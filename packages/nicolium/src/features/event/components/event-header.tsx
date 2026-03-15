@@ -3,7 +3,6 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/actions/moderation';
-import { deleteStatus } from '@/actions/statuses';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu as MenuType } from '@/components/dropdown-menu';
 import Icon from '@/components/icon';
@@ -17,6 +16,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useChats } from '@/queries/chats';
+import { useDeleteStatus } from '@/queries/statuses/use-status';
 import {
   useBookmarkStatus,
   usePinStatus,
@@ -128,6 +128,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status?.id!);
   const { mutate: pinStatus } = usePinStatus(status?.id!);
   const { mutate: unpinStatus } = useUnpinStatus(status?.id!);
+  const { mutate: deleteStatus } = useDeleteStatus(status?.id!);
   const deleteStatusModal = useDeleteStatusModal(status?.id!);
   const toggleStatusSensitivityModal = useToggleStatusSensitivityModal(status?.id!);
 
@@ -209,7 +210,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         />
       ),
       confirm: <FormattedMessage id='confirmations.delete_event.confirm' defaultMessage='Delete' />,
-      onConfirm: () => deleteStatus(status.id),
+      onConfirm: () => deleteStatus(undefined),
     });
   };
 

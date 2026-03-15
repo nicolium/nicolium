@@ -6,6 +6,7 @@ import StatusContainer from '@/containers/status-container';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useReplyCount, useReplyToId } from '@/stores/contexts';
+import { useStatusMeta } from '@/stores/status-meta';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
 
@@ -26,9 +27,9 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
   const replyCount = useReplyCount(id);
   const { data: statusData } = useMinimalStatus(id);
   const isLoaded = Boolean(statusData);
-  const isDeleted = Boolean(statusData?.deleted);
+  const { deleted } = useStatusMeta(id);
 
-  if (isDeleted) {
+  if (deleted) {
     return (
       <div className='py-4 pb-8'>
         <Tombstone id={id} onMoveUp={props.onMoveUp} onMoveDown={props.onMoveDown} deleted />

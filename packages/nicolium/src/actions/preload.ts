@@ -76,4 +76,4 @@ const preload = () => {
   }
 };
 
-export { pleromaDecoder, decodeFromMarkup, preload };
+export { preload };

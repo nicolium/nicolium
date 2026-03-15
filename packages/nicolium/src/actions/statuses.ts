@@ -15,11 +15,13 @@ import { shouldHaveCard } from '@/utils/status';
 import { importEntities } from './importer';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { useQueryClient } from '@tanstack/react-query';
 import type { CreateStatusParams, Status as BaseStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';
 
 const incrementReplyCount = (
   params: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>,
+  queryClient: ReturnType<typeof useQueryClient>,
 ) => {
   if (params.in_reply_to_id) {
     updateStatus(
@@ -45,6 +47,7 @@ const incrementReplyCount = (
 
 const decrementReplyCount = (
   params: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>,
+  queryClient: ReturnType<typeof useQueryClient>,
 ) => {
   if (params.in_reply_to_id) {
     updateStatus(
@@ -77,7 +80,7 @@ const createStatus = (
     useContextStore.getState().actions.importPendingStatus(params.in_reply_to_id, idempotencyKey);
     useTimelinesStore.getState().actions.importPendingStatus(params, idempotencyKey);
     if (!editedId) {
-      incrementReplyCount(params);
+      incrementReplyCount(params, queryClient);
     }
   }
 
@@ -145,7 +148,7 @@ const createStatus = (
       useTimelinesStore.getState().actions.deletePendingStatus(idempotencyKey);
       useContextStore.getState().actions.deletePendingStatus(params.in_reply_to_id, idempotencyKey);
       if (!editedId) {
-        decrementReplyCount(params);
+        decrementReplyCount(params, queryClient);
       }
       throw error;
     });
@@ -180,67 +183,6 @@ const fetchStatus = (statusId: string, intl?: IntlShape) => {
     .then((status) => {
       importEntities({ statuses: [status] });
       return status;
-    });
-};
-
-const deleteStatus = (statusId: string, withRedraft = false) => {
-  if (!isLoggedIn()) return null;
-
-  const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
-  if (!status) return null;
-
-  const poll = status.poll_id
-    ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
-    : undefined;
-
-  decrementReplyCount(status);
-
-  return getClient()
-    .statuses.deleteStatus(statusId)
-    .then((source) => {
-      usePendingStatusesStore.getState().actions.deleteStatus(statusId);
-      useTimelinesStore.getState().actions.deleteStatus(statusId);
-      updateStatus(
-        statusId,
-        (s) => {
-          s.deleted = true;
-        },
-        queryClient,
-      );
-
-      if (withRedraft) {
-        useComposeStore.getState().actions.setComposeToStatus(status, poll, source, withRedraft);
-        useModalsStore.getState().actions.openModal('COMPOSE');
-      }
-    })
-    .catch(() => {
-      incrementReplyCount(status);
-    });
-};
-
-const deleteStatusFromGroup = (statusId: string, groupId: string) => {
-  if (!isLoggedIn()) return null;
-
-  const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
-  if (!status) return null;
-
-  decrementReplyCount(status);
-
-  return getClient()
-    .experimental.groups.deleteGroupStatus(statusId, groupId)
-    .then(() => {
-      usePendingStatusesStore.getState().actions.deleteStatus(statusId);
-      useTimelinesStore.getState().actions.deleteStatus(statusId);
-      updateStatus(
-        statusId,
-        (s) => {
-          s.deleted = true;
-        },
-        queryClient,
-      );
-    })
-    .catch(() => {
-      incrementReplyCount(status);
     });
 };
 
@@ -283,7 +225,7 @@ export {
   createStatus,
   editStatus,
   fetchStatus,
-  deleteStatus,
-  deleteStatusFromGroup,
   toggleMuteStatus,
+  decrementReplyCount,
+  incrementReplyCount,
 };

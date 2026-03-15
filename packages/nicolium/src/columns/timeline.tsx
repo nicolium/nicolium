@@ -32,6 +32,7 @@ import {
   useWrenchedTimeline,
 } from '@/queries/timelines/use-timelines';
 import { useSettings } from '@/stores/settings';
+import { useStatusMeta } from '@/stores/status-meta';
 import { selectChild } from '@/utils/scroll-utils';
 import { hasActiveFilters, sortFilteredTimeline } from '@/utils/timeline-filter';
 
@@ -296,9 +297,10 @@ interface ITimelineStatus {
 const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => {
   const { id, isConnectedTop, isConnectedBottom } = props;
 
+  const { deleted } = useStatusMeta(id);
   const statusQuery = useStatus(id, { withFilteredResults: true });
 
-  if (statusQuery.data?.deleted) {
+  if (deleted) {
     return (
       <div className='py-4 pb-8'>
         <Tombstone id={id} onMoveUp={props.onMoveUp} onMoveDown={props.onMoveDown} deleted />

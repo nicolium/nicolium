@@ -6,12 +6,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { redactStatus } from '@/actions/admin';
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/actions/moderation';
 import { changeSetting } from '@/actions/settings';
-import {
-  deleteStatus,
-  deleteStatusFromGroup,
-  editStatus,
-  toggleMuteStatus,
-} from '@/actions/statuses';
+import { editStatus, toggleMuteStatus } from '@/actions/statuses';
 import DropdownMenu from '@/components/dropdown-menu';
 import StatusActionButton from '@/components/statuses/status-action-button';
 import { useCurrentAccount } from '@/contexts/current-account-context';
@@ -28,6 +23,11 @@ import { useGroupQuery } from '@/queries/groups/use-group';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useTranslationLanguages } from '@/queries/instance/use-translation-languages';
+import {
+  useDeleteStatus,
+  useDeleteStatusFromGroup,
+  type SelectedStatus,
+} from '@/queries/statuses/use-status';
 import {
   useBookmarkStatus,
   useDislikeStatus,
@@ -56,7 +56,6 @@ import Popover from '../ui/popover';
 import type { Menu } from '@/components/dropdown-menu';
 import type { Emoji as EmojiType } from '@/features/emoji';
 import type { UnauthorizedModalAction } from '@/modals/unauthorized-modal';
-import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { Me } from '@/stores/auth';
 
 const messages = defineMessages({
@@ -739,6 +738,11 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { mutate: pinStatus } = usePinStatus(status.id);
   const { mutate: unpinStatus } = useUnpinStatus(status.id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(status.account_id);
+  const { mutate: deleteStatus } = useDeleteStatus(status.id);
+  const { mutate: deleteStatusFromGroup } = useDeleteStatusFromGroup(
+    status.id,
+    status.group_id as string,
+  );
   const deleteStatusModal = useDeleteStatusModal(status.id);
   const toggleStatusSensitivityModal = useToggleStatusSensitivityModal(status.id);
 
@@ -788,7 +792,7 @@ const MenuButton: React.FC<IMenuButton> = ({
 
     const doDeleteStatus = (withRedraft = false) => {
       if (!deleteModal) {
-        deleteStatus(status.id, withRedraft);
+        deleteStatus(withRedraft);
       } else {
         openModal('CONFIRM', {
           heading: intl.formatMessage(
@@ -800,7 +804,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           confirm: intl.formatMessage(
             withRedraft ? messages.redraftConfirm : messages.deleteConfirm,
           ),
-          onConfirm: () => deleteStatus(status.id, withRedraft),
+          onConfirm: () => deleteStatus(withRedraft),
         });
       }
     };
@@ -936,7 +940,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         }),
         confirm: intl.formatMessage(messages.deleteConfirm),
         onConfirm: () => {
-          deleteStatusFromGroup(status.id, group!.id);
+          deleteStatusFromGroup();
         },
       });
     };

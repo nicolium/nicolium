@@ -19,7 +19,7 @@ import { useComposeActions } from '@/stores/compose';
 import { useThread } from '@/stores/contexts';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
-import { useStatusMetaActions } from '@/stores/status-meta';
+import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { selectChild } from '@/utils/scroll-utils';
 import { textForScreenReader } from '@/utils/status';
 
@@ -50,6 +50,7 @@ const Thread = ({
   const intl = useIntl();
   const { replyCompose, mentionCompose } = useComposeActions();
 
+  const { deleted } = useStatusMeta(status.id);
   const { expandStatuses, revealStatusesMedia, toggleStatusesMediaHidden } = useStatusMetaActions();
   const { openModal } = useModalsActions();
   const {
@@ -238,7 +239,7 @@ const Thread = ({
       if (id === status.id)
         return (
           <div className={clsx({ 'pb-4': hasDescendants })} key={status.id}>
-            {status.deleted ? (
+            {deleted ? (
               <Tombstone
                 id={status.id}
                 onMoveUp={handleMoveUp}

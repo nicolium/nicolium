@@ -206,7 +206,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const features = useFeatures();
 
   const { toggleStatusesMediaHidden, unfilterStatus } = useStatusMetaActions();
-  const { showFiltered } = useStatusMeta(status.id);
+  const { deleted, showFiltered } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { replyCompose, mentionCompose } = useComposeActions();
   const { boostModal } = useSettings();
@@ -521,7 +521,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
   if (!status) return null;
 
-  if (status.deleted)
+  if (deleted)
     return <Tombstone id={status.id} onMoveUp={onMoveUp} onMoveDown={onMoveDown} deleted />;
 
   if (filtered && showFiltered !== true) {

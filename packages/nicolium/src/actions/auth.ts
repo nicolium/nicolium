@@ -351,5 +351,4 @@ export {
   authLoggedIn,
   fetchMe,
   patchMe,
-  patchMeSuccess,
 };
