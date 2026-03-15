@@ -146,6 +146,9 @@ const layouts = {
     getParentRoute: () => rootRoute,
     path: '/@{$username}',
     component: ProfileLayout,
+    validateSearch: v.object({
+      with_replies: v.optional(v.boolean()),
+    }),
   }),
   remoteInstance: createRoute({
     getParentRoute: () => rootRoute,

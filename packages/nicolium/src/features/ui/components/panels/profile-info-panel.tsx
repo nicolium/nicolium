@@ -33,10 +33,14 @@ const messages = defineMessages({
   deactivated: { id: 'account.deactivated', defaultMessage: 'Deactivated' },
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
   pronouns: { id: 'account.pronouns.with_label', defaultMessage: 'Pronouns: {pronouns}' },
+  originalDisplayName: {
+    id: 'account.original_display_name',
+    defaultMessage: 'You have assigned a nickname to this user.',
+  },
 });
 
 interface IProfileInfoPanel {
-  account?: Account;
+  account?: Account & { original_display_name?: string };
   /** Username from URL params, in case the account isn't found. */
   username: string;
 }
@@ -176,6 +180,19 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
                 <Emojify text={account.display_name} emojis={account.emojis} />
               )}
             </Text>
+
+            {account.original_display_name &&
+              account.original_display_name !== account.display_name && (
+                <Text
+                  theme='muted'
+                  truncate
+                  title={intl.formatMessage(messages.originalDisplayName)}
+                >
+                  {'('}
+                  <Emojify text={account.original_display_name} emojis={account.emojis} />
+                  {')'}
+                </Text>
+              )}
 
             {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
 
