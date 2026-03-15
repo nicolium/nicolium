@@ -75,7 +75,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({
     } else if (reaction.me) {
       emojiUnreact(reaction.name);
     } else {
-      emojiReact(reaction.name /*, reaction.url */);
+      emojiReact(reaction.name);
     }
   };
 

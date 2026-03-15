@@ -118,11 +118,8 @@ const useEmojiReactMutation = (statusId: string) => {
 
   return useMutation({
     mutationKey: ['statuses', 'emojiReact', statusId],
-    mutationFn: async (emoji: string) => {
-      const status = await client.statuses.createStatusReaction(statusId, emoji);
-
-      importEntities({ statuses: [status] });
-    },
+    mutationFn: async (emoji: string) =>
+      await client.statuses.createStatusReaction(statusId, emoji),
     onMutate: (emoji) => {
       return updateStatus(
         statusId,
@@ -142,6 +139,12 @@ const useEmojiReactMutation = (statusId: string) => {
       );
     },
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onSettled: (status) => {
+      importEntities({ statuses: [status] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountsLists.statusReactions(statusId),
+      });
+    },
   });
 };
 
@@ -156,8 +159,6 @@ const useEmojiUnreactMutation = (statusId: string) => {
     mutationFn: async (emoji: string) => {
       const status = await client.statuses.deleteStatusReaction(statusId, emoji);
 
-      importEntities({ statuses: [status] });
-
       if (checkEmojiReactsSupport && !status.account.local) {
         supportsEmojiReacts(status.account.ap_id ?? status.account.url)
           .then((result) => {
@@ -171,6 +172,8 @@ const useEmojiUnreactMutation = (statusId: string) => {
           })
           .catch(() => {});
       }
+
+      return status;
     },
     onMutate: (emoji) =>
       updateStatus(
@@ -182,6 +185,12 @@ const useEmojiUnreactMutation = (statusId: string) => {
         queryClient,
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onSettled: (status) => {
+      importEntities({ statuses: [status] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountsLists.statusReactions(statusId),
+      });
+    },
   });
 };
 
