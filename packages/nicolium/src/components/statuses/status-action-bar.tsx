@@ -4,7 +4,6 @@ import React, { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { redactStatus } from '@/actions/admin';
-import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/actions/moderation';
 import { changeSetting } from '@/actions/settings';
 import { editStatus, toggleMuteStatus } from '@/actions/statuses';
 import DropdownMenu from '@/components/dropdown-menu';
@@ -13,6 +12,7 @@ import { useCurrentAccount } from '@/contexts/current-account-context';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
 import { languages } from '@/features/preferences';
 import { layouts } from '@/features/ui/router';
+import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/use-admin-modals';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';

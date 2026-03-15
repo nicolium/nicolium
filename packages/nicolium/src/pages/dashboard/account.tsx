@@ -2,7 +2,6 @@ import { PLEROMA } from 'pl-api';
 import React, { type ChangeEventHandler, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
 
-import { useDeactivateUserModal, useDeleteUserModal } from '@/actions/moderation';
 import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
@@ -15,6 +14,7 @@ import Toggle from '@/components/ui/toggle';
 import { SelectDropdown } from '@/features/forms';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { adminAccountRoute } from '@/features/ui/router';
+import { useDeactivateUserModal, useDeleteUserModal } from '@/hooks/use-admin-modals';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';

@@ -5,12 +5,12 @@ import ReactSwipeableViews from 'react-swipeable-views';
 
 import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
+import StatusContainer from '@/components/statuses/status-container';
 import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
-import StatusContainer from '@/containers/status-container';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { adminReportRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';

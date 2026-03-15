@@ -2,9 +2,9 @@ import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-q
 import { create } from 'mutative';
 import { useMemo } from 'react';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { importEntities } from '@/queries/utils/import-entities';
 import { compareDate } from '@/utils/comparators';
 
 import { queryClient } from '../client';

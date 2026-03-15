@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import Widget from '@/components/ui/widget';
-import AccountContainer from '@/containers/account-container';
 import { useBirthdayReminders } from '@/queries/accounts/use-birthday-reminders';
 
 const timeToMidnight = () => {

@@ -2,9 +2,9 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import Text from '@/components/ui/text';
 import Widget from '@/components/ui/widget';
-import AccountContainer from '@/containers/account-container';
 import PlaceholderSidebarSuggestions from '@/features/placeholder/components/placeholder-sidebar-suggestions';
 import { useFeatures } from '@/hooks/use-features';
 import {

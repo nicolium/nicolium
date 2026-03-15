@@ -2,7 +2,6 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/actions/moderation';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu as MenuType } from '@/components/dropdown-menu';
 import Icon from '@/components/icon';
@@ -11,6 +10,7 @@ import Button from '@/components/ui/button';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
+import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/use-admin-modals';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';

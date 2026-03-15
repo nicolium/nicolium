@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import StatusContent from '@/components/statuses/status-content';
 import Modal from '@/components/ui/modal';
 import ProgressBar from '@/components/ui/progress-bar';
 import Text from '@/components/ui/text';
-import AccountContainer from '@/containers/account-container';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useReportAccountMutation } from '@/queries/accounts/use-report';

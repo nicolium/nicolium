@@ -12,7 +12,7 @@ import { useTimelinesStore } from '@/stores/timelines';
 import { isLoggedIn } from '@/utils/auth';
 import { shouldHaveCard } from '@/utils/status';
 
-import { importEntities } from './importer';
+import { importEntities } from '../queries/utils/import-entities';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';
 import type { useQueryClient } from '@tanstack/react-query';

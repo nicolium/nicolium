@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import Widget from '@/components/ui/widget';
-import AccountContainer from '@/containers/account-container';
 import Emojify from '@/features/emoji/emojify';
 import { WhoToFollowPanel } from '@/features/ui/util/async-components';
 import { useEndorsedAccounts } from '@/queries/accounts/use-endorsed-accounts';

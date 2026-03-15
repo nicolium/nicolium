@@ -7,12 +7,12 @@ import {
 } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { importEntities } from '@/actions/importer';
 import { decrementReplyCount, incrementReplyCount } from '@/actions/statuses';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { normalizeStatus, type NormalizedStatus } from '@/normalizers/status';
 import { useFilters } from '@/queries/settings/use-filters';
+import { importEntities } from '@/queries/utils/import-entities';
 import { useComposeActions } from '@/stores/compose';
 import { useContextsActions } from '@/stores/contexts';
 import { useModalsActions } from '@/stores/modals';

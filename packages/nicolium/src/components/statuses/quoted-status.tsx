@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React, { type MouseEventHandler } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import AccountContainer from '@/containers/account-container';
+import AccountContainer from '@/components/accounts/account-container';
 
 import OutlineBox from '../outline-box';
 

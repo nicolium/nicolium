@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 
-import { importEntities } from '@/actions/importer';
 import { useStatContext } from '@/contexts/stat-context';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { updateReactions } from '@/queries/announcements/use-announcements';
@@ -8,6 +7,7 @@ import { queryClient } from '@/queries/client';
 import { updateConversations } from '@/queries/conversations/use-conversations';
 import { queryKeys } from '@/queries/keys';
 import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
+import { importEntities } from '@/queries/utils/import-entities';
 import { useSettings } from '@/stores/settings';
 import { useTimelinesActions } from '@/stores/timelines';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';

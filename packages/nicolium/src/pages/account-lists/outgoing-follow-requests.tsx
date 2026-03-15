@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import AccountContainer from '@/containers/account-container';
 import { useOutgoingFollowRequests } from '@/queries/accounts/use-follow-requests';
 
 import { FollowRequestsTabs } from './follow-requests';

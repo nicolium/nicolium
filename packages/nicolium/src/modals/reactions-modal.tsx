@@ -2,13 +2,13 @@ import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollableList from '@/components/scrollable-list';
 import Emoji from '@/components/ui/emoji';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import Tabs from '@/components/ui/tabs';
-import AccountContainer from '@/containers/account-container';
 import { useStatusReactions } from '@/queries/statuses/use-status-interactions';
 
 import type { Item } from '@/components/ui/tabs';

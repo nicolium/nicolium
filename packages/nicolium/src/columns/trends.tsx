@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import React from 'react';
 
+import AccountContainer from '@/components/accounts/account-container';
 import Hashtag from '@/components/hashtag';
 import ScrollableList from '@/components/scrollable-list';
+import StatusContainer from '@/components/statuses/status-container';
 import TrendingLink from '@/components/trending-link';
-import AccountContainer from '@/containers/account-container';
-import StatusContainer from '@/containers/status-container';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
 import PlaceholderHashtag from '@/features/placeholder/components/placeholder-hashtag';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';

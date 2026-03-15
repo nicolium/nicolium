@@ -10,7 +10,6 @@ import {
 import { useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
-import { importEntities } from '@/actions/importer';
 import {
   getNotificationStatusId,
   notificationMessages,
@@ -19,6 +18,7 @@ import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { appendFollowRequest } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
+import { importEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQueryOptions } from '@/queries/utils/make-paginated-response-query-options';
 import { useSettingsStore } from '@/stores/settings';
 import { compareId } from '@/utils/comparators';

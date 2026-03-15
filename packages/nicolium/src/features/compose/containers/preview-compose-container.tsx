@@ -1,6 +1,7 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import OutlineBox from '@/components/outline-box';
 import EventPreview from '@/components/statuses/event-preview';
 import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
@@ -11,7 +12,6 @@ import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
-import AccountContainer from '@/containers/account-container';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';

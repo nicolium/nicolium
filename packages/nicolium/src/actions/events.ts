@@ -4,7 +4,7 @@ import { getClient } from '@/api';
 import { useComposeStore } from '@/stores/compose';
 import toast from '@/toast';
 
-import { importEntities } from './importer';
+import { importEntities } from '../queries/utils/import-entities';
 
 import type { CreateEventParams, Location, MediaAttachment } from 'pl-api';
 

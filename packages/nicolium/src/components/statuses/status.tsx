@@ -3,10 +3,10 @@ import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
-import AccountContainer from '@/containers/account-container';
 import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';

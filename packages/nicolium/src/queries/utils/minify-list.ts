@@ -13,7 +13,7 @@ import {
   type Status,
 } from 'pl-api';
 
-import { importEntities } from '@/actions/importer';
+import { importEntities } from '@/queries/utils/import-entities';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';

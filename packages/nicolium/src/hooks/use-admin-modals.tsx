@@ -2,9 +2,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import OutlineBox from '@/components/outline-box';
 import Text from '@/components/ui/text';
-import AccountContainer from '@/containers/account-container';
 import { selectAccount } from '@/queries/accounts/selectors';
 import {
   useAdminDeleteAccountMutation,

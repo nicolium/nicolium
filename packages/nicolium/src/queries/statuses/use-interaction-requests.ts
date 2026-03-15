@@ -1,10 +1,10 @@
 import { type InfiniteData, useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { type InteractionRequest, PaginatedResponse } from 'pl-api';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { importEntities } from '@/queries/utils/import-entities';
 
 import { queryKeys } from '../keys';
 

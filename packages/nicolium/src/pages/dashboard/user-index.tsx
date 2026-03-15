@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import AccountContainer from '@/containers/account-container';
 import { adminUsersRoute } from '@/features/ui/router';
 import { useAdminAccounts } from '@/queries/admin/use-accounts';
 

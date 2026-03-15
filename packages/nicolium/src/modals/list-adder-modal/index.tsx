@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Modal from '@/components/ui/modal';
-import AccountContainer from '@/containers/account-container';
 import { NewListForm, getOrderedLists } from '@/pages/account-lists/lists';
 import { useLists, useListsForAccount } from '@/queries/accounts/use-lists';
 

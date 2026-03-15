@@ -12,9 +12,9 @@ import {
 } from 'pl-api';
 import { defineMessages } from 'react-intl';
 
-import { createAccount } from '@/actions/accounts';
 import { createApp } from '@/actions/apps';
 import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
+import { getClient } from '@/api';
 import * as BuildConfig from '@/build-config';
 import { selectAccount, selectOwnAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
@@ -223,7 +223,7 @@ const register = async (params: CreateAccountParams) => {
 
   const { app } = await createAppAndToken();
 
-  const { response } = await createAccount(params);
+  const response = await getClient().settings.createAccount(params);
   if ('identifier' in response) {
     toast.info(response.message);
   } else {

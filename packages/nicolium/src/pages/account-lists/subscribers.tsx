@@ -2,13 +2,13 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import Toggle from '@/components/ui/toggle';
-import AccountContainer from '@/containers/account-container';
 import { profileSubscribersRoute } from '@/features/ui/router';
 import { useSubscribers } from '@/queries/account-lists/use-follows';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';

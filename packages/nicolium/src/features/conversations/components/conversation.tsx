@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 
-import StatusContainer from '@/containers/status-container';
+import StatusContainer from '@/components/statuses/status-container';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
   useMarkConversationRead,

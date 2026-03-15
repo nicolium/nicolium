@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Spinner from '@/components/ui/spinner';
-import AccountContainer from '@/containers/account-container';
 import {
   useAcceptEventParticipationRequestMutation,
   useEventParticipationRequests,

@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
+import { importEntities } from '@/queries/utils/import-entities';
 import toast from '@/toast';
 
 import { queryKeys } from '../keys';

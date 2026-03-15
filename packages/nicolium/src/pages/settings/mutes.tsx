@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import AccountContainer from '@/containers/account-container';
 import { useMutes } from '@/queries/account-lists/use-blocks';
 
 const messages = defineMessages({

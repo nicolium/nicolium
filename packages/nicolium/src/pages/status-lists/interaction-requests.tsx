@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import Icon from '@/components/icon';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import PullToRefresh from '@/components/pull-to-refresh';
@@ -12,7 +13,6 @@ import StatusContent from '@/components/statuses/status-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Text from '@/components/ui/text';
-import AccountContainer from '@/containers/account-container';
 import { buildLink } from '@/features/notifications/components/notification';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useOwnAccount } from '@/hooks/use-own-account';

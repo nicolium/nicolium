@@ -2,8 +2,8 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import Widget from '@/components/ui/widget';
-import AccountContainer from '@/containers/account-container';
 import { useAdminAccounts } from '@/queries/admin/use-accounts';
 
 const messages = defineMessages({

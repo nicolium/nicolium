@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
+import { importEntities } from '@/queries/utils/import-entities';
 import { useTimelinesActions } from '@/stores/timelines';
 
 import type { AdminUpdateStatusParams } from 'pl-api';

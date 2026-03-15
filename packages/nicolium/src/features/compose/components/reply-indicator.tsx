@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import React from 'react';
 
+import AccountContainer from '@/components/accounts/account-container';
 import Markup from '@/components/markup';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
-import AccountContainer from '@/containers/account-container';
 import { getTextDirection } from '@/utils/rtl';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';

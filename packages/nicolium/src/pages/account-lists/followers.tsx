@@ -1,11 +1,11 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import MissingIndicator from '@/components/missing-indicator';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import AccountContainer from '@/containers/account-container';
 import { profileFollowersRoute } from '@/features/ui/router';
 import { useFollowers } from '@/queries/account-lists/use-follows';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
