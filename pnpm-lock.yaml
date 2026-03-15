@@ -534,7 +534,7 @@ importers:
         version: 3.7.0
       '@mkljczk/astro-theme':
         specifier: github:mkljczk/mkljczk-astro-theme
-        version: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/c20f460ef1d21f92ffa078911eb8a76c9161a3cc(astro@5.18.0(@types/node@25.5.0)(jiti@1.21.7)(lightningcss@1.32.0)(rollup@4.59.0)(sass-embedded@1.98.0)(sass@1.98.0)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2))
+        version: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/a4f33dd3a4bc2530e6288095b53aa8b90f3a8d9e(astro@5.18.0(@types/node@25.5.0)(jiti@1.21.7)(lightningcss@1.32.0)(rollup@4.59.0)(sass-embedded@1.98.0)(sass@1.98.0)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2))
       astro:
         specifier: ^5.18.0
         version: 5.18.0(@types/node@25.5.0)(jiti@1.21.7)(lightningcss@1.32.0)(rollup@4.59.0)(sass-embedded@1.98.0)(sass@1.98.0)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -2101,8 +2101,8 @@ packages:
   '@microsoft/tsdoc@0.15.1':
     resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
 
-  '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/c20f460ef1d21f92ffa078911eb8a76c9161a3cc':
-    resolution: {tarball: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/c20f460ef1d21f92ffa078911eb8a76c9161a3cc}
+  '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/a4f33dd3a4bc2530e6288095b53aa8b90f3a8d9e':
+    resolution: {tarball: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/a4f33dd3a4bc2530e6288095b53aa8b90f3a8d9e}
     version: 0.0.1
     peerDependencies:
       astro: ^5.0.0
@@ -9228,7 +9228,7 @@ snapshots:
 
   '@microsoft/tsdoc@0.15.1': {}
 
-  '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/c20f460ef1d21f92ffa078911eb8a76c9161a3cc(astro@5.18.0(@types/node@25.5.0)(jiti@1.21.7)(lightningcss@1.32.0)(rollup@4.59.0)(sass-embedded@1.98.0)(sass@1.98.0)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2))':
+  '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/a4f33dd3a4bc2530e6288095b53aa8b90f3a8d9e(astro@5.18.0(@types/node@25.5.0)(jiti@1.21.7)(lightningcss@1.32.0)(rollup@4.59.0)(sass-embedded@1.98.0)(sass@1.98.0)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2))':
     dependencies:
       astro: 5.18.0(@types/node@25.5.0)(jiti@1.21.7)(lightningcss@1.32.0)(rollup@4.59.0)(sass-embedded@1.98.0)(sass@1.98.0)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2)
 
