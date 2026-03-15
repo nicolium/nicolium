@@ -59,6 +59,15 @@ $vertical-lr-langs: mn-mong, mnmong;
     @apply list-decimal list-outside;
   }
 
+  li {
+    padding-left: 1rem;
+  }
+
+  ul li,
+  ol li {
+    padding-left: unset;
+  }
+
   blockquote {
     @apply py-1 pl-4 border-l-4 border-solid border-gray-400 text-gray-500 dark:text-gray-400;
 
