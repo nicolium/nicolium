@@ -279,53 +279,6 @@ const unmuteStatus = (statusId: string) => {
 const toggleMuteStatus = (status: Pick<Status, 'id' | 'muted'>) =>
   status.muted ? unmuteStatus(status.id) : muteStatus(status.id);
 
-// let TRANSLATIONS_QUEUE: Set<string> = new Set();
-// let TRANSLATIONS_TIMEOUT: NodeJS.Timeout | null = null;
-
-// const translateStatus = (statusId: string, targetLanguage: string, lazy?: boolean) => {
-//     const client = getClient();
-//     const features = client.features;
-
-//     const handleTranslateMany = () => {
-//       const copy = [...TRANSLATIONS_QUEUE];
-//       TRANSLATIONS_QUEUE = new Set();
-//       if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
-
-//       return client.statuses.translateStatuses(copy, targetLanguage).then((response) => {
-//         response.forEach((translation) => {
-//           dispatch<StatusesAction>({
-//             type: STATUS_TRANSLATE_SUCCESS,
-//             statusId: translation.id,
-//             translation: translation,
-//           });
-
-//           copy
-//             .filter((statusId) => !response.some(({ id }) => id === statusId))
-//             .forEach((statusId) => dispatch<StatusesAction>({
-//               type: STATUS_TRANSLATE_FAIL,
-//               statusId,
-//             }));
-//         });
-//       }).catch(error => {
-//         dispatch<StatusesAction>({
-//           type: STATUS_TRANSLATE_FAIL,
-//           statusId,
-//           error,
-//         });
-//       });
-//     };
-
-//     if (features.lazyTranslations && lazy) {
-//       TRANSLATIONS_QUEUE.add(statusId);
-
-//       if (TRANSLATIONS_TIMEOUT) clearTimeout(TRANSLATIONS_TIMEOUT);
-//       TRANSLATIONS_TIMEOUT = setTimeout(() => handleTranslateMany(), 3000);
-//     } else if (features.lazyTranslations && TRANSLATIONS_QUEUE.size) {
-//       TRANSLATIONS_QUEUE.add(statusId);
-
-//       handleTranslateMany();
-//   };
-
 export {
   createStatus,
   editStatus,
