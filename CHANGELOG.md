@@ -162,4 +162,3 @@ Changes made since the project forked from Soapbox in April 2024.
 - Admin dashboard now works on non-Pleroma backends.
 - Removed excessive calls to `fetchOwnAccounts`.
 - Media modal displays the whole thread correctly.
-- BrowsersList is actually being used now.

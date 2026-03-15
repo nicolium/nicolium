@@ -3,7 +3,6 @@ import { fileURLToPath, URL } from 'node:url';
 
 import { tsgoChecker } from '@mkljczk/vite-tsgo-checker';
 import react from '@vitejs/plugin-react';
-import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { bundleStats } from 'rollup-plugin-bundle-stats';
 import { defineConfig } from 'vite';
 import compileTime from 'vite-plugin-compile-time';
@@ -16,16 +15,17 @@ const config = defineConfig(() => ({
   build: {
     assetsDir: 'packs',
     assetsInlineLimit: 0,
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         assetFileNames: 'packs/assets/[name]-[hash].[ext]',
         chunkFileNames: 'packs/js/[name]-[hash].js',
         entryFileNames: 'packs/[name]-[hash].js',
-        experimentalMinChunkSize: 16 * 1024,
+        codeSplitting: {
+          minSize: 16 * 1024,
+        },
       },
     },
     sourcemap: true,
-    target: browserslistToEsbuild(),
   },
   assetsInclude: ['**/*.oga'],
   server: {

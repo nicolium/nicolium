@@ -73,12 +73,9 @@
     "autoprefixer": "^10.4.27",
     "blurhash": "^2.0.5",
     "bowser": "^2.14.1",
-    "browserslist": "^4.28.1",
-    "browserslist-to-esbuild": "^2.1.1",
     "clsx": "^2.1.1",
     "core-js": "^3.48.0",
     "cryptocurrency-icons": "^0.18.1",
-    "cssnano": "^7.1.3",
     "detect-passive-events": "^2.0.3",
     "dompurify": "^3.3.3",
     "emoji-datasource": "15.0.1",
@@ -175,10 +172,5 @@
       "oxfmt --check"
     ],
     "src/styles/**/*.scss": "stylelint"
-  },
-  "browserslist": [
-    "> 0.5%",
-    "last 2 versions",
-    "not dead"
-  ]
+  }
 }
