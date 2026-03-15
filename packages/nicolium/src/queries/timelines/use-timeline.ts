@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { useTimelineStream } from '@/api/hooks/streaming/use-timeline-stream';
+import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
 import { importEntities } from '@/queries/utils/import-entities';
 import {
   useTimelinesStore,

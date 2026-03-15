@@ -170,6 +170,24 @@ const editStatus = (statusId: string) => {
     });
 };
 
+const redactStatus = (statusId: string) => {
+  const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+  if (!status) return;
+
+  const poll = status.poll_id
+    ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
+    : undefined;
+
+  return getClient()
+    .statuses.getStatusSource(statusId)
+    .then((source) => {
+      useComposeStore
+        .getState()
+        .actions.setComposeToStatus(status, poll, source, false, null, null, true);
+      useModalsStore.getState().actions.openModal('COMPOSE');
+    });
+};
+
 const fetchStatus = (statusId: string, intl?: IntlShape) => {
   const params =
     intl && useSettingsStore.getState().settings.autoTranslate
@@ -224,6 +242,7 @@ const toggleMuteStatus = (status: Pick<Status, 'id' | 'muted'>) =>
 export {
   createStatus,
   editStatus,
+  redactStatus,
   fetchStatus,
   toggleMuteStatus,
   decrementReplyCount,

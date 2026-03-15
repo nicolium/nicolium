@@ -1,7 +1,7 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { pinHost, unpinHost } from '@/actions/remote-timeline';
+import { changeSetting } from '@/actions/settings';
 import Widget from '@/components/ui/widget';
 import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 import { useSettings } from '@/stores/settings';
@@ -22,10 +22,22 @@ const InstanceInfoPanel: React.FC<IInstanceInfoPanel> = ({ host }) => {
 
   const settings = useSettings();
   const remoteInstance = useRemoteInstance(host);
-  const pinned = settings.remote_timeline.pinnedHosts.includes(host);
+  const pinnedHosts = settings.remote_timeline.pinnedHosts;
+  const isPinned = pinnedHosts.includes(host);
+
+  const pinHost = (host: string) => {
+    changeSetting(['remote_timeline', 'pinnedHosts'], [...pinnedHosts, host]);
+  };
+
+  const unpinHost = (host: string) => {
+    changeSetting(
+      ['remote_timeline', 'pinnedHosts'],
+      pinnedHosts.filter((value) => value !== host),
+    );
+  };
 
   const handlePinHost = () => {
-    if (!pinned) {
+    if (!isPinned) {
       pinHost(host);
     } else {
       unpinHost(host);
@@ -39,11 +51,11 @@ const InstanceInfoPanel: React.FC<IInstanceInfoPanel> = ({ host }) => {
       title={remoteInstance.host}
       onActionClick={handlePinHost}
       actionIcon={
-        pinned
+        isPinned
           ? require('@phosphor-icons/core/regular/push-pin-slash.svg')
           : require('@phosphor-icons/core/regular/push-pin.svg')
       }
-      actionTitle={intl.formatMessage(pinned ? messages.unpinHost : messages.pinHost, { host })}
+      actionTitle={intl.formatMessage(isPinned ? messages.unpinHost : messages.pinHost, { host })}
     />
   );
 };

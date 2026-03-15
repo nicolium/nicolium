@@ -4,11 +4,11 @@ import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
-import { useUserStream } from '@/api/hooks/streaming/use-user-stream';
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
 import ThumbNavigation from '@/components/navigation/thumb-navigation';
 import Layout from '@/components/ui/layout';
 import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useUserStream } from '@/hooks/streaming/use-user-stream';
 import { useClient } from '@/hooks/use-client';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';

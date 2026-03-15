@@ -3,9 +3,8 @@ import { type Account, type CustomEmoji, GroupRoles } from 'pl-api';
 import React, { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { redactStatus } from '@/actions/admin';
 import { changeSetting } from '@/actions/settings';
-import { editStatus, toggleMuteStatus } from '@/actions/statuses';
+import { editStatus, toggleMuteStatus, redactStatus } from '@/actions/statuses';
 import DropdownMenu from '@/components/dropdown-menu';
 import StatusActionButton from '@/components/statuses/status-action-button';
 import { useCurrentAccount } from '@/contexts/current-account-context';
