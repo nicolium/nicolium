@@ -188,14 +188,14 @@ const configurationSchema = coerceObject({
       coerceObject(
         v.entriesFromList(
           ['local', 'remote'],
-          v.fallback(v.picklist(['public', 'authenticated', 'disabled', 'restricted']), 'public'),
+          v.fallback(v.picklist(['public', 'authenticated', 'disabled']), 'public'),
         ),
       ),
     ),
     live_feeds: coerceObject(
       v.entriesFromList(
         ['local', 'bubble', 'remote', 'wrenched'],
-        v.fallback(v.picklist(['public', 'authenticated', 'disabled']), 'public'),
+        v.fallback(v.picklist(['public', 'authenticated', 'disabled', 'restricted']), 'public'),
       ),
     ),
   }),
