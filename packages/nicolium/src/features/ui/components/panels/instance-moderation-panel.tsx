@@ -5,7 +5,7 @@ import DropdownMenu from '@/components/dropdown-menu';
 import Widget from '@/components/ui/widget';
 import InstanceRestrictions from '@/features/federation-restrictions/components/instance-restrictions';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useRemoteInstance } from '@/selectors';
+import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({

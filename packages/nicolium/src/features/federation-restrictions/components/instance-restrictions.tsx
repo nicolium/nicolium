@@ -5,7 +5,7 @@ import Icon from '@/components/icon';
 import Text from '@/components/ui/text';
 import { useInstance } from '@/stores/instance';
 
-import type { RemoteInstance } from '@/selectors';
+import type { RemoteInstance } from '@/queries/instance/use-remote-instance';
 
 const hasRestrictions = (remoteInstance: RemoteInstance): boolean => {
   const { accept, reject_deletes, report_removal, ...federation } = remoteInstance.federation;

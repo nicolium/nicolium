@@ -5,7 +5,7 @@ import ScrollableList from '@/components/scrollable-list';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
 import RestrictedInstance from '@/features/federation-restrictions/components/restricted-instance';
-import { useHosts } from '@/selectors';
+import { useHosts } from '@/queries/instance/use-remote-instance';
 import { useInstance } from '@/stores/instance';
 import { useFederationRestrictionsDisclosed } from '@/utils/state';
 

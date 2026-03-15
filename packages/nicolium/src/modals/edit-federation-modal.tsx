@@ -6,7 +6,7 @@ import List, { ListItem } from '@/components/list';
 import Modal from '@/components/ui/modal';
 import Toggle from '@/components/ui/toggle';
 import { useAdminConfig, useUpdateAdminConfig } from '@/queries/admin/use-config';
-import { useRemoteInstance } from '@/selectors';
+import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 import toast from '@/toast';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';

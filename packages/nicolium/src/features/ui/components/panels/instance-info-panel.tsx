@@ -3,7 +3,7 @@ import { useIntl, defineMessages } from 'react-intl';
 
 import { pinHost, unpinHost } from '@/actions/remote-timeline';
 import Widget from '@/components/ui/widget';
-import { useRemoteInstance } from '@/selectors';
+import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({

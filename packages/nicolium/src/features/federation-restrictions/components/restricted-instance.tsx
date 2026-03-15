@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 
 import Icon from '@/components/icon';
-import { useRemoteInstance } from '@/selectors';
+import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 
 import InstanceRestrictions from './instance-restrictions';
 
