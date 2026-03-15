@@ -19,6 +19,7 @@ import {
   useUnfollowAccountMutation,
 } from '@/queries/accounts/use-relationship';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import type { Account } from 'pl-api';
@@ -26,6 +27,7 @@ import type { Account } from 'pl-api';
 const messages = defineMessages({
   userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
   userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
+  unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
 });
 
 interface IActionButton {
@@ -46,6 +48,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
   const features = useFeatures();
   const intl = useIntl();
   const client = useClient();
+  const settings = useSettings();
 
   const { openModal } = useModalsActions();
   const { isLoggedIn, me } = useLoggedIn();
@@ -67,7 +70,30 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
 
   const handleFollow = () => {
     if (relationship?.following || relationship?.requested) {
-      unfollowAccount();
+      if (settings.unfollowModal) {
+        openModal('CONFIRM', {
+          heading: (
+            <FormattedMessage
+              id='confirmations.unfollow.heading'
+              defaultMessage='Unfollow {name}'
+              values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+            />
+          ),
+          message: (
+            <FormattedMessage
+              id='confirmations.unfollow.message'
+              defaultMessage='Are you sure you want to unfollow {name}?'
+              values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+            />
+          ),
+          confirm: intl.formatMessage(messages.unfollowConfirm),
+          onConfirm: () => {
+            unfollowAccount();
+          },
+        });
+      } else {
+        unfollowAccount();
+      }
     } else {
       followAccount(undefined);
     }
