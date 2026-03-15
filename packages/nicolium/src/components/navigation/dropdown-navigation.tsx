@@ -157,7 +157,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   const { isOpen } = useRegistrationStatus();
 
   const instance = useInstance();
-  const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
+  const timelineAccess = instance.configuration.timelines_access;
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -388,20 +388,22 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                 <>
                   <Divider />
 
-                  <DropdownNavigationLink
-                    to='/timeline/local'
-                    icon={require('@phosphor-icons/core/regular/planet.svg')}
-                    text={
-                      features.federating ? (
-                        <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
-                      ) : (
-                        <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
-                      )
-                    }
-                    onClick={closeSidebar}
-                  />
+                  {timelineAccess.live_feeds.local !== 'disabled' && (
+                    <DropdownNavigationLink
+                      to='/timeline/local'
+                      icon={require('@phosphor-icons/core/regular/planet.svg')}
+                      text={
+                        features.federating ? (
+                          <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
+                        ) : (
+                          <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
+                        )
+                      }
+                      onClick={closeSidebar}
+                    />
+                  )}
 
-                  {features.bubbleTimeline && (
+                  {features.bubbleTimeline && timelineAccess.live_feeds.bubble !== 'disabled' && (
                     <DropdownNavigationLink
                       to='/timeline/bubble'
                       icon={require('@phosphor-icons/core/regular/graph.svg')}
@@ -410,7 +412,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                     />
                   )}
 
-                  {features.federating && (
+                  {features.federating && timelineAccess.live_feeds.remote !== 'disabled' && (
                     <DropdownNavigationLink
                       to='/timeline/fediverse'
                       icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
@@ -419,14 +421,15 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                     />
                   )}
 
-                  {features.wrenchedTimeline && (
-                    <DropdownNavigationLink
-                      to='/timeline/wrenched'
-                      icon={require('@phosphor-icons/core/regular/wrench.svg')}
-                      text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-                      onClick={closeSidebar}
-                    />
-                  )}
+                  {features.wrenchedTimeline &&
+                    timelineAccess.live_feeds.wrenched !== 'disabled' && (
+                      <DropdownNavigationLink
+                        to='/timeline/wrenched'
+                        icon={require('@phosphor-icons/core/regular/wrench.svg')}
+                        text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
+                        onClick={closeSidebar}
+                      />
+                    )}
                 </>
               )}
 
@@ -519,7 +522,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
           </div>
         ) : (
           <div>
-            {features.publicTimeline && !restrictUnauth.timelines.local && (
+            {features.publicTimeline && timelineAccess.live_feeds.local === 'public' && (
               <>
                 <DropdownNavigationLink
                   to='/timeline/local'
@@ -534,7 +537,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                   onClick={closeSidebar}
                 />
 
-                {features.bubbleTimeline && !restrictUnauth.timelines.bubble && (
+                {features.bubbleTimeline && timelineAccess.live_feeds.bubble === 'public' && (
                   <DropdownNavigationLink
                     to='/timeline/bubble'
                     icon={require('@phosphor-icons/core/regular/graph.svg')}
@@ -543,7 +546,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                   />
                 )}
 
-                {features.federating && !restrictUnauth.timelines.federated && (
+                {features.federating && timelineAccess.live_feeds.remote === 'public' && (
                   <DropdownNavigationLink
                     to='/timeline/fediverse'
                     icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
@@ -552,7 +555,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                   />
                 )}
 
-                {features.wrenchedTimeline && !restrictUnauth.timelines.wrenched && (
+                {features.wrenchedTimeline && timelineAccess.live_feeds.wrenched === 'public' && (
                   <DropdownNavigationLink
                     to='/timeline/wrenched'
                     icon={require('@phosphor-icons/core/regular/wrench.svg')}

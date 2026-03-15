@@ -91,7 +91,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   );
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
 
-  const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
+  const timelineAccess = instance.configuration.timelines_access;
 
   const menu = useMemo((): Menu => {
     const menu: Menu = [];
@@ -371,16 +371,21 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
         {features.publicTimeline && (
           <>
-            {features.wrenchedTimeline && (account ?? !restrictUnauth.timelines.wrenched) && (
-              <SidebarNavigationLink
-                to='/timeline/wrenched'
-                icon={require('@phosphor-icons/core/regular/wrench.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/wrench-fill.svg')}
-                text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-              />
-            )}
+            {features.wrenchedTimeline &&
+              (account
+                ? timelineAccess.live_feeds.wrenched !== 'disabled'
+                : timelineAccess.live_feeds.wrenched === 'public') && (
+                <SidebarNavigationLink
+                  to='/timeline/wrenched'
+                  icon={require('@phosphor-icons/core/regular/wrench.svg')}
+                  activeIcon={require('@phosphor-icons/core/fill/wrench-fill.svg')}
+                  text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
+                />
+              )}
 
-            {(account ?? !restrictUnauth.timelines.local) && (
+            {(account
+              ? timelineAccess.live_feeds.local !== 'disabled'
+              : timelineAccess.live_feeds.local === 'public') && (
               <SidebarNavigationLink
                 to='/timeline/local'
                 icon={require('@phosphor-icons/core/regular/planet.svg')}
@@ -395,23 +400,29 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               />
             )}
 
-            {features.bubbleTimeline && (account ?? !restrictUnauth.timelines.bubble) && (
-              <SidebarNavigationLink
-                to='/timeline/bubble'
-                icon={require('@phosphor-icons/core/regular/graph.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/graph-fill.svg')}
-                text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-              />
-            )}
+            {features.bubbleTimeline &&
+              (account
+                ? timelineAccess.live_feeds.bubble !== 'disabled'
+                : timelineAccess.live_feeds.bubble === 'public') && (
+                <SidebarNavigationLink
+                  to='/timeline/bubble'
+                  icon={require('@phosphor-icons/core/regular/graph.svg')}
+                  activeIcon={require('@phosphor-icons/core/fill/graph-fill.svg')}
+                  text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                />
+              )}
 
-            {features.federating && (account ?? !restrictUnauth.timelines.federated) && (
-              <SidebarNavigationLink
-                to='/timeline/fediverse'
-                icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/fediverse-logo-fill.svg')}
-                text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-              />
-            )}
+            {features.federating &&
+              (account
+                ? timelineAccess.live_feeds.remote !== 'disabled'
+                : timelineAccess.live_feeds.remote === 'public') && (
+                <SidebarNavigationLink
+                  to='/timeline/fediverse'
+                  icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
+                  activeIcon={require('@phosphor-icons/core/fill/fediverse-logo-fill.svg')}
+                  text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                />
+              )}
           </>
         )}
 
