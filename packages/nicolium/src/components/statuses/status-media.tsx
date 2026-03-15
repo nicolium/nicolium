@@ -105,7 +105,6 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
             foregroundColor={attachment.meta.colors?.foreground}
             accentColor={attachment.meta.colors?.accent}
             duration={attachment.meta.original?.duration ?? 0}
-            height={263}
           />
         </Suspense>
       );

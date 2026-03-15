@@ -465,7 +465,8 @@ const Audio: React.FC<IAudio> = (props) => {
         backgroundColor: _getBackgroundColor(),
         color: _getForegroundColor(),
         width: '100%',
-        height: fullscreen ? '100%' : (height ?? props.height),
+        height: fullscreen ? '100%' : undefined,
+        aspectRatio: fullscreen ? undefined : '16 / 9',
       }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
