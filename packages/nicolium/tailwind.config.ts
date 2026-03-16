@@ -25,10 +25,9 @@ const config: Config = {
       xl: '1280px',
     },
     extend: {
-      boxShadow: ({ theme }) => ({
+      boxShadow: {
         '3xl': '0 25px 75px -15px rgba(0, 0, 0, 0.25)',
-        'inset-ring': `inset 0 0 0 2px ${theme('colors.primary.600')}`,
-      }),
+      },
       fontSize: {
         base: '0.9375rem',
       },
