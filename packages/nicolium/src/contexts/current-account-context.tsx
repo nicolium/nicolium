@@ -28,7 +28,7 @@ const DefaultCurrentAccountProvider: React.FC<ICurrentAccountProvider> = ({ chil
   return <CurrentAccountContext.Provider value={value}>{children}</CurrentAccountContext.Provider>;
 };
 
-const useCurrentAccount = () => useContext(CurrentAccountContext).me;
+const useCurrentAccount = () => useContext(CurrentAccountContext)?.me | null;
 
 const useCurrentAccountContext = () => useContext(CurrentAccountContext);
 
