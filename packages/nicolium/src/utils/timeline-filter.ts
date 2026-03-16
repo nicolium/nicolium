@@ -8,6 +8,10 @@ type StatusEntry = Extract<TimelineEntry, { type: 'status' }>;
 const isEntryFiltered = (entry: StatusEntry, filters: TimelineFilters): boolean =>
   (filters?.showDirect === false && entry.isDirect) ||
   (filters?.showReblogs === false && entry.isReblog) ||
+  (filters?.showSelfReblogs === false &&
+    entry.isReblog &&
+    entry.rebloggedBy.length === 1 &&
+    entry.rebloggedBy[0] === entry.accountId) ||
   (filters?.showReplies === false && entry.isReply) ||
   (filters?.showQuotes === false && entry.isQuote) ||
   (filters?.showNonMedia === false && !entry.hasMedia);

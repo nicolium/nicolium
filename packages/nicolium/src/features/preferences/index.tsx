@@ -315,6 +315,23 @@ const Preferences = () => {
         <ListItem
           label={
             <FormattedMessage
+              id='home.column_settings.show_self_reblogs'
+              defaultMessage='Show self-reposts in home timeline'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['timelines', 'home', 'showSelfReblogs']}
+            defaultValue
+            onChange={onToggleChange}
+            disabled={settings.timelines?.home?.showReblogs === false}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
               id='home.column_settings.show_replies'
               defaultMessage='Show replies in home timeline'
             />

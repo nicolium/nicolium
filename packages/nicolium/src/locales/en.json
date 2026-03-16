@@ -1214,6 +1214,7 @@
   "home.column_settings.show_quotes": "Show quotes in home timeline",
   "home.column_settings.show_reblogs": "Show reposts in home timeline",
   "home.column_settings.show_replies": "Show replies in home timeline",
+  "home.column_settings.show_self_reblogs": "Show self-reposts in home timeline",
   "icon_button.icons": "Icons",
   "icon_button.label": "Select icon",
   "import_data.actions.import": "Import",

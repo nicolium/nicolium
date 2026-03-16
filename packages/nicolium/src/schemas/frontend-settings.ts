@@ -83,6 +83,7 @@ const settingsSchema = v.object({
       v.string(),
       coerceObject({
         showReblogs: v.optional(v.boolean(), true),
+        showSelfReblogs: v.optional(v.boolean(), true),
         showReplies: v.optional(v.boolean(), true),
         showQuotes: v.optional(v.boolean(), true),
         showDirect: v.optional(v.boolean(), true),
