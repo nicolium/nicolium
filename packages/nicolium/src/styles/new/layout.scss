@@ -1096,10 +1096,34 @@ body {
 
   &--visible {
     animation: enter 200ms ease-out;
+
+    @keyframes enter {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
   }
 
   &:not(&--visible) {
     animation: leave 150ms ease-in forwards;
+
+    @keyframes leave {
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      to {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+    }
   }
 
   > div {
