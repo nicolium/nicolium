@@ -874,5 +874,6 @@ export {
   addToken,
   loadMastodonPreload,
   removeAccount,
+  defaultClient,
   type Me,
 };

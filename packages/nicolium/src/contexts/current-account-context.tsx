@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react';
 
-import { useAuthStore, useMe, type Me } from '@/stores/auth';
+import { defaultClient, useAuthStore, useMe, type Me } from '@/stores/auth';
 
 import type { PlApiClient } from 'pl-api';
 
@@ -9,7 +9,10 @@ interface CurrentAccountContextValue {
   client: PlApiClient;
 }
 
-const CurrentAccountContext = createContext<CurrentAccountContextValue>(null!);
+const CurrentAccountContext = createContext<CurrentAccountContextValue>({
+  me: null,
+  client: defaultClient,
+});
 
 interface ICurrentAccountProvider {
   children: React.ReactNode;
@@ -28,7 +31,7 @@ const DefaultCurrentAccountProvider: React.FC<ICurrentAccountProvider> = ({ chil
   return <CurrentAccountContext.Provider value={value}>{children}</CurrentAccountContext.Provider>;
 };
 
-const useCurrentAccount = () => useContext(CurrentAccountContext)?.me | null;
+const useCurrentAccount = () => useContext(CurrentAccountContext)?.me || null;
 
 const useCurrentAccountContext = () => useContext(CurrentAccountContext);
 

@@ -117,7 +117,6 @@ const Toast: React.FC<IToast> = (props) => {
         <div className='⁂-toast__dismiss'>
           <button
             type='button'
-            className=''
             onClick={dismissToast}
             data-testid='toast-dismiss'
             title={intl.formatMessage(messages.close)}

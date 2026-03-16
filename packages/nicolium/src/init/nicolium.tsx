@@ -16,16 +16,16 @@ preload();
 
 /** The root React node of the application. */
 const Nicolium: React.FC = () => (
-  <QueryClientProvider client={queryClient}>
-    <DefaultCurrentAccountProvider>
+  <DefaultCurrentAccountProvider>
+    <QueryClientProvider client={queryClient}>
       <StatProvider>
         <NicoliumHead />
         <NicoliumLoad>
           <NicoliumMount />
         </NicoliumLoad>
       </StatProvider>
-    </DefaultCurrentAccountProvider>
-  </QueryClientProvider>
+    </QueryClientProvider>
+  </DefaultCurrentAccountProvider>
 );
 
 export { Nicolium as default };
