@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
+import copy from '@/utils/copy';
 
 interface ICopyableInput {
   /** Text to be copied. */
@@ -18,15 +19,7 @@ const CopyableInput: React.FC<ICopyableInput> = ({ value, type = 'text', onCopy 
   const input = useRef<HTMLInputElement>(null);
 
   const selectInput = () => {
-    input.current?.select();
-
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(value);
-    } else {
-      document.execCommand('copy');
-    }
-
-    onCopy?.();
+    copy(value, onCopy, input.current);
   };
 
   return (
