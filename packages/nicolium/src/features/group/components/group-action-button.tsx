@@ -68,7 +68,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
       onConfirm: () =>
         leaveGroup(undefined, {
           onSuccess: () => {
-            toast.success(intl.formatMessage(messages.leaveSuccess));
+            toast.success(messages.leaveSuccess);
           },
         }),
     });

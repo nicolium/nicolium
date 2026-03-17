@@ -51,7 +51,7 @@ const ListForm: React.FC<IListForm> = ({ listId, onTabChange }) => {
       { title, replies_policy: repliesPolicy, exclusive, notify },
       {
         onSuccess: () => {
-          toast.success(intl.formatMessage(messages.success));
+          toast.success(messages.success);
         },
         onError: () => {
           toast.error(intl.formatMessage(messages.error));

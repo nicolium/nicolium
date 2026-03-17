@@ -326,7 +326,7 @@ const InteractionPoliciesPage = () => {
 
     Promise.all(promises)
       .then(() => {
-        toast.success(intl.formatMessage(messages.success));
+        toast.success(messages.success);
       })
       .catch(() => {
         toast.error(intl.formatMessage(messages.fail));

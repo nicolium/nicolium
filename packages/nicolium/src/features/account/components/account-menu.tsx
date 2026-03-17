@@ -36,6 +36,7 @@ const messages = defineMessages({
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
+  copySuccess: { id: 'account.copy_success', defaultMessage: 'Profile URL copied to clipboard' },
   media: { id: 'account.media', defaultMessage: 'Media' },
   blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
@@ -179,7 +180,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
     client.accounts
       .loadActivities(account.id)
       .then(() => {
-        toast.success(intl.formatMessage(messages.loadActivitiesSuccess));
+        toast.success(messages.loadActivitiesSuccess);
       })
       .catch(() => {
         toast.error(intl.formatMessage(messages.loadActivitiesFail));
@@ -318,7 +319,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   };
 
   const handleCopy: React.EventHandler<React.MouseEvent> = () => {
-    copy(account.url);
+    copy(account.url, () => toast.success(messages.copySuccess));
   };
 
   const makeMenu = () => {

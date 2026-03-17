@@ -141,11 +141,11 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
       },
       {
         onSuccess() {
-          toast.success(intl.formatMessage(messages.editSuccess));
+          toast.success(messages.editSuccess);
           onClose('EDIT_BOOKMARK_FOLDER');
         },
         onError() {
-          toast.success(intl.formatMessage(messages.editFail));
+          toast.success(messages.editFail);
         },
       },
     );

@@ -73,7 +73,7 @@ const EditGroup: React.FC = () => {
       },
       {
         onSuccess() {
-          toast.success(intl.formatMessage(messages.groupSaved));
+          toast.success(messages.groupSaved);
         },
         onError(error) {
           const response = (error as { response?: NicoliumResponse })?.response;

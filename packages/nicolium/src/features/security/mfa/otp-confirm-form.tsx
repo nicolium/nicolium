@@ -73,7 +73,7 @@ const OtpConfirmForm: React.FC = () => {
 
     confirmMfa(state, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.mfaConfirmSuccess));
+        toast.success(messages.mfaConfirmSuccess);
         navigate({ to: '/settings' });
       },
       onError: () => {

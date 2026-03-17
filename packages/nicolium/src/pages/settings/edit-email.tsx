@@ -46,7 +46,7 @@ const EditEmailPage = () => {
       .changeEmail(email, password)
       .then(() => {
         setState(initialState);
-        toast.success(intl.formatMessage(messages.updateEmailSuccess));
+        toast.success(messages.updateEmailSuccess);
       })
       .finally(() => {
         setLoading(false);

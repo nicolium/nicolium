@@ -180,14 +180,14 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       ?.textContent?.trim();
     if (content) {
       if (status.spoiler_text.length) content = `${status.spoiler_text}\n\n${content}`;
-      copy(content, () => toast.success(intl.formatMessage(messages.copyStatusSuccess)));
+      copy(content, () => toast.success(messages.copyStatusSuccess));
     }
   };
 
   const handleCopy = () => {
     const { uri } = status;
 
-    copy(uri, () => toast.success(intl.formatMessage(messages.copySuccess)));
+    copy(uri, () => toast.success(messages.copySuccess));
   };
 
   const handleBookmarkClick = () => {

@@ -64,7 +64,7 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
   const handleUpdate = () => {
     updateCircle(title, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.success));
+        toast.success(messages.success);
       },
       onError: () => {
         toast.error(intl.formatMessage(messages.error));

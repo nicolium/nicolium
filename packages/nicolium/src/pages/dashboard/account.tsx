@@ -232,7 +232,7 @@ const AdminAccountPage: React.FC = () => {
     updateTags(
       { oldTags: accountBadges, newTags: badges },
       {
-        onSuccess: () => toast.success(intl.formatMessage(messages.badgesSaved)),
+        onSuccess: () => toast.success(messages.badgesSaved),
       },
     );
   };

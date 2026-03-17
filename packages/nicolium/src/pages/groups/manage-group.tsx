@@ -62,7 +62,7 @@ const ManageGroup: React.FC = () => {
       onConfirm: () => {
         deleteGroup(undefined, {
           onSuccess() {
-            toast.success(intl.formatMessage(messages.deleteSuccess));
+            toast.success(messages.deleteSuccess);
             navigate({ to: '/groups' });
           },
         });

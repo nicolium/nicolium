@@ -60,7 +60,7 @@ const MigrationPage = () => {
       .moveAccount(targetAccount, password)
       .then(() => {
         clearForm();
-        toast.success(intl.formatMessage(messages.moveAccountSuccess));
+        toast.success(messages.moveAccountSuccess);
       })
       .catch((error) => {
         let message = intl.formatMessage(messages.moveAccountFail);

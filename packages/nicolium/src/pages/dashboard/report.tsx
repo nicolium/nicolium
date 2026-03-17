@@ -114,7 +114,7 @@ const ReportPage: React.FC = () => {
   const handleSelfAssignReport = () => {
     selfAssignReport(undefined, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.reportAssigned));
+        toast.success(messages.reportAssigned);
       },
     });
   };
@@ -122,7 +122,7 @@ const ReportPage: React.FC = () => {
   const handleUnassignReport = () => {
     unassignReport(undefined, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.reportUnassigned));
+        toast.success(messages.reportUnassigned);
       },
     });
   };
@@ -131,7 +131,7 @@ const ReportPage: React.FC = () => {
     const onConfirm = (actionTakenComment?: string) => {
       resolveReport(actionTakenComment, {
         onSuccess: () => {
-          toast.success(intl.formatMessage(messages.reportResolved));
+          toast.success(messages.reportResolved);
         },
       });
     };
@@ -151,7 +151,7 @@ const ReportPage: React.FC = () => {
   const handleReopenReport = () => {
     reopenReport(undefined, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.reportReopened));
+        toast.success(messages.reportReopened);
       },
     });
   };

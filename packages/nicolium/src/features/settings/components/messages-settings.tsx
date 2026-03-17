@@ -29,7 +29,7 @@ const MessagesSettings = () => {
       { accepts_chat_messages: event.target.checked },
       {
         onSuccess: () => {
-          toast.success(intl.formatMessage(messages.success));
+          toast.success(messages.success);
         },
         onError: () => {
           toast.error(intl.formatMessage(messages.fail));

@@ -91,7 +91,7 @@ const FrontendConfigEditor: React.FC = () => {
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     updateConfig(getUpdateFrontendConfigParams(data), {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.saved));
+        toast.success(messages.saved);
       },
     });
     e.preventDefault();

@@ -130,7 +130,7 @@ const ThemeEditorPage: React.FC = () => {
       const colors = v.parse(frontendConfigSchema, { colors: json }).colors;
 
       if (colors) setTheme(colors);
-      toast.success(intl.formatMessage(messages.importSuccess));
+      toast.success(messages.importSuccess);
     }
   };
 
@@ -140,7 +140,7 @@ const ThemeEditorPage: React.FC = () => {
     try {
       await fetchFrontendConfig(host);
       await updateTheme();
-      toast.success(intl.formatMessage(messages.saved));
+      toast.success(messages.saved);
       setSubmitting(false);
     } catch (e) {
       setSubmitting(false);

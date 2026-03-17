@@ -60,7 +60,7 @@ const ChatsPageSettings = () => {
 
     updateCredentials.mutate(data, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.success));
+        toast.success(messages.success);
       },
       onError: () => {
         toast.error(intl.formatMessage(messages.fail));

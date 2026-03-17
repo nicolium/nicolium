@@ -45,7 +45,7 @@ const DeleteAccountPage = () => {
     deleteAccount(client, password, { url: account!.url })
       .then(() => {
         setPassword('');
-        toast.success(intl.formatMessage(messages.deleteAccountSuccess));
+        toast.success(messages.deleteAccountSuccess);
       })
       .finally(() => {
         setLoading(false);

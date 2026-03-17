@@ -54,7 +54,7 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
         { notify: false },
         {
           onSuccess: () => {
-            toast.success(intl.formatMessage(messages.unsubscribeSuccess));
+            toast.success(messages.unsubscribeSuccess);
           },
           onError: () => {
             toast.error(intl.formatMessage(messages.unsubscribeFailure));
@@ -66,7 +66,7 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
         { notify: true },
         {
           onSuccess: () => {
-            toast.success(intl.formatMessage(messages.subscribeSuccess));
+            toast.success(messages.subscribeSuccess);
           },
           onError: () => {
             toast.error(intl.formatMessage(messages.subscribeFailure));

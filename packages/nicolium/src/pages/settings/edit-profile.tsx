@@ -354,7 +354,7 @@ const EditProfilePage: React.FC = () => {
     Promise.all(promises)
       .then(() => {
         setLoading(false);
-        toast.success(intl.formatMessage(messages.success));
+        toast.success(messages.success);
       })
       .catch(() => {
         setLoading(false);

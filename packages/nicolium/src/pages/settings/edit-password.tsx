@@ -61,7 +61,7 @@ const EditPasswordPage = () => {
       .changePassword(currentPassword, newPassword)
       .then(() => {
         resetState();
-        toast.success(intl.formatMessage(messages.updatePasswordSuccess));
+        toast.success(messages.updatePasswordSuccess);
       })
       .finally(() => {
         setLoading(false);

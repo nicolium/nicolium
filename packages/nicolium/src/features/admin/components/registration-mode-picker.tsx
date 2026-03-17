@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { RadioGroup, RadioItem } from '@/components/ui/radio';
 import { useUpdateAdminConfig } from '@/queries/admin/use-config';
@@ -43,7 +43,6 @@ const modeFromInstance = ({ registrations }: Instance): RegistrationMode => {
 
 /** Allows changing the registration mode of the instance, eg "open", "closed", "approval" */
 const RegistrationModePicker: React.FC = () => {
-  const intl = useIntl();
   const instance = useInstance();
   const { mutate: updateConfig } = useUpdateAdminConfig();
 
@@ -53,7 +52,7 @@ const RegistrationModePicker: React.FC = () => {
     const config = generateConfig(e.target.value as RegistrationMode);
     updateConfig(config, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.saved));
+        toast.success(messages.saved);
       },
     });
   };

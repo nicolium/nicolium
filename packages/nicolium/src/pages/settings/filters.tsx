@@ -42,7 +42,7 @@ const FiltersPage = () => {
   const handleFilterDelete = (id: string) => () => {
     deleteFilter(id, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.deleteSuccess));
+        toast.success(messages.deleteSuccess);
       },
       onError: () => {
         toast.error(intl.formatMessage(messages.deleteError));
