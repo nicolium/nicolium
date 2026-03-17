@@ -218,18 +218,22 @@ const Thread = ({
     </div>
   );
 
-  const renderStatus = (id: string) => (
-    <ThreadStatus
-      key={id}
-      id={id}
-      focusedStatusId={status.id}
-      onMoveUp={handleMoveUp}
-      onMoveDown={handleMoveDown}
-      contextType='thread'
-      linear={linear}
-      depth={treeIndent ? depths[id] : undefined}
-    />
-  );
+  const renderStatus = (id: string) => {
+    const isAncestor = treeIndent && thread.indexOf(id) < statusIndex;
+    return (
+      <ThreadStatus
+        key={id}
+        id={id}
+        focusedStatusId={status.id}
+        onMoveUp={handleMoveUp}
+        onMoveDown={handleMoveDown}
+        contextType='thread'
+        linear={linear}
+        depth={treeIndent ? depths[id] : undefined}
+        isAncestor={isAncestor}
+      />
+    );
+  };
 
   const renderPendingStatus = (id: string) => {
     const idempotencyKey = id.replace(/^末pending-/, '');

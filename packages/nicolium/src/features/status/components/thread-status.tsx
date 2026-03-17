@@ -19,6 +19,7 @@ interface IThreadStatus {
   onMoveDown: (id: string) => void;
   linear?: boolean;
   depth?: number;
+  isAncestor?: boolean;
 }
 
 /** Status with reply-connector in threads. */
@@ -46,7 +47,7 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
   }
 
   const renderTreeConnector = (): React.JSX.Element | null => {
-    if (props.linear || isIndentMode) return null;
+    if (props.linear || (isIndentMode && !props.isAncestor)) return null;
 
     const isConnectedTop = replyToId && replyToId !== focusedStatusId;
     const isConnectedBottom = replyCount > 0;
@@ -74,9 +75,12 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
 
   return (
     <div
-      className={clsx('thread__status relative pb-4', { 'thread__status--linear': props.linear })}
+      className={clsx('thread__status relative pb-4', {
+        'thread__status--linear': props.linear,
+        'thread__status--ancestor': props.isAncestor,
+      })}
     >
-      {isIndentMode && depth > 0 && <DepthBorders depth={depth} />}
+      {isIndentMode && depth > 0 && !props.isAncestor && <DepthBorders depth={depth} />}
       {renderTreeConnector()}
       <div style={depth > 0 ? { marginInlineStart: `${depth}rem` } : undefined}>{status}</div>
       {props.linear && (
