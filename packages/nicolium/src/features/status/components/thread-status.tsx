@@ -31,7 +31,7 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
   const isLoaded = Boolean(statusData);
   const { deleted } = useStatusMeta(id);
 
-  const [maxIndentDepth] = React.useState(isMobile() ? 6 : 8);
+  const [maxIndentDepth] = React.useState(isMobile(window.innerWidth) ? 6 : 8);
 
   const isIndentMode = props.depth !== undefined;
   const depth = Math.min(props.depth ?? 0, maxIndentDepth);
@@ -86,7 +86,11 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
   );
 };
 
-const DepthBorders: React.FC<{ depth: number }> = ({ depth }) => (
+interface IDepthBorders {
+  depth: number;
+}
+
+const DepthBorders: React.FC<IDepthBorders> = ({ depth }) => (
   <>
     {new Array(depth).fill(0).map((_, d) => (
       <span
