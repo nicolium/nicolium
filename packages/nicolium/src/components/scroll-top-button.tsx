@@ -20,7 +20,8 @@ interface IScrollTopButton {
   threshold?: number;
   /** Distance from the top of the screen (scrolling up) before the action is triggered. */
   autoloadThreshold?: number;
-  accountIds?: Array<number>;
+  /** Avatars of the accounts will display next to the message (limited to 3) */
+  accountIds?: Array<string>;
 }
 
 /** Floating new post counter above timelines, clicked to scroll to top. */
