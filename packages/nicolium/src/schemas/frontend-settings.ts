@@ -104,7 +104,7 @@ const settingsSchema = v.object({
   }),
 
   threads: coerceObject({
-    displayMode: v.optional(v.picklist(['tree', 'linear']), 'tree'),
+    displayMode: v.optional(v.picklist(['tree', 'tree-indent', 'linear']), 'tree'),
   }),
 
   notifications: coerceObject({

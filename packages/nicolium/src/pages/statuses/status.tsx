@@ -39,6 +39,7 @@ const messages = defineMessages({
       'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?',
   },
   treeView: { id: 'status.thread.tree_view', defaultMessage: 'Tree view' },
+  treeIndentView: { id: 'status.thread.tree_indent_view', defaultMessage: 'Tree (indented)' },
   linearView: { id: 'status.thread.linear_view', defaultMessage: 'Linear view' },
   expandAll: { id: 'status.thread.expand_all', defaultMessage: 'Expand all posts' },
 });
@@ -76,6 +77,15 @@ const StatusPage: React.FC = () => {
         icon: require('@phosphor-icons/core/regular/tree-view.svg'),
         type: 'radio',
         checked: displayMode === 'tree',
+      },
+      {
+        text: intl.formatMessage(messages.treeIndentView),
+        action: () => {
+          changeSetting(['threads', 'displayMode'], 'tree-indent');
+        },
+        icon: require('@phosphor-icons/core/regular/tree-structure.svg'),
+        type: 'radio',
+        checked: displayMode === 'tree-indent',
       },
       {
         text: intl.formatMessage(messages.linearView),

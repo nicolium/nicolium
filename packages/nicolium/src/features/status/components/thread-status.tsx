@@ -7,6 +7,7 @@ import PlaceholderStatus from '@/features/placeholder/components/placeholder-sta
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useReplyCount, useReplyToId } from '@/stores/contexts';
 import { useStatusMeta } from '@/stores/status-meta';
+import { isMobile } from '@/utils/is-mobile';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
 
@@ -17,6 +18,7 @@ interface IThreadStatus {
   onMoveUp: (id: string) => void;
   onMoveDown: (id: string) => void;
   linear?: boolean;
+  depth?: number;
 }
 
 /** Status with reply-connector in threads. */
@@ -29,16 +31,22 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
   const isLoaded = Boolean(statusData);
   const { deleted } = useStatusMeta(id);
 
+  const [maxIndentDepth] = React.useState(isMobile() ? 6 : 8);
+
+  const isIndentMode = props.depth !== undefined;
+  const depth = Math.min(props.depth ?? 0, maxIndentDepth);
+
   if (deleted) {
     return (
       <div className='py-4 pb-8'>
+        {depth > 0 && <DepthBorders depth={depth} />}
         <Tombstone id={id} onMoveUp={props.onMoveUp} onMoveDown={props.onMoveDown} deleted />
       </div>
     );
   }
 
-  const renderConnector = (): React.JSX.Element | null => {
-    if (props.linear) return null;
+  const renderTreeConnector = (): React.JSX.Element | null => {
+    if (props.linear || isIndentMode) return null;
 
     const isConnectedTop = replyToId && replyToId !== focusedStatusId;
     const isConnectedBottom = replyCount > 0;
@@ -58,21 +66,36 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
     );
   };
 
+  const status = isLoaded ? (
+    <StatusContainer {...props} showGroup={false} />
+  ) : (
+    <PlaceholderStatus variant='default' />
+  );
+
   return (
     <div
       className={clsx('thread__status relative pb-4', { 'thread__status--linear': props.linear })}
     >
-      {renderConnector()}
-      {isLoaded ? (
-        <StatusContainer {...props} showGroup={false} />
-      ) : (
-        <PlaceholderStatus variant='default' />
-      )}
+      {isIndentMode && depth > 0 && <DepthBorders depth={depth} />}
+      {renderTreeConnector()}
+      <div style={depth > 0 ? { marginInlineStart: `${depth}rem` } : undefined}>{status}</div>
       {props.linear && (
         <hr className='-mx-4 mt-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
       )}
     </div>
   );
 };
+
+const DepthBorders: React.FC<{ depth: number }> = ({ depth }) => (
+  <>
+    {new Array(depth).fill(0).map((_, d) => (
+      <span
+        key={d}
+        className='thread-indent-border'
+        style={{ insetInlineStart: `${d + 0.5}rem` }}
+      />
+    ))}
+  </>
+);
 
 export { ThreadStatus as default };

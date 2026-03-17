@@ -256,6 +256,35 @@ const useDescendantsIds = (statusId?: string) => {
   );
 };
 
+const useThreadDepths = (statusId?: string) => {
+  const inReplyTos = useContextStore((state) => state.inReplyTos);
+  const replies = useContextStore((state) => state.replies);
+
+  return useMemo(() => {
+    const depths: Record<string, number> = {};
+    if (!statusId) return depths;
+
+    const ancestorsIds = getAncestorsIds(statusId, inReplyTos);
+    for (const id of ancestorsIds) depths[id] = 0;
+    depths[statusId] = 0;
+
+    const queue: Array<{ id: string; depth: number }> = [{ id: statusId, depth: -1 }];
+    const visited = new Set<string>([statusId]);
+
+    while (queue.length > 0) {
+      const { id, depth } = queue.shift()!;
+      for (const childId of replies[id] || []) {
+        if (visited.has(childId)) continue;
+        visited.add(childId);
+        depths[childId] = Math.max(0, depth + 1);
+        queue.push({ id: childId, depth: depth + 1 });
+      }
+    }
+
+    return depths;
+  }, [inReplyTos, replies, statusId]);
+};
+
 const useThread = (statusId?: string, linear?: boolean) => {
   const inReplyTos = useContextStore((state) => state.inReplyTos);
   const replies = useContextStore((state) => state.replies);
@@ -307,6 +336,7 @@ export {
   useContextStore,
   useDescendantsIds,
   useThread,
+  useThreadDepths,
   useReplyToId,
   useReplyCount,
   useContextsActions,

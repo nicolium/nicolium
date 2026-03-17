@@ -1925,6 +1925,7 @@
   "status.spoiler.expand": "Expand",
   "status.thread.expand_all": "Expand all posts",
   "status.thread.linear_view": "Linear view",
+  "status.thread.tree_indent_view": "Tree (indented)",
   "status.thread.tree_view": "Tree view",
   "status.title": "Post details",
   "status.title_direct": "Direct message",

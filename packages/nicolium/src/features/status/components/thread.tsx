@@ -16,7 +16,7 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
-import { useThread } from '@/stores/contexts';
+import { useThread, useThreadDepths } from '@/stores/contexts';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
@@ -64,7 +64,9 @@ const Thread = ({
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
   const linear = displayMode === 'linear';
+  const treeIndent = displayMode === 'tree-indent';
   const thread = useThread(status.id, linear);
+  const depths = useThreadDepths(treeIndent ? status.id : undefined);
 
   const statusIndex = thread.indexOf(status.id);
   const initialIndex = isModal && statusIndex !== 0 ? statusIndex + 1 : statusIndex;
@@ -225,6 +227,7 @@ const Thread = ({
       onMoveDown={handleMoveDown}
       contextType='thread'
       linear={linear}
+      depth={treeIndent ? depths[id] : undefined}
     />
   );
 
@@ -339,7 +342,7 @@ const Thread = ({
     if (isModal) children.unshift(<div key='padding' className='h-4' />);
 
     return children;
-  }, [thread, linear, status, isModal]);
+  }, [thread, displayMode, status, isModal]);
 
   const meta = useMemo(() => {
     const firstAttachment = status.media_attachments && status.media_attachments[0];
