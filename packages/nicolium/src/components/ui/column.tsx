@@ -8,7 +8,9 @@ import { useFrontendConfig } from '@/hooks/use-frontend-config';
 
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
 
-type IColumnHeader = Pick<IColumn, 'label' | 'backHref' | 'backParams' | 'className' | 'action'>;
+interface IColumnHeader extends Pick<IColumn, 'backHref' | 'backParams' | 'className' | 'action'> {
+  label: JSX.Element;
+}
 
 /** Contains the column title with optional back button. */
 const ColumnHeader: React.FC<IColumnHeader> = ({
