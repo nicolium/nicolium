@@ -139,6 +139,7 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
         },
         className,
       )}
+      tabIndex={-1}
     >
       {children}
     </main>

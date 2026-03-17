@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { FormattedMessage } from 'react-intl';
 
 import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
@@ -22,11 +23,8 @@ import { usePrefetchNotifications } from '@/queries/notifications/use-notificati
 import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useAuthStore } from '@/stores/auth';
-import { useInstance } from '@/stores/instance';
-import { useInstanceStore } from '@/stores/instance';
-// Dummy import, to make sure that <Status /> ends up in the application bundle.
-// Without this it ends up in ~8 very commonly used bundles.
-import '@/components/statuses/status';
+import { useInstance, useInstanceStore } from '@/stores/instance';
+import { useModalsActions } from '@/stores/modals';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
 import { useIsStandalone } from '@/utils/state';
@@ -39,6 +37,9 @@ import {
   StatusHoverCard,
 } from './util/async-components';
 import GlobalHotkeys from './util/global-hotkeys';
+// Dummy import, to make sure that <Status /> ends up in the application bundle.
+// Without this it ends up in ~8 very commonly used bundles.
+import '@/components/statuses/status';
 
 const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ const UI: React.FC = React.memo(() => {
   const vapidKey =
     useAuthStore((state) => state.app?.vapid_key) ?? instance.configuration.vapid.public_key;
   const client = useClient();
+  const { openModal } = useModalsActions();
 
   const isDropdownMenuOpen = useIsDropdownMenuOpen();
   const standalone = useIsStandalone();
@@ -82,6 +84,14 @@ const UI: React.FC = React.memo(() => {
   };
   const handleDrop = (e: DragEvent) => {
     e.preventDefault();
+  };
+
+  const handleSkipToContent = () => {
+    document.querySelector('main')?.focus();
+  };
+
+  const handleOpenHotkeysModal = () => {
+    openModal('HOTKEYS');
   };
 
   /** Load initial data when a user is logged in */
@@ -150,6 +160,17 @@ const UI: React.FC = React.memo(() => {
   return (
     <GlobalHotkeys node={node}>
       <div ref={node} style={style}>
+        <div className='⁂-skip-links'>
+          <button onClick={handleSkipToContent}>
+            <FormattedMessage id='skip_links.skip_to_content' defaultMessage='Skip to content' />
+          </button>
+          <button onClick={handleOpenHotkeysModal}>
+            <FormattedMessage
+              id='navigation.keyboard_shortcuts'
+              defaultMessage='Keyboard shortcuts'
+            />
+          </button>
+        </div>
         <div
           className={clsx('⁂-dragging-area', {
             '⁂-dragging-area--dragging': isDragging,

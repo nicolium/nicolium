@@ -623,6 +623,25 @@ body {
   }
 }
 
+.⁂-skip-links {
+  position: absolute;
+  z-index: 10;
+  top: -4rem;
+
+  display: flex;
+  gap: 0.5rem;
+
+  padding: 0.5rem;
+
+  &:focus-within {
+    top: 0;
+  }
+
+  button {
+    @include mixins.button($theme: secondary);
+  }
+}
+
 .⁂-dragging-area {
   pointer-events: none;
 

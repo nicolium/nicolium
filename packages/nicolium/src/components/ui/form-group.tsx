@@ -24,11 +24,12 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
 
   let firstChild;
   if (React.isValidElement(inputChildren[0])) {
-    firstChild = React.cloneElement(
-      inputChildren[0],
+    firstChild = React.cloneElement(inputChildren[0], {
       // @ts-expect-error
-      { id: formFieldId },
-    );
+      id: formFieldId,
+      'aria-invalid': hasError,
+      'aria-describedby': hasError ? `error-${formFieldId}` : undefined,
+    });
   }
 
   // @ts-expect-error
@@ -53,7 +54,11 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
 
           {hasError && (
             <div>
-              <p data-testid='form-group-error' className='⁂-form-group__error'>
+              <p
+                id={`error-${formFieldId}`}
+                data-testid='form-group-error'
+                className='⁂-form-group__error'
+              >
                 {errors.join(', ')}
               </p>
             </div>
@@ -96,7 +101,11 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
         {inputChildren.filter((_, i) => i !== 0)}
 
         {hasError && (
-          <p data-testid='form-group-error' className='⁂-form-group__error'>
+          <p
+            id={`error-${formFieldId}`}
+            data-testid='form-group-error'
+            className='⁂-form-group__error'
+          >
             {errors.join(', ')}
           </p>
         )}

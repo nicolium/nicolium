@@ -1836,6 +1836,7 @@
   "signup_panel.subtitle": "Sign up now to discuss what's happening.",
   "signup_panel.title": "New to {site_title}?",
   "site_preview.preview": "Preview",
+  "skip_links.skip_to_content": "Skip to content",
   "status.add_known_language": "Do not auto-translate posts in {language}.",
   "status.admin_account": "Moderate @{name}",
   "status.admin_status": "Open this post in the moderation interface",
