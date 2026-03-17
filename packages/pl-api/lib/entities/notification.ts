@@ -23,7 +23,7 @@ const baseNotificationSchema = v.object({
 
 const accountNotificationSchema = v.object({
   ...baseNotificationSchema.entries,
-  type: v.picklist(['follow', 'follow_request', 'admin.sign_up']),
+  type: v.picklist(['follow', 'follow_request', 'follow_request_accepted', 'admin.sign_up']),
 });
 
 const mentionNotificationSchema = v.object({

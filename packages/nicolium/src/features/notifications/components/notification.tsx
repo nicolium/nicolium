@@ -73,6 +73,7 @@ const buildLink = (
 const icons: Partial<Record<NotificationType | 'reply', string>> = {
   follow: require('@phosphor-icons/core/regular/user-plus.svg'),
   follow_request: require('@phosphor-icons/core/regular/user-plus.svg'),
+  follow_request_accepted: require('@phosphor-icons/core/regular/user-plus.svg'),
   mention: require('@phosphor-icons/core/regular/at.svg'),
   favourite: require('@phosphor-icons/core/regular/star.svg'),
   reblog: require('@phosphor-icons/core/regular/repeat.svg'),
@@ -108,6 +109,10 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
   follow_request: {
     id: 'notification.follow_request',
     defaultMessage: '{name} has requested to follow you',
+  },
+  follow_request_accepted: {
+    id: 'notification.follow_request_accepted',
+    defaultMessage: '{name} accepted your follow request',
   },
   mention: {
     id: 'notification.mention',
@@ -458,6 +463,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
 
     switch (type) {
       case 'follow':
+      case 'follow_request_accepted':
         return <AccountContainer id={account.id} avatarSize={avatarSize} withRelationship />;
       case 'follow_request':
         return (

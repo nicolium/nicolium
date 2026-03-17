@@ -1522,6 +1522,7 @@
   "notification.favourite": "{name} liked your post",
   "notification.follow": "{name} followed you",
   "notification.follow_request": "{name} has requested to follow you",
+  "notification.follow_request_accepted": "{name} accepted your follow request",
   "notification.mention": "{name} mentioned you",
   "notification.moderation_warning": "You have received a moderation warning",
   "notification.more": "{count, plural, one {# other} other {# others}}",
