@@ -10,7 +10,7 @@ interface IMention {
   disabled?: boolean;
 }
 
-/** Mention for display in post content and the composer. */
+/** Mention for display in the composer. */
 const Mention: React.FC<IMention> = ({ mention: { acct, username }, disabled }) => {
   const handleClick: React.MouseEventHandler = (e) => {
     if (disabled) {
