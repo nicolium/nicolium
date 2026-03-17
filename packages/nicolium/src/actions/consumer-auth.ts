@@ -1,5 +1,3 @@
-import queryString from 'query-string';
-
 import * as BuildConfig from '@/build-config';
 import { isURL } from '@/utils/auth';
 import sourceCode from '@/utils/code';
@@ -31,14 +29,15 @@ const prepareRequest = async (provider: string) => {
   localStorage.setItem('nicolium:external:baseurl', baseURL);
   localStorage.setItem('nicolium:external:scopes', scopes);
 
-  const params = {
+  const params: Record<string, string> = {
     provider,
     'authorization[client_id]': client_id,
-    'authorization[redirect_uri]': redirect_uri,
     'authorization[scope]': scopes,
   };
 
-  const query = queryString.stringify(params);
+  if (redirect_uri) params['authorization[redirect_uri]'] = redirect_uri;
+
+  const query = new URLSearchParams(params);
 
   location.href = `${baseURL}/oauth/prepare_request?${query.toString()}`;
 };

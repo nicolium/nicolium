@@ -1,4 +1,3 @@
-import split from 'graphemesplit';
 import React from 'react';
 
 import Emoji from '@/components/ui/emoji';
@@ -12,6 +11,8 @@ import unicodeMapping from './mapping';
 import { validEmojiChar } from '.';
 
 import type { CustomEmoji } from 'pl-api';
+
+const segmenter = new Intl.Segmenter();
 
 interface IMaybeEmoji {
   text: string;
@@ -56,11 +57,9 @@ const Emojify: React.FC<IEmojify> = React.memo(
       stack = '';
     };
 
-    const splitText = split(text);
+    const splitText = segmenter.segment(text || '');
 
-    for (const index in splitText) {
-      let c = splitText[index];
-
+    for (let { segment: c, index } of splitText) {
       // convert FE0E selector to FE0F so it can be found in unimap
       if (c.codePointAt(c.length - 1) === 65038) {
         c = c.slice(0, -1) + String.fromCodePoint(65039);
