@@ -384,6 +384,7 @@ const Timeline: React.FC<ITimeline> = ({
     timelineId,
     entries,
     queuedCount,
+    queuedAccountIds,
     fetchNextPage,
     dequeueEntries,
     fillGap,
@@ -518,6 +519,7 @@ const Timeline: React.FC<ITimeline> = ({
           count={queuedCount}
           message={messages.queue}
           liveRegionMessage={messages.queueLiveRegion}
+          accountIds={queuedAccountIds}
         />
       </Portal>
       <PullToRefresh onRefresh={refetch} isPullable={!isFetching}>

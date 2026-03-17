@@ -40,6 +40,7 @@ interface TimelineData {
   entries: Array<TimelineEntry>;
   queuedEntries: Array<Status>;
   queuedCount: number;
+  queuedAccountIds: Array<string>;
   isFetching: boolean;
   isPending: boolean;
   isError: boolean;
@@ -221,6 +222,7 @@ const useTimelinesStore = create<State>()(
 
           timeline.queuedEntries.unshift(status);
           timeline.queuedCount += 1;
+          timeline.queuedAccountIds.unshift(status.account.id);
         });
       },
       deleteStatus: (statusId) => {
@@ -270,6 +272,7 @@ const useTimelinesStore = create<State>()(
           timeline.entries.unshift(...processedEntries);
           timeline.queuedEntries = [];
           timeline.queuedCount = 0;
+          timeline.queuedAccountIds = [];
         }),
       fillGap: (timelineId, gapMinId, statuses, hasMore, direction) =>
         set((state) => {
@@ -400,6 +403,7 @@ const useTimelinesStore = create<State>()(
                 status.account.id !== accountId && status.reblog?.account.id !== accountId,
             );
             timeline.queuedCount = timeline.queuedEntries.length;
+            timeline.queuedAccountIds = timeline.queuedAccountIds.filter((id) => id !== accountId);
           }
         }),
       resetTimeline: (timelineId) =>
@@ -414,6 +418,7 @@ const createEmptyTimeline = (): TimelineData => ({
   entries: [],
   queuedEntries: [],
   queuedCount: 0,
+  queuedAccountIds: [],
   isFetching: false,
   isPending: true,
   isError: false,

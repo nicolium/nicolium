@@ -3,6 +3,7 @@ import throttle from 'lodash/throttle';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useIntl, type MessageDescriptor } from 'react-intl';
 
+import AvatarStack from '@/components/accounts/avatar-stack';
 import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';
 
@@ -19,6 +20,7 @@ interface IScrollTopButton {
   threshold?: number;
   /** Distance from the top of the screen (scrolling up) before the action is triggered. */
   autoloadThreshold?: number;
+  accountIds?: Array<number>;
 }
 
 /** Floating new post counter above timelines, clicked to scroll to top. */
@@ -29,6 +31,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   threshold = 240,
   autoloadThreshold = 50,
   liveRegionMessage = message,
+  accountIds,
 }) => {
   const intl = useIntl();
   const { autoloadTimelines } = useSettings();
@@ -101,7 +104,11 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
         aria-hidden={!visible}
       >
         <button onClick={handleClick} tabIndex={visible ? 0 : -1} aria-label={buttonMessage}>
-          <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} aria-hidden />
+          {accountIds?.length ? (
+            <AvatarStack accountIds={accountIds} />
+          ) : (
+            <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} aria-hidden />
+          )}
 
           <p>{buttonMessage}</p>
         </button>

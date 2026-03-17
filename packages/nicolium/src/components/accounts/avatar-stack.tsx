@@ -10,7 +10,8 @@ interface IAvatarStack {
 }
 
 const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
-  const { data: accounts } = useAccounts(accountIds.slice(0, limit));
+  const dedupAccountIds = React.useMemo(() => [...new Set(accountIds)], [accountIds]);
+  const { data: accounts } = useAccounts(dedupAccountIds.slice(0, limit));
 
   return (
     <div className='relative flex' aria-hidden>
