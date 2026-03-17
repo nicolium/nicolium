@@ -18,6 +18,7 @@ import { mutative } from 'zustand-mutative';
 
 import { createApp } from '@/actions/apps';
 import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
+import { FE_NAME, LEGACY_FE_NAME } from '@/actions/settings';
 import * as BuildConfig from '@/build-config';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -453,10 +454,7 @@ const useAuthStore = create<AuthStore>()(
       setSentryAccount(account);
 
       const settings =
-        account.settings_store?.['nicolium'] ??
-        account.settings_store?.['nicolium_dev'] ??
-        account.settings_store?.['pl_fe'] ??
-        account.settings_store?.['pl_fe_dev'];
+        account.settings_store?.[FE_NAME] ?? account.settings_store?.[LEGACY_FE_NAME];
 
       if (settings) {
         // lazy import to avoid circular dependency at module init
