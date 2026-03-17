@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 import type { ICryptoAddress } from '@/features/crypto-donate/components/crypto-address';
-import type { ModalType } from '@/features/ui/components/modal-root';
 import type { AltTextModalProps } from '@/modals/alt-text-modal';
 import type { AntennaEditorModalProps } from '@/modals/antenna-editor-modal';
 import type { BlockMuteModalProps } from '@/modals/block-mute-modal';
@@ -41,57 +40,66 @@ import type { TextFieldModalProps } from '@/modals/text-field-modal';
 import type { UnauthorizedModalProps } from '@/modals/unauthorized-modal';
 
 type OpenModalProps =
-  | [type: 'ALT_TEXT', props: AltTextModalProps]
-  | [type: 'ANTENNA_EDITOR', props: AntennaEditorModalProps]
-  | [type: 'BIRTHDAYS' | 'CREATE_GROUP' | 'HOTKEYS']
-  | [type: 'BOOST', props: BoostModalProps]
-  | [type: 'CIRCLE_EDITOR', props: CircleEditorModalProps]
-  | [type: 'COMPARE_HISTORY', props: CompareHistoryModalProps]
-  | [type: 'COMPONENT', props: ComponentModalProps]
-  | [type: 'COMPOSE', props?: ComposeModalProps]
-  | [type: 'COMPOSE_INTERACTION_POLICY', props?: ComposeInteractionPolicyModalProps]
-  | [type: 'CONFIRM', props: ConfirmationModalProps]
+  | [type: 'ALT_TEXT', props: AltTextModalProps, element?: HTMLElement]
+  | [type: 'ANTENNA_EDITOR', props: AntennaEditorModalProps, element?: HTMLElement]
+  | [type: 'BIRTHDAYS' | 'CREATE_GROUP' | 'HOTKEYS', props?: undefined, element?: HTMLElement]
+  | [type: 'BOOST', props: BoostModalProps, element?: HTMLElement]
+  | [type: 'CIRCLE_EDITOR', props: CircleEditorModalProps, element?: HTMLElement]
+  | [type: 'COMPARE_HISTORY', props: CompareHistoryModalProps, element?: HTMLElement]
+  | [type: 'COMPONENT', props: ComponentModalProps, element?: HTMLElement]
+  | [type: 'COMPOSE', props?: ComposeModalProps, element?: HTMLElement]
+  | [
+      type: 'COMPOSE_INTERACTION_POLICY',
+      props?: ComposeInteractionPolicyModalProps,
+      element?: HTMLElement,
+    ]
+  | [type: 'CONFIRM', props: ConfirmationModalProps, element?: HTMLElement]
   | [type: 'CRYPTO_DONATE', props: ICryptoAddress]
-  | [type: 'DISLIKES', props: DislikesModalProps]
-  | [type: 'DROPDOWN_MENU', props: DropdownMenuModalProps]
-  | [type: 'EDIT_ANNOUNCEMENT', props?: EditAnnouncementModalProps]
-  | [type: 'EDIT_BOOKMARK_FOLDER', props: EditBookmarkFolderModalProps]
-  | [type: 'EDIT_DOMAIN', props?: EditDomainModalProps]
-  | [type: 'EDIT_FEDERATION', props: EditFederationModalProps]
-  | [type: 'EDIT_RULE', props?: EditRuleModalProps]
-  | [type: 'EMBED', props: EmbedModalProps]
-  | [type: 'EVENT_MAP', props: EventMapModalProps]
-  | [type: 'EVENT_PARTICIPANTS', props: EventParticipantsModalProps]
-  | [type: 'FAMILIAR_FOLLOWERS', props: FamiliarFollowersModalProps]
-  | [type: 'FAVOURITES', props: FavouritesModalProps]
-  | [type: 'JOIN_EVENT', props: JoinEventModalProps]
-  | [type: 'LIST_ADDER', props: ListAdderModalProps]
-  | [type: 'LIST_EDITOR', props: ListEditorModalProps]
-  | [type: 'MEDIA', props: MediaModalProps]
-  | [type: 'MENTIONS', props: MentionsModalProps]
-  | [type: 'MISSING_DESCRIPTION', props: MissingDescriptionModalProps]
-  | [type: 'BLOCK_MUTE', props: BlockMuteModalProps]
-  | [type: 'REACTIONS', props: ReactionsModalProps]
-  | [type: 'REBLOGS', props: ReblogsModalProps]
-  | [type: 'REPLY_MENTIONS', props: ReplyMentionsModalProps]
-  | [type: 'REPORT', props: ReportModalProps]
-  | [type: 'SELECT_BOOKMARK_FOLDER', props: SelectBookmarkFolderModalProps]
-  | [type: 'SELECT_DRIVE_FILE', props: SelectDriveFileModalProps]
-  | [type: 'TEXT_FIELD', props: TextFieldModalProps]
-  | [type: 'UNAUTHORIZED', props?: UnauthorizedModalProps];
+  | [type: 'DISLIKES', props: DislikesModalProps, element?: HTMLElement]
+  | [type: 'DROPDOWN_MENU', props: DropdownMenuModalProps, element?: HTMLElement]
+  | [type: 'EDIT_ANNOUNCEMENT', props?: EditAnnouncementModalProps, element?: HTMLElement]
+  | [type: 'EDIT_BOOKMARK_FOLDER', props: EditBookmarkFolderModalProps, element?: HTMLElement]
+  | [type: 'EDIT_DOMAIN', props?: EditDomainModalProps, element?: HTMLElement]
+  | [type: 'EDIT_FEDERATION', props: EditFederationModalProps, element?: HTMLElement]
+  | [type: 'EDIT_RULE', props?: EditRuleModalProps, element?: HTMLElement]
+  | [type: 'EMBED', props: EmbedModalProps, element?: HTMLElement]
+  | [type: 'EVENT_MAP', props: EventMapModalProps, element?: HTMLElement]
+  | [type: 'EVENT_PARTICIPANTS', props: EventParticipantsModalProps, element?: HTMLElement]
+  | [type: 'FAMILIAR_FOLLOWERS', props: FamiliarFollowersModalProps, element?: HTMLElement]
+  | [type: 'FAVOURITES', props: FavouritesModalProps, element?: HTMLElement]
+  | [type: 'JOIN_EVENT', props: JoinEventModalProps, element?: HTMLElement]
+  | [type: 'LIST_ADDER', props: ListAdderModalProps, element?: HTMLElement]
+  | [type: 'LIST_EDITOR', props: ListEditorModalProps, element?: HTMLElement]
+  | [type: 'MEDIA', props: MediaModalProps, element?: HTMLElement]
+  | [type: 'MENTIONS', props: MentionsModalProps, element?: HTMLElement]
+  | [type: 'MISSING_DESCRIPTION', props: MissingDescriptionModalProps, element?: HTMLElement]
+  | [type: 'BLOCK_MUTE', props: BlockMuteModalProps, element?: HTMLElement]
+  | [type: 'REACTIONS', props: ReactionsModalProps, element?: HTMLElement]
+  | [type: 'REBLOGS', props: ReblogsModalProps, element?: HTMLElement]
+  | [type: 'REPLY_MENTIONS', props: ReplyMentionsModalProps, element?: HTMLElement]
+  | [type: 'REPORT', props: ReportModalProps, element?: HTMLElement]
+  | [type: 'SELECT_BOOKMARK_FOLDER', props: SelectBookmarkFolderModalProps, element?: HTMLElement]
+  | [type: 'SELECT_DRIVE_FILE', props: SelectDriveFileModalProps, element?: HTMLElement]
+  | [type: 'TEXT_FIELD', props: TextFieldModalProps, element?: HTMLElement]
+  | [type: 'UNAUTHORIZED', props?: UnauthorizedModalProps, element?: HTMLElement];
 
-type Modals = Array<{
+type ModalType = OpenModalProps[0];
+
+type Modal = {
   modalType: ModalType;
   modalProps?: Record<string, any>;
-}>;
+  element?: HTMLElement;
+};
+
+type Modals = Array<Modal>;
 
 type State = {
   modals: Modals;
   actions: {
     /** Open a modal of the given type */
-    openModal: (...[modalType, modalProps]: OpenModalProps) => void;
+    openModal: (...args: OpenModalProps) => void;
     /** Close the modal */
-    closeModal: (modalType?: ModalType, all?: boolean) => void;
+    closeModal: (modalType?: ModalType | null, all?: boolean) => void;
   };
 };
 
@@ -100,33 +108,33 @@ const useModalsStore = create<State>()(
     (set) => ({
       modals: [],
       actions: {
-        openModal: (...[modalType, modalProps]) => {
-          set((state: State) => {
-            state.modals.push({ modalType, modalProps });
+        openModal: (...[modalType, modalProps, element]) => {
+          set((state) => {
+            state.modals.push({ modalType, modalProps, element } as any);
           });
         },
         closeModal: (modalType, all) => {
-          set((state: State) => {
+          set((state) => {
             if (state.modals.length === 0) {
               return;
             }
-            let closedModal: Record<string, any> | undefined;
+            let closedModal: (typeof state.modals)[number] | undefined;
             if (all) {
-              closedModal = state.modals[0].modalProps;
+              closedModal = state.modals[0];
               state.modals = [];
-            } else if (modalType === undefined) {
-              closedModal = state.modals[state.modals.length - 1].modalProps;
+            } else if (!modalType) {
+              closedModal = state.modals[state.modals.length - 1];
               state.modals = state.modals.slice(0, -1);
             } else if (state.modals.some((modal) => modalType === modal.modalType)) {
               const lastIndex = state.modals.findLastIndex(
                 (modal) => modalType === modal.modalType,
               );
-              closedModal = state.modals[lastIndex].modalProps;
+              closedModal = state.modals[lastIndex];
               state.modals = state.modals.slice(0, lastIndex);
             }
-            if (closedModal?.element) {
-              const element = closedModal.element;
-              setTimeout(() => element.focus(), 0);
+            const element = closedModal?.element || closedModal?.modalProps?.element;
+            if (element) {
+              setTimeout(() => (element as HTMLElement).focus(), 0);
             }
           });
         },

@@ -91,7 +91,7 @@ const UI: React.FC = React.memo(() => {
   };
 
   const handleOpenHotkeysModal = () => {
-    openModal('HOTKEYS');
+    openModal('HOTKEYS', undefined, document.getElementById('skip-link-hotkeys') || undefined);
   };
 
   /** Load initial data when a user is logged in */
@@ -164,7 +164,7 @@ const UI: React.FC = React.memo(() => {
           <button onClick={handleSkipToContent}>
             <FormattedMessage id='skip_links.skip_to_content' defaultMessage='Skip to content' />
           </button>
-          <button onClick={handleOpenHotkeysModal}>
+          <button id='skip-link-hotkeys' onClick={handleOpenHotkeysModal}>
             <FormattedMessage
               id='navigation.keyboard_shortcuts'
               defaultMessage='Keyboard shortcuts'
