@@ -12,6 +12,7 @@ import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
+import Toggle from '@/components/ui/toggle';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';
@@ -32,11 +33,19 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
   const { updateCompose } = useComposeActions();
   const intl = useIntl();
 
-  const previewedStatus = useCompose(composeId).preview as unknown as Status;
+  const compose = useCompose(composeId);
+  const autoUpdate = compose.previewAutoUpdate;
+  const previewedStatus = compose.preview as unknown as Status;
 
   const handleClose = () => {
     updateCompose(composeId, (draft) => {
       draft.preview = null;
+    });
+  };
+
+  const handleSwitchAutoUpdate: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    updateCompose(composeId, (draft) => {
+      draft.previewAutoUpdate = event.target.checked;
     });
   };
 
@@ -58,6 +67,10 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
             <FormattedMessage id='compose_form.preview_label' defaultMessage='Preview' />
           </Text>
 
+          <Text theme='muted' size='sm' className='inline-flex items-center gap-1' tag='label'>
+            <FormattedMessage id='compose_form.preview.auto_update' defaultMessage='Auto-update' />
+            <Toggle size='sm' checked={autoUpdate} onChange={handleSwitchAutoUpdate} />
+          </Text>
           <IconButton
             src={require('@phosphor-icons/core/regular/x.svg')}
             title={intl.formatMessage(messages.close)}

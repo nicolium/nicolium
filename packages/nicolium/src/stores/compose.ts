@@ -136,6 +136,7 @@ interface Compose {
   hashtagCasingSuggestion: string | null;
   hashtagCasingSuggestionIgnored: boolean | null;
   preview: Partial<BaseStatus> | null;
+  previewAutoUpdate: boolean;
   suggestedLanguage: string | null;
   showLocationPicker: boolean;
 
@@ -191,6 +192,7 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   hashtagCasingSuggestion: null,
   hashtagCasingSuggestionIgnored: null,
   preview: null,
+  previewAutoUpdate: false,
   suggestedLanguage: null,
   showLocationPicker: false,
 

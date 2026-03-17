@@ -12,7 +12,7 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
-import { useComposeStore } from '@/stores/compose';
+import { useComposeActions, useSubmitCompose } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 import { getStatusIdsFromLinksInContent } from '@/utils/status';
 import Purify from '@/utils/url-purify';
@@ -34,7 +34,8 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
   const { urlPrivacy, ignoreHashtagCasingSuggestions } = useSettings();
-  const { actions } = useComposeStore.getState();
+  const actions = useComposeActions();
+  const submitCompose = useSubmitCompose(composeId);
 
   const checkUrls = useCallback(
     debounce((editorState: EditorState) => {
@@ -86,6 +87,13 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
       });
     }, 2000),
     [urlPrivacy.clearLinksInCompose],
+  );
+
+  const updatePreview = useCallback(
+    debounce(() => {
+      submitCompose({ preview: true });
+    }, 2000),
+    [],
   );
 
   const checkHashtagCasingSuggestions = useCallback(
@@ -200,6 +208,9 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
           } else if (draft.modifiedLanguage) {
             draft.editorStateMap[draft.modifiedLanguage] = data as string;
             draft.textMap[draft.modifiedLanguage] = text;
+          }
+          if (draft.preview && draft.previewAutoUpdate) {
+            updatePreview();
           }
         });
         checkUrls(editorState);

@@ -683,6 +683,7 @@
   "compose_form.poll.remove_option": "Remove this answer",
   "compose_form.poll_placeholder": "Add a poll topic…",
   "compose_form.preview": "Preview post",
+  "compose_form.preview.auto_update": "Auto-update",
   "compose_form.preview.close": "Hide preview",
   "compose_form.preview_label": "Preview",
   "compose_form.publish": "Post",
