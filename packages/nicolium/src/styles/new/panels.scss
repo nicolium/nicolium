@@ -11,3 +11,15 @@
     line-height: 1;
   }
 }
+
+.⁂-notifications-panel__body {
+  gap: 0;
+
+  .⁂-status-list {
+    height: 32rem;
+  }
+
+  .⁂-notification {
+    padding: 0.5rem 0;
+  }
+}

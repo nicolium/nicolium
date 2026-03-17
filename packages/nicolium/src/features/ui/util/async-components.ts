@@ -26,6 +26,9 @@ export const LatestAccountsPanel = lazy(
 export const MyGroupsPanel = lazy(() => import('@/features/ui/components/panels/my-groups-panel'));
 export const NewEventPanel = lazy(() => import('@/features/ui/components/panels/new-event-panel'));
 export const NewGroupPanel = lazy(() => import('@/features/ui/components/panels/new-group-panel'));
+export const NotificationsPanel = lazy(
+  () => import('@/features/ui/components/panels/notifications-panel'),
+);
 export const PinnedAccountsPanel = lazy(
   () => import('@/features/ui/components/panels/pinned-accounts-panel'),
 );

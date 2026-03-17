@@ -178,18 +178,20 @@ const FilterBar = () => {
 
 interface INotificationsColumn {
   multiColumn?: boolean;
+  compact?: boolean;
 }
 
-const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) => {
+const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, compact }) => {
   const features = useFeatures();
   const settings = useSettings();
   const { mutate: markNotificationsRead } = useMarkNotificationsReadMutation();
   const queryClient = useQueryClient();
 
   const showFilterBar =
+    !compact &&
     (features.notificationsExcludeTypes || features.notificationsIncludeTypes) &&
     settings.notifications.quickFilter.show;
-  const activeFilter = settings.notifications.quickFilter.active;
+  const activeFilter = compact ? 'all' : settings.notifications.quickFilter.active;
   const {
     data: notifications = [],
     isLoading,
@@ -337,6 +339,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
         notification={item}
         onMoveUp={handleMoveUp}
         onMoveDown={handleMoveDown}
+        compact={compact}
       />
     ));
   } else {
