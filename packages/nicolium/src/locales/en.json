@@ -824,7 +824,7 @@
   "developers.settings_store.advanced": "Advanced settings",
   "developers.settings_store.hint": "It is possible to directly edit your user settings here. BE CAREFUL! Editing this section can break your account, and you will only be able to recover through the API.",
   "direct.search_placeholder": "Send a message to…",
-  "directory.display_filter": "Display filter",
+  "directory.display_filter": "Ordered by",
   "directory.federated": "From known fediverse",
   "directory.fediverse_filter": "Fediverse filter",
   "directory.local": "From {domain} only",

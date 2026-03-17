@@ -152,7 +152,7 @@ const DirectoryPage = () => {
   };
 
   const handleChangeLocal: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    navigate({ search: ({ order }) => ({ local: e.target.checked, order }) });
+    navigate({ search: ({ order }) => ({ local: e.target.value === 'local', order }) });
   };
 
   const handleLoadMore = () => {
@@ -165,9 +165,7 @@ const DirectoryPage = () => {
         <div className='⁂-directory__filters'>
           <div>
             <CardTitle
-              title={
-                <FormattedMessage id='directory.display_filter' defaultMessage='Display filter' />
-              }
+              title={<FormattedMessage id='directory.display_filter' defaultMessage='Ordered by' />}
             />
 
             <RadioGroup onChange={handleChangeOrder}>
@@ -199,12 +197,12 @@ const DirectoryPage = () => {
                 <RadioItem
                   label={intl.formatMessage(messages.local, { domain: instance.title })}
                   checked={local}
-                  value='1'
+                  value='local'
                 />
                 <RadioItem
                   label={intl.formatMessage(messages.federated)}
                   checked={!local}
-                  value='0'
+                  value='federated'
                 />
               </RadioGroup>
             </div>
