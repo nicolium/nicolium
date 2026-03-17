@@ -358,7 +358,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
     menu.push({
       text: intl.formatMessage(messages.copy),
       action: handleCopy,
-      icon: require('@phosphor-icons/core/regular/clipboard.svg'),
+      icon: require('@phosphor-icons/core/regular/link-simple-horizontal.svg'),
     });
 
     if (!ownAccount) return menu;

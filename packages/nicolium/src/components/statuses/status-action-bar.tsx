@@ -992,7 +992,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.copy),
         action: handleCopy,
-        icon: require('@phosphor-icons/core/regular/clipboard.svg'),
+        icon: require('@phosphor-icons/core/regular/link-simple-horizontal.svg'),
       });
 
       if ('share' in navigator) {

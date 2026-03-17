@@ -260,7 +260,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       {
         text: intl.formatMessage(messages.copy),
         action: handleCopy,
-        icon: require('@phosphor-icons/core/regular/clipboard.svg'),
+        icon: require('@phosphor-icons/core/regular/link-simple-horizontal.svg'),
       },
     ];
 
