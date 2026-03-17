@@ -28,7 +28,7 @@ const DisableOtpForm: React.FC = () => {
   const handleSubmit = useCallback(() => {
     disableMfa(password, {
       onSuccess: () => {
-        toast.success(intlmessages.mfaDisableSuccess);
+        toast.success(messages.mfaDisableSuccess);
         navigate({ to: '/settings' });
       },
       onError: () => {
