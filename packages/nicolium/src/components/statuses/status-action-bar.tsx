@@ -76,6 +76,12 @@ const messages = defineMessages({
   cannotReblog: { id: 'status.cannot_reblog', defaultMessage: 'This post cannot be reposted' },
   chat: { id: 'status.chat', defaultMessage: 'Chat with @{name}' },
   copy: { id: 'status.copy', defaultMessage: 'Copy link to post' },
+  copySuccess: { id: 'status.copy.success', defaultMessage: 'Link to post copied to clipboard' },
+  copyStatus: { id: 'status.copy_content', defaultMessage: 'Copy post content' },
+  copyStatusSuccess: {
+    id: 'status.copy_content.success',
+    defaultMessage: 'Post content copied to clipboard',
+  },
   deactivateUser: {
     id: 'admin.users.actions.deactivate_user',
     defaultMessage: 'Deactivate @{name}',
@@ -724,7 +730,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const client = useClient();
 
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
-  const { targetLanguage } = useStatusMeta(status.id);
+  const { targetLanguage, expanded } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { data: group } = useGroupQuery(status.group_id || undefined, true);
   const { mutate: blockGroupMember } = useBlockGroupUserMutation(
@@ -904,10 +910,22 @@ const MenuButton: React.FC<IMenuButton> = ({
         });
     };
 
+    const handleCopyStatus = () => {
+      let content = document
+        .querySelector(
+          `article[data-status-id="${status.id}"] .⁂-status-content__container [data-markup="true"]`,
+        )
+        ?.textContent?.trim();
+      if (content) {
+        if (status.spoiler_text.length) content = `${status.spoiler_text}\n\n${content}`;
+        copy(content, () => toast.success(intl.formatMessage(messages.copyStatusSuccess)));
+      }
+    };
+
     const handleCopy: React.EventHandler<React.MouseEvent> = () => {
       const { uri } = status;
 
-      copy(uri);
+      copy(uri, () => toast.success(intl.formatMessage(messages.copySuccess)));
     };
 
     const handleShare = () => {
@@ -985,6 +1003,14 @@ const MenuButton: React.FC<IMenuButton> = ({
         icon: require('@phosphor-icons/core/regular/arrows-vertical.svg'),
         to: '/@{$username}/posts/$statusId',
         params: { username: status.account.acct, statusId: status.id },
+      });
+    }
+
+    if (status.spoiler_text.length === 0 || (expanded ?? false)) {
+      menu.push({
+        text: intl.formatMessage(messages.copyStatus),
+        action: handleCopyStatus,
+        icon: require('@phosphor-icons/core/regular/copy.svg'),
       });
     }
 
@@ -1307,6 +1333,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     status.pinned,
     status.reblogged,
     status.account?.relationship,
+    expanded,
   ]);
 
   return useMemo(

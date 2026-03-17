@@ -108,7 +108,7 @@ const EventLayout = () => {
       {meta}
       <Layout.Main>
         <Column label={event?.name} withHeader={false}>
-          <div className='space-y-4'>
+          <article className='space-y-4' data-status-id={statusId}>
             <EventHeader status={status} />
 
             {status && showTabs && (
@@ -116,7 +116,7 @@ const EventLayout = () => {
             )}
 
             <Outlet />
-          </div>
+          </article>
         </Column>
       </Layout.Main>
 

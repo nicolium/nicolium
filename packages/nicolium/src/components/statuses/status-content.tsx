@@ -62,6 +62,7 @@ interface IStatusContent {
   preview?: boolean;
   withMedia?: boolean;
   compose?: boolean;
+  isEvent?: boolean;
 }
 
 /** Renders the text content of a status */
@@ -76,6 +77,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     preview,
     withMedia,
     compose = false,
+    isEvent = false,
   }) => {
     const { urlPrivacy, displaySpoilers, renderMfm, displayMentionAvatars } = useSettings();
     const { greentext } = useFrontendConfig();
@@ -96,7 +98,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       statusMeta.localTargetLanguage,
     );
 
-    const withSpoiler = status.spoiler_text?.length > 0;
+    const withSpoiler = status.spoiler_text.length > 0;
     const expanded = !withSpoiler || (statusMeta.expanded ?? false);
 
     const maybeSetCollapsed = (): void => {
@@ -209,7 +211,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       [collapsed, onlyEmoji],
     );
 
-    const expandable = !displaySpoilers;
+    const expandable = !displaySpoilers && !isEvent;
 
     const output = [];
 

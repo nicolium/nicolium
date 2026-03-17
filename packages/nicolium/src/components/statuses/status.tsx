@@ -553,6 +553,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         focusable={focusable}
         element='article'
         lang={actualStatus.language || undefined}
+        data-status-id={status.id}
       >
         {body}
       </Hotkeys>
@@ -671,6 +672,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
       element='article'
       lang={actualStatus.language || undefined}
       data-testid='status'
+      data-status-id={status.id}
     >
       {body}
     </Hotkeys>

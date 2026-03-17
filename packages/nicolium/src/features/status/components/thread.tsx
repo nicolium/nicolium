@@ -254,7 +254,12 @@ const Thread = ({
                 deleted
               />
             ) : (
-              <Hotkeys handlers={handlers} element='article' lang={status.language || undefined}>
+              <Hotkeys
+                handlers={handlers}
+                element='article'
+                lang={status.language || undefined}
+                data-status-id={status.id}
+              >
                 <div
                   ref={statusRef}
                   className='relative'

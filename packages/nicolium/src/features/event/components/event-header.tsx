@@ -28,6 +28,7 @@ import {
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
+import toast from '@/toast';
 import copy from '@/utils/copy';
 import { download } from '@/utils/download';
 import { shortNumberFormat } from '@/utils/numbers';
@@ -42,6 +43,12 @@ const messages = defineMessages({
   bannerHeader: { id: 'event.banner', defaultMessage: 'Event banner' },
   exportIcs: { id: 'event.export_ics', defaultMessage: 'Export to your calendar' },
   copy: { id: 'event.copy', defaultMessage: 'Copy link to event' },
+  copySuccess: { id: 'event.copy.success', defaultMessage: 'Link to event copied to clipboard' },
+  copyStatus: { id: 'status.copy_content', defaultMessage: 'Copy post content' },
+  copyStatusSuccess: {
+    id: 'status.copy_content.success',
+    defaultMessage: 'Post content copied to clipboard',
+  },
   external: { id: 'event.external', defaultMessage: 'View event on {domain}' },
   bookmark: { id: 'status.bookmark', defaultMessage: 'Bookmark' },
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
@@ -99,6 +106,7 @@ interface IEventHeader {
     | 'reblog_id'
     | 'reblogged'
     | 'sensitive'
+    | 'spoiler_text'
     | 'uri'
     | 'url'
     | 'visibility'
@@ -166,10 +174,20 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       .catch(() => {});
   };
 
+  const handleCopyStatus = () => {
+    let content = document
+      .querySelector(`article[data-status-id="${status.id}"] [data-markup="true"]`)
+      ?.textContent?.trim();
+    if (content) {
+      if (status.spoiler_text.length) content = `${status.spoiler_text}\n\n${content}`;
+      copy(content, () => toast.success(intl.formatMessage(messages.copyStatusSuccess)));
+    }
+  };
+
   const handleCopy = () => {
     const { uri } = status;
 
-    copy(uri);
+    copy(uri, () => toast.success(intl.formatMessage(messages.copySuccess)));
   };
 
   const handleBookmarkClick = () => {
@@ -257,12 +275,19 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         action: handleExportClick,
         icon: require('@phosphor-icons/core/regular/calendar-plus.svg'),
       },
-      {
-        text: intl.formatMessage(messages.copy),
-        action: handleCopy,
-        icon: require('@phosphor-icons/core/regular/link-simple-horizontal.svg'),
-      },
     ];
+
+    menu.push({
+      text: intl.formatMessage(messages.copyStatus),
+      action: handleCopyStatus,
+      icon: require('@phosphor-icons/core/regular/copy.svg'),
+    });
+
+    menu.push({
+      text: intl.formatMessage(messages.copy),
+      action: handleCopy,
+      icon: require('@phosphor-icons/core/regular/link-simple-horizontal.svg'),
+    });
 
     if (features.federating && !account.local) {
       menu.push({
