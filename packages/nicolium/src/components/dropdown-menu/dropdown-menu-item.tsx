@@ -71,9 +71,11 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         navigate({ to: item.to, params: item.params, search: item.search, replace: true });
       } else navigate({ to: item.to, params: item.params, search: item.search });
     } else if (typeof item.action === 'function') {
-      const action = item.action;
       event.preventDefault();
-      action(event);
+      item.action(event);
+    } else if (typeof item.onChange == 'function') {
+      event.preventDefault();
+      item.onChange(!item.checked);
     }
   };
 
