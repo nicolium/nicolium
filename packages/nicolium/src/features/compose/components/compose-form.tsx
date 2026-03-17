@@ -22,6 +22,7 @@ import {
 } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import PreviewComposeContainer from '../containers/preview-compose-container';
@@ -147,6 +148,7 @@ const ComposeForm = <ID extends string>({
   const { configuration } = useInstance();
   const { closeModal } = useModalsActions();
   const actions = useComposeActions();
+  const { renderMfm } = useSettings();
 
   const compose = useCompose(id);
   const uploadCompose = useUploadCompose(id);
@@ -387,7 +389,10 @@ const ComposeForm = <ID extends string>({
 
   const actionsMenu: Menu = [];
 
-  if (features.createStatusPreview) {
+  if (
+    features.createStatusPreview ||
+    (renderMfm && compose.contentType === 'text/x.misskeymarkdown')
+  ) {
     actionsMenu.push({
       text: intl.formatMessage(messages.preview),
       action: handlePreview,

@@ -714,6 +714,22 @@ const useSubmitCompose = (composeId: string) => {
 
       const compose = actions.getCompose(composeId);
 
+      if (preview && compose.contentType === 'text/x.misskeymarkdown') {
+        const data: Partial<Status> = {
+          text: compose.text,
+          content: compose.text,
+          spoiler_text: compose.spoilerText,
+          media_attachments: compose.mediaAttachments,
+          content_type: 'text/x.misskeymarkdown',
+          emojis: [],
+        };
+        actions.updateCompose(composeId, (draft) => {
+          draft.preview = data;
+        });
+        onSuccess?.();
+        return;
+      }
+
       const statusText = compose.text;
       const media = compose.mediaAttachments;
       const editedId = compose.editedId;
