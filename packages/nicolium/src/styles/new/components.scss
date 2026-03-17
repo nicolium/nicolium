@@ -542,10 +542,13 @@ a.⁂-list-item,
       @include mixins.text($theme: inherit, $size: sm);
     }
 
-    .⁂-avatar {
+    .⁂-avatar-stack .⁂-avatar {
+      --avatar-stack-background: rgb(var(--color-primary-600));
+
       width: 1.5rem !important;
       height: 1.5rem !important;
-      outline: 2px solid rgb(var(--color-primary-600));
+
+      /* outline: 2px solid rgb(var(--color-primary-600)); */
       box-shadow: none;
     }
   }

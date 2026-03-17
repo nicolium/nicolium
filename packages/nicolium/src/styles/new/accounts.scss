@@ -286,3 +286,31 @@
     }
   }
 }
+
+.⁂-avatar-stack {
+  --avatar-stack-background: white;
+
+  position: relative;
+  display: flex;
+
+  .dark & {
+    --avatar-stack-background: rgb(var(--color-primary-900));
+  }
+
+  .black & {
+    --avatar-stack-background: black;
+  }
+
+  > div {
+    position: relative;
+
+    &:not(:first-child) {
+      margin-left: -0.75rem;
+    }
+
+    .⁂-avatar {
+      border-radius: 9999px !important;
+      outline: 2px solid var(--avatar-stack-background);
+    }
+  }
+}
