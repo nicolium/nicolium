@@ -9,7 +9,7 @@ import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
 
 interface IColumnHeader extends Pick<IColumn, 'backHref' | 'backParams' | 'className' | 'action'> {
-  label: JSX.Element;
+  label: React.JSX.Element;
 }
 
 /** Contains the column title with optional back button. */
