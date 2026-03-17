@@ -869,6 +869,7 @@ const useSubmitCompose = (composeId: string) => {
           const data = await client.statuses.previewStatus(params);
           actions.updateCompose(composeId, (draft) => {
             draft.preview = data;
+            draft.preview.id = '';
           });
           onSuccess?.();
         } catch {}
