@@ -727,6 +727,21 @@ const Preferences = () => {
         <ListItem
           label={
             <FormattedMessage
+              id='preferences.fields.display_mention_avatars'
+              defaultMessage='Show avatars next to mentions'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['displayMentionAvatars']}
+            onChange={onToggleChange}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
               id='preferences.fields.use_system_media_controls_label'
               defaultMessage='Use native media controls'
             />

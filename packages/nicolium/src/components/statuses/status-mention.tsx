@@ -2,8 +2,10 @@ import React from 'react';
 
 import { Link } from '@/components/link';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useSettings } from '@/stores/settings';
 
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
+import { MentionWithAvatar } from '../accounts/mention-with-avatar';
 
 interface IStatusMention {
   accountId: string;
@@ -12,6 +14,8 @@ interface IStatusMention {
 
 const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
   const { data: account } = useAccount(accountId);
+
+  const { displayMentionAvatars } = useSettings();
 
   if (!account)
     return (
@@ -29,9 +33,13 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
         e.stopPropagation();
       }}
     >
-      <HoverAccountWrapper accountId={accountId} element='span'>
-        @{account.acct}
-      </HoverAccountWrapper>
+      {displayMentionAvatars ? (
+        <MentionWithAvatar id={accountId} username={account.acct} />
+      ) : (
+        <HoverAccountWrapper accountId={accountId} element='span'>
+          @{account.acct}
+        </HoverAccountWrapper>
+      )}
     </Link>
   );
 };

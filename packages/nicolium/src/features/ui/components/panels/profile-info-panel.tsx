@@ -12,6 +12,7 @@ import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
+import { useSettings } from '@/stores/settings';
 import { capitalize } from '@/utils/strings';
 
 import { ProfileField } from '../../util/async-components';
@@ -51,6 +52,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const acct = useAcct(account);
   const me = useCurrentAccount();
   const ownAccount = account?.id === me;
+  const { displayMentionAvatars } = useSettings();
 
   const { data: scrobble } = useAccountScrobbleQuery(account?.id);
 
@@ -222,6 +224,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
               html={account.note}
               emojis={account.emojis}
               speakAsCat={account.speak_as_cat}
+              displayMentionAvatars={displayMentionAvatars}
             />
           </Markup>
         )}

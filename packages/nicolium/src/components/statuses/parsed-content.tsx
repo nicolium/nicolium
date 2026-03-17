@@ -18,6 +18,7 @@ import { makeEmojiMap } from '@/utils/normalizers';
 import Purify from '@/utils/url-purify';
 
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
+import { MentionWithAvatar } from '../accounts/mention-with-avatar';
 import HashtagLink from '../hashtag-link';
 
 import StatusMention from './status-mention';
@@ -131,6 +132,7 @@ interface IParsedContent {
   displayTargetHost?: boolean;
   greentext?: boolean;
   speakAsCat?: boolean;
+  displayMentionAvatars?: boolean;
 }
 
 // Adapted from Mastodon https://github.com/mastodon/mastodon/blob/main/app/javascript/mastodon/components/hashtag_bar.tsx
@@ -175,7 +177,15 @@ function parseContent(
 };
 
 function parseContent(
-  { html, mentions, hasQuote, emojis, greentext = false, speakAsCat = false }: IParsedContent,
+  {
+    html,
+    mentions,
+    hasQuote,
+    emojis,
+    greentext = false,
+    speakAsCat = false,
+    displayMentionAvatars = false,
+  }: IParsedContent,
   extractHashtags = false,
 ) {
   if (html.length === 0) {
@@ -272,9 +282,13 @@ function parseContent(
                     e.stopPropagation();
                   }}
                 >
-                  <HoverAccountWrapper accountId={mention.id} element='span'>
-                    @{mention.username}
-                  </HoverAccountWrapper>
+                  {displayMentionAvatars ? (
+                    <MentionWithAvatar id={mention.id} username={mention.username} />
+                  ) : (
+                    <HoverAccountWrapper accountId={mention.id} element='span'>
+                      @{mention.username}
+                    </HoverAccountWrapper>
+                  )}
                 </Link>
               );
             }
@@ -371,13 +385,14 @@ function parseContent(
 
 const ParsedContent: React.FC<IParsedContent> = React.memo(
   (props) => {
-    const { urlPrivacy } = useSettings();
+    const { urlPrivacy, displayMentionAvatars } = useSettings();
 
     props = { ...props };
 
     props.cleanUrls ??= urlPrivacy.clearLinksInContent;
     props.redirectUrls ??= urlPrivacy.redirectLinksMode !== 'off';
     props.displayTargetHost ??= urlPrivacy.displayTargetHost;
+    props.displayMentionAvatars ??= displayMentionAvatars;
 
     return parseContent(props, false);
   },

@@ -77,7 +77,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     withMedia,
     compose = false,
   }) => {
-    const { urlPrivacy, displaySpoilers, renderMfm } = useSettings();
+    const { urlPrivacy, displaySpoilers, renderMfm, displayMentionAvatars } = useSettings();
     const { greentext } = useFrontendConfig();
     const { data: account } = useAccount(status.account_id);
 
@@ -174,10 +174,11 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           displayTargetHost: urlPrivacy.displayTargetHost,
           greentext,
           speakAsCat: account?.speak_as_cat,
+          displayMentionAvatars,
         },
         true,
       );
-    }, [content, renderMfm, account?.speak_as_cat]);
+    }, [content, renderMfm, account?.speak_as_cat, displayMentionAvatars]);
 
     const spoilerText =
       status.spoiler_text_map && statusMeta.currentLanguage

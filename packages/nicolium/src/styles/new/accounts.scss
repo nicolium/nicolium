@@ -245,3 +245,43 @@
     padding: 1rem;
   }
 }
+
+.⁂-mention-with-avatar {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+
+  padding: 0.125rem 0.5rem 0.125rem 0.25rem;
+  border-radius: 9999px;
+
+  vertical-align: middle;
+
+  background: rgb(var(--color-gray-200));
+
+  .dark & {
+    background: rgb(var(--color-primary-800));
+  }
+
+  .black & {
+    background: rgb(var(--color-gray-800));
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .⁂-avatar {
+    overflow: hidden;
+    border-radius: 9999px;
+
+    .text-lg & {
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+    }
+
+    &--placeholder {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}

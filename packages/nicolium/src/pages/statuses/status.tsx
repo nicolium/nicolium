@@ -42,6 +42,10 @@ const messages = defineMessages({
   treeIndentView: { id: 'status.thread.tree_indent_view', defaultMessage: 'Tree (indented)' },
   linearView: { id: 'status.thread.linear_view', defaultMessage: 'Linear view' },
   expandAll: { id: 'status.thread.expand_all', defaultMessage: 'Expand all posts' },
+  showAvatars: {
+    id: 'preferences.fields.display_mention_avatars',
+    defaultMessage: 'Show avatars next to mentions',
+  },
 });
 
 const StatusPage: React.FC = () => {
@@ -60,6 +64,7 @@ const StatusPage: React.FC = () => {
   const {
     displaySpoilers,
     threads: { displayMode },
+    displayMentionAvatars,
   } = useSettings();
 
   const handleRefresh = () => {
@@ -98,6 +103,15 @@ const StatusPage: React.FC = () => {
       },
     ];
 
+    menu.push(null, {
+      text: intl.formatMessage(messages.showAvatars),
+      onChange: (checked) => {
+        changeSetting(['displayMentionAvatars'], checked);
+      },
+      type: 'toggle',
+      checked: displayMentionAvatars,
+    });
+
     if (!displaySpoilers && expandAllStatuses) {
       menu.push(null, {
         text: intl.formatMessage(messages.expandAll),
@@ -106,7 +120,7 @@ const StatusPage: React.FC = () => {
       });
     }
     return menu;
-  }, [displayMode, expandAllStatuses]);
+  }, [displayMode, expandAllStatuses, displayMentionAvatars]);
 
   if (status?.event) {
     return (

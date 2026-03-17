@@ -73,7 +73,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     } else if (typeof item.action === 'function') {
       event.preventDefault();
       item.action(event);
-    } else if (typeof item.onChange == 'function') {
+    } else if (typeof item.onChange === 'function') {
       event.preventDefault();
       item.onChange(!item.checked);
     }

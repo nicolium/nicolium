@@ -1586,6 +1586,7 @@
   "preferences.fields.display_media.default": "Hide posts marked as sensitive",
   "preferences.fields.display_media.hide_all": "Always hide media posts",
   "preferences.fields.display_media.show_all": "Always show posts",
+  "preferences.fields.display_mention_avatars": "Show avatars next to mentions",
   "preferences.fields.implicit_addressing_label": "Include mentions in post content when replying",
   "preferences.fields.interface_size": "Interface size",
   "preferences.fields.known_languages_label": "Languages you know",
