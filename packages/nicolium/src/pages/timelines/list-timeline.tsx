@@ -4,7 +4,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { ListTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
-import MissingIndicator from '@/components/missing-indicator';
+import { EmptyMessage } from '@/components/empty-message';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
@@ -21,6 +21,7 @@ const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.delete_list.confirm', defaultMessage: 'Delete' },
   editList: { id: 'lists.edit', defaultMessage: 'Edit list' },
   deleteList: { id: 'lists.delete', defaultMessage: 'Delete list' },
+  notFound: { id: 'list.not_found', defaultMessage: 'List not found' },
 });
 
 const ListTimelinePage: React.FC = () => {
@@ -65,7 +66,24 @@ const ListTimelinePage: React.FC = () => {
       </Column>
     );
   } else if (!list) {
-    return <MissingIndicator />;
+    return (
+      <Column label={intl.formatMessage(messages.notFound)}>
+        <EmptyMessage
+          heading={<FormattedMessage id='list.not_found_heading' defaultMessage='List not found' />}
+          text={
+            <div className='flex flex-col items-center gap-4'>
+              <FormattedMessage
+                id='list.not_found'
+                defaultMessage="It might have been deleted or you don't have permission to view it. Make sure you're viewing it from the correct account."
+              />
+              <Button to='/lists' theme='muted'>
+                <FormattedMessage id='list.not_found.button' defaultMessage='Back to lists' />
+              </Button>
+            </div>
+          }
+        />
+      </Column>
+    );
   }
 
   const items = [
@@ -99,7 +117,6 @@ const ListTimelinePage: React.FC = () => {
               id='empty_column.list'
               defaultMessage='There is nothing in this list yet. When members of this list create new posts, they will appear here.'
             />
-            <br />
             <br />
             <Button onClick={handleEditClick}>
               <FormattedMessage id='list.click_to_add' defaultMessage='Click here to add people' />

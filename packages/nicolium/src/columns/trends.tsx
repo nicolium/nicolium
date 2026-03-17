@@ -68,17 +68,19 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
         children = [
           <EmptyMessage
             key='key-is-required'
+            icon={false}
+            heading={
+              <FormattedMessage
+                id='trends.no_accounts.heading'
+                defaultMessage='No suggested accounts'
+              />
+            }
             text={
               <div className='flex flex-col items-center gap-4'>
-                <FormattedMessage
-                  id='trends.no_accounts.first_line'
-                  defaultMessage='No suggested accounts found.'
-                />
-                <br />
                 {features.profileDirectory ? (
                   <>
                     <FormattedMessage
-                      id='trends.no_accounts.second_line'
+                      id='trends.no_accounts'
                       defaultMessage='Try entering a search query or browsing the profile directory to find accounts to follow.'
                     />
                     <Button to='/directory' theme='muted'>
@@ -87,7 +89,7 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
                   </>
                 ) : (
                   <FormattedMessage
-                    id='trends.no_accounts.second_line.no_directory'
+                    id='trends.no_accounts.no_directory'
                     defaultMessage='Try entering a search query to find accounts to follow.'
                   />
                 )}

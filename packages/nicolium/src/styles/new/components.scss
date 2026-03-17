@@ -858,6 +858,8 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
   align-items: center;
   justify-content: center;
 
+  max-width: 32rem;
+  margin: 0 auto;
   padding: 1.5rem 0;
 
   > div {
@@ -874,6 +876,12 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
       height: 1.5rem;
       color: rgb(var(--color-gray-600));
     }
+  }
+
+  h2 {
+    @include mixins.text($size: lg, $weight: bold, $align: center);
+
+    margin-bottom: -0.5rem;
   }
 
   p {
