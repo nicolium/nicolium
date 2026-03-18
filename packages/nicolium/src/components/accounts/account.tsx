@@ -15,6 +15,7 @@ import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
+import { useFeatures } from '@/hooks/use-features';
 import { useSettings } from '@/stores/settings';
 
 import Badge from '../badge';
@@ -164,6 +165,8 @@ const Account = ({
 
   const [style, setStyle] = useState<React.CSSProperties>({});
 
+  const intl = useIntl();
+  const features = useFeatures();
   const me = useCurrentAccount();
   const username = useAcct(account);
   const { disableUserProvidedMedia } = useSettings();
@@ -201,8 +204,6 @@ const Account = ({
 
     return null;
   };
-
-  const intl = useIntl();
 
   useLayoutEffect(() => {
     const onResize = () => {
@@ -435,7 +436,10 @@ const Account = ({
                 )}
 
                 {account.favicon && !disableUserProvidedMedia && (
-                  <InstanceFavicon account={account} disabled={!withLinkToProfile} />
+                  <InstanceFavicon
+                    account={account}
+                    disabled={!withLinkToProfile || !features.instanceTimeline}
+                  />
                 )}
 
                 {timestamp ? (

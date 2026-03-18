@@ -59,7 +59,9 @@ const RemoteTimelinePage: React.FC = () => {
       ...timelineFiltersOptions,
       null,
       {
-        text: intl.formatMessage(isPinned ? messages.unpinHost : messages.pinHost, { instance }),
+        text: intl.formatMessage(isPinned ? messages.unpinHost : messages.pinHost, {
+          host: instance,
+        }),
         action: handlePinHost,
         icon: isPinned ? iconPushPinSlash : iconPushPin,
       },
