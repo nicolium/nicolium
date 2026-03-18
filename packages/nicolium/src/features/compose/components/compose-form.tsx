@@ -1,3 +1,8 @@
+import iconAt from '@phosphor-icons/core/regular/at.svg';
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconEye from '@phosphor-icons/core/regular/eye.svg';
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import clsx from 'clsx';
 import { $getNodeByKey, CLEAR_EDITOR_COMMAND, TextNode, type LexicalEditor } from 'lexical';
 import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
@@ -114,7 +119,7 @@ const ComposeButton: React.FC<IComposeButton> = ({
           className='⁂-compose-form__button__actions'
           title={intl.formatMessage(messages.more)}
         >
-          <SvgIcon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
+          <SvgIcon src={iconCaretDown} aria-hidden />
         </button>
       </DropdownMenu>
     </div>
@@ -356,10 +361,10 @@ const ComposeForm = <ID extends string>({
   if (isEditing) {
     publishText = intl.formatMessage(messages.saveChanges);
   } else if (visibility === 'direct') {
-    publishIcon = require('@phosphor-icons/core/regular/at.svg');
+    publishIcon = iconAt;
     publishText = intl.formatMessage(messages.message);
   } else if (visibility === 'private' || visibility === 'mutuals_only') {
-    publishIcon = require('@phosphor-icons/core/regular/lock.svg');
+    publishIcon = iconLock;
     publishText = intl.formatMessage(messages.publish);
   } else {
     publishText =
@@ -396,14 +401,14 @@ const ComposeForm = <ID extends string>({
     actionsMenu.push({
       text: intl.formatMessage(messages.preview),
       action: handlePreview,
-      icon: require('@phosphor-icons/core/regular/eye.svg'),
+      icon: iconEye,
     });
   }
 
   actionsMenu.push({
     text: intl.formatMessage(messages.saveDraft),
     action: handleSaveDraft,
-    icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+    icon: iconPencilSimple,
   });
 
   return (

@@ -1,3 +1,7 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
+import iconLinkSimple from '@phosphor-icons/core/regular/link-simple.svg';
+import iconMagnifyingGlassPlus from '@phosphor-icons/core/regular/magnifying-glass-plus.svg';
+import iconPlay from '@phosphor-icons/core/regular/play.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import DOMPurify from 'dompurify';
@@ -212,7 +216,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       {trimmedDescription && <Text direction={direction}>{trimmedDescription}</Text>}
       <div className='flex items-center gap-1'>
         <Text tag='span' theme='muted'>
-          <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
+          <Icon src={iconLinkSimple} />
         </Text>
         <Text tag='span' theme='muted' size='sm' direction={direction}>
           {card.provider_name}
@@ -242,10 +246,10 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     if (embedded) {
       embed = <PreviewCardVideo card={card} />;
     } else {
-      let iconVariant = require('@phosphor-icons/core/regular/play.svg');
+      let iconVariant = iconPlay;
 
       if (card.type === 'photo') {
-        iconVariant = require('@phosphor-icons/core/regular/magnifying-glass-plus.svg');
+        iconVariant = iconMagnifyingGlassPlus;
       }
 
       embed = (
@@ -277,10 +281,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                     className='text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
                     title={intl.formatMessage(messages.externalLink)}
                   >
-                    <Icon
-                      src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
-                      className='size-6 text-inherit'
-                    />
+                    <Icon src={iconArrowSquareOut} className='size-6 text-inherit' />
                   </a>
                 )}
               </div>

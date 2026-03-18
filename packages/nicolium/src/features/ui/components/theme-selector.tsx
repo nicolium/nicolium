@@ -1,3 +1,8 @@
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconDesktop from '@phosphor-icons/core/regular/desktop.svg';
+import iconMoonStars from '@phosphor-icons/core/regular/moon-stars.svg';
+import iconMoon from '@phosphor-icons/core/regular/moon.svg';
+import iconSunDim from '@phosphor-icons/core/regular/sun-dim.svg';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -15,13 +20,13 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ id, value, onChange }) => {
   const themeIconSrc = useMemo(() => {
     switch (value) {
       case 'system':
-        return require('@phosphor-icons/core/regular/desktop.svg');
+        return iconDesktop;
       case 'light':
-        return require('@phosphor-icons/core/regular/sun-dim.svg');
+        return iconSunDim;
       case 'dark':
-        return require('@phosphor-icons/core/regular/moon.svg');
+        return iconMoon;
       case 'black':
-        return require('@phosphor-icons/core/regular/moon-stars.svg');
+        return iconMoonStars;
       default:
         return null;
     }
@@ -34,7 +39,15 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ id, value, onChange }) => {
   return (
     <div className='relative rounded-md shadow-sm'>
       <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-        <Icon src={themeIconSrc} className='size-4 text-gray-600 dark:text-gray-700' />
+        {themeIconSrc ? (
+          <Icon
+            src={themeIconSrc}
+            className='size-4 text-gray-600 dark:text-gray-700'
+            aria-hidden
+          />
+        ) : (
+          <div className='size-4' aria-hidden />
+        )}
       </div>
 
       <Select key={value} id={id} onChange={handleChange} defaultValue={value} className='!pl-10'>
@@ -53,10 +66,7 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ id, value, onChange }) => {
       </Select>
 
       <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3'>
-        <Icon
-          src={require('@phosphor-icons/core/regular/caret-down.svg')}
-          className='size-4 text-gray-600 dark:text-gray-700'
-        />
+        <Icon src={iconCaretDown} className='size-4 text-gray-600 dark:text-gray-700' />
       </div>
     </div>
   );

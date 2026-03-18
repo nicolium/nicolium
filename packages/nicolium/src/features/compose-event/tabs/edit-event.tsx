@@ -1,3 +1,5 @@
+import iconMapPin from '@phosphor-icons/core/regular/map-pin.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -222,9 +224,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const renderLocation = () =>
     location && (
       <div className='flex h-[38px] items-center gap-2 text-gray-700 dark:text-gray-500'>
-        <Icon
-          src={ADDRESS_ICONS[location.type] || require('@phosphor-icons/core/regular/map-pin.svg')}
-        />
+        <Icon src={ADDRESS_ICONS[location.type] || iconMapPin} />
         <div className='flex grow flex-col'>
           <Text>{location.description}</Text>
           <Text theme='muted' size='xs'>
@@ -235,7 +235,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         </div>
         <IconButton
           title={intl.formatMessage(messages.resetLocation)}
-          src={require('@phosphor-icons/core/regular/x.svg')}
+          src={iconX}
           onClick={() => {
             onChangeLocation(null);
           }}
@@ -267,7 +267,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
                 }
               />
               <IconButton
-                src={require('@phosphor-icons/core/regular/x.svg')}
+                src={iconX}
                 onClick={handleClearBanner}
                 title={intl.formatMessage(messages.resetLocation)}
               />

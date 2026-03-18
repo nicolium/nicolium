@@ -1,3 +1,4 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -98,10 +99,7 @@ const ServiceWorkerInfo: React.FC = () => {
             <ListItem label={intl.formatMessage(messages.url)}>
               <a href={url} target='_blank' className='flex items-center space-x-1 truncate'>
                 <span className='truncate'>{url}</span>
-                <Icon
-                  className='size-4'
-                  src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
-                />
+                <Icon className='size-4' src={iconArrowSquareOut} />
               </a>
             </ListItem>
           )}

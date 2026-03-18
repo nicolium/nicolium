@@ -1,3 +1,5 @@
+import iconArrowsInSimple from '@phosphor-icons/core/regular/arrows-in-simple.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -106,7 +108,7 @@ const OtherActionsStep = ({
 
               <div>
                 <Button
-                  icon={require('@phosphor-icons/core/regular/arrows-in-simple.svg')}
+                  icon={iconArrowsInSimple}
                   theme='tertiary'
                   size='sm'
                   onClick={() => {
@@ -122,7 +124,7 @@ const OtherActionsStep = ({
             </div>
           ) : (
             <Button
-              icon={require('@phosphor-icons/core/regular/plus.svg')}
+              icon={iconPlus}
               theme='tertiary'
               size='sm'
               onClick={() => {

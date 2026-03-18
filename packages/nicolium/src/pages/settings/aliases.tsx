@@ -1,3 +1,6 @@
+import iconBackspace from '@phosphor-icons/core/regular/backspace.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -56,7 +59,7 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   if (!added && accountId !== me) {
     button = (
       <IconButton
-        src={require('@phosphor-icons/core/regular/plus.svg')}
+        src={iconPlus}
         className='text-gray-400 hover:text-gray-600'
         iconClassName='h-5 w-5'
         title={intl.formatMessage(messages.add)}
@@ -124,7 +127,7 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
           title={intl.formatMessage(messages.clear)}
         >
           <Icon
-            src={require('@phosphor-icons/core/regular/backspace.svg')}
+            src={iconBackspace}
             className={clsx('size-5 text-gray-600', { hidden: !hasValue })}
             aria-hidden
           />
@@ -210,7 +213,7 @@ const AliasesPage = () => {
                 aria-label={intl.formatMessage(messages.delete)}
               >
                 <Text theme='muted' className='flex items-center gap-1'>
-                  <Icon src={require('@phosphor-icons/core/regular/x.svg')} />
+                  <Icon src={iconX} />
                   <FormattedMessage
                     id='aliases.aliases_list_delete'
                     defaultMessage='Unlink alias'

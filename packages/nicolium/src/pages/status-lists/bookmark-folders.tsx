@@ -1,3 +1,5 @@
+import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
+import iconFolderSimple from '@phosphor-icons/core/regular/folder-simple.svg';
 import { Navigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -120,7 +122,7 @@ const BookmarkFoldersPage: React.FC = () => {
             params={{ folderId: 'all' }}
             label={
               <div className='flex items-center gap-2'>
-                <Icon src={require('@phosphor-icons/core/regular/bookmarks.svg')} size={20} />
+                <Icon src={iconBookmarks} size={20} />
                 <span>
                   <FormattedMessage
                     id='bookmark_folders.all_bookmarks'
@@ -144,10 +146,7 @@ const BookmarkFoldersPage: React.FC = () => {
                       className='size-5 flex-none'
                     />
                   ) : (
-                    <Icon
-                      src={require('@phosphor-icons/core/regular/folder-simple.svg')}
-                      size={20}
-                    />
+                    <Icon src={iconFolderSimple} size={20} />
                   )}
                   <span>{folder.name}</span>
                 </div>

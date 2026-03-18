@@ -1,3 +1,5 @@
+import iconEyeSlash from '@phosphor-icons/core/regular/eye-slash.svg';
+import iconEye from '@phosphor-icons/core/regular/eye.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -134,14 +136,7 @@ const Input = React.forwardRef<HTMLInputElement, IInput>((props, ref) => {
         >
           <div className='⁂-input__wrapper__password-toggle'>
             <button type='button' onClick={togglePassword} tabIndex={-1}>
-              <SvgIcon
-                src={
-                  revealed
-                    ? require('@phosphor-icons/core/regular/eye-slash.svg')
-                    : require('@phosphor-icons/core/regular/eye.svg')
-                }
-                className='size-4'
-              />
+              <SvgIcon src={revealed ? iconEyeSlash : iconEye} className='size-4' />
             </button>
           </div>
         </Tooltip>

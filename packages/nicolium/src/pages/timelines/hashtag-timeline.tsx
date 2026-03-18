@@ -1,3 +1,4 @@
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -38,12 +39,7 @@ const HashtagTimelinePage: React.FC = () => {
   return (
     <Column
       label={`#${hashtag}`}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
     >
       {features.followHashtags && isLoggedIn && (
         <List>

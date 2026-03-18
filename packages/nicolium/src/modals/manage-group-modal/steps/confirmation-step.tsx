@@ -1,3 +1,5 @@
+import iconExport from '@phosphor-icons/core/regular/export.svg';
+import iconLinkSimple from '@phosphor-icons/core/regular/link-simple.svg';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 
@@ -115,7 +117,7 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
           <Button
             onClick={handleShare}
             theme='transparent'
-            icon={require('@phosphor-icons/core/regular/export.svg')}
+            icon={iconExport}
             className='text-primary-600'
           >
             <FormattedMessage
@@ -128,7 +130,7 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
         <Button
           onClick={handleCopyLink}
           theme='transparent'
-          icon={require('@phosphor-icons/core/regular/link-simple.svg')}
+          icon={iconLinkSimple}
           className='text-primary-600'
         >
           <FormattedMessage id='manage_group.confirmation.copy' defaultMessage='Copy link' />

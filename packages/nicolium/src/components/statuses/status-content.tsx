@@ -1,3 +1,5 @@
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -43,10 +45,7 @@ const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, preview }) => (
     {!preview && (
       <button className='⁂-read-more-button' onClick={onClick}>
         <FormattedMessage id='status.read_more' defaultMessage='Read more' />
-        <Icon
-          className='inline-block size-5'
-          src={require('@phosphor-icons/core/regular/caret-right.svg')}
-        />
+        <Icon className='inline-block size-5' src={iconCaretRight} />
       </button>
     )}
   </div>
@@ -231,7 +230,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           </span>
           {expandable && (
             <button onClick={toggleExpanded}>
-              <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+              <Icon src={iconCaretDown} />
               <span>
                 {expanded ? (
                   <FormattedMessage id='status.spoiler.collapse' defaultMessage='Collapse' />

@@ -1,3 +1,5 @@
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
+import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
@@ -75,7 +77,7 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
               },
             });
           },
-          icon: require('@phosphor-icons/core/regular/sign-out.svg'),
+          icon: iconSignOut,
         },
       ],
       [],
@@ -169,10 +171,7 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
               {features.chatsDelete && (
                 <div className='⁂-chat-list-item__menu'>
                   <DropdownMenu items={menu}>
-                    <IconButton
-                      src={require('@phosphor-icons/core/regular/dots-three.svg')}
-                      title={intl.formatMessage(messages.settings)}
-                    />
+                    <IconButton src={iconDotsThree} title={intl.formatMessage(messages.settings)} />
                   </DropdownMenu>
                 </div>
               )}

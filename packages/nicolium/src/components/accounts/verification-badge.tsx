@@ -1,3 +1,4 @@
+import iconCheck from '@phosphor-icons/core/regular/check.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
@@ -18,7 +19,7 @@ const VerificationBadge: React.FC<IVerificationBadge> = ({ className }) => {
   const frontendConfig = useFrontendConfig();
 
   // Prefer a custom icon if found
-  const icon = frontendConfig.verifiedIcon || require('@phosphor-icons/core/regular/check.svg');
+  const icon = frontendConfig.verifiedIcon || iconCheck;
 
   // Render component based on file extension
   const Element = icon.endsWith('.svg') ? Icon : 'img';

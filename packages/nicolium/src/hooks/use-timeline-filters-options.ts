@@ -111,7 +111,7 @@ const useTimelineFiltersOptions = (
 
     //   items.push({
     //     text: intl.formatMessage(messages.setAsDefault),
-    //     icon: require('@phosphor-icons/core/regular/house.svg'),
+    //     icon: iconHouse,
     //   });
     // }
 

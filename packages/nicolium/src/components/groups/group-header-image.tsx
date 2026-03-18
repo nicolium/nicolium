@@ -1,3 +1,4 @@
+import iconImageSquare from '@phosphor-icons/core/regular/image-square.svg';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -32,10 +33,7 @@ const GroupHeaderImage: React.FC<IGroupHeaderImage> = ({ className, group }) => 
           'flex items-center justify-center bg-gray-200 dark:bg-gray-800/30',
         )}
       >
-        <Icon
-          src={require('@phosphor-icons/core/regular/image-square.svg')}
-          className='size-6 text-gray-500 dark:text-gray-700'
-        />
+        <Icon src={iconImageSquare} className='size-6 text-gray-500 dark:text-gray-700' />
       </div>
     );
   }

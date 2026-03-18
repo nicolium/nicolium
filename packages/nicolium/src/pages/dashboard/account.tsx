@@ -1,3 +1,4 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
 import { PLEROMA } from 'pl-api';
 import React, { type ChangeEventHandler, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
@@ -344,12 +345,7 @@ const AdminAccountPage: React.FC = () => {
 
         {features.version.software === PLEROMA && (
           <div className='flex justify-center'>
-            <Button
-              icon={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
-              size='sm'
-              theme='secondary'
-              onClick={handleAdminFE}
-            >
+            <Button icon={iconArrowSquareOut} size='sm' theme='secondary' onClick={handleAdminFE}>
               <FormattedMessage
                 id='account_moderation_modal.admin_fe'
                 defaultMessage='Open in AdminFE'

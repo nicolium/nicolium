@@ -1,3 +1,4 @@
+import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
 import React from 'react';
 
 import Icon from '@/components/ui/icon';
@@ -17,7 +18,7 @@ const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId, sta
 
   return (
     <div className='⁂-quoted-status-indicator'>
-      <Icon src={require('@phosphor-icons/core/regular/quotes.svg')} aria-hidden />
+      <Icon src={iconQuotes} aria-hidden />
       <p>{statusUrl}</p>
     </div>
   );

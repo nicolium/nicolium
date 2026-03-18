@@ -1,3 +1,5 @@
+import iconEye from '@phosphor-icons/core/regular/eye.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -59,10 +61,7 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
     <OutlineBox>
       <div className='flex flex-col gap-2'>
         <div className='flex items-center gap-1'>
-          <Icon
-            className='size-4 text-gray-700 dark:text-gray-600'
-            src={require('@phosphor-icons/core/regular/eye.svg')}
-          />
+          <Icon className='size-4 text-gray-700 dark:text-gray-600' src={iconEye} />
           <Text theme='muted' size='sm' className='grow'>
             <FormattedMessage id='compose_form.preview_label' defaultMessage='Preview' />
           </Text>
@@ -72,7 +71,7 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
             <Toggle size='sm' checked={autoUpdate} onChange={handleSwitchAutoUpdate} />
           </Text>
           <IconButton
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             title={intl.formatMessage(messages.close)}
             onClick={handleClose}
             className='bg-transparent text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'

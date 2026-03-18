@@ -1,3 +1,4 @@
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -27,7 +28,7 @@ const LoadGap: React.FC<ILoadGap> = ({ disabled, maxId, onClick }) => {
       onClick={handleClick}
       aria-label={intl.formatMessage(messages.loadMore)}
     >
-      <Icon className='mx-auto' src={require('@phosphor-icons/core/regular/dots-three.svg')} />
+      <Icon className='mx-auto' src={iconDotsThree} />
     </button>
   );
 };

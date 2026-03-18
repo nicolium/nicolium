@@ -1,3 +1,4 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React from 'react';
 
@@ -49,7 +50,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
   if (!hideActions && onCancel) {
     actions = {
       onActionClick: handleClick,
-      actionIcon: require('@phosphor-icons/core/regular/x.svg'),
+      actionIcon: iconX,
       actionAlignment: 'top',
       actionTitle: 'Dismiss',
     };

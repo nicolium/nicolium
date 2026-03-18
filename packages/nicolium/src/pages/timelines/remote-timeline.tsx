@@ -1,3 +1,6 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -37,19 +40,14 @@ const RemoteTimelinePage: React.FC = () => {
       label={instance}
       title={<TimelinePicker active={`instance:${instance}`} />}
       truncateTitle={false}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
     >
       {!pinned && (
         <div className='mb-4 flex gap-2 px-2'>
           <IconButton
             className='text-gray-400 hover:text-gray-600'
             iconClassName='h-5 w-5'
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             onClick={handleCloseClick}
             title={intl.formatMessage(messages.close)}
           />
@@ -71,7 +69,7 @@ const RemoteTimelinePage: React.FC = () => {
             values={{ instance }}
           />
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
         instance={instance}
       />
     </Column>

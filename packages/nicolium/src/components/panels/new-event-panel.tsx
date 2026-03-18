@@ -1,3 +1,4 @@
+import iconCalendarDot from '@phosphor-icons/core/regular/calendar-dot.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -19,12 +20,7 @@ const NewEventPanel = () => (
       </Text>
     </div>
 
-    <Button
-      icon={require('@phosphor-icons/core/regular/calendar-dot.svg')}
-      theme='secondary'
-      block
-      to='/events/new'
-    >
+    <Button icon={iconCalendarDot} theme='secondary' block to='/events/new'>
       <FormattedMessage id='new_event_panel.action' defaultMessage='Create event' />
     </Button>
   </div>

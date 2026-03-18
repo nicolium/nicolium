@@ -1,3 +1,5 @@
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import React from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
@@ -33,7 +35,7 @@ const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({ host }) =
     {
       text: intl.formatMessage(messages.editFederation),
       action: handleEditFederation,
-      icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+      icon: iconPencilSimple,
     },
   ];
 
@@ -48,12 +50,7 @@ const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({ host }) =
         />
       }
       action={
-        account?.is_admin ? (
-          <DropdownMenu
-            items={menu}
-            src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-          />
-        ) : undefined
+        account?.is_admin ? <DropdownMenu items={menu} src={iconDotsThreeVertical} /> : undefined
       }
     >
       <InstanceRestrictions remoteInstance={remoteInstance} />

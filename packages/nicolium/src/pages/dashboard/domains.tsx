@@ -1,3 +1,4 @@
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -144,7 +145,7 @@ const AdminDomainsPage: React.FC = () => {
       <div className='flex flex-col gap-4'>
         <Button
           className='sm:w-fit sm:self-end'
-          icon={require('@phosphor-icons/core/regular/plus.svg')}
+          icon={iconPlus}
           onClick={handleCreateDomain}
           theme='secondary'
           block

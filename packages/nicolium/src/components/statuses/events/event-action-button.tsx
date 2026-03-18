@@ -1,3 +1,6 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
+import iconCheck from '@phosphor-icons/core/regular/check.svg';
+import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -44,7 +47,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
         className='min-w-max'
         size='sm'
         theme={theme}
-        icon={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
+        icon={iconArrowSquareOut}
         href={status.url}
       >
         <FormattedMessage id='event.join_state.empty' defaultMessage='Participate' />
@@ -99,14 +102,14 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
   switch (event.join_state) {
     case 'accept':
       buttonLabel = <FormattedMessage id='event.join_state.accept' defaultMessage='Going' />;
-      buttonIcon = require('@phosphor-icons/core/regular/check.svg');
+      buttonIcon = iconCheck;
       break;
     case 'pending':
       buttonLabel = <FormattedMessage id='event.join_state.pending' defaultMessage='Pending' />;
       break;
     case 'reject':
       buttonLabel = <FormattedMessage id='event.join_state.rejected' defaultMessage='Going' />;
-      buttonIcon = require('@phosphor-icons/core/regular/prohibit.svg');
+      buttonIcon = iconProhibit;
       buttonDisabled = true;
       break;
     default:

@@ -1,3 +1,4 @@
+import iconCalendarPlus from '@phosphor-icons/core/regular/calendar-plus.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -36,7 +37,7 @@ const ScheduleButton: React.FC<IScheduleButton> = ({ composeId, disabled }) => {
 
   return (
     <ComposeFormButton
-      icon={require('@phosphor-icons/core/regular/calendar-plus.svg')}
+      icon={iconCalendarPlus}
       title={intl.formatMessage(active ? messages.removeSchedule : messages.addSchedule)}
       active={active}
       disabled={disabled}

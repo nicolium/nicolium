@@ -1,3 +1,5 @@
+import iconGlobe from '@phosphor-icons/core/regular/globe.svg';
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -18,11 +20,7 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
       <div className='flex w-72 flex-col items-center gap-4'>
         <div className='rounded-full bg-gray-200 p-3 dark:bg-gray-800'>
           <Icon
-            src={
-              group.locked
-                ? require('@phosphor-icons/core/regular/lock.svg')
-                : require('@phosphor-icons/core/regular/globe.svg')
-            }
+            src={group.locked ? iconLock : iconGlobe}
             className='size-6 text-gray-600 dark:text-gray-600'
           />
         </div>
@@ -54,14 +52,7 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
     }
   >
     <div className='flex items-center gap-1' data-testid='group-privacy'>
-      <Icon
-        className='size-4'
-        src={
-          group.locked
-            ? require('@phosphor-icons/core/regular/lock.svg')
-            : require('@phosphor-icons/core/regular/globe.svg')
-        }
-      />
+      <Icon className='size-4' src={group.locked ? iconLock : iconGlobe} />
 
       <Text theme='inherit' tag='span' size='sm' weight='medium'>
         {group.locked ? (

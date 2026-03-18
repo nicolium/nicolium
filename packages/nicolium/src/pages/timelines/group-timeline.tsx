@@ -1,3 +1,4 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
@@ -75,7 +76,7 @@ const GroupTimelinePage: React.FC = () => {
             defaultMessage='There are no posts in this group yet.'
           />
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
         // showGroup={falsse}
       />
     </div>

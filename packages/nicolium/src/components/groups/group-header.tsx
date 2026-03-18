@@ -1,3 +1,4 @@
+import iconImageSquare from '@phosphor-icons/core/regular/image-square.svg';
 import { mediaAttachmentSchema } from 'pl-api';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -118,10 +119,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         className='flex h-32 w-full items-center justify-center bg-gray-200 dark:bg-gray-800/30 md:rounded-t-xl lg:h-52'
       >
         {isHeaderMissing ? (
-          <Icon
-            src={require('@phosphor-icons/core/regular/image-square.svg')}
-            className='size-6 text-gray-500 dark:text-gray-700'
-          />
+          <Icon src={iconImageSquare} className='size-6 text-gray-500 dark:text-gray-700' />
         ) : (
           header
         )}

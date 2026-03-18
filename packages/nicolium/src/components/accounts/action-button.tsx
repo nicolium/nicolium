@@ -1,3 +1,6 @@
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
+import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -212,7 +215,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
           />
         }
         onClick={handleBite}
-        icon={require('@phosphor-icons/core/regular/tooth.svg')}
+        icon={iconTooth}
       />
     );
   };
@@ -243,7 +246,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
       return (
         <Button
           onClick={handleRemoteFollow}
-          icon={require('@phosphor-icons/core/regular/plus.svg')}
+          icon={iconPlus}
           text={<FormattedMessage id='account.follow' defaultMessage='Follow' />}
           size='sm'
         />
@@ -333,11 +336,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
           size='sm'
           disabled={blockedBy || isPendingFollow || isPendingUnfollow}
           theme={isFollowing ? 'secondary' : 'primary'}
-          icon={
-            blockedBy
-              ? require('@phosphor-icons/core/regular/prohibit.svg')
-              : !isFollowing && require('@phosphor-icons/core/regular/plus.svg')
-          }
+          icon={blockedBy ? iconProhibit : !isFollowing ? iconPlus : undefined}
           onClick={handleFollow}
         >
           {isFollowing ? (

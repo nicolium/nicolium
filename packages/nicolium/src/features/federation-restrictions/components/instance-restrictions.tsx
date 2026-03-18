@@ -1,3 +1,9 @@
+import iconCheck from '@phosphor-icons/core/regular/check.svg';
+import iconEyeSlash from '@phosphor-icons/core/regular/eye-slash.svg';
+import iconImageBroken from '@phosphor-icons/core/regular/image-broken.svg';
+import iconLockOpen from '@phosphor-icons/core/regular/lock-open.svg';
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -49,7 +55,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
 
     if (followers_only) {
       items.push(
-        <Restriction key='followersOnly' icon={require('@phosphor-icons/core/regular/lock.svg')}>
+        <Restriction key='followersOnly' icon={iconLock}>
           <FormattedMessage
             id='federation_restriction.followers_only'
             defaultMessage='Hidden except to followers'
@@ -58,10 +64,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
       );
     } else if (federated_timeline_removal) {
       items.push(
-        <Restriction
-          key='federatedTimelineRemoval'
-          icon={require('@phosphor-icons/core/regular/lock-open.svg')}
-        >
+        <Restriction key='federatedTimelineRemoval' icon={iconLockOpen}>
           <FormattedMessage
             id='federation_restriction.federated_timeline_removal'
             defaultMessage='Fediverse timeline removal'
@@ -72,10 +75,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
 
     if (fullMediaRemoval) {
       items.push(
-        <Restriction
-          key='fullMediaRemoval'
-          icon={require('@phosphor-icons/core/regular/image-broken.svg')}
-        >
+        <Restriction key='fullMediaRemoval' icon={iconImageBroken}>
           <FormattedMessage
             id='federation_restriction.full_media_removal'
             defaultMessage='Full media removal'
@@ -84,10 +84,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
       );
     } else if (partialMediaRemoval) {
       items.push(
-        <Restriction
-          key='partialMediaRemoval'
-          icon={require('@phosphor-icons/core/regular/image-broken.svg')}
-        >
+        <Restriction key='partialMediaRemoval' icon={iconImageBroken}>
           <FormattedMessage
             id='federation_restriction.partial_media_removal'
             defaultMessage='Partial media removal'
@@ -98,7 +95,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
 
     if (!fullMediaRemoval && media_nsfw) {
       items.push(
-        <Restriction key='mediaNsfw' icon={require('@phosphor-icons/core/regular/eye-slash.svg')}>
+        <Restriction key='mediaNsfw' icon={iconEyeSlash}>
           <FormattedMessage
             id='federation_restriction.media_nsfw'
             defaultMessage='Attachments marked NSFW'
@@ -118,7 +115,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
 
     if (remoteInstance.federation.reject) {
       return (
-        <Restriction icon={require('@phosphor-icons/core/regular/x.svg')}>
+        <Restriction icon={iconX}>
           <FormattedMessage
             id='remote_instance.federation_panel.restricted_message'
             defaultMessage='{siteTitle} blocks all activities from {host}.'
@@ -129,7 +126,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
     } else if (hasRestrictions(remoteInstance)) {
       return (
         <>
-          <Restriction icon={require('@phosphor-icons/core/regular/lock.svg')}>
+          <Restriction icon={iconLock}>
             <FormattedMessage
               id='remote_instance.federation_panel.some_restrictions_message'
               defaultMessage='{siteTitle} has placed some restrictions on {host}.'
@@ -142,7 +139,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
       );
     } else {
       return (
-        <Restriction icon={require('@phosphor-icons/core/regular/check.svg')}>
+        <Restriction icon={iconCheck}>
           <FormattedMessage
             id='remote_instance.federation_panel.no_restrictions_message'
             defaultMessage='{siteTitle} has placed no restrictions on {host}.'

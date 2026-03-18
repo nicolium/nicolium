@@ -21,6 +21,9 @@ import toast from '@/toast';
 
 const toRad = (x: number) => x * (Math.PI / 180);
 
+import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
+
 import avatarMissing from '@/assets/images/avatar-missing.png';
 
 const HEIGHT = 1000;
@@ -256,16 +259,10 @@ const CirclePage: React.FC = () => {
         </div>
 
         <div className='flex gap-2'>
-          <Button
-            onClick={onSave}
-            icon={require('@phosphor-icons/core/regular/download-simple.svg')}
-          >
+          <Button onClick={onSave} icon={iconDownloadSimple}>
             <FormattedMessage id='interactions_circle.download' defaultMessage='Download' />
           </Button>
-          <Button
-            onClick={onCompose}
-            icon={require('@phosphor-icons/core/regular/note-pencil.svg')}
-          >
+          <Button onClick={onCompose} icon={iconNotePencil}>
             <FormattedMessage id='interactions_circle.compose' defaultMessage='Share' />
           </Button>
         </div>

@@ -1,3 +1,5 @@
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
@@ -23,13 +25,7 @@ const RestrictedInstance: React.FC<IRestrictedInstance> = ({ host }) => {
   return (
     <div>
       <a href='#' className='flex items-center gap-1 py-2.5 no-underline' onClick={toggleExpanded}>
-        <Icon
-          src={
-            expanded
-              ? require('@phosphor-icons/core/regular/caret-down.svg')
-              : require('@phosphor-icons/core/regular/caret-right.svg')
-          }
-        />
+        <Icon src={expanded ? iconCaretDown : iconCaretRight} />
         <div className={clsx({ 'line-through': remoteInstance.federation.reject })}>
           {remoteInstance.host}
         </div>

@@ -1,3 +1,5 @@
+import iconEyeSlash from '@phosphor-icons/core/regular/eye-slash.svg';
+import iconEye from '@phosphor-icons/core/regular/eye.svg';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -83,7 +85,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
         {visible ? (
           <Button
             text={<FormattedMessage id='moderation_overlay.hide' defaultMessage='Hide content' />}
-            icon={require('@phosphor-icons/core/regular/eye-slash.svg')}
+            icon={iconEyeSlash}
             onClick={toggleVisibility}
             theme='primary'
             size='sm'
@@ -123,7 +125,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
                   type='button'
                   theme='outlined'
                   size='sm'
-                  icon={require('@phosphor-icons/core/regular/eye.svg')}
+                  icon={iconEye}
                   onClick={toggleVisibility}
                 >
                   <FormattedMessage id='moderation_overlay.show' defaultMessage='Show content' />

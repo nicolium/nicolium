@@ -1,3 +1,6 @@
+import iconStopFill from '@phosphor-icons/core/fill/stop-fill.svg';
+import iconCheck from '@phosphor-icons/core/regular/check.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -129,7 +132,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
         <div className='flex items-center gap-3'>
           <AuthorizeRejectButton
             theme='danger'
-            icon={require('@phosphor-icons/core/regular/x.svg')}
+            icon={iconX}
             action={handleReject}
             isLoading={state === 'rejecting'}
             disabled={state === 'authorizing'}
@@ -138,7 +141,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
           />
           <AuthorizeRejectButton
             theme='primary'
-            icon={require('@phosphor-icons/core/regular/check.svg')}
+            icon={iconCheck}
             action={handleAuthorize}
             isLoading={state === 'authorizing'}
             disabled={state === 'rejecting'}
@@ -191,7 +194,7 @@ const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({
       })}
     >
       <IconButton
-        src={isLoading ? require('@phosphor-icons/core/fill/stop-fill.svg') : icon}
+        src={isLoading ? iconStopFill : icon}
         onClick={action}
         theme='seamless'
         className='size-10 items-center justify-center bg-white dark:!bg-gray-900'

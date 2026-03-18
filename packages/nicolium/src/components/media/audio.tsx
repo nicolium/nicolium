@@ -1,3 +1,8 @@
+import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
+import iconPause from '@phosphor-icons/core/regular/pause.svg';
+import iconPlay from '@phosphor-icons/core/regular/play.svg';
+import iconSpeakerHigh from '@phosphor-icons/core/regular/speaker-high.svg';
+import iconSpeakerX from '@phosphor-icons/core/regular/speaker-x.svg';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
@@ -554,13 +559,7 @@ const Audio: React.FC<IAudio> = (props) => {
                   className={clsx('player-button', fullscreen && 'py-2.5')}
                   onClick={togglePlay}
                 >
-                  <Icon
-                    src={
-                      paused
-                        ? require('@phosphor-icons/core/regular/play.svg')
-                        : require('@phosphor-icons/core/regular/pause.svg')
-                    }
-                  />
+                  <Icon src={paused ? iconPlay : iconPause} />
                 </button>
 
                 <button
@@ -570,13 +569,7 @@ const Audio: React.FC<IAudio> = (props) => {
                   className={clsx('player-button', fullscreen && 'py-2.5')}
                   onClick={toggleMute}
                 >
-                  <Icon
-                    src={
-                      muted
-                        ? require('@phosphor-icons/core/regular/speaker-x.svg')
-                        : require('@phosphor-icons/core/regular/speaker-high.svg')
-                    }
-                  />
+                  <Icon src={muted ? iconSpeakerX : iconSpeakerHigh} />
                 </button>
 
                 <div
@@ -621,7 +614,7 @@ const Audio: React.FC<IAudio> = (props) => {
                   download
                   target='_blank'
                 >
-                  <Icon src={require('@phosphor-icons/core/regular/download-simple.svg')} />
+                  <Icon src={iconDownloadSimple} />
                 </a>
               </div>
             </div>

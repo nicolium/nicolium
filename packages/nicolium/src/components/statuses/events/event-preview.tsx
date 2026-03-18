@@ -1,3 +1,5 @@
+import iconMapPin from '@phosphor-icons/core/regular/map-pin.svg';
+import iconUser from '@phosphor-icons/core/regular/user.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -77,7 +79,7 @@ const EventPreview: React.FC<IEventPreview> = ({
 
         <div className='⁂-event-card__info'>
           <div className='⁂-event-card__author'>
-            <Icon src={require('@phosphor-icons/core/regular/user.svg')} />
+            <Icon src={iconUser} />
             <div className='⁂-event-card__author__name'>
               <span>
                 <Emojify text={account.display_name} emojis={account.emojis} />
@@ -90,7 +92,7 @@ const EventPreview: React.FC<IEventPreview> = ({
 
           {event.location && (
             <div className='⁂-event-card__location'>
-              <Icon src={require('@phosphor-icons/core/regular/map-pin.svg')} />
+              <Icon src={iconMapPin} />
               <span>{event.location.name}</span>
             </div>
           )}

@@ -7,6 +7,8 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $createHorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
 import { $wrapNodeInElement, mergeRegister } from '@lexical/utils';
+import iconImage from '@phosphor-icons/core/regular/image.svg';
+import iconMinus from '@phosphor-icons/core/regular/minus.svg';
 import {
   $createParagraphNode,
   $getSelection,
@@ -76,7 +78,7 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
     fileElement.current?.click();
   };
 
-  const src = require('@phosphor-icons/core/regular/image.svg');
+  const src = iconImage;
 
   return (
     <label>
@@ -218,7 +220,7 @@ const BlockTypeFloatingToolbar = ({
           <ToolbarButton
             onClick={createHorizontalLine}
             aria-label={intl.formatMessage(messages.createHorizontalLine)}
-            icon={require('@phosphor-icons/core/regular/minus.svg')}
+            icon={iconMinus}
           />
         </>
       )}

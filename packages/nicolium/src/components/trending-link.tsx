@@ -1,3 +1,4 @@
+import iconLinkSimple from '@phosphor-icons/core/regular/link-simple.svg';
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 
@@ -56,7 +57,7 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
         <div className='divide-x-dot flex flex-wrap items-center text-gray-700 dark:text-gray-600'>
           <div className='flex items-center gap-1'>
             <Text tag='span' theme='muted'>
-              <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
+              <Icon src={iconLinkSimple} />
             </Text>
             <Text tag='span' theme='muted' size='sm' direction={direction}>
               {trendingLink.provider_name}

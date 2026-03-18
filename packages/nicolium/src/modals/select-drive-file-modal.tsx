@@ -1,3 +1,4 @@
+import iconFolder from '@phosphor-icons/core/regular/folder.svg';
 import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
@@ -48,10 +49,7 @@ const Folder: React.FC<IFolder> = ({ folder, active, disabled, onSelect, onDoubl
       onClick={disabled ? undefined : () => onSelect?.(folder)}
       disabled={disabled}
     >
-      <Icon
-        className='⁂-drive-file__icon'
-        src={require('@phosphor-icons/core/regular/folder.svg')}
-      />
+      <Icon className='⁂-drive-file__icon' src={iconFolder} />
 
       <span className='⁂-drive-file__label'>{folder.name}</span>
     </button>

@@ -1,3 +1,7 @@
+import iconArrowLineDown from '@phosphor-icons/core/regular/arrow-line-down.svg';
+import iconCaretDoubleDown from '@phosphor-icons/core/regular/caret-double-down.svg';
+import iconCaretDoubleUp from '@phosphor-icons/core/regular/caret-double-up.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useMemo, useRef, useState } from 'react';
@@ -64,7 +68,7 @@ const messages = defineMessages({
 const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
   return (
     <button className='⁂-skip-pinned' onClick={onClick}>
-      <Icon src={require('@phosphor-icons/core/regular/arrow-line-down.svg')} />
+      <Icon src={iconArrowLineDown} />
 
       <p>
         <FormattedMessage id='status.skip_pinned' defaultMessage='Skip pinned posts' />
@@ -178,7 +182,7 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
   return (
     <div className='⁂-timeline-gap'>
       <button onClick={() => handleFill('down')} disabled={isLoading}>
-        <Icon src={require('@phosphor-icons/core/regular/caret-double-down.svg')} aria-hidden />
+        <Icon src={iconCaretDoubleDown} aria-hidden />
         {firstEntry ? (
           <FormattedMessage id='timeline.gap.load_recent' defaultMessage='Load recent posts' />
         ) : (
@@ -195,7 +199,7 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
         </span>
       </div>
       <button onClick={() => handleFill('up')} disabled={isLoading}>
-        <Icon src={require('@phosphor-icons/core/regular/caret-double-up.svg')} aria-hidden />
+        <Icon src={iconCaretDoubleUp} aria-hidden />
         <FormattedMessage id='timeline.gap.load_newer' defaultMessage='Load newer posts' />
       </button>
     </div>
@@ -250,13 +254,7 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({ status, rebloggedBy
       <StatusInfo
         className='mt-4'
         avatarSize={42}
-        icon={
-          <Icon
-            src={require('@phosphor-icons/core/regular/repeat.svg')}
-            className='size-4 text-green-600'
-            aria-hidden
-          />
-        }
+        icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
         text={
           // status.visibility === 'private' ? (
           //   <FormattedMessage

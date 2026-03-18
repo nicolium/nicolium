@@ -1,3 +1,4 @@
+import iconCloudArrowUp from '@phosphor-icons/core/regular/cloud-arrow-up.svg';
 import { mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -58,7 +59,7 @@ const DriveButton: React.FC<IDriveButton> = ({ composeId }) => {
 
   return (
     <ComposeFormButton
-      icon={require('@phosphor-icons/core/regular/cloud-arrow-up.svg')}
+      icon={iconCloudArrowUp}
       title={intl.formatMessage(messages.button)}
       onClick={onClick}
     />

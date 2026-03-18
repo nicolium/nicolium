@@ -1,4 +1,19 @@
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
+import iconCursorText from '@phosphor-icons/core/regular/cursor-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
+import iconDownload from '@phosphor-icons/core/regular/download.svg';
+import iconEyeSlash from '@phosphor-icons/core/regular/eye-slash.svg';
+import iconEye from '@phosphor-icons/core/regular/eye.svg';
+import iconFileText from '@phosphor-icons/core/regular/file-text.svg';
+import iconFolderOpen from '@phosphor-icons/core/regular/folder-open.svg';
+import iconFolderPlus from '@phosphor-icons/core/regular/folder-plus.svg';
+import iconFolder from '@phosphor-icons/core/regular/folder.svg';
+import iconFolders from '@phosphor-icons/core/regular/folders.svg';
+import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
+import iconUpload from '@phosphor-icons/core/regular/upload.svg';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { clsx } from 'clsx';
 import { mediaAttachmentSchema, type DriveFile, type DriveFolder } from 'pl-api';
@@ -157,7 +172,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
           aria-label={intl.formatMessage(messages.home)}
           title={intl.formatMessage(messages.home)}
         >
-          <Icon src={require('@phosphor-icons/core/regular/house.svg')} aria-hidden />
+          <Icon src={iconHouse} aria-hidden />
           {label}
         </button>
       );
@@ -170,7 +185,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
           aria-label={intl.formatMessage(messages.home)}
           title={intl.formatMessage(messages.home)}
         >
-          <Icon src={require('@phosphor-icons/core/regular/house.svg')} aria-hidden />
+          <Icon src={iconHouse} aria-hidden />
           {label}
         </Link>
       );
@@ -181,7 +196,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
 
   const spacer = (
     <div className='⁂-drive-breadcrumbs__spacer' aria-hidden>
-      <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} />
+      <Icon src={iconCaretRight} />
     </div>
   );
 
@@ -214,7 +229,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
         <Breadcrumbs depth={depth + 1} onClick={onClick} />
         {spacer}
         <div className='⁂-drive-breadcrumbs__spacer' aria-hidden>
-          <Icon src={require('@phosphor-icons/core/regular/dots-three.svg')} />
+          <Icon src={iconDotsThree} />
         </div>
         {spacer}
         {button}
@@ -451,44 +466,44 @@ const File: React.FC<IFile> = ({ file, index, onMove }) => {
       isMedia
         ? {
             text: intl.formatMessage(messages.fileView),
-            icon: require('@phosphor-icons/core/regular/eye.svg'),
+            icon: iconEye,
             action: handleView,
           }
         : {
             text: intl.formatMessage(messages.fileDownload),
-            icon: require('@phosphor-icons/core/regular/download.svg'),
+            icon: iconDownload,
             href: file.url,
           },
       {
         text: intl.formatMessage(messages.fileRename),
-        icon: require('@phosphor-icons/core/regular/cursor-text.svg'),
+        icon: iconCursorText,
         action: handleRename,
       },
       {
         text: intl.formatMessage(messages.updateDescription),
-        icon: require('@phosphor-icons/core/regular/file-text.svg'),
+        icon: iconFileText,
         action: handleUpdateDescription,
       },
       file.sensitive
         ? {
             text: intl.formatMessage(messages.unmarkSensitive),
-            icon: require('@phosphor-icons/core/regular/eye.svg'),
+            icon: iconEye,
             action: handleToggleSensitive,
           }
         : {
             text: intl.formatMessage(messages.markSensitive),
-            icon: require('@phosphor-icons/core/regular/eye-slash.svg'),
+            icon: iconEyeSlash,
             action: handleToggleSensitive,
           },
       null,
       {
         text: intl.formatMessage(messages.fileMove),
-        icon: require('@phosphor-icons/core/regular/folders.svg'),
+        icon: iconFolders,
         action: handleMove,
       },
       {
         text: intl.formatMessage(messages.fileDelete),
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
         destructive: true,
         action: handleDelete,
       },
@@ -517,7 +532,7 @@ const File: React.FC<IFile> = ({ file, index, onMove }) => {
           }}
         >
           <IconButton
-            src={require('@phosphor-icons/core/regular/dots-three.svg')}
+            src={iconDotsThree}
             title={intl.formatMessage(messages.fileDropdown)}
             theme='secondary'
           />
@@ -670,23 +685,23 @@ const Folder: React.FC<IFolder> = ({ folder, index, onMove }) => {
     return [
       {
         text: intl.formatMessage(messages.folderView),
-        icon: require('@phosphor-icons/core/regular/folder-open.svg'),
+        icon: iconFolderOpen,
         to: '/drive/{-$folderId}',
         params: { folderId: folder.id ?? undefined },
       },
       {
         text: intl.formatMessage(messages.folderRename),
-        icon: require('@phosphor-icons/core/regular/cursor-text.svg'),
+        icon: iconCursorText,
         action: handleRename,
       },
       {
         text: intl.formatMessage(messages.folderMove),
-        icon: require('@phosphor-icons/core/regular/folders.svg'),
+        icon: iconFolders,
         action: handleMove,
       },
       {
         text: intl.formatMessage(messages.folderDelete),
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
         destructive: true,
         action: handleDelete,
       },
@@ -715,17 +730,14 @@ const Folder: React.FC<IFolder> = ({ folder, index, onMove }) => {
           }}
         >
           <IconButton
-            src={require('@phosphor-icons/core/regular/dots-three.svg')}
+            src={iconDotsThree}
             title={intl.formatMessage(messages.folderDropdown)}
             theme='secondary'
           />
         </DropdownMenu>
       </div>
 
-      <Icon
-        className='⁂-drive-file__icon'
-        src={require('@phosphor-icons/core/regular/folder.svg')}
-      />
+      <Icon className='⁂-drive-file__icon' src={iconFolder} />
 
       <span className='⁂-drive-file__label'>{folder.name}</span>
     </div>
@@ -747,7 +759,7 @@ const DrivePage: React.FC = () => {
   const items: Menu = [
     {
       text: intl.formatMessage(messages.fileUpload),
-      icon: require('@phosphor-icons/core/regular/upload.svg'),
+      icon: iconUpload,
       onSelectFile: (files: FileList) => {
         uploadFile(files[0], {
           onSuccess: () => {
@@ -761,7 +773,7 @@ const DrivePage: React.FC = () => {
     },
     {
       text: intl.formatMessage(messages.newFolder),
-      icon: require('@phosphor-icons/core/regular/folder-plus.svg'),
+      icon: iconFolderPlus,
       action: () => {
         openModal('TEXT_FIELD', {
           heading: <FormattedMessage id='drive.folder.create' defaultMessage='Create new folder' />,
@@ -812,12 +824,7 @@ const DrivePage: React.FC = () => {
       label={data?.name ?? intl.formatMessage(messages.heading)}
       backHref={'/drive/{-$folderId}'}
       backParams={{ folderId: data?.parent_id ?? undefined }}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
     >
       <div className='⁂-drive-breadcrumbs'>
         <Breadcrumbs folderId={folderId} />
@@ -830,7 +837,7 @@ const DrivePage: React.FC = () => {
               defaultMessage='There are no files or folders in this folder.'
             />
           }
-          icon={require('@phosphor-icons/core/regular/folder-open.svg')}
+          icon={iconFolderOpen}
         />
       ) : (
         <div className='⁂-drive-page__files' ref={filesRef}>

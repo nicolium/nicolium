@@ -1,3 +1,9 @@
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconFileHtml from '@phosphor-icons/core/regular/file-html.svg';
+import iconMarkdownLogo from '@phosphor-icons/core/regular/markdown-logo.svg';
+import iconParagraph from '@phosphor-icons/core/regular/paragraph.svg';
+import iconSparkle from '@phosphor-icons/core/regular/sparkle.svg';
+import iconTextIndent from '@phosphor-icons/core/regular/text-indent.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -50,7 +56,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
 
   if (postFormats.includes('text/plain')) {
     options.push({
-      icon: require('@phosphor-icons/core/regular/paragraph.svg'),
+      icon: iconParagraph,
       text: intl.formatMessage(messages.contentTypePlaintext),
       value: 'text/plain',
     });
@@ -58,7 +64,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
 
   if (postFormats.includes('text/markdown')) {
     options.push({
-      icon: require('@phosphor-icons/core/regular/markdown-logo.svg'),
+      icon: iconMarkdownLogo,
       text: intl.formatMessage(messages.contentTypeMarkdown),
       value: 'text/markdown',
     });
@@ -66,7 +72,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
 
   if (postFormats.includes('text/x.misskeymarkdown')) {
     options.push({
-      icon: require('@phosphor-icons/core/regular/sparkle.svg'),
+      icon: iconSparkle,
       text: intl.formatMessage(messages.contentTypeMfm),
       value: 'text/x.misskeymarkdown',
     });
@@ -74,7 +80,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
 
   if (postFormats.includes('text/html')) {
     options.push({
-      icon: require('@phosphor-icons/core/regular/file-html.svg'),
+      icon: iconFileHtml,
       text: intl.formatMessage(messages.contentTypeHtml),
       value: 'text/html',
     });
@@ -82,7 +88,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
 
   if (postFormats.includes('text/markdown')) {
     options.push({
-      icon: require('@phosphor-icons/core/regular/text-indent.svg'),
+      icon: iconTextIndent,
       text: intl.formatMessage(messages.contentTypeWysiwyg),
       value: 'wysiwyg',
     });
@@ -105,7 +111,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
       >
         {option?.icon && <Icon src={option.icon} aria-hidden />}
         {compact ? undefined : option?.text}
-        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
+        <Icon src={iconCaretDown} aria-hidden />
       </button>
     </DropdownMenu>
   );

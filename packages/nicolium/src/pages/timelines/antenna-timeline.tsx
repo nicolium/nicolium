@@ -1,3 +1,7 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -79,12 +83,12 @@ const AntennaTimelinePage: React.FC = () => {
       {
         text: intl.formatMessage(messages.editAntenna),
         action: handleEditClick,
-        icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+        icon: iconPencilSimple,
       },
       {
         text: intl.formatMessage(messages.deleteAntenna),
         action: handleDeleteClick,
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
       },
     ],
     [timelineFilterOptions],
@@ -93,12 +97,7 @@ const AntennaTimelinePage: React.FC = () => {
   return (
     <Column
       label={title}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
       title={<TimelinePicker active={`antenna:${antennaId}`} />}
       truncateTitle={false}
     >
@@ -112,7 +111,7 @@ const AntennaTimelinePage: React.FC = () => {
             />
           </div>
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
       />
     </Column>
   );

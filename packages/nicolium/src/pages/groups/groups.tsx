@@ -1,3 +1,4 @@
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -45,7 +46,7 @@ const Groups: React.FC = () => {
       {!(!isFetching && groupIds.length === 0) && (
         <Button
           className='xl:hidden'
-          icon={require('@phosphor-icons/core/regular/users-three.svg')}
+          icon={iconUsersThree}
           onClick={createGroup}
           theme='secondary'
           block

@@ -1,3 +1,4 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { type MouseEventHandler } from 'react';
@@ -68,7 +69,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
   if (onCancel) {
     actions = {
       onActionClick: handleClose,
-      actionIcon: require('@phosphor-icons/core/regular/x.svg'),
+      actionIcon: iconX,
       actionAlignment: 'top',
       actionTitle: intl.formatMessage(messages.cancel),
     };

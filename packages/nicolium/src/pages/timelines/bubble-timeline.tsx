@@ -1,3 +1,5 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -21,12 +23,7 @@ const BubbleTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='bubble' />}
       truncateTitle={false}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
     >
       <BubbleTimelineColumn
         emptyMessageText={
@@ -35,7 +32,7 @@ const BubbleTimelinePage = () => {
             defaultMessage='There is nothing here! Write something publicly to fill it up'
           />
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
       />
     </Column>
   );

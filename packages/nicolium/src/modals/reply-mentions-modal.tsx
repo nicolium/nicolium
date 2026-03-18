@@ -1,3 +1,6 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -52,7 +55,7 @@ const ReplyMentionAccount: React.FC<IReplyMentionAccount> = ({ composeId, accoun
   if (added) {
     button = (
       <IconButton
-        src={require('@phosphor-icons/core/regular/x.svg')}
+        src={iconX}
         className='text-gray-400 hover:text-gray-600'
         iconClassName='h-5 w-5'
         title={intl.formatMessage(messages.remove)}
@@ -62,7 +65,7 @@ const ReplyMentionAccount: React.FC<IReplyMentionAccount> = ({ composeId, accoun
   } else {
     button = (
       <IconButton
-        src={require('@phosphor-icons/core/regular/plus.svg')}
+        src={iconPlus}
         className='text-gray-400 hover:text-gray-600'
         iconClassName='h-5 w-5'
         title={intl.formatMessage(messages.add)}
@@ -107,7 +110,7 @@ const ReplyMentionsModal: React.FC<BaseModalProps & ReplyMentionsModalProps> = (
     <Modal
       title={<FormattedMessage id='navigation_bar.in_reply_to' defaultMessage='In reply to' />}
       onClose={onClickClose}
-      closeIcon={require('@phosphor-icons/core/regular/arrow-left.svg')}
+      closeIcon={iconArrowLeft}
       closePosition='left'
     >
       <div className='block min-h-[300px] flex-1 flex-row overflow-y-auto'>

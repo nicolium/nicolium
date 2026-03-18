@@ -1,3 +1,4 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import { Link } from '@tanstack/react-router';
 import { create } from 'mutative';
 import React, { useEffect, useState } from 'react';
@@ -92,11 +93,7 @@ const ComposeInteractionPolicyModal: React.FC<
         />
       }
       onClose={onClickClose}
-      closeIcon={
-        composeId === 'compose-modal'
-          ? require('@phosphor-icons/core/regular/arrow-left.svg')
-          : undefined
-      }
+      closeIcon={composeId === 'compose-modal' ? iconArrowLeft : undefined}
       closePosition={composeId === 'compose-modal' ? 'left' : undefined}
     >
       <div className='flex flex-col gap-4'>

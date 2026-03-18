@@ -7,6 +7,9 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection';
 import { mergeRegister } from '@lexical/utils';
+import iconMagnifyingGlassPlus from '@phosphor-icons/core/regular/magnifying-glass-plus.svg';
+import iconWarning from '@phosphor-icons/core/regular/warning.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import {
   $getNodeByKey,
@@ -299,7 +302,7 @@ const ImageComponent = ({
         <div className='absolute right-2 top-2 z-10 flex gap-2'>
           <IconButton
             onClick={previewImage}
-            src={require('@phosphor-icons/core/regular/magnifying-glass-plus.svg')}
+            src={iconMagnifyingGlassPlus}
             theme='dark'
             className='!p-1.5 hover:scale-105 hover:bg-gray-900'
             iconClassName='h-5 w-5'
@@ -307,7 +310,7 @@ const ImageComponent = ({
           />
           <IconButton
             onClick={deleteNode}
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             theme='dark'
             className='!p-1.5 hover:scale-105 hover:bg-gray-900'
             iconClassName='h-5 w-5'
@@ -354,7 +357,7 @@ const ImageComponent = ({
               },
             )}
           >
-            <Icon className='size-4' src={require('@phosphor-icons/core/regular/warning.svg')} />
+            <Icon className='size-4' src={iconWarning} />
             <FormattedMessage id='upload_form.description_missing.indicator' defaultMessage='Alt' />
           </span>
         )}

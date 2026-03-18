@@ -1,3 +1,5 @@
+import iconPaperclip from '@phosphor-icons/core/regular/paperclip.svg';
+import iconSpeakerHigh from '@phosphor-icons/core/regular/speaker-high.svg';
 import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, type CSSProperties } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -172,10 +174,7 @@ const Item: React.FC<IItem> = ({
     const attachmentIcon = (
       <Icon
         className='size-16 text-gray-800 dark:text-gray-200'
-        src={
-          MIMETYPE_ICONS[attachment.mime_type as string] ||
-          require('@phosphor-icons/core/regular/paperclip.svg')
-        }
+        src={MIMETYPE_ICONS[attachment.mime_type as string] || iconPaperclip}
       />
     );
 
@@ -277,7 +276,7 @@ const Item: React.FC<IItem> = ({
         title={attachment.description}
       >
         <span className='⁂-media-gallery__item__icons'>
-          <Icon src={require('@phosphor-icons/core/regular/speaker-high.svg')} />
+          <Icon src={iconSpeakerHigh} />
         </span>
         <span className='⁂-media-gallery__file-extension__label uppercase'>{ext}</span>
       </a>
@@ -385,7 +384,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
               src={
                 MIMETYPE_ICONS[
                   (attachment.type === 'unknown' && attachment.mime_type) || attachment.type
-                ] ?? require('@phosphor-icons/core/regular/paperclip.svg')
+                ] ?? iconPaperclip
               }
             />
             <Text align='left'>

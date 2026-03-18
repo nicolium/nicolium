@@ -1,3 +1,5 @@
+import iconGlobe from '@phosphor-icons/core/regular/globe.svg';
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -38,14 +40,7 @@ const GroupListItem: React.FC<IGroupListItem> = ({ groupId, withJoinAction = tru
             </Text>
 
             <div className='flex items-center gap-1 text-gray-700 dark:text-gray-600'>
-              <Icon
-                className='size-4.5'
-                src={
-                  group.locked
-                    ? require('@phosphor-icons/core/regular/lock.svg')
-                    : require('@phosphor-icons/core/regular/globe.svg')
-                }
-              />
+              <Icon className='size-4.5' src={group.locked ? iconLock : iconGlobe} />
 
               <Text theme='inherit' tag='span' size='sm' weight='medium'>
                 {group.locked ? (

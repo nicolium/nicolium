@@ -1,3 +1,6 @@
+import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
+import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
+import iconUserMinus from '@phosphor-icons/core/regular/user-minus.svg';
 import clsx from 'clsx';
 import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
@@ -159,7 +162,7 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
       if (isMemberUser) {
         items.push({
           text: intl.formatMessage(messages.groupModPromoteMod, { role: GroupRoles.ADMIN }),
-          icon: require('@phosphor-icons/core/regular/suitcase.svg'),
+          icon: iconSuitcase,
           action: handleAdminAssignment,
         });
       } else if (isMemberAdmin) {
@@ -168,7 +171,7 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
             role: GroupRoles.ADMIN,
             name: account.username,
           }),
-          icon: require('@phosphor-icons/core/regular/suitcase.svg'),
+          icon: iconSuitcase,
           action: handleUserAssignment,
           destructive: true,
         });
@@ -182,13 +185,13 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
     ) {
       items.push({
         text: intl.formatMessage(messages.groupModKick, { name: account.username }),
-        icon: require('@phosphor-icons/core/regular/user-minus.svg'),
+        icon: iconUserMinus,
         action: handleKickFromGroup,
       });
 
       items.push({
         text: intl.formatMessage(messages.groupModBlock, { name: account.username }),
-        icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+        icon: iconProhibit,
         action: handleBlockFromGroup,
         destructive: true,
       });

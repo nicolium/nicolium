@@ -1,3 +1,4 @@
+import iconClock from '@phosphor-icons/core/regular/clock.svg';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -84,10 +85,7 @@ const AccountLocalTime: React.FC<IAccountLocalTime> = ({ accountId, field }) => 
       className='mt-1 flex items-center gap-0.5'
       title={intl.formatMessage(messages.timezone, { timezone: field.value })}
     >
-      <Icon
-        src={require('@phosphor-icons/core/regular/clock.svg')}
-        className='size-4 text-gray-800 dark:text-gray-200'
-      />
+      <Icon src={iconClock} className='size-4 text-gray-800 dark:text-gray-200' />
       <Text size='sm'>
         {localTime}
         {me !== accountId && isTimezoneEqual && (

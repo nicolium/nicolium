@@ -1,3 +1,4 @@
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import { Link, linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useLayoutEffect, useRef, useState } from 'react';
@@ -311,7 +312,7 @@ const Account = ({
                 {withLocked && !timestamp && account.locked && (
                   <>
                     <Icon
-                      src={require('@phosphor-icons/core/regular/lock.svg')}
+                      src={iconLock}
                       alt={intl.formatMessage(messages.accountLocked)}
                       className='size-4 text-gray-600'
                     />
@@ -423,7 +424,7 @@ const Account = ({
                 {withLocked && !timestamp && account.locked && (
                   <>
                     <Icon
-                      src={require('@phosphor-icons/core/regular/lock.svg')}
+                      src={iconLock}
                       alt={intl.formatMessage(messages.accountLocked)}
                       className='size-4 text-gray-600'
                     />

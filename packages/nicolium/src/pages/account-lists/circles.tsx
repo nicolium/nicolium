@@ -1,3 +1,4 @@
+import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -100,10 +101,7 @@ const CirclesPage: React.FC = () => {
                 params={{ circleId: circle.id }}
                 label={
                   <div className='flex items-center gap-2'>
-                    <Icon
-                      src={require('@phosphor-icons/core/regular/list-bullets.svg')}
-                      size={20}
-                    />
+                    <Icon src={iconListBullets} size={20} />
                     <span>{circle.title}</span>
                   </div>
                 }

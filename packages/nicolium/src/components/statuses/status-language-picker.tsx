@@ -1,3 +1,4 @@
+import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -31,12 +32,7 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
 
     if (!status.content_map || Object.keys(status.content_map).length < 2) return null;
 
-    const icon = (
-      <Icon
-        className='size-4 text-gray-700 dark:text-gray-600'
-        src={require('@phosphor-icons/core/regular/translate.svg')}
-      />
-    );
+    const icon = <Icon className='size-4 text-gray-700 dark:text-gray-600' src={iconTranslate} />;
 
     return (
       <>

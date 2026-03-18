@@ -1,3 +1,4 @@
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
@@ -115,7 +116,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
 
             {account.locked && (
               <Icon
-                src={require('@phosphor-icons/core/regular/lock.svg')}
+                src={iconLock}
                 alt={intl.formatMessage(messages.accountLocked)}
                 className='size-4 text-gray-600'
               />

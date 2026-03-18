@@ -1,3 +1,4 @@
+import iconQrCode from '@phosphor-icons/core/regular/qr-code.svg';
 import React from 'react';
 
 import CopyableInput from '@/components/copyable-input';
@@ -40,7 +41,7 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props): React.JSX.Element => {
 
         <div className='ml-auto flex items-center'>
           <a className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1' href='#' onClick={handleModalClick}>
-            <Icon src={require('@phosphor-icons/core/regular/qr-code.svg')} size={20} />
+            <Icon src={iconQrCode} size={20} />
           </a>
         </div>
       </div>

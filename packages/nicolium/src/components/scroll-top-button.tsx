@@ -1,3 +1,4 @@
+import iconArrowLineUp from '@phosphor-icons/core/regular/arrow-line-up.svg';
 import clsx from 'clsx';
 import throttle from 'lodash/throttle';
 import React, { useState, useEffect, useCallback } from 'react';
@@ -108,7 +109,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
           {accountIds?.length && !disableUserProvidedMedia ? (
             <AvatarStack accountIds={accountIds} />
           ) : (
-            <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} aria-hidden />
+            <Icon src={iconArrowLineUp} aria-hidden />
           )}
 
           <p>{buttonMessage}</p>

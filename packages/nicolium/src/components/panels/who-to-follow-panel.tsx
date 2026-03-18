@@ -1,3 +1,4 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -57,7 +58,7 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
           <AccountContainer
             key={suggestion.account_id}
             id={suggestion.account_id}
-            actionIcon={require('@phosphor-icons/core/regular/x.svg')}
+            actionIcon={iconX}
             actionTitle={intl.formatMessage(messages.dismissSuggestion)}
             onActionClick={features.suggestionsDismiss ? handleDismiss : undefined}
           />

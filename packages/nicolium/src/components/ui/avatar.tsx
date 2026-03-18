@@ -1,3 +1,4 @@
+import iconImageSquare from '@phosphor-icons/core/regular/image-square.svg';
 import clsx from 'clsx';
 import { FastAverageColor } from 'fast-average-color';
 import React, { useEffect, useState } from 'react';
@@ -123,10 +124,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
         )}
       >
         <div className='absolute inset-0 z-[1] flex items-center justify-center rounded-[inherit] bg-gray-200 dark:bg-gray-900'>
-          <Icon
-            src={require('@phosphor-icons/core/regular/image-square.svg')}
-            className='size-4 text-gray-500 dark:text-gray-700'
-          />
+          <Icon src={iconImageSquare} className='size-4 text-gray-500 dark:text-gray-700' />
         </div>
       </div>
     );

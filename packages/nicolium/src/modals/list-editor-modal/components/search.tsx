@@ -1,3 +1,4 @@
+import iconBackspace from '@phosphor-icons/core/regular/backspace.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -52,7 +53,7 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
             }}
           >
             <Icon
-              src={require('@phosphor-icons/core/regular/backspace.svg')}
+              src={iconBackspace}
               className={clsx('size-5 text-gray-600', { hidden: !hasValue })}
               aria-hidden
             />

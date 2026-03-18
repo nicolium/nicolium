@@ -1,3 +1,10 @@
+import iconFacebookLogo from '@phosphor-icons/core/regular/facebook-logo.svg';
+import iconGithubLogo from '@phosphor-icons/core/regular/github-logo.svg';
+import iconGoogleLogo from '@phosphor-icons/core/regular/google-logo.svg';
+import iconKey from '@phosphor-icons/core/regular/key.svg';
+import iconSlackLogo from '@phosphor-icons/core/regular/slack-logo.svg';
+import iconSquaresFour from '@phosphor-icons/core/regular/squares-four.svg';
+import iconTwitterLogo from '@phosphor-icons/core/regular/twitter-logo.svg';
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
@@ -12,12 +19,12 @@ const messages = defineMessages({
 
 /** Map between OAuth providers and brand icons. */
 const BRAND_ICONS: Record<string, string> = {
-  twitter: require('@phosphor-icons/core/regular/twitter-logo.svg'),
-  facebook: require('@phosphor-icons/core/regular/facebook-logo.svg'),
-  google: require('@phosphor-icons/core/regular/google-logo.svg'),
-  microsoft: require('@phosphor-icons/core/regular/squares-four.svg'),
-  slack: require('@phosphor-icons/core/regular/slack-logo.svg'),
-  github: require('@phosphor-icons/core/regular/github-logo.svg'),
+  twitter: iconTwitterLogo,
+  facebook: iconFacebookLogo,
+  google: iconGoogleLogo,
+  microsoft: iconSquaresFour,
+  slack: iconSlackLogo,
+  github: iconGithubLogo,
 };
 
 interface IConsumerButton {
@@ -28,7 +35,7 @@ interface IConsumerButton {
 const ConsumerButton: React.FC<IConsumerButton> = ({ provider }) => {
   const intl = useIntl();
 
-  const icon = BRAND_ICONS[provider] || require('@phosphor-icons/core/regular/key.svg');
+  const icon = BRAND_ICONS[provider] || iconKey;
 
   const handleClick = () => {
     prepareRequest(provider);

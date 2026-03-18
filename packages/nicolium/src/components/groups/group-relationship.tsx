@@ -1,3 +1,5 @@
+import iconGavel from '@phosphor-icons/core/regular/gavel.svg';
+import iconUsers from '@phosphor-icons/core/regular/users.svg';
 import { GroupRoles, type Group } from 'pl-api';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -22,14 +24,7 @@ const GroupRelationship = ({ group }: IGroupRelationship) => {
       data-testid='group-relationship'
       className='flex items-center gap-1 text-primary-600 dark:text-primary-400'
     >
-      <Icon
-        className='size-4'
-        src={
-          isOwner
-            ? require('@phosphor-icons/core/regular/users.svg')
-            : require('@phosphor-icons/core/regular/gavel.svg')
-        }
-      />
+      <Icon className='size-4' src={isOwner ? iconUsers : iconGavel} />
 
       <Text tag='span' weight='medium' size='sm' theme='inherit'>
         {isOwner ? (

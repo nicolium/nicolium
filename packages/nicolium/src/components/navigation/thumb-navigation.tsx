@@ -1,3 +1,13 @@
+import iconBellSimpleFill from '@phosphor-icons/core/fill/bell-simple-fill.svg';
+import iconChatsTeardropFill from '@phosphor-icons/core/fill/chats-teardrop-fill.svg';
+import iconHouseFill from '@phosphor-icons/core/fill/house-fill.svg';
+import iconMagnifyingGlassFill from '@phosphor-icons/core/fill/magnifying-glass-fill.svg';
+import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
+import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
+import iconHouse from '@phosphor-icons/core/regular/house.svg';
+import iconList from '@phosphor-icons/core/regular/list.svg';
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconPlusSquare from '@phosphor-icons/core/regular/plus-square.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMatch } from '@tanstack/react-router';
 import React from 'react';
@@ -58,7 +68,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
       onClick={handleOpenComposeModal}
       title={intl.formatMessage(messages.compose)}
     >
-      <Icon src={require('@phosphor-icons/core/regular/plus-square.svg')} />
+      <Icon src={iconPlusSquare} />
     </button>
   );
 
@@ -69,12 +79,12 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
         onClick={isSidebarOpen ? closeSidebar : openSidebar}
         title={intl.formatMessage(isSidebarOpen ? messages.closeSidebar : messages.openSidebar)}
       >
-        <Icon src={require('@phosphor-icons/core/regular/list.svg')} />
+        <Icon src={iconList} />
       </button>
 
       <ThumbNavigationLink
-        src={require('@phosphor-icons/core/regular/house.svg')}
-        activeSrc={require('@phosphor-icons/core/fill/house-fill.svg')}
+        src={iconHouse}
+        activeSrc={iconHouseFill}
         text={intl.formatMessage(messages.home)}
         to='/'
         exact
@@ -82,8 +92,8 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
 
       {/* {features.groups && (
         <ThumbNavigationLink
-          src={require('@phosphor-icons/core/regular/users-three.svg')}
-          activeSrc={require('@phosphor-icons/core/fill/users-three-fill.svg')}
+          src={iconUsersThree}
+          activeSrc={iconUsersThreeFill}
           text={<FormattedMessage id='tabs_bar.groups' defaultMessage='Groups' />}
           to='/groups'
           exact
@@ -94,8 +104,8 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
 
       {(!standalone || account) && (
         <ThumbNavigationLink
-          src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
-          activeSrc={require('@phosphor-icons/core/fill/magnifying-glass-fill.svg')}
+          src={iconMagnifyingGlass}
+          activeSrc={iconMagnifyingGlassFill}
           text={intl.formatMessage(messages.search)}
           to='/search'
           exact
@@ -104,8 +114,8 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
 
       {account && (
         <ThumbNavigationLink
-          src={require('@phosphor-icons/core/regular/bell-simple.svg')}
-          activeSrc={require('@phosphor-icons/core/fill/bell-simple-fill.svg')}
+          src={iconBellSimple}
+          activeSrc={iconBellSimpleFill}
           text={intl.formatMessage(messages.notifications)}
           to='/notifications'
           exact
@@ -116,8 +126,8 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
       {account && features.chats && (
         <>
           <ThumbNavigationLink
-            src={require('@phosphor-icons/core/regular/chats-teardrop.svg')}
-            activeSrc={require('@phosphor-icons/core/fill/chats-teardrop-fill.svg')}
+            src={iconChatsTeardrop}
+            activeSrc={iconChatsTeardropFill}
             text={intl.formatMessage(messages.chats)}
             to='/chats'
             exact

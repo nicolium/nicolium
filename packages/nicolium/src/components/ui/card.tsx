@@ -1,3 +1,4 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
@@ -81,7 +82,7 @@ const CardHeader: React.FC<ICardHeader> = ({
         aria-label={intl.formatMessage(messages.back)}
         title={intl.formatMessage(messages.back)}
       >
-        <SvgIcon src={require('@phosphor-icons/core/regular/arrow-left.svg')} aria-hidden />
+        <SvgIcon src={iconArrowLeft} aria-hidden />
       </Comp>
     );
   };

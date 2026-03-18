@@ -1,3 +1,6 @@
+import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -44,7 +47,7 @@ const List: React.FC<IList> = ({ listId, accountId, added }) => {
       <IconButton
         className='text-gray-400 hover:text-gray-600'
         iconClassName='h-5 w-5'
-        src={require('@phosphor-icons/core/regular/x.svg')}
+        src={iconX}
         title={intl.formatMessage(messages.remove)}
         onClick={onRemove}
       />
@@ -54,7 +57,7 @@ const List: React.FC<IList> = ({ listId, accountId, added }) => {
       <IconButton
         className='text-gray-400 hover:text-gray-600'
         iconClassName='h-5 w-5'
-        src={require('@phosphor-icons/core/regular/plus.svg')}
+        src={iconPlus}
         title={intl.formatMessage(messages.add)}
         onClick={onAdd}
       />
@@ -63,7 +66,7 @@ const List: React.FC<IList> = ({ listId, accountId, added }) => {
 
   return (
     <div className='flex items-center gap-1.5 px-2 py-4 text-black dark:text-white'>
-      <Icon src={require('@phosphor-icons/core/regular/list-bullets.svg')} />
+      <Icon src={iconListBullets} />
       <span className='grow'>{list.title}</span>
       {button}
     </div>

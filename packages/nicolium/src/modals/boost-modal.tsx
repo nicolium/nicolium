@@ -1,3 +1,4 @@
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -58,11 +59,7 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
             values={{
               combo: (
                 <span>
-                  Shift +{' '}
-                  <Icon
-                    className='inline-block align-middle'
-                    src={require('@phosphor-icons/core/regular/repeat.svg')}
-                  />
+                  Shift + <Icon className='inline-block align-middle' src={iconRepeat} />
                 </span>
               ),
             }}

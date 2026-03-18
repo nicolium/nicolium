@@ -1,3 +1,10 @@
+import iconArrowsInSimple from '@phosphor-icons/core/regular/arrows-in-simple.svg';
+import iconArrowsOutSimple from '@phosphor-icons/core/regular/arrows-out-simple.svg';
+import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
+import iconPause from '@phosphor-icons/core/regular/pause.svg';
+import iconPlay from '@phosphor-icons/core/regular/play.svg';
+import iconSpeakerHigh from '@phosphor-icons/core/regular/speaker-high.svg';
+import iconSpeakerX from '@phosphor-icons/core/regular/speaker-x.svg';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
@@ -566,13 +573,7 @@ const Video: React.FC<IVideo> = ({
                 onClick={togglePlay}
                 autoFocus={autoFocus}
               >
-                <Icon
-                  src={
-                    paused
-                      ? require('@phosphor-icons/core/regular/play.svg')
-                      : require('@phosphor-icons/core/regular/pause.svg')
-                  }
-                />
+                <Icon src={paused ? iconPlay : iconPause} />
               </button>
 
               <button
@@ -582,13 +583,7 @@ const Video: React.FC<IVideo> = ({
                 className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
                 onClick={toggleMute}
               >
-                <Icon
-                  src={
-                    muted
-                      ? require('@phosphor-icons/core/regular/speaker-x.svg')
-                      : require('@phosphor-icons/core/regular/speaker-high.svg')
-                  }
-                />
+                <Icon src={muted ? iconSpeakerX : iconSpeakerHigh} />
               </button>
 
               <div
@@ -627,7 +622,7 @@ const Video: React.FC<IVideo> = ({
                 download
                 target='_blank'
               >
-                <Icon src={require('@phosphor-icons/core/regular/download-simple.svg')} />
+                <Icon src={iconDownloadSimple} />
               </a>
               <button
                 type='button'
@@ -640,13 +635,7 @@ const Video: React.FC<IVideo> = ({
                 className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
                 onClick={toggleFullscreen}
               >
-                <Icon
-                  src={
-                    fullscreen
-                      ? require('@phosphor-icons/core/regular/arrows-in-simple.svg')
-                      : require('@phosphor-icons/core/regular/arrows-out-simple.svg')
-                  }
-                />
+                <Icon src={fullscreen ? iconArrowsInSimple : iconArrowsOutSimple} />
               </button>
             </div>
           </div>

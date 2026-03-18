@@ -1,3 +1,5 @@
+import iconCircleNotch from '@phosphor-icons/core/regular/circle-notch.svg';
+import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
 import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -180,14 +182,11 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
 
   const button = (
     <button className='⁂-translate-button' onClick={handleTranslate}>
-      <Icon
-        src={require('@phosphor-icons/core/regular/translate.svg')}
-        className='⁂-translate-button__icon'
-      />
+      <Icon src={iconTranslate} className='⁂-translate-button__icon' />
       <span>{translationLabel()}</span>
       {translationQuery.isLoading && (
         <Icon
-          src={require('@phosphor-icons/core/regular/circle-notch.svg')}
+          src={iconCircleNotch}
           className='⁂-translate-button__icon ⁂-translate-button__icon--loading'
         />
       )}

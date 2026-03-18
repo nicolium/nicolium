@@ -1,3 +1,6 @@
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -101,12 +104,12 @@ const BookmarksPage: React.FC = () => {
         {
           text: intl.formatMessage(messages.editFolder),
           action: handleEditFolder,
-          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+          icon: iconPencilSimple,
         },
         {
           text: intl.formatMessage(messages.deleteFolder),
           action: handleDeleteFolder,
-          icon: require('@phosphor-icons/core/regular/trash.svg'),
+          icon: iconTrash,
         },
       ]
     : [];
@@ -114,12 +117,7 @@ const BookmarksPage: React.FC = () => {
   return (
     <Column
       label={folder ? folder.name : intl.formatMessage(messages.heading)}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
     >
       <PullToRefresh onRefresh={handleRefresh}>
         <StatusList

@@ -1,3 +1,7 @@
+import iconCaretLeft from '@phosphor-icons/core/regular/caret-left.svg';
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { Link } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
@@ -65,10 +69,7 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
             }}
             className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon
-              src={require('@phosphor-icons/core/regular/caret-left.svg')}
-              className='size-6 text-black dark:text-white'
-            />
+            <Icon src={iconCaretLeft} className='size-6 text-black dark:text-white' />
           </button>
         </div>
       )}
@@ -87,10 +88,7 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
             }}
             className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon
-              src={require('@phosphor-icons/core/regular/caret-right.svg')}
-              className='size-6 text-black dark:text-white'
-            />
+            <Icon src={iconCaretRight} className='size-6 text-black dark:text-white' />
           </button>
         </div>
       )}
@@ -268,7 +266,7 @@ const ReportPage: React.FC = () => {
                       </Text>
                       <IconButton
                         iconClassName='h-4 w-4'
-                        src={require('@phosphor-icons/core/regular/x.svg')}
+                        src={iconX}
                         onClick={handleUnassignReport}
                         text={intl.formatMessage(messages.reportUnassign)}
                       />
@@ -277,7 +275,7 @@ const ReportPage: React.FC = () => {
                     <IconButton
                       className='ml-auto'
                       iconClassName='h-4 w-4'
-                      src={require('@phosphor-icons/core/regular/plus.svg')}
+                      src={iconPlus}
                       onClick={handleSelfAssignReport}
                       text={intl.formatMessage(messages.reportAssign)}
                     />

@@ -1,3 +1,6 @@
+import iconArrowBendUpLeft from '@phosphor-icons/core/regular/arrow-bend-up-left.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconStar from '@phosphor-icons/core/regular/star.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
@@ -61,9 +64,9 @@ const messages = defineMessages({
 });
 
 const icons = {
-  favourite: require('@phosphor-icons/core/regular/star.svg'),
-  reblog: require('@phosphor-icons/core/regular/repeat.svg'),
-  reply: require('@phosphor-icons/core/regular/arrow-bend-up-left.svg'),
+  favourite: iconStar,
+  reblog: iconRepeat,
+  reply: iconArrowBendUpLeft,
 };
 
 const avatarSize = 42;

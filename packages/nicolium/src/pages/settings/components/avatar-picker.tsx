@@ -1,3 +1,4 @@
+import iconCameraPlus from '@phosphor-icons/core/regular/camera-plus.svg';
 import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -80,10 +81,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
             },
           )}
         >
-          <Icon
-            src={require('@phosphor-icons/core/regular/camera-plus.svg')}
-            className='size-5 text-white'
-          />
+          <Icon src={iconCameraPlus} className='size-5 text-white' />
         </div>
         <span className='sr-only'>
           <FormattedMessage id='group.upload_avatar' defaultMessage='Upload avatar' />

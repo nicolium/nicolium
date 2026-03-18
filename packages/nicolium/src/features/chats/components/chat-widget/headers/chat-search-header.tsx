@@ -1,3 +1,4 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -28,7 +29,7 @@ const ChatSearchHeader = () => {
             title={intl.formatMessage(messages.back)}
           >
             <Icon
-              src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+              src={iconArrowLeft}
               className='size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180'
             />
           </button>

@@ -1,3 +1,5 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -21,12 +23,7 @@ const CommunityTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='local' />}
       truncateTitle={false}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
     >
       <PublicTimelineColumn
         local
@@ -36,7 +33,7 @@ const CommunityTimelinePage = () => {
             defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!'
           />
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
       />
     </Column>
   );

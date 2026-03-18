@@ -1,3 +1,5 @@
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
+import iconWarningCircle from '@phosphor-icons/core/regular/warning-circle.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
@@ -27,7 +29,7 @@ const PendingItemsRow: React.FC<IPendingItemsRow> = ({ count, size = 'md', ...pr
           )}
         >
           <Icon
-            src={require('@phosphor-icons/core/regular/warning-circle.svg')}
+            src={iconWarningCircle}
             className={clsx({
               'h-5 w-5': size === 'md',
               'h-7 w-7': size === 'lg',
@@ -45,7 +47,7 @@ const PendingItemsRow: React.FC<IPendingItemsRow> = ({ count, size = 'md', ...pr
       </div>
 
       <Icon
-        src={require('@phosphor-icons/core/regular/caret-right.svg')}
+        src={iconCaretRight}
         className='size-5 text-gray-600 transition-colors group-hover:text-gray-700 dark:text-gray-600 dark:group-hover:text-gray-500'
       />
     </div>

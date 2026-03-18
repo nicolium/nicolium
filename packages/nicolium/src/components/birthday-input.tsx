@@ -1,3 +1,5 @@
+import iconCaretLeft from '@phosphor-icons/core/regular/caret-left.svg';
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 
@@ -77,7 +79,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         <IconButton
           className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
           iconClassName='size-4'
-          src={require('@phosphor-icons/core/regular/caret-left.svg')}
+          src={iconCaretLeft}
           onClick={decreaseMonth}
           disabled={prevMonthButtonDisabled}
           aria-label={intl.formatMessage(messages.previousMonth)}
@@ -87,7 +89,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         <IconButton
           className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
           iconClassName='size-4'
-          src={require('@phosphor-icons/core/regular/caret-right.svg')}
+          src={iconCaretRight}
           onClick={increaseMonth}
           disabled={nextMonthButtonDisabled}
           aria-label={intl.formatMessage(messages.nextMonth)}
@@ -98,7 +100,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         <IconButton
           className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
           iconClassName='size-4'
-          src={require('@phosphor-icons/core/regular/caret-left.svg')}
+          src={iconCaretLeft}
           onClick={decreaseYear}
           disabled={prevYearButtonDisabled}
           aria-label={intl.formatMessage(messages.previousYear)}
@@ -108,7 +110,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         <IconButton
           className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
           iconClassName='size-4'
-          src={require('@phosphor-icons/core/regular/caret-right.svg')}
+          src={iconCaretRight}
           onClick={increaseYear}
           disabled={nextYearButtonDisabled}
           aria-label={intl.formatMessage(messages.nextYear)}

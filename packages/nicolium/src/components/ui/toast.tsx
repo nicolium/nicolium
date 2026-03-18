@@ -1,3 +1,7 @@
+import iconCheckCircle from '@phosphor-icons/core/regular/check-circle.svg';
+import iconInfo from '@phosphor-icons/core/regular/info.svg';
+import iconWarningCircle from '@phosphor-icons/core/regular/warning-circle.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
@@ -50,13 +54,11 @@ const Toast: React.FC<IToast> = (props) => {
   const renderIcon = () => {
     switch (type) {
       case 'success':
-        return <Icon src={require('@phosphor-icons/core/regular/check-circle.svg')} aria-hidden />;
+        return <Icon src={iconCheckCircle} aria-hidden />;
       case 'info':
-        return <Icon src={require('@phosphor-icons/core/regular/info.svg')} aria-hidden />;
+        return <Icon src={iconInfo} aria-hidden />;
       case 'error':
-        return (
-          <Icon src={require('@phosphor-icons/core/regular/warning-circle.svg')} aria-hidden />
-        );
+        return <Icon src={iconWarningCircle} aria-hidden />;
     }
   };
 
@@ -122,7 +124,7 @@ const Toast: React.FC<IToast> = (props) => {
             title={intl.formatMessage(messages.close)}
             aria-label={intl.formatMessage(messages.close)}
           >
-            <Icon src={require('@phosphor-icons/core/regular/x.svg')} />
+            <Icon src={iconX} />
           </button>
         </div>
       </div>

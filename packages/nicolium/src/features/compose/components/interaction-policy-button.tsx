@@ -1,3 +1,4 @@
+import iconSliders from '@phosphor-icons/core/regular/sliders.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -34,7 +35,7 @@ const InteractionPolicyButton: React.FC<IInteractionPolicyButton> = ({ composeId
 
   return (
     <ComposeFormButton
-      icon={require('@phosphor-icons/core/regular/sliders.svg')}
+      icon={iconSliders}
       title={intl.formatMessage(messages.label)}
       onClick={handleClick}
       active={!!interactionPolicy}

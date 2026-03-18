@@ -1,3 +1,4 @@
+import iconWarning from '@phosphor-icons/core/regular/warning.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -30,7 +31,7 @@ const SensitiveMediaButton: React.FC<ISensitiveMediaButton> = ({ composeId }) =>
 
   return (
     <ComposeFormButton
-      icon={require('@phosphor-icons/core/regular/warning.svg')}
+      icon={iconWarning}
       title={intl.formatMessage(active ? messages.marked : messages.unmarked)}
       active={active}
       onClick={onClick}

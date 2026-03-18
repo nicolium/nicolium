@@ -1,3 +1,4 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React, { Suspense, useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -82,7 +83,7 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
           />
         </Suspense>
         <IconButton
-          src={require('@phosphor-icons/core/regular/x.svg')}
+          src={iconX}
           onClick={handleRemove}
           title={intl.formatMessage(messages.remove)}
         />

@@ -1,3 +1,4 @@
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import { Link } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
@@ -55,7 +56,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             avatarSize={42}
             icon={
               <Icon
-                src={require('@phosphor-icons/core/regular/users-three.svg')}
+                src={iconUsersThree}
                 className='size-4 text-primary-600 dark:text-primary-400'
                 aria-hidden
               />

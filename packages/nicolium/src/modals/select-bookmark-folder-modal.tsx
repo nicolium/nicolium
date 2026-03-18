@@ -1,3 +1,5 @@
+import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
+import iconFolderSimple from '@phosphor-icons/core/regular/folder-simple.svg';
 import fuzzysort from 'fuzzysort';
 import React, { useDeferredValue, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -103,7 +105,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
                 className='size-5 flex-none'
               />
             ) : (
-              <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />
+              <Icon src={iconFolderSimple} size={20} />
             )}
             <span>{folder.name}</span>
           </div>
@@ -126,7 +128,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
         key='all'
         label={
           <div className='flex items-center gap-2'>
-            <Icon src={require('@phosphor-icons/core/regular/bookmarks.svg')} size={20} />
+            <Icon src={iconBookmarks} size={20} />
             <span>
               <FormattedMessage
                 id='bookmark_folders.all_bookmarks'
@@ -154,7 +156,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
                     className='size-5 flex-none'
                   />
                 ) : (
-                  <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />
+                  <Icon src={iconFolderSimple} size={20} />
                 )}
                 <span>{folder.name}</span>
               </div>

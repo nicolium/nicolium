@@ -1,3 +1,4 @@
+import iconUploadSimple from '@phosphor-icons/core/regular/upload-simple.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -13,10 +14,7 @@ interface IUploadProgress {
 /** Displays a progress bar for uploading files. */
 const UploadProgress: React.FC<IUploadProgress> = ({ progress }) => (
   <div className='flex items-center gap-2'>
-    <Icon
-      src={require('@phosphor-icons/core/regular/upload-simple.svg')}
-      className='size-7 text-gray-500'
-    />
+    <Icon src={iconUploadSimple} className='size-7 text-gray-500' />
 
     <div className='flex flex-col gap-1'>
       <Text theme='muted'>

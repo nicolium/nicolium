@@ -1,3 +1,4 @@
+import iconPaperPlaneRight from '@phosphor-icons/core/regular/paper-plane-right.svg';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -252,7 +253,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
             ) : null}
 
             <IconButton
-              src={require('@phosphor-icons/core/regular/paper-plane-right.svg')}
+              src={iconPaperPlaneRight}
               iconClassName='h-5 w-5'
               className='text-primary-500'
               disabled={isSubmitDisabled}

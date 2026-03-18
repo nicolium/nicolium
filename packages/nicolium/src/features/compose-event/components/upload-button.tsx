@@ -1,3 +1,4 @@
+import iconUpload from '@phosphor-icons/core/regular/upload.svg';
 import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -33,11 +34,7 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
 
   return (
     <label className='flex size-full cursor-pointer items-center justify-center gap-3 text-primary-500 dark:text-primary-400'>
-      <Icon
-        src={require('@phosphor-icons/core/regular/upload.svg')}
-        className='size-7'
-        onClick={handleClick}
-      />
+      <Icon src={iconUpload} className='size-7' onClick={handleClick} />
 
       <Text size='sm' theme='primary' weight='semibold' transform='uppercase' tabIndex={0}>
         <FormattedMessage id='compose_event.upload_banner' defaultMessage='Upload event banner' />

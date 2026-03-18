@@ -1,3 +1,4 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
@@ -62,7 +63,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
           {token.app_name}
           {token.app_website && (
             <a href={token.app_website} target='_blank' rel='noopener noreferrer'>
-              <Icon src={require('@phosphor-icons/core/regular/arrow-square-out.svg')} />
+              <Icon src={iconArrowSquareOut} />
             </a>
           )}
         </p>

@@ -1,3 +1,4 @@
+import iconCheck from '@phosphor-icons/core/regular/check.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl, type FormatDateOptions } from 'react-intl';
@@ -76,7 +77,7 @@ const ProfileField: React.FC<IProfileField> = ({ accountId, field, emojis }) => 
                 date: intl.formatDate(field.verified_at, dateFormatOptions),
               })}
             >
-              <Icon src={require('@phosphor-icons/core/regular/check.svg')} />
+              <Icon src={iconCheck} />
             </span>
           )}
 

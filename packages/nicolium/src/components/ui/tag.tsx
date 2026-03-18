@@ -1,3 +1,4 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 
 import IconButton from './icon-button';
@@ -17,7 +18,7 @@ const Tag: React.FC<ITag> = ({ tag, onDelete }) => (
 
     <IconButton
       iconClassName='h-4 w-4'
-      src={require('@phosphor-icons/core/regular/x.svg')}
+      src={iconX}
       onClick={() => {
         onDelete(tag);
       }}

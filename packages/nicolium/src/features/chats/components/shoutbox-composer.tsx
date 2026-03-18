@@ -1,3 +1,4 @@
+import iconPaperPlaneRight from '@phosphor-icons/core/regular/paper-plane-right.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -88,7 +89,7 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
             ) : null}
 
             <IconButton
-              src={require('@phosphor-icons/core/regular/paper-plane-right.svg')}
+              src={iconPaperPlaneRight}
               iconClassName='h-5 w-5'
               className='text-primary-500'
               disabled={isSubmitDisabled}

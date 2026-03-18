@@ -1,3 +1,4 @@
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import { useNavigate, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
@@ -188,7 +189,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
 
         {!!item.items?.length && (
           <Icon
-            src={require('@phosphor-icons/core/regular/caret-right.svg')}
+            src={iconCaretRight}
             containerClassName='ml-auto rtl:ml-0 rtl:mr-auto'
             className='size-5 flex-none'
           />

@@ -1,4 +1,5 @@
 import { useFloating, shift, autoUpdate, flip } from '@floating-ui/react';
+import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -73,7 +74,7 @@ const EmojiPicker: React.FC<IEmojiPicker> = ({ emoji, emojiUrl, ...props }) => {
         ) : (
           <Icon
             className='size-5 text-gray-600 hover:text-gray-700 dark:hover:text-gray-500'
-            src={require('@phosphor-icons/core/regular/smiley.svg')}
+            src={iconSmiley}
           />
         )}
       </button>

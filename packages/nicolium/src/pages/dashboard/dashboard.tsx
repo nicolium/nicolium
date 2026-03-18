@@ -1,3 +1,4 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 
@@ -348,7 +349,7 @@ const Dashboard: React.FC = () => {
                 {sourceCode.displayName} {sourceCode.version}
               </span>
 
-              <Icon src={require('@phosphor-icons/core/regular/arrow-square-out.svg')} />
+              <Icon src={iconArrowSquareOut} />
             </a>
           </ListItem>
 

@@ -1,3 +1,4 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -27,7 +28,7 @@ const LinkTimelinePage: React.FC = () => {
             defaultMessage='There are no posts with this link yet.'
           />
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
       />
     </Column>
   );

@@ -1,3 +1,14 @@
+import iconAt from '@phosphor-icons/core/regular/at.svg';
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconChatsCircle from '@phosphor-icons/core/regular/chats-circle.svg';
+import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
+import iconCoins from '@phosphor-icons/core/regular/coins.svg';
+import iconGlobe from '@phosphor-icons/core/regular/globe.svg';
+import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
+import iconMoon from '@phosphor-icons/core/regular/moon.svg';
+import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import React, { useMemo } from 'react';
 import { useIntl, defineMessages, type IntlShape } from 'react-intl';
 
@@ -63,26 +74,26 @@ const getItems = (
 ) =>
   [
     {
-      icon: require('@phosphor-icons/core/regular/globe.svg'),
+      icon: iconGlobe,
       value: 'public',
       text: intl.formatMessage(messages.publicShort),
       meta: intl.formatMessage(messages.publicLong),
     },
     {
-      icon: require('@phosphor-icons/core/regular/moon.svg'),
+      icon: iconMoon,
       value: 'unlisted',
       text: intl.formatMessage(messages.unlistedShort),
       meta: intl.formatMessage(messages.unlistedLong),
     },
     {
-      icon: require('@phosphor-icons/core/regular/lock.svg'),
+      icon: iconLock,
       value: 'private',
       text: intl.formatMessage(messages.privateShort),
       meta: intl.formatMessage(messages.privateLong),
     },
     isReply && features.createStatusConversationScope
       ? {
-          icon: require('@phosphor-icons/core/regular/chats-circle.svg'),
+          icon: iconChatsCircle,
           value: 'conversation',
           text: intl.formatMessage(messages.conversationShort),
           meta: intl.formatMessage(messages.conversationLong),
@@ -90,7 +101,7 @@ const getItems = (
       : undefined,
     features.createStatusMutualsOnlyScope
       ? {
-          icon: require('@phosphor-icons/core/regular/users-three.svg'),
+          icon: iconUsersThree,
           value: 'mutuals_only',
           text: intl.formatMessage(messages.mutualsOnlyShort),
           meta: intl.formatMessage(messages.mutualsOnlyLong),
@@ -98,21 +109,21 @@ const getItems = (
       : undefined,
     features.createStatusSubscribersScope
       ? {
-          icon: require('@phosphor-icons/core/regular/coins.svg'),
+          icon: iconCoins,
           value: 'subscribers',
           text: intl.formatMessage(messages.subscribersShort),
           meta: intl.formatMessage(messages.subscribersLong),
         }
       : undefined,
     {
-      icon: require('@phosphor-icons/core/regular/at.svg'),
+      icon: iconAt,
       value: 'direct',
       text: intl.formatMessage(messages.directShort),
       meta: intl.formatMessage(messages.directLong),
     },
     features.createStatusLocalScope
       ? {
-          icon: require('@phosphor-icons/core/regular/planet.svg'),
+          icon: iconPlanet,
           value: 'local',
           text: intl.formatMessage(messages.localShort),
           meta: intl.formatMessage(messages.localLong),
@@ -120,10 +131,10 @@ const getItems = (
       : undefined,
     features.createStatusListScope && Object.keys(lists).length
       ? ({
-          icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
+          icon: iconListDashes,
           value: '',
           items: Object.values(lists).map((list) => ({
-            icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
+            icon: iconListDashes,
             value: `list:${list.id}`,
             text: list.title,
           })),
@@ -133,10 +144,10 @@ const getItems = (
       : undefined,
     features.circles && Object.keys(circles).length
       ? ({
-          icon: require('@phosphor-icons/core/regular/circles-three.svg'),
+          icon: iconCirclesThree,
           value: '',
           items: Object.values(circles).map((circle) => ({
-            icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
+            icon: iconListDashes,
             value: `circle:${circle.id}`,
             text: circle.title,
           })),
@@ -188,7 +199,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
 
   if (features.localOnlyStatuses)
     items.push({
-      icon: require('@phosphor-icons/core/regular/planet.svg'),
+      icon: iconPlanet,
       text: intl.formatMessage(messages.localShort),
       meta: intl.formatMessage(messages.localLong),
       type: 'toggle',
@@ -222,7 +233,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
       <button title={compact ? text : intl.formatMessage(messages.changePrivacy)}>
         {valueOption?.icon && <Icon src={valueOption.icon} aria-hidden />}
         {compact ? undefined : text}
-        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
+        <Icon src={iconCaretDown} aria-hidden />
       </button>
     </DropdownMenu>
   );

@@ -1,3 +1,4 @@
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
@@ -105,7 +106,7 @@ const ListItem: React.FC<IListItem> = ({
         <div className='⁂-list-item__body'>
           {children}
 
-          <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} aria-hidden />
+          <Icon src={iconCaretRight} aria-hidden />
         </div>
       ) : null}
 

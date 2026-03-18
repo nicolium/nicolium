@@ -1,4 +1,6 @@
 import { autoUpdate, flip, shift, useFloating, useTransitionStyles } from '@floating-ui/react';
+import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
+import iconTag from '@phosphor-icons/core/regular/tag.svg';
 import { useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
@@ -161,10 +163,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
             {account.local ? (
               <div className='flex items-center gap-0.5'>
-                <Icon
-                  src={require('@phosphor-icons/core/regular/calendar-dots.svg')}
-                  className='size-4 text-gray-800 dark:text-gray-200'
-                />
+                <Icon src={iconCalendarDots} className='size-4 text-gray-800 dark:text-gray-200' />
 
                 <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
                   <FormattedMessage
@@ -182,10 +181,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
             {account.pronouns.length > 0 && (
               <div className='flex items-center gap-0.5'>
-                <Icon
-                  src={require('@phosphor-icons/core/regular/tag.svg')}
-                  className='size-4 text-gray-800 dark:text-gray-200'
-                />
+                <Icon src={iconTag} className='size-4 text-gray-800 dark:text-gray-200' />
 
                 <Text
                   size='sm'

@@ -1,3 +1,5 @@
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React, { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -45,14 +47,14 @@ const ChatsPageSidebar = () => {
 
         <div className='flex gap-1'>
           <IconButton
-            src={require('@phosphor-icons/core/regular/sliders-horizontal.svg')}
+            src={iconSlidersHorizontal}
             iconClassName='h-5 w-5 text-gray-600'
             onClick={handleSettingsClick}
             title={intl.formatMessage(messages.settings)}
           />
 
           <IconButton
-            src={require('@phosphor-icons/core/regular/pencil-simple.svg')}
+            src={iconPencilSimple}
             iconClassName='h-5 w-5 text-gray-600'
             onClick={handleChatCreate}
             title={intl.formatMessage(messages.newChat)}

@@ -1,3 +1,9 @@
+import iconBackspace from '@phosphor-icons/core/regular/backspace.svg';
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconMinus from '@phosphor-icons/core/regular/minus.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
 import clsx from 'clsx';
 import fuzzysort from 'fuzzysort';
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
@@ -212,14 +218,7 @@ const getLanguageDropdown =
               isSearching ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.search)
             }
           >
-            <Icon
-              src={
-                isSearching
-                  ? require('@phosphor-icons/core/regular/backspace.svg')
-                  : require('@phosphor-icons/core/regular/magnifying-glass.svg')
-              }
-              aria-hidden
-            />
+            <Icon src={isSearching ? iconBackspace : iconMagnifyingGlass} aria-hidden />
           </button>
         </label>
         <div className='⁂-language-dropdown__options' tabIndex={-1} ref={node} role='listbox'>
@@ -251,14 +250,14 @@ const getLanguageDropdown =
                       title={intl.formatMessage(messages.deleteLanguage)}
                       onClick={handleDeleteLanguageClick}
                     >
-                      <Icon src={require('@phosphor-icons/core/regular/minus.svg')} />
+                      <Icon src={iconMinus} />
                     </button>
                   ) : (
                     <button
                       title={intl.formatMessage(messages.addLanguage)}
                       onClick={handleAddLanguageClick}
                     >
-                      <Icon src={require('@phosphor-icons/core/regular/plus.svg')} />
+                      <Icon src={iconPlus} />
                     </button>
                   ))}
               </button>
@@ -301,9 +300,9 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId, 
   return (
     <DropdownMenu component={LanguageDropdown} className='⁂-language-dropdown'>
       <button title={intl.formatMessage(messages.languagePrompt)}>
-        <Icon src={require('@phosphor-icons/core/regular/translate.svg')} aria-hidden />
+        <Icon src={iconTranslate} aria-hidden />
         {buttonLabel}
-        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
+        <Icon src={iconCaretDown} aria-hidden />
       </button>
     </DropdownMenu>
   );

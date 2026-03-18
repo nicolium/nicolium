@@ -1,3 +1,4 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -82,7 +83,7 @@ const LandingTimelinePage = () => {
               defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!'
             />
           }
-          emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+          emptyMessageIcon={iconChatCenteredText}
         />
       ) : (
         <About slug='index' />

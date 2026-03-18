@@ -23,6 +23,7 @@ THE SOFTWARE.
  */
 // Adapted from [multiselect-react-dropdown](https://github.com/srigar/multiselect-react-dropdown)
 
+import iconXCircle from '@phosphor-icons/core/regular/x-circle.svg';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -234,10 +235,7 @@ const Multiselect: React.FC<IMultiselect> = ({
                 title={intl.formatMessage(messages.removeItem)}
                 aria-label={intl.formatMessage(messages.removeItem)}
               >
-                <Icon
-                  className='ml-1 size-4 hover:cursor-pointer'
-                  src={require('@phosphor-icons/core/regular/x-circle.svg')}
-                />
+                <Icon className='ml-1 size-4 hover:cursor-pointer' src={iconXCircle} />
               </button>
             </span>
           ))}

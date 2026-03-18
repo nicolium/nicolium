@@ -1,3 +1,9 @@
+import iconAt from '@phosphor-icons/core/regular/at.svg';
+import iconCoins from '@phosphor-icons/core/regular/coins.svg';
+import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
+import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import React from 'react';
 import { defineMessages, type MessageDescriptor, useIntl } from 'react-intl';
 
@@ -41,12 +47,12 @@ const messages: Record<string, MessageDescriptor> = defineMessages({
 });
 
 const STATUS_TYPE_ICONS: Record<string, string> = {
-  direct: require('@phosphor-icons/core/regular/at.svg'),
-  private: require('@phosphor-icons/core/regular/lock.svg'),
-  mutuals_only: require('@phosphor-icons/core/regular/users-three.svg'),
-  local: require('@phosphor-icons/core/regular/planet.svg'),
-  list: require('@phosphor-icons/core/regular/list-bullets.svg'),
-  subscribers: require('@phosphor-icons/core/regular/coins.svg'),
+  direct: iconAt,
+  private: iconLock,
+  mutuals_only: iconUsersThree,
+  local: iconPlanet,
+  list: iconListBullets,
+  subscribers: iconCoins,
 };
 
 const StatusTypeIcon: React.FC<IStatusTypeIcon> = React.memo(({ visibility }) => {

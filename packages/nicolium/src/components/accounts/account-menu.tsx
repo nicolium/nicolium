@@ -1,3 +1,25 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
+import iconArrowsClockwise from '@phosphor-icons/core/regular/arrows-clockwise.svg';
+import iconAt from '@phosphor-icons/core/regular/at.svg';
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
+import iconEnvelopeSimple from '@phosphor-icons/core/regular/envelope-simple.svg';
+import iconExport from '@phosphor-icons/core/regular/export.svg';
+import iconFlag from '@phosphor-icons/core/regular/flag.svg';
+import iconGavel from '@phosphor-icons/core/regular/gavel.svg';
+import iconLinkSimpleHorizontal from '@phosphor-icons/core/regular/link-simple-horizontal.svg';
+import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
+import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRss from '@phosphor-icons/core/regular/rss.svg';
+import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
+import iconSpeakerSimpleX from '@phosphor-icons/core/regular/speaker-simple-x.svg';
+import iconTag from '@phosphor-icons/core/regular/tag.svg';
+import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
+import iconUserCheck from '@phosphor-icons/core/regular/user-check.svg';
+import iconUserMinus from '@phosphor-icons/core/regular/user-minus.svg';
+import iconUser from '@phosphor-icons/core/regular/user.svg';
 import { GOTOSOCIAL, MASTODON } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -332,7 +354,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
     if (features.rssFeeds && account.local && (software !== GOTOSOCIAL || account.enable_rss)) {
       menu.push({
         text: intl.formatMessage(messages.subscribeFeed),
-        icon: require('@phosphor-icons/core/regular/rss.svg'),
+        icon: iconRss,
         href: software === MASTODON ? `${account.url}.rss` : `${account.url}/feed.rss`,
         target: '_blank',
       });
@@ -342,7 +364,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       menu.push({
         text: intl.formatMessage(messages.share, { name: account.username }),
         action: handleShare,
-        icon: require('@phosphor-icons/core/regular/export.svg'),
+        icon: iconExport,
       });
     }
 
@@ -352,14 +374,14 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       menu.push({
         text: intl.formatMessage(messages.profileExternal, { domain }),
         href: account.url,
-        icon: require('@phosphor-icons/core/regular/arrow-square-out.svg'),
+        icon: iconArrowSquareOut,
       });
     }
 
     menu.push({
       text: intl.formatMessage(messages.copy),
       action: handleCopy,
-      icon: require('@phosphor-icons/core/regular/link-simple-horizontal.svg'),
+      icon: iconLinkSimpleHorizontal,
     });
 
     if (!ownAccount) return menu;
@@ -372,7 +394,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         ),
         to: '/search',
         search: { type: 'statuses', accountId: account.id },
-        icon: require('@phosphor-icons/core/regular/magnifying-glass.svg'),
+        icon: iconMagnifyingGlass,
       });
     }
 
@@ -384,36 +406,36 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       menu.push({
         text: intl.formatMessage(messages.editProfile),
         to: '/settings/profile',
-        icon: require('@phosphor-icons/core/regular/user.svg'),
+        icon: iconUser,
       });
       menu.push({
         text: intl.formatMessage(messages.preferences),
         to: '/settings',
-        icon: require('@phosphor-icons/core/regular/sliders-horizontal.svg'),
+        icon: iconSlidersHorizontal,
       });
       menu.push(null);
       menu.push({
         text: intl.formatMessage(messages.mutes),
         to: '/mutes',
-        icon: require('@phosphor-icons/core/regular/speaker-simple-x.svg'),
+        icon: iconSpeakerSimpleX,
       });
       menu.push({
         text: intl.formatMessage(messages.blocks),
         to: '/blocks',
-        icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+        icon: iconProhibit,
       });
     } else {
       menu.push({
         text: intl.formatMessage(messages.mention, { name: account.username }),
         action: onMention,
-        icon: require('@phosphor-icons/core/regular/at.svg'),
+        icon: iconAt,
       });
 
       if (features.privacyScopes) {
         menu.push({
           text: intl.formatMessage(messages.direct, { name: account.username }),
           action: onDirect,
-          icon: require('@phosphor-icons/core/regular/envelope-simple.svg'),
+          icon: iconEnvelopeSimple,
         });
       }
 
@@ -422,13 +444,13 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
           menu.push({
             text: intl.formatMessage(messages.hideReblogs, { name: account.username }),
             action: onReblogToggle,
-            icon: require('@phosphor-icons/core/regular/repeat.svg'),
+            icon: iconRepeat,
           });
         } else {
           menu.push({
             text: intl.formatMessage(messages.showReblogs, { name: account.username }),
             action: onReblogToggle,
-            icon: require('@phosphor-icons/core/regular/repeat.svg'),
+            icon: iconRepeat,
           });
         }
 
@@ -436,7 +458,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
           menu.push({
             text: intl.formatMessage(messages.addOrRemoveFromList),
             action: onAddToList,
-            icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
+            icon: iconListBullets,
           });
         }
 
@@ -446,16 +468,14 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
               account.relationship?.endorsed ? messages.unendorse : messages.endorse,
             ),
             action: onEndorseToggle,
-            icon: account.relationship?.endorsed
-              ? require('@phosphor-icons/core/regular/user-minus.svg')
-              : require('@phosphor-icons/core/regular/user-check.svg'),
+            icon: account.relationship?.endorsed ? iconUserMinus : iconUserCheck,
           });
         }
       } else if (features.lists && features.unrestrictedLists) {
         menu.push({
           text: intl.formatMessage(messages.addOrRemoveFromList),
           action: onAddToList,
-          icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
+          icon: iconListBullets,
         });
       }
 
@@ -463,7 +483,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.bite, { name: account.username }),
           action: onBite,
-          icon: require('@phosphor-icons/core/regular/tooth.svg'),
+          icon: iconTooth,
         });
       }
 
@@ -471,7 +491,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.loadActivities),
           action: onLoadActivities,
-          icon: require('@phosphor-icons/core/regular/arrows-clockwise.svg'),
+          icon: iconArrowsClockwise,
         });
       }
 
@@ -479,14 +499,14 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.note, { name: account.acct }),
           action: onEditNote,
-          icon: require('@phosphor-icons/core/regular/note-pencil.svg'),
+          icon: iconNotePencil,
         });
       }
 
       menu.push({
         text: intl.formatMessage(messages.nickname, { name: account.acct }),
         action: onEditNickname,
-        icon: require('@phosphor-icons/core/regular/tag.svg'),
+        icon: iconTag,
       });
 
       menu.push(null);
@@ -495,7 +515,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.removeFromFollowers),
           action: onRemoveFromFollowers,
-          icon: require('@phosphor-icons/core/regular/user-minus.svg'),
+          icon: iconUserMinus,
         });
       }
 
@@ -503,13 +523,13 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.unmute, { name: account.username }),
           action: onMute,
-          icon: require('@phosphor-icons/core/regular/speaker-simple-x.svg'),
+          icon: iconSpeakerSimpleX,
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.mute, { name: account.username }),
           action: onMute,
-          icon: require('@phosphor-icons/core/regular/speaker-simple-x.svg'),
+          icon: iconSpeakerSimpleX,
         });
       }
 
@@ -517,20 +537,20 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.unblock, { name: account.username }),
           action: onBlock,
-          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+          icon: iconProhibit,
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.block, { name: account.username }),
           action: onBlock,
-          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+          icon: iconProhibit,
         });
       }
 
       menu.push({
         text: intl.formatMessage(messages.report, { name: account.username }),
         action: onReport,
-        icon: require('@phosphor-icons/core/regular/flag.svg'),
+        icon: iconFlag,
       });
     }
 
@@ -545,7 +565,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
           action: () => {
             onUnblockDomain(domain);
           },
-          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+          icon: iconProhibit,
         });
       } else {
         menu.push({
@@ -553,7 +573,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
           action: () => {
             onBlockDomain(domain);
           },
-          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+          icon: iconProhibit,
         });
       }
     }
@@ -565,7 +585,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         text: intl.formatMessage(messages.adminAccount, { name: account.username }),
         to: '/nicolium/admin/accounts/$accountId',
         params: { accountId: account.id },
-        icon: require('@phosphor-icons/core/regular/gavel.svg'),
+        icon: iconGavel,
       });
     }
 
@@ -578,12 +598,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
 
   return (
     <DropdownMenu items={menu} placement='bottom-end'>
-      <IconButton
-        src={require('@phosphor-icons/core/regular/dots-three.svg')}
-        theme='outlined'
-        className='px-2'
-        iconClassName='h-4 w-4'
-      />
+      <IconButton src={iconDotsThree} theme='outlined' className='px-2' iconClassName='h-4 w-4' />
     </DropdownMenu>
   );
 };

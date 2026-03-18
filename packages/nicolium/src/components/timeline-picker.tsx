@@ -1,3 +1,13 @@
+import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
+import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
+import iconGlobeSimple from '@phosphor-icons/core/regular/globe-simple.svg';
+import iconGraph from '@phosphor-icons/core/regular/graph.svg';
+import iconHouse from '@phosphor-icons/core/regular/house.svg';
+import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
+import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
+import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -87,7 +97,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       items.push({
         to: '/',
         text: intl.formatMessage(messages.homeTimeline),
-        icon: require('@phosphor-icons/core/regular/house.svg'),
+        icon: iconHouse,
         active: active === 'home',
       });
     }
@@ -100,7 +110,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       items.push({
         to: '/timeline/local',
         text: intl.formatMessage(messages.localTimeline),
-        icon: require('@phosphor-icons/core/regular/planet.svg'),
+        icon: iconPlanet,
         active: active === 'local',
       });
     }
@@ -113,7 +123,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       items.push({
         to: '/timeline/bubble',
         text: intl.formatMessage(messages.bubbleTimeline),
-        icon: require('@phosphor-icons/core/regular/graph.svg'),
+        icon: iconGraph,
         active: active === 'bubble',
       });
     }
@@ -125,7 +135,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       items.push({
         to: '/timeline/fediverse',
         text: intl.formatMessage(messages.federatedTimeline),
-        icon: require('@phosphor-icons/core/regular/fediverse-logo.svg'),
+        icon: iconFediverseLogo,
         active: active === 'federated',
       });
     }
@@ -137,7 +147,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       items.push({
         to: '/timeline/wrenched',
         text: intl.formatMessage(messages.wrenchedTimeline),
-        icon: require('@phosphor-icons/core/regular/wrench.svg'),
+        icon: iconWrench,
         active: active === 'wrenched',
       });
     }
@@ -145,12 +155,12 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       items.push({
         text: intl.formatMessage(messages.lists),
         active: active.startsWith('list:'),
-        icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
+        icon: iconListDashes,
         items: lists.map((list) => ({
           to: '/list/$listId',
           params: { listId: list.id },
           text: list.title,
-          icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
+          icon: iconListDashes,
           active: active === `list:${list.id}`,
         })),
       });
@@ -159,12 +169,12 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       items.push({
         text: intl.formatMessage(messages.circles),
         active: active.startsWith('circle:'),
-        icon: require('@phosphor-icons/core/regular/circles-three.svg'),
+        icon: iconCirclesThree,
         items: circles.map((circle) => ({
           to: '/circles/$circleId',
           params: { circleId: circle.id },
           text: circle.title,
-          icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
+          icon: iconListDashes,
           active: active === `circle:${circle.id}`,
         })),
       });
@@ -173,12 +183,12 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       items.push({
         text: intl.formatMessage(messages.antennas),
         active: active.startsWith('antenna:'),
-        icon: require('@phosphor-icons/core/regular/broadcast.svg'),
+        icon: iconBroadcast,
         items: antennas.map((antenna) => ({
           to: '/antennas/$antennaId',
           params: { antennaId: antenna.id },
           text: antenna.title,
-          icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
+          icon: iconListDashes,
           active: active === `antenna:${antenna.id}`,
         })),
       });
@@ -187,12 +197,12 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       items.push({
         text: intl.formatMessage(messages.pinnedInstances),
         active: active.startsWith('instance:'),
-        icon: require('@phosphor-icons/core/regular/globe-simple.svg'),
+        icon: iconGlobeSimple,
         items: pinnedHosts.map((instance) => ({
           to: '/timeline/$instance',
           params: { instance },
           text: instance,
-          icon: require('@phosphor-icons/core/regular/globe-simple.svg'),
+          icon: iconGlobeSimple,
           active: active === `instance:${instance}`,
         })),
       });
@@ -204,7 +214,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     <DropdownMenu items={items} width='16rem' placement='bottom-start'>
       <div className='⁂-timeline-picker' role='button' tabIndex={0}>
         {heading}
-        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
+        <Icon src={iconCaretDown} aria-hidden />
       </div>
     </DropdownMenu>
   );

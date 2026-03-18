@@ -1,3 +1,9 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconArrowRight from '@phosphor-icons/core/regular/arrow-right.svg';
+import iconArrowsInSimple from '@phosphor-icons/core/regular/arrows-in-simple.svg';
+import iconArrowsOutSimple from '@phosphor-icons/core/regular/arrows-out-simple.svg';
+import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { animated, useSpring } from '@react-spring/web';
 import { Link } from '@tanstack/react-router';
 import { useDrag } from '@use-gesture/react';
@@ -311,7 +317,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           >
             <IconButton
               title={intl.formatMessage(messages.close)}
-              src={require('@phosphor-icons/core/regular/x.svg')}
+              src={iconX}
               onClick={() => {
                 onClose('MEDIA');
               }}
@@ -324,7 +330,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
               {/* {zoomable && (
                 <IconButton
                   title={intl.formatMessage(zoomedIn ? messages.zoomOut : messages.zoomIn)}
-                  src={zoomedIn ? require('@phosphor-icons/core/regular/magnifying-glass-minus.svg') : require('@phosphor-icons/core/regular/magnifying-glass-plus.svg')}
+                  src={zoomedIn ? iconMagnifyingGlassMinus : iconMagnifyingGlassPlus}
                   theme='dark'
                   className='!p-1.5 hover:scale-105 hover:bg-gray-900'
                   iconClassName='h-5 w-5'
@@ -334,7 +340,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
               <IconButton
                 title={intl.formatMessage(messages.download)}
-                src={require('@phosphor-icons/core/regular/download-simple.svg')}
+                src={iconDownloadSimple}
                 theme='dark'
                 className='!p-1.5 hover:scale-105 hover:bg-gray-900'
                 iconClassName='h-5 w-5'
@@ -343,11 +349,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
               {status && (
                 <IconButton
-                  src={
-                    isFullScreen
-                      ? require('@phosphor-icons/core/regular/arrows-in-simple.svg')
-                      : require('@phosphor-icons/core/regular/arrows-out-simple.svg')
-                  }
+                  src={isFullScreen ? iconArrowsInSimple : iconArrowsOutSimple}
                   title={intl.formatMessage(isFullScreen ? messages.minimize : messages.expand)}
                   theme='dark'
                   className='hidden !p-1.5 hover:scale-105 hover:bg-gray-900 xl:block'
@@ -373,10 +375,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   onClick={handlePrevClick}
                   aria-label={intl.formatMessage(messages.previous)}
                 >
-                  <Icon
-                    src={require('@phosphor-icons/core/regular/arrow-left.svg')}
-                    className='size-5'
-                  />
+                  <Icon src={iconArrowLeft} className='size-5' />
                 </button>
               </div>
               <div
@@ -391,10 +390,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   onClick={handleNextClick}
                   aria-label={intl.formatMessage(messages.next)}
                 >
-                  <Icon
-                    src={require('@phosphor-icons/core/regular/arrow-right.svg')}
-                    className='size-5'
-                  />
+                  <Icon src={iconArrowRight} className='size-5' />
                 </button>
               </div>
             </div>

@@ -1,3 +1,45 @@
+import iconStarFill from '@phosphor-icons/core/fill/star-fill.svg';
+import iconThumbsDownFill from '@phosphor-icons/core/fill/thumbs-down-fill.svg';
+import iconThumbsUpFill from '@phosphor-icons/core/fill/thumbs-up-fill.svg';
+import iconWrenchFill from '@phosphor-icons/core/fill/wrench-fill.svg';
+import iconArrowBendDoubleUpLeft from '@phosphor-icons/core/regular/arrow-bend-double-up-left.svg';
+import iconArrowBendUpLeft from '@phosphor-icons/core/regular/arrow-bend-up-left.svg';
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
+import iconArrowsClockwise from '@phosphor-icons/core/regular/arrows-clockwise.svg';
+import iconArrowsVertical from '@phosphor-icons/core/regular/arrows-vertical.svg';
+import iconAt from '@phosphor-icons/core/regular/at.svg';
+import iconBellSimpleSlash from '@phosphor-icons/core/regular/bell-simple-slash.svg';
+import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
+import iconBookmarkSimple from '@phosphor-icons/core/regular/bookmark-simple.svg';
+import iconBookmark from '@phosphor-icons/core/regular/bookmark.svg';
+import iconChatCircle from '@phosphor-icons/core/regular/chat-circle.svg';
+import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
+import iconCodeSimple from '@phosphor-icons/core/regular/code-simple.svg';
+import iconCopy from '@phosphor-icons/core/regular/copy.svg';
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
+import iconExport from '@phosphor-icons/core/regular/export.svg';
+import iconFlag from '@phosphor-icons/core/regular/flag.svg';
+import iconFolders from '@phosphor-icons/core/regular/folders.svg';
+import iconGavel from '@phosphor-icons/core/regular/gavel.svg';
+import iconGlobe from '@phosphor-icons/core/regular/globe.svg';
+import iconLinkSimpleHorizontal from '@phosphor-icons/core/regular/link-simple-horizontal.svg';
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
+import iconMoon from '@phosphor-icons/core/regular/moon.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
+import iconPushPinSlash from '@phosphor-icons/core/regular/push-pin-slash.svg';
+import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
+import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
+import iconSpeakerX from '@phosphor-icons/core/regular/speaker-x.svg';
+import iconStar from '@phosphor-icons/core/regular/star.svg';
+import iconThumbsDown from '@phosphor-icons/core/regular/thumbs-down.svg';
+import iconThumbsUp from '@phosphor-icons/core/regular/thumbs-up.svg';
+import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
+import iconWarning from '@phosphor-icons/core/regular/warning.svg';
+import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import { useMatch, useNavigate } from '@tanstack/react-router';
 import { type Account, type CustomEmoji, GroupRoles } from 'pl-api';
 import React, { useCallback, useMemo } from 'react';
@@ -371,11 +413,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
   const replyButton = (
     <StatusActionButton
       title={replyTitle}
-      icon={
-        status.in_reply_to_id
-          ? require('@phosphor-icons/core/regular/arrow-bend-double-up-left.svg')
-          : require('@phosphor-icons/core/regular/arrow-bend-up-left.svg')
-      }
+      icon={status.in_reply_to_id ? iconArrowBendDoubleUpLeft : iconArrowBendUpLeft}
       onClick={handleReplyClick}
       count={status.replies_count}
       text={withLabels ? intl.formatMessage(messages.reply) : undefined}
@@ -425,12 +463,12 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const { mutate: reblogStatus } = useReblogStatus(status.id);
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
-  let reblogIcon = require('@phosphor-icons/core/regular/repeat.svg');
+  let reblogIcon = iconRepeat;
 
   if (status.visibility === 'direct') {
-    reblogIcon = require('@phosphor-icons/core/regular/at.svg');
+    reblogIcon = iconAt;
   } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
-    reblogIcon = require('@phosphor-icons/core/regular/lock.svg');
+    reblogIcon = iconLock;
   }
 
   const handleReblogClick: React.EventHandler<React.MouseEvent> = (e) => {
@@ -504,12 +542,12 @@ const ReblogButton: React.FC<IReblogButton> = ({
     {
       text: intl.formatMessage(status.reblogged ? messages.cancelReblogPrivate : messages.reblog),
       action: handleReblogClick,
-      icon: require('@phosphor-icons/core/regular/repeat.svg'),
+      icon: iconRepeat,
     },
     {
       text: intl.formatMessage(messages.quotePost),
       action: handleQuoteClick,
-      icon: require('@phosphor-icons/core/regular/quotes.svg'),
+      icon: iconQuotes,
       disabled: !canQuote.canInteract,
     },
   ];
@@ -561,16 +599,8 @@ const FavouriteButton: React.FC<IActionButton> = ({
   const favouriteButton = (
     <StatusActionButton
       title={intl.formatMessage(messages.favourite)}
-      icon={
-        features.statusDislikes
-          ? require('@phosphor-icons/core/regular/thumbs-up.svg')
-          : require('@phosphor-icons/core/regular/star.svg')
-      }
-      filledIcon={
-        features.statusDislikes
-          ? require('@phosphor-icons/core/fill/thumbs-up-fill.svg')
-          : require('@phosphor-icons/core/fill/star-fill.svg')
-      }
+      icon={features.statusDislikes ? iconThumbsUp : iconStar}
+      filledIcon={features.statusDislikes ? iconThumbsUpFill : iconStarFill}
       onClick={handleFavouriteClick}
       onLongPress={handleFavouriteLongPress}
       active={status.favourited}
@@ -628,8 +658,8 @@ const DislikeButton: React.FC<IActionButton> = ({
   return (
     <StatusActionButton
       title={intl.formatMessage(messages.disfavourite)}
-      icon={require('@phosphor-icons/core/regular/thumbs-down.svg')}
-      filledIcon={require('@phosphor-icons/core/fill/thumbs-down-fill.svg')}
+      icon={iconThumbsDown}
+      filledIcon={iconThumbsDownFill}
       onClick={handleDislikeClick}
       onLongPress={handleDislikeLongPress}
       active={status.disliked}
@@ -679,8 +709,8 @@ const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
   return (
     <StatusActionButton
       title={intl.formatMessage(messages.wrench)}
-      icon={require('@phosphor-icons/core/regular/wrench.svg')}
-      filledIcon={require('@phosphor-icons/core/fill/wrench-fill.svg')}
+      icon={iconWrench}
+      filledIcon={iconWrenchFill}
       onClick={handleWrenchClick}
       onLongPress={handleWrenchLongPress}
       active={wrenches?.me}
@@ -1000,7 +1030,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     if (expandable) {
       menu.push({
         text: intl.formatMessage(messages.open),
-        icon: require('@phosphor-icons/core/regular/arrows-vertical.svg'),
+        icon: iconArrowsVertical,
         to: '/@{$username}/posts/$statusId',
         params: { username: status.account.acct, statusId: status.id },
       });
@@ -1010,7 +1040,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.copyStatus),
         action: handleCopyStatus,
-        icon: require('@phosphor-icons/core/regular/copy.svg'),
+        icon: iconCopy,
       });
     }
 
@@ -1018,14 +1048,14 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.copy),
         action: handleCopy,
-        icon: require('@phosphor-icons/core/regular/link-simple-horizontal.svg'),
+        icon: iconLinkSimpleHorizontal,
       });
 
       if ('share' in navigator) {
         menu.push({
           text: intl.formatMessage(messages.share),
           action: handleShare,
-          icon: require('@phosphor-icons/core/regular/export.svg'),
+          icon: iconExport,
         });
       }
 
@@ -1033,7 +1063,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.embed),
           action: handleEmbed,
-          icon: require('@phosphor-icons/core/regular/code-simple.svg'),
+          icon: iconCodeSimple,
         });
       }
     }
@@ -1046,7 +1076,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.viewReactions),
         action: handleOpenReactionsModal,
-        icon: require('@phosphor-icons/core/regular/smiley.svg'),
+        icon: iconSmiley,
       });
     }
 
@@ -1056,9 +1086,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(status.bookmarked ? messages.unbookmark : messages.bookmark),
         action: handleBookmarkClick,
-        icon: status.bookmarked
-          ? require('@phosphor-icons/core/regular/bookmark.svg')
-          : require('@phosphor-icons/core/regular/bookmark-simple.svg'),
+        icon: status.bookmarked ? iconBookmark : iconBookmarkSimple,
       });
     }
 
@@ -1068,7 +1096,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           status.bookmark_folder ? messages.bookmarkChangeFolder : messages.bookmarkSetFolder,
         ),
         action: handleBookmarkFolderClick,
-        icon: require('@phosphor-icons/core/regular/folders.svg'),
+        icon: iconFolders,
       });
     }
 
@@ -1076,7 +1104,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       const { hostname: domain } = new URL(status.uri);
       menu.push({
         text: intl.formatMessage(messages.external, { domain }),
-        icon: require('@phosphor-icons/core/regular/arrow-square-out.svg'),
+        icon: iconArrowSquareOut,
         href: status.uri,
         target: '_blank',
       });
@@ -1089,16 +1117,14 @@ const MenuButton: React.FC<IMenuButton> = ({
         mutingConversation ? messages.unmuteConversation : messages.muteConversation,
       ),
       action: handleConversationMuteClick,
-      icon: mutingConversation
-        ? require('@phosphor-icons/core/regular/bell-simple.svg')
-        : require('@phosphor-icons/core/regular/bell-simple-slash.svg'),
+      icon: mutingConversation ? iconBellSimple : iconBellSimpleSlash,
     });
 
     if (!status.in_reply_to_id && features.loadConversation) {
       menu.push({
         text: intl.formatMessage(messages.loadConversation),
         action: handleLoadConversationClick,
-        icon: require('@phosphor-icons/core/regular/arrows-clockwise.svg'),
+        icon: iconArrowsClockwise,
       });
     }
 
@@ -1107,28 +1133,28 @@ const MenuButton: React.FC<IMenuButton> = ({
     if (publicStatus && !status.reblogged && features.reblogVisibility) {
       menu.push({
         text: intl.formatMessage(messages.reblogVisibility),
-        icon: require('@phosphor-icons/core/regular/repeat.svg'),
+        icon: iconRepeat,
         items: [
           {
             text: intl.formatMessage(messages.reblogVisibilityPublic),
             action: (e) => {
               handleReblogClick(e, 'public');
             },
-            icon: require('@phosphor-icons/core/regular/globe.svg'),
+            icon: iconGlobe,
           },
           {
             text: intl.formatMessage(messages.reblogVisibilityUnlisted),
             action: (e) => {
               handleReblogClick(e, 'unlisted');
             },
-            icon: require('@phosphor-icons/core/regular/moon.svg'),
+            icon: iconMoon,
           },
           {
             text: intl.formatMessage(messages.reblogVisibilityPrivate),
             action: (e) => {
               handleReblogClick(e, 'private');
             },
-            icon: require('@phosphor-icons/core/regular/lock.svg'),
+            icon: iconLock,
           },
         ],
       });
@@ -1139,9 +1165,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(status.pinned ? messages.unpin : messages.pin),
           action: handlePinClick,
-          icon: status.pinned
-            ? require('@phosphor-icons/core/regular/push-pin-slash.svg')
-            : require('@phosphor-icons/core/regular/push-pin.svg'),
+          icon: status.pinned ? iconPushPinSlash : iconPushPin,
         });
       } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
         menu.push({
@@ -1149,27 +1173,27 @@ const MenuButton: React.FC<IMenuButton> = ({
             status.reblogged ? messages.cancelReblogPrivate : messages.reblogPrivate,
           ),
           action: handleReblogClick,
-          icon: require('@phosphor-icons/core/regular/repeat.svg'),
+          icon: iconRepeat,
         });
       }
 
       menu.push({
         text: intl.formatMessage(messages.delete),
         action: handleDeleteClick,
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
         destructive: true,
       });
       if (features.editStatuses) {
         menu.push({
           text: intl.formatMessage(messages.edit),
           action: handleEditClick,
-          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+          icon: iconPencilSimple,
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.redraft),
           action: handleRedraftClick,
-          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+          icon: iconPencilSimple,
           destructive: true,
         });
       }
@@ -1177,20 +1201,20 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.mention, { name: username }),
         action: handleMentionClick,
-        icon: require('@phosphor-icons/core/regular/at.svg'),
+        icon: iconAt,
       });
 
       if (status.account.accepts_chat_messages === true) {
         menu.push({
           text: intl.formatMessage(messages.chat, { name: username }),
           action: handleChatClick,
-          icon: require('@phosphor-icons/core/regular/chats-teardrop.svg'),
+          icon: iconChatsTeardrop,
         });
       } else if (features.privacyScopes) {
         menu.push({
           text: intl.formatMessage(messages.direct, { name: username }),
           action: handleDirectClick,
-          icon: require('@phosphor-icons/core/regular/chat-circle.svg'),
+          icon: iconChatCircle,
         });
       }
 
@@ -1199,25 +1223,25 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.mute, { name: username }),
         action: handleMuteClick,
-        icon: require('@phosphor-icons/core/regular/speaker-x.svg'),
+        icon: iconSpeakerX,
       });
       if (status.account.relationship?.blocking) {
         menu.push({
           text: intl.formatMessage(messages.unblock, { name: username }),
           action: handleUnblockClick,
-          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+          icon: iconProhibit,
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.block, { name: username }),
           action: handleBlockClick,
-          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+          icon: iconProhibit,
         });
       }
       menu.push({
         text: intl.formatMessage(messages.report, { name: username }),
         action: handleReport,
-        icon: require('@phosphor-icons/core/regular/flag.svg'),
+        icon: iconFlag,
       });
     }
 
@@ -1226,13 +1250,13 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.hideTranslation),
           action: handleTranslate,
-          icon: require('@phosphor-icons/core/regular/translate.svg'),
+          icon: iconTranslate,
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.translate),
           action: handleTranslate,
-          icon: require('@phosphor-icons/core/regular/translate.svg'),
+          icon: iconTranslate,
         });
       }
 
@@ -1241,7 +1265,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           language: languages[status.language as 'en'] || status.language,
         }),
         action: handleIgnoreLanguage,
-        icon: require('@phosphor-icons/core/regular/flag.svg'),
+        icon: iconFlag,
       });
     }
 
@@ -1261,7 +1285,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: 'Ban from Group',
           action: handleBlockFromGroup,
-          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+          icon: iconProhibit,
           destructive: true,
         });
       }
@@ -1270,7 +1294,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.groupModDelete),
           action: handleDeleteFromGroup,
-          icon: require('@phosphor-icons/core/regular/trash.svg'),
+          icon: iconTrash,
           destructive: true,
         });
       }
@@ -1283,14 +1307,14 @@ const MenuButton: React.FC<IMenuButton> = ({
         text: intl.formatMessage(messages.adminAccount, { name: username }),
         to: '/nicolium/admin/accounts/$accountId',
         params: { accountId: status.account_id },
-        icon: require('@phosphor-icons/core/regular/gavel.svg'),
+        icon: iconGavel,
       });
 
       if (isAdmin && features.pleromaAdminStatuses) {
         menu.push({
           text: intl.formatMessage(messages.adminStatus),
           href: `/pleroma/admin/#/statuses/${status.id}/`,
-          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+          icon: iconPencilSimple,
         });
       }
 
@@ -1300,7 +1324,7 @@ const MenuButton: React.FC<IMenuButton> = ({
             !status.sensitive ? messages.markStatusSensitive : messages.markStatusNotSensitive,
           ),
           action: handleToggleStatusSensitivity,
-          icon: require('@phosphor-icons/core/regular/warning.svg'),
+          icon: iconWarning,
         });
       }
 
@@ -1308,7 +1332,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.redact),
           action: handleRedactStatus,
-          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+          icon: iconPencilSimple,
           destructive: true,
         });
       }
@@ -1317,7 +1341,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.deleteStatus),
           action: handleDeleteStatus,
-          icon: require('@phosphor-icons/core/regular/trash.svg'),
+          icon: iconTrash,
           destructive: true,
         });
       }
@@ -1339,10 +1363,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   return useMemo(
     () => (
       <DropdownMenu items={menu}>
-        <StatusActionButton
-          title={intl.formatMessage(messages.more)}
-          icon={require('@phosphor-icons/core/regular/dots-three.svg')}
-        />
+        <StatusActionButton title={intl.formatMessage(messages.more)} icon={iconDotsThree} />
       </DropdownMenu>
     ),
     [menu],

@@ -1,3 +1,5 @@
+import iconCheckCircle from '@phosphor-icons/core/regular/check-circle.svg';
+import iconCheck from '@phosphor-icons/core/regular/check.svg';
 import { animated, config, useSpring } from '@react-spring/web';
 import clsx from 'clsx';
 import React from 'react';
@@ -104,12 +106,7 @@ const PollOptionText: React.FC<IPollOptionText> = ({
             aria-checked={active}
             aria-label={option.title}
           >
-            {active && (
-              <Icon
-                src={require('@phosphor-icons/core/regular/check.svg')}
-                className='size-4 text-white dark:text-primary-900'
-              />
-            )}
+            {active && <Icon src={iconCheck} className='size-4 text-white dark:text-primary-900' />}
           </span>
         </div>
       </div>
@@ -165,7 +162,7 @@ const PollOption: React.FC<IPollOption> = (props): React.JSX.Element | null => {
             <div className='relative flex items-center gap-2'>
               {voted ? (
                 <Icon
-                  src={require('@phosphor-icons/core/regular/check-circle.svg')}
+                  src={iconCheckCircle}
                   alt={intl.formatMessage(messages.voted)}
                   className='size-4 text-primary-600 dark:fill-white dark:text-primary-800'
                 />

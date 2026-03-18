@@ -1,3 +1,4 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
@@ -48,7 +49,7 @@ const Reports: React.FC = () => {
         <div className='flex items-center gap-2 border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'>
           <IconButton
             iconClassName='h-5 w-5'
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             onClick={handleUnsetAccounts}
             title={intl.formatMessage(messages.clearFilter)}
           />

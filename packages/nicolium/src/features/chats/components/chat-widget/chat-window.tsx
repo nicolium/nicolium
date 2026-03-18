@@ -1,3 +1,6 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconInfo from '@phosphor-icons/core/regular/info.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import { Link, type LinkProps } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -65,7 +68,7 @@ const ChatWindow = () => {
             {isOpen && (
               <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
                 <Icon
-                  src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+                  src={iconArrowLeft}
                   className='size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180'
                 />
               </button>
@@ -102,11 +105,7 @@ const ChatWindow = () => {
           </div>
         }
         secondaryAction={isOpen ? openChatSettings : openSearch}
-        secondaryActionIcon={
-          isOpen
-            ? require('@phosphor-icons/core/regular/info.svg')
-            : require('@phosphor-icons/core/regular/pencil-simple.svg')
-        }
+        secondaryActionIcon={isOpen ? iconInfo : iconPencilSimple}
         secondaryActionTitle={
           isOpen ? intl.formatMessage(messages.chatInfo) : intl.formatMessage(messages.newChat)
         }

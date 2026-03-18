@@ -1,3 +1,4 @@
+import iconAt from '@phosphor-icons/core/regular/at.svg';
 import { Link, useNavigate } from '@tanstack/react-router';
 import debounce from 'lodash/debounce';
 import React, { useState, useRef, useCallback } from 'react';
@@ -298,7 +299,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
             autoCorrect='off'
             autoCapitalize='off'
             pattern='^[a-zA-Z\d_-]+'
-            icon={require('@phosphor-icons/core/regular/at.svg')}
+            icon={iconAt}
             onChange={onUsernameChange}
             value={params.username}
             required

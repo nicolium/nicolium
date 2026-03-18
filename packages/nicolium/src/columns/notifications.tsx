@@ -1,9 +1,16 @@
+import iconAt from '@phosphor-icons/core/regular/at.svg';
+import iconBellSimpleRinging from '@phosphor-icons/core/regular/bell-simple-ringing.svg';
+import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
+import iconChartBar from '@phosphor-icons/core/regular/chart-bar.svg';
+
+import '@/styles/new/notifications.scss';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconStar from '@phosphor-icons/core/regular/star.svg';
+import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
-import '@/styles/new/notifications.scss';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { saveSettings } from '@/actions/settings';
@@ -89,84 +96,46 @@ const FilterBar = () => {
     });
   } else {
     items.push({
-      text: (
-        <Icon className='size-4' src={require('@phosphor-icons/core/regular/at.svg')} aria-hidden />
-      ),
+      text: <Icon className='size-4' src={iconAt} aria-hidden />,
       title: intl.formatMessage(messages.mentions),
       action: onClick('mention'),
       name: 'mention',
     });
     if (features.accountNotifies)
       items.push({
-        text: (
-          <Icon
-            className='size-4'
-            src={require('@phosphor-icons/core/regular/bell-simple-ringing.svg')}
-            aria-hidden
-          />
-        ),
+        text: <Icon className='size-4' src={iconBellSimpleRinging} aria-hidden />,
         title: intl.formatMessage(messages.statuses),
         action: onClick('status'),
         name: 'status',
       });
     items.push({
-      text: (
-        <Icon
-          className='size-4'
-          src={require('@phosphor-icons/core/regular/star.svg')}
-          aria-hidden
-        />
-      ),
+      text: <Icon className='size-4' src={iconStar} aria-hidden />,
       title: intl.formatMessage(messages.favourites),
       action: onClick('favourite'),
       name: 'favourite',
     });
     items.push({
-      text: (
-        <Icon
-          className='size-4'
-          src={require('@phosphor-icons/core/regular/repeat.svg')}
-          aria-hidden
-        />
-      ),
+      text: <Icon className='size-4' src={iconRepeat} aria-hidden />,
       title: intl.formatMessage(messages.boosts),
       action: onClick('reblog'),
       name: 'reblog',
     });
     if (features.polls)
       items.push({
-        text: (
-          <Icon
-            className='size-4'
-            src={require('@phosphor-icons/core/regular/chart-bar.svg')}
-            aria-hidden
-          />
-        ),
+        text: <Icon className='size-4' src={iconChartBar} aria-hidden />,
         title: intl.formatMessage(messages.polls),
         action: onClick('poll'),
         name: 'poll',
       });
     if (features.events)
       items.push({
-        text: (
-          <Icon
-            className='size-4'
-            src={require('@phosphor-icons/core/regular/calendar-dots.svg')}
-            aria-hidden
-          />
-        ),
+        text: <Icon className='size-4' src={iconCalendarDots} aria-hidden />,
         title: intl.formatMessage(messages.events),
         action: onClick('events'),
         name: 'events',
       });
     items.push({
-      text: (
-        <Icon
-          className='size-4'
-          src={require('@phosphor-icons/core/regular/user-plus.svg')}
-          aria-hidden
-        />
-      ),
+      text: <Icon className='size-4' src={iconUserPlus} aria-hidden />,
       title: intl.formatMessage(messages.follows),
       action: onClick('follow'),
       name: 'follow',

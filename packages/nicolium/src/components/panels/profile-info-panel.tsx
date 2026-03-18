@@ -1,3 +1,9 @@
+import iconBalloon from '@phosphor-icons/core/regular/balloon.svg';
+import iconCake from '@phosphor-icons/core/regular/cake.svg';
+import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
+import iconMapPin from '@phosphor-icons/core/regular/map-pin.svg';
+import iconTag from '@phosphor-icons/core/regular/tag.svg';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -131,11 +137,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
     return (
       <div className='flex items-center gap-0.5'>
         <Icon
-          src={
-            hasBirthday
-              ? require('@phosphor-icons/core/regular/cake.svg')
-              : require('@phosphor-icons/core/regular/balloon.svg')
-          }
+          src={hasBirthday ? iconCake : iconBalloon}
           className='size-4 text-gray-800 dark:text-gray-200'
         />
 
@@ -207,7 +209,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
             {account.locked && (
               <Icon
-                src={require('@phosphor-icons/core/regular/lock.svg')}
+                src={iconLock}
                 alt={intl.formatMessage(messages.accountLocked)}
                 className='size-4 text-gray-600'
               />
@@ -231,10 +233,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
         <div className='flex flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center'>
           {account.local ? (
             <div className='flex items-center gap-0.5'>
-              <Icon
-                src={require('@phosphor-icons/core/regular/calendar-dots.svg')}
-                className='size-4 text-gray-800 dark:text-gray-200'
-              />
+              <Icon src={iconCalendarDots} className='size-4 text-gray-800 dark:text-gray-200' />
 
               <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
                 <FormattedMessage
@@ -250,10 +249,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
           {account.location ? (
             <div className='flex items-center gap-0.5'>
-              <Icon
-                src={require('@phosphor-icons/core/regular/map-pin.svg')}
-                className='size-4 text-gray-800 dark:text-gray-200'
-              />
+              <Icon src={iconMapPin} className='size-4 text-gray-800 dark:text-gray-200' />
 
               <Text size='sm'>{account.location}</Text>
             </div>
@@ -268,10 +264,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
                 pronouns: account.pronouns.join('/'),
               })}
             >
-              <Icon
-                src={require('@phosphor-icons/core/regular/tag.svg')}
-                className='size-4 text-gray-800 dark:text-gray-200'
-              />
+              <Icon src={iconTag} className='size-4 text-gray-800 dark:text-gray-200' />
 
               <Text size='sm'>{account.pronouns.join('/')}</Text>
             </div>

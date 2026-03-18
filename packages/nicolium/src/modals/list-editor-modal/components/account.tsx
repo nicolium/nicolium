@@ -1,3 +1,5 @@
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -24,7 +26,7 @@ const Account: React.FC<IAccount> = ({ accountId, added, onAdd, onRemove }) => {
   if (added) {
     button = (
       <IconButton
-        src={require('@phosphor-icons/core/regular/x.svg')}
+        src={iconX}
         className='text-gray-400 hover:text-gray-600'
         iconClassName='h-5 w-5'
         title={intl.formatMessage(messages.remove)}
@@ -36,7 +38,7 @@ const Account: React.FC<IAccount> = ({ accountId, added, onAdd, onRemove }) => {
   } else {
     button = (
       <IconButton
-        src={require('@phosphor-icons/core/regular/plus.svg')}
+        src={iconPlus}
         className='text-gray-400 hover:text-gray-600'
         iconClassName='h-5 w-5'
         title={intl.formatMessage(messages.add)}

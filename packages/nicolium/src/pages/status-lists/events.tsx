@@ -1,3 +1,5 @@
+import iconCaretLeft from '@phosphor-icons/core/regular/caret-left.svg';
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import { Link } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -69,10 +71,7 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
             }}
             className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon
-              src={require('@phosphor-icons/core/regular/caret-left.svg')}
-              className='size-6 text-black dark:text-white'
-            />
+            <Icon src={iconCaretLeft} className='size-6 text-black dark:text-white' />
           </button>
         </div>
       )}
@@ -89,10 +88,7 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
             }}
             className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon
-              src={require('@phosphor-icons/core/regular/caret-right.svg')}
-              className='size-6 text-black dark:text-white'
-            />
+            <Icon src={iconCaretRight} className='size-6 text-black dark:text-white' />
           </button>
         </div>
       )}

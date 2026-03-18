@@ -1,3 +1,6 @@
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -39,7 +42,7 @@ const AntennasPage: React.FC = () => {
       action: () => {
         openModal('ANTENNA_EDITOR', {});
       },
-      icon: require('@phosphor-icons/core/regular/plus.svg'),
+      icon: iconPlus,
     },
   ];
 
@@ -53,12 +56,7 @@ const AntennasPage: React.FC = () => {
   return (
     <Column
       label={intl.formatMessage(messages.heading)}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
     >
       <div className='flex flex-col gap-4'>
         {/* <NewListForm /> */}
@@ -76,10 +74,7 @@ const AntennasPage: React.FC = () => {
                 params={{ antennaId: antenna.id }}
                 label={
                   <div className='flex items-center gap-2'>
-                    <Icon
-                      src={require('@phosphor-icons/core/regular/list-bullets.svg')}
-                      size={20}
-                    />
+                    <Icon src={iconListBullets} size={20} />
                     <span>{antenna.title}</span>
                   </div>
                 }

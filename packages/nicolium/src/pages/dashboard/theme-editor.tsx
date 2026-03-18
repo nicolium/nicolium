@@ -1,3 +1,6 @@
+import iconArrowsClockwise from '@phosphor-icons/core/regular/arrows-clockwise.svg';
+import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
+import iconExport from '@phosphor-icons/core/regular/export.svg';
 import React, { useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
@@ -221,17 +224,17 @@ const ThemeEditorPage: React.FC = () => {
               {
                 text: intl.formatMessage(messages.restore),
                 action: restoreDefaultTheme,
-                icon: require('@phosphor-icons/core/regular/arrows-clockwise.svg'),
+                icon: iconArrowsClockwise,
               },
               {
                 text: intl.formatMessage(messages.import),
                 action: importTheme,
-                icon: require('@phosphor-icons/core/regular/export.svg'),
+                icon: iconExport,
               },
               {
                 text: intl.formatMessage(messages.export),
                 action: exportTheme,
-                icon: require('@phosphor-icons/core/regular/download-simple.svg'),
+                icon: iconDownloadSimple,
               },
             ]}
           />

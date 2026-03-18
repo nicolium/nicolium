@@ -8,6 +8,8 @@ import {
   size,
   useFloating,
 } from '@floating-ui/react';
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
 import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -201,7 +203,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
                 <div className='⁂-dropdown-menu__header'>
                   <IconButton
                     theme='transparent'
-                    src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+                    src={iconArrowLeft}
                     onClick={handleExitSubmenu}
                     autoFocus
                     title={intl.formatMessage(messages.back)}
@@ -233,7 +235,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
     onOpen,
     onShiftClick,
     placement: initialPlacement = 'top',
-    src = require('@phosphor-icons/core/regular/dots-three.svg'),
+    src = iconDotsThree,
     title = 'Menu',
     width,
     className,

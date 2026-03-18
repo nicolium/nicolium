@@ -1,3 +1,4 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React, { useRef } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
@@ -118,7 +119,7 @@ const Streamfield = <T,>({
                   <IconButton
                     iconClassName='h-4 w-4'
                     className='bg-transparent text-gray-600 hover:text-gray-600'
-                    src={require('@phosphor-icons/core/regular/x.svg')}
+                    src={iconX}
                     onClick={() => {
                       onRemoveItem(i);
                     }}

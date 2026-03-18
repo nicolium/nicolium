@@ -1,3 +1,5 @@
+import iconPushPinSlash from '@phosphor-icons/core/regular/push-pin-slash.svg';
+import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
@@ -50,11 +52,7 @@ const InstanceInfoPanel: React.FC<IInstanceInfoPanel> = ({ host }) => {
     <Widget
       title={remoteInstance.host}
       onActionClick={handlePinHost}
-      actionIcon={
-        isPinned
-          ? require('@phosphor-icons/core/regular/push-pin-slash.svg')
-          : require('@phosphor-icons/core/regular/push-pin.svg')
-      }
+      actionIcon={isPinned ? iconPushPinSlash : iconPushPin}
       actionTitle={intl.formatMessage(isPinned ? messages.unpinHost : messages.pinHost, { host })}
     />
   );

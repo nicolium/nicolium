@@ -1,3 +1,7 @@
+import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
+import iconExport from '@phosphor-icons/core/regular/export.svg';
+import iconRss from '@phosphor-icons/core/regular/rss.svg';
+import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
@@ -49,7 +53,7 @@ interface IMovedNote {
 const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
   <div className='⁂-moved-note__container'>
     <div className='⁂-moved-note'>
-      <Icon src={require('@phosphor-icons/core/regular/suitcase.svg')} />
+      <Icon src={iconSuitcase} />
 
       <p>
         <FormattedMessage
@@ -253,7 +257,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
     if (account.accepts_chat_messages) {
       return (
         <IconButton
-          src={require('@phosphor-icons/core/regular/chats-teardrop.svg')}
+          src={iconChatsTeardrop}
           onClick={() => {
             createAndNavigateToChat.mutate(account.id);
           }}
@@ -277,7 +281,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
 
     return (
       <IconButton
-        src={require('@phosphor-icons/core/regular/export.svg')}
+        src={iconExport}
         onClick={handleShare}
         title={intl.formatMessage(messages.share, { name: account.username })}
         theme='outlined'
@@ -301,7 +305,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
 
     return (
       <IconButton
-        src={require('@phosphor-icons/core/regular/rss.svg')}
+        src={iconRss}
         href={href}
         title={intl.formatMessage(messages.subscribeFeed)}
         theme='outlined'

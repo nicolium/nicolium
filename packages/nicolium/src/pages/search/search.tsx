@@ -1,3 +1,5 @@
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
@@ -106,15 +108,9 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
           }
         >
           {query === value ? (
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/x.svg')}
-              className='size-4 text-gray-600'
-            />
+            <SvgIcon src={iconX} className='size-4 text-gray-600' />
           ) : (
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
-              className='size-4 text-gray-600'
-            />
+            <SvgIcon src={iconMagnifyingGlass} className='size-4 text-gray-600' />
           )}
         </button>
       </div>
@@ -196,7 +192,7 @@ const SearchResults = () => {
           <IconButton
             className='text-gray-400 hover:text-gray-600'
             iconClassName='h-5 w-5'
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             onClick={handleUnsetAccount}
             title={intl.formatMessage(messages.clearAccountFilter)}
           />

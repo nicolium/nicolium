@@ -1,3 +1,5 @@
+import iconMapPin from '@phosphor-icons/core/regular/map-pin.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -38,11 +40,7 @@ const LocationForm: React.FC<ILocationForm> = ({ composeId }) => {
     <div className='⁂-compose-form__schedule'>
       {location ? (
         <div className='flex h-[38px] items-center gap-2 text-gray-700 dark:text-gray-500'>
-          <Icon
-            src={
-              ADDRESS_ICONS[location.type] || require('@phosphor-icons/core/regular/map-pin.svg')
-            }
-          />
+          <Icon src={ADDRESS_ICONS[location.type] || iconMapPin} />
           <div className='flex grow flex-col'>
             <Text>{location.description}</Text>
             <Text theme='muted' size='xs'>
@@ -53,7 +51,7 @@ const LocationForm: React.FC<ILocationForm> = ({ composeId }) => {
           </div>
           <IconButton
             title={intl.formatMessage(messages.resetLocation)}
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             onClick={() => {
               onChangeLocation(null);
             }}

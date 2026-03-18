@@ -1,3 +1,4 @@
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -117,12 +118,7 @@ const EditGroup: React.FC = () => {
             placeholder={intl.formatMessage(messages.groupNamePlaceholder)}
             maxLength={maxName}
             {...displayName}
-            append={
-              <Icon
-                className='size-5 text-gray-600'
-                src={require('@phosphor-icons/core/regular/lock.svg')}
-              />
-            }
+            append={<Icon className='size-5 text-gray-600' src={iconLock} />}
             disabled
           />
         </FormGroup>

@@ -1,3 +1,6 @@
+import iconClipboard from '@phosphor-icons/core/regular/clipboard.svg';
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import clsx from 'clsx';
 import escape from 'lodash/escape';
 import React, { useMemo, useState } from 'react';
@@ -119,7 +122,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         action: () => {
           handleCopyText(chatMessage);
         },
-        icon: require('@phosphor-icons/core/regular/clipboard.svg'),
+        icon: iconClipboard,
       });
     }
 
@@ -129,7 +132,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         action: () => {
           deleteChatMessage.mutate(chatMessage.id);
         },
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
         destructive: true,
       });
     } else {
@@ -138,7 +141,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         action: () => {
           deleteChatMessage.mutate(chatMessage.id);
         },
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
         destructive: true,
       });
     }
@@ -180,10 +183,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
               })}
               data-testid='chat-message-menu'
             >
-              <Icon
-                src={require('@phosphor-icons/core/regular/dots-three.svg')}
-                className='size-4'
-              />
+              <Icon src={iconDotsThree} className='size-4' />
             </button>
           </DropdownMenu>
         )}

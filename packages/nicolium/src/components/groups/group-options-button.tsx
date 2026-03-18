@@ -1,3 +1,6 @@
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
+import iconExport from '@phosphor-icons/core/regular/export.svg';
+import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
 import { GroupRoles, type Group } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -67,7 +70,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
     if (canShare) {
       items.push({
         text: intl.formatMessage(messages.share),
-        icon: require('@phosphor-icons/core/regular/export.svg'),
+        icon: iconExport,
         action: handleShare,
       });
     }
@@ -76,7 +79,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
       items.push(null);
       items.push({
         text: intl.formatMessage(messages.leave),
-        icon: require('@phosphor-icons/core/regular/sign-out.svg'),
+        icon: iconSignOut,
         action: handleLeave,
       });
     }
@@ -91,7 +94,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
   return (
     <DropdownMenu items={menu} placement='bottom'>
       <IconButton
-        src={require('@phosphor-icons/core/regular/dots-three.svg')}
+        src={iconDotsThree}
         theme='secondary'
         iconClassName='h-5 w-5'
         className='self-stretch px-2.5'

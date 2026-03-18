@@ -1,3 +1,4 @@
+import iconRss from '@phosphor-icons/core/regular/rss.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -26,7 +27,7 @@ const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp }) => (
           <FormattedMessage id='rss_feed.label' defaultMessage='RSS Feed' />
         </p>
 
-        <Icon src={require('@phosphor-icons/core/regular/rss.svg')} />
+        <Icon src={iconRss} />
 
         <span aria-hidden>&middot;</span>
 

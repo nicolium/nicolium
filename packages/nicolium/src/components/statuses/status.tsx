@@ -1,3 +1,8 @@
+import iconHash from '@phosphor-icons/core/regular/hash.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import { Link, linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
@@ -77,7 +82,7 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
 
           <Icon
             className='size-4 text-gray-700 dark:text-gray-600'
-            src={require('@phosphor-icons/core/regular/pencil-simple.svg')}
+            src={iconPencilSimple}
             title={intl.formatMessage(messages.edited, {
               date: intl.formatDate(new Date(status.edited_at), {
                 hour12: true,
@@ -138,7 +143,7 @@ const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({
       avatarSize={avatarSize}
       icon={
         <Icon
-          src={require('@phosphor-icons/core/regular/hash.svg')}
+          src={iconHash}
           className='size-4 text-primary-600 dark:text-primary-400'
           aria-hidden
         />
@@ -370,13 +375,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={
-            <Icon
-              src={require('@phosphor-icons/core/regular/repeat.svg')}
-              className='size-4 text-green-600'
-              aria-hidden
-            />
-          }
+          icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
           text={
             <FormattedMessage
               id='status.reblogged_by_with_group'
@@ -436,13 +435,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={
-            <Icon
-              src={require('@phosphor-icons/core/regular/repeat.svg')}
-              className='size-4 text-green-600'
-              aria-hidden
-            />
-          }
+          icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
           text={
             status.visibility === 'private' ? (
               <FormattedMessage
@@ -467,7 +460,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
           avatarSize={avatarSize}
           icon={
             <Icon
-              src={require('@phosphor-icons/core/regular/push-pin.svg')}
+              src={iconPushPin}
               className='size-4 text-gray-600 dark:text-gray-400'
               aria-hidden
             />
@@ -482,7 +475,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
           avatarSize={avatarSize}
           icon={
             <Icon
-              src={require('@phosphor-icons/core/regular/users-three.svg')}
+              src={iconUsersThree}
               className='size-4 text-primary-600 dark:text-primary-400'
               aria-hidden
             />

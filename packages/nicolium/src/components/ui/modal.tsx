@@ -1,3 +1,6 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconTwitterLogo from '@phosphor-icons/core/regular/twitter-logo.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -21,10 +24,10 @@ const useDefaultCloseIcon = (): string => {
     account?.url === 'https://donotsta.re/users/pmysl' ||
     account?.url === 'https://to.juz.sie.federu.je/@pmysl'
   ) {
-    return require('@phosphor-icons/core/regular/twitter-logo.svg');
+    return iconTwitterLogo;
   }
 
-  return require('@phosphor-icons/core/regular/x.svg');
+  return iconX;
 };
 
 interface IModal {
@@ -120,7 +123,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
             <div>
               {onBack && (
                 <IconButton
-                  src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+                  src={iconArrowLeft}
                   title={intl.formatMessage(messages.back)}
                   onClick={onBack}
                 />

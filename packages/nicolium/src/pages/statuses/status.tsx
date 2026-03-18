@@ -1,3 +1,8 @@
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconTreeStructure from '@phosphor-icons/core/regular/tree-structure.svg';
+import iconTreeView from '@phosphor-icons/core/regular/tree-view.svg';
 import { Navigate } from '@tanstack/react-router';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -79,7 +84,7 @@ const StatusPage: React.FC = () => {
         action: () => {
           changeSetting(['threads', 'displayMode'], 'tree');
         },
-        icon: require('@phosphor-icons/core/regular/tree-view.svg'),
+        icon: iconTreeView,
         type: 'radio',
         checked: displayMode === 'tree',
       },
@@ -88,7 +93,7 @@ const StatusPage: React.FC = () => {
         action: () => {
           changeSetting(['threads', 'displayMode'], 'tree-indent');
         },
-        icon: require('@phosphor-icons/core/regular/tree-structure.svg'),
+        icon: iconTreeStructure,
         type: 'radio',
         checked: displayMode === 'tree-indent',
       },
@@ -97,7 +102,7 @@ const StatusPage: React.FC = () => {
         action: () => {
           changeSetting(['threads', 'displayMode'], 'linear');
         },
-        icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
+        icon: iconListBullets,
         type: 'radio',
         checked: displayMode === 'linear',
       },
@@ -116,7 +121,7 @@ const StatusPage: React.FC = () => {
       menu.push(null, {
         text: intl.formatMessage(messages.expandAll),
         action: expandAllStatuses,
-        icon: require('@phosphor-icons/core/regular/caret-down.svg'),
+        icon: iconCaretDown,
       });
     }
     return menu;
@@ -161,12 +166,7 @@ const StatusPage: React.FC = () => {
     <div className='flex flex-col gap-4'>
       <Column
         label={intl.formatMessage(titleMessage())}
-        action={
-          <DropdownMenu
-            items={items}
-            src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-          />
-        }
+        action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
       >
         <PullToRefresh onRefresh={handleRefresh}>
           <Thread

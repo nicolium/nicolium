@@ -1,3 +1,5 @@
+import iconRss from '@phosphor-icons/core/regular/rss.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -123,7 +125,7 @@ const RssFeedSubscriptions = () => {
                     {feed.image_url ? (
                       <Avatar size={40} src={feed.image_url} />
                     ) : (
-                      <Icon src={require('@phosphor-icons/core/regular/rss.svg')} size={40} />
+                      <Icon src={iconRss} size={40} />
                     )}
                     <div className='flex flex-1 flex-col'>
                       <span>{feed.title}</span>
@@ -135,7 +137,7 @@ const RssFeedSubscriptions = () => {
                       onClick={handleDelete(feed.url)}
                       disabled={isPending}
                       className='size-8 text-gray-700 dark:text-gray-600'
-                      src={require('@phosphor-icons/core/regular/x.svg')}
+                      src={iconX}
                       title={intl.formatMessage(messages.deleteFeed)}
                     />
                   </div>

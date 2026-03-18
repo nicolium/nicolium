@@ -1,3 +1,4 @@
+import iconLockOpen from '@phosphor-icons/core/regular/lock-open.svg';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -32,7 +33,7 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
       <Text tag='span'>{domain}</Text>
       <IconButton
         iconClassName='h-5 w-5'
-        src={require('@phosphor-icons/core/regular/lock-open.svg')}
+        src={iconLockOpen}
         title={intl.formatMessage(messages.unblockDomain, { domain })}
         onClick={handleDomainUnblock}
       />

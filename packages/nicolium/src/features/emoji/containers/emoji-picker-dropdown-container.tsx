@@ -1,4 +1,5 @@
 import { useFloating, shift, flip, autoUpdate, useTransitionStyles } from '@floating-ui/react';
+import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -92,7 +93,7 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
               theme === 'inverse',
           })}
           ref={refs.setReference}
-          src={require('@phosphor-icons/core/regular/smiley.svg')}
+          src={iconSmiley}
           title={title}
           aria-label={title}
           aria-expanded={isOpen}

@@ -1,3 +1,4 @@
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import React, { useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -103,7 +104,7 @@ const ChatPane = () => {
             toggleChatPane();
           }
         }}
-        secondaryActionIcon={require('@phosphor-icons/core/regular/note-pencil.svg')}
+        secondaryActionIcon={iconNotePencil}
         secondaryActionTitle={intl.formatMessage(messages.newChat)}
       />
 

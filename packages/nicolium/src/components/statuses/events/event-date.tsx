@@ -1,3 +1,4 @@
+import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import React from 'react';
 import { FormattedDate } from 'react-intl';
 
@@ -80,7 +81,7 @@ const EventDate: React.FC<IEventDate> = ({ status }) => {
 
   return (
     <div className='⁂-event-date'>
-      <Icon src={require('@phosphor-icons/core/regular/calendar-dots.svg')} />
+      <Icon src={iconCalendarDots} />
       <span>{date}</span>
     </div>
   );

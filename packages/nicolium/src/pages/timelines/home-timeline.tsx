@@ -1,3 +1,5 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -56,12 +58,7 @@ const HomeTimelinePage: React.FC = () => {
       title={<TimelinePicker active='home' />}
       withBack={false}
       truncateTitle={false}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
     >
       <HomeTimelineColumn
         emptyMessageText={
@@ -101,7 +98,7 @@ const HomeTimelinePage: React.FC = () => {
             )}
           </div>
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
       />
     </Column>
   );

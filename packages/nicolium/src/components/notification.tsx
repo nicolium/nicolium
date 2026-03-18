@@ -1,3 +1,18 @@
+import iconArrowBendUpLeft from '@phosphor-icons/core/regular/arrow-bend-up-left.svg';
+import iconAt from '@phosphor-icons/core/regular/at.svg';
+import iconBellSimpleRinging from '@phosphor-icons/core/regular/bell-simple-ringing.svg';
+import iconCalendarDot from '@phosphor-icons/core/regular/calendar-dot.svg';
+import iconCalendarStar from '@phosphor-icons/core/regular/calendar-star.svg';
+import iconChartBar from '@phosphor-icons/core/regular/chart-bar.svg';
+import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
+import iconPencilSimpleLine from '@phosphor-icons/core/regular/pencil-simple-line.svg';
+import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
+import iconStar from '@phosphor-icons/core/regular/star.svg';
+import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
+import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
+import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useCallback, useMemo, useRef } from 'react';
 import {
@@ -71,25 +86,25 @@ const buildLink = (
 );
 
 const icons: Partial<Record<NotificationType | 'reply', string>> = {
-  follow: require('@phosphor-icons/core/regular/user-plus.svg'),
-  follow_request: require('@phosphor-icons/core/regular/user-plus.svg'),
-  follow_request_accepted: require('@phosphor-icons/core/regular/user-plus.svg'),
-  mention: require('@phosphor-icons/core/regular/at.svg'),
-  favourite: require('@phosphor-icons/core/regular/star.svg'),
-  reblog: require('@phosphor-icons/core/regular/repeat.svg'),
-  status: require('@phosphor-icons/core/regular/bell-simple-ringing.svg'),
-  poll: require('@phosphor-icons/core/regular/chart-bar.svg'),
-  move: require('@phosphor-icons/core/regular/suitcase.svg'),
-  chat_mention: require('@phosphor-icons/core/regular/chats-teardrop.svg'),
-  emoji_reaction: require('@phosphor-icons/core/regular/smiley.svg'),
-  update: require('@phosphor-icons/core/regular/pencil-simple-line.svg'),
-  event_reminder: require('@phosphor-icons/core/regular/calendar-star.svg'),
-  participation_request: require('@phosphor-icons/core/regular/calendar-dot.svg'),
-  participation_accepted: require('@phosphor-icons/core/regular/calendar-dot.svg'),
-  bite: require('@phosphor-icons/core/regular/tooth.svg'),
-  reply: require('@phosphor-icons/core/regular/arrow-bend-up-left.svg'),
-  quote: require('@phosphor-icons/core/regular/quotes.svg'),
-  quoted_update: require('@phosphor-icons/core/regular/pencil-simple-line.svg'),
+  follow: iconUserPlus,
+  follow_request: iconUserPlus,
+  follow_request_accepted: iconUserPlus,
+  mention: iconAt,
+  favourite: iconStar,
+  reblog: iconRepeat,
+  status: iconBellSimpleRinging,
+  poll: iconChartBar,
+  move: iconSuitcase,
+  chat_mention: iconChatsTeardrop,
+  emoji_reaction: iconSmiley,
+  update: iconPencilSimpleLine,
+  event_reminder: iconCalendarStar,
+  participation_request: iconCalendarDot,
+  participation_accepted: iconCalendarDot,
+  bite: iconTooth,
+  reply: iconArrowBendUpLeft,
+  quote: iconQuotes,
+  quoted_update: iconPencilSimpleLine,
 };
 
 // For use by the service worker

@@ -1,3 +1,4 @@
+import iconCake from '@phosphor-icons/core/regular/cake.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -39,7 +40,7 @@ const Account: React.FC<IAccount> = ({ accountId }) => {
           date: formattedBirthday,
         })}
       >
-        <Icon src={require('@phosphor-icons/core/regular/cake.svg')} />
+        <Icon src={iconCake} />
         {formattedBirthday}
       </div>
     </div>

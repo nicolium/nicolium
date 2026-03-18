@@ -1,3 +1,5 @@
+import iconUpload from '@phosphor-icons/core/regular/upload.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -96,7 +98,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
             },
           )}
         >
-          <Icon src={require('@phosphor-icons/core/regular/upload.svg')} className='size-4.5' />
+          <Icon src={iconUpload} className='size-4.5' />
 
           <Text size='md' theme='primary' weight='semibold'>
             <FormattedMessage id='group.upload_banner' defaultMessage='Upload photo' />
@@ -117,7 +119,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
         {onClear && src && (
           <IconButton
             onClick={handleClear}
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             theme='dark'
             className='absolute right-2 top-2 z-10 hover:scale-105 hover:bg-gray-900'
             iconClassName='h-5 w-5'

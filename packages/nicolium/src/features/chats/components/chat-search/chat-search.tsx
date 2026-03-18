@@ -1,3 +1,5 @@
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import React, { useRef, useState } from 'react';
@@ -110,11 +112,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
               )}
             >
               <Icon
-                src={
-                  hasSearchValue
-                    ? require('@phosphor-icons/core/regular/x.svg')
-                    : require('@phosphor-icons/core/regular/magnifying-glass.svg')
-                }
+                src={hasSearchValue ? iconX : iconMagnifyingGlass}
                 className='size-4 text-gray-700 dark:text-gray-600'
                 aria-hidden='true'
               />

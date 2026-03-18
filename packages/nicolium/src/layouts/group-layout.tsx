@@ -1,3 +1,4 @@
+import iconEyeSlash from '@phosphor-icons/core/regular/eye-slash.svg';
 import { Outlet, useLocation } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -24,10 +25,7 @@ const messages = defineMessages({
 const PrivacyBlankslate = () => (
   <div className='flex flex-col items-center gap-4 py-10'>
     <div className='rounded-full bg-gray-200 p-3 dark:bg-gray-800'>
-      <Icon
-        src={require('@phosphor-icons/core/regular/eye-slash.svg')}
-        className='size-6 text-gray-600 dark:text-gray-600'
-      />
+      <Icon src={iconEyeSlash} className='size-6 text-gray-600 dark:text-gray-600' />
     </div>
 
     <Text theme='muted'>

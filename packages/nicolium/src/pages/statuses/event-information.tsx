@@ -1,3 +1,6 @@
+import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
+import iconLinkSimple from '@phosphor-icons/core/regular/link-simple.svg';
+import iconMapPin from '@phosphor-icons/core/regular/map-pin.svg';
 import React, { useCallback } from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
@@ -76,7 +79,7 @@ const EventInformationPage: React.FC = () => {
             <FormattedMessage id='event.location' defaultMessage='Location' />
           </h2>
           <div className='⁂-event-information__location__body'>
-            <Icon src={require('@phosphor-icons/core/regular/map-pin.svg')} />
+            <Icon src={iconMapPin} />
             <p>{text}</p>
           </div>
         </div>
@@ -104,7 +107,7 @@ const EventInformationPage: React.FC = () => {
           <FormattedMessage id='event.date' defaultMessage='Date' />
         </h2>
         <div className='⁂-event-information__date__body'>
-          <Icon src={require('@phosphor-icons/core/regular/calendar-dots.svg')} />
+          <Icon src={iconCalendarDots} />
           <p>
             <FormattedDate
               value={startDate}
@@ -147,7 +150,7 @@ const EventInformationPage: React.FC = () => {
         <ul>
           {status.event.links.map((link) => (
             <li key={link.id}>
-              <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
+              <Icon src={iconLinkSimple} />
               <a
                 href={link.remote_url ?? link.url}
                 className='text-primary-600 hover:underline dark:text-primary-400'

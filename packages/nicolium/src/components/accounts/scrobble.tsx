@@ -1,3 +1,4 @@
+import iconMusicNotesSimple from '@phosphor-icons/core/regular/music-notes-simple.svg';
 import clsx from 'clsx';
 import React, { useMemo, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -41,10 +42,7 @@ const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
 
   return (
     <div className='flex items-center gap-0.5'>
-      <Icon
-        src={require('@phosphor-icons/core/regular/music-notes-simple.svg')}
-        className='size-4 text-gray-800 dark:text-gray-200'
-      />
+      <Icon src={iconMusicNotesSimple} className='size-4 text-gray-800 dark:text-gray-200' />
 
       <div className='relative box-border w-full overflow-hidden whitespace-nowrap'>
         <Text

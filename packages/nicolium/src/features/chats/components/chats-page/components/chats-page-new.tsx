@@ -1,3 +1,4 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -21,7 +22,7 @@ const ChatsPageNew: React.FC = () => {
     <div className='flex h-full flex-col gap-4'>
       <div className='flex items-center px-4 pt-6 sm:px-6'>
         <IconButton
-          src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+          src={iconArrowLeft}
           className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
           onClick={() => navigate({ to: '/chats' })}
           title={intl.formatMessage(messages.back)}

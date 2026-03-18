@@ -1,3 +1,7 @@
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -96,12 +100,12 @@ const ListTimelinePage: React.FC = () => {
       {
         text: intl.formatMessage(messages.editList),
         action: handleEditClick,
-        icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+        icon: iconPencilSimple,
       },
       {
         text: intl.formatMessage(messages.deleteList),
         action: handleDeleteClick,
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
       },
     ],
     [timelineFilterOptions],
@@ -112,12 +116,7 @@ const ListTimelinePage: React.FC = () => {
       label={title}
       title={<TimelinePicker active={`list:${listId}`} />}
       truncateTitle={false}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
     >
       <ListTimelineColumn
         listId={listId}
@@ -133,7 +132,7 @@ const ListTimelinePage: React.FC = () => {
             </Button>
           </div>
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/list-bullets.svg')}
+        emptyMessageIcon={iconListBullets}
       />
     </Column>
   );

@@ -1,3 +1,5 @@
+import iconImage from '@phosphor-icons/core/regular/image.svg';
+import iconPaperclip from '@phosphor-icons/core/regular/paperclip.svg';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -54,11 +56,7 @@ const UploadButton: React.FC<IUploadButton> = ({
     return null;
   }
 
-  const src =
-    icon ??
-    (onlyImages(attachmentTypes)
-      ? require('@phosphor-icons/core/regular/image.svg')
-      : require('@phosphor-icons/core/regular/paperclip.svg'));
+  const src = icon ?? (onlyImages(attachmentTypes) ? iconImage : iconPaperclip);
 
   return (
     <div>

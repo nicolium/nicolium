@@ -1,3 +1,7 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconInfo from '@phosphor-icons/core/regular/info.svg';
+import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
+import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
 import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -104,7 +108,7 @@ const ChatsPageChat = () => {
 
   const menuItems: Menu = [
     {
-      icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+      icon: iconProhibit,
       text: intl.formatMessage(isBlocked ? messages.unblockUser : messages.blockUser, {
         acct: chat.account.acct,
       }),
@@ -114,7 +118,7 @@ const ChatsPageChat = () => {
 
   if (features.chatsDelete)
     menuItems.push({
-      icon: require('@phosphor-icons/core/regular/sign-out.svg'),
+      icon: iconSignOut,
       text: intl.formatMessage(messages.leaveChat),
       action: handleLeaveChat,
     });
@@ -125,7 +129,7 @@ const ChatsPageChat = () => {
         <div className='flex items-center gap-2'>
           <div className='flex items-center'>
             <IconButton
-              src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+              src={iconArrowLeft}
               className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
               onClick={() => navigate({ to: '/chats' })}
               title={intl.formatMessage(messages.back)}
@@ -156,7 +160,7 @@ const ChatsPageChat = () => {
         </div>
 
         <DropdownMenu
-          src={require('@phosphor-icons/core/regular/info.svg')}
+          src={iconInfo}
           component={() => (
             <div className='px-4 py-2'>
               <Account account={chat.account} disabled hideActions />

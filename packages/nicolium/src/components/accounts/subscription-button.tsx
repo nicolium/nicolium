@@ -1,3 +1,5 @@
+import iconBellSimpleRinging from '@phosphor-icons/core/regular/bell-simple-ringing.svg';
+import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -87,11 +89,7 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
   if (isRequested || isFollowing) {
     return (
       <IconButton
-        src={
-          isSubscribed
-            ? require('@phosphor-icons/core/regular/bell-simple-ringing.svg')
-            : require('@phosphor-icons/core/regular/bell-simple.svg')
-        }
+        src={isSubscribed ? iconBellSimpleRinging : iconBellSimple}
         onClick={handleToggle}
         disabled={isPending}
         title={title}

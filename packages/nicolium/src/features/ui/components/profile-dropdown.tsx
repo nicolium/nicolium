@@ -1,3 +1,5 @@
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
@@ -92,14 +94,14 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
     menu.push({
       text: intl.formatMessage(messages.add),
       linkOptions: { to: '/login/add' },
-      icon: require('@phosphor-icons/core/regular/plus.svg'),
+      icon: iconPlus,
     });
 
     menu.push({
       text: intl.formatMessage(messages.logout, { acct: account.acct }),
       linkOptions: { to: '/logout' },
       action: handleLogOut,
-      icon: require('@phosphor-icons/core/regular/sign-out.svg'),
+      icon: iconSignOut,
     });
 
     return () => (

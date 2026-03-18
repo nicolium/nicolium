@@ -1,3 +1,4 @@
+import iconSmileySticker from '@phosphor-icons/core/regular/smiley-sticker.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -145,7 +146,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
             className='⁂-status-reactions-bar__picker-button emoji-picker-dropdown'
             title={intl.formatMessage(messages.addEmoji)}
           >
-            <Icon src={require('@phosphor-icons/core/regular/smiley-sticker.svg')} aria-hidden />
+            <Icon src={iconSmileySticker} aria-hidden />
           </button>
         </EmojiPickerDropdown>
       )}
