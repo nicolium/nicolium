@@ -19,7 +19,7 @@ const IconPickerDropdown: React.FC<IIconPickerDropdown> = ({ value, onPickIcon }
   const intl = useIntl();
 
   const title = intl.formatMessage(messages.emoji);
-  const forkAwesomeIcons = require('../forkawesome.json');
+  const forkAwesomeIcons = require('./forkawesome.json');
 
   return (
     <div>
