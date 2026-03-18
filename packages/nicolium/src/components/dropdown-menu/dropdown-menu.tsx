@@ -387,6 +387,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
       onClick: handleClick,
       onKeyPress: handleKeyPress,
       ref: refs.setReference,
+      'aria-haspopup': true,
       'aria-expanded': isOpen,
     });
   }, [children, !!items?.length, component]);
