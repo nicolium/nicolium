@@ -18,13 +18,13 @@ import Select from '@/components/ui/select';
 import Streamfield from '@/components/ui/streamfield';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
-import CryptoAddressInput from '@/features/frontend-config/components/crypto-address-input';
-import FooterLinkInput from '@/features/frontend-config/components/footer-link-input';
-import PromoPanelInput from '@/features/frontend-config/components/promo-panel-input';
-import SitePreview from '@/features/frontend-config/components/site-preview';
 import ThemeSelector from '@/features/ui/components/theme-selector';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import CryptoAddressInput from '@/pages/dashboard/components/frontend-config/crypto-address-input';
+import FooterLinkInput from '@/pages/dashboard/components/frontend-config/footer-link-input';
+import PromoPanelInput from '@/pages/dashboard/components/frontend-config/promo-panel-input';
+import SitePreview from '@/pages/dashboard/components/frontend-config/site-preview';
 import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
 import {
   cryptoAddressSchema,
