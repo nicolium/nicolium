@@ -2,12 +2,12 @@ import { Navigate, Outlet, useLocation } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import AccountHeader from '@/components/accounts/account-header';
 import LinkFooter from '@/components/navigation/link-footer';
 import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import Header from '@/features/account/components/header';
 import { layouts } from '@/features/ui/router';
 import {
   WhoToFollowPanel,
@@ -103,7 +103,7 @@ const ProfileLayout: React.FC = () => {
           label={account ? `@${acct}` : ''}
           withHeader={false}
         >
-          <Header key={`profile-header-${account?.id}`} account={account} />
+          <AccountHeader key={`profile-header-${account?.id}`} account={account} />
           <ProfileInfoPanel username={username} account={account} />
 
           {account && showTabs && (

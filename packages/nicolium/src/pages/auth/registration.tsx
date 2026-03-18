@@ -3,9 +3,10 @@ import { FormattedMessage } from 'react-intl';
 
 import { BigCard } from '@/components/ui/big-card';
 import Text from '@/components/ui/text';
-import RegistrationForm from '@/features/auth-login/components/registration-form';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useInstance } from '@/stores/instance';
+
+import RegistrationForm from './components/registration-form';
 
 const RegistrationPage: React.FC = () => {
   const instance = useInstance();

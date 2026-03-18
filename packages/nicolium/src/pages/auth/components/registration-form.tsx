@@ -12,13 +12,14 @@ import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import Textarea from '@/components/ui/textarea';
-import CaptchaField from '@/features/auth-login/components/captcha';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
+
+import CaptchaField from './captcha';
 
 import type { CreateAccountParams } from 'pl-api';
 

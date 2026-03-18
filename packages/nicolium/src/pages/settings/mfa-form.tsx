@@ -5,9 +5,9 @@ import Column from '@/components/ui/column';
 import { useFeatures } from '@/hooks/use-features';
 import { useMfaConfig } from '@/queries/security/use-mfa';
 
-import DisableOtpForm from '../../features/security/mfa/disable-otp-form';
-import EnableOtpForm from '../../features/security/mfa/enable-otp-form';
-import OtpConfirmForm from '../../features/security/mfa/otp-confirm-form';
+import DisableOtpForm from './components/disable-otp-form';
+import EnableOtpForm from './components/enable-otp-form';
+import OtpConfirmForm from './components/otp-confirm-form';
 
 const messages = defineMessages({
   heading: { id: 'column.mfa', defaultMessage: 'Multi-factor authentication' },

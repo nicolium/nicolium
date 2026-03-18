@@ -27,9 +27,8 @@ import { useInstance, useInstanceStore } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
+import GlobalHotkeys from '@/utils/global-hotkeys';
 import { useIsStandalone } from '@/utils/state';
-
-import GlobalHotkeys from '../../utils/global-hotkeys';
 
 import {
   ModalRoot,

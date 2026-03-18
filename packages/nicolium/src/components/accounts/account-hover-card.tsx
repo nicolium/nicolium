@@ -4,13 +4,13 @@ import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
+import ActionButton from '@/components/accounts/action-button';
+import { isTimezoneLabel } from '@/components/accounts/profile-field';
 import Badge from '@/components/badge';
 import Card, { CardBody } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import ActionButton from '@/features/ui/components/action-button';
-import { isTimezoneLabel } from '@/features/ui/components/profile-field';
 import { UserPanel } from '@/features/ui/util/async-components';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useAccount } from '@/queries/accounts/use-account';

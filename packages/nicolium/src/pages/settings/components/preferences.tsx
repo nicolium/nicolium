@@ -9,17 +9,17 @@ import Form from '@/components/ui/form';
 import { Multiselect } from '@/components/ui/multiselect';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import StepSlider from '@/components/ui/step-slider';
-import SettingToggle from '@/features/settings/components/setting-toggle';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { PaletteListItem } from '@/pages/dashboard/theme-editor';
+import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useInstance } from '@/stores/instance';
 import { useDefaultSettings, useSettings } from '@/stores/settings';
 import sourceCode from '@/utils/code';
 import colors from '@/utils/colors';
 import { useIsStandalone } from '@/utils/state';
 
-import ThemeToggle from '../ui/components/theme-toggle';
+import ThemeToggle from '../../../features/ui/components/theme-toggle';
 
 const languages = {
   en: 'English',

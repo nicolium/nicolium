@@ -10,7 +10,7 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Textarea from '@/components/ui/textarea';
-import SettingToggle from '@/features/settings/components/setting-toggle';
+import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useSettingsStore, useSettingsStoreActions } from '@/stores/settings';
 import toast from '@/toast';
 

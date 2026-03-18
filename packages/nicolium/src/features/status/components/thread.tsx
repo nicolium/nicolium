@@ -5,10 +5,10 @@ import { useIntl } from 'react-intl';
 
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
+import PendingStatus from '@/components/statuses/pending-status';
 import StatusActionBar from '@/components/statuses/status-action-bar';
 import Tombstone from '@/components/statuses/tombstone';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import PendingStatus from '@/features/ui/components/pending-status';
 import {
   useFavouriteStatus,
   useReblogStatus,

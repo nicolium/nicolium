@@ -6,8 +6,11 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
-import { type Language, languages as languagesObject } from '@/features/preferences';
 import { useFeatures } from '@/hooks/use-features';
+import {
+  type Language,
+  languages as languagesObject,
+} from '@/pages/settings/components/preferences';
 import { useCompose, useComposeActions } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 

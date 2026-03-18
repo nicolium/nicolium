@@ -5,6 +5,7 @@ import React from 'react';
 import Account from '@/components/accounts/account';
 import PlaceholderCard from '@/components/placeholders/placeholder-card';
 import PlaceholderMediaGallery from '@/components/placeholders/placeholder-media-gallery';
+import PollPreview from '@/components/polls/poll-preview';
 import StatusContent from '@/components/statuses/status-content';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import Card from '@/components/ui/card';
@@ -12,10 +13,7 @@ import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
 import { usePendingStatus } from '@/stores/pending-statuses';
-
-import { buildStatus } from '../../../utils/pending-status-builder';
-
-import PollPreview from './poll-preview';
+import { buildStatus } from '@/utils/pending-status-builder';
 
 import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 import type { Poll } from 'pl-api';

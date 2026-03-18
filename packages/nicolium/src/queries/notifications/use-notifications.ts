@@ -10,10 +10,7 @@ import {
 import { useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
-import {
-  getNotificationStatusId,
-  notificationMessages,
-} from '@/features/notifications/components/notification';
+import { getNotificationStatusId, notificationMessages } from '@/components/notification';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { appendFollowRequest } from '@/queries/accounts/use-follow-requests';

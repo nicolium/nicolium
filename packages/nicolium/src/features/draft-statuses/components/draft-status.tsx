@@ -5,10 +5,10 @@ import { FormattedMessage } from 'react-intl';
 import Account from '@/components/accounts/account';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import OutlineBox from '@/components/outline-box';
+import PollPreview from '@/components/polls/poll-preview';
 import StatusContent from '@/components/statuses/status-content';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
-import PollPreview from '@/features/ui/components/poll-preview';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
 import { buildPoll, buildStatus } from '../builder';

@@ -23,7 +23,7 @@ import toast from '@/toast';
 import { useUiStoreActions } from './ui';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
-import type { Language } from '@/features/preferences';
+import type { Language } from '@/pages/settings/components/preferences';
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { LinkOptions } from '@tanstack/react-router';
 import type {

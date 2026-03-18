@@ -15,7 +15,7 @@ export const InstanceModerationPanel = lazy(
   () => import('@/components/panels/instance-moderation-panel'),
 );
 export const LatestAccountsPanel = lazy(
-  () => import('@/features/admin/components/latest-accounts-panel'),
+  () => import('@/pages/dashboard/components/latest-accounts-panel'),
 );
 export const MyGroupsPanel = lazy(() => import('@/components/panels/my-groups-panel'));
 export const NewEventPanel = lazy(() => import('@/components/panels/new-event-panel'));
@@ -41,7 +41,7 @@ export const EmojiPicker = lazy(() => import('@/features/emoji/components/emoji-
 export const EventHeader = lazy(() => import('@/components/statuses/events/event-header'));
 export const MediaGallery = lazy(() => import('@/components/media/media-gallery'));
 export const ModalRoot = lazy(() => import('@/features/ui/components/modal-root'));
-export const ProfileField = lazy(() => import('@/features/ui/components/profile-field'));
+export const ProfileField = lazy(() => import('@/components/accounts/profile-field'));
 export const AccountHoverCard = lazy(() => import('@/components/accounts/account-hover-card'));
 export const StatusHoverCard = lazy(() => import('@/components/statuses/status-hover-card'));
 export const Video = lazy(() => import('@/components/media/video'));

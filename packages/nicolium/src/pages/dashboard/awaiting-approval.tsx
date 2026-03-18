@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import UnapprovedAccount from '@/features/admin/components/unapproved-account';
+import UnapprovedAccount from '@/pages/dashboard/components/unapproved-account';
 import { useAdminAccounts } from '@/queries/admin/use-accounts';
 
 const messages = defineMessages({

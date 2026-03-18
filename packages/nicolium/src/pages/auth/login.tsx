@@ -7,13 +7,14 @@ import { BigCard } from '@/components/ui/big-card';
 import Button from '@/components/ui/button';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import ConsumersList from '@/features/auth-login/components/consumers-list';
-import LoginForm from '@/features/auth-login/components/login-form';
-import OtpAuthForm from '@/features/auth-login/components/otp-auth-form';
 import { useAuthActions } from '@/stores/auth';
 import { useModalsActions } from '@/stores/modals';
 import { getRedirectUrl } from '@/utils/redirect';
 import { useIsStandalone } from '@/utils/state';
+
+import ConsumersList from './components/consumers-list';
+import LoginForm from './components/login-form';
+import OtpAuthForm from './components/otp-auth-form';
 
 import type { NicoliumResponse } from '@/api';
 

@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import ActionButton from '@/components/accounts/action-button';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Avatar from '@/components/ui/avatar';
@@ -12,7 +13,6 @@ import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
-import ActionButton from '@/features/ui/components/action-button';
 import { useAcct } from '@/hooks/use-acct';
 import { useSettings } from '@/stores/settings';
 

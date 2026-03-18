@@ -7,6 +7,7 @@ import '@/styles/new/notifications.scss';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { saveSettings } from '@/actions/settings';
+import Notification from '@/components/notification';
 import PlaceholderNotification from '@/components/placeholders/placeholder-notification';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';
@@ -14,7 +15,6 @@ import ScrollableList from '@/components/scrollable-list';
 import Icon from '@/components/ui/icon';
 import Portal from '@/components/ui/portal';
 import Tabs from '@/components/ui/tabs';
-import Notification from '@/features/notifications/components/notification';
 import { useFeatures } from '@/hooks/use-features';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';

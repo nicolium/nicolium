@@ -5,10 +5,10 @@ import List, { ListItem } from '@/components/list';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Text from '@/components/ui/text';
-import Preferences from '@/features/preferences';
-import MessagesSettings from '@/features/settings/components/messages-settings';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import MessagesSettings from '@/pages/settings/components/messages-settings';
+import Preferences from '@/pages/settings/components/preferences';
 import { useMfaConfig } from '@/queries/security/use-mfa';
 
 const messages = defineMessages({

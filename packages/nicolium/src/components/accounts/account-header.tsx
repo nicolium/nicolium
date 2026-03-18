@@ -7,6 +7,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import Account from '@/components/accounts/account';
+import ActionButton from '@/components/accounts/action-button';
+import SubscriptionButton from '@/components/accounts/subscription-button';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Badge from '@/components/badge';
 import AltIndicator from '@/components/media/alt-indicator';
@@ -17,8 +19,6 @@ import IconButton from '@/components/ui/icon-button';
 import Popover from '@/components/ui/popover';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
-import ActionButton from '@/features/ui/components/action-button';
-import SubscriptionButton from '@/features/ui/components/subscription-button';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useChats } from '@/queries/chats';
@@ -67,11 +67,11 @@ const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
   </div>
 );
 
-interface IHeader {
+interface IAccountHeader {
   account?: AccountEntity;
 }
 
-const Header: React.FC<IHeader> = ({ account }) => {
+const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
   const intl = useIntl();
   const navigate = useNavigate();
 
@@ -370,4 +370,4 @@ const Header: React.FC<IHeader> = ({ account }) => {
   );
 };
 
-export { Header as default };
+export { AccountHeader as default };

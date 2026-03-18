@@ -6,8 +6,8 @@ import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
-import Report from '@/features/admin/components/report';
 import { adminReportsRoute } from '@/features/ui/router';
+import Report from '@/pages/dashboard/components/report';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useReports } from '@/queries/admin/use-reports';
 

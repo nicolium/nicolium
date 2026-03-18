@@ -6,11 +6,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FormattedMessage } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import ProfileStats from '@/components/accounts/profile-stats';
 import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import ProfileStats from '@/features/ui/components/profile-stats';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';

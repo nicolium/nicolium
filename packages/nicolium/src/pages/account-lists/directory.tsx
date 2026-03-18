@@ -4,6 +4,7 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import ActionButton from '@/components/accounts/action-button';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import Badge from '@/components/badge';
 import LoadMore from '@/components/load-more';
@@ -15,7 +16,6 @@ import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import { RadioGroup, RadioItem } from '@/components/ui/radio';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import ActionButton from '@/features/ui/components/action-button';
 import { directoryRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';

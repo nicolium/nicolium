@@ -6,8 +6,8 @@ import { FormattedMessage } from 'react-intl';
 import LoadGap from '@/components/load-gap';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList, { type IScrollableList } from '@/components/scrollable-list';
+import PendingStatus from '@/components/statuses/pending-status';
 import StatusContainer from '@/components/statuses/status-container';
-import PendingStatus from '@/features/ui/components/pending-status';
 import { timelineToFilterContextType } from '@/queries/settings/use-filters';
 import { selectChild } from '@/utils/scroll-utils';
 

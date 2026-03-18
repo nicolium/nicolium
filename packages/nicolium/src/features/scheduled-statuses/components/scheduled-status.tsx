@@ -3,10 +3,10 @@ import React from 'react';
 
 import Account from '@/components/accounts/account';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
+import PollPreview from '@/components/polls/poll-preview';
 import StatusContent from '@/components/statuses/status-content';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import { buildPoll } from '@/features/draft-statuses/builder';
-import PollPreview from '@/features/ui/components/poll-preview';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
 import { buildStatus } from '../builder';

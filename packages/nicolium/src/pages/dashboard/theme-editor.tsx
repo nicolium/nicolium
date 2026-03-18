@@ -11,7 +11,6 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import ColorPicker from '@/features/frontend-config/components/color-picker';
-import Palette, { type ColorGroup } from '@/features/theme-editor/components/palette';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { normalizeColors } from '@/hooks/use-theme-css';
 import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
@@ -19,6 +18,8 @@ import { frontendConfigSchema } from '@/schemas/frontend-config';
 import { useFrontendConfigStore } from '@/stores/frontend-config';
 import toast from '@/toast';
 import { download } from '@/utils/download';
+
+import Palette, { type ColorGroup } from './components/theme-editor/palette';
 
 import type { ColorChangeHandler } from 'react-color';
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import ProfileFamiliarFollowers from '@/components/accounts/profile-familiar-followers';
+import ProfileStats from '@/components/accounts/profile-stats';
 import Scrobble from '@/components/accounts/scrobble';
 import Badge from '@/components/badge';
 import Markup from '@/components/markup';
@@ -10,8 +12,6 @@ import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
-import ProfileFamiliarFollowers from '@/features/ui/components/profile-familiar-followers';
-import ProfileStats from '@/features/ui/components/profile-stats';
 import { ProfileField } from '@/features/ui/util/async-components';
 import { useAcct } from '@/hooks/use-acct';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
