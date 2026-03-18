@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 
-import IconPickerDropdown from './icon-picker-dropdown';
+const IconPickerDropdown = React.lazy(() => import('./icon-picker-dropdown'));
 
 interface IIconPicker {
   value: string;
@@ -9,7 +9,9 @@ interface IIconPicker {
 
 const IconPicker: React.FC<IIconPicker> = ({ value, onChange }) => (
   <div className='relative mt-1 rounded-md border border-solid border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-800'>
-    <IconPickerDropdown value={value} onPickIcon={onChange} />
+    <Suspense fallback={<div className='size-[38px]' />}>
+      <IconPickerDropdown value={value} onPickIcon={onChange} />
+    </Suspense>
   </div>
 );
 

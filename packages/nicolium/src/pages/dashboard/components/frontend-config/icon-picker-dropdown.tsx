@@ -4,6 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import ForkAwesomeIcon from '@/components/fork-awesome-icon';
 import Popover from '@/components/ui/popover';
 
+import forkAwesomeIcons from './forkawesome.json';
 import IconPickerMenu from './icon-picker-menu';
 
 const messages = defineMessages({
@@ -19,7 +20,6 @@ const IconPickerDropdown: React.FC<IIconPickerDropdown> = ({ value, onPickIcon }
   const intl = useIntl();
 
   const title = intl.formatMessage(messages.emoji);
-  const forkAwesomeIcons = require('./forkawesome.json');
 
   return (
     <div>

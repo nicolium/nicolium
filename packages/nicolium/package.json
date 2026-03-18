@@ -156,7 +156,6 @@
     "vite-plugin-compile-time": "^0.4.6",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^1.2.0",
-    "vite-plugin-require": "^1.2.14",
     "vite-plugin-static-copy": "^3.3.0",
     "vitest": "^4.1.0"
   },

@@ -8,7 +8,6 @@ import { defineConfig } from 'vite';
 import compileTime from 'vite-plugin-compile-time';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
-import vitePluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 const config = defineConfig(() => ({
@@ -35,8 +34,6 @@ const config = defineConfig(() => ({
   },
   plugins: [
     tsgoChecker(),
-    // @ts-expect-error https://github.com/wangzongming/vite-plugin-require/issues/23
-    vitePluginRequire.default(),
     compileTime(),
     createHtmlPlugin({
       template: 'index.html',
