@@ -10,7 +10,6 @@ export const CryptoDonatePanel = lazy(
   () => import('@/features/crypto-donate/components/crypto-donate-panel'),
 );
 export const GroupMediaPanel = lazy(() => import('@/components/panels/group-media-panel'));
-export const InstanceInfoPanel = lazy(() => import('@/components/panels/instance-info-panel'));
 export const InstanceModerationPanel = lazy(
   () => import('@/components/panels/instance-moderation-panel'),
 );
