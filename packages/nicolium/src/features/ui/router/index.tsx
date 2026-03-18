@@ -759,7 +759,7 @@ export const groupMembershipRequestsRoute = createRoute({
 export const newStatusRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/statuses/new',
-  component: lazy(() => import('@/pages/utils/new-status')),
+  component: lazy(() => import('@/pages/compose/new-status')),
 });
 
 export const scheduledStatusesRoute = createRoute({
@@ -1045,19 +1045,19 @@ export const adminRulesRoute = createRoute({
 export const serverInfoRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/info',
-  component: lazy(() => import('@/pages/utils/server-info')),
+  component: lazy(() => import('@/pages/instance/server-info')),
 });
 
 export const aboutRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/about/{-$slug}',
-  component: lazy(() => import('@/pages/utils/about')),
+  component: lazy(() => import('@/pages/instance/about')),
 });
 
 export const shareRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/share',
-  component: lazy(() => import('@/pages/utils/share')),
+  component: lazy(() => import('@/pages/compose/share')),
   validateSearch: v.object({
     title: v.optional(v.string(), ''),
     text: v.optional(v.string(), ''),
@@ -1098,7 +1098,7 @@ export const developersSwRoute = createRoute({
 export const errorRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/error',
-  component: lazy(() => import('@/pages/utils/intentional-error')),
+  component: lazy(() => import('@/pages/errors/intentional-error')),
 });
 
 export const networkErrorRoute = createRoute({
@@ -1116,7 +1116,7 @@ export const networkErrorRoute = createRoute({
 export const cryptoDonateRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/donate/crypto',
-  component: lazy(() => import('@/pages/utils/crypto-donate')),
+  component: lazy(() => import('@/pages/instance/crypto-donate')),
   beforeLoad: ({ context: { hasCrypto } }) => {
     if (!hasCrypto) throw notFound();
   },
@@ -1126,7 +1126,7 @@ export const cryptoDonateRoute = createRoute({
 export const federationRestrictionsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/federation_restrictions',
-  component: lazy(() => import('@/pages/utils/federation-restrictions')),
+  component: lazy(() => import('@/pages/instance/federation-restrictions')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.federating) throw notFound();
   },
@@ -1465,7 +1465,7 @@ const router = createRouter({
     isAdmin: false,
     hasCrypto: false,
   },
-  defaultNotFoundComponent: lazy(() => import('@/pages/utils/generic-not-found')),
+  defaultNotFoundComponent: lazy(() => import('@/pages/errors/generic-not-found')),
   defaultPendingComponent: PendingComponent,
   defaultErrorComponent: SiteError,
   defaultPreload: 'intent',

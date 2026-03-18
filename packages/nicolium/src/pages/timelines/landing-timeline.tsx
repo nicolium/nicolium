@@ -8,7 +8,7 @@ import { ParsedContent } from '@/components/statuses/parsed-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
-import { About } from '@/pages/utils/about';
+import { About } from '@/pages/instance/about';
 import { usePublicTimeline } from '@/queries/timelines/use-timelines';
 import { useInstance } from '@/stores/instance';
 import { getTextDirection } from '@/utils/rtl';

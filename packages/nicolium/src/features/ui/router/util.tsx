@@ -7,7 +7,7 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useIsStandalone } from '@/utils/state';
 
 const HomeTimeline = lazyRouteComponent(() => import('@/pages/timelines/home-timeline'));
-const LandingPage = lazyRouteComponent(() => import('@/pages/utils/landing'));
+const LandingPage = lazyRouteComponent(() => import('@/pages/instance/landing'));
 const LandingTimeline = lazyRouteComponent(() => import('@/pages/timelines/landing-timeline'));
 
 const HomeRoute = () => {
