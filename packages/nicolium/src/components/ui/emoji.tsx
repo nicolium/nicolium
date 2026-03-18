@@ -50,6 +50,7 @@ const Emoji: React.FC<IEmoji> = (props) => {
     <img
       draggable='false'
       alt={alt ?? emoji}
+      title={alt ?? emoji}
       src={joinPublicPath(`packs/emoji/${filename}.svg`)}
       {...rest}
     />

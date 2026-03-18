@@ -88,6 +88,7 @@ const StillImage: React.FC<IStillImage> = ({
       <img
         src={src}
         alt={alt}
+        title={alt}
         ref={img}
         onLoad={handleImageLoad}
         onError={onError}
@@ -101,6 +102,7 @@ const StillImage: React.FC<IStillImage> = ({
           <img
             src={staticSrc}
             alt={alt}
+            title={alt}
             className={clsx(baseClassName, 'absolute top-0 group-hover:invisible')}
           />
         ) : (
