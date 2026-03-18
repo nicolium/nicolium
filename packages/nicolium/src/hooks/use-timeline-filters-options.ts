@@ -9,16 +9,16 @@ import { useFeatures } from './use-features';
 import type { Menu } from '@/components/dropdown-menu';
 
 const messages = defineMessages({
-  showReblogs: { id: 'timeline_filters.show_reblogs', defaultMessage: 'Show reposts in timeline' },
+  showReblogs: { id: 'timeline_filters.show_reblogs', defaultMessage: 'Show reposts' },
   showSelfReblogs: {
     id: 'timeline_filters.show_self_reblogs',
-    defaultMessage: 'Show self-reposts in timeline',
+    defaultMessage: 'Show self-reposts',
   },
-  showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies in timeline' },
-  showQuotes: { id: 'timeline_filters.show_quotes', defaultMessage: 'Show quotes in timeline' },
+  showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies' },
+  showQuotes: { id: 'timeline_filters.show_quotes', defaultMessage: 'Show quotes' },
   showDirect: {
     id: 'timeline_filters.show_direct',
-    defaultMessage: 'Show direct messages in timeline',
+    defaultMessage: 'Show direct messages',
   },
   hideNonMedia: {
     id: 'timeline_filters.show_media_only',
