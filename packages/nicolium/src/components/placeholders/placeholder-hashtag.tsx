@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { generateText, randomIntFromInterval } from '../utils';
+import { generateText, randomIntFromInterval } from '@/utils/placeholders';
 
 /** Fake hashtag to display while data is loading. */
 const PlaceholderHashtag: React.FC = () => {

@@ -3,11 +3,11 @@ import clsx from 'clsx';
 import React from 'react';
 
 import Account from '@/components/accounts/account';
+import PlaceholderCard from '@/components/placeholders/placeholder-card';
+import PlaceholderMediaGallery from '@/components/placeholders/placeholder-media-gallery';
 import StatusContent from '@/components/statuses/status-content';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import Card from '@/components/ui/card';
-import PlaceholderCard from '@/features/placeholder/components/placeholder-card';
-import PlaceholderMediaGallery from '@/features/placeholder/components/placeholder-media-gallery';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';

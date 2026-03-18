@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from '@/components/icon';
-import { formatTime, getPointerPosition } from '@/features/video';
+import { formatTime, getPointerPosition } from '@/components/media/video';
 import { useSettings } from '@/stores/settings';
 
 import Visualizer from './visualizer';

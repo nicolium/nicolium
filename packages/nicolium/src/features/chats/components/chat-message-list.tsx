@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { type Components, Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
+import PlaceholderChatMessage from '@/components/placeholders/placeholder-chat-message';
 import Avatar from '@/components/ui/avatar';
 import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
 import Spinner from '@/components/ui/spinner';
 import Text from '@/components/ui/text';
-import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import {
   useChatMessages,

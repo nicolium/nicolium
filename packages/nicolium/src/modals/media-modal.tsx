@@ -5,16 +5,16 @@ import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import Audio from '@/components/media/audio';
 import ExtendedVideoPlayer from '@/components/media/extended-video-player';
+import Video from '@/components/media/video';
 import MissingIndicator from '@/components/missing-indicator';
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import StatusActionBar from '@/components/statuses/status-action-bar';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Audio from '@/features/audio';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import Thread from '@/features/status/components/thread';
 import ZoomableImage from '@/features/ui/components/zoomable-image';
-import Video from '@/features/video';
 import { useStatus } from '@/queries/statuses/use-status';
 import { userTouching } from '@/utils/is-mobile';
 

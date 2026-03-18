@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { randomIntFromInterval, generateText } from '../utils';
+import { randomIntFromInterval, generateText } from '@/utils/placeholders';
 
 const PlaceholderSidebarTrends = ({ limit }: { limit: number }) => {
   const trend = randomIntFromInterval(6, 3);

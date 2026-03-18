@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react';
 
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
+import PlaceholderCard from '@/components/placeholders/placeholder-card';
 import PreviewCard from '@/components/preview-card';
-import PlaceholderCard from '@/features/placeholder/components/placeholder-card';
 import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';

@@ -3,10 +3,10 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import GroupCard from '@/components/group-card';
+import PlaceholderGroupCard from '@/components/placeholders/placeholder-group-card';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Text from '@/components/ui/text';
-import PlaceholderGroupCard from '@/features/placeholder/components/placeholder-group-card';
 import { useGroupsQuery } from '@/queries/groups/use-groups';
 import { useModalsActions } from '@/stores/modals';
 

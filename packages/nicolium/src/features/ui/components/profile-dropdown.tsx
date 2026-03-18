@@ -5,7 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
 import DropdownMenu from '@/components/dropdown-menu';
-import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
+import PlaceholderAccount from '@/components/placeholders/placeholder-account';
 import { useFeatures } from '@/hooks/use-features';
 import {
   useLoggedInAccount,

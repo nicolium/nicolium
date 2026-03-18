@@ -10,14 +10,13 @@ import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
+import ProfileFamiliarFollowers from '@/features/ui/components/profile-familiar-followers';
+import ProfileStats from '@/features/ui/components/profile-stats';
+import { ProfileField } from '@/features/ui/util/async-components';
 import { useAcct } from '@/hooks/use-acct';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useSettings } from '@/stores/settings';
 import { capitalize } from '@/utils/strings';
-
-import { ProfileField } from '../../util/async-components';
-import ProfileFamiliarFollowers from '../profile-familiar-followers';
-import ProfileStats from '../profile-stats';
 
 import type { Account } from 'pl-api';
 

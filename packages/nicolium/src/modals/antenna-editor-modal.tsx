@@ -10,10 +10,10 @@ import FormGroup from '@/components/ui/form-group';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
+import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Spinner from '@/components/ui/spinner';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
-import { SelectDropdown } from '@/features/forms';
 import {
   useAddAccountsToAntenna,
   useAddDomainsToAntenna,

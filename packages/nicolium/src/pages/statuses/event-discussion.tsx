@@ -2,10 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import MissingIndicator from '@/components/missing-indicator';
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
 import Tombstone from '@/components/statuses/tombstone';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import ThreadStatus from '@/features/status/components/thread-status';
 import PendingStatus from '@/features/ui/components/pending-status';
 import { eventDiscussionRoute } from '@/features/ui/router';

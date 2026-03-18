@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
 
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import StatusContainer from '@/components/statuses/status-container';
 import Tombstone from '@/components/statuses/tombstone';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useReplyCount, useReplyToId } from '@/stores/contexts';
 import { useStatusMeta } from '@/stores/status-meta';

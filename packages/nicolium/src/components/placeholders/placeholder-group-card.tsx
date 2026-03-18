@@ -1,8 +1,7 @@
 import React from 'react';
 
 import Text from '@/components/ui/text';
-
-import { generateText, randomIntFromInterval } from '../utils';
+import { generateText, randomIntFromInterval } from '@/utils/placeholders';
 
 const PlaceholderGroupCard = () => {
   const groupNameLength = randomIntFromInterval(12, 20);

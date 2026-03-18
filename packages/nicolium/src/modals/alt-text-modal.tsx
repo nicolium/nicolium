@@ -4,12 +4,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Blurhash from '@/components/media/blurhash';
+import { getPointerPosition } from '@/components/media/video';
 import FormGroup from '@/components/ui/form-group';
 import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';
 import Textarea from '@/components/ui/textarea';
 import { MIMETYPE_ICONS } from '@/components/upload';
-import { getPointerPosition } from '@/features/video';
 import { useCompose } from '@/hooks/use-compose';
 import { useFeatures } from '@/hooks/use-features';
 import toast from '@/toast';

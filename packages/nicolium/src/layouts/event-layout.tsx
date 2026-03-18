@@ -2,11 +2,11 @@ import { Outlet, useLocation, useNavigate } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import LinkFooter from '@/features/ui/components/link-footer';
 import { layouts } from '@/features/ui/router';
 import {

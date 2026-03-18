@@ -1,8 +1,7 @@
 import React from 'react';
 
 import Text from '@/components/ui/text';
-
-import { generateText, randomIntFromInterval } from '../utils';
+import { generateText, randomIntFromInterval } from '@/utils/placeholders';
 
 const PlaceholderEventPreview = () => {
   const eventNameLength = randomIntFromInterval(5, 25);

@@ -4,12 +4,12 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
+import PlaceholderChatMessage from '@/components/placeholders/placeholder-chat-message';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
-import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useShoutboxIsLoading, useShoutboxMessages, type ShoutMessage } from '@/stores/shoutbox';
 

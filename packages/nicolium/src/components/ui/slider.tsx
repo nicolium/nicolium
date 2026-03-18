@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { getPointerPosition } from '@/features/video';
+import { getPointerPosition } from '@/components/media/video';
 
 interface ISlider {
   id?: string;

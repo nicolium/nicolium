@@ -2,8 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 
 import Text from '@/components/ui/text';
-
-import { randomIntFromInterval } from '../utils';
+import { randomIntFromInterval } from '@/utils/placeholders';
 
 import PlaceholderAvatar from './placeholder-avatar';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { generateText, randomIntFromInterval } from '../utils';
+import { generateText, randomIntFromInterval } from '@/utils/placeholders';
 
 const PlaceholderEventHeader = () => {
   const eventNameLength = randomIntFromInterval(5, 25);

@@ -1,7 +1,7 @@
 import throttle from 'lodash/throttle';
 import React, { useCallback, useRef } from 'react';
 
-import { getPointerPosition } from '@/features/video';
+import { getPointerPosition } from '@/components/media/video';
 
 interface IStepSlider {
   id?: string;

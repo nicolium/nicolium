@@ -2,8 +2,8 @@ import { debounce } from '@tanstack/react-pacer/debouncer';
 import React, { useCallback, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { useConversations } from '@/queries/conversations/use-conversations';
 import { selectChild } from '@/utils/scroll-utils';
 

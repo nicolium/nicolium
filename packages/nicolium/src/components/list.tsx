@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import Icon from '@/components/ui/icon';
 import Select from '@/components/ui/select';
-import { SelectDropdown } from '@/features/forms';
+import { SelectDropdown } from '@/components/ui/select-dropdown';
 
 interface IList {
   children: React.ReactNode;

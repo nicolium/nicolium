@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { getCurrentDate } from '@/components/panels/birthday-panel';
 import ScrollableList from '@/components/scrollable-list';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import Account from '@/features/birthdays/account';
-import { getCurrentDate } from '@/features/ui/components/panels/birthday-panel';
 import { useBirthdayReminders } from '@/queries/accounts/use-birthday-reminders';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';

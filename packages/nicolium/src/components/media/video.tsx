@@ -14,7 +14,7 @@ import {
   maximumAspectRatio,
 } from '@/utils/media-aspect-ratio';
 
-import { isFullscreen, requestFullscreen, exitFullscreen } from '../ui/util/fullscreen';
+import { isFullscreen, requestFullscreen, exitFullscreen } from '../../features/ui/util/fullscreen';
 
 const DEFAULT_HEIGHT = 300;
 

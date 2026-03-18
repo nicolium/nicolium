@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu as MenuType } from '@/components/dropdown-menu';
 import Icon from '@/components/icon';
+import PlaceholderEventHeader from '@/components/placeholders/placeholder-event-header';
 import StillImage from '@/components/still-image';
 import Button from '@/components/ui/button';
 import IconButton from '@/components/ui/icon-button';
@@ -33,7 +34,6 @@ import copy from '@/utils/copy';
 import { download } from '@/utils/download';
 import { shortNumberFormat } from '@/utils/numbers';
 
-import PlaceholderEventHeader from '../../placeholder/components/placeholder-event-header';
 import EventActionButton from '../components/event-action-button';
 import EventDate from '../components/event-date';
 

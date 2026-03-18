@@ -3,9 +3,9 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Hashtag from '@/components/hashtag';
+import PlaceholderSidebarTrends from '@/components/placeholders/placeholder-sidebar-trends';
 import Text from '@/components/ui/text';
 import Widget from '@/components/ui/widget';
-import PlaceholderSidebarTrends from '@/features/placeholder/components/placeholder-sidebar-trends';
 import useTrendingTags from '@/queries/trends/use-trending-tags';
 
 interface ITrendsPanel {

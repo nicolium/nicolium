@@ -2,13 +2,13 @@ import { Link } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import PlaceholderEventPreview from '@/components/placeholders/placeholder-event-preview';
 import ReactSwipeableViews from '@/components/react-swipeable-views';
 import EventPreview from '@/components/statuses/event-preview';
 import Button from '@/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
-import PlaceholderEventPreview from '@/features/placeholder/components/placeholder-event-preview';
 import { useStatus } from '@/queries/statuses/use-status';
 import {
   useJoinedEventsTimeline,

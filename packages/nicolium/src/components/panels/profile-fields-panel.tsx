@@ -1,8 +1,7 @@
 import React from 'react';
 
 import Widget from '@/components/ui/widget';
-
-import { ProfileField } from '../../util/async-components';
+import { ProfileField } from '@/features/ui/util/async-components';
 
 import type { Account } from 'pl-api';
 

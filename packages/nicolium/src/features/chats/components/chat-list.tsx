@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import React, { useCallback, useRef, useState } from 'react';
 import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
+import PlaceholderChat from '@/components/placeholders/placeholder-chat';
 import PullToRefresh from '@/components/pull-to-refresh';
 import Spinner from '@/components/ui/spinner';
-import PlaceholderChat from '@/features/placeholder/components/placeholder-chat';
 import { useChats } from '@/queries/chats';
 import { useShoutboxIsLoading } from '@/stores/shoutbox';
 import { selectChild } from '@/utils/scroll-utils';
