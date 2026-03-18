@@ -54,6 +54,19 @@ body {
   }
 }
 
+.noscript {
+  position: absolute;
+  inset: 0;
+  padding: 1rem;
+  text-align: center;
+
+  a {
+    @include mixins.text($size: inherit, $theme: subtle);
+
+    text-decoration-line: underline;
+  }
+}
+
 #app {
   height: 100%;
 }
