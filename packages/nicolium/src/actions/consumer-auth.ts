@@ -1,5 +1,4 @@
 import * as BuildConfig from '@/build-config';
-import { isURL } from '@/utils/auth';
 import sourceCode from '@/utils/code';
 import { getScopes } from '@/utils/scopes';
 
@@ -19,7 +18,7 @@ const createProviderApp = () => {
 };
 
 const prepareRequest = async (provider: string) => {
-  const baseURL = isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '';
+  const baseURL = URL.canParse(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '';
 
   const scopes = getScopes(undefined, true);
   const app = await createProviderApp();

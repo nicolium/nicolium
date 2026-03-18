@@ -26,7 +26,7 @@ import { coerceObject } from '@/schemas/utils';
 import { setSentryAccount, unsetSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
 import toast from '@/toast';
-import { validId, isURL, parseBaseURL } from '@/utils/auth';
+import { validId, parseBaseURL } from '@/utils/auth';
 import sourceCode from '@/utils/code';
 import { normalizeUsername } from '@/utils/input';
 import { getScopes } from '@/utils/scopes';
@@ -68,7 +68,7 @@ const instance = (() => {
   }
 })();
 
-const backendUrl = isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '';
+const backendUrl = URL.canParse(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '';
 
 const mastodonPreloadSchema = coerceObject({
   meta: coerceObject({
@@ -189,7 +189,7 @@ const setSessionUser = (state: AuthData) => {
 const isUpgradingUrlId = (state: AuthData) => {
   const me = state.me;
   const user = state.users[me!];
-  return validId(me) && user && !isURL(me);
+  return validId(me) && user && !URL.canParse(me as string);
 };
 
 const sanitizeState = (state: AuthData) => {
@@ -263,7 +263,7 @@ const importTokenData = (state: AuthData, token: Token, app?: CredentialApplicat
 };
 
 const upgradeNonUrlId = (state: AuthData, account: CredentialAccount) => {
-  if (isURL(state.me)) return;
+  if (state.me && URL.canParse(state.me)) return;
   state.me = state.me === account.id ? account.url : state.me;
   delete state.users[account.id];
 };
@@ -312,7 +312,7 @@ const importMastodonPreloadData = (state: AuthData, data: Record<string, any>) =
   const accountUrl = parsedData.accounts[accountId]?.url;
   const accessToken = parsedData.meta.access_token;
 
-  if (validId(accessToken) && validId(accountId) && isURL(accountUrl)) {
+  if (validId(accessToken) && validId(accountId) && URL.canParse(accountUrl)) {
     state.tokens[accessToken] = v.parse(tokenSchema, {
       access_token: accessToken,
       account: accountId,
@@ -830,7 +830,9 @@ const isLoggedIn = () => validId(getCurrentAccountId());
 
 const getAuthUserUrl = () => {
   const { me, users } = useAuthStore.getState();
-  return [users[me!]?.url, me].filter((url) => url).find(isURL);
+  return [users[me!]?.url, me]
+    .filter((url): url is string => !!url)
+    .find((url) => URL.canParse(url));
 };
 
 const getMeUrl = () => getOwnAccount()?.url;
