@@ -3,6 +3,7 @@ import { FastAverageColor } from 'fast-average-color';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import missingAvatar from '@/assets/images/avatar-missing.png';
 import StillImage, { type IStillImage } from '@/components/still-image';
 import { useSettings } from '@/stores/settings';
 
@@ -142,7 +143,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
     <StillImage
       className={clsx('⁂-avatar', isCat && '⁂-avatar--cat', className)}
       style={style}
-      src={src || require('@/assets/images/avatar-missing.png')}
+      src={src || missingAvatar}
       alt={altText}
       onError={handleLoadFailure}
     />
