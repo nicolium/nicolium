@@ -495,7 +495,7 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
   const { mutate: updateAntenna, isPending: updateDisabled } = useUpdateAntenna(antennaId!);
   const { mutate: createAntenna, isPending: createDisabled } = useCreateAntenna();
 
-  const { data: lists } = useLists((lists) => lists);
+  const { data: lists } = useLists();
 
   const [title, setTitle] = useState(antenna ? antenna.title : '');
   const [ltl, setLtl] = useState(antenna ? antenna.ltl : false);
