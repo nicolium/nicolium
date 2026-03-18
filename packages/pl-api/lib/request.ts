@@ -22,14 +22,17 @@ type Response<T = any> = {
   @param {object} response - Fetch API response object
   @returns {object} Link object
   */
-const getLinks = (response: Pick<Response, 'headers'>): LinkHeader =>
-  new LinkHeader(response.headers?.get('link') || undefined);
+const getLinks = (
+  response: Pick<Response, 'headers'>,
+): { next: string | null; prev: string | null } => {
+  const headers = response.headers?.get('link');
+  const linkHeader = (headers && new LinkHeader(headers)) || null;
 
-const getNextLink = (response: Pick<Response, 'headers'>): string | null =>
-  getLinks(response).refs.find((link) => link.rel.toLocaleLowerCase() === 'next')?.uri || null;
-
-const getPrevLink = (response: Pick<Response, 'headers'>): string | null =>
-  getLinks(response).refs.find((link) => link.rel.toLocaleLowerCase() === 'prev')?.uri || null;
+  return {
+    next: linkHeader?.refs.find((link) => link.rel.toLocaleLowerCase() === 'next')?.uri || null,
+    prev: linkHeader?.refs.find((link) => link.rel.toLocaleLowerCase() === 'prev')?.uri || null,
+  };
+};
 
 interface AsyncRefreshHeader {
   id: string;
@@ -188,8 +191,6 @@ export {
   type RequestMeta,
   type AsyncRefreshHeader,
   getLinks,
-  getNextLink,
-  getPrevLink,
   getAsyncRefreshHeader,
   request as default,
 };

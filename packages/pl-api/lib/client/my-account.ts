@@ -11,7 +11,7 @@ import {
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
 import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from '@/features';
-import { getNextLink, getPrevLink } from '@/request';
+import { getLinks } from '@/request';
 import { PaginatedResponse } from '@/responses';
 
 import type { accounts } from './accounts';
@@ -40,8 +40,7 @@ const paginatedIceshrimpAccountsList = async <T>(
 
   const items = await client.accounts.getAccounts(ids);
 
-  const prevLink = getPrevLink(response);
-  const nextLink = getNextLink(response);
+  const { prev: prevLink, next: nextLink } = getLinks(response);
 
   return new PaginatedResponse(items, {
     previous: prevLink ? () => paginatedIceshrimpAccountsList(client, prevLink, fn) : null,

@@ -3,7 +3,7 @@ import * as v from 'valibot';
 import { instanceSchema } from '@/entities/instance';
 import { filteredArray } from '@/entities/utils';
 import { type Features, getFeatures } from '@/features';
-import request, { getNextLink, getPrevLink, type RequestBody } from '@/request';
+import request, { getLinks, type RequestBody } from '@/request';
 import { PaginatedResponse } from '@/responses';
 
 import type { Instance } from '@/entities/instance';
@@ -69,15 +69,18 @@ class PlApiBaseClient {
   ) => {
     const targetSchema = isArray ? filteredArray(schema) : schema;
 
-    const processResponse = (response: PlApiResponse<any>) =>
-      new PaginatedResponse<T, IsArray>(
+    const processResponse = (response: PlApiResponse<any>) => {
+      const { prev: prevLink, next: nextLink } = getLinks(response);
+
+      return new PaginatedResponse<T, IsArray>(
         v.parse(targetSchema, response.json) as IsArray extends true ? Array<T> : T,
         {
-          previous: getMore(getPrevLink(response)),
-          next: getMore(getNextLink(response)),
+          previous: getMore(prevLink),
+          next: getMore(nextLink),
           partial: response.status === 206,
         },
       );
+    };
 
     const getMore = (input: string | null) =>
       input ? () => this.request(input).then(processResponse) : null;
