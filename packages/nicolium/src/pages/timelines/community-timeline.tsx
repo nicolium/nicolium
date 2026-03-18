@@ -2,14 +2,17 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { PublicTimelineColumn } from '@/columns/timeline';
+import DropdownMenu from '@/components/dropdown-menu';
 import { TimelinePicker } from '@/components/timeline-picker';
 import Column from '@/components/ui/column';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 
 const messages = defineMessages({
   title: { id: 'column.community', defaultMessage: 'Local timeline' },
 });
 
 const CommunityTimelinePage = () => {
+  const items = useTimelineFiltersOptions('public');
   const intl = useIntl();
 
   return (
@@ -18,6 +21,12 @@ const CommunityTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='local' />}
       truncateTitle={false}
+      action={
+        <DropdownMenu
+          items={items}
+          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
+        />
+      }
     >
       <PublicTimelineColumn
         local

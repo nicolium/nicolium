@@ -3,11 +3,13 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { PublicTimelineColumn } from '@/columns/timeline';
+import DropdownMenu from '@/components/dropdown-menu';
 import { TimelinePicker } from '@/components/timeline-picker';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import { remoteTimelineRoute } from '@/features/ui/router';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
@@ -17,6 +19,7 @@ const messages = defineMessages({
 /** View statuses from a remote instance. */
 const RemoteTimelinePage: React.FC = () => {
   const { instance } = remoteTimelineRoute.useParams();
+  const items = useTimelineFiltersOptions('public');
 
   const intl = useIntl();
   const navigate = useNavigate();
@@ -34,6 +37,12 @@ const RemoteTimelinePage: React.FC = () => {
       label={instance}
       title={<TimelinePicker active={`instance:${instance}`} />}
       truncateTitle={false}
+      action={
+        <DropdownMenu
+          items={items}
+          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
+        />
+      }
     >
       {!pinned && (
         <div className='mb-4 flex gap-2 px-2'>

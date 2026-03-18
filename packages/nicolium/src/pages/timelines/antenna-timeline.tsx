@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { AntennaTimelineColumn } from '@/columns/timeline';
@@ -10,6 +10,7 @@ import { TimelinePicker } from '@/components/timeline-picker';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import { antennaTimelineRoute } from '@/features/ui/router';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { useAntenna, useDeleteAntenna } from '@/queries/accounts/use-antennas';
 import { useModalsActions } from '@/stores/modals';
 
@@ -33,6 +34,8 @@ const AntennaTimelinePage: React.FC = () => {
 
   const { data: antenna, isFetching } = useAntenna(antennaId);
   const { mutate: deleteAntenna } = useDeleteAntenna();
+
+  const timelineFilterOptions = useTimelineFiltersOptions('antenna');
 
   const handleEditClick = () => {
     openModal('ANTENNA_EDITOR', { antennaId });
@@ -69,18 +72,23 @@ const AntennaTimelinePage: React.FC = () => {
     return <MissingIndicator />;
   }
 
-  const items = [
-    {
-      text: intl.formatMessage(messages.editAntenna),
-      action: handleEditClick,
-      icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
-    },
-    {
-      text: intl.formatMessage(messages.deleteAntenna),
-      action: handleDeleteClick,
-      icon: require('@phosphor-icons/core/regular/trash.svg'),
-    },
-  ];
+  const items = useMemo(
+    () => [
+      ...timelineFilterOptions,
+      null,
+      {
+        text: intl.formatMessage(messages.editAntenna),
+        action: handleEditClick,
+        icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+      },
+      {
+        text: intl.formatMessage(messages.deleteAntenna),
+        action: handleDeleteClick,
+        icon: require('@phosphor-icons/core/regular/trash.svg'),
+      },
+    ],
+    [timelineFilterOptions],
+  );
 
   return (
     <Column

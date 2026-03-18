@@ -2,11 +2,13 @@ import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { HomeTimelineColumn } from '@/columns/timeline';
+import DropdownMenu from '@/components/dropdown-menu';
 import { Link } from '@/components/link';
 import { TimelinePicker } from '@/components/timeline-picker';
 import Column from '@/components/ui/column';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { useInstance } from '@/stores/instance';
 import { useUiStore } from '@/stores/ui';
 
@@ -42,6 +44,7 @@ const HomeTimelinePage: React.FC = () => {
   const features = useFeatures();
   const instance = useInstance();
 
+  const items = useTimelineFiltersOptions('home');
   const { isSledzikRemoved } = useUiStore();
 
   if (isSledzikRemoved) return null;
@@ -53,6 +56,12 @@ const HomeTimelinePage: React.FC = () => {
       title={<TimelinePicker active='home' />}
       withBack={false}
       truncateTitle={false}
+      action={
+        <DropdownMenu
+          items={items}
+          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
+        />
+      }
     >
       <HomeTimelineColumn
         emptyMessageText={

@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { ListTimelineColumn } from '@/columns/timeline';
@@ -10,6 +10,7 @@ import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import { listTimelineRoute } from '@/features/ui/router';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { useDeleteList, useList } from '@/queries/accounts/use-lists';
 import { useModalsActions } from '@/stores/modals';
 
@@ -31,6 +32,7 @@ const ListTimelinePage: React.FC = () => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
   const navigate = useNavigate();
+  const timelineFilterOptions = useTimelineFiltersOptions('list');
 
   const { data: list, isFetching } = useList(listId);
   const { mutate: deleteList } = useDeleteList();
@@ -87,18 +89,23 @@ const ListTimelinePage: React.FC = () => {
     );
   }
 
-  const items = [
-    {
-      text: intl.formatMessage(messages.editList),
-      action: handleEditClick,
-      icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
-    },
-    {
-      text: intl.formatMessage(messages.deleteList),
-      action: handleDeleteClick,
-      icon: require('@phosphor-icons/core/regular/trash.svg'),
-    },
-  ];
+  const items = useMemo(
+    () => [
+      ...timelineFilterOptions,
+      null,
+      {
+        text: intl.formatMessage(messages.editList),
+        action: handleEditClick,
+        icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+      },
+      {
+        text: intl.formatMessage(messages.deleteList),
+        action: handleDeleteClick,
+        icon: require('@phosphor-icons/core/regular/trash.svg'),
+      },
+    ],
+    [timelineFilterOptions],
+  );
 
   return (
     <Column

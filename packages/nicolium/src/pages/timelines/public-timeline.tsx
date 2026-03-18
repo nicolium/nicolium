@@ -4,9 +4,11 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import { PublicTimelineColumn } from '@/columns/timeline';
+import DropdownMenu from '@/components/dropdown-menu';
 import { TimelinePicker } from '@/components/timeline-picker';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 
@@ -20,6 +22,7 @@ const PublicTimelinePage = () => {
 
   const instance = useInstance();
   const settings = useSettings();
+  const items = useTimelineFiltersOptions('public');
 
   const explanationBoxExpanded = settings.explanationBox;
   const showExplanationBox = settings.showExplanationBox;
@@ -38,6 +41,12 @@ const PublicTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='federated' />}
       truncateTitle={false}
+      action={
+        <DropdownMenu
+          items={items}
+          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
+        />
+      }
     >
       {showExplanationBox && (
         <Accordion

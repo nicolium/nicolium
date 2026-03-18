@@ -78,7 +78,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
         }
         return '';
     }
-  }, [active]);
+  }, [active, lists, circles, antennas]);
 
   const items = useMemo(() => {
     const items: Menu = [];

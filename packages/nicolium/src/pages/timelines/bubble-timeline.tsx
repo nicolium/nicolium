@@ -2,8 +2,10 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { BubbleTimelineColumn } from '@/columns/timeline';
+import DropdownMenu from '@/components/dropdown-menu';
 import { TimelinePicker } from '@/components/timeline-picker';
 import Column from '@/components/ui/column';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 
 const messages = defineMessages({
   title: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
@@ -11,6 +13,7 @@ const messages = defineMessages({
 
 const BubbleTimelinePage = () => {
   const intl = useIntl();
+  const items = useTimelineFiltersOptions('bubble');
 
   return (
     <Column
@@ -18,6 +21,12 @@ const BubbleTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='bubble' />}
       truncateTitle={false}
+      action={
+        <DropdownMenu
+          items={items}
+          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
+        />
+      }
     >
       <BubbleTimelineColumn
         emptyMessageText={

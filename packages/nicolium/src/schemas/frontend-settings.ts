@@ -81,14 +81,25 @@ const settingsSchema = v.object({
 
   timelines: v.fallback(
     v.record(
-      v.string(),
+      v.picklist([
+        'home',
+        'antenna',
+        'bubble',
+        'circle',
+        'local',
+        'group',
+        'hashtag',
+        'list',
+        'public',
+        'wrenched',
+      ]),
       coerceObject({
-        showReblogs: v.optional(v.boolean(), true),
-        showSelfReblogs: v.optional(v.boolean(), true),
-        showReplies: v.optional(v.boolean(), true),
-        showQuotes: v.optional(v.boolean(), true),
-        showDirect: v.optional(v.boolean(), true),
-        showNonMedia: v.optional(v.boolean(), true),
+        showReblogs: v.fallback(v.boolean(), true),
+        showSelfReblogs: v.fallback(v.boolean(), true),
+        showReplies: v.fallback(v.boolean(), true),
+        showQuotes: v.fallback(v.boolean(), true),
+        showDirect: v.fallback(v.boolean(), true),
+        showNonMedia: v.fallback(v.boolean(), true),
       }),
     ),
     {},
@@ -129,6 +140,6 @@ const settingsSchema = v.object({
 });
 
 type Settings = v.InferOutput<typeof settingsSchema>;
-type TimelineFilters = Settings['timelines'][string];
+type TimelineFilters = Settings['timelines']['home'];
 
 export { settingsSchema, type Settings, type TimelineFilters };
