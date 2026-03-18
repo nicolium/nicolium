@@ -2,8 +2,6 @@ import iconAt from '@phosphor-icons/core/regular/at.svg';
 import iconBellSimpleRinging from '@phosphor-icons/core/regular/bell-simple-ringing.svg';
 import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconChartBar from '@phosphor-icons/core/regular/chart-bar.svg';
-
-import '@/styles/new/notifications.scss';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
@@ -35,6 +33,8 @@ import { selectChild } from '@/utils/scroll-utils';
 
 import type { Item } from '@/components/ui/tabs';
 import type { VirtuosoHandle } from 'react-virtuoso';
+
+import '@/styles/new/notifications.scss';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
