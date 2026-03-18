@@ -14,16 +14,23 @@ const getHost = () => {
   }
 };
 
-const fetchInstance = async () => {
-  try {
-    const client = getClient();
-    const instance = await client.instance.getInstance();
+const doFetchInstance = async () => {
+  const client = getClient();
+  const instance = await client.instance.getInstance();
 
-    useInstanceStore.getState().actions.loadInstance(instance);
-    useComposeStore.getState().actions.importDefaultContentType(instance);
-  } catch (error) {
+  useInstanceStore.getState().actions.loadInstance(instance);
+  useComposeStore.getState().actions.importDefaultContentType(instance);
+};
+
+const fetchInstance = async () => {
+  const { fetched, instanceFetchFailed } = useInstanceStore.getState();
+  if (fetched || (instanceFetchFailed && !getAuthUserUrl())) return;
+
+  const promise = doFetchInstance().catch((error) => {
     useInstanceStore.getState().actions.instanceFetchFailed(error);
-  }
+  });
+
+  if (!fetched) await promise;
 };
 
 const checkIfStandalone = () =>
@@ -31,9 +38,11 @@ const checkIfStandalone = () =>
     .then(({ ok, headers }) => {
       const isOk = ok && !!headers.get('content-type')?.includes('application/json');
       useInstanceStore.getState().actions.setInstanceFetchFailed(!isOk);
+      return !isOk;
     })
     .catch((err) => {
       useInstanceStore.getState().actions.setInstanceFetchFailed(!err.response?.ok);
+      return true;
     });
 
 export { getHost, fetchInstance, checkIfStandalone };
