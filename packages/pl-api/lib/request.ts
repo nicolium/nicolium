@@ -78,6 +78,7 @@ interface RequestBody<Params = Record<string, any>> {
   onUploadProgress?: (e: ProgressEvent) => void;
   signal?: AbortSignal;
   contentType?: string;
+  formData?: boolean;
   idempotencyKey?: string;
 }
 
@@ -96,6 +97,7 @@ function request<T = any>(
     onUploadProgress,
     signal,
     contentType = 'application/json',
+    formData,
     idempotencyKey,
   }: RequestBody = {},
 ) {
@@ -108,7 +110,7 @@ function request<T = any>(
   else if (this.accessToken) headers.set('Authorization', `Bearer ${this.accessToken}`);
   else if (this.customAuthorizationToken)
     headers.set('Authorization', this.customAuthorizationToken);
-  if (contentType !== '' && body) headers.set('Content-Type', contentType);
+  if (!formData) headers.set('Content-Type', contentType);
   if (idempotencyKey) headers.set('Idempotency-Key', idempotencyKey);
 
   body = body && contentType === '' ? serialize(body, { indices: true }) : JSON.stringify(body);

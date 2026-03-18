@@ -559,7 +559,7 @@ const settings = (client: PlApiBaseClient) => ({
         response = await client.request('/api/v1/import', {
           method: 'POST',
           body: { data: list, type: 'following', mode },
-          contentType: '',
+          formData: true,
         });
         break;
       case MITRA:
@@ -572,7 +572,7 @@ const settings = (client: PlApiBaseClient) => ({
         response = await client.request('/api/pleroma/follow_import', {
           method: 'POST',
           body: { list },
-          contentType: '',
+          formData: true,
         });
     }
 
@@ -611,14 +611,14 @@ const settings = (client: PlApiBaseClient) => ({
         response = await client.request('/api/v1/import', {
           method: 'POST',
           body: { data: list, type: 'blocks', mode },
-          contentType: '',
+          formData: true,
         });
         break;
       default:
         response = await client.request('/api/pleroma/blocks_import', {
           method: 'POST',
           body: { list },
-          contentType: '',
+          formData: true,
         });
     }
 
@@ -640,14 +640,14 @@ const settings = (client: PlApiBaseClient) => ({
         response = await client.request('/api/v1/import', {
           method: 'POST',
           body: { data: list, type: 'blocks', mode },
-          contentType: '',
+          formData: true,
         });
         break;
       default:
         response = await client.request('/api/pleroma/mutes_import', {
           method: 'POST',
           body: { list },
-          contentType: '',
+          formData: true,
         });
     }
 

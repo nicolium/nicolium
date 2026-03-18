@@ -137,7 +137,7 @@ const ImportDataPage = () => {
       .request('/api/pleroma/archive_import', {
         method: 'POST',
         body: form,
-        contentType: '',
+        formData: true,
       })
       .then(() => {
         toast.success(messages.archiveSuccess);

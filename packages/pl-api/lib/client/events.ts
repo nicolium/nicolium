@@ -131,7 +131,7 @@ const events = (client: PlApiBaseClient) => ({
    */
   getEventIcs: async (statusId: string) => {
     const response = await client.request(`/api/v1/pleroma/events/${statusId}/ics`, {
-      contentType: '',
+      formData: true,
     });
 
     return response.data;

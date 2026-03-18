@@ -110,7 +110,7 @@ const stories = (client: PlApiBaseClient) => ({
     const response = await client.request('/api/web/stories/v1/add', {
       method: 'POST',
       body: { file },
-      contentType: '',
+      formData: true,
     });
 
     return v.parse(storyMediaSchema, response.json);

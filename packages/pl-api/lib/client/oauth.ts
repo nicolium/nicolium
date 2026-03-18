@@ -76,7 +76,7 @@ const oauth = (client: PlApiBaseClient) => ({
     const response = await client.request('/oauth/token', {
       method: 'POST',
       body: params,
-      contentType: '',
+      formData: true,
     });
 
     return v.parse(tokenSchema, { scope: params.scope || '', ...response.json });
@@ -91,7 +91,7 @@ const oauth = (client: PlApiBaseClient) => ({
     const response = await client.request<EmptyObject>('/oauth/revoke', {
       method: 'POST',
       body: params,
-      contentType: '',
+      formData: true,
     });
 
     client.socket?.close();

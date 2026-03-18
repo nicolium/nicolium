@@ -1525,7 +1525,7 @@ const admin = (client: PlApiBaseClient) => {
         const response = await client.request('/api/v1/admin/custom_emojis', {
           method: 'POST',
           body: params,
-          contentType: '',
+          formData: true,
         });
 
         return v.parse(adminCustomEmojiSchema, response.json);
@@ -1535,7 +1535,7 @@ const admin = (client: PlApiBaseClient) => {
         const response = await client.request(`/api/v1/admin/custom_emojis/${emojiId}`, {
           method: 'PATCH',
           body: params,
-          contentType: '',
+          formData: true,
         });
 
         return v.parse(adminCustomEmojiSchema, response.json);

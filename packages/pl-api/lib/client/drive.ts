@@ -81,7 +81,7 @@ const drive = (client: PlApiBaseClient) => ({
       method: 'POST',
       body: { file },
       params: { folderId },
-      contentType: '',
+      formData: true,
     });
 
     return v.parse(driveFileSchema, response.json);
