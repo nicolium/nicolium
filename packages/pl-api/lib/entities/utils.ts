@@ -40,7 +40,9 @@ const coerceObject = <T extends v.ObjectEntries>(shape: T) =>
   v.optional(
     v.pipe(
       v.any(),
-      v.transform((input) => (typeof input === 'object' && input !== null ? input : {})),
+      v.transform((input) =>
+        typeof input === 'object' && !Array.isArray(input) && input !== null ? input : {},
+      ),
       v.object(shape),
     ),
     {},
