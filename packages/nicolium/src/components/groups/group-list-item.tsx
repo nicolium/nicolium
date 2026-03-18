@@ -6,9 +6,10 @@ import GroupAvatar from '@/components/groups/group-avatar';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
-import GroupActionButton from '@/features/group/components/group-action-button';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { shortNumberFormat } from '@/utils/numbers';
+
+import GroupActionButton from './group-action-button';
 
 interface IGroupListItem {
   groupId: string;

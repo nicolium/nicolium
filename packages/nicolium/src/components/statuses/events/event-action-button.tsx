@@ -10,7 +10,7 @@ import {
 import { useModalsActions } from '@/stores/modals';
 
 import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
-import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
+import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 
 const messages = defineMessages({
   leaveHeading: { id: 'confirmations.leave_event.heading', defaultMessage: 'Leave event' },

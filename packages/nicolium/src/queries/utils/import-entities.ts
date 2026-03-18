@@ -1,9 +1,9 @@
 import { notifyManager } from '@tanstack/react-query';
 
-import { normalizeStatus } from '@/normalizers/status';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { normalizeStatus } from '@/queries/statuses/normalize';
 import { useContextStore } from '@/stores/contexts';
 
 import type {

@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import GroupCard from '@/components/group-card';
+import GroupCard from '@/components/groups/group-card';
 import PlaceholderGroupCard from '@/components/placeholders/placeholder-group-card';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';

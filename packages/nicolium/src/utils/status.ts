@@ -1,6 +1,6 @@
 import { selectAccount } from '@/queries/accounts/selectors';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { IntlShape } from 'react-intl';
 
 /** Grab the first external link from a status. */

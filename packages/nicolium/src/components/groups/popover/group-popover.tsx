@@ -7,11 +7,11 @@ import Divider from '@/components/ui/divider';
 import Popover from '@/components/ui/popover';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
-import GroupMemberCount from '@/features/group/components/group-member-count';
-import GroupPrivacy from '@/features/group/components/group-privacy';
 import { groupTimelineRoute } from '@/features/ui/router';
 
 import GroupAvatar from '../group-avatar';
+import GroupMemberCount from '../group-member-count';
+import GroupPrivacy from '../group-privacy';
 
 import type { Group } from 'pl-api';
 

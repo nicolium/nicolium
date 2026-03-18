@@ -34,8 +34,8 @@ import copy from '@/utils/copy';
 import { download } from '@/utils/download';
 import { shortNumberFormat } from '@/utils/numbers';
 
-import EventActionButton from '../../../components/statuses/events/event-action-button';
-import EventDate from '../../../components/statuses/events/event-date';
+import EventActionButton from './event-action-button';
+import EventDate from './event-date';
 
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 

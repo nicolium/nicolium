@@ -11,7 +11,7 @@ import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
-import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
+import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
 
 const messages = defineMessages({

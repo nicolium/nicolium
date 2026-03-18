@@ -29,6 +29,8 @@ import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
 import { useIsStandalone } from '@/utils/state';
 
+import GlobalHotkeys from '../../utils/global-hotkeys';
+
 import {
   ModalRoot,
   AccountHoverCard,
@@ -36,7 +38,6 @@ import {
   DropdownNavigation,
   StatusHoverCard,
 } from './util/async-components';
-import GlobalHotkeys from './util/global-hotkeys';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import '@/components/statuses/status';

@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 
+import GroupMemberListItem from '@/components/groups/group-member-list-item';
 import { PendingItemsRow } from '@/components/pending-items-row';
 import PlaceholderAccount from '@/components/placeholders/placeholder-account';
 import ScrollableList from '@/components/scrollable-list';
-import GroupMemberListItem from '@/features/group/components/group-member-list-item';
 import { groupMembersRoute } from '@/features/ui/router';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import {

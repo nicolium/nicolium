@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 import OutlineBox from '@/components/outline-box';
-import EventPreview from '@/components/statuses/event-preview';
+import EventPreview from '@/components/statuses/events/event-preview';
 import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
 import SensitiveContentOverlay from '@/components/statuses/sensitive-content-overlay';
 import StatusContent from '@/components/statuses/status-content';
@@ -15,7 +15,7 @@ import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
 const messages = defineMessages({
   close: {

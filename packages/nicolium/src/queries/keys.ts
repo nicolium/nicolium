@@ -13,7 +13,7 @@ import type {
   MinifiedAdminReport,
   MinifiedConversation,
 } from './utils/minify-list';
-import type { NormalizedStatus } from '@/normalizers/status';
+import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { DataTag, InfiniteData } from '@tanstack/react-query';
 import type {
   Account,

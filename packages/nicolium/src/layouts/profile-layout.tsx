@@ -2,12 +2,12 @@ import { Navigate, Outlet, useLocation } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import LinkFooter from '@/components/navigation/link-footer';
 import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Header from '@/features/account/components/header';
-import LinkFooter from '@/features/ui/components/link-footer';
 import { layouts } from '@/features/ui/router';
 import {
   WhoToFollowPanel,

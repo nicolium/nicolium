@@ -6,7 +6,7 @@ import {
   useGroupMediaTimeline,
 } from '@/queries/timelines/use-account-media-timeline';
 
-import type { NormalizedStatus } from '@/normalizers/status';
+import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { MediaAttachment } from 'pl-api';
 
 type AccountGalleryAttachment = MediaAttachment & {

@@ -4,14 +4,14 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Icon from '@/components/icon';
+import EventActionButton from '@/components/statuses/events/event-action-button';
+import EventDate from '@/components/statuses/events/event-date';
 import Button from '@/components/ui/button';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
-import EventActionButton from '@/features/event/components/event-action-button';
-import EventDate from '@/features/event/components/event-date';
 import { useAccount } from '@/queries/accounts/use-account';
 
-import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
+import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 
 const messages = defineMessages({
   eventBanner: { id: 'event.banner', defaultMessage: 'Event banner' },

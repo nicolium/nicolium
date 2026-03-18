@@ -10,7 +10,7 @@ import { useStatusMeta } from '@/stores/status-meta';
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
 type Selected = Record<number, boolean>;
 

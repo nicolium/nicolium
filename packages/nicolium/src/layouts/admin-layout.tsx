@@ -4,7 +4,7 @@ import React from 'react';
 import Layout from '@/components/ui/layout';
 import { LatestAccountsPanel } from '@/features/ui/util/async-components';
 
-import LinkFooter from '../features/ui/components/link-footer';
+import LinkFooter from '../components/navigation/link-footer';
 
 const AdminLayout = () => (
   <>

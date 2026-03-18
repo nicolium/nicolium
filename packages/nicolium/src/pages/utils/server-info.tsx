@@ -1,11 +1,11 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
+import LinkFooter from '@/components/navigation/link-footer';
 import PromoPanel from '@/components/panels/promo-panel';
 import Column from '@/components/ui/column';
 import Divider from '@/components/ui/divider';
 import Text from '@/components/ui/text';
-import LinkFooter from '@/features/ui/components/link-footer';
 import { useInstance } from '@/stores/instance';
 
 const messages = defineMessages({

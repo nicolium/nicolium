@@ -1,9 +1,9 @@
 import { statusSchema, type Account } from 'pl-api';
 import * as v from 'valibot';
 
-import { normalizeStatus } from '@/normalizers/status';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { normalizeStatus } from '@/queries/statuses/normalize';
 
 import type { PendingStatus } from '@/stores/pending-statuses';
 

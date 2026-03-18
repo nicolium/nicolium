@@ -16,7 +16,7 @@ import {
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { Instance } from 'pl-api';
 
 const canRemoteTranslate = (

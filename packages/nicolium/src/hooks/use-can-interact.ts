@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { useCurrentAccount } from '@/contexts/current-account-context';
 
-import type { NormalizedStatus } from '@/normalizers/status';
+import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { InteractionPolicy, InteractionPolicyEntry } from 'pl-api';
 
 const useCanInteract = (

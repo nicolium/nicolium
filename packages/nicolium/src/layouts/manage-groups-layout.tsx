@@ -1,8 +1,8 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
+import LinkFooter from '@/components/navigation/link-footer';
 import Layout from '@/components/ui/layout';
-import LinkFooter from '@/features/ui/components/link-footer';
 import { MyGroupsPanel, NewGroupPanel } from '@/features/ui/util/async-components';
 
 /** Layout to display groups. */

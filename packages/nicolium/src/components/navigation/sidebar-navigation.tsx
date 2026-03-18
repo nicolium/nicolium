@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import ComposeButton from '@/components/navigation/compose-button';
 import Icon from '@/components/ui/icon';
 import { useStatContext } from '@/contexts/stat-context';
-import ComposeButton from '@/features/ui/components/compose-button';
 import ProfileDropdown from '@/features/ui/components/profile-dropdown';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';

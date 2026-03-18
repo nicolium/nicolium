@@ -10,7 +10,7 @@ import { useSettings } from '@/stores/settings';
 
 import { useMediaVisible } from './sensitive-content-overlay';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { MediaAttachment } from 'pl-api';
 
 interface IStatusMedia {

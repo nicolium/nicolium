@@ -23,7 +23,7 @@ import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
 import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';
 
-import type { NormalizedStatus } from '@/normalizers/status';
+import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { EmojiReaction, PaginatedResponse } from 'pl-api';
 
 const messages = defineMessages({

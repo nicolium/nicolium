@@ -1,9 +1,9 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
+import LinkFooter from '@/components/navigation/link-footer';
 import Layout from '@/components/ui/layout';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import LinkFooter from '@/features/ui/components/link-footer';
 import { WhoToFollowPanel, TrendsPanel, SignUpPanel } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 const StatusLayout = () => {

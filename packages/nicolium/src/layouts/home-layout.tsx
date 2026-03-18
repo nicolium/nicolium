@@ -3,12 +3,12 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 
 import { BANNER_HTML } from '@/build-config';
+import LinkFooter from '@/components/navigation/link-footer';
 import Avatar from '@/components/ui/avatar';
 import Layout from '@/components/ui/layout';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Warning from '@/features/compose/components/warning';
-import LinkFooter from '@/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
   TrendsPanel,

@@ -38,7 +38,7 @@ export const ComposeForm = lazy(() => import('@/features/compose/components/comp
 export const DatePicker = lazy(() => import('@/features/birthdays/date-picker'));
 export const DropdownNavigation = lazy(() => import('@/components/navigation/dropdown-navigation'));
 export const EmojiPicker = lazy(() => import('@/features/emoji/components/emoji-picker'));
-export const EventHeader = lazy(() => import('@/features/event/components/event-header'));
+export const EventHeader = lazy(() => import('@/components/statuses/events/event-header'));
 export const MediaGallery = lazy(() => import('@/components/media/media-gallery'));
 export const ModalRoot = lazy(() => import('@/features/ui/components/modal-root'));
 export const ProfileField = lazy(() => import('@/features/ui/components/profile-field'));

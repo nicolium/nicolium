@@ -3,7 +3,7 @@ import { mutative } from 'zustand-mutative';
 
 import { findStatuses } from '@/queries/statuses/use-status';
 
-import type { NormalizedStatus } from '@/normalizers/status';
+import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { CreateStatusParams, Status } from 'pl-api';
 
 type TimelineEntry =

@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import GroupListItem from '@/components/groups/group-list-item';
 import PlaceholderGroupSearch from '@/components/placeholders/placeholder-group-search';
 import Widget from '@/components/ui/widget';
-import GroupListItem from '@/features/groups/components/discover/group-list-item';
 import { useGroupsQuery } from '@/queries/groups/use-groups';
 
 const MyGroupsPanel = () => {

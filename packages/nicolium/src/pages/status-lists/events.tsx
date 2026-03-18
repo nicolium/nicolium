@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import PlaceholderEventPreview from '@/components/placeholders/placeholder-event-preview';
 import ReactSwipeableViews from '@/components/react-swipeable-views';
-import EventPreview from '@/components/statuses/event-preview';
+import EventPreview from '@/components/statuses/events/event-preview';
 import Button from '@/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';

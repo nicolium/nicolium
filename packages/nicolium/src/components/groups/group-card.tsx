@@ -2,13 +2,13 @@ import React from 'react';
 
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
-import GroupHeaderImage from '@/features/group/components/group-header-image';
-import GroupMemberCount from '@/features/group/components/group-member-count';
-import GroupPrivacy from '@/features/group/components/group-privacy';
-import GroupRelationship from '@/features/group/components/group-relationship';
 import { useGroupQuery } from '@/queries/groups/use-group';
 
-import GroupAvatar from './groups/group-avatar';
+import GroupAvatar from './group-avatar';
+import GroupHeaderImage from './group-header-image';
+import GroupMemberCount from './group-member-count';
+import GroupPrivacy from './group-privacy';
+import GroupRelationship from './group-relationship';
 
 interface IGroupCard {
   groupId: string;

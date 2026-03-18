@@ -29,7 +29,7 @@ import { textForScreenReader } from '@/utils/status';
 import HashtagLink from '../hashtag-link';
 import RelativeTimestamp from '../relative-timestamp';
 
-import EventPreview from './event-preview';
+import EventPreview from './events/event-preview';
 import RssFeedInfo from './rss-feed-info';
 import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';

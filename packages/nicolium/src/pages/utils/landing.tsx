@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import LinkFooter from '@/components/navigation/link-footer';
 import Button from '@/components/ui/button';
 import Card, { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Text from '@/components/ui/text';
-import LinkFooter from '@/features/ui/components/link-footer';
 import sourceCode from '@/utils/code';
 
 import { LogoText } from '../timelines/landing-timeline';

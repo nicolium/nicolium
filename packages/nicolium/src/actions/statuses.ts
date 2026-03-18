@@ -12,7 +12,7 @@ import { shouldHaveCard } from '@/utils/status';
 
 import { importEntities } from '../queries/utils/import-entities';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { useQueryClient } from '@tanstack/react-query';
 import type { CreateStatusParams, PlApiClient, Status as BaseStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';

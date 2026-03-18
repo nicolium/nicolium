@@ -8,7 +8,7 @@ import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
 import DropdownMenu from '../dropdown-menu';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
 const messages = defineMessages({
   languageVersions: {

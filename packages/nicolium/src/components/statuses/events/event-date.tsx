@@ -3,7 +3,7 @@ import { FormattedDate } from 'react-intl';
 
 import Icon from '@/components/icon';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
 interface IEventDate {
   status: Pick<Status, 'event'>;

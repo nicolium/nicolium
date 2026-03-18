@@ -7,7 +7,7 @@ import AccountContainer from '@/components/accounts/account-container';
 
 import OutlineBox from '../outline-box';
 
-import EventPreview from './event-preview';
+import EventPreview from './events/event-preview';
 import StatusContent from './status-content';
 import StatusReplyMentions from './status-reply-mentions';
 

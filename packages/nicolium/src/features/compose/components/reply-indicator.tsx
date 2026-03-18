@@ -8,7 +8,7 @@ import { ParsedContent } from '@/components/statuses/parsed-content';
 import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
 import { getTextDirection } from '@/utils/rtl';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
 interface IReplyIndicator {
   className?: string;

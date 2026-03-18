@@ -6,7 +6,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
-import { Hotkeys } from '../components/hotkeys';
+import { Hotkeys } from '../features/ui/components/hotkeys';
 
 import type { LexicalEditor } from 'lexical';
 

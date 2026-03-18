@@ -2,13 +2,13 @@ import { Outlet, useLocation } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import GroupHeader from '@/components/groups/group-header';
+import LinkFooter from '@/components/navigation/link-footer';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
-import GroupHeader from '@/features/group/components/group-header';
-import LinkFooter from '@/features/ui/components/link-footer';
 import { layouts } from '@/features/ui/router';
 import { GroupMediaPanel, SignUpPanel } from '@/features/ui/util/async-components';
 import { useOwnAccount } from '@/hooks/use-own-account';

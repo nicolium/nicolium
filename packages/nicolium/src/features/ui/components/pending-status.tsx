@@ -13,11 +13,11 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
 import { usePendingStatus } from '@/stores/pending-statuses';
 
-import { buildStatus } from '../util/pending-status-builder';
+import { buildStatus } from '../../../utils/pending-status-builder';
 
 import PollPreview from './poll-preview';
 
-import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
+import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 import type { Poll } from 'pl-api';
 
 const shouldHaveCard = (pendingStatus: StatusEntity) =>
