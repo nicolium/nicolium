@@ -51,7 +51,7 @@ const baseStatusSchema = v.object({
     v.unknown(),
     v.transform((account) => {
       const fallbackAccount = (window as any)?.__PL_API_FALLBACK_ACCOUNT;
-      if (fallbackAccount && Object.keys(account as object).length > 0) return fallbackAccount;
+      if (fallbackAccount && Object.keys(account as object).length === 0) return fallbackAccount;
       return account;
     }),
     accountSchema,
