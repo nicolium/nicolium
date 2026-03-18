@@ -8,17 +8,28 @@ import { useFrontendConfig } from '@/hooks/use-frontend-config';
 
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
 
-interface IColumnHeader extends Pick<IColumn, 'backHref' | 'backParams' | 'className' | 'action'> {
-  label?: React.ReactNode;
-}
+type IColumnHeader = Pick<
+  IColumn,
+  | 'label'
+  | 'title'
+  | 'withBack'
+  | 'backHref'
+  | 'backParams'
+  | 'className'
+  | 'action'
+  | 'truncateTitle'
+>;
 
 /** Contains the column title with optional back button. */
 const ColumnHeader: React.FC<IColumnHeader> = ({
   label,
+  title,
+  withBack,
   backHref,
   backParams,
   className,
   action,
+  truncateTitle,
 }) => {
   const navigate = useNavigate();
   const { history } = useRouter();
@@ -37,8 +48,8 @@ const ColumnHeader: React.FC<IColumnHeader> = ({
   };
 
   return (
-    <CardHeader className={className} onBackClick={handleBackClick}>
-      <CardTitle title={label} />
+    <CardHeader className={className} onBackClick={withBack ? handleBackClick : undefined}>
+      <CardTitle title={title || label} truncate={truncateTitle} />
 
       {action && <div className='⁂-column__header__action'>{action}</div>}
     </CardHeader>
@@ -47,11 +58,13 @@ const ColumnHeader: React.FC<IColumnHeader> = ({
 
 interface IColumn {
   /** Route the back button goes to. */
+  withBack?: boolean;
   backHref?: LinkOptions['to'];
   backParams?: LinkOptions['params'];
   backSearch?: LinkOptions['search'];
   /** Column title text. */
   label?: string;
+  title?: React.ReactNode;
   /** Whether this column should have a transparent background. */
   transparent?: boolean;
   /** Whether this column should have a title and back button. */
@@ -66,20 +79,24 @@ interface IColumn {
   action?: React.ReactNode;
   /** Column size, inherited from Card. */
   size?: CardSizes;
+  truncateTitle?: boolean;
 }
 
 /** A backdrop for the main section of the UI. */
 const Column: React.FC<IColumn> = (props): React.JSX.Element => {
   const {
+    withBack = true,
     backHref,
     children,
     label,
+    title,
     transparent = false,
     withHeader = true,
     className,
     bodyClassName,
     action,
     size,
+    truncateTitle,
   } = props;
   const frontendConfig = useFrontendConfig();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -120,11 +137,14 @@ const Column: React.FC<IColumn> = (props): React.JSX.Element => {
       {withHeader && (
         <ColumnHeader
           label={label}
+          title={title}
+          withBack={withBack}
           backHref={backHref}
           className={clsx('⁂-column__header', {
             '⁂-column__header--scrolled': isScrolled,
           })}
           action={action}
+          truncateTitle={truncateTitle}
         />
       )}
 

@@ -2,6 +2,7 @@ import { useMutation, useQuery, type UseQueryResult } from '@tanstack/react-quer
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryKeys } from '@/queries/keys';
 
 import { queryClient } from '../client';
@@ -16,11 +17,12 @@ function useAntennas(): UseQueryResult<Array<Antenna>, Error>;
 function useAntennas<T = Array<Antenna>>(select?: (data: Array<Antenna>) => T) {
   const client = useClient();
   const features = useFeatures();
+  const { isLoggedIn } = useLoggedIn();
 
   return useQuery({
     queryKey: queryKeys.antennas.all,
     queryFn: () => client.antennas.fetchAntennas(),
-    enabled: features.antennas,
+    enabled: isLoggedIn && features.antennas,
     select,
   });
 }

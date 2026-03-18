@@ -5,6 +5,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { CircleTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
+import { TimelinePicker } from '@/components/timeline-picker';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
@@ -90,6 +91,8 @@ const CircleTimelinePage: React.FC = () => {
           src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
         />
       }
+      title={<TimelinePicker active={`cirlce:${circleId}`} />}
+      truncateTitle={false}
     >
       <CircleTimelineColumn
         circleId={circleId}

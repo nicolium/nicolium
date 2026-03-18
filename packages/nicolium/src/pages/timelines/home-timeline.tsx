@@ -3,6 +3,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { HomeTimelineColumn } from '@/columns/timeline';
 import { Link } from '@/components/link';
+import { TimelinePicker } from '@/components/timeline-picker';
 import Column from '@/components/ui/column';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
@@ -46,7 +47,13 @@ const HomeTimelinePage: React.FC = () => {
   if (isSledzikRemoved) return null;
 
   return (
-    <Column className='py-0' label={intl.formatMessage(messages.title)} withHeader={false}>
+    <Column
+      className='py-0'
+      label={intl.formatMessage(messages.title)}
+      title={<TimelinePicker active='home' />}
+      withBack={false}
+      truncateTitle={false}
+    >
       <HomeTimelineColumn
         emptyMessageText={
           <div className='flex flex-col gap-1'>

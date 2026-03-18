@@ -2,6 +2,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { PublicTimelineColumn } from '@/columns/timeline';
+import { TimelinePicker } from '@/components/timeline-picker';
 import Column from '@/components/ui/column';
 
 const messages = defineMessages({
@@ -12,7 +13,12 @@ const CommunityTimelinePage = () => {
   const intl = useIntl();
 
   return (
-    <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)}>
+    <Column
+      className='-mt-3 sm:mt-0'
+      label={intl.formatMessage(messages.title)}
+      title={<TimelinePicker active='local' />}
+      truncateTitle={false}
+    >
       <PublicTimelineColumn
         local
         emptyMessageText={

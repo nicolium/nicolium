@@ -4,9 +4,9 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import { PublicTimelineColumn } from '@/columns/timeline';
+import { TimelinePicker } from '@/components/timeline-picker';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
-import PinnedHostsPicker from '@/features/remote-timeline/components/pinned-hosts-picker';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 
@@ -33,9 +33,12 @@ const PublicTimelinePage = () => {
   };
 
   return (
-    <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)}>
-      <PinnedHostsPicker />
-
+    <Column
+      className='-mt-3 sm:mt-0'
+      label={intl.formatMessage(messages.title)}
+      title={<TimelinePicker active='federated' />}
+      truncateTitle={false}
+    >
       {showExplanationBox && (
         <Accordion
           headline={

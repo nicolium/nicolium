@@ -2,6 +2,7 @@ import { type UseQueryResult, useMutation, useQuery } from '@tanstack/react-quer
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryKeys } from '@/queries/keys';
 
 import { queryClient } from '../client';
@@ -16,11 +17,12 @@ function useCircles(): UseQueryResult<Array<Circle>, Error>;
 function useCircles<T = Array<Circle>>(select?: (data: Array<Circle>) => T) {
   const client = useClient();
   const features = useFeatures();
+  const { isLoggedIn } = useLoggedIn();
 
   return useQuery({
     queryKey: queryKeys.circles.all,
     queryFn: () => client.circles.fetchCircles(),
-    enabled: features.circles,
+    enabled: isLoggedIn && features.circles,
     select,
   });
 }

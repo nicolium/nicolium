@@ -2024,6 +2024,7 @@
   "timeline.gap.load_newer": "Load newer posts",
   "timeline.gap.load_older": "Load older posts",
   "timeline.gap.load_recent": "Load recent posts",
+  "timeline_picker.pinned_instances": "Pinned instances",
   "toast.view": "View",
   "trends.count_by_accounts": "{count} {rawCount, plural, one {person} other {people}} talking",
   "trends.no_accounts": "Try entering a search query or browsing the profile directory to find accounts to follow.",

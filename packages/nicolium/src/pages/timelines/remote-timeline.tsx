@@ -3,10 +3,10 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { PublicTimelineColumn } from '@/columns/timeline';
+import { TimelinePicker } from '@/components/timeline-picker';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
-import PinnedHostsPicker from '@/features/remote-timeline/components/pinned-hosts-picker';
 import { remoteTimelineRoute } from '@/features/ui/router';
 import { useSettings } from '@/stores/settings';
 
@@ -30,9 +30,11 @@ const RemoteTimelinePage: React.FC = () => {
   };
 
   return (
-    <Column label={instance}>
-      {instance && <PinnedHostsPicker host={instance} />}
-
+    <Column
+      label={instance}
+      title={<TimelinePicker active={`instance:${instance}`} />}
+      truncateTitle={false}
+    >
       {!pinned && (
         <div className='mb-4 flex gap-2 px-2'>
           <IconButton

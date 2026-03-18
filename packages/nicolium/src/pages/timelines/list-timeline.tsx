@@ -5,6 +5,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { ListTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import { EmptyMessage } from '@/components/empty-message';
+import { TimelinePicker } from '@/components/timeline-picker';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
@@ -67,7 +68,11 @@ const ListTimelinePage: React.FC = () => {
     );
   } else if (!list) {
     return (
-      <Column label={intl.formatMessage(messages.notFound)}>
+      <Column
+        label={intl.formatMessage(messages.notFound)}
+        title={<TimelinePicker active={`list:${listId}`} />}
+        truncateTitle={false}
+      >
         <EmptyMessage
           heading={<FormattedMessage id='list.not_found_heading' defaultMessage='List not found' />}
           text={

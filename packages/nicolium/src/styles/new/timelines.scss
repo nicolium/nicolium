@@ -158,3 +158,29 @@
 .⁂-load-more {
   @include mixins.button($theme: primary, $block: true);
 }
+
+.⁂-timeline-picker {
+  cursor: pointer;
+
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  margin: -0.25rem -0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+
+  transition: background 150ms ease-in-out;
+
+  &:hover, &:focus-within, &[aria-expanded="true"] {
+    background: rgb(var(--color-primary-100));
+
+    .dark & {
+      background: rgb(var(--color-primary-800));
+    }
+
+    .dark.black & {
+      background: rgb(var(--color-gray-900));
+    }
+  }
+}

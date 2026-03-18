@@ -2,6 +2,7 @@ import { useMutation, useQuery, type UseQueryResult } from '@tanstack/react-quer
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryKeys } from '@/queries/keys';
 
 import { queryClient } from '../client';
@@ -16,11 +17,12 @@ function useLists(): UseQueryResult<Array<List>, Error>;
 function useLists<T = Array<List>>(select?: (data: Array<List>) => T) {
   const client = useClient();
   const features = useFeatures();
+  const { isLoggedIn } = useLoggedIn();
 
   return useQuery({
     queryKey: queryKeys.lists.all,
     queryFn: () => client.lists.getLists(),
-    enabled: features.lists,
+    enabled: isLoggedIn && features.lists,
     select,
   });
 }
