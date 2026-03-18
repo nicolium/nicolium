@@ -113,6 +113,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   const intl = useIntl();
   const {
     urlPrivacy: { clearLinksInContent, redirectLinksMode },
+    disableUserProvidedMedia,
   } = useSettings();
   const [width, setWidth] = useState(defaultWidth);
   const [embedded, setEmbedded] = useState(false);
@@ -237,7 +238,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     />
   );
 
-  if (interactive) {
+  if (interactive && !disableUserProvidedMedia) {
     if (embedded) {
       embed = <PreviewCardVideo card={card} />;
     } else {
@@ -295,7 +296,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
         {description}
       </div>
     );
-  } else if (card.image) {
+  } else if (card.image && !disableUserProvidedMedia) {
     embed = (
       <div
         className={clsx(

@@ -35,7 +35,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   accountIds,
 }) => {
   const intl = useIntl();
-  const { autoloadTimelines } = useSettings();
+  const { autoloadTimelines, disableUserProvidedMedia } = useSettings();
 
   // Whether we are scrolled past the `threshold`.
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -105,7 +105,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
         aria-hidden={!visible}
       >
         <button onClick={handleClick} tabIndex={visible ? 0 : -1} aria-label={buttonMessage}>
-          {accountIds?.length ? (
+          {accountIds?.length && !disableUserProvidedMedia ? (
             <AvatarStack accountIds={accountIds} />
           ) : (
             <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} aria-hidden />

@@ -36,7 +36,7 @@ interface IStatusMedia {
 /** Render media attachments for a status. */
 const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick }) => {
   const { openModal } = useModalsActions();
-  const { displayMedia } = useSettings();
+  const { displayMedia, disableUserProvidedMedia } = useSettings();
   const { data: account } = useAccount(status.account_id);
 
   const [visible] = useMediaVisible(status, displayMedia);
@@ -71,7 +71,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
   if (size > 0 && firstAttachment) {
     if (muted) {
       media = <AttachmentThumbs status={status} onClick={onClick} />;
-    } else if (size === 1 && firstAttachment.type === 'video') {
+    } else if (size === 1 && firstAttachment.type === 'video' && !disableUserProvidedMedia) {
       const video = firstAttachment;
 
       media = (
@@ -88,7 +88,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
           />
         </Suspense>
       );
-    } else if (size === 1 && firstAttachment.type === 'audio') {
+    } else if (size === 1 && firstAttachment.type === 'audio' && !disableUserProvidedMedia) {
       const attachment = firstAttachment;
 
       media = (

@@ -202,7 +202,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
 
   return (
     <DropdownMenu items={items} width='16rem' placement='bottom-start'>
-      <div className='⁂-timeline-picker'>
+      <div className='⁂-timeline-picker' role='button' tabIndex={0}>
         {heading}
         <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
       </div>

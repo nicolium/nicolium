@@ -412,7 +412,6 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
                 }[attachment.type]}
             </Text>
           </button>
-          // <MediaItem key={index} item={item} />
         ))}
       </div>
     );
