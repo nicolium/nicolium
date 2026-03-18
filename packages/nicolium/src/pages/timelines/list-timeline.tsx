@@ -68,11 +68,7 @@ const ListTimelinePage: React.FC = () => {
     );
   } else if (!list) {
     return (
-      <Column
-        label={intl.formatMessage(messages.notFound)}
-        title={<TimelinePicker active={`list:${listId}`} />}
-        truncateTitle={false}
-      >
+      <Column label={intl.formatMessage(messages.notFound)}>
         <EmptyMessage
           heading={<FormattedMessage id='list.not_found_heading' defaultMessage='List not found' />}
           text={
@@ -107,6 +103,8 @@ const ListTimelinePage: React.FC = () => {
   return (
     <Column
       label={title}
+      title={<TimelinePicker active={`list:${listId}`} />}
+      truncateTitle={false}
       action={
         <DropdownMenu
           items={items}

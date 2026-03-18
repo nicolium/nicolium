@@ -91,7 +91,7 @@ const CircleTimelinePage: React.FC = () => {
           src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
         />
       }
-      title={<TimelinePicker active={`cirlce:${circleId}`} />}
+      title={<TimelinePicker active={`circle:${circleId}`} />}
       truncateTitle={false}
     >
       <CircleTimelineColumn
