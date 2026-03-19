@@ -30,7 +30,7 @@ const fetchInstance = async () => {
     useInstanceStore.getState().actions.instanceFetchFailed(error);
   });
 
-  if (!fetched) await promise;
+  if (!fetched && !getAuthUserUrl()) await promise;
 };
 
 const checkIfStandalone = () =>
