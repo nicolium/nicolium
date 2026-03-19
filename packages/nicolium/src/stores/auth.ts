@@ -710,8 +710,6 @@ const useAuthStore = create<AuthStore>()(
               queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
               get().actions.setCurrentAccountIfUnset(account);
               if (account.id === get().currentAccountId) fetchMeSuccess(account);
-              get().actions.verifyCredentials(token, accountUrl!);
-              return;
             } catch {}
 
             return await get().actions.verifyCredentials(token, accountUrl!);
