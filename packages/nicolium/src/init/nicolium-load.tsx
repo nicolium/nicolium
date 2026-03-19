@@ -42,12 +42,10 @@ const NicoliumLoad: React.FC<INicoliumLoad> = ({ children }) => {
   useEffect(() => {
     /** Load initial data from the backend */
     const loadInitial = async () => {
-      const standaloneCheck = checkIfStandalone();
+      checkIfStandalone();
       // Await for authenticated fetch
       await fetchMe();
-      // Wait for standalone detection before proceeding
-      await standaloneCheck;
-      // Await for feature detection (skipped if already fetched or standalone)
+      // Await for feature detection
       await fetchInstance();
       // Await for configuration
       await loadFrontendConfig();
