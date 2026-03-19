@@ -116,7 +116,7 @@ function request<T = any>(
   if (!formData) headers.set('Content-Type', contentType);
   if (idempotencyKey) headers.set('Idempotency-Key', idempotencyKey);
 
-  body = body && contentType === '' ? serialize(body, { indices: true }) : JSON.stringify(body);
+  body = body && formData ? serialize(body, { indices: true }) : JSON.stringify(body);
 
   // Fetch API doesn't report upload progress, use XHR
   if (onUploadProgress) {
