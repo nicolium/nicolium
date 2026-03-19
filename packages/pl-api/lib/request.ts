@@ -113,10 +113,12 @@ function request<T = any>(
   else if (this.accessToken) headers.set('Authorization', `Bearer ${this.accessToken}`);
   else if (this.customAuthorizationToken)
     headers.set('Authorization', this.customAuthorizationToken);
-  if (!formData) headers.set('Content-Type', contentType);
+  body =
+    body && (formData || contentType === '')
+      ? serialize(body, { indices: true })
+      : JSON.stringify(body);
+  if (!formData && body) headers.set('Content-Type', contentType);
   if (idempotencyKey) headers.set('Idempotency-Key', idempotencyKey);
-
-  body = body && contentType === '' ? serialize(body, { indices: true }) : JSON.stringify(body);
 
   // Fetch API doesn't report upload progress, use XHR
   if (onUploadProgress) {
