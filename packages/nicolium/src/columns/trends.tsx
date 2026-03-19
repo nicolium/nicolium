@@ -63,7 +63,6 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
       isLoading = isLoadingAccounts;
       placeholderComponent = PlaceholderAccount;
 
-      console.log(accounts, isFetching, isLoading);
       if (!isFetching && !isLoading && accounts?.length === 0) {
         children = [
           <EmptyMessage
