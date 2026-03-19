@@ -436,8 +436,8 @@ importers:
         specifier: ^1.4.1
         version: 1.4.1(typedoc@0.28.17(typescript@5.9.3))
       typedoc-plugin-valibot:
-        specifier: ^1.0.0
-        version: 1.0.1(typedoc@0.28.17(typescript@5.9.3))
+        specifier: ^1.0.2
+        version: 1.0.2(typedoc@0.28.17(typescript@5.9.3))
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -7049,8 +7049,8 @@ packages:
     peerDependencies:
       typedoc: ^0.25.13 || ^0.26.x || ^0.27.x || ^0.28.x
 
-  typedoc-plugin-valibot@1.0.1:
-    resolution: {integrity: sha512-HlF4/zVqPhNZ2KaWuJeqejCwoJfhhDsM92Kp52GHH61bXyrfiVRr9JXHW2ZKpdh5jge8Xw7tmRLYCAPYY6I4ag==}
+  typedoc-plugin-valibot@1.0.2:
+    resolution: {integrity: sha512-PTzEEPq4MM9KBV6i/7v3nBstSUpqJGNKViFZCgIQyPc1T35essUCZbAWKa/020feDbtReJ1y5gEWv0LnNx53CQ==}
     peerDependencies:
       typedoc: 0.23.x || 0.24.x || 0.25.x || 0.26.x || 0.27.x || 0.28.x
 
@@ -14744,7 +14744,7 @@ snapshots:
       '@material/material-color-utilities': 0.3.0
       typedoc: 0.28.17(typescript@5.9.3)
 
-  typedoc-plugin-valibot@1.0.1(typedoc@0.28.17(typescript@5.9.3)):
+  typedoc-plugin-valibot@1.0.2(typedoc@0.28.17(typescript@5.9.3)):
     dependencies:
       typedoc: 0.28.17(typescript@5.9.3)
 
