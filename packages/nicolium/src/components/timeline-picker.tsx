@@ -103,9 +103,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     }
 
     if (
-      isLoggedIn
+      features.publicTimeline &&
+      (isLoggedIn
         ? timelineAccess.live_feeds.local !== 'disabled'
-        : timelineAccess.live_feeds.local === 'public'
+        : timelineAccess.live_feeds.local === 'public')
     ) {
       items.push({
         to: '/timeline/local',
@@ -116,9 +117,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     }
 
     if (
-      features.bubbleTimeline && isLoggedIn
+      features.bubbleTimeline &&
+      (isLoggedIn
         ? timelineAccess.live_feeds.bubble !== 'disabled'
-        : timelineAccess.live_feeds.bubble === 'public'
+        : timelineAccess.live_feeds.bubble === 'public')
     ) {
       items.push({
         to: '/timeline/bubble',
@@ -128,9 +130,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       });
     }
     if (
-      features.bubbleTimeline && isLoggedIn
+      features.publicTimeline &&
+      (isLoggedIn
         ? timelineAccess.live_feeds.bubble !== 'disabled'
-        : timelineAccess.live_feeds.bubble === 'public'
+        : timelineAccess.live_feeds.bubble === 'public')
     ) {
       items.push({
         to: '/timeline/fediverse',
@@ -140,9 +143,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       });
     }
     if (
-      features.wrenchedTimeline && isLoggedIn
+      features.wrenchedTimeline &&
+      (isLoggedIn
         ? timelineAccess.live_feeds.wrenched !== 'disabled'
-        : timelineAccess.live_feeds.wrenched === 'public'
+        : timelineAccess.live_feeds.wrenched === 'public')
     ) {
       items.push({
         to: '/timeline/wrenched',
