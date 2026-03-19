@@ -16,7 +16,7 @@ const media = (client: PlApiBaseClient) => ({
   uploadMedia: async (params: UploadMediaParams, meta?: RequestMeta) => {
     const response = await client.request(
       client.features.mediaV2 ? '/api/v2/media' : '/api/v1/media',
-      { ...meta, method: 'POST', body: params, contentType: '' },
+      { ...meta, method: 'POST', body: params, formData: true },
     );
 
     return v.parse(mediaAttachmentSchema, response.json);

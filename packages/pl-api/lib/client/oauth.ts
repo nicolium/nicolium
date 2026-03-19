@@ -19,7 +19,7 @@ const oauth = (client: PlApiBaseClient) => ({
    * @see {@link https://docs.joinmastodon.org/methods/oauth/#authorize}
    */
   authorize: async (params: OauthAuthorizeParams) => {
-    const response = await client.request('/oauth/authorize', { params, contentType: '' });
+    const response = await client.request('/oauth/authorize', { params, formData: true });
 
     return v.parse(v.string(), response.json);
   },
