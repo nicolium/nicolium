@@ -23,8 +23,8 @@ const doFetchInstance = async () => {
 };
 
 const fetchInstance = async () => {
-  const { fetched, instanceFetchFailed } = useInstanceStore.getState();
-  if (fetched || (instanceFetchFailed && !getAuthUserUrl())) return;
+  const { fetched } = useInstanceStore.getState();
+  if (fetched) return;
 
   const promise = doFetchInstance().catch((error) => {
     useInstanceStore.getState().actions.instanceFetchFailed(error);
