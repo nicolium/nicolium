@@ -4,180 +4,177 @@
 
 Changes made since the project forked from Soapbox in April 2024.
 
-This changelog does not include a lot of UI changes, consistency improvements, optimizations, accessibility improvements and updates for improved backend compatibility. It's too hard to maintain such a list manually and it wouldn't be really that useful.
+> This changelog does not cover every UI change, consistency improvement, optimization, accessibility improvement, or backend compatibility update — maintaining such a list manually would be impractical.
 
 ### Major changes
 
 - Switched to a separate library [`pl-api`](https://codeberg.org/nicolium/nicolium/src/branch/develop/packages/pl-api) for Mastodon API integration. It is mostly written from scratch, inheriting minor code parts from Soapbox/Mastodon. This also comes with improved compatibility with various Mastodon API extensions and abstracts out the implementation details.
+- Migrated client data stores from Redux to Zustand and remote data stores to TanStack Query. Stores have been migrated away from `immutable`.
+- Migrated router from React Router to TanStack Router.
+- Styles are being migrated from TailwindCSS to SCSS.
+- Cat ears.
 
 ### Added
 
-- Cat ears
-
-**Behavior:**
-
+#### Behavior
 - Notifications of the same type and reposts of the same post are grouped client-side.
-- Date is displayed for notifications that are not about new posts.
-- Replies to your posts are displayed differently to other mentions in notification list.
-- Hashtags from the last line of a post are displayed in a separate component. Adapted [from Mastodon](https://github.com/mastodon/mastodon/pull/26499).
 - Native grouped notifications are used on Mastodon.
-- Likes, reposts and reactions lists are displayed on long press of respective buttons.
+- Date is displayed for notifications that are not about new posts.
+- Replies to your posts are displayed differently from other mentions in the notification list.
+- Hashtags from the last line of a post are displayed in a separate component. Adapted [from Mastodon](https://github.com/mastodon/mastodon/pull/26499).
+- Likes, reposts, and reactions lists are displayed on long press of respective buttons.
 - User local time is displayed on profile and in account hover card, if specified in profile fields.
 - Poll results can be displayed before voting.
-- By default, home timeline remembers the moment you stopped scrolling and restores the position when you're back in the app.
-- A 'Skip pinned posts' button was added to user profiles.
+- Home timeline remembers scroll position by default and restores it when you return to the app.
+- A "Skip pinned posts" button was added to user profiles.
+- Posts in timelines are displayed grouped together if they belong to the same context.
 
-**Settings:**
-
-- You can add image description to your avatar/backend, if supported by backend.
-- GoToSocial users can manage post interaction policies.
-- Users can set interface theme color.
-- Users can adjust interface size.
-- Users can use system font for emoji rendering.
-
-**Composing posts:**
+#### Composing posts
 
 - WYSIWYG text formatting, available if Markdown is supported.
-- When writing posts, links to statuses are added as quotes, when supported by backend.
-- You can select post language manually, when composing.
-- You can write posts with multiple language versions, when supported by backend.
-- Language detection is done client-side for composed posts, utilizing `fasttext.wasm.js`.
-- Draft posts. They are stored locally only and work with any backend.
-- New visibility scopes are supported – local-only and list-only for Pleroma. Local-only is a separate switch on GoToSocial.
-- On backends that support explicit mentioning, you can choose to include mentions in your replies body.
-- GoToSocial users can set per-post interaction policies.
-- When adding a URL with tracking parameters, a suggestion to remove them from the URL is displayed.
-- On supported backends, you can see post preview before posting.
-- When entering a long, all-lowercase hashtag, a suggestion about hashtag accessibility is displayed.
+- Links to statuses are added as quotes when supported by backend.
+- Manual post language selection.
+- Posts with multiple language versions, when supported by backend.
+- Client-side language detection for composed posts via `fasttext.wasm.js`.
+- Draft posts, stored locally and compatible with any backend.
+- New visibility scopes: local-only and list-only for Pleroma; local-only as a separate switch on GoToSocial.
+- Optional inclusion of mentions in reply body on backends that support explicit mentioning.
+- Per-post interaction policies for GoToSocial users.
+- Suggestion to remove tracking parameters when adding a URL.
+- Post preview before posting, on supported backends.
+- Suggestion about hashtag accessibility when entering long, all-lowercase hashtags.
 
-**Dashboard:**
+#### Features
 
-- Dashboard main page displays metrics included in Mastodon admin dashboard, if supported by backend.
-
-**Features:**
-
-- The most recent scrobble is displayed on user profile/card.
+- Most recent scrobble is displayed on user profile/card.
 - Users can generate _interaction circles_ for their profiles.
-- You can bite users, if supported by backend.
-- You can browse Bubble timeline, if supported by backend.
-- Mastodon displays trending articles on Search page.
-- Posts can be addressed to lists of users, on Pleroma.
-- Support for events with external registration.
-- Added a dedicated wrench reaction button.
-- Interaction requests are supported. You can review pending requests and you get informed if your backend doesn't let you reply to a post. Supported on GoToSocial.
-- Events with external sign up are supported.
+- Bite users, if supported by backend.
+- Bubble timeline, if supported by backend.
+- Mastodon displays trending articles on the Search page.
+- Posts can be addressed to lists of users on Pleroma.
+- Events with external registration.
+- Dedicated wrench reaction button.
+- Interaction requests: review pending requests and get informed if your backend doesn't let you reply to a post (GoToSocial).
 - Application name used to post a status is displayed.
 - Outgoing follow requests are displayed, if supported by backend.
-- It is possible to remove tracking parameters from URLs in displayed posts.
-- Displayed media now have a button for alternative text preview.
-- Links in displayed posts can be configured to always display target domain, even when it's not a part of their content.
-- Users can configure redirects from popular websites to proxy services like Nitter and Piped in displayed posts.
-- It is possible to boost a post with specific visibility, if supported by backend.
-- Pleroma shoutbox is displayed on chats page.
-- Displaying user-provided media can be disabled, media descriptions will be displayed instead.
-- MFM can be displayed on compatible backends.
-- Lists can be set as exclusive and replies policy can be set up, if supported by backend.
-- Threads can be displayed in a linear view, similarly to traditional Pleroma-FE, as an alternative to tree view. You can expand spoilers with one click.
-- Iceshrimp.NET drive is supported, allowing to upload and manage files and attach them to uploaded posts.
-- Posts (including private ones, also for unauthenticated users) can be translated locally, on browsers supporting Translator API.
-- You can set blocks to auto-expire on Pleroma.
-- Antennas and circles are supported on Mastodon forks that implement those.
+- Remove tracking parameters from URLs in displayed posts.
+- Button for alternative text preview on displayed media.
+- Option to always display target domain for links, even when not part of content.
+- Configurable redirects from popular websites to proxy services like Nitter and Piped in displayed posts.
+- Boost a post with specific visibility, if supported by backend.
+- Pleroma shoutbox on the chats page.
+- Option to disable user-provided media, showing descriptions instead.
+- MFM rendering on compatible backends.
+- Exclusive lists and replies policy, if supported by backend.
+- Linear thread view (similar to traditional Pleroma-FE) as an alternative to tree view, with one-click spoiler expansion.
+- Iceshrimp.NET drive support for uploading, managing, and attaching files to posts.
+- Local post translation (including private posts, also for unauthenticated users) on browsers supporting the Translator API.
+- Auto-expiring blocks on Pleroma.
+- Antennas and circles on Mastodon forks that implement those.
+
+#### Settings
+
+- Image descriptions for avatar/header, if supported by backend.
+- GoToSocial users can manage post interaction policies.
+- Interface theme color selection.
+- Adjustable interface size.
+- Option to use system font for emoji rendering.
+
+#### Dashboard
+
+- Dashboard main page displays metrics from the Mastodon admin dashboard, if supported by backend.
 
 ### Changed
 
-**Behavior:**
+#### Behavior
 
-- Separated favourites from reaction emojis. Limit for one reaction per post is removed. Facebook-like emoji reaction bar is removed.
+- Separated favourites from reaction emojis; removed per-post reaction limit and Facebook-like emoji reaction bar.
 - Simplified sensitive text/media logic.
-- Reposting user is mentioned, when replying to a reposted status.
-- Notification types filtering options are reasonably merged.
+- Reposting user is mentioned when replying to a reposted status.
+- Notification type filtering options are reasonably merged.
 - Search results are never cleared by just leaving the page.
-- Status spoilers are displayed with a collapse/expand button, not in an overlay.
+- Status spoilers use a collapse/expand button instead of an overlay.
 - Mentions and hashtags in bio no longer link to external pages.
 - Quotes are counted with reblogs for non-detailed statuses.
 - Reactions/favourites/reblogs list modal is displayed on long press.
-- Various accessibility changes, focused on screen reader compatibility.
-- Posts in timelines are now displayed grouped together if they belong to the same context.
+- Various accessibility improvements, focused on screen reader compatibility.
 - Users get asked to update account note when blocking/muting accounts.
-- Bookmark folder selection modal lets you filter folders by searching.
-- Improved provding meta information for posts to improve Reader Mode on Firefox.
+- Bookmark folder selection modal supports filtering by search.
+- Improved meta information for posts to improve Reader Mode on Firefox.
 
-**Settings:**
+#### Composing posts
 
-- Moved missing description confirmation option back to Settings page.
+- Custom emojis are split into categories.
+- GoToSocial users can post with a date in the past.
+- Post scopes renamed to match Mastodon wording.
+
+#### Settings
+
+- Missing description confirmation option moved back to the Settings page.
 - Profile fields can be reordered on the Edit profile page.
 - Explicit addressing can be disabled on supported backends.
-- Developers options are no longer hidden behind a challenge.
+- Developer options are no longer hidden behind a challenge.
 
-**Composing posts:**
+#### UI
 
-- Custom emojis are now split into categories.
-- GoToSocial users can post with date in the past.
-- Post scopes were renamed to match wording used by Mastodon.
-
-**UI changes:**
-
-- Removed header. Search bar and profile dropdown are moved to the sidebar. Mobile sidebar button is moved to the thumb navigation.
-- Floating action button for creating new posts is moved to the thumb navigation.
-- Mobile sidebar UI is changed to look like a popover.
-- Added some animations, improved consistency of the existing ones.
-- Max width of the layout is increased.
-- Updated Lists UI, to match the overall style.
-- RSS button is displayed in account header for local users, when unauthenticated.
+- Removed header; search bar and profile dropdown moved to the sidebar; mobile sidebar button moved to thumb navigation.
+- Floating action button for new posts moved to thumb navigation.
+- Mobile sidebar styled as a popover.
+- Added animations and improved consistency of existing ones.
+- Increased max width of the layout.
+- Updated Lists UI to match overall style.
+- RSS button displayed in account header for local users when unauthenticated.
 - Conversations page is always displayed, even when Chats are supported.
 - Made it woke.
-- Emojis are zoomed on hover.
-- Event create/edit form is now a page, instead of a modal.
-- A star is used for favorite icon, instead of a heart.
+- Emojis zoom on hover.
+- Event create/edit form is now a page instead of a modal.
+- Star used for favourite icon instead of a heart.
 - Account avatars are squared.
-- Background gradients can be disabled. Some other visual behavior depends on this setting.
-- Tabler Icons were replaced with Phosphor Icons.
-- The entire loading process uses the same animation now.
-- Changed status info and notification title design.
+- Background gradients can be disabled; some visual behavior depends on this setting.
+- Tabler Icons replaced with Phosphor Icons.
+- Unified loading animation across the entire loading process.
+- Redesigned status info and notification title.
 - Redesigned audio/video player controls.
-- Some UI elements like sliders got animations and accessibility improvements.
+- Animations and accessibility improvements for UI elements like sliders.
 
-**Internal:**
+#### Internal
 
-- Migrated client data stores from Redux to Zustand and remote data stores to TanStack Query. Stores have been migrated away from `immutable`.
-- Posts are now emojified during render, instead of when inserting posts to the state.
+- Posts are emojified during render instead of when inserting into state.
 - Barrel exports are no longer used.
-- Search page uses URL params now.
+- Search page uses URL params.
 - Themes use `adoptedStyleSheets` to work with stricter CSP.
 - Settings store uses a different key in development environment.
-- Styles are being migrated from TailwindCSS to just scss.
-- Default max image size is increased to match Mastodon limits.
-- Router has been migrated from React Router to TanStack Router.
+- Default max image size increased to match Mastodon limits.
 
-**Dependencies:**
+#### Dependencies
 
 - Replaced `react-popper` and `react-overlays` with `@floating-ui/react`.
-- `uuid` package is replaced by the `randomUUID()` method.
-- Some libraries, like the PullToRefresh component, have been included directly into the app.
-- `react-motion` dependency has been removed, adopting migration to `@react-spring/web` from Mastodon.
-- A fork of `react-hotkeys` has been replaced with new hotkey handling system from Mastodon.
-- FlexSearch was replaced with `fuzzysort` package for emoji search.
+- Replaced `uuid` package with the `randomUUID()` method.
+- Inlined some libraries, like the PullToRefresh component, directly into the app.
+- Removed `react-motion`; adopted migration to `@react-spring/web` from Mastodon.
+- Replaced a fork of `react-hotkeys` with Mastodon's hotkey handling system.
+- Replaced FlexSearch with `fuzzysort` for emoji search.
 - Replaced ESLint with `oxfmt` and `oxlint`.
 
 ### Removed
 
-- Removed Truth Social-specific features.
-- Removed Nostr-specific stuff.
-- Removed Rumble-specific embed handling.
-- Removed option that pretends to disable name editing for verified users.
-- Removed Call to Action banner.
-- Removed links to block explorers for crypto addresses.
-- Removed support for custom apps provided during build.
-- Removed so called 'GDPR banner'.
-- Removed embed page which loads too much for the use case.
+- Truth Social-specific features.
+- Nostr-specific features.
+- Rumble-specific embed handling.
+- Option that pretends to disable name editing for verified users.
+- Call to Action banner.
+- Links to block explorers for crypto addresses.
+- Support for custom apps provided during build.
+- So called 'GDPR banner'.
+- Embed page (loaded too much for the use case).
 
 ### Fixed
 
-- When initializing FaviconService, canvas export permission is checked.
+- Canvas export permission is checked when initializing FaviconService.
 - Improved regex for mentions in post composer.
-- Post tombstones don't interrupt status navigation with hotkeys.
+- Post tombstones no longer interrupt status navigation with hotkeys.
 - Emojis are supported in poll options.
-- Unsupported content types are not listed as available, when composing a post.
+- Unsupported content types are not listed as available when composing a post.
 - Admin dashboard now works on non-Pleroma backends.
 - Removed excessive calls to `fetchOwnAccounts`.
 - Media modal displays the whole thread correctly.
