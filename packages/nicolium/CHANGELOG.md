@@ -17,6 +17,7 @@ Changes made since the project forked from Soapbox in April 2024.
 ### Added
 
 #### Behavior
+
 - Notifications of the same type and reposts of the same post are grouped client-side.
 - Native grouped notifications are used on Mastodon.
 - Date is displayed for notifications that are not about new posts.

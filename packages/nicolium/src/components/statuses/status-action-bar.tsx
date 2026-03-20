@@ -43,7 +43,7 @@ import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import { useMatch, useNavigate } from '@tanstack/react-router';
 import { type Account, type CustomEmoji, GroupRoles } from 'pl-api';
 import React, { useCallback, useMemo } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import { editStatus, toggleMuteStatus, redactStatus } from '@/actions/statuses';
@@ -230,6 +230,7 @@ const messages = defineMessages({
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
   viewReactions: { id: 'status.view_reactions', defaultMessage: 'View reactions' },
   wrench: { id: 'status.wrench', defaultMessage: 'Wrench reaction' },
+  wrenchConfirm: { id: 'confirmations.wrench.confirm', defaultMessage: 'Wrench' },
   addKnownLanguage: {
     id: 'status.add_known_language',
     defaultMessage: 'Do not auto-translate posts in {language}.',
@@ -678,7 +679,7 @@ const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
   const features = useFeatures();
 
   const { openModal } = useModalsActions();
-  const { showWrenchButton } = useSettings();
+  const { showWrenchButton, wrenchModal } = useSettings();
 
   const { mutate: emojiReact } = useEmojiReactMutation(status.id);
   const { mutate: emojiUnreact } = useEmojiUnreactMutation(status.id);
@@ -690,17 +691,37 @@ const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
   const wrenches =
     showWrenchButton && (status.emoji_reactions.find((emoji) => emoji.name === '🔧') ?? undefined);
 
+  const checkConfirmation = (callback: () => void) => {
+    if (wrenchModal) {
+      openModal('CONFIRM', {
+        heading: (
+          <FormattedMessage id='confirmations.wrench.heading' defaultMessage='Wrench the post' />
+        ),
+        message: (
+          <FormattedMessage
+            id='confirmations.wrench.message'
+            defaultMessage='Are you sure you want to wrench this post? This can have disastrous consequences.'
+          />
+        ),
+        confirm: intl.formatMessage(messages.wrenchConfirm),
+        onConfirm: callback,
+      });
+    } else {
+      callback();
+    }
+  };
+
   const handleWrenchClick: React.EventHandler<React.MouseEvent> = () => {
     if (wrenches?.me) {
       emojiUnreact('🔧');
     } else {
-      emojiReact('🔧');
+      checkConfirmation(() => emojiReact('🔧'));
     }
   };
 
   const handleWrenchLongPress = () => {
     if (features.customEmojiReacts && hasLongerWrench) {
-      emojiReact(hasLongerWrench.shortcode);
+      checkConfirmation(() => emojiReact(hasLongerWrench.shortcode));
     } else if (wrenches?.count) {
       openModal('REACTIONS', { statusId: status.id, reaction: wrenches.name });
     }

@@ -21,6 +21,7 @@ const settingsSchema = v.object({
   boostModal: v.fallback(v.boolean(), false),
   deleteModal: v.fallback(v.boolean(), true),
   missingDescriptionModal: v.fallback(v.boolean(), true),
+  wrenchModal: v.fallback(v.boolean(), false),
   ignoreHashtagCasingSuggestions: v.fallback(v.boolean(), false),
   defaultPrivacy: v.fallback(v.picklist(['public', 'unlisted', 'private', 'direct']), 'public'),
   defaultContentType: v.fallback(

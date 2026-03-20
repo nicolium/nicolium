@@ -815,6 +815,29 @@ const Preferences = () => {
             onChange={onToggleChange}
           />
         </ListItem>
+
+        {settings.showWrenchButton && (
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.wrench_modal_label'
+                defaultMessage='Show confirmation dialog before adding wrench reaction'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='preferences.fields.wrench_modal_hint'
+                defaultMessage='Prevents the consequences of accidentally using the wrench button.'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['wrenchModal']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+        )}
       </List>
 
       <List>
