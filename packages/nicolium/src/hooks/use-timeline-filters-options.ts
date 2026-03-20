@@ -59,7 +59,7 @@ const useTimelineFiltersOptions = (
   return useMemo(() => {
     const items: Menu = [];
 
-    if (timeline == 'home') {
+    if (timeline === 'home') {
       items.push({
         text: intl.formatMessage(messages.showReblogs),
         type: 'toggle',
@@ -70,6 +70,7 @@ const useTimelineFiltersOptions = (
         text: intl.formatMessage(messages.showSelfReblogs),
         type: 'toggle',
         checked: timelineSettings?.showSelfReblogs,
+        disabled: !timelineSettings?.showReblogs,
         onChange: (checked) => changeSetting(['timelines', timeline, 'showSelfReblogs'], checked),
       });
     }
