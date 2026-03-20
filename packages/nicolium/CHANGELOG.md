@@ -4,6 +4,8 @@
 
 Changes made since the project forked from Soapbox in April 2024.
 
+This changelog does not include a lot of UI changes, consistency improvements, optimizations, accessibility improvements and updates for improved backend compatibility. It's too hard to maintain such a list manually and it wouldn't be really that useful.
+
 ### Major changes
 
 - Switched to a separate library [`pl-api`](https://codeberg.org/nicolium/nicolium/src/branch/develop/packages/pl-api) for Mastodon API integration. It is mostly written from scratch, inheriting minor code parts from Soapbox/Mastodon. This also comes with improved compatibility with various Mastodon API extensions and abstracts out the implementation details.
@@ -22,6 +24,8 @@ Changes made since the project forked from Soapbox in April 2024.
 - Likes, reposts and reactions lists are displayed on long press of respective buttons.
 - User local time is displayed on profile and in account hover card, if specified in profile fields.
 - Poll results can be displayed before voting.
+- By default, home timeline remembers the moment you stopped scrolling and restores the position when you're back in the app.
+- A 'Skip pinned posts' button was added to user profiles.
 
 **Settings:**
 
@@ -74,6 +78,10 @@ Changes made since the project forked from Soapbox in April 2024.
 - MFM can be displayed on compatible backends.
 - Lists can be set as exclusive and replies policy can be set up, if supported by backend.
 - Threads can be displayed in a linear view, similarly to traditional Pleroma-FE, as an alternative to tree view. You can expand spoilers with one click.
+- Iceshrimp.NET drive is supported, allowing to upload and manage files and attach them to uploaded posts.
+- Posts (including private ones, also for unauthenticated users) can be translated locally, on browsers supporting Translator API.
+- You can set blocks to auto-expire on Pleroma.
+- Antennas and circles are supported on Mastodon forks that implement those.
 
 ### Changed
 
@@ -89,6 +97,10 @@ Changes made since the project forked from Soapbox in April 2024.
 - Quotes are counted with reblogs for non-detailed statuses.
 - Reactions/favourites/reblogs list modal is displayed on long press.
 - Various accessibility changes, focused on screen reader compatibility.
+- Posts in timelines are now displayed grouped together if they belong to the same context.
+- Users get asked to update account note when blocking/muting accounts.
+- Bookmark folder selection modal lets you filter folders by searching.
+- Improved provding meta information for posts to improve Reader Mode on Firefox.
 
 **Settings:**
 
@@ -123,10 +135,11 @@ Changes made since the project forked from Soapbox in April 2024.
 - The entire loading process uses the same animation now.
 - Changed status info and notification title design.
 - Redesigned audio/video player controls.
+- Some UI elements like sliders got animations and accessibility improvements.
 
 **Internal:**
 
-- Migrated some local stores from Redux to Zustand. Other stores have been migrated away from `immutable`, before moving them either to Zustand or TanStack Query.
+- Migrated client data stores from Redux to Zustand and remote data stores to TanStack Query. Stores have been migrated away from `immutable`.
 - Posts are now emojified during render, instead of when inserting posts to the state.
 - Barrel exports are no longer used.
 - Search page uses URL params now.
@@ -134,11 +147,17 @@ Changes made since the project forked from Soapbox in April 2024.
 - Settings store uses a different key in development environment.
 - Styles are being migrated from TailwindCSS to just scss.
 - Default max image size is increased to match Mastodon limits.
+- Router has been migrated from React Router to TanStack Router.
 
 **Dependencies:**
 
 - Replaced `react-popper` and `react-overlays` with `@floating-ui/react`.
 - `uuid` package is replaced by the `randomUUID()` method.
+- Some libraries, like the PullToRefresh component, have been included directly into the app.
+- `react-motion` dependency has been removed, adopting migration to `@react-spring/web` from Mastodon.
+- A fork of `react-hotkeys` has been replaced with new hotkey handling system from Mastodon.
+- FlexSearch was replaced with `fuzzysort` package for emoji search.
+- Replaced ESLint with `oxfmt` and `oxlint`.
 
 ### Removed
 
