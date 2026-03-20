@@ -659,11 +659,11 @@
     }
 
     .dark.black .⁂-quoted-status:hover & {
-      background-image: linear-gradient(to bottom, transparent, rgb(var(--color-gray-800)));
+      background-image: linear-gradient(to bottom, transparent, rgb(var(--color-primary-800)));
     }
 
     .dark .⁂-quoted-status:hover & {
-      background-image: linear-gradient(to bottom, transparent, rgb(var(--color-gray-800)));
+      background-image: linear-gradient(to bottom, transparent, rgb(var(--color-primary-800)));
     }
   }
 
