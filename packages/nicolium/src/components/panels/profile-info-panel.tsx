@@ -180,7 +180,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
               {account.deactivated ? (
                 <FormattedMessage id='account.deactivated' defaultMessage='Deactivated' />
               ) : (
-                <Emojify text={account.display_name} emojis={account.emojis} />
+                <Emojify text={account.display_name} emojis={account.emojis} truncated />
               )}
             </Text>
 

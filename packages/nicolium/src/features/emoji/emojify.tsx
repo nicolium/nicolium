@@ -18,16 +18,22 @@ interface IMaybeEmoji {
   text: string;
   emojis: Record<string, CustomEmoji>;
   nyaize: boolean;
+  truncated: boolean;
 }
 
-const MaybeEmoji: React.FC<IMaybeEmoji> = ({ text, emojis, nyaize: shouldNyaize }) => {
+const MaybeEmoji: React.FC<IMaybeEmoji> = ({ text, emojis, nyaize: shouldNyaize, truncated }) => {
   if (text.length < 3) return text;
   if (text in emojis) {
     const emoji = emojis[text];
     const filename = emoji.static_url;
 
     if (filename?.length > 0) {
-      return <Emoji className='emojione ⁂-emoji' emoji={text} src={filename} />;
+      const emoji = <Emoji className='emojione ⁂-emoji' emoji={text} src={filename} />;
+      if (truncated) {
+        return <span className='inline-flex'>{emoji}</span>;
+      } else {
+        return emoji;
+      }
     }
   }
 
@@ -38,10 +44,11 @@ interface IEmojify {
   text: string;
   emojis?: Array<CustomEmoji> | Record<string, CustomEmoji>;
   nyaize?: boolean;
+  truncated?: boolean;
 }
 
 const Emojify: React.FC<IEmojify> = React.memo(
-  ({ text, emojis = {}, nyaize: shouldNyaize = false }) => {
+  ({ text, emojis = {}, nyaize: shouldNyaize = false, truncated = false }) => {
     const { disableUserProvidedMedia, systemEmojiFont } = useSettings();
 
     if (Array.isArray(emojis)) emojis = makeEmojiMap(emojis);
@@ -73,7 +80,7 @@ const Emojify: React.FC<IEmojify> = React.memo(
 
         const { unified, shortcode } = unicodeMapping[c];
 
-        nodes.push(
+        const emoji = (
           <img
             key={index}
             draggable={false}
@@ -81,14 +88,20 @@ const Emojify: React.FC<IEmojify> = React.memo(
             alt={c}
             title={`:${shortcode}:`}
             src={joinPublicPath(`packs/emoji/${unified}.svg`)}
-          />,
+          />
         );
+
+        if (truncated) {
+          nodes.push(<span className='inline-flex'>{emoji}</span>);
+        } else {
+          nodes.push(emoji);
+        }
       } else if (!systemEmojiFont && unqualified in unicodeMapping) {
         clearStack();
 
         const { unified, shortcode } = unicodeMapping[unqualified];
 
-        nodes.push(
+        const emoji = (
           <img
             key={index}
             draggable={false}
@@ -96,8 +109,14 @@ const Emojify: React.FC<IEmojify> = React.memo(
             alt={unqualified}
             title={`:${shortcode}:`}
             src={joinPublicPath(`packs/emoji/${unified}.svg`)}
-          />,
+          />
         );
+
+        if (truncated) {
+          nodes.push(<span className='inline-flex'>{emoji}</span>);
+        } else {
+          nodes.push(emoji);
+        }
       } else if (!disableUserProvidedMedia && c === ':') {
         if (!open) {
           clearStack();
@@ -107,7 +126,15 @@ const Emojify: React.FC<IEmojify> = React.memo(
 
         // we see another : we convert it and clear the stack buffer
         if (open) {
-          nodes.push(<MaybeEmoji key={index} text={stack} emojis={emojis} nyaize={shouldNyaize} />);
+          nodes.push(
+            <MaybeEmoji
+              key={index}
+              text={stack}
+              emojis={emojis}
+              nyaize={shouldNyaize}
+              truncated={truncated}
+            />,
+          );
           stack = '';
         }
 
