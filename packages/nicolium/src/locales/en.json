@@ -1608,6 +1608,7 @@
   "preferences.fields.language_label": "Display language",
   "preferences.fields.media_display_label": "Sensitive content",
   "preferences.fields.mention_policy_label": "Accept mentions from",
+  "preferences.fields.missing_description_boost_modal_label": "Show confirmation dialog before reposting a post without media descriptions",
   "preferences.fields.missing_description_modal_label": "Show confirmation dialog before sending a post without media descriptions",
   "preferences.fields.preserve_spoilers_label": "Preserve content warning when replying",
   "preferences.fields.privacy_label": "Default post privacy",

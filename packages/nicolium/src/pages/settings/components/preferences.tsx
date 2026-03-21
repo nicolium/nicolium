@@ -804,6 +804,21 @@ const Preferences = () => {
         <ListItem
           label={
             <FormattedMessage
+              id='preferences.fields.missing_description_boost_modal_label'
+              defaultMessage='Show confirmation dialog before reposting a post without media descriptions'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['missingDescriptionBoostModal']}
+            onChange={onToggleChange}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
               id='preferences.fields.unfollow_modal_label'
               defaultMessage='Show confirmation dialog before unfollowing someone'
             />

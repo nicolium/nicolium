@@ -486,7 +486,6 @@ const ReblogButton: React.FC<IReblogButton> = ({
 
       const hasFilenameDescriptions = attachments.some((attachment) => {
         const extension = (attachment.remote_url || attachment.url).split('.').pop()?.toLowerCase();
-
         return attachment.description.trim().endsWith(`.${extension}`);
       });
 
