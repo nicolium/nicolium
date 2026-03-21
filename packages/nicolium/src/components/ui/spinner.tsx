@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Text from './text';
 
-import './spinner.css';
+import './spinner.scss';
 
 interface ISpinner {
   /** Width and height of the spinner in pixels. */

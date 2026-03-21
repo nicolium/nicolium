@@ -14,12 +14,23 @@
 }
 
 .spinner > div::after {
-  @apply block absolute rounded-full bg-gray-700 dark:bg-gray-400;
+  display: block;
+  position: absolute;
+  border-radius: 9999px;
   content: ' ';
   top: 3.75%;
   left: 46.25%;
   width: 7.5%;
   height: 22.5%;
+  background: rgb(var(--color-gray-700));
+
+  .dark & {
+    background: rgb(var(--color-gray-400));
+  }
+
+  .dark button & {
+    background: white;
+  }
 }
 
 .spinner > div:nth-child(1) {
