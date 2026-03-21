@@ -189,7 +189,7 @@
 
 .⁂-profile-field {
   span[data-markup] {
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
   }
 
   dt span[data-markup] {
@@ -218,7 +218,7 @@
     @include mixins.text;
 
     overflow: hidden;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
   }
 }
 
