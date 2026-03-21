@@ -207,15 +207,17 @@ const Account = ({
 
   useLayoutEffect(() => {
     const onResize = () => {
+      console.log('resizing');
       const style: React.CSSProperties = {};
       const actionWidth = actionRef.current?.clientWidth ?? 0;
 
       if (overflowRef.current) {
+        const maxWidth = overflowRef.current.classList.contains('w-fit')
+          ? overflowRef.current.parentElement!.clientWidth
+          : overflowRef.current.clientWidth;
         style.maxWidth = Math.max(
           0,
-          overflowRef.current.clientWidth -
-            (withAvatar ? avatarSize + 12 : 0) -
-            (actionWidth ? actionWidth + 12 : 0),
+          maxWidth - (withAvatar ? avatarSize + 12 : 0) - (actionWidth ? actionWidth + 12 : 0),
         );
       }
 
@@ -344,9 +346,8 @@ const Account = ({
       className={clsx('⁂-account-card', {
         '⁂-account-card--action-top': actionAlignment === 'top',
       })}
-      ref={overflowRef}
     >
-      <div>
+      <div className='w-fit min-w-full' ref={overflowRef}>
         <div
           className={clsx(
             'flex max-w-full items-center gap-3',
