@@ -6,8 +6,15 @@ import type { CustomEmoji } from 'pl-api';
 
 let emojis: EmojiData['emojis'] = {};
 
-const nativeData: Array<{ key: string; id: string }> = [];
-let customData: Array<{ key: string; id: string }> = [];
+interface SearchableEmoji {
+  emojiId: string;
+  emojiName: string;
+  emojiKeywords: string;
+  id: string;
+}
+
+const nativeData: Array<SearchableEmoji> = [];
+let customData: Array<SearchableEmoji> = [];
 
 import('./data')
   .then((data) => {
@@ -16,8 +23,10 @@ import('./data')
     const sortedEmojis = Object.entries(emojis).toSorted((a, b) => a[0].localeCompare(b[0]));
     for (const [key, emoji] of sortedEmojis) {
       nativeData.push({
-        key: `${emoji.id} ${emoji.name} ${emoji.keywords.join(' ')}`.replaceAll('-', '_'),
-        id: 'n' + key,
+        emojiId: emoji.id.replaceAll('-', '_'),
+        emojiName: emoji.name.replaceAll('-', '_'),
+        emojiKeywords: `${emoji.id} ${emoji.keywords.join(' ')}`.replaceAll('-', '_'),
+        id: 'e' + key,
       });
     }
   })
@@ -25,14 +34,19 @@ import('./data')
 
 const addCustomToPool = (customEmojis: CustomEmoji[]) => {
   customData = customEmojis.map((emoji, i) => ({
-    key: emoji.shortcode.replaceAll('-', '_'),
+    emojiId: '',
+    emojiName: emoji.shortcode.replaceAll('-', '_'),
+    emojiKeywords: emoji.shortcode.replaceAll('-', '_'),
     id: 'c' + i,
   }));
 };
 
 const search = (query: string, customEmojis: Array<CustomEmoji> = [], limit = 5): Emoji[] => {
   return fuzzysort
-    .go(query.replaceAll('-', '_'), [...nativeData, ...customData], { key: 'key', limit })
+    .go(query.replaceAll('-', '_'), [...nativeData, ...customData], {
+      keys: ['emojiId', 'emojiName', 'emojiKeywords'],
+      limit,
+    })
     .map((result) => {
       const { id } = result.obj;
 
