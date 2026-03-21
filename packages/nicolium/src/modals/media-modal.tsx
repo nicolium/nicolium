@@ -49,7 +49,9 @@ interface MediaModalProps {
 }
 
 const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
-  const { statusId, onClose, time = 0 } = props;
+  const { statusId, time = 0 } = props;
+
+  const onClose = () => props.onClose('MEDIA');
 
   const intl = useIntl();
 
@@ -301,7 +303,9 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           style={wrapperStyles}
           className='⁂-media-modal__closer'
           role='presentation'
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
             onClose();
           }}
         >
@@ -318,9 +322,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             <IconButton
               title={intl.formatMessage(messages.close)}
               src={iconX}
-              onClick={() => {
-                onClose('MEDIA');
-              }}
+              onClick={onClose}
               theme='dark'
               className='!p-1.5 hover:scale-105 hover:bg-gray-900'
               iconClassName='h-5 w-5'

@@ -117,19 +117,18 @@ const Item: React.FC<IItem> = ({
 
   // FIXME: wtf?
   const handleClick: React.MouseEventHandler = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (isIOS() && !e.target.autoPlay) {
       e.target.autoPlay = true;
-      e.preventDefault();
     } else if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       if (hoverToPlay()) {
         e.target.pause();
         e.target.currentTime = 0;
       }
-      e.preventDefault();
       onClick(index);
     }
-
-    e.stopPropagation();
   };
 
   const handleVideoHover: React.MouseEventHandler<HTMLVideoElement> = ({
