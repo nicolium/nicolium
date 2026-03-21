@@ -1,10 +1,8 @@
 # Changelog
 
-## Unreleased
+## v0.1.0
 
-Changes made since the project forked from Soapbox in April 2024.
-
-> This changelog does not cover every UI change, consistency improvement, optimization, accessibility improvement, or backend compatibility update — maintaining such a list manually would be impractical.
+> This list includes changes made since the project forked from Soapbox in April 2024. It does not cover every UI change, consistency improvement, optimization, accessibility improvement, or backend compatibility update — maintaining such a list manually would be impractical.
 
 ### Major changes
 
