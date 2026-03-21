@@ -114,6 +114,10 @@ const messages = defineMessages({
     id: 'status.bookmark_folder_change',
     defaultMessage: 'Change bookmark folder',
   },
+  boostConfirm: {
+    id: 'confirmations.boost_missing_description.confirm',
+    defaultMessage: 'Repost anyway',
+  },
   cancelReblogPrivate: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
   cannotReblog: { id: 'status.cannot_reblog', defaultMessage: 'This post cannot be reposted' },
   chat: { id: 'status.chat', defaultMessage: 'Chat with @{name}' },
@@ -456,7 +460,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const features = useFeatures();
   const intl = useIntl();
 
-  const { boostModal } = useSettings();
+  const { boostModal, missingDescriptionBoostModal } = useSettings();
   const { openModal } = useModalsActions();
   const canReblog = useCanInteract(status, 'can_reblog');
   const canQuote = useCanInteract(status, 'can_quote');
@@ -474,7 +478,11 @@ const ReblogButton: React.FC<IReblogButton> = ({
 
   const handleReblogClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (me) {
-      const modalReblog = () => {
+      const hasMissingDescriptions = status.media_attachments.some(
+        (attachment) => attachment.type !== 'unknown' && !attachment.description,
+      );
+
+      const doReblog = () => {
         if (status.reblogged) {
           unreblogStatus();
         } else {
@@ -485,10 +493,28 @@ const ReblogButton: React.FC<IReblogButton> = ({
           });
         }
       };
-      if ((e && e.shiftKey) || !boostModal) {
-        modalReblog();
+
+      if (missingDescriptionBoostModal && hasMissingDescriptions) {
+        openModal('CONFIRM', {
+          heading: (
+            <FormattedMessage
+              id='confirmations.boost_missing_description.heading'
+              defaultMessage='Reposting a post with missing description'
+            />
+          ),
+          message: (
+            <FormattedMessage
+              id='confirmations.boost_missing_description.message'
+              defaultMessage='The post does not have a description for all attachments. Do you want to repost it anyway?'
+            />
+          ),
+          confirm: intl.formatMessage(messages.boostConfirm),
+          onConfirm: doReblog,
+        });
+      } else if ((e && e.shiftKey) || !boostModal) {
+        doReblog();
       } else {
-        openModal('BOOST', { statusId: status.id, onReblog: modalReblog });
+        openModal('BOOST', { statusId: status.id, onReblog: doReblog });
       }
     } else {
       onOpenUnauthorizedModal('REBLOG');
