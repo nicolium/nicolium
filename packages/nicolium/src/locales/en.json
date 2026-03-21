@@ -730,6 +730,7 @@
   "confirmations.block_from_group.heading": "Ban from group",
   "confirmations.block_from_group.message": "Are you sure you want to ban @{name} from the group?",
   "confirmations.boost_missing_description.confirm": "Repost anyway",
+  "confirmations.boost_missing_description.filename_warning": "One or more attachments likely has a filename (e.g. 'image.jpg') as its description instead of meaningful alt text. Do you want to repost it anyway?",
   "confirmations.boost_missing_description.heading": "Reposting a post with missing description",
   "confirmations.boost_missing_description.message": "The post does not have a description for all attachments. Do you want to repost it anyway?",
   "confirmations.cancel.confirm": "Discard",

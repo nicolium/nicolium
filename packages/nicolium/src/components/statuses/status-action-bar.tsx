@@ -478,9 +478,17 @@ const ReblogButton: React.FC<IReblogButton> = ({
 
   const handleReblogClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (me) {
-      const hasMissingDescriptions = status.media_attachments.some(
-        (attachment) => attachment.type !== 'unknown' && !attachment.description,
+      const attachments = status.media_attachments.filter(
+        (attachment) => attachment.type !== 'unknown',
       );
+
+      const hasMissingDescriptions = attachments.some((attachment) => !attachment.description);
+
+      const hasFilenameDescriptions = attachments.some((attachment) => {
+        const extension = (attachment.remote_url || attachment.url).split('.').pop()?.toLowerCase();
+
+        return attachment.description.trim().endsWith(`.${extension}`);
+      });
 
       const doReblog = () => {
         if (status.reblogged) {
@@ -494,7 +502,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
         }
       };
 
-      if (missingDescriptionBoostModal && hasMissingDescriptions) {
+      if (missingDescriptionBoostModal && (hasMissingDescriptions || hasFilenameDescriptions)) {
         openModal('CONFIRM', {
           heading: (
             <FormattedMessage
@@ -503,10 +511,20 @@ const ReblogButton: React.FC<IReblogButton> = ({
             />
           ),
           message: (
-            <FormattedMessage
-              id='confirmations.boost_missing_description.message'
-              defaultMessage='The post does not have a description for all attachments. Do you want to repost it anyway?'
-            />
+            <>
+              {hasMissingDescriptions && (
+                <FormattedMessage
+                  id='confirmations.boost_missing_description.message'
+                  defaultMessage='The post does not have a description for all attachments. Do you want to repost it anyway?'
+                />
+              )}
+              {hasFilenameDescriptions && (
+                <FormattedMessage
+                  id='confirmations.boost_missing_description.filename_warning'
+                  defaultMessage="One or more attachments likely has a filename (e.g. 'image.jpg') as its description instead of meaningful alt text. Do you want to repost it anyway?"
+                />
+              )}
+            </>
           ),
           confirm: intl.formatMessage(messages.boostConfirm),
           onConfirm: doReblog,
