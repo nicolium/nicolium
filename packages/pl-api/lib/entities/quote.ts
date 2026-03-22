@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-import { statusSchema } from './status';
+import { type Status, statusSchema } from './status';
 
 const quoteStateSchema = v.picklist([
   'pending',
@@ -26,7 +26,10 @@ const quoteSchema = v.object({
 /**
  * @category Entity types
  */
-type Quote = v.InferOutput<typeof quoteSchema>;
+interface Quote {
+  state: v.InferOutput<typeof quoteStateSchema>;
+  quoted_status: Status | null;
+}
 
 /**
  * @category Schemas
