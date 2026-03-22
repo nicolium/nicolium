@@ -19,4 +19,4 @@ nicolium.example.com {
 }
 ```
 
-This assumes you're serving Nicolium under the nicolium.example.com domain and the Nicolium files are located in `/var/www/nicolium`. You can download Nicolium from `https://pl.mkljczk.pl/pl-fe.zip` or [build it from source](../building/nicolium.md).
+This assumes you're serving Nicolium under the nicolium.example.com domain and the Nicolium files are located in `/var/www/nicolium`. You can download Nicolium from `https://web.nicolium.app/release.zip` or [build it from source](../building/nicolium.md).

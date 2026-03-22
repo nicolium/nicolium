@@ -1,7 +1,7 @@
 {
   "name": "pl-hooks",
   "version": "0.0.15",
-  "homepage": "https://codeberg.org/nicolium/nicolium/src/branch/develop/packages/pl-hooks",
+  "homepage": "https://codeberg.org/nicolium/nicolium/src/packages/pl-hooks",
   "bugs": {
     "url": "https://codeberg.org/nicolium/nicolium/issues"
   },

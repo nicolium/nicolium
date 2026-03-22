@@ -10,7 +10,7 @@ pl-api is a TypeScript/JavaScript library that provides a type-safe client for i
 
 - Version: 1.0.0-rc.94
 - License: AGPL-3.0-or-later
-- Homepage: https://codeberg.org/nicolium/nicolium/src/branch/develop/packages/pl-api
+- Homepage: https://codeberg.org/nicolium/nicolium/src/packages/pl-api
 - Documentation: https://pl.mkljczk.pl/pl-api-docs
 - NPM package: https://www.npmjs.com/package/pl-api
 
@@ -98,7 +98,7 @@ page1.items.forEach(account => console.log(account.username));
 ## Projects using pl-api
 
 - Nicolium - Web client for Mastodon-compatible servers (https://codeberg.org/nicolium/nicolium)
-- **pl-hooks** - React hooks library for Mastodon APIs (https://codeberg.org/nicolium/nicolium/src/branch/develop/packages/pl-hooks)
+- **pl-hooks** - React hooks library for Mastodon APIs (https://codeberg.org/nicolium/nicolium/src/packages/pl-hooks)
 
 ## Development
 

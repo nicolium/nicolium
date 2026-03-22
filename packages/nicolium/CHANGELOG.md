@@ -6,7 +6,7 @@
 
 ### Major changes
 
-- Switched to a separate library [`pl-api`](https://codeberg.org/nicolium/nicolium/src/branch/develop/packages/pl-api) for Mastodon API integration. It is mostly written from scratch, inheriting minor code parts from Soapbox/Mastodon. This also comes with improved compatibility with various Mastodon API extensions and abstracts out the implementation details.
+- Switched to a separate library [`pl-api`](https://codeberg.org/nicolium/nicolium/src/packages/pl-api) for Mastodon API integration. It is mostly written from scratch, inheriting minor code parts from Soapbox/Mastodon. This also comes with improved compatibility with various Mastodon API extensions and abstracts out the implementation details.
 - Migrated client data stores from Redux to Zustand and remote data stores to TanStack Query. Stores have been migrated away from `immutable`.
 - Migrated router from React Router to TanStack Router.
 - Styles are being migrated from TailwindCSS to SCSS.

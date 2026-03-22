@@ -11,7 +11,7 @@ order: 32
 The most straightforward way to install Nicolium as a frontend for Pleroma or Akkoma is to simply download it and place its files in the `/instance/static` directory of your Pleroma/Akkoma installation (usually `/opt/pleroma/instance/static` or `/opt/akkoma/instance/static`, accordingly).
 
 ```bash
-curl -O https://pl.mkljczk.pl/pl-fe.zip
+curl -O https://web.nicolium.app/release.zip
 unzip pl-fe.zip -d /opt/pleroma/instance/static/
 rm pl-fe.zip
 ```
@@ -24,13 +24,13 @@ To install it from CLI, use:
 
 ### OTP
 ```bash
-./bin/pleroma_ctl frontend install pl-fe --ref develop --build-url https://pl.mkljczk.pl/pl-fe.zip --build-dir .
+./bin/pleroma_ctl frontend install pl-fe --ref release --build-url https://web.nicolium.app/release.zip --build-dir .
 ```
 
 ### From Source
 
 ```bash
-mix pleroma.frontend install pl-fe --ref develop --build-url https://pl.mkljczk.pl/pl-fe.zip --build-dir .
+mix pleroma.frontend install pl-fe --ref release --build-url https://web.nicolium.app/release.zip --build-dir .
 ```
 
 It is now possible to set Nicolium as the primary frontend in the configuration file or via AdminFE:
@@ -38,7 +38,7 @@ It is now possible to set Nicolium as the primary frontend in the configuration 
 config :pleroma, :frontends,
   primary: %{
     "name" => "pl-fe",
-    "ref" => "develop"
+    "ref" => "release"
   },
   ...
 ```
