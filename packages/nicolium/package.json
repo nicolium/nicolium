@@ -156,7 +156,7 @@
     "vite-plugin-compile-time": "^0.4.6",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^1.2.0",
-    "vite-plugin-static-copy": "^4.0.0",
+    "vite-plugin-static-copy": "^3.4.0",
     "vitest": "^4.1.0"
   },
   "lint-staged": {
