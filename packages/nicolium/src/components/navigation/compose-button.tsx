@@ -31,11 +31,15 @@ const ComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
 const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const { openModal } = useModalsActions();
   const onOpenCompose = () => {
-    openModal('COMPOSE');
+    openModal('COMPOSE', undefined, document.getElementById('sidebar-compose') || undefined);
   };
 
   return (
-    <button className='⁂-sidebar-navigation__compose-button' onClick={onOpenCompose}>
+    <button
+      className='⁂-sidebar-navigation__compose-button'
+      id='sidebar-compose'
+      onClick={onOpenCompose}
+    >
       {shrink ? (
         <Icon src={iconPlus} />
       ) : (
