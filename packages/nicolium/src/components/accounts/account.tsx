@@ -207,7 +207,6 @@ const Account = ({
 
   useLayoutEffect(() => {
     const onResize = () => {
-      console.log('resizing');
       const style: React.CSSProperties = {};
       const actionWidth = actionRef.current?.clientWidth ?? 0;
 
