@@ -45,23 +45,23 @@
     "object-to-formdata": "^4.5.1",
     "query-string": "^9.3.1",
     "semver": "^7.7.4",
-    "valibot": "^1.2.0"
+    "valibot": "^1.3.1"
   },
   "devDependencies": {
     "@types/http-link-header": "^1.0.7",
     "@types/node": "^25.3.5",
     "@types/semver": "^7.7.1",
     "@vitest/coverage-v8": "4.1.0",
-    "oxfmt": "^0.40.0",
+    "oxfmt": "^0.41.0",
     "oxlint": "^1.55.0",
     "typedoc": "^0.28.17",
     "typedoc-material-theme": "^1.4.1",
     "typedoc-plugin-valibot": "^1.0.2",
     "typescript": "^5.9.3",
-    "vite": "^8.0.0",
+    "vite": "^8.0.1",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.1.0",
-    "ws": "^8.19.0"
+    "ws": "^8.20.0"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts}": [
