@@ -27,6 +27,8 @@ const ComposeFormButton: React.FC<IComposeFormButton> = ({
       })}
       src={icon}
       title={title}
+      aria-label={title}
+      aria-pressed={active}
       disabled={disabled}
       onClick={onClick}
     />

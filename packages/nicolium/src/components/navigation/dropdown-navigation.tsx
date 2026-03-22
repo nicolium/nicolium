@@ -255,7 +255,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
     >
       <div className='⁂-dropdown-navigation__overlay' role='button' onClick={handleClose} />
 
-      <div className='⁂-dropdown-navigation'>
+      <div className='⁂-dropdown-navigation' id='dropdown-navigation' role='menu'>
         {account ? (
           <div>
             <Link to='/@{$username}' params={{ username: account.acct }} onClick={closeSidebar}>

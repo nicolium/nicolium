@@ -78,6 +78,11 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
         className='⁂-thumb-navigation__item'
         onClick={isSidebarOpen ? closeSidebar : openSidebar}
         title={intl.formatMessage(isSidebarOpen ? messages.closeSidebar : messages.openSidebar)}
+        aria-label={intl.formatMessage(
+          isSidebarOpen ? messages.closeSidebar : messages.openSidebar,
+        )}
+        aria-controls='dropdown-navigation'
+        aria-expanded={isSidebarOpen}
       >
         <Icon src={iconList} />
       </button>
