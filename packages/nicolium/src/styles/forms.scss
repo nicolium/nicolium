@@ -29,16 +29,6 @@ select {
     opacity: 0.5;
   }
 
-  input {
-    margin-top: 3px;
-    border: none;
-    background: transparent;
-
-    &:focus {
-      outline: none;
-    }
-  }
-
   ul {
     overflow-y: auto;
     display: block;
@@ -62,12 +52,60 @@ select {
 
   .searchWrapper {
     position: relative;
-    border: 1px solid;
 
-    @apply rounded-md border-gray-300 bg-white min-h-[38px] max-w-[400px] py-0 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 disabled:opacity-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm w-auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    width: auto;
+    max-width: 25rem;
+    min-height: 38px;
+    padding: 0 2.5rem 0 0.75rem;
+    border: 1px solid rgb(var(--color-gray-300));
+    border-radius: 0.375rem;
+
+    font-size: 0.9375rem;
+
+    background: white;
+
+    &:focus {
+      border-color: rgb(var(--color-primary-500));
+      outline: 2px solid rgb(var(--color-primary-500));
+    }
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+      color: rgb(var(--color-gray-100));
+      background: rgb(var(--color-gray-900));
+      outline: 2px solid rgb(var(--color-primary-700));
+
+      &:focus {
+        border-color: rgb(var(--color-primary-500));
+        outline-color: rgb(var(--color-primary-500));
+      }
+    }
+
+    .sm & {
+      font-size: 0.875rem;
+    }
 
     > input {
-      @apply first:pl-0 p-1.5 m-0 focus:ring-0 text-base sm:text-sm;
+      margin: 0;
+      padding: 0;
+      border: none;
+
+      font-size: 0.9375rem;
+
+      background: transparent;
+      box-shadow: none;
+
+      .sm & {
+        font-size: 0.875rem;
+      }
+
+      &:focus {
+        outline: none;
+      }
     }
   }
 
@@ -75,6 +113,7 @@ select {
     display: inline-flex;
     align-items: center;
 
+    margin: 0.25rem 0;
     margin-right: 5px;
     padding: 4px 10px;
     border-radius: 11px;
@@ -84,7 +123,7 @@ select {
     color: #fff;
     white-space: nowrap;
 
-    @apply bg-primary-600 my-1;
+    background: rgb(var(--color-primary-600));
   }
 
   .optionListContainer {
@@ -112,16 +151,20 @@ select {
   }
 
   .optionContainer {
-    @apply border-gray-300 dark:border-gray-800 dark:bg-gray-900;
+    border-color: rgb(var(--color-gray-300));
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+      background: rgb(var(--color-gray-900));
+      outline: 2px solid rgb(var(--color-primary-700));
+    }
   }
 
   .option {
-    @apply hover:bg-primary-600;
-
+    &:hover,
     &:focus {
-      @apply bg-primary-600;
-
       color: #fff;
+      background: rgb(var(--color-primary-600));
     }
   }
 }
