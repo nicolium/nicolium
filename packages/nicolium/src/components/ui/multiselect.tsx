@@ -253,7 +253,7 @@ const Multiselect: React.FC<IMultiselect> = ({
           />
         </div>
         <div
-          className={clsx('optionListContainer', isOpen ? 'displayBlock' : 'displayNone')}
+          className={clsx('optionListContainer', !isOpen && 'optionListContainer--hidden')}
           onMouseDown={(e) => e.preventDefault()}
         >
           <ul className='optionContainer'>

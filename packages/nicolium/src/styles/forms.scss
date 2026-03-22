@@ -130,11 +130,17 @@ select {
     position: absolute;
     z-index: 2;
 
+    display: block;
+
     width: 100%;
     margin-top: 1px;
     border-radius: 4px;
 
     background: #fff;
+
+    &--hidden {
+      display: none;
+    }
   }
 
   .displayBlock {
