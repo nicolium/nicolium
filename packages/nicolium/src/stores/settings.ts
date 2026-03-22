@@ -131,6 +131,11 @@ const mergeSettings = (state: State, updating = false) => {
           .catch(() => {
             toast.error(messages.redirectServicesUpdateFail);
           });
+      } else if (
+        mergedSettings.urlPrivacy.redirectLinksMode === 'off' &&
+        state.settings.urlPrivacy.redirectLinksMode !== 'off'
+      ) {
+        setManualRedirectServices(currentAccountId, {});
       }
     }
   }
