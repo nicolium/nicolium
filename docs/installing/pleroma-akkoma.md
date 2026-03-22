@@ -12,32 +12,32 @@ The most straightforward way to install Nicolium as a frontend for Pleroma or Ak
 
 ```bash
 curl -O https://web.nicolium.app/release.zip
-unzip pl-fe.zip -d /opt/pleroma/instance/static/
-rm pl-fe.zip
+unzip release.zip -d /opt/pleroma/instance/static/
+rm release.zip
 ```
 
 ## Installation via Pleroma/Akkoma frontend management
 
-It is also possible to use the Pleroma/Akkoma frontend management tool. You can find more information about it in the [Pleroma documentation](https://docs.pleroma.social/backend/administration/frontends-management/). You can use either the PleromaFE built-in admin dashboard or the older AdminFE to install Nicolium and set it as the server frontend. You don't have to provide any URL. It's right there in Pleroma/Akkoma.
+It is also possible to use the Pleroma/Akkoma frontend management tool. You can find more information about it in the [Pleroma documentation](https://docs.pleroma.social/backend/administration/frontends-management/). You can use either the PleromaFE built-in admin dashboard or the older AdminFE to install Nicolium and set it as the server frontend. You don't have to provide any URL. It's right there in Pleroma/Akkoma (under the name `pl-fe`).
 
 To install it from CLI, use:
 
 ### OTP
 ```bash
-./bin/pleroma_ctl frontend install pl-fe --ref release --build-url https://web.nicolium.app/release.zip --build-dir .
+./bin/pleroma_ctl frontend install nicolium --ref release --build-url https://web.nicolium.app/release.zip --build-dir .
 ```
 
 ### From Source
 
 ```bash
-mix pleroma.frontend install pl-fe --ref release --build-url https://web.nicolium.app/release.zip --build-dir .
+mix pleroma.frontend install nicolium --ref release --build-url https://web.nicolium.app/release.zip --build-dir .
 ```
 
 It is now possible to set Nicolium as the primary frontend in the configuration file or via AdminFE:
 ```elixir
 config :pleroma, :frontends,
   primary: %{
-    "name" => "pl-fe",
+    "name" => "nicolium", # Use `pl-fe` if you installed it via Pleroma/Akkoma dashboard
     "ref" => "release"
   },
   ...

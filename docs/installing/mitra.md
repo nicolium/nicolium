@@ -10,6 +10,6 @@ Installing Nicolium as a frontend for Mitra is no different from installing the 
 
 ```bash
 curl -O https://web.nicolium.app/release.zip
-unzip pl-fe.zip -d /usr/share/mitra/www
-rm pl-fe.zip
+unzip release.zip -d /usr/share/mitra/www
+rm release.zip
 ```
