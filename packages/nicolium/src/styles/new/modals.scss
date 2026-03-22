@@ -207,9 +207,7 @@
     border-top-right-radius: 0.75rem;
 
     background-color: #fff;
-    box-shadow:
-      0 10px 15px -3px #0001,
-      0 4px 6px -4px #0001;
+    box-shadow: var(--shadow-lg);
 
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 200ms;

@@ -90,9 +90,7 @@ body {
 
   background-color: #fffe;
   backdrop-filter: blur(12px) saturate(2);
-  box-shadow:
-    0 10px 15px -3px #0001,
-    0 4px 6px -4px #0001;
+  box-shadow: var(--shadow-lg);
 
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -1113,9 +1111,7 @@ body {
   border-radius: 0.5rem;
 
   background-color: #fff;
-  box-shadow:
-    0 10px 15px -3px #0001,
-    0 4px 6px -4px #0001;
+  box-shadow: var(--shadow-lg);
 
   .dark.black & {
     background-color: #000;

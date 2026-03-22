@@ -1,0 +1,59 @@
+:root {
+  --reach-tabs: 1;
+}
+
+[data-reach-tabs] {
+  position: relative;
+  padding-bottom: 3px;
+}
+
+[data-reach-tab-list] {
+  overflow: auto;
+  display: flex;
+}
+
+[data-reach-tab] {
+  display: flex;
+  flex: 1 1 0%;
+  align-items: center;
+  justify-content: center;
+
+  min-width: fit-content;
+  padding: 1rem 0.25rem;
+
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: rgb(var(--color-gray-700));
+  text-align: center;
+
+  .dark & {
+    color: rgb(var(--color-gray-600));
+  }
+
+  &:hover {
+    color: rgb(var(--color-gray-800));
+
+    .dark & {
+      color: rgb(var(--color-gray-500));
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgb(var(--color-primary-500));
+    outline-offset: 2px;
+
+    .dark & {
+      outline-color: rgb(var(--color-primary-500));
+      outline-offset: 0;
+    }
+  }
+}
+
+[data-reach-tab][data-selected] {
+  color: rgb(var(--color-gray-900));
+
+  .dark & {
+    color: rgb(var(--color-gray-100));
+  }
+}

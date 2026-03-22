@@ -13,7 +13,7 @@ import Counter from './counter';
 
 import type { LinkOptions } from '@tanstack/react-router';
 
-import './tabs.css';
+import './tabs.scss';
 
 const HORIZONTAL_PADDING = 8;
 const AnimatedContext = React.createContext<React.Dispatch<

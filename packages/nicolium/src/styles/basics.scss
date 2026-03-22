@@ -8,13 +8,19 @@ body {
 }
 
 ::selection {
-  @apply bg-primary-600 text-white;
-}
-
-noscript {
-  @apply text-center;
+  color: white;
+  background: rgb(var(--color-primary-600));
 }
 
 .emojione {
-  @apply w-4 h-4 -mt-[0.2ex] mb-[0.2ex] inline-block align-middle object-contain;
+  display: inline-block;
+
+  width: 1rem;
+  height: 1rem;
+  margin-top: -0.2ex;
+  margin-bottom: 0.2ex;
+
+  vertical-align: middle;
+
+  object-fit: contain;
 }
