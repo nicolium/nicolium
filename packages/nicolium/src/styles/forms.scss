@@ -1,15 +1,21 @@
 select {
-  @apply pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md;
+  padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+  border-color: rgb(var(--color-gray-300));
+  border-radius: 0.375rem;
+
+  font-size: 0.9375rem;
 
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-}
 
-.form-error {
-  @apply before:border-solid before:border-transparent before:h-0 before:left-2.5 before:pointer-events-none before:w-0 before:absolute before:border-[6px] before:ml-[-1px] after:border-solid after:border-transparent after:h-0 after:left-2.5 after:pointer-events-none after:w-0 after:absolute before:border-b-red-200;
-}
+  &:focus {
+    border-color: rgb(var(--color-indigo-500));
+    outline: 2px solid rgb(var(--color-indigo-500));
+  }
 
-.input.with_label.toggle .label_input {
-  @apply flex text-sm items-center;
+  .sm & {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
 }
 
 // Adapted from [multiselect-react-dropdown](https://github.com/srigar/multiselect-react-dropdown), licensed under MIT License.
