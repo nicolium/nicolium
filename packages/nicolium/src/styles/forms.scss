@@ -1,3 +1,5 @@
+@use './new/variables';
+
 select {
   padding: 0.5rem 2.5rem 0.5rem 0.75rem;
   border-color: rgb(var(--color-gray-300));
@@ -12,7 +14,7 @@ select {
     outline: 2px solid rgb(var(--color-indigo-500));
   }
 
-  .sm & {
+  @media (min-width: variables.$breakpoint-sm) {
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
@@ -85,10 +87,6 @@ select {
       }
     }
 
-    .sm & {
-      font-size: 0.875rem;
-    }
-
     > input {
       margin: 0;
       padding: 0;
@@ -99,13 +97,17 @@ select {
       background: transparent;
       box-shadow: none;
 
-      .sm & {
-        font-size: 0.875rem;
-      }
-
       &:focus {
         outline: none;
       }
+
+      @media (min-width: variables.$breakpoint-sm) {
+        font-size: 0.875rem;
+      }
+    }
+
+    @media (min-width: variables.$breakpoint-sm) {
+      font-size: 0.875rem;
     }
   }
 
