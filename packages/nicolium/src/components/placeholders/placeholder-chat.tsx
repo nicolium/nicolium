@@ -5,7 +5,7 @@ import PlaceholderDisplayName from './placeholder-display-name';
 
 /** Fake chat to display while data is loading. */
 const PlaceholderChat = () => (
-  <div className='flex w-full animate-pulse flex-col px-4 py-2'>
+  <div className='flex w-full flex-col px-4 py-2 no-reduce-motion:animate-pulse'>
     <div className='flex items-center gap-2'>
       <PlaceholderAvatar size={40} />
 

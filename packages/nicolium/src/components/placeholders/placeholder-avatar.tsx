@@ -21,7 +21,9 @@ const PlaceholderAvatar: React.FC<IPlaceholderAvatar> = ({ size, withText = fals
   }, [size]);
 
   return (
-    <div className={clsx('flex animate-pulse flex-col gap-2 text-center', className)}>
+    <div
+      className={clsx('flex flex-col gap-2 text-center no-reduce-motion:animate-pulse', className)}
+    >
       <div className='mx-auto block rounded-lg bg-primary-50 dark:bg-primary-800' style={style} />
 
       {withText && (

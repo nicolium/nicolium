@@ -18,7 +18,7 @@ const PlaceholderStatus: React.FC<IPlaceholderStatus> = React.memo(({ variant = 
       'py-4': variant === 'slim',
     })}
   >
-    <div className='w-full animate-pulse overflow-hidden'>
+    <div className='w-full overflow-hidden no-reduce-motion:animate-pulse'>
       <div>
         <div className='flex items-center gap-3'>
           <div className='shrink-0'>

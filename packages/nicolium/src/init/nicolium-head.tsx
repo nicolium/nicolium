@@ -13,6 +13,8 @@ import { useSettings } from '@/stores/settings';
 
 const Helmet = React.lazy(() => import('@/components/helmet'));
 
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
 /** Injects metadata into site head. */
 const NicoliumHead = () => {
   const locale = useLocale();
@@ -35,7 +37,7 @@ const NicoliumHead = () => {
   const dsn = frontendConfig.sentryDsn;
 
   const bodyClass = clsx({
-    'no-reduce-motion': !reduceMotion,
+    'no-reduce-motion': !(reduceMotion || prefersReducedMotion.matches),
     'underline-links': underlineLinks,
     demetricator: demetricator,
     'system-font': systemFont,

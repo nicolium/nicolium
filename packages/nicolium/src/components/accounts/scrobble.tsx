@@ -48,7 +48,7 @@ const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
         <Text
           size='sm'
           className={clsx('relative inline-block', {
-            'animate-text-overflow': animate,
+            'no-reduce-motion:animate-text-overflow': animate,
           })}
           ref={textRef}
         >

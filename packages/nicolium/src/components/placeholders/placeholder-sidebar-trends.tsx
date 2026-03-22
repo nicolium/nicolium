@@ -11,7 +11,7 @@ const PlaceholderSidebarTrends = ({ limit }: { limit: number }) => {
       {new Array(limit).fill(undefined).map((_, idx) => (
         <div
           key={idx}
-          className='flex animate-pulse flex-col text-primary-200 dark:text-primary-700'
+          className='flex flex-col text-primary-200 no-reduce-motion:animate-pulse dark:text-primary-700'
         >
           <p>{generateText(trend)}</p>
           <p>{generateText(stat)}</p>

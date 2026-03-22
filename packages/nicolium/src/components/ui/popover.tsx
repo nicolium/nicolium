@@ -11,11 +11,12 @@ import {
   useFloating,
   useHover,
   useInteractions,
-  useTransitionStyles,
   type OffsetOptions,
 } from '@floating-ui/react';
 import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
+
+import { useTransitionStyles } from '@/hooks/use-transition-styles';
 
 import Portal from './portal';
 

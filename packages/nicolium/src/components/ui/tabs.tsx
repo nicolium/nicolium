@@ -43,9 +43,12 @@ const AnimatedTabs: React.FC<IAnimatedTabs> = ({ children, ...rest }) => {
       <ReachTabs {...rest} ref={ref}>
         <div className='absolute h-[3px] w-full bg-primary-200 dark:bg-gray-800' style={{ top }} />
         <div
-          className={clsx('absolute h-[3px] bg-primary-500 transition-all duration-200', {
-            hidden: top <= 0,
-          })}
+          className={clsx(
+            'absolute h-[3px] bg-primary-500 no-reduce-motion:transition-all no-reduce-motion:duration-200',
+            {
+              hidden: top <= 0,
+            },
+          )}
           style={{ left, top, width }}
         />
         {children}

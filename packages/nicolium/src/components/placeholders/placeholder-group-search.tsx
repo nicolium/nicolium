@@ -7,7 +7,7 @@ const PlaceholderGroupSearch = ({ withJoinAction = true }: { withJoinAction?: bo
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (
-    <div className='flex animate-pulse items-center justify-between'>
+    <div className='flex items-center justify-between no-reduce-motion:animate-pulse'>
       <div className='flex items-center gap-2 overflow-hidden'>
         {/* Group Avatar */}
         <div className='size-11 rounded-lg bg-gray-500 dark:bg-gray-700 dark:ring-primary-900' />

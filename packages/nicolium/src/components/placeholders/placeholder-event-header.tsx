@@ -9,7 +9,7 @@ const PlaceholderEventHeader = () => {
   const locationLength = randomIntFromInterval(5, 30);
 
   return (
-    <div className='flex animate-pulse flex-col gap-2 text-primary-50 dark:text-primary-800'>
+    <div className='flex flex-col gap-2 text-primary-50 no-reduce-motion:animate-pulse dark:text-primary-800'>
       <p className='text-lg'>{generateText(eventNameLength)}</p>
 
       <div className='flex flex-col gap-1'>

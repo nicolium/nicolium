@@ -1,4 +1,4 @@
-import { useFloating, shift, flip, autoUpdate, useTransitionStyles } from '@floating-ui/react';
+import { useFloating, shift, flip, autoUpdate } from '@floating-ui/react';
 import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
@@ -7,6 +7,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import IconButton from '@/components/ui/icon-button';
 import Portal from '@/components/ui/portal';
 import { useClickOutside } from '@/hooks/use-click-outside';
+import { useTransitionStyles } from '@/hooks/use-transition-styles';
 
 import EmojiPickerDropdown, {
   type IEmojiPickerDropdown,

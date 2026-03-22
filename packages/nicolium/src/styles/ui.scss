@@ -38,6 +38,10 @@
   height: 100%;
 }
 
+body:not(.no-reduce-motion) .react-swipeable-view-container {
+  transition: none !important;
+}
+
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
 }

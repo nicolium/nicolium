@@ -7,7 +7,7 @@ import { randomIntFromInterval, generateText } from '@/utils/placeholders';
 const PlaceholderCard: React.FC = React.memo(() => (
   <div
     className={clsx('status-card', {
-      'animate-pulse': true,
+      'no-reduce-motion:animate-pulse': true,
     })}
   >
     <div className='primary-500 w-2/5 rounded-l'>&nbsp;</div>

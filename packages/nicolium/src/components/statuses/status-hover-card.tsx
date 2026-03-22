@@ -1,10 +1,11 @@
-import { autoUpdate, flip, shift, useFloating, useTransitionStyles } from '@floating-ui/react';
+import { autoUpdate, flip, shift, useFloating } from '@floating-ui/react';
 import { useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 
 import { showStatusHoverCard } from '@/components/statuses/hover-status-wrapper';
 import StatusContainer from '@/components/statuses/status-container';
+import { useTransitionStyles } from '@/hooks/use-transition-styles';
 import { useStatus } from '@/queries/statuses/use-status';
 import { useStatusHoverCardActions, useStatusHoverCardStore } from '@/stores/status-hover-card';
 

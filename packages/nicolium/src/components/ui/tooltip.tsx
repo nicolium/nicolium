@@ -7,9 +7,10 @@ import {
   useFloating,
   useHover,
   useInteractions,
-  useTransitionStyles,
 } from '@floating-ui/react';
 import React, { useRef, useState } from 'react';
+
+import { useTransitionStyles } from '@/hooks/use-transition-styles';
 
 interface ITooltip {
   /** Element to display the tooltip around. */

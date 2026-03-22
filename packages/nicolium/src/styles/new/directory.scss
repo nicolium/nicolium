@@ -27,7 +27,7 @@
     grid-template-columns: repeat(1, minmax(0, 1fr));
     gap: 0.625rem;
 
-    &--loading {
+    .no-reduce-motion &--loading {
       animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 

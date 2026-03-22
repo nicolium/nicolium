@@ -8,7 +8,7 @@ const PlaceholderEventPreview = () => {
   const nameLength = randomIntFromInterval(5, 15);
 
   return (
-    <div className='relative w-full animate-pulse overflow-hidden rounded-lg bg-gray-100 text-primary-50 black:border black:border-gray-800 black:bg-black dark:bg-primary-800 dark:text-primary-800'>
+    <div className='relative w-full overflow-hidden rounded-lg bg-gray-100 text-primary-50 black:border black:border-gray-800 black:bg-black no-reduce-motion:animate-pulse dark:bg-primary-800 dark:text-primary-800'>
       <div className='h-40 bg-primary-200 dark:bg-gray-600' />
       <div className='flex flex-col gap-2 p-2.5'>
         <Text weight='semibold'>{generateText(eventNameLength)}</Text>

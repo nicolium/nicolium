@@ -7,7 +7,7 @@ const PlaceholderGroupCard = () => {
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (
-    <div className='animate-pulse'>
+    <div className='no-reduce-motion:animate-pulse'>
       <div className='relative flex h-[240px] flex-col rounded-lg border border-solid border-gray-300 bg-white black:bg-black dark:border-primary-800 dark:bg-primary-900'>
         {/* Group Cover Image */}
         <div className='relative grow basis-1/2 rounded-t-lg bg-gray-300 dark:bg-gray-800' />

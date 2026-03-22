@@ -14,7 +14,7 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
     <div
       data-testid='placeholder-chat-message'
       className={clsx({
-        'flex max-w-[85%] animate-pulse flex-col gap-1': true,
+        'flex max-w-[85%] flex-col gap-1 no-reduce-motion:animate-pulse': true,
         'ml-auto': isMyMessage,
       })}
     >

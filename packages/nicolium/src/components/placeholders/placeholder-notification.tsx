@@ -7,7 +7,7 @@ import PlaceholderStatusContent from './placeholder-status-content';
 /** Fake notification to display while data is loading. */
 const PlaceholderNotification = React.memo(() => (
   <div className='bg-white p-4 black:bg-black dark:bg-primary-900'>
-    <div className='w-full animate-pulse'>
+    <div className='w-full no-reduce-motion:animate-pulse'>
       <div className='mb-2'>
         <PlaceholderStatusContent minLength={20} maxLength={20} />
       </div>

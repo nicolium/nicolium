@@ -1,4 +1,4 @@
-import { autoUpdate, flip, shift, useFloating, useTransitionStyles } from '@floating-ui/react';
+import { autoUpdate, flip, shift, useFloating } from '@floating-ui/react';
 import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconTag from '@phosphor-icons/core/regular/tag.svg';
 import { useRouter } from '@tanstack/react-router';
@@ -14,6 +14,7 @@ import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { UserPanel } from '@/features/ui/util/async-components';
+import { useTransitionStyles } from '@/hooks/use-transition-styles';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountHoverCardActions, useAccountHoverCardStore } from '@/stores/account-hover-card';

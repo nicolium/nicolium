@@ -112,7 +112,7 @@
       inset: 0;
     }
 
-    &:hover {
+    .no-reduce-motion &:hover {
       &::before {
         animation: earwiggleleft 1s infinite;
       }
