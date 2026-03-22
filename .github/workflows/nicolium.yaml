@@ -83,7 +83,7 @@ jobs:
         NODE_ENV: production
       working-directory: ./packages/nicolium
       run: |
-          BANNER_HTML="pl.mkljczk.pl runs Nicolium's \`develop\` branch, which can break sometimes. For a more stable experience, use <a href=\"https://web.nicolium.app\" target=\"_blank\" rel=\"noopener noreferrer\">web.nicolium.app</a>." WITH_LANDING_PAGE=true pnpm build
+          BANNER_HTML="pl.mkljczk.pl runs Nicolium's \`develop\` branch, which can break sometimes. For a more stable experience, use <a href=\"https://web.nicolium.app\" target=\"_blank\" rel=\"noopener noreferrer\">web.nicolium.app</a>." WITH_LANDING_PAGE=true ANALYZE=true pnpm build
           cp dist/index.html dist/404.html
           cp nicolium.zip dist/pl-fe.zip
 

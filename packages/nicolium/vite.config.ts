@@ -157,7 +157,6 @@ const config = defineConfig(() => ({
         },
       ],
     }),
-    bundleStats(),
     {
       name: 'mock-api',
       configureServer(server) {
@@ -171,6 +170,7 @@ const config = defineConfig(() => ({
         });
       },
     },
+    ...(process.env.ANALYZE === 'true' ? [bundleStats()] : []),
   ],
   resolve: {
     alias: [
