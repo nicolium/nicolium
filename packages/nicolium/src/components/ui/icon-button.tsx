@@ -33,7 +33,7 @@ const IconButton = React.forwardRef(
         className={clsx('⁂-icon-button', `⁂-icon-button--${theme}`, className)}
         {...filteredProps}
         data-testid={filteredProps['data-testid'] ?? 'icon-button'}
-        {...(props.href ? { target: '_blank' } : {})}
+        {...(props.href ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       >
         <SvgIcon src={src} className={iconClassName} aria-hidden />
 

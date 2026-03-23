@@ -613,6 +613,7 @@ const Audio: React.FC<IAudio> = (props) => {
                   href={src}
                   download
                   target='_blank'
+                  rel='noopener noreferrer'
                 >
                   <Icon src={iconDownloadSimple} />
                 </a>

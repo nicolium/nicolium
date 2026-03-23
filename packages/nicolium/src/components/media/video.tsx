@@ -621,6 +621,7 @@ const Video: React.FC<IVideo> = ({
                 href={src}
                 download
                 target='_blank'
+                rel='noopener noreferrer'
               >
                 <Icon src={iconDownloadSimple} />
               </a>
