@@ -7,7 +7,6 @@ import DropdownMenu from '@/components/dropdown-menu';
 import List, { ListItem } from '@/components/list';
 import Column from '@/components/ui/column';
 import Toggle from '@/components/ui/toggle';
-import { hashtagTimelineRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
@@ -16,6 +15,7 @@ import {
   useUnfollowHashtagMutation,
 } from '@/queries/hashtags/use-followed-tags';
 import { useHashtag } from '@/queries/hashtags/use-hashtag';
+import { hashtagTimelineRoute } from '@/router';
 
 const HashtagTimelinePage: React.FC = () => {
   const { hashtag } = hashtagTimelineRoute.useParams();

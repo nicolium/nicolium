@@ -28,7 +28,6 @@ import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import ColumnLoading from '@/features/ui/components/column-loading';
-import { driveRoute } from '@/features/ui/router';
 import {
   useCreateDriveFileMutation,
   useDeleteDriveFileMutation,
@@ -42,6 +41,7 @@ import {
   useMoveDriveFolderMutation,
   useUpdateDriveFolderMutation,
 } from '@/queries/drive/use-drive-folder';
+import { driveRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 import { download } from '@/utils/download';

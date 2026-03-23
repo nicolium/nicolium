@@ -8,7 +8,6 @@ import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { layouts } from '@/features/ui/router';
 import {
   WhoToFollowPanel,
   ProfileInfoPanel,
@@ -21,6 +20,7 @@ import {
 import { useAcct } from '@/hooks/use-acct';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
+import { layouts } from '@/router';
 import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
 
 /** Layout to display a user's profile. */

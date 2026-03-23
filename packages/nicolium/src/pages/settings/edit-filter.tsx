@@ -15,9 +15,9 @@ import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Streamfield from '@/components/ui/streamfield';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
-import { editFilterRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useCreateFilter, useFilter, useUpdateFilter } from '@/queries/settings/use-filters';
+import { editFilterRoute } from '@/router';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';

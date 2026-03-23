@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 
-import { shareRoute } from '@/features/ui/router';
+import { shareRoute } from '@/router';
 import { useComposeActions } from '@/stores/compose';
 
 const SharePage: React.FC = () => {

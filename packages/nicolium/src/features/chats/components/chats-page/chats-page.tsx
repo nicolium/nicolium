@@ -2,8 +2,8 @@ import { Outlet, useMatch } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import { chatsEmptyRoute } from '@/features/ui/router';
 import { useChats } from '@/queries/chats';
+import { chatsEmptyRoute } from '@/router';
 import { useShoutboxIsLoading } from '@/stores/shoutbox';
 
 import ChatsPageSidebar from './components/chats-page-sidebar';

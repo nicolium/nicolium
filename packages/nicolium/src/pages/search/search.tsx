@@ -13,10 +13,10 @@ import Input from '@/components/ui/input';
 import SvgIcon from '@/components/ui/svg-icon';
 import Tabs from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
-import { searchRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { queryKeys } from '@/queries/keys';
+import { searchRoute } from '@/router';
 
 type SearchFilter = 'accounts' | 'hashtags' | 'statuses' | 'links';
 

@@ -14,7 +14,6 @@ import TagInput from '@/components/ui/tag-input';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import ColumnLoading from '@/features/ui/components/column-loading';
-import { adminAccountRoute } from '@/features/ui/router';
 import { useDeactivateUserModal, useDeleteUserModal } from '@/hooks/use-admin-modals';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -28,6 +27,7 @@ import {
   useAdminVerifyAccountMutation,
   useAdminUnverifyAccountMutation,
 } from '@/queries/admin/use-verify-account';
+import { adminAccountRoute } from '@/router';
 import toast from '@/toast';
 import { badgeToTag, tagToBadge, getBadges } from '@/utils/badges';
 

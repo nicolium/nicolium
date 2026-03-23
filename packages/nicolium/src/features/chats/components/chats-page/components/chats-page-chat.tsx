@@ -12,13 +12,13 @@ import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Avatar from '@/components/ui/avatar';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
-import { chatRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import {
   useUnblockAccountMutation,
   useRelationshipQuery,
 } from '@/queries/accounts/use-relationship';
 import { useChat, useDeleteChat } from '@/queries/chats';
+import { chatRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 
 import Chat from '../../chat';

@@ -7,7 +7,6 @@ import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import ColumnForbidden from '@/features/ui/components/column-forbidden';
-import { groupMembershipRequestsRoute } from '@/features/ui/router';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import {
@@ -15,6 +14,7 @@ import {
   useGroupMembershipRequestsQuery,
   useRejectGroupMembershipRequestMutation,
 } from '@/queries/groups/use-group-members';
+import { groupMembershipRequestsRoute } from '@/router';
 import toast from '@/toast';
 
 import type { NicoliumResponse } from '@/api';

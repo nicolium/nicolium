@@ -2,8 +2,8 @@ import { useMatch } from '@tanstack/react-router';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { toggleChatPane } from '@/actions/chats';
-import { chatRoute, layouts } from '@/features/ui/router';
 import { useChat } from '@/queries/chats';
+import { chatRoute, layouts } from '@/router';
 import { useSettings } from '@/stores/settings';
 
 import type { Chat } from 'pl-api';

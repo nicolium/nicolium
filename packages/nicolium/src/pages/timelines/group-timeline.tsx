@@ -6,11 +6,11 @@ import { FormattedMessage } from 'react-intl';
 
 import { GroupTimelineColumn } from '@/columns/timeline';
 import Avatar from '@/components/ui/avatar';
-import { groupTimelineRoute } from '@/features/ui/router';
 import { ComposeForm } from '@/features/ui/util/async-components';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
+import { groupTimelineRoute } from '@/router';
 import { useComposeActions, useUploadCompose } from '@/stores/compose';
 
 const GroupTimelinePage: React.FC = () => {

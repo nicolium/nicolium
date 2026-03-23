@@ -6,9 +6,9 @@ import MissingIndicator from '@/components/missing-indicator';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import { profileFollowersRoute } from '@/features/ui/router';
 import { useFollowers } from '@/queries/account-lists/use-follows';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
+import { profileFollowersRoute } from '@/router';
 
 const messages = defineMessages({
   heading: { id: 'column.followers', defaultMessage: 'Followers' },

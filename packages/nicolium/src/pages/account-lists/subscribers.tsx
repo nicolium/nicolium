@@ -9,9 +9,9 @@ import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import Toggle from '@/components/ui/toggle';
-import { profileSubscribersRoute } from '@/features/ui/router';
 import { useSubscribers } from '@/queries/account-lists/use-follows';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
+import { profileSubscribersRoute } from '@/router';
 
 const messages = defineMessages({
   heading: { id: 'column.subscribers', defaultMessage: 'Subscribers' },

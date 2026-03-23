@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 
 import LoadingScreen from '@/components/loading-screen';
-import { RouterWithContext } from '@/features/ui/router';
+import { RouterWithContext } from '@/router';
 
 /** Highest level node with the Redux store. */
 const NicoliumMount = () => {

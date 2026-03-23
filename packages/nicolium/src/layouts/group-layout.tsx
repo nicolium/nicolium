@@ -10,11 +10,11 @@ import Icon from '@/components/ui/icon';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
-import { layouts } from '@/features/ui/router';
 import { GroupMediaPanel, SignUpPanel } from '@/features/ui/util/async-components';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useGroupMembershipRequestsQuery } from '@/queries/groups/use-group-members';
+import { layouts } from '@/router';
 
 const messages = defineMessages({
   all: { id: 'group.tabs.all', defaultMessage: 'All' },

@@ -6,12 +6,12 @@ import GroupMemberListItem from '@/components/groups/group-member-list-item';
 import { PendingItemsRow } from '@/components/pending-items-row';
 import PlaceholderAccount from '@/components/placeholders/placeholder-account';
 import ScrollableList from '@/components/scrollable-list';
-import { groupMembersRoute } from '@/features/ui/router';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import {
   useGroupMembers,
   useGroupMembershipRequestsQuery,
 } from '@/queries/groups/use-group-members';
+import { groupMembersRoute } from '@/router';
 
 const GroupMembers: React.FC = () => {
   const { groupId } = groupMembersRoute.useParams();

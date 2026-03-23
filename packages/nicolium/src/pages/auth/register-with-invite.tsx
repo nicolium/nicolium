@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { BigCard } from '@/components/ui/big-card';
-import { inviteRoute } from '@/features/ui/router';
+import { inviteRoute } from '@/router';
 import { useInstance } from '@/stores/instance';
 
 import RegistrationForm from './components/registration-form';

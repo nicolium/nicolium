@@ -9,7 +9,7 @@ import { useGroupQuery } from '@/queries/groups/use-group';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
-import { layouts } from '../../features/ui/router';
+import { layouts } from '../../router';
 
 interface IComposeButton {
   /** Whether the button should shrink to fit in a smaller space. */

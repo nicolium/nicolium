@@ -16,10 +16,10 @@ import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import { RadioGroup, RadioItem } from '@/components/ui/radio';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { directoryRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useDirectory } from '@/queries/accounts/use-directory';
+import { directoryRoute } from '@/router';
 import { useInstance } from '@/stores/instance';
 import { shortNumberFormat } from '@/utils/numbers';
 

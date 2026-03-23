@@ -51,7 +51,6 @@ import DropdownMenu from '@/components/dropdown-menu';
 import StatusActionButton from '@/components/statuses/status-action-button';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
-import { layouts } from '@/features/ui/router';
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/use-admin-modals';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useClient } from '@/hooks/use-client';
@@ -83,6 +82,7 @@ import {
   useUnpinStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
+import { layouts } from '@/router';
 import { useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';

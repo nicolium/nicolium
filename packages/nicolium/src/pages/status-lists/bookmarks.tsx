@@ -9,12 +9,12 @@ import DropdownMenu from '@/components/dropdown-menu';
 import PullToRefresh from '@/components/pull-to-refresh';
 import StatusList from '@/components/statuses/status-list';
 import Column from '@/components/ui/column';
-import { bookmarksRoute } from '@/features/ui/router';
 import { useBookmarks } from '@/queries/status-lists/use-bookmarks';
 import {
   useBookmarkFolder,
   useDeleteBookmarkFolder,
 } from '@/queries/statuses/use-bookmark-folders';
+import { bookmarksRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 

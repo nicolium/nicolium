@@ -4,9 +4,9 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import MissingIndicator from '@/components/missing-indicator';
 import StatusList from '@/components/statuses/status-list';
 import Column from '@/components/ui/column';
-import { profilePinsRoute } from '@/features/ui/router';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
+import { profilePinsRoute } from '@/router';
 
 const messages = defineMessages({
   heading: { id: 'column.pins', defaultMessage: 'Pinned posts' },

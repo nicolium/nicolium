@@ -38,12 +38,12 @@ import StatusLayout from '@/layouts/status-layout';
 import { useInstance } from '@/stores/instance';
 import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
 
-import ChatsPageChat from '../../chats/components/chats-page/components/chats-page-chat';
-import ChatsPageEmpty from '../../chats/components/chats-page/components/chats-page-empty';
-import ChatsPageNew from '../../chats/components/chats-page/components/chats-page-new';
-import ChatsPageSettings from '../../chats/components/chats-page/components/chats-page-settings';
-import ChatsPageShoutbox from '../../chats/components/chats-page/components/chats-page-shoutbox';
-import ColumnLoading from '../components/column-loading';
+import ChatsPageChat from '../features/chats/components/chats-page/components/chats-page-chat';
+import ChatsPageEmpty from '../features/chats/components/chats-page/components/chats-page-empty';
+import ChatsPageNew from '../features/chats/components/chats-page/components/chats-page-new';
+import ChatsPageSettings from '../features/chats/components/chats-page/components/chats-page-settings';
+import ChatsPageShoutbox from '../features/chats/components/chats-page/components/chats-page-shoutbox';
+import ColumnLoading from '../features/ui/components/column-loading';
 
 import type { Features } from 'pl-api';
 

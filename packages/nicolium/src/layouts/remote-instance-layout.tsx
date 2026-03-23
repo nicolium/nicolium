@@ -3,9 +3,9 @@ import React from 'react';
 
 import LinkFooter from '@/components/navigation/link-footer';
 import Layout from '@/components/ui/layout';
-import { layouts } from '@/features/ui/router';
 import { PromoPanel, InstanceModerationPanel } from '@/features/ui/util/async-components';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { layouts } from '@/router';
 import { useFederationRestrictionsDisclosed } from '@/utils/state';
 
 /** Layout for viewing a remote instance timeline. */

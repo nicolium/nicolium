@@ -14,8 +14,8 @@ import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import PullToRefresh from '@/components/pull-to-refresh';
 import Column from '@/components/ui/column';
 import Thread from '@/features/status/components/thread';
-import { statusRoute } from '@/features/ui/router';
 import { useStatus } from '@/queries/statuses/use-status';
+import { statusRoute } from '@/router';
 import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({

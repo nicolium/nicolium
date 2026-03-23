@@ -7,9 +7,9 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 import MissingIndicator from '@/components/missing-indicator';
 import StatusContent from '@/components/statuses/status-content';
 import Icon from '@/components/ui/icon';
-import { eventInformationRoute } from '@/features/ui/router';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useStatus } from '@/queries/statuses/use-status';
+import { eventInformationRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 
 const EventInformationPage: React.FC = () => {

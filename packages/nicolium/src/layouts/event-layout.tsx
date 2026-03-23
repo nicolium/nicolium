@@ -8,7 +8,6 @@ import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { layouts } from '@/features/ui/router';
 import {
   EventHeader,
   SignUpPanel,
@@ -17,6 +16,7 @@ import {
 } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 import { useStatus } from '@/queries/statuses/use-status';
+import { layouts } from '@/router';
 const EventLayout = () => {
   const { statusId } = layouts.event.useParams();
 

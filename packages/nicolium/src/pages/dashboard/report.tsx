@@ -16,7 +16,6 @@ import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import ColumnLoading from '@/features/ui/components/column-loading';
-import { adminReportRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import {
   useReopenReport,
@@ -25,6 +24,7 @@ import {
   useSelfAssignReport,
   useUnassignReport,
 } from '@/queries/admin/use-reports';
+import { adminReportRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 

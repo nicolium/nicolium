@@ -6,7 +6,7 @@ import Column from '@/components/ui/column';
 import Tabs from '@/components/ui/tabs';
 import { EditEvent } from '@/features/compose-event/tabs/edit-event';
 import { ManagePendingParticipants } from '@/features/compose-event/tabs/manage-pending-participants';
-import { eventEditRoute } from '@/features/ui/router';
+import { eventEditRoute } from '@/router';
 
 const messages = defineMessages({
   manageEvent: { id: 'navigation_bar.manage_event', defaultMessage: 'Manage event' },

@@ -14,8 +14,8 @@ import { TimelinePicker } from '@/components/timeline-picker';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
-import { remoteTimelineRoute } from '@/features/ui/router';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
+import { remoteTimelineRoute } from '@/router';
 import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({

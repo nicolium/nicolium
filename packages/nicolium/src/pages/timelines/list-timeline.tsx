@@ -13,9 +13,9 @@ import { TimelinePicker } from '@/components/timeline-picker';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import { listTimelineRoute } from '@/features/ui/router';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { useDeleteList, useList } from '@/queries/accounts/use-lists';
+import { listTimelineRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({

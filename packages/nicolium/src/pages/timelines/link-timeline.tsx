@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { LinkTimelineColumn } from '@/columns/timeline';
 import Column from '@/components/ui/column';
-import { linkTimelineRoute } from '@/features/ui/router';
+import { linkTimelineRoute } from '@/router';
 
 const messages = defineMessages({
   header: { id: 'column.link_timeline', defaultMessage: 'Posts linking to {url}' },

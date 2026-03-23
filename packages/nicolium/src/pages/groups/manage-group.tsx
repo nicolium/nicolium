@@ -10,8 +10,8 @@ import Spinner from '@/components/ui/spinner';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import ColumnForbidden from '@/features/ui/components/column-forbidden';
-import { manageGroupRoute } from '@/features/ui/router';
 import { useDeleteGroupMutation, useGroupQuery } from '@/queries/groups/use-group';
+import { manageGroupRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 

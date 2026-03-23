@@ -5,10 +5,10 @@ import LoadMore from '@/components/load-more';
 import MissingIndicator from '@/components/missing-indicator';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import { groupGalleryRoute } from '@/features/ui/router';
 import { type AccountGalleryAttachment, useGroupGallery } from '@/hooks/use-account-gallery';
 import { MediaItem } from '@/pages/accounts/account-gallery';
 import { useGroupQuery } from '@/queries/groups/use-group';
+import { groupGalleryRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 
 const GroupGallery: React.FC = () => {
