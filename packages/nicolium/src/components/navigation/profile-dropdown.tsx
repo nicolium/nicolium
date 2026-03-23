@@ -15,7 +15,7 @@ import {
 } from '@/queries/accounts/use-logged-in-accounts';
 import { useAuthActions } from '@/stores/auth';
 
-import ThemeToggle from './theme-toggle';
+import ThemeToggle from '../../features/ui/components/theme-toggle';
 
 import type { Account as AccountEntity } from 'pl-api';
 

@@ -5,8 +5,8 @@ import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import Widget from '@/components/ui/widget';
-import InstanceRestrictions from '@/features/federation-restrictions/components/instance-restrictions';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import InstanceRestrictions from '@/pages/instance/components/instance-restrictions';
 import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 import { useModalsActions } from '@/stores/modals';
 

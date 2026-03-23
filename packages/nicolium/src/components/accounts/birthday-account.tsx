@@ -10,11 +10,11 @@ const messages = defineMessages({
   birthday: { id: 'account.birthday', defaultMessage: 'Born {date}' },
 });
 
-interface IAccount {
+interface IBirthdayAccount {
   accountId: string;
 }
 
-const Account: React.FC<IAccount> = ({ accountId }) => {
+const BirthdayAccount: React.FC<IBirthdayAccount> = ({ accountId }) => {
   const intl = useIntl();
   const { data: account } = useAccount(accountId);
 
@@ -47,4 +47,4 @@ const Account: React.FC<IAccount> = ({ accountId }) => {
   );
 };
 
-export { Account as default };
+export { BirthdayAccount as default };

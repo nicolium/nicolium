@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import ScrollableList from '@/components/scrollable-list';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
-import RestrictedInstance from '@/features/federation-restrictions/components/restricted-instance';
+import RestrictedInstance from '@/pages/instance/components/restricted-instance';
 import { useHosts } from '@/queries/instance/use-remote-instance';
 import { useInstance } from '@/stores/instance';
 import { useFederationRestrictionsDisclosed } from '@/utils/state';

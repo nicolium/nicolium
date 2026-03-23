@@ -53,9 +53,9 @@ import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import ComposeButton from '@/components/navigation/compose-button';
+import ProfileDropdown from '@/components/navigation/profile-dropdown';
 import Icon from '@/components/ui/icon';
 import { useStatContext } from '@/contexts/stat-context';
-import ProfileDropdown from '@/features/ui/components/profile-dropdown';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
