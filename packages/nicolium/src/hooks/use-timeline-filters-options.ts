@@ -59,7 +59,7 @@ const useTimelineFiltersOptions = (
   return useMemo(() => {
     const items: Menu = [];
 
-    if (timeline === 'home') {
+    if (['home', 'list', 'antenna'].includes(timeline)) {
       items.push({
         text: intl.formatMessage(messages.showReblogs),
         type: 'toggle',
