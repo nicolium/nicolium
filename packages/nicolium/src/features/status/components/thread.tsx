@@ -243,7 +243,7 @@ const Thread = ({
 
   const renderChildren = (list: Array<string>) =>
     list.map((id) => {
-      if (id === status.id)
+      if (id === status.id) {
         return (
           <div className={clsx({ 'pb-4': hasDescendants })} key={status.id}>
             {deleted ? (
@@ -289,6 +289,7 @@ const Thread = ({
             )}
           </div>
         );
+      }
 
       if (id.endsWith('-tombstone')) {
         return renderTombstone(id);
@@ -328,7 +329,7 @@ const Thread = ({
     [status.id],
   );
 
-  const hasDescendants = thread.length > statusIndex;
+  const hasDescendants = thread.length > statusIndex + 1;
 
   type HotkeyHandlers = { [key: string]: (keyEvent?: KeyboardEvent) => void };
 
