@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.1.1
+
+### Added
+- Missing ARIA attributes and other minor accessibility improvements.
+
+### Changed
+- Continued work on migrating styles from TailwindCSS.
+- Some files were moved to different locations.
+- Added a warning related to CORS configuration when signing in to an external instance.
+
+### Fixed
+
+- Removed `console.log` statement accidentally left in the release code.
+- Requests without body do not get `Content-Type: application/json` appended by default, which fixes a bug with GoToSocial.
+- Last status in a thread view, if expanded, no longer gets bottom padding.
+
 ## v0.1.0
 
 > This list includes changes made since the project forked from Soapbox in April 2024. It does not cover every UI change, consistency improvement, optimization, accessibility improvement, or backend compatibility update — maintaining such a list manually would be impractical.
