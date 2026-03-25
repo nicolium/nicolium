@@ -142,7 +142,7 @@
     "jsdom": "^29.0.1",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.56.0",
-    "oxlint-tsgolint": "^0.17.1",
+    "oxlint-tsgolint": "^0.17.4",
     "rollup-plugin-bundle-stats": "^4.22.0",
     "stylelint": "^17.5.0",
     "stylelint-config-clean-order": "^8.0.1",
