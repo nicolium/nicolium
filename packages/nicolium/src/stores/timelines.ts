@@ -222,7 +222,7 @@ const useTimelinesStore = create<State>()(
 
           timeline.queuedEntries.unshift(status);
           timeline.queuedCount += 1;
-          timeline.queuedAccountIds.unshift(status.account.id);
+          timeline.queuedAccountIds.unshift((status.reblog || status).account.id);
         });
       },
       deleteStatus: (statusId) => {

@@ -3,9 +3,11 @@
 ## v0.1.1
 
 ### Added
+
 - Missing ARIA attributes and other minor accessibility improvements.
 
 ### Changed
+
 - Continued work on migrating styles from TailwindCSS.
 - Some files were moved to different locations.
 - Added a warning related to CORS configuration when signing in to an external instance.
