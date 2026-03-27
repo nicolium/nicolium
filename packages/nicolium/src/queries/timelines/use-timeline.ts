@@ -60,7 +60,7 @@ const useTimeline = (
 
     const poll = async () => {
       const sinceId =
-        useTimelinesStore.getState().timelines[timelineId]?.queuedEntries[0]?.id ??
+        useTimelinesStore.getState().timelines[timelineId]?.newestStatusId ??
         newestStatusId.current;
       if (!sinceId) return;
 
