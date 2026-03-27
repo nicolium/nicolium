@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import Helmet from '@/components/helmet';
+import HeadTitle from '@/components/helmet';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
@@ -125,14 +125,13 @@ const Column: React.FC<IColumn> = (props): React.JSX.Element => {
       variant={transparent ? undefined : 'rounded'}
       className={clsx('⁂-column', className)}
     >
-      <Helmet title={label}>
-        {frontendConfig.appleAppId && (
-          <meta
-            name='apple-itunes-app'
-            content={`app-id=${frontendConfig.appleAppId}, app-argument=${location.href}`}
-          />
-        )}
-      </Helmet>
+      <HeadTitle title={label} />
+      {frontendConfig.appleAppId && (
+        <meta
+          name='apple-itunes-app'
+          content={`app-id=${frontendConfig.appleAppId}, app-argument=${location.href}`}
+        />
+      )}
 
       {withHeader && (
         <ColumnHeader
