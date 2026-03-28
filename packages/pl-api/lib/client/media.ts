@@ -42,7 +42,7 @@ const media = (client: PlApiBaseClient) => ({
     const response = await client.request(`/api/v1/media/${attachmentId}`, {
       method: 'PUT',
       body: params,
-      contentType: params.thumbnail ? '' : undefined,
+      formData: !!params.thumbnail,
     });
 
     return v.parse(mediaAttachmentSchema, response.json);

@@ -59,7 +59,14 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
     const poll = status.poll_id
       ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
       : undefined;
-    setComposeToStatus(status, poll, source, false, source.draft_id, source.editorState);
+    setComposeToStatus(
+      status,
+      poll,
+      { ...source, location: null },
+      false,
+      source.draft_id,
+      source.editorState,
+    );
     openModal('COMPOSE');
   };
 

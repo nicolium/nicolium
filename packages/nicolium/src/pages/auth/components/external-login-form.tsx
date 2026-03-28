@@ -13,7 +13,12 @@ const messages = defineMessages({
   instancePlaceholder: { id: 'login.fields.instance_placeholder', defaultMessage: 'example.com' },
   instanceFailed: {
     id: 'login_external.errors.instance_fail',
-    defaultMessage: 'The instance returned an error.',
+    defaultMessage: 'The instance returned an error. Is the URL correct?',
+  },
+  corsFailed: {
+    id: 'login_external.errors.cors_fail',
+    defaultMessage:
+      'Connection failed, likely due to CORS configuration. Is the instance configured to allow logins from other origins?',
   },
   networkFailed: {
     id: 'login_external.errors.network_fail',
@@ -47,8 +52,10 @@ const ExternalLoginForm: React.FC = () => {
         console.error(error);
         const status = error.response?.status;
 
-        if (status) {
+        if (status || !error.message) {
           toast.error(intl.formatMessage(messages.instanceFailed));
+        } else if (error.message === 'NetworkError when attempting to fetch resource.') {
+          toast.error(intl.formatMessage(messages.corsFailed));
         } else if (!status && ['Network request failed', 'Timeout'].includes(error.message)) {
           toast.error(intl.formatMessage(messages.networkFailed));
         }

@@ -906,6 +906,7 @@ const getFeatures = (instance: Instance) => {
       v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA,
@@ -1390,6 +1391,7 @@ const getFeatures = (instance: Instance) => {
     polls: any([
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
@@ -1407,6 +1409,7 @@ const getFeatures = (instance: Instance) => {
     postLanguages: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '3.23.0'),
       v.software === PLEROMA && gte(v.version, '2.9.0'),
@@ -1473,6 +1476,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,

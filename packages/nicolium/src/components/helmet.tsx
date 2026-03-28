@@ -10,12 +10,11 @@ import FaviconService from '@/utils/favicon-service';
 
 FaviconService.initFaviconService();
 
-interface IHelmet {
+interface IHeadTitle {
   title?: string;
-  children?: React.ReactNode;
 }
 
-const Helmet: React.FC<IHelmet> = ({ title, children }) => {
+const HeadTitle: React.FC<IHeadTitle> = ({ title }) => {
   const instance = useInstance();
   const { unreadChatsCount } = useStatContext();
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
@@ -45,12 +44,7 @@ const Helmet: React.FC<IHelmet> = ({ title, children }) => {
     ? addCounter(`${title} | ${instance.title}`)
     : addCounter(instance.title);
 
-  return (
-    <>
-      <title>{formattedTitle}</title>
-      {children}
-    </>
-  );
+  return <title>{formattedTitle}</title>;
 };
 
-export { Helmet as default };
+export { HeadTitle as default };

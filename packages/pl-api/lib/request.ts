@@ -99,7 +99,7 @@ function request<T = any>(
     params,
     onUploadProgress,
     signal,
-    contentType = 'application/json',
+    contentType,
     formData,
     idempotencyKey,
   }: RequestBody = {},
@@ -113,7 +113,8 @@ function request<T = any>(
   else if (this.accessToken) headers.set('Authorization', `Bearer ${this.accessToken}`);
   else if (this.customAuthorizationToken)
     headers.set('Authorization', this.customAuthorizationToken);
-  if (!formData) headers.set('Content-Type', contentType);
+  if ((!formData && body) || contentType)
+    headers.set('Content-Type', contentType || 'application/json');
   if (idempotencyKey) headers.set('Idempotency-Key', idempotencyKey);
 
   body = body && formData ? serialize(body, { indices: true }) : JSON.stringify(body);

@@ -98,7 +98,7 @@ const experimental = (client: PlApiBaseClient) => {
               description: params.note,
               membership: 'public',
             },
-            contentType: params.avatar || params.header ? '' : undefined,
+            formData: !!(params.avatar || params.header),
           });
 
           if (response.json?.id) {
@@ -108,7 +108,7 @@ const experimental = (client: PlApiBaseClient) => {
           response = await client.request('/api/v1/groups', {
             method: 'POST',
             body: params,
-            contentType: params.avatar || params.header ? '' : undefined,
+            formData: !!(params.avatar || params.header),
           });
         }
 
@@ -133,7 +133,7 @@ const experimental = (client: PlApiBaseClient) => {
         const response = await client.request(`/api/v1/groups/${groupId}`, {
           method: 'PUT',
           body: params,
-          contentType: params.avatar || params.header ? '' : undefined,
+          formData: !!(params.avatar || params.header),
         });
 
         return v.parse(groupSchema, response.json);

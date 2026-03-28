@@ -8,10 +8,11 @@ import { useLocale, useLocaleDirection } from '@/hooks/use-locale';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeCss } from '@/hooks/use-theme-css';
 import { startSentry } from '@/sentry';
+import { useInstanceStore } from '@/stores/instance';
 import { useHasModals } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
-const Helmet = React.lazy(() => import('@/components/helmet'));
+const HeadTitle = React.lazy(() => import('@/components/helmet'));
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -30,6 +31,7 @@ const NicoliumHead = () => {
   const theme = useTheme();
   const [wcoVisible, setWcoVisible] = React.useState(false);
   const [wcoRight, setWcoRight] = React.useState(false);
+  const instanceFetched = useInstanceStore((state) => state.fetched);
 
   const withModals = useHasModals();
 
@@ -96,7 +98,7 @@ const NicoliumHead = () => {
 
   return (
     <>
-      <Helmet />
+      {instanceFetched && <HeadTitle />}
       <meta name='theme-color' content={color} />
       <InlineStyle>{`:root { ${themeCss} }`}</InlineStyle>
       {['dark', 'black'].includes(theme) && (

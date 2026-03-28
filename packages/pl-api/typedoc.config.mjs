@@ -9,14 +9,7 @@ const config = {
   },
   categorizeByGroup: true,
   sort: ['kind', 'alphabetical'],
-  kindSortOrder: [
-    'Function',
-    'Class',
-    'Interface',
-    'TypeAlias',
-    'Variable',
-    'Enum',
-  ],
+  kindSortOrder: ['Function', 'Class', 'Interface', 'TypeAlias', 'Variable', 'Enum'],
   intentionallyNotExported: [
     'CreateStatusOptionalParams',
     'CreateStatusWithContent',

@@ -19,7 +19,7 @@ const messages = defineMessages({
 });
 
 interface IStatusLanguagePicker {
-  status: Pick<Status, 'id' | 'content_map'>;
+  status: Pick<Status, 'id' | 'content_map' | 'language'>;
   showLabel?: boolean;
 }
 
@@ -44,7 +44,7 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
             action: () => {
               setStatusLanguage(status.id, language);
             },
-            active: language === currentLanguage,
+            active: language === (currentLanguage || status.language),
           }))}
         >
           <button title={intl.formatMessage(messages.languageVersions)} className='hover:underline'>

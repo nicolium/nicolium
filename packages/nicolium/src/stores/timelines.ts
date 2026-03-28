@@ -46,6 +46,7 @@ interface TimelineData {
   isError: boolean;
   hasNextPage: boolean;
   oldestStatusId?: string;
+  newestStatusId?: string;
 }
 
 interface State {
@@ -202,6 +203,9 @@ const useTimelinesStore = create<State>()(
           }
           timeline.isPending = false;
           timeline.isFetching = false;
+          if ((initialFetch || restoring) && statuses.length > 0) {
+            timeline.newestStatusId = statuses[0].id;
+          }
           if (typeof hasMore === 'boolean') {
             timeline.hasNextPage = hasMore;
             const oldestStatus = statuses.at(-1);
@@ -220,9 +224,12 @@ const useTimelinesStore = create<State>()(
           )
             return;
 
+          if (!timeline.newestStatusId || timeline.newestStatusId.localeCompare(status.id) < 0) {
+            timeline.newestStatusId = status.id;
+          }
           timeline.queuedEntries.unshift(status);
           timeline.queuedCount += 1;
-          timeline.queuedAccountIds.unshift(status.account.id);
+          timeline.queuedAccountIds.unshift((status.reblog || status).account.id);
         });
       },
       deleteStatus: (statusId) => {
@@ -269,6 +276,7 @@ const useTimelinesStore = create<State>()(
 
           const processedEntries = processPage(timeline.queuedEntries);
 
+          timeline.newestStatusId = timeline.queuedEntries.toSorted().at(-1)!.id;
           timeline.entries.unshift(...processedEntries);
           timeline.queuedEntries = [];
           timeline.queuedCount = 0;
