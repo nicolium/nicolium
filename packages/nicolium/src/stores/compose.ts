@@ -325,7 +325,7 @@ interface ComposeActions {
       | 'visibility'
     >,
     poll: Poll | null | undefined,
-    source: Pick<StatusSource, 'content_type' | 'text' | 'spoiler_text'>,
+    source: Omit<StatusSource, 'id'>,
     withRedraft?: boolean,
     draftId?: string | null,
     editorState?: string | null,
@@ -431,6 +431,7 @@ const useComposeStore = create<ComposeStore>()(
               compose.editedId = status.id;
             }
             compose.text = source.text;
+            compose.textMap = source.text_map ?? {};
             compose.to = mentions;
             compose.parentRebloggedById = null;
             compose.inReplyToId = status.in_reply_to_id;
@@ -451,6 +452,7 @@ const useComposeStore = create<ComposeStore>()(
             compose.redacting = redacting ?? false;
 
             compose.spoilerText = source.spoiler_text;
+            compose.spoilerTextMap = source.spoiler_text_map ?? {};
 
             if (poll) {
               compose.poll = newPoll({

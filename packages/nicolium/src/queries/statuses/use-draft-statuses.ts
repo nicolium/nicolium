@@ -24,6 +24,10 @@ const draftStatusSchema = v.pipe(
     in_reply_to: draft.inReplyTo,
     media_attachments: draft.mediaAttachments,
     spoiler_text: draft.spoilerText,
+    spoiler_text_map: draft.spoilerTextMap,
+    text: draft.text,
+    text_map: draft.textMap,
+    language: draft.language,
     ...draft,
   })),
   v.object({
@@ -39,7 +43,10 @@ const draftStatusSchema = v.pipe(
     schedule: v.fallback(v.nullable(v.string()), null),
     sensitive: v.fallback(v.boolean(), false),
     spoiler_text: v.fallback(v.string(), ''),
+    spoiler_text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
     text: v.fallback(v.string(), ''),
+    text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
+    language: v.fallback(v.string(), ''),
   }),
 );
 
