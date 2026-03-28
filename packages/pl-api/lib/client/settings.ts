@@ -81,13 +81,12 @@ const settings = (client: PlApiBaseClient) => ({
 
     const response = await client.request('/api/v1/accounts/update_credentials', {
       method: 'PATCH',
-      contentType:
+      formData: !!(
         client.features.version.software === GOTOSOCIAL ||
         client.features.version.software === ICESHRIMP_NET ||
         params.avatar ||
         params.header
-          ? ''
-          : undefined,
+      ),
       body: params,
     });
 
