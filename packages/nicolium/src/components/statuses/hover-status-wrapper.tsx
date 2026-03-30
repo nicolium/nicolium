@@ -46,7 +46,7 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
       event.preventDefault();
       event.stopPropagation();
 
-      showStatusHoverCard(openStatusHoverCard, ref, statusId);
+      openStatusHoverCard(ref as React.RefObject<HTMLDivElement>, statusId);
       return;
     }
 
