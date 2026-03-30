@@ -115,7 +115,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
         </div>
       )}
 
-      <StatusReplyMentions status={actualStatus} />
+      <StatusReplyMentions status={actualStatus} hoverable={false} />
 
       <div className='relative z-0 flex flex-col gap-4'>
         <StatusContent
