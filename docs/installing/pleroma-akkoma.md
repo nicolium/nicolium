@@ -10,6 +10,8 @@ order: 32
 
 The most straightforward way to install Nicolium as a frontend for Pleroma or Akkoma is to simply download it and place its files in the `/instance/static` directory of your Pleroma/Akkoma installation (usually `/opt/pleroma/instance/static` or `/opt/akkoma/instance/static`, accordingly).
 
+> **Note:** This assumes you want to use the stable release version of Nicolium. If you want to use the development version (which is more cutting-edge but can break sometimes), replace `release` with `develop` in the URLs and commands below.
+
 ```bash
 curl -O https://web.nicolium.app/release.zip
 unzip release.zip -d /opt/pleroma/instance/static/
