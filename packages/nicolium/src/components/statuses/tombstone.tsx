@@ -8,11 +8,10 @@ interface ITombstone {
   onMoveUp?: (statusId: string) => void | boolean;
   onMoveDown?: (statusId: string) => void | boolean;
   deleted?: boolean;
-  unavailable?: boolean;
 }
 
 /** Represents a deleted item. */
-const Tombstone: React.FC<ITombstone> = ({ id, onMoveUp, onMoveDown, deleted, unavailable }) => {
+const Tombstone: React.FC<ITombstone> = ({ id, onMoveUp, onMoveDown, deleted }) => {
   const handlers = {
     moveUp: () => onMoveUp?.(id),
     moveDown: () => onMoveDown?.(id),
@@ -23,7 +22,7 @@ const Tombstone: React.FC<ITombstone> = ({ id, onMoveUp, onMoveDown, deleted, un
       <div className='focusable ⁂-status-tombstone' tabIndex={0}>
         {deleted ? (
           <FormattedMessage id='statuses.tombstone.deleted' defaultMessage='The post is deleted.' />
-        ) : unavailable ? (
+        ) : id.endsWith('-unavailable') ? (
           <FormattedMessage
             id='statuses.tombstone.unavailable'
             defaultMessage='The post is not visible to you.'
