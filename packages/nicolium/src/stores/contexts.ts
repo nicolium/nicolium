@@ -34,8 +34,8 @@ const importStatuses = (state: State, statuses: ContextStatus[]) => {
 /** Insert a fake status ID connecting descendant to ancestor. */
 const insertTombstone = (state: State, ancestorId: string, descendantId: string) => {
   const tombstoneId = `${descendantId}-tombstone`;
-  importStatus(state, { id: tombstoneId, in_reply_to_id: ancestorId, parent_visible: false });
-  importStatus(state, { id: descendantId, in_reply_to_id: tombstoneId, parent_visible: false });
+  importStatus(state, { id: tombstoneId, in_reply_to_id: ancestorId, parent_visible: undefined });
+  importStatus(state, { id: descendantId, in_reply_to_id: tombstoneId, parent_visible: undefined });
 };
 
 /** Find the highest level status from this statusId. */
@@ -177,7 +177,7 @@ const useContextStore = create<State>()(
       importPendingStatus: (inReplyToId, idempotencyKey) =>
         set((state) => {
           const id = `末pending-${idempotencyKey}`;
-          importStatus(state, { id, in_reply_to_id: inReplyToId ?? null });
+          importStatus(state, { id, in_reply_to_id: inReplyToId ?? null, parent_visible: undefined });
         }),
       deletePendingStatus: (inReplyToId, idempotencyKey) =>
         set((state) => {
