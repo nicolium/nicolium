@@ -8,6 +8,7 @@ import {
   useTimelinesActions,
   type TimelineEntry,
 } from '@/stores/timelines';
+import { compareId } from '@/utils/comparators';
 
 import type { PaginatedResponse, PaginationParams, Status, StreamingParams } from 'pl-api';
 
@@ -25,6 +26,9 @@ interface TimelineOptions {
 
 const POLLING_INTERVAL = 20_000;
 
+const sinceIdUnsupported = (statuses: Status[], sinceId: string) =>
+  statuses.length > 0 && statuses.some((status) => compareId(status.id, sinceId) <= 0);
+
 const useTimeline = (
   timelineId: string,
   fetcher: TimelineFetcher,
@@ -35,6 +39,7 @@ const useTimeline = (
   const restoringMaxId = options?.restoringMaxId;
 
   const timeline = useStoreTimeline(timelineId);
+  const pollingEnabled = useTimelinesStore((state) => state.pollingEnabled);
   const timelineActions = useTimelinesActions();
 
   const { connected: streamingConnected } = useTimelineStream(
@@ -56,7 +61,8 @@ const useTimeline = (
 
   // polling fallback when streaming is not connected
   useEffect(() => {
-    if (!polling || streamingConnected || timeline.isPending || !newestStatusId) return;
+    if (!polling || !pollingEnabled || streamingConnected || timeline.isPending || !newestStatusId)
+      return;
 
     const poll = async () => {
       const sinceId =
@@ -66,6 +72,11 @@ const useTimeline = (
 
       try {
         const response = await fetcherRef.current({ since_id: sinceId });
+        if (sinceIdUnsupported(response.items, sinceId)) {
+          timelineActions.disablePolling();
+          return;
+        }
+
         if (response.items.length === 0) return;
 
         importEntities({ statuses: response.items });
@@ -77,7 +88,7 @@ const useTimeline = (
 
     const interval = setInterval(poll, POLLING_INTERVAL);
     return () => clearInterval(interval);
-  }, [timelineId, polling, streamingConnected, timeline.isPending]);
+  }, [timelineId, polling, pollingEnabled, streamingConnected, timeline.isPending]);
 
   useEffect(() => {
     if (!timeline.isPending || timeline.isFetching) return;

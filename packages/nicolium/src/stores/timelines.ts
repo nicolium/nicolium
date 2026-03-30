@@ -51,6 +51,7 @@ interface TimelineData {
 
 interface State {
   timelines: Record<string, TimelineData>;
+  pollingEnabled: boolean;
   actions: {
     expandTimeline: (
       timelineId: string,
@@ -76,6 +77,7 @@ interface State {
     deletePendingStatus: (idempotencyKey: string) => void;
     filterTimelines: (accountId: string) => void;
     resetTimeline: (timelineId: string) => void;
+    disablePolling: () => void;
   };
 }
 
@@ -186,6 +188,7 @@ const getTimelinesForStatus = (
 const useTimelinesStore = create<State>()(
   mutative((set) => ({
     timelines: {} as Record<string, TimelineData>,
+    pollingEnabled: true,
     actions: {
       expandTimeline: (timelineId, statuses, hasMore, initialFetch = false, restoring = false) =>
         set((state) => {
@@ -417,6 +420,10 @@ const useTimelinesStore = create<State>()(
       resetTimeline: (timelineId) =>
         set((state) => {
           state.timelines[timelineId] = createEmptyTimeline();
+        }),
+      disablePolling: () =>
+        set((state) => {
+          state.pollingEnabled = false;
         }),
     },
   })),
