@@ -140,15 +140,10 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         onKeyDown={handleItemKeyDown}
         target={typeof item.target === 'string' ? item.target : '_blank'}
         title={item.text}
-        className={clsx(
-          'mx-2 my-1 flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 rtl:flex-row-reverse',
-          {
-            'text-danger-600 dark:text-danger-400': item.destructive,
-            'cursor-not-allowed opacity-50': item.disabled,
-            'hover:bg-gray-100 hover:text-gray-800 focus:bg-gray-100 focus:text-gray-800 focus:outline-none black:hover:bg-gray-900 black:focus:bg-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-200 dark:focus:bg-gray-800 dark:focus:text-gray-200':
-              !item.disabled,
-          },
-        )}
+        aria-disabled={item.disabled}
+        className={clsx('⁂-dropdown-menu__item', {
+          '⁂-dropdown-menu__item--destructive': item.destructive,
+        })}
       >
         {item.icon && <Icon src={item.icon} className='mr-3 size-5 flex-none rtl:ml-3 rtl:mr-0' />}
 
