@@ -177,7 +177,11 @@ const useContextStore = create<State>()(
       importPendingStatus: (inReplyToId, idempotencyKey) =>
         set((state) => {
           const id = `末pending-${idempotencyKey}`;
-          importStatus(state, { id, in_reply_to_id: inReplyToId ?? null, parent_visible: undefined });
+          importStatus(state, {
+            id,
+            in_reply_to_id: inReplyToId ?? null,
+            parent_visible: undefined,
+          });
         }),
       deletePendingStatus: (inReplyToId, idempotencyKey) =>
         set((state) => {
@@ -320,7 +324,19 @@ const useThread = (statusId?: string, linear?: boolean) => {
     ancestorsIds = ancestorsIds.filter((id) => id !== statusId && !descendantsIds.includes(id));
     descendantsIds = descendantsIds.filter((id) => id !== statusId && !ancestorsIds.includes(id));
 
-    return [...ancestorsIds, statusId, ...descendantsIds];
+    let threadIds = [...ancestorsIds, statusId, ...descendantsIds];
+
+    let hasTombstone = false;
+    if (linear)
+      threadIds = threadIds.filter((id) => {
+        if (id.endsWith('-tombstone') || id.endsWith('-unavailable')) {
+          hasTombstone = true;
+          return false;
+        }
+        return true;
+      });
+    if (hasTombstone) threadIds.unshift(`${statusId}-tombstone`);
+    return threadIds;
   }, [inReplyTos, replies, statusId, linear]);
 };
 
