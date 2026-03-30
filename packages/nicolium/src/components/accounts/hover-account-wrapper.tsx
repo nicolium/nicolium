@@ -7,7 +7,7 @@ import { isMobile } from '@/utils/is-mobile';
 
 const showAccountHoverCard = debounce((openAccountHoverCard, ref, accountId) => {
   openAccountHoverCard(ref, accountId);
-}, 600);
+}, 300);
 
 interface IHoverAccountWrapper {
   accountId?: string;
