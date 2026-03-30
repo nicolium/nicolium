@@ -58,7 +58,7 @@ const HomeTimelinePage: React.FC = () => {
       title={<TimelinePicker active='home' />}
       withBack={false}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       <HomeTimelineColumn
         emptyMessageText={

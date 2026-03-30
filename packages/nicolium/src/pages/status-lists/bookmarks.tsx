@@ -117,7 +117,7 @@ const BookmarksPage: React.FC = () => {
   return (
     <Column
       label={folder ? folder.name : intl.formatMessage(messages.heading)}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       <PullToRefresh onRefresh={handleRefresh}>
         <StatusList

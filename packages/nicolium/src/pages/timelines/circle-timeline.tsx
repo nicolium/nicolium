@@ -96,7 +96,7 @@ const CircleTimelinePage: React.FC = () => {
   return (
     <Column
       label={title}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
       title={<TimelinePicker active={`circle:${circleId}`} />}
       truncateTitle={false}
     >

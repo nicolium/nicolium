@@ -23,7 +23,7 @@ const CommunityTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='local' />}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       <PublicTimelineColumn
         local

@@ -23,7 +23,7 @@ const WrenchedTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='wrenched' />}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       <WrenchedTimelineColumn
         emptyMessageText={

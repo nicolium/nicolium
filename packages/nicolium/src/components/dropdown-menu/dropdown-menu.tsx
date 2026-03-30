@@ -50,6 +50,8 @@ interface IDropdownMenu {
   title?: string;
   width?: React.CSSProperties['width'];
   className?: string;
+  /** Forces the dropdown to be displayed as a dropdown menu, not in a modal. */
+  forceDropdown?: boolean;
 }
 
 const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
@@ -135,7 +137,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
 
   const handleDocumentClick = useMemo(
     () => (event: Event) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+      if (ref.current && !ref.current.contains(event.target as Node) && event.type !== 'touchend') {
         handleClose();
         event.stopPropagation();
       }
@@ -239,6 +241,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
     title = 'Menu',
     width,
     className,
+    forceDropdown,
   } = props;
 
   const { openDropdownMenu, closeDropdownMenu } = useUiStoreActions();
@@ -288,7 +291,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
   };
 
   const handleOpen = () => {
-    if (userTouching.matches) {
+    if (userTouching.matches && !forceDropdown) {
       const handleClose = () => {
         closeModal('DROPDOWN_MENU');
       };

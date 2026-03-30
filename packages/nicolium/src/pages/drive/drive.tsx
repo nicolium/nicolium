@@ -824,7 +824,7 @@ const DrivePage: React.FC = () => {
       label={data?.name ?? intl.formatMessage(messages.heading)}
       backHref={'/drive/{-$folderId}'}
       backParams={{ folderId: data?.parent_id ?? undefined }}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       <div className='⁂-drive-breadcrumbs'>
         <Breadcrumbs folderId={folderId} />

@@ -116,7 +116,7 @@ const ListTimelinePage: React.FC = () => {
       label={title}
       title={<TimelinePicker active={`list:${listId}`} />}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       <ListTimelineColumn
         listId={listId}

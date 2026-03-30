@@ -39,7 +39,7 @@ const HashtagTimelinePage: React.FC = () => {
   return (
     <Column
       label={`#${hashtag}`}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       {features.followHashtags && isLoggedIn && (
         <List>

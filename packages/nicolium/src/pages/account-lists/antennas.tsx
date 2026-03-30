@@ -56,7 +56,7 @@ const AntennasPage: React.FC = () => {
   return (
     <Column
       label={intl.formatMessage(messages.heading)}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       <div className='flex flex-col gap-4'>
         {/* <NewListForm /> */}

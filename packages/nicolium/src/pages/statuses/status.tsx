@@ -166,7 +166,7 @@ const StatusPage: React.FC = () => {
     <div className='flex flex-col gap-4'>
       <Column
         label={intl.formatMessage(titleMessage())}
-        action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+        action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
       >
         <PullToRefresh onRefresh={handleRefresh}>
           <Thread

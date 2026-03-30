@@ -97,7 +97,7 @@ const AntennaTimelinePage: React.FC = () => {
   return (
     <Column
       label={title}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
       title={<TimelinePicker active={`antenna:${antennaId}`} />}
       truncateTitle={false}
     >

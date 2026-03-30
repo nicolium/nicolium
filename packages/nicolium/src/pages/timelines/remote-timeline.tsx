@@ -74,7 +74,7 @@ const RemoteTimelinePage: React.FC = () => {
       label={instance}
       title={<TimelinePicker active={`instance:${instance}`} />}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       {!isPinned && (
         <div className='mb-4 flex gap-2 px-2'>

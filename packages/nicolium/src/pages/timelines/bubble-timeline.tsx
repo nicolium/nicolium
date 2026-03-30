@@ -23,7 +23,7 @@ const BubbleTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='bubble' />}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       <BubbleTimelineColumn
         emptyMessageText={

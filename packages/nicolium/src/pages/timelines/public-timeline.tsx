@@ -44,7 +44,7 @@ const PublicTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='federated' />}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} />}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       {showExplanationBox && (
         <Accordion
