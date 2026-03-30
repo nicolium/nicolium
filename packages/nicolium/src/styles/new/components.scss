@@ -1076,6 +1076,68 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
         }
       }
     }
+
+    &__icon {
+      flex: none;
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-right: 0.75rem;
+
+      [dir='rtl'] & {
+        margin-right: 0;
+        margin-left: 0.75rem;
+      }
+    }
+
+    &__content {
+      overflow: hidden;
+      font-size: 0.9375rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:not(:last-child) {
+        margin-right: 0.5rem;
+      }
+
+      div:first-child {
+        overflow: hidden;
+        font-size: 0.9375rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      div:last-child {
+        margin-top: 0.125rem;
+        font-size: 0.75rem;
+        line-height: 1rem;
+      }
+    }
+
+    &__counter {
+      flex: none;
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-left: auto;
+    }
+
+    &__switch {
+      margin-left: auto;
+    }
+
+    &__expand {
+      margin-left: auto;
+
+      [dir='rtl'] & {
+        margin-right: auto;
+        margin-left: 0;
+      }
+
+      svg {
+        flex: none;
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
   }
 }
 

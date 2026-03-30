@@ -145,20 +145,13 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
           '⁂-dropdown-menu__item--destructive': item.destructive,
         })}
       >
-        {item.icon && <Icon src={item.icon} className='mr-3 size-5 flex-none rtl:ml-3 rtl:mr-0' />}
+        {item.icon && <Icon src={item.icon} className='⁂-dropdown-menu__item__icon' />}
 
-        <div
-          className={clsx('truncate', {
-            'text-xs': item.meta,
-            'text-base': !item.meta,
-            'mr-2':
-              (item.count ?? item.type === 'toggle') || item.type === 'radio' || item.items?.length,
-          })}
-        >
+        <div className='⁂-dropdown-menu__item__content'>
           {item.meta ? (
             <>
-              <div className='truncate text-base'>{item.text}</div>
-              <div className='mt-0.5'>{item.meta}</div>
+              <div>{item.text}</div>
+              <div>{item.meta}</div>
             </>
           ) : (
             item.text
@@ -166,13 +159,13 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         </div>
 
         {item.count ? (
-          <span className='ml-auto size-5 flex-none'>
+          <span className='⁂-dropdown-menu__item__counter'>
             <Counter count={item.count} />
           </span>
         ) : null}
 
         {(item.type === 'toggle' || item.type === 'radio') && (
-          <div className='ml-auto'>
+          <div className='⁂-dropdown-menu__item__switch'>
             <Toggle
               checked={item.checked}
               onChange={handleChange}
@@ -183,11 +176,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         )}
 
         {!!item.items?.length && (
-          <Icon
-            src={iconCaretRight}
-            containerClassName='ml-auto rtl:ml-0 rtl:mr-auto'
-            className='size-5 flex-none'
-          />
+          <Icon src={iconCaretRight} containerClassName='⁂-dropdown-menu__item__expand' />
         )}
       </a>
 
