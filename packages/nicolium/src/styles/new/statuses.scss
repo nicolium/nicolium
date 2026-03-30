@@ -1,4 +1,5 @@
 @use 'mixins';
+@use 'variables';
 
 .⁂-status {
   cursor: pointer;
@@ -627,6 +628,15 @@
 
   z-index: 1;
   margin: -0.5rem auto;
+
+  &--expanded {
+    position: sticky;
+    bottom: 0.5rem;
+
+    @media (max-width: variables.$breakpoint-md) {
+      bottom: 4rem;
+    }
+  }
 
   &:not(.⁂-expand-button--expanded) {
     margin-top: -3rem;
