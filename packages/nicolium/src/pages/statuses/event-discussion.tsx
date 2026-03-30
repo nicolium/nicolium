@@ -69,7 +69,7 @@ const EventDiscussionPage: React.FC = () => {
 
   const renderChildren = (list: Array<string>) =>
     list.map((id) => {
-      if (id.endsWith('-tombstone')) {
+      if (id.endsWith('-tombstone') || id.endsWith('-unavailable')) {
         return renderTombstone(id);
       } else if (id.startsWith('末pending-')) {
         return renderPendingStatus(id);

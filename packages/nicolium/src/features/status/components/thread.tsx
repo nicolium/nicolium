@@ -292,7 +292,7 @@ const Thread = ({
         );
       }
 
-      if (id.endsWith('-tombstone')) {
+      if (id.endsWith('-tombstone') || id.endsWith('-unavailable')) {
         return renderTombstone(id);
       } else if (id.startsWith('末pending-')) {
         return renderPendingStatus(id);

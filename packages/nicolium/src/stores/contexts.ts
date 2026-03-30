@@ -7,18 +7,18 @@ import { findStatuses } from '@/queries/statuses/use-status';
 import type { Context, Status } from 'pl-api';
 
 /** Minimal status fields needed to process context. */
-type ContextStatus = Pick<Status, 'id' | 'in_reply_to_id'>;
+type ContextStatus = Pick<Status, 'id' | 'in_reply_to_id' | 'parent_visible'>;
 
 /** Import a single status into the reducer, setting replies and replyTos. */
 const importStatus = (state: State, status: ContextStatus, idempotencyKey?: string) => {
-  const { id, in_reply_to_id: inReplyToId } = status;
+  const { id, in_reply_to_id: inReplyToId, parent_visible: parentVisible } = status;
   if (!inReplyToId) return;
 
   const replies = state.replies[inReplyToId] || [];
   const newReplies = [...new Set([...replies, id])].toSorted();
 
   state.replies[inReplyToId] = newReplies;
-  state.inReplyTos[id] = inReplyToId;
+  state.inReplyTos[id] = parentVisible === false ? `${inReplyToId}-unavailable` : inReplyToId;
 
   if (idempotencyKey) {
     deletePendingStatus(state, status.in_reply_to_id, idempotencyKey);
@@ -34,8 +34,8 @@ const importStatuses = (state: State, statuses: ContextStatus[]) => {
 /** Insert a fake status ID connecting descendant to ancestor. */
 const insertTombstone = (state: State, ancestorId: string, descendantId: string) => {
   const tombstoneId = `${descendantId}-tombstone`;
-  importStatus(state, { id: tombstoneId, in_reply_to_id: ancestorId });
-  importStatus(state, { id: descendantId, in_reply_to_id: tombstoneId });
+  importStatus(state, { id: tombstoneId, in_reply_to_id: ancestorId, parent_visible: false });
+  importStatus(state, { id: descendantId, in_reply_to_id: tombstoneId, parent_visible: false });
 };
 
 /** Find the highest level status from this statusId. */
