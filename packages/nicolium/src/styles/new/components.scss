@@ -165,7 +165,7 @@
     }
   }
 
-  &:not(&--spoiler-expanded) {
+  &:not(&--expanded) {
     .⁂-accordion__body {
       display: none;
       height: 0;
