@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.1.2
+
+### Changed
+
+- Collapsed posts can be expanded without switching to the thread view.
+- Posts can be previewed on touchscreen devices by clicking on the 'Replying to' text on a reply.
+- Continued work on migrating styles from TailwindCSS.
+- Some dropdown menus now don't get opened as a modal on mobile.
+- Updated feature detection for Hollo.
+
+### Fixed
+
+- Finished the content-type bugfixes.
+- Polling is now disabled when the instance doesn't support `since_id` parameter.
+- It's now possible to edit a multilingual post.
+- Unread notification count on Hollo is now handled correctly.
+
 ## v0.1.1
 
 ### Added
