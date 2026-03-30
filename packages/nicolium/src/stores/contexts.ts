@@ -17,8 +17,10 @@ const importStatus = (state: State, status: ContextStatus, idempotencyKey?: stri
   const replies = state.replies[inReplyToId] || [];
   const newReplies = [...new Set([...replies, id])].toSorted();
 
-  state.replies[inReplyToId] = newReplies;
-  state.inReplyTos[id] = parentVisible === false ? `${inReplyToId}-unavailable` : inReplyToId;
+  const parentId = parentVisible === false ? `${inReplyToId}-unavailable` : inReplyToId;
+
+  state.replies[parentId] = newReplies;
+  state.inReplyTos[id] = parentId;
 
   if (idempotencyKey) {
     deletePendingStatus(state, status.in_reply_to_id, idempotencyKey);
@@ -307,7 +309,8 @@ const useThread = (statusId?: string, linear?: boolean) => {
         parentStatus = next;
       }
 
-      const threadStatuses = [parentStatus];
+      let threadStatuses = [parentStatus];
+      let hasTombstone: string | undefined;
 
       for (let i = 0; i < threadStatuses.length; i++) {
         for (const reply of replies[threadStatuses[i]] || []) {
@@ -315,7 +318,18 @@ const useThread = (statusId?: string, linear?: boolean) => {
         }
       }
 
-      return threadStatuses.toSorted();
+      threadStatuses = threadStatuses
+        .filter((id) => {
+          if (id.endsWith('-tombstone') || id.endsWith('-unavailable')) {
+            hasTombstone = id;
+            return false;
+          }
+          return true;
+        })
+        .toSorted();
+
+      if (hasTombstone) threadStatuses.unshift(hasTombstone);
+      return threadStatuses;
     }
 
     let ancestorsIds = getAncestorsIds(statusId, inReplyTos);
@@ -324,19 +338,7 @@ const useThread = (statusId?: string, linear?: boolean) => {
     ancestorsIds = ancestorsIds.filter((id) => id !== statusId && !descendantsIds.includes(id));
     descendantsIds = descendantsIds.filter((id) => id !== statusId && !ancestorsIds.includes(id));
 
-    let threadIds = [...ancestorsIds, statusId, ...descendantsIds];
-
-    let hasTombstone: string | undefined;
-    if (linear)
-      threadIds = threadIds.filter((id) => {
-        if (id.endsWith('-tombstone') || id.endsWith('-unavailable')) {
-          hasTombstone = id;
-          return false;
-        }
-        return true;
-      });
-    if (hasTombstone) threadIds.unshift(hasTombstone);
-    return threadIds;
+    return [...ancestorsIds, statusId, ...descendantsIds];
   }, [inReplyTos, replies, statusId, linear]);
 };
 
