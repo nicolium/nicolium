@@ -597,7 +597,12 @@ const ReblogButton: React.FC<IReblogButton> = ({
   ];
 
   return (
-    <DropdownMenu items={reblogMenu} disabled={!publicStatus} onShiftClick={handleReblogClick}>
+    <DropdownMenu
+      items={reblogMenu}
+      disabled={!publicStatus}
+      onShiftClick={handleReblogClick}
+      forceDropdown
+    >
       {reblogButton}
     </DropdownMenu>
   );
