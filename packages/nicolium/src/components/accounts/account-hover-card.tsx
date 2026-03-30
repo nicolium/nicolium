@@ -93,6 +93,13 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (account && !ref?.current) {
+      showAccountHoverCard.cancel();
+      closeAccountHoverCard(true);
+    }
+  }, [!!account]);
+
   const { x, y, strategy, refs, context, placement } = useFloating({
     open: !!account,
     elements: {

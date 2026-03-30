@@ -35,6 +35,13 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (statusId && !ref?.current) {
+      showStatusHoverCard.cancel();
+      closeStatusHoverCard(true);
+    }
+  }, [!!statusId]);
+
   const { x, y, strategy, refs, context, placement } = useFloating({
     open: !!statusId,
     elements: {
