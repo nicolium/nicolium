@@ -39,6 +39,15 @@ const defaultSettings = {
   showNonMedia: true,
 };
 
+const getUpdatedTimelineSettings = (
+  timeline: typeof defaultSettings,
+  key: keyof typeof defaultSettings,
+  value: boolean,
+): typeof defaultSettings => ({
+  ...timeline,
+  [key]: value,
+});
+
 const useTimelineFiltersOptions = (
   timeline:
     | 'home'
@@ -59,19 +68,25 @@ const useTimelineFiltersOptions = (
   return useMemo(() => {
     const items: Menu = [];
 
+    const handleOnChecked = (key: keyof typeof defaultSettings) => (checked: boolean) =>
+      changeSetting(
+        ['timelines', timeline],
+        getUpdatedTimelineSettings(timelineSettings, key, checked),
+      );
+
     if (['home', 'list', 'antenna'].includes(timeline)) {
       items.push({
         text: intl.formatMessage(messages.showReblogs),
         type: 'toggle',
         checked: timelineSettings?.showReblogs,
-        onChange: (checked) => changeSetting(['timelines', timeline, 'showReblogs'], checked),
+        onChange: handleOnChecked('showReblogs'),
       });
       items.push({
         text: intl.formatMessage(messages.showSelfReblogs),
         type: 'toggle',
         checked: timelineSettings?.showSelfReblogs,
         disabled: !timelineSettings?.showReblogs,
-        onChange: (checked) => changeSetting(['timelines', timeline, 'showSelfReblogs'], checked),
+        onChange: handleOnChecked('showSelfReblogs'),
       });
     }
 
@@ -79,7 +94,7 @@ const useTimelineFiltersOptions = (
       text: intl.formatMessage(messages.showReplies),
       type: 'toggle',
       checked: timelineSettings?.showReplies,
-      onChange: (checked) => changeSetting(['timelines', timeline, 'showReplies'], checked),
+      onChange: handleOnChecked('showReplies'),
     });
 
     if (features.quotePosts) {
@@ -87,7 +102,7 @@ const useTimelineFiltersOptions = (
         text: intl.formatMessage(messages.showQuotes),
         type: 'toggle',
         checked: timelineSettings?.showQuotes,
-        onChange: (checked) => changeSetting(['timelines', timeline, 'showQuotes'], checked),
+        onChange: handleOnChecked('showQuotes'),
       });
     }
 
@@ -96,7 +111,7 @@ const useTimelineFiltersOptions = (
         text: intl.formatMessage(messages.showDirect),
         type: 'toggle',
         checked: timelineSettings?.showDirect,
-        onChange: (checked) => changeSetting(['timelines', timeline, 'showDirect'], checked),
+        onChange: handleOnChecked('showDirect'),
       });
     }
 
@@ -104,7 +119,7 @@ const useTimelineFiltersOptions = (
       text: intl.formatMessage(messages.hideNonMedia),
       type: 'toggle',
       checked: !timelineSettings?.showNonMedia,
-      onChange: (checked) => changeSetting(['timelines', timeline, 'showNonMedia'], !checked),
+      onChange: handleOnChecked('showNonMedia'),
     });
 
     // {
@@ -120,4 +135,4 @@ const useTimelineFiltersOptions = (
   }, [timeline, features, timelineSettings]);
 };
 
-export { useTimelineFiltersOptions };
+export { useTimelineFiltersOptions, getUpdatedTimelineSettings };
