@@ -1864,6 +1864,7 @@
   "status.cancel_reblog_private": "Un-repost",
   "status.cannot_reblog": "This post cannot be reposted",
   "status.chat": "Chat with @{name}",
+  "status.collapse": "Collapse",
   "status.copy": "Copy link to post",
   "status.copy.success": "Link to post copied to clipboard",
   "status.copy_content": "Copy post content",
