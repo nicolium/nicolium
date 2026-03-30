@@ -27,7 +27,7 @@ const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.delete_list.confirm', defaultMessage: 'Delete' },
   editList: { id: 'lists.edit', defaultMessage: 'Edit list' },
   deleteList: { id: 'lists.delete', defaultMessage: 'Delete list' },
-  notFound: { id: 'list.not_found', defaultMessage: 'List not found' },
+  notFound: { id: 'list.not_found.heading', defaultMessage: 'List not found' },
 });
 
 const ListTimelinePage: React.FC = () => {
@@ -76,11 +76,11 @@ const ListTimelinePage: React.FC = () => {
     return (
       <Column label={intl.formatMessage(messages.notFound)}>
         <EmptyMessage
-          heading={<FormattedMessage id='list.not_found_heading' defaultMessage='List not found' />}
+          heading={<FormattedMessage id='list.not_found.heading' defaultMessage='List not found' />}
           text={
             <div className='flex flex-col items-center gap-4'>
               <FormattedMessage
-                id='list.not_found'
+                id='list.not_found.text'
                 defaultMessage="It might have been deleted or you don't have permission to view it. Make sure you're viewing it from the correct account."
               />
               <Button to='/lists' theme='muted'>

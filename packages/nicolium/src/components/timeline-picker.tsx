@@ -27,7 +27,7 @@ const messages = defineMessages({
   localTimeline: { id: 'column.community', defaultMessage: 'Local timeline' },
   bubbleTimeline: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
   federatedTimeline: { id: 'column.public', defaultMessage: 'Fediverse timeline' },
-  wrenchedTimeline: { id: 'column.wrenched', defaultMessage: 'Wrenched timeline' },
+  wrenchedTimeline: { id: 'column.wrenched', defaultMessage: 'Recent wrenches timeline' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
   circles: { id: 'column.circles', defaultMessage: 'Circles' },
   antennas: { id: 'column.antennas', defaultMessage: 'Antennas' },
