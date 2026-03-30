@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 
 import { useStatusHoverCardActions } from '@/stores/status-hover-card';
-import { isMobile } from '@/utils/is-mobile';
+import { isMobile, userTouching } from '@/utils/is-mobile';
 
 const showStatusHoverCard = debounce((openStatusHoverCard, ref, statusId) => {
   openStatusHoverCard(ref, statusId);
@@ -41,7 +41,15 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
     }, 200);
   };
 
-  const handleClick = () => {
+  const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    if (userTouching.matches) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      showStatusHoverCard(openStatusHoverCard, ref, statusId);
+      return;
+    }
+
     showStatusHoverCard.cancel();
     closeStatusHoverCard(true);
   };

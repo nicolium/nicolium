@@ -1,4 +1,4 @@
-import { autoUpdate, flip, shift, useFloating } from '@floating-ui/react';
+import { autoUpdate, flip, shift, size, useFloating } from '@floating-ui/react';
 import { useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
@@ -36,10 +36,38 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   }, []);
 
   useEffect(() => {
-    if (statusId && !ref?.current) {
+    if (!statusId) return;
+    if (!ref?.current) {
       showStatusHoverCard.cancel();
       closeStatusHoverCard(true);
     }
+
+    let touchPosition = { x: 0, y: 0 };
+
+    const handleDocumentTouchStart = (event: TouchEvent) => {
+      touchPosition = {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
+      };
+    };
+
+    const handleDocumentTouchEnd = (event: TouchEvent) => {
+      if (
+        touchPosition.x === event.changedTouches[0].clientX &&
+        touchPosition.y === event.changedTouches[0].clientY
+      )
+        return;
+      showStatusHoverCard.cancel();
+      closeStatusHoverCard(true);
+    };
+
+    document.addEventListener('touchstart', handleDocumentTouchStart);
+    document.addEventListener('touchend', handleDocumentTouchEnd);
+
+    return () => {
+      document.removeEventListener('touchstart', handleDocumentTouchStart);
+      document.removeEventListener('touchend', handleDocumentTouchEnd);
+    };
   }, [!!statusId]);
 
   const { x, y, strategy, refs, context, placement } = useFloating({
@@ -52,6 +80,14 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
       flip(),
       shift({
         padding: 8,
+      }),
+      size({
+        apply({ availableWidth, availableHeight, elements }) {
+          Object.assign(elements.floating.style, {
+            maxWidth: `${availableWidth - 8}px`,
+            maxHeight: `${availableHeight}px`,
+          });
+        },
       }),
     ],
     whileElementsMounted: autoUpdate,
