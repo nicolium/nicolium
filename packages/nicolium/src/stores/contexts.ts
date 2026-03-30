@@ -326,16 +326,16 @@ const useThread = (statusId?: string, linear?: boolean) => {
 
     let threadIds = [...ancestorsIds, statusId, ...descendantsIds];
 
-    let hasTombstone = false;
+    let hasTombstone: string | undefined;
     if (linear)
       threadIds = threadIds.filter((id) => {
         if (id.endsWith('-tombstone') || id.endsWith('-unavailable')) {
-          hasTombstone = true;
+          hasTombstone = id;
           return false;
         }
         return true;
       });
-    if (hasTombstone) threadIds.unshift(`${statusId}-tombstone`);
+    if (hasTombstone) threadIds.unshift(hasTombstone);
     return threadIds;
   }, [inReplyTos, replies, statusId, linear]);
 };
