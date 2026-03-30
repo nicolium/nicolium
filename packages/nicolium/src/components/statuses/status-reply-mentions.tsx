@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router';
+import clsx from 'clsx';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
@@ -9,12 +10,19 @@ import { useModalsActions } from '@/stores/modals';
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
 interface IStatusReplyMentions {
-  status: Pick<Status, 'in_reply_to_id' | 'in_reply_to_account_id' | 'id' | 'mentions'>;
+  status: Pick<
+    Status,
+    'in_reply_to_id' | 'in_reply_to_account_id' | 'id' | 'mentions' | 'parent_visible'
+  >;
   hoverable?: boolean;
 }
 
 const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable = true }) => {
   const { openModal } = useModalsActions();
+
+  if (status.parent_visible === false) {
+    hoverable = false;
+  }
 
   const handleOpenMentionsModal: React.MouseEventHandler<HTMLSpanElement> = (e) => {
     e.stopPropagation();
@@ -41,7 +49,11 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   // Rare, but it can happen.
   if (to.length === 0) {
     const body = (
-      <div className='⁂-status-reply-mentions'>
+      <div
+        className={clsx('⁂-status-reply-mentions', {
+          '⁂-status-reply-mentions--unavailable': status.parent_visible === false,
+        })}
+      >
         <FormattedMessage id='reply_mentions.reply_empty' defaultMessage='Replying to post' />
       </div>
     );
@@ -105,7 +117,11 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   }
 
   return (
-    <div className='⁂-status-reply-mentions'>
+    <div
+      className={clsx('⁂-status-reply-mentions', {
+        '⁂-status-reply-mentions--unavailable': status.parent_visible === false,
+      })}
+    >
       <FormattedMessage
         id='reply_mentions.reply.hoverable'
         defaultMessage='<hover>Replying to</hover> {accounts}'
