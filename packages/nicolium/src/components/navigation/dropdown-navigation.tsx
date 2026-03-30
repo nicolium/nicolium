@@ -52,6 +52,7 @@ import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
+import { useIsStandalone } from '@/utils/state';
 
 import type { Account as AccountEntity } from 'pl-api';
 
@@ -182,6 +183,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   const touchStart = useRef(0);
   const touchEnd = useRef<number | null>(null);
   const { isOpen } = useRegistrationStatus();
+  const standalone = useIsStandalone();
 
   const instance = useInstance();
   const timelineAccess = instance.configuration.timelines_access;
@@ -549,51 +551,53 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
           </div>
         ) : (
           <div>
-            {features.publicTimeline && timelineAccess.live_feeds.local === 'public' && (
-              <>
-                <DropdownNavigationLink
-                  to='/timeline/local'
-                  icon={iconPlanet}
-                  text={
-                    features.federating ? (
-                      <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
-                    ) : (
-                      <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
-                    )
-                  }
-                  onClick={closeSidebar}
-                />
-
-                {features.bubbleTimeline && timelineAccess.live_feeds.bubble === 'public' && (
+            {!standalone &&
+              features.publicTimeline &&
+              timelineAccess.live_feeds.local === 'public' && (
+                <>
                   <DropdownNavigationLink
-                    to='/timeline/bubble'
-                    icon={iconGraph}
-                    text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                    to='/timeline/local'
+                    icon={iconPlanet}
+                    text={
+                      features.federating ? (
+                        <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
+                      ) : (
+                        <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
+                      )
+                    }
                     onClick={closeSidebar}
                   />
-                )}
 
-                {features.federating && timelineAccess.live_feeds.remote === 'public' && (
-                  <DropdownNavigationLink
-                    to='/timeline/fediverse'
-                    icon={iconFediverseLogo}
-                    text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                    onClick={closeSidebar}
-                  />
-                )}
+                  {features.bubbleTimeline && timelineAccess.live_feeds.bubble === 'public' && (
+                    <DropdownNavigationLink
+                      to='/timeline/bubble'
+                      icon={iconGraph}
+                      text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                      onClick={closeSidebar}
+                    />
+                  )}
 
-                {features.wrenchedTimeline && timelineAccess.live_feeds.wrenched === 'public' && (
-                  <DropdownNavigationLink
-                    to='/timeline/wrenched'
-                    icon={iconWrench}
-                    text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-                    onClick={closeSidebar}
-                  />
-                )}
+                  {features.federating && timelineAccess.live_feeds.remote === 'public' && (
+                    <DropdownNavigationLink
+                      to='/timeline/fediverse'
+                      icon={iconFediverseLogo}
+                      text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                      onClick={closeSidebar}
+                    />
+                  )}
 
-                <Divider />
-              </>
-            )}
+                  {features.wrenchedTimeline && timelineAccess.live_feeds.wrenched === 'public' && (
+                    <DropdownNavigationLink
+                      to='/timeline/wrenched'
+                      icon={iconWrench}
+                      text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
+                      onClick={closeSidebar}
+                    />
+                  )}
+
+                  <Divider />
+                </>
+              )}
 
             <DropdownNavigationLink
               to='/login'
