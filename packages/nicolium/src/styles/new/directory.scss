@@ -28,7 +28,7 @@
     gap: 0.625rem;
 
     .no-reduce-motion &--loading {
-      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      animation: pulse 2s ease-in-out infinite;
     }
 
     @media (min-width: variables.$breakpoint-sm) {

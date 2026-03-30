@@ -36,7 +36,7 @@
 
     height: 100%;
 
-    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 150ms var(--ease-default);
 
     @media (min-width: variables.$breakpoint-xl) {
       padding-right: 24rem;
@@ -209,7 +209,7 @@
     background-color: #fff;
     box-shadow: var(--shadow-lg);
 
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-timing-function: var(--ease-default);
     transition-duration: 200ms;
 
     &:focus {
@@ -222,7 +222,7 @@
     }
 
     .no-reduce-motion & {
-      transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 150ms var(--ease-default);
     }
 
     .dark & {
@@ -271,7 +271,7 @@
       appearance: none;
       background-color: transparent;
 
-      transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 150ms var(--ease-default);
 
       &:hover {
         background-color: #fff1;

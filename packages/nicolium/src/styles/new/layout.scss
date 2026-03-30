@@ -92,7 +92,7 @@ body {
   backdrop-filter: blur(12px) saturate(2);
   box-shadow: var(--shadow-lg);
 
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-timing-function: var(--ease-default);
 
   .dark.black & {
     background-color: #000b;
@@ -100,7 +100,7 @@ body {
 
   .no-reduce-motion & {
     transform: scale(0);
-    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 150ms var(--ease-default);
   }
 
   .dark & {
@@ -126,7 +126,7 @@ body {
     }
 
     .no-reduce-motion & {
-      transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 150ms var(--ease-default);
     }
 
     .dark & {
@@ -218,7 +218,7 @@ body {
 
       .⁂-icon {
         color: rgb(var(--color-gray-900));
-        transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 150ms var(--ease-default);
 
         .dark & {
           color: rgb(var(--color-gray-100));
@@ -454,7 +454,7 @@ body {
     border-color,
     text-decoration-color,
     fill,
-    stroke 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    stroke 200ms var(--ease-default);
 
   [dir='rtl'] & {
     flex-direction: row-reverse;
@@ -474,7 +474,7 @@ body {
       border-color,
       text-decoration-color,
       fill,
-      stroke 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      stroke 200ms var(--ease-default);
 
     svg {
       width: 1.25rem;
@@ -556,7 +556,7 @@ body {
 
   &:not(.⁂-modal-root--visible) {
     z-index: 50;
-    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 150ms var(--ease-default);
   }
 
   &--visible {
@@ -571,7 +571,7 @@ body {
     width: 100%;
     height: 100dvh;
 
-    transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 150ms var(--ease-default);
   }
 
   &--revealed {
@@ -662,7 +662,7 @@ body {
   width: 100vw;
   height: 100vh;
 
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 150ms var(--ease-default);
 
   &--dragging {
     backdrop-filter: blur(8px);

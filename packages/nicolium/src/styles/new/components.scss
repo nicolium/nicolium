@@ -136,7 +136,7 @@
       width: 1.25rem;
       height: 1.25rem;
       color: rgb(var(--color-gray-700));
-      transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 150ms var(--ease-default);
 
       .dark & {
         color: rgb(var(--color-gray-600));
@@ -499,7 +499,7 @@ a.⁂-list-item,
 
   opacity: 0;
 
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 150ms var(--ease-default);
 
   &--visible {
     top: 0.5rem;
@@ -522,7 +522,7 @@ a.⁂-list-item,
     background-color: rgb(var(--color-primary-600) / 0.8);
     backdrop-filter: blur(12px) saturate(2);
 
-    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 150ms var(--ease-default);
 
     &:hover {
       transform: scale(1.05);
@@ -727,7 +727,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     0 20px 25px -5px #0001,
     0 8px 10px -6px #0001;
 
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 150ms var(--ease-default);
 
   .dark.black & {
     background-color: #000;
@@ -915,7 +915,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     background-color: #fff;
     box-shadow: var(--shadow-lg);
 
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-timing-function: var(--ease-default);
     transition-duration: 100ms;
 
     &:focus {
@@ -928,7 +928,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     }
 
     .no-reduce-motion & {
-      transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 150ms var(--ease-default);
     }
 
     .dark & {
@@ -1199,7 +1199,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
 }
 
 .⁂-emoji {
-  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 150ms var(--ease-default);
 
   &:hover {
     transform: scale(1.25);
@@ -1340,7 +1340,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
 
   height: 1.5rem;
 
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 150ms var(--ease-default);
 
   &__track {
     position: absolute;
@@ -1404,7 +1404,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
 
   height: 1.5rem;
 
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 150ms var(--ease-default);
 
   &__track {
     position: absolute;
