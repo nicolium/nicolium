@@ -51,6 +51,30 @@ const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, preview }) => (
   </div>
 );
 
+interface IExpandButton {
+  onClick: React.MouseEventHandler;
+  expanded?: boolean;
+}
+
+const ExpandButton: React.FC<IExpandButton> = ({ onClick, expanded }) => (
+  <>
+    <div className='⁂-read-more-button__container'>
+      {!expanded && <div className='⁂-read-more-button__gradient' />}
+    </div>
+    <button
+      className={clsx('⁂-expand-button', { '⁂-expand-button--expanded': expanded })}
+      onClick={onClick}
+    >
+      <Icon src={iconCaretDown} />
+      {expanded ? (
+        <FormattedMessage id='status.collapse' defaultMessage='Collapse' />
+      ) : (
+        <FormattedMessage id='status.read_more' defaultMessage='Read more' />
+      )}
+    </button>
+  </>
+);
+
 interface IStatusContent {
   status: NormalizedStatus;
   onClick?: () => void;
@@ -62,6 +86,7 @@ interface IStatusContent {
   withMedia?: boolean;
   compose?: boolean;
   isEvent?: boolean;
+  expandable?: boolean;
 }
 
 /** Renders the text content of a status */
@@ -77,6 +102,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     withMedia,
     compose = false,
     isEvent = false,
+    expandable = false,
   }) => {
     const { urlPrivacy, displaySpoilers, renderMfm, displayMentionAvatars } = useSettings();
     const { greentext } = useFrontendConfig();
@@ -89,7 +115,8 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     const contentNode = useRef<HTMLDivElement>(null);
     const spoilerNode = useRef<HTMLSpanElement>(null);
 
-    const { collapseStatuses, expandStatuses } = useStatusMetaActions();
+    const { collapseStatuses, expandStatuses, collapseStatusSpoilers, expandStatusSpoilers } =
+      useStatusMetaActions();
     const statusMeta = useStatusMeta(status.id);
     const { data: translation } = useStatusTranslation(status.id, statusMeta.targetLanguage);
     const { data: localTranslation } = useLocalStatusTranslation(
@@ -98,7 +125,8 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     );
 
     const withSpoiler = status.spoiler_text.length > 0;
-    const expanded = !withSpoiler || (statusMeta.expanded ?? false);
+    const { expanded } = statusMeta;
+    const spoilerExpanded = !withSpoiler || (statusMeta.spoilerExpanded ?? false);
 
     const maybeSetCollapsed = (): void => {
       if (!contentNode.current) return;
@@ -121,20 +149,30 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       }
     };
 
-    const toggleExpanded: React.MouseEventHandler = (e) => {
+    const toggleSpoilerExpanded: React.MouseEventHandler = (e) => {
       e.preventDefault();
       e.stopPropagation();
 
+      if (spoilerExpanded) {
+        collapseStatusSpoilers([status.id]);
+        setCollapsed(null);
+      } else expandStatusSpoilers([status.id]);
+    };
+
+    const toggleExpanded: React.MouseEventHandler = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       if (expanded) {
         collapseStatuses([status.id]);
-        setCollapsed(null);
-      } else expandStatuses([status.id]);
+      } else {
+        expandStatuses([status.id]);
+      }
     };
 
     useLayoutEffect(() => {
       maybeSetCollapsed();
       maybeSetOnlyEmoji();
-    }, [expanded]);
+    }, [spoilerExpanded]);
 
     const content = useMemo(
       (): string =>
@@ -194,23 +232,23 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     const className = useMemo(
       () =>
         clsx('⁂-status-content', {
-          'overflow-hidden': collapsed,
-          'max-h-[200px]': collapsed && !isQuote && !preview,
-          'max-h-[120px]': collapsed && isQuote,
-          'max-h-[80px]': collapsed && preview,
-          'max-h-[282px]': collapsable && collapsed === null && !isQuote && !preview,
-          'max-h-[202px]': collapsable && collapsed === null && isQuote,
-          'max-h-[82px]': collapsed === null && preview,
+          'overflow-hidden': collapsed && !expanded,
+          'max-h-[200px]': collapsed && !isQuote && !preview && !expanded,
+          'max-h-[120px]': collapsed && isQuote && !expanded,
+          'max-h-[80px]': collapsed && preview && !expanded,
+          'max-h-[282px]': collapsable && collapsed === null && !isQuote && !preview && !expanded,
+          'max-h-[202px]': collapsable && collapsed === null && isQuote && !expanded,
+          'max-h-[82px]': collapsed === null && preview && !expanded,
           'big-emoji leading-normal': onlyEmoji,
-          '⁂-status-content--expanded': !collapsable,
+          '⁂-status-content--spoiler-expanded': !collapsable,
           '⁂-status-content--quote': isQuote,
           '⁂-status-content--preview': preview,
           '⁂-status-content--poll': !!status.poll_id,
         }),
-      [collapsed, onlyEmoji],
+      [collapsed, onlyEmoji, spoilerExpanded, expanded],
     );
 
-    const expandable = !displaySpoilers && !isEvent;
+    const hasSpoiler = !displaySpoilers && !isEvent;
 
     const output = [];
 
@@ -218,21 +256,21 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       output.push(
         <h2
           className={clsx('⁂-status-title', {
-            '⁂-status-title--clamp': !expanded && lineClamp,
+            '⁂-status-title--clamp': !spoilerExpanded && lineClamp,
           })}
           key='spoiler'
           {...(expandable
-            ? { onClick: toggleExpanded, role: 'button', 'aria-expanded': expanded }
+            ? { onClick: toggleSpoilerExpanded, role: 'button', 'aria-expanded': spoilerExpanded }
             : {})}
         >
           <span ref={spoilerNode}>
             <Emojify text={spoilerText} emojis={status.emojis} />
           </span>
-          {expandable && (
-            <button onClick={toggleExpanded}>
+          {hasSpoiler && (
+            <button onClick={toggleSpoilerExpanded}>
               <Icon src={iconCaretDown} />
               <span>
-                {expanded ? (
+                {spoilerExpanded ? (
                   <FormattedMessage id='status.spoiler.collapse' defaultMessage='Collapse' />
                 ) : (
                   <FormattedMessage id='status.spoiler.expand' defaultMessage='Expand' />
@@ -244,7 +282,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       );
     }
 
-    if (!expandable || expanded) {
+    if (!hasSpoiler || spoilerExpanded) {
       let quote;
 
       if (withMedia && status.quote_id) {
@@ -298,8 +336,12 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
         );
       }
 
-      if (collapsed) {
-        output.push(<ReadMoreButton onClick={onClick} key='read-more' preview={preview} />);
+      if (collapsed || preview) {
+        if (expandable && !preview) {
+          output.push(<ExpandButton onClick={toggleExpanded} key='expand' expanded={expanded} />);
+        } else if (collapsed) {
+          output.push(<ReadMoreButton onClick={onClick} key='read-more' preview={preview} />);
+        }
       }
 
       if (status.poll_id) {

@@ -613,6 +613,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
               collapsable
               translatable
               withMedia
+              expandable
             />
           )}
 

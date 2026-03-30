@@ -824,7 +824,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const client = useClient();
 
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
-  const { targetLanguage, expanded } = useStatusMeta(status.id);
+  const { targetLanguage, spoilerExpanded } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { data: group } = useGroupQuery(status.group_id || undefined, true);
   const { mutate: blockGroupMember } = useBlockGroupUserMutation(
@@ -1100,7 +1100,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       });
     }
 
-    if (status.spoiler_text.length === 0 || (expanded ?? false)) {
+    if (status.spoiler_text.length === 0 || (spoilerExpanded ?? false)) {
       menu.push({
         text: intl.formatMessage(messages.copyStatus),
         action: handleCopyStatus,
@@ -1421,7 +1421,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     status.pinned,
     status.reblogged,
     status.account?.relationship,
-    expanded,
+    spoilerExpanded,
   ]);
 
   return useMemo(

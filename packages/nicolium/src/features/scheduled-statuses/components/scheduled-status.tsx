@@ -57,7 +57,7 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus, ...other
         <StatusReplyMentions status={status} />
 
         <div className='flex flex-col gap-4'>
-          <StatusContent status={status} collapsable={false} />
+          <StatusContent status={status} expandable />
 
           {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
 

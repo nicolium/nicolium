@@ -51,7 +51,8 @@ const Thread = ({
   const { replyCompose, mentionCompose } = useComposeActions();
 
   const { deleted } = useStatusMeta(status.id);
-  const { expandStatuses, revealStatusesMedia, toggleStatusesMediaHidden } = useStatusMetaActions();
+  const { expandStatusSpoilers, revealStatusesMedia, toggleStatusesMediaHidden } =
+    useStatusMetaActions();
   const { openModal } = useModalsActions();
   const {
     boostModal,
@@ -395,7 +396,7 @@ const Thread = ({
 
   useEffect(() => {
     setExpandAllStatuses?.(() => {
-      expandStatuses(thread);
+      expandStatusSpoilers(thread);
       revealStatusesMedia(thread);
     });
   }, [thread]);

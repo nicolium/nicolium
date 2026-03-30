@@ -118,7 +118,13 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
       <StatusReplyMentions status={actualStatus} />
 
       <div className='relative z-0 flex flex-col gap-4'>
-        <StatusContent status={actualStatus} textSize='lg' translatable withMedia={withMedia} />
+        <StatusContent
+          status={actualStatus}
+          textSize='lg'
+          translatable
+          withMedia={withMedia}
+          expandable
+        />
       </div>
 
       {!status.rss_feed && (
