@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Text from '@/components/ui/text';
 import { useSettings } from '@/stores/settings';
 import { shortNumberFormat } from '@/utils/numbers';
 
@@ -44,18 +43,11 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
   }
 
   return (
-    <div className='flex flex-wrap items-center gap-x-3'>
+    <div className='⁂-account-stats'>
       {!demetricator && (
-        <div
-          className='flex items-center gap-1'
-          title={intl.formatMessage(messages.statusesCount, { count: account.statuses_count })}
-        >
-          <Text theme='primary' weight='bold' size='sm'>
-            {shortNumberFormat(account.statuses_count)}
-          </Text>
-          <Text weight='bold' size='sm'>
-            <FormattedMessage id='account.statuses' defaultMessage='Statuses' />
-          </Text>
+        <div title={intl.formatMessage(messages.statusesCount, { count: account.statuses_count })}>
+          <strong>{shortNumberFormat(account.statuses_count)}</strong>
+          <FormattedMessage id='account.statuses' defaultMessage='Statuses' />
         </div>
       )}
 
@@ -63,44 +55,22 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
         to='/@{$username}/followers'
         params={{ username: account.acct }}
         onClick={onClickHandler}
-        title={intl.formatNumber(account.followers_count)}
-        className='hover:underline'
+        title={intl.formatMessage(messages.followersCount, { count: account.followers_count })}
       >
-        <div
-          className='flex items-center gap-1'
-          title={intl.formatMessage(messages.followersCount, { count: account.followers_count })}
-        >
-          {!demetricator && (
-            <Text theme='primary' weight='bold' size='sm'>
-              {shortNumberFormat(account.followers_count)}
-            </Text>
-          )}
-          <Text weight='bold' size='sm'>
-            <FormattedMessage id='account.followers' defaultMessage='Followers' />
-          </Text>
-        </div>
+        {!demetricator && <strong>{shortNumberFormat(account.followers_count)}</strong>}
+
+        <FormattedMessage id='account.followers' defaultMessage='Followers' />
       </Link>
 
       <Link
         to='/@{$username}/following'
         params={{ username: account.acct }}
         onClick={onClickHandler}
-        title={intl.formatNumber(account.following_count)}
-        className='hover:underline'
+        title={intl.formatMessage(messages.followingCount, { count: account.following_count })}
       >
-        <div
-          className='flex items-center gap-1'
-          title={intl.formatMessage(messages.followingCount, { count: account.following_count })}
-        >
-          {!demetricator && (
-            <Text theme='primary' weight='bold' size='sm'>
-              {shortNumberFormat(account.following_count)}
-            </Text>
-          )}
-          <Text weight='bold' size='sm'>
-            <FormattedMessage id='account.follows' defaultMessage='Following' />
-          </Text>
-        </div>
+        {!demetricator && <strong>{shortNumberFormat(account.following_count)}</strong>}
+
+        <FormattedMessage id='account.follows' defaultMessage='Following' />
       </Link>
 
       {account.subscribers_count > 0 && (
@@ -108,24 +78,13 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
           to='/@{$username}/subscribers'
           params={{ username: account.acct }}
           onClick={onClickHandler}
-          title={intl.formatNumber(account.subscribers_count)}
-          className='hover:underline'
+          title={intl.formatMessage(messages.subscribersCount, {
+            count: account.subscribers_count,
+          })}
         >
-          <div
-            className='flex items-center gap-1'
-            title={intl.formatMessage(messages.subscribersCount, {
-              count: account.subscribers_count,
-            })}
-          >
-            {!demetricator && (
-              <Text theme='primary' weight='bold' size='sm'>
-                {shortNumberFormat(account.subscribers_count)}
-              </Text>
-            )}
-            <Text weight='bold' size='sm'>
-              <FormattedMessage id='account.subscribers' defaultMessage='Subscribers' />
-            </Text>
-          </div>
+          {!demetricator && <strong>{shortNumberFormat(account.subscribers_count)}</strong>}
+
+          <FormattedMessage id='account.subscribers' defaultMessage='Subscribers' />
         </Link>
       )}
     </div>

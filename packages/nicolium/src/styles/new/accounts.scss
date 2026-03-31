@@ -42,6 +42,32 @@
   }
 }
 
+.⁂-account-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+
+  a, div {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    @include mixins.text($weight: bold, $size: sm);
+
+    strong {
+      color: rgb(var(--color-primary-600));
+
+      .dark * & {
+        color: rgb(var(--color-primary-400));
+      }
+    }
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
 .⁂-account-card {
   display: block;
   flex-shrink: 0;

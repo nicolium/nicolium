@@ -58,7 +58,7 @@
 }
 
 .react-datepicker__navigation--next {
-  @apply right-4;
+  right: 1rem;
 
   &--with-time:not(.react-datepicker__navigation--next--with-today-button) {
     right: 100px;
@@ -76,12 +76,13 @@
 }
 
 .react-datepicker__header__dropdown {
-  @apply py-4;
+  padding: 1rem 0;
 }
 
 .react-datepicker__day-names,
 .react-datepicker__week {
-  @apply flex justify-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .react-datepicker__time {
