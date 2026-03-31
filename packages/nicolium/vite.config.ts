@@ -28,6 +28,7 @@ const config = defineConfig(() => ({
   },
   assetsInclude: ['**/*.oga'],
   server: {
+    host: '0.0.0.0',
     port: Number(process.env.PORT ?? 7312),
     hmr: process.env.HMR_DISABLED === 'true' ? false : undefined,
     ws: process.env.WS_DISABLED === 'true' ? false : undefined,

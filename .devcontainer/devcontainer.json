@@ -1,0 +1,37 @@
+{
+  "name": "Nicolium",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/nicolium",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20",
+      "nodeGypDependencies": true
+    }
+  },
+
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": true,
+
+  "forwardPorts": [7312],
+  "portsAttributes": {
+    "7312": {
+      "label": "Nicolium",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  "postCreateCommand": "bash -lc \"set -euo pipefail; corepack enable; mkdir -p ~/.local/bin; curl -fsSL https://github.com/formatjs/formatjs/releases/download/formatjs_cli_v1.1.0/formatjs_cli-linux-x64 -o ~/.local/bin/formatjs; chmod +x ~/.local/bin/formatjs; pnpm install --ignore-scripts\"",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "oxc.oxc-vscode",
+        "stylelint.vscode-stylelint",
+        "wix.vscode-import-cost"
+      ]
+    }
+  }
+}
