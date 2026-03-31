@@ -22,7 +22,7 @@
     }
   },
 
-  "postCreateCommand": "bash -lc \"set -euo pipefail; corepack enable; mkdir -p ~/.local/bin; curl -fsSL https://github.com/formatjs/formatjs/releases/download/formatjs_cli_v1.1.0/formatjs_cli-linux-x64 -o ~/.local/bin/formatjs; chmod +x ~/.local/bin/formatjs; pnpm install --ignore-scripts\"",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
 
   "customizations": {
     "vscode": {
