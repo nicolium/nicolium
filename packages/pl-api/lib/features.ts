@@ -910,6 +910,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA,
+      v.software === SNAC && gte(v.version, '2.78.0'),
       v.software === TOKI,
     ]),
 
@@ -1398,6 +1399,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MITRA && gte(v.version, '3.15.0'),
       v.software === NEODB,
       v.software === SHARKEY,
+      v.software === SNAC && gte(v.version, '2.90.0'),
       v.software === TAKAHE && gte(v.version, '0.8.0'),
       instance.api_versions['polls.pleroma.pl-api'] >= 1,
     ]),
