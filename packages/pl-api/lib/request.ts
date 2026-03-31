@@ -124,7 +124,7 @@ function request<T = any>(
     return new Promise<Response<T>>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
 
-      xhr.addEventListener('progress', onUploadProgress!);
+      xhr.upload.addEventListener('progress', onUploadProgress!);
       xhr.addEventListener('loadend', () => {
         const data = xhr.response;
         let json: T = undefined!;
