@@ -34,7 +34,7 @@ jobs:
 
     - name: Install deps
       working-directory: .
-      run: pnpm install
+      run: pnpm install --ignore-scripts
 
     - name: Build pl-api
       env:

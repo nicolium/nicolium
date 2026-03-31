@@ -104,7 +104,7 @@ page1.items.forEach(account => console.log(account.username));
 
 ```bash
 # Install dependencies
-pnpm install
+pnpm install --ignore-scripts
 
 # Build the library
 pnpm -F pl-api build
