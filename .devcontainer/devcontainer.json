@@ -33,5 +33,12 @@
         "wix.vscode-import-cost"
       ]
     }
+  },
+
+  "containerEnv": {
+    "WAYLAND_DISPLAY": ""
+  },
+  "remoteEnv": {
+  	"WAYLAND_DISPLAY": ""
   }
 }
