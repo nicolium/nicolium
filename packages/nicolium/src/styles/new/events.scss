@@ -217,7 +217,9 @@
     }
   }
 
-  .lexical {
+  &__editor {
+    position: relative;
+
     display: block;
 
     width: 100%;

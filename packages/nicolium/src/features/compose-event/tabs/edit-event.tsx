@@ -309,6 +309,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           <ContentTypeButton composeId={composeId} />
           <ComposeEditor
             key={String(isDisabled)}
+            className='⁂-edit-event__editor'
             placeholderClassName='⁂-compose-form__editor__placeholder'
             composeId={composeId}
             placeholder={intl.formatMessage(messages.eventDescriptionPlaceholder)}

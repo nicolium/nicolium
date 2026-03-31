@@ -109,14 +109,14 @@ const ComposeButton: React.FC<IComposeButton> = ({
   const intl = useIntl();
 
   return (
-    <div className='⁂-compose-form__button__container'>
-      <button {...props} disabled={disabled} className='⁂-compose-form__button'>
+    <div className='⁂-compose-form__send-button__container'>
+      <button {...props} disabled={disabled} className='⁂-compose-form__send-button'>
         {icon ? <Icon src={icon} /> : null}
         <span>{text}</span>
       </button>
       <DropdownMenu items={actionsMenu} placement='bottom' disabled={disabled}>
         <button
-          className='⁂-compose-form__button__actions'
+          className='⁂-compose-form__send-button__actions'
           title={intl.formatMessage(messages.more)}
         >
           <SvgIcon src={iconCaretDown} aria-hidden />

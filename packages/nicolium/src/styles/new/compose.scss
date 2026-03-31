@@ -31,20 +31,43 @@
     background-color: transparent !important;
   }
 
-  &__editor__placeholder {
-    pointer-events: none;
-    user-select: none;
+  &__editor {
+    position: relative;
 
-    position: absolute;
-    top: 0;
+    &__placeholder {
+      pointer-events: none;
+      user-select: none;
 
-    font-size: 1rem;
-    color: rgb(var(--color-gray-600));
+      position: absolute;
+      top: 0;
 
-    visibility: visible !important;
-
-    .dark &::placeholder {
+      font-size: 1rem;
       color: rgb(var(--color-gray-600));
+
+      visibility: visible !important;
+
+      .dark &::placeholder {
+        color: rgb(var(--color-gray-600));
+      }
+    }
+
+    &__editable {
+      position: relative;
+      z-index: 10;
+      min-height: 99px;
+      font-size: 1rem;
+
+      &--condensed {
+        min-height: 39px;
+      }
+
+      .no-reduce-motion & {
+        transition: min-height 150ms var(--ease-default);
+      }
+
+      &:focus-visible {
+        outline: none;
+      }
     }
   }
 
@@ -114,6 +137,34 @@
     align-items: center;
   }
 
+  &__button {
+    color: rgb(var(--color-gray-600));
+
+    &:hover {
+      color: rgb(var(--color-gray-700));
+    }
+
+    .dark &:hover {
+      color: rgb(var(--color-gray-500));
+    }
+
+    &[aria-pressed='true'] {
+      color: rgb(var(--color-primary-500));
+
+      &:hover {
+        color: rgb(var(--color-primary-600));
+      }
+
+      .dark & {
+        color: rgb(var(--color-primary-500));
+
+        &:hover {
+          color: rgb(var(--color-primary-400));
+        }
+      }
+    }
+  }
+
   &__actions {
     display: flex;
     gap: 1rem;
@@ -132,7 +183,7 @@
     align-items: center;
   }
 
-  &__button {
+  &__send-button {
     user-select: none;
 
     display: inline-flex;

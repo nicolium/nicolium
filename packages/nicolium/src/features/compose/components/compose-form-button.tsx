@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import React from 'react';
 
 import IconButton from '@/components/ui/icon-button';
@@ -20,11 +19,7 @@ const ComposeFormButton: React.FC<IComposeFormButton> = ({
 }) => (
   <div>
     <IconButton
-      className={clsx({
-        'text-gray-600 hover:text-gray-700 dark:hover:text-gray-500': !active,
-        'text-primary-500 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-400':
-          active,
-      })}
+      className='⁂-compose-form__button'
       src={icon}
       title={title}
       aria-label={title}
