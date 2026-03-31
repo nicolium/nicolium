@@ -40,17 +40,30 @@
     flex: 0 1 auto;
 
     .player-button {
-      @apply block outline-0 bg-transparent text-base border-0 text-black dark:text-white rounded-full;
-
+      display: block;
       flex: 0 0 auto;
+
       padding: 4px;
+      border-width: 0;
+      border-radius: 9999px;
+
+      font-size: 0.9375rem;
+      color: black;
+
+      background-color: transparent;
+      outline-width: 0;
+
+      .dark {
+        color: white;
+      }
 
       &:hover {
         @apply dark:bg-primary-200/20 bg-primary-700/20 rounded-full;
       }
 
       .svg-icon {
-        @apply w-5 h-5;
+        width: 1.25rem;
+        height: 1.25rem;
       }
     }
   }
