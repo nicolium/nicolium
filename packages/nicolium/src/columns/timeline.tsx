@@ -209,10 +209,16 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
 interface ITimelineStatusInfo {
   status: SelectedStatus;
   rebloggedBy: Array<string>;
+  reblogVisibility?: string;
   timelineId: string;
 }
 
-const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({ status, rebloggedBy, timelineId }) => {
+const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
+  status,
+  rebloggedBy,
+  reblogVisibility,
+  timelineId,
+}) => {
   const features = useFeatures();
   const isReblogged = rebloggedBy.length > 0;
 
@@ -256,19 +262,19 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({ status, rebloggedBy
         avatarSize={42}
         icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
         text={
-          // status.visibility === 'private' ? (
-          //   <FormattedMessage
-          //     id='status.reblogged_by_private'
-          //     defaultMessage='{name} reposted to followers'
-          //     values={values}
-          //   />
-          // ) : (
-          <FormattedMessage
-            id='status.reblogged_by'
-            defaultMessage='{name} reposted'
-            values={values}
-          />
-          // )
+          reblogVisibility === 'private' ? (
+            <FormattedMessage
+              id='status.reblogged_by_private'
+              defaultMessage='{name} reposted to followers'
+              values={values}
+            />
+          ) : (
+            <FormattedMessage
+              id='status.reblogged_by'
+              defaultMessage='{name} reposted'
+              values={values}
+            />
+          )
         }
       />
     );
@@ -281,6 +287,7 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({ status, rebloggedBy
 interface ITimelineStatus {
   id: string;
   rebloggedBy: Array<string>;
+  reblogVisibility?: string;
   timelineId: string;
   contextType?: FilterContextType;
   isConnectedTop?: boolean;
@@ -341,6 +348,7 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
         <TimelineStatusInfo
           status={statusQuery.data!}
           rebloggedBy={props.rebloggedBy}
+          reblogVisibility={props.reblogVisibility}
           timelineId={props.timelineId}
         />
       )}
@@ -440,6 +448,7 @@ const Timeline: React.FC<ITimeline> = ({
           onMoveUp={() => handleMoveUp(index)}
           onMoveDown={() => handleMoveDown(index)}
           rebloggedBy={entry.rebloggedBy}
+          reblogVisibility={entry.reblogVisibility}
           timelineId={timelineId}
           // showGroup={showGroup}
         />

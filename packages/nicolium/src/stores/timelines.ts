@@ -15,6 +15,7 @@ type TimelineEntry =
       accountId: string;
       rebloggedBy: Array<string>;
       reblogIds: Array<string>;
+      reblogVisibility?: string;
       isConnectedTop?: boolean;
       isConnectedBottom?: boolean;
       isReply: boolean;
@@ -125,6 +126,9 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
         if (!existingEntry.rebloggedBy.includes(status.account.id)) {
           existingEntry.rebloggedBy.push(status.account.id);
           existingEntry.reblogIds.push(status.id);
+          if (existingEntry.reblogVisibility !== status.visibility) {
+            existingEntry.reblogVisibility = undefined;
+          }
         }
       } else {
         timelinePage.push({
@@ -134,6 +138,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
           accountId: status.reblog.account.id,
           rebloggedBy: [status.account.id],
           reblogIds: [status.id],
+          reblogVisibility: status.visibility,
           isConnectedTop,
           isReply: status.reblog.in_reply_to_id !== null,
           isReblog: true,
