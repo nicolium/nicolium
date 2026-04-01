@@ -77,7 +77,7 @@ const GroupTimelinePage: React.FC = () => {
           />
         }
         emptyMessageIcon={iconChatCenteredText}
-        // showGroup={falsse}
+        // showGroup={false}
       />
     </div>
   );

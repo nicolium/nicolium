@@ -15,7 +15,6 @@ import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import { useFeatures } from '@/hooks/use-features';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import { useStatus, type SelectedStatus } from '@/queries/statuses/use-status';
@@ -179,7 +178,6 @@ interface IStatus {
   showGroup?: boolean;
   showInfo?: boolean;
   fromBookmarks?: boolean;
-  fromHomeTimeline?: boolean;
   className?: string;
 }
 
@@ -200,7 +198,6 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     showGroup = true,
     showInfo = true,
     fromBookmarks = false,
-    fromHomeTimeline = false,
     className,
     contextType,
   } = props;
@@ -208,7 +205,6 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const router = useRouter();
-  const features = useFeatures();
 
   const { toggleStatusesMediaHidden, unfilterStatus } = useStatusMetaActions();
   const { deleted, showFiltered } = useStatusMeta(status.id);
@@ -502,12 +498,6 @@ const Status: React.FC<IStatus> = React.memo((props) => {
             />
           }
         />
-      );
-    } else if (fromHomeTimeline) {
-      return (
-        features.followHashtags && (
-          <StatusFollowedTagInfo className='-mb-1' status={actualStatus} avatarSize={avatarSize} />
-        )
       );
     }
   }, [status.account, group?.id]);

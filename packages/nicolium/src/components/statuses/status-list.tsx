@@ -105,7 +105,6 @@ const StatusList: React.FC<IStatusList> = ({
       showGroup={showGroup}
       variant='slim'
       fromBookmarks={other.scrollKey === 'bookmarked_statuses'}
-      fromHomeTimeline={timelineId === 'home'}
     />
   );
 
