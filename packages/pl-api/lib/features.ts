@@ -12,7 +12,7 @@ const any = (arr: Array<any>): boolean => arr.some(Boolean);
  * Ditto, a Nostr server with Mastodon API.
  *
  * @category Software
- * @see {@link https://gitlab.com/soapbox-pub/ditto}
+ * @see {@link https://gitlab.com/soapbox-pub/ditto-v1}
  */
 const DITTO = 'Ditto';
 
