@@ -263,7 +263,7 @@ const Account = ({
                 username={account.username}
               />
             ) : (
-              <div className='rounded-lg'>
+              <div className={clsx('rounded-lg', emoji && 'relative')}>
                 <Avatar
                   src={account.avatar}
                   size={avatarSize}
