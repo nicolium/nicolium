@@ -118,7 +118,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
       <div
         style={style}
         className={clsx(
-          'relative rounded-lg bg-gray-200 dark:bg-gray-900',
+          '⁂-avatar relative bg-gray-200 dark:bg-gray-900',
           isCat && '⁂-avatar--cat',
           className,
         )}
