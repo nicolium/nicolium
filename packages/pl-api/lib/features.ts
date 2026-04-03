@@ -1729,7 +1729,10 @@ const getFeatures = (instance: Instance) => {
      * Trending links.
      * @see GET /api/v1/trends/links
      */
-    trendingLinks: v.software === MASTODON && gte(v.compatVersion, '3.5.0'),
+    trendingLinks: any([
+      v.software === MASTODON && gte(v.compatVersion, '3.5.0'),
+      v.software === NEODB,
+    ]),
 
     /**
      * Trending statuses.
@@ -1741,6 +1744,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === ICESHRIMP,
       v.software === MASTODON,
+      v.software === NEODB,
       v.software === PIXELFED,
       v.software === SHARKEY,
     ]),
