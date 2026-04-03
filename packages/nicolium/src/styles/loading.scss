@@ -19,7 +19,7 @@
   color: rgb(var(--color-gray-50));
   text-transform: uppercase;
 
-  .dark {
+  .dark & {
     color: rgb(var(--color-gray-800));
   }
 }
@@ -44,7 +44,7 @@
 
   background-color: transparent;
 
-  .dark {
+  .dark & {
     border-color: rgb(var(--color-gray-800));
   }
 }

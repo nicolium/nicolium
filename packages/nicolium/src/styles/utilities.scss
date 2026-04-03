@@ -7,7 +7,7 @@
 .mention {
   color: rgb(var(--color-primary-600));
 
-  .dark {
+  .dark & {
     color: rgb(var(--color-primary-400));
   }
 

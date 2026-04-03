@@ -12,7 +12,7 @@
 
   background-color: rgb(var(--color-primary-900));
 
-  .dark {
+  .dark & {
     color: rgb(var(--color-gray-100));
     background-color: rgb(var(--color-primary-700));
   }

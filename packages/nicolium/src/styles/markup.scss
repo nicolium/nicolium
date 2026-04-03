@@ -39,7 +39,7 @@ $vertical-lr-langs: mn-mong, mnmong;
   a {
     color: rgb(var(--color-primary-600));
 
-    .dark {
+    .dark & {
       color: rgb(var(--color-primary-400));
     }
 
@@ -89,7 +89,7 @@ $vertical-lr-langs: mn-mong, mnmong;
     border-left: 4px solid rgb(var(--color-gray-400));
     color: rgb(var(--color-gray-500));
 
-    .dark {
+    .dark & {
       color: rgb(var(--color-gray-400));
     }
 
@@ -107,7 +107,7 @@ $vertical-lr-langs: mn-mong, mnmong;
 
     background-color: rgb(var(--color-gray-200));
 
-    .dark {
+    .dark & {
       background-color: rgb(var(--color-gray-900));
     }
   }
@@ -132,7 +132,7 @@ $vertical-lr-langs: mn-mong, mnmong;
   pre {
     background: rgb(var(--color-gray-100));
 
-    .dark {
+    .dark & {
       background: rgb(var(--color-primary-800));
     }
   }
@@ -191,7 +191,7 @@ $vertical-lr-langs: mn-mong, mnmong;
       text-decoration: underline;
     }
 
-    .dark {
+    .dark & {
       color: rgb(var(--color-primary-400));
 
       &:hover {
