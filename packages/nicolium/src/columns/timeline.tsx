@@ -298,11 +298,15 @@ interface ITimelineStatus {
 }
 
 /** Status with reply-connector in threads. */
-const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => {
+const TimelineStatus: React.FC<ITimelineStatus> = (props) => {
   const { id, isConnectedTop, isConnectedBottom } = props;
 
   const { deleted } = useStatusMeta(id);
   const statusQuery = useStatus(id, { withFilteredResults: true });
+
+  if (statusQuery.data?.filtered?.some(({ filter }) => filter.filter_action === 'hide')) {
+    return null;
+  }
 
   if (deleted) {
     return (
