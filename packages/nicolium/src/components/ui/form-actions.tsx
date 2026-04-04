@@ -6,7 +6,7 @@ interface IFormActions {
 
 /** Container element to house form actions. */
 const FormActions: React.FC<IFormActions> = ({ children }) => (
-  <div className='flex justify-end gap-2'>{children}</div>
+  <div className='⁂-form__actions'>{children}</div>
 );
 
 export { FormActions as default };
