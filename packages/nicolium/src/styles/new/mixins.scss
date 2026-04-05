@@ -288,13 +288,13 @@
     color: rgb(var(--color-danger-600));
     background-color: rgb(var(--color-danger-100));
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: rgb(var(--color-gray-100));
       background-color: rgb(var(--color-danger-600));
     }
 
     &:focus {
-      background-color: rgb(var(--color-danger-100));
       outline-color: rgb(var(--color-danger-500));
     }
 
