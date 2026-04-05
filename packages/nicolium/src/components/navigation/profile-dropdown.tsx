@@ -114,9 +114,9 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   }, [account, otherAccountIds.length, features]);
 
   return (
-    <DropdownMenu component={ProfileDropdownMenu}>
+    <DropdownMenu component={ProfileDropdownMenu} className='⁂-profile-dropdown'>
       <button
-        className='w-full rounded-lg focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-gray-800 dark:ring-offset-0 dark:focus:ring-primary-500'
+        className='⁂-profile-dropdown__toggle'
         type='button'
         title={intl.formatMessage(messages.openDropdown)}
         aria-label={intl.formatMessage(messages.openDropdown)}
@@ -147,9 +147,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
       </label>
     );
   } else if (!menuItem.text) {
-    return (
-      <hr className='mx-2 my-1 border-t-2 border-gray-100 black:border-t dark:border-gray-800' />
-    );
+    return <hr />;
   } else if (menuItem.action) {
     return (
       <button type='button' onClick={menuItem.action} className={baseClassName}>

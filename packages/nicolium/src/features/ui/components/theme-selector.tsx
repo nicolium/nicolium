@@ -37,20 +37,12 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ id, value, onChange }) => {
   };
 
   return (
-    <div className='relative rounded-md shadow-sm'>
-      <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-        {themeIconSrc ? (
-          <Icon
-            src={themeIconSrc}
-            className='size-4 text-gray-600 dark:text-gray-700'
-            aria-hidden
-          />
-        ) : (
-          <div className='size-4' aria-hidden />
-        )}
+    <div className='⁂-theme-selector'>
+      <div className='⁂-theme-selector__overlay'>
+        {themeIconSrc ? <Icon src={themeIconSrc} aria-hidden /> : <div aria-hidden />}
       </div>
 
-      <Select key={value} id={id} onChange={handleChange} defaultValue={value} className='!pl-10'>
+      <Select key={value} id={id} onChange={handleChange} defaultValue={value}>
         <option value='system'>
           <FormattedMessage id='theme_toggle.system' defaultMessage='System' />
         </option>
@@ -65,8 +57,8 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ id, value, onChange }) => {
         </option>
       </Select>
 
-      <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3'>
-        <Icon src={iconCaretDown} className='size-4 text-gray-600 dark:text-gray-700' />
+      <div className='⁂-theme-selector__arrow'>
+        <Icon src={iconCaretDown} />
       </div>
     </div>
   );

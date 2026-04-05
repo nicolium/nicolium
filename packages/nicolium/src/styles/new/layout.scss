@@ -551,6 +551,40 @@ body {
   }
 }
 
+.⁂-profile-dropdown {
+  &__toggle {
+    width: 100%;
+    border-radius: 0.5rem;
+
+    &:focus {
+      outline: 2px solid rgb(var(--color-primary-500));
+      outline-offset: 2px;
+    }
+
+    .dark & {
+      outline-color: rgb(var(--color-gray-800));
+      outline-offset: 0;
+    }
+
+    .dark &:focus {
+      outline-color: rgb(var(--color-primary-500));
+    }
+  }
+
+  hr {
+    margin: 0.25rem 0.5rem;
+    border-top: 2px solid rgb(var(--color-gray-100));
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+    }
+
+    .dark.black & {
+      border-top-width: 1px;
+    }
+  }
+}
+
 .⁂-modal-root {
   opacity: 0;
 

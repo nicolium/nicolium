@@ -453,6 +453,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
                 items={items}
                 component={component}
                 width={width}
+                className={className}
               />
 
               {/* Arrow */}
