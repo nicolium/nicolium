@@ -1,7 +1,6 @@
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
-import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -133,14 +132,9 @@ interface MenuItemProps {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
-  const baseClassName = clsx(
-    className,
-    'block w-full cursor-pointer truncate px-4 py-2.5 text-left text-sm text-gray-700 outline-none hover:bg-gray-100 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:ring-offset-0 rtl:text-right',
-  );
-
   if (menuItem.toggle) {
     return (
-      <label className='flex flex-row items-center justify-between space-x-4 px-4 py-1 text-sm text-gray-700 dark:text-gray-400'>
+      <label>
         <span>{menuItem.text}</span>
 
         {menuItem.toggle}
@@ -150,18 +144,16 @@ const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
     return <hr />;
   } else if (menuItem.action) {
     return (
-      <button type='button' onClick={menuItem.action} className={baseClassName}>
+      <button type='button' onClick={menuItem.action} className={className}>
         {menuItem.text}
       </button>
     );
   } else if (menuItem.linkOptions) {
     return (
-      <Link {...menuItem.linkOptions} className={baseClassName}>
+      <Link {...menuItem.linkOptions} className={className}>
         {menuItem.text}
       </Link>
     );
-  } else {
-    throw menuItem;
   }
 };
 

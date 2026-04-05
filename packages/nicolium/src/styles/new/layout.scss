@@ -583,6 +583,70 @@ body {
       border-top-width: 1px;
     }
   }
+
+  label {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0.25rem 1rem;
+
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: rgb(var(--color-gray-700));
+
+    .dark & {
+      color: rgb(var(--color-gray-400));
+    }
+  }
+
+  button,
+  a {
+    cursor: pointer;
+
+    overflow: hidden;
+    display: block;
+
+    width: 100%;
+    padding: 0.625rem 1rem;
+
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: rgb(var(--color-gray-700));
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    outline: none;
+
+    [dir='rtl'] & {
+      text-align: right;
+    }
+
+    &:hover {
+      background-color: rgb(var(--color-gray-100));
+    }
+
+    &:focus {
+      background-color: rgb(var(--color-gray-100));
+      outline: 2px solid rgb(var(--color-primary-500));
+      outline-offset: 2px;
+    }
+
+    .dark & {
+      color: rgb(var(--color-gray-500));
+    }
+
+    .dark &:hover {
+      background-color: rgb(var(--color-gray-800));
+    }
+
+    .dark &:focus {
+      outline-offset: 0;
+    }
+  }
 }
 
 .⁂-modal-root {
