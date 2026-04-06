@@ -54,6 +54,7 @@ import type {
   PaginatedResponse,
   PlApiClient,
   PleromaConfig,
+  PleromaConfigDescription,
   Poll,
   Relationship,
   RssFeed,
@@ -306,6 +307,10 @@ const groupRelationships = {
 const admin = {
   root: ['admin'] as const,
   config: ['admin', 'config'] as TaggedKey<['admin', 'config'], PleromaConfig>,
+  configDescriptions: ['admin', 'configDescriptions'] as TaggedKey<
+    ['admin', 'configDescriptions'],
+    Array<PleromaConfigDescription>
+  >,
   accounts: {
     root: ['admin', 'accounts'] as const,
     show: (accountId: string) => {

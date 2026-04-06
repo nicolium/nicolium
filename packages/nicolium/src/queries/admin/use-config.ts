@@ -16,7 +16,19 @@ const useAdminConfig = () => {
   return useQuery({
     queryKey: queryKeys.admin.config,
     queryFn: () => client.admin.config.getPleromaConfig(),
-    enabled: ownAccount?.is_admin && features.pleromaAdminAccounts,
+    enabled: ownAccount?.is_admin && features.pleromaAdminConfig,
+  });
+};
+
+const useAdminConfigDescriptions = () => {
+  const client = useClient();
+  const features = useFeatures();
+  const { data: ownAccount } = useOwnAccount();
+
+  return useQuery({
+    queryKey: queryKeys.admin.configDescriptions,
+    queryFn: () => client.admin.config.getPleromaConfigDescriptions(),
+    enabled: ownAccount?.is_admin && features.pleromaAdminConfig,
   });
 };
 
@@ -52,4 +64,9 @@ const getUpdateFrontendConfigParams = (data: any) => {
   ];
 };
 
-export { useAdminConfig, useUpdateAdminConfig, getUpdateFrontendConfigParams };
+export {
+  useAdminConfig,
+  useAdminConfigDescriptions,
+  useUpdateAdminConfig,
+  getUpdateFrontendConfigParams,
+};
