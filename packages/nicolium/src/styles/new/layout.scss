@@ -639,7 +639,8 @@ body {
       color: rgb(var(--color-gray-500));
     }
 
-    .dark &:hover {
+    .dark &:hover,
+    .dark &:focus {
       background-color: rgb(var(--color-gray-800));
     }
 
