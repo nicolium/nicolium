@@ -9,6 +9,7 @@
   &__actions {
     display: flex;
     gap: 0.5rem;
+    align-items: center;
     justify-content: flex-end;
   }
 }
@@ -325,29 +326,15 @@
 
     &--checkbox {
       margin-top: -0.125rem;
+
+      a:hover & {
+        text-decoration: underline;
+      }
     }
   }
 
   &__content:not(:first-child) {
     margin-top: 0.25rem;
-  }
-
-  &__hint {
-    font-size: 0.75rem;
-    line-height: 1rem;
-    color: rgb(var(--color-gray-700));
-
-    .dark & {
-      color: rgb(var(--color-gray-600));
-    }
-
-    &--above {
-      margin-bottom: 0.125rem;
-    }
-
-    &--below {
-      margin-top: 0.125rem;
-    }
   }
 
   &__error {
@@ -391,6 +378,24 @@
       border-color: transparent;
       border-style: solid;
     }
+  }
+}
+
+p.⁂-form-group__hint {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: rgb(var(--color-gray-700));
+
+  .dark & {
+    color: rgb(var(--color-gray-600));
+  }
+
+  &--above {
+    margin-bottom: 0.125rem;
+  }
+
+  &--below {
+    margin-top: 0.125rem;
   }
 }
 
