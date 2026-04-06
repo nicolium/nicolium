@@ -345,7 +345,7 @@ const Account = ({
             username={account.username}
           />
         ) : (
-          <LinkEl className='rounded-lg' {...linkProps}>
+          <LinkEl className={clsx('rounded-lg', emoji && 'relative')} {...linkProps}>
             <Avatar
               src={account.avatar}
               size={avatarSize}
