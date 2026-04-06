@@ -59,3 +59,202 @@
     @include mixins.text($align: center);
   }
 }
+
+.⁂-admin-config {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__filters {
+    display: grid;
+    gap: 1rem;
+  }
+
+  &__sections {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .⁂-form__actions {
+      position: sticky;
+      bottom: 0;
+
+      margin: -0.5rem -1rem;
+      padding: 0.5rem 1rem;
+
+      background-color: #fffe;
+      backdrop-filter: blur(12px) saturate(2);
+
+      .dark & {
+        background-color: rgb(var(--color-primary-900) / 0.9);
+        backdrop-filter: blur(12px);
+      }
+
+      @media (max-width: variables.$breakpoint-lg) {
+        bottom: 53px;
+      }
+    }
+  }
+
+  &__section-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__section-title,
+  &__headline-title {
+    @include mixins.text($weight: semibold);
+
+    margin: 0;
+  }
+
+  &__section-title {
+    @include mixins.text($size: lg, $weight: semibold);
+  }
+
+  .dark & .⁂-accordion {
+    background-color: rgb(var(--color-primary-900));
+  }
+
+  &__feedback {
+    flex-grow: 1;
+  }
+
+  p.⁂-admin-config__meta,
+  p.⁂-admin-config__feedback {
+    @include mixins.text($size: sm, $theme: muted);
+
+    margin: 0;
+  }
+
+  p.⁂-admin-config__feedback--danger {
+    @include mixins.text($size: sm, $theme: danger);
+  }
+
+  &__accordion-list,
+  &__editor-stack,
+  &__streamfield-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__accordion-headline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    align-items: flex-start;
+
+    width: 100%;
+
+    text-align: left;
+  }
+
+  &__fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  &__editor-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  &__toggle-field {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  &__streamfield-row {
+    display: grid;
+    flex-grow: 1;
+    gap: 0.75rem;
+    align-items: start;
+
+    &__input {
+      flex-grow: 1;
+      width: 100%;
+      margin-top: 0;
+    }
+
+    @media (min-width: variables.$breakpoint-md) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  &__streamfield-row--dynamic {
+
+    @media (min-width: variables.$breakpoint-md) {
+      grid-template-columns: minmax(10rem, 0.75fr) minmax(0, 1.25fr);
+    }
+  }
+
+  &__suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+
+    .⁂-form-group__content > & {
+      margin-top: 0.75rem;
+    }
+  }
+
+  p.⁂-admin-config__suggestions-label {
+    @include mixins.text($size: xs, $theme: muted);
+
+    margin: 0;
+  }
+
+  &__suggestion-button {
+    @include mixins.button($theme: secondary, $size: sm);
+
+    border-radius: 0.75rem;
+    text-align: left;
+  }
+
+  &__submit-button {
+    @include mixins.button($theme: primary);
+  }
+
+  &__reset-button {
+    @include mixins.button($theme: secondary);
+  }
+
+  .⁂-form-group:has(> .⁂-form-group__content > .⁂-admin-config__toggle-field) {
+    display: grid;
+    grid-template-areas:
+      'label toggle'
+      'hint toggle';
+
+    .⁂-form-group__label {
+      grid-area: label;
+    }
+
+    .⁂-form-group__hint {
+      grid-area: hint;
+    }
+
+    .⁂-admin-config__toggle-field {
+      display: flex;
+      grid-area: toggle;
+      align-items: center;
+    }
+
+    .⁂-form-group__content {
+      display: contents;
+    }
+  }
+}

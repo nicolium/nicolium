@@ -637,7 +637,7 @@
     position: sticky;
     bottom: 0.5rem;
 
-    @media (max-width: variables.$breakpoint-md) {
+    @media (max-width: variables.$breakpoint-lg) {
       bottom: 4rem;
     }
   }

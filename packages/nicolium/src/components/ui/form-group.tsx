@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 
 import Checkbox from './checkbox';
 
@@ -78,7 +78,7 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
   }
 
   return (
-    <div>
+    <div className='⁂-form-group'>
       {labelText && (
         <label
           htmlFor={formFieldId}
@@ -114,4 +114,6 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
   );
 };
 
-export { FormGroup as default };
+const MemoizedFormGroup = memo(FormGroup);
+
+export { MemoizedFormGroup as default };

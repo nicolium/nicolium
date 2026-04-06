@@ -307,6 +307,18 @@ const Dashboard: React.FC = () => {
             />
           )}
 
+          {features.pleromaAdminConfig && (
+            <ListItem
+              to='/nicolium/admin/pleroma-config'
+              label={
+                <FormattedMessage
+                  id='column.admin.pleroma_config'
+                  defaultMessage='Pleroma configuration'
+                />
+              }
+            />
+          )}
+
           {features.domains && (
             <ListItem
               to='/nicolium/admin/domains'
