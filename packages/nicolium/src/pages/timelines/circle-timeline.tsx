@@ -35,7 +35,7 @@ const CircleTimelinePage: React.FC = () => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
   const navigate = useNavigate();
-  const timelineFilterOptions = useTimelineFiltersOptions('circle');
+  const timelineFilterOptions = useTimelineFiltersOptions('circle', `circle:${circleId}`);
 
   const { data: circle, isFetching } = useCircle(circleId);
   const { mutate: deleteCircle } = useDeleteCircle();

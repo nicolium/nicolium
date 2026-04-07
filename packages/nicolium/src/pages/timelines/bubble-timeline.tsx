@@ -15,7 +15,7 @@ const messages = defineMessages({
 
 const BubbleTimelinePage = () => {
   const intl = useIntl();
-  const items = useTimelineFiltersOptions('bubble');
+  const items = useTimelineFiltersOptions('bubble', 'bubble');
 
   return (
     <Column

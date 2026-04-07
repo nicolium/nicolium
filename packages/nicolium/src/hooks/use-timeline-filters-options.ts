@@ -1,3 +1,4 @@
+import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -26,7 +27,7 @@ const messages = defineMessages({
   },
   setAsDefault: {
     id: 'timeline_filters.set_as_default',
-    defaultMessage: 'Set as default timeline',
+    defaultMessage: 'Use as default timeline',
   },
 });
 
@@ -60,10 +61,12 @@ const useTimelineFiltersOptions = (
     | 'list'
     | 'public'
     | 'wrenched',
+  timelineId?: string,
 ) => {
   const intl = useIntl();
   const features = useFeatures();
-  const timelineSettings = useSettings().timelines[timeline] || defaultSettings;
+  const { timelines, defaultTimeline } = useSettings();
+  const timelineSettings = timelines[timeline] || defaultSettings;
 
   return useMemo(() => {
     const items: Menu = [];
@@ -122,17 +125,21 @@ const useTimelineFiltersOptions = (
       onChange: handleOnChecked('showNonMedia'),
     });
 
-    // {
-    //   items.push(null);
+    if (timelineId) {
+      items.push(null);
 
-    //   items.push({
-    //     text: intl.formatMessage(messages.setAsDefault),
-    //     icon: iconHouse,
-    //   });
-    // }
+      items.push({
+        text: intl.formatMessage(messages.setAsDefault),
+        icon: iconHouse,
+        type: 'toggle',
+        checked: defaultTimeline === timelineId,
+        disabled: defaultTimeline === timelineId && timelineId === 'home',
+        onChange: () => changeSetting(['defaultTimeline'], timelineId),
+      });
+    }
 
     return items;
-  }, [timeline, features, timelineSettings]);
+  }, [timeline, features, timelineSettings, defaultTimeline, timelineId]);
 };
 
 export { useTimelineFiltersOptions, getUpdatedTimelineSettings };

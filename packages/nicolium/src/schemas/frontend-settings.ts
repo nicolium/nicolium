@@ -60,6 +60,25 @@ const settingsSchema = v.object({
   accountNicknames: v.fallback(v.record(v.string(), v.string()), {}),
   useSystemMediaControls: v.fallback(v.boolean(), false),
   displayMentionAvatars: v.fallback(v.boolean(), false),
+  defaultTimeline: v.fallback(
+    v.pipe(
+      v.string(),
+      v.transform((timeline) => {
+        if (['home', 'local', 'bubble', 'federated', 'wrenched'].includes(timeline)) {
+          return timeline;
+        }
+        if (
+          ['list', 'circle', 'antenna', 'instance'].some((prefix) =>
+            timeline.startsWith(prefix + ':'),
+          )
+        ) {
+          return timeline;
+        }
+        return 'home';
+      }),
+    ),
+    'home',
+  ),
 
   theme: v.optional(
     coerceObject({

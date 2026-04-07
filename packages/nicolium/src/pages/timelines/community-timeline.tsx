@@ -14,7 +14,7 @@ const messages = defineMessages({
 });
 
 const CommunityTimelinePage = () => {
-  const items = useTimelineFiltersOptions('public');
+  const items = useTimelineFiltersOptions('public', 'local');
   const intl = useIntl();
 
   return (

@@ -25,7 +25,7 @@ const PublicTimelinePage = () => {
 
   const instance = useInstance();
   const settings = useSettings();
-  const items = useTimelineFiltersOptions('public');
+  const items = useTimelineFiltersOptions('public', 'federated');
 
   const explanationBoxExpanded = settings.explanationBox;
   const showExplanationBox = settings.showExplanationBox;

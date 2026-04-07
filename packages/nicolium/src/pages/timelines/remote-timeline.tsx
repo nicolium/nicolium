@@ -27,14 +27,22 @@ const messages = defineMessages({
 /** View statuses from a remote instance. */
 const RemoteTimelinePage: React.FC = () => {
   const { instance } = remoteTimelineRoute.useParams();
-  const timelineFiltersOptions = useTimelineFiltersOptions('public');
 
   const intl = useIntl();
   const navigate = useNavigate();
 
   const settings = useSettings();
 
-  const isPinned = settings.remote_timeline.pinnedHosts.includes(instance);
+  const {
+    defaultTimeline,
+    remote_timeline: { pinnedHosts },
+  } = settings;
+  const isPinned = pinnedHosts.includes(instance);
+
+  const timelineFiltersOptions = useTimelineFiltersOptions(
+    'public',
+    isPinned ? `instance:${instance}` : undefined,
+  );
 
   const handleCloseClick: React.MouseEventHandler = () => {
     navigate({ to: '/timeline/fediverse' });
@@ -51,6 +59,9 @@ const RemoteTimelinePage: React.FC = () => {
         ['remote_timeline', 'pinnedHosts'],
         settings.remote_timeline.pinnedHosts.filter((value) => value !== instance),
       );
+      if (defaultTimeline === `instance:${instance}`) {
+        changeSetting(['defaultTimeline'], 'home');
+      }
     }
   };
 

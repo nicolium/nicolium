@@ -221,6 +221,13 @@ export const signupRoute = createRoute({
 });
 
 // Timeline routes
+export const homeTimelineRoute = createRoute({
+  getParentRoute: () => layouts.home,
+  path: '/timeline/home',
+  component: lazy(() => import('@/pages/timelines/home-timeline')),
+  beforeLoad: requireAuth,
+});
+
 export const localTimelineRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/timeline/local',
@@ -1431,6 +1438,7 @@ const routeTree = rootRoute.addChildren([
   layouts.groups.addChildren([groupsRoute]),
   layouts.home.addChildren([
     homeRoute,
+    homeTimelineRoute,
     localTimelineRoute,
     federatedTimelineRoute,
     bubbleTimelineRoute,

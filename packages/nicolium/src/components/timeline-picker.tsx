@@ -52,7 +52,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
   const timelineAccess = useInstance().configuration.timelines_access;
-  const pinnedHosts = useSettings().remote_timeline.pinnedHosts;
+  const {
+    defaultTimeline,
+    remote_timeline: { pinnedHosts },
+  } = useSettings();
 
   const { data: lists } = useLists();
   const { data: circles } = useCircles();
@@ -95,7 +98,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
 
     if (isLoggedIn) {
       items.push({
-        to: '/',
+        to: defaultTimeline === 'home' ? '/' : '/timeline/home',
         text: intl.formatMessage(messages.homeTimeline),
         icon: iconHouse,
         active: active === 'home',
@@ -211,8 +214,9 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
         })),
       });
     }
+
     return items;
-  }, [active, lists, circles, antennas, features, isLoggedIn]);
+  }, [active, lists, circles, antennas, features, isLoggedIn, defaultTimeline]);
 
   return (
     <DropdownMenu items={items} width='16rem' placement='bottom-start' forceDropdown>

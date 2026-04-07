@@ -39,7 +39,7 @@ const AntennaTimelinePage: React.FC = () => {
   const { data: antenna, isFetching } = useAntenna(antennaId);
   const { mutate: deleteAntenna } = useDeleteAntenna();
 
-  const timelineFilterOptions = useTimelineFiltersOptions('antenna');
+  const timelineFilterOptions = useTimelineFiltersOptions('antenna', `antenna:${antennaId}`);
 
   const handleEditClick = () => {
     openModal('ANTENNA_EDITOR', { antennaId });

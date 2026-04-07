@@ -2063,7 +2063,7 @@
   "timeline.gap.load_newer": "Load newer posts",
   "timeline.gap.load_older": "Load older posts",
   "timeline.gap.load_recent": "Load recent posts",
-  "timeline_filters.set_as_default": "Set as default timeline",
+  "timeline_filters.set_as_default": "Use as default timeline",
   "timeline_filters.show_direct": "Show direct messages",
   "timeline_filters.show_media_only": "Only show posts with media",
   "timeline_filters.show_quotes": "Show quotes",

@@ -15,7 +15,7 @@ const messages = defineMessages({
 
 const WrenchedTimelinePage = () => {
   const intl = useIntl();
-  const items = useTimelineFiltersOptions('wrenched');
+  const items = useTimelineFiltersOptions('wrenched', 'wrenched');
 
   return (
     <Column

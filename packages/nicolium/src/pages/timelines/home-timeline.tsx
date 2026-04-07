@@ -46,7 +46,7 @@ const HomeTimelinePage: React.FC = () => {
   const features = useFeatures();
   const instance = useInstance();
 
-  const items = useTimelineFiltersOptions('home');
+  const items = useTimelineFiltersOptions('home', 'home');
   const { isSledzikRemoved } = useUiStore();
 
   if (isSledzikRemoved) return null;

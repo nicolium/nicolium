@@ -36,7 +36,7 @@ const ListTimelinePage: React.FC = () => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
   const navigate = useNavigate();
-  const timelineFilterOptions = useTimelineFiltersOptions('list');
+  const timelineFilterOptions = useTimelineFiltersOptions('list', `list:${listId}`);
 
   const { data: list, isFetching } = useList(listId);
   const { mutate: deleteList } = useDeleteList();
