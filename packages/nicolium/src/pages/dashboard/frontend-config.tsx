@@ -363,6 +363,26 @@ const FrontendConfigEditor: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
+                  id='frontend_config.allow_displaying_remote_no_login_label'
+                  defaultMessage='Allow displaying remote content when not logged in'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='frontend_config.allow_displaying_remote_no_login_hint'
+                  defaultMessage='When disabled, users will be navigated to origin URLs when trying to view remote content.'
+                />
+              }
+            >
+              <Toggle
+                checked={frontendConfig.allowDisplayingRemoteNoLogin}
+                onChange={handleChange('allowDisplayingRemoteNoLogin', (e) => e.target.checked)}
+              />
+            </ListItem>
+
+            <ListItem
+              label={
+                <FormattedMessage
                   id='frontend_config.redirect_root_no_login_label'
                   defaultMessage='Redirect homepage'
                 />

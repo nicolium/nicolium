@@ -1135,6 +1135,8 @@
   "follow_request.authorize": "Authorize",
   "follow_request.reject": "Reject",
   "footer.meow": "meow :3 {emoji}",
+  "frontend_config.allow_displaying_remote_no_login_hint": "When disabled, users will be navigated to origin URLs when trying to view remote content.",
+  "frontend_config.allow_displaying_remote_no_login_label": "Allow displaying remote content when not logged in",
   "frontend_config.copyright_footer.meta_fields.label_placeholder": "Copyright footer",
   "frontend_config.crypto_address.meta_fields.address_placeholder": "Address",
   "frontend_config.crypto_address.meta_fields.note_placeholder": "Note (optional)",
