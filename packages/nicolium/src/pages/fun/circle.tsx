@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import React, { useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -24,7 +25,6 @@ import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 
 import avatarMissing from '@/assets/images/avatar-missing.png';
-import { AccountLink } from '@/components/accounts/account-link';
 
 const HEIGHT = 1000;
 const WIDTH = 1000;
@@ -240,7 +240,7 @@ const CirclePage: React.FC = () => {
           >
             <div className='flex flex-col gap-2'>
               {users?.map((user) => (
-                <AccountLink account={user} key={user.id}>
+                <Link key={user.id} to='/@{$username}' params={{ username: user.acct }}>
                   <div className='flex items-center gap-2'>
                     <Avatar
                       size={20}
@@ -252,7 +252,7 @@ const CirclePage: React.FC = () => {
                       {user.acct}
                     </Text>
                   </div>
-                </AccountLink>
+                </Link>
               ))}
             </div>
           </Accordion>

@@ -2,6 +2,7 @@ import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import iconInfo from '@phosphor-icons/core/regular/info.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
+import { useNavigate } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 

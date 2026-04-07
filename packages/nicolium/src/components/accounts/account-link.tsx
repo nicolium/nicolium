@@ -7,7 +7,7 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import type { Account, Mention } from 'pl-api';
 
 interface IAccountLink extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  account: Account | Mention;
+  account: Pick<Account, 'acct' | 'url' | 'local'> | Mention;
 }
 
 const AccountLink: React.FC<IAccountLink> = ({ account, ...props }) => {

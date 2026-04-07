@@ -72,7 +72,7 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
 };
 
 const buildLink = (
-  account: Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>,
+  account: Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id' | 'local' | 'url'>,
 ): React.JSX.Element => (
   <AccountLink
     className='font-bold text-gray-800 hover:underline dark:text-gray-200'
@@ -215,7 +215,7 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
 const buildMessage = (
   intl: IntlShape,
   type: NotificationType | 'reply',
-  accounts: Array<Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>>,
+  accounts: Array<Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id' | 'local' | 'url'>>,
   targetName: string,
   instanceTitle: string,
   hasStatus: boolean,

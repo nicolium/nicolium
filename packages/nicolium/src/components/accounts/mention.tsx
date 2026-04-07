@@ -12,7 +12,7 @@ interface IMention {
 }
 
 /** Mention for display in the composer. */
-const Mention: React.FC<IMention> = ({ mention: { acct, username }, disabled }) => {
+const Mention: React.FC<IMention> = ({ mention, disabled }) => {
   const handleClick: React.MouseEventHandler = (e) => {
     if (disabled) {
       e.preventDefault();
@@ -21,9 +21,9 @@ const Mention: React.FC<IMention> = ({ mention: { acct, username }, disabled }) 
   };
 
   return (
-    <Tooltip text={`@${acct}`}>
-      <AccountLink account={{ acct, username }} onClick={handleClick} dir='ltr'>
-        @{username}
+    <Tooltip text={`@${mention.acct}`}>
+      <AccountLink account={mention} onClick={handleClick} dir='ltr'>
+        @{mention.username}
       </AccountLink>
     </Tooltip>
   );

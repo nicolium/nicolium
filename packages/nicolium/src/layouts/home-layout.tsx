@@ -61,7 +61,7 @@ const HomeLayout = () => {
           >
             <div className='⁂-compose-block__body'>
               {!disableUserProvidedMedia && (
-                <AccountLink className='⁂-compose-block__avatar' account={account}>
+                <AccountLink className='⁂-compose-block__avatar' account={account!}>
                   <Avatar
                     src={avatar}
                     alt={account?.avatar_description}
