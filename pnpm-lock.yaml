@@ -409,7 +409,7 @@ importers:
         version: 7.7.4
       valibot:
         specifier: ^1.3.1
-        version: 1.3.1(typescript@6.0.2)
+        version: 1.3.1(typescript@5.9.3)
     devDependencies:
       '@types/http-link-header':
         specifier: ^1.0.7
@@ -431,22 +431,22 @@ importers:
         version: 1.59.0(oxlint-tsgolint@0.20.0)
       typedoc:
         specifier: ^0.28.18
-        version: 0.28.18(typescript@6.0.2)
+        version: 0.28.18(typescript@5.9.3)
       typedoc-material-theme:
         specifier: ^1.4.1
-        version: 1.4.1(typedoc@0.28.18(typescript@6.0.2))
+        version: 1.4.1(typedoc@0.28.18(typescript@5.9.3))
       typedoc-plugin-valibot:
         specifier: ^1.0.2
-        version: 1.0.2(typedoc@0.28.18(typescript@6.0.2))
+        version: 1.0.2(typedoc@0.28.18(typescript@5.9.3))
       typescript:
-        specifier: ^6.0.2
-        version: 6.0.2
+        specifier: ^5.9.3
+        version: 5.9.3
       vite:
         specifier: ^8.0.6
         version: 8.0.6(@types/node@25.5.2)(esbuild@0.27.4)(jiti@1.21.7)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.1)(yaml@2.8.2)
       vite-plugin-dts:
         specifier: ^4.5.4
-        version: 4.5.4(@types/node@25.5.2)(rollup@4.60.1)(typescript@6.0.2)(vite@8.0.6(@types/node@25.5.2)(esbuild@0.27.4)(jiti@1.21.7)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.1)(yaml@2.8.2))
+        version: 4.5.4(@types/node@25.5.2)(rollup@4.60.1)(typescript@5.9.3)(vite@8.0.6(@types/node@25.5.2)(esbuild@0.27.4)(jiti@1.21.7)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.1)(yaml@2.8.2))
       vitest:
         specifier: ^4.1.3
         version: 4.1.3(@types/node@25.5.2)(@vitest/coverage-v8@4.1.3)(jsdom@29.0.2)(vite@8.0.6(@types/node@25.5.2)(esbuild@0.27.4)(jiti@1.21.7)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.1)(yaml@2.8.2))
@@ -10861,19 +10861,6 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
-  '@vue/language-core@2.2.0(typescript@6.0.2)':
-    dependencies:
-      '@volar/language-core': 2.4.22
-      '@vue/compiler-dom': 3.5.18
-      '@vue/compiler-vue2': 2.7.16
-      '@vue/shared': 3.5.18
-      alien-signals: 0.4.14
-      minimatch: 9.0.5
-      muggle-string: 0.4.1
-      path-browserify: 1.0.1
-    optionalDependencies:
-      typescript: 6.0.2
-
   '@vue/shared@3.5.18': {}
 
   '@vue/shared@3.5.29':
@@ -15125,22 +15112,22 @@ snapshots:
       possible-typed-array-names: 1.1.0
       reflect.getprototypeof: 1.0.10
 
-  typedoc-material-theme@1.4.1(typedoc@0.28.18(typescript@6.0.2)):
+  typedoc-material-theme@1.4.1(typedoc@0.28.18(typescript@5.9.3)):
     dependencies:
       '@material/material-color-utilities': 0.3.0
-      typedoc: 0.28.18(typescript@6.0.2)
+      typedoc: 0.28.18(typescript@5.9.3)
 
-  typedoc-plugin-valibot@1.0.2(typedoc@0.28.18(typescript@6.0.2)):
+  typedoc-plugin-valibot@1.0.2(typedoc@0.28.18(typescript@5.9.3)):
     dependencies:
-      typedoc: 0.28.18(typescript@6.0.2)
+      typedoc: 0.28.18(typescript@5.9.3)
 
-  typedoc@0.28.18(typescript@6.0.2):
+  typedoc@0.28.18(typescript@5.9.3):
     dependencies:
       '@gerrit0/mini-shiki': 3.23.0
       lunr: 2.3.9
       markdown-it: 14.1.1
       minimatch: 10.2.5
-      typescript: 6.0.2
+      typescript: 5.9.3
       yaml: 2.8.2
 
   typescript@5.8.2: {}
@@ -15292,6 +15279,10 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
+  valibot@1.3.1(typescript@5.9.3):
+    optionalDependencies:
+      typescript: 5.9.3
+
   valibot@1.3.1(typescript@6.0.2):
     optionalDependencies:
       typescript: 6.0.2
@@ -15347,18 +15338,18 @@ snapshots:
       - rollup
       - supports-color
 
-  vite-plugin-dts@4.5.4(@types/node@25.5.2)(rollup@4.60.1)(typescript@6.0.2)(vite@8.0.6(@types/node@25.5.2)(esbuild@0.27.4)(jiti@1.21.7)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.1)(yaml@2.8.2)):
+  vite-plugin-dts@4.5.4(@types/node@25.5.2)(rollup@4.60.1)(typescript@5.9.3)(vite@8.0.6(@types/node@25.5.2)(esbuild@0.27.4)(jiti@1.21.7)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.1)(yaml@2.8.2)):
     dependencies:
       '@microsoft/api-extractor': 7.52.10(@types/node@25.5.2)
       '@rollup/pluginutils': 5.2.0(rollup@4.60.1)
       '@volar/typescript': 2.4.22
-      '@vue/language-core': 2.2.0(typescript@6.0.2)
+      '@vue/language-core': 2.2.0(typescript@5.9.3)
       compare-versions: 6.1.1
       debug: 4.4.1
       kolorist: 1.8.0
       local-pkg: 1.1.1
       magic-string: 0.30.17
-      typescript: 6.0.2
+      typescript: 5.9.3
     optionalDependencies:
       vite: 8.0.6(@types/node@25.5.2)(esbuild@0.27.4)(jiti@1.21.7)(sass-embedded@1.99.0)(sass@1.99.0)(terser@5.46.1)(yaml@2.8.2)
     transitivePeerDependencies:
