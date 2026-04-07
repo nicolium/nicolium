@@ -1,4 +1,5 @@
 import { Outlet, useLocation, useNavigate } from '@tanstack/react-router';
+import { Navigate } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -15,13 +16,16 @@ import {
   WhoToFollowPanel,
 } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useStatus } from '@/queries/statuses/use-status';
 import { layouts } from '@/router';
+
 const EventLayout = () => {
   const { statusId } = layouts.event.useParams();
 
   const me = useCurrentAccount();
   const features = useFeatures();
+  const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,6 +74,10 @@ const EventLayout = () => {
       </>
     );
   }, [status]);
+
+  if (!me && status && !status.account.local && !allowDisplayingRemoteNoLogin) {
+    return <Navigate to='/external_redirect' state={{ redirectTarget: status.url }} replace />;
+  }
 
   if (status && !event) {
     navigate({

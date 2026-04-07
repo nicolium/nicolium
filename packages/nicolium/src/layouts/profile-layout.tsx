@@ -19,6 +19,7 @@ import {
 } from '@/features/ui/util/async-components';
 import { useAcct } from '@/hooks/use-acct';
 import { useFeatures } from '@/hooks/use-features';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { layouts } from '@/router';
 import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
@@ -34,10 +35,15 @@ const ProfileLayout: React.FC = () => {
   const me = useCurrentAccount();
   const features = useFeatures();
   const acct = useAcct(account);
+  const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
 
   if (isUnauthorized) {
     localStorage.setItem(LOCAL_STORAGE_REDIRECT_KEY, location.href);
     return <Navigate to='/login' />;
+  }
+
+  if (!me && account && !account.local && !allowDisplayingRemoteNoLogin) {
+    return <Navigate to='/external_redirect' state={{ redirectTarget: account.url }} replace />;
   }
 
   // Fix case of username

@@ -1121,6 +1121,12 @@ export const networkErrorRoute = createRoute({
   ),
 });
 
+export const externalRedirectRoute = createRoute({
+  getParentRoute: () => layouts.empty,
+  path: '/external_redirect',
+  component: lazy(() => import('@/pages/instance/external-redirect')),
+});
+
 // Crypto donate
 export const cryptoDonateRoute = createRoute({
   getParentRoute: () => layouts.default,
@@ -1416,6 +1422,7 @@ const routeTree = rootRoute.addChildren([
     serverInfoRoute,
     errorRoute,
     networkErrorRoute,
+    externalRedirectRoute,
   ]),
   layouts.event.addChildren([eventInformationRoute, eventDiscussionRoute]),
   layouts.events.addChildren([eventsRoute, newEventRoute, eventEditRoute]),
@@ -1500,6 +1507,7 @@ declare module '@tanstack/react-router' {
 
   interface HistoryState {
     modalIndex?: number;
+    redirectTarget?: string;
   }
 }
 

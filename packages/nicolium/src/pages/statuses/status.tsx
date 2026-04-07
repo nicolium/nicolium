@@ -14,6 +14,8 @@ import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import PullToRefresh from '@/components/pull-to-refresh';
 import Column from '@/components/ui/column';
 import Thread from '@/features/status/components/thread';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useStatus } from '@/queries/statuses/use-status';
 import { statusRoute } from '@/router';
 import { useSettings } from '@/stores/settings';
@@ -56,6 +58,8 @@ const messages = defineMessages({
 const StatusPage: React.FC = () => {
   const { username, statusId } = statusRoute.useParams();
   const intl = useIntl();
+  const { isLoggedIn } = useLoggedIn();
+  const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
 
   const {
     data: status,
@@ -137,6 +141,10 @@ const StatusPage: React.FC = () => {
     );
   }
 
+  if (!isLoggedIn && status && !status.account.local && !allowDisplayingRemoteNoLogin) {
+    return <Navigate to='/external_redirect' state={{ redirectTarget: status.url }} replace />;
+  }
+
   if (username && status && username !== status.account.acct) {
     return (
       <Navigate
@@ -147,9 +155,10 @@ const StatusPage: React.FC = () => {
     );
   }
 
-  if (!status && !isPending) {
-    return <MissingIndicator />;
-  } else if (!status) {
+  if (!status) {
+    if (!isPending) {
+      return <MissingIndicator />;
+    }
     return (
       <Column>
         <PlaceholderStatus />
