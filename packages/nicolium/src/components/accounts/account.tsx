@@ -16,6 +16,7 @@ import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
 import { useFeatures } from '@/hooks/use-features';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useSettings } from '@/stores/settings';
 
 import Badge from '../badge';
@@ -161,6 +162,9 @@ const Account = ({
   const me = useCurrentAccount();
   const username = useAcct(account);
   const { disableUserProvidedMedia } = useSettings();
+  const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
+
+  const withExternalLink = !allowDisplayingRemoteNoLogin && !account.local;
 
   const handleAction = () => {
     onActionClick!(account);
@@ -233,16 +237,26 @@ const Account = ({
 
   if (withDate) timestamp = account.created_at;
 
-  const LinkEl: React.ElementType = withLinkToProfile ? Link : 'div';
+  const LinkEl: React.ElementType = withLinkToProfile ? (withExternalLink ? 'a' : Link) : 'div';
   const linkProps = withLinkToProfile
-    ? {
-        to: '/@{$username}',
-        params: { username: account.acct },
-        title: account.acct,
-        onClick: (event: React.MouseEvent) => {
-          event.stopPropagation();
-        },
-      }
+    ? withExternalLink
+      ? {
+          href: account.url,
+          target: '_blank',
+          rel: 'noopener noreferrer',
+          title: account.acct,
+          onClick: (event: React.MouseEvent) => {
+            event.stopPropagation();
+          },
+        }
+      : {
+          to: '/@{$username}',
+          params: { username: account.acct },
+          title: account.acct,
+          onClick: (event: React.MouseEvent) => {
+            event.stopPropagation();
+          },
+        }
     : {};
 
   if (disabled)
