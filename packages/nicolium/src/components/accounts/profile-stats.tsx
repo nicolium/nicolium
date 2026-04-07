@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useSettings } from '@/stores/settings';
 import { shortNumberFormat } from '@/utils/numbers';
 
@@ -27,7 +28,16 @@ interface IProfileStats {
   account:
     | Pick<
         Account,
-        'acct' | 'followers_count' | 'following_count' | 'statuses_count' | 'subscribers_count'
+        | 'acct'
+        | 'followers_count'
+        | 'following_count'
+        | 'hide_followers'
+        | 'hide_followers_count'
+        | 'hide_follows'
+        | 'hide_follows_count'
+        | 'id'
+        | 'statuses_count'
+        | 'subscribers_count'
       >
     | undefined;
   onClickHandler?: React.MouseEventHandler;
@@ -37,10 +47,19 @@ interface IProfileStats {
 const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
   const intl = useIntl();
   const { demetricator } = useSettings();
+  const me = useCurrentAccount();
+
+  const ownAccount = account?.id === me;
 
   if (!account) {
     return null;
   }
+
+  const showFollowers = ownAccount || !account.hide_followers_count || !account.hide_followers;
+  const showFollowing = ownAccount || !account.hide_follows_count || !account.hide_follows;
+
+  const FollowersComponent = !account.hide_followers || ownAccount ? Link : 'div';
+  const FollowingComponent = !account.hide_follows || ownAccount ? Link : 'div';
 
   return (
     <div className='⁂-account-stats'>
@@ -51,27 +70,43 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
         </div>
       )}
 
-      <Link
-        to='/@{$username}/followers'
-        params={{ username: account.acct }}
-        onClick={onClickHandler}
-        title={intl.formatMessage(messages.followersCount, { count: account.followers_count })}
-      >
-        {!demetricator && <strong>{shortNumberFormat(account.followers_count)}</strong>}
+      {showFollowers ? (
+        <FollowersComponent
+          to='/@{$username}/followers'
+          params={{ username: account.acct }}
+          onClick={onClickHandler}
+          title={intl.formatMessage(messages.followersCount, { count: account.followers_count })}
+        >
+          {!demetricator && !(account.hide_followers_count && !ownAccount) && (
+            <strong>{shortNumberFormat(account.followers_count)}</strong>
+          )}
 
-        <FormattedMessage id='account.followers' defaultMessage='Followers' />
-      </Link>
+          <FormattedMessage id='account.followers' defaultMessage='Followers' />
+        </FollowersComponent>
+      ) : (
+        <div>
+          <FormattedMessage id='account.followers.hidden' defaultMessage='Followers hidden' />
+        </div>
+      )}
 
-      <Link
-        to='/@{$username}/following'
-        params={{ username: account.acct }}
-        onClick={onClickHandler}
-        title={intl.formatMessage(messages.followingCount, { count: account.following_count })}
-      >
-        {!demetricator && <strong>{shortNumberFormat(account.following_count)}</strong>}
+      {showFollowing ? (
+        <FollowingComponent
+          to='/@{$username}/following'
+          params={{ username: account.acct }}
+          onClick={onClickHandler}
+          title={intl.formatMessage(messages.followingCount, { count: account.following_count })}
+        >
+          {!demetricator && !(account.hide_follows_count && !ownAccount) && (
+            <strong>{shortNumberFormat(account.following_count)}</strong>
+          )}
 
-        <FormattedMessage id='account.follows' defaultMessage='Following' />
-      </Link>
+          <FormattedMessage id='account.follows' defaultMessage='Following' />
+        </FollowingComponent>
+      ) : (
+        <div>
+          <FormattedMessage id='account.following.hidden' defaultMessage='Follows hidden' />
+        </div>
+      )}
 
       {account.subscribers_count > 0 && (
         <Link
