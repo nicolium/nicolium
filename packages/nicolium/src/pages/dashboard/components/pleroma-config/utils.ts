@@ -218,7 +218,6 @@ const createDynamicEntry = (key = '', value = ''): DynamicEntry => ({
 });
 
 const normalizeTupleEntries = (value: unknown, isList: boolean): TupleEntry[] => {
-  console.log('Normalizing tuple entries', { value, isList });
   if (isList) {
     if (!Array.isArray(value)) return [createTupleEntry()];
 
@@ -240,7 +239,6 @@ const normalizeTupleEntries = (value: unknown, isList: boolean): TupleEntry[] =>
 };
 
 const normalizeDynamicEntries = (value: unknown, isKeyword: boolean): DynamicEntry[] => {
-  console.log('Normalizing dynamic entries', { value, isKeyword });
   if (isKeyword) {
     if (!Array.isArray(value)) return [createDynamicEntry()];
 
