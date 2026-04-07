@@ -107,6 +107,7 @@ const importEntities = (
   notifyManager.batch(() => {
     if (!isEmpty(accounts)) {
       for (const account of Object.values(accounts)) {
+        queryClient.setQueryData(queryKeys.accounts.lookup(account.acct.toLowerCase()), account.id);
         queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
       }
     }
