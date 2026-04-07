@@ -9,6 +9,7 @@ import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
 import nyaize from '@/utils/nyaize';
 
+import { AccountLink } from '../accounts/account-link';
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
 import HashtagLink from '../hashtag-link';
 import Emoji from '../ui/emoji';
@@ -435,9 +436,8 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
               if (mention) {
                 return (
                   <bdi>
-                    <Link
-                      to='/@{$username}'
-                      params={{ username: mention.acct }}
+                    <AccountLink
+                      account={mention}
                       dir='ltr'
                       onClick={(e) => {
                         e.stopPropagation();
@@ -446,7 +446,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
                       <HoverAccountWrapper accountId={mention.id} element='span'>
                         @{mention.username}
                       </HoverAccountWrapper>
-                    </Link>
+                    </AccountLink>
                   </bdi>
                 );
               }

@@ -30,6 +30,7 @@ import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { textForScreenReader } from '@/utils/status';
 
+import { AccountLink } from '../accounts/account-link';
 import HashtagLink from '../hashtag-link';
 import RelativeTimestamp from '../relative-timestamp';
 
@@ -378,11 +379,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
               defaultMessage='{name} reposted from {group}'
               values={{
                 name: (
-                  <Link
-                    to='/@{$username}'
-                    params={{ username: status.account.acct }}
-                    className='hover:underline'
-                  >
+                  <AccountLink account={status.account} className='hover:underline'>
                     <bdi className='truncate'>
                       <strong className='text-gray-800 dark:text-gray-200'>
                         <Emojify
@@ -391,7 +388,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
                         />
                       </strong>
                     </bdi>
-                  </Link>
+                  </AccountLink>
                 ),
                 group: (
                   <Link
@@ -412,18 +409,17 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     } else if (isReblog) {
       const values = {
         name: (
-          <Link
-            key={status.account.acct}
-            to='/@{$username}'
-            params={{ username: status.account.acct }}
+          <AccountLink
+            account={status.account}
             className='hover:underline'
+            key={status.account.acct}
           >
             <bdi className='truncate'>
               <strong className='text-gray-800 dark:text-gray-200'>
                 <Emojify text={status.account.display_name} emojis={status.account.emojis} />
               </strong>
             </bdi>
-          </Link>
+          </AccountLink>
         ),
       };
 

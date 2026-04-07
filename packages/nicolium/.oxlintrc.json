@@ -54,6 +54,7 @@
     "jsx-a11y/media-has-caption": "off",
     "jsx-a11y/mouse-events-have-key-events": "warn",
     "jsx-a11y/no-autofocus": "warn",
+    "jsx-a11y/no-noninteractive-tabindex": "warn",
     "jsx-a11y/no-static-element-interactions": "warn",
     "jsx-a11y/prefer-tag-over-role": "warn",
 

@@ -2,11 +2,11 @@ import iconArrowLineDown from '@phosphor-icons/core/regular/arrow-line-down.svg'
 import iconCaretDoubleDown from '@phosphor-icons/core/regular/caret-double-down.svg';
 import iconCaretDoubleUp from '@phosphor-icons/core/regular/caret-double-up.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
-import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
+import { AccountLink } from '@/components/accounts/account-link';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import PullToRefresh from '@/components/pull-to-refresh';
@@ -229,14 +229,12 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
       (account) =>
         !!account && (
           <HoverAccountWrapper key={account.id} accountId={account.id} element='bdi'>
-            <Link
-              key={account.acct}
-              to='/@{$username}'
-              params={{ username: account.acct }}
+            <AccountLink
+              account={account}
               className='truncate font-bold text-gray-800 hover:underline dark:text-gray-200'
             >
               <Emojify text={account.display_name} emojis={account.emojis} />
-            </Link>
+            </AccountLink>
           </HoverAccountWrapper>
         ),
     );

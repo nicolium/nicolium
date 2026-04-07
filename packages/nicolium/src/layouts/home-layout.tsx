@@ -1,8 +1,9 @@
-import { Outlet, Link } from '@tanstack/react-router';
+import { Outlet } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useRef } from 'react';
 
 import { BANNER_HTML } from '@/build-config';
+import { AccountLink } from '@/components/accounts/account-link';
 import LinkFooter from '@/components/navigation/link-footer';
 import Avatar from '@/components/ui/avatar';
 import Layout from '@/components/ui/layout';
@@ -45,7 +46,6 @@ const HomeLayout = () => {
     uploadCompose(files);
   });
 
-  const acct = account ? account.acct : '';
   const avatar = account ? account.avatar : '';
 
   return (
@@ -61,11 +61,7 @@ const HomeLayout = () => {
           >
             <div className='⁂-compose-block__body'>
               {!disableUserProvidedMedia && (
-                <Link
-                  className='⁂-compose-block__avatar'
-                  to='/@{$username}'
-                  params={{ username: acct }}
-                >
+                <AccountLink className='⁂-compose-block__avatar' account={account}>
                   <Avatar
                     src={avatar}
                     alt={account?.avatar_description}
@@ -73,7 +69,7 @@ const HomeLayout = () => {
                     size={42}
                     username={account?.username}
                   />
-                </Link>
+                </AccountLink>
               )}
 
               <div className='⁂-compose-block__form'>

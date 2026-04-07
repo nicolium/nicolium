@@ -10,13 +10,12 @@ import minBy from 'lodash/minBy';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-/* eslint-disable no-redeclare */
-import { Link } from '@/components/link';
 import Emojify from '@/features/emoji/emojify';
 import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
 import Purify from '@/utils/url-purify';
 
+import { AccountLink } from '../accounts/account-link';
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
 import { MentionWithAvatar } from '../accounts/mention-with-avatar';
 import HashtagLink from '../hashtag-link';
@@ -274,14 +273,7 @@ function parseContent(
             const mention = mentions.find(({ url }) => domNode.attribs.href === url);
             if (mention) {
               return (
-                <Link
-                  to='/@{$username}'
-                  params={{ username: mention.acct }}
-                  dir='ltr'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
+                <AccountLink account={mention} dir='ltr' onClick={(e) => e.stopPropagation()}>
                   {displayMentionAvatars ? (
                     <MentionWithAvatar id={mention.id} username={mention.username} />
                   ) : (
@@ -289,7 +281,7 @@ function parseContent(
                       @{mention.username}
                     </HoverAccountWrapper>
                   )}
-                </Link>
+                </AccountLink>
               );
             }
           } else if (domNode.attribs['data-user']) {

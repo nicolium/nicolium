@@ -25,10 +25,11 @@ import iconSpeakerSimpleX from '@phosphor-icons/core/regular/speaker-simple-x.sv
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import iconUsers from '@phosphor-icons/core/regular/users.svg';
 import iconWarning from '@phosphor-icons/core/regular/warning.svg';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import { AccountLink } from '@/components/accounts/account-link';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu as MenuType } from '@/components/dropdown-menu';
 import Icon from '@/components/icon';
@@ -552,18 +553,14 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                 defaultMessage='Organized by {name}'
                 values={{
                   name: (
-                    <Link
-                      className='mention inline-block'
-                      to='/@{$username}'
-                      params={{ username: account.acct }}
-                    >
+                    <AccountLink className='mention inline-block' account={account}>
                       <div className='flex flex-grow items-center gap-1'>
                         <span>
                           <Emojify text={account.display_name} emojis={account.emojis} />
                         </span>
                         {account.verified && <VerificationBadge />}
                       </div>
-                    </Link>
+                    </AccountLink>
                   ),
                 }}
               />

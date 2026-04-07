@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Link } from '@/components/link';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useSettings } from '@/stores/settings';
 
+import { AccountLink } from '../accounts/account-link';
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
 import { MentionWithAvatar } from '../accounts/mention-with-avatar';
 
@@ -25,9 +25,8 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
     );
 
   return (
-    <Link
-      to='/@{$username}'
-      params={{ username: account.acct }}
+    <AccountLink
+      account={account}
       dir='ltr'
       onClick={(e) => {
         e.stopPropagation();
@@ -40,7 +39,7 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
           @{account.acct}
         </HoverAccountWrapper>
       )}
-    </Link>
+    </AccountLink>
   );
 };
 

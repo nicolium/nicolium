@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
@@ -6,6 +5,8 @@ import { FormattedList, FormattedMessage } from 'react-intl';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import HoverStatusWrapper from '@/components/statuses/hover-status-wrapper';
 import { useModalsActions } from '@/stores/modals';
+
+import { AccountLink } from '../accounts/account-link';
 
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
@@ -74,17 +75,16 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   // The typical case with a reply-to and a list of mentions.
   const accounts = to.slice(0, 2).map((account) => {
     const link = (
-      <Link
+      <AccountLink
         key={account.id}
-        to='/@{$username}'
-        params={{ username: account.acct }}
+        account={account}
         className='inline-block max-w-[200px] truncate align-bottom text-primary-600 no-underline [direction:ltr] hover:text-primary-700 hover:underline dark:text-primary-400 dark:hover:text-primary-400'
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
         @{account.username}
-      </Link>
+      </AccountLink>
     );
 
     if (hoverable) {

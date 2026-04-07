@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { Link } from '@/components/link';
 import Tooltip from '@/components/ui/tooltip';
+
+import { AccountLink } from './account-link';
 
 import type { Mention as MentionEntity } from 'pl-api';
 
 interface IMention {
-  mention: Pick<MentionEntity, 'acct' | 'username'>;
+  mention: MentionEntity;
   disabled?: boolean;
 }
 
@@ -21,9 +22,9 @@ const Mention: React.FC<IMention> = ({ mention: { acct, username }, disabled }) 
 
   return (
     <Tooltip text={`@${acct}`}>
-      <Link to='/@{$username}' params={{ username: acct }} onClick={handleClick} dir='ltr'>
+      <AccountLink account={{ acct, username }} onClick={handleClick} dir='ltr'>
         @{username}
-      </Link>
+      </AccountLink>
     </Tooltip>
   );
 };

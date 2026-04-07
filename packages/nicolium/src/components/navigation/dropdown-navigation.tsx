@@ -54,6 +54,8 @@ import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
 import { useIsStandalone } from '@/utils/state';
 
+import { AccountLink } from '../accounts/account-link';
+
 import type { Account as AccountEntity } from 'pl-api';
 
 interface IAccountSwitcher {
@@ -260,9 +262,9 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
       <div className='⁂-dropdown-navigation' id='dropdown-navigation' role='menu'>
         {account ? (
           <div>
-            <Link to='/@{$username}' params={{ username: account.acct }} onClick={closeSidebar}>
+            <AccountLink account={account} onClick={closeSidebar}>
               <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} />
-            </Link>
+            </AccountLink>
 
             {!settings.demetricator && (
               <ProfileStats account={account} onClickHandler={handleClose} />

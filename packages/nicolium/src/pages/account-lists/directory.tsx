@@ -1,9 +1,10 @@
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import { AccountLink } from '@/components/accounts/account-link';
 import ActionButton from '@/components/accounts/action-button';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import Badge from '@/components/badge';
@@ -70,7 +71,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           <div className='⁂-directory-card__header__image--empty' />
         )}
 
-        <Link to='/@{$username}' params={{ username: account.acct }} title={account.acct}>
+        <AccountLink account={account}>
           <HoverAccountWrapper key={account.id} accountId={account.id} element='span'>
             <Avatar
               src={account.avatar}
@@ -81,7 +82,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
               username={account.username}
             />
           </HoverAccountWrapper>
-        </Link>
+        </AccountLink>
       </div>
 
       <div className='⁂-directory-card__account'>

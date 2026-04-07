@@ -2,7 +2,6 @@ import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.sv
 import iconLinkSimple from '@phosphor-icons/core/regular/link-simple.svg';
 import iconMagnifyingGlassPlus from '@phosphor-icons/core/regular/magnifying-glass-plus.svg';
 import iconPlay from '@phosphor-icons/core/regular/play.svg';
-import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import DOMPurify from 'dompurify';
 import {
@@ -22,6 +21,7 @@ import { useSettings } from '@/stores/settings';
 import { getTextDirection } from '@/utils/rtl';
 import Purify from '@/utils/url-purify';
 
+import { AccountLink } from './accounts/account-link';
 import HoverAccountWrapper from './accounts/hover-account-wrapper';
 import Avatar from './ui/avatar';
 
@@ -366,9 +366,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                       element='bdi'
                     >
                       {author.account ? (
-                        <Link to='/@{$username}' params={{ username: author.account?.acct ?? '' }}>
-                          {linkBody}
-                        </Link>
+                        <AccountLink account={author.account}>{linkBody}</AccountLink>
                       ) : (
                         <a href={author.url} target='_blank' rel='noopener noreferrer'>
                           {linkBody}

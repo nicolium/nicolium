@@ -13,7 +13,7 @@ import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
 import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import React, { useCallback, useMemo, useRef } from 'react';
 import {
   defineMessages,
@@ -50,6 +50,8 @@ import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
 
+import { AccountLink } from './accounts/account-link';
+
 import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 import type { NotificationType } from '@/utils/notification';
 import type { Account, NotificationGroup } from 'pl-api';
@@ -72,17 +74,16 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
 const buildLink = (
   account: Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>,
 ): React.JSX.Element => (
-  <Link
+  <AccountLink
     className='font-bold text-gray-800 hover:underline dark:text-gray-200'
     title={account.acct}
-    to='/@{$username}'
-    params={{ username: account.acct }}
+    account={account}
     key={account.id}
   >
     <HoverAccountWrapper key={account.acct} element='bdi' accountId={account.id}>
       <Emojify text={account.display_name} emojis={account.emojis} />
     </HoverAccountWrapper>
-  </Link>
+  </AccountLink>
 );
 
 const icons: Partial<Record<NotificationType | 'reply', string>> = {

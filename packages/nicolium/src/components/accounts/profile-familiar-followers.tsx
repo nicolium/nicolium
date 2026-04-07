@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
@@ -10,6 +9,8 @@ import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFamiliarFollowers } from '@/queries/accounts/use-familiar-followers';
 import { useModalsActions } from '@/stores/modals';
+
+import { AccountLink } from './account-link';
 
 import type { Account } from 'pl-api';
 
@@ -23,12 +24,7 @@ const FamiliarFollowerLink: React.FC<IFamiliarFollowerLink> = ({ id }) => {
   if (!account) return null;
 
   return (
-    <Link
-      className='mention inline-block'
-      to='/@{$username}'
-      params={{ username: account.acct }}
-      key={account.id}
-    >
+    <AccountLink className='mention inline-block' account={account} key={account.id}>
       <HoverAccountWrapper accountId={account.id} element='span'>
         <div className='flex flex-grow items-center gap-1'>
           <Text size='sm' theme='primary' truncate>
@@ -38,7 +34,7 @@ const FamiliarFollowerLink: React.FC<IFamiliarFollowerLink> = ({ id }) => {
           {account.verified && <VerificationBadge />}
         </div>
       </HoverAccountWrapper>
-    </Link>
+    </AccountLink>
   );
 };
 

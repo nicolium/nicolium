@@ -1,10 +1,10 @@
 import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
-import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { GroupTimelineColumn } from '@/columns/timeline';
+import { AccountLink } from '@/components/accounts/account-link';
 import Avatar from '@/components/ui/avatar';
 import { ComposeForm } from '@/features/ui/util/async-components';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
@@ -54,14 +54,14 @@ const GroupTimelinePage: React.FC = () => {
               'ring-2 ring-primary-600 ring-offset-2': isDraggedOver,
             })}
           >
-            <Link to='/@{$username}' params={{ username: account.acct }}>
+            <AccountLink account={account}>
               <Avatar
                 src={account.avatar}
                 alt={account.avatar_description}
                 size={42}
                 isCat={account.is_cat}
               />
-            </Link>
+            </AccountLink>
 
             <ComposeForm id={composeId} shouldCondense group={groupId} withAvatar transparent />
           </div>

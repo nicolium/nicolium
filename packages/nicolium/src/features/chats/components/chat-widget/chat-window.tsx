@@ -5,6 +5,7 @@ import { Link, type LinkProps } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
+import { AccountLink } from '@/components/accounts/account-link';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
@@ -76,7 +77,7 @@ const ChatWindow = () => {
 
             <div className='flex items-center gap-3'>
               {isOpen && (
-                <Link to='/@{$username}' params={{ username: chat.account.acct }}>
+                <AccountLink account={chat.account}>
                   <Avatar
                     src={chat.account.avatar}
                     alt={chat.account.avatar_description}
@@ -84,7 +85,7 @@ const ChatWindow = () => {
                     isCat={chat.account.is_cat}
                     username={chat.account.username}
                   />
-                </Link>
+                </AccountLink>
               )}
 
               <div className='flex flex-col items-start'>

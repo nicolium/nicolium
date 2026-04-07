@@ -2,11 +2,11 @@ import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import iconInfo from '@phosphor-icons/core/regular/info.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
-import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import { AccountLink } from '@/components/accounts/account-link';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Avatar from '@/components/ui/avatar';
@@ -135,7 +135,7 @@ const ChatsPageChat = () => {
               title={intl.formatMessage(messages.back)}
             />
 
-            <Link to='/@{$username}' params={{ username: chat.account.acct }}>
+            <AccountLink account={chat.account}>
               <Avatar
                 src={chat.account.avatar}
                 alt={chat.account.avatar_description}
@@ -144,16 +144,16 @@ const ChatsPageChat = () => {
                 isCat={chat.account.is_cat}
                 username={chat.account.username}
               />
-            </Link>
+            </AccountLink>
           </div>
 
           <div className='flex h-11 flex-col items-start overflow-hidden'>
             <div className='flex w-full grow items-center space-x-1'>
-              <Link to='/@{$username}' params={{ username: chat.account.acct }}>
+              <AccountLink account={chat.account}>
                 <Text weight='bold' size='sm' align='left' truncate>
                   {chat.account.display_name || `@${chat.account.username}`}
                 </Text>
-              </Link>
+              </AccountLink>
               {chat.account.verified && <VerificationBadge />}
             </div>
           </div>

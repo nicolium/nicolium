@@ -15,6 +15,8 @@ import { useAccount } from '@/queries/accounts/use-account';
 import { useSettings } from '@/stores/settings';
 import { shortNumberFormat } from '@/utils/numbers';
 
+import { AccountLink } from '../accounts/account-link';
+
 const messages = defineMessages({
   accountLocked: {
     id: 'account.locked_info',
@@ -59,12 +61,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
             className={clsx('flex', disableUserProvidedMedia ? 'justify-end' : 'justify-between')}
           >
             {!disableUserProvidedMedia && (
-              <Link
-                to='/@{$username}'
-                params={{ username: acct }}
-                title={acct}
-                className='-mt-12 block'
-              >
+              <AccountLink account={account} title={acct} className='-mt-12 block'>
                 <Avatar
                   src={account.avatar}
                   alt={account.avatar_description}
@@ -74,7 +71,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
                   size={80}
                   className='size-20 bg-gray-50 ring-2 ring-white'
                 />
-              </Link>
+              </AccountLink>
             )}
 
             {action && <div className='mt-2'>{action}</div>}
@@ -82,7 +79,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         </div>
 
         <div className='flex flex-col'>
-          <Link to='/@{$username}' params={{ username: account.acct }}>
+          <AccountLink account={account}>
             <div className='flex items-center gap-1'>
               <Text size='lg' weight='bold' truncate>
                 <Emojify text={account.display_name} emojis={account.emojis} />
@@ -107,7 +104,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
                 <div className='flex items-center gap-1'>{badges}</div>
               )}
             </div>
-          </Link>
+          </AccountLink>
 
           <div className='flex items-center gap-1'>
             <Text size='sm' theme='muted' direction='ltr' truncate>

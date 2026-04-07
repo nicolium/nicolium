@@ -1,8 +1,8 @@
-import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
+import { AccountLink } from '@/components/accounts/account-link';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import PlaceholderChatMessage from '@/components/placeholders/placeholder-chat-message';
 import { ParsedContent } from '@/components/statuses/parsed-content';
@@ -39,12 +39,7 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
         })}
       >
         {!isMyMessage && (
-          <Link
-            className='mb-0.5'
-            to='/@{$username}'
-            params={{ username: account.acct }}
-            title={account.acct}
-          >
+          <AccountLink className='mb-0.5' account={account} title={account.acct}>
             <HoverAccountWrapper accountId={account.id} element='span'>
               <Avatar
                 src={account.avatar}
@@ -54,7 +49,7 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
                 username={account.username}
               />
             </HoverAccountWrapper>
-          </Link>
+          </AccountLink>
         )}
 
         <div
