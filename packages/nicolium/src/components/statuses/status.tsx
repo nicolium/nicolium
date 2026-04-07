@@ -40,6 +40,7 @@ import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';
 import StatusInfo from './status-info';
 import StatusLanguagePicker from './status-language-picker';
+import { StatusLink } from './status-link';
 import StatusReactionsBar from './status-reactions-bar';
 import StatusReplyMentions from './status-reply-mentions';
 import Tombstone from './tombstone';
@@ -59,9 +60,9 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
   const intl = useIntl();
   return (
     <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
-      <Link
-        to='/@{$username}/posts/$statusId'
-        params={{ username: status.account.acct, statusId: status.id }}
+      <StatusLink
+        status={status}
+        account={status.account}
         className='hover:underline'
         onClick={(event) => {
           event.stopPropagation();
@@ -73,7 +74,7 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
           size='sm'
           className='whitespace-nowrap'
         />
-      </Link>
+      </StatusLink>
       <StatusTypeIcon visibility={status.visibility} />
       <StatusLanguagePicker status={status} />
       {!!status.edited_at && (

@@ -5,7 +5,6 @@ import iconArrowsOutSimple from '@phosphor-icons/core/regular/arrows-out-simple.
 import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
 import iconX from '@phosphor-icons/core/regular/x.svg';
 import { animated, useSpring } from '@react-spring/web';
-import { Link } from '@tanstack/react-router';
 import { useDrag } from '@use-gesture/react';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -18,6 +17,7 @@ import ZoomableImage from '@/components/media/zoomable-image';
 import MissingIndicator from '@/components/missing-indicator';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import StatusActionBar from '@/components/statuses/status-action-bar';
+import { StatusLink } from '@/components/statuses/status-link';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Thread from '@/features/status/components/thread';
@@ -187,12 +187,9 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         }
 
         const link = status && (
-          <Link
-            to='/@{$username}/posts/$statusId'
-            params={{ username: status.account.acct, statusId: status.id }}
-          >
+          <StatusLink status={status} account={status.account}>
             <FormattedMessage id='lightbox.view_context' defaultMessage='View context' />
-          </Link>
+          </StatusLink>
         );
 
         if (attachment.type === 'image') {
