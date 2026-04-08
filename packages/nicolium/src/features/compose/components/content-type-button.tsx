@@ -106,6 +106,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
       }))}
     >
       <button
+        type='button'
         className='⁂-content-type-button'
         title={compact ? option?.text : intl.formatMessage(messages.changeContentType)}
       >

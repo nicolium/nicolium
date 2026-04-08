@@ -299,7 +299,7 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId, 
 
   return (
     <DropdownMenu component={LanguageDropdown} className='⁂-language-dropdown'>
-      <button title={intl.formatMessage(messages.languagePrompt)}>
+      <button type='button' title={intl.formatMessage(messages.languagePrompt)}>
         <Icon src={iconTranslate} aria-hidden />
         {buttonLabel}
         <Icon src={iconCaretDown} aria-hidden />

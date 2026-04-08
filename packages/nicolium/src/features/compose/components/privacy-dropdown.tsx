@@ -230,7 +230,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
 
   return (
     <DropdownMenu items={items} width='16rem'>
-      <button title={compact ? text : intl.formatMessage(messages.changePrivacy)}>
+      <button type='button' title={compact ? text : intl.formatMessage(messages.changePrivacy)}>
         {valueOption?.icon && <Icon src={valueOption.icon} aria-hidden />}
         {compact ? undefined : text}
         <Icon src={iconCaretDown} aria-hidden />
