@@ -133,16 +133,17 @@ const RssFeedSubscriptions = () => {
                         {feed.url}
                       </Text>
                     </div>
-                    <IconButton
-                      onClick={handleDelete(feed.url)}
-                      disabled={isPending}
-                      className='size-8 text-gray-700 dark:text-gray-600'
-                      src={iconX}
-                      title={intl.formatMessage(messages.deleteFeed)}
-                    />
                   </div>
                 }
-              />
+              >
+                <IconButton
+                  onClick={handleDelete(feed.url)}
+                  disabled={isPending}
+                  className='size-8 text-gray-700 dark:text-gray-600'
+                  src={iconX}
+                  title={intl.formatMessage(messages.deleteFeed)}
+                />
+              </ListItem>
             ))}
           </List>
         ) : (
