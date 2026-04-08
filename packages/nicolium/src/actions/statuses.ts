@@ -74,13 +74,11 @@ const createStatus = (
   editedId: string | null,
   redacting = false,
 ) => {
-  if (!params.preview) {
+  if (!params.preview && !editedId) {
     usePendingStatusesStore.getState().actions.importStatus(params, idempotencyKey);
     useContextStore.getState().actions.importPendingStatus(params.in_reply_to_id, idempotencyKey);
     useTimelinesStore.getState().actions.importPendingStatus(params, idempotencyKey);
-    if (!editedId) {
-      incrementReplyCount(params, queryClient);
-    }
+    incrementReplyCount(params, queryClient);
   }
 
   return (
