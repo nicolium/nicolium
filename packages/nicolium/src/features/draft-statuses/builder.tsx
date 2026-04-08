@@ -10,7 +10,7 @@ const buildPoll = (draftPoll: DraftStatus['poll']) => {
     return v.parse(pollSchema, {
       ...draftPoll,
       id: 'poll',
-      options: draftPoll.options.map((title: string) => ({ title })).toArray(),
+      options: draftPoll.options.map((title: string) => ({ title })),
     });
   } else {
     return null;
