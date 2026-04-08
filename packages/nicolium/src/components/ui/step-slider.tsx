@@ -66,7 +66,7 @@ const StepSlider: React.FC<IStepSlider> = ({
         }
       }
     }, 60),
-    [node.current],
+    [node.current, onChange],
   );
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = (event) => {

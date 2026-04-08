@@ -89,7 +89,7 @@ const Slider: React.FC<ISlider> = ({
         }
       }
     }, 60),
-    [node.current],
+    [node.current, onChange],
   );
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = (event) => {
