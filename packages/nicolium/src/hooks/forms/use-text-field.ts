@@ -8,7 +8,7 @@ const useTextField = (initialValue?: string) => {
   const [value, setValue] = useState(initialValue);
   const hasInitialValue = typeof initialValue === 'string';
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+  const onChange = (e: { target: { value: string } }) => {
     setValue(e.target.value);
   };
 

@@ -47,6 +47,7 @@ const NewFeedForm: React.FC = () => {
     createRssFeedSubscription(url.value, {
       onSuccess() {
         toast.success(messages.createSuccess);
+        url.onChange({ target: { value: '' } });
       },
       onError() {
         toast.error(messages.createFail);
@@ -125,7 +126,9 @@ const RssFeedSubscriptions = () => {
                     {feed.image_url ? (
                       <Avatar size={40} src={feed.image_url} />
                     ) : (
-                      <Icon src={iconRss} size={40} />
+                      <div className='flex size-10 items-center justify-center rounded-full rounded-lg bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100'>
+                        <Icon src={iconRss} size={32} />
+                      </div>
                     )}
                     <div className='flex flex-1 flex-col'>
                       <span>{feed.title}</span>
