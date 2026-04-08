@@ -164,7 +164,7 @@ const Account = ({
   const { disableUserProvidedMedia } = useSettings();
   const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
 
-  const withExternalLink = !me && !allowDisplayingRemoteNoLogin && !account.local;
+  const withExternalLink = !me && !allowDisplayingRemoteNoLogin && account && !account.local;
 
   const handleAction = () => {
     onActionClick!(account);
