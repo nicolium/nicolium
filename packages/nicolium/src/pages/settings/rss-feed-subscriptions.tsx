@@ -31,7 +31,7 @@ const messages = defineMessages({
   },
   createFail: {
     id: 'rss_feed_subscriptions.add.fail',
-    defaultMessage: 'Failed to subsrcibe to RSS feed',
+    defaultMessage: 'Failed to subscribe to RSS feed',
   },
 });
 
@@ -49,7 +49,7 @@ const NewFeedForm: React.FC = () => {
         toast.success(messages.createSuccess);
       },
       onError() {
-        toast.success(messages.createFail);
+        toast.error(messages.createFail);
       },
     });
   };

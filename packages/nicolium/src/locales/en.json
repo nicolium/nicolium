@@ -1806,7 +1806,7 @@
   "report.unassign": "Unassign",
   "report.unassign.success": "Unassigned report.",
   "rss_feed.label": "RSS Feed",
-  "rss_feed_subscriptions.add.fail": "Failed to subsrcibe to RSS feed",
+  "rss_feed_subscriptions.add.fail": "Failed to subscribe to RSS feed",
   "rss_feed_subscriptions.add.success": "Successfully subscribed to RSS feed",
   "rss_feed_subscriptions.delete": "Delete feed",
   "rss_feed_subscriptions.list.heading": "Subscribed feeds",
