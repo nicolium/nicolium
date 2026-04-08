@@ -22,7 +22,7 @@ const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp }) => (
     <div className='⁂-rss-feed-info__content'>
       <p className='⁂-rss-feed-info__title'>{feed.title}</p>
 
-      <div className='flex items-center gap-1'>
+      <div className='flex items-center gap-1 text-gray-700 dark:text-gray-600'>
         <p>
           <FormattedMessage id='rss_feed.label' defaultMessage='RSS Feed' />
         </p>
