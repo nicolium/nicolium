@@ -1476,7 +1476,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     });
   }, []);
 
-  if (!status) {
+  if (!status || !status.account) {
     return null;
   }
 

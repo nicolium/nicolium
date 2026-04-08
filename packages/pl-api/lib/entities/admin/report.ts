@@ -15,6 +15,11 @@ import { adminAccountSchema } from './account';
 const adminReportSchema = v.pipe(
   v.any(),
   v.transform((report: any) => {
+    report.statuses = report.statuses?.map((status: any) => ({
+      ...status,
+      account: (report.actor ? report.account : report.target_account)?.account || status.account,
+    }));
+
     if (report.actor) {
       /**
        * Convert Pleroma report schema
