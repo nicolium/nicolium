@@ -1,1 +1,1 @@
-CHANGELOG.md
+packages/nicolium/CHANGELOG.md
