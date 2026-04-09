@@ -46,3 +46,5 @@ pnpm -F pl-api lint
 ```
 
 While contributing code, try to follow the existing coding style. Common sense rules regarding contributions apply. Keep your changes focused on a single issue or feature. Do not create pull requests including larger changes you don't understand fully—whether it's from another project or some auto-generated code.
+
+Contributions must not include LLM-generated first-party code or graphic assets.
