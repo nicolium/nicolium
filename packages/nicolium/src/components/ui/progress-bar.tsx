@@ -17,7 +17,7 @@ const ProgressBar: React.FC<IProgressBar> = ({ progress, size = 'md' }) => {
 
   const styles = useSpring({
     from: { width: '0%' },
-    to: { width: `${progress}%` },
+    to: { width: `${progress * 100}%` },
     reset: true,
     immediate: reduceMotion,
   });
