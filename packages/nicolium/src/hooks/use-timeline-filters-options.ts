@@ -6,6 +6,7 @@ import { changeSetting } from '@/actions/settings';
 import { useSettings } from '@/stores/settings';
 
 import { useFeatures } from './use-features';
+import { useLoggedIn } from './use-logged-in';
 
 import type { Menu } from '@/components/dropdown-menu';
 
@@ -65,6 +66,7 @@ const useTimelineFiltersOptions = (
 ) => {
   const intl = useIntl();
   const features = useFeatures();
+  const { isLoggedIn } = useLoggedIn();
   const { timelines, defaultTimeline } = useSettings();
   const timelineSettings = timelines[timeline] || defaultSettings;
 
@@ -125,7 +127,7 @@ const useTimelineFiltersOptions = (
       onChange: handleOnChecked('showNonMedia'),
     });
 
-    if (timelineId) {
+    if (timelineId && isLoggedIn) {
       items.push(null);
 
       items.push({
