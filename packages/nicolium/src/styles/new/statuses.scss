@@ -980,7 +980,7 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
   }
 
   &__details {
-    @include mixins.text($theme: muted, $size: xs);
+    @include mixins.text($theme: muted, $size: sm);
 
     display: flex;
     gap: 0.25rem;
