@@ -135,8 +135,8 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     if (
       features.publicTimeline &&
       (isLoggedIn
-        ? timelineAccess.live_feeds.bubble !== 'disabled'
-        : timelineAccess.live_feeds.bubble === 'public')
+        ? timelineAccess.live_feeds.remote !== 'disabled'
+        : timelineAccess.live_feeds.remote === 'public')
     ) {
       items.push({
         to: '/timeline/fediverse',
