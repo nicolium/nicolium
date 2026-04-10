@@ -101,7 +101,11 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
       {renderStatusInfo()}
 
       {actualStatus.rss_feed ? (
-        <RssFeedInfo feed={actualStatus.rss_feed} timestamp={actualStatus.created_at} />
+        <RssFeedInfo
+          feed={actualStatus.rss_feed}
+          timestamp={actualStatus.created_at}
+          url={actualStatus.url}
+        />
       ) : (
         <div className='mb-4'>
           <Account

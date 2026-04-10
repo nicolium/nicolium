@@ -569,7 +569,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         {statusInfo}
 
         {status.rss_feed ? (
-          <RssFeedInfo feed={status.rss_feed} timestamp={status.created_at} />
+          <RssFeedInfo feed={status.rss_feed} timestamp={status.created_at} url={status.url} />
         ) : (
           actualStatus.account_id && (
             <div className='flex'>

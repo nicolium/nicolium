@@ -11,16 +11,28 @@ import type { RssFeed } from 'pl-api';
 interface IRssFeedInfo {
   feed: RssFeed;
   timestamp: string;
+  url: string;
 }
 
-const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp }) => (
+const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp, url }) => (
   <div className='⁂-rss-feed-info'>
     <div className='⁂-rss-feed-info__avatar'>
       <Avatar src={feed.image_url || ''} size={42} alt={feed.title || ''} />
     </div>
 
     <div className='⁂-rss-feed-info__content'>
-      <p className='⁂-rss-feed-info__title'>{feed.title}</p>
+      <p className='⁂-rss-feed-info__title'>
+        {feed.title}
+
+        <a href={url} target='_blank' rel='noopener noreferrer' className='⁂-rss-feed-info__link'>
+          <RelativeTimestamp
+            timestamp={timestamp}
+            theme='muted'
+            size='sm'
+            className='whitespace-nowrap'
+          />
+        </a>
+      </p>
 
       <div className='⁂-rss-feed-info__details'>
         <p>
@@ -28,15 +40,6 @@ const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp }) => (
         </p>
 
         <Icon src={iconRss} />
-
-        <span aria-hidden>&middot;</span>
-
-        <RelativeTimestamp
-          timestamp={timestamp}
-          theme='muted'
-          size='sm'
-          className='whitespace-nowrap'
-        />
       </div>
     </div>
   </div>
