@@ -99,7 +99,7 @@ body {
   }
 
   .no-reduce-motion & {
-    transform: scale(0);
+    transform: scale(0.9);
     transition: transform 150ms var(--ease-default);
   }
 
