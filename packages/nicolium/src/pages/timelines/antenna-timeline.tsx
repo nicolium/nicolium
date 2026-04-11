@@ -64,18 +64,6 @@ const AntennaTimelinePage: React.FC = () => {
 
   const title = antenna ? antenna.title : antennaId;
 
-  if (!antenna && isFetching) {
-    return (
-      <Column>
-        <div>
-          <Spinner />
-        </div>
-      </Column>
-    );
-  } else if (!antenna) {
-    return <MissingIndicator />;
-  }
-
   const items = useMemo(
     () => [
       ...timelineFilterOptions,
@@ -93,6 +81,18 @@ const AntennaTimelinePage: React.FC = () => {
     ],
     [timelineFilterOptions],
   );
+
+  if (!antenna && isFetching) {
+    return (
+      <Column>
+        <div>
+          <Spinner />
+        </div>
+      </Column>
+    );
+  } else if (!antenna) {
+    return <MissingIndicator />;
+  }
 
   return (
     <Column

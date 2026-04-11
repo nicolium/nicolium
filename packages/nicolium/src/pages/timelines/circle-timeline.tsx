@@ -63,18 +63,6 @@ const CircleTimelinePage: React.FC = () => {
 
   const title = circle ? circle.title : circleId;
 
-  if (!circle && isFetching) {
-    return (
-      <Column>
-        <div>
-          <Spinner />
-        </div>
-      </Column>
-    );
-  } else if (!circle) {
-    return <MissingIndicator />;
-  }
-
   const items = useMemo(
     () => [
       ...timelineFilterOptions,
@@ -92,6 +80,18 @@ const CircleTimelinePage: React.FC = () => {
     ],
     [timelineFilterOptions],
   );
+
+  if (!circle && isFetching) {
+    return (
+      <Column>
+        <div>
+          <Spinner />
+        </div>
+      </Column>
+    );
+  } else if (!circle) {
+    return <MissingIndicator />;
+  }
 
   return (
     <Column

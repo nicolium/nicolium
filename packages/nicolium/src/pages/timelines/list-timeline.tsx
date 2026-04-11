@@ -64,6 +64,24 @@ const ListTimelinePage: React.FC = () => {
 
   const title = list ? list.title : listId;
 
+  const items = useMemo(
+    () => [
+      ...timelineFilterOptions,
+      null,
+      {
+        text: intl.formatMessage(messages.editList),
+        action: handleEditClick,
+        icon: iconPencilSimple,
+      },
+      {
+        text: intl.formatMessage(messages.deleteList),
+        action: handleDeleteClick,
+        icon: iconTrash,
+      },
+    ],
+    [timelineFilterOptions],
+  );
+
   if (!list && isFetching) {
     return (
       <Column>
@@ -92,24 +110,6 @@ const ListTimelinePage: React.FC = () => {
       </Column>
     );
   }
-
-  const items = useMemo(
-    () => [
-      ...timelineFilterOptions,
-      null,
-      {
-        text: intl.formatMessage(messages.editList),
-        action: handleEditClick,
-        icon: iconPencilSimple,
-      },
-      {
-        text: intl.formatMessage(messages.deleteList),
-        action: handleDeleteClick,
-        icon: iconTrash,
-      },
-    ],
-    [timelineFilterOptions],
-  );
 
   return (
     <Column
