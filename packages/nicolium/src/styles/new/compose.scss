@@ -138,7 +138,8 @@
 
     .⁂-icon-button {
       padding: 0.5rem;
-      color: rgb(var(--color-gray-400));
+      color: rgb(var(--color-gray-600));
+      background-color: transparent;
       transition: all 200ms var(--ease-default);
 
       &:hover {
