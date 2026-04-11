@@ -411,6 +411,8 @@ p.⁂-form-group__hint {
   background: transparent;
   background-image: none !important;
 
+  transition: background-color 150ms var(--ease-default);
+
   &::after {
     content: '';
     display: block;

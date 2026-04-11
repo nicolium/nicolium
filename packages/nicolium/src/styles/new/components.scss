@@ -707,6 +707,11 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
   pointer-events: auto;
 
   position: relative;
+  transform: scale(0.9)
+
+    .⁂-modal-root--revealed &{
+    transform: scale(1);
+  }
 
   overflow: auto;
   display: flex;
