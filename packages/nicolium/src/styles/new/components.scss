@@ -493,16 +493,17 @@ a.⁂-list-item,
 .⁂-scroll-top-button {
   position: fixed;
   z-index: 50;
-  top: -1rem;
+  top: 0.5rem;
   left: 50%;
-  transform: translateX(-50%);
+  transform-origin: top center;
+  transform: translateX(-50%) scale(0.9);
 
   opacity: 0;
 
   transition: all 150ms var(--ease-default);
 
   &--visible {
-    top: 0.5rem;
+    transform: translateX(-50%) scale(1);
     opacity: 1;
   }
 
