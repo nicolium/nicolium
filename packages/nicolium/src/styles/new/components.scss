@@ -491,6 +491,8 @@ a.⁂-list-item,
 }
 
 .⁂-scroll-top-button {
+  pointer-events: none;
+
   position: fixed;
   z-index: 50;
   top: 0.5rem;
@@ -503,6 +505,7 @@ a.⁂-list-item,
   transition: all 150ms var(--ease-default);
 
   &--visible {
+    pointer-events: auto;
     transform: translateX(-50%) scale(1);
     opacity: 1;
   }
