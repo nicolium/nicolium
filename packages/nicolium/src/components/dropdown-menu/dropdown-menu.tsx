@@ -403,8 +403,8 @@ const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
 
   const getClassName = () => {
     const className = clsx('', {
-      'no-reduce-motion:scale-0': !(isDisplayed && isOpen),
-      'scale-100': isDisplayed && isOpen,
+      'no-reduce-motion:scale-90 no-reduce-motion:opacity-0': !(isDisplayed && isOpen),
+      'scale-100 opacity-100': isDisplayed && isOpen,
       'origin-bottom': placement === 'top',
       'origin-left': placement === 'right',
       'origin-top': placement === 'bottom',
