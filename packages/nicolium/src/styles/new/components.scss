@@ -707,11 +707,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
   pointer-events: auto;
 
   position: relative;
-  transform: scale(0.9)
-
-    .⁂-modal-root--revealed &{
-    transform: scale(1);
-  }
+  transform: scale(0.9);
 
   overflow: auto;
   display: flex;
@@ -734,6 +730,10 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     0 8px 10px -6px #0001;
 
   transition: all 150ms var(--ease-default);
+
+  .⁂-modal-root--revealed & {
+    transform: scale(1);
+  }
 
   .dark.black & {
     background-color: #000;
