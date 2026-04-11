@@ -21,7 +21,7 @@ import { statusRoute } from '@/router';
 import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
-  title: { id: 'status.title', defaultMessage: 'Post details' },
+  title: { id: 'status.title', defaultMessage: 'Post by @{username}' },
   titleDirect: { id: 'status.title_direct', defaultMessage: 'Direct message' },
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
   deleteHeading: { id: 'confirmations.delete.heading', defaultMessage: 'Delete post' },
@@ -174,7 +174,7 @@ const StatusPage: React.FC = () => {
   return (
     <div className='flex flex-col gap-4'>
       <Column
-        label={intl.formatMessage(titleMessage())}
+        label={intl.formatMessage(titleMessage(), { username: status.account.acct })}
         action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
       >
         <PullToRefresh onRefresh={handleRefresh}>

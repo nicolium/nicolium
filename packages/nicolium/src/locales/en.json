@@ -1979,7 +1979,7 @@
   "status.thread.linear_view": "Linear view",
   "status.thread.tree_indent_view": "Tree (indented)",
   "status.thread.tree_view": "Tree view",
-  "status.title": "Post details",
+  "status.title": "Post by @{username}",
   "status.title_direct": "Direct message",
   "status.translate": "Translate",
   "status.translate.download": "Download model and translate locally",
