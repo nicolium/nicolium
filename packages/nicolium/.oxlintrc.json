@@ -47,6 +47,7 @@
 
     // "react/display-name": "error",
     "react/exhaustive-deps": "off",
+    "react/rules-of-hooks": "error",
 
     "jsx-a11y/anchor-is-valid": "warn",
     "jsx-a11y/click-events-have-key-events": "warn",
