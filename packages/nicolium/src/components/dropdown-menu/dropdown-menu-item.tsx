@@ -1,5 +1,5 @@
 import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
-import { useNavigate, type LinkOptions } from '@tanstack/react-router';
+import { Link, useNavigate, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 
@@ -127,58 +127,79 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     return <hr />;
   }
 
+  const itemContent = (
+    <>
+      {item.icon && <Icon src={item.icon} className='⁂-dropdown-menu__item__icon' />}
+
+      <div className='⁂-dropdown-menu__item__content'>
+        {item.meta ? (
+          <>
+            <div>{item.text}</div>
+            <div>{item.meta}</div>
+          </>
+        ) : (
+          item.text
+        )}
+      </div>
+
+      {item.count ? (
+        <span className='⁂-dropdown-menu__item__counter'>
+          <Counter count={item.count} />
+        </span>
+      ) : null}
+
+      {(item.type === 'toggle' || item.type === 'radio') && (
+        <div className='⁂-dropdown-menu__item__switch'>
+          <Toggle
+            checked={item.checked}
+            onChange={handleChange}
+            radio={item.type === 'radio'}
+            disabled={item.disabled}
+          />
+        </div>
+      )}
+
+      {!!item.items?.length && (
+        <Icon src={iconCaretRight} containerClassName='⁂-dropdown-menu__item__expand' />
+      )}
+    </>
+  );
+
+  const itemProps = {
+    tabIndex: item.disabled ? -1 : 0,
+    ref: itemRef,
+    'data-index': index,
+    onClick: handleClick,
+    onAuxClick: handleAuxClick,
+    onKeyDown: handleItemKeyDown,
+    title: item.text,
+    'aria-disabled': item.disabled,
+    className: clsx('⁂-dropdown-menu__item', {
+      '⁂-dropdown-menu__item--destructive': item.destructive,
+    }),
+  };
+
   return (
     <li>
-      <a
-        href={item.href ?? item.to ?? '#'}
-        role='button'
-        tabIndex={item.disabled ? -1 : 0}
-        ref={itemRef}
-        data-index={index}
-        onClick={handleClick}
-        onAuxClick={handleAuxClick}
-        onKeyDown={handleItemKeyDown}
-        target={typeof item.target === 'string' ? item.target : '_blank'}
-        title={item.text}
-        aria-disabled={item.disabled}
-        className={clsx('⁂-dropdown-menu__item', {
-          '⁂-dropdown-menu__item--destructive': item.destructive,
-        })}
-      >
-        {item.icon && <Icon src={item.icon} className='⁂-dropdown-menu__item__icon' />}
-
-        <div className='⁂-dropdown-menu__item__content'>
-          {item.meta ? (
-            <>
-              <div>{item.text}</div>
-              <div>{item.meta}</div>
-            </>
-          ) : (
-            item.text
-          )}
-        </div>
-
-        {item.count ? (
-          <span className='⁂-dropdown-menu__item__counter'>
-            <Counter count={item.count} />
-          </span>
-        ) : null}
-
-        {(item.type === 'toggle' || item.type === 'radio') && (
-          <div className='⁂-dropdown-menu__item__switch'>
-            <Toggle
-              checked={item.checked}
-              onChange={handleChange}
-              radio={item.type === 'radio'}
-              disabled={item.disabled}
-            />
-          </div>
-        )}
-
-        {!!item.items?.length && (
-          <Icon src={iconCaretRight} containerClassName='⁂-dropdown-menu__item__expand' />
-        )}
-      </a>
+      {item.to ? (
+        <Link
+          to={item.to}
+          params={item.params}
+          search={item.search}
+          target={typeof item.target === 'string' ? item.target : undefined}
+          {...itemProps}
+        >
+          {itemContent}
+        </Link>
+      ) : (
+        <a
+          href={item.href ?? '#'}
+          target={typeof item.target === 'string' ? item.target : '_blank'}
+          {...itemProps}
+        >
+          {itemContent}
+        </a>
+      )}
 
       {item.onSelectFile && (
         <label className='sr-only'>
