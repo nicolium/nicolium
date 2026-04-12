@@ -16,8 +16,13 @@ interface IFormGroup {
 }
 
 /** Input container with label. Renders the child. */
-const FormGroup: React.FC<IFormGroup> = (props) => {
-  const { children, errors = [], labelText, labelTitle, hintText } = props;
+const FormGroup: React.FC<IFormGroup> = ({
+  children,
+  errors = [],
+  labelText,
+  labelTitle,
+  hintText,
+}) => {
   const formFieldId: string = useMemo(() => `field-${crypto.randomUUID()}`, []);
   const inputChildren = React.Children.toArray(children);
   const hasError = errors?.length > 0;

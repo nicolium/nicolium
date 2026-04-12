@@ -83,21 +83,20 @@ interface IColumn {
 }
 
 /** A backdrop for the main section of the UI. */
-const Column: React.FC<IColumn> = (props): React.JSX.Element => {
-  const {
-    withBack = true,
-    backHref,
-    children,
-    label,
-    title,
-    transparent = false,
-    withHeader = true,
-    className,
-    bodyClassName,
-    action,
-    size,
-    truncateTitle,
-  } = props;
+const Column: React.FC<IColumn> = ({
+  withBack = true,
+  backHref,
+  children,
+  label,
+  title,
+  transparent = false,
+  withHeader = true,
+  className,
+  bodyClassName,
+  action,
+  size,
+  truncateTitle,
+}) => {
   const frontendConfig = useFrontendConfig();
   const [isScrolled, setIsScrolled] = useState(false);
 

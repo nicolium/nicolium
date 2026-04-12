@@ -333,18 +333,16 @@ interface IMediaGallery {
   visible?: boolean;
 }
 
-const MediaGallery: React.FC<IMediaGallery> = (props) => {
-  const {
-    media,
-    defaultWidth = 0,
-    className,
-    onOpenMedia,
-    cacheWidth,
-    compact,
-    height,
-    visible,
-  } = props;
-
+const MediaGallery: React.FC<IMediaGallery> = ({
+  media,
+  defaultWidth = 0,
+  className,
+  onOpenMedia,
+  cacheWidth,
+  compact,
+  height,
+  visible,
+}) => {
   const { disableUserProvidedMedia } = useSettings();
 
   const [width, setWidth] = useState<number>(defaultWidth);

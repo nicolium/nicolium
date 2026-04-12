@@ -24,9 +24,7 @@ interface ITooltip {
 /**
  * Tooltip
  */
-const Tooltip: React.FC<ITooltip> = (props) => {
-  const { children, text, disabled = false } = props;
-
+const Tooltip: React.FC<ITooltip> = ({ children, text, disabled = false }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const arrowRef = useRef<SVGSVGElement>(null);

@@ -227,23 +227,21 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
   );
 };
 
-const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
-  const {
-    children,
-    disabled,
-    items,
-    component,
-    onClose,
-    onOpen,
-    onShiftClick,
-    placement: initialPlacement = 'top',
-    src = iconDotsThree,
-    title = 'Menu',
-    width,
-    className,
-    forceDropdown,
-  } = props;
-
+const DropdownMenu: React.FC<IDropdownMenu> = ({
+  children,
+  disabled,
+  items,
+  component,
+  onClose,
+  onOpen,
+  onShiftClick,
+  placement: initialPlacement = 'top',
+  src = iconDotsThree,
+  title = 'Menu',
+  width,
+  className,
+  forceDropdown,
+}) => {
   const { openDropdownMenu, closeDropdownMenu } = useUiStoreActions();
   const { openModal, closeModal } = useModalsActions();
 

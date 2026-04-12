@@ -11,9 +11,7 @@ interface ISelectDropdown {
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
-const SelectDropdown: React.FC<ISelectDropdown> = (props) => {
-  const { label, hint, items, ...rest } = props;
-
+const SelectDropdown: React.FC<ISelectDropdown> = ({ label, hint, items, ...rest }) => {
   const optionElems = Object.keys(items).map((item) => (
     <option key={item} value={item}>
       {items[item]}

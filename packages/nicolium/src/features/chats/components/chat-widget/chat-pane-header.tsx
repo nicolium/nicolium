@@ -21,19 +21,17 @@ interface IChatPaneHeader {
   secondaryActionTitle?: string;
 }
 
-const ChatPaneHeader: React.FC<IChatPaneHeader> = (props) => {
-  const {
-    isOpen,
-    isToggleable = true,
-    onToggle,
-    secondaryAction,
-    secondaryActionIcon,
-    secondaryActionTitle,
-    title,
-    unreadCount,
-    ...rest
-  } = props;
-
+const ChatPaneHeader: React.FC<IChatPaneHeader> = ({
+  isOpen,
+  isToggleable = true,
+  onToggle,
+  secondaryAction,
+  secondaryActionIcon,
+  secondaryActionTitle,
+  title,
+  unreadCount,
+  ...rest
+}) => {
   const intl = useIntl();
   const { demetricator } = useSettings();
 

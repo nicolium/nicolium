@@ -9,9 +9,7 @@ interface IStatusInfo {
   title?: string;
 }
 
-const StatusInfo: React.FC<IStatusInfo> = (props) => {
-  const { avatarSize, icon, text, className, title } = props;
-
+const StatusInfo: React.FC<IStatusInfo> = ({ avatarSize, icon, text, className, title }) => {
   const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };

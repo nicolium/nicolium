@@ -27,12 +27,7 @@ interface IPollFooter {
   statusId: string;
 }
 
-const PollFooter: React.FC<IPollFooter> = ({
-  poll,
-  showResults,
-  selected,
-  statusId,
-}): React.JSX.Element => {
+const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, statusId }) => {
   const intl = useIntl();
 
   const { refetch } = usePollQuery(poll.id);
