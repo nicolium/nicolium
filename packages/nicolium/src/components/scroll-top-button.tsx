@@ -43,7 +43,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   // Whether we are scrolled above the `autoloadThreshold`.
   const [scrolledTop, setScrolledTop] = useState<boolean>(false);
 
-  const visible = count > 0 && (!autoloadTimelines || scrolled);
+  const visible = count > 0 && (autoloadTimelines ? scrolledTop : scrolled);
   const buttonMessage = intl.formatMessage(message, { count });
 
   /** Number of pixels scrolled down from the top of the page. */
@@ -57,9 +57,14 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
     }
   }, [autoloadTimelines, scrolledTop, count, onClick]);
 
-  /** Set state while scrolling. */
-  const handleScroll = useCallback(
-    throttle(
+  /** Scroll to top and trigger `onClick`. */
+  const handleClick: React.MouseEventHandler = useCallback(() => {
+    window.scrollTo({ top: 0 });
+    onClick();
+  }, [onClick]);
+
+  useEffect(() => {
+    const handleScroll = throttle(
       () => {
         const scrollTop = getScrollTop();
 
@@ -68,17 +73,8 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
       },
       40,
       { trailing: true },
-    ),
-    [threshold, autoloadThreshold],
-  );
+    );
 
-  /** Scroll to top and trigger `onClick`. */
-  const handleClick: React.MouseEventHandler = useCallback(() => {
-    window.scrollTo({ top: 0 });
-    onClick();
-  }, [onClick]);
-
-  useEffect(() => {
     // Delay adding the scroll listener so navigating back doesn't
     // unload feed items before the feed is rendered.
     setTimeout(() => {
@@ -89,7 +85,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [handleScroll]);
+  }, []);
 
   useEffect(() => {
     maybeUnload();

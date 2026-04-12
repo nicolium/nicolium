@@ -539,8 +539,8 @@ const Timeline: React.FC<ITimeline> = ({
           id='status-list'
           key='scrollable-list'
           scrollKey={timelineId}
-          isLoading={isFetching}
-          showLoading={isPending}
+          isLoading={isFetching || true}
+          showLoading={isPending || true}
           placeholderComponent={() => <PlaceholderTimelineStatus />}
           placeholderCount={20}
           ref={node}
