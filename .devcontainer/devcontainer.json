@@ -27,7 +27,6 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "dbaeumer.vscode-eslint",
         "oxc.oxc-vscode",
         "stylelint.vscode-stylelint",
         "wix.vscode-import-cost"

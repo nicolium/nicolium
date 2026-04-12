@@ -1,6 +1,5 @@
 {
     "recommendations": [
-        "dbaeumer.vscode-eslint",
         "ms-vscode-remote.remote-containers",
         "oxc.oxc-vscode",
         "stylelint.vscode-stylelint",

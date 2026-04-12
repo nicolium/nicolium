@@ -39,10 +39,16 @@ This will start a Vite development server where you can use `pl-api` client insi
 
 Nicolium monorepo is hosted on [Codeberg](https://codeberg.org/nicolium/nicolium) and [GitHub](https://github.comnicolium/nicoliumum). While issues are only tracked on Codeberg, you can submit pull requests on both platforms. Remember to follow the [Code of Conduct](./code-of-conduct.mdx) when interacting with the community.
 
-The project uses [ESLint](https://eslint.org/) for code style checking. You can run the linter using the following command:
+The project uses [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) + [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) for code style checking. You can run the linter using the following command:
 
 ```bash
 pnpm -F pl-api lint
+```
+
+And for formatter:
+
+```bash
+pnpm -F nicolium fmt --check
 ```
 
 While contributing code, try to follow the existing coding style. Common sense rules regarding contributions apply. Keep your changes focused on a single issue or feature. Do not create pull requests including larger changes you don't understand fully—whether it's from another project or some auto-generated code.
