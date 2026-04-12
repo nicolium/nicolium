@@ -1,3 +1,4 @@
+import iconBookmarkFill from '@phosphor-icons/core/fill/bookmark-fill.svg';
 import iconStarFill from '@phosphor-icons/core/fill/star-fill.svg';
 import iconThumbsDownFill from '@phosphor-icons/core/fill/thumbs-down-fill.svg';
 import iconThumbsUpFill from '@phosphor-icons/core/fill/thumbs-up-fill.svg';
@@ -66,6 +67,7 @@ import { useTranslationLanguages } from '@/queries/instance/use-translation-lang
 import {
   useDeleteStatus,
   useDeleteStatusFromGroup,
+  useStatus,
   type SelectedStatus,
 } from '@/queries/statuses/use-status';
 import {
@@ -83,6 +85,7 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { layouts } from '@/router';
+import { settingsSchema } from '@/schemas/frontend-settings';
 import { useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
@@ -187,6 +190,7 @@ const messages = defineMessages({
   muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
   open: { id: 'status.open', defaultMessage: 'Show post details' },
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
+  quotePostShort: { id: 'status.quote.short', defaultMessage: 'Quote' },
   quotePost: { id: 'status.quote', defaultMessage: 'Quote post' },
   reblog: { id: 'status.reblog', defaultMessage: 'Repost' },
   reblogPrivate: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
@@ -254,6 +258,10 @@ const messages = defineMessages({
     id: 'status.interaction_policy.reply.header',
     defaultMessage: 'The author limits who can reply to this post.',
   },
+  quoteInteractionPolicyHeader: {
+    id: 'status.interaction_policy.quote.header',
+    defaultMessage: 'The author limits who can quote this post.',
+  },
 
   favouriteInteractionPolicyFollowers: {
     id: 'status.interaction_policy.favourite.followers_only',
@@ -306,6 +314,23 @@ const messages = defineMessages({
     defaultMessage: 'Only users mentioned by the author can reply.',
   },
 
+  quoteInteractionPolicyFollowers: {
+    id: 'status.interaction_policy.quote.followers_only',
+    defaultMessage: 'Only users following the author can quote.',
+  },
+  quoteInteractionPolicyFollowing: {
+    id: 'status.interaction_policy.quote.following_only',
+    defaultMessage: 'Only users followed by the author can quote.',
+  },
+  quoteInteractionPolicyMutuals: {
+    id: 'status.interaction_policy.quote.mutuals_only',
+    defaultMessage: 'Only users mutually following the author can quote.',
+  },
+  quoteInteractionPolicyMentioned: {
+    id: 'status.interaction_policy.quote.mentioned_only',
+    defaultMessage: 'Only users mentioned by the author can quote.',
+  },
+
   favouriteApprovalRequired: {
     id: 'status.interaction_policy.favourite.approval_required',
     defaultMessage: 'The author needs to approve your like.',
@@ -316,8 +341,10 @@ const messages = defineMessages({
   },
 });
 
+const STATUS_ACTIONS = settingsSchema.entries.statusActionBarItems.item.options;
+
 interface IInteractionPopover {
-  type: 'favourite' | 'reblog' | 'reply';
+  type: 'favourite' | 'reblog' | 'reply' | 'quote';
   allowed: ReturnType<typeof useCanInteract>['allowed'];
 }
 
@@ -325,6 +352,7 @@ const INTERACTION_POLICY_HEADERS = {
   favourite: messages.favouriteInteractionPolicyHeader,
   reblog: messages.reblogInteractionPolicyHeader,
   reply: messages.replyInteractionPolicyHeader,
+  quote: messages.quoteInteractionPolicyHeader,
 };
 
 const INTERACTION_POLICY_DESCRIPTIONS = {
@@ -345,6 +373,12 @@ const INTERACTION_POLICY_DESCRIPTIONS = {
     following: messages.replyInteractionPolicyFollowing,
     mutuals: messages.replyInteractionPolicyMutuals,
     mentioned: messages.replyInteractionPolicyMentioned,
+  },
+  quote: {
+    followers: messages.quoteInteractionPolicyFollowers,
+    following: messages.quoteInteractionPolicyFollowing,
+    mutuals: messages.quoteInteractionPolicyMutuals,
+    mentioned: messages.quoteInteractionPolicyMentioned,
   },
 };
 
@@ -447,6 +481,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
 
 interface IReblogButton extends IActionButton {
   publicStatus: boolean;
+  withQuote: boolean;
 }
 
 const ReblogButton: React.FC<IReblogButton> = ({
@@ -455,6 +490,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   me,
   onOpenUnauthorizedModal,
   publicStatus,
+  withQuote,
 }) => {
   const { quoteCompose } = useComposeActions();
   const features = useFeatures();
@@ -572,7 +608,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
       </Popover>
     );
 
-  if (!features.quotePosts || !me) return reblogButton;
+  if (!features.quotePosts || !me || !withQuote) return reblogButton;
 
   const handleQuoteClick: React.EventHandler<React.MouseEvent> = () => {
     if (me) {
@@ -727,17 +763,16 @@ const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
   const features = useFeatures();
 
   const { openModal } = useModalsActions();
-  const { showWrenchButton, wrenchModal } = useSettings();
+  const { wrenchModal } = useSettings();
 
   const { mutate: emojiReact } = useEmojiReactMutation(status.id);
   const { mutate: emojiUnreact } = useEmojiUnreactMutation(status.id);
 
   const { data: hasLongerWrench } = useCustomEmojis(getLongerWrench);
 
-  if (!me || withLabels || !features.emojiReacts || !showWrenchButton) return;
+  if (!me || withLabels || !features.emojiReacts) return;
 
-  const wrenches =
-    showWrenchButton && (status.emoji_reactions.find((emoji) => emoji.name === '🔧') ?? undefined);
+  const wrenches = status.emoji_reactions.find((emoji) => emoji.name === '🔧') ?? undefined;
 
   const checkConfirmation = (callback: () => void) => {
     if (wrenchModal) {
@@ -808,10 +843,277 @@ const EmojiPickerButton: React.FC<Omit<IActionButton, 'onOpenUnauthorizedModal'>
   );
 };
 
+const BookmarkButton: React.FC<IActionButton> = ({ status, me }) => {
+  const { openModal } = useModalsActions();
+  const features = useFeatures();
+  const intl = useIntl();
+
+  const { mutate: bookmarkStatus } = useBookmarkStatus(status.id);
+  const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status.id);
+
+  const handleBookmarkClick: React.EventHandler<React.MouseEvent> = () => {
+    if (status.bookmarked) unbookmarkStatus();
+    else bookmarkStatus(undefined);
+  };
+
+  const handleBookmarkLongPress = () => {
+    openModal('SELECT_BOOKMARK_FOLDER', {
+      statusId: status.id,
+    });
+  };
+
+  return (
+    <StatusActionButton
+      title={intl.formatMessage(messages.bookmark)}
+      icon={iconBookmarkSimple}
+      filledIcon={iconBookmarkFill}
+      onClick={handleBookmarkClick}
+      onLongPress={
+        status.bookmarked && features.bookmarkFolders ? handleBookmarkLongPress : undefined
+      }
+      active={status.bookmarked}
+      disabled={!me}
+    />
+  );
+};
+
+const QuoteButton: React.FC<IActionButton> = ({
+  status,
+  withLabels,
+  me,
+  onOpenUnauthorizedModal,
+}) => {
+  const { quoteCompose } = useComposeActions();
+  const features = useFeatures();
+  const intl = useIntl();
+
+  const canQuote = useCanInteract(status, 'can_quote');
+
+  if (!features.quotePosts) return;
+
+  const handleQuoteClick: React.EventHandler<React.MouseEvent> = () => {
+    if (me) {
+      quoteCompose(status, canQuote.approvalRequired || false);
+    } else {
+      onOpenUnauthorizedModal('REBLOG');
+    }
+  };
+
+  const quoteButton = (
+    <StatusActionButton
+      title={intl.formatMessage(messages.quotePost)}
+      icon={iconQuotes}
+      onClick={handleQuoteClick}
+      count={status.quotes_count}
+      text={withLabels ? intl.formatMessage(messages.quotePostShort) : undefined}
+    />
+  );
+
+  if (me && !canQuote.canInteract) {
+    return (
+      <Popover
+        interaction='click'
+        content={<InteractionPopover allowed={canQuote.allowed} type='quote' />}
+      >
+        {quoteButton}
+      </Popover>
+    );
+  }
+
+  return quoteButton;
+};
+
+const ShareButton: React.FC<IActionButton> = ({ status }) => {
+  const intl = useIntl();
+
+  const handleShare = () => {
+    navigator
+      .share({
+        text: status.search_index,
+        url: status.uri,
+      })
+      .catch((e) => {
+        if (e.name !== 'AbortError') console.error(e);
+      });
+  };
+
+  if (!('share' in navigator)) return null;
+
+  return (
+    <StatusActionButton
+      title={intl.formatMessage(messages.share)}
+      icon={iconExport}
+      onClick={handleShare}
+    />
+  );
+};
+
+const useItems = (
+  items: Array<(typeof STATUS_ACTIONS)[number]>,
+  status: SelectedStatus | undefined,
+  withLabels: boolean,
+  rebloggedBy?: Account,
+) => {
+  const { openModal } = useModalsActions();
+  const me = useCurrentAccount();
+
+  const publicStatus = useMemo(
+    () => (status ? ['public', 'unlisted', 'group'].includes(status.visibility) : false),
+    [status?.visibility],
+  );
+
+  const onOpenUnauthorizedModal = useCallback((action?: UnauthorizedModalAction) => {
+    openModal('UNAUTHORIZED', {
+      action,
+      ap_id: status!.url,
+    });
+  }, []);
+
+  return useMemo(() => {
+    const renderedItems: React.ReactNode[] = [];
+
+    if (!status) return renderedItems;
+
+    for (const item of items) {
+      switch (item) {
+        case 'reply':
+          renderedItems.push(
+            <ReplyButton
+              key='reply'
+              status={status}
+              withLabels={withLabels}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+              rebloggedBy={rebloggedBy}
+            />,
+          );
+          break;
+        case 'reblog':
+          renderedItems.push(
+            <ReblogButton
+              key='reblog'
+              status={status}
+              withLabels={withLabels}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+              publicStatus={publicStatus}
+              withQuote={false}
+            />,
+          );
+          break;
+        case 'favourite':
+          renderedItems.push(
+            <FavouriteButton
+              key='favourite'
+              status={status}
+              withLabels={withLabels}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+            />,
+          );
+          break;
+        case 'dislike':
+          renderedItems.push(
+            <DislikeButton
+              key='dislike'
+              status={status}
+              withLabels={withLabels}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+            />,
+          );
+          break;
+        case 'wrench':
+          renderedItems.push(
+            <WrenchButton
+              key='wrench'
+              status={status}
+              withLabels={withLabels}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+            />,
+          );
+          break;
+        case 'reaction':
+          renderedItems.push(
+            <EmojiPickerButton key='emoji' status={status} withLabels={withLabels} me={me} />,
+          );
+          break;
+        case 'bookmark':
+          renderedItems.push(
+            <BookmarkButton
+              key='bookmark'
+              status={status}
+              withLabels={withLabels}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+            />,
+          );
+          break;
+        case 'quote':
+          renderedItems.push(
+            <QuoteButton
+              key='quote'
+              status={status}
+              withLabels={withLabels}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+            />,
+          );
+          break;
+        case 'share':
+          renderedItems.push(
+            <ShareButton
+              key='share'
+              status={status}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+            />,
+          );
+          break;
+        default:
+          break;
+      }
+    }
+
+    return renderedItems;
+  }, [items, status, withLabels, me, onOpenUnauthorizedModal]);
+};
+
+interface IMenuButtonRemainingItems {
+  statusId: string;
+  rebloggedBy?: Account;
+}
+
+const MenuButtonRemainingItems: React.FC<IMenuButtonRemainingItems> = ({
+  statusId,
+  rebloggedBy,
+}) => {
+  const { statusActionBarItems } = useSettings();
+
+  const { data: status } = useStatus(statusId);
+
+  const remaining = useMemo(() => {
+    return STATUS_ACTIONS.filter((action) => {
+      if (statusActionBarItems.includes(action)) return false;
+      if (action === 'quote' && statusActionBarItems.includes('reblog')) return false;
+      if (['bookmark', 'share'].includes(action)) return false;
+      return true;
+    });
+  }, [statusActionBarItems]);
+
+  const items = useItems(remaining, status, false, rebloggedBy);
+
+  if (!items.length || !status) return null;
+
+  return <div className='⁂-status-action-bar__menu__items'>{items}</div>;
+};
+
 interface IMenuButton extends IActionButton {
   expandable?: boolean;
   fromBookmarks?: boolean;
   publicStatus: boolean;
+  rebloggedBy?: Account;
 }
 
 const MenuButton: React.FC<IMenuButton> = ({
@@ -820,6 +1122,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   expandable,
   fromBookmarks,
   publicStatus,
+  rebloggedBy,
 }) => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -852,7 +1155,7 @@ const MenuButton: React.FC<IMenuButton> = ({
 
   const features = useFeatures();
   const instance = useInstance();
-  const { autoTranslate, deleteModal, knownLanguages } = useSettings();
+  const { autoTranslate, deleteModal, knownLanguages, statusActionBarItems } = useSettings();
 
   const { data: translationLanguages = {} } = useTranslationLanguages();
   const { mutate: reblogStatus } = useReblogStatus(status.id);
@@ -1120,7 +1423,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         icon: iconLinkSimpleHorizontal,
       });
 
-      if ('share' in navigator) {
+      if ('share' in navigator && !statusActionBarItems.includes('share')) {
         menu.push({
           text: intl.formatMessage(messages.share),
           action: handleShare,
@@ -1151,7 +1454,7 @@ const MenuButton: React.FC<IMenuButton> = ({
 
     const isGroupStatus = typeof status.group_id === 'string';
 
-    if (features.bookmarks) {
+    if (features.bookmarks && !statusActionBarItems.includes('bookmark')) {
       menu.push({
         text: intl.formatMessage(status.bookmarked ? messages.unbookmark : messages.bookmark),
         action: handleBookmarkClick,
@@ -1427,11 +1730,17 @@ const MenuButton: React.FC<IMenuButton> = ({
     status.reblogged,
     status.account?.relationship,
     spoilerExpanded,
+    statusActionBarItems,
   ]);
 
   return useMemo(
     () => (
-      <DropdownMenu items={menu}>
+      <DropdownMenu
+        component={() => (
+          <MenuButtonRemainingItems statusId={status.id} rebloggedBy={rebloggedBy} />
+        )}
+        items={menu}
+      >
         <StatusActionButton title={intl.formatMessage(messages.more)} icon={iconDotsThree} />
       </DropdownMenu>
     ),
@@ -1457,6 +1766,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   rebloggedBy,
 }) => {
   const { openModal } = useModalsActions();
+  const { statusActionBarItems } = useSettings();
 
   const me = useCurrentAccount();
 
@@ -1476,50 +1786,15 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     });
   }, []);
 
+  const items = useItems(statusActionBarItems, status, withLabels, rebloggedBy);
+
   if (!status || !status.account) {
     return null;
   }
 
   return (
     <div className={`⁂-status-action-bar ⁂-status-action-bar--${space}`} onClick={onContainerClick}>
-      <ReplyButton
-        status={status}
-        withLabels={withLabels}
-        me={me}
-        onOpenUnauthorizedModal={onOpenUnauthorizedModal}
-        rebloggedBy={rebloggedBy}
-      />
-
-      <ReblogButton
-        status={status}
-        withLabels={withLabels}
-        me={me}
-        onOpenUnauthorizedModal={onOpenUnauthorizedModal}
-        publicStatus={publicStatus}
-      />
-
-      <FavouriteButton
-        status={status}
-        withLabels={withLabels}
-        me={me}
-        onOpenUnauthorizedModal={onOpenUnauthorizedModal}
-      />
-
-      <DislikeButton
-        status={status}
-        withLabels={withLabels}
-        me={me}
-        onOpenUnauthorizedModal={onOpenUnauthorizedModal}
-      />
-
-      <WrenchButton
-        status={status}
-        withLabels={withLabels}
-        me={me}
-        onOpenUnauthorizedModal={onOpenUnauthorizedModal}
-      />
-
-      <EmojiPickerButton status={status} withLabels={withLabels} me={me} />
+      {items}
 
       <MenuButton
         status={status}
@@ -1529,6 +1804,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         expandable={expandable}
         fromBookmarks={fromBookmarks}
         publicStatus={publicStatus}
+        rebloggedBy={rebloggedBy}
       />
     </div>
   );

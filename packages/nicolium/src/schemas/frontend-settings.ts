@@ -4,6 +4,22 @@ import { locales } from '@/messages';
 
 import { coerceObject } from './utils';
 
+const DEFAULT_STATUS_ACTION_BAR_ITEMS = [
+  'reply',
+  'reblog',
+  'favourite',
+  'dislike',
+  'reaction',
+] as const;
+
+// const DEFAULT_SIDEBAR_ITEMS = [
+//   'context',
+//   'announcements',
+//   'recommendations',
+//   'promo',
+//   'footer',
+// ] as const;
+
 const skinToneSchema = v.picklist([1, 2, 3, 4, 5, 6]);
 
 const settingsSchema = v.object({
@@ -39,7 +55,6 @@ const settingsSchema = v.object({
   forceImplicitAddressing: v.fallback(v.boolean(), false),
   autoTranslate: v.fallback(v.boolean(), false),
   knownLanguages: v.fallback(v.array(v.string()), []),
-  showWrenchButton: v.fallback(v.boolean(), false),
   urlPrivacy: coerceObject({
     clearLinksInCompose: v.optional(v.boolean(), true),
     clearLinksInContent: v.optional(v.boolean(), false),
@@ -158,6 +173,39 @@ const settingsSchema = v.object({
   saved: v.fallback(v.boolean(), true),
 
   demo: v.fallback(v.boolean(), false),
+
+  // navigationItems: v.fallback(
+  //   v.array(v.any()),
+  //   [],
+  // ),
+  statusActionBarItems: v.fallback(
+    v.array(
+      v.picklist([
+        'reply',
+        'reblog',
+        'quote',
+        'favourite',
+        'dislike',
+        'wrench',
+        'reaction',
+        'bookmark',
+        'share',
+      ]),
+    ),
+    DEFAULT_STATUS_ACTION_BAR_ITEMS,
+  ),
+  // sidebarItems: v.fallback(
+  //   v.array(v.picklist([
+  //     'context',
+  //     'announcements',
+  //     'recommendations',
+  //     'promo',
+  //     'footer',
+  //     'compose',
+  //     'notifications',
+  //   ])),
+  //   DEFAULT_SIDEBAR_ITEMS,
+  // ),
 });
 
 type Settings = v.InferOutput<typeof settingsSchema>;

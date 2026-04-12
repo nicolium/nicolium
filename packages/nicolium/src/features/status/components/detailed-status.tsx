@@ -5,6 +5,7 @@ import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-
 
 import Account from '@/components/accounts/account';
 import RssFeedInfo from '@/components/statuses/rss-feed-info';
+import StatusActionBar from '@/components/statuses/status-action-bar';
 import StatusContent from '@/components/statuses/status-content';
 import StatusInfo from '@/components/statuses/status-info';
 import StatusLanguagePicker from '@/components/statuses/status-language-picker';
@@ -15,6 +16,7 @@ import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
+import { useSettings } from '@/stores/settings';
 
 import StatusInteractionBar from './status-interaction-bar';
 import StatusTypeIcon from './status-type-icon';
@@ -42,6 +44,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
   const { data: group } = useGroupQuery(status.group_id ?? undefined);
   const { data: account } = useAccount(status.account_id);
+  const { statusActionBarItems } = useSettings();
 
   const handleOpenCompareHistoryModal = () => {
     onOpenCompareHistoryModal(status);
@@ -113,6 +116,13 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             account={account}
             avatarSize={42}
             hideActions
+            action={
+              statusActionBarItems.length === 0 ? (
+                <div className='-m-1.5'>
+                  <StatusActionBar status={status} />
+                </div>
+              ) : undefined
+            }
             approvalStatus={actualStatus.approval_status}
             withLocked={false}
           />

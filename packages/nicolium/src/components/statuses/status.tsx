@@ -58,8 +58,11 @@ interface IAccountInfo {
 
 const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
   const intl = useIntl();
+  const { statusActionBarItems } = useSettings();
+
   return (
     <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
+      {!statusActionBarItems.length && <StatusActionBar status={status} fromBookmarks expandable />}
       <StatusLink
         status={status}
         account={status.account}
@@ -212,7 +215,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const { deleted, showFiltered } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { replyCompose, mentionCompose } = useComposeActions();
-  const { boostModal } = useSettings();
+  const { boostModal, statusActionBarItems } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
 
@@ -608,7 +611,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
             <>
               <StatusReactionsBar status={actualStatus} collapsed />
 
-              {!hideActionBar && (
+              {!hideActionBar && statusActionBarItems.length > 0 && (
                 <div
                   className={clsx({
                     'pt-2': actualStatus.emoji_reactions.length,

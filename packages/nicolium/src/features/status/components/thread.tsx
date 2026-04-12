@@ -57,6 +57,7 @@ const Thread = ({
   const {
     boostModal,
     threads: { displayMode },
+    statusActionBarItems,
   } = useSettings();
 
   const { mutate: favouriteStatus } = useFavouriteStatus(status.id);
@@ -274,7 +275,7 @@ const Thread = ({
                     withMedia={withMedia}
                   />
 
-                  {!status.rss_feed && (
+                  {!status.rss_feed && statusActionBarItems.length > 0 && (
                     <>
                       <hr className='-mx-4 mb-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
 

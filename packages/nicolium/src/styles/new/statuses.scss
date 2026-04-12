@@ -318,6 +318,19 @@
       }
     }
   }
+
+  &__menu__items {
+    display: flex;
+    justify-content: space-around;
+
+    margin: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgb(var(--color-gray-200));
+
+    .dark & {
+      border-bottom-color: rgb(var(--color-gray-800));
+    }
+  }
 }
 
 .thread__status {

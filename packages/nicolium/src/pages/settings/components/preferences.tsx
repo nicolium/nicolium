@@ -9,6 +9,7 @@ import Form from '@/components/ui/form';
 import { Multiselect } from '@/components/ui/multiselect';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import StepSlider from '@/components/ui/step-slider';
+import Toggle from '@/components/ui/toggle';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { PaletteListItem } from '@/pages/dashboard/theme-editor';
@@ -209,6 +210,21 @@ const Preferences = () => {
   const onThemeReset = () => {
     changeSetting(['themeMode'], defaultSettings.themeMode, { save: false });
     changeSetting(['theme'], defaultSettings.theme, { showAlert: true });
+  };
+
+  const onToggleWrenchButton: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+    const showWrenchButton = target.checked;
+
+    let newItems = [...settings.statusActionBarItems];
+
+    if (showWrenchButton) {
+      const index = newItems.indexOf('reaction');
+      if (index !== -1) newItems.splice(index, 0, 'wrench');
+    } else {
+      newItems = newItems.filter((item) => item !== 'wrench');
+    }
+
+    changeSetting(['statusActionBarItems'], newItems);
   };
 
   const displayMediaOptions = React.useMemo(
@@ -663,7 +679,7 @@ const Preferences = () => {
           />
         </ListItem>
 
-        {features.emojiReacts && (
+        {features.emojiReacts && settings.statusActionBarItems.includes('reaction') && (
           <ListItem
             label={
               <FormattedMessage
@@ -672,10 +688,9 @@ const Preferences = () => {
               />
             }
           >
-            <SettingToggle
-              settings={settings}
-              settingPath={['showWrenchButton']}
-              onChange={onToggleChange}
+            <Toggle
+              checked={settings.statusActionBarItems.includes('wrench')}
+              onChange={onToggleWrenchButton}
             />
           </ListItem>
         )}
@@ -831,7 +846,7 @@ const Preferences = () => {
           />
         </ListItem>
 
-        {settings.showWrenchButton && (
+        {settings.statusActionBarItems.includes('wrench') && (
           <ListItem
             label={
               <FormattedMessage
