@@ -18,7 +18,6 @@ import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';
 import ScrollableList from '@/components/scrollable-list';
 import Icon from '@/components/ui/icon';
-import Portal from '@/components/ui/portal';
 import Tabs from '@/components/ui/tabs';
 import { useFeatures } from '@/hooks/use-features';
 import { queryClient } from '@/queries/client';
@@ -338,16 +337,14 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
 
   return (
     <>
-      {filterBarContainer}
+      <ScrollTopButton
+        onClick={handleDequeueNotifications}
+        count={queuedNotificationCount}
+        message={messages.queue}
+        liveRegionMessage={messages.queueLiveRegion}
+      />
 
-      <Portal>
-        <ScrollTopButton
-          onClick={handleDequeueNotifications}
-          count={queuedNotificationCount}
-          message={messages.queue}
-          liveRegionMessage={messages.queueLiveRegion}
-        />
-      </Portal>
+      {filterBarContainer}
 
       <PullToRefresh onRefresh={handleRefresh}>{scrollContainer}</PullToRefresh>
     </>

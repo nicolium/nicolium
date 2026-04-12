@@ -43,7 +43,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   // Whether we are scrolled above the `autoloadThreshold`.
   const [scrolledTop, setScrolledTop] = useState<boolean>(false);
 
-  const visible = count > 0 && (autoloadTimelines ? scrolledTop : scrolled);
+  const visible = count > 0 && (!autoloadTimelines || scrolled);
   const buttonMessage = intl.formatMessage(message, { count });
 
   /** Number of pixels scrolled down from the top of the page. */

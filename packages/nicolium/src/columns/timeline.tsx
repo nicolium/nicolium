@@ -17,7 +17,6 @@ import Status, { StatusFollowedTagInfo } from '@/components/statuses/status';
 import StatusInfo from '@/components/statuses/status-info';
 import Tombstone from '@/components/statuses/tombstone';
 import Icon from '@/components/ui/icon';
-import Portal from '@/components/ui/portal';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import { useFeatures } from '@/hooks/use-features';
@@ -522,15 +521,13 @@ const Timeline: React.FC<ITimeline> = ({
 
   return (
     <>
-      <Portal>
-        <ScrollTopButton
-          onClick={dequeueEntries}
-          count={queuedCount}
-          message={messages.queue}
-          liveRegionMessage={messages.queueLiveRegion}
-          accountIds={queuedAccountIds}
-        />
-      </Portal>
+      <ScrollTopButton
+        onClick={dequeueEntries}
+        count={queuedCount}
+        message={messages.queue}
+        liveRegionMessage={messages.queueLiveRegion}
+        accountIds={queuedAccountIds}
+      />
       <PullToRefresh onRefresh={refetch} isPullable={!isFetching}>
         {featuredStatusIds && featuredStatusIds.length > 3 && entries?.length > 0 && (
           <SkipPinned onClick={handleSkipPinned} />
