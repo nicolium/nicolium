@@ -1462,7 +1462,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       });
     }
 
-    if (features.bookmarkFolders && fromBookmarks) {
+    if (features.bookmarkFolders && status.bookmarked && fromBookmarks) {
       menu.push({
         text: intl.formatMessage(
           status.bookmark_folder ? messages.bookmarkChangeFolder : messages.bookmarkSetFolder,
