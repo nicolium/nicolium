@@ -34,7 +34,7 @@ const config = defineConfig(() => ({
     ws: process.env.WS_DISABLED === 'true' ? false : undefined,
   },
   plugins: [
-    tsgoChecker(),
+    tsgoChecker(process.env.NODE_ENV !== 'test'),
     compileTime(),
     createHtmlPlugin({
       template: 'index.html',
