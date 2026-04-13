@@ -144,7 +144,7 @@
     "oxlint": "^1.59.0",
     "oxlint-tsgolint": "^0.20.0",
     "rollup-plugin-bundle-stats": "^4.22.0",
-    "stylelint": "^17.6.0",
+    "stylelint": "^17.7.0",
     "stylelint-config-clean-order": "^8.0.1",
     "stylelint-config-standard-scss": "^17.0.0",
     "stylelint-order": "^8.1.0",
