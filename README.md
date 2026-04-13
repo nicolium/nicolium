@@ -40,6 +40,8 @@ Maintenance of Nicolium is possible thanks to the support of our sponsors. If yo
 
 <!-- sponsors --><a href="https://github.com/j-g00da"><img src="https:&#x2F;&#x2F;github.com&#x2F;j-g00da.png" width="60px" alt="User avatar: Jagoda Estera Ślązak" /></a><a href="https://github.com/pmysl"><img src="https:&#x2F;&#x2F;github.com&#x2F;pmysl.png" width="60px" alt="User avatar: " /></a><!-- sponsors -->
 
+(if you don't want to appear on the list above, but want to support the project, please let us know by contacting [Nicolium Fediverse account](https://pl.fediverse.pl/@Nicolium) or set your sponsorship to private)
+
 ## License
 
 Nicolium is a fork of [Soapbox](https://gitlab.com/soapbox-pub/soapbox/) and inherits a lot of code from [Mastodon](https://github.com/mastodon/mastodon/).
