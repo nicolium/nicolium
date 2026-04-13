@@ -94,6 +94,7 @@ const settingsSchema = v.object({
     ),
     'home',
   ),
+  showChatWidget: v.fallback(v.boolean(), true),
 
   theme: v.optional(
     coerceObject({

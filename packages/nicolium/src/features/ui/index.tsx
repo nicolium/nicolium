@@ -25,11 +25,14 @@ import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-stat
 import { useAuthStore } from '@/stores/auth';
 import { useInstance, useInstanceStore } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
 import GlobalHotkeys from '@/utils/global-hotkeys';
 import { useIsStandalone } from '@/utils/state';
-
+// Dummy import, to make sure that <Status /> ends up in the application bundle.
+// Without this it ends up in ~8 very commonly used bundles.
+import '@/components/statuses/status';
 import {
   ModalRoot,
   AccountHoverCard,
@@ -37,9 +40,6 @@ import {
   DropdownNavigation,
   StatusHoverCard,
 } from './util/async-components';
-// Dummy import, to make sure that <Status /> ends up in the application bundle.
-// Without this it ends up in ~8 very commonly used bundles.
-import '@/components/statuses/status';
 
 const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();
@@ -56,6 +56,7 @@ const UI: React.FC = React.memo(() => {
   const isDropdownMenuOpen = useIsDropdownMenuOpen();
   const standalone = useIsStandalone();
   const instanceFetched = useInstanceStore((state) => state.fetched);
+  const { showChatWidget } = useSettings();
 
   useAdminConfig();
   useShoutboxSubscription();
@@ -181,7 +182,7 @@ const UI: React.FC = React.memo(() => {
             <DropdownNavigation />
           </Suspense>
 
-          {me && features.chats && (
+          {me && features.chats && showChatWidget && (
             <div className='⁂-chat-widget__container'>
               <Suspense fallback={<div className='⁂-chat-widget ⁂-chat-widget--placeholder' />}>
                 <ChatWidget />
