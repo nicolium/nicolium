@@ -1727,3 +1727,67 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     opacity: 0;
   }
 }
+
+.⁂-code-block {
+  position: relative;
+
+  > label {
+    input {
+      display: none;
+    }
+
+    .⁂-icon {
+      position: absolute;
+      z-index: 10;
+      top: 0.25rem;
+      right: 0.25rem;
+
+      padding: 0.25rem;
+      border-radius: 0.375rem;
+
+      color: rgb(var(--color-gray-800));
+
+      opacity: 0;
+      background-color: rgb(var(--color-gray-200));
+
+      transition: opacity 150ms var(--ease-default);
+
+      .dark & {
+        color: rgb(var(--color-gray-200));
+        background-color: rgb(var(--color-primary-900));
+      }
+
+      &:hover {
+        background-color: rgb(var(--color-gray-300));
+
+        .dark & {
+          background-color: #000;
+        }
+      }
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  &:has(> label input:checked) {
+    > label .⁂-icon {
+      opacity: 0.3;
+    }
+  }
+
+  &:hover, &:focus {
+    > label .⁂-icon {
+      opacity: 1 !important;
+    }
+  }
+
+  &:has(> label input:checked) {
+    pre {
+      text-wrap: wrap;
+    }
+  }
+}
+

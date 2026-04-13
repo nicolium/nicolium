@@ -464,6 +464,7 @@
   "circles.new.title_placeholder": "New circle title",
   "circles.remove_from_circle": "Remove from circle",
   "circles.subheading": "Your circles",
+  "code_block.toggle_wrap": "Toggle wrap",
   "column.admin.account": "Moderate @{acct}",
   "column.admin.announcements": "Announcements",
   "column.admin.awaiting_approval": "Awaiting approval",

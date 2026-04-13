@@ -7,8 +7,9 @@ import parse, {
 } from 'html-react-parser';
 import groupBy from 'lodash/groupBy';
 import minBy from 'lodash/minBy';
+import iconTextWrap from 'lucide-static/icons/text-wrap.svg';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Emojify from '@/features/emoji/emojify';
 import { useSettings } from '@/stores/settings';
@@ -19,12 +20,20 @@ import { AccountLink } from '../accounts/account-link';
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
 import { MentionWithAvatar } from '../accounts/mention-with-avatar';
 import HashtagLink from '../hashtag-link';
+import Icon from '../ui/icon';
 
 import StatusMention from './status-mention';
 
 import type { CustomEmoji, Mention } from 'pl-api';
 
 const GREENTEXT_CLASS = 'dark:text-accent-green text-lime-600';
+
+const messages = defineMessages({
+  toggleWrap: {
+    id: 'code_block.toggle_wrap',
+    defaultMessage: 'Toggle wrap',
+  },
+});
 
 const checkSuspiciousUrl = (url: string): boolean => {
   try {
@@ -60,6 +69,27 @@ const isHostNotVisible = (href: string, text?: string): false | string => {
   } catch (e) {
     return false;
   }
+};
+
+interface ICodeBlock {
+  children: React.ReactNode;
+}
+
+const CodeBlock: React.FC<ICodeBlock> = ({ children }) => {
+  const intl = useIntl();
+
+  return (
+    <div className='⁂-code-block'>
+      <label onClick={(e) => e.stopPropagation()} title={intl.formatMessage(messages.toggleWrap)}>
+        <input type='checkbox' />
+        <span className='sr-only'>
+          <FormattedMessage id='code_block.toggle_wrap' defaultMessage='Toggle wrap' />
+        </span>
+        <Icon src={iconTextWrap} aria-hidden />
+      </label>
+      <pre>{children}</pre>
+    </div>
+  );
 };
 
 interface IParsedUrl extends React.HTMLAttributes<HTMLAnchorElement> {
@@ -247,6 +277,10 @@ function parseContent(
         domNode.attribs.class = `${domNode.attribs.class || ''} ${GREENTEXT_CLASS}`;
         // @ts-expect-error
         domNode.greentext = true;
+      }
+
+      if (domNode.name === 'pre') {
+        return <CodeBlock>{domToReact(domNode.children as Array<DOMNode>, options)}</CodeBlock>;
       }
 
       if (domNode.name === 'a') {
