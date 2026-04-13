@@ -29,4 +29,4 @@ const getBadges = (account: Pick<Account, '__meta'>) => {
   return filterBadges(tags);
 };
 
-export { tagToBadge, badgeToTag, getTagDiff, getBadges };
+export { tagToBadge, badgeToTag, getTagDiff, filterBadges, getBadges };
