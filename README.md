@@ -34,6 +34,12 @@ This project is hosted on [Codeberg](https://codeberg.org/nicolium/nicolium) and
 
 You can find more information about setting up the development environment in [the documentation](https://nicolium.app/docs/contributing/nicolium/).
 
+## Sponsors
+
+Maintenance of Nicolium is possible thanks to the support of our sponsors. If you want to support the project, consider sponsoring [mkljczk](https://github.com/sponsors/mkljczk) or [pmysl](https://github.com/sponsors/pmysl) on GitHub Sponsors.
+
+<!-- sponsors --><!-- sponsors -->
+
 ## License
 
 Nicolium is a fork of [Soapbox](https://gitlab.com/soapbox-pub/soapbox/) and inherits a lot of code from [Mastodon](https://github.com/mastodon/mastodon/).
