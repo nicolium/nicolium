@@ -997,7 +997,7 @@ const useItems = (
               me={me}
               onOpenUnauthorizedModal={onOpenUnauthorizedModal}
               publicStatus={publicStatus}
-              withQuote={false}
+              withQuote={!items.includes('quote')}
             />,
           );
           break;
