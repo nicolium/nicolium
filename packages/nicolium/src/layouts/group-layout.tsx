@@ -4,14 +4,12 @@ import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import GroupHeader from '@/components/groups/group-header';
-import LinkFooter from '@/components/navigation/link-footer';
+import { AsideContent } from '@/components/navigation/aside-content';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
-import { GroupMediaPanel, SignUpPanel } from '@/features/ui/util/async-components';
-import { useOwnAccount } from '@/hooks/use-own-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useGroupMembershipRequestsQuery } from '@/queries/groups/use-group-members';
 import { layouts } from '@/router';
@@ -43,7 +41,6 @@ const GroupLayout = () => {
 
   const intl = useIntl();
   const location = useLocation();
-  const { data: me } = useOwnAccount();
 
   const { data: group } = useGroupQuery(groupId, true);
   const { data: membershipRequests = [] } = useGroupMembershipRequestsQuery(groupId);
@@ -101,11 +98,7 @@ const GroupLayout = () => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && <SignUpPanel />}
-        {group && (group.relationship?.member ?? !group.locked) && (
-          <GroupMediaPanel group={group} />
-        )}
-        <LinkFooter />
+        <AsideContent layout='group' group={group} />
       </Layout.Aside>
     </>
   );

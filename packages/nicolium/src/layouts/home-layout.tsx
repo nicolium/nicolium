@@ -4,25 +4,14 @@ import React, { useRef } from 'react';
 
 import { BANNER_HTML } from '@/build-config';
 import { AccountLink } from '@/components/accounts/account-link';
-import LinkFooter from '@/components/navigation/link-footer';
+import { AsideContent } from '@/components/navigation/aside-content';
 import Avatar from '@/components/ui/avatar';
 import Layout from '@/components/ui/layout';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Warning from '@/features/compose/components/warning';
-import {
-  WhoToFollowPanel,
-  TrendsPanel,
-  SignUpPanel,
-  PromoPanel,
-  CryptoDonatePanel,
-  BirthdayPanel,
-  AnnouncementsPanel,
-  ComposeForm,
-} from '@/features/ui/util/async-components';
+import { ComposeForm } from '@/features/ui/util/async-components';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
-import { useFeatures } from '@/hooks/use-features';
-import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useUploadCompose } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
@@ -30,17 +19,12 @@ import { useSettings } from '@/stores/settings';
 const HomeLayout = () => {
   const me = useCurrentAccount();
   const { data: account } = useOwnAccount();
-  const features = useFeatures();
-  const frontendConfig = useFrontendConfig();
   const { disableUserProvidedMedia, composeInTimelines } = useSettings();
 
   const composeId = 'home';
   const composeBlock = useRef<HTMLDivElement>(null);
 
   const uploadCompose = useUploadCompose(composeId);
-
-  const hasCrypto = typeof frontendConfig.cryptoAddresses[0]?.ticker === 'string';
-  const cryptoLimit = frontendConfig.cryptoDonatePanel.limit;
 
   const { isDragging, isDraggedOver } = useDraggedFiles(composeBlock, (files) => {
     uploadCompose(files);
@@ -97,14 +81,7 @@ const HomeLayout = () => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && <SignUpPanel />}
-        {me && features.announcements && <AnnouncementsPanel />}
-        {features.trends && <TrendsPanel limit={5} />}
-        {hasCrypto && cryptoLimit > 0 && me && <CryptoDonatePanel limit={cryptoLimit} />}
-        <PromoPanel />
-        {features.birthdays && <BirthdayPanel limit={10} />}
-        {me && features.suggestions && <WhoToFollowPanel limit={3} />}
-        <LinkFooter />
+        <AsideContent layout='home' />
       </Layout.Aside>
     </>
   );

@@ -3,22 +3,13 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import AccountHeader from '@/components/accounts/account-header';
-import LinkFooter from '@/components/navigation/link-footer';
+import { AsideContent } from '@/components/navigation/aside-content';
 import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import {
-  WhoToFollowPanel,
-  ProfileInfoPanel,
-  ProfileMediaPanel,
-  ProfileFieldsPanel,
-  SignUpPanel,
-  PinnedAccountsPanel,
-  AccountNotePanel,
-} from '@/features/ui/util/async-components';
+import { ProfileInfoPanel } from '@/features/ui/util/async-components';
 import { useAcct } from '@/hooks/use-acct';
-import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { layouts } from '@/router';
@@ -33,7 +24,6 @@ const ProfileLayout: React.FC = () => {
   const { data: account, isUnauthorized } = useAccountLookup(username, true);
 
   const me = useCurrentAccount();
-  const features = useFeatures();
   const acct = useAcct(account);
   const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
 
@@ -121,17 +111,7 @@ const ProfileLayout: React.FC = () => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && <SignUpPanel />}
-
-        {features.notes && account && account?.id !== me && <AccountNotePanel account={account} />}
-        <ProfileMediaPanel account={account} />
-        {account && account.fields.length > 0 && <ProfileFieldsPanel account={account} />}
-        {features.accountEndorsements && account && account.local ? (
-          <PinnedAccountsPanel account={account} limit={5} />
-        ) : (
-          me && features.suggestions && <WhoToFollowPanel limit={3} />
-        )}
-        <LinkFooter key='link-footer' />
+        <AsideContent layout='profile' account={account} />
       </Layout.Aside>
     </>
   );

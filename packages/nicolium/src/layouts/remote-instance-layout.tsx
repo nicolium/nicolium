@@ -1,19 +1,13 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
-import LinkFooter from '@/components/navigation/link-footer';
+import { AsideContent } from '@/components/navigation/aside-content';
 import Layout from '@/components/ui/layout';
-import { PromoPanel, InstanceModerationPanel } from '@/features/ui/util/async-components';
-import { useOwnAccount } from '@/hooks/use-own-account';
 import { layouts } from '@/router';
-import { useFederationRestrictionsDisclosed } from '@/utils/state';
 
 /** Layout for viewing a remote instance timeline. */
 const RemoteInstanceLayout = () => {
   const { instance } = layouts.remoteInstance.useParams();
-
-  const { data: account } = useOwnAccount();
-  const disclosed = useFederationRestrictionsDisclosed();
 
   return (
     <>
@@ -22,9 +16,7 @@ const RemoteInstanceLayout = () => {
       </Layout.Main>
 
       <Layout.Aside>
-        <PromoPanel />
-        {(disclosed || account?.is_admin) && <InstanceModerationPanel host={instance} />}
-        <LinkFooter />
+        <AsideContent layout='remote-instance' instance={instance} />
       </Layout.Aside>
     </>
   );

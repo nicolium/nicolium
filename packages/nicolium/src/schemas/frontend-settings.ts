@@ -12,13 +12,13 @@ const DEFAULT_STATUS_ACTION_BAR_ITEMS = [
   'reaction',
 ] as const;
 
-// const DEFAULT_SIDEBAR_ITEMS = [
-//   'context',
-//   'announcements',
-//   'recommendations',
-//   'promo',
-//   'footer',
-// ] as const;
+const DEFAULT_SIDEBAR_ITEMS = [
+  'context',
+  'announcements',
+  'recommendations',
+  'promo',
+  'footer',
+] as const;
 
 const skinToneSchema = v.picklist([1, 2, 3, 4, 5, 6]);
 
@@ -194,18 +194,20 @@ const settingsSchema = v.object({
     ),
     DEFAULT_STATUS_ACTION_BAR_ITEMS,
   ),
-  // sidebarItems: v.fallback(
-  //   v.array(v.picklist([
-  //     'context',
-  //     'announcements',
-  //     'recommendations',
-  //     'promo',
-  //     'footer',
-  //     'compose',
-  //     'notifications',
-  //   ])),
-  //   DEFAULT_SIDEBAR_ITEMS,
-  // ),
+  sidebarItems: v.fallback(
+    v.array(
+      v.picklist([
+        'context',
+        'announcements',
+        'recommendations',
+        'promo',
+        'footer',
+        'compose',
+        'notifications',
+      ]),
+    ),
+    DEFAULT_SIDEBAR_ITEMS,
+  ),
 });
 
 type Settings = v.InferOutput<typeof settingsSchema>;

@@ -1,9 +1,8 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
-import LinkFooter from '@/components/navigation/link-footer';
+import { AsideContent } from '@/components/navigation/aside-content';
 import Layout from '@/components/ui/layout';
-import { MyGroupsPanel, NewGroupPanel } from '@/features/ui/util/async-components';
 
 /** Layout to display groups. */
 const ManageGroupsLayout = () => (
@@ -13,9 +12,7 @@ const ManageGroupsLayout = () => (
     </Layout.Main>
 
     <Layout.Aside>
-      <NewGroupPanel />
-      <MyGroupsPanel />
-      <LinkFooter />
+      <AsideContent layout='groups' />
     </Layout.Aside>
   </>
 );
