@@ -73,16 +73,7 @@ const UI: React.FC = React.memo(() => {
     }
   };
 
-  const handleDragEnter = (e: DragEvent) => {
-    e.preventDefault();
-  };
-  const handleDragLeave = (e: DragEvent) => {
-    e.preventDefault();
-  };
-  const handleDragOver = (e: DragEvent) => {
-    e.preventDefault();
-  };
-  const handleDrop = (e: DragEvent) => {
+  const handleDragEvents = (e: DragEvent) => {
     e.preventDefault();
   };
 
@@ -125,15 +116,15 @@ const UI: React.FC = React.memo(() => {
   }, []);
 
   useEffect(() => {
-    document.addEventListener('dragenter', handleDragEnter);
-    document.addEventListener('dragleave', handleDragLeave);
-    document.addEventListener('dragover', handleDragOver);
-    document.addEventListener('drop', handleDrop);
+    document.addEventListener('dragenter', handleDragEvents);
+    document.addEventListener('dragleave', handleDragEvents);
+    document.addEventListener('dragover', handleDragEvents);
+    document.addEventListener('drop', handleDragEvents);
     return () => {
-      document.removeEventListener('dragenter', handleDragEnter);
-      document.removeEventListener('dragleave', handleDragLeave);
-      document.removeEventListener('dragover', handleDragOver);
-      document.removeEventListener('drop', handleDrop);
+      document.removeEventListener('dragenter', handleDragEvents);
+      document.removeEventListener('dragleave', handleDragEvents);
+      document.removeEventListener('dragover', handleDragEvents);
+      document.removeEventListener('drop', handleDragEvents);
     };
   }, []);
 
