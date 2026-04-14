@@ -221,7 +221,7 @@ const SearchPage = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <div className='space-y-4'>
-        <SearchInput className='sticky top-[74px]' query={query} />
+        <SearchInput className='sticky top-[calc(4.5rem+2px)]' query={query} />
         <SearchResults />
       </div>
     </Column>
