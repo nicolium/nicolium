@@ -679,16 +679,13 @@ const admin = (client: PlApiBaseClient) => {
 
       /**
        * Assign report to self
-       * Claim the handling of this report to yourcategory.
-       * @see {@link https://docs.joinmastodon.org/methods/admin/reports/#assign_tocategory}
+       * Claim the handling of this report to yourself.
+       * @see {@link https://docs.joinmastodon.org/methods/admin/reports/#assign_to_self}
        */
       assignReportToSelf: async (reportId: string) => {
-        const response = await client.request(
-          `/api/v1/admin/reports/${reportId}/assign_tocategory`,
-          {
-            method: 'POST',
-          },
-        );
+        const response = await client.request(`/api/v1/admin/reports/${reportId}/assign_to_self`, {
+          method: 'POST',
+        });
 
         return v.parse(adminReportSchema, response.json);
       },
