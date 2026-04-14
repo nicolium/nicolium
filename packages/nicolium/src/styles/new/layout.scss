@@ -101,7 +101,7 @@ body {
   .no-reduce-motion & {
     transform: scale(0.9);
     opacity: 0;
-    transition: transform 150ms var(--ease-default);
+    transition: transform 150ms var(--ease-default), opacity 150ms var(--ease-default);
   }
 
   .dark & {
