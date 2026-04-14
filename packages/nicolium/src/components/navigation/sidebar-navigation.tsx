@@ -420,18 +420,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
         {features.publicTimeline && (
           <>
-            {features.wrenchedTimeline &&
-              (account
-                ? timelineAccess.live_feeds.wrenched !== 'disabled'
-                : timelineAccess.live_feeds.wrenched === 'public') && (
-                <SidebarNavigationLink
-                  to='/timeline/wrenched'
-                  icon={iconWrench}
-                  activeIcon={iconWrenchFill}
-                  text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-                />
-              )}
-
             {(account
               ? timelineAccess.live_feeds.local !== 'disabled'
               : timelineAccess.live_feeds.local === 'public') && (
@@ -470,6 +458,18 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                   icon={iconFediverseLogo}
                   activeIcon={iconFediverseLogoFill}
                   text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                />
+              )}
+
+            {features.wrenchedTimeline &&
+              (account
+                ? timelineAccess.live_feeds.wrenched !== 'disabled'
+                : timelineAccess.live_feeds.wrenched === 'public') && (
+                <SidebarNavigationLink
+                  to='/timeline/wrenched'
+                  icon={iconWrench}
+                  activeIcon={iconWrenchFill}
+                  text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
                 />
               )}
           </>
