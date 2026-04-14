@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import BaseHead from "@mkljczk/astro-theme/components/BaseHead.astro";
 import BaseDocsLayout from "@mkljczk/astro-theme/layouts/DocsLayout.astro";
 import Header from "../components/Header.astro";
+import HeaderMeta from "../components/HeaderMeta.astro";
 import Footer from "../components/Footer.astro";
 
 interface Props {
@@ -43,13 +44,16 @@ for (const doc of sorted) {
   tocHeading="Table of Contents"
   sidebarHeading="Documentation"
 >
-  <BaseHead
-    slot="head"
-    siteTitle="Nicolium"
-    title={`${title} — Docs`}
-    description={`${title} — Nicolium documentation`}
-    faviconPath="/favicon.svg"
-  />
+  <head>
+    <BaseHead
+      slot="head"
+      siteTitle="Nicolium"
+      title={`${title} — Docs`}
+      description={`${title} — Nicolium documentation`}
+      faviconPath="/favicon.svg"
+    />
+    <HeaderMeta />
+  </head>
   <Header slot="header" docsNav={sections} />
   <Footer slot="footer" />
   <slot />
