@@ -64,7 +64,7 @@ const messages = defineMessages({
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
   hideReblogs: { id: 'account.hide_reblogs', defaultMessage: 'Hide reposts from @{name}' },
   showReblogs: { id: 'account.show_reblogs', defaultMessage: 'Show reposts from @{name}' },
-  preferences: { id: 'column.preferences', defaultMessage: 'Preferences' },
+  settings: { id: 'settings.settings', defaultMessage: 'Settings' },
   blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
   mutes: { id: 'column.mutes', defaultMessage: 'Mutes' },
   endorse: { id: 'account.endorse', defaultMessage: 'Feature on profile' },
@@ -409,7 +409,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         icon: iconUser,
       });
       menu.push({
-        text: intl.formatMessage(messages.preferences),
+        text: intl.formatMessage(messages.settings),
         to: '/settings',
         icon: iconSlidersHorizontal,
       });

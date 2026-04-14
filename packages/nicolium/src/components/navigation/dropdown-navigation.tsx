@@ -469,7 +469,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
               <DropdownNavigationLink
                 to='/settings'
                 icon={iconSlidersHorizontal}
-                text={<FormattedMessage id='column.preferences' defaultMessage='Preferences' />}
+                text={<FormattedMessage id='settings.settings' defaultMessage='Settings' />}
                 onClick={closeSidebar}
               />
 

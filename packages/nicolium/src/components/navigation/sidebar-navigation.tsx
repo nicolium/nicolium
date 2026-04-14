@@ -378,7 +378,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 to='/groups'
                 icon={iconUsersThree}
                 activeIcon={iconUsersThreeFill}
-                text={<FormattedMessage id='tabs_bar.groups' defaultMessage='Groups' />}
+                text={<FormattedMessage id='column.groups' defaultMessage='Groups' />}
               />
             )}
 
@@ -403,7 +403,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               to='/settings'
               icon={iconSlidersHorizontal}
               activeIcon={iconSlidersHorizontalFill}
-              text={<FormattedMessage id='tabs_bar.settings' defaultMessage='Settings' />}
+              text={<FormattedMessage id='settings.settings' defaultMessage='Settings' />}
             />
 
             {(account.is_admin ?? account.is_moderator) && (
@@ -412,7 +412,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 icon={iconGauge}
                 activeIcon={iconGaugeFill}
                 count={dashboardCount}
-                text={<FormattedMessage id='tabs_bar.dashboard' defaultMessage='Dashboard' />}
+                text={<FormattedMessage id='column.admin.dashboard' defaultMessage='Dashboard' />}
               />
             )}
           </>
