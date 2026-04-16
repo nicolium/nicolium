@@ -78,11 +78,13 @@ const useTimelineFiltersOptions = (
   return useMemo(() => {
     const items: Menu = [];
 
-    const handleOnChecked = (key: keyof typeof defaultSettings) => (checked: boolean) =>
-      changeSetting(
-        ['timelines', timeline],
-        getUpdatedTimelineSettings(timelineSettings, key, checked),
-      );
+    const handleOnChecked =
+      (key: keyof typeof defaultSettings, inverse: boolean = false) =>
+      (checked: boolean) =>
+        changeSetting(
+          ['timelines', timeline],
+          getUpdatedTimelineSettings(timelineSettings, key, inverse ? !checked : checked),
+        );
 
     if (['home', 'list', 'antenna'].includes(timeline)) {
       items.push({
@@ -129,7 +131,7 @@ const useTimelineFiltersOptions = (
       text: intl.formatMessage(messages.hideNonMedia),
       type: 'toggle',
       checked: !timelineSettings?.showNonMedia,
-      onChange: handleOnChecked('showNonMedia'),
+      onChange: handleOnChecked('showNonMedia', true),
     });
 
     items.push({
