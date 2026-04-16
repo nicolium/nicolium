@@ -926,12 +926,21 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
 
 .⁂-quoted-status {
   cursor: pointer;
+
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 
+  padding: 1rem;
+  border: 1px solid rgb(var(--color-gray-300));
+  border-radius: 0.5rem;
+
+  .dark & {
+    border-color: rgb(var(--color-gray-800));
+  }
+
   &:not(&--compose) {
-    &:hover {
+    &:hover:not(:has(.⁂-quoted-status:hover)) {
       background: rgb(var(--color-gray-100));
 
       .dark & {
@@ -947,6 +956,10 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
+
+  .⁂-quoted-status {
+    padding: 0.75rem;
   }
 }
 

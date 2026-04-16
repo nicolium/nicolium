@@ -87,6 +87,7 @@ interface IStatusContent {
   compose?: boolean;
   isEvent?: boolean;
   expandable?: boolean;
+  quoteDepth?: number;
 }
 
 /** Renders the text content of a status */
@@ -103,8 +104,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     compose = false,
     isEvent = false,
     expandable = false,
+    quoteDepth = 0,
   }) => {
-    const { urlPrivacy, displaySpoilers, renderMfm, displayMentionAvatars } = useSettings();
+    const { urlPrivacy, displaySpoilers, renderMfm, displayMentionAvatars, showNestedQuotes } =
+      useSettings();
     const { greentext } = useFrontendConfig();
     const { data: account } = useAccount(status.account_id);
 
@@ -286,7 +289,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       let quote;
 
       if (withMedia && status.quote_id) {
-        if (isQuote) {
+        if (showNestedQuotes ? quoteDepth >= 3 : quoteDepth >= 1) {
           quote = <QuotedStatusIndicator statusId={status.quote_id} statusUrl={status.quote_url} />;
         } else if (!(status.quote_visible ?? true)) {
           quote = (
@@ -300,7 +303,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             </OutlineBox>
           );
         } else {
-          quote = <QuotedStatus statusId={status.quote_id} />;
+          quote = <QuotedStatus statusId={status.quote_id} quoteDepth={quoteDepth} />;
         }
       }
 

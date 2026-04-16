@@ -6,8 +6,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 
-import OutlineBox from '../outline-box';
-
 import EventPreview from './events/event-preview';
 import StatusContent from './status-content';
 import StatusReplyMentions from './status-reply-mentions';
@@ -25,10 +23,12 @@ interface IQuotedStatus {
   onCancel?: () => void;
   /** Whether the status is shown in the post composer. */
   compose?: boolean;
+  /** The depth of quote nesting. */
+  quoteDepth?: number;
 }
 
 /** Status embedded in a quote post. */
-const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) => {
+const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose, quoteDepth = 0 }) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const router = useRouter();
@@ -76,7 +76,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
   }
 
   return (
-    <OutlineBox
+    <div
       data-testid='quoted-status'
       className={clsx('⁂-quoted-status', {
         '⁂-quoted-status--compose': compose,
@@ -101,10 +101,17 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
         <EventPreview status={status} hideAction />
       ) : (
         <div className='⁂-quoted-status__content'>
-          <StatusContent status={status} collapsable isQuote withMedia compose={compose} />
+          <StatusContent
+            status={status}
+            collapsable
+            isQuote
+            quoteDepth={quoteDepth + 1}
+            withMedia
+            compose={compose}
+          />
         </div>
       )}
-    </OutlineBox>
+    </div>
   );
 };
 

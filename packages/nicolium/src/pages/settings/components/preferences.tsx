@@ -757,6 +757,27 @@ const Preferences = () => {
         <ListItem
           label={
             <FormattedMessage
+              id='preferences.fields.show_nested_quotes'
+              defaultMessage='Display quotes nested in other quoted posts'
+            />
+          }
+          hint={
+            <FormattedMessage
+              id='preferences.fields.show_nested_quotes.hint'
+              defaultMessage='Up to three posts in the quote chain will be displayed.'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['showNestedQuotes']}
+            onChange={onToggleChange}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
               id='preferences.fields.use_system_media_controls_label'
               defaultMessage='Use native media controls'
             />

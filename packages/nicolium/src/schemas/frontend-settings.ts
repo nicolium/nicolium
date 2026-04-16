@@ -95,6 +95,7 @@ const settingsSchema = v.object({
     'home',
   ),
   showChatWidget: v.fallback(v.boolean(), true),
+  showNestedQuotes: v.fallback(v.boolean(), false),
 
   theme: v.optional(
     coerceObject({
