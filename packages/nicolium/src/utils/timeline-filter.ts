@@ -14,7 +14,8 @@ const isEntryFiltered = (entry: StatusEntry, filters: TimelineFilters): boolean 
     entry.rebloggedBy[0] === entry.accountId) ||
   (filters?.showReplies === false && entry.isReply) ||
   (filters?.showQuotes === false && entry.isQuote) ||
-  (filters?.showNonMedia === false && !entry.hasMedia);
+  (filters?.showNonMedia === false && !entry.hasMedia) ||
+  (filters?.showMediaWithoutAltText === false && entry.hasMediaWithoutAltText);
 
 const hasActiveFilters = (filters: TimelineFilters | undefined): filters is TimelineFilters =>
   !!filters &&
@@ -22,7 +23,8 @@ const hasActiveFilters = (filters: TimelineFilters | undefined): filters is Time
     filters.showReblogs === false ||
     filters.showReplies === false ||
     filters.showQuotes === false ||
-    filters.showNonMedia === false);
+    filters.showNonMedia === false ||
+    filters.showMediaWithoutAltText === false);
 
 const sortFilteredTimeline = (
   entries: Array<TimelineEntry>,
