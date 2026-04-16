@@ -14,7 +14,6 @@ import Audio from '@/components/media/audio';
 import ExtendedVideoPlayer from '@/components/media/extended-video-player';
 import Video from '@/components/media/video';
 import ZoomableImage from '@/components/media/zoomable-image';
-import MissingIndicator from '@/components/missing-indicator';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import StatusActionBar from '@/components/statuses/status-action-bar';
 import { StatusLink } from '@/components/statuses/status-link';
@@ -271,14 +270,6 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     };
   }, [index]);
 
-  if (statusId) {
-    if (isPending) {
-      return <MissingIndicator />;
-    } else if (!status) {
-      return <PlaceholderStatus />;
-    }
-  }
-
   const handleClickOutside: React.MouseEventHandler<HTMLElement> = (e) => {
     if ((e.target as HTMLElement).tagName === 'DIV') {
       onClose();
@@ -409,7 +400,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         </div>
       </div>
 
-      {status && (
+      {(status || (statusId && isPending)) && (
         <div
           className={clsx(
             '-right-96 hidden bg-white transition-all xl:fixed xl:inset-y-0 xl:right-0 xl:flex xl:w-96 xl:flex-col',
@@ -418,7 +409,11 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             },
           )}
         >
-          <Thread status={status} withMedia={false} itemClassName='px-4' isModal />
+          {status ? (
+            <Thread status={status} withMedia={false} itemClassName='px-4' isModal />
+          ) : (
+            <PlaceholderStatus />
+          )}
         </div>
       )}
     </div>
