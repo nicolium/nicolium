@@ -24,6 +24,7 @@ type TimelineEntry =
       isQuote: boolean;
       isDirect: boolean;
       hasMedia: boolean;
+      hasMediaWithoutAltText: boolean;
     }
   | {
       type: 'pending-status';
@@ -81,6 +82,9 @@ interface State {
     disablePolling: () => void;
   };
 }
+
+const hasMediaWithoutAltText = (status: Status): boolean =>
+  status.media_attachments.some((media) => media.type !== 'unknown' && !media.description);
 
 const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
   const timelinePage: Array<TimelineEntry> = [];
@@ -145,6 +149,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
           isQuote: status.reblog.quote !== null,
           isDirect: status.reblog.visibility === 'direct',
           hasMedia: status.reblog.media_attachments.length > 0,
+          hasMediaWithoutAltText: hasMediaWithoutAltText(status.reblog),
         });
       }
       return -1;
@@ -163,6 +168,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
       isQuote: status.quote !== null,
       isDirect: status.visibility === 'direct',
       hasMedia: status.media_attachments.length > 0,
+      hasMediaWithoutAltText: hasMediaWithoutAltText(status),
     });
 
     return -1;
@@ -377,6 +383,7 @@ const useTimelinesStore = create<State>()(
                 isQuote: status.quote !== null,
                 isDirect: status.visibility === 'direct',
                 hasMedia: status.media_attachments.length > 0,
+                hasMediaWithoutAltText: hasMediaWithoutAltText(status),
               };
             }
           }

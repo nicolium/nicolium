@@ -26,6 +26,10 @@ const messages = defineMessages({
     id: 'timeline_filters.show_media_only',
     defaultMessage: 'Only show posts with media',
   },
+  showMediaWithoutAltText: {
+    id: 'timeline_filters.show_media_without_alt_text',
+    defaultMessage: 'Show media without description',
+  },
   setAsDefault: {
     id: 'timeline_filters.set_as_default',
     defaultMessage: 'Use as default timeline',
@@ -39,6 +43,7 @@ const defaultSettings = {
   showQuotes: true,
   showDirect: true,
   showNonMedia: true,
+  showMediaWithoutAltText: true,
 };
 
 const getUpdatedTimelineSettings = (
@@ -125,6 +130,13 @@ const useTimelineFiltersOptions = (
       type: 'toggle',
       checked: !timelineSettings?.showNonMedia,
       onChange: handleOnChecked('showNonMedia'),
+    });
+
+    items.push({
+      text: intl.formatMessage(messages.showMediaWithoutAltText),
+      type: 'toggle',
+      checked: timelineSettings?.showMediaWithoutAltText,
+      onChange: handleOnChecked('showMediaWithoutAltText'),
     });
 
     if (timelineId && isLoggedIn) {

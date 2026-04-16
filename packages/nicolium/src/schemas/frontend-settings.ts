@@ -138,6 +138,7 @@ const settingsSchema = v.object({
         showQuotes: v.fallback(v.boolean(), true),
         showDirect: v.fallback(v.boolean(), true),
         showNonMedia: v.fallback(v.boolean(), true),
+        showMediaWithoutAltText: v.fallback(v.boolean(), true),
       }),
     ),
     {},
