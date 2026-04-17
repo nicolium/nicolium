@@ -71,6 +71,10 @@
     }
   }
 
+  &__editor-placeholder {
+    height: 39px;
+  }
+
   &:not(&--transparent) &__editor {
     padding-top: 0.5rem;
     padding-right: 0.75rem;

@@ -456,7 +456,7 @@ const ComposeForm = <ID extends string>({
       )}
 
       <div>
-        <Suspense>
+        <Suspense fallback={<div className='⁂-compose-form__editor-placeholder' />}>
           <ComposeEditor
             key={modifiedLanguage}
             ref={editorRef}
