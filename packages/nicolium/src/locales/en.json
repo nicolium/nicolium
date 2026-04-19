@@ -1644,7 +1644,7 @@
   "preferences.fields.privacy_label": "Default post privacy",
   "preferences.fields.reduce_motion_label": "Reduce motion in animations",
   "preferences.fields.remember_timeline_position_hint": "When enabled, the app will return to the place you left off in the home timeline last time you visited it.",
-  "preferences.fields.remember_timeline_position_label": "Remeber position of home timeline",
+  "preferences.fields.remember_timeline_position_label": "Remember position of home timeline",
   "preferences.fields.render_advanced_mfm_label": "Enable advanced MFM",
   "preferences.fields.render_animated_mfm_label": "Enable animated MFM",
   "preferences.fields.render_mfm_hint": "MFM support is experimental, not all node types are supported.",

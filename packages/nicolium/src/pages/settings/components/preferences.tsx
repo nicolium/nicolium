@@ -399,7 +399,7 @@ const Preferences = () => {
           label={
             <FormattedMessage
               id='preferences.fields.remember_timeline_position_label'
-              defaultMessage='Remeber position of home timeline'
+              defaultMessage='Remember position of home timeline'
             />
           }
           hint={
