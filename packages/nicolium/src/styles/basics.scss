@@ -1,5 +1,7 @@
 html {
   scrollbar-gutter: stable;
+  font-size: var(--text-md);
+  line-height: var(--leading-md);
 }
 
 body {
@@ -9,23 +11,18 @@ body {
 
 html.body {
   &--sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
-
-  &--md {
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
   }
 
   &--lg {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
+    font-size: var(--text-lg);
+    line-height: var(--leading-lg);
   }
 
   &--xl {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+    font-size: var(--text-xl);
+    line-height: var(--leading-xl);
   }
 }
 

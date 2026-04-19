@@ -95,8 +95,8 @@
   img,
   canvas {
     border-radius: inherit;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
   }
 
   // Adapted from Iceshrimp which I guess took it from Misskey

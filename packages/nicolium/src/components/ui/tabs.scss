@@ -21,9 +21,9 @@
   min-width: fit-content;
   padding: 1rem 0.25rem;
 
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
-  line-height: 1.25rem;
+  line-height: var(--leading-sm);
   color: rgb(var(--color-gray-700));
   text-align: center;
 

@@ -1,4 +1,6 @@
 .react-datepicker {
+  padding: 1rem;
+
   @apply black:bg-black dark:bg-gray-900 dark:border-gray-700 p-4 font-sans text-xs text-gray-900 dark:text-gray-300 border border-solid border-gray-200 rounded-lg;
 }
 

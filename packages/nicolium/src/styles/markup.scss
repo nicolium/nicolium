@@ -5,21 +5,21 @@ $vertical-lr-langs: mn-mong, mnmong;
   white-space: pre-wrap;
 
   h1 {
-    font-size: 1.875rem;
+    font-size: var(--text-3xl);
     font-weight: 600;
-    line-height: 2.25rem;
+    line-height: var(--leading-3xl);
   }
 
   h2 {
-    font-size: 1.5rem;
+    font-size: var(--text-2xl);
     font-weight: 600;
-    line-height: 2rem;
+    line-height: var(--leading-2xl);
   }
 
   h3 {
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     font-weight: 900;
-    line-height: 1.75rem;
+    line-height: var(--leading-xl);
   }
 
   hr {

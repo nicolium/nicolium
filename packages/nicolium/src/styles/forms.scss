@@ -5,7 +5,7 @@ select {
   border-color: rgb(var(--color-gray-300));
   border-radius: 0.375rem;
 
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
 
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
 
@@ -15,8 +15,8 @@ select {
   }
 
   @media (min-width: variables.$breakpoint-sm) {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
   }
 }
 
@@ -66,7 +66,7 @@ select {
     border: 1px solid rgb(var(--color-gray-300));
     border-radius: 0.375rem;
 
-    font-size: 0.9375rem;
+    font-size: var(--text-base);
 
     background: white;
 
@@ -92,7 +92,7 @@ select {
       padding: 0;
       border: none;
 
-      font-size: 0.9375rem;
+      font-size: var(--text-base);
 
       background: transparent;
       box-shadow: none;
@@ -102,12 +102,12 @@ select {
       }
 
       @media (min-width: variables.$breakpoint-sm) {
-        font-size: 0.875rem;
+        font-size: var(--text-sm);
       }
     }
 
     @media (min-width: variables.$breakpoint-sm) {
-      font-size: 0.875rem;
+      font-size: var(--text-sm);
     }
   }
 

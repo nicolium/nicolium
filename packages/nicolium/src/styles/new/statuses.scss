@@ -50,8 +50,8 @@
 
   margin-bottom: 0.25rem;
 
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
   color: rgb(var(--color-gray-700));
 
   .dark & {
@@ -484,9 +484,9 @@
     padding-bottom: 0.125rem;
     padding-left: 0.375rem;
 
-    font-size: 0.75rem;
+    font-size: var(--text-xs);
     font-weight: 600;
-    line-height: 18px;
+    line-height: var(--leading-xs);
     color: #fff;
 
     opacity: 0.9;
@@ -525,8 +525,8 @@
       height: 3rem;
 
       &-overflow {
-        font-size: 1.25rem;
-        line-height: 1.75rem;
+        font-size: var(--text-xl);
+        line-height: var(--leading-xl);
       }
 
       &__icons svg {
@@ -830,7 +830,7 @@
       width: 100%;
       height: 100%;
 
-      font-size: 0.875rem;
+      font-size: var(--text-xs);
       font-style: italic;
       color: rgb(var(--color-primary-600));
       text-align: center;
@@ -898,9 +898,9 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
     padding: 0.25rem 0.375rem;
     border-radius: 0.125rem;
 
-    font-size: 0.75rem;
+    font-size: var(--text-xs);
     font-weight: 500;
-    line-height: 1rem;
+    line-height: var(--leading-xs);
     color: rgb(var(--color-primary-600));
 
     background-color: rgb(var(--color-gray-100));

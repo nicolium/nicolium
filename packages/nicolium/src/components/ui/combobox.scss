@@ -28,8 +28,8 @@
 
   padding: 0.625rem 1rem;
 
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
   color: rgb(var(--color-gray-700));
 
   .dark & {

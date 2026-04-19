@@ -70,9 +70,9 @@
       padding: 0.25rem 0.5rem;
       border-radius: 0.25rem;
 
-      font-size: 0.75rem;
+      font-size: var(--text-xs);
       font-weight: 500;
-      line-height: 1rem;
+      line-height: var(--leading-xs);
       color: #fff;
       text-overflow: ellipsis;
 

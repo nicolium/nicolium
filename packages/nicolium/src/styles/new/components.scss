@@ -260,9 +260,9 @@
   height: 1.25rem;
   border-radius: 9999px;
 
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: 500;
-  line-height: 1rem;
+  line-height: var(--leading-xs);
   color: white;
 
   background-color: rgb(var(--color-secondary-500));
@@ -341,8 +341,8 @@
   }
 
   &__hint {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
     color: rgb(var(--color-gray-700));
 
     .dark & {
@@ -407,7 +407,7 @@ a.⁂-list-item,
   border-color: rgb(var(--color-gray-300));
   border-radius: 0.375rem;
 
-  line-height: 1.25rem;
+  line-height: var(--leading-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 
@@ -439,7 +439,7 @@ a.⁂-list-item,
   }
 
   @media (min-width: variables.$breakpoint-sm) {
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 }
 
@@ -611,8 +611,8 @@ a.⁂-list-item,
     padding-bottom: 0.625rem;
     padding-left: 1rem;
 
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
     color: rgb(var(--color-gray-700));
 
     &:hover {
@@ -663,8 +663,8 @@ a.⁂-list-item,
     padding-bottom: 0.625rem;
     padding-left: 1rem;
 
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
     color: rgb(var(--color-gray-700));
 
     & > :not([hidden]) ~ :not([hidden]) {
@@ -797,9 +797,9 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     h2 {
       flex-grow: 1;
 
-      font-size: 1.125rem;
+      font-size: var(--text-lg);
       font-weight: 700;
-      line-height: 1.5rem;
+      line-height: var(--leading-base);
       color: rgb(var(--color-gray-900));
 
       .dark & {
@@ -1053,7 +1053,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     padding: 0.375rem 0.5rem;
     border-radius: 0.375rem;
 
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     color: rgb(var(--color-gray-700));
 
     .dark & {
@@ -1110,7 +1110,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
 
     &__content {
       overflow: hidden;
-      font-size: 0.9375rem;
+      font-size: var(--text-base);
       text-overflow: ellipsis;
       white-space: nowrap;
 
@@ -1120,15 +1120,15 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
 
       div:first-child {
         overflow: hidden;
-        font-size: 0.9375rem;
+        font-size: var(--text-base);
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
       div:last-child {
         margin-top: 0.125rem;
-        font-size: 0.75rem;
-        line-height: 1rem;
+        font-size: var(--text-xs);
+        line-height: var(--leading-xs);
       }
     }
 
@@ -1353,9 +1353,9 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
   padding-left: 0.5rem;
   border-radius: 0.25rem;
 
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: 500;
-  line-height: 1rem;
+  line-height: var(--leading-xs);
   color: #fff;
   text-transform: uppercase;
 
@@ -1375,9 +1375,9 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
   padding: 0.375rem 0.625rem;
   border-radius: 0.25rem;
 
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: 500;
-  line-height: 1rem;
+  line-height: var(--leading-xs);
   color: rgb(var(--color-gray-100));
   white-space: nowrap;
 

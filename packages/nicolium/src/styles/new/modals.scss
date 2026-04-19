@@ -263,9 +263,9 @@
       border-width: 1px;
       border-radius: 9999px;
 
-      font-size: 0.875rem;
+      font-size: var(--text-sm);
       font-weight: 500;
-      line-height: 1.25rem;
+      line-height: var(--leading-sm);
       color: rgb(var(--color-gray-700));
 
       appearance: none;

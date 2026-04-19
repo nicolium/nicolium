@@ -271,8 +271,8 @@
     }
 
     @media (min-width: variables.$breakpoint-sm) {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
+      font-size: var(--text-sm);
+      line-height: var(--leading-sm);
     }
   }
 

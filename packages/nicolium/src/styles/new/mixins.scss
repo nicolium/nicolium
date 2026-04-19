@@ -19,26 +19,26 @@
   }
 
   @if $size == xs {
-    font-size: 0.75rem;
-    line-height: 1rem;
+    font-size: var(--text-xs);
+    line-height: var(--leading-xs);
   } @else if $size == sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
   } @else if $size == md {
-    font-size: 0.9375rem;
-    line-height: 1.25rem;
+    font-size: var(--text-base);
+    line-height: var(--leading-base);
   } @else if $size == lg {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
+    font-size: var(--text-lg);
+    line-height: var(--leading-lg);
   } @else if $size == xl {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+    font-size: var(--text-xl);
+    line-height: var(--leading-xl);
   } @else if $size == 2xl {
-    font-size: 1.5rem;
-    line-height: 2rem;
+    font-size: var(--text-2xl);
+    line-height: var(--leading-2xl);
   } @else if $size == 3xl {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
+    font-size: var(--text-3xl);
+    line-height: var(--leading-3xl);
   } @else if $size == inherit {
     font-size: inherit;
     line-height: inherit;
@@ -371,8 +371,8 @@
     padding-bottom: 0.25rem;
     padding-left: 0.5rem;
 
-    font-size: 0.75rem;
-    line-height: 1rem;
+    font-size: var(--text-xs);
+    line-height: var(--leading-xs);
   } @else if $size == sm {
     column-gap: 0.5rem;
 
@@ -381,8 +381,8 @@
     padding-bottom: 0.375rem;
     padding-left: 0.75rem;
 
-    font-size: 0.75rem;
-    line-height: 1rem;
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
   } @else if $size == md {
     column-gap: 0.5rem;
 
@@ -391,8 +391,8 @@
     padding-bottom: 0.5rem;
     padding-left: 1rem;
 
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    font-size: var(--text-base);
+    line-height: var(--leading-base);
   } @else if $size == lg {
     column-gap: 0.5rem;
 
@@ -401,7 +401,8 @@
     padding-bottom: 0.75rem;
     padding-left: 1.5rem;
 
-    font-size: 0.9375rem;
+    font-size: var(--text-lg);
+    line-height: var(--leading-lg);
   } @else {
     @warn "Unknown button size `#{$size}`.";
   }
