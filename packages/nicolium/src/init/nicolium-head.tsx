@@ -76,7 +76,7 @@ const NicoliumHead = () => {
 
   useEffect(() => {
     document.documentElement.lang = locale;
-    document.documentElement.className = clsx(`text-${themeSettings?.interfaceSize ?? 'md'}`, {
+    document.documentElement.className = clsx(`body--${themeSettings?.interfaceSize ?? 'md'}`, {
       dark: theme === 'dark',
       'black dark': theme === 'black',
       'window-controls-overlay': wcoVisible,

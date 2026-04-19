@@ -7,6 +7,28 @@ body {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+html.body {
+  &--sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  &--md {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  &--lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  &--xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
 ::selection {
   color: white;
   background: rgb(var(--color-primary-600));
