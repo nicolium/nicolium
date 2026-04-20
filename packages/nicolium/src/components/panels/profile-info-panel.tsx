@@ -194,25 +194,27 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
         <div className='flex flex-col'>
           <div className='flex items-center gap-1'>
             <Text size='lg' weight='bold' truncate>
-              {account.deactivated ? (
-                <FormattedMessage id='account.deactivated' defaultMessage='Deactivated' />
-              ) : (
-                <Emojify text={account.display_name} emojis={account.emojis} truncated />
-              )}
+              <Emojify text={account.display_name} emojis={account.emojis} truncated />
             </Text>
 
-            {account.original_display_name &&
-              account.original_display_name !== account.display_name && (
+            {(account.original_display_name &&
+              account.original_display_name !== account.display_name) ||
+              (account.deactivated && (
                 <Text
                   theme='muted'
                   truncate
                   title={intl.formatMessage(messages.originalDisplayName)}
                 >
                   {'('}
-                  <Emojify text={account.original_display_name} emojis={account.emojis} />
+                  {account.original_display_name &&
+                  account.original_display_name !== account.display_name ? (
+                    <Emojify text={account.original_display_name} emojis={account.emojis} />
+                  ) : (
+                    <FormattedMessage id='account.deactivated' defaultMessage='Deactivated' />
+                  )}
                   {')'}
                 </Text>
-              )}
+              ))}
 
             {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
 
