@@ -79,10 +79,10 @@
 
       &:hover {
         border-radius: var(--radius-full);
-        background: rgb(var(--color-primary-700/20));
+        background: rgb(var(--color-primary-700) / 20);
 
         .dark & {
-          background: rgb(var(--color-primary-200/20));
+          background: rgb(var(--color-primary-200) / 20);
         }
       }
 
