@@ -1,3 +1,5 @@
+@use '../new/variables';
+
 .detailed,
 .fullscreen {
   .video-player__volume__current,
@@ -12,18 +14,28 @@
 
 .video-player {
   &__controls {
-    @apply bg-primary-200 dark:bg-primary-700 black:bg-primary-800 box-border ring-0 transition-all duration-300 ease-in-out;
-
     position: absolute;
     z-index: 2;
     right: 0.75rem;
     bottom: -4rem;
     left: 0.75rem;
 
+    box-sizing: border-box;
     padding: 0.25rem 0.75rem;
     border-radius: var(--radius-lg);
 
     opacity: 0.8;
+    background: rgb(var(--color-primary-200));
+
+    transition: all 0.30s ease-in-out;
+
+    .dark & {
+      background: rgb(var(--color-primary-700));
+    }
+
+    .black & {
+      background: rgb(var(--color-primary-800));
+    }
 
     &--visible {
       bottom: 0.75rem;
@@ -35,9 +47,17 @@
   }
 
   &__buttons {
-    @apply flex items-center text-base whitespace-nowrap overflow-hidden text-ellipsis flex-initial gap-1;
-
+    overflow: hidden;
+    display: flex;
+    flex: initial;
     flex: 0 1 auto;
+    gap: 0.25rem;
+    align-items: center;
+
+    font-size: var(--text-base);
+    line-height: var(--leading-base);
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     .player-button {
       display: block;
@@ -58,7 +78,12 @@
       }
 
       &:hover {
-        @apply dark:bg-primary-200/20 bg-primary-700/20 rounded-full;
+        border-radius: var(--radius-full);
+        background: rgb(var(--color-primary-700/20));
+
+        .dark & {
+          background: rgb(var(--color-primary-200/20));
+        }
       }
 
       .svg-icon {
@@ -69,38 +94,119 @@
   }
 
   &__volume {
-    @apply inline-flex cursor-pointer h-6 relative before:content-[''] before:w-12 before:bg-black/35 dark:before:bg-white/35 before:rounded before:absolute before:h-1 before:left-0 before:top-1/2 w-12 mr-4;
+    cursor: pointer;
+
+    position: relative;
+
+    display: inline-flex;
+
+    width: 3rem;
+    height: 1.5rem;
+    margin-right: 1rem;
 
     &::before {
+      content: '';
+
+      position: absolute;
+      top: 50%;
+      left: 0;
       transform: translate(0, -50%);
+
+      width: 3rem;
+      height: 0.25rem;
+      border-radius: 50%;
+
+      background: rgb(0 0 0 / 0.35);
+
+      .dark & {
+        background: rgb(255 255 255 / 0.35);
+      }
     }
 
     &__current {
-      @apply bg-accent-500 block absolute h-1 rounded left-0 top-1/2;
-
+      position: absolute;
+      top: 50%;
+      left: 0;
       transform: translate(0, -50%);
+
+      display: block;
+
+      height: 0.25rem;
+      border-radius: 50%;
+
+      background: rgb(var(--color-accent-500));
     }
 
     &__handle {
-      @apply bg-accent-500 absolute z-[3] rounded-[50%] size-3 top-1/2 left-0 -ml-1.5;
-
+      position: absolute;
+      z-index: 3;
+      top: 50%;
+      left: 0;
       transform: translate(0, -50%);
+
+      width: 0.75rem;
+      height: 0.75rem;
+      margin-left: -0.375rem;
+      border-radius: 50%;
+
+      background: rgb(var(--color-accent-500));
     }
   }
 
   &__link {
-    @apply px-2.5 py-0.5 xl:hidden;
+    padding: 0.125rem 0.625rem;
 
     a {
-      @apply no-underline text-sm font-medium text-white hover:underline active:underline focus:underline;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      line-height: var(--leading-sm);
+      color: white;
+      text-decoration: none;
+
+      &:hover, &:active, &:focus {
+        text-decoration: underline;
+      }
+    }
+
+    @media (min-width: variables.$breakpoint-xl) {
+      display: none;
     }
   }
 
   &__seek {
-    @apply cursor-pointer h-3 relative before:content-[''] before:w-full before:bg-black/35 dark:before:bg-white/35 before:rounded before:block before:absolute before:h-1 before:top-1;
+    cursor: pointer;
+    position: relative;
+    height: 0.75rem;
+
+    &::before {
+      content: '';
+
+      position: absolute;
+      top: 0.25rem;
+
+      display: block;
+
+      width: 100%;
+      height: 0.25rem;
+      border-radius: 50%;
+
+      background: rgb(0 0 0 / 0.35);
+
+      .dark & {
+        background: rgb(255 255 255 / 0.35);
+      }
+    }
 
     &__handle {
-      @apply bg-accent-500 absolute z-[3] rounded-[50%] size-3 -ml-1.5;
+      position: absolute;
+      z-index: 3;
+
+      width: 0.75rem;
+      height: 0.75rem;
+      margin-left: -0.375rem;
+      border-radius: 50%;
+
+      background: rgb(var(--color-accent-500));
 
       .no-reduce-motion & {
         transition: opacity 0.1s ease;

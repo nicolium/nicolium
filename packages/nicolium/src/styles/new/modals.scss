@@ -64,6 +64,7 @@
 
     .video-player,
     .audio-player {
+      overflow: hidden;
       margin: 3rem 0;
     }
   }
