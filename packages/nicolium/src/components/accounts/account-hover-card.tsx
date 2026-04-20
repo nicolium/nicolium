@@ -142,10 +142,8 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
   return (
     <div
-      className={clsx({
-        'absolute left-0 top-0 z-[101] w-[320px] transition-opacity': true,
-        'opacity-100': visible && context.open,
-        'pointer-events-none opacity-0': !visible || !context.open,
+      className={clsx('⁂-account-hover-card', {
+        '⁂-account-hover-card--hidden': !visible || !context.open,
       })}
       ref={refs.setFloating}
       style={{
@@ -157,10 +155,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Card
-        variant='rounded'
-        className='relative isolate overflow-hidden black:rounded-xl black:border black:border-gray-800'
-      >
+      <Card variant='rounded' className='isolate'>
         <CardBody>
           <div className='flex flex-col gap-2'>
             <UserPanel
@@ -170,35 +165,34 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
             />
 
             {account.local ? (
-              <div className='flex items-center gap-0.5'>
-                <Icon src={iconCalendarDots} className='size-4 text-gray-800 dark:text-gray-200' />
+              <div
+                className='⁂-account-info__details__item'
+                title={intl.formatDate(account.created_at, dateFormatOptions)}
+              >
+                <Icon src={iconCalendarDots} />
 
-                <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
-                  <FormattedMessage
-                    id='account.member_since'
-                    defaultMessage='Joined {date}'
-                    values={{
-                      date: memberSinceDate,
-                    }}
-                  />
-                </Text>
+                <FormattedMessage
+                  id='account.member_since'
+                  defaultMessage='Joined {date}'
+                  values={{
+                    date: memberSinceDate,
+                  }}
+                />
               </div>
             ) : null}
 
             {timezoneField && <AccountLocalTime accountId={account.id} field={timezoneField} />}
 
             {account.pronouns.length > 0 && (
-              <div className='flex items-center gap-0.5'>
-                <Icon src={iconTag} className='size-4 text-gray-800 dark:text-gray-200' />
+              <div
+                className='⁂-account-info__details__item'
+                title={intl.formatMessage(messages.pronouns, {
+                  pronouns: account.pronouns.join('/'),
+                })}
+              >
+                <Icon src={iconTag} />
 
-                <Text
-                  size='sm'
-                  title={intl.formatMessage(messages.pronouns, {
-                    pronouns: account.pronouns.join('/'),
-                  })}
-                >
-                  {account.pronouns.join('/')}
-                </Text>
+                {account.pronouns.join('/')}
               </div>
             )}
 
