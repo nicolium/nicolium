@@ -19,7 +19,7 @@
         background-color: rgb(var(--color-gray-200));
 
         .dark & {
-          background-color: rgb(var(--color-gray-900), 0.5);
+          background-color: rgb(var(--color-gray-900) / 0.5);
         }
 
         .black & {
@@ -27,7 +27,7 @@
         }
 
         @media (min-width: variables.$breakpoint-md) {
-          border-radius: 0.75rem 0.75rem 0 0;
+          border-radius: var(--radius-xl) var(--radius-xl) 0 0;
         }
 
         @media (min-width: variables.$breakpoint-lg) {
@@ -89,7 +89,7 @@
 
 .⁂-avatar {
   display: block;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-lg);
   line-height: 0;
 
   img,
@@ -205,7 +205,7 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.125rem;
 
-    border-radius: 0.375rem;
+    border-radius: var(--radius-md);
   }
 
   &__empty {
@@ -279,7 +279,7 @@
 
   margin: 0.5px 0;
   padding: 0.125rem 0.5rem 0.125rem 0.25rem;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
 
   vertical-align: middle;
 
@@ -299,7 +299,7 @@
 
   .⁂-avatar {
     overflow: hidden;
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
 
     .text-lg & {
       width: 1.5rem !important;
@@ -335,7 +335,7 @@
     }
 
     .⁂-avatar {
-      border-radius: 9999px !important;
+      border-radius: var(--radius-full) !important;
       outline: 2px solid var(--avatar-stack-background);
     }
   }

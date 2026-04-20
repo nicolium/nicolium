@@ -27,7 +27,7 @@
   }
 
   &__spoiler-input {
-    border-radius: 0.375rem;
+    border-radius: var(--radius-md);
     background-color: transparent !important;
   }
 
@@ -41,7 +41,7 @@
       position: absolute;
       top: 0;
 
-      font-size: 1rem;
+      font-size: var(--text-base);
       color: rgb(var(--color-gray-600));
 
       visibility: visible !important;
@@ -55,7 +55,7 @@
       position: relative;
       z-index: 10;
       min-height: 99px;
-      font-size: 1rem;
+      font-size: var(--text-base);
 
       &--condensed {
         min-height: 39px;
@@ -81,7 +81,7 @@
     padding-bottom: 0.5rem;
     padding-left: 0.75rem;
     border: 1px solid rgb(var(--color-gray-400));
-    border-radius: 0.375rem;
+    border-radius: var(--radius-md);
 
     outline: 2px solid transparent;
 

@@ -41,7 +41,7 @@
   align-items: center;
 
   padding: 1rem;
-  border-radius: 0.25rem;
+  border-radius: var(--radius-sm);
 
   background-color: rgb(var(--color-gray-100));
 
@@ -221,7 +221,7 @@
   &__suggestion-button {
     @include mixins.button($theme: secondary, $size: sm);
 
-    border-radius: 0.75rem;
+    border-radius: var(--radius-xl);
     text-align: left;
   }
 

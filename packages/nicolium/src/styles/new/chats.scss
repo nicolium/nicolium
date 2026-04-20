@@ -11,7 +11,7 @@
 
   width: 24rem;
   height: 4rem;
-  border-radius: 0.5rem 0.5rem 0 0;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 
   background: white;
   box-shadow: 0 25px 75px -15px #0004;
@@ -240,7 +240,7 @@
   padding-right: 0.5rem;
   padding-bottom: 0.75rem;
   padding-left: 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-lg);
 
   &:hover {
     background-color: rgb(var(--color-gray-100));
@@ -366,7 +366,7 @@
   &__unread {
     width: 0.5rem;
     height: 0.5rem;
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
     background-color: rgb(var(--color-secondary-500));
   }
 

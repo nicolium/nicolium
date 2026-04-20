@@ -103,7 +103,7 @@ $vertical-lr-langs: mn-mong, mnmong;
 
     width: 100%;
     margin: 1rem 0;
-    border-radius: 0.375rem;
+    border-radius: var(--radius-md);
 
     background-color: rgb(var(--color-gray-200));
 
@@ -140,7 +140,7 @@ $vertical-lr-langs: mn-mong, mnmong;
   /* Inline code */
   p > code {
     padding: 0.125rem 0.25rem;
-    border-radius: 0.125rem;
+    border-radius: var(--radius-xs);
   }
 
   /* Code block */
@@ -148,9 +148,9 @@ $vertical-lr-langs: mn-mong, mnmong;
     overflow-x: auto;
 
     padding: 0.5rem 0.75rem;
-    border-radius: 0.375rem;
+    border-radius: var(--radius-md);
 
-    line-height: 1.5rem;
+    line-height: var(--leading-base);
     word-break: break-all;
 
     &:not(:last-child) {
@@ -173,7 +173,7 @@ $vertical-lr-langs: mn-mong, mnmong;
   img:not(.emojione) {
     max-height: 30rem;
     margin: 0 auto;
-    border-radius: 0.125rem;
+    border-radius: var(--radius-xs);
   }
 
   &.big-emoji img.emojione {

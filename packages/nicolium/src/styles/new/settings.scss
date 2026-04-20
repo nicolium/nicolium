@@ -19,7 +19,7 @@
 
   height: 100%;
   padding: 1rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-lg);
 
   background-color: rgb(var(--color-gray-100));
 
@@ -100,7 +100,7 @@
 
 .⁂-theme-selector {
   position: relative;
-  border-radius: 0.375rem;
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
 
   &__overlay {

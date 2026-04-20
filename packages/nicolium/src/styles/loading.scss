@@ -40,7 +40,7 @@
   height: 3rem;
   border: 0 solid #e5e7eb;
   border-width: 6px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
 
   background-color: transparent;
 

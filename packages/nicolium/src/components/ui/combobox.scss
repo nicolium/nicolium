@@ -4,7 +4,7 @@
 
 [data-reach-combobox-popover] {
   z-index: 100;
-  border-radius: 0.375rem;
+  border-radius: var(--radius-md);
   background: white;
   box-shadow: var(--shadow-lg);
 

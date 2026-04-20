@@ -115,7 +115,7 @@
   padding-left: 0.75rem;
   border-color: rgb(var(--color-gray-200));
   border-width: 1px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
 
   color: rgb(var(--color-gray-700));
 
@@ -168,7 +168,7 @@
 
   margin: -0.25rem -0.5rem;
   padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
+  border-radius: var(--radius-sm);
 
   transition: background 150ms ease-in-out;
 

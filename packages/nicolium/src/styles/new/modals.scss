@@ -261,7 +261,7 @@
       padding: 0.5rem;
       border-color: rgb(var(--color-gray-700));
       border-width: 1px;
-      border-radius: 9999px;
+      border-radius: var(--radius-full);
 
       font-size: var(--text-sm);
       font-weight: 500;

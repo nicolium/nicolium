@@ -8,7 +8,7 @@
   span {
     @include mixins.text($theme: success);
 
-    line-height: 1;
+    line-height: var(--leading-sm);
   }
 }
 

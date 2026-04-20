@@ -43,7 +43,7 @@
 
       width: 6rem;
       height: 6rem;
-      border-radius: 0.5rem;
+      border-radius: var(--radius-lg);
 
       object-fit: cover;
     }
@@ -68,7 +68,7 @@
 
       max-width: 100%;
       padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
+      border-radius: var(--radius-sm);
 
       font-size: var(--text-xs);
       font-weight: 500;
@@ -95,7 +95,7 @@
 
   &__item {
     padding: 0.25rem;
-    border-radius: 0.25rem;
+    border-radius: var(--radius-sm);
 
     &--current {
       padding: 0.25rem 0.5rem;
@@ -137,7 +137,7 @@
       width: 2rem;
       height: 2rem;
       margin: 0.5rem;
-      border-radius: 0.5rem;
+      border-radius: var(--radius-lg);
 
       object-fit: cover;
     }
