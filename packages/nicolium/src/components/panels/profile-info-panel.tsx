@@ -4,7 +4,8 @@ import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import iconMapPin from '@phosphor-icons/core/regular/map-pin.svg';
 import iconTag from '@phosphor-icons/core/regular/tag.svg';
-import React from 'react';
+import { clsx } from 'clsx';
+import React, { useLayoutEffect, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import ProfileFamiliarFollowers from '@/components/accounts/profile-familiar-followers';
@@ -23,6 +24,8 @@ import { useAcct } from '@/hooks/use-acct';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useSettings } from '@/stores/settings';
 import { capitalize } from '@/utils/strings';
+
+import { ExpandButton } from '../statuses/status-content';
 
 import type { Account } from 'pl-api';
 
@@ -53,6 +56,7 @@ interface IProfileInfoPanel {
 
 /** User profile metadata, such as location, birthday, etc. */
 const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) => {
+  const accountInfoNode = React.useRef<HTMLDivElement>(null);
   const intl = useIntl();
   const acct = useAcct(account);
   const me = useCurrentAccount();
@@ -60,6 +64,19 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const { displayMentionAvatars } = useSettings();
 
   const { data: scrobble } = useAccountScrobbleQuery(account?.id);
+
+  const [collapsed, setCollapsed] = useState<boolean | null>(null);
+
+  const maybeSetCollapsed = (): void => {
+    if (!accountInfoNode.current) return;
+
+    // 20px * x lines (+ 2px padding at the top)
+    setCollapsed(accountInfoNode.current.clientHeight >= 282 ? true : null);
+  };
+
+  useLayoutEffect(() => {
+    maybeSetCollapsed();
+  }, []);
 
   const getStaffBadge = (): React.ReactNode => {
     if (account?.is_admin) {
@@ -219,70 +236,90 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
         <ProfileStats account={account} />
 
-        {!!account.note && (
-          <Markup className='break-words' size='sm'>
-            <ParsedContent
-              html={account.note}
-              emojis={account.emojis}
-              speakAsCat={account.speak_as_cat}
-              displayMentionAvatars={displayMentionAvatars}
-            />
-          </Markup>
-        )}
-
-        <div className='flex flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center'>
-          {account.local ? (
-            <div className='flex items-center gap-0.5'>
-              <Icon src={iconCalendarDots} className='size-4 text-gray-800 dark:text-gray-200' />
-
-              <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
-                <FormattedMessage
-                  id='account.member_since'
-                  defaultMessage='Joined {date}'
-                  values={{
-                    date: memberSinceDate,
-                  }}
+        <div className='⁂-account-info__container' ref={accountInfoNode}>
+          <div className={clsx('⁂-account-info', { '⁂-account-info--collapsed': collapsed })}>
+            {!!account.note && (
+              <Markup className='break-words' size='sm'>
+                <ParsedContent
+                  html={account.note}
+                  emojis={account.emojis}
+                  speakAsCat={account.speak_as_cat}
+                  displayMentionAvatars={displayMentionAvatars}
                 />
-              </Text>
+              </Markup>
+            )}
+
+            <div className='flex flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center'>
+              {account.local ? (
+                <div className='flex items-center gap-0.5'>
+                  <Icon
+                    src={iconCalendarDots}
+                    className='size-4 text-gray-800 dark:text-gray-200'
+                  />
+
+                  <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
+                    <FormattedMessage
+                      id='account.member_since'
+                      defaultMessage='Joined {date}'
+                      values={{
+                        date: memberSinceDate,
+                      }}
+                    />
+                  </Text>
+                </div>
+              ) : null}
+
+              {account.location ? (
+                <div className='flex items-center gap-0.5'>
+                  <Icon src={iconMapPin} className='size-4 text-gray-800 dark:text-gray-200' />
+
+                  <Text size='sm'>{account.location}</Text>
+                </div>
+              ) : null}
+
+              {renderBirthday()}
+
+              {account.pronouns.length > 0 ? (
+                <div
+                  className='flex items-center gap-0.5'
+                  title={intl.formatMessage(messages.pronouns, {
+                    pronouns: account.pronouns.join('/'),
+                  })}
+                >
+                  <Icon src={iconTag} className='size-4 text-gray-800 dark:text-gray-200' />
+
+                  <Text size='sm'>{account.pronouns.join('/')}</Text>
+                </div>
+              ) : null}
             </div>
-          ) : null}
 
-          {account.location ? (
-            <div className='flex items-center gap-0.5'>
-              <Icon src={iconMapPin} className='size-4 text-gray-800 dark:text-gray-200' />
+            {scrobble && <Scrobble scrobble={scrobble} />}
 
-              <Text size='sm'>{account.location}</Text>
-            </div>
-          ) : null}
+            {ownAccount ? null : <ProfileFamiliarFollowers account={account} />}
 
-          {renderBirthday()}
+            {account.fields.length > 0 && (
+              <div className='mt-4 flex flex-col gap-2 xl:hidden'>
+                {account.fields.map((field, i) => (
+                  <ProfileField
+                    field={field}
+                    key={i}
+                    emojis={account.emojis}
+                    accountId={account.id}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
 
-          {account.pronouns.length > 0 ? (
-            <div
-              className='flex items-center gap-0.5'
-              title={intl.formatMessage(messages.pronouns, {
-                pronouns: account.pronouns.join('/'),
-              })}
-            >
-              <Icon src={iconTag} className='size-4 text-gray-800 dark:text-gray-200' />
-
-              <Text size='sm'>{account.pronouns.join('/')}</Text>
-            </div>
-          ) : null}
+          {collapsed !== null && (
+            <ExpandButton
+              onClick={() => setCollapsed((value) => !value)}
+              key='expand'
+              expanded={!collapsed}
+            />
+          )}
         </div>
-
-        {scrobble && <Scrobble scrobble={scrobble} />}
-
-        {ownAccount ? null : <ProfileFamiliarFollowers account={account} />}
       </div>
-
-      {account.fields.length > 0 && (
-        <div className='mt-4 flex flex-col gap-2 xl:hidden'>
-          {account.fields.map((field, i) => (
-            <ProfileField field={field} key={i} emojis={account.emojis} accountId={account.id} />
-          ))}
-        </div>
-      )}
     </div>
   );
 };

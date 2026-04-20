@@ -100,7 +100,11 @@ const ProfileLayout: React.FC = () => {
           withHeader={false}
         >
           <AccountHeader key={`profile-header-${account?.id}`} account={account} />
-          <ProfileInfoPanel username={username} account={account} />
+          <ProfileInfoPanel
+            key={`profile-info-${account?.id}`}
+            username={username}
+            account={account}
+          />
 
           {account && showTabs && (
             <Tabs key={`profile-tabs-${account.id}`} items={tabItems} activeItem={activeItem} />

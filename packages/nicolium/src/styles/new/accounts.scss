@@ -68,6 +68,23 @@
   }
 }
 
+.⁂-account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  
+  &--collapsed {
+    overflow: hidden;
+    max-height: 200px;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
 .⁂-account-card {
   display: block;
   flex-shrink: 0;
