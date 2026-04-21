@@ -60,7 +60,8 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const acct = useAcct(account);
   const me = useCurrentAccount();
   const ownAccount = account?.id === me;
-  const { displayMentionAvatars } = useSettings();
+  const { displayMentionAvatars, sidebarItems } = useSettings();
+  const isContextDisplayed = sidebarItems.includes('context');
 
   const { data: scrobble } = useAccountScrobbleQuery(account?.id);
 
@@ -284,7 +285,11 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
             {ownAccount ? null : <ProfileFamiliarFollowers account={account} />}
 
             {account.fields.length > 0 && (
-              <div className='⁂-account-info__fields'>
+              <div
+                className={clsx('⁂-account-info__fields', {
+                  '⁂-account-info__fields--optional': isContextDisplayed,
+                })}
+              >
                 {account.fields.map((field, i) => (
                   <ProfileField
                     field={field}
