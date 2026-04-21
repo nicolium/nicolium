@@ -209,6 +209,21 @@ const AppearancePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
+                id='preferences.fields.reduce_motion_label'
+                defaultMessage='Reduce motion in animations'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['reduceMotion']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
                 id='preferences.fields.system_font_label'
                 defaultMessage="Use system's default font"
               />
@@ -232,21 +247,6 @@ const AppearancePreferences: React.FC = () => {
             <SettingToggle
               settings={settings}
               settingPath={['systemEmojiFont']}
-              onChange={onToggleChange}
-            />
-          </ListItem>
-
-          <ListItem
-            label={
-              <FormattedMessage
-                id='preferences.fields.reduce_motion_label'
-                defaultMessage='Reduce motion in animations'
-              />
-            }
-          >
-            <SettingToggle
-              settings={settings}
-              settingPath={['reduceMotion']}
               onChange={onToggleChange}
             />
           </ListItem>

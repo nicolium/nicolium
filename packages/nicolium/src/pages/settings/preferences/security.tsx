@@ -8,7 +8,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useMfaConfig } from '@/queries/security/use-mfa';
 
 const messages = defineMessages({
-  heading: { id: 'preferences.heading.timelines', defaultMessage: 'Timelines settings' },
+  heading: { id: 'preferences.heading.security', defaultMessage: 'Privacy and security' },
 });
 
 const SecurityPreferences: React.FC = () => {
