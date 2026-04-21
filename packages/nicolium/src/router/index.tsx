@@ -533,14 +533,14 @@ export const outgoingFollowRequestsRoute = createRoute({
 });
 
 export const blocksRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/blocks',
   component: lazy(() => import('@/pages/settings/blocks')),
   beforeLoad: requireAuth,
 });
 
 export const domainBlocksRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/domain_blocks',
   component: lazy(() => import('@/pages/settings/domain-blocks')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -549,7 +549,7 @@ export const domainBlocksRoute = createRoute({
 });
 
 export const mutesRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/mutes',
   component: lazy(() => import('@/pages/settings/mutes')),
   beforeLoad: requireAuth,
@@ -557,7 +557,7 @@ export const mutesRoute = createRoute({
 
 // Filters
 export const filtersRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/filters',
   component: lazy(() => import('@/pages/settings/filters')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -566,7 +566,7 @@ export const filtersRoute = createRoute({
 });
 
 export const editFilterRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/filters/$filterId',
   component: lazy(() => import('@/pages/settings/edit-filter')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -1444,11 +1444,6 @@ const routeTree = rootRoute.addChildren([
     directoryRoute,
     followRequestsRoute,
     outgoingFollowRequestsRoute,
-    blocksRoute,
-    domainBlocksRoute,
-    mutesRoute,
-    filtersRoute,
-    editFilterRoute,
     followedTagsRoute,
     rssFeedSubscriptionsRoute,
     interactionRequestsRoute,
@@ -1531,6 +1526,11 @@ const routeTree = rootRoute.addChildren([
     settingsTokensRoute,
     settingsInteractionPoliciesRoute,
     settingsPrivacyRoute,
+    blocksRoute,
+    domainBlocksRoute,
+    mutesRoute,
+    filtersRoute,
+    editFilterRoute,
   ]),
   layouts.status.addChildren([statusRoute, statusQuotesRoute]),
   ...redirectRoutes,
