@@ -118,8 +118,11 @@ body {
 
   &__overlay {
     cursor: default;
+
     position: fixed;
     inset: 0;
+
+    opacity: 0;
     background-color: rgb(var(--color-gray-500));
 
     .dark.black & {
