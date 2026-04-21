@@ -129,10 +129,9 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
   };
 
   return (
-    <div className='relative mt-1 w-fit rounded-md shadow-sm'>
+    <div className='relative mt-1 rounded-md shadow-sm'>
       <DatePicker
         selected={selected}
-        wrapperClassName='w-fit'
         onChange={handleChange}
         placeholderText={intl.formatMessage(messages.birthdayPlaceholder)}
         minDate={new Date('1900-01-01')}
