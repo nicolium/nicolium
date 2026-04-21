@@ -24,6 +24,7 @@ interface IStatusMedia {
     | 'filtered'
     | 'media_attachments'
     | 'quote_id'
+    | 'quote_visible'
     | 'sensitive'
     | 'visibility'
   >;
@@ -120,7 +121,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
         </Suspense>
       );
     }
-  } else if (!status.quote_id && status.card) {
+  } else if ((!status.quote_id || !status.quote_visible) && status.card) {
     media = <PreviewCard onOpenMedia={openMedia} card={status.card} compact />;
   } else if (status.expectsCard) {
     media = <PlaceholderCard />;
