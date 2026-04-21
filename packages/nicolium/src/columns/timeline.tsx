@@ -77,7 +77,7 @@ const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
 };
 
 const PlaceholderTimelineStatus = () => (
-  <div className='⁂-timeline-status relative border-b border-solid border-gray-200 dark:border-gray-800'>
+  <div className='⁂-timeline-status'>
     <PlaceholderStatus variant='slim' />
   </div>
 );
@@ -88,7 +88,7 @@ interface ITimelinePendingStatus {
 
 const TimelinePendingStatus: React.FC<ITimelinePendingStatus> = ({ idempotencyKey }) => {
   return (
-    <div className='⁂-timeline-status relative border-b border-solid border-gray-200 dark:border-gray-800'>
+    <div className='⁂-timeline-status'>
       <PendingStatus idempotencyKey={idempotencyKey} variant='slim' />
     </div>
   );
