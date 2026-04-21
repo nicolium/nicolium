@@ -377,6 +377,8 @@
     gap: 0.25rem;
     align-items: center;
 
+    min-width: fit-content;
+
     color: rgb(var(--color-gray-700));
 
     [dir='rtl'] & {
