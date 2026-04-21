@@ -1,12 +1,36 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import SettingToggle from '@/pages/settings/components/setting-toggle';
-import { useSettings } from '@/stores/settings';
+import Toggle from '@/components/ui/toggle';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
+
+interface ITimelineFilters {
+  timeline: Parameters<typeof useTimelineFiltersOptions>[0];
+}
+
+const TimelineFilters: React.FC<ITimelineFilters> = ({ timeline }) => {
+  const items = useTimelineFiltersOptions(timeline);
+
+  return (
+    <List>
+      {items.map((item) =>
+        item === null || item.icon || !item.onChange ? null : (
+          <ListItem key={item.text} label={item.text}>
+            <Toggle
+              checked={item.checked}
+              onChange={({ target }) => item.onChange!(target.checked)}
+              disabled={item.disabled}
+            />
+          </ListItem>
+        ),
+      )}
+    </List>
+  );
+};
 
 const messages = defineMessages({
   heading: { id: 'preferences.heading.timelines', defaultMessage: 'Timelines settings' },
@@ -14,97 +38,17 @@ const messages = defineMessages({
 
 const TimelinesPreferences: React.FC = () => {
   const intl = useIntl();
-  const settings = useSettings();
-
-  const onToggleChange = (key: string[], checked: boolean) => {
-    changeSetting(key, checked);
-  };
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form>
-        <List>
-          <ListItem
-            label={
-              <FormattedMessage
-                id='home.column_settings.show_reblogs'
-                defaultMessage='Show reposts in home timeline'
-              />
-            }
-          >
-            <SettingToggle
-              settings={settings}
-              settingPath={['timelines', 'home', 'showReblogs']}
-              defaultValue
-              onChange={onToggleChange}
-            />
-          </ListItem>
+        <CardTitle
+          title={
+            <FormattedMessage id='home.column_settings.heading' defaultMessage='Home timeline' />
+          }
+        />
 
-          <ListItem
-            label={
-              <FormattedMessage
-                id='home.column_settings.show_self_reblogs'
-                defaultMessage='Show self-reposts in home timeline'
-              />
-            }
-          >
-            <SettingToggle
-              settings={settings}
-              settingPath={['timelines', 'home', 'showSelfReblogs']}
-              defaultValue
-              onChange={onToggleChange}
-              disabled={settings.timelines?.home?.showReblogs === false}
-            />
-          </ListItem>
-
-          <ListItem
-            label={
-              <FormattedMessage
-                id='home.column_settings.show_replies'
-                defaultMessage='Show replies in home timeline'
-              />
-            }
-          >
-            <SettingToggle
-              settings={settings}
-              settingPath={['timelines', 'home', 'showReplies']}
-              defaultValue
-              onChange={onToggleChange}
-            />
-          </ListItem>
-
-          <ListItem
-            label={
-              <FormattedMessage
-                id='home.column_settings.show_quotes'
-                defaultMessage='Show quotes in home timeline'
-              />
-            }
-          >
-            <SettingToggle
-              settings={settings}
-              settingPath={['timelines', 'home', 'showQuotes']}
-              defaultValue
-              onChange={onToggleChange}
-            />
-          </ListItem>
-
-          <ListItem
-            label={
-              <FormattedMessage
-                id='home.column_settings.show_direct'
-                defaultMessage='Show direct messages in home timeline'
-              />
-            }
-          >
-            <SettingToggle
-              settings={settings}
-              settingPath={['timelines', 'home', 'showDirect']}
-              defaultValue
-              onChange={onToggleChange}
-            />
-          </ListItem>
-        </List>
+        <TimelineFilters timeline='home' />
       </Form>
     </Column>
   );
