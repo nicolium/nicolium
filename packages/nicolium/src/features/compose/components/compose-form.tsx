@@ -132,7 +132,9 @@ interface IComposeForm<ID extends string> {
   autoFocus?: boolean;
   clickableAreaRef?: React.RefObject<HTMLDivElement | null>;
   event?: string;
+  fullScreen?: boolean;
   group?: string;
+  onSubmit?: () => void;
   withAvatar?: boolean;
   transparent?: boolean;
   compact?: boolean;
@@ -144,7 +146,9 @@ const ComposeForm = <ID extends string>({
   autoFocus,
   clickableAreaRef,
   event,
+  fullScreen,
   group,
+  onSubmit,
   withAvatar,
   transparent,
   compact,
@@ -232,8 +236,10 @@ const ComposeForm = <ID extends string>({
     e?.preventDefault();
 
     submitCompose({
+      propagate: fullScreen,
       onSuccess: () => {
         editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+        onSubmit?.();
       },
     });
   };

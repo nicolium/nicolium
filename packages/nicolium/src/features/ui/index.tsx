@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from '@tanstack/react-router';
+import { Outlet, useMatch, useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -22,6 +22,7 @@ import { usePrefetchNotificationsMarker } from '@/queries/markers/use-markers';
 import { usePrefetchNotifications } from '@/queries/notifications/use-notifications';
 import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { newStatusRoute } from '@/router';
 import { useAuthStore } from '@/stores/auth';
 import { useInstance, useInstanceStore } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
@@ -29,10 +30,11 @@ import { useSettings } from '@/stores/settings';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
 import GlobalHotkeys from '@/utils/global-hotkeys';
-import { useIsStandalone } from '@/utils/state';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import '@/components/statuses/status';
+import { useIsStandalone } from '@/utils/state';
+
 import {
   ModalRoot,
   AccountHoverCard,
@@ -57,6 +59,7 @@ const UI: React.FC = React.memo(() => {
   const standalone = useIsStandalone();
   const instanceFetched = useInstanceStore((state) => state.fetched);
   const { showChatWidget } = useSettings();
+  const isNewStatusPage = !!useMatch({ from: newStatusRoute.id, shouldThrow: false });
 
   useAdminConfig();
   useShoutboxSubscription();
@@ -171,9 +174,11 @@ const UI: React.FC = React.memo(() => {
 
         <div className='⁂-layout__container'>
           <Layout fullWidth={fullWidth}>
-            <Layout.Sidebar shrink={fullWidth}>
-              {!(standalone && !me) && <SidebarNavigation shrink={fullWidth} />}
-            </Layout.Sidebar>
+            {!isNewStatusPage && (
+              <Layout.Sidebar shrink={fullWidth}>
+                {!(standalone && !me) && <SidebarNavigation shrink={fullWidth} />}
+              </Layout.Sidebar>
+            )}
 
             <Outlet />
           </Layout>
@@ -182,7 +187,7 @@ const UI: React.FC = React.memo(() => {
             <DropdownNavigation />
           </Suspense>
 
-          {me && features.chats && showChatWidget && (
+          {me && features.chats && showChatWidget && !isNewStatusPage && (
             <div className='⁂-chat-widget__container'>
               <Suspense fallback={<div className='⁂-chat-widget ⁂-chat-widget--placeholder' />}>
                 <ChatWidget />
@@ -190,7 +195,7 @@ const UI: React.FC = React.memo(() => {
             </div>
           )}
 
-          <ThumbNavigation />
+          {!isNewStatusPage && <ThumbNavigation />}
 
           <Suspense>
             <AccountHoverCard />

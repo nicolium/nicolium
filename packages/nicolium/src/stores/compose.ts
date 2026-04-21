@@ -14,11 +14,13 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { router } from '@/router';
 import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions, useModalsStore } from '@/stores/modals';
 import { useSettings, useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
+import { userTouching } from '@/utils/is-mobile';
 
 import { useUiStoreActions } from './ui';
 
@@ -66,6 +68,15 @@ const messages = defineMessages({
 });
 
 const getResetFileKey = () => Math.floor(Math.random() * 0x10000);
+
+type ComposePageSearch = {
+  approvalRequired?: boolean;
+  draftId?: string;
+  inReplyTo?: string;
+  quote?: string;
+  text?: string;
+  visibility?: 'public' | 'unlisted' | 'private' | 'direct';
+};
 
 interface ComposePoll {
   options: Array<string>;
@@ -298,6 +309,24 @@ const appendMedia = (compose: Compose, media: MediaAttachment) => {
   }
 };
 
+const openDedicatedComposeWindow = (search?: ComposePageSearch) =>
+  window.open(
+    router.buildLocation({ search: search ?? {}, to: '/statuses/new' }).href,
+    'targetWindow',
+    'height=500,width=700',
+  );
+
+const openComposeSurface = (search?: ComposePageSearch, modalProps?: { composeId?: string }) => {
+  const { useDedicatedComposePage } = useSettingsStore.getState().settings;
+
+  if (useDedicatedComposePage && !userTouching.matches && !modalProps?.composeId) {
+    openDedicatedComposeWindow(search);
+    return;
+  }
+
+  useModalsStore.getState().actions.openModal('COMPOSE', modalProps);
+};
+
 interface ComposeState {
   default: Compose;
   composers: Record<string, Compose>;
@@ -345,10 +374,12 @@ interface ComposeActions {
     >,
     rebloggedBy?: Pick<Account, 'acct' | 'id'>,
     approvalRequired?: boolean,
+    openComposer?: boolean,
   ) => void;
   quoteCompose: (
     status: Pick<Status, 'id' | 'account_id' | 'visibility' | 'group_id' | 'list_id'>,
     approvalRequired?: boolean,
+    openComposer?: boolean,
   ) => void;
   mentionCompose: (account: Pick<Account, 'acct'>) => void;
   directCompose: (account: Pick<Account, 'acct'>) => void;
@@ -472,7 +503,7 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
-        replyCompose: (status, rebloggedBy, approvalRequired) => {
+        replyCompose: (status, rebloggedBy, approvalRequired, openComposer = true) => {
           const { features } = getClient();
           const { forceImplicitAddressing, preserveSpoilers } =
             useSettingsStore.getState().settings;
@@ -516,10 +547,15 @@ const useComposeStore = create<ComposeStore>()(
             }
           });
 
-          useModalsStore.getState().actions.openModal('COMPOSE');
+          if (openComposer) {
+            openComposeSurface({
+              approvalRequired,
+              inReplyTo: status.id,
+            });
+          }
         },
 
-        quoteCompose: (status, approvalRequired) => {
+        quoteCompose: (status, approvalRequired, openComposer = true) => {
           set((draft) => {
             if (!draft.composers['compose-modal']) {
               draft.composers['compose-modal'] = {
@@ -552,11 +588,24 @@ const useComposeStore = create<ComposeStore>()(
             }
           });
 
-          useModalsStore.getState().actions.openModal('COMPOSE');
+          if (openComposer) {
+            openComposeSurface({
+              approvalRequired,
+              quote: status.id,
+            });
+          }
         },
 
         mentionCompose: (account) => {
           if (!isLoggedIn()) return;
+
+          if (
+            useSettingsStore.getState().settings.useDedicatedComposePage &&
+            !userTouching.matches
+          ) {
+            openDedicatedComposeWindow({ text: `@${account.acct} ` });
+            return;
+          }
 
           get().actions.updateCompose('compose-modal', (compose) => {
             compose.text = [compose.text.trim(), `@${account.acct} `]
@@ -564,10 +613,21 @@ const useComposeStore = create<ComposeStore>()(
               .join(' ');
             compose.caretPosition = null;
           });
-          useModalsStore.getState().actions.openModal('COMPOSE');
+          openComposeSurface();
         },
 
         directCompose: (account) => {
+          if (
+            useSettingsStore.getState().settings.useDedicatedComposePage &&
+            !userTouching.matches
+          ) {
+            openDedicatedComposeWindow({
+              text: `@${account.acct} `,
+              visibility: 'direct',
+            });
+            return;
+          }
+
           get().actions.updateCompose('compose-modal', (compose) => {
             compose.text = [compose.text.trim(), `@${account.acct} `]
               .filter((str) => str.length !== 0)
@@ -575,7 +635,7 @@ const useComposeStore = create<ComposeStore>()(
             compose.visibility = 'direct';
             compose.caretPosition = null;
           });
-          useModalsStore.getState().actions.openModal('COMPOSE');
+          openComposeSurface();
         },
 
         groupComposeModal: (group) => {
@@ -601,7 +661,7 @@ const useComposeStore = create<ComposeStore>()(
               text,
             };
           });
-          useModalsStore.getState().actions.openModal('COMPOSE');
+          openComposeSurface({ text });
         },
 
         eventDiscussionCompose: (composeId, status) => {
@@ -713,8 +773,15 @@ const useSubmitCompose = (composeId: string) => {
   const settings = useSettings();
 
   const submitCompose = useCallback(
-    async (opts: { force?: boolean; preview?: boolean; onSuccess?: () => void } = {}) => {
-      const { force = false, preview = false, onSuccess } = opts;
+    async (
+      opts: {
+        force?: boolean;
+        preview?: boolean;
+        onSuccess?: () => void;
+        propagate?: boolean;
+      } = {},
+    ) => {
+      const { force = false, preview = false, onSuccess, propagate = false } = opts;
 
       const compose = actions.getCompose(composeId);
 
@@ -766,7 +833,7 @@ const useSubmitCompose = (composeId: string) => {
             openModal('MISSING_DESCRIPTION', {
               onContinue: () => {
                 closeModal('MISSING_DESCRIPTION');
-                submitCompose({ force: true, onSuccess });
+                submitCompose({ force: true, onSuccess, propagate });
               },
             });
             return;
@@ -911,19 +978,29 @@ const useSubmitCompose = (composeId: string) => {
                     to: '/@{$username}/posts/$statusId',
                     params: { username: data.account.acct, statusId: data.id },
                   };
-            toast.success(
-              compose.redacting
-                ? messages.redactSuccess
-                : editedId
-                  ? messages.editSuccess
-                  : messages.success,
-              { actionLabel: messages.view, actionLinkOptions: linkOptions },
-            );
+            const toastMessage = compose.redacting
+              ? messages.redactSuccess
+              : editedId
+                ? messages.editSuccess
+                : messages.success;
+            const toastOptions = { actionLabel: messages.view, actionLinkOptions: linkOptions };
+
+            if (propagate) {
+              toast.propagate('success', toastMessage, toastOptions);
+            } else {
+              toast.success(toastMessage, toastOptions);
+            }
           } else {
-            toast.success(messages.scheduledSuccess, {
+            const toastOptions = {
               actionLabel: messages.view,
-              actionLinkOptions: { to: '/scheduled_statuses' },
-            });
+              actionLinkOptions: { to: '/scheduled_statuses' as const },
+            };
+
+            if (propagate) {
+              toast.propagate('success', messages.scheduledSuccess, toastOptions);
+            } else {
+              toast.success(messages.scheduledSuccess, toastOptions);
+            }
           }
 
           onSuccess?.();
@@ -1050,6 +1127,7 @@ export {
   type Compose,
   appendMedia,
   newPoll,
+  openDedicatedComposeWindow,
   statusToMentionsAccountIdsArray,
   useComposeStore,
   useCompose,

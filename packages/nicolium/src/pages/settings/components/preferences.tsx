@@ -646,6 +646,27 @@ const Preferences = () => {
         <ListItem
           label={
             <FormattedMessage
+              id='preferences.fields.use_dedicated_compose_page'
+              defaultMessage='Open compose in a separate window'
+            />
+          }
+          hint={
+            <FormattedMessage
+              id='preferences.fields.use_dedicated_compose_page_hint'
+              defaultMessage='Only applies to non-touch devices.'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['useDedicatedComposePage']}
+            onChange={onToggleChange}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
               id='preferences.notifications.advanced'
               defaultMessage='Show all notification categories'
             />

@@ -53,6 +53,7 @@ const settingsSchema = v.object({
   autoloadMore: v.fallback(v.boolean(), true),
   preserveSpoilers: v.fallback(v.boolean(), true),
   forceImplicitAddressing: v.fallback(v.boolean(), false),
+  useDedicatedComposePage: v.fallback(v.boolean(), false),
   autoTranslate: v.fallback(v.boolean(), false),
   knownLanguages: v.fallback(v.array(v.string()), []),
   showSideBySideTranslations: v.fallback(v.boolean(), false),

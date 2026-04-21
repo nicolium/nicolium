@@ -27,6 +27,7 @@ import EmptyLayout from '@/layouts/empty-layout';
 import EventLayout from '@/layouts/event-layout';
 import EventsLayout from '@/layouts/events-layout';
 import ExternalLoginLayout from '@/layouts/external-login-layout';
+import FullWidthLayout from '@/layouts/full-width-layout';
 import GroupLayout from '@/layouts/group-layout';
 import GroupsLayout from '@/layouts/groups-layout';
 import HomeLayout from '@/layouts/home-layout';
@@ -118,6 +119,11 @@ const layouts = {
     getParentRoute: () => rootRoute,
     id: 'external-login-layout',
     component: ExternalLoginLayout,
+  }),
+  fullWidth: createRoute({
+    getParentRoute: () => rootRoute,
+    id: 'full-width-layout',
+    component: FullWidthLayout,
   }),
   group: createRoute({
     getParentRoute: () => rootRoute,
@@ -764,9 +770,17 @@ export const groupMembershipRequestsRoute = createRoute({
 
 // Statuses
 export const newStatusRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.fullWidth,
   path: '/statuses/new',
   component: lazy(() => import('@/pages/compose/new-status')),
+  validateSearch: v.object({
+    approvalRequired: v.optional(v.boolean()),
+    draftId: v.optional(v.string()),
+    inReplyTo: v.optional(v.string()),
+    text: v.optional(v.string()),
+    quote: v.optional(v.string()),
+    visibility: v.optional(v.picklist(['public', 'unlisted', 'private', 'direct'])),
+  }),
 });
 
 export const scheduledStatusesRoute = createRoute({
@@ -1390,7 +1404,6 @@ const routeTree = rootRoute.addChildren([
     followedTagsRoute,
     rssFeedSubscriptionsRoute,
     interactionRequestsRoute,
-    newStatusRoute,
     scheduledStatusesRoute,
     draftStatusesRoute,
     driveRoute,
@@ -1434,6 +1447,7 @@ const routeTree = rootRoute.addChildren([
   layouts.event.addChildren([eventInformationRoute, eventDiscussionRoute]),
   layouts.events.addChildren([eventsRoute, newEventRoute, eventEditRoute]),
   layouts.externalLogin.addChildren([loginExternalRoute]),
+  layouts.fullWidth.addChildren([newStatusRoute]),
   layouts.group.addChildren([groupTimelineRoute, groupMembersRoute, groupGalleryRoute]),
   layouts.groups.addChildren([groupsRoute]),
   layouts.home.addChildren([

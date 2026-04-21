@@ -6,8 +6,10 @@ import { FormattedMessage } from 'react-intl';
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
 import { useGroupQuery } from '@/queries/groups/use-group';
-import { useComposeActions } from '@/stores/compose';
+import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
+import { userTouching } from '@/utils/is-mobile';
 
 import { layouts } from '../../router';
 
@@ -30,7 +32,14 @@ const ComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
 
 const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const { openModal } = useModalsActions();
+  const { useDedicatedComposePage } = useSettings();
+
   const onOpenCompose = () => {
+    if (useDedicatedComposePage && !userTouching.matches) {
+      openDedicatedComposeWindow();
+      return;
+    }
+
     openModal('COMPOSE', undefined, document.getElementById('sidebar-compose') || undefined);
   };
 
