@@ -954,6 +954,7 @@ const useItems = (
   withLabels: boolean,
   rebloggedBy?: Account,
 ) => {
+  const features = useFeatures();
   const { openModal } = useModalsActions();
   const me = useCurrentAccount();
 
@@ -1013,53 +1014,63 @@ const useItems = (
           );
           break;
         case 'dislike':
-          renderedItems.push(
-            <DislikeButton
-              key='dislike'
-              status={status}
-              withLabels={withLabels}
-              me={me}
-              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
-            />,
-          );
+          if (features.statusDislikes) {
+            renderedItems.push(
+              <DislikeButton
+                key='dislike'
+                status={status}
+                withLabels={withLabels}
+                me={me}
+                onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+              />,
+            );
+          }
           break;
         case 'wrench':
-          renderedItems.push(
-            <WrenchButton
-              key='wrench'
-              status={status}
-              withLabels={withLabels}
-              me={me}
-              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
-            />,
-          );
+          if (features.emojiReacts) {
+            renderedItems.push(
+              <WrenchButton
+                key='wrench'
+                status={status}
+                withLabels={withLabels}
+                me={me}
+                onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+              />,
+            );
+          }
           break;
         case 'reaction':
-          renderedItems.push(
-            <EmojiPickerButton key='emoji' status={status} withLabels={withLabels} me={me} />,
-          );
+          if (features.emojiReacts) {
+            renderedItems.push(
+              <EmojiPickerButton key='emoji' status={status} withLabels={withLabels} me={me} />,
+            );
+          }
           break;
         case 'bookmark':
-          renderedItems.push(
-            <BookmarkButton
-              key='bookmark'
-              status={status}
-              withLabels={withLabels}
-              me={me}
-              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
-            />,
-          );
+          if (features.bookmarks) {
+            renderedItems.push(
+              <BookmarkButton
+                key='bookmark'
+                status={status}
+                withLabels={withLabels}
+                me={me}
+                onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+              />,
+            );
+          }
           break;
         case 'quote':
-          renderedItems.push(
-            <QuoteButton
-              key='quote'
-              status={status}
-              withLabels={withLabels}
-              me={me}
-              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
-            />,
-          );
+          if (features.quotePosts) {
+            renderedItems.push(
+              <QuoteButton
+                key='quote'
+                status={status}
+                withLabels={withLabels}
+                me={me}
+                onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+              />,
+            );
+          }
           break;
         case 'share':
           renderedItems.push(
