@@ -64,7 +64,7 @@ const AsideContent: React.FC<IAsideContent> = ({
   return useMemo(() => {
     const items: React.ReactNode[] = [];
 
-    if (!account && (!standalone || layout !== 'external-login')) {
+    if (!ownAccount && (!standalone || layout !== 'external-login')) {
       items.push(<SignUpPanel key='sign-up' />);
     }
 
