@@ -1651,6 +1651,8 @@
   "preferences.fields.render_mfm_label": "Render Misskey Flavored Markdown",
   "preferences.fields.show_nested_quotes": "Display quotes nested in other quoted posts",
   "preferences.fields.show_nested_quotes.hint": "Up to three posts in the quote chain will be displayed.",
+  "preferences.fields.side_by_side_translations": "Show translations next to the original post",
+  "preferences.fields.side_by_side_translations_hint": "When translation is enabled, display the translation alongside the original text.",
   "preferences.fields.spoilers_display_label": "Automatically expand text behind spoilers",
   "preferences.fields.store_settings_in_notes": "Store settings in account notes (recommended)",
   "preferences.fields.store_settings_in_notes_hint": "It allows you to sync your settings across devices. They are only visible to you.",

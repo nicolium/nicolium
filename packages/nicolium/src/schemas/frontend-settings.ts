@@ -55,6 +55,7 @@ const settingsSchema = v.object({
   forceImplicitAddressing: v.fallback(v.boolean(), false),
   autoTranslate: v.fallback(v.boolean(), false),
   knownLanguages: v.fallback(v.array(v.string()), []),
+  showSideBySideTranslations: v.fallback(v.boolean(), false),
   urlPrivacy: coerceObject({
     clearLinksInCompose: v.optional(v.boolean(), true),
     clearLinksInContent: v.optional(v.boolean(), false),

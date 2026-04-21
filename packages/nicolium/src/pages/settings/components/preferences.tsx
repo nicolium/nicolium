@@ -1075,6 +1075,27 @@ const Preferences = () => {
           </ListItem>
 
           <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.side_by_side_translations'
+                defaultMessage='Show translations next to the original post'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='preferences.fields.side_by_side_translations_hint'
+                defaultMessage='When translation is enabled, display the translation alongside the original text.'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['showSideBySideTranslations']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
             className='!overflow-visible'
             label={
               <FormattedMessage

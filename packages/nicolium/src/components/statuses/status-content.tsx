@@ -106,17 +106,25 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     expandable = false,
     quoteDepth = 0,
   }) => {
-    const { urlPrivacy, displaySpoilers, renderMfm, displayMentionAvatars, showNestedQuotes } =
-      useSettings();
+    const {
+      urlPrivacy,
+      displaySpoilers,
+      renderMfm,
+      displayMentionAvatars,
+      showNestedQuotes,
+      showSideBySideTranslations,
+    } = useSettings();
     const { greentext } = useFrontendConfig();
     const { data: account } = useAccount(status.account_id);
 
     const [collapsed, setCollapsed] = useState<boolean | null>(null);
+    const [isTranslationEqual, setIsTranslationEqual] = useState(false);
     const [onlyEmoji, setOnlyEmoji] = useState(false);
     const [lineClamp, setLineClamp] = useState(true);
 
     const contentNode = useRef<HTMLDivElement>(null);
     const spoilerNode = useRef<HTMLSpanElement>(null);
+    const translationNode = useRef<HTMLDivElement>(null);
 
     const { collapseStatuses, expandStatuses, collapseStatusSpoilers, expandStatusSpoilers } =
       useStatusMetaActions();
@@ -179,14 +187,20 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
 
     const content = useMemo(
       (): string =>
-        localTranslation
+        !showSideBySideTranslations && localTranslation
           ? localTranslation.content
-          : translation
+          : !showSideBySideTranslations && translation
             ? translation.content
             : status.content_map && statusMeta.currentLanguage
               ? status.content_map[statusMeta.currentLanguage] || status.content
               : status.content,
-      [status.content, localTranslation, translation, statusMeta.currentLanguage],
+      [
+        showSideBySideTranslations,
+        status.content,
+        localTranslation,
+        translation,
+        statusMeta.currentLanguage,
+      ],
     );
 
     const { content: parsedContent, hashtags } = useMemo(() => {
@@ -230,6 +244,64 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     useLayoutEffect(() => {
       setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);
     }, [spoilerText]);
+
+    const activeTranslation =
+      localTranslation && typeof localTranslation === 'object'
+        ? localTranslation
+        : translation && typeof translation === 'object'
+          ? translation
+          : null;
+
+    const translationContent =
+      showSideBySideTranslations && translatable ? (activeTranslation?.content ?? null) : null;
+
+    const translationLanguage =
+      statusMeta.localTargetLanguage ?? statusMeta.targetLanguage ?? undefined;
+
+    const { content: parsedTranslationContent } = useMemo(() => {
+      if (!translationContent) return { content: null };
+
+      return parseContent(
+        {
+          html: translationContent,
+          mentions: status.mentions,
+          hasQuote: !!status.quote_id,
+          emojis: status.emojis,
+          cleanUrls: urlPrivacy.clearLinksInContent,
+          redirectUrls: urlPrivacy.redirectLinksMode !== 'off',
+          displayTargetHost: urlPrivacy.displayTargetHost,
+          greentext,
+          speakAsCat: account?.speak_as_cat,
+          displayMentionAvatars,
+        },
+        true,
+      );
+    }, [
+      account?.speak_as_cat,
+      displayMentionAvatars,
+      greentext,
+      status.emojis,
+      status.mentions,
+      status.quote_id,
+      translationContent,
+      urlPrivacy.clearLinksInContent,
+      urlPrivacy.displayTargetHost,
+      urlPrivacy.redirectLinksMode,
+    ]);
+
+    useLayoutEffect(() => {
+      if (!translationContent) {
+        setIsTranslationEqual(false);
+        return;
+      }
+
+      const normalizeText = (value?: string) => value?.trim().replace(/\s+/g, ' ') ?? '';
+
+      setIsTranslationEqual(
+        normalizeText(contentNode.current?.innerText) ===
+          normalizeText(translationNode.current?.innerText),
+      );
+    }, [parsedContent, parsedTranslationContent, translationContent]);
 
     const direction = getTextDirection(status.search_index);
     const className = useMemo(
@@ -323,7 +395,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       );
 
       if (status.content) {
-        output.push(
+        const originalContent = (
           <Markup
             ref={contentNode}
             tabIndex={0}
@@ -335,8 +407,31 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             tag='div'
           >
             {parsedContent}
-          </Markup>,
+          </Markup>
         );
+
+        if (translationContent && parsedTranslationContent && !isTranslationEqual) {
+          output.push(
+            <div className='grid gap-4 sm:grid-cols-2 md:gap-6' key='translated-content'>
+              <div className='min-w-0'>{originalContent}</div>
+              <div className='min-w-0 border-t border-gray-200 pt-4 dark:border-gray-800 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0'>
+                <Markup
+                  ref={translationNode}
+                  tabIndex={0}
+                  className={className}
+                  direction={direction}
+                  lang={translationLanguage}
+                  size={textSize}
+                  tag='div'
+                >
+                  {parsedTranslationContent}
+                </Markup>
+              </div>
+            </div>,
+          );
+        } else {
+          output.push(originalContent);
+        }
       }
 
       if (collapsed || preview) {

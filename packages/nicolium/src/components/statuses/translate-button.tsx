@@ -80,6 +80,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   const settings = useSettings();
   const autoTranslate = settings.autoTranslate;
   const knownLanguages = autoTranslate ? [...settings.knownLanguages, intl.locale] : [intl.locale];
+  const showSideBySideTranslations = settings.showSideBySideTranslations;
 
   const me = useCurrentAccount();
   const { data: translationLanguages = {} } = useTranslationLanguages();
@@ -148,7 +149,11 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
 
   const translationLabel = () => {
     if (translationQuery.data) {
-      return <FormattedMessage id='status.show_original' defaultMessage='Show original' />;
+      return showSideBySideTranslations ? (
+        <FormattedMessage id='status.hide_translation' defaultMessage='Hide translation' />
+      ) : (
+        <FormattedMessage id='status.show_original' defaultMessage='Show original' />
+      );
     }
 
     if (translationQuery.isLoading) {
