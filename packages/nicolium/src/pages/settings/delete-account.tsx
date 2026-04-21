@@ -58,7 +58,7 @@ const DeleteAccountPage = () => {
   }, [password, intl]);
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} variant='rounded' backHref='/settings'>
+    <Column label={intl.formatMessage(messages.heading)} backHref='/settings'>
       <div className='flex flex-col gap-4'>
         <Text theme='muted'>
           {features.deleteAccountWithoutPassword ? (
