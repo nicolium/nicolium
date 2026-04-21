@@ -68,6 +68,7 @@
 
     &__display-name {
       display: flex;
+      flex-wrap: wrap;
       gap: 0.25rem;
       align-items: center;
       @include mixins.text($size: lg, $weight: bold);
