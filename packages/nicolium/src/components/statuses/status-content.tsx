@@ -384,7 +384,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
         (withMedia && status.media_attachments.length > 0)) && (
         <div className='flex flex-col gap-4' key='media'>
           {((withMedia && status.media_attachments.length > 0) ||
-            (status.card && (!quote || !status.quote_visible))) && (
+            (status.card && (!quote || status.quote_visible === false))) && (
             <div className='relative has-[div[data-testid="sensitive-overlay"]]:min-h-24'>
               <SensitiveContentOverlay status={status} />
               {withMedia && <StatusMedia status={status} muted={compose} />}
