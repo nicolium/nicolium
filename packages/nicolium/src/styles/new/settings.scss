@@ -160,3 +160,24 @@
     }
   }
 }
+
+.⁂-interface-item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  width: 100%;
+  min-height: 2rem;
+
+  div {
+    p {
+      @include mixins.text;
+
+      line-height: var(--leading-sm);
+    }
+
+    small {
+      @include mixins.text($size: sm, $theme: muted);
+    }
+  }
+}

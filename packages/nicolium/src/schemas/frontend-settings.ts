@@ -4,12 +4,34 @@ import { locales } from '@/messages';
 
 import { coerceObject, filteredArray } from './utils';
 
+const AVAILABLE_STATUS_ACTION_BAR_ITEMS = [
+  'reply',
+  'reblog',
+  'quote',
+  'favourite',
+  'dislike',
+  'wrench',
+  'reaction',
+  'bookmark',
+  'share',
+] as const;
+
 const DEFAULT_STATUS_ACTION_BAR_ITEMS = [
   'reply',
   'reblog',
   'favourite',
   'dislike',
   'reaction',
+] as const;
+
+const AVAILABLE_SIDEBAR_ITEMS = [
+  'context',
+  'announcements',
+  'recommendations',
+  'promo',
+  'footer',
+  'compose',
+  'notifications',
 ] as const;
 
 const DEFAULT_SIDEBAR_ITEMS = [
@@ -248,35 +270,10 @@ const settingsSchema = v.object({
   //   [],
   // ),
   statusActionBarItems: v.fallback(
-    v.array(
-      v.picklist([
-        'reply',
-        'reblog',
-        'quote',
-        'favourite',
-        'dislike',
-        'wrench',
-        'reaction',
-        'bookmark',
-        'share',
-      ]),
-    ),
+    v.array(v.picklist(AVAILABLE_STATUS_ACTION_BAR_ITEMS)),
     DEFAULT_STATUS_ACTION_BAR_ITEMS,
   ),
-  sidebarItems: v.fallback(
-    v.array(
-      v.picklist([
-        'context',
-        'announcements',
-        'recommendations',
-        'promo',
-        'footer',
-        'compose',
-        'notifications',
-      ]),
-    ),
-    DEFAULT_SIDEBAR_ITEMS,
-  ),
+  sidebarItems: v.fallback(v.array(v.picklist(AVAILABLE_SIDEBAR_ITEMS)), DEFAULT_SIDEBAR_ITEMS),
 
   deck: deckSettingsSchema,
 });
@@ -284,4 +281,10 @@ const settingsSchema = v.object({
 type Settings = v.InferOutput<typeof settingsSchema>;
 type TimelineFilters = Settings['timelines']['home'];
 
-export { settingsSchema, type Settings, type TimelineFilters };
+export {
+  settingsSchema,
+  type Settings,
+  type TimelineFilters,
+  AVAILABLE_SIDEBAR_ITEMS,
+  AVAILABLE_STATUS_ACTION_BAR_ITEMS,
+};

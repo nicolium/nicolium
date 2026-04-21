@@ -1,0 +1,124 @@
+import iconDotsSixVertical from '@phosphor-icons/core/regular/dots-six-vertical.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import React from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+
+import { changeSetting } from '@/actions/settings';
+import List, { ListItem } from '@/components/list';
+import { CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import Icon from '@/components/ui/icon';
+import Streamfield, { type StreamfieldComponent } from '@/components/ui/streamfield';
+import { useFeatures } from '@/hooks/use-features';
+import { AVAILABLE_STATUS_ACTION_BAR_ITEMS } from '@/schemas/frontend-settings';
+import { useSettings } from '@/stores/settings';
+
+const messages = defineMessages({
+  heading: {
+    id: 'settings.status_action_bar_items.heading',
+    defaultMessage: 'Status action items',
+  },
+});
+
+const itemsMessages = {
+  reply: { id: 'settings.status_action_bar_items.item.reply', defaultMessage: 'Reply' },
+  reblog: { id: 'settings.status_action_bar_items.item.reblog', defaultMessage: 'Reblog' },
+  quote: { id: 'settings.status_action_bar_items.item.quote', defaultMessage: 'Quote' },
+  favourite: { id: 'settings.status_action_bar_items.item.favourite', defaultMessage: 'Favourite' },
+  dislike: { id: 'settings.status_action_bar_items.item.dislike', defaultMessage: 'Dislike' },
+  wrench: { id: 'settings.status_action_bar_items.item.wrench', defaultMessage: 'Wrench reaction' },
+  reaction: { id: 'settings.status_action_bar_items.item.reaction', defaultMessage: 'React' },
+  bookmark: { id: 'settings.status_action_bar_items.item.bookmark', defaultMessage: 'Bookmark' },
+  share: { id: 'settings.status_action_bar_items.item.share', defaultMessage: 'Share' },
+};
+
+const StatusActionBarItem: StreamfieldComponent<
+  (typeof AVAILABLE_STATUS_ACTION_BAR_ITEMS)[number]
+> = ({ value }) => {
+  const intl = useIntl();
+
+  return (
+    <div className='⁂-interface-item'>
+      <Icon src={iconDotsSixVertical} aria-hidden />
+      <div>
+        <p>{intl.formatMessage(itemsMessages[value])}</p>
+      </div>
+    </div>
+  );
+};
+
+const StatusActionBarItems: React.FC = () => {
+  const features = useFeatures();
+  const intl = useIntl();
+
+  const settings = useSettings();
+  console.log(settings.statusActionBarItems);
+
+  const availableItems = {
+    reply: true,
+    reblog: true,
+    quote: features.quotePosts,
+    favourite: true,
+    dislike: features.statusDislikes,
+    wrench: features.emojiReacts,
+    reaction: features.emojiReacts,
+    bookmark: features.bookmarks,
+    share: true,
+  };
+
+  const unusedItems = AVAILABLE_STATUS_ACTION_BAR_ITEMS.filter(
+    (item) => !settings.statusActionBarItems.includes(item) && availableItems[item],
+  );
+
+  return (
+    <Column title={intl.formatMessage(messages.heading)}>
+      <Form>
+        <Streamfield
+          component={StatusActionBarItem}
+          values={settings.statusActionBarItems.filter((item) => availableItems[item])}
+          onChange={(values) => changeSetting(['statusActionBarItems'], values)}
+          onRemoveItem={(index) => {
+            changeSetting(
+              ['statusActionBarItems'],
+              settings.statusActionBarItems.filter((_, i) => i !== index),
+            );
+          }}
+          draggable
+        />
+
+        {unusedItems.length > 0 && (
+          <>
+            <CardTitle
+              title={
+                <FormattedMessage
+                  id='settings.status_action_bar_items.available'
+                  defaultMessage='Available items'
+                />
+              }
+            />
+
+            <List>
+              {unusedItems.map((item) => (
+                <ListItem
+                  key={item}
+                  label={intl.formatMessage(itemsMessages[item])}
+                  onClick={() =>
+                    changeSetting(
+                      ['statusActionBarItems'],
+                      [...settings.statusActionBarItems, item],
+                    )
+                  }
+                  size='sm'
+                  actionIcon={iconPlus}
+                />
+              ))}
+            </List>
+          </>
+        )}
+      </Form>
+    </Column>
+  );
+};
+
+export { StatusActionBarItems as default };

@@ -296,6 +296,28 @@ const AppearancePreferences: React.FC = () => {
             />
           </ListItem>
         </List>
+
+        <List>
+          <ListItem
+            to='/settings/sidebar'
+            label={
+              <FormattedMessage
+                id='preferences.fields.sidebar_items'
+                defaultMessage='Customize sidebar items'
+              />
+            }
+          />
+
+          <ListItem
+            to='/settings/status_actions'
+            label={
+              <FormattedMessage
+                id='preferences.fields.status_actions_items'
+                defaultMessage='Custom status actions'
+              />
+            }
+          />
+        </List>
       </Form>
     </Column>
   );

@@ -7,7 +7,6 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import { Multiselect } from '@/components/ui/multiselect';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
-import Toggle from '@/components/ui/toggle';
 import { useFeatures } from '@/hooks/use-features';
 import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useInstance } from '@/stores/instance';
@@ -53,21 +52,6 @@ const ContentPreferences: React.FC = () => {
 
   const onToggleChange = (key: string[], checked: boolean) => {
     changeSetting(key, checked);
-  };
-
-  const onToggleWrenchButton: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
-    const showWrenchButton = target.checked;
-
-    let newItems = [...settings.statusActionBarItems];
-
-    if (showWrenchButton) {
-      const index = newItems.indexOf('reaction');
-      if (index !== -1) newItems.splice(index, 0, 'wrench');
-    } else {
-      newItems = newItems.filter((item) => item !== 'wrench');
-    }
-
-    changeSetting(['statusActionBarItems'], newItems);
   };
 
   const displayMediaOptions = React.useMemo(
@@ -223,24 +207,6 @@ const ContentPreferences: React.FC = () => {
             </ListItem>
           )}
         </List>
-
-        {features.emojiReacts && settings.statusActionBarItems.includes('reaction') && (
-          <List>
-            <ListItem
-              label={
-                <FormattedMessage
-                  id='preferences.fields.wrench_label'
-                  defaultMessage='Display wrench reaction button'
-                />
-              }
-            >
-              <Toggle
-                checked={settings.statusActionBarItems.includes('wrench')}
-                onChange={onToggleWrenchButton}
-              />
-            </ListItem>
-          </List>
-        )}
 
         {instance.pleroma.metadata.post_formats.includes('text/x.misskeymarkdown') && (
           <List>

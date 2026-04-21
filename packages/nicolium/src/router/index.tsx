@@ -983,6 +983,20 @@ export const settingsPrivacyRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
+export const settingsSidebarItemsRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/sidebar',
+  component: lazy(() => import('@/pages/settings/preferences/sidebar-items')),
+  beforeLoad: requireAuth,
+});
+
+export const settingsStatusActionBarItemsRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/status_actions',
+  component: lazy(() => import('@/pages/settings/preferences/status-action-bar-items')),
+  beforeLoad: requireAuth,
+});
+
 // Frontend config
 export const frontendConfigRoute = createRoute({
   getParentRoute: () => layouts.default,
@@ -1526,6 +1540,8 @@ const routeTree = rootRoute.addChildren([
     settingsTokensRoute,
     settingsInteractionPoliciesRoute,
     settingsPrivacyRoute,
+    settingsSidebarItemsRoute,
+    settingsStatusActionBarItemsRoute,
     blocksRoute,
     domainBlocksRoute,
     mutesRoute,

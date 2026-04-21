@@ -83,18 +83,20 @@ const Streamfield = <T,>({
 
   return (
     <div className='flex flex-col gap-2'>
-      <div className='flex flex-col'>
-        {label && (
-          <Text size='sm' weight='medium'>
-            {label}
-          </Text>
-        )}
-        {hint && (
-          <Text size='xs' theme='muted'>
-            {hint}
-          </Text>
-        )}
-      </div>
+      {label || hint ? (
+        <div className='flex flex-col'>
+          {label && (
+            <Text size='sm' weight='medium'>
+              {label}
+            </Text>
+          )}
+          {hint && (
+            <Text size='xs' theme='muted'>
+              {hint}
+            </Text>
+          )}
+        </div>
+      ) : null}
 
       {values.length > 0 && (
         <div className='flex flex-col gap-1'>

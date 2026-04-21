@@ -22,6 +22,7 @@ type IListItem = {
   isSelected?: boolean;
   children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
   size?: 'sm' | 'md';
+  actionIcon?: string;
 } & (LinkOptions | {});
 
 const ListItem: React.FC<IListItem> = ({
@@ -33,6 +34,7 @@ const ListItem: React.FC<IListItem> = ({
   onClick,
   isSelected,
   size = 'md',
+  actionIcon,
   ...rest
 }) => {
   const matchRoute = useMatchRoute();
@@ -110,7 +112,7 @@ const ListItem: React.FC<IListItem> = ({
         <div className='⁂-list-item__body'>
           {children}
 
-          <Icon src={iconCaretRight} aria-hidden />
+          <Icon src={actionIcon || iconCaretRight} aria-hidden />
         </div>
       ) : null}
 
