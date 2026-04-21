@@ -2,11 +2,12 @@ import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React from 'react';
 
-import AccountContainer from '@/components/accounts/account-container';
+import Account from '@/components/accounts/account';
 import Markup from '@/components/markup';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
+import { useAccount } from '@/queries/accounts/use-account';
 import { getTextDirection } from '@/utils/rtl';
 
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
@@ -41,6 +42,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
   const handleClick = () => {
     onCancel!();
   };
+  const { data: account } = useAccount(status?.account_id);
 
   if (!status) {
     return null;
@@ -63,14 +65,16 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
         className,
       )}
     >
-      <AccountContainer
-        {...actions}
-        id={status.account_id}
-        timestamp={status.created_at}
-        showAccountHoverCard={false}
-        withLinkToProfile={false}
-        hideActions={hideActions}
-      />
+      {account && (
+        <Account
+          {...actions}
+          account={account}
+          timestamp={status.created_at}
+          showAccountHoverCard={false}
+          withLinkToProfile={false}
+          hideActions={hideActions}
+        />
+      )}
 
       <Markup
         className='break-words'
@@ -83,6 +87,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
           mentions={status.mentions}
           hasQuote={!!status.quote_id}
           emojis={status.emojis}
+          speakAsCat={account?.speak_as_cat}
         />
       </Markup>
 
