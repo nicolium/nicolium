@@ -73,7 +73,7 @@ const EditPasswordPage = () => {
   }, [currentPassword, newPassword, newPasswordConfirmation, intl]);
 
   return (
-    <Column label={intl.formatMessage(messages.header)} backHref='/settings'>
+    <Column label={intl.formatMessage(messages.header)} backHref='/settings/security'>
       <Form onSubmit={handleSubmit}>
         <FormGroup
           labelText={
@@ -124,7 +124,7 @@ const EditPasswordPage = () => {
         </FormGroup>
 
         <FormActions>
-          <Button to='/settings' theme='tertiary'>
+          <Button to='/settings/security' theme='tertiary'>
             <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
           </Button>
 

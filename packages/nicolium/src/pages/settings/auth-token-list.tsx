@@ -4,7 +4,6 @@ import React from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import Badge from '@/components/badge';
-import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import Spinner from '@/components/ui/spinner';
@@ -175,17 +174,7 @@ const AuthTokenListPage: React.FC = () => {
     <Spinner />
   );
 
-  return (
-    <Column label={intl.formatMessage(messages.header)} transparent withHeader={false}>
-      <Card variant='rounded'>
-        <CardHeader backHref='/settings'>
-          <CardTitle title={intl.formatMessage(messages.header)} />
-        </CardHeader>
-
-        <CardBody>{body}</CardBody>
-      </Card>
-    </Column>
-  );
+  return <Column label={intl.formatMessage(messages.header)}>{body}</Column>;
 };
 
 export { AuthTokenListPage as default };

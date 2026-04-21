@@ -74,7 +74,7 @@ const OtpConfirmForm: React.FC = () => {
     confirmMfa(state, {
       onSuccess: () => {
         toast.success(messages.mfaConfirmSuccess);
-        navigate({ to: '/settings' });
+        navigate({ to: '/settings/security' });
       },
       onError: () => {
         toast.error(intl.formatMessage(messages.confirmFail));
@@ -157,7 +157,7 @@ const OtpConfirmForm: React.FC = () => {
             type='button'
             theme='tertiary'
             text={intl.formatMessage(messages.mfaCancelButton)}
-            onClick={() => navigate({ to: '/settings' })}
+            onClick={() => navigate({ to: '/settings/security' })}
             disabled={isPending}
           />
 

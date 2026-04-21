@@ -29,7 +29,7 @@ const DisableOtpForm: React.FC = () => {
     disableMfa(password, {
       onSuccess: () => {
         toast.success(messages.mfaDisableSuccess);
-        navigate({ to: '/settings' });
+        navigate({ to: '/settings/security' });
       },
       onError: () => {
         toast.error(intl.formatMessage(messages.disableFail));

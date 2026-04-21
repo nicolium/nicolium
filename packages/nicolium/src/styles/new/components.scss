@@ -307,6 +307,22 @@
     padding: 0.125rem 0.5rem;
   }
 
+  &--active {
+    background-image: linear-gradient(
+      to right,
+      rgb(var(--color-gradient-start) / 0.25),
+      rgb(var(--color-gradient-end) / 0.25)
+    );
+
+    .dark & {
+      background-image: linear-gradient(
+        to right,
+        rgb(var(--color-gradient-start) / 0.20),
+        rgb(var(--color-gradient-end) / 0.20)
+      );
+    }
+  }
+
   &:first-child {
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;

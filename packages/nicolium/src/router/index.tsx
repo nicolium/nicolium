@@ -35,6 +35,7 @@ import ManageGroupsLayout from '@/layouts/manage-groups-layout';
 import ProfileLayout from '@/layouts/profile-layout';
 import RemoteInstanceLayout from '@/layouts/remote-instance-layout';
 import SearchLayout from '@/layouts/search-layout';
+import SettingsLayout from '@/layouts/settings-layout';
 import StatusLayout from '@/layouts/status-layout';
 import { useInstance } from '@/stores/instance';
 import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
@@ -165,6 +166,11 @@ const layouts = {
     getParentRoute: () => rootRoute,
     id: 'search-layout',
     component: SearchLayout,
+  }),
+  settings: createRoute({
+    getParentRoute: () => rootRoute,
+    id: 'settings-layout',
+    component: SettingsLayout,
   }),
   status: createRoute({
     getParentRoute: () => rootRoute,
@@ -825,22 +831,64 @@ export const settingsRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
+export const settingsGeneralRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/general',
+  component: lazy(() => import('@/pages/settings/preferences/general')),
+  beforeLoad: requireAuth,
+});
+
+export const settingsAppearanceRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/appearance',
+  component: lazy(() => import('@/pages/settings/preferences/appearance')),
+  beforeLoad: requireAuth,
+});
+
+export const settingsContentRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/content',
+  component: lazy(() => import('@/pages/settings/preferences/content')),
+  beforeLoad: requireAuth,
+});
+
+export const settingsComposeRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/compose',
+  component: lazy(() => import('@/pages/settings/preferences/compose')),
+  beforeLoad: requireAuth,
+});
+
+export const settingsTimelinesRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/timelines',
+  component: lazy(() => import('@/pages/settings/preferences/timelines')),
+  beforeLoad: requireAuth,
+});
+
+export const settingsSecurityRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/security',
+  component: lazy(() => import('@/pages/settings/preferences/security')),
+  beforeLoad: requireAuth,
+});
+
 export const settingsProfileRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/profile',
   component: lazy(() => import('@/pages/settings/edit-profile')),
   beforeLoad: requireAuth,
 });
 
 export const settingsExportRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/export',
   component: lazy(() => import('@/pages/settings/export-data')),
   beforeLoad: requireAuth,
 });
 
 export const settingsImportRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/import',
   component: lazy(() => import('@/pages/settings/import-data')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -850,7 +898,7 @@ export const settingsImportRoute = createRoute({
 });
 
 export const settingsAliasesRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/aliases',
   component: lazy(() => import('@/pages/settings/aliases')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -859,7 +907,7 @@ export const settingsAliasesRoute = createRoute({
 });
 
 export const settingsMigrationRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/migration',
   component: lazy(() => import('@/pages/settings/migration')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -868,7 +916,7 @@ export const settingsMigrationRoute = createRoute({
 });
 
 export const settingsBackupsRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/backups',
   component: lazy(() => import('@/pages/settings/backups')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -877,14 +925,14 @@ export const settingsBackupsRoute = createRoute({
 });
 
 export const settingsEmailRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/email',
   component: lazy(() => import('@/pages/settings/edit-email')),
   beforeLoad: requireAuth,
 });
 
 export const settingsPasswordRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/password',
   component: lazy(() => import('@/pages/settings/edit-password')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -893,7 +941,7 @@ export const settingsPasswordRoute = createRoute({
 });
 
 export const settingsAccountRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/account',
   component: lazy(() => import('@/pages/settings/delete-account')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -902,7 +950,7 @@ export const settingsAccountRoute = createRoute({
 });
 
 export const settingsMfaRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/mfa',
   component: lazy(() => import('@/pages/settings/mfa-form')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -911,7 +959,7 @@ export const settingsMfaRoute = createRoute({
 });
 
 export const settingsTokensRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/tokens',
   component: lazy(() => import('@/pages/settings/auth-token-list')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -920,7 +968,7 @@ export const settingsTokensRoute = createRoute({
 });
 
 export const settingsInteractionPoliciesRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/interaction_policies',
   component: lazy(() => import('@/pages/settings/interaction-policies')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
@@ -929,7 +977,7 @@ export const settingsInteractionPoliciesRoute = createRoute({
 });
 
 export const settingsPrivacyRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.settings,
   path: '/settings/privacy',
   component: lazy(() => import('@/pages/settings/privacy')),
   beforeLoad: requireAuth,
@@ -1409,19 +1457,6 @@ const routeTree = rootRoute.addChildren([
     driveRoute,
     circleRoute,
     settingsRoute,
-    settingsProfileRoute,
-    settingsExportRoute,
-    settingsImportRoute,
-    settingsAliasesRoute,
-    settingsMigrationRoute,
-    settingsBackupsRoute,
-    settingsEmailRoute,
-    settingsPasswordRoute,
-    settingsAccountRoute,
-    settingsMfaRoute,
-    settingsTokensRoute,
-    settingsInteractionPoliciesRoute,
-    settingsPrivacyRoute,
     frontendConfigRoute,
     aboutRoute,
     shareRoute,
@@ -1476,6 +1511,27 @@ const routeTree = rootRoute.addChildren([
   ]),
   layouts.remoteInstance.addChildren([remoteTimelineRoute]),
   layouts.search.addChildren([searchRoute]),
+  layouts.settings.addChildren([
+    settingsGeneralRoute,
+    settingsAppearanceRoute,
+    settingsContentRoute,
+    settingsComposeRoute,
+    settingsTimelinesRoute,
+    settingsSecurityRoute,
+    settingsProfileRoute,
+    settingsExportRoute,
+    settingsImportRoute,
+    settingsAliasesRoute,
+    settingsMigrationRoute,
+    settingsBackupsRoute,
+    settingsEmailRoute,
+    settingsPasswordRoute,
+    settingsAccountRoute,
+    settingsMfaRoute,
+    settingsTokensRoute,
+    settingsInteractionPoliciesRoute,
+    settingsPrivacyRoute,
+  ]),
   layouts.status.addChildren([statusRoute, statusQuotesRoute]),
   ...redirectRoutes,
 ]);

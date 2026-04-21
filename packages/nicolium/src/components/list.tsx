@@ -1,5 +1,5 @@
 import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
-import { Link, type LinkOptions } from '@tanstack/react-router';
+import { Link, useMatchRoute, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
@@ -35,6 +35,9 @@ const ListItem: React.FC<IListItem> = ({
   size = 'md',
   ...rest
 }) => {
+  const matchRoute = useMatchRoute();
+  const isActive = 'to' in rest ? matchRoute({ to: rest.to }) !== false : false;
+
   const [domId] = useState(`list-group-${crypto.randomUUID()}`);
   const labelId = `${domId}-label`;
   const hintId = `${domId}-hint`;
@@ -86,6 +89,7 @@ const ListItem: React.FC<IListItem> = ({
   const classNames = clsx('⁂-list-item', className, {
     '⁂-list-item--md': size === 'md',
     '⁂-list-item--sm': size === 'sm',
+    '⁂-list-item--active': isActive,
   });
 
   const body = (

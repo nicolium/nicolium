@@ -2,7 +2,7 @@ import * as v from 'valibot';
 
 import { locales } from '@/messages';
 
-import { coerceObject } from './utils';
+import { coerceObject, filteredArray } from './utils';
 
 const DEFAULT_STATUS_ACTION_BAR_ITEMS = [
   'reply',
@@ -19,6 +19,88 @@ const DEFAULT_SIDEBAR_ITEMS = [
   'promo',
   'footer',
 ] as const;
+
+const timelineSchema = v.fallback(
+  v.pipe(
+    v.string(),
+    v.transform((timeline) => {
+      if (['home', 'local', 'bubble', 'federated', 'wrenched'].includes(timeline)) {
+        return timeline;
+      }
+      if (
+        ['list', 'circle', 'antenna', 'instance'].some((prefix) =>
+          timeline.startsWith(prefix + ':'),
+        )
+      ) {
+        return timeline;
+      }
+      return 'home';
+    }),
+  ),
+  'home',
+);
+
+const baseDeckColumnSchema = v.object({
+  columnWidth: v.fallback(v.picklist(['xs', 'sm', 'md', 'lg', 'xl']), 'md'),
+});
+
+const timelineDeckColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('timeline'),
+  timeline: timelineSchema,
+});
+
+const notificationsColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('notifications'),
+  filters: v.fallback(v.array(v.string()), []),
+});
+
+const accountColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('account'),
+  accountId: v.fallback(v.optional(v.string()), undefined),
+});
+
+const searchColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('search'),
+  query: v.fallback(v.string(), ''),
+  searchType: v.fallback(v.picklist(['accounts', 'statuses', 'hashtags']), 'accounts'),
+  accountId: v.fallback(v.optional(v.string()), undefined),
+});
+
+const deckColumnSchema = v.variant('type', [
+  timelineDeckColumnSchema,
+  notificationsColumnSchema,
+  accountColumnSchema,
+  searchColumnSchema,
+]);
+
+const deckSettingsSchema = v.fallback(
+  v.object({
+    columns: filteredArray(deckColumnSchema),
+  }),
+  {
+    columns: [
+      {
+        type: 'timeline',
+        columnWidth: 'md',
+        timeline: 'home',
+      },
+      {
+        type: 'notifications',
+        columnWidth: 'md',
+        filters: [],
+      },
+      {
+        type: 'account',
+        columnWidth: 'md',
+        accountId: 'self',
+      },
+    ],
+  },
+);
 
 const skinToneSchema = v.picklist([1, 2, 3, 4, 5, 6]);
 
@@ -77,25 +159,7 @@ const settingsSchema = v.object({
   accountNicknames: v.fallback(v.record(v.string(), v.string()), {}),
   useSystemMediaControls: v.fallback(v.boolean(), false),
   displayMentionAvatars: v.fallback(v.boolean(), false),
-  defaultTimeline: v.fallback(
-    v.pipe(
-      v.string(),
-      v.transform((timeline) => {
-        if (['home', 'local', 'bubble', 'federated', 'wrenched'].includes(timeline)) {
-          return timeline;
-        }
-        if (
-          ['list', 'circle', 'antenna', 'instance'].some((prefix) =>
-            timeline.startsWith(prefix + ':'),
-          )
-        ) {
-          return timeline;
-        }
-        return 'home';
-      }),
-    ),
-    'home',
-  ),
+  defaultTimeline: timelineSchema,
   showChatWidget: v.fallback(v.boolean(), true),
   showNestedQuotes: v.fallback(v.boolean(), false),
 
@@ -213,6 +277,8 @@ const settingsSchema = v.object({
     ),
     DEFAULT_SIDEBAR_ITEMS,
   ),
+
+  deck: deckSettingsSchema,
 });
 
 type Settings = v.InferOutput<typeof settingsSchema>;
