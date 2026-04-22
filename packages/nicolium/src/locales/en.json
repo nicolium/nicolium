@@ -1652,7 +1652,7 @@
   "preferences.fields.side_by_side_translations_hint": "When translation is enabled, display the translation alongside the original text.",
   "preferences.fields.sidebar_items": "Customize sidebar items",
   "preferences.fields.spoilers_display_label": "Automatically expand text behind spoilers",
-  "preferences.fields.status_actions_items": "Custom status actions",
+  "preferences.fields.status_actions_items": "Customize status actions",
   "preferences.fields.store_settings_in_notes": "Store settings in account notes (recommended)",
   "preferences.fields.store_settings_in_notes_hint": "It allows you to sync your settings across devices. They are only visible to you.",
   "preferences.fields.system_emoji_font_label": "Use system emoji font",

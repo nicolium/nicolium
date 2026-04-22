@@ -313,7 +313,7 @@ const AppearancePreferences: React.FC = () => {
             label={
               <FormattedMessage
                 id='preferences.fields.status_actions_items'
-                defaultMessage='Custom status actions'
+                defaultMessage='Customize status actions'
               />
             }
           />
