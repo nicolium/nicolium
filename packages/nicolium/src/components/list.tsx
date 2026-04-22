@@ -16,6 +16,7 @@ const List: React.FC<IList> = ({ children }) => <div className='⁂-list'>{child
 type IListItem = {
   className?: string;
   label: React.ReactNode;
+  labelClassName?: string;
   hint?: React.ReactNode;
   href?: string;
   onClick?(): void;
@@ -28,6 +29,7 @@ type IListItem = {
 const ListItem: React.FC<IListItem> = ({
   className,
   label,
+  labelClassName,
   hint,
   children,
   href,
@@ -96,7 +98,7 @@ const ListItem: React.FC<IListItem> = ({
 
   const body = (
     <>
-      <div className='⁂-list-item__label'>
+      <div className={clsx('⁂-list-item__label', labelClassName)}>
         <LabelComp id={labelId} {...(LabelComp === 'label' ? { htmlFor: domId } : {})}>
           {label}
         </LabelComp>
