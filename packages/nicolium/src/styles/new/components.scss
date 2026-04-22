@@ -420,6 +420,10 @@ a.⁂-list-item,
   }
 }
 
+.⁂-list-item:has(.⁂-edit-profile-link__display-name) {
+  min-width: unset;
+}
+
 .⁂-select {
   overflow: hidden;
 
