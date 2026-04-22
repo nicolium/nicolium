@@ -421,7 +421,9 @@ a.⁂-list-item,
 }
 
 .⁂-list-item:has(.⁂-edit-profile-link__display-name) {
-  min-width: unset;
+  .⁂-list-item__body {
+    min-width: unset;
+  }
 }
 
 .⁂-select {
