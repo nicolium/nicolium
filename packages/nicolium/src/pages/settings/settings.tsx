@@ -34,11 +34,10 @@ const SettingsPage = () => {
           <List>
             <ListItem
               label={<FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />}
+              labelClassName='min-w-fit'
               to='/settings/profile'
             >
-              <span className='⁂-edit-profile-link__display-name max-w-full truncate'>
-                {displayName}
-              </span>
+              <span className='⁂-edit-profile-link__display-name truncate'>{displayName}</span>
             </ListItem>
           </List>
         </CardBody>
