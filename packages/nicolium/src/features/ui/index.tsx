@@ -22,7 +22,7 @@ import { usePrefetchNotificationsMarker } from '@/queries/markers/use-markers';
 import { usePrefetchNotifications } from '@/queries/notifications/use-notifications';
 import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
-import { newStatusRoute } from '@/router';
+import { deckRoute, newStatusRoute } from '@/router';
 import { useAuthStore } from '@/stores/auth';
 import { useInstance, useInstanceStore } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
@@ -60,6 +60,7 @@ const UI: React.FC = React.memo(() => {
   const instanceFetched = useInstanceStore((state) => state.fetched);
   const { showChatWidget } = useSettings();
   const isNewStatusPage = !!useMatch({ from: newStatusRoute.id, shouldThrow: false });
+  const fullWidth = !!useMatch({ from: deckRoute.id, shouldThrow: false });
 
   useAdminConfig();
   useShoutboxSubscription();
@@ -149,8 +150,6 @@ const UI: React.FC = React.memo(() => {
   const style: React.CSSProperties = {
     pointerEvents: isDropdownMenuOpen ? 'none' : undefined,
   };
-
-  const fullWidth = false; // !!matchPath(history.location.pathname, '/deck');
 
   return (
     <GlobalHotkeys node={node}>
