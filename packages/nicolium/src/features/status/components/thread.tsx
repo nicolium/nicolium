@@ -94,8 +94,8 @@ const Thread = ({
     } else {
       openModal('BOOST', {
         statusId: status.id,
-        onReblog: () => {
-          reblogStatus(undefined);
+        onReblog: (visibility) => {
+          reblogStatus(visibility);
         },
       });
     }

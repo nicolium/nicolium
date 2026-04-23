@@ -310,9 +310,9 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const handleHotkeyBoost = (e?: KeyboardEvent) => {
     if (status.rss_feed) return;
 
-    const modalReblog = () => {
+    const modalReblog = (visibility?: string) => {
       if (status.reblogged) unreblogStatus();
-      else reblogStatus(undefined);
+      else reblogStatus(visibility);
     };
     if ((e && e.shiftKey) || !boostModal) {
       modalReblog();

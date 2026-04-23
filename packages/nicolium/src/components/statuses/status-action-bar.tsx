@@ -525,11 +525,11 @@ const ReblogButton: React.FC<IReblogButton> = ({
         return attachment.description.trim().endsWith(`.${extension}`);
       });
 
-      const doReblog = () => {
+      const doReblog = (visibility?: string) => {
         if (status.reblogged) {
           unreblogStatus();
         } else {
-          reblogStatus(undefined, {
+          reblogStatus(visibility, {
             onSuccess: () => {
               if (canReblog.approvalRequired) toast.info(messages.reblogApprovalRequired);
             },
