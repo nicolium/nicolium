@@ -13,6 +13,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { router } from '@/router';
 import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';
@@ -1001,6 +1002,8 @@ const useSubmitCompose = (composeId: string) => {
             } else {
               toast.success(messages.scheduledSuccess, toastOptions);
             }
+
+            queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
           }
 
           onSuccess?.();
