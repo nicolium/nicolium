@@ -2,6 +2,6 @@
   "name": "Nicolium",
   "description": "Mastodon-compatible social media front-end.",
   "keywords": ["fediverse"],
-  "website": "https://codeberg.org/mkljczk/nicolium",
+  "website": "https://codeberg.org/nicolium/nicolium",
   "stack": "container"
 }

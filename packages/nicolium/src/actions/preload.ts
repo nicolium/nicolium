@@ -4,13 +4,9 @@ import * as v from 'valibot';
 
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
-
-import { verifyCredentials } from './auth';
-
-import type { AppDispatch } from '@/store';
-
-const PLEROMA_PRELOAD_IMPORT = 'PLEROMA_PRELOAD_IMPORT' as const;
-const MASTODON_PRELOAD_IMPORT = 'MASTODON_PRELOAD_IMPORT' as const;
+import { loadMastodonPreload, verifyCredentials } from '@/stores/auth';
+import { useFrontendConfigStore } from '@/stores/frontend-config';
+import { useInstanceStore } from '@/stores/instance';
 
 // https://git.pleroma.social/pleroma/pleroma-fe/-/merge_requests/1176/diffs
 const decodeUTF8Base64 = (data: string) => {
@@ -32,32 +28,25 @@ const decodeFromMarkup = (elementId: string, decoder: (json: string) => Record<s
   return decoder(textContent as string);
 };
 
-const preloadFromMarkup =
-  (
-    elementId: string,
-    decoder: (json: string) => Record<string, any>,
-    action: (data: Record<string, any>) => any,
-  ) =>
-  (dispatch: AppDispatch) => {
-    try {
-      const data = decodeFromMarkup(elementId, decoder);
-      dispatch(action(data));
-    } catch {
-      // Do nothing
-    }
-  };
-
-const preload = () => (dispatch: AppDispatch) => {
-  dispatch(preloadFromMarkup('initial-results', pleromaDecoder, preloadPleroma));
-  dispatch(preloadFromMarkup('initial-state', JSON.parse, preloadMastodon));
+const preloadFromMarkup = (
+  elementId: string,
+  decoder: (json: string) => Record<string, any>,
+  action: (data: Record<string, any>) => void,
+) => {
+  try {
+    const data = decodeFromMarkup(elementId, decoder);
+    action(data);
+  } catch {
+    // Do nothing
+  }
 };
 
-const preloadPleroma = (data: Record<string, any>): PreloadAction => ({
-  type: PLEROMA_PRELOAD_IMPORT,
-  data,
-});
+const preloadPleroma = (data: Record<string, any>) => {
+  useInstanceStore.getState().actions.importPreload(data);
+  useFrontendConfigStore.getState().actions.importPreload(data);
+};
 
-const preloadMastodon = (data: Record<string, any>) => (dispatch: AppDispatch) => {
+const preloadMastodon = (data: Record<string, any>) => {
   const { me, access_token } = data.meta;
   const { url } = data.accounts[me];
 
@@ -69,20 +58,20 @@ const preloadMastodon = (data: Record<string, any>) => (dispatch: AppDispatch) =
       //
     }
   }
-  dispatch(verifyCredentials(access_token, url));
-  dispatch({ type: MASTODON_PRELOAD_IMPORT, data });
+
+  loadMastodonPreload(data);
+  verifyCredentials(access_token, url);
 };
 
-interface PreloadAction {
-  type: typeof PLEROMA_PRELOAD_IMPORT | typeof MASTODON_PRELOAD_IMPORT;
-  data: Record<string, any>;
-}
+const preload = () => {
+  preloadFromMarkup('initial-results', pleromaDecoder, preloadPleroma);
 
-export {
-  PLEROMA_PRELOAD_IMPORT,
-  MASTODON_PRELOAD_IMPORT,
-  pleromaDecoder,
-  decodeFromMarkup,
-  preload,
-  type PreloadAction,
+  try {
+    const data = decodeFromMarkup('initial-state', JSON.parse);
+    preloadMastodon(data);
+  } catch {
+    // Do nothing
+  }
 };
+
+export { preload };

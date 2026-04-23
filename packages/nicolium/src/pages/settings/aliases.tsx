@@ -1,3 +1,6 @@
+import iconBackspace from '@phosphor-icons/core/regular/backspace.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -8,10 +11,9 @@ import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useSearchAccounts } from '@/queries/search/use-search';
@@ -20,7 +22,6 @@ import {
   useAddAccountAlias,
   useDeleteAccountAlias,
 } from '@/queries/settings/use-account-aliases';
-
 const messages = defineMessages({
   heading: { id: 'column.aliases', defaultMessage: 'Account aliases' },
   delete: { id: 'column.aliases.delete', defaultMessage: 'Delete' },
@@ -38,7 +39,7 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   const intl = useIntl();
   const features = useFeatures();
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useAccount(accountId);
 
   const { mutate: addAccountAlias } = useAddAccountAlias();
@@ -58,7 +59,7 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   if (!added && accountId !== me) {
     button = (
       <IconButton
-        src={require('@phosphor-icons/core/regular/plus.svg')}
+        src={iconPlus}
         className='text-gray-400 hover:text-gray-600'
         iconClassName='h-5 w-5'
         title={intl.formatMessage(messages.add)}
@@ -68,12 +69,12 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   }
 
   return (
-    <HStack space={1} alignItems='center' justifyContent='between' className='p-2.5'>
+    <div className='flex items-center justify-between gap-1 p-2.5'>
       <div className='w-full'>
         <AccountComponent account={account} withRelationship={false} />
       </div>
       {button}
-    </HStack>
+    </div>
   );
 };
 
@@ -126,7 +127,7 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
           title={intl.formatMessage(messages.clear)}
         >
           <Icon
-            src={require('@phosphor-icons/core/regular/backspace.svg')}
+            src={iconBackspace}
             className={clsx('size-5 text-gray-600', { hidden: !hasValue })}
             aria-hidden
           />
@@ -198,8 +199,8 @@ const AliasesPage = () => {
       </CardHeader>
       <div className='flex-1'>
         <ScrollableList scrollKey='aliases' emptyMessageText={emptyMessage}>
-          {aliases.map((alias, i) => (
-            <HStack alignItems='center' justifyContent='between' space={1} key={i} className='p-2'>
+          {aliases.map((alias) => (
+            <div key={alias} className='flex items-center justify-between gap-1 p-2'>
               <div>
                 <Text tag='span' theme='muted'>
                   <FormattedMessage id='aliases.account_label' defaultMessage='Old account:' />
@@ -212,14 +213,14 @@ const AliasesPage = () => {
                 aria-label={intl.formatMessage(messages.delete)}
               >
                 <Text theme='muted' className='flex items-center gap-1'>
-                  <Icon src={require('@phosphor-icons/core/regular/x.svg')} />
+                  <Icon src={iconX} />
                   <FormattedMessage
                     id='aliases.aliases_list_delete'
                     defaultMessage='Unlink alias'
                   />
                 </Text>
               </button>
-            </HStack>
+            </div>
           ))}
         </ScrollableList>
       </div>

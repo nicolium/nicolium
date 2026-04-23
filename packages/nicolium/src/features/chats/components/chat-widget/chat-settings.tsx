@@ -1,11 +1,10 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useFeatures } from '@/hooks/use-features';
@@ -102,10 +101,10 @@ const ChatSettings = () => {
         isToggleable={false}
         onToggle={minimizeChatPane}
         title={
-          <HStack alignItems='center' space={2}>
+          <div className='flex items-center gap-2'>
             <button onClick={closeSettings} title={intl.formatMessage(messages.back)}>
               <Icon
-                src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+                src={iconArrowLeft}
                 className='size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180'
               />
             </button>
@@ -113,11 +112,11 @@ const ChatSettings = () => {
             <Text weight='semibold'>
               <FormattedMessage id='chat_settings.title' defaultMessage='Chat details' />
             </Text>
-          </HStack>
+          </div>
         }
       />
 
-      <Stack space={4} className='px-4'>
+      <div className='flex flex-col gap-4 px-4'>
         <Account account={chat.account} hideActions />
 
         <List>
@@ -153,7 +152,7 @@ const ChatSettings = () => {
             />
           )}
         </List>
-      </Stack>
+      </div>
     </>
   );
 };

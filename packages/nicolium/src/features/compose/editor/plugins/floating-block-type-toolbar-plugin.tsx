@@ -7,6 +7,8 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $createHorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
 import { $wrapNodeInElement, mergeRegister } from '@lexical/utils';
+import iconImage from '@phosphor-icons/core/regular/image.svg';
+import iconMinus from '@phosphor-icons/core/regular/minus.svg';
 import {
   $createParagraphNode,
   $getSelection,
@@ -23,9 +25,9 @@ import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadFile } from '@/actions/media';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import { $createImageNode } from '../nodes/image-node';
 import { setFloatingElemPosition } from '../utils/set-floating-elem-position';
@@ -46,8 +48,8 @@ interface IUploadButton {
 
 const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
   const intl = useIntl();
+  const client = useClient();
   const { configuration } = useInstance();
-  const dispatch = useAppDispatch();
   const [disabled, setDisabled] = useState(false);
 
   const fileElement = useRef<HTMLInputElement>(null);
@@ -57,18 +59,17 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
     if (e.target.files?.length) {
       setDisabled(true);
 
-      dispatch(
-        uploadFile(
-          e.target.files.item(0) as File,
-          intl,
-          ({ url }) => {
-            onSelectFile(url);
-            setDisabled(false);
-          },
-          () => {
-            setDisabled(false);
-          },
-        ),
+      uploadFile(
+        client,
+        e.target.files.item(0) as File,
+        intl,
+        ({ url }) => {
+          onSelectFile(url);
+          setDisabled(false);
+        },
+        () => {
+          setDisabled(false);
+        },
       );
     }
   };
@@ -77,7 +78,7 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
     fileElement.current?.click();
   };
 
-  const src = require('@phosphor-icons/core/regular/image.svg');
+  const src = iconImage;
 
   return (
     <label>
@@ -219,7 +220,7 @@ const BlockTypeFloatingToolbar = ({
           <ToolbarButton
             onClick={createHorizontalLine}
             aria-label={intl.formatMessage(messages.createHorizontalLine)}
-            icon={require('@phosphor-icons/core/regular/minus.svg')}
+            icon={iconMinus}
           />
         </>
       )}

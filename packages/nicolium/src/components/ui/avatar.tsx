@@ -1,8 +1,10 @@
+import iconImageSquare from '@phosphor-icons/core/regular/image-square.svg';
 import clsx from 'clsx';
 import { FastAverageColor } from 'fast-average-color';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import missingAvatar from '@/assets/images/avatar-missing.png';
 import StillImage, { type IStillImage } from '@/components/still-image';
 import { useSettings } from '@/stores/settings';
 
@@ -10,7 +12,6 @@ import AltIndicator from '../media/alt-indicator';
 
 import Icon from './icon';
 import Popover from './popover';
-import Stack from './stack';
 import Text from './text';
 
 const COLOR_CACHE = new Map<string, string>();
@@ -93,7 +94,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
         interaction='hover'
         referenceElementClassName='cursor-pointer'
         content={
-          <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
+          <div className='flex max-h-[32rem] max-w-96 flex-col gap-1 overflow-auto p-4'>
             <Text weight='semibold'>
               <FormattedMessage
                 id='account.avatar.description'
@@ -101,7 +102,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
               />
             </Text>
             <Text className='whitespace-pre-wrap'>{alt}</Text>
-          </Stack>
+          </div>
         }
         isFlush
       >
@@ -117,16 +118,13 @@ const Avatar: React.FC<IAvatar> = (props) => {
       <div
         style={style}
         className={clsx(
-          'relative rounded-lg bg-gray-200 dark:bg-gray-900',
-          isCat && 'avatar__cat',
+          '⁂-avatar relative bg-gray-200 dark:bg-gray-900',
+          isCat && '⁂-avatar--cat',
           className,
         )}
       >
         <div className='absolute inset-0 z-[1] flex items-center justify-center rounded-[inherit] bg-gray-200 dark:bg-gray-900'>
-          <Icon
-            src={require('@phosphor-icons/core/regular/image-square.svg')}
-            className='size-4 text-gray-500 dark:text-gray-700'
-          />
+          <Icon src={iconImageSquare} className='size-4 text-gray-500 dark:text-gray-700' />
         </div>
       </div>
     );
@@ -143,7 +141,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
     <StillImage
       className={clsx('⁂-avatar', isCat && '⁂-avatar--cat', className)}
       style={style}
-      src={src || require('@/assets/images/avatar-missing.png')}
+      src={src || missingAvatar}
       alt={altText}
       onError={handleLoadFailure}
     />

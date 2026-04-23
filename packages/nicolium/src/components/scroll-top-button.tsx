@@ -1,8 +1,10 @@
+import iconArrowLineUp from '@phosphor-icons/core/regular/arrow-line-up.svg';
 import clsx from 'clsx';
 import throttle from 'lodash/throttle';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useIntl, type MessageDescriptor } from 'react-intl';
 
+import AvatarStack from '@/components/accounts/avatar-stack';
 import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';
 
@@ -19,6 +21,8 @@ interface IScrollTopButton {
   threshold?: number;
   /** Distance from the top of the screen (scrolling up) before the action is triggered. */
   autoloadThreshold?: number;
+  /** Avatars of the accounts will display next to the message (limited to 3) */
+  accountIds?: Array<string>;
 }
 
 /** Floating new post counter above timelines, clicked to scroll to top. */
@@ -29,9 +33,10 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   threshold = 240,
   autoloadThreshold = 50,
   liveRegionMessage = message,
+  accountIds,
 }) => {
   const intl = useIntl();
-  const { autoloadTimelines } = useSettings();
+  const { autoloadTimelines, disableUserProvidedMedia } = useSettings();
 
   // Whether we are scrolled past the `threshold`.
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -52,9 +57,14 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
     }
   }, [autoloadTimelines, scrolledTop, count, onClick]);
 
-  /** Set state while scrolling. */
-  const handleScroll = useCallback(
-    throttle(
+  /** Scroll to top and trigger `onClick`. */
+  const handleClick: React.MouseEventHandler = useCallback(() => {
+    window.scrollTo({ top: 0 });
+    onClick();
+  }, [onClick]);
+
+  useEffect(() => {
+    const handleScroll = throttle(
       () => {
         const scrollTop = getScrollTop();
 
@@ -63,17 +73,8 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
       },
       40,
       { trailing: true },
-    ),
-    [threshold, autoloadThreshold],
-  );
+    );
 
-  /** Scroll to top and trigger `onClick`. */
-  const handleClick: React.MouseEventHandler = useCallback(() => {
-    window.scrollTo({ top: 0 });
-    onClick();
-  }, [onClick]);
-
-  useEffect(() => {
     // Delay adding the scroll listener so navigating back doesn't
     // unload feed items before the feed is rendered.
     setTimeout(() => {
@@ -84,7 +85,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [handleScroll]);
+  }, []);
 
   useEffect(() => {
     maybeUnload();
@@ -101,7 +102,11 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
         aria-hidden={!visible}
       >
         <button onClick={handleClick} tabIndex={visible ? 0 : -1} aria-label={buttonMessage}>
-          <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} aria-hidden />
+          {accountIds?.length && !disableUserProvidedMedia ? (
+            <AvatarStack accountIds={accountIds} />
+          ) : (
+            <Icon src={iconArrowLineUp} aria-hidden />
+          )}
 
           <p>{buttonMessage}</p>
         </button>

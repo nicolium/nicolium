@@ -3,7 +3,7 @@ import { mutative } from 'zustand-mutative';
 
 import { findStatuses } from '@/queries/statuses/use-status';
 
-import type { NormalizedStatus } from '@/normalizers/status';
+import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { CreateStatusParams, Status } from 'pl-api';
 
 type TimelineEntry =
@@ -12,8 +12,10 @@ type TimelineEntry =
       id: string;
       // id of the topmost status where the target status was found, either the status itself or its reblog
       originalId: string;
+      accountId: string;
       rebloggedBy: Array<string>;
       reblogIds: Array<string>;
+      reblogVisibility?: string;
       isConnectedTop?: boolean;
       isConnectedBottom?: boolean;
       isReply: boolean;
@@ -22,6 +24,7 @@ type TimelineEntry =
       isQuote: boolean;
       isDirect: boolean;
       hasMedia: boolean;
+      hasMediaWithoutAltText: boolean;
     }
   | {
       type: 'pending-status';
@@ -39,15 +42,18 @@ interface TimelineData {
   entries: Array<TimelineEntry>;
   queuedEntries: Array<Status>;
   queuedCount: number;
+  queuedAccountIds: Array<string>;
   isFetching: boolean;
   isPending: boolean;
   isError: boolean;
   hasNextPage: boolean;
   oldestStatusId?: string;
+  newestStatusId?: string;
 }
 
 interface State {
   timelines: Record<string, TimelineData>;
+  pollingEnabled: boolean;
   actions: {
     expandTimeline: (
       timelineId: string,
@@ -73,8 +79,12 @@ interface State {
     deletePendingStatus: (idempotencyKey: string) => void;
     filterTimelines: (accountId: string) => void;
     resetTimeline: (timelineId: string) => void;
+    disablePolling: () => void;
   };
 }
+
+const hasMediaWithoutAltText = (status: Status): boolean =>
+  status.media_attachments.some((media) => media.type !== 'unknown' && !media.description);
 
 const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
   const timelinePage: Array<TimelineEntry> = [];
@@ -120,20 +130,26 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
         if (!existingEntry.rebloggedBy.includes(status.account.id)) {
           existingEntry.rebloggedBy.push(status.account.id);
           existingEntry.reblogIds.push(status.id);
+          if (existingEntry.reblogVisibility !== status.visibility) {
+            existingEntry.reblogVisibility = undefined;
+          }
         }
       } else {
         timelinePage.push({
           type: 'status',
           id: status.reblog.id,
           originalId: status.id,
+          accountId: status.reblog.account.id,
           rebloggedBy: [status.account.id],
           reblogIds: [status.id],
+          reblogVisibility: status.visibility,
           isConnectedTop,
           isReply: status.reblog.in_reply_to_id !== null,
           isReblog: true,
           isQuote: status.reblog.quote !== null,
           isDirect: status.reblog.visibility === 'direct',
           hasMedia: status.reblog.media_attachments.length > 0,
+          hasMediaWithoutAltText: hasMediaWithoutAltText(status.reblog),
         });
       }
       return -1;
@@ -143,6 +159,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
       type: 'status',
       id: status.id,
       originalId: status.id,
+      accountId: status.account.id,
       rebloggedBy: [],
       reblogIds: [],
       isConnectedTop,
@@ -151,6 +168,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
       isQuote: status.quote !== null,
       isDirect: status.visibility === 'direct',
       hasMedia: status.media_attachments.length > 0,
+      hasMediaWithoutAltText: hasMediaWithoutAltText(status),
     });
 
     return -1;
@@ -181,6 +199,7 @@ const getTimelinesForStatus = (
 const useTimelinesStore = create<State>()(
   mutative((set) => ({
     timelines: {} as Record<string, TimelineData>,
+    pollingEnabled: true,
     actions: {
       expandTimeline: (timelineId, statuses, hasMore, initialFetch = false, restoring = false) =>
         set((state) => {
@@ -198,6 +217,9 @@ const useTimelinesStore = create<State>()(
           }
           timeline.isPending = false;
           timeline.isFetching = false;
+          if ((initialFetch || restoring) && statuses.length > 0) {
+            timeline.newestStatusId = statuses[0].id;
+          }
           if (typeof hasMore === 'boolean') {
             timeline.hasNextPage = hasMore;
             const oldestStatus = statuses.at(-1);
@@ -216,8 +238,12 @@ const useTimelinesStore = create<State>()(
           )
             return;
 
+          if (!timeline.newestStatusId || timeline.newestStatusId.localeCompare(status.id) < 0) {
+            timeline.newestStatusId = status.id;
+          }
           timeline.queuedEntries.unshift(status);
           timeline.queuedCount += 1;
+          timeline.queuedAccountIds.unshift((status.reblog || status).account.id);
         });
       },
       deleteStatus: (statusId) => {
@@ -264,9 +290,11 @@ const useTimelinesStore = create<State>()(
 
           const processedEntries = processPage(timeline.queuedEntries);
 
+          timeline.newestStatusId = timeline.queuedEntries.toSorted().at(-1)!.id;
           timeline.entries.unshift(...processedEntries);
           timeline.queuedEntries = [];
           timeline.queuedCount = 0;
+          timeline.queuedAccountIds = [];
         }),
       fillGap: (timelineId, gapMinId, statuses, hasMore, direction) =>
         set((state) => {
@@ -347,6 +375,7 @@ const useTimelinesStore = create<State>()(
                 type: 'status',
                 id: status.id,
                 originalId: status.id,
+                accountId: status.account.id,
                 rebloggedBy: [],
                 reblogIds: [],
                 isReply: status.in_reply_to_id !== null,
@@ -354,6 +383,7 @@ const useTimelinesStore = create<State>()(
                 isQuote: status.quote !== null,
                 isDirect: status.visibility === 'direct',
                 hasMedia: status.media_attachments.length > 0,
+                hasMediaWithoutAltText: hasMediaWithoutAltText(status),
               };
             }
           }
@@ -396,11 +426,16 @@ const useTimelinesStore = create<State>()(
                 status.account.id !== accountId && status.reblog?.account.id !== accountId,
             );
             timeline.queuedCount = timeline.queuedEntries.length;
+            timeline.queuedAccountIds = timeline.queuedAccountIds.filter((id) => id !== accountId);
           }
         }),
       resetTimeline: (timelineId) =>
         set((state) => {
           state.timelines[timelineId] = createEmptyTimeline();
+        }),
+      disablePolling: () =>
+        set((state) => {
+          state.pollingEnabled = false;
         }),
     },
   })),
@@ -410,6 +445,7 @@ const createEmptyTimeline = (): TimelineData => ({
   entries: [],
   queuedEntries: [],
   queuedCount: 0,
+  queuedAccountIds: [],
   isFetching: false,
   isPending: true,
   isError: false,

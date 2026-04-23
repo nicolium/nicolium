@@ -1,17 +1,20 @@
+import iconHash from '@phosphor-icons/core/regular/hash.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import { Link, linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 
-import { unfilterStatus } from '@/actions/statuses';
+import AccountContainer from '@/components/accounts/account-container';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
-import AccountContainer from '@/containers/account-container';
 import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import { useFeatures } from '@/hooks/use-features';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import { useStatus, type SelectedStatus } from '@/queries/statuses/use-status';
@@ -24,18 +27,20 @@ import {
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
-import { useStatusMetaActions } from '@/stores/status-meta';
+import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { textForScreenReader } from '@/utils/status';
 
+import { AccountLink } from '../accounts/account-link';
 import HashtagLink from '../hashtag-link';
 import RelativeTimestamp from '../relative-timestamp';
 
-import EventPreview from './event-preview';
+import EventPreview from './events/event-preview';
 import RssFeedInfo from './rss-feed-info';
 import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';
 import StatusInfo from './status-info';
 import StatusLanguagePicker from './status-language-picker';
+import { StatusLink } from './status-link';
 import StatusReactionsBar from './status-reactions-bar';
 import StatusReplyMentions from './status-reply-mentions';
 import Tombstone from './tombstone';
@@ -53,11 +58,14 @@ interface IAccountInfo {
 
 const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
   const intl = useIntl();
+  const { statusActionBarItems } = useSettings();
+
   return (
     <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
-      <Link
-        to='/@{$username}/posts/$statusId'
-        params={{ username: status.account.acct, statusId: status.id }}
+      {!statusActionBarItems.length && <StatusActionBar status={status} fromBookmarks expandable />}
+      <StatusLink
+        status={status}
+        account={status.account}
         className='hover:underline'
         onClick={(event) => {
           event.stopPropagation();
@@ -69,7 +77,7 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
           size='sm'
           className='whitespace-nowrap'
         />
-      </Link>
+      </StatusLink>
       <StatusTypeIcon visibility={status.visibility} />
       <StatusLanguagePicker status={status} />
       {!!status.edited_at && (
@@ -78,7 +86,7 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
 
           <Icon
             className='size-4 text-gray-700 dark:text-gray-600'
-            src={require('@phosphor-icons/core/regular/pencil-simple.svg')}
+            src={iconPencilSimple}
             title={intl.formatMessage(messages.edited, {
               date: intl.formatDate(new Date(status.edited_at), {
                 hour12: true,
@@ -139,7 +147,7 @@ const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({
       avatarSize={avatarSize}
       icon={
         <Icon
-          src={require('@phosphor-icons/core/regular/hash.svg')}
+          src={iconHash}
           className='size-4 text-primary-600 dark:text-primary-400'
           aria-hidden
         />
@@ -175,7 +183,6 @@ interface IStatus {
   showGroup?: boolean;
   showInfo?: boolean;
   fromBookmarks?: boolean;
-  fromHomeTimeline?: boolean;
   className?: string;
 }
 
@@ -196,7 +203,6 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     showGroup = true,
     showInfo = true,
     fromBookmarks = false,
-    fromHomeTimeline = false,
     className,
     contextType,
   } = props;
@@ -204,12 +210,12 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const router = useRouter();
-  const features = useFeatures();
 
-  const { toggleStatusesMediaHidden } = useStatusMetaActions();
+  const { toggleStatusesMediaHidden, unfilterStatus } = useStatusMetaActions();
+  const { deleted, showFiltered } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { replyCompose, mentionCompose } = useComposeActions();
-  const { boostModal } = useSettings();
+  const { boostModal, statusActionBarItems } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
 
@@ -370,24 +376,14 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={
-            <Icon
-              src={require('@phosphor-icons/core/regular/repeat.svg')}
-              className='size-4 text-green-600'
-              aria-hidden
-            />
-          }
+          icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
           text={
             <FormattedMessage
               id='status.reblogged_by_with_group'
               defaultMessage='{name} reposted from {group}'
               values={{
                 name: (
-                  <Link
-                    to='/@{$username}'
-                    params={{ username: status.account.acct }}
-                    className='hover:underline'
-                  >
+                  <AccountLink account={status.account} className='hover:underline'>
                     <bdi className='truncate'>
                       <strong className='text-gray-800 dark:text-gray-200'>
                         <Emojify
@@ -396,7 +392,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
                         />
                       </strong>
                     </bdi>
-                  </Link>
+                  </AccountLink>
                 ),
                 group: (
                   <Link
@@ -415,52 +411,27 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         />
       );
     } else if (isReblog) {
-      const accounts = status.accounts ?? [status.account];
-
-      const renderedAccounts = accounts.slice(0, 2).map(
-        (account) =>
-          !!account && (
-            <Link
-              key={account.acct}
-              to='/@{$username}'
-              params={{ username: account.acct }}
-              className='hover:underline'
-            >
-              <bdi className='truncate'>
-                <strong className='text-gray-800 dark:text-gray-200'>
-                  <Emojify text={account.display_name} emojis={account.emojis} />
-                </strong>
-              </bdi>
-            </Link>
-          ),
-      );
-
-      if (accounts.length > 2) {
-        renderedAccounts.push(
-          <FormattedMessage
-            id='notification.more'
-            defaultMessage='{count, plural, one {# other} other {# others}}'
-            values={{ count: accounts.length - renderedAccounts.length }}
-          />,
-        );
-      }
-
       const values = {
-        name: <FormattedList type='conjunction' value={renderedAccounts} />,
-        count: accounts.length,
+        name: (
+          <AccountLink
+            account={status.account}
+            className='hover:underline'
+            key={status.account.acct}
+          >
+            <bdi className='truncate'>
+              <strong className='text-gray-800 dark:text-gray-200'>
+                <Emojify text={status.account.display_name} emojis={status.account.emojis} />
+              </strong>
+            </bdi>
+          </AccountLink>
+        ),
       };
 
       return (
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={
-            <Icon
-              src={require('@phosphor-icons/core/regular/repeat.svg')}
-              className='size-4 text-green-600'
-              aria-hidden
-            />
-          }
+          icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
           text={
             status.visibility === 'private' ? (
               <FormattedMessage
@@ -485,7 +456,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
           avatarSize={avatarSize}
           icon={
             <Icon
-              src={require('@phosphor-icons/core/regular/push-pin.svg')}
+              src={iconPushPin}
               className='size-4 text-gray-600 dark:text-gray-400'
               aria-hidden
             />
@@ -500,7 +471,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
           avatarSize={avatarSize}
           icon={
             <Icon
-              src={require('@phosphor-icons/core/regular/users-three.svg')}
+              src={iconUsersThree}
               className='size-4 text-primary-600 dark:text-primary-400'
               aria-hidden
             />
@@ -528,21 +499,15 @@ const Status: React.FC<IStatus> = React.memo((props) => {
           }
         />
       );
-    } else if (fromHomeTimeline) {
-      return (
-        features.followHashtags && (
-          <StatusFollowedTagInfo className='-mb-1' status={actualStatus} avatarSize={avatarSize} />
-        )
-      );
     }
-  }, [status.accounts, group?.id]);
+  }, [status.account, group?.id]);
 
   if (!status) return null;
 
-  if (status.deleted)
+  if (deleted)
     return <Tombstone id={status.id} onMoveUp={onMoveUp} onMoveDown={onMoveDown} deleted />;
 
-  if (filtered && actualStatus.showFiltered !== true) {
+  if (filtered && showFiltered !== true) {
     const body = (
       <div className={clsx('status__wrapper text-center')} ref={node}>
         <Text theme='muted'>
@@ -571,6 +536,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         focusable={focusable}
         element='article'
         lang={actualStatus.language || undefined}
+        data-status-id={status.id}
       >
         {body}
       </Hotkeys>
@@ -606,7 +572,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         {statusInfo}
 
         {status.rss_feed ? (
-          <RssFeedInfo feed={status.rss_feed} timestamp={status.created_at} />
+          <RssFeedInfo feed={status.rss_feed} timestamp={status.created_at} url={status.url} />
         ) : (
           actualStatus.account_id && (
             <div className='flex'>
@@ -637,6 +603,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
               collapsable
               translatable
               withMedia
+              expandable
             />
           )}
 
@@ -644,7 +611,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
             <>
               <StatusReactionsBar status={actualStatus} collapsed />
 
-              {!hideActionBar && (
+              {!hideActionBar && statusActionBarItems.length > 0 && (
                 <div
                   className={clsx({
                     'pt-2': actualStatus.emoji_reactions.length,
@@ -689,6 +656,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
       element='article'
       lang={actualStatus.language || undefined}
       data-testid='status'
+      data-status-id={status.id}
     >
       {body}
     </Hotkeys>

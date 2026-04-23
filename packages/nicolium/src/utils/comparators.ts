@@ -13,6 +13,10 @@ const compareId = (id1: string, id2: string) => {
   }
   if (id1.length === id2.length) {
     return id1 > id2 ? 1 : -1;
+  } else if (id1.includes('/') && id2.includes('/')) {
+    // Hollo notification IDs consist of a date, notification type and a UUID.
+    // If both IDs start with a date, we can compare just the date part.
+    return id1.split('/')[0] > id2.split('/')[0] ? 1 : -1;
   } else {
     return id1.length > id2.length ? 1 : -1;
   }

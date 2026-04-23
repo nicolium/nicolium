@@ -5,11 +5,8 @@ import List, { ListItem } from '@/components/list';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Text from '@/components/ui/text';
-import Preferences from '@/features/preferences';
-import MessagesSettings from '@/features/settings/components/messages-settings';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useMfaConfig } from '@/queries/security/use-mfa';
 
 const messages = defineMessages({
   settings: { id: 'settings.settings', defaultMessage: 'Settings' },
@@ -19,11 +16,8 @@ const messages = defineMessages({
 const SettingsPage = () => {
   const intl = useIntl();
 
-  const { data: mfa } = useMfaConfig();
   const features = useFeatures();
   const { data: account } = useOwnAccount();
-
-  const isMfaEnabled = mfa?.settings.totp;
 
   if (!account) return null;
 
@@ -31,7 +25,7 @@ const SettingsPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.settings)} transparent withHeader={false}>
-      <Card className='space-y-4' variant='rounded'>
+      <Card className='flex flex-col gap-4' variant='rounded'>
         <CardHeader>
           <CardTitle title={<FormattedMessage id='settings.profile' defaultMessage='Profile' />} />
         </CardHeader>
@@ -40,122 +34,13 @@ const SettingsPage = () => {
           <List>
             <ListItem
               label={<FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />}
+              labelClassName='min-w-fit'
               to='/settings/profile'
             >
-              <span className='max-w-full truncate'>{displayName}</span>
+              <span className='⁂-edit-profile-link__display-name truncate'>{displayName}</span>
             </ListItem>
           </List>
         </CardBody>
-
-        <CardHeader>
-          <CardTitle
-            title={
-              <FormattedMessage id='settings.mutes_blocks' defaultMessage='Mutes and blocks' />
-            }
-          />
-        </CardHeader>
-
-        <CardBody>
-          <List>
-            <ListItem
-              label={<FormattedMessage id='column.mutes' defaultMessage='Mutes' />}
-              to='/mutes'
-            />
-            <ListItem
-              label={<FormattedMessage id='column.blocks' defaultMessage='Blocks' />}
-              to='/blocks'
-            />
-            {(features.filters || features.filtersV2) && (
-              <ListItem
-                label={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
-                to='/filters'
-              />
-            )}
-            {features.federating && (
-              <ListItem
-                label={
-                  <FormattedMessage id='column.domain_blocks' defaultMessage='Domain blocks' />
-                }
-                to='/domain_blocks'
-              />
-            )}
-            {(features.interactionRequests || features.quoteApprovalPolicies) && (
-              <ListItem
-                label={
-                  <FormattedMessage
-                    id='column.interaction_policies'
-                    defaultMessage='Interaction policies'
-                  />
-                }
-                to='/settings/interaction_policies'
-              />
-            )}
-          </List>
-        </CardBody>
-
-        <CardHeader>
-          <CardTitle
-            title={<FormattedMessage id='settings.security' defaultMessage='Security' />}
-          />
-        </CardHeader>
-
-        <CardBody>
-          <List>
-            {features.changeEmail && (
-              <ListItem
-                label={<FormattedMessage id='column.change_email' defaultMessage='Change email' />}
-                to='/settings/email'
-              />
-            )}
-            {features.changePassword && (
-              <ListItem
-                label={
-                  <FormattedMessage id='column.change_password' defaultMessage='Change password' />
-                }
-                to='/settings/password'
-              />
-            )}
-            {features.manageMfa && (
-              <ListItem
-                label={
-                  <FormattedMessage id='settings.configure_mfa' defaultMessage='Configure MFA' />
-                }
-                to='/settings/mfa'
-              >
-                <span>
-                  {isMfaEnabled ? (
-                    <FormattedMessage id='mfa.enabled' defaultMessage='Enabled' />
-                  ) : (
-                    <FormattedMessage id='mfa.disabled' defaultMessage='Disabled' />
-                  )}
-                </span>
-              </ListItem>
-            )}
-            {features.sessions && (
-              <ListItem
-                label={<FormattedMessage id='column.tokens' defaultMessage='Active sessions' />}
-                to='/settings/tokens'
-              />
-            )}
-            <ListItem
-              label={<FormattedMessage id='settings.privacy' defaultMessage='Privacy' />}
-              to='/settings/privacy'
-            />
-          </List>
-        </CardBody>
-
-        {features.chats ? (
-          <>
-            <CardHeader>
-              <CardTitle title={<FormattedMessage id='column.chats' defaultMessage='Chats' />} />
-            </CardHeader>
-
-            <CardBody>
-              <MessagesSettings />
-            </CardBody>
-          </>
-        ) : null}
-
         <CardHeader>
           <CardTitle
             title={<FormattedMessage id='column.preferences' defaultMessage='Preferences' />}
@@ -163,7 +48,49 @@ const SettingsPage = () => {
         </CardHeader>
 
         <CardBody>
-          <Preferences />
+          <List>
+            <ListItem
+              to='/settings/general'
+              label={<FormattedMessage id='preferences.tab.general' defaultMessage='General' />}
+            />
+
+            <ListItem
+              to='/settings/appearance'
+              label={
+                <FormattedMessage id='preferences.tab.appearance' defaultMessage='Appearance' />
+              }
+            />
+
+            <ListItem
+              to='/settings/content'
+              label={
+                <FormattedMessage
+                  id='preferences.tab.content'
+                  defaultMessage='Content and filtering'
+                />
+              }
+            />
+
+            <ListItem
+              to='/settings/compose'
+              label={<FormattedMessage id='preferences.tab.compose' defaultMessage='Compose' />}
+            />
+
+            <ListItem
+              to='/settings/timelines'
+              label={<FormattedMessage id='preferences.tab.timelines' defaultMessage='Timelines' />}
+            />
+
+            <ListItem
+              to='/settings/security'
+              label={
+                <FormattedMessage
+                  id='preferences.tab.security'
+                  defaultMessage='Privacy and security'
+                />
+              }
+            />
+          </List>
         </CardBody>
 
         <CardHeader>

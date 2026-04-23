@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import {
   useAddAccountsToList,
@@ -39,7 +38,7 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
   };
 
   return (
-    <Stack space={2}>
+    <div className='flex flex-col gap-2'>
       {accountIds.length > 0 ? (
         <div className='min-h-24'>
           <CardHeader>
@@ -95,7 +94,7 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
           ))}
         </div>
       </div>
-    </Stack>
+    </div>
   );
 };
 

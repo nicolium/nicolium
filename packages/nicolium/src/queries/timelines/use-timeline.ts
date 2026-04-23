@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { importEntities } from '@/actions/importer';
-import { useTimelineStream } from '@/api/hooks/streaming/use-timeline-stream';
+import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
+import { importEntities } from '@/queries/utils/import-entities';
 import {
+  useTimelinesStore,
   useTimeline as useStoreTimeline,
   useTimelinesActions,
   type TimelineEntry,
 } from '@/stores/timelines';
+import { compareId } from '@/utils/comparators';
 
 import type { PaginatedResponse, PaginationParams, Status, StreamingParams } from 'pl-api';
 
@@ -17,16 +19,76 @@ interface StreamConfig {
   params?: StreamingParams;
 }
 
+interface TimelineOptions {
+  polling?: boolean;
+  restoringMaxId?: string;
+}
+
+const POLLING_INTERVAL = 20_000;
+
+const sinceIdUnsupported = (statuses: Status[], sinceId: string) =>
+  statuses.length > 0 && statuses.some((status) => compareId(status.id, sinceId) <= 0);
+
 const useTimeline = (
   timelineId: string,
   fetcher: TimelineFetcher,
   streamConfig?: StreamConfig,
-  restoring?: boolean,
+  options?: TimelineOptions,
 ) => {
+  const polling = options?.polling ?? true;
+  const restoringMaxId = options?.restoringMaxId;
+
   const timeline = useStoreTimeline(timelineId);
+  const pollingEnabled = useTimelinesStore((state) => state.pollingEnabled);
   const timelineActions = useTimelinesActions();
 
-  useTimelineStream(streamConfig?.stream ?? '', streamConfig?.params, !!streamConfig?.stream);
+  const { connected: streamingConnected } = useTimelineStream(
+    streamConfig?.stream ?? '',
+    streamConfig?.params,
+    !!streamConfig?.stream,
+  );
+
+  const fetcherRef = useRef(fetcher);
+  fetcherRef.current = fetcher;
+
+  const newestStatusId = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (timeline.entries[0]?.type === 'status') {
+      newestStatusId.current = timeline.entries[0].originalId;
+    }
+  }, [timeline.entries]);
+
+  // polling fallback when streaming is not connected
+  useEffect(() => {
+    if (!polling || !pollingEnabled || streamingConnected || timeline.isPending || !newestStatusId)
+      return;
+
+    const poll = async () => {
+      const sinceId =
+        useTimelinesStore.getState().timelines[timelineId]?.newestStatusId ??
+        newestStatusId.current;
+      if (!sinceId) return;
+
+      try {
+        const response = await fetcherRef.current({ since_id: sinceId });
+        if (sinceIdUnsupported(response.items, sinceId)) {
+          timelineActions.disablePolling();
+          return;
+        }
+
+        if (response.items.length === 0) return;
+
+        importEntities({ statuses: response.items });
+        for (const status of response.items) {
+          timelineActions.receiveStreamingStatus(timelineId, status);
+        }
+      } catch {}
+    };
+
+    const interval = setInterval(poll, POLLING_INTERVAL);
+    return () => clearInterval(interval);
+  }, [timelineId, polling, pollingEnabled, streamingConnected, timeline.isPending]);
 
   useEffect(() => {
     if (!timeline.isPending || timeline.isFetching) return;
@@ -34,26 +96,35 @@ const useTimeline = (
   }, [timelineId]);
 
   const fetchInitial = useCallback(
-    async (isRestoring = restoring) => {
+    async (isRestoring = !!restoringMaxId) => {
       timelineActions.setLoading(timelineId, true);
       try {
-        const response = await fetcher();
+        const [response, shouldInsertGap] = await Promise.all([
+          fetcher(),
+          !restoringMaxId
+            ? Promise.resolve(false)
+            : fetcher({ since_id: restoringMaxId, limit: 1 })
+                .then((res) => res.items.length > 0)
+                .catch(() => true),
+        ]);
         importEntities({ statuses: response.items });
         timelineActions.expandTimeline(
           timelineId,
           response.items,
           !!response.next,
           true,
-          isRestoring,
+          isRestoring && shouldInsertGap,
         );
       } catch (error) {
         timelineActions.setError(timelineId, true);
       }
     },
-    [timelineId, restoring],
+    [timelineId, restoringMaxId],
   );
 
   const fetchNextPage = useCallback(async () => {
+    if (timeline.isFetching) return;
+
     timelineActions.setLoading(timelineId, true);
 
     try {
@@ -65,7 +136,7 @@ const useTimeline = (
     } catch (error) {
       timelineActions.setError(timelineId, true);
     }
-  }, [timelineId, timeline.oldestStatusId]);
+  }, [timelineId, timeline.oldestStatusId, timeline.isFetching]);
 
   const dequeueEntries = useCallback(() => {
     timelineActions.dequeueEntries(timelineId);

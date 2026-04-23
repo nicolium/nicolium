@@ -1,11 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Stack from './stack';
-import Text from './text';
-
-import './spinner.css';
-
 interface ISpinner {
   /** Width and height of the spinner in pixels. */
   size?: number;
@@ -15,19 +10,19 @@ interface ISpinner {
 
 /** Spinning loading placeholder. */
 const Spinner = ({ size = 30, withText = true }: ISpinner) => (
-  <Stack space={2} justifyContent='center' alignItems='center'>
-    <div className='spinner' style={{ width: size, height: size }}>
+  <div className='⁂-spinner__container'>
+    <div className='⁂-spinner' style={{ width: size, height: size }}>
       {Array.from(Array(12).keys()).map((i) => (
         <div key={i}>&nbsp;</div>
       ))}
     </div>
 
     {withText && (
-      <Text theme='muted' tracking='wide'>
+      <p>
         <FormattedMessage id='loading_indicator.label' defaultMessage='Loading…' />
-      </Text>
+      </p>
     )}
-  </Stack>
+  </div>
 );
 
 export { Spinner as default };

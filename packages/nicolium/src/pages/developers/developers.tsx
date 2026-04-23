@@ -1,3 +1,9 @@
+import iconAppWindow from '@phosphor-icons/core/regular/app-window.svg';
+import iconBug from '@phosphor-icons/core/regular/bug.svg';
+import iconCode from '@phosphor-icons/core/regular/code.svg';
+import iconSquaresFour from '@phosphor-icons/core/regular/squares-four.svg';
+import iconWarning from '@phosphor-icons/core/regular/warning.svg';
+import iconWifiX from '@phosphor-icons/core/regular/wifi-x.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -55,10 +61,7 @@ const DevelopersPage: React.FC = () => {
       <Column label={intl.formatMessage(messages.heading)}>
         <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3'>
           <DashWidget to='/developers/apps/create'>
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/squares-four.svg')}
-              className='text-gray-700 dark:text-gray-600'
-            />
+            <SvgIcon src={iconSquaresFour} className='text-gray-700 dark:text-gray-600' />
 
             <Text>
               <FormattedMessage
@@ -69,10 +72,7 @@ const DevelopersPage: React.FC = () => {
           </DashWidget>
 
           <DashWidget to='/developers/settings_store'>
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/code.svg')}
-              className='text-gray-700 dark:text-gray-600'
-            />
+            <SvgIcon src={iconCode} className='text-gray-700 dark:text-gray-600' />
 
             <Text>
               <FormattedMessage
@@ -83,10 +83,7 @@ const DevelopersPage: React.FC = () => {
           </DashWidget>
 
           <DashWidget to='/error'>
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/bug.svg')}
-              className='text-gray-700 dark:text-gray-600'
-            />
+            <SvgIcon src={iconBug} className='text-gray-700 dark:text-gray-600' />
 
             <Text>
               <FormattedMessage
@@ -97,10 +94,7 @@ const DevelopersPage: React.FC = () => {
           </DashWidget>
 
           <DashWidget to='/error/network'>
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/wifi-x.svg')}
-              className='text-gray-700 dark:text-gray-600'
-            />
+            <SvgIcon src={iconWifiX} className='text-gray-700 dark:text-gray-600' />
 
             <Text>
               <FormattedMessage
@@ -111,10 +105,7 @@ const DevelopersPage: React.FC = () => {
           </DashWidget>
 
           <DashWidget to='/developers/sw'>
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/app-window.svg')}
-              className='text-gray-700 dark:text-gray-600'
-            />
+            <SvgIcon src={iconAppWindow} className='text-gray-700 dark:text-gray-600' />
 
             <Text>
               <FormattedMessage
@@ -125,10 +116,7 @@ const DevelopersPage: React.FC = () => {
           </DashWidget>
 
           <DashWidget onClick={showToast}>
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/warning.svg')}
-              className='text-gray-700 dark:text-gray-600'
-            />
+            <SvgIcon src={iconWarning} className='text-gray-700 dark:text-gray-600' />
 
             <Text>
               <FormattedMessage

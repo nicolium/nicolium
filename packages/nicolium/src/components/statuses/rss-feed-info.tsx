@@ -1,59 +1,47 @@
+import iconRss from '@phosphor-icons/core/regular/rss.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import RelativeTimestamp from '../relative-timestamp';
 import Avatar from '../ui/avatar';
-import HStack from '../ui/hstack';
 import Icon from '../ui/icon';
-import Stack from '../ui/stack';
-import Text from '../ui/text';
 
 import type { RssFeed } from 'pl-api';
 
 interface IRssFeedInfo {
   feed: RssFeed;
   timestamp: string;
+  url: string;
 }
 
-const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp }) => (
-  <div className='group block w-full shrink-0'>
-    <HStack alignItems='center' space={3} className='overflow-hidden'>
-      <div className='rounded-lg'>
-        <Avatar src={feed.image_url || ''} size={42} alt={feed.title || ''} />
+const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp, url }) => (
+  <div className='⁂-rss-feed-info'>
+    <div className='⁂-rss-feed-info__avatar'>
+      <Avatar src={feed.image_url || ''} size={42} alt={feed.title || ''} />
+    </div>
+
+    <div className='⁂-rss-feed-info__content'>
+      <p className='⁂-rss-feed-info__title'>
+        {feed.title}
+
+        <a href={url} target='_blank' rel='noopener noreferrer' className='⁂-rss-feed-info__link'>
+          <RelativeTimestamp
+            timestamp={timestamp}
+            theme='muted'
+            size='sm'
+            className='whitespace-nowrap'
+          />
+        </a>
+      </p>
+
+      <div className='⁂-rss-feed-info__details'>
+        <p>
+          <FormattedMessage id='rss_feed.label' defaultMessage='RSS Feed' />
+        </p>
+
+        <Icon src={iconRss} />
       </div>
-
-      <div className='grow overflow-hidden'>
-        <HStack space={1} alignItems='center' grow>
-          <Text size='sm' weight='semibold' truncate>
-            {feed.title}
-          </Text>
-        </HStack>
-
-        <Stack>
-          <HStack alignItems='center' space={1}>
-            <Text theme='muted' size='sm'>
-              <FormattedMessage id='rss_feed.label' defaultMessage='RSS Feed' />
-            </Text>
-
-            <Icon
-              className='size-4 text-gray-700 dark:text-gray-600'
-              src={require('@phosphor-icons/core/regular/rss.svg')}
-            />
-
-            <Text tag='span' theme='muted' size='sm'>
-              &middot;
-            </Text>
-
-            <RelativeTimestamp
-              timestamp={timestamp}
-              theme='muted'
-              size='sm'
-              className='whitespace-nowrap'
-            />
-          </HStack>
-        </Stack>
-      </div>
-    </HStack>
+    </div>
   </div>
 );
 

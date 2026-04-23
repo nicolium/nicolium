@@ -2,13 +2,12 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { type Components, Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
+import PlaceholderChatMessage from '@/components/placeholders/placeholder-chat-message';
 import Avatar from '@/components/ui/avatar';
 import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import {
   useChatMessages,
@@ -198,62 +197,58 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
 
   if (isBlocked) {
     return (
-      <Stack alignItems='center' justifyContent='center' className='h-full grow'>
-        <Stack alignItems='center' space={2}>
-          <Avatar
-            src={chat.account.avatar}
-            alt={chat.account.avatar_description}
-            size={75}
-            isCat={chat.account.is_cat}
-            username={chat.account.username}
+      <div className='flex h-full grow flex-col items-center gap-2'>
+        <Avatar
+          src={chat.account.avatar}
+          alt={chat.account.avatar_description}
+          size={75}
+          isCat={chat.account.is_cat}
+          username={chat.account.username}
+        />
+        <Text align='center'>
+          <FormattedMessage
+            id='chat_message_list.blocked_by'
+            defaultMessage='You are blocked by @{acct}'
+            values={{
+              acct: (
+                <Text tag='span' theme='primary'>
+                  {chat.account.acct}
+                </Text>
+              ),
+            }}
           />
-          <Text align='center'>
-            <>
-              <Text tag='span'>
-                <FormattedMessage
-                  id='chat_message_list.blocked_by'
-                  defaultMessage='You are blocked by'
-                />
-              </Text>{' '}
-              <Text tag='span' theme='primary'>
-                @{chat.account.acct}
-              </Text>
-            </>
-          </Text>
-        </Stack>
-      </Stack>
+        </Text>
+      </div>
     );
   }
 
   if (isError) {
     return (
-      <Stack alignItems='center' justifyContent='center' className='h-full grow'>
-        <Stack space={4}>
-          <Stack space={1}>
-            <Text size='lg' weight='bold' align='center'>
-              <FormattedMessage
-                id='chat_message_list.network_failure.title'
-                defaultMessage='Whoops!'
-              />
-            </Text>
-            <Text theme='muted' align='center'>
-              <FormattedMessage
-                id='chat_message_list.network_failure.subtitle'
-                defaultMessage='We encountered a network failure.'
-              />
-            </Text>
-          </Stack>
+      <div className='flex h-full grow items-center justify-center gap-4'>
+        <div className='flex flex-col gap-1'>
+          <Text size='lg' weight='bold' align='center'>
+            <FormattedMessage
+              id='chat_message_list.network_failure.title'
+              defaultMessage='Whoops!'
+            />
+          </Text>
+          <Text theme='muted' align='center'>
+            <FormattedMessage
+              id='chat_message_list.network_failure.subtitle'
+              defaultMessage='We encountered a network failure.'
+            />
+          </Text>
+        </div>
 
-          <div className='mx-auto'>
-            <Button theme='primary' onClick={() => refetch()}>
-              <FormattedMessage
-                id='chat_message_list.network_failure.action'
-                defaultMessage='Try again'
-              />
-            </Button>
-          </div>
-        </Stack>
-      </Stack>
+        <div className='mx-auto'>
+          <Button theme='primary' onClick={() => refetch()}>
+            <FormattedMessage
+              id='chat_message_list.network_failure.action'
+              defaultMessage='Try again'
+            />
+          </Button>
+        </div>
+      </div>
     );
   }
 

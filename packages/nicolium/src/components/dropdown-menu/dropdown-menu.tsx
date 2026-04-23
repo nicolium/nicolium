@@ -8,12 +8,14 @@ import {
   size,
   useFloating,
 } from '@floating-ui/react';
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
 import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import ReactSwipeableViews from 'react-swipeable-views';
 
+import ReactSwipeableViews from '@/components/react-swipeable-views';
 import IconButton from '@/components/ui/icon-button';
 import Portal from '@/components/ui/portal';
 import { useModalsActions } from '@/stores/modals';
@@ -48,6 +50,8 @@ interface IDropdownMenu {
   title?: string;
   width?: React.CSSProperties['width'];
   className?: string;
+  /** Forces the dropdown to be displayed as a dropdown menu, not in a modal. */
+  forceDropdown?: boolean;
 }
 
 const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
@@ -133,7 +137,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
 
   const handleDocumentClick = useMemo(
     () => (event: Event) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+      if (ref.current && !ref.current.contains(event.target as Node) && event.type !== 'touchend') {
         handleClose();
         event.stopPropagation();
       }
@@ -201,7 +205,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
                 <div className='⁂-dropdown-menu__header'>
                   <IconButton
                     theme='transparent'
-                    src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+                    src={iconArrowLeft}
                     onClick={handleExitSubmenu}
                     autoFocus
                     title={intl.formatMessage(messages.back)}
@@ -223,22 +227,21 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
   );
 };
 
-const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
-  const {
-    children,
-    disabled,
-    items,
-    component,
-    onClose,
-    onOpen,
-    onShiftClick,
-    placement: initialPlacement = 'top',
-    src = require('@phosphor-icons/core/regular/dots-three.svg'),
-    title = 'Menu',
-    width,
-    className,
-  } = props;
-
+const DropdownMenu: React.FC<IDropdownMenu> = ({
+  children,
+  disabled,
+  items,
+  component,
+  onClose,
+  onOpen,
+  onShiftClick,
+  placement: initialPlacement = 'top',
+  src = iconDotsThree,
+  title = 'Menu',
+  width,
+  className,
+  forceDropdown,
+}) => {
   const { openDropdownMenu, closeDropdownMenu } = useUiStoreActions();
   const { openModal, closeModal } = useModalsActions();
 
@@ -286,7 +289,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
   };
 
   const handleOpen = () => {
-    if (userTouching.matches) {
+    if (userTouching.matches && !forceDropdown) {
       const handleClose = () => {
         closeModal('DROPDOWN_MENU');
       };
@@ -387,6 +390,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
       onClick: handleClick,
       onKeyPress: handleKeyPress,
       ref: refs.setReference,
+      'aria-haspopup': true,
       'aria-expanded': isOpen,
     });
   }, [children, !!items?.length, component]);
@@ -397,8 +401,8 @@ const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
 
   const getClassName = () => {
     const className = clsx('', {
-      'no-reduce-motion:scale-0': !(isDisplayed && isOpen),
-      'scale-100': isDisplayed && isOpen,
+      'no-reduce-motion:scale-90 no-reduce-motion:opacity-0': !(isDisplayed && isOpen),
+      'scale-100 opacity-100': isDisplayed && isOpen,
       'origin-bottom': placement === 'top',
       'origin-left': placement === 'right',
       'origin-top': placement === 'bottom',
@@ -447,6 +451,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
                 items={items}
                 component={component}
                 width={width}
+                className={className}
               />
 
               {/* Arrow */}

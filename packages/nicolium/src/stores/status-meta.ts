@@ -6,16 +6,21 @@ type State = {
     string,
     {
       expanded?: boolean;
+      spoilerExpanded?: boolean;
       mediaVisible?: boolean;
       currentLanguage?: string;
       targetLanguage?: string;
       localTargetLanguage?: string;
       showPollResults?: boolean;
+      showFiltered?: boolean;
+      deleted?: boolean;
     }
   >;
   actions: {
     expandStatuses: (statusIds: Array<string>) => void;
     collapseStatuses: (statusIds: Array<string>) => void;
+    expandStatusSpoilers: (statusIds: Array<string>) => void;
+    collapseStatusSpoilers: (statusIds: Array<string>) => void;
     revealStatusesMedia: (statusIds: Array<string>) => void;
     hideStatusesMedia: (statusIds: Array<string>) => void;
     toggleStatusesMediaHidden: (statusIds: Array<string>) => void;
@@ -25,6 +30,8 @@ type State = {
     hideLocalTranslation: (statusId: string) => void;
     setStatusLanguage: (statusId: string, language: string) => void;
     toggleShowPollResults: (statusId: string) => void;
+    unfilterStatus: (statusId: string) => void;
+    markStatusDeleted: (statusId: string) => void;
   };
 };
 
@@ -47,6 +54,24 @@ const useStatusMetaStore = create<State>()(
             if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
             state.statuses[statusId].expanded = false;
+          }
+        });
+      },
+      expandStatusSpoilers: (statusIds) => {
+        set((state: State) => {
+          for (const statusId of statusIds) {
+            if (!state.statuses[statusId]) state.statuses[statusId] = {};
+
+            state.statuses[statusId].spoilerExpanded = true;
+          }
+        });
+      },
+      collapseStatusSpoilers: (statusIds) => {
+        set((state: State) => {
+          for (const statusId of statusIds) {
+            if (!state.statuses[statusId]) state.statuses[statusId] = {};
+
+            state.statuses[statusId].spoilerExpanded = false;
           }
         });
       },
@@ -115,6 +140,20 @@ const useStatusMetaStore = create<State>()(
           if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
           state.statuses[statusId].showPollResults = !state.statuses[statusId].showPollResults;
+        });
+      },
+      unfilterStatus: (statusId) => {
+        set((state: State) => {
+          if (!state.statuses[statusId]) state.statuses[statusId] = {};
+
+          state.statuses[statusId].showFiltered = true;
+        });
+      },
+      markStatusDeleted: (statusId) => {
+        set((state: State) => {
+          if (!state.statuses[statusId]) state.statuses[statusId] = {};
+
+          state.statuses[statusId].deleted = true;
         });
       },
     },

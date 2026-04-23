@@ -16,9 +16,8 @@ interface IEmoji extends Pick<
 }
 
 /** A single emoji image. */
-const Emoji: React.FC<IEmoji> = (props) => {
+const Emoji: React.FC<IEmoji> = ({ emoji, alt, src, staticSrc, noGroup, ...rest }) => {
   const { disableUserProvidedMedia, systemEmojiFont } = useSettings();
-  const { emoji, alt, src, staticSrc, noGroup, ...rest } = props;
 
   let filename;
 
@@ -50,6 +49,7 @@ const Emoji: React.FC<IEmoji> = (props) => {
     <img
       draggable='false'
       alt={alt ?? emoji}
+      title={alt ?? emoji}
       src={joinPublicPath(`packs/emoji/${filename}.svg`)}
       {...rest}
     />

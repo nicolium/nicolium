@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import AccountContainer from '@/containers/account-container';
 import { useBlocks } from '@/queries/account-lists/use-blocks';
 
 const messages = defineMessages({

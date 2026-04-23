@@ -2,37 +2,32 @@
 @use 'variables';
 
 .⁂-layout__main--home {
-  .dark.black & > :not([hidden]) ~ :not([hidden]) {
-    border-color: rgb(var(--color-gray-800));
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .dark.black & {
+    gap: 0;
+
+    & > :not([hidden]) ~ :not([hidden]) {
+      border-color: rgb(var(--color-gray-800));
+    }
   }
 
   .dark & > :not([hidden]) ~ :not([hidden]) {
     border-color: rgb(var(--color-primary-800));
   }
-
-  @media (min-width: variables.$breakpoint-sm) {
-    & > :not([hidden]) ~ :not([hidden]) {
-      margin-top: 1rem;
-    }
-  }
 }
 
 .⁂-compose-block {
-  @include mixins.card($variant: rounded);
   position: relative;
   z-index: 1;
   border-color: rgb(var(--color-gray-200));
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
-
-
-  @media (max-width: variables.$breakpoint-sm) {
-    border-bottom-width: 1px;
-    box-shadow: none;
-  }
+  transition: all 150ms var(--ease-default);
 
   .dark.black & {
-    border-bottom-width: 1px;
     border-color: rgb(var(--color-gray-800));
+    border-bottom-width: 1px;
   }
 
   .dark & {
@@ -41,9 +36,9 @@
 
   &--dragging {
     z-index: 99;
-    border-width: 2px;
-    border-style: dashed;
     border-color: rgb(var(--color-primary-600));
+    border-style: dashed;
+    border-width: 2px;
   }
 
   &--dragged-over {
@@ -53,21 +48,28 @@
 
   &__body {
     display: flex;
-    align-items: flex-start;
     gap: 0.5rem;
+    align-items: flex-start;
   }
 
   &__form {
-    width: 100%;
     transform: translateY(0.125rem);
+    width: 100%;
   }
+
+  @media (max-width: variables.$breakpoint-sm) {
+    border-bottom-width: 1px;
+    box-shadow: none;
+  }
+
+  @include mixins.card($variant: rounded);
 }
 
 .⁂-status-list {
   & > :not([hidden]) ~ :not([hidden]) {
-    border-top-width: 1px;
-    border-style: solid;
     border-color: rgb(var(--color-gray-200));
+    border-style: solid;
+    border-top-width: 1px;
   }
 
   .dark.black & > :not([hidden]) ~ :not([hidden]) {
@@ -82,6 +84,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 
@@ -97,22 +100,26 @@
 
 .⁂-skip-pinned {
   position: absolute;
-  right: 1.5rem;
   z-index: 10;
+  right: 0;
+
   display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
   width: fit-content;
   max-width: 100%;
-  align-items: center;
-  gap: 0.5rem;
-  border-radius: 9999px;
-  border-width: 1px;
-  border-color: rgb(var(--color-gray-200));
-  background-color: rgb(var(--color-gray-100));
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
   padding-top: 0.25rem;
+  padding-right: 0.75rem;
   padding-bottom: 0.25rem;
+  padding-left: 0.75rem;
+  border-color: rgb(var(--color-gray-200));
+  border-width: 1px;
+  border-radius: var(--radius-full);
+
   color: rgb(var(--color-gray-700));
+
+  background-color: rgb(var(--color-gray-100));
 
   &:hover {
     background-color: rgb(var(--color-gray-200));
@@ -129,8 +136,8 @@
 
   .dark & {
     border-color: transparent;
-    background-color: rgb(var(--color-primary-800));
     color: rgb(var(--color-gray-600));
+    background-color: rgb(var(--color-primary-800));
   }
 
   .dark &:hover {
@@ -150,4 +157,30 @@
 
 .⁂-load-more {
   @include mixins.button($theme: primary, $block: true);
+}
+
+.⁂-timeline-picker {
+  cursor: pointer;
+
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  margin: -0.25rem -0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+
+  transition: background 150ms ease-in-out;
+
+  &:hover, &:focus-within, &[aria-expanded="true"] {
+    background: rgb(var(--color-primary-100));
+
+    .dark & {
+      background: rgb(var(--color-primary-800));
+    }
+
+    .dark.black & {
+      background: rgb(var(--color-gray-900));
+    }
+  }
 }

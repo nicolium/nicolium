@@ -1,10 +1,9 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React, { useRef } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import Button from './button';
-import HStack from './hstack';
 import IconButton from './icon-button';
-import Stack from './stack';
 import Text from './text';
 
 const messages = defineMessages({
@@ -83,28 +82,29 @@ const Streamfield = <T,>({
   };
 
   return (
-    <Stack space={4}>
-      <Stack>
-        {label && (
-          <Text size='sm' weight='medium'>
-            {label}
-          </Text>
-        )}
-        {hint && (
-          <Text size='xs' theme='muted'>
-            {hint}
-          </Text>
-        )}
-      </Stack>
+    <div className='flex flex-col gap-2'>
+      {label || hint ? (
+        <div className='flex flex-col'>
+          {label && (
+            <Text size='sm' weight='medium'>
+              {label}
+            </Text>
+          )}
+          {hint && (
+            <Text size='xs' theme='muted'>
+              {hint}
+            </Text>
+          )}
+        </div>
+      ) : null}
 
       {values.length > 0 && (
-        <Stack space={1}>
+        <div className='flex flex-col gap-1'>
           {values.map((value, i) =>
             (value as Record<string, unknown>)?._destroy ? null : (
-              <HStack
+              <div
+                className='flex items-center gap-2'
                 key={i}
-                space={2}
-                alignItems='center'
                 draggable={draggable}
                 onDragStart={handleDragStart(i)}
                 onDragEnter={handleDragEnter(i)}
@@ -121,17 +121,17 @@ const Streamfield = <T,>({
                   <IconButton
                     iconClassName='h-4 w-4'
                     className='bg-transparent text-gray-600 hover:text-gray-600'
-                    src={require('@phosphor-icons/core/regular/x.svg')}
+                    src={iconX}
                     onClick={() => {
                       onRemoveItem(i);
                     }}
                     title={intl.formatMessage(messages.remove)}
                   />
                 )}
-              </HStack>
+              </div>
             ),
           )}
-        </Stack>
+        </div>
       )}
 
       {onAddItem && values.length < maxItems && (
@@ -139,7 +139,7 @@ const Streamfield = <T,>({
           <FormattedMessage id='streamfield.add' defaultMessage='Add' />
         </Button>
       )}
-    </Stack>
+    </div>
   );
 };
 

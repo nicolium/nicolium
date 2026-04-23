@@ -1,30 +1,19 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
+import { AsideContent } from '@/components/navigation/aside-content';
 import Layout from '@/components/ui/layout';
-import LinkFooter from '@/features/ui/components/link-footer';
-import { WhoToFollowPanel, TrendsPanel, SignUpPanel } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { useFeatures } from '@/hooks/use-features';
 
-const StatusLayout = () => {
-  const me = useAppSelector((state) => state.me);
-  const features = useFeatures();
+const StatusLayout = () => (
+  <>
+    <Layout.Main>
+      <Outlet />
+    </Layout.Main>
 
-  return (
-    <>
-      <Layout.Main>
-        <Outlet />
-      </Layout.Main>
-
-      <Layout.Aside>
-        {!me && <SignUpPanel />}
-        {features.trends && <TrendsPanel limit={5} />}
-        {me && features.suggestions && <WhoToFollowPanel limit={3} />}
-        <LinkFooter />
-      </Layout.Aside>
-    </>
-  );
-};
+    <Layout.Aside>
+      <AsideContent layout='default' />
+    </Layout.Aside>
+  </>
+);
 
 export { StatusLayout as default };

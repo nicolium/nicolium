@@ -7,25 +7,33 @@ import parse, {
 } from 'html-react-parser';
 import groupBy from 'lodash/groupBy';
 import minBy from 'lodash/minBy';
+import iconTextWrap from 'lucide-static/icons/text-wrap.svg';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-/* eslint-disable no-redeclare */
-import { Link } from '@/components/link';
 import Emojify from '@/features/emoji/emojify';
 import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
-import nyaize from '@/utils/nyaize';
 import Purify from '@/utils/url-purify';
 
+import { AccountLink } from '../accounts/account-link';
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
+import { MentionWithAvatar } from '../accounts/mention-with-avatar';
 import HashtagLink from '../hashtag-link';
+import Icon from '../ui/icon';
 
 import StatusMention from './status-mention';
 
 import type { CustomEmoji, Mention } from 'pl-api';
 
 const GREENTEXT_CLASS = 'dark:text-accent-green text-lime-600';
+
+const messages = defineMessages({
+  toggleWrap: {
+    id: 'code_block.toggle_wrap',
+    defaultMessage: 'Toggle wrap',
+  },
+});
 
 const checkSuspiciousUrl = (url: string): boolean => {
   try {
@@ -61,6 +69,27 @@ const isHostNotVisible = (href: string, text?: string): false | string => {
   } catch (e) {
     return false;
   }
+};
+
+interface ICodeBlock {
+  children: React.ReactNode;
+}
+
+const CodeBlock: React.FC<ICodeBlock> = ({ children }) => {
+  const intl = useIntl();
+
+  return (
+    <div className='⁂-code-block'>
+      <label onClick={(e) => e.stopPropagation()} title={intl.formatMessage(messages.toggleWrap)}>
+        <input type='checkbox' />
+        <span className='sr-only'>
+          <FormattedMessage id='code_block.toggle_wrap' defaultMessage='Toggle wrap' />
+        </span>
+        <Icon src={iconTextWrap} aria-hidden />
+      </label>
+      <pre>{children}</pre>
+    </div>
+  );
 };
 
 interface IParsedUrl extends React.HTMLAttributes<HTMLAnchorElement> {
@@ -132,6 +161,7 @@ interface IParsedContent {
   displayTargetHost?: boolean;
   greentext?: boolean;
   speakAsCat?: boolean;
+  displayMentionAvatars?: boolean;
 }
 
 // Adapted from Mastodon https://github.com/mastodon/mastodon/blob/main/app/javascript/mastodon/components/hashtag_bar.tsx
@@ -176,7 +206,15 @@ function parseContent(
 };
 
 function parseContent(
-  { html, mentions, hasQuote, emojis, greentext = false, speakAsCat = false }: IParsedContent,
+  {
+    html,
+    mentions,
+    hasQuote,
+    emojis,
+    greentext = false,
+    speakAsCat = false,
+    displayMentionAvatars = false,
+  }: IParsedContent,
   extractHashtags = false,
 ) {
   if (html.length === 0) {
@@ -197,10 +235,8 @@ function parseContent(
 
   let hasSuspiciousUrl = false;
 
-  const transformText = (data: string, key?: React.Key) => {
-    const text = speakAsCat ? nyaize(data) : data;
-
-    return <Emojify key={key} text={text} emojis={emojiMap} />;
+  const transformText = (text: string, key?: React.Key) => {
+    return <Emojify key={key} text={text} emojis={emojiMap} nyaize={speakAsCat} />;
   };
 
   const options: HTMLReactParserOptions = {
@@ -243,6 +279,10 @@ function parseContent(
         domNode.greentext = true;
       }
 
+      if (domNode.name === 'pre') {
+        return <CodeBlock>{domToReact(domNode.children as Array<DOMNode>, options)}</CodeBlock>;
+      }
+
       if (domNode.name === 'a') {
         const classes = domNode.attribs.class?.split(' ');
 
@@ -267,18 +307,15 @@ function parseContent(
             const mention = mentions.find(({ url }) => domNode.attribs.href === url);
             if (mention) {
               return (
-                <Link
-                  to='/@{$username}'
-                  params={{ username: mention.acct }}
-                  dir='ltr'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <HoverAccountWrapper accountId={mention.id} element='span'>
-                    @{mention.username}
-                  </HoverAccountWrapper>
-                </Link>
+                <AccountLink account={mention} dir='ltr' onClick={(e) => e.stopPropagation()}>
+                  {displayMentionAvatars ? (
+                    <MentionWithAvatar id={mention.id} username={mention.username} />
+                  ) : (
+                    <HoverAccountWrapper accountId={mention.id} element='span'>
+                      @{mention.username}
+                    </HoverAccountWrapper>
+                  )}
+                </AccountLink>
               );
             }
           } else if (domNode.attribs['data-user']) {
@@ -374,13 +411,14 @@ function parseContent(
 
 const ParsedContent: React.FC<IParsedContent> = React.memo(
   (props) => {
-    const { urlPrivacy } = useSettings();
+    const { urlPrivacy, displayMentionAvatars } = useSettings();
 
     props = { ...props };
 
     props.cleanUrls ??= urlPrivacy.clearLinksInContent;
     props.redirectUrls ??= urlPrivacy.redirectLinksMode !== 'off';
     props.displayTargetHost ??= urlPrivacy.displayTargetHost;
+    props.displayMentionAvatars ??= displayMentionAvatars;
 
     return parseContent(props, false);
   },

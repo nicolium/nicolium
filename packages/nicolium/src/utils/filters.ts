@@ -55,4 +55,4 @@ const checkFiltered = (index: string, filters: Array<Filter>): Array<FilterResul
     return results;
   }, []);
 
-export { escapeRegExp, regexFromFilters, checkFiltered };
+export { regexFromFilters, checkFiltered };

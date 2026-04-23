@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import * as v from 'valibot';
 
-import { updateFrontendConfig } from '@/actions/admin';
 import { uploadMedia } from '@/actions/media';
 import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
@@ -19,14 +18,14 @@ import Select from '@/components/ui/select';
 import Streamfield from '@/components/ui/streamfield';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
-import CryptoAddressInput from '@/features/frontend-config/components/crypto-address-input';
-import FooterLinkInput from '@/features/frontend-config/components/footer-link-input';
-import PromoPanelInput from '@/features/frontend-config/components/promo-panel-input';
-import SitePreview from '@/features/frontend-config/components/site-preview';
 import ThemeSelector from '@/features/ui/components/theme-selector';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import CryptoAddressInput from '@/pages/dashboard/components/frontend-config/crypto-address-input';
+import FooterLinkInput from '@/pages/dashboard/components/frontend-config/footer-link-input';
+import PromoPanelInput from '@/pages/dashboard/components/frontend-config/promo-panel-input';
+import SitePreview from '@/pages/dashboard/components/frontend-config/site-preview';
+import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
 import {
   cryptoAddressSchema,
   footerItemSchema,
@@ -34,6 +33,7 @@ import {
   promoPanelItemSchema,
   type FrontendConfig,
 } from '@/schemas/frontend-config';
+import { useFrontendConfigStore } from '@/stores/frontend-config';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -64,13 +64,13 @@ type ThemeChangeHandler = (theme: 'system' | 'light' | 'dark' | 'black') => void
 
 const FrontendConfigEditor: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const client = useClient();
 
   const features = useFeatures();
 
-  const initialData = useAppSelector((state) => state.frontendConfig);
+  const initialData = useFrontendConfigStore((state) => state.partialConfig);
+  const { mutate: updateConfig, isPending } = useUpdateAdminConfig();
 
-  const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState(v.parse(frontendConfigSchema, initialData));
   const [jsonEditorExpanded, setJsonEditorExpanded] = useState(false);
   const [rawJSON, setRawJSON] = useState<string>(JSON.stringify(initialData, null, 2));
@@ -89,15 +89,11 @@ const FrontendConfigEditor: React.FC = () => {
   };
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
-    dispatch(updateFrontendConfig(data))
-      .then(() => {
-        setLoading(false);
-        toast.success(intl.formatMessage(messages.saved));
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-    setLoading(true);
+    updateConfig(getUpdateFrontendConfigParams(data), {
+      onSuccess: () => {
+        toast.success(messages.saved);
+      },
+    });
     e.preventDefault();
   };
 
@@ -125,7 +121,7 @@ const FrontendConfigEditor: React.FC = () => {
       const file = e.target.files?.item(0);
 
       if (file) {
-        dispatch(uploadMedia({ file }))
+        uploadMedia(client, { file })
           .then((data) => {
             handleChange(path, () => data.url)(e);
           })
@@ -199,7 +195,7 @@ const FrontendConfigEditor: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
-        <fieldset className='space-y-6' disabled={isLoading}>
+        <fieldset className='space-y-6' disabled={isPending}>
           <SitePreview frontendConfig={frontendConfig} />
 
           <CardHeader>
@@ -361,6 +357,26 @@ const FrontendConfigEditor: React.FC = () => {
               <Toggle
                 checked={frontendConfig.mediaPreview}
                 onChange={handleChange('mediaPreview', (e) => e.target.checked)}
+              />
+            </ListItem>
+
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='frontend_config.allow_displaying_remote_no_login_label'
+                  defaultMessage='Allow displaying remote content when not logged in'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='frontend_config.allow_displaying_remote_no_login_hint'
+                  defaultMessage='When disabled, users will be navigated to origin URLs when trying to view remote content.'
+                />
+              }
+            >
+              <Toggle
+                checked={frontendConfig.allowDisplayingRemoteNoLogin}
+                onChange={handleChange('allowDisplayingRemoteNoLogin', (e) => e.target.checked)}
               />
             </ListItem>
 

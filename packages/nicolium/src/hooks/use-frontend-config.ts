@@ -1,17 +1,6 @@
-import { useMemo } from 'react';
-import * as v from 'valibot';
+import { useFrontendConfigStore } from '@/stores/frontend-config';
 
-import { frontendConfigSchema } from '@/schemas/frontend-config';
-
-import { useAppSelector } from './use-app-selector';
-
-const defaultFrontendConfig = v.parse(frontendConfigSchema, {});
-
-/** Get the Nicolium config from the store */
-const useFrontendConfig = () => {
-  const partialConfig = useAppSelector((state) => state.frontendConfig);
-
-  return useMemo(() => ({ ...defaultFrontendConfig, ...partialConfig }), [partialConfig]);
-};
+/** Get the Nicolium config from the store. */
+const useFrontendConfig = () => useFrontendConfigStore((state) => state.config);
 
 export { useFrontendConfig };

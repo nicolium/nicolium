@@ -1,10 +1,10 @@
+import iconArrowsInSimple from '@phosphor-icons/core/regular/arrows-in-simple.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { useFeatures } from '@/hooks/use-features';
@@ -76,8 +76,8 @@ const OtherActionsStep = ({
   };
 
   return (
-    <Stack space={4}>
-      <Stack space={2}>
+    <div className='flex flex-col gap-4'>
+      <div className='flex flex-col gap-2'>
         <Text tag='h1' size='xl' weight='semibold'>
           <FormattedMessage
             id='report.other_actions.other_statuses'
@@ -94,7 +94,7 @@ const OtherActionsStep = ({
           }
         >
           {showAdditionalStatuses ? (
-            <Stack space={2}>
+            <div className='flex flex-col gap-2'>
               <div className='⁂-status-list'>
                 {statusIds.map((statusId) => (
                   <StatusCheckBox
@@ -108,7 +108,7 @@ const OtherActionsStep = ({
 
               <div>
                 <Button
-                  icon={require('@phosphor-icons/core/regular/arrows-in-simple.svg')}
+                  icon={iconArrowsInSimple}
                   theme='tertiary'
                   size='sm'
                   onClick={() => {
@@ -121,10 +121,10 @@ const OtherActionsStep = ({
                   />
                 </Button>
               </div>
-            </Stack>
+            </div>
           ) : (
             <Button
-              icon={require('@phosphor-icons/core/regular/plus.svg')}
+              icon={iconPlus}
               theme='tertiary'
               size='sm'
               onClick={() => {
@@ -135,9 +135,9 @@ const OtherActionsStep = ({
             </Button>
           )}
         </FormGroup>
-      </Stack>
+      </div>
 
-      <Stack space={2}>
+      <div className='flex flex-col gap-2'>
         <Text tag='h1' size='xl' weight='semibold'>
           <FormattedMessage
             id='report.other_actions.further_actions'
@@ -153,7 +153,7 @@ const OtherActionsStep = ({
             />
           }
         >
-          <HStack space={2} alignItems='center'>
+          <div className='flex items-center gap-2'>
             <Toggle checked={isBlocked} onChange={handleBlockChange} id='report-block' />
 
             <Text theme='muted' tag='label' size='sm' htmlFor='report-block'>
@@ -163,7 +163,7 @@ const OtherActionsStep = ({
                 values={{ target: `@${account.acct}` }}
               />
             </Text>
-          </HStack>
+          </div>
         </FormGroup>
 
         {canForward && (
@@ -175,7 +175,7 @@ const OtherActionsStep = ({
               />
             }
           >
-            <HStack space={2} alignItems='center'>
+            <div className='flex items-center gap-2'>
               <Toggle
                 checked={isForward}
                 onChange={handleForwardChange}
@@ -190,11 +190,11 @@ const OtherActionsStep = ({
                   values={{ target: getDomain(account) }}
                 />
               </Text>
-            </HStack>
+            </div>
           </FormGroup>
         )}
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

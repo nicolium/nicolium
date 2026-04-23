@@ -193,20 +193,15 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(
 
     return (
       <LexicalComposer key={isWysiwyg ? 'wysiwyg' : 'no-wysiwyg'} initialConfig={initialConfig}>
-        <div className={clsx('lexical relative', className)} data-markup>
+        <div className={className} data-markup>
           <RichTextPlugin
             contentEditable={
               <div onFocus={onFocus} onPaste={handlePaste} ref={onRef}>
                 <ContentEditable
                   tabIndex={0}
-                  className={clsx(
-                    'relative z-10 text-[1rem] outline-none transition-[min-height] motion-reduce:transition-none',
-                    editableClassName,
-                    {
-                      'min-h-[39px]': condensed,
-                      'min-h-[99px]': !condensed,
-                    },
-                  )}
+                  className={clsx('⁂-compose-form__editor__editable', editableClassName, {
+                    '⁂-compose-form__editor__editable--condensed': condensed,
+                  })}
                   lang={language ?? undefined}
                   data-compose-id={composeId}
                   aria-label={textareaPlaceholder}

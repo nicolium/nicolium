@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 
@@ -67,7 +66,7 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
       secondaryText={secondary}
       secondaryAction={onSecondary && handleSecondary}
     >
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <Text id='modal-description'>{message}</Text>
 
         {checkbox && (
@@ -77,7 +76,7 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
             </ListItem>
           </List>
         )}
-      </Stack>
+      </div>
     </Modal>
   );
 };

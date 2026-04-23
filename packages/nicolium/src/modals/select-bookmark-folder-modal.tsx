@@ -1,15 +1,15 @@
+import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
+import iconFolderSimple from '@phosphor-icons/core/regular/folder-simple.svg';
 import fuzzysort from 'fuzzysort';
 import React, { useDeferredValue, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ListItem } from '@/components/list';
 import Emoji from '@/components/ui/emoji';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';
 import { RadioGroup, RadioItem } from '@/components/ui/radio';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import Toggle from '@/components/ui/toggle';
 import { useFeatures } from '@/hooks/use-features';
 import { NewFolderForm } from '@/pages/status-lists/bookmark-folders';
@@ -97,7 +97,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
       <ListItem
         key={folder.id}
         label={
-          <HStack alignItems='center' space={2}>
+          <div className='flex items-center gap-2'>
             {folder.emoji ? (
               <Emoji
                 emoji={folder.emoji}
@@ -105,10 +105,10 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
                 className='size-5 flex-none'
               />
             ) : (
-              <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />
+              <Icon src={iconFolderSimple} size={20} />
             )}
             <span>{folder.name}</span>
-          </HStack>
+          </div>
         }
       >
         <Toggle
@@ -127,15 +127,15 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
       <RadioItem
         key='all'
         label={
-          <HStack alignItems='center' space={2}>
-            <Icon src={require('@phosphor-icons/core/regular/bookmarks.svg')} size={20} />
+          <div className='flex items-center gap-2'>
+            <Icon src={iconBookmarks} size={20} />
             <span>
               <FormattedMessage
                 id='bookmark_folders.all_bookmarks'
                 defaultMessage='All bookmarks'
               />
             </span>
-          </HStack>
+          </div>
         }
         checked={selectedFolder === null}
         value=''
@@ -148,7 +148,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
           <RadioItem
             key={folder.id}
             label={
-              <HStack alignItems='center' space={2}>
+              <div className='flex items-center gap-2'>
                 {folder.emoji ? (
                   <Emoji
                     emoji={folder.emoji}
@@ -156,10 +156,10 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
                     className='size-5 flex-none'
                   />
                 ) : (
-                  <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />
+                  <Icon src={iconFolderSimple} size={20} />
                 )}
                 <span>{folder.name}</span>
-              </HStack>
+              </div>
             }
             checked={selectedFolder === folder.id}
             value={folder.id}
@@ -172,11 +172,11 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
   const body = isFetching ? (
     <Spinner />
   ) : (
-    <Stack space={4}>
+    <div className='flex flex-col gap-4'>
       <NewFolderForm search onChange={handleSearchChange} />
 
       <RadioGroup onChange={onChange}>{items}</RadioGroup>
-    </Stack>
+    </div>
   );
 
   return (

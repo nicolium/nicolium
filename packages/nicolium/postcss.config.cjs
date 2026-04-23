@@ -1,9 +1,8 @@
 /** @type {import('postcss-load-config').ConfigFn} */
-const config = ({ env }) => ({
+const config = () => ({
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
-    cssnano: env === 'production' ? {} : false,
   },
 });
 

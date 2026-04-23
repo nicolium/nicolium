@@ -1,9 +1,9 @@
+import iconClock from '@phosphor-icons/core/regular/clock.svg';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
-import HStack from '../ui/hstack';
 import Icon from '../ui/icon';
 import Text from '../ui/text';
 
@@ -81,16 +81,11 @@ const AccountLocalTime: React.FC<IAccountLocalTime> = ({ accountId, field }) => 
   if (!localTime) return null;
 
   return (
-    <HStack
-      className='mt-1'
-      alignItems='center'
-      space={0.5}
+    <div
+      className='mt-1 flex items-center gap-0.5'
       title={intl.formatMessage(messages.timezone, { timezone: field.value })}
     >
-      <Icon
-        src={require('@phosphor-icons/core/regular/clock.svg')}
-        className='size-4 text-gray-800 dark:text-gray-200'
-      />
+      <Icon src={iconClock} className='size-4 text-gray-800 dark:text-gray-200' />
       <Text size='sm'>
         {localTime}
         {me !== accountId && isTimezoneEqual && (
@@ -100,7 +95,7 @@ const AccountLocalTime: React.FC<IAccountLocalTime> = ({ accountId, field }) => 
           </span>
         )}
       </Text>
-    </HStack>
+    </div>
   );
 };
 

@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { initReport, ReportableEntities } from '@/actions/reports';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
@@ -17,6 +14,7 @@ import {
   useMuteAccountMutation,
   useUpdateAccountNoteMutation,
 } from '@/queries/accounts/use-relationship';
+import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -48,6 +46,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
   const [note, setNote] = useState<string | undefined>(undefined);
   const { notes, blocksDuration, mutesDuration } = useFeatures();
   const canSetDuration = action === 'MUTE' ? mutesDuration : blocksDuration;
+  const { openModal } = useModalsActions();
 
   const currentNote = account?.relationship?.note;
 
@@ -81,7 +80,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
 
   const handleBlockAndReport = () => {
     handleClick(() => {
-      initReport(ReportableEntities.STATUS, account, { statusId });
+      openModal('REPORT', { accountId: account.id, statusIds: statusId ? [statusId] : undefined });
     });
   };
 
@@ -141,7 +140,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
       cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
       cancelAction={handleCancel}
     >
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <Text>
           {action === 'MUTE' ? (
             <FormattedMessage
@@ -159,17 +158,15 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
         </Text>
 
         {action === 'MUTE' && (
-          <label>
-            <HStack alignItems='center' space={2}>
-              <Text tag='span' theme='muted'>
-                <FormattedMessage
-                  id='mute_modal.hide_notifications'
-                  defaultMessage='Hide notifications from this user?'
-                />
-              </Text>
+          <label className='flex items-center gap-2'>
+            <Text tag='span' theme='muted'>
+              <FormattedMessage
+                id='mute_modal.hide_notifications'
+                defaultMessage='Hide notifications from this user?'
+              />
+            </Text>
 
-              <Toggle checked={notifications} onChange={toggleNotifications} />
-            </HStack>
+            <Toggle checked={notifications} onChange={toggleNotifications} />
           </label>
         )}
 
@@ -217,7 +214,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
         {canSetDuration && (
           <>
             <label>
-              <HStack alignItems='center' space={2}>
+              <div className='flex items-center gap-2'>
                 <Text tag='span'>
                   {action === 'MUTE' ? (
                     <FormattedMessage
@@ -233,21 +230,21 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
                 </Text>
 
                 <Toggle checked={duration !== 0} onChange={toggleAutoExpire} />
-              </HStack>
+              </div>
             </label>
 
             {duration !== 0 && (
-              <Stack space={2}>
+              <div className='flex flex-col gap-2'>
                 <Text weight='medium'>
                   <FormattedMessage id='mute_modal.duration' defaultMessage='Duration' />:{' '}
                 </Text>
 
                 <DurationSelector onDurationChange={handleChangeMuteDuration} value={duration} />
-              </Stack>
+              </div>
             )}
           </>
         )}
-      </Stack>
+      </div>
     </Modal>
   );
 };

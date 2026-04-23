@@ -1,3 +1,5 @@
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -68,12 +70,7 @@ const Accordion: React.FC<IAccordion> = ({
         <span>{headline}</span>
 
         <div className='⁂-accordion__header__actions'>
-          {menu && (
-            <DropdownMenu
-              items={menu}
-              src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-            />
-          )}
+          {menu && <DropdownMenu items={menu} src={iconDotsThreeVertical} />}
           {action && actionIcon && (
             <button
               className='⁂-accordion__header__action'
@@ -83,11 +80,7 @@ const Accordion: React.FC<IAccordion> = ({
               <Icon src={actionIcon} aria-hidden />
             </button>
           )}
-          <Icon
-            src={require('@phosphor-icons/core/regular/caret-down.svg')}
-            className='⁂-accordion__header__chevron'
-            aria-hidden
-          />
+          <Icon src={iconCaretDown} className='⁂-accordion__header__chevron' aria-hidden />
         </div>
       </button>
 

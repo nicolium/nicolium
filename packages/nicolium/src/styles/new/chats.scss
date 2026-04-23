@@ -3,21 +3,24 @@
 
 .⁂-chat-widget {
   position: fixed;
-  bottom: 0;
   z-index: 99;
+  bottom: 0;
+
   display: flex;
   flex-direction: column;
+
   width: 24rem;
   height: 4rem;
-  border-radius: 0.5rem 0.5rem 0 0;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+
   background: white;
   box-shadow: 0 25px 75px -15px #0004;
 
-  [dir="ltr"] & {
+  [dir='ltr'] & {
     right: 1.25rem;
   }
 
-  [dir="rtl"] & {
+  [dir='rtl'] & {
     left: 1.25rem;
   }
 
@@ -26,8 +29,8 @@
   }
 
   .black & {
-    background: black;
     border: 1px solid rgb(var(--color-gray-800));
+    background: black;
   }
 
   &--open {
@@ -39,8 +42,8 @@
     }
   }
 
-  &--placeholder {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .no-reduce-motion &--placeholder {
+    animation: pulse 2s ease-in-out infinite;
   }
 
   &__container {
@@ -52,25 +55,27 @@
   }
 
   &__header {
+    overflow: hidden;
     display: flex;
+    gap: 0.5rem;
     align-items: center;
     justify-content: space-between;
+
     height: 4rem;
     min-height: 4rem;
+    padding: 0.75rem 1rem;
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
-    padding: 0.75rem 1rem;
-    gap: 0.5rem;
-    overflow: hidden;
 
     &__title {
-      display: flex;
-      height: 4rem;
-      flex-grow: 1;
-      flex-direction: row;
-      align-items: center;
-      gap: 0.25rem;
       overflow: hidden;
+      display: flex;
+      flex-direction: row;
+      flex-grow: 1;
+      gap: 0.25rem;
+      align-items: center;
+
+      height: 4rem;
 
       p {
         overflow: hidden;
@@ -81,18 +86,19 @@
     &__title div:first-child,
     &__count p {
       @include mixins.text($weight: semibold);
+
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     &__count {
       display: flex;
-      align-items: center;
       gap: 0.5rem;
+      align-items: center;
 
       &__dot {
-        height: 0.625rem;
         width: 0.625rem;
+        height: 0.625rem;
         border-radius: 50%;
         background: rgb(var(--color-accent-300));
       }
@@ -100,56 +106,64 @@
 
     &__actions {
       display: flex;
-      align-items: center;
       gap: 0.5rem;
+      align-items: center;
 
       svg {
-        height: 1.25rem;
         width: 1.25rem;
+        height: 1.25rem;
         color: rgb(var(--color-gray-600));
       }
     }
 
     &__open-button svg {
       transform: rotate(0deg);
-      transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.15s var(--ease-default);
     }
   }
 
   &__search-header {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
+    align-items: center;
   }
 
   &__list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    height: 100%;
     flex-grow: 1;
+    gap: 1rem;
+
+    height: 100%;
 
     > div {
       &::before,
       &::after {
+        --gradient-from: #fff;
+        --gradient-to: transparent;
+
         pointer-events: none;
+        content: '';
+
         position: absolute;
-        left: 0;
+        z-index: 2;
         right: 0;
+        left: 0;
+
         display: flex;
         justify-content: center;
 
-        --gradient-from: #fff;
-        --gradient-to: transparent;
-        padding-bottom: 3rem;
         padding-top: 2rem;
-        opacity: 1;
-        transition: opacity 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        padding-bottom: 3rem;
 
+        opacity: 1;
+
+        transition: opacity 500ms var(--ease-default);
 
         .dark.black & {
           --gradient-from: #000;
           --gradient-to: transparent;
+
           opacity: 0.5;
         }
 
@@ -157,8 +171,6 @@
           --gradient-from: rgb(var(--color-gray-900));
           --gradient-to: rgb(var(--color-gray-900) / 0);
         }
-        content: '';
-        z-index: 2;
       }
 
       &::before {
@@ -189,17 +201,19 @@
   &__blankslate {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
     flex-grow: 1;
     gap: 1rem;
+    align-items: center;
+    justify-content: center;
+
+    height: 100%;
 
     &__text {
       display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 0.25rem;
+      align-items: center;
+
       max-width: 80%;
 
       &__title {
@@ -219,13 +233,14 @@
 
 .⁂-chat-list-item {
   display: flex;
-  width: 100%;
   flex-direction: column;
-  border-radius: 0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+
+  width: 100%;
   padding-top: 0.75rem;
+  padding-right: 0.5rem;
   padding-bottom: 0.75rem;
+  padding-left: 0.5rem;
+  border-radius: var(--radius-lg);
 
   &:hover {
     background-color: rgb(var(--color-gray-100));
@@ -237,10 +252,11 @@
 
   > div {
     display: flex;
-    width: 100%;
+    gap: 0.5rem;
     align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
+
+    width: 100%;
   }
 
   &--shoutbox > div {
@@ -248,10 +264,10 @@
   }
 
   &__info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     overflow: hidden;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 
   &__avatar {
@@ -259,17 +275,17 @@
   }
 
   &__content {
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    overflow: hidden;
   }
 
   &__name {
     display: flex;
-    width: 100%;
     flex-grow: 1;
     align-items: center;
+    width: 100%;
 
     & > :not([hidden]) ~ :not([hidden]) {
       margin-left: 0.25rem;
@@ -282,9 +298,10 @@
 
   &__message {
     @include mixins.text($theme: muted, $size: sm, $align: left, $truncate: true);
+
     pointer-events: none;
-    height: 1.25rem;
     width: 100%;
+    height: 1.25rem;
 
     & > * {
       overflow: hidden;
@@ -307,13 +324,13 @@
 
   &__actions {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
+    align-items: center;
   }
 
   &__menu {
-    max-width: 0;
     overflow: hidden;
+    max-width: 0;
     color: rgb(var(--color-gray-600));
 
     &:hover {
@@ -336,8 +353,8 @@
       }
 
       svg {
-        height: 1rem;
         width: 1rem;
+        height: 1rem;
       }
     }
   }
@@ -349,7 +366,7 @@
   &__unread {
     width: 0.5rem;
     height: 0.5rem;
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
     background-color: rgb(var(--color-secondary-500));
   }
 

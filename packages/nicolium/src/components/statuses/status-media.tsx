@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react';
 
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
+import PlaceholderCard from '@/components/placeholders/placeholder-card';
 import PreviewCard from '@/components/preview-card';
-import PlaceholderCard from '@/features/placeholder/components/placeholder-card';
 import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
@@ -10,7 +10,7 @@ import { useSettings } from '@/stores/settings';
 
 import { useMediaVisible } from './sensitive-content-overlay';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { MediaAttachment } from 'pl-api';
 
 interface IStatusMedia {
@@ -24,6 +24,7 @@ interface IStatusMedia {
     | 'filtered'
     | 'media_attachments'
     | 'quote_id'
+    | 'quote_visible'
     | 'sensitive'
     | 'visibility'
   >;
@@ -36,7 +37,7 @@ interface IStatusMedia {
 /** Render media attachments for a status. */
 const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick }) => {
   const { openModal } = useModalsActions();
-  const { displayMedia } = useSettings();
+  const { displayMedia, disableUserProvidedMedia } = useSettings();
   const { data: account } = useAccount(status.account_id);
 
   const [visible] = useMediaVisible(status, displayMedia);
@@ -71,7 +72,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
   if (size > 0 && firstAttachment) {
     if (muted) {
       media = <AttachmentThumbs status={status} onClick={onClick} />;
-    } else if (size === 1 && firstAttachment.type === 'video') {
+    } else if (size === 1 && firstAttachment.type === 'video' && !disableUserProvidedMedia) {
       const video = firstAttachment;
 
       media = (
@@ -88,7 +89,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
           />
         </Suspense>
       );
-    } else if (size === 1 && firstAttachment.type === 'audio') {
+    } else if (size === 1 && firstAttachment.type === 'audio' && !disableUserProvidedMedia) {
       const attachment = firstAttachment;
 
       media = (
@@ -105,7 +106,6 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
             foregroundColor={attachment.meta.colors?.foreground}
             accentColor={attachment.meta.colors?.accent}
             duration={attachment.meta.original?.duration ?? 0}
-            height={263}
           />
         </Suspense>
       );
@@ -121,7 +121,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
         </Suspense>
       );
     }
-  } else if (!status.quote_id && status.card) {
+  } else if ((!status.quote_id || status.quote_visible === false) && status.card) {
     media = <PreviewCard onOpenMedia={openMedia} card={status.card} compact />;
   } else if (status.expectsCard) {
     media = <PlaceholderCard />;

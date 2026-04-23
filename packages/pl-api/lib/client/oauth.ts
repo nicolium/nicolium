@@ -19,7 +19,7 @@ const oauth = (client: PlApiBaseClient) => ({
    * @see {@link https://docs.joinmastodon.org/methods/oauth/#authorize}
    */
   authorize: async (params: OauthAuthorizeParams) => {
-    const response = await client.request('/oauth/authorize', { params, contentType: '' });
+    const response = await client.request('/oauth/authorize', { params, formData: true });
 
     return v.parse(v.string(), response.json);
   },
@@ -76,7 +76,7 @@ const oauth = (client: PlApiBaseClient) => ({
     const response = await client.request('/oauth/token', {
       method: 'POST',
       body: params,
-      contentType: '',
+      formData: true,
     });
 
     return v.parse(tokenSchema, { scope: params.scope || '', ...response.json });
@@ -91,7 +91,7 @@ const oauth = (client: PlApiBaseClient) => ({
     const response = await client.request<EmptyObject>('/oauth/revoke', {
       method: 'POST',
       body: params,
-      contentType: '',
+      formData: true,
     });
 
     client.socket?.close();

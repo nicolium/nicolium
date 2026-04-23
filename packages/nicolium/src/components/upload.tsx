@@ -27,7 +27,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AltIndicator from '@/components/media/alt-indicator';
 import Blurhash from '@/components/media/blurhash';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import { useModalsActions } from '@/stores/modals';
@@ -198,7 +197,7 @@ const Upload: React.FC<IUpload> = ({
             typeof x === 'number' && typeof y === 'number' ? `${x}% ${y}%` : undefined,
         }}
       >
-        <HStack className='absolute right-2 top-2 z-10' space={2}>
+        <div className='absolute right-2 top-2 z-10 flex gap-2'>
           {onDescriptionChange && (
             <IconButton
               onClick={handleOpenAltTextModal}
@@ -229,9 +228,9 @@ const Upload: React.FC<IUpload> = ({
               title={intl.formatMessage(messages.delete)}
             />
           )}
-        </HStack>
+        </div>
 
-        <HStack space={2} justifyContent='between' className='absolute inset-x-2 bottom-2 z-10'>
+        <div className='absolute inset-x-2 bottom-2 z-10 flex justify-between gap-2'>
           <span className='overflow-hidden text-ellipsis rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white'>
             {media.url.split('/').at(-1)}
           </span>
@@ -244,7 +243,7 @@ const Upload: React.FC<IUpload> = ({
               <AltIndicator warning />
             </button>
           )}
-        </HStack>
+        </div>
 
         <div className={clsx('absolute inset-0 size-full', { 'z-[-1]': hasBackgroundImage })}>
           {mediaType === 'video' && (

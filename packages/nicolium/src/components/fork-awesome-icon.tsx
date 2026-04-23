@@ -8,6 +8,8 @@
 import clsx from 'clsx';
 import React from 'react';
 
+import 'line-awesome/dist/font-awesome-line-awesome/css/all.css';
+
 interface IForkAwesomeIcon extends React.HTMLAttributes<HTMLLIElement> {
   id: string;
   className?: string;

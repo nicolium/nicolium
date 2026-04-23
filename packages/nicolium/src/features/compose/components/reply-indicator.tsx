@@ -1,15 +1,16 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React from 'react';
 
+import Account from '@/components/accounts/account';
 import Markup from '@/components/markup';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
-import Stack from '@/components/ui/stack';
-import AccountContainer from '@/containers/account-container';
+import { useAccount } from '@/queries/accounts/use-account';
 import { getTextDirection } from '@/utils/rtl';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
 interface IReplyIndicator {
   className?: string;
@@ -41,6 +42,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
   const handleClick = () => {
     onCancel!();
   };
+  const { data: account } = useAccount(status?.account_id);
 
   if (!status) {
     return null;
@@ -50,35 +52,42 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
   if (!hideActions && onCancel) {
     actions = {
       onActionClick: handleClick,
-      actionIcon: require('@phosphor-icons/core/regular/x.svg'),
+      actionIcon: iconX,
       actionAlignment: 'top',
       actionTitle: 'Dismiss',
     };
   }
 
   return (
-    <Stack
-      space={2}
+    <div
       className={clsx(
-        'max-h-72 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800',
+        'flex max-h-72 flex-col gap-2 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800',
         className,
       )}
     >
-      <AccountContainer
-        {...actions}
-        id={status.account_id}
-        timestamp={status.created_at}
-        showAccountHoverCard={false}
-        withLinkToProfile={false}
-        hideActions={hideActions}
-      />
+      {account && (
+        <Account
+          {...actions}
+          account={account}
+          timestamp={status.created_at}
+          showAccountHoverCard={false}
+          withLinkToProfile={false}
+          hideActions={hideActions}
+        />
+      )}
 
-      <Markup className='break-words' size='sm' direction={getTextDirection(status.search_index)}>
+      <Markup
+        className='break-words'
+        size='sm'
+        direction={getTextDirection(status.search_index)}
+        tag='div'
+      >
         <ParsedContent
           html={status.content}
           mentions={status.mentions}
           hasQuote={!!status.quote_id}
           emojis={status.emojis}
+          speakAsCat={account?.speak_as_cat}
         />
       </Markup>
 
@@ -87,7 +96,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
       {status.quote_id && (
         <QuotedStatusIndicator statusId={status.quote_id} statusUrl={status.quote_url} />
       )}
-    </Stack>
+    </div>
   );
 };
 

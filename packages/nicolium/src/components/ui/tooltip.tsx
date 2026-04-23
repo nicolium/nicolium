@@ -7,9 +7,10 @@ import {
   useFloating,
   useHover,
   useInteractions,
-  useTransitionStyles,
 } from '@floating-ui/react';
 import React, { useRef, useState } from 'react';
+
+import { useTransitionStyles } from '@/hooks/use-transition-styles';
 
 interface ITooltip {
   /** Element to display the tooltip around. */
@@ -23,9 +24,7 @@ interface ITooltip {
 /**
  * Tooltip
  */
-const Tooltip: React.FC<ITooltip> = (props) => {
-  const { children, text, disabled = false } = props;
-
+const Tooltip: React.FC<ITooltip> = ({ children, text, disabled = false }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const arrowRef = useRef<SVGSVGElement>(null);

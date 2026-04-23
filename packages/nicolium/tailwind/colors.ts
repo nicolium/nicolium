@@ -37,4 +37,4 @@ const parseColorMatrix = (colorMatrix: ColorMatrix): RecursiveKeyValuePair =>
     return palette;
   }, {});
 
-export { parseColorMatrix };
+export { withOpacityValue, parseColorMatrix };

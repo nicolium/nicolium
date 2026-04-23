@@ -1,35 +1,40 @@
-import { Outlet, useNavigate } from '@tanstack/react-router';
+import { Outlet, useMatch, useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { FormattedMessage } from 'react-intl';
 
-import { fetchConfig } from '@/actions/admin';
 import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
-import { useUserStream } from '@/api/hooks/streaming/use-user-stream';
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
 import ThumbNavigation from '@/components/navigation/thumb-navigation';
 import Layout from '@/components/ui/layout';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useUserStream } from '@/hooks/streaming/use-user-stream';
 import { useClient } from '@/hooks/use-client';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { prefetchFollowRequests } from '@/queries/accounts/use-follow-requests';
+import { useAdminConfig } from '@/queries/admin/use-config';
 import { queryClient } from '@/queries/client';
 import { prefetchCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { usePrefetchNotificationsMarker } from '@/queries/markers/use-markers';
 import { usePrefetchNotifications } from '@/queries/notifications/use-notifications';
 import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { newStatusRoute } from '@/router';
+import { useAuthStore } from '@/stores/auth';
+import { useInstance, useInstanceStore } from '@/stores/instance';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
-import { getVapidKey } from '@/utils/auth';
-import { isStandalone } from '@/utils/state';
+import GlobalHotkeys from '@/utils/global-hotkeys';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import '@/components/statuses/status';
+import { useIsStandalone } from '@/utils/state';
+
 import {
   ModalRoot,
   AccountHoverCard,
@@ -37,22 +42,26 @@ import {
   DropdownNavigation,
   StatusHoverCard,
 } from './util/async-components';
-import GlobalHotkeys from './util/global-hotkeys';
 
 const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement | null>(null);
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useOwnAccount();
   const features = useFeatures();
-  const vapidKey = useAppSelector((state) => getVapidKey(state));
-  const client = useClient();
   const instance = useInstance();
+  const vapidKey =
+    useAuthStore((state) => state.app?.vapid_key) ?? instance.configuration.vapid.public_key;
+  const client = useClient();
+  const { openModal } = useModalsActions();
 
   const isDropdownMenuOpen = useIsDropdownMenuOpen();
-  const standalone = useAppSelector(isStandalone);
+  const standalone = useIsStandalone();
+  const instanceFetched = useInstanceStore((state) => state.fetched);
+  const { showChatWidget } = useSettings();
+  const isNewStatusPage = !!useMatch({ from: newStatusRoute.id, shouldThrow: false });
 
+  useAdminConfig();
   useShoutboxSubscription();
   useFilters();
   usePrefetchNotifications();
@@ -68,17 +77,16 @@ const UI: React.FC = React.memo(() => {
     }
   };
 
-  const handleDragEnter = (e: DragEvent) => {
+  const handleDragEvents = (e: DragEvent) => {
     e.preventDefault();
   };
-  const handleDragLeave = (e: DragEvent) => {
-    e.preventDefault();
+
+  const handleSkipToContent = () => {
+    document.querySelector('main')?.focus();
   };
-  const handleDragOver = (e: DragEvent) => {
-    e.preventDefault();
-  };
-  const handleDrop = (e: DragEvent) => {
-    e.preventDefault();
+
+  const handleOpenHotkeysModal = () => {
+    openModal('HOTKEYS', undefined, document.getElementById('skip-link-hotkeys') || undefined);
   };
 
   /** Load initial data when a user is logged in */
@@ -87,18 +95,17 @@ const UI: React.FC = React.memo(() => {
 
     prefetchCustomEmojis(client);
 
-    if (account.is_admin && features.pleromaAdminAccounts) {
-      dispatch(fetchConfig());
-    }
-
     if (account.locked) {
       requestIdleCallback(() => prefetchFollowRequests(client), { timeout: 2000 });
     }
 
     if (features.scheduledStatuses) {
-      requestIdleCallback(() => queryClient.prefetchInfiniteQuery(scheduledStatusesQueryOptions), {
-        timeout: 2000,
-      });
+      requestIdleCallback(
+        () => queryClient.prefetchInfiniteQuery(scheduledStatusesQueryOptions(client)),
+        {
+          timeout: 2000,
+        },
+      );
     }
   };
 
@@ -113,15 +120,15 @@ const UI: React.FC = React.memo(() => {
   }, []);
 
   useEffect(() => {
-    document.addEventListener('dragenter', handleDragEnter);
-    document.addEventListener('dragleave', handleDragLeave);
-    document.addEventListener('dragover', handleDragOver);
-    document.addEventListener('drop', handleDrop);
+    document.addEventListener('dragenter', handleDragEvents);
+    document.addEventListener('dragleave', handleDragEvents);
+    document.addEventListener('dragover', handleDragEvents);
+    document.addEventListener('drop', handleDragEvents);
     return () => {
-      document.removeEventListener('dragenter', handleDragEnter);
-      document.removeEventListener('dragleave', handleDragLeave);
-      document.removeEventListener('dragover', handleDragOver);
-      document.removeEventListener('drop', handleDrop);
+      document.removeEventListener('dragenter', handleDragEvents);
+      document.removeEventListener('dragleave', handleDragEvents);
+      document.removeEventListener('dragover', handleDragEvents);
+      document.removeEventListener('drop', handleDragEvents);
     };
   }, []);
 
@@ -129,12 +136,12 @@ const UI: React.FC = React.memo(() => {
 
   // The user has logged in
   useEffect(() => {
-    if (instance.fetched) loadAccountData();
-  }, [!!account, instance.fetched]);
+    if (instanceFetched) loadAccountData();
+  }, [!!account, instanceFetched]);
 
   useEffect(() => {
-    dispatch(registerPushNotifications());
-  }, [vapidKey]);
+    if (account) registerPushNotifications(client, account.id);
+  }, [vapidKey, !!account]);
 
   // Wait for login to succeed or fail
   if (me === null) return null;
@@ -148,6 +155,17 @@ const UI: React.FC = React.memo(() => {
   return (
     <GlobalHotkeys node={node}>
       <div ref={node} style={style}>
+        <div className='⁂-skip-links'>
+          <button onClick={handleSkipToContent}>
+            <FormattedMessage id='skip_links.skip_to_content' defaultMessage='Skip to content' />
+          </button>
+          <button id='skip-link-hotkeys' onClick={handleOpenHotkeysModal}>
+            <FormattedMessage
+              id='navigation.keyboard_shortcuts'
+              defaultMessage='Keyboard shortcuts'
+            />
+          </button>
+        </div>
         <div
           className={clsx('⁂-dragging-area', {
             '⁂-dragging-area--dragging': isDragging,
@@ -156,9 +174,11 @@ const UI: React.FC = React.memo(() => {
 
         <div className='⁂-layout__container'>
           <Layout fullWidth={fullWidth}>
-            <Layout.Sidebar shrink={fullWidth}>
-              {!(standalone && !me) && <SidebarNavigation shrink={fullWidth} />}
-            </Layout.Sidebar>
+            {!isNewStatusPage && (
+              <Layout.Sidebar shrink={fullWidth}>
+                {!(standalone && !me) && <SidebarNavigation shrink={fullWidth} />}
+              </Layout.Sidebar>
+            )}
 
             <Outlet />
           </Layout>
@@ -167,7 +187,7 @@ const UI: React.FC = React.memo(() => {
             <DropdownNavigation />
           </Suspense>
 
-          {me && features.chats && (
+          {me && features.chats && showChatWidget && !isNewStatusPage && (
             <div className='⁂-chat-widget__container'>
               <Suspense fallback={<div className='⁂-chat-widget ⁂-chat-widget--placeholder' />}>
                 <ChatWidget />
@@ -175,7 +195,7 @@ const UI: React.FC = React.memo(() => {
             </div>
           )}
 
-          <ThumbNavigation />
+          {!isNewStatusPage && <ThumbNavigation />}
 
           <Suspense>
             <AccountHoverCard />

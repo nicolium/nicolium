@@ -1,3 +1,6 @@
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -5,10 +8,8 @@ import DropdownMenu from '@/components/dropdown-menu';
 import List, { ListItem } from '@/components/list';
 import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import { useAntennas } from '@/queries/accounts/use-antennas';
 import { useModalsActions } from '@/stores/modals';
 
@@ -41,7 +42,7 @@ const AntennasPage: React.FC = () => {
       action: () => {
         openModal('ANTENNA_EDITOR', {});
       },
-      icon: require('@phosphor-icons/core/regular/plus.svg'),
+      icon: iconPlus,
     },
   ];
 
@@ -55,14 +56,9 @@ const AntennasPage: React.FC = () => {
   return (
     <Column
       label={intl.formatMessage(messages.heading)}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         {/* <NewListForm /> */}
 
         {!Object.keys(antennas).length ? (
@@ -77,19 +73,16 @@ const AntennasPage: React.FC = () => {
                 to='/antennas/$antennaId'
                 params={{ antennaId: antenna.id }}
                 label={
-                  <HStack alignItems='center' space={2}>
-                    <Icon
-                      src={require('@phosphor-icons/core/regular/list-bullets.svg')}
-                      size={20}
-                    />
+                  <div className='flex items-center gap-2'>
+                    <Icon src={iconListBullets} size={20} />
                     <span>{antenna.title}</span>
-                  </HStack>
+                  </div>
                 }
               />
             ))}
           </List>
         )}
-      </Stack>
+      </div>
     </Column>
   );
 };

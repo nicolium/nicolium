@@ -2,10 +2,9 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
-import AccountContainer from '@/containers/account-container';
 import { useMutes } from '@/queries/account-lists/use-blocks';
 
 const messages = defineMessages({
@@ -19,7 +18,7 @@ const MutesPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <ScrollableList
           itemClassName={clsx('pb-4', { 'last:pb-0': !hasNextPage })}
           scrollKey='mutes'
@@ -42,7 +41,7 @@ const MutesPage: React.FC = () => {
             />
           ))}
         </ScrollableList>
-      </Stack>
+      </div>
     </Column>
   );
 };

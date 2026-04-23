@@ -1,9 +1,10 @@
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
+import AccountContainer from '@/components/accounts/account-container';
 import IconButton from '@/components/ui/icon-button';
-import AccountContainer from '@/containers/account-container';
 
 const messages = defineMessages({
   remove: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },
@@ -25,7 +26,7 @@ const Account: React.FC<IAccount> = ({ accountId, added, onAdd, onRemove }) => {
   if (added) {
     button = (
       <IconButton
-        src={require('@phosphor-icons/core/regular/x.svg')}
+        src={iconX}
         className='text-gray-400 hover:text-gray-600'
         iconClassName='h-5 w-5'
         title={intl.formatMessage(messages.remove)}
@@ -37,7 +38,7 @@ const Account: React.FC<IAccount> = ({ accountId, added, onAdd, onRemove }) => {
   } else {
     button = (
       <IconButton
-        src={require('@phosphor-icons/core/regular/plus.svg')}
+        src={iconPlus}
         className='text-gray-400 hover:text-gray-600'
         iconClassName='h-5 w-5'
         title={intl.formatMessage(messages.add)}
@@ -49,12 +50,12 @@ const Account: React.FC<IAccount> = ({ accountId, added, onAdd, onRemove }) => {
   }
 
   return (
-    <HStack space={1} alignItems='center' justifyContent='between' className='p-2.5'>
+    <div className='flex items-center justify-between gap-1 p-2.5'>
       <div className='w-full'>
         <AccountContainer id={accountId} withRelationship={false} />
       </div>
       {button}
-    </HStack>
+    </div>
   );
 };
 

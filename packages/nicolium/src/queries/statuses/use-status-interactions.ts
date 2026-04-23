@@ -8,10 +8,10 @@ import {
 import { create } from 'mutative';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { importEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 import { useModalsActions } from '@/stores/modals';
@@ -23,7 +23,7 @@ import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
 import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';
 
-import type { NormalizedStatus } from '@/normalizers/status';
+import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { EmojiReaction, PaginatedResponse } from 'pl-api';
 
 const messages = defineMessages({
@@ -118,26 +118,33 @@ const useEmojiReactMutation = (statusId: string) => {
 
   return useMutation({
     mutationKey: ['statuses', 'emojiReact', statusId],
-    mutationFn: async (emoji: string) => {
-      const status = await client.statuses.createStatusReaction(statusId, emoji);
-
-      importEntities({ statuses: [status] });
-    },
+    mutationFn: async (emoji: string) =>
+      await client.statuses.createStatusReaction(statusId, emoji),
     onMutate: (emoji) => {
-      const customEmoji = queryClient
-        .getQueryData(queryKeys.instance.customEmojis)
-        ?.find((e) => e.shortcode === emoji);
-
       return updateStatus(
         statusId,
-        (status) => ({
-          ...status,
-          emoji_reactions: simulateEmojiReact(status.emoji_reactions, emoji, customEmoji?.url),
-        }),
+        (status) => {
+          const customEmoji =
+            queryClient
+              .getQueryData(queryKeys.instance.customEmojis)
+              ?.find((e) => e.shortcode === emoji) ||
+            status.emoji_reactions?.find((r) => r.name === emoji);
+
+          return {
+            ...status,
+            emoji_reactions: simulateEmojiReact(status.emoji_reactions, emoji, customEmoji?.url),
+          };
+        },
         queryClient,
       );
     },
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onSettled: (status) => {
+      importEntities({ statuses: [status] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountsLists.statusReactions(statusId),
+      });
+    },
   });
 };
 
@@ -152,8 +159,6 @@ const useEmojiUnreactMutation = (statusId: string) => {
     mutationFn: async (emoji: string) => {
       const status = await client.statuses.deleteStatusReaction(statusId, emoji);
 
-      importEntities({ statuses: [status] });
-
       if (checkEmojiReactsSupport && !status.account.local) {
         supportsEmojiReacts(status.account.ap_id ?? status.account.url)
           .then((result) => {
@@ -167,6 +172,8 @@ const useEmojiUnreactMutation = (statusId: string) => {
           })
           .catch(() => {});
       }
+
+      return status;
     },
     onMutate: (emoji) =>
       updateStatus(
@@ -178,6 +185,12 @@ const useEmojiUnreactMutation = (statusId: string) => {
         queryClient,
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onSettled: (status) => {
+      importEntities({ statuses: [status] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountsLists.statusReactions(statusId),
+      });
+    },
   });
 };
 

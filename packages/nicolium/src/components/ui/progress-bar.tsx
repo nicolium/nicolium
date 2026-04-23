@@ -17,18 +17,13 @@ const ProgressBar: React.FC<IProgressBar> = ({ progress, size = 'md' }) => {
 
   const styles = useSpring({
     from: { width: '0%' },
-    to: { width: `${progress}%` },
+    to: { width: `${progress * 100}%` },
     reset: true,
     immediate: reduceMotion,
   });
 
   return (
-    <div
-      className={clsx('h-2.5 w-full overflow-hidden rounded-lg bg-gray-300 dark:bg-primary-800', {
-        'h-2.5': size === 'md',
-        'h-[6px]': size === 'sm',
-      })}
-    >
+    <div className={clsx('⁂-progress-bar', { '⁂-progress-bar--sm': size === 'sm' })}>
       <animated.div className='h-full bg-secondary-500' style={styles} />
     </div>
   );

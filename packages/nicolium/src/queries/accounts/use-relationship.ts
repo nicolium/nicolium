@@ -7,7 +7,7 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
 import { useContextsActions } from '@/stores/contexts';
-import { useTimelinesStore } from '@/stores/timelines';
+import { useTimelinesActions } from '@/stores/timelines';
 
 import type {
   BlockAccountParams,
@@ -145,6 +145,7 @@ const useBlockAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const { filterContexts } = useContextsActions();
+  const { filterTimelines } = useTimelinesActions();
 
   return useMutation({
     mutationKey: queryKeys.accountRelationships.show(accountId),
@@ -179,7 +180,7 @@ const useBlockAccountMutation = (accountId: string) => {
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
       filterContexts(data);
-      useTimelinesStore.getState().actions.filterTimelines(data.id);
+      filterTimelines(data.id);
     },
   });
 };
@@ -212,6 +213,7 @@ const useMuteAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const { filterContexts } = useContextsActions();
+  const { filterTimelines } = useTimelinesActions();
 
   return useMutation({
     mutationKey: queryKeys.accountRelationships.show(accountId),
@@ -242,7 +244,7 @@ const useMuteAccountMutation = (accountId: string) => {
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
       filterContexts(data);
-      useTimelinesStore.getState().actions.filterTimelines(data.id);
+      filterTimelines(data.id);
     },
   });
 };

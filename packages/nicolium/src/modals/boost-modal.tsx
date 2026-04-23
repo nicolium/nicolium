@@ -1,9 +1,9 @@
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/icon';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import ReplyIndicator from '@/features/compose/components/reply-indicator';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
@@ -49,7 +49,7 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
       confirmationAction={handleReblog}
       confirmationText={buttonText}
     >
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <ReplyIndicator status={status} hideActions />
 
         <Text>
@@ -59,17 +59,13 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
             values={{
               combo: (
                 <span>
-                  Shift +{' '}
-                  <Icon
-                    className='inline-block align-middle'
-                    src={require('@phosphor-icons/core/regular/repeat.svg')}
-                  />
+                  Shift + <Icon className='inline-block align-middle' src={iconRepeat} />
                 </span>
               ),
             }}
           />
         </Text>
-      </Stack>
+      </div>
     </Modal>
   );
 };

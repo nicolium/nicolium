@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    command: sleep infinity
+    volumes:
+      - ..:/workspaces/nicolium:Z
+    ports:
+      -  "127.0.0.1:7312:7312"

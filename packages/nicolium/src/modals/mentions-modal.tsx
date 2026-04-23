@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import ScrollableList from '@/components/scrollable-list';
 import Modal from '@/components/ui/modal';
-import AccountContainer from '@/containers/account-container';
 import { useStatus } from '@/queries/statuses/use-status';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';

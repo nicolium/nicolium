@@ -1,21 +1,25 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconArrowRight from '@phosphor-icons/core/regular/arrow-right.svg';
+import iconArrowsInSimple from '@phosphor-icons/core/regular/arrows-in-simple.svg';
+import iconArrowsOutSimple from '@phosphor-icons/core/regular/arrows-out-simple.svg';
+import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { animated, useSpring } from '@react-spring/web';
-import { Link } from '@tanstack/react-router';
 import { useDrag } from '@use-gesture/react';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import Audio from '@/components/media/audio';
 import ExtendedVideoPlayer from '@/components/media/extended-video-player';
-import MissingIndicator from '@/components/missing-indicator';
+import Video from '@/components/media/video';
+import ZoomableImage from '@/components/media/zoomable-image';
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import StatusActionBar from '@/components/statuses/status-action-bar';
-import HStack from '@/components/ui/hstack';
+import { StatusLink } from '@/components/statuses/status-link';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Audio from '@/features/audio';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import Thread from '@/features/status/components/thread';
-import ZoomableImage from '@/features/ui/components/zoomable-image';
-import Video from '@/features/video';
 import { useStatus } from '@/queries/statuses/use-status';
 import { userTouching } from '@/utils/is-mobile';
 
@@ -44,7 +48,9 @@ interface MediaModalProps {
 }
 
 const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
-  const { statusId, onClose, time = 0 } = props;
+  const { statusId, time = 0 } = props;
+
+  const onClose = () => props.onClose('MEDIA');
 
   const intl = useIntl();
 
@@ -180,12 +186,9 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         }
 
         const link = status && (
-          <Link
-            to='/@{$username}/posts/$statusId'
-            params={{ username: status.account.acct, statusId: status.id }}
-          >
+          <StatusLink status={status} account={status.account}>
             <FormattedMessage id='lightbox.view_context' defaultMessage='View context' />
-          </Link>
+          </StatusLink>
         );
 
         if (attachment.type === 'image') {
@@ -267,14 +270,6 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     };
   }, [index]);
 
-  if (statusId) {
-    if (isPending) {
-      return <MissingIndicator />;
-    } else if (!status) {
-      return <PlaceholderStatus />;
-    }
-  }
-
   const handleClickOutside: React.MouseEventHandler<HTMLElement> = (e) => {
     if ((e.target as HTMLElement).tagName === 'DIV') {
       onClose();
@@ -296,7 +291,9 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           style={wrapperStyles}
           className='⁂-media-modal__closer'
           role='presentation'
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
             onClose();
           }}
         >
@@ -304,30 +301,26 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         </animated.div>
 
         <div className='⁂-media-modal__navigation'>
-          <HStack
-            alignItems='center'
-            justifyContent='between'
+          <div
             className={clsx(
-              'pointer-events-auto z-10 flex-[0_0_60px] p-4 transition-opacity',
+              'pointer-events-auto z-10 flex flex-[0_0_60px] items-center justify-between p-4 transition-opacity',
               navigationHiddenClassName,
             )}
           >
             <IconButton
               title={intl.formatMessage(messages.close)}
-              src={require('@phosphor-icons/core/regular/x.svg')}
-              onClick={() => {
-                onClose('MEDIA');
-              }}
+              src={iconX}
+              onClick={onClose}
               theme='dark'
               className='!p-1.5 hover:scale-105 hover:bg-gray-900'
               iconClassName='h-5 w-5'
             />
 
-            <HStack alignItems='center' space={2}>
+            <div className='flex items-center gap-2'>
               {/* {zoomable && (
                 <IconButton
                   title={intl.formatMessage(zoomedIn ? messages.zoomOut : messages.zoomIn)}
-                  src={zoomedIn ? require('@phosphor-icons/core/regular/magnifying-glass-minus.svg') : require('@phosphor-icons/core/regular/magnifying-glass-plus.svg')}
+                  src={zoomedIn ? iconMagnifyingGlassMinus : iconMagnifyingGlassPlus}
                   theme='dark'
                   className='!p-1.5 hover:scale-105 hover:bg-gray-900'
                   iconClassName='h-5 w-5'
@@ -337,7 +330,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
               <IconButton
                 title={intl.formatMessage(messages.download)}
-                src={require('@phosphor-icons/core/regular/download-simple.svg')}
+                src={iconDownloadSimple}
                 theme='dark'
                 className='!p-1.5 hover:scale-105 hover:bg-gray-900'
                 iconClassName='h-5 w-5'
@@ -346,11 +339,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
               {status && (
                 <IconButton
-                  src={
-                    isFullScreen
-                      ? require('@phosphor-icons/core/regular/arrows-in-simple.svg')
-                      : require('@phosphor-icons/core/regular/arrows-out-simple.svg')
-                  }
+                  src={isFullScreen ? iconArrowsInSimple : iconArrowsOutSimple}
                   title={intl.formatMessage(isFullScreen ? messages.minimize : messages.expand)}
                   theme='dark'
                   className='hidden !p-1.5 hover:scale-105 hover:bg-gray-900 xl:block'
@@ -360,10 +349,10 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   }}
                 />
               )}
-            </HStack>
-          </HStack>
+            </div>
+          </div>
           {hasMultipleImages && (
-            <HStack className='z-10 mx-5' justifyContent='between'>
+            <div className='z-10 mx-5 flex justify-between'>
               <div
                 className={clsx(
                   'pointer-events-auto z-10 flex h-fit items-center transition-opacity',
@@ -376,10 +365,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   onClick={handlePrevClick}
                   aria-label={intl.formatMessage(messages.previous)}
                 >
-                  <Icon
-                    src={require('@phosphor-icons/core/regular/arrow-left.svg')}
-                    className='size-5'
-                  />
+                  <Icon src={iconArrowLeft} className='size-5' />
                 </button>
               </div>
               <div
@@ -394,31 +380,27 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   onClick={handleNextClick}
                   aria-label={intl.formatMessage(messages.next)}
                 >
-                  <Icon
-                    src={require('@phosphor-icons/core/regular/arrow-right.svg')}
-                    className='size-5'
-                  />
+                  <Icon src={iconArrowRight} className='size-5' />
                 </button>
               </div>
-            </HStack>
+            </div>
           )}
           {status ? (
-            <HStack
-              justifyContent='center'
+            <div
               className={clsx(
-                'pointer-events-auto flex-[0_0_60px] transition-opacity',
+                'pointer-events-auto flex flex-[0_0_60px] justify-center transition-opacity',
                 navigationHiddenClassName,
               )}
             >
               <StatusActionBar status={status} space='md' expandable />
-            </HStack>
+            </div>
           ) : (
             <span />
           )}
         </div>
       </div>
 
-      {status && (
+      {(status || (statusId && isPending)) && (
         <div
           className={clsx(
             '-right-96 hidden bg-white transition-all xl:fixed xl:inset-y-0 xl:right-0 xl:flex xl:w-96 xl:flex-col',
@@ -427,7 +409,11 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             },
           )}
         >
-          <Thread status={status} withMedia={false} itemClassName='px-4' isModal />
+          {status ? (
+            <Thread status={status} withMedia={false} itemClassName='px-4' isModal />
+          ) : (
+            <PlaceholderStatus />
+          )}
         </div>
       )}
     </div>

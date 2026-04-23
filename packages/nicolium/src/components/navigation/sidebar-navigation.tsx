@@ -1,15 +1,63 @@
+import iconBellSimpleFill from '@phosphor-icons/core/fill/bell-simple-fill.svg';
+import iconChatsTeardropFill from '@phosphor-icons/core/fill/chats-teardrop-fill.svg';
+import iconCloudFill from '@phosphor-icons/core/fill/cloud-fill.svg';
+import iconEnvelopeSimpleFill from '@phosphor-icons/core/fill/envelope-simple-fill.svg';
+import iconFediverseLogoFill from '@phosphor-icons/core/fill/fediverse-logo-fill.svg';
+import iconGaugeFill from '@phosphor-icons/core/fill/gauge-fill.svg';
+import iconGraphFill from '@phosphor-icons/core/fill/graph-fill.svg';
+import iconHouseFill from '@phosphor-icons/core/fill/house-fill.svg';
+import iconMagnifyingGlassFill from '@phosphor-icons/core/fill/magnifying-glass-fill.svg';
+import iconPlanetFill from '@phosphor-icons/core/fill/planet-fill.svg';
+import iconSignInFill from '@phosphor-icons/core/fill/sign-in-fill.svg';
+import iconSlidersHorizontalFill from '@phosphor-icons/core/fill/sliders-horizontal-fill.svg';
+import iconUserFill from '@phosphor-icons/core/fill/user-fill.svg';
+import iconUserPlusFill from '@phosphor-icons/core/fill/user-plus-fill.svg';
+import iconUsersThreeFill from '@phosphor-icons/core/fill/users-three-fill.svg';
+import iconWrenchFill from '@phosphor-icons/core/fill/wrench-fill.svg';
+import iconAddressBook from '@phosphor-icons/core/regular/address-book.svg';
+import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
+import iconBookOpen from '@phosphor-icons/core/regular/book-open.svg';
+import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
+import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
+import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
+import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
+import iconCloud from '@phosphor-icons/core/regular/cloud.svg';
+import iconCode from '@phosphor-icons/core/regular/code.svg';
+import iconDotsThreeCircle from '@phosphor-icons/core/regular/dots-three-circle.svg';
+import iconEnvelopeSimple from '@phosphor-icons/core/regular/envelope-simple.svg';
+import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
+import iconGauge from '@phosphor-icons/core/regular/gauge.svg';
+import iconGraph from '@phosphor-icons/core/regular/graph.svg';
+import iconHash from '@phosphor-icons/core/regular/hash.svg';
+import iconHeartHalf from '@phosphor-icons/core/regular/heart-half.svg';
+import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
+import iconHouse from '@phosphor-icons/core/regular/house.svg';
+import iconKeyboard from '@phosphor-icons/core/regular/keyboard.svg';
+import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
+import iconQuestion from '@phosphor-icons/core/regular/question.svg';
+import iconRss from '@phosphor-icons/core/regular/rss.svg';
+import iconSignIn from '@phosphor-icons/core/regular/sign-in.svg';
+import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
+import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
+import iconUser from '@phosphor-icons/core/regular/user.svg';
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
+import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import ComposeButton from '@/components/navigation/compose-button';
+import ProfileDropdown from '@/components/navigation/profile-dropdown';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import { useStatContext } from '@/contexts/stat-context';
-import ComposeButton from '@/features/ui/components/compose-button';
-import ProfileDropdown from '@/features/ui/components/profile-dropdown';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
@@ -19,6 +67,7 @@ import { useNotificationsUnreadCount } from '@/queries/notifications/use-notific
 import { scheduledStatusesCountQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import sourceCode from '@/utils/code';
 
@@ -67,16 +116,17 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const { openModal } = useModalsActions();
 
   const instance = useInstance();
+  const client = useClient();
   const features = useFeatures();
   const { data: account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
 
   const authenticatedScheduledStatusesCountQueryOptions = useMemo(
     () => ({
-      ...scheduledStatusesCountQueryOptions,
+      ...scheduledStatusesCountQueryOptions(client),
       enabled: !!account && features.scheduledStatuses,
     }),
-    [!!account, features],
+    [client, !!account, features],
   );
 
   const notificationCount = useNotificationsUnreadCount();
@@ -90,7 +140,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   );
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
 
-  const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
+  const timelineAccess = instance.configuration.timelines_access;
 
   const menu = useMemo((): Menu => {
     const menu: Menu = [];
@@ -100,7 +150,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/conversations',
           text: intl.formatMessage(messages.conversations),
-          icon: require('@phosphor-icons/core/regular/envelope-simple.svg'),
+          icon: iconEnvelopeSimple,
         });
       }
 
@@ -108,7 +158,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/follow_requests',
           text: intl.formatMessage(messages.followRequests),
-          icon: require('@phosphor-icons/core/regular/user-plus.svg'),
+          icon: iconUserPlus,
           count: followRequestsCount,
         });
       }
@@ -117,7 +167,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/interaction_requests',
           text: intl.formatMessage(messages.interactionRequests),
-          icon: require('@phosphor-icons/core/regular/heart-half.svg'),
+          icon: iconHeartHalf,
           count: interactionRequestsCount,
         });
       }
@@ -126,7 +176,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/bookmarks',
           text: intl.formatMessage(messages.bookmarks),
-          icon: require('@phosphor-icons/core/regular/bookmarks.svg'),
+          icon: iconBookmarks,
         });
       }
 
@@ -134,7 +184,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/lists',
           text: intl.formatMessage(messages.lists),
-          icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
+          icon: iconListDashes,
         });
       }
 
@@ -142,7 +192,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/circles',
           text: intl.formatMessage(messages.circles),
-          icon: require('@phosphor-icons/core/regular/circles-three.svg'),
+          icon: iconCirclesThree,
         });
       }
 
@@ -150,7 +200,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/antennas',
           text: intl.formatMessage({ id: 'column.antennas', defaultMessage: 'Antennas' }),
-          icon: require('@phosphor-icons/core/regular/broadcast.svg'),
+          icon: iconBroadcast,
         });
       }
 
@@ -158,7 +208,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/events',
           text: intl.formatMessage(messages.events),
-          icon: require('@phosphor-icons/core/regular/calendar-dots.svg'),
+          icon: iconCalendarDots,
         });
       }
 
@@ -166,7 +216,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/directory',
           text: intl.formatMessage(messages.profileDirectory),
-          icon: require('@phosphor-icons/core/regular/address-book.svg'),
+          icon: iconAddressBook,
         });
       }
 
@@ -174,7 +224,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/followed_tags',
           text: intl.formatMessage(messages.followedTags),
-          icon: require('@phosphor-icons/core/regular/hash.svg'),
+          icon: iconHash,
         });
       }
 
@@ -182,14 +232,14 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/rss_feed_subscriptions',
           text: intl.formatMessage(messages.rssFeedSubscriptions),
-          icon: require('@phosphor-icons/core/regular/rss.svg'),
+          icon: iconRss,
         });
       }
 
       if (scheduledStatusCount > 0) {
         menu.push({
           to: '/scheduled_statuses',
-          icon: require('@phosphor-icons/core/regular/hourglass.svg'),
+          icon: iconHourglass,
           text: intl.formatMessage(messages.scheduledStatuses),
           count: scheduledStatusCount,
         });
@@ -198,7 +248,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
       if (draftCount > 0) {
         menu.push({
           to: '/draft_statuses',
-          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+          icon: iconPencilSimple,
           text: intl.formatMessage(messages.drafts),
           count: draftCount,
         });
@@ -207,26 +257,26 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
       menu.push(null);
 
       menu.push({
-        icon: require('@phosphor-icons/core/regular/question.svg'),
+        icon: iconQuestion,
         text: intl.formatMessage(messages.help),
         items: [
           {
             action: () => {
               openModal('HOTKEYS');
             },
-            icon: require('@phosphor-icons/core/regular/keyboard.svg'),
+            icon: iconKeyboard,
             text: intl.formatMessage(messages.keyboardShortcuts),
           },
           {
             href: 'https://nicolium.app/docs/',
             target: '_blank',
-            icon: require('@phosphor-icons/core/regular/book-open.svg'),
+            icon: iconBookOpen,
             text: intl.formatMessage(messages.docs),
           },
           {
             href: sourceCode.url,
             target: '_blank',
-            icon: require('@phosphor-icons/core/regular/code.svg'),
+            icon: iconCode,
             text: intl.formatMessage(messages.sourceCode),
           },
         ],
@@ -264,7 +314,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                   account={account}
                   action={
                     <Icon
-                      src={require('@phosphor-icons/core/regular/caret-down.svg')}
+                      src={iconCaretDown}
                       className='⁂-sidebar-navigation__header__account__expand'
                     />
                   }
@@ -281,15 +331,15 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
       <ul className='⁂-sidebar-navigation__links'>
         <SidebarNavigationLink
           to='/'
-          icon={require('@phosphor-icons/core/regular/house.svg')}
-          activeIcon={require('@phosphor-icons/core/fill/house-fill.svg')}
+          icon={iconHouse}
+          activeIcon={iconHouseFill}
           text={<FormattedMessage id='tabs_bar.home' defaultMessage='Home' />}
         />
 
         <SidebarNavigationLink
           to='/search'
-          icon={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
-          activeIcon={require('@phosphor-icons/core/fill/magnifying-glass-fill.svg')}
+          icon={iconMagnifyingGlass}
+          activeIcon={iconMagnifyingGlassFill}
           text={<FormattedMessage id='tabs_bar.search' defaultMessage='Search' />}
         />
 
@@ -297,8 +347,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
           <>
             <SidebarNavigationLink
               to='/notifications'
-              icon={require('@phosphor-icons/core/regular/bell-simple.svg')}
-              activeIcon={require('@phosphor-icons/core/fill/bell-simple-fill.svg')}
+              icon={iconBellSimple}
+              activeIcon={iconBellSimpleFill}
               count={notificationCount}
               text={<FormattedMessage id='tabs_bar.notifications' defaultMessage='Notifications' />}
             />
@@ -306,8 +356,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
             {features.chats && (
               <SidebarNavigationLink
                 to='/chats'
-                icon={require('@phosphor-icons/core/regular/chats-teardrop.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/chats-teardrop-fill.svg')}
+                icon={iconChatsTeardrop}
+                activeIcon={iconChatsTeardropFill}
                 count={unreadChatsCount}
                 countMax={9}
                 text={<FormattedMessage id='column.chats' defaultMessage='Chats' />}
@@ -317,8 +367,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
             {!features.chats && features.conversations && (
               <SidebarNavigationLink
                 to='/conversations'
-                icon={require('@phosphor-icons/core/regular/envelope-simple.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/envelope-simple-fill.svg')}
+                icon={iconEnvelopeSimple}
+                activeIcon={iconEnvelopeSimpleFill}
                 text={<FormattedMessage id='column.direct' defaultMessage='Direct messages' />}
               />
             )}
@@ -326,43 +376,43 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
             {features.groups && (
               <SidebarNavigationLink
                 to='/groups'
-                icon={require('@phosphor-icons/core/regular/users-three.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/users-three-fill.svg')}
-                text={<FormattedMessage id='tabs_bar.groups' defaultMessage='Groups' />}
+                icon={iconUsersThree}
+                activeIcon={iconUsersThreeFill}
+                text={<FormattedMessage id='column.groups' defaultMessage='Groups' />}
               />
             )}
 
             <SidebarNavigationLink
               to='/@{$username}'
               params={{ username: account.username }}
-              icon={require('@phosphor-icons/core/regular/user.svg')}
-              activeIcon={require('@phosphor-icons/core/fill/user-fill.svg')}
+              icon={iconUser}
+              activeIcon={iconUserFill}
               text={<FormattedMessage id='tabs_bar.profile' defaultMessage='Profile' />}
             />
 
             {features.drive && (
               <SidebarNavigationLink
                 to='/drive/{-$folderId}'
-                icon={require('@phosphor-icons/core/regular/cloud.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/cloud-fill.svg')}
+                icon={iconCloud}
+                activeIcon={iconCloudFill}
                 text={<FormattedMessage id='column.drive' defaultMessage='Drive' />}
               />
             )}
 
             <SidebarNavigationLink
               to='/settings'
-              icon={require('@phosphor-icons/core/regular/sliders-horizontal.svg')}
-              activeIcon={require('@phosphor-icons/core/fill/sliders-horizontal-fill.svg')}
-              text={<FormattedMessage id='tabs_bar.settings' defaultMessage='Settings' />}
+              icon={iconSlidersHorizontal}
+              activeIcon={iconSlidersHorizontalFill}
+              text={<FormattedMessage id='settings.settings' defaultMessage='Settings' />}
             />
 
             {(account.is_admin ?? account.is_moderator) && (
               <SidebarNavigationLink
                 to='/nicolium/admin'
-                icon={require('@phosphor-icons/core/regular/gauge.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/gauge-fill.svg')}
+                icon={iconGauge}
+                activeIcon={iconGaugeFill}
                 count={dashboardCount}
-                text={<FormattedMessage id='tabs_bar.dashboard' defaultMessage='Dashboard' />}
+                text={<FormattedMessage id='column.admin.dashboard' defaultMessage='Dashboard' />}
               />
             )}
           </>
@@ -370,20 +420,13 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
         {features.publicTimeline && (
           <>
-            {features.wrenchedTimeline && (account ?? !restrictUnauth.timelines.wrenched) && (
-              <SidebarNavigationLink
-                to='/timeline/wrenched'
-                icon={require('@phosphor-icons/core/regular/wrench.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/wrench-fill.svg')}
-                text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-              />
-            )}
-
-            {(account ?? !restrictUnauth.timelines.local) && (
+            {(account
+              ? timelineAccess.live_feeds.local !== 'disabled'
+              : timelineAccess.live_feeds.local === 'public') && (
               <SidebarNavigationLink
                 to='/timeline/local'
-                icon={require('@phosphor-icons/core/regular/planet.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/planet-fill.svg')}
+                icon={iconPlanet}
+                activeIcon={iconPlanetFill}
                 text={
                   features.federating ? (
                     <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
@@ -394,53 +437,71 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               />
             )}
 
-            {features.bubbleTimeline && (account ?? !restrictUnauth.timelines.bubble) && (
-              <SidebarNavigationLink
-                to='/timeline/bubble'
-                icon={require('@phosphor-icons/core/regular/graph.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/graph-fill.svg')}
-                text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-              />
-            )}
+            {features.bubbleTimeline &&
+              (account
+                ? timelineAccess.live_feeds.bubble !== 'disabled'
+                : timelineAccess.live_feeds.bubble === 'public') && (
+                <SidebarNavigationLink
+                  to='/timeline/bubble'
+                  icon={iconGraph}
+                  activeIcon={iconGraphFill}
+                  text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                />
+              )}
 
-            {features.federating && (account ?? !restrictUnauth.timelines.federated) && (
-              <SidebarNavigationLink
-                to='/timeline/fediverse'
-                icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/fediverse-logo-fill.svg')}
-                text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-              />
-            )}
+            {features.federating &&
+              (account
+                ? timelineAccess.live_feeds.remote !== 'disabled'
+                : timelineAccess.live_feeds.remote === 'public') && (
+                <SidebarNavigationLink
+                  to='/timeline/fediverse'
+                  icon={iconFediverseLogo}
+                  activeIcon={iconFediverseLogoFill}
+                  text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                />
+              )}
+
+            {features.wrenchedTimeline &&
+              (account
+                ? timelineAccess.live_feeds.wrenched !== 'disabled'
+                : timelineAccess.live_feeds.wrenched === 'public') && (
+                <SidebarNavigationLink
+                  to='/timeline/wrenched'
+                  icon={iconWrench}
+                  activeIcon={iconWrenchFill}
+                  text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
+                />
+              )}
           </>
         )}
 
         {menu.length > 0 && (
           <DropdownMenu items={menu} placement='top' width='16rem'>
             <SidebarNavigationLink
-              icon={require('@phosphor-icons/core/regular/dots-three-circle.svg')}
+              icon={iconDotsThreeCircle}
               text={<FormattedMessage id='tabs_bar.more' defaultMessage='More' />}
             />
           </DropdownMenu>
         )}
 
         {!account && (
-          <Stack className='xl:hidden' space={1.5}>
+          <div className='flex flex-col gap-1.5 xl:hidden'>
             <SidebarNavigationLink
               to='/login'
-              icon={require('@phosphor-icons/core/regular/sign-in.svg')}
-              activeIcon={require('@phosphor-icons/core/fill/sign-in-fill.svg')}
+              icon={iconSignIn}
+              activeIcon={iconSignInFill}
               text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
             />
 
             {isOpen && (
               <SidebarNavigationLink
                 to='/signup'
-                icon={require('@phosphor-icons/core/regular/user-plus.svg')}
-                activeIcon={require('@phosphor-icons/core/fill/user-plus-fill.svg')}
+                icon={iconUserPlus}
+                activeIcon={iconUserPlusFill}
                 text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
               />
             )}
-          </Stack>
+          </div>
         )}
       </ul>
 

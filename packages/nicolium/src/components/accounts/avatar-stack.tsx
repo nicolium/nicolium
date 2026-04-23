@@ -1,8 +1,6 @@
-import clsx from 'clsx';
 import React from 'react';
 
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 
 interface IAvatarStack {
@@ -11,18 +9,18 @@ interface IAvatarStack {
 }
 
 const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
-  const { data: accounts } = useAccounts(accountIds.slice(0, limit));
+  const dedupAccountIds = React.useMemo(
+    () => [...new Set(accountIds)].slice(0, limit),
+    [accountIds],
+  );
+
+  const { data: accounts } = useAccounts(dedupAccountIds);
 
   return (
-    <HStack className='relative' aria-hidden>
+    <div className='⁂-avatar-stack' aria-hidden>
       {accounts.map((account, i) => (
-        <div
-          className={clsx('relative', { '-ml-3': i !== 0 })}
-          key={account.id}
-          style={{ zIndex: limit - i }}
-        >
+        <div key={account.id} style={{ zIndex: limit - i }}>
           <Avatar
-            className='!rounded-full ring-1 ring-white dark:ring-primary-900'
             src={account.avatar}
             alt={account.avatar_description}
             size={20}
@@ -31,7 +29,7 @@ const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
           />
         </div>
       ))}
-    </HStack>
+    </div>
   );
 };
 

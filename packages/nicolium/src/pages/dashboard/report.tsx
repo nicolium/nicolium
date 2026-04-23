@@ -1,20 +1,22 @@
+import iconCaretLeft from '@phosphor-icons/core/regular/caret-left.svg';
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { Link } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
-import ReactSwipeableViews from 'react-swipeable-views';
 
 import Account from '@/components/accounts/account';
+import { AccountLink } from '@/components/accounts/account-link';
 import List, { ListItem } from '@/components/list';
+import ReactSwipeableViews from '@/components/react-swipeable-views';
+import StatusContainer from '@/components/statuses/status-container';
 import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import StatusContainer from '@/containers/status-container';
 import ColumnLoading from '@/features/ui/components/column-loading';
-import { adminReportRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import {
   useReopenReport,
@@ -23,6 +25,7 @@ import {
   useSelfAssignReport,
   useUnassignReport,
 } from '@/queries/admin/use-reports';
+import { adminReportRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -67,10 +70,7 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
             }}
             className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon
-              src={require('@phosphor-icons/core/regular/caret-left.svg')}
-              className='size-6 text-black dark:text-white'
-            />
+            <Icon src={iconCaretLeft} className='size-6 text-black dark:text-white' />
           </button>
         </div>
       )}
@@ -89,10 +89,7 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
             }}
             className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon
-              src={require('@phosphor-icons/core/regular/caret-right.svg')}
-              className='size-6 text-black dark:text-white'
-            />
+            <Icon src={iconCaretRight} className='size-6 text-black dark:text-white' />
           </button>
         </div>
       )}
@@ -116,7 +113,7 @@ const ReportPage: React.FC = () => {
   const handleSelfAssignReport = () => {
     selfAssignReport(undefined, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.reportAssigned));
+        toast.success(messages.reportAssigned);
       },
     });
   };
@@ -124,7 +121,7 @@ const ReportPage: React.FC = () => {
   const handleUnassignReport = () => {
     unassignReport(undefined, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.reportUnassigned));
+        toast.success(messages.reportUnassigned);
       },
     });
   };
@@ -133,7 +130,7 @@ const ReportPage: React.FC = () => {
     const onConfirm = (actionTakenComment?: string) => {
       resolveReport(actionTakenComment, {
         onSuccess: () => {
-          toast.success(intl.formatMessage(messages.reportResolved));
+          toast.success(messages.reportResolved);
         },
       });
     };
@@ -153,7 +150,7 @@ const ReportPage: React.FC = () => {
   const handleReopenReport = () => {
     reopenReport(undefined, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.reportReopened));
+        toast.success(messages.reportReopened);
       },
     });
   };
@@ -164,13 +161,9 @@ const ReportPage: React.FC = () => {
     <Column label={intl.formatMessage(messages.columnHeading, { id: reportId })}>
       <div className='mb-4 grid grid-cols-1 gap-2 md:grid-cols-2'>
         {report.target_account && (
-          <Link
-            to='/@{$username}'
-            params={{ username: report.target_account.acct }}
-            className='h-fit'
-          >
+          <AccountLink account={report.target_account} className='h-fit'>
             <Card variant='rounded'>
-              <Stack space={2}>
+              <div className='flex flex-col gap-2'>
                 <Text size='md' weight='medium'>
                   <FormattedMessage
                     id='admin.report.target_account'
@@ -178,9 +171,9 @@ const ReportPage: React.FC = () => {
                   />
                 </Text>
                 <Account account={report.target_account} disabled hideActions />
-              </Stack>
+              </div>
             </Card>
-          </Link>
+          </AccountLink>
         )}
         <table className='w-full'>
           <tbody>
@@ -259,7 +252,7 @@ const ReportPage: React.FC = () => {
 
                 <td className='p-2.5 text-end'>
                   {report.assigned_account ? (
-                    <HStack space={2} alignItems='center' justifyContent='end'>
+                    <div className='flex items-center justify-end gap-2'>
                       <Text size='sm' className='hover:underline'>
                         <Link
                           to='/nicolium/admin/accounts/$accountId'
@@ -270,16 +263,16 @@ const ReportPage: React.FC = () => {
                       </Text>
                       <IconButton
                         iconClassName='h-4 w-4'
-                        src={require('@phosphor-icons/core/regular/x.svg')}
+                        src={iconX}
                         onClick={handleUnassignReport}
                         text={intl.formatMessage(messages.reportUnassign)}
                       />
-                    </HStack>
+                    </div>
                   ) : (
                     <IconButton
                       className='ml-auto'
                       iconClassName='h-4 w-4'
-                      src={require('@phosphor-icons/core/regular/plus.svg')}
+                      src={iconPlus}
                       onClick={handleSelfAssignReport}
                       text={intl.formatMessage(messages.reportAssign)}
                     />
@@ -292,12 +285,12 @@ const ReportPage: React.FC = () => {
       </div>
       {report.status_ids?.length > 0 && (
         <Card variant='rounded' className='mb-4'>
-          <Stack space={2}>
+          <div className='flex flex-col gap-2'>
             <Text size='md' weight='medium'>
               <FormattedMessage id='admin.report.statuses' defaultMessage='Reported content' />
             </Text>
             <ReportStatuses statusIds={report.status_ids} />
-          </Stack>
+          </div>
         </Card>
       )}
       <List>

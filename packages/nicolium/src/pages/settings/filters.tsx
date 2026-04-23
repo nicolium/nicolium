@@ -5,8 +5,6 @@ import RelativeTimestamp from '@/components/relative-timestamp';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useDeleteFilter, useFilters } from '@/queries/settings/use-filters';
@@ -44,7 +42,7 @@ const FiltersPage = () => {
   const handleFilterDelete = (id: string) => () => {
     deleteFilter(id, {
       onSuccess: () => {
-        toast.success(intl.formatMessage(messages.deleteSuccess));
+        toast.success(messages.deleteSuccess);
       },
       onError: () => {
         toast.error(intl.formatMessage(messages.deleteError));
@@ -58,11 +56,11 @@ const FiltersPage = () => {
 
   return (
     <Column className='filter-settings-panel' label={intl.formatMessage(messages.heading)}>
-      <HStack className='mb-4' space={2} justifyContent='end'>
+      <div className='mb-4 flex justify-end gap-2'>
         <Button to='/filters/$filterId' params={{ filterId: 'new' }} theme='primary' size='sm'>
           <FormattedMessage id='filters.create_filter' defaultMessage='Create filter' />
         </Button>
-      </HStack>
+      </div>
 
       <ScrollableList
         scrollKey='filters'
@@ -71,8 +69,8 @@ const FiltersPage = () => {
       >
         {filters.map((filter) => (
           <div key={filter.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-            <Stack space={2}>
-              <Stack className='grow' space={1}>
+            <div className='flex flex-col gap-2'>
+              <div className='flex grow flex-col gap-1'>
                 <Text weight='medium'>
                   <FormattedMessage
                     id='filters.filters_list_phrases_label'
@@ -95,7 +93,7 @@ const FiltersPage = () => {
                       .join(', ')}
                   </Text>
                 </Text>
-                <HStack space={4} wrap>
+                <div className='flex flex-wrap gap-4'>
                   <Text weight='medium'>
                     {filtersV2 ? (
                       filter.filter_action === 'hide' ? (
@@ -136,17 +134,17 @@ const FiltersPage = () => {
                       )}
                     </Text>
                   )}
-                </HStack>
-              </Stack>
-              <HStack space={2} justifyContent='end'>
+                </div>
+              </div>
+              <div className='flex justify-end gap-2'>
                 <Button theme='primary' to='/filters/$filterId' params={{ filterId: filter.id }}>
                   <FormattedMessage id='column.filters.edit' defaultMessage='Edit filter' />
                 </Button>
                 <Button theme='danger' onClick={handleFilterDelete(filter.id)}>
                   <FormattedMessage id='column.filters.delete' defaultMessage='Delete' />
                 </Button>
-              </HStack>
-            </Stack>
+              </div>
+            </div>
           </div>
         ))}
       </ScrollableList>

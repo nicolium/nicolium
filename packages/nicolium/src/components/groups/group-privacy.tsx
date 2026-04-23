@@ -1,0 +1,68 @@
+import iconGlobe from '@phosphor-icons/core/regular/globe.svg';
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import Icon from '@/components/ui/icon';
+import Popover from '@/components/ui/popover';
+import Text from '@/components/ui/text';
+
+import type { Group } from 'pl-api';
+
+interface IGroupPolicy {
+  group: Pick<Group, 'locked'>;
+}
+
+const GroupPrivacy = ({ group }: IGroupPolicy) => (
+  <Popover
+    referenceElementClassName='cursor-help'
+    content={
+      <div className='flex w-72 flex-col items-center gap-4'>
+        <div className='rounded-full bg-gray-200 p-3 dark:bg-gray-800'>
+          <Icon
+            src={group.locked ? iconLock : iconGlobe}
+            className='size-6 text-gray-600 dark:text-gray-600'
+          />
+        </div>
+
+        <div className='flex flex-col items-center gap-1'>
+          <Text size='lg' weight='bold' align='center'>
+            {group.locked ? (
+              <FormattedMessage id='group.privacy.locked.full' defaultMessage='Private Group' />
+            ) : (
+              <FormattedMessage id='group.privacy.public.full' defaultMessage='Public Group' />
+            )}
+          </Text>
+
+          <Text theme='muted' align='center'>
+            {group.locked ? (
+              <FormattedMessage
+                id='group.privacy.locked.info'
+                defaultMessage='Discoverable. Users can join after their request is approved.'
+              />
+            ) : (
+              <FormattedMessage
+                id='group.privacy.public.info'
+                defaultMessage='Discoverable. Anyone can join.'
+              />
+            )}
+          </Text>
+        </div>
+      </div>
+    }
+  >
+    <div className='flex items-center gap-1' data-testid='group-privacy'>
+      <Icon className='size-4' src={group.locked ? iconLock : iconGlobe} />
+
+      <Text theme='inherit' tag='span' size='sm' weight='medium'>
+        {group.locked ? (
+          <FormattedMessage id='group.privacy.locked' defaultMessage='Private' />
+        ) : (
+          <FormattedMessage id='group.privacy.public' defaultMessage='Public' />
+        )}
+      </Text>
+    </div>
+  </Popover>
+);
+
+export { GroupPrivacy as default };

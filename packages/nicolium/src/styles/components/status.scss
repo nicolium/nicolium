@@ -1,33 +1,64 @@
 [column-type='filled'] .status__wrapper,
 [column-type='filled'] .status-placeholder {
-  @apply bg-transparent dark:bg-transparent rounded-none shadow-none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+
+  .dark & {
+    background: transparent;
+  }
 }
 
 .status-check-box__status {
   .media-gallery {
-    @apply max-w-[250px];
+    max-width: 250px;
   }
 
   .status__content {
-    @apply p-0 text-gray-700 dark:text-gray-500 text-sm whitespace-normal;
+    padding: 0;
+
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+    color: rgb(var(--color-gray-700));
+    white-space: normal;
+
+    .dark & {
+      color: rgb(var(--color-gray-500));
+    }
   }
 
   .video-player,
   .audio-player {
-    @apply mt-2 max-w-[250px];
+    max-width: 250px;
+    margin-top: 0.5rem;
   }
 
   .media-gallery__item-thumbnail {
-    @apply cursor-default;
+    cursor: default;
   }
 }
 
 .focusable:focus {
-  @apply outline-0 ring-2 ring-primary-300;
+  outline: 2px solid rgb(var(--color-primary-300));
+  outline-offset: 0;
 }
 
 .status-card {
-  @apply flex text-sm border border-solid border-gray-200 dark:border-gray-800 rounded-lg text-gray-800 dark:text-gray-200 no-underline overflow-hidden;
+  overflow: hidden;
+  display: flex;
+
+  border: 1px solid rgb(var(--color-gray-200));
+  border-radius: var(--radius-lg);
+
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  color: rgb(var(--color-gray-800));
+  text-decoration: none;
+
+  .dark & {
+    border-color: rgb(var(--color-gray-800));
+    color: rgb(var(--color-gray-200));
+  }
 
   iframe {
     width: 100% !important;
@@ -36,31 +67,58 @@
 }
 
 a.status-card {
-  @apply cursor-pointer hover:bg-gray-100 dark:hover:bg-primary-800/30 hover:no-underline;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+    background-color: rgb(var(--color-gray-100));
+
+    .dark & {
+      background-color: rgb(var(--color-gray-800) / 0.3);
+    }
+  }
 }
 
 .status-card__image {
-  @apply relative overflow-hidden;
+  position: relative;
+  overflow: hidden;
   flex: 0 0 40%;
 
   & > .svg-icon {
-    @apply h-10 w-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     transform-origin: 50% 50%;
+    transform: translate(-50%, -50%);
+
+    width: 2.5rem;
+    height: 2.5rem;
 
     svg {
-      @apply stroke-[1px];
+      stroke-width: 1px;
     }
   }
 }
 
 .status-card.horizontal {
-  @apply block;
+  display: block;
 }
 
 .status-card.compact {
-  @apply border-gray-200 dark:border-gray-800;
+  border-color: rgb(var(--color-gray-200));
+
+  .dark & {
+    border-color: rgb(var(--color-gray-800));
+  }
 }
 
 .status-card__image-image {
-  @apply block w-full h-full object-cover bg-cover bg-center;
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  background-position: center;
+  background-size: cover;
 }

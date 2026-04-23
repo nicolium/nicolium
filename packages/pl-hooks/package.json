@@ -1,14 +1,14 @@
 {
   "name": "pl-hooks",
   "version": "0.0.15",
-  "homepage": "https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-hooks",
+  "homepage": "https://codeberg.org/nicolium/nicolium/src/packages/pl-hooks",
   "bugs": {
-    "url": "https://codeberg.org/mkljczk/nicolium/issues"
+    "url": "https://codeberg.org/nicolium/nicolium/issues"
   },
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://codeberg.org/mkljczk/nicolium"
+    "url": "https://codeberg.org/nicolium/nicolium"
   },
   "files": [
     "dist"
@@ -25,22 +25,22 @@
     "fmt:check": "oxfmt --check"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.90.21",
-    "lodash": "^4.17.23",
+    "@tanstack/react-query": "^5.96.2",
+    "lodash": "^4.18.1",
     "pl-api": "workspace:*",
     "react": "^19.2.4",
-    "valibot": "^1.2.0"
+    "valibot": "^1.3.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.24",
-    "@types/node": "^25.3.3",
+    "@types/node": "^25.5.2",
     "@types/react": "^19.2.14",
-    "oxfmt": "^0.36.0",
-    "oxlint": "^1.51.0",
-    "oxlint-tsgolint": "^0.16.0",
+    "oxfmt": "^0.44.0",
+    "oxlint": "^1.59.0",
+    "oxlint-tsgolint": "^0.20.0",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1",
-    "vite-plugin-dts": "^4.5.4ls"
+    "vite": "^8.0.7",
+    "vite-plugin-dts": "^4.5.4"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts,tsx}": [

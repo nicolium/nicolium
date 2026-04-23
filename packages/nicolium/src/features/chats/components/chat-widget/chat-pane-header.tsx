@@ -1,3 +1,4 @@
+import iconCaretUp from '@phosphor-icons/core/regular/caret-up.svg';
 import React, { type HTMLAttributes } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -20,19 +21,17 @@ interface IChatPaneHeader {
   secondaryActionTitle?: string;
 }
 
-const ChatPaneHeader: React.FC<IChatPaneHeader> = (props) => {
-  const {
-    isOpen,
-    isToggleable = true,
-    onToggle,
-    secondaryAction,
-    secondaryActionIcon,
-    secondaryActionTitle,
-    title,
-    unreadCount,
-    ...rest
-  } = props;
-
+const ChatPaneHeader: React.FC<IChatPaneHeader> = ({
+  isOpen,
+  isToggleable = true,
+  onToggle,
+  secondaryAction,
+  secondaryActionIcon,
+  secondaryActionTitle,
+  title,
+  unreadCount,
+  ...rest
+}) => {
   const intl = useIntl();
   const { demetricator } = useSettings();
 
@@ -67,7 +66,7 @@ const ChatPaneHeader: React.FC<IChatPaneHeader> = (props) => {
 
         <IconButton
           onClick={onToggle}
-          src={require('@phosphor-icons/core/regular/caret-up.svg')}
+          src={iconCaretUp}
           className='⁂-chat-widget__header__open-button'
           title={
             isOpen ? intl.formatMessage(messages.collapse) : intl.formatMessage(messages.expand)

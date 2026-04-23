@@ -1,12 +1,24 @@
-import { useQueries, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+  type UseQueryResult,
+} from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { importEntities } from '@/actions/importer';
+import { decrementReplyCount, incrementReplyCount } from '@/actions/statuses';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { normalizeStatus, type NormalizedStatus } from '@/normalizers/status';
 import { useFilters } from '@/queries/settings/use-filters';
+import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
+import { importEntities } from '@/queries/utils/import-entities';
+import { useComposeActions } from '@/stores/compose';
 import { useContextsActions } from '@/stores/contexts';
+import { useModalsActions } from '@/stores/modals';
+import { usePendingStatusesActions } from '@/stores/pending-statuses';
+import { useStatusMetaActions } from '@/stores/status-meta';
+import { useTimelinesActions } from '@/stores/timelines';
 import { checkFiltered } from '@/utils/filters';
 
 import { useAccount } from '../accounts/use-account';
@@ -31,7 +43,6 @@ type MinifiedContext = ReturnType<typeof minifyContext>;
 
 type SelectedStatus = NormalizedStatus & {
   account: Account;
-  accounts?: Array<Account>;
   reblog: SelectedStatus | null;
   quote: SelectedStatus | null;
 };
@@ -66,7 +77,6 @@ const useStatusQuery = (statusId?: string) => {
       data: {
         ...statusQuery.data,
         account: account.data!,
-        accounts: [account.data!],
       },
     };
   }, [statusQuery.data, account.data]) as unknown as UseQueryResult<NormalizedStatus>;
@@ -172,11 +182,84 @@ const findStatuses = (
     )
     .map(([key, data]) => [key[1], data]);
 
+const useDeleteStatus = (statusId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const { markStatusDeleted } = useStatusMetaActions();
+  const { deleteStatus: deletePendingStatus } = usePendingStatusesActions();
+  const { deleteStatus: deleteStatusFromTimelines } = useTimelinesActions();
+  const { setComposeToStatus } = useComposeActions();
+  const { openModal } = useModalsActions();
+
+  return useMutation({
+    mutationFn: (_withRedraft?: boolean) => client.statuses.deleteStatus(statusId),
+    onMutate: () => {
+      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      if (!status) return;
+
+      decrementReplyCount(status, queryClient);
+    },
+    onSuccess: (source, withRedraft) => {
+      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+
+      const poll = status?.poll_id
+        ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
+        : undefined;
+
+      deletePendingStatus(statusId);
+      deleteStatusFromTimelines(statusId);
+      markStatusDeleted(statusId);
+
+      if (withRedraft && status) {
+        setComposeToStatus(status, poll, source, withRedraft);
+        openModal('COMPOSE');
+      }
+    },
+    onError: () => {
+      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      if (!status) return;
+
+      incrementReplyCount(status, queryClient);
+    },
+  });
+};
+
+const useDeleteStatusFromGroup = (statusId: string, groupId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const { markStatusDeleted } = useStatusMetaActions();
+  const { deleteStatus: deletePendingStatus } = usePendingStatusesActions();
+  const { deleteStatus: deleteStatusFromTimelines } = useTimelinesActions();
+
+  return useMutation({
+    mutationFn: () => client.experimental.groups.deleteGroupStatus(statusId, groupId),
+    onMutate: () => {
+      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      if (!status) return;
+
+      decrementReplyCount(status, queryClient);
+    },
+    onSuccess: () => {
+      deletePendingStatus(statusId);
+      deleteStatusFromTimelines(statusId);
+      markStatusDeleted(statusId);
+    },
+    onError: () => {
+      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      if (!status) return;
+
+      incrementReplyCount(status, queryClient);
+    },
+  });
+};
+
 export {
   useMinimalStatus,
   useStatus,
   useStatusContext,
   useStatuses,
+  useDeleteStatus,
+  useDeleteStatusFromGroup,
   findStatuses,
   type MinifiedContext,
   type SelectedStatus,

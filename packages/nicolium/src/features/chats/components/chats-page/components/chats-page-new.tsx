@@ -1,11 +1,10 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { CardTitle } from '@/components/ui/card';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 
 import ChatSearch from '../../chat-search/chat-search';
 
@@ -20,22 +19,20 @@ const ChatsPageNew: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <Stack className='h-full gap-4'>
-      <Stack className='grow px-4 pt-6 sm:px-6'>
-        <HStack alignItems='center'>
-          <IconButton
-            src={require('@phosphor-icons/core/regular/arrow-left.svg')}
-            className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
-            onClick={() => navigate({ to: '/chats' })}
-            title={intl.formatMessage(messages.back)}
-          />
+    <div className='flex h-full flex-col gap-4'>
+      <div className='flex items-center px-4 pt-6 sm:px-6'>
+        <IconButton
+          src={iconArrowLeft}
+          className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
+          onClick={() => navigate({ to: '/chats' })}
+          title={intl.formatMessage(messages.back)}
+        />
 
-          <CardTitle title={intl.formatMessage(messages.title)} />
-        </HStack>
-      </Stack>
+        <CardTitle title={intl.formatMessage(messages.title)} />
+      </div>
 
       <ChatSearch isMainPage />
-    </Stack>
+    </div>
   );
 };
 

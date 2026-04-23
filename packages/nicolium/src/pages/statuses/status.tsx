@@ -1,3 +1,8 @@
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconTreeStructure from '@phosphor-icons/core/regular/tree-structure.svg';
+import iconTreeView from '@phosphor-icons/core/regular/tree-view.svg';
 import { Navigate } from '@tanstack/react-router';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -5,18 +10,18 @@ import { defineMessages, useIntl } from 'react-intl';
 import { changeSetting } from '@/actions/settings';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import PullToRefresh from '@/components/pull-to-refresh';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import Thread from '@/features/status/components/thread';
-import { statusRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useStatus } from '@/queries/statuses/use-status';
+import { statusRoute } from '@/router';
 import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
-  title: { id: 'status.title', defaultMessage: 'Post details' },
+  title: { id: 'status.title', defaultMessage: 'Post by @{username}' },
   titleDirect: { id: 'status.title_direct', defaultMessage: 'Direct message' },
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
   deleteHeading: { id: 'confirmations.delete.heading', defaultMessage: 'Delete post' },
@@ -41,15 +46,20 @@ const messages = defineMessages({
       'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?',
   },
   treeView: { id: 'status.thread.tree_view', defaultMessage: 'Tree view' },
+  treeIndentView: { id: 'status.thread.tree_indent_view', defaultMessage: 'Tree (indented)' },
   linearView: { id: 'status.thread.linear_view', defaultMessage: 'Linear view' },
   expandAll: { id: 'status.thread.expand_all', defaultMessage: 'Expand all posts' },
+  showAvatars: {
+    id: 'preferences.fields.display_mention_avatars',
+    defaultMessage: 'Show avatars next to mentions',
+  },
 });
 
 const StatusPage: React.FC = () => {
   const { username, statusId } = statusRoute.useParams();
-
-  const dispatch = useAppDispatch();
   const intl = useIntl();
+  const { isLoggedIn } = useLoggedIn();
+  const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
 
   const {
     data: status,
@@ -63,6 +73,7 @@ const StatusPage: React.FC = () => {
   const {
     displaySpoilers,
     threads: { displayMode },
+    displayMentionAvatars,
   } = useSettings();
 
   const handleRefresh = () => {
@@ -75,32 +86,50 @@ const StatusPage: React.FC = () => {
       {
         text: intl.formatMessage(messages.treeView),
         action: () => {
-          dispatch(changeSetting(['threads', 'displayMode'], 'tree'));
+          changeSetting(['threads', 'displayMode'], 'tree');
         },
-        icon: require('@phosphor-icons/core/regular/tree-view.svg'),
+        icon: iconTreeView,
         type: 'radio',
         checked: displayMode === 'tree',
       },
       {
+        text: intl.formatMessage(messages.treeIndentView),
+        action: () => {
+          changeSetting(['threads', 'displayMode'], 'tree-indent');
+        },
+        icon: iconTreeStructure,
+        type: 'radio',
+        checked: displayMode === 'tree-indent',
+      },
+      {
         text: intl.formatMessage(messages.linearView),
         action: () => {
-          dispatch(changeSetting(['threads', 'displayMode'], 'linear'));
+          changeSetting(['threads', 'displayMode'], 'linear');
         },
-        icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
+        icon: iconListBullets,
         type: 'radio',
         checked: displayMode === 'linear',
       },
     ];
 
+    menu.push(null, {
+      text: intl.formatMessage(messages.showAvatars),
+      onChange: (checked) => {
+        changeSetting(['displayMentionAvatars'], checked);
+      },
+      type: 'toggle',
+      checked: displayMentionAvatars,
+    });
+
     if (!displaySpoilers && expandAllStatuses) {
       menu.push(null, {
         text: intl.formatMessage(messages.expandAll),
         action: expandAllStatuses,
-        icon: require('@phosphor-icons/core/regular/caret-down.svg'),
+        icon: iconCaretDown,
       });
     }
     return menu;
-  }, [displayMode, expandAllStatuses]);
+  }, [displayMode, expandAllStatuses, displayMentionAvatars]);
 
   if (status?.event) {
     return (
@@ -110,6 +139,10 @@ const StatusPage: React.FC = () => {
         replace
       />
     );
+  }
+
+  if (!isLoggedIn && status && !status.account.local && !allowDisplayingRemoteNoLogin) {
+    return <Navigate to='/external_redirect' state={{ redirectTarget: status.url }} replace />;
   }
 
   if (username && status && username !== status.account.acct) {
@@ -122,9 +155,10 @@ const StatusPage: React.FC = () => {
     );
   }
 
-  if (!status && !isPending) {
-    return <MissingIndicator />;
-  } else if (!status) {
+  if (!status) {
+    if (!isPending) {
+      return <MissingIndicator />;
+    }
     return (
       <Column>
         <PlaceholderStatus />
@@ -138,15 +172,10 @@ const StatusPage: React.FC = () => {
   };
 
   return (
-    <Stack space={4}>
+    <div className='flex flex-col gap-4'>
       <Column
-        label={intl.formatMessage(titleMessage())}
-        action={
-          <DropdownMenu
-            items={items}
-            src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-          />
-        }
+        label={intl.formatMessage(titleMessage(), { username: status.account.acct })}
+        action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
       >
         <PullToRefresh onRefresh={handleRefresh}>
           <Thread
@@ -158,7 +187,7 @@ const StatusPage: React.FC = () => {
           />
         </PullToRefresh>
       </Column>
-    </Stack>
+    </div>
   );
 };
 

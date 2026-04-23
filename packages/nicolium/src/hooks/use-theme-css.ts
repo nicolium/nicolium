@@ -78,7 +78,7 @@ const useThemeCss = (overwriteConfig?: FrontendConfig) => {
       let baseTheme: Partial<FrontendConfig>;
       if (overwriteConfig) baseTheme = overwriteConfig;
       else if (demo) baseTheme = {};
-      else baseTheme = theme ?? frontendConfig;
+      else baseTheme = { ...frontendConfig, ...theme };
 
       const colors = normalizeColors(baseTheme);
 

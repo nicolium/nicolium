@@ -1,8 +1,18 @@
 .svg-icon {
-  @apply h-4 w-4 flex items-center justify-center transition duration-200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 1rem;
+  height: 1rem;
+
+  transition: all 200ms var(--ease-default);
 
   svg {
+    width: 100%;
+
     // Apparently this won't skew the image as long as it has a viewbox
-    @apply h-full w-full transition duration-200;
+    height: 100%;
+    transition: all 200ms var(--ease-default);
   }
 }

@@ -1,0 +1,43 @@
+{
+  "name": "Nicolium",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/nicolium",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20",
+      "nodeGypDependencies": true
+    }
+  },
+
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": true,
+
+  "forwardPorts": [7312],
+  "portsAttributes": {
+    "7312": {
+      "label": "Nicolium",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "oxc.oxc-vscode",
+        "stylelint.vscode-stylelint",
+        "wix.vscode-import-cost"
+      ]
+    }
+  },
+
+  "containerEnv": {
+    "WAYLAND_DISPLAY": ""
+  },
+  "remoteEnv": {
+  	"WAYLAND_DISPLAY": ""
+  }
+}

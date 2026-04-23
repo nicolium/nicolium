@@ -2,13 +2,15 @@
 
 > A JavaScript library for interacting with Mastodon API-compatible servers
 
+! for humans: this file is not actually maintained, i needed it once for a hackathon and didn't touch it since. i prefer writing documentation for humans lol
+
 ## Overview
 
 pl-api is a TypeScript/JavaScript library that provides a type-safe client for interacting with Mastodon API-compatible servers. It supports 12 independent Mastodon API implementations and 5 forks, abstracting implementation differences between various backends.
 
 - Version: 1.0.0-rc.94
 - License: AGPL-3.0-or-later
-- Homepage: https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-api
+- Homepage: https://codeberg.org/nicolium/nicolium/src/packages/pl-api
 - Documentation: https://pl.mkljczk.pl/pl-api-docs
 - NPM package: https://www.npmjs.com/package/pl-api
 
@@ -95,14 +97,14 @@ page1.items.forEach(account => console.log(account.username));
 
 ## Projects using pl-api
 
-- Nicolium - Web client for Mastodon-compatible servers (https://codeberg.org/mkljczk/nicolium)
-- **pl-hooks** - React hooks library for Mastodon APIs (https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-hooks)
+- Nicolium - Web client for Mastodon-compatible servers (https://codeberg.org/nicolium/nicolium)
+- **pl-hooks** - React hooks library for Mastodon APIs (https://codeberg.org/nicolium/nicolium/src/packages/pl-hooks)
 
 ## Development
 
 ```bash
 # Install dependencies
-pnpm install
+pnpm install --ignore-scripts
 
 # Build the library
 pnpm -F pl-api build
@@ -159,8 +161,8 @@ stream.listen((event) => {
 
 ## Links
 
-- Repository: https://codeberg.org/mkljczk/nicolium
-- Issues: https://codeberg.org/mkljczk/nicolium/issues
+- Repository: https://codeberg.org/nicolium/nicolium
+- Issues: https://codeberg.org/nicolium/nicolium/issues
 - NPM package: https://www.npmjs.com/package/pl-api
 - API documentation: https://pl.mkljczk.pl/pl-api-docs
 - Mastodon API docs: https://docs.joinmastodon.org

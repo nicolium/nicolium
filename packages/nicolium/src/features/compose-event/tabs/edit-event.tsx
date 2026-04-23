@@ -1,3 +1,5 @@
+import iconMapPin from '@phosphor-icons/core/regular/map-pin.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -12,20 +14,18 @@ import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import ContentTypeButton from '@/features/compose/components/content-type-button';
 import { isCurrentOrFutureDate } from '@/features/compose/components/schedule-form';
 import { ComposeEditor, DatePicker } from '@/features/ui/util/async-components';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useInstance } from '@/hooks/use-instance';
+import { useClient } from '@/hooks/use-client';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useChangeUploadCompose, useComposeActions } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -68,7 +68,7 @@ interface IEditEvent {
 
 const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const client = useClient();
   const navigate = useNavigate();
   const { openModal } = useModalsActions();
 
@@ -130,18 +130,17 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const handleFiles = (files: FileList) => {
     setIsUploading(true);
 
-    dispatch(
-      uploadFile(
-        files[0],
-        intl,
-        (data) => {
-          setBanner(data);
-          setIsUploading(false);
-        },
-        () => {
-          setIsUploading(false);
-        },
-      ),
+    uploadFile(
+      client,
+      files[0],
+      intl,
+      (data) => {
+        setBanner(data);
+        setIsUploading(false);
+      },
+      () => {
+        setIsUploading(false);
+      },
     );
   };
 
@@ -172,18 +171,17 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const handleSubmit = () => {
     setIsDisabled(true);
 
-    dispatch(
-      submitEvent({
-        statusId,
-        name,
-        status: text,
-        banner,
-        startTime,
-        endTime,
-        joinMode: approvalRequired ? 'restricted' : 'free',
-        location,
-      }),
-    )
+    submitEvent({
+      client,
+      statusId,
+      name,
+      status: text,
+      banner,
+      startTime,
+      endTime,
+      joinMode: approvalRequired ? 'restricted' : 'free',
+      location,
+    })
       .then((status) => {
         if (status)
           navigate({
@@ -197,7 +195,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   useEffect(() => {
     if (statusId) {
-      Promise.all([dispatch(initEventEdit(statusId)), dispatch(fetchStatus(statusId))])
+      Promise.all([initEventEdit(client, statusId), fetchStatus(client, statusId)])
         .then(([source, status]) => {
           if (!source || !status) throw new Error();
 
@@ -225,26 +223,24 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   const renderLocation = () =>
     location && (
-      <HStack className='h-[38px] text-gray-700 dark:text-gray-500' alignItems='center' space={2}>
-        <Icon
-          src={ADDRESS_ICONS[location.type] || require('@phosphor-icons/core/regular/map-pin.svg')}
-        />
-        <Stack className='grow'>
+      <div className='flex h-[38px] items-center gap-2 text-gray-700 dark:text-gray-500'>
+        <Icon src={ADDRESS_ICONS[location.type] || iconMapPin} />
+        <div className='flex grow flex-col'>
           <Text>{location.description}</Text>
           <Text theme='muted' size='xs'>
             {[location.street, location.locality, location.country]
               .filter((val) => val?.trim())
               .join(' · ')}
           </Text>
-        </Stack>
+        </div>
         <IconButton
           title={intl.formatMessage(messages.resetLocation)}
-          src={require('@phosphor-icons/core/regular/x.svg')}
+          src={iconX}
           onClick={() => {
             onChangeLocation(null);
           }}
         />
-      </HStack>
+      </div>
     );
 
   return (
@@ -271,7 +267,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
                 }
               />
               <IconButton
-                src={require('@phosphor-icons/core/regular/x.svg')}
+                src={iconX}
                 onClick={handleClearBanner}
                 title={intl.formatMessage(messages.resetLocation)}
               />
@@ -313,6 +309,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           <ContentTypeButton composeId={composeId} />
           <ComposeEditor
             key={String(isDisabled)}
+            className='⁂-edit-event__editor'
             placeholderClassName='⁂-compose-form__editor__placeholder'
             composeId={composeId}
             placeholder={intl.formatMessage(messages.eventDescriptionPlaceholder)}
@@ -350,7 +347,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           onChange={onChangeStartTime}
         />
       </FormGroup>
-      <HStack alignItems='center' space={2}>
+      <div className='flex items-center gap-2'>
         <Toggle checked={!!endTime} onChange={onChangeHasEndTime} id='has-end-time-toggle' />
         <Text htmlFor='has-end-time-toggle' tag='label' theme='muted'>
           <FormattedMessage
@@ -358,7 +355,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
             defaultMessage='This event has an end date'
           />
         </Text>
-      </HStack>
+      </div>
       {endTime && (
         <FormGroup
           labelText={
@@ -381,7 +378,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         </FormGroup>
       )}
       {!statusId && (
-        <HStack alignItems='center' space={2}>
+        <div className='flex items-center gap-2'>
           <Toggle
             checked={approvalRequired}
             onChange={onChangeApprovalRequired}
@@ -393,7 +390,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
               defaultMessage='I want to approve participation requests manually'
             />
           </Text>
-        </HStack>
+        </div>
       )}
       <FormActions>
         <Button disabled={isDisabled} theme='primary' type='submit'>

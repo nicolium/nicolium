@@ -1,14 +1,18 @@
 import clsx from 'clsx';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
+import { EmptyMessage } from '@/components/empty-message';
 import Hashtag from '@/components/hashtag';
+import PlaceholderAccount from '@/components/placeholders/placeholder-account';
+import PlaceholderHashtag from '@/components/placeholders/placeholder-hashtag';
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
+import StatusContainer from '@/components/statuses/status-container';
 import TrendingLink from '@/components/trending-link';
-import AccountContainer from '@/containers/account-container';
-import StatusContainer from '@/containers/status-container';
-import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
-import PlaceholderHashtag from '@/features/placeholder/components/placeholder-hashtag';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import Button from '@/components/ui/button';
+import { useFeatures } from '@/hooks/use-features';
 import { useSuggestedAccounts } from '@/queries/trends/use-suggested-accounts';
 import { useTrendingLinks } from '@/queries/trends/use-trending-links';
 import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
@@ -21,6 +25,8 @@ interface ITrendsColumn {
 }
 
 const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
+  const features = useFeatures();
+
   const {
     data: accounts,
     isFetching: isFetchingAccounts,
@@ -56,6 +62,41 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
       isFetching = isFetchingAccounts;
       isLoading = isLoadingAccounts;
       placeholderComponent = PlaceholderAccount;
+
+      if (!isFetching && !isLoading && accounts?.length === 0) {
+        children = [
+          <EmptyMessage
+            key='key-is-required'
+            icon={false}
+            heading={
+              <FormattedMessage
+                id='trends.no_accounts.heading'
+                defaultMessage='No suggested accounts'
+              />
+            }
+            text={
+              <div className='flex flex-col items-center gap-4'>
+                {features.profileDirectory ? (
+                  <>
+                    <FormattedMessage
+                      id='trends.no_accounts'
+                      defaultMessage='Try entering a search query or browsing the profile directory to find accounts to follow.'
+                    />
+                    <Button to='/directory' theme='muted'>
+                      <FormattedMessage id='column.directory' defaultMessage='Profile directory' />
+                    </Button>
+                  </>
+                ) : (
+                  <FormattedMessage
+                    id='trends.no_accounts.no_directory'
+                    defaultMessage='Try entering a search query to find accounts to follow.'
+                  />
+                )}
+              </div>
+            }
+          />,
+        ];
+      }
       break;
     }
     case 'hashtags': {

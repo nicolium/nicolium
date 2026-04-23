@@ -1,5 +1,6 @@
+import { useInstance } from '@/stores/instance';
+
 import { useFeatures } from './use-features';
-import { useInstance } from './use-instance';
 
 const useRegistrationStatus = () => {
   const instance = useInstance();

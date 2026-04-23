@@ -3,10 +3,8 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import { ParsedContent } from '@/components/statuses/parsed-content';
-import HStack from '@/components/ui/hstack';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -53,7 +51,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
           const poll = typeof version.poll !== 'string' && version.poll;
 
           return (
-            <Stack space={2} className='py-2 first:pt-0 last:pb-0' key={version.created_at}>
+            <div className='flex flex-col gap-2 py-2 first:pt-0 last:pb-0' key={version.created_at}>
               {version.spoiler_text.length > 0 && (
                 <>
                   <span>
@@ -67,11 +65,10 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
 
               {poll && (
                 <div className='poll'>
-                  <Stack>
+                  <div className='flex flex-col'>
                     {poll.options.map((option) => (
-                      <HStack
-                        alignItems='center'
-                        className='p-1 text-gray-900 dark:text-gray-300'
+                      <div
+                        className='flex items-center p-1 text-gray-900 dark:text-gray-300'
                         key={option.title}
                       >
                         <span
@@ -86,9 +83,9 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                             speakAsCat={statusAccount?.speak_as_cat}
                           />
                         </span>
-                      </HStack>
+                      </div>
                     ))}
-                  </Stack>
+                  </div>
                 </div>
               )}
 
@@ -105,7 +102,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                   minute='2-digit'
                 />
               </Text>
-            </Stack>
+            </div>
           );
         })}
       </div>

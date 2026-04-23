@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import React, { useCallback, useRef } from 'react';
 
-import HStack from '@/components/ui/hstack';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 import Upload from './upload';
@@ -53,7 +52,7 @@ const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
     <div className='overflow-hidden'>
       <UploadProgress composeId={composeId} />
 
-      <HStack wrap className={clsx('overflow-hidden', mediaIds.length > 0 && 'm-[-5px]')}>
+      <div className={clsx('flex flex-wrap overflow-hidden', mediaIds.length > 0 && 'm-[-5px]')}>
         {mediaIds.map((id: string) => (
           <Upload
             id={id}
@@ -65,7 +64,7 @@ const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
             onDragEnd={handleDragEnd}
           />
         ))}
-      </HStack>
+      </div>
     </div>
   );
 };

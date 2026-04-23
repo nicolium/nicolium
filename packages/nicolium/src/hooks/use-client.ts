@@ -1,7 +1,5 @@
-import { getClient } from '@/api';
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 
-import { useAppSelector } from './use-app-selector';
-
-const useClient = () => useAppSelector(getClient);
+const useClient = () => useCurrentAccountContext().client;
 
 export { useClient };

@@ -1,5 +1,6 @@
 {
-  "extends": ["stylelint-config-standard-scss"],
+  "plugins": ["@stylistic/stylelint-plugin"],
+  "extends": ["stylelint-config-standard-scss", "stylelint-config-clean-order/error"],
   "rules": {
     "alpha-value-notation": null,
     "at-rule-no-unknown": null,
@@ -18,7 +19,6 @@
     "color-function-notation": null,
     "custom-property-pattern": null,
     "declaration-block-no-redundant-longhand-properties": null,
-    "declaration-empty-line-before": "never",
     "font-family-no-missing-generic-family-keyword": [
       true,
       { "ignoreFontFamilies": ["ForkAwesome", "Font Awesome 5 Free"] }
@@ -32,6 +32,7 @@
     ],
     "scss/operator-no-unspaced": null,
     "selector-class-pattern": null,
-    "no-invalid-position-declaration": null
+    "no-invalid-position-declaration": null,
+    "@stylistic/indentation": 2
   }
 }

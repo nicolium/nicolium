@@ -1,13 +1,13 @@
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import GroupCard from '@/components/group-card';
+import GroupCard from '@/components/groups/group-card';
+import PlaceholderGroupCard from '@/components/placeholders/placeholder-group-card';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import PlaceholderGroupCard from '@/features/placeholder/components/placeholder-group-card';
 import { useGroupsQuery } from '@/queries/groups/use-groups';
 import { useModalsActions } from '@/stores/modals';
 
@@ -21,8 +21,8 @@ const Groups: React.FC = () => {
   };
 
   const renderBlankslate = () => (
-    <Stack space={4} alignItems='center' justifyContent='center' className='py-6'>
-      <Stack space={2} className='max-w-sm'>
+    <div className='flex flex-col items-center justify-center gap-4 py-6'>
+      <div className='flex max-w-sm flex-col gap-2'>
         <Text size='2xl' weight='bold' tag='h2' align='center'>
           <FormattedMessage id='groups.empty.title' defaultMessage='No groups yet' />
         </Text>
@@ -33,20 +33,20 @@ const Groups: React.FC = () => {
             defaultMessage='Start discovering groups to join or create your own.'
           />
         </Text>
-      </Stack>
+      </div>
 
       <Button className='self-center' onClick={createGroup} theme='secondary'>
         <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
       </Button>
-    </Stack>
+    </div>
   );
 
   return (
-    <Stack space={4}>
+    <div className='flex flex-col gap-4'>
       {!(!isFetching && groupIds.length === 0) && (
         <Button
           className='xl:hidden'
-          icon={require('@phosphor-icons/core/regular/users-three.svg')}
+          icon={iconUsersThree}
           onClick={createGroup}
           theme='secondary'
           block
@@ -70,7 +70,7 @@ const Groups: React.FC = () => {
           </Link>
         ))}
       </ScrollableList>
-    </Stack>
+    </div>
   );
 };
 

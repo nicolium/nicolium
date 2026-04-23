@@ -18,6 +18,7 @@ import {
   adminReportSchema,
   adminRuleSchema,
   adminTagSchema,
+  pleromaConfigDescriptionSchema,
   pleromaConfigSchema,
   statusSchema,
   statusSourceSchema,
@@ -678,16 +679,13 @@ const admin = (client: PlApiBaseClient) => {
 
       /**
        * Assign report to self
-       * Claim the handling of this report to yourcategory.
-       * @see {@link https://docs.joinmastodon.org/methods/admin/reports/#assign_tocategory}
+       * Claim the handling of this report to yourself.
+       * @see {@link https://docs.joinmastodon.org/methods/admin/reports/#assign_to_self}
        */
       assignReportToSelf: async (reportId: string) => {
-        const response = await client.request(
-          `/api/v1/admin/reports/${reportId}/assign_tocategory`,
-          {
-            method: 'POST',
-          },
-        );
+        const response = await client.request(`/api/v1/admin/reports/${reportId}/assign_to_self`, {
+          method: 'POST',
+        });
 
         return v.parse(adminReportSchema, response.json);
       },
@@ -1458,12 +1456,30 @@ const admin = (client: PlApiBaseClient) => {
     },
 
     config: {
+      /**
+       * Requires features{@link Features.pleromaAdminConfig}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminconfigdescriptions}
+       */
+      getPleromaConfigDescriptions: async () => {
+        const response = await client.request('/api/v1/pleroma/admin/config/descriptions');
+
+        return v.parse(v.array(pleromaConfigDescriptionSchema), response.json);
+      },
+
+      /**
+       * Requires features{@link Features.pleromaAdminConfig}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminconfig}
+       */
       getPleromaConfig: async () => {
         const response = await client.request('/api/v1/pleroma/admin/config');
 
         return v.parse(pleromaConfigSchema, response.json);
       },
 
+      /**
+       * Requires features{@link Features.pleromaAdminConfig}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminconfig}
+       */
       updatePleromaConfig: async (params: PleromaConfig['configs']) => {
         const response = await client.request('/api/v1/pleroma/admin/config', {
           method: 'POST',
@@ -1506,7 +1522,7 @@ const admin = (client: PlApiBaseClient) => {
         const response = await client.request('/api/v1/admin/custom_emojis', {
           method: 'POST',
           body: params,
-          contentType: '',
+          formData: true,
         });
 
         return v.parse(adminCustomEmojiSchema, response.json);
@@ -1516,7 +1532,7 @@ const admin = (client: PlApiBaseClient) => {
         const response = await client.request(`/api/v1/admin/custom_emojis/${emojiId}`, {
           method: 'PATCH',
           body: params,
-          contentType: '',
+          formData: true,
         });
 
         return v.parse(adminCustomEmojiSchema, response.json);

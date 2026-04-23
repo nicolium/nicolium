@@ -1,0 +1,93 @@
+import { useNavigate } from '@tanstack/react-router';
+import React, { useState, useEffect } from 'react';
+import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
+
+import Button from '@/components/ui/button';
+import FormActions from '@/components/ui/form-actions';
+import Spinner from '@/components/ui/spinner';
+import Text from '@/components/ui/text';
+import { useClient } from '@/hooks/use-client';
+import toast from '@/toast';
+
+const messages = defineMessages({
+  mfaCancelButton: { id: 'column.mfa_cancel', defaultMessage: 'Cancel' },
+  mfaSetupButton: { id: 'column.mfa_setup', defaultMessage: 'Proceed to setup' },
+  codesFail: { id: 'security.codes.fail', defaultMessage: 'Failed to fetch backup codes' },
+});
+
+interface IEnableOtpForm {
+  displayOtpForm: boolean;
+  handleSetupProceedClick: (event: React.MouseEvent) => void;
+}
+
+const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupProceedClick }) => {
+  const intl = useIntl();
+  const navigate = useNavigate();
+  const client = useClient();
+
+  const [backupCodes, setBackupCodes] = useState<Array<string>>([]);
+
+  useEffect(() => {
+    client.settings.mfa
+      .getMfaBackupCodes()
+      .then(({ codes: backupCodes }) => {
+        setBackupCodes(backupCodes);
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(messages.codesFail));
+      });
+  }, []);
+
+  return (
+    <div className='flex flex-col gap-4'>
+      <div className='flex flex-col gap-4'>
+        <Text theme='muted'>
+          <FormattedMessage
+            id='mfa.setup_warning'
+            defaultMessage="Write these codes down or save them somewhere secure - otherwise you won't see them again. If you lose access to your 2FA app and recovery codes you'll be locked out of your account."
+          />
+        </Text>
+
+        <div className='rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-800'>
+          <div className='flex flex-col gap-3'>
+            <Text weight='medium' align='center'>
+              <FormattedMessage id='mfa.setup_recoverycodes' defaultMessage='Recovery codes' />
+            </Text>
+
+            {backupCodes.length > 0 ? (
+              <div className='grid grid-cols-2 gap-3 rounded-lg text-center'>
+                {backupCodes.map((code, i) => (
+                  <Text key={i} theme='muted' size='sm'>
+                    {code}
+                  </Text>
+                ))}
+              </div>
+            ) : (
+              <Spinner />
+            )}
+          </div>
+        </div>
+      </div>
+
+      {!displayOtpForm && (
+        <FormActions>
+          <Button
+            theme='tertiary'
+            text={intl.formatMessage(messages.mfaCancelButton)}
+            onClick={() => navigate({ to: '/settings/security' })}
+          />
+
+          {backupCodes.length > 0 && (
+            <Button
+              theme='primary'
+              text={intl.formatMessage(messages.mfaSetupButton)}
+              onClick={handleSetupProceedClick}
+            />
+          )}
+        </FormActions>
+      )}
+    </div>
+  );
+};
+
+export { EnableOtpForm as default };

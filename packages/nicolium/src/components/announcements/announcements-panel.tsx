@@ -1,10 +1,9 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import ReactSwipeableViews from 'react-swipeable-views';
 
+import ReactSwipeableViews from '@/components/react-swipeable-views';
 import Card from '@/components/ui/card';
-import HStack from '@/components/ui/hstack';
 import Widget from '@/components/ui/widget';
 import { useAnnouncements } from '@/queries/announcements/use-announcements';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
@@ -46,7 +45,7 @@ const AnnouncementsPanel = () => {
             .toReversed()}
         </ReactSwipeableViews>
         {announcements.length > 1 && (
-          <HStack space={2} alignItems='center' justifyContent='center' className='relative'>
+          <div className='relative flex items-center justify-center gap-2'>
             {announcements.map((_, i) => (
               <button
                 key={i}
@@ -61,7 +60,7 @@ const AnnouncementsPanel = () => {
                 })}
               />
             ))}
-          </HStack>
+          </div>
         )}
       </Card>
     </Widget>

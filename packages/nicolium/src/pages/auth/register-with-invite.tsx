@@ -2,9 +2,10 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { BigCard } from '@/components/ui/big-card';
-import RegistrationForm from '@/features/auth-login/components/registration-form';
-import { inviteRoute } from '@/features/ui/router';
-import { useInstance } from '@/hooks/use-instance';
+import { inviteRoute } from '@/router';
+import { useInstance } from '@/stores/instance';
+
+import RegistrationForm from './components/registration-form';
 
 /** Page to register with an invitation. */
 const RegisterWithInvitePage: React.FC = () => {

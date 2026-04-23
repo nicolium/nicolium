@@ -1,8 +1,8 @@
 # Nicolium
 
-[![Codeberg Repo stars](https://img.shields.io/gitea/stars/mkljczk/nicolium?gitea_url=https%3A%2F%2Fcodeberg.org&logo=Codeberg)](https://codeberg.org/mkljczk/nicolium)
-[![GitHub Repo stars](https://img.shields.io/github/stars/mkljczk/nicolium)](https://github.com/mkljczk/nicolium)
-[![GitHub License](https://img.shields.io/github/license/mkljczk/nicolium)](https://github.com/mkljczk/nicolium?tab=AGPL-3.0-1-ov-file#readme)
+[![Codeberg Repo stars](https://img.shields.io/gitea/stars/nicolium/nicolium?gitea_url=https%3A%2F%2Fcodeberg.org&logo=Codeberg)](https://codeberg.org/nicolium/nicolium)
+[![GitHub Repo stars](https://img.shields.io/github/stars/nicolium/nicolium)](https://github.com/nicolium/nicolium)
+[![GitHub License](https://img.shields.io/github/license/nicolium/nicolium)](https://github.com/nicolium/nicolium?tab=AGPL-3.0-1-ov-file#readme)
 [![Weblate project translated](https://img.shields.io/weblate/progress/nicolium)](https://hosted.weblate.org/engage/nicolium/)
 ![trans rights btw](https://img.shields.io/badge/-rights_btw-wtf?style=flat&label=trans&labelColor=5BCEFA&color=F5A9B8)
 
@@ -30,9 +30,17 @@ The repository hosts Nicolium, but also libraries related to the project. Curren
 
 ## Contributing
 
-This project is hosted on [Codeberg](https://codeberg.org/mkljczk/nicolium) and [GitHub](https://github.com/mkljczk/nicolium). You can open issues on Codeberg or create pull requests on both platforms.
+This project is hosted on [Codeberg](https://codeberg.org/nicolium/nicolium) and [GitHub](https://github.com/nicolium/nicolium). You can open issues on Codeberg or create pull requests on both platforms.
 
 You can find more information about setting up the development environment in [the documentation](https://nicolium.app/docs/contributing/nicolium/).
+
+## Sponsors
+
+Maintenance of Nicolium is possible thanks to the support of our sponsors. If you want to support the project, consider sponsoring [mkljczk](https://github.com/sponsors/mkljczk) or [pmysl](https://github.com/sponsors/pmysl) on GitHub Sponsors.
+
+<!-- sponsors --><a href="https://github.com/j-g00da"><img src="https:&#x2F;&#x2F;github.com&#x2F;j-g00da.png" width="60px" alt="User avatar: Jagoda Estera Ślązak" /></a><a href="https://github.com/pmysl"><img src="https:&#x2F;&#x2F;github.com&#x2F;pmysl.png" width="60px" alt="User avatar: " /></a><a href="https://github.com/mkljczk"><img src="https:&#x2F;&#x2F;github.com&#x2F;mkljczk.png" width="60px" alt="User avatar: nicole mikołajczyk" /></a><!-- sponsors -->
+
+(if you don't want to appear on the list above, but want to support the project, please let us know by contacting [Nicolium Fediverse account](https://pl.fediverse.pl/@Nicolium) or set your sponsorship to private)
 
 ## License
 

@@ -4,8 +4,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import PullToRefresh from '@/components/pull-to-refresh';
 import StatusList from '@/components/statuses/status-list';
 import Column from '@/components/ui/column';
-import { statusQuotesRoute } from '@/features/ui/router';
 import { useStatusQuotes } from '@/queries/statuses/use-status-quotes';
+import { statusQuotesRoute } from '@/router';
 
 const messages = defineMessages({
   heading: { id: 'column.quotes', defaultMessage: 'Post quotes' },

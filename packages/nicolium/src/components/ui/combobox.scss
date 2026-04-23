@@ -1,0 +1,52 @@
+:root {
+  --reach-combobox: 1;
+}
+
+[data-reach-combobox-popover] {
+  z-index: 100;
+  border-radius: var(--radius-md);
+  background: white;
+  box-shadow: var(--shadow-lg);
+
+  .dark & {
+    background: rgb(var(--color-gray-900));
+    outline: 2px solid rgb(var(--color-primary-700));
+  }
+}
+
+[data-reach-combobox-list] {
+  user-select: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style-type: none;
+}
+
+[data-reach-combobox-option] {
+  cursor: pointer;
+
+  display: block;
+
+  padding: 0.625rem 1rem;
+
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  color: rgb(var(--color-gray-700));
+
+  .dark & {
+    color: rgb(var(--color-gray-500));
+  }
+}
+
+[data-reach-combobox-option][aria-selected='true'],
+[data-reach-combobox-option]:hover,
+[data-reach-combobox-option][aria-selected='true']:hover {
+  background: rgb(var(--color-gray-100));
+
+  .dark & {
+    background: rgb(var(--color-gray-800));
+  }
+}
+
+[data-suggested-value] {
+  font-weight: 700;
+}

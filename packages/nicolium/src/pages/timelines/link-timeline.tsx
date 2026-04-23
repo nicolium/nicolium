@@ -1,9 +1,10 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { LinkTimelineColumn } from '@/columns/timeline';
 import Column from '@/components/ui/column';
-import { linkTimelineRoute } from '@/features/ui/router';
+import { linkTimelineRoute } from '@/router';
 
 const messages = defineMessages({
   header: { id: 'column.link_timeline', defaultMessage: 'Posts linking to {url}' },
@@ -27,7 +28,7 @@ const LinkTimelinePage: React.FC = () => {
             defaultMessage='There are no posts with this link yet.'
           />
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
       />
     </Column>
   );

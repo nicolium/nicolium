@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient, type UseQueryResult } from '@tan
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 
 import { queryKeys } from '../keys';
 
@@ -13,12 +14,13 @@ function useFilters<T>(select: (data: Array<Filter>) => T): UseQueryResult<T, Er
 function useFilters(): UseQueryResult<Array<Filter>, Error>;
 function useFilters<T = Array<Filter>>(select?: (data: Array<Filter>) => T) {
   const client = useClient();
+  const { isLoggedIn } = useLoggedIn();
   const features = useFeatures();
 
   return useQuery({
     queryKey: queryKeys.filters.all,
     queryFn: async () => client.filtering.getFilters(),
-    enabled: features.filters || features.filtersV2,
+    enabled: isLoggedIn && (features.filters || features.filtersV2),
     staleTime: 30 * 60 * 1000, // 30 minutes
     select,
   });

@@ -1,10 +1,10 @@
+import iconUpload from '@phosphor-icons/core/regular/upload.svg';
 import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/icon';
-import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useInstance } from '@/stores/instance';
 
 interface IUploadButton {
   disabled?: boolean;
@@ -14,9 +14,10 @@ interface IUploadButton {
 const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   const fileElement = useRef<HTMLInputElement>(null);
 
-  const attachmentTypes = useAppSelector(
-    (state) => state.instance.configuration.media_attachments.supported_mime_types,
-  )?.filter((type) => type.startsWith('image/'));
+  const attachmentTypes =
+    useInstance().configuration.media_attachments.supported_mime_types?.filter((type) =>
+      type.startsWith('image/'),
+    );
 
   let accept = attachmentTypes?.join(',');
   if (accept === 'application/octet-stream') accept = undefined;
@@ -32,18 +33,8 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   };
 
   return (
-    <HStack
-      className='size-full cursor-pointer text-primary-500 dark:text-primary-400'
-      space={3}
-      alignItems='center'
-      justifyContent='center'
-      element='label'
-    >
-      <Icon
-        src={require('@phosphor-icons/core/regular/upload.svg')}
-        className='size-7'
-        onClick={handleClick}
-      />
+    <label className='flex size-full cursor-pointer items-center justify-center gap-3 text-primary-500 dark:text-primary-400'>
+      <Icon src={iconUpload} className='size-7' onClick={handleClick} />
 
       <Text size='sm' theme='primary' weight='semibold' transform='uppercase' tabIndex={0}>
         <FormattedMessage id='compose_event.upload_banner' defaultMessage='Upload event banner' />
@@ -56,7 +47,7 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
         disabled={disabled}
         className='hidden'
       />
-    </HStack>
+    </label>
   );
 };
 

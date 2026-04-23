@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 
 import Upload from '@/components/upload';
-import { useInstance } from '@/hooks/use-instance';
 import { useChangeUploadCompose, useCompose, useComposeActions } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 
 interface IUploadCompose {
   id: string;

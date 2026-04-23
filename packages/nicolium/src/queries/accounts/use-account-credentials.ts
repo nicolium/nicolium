@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { patchMeSuccess } from '@/actions/me';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { queryKeys } from '@/queries/keys';
+import { useAuthActions } from '@/stores/auth';
+import { useComposeActions } from '@/stores/compose';
 
 import type { UpdateCredentialsParams } from 'pl-api';
 
@@ -22,8 +22,9 @@ const useCredentialAccount = (enabled = true) => {
 const useUpdateCredentials = () => {
   const client = useClient();
   const currentAccount = useCurrentAccount();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const { setCurrentAccount } = useAuthActions();
+  const { importDefaultSettings } = useComposeActions();
 
   return useMutation({
     mutationKey: queryKeys.accountCredentials.show(currentAccount as string),
@@ -33,7 +34,9 @@ const useUpdateCredentials = () => {
         queryKeys.accountCredentials.show(currentAccount as string),
         response,
       );
-      dispatch(patchMeSuccess(response));
+      queryClient.setQueryData(queryKeys.accounts.show(response.id), response);
+      importDefaultSettings(response);
+      setCurrentAccount(response);
     },
   });
 };

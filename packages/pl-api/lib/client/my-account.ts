@@ -11,7 +11,7 @@ import {
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
 import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from '@/features';
-import { getNextLink, getPrevLink } from '@/request';
+import { getLinks } from '@/request';
 import { PaginatedResponse } from '@/responses';
 
 import type { accounts } from './accounts';
@@ -40,8 +40,7 @@ const paginatedIceshrimpAccountsList = async <T>(
 
   const items = await client.accounts.getAccounts(ids);
 
-  const prevLink = getPrevLink(response);
-  const nextLink = getNextLink(response);
+  const { prev: prevLink, next: nextLink } = getLinks(response);
 
   return new PaginatedResponse(items, {
     previous: prevLink ? () => paginatedIceshrimpAccountsList(client, prevLink, fn) : null,
@@ -166,7 +165,7 @@ const myAccount = (client: PlApiBaseClient & { accounts: ReturnType<typeof accou
       body: { name },
     });
 
-    return v.parse(filteredArray(featuredTagSchema), response.json);
+    return v.parse(featuredTagSchema, response.json);
   },
 
   /**
@@ -176,10 +175,9 @@ const myAccount = (client: PlApiBaseClient & { accounts: ReturnType<typeof accou
    * Requires features{@link Features.featuredTags}.
    * @see {@link https://docs.joinmastodon.org/methods/featured_tags/#unfeature}
    */
-  unfeatureTag: async (name: string) => {
-    const response = await client.request<EmptyObject>('/api/v1/featured_tags', {
+  unfeatureTag: async (featuredTagId: string) => {
+    const response = await client.request<EmptyObject>(`/api/v1/featured_tags/${featuredTagId}`, {
       method: 'DELETE',
-      body: { name },
     });
 
     return response.json;

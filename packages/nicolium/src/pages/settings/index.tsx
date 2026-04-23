@@ -2,9 +2,9 @@ import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import Hashtag from '@/components/hashtag';
+import PlaceholderHashtag from '@/components/placeholders/placeholder-hashtag';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import PlaceholderHashtag from '@/features/placeholder/components/placeholder-hashtag';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 
 const messages = defineMessages({

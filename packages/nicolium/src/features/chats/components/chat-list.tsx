@@ -2,10 +2,9 @@ import clsx from 'clsx';
 import React, { useCallback, useRef, useState } from 'react';
 import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
+import PlaceholderChat from '@/components/placeholders/placeholder-chat';
 import PullToRefresh from '@/components/pull-to-refresh';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
-import PlaceholderChat from '@/features/placeholder/components/placeholder-chat';
 import { useChats } from '@/queries/chats';
 import { useShoutboxIsLoading } from '@/stores/shoutbox';
 import { selectChild } from '@/utils/scroll-utils';
@@ -91,11 +90,11 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
   const renderEmpty = () => {
     if (isFetching) {
       return (
-        <Stack space={2}>
+        <div className='flex flex-col gap-2'>
           <PlaceholderChat />
           <PlaceholderChat />
           <PlaceholderChat />
-        </Stack>
+        </div>
       );
     }
 

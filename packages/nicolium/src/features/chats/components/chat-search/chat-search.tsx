@@ -1,3 +1,5 @@
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import React, { useRef, useState } from 'react';
@@ -5,7 +7,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useChats } from '@/queries/chats';
@@ -90,7 +91,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
   };
 
   return (
-    <Stack space={4} className='-mt-1 h-full grow'>
+    <div className='-mt-1 flex h-full grow flex-col gap-4'>
       <div className='px-4 pt-1'>
         <Input
           data-testid='search'
@@ -111,11 +112,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
               )}
             >
               <Icon
-                src={
-                  hasSearchValue
-                    ? require('@phosphor-icons/core/regular/x.svg')
-                    : require('@phosphor-icons/core/regular/magnifying-glass.svg')
-                }
+                src={hasSearchValue ? iconX : iconMagnifyingGlass}
                 className='size-4 text-gray-700 dark:text-gray-600'
                 aria-hidden='true'
               />
@@ -124,10 +121,10 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
         />
       </div>
 
-      <Stack className='grow' ref={parentRef}>
+      <div className='flex grow flex-col' ref={parentRef}>
         {renderBody()}
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

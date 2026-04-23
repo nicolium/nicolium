@@ -1,21 +1,20 @@
-import React from 'react';
-import { Helmet as ReactHelmet } from 'react-helmet-async';
+import React, { useEffect } from 'react';
 
 import { useStatContext } from '@/contexts/stat-context';
-import { useInstance } from '@/hooks/use-instance';
 import { usePendingUsersCount } from '@/queries/admin/use-accounts';
 import { usePendingReportsCount } from '@/queries/admin/use-reports';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
+import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import FaviconService from '@/utils/favicon-service';
 
 FaviconService.initFaviconService();
 
-interface IHelmet {
-  children: React.ReactNode;
+interface IHeadTitle {
+  title?: string;
 }
 
-const Helmet: React.FC<IHelmet> = ({ children }) => {
+const HeadTitle: React.FC<IHeadTitle> = ({ title }) => {
   const instance = useInstance();
   const { unreadChatsCount } = useStatContext();
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
@@ -33,27 +32,19 @@ const Helmet: React.FC<IHelmet> = ({ children }) => {
   const addCounter = (string: string) =>
     hasUnreadNotifications ? `(${unreadCount}) ${string}` : string;
 
-  const updateFaviconBadge = () => {
+  useEffect(() => {
     if (hasUnreadNotifications) {
       FaviconService.drawFaviconBadge();
     } else {
       FaviconService.clearFaviconBadge();
     }
-  };
-
-  React.useEffect(() => {
-    updateFaviconBadge();
   }, [unreadCount, demetricator]);
 
-  return (
-    <ReactHelmet
-      titleTemplate={addCounter(`%s | ${instance.title}`)}
-      defaultTitle={addCounter(instance.title)}
-      defer={false}
-    >
-      {children}
-    </ReactHelmet>
-  );
+  const formattedTitle = title
+    ? addCounter(`${title} | ${instance.title}`)
+    : addCounter(instance.title);
+
+  return <title>{formattedTitle}</title>;
 };
 
-export { Helmet as default };
+export { HeadTitle as default };

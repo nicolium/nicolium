@@ -1,16 +1,16 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
-import Report from '@/features/admin/components/report';
-import { adminReportsRoute } from '@/features/ui/router';
+import Report from '@/pages/dashboard/components/report';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useReports } from '@/queries/admin/use-reports';
+import { adminReportsRoute } from '@/router';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.reports', defaultMessage: 'Reports' },
@@ -46,14 +46,10 @@ const Reports: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       {(accountId ?? targetAccountId) && (
-        <HStack
-          className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'
-          alignItems='center'
-          space={2}
-        >
+        <div className='flex items-center gap-2 border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'>
           <IconButton
             iconClassName='h-5 w-5'
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             onClick={handleUnsetAccounts}
             title={intl.formatMessage(messages.clearFilter)}
           />
@@ -91,7 +87,7 @@ const Reports: React.FC = () => {
               }}
             />
           </Text>
-        </HStack>
+        </div>
       )}
       <ScrollableList
         scrollKey='adminReports'

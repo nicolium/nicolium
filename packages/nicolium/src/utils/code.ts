@@ -3,7 +3,7 @@ import { execSync } from 'node:child_process';
 import pkg from '../../package.json';
 
 const code = compileTime(() => {
-  const { CI_COMMIT_TAG, CI_COMMIT_REF_NAME, CI_COMMIT_SHA } = process.env;
+  const { GITHUB_REF_NAME, GITHUB_SHA, GITHUB_REF_TYPE } = process.env;
 
   const shortRepoName = (url: string): string => new URL(url).pathname.slice(1);
   const trimHash = (hash: string): string => hash.slice(0, 7);
@@ -17,13 +17,16 @@ const code = compileTime(() => {
   };
 
   const version = (pkg: { version: string }): string => {
-    // Try to discern from GitLab CI first
-    if (CI_COMMIT_TAG === `v${pkg.version}` || CI_COMMIT_REF_NAME === 'stable') {
+    const ciTag = GITHUB_REF_TYPE === 'tag' ? GITHUB_REF_NAME : undefined;
+    const branch = GITHUB_REF_TYPE === 'branch' ? GITHUB_REF_NAME : undefined;
+
+    // Try to discern from GitHub CI first
+    if (ciTag === `v${pkg.version}` || branch === 'stable') {
       return pkg.version;
     }
 
-    if (typeof CI_COMMIT_SHA === 'string') {
-      return `${pkg.version}-${trimHash(CI_COMMIT_SHA)}`;
+    if (typeof GITHUB_SHA === 'string') {
+      return `${pkg.version}-${trimHash(GITHUB_SHA)}`;
     }
 
     // Fall back to git directly
@@ -43,12 +46,10 @@ const code = compileTime(() => {
     repository: shortRepoName(pkg.repository.url),
     version: version(pkg),
     homepage: pkg.homepage,
-    ref: CI_COMMIT_TAG ?? CI_COMMIT_SHA ?? tryGit('git rev-parse HEAD'),
+    ref: (GITHUB_REF_TYPE === 'tag' ? GITHUB_REF_NAME : GITHUB_SHA) ?? tryGit('git rev-parse HEAD'),
   };
 
   return code;
 });
-
-export type Code = typeof code;
 
 export default code;

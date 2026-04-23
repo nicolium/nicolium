@@ -8,12 +8,15 @@ import { useLocale, useLocaleDirection } from '@/hooks/use-locale';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeCss } from '@/hooks/use-theme-css';
 import { startSentry } from '@/sentry';
+import { useInstanceStore } from '@/stores/instance';
 import { useHasModals } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
-const Helmet = React.lazy(() => import('@/components/helmet'));
+const HeadTitle = React.lazy(() => import('@/components/helmet'));
 
-/** Injects metadata into site head with Helmet. */
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+/** Injects metadata into site head. */
 const NicoliumHead = () => {
   const locale = useLocale();
   const direction = useLocaleDirection(locale);
@@ -28,6 +31,7 @@ const NicoliumHead = () => {
   const theme = useTheme();
   const [wcoVisible, setWcoVisible] = React.useState(false);
   const [wcoRight, setWcoRight] = React.useState(false);
+  const instanceFetched = useInstanceStore((state) => state.fetched);
 
   const withModals = useHasModals();
 
@@ -35,7 +39,7 @@ const NicoliumHead = () => {
   const dsn = frontendConfig.sentryDsn;
 
   const bodyClass = clsx({
-    'no-reduce-motion': !reduceMotion,
+    'no-reduce-motion': !(reduceMotion || prefersReducedMotion.matches),
     'underline-links': underlineLinks,
     demetricator: demetricator,
     'system-font': systemFont,
@@ -70,6 +74,21 @@ const NicoliumHead = () => {
     };
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    document.documentElement.className = clsx(`body--${themeSettings?.interfaceSize ?? 'md'}`, {
+      dark: theme === 'dark',
+      'black dark': theme === 'black',
+      'window-controls-overlay': wcoVisible,
+      'window-controls-overlay--right': wcoRight,
+    });
+  }, [locale, themeSettings?.interfaceSize, theme, wcoVisible, wcoRight]);
+
+  useEffect(() => {
+    document.body.className = bodyClass;
+    document.body.dir = direction;
+  }, [bodyClass, direction]);
+
   const color = useMemo(() => {
     if (wcoVisible) {
       return window.getComputedStyle(document.body, null).getPropertyValue('background-color');
@@ -79,18 +98,7 @@ const NicoliumHead = () => {
 
   return (
     <>
-      <Helmet>
-        <html
-          lang={locale}
-          className={clsx(`text-${themeSettings?.interfaceSize ?? 'md'}`, {
-            dark: theme === 'dark',
-            'black dark': theme === 'black',
-            'window-controls-overlay': wcoVisible,
-            'window-controls-overlay--right': wcoRight,
-          })}
-        />
-        <body className={bodyClass} dir={direction} />
-      </Helmet>
+      {instanceFetched && <HeadTitle />}
       <meta name='theme-color' content={color} />
       <InlineStyle>{`:root { ${themeCss} }`}</InlineStyle>
       {['dark', 'black'].includes(theme) && (

@@ -1,10 +1,8 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
+import { AsideContent } from '@/components/navigation/aside-content';
 import Layout from '@/components/ui/layout';
-import { LatestAccountsPanel } from '@/features/ui/util/async-components';
-
-import LinkFooter from '../features/ui/components/link-footer';
 
 const AdminLayout = () => (
   <>
@@ -13,8 +11,7 @@ const AdminLayout = () => (
     </Layout.Main>
 
     <Layout.Aside>
-      <LatestAccountsPanel limit={5} />
-      <LinkFooter />
+      <AsideContent layout='admin' />
     </Layout.Aside>
   </>
 );

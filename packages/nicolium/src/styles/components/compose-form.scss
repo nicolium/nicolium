@@ -1,11 +1,11 @@
 .compose-form__upload-thumbnail {
   &.video {
-    @apply bg-cover;
     background-image: url('../assets/images/video-placeholder.png');
+    background-size: cover;
   }
 
   &.audio {
-    @apply bg-cover;
     background-image: url('../assets/images/audio-placeholder.png');
+    background-size: cover;
   }
 }

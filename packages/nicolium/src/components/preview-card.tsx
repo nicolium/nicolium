@@ -1,4 +1,7 @@
-import { Link } from '@tanstack/react-router';
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
+import iconLinkSimple from '@phosphor-icons/core/regular/link-simple.svg';
+import iconMagnifyingGlassPlus from '@phosphor-icons/core/regular/magnifying-glass-plus.svg';
+import iconPlay from '@phosphor-icons/core/regular/play.svg';
 import clsx from 'clsx';
 import DOMPurify from 'dompurify';
 import {
@@ -11,15 +14,14 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import Blurhash from '@/components/media/blurhash';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useSettings } from '@/stores/settings';
 import { getTextDirection } from '@/utils/rtl';
 import Purify from '@/utils/url-purify';
 
+import { AccountLink } from './accounts/account-link';
 import HoverAccountWrapper from './accounts/hover-account-wrapper';
 import Avatar from './ui/avatar';
 
@@ -115,6 +117,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   const intl = useIntl();
   const {
     urlPrivacy: { clearLinksInContent, redirectLinksMode },
+    disableUserProvidedMedia,
   } = useSettings();
   const [width, setWidth] = useState(defaultWidth);
   const [embedded, setEmbedded] = useState(false);
@@ -204,22 +207,22 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   );
 
   const description = (
-    <Stack space={2} className='flex-1 overflow-hidden p-4'>
+    <div className='flex flex-1 flex-col gap-1 overflow-hidden p-4'>
       {trimmedTitle && (
         <Text weight='bold' direction={direction}>
           {title}
         </Text>
       )}
       {trimmedDescription && <Text direction={direction}>{trimmedDescription}</Text>}
-      <HStack space={1} alignItems='center'>
+      <div className='flex items-center gap-1'>
         <Text tag='span' theme='muted'>
-          <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
+          <Icon src={iconLinkSimple} />
         </Text>
         <Text tag='span' theme='muted' size='sm' direction={direction}>
           {card.provider_name}
         </Text>
-      </HStack>
-    </Stack>
+      </div>
+    </div>
   );
 
   let embed: React.ReactNode = null;
@@ -239,14 +242,14 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     />
   );
 
-  if (interactive) {
+  if (interactive && !disableUserProvidedMedia) {
     if (embedded) {
       embed = <PreviewCardVideo card={card} />;
     } else {
-      let iconVariant = require('@phosphor-icons/core/regular/play.svg');
+      let iconVariant = iconPlay;
 
       if (card.type === 'photo') {
-        iconVariant = require('@phosphor-icons/core/regular/magnifying-glass-plus.svg');
+        iconVariant = iconMagnifyingGlassPlus;
       }
 
       embed = (
@@ -256,7 +259,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
           <div className='absolute inset-0 flex items-center justify-center'>
             <div className='flex items-center justify-center rounded-full bg-gray-500/90 px-4 py-3 shadow-md dark:bg-gray-700/90'>
-              <HStack space={3} alignItems='center'>
+              <div className='flex items-center gap-3'>
                 <button
                   onClick={handleEmbedClick}
                   className='appearance-none text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
@@ -278,13 +281,10 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                     className='text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
                     title={intl.formatMessage(messages.externalLink)}
                   >
-                    <Icon
-                      src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
-                      className='size-6 text-inherit'
-                    />
+                    <Icon src={iconArrowSquareOut} className='size-6 text-inherit' />
                   </a>
                 )}
-              </HStack>
+              </div>
             </div>
           </div>
         </div>
@@ -297,7 +297,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
         {description}
       </div>
     );
-  } else if (card.image) {
+  } else if (card.image && !disableUserProvidedMedia) {
     embed = (
       <div
         className={clsx(
@@ -333,7 +333,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   if (card.authors.length) {
     return (
-      <Stack>
+      <div className='flex flex-col'>
         {link}
         <div className='-mt-4 rounded-lg border border-t-0 border-solid border-gray-200 bg-gray-100 p-2 pt-6 black:bg-primary-900 dark:border-gray-800 dark:bg-primary-700'>
           <Text theme='muted' className='flex items-center gap-2'>
@@ -343,7 +343,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
               values={{
                 name: card.authors.map((author) => {
                   const linkBody = (
-                    <HStack space={1} alignItems='center'>
+                    <div className='flex items-center gap-1'>
                       {author.account && (
                         <Avatar
                           src={author.account?.avatar}
@@ -357,7 +357,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                           emojis={author.account?.emojis}
                         />
                       </Text>
-                    </HStack>
+                    </div>
                   );
                   return (
                     <HoverAccountWrapper
@@ -366,9 +366,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                       element='bdi'
                     >
                       {author.account ? (
-                        <Link to='/@{$username}' params={{ username: author.account?.acct ?? '' }}>
-                          {linkBody}
-                        </Link>
+                        <AccountLink account={author.account}>{linkBody}</AccountLink>
                       ) : (
                         <a href={author.url} target='_blank' rel='noopener noreferrer'>
                           {linkBody}
@@ -381,7 +379,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
             />
           </Text>
         </div>
-      </Stack>
+      </div>
     );
   }
 

@@ -38,8 +38,8 @@ For unsupported projects, it falls back to a basic feature set, though every met
 
 ## Projects using `pl-api`
 
-- [Nicolium](https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/nicolium) is a web client for Mastodon-compatible servers forked from Soapbox. It uses `pl-api` for API interactions.
-- [`pl-hooks`](https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-hooks) is a work-in-progress library utilizing `pl-api`.
+- [Nicolium](https://codeberg.org/nicolium/nicolium/src/packages/nicolium) is a web client for Mastodon-compatible servers forked from Soapbox. It uses `pl-api` for API interactions.
+- [`pl-hooks`](https://codeberg.org/nicolium/nicolium/src/packages/pl-hooks) is a work-in-progress library utilizing `pl-api`.
 
 If you are using `pl-api` in your project, please open a pull request with a link to the project.
 

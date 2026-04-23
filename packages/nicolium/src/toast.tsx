@@ -19,6 +19,20 @@ interface IToastOptions {
   summary?: string;
 }
 
+let broadcastChannel: BroadcastChannel | null = null;
+
+if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+  broadcastChannel = new BroadcastChannel('toast');
+  broadcastChannel.onmessage = ({ data }) => {
+    const { message, opts, type } = data as {
+      message: ToastText;
+      opts?: IToastOptions;
+      type: ToastType;
+    };
+    createToast(type, message, opts);
+  };
+}
+
 const DEFAULT_DURATION = 4000;
 
 const createToast = (type: ToastType, message: ToastText, opts?: IToastOptions) => {
@@ -39,6 +53,26 @@ const success = (message: ToastText, opts?: IToastOptions) => {
 
 const error = (message: ToastText, opts?: IToastOptions) => {
   createToast('error', message, opts);
+};
+
+const propagate = (type: ToastType, message: ToastText, opts?: IToastOptions) => {
+  if (broadcastChannel) {
+    broadcastChannel.postMessage({
+      message,
+      opts: opts
+        ? {
+            actionLabel: opts.actionLabel,
+            actionLinkOptions: opts.actionLinkOptions,
+            duration: opts.duration,
+            summary: opts.summary,
+          }
+        : undefined,
+      type,
+    });
+    return;
+  }
+
+  createToast(type, message, opts);
 };
 
 const messages = defineMessages({
@@ -69,12 +103,10 @@ const showAlertForError = (networkError: { response: NicoliumResponse }) => {
 
     if (message) {
       error(message);
-      return;
     }
   } else {
     console.error(networkError);
     error(messages.unexpectedMessage);
-    return;
   }
 };
 
@@ -84,5 +116,6 @@ export default {
   info,
   success,
   error,
+  propagate,
   showAlertForError,
 };

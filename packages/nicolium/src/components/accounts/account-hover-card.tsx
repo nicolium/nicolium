@@ -1,19 +1,20 @@
-import { autoUpdate, flip, shift, useFloating, useTransitionStyles } from '@floating-ui/react';
+import { autoUpdate, flip, shift, useFloating } from '@floating-ui/react';
+import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
+import iconTag from '@phosphor-icons/core/regular/tag.svg';
 import { useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
+import ActionButton from '@/components/accounts/action-button';
+import { isTimezoneLabel } from '@/components/accounts/profile-field';
 import Badge from '@/components/badge';
 import Card, { CardBody } from '@/components/ui/card';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import ActionButton from '@/features/ui/components/action-button';
-import { isTimezoneLabel } from '@/features/ui/components/profile-field';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { UserPanel } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useTransitionStyles } from '@/hooks/use-transition-styles';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountHoverCardActions, useAccountHoverCardStore } from '@/stores/account-hover-card';
@@ -74,7 +75,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const { accountId, ref } = useAccountHoverCardStore();
   const { updateAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useAccount(accountId ?? undefined, true);
   const { data: scrobble } = useAccountScrobbleQuery(account?.id);
   const badges = getBadges(account);
@@ -91,6 +92,13 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
       unlisten();
     };
   }, []);
+
+  useEffect(() => {
+    if (account && !ref?.current) {
+      showAccountHoverCard.cancel();
+      closeAccountHoverCard(true);
+    }
+  }, [!!account]);
 
   const { x, y, strategy, refs, context, placement } = useFloating({
     open: !!account,
@@ -134,10 +142,8 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
   return (
     <div
-      className={clsx({
-        'absolute left-0 top-0 z-[101] w-[320px] transition-opacity': true,
-        'opacity-100': visible && context.open,
-        'pointer-events-none opacity-0': !visible || !context.open,
+      className={clsx('⁂-account-hover-card', {
+        '⁂-account-hover-card--hidden': !visible || !context.open,
       })}
       ref={refs.setFloating}
       style={{
@@ -149,12 +155,9 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Card
-        variant='rounded'
-        className='relative isolate overflow-hidden black:rounded-xl black:border black:border-gray-800'
-      >
+      <Card variant='rounded' className='isolate'>
         <CardBody>
-          <Stack space={2}>
+          <div className='flex flex-col gap-2'>
             <UserPanel
               accountId={account.id}
               action={<ActionButton account={account} small />}
@@ -162,42 +165,35 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
             />
 
             {account.local ? (
-              <HStack alignItems='center' space={0.5}>
-                <Icon
-                  src={require('@phosphor-icons/core/regular/calendar-dots.svg')}
-                  className='size-4 text-gray-800 dark:text-gray-200'
-                />
+              <div
+                className='⁂-account-info__details__item'
+                title={intl.formatDate(account.created_at, dateFormatOptions)}
+              >
+                <Icon src={iconCalendarDots} />
 
-                <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
-                  <FormattedMessage
-                    id='account.member_since'
-                    defaultMessage='Joined {date}'
-                    values={{
-                      date: memberSinceDate,
-                    }}
-                  />
-                </Text>
-              </HStack>
+                <FormattedMessage
+                  id='account.member_since'
+                  defaultMessage='Joined {date}'
+                  values={{
+                    date: memberSinceDate,
+                  }}
+                />
+              </div>
             ) : null}
 
             {timezoneField && <AccountLocalTime accountId={account.id} field={timezoneField} />}
 
             {account.pronouns.length > 0 && (
-              <HStack alignItems='center' space={0.5}>
-                <Icon
-                  src={require('@phosphor-icons/core/regular/tag.svg')}
-                  className='size-4 text-gray-800 dark:text-gray-200'
-                />
+              <div
+                className='⁂-account-info__details__item'
+                title={intl.formatMessage(messages.pronouns, {
+                  pronouns: account.pronouns.join('/'),
+                })}
+              >
+                <Icon src={iconTag} />
 
-                <Text
-                  size='sm'
-                  title={intl.formatMessage(messages.pronouns, {
-                    pronouns: account.pronouns.join('/'),
-                  })}
-                >
-                  {account.pronouns.join('/')}
-                </Text>
-              </HStack>
+                {account.pronouns.join('/')}
+              </div>
             )}
 
             {!!scrobble && <Scrobble scrobble={scrobble} />}
@@ -211,7 +207,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
                 <ParsedContent html={account.note} emojis={account.emojis} />
               </Text>
             )}
-          </Stack>
+          </div>
 
           {followedBy && (
             <div className='absolute left-2 top-2'>

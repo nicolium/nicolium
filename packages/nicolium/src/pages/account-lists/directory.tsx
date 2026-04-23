@@ -1,9 +1,11 @@
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import { AccountLink } from '@/components/accounts/account-link';
+import ActionButton from '@/components/accounts/action-button';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import Badge from '@/components/badge';
 import LoadMore from '@/components/load-more';
@@ -14,13 +16,12 @@ import Avatar from '@/components/ui/avatar';
 import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import { RadioGroup, RadioItem } from '@/components/ui/radio';
-import ActionButton from '@/features/ui/components/action-button';
-import { directoryRoute } from '@/features/ui/router';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useDirectory } from '@/queries/accounts/use-directory';
+import { directoryRoute } from '@/router';
+import { useInstance } from '@/stores/instance';
 import { shortNumberFormat } from '@/utils/numbers';
 
 const messages = defineMessages({
@@ -36,7 +37,7 @@ interface IAccountCard {
 }
 
 const AccountCard: React.FC<IAccountCard> = ({ id }) => {
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useAccount(id);
 
   if (!account) return null;
@@ -70,7 +71,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           <div className='⁂-directory-card__header__image--empty' />
         )}
 
-        <Link to='/@{$username}' params={{ username: account.acct }} title={account.acct}>
+        <AccountLink account={account}>
           <HoverAccountWrapper key={account.id} accountId={account.id} element='span'>
             <Avatar
               src={account.avatar}
@@ -81,7 +82,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
               username={account.username}
             />
           </HoverAccountWrapper>
-        </Link>
+        </AccountLink>
       </div>
 
       <div className='⁂-directory-card__account'>
@@ -152,7 +153,7 @@ const DirectoryPage = () => {
   };
 
   const handleChangeLocal: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    navigate({ search: ({ order }) => ({ local: e.target.checked, order }) });
+    navigate({ search: ({ order }) => ({ local: e.target.value === 'local', order }) });
   };
 
   const handleLoadMore = () => {
@@ -165,9 +166,7 @@ const DirectoryPage = () => {
         <div className='⁂-directory__filters'>
           <div>
             <CardTitle
-              title={
-                <FormattedMessage id='directory.display_filter' defaultMessage='Display filter' />
-              }
+              title={<FormattedMessage id='directory.display_filter' defaultMessage='Ordered by' />}
             />
 
             <RadioGroup onChange={handleChangeOrder}>
@@ -199,12 +198,12 @@ const DirectoryPage = () => {
                 <RadioItem
                   label={intl.formatMessage(messages.local, { domain: instance.title })}
                   checked={local}
-                  value='1'
+                  value='local'
                 />
                 <RadioItem
                   label={intl.formatMessage(messages.federated)}
                   checked={!local}
-                  value='0'
+                  value='federated'
                 />
               </RadioGroup>
             </div>

@@ -7,6 +7,8 @@
 import { $isAutoLinkNode, $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $findMatchingParent, mergeRegister } from '@lexical/utils';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import {
   type BaseSelection,
   $getSelection,
@@ -207,11 +209,7 @@ const FloatingLinkEditor = ({
                 }
               }}
             >
-              <Icon
-                className='size-5'
-                src={require('@phosphor-icons/core/regular/x.svg')}
-                aria-hidden
-              />
+              <Icon className='size-5' src={iconX} aria-hidden />
             </div>
           </>
         ) : (
@@ -242,11 +240,7 @@ const FloatingLinkEditor = ({
                 }
               }}
             >
-              <Icon
-                className='size-5'
-                src={require('@phosphor-icons/core/regular/pencil-simple.svg')}
-                aria-hidden
-              />
+              <Icon className='size-5' src={iconPencilSimple} aria-hidden />
             </div>
           </>
         )}

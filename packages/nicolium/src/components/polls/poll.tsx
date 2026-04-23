@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
 import { useModalsActions } from '@/stores/modals';
 import { useStatusMeta } from '@/stores/status-meta';
@@ -11,7 +10,7 @@ import { useStatusMeta } from '@/stores/status-meta';
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
 type Selected = Record<number, boolean>;
 
@@ -25,7 +24,7 @@ interface IPoll {
 const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.Element | null => {
   const { openModal } = useModalsActions();
 
-  const isLoggedIn = useAppSelector((state) => state.me);
+  const isLoggedIn = useCurrentAccount();
 
   const { data: poll } = usePollQuery(id);
   // TODO: handle pending mutation state
@@ -84,8 +83,8 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
         </Text>
       )}
 
-      <Stack space={4}>
-        <Stack space={2}>
+      <div className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-2'>
           {poll.options.map((option, i) => (
             <PollOption
               key={i}
@@ -99,7 +98,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
               truncate={truncate}
             />
           ))}
-        </Stack>
+        </div>
 
         <PollFooter
           poll={poll}
@@ -107,7 +106,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
           selected={selected}
           statusId={status.id}
         />
-      </Stack>
+      </div>
     </div>
   );
 };

@@ -2,9 +2,8 @@ import { Outlet, useMatch } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import Stack from '@/components/ui/stack';
-import { chatsEmptyRoute } from '@/features/ui/router';
 import { useChats } from '@/queries/chats';
+import { chatsEmptyRoute } from '@/router';
 import { useShoutboxIsLoading } from '@/stores/shoutbox';
 
 import ChatsPageSidebar from './components/chats-page-sidebar';
@@ -58,24 +57,24 @@ const ChatsPage: React.FC = () => {
         className='grid h-full grid-cols-9 overflow-hidden black:divide-gray-800 dark:divide-solid dark:divide-primary-800 sm:black:divide-x sm:dark:divide-x-2'
         data-testid='chat-page'
       >
-        <Stack
+        <div
           className={clsx(
-            'dark:inset col-span-9 overflow-hidden bg-gradient-to-r from-white to-gray-100 black:bg-black dark:bg-gray-900 dark:bg-none sm:col-span-3',
+            'dark:inset col-span-9 flex flex-col overflow-hidden bg-gradient-to-r from-white to-gray-100 black:bg-black dark:bg-gray-900 dark:bg-none sm:col-span-3',
             {
               'hidden sm:block': isSidebarHidden,
             },
           )}
         >
           <ChatsPageSidebar />
-        </Stack>
+        </div>
 
-        <Stack
-          className={clsx('col-span-9 h-full overflow-hidden sm:col-span-6', {
+        <div
+          className={clsx('col-span-9 flex h-full flex-col overflow-hidden sm:col-span-6', {
             'hidden sm:block': !isSidebarHidden,
           })}
         >
           <Outlet />
-        </Stack>
+        </div>
       </div>
     </div>
   );

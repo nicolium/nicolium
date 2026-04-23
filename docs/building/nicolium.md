@@ -18,7 +18,7 @@ You can now proceed to fetching Nicolium Git repository, installing dependencies
 
 ```bash
 # Clone the Nicolium repository
-git clone https://codeberg.org/mkljczk/nicolium.git
+git clone https://codeberg.org/nicolium/nicolium.git
 cd nicolium
 # Install dependencies
 pnpm install

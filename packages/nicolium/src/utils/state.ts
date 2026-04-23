@@ -1,43 +1,27 @@
 /**
- * State: general Redux state utility functions.
+ * State: general state utility functions.
  * @module @/utils/state
  */
 
 import * as BuildConfig from '@/build-config';
 import { isPrerendered } from '@/precheck';
-import { selectOwnAccount } from '@/queries/accounts/selectors';
-import { isURL } from '@/utils/auth';
-
-import type { RootState } from '@/store';
-
-/** Whether to display the fqn instead of the acct. */
-const displayFqn = (state: RootState): boolean => state.frontendConfig.displayFqn ?? true;
-
-/** Whether the instance exposes instance blocks through the API. */
-const federationRestrictionsDisclosed = (state: RootState): boolean =>
-  !!state.instance.pleroma.metadata.federation.mrf_policies;
+import { useInstanceStore } from '@/stores/instance';
 
 /**
  * Determine whether Nicolium is running in standalone mode.
  * Standalone mode runs separately from any backend and can login anywhere.
  */
-const isStandalone = (state: RootState): boolean => {
-  const instanceFetchFailed = state.meta.instance_fetch_failed;
-  return isURL(BuildConfig.BACKEND_URL) ? false : !isPrerendered && instanceFetchFailed;
+const isStandalone = (): boolean => {
+  const instanceFetchFailed = useInstanceStore.getState().instanceFetchFailed;
+  return URL.canParse(BuildConfig.BACKEND_URL) ? false : !isPrerendered && instanceFetchFailed;
 };
 
-const getHost = (url: string = ''): string => {
-  try {
-    return new URL(url).origin;
-  } catch {
-    return '';
-  }
+const useIsStandalone = () => {
+  const instanceFetchFailed = useInstanceStore((state) => state.instanceFetchFailed);
+  return URL.canParse(BuildConfig.BACKEND_URL) ? false : !isPrerendered && instanceFetchFailed;
 };
 
-/** Get the baseURL of the instance. */
-const getBaseURL = (state: RootState): string => {
-  const account = selectOwnAccount(state);
-  return isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : getHost(account?.url);
-};
+const useFederationRestrictionsDisclosed = () =>
+  useInstanceStore((state) => !!state.instance.pleroma.metadata.federation.mrf_policies);
 
-export { displayFqn, federationRestrictionsDisclosed, isStandalone, getBaseURL };
+export { isStandalone, useIsStandalone, useFederationRestrictionsDisclosed };

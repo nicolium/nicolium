@@ -4,13 +4,12 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import AnimatedNumber from '@/components/animated-number';
-import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
 interface IStatusInteractionBar {
   status: Pick<
@@ -49,7 +48,6 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   const handleOpenReblogsModal: React.EventHandler<React.MouseEvent> = (e) => {
     e.preventDefault();
 
-    // if (!me) onOpenUnauthorizedModal();
     onOpenReblogsModal(status.id);
   };
 
@@ -94,14 +92,12 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   ) => {
     e.preventDefault();
 
-    // if (!me) onOpenUnauthorizedModal();
     onOpenFavouritesModal(status.id);
   };
 
   const handleOpenDislikesModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     e.preventDefault();
 
-    // if (!me) onOpenUnauthorizedModal();
     onOpenDislikesModal(status.id);
   };
 
@@ -146,12 +142,12 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   };
 
   return (
-    <HStack space={3}>
+    <div className='flex gap-3'>
       {getReposts()}
       {getQuotes()}
       {getFavourites()}
       {getDislikes()}
-    </HStack>
+    </div>
   );
 };
 
@@ -176,7 +172,7 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({
   });
 
   const body = (
-    <HStack space={1} alignItems='center'>
+    <div className='flex items-center gap-1'>
       <Text weight='bold'>
         <AnimatedNumber value={count} short />
       </Text>
@@ -184,7 +180,7 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({
       <Text tag='div' theme='muted'>
         {children}
       </Text>
-    </HStack>
+    </div>
   );
 
   if ('to' in rest) {

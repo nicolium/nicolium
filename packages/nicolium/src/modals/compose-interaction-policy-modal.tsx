@@ -1,10 +1,10 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import { Link } from '@tanstack/react-router';
 import { create } from 'mutative';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import Warning from '@/features/compose/components/warning';
 import { useClient } from '@/hooks/use-client';
 import {
@@ -68,8 +68,10 @@ const ComposeInteractionPolicyModal: React.FC<
         draft.interactionPolicy ?? interactionPolicy,
         (draftPolicy: InteractionPolicy) => {
           draftPolicy[policy][rule] = value;
-          draftPolicy[policy][rule === 'always' ? 'with_approval' : 'always'] = draftPolicy[policy][
-            rule === 'always' ? 'with_approval' : 'always'
+          draftPolicy[policy][
+            rule === 'automatic_approval' ? 'manual_approval' : 'automatic_approval'
+          ] = draftPolicy[policy][
+            rule === 'automatic_approval' ? 'manual_approval' : 'automatic_approval'
           ].filter((r) => !value.includes(r as Scope));
         },
       );
@@ -91,14 +93,10 @@ const ComposeInteractionPolicyModal: React.FC<
         />
       }
       onClose={onClickClose}
-      closeIcon={
-        composeId === 'compose-modal'
-          ? require('@phosphor-icons/core/regular/arrow-left.svg')
-          : undefined
-      }
+      closeIcon={composeId === 'compose-modal' ? iconArrowLeft : undefined}
       closePosition={composeId === 'compose-modal' ? 'left' : undefined}
     >
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <Warning
           message={
             <FormattedMessage
@@ -125,7 +123,7 @@ const ComposeInteractionPolicyModal: React.FC<
           visibility={compose.visibility as 'public'}
           singlePost
         />
-      </Stack>
+      </div>
     </Modal>
   );
 };

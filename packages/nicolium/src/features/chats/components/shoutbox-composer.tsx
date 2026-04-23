@@ -1,12 +1,11 @@
+import iconPaperPlaneRight from '@phosphor-icons/core/regular/paper-plane-right.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Combobox, { ComboboxInput } from '@/components/ui/combobox';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import ChatTextarea from './chat-textarea';
 
@@ -61,8 +60,8 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
         {/* Spacer */}
         <div className='h-5' />
 
-        <HStack alignItems='stretch' justifyContent='between' space={4}>
-          <Stack grow>
+        <div className='flex items-stretch justify-between gap-4'>
+          <div className='flex flex-grow flex-col'>
             <Combobox onSelect={onSelectComboboxOption}>
               <ComboboxInput
                 key={resetContentKey}
@@ -80,9 +79,9 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
                 disabled={disabled}
               />
             </Combobox>
-          </Stack>
+          </div>
 
-          <Stack space={2} justifyContent='end' alignItems='center' className='mb-1.5 w-10'>
+          <div className='mb-1.5 flex w-10 flex-col items-center justify-end gap-2'>
             {isOverCharacterLimit ? (
               <Text size='sm' theme='danger'>
                 {overLimitText}
@@ -90,15 +89,15 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
             ) : null}
 
             <IconButton
-              src={require('@phosphor-icons/core/regular/paper-plane-right.svg')}
+              src={iconPaperPlaneRight}
               iconClassName='h-5 w-5'
               className='text-primary-500'
               disabled={isSubmitDisabled}
               onClick={onSubmit}
               title={intl.formatMessage(messages.send)}
             />
-          </Stack>
-        </HStack>
+          </div>
+        </div>
 
         <div className='h-5' />
       </div>

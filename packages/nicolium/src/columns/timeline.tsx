@@ -1,22 +1,24 @@
-import { Link } from '@tanstack/react-router';
+import iconArrowLineDown from '@phosphor-icons/core/regular/arrow-line-down.svg';
+import iconCaretDoubleDown from '@phosphor-icons/core/regular/caret-double-down.svg';
+import iconCaretDoubleUp from '@phosphor-icons/core/regular/caret-double-up.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
 import clsx from 'clsx';
 import React, { useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
+import { AccountLink } from '@/components/accounts/account-link';
+import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';
 import ScrollableList, { type IScrollableList } from '@/components/scrollable-list';
+import PendingStatus from '@/components/statuses/pending-status';
 import Status, { StatusFollowedTagInfo } from '@/components/statuses/status';
 import StatusInfo from '@/components/statuses/status-info';
 import Tombstone from '@/components/statuses/tombstone';
-import Button from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
-import Portal from '@/components/ui/portal';
-import Stack from '@/components/ui/stack';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
-import PendingStatus from '@/features/ui/components/pending-status';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
@@ -34,10 +36,12 @@ import {
   useWrenchedTimeline,
 } from '@/queries/timelines/use-timelines';
 import { useSettings } from '@/stores/settings';
+import { useStatusMeta } from '@/stores/status-meta';
 import { selectChild } from '@/utils/scroll-utils';
+import { hasActiveFilters, sortFilteredTimeline } from '@/utils/timeline-filter';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
-import type { Settings } from '@/schemas/frontend-settings';
+import type { TimelineFilters } from '@/schemas/frontend-settings';
 import type { TimelineEntry } from '@/stores/timelines';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
@@ -63,7 +67,7 @@ const messages = defineMessages({
 const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
   return (
     <button className='⁂-skip-pinned' onClick={onClick}>
-      <Icon src={require('@phosphor-icons/core/regular/arrow-line-down.svg')} />
+      <Icon src={iconArrowLineDown} />
 
       <p>
         <FormattedMessage id='status.skip_pinned' defaultMessage='Skip pinned posts' />
@@ -73,7 +77,7 @@ const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
 };
 
 const PlaceholderTimelineStatus = () => (
-  <div className='⁂-timeline-status relative border-b border-solid border-gray-200 dark:border-gray-800'>
+  <div className='⁂-timeline-status'>
     <PlaceholderStatus variant='slim' />
   </div>
 );
@@ -84,7 +88,7 @@ interface ITimelinePendingStatus {
 
 const TimelinePendingStatus: React.FC<ITimelinePendingStatus> = ({ idempotencyKey }) => {
   return (
-    <div className='⁂-timeline-status relative border-b border-solid border-gray-200 dark:border-gray-800'>
+    <div className='⁂-timeline-status'>
       <PendingStatus idempotencyKey={idempotencyKey} variant='slim' />
     </div>
   );
@@ -175,19 +179,15 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
   };
 
   return (
-    <Stack className='⁂-timeline-gap mx-auto items-stretch'>
-      <Button
-        theme='transparent'
-        icon={require('@phosphor-icons/core/regular/caret-double-down.svg')}
-        onClick={() => handleFill('down')}
-        disabled={isLoading}
-      >
+    <div className='⁂-timeline-gap'>
+      <button onClick={() => handleFill('down')} disabled={isLoading}>
+        <Icon src={iconCaretDoubleDown} aria-hidden />
         {firstEntry ? (
           <FormattedMessage id='timeline.gap.load_recent' defaultMessage='Load recent posts' />
         ) : (
           <FormattedMessage id='timeline.gap.load_older' defaultMessage='Load older posts' />
         )}
-      </Button>
+      </button>
       <div className='⁂-timeline-gap__separator'>
         <span
           title={intl.formatMessage(
@@ -197,25 +197,27 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
           {renderTimeDistance()}
         </span>
       </div>
-      <Button
-        theme='transparent'
-        icon={require('@phosphor-icons/core/regular/caret-double-up.svg')}
-        onClick={() => handleFill('up')}
-        disabled={isLoading}
-      >
+      <button onClick={() => handleFill('up')} disabled={isLoading}>
+        <Icon src={iconCaretDoubleUp} aria-hidden />
         <FormattedMessage id='timeline.gap.load_newer' defaultMessage='Load newer posts' />
-      </Button>
-    </Stack>
+      </button>
+    </div>
   );
 };
 
 interface ITimelineStatusInfo {
   status: SelectedStatus;
   rebloggedBy: Array<string>;
+  reblogVisibility?: string;
   timelineId: string;
 }
 
-const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({ status, rebloggedBy, timelineId }) => {
+const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
+  status,
+  rebloggedBy,
+  reblogVisibility,
+  timelineId,
+}) => {
   const features = useFeatures();
   const isReblogged = rebloggedBy.length > 0;
 
@@ -225,18 +227,14 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({ status, rebloggedBy
     const renderedAccounts = accounts.slice(0, 2).map(
       (account) =>
         !!account && (
-          <Link
-            key={account.acct}
-            to='/@{$username}'
-            params={{ username: account.acct }}
-            className='hover:underline'
-          >
-            <bdi className='truncate'>
-              <strong className='text-gray-800 dark:text-gray-200'>
-                <Emojify text={account.display_name} emojis={account.emojis} />
-              </strong>
-            </bdi>
-          </Link>
+          <HoverAccountWrapper key={account.id} accountId={account.id} element='bdi'>
+            <AccountLink
+              account={account}
+              className='truncate font-bold text-gray-800 hover:underline dark:text-gray-200'
+            >
+              <Emojify text={account.display_name} emojis={account.emojis} />
+            </AccountLink>
+          </HoverAccountWrapper>
         ),
     );
 
@@ -259,27 +257,21 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({ status, rebloggedBy
       <StatusInfo
         className='mt-4'
         avatarSize={42}
-        icon={
-          <Icon
-            src={require('@phosphor-icons/core/regular/repeat.svg')}
-            className='size-4 text-green-600'
-            aria-hidden
-          />
-        }
+        icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
         text={
-          // status.visibility === 'private' ? (
-          //   <FormattedMessage
-          //     id='status.reblogged_by_private'
-          //     defaultMessage='{name} reposted to followers'
-          //     values={values}
-          //   />
-          // ) : (
-          <FormattedMessage
-            id='status.reblogged_by'
-            defaultMessage='{name} reposted'
-            values={values}
-          />
-          // )
+          reblogVisibility === 'private' ? (
+            <FormattedMessage
+              id='status.reblogged_by_private'
+              defaultMessage='{name} reposted to followers'
+              values={values}
+            />
+          ) : (
+            <FormattedMessage
+              id='status.reblogged_by'
+              defaultMessage='{name} reposted'
+              values={values}
+            />
+          )
         }
       />
     );
@@ -292,6 +284,7 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({ status, rebloggedBy
 interface ITimelineStatus {
   id: string;
   rebloggedBy: Array<string>;
+  reblogVisibility?: string;
   timelineId: string;
   contextType?: FilterContextType;
   isConnectedTop?: boolean;
@@ -302,12 +295,17 @@ interface ITimelineStatus {
 }
 
 /** Status with reply-connector in threads. */
-const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => {
+const TimelineStatus: React.FC<ITimelineStatus> = (props) => {
   const { id, isConnectedTop, isConnectedBottom } = props;
 
+  const { deleted } = useStatusMeta(id);
   const statusQuery = useStatus(id, { withFilteredResults: true });
 
-  if (statusQuery.data?.deleted) {
+  if (statusQuery.data?.filtered?.some(({ filter }) => filter.filter_action === 'hide')) {
+    return null;
+  }
+
+  if (deleted) {
     return (
       <div className='py-4 pb-8'>
         <Tombstone id={id} onMoveUp={props.onMoveUp} onMoveDown={props.onMoveDown} deleted />
@@ -351,6 +349,7 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
         <TimelineStatusInfo
           status={statusQuery.data!}
           rebloggedBy={props.rebloggedBy}
+          reblogVisibility={props.reblogVisibility}
           timelineId={props.timelineId}
         />
       )}
@@ -371,7 +370,7 @@ type IBaseTimeline = Pick<
   'emptyMessageIcon' | 'emptyMessageText' | 'onTopItemChanged'
 > & {
   featuredStatusIds?: Array<string>;
-  filters?: Settings['timelines'][string];
+  filters?: TimelineFilters;
 };
 
 interface ITimeline extends IBaseTimeline {
@@ -392,6 +391,7 @@ const Timeline: React.FC<ITimeline> = ({
     timelineId,
     entries,
     queuedCount,
+    queuedAccountIds,
     fetchNextPage,
     dequeueEntries,
     fillGap,
@@ -449,6 +449,7 @@ const Timeline: React.FC<ITimeline> = ({
           onMoveUp={() => handleMoveUp(index)}
           onMoveDown={() => handleMoveDown(index)}
           rebloggedBy={entry.rebloggedBy}
+          reblogVisibility={entry.reblogVisibility}
           timelineId={timelineId}
           // showGroup={showGroup}
         />
@@ -488,63 +489,49 @@ const Timeline: React.FC<ITimeline> = ({
       }
     }
 
-    entries
-      .map((entry) => {
-        if (entry.type === 'status') {
-          return {
-            ...entry,
-            filtered:
-              (filters?.showDirect === false && entry.isDirect) ||
-              (filters?.showReblogs === false && entry.isReblog) ||
-              (filters?.showReplies === false && entry.isReply) ||
-              (filters?.showQuotes === false && entry.isQuote) ||
-              (filters?.showNonMedia === false && !entry.hasMedia),
-          };
-        }
-        return entry;
-      })
-      .forEach((entry, entryIndex, entries) => {
-        if (entry.type === 'status' && entry.filtered) {
-          return;
-        }
+    const processedEntries = hasActiveFilters(filters)
+      ? sortFilteredTimeline(entries, filters)
+      : entries;
 
-        if (entry.type === 'status') {
-          const previousEntry = entries[entryIndex - 1];
-          const nextEntry = entries[entryIndex + 1];
+    processedEntries.forEach((entry, entryIndex, arr) => {
+      if (entry.type === 'status') {
+        const previousEntry = arr[entryIndex - 1];
+        const nextEntry = arr[entryIndex + 1];
 
-          rendered.push(
-            renderEntry(entry, rendered.length, {
-              isConnectedTop:
-                !!entry.isConnectedTop &&
-                previousEntry?.type === 'status' &&
-                !previousEntry.filtered,
-              isConnectedBottom:
-                !!entry.isConnectedBottom && nextEntry?.type === 'status' && !nextEntry.filtered,
-            }),
-          );
-          return;
-        }
+        rendered.push(
+          renderEntry(entry, rendered.length, {
+            isConnectedTop:
+              !!entry.isConnectedTop &&
+              previousEntry?.type === 'status' &&
+              !!previousEntry.isConnectedBottom,
+            isConnectedBottom:
+              !!entry.isConnectedBottom &&
+              nextEntry?.type === 'status' &&
+              !!nextEntry.isConnectedTop,
+          }),
+        );
+        return;
+      }
 
-        rendered.push(renderEntry(entry, rendered.length));
-      });
+      rendered.push(renderEntry(entry, rendered.length));
+    });
 
     return rendered;
   }, [entries, contextType, timelineId, featuredStatusIds, filters]);
 
   return (
     <>
-      <Portal>
-        <ScrollTopButton
-          onClick={dequeueEntries}
-          count={queuedCount}
-          message={messages.queue}
-          liveRegionMessage={messages.queueLiveRegion}
-        />
-      </Portal>
-      {featuredStatusIds && featuredStatusIds.length > 3 && entries?.length > 0 && (
-        <SkipPinned onClick={handleSkipPinned} />
-      )}
+      <ScrollTopButton
+        onClick={dequeueEntries}
+        count={queuedCount}
+        message={messages.queue}
+        liveRegionMessage={messages.queueLiveRegion}
+        accountIds={queuedAccountIds}
+      />
       <PullToRefresh onRefresh={refetch} isPullable={!isFetching}>
+        {featuredStatusIds && featuredStatusIds.length > 3 && entries?.length > 0 && (
+          <SkipPinned onClick={handleSkipPinned} />
+        )}
         <ScrollableList
           id='status-list'
           key='scrollable-list'
@@ -582,12 +569,15 @@ const getRestoredPosition = (me: string) => {
 };
 
 const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
 
-  const timelineFilters = useSettings().timelines.home;
+  const {
+    timelines: { home: timelineFilters },
+    rememberTimelinePosition,
+  } = useSettings();
 
   const maxId = useMemo(() => {
-    if (!me) return undefined;
+    if (!me || !rememberTimelinePosition) return undefined;
 
     const position = getRestoredPosition(me);
 
@@ -608,7 +598,7 @@ const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
 
   const handleTopItemChanged = (index: number) => {
     const entry = timelineQuery.entries[index];
-    if (me) savePosition(me, entry, index);
+    if (me && rememberTimelinePosition) savePosition(me, entry, index);
   };
 
   return (
@@ -634,9 +624,12 @@ const PublicTimelineColumn: React.FC<IPublicTimelineColumn> = ({
   instance,
   ...props
 }) => {
+  const timelineFilters = useSettings().timelines.public;
   const timelineQuery = usePublicTimeline({ local, remote, instance });
 
-  return <Timeline query={timelineQuery} contextType='public' {...props} />;
+  return (
+    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+  );
 };
 
 interface IHashtagTimelineColumn extends IBaseTimeline {
@@ -644,9 +637,12 @@ interface IHashtagTimelineColumn extends IBaseTimeline {
 }
 
 const HashtagTimelineColumn: React.FC<IHashtagTimelineColumn> = ({ hashtag, ...props }) => {
+  const timelineFilters = useSettings().timelines.hashtag;
   const timelineQuery = useHashtagTimeline(hashtag);
 
-  return <Timeline query={timelineQuery} contextType='public' {...props} />;
+  return (
+    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+  );
 };
 
 interface ILinkTimelineColumn extends IBaseTimeline {
@@ -664,9 +660,10 @@ interface IListTimelineColumn extends IBaseTimeline {
 }
 
 const ListTimelineColumn: React.FC<IListTimelineColumn> = ({ listId, ...props }) => {
+  const timelineFilters = useSettings().timelines.list;
   const timelineQuery = useListTimeline(listId);
 
-  return <Timeline query={timelineQuery} contextType='home' {...props} />;
+  return <Timeline query={timelineQuery} contextType='home' filters={timelineFilters} {...props} />;
 };
 
 interface IGroupTimelineColumn extends IBaseTimeline {
@@ -674,15 +671,21 @@ interface IGroupTimelineColumn extends IBaseTimeline {
 }
 
 const GroupTimelineColumn: React.FC<IGroupTimelineColumn> = ({ groupId, ...props }) => {
+  const timelineFilters = useSettings().timelines.group;
   const timelineQuery = useGroupTimeline(groupId);
 
-  return <Timeline query={timelineQuery} contextType='public' {...props} />;
+  return (
+    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+  );
 };
 
 const BubbleTimelineColumn: React.FC<IBaseTimeline> = (props) => {
+  const timelineFilters = useSettings().timelines.bubble;
   const timelineQuery = useBubbleTimeline();
 
-  return <Timeline query={timelineQuery} contextType='public' {...props} />;
+  return (
+    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+  );
 };
 
 interface IAntennaTimelineColumn extends IBaseTimeline {
@@ -690,9 +693,12 @@ interface IAntennaTimelineColumn extends IBaseTimeline {
 }
 
 const AntennaTimelineColumn: React.FC<IAntennaTimelineColumn> = ({ antennaId, ...props }) => {
+  const timelineFilters = useSettings().timelines.antenna;
   const timelineQuery = useAntennaTimeline(antennaId);
 
-  return <Timeline query={timelineQuery} contextType='public' {...props} />;
+  return (
+    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+  );
 };
 
 interface ICircleTimelineColumn extends IBaseTimeline {
@@ -700,15 +706,21 @@ interface ICircleTimelineColumn extends IBaseTimeline {
 }
 
 const CircleTimelineColumn: React.FC<ICircleTimelineColumn> = ({ circleId, ...props }) => {
+  const timelineFilters = useSettings().timelines.bubble;
   const timelineQuery = useCircleTimeline(circleId);
 
-  return <Timeline query={timelineQuery} contextType='public' {...props} />;
+  return (
+    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+  );
 };
 
 const WrenchedTimelineColumn: React.FC<IBaseTimeline> = (props) => {
+  const timelineFilters = useSettings().timelines.wrenched;
   const timelineQuery = useWrenchedTimeline();
 
-  return <Timeline query={timelineQuery} contextType='public' {...props} />;
+  return (
+    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+  );
 };
 
 interface IAccountTimelineColumn extends IBaseTimeline {

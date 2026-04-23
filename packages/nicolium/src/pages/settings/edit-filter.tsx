@@ -9,17 +9,15 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 import Select from '@/components/ui/select';
-import Stack from '@/components/ui/stack';
+import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Streamfield from '@/components/ui/streamfield';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
-import { SelectDropdown } from '@/features/forms';
-import { editFilterRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useCreateFilter, useFilter, useUpdateFilter } from '@/queries/settings/use-filters';
+import { editFilterRoute } from '@/router';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -64,7 +62,7 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
     };
 
   return (
-    <HStack space={2} grow>
+    <div className='flex flex-grow gap-2'>
       <Input
         type='text'
         outerClassName='w-2/5 grow'
@@ -72,14 +70,14 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
         onChange={handleChange('keyword')}
         placeholder={intl.formatMessage(messages.keyword)}
       />
-      <HStack alignItems='center' space={2}>
+      <div className='flex items-center gap-2'>
         <Toggle checked={value.whole_word} onChange={handleChange('whole_word')} />
 
         <Text tag='span' theme='muted'>
           <FormattedMessage id='column.filters.whole_word' defaultMessage='Whole word' />
         </Text>
-      </HStack>
-    </HStack>
+      </div>
+    </div>
   );
 };
 
@@ -240,7 +238,7 @@ const EditFilterPage: React.FC = () => {
           <SelectDropdown items={expirations} defaultValue='' onChange={handleSelectChange} />
         </FormGroup>
 
-        <Stack>
+        <div className='flex flex-col'>
           <Text size='sm' weight='medium'>
             <FormattedMessage id='filters.context_header' defaultMessage='Filter contexts' />
           </Text>
@@ -250,7 +248,7 @@ const EditFilterPage: React.FC = () => {
               defaultMessage='One or multiple contexts where the filter should apply'
             />
           </Text>
-        </Stack>
+        </div>
 
         <List>
           <ListItem

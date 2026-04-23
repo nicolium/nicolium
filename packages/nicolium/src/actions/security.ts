@@ -4,62 +4,29 @@
  * @see module:@/actions/auth
  */
 
-import { getClient } from '@/api';
+import { messages } from '@/stores/auth';
 import toast from '@/toast';
-import { getLoggedInAccount } from '@/utils/auth';
 import { normalizeUsername } from '@/utils/input';
 
-import { AUTH_LOGGED_OUT, messages } from './auth';
+import type { PlApiClient } from 'pl-api';
 
-import type { AppDispatch, RootState } from '@/store';
-import type { Account } from 'pl-api';
-
-const changePassword =
-  (oldPassword: string, newPassword: string) =>
-  (_dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).settings.changePassword(oldPassword, newPassword);
-
-const resetPassword =
-  (usernameOrEmail: string) => (_dispatch: AppDispatch, getState: () => RootState) => {
-    const input = normalizeUsername(usernameOrEmail);
-
-    return getClient(getState).settings.resetPassword(
-      input.includes('@') ? input : undefined,
-      input.includes('@') ? undefined : input,
-    );
-  };
-
-const changeEmail =
-  (email: string, password: string) => (_dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).settings.changeEmail(email, password);
-
-const deleteAccount = (password: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  const account = getLoggedInAccount(getState())!;
-
-  const client = getClient(getState);
-
-  return (
-    client.features.deleteAccount
-      ? client.settings.deleteAccount(password)
-      : client.settings.deleteAccountWithoutPassword()
-  ).then(() => {
-    dispatch<SecurityAction>({ type: AUTH_LOGGED_OUT, account });
-    toast.success(messages.loggedOut);
-  });
+const resetPassword = (client: PlApiClient, usernameOrEmail: string) => {
+  const input = normalizeUsername(usernameOrEmail);
+  return client.settings.resetPassword(
+    input.includes('@') ? input : undefined,
+    input.includes('@') ? undefined : input,
+  );
 };
 
-const moveAccount =
-  (targetAccount: string, password: string) =>
-  (_dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).settings.moveAccount(targetAccount, password);
+const deleteAccount = async (client: PlApiClient, password: string, account: { url: string }) => {
+  const { removeAccount } = await import('@/stores/auth');
 
-type SecurityAction = { type: typeof AUTH_LOGGED_OUT; account: Account };
+  await (client.features.deleteAccount
+    ? client.settings.deleteAccount(password)
+    : client.settings.deleteAccountWithoutPassword());
 
-export {
-  changePassword,
-  resetPassword,
-  changeEmail,
-  deleteAccount,
-  moveAccount,
-  type SecurityAction,
+  removeAccount(account);
+  toast.success(messages.loggedOut);
 };
+
+export { resetPassword, deleteAccount };

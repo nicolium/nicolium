@@ -1,8 +1,10 @@
+import iconArrowsClockwise from '@phosphor-icons/core/regular/arrows-clockwise.svg';
+import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
+import iconExport from '@phosphor-icons/core/regular/export.svg';
 import React, { useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { updateFrontendConfig } from '@/actions/admin';
 import { fetchFrontendConfig } from '@/actions/frontend-config';
 import { getHost } from '@/actions/instance';
 import DropdownMenu from '@/components/dropdown-menu';
@@ -11,15 +13,16 @@ import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
-import ColorPicker from '@/features/frontend-config/components/color-picker';
-import Palette, { type ColorGroup } from '@/features/theme-editor/components/palette';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { normalizeColors } from '@/hooks/use-theme-css';
+import ColorPicker from '@/pages/dashboard/components/frontend-config/color-picker';
+import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
 import { frontendConfigSchema } from '@/schemas/frontend-config';
+import { useFrontendConfigStore } from '@/stores/frontend-config';
 import toast from '@/toast';
 import { download } from '@/utils/download';
+
+import Palette, { type ColorGroup } from './components/theme-editor/palette';
 
 import type { ColorChangeHandler } from 'react-color';
 
@@ -51,11 +54,11 @@ const messages = defineMessages({
 /** UI for editing Tailwind theme colors. */
 const ThemeEditorPage: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const frontendConfig = useFrontendConfig();
-  const host = useAppSelector((state) => getHost(state));
-  const rawConfig = useAppSelector((state) => state.frontendConfig);
+  const host = getHost();
+  const rawConfig = useFrontendConfigStore((state) => state.partialConfig);
+  const { mutate: updateConfig } = useUpdateAdminConfig();
 
   const [colors, setColors] = useState(normalizeColors(frontendConfig));
   const [isDefault, setIsDefault] = useState(false);
@@ -97,14 +100,14 @@ const ThemeEditorPage: React.FC = () => {
     setTheme(normalizeColors(frontendConfig));
   };
 
-  const updateTheme = async () => {
+  const updateTheme = () => {
     let params;
     if (isDefault) {
       params = { ...rawConfig, colors: undefined, brandColor: undefined, accentColor: undefined };
     } else {
       params = { ...rawConfig, colors };
     }
-    await dispatch(updateFrontendConfig(params));
+    return updateConfig(getUpdateFrontendConfigParams(params));
   };
 
   const restoreDefaultTheme = () => {
@@ -131,7 +134,7 @@ const ThemeEditorPage: React.FC = () => {
       const colors = v.parse(frontendConfigSchema, { colors: json }).colors;
 
       if (colors) setTheme(colors);
-      toast.success(intl.formatMessage(messages.importSuccess));
+      toast.success(messages.importSuccess);
     }
   };
 
@@ -139,9 +142,9 @@ const ThemeEditorPage: React.FC = () => {
     setSubmitting(true);
 
     try {
-      await dispatch(fetchFrontendConfig(host));
+      await fetchFrontendConfig(host);
       await updateTheme();
-      toast.success(intl.formatMessage(messages.saved));
+      toast.success(messages.saved);
       setSubmitting(false);
     } catch (e) {
       setSubmitting(false);
@@ -221,17 +224,17 @@ const ThemeEditorPage: React.FC = () => {
               {
                 text: intl.formatMessage(messages.restore),
                 action: restoreDefaultTheme,
-                icon: require('@phosphor-icons/core/regular/arrows-clockwise.svg'),
+                icon: iconArrowsClockwise,
               },
               {
                 text: intl.formatMessage(messages.import),
                 action: importTheme,
-                icon: require('@phosphor-icons/core/regular/export.svg'),
+                icon: iconExport,
               },
               {
                 text: intl.formatMessage(messages.export),
                 action: exportTheme,
-                icon: require('@phosphor-icons/core/regular/download-simple.svg'),
+                icon: iconDownloadSimple,
               },
             ]}
           />

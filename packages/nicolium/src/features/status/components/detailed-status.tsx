@@ -1,21 +1,22 @@
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import { Link } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
 import RssFeedInfo from '@/components/statuses/rss-feed-info';
+import StatusActionBar from '@/components/statuses/status-action-bar';
 import StatusContent from '@/components/statuses/status-content';
 import StatusInfo from '@/components/statuses/status-info';
 import StatusLanguagePicker from '@/components/statuses/status-language-picker';
 import StatusReactionsBar from '@/components/statuses/status-reactions-bar';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
+import { useSettings } from '@/stores/settings';
 
 import StatusInteractionBar from './status-interaction-bar';
 import StatusTypeIcon from './status-type-icon';
@@ -43,6 +44,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
   const { data: group } = useGroupQuery(status.group_id ?? undefined);
   const { data: account } = useAccount(status.account_id);
+  const { statusActionBarItems } = useSettings();
 
   const handleOpenCompareHistoryModal = () => {
     onOpenCompareHistoryModal(status);
@@ -57,7 +59,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             avatarSize={42}
             icon={
               <Icon
-                src={require('@phosphor-icons/core/regular/users-three.svg')}
+                src={iconUsersThree}
                 className='size-4 text-primary-600 dark:text-primary-400'
                 aria-hidden
               />
@@ -102,7 +104,11 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
       {renderStatusInfo()}
 
       {actualStatus.rss_feed ? (
-        <RssFeedInfo feed={actualStatus.rss_feed} timestamp={actualStatus.created_at} />
+        <RssFeedInfo
+          feed={actualStatus.rss_feed}
+          timestamp={actualStatus.created_at}
+          url={actualStatus.url}
+        />
       ) : (
         <div className='mb-4'>
           <Account
@@ -110,31 +116,42 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             account={account}
             avatarSize={42}
             hideActions
+            action={
+              statusActionBarItems.length === 0 ? (
+                <div className='-m-1.5'>
+                  <StatusActionBar status={status} />
+                </div>
+              ) : undefined
+            }
             approvalStatus={actualStatus.approval_status}
             withLocked={false}
           />
         </div>
       )}
 
-      <StatusReplyMentions status={actualStatus} />
+      <StatusReplyMentions status={actualStatus} hoverable={false} />
 
-      <Stack className='relative z-0'>
-        <Stack space={4}>
-          <StatusContent status={actualStatus} textSize='lg' translatable withMedia={withMedia} />
-        </Stack>
-      </Stack>
+      <div className='relative z-0 flex flex-col gap-4'>
+        <StatusContent
+          status={actualStatus}
+          textSize='lg'
+          translatable
+          withMedia={withMedia}
+          expandable
+        />
+      </div>
 
       {!status.rss_feed && (
         <>
           <StatusReactionsBar status={actualStatus} />
 
-          <HStack space={2} justifyContent='between' alignItems='center' className='py-3' wrap>
+          <div className='flex flex-wrap items-center justify-between gap-2 py-3'>
             <StatusInteractionBar status={actualStatus} />
 
-            <HStack space={1} alignItems='center'>
+            <div className='flex items-center gap-1'>
               <span>
                 <Text tag='span' theme='muted' size='sm'>
-                  <HStack space={1} alignItems='center' wrap>
+                  <div className='flex flex-wrap items-center gap-1'>
                     <a
                       href={actualStatus.url}
                       target='_blank'
@@ -192,15 +209,15 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                         </button>
                       </>
                     )}
-                  </HStack>
+                  </div>
                 </Text>
               </span>
 
               <StatusTypeIcon visibility={actualStatus.visibility} />
 
               <StatusLanguagePicker status={actualStatus} showLabel />
-            </HStack>
-          </HStack>
+            </div>
+          </div>
         </>
       )}
     </div>

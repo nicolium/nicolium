@@ -1,14 +1,14 @@
 {
   "name": "pl-api",
   "version": "1.0.0-rc.99",
-  "homepage": "https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-api",
+  "homepage": "https://codeberg.org/nicolium/nicolium/src/packages/pl-api",
   "bugs": {
-    "url": "https://codeberg.org/mkljczk/nicolium/issues"
+    "url": "https://codeberg.org/nicolium/nicolium/issues"
   },
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "git+https://codeberg.org/mkljczk/nicolium.git"
+    "url": "git+https://codeberg.org/nicolium/nicolium.git"
   },
   "files": [
     "dist"
@@ -45,23 +45,23 @@
     "object-to-formdata": "^4.5.1",
     "query-string": "^9.3.1",
     "semver": "^7.7.4",
-    "valibot": "^1.2.0"
+    "valibot": "^1.3.1"
   },
   "devDependencies": {
     "@types/http-link-header": "^1.0.7",
-    "@types/node": "^25.3.0",
+    "@types/node": "^25.5.2",
     "@types/semver": "^7.7.1",
-    "@vitest/coverage-v8": "4.0.18",
-    "oxfmt": "^0.36.0",
-    "oxlint": "^1.51.0",
-    "typedoc": "^0.28.17",
+    "@vitest/coverage-v8": "4.1.3",
+    "oxfmt": "^0.44.0",
+    "oxlint": "^1.59.0",
+    "typedoc": "^0.28.18",
     "typedoc-material-theme": "^1.4.1",
-    "typedoc-plugin-valibot": "^1.0.0",
+    "typedoc-plugin-valibot": "^1.0.2",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1",
+    "vite": "^8.0.6",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.0.18",
-    "ws": "^8.19.0"
+    "vitest": "^4.1.3",
+    "ws": "^8.20.0"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts}": [

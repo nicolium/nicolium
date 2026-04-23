@@ -1,21 +1,24 @@
+import iconAt from '@phosphor-icons/core/regular/at.svg';
+import iconBellSimpleRinging from '@phosphor-icons/core/regular/bell-simple-ringing.svg';
+import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
+import iconChartBar from '@phosphor-icons/core/regular/chart-bar.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconStar from '@phosphor-icons/core/regular/star.svg';
+import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
-import '@/styles/new/notifications.scss';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { saveSettings } from '@/actions/settings';
+import Notification from '@/components/notification';
+import PlaceholderNotification from '@/components/placeholders/placeholder-notification';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';
 import ScrollableList from '@/components/scrollable-list';
 import Icon from '@/components/ui/icon';
-import Portal from '@/components/ui/portal';
 import Tabs from '@/components/ui/tabs';
-import Notification from '@/features/notifications/components/notification';
-import PlaceholderNotification from '@/features/placeholder/components/placeholder-notification';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -29,6 +32,8 @@ import { selectChild } from '@/utils/scroll-utils';
 
 import type { Item } from '@/components/ui/tabs';
 import type { VirtuosoHandle } from 'react-virtuoso';
+
+import '@/styles/new/notifications.scss';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
@@ -56,7 +61,6 @@ const messages = defineMessages({
 
 const FilterBar = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const settings = useSettings();
   const { changeSetting } = useSettingsStoreActions();
   const features = useFeatures();
@@ -66,7 +70,7 @@ const FilterBar = () => {
 
   const onClick = (filterType: FilterType) => () => {
     changeSetting(['notifications', 'quickFilter', 'active'], filterType);
-    dispatch(saveSettings());
+    saveSettings();
     if (filterType === selectedFilter) {
       queryClient.refetchQueries({
         queryKey: queryKeys.notifications.list(filterType),
@@ -91,84 +95,46 @@ const FilterBar = () => {
     });
   } else {
     items.push({
-      text: (
-        <Icon className='size-4' src={require('@phosphor-icons/core/regular/at.svg')} aria-hidden />
-      ),
+      text: <Icon className='size-4' src={iconAt} aria-hidden />,
       title: intl.formatMessage(messages.mentions),
       action: onClick('mention'),
       name: 'mention',
     });
     if (features.accountNotifies)
       items.push({
-        text: (
-          <Icon
-            className='size-4'
-            src={require('@phosphor-icons/core/regular/bell-simple-ringing.svg')}
-            aria-hidden
-          />
-        ),
+        text: <Icon className='size-4' src={iconBellSimpleRinging} aria-hidden />,
         title: intl.formatMessage(messages.statuses),
         action: onClick('status'),
         name: 'status',
       });
     items.push({
-      text: (
-        <Icon
-          className='size-4'
-          src={require('@phosphor-icons/core/regular/star.svg')}
-          aria-hidden
-        />
-      ),
+      text: <Icon className='size-4' src={iconStar} aria-hidden />,
       title: intl.formatMessage(messages.favourites),
       action: onClick('favourite'),
       name: 'favourite',
     });
     items.push({
-      text: (
-        <Icon
-          className='size-4'
-          src={require('@phosphor-icons/core/regular/repeat.svg')}
-          aria-hidden
-        />
-      ),
+      text: <Icon className='size-4' src={iconRepeat} aria-hidden />,
       title: intl.formatMessage(messages.boosts),
       action: onClick('reblog'),
       name: 'reblog',
     });
     if (features.polls)
       items.push({
-        text: (
-          <Icon
-            className='size-4'
-            src={require('@phosphor-icons/core/regular/chart-bar.svg')}
-            aria-hidden
-          />
-        ),
+        text: <Icon className='size-4' src={iconChartBar} aria-hidden />,
         title: intl.formatMessage(messages.polls),
         action: onClick('poll'),
         name: 'poll',
       });
     if (features.events)
       items.push({
-        text: (
-          <Icon
-            className='size-4'
-            src={require('@phosphor-icons/core/regular/calendar-dots.svg')}
-            aria-hidden
-          />
-        ),
+        text: <Icon className='size-4' src={iconCalendarDots} aria-hidden />,
         title: intl.formatMessage(messages.events),
         action: onClick('events'),
         name: 'events',
       });
     items.push({
-      text: (
-        <Icon
-          className='size-4'
-          src={require('@phosphor-icons/core/regular/user-plus.svg')}
-          aria-hidden
-        />
-      ),
+      text: <Icon className='size-4' src={iconUserPlus} aria-hidden />,
       title: intl.formatMessage(messages.follows),
       action: onClick('follow'),
       name: 'follow',
@@ -180,18 +146,20 @@ const FilterBar = () => {
 
 interface INotificationsColumn {
   multiColumn?: boolean;
+  compact?: boolean;
 }
 
-const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) => {
+const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, compact }) => {
   const features = useFeatures();
   const settings = useSettings();
   const { mutate: markNotificationsRead } = useMarkNotificationsReadMutation();
   const queryClient = useQueryClient();
 
   const showFilterBar =
+    !compact &&
     (features.notificationsExcludeTypes || features.notificationsIncludeTypes) &&
     settings.notifications.quickFilter.show;
-  const activeFilter = settings.notifications.quickFilter.active;
+  const activeFilter = compact ? 'all' : settings.notifications.quickFilter.active;
   const {
     data: notifications = [],
     isLoading,
@@ -339,6 +307,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
         notification={item}
         onMoveUp={handleMoveUp}
         onMoveDown={handleMoveDown}
+        compact={compact}
       />
     ));
   } else {
@@ -359,7 +328,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
       placeholderCount={20}
       onLoadMore={handleLoadOlder}
       onScrollToTop={handleScrollToTop}
-      listClassName={clsx('⁂-status-list', { 'animate-pulse': isLoading })}
+      listClassName={clsx('⁂-status-list', { 'no-reduce-motion:animate-pulse': isLoading })}
       useWindowScroll={!multiColumn}
     >
       {scrollableContent!}
@@ -368,16 +337,14 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
 
   return (
     <>
-      {filterBarContainer}
+      <ScrollTopButton
+        onClick={handleDequeueNotifications}
+        count={queuedNotificationCount}
+        message={messages.queue}
+        liveRegionMessage={messages.queueLiveRegion}
+      />
 
-      <Portal>
-        <ScrollTopButton
-          onClick={handleDequeueNotifications}
-          count={queuedNotificationCount}
-          message={messages.queue}
-          liveRegionMessage={messages.queueLiveRegion}
-        />
-      </Portal>
+      {filterBarContainer}
 
       <PullToRefresh onRefresh={handleRefresh}>{scrollContainer}</PullToRefresh>
     </>

@@ -3,12 +3,10 @@ import React from 'react';
 
 import Account from '@/components/accounts/account';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
+import PollPreview from '@/components/polls/poll-preview';
 import StatusContent from '@/components/statuses/status-content';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import { buildPoll } from '@/features/draft-statuses/builder';
-import PollPreview from '@/features/ui/components/poll-preview';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
 import { buildStatus } from '../builder';
@@ -45,7 +43,7 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus, ...other
         data-id={status.id}
       >
         <div className='mb-4'>
-          <HStack justifyContent='between' alignItems='start'>
+          <div className='flex items-start justify-between'>
             <Account
               key={ownAccount.id}
               account={ownAccount}
@@ -53,18 +51,18 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus, ...other
               futureTimestamp
               action={<ScheduledStatusActionBar status={status} {...other} />}
             />
-          </HStack>
+          </div>
         </div>
 
         <StatusReplyMentions status={status} />
 
-        <Stack space={4}>
-          <StatusContent status={status} collapsable={false} />
+        <div className='flex flex-col gap-4'>
+          <StatusContent status={status} expandable />
 
           {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
 
           {poll && <PollPreview poll={poll} />}
-        </Stack>
+        </div>
       </div>
     </div>
   );

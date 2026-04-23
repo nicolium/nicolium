@@ -1,3 +1,5 @@
+import iconEyeSlash from '@phosphor-icons/core/regular/eye-slash.svg';
+import iconSpeakerHigh from '@phosphor-icons/core/regular/speaker-high.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
@@ -10,10 +12,10 @@ import MissingIndicator from '@/components/missing-indicator';
 import StillImage from '@/components/still-image';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import { profileMediaRoute } from '@/features/ui/router';
 import { type AccountGalleryAttachment, useAccountGallery } from '@/hooks/use-account-gallery';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
+import { profileMediaRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { isIOS } from '@/utils/is-mobile';
@@ -116,7 +118,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
     thumbnail = (
       <div className={clsx('⁂-media-gallery__item-thumbnail', { 'rounded-br-md': isLast })}>
         <span className='⁂-media-gallery__item__icons'>
-          <Icon src={require('@phosphor-icons/core/regular/speaker-high.svg')} />
+          <Icon src={iconSpeakerHigh} />
         </span>
         <span className='⁂-media-gallery__file-extension__label'>{fileExtension}</span>
       </div>
@@ -126,7 +128,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
   if (!visible) {
     icon = (
       <span className='⁂-media-gallery__item__icons'>
-        <Icon src={require('@phosphor-icons/core/regular/eye-slash.svg')} />
+        <Icon src={iconEyeSlash} />
       </span>
     );
   }

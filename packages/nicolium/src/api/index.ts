@@ -5,11 +5,6 @@
 import * as BuildConfig from '@/build-config';
 import { buildFullPath } from '@/utils/url';
 
-import type { RootState, Store } from '@/store';
-
-let store: Store;
-import('@/store').then((value) => (store = value.store)).catch(() => {});
-
 type NicoliumResponse<T = any> = Response & { data: string; json: T };
 
 /**
@@ -47,10 +42,4 @@ const staticFetch = async (input: URL | RequestInfo, init?: RequestInit) => {
   } as any as NicoliumResponse;
 };
 
-const getClient = (state: RootState | (() => RootState) = store?.getState()) => {
-  if (typeof state === 'function') state = state();
-
-  return state.auth.client;
-};
-
-export { type NicoliumResponse, staticFetch, getClient };
+export { type NicoliumResponse, staticFetch };

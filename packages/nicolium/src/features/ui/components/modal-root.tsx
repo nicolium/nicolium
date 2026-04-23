@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 
 import Base from '@/components/modal-root';
-import { useComposeStore } from '@/stores/compose';
+import { useComposeActions } from '@/stores/compose';
 import { useModals, useModalsActions } from '@/stores/modals';
 
 import ModalLoading from './modal-loading';
@@ -63,6 +63,8 @@ const ModalRoot: React.FC = () => {
 
   const modals = useModals();
   const { closeModal } = useModalsActions();
+  const { resetCompose } = useComposeActions();
+
   const { modalType: type, modalProps: props } = modals.at(-1) ?? {
     modalProps: {},
     modalType: null,
@@ -72,7 +74,7 @@ const ModalRoot: React.FC = () => {
   const onClickClose = (type?: ModalType, all?: boolean) => {
     switch (type) {
       case 'COMPOSE':
-        useComposeStore.getState().actions.resetCompose('compose-modal');
+        resetCompose('compose-modal');
         break;
       default:
         break;

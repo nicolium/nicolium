@@ -1,3 +1,5 @@
+import iconPaperclip from '@phosphor-icons/core/regular/paperclip.svg';
+import iconSpeakerHigh from '@phosphor-icons/core/regular/speaker-high.svg';
 import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, type CSSProperties } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -7,7 +9,6 @@ import AltIndicator from '@/components/media/alt-indicator';
 import Blurhash from '@/components/media/blurhash';
 import StillImage from '@/components/still-image';
 import Popover from '@/components/ui/popover';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
@@ -21,8 +22,6 @@ import {
   minimumAspectRatio,
   maximumAspectRatio,
 } from '@/utils/media-aspect-ratio';
-
-import HStack from '../ui/hstack';
 
 import type { MediaAttachment } from 'pl-api';
 
@@ -118,19 +117,18 @@ const Item: React.FC<IItem> = ({
 
   // FIXME: wtf?
   const handleClick: React.MouseEventHandler = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (isIOS() && !e.target.autoPlay) {
       e.target.autoPlay = true;
-      e.preventDefault();
     } else if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       if (hoverToPlay()) {
         e.target.pause();
         e.target.currentTime = 0;
       }
-      e.preventDefault();
       onClick(index);
     }
-
-    e.stopPropagation();
   };
 
   const handleVideoHover: React.MouseEventHandler<HTMLVideoElement> = ({
@@ -175,10 +173,7 @@ const Item: React.FC<IItem> = ({
     const attachmentIcon = (
       <Icon
         className='size-16 text-gray-800 dark:text-gray-200'
-        src={
-          MIMETYPE_ICONS[attachment.mime_type as string] ||
-          require('@phosphor-icons/core/regular/paperclip.svg')
-        }
+        src={MIMETYPE_ICONS[attachment.mime_type as string] || iconPaperclip}
       />
     );
 
@@ -224,7 +219,7 @@ const Item: React.FC<IItem> = ({
             interaction='click'
             referenceElementClassName='cursor-pointer'
             content={
-              <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
+              <div className='flex max-h-[32rem] max-w-96 flex-col gap-1 overflow-auto p-4'>
                 <Text weight='semibold'>
                   <FormattedMessage
                     id='media-gallery.description'
@@ -232,7 +227,7 @@ const Item: React.FC<IItem> = ({
                   />
                 </Text>
                 <Text className='whitespace-pre-wrap'>{attachment.description}</Text>
-              </Stack>
+              </div>
             }
             isFlush
             title={intl.formatMessage(messages.altText)}
@@ -280,7 +275,7 @@ const Item: React.FC<IItem> = ({
         title={attachment.description}
       >
         <span className='⁂-media-gallery__item__icons'>
-          <Icon src={require('@phosphor-icons/core/regular/speaker-high.svg')} />
+          <Icon src={iconSpeakerHigh} />
         </span>
         <span className='⁂-media-gallery__file-extension__label uppercase'>{ext}</span>
       </a>
@@ -338,18 +333,16 @@ interface IMediaGallery {
   visible?: boolean;
 }
 
-const MediaGallery: React.FC<IMediaGallery> = (props) => {
-  const {
-    media,
-    defaultWidth = 0,
-    className,
-    onOpenMedia,
-    cacheWidth,
-    compact,
-    height,
-    visible,
-  } = props;
-
+const MediaGallery: React.FC<IMediaGallery> = ({
+  media,
+  defaultWidth = 0,
+  className,
+  onOpenMedia,
+  cacheWidth,
+  compact,
+  height,
+  visible,
+}) => {
   const { disableUserProvidedMedia } = useSettings();
 
   const [width, setWidth] = useState<number>(defaultWidth);
@@ -374,12 +367,10 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
 
   if (disableUserProvidedMedia) {
     return (
-      <Stack space={2}>
+      <div className='flex flex-col gap-2'>
         {media.map((attachment, index) => (
-          <HStack
-            element='button'
-            alignItems='center'
-            space={2}
+          <button
+            className='flex items-center gap-2'
             key={attachment.id}
             onClick={() => {
               handleClick(index);
@@ -390,7 +381,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
               src={
                 MIMETYPE_ICONS[
                   (attachment.type === 'unknown' && attachment.mime_type) || attachment.type
-                ] ?? require('@phosphor-icons/core/regular/paperclip.svg')
+                ] ?? iconPaperclip
               }
             />
             <Text align='left'>
@@ -416,10 +407,9 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
                   ),
                 }[attachment.type]}
             </Text>
-          </HStack>
-          // <MediaItem key={index} item={item} />
+          </button>
         ))}
-      </Stack>
+      </div>
     );
   }
 

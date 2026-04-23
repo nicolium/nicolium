@@ -1,12 +1,9 @@
-import { useAppSelector } from './use-app-selector';
-
+import { useCurrentAccount } from '@/contexts/current-account-context';
 const useLoggedIn = () => {
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
 
   return {
     isLoggedIn: typeof me === 'string',
-    isLoginLoading: me === null,
-    isLoginFailed: me === false,
     me,
   };
 };

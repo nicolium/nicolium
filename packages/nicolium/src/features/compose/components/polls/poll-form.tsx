@@ -4,13 +4,11 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import AutosuggestInput from '@/components/autosuggest-input';
 import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
-import { useInstance } from '@/hooks/use-instance';
 import { useCompose, useComposeActions } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 
 import DurationSelector from './duration-selector';
 
@@ -81,7 +79,7 @@ const Option: React.FC<IOption> = ({
 
   return (
     <div className='⁂-compose-form__poll__option'>
-      <HStack alignItems='center' space={2} grow>
+      <div className='flex flex-grow items-center gap-2'>
         <div className='w-6'>
           <Text weight='bold'>{index + 1}.</Text>
         </div>
@@ -100,7 +98,7 @@ const Option: React.FC<IOption> = ({
           autoFocus={index === 0 || index >= 2}
           lang={language ?? undefined}
         />
-      </HStack>
+      </div>
 
       {index > 1 && (
         <div>
@@ -192,7 +190,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
           />
         ))}
 
-        <HStack space={2}>
+        <div className='flex gap-2'>
           <div className='w-6' />
 
           {options.length < maxOptions && (
@@ -200,14 +198,14 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
               <FormattedMessage id='compose_form.poll.add_option' defaultMessage='Add an answer' />
             </Button>
           )}
-        </HStack>
+        </div>
       </div>
 
       <Divider />
 
       <label className='text-start'>
-        <HStack alignItems='center' justifyContent='between'>
-          <Stack>
+        <div className='flex items-center justify-between'>
+          <div className='flex flex-col'>
             <Text weight='medium'>
               <FormattedMessage id='compose_form.poll.multiselect' defaultMessage='Multi-select' />
             </Text>
@@ -218,16 +216,16 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
                 defaultMessage='Allow users to select multiple answers'
               />
             </Text>
-          </Stack>
+          </div>
 
           <Toggle checked={isMultiple} onChange={handleToggleMultiple} />
-        </HStack>
+        </div>
       </label>
 
       <Divider />
 
       {/* Duration */}
-      <Stack space={2}>
+      <div className='flex flex-col gap-2'>
         <Text weight='medium'>
           <FormattedMessage id='compose_form.poll.duration' defaultMessage='Poll duration' />
         </Text>
@@ -236,7 +234,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
           onDurationChange={handleSelectDuration}
           value={expiresIn ?? 2 * 24 * 60 * 60}
         />
-      </Stack>
+      </div>
 
       {/* Remove Poll */}
       <div className='text-center'>

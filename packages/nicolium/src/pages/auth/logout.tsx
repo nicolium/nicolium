@@ -1,17 +1,17 @@
 import { Navigate } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { logOut } from '@/actions/auth';
 import Spinner from '@/components/ui/spinner';
+import { useAuthActions } from '@/stores/auth';
 
 /** Component that logs the user out when rendered */
 const LogoutPage: React.FC = () => {
-  const dispatch = useDispatch();
+  const { logOut } = useAuthActions();
+
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    dispatch(logOut() as any)
+    logOut()
       .then(() => {
         setDone(true);
       })

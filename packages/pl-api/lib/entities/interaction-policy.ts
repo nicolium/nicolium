@@ -17,10 +17,21 @@ const interactionPolicyEntrySchema = v.picklist([
  */
 type InteractionPolicyEntry = v.InferOutput<typeof interactionPolicyEntrySchema>;
 
-const interactionPolicyRuleSchema = coerceObject({
-  always: v.fallback(v.array(interactionPolicyEntrySchema), ['public', 'me']),
-  with_approval: v.fallback(v.array(interactionPolicyEntrySchema), []),
-});
+const interactionPolicyRuleSchema = v.optional(
+  v.pipe(
+    v.any(),
+    v.transform((rule) => {
+      if (rule.always) rule.automatic_approval = rule.always;
+      if (rule.with_approval) rule.manual_approval = rule.with_approval;
+      return rule;
+    }),
+    v.object({
+      automatic_approval: v.fallback(v.array(interactionPolicyEntrySchema), ['public', 'me']),
+      manual_approval: v.fallback(v.array(interactionPolicyEntrySchema), []),
+    }),
+  ),
+  {},
+);
 
 /**
  * @category Schemas

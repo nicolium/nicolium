@@ -1,3 +1,4 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -61,7 +62,7 @@ const RemoveButton: React.FC<IRemoveButton> = ({ onClick }) => {
       className='flex size-5 items-center justify-center rounded-full bg-secondary-500 p-1'
       aria-label={intl.formatMessage(messages.removeAttachment)}
     >
-      <Icon className='size-3 text-white' src={require('@phosphor-icons/core/regular/x.svg')} />
+      <Icon className='size-3 text-white' src={iconX} />
     </button>
   );
 };

@@ -1,17 +1,16 @@
-import { Link } from '@tanstack/react-router';
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { GroupTimelineColumn } from '@/columns/timeline';
+import { AccountLink } from '@/components/accounts/account-link';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
-import { groupTimelineRoute } from '@/features/ui/router';
 import { ComposeForm } from '@/features/ui/util/async-components';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
+import { groupTimelineRoute } from '@/router';
 import { useComposeActions, useUploadCompose } from '@/stores/compose';
 
 const GroupTimelinePage: React.FC = () => {
@@ -45,29 +44,27 @@ const GroupTimelinePage: React.FC = () => {
   }
 
   return (
-    <Stack space={2}>
+    <div className='flex flex-col gap-2'>
       {canComposeGroupStatus && (
         <div className='border-b border-solid border-gray-200 py-6 dark:border-gray-800'>
-          <HStack
+          <div
             ref={composer}
-            alignItems='start'
-            space={2}
-            className={clsx('relative rounded-xl transition', {
+            className={clsx('relative flex items-start gap-2 rounded-xl transition', {
               'z-[99] border-2 border-dashed border-primary-600 p-4': isDragging,
               'ring-2 ring-primary-600 ring-offset-2': isDraggedOver,
             })}
           >
-            <Link to='/@{$username}' params={{ username: account.acct }}>
+            <AccountLink account={account}>
               <Avatar
                 src={account.avatar}
                 alt={account.avatar_description}
                 size={42}
                 isCat={account.is_cat}
               />
-            </Link>
+            </AccountLink>
 
             <ComposeForm id={composeId} shouldCondense group={groupId} withAvatar transparent />
-          </HStack>
+          </div>
         </div>
       )}
 
@@ -79,10 +76,10 @@ const GroupTimelinePage: React.FC = () => {
             defaultMessage='There are no posts in this group yet.'
           />
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-        // showGroup={falsse}
+        emptyMessageIcon={iconChatCenteredText}
+        // showGroup={false}
       />
-    </Stack>
+    </div>
   );
 };
 

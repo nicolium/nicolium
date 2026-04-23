@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { importEntities } from '@/queries/utils/import-entities';
 
 import { queryKeys } from '../keys';
 

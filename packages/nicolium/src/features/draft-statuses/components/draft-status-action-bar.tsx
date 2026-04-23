@@ -3,16 +3,16 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
-import { useComposeActions } from '@/stores/compose';
+import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
+import { userTouching } from '@/utils/is-mobile';
 
-import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
+import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
 
 const messages = defineMessages({
@@ -34,11 +34,11 @@ interface IDraftStatusActionBar {
 
 const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status }) => {
   const intl = useIntl();
+  const client = useClient();
 
   const { openModal } = useModalsActions();
   const { setComposeToStatus } = useComposeActions();
   const settings = useSettings();
-  const dispatch = useAppDispatch();
   const cancelDraftStatus = useCancelDraftStatus();
 
   const handleCancelClick = () => {
@@ -56,23 +56,35 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   };
 
   const handleEditClick = () => {
-    if (status.in_reply_to_id) dispatch(fetchStatus(status.in_reply_to_id));
+    if (settings.useDedicatedComposePage && !userTouching.matches) {
+      openDedicatedComposeWindow({ draftId: source.draft_id });
+      return;
+    }
+
+    if (status.in_reply_to_id) fetchStatus(client, status.in_reply_to_id);
     const poll = status.poll_id
       ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
       : undefined;
-    setComposeToStatus(status, poll, source, false, source.draft_id, source.editorState);
+    setComposeToStatus(
+      status,
+      poll,
+      { ...source, location: null },
+      false,
+      source.draft_id,
+      source.editorState,
+    );
     openModal('COMPOSE');
   };
 
   return (
-    <HStack space={2} justifyContent='end'>
+    <div className='flex justify-end gap-2'>
       <Button theme='primary' size='sm' onClick={handleEditClick}>
         <FormattedMessage id='draft_status.edit' defaultMessage='Edit' />
       </Button>
       <Button theme='danger' size='sm' onClick={handleCancelClick}>
         <FormattedMessage id='draft_status.cancel' defaultMessage='Delete' />
       </Button>
-    </HStack>
+    </div>
   );
 };
 

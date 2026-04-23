@@ -4,10 +4,10 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import MissingIndicator from '@/components/missing-indicator';
 import StatusList from '@/components/statuses/status-list';
 import Column from '@/components/ui/column';
-import { profileFavoritesRoute } from '@/features/ui/router';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { useFavourites } from '@/queries/status-lists/use-favourites';
+import { profileFavoritesRoute } from '@/router';
 
 const messages = defineMessages({
   heading: { id: 'column.favourited_statuses', defaultMessage: 'Liked posts' },

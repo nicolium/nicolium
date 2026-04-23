@@ -1,10 +1,12 @@
+import iconCaretLeft from '@phosphor-icons/core/regular/caret-left.svg';
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 
 import IconButton from '@/components/ui/icon-button';
 import { DatePicker } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 const messages = defineMessages({
   birthdayPlaceholder: {
@@ -15,6 +17,7 @@ const messages = defineMessages({
   nextMonth: { id: 'datepicker.next_month', defaultMessage: 'Next month' },
   previousYear: { id: 'datepicker.previous_year', defaultMessage: 'Previous year' },
   nextYear: { id: 'datepicker.next_year', defaultMessage: 'Next year' },
+  clear: { id: 'search.clear', defaultMessage: 'Clear input' },
 });
 
 interface IBirthdayInput {
@@ -76,7 +79,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         <IconButton
           className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
           iconClassName='size-4'
-          src={require('@phosphor-icons/core/regular/caret-left.svg')}
+          src={iconCaretLeft}
           onClick={decreaseMonth}
           disabled={prevMonthButtonDisabled}
           aria-label={intl.formatMessage(messages.previousMonth)}
@@ -86,7 +89,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         <IconButton
           className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
           iconClassName='size-4'
-          src={require('@phosphor-icons/core/regular/caret-right.svg')}
+          src={iconCaretRight}
           onClick={increaseMonth}
           disabled={nextMonthButtonDisabled}
           aria-label={intl.formatMessage(messages.nextMonth)}
@@ -97,7 +100,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         <IconButton
           className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
           iconClassName='size-4'
-          src={require('@phosphor-icons/core/regular/caret-left.svg')}
+          src={iconCaretLeft}
           onClick={decreaseYear}
           disabled={prevYearButtonDisabled}
           aria-label={intl.formatMessage(messages.previousYear)}
@@ -107,7 +110,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         <IconButton
           className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
           iconClassName='size-4'
-          src={require('@phosphor-icons/core/regular/caret-right.svg')}
+          src={iconCaretRight}
           onClick={increaseYear}
           disabled={nextYearButtonDisabled}
           aria-label={intl.formatMessage(messages.nextYear)}
@@ -129,7 +132,6 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
     <div className='relative mt-1 rounded-md shadow-sm'>
       <DatePicker
         selected={selected}
-        wrapperClassName='w-fit'
         onChange={handleChange}
         placeholderText={intl.formatMessage(messages.birthdayPlaceholder)}
         minDate={new Date('1900-01-01')}
@@ -137,6 +139,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         required={required}
         renderCustomHeader={renderCustomHeader}
         isClearable={!required}
+        ariaLabelClose={intl.formatMessage(messages.clear)}
       />
     </div>
   );

@@ -1,3 +1,4 @@
+import iconChartBar from '@phosphor-icons/core/regular/chart-bar.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -36,7 +37,7 @@ const PollButton: React.FC<IPollButton> = ({ composeId, disabled }) => {
 
   return (
     <ComposeFormButton
-      icon={require('@phosphor-icons/core/regular/chart-bar.svg')}
+      icon={iconChartBar}
       title={intl.formatMessage(active ? messages.removePoll : messages.addPoll)}
       active={active}
       disabled={disabled}

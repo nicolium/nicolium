@@ -2,28 +2,27 @@ import { create } from 'mutative';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { patchMe } from '@/actions/me';
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import { InlineMultiselect } from '@/components/ui/inline-multiselect';
+import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Tabs from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
 import Warning from '@/features/compose/components/warning';
-import { SelectDropdown } from '@/features/forms';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';
+import { useAuthActions } from '@/stores/auth';
 import toast from '@/toast';
 
 import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
 
 type Visibility = 'public' | 'unlisted' | 'private';
 type Policy = 'can_favourite' | 'can_reblog' | 'can_reply';
-type Rule = 'always' | 'with_approval';
+type Rule = 'automatic_approval' | 'manual_approval';
 type Scope = 'followers' | 'following' | 'mentioned' | 'public';
 
 type QuoteApprovalPolicy = CreateStatusParams['quote_approval_policy'];
@@ -210,8 +209,8 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
                 >
                   <InlineMultiselect<Scope>
                     items={items}
-                    value={interactionPolicy[policy].always as Array<Scope>}
-                    onChange={handleChange(policy, 'always')}
+                    value={interactionPolicy[policy].automatic_approval as Array<Scope>}
+                    onChange={handleChange(policy, 'automatic_approval')}
                     disabled={disabled}
                   />
                 </ListItem>
@@ -225,8 +224,8 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
                 >
                   <InlineMultiselect
                     items={items}
-                    value={interactionPolicy[policy].with_approval as Array<Scope>}
-                    onChange={handleChange(policy, 'with_approval')}
+                    value={interactionPolicy[policy].manual_approval as Array<Scope>}
+                    onChange={handleChange(policy, 'manual_approval')}
                     disabled={disabled}
                   />
                 </ListItem>
@@ -258,8 +257,8 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
 
 const InteractionPoliciesPage = () => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
+  const { updateMe } = useAuthActions();
 
   const [quotePolicy, setQuotePolicy] = useState<QuoteApprovalPolicy>('public');
 
@@ -294,11 +293,11 @@ const InteractionPoliciesPage = () => {
     setInteractionPolicies((policies) =>
       create(policies, (draft) => {
         draft[visibility][policy][rule] = value;
-        draft[visibility][policy][rule === 'always' ? 'with_approval' : 'always'] = draft[
-          visibility
-        ][policy][rule === 'always' ? 'with_approval' : 'always'].filter(
-          (rule) => !value.includes(rule as any),
-        );
+        draft[visibility][policy][
+          rule === 'automatic_approval' ? 'manual_approval' : 'automatic_approval'
+        ] = draft[visibility][policy][
+          rule === 'automatic_approval' ? 'manual_approval' : 'automatic_approval'
+        ].filter((rule) => !value.includes(rule as any));
       }),
     );
   };
@@ -321,13 +320,13 @@ const InteractionPoliciesPage = () => {
       );
     }
 
-    if (features.quoteApprovalPolicies) {
-      promises.push(dispatch(patchMe({ source: { quote_policy: quotePolicy } })));
+    if (features.quoteApprovalPolicies && !features.interactionRequests) {
+      promises.push(updateMe({ source: { quote_policy: quotePolicy } }));
     }
 
     Promise.all(promises)
       .then(() => {
-        toast.success(intl.formatMessage(messages.success));
+        toast.success(messages.success);
       })
       .catch(() => {
         toast.error(intl.formatMessage(messages.fail));

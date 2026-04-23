@@ -7,18 +7,20 @@ import { findStatuses } from '@/queries/statuses/use-status';
 import type { Context, Status } from 'pl-api';
 
 /** Minimal status fields needed to process context. */
-type ContextStatus = Pick<Status, 'id' | 'in_reply_to_id'>;
+type ContextStatus = Pick<Status, 'id' | 'in_reply_to_id' | 'parent_visible'>;
 
 /** Import a single status into the reducer, setting replies and replyTos. */
 const importStatus = (state: State, status: ContextStatus, idempotencyKey?: string) => {
-  const { id, in_reply_to_id: inReplyToId } = status;
+  const { id, in_reply_to_id: inReplyToId, parent_visible: parentVisible } = status;
   if (!inReplyToId) return;
 
   const replies = state.replies[inReplyToId] || [];
   const newReplies = [...new Set([...replies, id])].toSorted();
 
-  state.replies[inReplyToId] = newReplies;
-  state.inReplyTos[id] = inReplyToId;
+  const parentId = parentVisible === false ? `${inReplyToId}-unavailable` : inReplyToId;
+
+  state.replies[parentId] = newReplies;
+  state.inReplyTos[id] = parentId;
 
   if (idempotencyKey) {
     deletePendingStatus(state, status.in_reply_to_id, idempotencyKey);
@@ -34,8 +36,8 @@ const importStatuses = (state: State, statuses: ContextStatus[]) => {
 /** Insert a fake status ID connecting descendant to ancestor. */
 const insertTombstone = (state: State, ancestorId: string, descendantId: string) => {
   const tombstoneId = `${descendantId}-tombstone`;
-  importStatus(state, { id: tombstoneId, in_reply_to_id: ancestorId });
-  importStatus(state, { id: descendantId, in_reply_to_id: tombstoneId });
+  importStatus(state, { id: tombstoneId, in_reply_to_id: ancestorId, parent_visible: undefined });
+  importStatus(state, { id: descendantId, in_reply_to_id: tombstoneId, parent_visible: undefined });
 };
 
 /** Find the highest level status from this statusId. */
@@ -177,7 +179,11 @@ const useContextStore = create<State>()(
       importPendingStatus: (inReplyToId, idempotencyKey) =>
         set((state) => {
           const id = `末pending-${idempotencyKey}`;
-          importStatus(state, { id, in_reply_to_id: inReplyToId ?? null });
+          importStatus(state, {
+            id,
+            in_reply_to_id: inReplyToId ?? null,
+            parent_visible: undefined,
+          });
         }),
       deletePendingStatus: (inReplyToId, idempotencyKey) =>
         set((state) => {
@@ -256,6 +262,35 @@ const useDescendantsIds = (statusId?: string) => {
   );
 };
 
+const useThreadDepths = (statusId?: string) => {
+  const inReplyTos = useContextStore((state) => state.inReplyTos);
+  const replies = useContextStore((state) => state.replies);
+
+  return useMemo(() => {
+    const depths: Record<string, number> = {};
+    if (!statusId) return depths;
+
+    const ancestorsIds = getAncestorsIds(statusId, inReplyTos);
+    for (const id of ancestorsIds) depths[id] = 0;
+    depths[statusId] = 0;
+
+    const queue: Array<{ id: string; depth: number }> = [{ id: statusId, depth: -1 }];
+    const visited = new Set<string>([statusId]);
+
+    while (queue.length > 0) {
+      const { id, depth } = queue.shift()!;
+      for (const childId of replies[id] || []) {
+        if (visited.has(childId)) continue;
+        visited.add(childId);
+        depths[childId] = Math.max(0, depth + 1);
+        queue.push({ id: childId, depth: depth + 1 });
+      }
+    }
+
+    return depths;
+  }, [inReplyTos, replies, statusId]);
+};
+
 const useThread = (statusId?: string, linear?: boolean) => {
   const inReplyTos = useContextStore((state) => state.inReplyTos);
   const replies = useContextStore((state) => state.replies);
@@ -274,7 +309,8 @@ const useThread = (statusId?: string, linear?: boolean) => {
         parentStatus = next;
       }
 
-      const threadStatuses = [parentStatus];
+      let threadStatuses = [parentStatus];
+      let hasTombstone: string | undefined;
 
       for (let i = 0; i < threadStatuses.length; i++) {
         for (const reply of replies[threadStatuses[i]] || []) {
@@ -282,7 +318,18 @@ const useThread = (statusId?: string, linear?: boolean) => {
         }
       }
 
-      return threadStatuses.toSorted();
+      threadStatuses = threadStatuses
+        .filter((id) => {
+          if (id.endsWith('-tombstone') || id.endsWith('-unavailable')) {
+            hasTombstone = id;
+            return false;
+          }
+          return true;
+        })
+        .toSorted();
+
+      if (hasTombstone) threadStatuses.unshift(hasTombstone);
+      return threadStatuses;
     }
 
     let ancestorsIds = getAncestorsIds(statusId, inReplyTos);
@@ -307,6 +354,7 @@ export {
   useContextStore,
   useDescendantsIds,
   useThread,
+  useThreadDepths,
   useReplyToId,
   useReplyCount,
   useContextsActions,

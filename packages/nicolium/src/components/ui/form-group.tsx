@@ -1,8 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 
 import Checkbox from './checkbox';
-import HStack from './hstack';
-import Stack from './stack';
 
 interface IFormGroup {
   /** Input label message. */
@@ -18,19 +16,25 @@ interface IFormGroup {
 }
 
 /** Input container with label. Renders the child. */
-const FormGroup: React.FC<IFormGroup> = (props) => {
-  const { children, errors = [], labelText, labelTitle, hintText } = props;
+const FormGroup: React.FC<IFormGroup> = ({
+  children,
+  errors = [],
+  labelText,
+  labelTitle,
+  hintText,
+}) => {
   const formFieldId: string = useMemo(() => `field-${crypto.randomUUID()}`, []);
   const inputChildren = React.Children.toArray(children);
   const hasError = errors?.length > 0;
 
   let firstChild;
   if (React.isValidElement(inputChildren[0])) {
-    firstChild = React.cloneElement(
-      inputChildren[0],
+    firstChild = React.cloneElement(inputChildren[0], {
       // @ts-expect-error
-      { id: formFieldId },
-    );
+      id: formFieldId,
+      'aria-invalid': hasError,
+      'aria-describedby': hasError ? `error-${formFieldId}` : undefined,
+    });
   }
 
   // @ts-expect-error
@@ -38,10 +42,10 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
 
   if (isCheckboxFormGroup) {
     return (
-      <HStack alignItems='start' space={2}>
+      <div className='flex items-start gap-2'>
         {firstChild}
 
-        <Stack>
+        <div className='flex flex-col'>
           {labelText && (
             <label
               htmlFor={formFieldId}
@@ -55,7 +59,11 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
 
           {hasError && (
             <div>
-              <p data-testid='form-group-error' className='⁂-form-group__error'>
+              <p
+                id={`error-${formFieldId}`}
+                data-testid='form-group-error'
+                className='⁂-form-group__error'
+              >
                 {errors.join(', ')}
               </p>
             </div>
@@ -69,13 +77,13 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
               {hintText}
             </p>
           )}
-        </Stack>
-      </HStack>
+        </div>
+      </div>
     );
   }
 
   return (
-    <div>
+    <div className='⁂-form-group'>
       {labelText && (
         <label
           htmlFor={formFieldId}
@@ -98,7 +106,11 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
         {inputChildren.filter((_, i) => i !== 0)}
 
         {hasError && (
-          <p data-testid='form-group-error' className='⁂-form-group__error'>
+          <p
+            id={`error-${formFieldId}`}
+            data-testid='form-group-error'
+            className='⁂-form-group__error'
+          >
             {errors.join(', ')}
           </p>
         )}
@@ -107,4 +119,6 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
   );
 };
 
-export { FormGroup as default };
+const MemoizedFormGroup = memo(FormGroup);
+
+export { MemoizedFormGroup as default };

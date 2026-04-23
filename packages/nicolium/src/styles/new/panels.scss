@@ -7,6 +7,19 @@
 
   span {
     @include mixins.text($theme: success);
-    line-height: 1;
+
+    line-height: var(--leading-sm);
+  }
+}
+
+.⁂-notifications-panel__body {
+  gap: 0;
+
+  .⁂-status-list {
+    height: 32rem;
+  }
+
+  .⁂-notification {
+    padding: 0.5rem 0;
   }
 }

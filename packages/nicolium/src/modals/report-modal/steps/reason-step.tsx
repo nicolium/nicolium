@@ -3,10 +3,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import FormGroup from '@/components/ui/form-group';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import type { Account } from 'pl-api';
 
@@ -75,9 +74,9 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
   }, [rules]);
 
   return (
-    <Stack space={4}>
+    <div className='flex flex-col gap-4'>
       {shouldRequireRule && (
-        <Stack space={2}>
+        <div className='flex flex-col gap-2'>
           <Text size='xl' weight='semibold' tag='h1'>
             <FormattedMessage id='report.reason.title' defaultMessage='Reason for reporting' />
           </Text>
@@ -106,7 +105,7 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
                       'bg-gray-200 hover:bg-gray-200 dark:bg-primary-800/50': isSelected,
                     })}
                   >
-                    <Stack className='mr-3'>
+                    <div className='mr-3 flex flex-col'>
                       <Text
                         tag='span'
                         size='sm'
@@ -118,7 +117,7 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
                       <Text tag='span' theme='muted' size='sm'>
                         {rule.hint}
                       </Text>
-                    </Stack>
+                    </div>
 
                     <input
                       name='reason'
@@ -152,7 +151,7 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
               )}
             />
           </div>
-        </Stack>
+        </div>
       )}
 
       <FormGroup labelText={intl.formatMessage(messages.placeholder)}>
@@ -162,7 +161,7 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
           onChange={handleCommentChange}
         />
       </FormGroup>
-    </Stack>
+    </div>
   );
 };
 

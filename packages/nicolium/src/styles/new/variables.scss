@@ -4,6 +4,32 @@ $breakpoint-lg: 976px;
 $breakpoint-xl: 1280px;
 
 :root {
+  --shadow-sm: 0 1px 2px 0 #0001;
+  --shadow-lg: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --leading-xs: 1rem;
+  --leading-sm: 1.25rem;
+  --leading-base: 1.5rem;
+  --leading-lg: 1.75rem;
+  --leading-xl: var(--leading-lg);
+  --leading-2xl: 2rem;
+  --leading-3xl: 2.25rem;
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 9999px;
+
   /* --hex-slate-50: #f8fafc;
   --hex-slate-100: #f1f5f9;
   --hex-slate-200: #e2e8f0;

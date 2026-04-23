@@ -4,16 +4,14 @@ import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
-import HStack from '@/components/ui/hstack';
 import Popover from '@/components/ui/popover';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
-import GroupMemberCount from '@/features/group/components/group-member-count';
-import GroupPrivacy from '@/features/group/components/group-privacy';
-import { groupTimelineRoute } from '@/features/ui/router';
+import { groupTimelineRoute } from '@/router';
 
 import GroupAvatar from '../group-avatar';
+import GroupMemberCount from '../group-member-count';
+import GroupPrivacy from '../group-privacy';
 
 import type { Group } from 'pl-api';
 
@@ -23,9 +21,7 @@ interface IGroupPopoverContainer {
   group: Group;
 }
 
-const GroupPopover: React.FC<IGroupPopoverContainer> = (props) => {
-  const { children, group, isEnabled } = props;
-
+const GroupPopover: React.FC<IGroupPopoverContainer> = ({ children, group, isEnabled }) => {
   const shouldHideAction = !!useMatch({ from: groupTimelineRoute.fullPath, shouldThrow: false });
 
   if (!isEnabled) {
@@ -37,13 +33,13 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = (props) => {
       interaction='click'
       referenceElementClassName='cursor-pointer'
       content={
-        <Stack space={4} className='w-80 pb-4'>
-          <Stack
-            className='relative h-60 rounded-lg bg-white black:bg-white dark:border-primary-800 dark:bg-primary-900'
+        <div className='flex w-80 flex-col gap-4 pb-4'>
+          <div
+            className='relative flex h-60 flex-col rounded-lg bg-white black:bg-white dark:border-primary-800 dark:bg-primary-900'
             data-testid='group-card'
           >
             {/* Group Cover Image */}
-            <Stack grow className='relative basis-1/2 rounded-t-lg bg-primary-100 dark:bg-gray-800'>
+            <div className='relative flex grow basis-1/2 flex-col rounded-t-lg bg-primary-100 dark:bg-gray-800'>
               {group.header && (
                 <img
                   className='absolute inset-0 size-full rounded-t-lg object-cover'
@@ -51,7 +47,7 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = (props) => {
                   alt={group.header_description}
                 />
               )}
-            </Stack>
+            </div>
 
             {/* Group Avatar */}
             <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
@@ -59,27 +55,21 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = (props) => {
             </div>
 
             {/* Group Info */}
-            <Stack
-              alignItems='center'
-              justifyContent='end'
-              grow
-              className='basis-1/2 py-4'
-              space={0.5}
-            >
+            <div className='flex grow basis-1/2 flex-col items-center justify-end gap-0.5 py-4'>
               <Text size='lg' weight='bold'>
                 <Emojify text={group.display_name} emojis={group.emojis} />
               </Text>
 
-              <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>
+              <div className='flex flex-wrap gap-2 text-gray-700 dark:text-gray-600'>
                 <GroupPrivacy group={group} />
                 <GroupMemberCount group={group} />
-              </HStack>
-            </Stack>
-          </Stack>
+              </div>
+            </div>
+          </div>
 
           <Divider />
 
-          <Stack space={0.5} className='px-4'>
+          <div className='flex flex-col gap-0.5 px-4'>
             <Text weight='semibold'>
               <FormattedMessage id='group.popover.title' defaultMessage='Membership required' />
             </Text>
@@ -89,7 +79,7 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = (props) => {
                 defaultMessage='You must be a member of the group in order to reply to this status.'
               />
             </Text>
-          </Stack>
+          </div>
 
           {!shouldHideAction && (
             <div className='px-4'>
@@ -100,7 +90,7 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = (props) => {
               </Link>
             </div>
           )}
-        </Stack>
+        </div>
       }
       isFlush
     >

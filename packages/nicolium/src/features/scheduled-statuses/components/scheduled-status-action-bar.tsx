@@ -1,14 +1,12 @@
-import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
-import { cancelScheduledStatusMutationOptions } from '@/queries/statuses/scheduled-statuses';
+import { useCancelScheduledStatusMutation } from '@/queries/statuses/scheduled-statuses';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
-import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
+import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 
 const messages = defineMessages({
   cancel: { id: 'scheduled_status.cancel', defaultMessage: 'Cancel' },
@@ -30,9 +28,7 @@ interface IScheduledStatusActionBar {
 const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status }) => {
   const intl = useIntl();
 
-  const { mutate: cancelScheduledStatus } = useMutation(
-    cancelScheduledStatusMutationOptions(status.id),
-  );
+  const { mutate: cancelScheduledStatus } = useCancelScheduledStatusMutation(status.id);
   const { openModal } = useModalsActions();
   const settings = useSettings();
 
@@ -53,11 +49,11 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
   };
 
   return (
-    <HStack justifyContent='end'>
+    <div className='flex justify-end'>
       <Button theme='danger' size='sm' onClick={handleCancelClick}>
         <FormattedMessage id='scheduled_status.cancel' defaultMessage='Cancel' />
       </Button>
-    </HStack>
+    </div>
   );
 };
 

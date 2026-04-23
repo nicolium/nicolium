@@ -1,15 +1,21 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import { useNavigate } from '@tanstack/react-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { AntennaTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
+import { TimelinePicker } from '@/components/timeline-picker';
 // import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import { antennaTimelineRoute } from '@/features/ui/router';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { useAntenna, useDeleteAntenna } from '@/queries/accounts/use-antennas';
+import { antennaTimelineRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({
@@ -32,6 +38,8 @@ const AntennaTimelinePage: React.FC = () => {
 
   const { data: antenna, isFetching } = useAntenna(antennaId);
   const { mutate: deleteAntenna } = useDeleteAntenna();
+
+  const timelineFilterOptions = useTimelineFiltersOptions('antenna', `antenna:${antennaId}`);
 
   const handleEditClick = () => {
     openModal('ANTENNA_EDITOR', { antennaId });
@@ -56,6 +64,24 @@ const AntennaTimelinePage: React.FC = () => {
 
   const title = antenna ? antenna.title : antennaId;
 
+  const items = useMemo(
+    () => [
+      ...timelineFilterOptions,
+      null,
+      {
+        text: intl.formatMessage(messages.editAntenna),
+        action: handleEditClick,
+        icon: iconPencilSimple,
+      },
+      {
+        text: intl.formatMessage(messages.deleteAntenna),
+        action: handleDeleteClick,
+        icon: iconTrash,
+      },
+    ],
+    [timelineFilterOptions],
+  );
+
   if (!antenna && isFetching) {
     return (
       <Column>
@@ -68,28 +94,12 @@ const AntennaTimelinePage: React.FC = () => {
     return <MissingIndicator />;
   }
 
-  const items = [
-    {
-      text: intl.formatMessage(messages.editAntenna),
-      action: handleEditClick,
-      icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
-    },
-    {
-      text: intl.formatMessage(messages.deleteAntenna),
-      action: handleDeleteClick,
-      icon: require('@phosphor-icons/core/regular/trash.svg'),
-    },
-  ];
-
   return (
     <Column
       label={title}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+      title={<TimelinePicker active={`antenna:${antennaId}`} />}
+      truncateTitle={false}
     >
       <AntennaTimelineColumn
         antennaId={antennaId}
@@ -101,7 +111,7 @@ const AntennaTimelinePage: React.FC = () => {
             />
           </div>
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
       />
     </Column>
   );

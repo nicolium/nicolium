@@ -204,7 +204,7 @@ type UpdateInteractionPoliciesParams = Record<
   Record<
     'can_favourite' | 'can_reblog' | 'can_reply',
     Record<
-      'always' | 'with_approval',
+      'automatic_approval' | 'manual_approval',
       Array<
         'public' | 'followers' | 'following' | 'mutuals' | 'mentioned' | 'author' | 'me' | string
       >

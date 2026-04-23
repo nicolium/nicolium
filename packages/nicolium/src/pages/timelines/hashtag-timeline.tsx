@@ -1,18 +1,21 @@
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { HashtagTimelineColumn } from '@/columns/timeline';
+import DropdownMenu from '@/components/dropdown-menu';
 import List, { ListItem } from '@/components/list';
 import Column from '@/components/ui/column';
 import Toggle from '@/components/ui/toggle';
-import { hashtagTimelineRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import {
   useFollowHashtagMutation,
   useUnfollowHashtagMutation,
 } from '@/queries/hashtags/use-followed-tags';
 import { useHashtag } from '@/queries/hashtags/use-hashtag';
+import { hashtagTimelineRoute } from '@/router';
 
 const HashtagTimelinePage: React.FC = () => {
   const { hashtag } = hashtagTimelineRoute.useParams();
@@ -20,6 +23,7 @@ const HashtagTimelinePage: React.FC = () => {
   const features = useFeatures();
   const { data: tag } = useHashtag(hashtag);
   const { isLoggedIn } = useLoggedIn();
+  const items = useTimelineFiltersOptions('hashtag');
 
   const { mutate: followHashtag } = useFollowHashtagMutation(hashtag);
   const { mutate: unfollowHashtag } = useUnfollowHashtagMutation(hashtag);
@@ -33,7 +37,10 @@ const HashtagTimelinePage: React.FC = () => {
   };
 
   return (
-    <Column label={`#${hashtag}`}>
+    <Column
+      label={`#${hashtag}`}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+    >
       {features.followHashtags && isLoggedIn && (
         <List>
           <ListItem

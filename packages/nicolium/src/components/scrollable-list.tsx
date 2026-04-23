@@ -202,7 +202,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
     };
 
     const handleEndReached = () => {
-      if (autoloadMore && hasMore && onLoadMore) {
+      if (autoloadMore && hasMore && onLoadMore && !isLoading) {
         onLoadMore();
       }
     };

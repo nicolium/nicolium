@@ -16,7 +16,7 @@ const media = (client: PlApiBaseClient) => ({
   uploadMedia: async (params: UploadMediaParams, meta?: RequestMeta) => {
     const response = await client.request(
       client.features.mediaV2 ? '/api/v2/media' : '/api/v1/media',
-      { ...meta, method: 'POST', body: params, contentType: '' },
+      { ...meta, method: 'POST', body: params, formData: true },
     );
 
     return v.parse(mediaAttachmentSchema, response.json);
@@ -42,7 +42,7 @@ const media = (client: PlApiBaseClient) => ({
     const response = await client.request(`/api/v1/media/${attachmentId}`, {
       method: 'PUT',
       body: params,
-      contentType: params.thumbnail ? '' : undefined,
+      formData: !!params.thumbnail,
     });
 
     return v.parse(mediaAttachmentSchema, response.json);

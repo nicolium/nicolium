@@ -1,0 +1,132 @@
+import { Navigate } from '@tanstack/react-router';
+import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import { fetchInstance } from '@/actions/instance';
+import Button from '@/components/ui/button';
+import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useRegistrationStatus } from '@/hooks/use-registration-status';
+import ExternalLoginForm from '@/pages/auth/components/external-login-form';
+import LoginForm from '@/pages/auth/components/login-form';
+import OtpAuthForm from '@/pages/auth/components/otp-auth-form';
+import { useAuthActions } from '@/stores/auth';
+import { useInstance } from '@/stores/instance';
+import { getRedirectUrl } from '@/utils/redirect';
+import { useIsStandalone } from '@/utils/state';
+
+import type { NicoliumResponse } from '@/api';
+
+const SignUpPanel = () => {
+  const instance = useInstance();
+  const { isOpen } = useRegistrationStatus();
+  const me = useCurrentAccount();
+  const standalone = useIsStandalone();
+  const { logIn, switchAccountById, verifyCredentials } = useAuthActions();
+
+  const token = new URLSearchParams(window.location.search).get('token');
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [mfaAuthNeeded, setMfaAuthNeeded] = useState(!!token);
+  const [mfaToken, setMfaToken] = useState(token ?? '');
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  const getFormData = (form: HTMLFormElement) =>
+    Object.fromEntries(
+      Array.from(form).map((i) => [(i as HTMLInputElement).name, (i as HTMLInputElement).value]),
+    );
+
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {
+    const { username, password } = getFormData(event.target);
+    logIn(username, password)
+      .then(({ access_token }) => verifyCredentials(access_token))
+      // Refetch the instance for authenticated fetch
+      .then(async (account) => {
+        await fetchInstance();
+        return account;
+      })
+      .then((account: { id: string }) => {
+        switchAccountById(account.id);
+        if (typeof me !== 'string') {
+          setShouldRedirect(true);
+        }
+      })
+      .catch((error: { response: NicoliumResponse }) => {
+        const data: any = error.response?.json;
+        if (data?.error === 'mfa_required') {
+          setMfaAuthNeeded(true);
+          setMfaToken(data.mfa_token);
+        }
+        setIsLoading(false);
+      });
+    setIsLoading(true);
+    event.preventDefault();
+  };
+
+  if (shouldRedirect) {
+    const redirectUri = getRedirectUrl();
+    return <Navigate to={redirectUri} />;
+  }
+
+  if (mfaAuthNeeded) return <OtpAuthForm mfa_token={mfaToken} small />;
+
+  if (me) return null;
+
+  return (
+    <div className='flex flex-col gap-2' data-testid='sign-up-panel'>
+      {isOpen && (
+        <>
+          <div className='flex flex-col'>
+            <Text size='lg' weight='bold'>
+              <FormattedMessage
+                id='signup_panel.title'
+                defaultMessage='New to {site_title}?'
+                values={{ site_title: instance.title }}
+              />
+            </Text>
+
+            <Text theme='muted' size='sm'>
+              <FormattedMessage
+                id='signup_panel.subtitle'
+                defaultMessage="Sign up now to discuss what's happening."
+              />
+            </Text>
+          </div>
+
+          <Button theme='primary' to='/signup' block>
+            <FormattedMessage id='account.register' defaultMessage='Sign up' />
+          </Button>
+        </>
+      )}
+
+      {standalone ? (
+        <>
+          <Text size='lg' weight='bold'>
+            <FormattedMessage
+              id='signup_panel.sign_in.title.external'
+              defaultMessage='Sign in to external instance'
+            />
+          </Text>
+          <ExternalLoginForm />
+        </>
+      ) : (
+        <>
+          <Text size='lg' weight='bold'>
+            {isOpen ? (
+              <FormattedMessage
+                id='signup_panel.sign_in.title.or'
+                defaultMessage='Already have an account?'
+              />
+            ) : (
+              <FormattedMessage id='signup_panel.sign_in.title' defaultMessage='Sign in' />
+            )}
+          </Text>
+
+          <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
+        </>
+      )}
+    </div>
+  );
+};
+
+export { SignUpPanel as default };

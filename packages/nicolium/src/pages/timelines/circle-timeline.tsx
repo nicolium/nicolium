@@ -1,15 +1,21 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import { useNavigate } from '@tanstack/react-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { CircleTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
+import { TimelinePicker } from '@/components/timeline-picker';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import { circleTimelineRoute } from '@/features/ui/router';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { useCircle, useDeleteCircle } from '@/queries/accounts/use-circles';
+import { circleTimelineRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({
@@ -29,6 +35,7 @@ const CircleTimelinePage: React.FC = () => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
   const navigate = useNavigate();
+  const timelineFilterOptions = useTimelineFiltersOptions('circle', `circle:${circleId}`);
 
   const { data: circle, isFetching } = useCircle(circleId);
   const { mutate: deleteCircle } = useDeleteCircle();
@@ -56,6 +63,24 @@ const CircleTimelinePage: React.FC = () => {
 
   const title = circle ? circle.title : circleId;
 
+  const items = useMemo(
+    () => [
+      ...timelineFilterOptions,
+      null,
+      {
+        text: intl.formatMessage(messages.editCircle),
+        action: handleEditClick,
+        icon: iconPencilSimple,
+      },
+      {
+        text: intl.formatMessage(messages.deleteCircle),
+        action: handleDeleteClick,
+        icon: iconTrash,
+      },
+    ],
+    [timelineFilterOptions],
+  );
+
   if (!circle && isFetching) {
     return (
       <Column>
@@ -68,28 +93,12 @@ const CircleTimelinePage: React.FC = () => {
     return <MissingIndicator />;
   }
 
-  const items = [
-    {
-      text: intl.formatMessage(messages.editCircle),
-      action: handleEditClick,
-      icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
-    },
-    {
-      text: intl.formatMessage(messages.deleteCircle),
-      action: handleDeleteClick,
-      icon: require('@phosphor-icons/core/regular/trash.svg'),
-    },
-  ];
-
   return (
     <Column
       label={title}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+      title={<TimelinePicker active={`circle:${circleId}`} />}
+      truncateTitle={false}
     >
       <CircleTimelineColumn
         circleId={circleId}
@@ -109,7 +118,7 @@ const CircleTimelinePage: React.FC = () => {
             </Button>
           </div>
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
       />
     </Column>
   );

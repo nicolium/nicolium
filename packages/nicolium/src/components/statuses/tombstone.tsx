@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Text from '@/components/ui/text';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 
 interface ITombstone {
@@ -19,24 +18,21 @@ const Tombstone: React.FC<ITombstone> = ({ id, onMoveUp, onMoveDown, deleted }) 
   };
 
   return (
-    <Hotkeys handlers={handlers} className='h-16'>
-      <div
-        className='focusable flex h-[42px] items-center justify-center rounded-lg border-2 border-gray-200 text-center dark:border-gray-800'
-        tabIndex={0}
-      >
-        <Text theme='muted'>
-          {deleted ? (
-            <FormattedMessage
-              id='statuses.tombstone.deleted'
-              defaultMessage='The post is deleted.'
-            />
-          ) : (
-            <FormattedMessage
-              id='statuses.tombstone'
-              defaultMessage='One or more posts are unavailable.'
-            />
-          )}
-        </Text>
+    <Hotkeys handlers={handlers} className='⁂-status-tombstone__container'>
+      <div className='focusable ⁂-status-tombstone' tabIndex={0}>
+        {deleted ? (
+          <FormattedMessage id='statuses.tombstone.deleted' defaultMessage='The post is deleted.' />
+        ) : id.endsWith('-unavailable') ? (
+          <FormattedMessage
+            id='statuses.tombstone.unavailable'
+            defaultMessage='The post is not visible to you.'
+          />
+        ) : (
+          <FormattedMessage
+            id='statuses.tombstone'
+            defaultMessage='One or more posts are unavailable.'
+          />
+        )}
       </div>
     </Hotkeys>
   );

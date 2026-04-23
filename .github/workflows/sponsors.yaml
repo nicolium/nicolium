@@ -1,0 +1,26 @@
+name: Generate Sponsors README
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 30 15 * * 0-6
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Generate sponsors
+        uses: mkljczk/github-sponsors-readme-action@v1
+        with:
+          token: ${{ secrets.PAT }}
+          file: 'README.md'
+
+      - name: Commit and push readme changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "README: update sponsors"
+          branch: develop
+          file_pattern: README.md

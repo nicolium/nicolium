@@ -2,7 +2,7 @@ import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 
 import { ChatProvider } from '@/contexts/chat-context';
-import { layouts } from '@/features/ui/router';
+import { layouts } from '@/router';
 
 import ChatPane from '../chat-pane/chat-pane';
 

@@ -135,10 +135,11 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
       className={clsx(
         {
           '⁂-layout__main': true,
-          '⁂-layout__main--chats': features.chats,
+          '⁂-layout__main--with-chats': features.chats,
         },
         className,
       )}
+      tabIndex={-1}
     >
       {children}
     </main>

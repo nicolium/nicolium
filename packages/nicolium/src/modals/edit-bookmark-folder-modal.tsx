@@ -1,10 +1,10 @@
 import { useFloating, shift, autoUpdate, flip } from '@floating-ui/react';
+import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Emoji from '@/components/ui/emoji';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
@@ -74,7 +74,7 @@ const EmojiPicker: React.FC<IEmojiPicker> = ({ emoji, emojiUrl, ...props }) => {
         ) : (
           <Icon
             className='size-5 text-gray-600 hover:text-gray-700 dark:hover:text-gray-500'
-            src={require('@phosphor-icons/core/regular/smiley.svg')}
+            src={iconSmiley}
           />
         )}
       </button>
@@ -142,11 +142,11 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
       },
       {
         onSuccess() {
-          toast.success(intl.formatMessage(messages.editSuccess));
+          toast.success(messages.editSuccess);
           onClose('EDIT_BOOKMARK_FOLDER');
         },
         onError() {
-          toast.success(intl.formatMessage(messages.editFail));
+          toast.success(messages.editFail);
         },
       },
     );
@@ -168,7 +168,7 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
         <FormattedMessage id='edit_bookmark_folder_modal.confirm' defaultMessage='Save' />
       }
     >
-      <HStack space={2}>
+      <div className='flex gap-2'>
         {features.bookmarkFolderEmojis && (
           <EmojiPicker emoji={emoji} emojiUrl={emojiUrl} onPickEmoji={handleEmojiPick} />
         )}
@@ -181,7 +181,7 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
           disabled={isPending}
           {...name}
         />
-      </HStack>
+      </div>
     </Modal>
   );
 };

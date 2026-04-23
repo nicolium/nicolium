@@ -1,21 +1,12 @@
 import { skipToken, useQueries, useQuery } from '@tanstack/react-query';
-import { createSelector } from 'reselect';
+import { useMemo } from 'react';
 
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { queryKeys } from '@/queries/keys';
+import { useAuthStore } from '@/stores/auth';
 import { validId } from '@/utils/auth';
 
-import type { RootState } from '@/store';
 import type { Account } from 'pl-api';
-
-const selectOtherAccountIds = createSelector(
-  (state: RootState) => state.auth.users,
-  (state: RootState) => state.me,
-  (users, me) =>
-    Object.values(users)
-      .map((authUser) => authUser?.id)
-      .filter((id): id is string => validId(id) && id !== me),
-);
 
 const useLoggedInAccount = (accountId: string) => {
   const query = useQuery<Account>({
@@ -26,7 +17,18 @@ const useLoggedInAccount = (accountId: string) => {
   return query;
 };
 
-const useLoggedInAccountIds = () => useAppSelector(selectOtherAccountIds);
+const useLoggedInAccountIds = () => {
+  const users = useAuthStore((state) => state.users);
+  const currentAccountId = useCurrentAccount();
+
+  return useMemo(
+    () =>
+      Object.values(users)
+        .map((authUser) => authUser?.id)
+        .filter((id): id is string => validId(id) && id !== currentAccountId),
+    [users, currentAccountId],
+  );
+};
 
 /** doesn't fetch because it's a hack that should not exist like this */
 const useLoggedInAccounts = () => {

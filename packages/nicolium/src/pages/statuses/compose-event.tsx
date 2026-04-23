@@ -3,11 +3,10 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { cancelEventCompose } from '@/actions/events';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import Tabs from '@/components/ui/tabs';
 import { EditEvent } from '@/features/compose-event/tabs/edit-event';
 import { ManagePendingParticipants } from '@/features/compose-event/tabs/manage-pending-participants';
-import { eventEditRoute } from '@/features/ui/router';
+import { eventEditRoute } from '@/router';
 
 const messages = defineMessages({
   manageEvent: { id: 'navigation_bar.manage_event', defaultMessage: 'Manage event' },
@@ -53,14 +52,14 @@ const EditEventPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.manageEvent)}>
-      <Stack space={2}>
+      <div className='flex flex-col gap-2'>
         {renderTabs()}
         {tab === 'edit' ? (
           <EditEvent statusId={statusId} />
         ) : (
           <ManagePendingParticipants statusId={statusId} />
         )}
-      </Stack>
+      </div>
     </Column>
   );
 };

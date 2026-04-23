@@ -1,14 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changePassword } from '@/actions/security';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -31,7 +30,7 @@ const initialState = { currentPassword: '', newPassword: '', newPasswordConfirma
 
 const EditPasswordPage = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const client = useClient();
 
   const [state, setState] = React.useState(initialState);
   const [isLoading, setLoading] = React.useState(false);
@@ -58,10 +57,11 @@ const EditPasswordPage = () => {
     }
 
     setLoading(true);
-    dispatch(changePassword(currentPassword, newPassword))
+    client.settings
+      .changePassword(currentPassword, newPassword)
       .then(() => {
         resetState();
-        toast.success(intl.formatMessage(messages.updatePasswordSuccess));
+        toast.success(messages.updatePasswordSuccess);
       })
       .finally(() => {
         setLoading(false);
@@ -70,10 +70,10 @@ const EditPasswordPage = () => {
         resetState();
         toast.error(intl.formatMessage(messages.updatePasswordFail));
       });
-  }, [currentPassword, newPassword, newPasswordConfirmation, dispatch, intl]);
+  }, [currentPassword, newPassword, newPasswordConfirmation, intl]);
 
   return (
-    <Column label={intl.formatMessage(messages.header)} backHref='/settings'>
+    <Column label={intl.formatMessage(messages.header)} backHref='/settings/security'>
       <Form onSubmit={handleSubmit}>
         <FormGroup
           labelText={
@@ -124,7 +124,7 @@ const EditPasswordPage = () => {
         </FormGroup>
 
         <FormActions>
-          <Button to='/settings' theme='tertiary'>
+          <Button to='/settings/security' theme='tertiary'>
             <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
           </Button>
 

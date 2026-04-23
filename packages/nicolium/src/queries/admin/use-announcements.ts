@@ -1,11 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { create } from 'mutative';
-import {
-  adminAnnouncementSchema,
-  type AdminCreateAnnouncementParams,
-  type AdminUpdateAnnouncementParams,
-} from 'pl-api';
-import * as v from 'valibot';
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
@@ -13,6 +6,8 @@ import { removePageItem } from '@/utils/queries';
 
 import { queryKeys } from '../keys';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
+
+import type { AdminCreateAnnouncementParams, AdminUpdateAnnouncementParams } from 'pl-api';
 
 const useAnnouncements = makePaginatedResponseQuery(queryKeys.admin.announcements, (client) =>
   client.admin.announcements.getAnnouncements(),
@@ -25,16 +20,8 @@ const useCreateAnnouncementMutation = () => {
     mutationFn: (params: AdminCreateAnnouncementParams) =>
       client.admin.announcements.createAnnouncement(params),
     retry: false,
-    onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.admin.announcements, (prevData) =>
-        create(prevData, (draft) => {
-          if (draft?.pages.length)
-            draft.pages[0].items = [
-              v.parse(adminAnnouncementSchema, data),
-              ...draft.pages[0].items,
-            ];
-        }),
-      );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.announcements });
       queryClient.invalidateQueries({ queryKey: queryKeys.announcements.root });
     },
   });
@@ -47,15 +34,8 @@ const useUpdateAnnouncementMutation = () => {
     mutationFn: ({ id, ...params }: AdminUpdateAnnouncementParams & { id: string }) =>
       client.admin.announcements.updateAnnouncement(id, params),
     retry: false,
-    onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.admin.announcements, (prevData) =>
-        create(prevData, (draft) => {
-          draft?.pages.forEach(({ items }) => {
-            const index = items.findIndex(({ id }) => id === data.id);
-            if (index !== -1) items[index] = v.parse(adminAnnouncementSchema, data);
-          });
-        }),
-      );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.announcements });
       queryClient.invalidateQueries({ queryKey: queryKeys.announcements.root });
     },
   });

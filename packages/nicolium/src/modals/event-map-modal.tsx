@@ -1,20 +1,23 @@
+import iconCompass from '@phosphor-icons/core/regular/compass.svg';
 import L from 'leaflet';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import 'leaflet/dist/leaflet.css';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 
-import 'leaflet/dist/leaflet.css';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
 });
 
 interface EventMapModalProps {
@@ -64,15 +67,12 @@ const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose,
       onClose={onClickClose}
       className='⁂-event-map-modal'
     >
-      <Stack alignItems='center' space={6}>
+      <div className='flex flex-col items-center gap-6'>
         <div className='h-96 w-full' id='event-map' />
-        <Button
-          onClick={onClickNavigate}
-          icon={require('@phosphor-icons/core/regular/compass.svg')}
-        >
+        <Button onClick={onClickNavigate} icon={iconCompass}>
           <FormattedMessage id='event_map.navigate' defaultMessage='Navigate' />
         </Button>
-      </Stack>
+      </div>
     </Modal>
   );
 };

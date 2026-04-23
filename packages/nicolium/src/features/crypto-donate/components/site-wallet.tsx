@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Stack from '@/components/ui/stack';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 
 import CryptoAddress from './crypto-address';
@@ -14,7 +13,7 @@ const SiteWallet: React.FC<ISiteWallet> = ({ limit }): React.JSX.Element => {
   const addresses = typeof limit === 'number' ? cryptoAddresses.slice(0, limit) : cryptoAddresses;
 
   return (
-    <Stack space={4}>
+    <div className='flex flex-col gap-4'>
       {addresses.map((address) => (
         <CryptoAddress
           key={address.ticker}
@@ -23,7 +22,7 @@ const SiteWallet: React.FC<ISiteWallet> = ({ limit }): React.JSX.Element => {
           note={address.note}
         />
       ))}
-    </Stack>
+    </div>
   );
 };
 

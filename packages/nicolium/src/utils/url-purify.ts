@@ -21,7 +21,7 @@ import {
 
 import KVStore from '@/storage/kv-store';
 
-import type { Me } from '@/reducers/me';
+import type { Me } from '@/stores/auth';
 
 interface KVStoreRulesItem {
   hashUrl?: string;

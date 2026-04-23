@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useDirectStream } from '@/api/hooks/streaming/use-direct-stream';
 import Column from '@/components/ui/column';
-import ConversationsList from '@/features/conversations/components/conversations-list';
+import { useDirectStream } from '@/hooks/streaming/use-direct-stream';
+import ConversationsList from '@/pages/status-lists/components/conversations-list';
 
 const messages = defineMessages({
   title: { id: 'column.direct', defaultMessage: 'Direct messages' },

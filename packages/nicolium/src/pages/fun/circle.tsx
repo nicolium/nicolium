@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { processCircle } from '@/actions/circle';
@@ -11,11 +11,9 @@ import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
-import HStack from '@/components/ui/hstack';
 import ProgressBar from '@/components/ui/progress-bar';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { appendMedia, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
@@ -23,7 +21,10 @@ import toast from '@/toast';
 
 const toRad = (x: number) => x * (Math.PI / 180);
 
-const avatarMissing: string = require('@/assets/images/avatar-missing.png');
+import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
+
+import avatarMissing from '@/assets/images/avatar-missing.png';
 
 const HEIGHT = 1000;
 const WIDTH = 1000;
@@ -72,14 +73,12 @@ const CirclePage: React.FC = () => {
     useState<Array<{ id: string; avatar?: string; avatar_description?: string; acct: string }>>();
 
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const client = useClient();
   const { openModal } = useModalsActions();
   const { resetCompose, updateCompose } = useComposeActions();
   const { data: account } = useOwnAccount();
-
-  useEffect(() => {}, []);
 
   const onSave: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -98,21 +97,19 @@ const CirclePage: React.FC = () => {
     canvasRef.current!.toBlob((blob) => {
       const file = new File([blob!], 'interactions_circle.png', { type: 'image/png' });
 
-      dispatch(
-        uploadFile(file, intl, (data) => {
-          updateCompose('compose-modal', (draft) => {
-            appendMedia(draft, data);
-          });
-          openModal('COMPOSE');
-        }),
-      );
+      uploadFile(client, file, intl, (data) => {
+        updateCompose('compose-modal', (draft) => {
+          appendMedia(draft, data);
+        });
+        openModal('COMPOSE');
+      });
     }, 'image/png');
   };
 
   const handleRequest = () => {
     setProgress({ state: 'pending', progress: 0 });
 
-    dispatch(processCircle(setProgress))
+    processCircle(client, account!.id, setProgress)()
       .then(async (users) => {
         setUsers(users);
 
@@ -221,19 +218,14 @@ const CirclePage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack alignItems='center' space={6}>
+      <div className='flex flex-col items-center gap-4'>
         {state !== 'done' && (
-          <Stack
-            alignItems='center'
-            justifyContent='center'
-            className='absolute inset-0 z-40 w-full bg-gray-800/75 p-4 backdrop-blur-lg'
-            space={4}
-          >
+          <div className='absolute inset-0 z-40 flex w-full flex-col items-center justify-center gap-4 bg-gray-800/75 p-4 backdrop-blur-lg'>
             <ProgressBar progress={progress / 100} size='md' />
             <Text theme='white' weight='semibold'>
               {intl.formatMessage(messages[state])}
             </Text>
-          </Stack>
+          </div>
         )}
 
         <canvas className='max-w-full' ref={canvasRef} width={1000} height={1000} />
@@ -246,10 +238,10 @@ const CirclePage: React.FC = () => {
             expanded={expanded}
             onToggle={setExpanded}
           >
-            <Stack space={2}>
+            <div className='flex flex-col gap-2'>
               {users?.map((user) => (
                 <Link key={user.id} to='/@{$username}' params={{ username: user.acct }}>
-                  <HStack space={2} alignItems='center'>
+                  <div className='flex items-center gap-2'>
                     <Avatar
                       size={20}
                       src={user.avatar!}
@@ -259,28 +251,22 @@ const CirclePage: React.FC = () => {
                     <Text size='sm' weight='semibold' truncate>
                       {user.acct}
                     </Text>
-                  </HStack>
+                  </div>
                 </Link>
               ))}
-            </Stack>
+            </div>
           </Accordion>
         </div>
 
-        <HStack space={2}>
-          <Button
-            onClick={onSave}
-            icon={require('@phosphor-icons/core/regular/download-simple.svg')}
-          >
+        <div className='flex gap-2'>
+          <Button onClick={onSave} icon={iconDownloadSimple}>
             <FormattedMessage id='interactions_circle.download' defaultMessage='Download' />
           </Button>
-          <Button
-            onClick={onCompose}
-            icon={require('@phosphor-icons/core/regular/note-pencil.svg')}
-          >
+          <Button onClick={onCompose} icon={iconNotePencil}>
             <FormattedMessage id='interactions_circle.compose' defaultMessage='Share' />
           </Button>
-        </HStack>
-      </Stack>
+        </div>
+      </div>
     </Column>
   );
 };

@@ -2,29 +2,28 @@ import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { logIn, verifyCredentials, switchAccount } from '@/actions/auth';
 import { fetchInstance } from '@/actions/instance';
 import { BigCard } from '@/components/ui/big-card';
 import Button from '@/components/ui/button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import ConsumersList from '@/features/auth-login/components/consumers-list';
-import LoginForm from '@/features/auth-login/components/login-form';
-import OtpAuthForm from '@/features/auth-login/components/otp-auth-form';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useAuthActions } from '@/stores/auth';
 import { useModalsActions } from '@/stores/modals';
 import { getRedirectUrl } from '@/utils/redirect';
-import { isStandalone } from '@/utils/state';
+import { useIsStandalone } from '@/utils/state';
+
+import ConsumersList from './components/consumers-list';
+import LoginForm from './components/login-form';
+import OtpAuthForm from './components/otp-auth-form';
 
 import type { NicoliumResponse } from '@/api';
 
 const LoginPage = () => {
-  const dispatch = useAppDispatch();
   const { closeModal } = useModalsActions();
+  const { logIn, verifyCredentials, switchAccountById } = useAuthActions();
 
-  const me = useAppSelector((state) => state.me);
-  const standalone = useAppSelector((state) => isStandalone(state));
+  const me = useCurrentAccount();
+  const standalone = useIsStandalone();
 
   const token = new URLSearchParams(window.location.search).get('token');
 
@@ -38,16 +37,16 @@ const LoginPage = () => {
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {
     const { username, password } = getFormData(event.target);
-    dispatch(logIn(username, password))
-      .then(({ access_token }) => dispatch(verifyCredentials(access_token)))
+    logIn(username, password)
+      .then(({ access_token }) => verifyCredentials(access_token))
       // Refetch the instance for authenticated fetch
       .then(async (account) => {
-        await dispatch(fetchInstance());
+        await fetchInstance();
         return account;
       })
       .then((account: { id: string }) => {
         closeModal();
-        dispatch(switchAccount(account.id));
+        switchAccountById(account.id);
         if (typeof me !== 'string') {
           setShouldRedirect(true);
         }
@@ -75,7 +74,7 @@ const LoginPage = () => {
 
   return (
     <BigCard title={<FormattedMessage id='login_form.header' defaultMessage='Sign in' />}>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
         <ConsumersList />
 
@@ -95,7 +94,7 @@ const LoginPage = () => {
             defaultMessage='Sign in from remote instance'
           />
         </Button>
-      </Stack>
+      </div>
     </BigCard>
   );
 };

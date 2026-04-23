@@ -7,7 +7,7 @@
 import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import React from 'react';
 
-import Mention from '@/components/mention';
+import Mention from '@/components/accounts/mention';
 
 import type { LexicalNode, NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 import type { Mention as MentionEntity } from 'pl-api';

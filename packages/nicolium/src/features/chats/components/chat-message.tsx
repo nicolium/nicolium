@@ -1,3 +1,6 @@
+import iconClipboard from '@phosphor-icons/core/regular/clipboard.svg';
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import clsx from 'clsx';
 import escape from 'lodash/escape';
 import React, { useMemo, useState } from 'react';
@@ -5,12 +8,10 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import { ParsedContent } from '@/components/statuses/parsed-content';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { MediaGallery } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useDeleteChatMessage, type ChatMessage as ChatMessageEntity } from '@/queries/chats';
 import { useModalsActions } from '@/stores/modals';
 import { stripHTML } from '@/utils/html';
@@ -50,7 +51,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
   const { openModal } = useModalsActions();
   const intl = useIntl();
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const deleteChatMessage = useDeleteChatMessage(chat.id);
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -121,7 +122,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         action: () => {
           handleCopyText(chatMessage);
         },
-        icon: require('@phosphor-icons/core/regular/clipboard.svg'),
+        icon: iconClipboard,
       });
     }
 
@@ -131,7 +132,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         action: () => {
           deleteChatMessage.mutate(chatMessage.id);
         },
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
         destructive: true,
       });
     } else {
@@ -140,7 +141,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         action: () => {
           deleteChatMessage.mutate(chatMessage.id);
         },
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
         destructive: true,
       });
     }
@@ -182,42 +183,32 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
               })}
               data-testid='chat-message-menu'
             >
-              <Icon
-                src={require('@phosphor-icons/core/regular/dots-three.svg')}
-                className='size-4'
-              />
+              <Icon src={iconDotsThree} className='size-4' />
             </button>
           </DropdownMenu>
         )}
       </div>
 
-      <Stack
-        space={1.5}
-        className={clsx({
-          'ml-auto': isMyMessage,
-        })}
-      >
-        <HStack
-          alignItems='center'
-          justifyContent={isMyMessage ? 'end' : 'start'}
-          className={clsx({
+      <div className={clsx('flex flex-col gap-1.5', { 'ml-auto': isMyMessage })}>
+        <div
+          className={clsx('flex items-center', {
+            'justify-end': isMyMessage,
+            'justify-start': !isMyMessage,
             'opacity-50': chatMessage.pending,
           })}
         >
-          <Stack
-            space={0.5}
+          <div
             className={clsx({
-              'max-w-[85%]': true,
+              'flex max-w-[85%] flex-col gap-0.5': true,
               'flex-1': !!chatMessage.attachment,
-              'order-3': isMyMessage,
-              'order-1': !isMyMessage,
+              'order-3 items-end': isMyMessage,
+              'order-1 items-start': !isMyMessage,
             })}
-            alignItems={isMyMessage ? 'end' : 'start'}
           >
             {maybeRenderMedia(chatMessage)}
 
             {content && (
-              <HStack alignItems='bottom' className='max-w-full'>
+              <div className='flex max-w-full items-end'>
                 <div
                   title={getFormattedTimestamp(chatMessage)}
                   className={clsx({
@@ -238,15 +229,13 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
                     <ParsedContent html={content} emojis={chatMessage.emojis} />
                   </Text>
                 </div>
-              </HStack>
+              </div>
             )}
-          </Stack>
-        </HStack>
+          </div>
+        </div>
 
-        <HStack
-          alignItems='center'
-          space={2}
-          className={clsx({
+        <div
+          className={clsx('flex items-center gap-2', {
             'ml-auto': isMyMessage,
           })}
         >
@@ -262,8 +251,8 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
               </Text>
             </span>
           </div>
-        </HStack>
-      </Stack>
+        </div>
+      </div>
     </div>
   );
 });

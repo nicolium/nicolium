@@ -1,3 +1,5 @@
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
@@ -62,7 +64,7 @@ const SearchInput = React.memo(() => {
   const makeMenu = () => [
     {
       text: intl.formatMessage(messages.action, { query: value }),
-      icon: require('@phosphor-icons/core/regular/magnifying-glass.svg'),
+      icon: iconMagnifyingGlass,
       action: handleSubmit,
     },
   ];
@@ -95,13 +97,13 @@ const SearchInput = React.memo(() => {
           }
         >
           <SvgIcon
-            src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
+            src={iconMagnifyingGlass}
             className={clsx('size-4 text-gray-600', { hidden: hasValue })}
             aria-hidden
           />
 
           <SvgIcon
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             className={clsx('size-4 text-gray-600', { hidden: !hasValue })}
             aria-hidden
           />

@@ -1,3 +1,4 @@
+import iconLinkSimple from '@phosphor-icons/core/regular/link-simple.svg';
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 
@@ -5,9 +6,7 @@ import { getTextDirection } from '@/utils/rtl';
 
 import { accountsCountRenderer } from './hashtag';
 import Blurhash from './media/blurhash';
-import HStack from './ui/hstack';
 import Icon from './ui/icon';
-import Stack from './ui/stack';
 import Text from './ui/text';
 
 import type { TrendsLink } from 'pl-api';
@@ -46,7 +45,7 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
       rel='noopener noreferrer'
     >
       {media}
-      <Stack space={2} className='flex-1 overflow-hidden'>
+      <div className='flex flex-1 flex-col gap-2 overflow-hidden'>
         <Text className='line-clamp-2' weight='bold' direction={direction}>
           {trendingLink.title}
         </Text>
@@ -55,15 +54,15 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
             {trendingLink.description}
           </Text>
         )}
-        <HStack alignItems='center' wrap className='divide-x-dot text-gray-700 dark:text-gray-600'>
-          <HStack space={1} alignItems='center'>
+        <div className='divide-x-dot flex flex-wrap items-center text-gray-700 dark:text-gray-600'>
+          <div className='flex items-center gap-1'>
             <Text tag='span' theme='muted'>
-              <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
+              <Icon src={iconLinkSimple} />
             </Text>
             <Text tag='span' theme='muted' size='sm' direction={direction}>
               {trendingLink.provider_name}
             </Text>
-          </HStack>
+          </div>
 
           {!!count && (
             <Link
@@ -74,8 +73,8 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
               {accountsCountRenderer(count)}
             </Link>
           )}
-        </HStack>
-      </Stack>
+        </div>
+      </div>
     </a>
   );
 };

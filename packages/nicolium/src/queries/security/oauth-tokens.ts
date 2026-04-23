@@ -1,19 +1,21 @@
-import { getClient } from '@/api';
+import { useMutation } from '@tanstack/react-query';
+
+import { useClient } from '@/hooks/use-client';
 import { removePageItem } from '@/utils/queries';
 
 import { queryKeys } from '../keys';
-import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
-import { mutationOptions } from '../utils/mutation-options';
+import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
-const oauthTokensQueryOptions = makePaginatedResponseQueryOptions(
-  queryKeys.security.oauthTokens,
-  (client) => client.settings.getOauthTokens(),
-)();
+const useOauthTokensQuery = makePaginatedResponseQuery(queryKeys.security.oauthTokens, (client) =>
+  client.settings.getOauthTokens(),
+);
 
-const revokeOauthTokenMutationOptions = (oauthTokenId: string) =>
-  mutationOptions({
+const useRevokeOauthTokenMutation = (oauthTokenId: string) => {
+  const client = useClient();
+
+  return useMutation({
     mutationKey: ['security', 'oauthTokens', oauthTokenId],
-    mutationFn: () => getClient().settings.deleteOauthToken(oauthTokenId),
+    mutationFn: () => client.settings.deleteOauthToken(oauthTokenId),
     onSettled: () => {
       removePageItem(
         queryKeys.security.oauthTokens,
@@ -23,5 +25,6 @@ const revokeOauthTokenMutationOptions = (oauthTokenId: string) =>
       );
     },
   });
+};
 
-export { oauthTokensQueryOptions, revokeOauthTokenMutationOptions };
+export { useOauthTokensQuery, useRevokeOauthTokenMutation };

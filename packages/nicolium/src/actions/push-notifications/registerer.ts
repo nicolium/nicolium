@@ -1,12 +1,11 @@
 import { createPushSubscription } from '@/actions/push-subscriptions';
 import { pushNotificationsSettings } from '@/settings';
-import { getVapidKey } from '@/utils/auth';
+import { getApp, type Me } from '@/stores/auth';
+import { useInstanceStore } from '@/stores/instance';
+import { usePushNotificationsStore } from '@/stores/push-notifications';
 import { decode as decodeBase64 } from '@/utils/base64';
 
-import { setBrowserSupport, setSubscription, clearSubscription } from './setter';
-
-import type { Me } from '@/reducers/me';
-import type { AppDispatch, RootState } from '@/store';
+import type { PlApiClient } from 'pl-api';
 
 // Taken from https://www.npmjs.com/package/web-push
 const urlBase64ToUint8Array = (base64String: string) => {
@@ -29,10 +28,13 @@ const getPushSubscription = (registration: ServiceWorkerRegistration) =>
     .getSubscription()
     .then((subscription) => ({ registration, subscription }));
 
-const subscribe = (registration: ServiceWorkerRegistration, getState: () => RootState) =>
+const getVapidKey = () =>
+  getApp()?.vapid_key ?? useInstanceStore.getState().instance.configuration.vapid.public_key;
+
+const subscribe = (registration: ServiceWorkerRegistration) =>
   registration.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array(getVapidKey(getState())),
+    applicationServerKey: urlBase64ToUint8Array(getVapidKey()),
   });
 
 const unsubscribe = ({
@@ -48,32 +50,30 @@ const unsubscribe = ({
         r(registration);
       });
 
-const sendSubscriptionToBackend =
-  (subscription: PushSubscription, me: Me) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const alerts = getState().pushNotifications.alerts;
-    const params = { subscription, data: { alerts } };
-
-    if (me) {
-      const data = pushNotificationsSettings.get(me);
-      if (data) {
-        params.data = data;
-      }
-    }
-
-    return dispatch(createPushSubscription(params));
+const sendSubscriptionToBackend = (subscription: PushSubscription, me: Me, client: PlApiClient) => {
+  const alerts = usePushNotificationsStore.getState().alerts;
+  const params: { subscription: PushSubscription; data: { alerts: Record<string, boolean> } } = {
+    subscription,
+    data: { alerts },
   };
+
+  if (me) {
+    const data = pushNotificationsSettings.get(me);
+    if (data) {
+      params.data = data;
+    }
+  }
+
+  return createPushSubscription(client, params);
+};
 
 // Last one checks for payload support: https://web-push-book.gauntface.com/chapter-06/01-non-standards-browsers/#no-payload
 // eslint-disable-next-line compat/compat
 const supportsPushNotifications =
   'serviceWorker' in navigator && 'PushManager' in window && 'getKey' in PushSubscription.prototype;
 
-const register = () => (dispatch: AppDispatch, getState: () => RootState) => {
-  const me = getState().me;
-  const vapidKey = getVapidKey(getState());
-
-  dispatch(setBrowserSupport(supportsPushNotifications));
+const register = (client: PlApiClient, me: Me) => {
+  const vapidKey = getVapidKey();
 
   if (!supportsPushNotifications) {
     console.warn('Your browser does not support Web Push Notifications.');
@@ -91,38 +91,31 @@ const register = () => (dispatch: AppDispatch, getState: () => RootState) => {
     .then(getPushSubscription)
     .then(async ({ registration, subscription }) => {
       if (subscription !== null) {
-        // We have a subscription, check if it is still valid
         const currentServerKey = new Uint8Array(
           subscription.options.applicationServerKey!,
         ).toString();
         const subscriptionServerKey = urlBase64ToUint8Array(vapidKey).toString();
-        const serverEndpoint = getState().pushNotifications.subscription?.endpoint;
+        const serverEndpoint = usePushNotificationsStore.getState().subscription?.endpoint;
 
-        // If the VAPID public key did not change and the endpoint corresponds
-        // to the endpoint saved in the backend, the subscription is valid
         if (
           subscriptionServerKey === currentServerKey &&
           subscription.endpoint === serverEndpoint
         ) {
           return subscription;
         } else {
-          // Something went wrong, try to subscribe again
           const swRegistration = await unsubscribe({ registration, subscription });
-          const pushSubscription = await subscribe(swRegistration, getState);
-          await dispatch(sendSubscriptionToBackend(pushSubscription, me));
+          const pushSubscription = await subscribe(swRegistration);
+          await sendSubscriptionToBackend(pushSubscription, me, client);
         }
       }
 
-      // No subscription, try to subscribe
-      return subscribe(registration, getState).then((pushSubscription) =>
-        dispatch(sendSubscriptionToBackend(pushSubscription, me)),
+      return subscribe(registration).then((pushSubscription) =>
+        sendSubscriptionToBackend(pushSubscription, me, client),
       );
     })
     .then((subscription) => {
-      // If we got a PushSubscription (and not a subscription object from the backend)
-      // it means that the backend subscription is valid (and was set during hydration)
       if (!(subscription instanceof PushSubscription)) {
-        dispatch(setSubscription(subscription));
+        usePushNotificationsStore.getState().actions.setSubscription(subscription);
         if (me) {
           pushNotificationsSettings.set(me, { alerts: subscription.alerts });
         }
@@ -137,8 +130,7 @@ const register = () => (dispatch: AppDispatch, getState: () => RootState) => {
         console.error('The VAPID public key seems to be invalid:', vapidKey);
       }
 
-      // Clear alerts and hide UI settings
-      dispatch(clearSubscription());
+      usePushNotificationsStore.getState().actions.clearSubscription();
 
       if (me) {
         pushNotificationsSettings.remove(me);

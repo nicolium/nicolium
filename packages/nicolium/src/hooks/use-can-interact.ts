@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import { useAppSelector } from './use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 
-import type { NormalizedStatus } from '@/normalizers/status';
+import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { InteractionPolicy, InteractionPolicyEntry } from 'pl-api';
 
 const useCanInteract = (
@@ -16,7 +16,7 @@ const useCanInteract = (
   approvalRequired: boolean | null;
   allowed?: Array<InteractionPolicyEntry>;
 } => {
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
 
   return useMemo(() => {
     if (type === 'can_quote') {
@@ -29,13 +29,13 @@ const useCanInteract = (
     }
     const interactionPolicy = status.interaction_policy;
 
-    if (me === status.account_id || interactionPolicy[type].always.includes('me'))
+    if (me === status.account_id || interactionPolicy[type].automatic_approval.includes('me'))
       return {
         canInteract: true,
         approvalRequired: false,
       };
 
-    if (interactionPolicy[type].with_approval.includes('me'))
+    if (interactionPolicy[type].manual_approval.includes('me'))
       return {
         canInteract: true,
         approvalRequired: true,
@@ -44,7 +44,10 @@ const useCanInteract = (
     return {
       canInteract: false,
       approvalRequired: null,
-      allowed: [...interactionPolicy[type].always, ...interactionPolicy[type].with_approval],
+      allowed: [
+        ...interactionPolicy[type].automatic_approval,
+        ...interactionPolicy[type].manual_approval,
+      ],
     };
   }, [me, status.id, type]);
 };

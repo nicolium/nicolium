@@ -7,25 +7,22 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import Text from '@/components/ui/text';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-
-import type { AppDispatch, RootState } from '@/store';
+import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useClient } from '@/hooks/use-client';
 
 interface ICSVExporter {
   inputLabel: React.ReactNode;
   inputHint: React.ReactNode;
   submitText: React.ReactNode;
-  action: () => (dispatch: AppDispatch, getState: () => RootState) => Promise<any>;
+  action: () => Promise<any>;
 }
 
 const CSVExporter: React.FC<ICSVExporter> = ({ inputLabel, inputHint, submitText, action }) => {
-  const dispatch = useAppDispatch();
-
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick: React.MouseEventHandler = () => {
     setIsLoading(true);
-    dispatch(action())
+    action()
       .then(() => {
         setIsLoading(false);
       })
@@ -56,12 +53,14 @@ const messages = defineMessages({
 });
 
 const ExportDataPage = () => {
+  const client = useClient();
+  const currentAccountId = useCurrentAccount();
   const intl = useIntl();
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <CSVExporter
-        action={exportFollows}
+        action={() => exportFollows(client, currentAccountId as string)}
         inputLabel={<FormattedMessage id='export_data.follows_label' defaultMessage='Follows' />}
         inputHint={
           <FormattedMessage
@@ -77,7 +76,7 @@ const ExportDataPage = () => {
         }
       />
       <CSVExporter
-        action={exportBlocks}
+        action={() => exportBlocks(client)}
         inputLabel={<FormattedMessage id='export_data.blocks_label' defaultMessage='Blocks' />}
         inputHint={
           <FormattedMessage
@@ -90,7 +89,7 @@ const ExportDataPage = () => {
         }
       />
       <CSVExporter
-        action={exportMutes}
+        action={() => exportMutes(client)}
         inputLabel={<FormattedMessage id='export_data.mutes_label' defaultMessage='Mutes' />}
         inputHint={
           <FormattedMessage

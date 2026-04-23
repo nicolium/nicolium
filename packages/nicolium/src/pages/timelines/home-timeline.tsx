@@ -1,13 +1,17 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { HomeTimelineColumn } from '@/columns/timeline';
+import DropdownMenu from '@/components/dropdown-menu';
 import { Link } from '@/components/link';
+import { TimelinePicker } from '@/components/timeline-picker';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
+import { useInstance } from '@/stores/instance';
 import { useUiStore } from '@/stores/ui';
 
 const messages = defineMessages({
@@ -22,7 +26,7 @@ const messages = defineMessages({
 // const checkIfReloadNeeded = useCallback((isPartial: boolean) => {
 //   if (isPartial) {
 //     polling.current = setInterval(() => {
-//       dispatch(fetchHomeTimeline());
+//       fetchHomeTimeline();
 //     }, 3000);
 //   } else if (polling.current) {
 //     clearInterval(polling.current);
@@ -42,15 +46,23 @@ const HomeTimelinePage: React.FC = () => {
   const features = useFeatures();
   const instance = useInstance();
 
+  const items = useTimelineFiltersOptions('home', 'home');
   const { isSledzikRemoved } = useUiStore();
 
   if (isSledzikRemoved) return null;
 
   return (
-    <Column className='py-0' label={intl.formatMessage(messages.title)} withHeader={false}>
+    <Column
+      className='py-0'
+      label={intl.formatMessage(messages.title)}
+      title={<TimelinePicker active='home' />}
+      withBack={false}
+      truncateTitle={false}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+    >
       <HomeTimelineColumn
         emptyMessageText={
-          <Stack space={1}>
+          <div className='flex flex-col gap-1'>
             <Text size='xl' weight='medium' align='center'>
               <FormattedMessage
                 id='empty_column.home.title'
@@ -84,9 +96,9 @@ const HomeTimelinePage: React.FC = () => {
                 />
               </Text>
             )}
-          </Stack>
+          </div>
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
       />
     </Column>
   );

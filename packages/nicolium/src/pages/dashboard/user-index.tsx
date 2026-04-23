@@ -1,12 +1,11 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
-import AccountContainer from '@/containers/account-container';
-import { adminUsersRoute } from '@/features/ui/router';
 import { useAdminAccounts } from '@/queries/admin/use-accounts';
+import { adminUsersRoute } from '@/router';
 
 import { SearchInput } from '../search/search';
 
@@ -33,7 +32,7 @@ const UserIndexPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack space={2}>
+      <div className='flex flex-col gap-2'>
         <SearchInput query={query} />
         <ScrollableList
           scrollKey='userIndex'
@@ -50,7 +49,7 @@ const UserIndexPage: React.FC = () => {
             <AccountContainer key={id} id={id} withDate />
           ))}
         </ScrollableList>
-      </Stack>
+      </div>
     </Column>
   );
 };

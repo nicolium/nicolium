@@ -1,3 +1,4 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -7,12 +8,10 @@ import Markup from '@/components/markup';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
-import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
-import { About } from '@/pages/utils/about';
+import { About } from '@/pages/instance/about';
 import { usePublicTimeline } from '@/queries/timelines/use-timelines';
+import { useInstance } from '@/stores/instance';
 import { getTextDirection } from '@/utils/rtl';
 
 interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'className' | 'dir'> {
@@ -36,17 +35,17 @@ const SiteBanner: React.FC = () => {
   const instance = useInstance();
 
   return (
-    <Stack space={6}>
+    <div className='flex flex-col gap-6'>
       <LogoText className='-my-5' dir={getTextDirection(instance.title)}>
         {instance.title}
       </LogoText>
 
       {instance.description.trim().length > 0 && (
-        <Markup size='lg' direction={getTextDirection(instance.description)}>
+        <Markup size='lg' direction={getTextDirection(instance.description)} tag='div'>
           <ParsedContent html={instance.description} />
         </Markup>
       )}
-    </Stack>
+    </div>
   );
 };
 
@@ -64,7 +63,7 @@ const LandingTimelinePage = () => {
         <SiteBanner />
       </div>
 
-      <HStack className='mb-4 lg:hidden' justifyContent='end' space={4}>
+      <div className='mb-4 flex justify-end gap-4 lg:hidden'>
         <Button theme='tertiary' to='/login'>
           <FormattedMessage id='account.login' defaultMessage='Log in' />
         </Button>
@@ -73,7 +72,7 @@ const LandingTimelinePage = () => {
             <FormattedMessage id='account.register' defaultMessage='Sign up' />
           </Button>
         )}
-      </HStack>
+      </div>
 
       {timelineEnabled && !isError ? (
         <PublicTimelineColumn
@@ -84,7 +83,7 @@ const LandingTimelinePage = () => {
               defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!'
             />
           }
-          emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+          emptyMessageIcon={iconChatCenteredText}
         />
       ) : (
         <About slug='index' />

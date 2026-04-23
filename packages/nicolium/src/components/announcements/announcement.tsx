@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedDate } from 'react-intl';
 
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { getTextDirection } from '@/utils/rtl';
@@ -36,7 +35,7 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement, emojiMap }) => {
   const direction = getTextDirection(announcement.content);
 
   return (
-    <Stack className='w-full' space={2}>
+    <div className='flex w-full flex-col gap-2'>
       {hasTimeRange && (
         <Text theme='muted' direction={direction}>
           <FormattedDate
@@ -70,7 +69,7 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement, emojiMap }) => {
           emojiMap={emojiMap}
         />
       )}
-    </Stack>
+    </div>
   );
 };
 

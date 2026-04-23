@@ -56,25 +56,6 @@ const isAlphaNumeric = (c: string) => {
 
 const validEmojiChar = (c: string) => isAlphaNumeric(c) || ['_', '-', '.'].includes(c);
 
-const buildCustomEmojis = (customEmojis: Array<BaseCustomEmoji>) => {
-  const emojis: EmojiMart<EmojiMartCustom>[] = [];
-
-  customEmojis.forEach((emoji) => {
-    const shortcode = emoji.shortcode;
-    const url = emoji.static_url;
-    const name = shortcode.replace(':', '');
-
-    emojis.push({
-      id: name,
-      name,
-      keywords: [name],
-      skins: [{ src: url }],
-    });
-  });
-
-  return emojis;
-};
-
 const buildCustomEmojiCategories = (customEmojis: Array<BaseCustomEmoji>, intl?: IntlShape) => {
   const emojiCategories: Record<string, EmojiMart<EmojiMartCustom>[]> = {};
 
@@ -118,7 +99,6 @@ export {
   type Emoji,
   isCustomEmoji,
   isNativeEmoji,
-  buildCustomEmojis,
   buildCustomEmojiCategories,
   validEmojiChar,
 };

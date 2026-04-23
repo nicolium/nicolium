@@ -1,8 +1,23 @@
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
+import iconCursorText from '@phosphor-icons/core/regular/cursor-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
+import iconDownload from '@phosphor-icons/core/regular/download.svg';
+import iconEyeSlash from '@phosphor-icons/core/regular/eye-slash.svg';
+import iconEye from '@phosphor-icons/core/regular/eye.svg';
+import iconFileText from '@phosphor-icons/core/regular/file-text.svg';
+import iconFolderOpen from '@phosphor-icons/core/regular/folder-open.svg';
+import iconFolderPlus from '@phosphor-icons/core/regular/folder-plus.svg';
+import iconFolder from '@phosphor-icons/core/regular/folder.svg';
+import iconFolders from '@phosphor-icons/core/regular/folders.svg';
+import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
+import iconUpload from '@phosphor-icons/core/regular/upload.svg';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { clsx } from 'clsx';
 import { mediaAttachmentSchema, type DriveFile, type DriveFolder } from 'pl-api';
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
@@ -13,7 +28,6 @@ import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import ColumnLoading from '@/features/ui/components/column-loading';
-import { driveRoute } from '@/features/ui/router';
 import {
   useCreateDriveFileMutation,
   useDeleteDriveFileMutation,
@@ -27,6 +41,7 @@ import {
   useMoveDriveFolderMutation,
   useUpdateDriveFolderMutation,
 } from '@/queries/drive/use-drive-folder';
+import { driveRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 import { download } from '@/utils/download';
@@ -126,6 +141,7 @@ const messages = defineMessages({
     defaultMessage: 'Folder created successfully.',
   },
   newFolderError: { id: 'drive.folder.new.error', defaultMessage: 'Failed to create folder.' },
+  home: { id: 'drive.breadcrumbs.home', defaultMessage: 'Home' },
 });
 
 interface IBreadcrumbs {
@@ -136,6 +152,7 @@ interface IBreadcrumbs {
 
 const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) => {
   const { data } = useDriveFolderQuery(folderId);
+  const intl = useIntl();
 
   if (!folderId) {
     const label = depth === 0 && (
@@ -152,8 +169,10 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
           })}
           onClick={() => onClick?.()}
           disabled={depth === 0}
+          aria-label={intl.formatMessage(messages.home)}
+          title={intl.formatMessage(messages.home)}
         >
-          <Icon src={require('@phosphor-icons/core/regular/house.svg')} />
+          <Icon src={iconHouse} aria-hidden />
           {label}
         </button>
       );
@@ -163,8 +182,10 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
           to='/drive/{-$folderId}'
           params={{ folderId: undefined }}
           className='⁂-drive-breadcrumbs__home'
+          aria-label={intl.formatMessage(messages.home)}
+          title={intl.formatMessage(messages.home)}
         >
-          <Icon src={require('@phosphor-icons/core/regular/house.svg')} />
+          <Icon src={iconHouse} aria-hidden />
           {label}
         </Link>
       );
@@ -175,7 +196,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
 
   const spacer = (
     <div className='⁂-drive-breadcrumbs__spacer' aria-hidden>
-      <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} />
+      <Icon src={iconCaretRight} />
     </div>
   );
 
@@ -208,7 +229,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
         <Breadcrumbs depth={depth + 1} onClick={onClick} />
         {spacer}
         <div className='⁂-drive-breadcrumbs__spacer' aria-hidden>
-          <Icon src={require('@phosphor-icons/core/regular/dots-three.svg')} />
+          <Icon src={iconDotsThree} />
         </div>
         {spacer}
         {button}
@@ -227,10 +248,14 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
 
 interface IFile {
   file: DriveFile;
+  index: number;
+  onMove: (index: number, direction: 'home' | 'end' | 'up' | 'down') => void;
 }
 
-const File: React.FC<IFile> = ({ file }) => {
+const File: React.FC<IFile> = ({ file, index, onMove }) => {
   const intl = useIntl();
+  const fileRef = useRef<HTMLDivElement | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const { openModal } = useModalsActions();
   const { mutate: updateFile } = useUpdateDriveFileMutation(file.id);
@@ -264,6 +289,50 @@ const File: React.FC<IFile> = ({ file }) => {
       media: [mediaAttachment],
       index: 0,
     });
+  };
+
+  const handleFileKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    if (isDropdownOpen) return;
+
+    switch (e.key) {
+      case 'Enter':
+      case ' ':
+        handleView();
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+      case 'Home':
+      case 'PageUp':
+        onMove(index, 'home');
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+      case 'End':
+      case 'PageDown':
+        onMove(index, 'end');
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+      case 'ArrowUp':
+      case 'ArrowLeft':
+        onMove(index, 'up');
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+      case 'ArrowDown':
+      case 'ArrowRight':
+        onMove(index, 'down');
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+    }
+  };
+
+  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    fileRef.current?.querySelector('button')?.click();
   };
 
   const items = useMemo(() => {
@@ -397,44 +466,44 @@ const File: React.FC<IFile> = ({ file }) => {
       isMedia
         ? {
             text: intl.formatMessage(messages.fileView),
-            icon: require('@phosphor-icons/core/regular/eye.svg'),
+            icon: iconEye,
             action: handleView,
           }
         : {
             text: intl.formatMessage(messages.fileDownload),
-            icon: require('@phosphor-icons/core/regular/download.svg'),
+            icon: iconDownload,
             href: file.url,
           },
       {
         text: intl.formatMessage(messages.fileRename),
-        icon: require('@phosphor-icons/core/regular/cursor-text.svg'),
+        icon: iconCursorText,
         action: handleRename,
       },
       {
         text: intl.formatMessage(messages.updateDescription),
-        icon: require('@phosphor-icons/core/regular/file-text.svg'),
+        icon: iconFileText,
         action: handleUpdateDescription,
       },
       file.sensitive
         ? {
             text: intl.formatMessage(messages.unmarkSensitive),
-            icon: require('@phosphor-icons/core/regular/eye.svg'),
+            icon: iconEye,
             action: handleToggleSensitive,
           }
         : {
             text: intl.formatMessage(messages.markSensitive),
-            icon: require('@phosphor-icons/core/regular/eye-slash.svg'),
+            icon: iconEyeSlash,
             action: handleToggleSensitive,
           },
       null,
       {
         text: intl.formatMessage(messages.fileMove),
-        icon: require('@phosphor-icons/core/regular/folders.svg'),
+        icon: iconFolders,
         action: handleMove,
       },
       {
         text: intl.formatMessage(messages.fileDelete),
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
         destructive: true,
         action: handleDelete,
       },
@@ -442,11 +511,28 @@ const File: React.FC<IFile> = ({ file }) => {
   }, [file]);
 
   return (
-    <div className='⁂-drive-file' tabIndex={0} onDoubleClick={handleView}>
+    <div
+      ref={fileRef}
+      className='⁂-drive-file'
+      tabIndex={0}
+      onDoubleClick={handleView}
+      onKeyDown={handleFileKeyDown}
+      onContextMenu={handleContextMenu}
+      data-index={index}
+    >
       <div className='⁂-drive-file__button'>
-        <DropdownMenu items={items} placement='right-start'>
+        <DropdownMenu
+          items={items}
+          placement='right-start'
+          onOpen={() => {
+            setIsDropdownOpen(true);
+          }}
+          onClose={() => {
+            setIsDropdownOpen(false);
+          }}
+        >
           <IconButton
-            src={require('@phosphor-icons/core/regular/dots-three.svg')}
+            src={iconDotsThree}
             title={intl.formatMessage(messages.fileDropdown)}
             theme='secondary'
           />
@@ -469,11 +555,15 @@ const File: React.FC<IFile> = ({ file }) => {
 
 interface IFolder {
   folder: DriveFolder;
+  index: number;
+  onMove: (index: number, direction: 'home' | 'end' | 'up' | 'down') => void;
 }
 
-const Folder: React.FC<IFolder> = ({ folder }) => {
+const Folder: React.FC<IFolder> = ({ folder, index, onMove }) => {
   const navigate = useNavigate();
   const intl = useIntl();
+  const folderRef = useRef<HTMLDivElement | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const { openModal } = useModalsActions();
   const { mutate: deleteFolder } = useDeleteDriveFolderMutation(folder.id!);
@@ -482,6 +572,50 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
 
   const handleEnterFolder = () => {
     navigate({ to: '/drive/{-$folderId}', params: { folderId: folder.id ?? undefined } });
+  };
+
+  const handleFolderKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    if (isDropdownOpen) return;
+
+    switch (e.key) {
+      case 'Enter':
+      case ' ':
+        handleEnterFolder();
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+      case 'Home':
+      case 'PageUp':
+        onMove(index, 'home');
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+      case 'End':
+      case 'PageDown':
+        onMove(index, 'end');
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+      case 'ArrowUp':
+      case 'ArrowLeft':
+        onMove(index, 'up');
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+      case 'ArrowDown':
+      case 'ArrowRight':
+        onMove(index, 'down');
+        e.preventDefault();
+        e.stopPropagation();
+        break;
+    }
+  };
+
+  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    folderRef.current?.querySelector('button')?.click();
   };
 
   const items: Menu = useMemo(() => {
@@ -551,23 +685,23 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
     return [
       {
         text: intl.formatMessage(messages.folderView),
-        icon: require('@phosphor-icons/core/regular/folder-open.svg'),
+        icon: iconFolderOpen,
         to: '/drive/{-$folderId}',
         params: { folderId: folder.id ?? undefined },
       },
       {
         text: intl.formatMessage(messages.folderRename),
-        icon: require('@phosphor-icons/core/regular/cursor-text.svg'),
+        icon: iconCursorText,
         action: handleRename,
       },
       {
         text: intl.formatMessage(messages.folderMove),
-        icon: require('@phosphor-icons/core/regular/folders.svg'),
+        icon: iconFolders,
         action: handleMove,
       },
       {
         text: intl.formatMessage(messages.folderDelete),
-        icon: require('@phosphor-icons/core/regular/trash.svg'),
+        icon: iconTrash,
         destructive: true,
         action: handleDelete,
       },
@@ -575,21 +709,35 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
   }, [folder]);
 
   return (
-    <div className='⁂-drive-file ⁂-drive-folder' tabIndex={0} onDoubleClick={handleEnterFolder}>
+    <div
+      className='⁂-drive-file ⁂-drive-folder'
+      ref={folderRef}
+      tabIndex={0}
+      onDoubleClick={handleEnterFolder}
+      onKeyDown={handleFolderKeyDown}
+      onContextMenu={handleContextMenu}
+      data-index={index}
+    >
       <div className='⁂-drive-file__button'>
-        <DropdownMenu items={items} placement='right-start'>
+        <DropdownMenu
+          items={items}
+          placement='right-start'
+          onOpen={() => {
+            setIsDropdownOpen(true);
+          }}
+          onClose={() => {
+            setIsDropdownOpen(false);
+          }}
+        >
           <IconButton
-            src={require('@phosphor-icons/core/regular/dots-three.svg')}
+            src={iconDotsThree}
             title={intl.formatMessage(messages.folderDropdown)}
             theme='secondary'
           />
         </DropdownMenu>
       </div>
 
-      <Icon
-        className='⁂-drive-file__icon'
-        src={require('@phosphor-icons/core/regular/folder.svg')}
-      />
+      <Icon className='⁂-drive-file__icon' src={iconFolder} />
 
       <span className='⁂-drive-file__label'>{folder.name}</span>
     </div>
@@ -597,9 +745,10 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
 };
 
 const DrivePage: React.FC = () => {
-  const { folderId } = driveRoute.useParams();
-
+  const filesRef = useRef<HTMLDivElement | null>(null);
   const intl = useIntl();
+
+  const { folderId } = driveRoute.useParams();
 
   const { openModal } = useModalsActions();
 
@@ -610,7 +759,7 @@ const DrivePage: React.FC = () => {
   const items: Menu = [
     {
       text: intl.formatMessage(messages.fileUpload),
-      icon: require('@phosphor-icons/core/regular/upload.svg'),
+      icon: iconUpload,
       onSelectFile: (files: FileList) => {
         uploadFile(files[0], {
           onSuccess: () => {
@@ -624,7 +773,7 @@ const DrivePage: React.FC = () => {
     },
     {
       text: intl.formatMessage(messages.newFolder),
-      icon: require('@phosphor-icons/core/regular/folder-plus.svg'),
+      icon: iconFolderPlus,
       action: () => {
         openModal('TEXT_FIELD', {
           heading: <FormattedMessage id='drive.folder.create' defaultMessage='Create new folder' />,
@@ -649,6 +798,20 @@ const DrivePage: React.FC = () => {
     },
   ];
 
+  const handleMove = (index: number, direction: 'home' | 'end' | 'up' | 'down') => {
+    const totalItems = data!.files.length + data!.folders.length;
+    const newItem =
+      direction === 'home'
+        ? 0
+        : direction === 'end'
+          ? totalItems - 1
+          : direction === 'up'
+            ? index - 1
+            : index + 1;
+    if (newItem < 0 || newItem >= totalItems) return;
+    (filesRef.current?.querySelector(`div[data-index="${newItem}"]`) as HTMLDivElement)?.focus();
+  };
+
   if (isPending) {
     return <ColumnLoading />;
   }
@@ -661,12 +824,7 @@ const DrivePage: React.FC = () => {
       label={data?.name ?? intl.formatMessage(messages.heading)}
       backHref={'/drive/{-$folderId}'}
       backParams={{ folderId: data?.parent_id ?? undefined }}
-      action={
-        <DropdownMenu
-          items={items}
-          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
-        />
-      }
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       <div className='⁂-drive-breadcrumbs'>
         <Breadcrumbs folderId={folderId} />
@@ -679,15 +837,20 @@ const DrivePage: React.FC = () => {
               defaultMessage='There are no files or folders in this folder.'
             />
           }
-          icon={require('@phosphor-icons/core/regular/folder-open.svg')}
+          icon={iconFolderOpen}
         />
       ) : (
-        <div className='⁂-drive-page__files'>
-          {data?.folders.map((folder) => (
-            <Folder key={folder.id} folder={folder} />
+        <div className='⁂-drive-page__files' ref={filesRef}>
+          {data?.folders.map((folder, index) => (
+            <Folder key={folder.id} folder={folder} index={index} onMove={handleMove} />
           ))}
-          {data?.files.map((file) => (
-            <File key={file.id} file={file} />
+          {data?.files.map((file, index) => (
+            <File
+              key={file.id}
+              file={file}
+              index={data.folders.length + index}
+              onMove={handleMove}
+            />
           ))}
         </div>
       )}

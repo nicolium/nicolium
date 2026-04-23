@@ -1,27 +1,24 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
 import { PLEROMA } from 'pl-api';
 import React, { type ChangeEventHandler, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
 
-import { setBadges as saveBadges, setRole } from '@/actions/admin';
-import { deactivateUserModal, deleteUserModal } from '@/actions/moderation';
 import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
 import OutlineBox from '@/components/outline-box';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
+import { SelectDropdown } from '@/components/ui/select-dropdown';
 import TagInput from '@/components/ui/tag-input';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
-import { SelectDropdown } from '@/features/forms';
 import ColumnLoading from '@/features/ui/components/column-loading';
-import { adminAccountRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useDeactivateUserModal, useDeleteUserModal } from '@/hooks/use-admin-modals';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useAdminSetRoleMutation, useAdminUpdateTagsMutation } from '@/queries/admin/use-accounts';
 import {
   useAdminSuggestAccountMutation,
   useAdminUnsuggestAccountMutation,
@@ -30,6 +27,7 @@ import {
   useAdminVerifyAccountMutation,
   useAdminUnverifyAccountMutation,
 } from '@/queries/admin/use-verify-account';
+import { adminAccountRoute } from '@/router';
 import toast from '@/toast';
 import { badgeToTag, tagToBadge, getBadges } from '@/utils/badges';
 
@@ -95,7 +93,8 @@ interface IStaffRolePicker {
 /** Picker for setting the staff role of an account. */
 const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+
+  const { mutate: adminSetRole } = useAdminSetRoleMutation(account.id);
 
   const roles: Record<AccountRole, string> = useMemo(
     () => ({
@@ -109,8 +108,8 @@ const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
   const handleRoleChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     const role = e.target.value as AccountRole;
 
-    dispatch(setRole(account.id, role))
-      .then(() => {
+    adminSetRole(role, {
+      onSuccess: () => {
         let message: MessageDescriptor | undefined;
 
         if (role === 'admin') {
@@ -126,8 +125,8 @@ const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
         if (message) {
           toast.success(intl.formatMessage(message, { acct: account.acct }));
         }
-      })
-      .catch(() => {});
+      },
+    });
   };
 
   const accountRole = getRole(account);
@@ -165,7 +164,6 @@ const AdminAccountPage: React.FC = () => {
   const { accountId } = adminAccountRoute.useParams();
 
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const { mutate: suggest } = useAdminSuggestAccountMutation(accountId);
   const { mutate: unsuggest } = useAdminUnsuggestAccountMutation(accountId);
@@ -174,6 +172,9 @@ const AdminAccountPage: React.FC = () => {
   const { data: ownAccount } = useOwnAccount();
   const features = useFeatures();
   const { data: account, isLoading } = useAccount(accountId);
+  const deactivateUserModal = useDeactivateUserModal(accountId);
+  const deleteUserModal = useDeleteUserModal(accountId);
+  const { mutate: updateTags } = useAdminUpdateTagsMutation(accountId);
 
   const accountBadges = account ? getBadges(account) : [];
   const [badges, setBadges] = useState<string[]>(accountBadges);
@@ -221,24 +222,25 @@ const AdminAccountPage: React.FC = () => {
   };
 
   const handleDeactivate = () => {
-    dispatch(deactivateUserModal(intl, account.id));
+    deactivateUserModal();
   };
 
   const handleDelete = () => {
-    dispatch(deleteUserModal(intl, account.id));
+    deleteUserModal();
   };
 
   const handleSaveBadges = () => {
-    dispatch(saveBadges(account.id, accountBadges, badges))
-      .then(() => {
-        toast.success(intl.formatMessage(messages.badgesSaved));
-      })
-      .catch(() => {});
+    updateTags(
+      { oldTags: accountBadges, newTags: badges },
+      {
+        onSuccess: () => toast.success(messages.badgesSaved),
+      },
+    );
   };
 
   return (
     <Column label={intl.formatMessage(messages.columnHeading, { acct: account.acct })}>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <OutlineBox>
           <Account
             account={account}
@@ -300,12 +302,12 @@ const AdminAccountPage: React.FC = () => {
               }
             >
               <div className='grow'>
-                <HStack className='w-full' alignItems='center' space={2}>
+                <div className='flex w-full items-center gap-2'>
                   <BadgeInput badges={badges} onChange={setBadges} />
                   <Button onClick={handleSaveBadges}>
                     <FormattedMessage id='common.save' defaultMessage='Save' />
                   </Button>
-                </HStack>
+                </div>
               </div>
             </ListItem>
           )}
@@ -342,21 +344,16 @@ const AdminAccountPage: React.FC = () => {
         </Text>
 
         {features.version.software === PLEROMA && (
-          <HStack justifyContent='center'>
-            <Button
-              icon={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
-              size='sm'
-              theme='secondary'
-              onClick={handleAdminFE}
-            >
+          <div className='flex justify-center'>
+            <Button icon={iconArrowSquareOut} size='sm' theme='secondary' onClick={handleAdminFE}>
               <FormattedMessage
                 id='account_moderation_modal.admin_fe'
                 defaultMessage='Open in AdminFE'
               />
             </Button>
-          </HStack>
+          </div>
         )}
-      </Stack>
+      </div>
     </Column>
   );
 };

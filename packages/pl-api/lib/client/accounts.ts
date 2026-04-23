@@ -327,7 +327,7 @@ const accounts = (client: PlApiBaseClient) => ({
    */
   getAccountEndorsements: (accountId: string, params?: GetAccountEndorsementsParams) =>
     client.paginatedGet(
-      `/api/v1/${[PLEROMA].includes(client.features.version.software as string) ? 'pleroma/' : ''}accounts/${accountId}/endorsements`,
+      `/api/v1/${client.features.version.software === PLEROMA ? 'pleroma/' : ''}accounts/${accountId}/endorsements`,
       { params },
       accountSchema,
     ),

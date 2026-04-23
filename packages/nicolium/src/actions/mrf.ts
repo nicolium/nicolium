@@ -1,9 +1,7 @@
 import { mrfSimpleSchema, type MRFSimple } from '@/schemas/pleroma';
 import ConfigDB from '@/utils/config-db';
 
-import { fetchConfig, updateConfig } from './admin';
-
-import type { AppDispatch, RootState } from '@/store';
+import type { PleromaConfig } from 'pl-api';
 
 const simplePolicyMerge = (
   simplePolicy: Partial<MRFSimple>,
@@ -32,15 +30,15 @@ const simplePolicyMerge = (
   ]);
 };
 
-const updateMrf =
-  (host: string, restrictions: Record<string, any>) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    dispatch(fetchConfig()).then(() => {
-      const configs = getState().admin.configs;
-      const simplePolicy = ConfigDB.toSimplePolicy(configs);
-      const merged = simplePolicyMerge(simplePolicy, host, restrictions);
-      const config = ConfigDB.fromSimplePolicy(merged);
-      return dispatch(updateConfig(config));
-    });
+const getUpdatedMrf = (
+  configs: PleromaConfig['configs'],
+  host: string,
+  restrictions: Record<string, any>,
+) => {
+  const simplePolicy = ConfigDB.toSimplePolicy(configs);
+  const merged = simplePolicyMerge(simplePolicy, host, restrictions);
+  const config = ConfigDB.fromSimplePolicy(merged);
+  return config;
+};
 
-export { updateMrf };
+export { getUpdatedMrf };

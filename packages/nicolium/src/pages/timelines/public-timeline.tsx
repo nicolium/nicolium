@@ -1,14 +1,18 @@
+import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import { PublicTimelineColumn } from '@/columns/timeline';
+import DropdownMenu from '@/components/dropdown-menu';
+import { TimelinePicker } from '@/components/timeline-picker';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
-import PinnedHostsPicker from '@/features/remote-timeline/components/pinned-hosts-picker';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useInstance } from '@/hooks/use-instance';
+import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
+import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
@@ -17,27 +21,31 @@ const messages = defineMessages({
 });
 
 const PublicTimelinePage = () => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const instance = useInstance();
   const settings = useSettings();
+  const items = useTimelineFiltersOptions('public', 'federated');
 
   const explanationBoxExpanded = settings.explanationBox;
   const showExplanationBox = settings.showExplanationBox;
 
   const dismissExplanationBox = () => {
-    dispatch(changeSetting(['showExplanationBox'], false));
+    changeSetting(['showExplanationBox'], false);
   };
 
   const toggleExplanationBox = (setting: boolean) => {
-    dispatch(changeSetting(['explanationBox'], setting));
+    changeSetting(['explanationBox'], setting);
   };
 
   return (
-    <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)}>
-      <PinnedHostsPicker />
-
+    <Column
+      className='-mt-3 sm:mt-0'
+      label={intl.formatMessage(messages.title)}
+      title={<TimelinePicker active='federated' />}
+      truncateTitle={false}
+      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+    >
       {showExplanationBox && (
         <Accordion
           headline={
@@ -47,7 +55,7 @@ const PublicTimelinePage = () => {
             />
           }
           action={dismissExplanationBox}
-          actionIcon={require('@phosphor-icons/core/regular/x.svg')}
+          actionIcon={iconX}
           actionLabel={intl.formatMessage(messages.dismiss)}
           expanded={explanationBoxExpanded}
           onToggle={toggleExplanationBox}
@@ -78,7 +86,7 @@ const PublicTimelinePage = () => {
             defaultMessage='There is nothing here! Write something publicly, or manually follow users from other servers to fill it up'
           />
         }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        emptyMessageIcon={iconChatCenteredText}
       />
     </Column>
   );

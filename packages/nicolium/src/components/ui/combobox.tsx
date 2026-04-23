@@ -1,4 +1,4 @@
-import './combobox.css';
+import './combobox.scss';
 
 export {
   Combobox as default,

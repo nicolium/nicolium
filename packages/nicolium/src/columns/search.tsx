@@ -2,13 +2,13 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import Hashtag from '@/components/hashtag';
+import PlaceholderAccount from '@/components/placeholders/placeholder-account';
+import PlaceholderHashtag from '@/components/placeholders/placeholder-hashtag';
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
-import AccountContainer from '@/containers/account-container';
-import StatusContainer from '@/containers/status-container';
-import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
-import PlaceholderHashtag from '@/features/placeholder/components/placeholder-hashtag';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import StatusContainer from '@/components/statuses/status-container';
 import {
   useSearchAccounts,
   useSearchHashtags,

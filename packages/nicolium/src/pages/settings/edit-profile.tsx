@@ -3,7 +3,6 @@ import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { patchMe } from '@/actions/me';
 import BirthdayInput from '@/components/birthday-input';
 import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
@@ -12,21 +11,19 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
+import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Streamfield from '@/components/ui/streamfield';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
-import AvatarPicker from '@/features/edit-profile/components/avatar-picker';
-import HeaderPicker from '@/features/edit-profile/components/header-picker';
-import { SelectDropdown } from '@/features/forms';
 import { useImageField } from '@/hooks/forms/use-image-field';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import AvatarPicker from '@/pages/settings/components/avatar-picker';
+import HeaderPicker from '@/pages/settings/components/header-picker';
+import { useAuthActions } from '@/stores/auth';
+import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -230,7 +227,7 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
     };
 
   return (
-    <HStack space={2} grow>
+    <div className='flex flex-grow gap-2'>
       <Input
         type='text'
         outerClassName='w-2/5 grow'
@@ -265,26 +262,24 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
           if (field) field.draggable = true;
         }}
       />
-    </HStack>
+    </div>
   );
 };
 
 /** Edit profile page. */
 const EditProfilePage: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const instance = useInstance();
   const client = useClient();
 
+  const { updateMe } = useAuthActions();
   const { data: account } = useOwnAccount();
   const features = useFeatures();
   const maxFields = instance.configuration.accounts
     ? instance.configuration.accounts.max_profile_fields
     : instance.pleroma.metadata.fields_limits.max_fields;
 
-  const attachmentTypes = useAppSelector(
-    (state) => state.instance.configuration.media_attachments.supported_mime_types,
-  )
+  const attachmentTypes = instance.configuration.media_attachments.supported_mime_types
     ?.filter((type) => type.startsWith('image/'))
     .join(',');
 
@@ -337,12 +332,12 @@ const EditProfilePage: React.FC = () => {
       params.fields_attributes = Object.fromEntries(
         fields_attributes.map(({ name, value }, i) => [i.toString(), { name, value }]),
       );
-    if (header.file !== undefined) params.header = header.file ?? '';
-    if (avatar.file !== undefined) params.avatar = avatar.file ?? '';
+    if (header.file !== null) params.header = header.file ?? '';
+    if (avatar.file !== null) params.avatar = avatar.file ?? '';
 
     if (!instance.configuration.accounts?.allow_custom_css) delete params.custom_css;
 
-    promises.push(dispatch(patchMe(params as any)));
+    promises.push(updateMe(params as any));
 
     if (features.muteStrangers) {
       promises.push(
@@ -359,7 +354,7 @@ const EditProfilePage: React.FC = () => {
     Promise.all(promises)
       .then(() => {
         setLoading(false);
-        toast.success(intl.formatMessage(messages.success));
+        toast.success(messages.success);
       })
       .catch(() => {
         setLoading(false);

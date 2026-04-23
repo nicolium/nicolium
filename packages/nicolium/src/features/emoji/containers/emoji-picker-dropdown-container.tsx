@@ -1,11 +1,12 @@
-import { useFloating, shift, flip, autoUpdate, useTransitionStyles } from '@floating-ui/react';
-import clsx from 'clsx';
+import { useFloating, shift, flip, autoUpdate } from '@floating-ui/react';
+import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import IconButton from '@/components/ui/icon-button';
 import Portal from '@/components/ui/portal';
 import { useClickOutside } from '@/hooks/use-click-outside';
+import { useTransitionStyles } from '@/hooks/use-transition-styles';
 
 import EmojiPickerDropdown, {
   type IEmojiPickerDropdown,
@@ -20,11 +21,9 @@ interface IEmojiPickerDropdownContainer extends Pick<
   'onPickEmoji' | 'condensed' | 'withCustom'
 > {
   children?: React.JSX.Element;
-  theme?: 'default' | 'inverse';
 }
 
 const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
-  theme = 'default',
   children,
   ...props
 }) => {
@@ -85,14 +84,9 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
       {clonedChildren ?? (
         <IconButton
           theme='transparent'
-          className={clsx('emoji-picker-dropdown -m-1 p-2', {
-            'bg-transparent text-gray-600 hover:bg-primary-100 hover:text-gray-800 black:hover:bg-gray-800 dark:hover:bg-primary-800 dark:hover:text-white':
-              theme === 'default',
-            'bg-transparent text-white/80 hover:text-white dark:bg-transparent':
-              theme === 'inverse',
-          })}
+          className='emoji-picker-dropdown -m-1 bg-transparent p-2 text-gray-600 hover:bg-primary-100 hover:text-gray-800 black:hover:bg-gray-800 dark:hover:bg-primary-800 dark:hover:text-white'
           ref={refs.setReference}
-          src={require('@phosphor-icons/core/regular/smiley.svg')}
+          src={iconSmiley}
           title={title}
           aria-label={title}
           aria-expanded={isOpen}

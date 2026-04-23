@@ -1,3 +1,5 @@
+import iconBackspace from '@phosphor-icons/core/regular/backspace.svg';
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
 import { useDebounce } from '@uidotdev/usehooks';
 import clsx from 'clsx';
 import React, { useState } from 'react';
@@ -81,13 +83,10 @@ const LocationSearch: React.FC<ILocationSearch> = ({ id, onSelected }) => {
         title={intl.formatMessage(messages.clear)}
       >
         <Icon
-          src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
+          src={iconMagnifyingGlass}
           className={clsx('size-5 text-gray-600', { hidden: !empty })}
         />
-        <Icon
-          src={require('@phosphor-icons/core/regular/backspace.svg')}
-          className={clsx('size-5 text-gray-600', { hidden: empty })}
-        />
+        <Icon src={iconBackspace} className={clsx('size-5 text-gray-600', { hidden: empty })} />
       </button>
     </div>
   );

@@ -6,13 +6,12 @@ import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -244,14 +243,14 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
         isOpen ? <FormattedMessage id='account.register' defaultMessage='Sign up' /> : undefined
       }
     >
-      <Stack>
+      <div className='flex flex-col'>
         <Text>
           <FormattedMessage
             id='unauthorized_modal.text'
             defaultMessage='You need to be logged in to do that.'
           />
         </Text>
-      </Stack>
+      </div>
     </Modal>
   );
 };

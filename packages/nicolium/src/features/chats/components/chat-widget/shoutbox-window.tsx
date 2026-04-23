@@ -1,14 +1,13 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import Shoutbox from '../shoutbox';
 
@@ -32,20 +31,20 @@ const ShoutboxWindow = () => {
     <>
       <ChatPaneHeader
         title={
-          <HStack alignItems='center' space={2}>
+          <div className='flex items-center gap-2'>
             {isOpen && (
               <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
                 <Icon
-                  src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+                  src={iconArrowLeft}
                   className='size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180'
                 />
               </button>
             )}
 
-            <HStack alignItems='center' space={3}>
+            <div className='flex items-center gap-3'>
               {isOpen && <Avatar src={logo} alt='' size={40} className='flex-none' />}
 
-              <Stack alignItems='start'>
+              <div className='flex flex-col items-start'>
                 <div className='flex grow items-center space-x-1'>
                   <Text size='sm' weight='bold' truncate>
                     <FormattedMessage
@@ -55,18 +54,18 @@ const ShoutboxWindow = () => {
                     />
                   </Text>
                 </div>
-              </Stack>
-            </HStack>
-          </HStack>
+              </div>
+            </div>
+          </div>
         }
         isToggleable={!isOpen}
         isOpen={isOpen}
         onToggle={toggleChatPane}
       />
 
-      <Stack className='h-full grow overflow-hidden' space={2}>
+      <div className='flex h-full grow flex-col gap-2 overflow-hidden'>
         <Shoutbox />
-      </Stack>
+      </div>
     </>
   );
 };

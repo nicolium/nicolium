@@ -1,3 +1,4 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 
@@ -5,16 +6,16 @@ import List, { ListItem } from '@/components/list';
 import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
-import { Counter } from '@/features/admin/components/counter';
-import { DashCounter, DashCounters } from '@/features/admin/components/dashcounter';
-import { Dimension } from '@/features/admin/components/dimension';
-import RegistrationModePicker from '@/features/admin/components/registration-mode-picker';
-import { Retention } from '@/features/admin/components/retention';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { Counter } from '@/pages/dashboard/components/counter';
+import { DashCounter, DashCounters } from '@/pages/dashboard/components/dashcounter';
+import { Dimension } from '@/pages/dashboard/components/dimension';
+import RegistrationModePicker from '@/pages/dashboard/components/registration-mode-picker';
+import { Retention } from '@/pages/dashboard/components/retention';
 import { usePendingUsersCount } from '@/queries/admin/use-accounts';
 import { usePendingReportsCount } from '@/queries/admin/use-reports';
+import { useInstance } from '@/stores/instance';
 import sourceCode from '@/utils/code';
 
 const messages = defineMessages({
@@ -306,6 +307,18 @@ const Dashboard: React.FC = () => {
             />
           )}
 
+          {features.pleromaAdminConfig && (
+            <ListItem
+              to='/nicolium/admin/pleroma-config'
+              label={
+                <FormattedMessage
+                  id='column.admin.pleroma_config'
+                  defaultMessage='Pleroma configuration'
+                />
+              }
+            />
+          )}
+
           {features.domains && (
             <ListItem
               to='/nicolium/admin/domains'
@@ -348,7 +361,7 @@ const Dashboard: React.FC = () => {
                 {sourceCode.displayName} {sourceCode.version}
               </span>
 
-              <Icon src={require('@phosphor-icons/core/regular/arrow-square-out.svg')} />
+              <Icon src={iconArrowSquareOut} />
             </a>
           </ListItem>
 

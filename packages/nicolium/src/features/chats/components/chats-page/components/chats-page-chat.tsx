@@ -1,22 +1,25 @@
-import { Link, useNavigate } from '@tanstack/react-router';
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconInfo from '@phosphor-icons/core/regular/info.svg';
+import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
+import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
+import { useNavigate } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import { AccountLink } from '@/components/accounts/account-link';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import { chatRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import {
   useUnblockAccountMutation,
   useRelationshipQuery,
 } from '@/queries/accounts/use-relationship';
 import { useChat, useDeleteChat } from '@/queries/chats';
+import { chatRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
 
 import Chat from '../../chat';
@@ -106,7 +109,7 @@ const ChatsPageChat = () => {
 
   const menuItems: Menu = [
     {
-      icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+      icon: iconProhibit,
       text: intl.formatMessage(isBlocked ? messages.unblockUser : messages.blockUser, {
         acct: chat.account.acct,
       }),
@@ -116,24 +119,24 @@ const ChatsPageChat = () => {
 
   if (features.chatsDelete)
     menuItems.push({
-      icon: require('@phosphor-icons/core/regular/sign-out.svg'),
+      icon: iconSignOut,
       text: intl.formatMessage(messages.leaveChat),
       action: handleLeaveChat,
     });
 
   return (
-    <Stack className='h-full overflow-hidden'>
-      <HStack alignItems='center' justifyContent='between' space={2} className='w-full p-4'>
-        <HStack alignItems='center' space={2}>
-          <HStack alignItems='center'>
+    <div className='flex h-full flex-col overflow-hidden'>
+      <div className='flex w-full items-center justify-between gap-2 p-4'>
+        <div className='flex items-center gap-2'>
+          <div className='flex items-center'>
             <IconButton
-              src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+              src={iconArrowLeft}
               className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
               onClick={() => navigate({ to: '/chats' })}
               title={intl.formatMessage(messages.back)}
             />
 
-            <Link to='/@{$username}' params={{ username: chat.account.acct }}>
+            <AccountLink account={chat.account}>
               <Avatar
                 src={chat.account.avatar}
                 alt={chat.account.avatar_description}
@@ -142,23 +145,23 @@ const ChatsPageChat = () => {
                 isCat={chat.account.is_cat}
                 username={chat.account.username}
               />
-            </Link>
-          </HStack>
+            </AccountLink>
+          </div>
 
-          <Stack alignItems='start' className='h-11 overflow-hidden'>
+          <div className='flex h-11 flex-col items-start overflow-hidden'>
             <div className='flex w-full grow items-center space-x-1'>
-              <Link to='/@{$username}' params={{ username: chat.account.acct }}>
+              <AccountLink account={chat.account}>
                 <Text weight='bold' size='sm' align='left' truncate>
                   {chat.account.display_name || `@${chat.account.username}`}
                 </Text>
-              </Link>
+              </AccountLink>
               {chat.account.verified && <VerificationBadge />}
             </div>
-          </Stack>
-        </HStack>
+          </div>
+        </div>
 
         <DropdownMenu
-          src={require('@phosphor-icons/core/regular/info.svg')}
+          src={iconInfo}
           component={() => (
             <div className='px-4 py-2'>
               <Account account={chat.account} disabled hideActions />
@@ -166,12 +169,12 @@ const ChatsPageChat = () => {
           )}
           items={menuItems}
         />
-      </HStack>
+      </div>
 
       <div className='h-full overflow-hidden'>
         <Chat className='h-full' chat={chat} inputRef={inputRef} />
       </div>
-    </Stack>
+    </div>
   );
 };
 

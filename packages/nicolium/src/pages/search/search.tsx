@@ -1,3 +1,5 @@
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
@@ -6,16 +8,15 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import SearchColumn from '@/columns/search';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import SvgIcon from '@/components/ui/svg-icon';
 import Tabs from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
-import { searchRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { queryKeys } from '@/queries/keys';
+import { searchRoute } from '@/router';
 
 type SearchFilter = 'accounts' | 'hashtags' | 'statuses' | 'links';
 
@@ -107,15 +108,9 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
           }
         >
           {query === value ? (
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/x.svg')}
-              className='size-4 text-gray-600'
-            />
+            <SvgIcon src={iconX} className='size-4 text-gray-600' />
           ) : (
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
-              className='size-4 text-gray-600'
-            />
+            <SvgIcon src={iconMagnifyingGlass} className='size-4 text-gray-600' />
           )}
         </button>
       </div>
@@ -193,15 +188,11 @@ const SearchResults = () => {
   return (
     <>
       {accountId ? (
-        <HStack
-          className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'
-          alignItems='center'
-          space={2}
-        >
+        <div className='flex items-center gap-2 border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'>
           <IconButton
             className='text-gray-400 hover:text-gray-600'
             iconClassName='h-5 w-5'
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             onClick={handleUnsetAccount}
             title={intl.formatMessage(messages.clearAccountFilter)}
           />
@@ -212,7 +203,7 @@ const SearchResults = () => {
               values={{ acct: <strong className='break-words'>{account?.acct}</strong> }}
             />
           </Text>
-        </HStack>
+        </div>
       ) : (
         renderFilterBar()
       )}
@@ -230,7 +221,7 @@ const SearchPage = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <div className='space-y-4'>
-        <SearchInput className='sticky top-[74px]' query={query} />
+        <SearchInput className='sticky top-[calc(4.5rem+2px)]' query={query} />
         <SearchResults />
       </div>
     </Column>

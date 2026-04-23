@@ -1,19 +1,19 @@
+import iconEmpty from '@phosphor-icons/core/regular/empty.svg';
 import React from 'react';
 
 import Icon from './ui/icon';
 
 interface IEmptyMessage {
+  heading?: React.ReactNode;
   text: React.ReactNode;
-  icon?: string;
+  icon?: string | false;
 }
 
-const EmptyMessage: React.FC<IEmptyMessage> = ({
-  text,
-  icon = require('@phosphor-icons/core/regular/empty.svg'),
-}) => (
+const EmptyMessage: React.FC<IEmptyMessage> = ({ heading, text, icon = iconEmpty }) => (
   <div className='⁂-empty-message'>
-    <Icon src={icon} aria-hidden />
+    {icon !== false && <Icon src={icon} aria-hidden />}
 
+    {heading && <h2>{heading}</h2>}
     <p>{text}</p>
   </div>
 );

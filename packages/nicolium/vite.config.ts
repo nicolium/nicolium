@@ -3,40 +3,38 @@ import { fileURLToPath, URL } from 'node:url';
 
 import { tsgoChecker } from '@mkljczk/vite-tsgo-checker';
 import react from '@vitejs/plugin-react';
-import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { bundleStats } from 'rollup-plugin-bundle-stats';
 import { defineConfig } from 'vite';
 import compileTime from 'vite-plugin-compile-time';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
-import vitePluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 const config = defineConfig(() => ({
   build: {
     assetsDir: 'packs',
     assetsInlineLimit: 0,
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         assetFileNames: 'packs/assets/[name]-[hash].[ext]',
         chunkFileNames: 'packs/js/[name]-[hash].js',
         entryFileNames: 'packs/[name]-[hash].js',
-        experimentalMinChunkSize: 16 * 1024,
+        codeSplitting: {
+          minSize: 16 * 1024,
+        },
       },
     },
     sourcemap: true,
-    target: browserslistToEsbuild(),
   },
   assetsInclude: ['**/*.oga'],
   server: {
+    host: '0.0.0.0',
     port: Number(process.env.PORT ?? 7312),
     hmr: process.env.HMR_DISABLED === 'true' ? false : undefined,
     ws: process.env.WS_DISABLED === 'true' ? false : undefined,
   },
   plugins: [
-    tsgoChecker(),
-    // @ts-expect-error https://github.com/wangzongming/vite-plugin-require/issues/23
-    vitePluginRequire.default(),
+    tsgoChecker(process.env.NODE_ENV !== 'test'),
     compileTime(),
     createHtmlPlugin({
       template: 'index.html',
@@ -131,7 +129,7 @@ const config = defineConfig(() => ({
     viteStaticCopy({
       targets: [
         {
-          src: './node_modules/@twemoji/svg/*',
+          src: './node_modules/@twemoji/svg/*.svg',
           dest: 'packs/emoji/',
         },
         {
@@ -160,7 +158,6 @@ const config = defineConfig(() => ({
         },
       ],
     }),
-    bundleStats(),
     {
       name: 'mock-api',
       configureServer(server) {
@@ -174,6 +171,7 @@ const config = defineConfig(() => ({
         });
       },
     },
+    ...(process.env.ANALYZE === 'true' ? [bundleStats()] : []),
   ],
   resolve: {
     alias: [

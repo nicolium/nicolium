@@ -1,7 +1,8 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryKeys } from '@/queries/keys';
 
 import { queryClient } from '../client';
@@ -11,17 +12,20 @@ import { minifyAccountList } from '../utils/minify-list';
 
 import type { CreateListParams, List, UpdateListParams } from 'pl-api';
 
-const useLists = <T>(select?: (data: Array<List>) => T) => {
+function useLists<T>(select: (data: Array<List>) => T): UseQueryResult<T, Error>;
+function useLists(): UseQueryResult<Array<List>, Error>;
+function useLists<T = Array<List>>(select?: (data: Array<List>) => T) {
   const client = useClient();
   const features = useFeatures();
+  const { isLoggedIn } = useLoggedIn();
 
   return useQuery({
     queryKey: queryKeys.lists.all,
     queryFn: () => client.lists.getLists(),
-    enabled: features.lists,
+    enabled: isLoggedIn && features.lists,
     select,
   });
-};
+}
 
 const useList = (listId?: string) =>
   useLists((data) => (listId ? data.find((list) => list.id === listId) : undefined));

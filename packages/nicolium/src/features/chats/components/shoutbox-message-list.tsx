@@ -1,17 +1,15 @@
-import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
+import { AccountLink } from '@/components/accounts/account-link';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
+import PlaceholderChatMessage from '@/components/placeholders/placeholder-chat-message';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
-import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useShoutboxIsLoading, useShoutboxMessages, type ShoutMessage } from '@/stores/shoutbox';
 
@@ -34,21 +32,14 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
       key={message.id}
       className='group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40'
     >
-      <HStack
-        space={2}
-        alignItems='bottom'
-        justifyContent={isMyMessage ? 'end' : 'start'}
-        className={clsx({
-          'ml-auto': isMyMessage,
+      <div
+        className={clsx('flex items-end gap-2', {
+          'ml-auto justify-end': isMyMessage,
+          'justify-start': !isMyMessage,
         })}
       >
         {!isMyMessage && (
-          <Link
-            className='mb-0.5'
-            to='/@{$username}'
-            params={{ username: account.acct }}
-            title={account.acct}
-          >
+          <AccountLink className='mb-0.5' account={account} title={account.acct}>
             <HoverAccountWrapper accountId={account.id} element='span'>
               <Avatar
                 src={account.avatar}
@@ -58,42 +49,38 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
                 username={account.username}
               />
             </HoverAccountWrapper>
-          </Link>
+          </AccountLink>
         )}
 
-        <Stack
-          space={0.5}
-          className={clsx({
+        <div
+          className={clsx('flex flex-col gap-0.5', {
             'max-w-[85%]': true,
-            'order-3': isMyMessage,
-            'order-1': !isMyMessage,
+            'order-3 items-end': isMyMessage,
+            'order-1 items-start': !isMyMessage,
           })}
-          alignItems={isMyMessage ? 'end' : 'start'}
         >
-          <HStack alignItems='bottom' className='max-w-full'>
-            <div
-              className={clsx({
-                'relative max-w-full space-y-2 text-ellipsis break-words rounded-md px-3 py-2 [&_.mention]:underline': true,
-                '[&_.mention]:text-primary-600 dark:[&_.mention]:text-primary-400': !isMyMessage,
-                'dark:[&_.mention]:white [&_.mention]:text-white': isMyMessage,
-                'bg-primary-500 text-white': isMyMessage,
-                'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100': !isMyMessage,
-                // '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
-              })}
-              tabIndex={0}
-            >
-              <Text size='sm' theme='inherit' className='break-word-nested'>
-                <ParsedContent html={message.text} />
-              </Text>
-            </div>
-          </HStack>
+          <div
+            className={clsx({
+              'relative max-w-full space-y-2 text-ellipsis break-words rounded-md px-3 py-2 [&_.mention]:underline': true,
+              '[&_.mention]:text-primary-600 dark:[&_.mention]:text-primary-400': !isMyMessage,
+              'dark:[&_.mention]:white [&_.mention]:text-white': isMyMessage,
+              'bg-primary-500 text-white': isMyMessage,
+              'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100': !isMyMessage,
+              // '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
+            })}
+            tabIndex={0}
+          >
+            <Text size='sm' theme='inherit' className='break-word-nested'>
+              <ParsedContent html={message.text} />
+            </Text>
+          </div>
           {!isMyMessage && (
             <Text size='xs' theme='muted'>
               <Emojify text={account.display_name} emojis={account.emojis} />
             </Text>
           )}
-        </Stack>
-      </HStack>
+        </div>
+      </div>
     </div>
   );
 };
@@ -103,7 +90,7 @@ const ShoutboxMessageList: React.FC = () => {
   const node = useRef<VirtuosoHandle | null>(null);
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const shoutboxMessages = useShoutboxMessages() || [];
   const isLoading = useShoutboxIsLoading();
 

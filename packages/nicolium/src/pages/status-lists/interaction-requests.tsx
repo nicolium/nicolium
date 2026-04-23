@@ -1,21 +1,22 @@
+import iconArrowBendUpLeft from '@phosphor-icons/core/regular/arrow-bend-up-left.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconStar from '@phosphor-icons/core/regular/star.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import Icon from '@/components/icon';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
+import { buildLink } from '@/components/notification';
 import PullToRefresh from '@/components/pull-to-refresh';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import ScrollableList from '@/components/scrollable-list';
 import StatusContent from '@/components/statuses/status-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import AccountContainer from '@/containers/account-container';
-import { buildLink } from '@/features/notifications/components/notification';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -63,9 +64,9 @@ const messages = defineMessages({
 });
 
 const icons = {
-  favourite: require('@phosphor-icons/core/regular/star.svg'),
-  reblog: require('@phosphor-icons/core/regular/repeat.svg'),
-  reply: require('@phosphor-icons/core/regular/arrow-bend-up-left.svg'),
+  favourite: iconStar,
+  reblog: iconRepeat,
+  reply: iconArrowBendUpLeft,
 };
 
 const avatarSize = 42;
@@ -88,7 +89,7 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
   if (!status) return null;
 
   return (
-    <Stack className='relative py-2' space={2}>
+    <div className='relative flex flex-col gap-2 py-2'>
       {hasReply && (
         <div className='absolute left-5 top-[62px] z-[1] block h-[calc(100%-58px)] w-0.5 bg-gray-200 black:bg-gray-800 dark:bg-primary-800 rtl:left-auto rtl:right-5' />
       )}
@@ -101,12 +102,12 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
         action={actions ?? <></>}
       />
 
-      <Stack space={2} className={clsx(hasReply && 'pl-[54px]')}>
+      <div className={clsx('flex flex-col gap-2', hasReply && 'pl-[54px]')}>
         <StatusContent status={status} preview={!isReply} />
 
         {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 
@@ -188,7 +189,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   });
 
   const actions = (
-    <HStack space={2}>
+    <div className='flex gap-2'>
       <Button
         theme='secondary'
         size='sm'
@@ -205,7 +206,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
           handleReject();
         }}
       />
-    </HStack>
+    </div>
   );
 
   const handleMoveUp = () => {
@@ -228,9 +229,9 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   return (
     <Hotkeys handlers={handlers} className='notification focusable' tabIndex={0}>
       <div className='focusable p-4'>
-        <Stack space={2}>
+        <div className='flex flex-col gap-2'>
           <div>
-            <HStack alignItems='center' space={3}>
+            <div className='flex items-center gap-3'>
               <div className='flex justify-end' style={{ flexBasis: avatarSize }}>
                 <Icon
                   src={icons[interactionRequest.type]}
@@ -256,7 +257,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
                   </Text>
                 </div>
               )}
-            </HStack>
+            </div>
           </div>
 
           {interactionRequest.status_id && (
@@ -269,7 +270,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
           {interactionRequest.reply_id && (
             <InteractionRequestStatus id={interactionRequest.reply_id} isReply actions={actions} />
           )}
-        </Stack>
+        </div>
       </div>
     </Hotkeys>
   );
@@ -322,7 +323,7 @@ const InteractionRequestsPage = () => {
           emptyMessageText={emptyMessage}
           onLoadMore={() => fetchNextPage()}
           listClassName={clsx('⁂-status-list', {
-            'animate-pulse': data?.length === 0,
+            'no-reduce-motion:animate-pulse': data?.length === 0,
           })}
         >
           {data?.map((request) => (

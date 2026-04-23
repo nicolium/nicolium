@@ -1,7 +1,7 @@
 /** Default header filenames from various backends */
 const DEFAULT_HEADERS: Array<string | RegExp> = [
   '/assets/default_header.webp', // GoToSocial
-  '/headers/original/missing.png', // Mastodon
+  '/headers/original/missing.png', // Hollo, Mastodon
   '/api/v1/accounts/identicon', // Mitra
   /\/static\/img\/missing\.[a-z0-9]+\.png$/, // NeoDB
   '/storage/headers/missing.png', // Pixelfed
@@ -19,7 +19,7 @@ const isDefaultHeader = (url: string = '') =>
 /** Default avatar filenames from various backends */
 const DEFAULT_AVATARS: Array<string | RegExp> = [
   /\/assets\/default_avatars\/GoToSocial_icon[1-6]\.webp$/, // GoToSocial
-  '/avatars/original/missing.png', // Mastodon
+  '/avatars/original/missing.png', // Hollo, Mastodon
   '/api/v1/accounts/identicon', // Mitra
   '/s/img/avatar.svg', // NeoDB
   '/avatars/default.jpg', // Pixelfed

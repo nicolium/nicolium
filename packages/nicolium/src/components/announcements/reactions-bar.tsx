@@ -1,3 +1,4 @@
+import iconSmileySticker from '@phosphor-icons/core/regular/smiley-sticker.svg';
 import { useTransition } from '@react-spring/web';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -66,7 +67,7 @@ const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emoj
             className='⁂-status-reactions-bar__picker-button emoji-picker-dropdown'
             title={intl.formatMessage(messages.addEmoji)}
           >
-            <Icon src={require('@phosphor-icons/core/regular/smiley-sticker.svg')} aria-hidden />
+            <Icon src={iconSmileySticker} aria-hidden />
           </button>
         </EmojiPickerDropdown>
       )}

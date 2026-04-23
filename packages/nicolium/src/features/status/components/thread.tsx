@@ -3,13 +3,12 @@ import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
+import PendingStatus from '@/components/statuses/pending-status';
 import StatusActionBar from '@/components/statuses/status-action-bar';
 import Tombstone from '@/components/statuses/tombstone';
-import Stack from '@/components/ui/stack';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import PendingStatus from '@/features/ui/components/pending-status';
 import {
   useFavouriteStatus,
   useReblogStatus,
@@ -17,17 +16,17 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
-import { useThread } from '@/stores/contexts';
+import { useThread, useThreadDepths } from '@/stores/contexts';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
-import { useStatusMetaActions } from '@/stores/status-meta';
+import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { selectChild } from '@/utils/scroll-utils';
 import { textForScreenReader } from '@/utils/status';
 
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { Account } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
@@ -51,11 +50,14 @@ const Thread = ({
   const intl = useIntl();
   const { replyCompose, mentionCompose } = useComposeActions();
 
-  const { expandStatuses, revealStatusesMedia, toggleStatusesMediaHidden } = useStatusMetaActions();
+  const { deleted } = useStatusMeta(status.id);
+  const { expandStatusSpoilers, revealStatusesMedia, toggleStatusesMediaHidden } =
+    useStatusMetaActions();
   const { openModal } = useModalsActions();
   const {
     boostModal,
     threads: { displayMode },
+    statusActionBarItems,
   } = useSettings();
 
   const { mutate: favouriteStatus } = useFavouriteStatus(status.id);
@@ -64,7 +66,9 @@ const Thread = ({
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
   const linear = displayMode === 'linear';
+  const treeIndent = displayMode === 'tree-indent';
   const thread = useThread(status.id, linear);
+  const depths = useThreadDepths(treeIndent ? status.id : undefined);
 
   const statusIndex = thread.indexOf(status.id);
   const initialIndex = isModal && statusIndex !== 0 ? statusIndex + 1 : statusIndex;
@@ -216,17 +220,22 @@ const Thread = ({
     </div>
   );
 
-  const renderStatus = (id: string) => (
-    <ThreadStatus
-      key={id}
-      id={id}
-      focusedStatusId={status.id}
-      onMoveUp={handleMoveUp}
-      onMoveDown={handleMoveDown}
-      contextType='thread'
-      linear={linear}
-    />
-  );
+  const renderStatus = (id: string) => {
+    const isAncestor = treeIndent && thread.indexOf(id) < statusIndex;
+    return (
+      <ThreadStatus
+        key={id}
+        id={id}
+        focusedStatusId={status.id}
+        onMoveUp={handleMoveUp}
+        onMoveDown={handleMoveDown}
+        contextType='thread'
+        linear={linear}
+        depth={treeIndent ? depths[id] : undefined}
+        isAncestor={isAncestor}
+      />
+    );
+  };
 
   const renderPendingStatus = (id: string) => {
     const idempotencyKey = id.replace(/^末pending-/, '');
@@ -236,10 +245,10 @@ const Thread = ({
 
   const renderChildren = (list: Array<string>) =>
     list.map((id) => {
-      if (id === status.id)
+      if (id === status.id) {
         return (
           <div className={clsx({ 'pb-4': hasDescendants })} key={status.id}>
-            {status.deleted ? (
+            {deleted ? (
               <Tombstone
                 id={status.id}
                 onMoveUp={handleMoveUp}
@@ -247,7 +256,12 @@ const Thread = ({
                 deleted
               />
             ) : (
-              <Hotkeys handlers={handlers} element='article' lang={status.language || undefined}>
+              <Hotkeys
+                handlers={handlers}
+                element='article'
+                lang={status.language || undefined}
+                data-status-id={status.id}
+              >
                 <div
                   ref={statusRef}
                   className='relative'
@@ -261,7 +275,7 @@ const Thread = ({
                     withMedia={withMedia}
                   />
 
-                  {!status.rss_feed && (
+                  {!status.rss_feed && statusActionBarItems.length > 0 && (
                     <>
                       <hr className='-mx-4 mb-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
 
@@ -277,8 +291,9 @@ const Thread = ({
             )}
           </div>
         );
+      }
 
-      if (id.endsWith('-tombstone')) {
+      if (id.endsWith('-tombstone') || id.endsWith('-unavailable')) {
         return renderTombstone(id);
       } else if (id.startsWith('末pending-')) {
         return renderPendingStatus(id);
@@ -316,7 +331,7 @@ const Thread = ({
     [status.id],
   );
 
-  const hasDescendants = thread.length > statusIndex;
+  const hasDescendants = thread.length > statusIndex + 1;
 
   type HotkeyHandlers = { [key: string]: (keyEvent?: KeyboardEvent) => void };
 
@@ -339,7 +354,7 @@ const Thread = ({
     if (isModal) children.unshift(<div key='padding' className='h-4' />);
 
     return children;
-  }, [thread, linear, status, isModal]);
+  }, [thread, displayMode, status, isModal]);
 
   const meta = useMemo(() => {
     const firstAttachment = status.media_attachments && status.media_attachments[0];
@@ -382,15 +397,14 @@ const Thread = ({
 
   useEffect(() => {
     setExpandAllStatuses?.(() => {
-      expandStatuses(thread);
+      expandStatusSpoilers(thread);
       revealStatusesMedia(thread);
     });
   }, [thread]);
 
   return (
-    <Stack
-      space={2}
-      className={clsx({
+    <div
+      className={clsx('flex flex-col gap-2', {
         'h-full': isModal,
         'mt-2': !isModal,
       })}
@@ -420,7 +434,7 @@ const Thread = ({
           {children}
         </ScrollableList>
       </div>
-    </Stack>
+    </div>
   );
 };
 

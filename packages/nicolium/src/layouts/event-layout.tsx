@@ -1,28 +1,24 @@
 import { Outlet, useLocation, useNavigate } from '@tanstack/react-router';
+import { Navigate } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { AsideContent } from '@/components/navigation/aside-content';
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
-import LinkFooter from '@/features/ui/components/link-footer';
-import { layouts } from '@/features/ui/router';
-import {
-  EventHeader,
-  SignUpPanel,
-  TrendsPanel,
-  WhoToFollowPanel,
-} from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { useFeatures } from '@/hooks/use-features';
+import { useCurrentAccount } from '@/contexts/current-account-context';
+import { EventHeader } from '@/features/ui/util/async-components';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useStatus } from '@/queries/statuses/use-status';
+import { layouts } from '@/router';
 
 const EventLayout = () => {
   const { statusId } = layouts.event.useParams();
 
-  const me = useAppSelector((state) => state.me);
-  const features = useFeatures();
+  const me = useCurrentAccount();
+  const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -72,6 +68,10 @@ const EventLayout = () => {
     );
   }, [status]);
 
+  if (!me && status && !status.account.local && !allowDisplayingRemoteNoLogin) {
+    return <Navigate to='/external_redirect' state={{ redirectTarget: status.url }} replace />;
+  }
+
   if (status && !event) {
     navigate({
       to: '/@{$username}/posts/$statusId',
@@ -109,7 +109,7 @@ const EventLayout = () => {
       {meta}
       <Layout.Main>
         <Column label={event?.name} withHeader={false}>
-          <div className='space-y-4'>
+          <article className='space-y-4' data-status-id={statusId}>
             <EventHeader status={status} />
 
             {status && showTabs && (
@@ -117,15 +117,12 @@ const EventLayout = () => {
             )}
 
             <Outlet />
-          </div>
+          </article>
         </Column>
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && <SignUpPanel />}
-        {features.trends && <TrendsPanel limit={5} />}
-        {features.suggestions && <WhoToFollowPanel limit={3} />}
-        <LinkFooter key='link-footer' />
+        <AsideContent layout='default' />
       </Layout.Aside>
     </>
   );

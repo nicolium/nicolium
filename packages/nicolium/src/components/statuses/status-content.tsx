@@ -1,9 +1,10 @@
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Emojify from '@/features/emoji/emojify';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
@@ -28,7 +29,7 @@ import StatusMedia from './status-media';
 import TranslateButton from './translate-button';
 
 import type { Sizes } from '@/components/ui/text';
-import type { NormalizedStatus } from '@/normalizers/status';
+import type { NormalizedStatus } from '@/queries/statuses/normalize';
 
 const BIG_EMOJI_LIMIT = 10;
 
@@ -44,13 +45,34 @@ const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, preview }) => (
     {!preview && (
       <button className='⁂-read-more-button' onClick={onClick}>
         <FormattedMessage id='status.read_more' defaultMessage='Read more' />
-        <Icon
-          className='inline-block size-5'
-          src={require('@phosphor-icons/core/regular/caret-right.svg')}
-        />
+        <Icon className='inline-block size-5' src={iconCaretRight} />
       </button>
     )}
   </div>
+);
+
+interface IExpandButton {
+  onClick: React.MouseEventHandler;
+  expanded?: boolean;
+}
+
+const ExpandButton: React.FC<IExpandButton> = ({ onClick, expanded }) => (
+  <>
+    <div className='⁂-read-more-button__container'>
+      {!expanded && <div className='⁂-read-more-button__gradient' />}
+    </div>
+    <button
+      className={clsx('⁂-expand-button', { '⁂-expand-button--expanded': expanded })}
+      onClick={onClick}
+    >
+      <Icon src={iconCaretDown} />
+      {expanded ? (
+        <FormattedMessage id='status.collapse' defaultMessage='Collapse' />
+      ) : (
+        <FormattedMessage id='status.read_more' defaultMessage='Read more' />
+      )}
+    </button>
+  </>
 );
 
 interface IStatusContent {
@@ -63,6 +85,9 @@ interface IStatusContent {
   preview?: boolean;
   withMedia?: boolean;
   compose?: boolean;
+  isEvent?: boolean;
+  expandable?: boolean;
+  quoteDepth?: number;
 }
 
 /** Renders the text content of a status */
@@ -77,19 +102,32 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     preview,
     withMedia,
     compose = false,
+    isEvent = false,
+    expandable = false,
+    quoteDepth = 0,
   }) => {
-    const { urlPrivacy, displaySpoilers, renderMfm } = useSettings();
+    const {
+      urlPrivacy,
+      displaySpoilers,
+      renderMfm,
+      displayMentionAvatars,
+      showNestedQuotes,
+      showSideBySideTranslations,
+    } = useSettings();
     const { greentext } = useFrontendConfig();
     const { data: account } = useAccount(status.account_id);
 
     const [collapsed, setCollapsed] = useState<boolean | null>(null);
+    const [isTranslationEqual, setIsTranslationEqual] = useState(false);
     const [onlyEmoji, setOnlyEmoji] = useState(false);
     const [lineClamp, setLineClamp] = useState(true);
 
     const contentNode = useRef<HTMLDivElement>(null);
     const spoilerNode = useRef<HTMLSpanElement>(null);
+    const translationNode = useRef<HTMLDivElement>(null);
 
-    const { collapseStatuses, expandStatuses } = useStatusMetaActions();
+    const { collapseStatuses, expandStatuses, collapseStatusSpoilers, expandStatusSpoilers } =
+      useStatusMetaActions();
     const statusMeta = useStatusMeta(status.id);
     const { data: translation } = useStatusTranslation(status.id, statusMeta.targetLanguage);
     const { data: localTranslation } = useLocalStatusTranslation(
@@ -97,8 +135,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       statusMeta.localTargetLanguage,
     );
 
-    const withSpoiler = status.spoiler_text?.length > 0;
-    const expanded = !withSpoiler || (statusMeta.expanded ?? false);
+    const withSpoiler = status.spoiler_text.length > 0;
+    const { expanded } = statusMeta;
+    const spoilerExpanded = !withSpoiler || (statusMeta.spoilerExpanded ?? false);
 
     const maybeSetCollapsed = (): void => {
       if (!contentNode.current) return;
@@ -121,31 +160,47 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       }
     };
 
-    const toggleExpanded: React.MouseEventHandler = (e) => {
+    const toggleSpoilerExpanded: React.MouseEventHandler = (e) => {
       e.preventDefault();
       e.stopPropagation();
 
+      if (spoilerExpanded) {
+        collapseStatusSpoilers([status.id]);
+        setCollapsed(null);
+      } else expandStatusSpoilers([status.id]);
+    };
+
+    const toggleExpanded: React.MouseEventHandler = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       if (expanded) {
         collapseStatuses([status.id]);
-        setCollapsed(null);
-      } else expandStatuses([status.id]);
+      } else {
+        expandStatuses([status.id]);
+      }
     };
 
     useLayoutEffect(() => {
       maybeSetCollapsed();
       maybeSetOnlyEmoji();
-    }, [expanded]);
+    }, [spoilerExpanded]);
 
     const content = useMemo(
       (): string =>
-        localTranslation
+        !showSideBySideTranslations && localTranslation
           ? localTranslation.content
-          : translation
+          : !showSideBySideTranslations && translation
             ? translation.content
             : status.content_map && statusMeta.currentLanguage
               ? status.content_map[statusMeta.currentLanguage] || status.content
               : status.content,
-      [status.content, localTranslation, translation, statusMeta.currentLanguage],
+      [
+        showSideBySideTranslations,
+        status.content,
+        localTranslation,
+        translation,
+        statusMeta.currentLanguage,
+      ],
     );
 
     const { content: parsedContent, hashtags } = useMemo(() => {
@@ -175,10 +230,11 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           displayTargetHost: urlPrivacy.displayTargetHost,
           greentext,
           speakAsCat: account?.speak_as_cat,
+          displayMentionAvatars,
         },
         true,
       );
-    }, [content, renderMfm, account?.speak_as_cat]);
+    }, [content, renderMfm, account?.speak_as_cat, displayMentionAvatars]);
 
     const spoilerText =
       status.spoiler_text_map && statusMeta.currentLanguage
@@ -189,27 +245,85 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);
     }, [spoilerText]);
 
+    const activeTranslation =
+      localTranslation && typeof localTranslation === 'object'
+        ? localTranslation
+        : translation && typeof translation === 'object'
+          ? translation
+          : null;
+
+    const translationContent =
+      showSideBySideTranslations && translatable ? (activeTranslation?.content ?? null) : null;
+
+    const translationLanguage =
+      statusMeta.localTargetLanguage ?? statusMeta.targetLanguage ?? undefined;
+
+    const { content: parsedTranslationContent } = useMemo(() => {
+      if (!translationContent) return { content: null };
+
+      return parseContent(
+        {
+          html: translationContent,
+          mentions: status.mentions,
+          hasQuote: !!status.quote_id,
+          emojis: status.emojis,
+          cleanUrls: urlPrivacy.clearLinksInContent,
+          redirectUrls: urlPrivacy.redirectLinksMode !== 'off',
+          displayTargetHost: urlPrivacy.displayTargetHost,
+          greentext,
+          speakAsCat: account?.speak_as_cat,
+          displayMentionAvatars,
+        },
+        true,
+      );
+    }, [
+      account?.speak_as_cat,
+      displayMentionAvatars,
+      greentext,
+      status.emojis,
+      status.mentions,
+      status.quote_id,
+      translationContent,
+      urlPrivacy.clearLinksInContent,
+      urlPrivacy.displayTargetHost,
+      urlPrivacy.redirectLinksMode,
+    ]);
+
+    useLayoutEffect(() => {
+      if (!translationContent) {
+        setIsTranslationEqual(false);
+        return;
+      }
+
+      const normalizeText = (value?: string) => value?.trim().replace(/\s+/g, ' ') ?? '';
+
+      setIsTranslationEqual(
+        normalizeText(contentNode.current?.innerText) ===
+          normalizeText(translationNode.current?.innerText),
+      );
+    }, [parsedContent, parsedTranslationContent, translationContent]);
+
     const direction = getTextDirection(status.search_index);
     const className = useMemo(
       () =>
         clsx('⁂-status-content', {
-          'overflow-hidden': collapsed,
-          'max-h-[200px]': collapsed && !isQuote && !preview,
-          'max-h-[120px]': collapsed && isQuote,
-          'max-h-[80px]': collapsed && preview,
-          'max-h-[282px]': collapsable && collapsed === null && !isQuote && !preview,
-          'max-h-[202px]': collapsable && collapsed === null && isQuote,
-          'max-h-[82px]': collapsed === null && preview,
+          'overflow-hidden': collapsed && !expanded,
+          'max-h-[200px]': collapsed && !isQuote && !preview && !expanded,
+          'max-h-[120px]': collapsed && isQuote && !expanded,
+          'max-h-[80px]': collapsed && preview && !expanded,
+          'max-h-[282px]': collapsable && collapsed === null && !isQuote && !preview && !expanded,
+          'max-h-[202px]': collapsable && collapsed === null && isQuote && !expanded,
+          'max-h-[82px]': collapsed === null && preview && !expanded,
           'big-emoji leading-normal': onlyEmoji,
-          '⁂-status-content--expanded': !collapsable,
+          '⁂-status-content--spoiler-expanded': !collapsable,
           '⁂-status-content--quote': isQuote,
           '⁂-status-content--preview': preview,
           '⁂-status-content--poll': !!status.poll_id,
         }),
-      [collapsed, onlyEmoji],
+      [collapsed, onlyEmoji, spoilerExpanded, expanded],
     );
 
-    const expandable = !displaySpoilers;
+    const hasSpoiler = !displaySpoilers && !isEvent;
 
     const output = [];
 
@@ -217,21 +331,21 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       output.push(
         <h2
           className={clsx('⁂-status-title', {
-            '⁂-status-title--clamp': !expanded && lineClamp,
+            '⁂-status-title--clamp': !spoilerExpanded && lineClamp,
           })}
           key='spoiler'
           {...(expandable
-            ? { onClick: toggleExpanded, role: 'button', 'aria-expanded': expanded }
+            ? { onClick: toggleSpoilerExpanded, role: 'button', 'aria-expanded': spoilerExpanded }
             : {})}
         >
           <span ref={spoilerNode}>
             <Emojify text={spoilerText} emojis={status.emojis} />
           </span>
-          {expandable && (
-            <button onClick={toggleExpanded}>
-              <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+          {hasSpoiler && (
+            <button onClick={toggleSpoilerExpanded}>
+              <Icon src={iconCaretDown} />
               <span>
-                {expanded ? (
+                {spoilerExpanded ? (
                   <FormattedMessage id='status.spoiler.collapse' defaultMessage='Collapse' />
                 ) : (
                   <FormattedMessage id='status.spoiler.expand' defaultMessage='Expand' />
@@ -243,11 +357,11 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       );
     }
 
-    if (!expandable || expanded) {
+    if (!hasSpoiler || spoilerExpanded) {
       let quote;
 
       if (withMedia && status.quote_id) {
-        if (isQuote) {
+        if (showNestedQuotes ? quoteDepth >= 3 : quoteDepth >= 1) {
           quote = <QuotedStatusIndicator statusId={status.quote_id} statusUrl={status.quote_url} />;
         } else if (!(status.quote_visible ?? true)) {
           quote = (
@@ -261,15 +375,16 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             </OutlineBox>
           );
         } else {
-          quote = <QuotedStatus statusId={status.quote_id} />;
+          quote = <QuotedStatus statusId={status.quote_id} quoteDepth={quoteDepth} />;
         }
       }
 
       const media = (quote ||
         status.card ||
         (withMedia && status.media_attachments.length > 0)) && (
-        <Stack space={4} key='media'>
-          {((withMedia && status.media_attachments.length > 0) || (status.card && !quote)) && (
+        <div className='flex flex-col gap-4' key='media'>
+          {((withMedia && status.media_attachments.length > 0) ||
+            (status.card && (!quote || status.quote_visible === false))) && (
             <div className='relative has-[div[data-testid="sensitive-overlay"]]:min-h-24'>
               <SensitiveContentOverlay status={status} />
               {withMedia && <StatusMedia status={status} muted={compose} />}
@@ -277,11 +392,11 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           )}
 
           {quote}
-        </Stack>
+        </div>
       );
 
       if (status.content) {
-        output.push(
+        const originalContent = (
           <Markup
             ref={contentNode}
             tabIndex={0}
@@ -290,14 +405,42 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             direction={direction}
             lang={status.language ?? undefined}
             size={textSize}
+            tag='div'
           >
             {parsedContent}
-          </Markup>,
+          </Markup>
         );
+
+        if (translationContent && parsedTranslationContent && !isTranslationEqual) {
+          output.push(
+            <div className='grid gap-4 sm:grid-cols-2 md:gap-6' key='translated-content'>
+              <div className='min-w-0'>{originalContent}</div>
+              <div className='min-w-0 border-t border-gray-200 pt-4 dark:border-gray-800 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0'>
+                <Markup
+                  ref={translationNode}
+                  tabIndex={0}
+                  className={className}
+                  direction={direction}
+                  lang={translationLanguage}
+                  size={textSize}
+                  tag='div'
+                >
+                  {parsedTranslationContent}
+                </Markup>
+              </div>
+            </div>,
+          );
+        } else {
+          output.push(originalContent);
+        }
       }
 
-      if (collapsed) {
-        output.push(<ReadMoreButton onClick={onClick} key='read-more' preview={preview} />);
+      if (collapsed || preview) {
+        if (expandable && !preview) {
+          output.push(<ExpandButton onClick={toggleExpanded} key='expand' expanded={expanded} />);
+        } else if (collapsed) {
+          output.push(<ReadMoreButton onClick={onClick} key='read-more' preview={preview} />);
+        }
       }
 
       if (status.poll_id) {
@@ -335,4 +478,4 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
 
 StatusContent.displayName = 'StatusContent';
 
-export { StatusContent as default };
+export { StatusContent as default, ExpandButton };

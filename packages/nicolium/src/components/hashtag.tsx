@@ -3,8 +3,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
 
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { shortNumberFormat } from '@/utils/numbers';
 
@@ -32,8 +30,8 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
   const count = Number(hashtag.history?.[0]?.accounts);
 
   return (
-    <HStack alignItems='center' justifyContent='between' data-testid='hashtag'>
-      <Stack>
+    <div className='flex items-center justify-between' data-testid='hashtag'>
+      <div className='flex flex-col'>
         <Link to='/tags/$hashtag' params={{ hashtag: hashtag.name }} className='hover:underline'>
           <Text tag='span' size='sm' weight='semibold'>
             #{hashtag.name}
@@ -41,7 +39,7 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
         </Link>
 
         {accountsCountRenderer(count)}
-      </Stack>
+      </div>
 
       {hashtag.history && (
         <div className='w-[40px]' data-testid='sparklines'>
@@ -54,7 +52,7 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
           </Sparklines>
         </div>
       )}
-    </HStack>
+    </div>
   );
 };
 

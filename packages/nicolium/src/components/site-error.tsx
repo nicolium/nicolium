@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { NODE_ENV } from '@/build-config';
@@ -8,6 +8,7 @@ import { useLogo } from '@/hooks/use-logo';
 import { captureSentryException } from '@/sentry';
 import KVStore from '@/storage/kv-store';
 import sourceCode from '@/utils/code';
+import copy from '@/utils/copy';
 import { isNetworkError } from '@/utils/errors';
 import { unregisterSW } from '@/utils/sw';
 
@@ -27,7 +28,6 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
   const intl = useIntl();
   const { links, sentryDsn } = useFrontendConfig();
   const { src: logoSrc } = useLogo();
-  const textarea = useRef<HTMLTextAreaElement>(null);
 
   const [browser, setBrowser] = useState<Bowser.Parser.Parser>();
   const [sentryEventId, setSentryEventId] = useState<string>();
@@ -48,12 +48,7 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
   };
 
   const handleCopy: React.MouseEventHandler = () => {
-    if (!textarea.current) return;
-
-    textarea.current.select();
-    textarea.current.setSelectionRange(0, 99999);
-
-    document.execCommand('copy');
+    copy(errorText);
   };
 
   useEffect(() => {
@@ -146,14 +141,7 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
               <SentryFeedbackForm eventId={sentryEventId} />
             )}
             {errorText && (
-              <Textarea
-                ref={textarea}
-                value={errorText}
-                onClick={handleCopy}
-                isCodeEditor
-                rows={12}
-                readOnly
-              />
+              <Textarea value={errorText} onClick={handleCopy} isCodeEditor rows={12} readOnly />
             )}
 
             {browser && (

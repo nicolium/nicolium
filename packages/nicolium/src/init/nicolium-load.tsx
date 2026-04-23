@@ -3,26 +3,12 @@ import { IntlProvider } from 'react-intl';
 
 import { loadFrontendConfig } from '@/actions/frontend-config';
 import { checkIfStandalone, fetchInstance } from '@/actions/instance';
-import { fetchMe } from '@/actions/me';
 import LoadingScreen from '@/components/loading-screen';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useLocale } from '@/hooks/use-locale';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import MESSAGES from '@/messages';
-
-import type { AppDispatch } from '@/store';
-
-/** Load initial data from the backend */
-const loadInitial = () => async (dispatch: AppDispatch) => {
-  dispatch(checkIfStandalone());
-  // Await for authenticated fetch
-  await dispatch(fetchMe());
-  // Await for feature detection
-  await dispatch(fetchInstance());
-  // Await for configuration
-  await dispatch(loadFrontendConfig());
-};
+import { useAuthActions } from '@/stores/auth';
 
 interface INicoliumLoad {
   children: React.ReactNode;
@@ -30,11 +16,10 @@ interface INicoliumLoad {
 
 /** Initial data loader. */
 const NicoliumLoad: React.FC<INicoliumLoad> = ({ children }) => {
-  const dispatch = useAppDispatch();
-
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useOwnAccount();
   const locale = useLocale();
+  const { fetchMe } = useAuthActions();
 
   const [messages, setMessages] = useState<Record<string, string>>({});
   const [localeLoading, setLocaleLoading] = useState(true);
@@ -55,7 +40,18 @@ const NicoliumLoad: React.FC<INicoliumLoad> = ({ children }) => {
 
   // Load initial data from the API
   useEffect(() => {
-    dispatch(loadInitial())
+    /** Load initial data from the backend */
+    const loadInitial = async () => {
+      checkIfStandalone();
+      // Await for authenticated fetch
+      await fetchMe();
+      // Await for feature detection
+      await fetchInstance();
+      // Await for configuration
+      await loadFrontendConfig();
+    };
+
+    loadInitial()
       .then(() => {
         setIsLoaded(true);
       })

@@ -1,11 +1,10 @@
+import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
 import React from 'react';
 
 import Icon from '@/components/ui/icon';
 import { MIMETYPE_ICONS } from '@/components/upload';
 
 import type { MediaAttachment } from 'pl-api';
-
-const defaultIcon = require('@phosphor-icons/core/regular/paperclip.svg');
 
 interface IChatUploadPreview {
   className?: string;

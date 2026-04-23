@@ -1,3 +1,4 @@
+import iconMapPin from '@phosphor-icons/core/regular/map-pin.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -44,7 +45,7 @@ const LocationButton: React.FC<ILocationButton> = ({ composeId }) => {
 
   return (
     <ComposeFormButton
-      icon={require('@phosphor-icons/core/regular/map-pin.svg')}
+      icon={iconMapPin}
       title={intl.formatMessage(active ? messages.hideLocationPicker : messages.showLocationPicker)}
       active={active}
       onClick={onClick}

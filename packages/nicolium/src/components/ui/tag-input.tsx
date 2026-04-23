@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import HStack from './hstack';
 import Tag from './tag';
 
 interface ITagInput {
@@ -47,7 +46,7 @@ const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
 
   return (
     <div className='⁂-tag-input'>
-      <HStack className='⁂-tag-input__list' space={2} wrap>
+      <div className='⁂-tag-input__list'>
         {tags.map((tag) => (
           <div key={tag} className='⁂-tag-input__item'>
             <Tag tag={tag} onDelete={handleTagDelete} />
@@ -63,7 +62,7 @@ const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
           }}
           onKeyDown={handleKeyDown}
         />
-      </HStack>
+      </div>
     </div>
   );
 };

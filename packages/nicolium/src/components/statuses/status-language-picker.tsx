@@ -1,15 +1,15 @@
+import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
-import { type Language, languages } from '@/features/preferences';
+import { type Language, languages } from '@/pages/settings/components/preferences';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
 import DropdownMenu from '../dropdown-menu';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
 const messages = defineMessages({
   languageVersions: {
@@ -19,7 +19,7 @@ const messages = defineMessages({
 });
 
 interface IStatusLanguagePicker {
-  status: Pick<Status, 'id' | 'content_map'>;
+  status: Pick<Status, 'id' | 'content_map' | 'language'>;
   showLabel?: boolean;
 }
 
@@ -32,12 +32,7 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
 
     if (!status.content_map || Object.keys(status.content_map).length < 2) return null;
 
-    const icon = (
-      <Icon
-        className='size-4 text-gray-700 dark:text-gray-600'
-        src={require('@phosphor-icons/core/regular/translate.svg')}
-      />
-    );
+    const icon = <Icon className='size-4 text-gray-700 dark:text-gray-600' src={iconTranslate} />;
 
     return (
       <>
@@ -49,17 +44,17 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
             action: () => {
               setStatusLanguage(status.id, language);
             },
-            active: language === currentLanguage,
+            active: language === (currentLanguage || status.language),
           }))}
         >
           <button title={intl.formatMessage(messages.languageVersions)} className='hover:underline'>
             {showLabel ? (
-              <HStack space={1} alignItems='center'>
+              <div className='flex items-center gap-1'>
                 {icon}
                 <Text tag='span' theme='muted' size='sm'>
                   {languages[currentLanguage as Language] || currentLanguage}
                 </Text>
-              </HStack>
+              </div>
             ) : (
               icon
             )}

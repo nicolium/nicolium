@@ -2,7 +2,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { BigCard } from '@/components/ui/big-card';
-import ExternalLoginForm from '@/features/external-login/components/external-login-form';
+
+import ExternalLoginForm from './components/external-login-form';
 
 /** Page for logging into a remote instance */
 const ExternalLoginPage: React.FC = () => (

@@ -1,3 +1,4 @@
+import iconArrowRight from '@phosphor-icons/core/regular/arrow-right.svg';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 
@@ -22,7 +23,7 @@ const Widget: React.FC<IWidget> = ({
   title,
   children,
   onActionClick,
-  actionIcon = require('@phosphor-icons/core/regular/arrow-right.svg'),
+  actionIcon = iconArrowRight,
   actionTitle,
   action,
   className,

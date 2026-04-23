@@ -1,3 +1,4 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -5,10 +6,8 @@ import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import FormActions from '@/components/ui/form-actions';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Indicator from '@/components/ui/indicator';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { unregisterSW } from '@/utils/sw';
 
@@ -85,25 +84,22 @@ const ServiceWorkerInfo: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)} backHref='/developers'>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <List>
           <ListItem label={intl.formatMessage(messages.status)}>
-            <HStack alignItems='center' space={2}>
+            <div className='flex items-center gap-2'>
               <Indicator state={getState()} />
               <Text size='md' theme='muted'>
                 {getMessage()}
               </Text>
-            </HStack>
+            </div>
           </ListItem>
 
           {url && (
             <ListItem label={intl.formatMessage(messages.url)}>
               <a href={url} target='_blank' className='flex items-center space-x-1 truncate'>
                 <span className='truncate'>{url}</span>
-                <Icon
-                  className='size-4'
-                  src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
-                />
+                <Icon className='size-4' src={iconArrowSquareOut} />
               </a>
             </ListItem>
           )}
@@ -114,7 +110,7 @@ const ServiceWorkerInfo: React.FC = () => {
             <FormattedMessage id='sw.restart' defaultMessage='Restart' />
           </Button>
         </FormActions>
-      </Stack>
+      </div>
     </Column>
   );
 };

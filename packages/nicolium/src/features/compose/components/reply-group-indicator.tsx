@@ -12,9 +12,7 @@ interface IReplyGroupIndicator {
   composeId: string;
 }
 
-const ReplyGroupIndicator: React.FC<IReplyGroupIndicator> = (props) => {
-  const { composeId } = props;
-
+const ReplyGroupIndicator: React.FC<IReplyGroupIndicator> = ({ composeId }) => {
   const { inReplyToId } = useCompose(composeId);
 
   const { data: status } = useMinimalStatus(inReplyToId ?? undefined);

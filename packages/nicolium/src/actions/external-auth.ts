@@ -10,13 +10,11 @@ import { instanceSchema, PlApiClient, type Instance } from 'pl-api';
 import * as v from 'valibot';
 
 import { createApp } from '@/actions/apps';
-import { authLoggedIn, verifyCredentials, switchAccount } from '@/actions/auth';
 import { obtainOAuthToken } from '@/actions/oauth';
+import { addToken, verifyCredentials, switchAccount } from '@/stores/auth';
 import { parseBaseURL } from '@/utils/auth';
 import sourceCode from '@/utils/code';
 import { getInstanceScopes } from '@/utils/scopes';
-
-import type { AppDispatch } from '@/store';
 
 const fetchExternalInstance = (baseURL: string) =>
   new PlApiClient(baseURL).instance
@@ -72,7 +70,7 @@ const externalLogin = (host: string) => {
   });
 };
 
-const loginWithCode = (code: string) => (dispatch: AppDispatch) => {
+const loginWithCode = async (code: string) => {
   const app = JSON.parse(localStorage.getItem('nicolium:external:app')!);
   const { client_id, client_secret, redirect_uri } = app;
   const baseURL = localStorage.getItem('nicolium:external:baseurl')!;
@@ -87,11 +85,11 @@ const loginWithCode = (code: string) => (dispatch: AppDispatch) => {
     code,
   };
 
-  return obtainOAuthToken(params, baseURL)
-    .then((token) => dispatch(authLoggedIn(token, app)))
-    .then(({ access_token }) => dispatch(verifyCredentials(access_token, baseURL)))
-    .then((account) => dispatch(switchAccount(account.id)))
-    .then(() => (window.location.href = '/'));
+  const token = await obtainOAuthToken(params, baseURL);
+  addToken(token, app);
+  const account = await verifyCredentials(token.access_token, baseURL);
+  switchAccount(account.id);
+  window.location.href = '/';
 };
 
 export { externalLogin, loginWithCode };

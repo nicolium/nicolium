@@ -7,6 +7,7 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { queryKeys } from '@/queries/keys';
+import { useSettings } from '@/stores/settings';
 
 import type { NicoliumResponse } from '@/api';
 
@@ -30,6 +31,9 @@ const useAccount = (accountId?: string, withRelationship = false) => {
   const features = useFeatures();
   const { me } = useLoggedIn();
   const queryClient = useQueryClient();
+  const { accountNicknames } = useSettings();
+
+  const nickname = accountNicknames[accountId ?? ''];
 
   const accountQuery = useQuery({
     queryKey: queryKeys.accounts.show(accountId!),
@@ -63,19 +67,14 @@ const useAccount = (accountId?: string, withRelationship = false) => {
     const mergedRelationship = relationship ?? accountQuery.data.relationship;
     const mergedIsAdmin = credentialIsAdmin ?? accountQuery.data.is_admin;
 
-    if (
-      mergedRelationship === accountQuery.data.relationship &&
-      mergedIsAdmin === accountQuery.data.is_admin
-    ) {
-      return accountQuery.data;
-    }
-
     return {
       ...accountQuery.data,
+      display_name: nickname ?? accountQuery.data.display_name,
+      original_display_name: accountQuery.data.display_name,
       relationship: mergedRelationship,
       is_admin: mergedIsAdmin,
     };
-  }, [accountQuery.data, relationship, credentialIsAdmin]);
+  }, [accountQuery.data, relationship, credentialIsAdmin, nickname]);
 
   return {
     ...accountQuery,

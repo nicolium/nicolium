@@ -1,11 +1,11 @@
-import { Link, type LinkOptions } from '@tanstack/react-router';
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
+import { Link, useMatchRoute, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Select from '@/components/ui/select';
-import { SelectDropdown } from '@/features/forms';
+import { SelectDropdown } from '@/components/ui/select-dropdown';
 
 interface IList {
   children: React.ReactNode;
@@ -16,25 +16,32 @@ const List: React.FC<IList> = ({ children }) => <div className='⁂-list'>{child
 type IListItem = {
   className?: string;
   label: React.ReactNode;
+  labelClassName?: string;
   hint?: React.ReactNode;
   href?: string;
   onClick?(): void;
   isSelected?: boolean;
   children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
   size?: 'sm' | 'md';
+  actionIcon?: string;
 } & (LinkOptions | {});
 
 const ListItem: React.FC<IListItem> = ({
   className,
   label,
+  labelClassName,
   hint,
   children,
   href,
   onClick,
   isSelected,
   size = 'md',
+  actionIcon,
   ...rest
 }) => {
+  const matchRoute = useMatchRoute();
+  const isActive = 'to' in rest ? matchRoute({ to: rest.to }) !== false : false;
+
   const [domId] = useState(`list-group-${crypto.randomUUID()}`);
   const labelId = `${domId}-label`;
   const hintId = `${domId}-hint`;
@@ -86,11 +93,12 @@ const ListItem: React.FC<IListItem> = ({
   const classNames = clsx('⁂-list-item', className, {
     '⁂-list-item--md': size === 'md',
     '⁂-list-item--sm': size === 'sm',
+    '⁂-list-item--active': isActive,
   });
 
   const body = (
     <>
-      <div className='⁂-list-item__label'>
+      <div className={clsx('⁂-list-item__label', labelClassName)}>
         <LabelComp id={labelId} {...(LabelComp === 'label' ? { htmlFor: domId } : {})}>
           {label}
         </LabelComp>
@@ -103,11 +111,11 @@ const ListItem: React.FC<IListItem> = ({
       </div>
 
       {'to' in rest || href || onClick ? (
-        <HStack space={1} alignItems='center' className='⁂-list-item__body'>
+        <div className='⁂-list-item__body'>
           {children}
 
-          <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} aria-hidden />
-        </HStack>
+          <Icon src={actionIcon || iconCaretRight} aria-hidden />
+        </div>
       ) : null}
 
       {!('to' in rest) && typeof onClick === 'undefined' ? renderChildren() : null}

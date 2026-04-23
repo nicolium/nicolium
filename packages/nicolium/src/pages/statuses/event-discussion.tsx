@@ -2,16 +2,15 @@ import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import MissingIndicator from '@/components/missing-indicator';
+import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
+import PendingStatus from '@/components/statuses/pending-status';
 import Tombstone from '@/components/statuses/tombstone';
-import Stack from '@/components/ui/stack';
-import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import ThreadStatus from '@/features/status/components/thread-status';
-import PendingStatus from '@/features/ui/components/pending-status';
-import { eventDiscussionRoute } from '@/features/ui/router';
 import { ComposeForm } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useStatus } from '@/queries/statuses/use-status';
+import { eventDiscussionRoute } from '@/router';
 import { useComposeActions } from '@/stores/compose';
 import { useDescendantsIds } from '@/stores/contexts';
 import { selectChild } from '@/utils/scroll-utils';
@@ -25,7 +24,7 @@ const EventDiscussionPage: React.FC = () => {
 
   const { data: status, isPending } = useStatus(statusId);
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
 
   const descendantsIds = useDescendantsIds(statusId);
 
@@ -70,7 +69,7 @@ const EventDiscussionPage: React.FC = () => {
 
   const renderChildren = (list: Array<string>) =>
     list.map((id) => {
-      if (id.endsWith('-tombstone')) {
+      if (id.endsWith('-tombstone') || id.endsWith('-unavailable')) {
         return renderTombstone(id);
       } else if (id.startsWith('末pending-')) {
         return renderPendingStatus(id);
@@ -94,7 +93,7 @@ const EventDiscussionPage: React.FC = () => {
   }
 
   return (
-    <Stack space={2}>
+    <div className='flex flex-col gap-2'>
       {me && (
         <div className='border-b border-solid border-gray-200 p-2 pt-0 dark:border-gray-800'>
           <ComposeForm id={`reply:${status.id}`} event={status.id} transparent />
@@ -116,7 +115,7 @@ const EventDiscussionPage: React.FC = () => {
           {children}
         </ScrollableList>
       </div>
-    </Stack>
+    </div>
   );
 };
 

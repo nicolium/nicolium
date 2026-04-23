@@ -1,12 +1,14 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconInfo from '@phosphor-icons/core/regular/info.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import { Link, type LinkProps } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
+import { AccountLink } from '@/components/accounts/account-link';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 
@@ -63,19 +65,19 @@ const ChatWindow = () => {
     <>
       <ChatPaneHeader
         title={
-          <HStack alignItems='center' space={2}>
+          <div className='flex items-center gap-2'>
             {isOpen && (
               <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
                 <Icon
-                  src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+                  src={iconArrowLeft}
                   className='size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180'
                 />
               </button>
             )}
 
-            <HStack alignItems='center' space={3}>
+            <div className='flex items-center gap-3'>
               {isOpen && (
-                <Link to='/@{$username}' params={{ username: chat.account.acct }}>
+                <AccountLink account={chat.account}>
                   <Avatar
                     src={chat.account.avatar}
                     alt={chat.account.avatar_description}
@@ -83,10 +85,10 @@ const ChatWindow = () => {
                     isCat={chat.account.is_cat}
                     username={chat.account.username}
                   />
-                </Link>
+                </AccountLink>
               )}
 
-              <Stack alignItems='start'>
+              <div className='flex flex-col items-start'>
                 <LinkWrapper
                   enabled={isOpen}
                   to='/@{$username}'
@@ -99,16 +101,12 @@ const ChatWindow = () => {
                     {chat.account.verified && <VerificationBadge />}
                   </div>
                 </LinkWrapper>
-              </Stack>
-            </HStack>
-          </HStack>
+              </div>
+            </div>
+          </div>
         }
         secondaryAction={isOpen ? openChatSettings : openSearch}
-        secondaryActionIcon={
-          isOpen
-            ? require('@phosphor-icons/core/regular/info.svg')
-            : require('@phosphor-icons/core/regular/pencil-simple.svg')
-        }
+        secondaryActionIcon={isOpen ? iconInfo : iconPencilSimple}
         secondaryActionTitle={
           isOpen ? intl.formatMessage(messages.chatInfo) : intl.formatMessage(messages.newChat)
         }
@@ -117,9 +115,9 @@ const ChatWindow = () => {
         onToggle={toggleChatPane}
       />
 
-      <Stack className='h-full grow overflow-hidden' space={2}>
+      <div className='flex h-full grow flex-col overflow-hidden'>
         <Chat chat={chat} inputRef={inputRef} />
-      </Stack>
+      </div>
     </>
   );
 };

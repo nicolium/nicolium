@@ -12,7 +12,7 @@ const any = (arr: Array<any>): boolean => arr.some(Boolean);
  * Ditto, a Nostr server with Mastodon API.
  *
  * @category Software
- * @see {@link https://gitlab.com/soapbox-pub/ditto}
+ * @see {@link https://gitlab.com/soapbox-pub/ditto-v1}
  */
 const DITTO = 'Ditto';
 
@@ -683,6 +683,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FIREFISH,
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === GOTOSOCIAL && gte(v.version, '0.18.0'),
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
@@ -905,9 +906,11 @@ const getFeatures = (instance: Instance) => {
       v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA,
+      v.software === SNAC && gte(v.version, '2.78.0'),
       v.software === TOKI,
     ]),
 
@@ -1360,6 +1363,14 @@ const getFeatures = (instance: Instance) => {
      */
     pleromaAdminAnnouncements: any([v.software === AKKOMA, v.software === PLEROMA]),
 
+    /**
+     * @see GET /api/v1/pleroma/admin/config/descriptions
+     * @see GET /api/v1/pleroma/admin/config
+     * @see POST /api/v1/pleroma/admin/config
+     * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminconfig}
+     */
+    pleromaAdminConfig: any([v.software === AKKOMA, v.software === PLEROMA]),
+
     pleromaAdminModerationLog: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     pleromaAdminRelays: any([v.software === AKKOMA, v.software === PLEROMA]),
@@ -1381,12 +1392,14 @@ const getFeatures = (instance: Instance) => {
     polls: any([
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '3.15.0'),
       v.software === NEODB,
       v.software === SHARKEY,
+      v.software === SNAC && gte(v.version, '2.90.0'),
       v.software === TAKAHE && gte(v.version, '0.8.0'),
       instance.api_versions['polls.pleroma.pl-api'] >= 1,
     ]),
@@ -1398,6 +1411,7 @@ const getFeatures = (instance: Instance) => {
     postLanguages: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '3.23.0'),
       v.software === PLEROMA && gte(v.version, '2.9.0'),
@@ -1464,6 +1478,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
@@ -1714,7 +1729,10 @@ const getFeatures = (instance: Instance) => {
      * Trending links.
      * @see GET /api/v1/trends/links
      */
-    trendingLinks: v.software === MASTODON && gte(v.compatVersion, '3.5.0'),
+    trendingLinks: any([
+      v.software === MASTODON && gte(v.compatVersion, '3.5.0'),
+      v.software === NEODB,
+    ]),
 
     /**
      * Trending statuses.
@@ -1726,6 +1744,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === ICESHRIMP,
       v.software === MASTODON,
+      v.software === NEODB,
       v.software === PIXELFED,
       v.software === SHARKEY,
     ]),

@@ -1,16 +1,16 @@
+import iconCircleNotch from '@phosphor-icons/core/regular/circle-notch.svg';
+import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
 import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { useTranslationLanguages } from '@/queries/instance/use-translation-languages';
 import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
+import { useInstance } from '@/stores/instance';
 import {
   useLanguageModelAvailability,
   useLanguageModelAvailabilityActions,
@@ -18,7 +18,7 @@ import {
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { Instance } from 'pl-api';
 
 const canRemoteTranslate = (
@@ -80,8 +80,9 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   const settings = useSettings();
   const autoTranslate = settings.autoTranslate;
   const knownLanguages = autoTranslate ? [...settings.knownLanguages, intl.locale] : [intl.locale];
+  const showSideBySideTranslations = settings.showSideBySideTranslations;
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: translationLanguages = {} } = useTranslationLanguages();
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
   const { fetchLocalTranslation, hideLocalTranslation } = useStatusMetaActions();
@@ -148,7 +149,11 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
 
   const translationLabel = () => {
     if (translationQuery.data) {
-      return <FormattedMessage id='status.show_original' defaultMessage='Show original' />;
+      return showSideBySideTranslations ? (
+        <FormattedMessage id='status.hide_translation' defaultMessage='Hide translation' />
+      ) : (
+        <FormattedMessage id='status.show_original' defaultMessage='Show original' />
+      );
     }
 
     if (translationQuery.isLoading) {
@@ -181,16 +186,13 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   };
 
   const button = (
-    <button
-      className='flex w-fit items-center gap-1 text-primary-600 hover:underline dark:text-gray-600'
-      onClick={handleTranslate}
-    >
-      <Icon src={require('@phosphor-icons/core/regular/translate.svg')} className='size-4' />
+    <button className='⁂-translate-button' onClick={handleTranslate}>
+      <Icon src={iconTranslate} className='⁂-translate-button__icon' />
       <span>{translationLabel()}</span>
       {translationQuery.isLoading && (
         <Icon
-          src={require('@phosphor-icons/core/regular/circle-notch.svg')}
-          className='size-4 animate-spin'
+          src={iconCircleNotch}
+          className='⁂-translate-button__icon ⁂-translate-button__icon--loading'
         />
       )}
     </button>
@@ -202,9 +204,9 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
     const provider = translationQuery.data.provider;
 
     return (
-      <Stack space={3} alignItems='start'>
+      <div className='⁂-translate-button__container'>
         {button}
-        <Text theme='muted'>
+        <p className='⁂-translate-button__info'>
           <FormattedMessage
             id='status.translated_from_with'
             defaultMessage='Translated from {lang} {provider}'
@@ -224,8 +226,8 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
               ) : undefined,
             }}
           />
-        </Text>
-      </Stack>
+        </p>
+      </div>
     );
   }
 

@@ -1,20 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { submitReport, ReportableEntities } from '@/actions/reports';
+import AccountContainer from '@/components/accounts/account-container';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import StatusContent from '@/components/statuses/status-content';
 import Modal from '@/components/ui/modal';
 import ProgressBar from '@/components/ui/progress-bar';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import AccountContainer from '@/containers/account-container';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useInstance } from '@/hooks/use-instance';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
+import { useReportAccountMutation } from '@/queries/accounts/use-report';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useAccountTimeline } from '@/queries/timelines/use-timelines';
+import { useInstance } from '@/stores/instance';
 
 import ConfirmationStep from './steps/confirmation-step';
 import OtherActionsStep from './steps/other-actions-step';
@@ -42,7 +40,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
   }
 
   return (
-    <Stack space={2} className='rounded-lg bg-gray-100 p-4 dark:bg-gray-800'>
+    <div className='flex flex-col gap-2 rounded-lg bg-gray-100 p-4 dark:bg-gray-800'>
       <AccountContainer
         id={status.account_id}
         showAccountHoverCard={false}
@@ -54,27 +52,24 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
       <StatusContent status={status} />
 
       {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
-    </Stack>
+    </div>
   );
 };
 
 interface ReportModalProps {
   accountId: string;
-  entityType: ReportableEntities;
-  statusIds: Array<string>;
+  statusIds?: Array<string>;
 }
 
 const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   onClose,
   accountId,
-  entityType,
-  statusIds,
+  statusIds = [],
 }) => {
-  const dispatch = useAppDispatch();
-
   const { data: account } = useAccount(accountId || undefined);
 
   const { mutate: blockAccount } = useBlockAccountMutation(accountId);
+  const { mutate: reportAccount } = useReportAccountMutation(accountId);
 
   const [block, setBlock] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -86,22 +81,30 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
 
   const shouldRequireRule = rules.length > 0;
 
-  const isReportingAccount = entityType === ReportableEntities.ACCOUNT;
-  const isReportingStatus = entityType === ReportableEntities.STATUS;
+  const isReportingAccount = statusIds.length === 0;
 
   const [currentStep, setCurrentStep] = useState<Steps>(Steps.ONE);
 
   const handleSubmit = () => {
     setIsSubmitting(true);
 
-    dispatch(submitReport(accountId, selectedStatusIds, [...ruleIds], comment, forward))
-      .then(() => {
-        setIsSubmitting(false);
-        setCurrentStep(Steps.THREE);
-      })
-      .catch(() => {
-        setIsSubmitting(false);
-      });
+    reportAccount(
+      {
+        status_ids: selectedStatusIds,
+        comment,
+        forward,
+        rule_ids: ruleIds,
+      },
+      {
+        onSuccess: () => {
+          setIsSubmitting(false);
+          setCurrentStep(Steps.THREE);
+        },
+        onError: () => {
+          setIsSubmitting(false);
+        },
+      },
+    );
 
     if (block && account) {
       blockAccount(undefined);
@@ -178,7 +181,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   };
 
   const renderSelectedEntity = () => {
-    if (entityType === ReportableEntities.STATUS) return renderSelectedStatuses();
+    if (!isReportingAccount) return renderSelectedStatuses();
     return null;
   };
 
@@ -195,19 +198,8 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
       return false;
     }
 
-    return (
-      isSubmitting ||
-      (shouldRequireRule && ruleIds.length === 0) ||
-      (isReportingStatus && selectedStatusIds.length === 0)
-    );
-  }, [
-    currentStep,
-    isSubmitting,
-    shouldRequireRule,
-    ruleIds.length,
-    selectedStatusIds.length,
-    isReportingStatus,
-  ]);
+    return isSubmitting || (shouldRequireRule && ruleIds.length === 0);
+  }, [currentStep, isSubmitting, shouldRequireRule, ruleIds.length, selectedStatusIds.length]);
 
   const calculateProgress = useCallback(() => {
     switch (currentStep) {
@@ -241,7 +233,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
       confirmationDisabled={isConfirmationButtonDisabled}
       skipFocus
     >
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <ProgressBar progress={calculateProgress()} />
 
         {currentStep !== Steps.THREE && !isReportingAccount && renderSelectedEntity()}
@@ -262,7 +254,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
             isSubmitting={isSubmitting}
           />
         )}
-      </Stack>
+      </div>
     </Modal>
   );
 };

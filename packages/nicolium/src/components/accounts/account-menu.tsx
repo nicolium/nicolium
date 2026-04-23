@@ -1,0 +1,606 @@
+import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
+import iconArrowsClockwise from '@phosphor-icons/core/regular/arrows-clockwise.svg';
+import iconAt from '@phosphor-icons/core/regular/at.svg';
+import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
+import iconEnvelopeSimple from '@phosphor-icons/core/regular/envelope-simple.svg';
+import iconExport from '@phosphor-icons/core/regular/export.svg';
+import iconFlag from '@phosphor-icons/core/regular/flag.svg';
+import iconGavel from '@phosphor-icons/core/regular/gavel.svg';
+import iconLinkSimpleHorizontal from '@phosphor-icons/core/regular/link-simple-horizontal.svg';
+import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
+import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRss from '@phosphor-icons/core/regular/rss.svg';
+import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
+import iconSpeakerSimpleX from '@phosphor-icons/core/regular/speaker-simple-x.svg';
+import iconTag from '@phosphor-icons/core/regular/tag.svg';
+import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
+import iconUserCheck from '@phosphor-icons/core/regular/user-check.svg';
+import iconUserMinus from '@phosphor-icons/core/regular/user-minus.svg';
+import iconUser from '@phosphor-icons/core/regular/user.svg';
+import { GOTOSOCIAL, MASTODON } from 'pl-api';
+import React from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+
+import { changeSetting } from '@/actions/settings';
+import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
+import IconButton from '@/components/ui/icon-button';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import {
+  useFollowAccountMutation,
+  usePinAccountMutation,
+  useRemoveAccountFromFollowersMutation,
+  useUnblockAccountMutation,
+  useUnmuteAccountMutation,
+  useUnpinAccountMutation,
+  useUpdateAccountNoteMutation,
+} from '@/queries/accounts/use-relationship';
+import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/settings/domain-blocks';
+import { useComposeActions } from '@/stores/compose';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
+import toast from '@/toast';
+import copy from '@/utils/copy';
+
+import type { Account } from 'pl-api';
+
+const messages = defineMessages({
+  editProfile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
+  mention: { id: 'account.mention', defaultMessage: 'Mention' },
+  direct: { id: 'account.direct', defaultMessage: 'Direct message @{name}' },
+  unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
+  block: { id: 'account.block', defaultMessage: 'Block @{name}' },
+  unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
+  mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
+  report: { id: 'account.report', defaultMessage: 'Report @{name}' },
+  copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
+  copySuccess: { id: 'account.copy_success', defaultMessage: 'Profile URL copied to clipboard' },
+  media: { id: 'account.media', defaultMessage: 'Media' },
+  blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
+  unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
+  hideReblogs: { id: 'account.hide_reblogs', defaultMessage: 'Hide reposts from @{name}' },
+  showReblogs: { id: 'account.show_reblogs', defaultMessage: 'Show reposts from @{name}' },
+  settings: { id: 'settings.settings', defaultMessage: 'Settings' },
+  blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
+  mutes: { id: 'column.mutes', defaultMessage: 'Mutes' },
+  endorse: { id: 'account.endorse', defaultMessage: 'Feature on profile' },
+  unendorse: { id: 'account.unendorse', defaultMessage: "Don't feature on profile" },
+  bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
+  removeFromFollowers: {
+    id: 'account.remove_from_followers',
+    defaultMessage: 'Remove this follower',
+  },
+  adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
+  addOrRemoveFromList: {
+    id: 'account.add_or_remove_from_list',
+    defaultMessage: 'Add or remove from lists',
+  },
+  search: { id: 'account.search', defaultMessage: 'Search from @{name}' },
+  searchSelf: { id: 'account.search_self', defaultMessage: 'Search your posts' },
+  unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
+  blockDomainConfirm: {
+    id: 'confirmations.domain_block.confirm',
+    defaultMessage: 'Hide entire domain',
+  },
+  removeFromFollowersConfirm: {
+    id: 'confirmations.remove_from_followers.confirm',
+    defaultMessage: 'Remove',
+  },
+  userEndorsed: {
+    id: 'account.endorse.success',
+    defaultMessage: 'You are now featuring @{acct} on your profile',
+  },
+  userUnendorsed: {
+    id: 'account.unendorse.success',
+    defaultMessage: 'You are no longer featuring @{acct}',
+  },
+  userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
+  userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
+  profileExternal: { id: 'account.profile_external', defaultMessage: 'View profile on {domain}' },
+  loadActivities: { id: 'account.load_activities', defaultMessage: 'Fetch latest posts' },
+  loadActivitiesSuccess: {
+    id: 'account.load_activities.success',
+    defaultMessage: 'Scheduled fetching latest posts',
+  },
+  loadActivitiesFail: {
+    id: 'account.load_activities.fail',
+    defaultMessage: 'Failed to fetch latest posts',
+  },
+  nickname: { id: 'account.nickname.modal_header', defaultMessage: 'Set nickname for @{name}' },
+  nicknamePlaceholder: { id: 'account.nickname.placeholder', defaultMessage: 'Enter a nickname' },
+  nicknameSave: { id: 'account.nickname.save', defaultMessage: 'Save nickname' },
+  nicknameSaved: { id: 'account.nickname.success', defaultMessage: 'Nickname saved' },
+  note: { id: 'account_note.modal_header', defaultMessage: 'Edit note for @{name}' },
+  notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
+  noteSaved: { id: 'account_note.success', defaultMessage: 'Note saved' },
+  noteSaveFailed: { id: 'account_note.fail', defaultMessage: 'Failed to save note' },
+  share: { id: 'account.share', defaultMessage: "Share @{name}'s profile" },
+  subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
+});
+
+interface IAccountMenu {
+  account: Account;
+}
+
+const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
+  const intl = useIntl();
+  const { mentionCompose, directCompose } = useComposeActions();
+  const client = useClient();
+
+  const features = useFeatures();
+  const { data: ownAccount } = useOwnAccount();
+  const { mutate: followAccount } = useFollowAccountMutation(account?.id!);
+  const { mutate: unblockAccount } = useUnblockAccountMutation(account?.id!);
+  const { mutate: unmuteAccount } = useUnmuteAccountMutation(account?.id!);
+  const { mutate: pinAccount } = usePinAccountMutation(account?.id!);
+  const { mutate: unpinAccount } = useUnpinAccountMutation(account?.id!);
+  const { mutate: removeFromFollowers } = useRemoveAccountFromFollowersMutation(account?.id!);
+  const { mutate: updateAccountNote } = useUpdateAccountNoteMutation(account?.id!);
+  const { mutate: blockDomain } = useBlockDomainMutation();
+  const { mutate: unblockDomain } = useUnblockDomainMutation();
+  const { openModal } = useModalsActions();
+  const settings = useSettings();
+
+  const { software } = features.version;
+
+  const onBlock = () => {
+    if (account.relationship?.blocking) {
+      unblockAccount();
+    } else {
+      openModal('BLOCK_MUTE', { accountId: account.id, action: 'BLOCK' });
+    }
+  };
+
+  const onMention = () => {
+    mentionCompose(account);
+  };
+
+  const onDirect = () => {
+    directCompose(account);
+  };
+
+  const onReblogToggle = () => {
+    if (account.relationship?.showing_reblogs) {
+      followAccount({ reblogs: false });
+    } else {
+      followAccount({ reblogs: true });
+    }
+  };
+
+  const onEndorseToggle = () => {
+    if (account.relationship?.endorsed) {
+      unpinAccount(undefined, {
+        onSuccess: () => {
+          toast.success(intl.formatMessage(messages.userUnendorsed, { acct: account.acct }));
+        },
+      });
+    } else {
+      pinAccount(undefined, {
+        onSuccess: () => {
+          toast.success(intl.formatMessage(messages.userEndorsed, { acct: account.acct }));
+        },
+      });
+    }
+  };
+
+  const onBite = () => {
+    client.accounts
+      .biteAccount(account.id)
+      .then(() => {
+        toast.success(intl.formatMessage(messages.userBit, { acct: account.acct }));
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct }));
+      });
+  };
+
+  const onLoadActivities = () => {
+    client.accounts
+      .loadActivities(account.id)
+      .then(() => {
+        toast.success(messages.loadActivitiesSuccess);
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(messages.loadActivitiesFail));
+      });
+  };
+
+  const onEditNote = () => {
+    openModal('TEXT_FIELD', {
+      heading: (
+        <FormattedMessage
+          id='account_note.modal_header'
+          defaultMessage='Edit note for @{name}'
+          values={{ name: account.acct }}
+        />
+      ),
+      placeholder: intl.formatMessage(messages.notePlaceholder),
+      confirm: <FormattedMessage id='account_note.save' defaultMessage='Save note' />,
+      onConfirm: (value) => {
+        updateAccountNote(value, {
+          onSuccess: () => {
+            toast.success(messages.noteSaved);
+          },
+          onError: () => {
+            toast.error(messages.noteSaveFailed);
+          },
+        });
+      },
+      text: account.relationship?.note ?? '',
+    });
+  };
+
+  const onEditNickname = () => {
+    const currentNickname = settings.accountNicknames[account.id] ?? '';
+    openModal('TEXT_FIELD', {
+      heading: (
+        <FormattedMessage
+          id='account.nickname.modal_header'
+          defaultMessage='Set nickname for @{name}'
+          values={{ name: account.acct }}
+        />
+      ),
+      placeholder: intl.formatMessage(messages.nicknamePlaceholder),
+      confirm: <FormattedMessage id='account.nickname.save' defaultMessage='Save nickname' />,
+      onConfirm: (value) => {
+        const trimmed = value.trim();
+        changeSetting(['accountNicknames', account.id], trimmed || undefined);
+        toast.success(messages.nicknameSaved);
+      },
+      text: currentNickname,
+      singleLine: true,
+    });
+  };
+
+  const onReport = () => {
+    openModal('REPORT', { accountId: account.id });
+  };
+
+  const onMute = () => {
+    if (account.relationship?.muting) {
+      unmuteAccount();
+    } else {
+      openModal('BLOCK_MUTE', { accountId: account.id, action: 'MUTE' });
+    }
+  };
+
+  const onBlockDomain = (domain: string) => {
+    openModal('CONFIRM', {
+      heading: (
+        <FormattedMessage
+          id='confirmations.domain_block.heading'
+          defaultMessage='Block {domain}'
+          values={{ domain }}
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.domain_block.message'
+          defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications.'
+          values={{ domain: <strong>{domain}</strong> }}
+        />
+      ),
+      confirm: intl.formatMessage(messages.blockDomainConfirm),
+      onConfirm: () => {
+        blockDomain(domain);
+      },
+    });
+  };
+
+  const onUnblockDomain = (domain: string) => {
+    unblockDomain(domain);
+  };
+
+  const onAddToList = () => {
+    openModal('LIST_ADDER', {
+      accountId: account.id,
+    });
+  };
+
+  const onRemoveFromFollowers = () => {
+    const unfollowModal = settings.unfollowModal;
+    if (unfollowModal) {
+      openModal('CONFIRM', {
+        heading: (
+          <FormattedMessage
+            id='confirmations.remove_from_followers.heading'
+            defaultMessage='Remove {name} from followers'
+            values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+          />
+        ),
+        message: (
+          <FormattedMessage
+            id='confirmations.remove_from_followers.message'
+            defaultMessage='Are you sure you want to remove {name} from your followers?'
+            values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+          />
+        ),
+        confirm: intl.formatMessage(messages.removeFromFollowersConfirm),
+        onConfirm: () => {
+          removeFromFollowers();
+        },
+      });
+    } else {
+      removeFromFollowers();
+    }
+  };
+
+  const handleShare = () => {
+    navigator
+      .share({
+        text: `@${account.acct}`,
+        url: account.url,
+      })
+      .catch((e) => {
+        if (e.name !== 'AbortError') console.error(e);
+      });
+  };
+
+  const handleCopy: React.EventHandler<React.MouseEvent> = () => {
+    copy(account.url, () => toast.success(messages.copySuccess));
+  };
+
+  const makeMenu = () => {
+    const menu: Menu = [];
+
+    if (!account) {
+      return [];
+    }
+
+    if (features.rssFeeds && account.local && (software !== GOTOSOCIAL || account.enable_rss)) {
+      menu.push({
+        text: intl.formatMessage(messages.subscribeFeed),
+        icon: iconRss,
+        href: software === MASTODON ? `${account.url}.rss` : `${account.url}/feed.rss`,
+        target: '_blank',
+      });
+    }
+
+    if ('share' in navigator) {
+      menu.push({
+        text: intl.formatMessage(messages.share, { name: account.username }),
+        action: handleShare,
+        icon: iconExport,
+      });
+    }
+
+    if (features.federating && !account.local) {
+      const domain = account.fqn.split('@')[1];
+
+      menu.push({
+        text: intl.formatMessage(messages.profileExternal, { domain }),
+        href: account.url,
+        icon: iconArrowSquareOut,
+      });
+    }
+
+    menu.push({
+      text: intl.formatMessage(messages.copy),
+      action: handleCopy,
+      icon: iconLinkSimpleHorizontal,
+    });
+
+    if (!ownAccount) return menu;
+
+    if (features.searchFromAccount) {
+      menu.push({
+        text: intl.formatMessage(
+          account.id === ownAccount.id ? messages.searchSelf : messages.search,
+          { name: account.username },
+        ),
+        to: '/search',
+        search: { type: 'statuses', accountId: account.id },
+        icon: iconMagnifyingGlass,
+      });
+    }
+
+    if (menu.length) {
+      menu.push(null);
+    }
+
+    if (account.id === ownAccount.id) {
+      menu.push({
+        text: intl.formatMessage(messages.editProfile),
+        to: '/settings/profile',
+        icon: iconUser,
+      });
+      menu.push({
+        text: intl.formatMessage(messages.settings),
+        to: '/settings',
+        icon: iconSlidersHorizontal,
+      });
+      menu.push(null);
+      menu.push({
+        text: intl.formatMessage(messages.mutes),
+        to: '/mutes',
+        icon: iconSpeakerSimpleX,
+      });
+      menu.push({
+        text: intl.formatMessage(messages.blocks),
+        to: '/blocks',
+        icon: iconProhibit,
+      });
+    } else {
+      menu.push({
+        text: intl.formatMessage(messages.mention, { name: account.username }),
+        action: onMention,
+        icon: iconAt,
+      });
+
+      if (features.privacyScopes) {
+        menu.push({
+          text: intl.formatMessage(messages.direct, { name: account.username }),
+          action: onDirect,
+          icon: iconEnvelopeSimple,
+        });
+      }
+
+      if (account.relationship?.following) {
+        if (account.relationship?.showing_reblogs) {
+          menu.push({
+            text: intl.formatMessage(messages.hideReblogs, { name: account.username }),
+            action: onReblogToggle,
+            icon: iconRepeat,
+          });
+        } else {
+          menu.push({
+            text: intl.formatMessage(messages.showReblogs, { name: account.username }),
+            action: onReblogToggle,
+            icon: iconRepeat,
+          });
+        }
+
+        if (features.lists) {
+          menu.push({
+            text: intl.formatMessage(messages.addOrRemoveFromList),
+            action: onAddToList,
+            icon: iconListBullets,
+          });
+        }
+
+        if (features.accountEndorsements) {
+          menu.push({
+            text: intl.formatMessage(
+              account.relationship?.endorsed ? messages.unendorse : messages.endorse,
+            ),
+            action: onEndorseToggle,
+            icon: account.relationship?.endorsed ? iconUserMinus : iconUserCheck,
+          });
+        }
+      } else if (features.lists && features.unrestrictedLists) {
+        menu.push({
+          text: intl.formatMessage(messages.addOrRemoveFromList),
+          action: onAddToList,
+          icon: iconListBullets,
+        });
+      }
+
+      if (features.bites) {
+        menu.push({
+          text: intl.formatMessage(messages.bite, { name: account.username }),
+          action: onBite,
+          icon: iconTooth,
+        });
+      }
+
+      if (features.loadActivities && !account.local) {
+        menu.push({
+          text: intl.formatMessage(messages.loadActivities),
+          action: onLoadActivities,
+          icon: iconArrowsClockwise,
+        });
+      }
+
+      if (account.relationship && features.notes) {
+        menu.push({
+          text: intl.formatMessage(messages.note, { name: account.acct }),
+          action: onEditNote,
+          icon: iconNotePencil,
+        });
+      }
+
+      menu.push({
+        text: intl.formatMessage(messages.nickname, { name: account.acct }),
+        action: onEditNickname,
+        icon: iconTag,
+      });
+
+      menu.push(null);
+
+      if (features.removeFromFollowers && account.relationship?.followed_by) {
+        menu.push({
+          text: intl.formatMessage(messages.removeFromFollowers),
+          action: onRemoveFromFollowers,
+          icon: iconUserMinus,
+        });
+      }
+
+      if (account.relationship?.muting) {
+        menu.push({
+          text: intl.formatMessage(messages.unmute, { name: account.username }),
+          action: onMute,
+          icon: iconSpeakerSimpleX,
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.mute, { name: account.username }),
+          action: onMute,
+          icon: iconSpeakerSimpleX,
+        });
+      }
+
+      if (account.relationship?.blocking) {
+        menu.push({
+          text: intl.formatMessage(messages.unblock, { name: account.username }),
+          action: onBlock,
+          icon: iconProhibit,
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.block, { name: account.username }),
+          action: onBlock,
+          icon: iconProhibit,
+        });
+      }
+
+      menu.push({
+        text: intl.formatMessage(messages.report, { name: account.username }),
+        action: onReport,
+        icon: iconFlag,
+      });
+    }
+
+    if (!account.local) {
+      const domain = account.fqn.split('@')[1];
+
+      menu.push(null);
+
+      if (account.relationship?.domain_blocking) {
+        menu.push({
+          text: intl.formatMessage(messages.unblockDomain, { domain }),
+          action: () => {
+            onUnblockDomain(domain);
+          },
+          icon: iconProhibit,
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.blockDomain, { domain }),
+          action: () => {
+            onBlockDomain(domain);
+          },
+          icon: iconProhibit,
+        });
+      }
+    }
+
+    if (ownAccount.is_admin || ownAccount.is_moderator) {
+      menu.push(null);
+
+      menu.push({
+        text: intl.formatMessage(messages.adminAccount, { name: account.username }),
+        to: '/nicolium/admin/accounts/$accountId',
+        params: { accountId: account.id },
+        icon: iconGavel,
+      });
+    }
+
+    return menu;
+  };
+
+  const menu = makeMenu();
+
+  if (!menu.length) return null;
+
+  return (
+    <DropdownMenu items={menu} placement='bottom-end'>
+      <IconButton src={iconDotsThree} theme='outlined' className='px-2' iconClassName='h-4 w-4' />
+    </DropdownMenu>
+  );
+};
+
+export { AccountMenu };

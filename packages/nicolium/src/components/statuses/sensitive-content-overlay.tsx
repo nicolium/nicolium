@@ -1,14 +1,15 @@
+import iconEyeSlash from '@phosphor-icons/core/regular/eye-slash.svg';
+import iconEye from '@phosphor-icons/core/regular/eye.svg';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
-import type { NormalizedStatus as Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { FilterResult } from 'pl-api';
 
 const useMediaVisible = (
@@ -84,7 +85,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
         {visible ? (
           <Button
             text={<FormattedMessage id='moderation_overlay.hide' defaultMessage='Hide content' />}
-            icon={require('@phosphor-icons/core/regular/eye-slash.svg')}
+            icon={iconEyeSlash}
             onClick={toggleVisibility}
             theme='primary'
             size='sm'
@@ -119,17 +120,17 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
                 </Text>
               </div>
 
-              <HStack alignItems='center' justifyContent='center' space={2}>
+              <div className='flex items-center justify-center gap-2'>
                 <Button
                   type='button'
                   theme='outlined'
                   size='sm'
-                  icon={require('@phosphor-icons/core/regular/eye.svg')}
+                  icon={iconEye}
                   onClick={toggleVisibility}
                 >
                   <FormattedMessage id='moderation_overlay.show' defaultMessage='Show content' />
                 </Button>
-              </HStack>
+              </div>
             </div>
           </div>
         )}

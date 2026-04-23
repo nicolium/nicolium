@@ -1,9 +1,8 @@
+import iconQrCode from '@phosphor-icons/core/regular/qr-code.svg';
 import React from 'react';
 
 import CopyableInput from '@/components/copyable-input';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useModalsActions } from '@/stores/modals';
 
@@ -17,7 +16,7 @@ interface ICryptoAddress {
   note?: string;
 }
 
-const CryptoAddress: React.FC<ICryptoAddress> = (props): React.JSX.Element => {
+const CryptoAddress: React.FC<ICryptoAddress> = (props) => {
   const { address, ticker, note } = props;
 
   const { openModal } = useModalsActions();
@@ -30,8 +29,8 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props): React.JSX.Element => {
   const title = getTitle(ticker);
 
   return (
-    <Stack>
-      <HStack alignItems='center' className='mb-1'>
+    <div className='flex flex-col'>
+      <div className='mb-1 flex items-center'>
         <CryptoIcon
           className='mr-2.5 flex w-6 items-start justify-center rtl:ml-2.5 rtl:mr-0'
           ticker={ticker}
@@ -40,17 +39,17 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props): React.JSX.Element => {
 
         <Text weight='bold'>{title || ticker.toUpperCase()}</Text>
 
-        <HStack alignItems='center' className='ml-auto'>
+        <div className='ml-auto flex items-center'>
           <a className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1' href='#' onClick={handleModalClick}>
-            <Icon src={require('@phosphor-icons/core/regular/qr-code.svg')} size={20} />
+            <Icon src={iconQrCode} size={20} />
           </a>
-        </HStack>
-      </HStack>
+        </div>
+      </div>
 
       {note && <Text>{note}</Text>}
 
       <CopyableInput value={address} />
-    </Stack>
+    </div>
   );
 };
 

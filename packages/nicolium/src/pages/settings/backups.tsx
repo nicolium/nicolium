@@ -5,9 +5,7 @@ import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import FormActions from '@/components/ui/form-actions';
-import HStack from '@/components/ui/hstack';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useBackups, useCreateBackupMutation } from '@/queries/settings/use-backups';
 
@@ -37,8 +35,8 @@ const Backup: React.FC<IBackup> = ({ backup }) => {
 
   return (
     <div key={backup.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-      <Stack space={2}>
-        <Stack>
+      <div className='flex flex-col gap-2'>
+        <div className='flex flex-col'>
           <Text size='md'>
             <FormattedDate
               value={backup.inserted_at}
@@ -50,8 +48,8 @@ const Backup: React.FC<IBackup> = ({ backup }) => {
               minute='2-digit'
             />
           </Text>
-        </Stack>
-        <HStack justifyContent='end'>
+        </div>
+        <div className='flex justify-end'>
           {backup.processed ? (
             <a href={backup.url} target='_blank'>
               {button}
@@ -59,8 +57,8 @@ const Backup: React.FC<IBackup> = ({ backup }) => {
           ) : (
             button
           )}
-        </HStack>
-      </Stack>
+        </div>
+      </div>
     </div>
   );
 };

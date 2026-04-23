@@ -7,8 +7,8 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
+import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Toggle from '@/components/ui/toggle';
-import { SelectDropdown } from '@/features/forms';
 import { useFeatures } from '@/hooks/use-features';
 import { useList, useUpdateList } from '@/queries/accounts/use-lists';
 import toast from '@/toast';
@@ -51,7 +51,7 @@ const ListForm: React.FC<IListForm> = ({ listId, onTabChange }) => {
       { title, replies_policy: repliesPolicy, exclusive, notify },
       {
         onSuccess: () => {
-          toast.success(intl.formatMessage(messages.success));
+          toast.success(messages.success);
         },
         onError: () => {
           toast.error(intl.formatMessage(messages.error));

@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import AccountContainer from '@/components/accounts/account-container';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollableList from '@/components/scrollable-list';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
-import AccountContainer from '@/containers/account-container';
 import { useStatusDislikes } from '@/queries/statuses/use-status-interactions';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';

@@ -1,4 +1,4 @@
-const copy = (text: string, onSuccess?: () => void) => {
+const copy = (text: string, onSuccess?: () => void, ref?: HTMLInputElement | null) => {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text);
 
@@ -6,21 +6,25 @@ const copy = (text: string, onSuccess?: () => void) => {
       onSuccess();
     }
   } else {
-    const textarea = document.createElement('textarea');
-
-    textarea.textContent = text;
-    textarea.style.position = 'fixed';
-
-    document.body.appendChild(textarea);
-
     try {
-      textarea.select();
-      document.execCommand('copy');
+      if (!ref) {
+        const textarea = document.createElement('textarea');
+
+        textarea.textContent = text;
+        textarea.style.position = 'fixed';
+
+        document.body.appendChild(textarea);
+
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      } else {
+        ref.select();
+        document.execCommand('copy');
+      }
     } catch {
       // Do nothing
     } finally {
-      document.body.removeChild(textarea);
-
       if (onSuccess) {
         onSuccess();
       }

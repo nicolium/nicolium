@@ -9,9 +9,8 @@
 import { PlApiClient, type GetTokenParams, type RevokeTokenParams } from 'pl-api';
 
 import * as BuildConfig from '@/build-config';
-import { getBaseURL } from '@/utils/state';
-
-import type { AppDispatch, RootState } from '@/store';
+import { getMe } from '@/stores/auth';
+import { parseBaseURL } from '@/utils/auth';
 
 const obtainOAuthToken = async (params: GetTokenParams, baseURL?: string) => {
   const client = new PlApiClient((baseURL ?? BuildConfig.BACKEND_URL) || '');
@@ -20,11 +19,11 @@ const obtainOAuthToken = async (params: GetTokenParams, baseURL?: string) => {
   return client.oauth.getToken(params);
 };
 
-const revokeOAuthToken =
-  (params: RevokeTokenParams) => (dispatch: AppDispatch, getState: () => RootState) => {
-    const baseURL = getBaseURL(getState());
-    const client = new PlApiClient(baseURL || '');
-    return client.oauth.revokeToken(params);
-  };
+const revokeOAuthToken = async (params: RevokeTokenParams) => {
+  const me = getMe();
+  const baseURL = parseBaseURL(me || undefined) || BuildConfig.BACKEND_URL;
+  const client = new PlApiClient(baseURL || '');
+  return client.oauth.revokeToken(params);
+};
 
 export { obtainOAuthToken, revokeOAuthToken };

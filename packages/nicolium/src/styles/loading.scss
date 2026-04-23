@@ -1,26 +1,52 @@
 .loading-indicator-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100vw;
   height: 100vh;
   height: 100dvh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .loading-indicator {
-  @apply text-gray-50 dark:text-gray-800 text-xs uppercase flex flex-col items-center justify-center overflow-visible;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  font-size: var(--text-xs);
+  color: rgb(var(--color-gray-50));
+  text-transform: uppercase;
+
+  .dark & {
+    color: rgb(var(--color-gray-800));
+  }
 }
 
 .loading-indicator__container {
+  position: relative;
   width: 2.5rem;
   height: 2.5rem;
-  position: relative;
 }
 
 .loading-indicator__figure {
-  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-transparent dark:bg-transparent border-[#e5e7eb] dark:border-gray-800;
-  border: 0 solid;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 3rem;
+  height: 3rem;
+  border: 0 solid #e5e7eb;
   border-width: 6px;
+  border-radius: var(--radius-full);
+
+  background-color: transparent;
+
+  .dark & {
+    border-color: rgb(var(--color-gray-800));
+  }
 }
 
 .no-reduce-motion .loading-indicator__figure {
@@ -28,28 +54,45 @@
 }
 
 .loading-indicator-wrapper .loading-indicator {
-  @apply h-screen w-screen items-center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
 
   &__figure {
-    @apply border-gray-200 dark:border-gray-800;
+    border-color: rgb(var(--color-gray-200));
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+    }
   }
 }
 
 @keyframes loader-figure {
   0% {
-    @apply bg-yellow-200 w-0 h-0;
+    width: 0;
+    height: 0;
+    background: var(--hex-yellow-200);
   }
 
   29% {
-    @apply bg-gray-200;
+    background: rgb(var(--color-gray-200));
   }
 
   30% {
-    @apply w-12 h-12 bg-transparent opacity-100;
+    width: 3rem;
+    height: 3rem;
     border-width: 6px;
+
+    opacity: 1;
+    background: transparent;
   }
 
   100% {
-    @apply w-12 h-12 border-0 opacity-0 bg-transparent;
+    width: 3rem;
+    height: 3rem;
+    border-width: 0;
+
+    opacity: 0;
+    background: transparent;
   }
 }

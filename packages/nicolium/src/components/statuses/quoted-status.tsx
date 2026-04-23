@@ -1,14 +1,12 @@
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { type MouseEventHandler } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Stack from '@/components/ui/stack';
-import AccountContainer from '@/containers/account-container';
+import AccountContainer from '@/components/accounts/account-container';
 
-import OutlineBox from '../outline-box';
-
-import EventPreview from './event-preview';
+import EventPreview from './events/event-preview';
 import StatusContent from './status-content';
 import StatusReplyMentions from './status-reply-mentions';
 
@@ -25,10 +23,12 @@ interface IQuotedStatus {
   onCancel?: () => void;
   /** Whether the status is shown in the post composer. */
   compose?: boolean;
+  /** The depth of quote nesting. */
+  quoteDepth?: number;
 }
 
 /** Status embedded in a quote post. */
-const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) => {
+const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose, quoteDepth = 0 }) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const router = useRouter();
@@ -69,43 +69,49 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
   if (onCancel) {
     actions = {
       onActionClick: handleClose,
-      actionIcon: require('@phosphor-icons/core/regular/x.svg'),
+      actionIcon: iconX,
       actionAlignment: 'top',
       actionTitle: intl.formatMessage(messages.cancel),
     };
   }
 
   return (
-    <OutlineBox
+    <div
       data-testid='quoted-status'
-      className={clsx('cursor-pointer', {
-        'group hover:bg-gray-100 dark:hover:bg-gray-800': !compose,
+      className={clsx('⁂-quoted-status', {
+        '⁂-quoted-status--compose': compose,
       })}
+      onClick={handleExpandClick}
     >
-      <Stack space={2} onClick={handleExpandClick}>
-        {account.id && (
-          <AccountContainer
-            {...actions}
-            id={account.id}
-            timestamp={status.created_at}
-            withRelationship={false}
-            showAccountHoverCard={!compose}
-            withLinkToProfile={!compose}
-            withLocked={false}
+      {account.id && (
+        <AccountContainer
+          {...actions}
+          id={account.id}
+          timestamp={status.created_at}
+          withRelationship={false}
+          showAccountHoverCard={!compose}
+          withLinkToProfile={!compose}
+          withLocked={false}
+        />
+      )}
+
+      <StatusReplyMentions status={status} hoverable={false} />
+
+      {status.event ? (
+        <EventPreview status={status} hideAction />
+      ) : (
+        <div className='⁂-quoted-status__content'>
+          <StatusContent
+            status={status}
+            collapsable
+            isQuote
+            quoteDepth={quoteDepth + 1}
+            withMedia
+            compose={compose}
           />
-        )}
-
-        <StatusReplyMentions status={status} hoverable={false} />
-
-        {status.event ? (
-          <EventPreview status={status} hideAction />
-        ) : (
-          <Stack space={4} className='relative z-0'>
-            <StatusContent status={status} collapsable isQuote withMedia compose={compose} />
-          </Stack>
-        )}
-      </Stack>
-    </OutlineBox>
+        </div>
+      )}
+    </div>
   );
 };
 

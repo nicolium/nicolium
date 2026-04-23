@@ -4,11 +4,11 @@
   "version": "0.0.1",
   "homepage": "https://nicolium.app",
   "bugs": {
-    "url": "https://codeberg.org/mkljczk/nicolium/issues"
+    "url": "https://codeberg.org/nicolium/nicolium/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://codeberg.org/mkljczk/nicolium.git"
+    "url": "git+https://codeberg.org/nicolium/nicolium.git"
   },
   "scripts": {
     "dev": "astro dev",
@@ -21,7 +21,7 @@
     "@astrojs/rss": "^4.0.15",
     "@astrojs/sitemap": "^3.7.0",
     "@mkljczk/astro-theme": "github:mkljczk/mkljczk-astro-theme",
-    "astro": "^5.18.0",
+    "astro": "^5.18.1",
     "rehype-external-links": "^3.0.0",
     "sharp": "^0.34.3"
   }

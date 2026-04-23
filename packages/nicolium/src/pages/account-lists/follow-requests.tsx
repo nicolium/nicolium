@@ -8,7 +8,6 @@ import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import Tabs, { type Item } from '@/components/ui/tabs';
-import { followRequestsRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
@@ -16,6 +15,7 @@ import {
   useFollowRequests,
   useRejectFollowRequestMutation,
 } from '@/queries/accounts/use-follow-requests';
+import { followRequestsRoute } from '@/router';
 
 const messages = defineMessages({
   heading: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },

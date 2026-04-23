@@ -1,12 +1,12 @@
+import iconMapPin from '@phosphor-icons/core/regular/map-pin.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { ADDRESS_ICONS } from '@/components/autosuggest-location';
 import LocationSearch from '@/components/location-search';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
@@ -39,28 +39,24 @@ const LocationForm: React.FC<ILocationForm> = ({ composeId }) => {
   return (
     <div className='⁂-compose-form__schedule'>
       {location ? (
-        <HStack className='h-[38px] text-gray-700 dark:text-gray-500' alignItems='center' space={2}>
-          <Icon
-            src={
-              ADDRESS_ICONS[location.type] || require('@phosphor-icons/core/regular/map-pin.svg')
-            }
-          />
-          <Stack className='grow'>
+        <div className='flex h-[38px] items-center gap-2 text-gray-700 dark:text-gray-500'>
+          <Icon src={ADDRESS_ICONS[location.type] || iconMapPin} />
+          <div className='flex grow flex-col'>
             <Text>{location.description}</Text>
             <Text theme='muted' size='xs'>
               {[location.street, location.locality, location.country]
                 .filter((val) => val?.trim())
                 .join(' · ')}
             </Text>
-          </Stack>
+          </div>
           <IconButton
             title={intl.formatMessage(messages.resetLocation)}
-            src={require('@phosphor-icons/core/regular/x.svg')}
+            src={iconX}
             onClick={() => {
               onChangeLocation(null);
             }}
           />
-        </HStack>
+        </div>
       ) : (
         <LocationSearch onSelected={onChangeLocation} />
       )}

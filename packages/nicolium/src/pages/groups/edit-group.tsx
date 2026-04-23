@@ -1,3 +1,4 @@
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -10,14 +11,13 @@ import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
 import Textarea from '@/components/ui/textarea';
-import AvatarPicker from '@/features/edit-profile/components/avatar-picker';
-import HeaderPicker from '@/features/edit-profile/components/header-picker';
-import { editGroupRoute } from '@/features/ui/router';
 import { useImageField } from '@/hooks/forms/use-image-field';
 import { useTextField } from '@/hooks/forms/use-text-field';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { useInstance } from '@/hooks/use-instance';
+import AvatarPicker from '@/pages/settings/components/avatar-picker';
+import HeaderPicker from '@/pages/settings/components/header-picker';
 import { useGroupQuery, useUpdateGroupMutation } from '@/queries/groups/use-group';
+import { editGroupRoute } from '@/router';
+import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 import { unescapeHTML } from '@/utils/html';
 
@@ -60,9 +60,7 @@ const EditGroup: React.FC = () => {
   const maxName = Number(instance.configuration.groups.max_characters_name);
   const maxNote = Number(instance.configuration.groups.max_characters_description);
 
-  const attachmentTypes = useAppSelector(
-    (state) => state.instance.configuration.media_attachments.supported_mime_types,
-  )
+  const attachmentTypes = instance.configuration.media_attachments.supported_mime_types
     ?.filter((type) => type.startsWith('image/'))
     .join(',');
 
@@ -76,7 +74,7 @@ const EditGroup: React.FC = () => {
       },
       {
         onSuccess() {
-          toast.success(intl.formatMessage(messages.groupSaved));
+          toast.success(messages.groupSaved);
         },
         onError(error) {
           const response = (error as { response?: NicoliumResponse })?.response;
@@ -120,12 +118,7 @@ const EditGroup: React.FC = () => {
             placeholder={intl.formatMessage(messages.groupNamePlaceholder)}
             maxLength={maxName}
             {...displayName}
-            append={
-              <Icon
-                className='size-5 text-gray-600'
-                src={require('@phosphor-icons/core/regular/lock.svg')}
-              />
-            }
+            append={<Icon className='size-5 text-gray-600' src={iconLock} />}
             disabled
           />
         </FormGroup>

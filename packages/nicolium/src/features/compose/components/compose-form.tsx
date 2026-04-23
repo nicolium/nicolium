@@ -1,3 +1,8 @@
+import iconAt from '@phosphor-icons/core/regular/at.svg';
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconEye from '@phosphor-icons/core/regular/eye.svg';
+import iconLock from '@phosphor-icons/core/regular/lock.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import clsx from 'clsx';
 import { $getNodeByKey, CLEAR_EDITOR_COMMAND, TextNode, type LexicalEditor } from 'lexical';
 import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
@@ -13,7 +18,6 @@ import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdo
 import { ComposeEditor } from '@/features/ui/util/async-components';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import {
   useCompose,
@@ -21,7 +25,9 @@ import {
   useUploadCompose,
   useSubmitCompose,
 } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import PreviewComposeContainer from '../containers/preview-compose-container';
@@ -103,17 +109,17 @@ const ComposeButton: React.FC<IComposeButton> = ({
   const intl = useIntl();
 
   return (
-    <div className='⁂-compose-form__button__container'>
-      <button {...props} disabled={disabled} className='⁂-compose-form__button'>
+    <div className='⁂-compose-form__send-button__container'>
+      <button {...props} disabled={disabled} className='⁂-compose-form__send-button'>
         {icon ? <Icon src={icon} /> : null}
         <span>{text}</span>
       </button>
       <DropdownMenu items={actionsMenu} placement='bottom' disabled={disabled}>
         <button
-          className='⁂-compose-form__button__actions'
+          className='⁂-compose-form__send-button__actions'
           title={intl.formatMessage(messages.more)}
         >
-          <SvgIcon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
+          <SvgIcon src={iconCaretDown} aria-hidden />
         </button>
       </DropdownMenu>
     </div>
@@ -126,7 +132,9 @@ interface IComposeForm<ID extends string> {
   autoFocus?: boolean;
   clickableAreaRef?: React.RefObject<HTMLDivElement | null>;
   event?: string;
+  fullScreen?: boolean;
   group?: string;
+  onSubmit?: () => void;
   withAvatar?: boolean;
   transparent?: boolean;
   compact?: boolean;
@@ -138,7 +146,9 @@ const ComposeForm = <ID extends string>({
   autoFocus,
   clickableAreaRef,
   event,
+  fullScreen,
   group,
+  onSubmit,
   withAvatar,
   transparent,
   compact,
@@ -147,6 +157,7 @@ const ComposeForm = <ID extends string>({
   const { configuration } = useInstance();
   const { closeModal } = useModalsActions();
   const actions = useComposeActions();
+  const { renderMfm } = useSettings();
 
   const compose = useCompose(id);
   const uploadCompose = useUploadCompose(id);
@@ -225,8 +236,10 @@ const ComposeForm = <ID extends string>({
     e?.preventDefault();
 
     submitCompose({
+      propagate: fullScreen,
       onSuccess: () => {
         editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+        onSubmit?.();
       },
     });
   };
@@ -354,10 +367,10 @@ const ComposeForm = <ID extends string>({
   if (isEditing) {
     publishText = intl.formatMessage(messages.saveChanges);
   } else if (visibility === 'direct') {
-    publishIcon = require('@phosphor-icons/core/regular/at.svg');
+    publishIcon = iconAt;
     publishText = intl.formatMessage(messages.message);
   } else if (visibility === 'private' || visibility === 'mutuals_only') {
-    publishIcon = require('@phosphor-icons/core/regular/lock.svg');
+    publishIcon = iconLock;
     publishText = intl.formatMessage(messages.publish);
   } else {
     publishText =
@@ -387,18 +400,21 @@ const ComposeForm = <ID extends string>({
 
   const actionsMenu: Menu = [];
 
-  if (features.createStatusPreview) {
+  if (
+    features.createStatusPreview ||
+    (renderMfm && compose.contentType === 'text/x.misskeymarkdown')
+  ) {
     actionsMenu.push({
       text: intl.formatMessage(messages.preview),
       action: handlePreview,
-      icon: require('@phosphor-icons/core/regular/eye.svg'),
+      icon: iconEye,
     });
   }
 
   actionsMenu.push({
     text: intl.formatMessage(messages.saveDraft),
     action: handleSaveDraft,
-    icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+    icon: iconPencilSimple,
   });
 
   return (
@@ -446,7 +462,7 @@ const ComposeForm = <ID extends string>({
       )}
 
       <div>
-        <Suspense>
+        <Suspense fallback={<div className='⁂-compose-form__editor-placeholder' />}>
           <ComposeEditor
             key={modifiedLanguage}
             ref={editorRef}

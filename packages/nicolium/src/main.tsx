@@ -10,7 +10,6 @@ declare global {
   }
 }
 
-import '@/storage/migrate-legacy-data';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
@@ -26,8 +25,6 @@ import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import '@fontsource/inter/900.css';
 import '@fontsource/roboto-mono/400.css';
-import 'line-awesome/dist/font-awesome-line-awesome/css/all.css';
-import 'react-datepicker/dist/react-datepicker.css';
 import './styles/i18n.css';
 import './styles/application.scss';
 import './styles/tailwind.css';

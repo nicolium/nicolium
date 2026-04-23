@@ -5,11 +5,10 @@ import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Textarea from '@/components/ui/textarea';
-import AvatarPicker from '@/features/edit-profile/components/avatar-picker';
-import HeaderPicker from '@/features/edit-profile/components/header-picker';
 import { usePreview } from '@/hooks/forms/use-preview';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { useInstance } from '@/hooks/use-instance';
+import AvatarPicker from '@/pages/settings/components/avatar-picker';
+import HeaderPicker from '@/pages/settings/components/header-picker';
+import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import resizeImage from '@/utils/resize-image';
 
@@ -45,9 +44,7 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
   const avatarSrc = usePreview(params.avatar);
   const headerSrc = usePreview(params.header);
 
-  const attachmentTypes = useAppSelector(
-    (state) => state.instance.configuration.media_attachments.supported_mime_types,
-  )
+  const attachmentTypes = instance.configuration.media_attachments.supported_mime_types
     ?.filter((type) => type.startsWith('image/'))
     .join(',');
 

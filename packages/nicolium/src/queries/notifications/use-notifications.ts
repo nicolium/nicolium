@@ -10,19 +10,16 @@ import {
 import { useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
-import { importEntities } from '@/actions/importer';
-import {
-  getNotificationStatusId,
-  notificationMessages,
-} from '@/features/notifications/components/notification';
+import { getNotificationStatusId, notificationMessages } from '@/components/notification';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { appendFollowRequest } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
+import { importEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQueryOptions } from '@/queries/utils/make-paginated-response-query-options';
-import { regexFromFilters } from '@/selectors';
 import { useSettingsStore } from '@/stores/settings';
 import { compareId } from '@/utils/comparators';
+import { regexFromFilters } from '@/utils/filters';
 import { unescapeHTML } from '@/utils/html';
 import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from '@/utils/notification';
 import { play, soundCache } from '@/utils/sounds';
@@ -124,9 +121,10 @@ const notificationsQueryOptions = makePaginatedResponseQueryOptions(
 
 const useNotifications = (activeFilter: FilterType) => {
   const { me } = useLoggedIn();
+  const client = useClient();
 
   return useInfiniteQuery({
-    ...notificationsQueryOptions(activeFilter),
+    ...notificationsQueryOptions(client, activeFilter),
     enabled: !!me,
   });
 };
@@ -292,12 +290,13 @@ const useNotificationsUnreadCount = () => {
 
 const usePrefetchNotifications = () => {
   const queryClient = useQueryClient();
+  const client = useClient();
   const { me } = useLoggedIn();
   const activeFilter = useActiveFilter();
 
   useEffect(() => {
     if (!me) return;
-    queryClient.prefetchInfiniteQuery(notificationsQueryOptions(activeFilter));
+    queryClient.prefetchInfiniteQuery(notificationsQueryOptions(client, activeFilter));
   }, [me]);
 };
 

@@ -4,6 +4,7 @@ import Hero from "@mkljczk/astro-theme/components/Hero.astro";
 import Section from "@mkljczk/astro-theme/components/Section.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
+import HeaderMeta from "../components/HeaderMeta.astro";
 import Screenshot2 from "../assets/screenshot2.png";
 import Screenshot3 from "../assets/screenshot3.png";
 import Screenshot4 from "../assets/screenshot4.png";
@@ -19,6 +20,7 @@ import Screenshot6 from "../assets/screenshot6.png";
       description="Mastodon-compatible social media front-end"
       faviconPath="/favicon.svg"
     />
+    <HeaderMeta />
   </head>
   <body>
     <Header />
@@ -30,7 +32,7 @@ import Screenshot6 from "../assets/screenshot6.png";
         buttonLink="https://web.nicolium.app"
         buttonTarget="_blank"
         button2Text="Source code"
-        button2Link="https://codeberg.org/mkljczk/nicolium"
+        button2Link="https://codeberg.org/nicolium/nicolium"
         button2Target="_blank"
       />
       <section class="sections">
@@ -67,10 +69,10 @@ import Screenshot6 from "../assets/screenshot6.png";
             heading="Open source."
             subheading="Nicolium is free and open source software. You can participate in development, contribute to the project or report bugs."
             buttonText="Codeberg"
-            buttonLink="https://codeberg.org/mkljczk/nicolium"
+            buttonLink="https://codeberg.org/nicolium/nicolium"
             buttonTarget="_blank"
             button2Text="GitHub"
-            button2Link="https://github.com/mkljczk/nicolium"
+            button2Link="https://github.com/nicolium/nicolium"
             button2Target="_blank"
             imageSrc={Screenshot6}
             imageAlt="Screenshot of a part of pl-api source code"

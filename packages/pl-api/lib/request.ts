@@ -22,14 +22,17 @@ type Response<T = any> = {
   @param {object} response - Fetch API response object
   @returns {object} Link object
   */
-const getLinks = (response: Pick<Response, 'headers'>): LinkHeader =>
-  new LinkHeader(response.headers?.get('link') || undefined);
+const getLinks = (
+  response: Pick<Response, 'headers'>,
+): { next: string | null; prev: string | null } => {
+  const headers = response.headers?.get('link');
+  const linkHeader = (headers && new LinkHeader(headers)) || null;
 
-const getNextLink = (response: Pick<Response, 'headers'>): string | null =>
-  getLinks(response).refs.find((link) => link.rel.toLocaleLowerCase() === 'next')?.uri || null;
-
-const getPrevLink = (response: Pick<Response, 'headers'>): string | null =>
-  getLinks(response).refs.find((link) => link.rel.toLocaleLowerCase() === 'prev')?.uri || null;
+  return {
+    next: linkHeader?.refs.find((link) => link.rel.toLocaleLowerCase() === 'next')?.uri || null,
+    prev: linkHeader?.refs.find((link) => link.rel.toLocaleLowerCase() === 'prev')?.uri || null,
+  };
+};
 
 interface AsyncRefreshHeader {
   id: string;
@@ -78,6 +81,7 @@ interface RequestBody<Params = Record<string, any>> {
   onUploadProgress?: (e: ProgressEvent) => void;
   signal?: AbortSignal;
   contentType?: string;
+  formData?: boolean;
   idempotencyKey?: string;
 }
 
@@ -95,7 +99,8 @@ function request<T = any>(
     params,
     onUploadProgress,
     signal,
-    contentType = 'application/json',
+    contentType,
+    formData,
     idempotencyKey,
   }: RequestBody = {},
 ) {
@@ -108,17 +113,18 @@ function request<T = any>(
   else if (this.accessToken) headers.set('Authorization', `Bearer ${this.accessToken}`);
   else if (this.customAuthorizationToken)
     headers.set('Authorization', this.customAuthorizationToken);
-  if (contentType !== '' && body) headers.set('Content-Type', contentType);
+  if ((!formData && body) || contentType)
+    headers.set('Content-Type', contentType || 'application/json');
   if (idempotencyKey) headers.set('Idempotency-Key', idempotencyKey);
 
-  body = body && contentType === '' ? serialize(body, { indices: true }) : JSON.stringify(body);
+  body = body && formData ? serialize(body, { indices: true }) : JSON.stringify(body);
 
   // Fetch API doesn't report upload progress, use XHR
   if (onUploadProgress) {
     return new Promise<Response<T>>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
 
-      xhr.addEventListener('progress', onUploadProgress!);
+      xhr.upload.addEventListener('progress', onUploadProgress!);
       xhr.addEventListener('loadend', () => {
         const data = xhr.response;
         let json: T = undefined!;
@@ -186,8 +192,6 @@ export {
   type RequestMeta,
   type AsyncRefreshHeader,
   getLinks,
-  getNextLink,
-  getPrevLink,
   getAsyncRefreshHeader,
   request as default,
 };

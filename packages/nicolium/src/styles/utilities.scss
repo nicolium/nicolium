@@ -1,12 +1,22 @@
 .divide-x-dot > *:not(:last-child)::after {
-  @apply px-1;
   content: '·';
+  padding-right: 0.25rem;
+  padding-left: 0.25rem;
 }
 
 .mention {
-  @apply text-primary-600 dark:text-primary-400 hover:underline;
+  color: rgb(var(--color-primary-600));
+
+  .dark & {
+    color: rgb(var(--color-primary-400));
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .emoji-lg img.emojione {
-  @apply h-9 w-9 #{!important};
+  width: 2.25rem !important;
+  height: 2.25rem !important;
 }

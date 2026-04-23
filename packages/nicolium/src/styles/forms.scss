@@ -1,87 +1,148 @@
+@use './new/variables';
+
 select {
-  @apply pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md;
+  padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+  border-color: rgb(var(--color-gray-300));
+  border-radius: var(--radius-md);
+
+  font-size: var(--text-base);
+
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-}
 
-.form-error {
-  @apply before:border-solid before:border-transparent before:h-0 before:left-2.5 before:pointer-events-none before:w-0 before:absolute before:border-[6px] before:ml-[-1px] after:border-solid after:border-transparent after:h-0 after:left-2.5 after:pointer-events-none after:w-0 after:absolute before:border-b-red-200;
-}
+  &:focus {
+    border-color: rgb(var(--color-indigo-500));
+    outline: 2px solid rgb(var(--color-indigo-500));
+  }
 
-.input.with_label.toggle .label_input {
-  @apply flex text-sm items-center;
+  @media (min-width: variables.$breakpoint-sm) {
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+  }
 }
 
 // Adapted from [multiselect-react-dropdown](https://github.com/srigar/multiselect-react-dropdown), licensed under MIT License.
 .multiselect-container {
   position: relative;
-  text-align: left;
   width: 100%;
+  text-align: left;
 
   &--disabled {
     pointer-events: none;
     opacity: 0.5;
   }
 
-  input {
-    border: none;
-    margin-top: 3px;
-    background: transparent;
-
-    &:focus {
-      outline: none;
-    }
-  }
-
   ul {
-    display: block;
-    padding: 0;
-    margin: 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    max-height: 250px;
     overflow-y: auto;
+    display: block;
+
+    max-height: 250px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: var(--radius-sm);
   }
 
   li {
     padding: 10px;
 
     &:hover {
-      background: #0096fb;
-      color: #fff;
       cursor: pointer;
+      color: #fff;
+      background: #0096fb;
     }
   }
 
   .searchWrapper {
-    border: 1px solid;
     position: relative;
-    @apply rounded-md border-gray-300 bg-white min-h-[38px] max-w-[400px] py-0 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 disabled:opacity-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm w-auto;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    width: auto;
+    max-width: 25rem;
+    min-height: 38px;
+    padding: 0 2.5rem 0 0.75rem;
+    border: 1px solid rgb(var(--color-gray-300));
+    border-radius: var(--radius-md);
+
+    font-size: var(--text-base);
+
+    background: white;
+
+    &:focus {
+      border-color: rgb(var(--color-primary-500));
+      outline: 2px solid rgb(var(--color-primary-500));
+    }
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+      color: rgb(var(--color-gray-100));
+      background: rgb(var(--color-gray-900));
+      outline: 2px solid rgb(var(--color-primary-700));
+
+      &:focus {
+        border-color: rgb(var(--color-primary-500));
+        outline-color: rgb(var(--color-primary-500));
+      }
+    }
 
     > input {
-      @apply first:pl-0 p-1.5 m-0 focus:ring-0 text-base sm:text-sm;
+      margin: 0;
+      padding: 0;
+      border: none;
+
+      font-size: var(--text-base);
+
+      background: transparent;
+      box-shadow: none;
+
+      &:focus {
+        outline: none;
+      }
+
+      @media (min-width: variables.$breakpoint-sm) {
+        font-size: var(--text-sm);
+      }
+    }
+
+    @media (min-width: variables.$breakpoint-sm) {
+      font-size: var(--text-sm);
     }
   }
 
   .chip {
-    padding: 4px 10px;
-    margin-right: 5px;
-    border-radius: 11px;
     display: inline-flex;
     align-items: center;
-    font-size: 13px;
-    line-height: 19px;
+
+    margin: 0.25rem 0;
+    margin-right: 5px;
+    padding: 4px 10px;
+    border-radius: var(--radius-xl);
+
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
     color: #fff;
     white-space: nowrap;
-    @apply bg-primary-600 my-1;
+
+    background: rgb(var(--color-primary-600));
   }
 
   .optionListContainer {
     position: absolute;
-    width: 100%;
-    background: #fff;
-    border-radius: 4px;
-    margin-top: 1px;
     z-index: 2;
+
+    display: block;
+
+    width: 100%;
+    margin-top: 1px;
+    border-radius: var(--radius-sm);
+
+    background: #fff;
+
+    &--hidden {
+      display: none;
+    }
   }
 
   .displayBlock {
@@ -93,20 +154,25 @@ select {
   }
 
   .notFound {
-    padding: 10px;
     display: block;
+    padding: 10px;
   }
 
   .optionContainer {
-    @apply border-gray-300 dark:border-gray-800 dark:bg-gray-900;
+    border-color: rgb(var(--color-gray-300));
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+      background: rgb(var(--color-gray-900));
+      outline: 2px solid rgb(var(--color-primary-700));
+    }
   }
 
   .option {
-    @apply hover:bg-primary-600;
-
+    &:hover,
     &:focus {
-      @apply bg-primary-600;
       color: #fff;
+      background: rgb(var(--color-primary-600));
     }
   }
 }

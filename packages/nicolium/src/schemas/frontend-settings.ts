@@ -2,7 +2,127 @@ import * as v from 'valibot';
 
 import { locales } from '@/messages';
 
-import { coerceObject } from './utils';
+import { coerceObject, filteredArray } from './utils';
+
+const AVAILABLE_STATUS_ACTION_BAR_ITEMS = [
+  'reply',
+  'reblog',
+  'quote',
+  'favourite',
+  'dislike',
+  'wrench',
+  'reaction',
+  'bookmark',
+  'share',
+] as const;
+
+const DEFAULT_STATUS_ACTION_BAR_ITEMS = [
+  'reply',
+  'reblog',
+  'favourite',
+  'dislike',
+  'reaction',
+] as const;
+
+const AVAILABLE_SIDEBAR_ITEMS = [
+  'context',
+  'announcements',
+  'recommendations',
+  'promo',
+  'footer',
+  'compose',
+  'notifications',
+] as const;
+
+const DEFAULT_SIDEBAR_ITEMS = [
+  'context',
+  'announcements',
+  'recommendations',
+  'promo',
+  'footer',
+] as const;
+
+const timelineSchema = v.fallback(
+  v.pipe(
+    v.string(),
+    v.transform((timeline) => {
+      if (['home', 'local', 'bubble', 'federated', 'wrenched'].includes(timeline)) {
+        return timeline;
+      }
+      if (
+        ['list', 'circle', 'antenna', 'instance'].some((prefix) =>
+          timeline.startsWith(prefix + ':'),
+        )
+      ) {
+        return timeline;
+      }
+      return 'home';
+    }),
+  ),
+  'home',
+);
+
+const baseDeckColumnSchema = v.object({
+  columnWidth: v.fallback(v.picklist(['xs', 'sm', 'md', 'lg', 'xl']), 'md'),
+});
+
+const timelineDeckColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('timeline'),
+  timeline: timelineSchema,
+});
+
+const notificationsColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('notifications'),
+  filters: v.fallback(v.array(v.string()), []),
+});
+
+const accountColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('account'),
+  accountId: v.fallback(v.optional(v.string()), undefined),
+});
+
+const searchColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('search'),
+  query: v.fallback(v.string(), ''),
+  searchType: v.fallback(v.picklist(['accounts', 'statuses', 'hashtags']), 'accounts'),
+  accountId: v.fallback(v.optional(v.string()), undefined),
+});
+
+const deckColumnSchema = v.variant('type', [
+  timelineDeckColumnSchema,
+  notificationsColumnSchema,
+  accountColumnSchema,
+  searchColumnSchema,
+]);
+
+const deckSettingsSchema = v.fallback(
+  v.object({
+    columns: filteredArray(deckColumnSchema),
+  }),
+  {
+    columns: [
+      {
+        type: 'timeline',
+        columnWidth: 'md',
+        timeline: 'home',
+      },
+      {
+        type: 'notifications',
+        columnWidth: 'md',
+        filters: [],
+      },
+      {
+        type: 'account',
+        columnWidth: 'md',
+        accountId: 'self',
+      },
+    ],
+  },
+);
 
 const skinToneSchema = v.picklist([1, 2, 3, 4, 5, 6]);
 
@@ -10,9 +130,9 @@ const settingsSchema = v.object({
   onboarded: v.fallback(v.boolean(), false),
   skinTone: v.fallback(skinToneSchema, 1),
   reduceMotion: v.fallback(v.boolean(), false),
-  renderMfm: v.fallback(v.boolean(), false),
+  renderMfm: v.fallback(v.boolean(), true),
   renderAdvancedMfm: v.fallback(v.boolean(), true),
-  renderAnimatedMfm: v.fallback(v.boolean(), true),
+  renderAnimatedMfm: v.fallback(v.boolean(), false),
   underlineLinks: v.fallback(v.boolean(), false),
   autoPlayGif: v.fallback(v.boolean(), true),
   displayMedia: v.fallback(v.picklist(['default', 'hide_all', 'show_all']), 'default'),
@@ -21,6 +141,8 @@ const settingsSchema = v.object({
   boostModal: v.fallback(v.boolean(), false),
   deleteModal: v.fallback(v.boolean(), true),
   missingDescriptionModal: v.fallback(v.boolean(), true),
+  wrenchModal: v.fallback(v.boolean(), false),
+  missingDescriptionBoostModal: v.fallback(v.boolean(), false),
   ignoreHashtagCasingSuggestions: v.fallback(v.boolean(), false),
   defaultPrivacy: v.fallback(v.picklist(['public', 'unlisted', 'private', 'direct']), 'public'),
   defaultContentType: v.fallback(
@@ -35,9 +157,10 @@ const settingsSchema = v.object({
   autoloadMore: v.fallback(v.boolean(), true),
   preserveSpoilers: v.fallback(v.boolean(), true),
   forceImplicitAddressing: v.fallback(v.boolean(), false),
+  useDedicatedComposePage: v.fallback(v.boolean(), false),
   autoTranslate: v.fallback(v.boolean(), false),
   knownLanguages: v.fallback(v.array(v.string()), []),
-  showWrenchButton: v.fallback(v.boolean(), false),
+  showSideBySideTranslations: v.fallback(v.boolean(), false),
   urlPrivacy: coerceObject({
     clearLinksInCompose: v.optional(v.boolean(), true),
     clearLinksInContent: v.optional(v.boolean(), false),
@@ -53,6 +176,14 @@ const settingsSchema = v.object({
   disableUserProvidedMedia: v.fallback(v.boolean(), false),
   stripMetadata: v.fallback(v.boolean(), false),
   storeSettingsInNotes: v.fallback(v.boolean(), false),
+  composeInTimelines: v.fallback(v.boolean(), true),
+  rememberTimelinePosition: v.fallback(v.boolean(), true),
+  accountNicknames: v.fallback(v.record(v.string(), v.string()), {}),
+  useSystemMediaControls: v.fallback(v.boolean(), false),
+  displayMentionAvatars: v.fallback(v.boolean(), false),
+  defaultTimeline: timelineSchema,
+  showChatWidget: v.fallback(v.boolean(), true),
+  showNestedQuotes: v.fallback(v.boolean(), false),
 
   theme: v.optional(
     coerceObject({
@@ -76,13 +207,26 @@ const settingsSchema = v.object({
 
   timelines: v.fallback(
     v.record(
-      v.string(),
+      v.picklist([
+        'home',
+        'antenna',
+        'bubble',
+        'circle',
+        'local',
+        'group',
+        'hashtag',
+        'list',
+        'public',
+        'wrenched',
+      ]),
       coerceObject({
-        showReblogs: v.optional(v.boolean(), true),
-        showReplies: v.optional(v.boolean(), true),
-        showQuotes: v.optional(v.boolean(), true),
-        showDirect: v.optional(v.boolean(), true),
-        showNonMedia: v.optional(v.boolean(), true),
+        showReblogs: v.fallback(v.boolean(), true),
+        showSelfReblogs: v.fallback(v.boolean(), true),
+        showReplies: v.fallback(v.boolean(), true),
+        showQuotes: v.fallback(v.boolean(), true),
+        showDirect: v.fallback(v.boolean(), true),
+        showNonMedia: v.fallback(v.boolean(), true),
+        showMediaWithoutAltText: v.fallback(v.boolean(), true),
       }),
     ),
     {},
@@ -99,7 +243,7 @@ const settingsSchema = v.object({
   }),
 
   threads: coerceObject({
-    displayMode: v.optional(v.picklist(['tree', 'linear']), 'tree'),
+    displayMode: v.optional(v.picklist(['tree', 'tree-indent', 'linear']), 'tree'),
   }),
 
   notifications: coerceObject({
@@ -120,8 +264,27 @@ const settingsSchema = v.object({
   saved: v.fallback(v.boolean(), true),
 
   demo: v.fallback(v.boolean(), false),
+
+  // navigationItems: v.fallback(
+  //   v.array(v.any()),
+  //   [],
+  // ),
+  statusActionBarItems: v.fallback(
+    v.array(v.picklist(AVAILABLE_STATUS_ACTION_BAR_ITEMS)),
+    DEFAULT_STATUS_ACTION_BAR_ITEMS,
+  ),
+  sidebarItems: v.fallback(v.array(v.picklist(AVAILABLE_SIDEBAR_ITEMS)), DEFAULT_SIDEBAR_ITEMS),
+
+  deck: deckSettingsSchema,
 });
 
 type Settings = v.InferOutput<typeof settingsSchema>;
+type TimelineFilters = Settings['timelines']['home'];
 
-export { settingsSchema, type Settings };
+export {
+  settingsSchema,
+  type Settings,
+  type TimelineFilters,
+  AVAILABLE_SIDEBAR_ITEMS,
+  AVAILABLE_STATUS_ACTION_BAR_ITEMS,
+};

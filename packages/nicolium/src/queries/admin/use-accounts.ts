@@ -9,6 +9,7 @@ import {
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
+import { getTagDiff } from '@/utils/badges';
 
 import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';
@@ -60,13 +61,14 @@ const pendingUsersQuery = makePaginatedResponseQueryOptions(
     client.admin.accounts
       .getAccounts({ origin: 'local', status: 'pending' })
       .then(minifyAdminAccountList),
-)();
+);
 
 const usePendingUsersCount = () => {
+  const client = useClient();
   const { data: account } = useOwnAccount();
 
   return useInfiniteQuery({
-    ...pendingUsersQuery,
+    ...pendingUsersQuery(client),
     select: (data) =>
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,
     enabled: !!(account?.is_admin ?? account?.is_moderator),
@@ -218,6 +220,75 @@ const useAdminUnsensitiveAccountMutation = (accountId: string) => {
   });
 };
 
+const useAdminTagUserMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId, 'tag'],
+    mutationFn: (tags: Array<string>) => client.admin.accounts.tagUser(accountId, tags),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.accounts.show(accountId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+    },
+  });
+};
+
+const useAdminUntagUserMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId, 'untag'],
+    mutationFn: (tags: Array<string>) => client.admin.accounts.untagUser(accountId, tags),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+    },
+  });
+};
+
+const useAdminUpdateTagsMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId, 'updateTags'],
+    mutationFn: ({ oldTags, newTags }: { oldTags: Array<string>; newTags: Array<string> }) => {
+      const { added, removed } = getTagDiff(oldTags, newTags);
+
+      return Promise.all([
+        added.length ? client.admin.accounts.tagUser(accountId, added) : null,
+        removed.length ? client.admin.accounts.untagUser(accountId, removed) : null,
+      ]);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+    },
+  });
+};
+
+const useAdminSetRoleMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId, 'setRole'],
+    mutationFn: (role: 'user' | 'moderator' | 'admin') => {
+      switch (role) {
+        case 'user':
+          return client.admin.accounts.demoteToUser(accountId);
+        case 'moderator':
+          return client.admin.accounts.promoteToModerator(accountId);
+        case 'admin':
+          return client.admin.accounts.promoteToAdmin(accountId);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+    },
+  });
+};
+
 export {
   useAdminAccount,
   useAdminAccounts,
@@ -230,4 +301,8 @@ export {
   useAdminUnsilenceAccountMutation,
   useAdminUnsuspendAccountMutation,
   useAdminUnsensitiveAccountMutation,
+  useAdminTagUserMutation,
+  useAdminUntagUserMutation,
+  useAdminUpdateTagsMutation,
+  useAdminSetRoleMutation,
 };

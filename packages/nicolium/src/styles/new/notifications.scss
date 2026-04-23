@@ -8,13 +8,13 @@
 
   &__header {
     display: flex;
-    align-items: center;
     gap: 0.75rem;
+    align-items: center;
   }
 
   &__info {
-    min-width: 0;
     flex: 1 1 0%;
+    min-width: 0;
   }
 
   &__icon {
@@ -26,14 +26,15 @@
     }
 
     &--emoji {
-      height: 1rem;
       width: 1rem;
+      height: 1rem;
     }
   }
 
   &__timestamp {
     flex: none;
     margin-left: auto;
+
     @include mixins.text($size: xs, $theme: muted, $truncate: true);
   }
 

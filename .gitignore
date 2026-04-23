@@ -1,5 +1,7 @@
+node_modules
 /node_modules/
 yarn-error.log*
 coverage/
 package-lock.json
 .idea/
+.pnpm-store

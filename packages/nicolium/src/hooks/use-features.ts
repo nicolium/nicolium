@@ -1,10 +1,10 @@
-import { useAppSelector } from './use-app-selector';
+import { useClient } from '@/hooks/use-client';
 
 import type { Features } from 'pl-api';
 
 /** Get features for the current instance. */
 const useFeatures = (): Features => ({
-  ...useAppSelector((state) => state.auth.client.features),
+  ...useClient().features,
   filtersV2BlurAction: true,
 });
 

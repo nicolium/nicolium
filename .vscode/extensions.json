@@ -1,9 +1,8 @@
 {
     "recommendations": [
-        "dbaeumer.vscode-eslint",
-        "bradlc.vscode-tailwindcss",
+        "ms-vscode-remote.remote-containers",
+        "oxc.oxc-vscode",
         "stylelint.vscode-stylelint",
-        "wix.vscode-import-cost",
-        "bradlc.vscode-tailwindcss"
+        "wix.vscode-import-cost"
     ]
 }
