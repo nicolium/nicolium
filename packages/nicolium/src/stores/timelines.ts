@@ -442,6 +442,7 @@ const useTimelinesStore = create<State>()(
         set((state) => {
           for (const timeline in Object.values(state.timelines)) {
             if (
+              timeline in state.timelines &&
               state.timelines[timeline].isError &&
               state.timelines[timeline].entries.length === 0
             ) {
