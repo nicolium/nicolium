@@ -2085,6 +2085,7 @@
   "time_remaining.minutes": "{number, plural, one {# minute} other {# minutes}} left",
   "time_remaining.moments": "Moments remaining",
   "time_remaining.seconds": "{number, plural, one {# second} other {# seconds}} left",
+  "timeline.error.unauthorized": "You are not authorized to view this timeline.",
   "timeline.gap.explanation": "Time elapsed between the two posts surrounding the gap.",
   "timeline.gap.explanation_first": "Time elapsed since the post before the gap.",
   "timeline.gap.load_newer": "Load newer posts",

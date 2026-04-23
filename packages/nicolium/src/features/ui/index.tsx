@@ -28,11 +28,12 @@ import { useInstance, useInstanceStore } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
+import { useTimelinesActions } from '@/stores/timelines';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
-import GlobalHotkeys from '@/utils/global-hotkeys';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import '@/components/statuses/status';
+import GlobalHotkeys from '@/utils/global-hotkeys';
 import { useIsStandalone } from '@/utils/state';
 
 import {
@@ -54,6 +55,7 @@ const UI: React.FC = React.memo(() => {
     useAuthStore((state) => state.app?.vapid_key) ?? instance.configuration.vapid.public_key;
   const client = useClient();
   const { openModal } = useModalsActions();
+  const { resetErroredTimelines } = useTimelinesActions();
 
   const isDropdownMenuOpen = useIsDropdownMenuOpen();
   const standalone = useIsStandalone();
@@ -142,6 +144,10 @@ const UI: React.FC = React.memo(() => {
   useEffect(() => {
     if (account) registerPushNotifications(client, account.id);
   }, [vapidKey, !!account]);
+
+  useEffect(() => {
+    resetErroredTimelines();
+  }, [!!account]);
 
   // Wait for login to succeed or fail
   if (me === null) return null;

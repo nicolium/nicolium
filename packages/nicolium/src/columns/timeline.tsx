@@ -8,6 +8,7 @@ import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-
 
 import { AccountLink } from '@/components/accounts/account-link';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
+import { EmptyMessage } from '@/components/empty-message';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';
@@ -397,6 +398,7 @@ const Timeline: React.FC<ITimeline> = ({
     fillGap,
     isFetching,
     isPending,
+    isError,
     hasNextPage,
     refetch,
   } = query;
@@ -518,6 +520,21 @@ const Timeline: React.FC<ITimeline> = ({
 
     return rendered;
   }, [entries, contextType, timelineId, featuredStatusIds, filters]);
+
+  if (isError === 401 && entries.length === 0) {
+    return (
+      <PullToRefresh onRefresh={refetch}>
+        <EmptyMessage
+          text={
+            <FormattedMessage
+              id='timeline.error.unauthorized'
+              defaultMessage='You are not authorized to view this timeline.'
+            />
+          }
+        />
+      </PullToRefresh>
+    );
+  }
 
   return (
     <>

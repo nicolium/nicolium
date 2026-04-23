@@ -91,7 +91,7 @@ const useTimeline = (
   }, [timelineId, polling, pollingEnabled, streamingConnected, timeline.isPending]);
 
   useEffect(() => {
-    if (!timeline.isPending || timeline.isFetching) return;
+    if (!timeline.isPending || timeline.isFetching || timeline.isError === 401) return;
     fetchInitial();
   }, [timelineId]);
 
@@ -116,7 +116,11 @@ const useTimeline = (
           isRestoring && shouldInsertGap,
         );
       } catch (error) {
-        timelineActions.setError(timelineId, true);
+        timelineActions.setError(
+          timelineId,
+          true,
+          (error as { response?: { status?: number } }).response?.status,
+        );
       }
     },
     [timelineId, restoringMaxId],
@@ -134,7 +138,11 @@ const useTimeline = (
 
       timelineActions.expandTimeline(timelineId, response.items, !!response.next, false);
     } catch (error) {
-      timelineActions.setError(timelineId, true);
+      timelineActions.setError(
+        timelineId,
+        true,
+        (error as { response?: { status?: number } }).response?.status,
+      );
     }
   }, [timelineId, timeline.oldestStatusId, timeline.isFetching]);
 
