@@ -224,9 +224,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleReblogClick = (visibility?: string) => {
-    const modalReblog = (selectedVisibility = visibility) => {
+    const modalReblog = (selectedVisibility = visibility, scheduledAt?: string) => {
       if (status.reblogged) unreblogStatus();
-      else reblogStatus(selectedVisibility);
+      else reblogStatus({ visibility: selectedVisibility, scheduledAt });
     };
     if (!boostModal) {
       modalReblog();

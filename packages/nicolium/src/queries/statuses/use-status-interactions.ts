@@ -304,7 +304,8 @@ const useReblogStatus = (statusId: string) => {
 
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
-    mutationFn: (visibility?: string) => client.statuses.reblogStatus(statusId, visibility),
+    mutationFn: ({ visibility, scheduledAt }: { visibility?: string; scheduledAt?: string } = {}) =>
+      client.statuses.reblogStatus(statusId, visibility, scheduledAt),
     onMutate: () =>
       updateStatus(
         statusId,

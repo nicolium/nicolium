@@ -90,12 +90,12 @@ const Thread = ({
     if (status.reblogged) {
       unreblogStatus();
     } else if ((e && e.shiftKey) || !boostModal) {
-      reblogStatus(undefined);
+      reblogStatus({});
     } else {
       openModal('BOOST', {
         statusId: status.id,
-        onReblog: (visibility) => {
-          reblogStatus(visibility);
+        onReblog: (visibility, scheduledAt) => {
+          reblogStatus({ visibility, scheduledAt });
         },
       });
     }

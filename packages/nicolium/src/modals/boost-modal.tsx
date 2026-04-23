@@ -3,14 +3,22 @@ import iconGlobe from '@phosphor-icons/core/regular/globe.svg';
 import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import iconMoon from '@phosphor-icons/core/regular/moon.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
-import React from 'react';
+import clsx from 'clsx';
+import React, { Suspense } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
+import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Text from '@/components/ui/text';
+import Toggle from '@/components/ui/toggle';
 import ReplyIndicator from '@/features/compose/components/reply-indicator';
+import {
+  isCurrentOrFutureDate,
+  isFiveMinutesFromNow,
+} from '@/features/compose/components/schedule-form';
+import { DatePicker } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 
@@ -24,6 +32,7 @@ const messages = defineMessages({
     id: 'boost_modal.change_visibility',
     defaultMessage: 'Adjust repost visibility',
   },
+  schedule: { id: 'boost_modal.post_time', defaultMessage: 'Repost date/time' },
 });
 
 interface IPrivacyDropdown {
@@ -74,7 +83,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ visibility, onChange }) =
 
 interface BoostModalProps {
   statusId: string;
-  onReblog: (selectedVisibility?: string) => void;
+  onReblog: (selectedVisibility?: string, scheduledAt?: string) => void;
   visibility?: string;
 }
 
@@ -85,14 +94,20 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
   onClose,
 }) => {
   const features = useFeatures();
+  const intl = useIntl();
 
   const { data: status } = useMinimalStatus(statusId);
 
   const [selectedVisibility, setSelectedVisibility] = React.useState('public');
+  const [scheduledAt, setScheduledAt] = React.useState<Date | null>(null);
 
   const handleReblog = () => {
-    onReblog(selectedVisibility);
+    onReblog(selectedVisibility, scheduledAt?.toISOString() || undefined);
     onClose('BOOST');
+  };
+
+  const toggleSchedule: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+    setScheduledAt(target.checked ? new Date(Date.now() + 10 * 60 * 1000) : null);
   };
 
   const buttonText = status?.reblogged ? (
@@ -143,6 +158,47 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
             }}
           />
         </Text>
+
+        {features.scheduledReblogs && (
+          <>
+            <label className='flex items-center gap-2'>
+              <Text tag='span'>
+                <FormattedMessage
+                  id='boost_modal.schedule.toggle'
+                  defaultMessage='Schedule repost for later'
+                />
+              </Text>
+
+              <Toggle checked={!!scheduledAt} onChange={toggleSchedule} />
+            </label>
+
+            {scheduledAt && (
+              <div className='flex flex-col gap-2'>
+                <Text weight='medium'>
+                  <FormattedMessage id='boost_modal.schedule.label' defaultMessage='Schedule at:' />
+                </Text>
+
+                <Suspense fallback={<Input type='text' disabled />}>
+                  <DatePicker
+                    selected={scheduledAt}
+                    showTimeSelect
+                    dateFormat='MMMM d, yyyy h:mm aa'
+                    timeIntervals={15}
+                    wrapperClassName='react-datepicker-wrapper'
+                    onChange={setScheduledAt}
+                    placeholderText={intl.formatMessage(messages.schedule)}
+                    filterDate={isCurrentOrFutureDate}
+                    filterTime={isFiveMinutesFromNow}
+                    className={clsx({
+                      'has-error': !isFiveMinutesFromNow(scheduledAt),
+                    })}
+                    portalId='app'
+                  />
+                </Suspense>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </Modal>
   );

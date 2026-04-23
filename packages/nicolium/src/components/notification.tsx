@@ -393,12 +393,12 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
         if (status.reblogged) {
           unreblogStatus();
         } else if (e?.shiftKey || !boostModal) {
-          reblogStatus(undefined);
+          reblogStatus({});
         } else {
           openModal('BOOST', {
             statusId: status.id,
-            onReblog: (visibility) => {
-              reblogStatus(visibility);
+            onReblog: (visibility, scheduledAt) => {
+              reblogStatus({ visibility, scheduledAt });
             },
           });
         }

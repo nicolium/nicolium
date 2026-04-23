@@ -525,15 +525,18 @@ const ReblogButton: React.FC<IReblogButton> = ({
         return attachment.description.trim().endsWith(`.${extension}`);
       });
 
-      const doReblog = (visibility?: string) => {
+      const doReblog = (visibility?: string, scheduledAt?: string) => {
         if (status.reblogged) {
           unreblogStatus();
         } else {
-          reblogStatus(visibility, {
-            onSuccess: () => {
-              if (canReblog.approvalRequired) toast.info(messages.reblogApprovalRequired);
+          reblogStatus(
+            { visibility, scheduledAt },
+            {
+              onSuccess: () => {
+                if (canReblog.approvalRequired) toast.info(messages.reblogApprovalRequired);
+              },
             },
-          });
+          );
         }
       };
 
@@ -1250,9 +1253,9 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleReblogClick = (e: React.MouseEvent | React.KeyboardEvent, visibility?: string) => {
-      const modalReblog = () => {
+      const modalReblog = (_?: string, scheduledAt?: string) => {
         if (status.reblogged) unreblogStatus();
-        else reblogStatus(visibility);
+        else reblogStatus({ visibility, scheduledAt });
       };
       if ((e && e.shiftKey) || !boostModal) {
         modalReblog();
