@@ -53,7 +53,6 @@ const StatusActionBarItems: React.FC = () => {
   const intl = useIntl();
 
   const settings = useSettings();
-  console.log(settings.statusActionBarItems);
 
   const availableItems = {
     reply: true,

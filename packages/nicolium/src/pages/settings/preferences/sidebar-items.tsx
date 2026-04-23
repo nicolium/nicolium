@@ -82,7 +82,6 @@ const SidebarItems: React.FC = () => {
   const intl = useIntl();
 
   const settings = useSettings();
-  console.log(settings.sidebarItems);
 
   const availableItems = AVAILABLE_SIDEBAR_ITEMS.filter(
     (item) => !settings.sidebarItems.includes(item),
