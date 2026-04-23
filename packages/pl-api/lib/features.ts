@@ -1577,6 +1577,12 @@ const getFeatures = (instance: Instance) => {
     rssFeedSubscriptions: instance.api_versions['rss_feed_subscriptions.pleroma.pl-api'] >= 1,
 
     /**
+     * Ability to schedule boosts to be posted at a later time.
+     * @see POST /api/v1/statuses/:id/reblog
+     */
+    scheduledReblogs: any([instance.api_versions['net.iceshrimp.scheduled_boosts'] >= 1]),
+
+    /**
      * Can schedule statuses to be posted at a later time.
      * @see POST /api/v1/statuses
      * @see {@link https://docs.joinmastodon.org/methods/scheduled_statuses/}
@@ -1588,6 +1594,7 @@ const getFeatures = (instance: Instance) => {
       v.software === GOTOSOCIAL && gte(v.version, '0.18.0'),
       v.software === MASTODON,
       v.software === PLEROMA,
+      instance.api_versions['net.iceshrimp.scheduled_boosts'] >= 1,
     ]),
 
     /**
