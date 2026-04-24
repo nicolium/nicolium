@@ -904,6 +904,9 @@ body {
     grid-column: span 3 / span 3;
 
     &__content {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 1rem);
       padding-bottom: 3rem;
 
       & > :not([hidden]) ~ :not([hidden]) {

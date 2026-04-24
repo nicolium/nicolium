@@ -11,6 +11,7 @@ import {
   MyGroupsPanel,
   NewEventPanel,
   NewGroupPanel,
+  NotificationsPanel,
   PinnedAccountsPanel,
   ProfileFieldsPanel,
   ProfileMediaPanel,
@@ -40,6 +41,7 @@ interface IAsideContent {
     | 'group'
     | 'groups'
     | 'home'
+    | 'notifications'
     | 'profile'
     | 'remote-instance'
     | 'search';
@@ -155,6 +157,11 @@ const AsideContent: React.FC<IAsideContent> = ({
           if (layout === 'home' || layout === 'remote-instance') {
             items.push(<PromoPanel key='promo' />);
           }
+          break;
+        }
+        case 'notifications': {
+          if (layout === 'notifications') break;
+          items.push(<NotificationsPanel key='notifications' />);
           break;
         }
         case 'footer': {

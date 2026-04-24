@@ -38,6 +38,12 @@
     @include mixins.text($size: xs, $theme: muted, $truncate: true);
   }
 
+  a.⁂-notification__timestamp {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
   .⁂-status__wrapper {
     padding: 0;
   }

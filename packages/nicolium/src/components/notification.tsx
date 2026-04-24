@@ -13,7 +13,7 @@ import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
 import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useCallback, useMemo, useRef } from 'react';
 import {
   defineMessages,
@@ -574,6 +574,15 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
     />
   );
 
+  const timestamp = (
+    <RelativeTimestamp
+      timestamp={notification.latest_page_notification_at!}
+      theme='muted'
+      size='sm'
+      className='whitespace-nowrap'
+    />
+  );
+
   return (
     <Hotkeys handlers={handlers} data-testid='notification'>
       <div className='⁂-notification' tabIndex={0} aria-label={ariaLabel} ref={node}>
@@ -581,14 +590,17 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
           <div className='⁂-notification__header'>
             <div className='⁂-notification__info'>{statusInfo}</div>
 
-            <p className='⁂-notification__timestamp'>
-              <RelativeTimestamp
-                timestamp={notification.latest_page_notification_at!}
-                theme='muted'
-                size='sm'
-                className='whitespace-nowrap'
-              />
-            </p>
+            {compact && status ? (
+              <Link
+                to='/@${username}/posts/$id'
+                params={{ username: status.account?.acct || 'undefined', id: status.id }}
+                className='⁂-notification__timestamp'
+              >
+                {timestamp}
+              </Link>
+            ) : (
+              <p className='⁂-notification__timestamp'>{timestamp}</p>
+            )}
           </div>
         ) : (
           statusInfo

@@ -12,14 +12,21 @@
   }
 }
 
-.⁂-notifications-panel__body {
-  gap: 0;
+.⁂-notifications-panel {
+  flex-grow: 1;
 
-  .⁂-status-list {
-    height: 32rem;
-  }
+  .⁂-widget__body {
+    flex-grow: 1;
+    gap: 0;
+    min-height: 20rem;
 
-  .⁂-notification {
-    padding: 0.5rem 0;
+    .ptr {
+      display: grid; // why?
+      flex-grow: 1;
+    }
+
+    .⁂-notification {
+      padding: 0.5rem;
+    }
   }
 }

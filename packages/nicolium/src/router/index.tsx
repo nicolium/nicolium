@@ -32,6 +32,7 @@ import GroupLayout from '@/layouts/group-layout';
 import GroupsLayout from '@/layouts/groups-layout';
 import HomeLayout from '@/layouts/home-layout';
 import ManageGroupsLayout from '@/layouts/manage-groups-layout';
+import NotificationsLayout from '@/layouts/notifications-layout';
 import ProfileLayout from '@/layouts/profile-layout';
 import RemoteInstanceLayout from '@/layouts/remote-instance-layout';
 import SearchLayout from '@/layouts/search-layout';
@@ -147,6 +148,12 @@ const layouts = {
     getParentRoute: () => rootRoute,
     id: 'manage-groups-layout',
     component: ManageGroupsLayout,
+    beforeLoad: requireAuth,
+  }),
+  notifications: createRoute({
+    getParentRoute: () => rootRoute,
+    id: 'notifications-layout',
+    component: NotificationsLayout,
     beforeLoad: requireAuth,
   }),
   profile: createRoute({
@@ -428,7 +435,7 @@ export const bookmarksRoute = createRoute({
 
 // Notifications
 export const notificationsRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.notifications,
   path: '/notifications',
   component: lazy(() => import('@/pages/notifications/notifications')),
   beforeLoad: requireAuth,
@@ -1454,7 +1461,6 @@ const routeTree = rootRoute.addChildren([
     antennaTimelineRoute,
     bookmarkFoldersRoute,
     bookmarksRoute,
-    notificationsRoute,
     directoryRoute,
     followRequestsRoute,
     outgoingFollowRequestsRoute,
@@ -1508,6 +1514,7 @@ const routeTree = rootRoute.addChildren([
     groupBlocksRoute,
     groupMembershipRequestsRoute,
   ]),
+  layouts.notifications.addChildren([notificationsRoute]),
   layouts.profile.addChildren([
     profileRoute,
     profileFollowersRoute,
