@@ -592,8 +592,8 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
 
             {compact && status ? (
               <Link
-                to='/@${username}/posts/$id'
-                params={{ username: status.account?.acct || 'undefined', id: status.id }}
+                to='/@{$username}/posts/$statusId'
+                params={{ username: status.account?.acct || 'undefined', statusId: status.id }}
                 className='⁂-notification__timestamp'
               >
                 {timestamp}
