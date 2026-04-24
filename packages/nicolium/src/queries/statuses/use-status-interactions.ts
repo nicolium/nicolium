@@ -37,6 +37,7 @@ const messages = defineMessages({
     defaultMessage:
       '@{acct}’s instance most likely doesn’t understand emoji reactions. The user will not get notified of the reaction.',
   },
+  reblogScheduled: { id: 'status.reblog_scheduled', defaultMessage: 'Reblog scheduled' },
 });
 
 const queryKey = {
@@ -317,9 +318,19 @@ const useReblogStatus = (statusId: string) => {
         queryClient,
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
-    onSettled: (status) => {
-      importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
+    onSuccess: (status) => {
+      if ('scheduled_at' in status) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
+        toast.success(messages.reblogScheduled, {
+          actionLabel: messages.view,
+          actionLinkOptions: { to: '/draft_statuses' },
+        });
+      } else {
+        importEntities({ statuses: [status] });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.accountsLists.statusReblogs(statusId),
+        });
+      }
     },
   });
 };
@@ -342,7 +353,7 @@ const useUnreblogStatus = (statusId: string) => {
         queryClient,
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
-    onSettled: (status) => {
+    onSuccess: (status) => {
       importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
     },

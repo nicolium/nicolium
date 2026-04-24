@@ -1982,6 +1982,7 @@
   "status.read_more": "Read more",
   "status.reblog": "Repost",
   "status.reblog_private": "Repost to original audience",
+  "status.reblog_scheduled": "Reblog scheduled",
   "status.reblog_visibility": "Repost to specific audience",
   "status.reblog_visibility_private": "Followers-only repost",
   "status.reblog_visibility_public": "Public repost",

@@ -246,6 +246,7 @@ const statuses = (client: PlApiBaseClient) => {
         body: { visibility, scheduled_at: scheduledAt },
       });
 
+      if (response.json?.scheduled_at) return v.parse(scheduledStatusSchema, response.json);
       return v.parse(statusSchema, response.json);
     },
 
