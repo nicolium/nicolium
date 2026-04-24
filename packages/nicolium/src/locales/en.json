@@ -74,6 +74,7 @@
   "account.requested_small": "Follow requested",
   "account.rss_feed": "Subscribe to RSS feed",
   "account.scrobbling": "Playing {song}",
+  "account.scrobbling.compose": "Create a #NowPlaying post",
   "account.scrobbling.title": "{title} by {artist}",
   "account.search": "Search from @{name}",
   "account.search_self": "Search your posts",

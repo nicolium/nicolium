@@ -280,7 +280,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
               ) : null}
             </div>
 
-            {scrobble && <Scrobble scrobble={scrobble} />}
+            {scrobble && <Scrobble scrobble={scrobble} withComposeButton={ownAccount} />}
 
             {ownAccount ? null : <ProfileFamiliarFollowers account={account} />}
 
