@@ -1683,18 +1683,20 @@ const MenuButton: React.FC<IMenuButton> = ({
     }
 
     if (autoTranslating) {
-      if (targetLanguage) {
-        menu.push({
-          text: intl.formatMessage(messages.hideTranslation),
-          action: handleTranslate,
-          icon: iconTranslate,
-        });
-      } else {
-        menu.push({
-          text: intl.formatMessage(messages.translate),
-          action: handleTranslate,
-          icon: iconTranslate,
-        });
+      if (!statusActionBarItems.includes('translate')) {
+        if (targetLanguage) {
+          menu.push({
+            text: intl.formatMessage(messages.hideTranslation),
+            action: handleTranslate,
+            icon: iconTranslate,
+          });
+        } else {
+          menu.push({
+            text: intl.formatMessage(messages.translate),
+            action: handleTranslate,
+            icon: iconTranslate,
+          });
+        }
       }
 
       menu.push({
