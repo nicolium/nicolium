@@ -170,4 +170,4 @@ Layout.Sidebar = Sidebar;
 Layout.Main = Main;
 Layout.Aside = Aside;
 
-export { Layout as default };
+export { Layout as default, useWindowControlsOverlay };
