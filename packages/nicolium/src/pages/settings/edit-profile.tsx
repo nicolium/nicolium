@@ -328,10 +328,15 @@ const EditProfilePage: React.FC = () => {
 
     if (fields_attributes?.length === 0)
       params.fields_attributes = { '0': { name: '', value: '' } };
-    else if (fields_attributes)
+    else if (fields_attributes) {
+      const padLength = fields_attributes.length.toString().length;
       params.fields_attributes = Object.fromEntries(
-        fields_attributes.map(({ name, value }, i) => [i.toString(), { name, value }]),
+        fields_attributes.map(({ name, value }, i) => [
+          i.toString().padStart(padLength, '0'),
+          { name, value },
+        ]),
       );
+    }
     if (header.file !== null) params.header = header.file ?? '';
     if (avatar.file !== null) params.avatar = avatar.file ?? '';
 
