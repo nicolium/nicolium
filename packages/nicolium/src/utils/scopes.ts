@@ -1,4 +1,5 @@
 import { getFeatures, HOLLO, ICESHRIMP_NET, PLEROMA, TOKI, type Instance } from 'pl-api';
+import gte from 'semver/functions/gte';
 
 import { useInstanceStore } from '@/stores/instance';
 
@@ -36,7 +37,7 @@ const getInstanceScopes = (
     }
   }
 
-  if (v.software === ICESHRIMP_NET && !external) {
+  if (v.software === ICESHRIMP_NET && (!external || gte(v.version, '2026.1.0'))) {
     scopes += ' iceshrimp';
   }
 
