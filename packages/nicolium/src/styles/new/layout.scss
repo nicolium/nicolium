@@ -907,7 +907,11 @@ body {
       display: flex;
       flex-direction: column;
       min-height: calc(100vh - 1rem);
-      padding-bottom: 3rem;
+      padding-bottom: 1rem;
+
+      .⁂-layout__main--with-chats & {
+        padding-bottom: 3rem;
+      }
 
       & > :not([hidden]) ~ :not([hidden]) {
         margin-top: 1rem;
