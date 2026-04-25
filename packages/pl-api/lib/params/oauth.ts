@@ -58,6 +58,7 @@ interface MfaChallengeParams {
   mfa_token: string;
   challenge_type: 'totp' | 'recovery';
   code: string;
+  scope?: string;
 }
 
 export type { OauthAuthorizeParams, GetTokenParams, RevokeTokenParams, MfaChallengeParams };

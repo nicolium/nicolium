@@ -385,7 +385,6 @@ type AuthStore = AuthState & { actions: AuthActions };
 
 const useAuthStore = create<AuthStore>()(
   mutative((set, get) => {
-    const getMe = () => get().me;
     const getMeClient = () => {
       const { me, clients } = get();
       return me ? (clients[me] ?? get().defaultClient) : get().defaultClient;
@@ -642,7 +641,7 @@ const useAuthStore = create<AuthStore>()(
               scope: getScopes(),
             };
 
-            const token = await obtainOAuthToken(params);
+            const token = await obtainOAuthToken(params, undefined, get().defaultClient);
             authLoggedIn(token, app);
             return token;
           } catch (error: any) {
@@ -658,10 +657,7 @@ const useAuthStore = create<AuthStore>()(
         },
 
         verifyOtp: async (code, mfaToken) => {
-          const { app } = get();
-          const me = getMe();
-          const baseUrl = parseBaseURL(me || undefined) || BuildConfig.BACKEND_URL;
-          const client = new PlApiClient(baseUrl);
+          const { app, defaultClient: client } = get();
 
           const token = await client.oauth.mfaChallenge({
             client_id: app?.client_id!,
@@ -669,6 +665,7 @@ const useAuthStore = create<AuthStore>()(
             mfa_token: mfaToken,
             code,
             challenge_type: 'totp',
+            scope: getScopes(),
           });
 
           authLoggedIn(token, app);
