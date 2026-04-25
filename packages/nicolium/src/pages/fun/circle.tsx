@@ -168,6 +168,7 @@ const CirclePage: React.FC = () => {
                   resolve(null);
                 };
 
+                img.crossOrigin = 'anonymous';
                 img.setAttribute('crossorigin', 'anonymous');
                 img.src = avatarUrl;
               });
