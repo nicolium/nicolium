@@ -57,6 +57,7 @@ import { useCanInteract } from '@/hooks/use-can-interact';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useTranslate } from '@/hooks/use-translate';
 import { languages } from '@/pages/settings/components/preferences';
 import { useUnblockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useChats } from '@/queries/chats';
@@ -245,6 +246,10 @@ const messages = defineMessages({
   },
   translate: { id: 'status.translate', defaultMessage: 'Translate' },
   hideTranslation: { id: 'status.hide_translation', defaultMessage: 'Hide translation' },
+  downloadModelAndTranslate: {
+    id: 'status.translate.download',
+    defaultMessage: 'Download model and translate locally',
+  },
 
   favouriteInteractionPolicyHeader: {
     id: 'status.interaction_policy.favourite.header',
@@ -951,6 +956,42 @@ const ShareButton: React.FC<IActionButton> = ({ status }) => {
   );
 };
 
+const TranslateButton: React.FC<IActionButton> = ({ status }) => {
+  const intl = useIntl();
+  const translateInformation = useTranslate(status);
+  if (!translateInformation) return null;
+
+  const { translate, state } = translateInformation;
+
+  let title;
+
+  switch (state) {
+    case 'translated':
+      title = intl.formatMessage(messages.hideTranslation);
+      break;
+    case 'translatable':
+    case 'translating':
+      title = intl.formatMessage(messages.translate);
+      break;
+    case 'downloadable':
+      title = intl.formatMessage(messages.downloadModelAndTranslate);
+      break;
+    case 'downloading':
+      title = intl.formatMessage(messages.loadConversation);
+      break;
+  }
+
+  return (
+    <StatusActionButton
+      title={title}
+      icon={iconTranslate}
+      onClick={translate}
+      loading={state === 'translating' || state === 'downloading'}
+      active={state === 'translated'}
+    />
+  );
+};
+
 const useItems = (
   items: Array<(typeof STATUS_ACTIONS)[number]>,
   status: SelectedStatus | undefined,
@@ -1079,6 +1120,16 @@ const useItems = (
           renderedItems.push(
             <ShareButton
               key='share'
+              status={status}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+            />,
+          );
+          break;
+        case 'translate':
+          renderedItems.push(
+            <TranslateButton
+              key='translate'
               status={status}
               me={me}
               onOpenUnauthorizedModal={onOpenUnauthorizedModal}

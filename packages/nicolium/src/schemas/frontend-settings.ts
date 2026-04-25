@@ -14,6 +14,7 @@ const AVAILABLE_STATUS_ACTION_BAR_ITEMS = [
   'reaction',
   'bookmark',
   'share',
+  'translate',
 ] as const;
 
 const DEFAULT_STATUS_ACTION_BAR_ITEMS = [

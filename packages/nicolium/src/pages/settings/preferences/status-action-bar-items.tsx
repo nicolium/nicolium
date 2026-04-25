@@ -31,6 +31,7 @@ const itemsMessages = {
   reaction: { id: 'settings.status_action_bar_items.item.reaction', defaultMessage: 'React' },
   bookmark: { id: 'settings.status_action_bar_items.item.bookmark', defaultMessage: 'Bookmark' },
   share: { id: 'settings.status_action_bar_items.item.share', defaultMessage: 'Share' },
+  translate: { id: 'settings.status_action_bar_items.item.translate', defaultMessage: 'Translate' },
 };
 
 const StatusActionBarItem: StreamfieldComponent<
@@ -64,6 +65,7 @@ const StatusActionBarItems: React.FC = () => {
     reaction: features.emojiReacts,
     bookmark: features.bookmarks,
     share: true,
+    translate: features.translations || 'Translator' in globalThis,
   };
 
   const unusedItems = AVAILABLE_STATUS_ACTION_BAR_ITEMS.filter(

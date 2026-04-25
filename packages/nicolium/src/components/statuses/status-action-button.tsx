@@ -34,6 +34,7 @@ interface IStatusActionButton extends React.ButtonHTMLAttributes<HTMLButtonEleme
   count?: number;
   active?: boolean;
   text?: React.ReactNode;
+  loading?: boolean;
   onLongPress?: (event: React.MouseEvent | React.TouchEvent) => void;
 }
 
@@ -47,6 +48,7 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
       active,
       count = 0,
       text,
+      loading,
       onLongPress,
       ...filteredProps
     } = props;
@@ -86,6 +88,7 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
           '⁂-status-action-bar__button',
           {
             '⁂-status-action-bar__button--active': active,
+            '⁂-status-action-bar__button--loading': loading,
           },
           className,
         )}
