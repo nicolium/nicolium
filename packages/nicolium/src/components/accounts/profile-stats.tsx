@@ -41,10 +41,11 @@ interface IProfileStats {
       >
     | undefined;
   onClickHandler?: React.MouseEventHandler;
+  withStatusesLink?: boolean;
 }
 
 /** Display follower and following counts for an account. */
-const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
+const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler, withStatusesLink }) => {
   const intl = useIntl();
   const { demetricator } = useSettings();
   const me = useCurrentAccount();
@@ -58,16 +59,22 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
   const showFollowers = ownAccount || !account.hide_followers_count || !account.hide_followers;
   const showFollowing = ownAccount || !account.hide_follows_count || !account.hide_follows;
 
+  const StatusesComponent = withStatusesLink ? Link : 'div';
   const FollowersComponent = !account.hide_followers || ownAccount ? Link : 'div';
   const FollowingComponent = !account.hide_follows || ownAccount ? Link : 'div';
 
   return (
     <div className='⁂-account-stats'>
       {!demetricator && (
-        <div title={intl.formatMessage(messages.statusesCount, { count: account.statuses_count })}>
+        <StatusesComponent
+          to='/@{$username}'
+          params={{ username: account.acct }}
+          onClick={onClickHandler}
+          title={intl.formatMessage(messages.statusesCount, { count: account.statuses_count })}
+        >
           <strong>{shortNumberFormat(account.statuses_count)}</strong>
           <FormattedMessage id='account.statuses' defaultMessage='Statuses' />
-        </div>
+        </StatusesComponent>
       )}
 
       {showFollowers ? (

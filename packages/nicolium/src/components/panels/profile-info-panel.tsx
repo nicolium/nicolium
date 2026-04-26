@@ -51,10 +51,11 @@ interface IProfileInfoPanel {
   account?: Account & { original_display_name?: string };
   /** Username from URL params, in case the account isn't found. */
   username: string;
+  withStatusesLink: boolean;
 }
 
 /** User profile metadata, such as location, birthday, etc. */
-const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) => {
+const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, withStatusesLink }) => {
   const accountInfoNode = React.useRef<HTMLDivElement>(null);
   const intl = useIntl();
   const acct = useAcct(account);
@@ -223,7 +224,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
           </div>
         </div>
 
-        <ProfileStats account={account} />
+        <ProfileStats account={account} withStatusesLink={withStatusesLink} />
 
         <div className='⁂-account-info__container' ref={accountInfoNode}>
           <div className={clsx('⁂-account-info', { '⁂-account-info--collapsed': collapsed })}>
