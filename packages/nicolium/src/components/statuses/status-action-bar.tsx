@@ -1162,7 +1162,7 @@ const MenuButtonRemainingItems: React.FC<IMenuButtonRemainingItems> = ({
     return STATUS_ACTIONS.filter((action) => {
       if (statusActionBarItems.includes(action)) return false;
       if (action === 'quote' && statusActionBarItems.includes('reblog')) return false;
-      if (['wrench', 'bookmark', 'share'].includes(action)) return false;
+      if (['wrench', 'bookmark', 'share', 'translate'].includes(action)) return false;
       return true;
     });
   }, [statusActionBarItems]);
