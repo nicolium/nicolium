@@ -47,7 +47,6 @@ import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
 import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -56,7 +55,6 @@ import ComposeButton from '@/components/navigation/compose-button';
 import ProfileDropdown from '@/components/navigation/profile-dropdown';
 import Icon from '@/components/ui/icon';
 import { useStatContext } from '@/contexts/stat-context';
-import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
@@ -64,7 +62,7 @@ import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
 import { usePendingUsersCount } from '@/queries/admin/use-accounts';
 import { usePendingReportsCount } from '@/queries/admin/use-reports';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
-import { scheduledStatusesCountQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { useScheduledStatusesCountQuery } from '@/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
 import { useInstance } from '@/stores/instance';
@@ -116,18 +114,9 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const { openModal } = useModalsActions();
 
   const instance = useInstance();
-  const client = useClient();
   const features = useFeatures();
   const { data: account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
-
-  const authenticatedScheduledStatusesCountQueryOptions = useMemo(
-    () => ({
-      ...scheduledStatusesCountQueryOptions(client),
-      enabled: !!account && features.scheduledStatuses,
-    }),
-    [client, !!account, features],
-  );
 
   const notificationCount = useNotificationsUnreadCount();
   const followRequestsCount = useFollowRequestsCount().data ?? 0;
@@ -135,9 +124,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
   const dashboardCount = pendingReportsCount + awaitingApprovalCount;
-  const { data: scheduledStatusCount = 0 } = useInfiniteQuery(
-    authenticatedScheduledStatusesCountQueryOptions,
-  );
+  const { data: scheduledStatusCount = 0 } = useScheduledStatusesCountQuery();
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
 
   const timelineAccess = instance.configuration.timelines_access;

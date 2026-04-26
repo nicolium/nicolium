@@ -1,4 +1,3 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -6,8 +5,7 @@ import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import ScheduledStatus from '@/features/scheduled-statuses/components/scheduled-status';
-import { useClient } from '@/hooks/use-client';
-import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { useScheduledStatusesQuery } from '@/queries/statuses/scheduled-statuses';
 
 const messages = defineMessages({
   heading: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
@@ -15,7 +13,6 @@ const messages = defineMessages({
 
 const ScheduledStatusesPage = () => {
   const intl = useIntl();
-  const client = useClient();
 
   const {
     data: scheduledStatuses = [],
@@ -23,7 +20,7 @@ const ScheduledStatusesPage = () => {
     hasNextPage,
     fetchNextPage,
     refetch,
-  } = useInfiniteQuery(scheduledStatusesQueryOptions(client));
+  } = useScheduledStatusesQuery();
 
   const emptyMessage = (
     <FormattedMessage

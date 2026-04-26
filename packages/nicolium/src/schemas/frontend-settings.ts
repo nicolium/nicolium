@@ -4,6 +4,69 @@ import { locales } from '@/messages';
 
 import { coerceObject, filteredArray } from './utils';
 
+const AVAILABLE_NAVIGATION_ITEMS = [
+  'search-input',
+  'home',
+  'search',
+  'notifications',
+  'chats',
+  'conversations',
+  'groups',
+  'profile',
+  'drive',
+  'settings',
+  'dashboard',
+  'public-timeline',
+  'bubble-timeline',
+  'fediverse-timeline',
+  'wrenched-timeline',
+  'follow-requests',
+  'interaction-requests',
+  'bookmarks',
+  'lists',
+  'circles',
+  'antennas',
+  'events',
+  'directory',
+  'followed-hashtags',
+  'rss-feed-subscriptions',
+  'scheduled-statuses',
+  'drafts',
+  'edit-profile',
+  'mutes',
+  'blocks',
+  'filters',
+  'domain-blocks',
+  'circle',
+];
+
+const DEFAULT_PINNED_NAVIGATION_ITEMS = [
+  'home',
+  'groups',
+  'search',
+  'notifications',
+  'chats',
+  'compose',
+];
+
+const DEFAULT_NAVIGATION_ITEMS = [
+  'search-input',
+  'home',
+  'search',
+  'notifications',
+  'chats',
+  'groups',
+  'profile',
+  'drive',
+  'settings',
+  'dashboard',
+  'separator',
+  'public-timeline',
+  'bubble-timeline',
+  'fediverse-timeline',
+  'wrenched-timeline',
+];
+
 const AVAILABLE_STATUS_ACTION_BAR_ITEMS = [
   'reply',
   'reblog',
@@ -266,10 +329,14 @@ const settingsSchema = v.object({
 
   demo: v.fallback(v.boolean(), false),
 
-  // navigationItems: v.fallback(
-  //   v.array(v.any()),
-  //   [],
-  // ),
+  navigationItems: v.fallback(
+    v.array(v.picklist(AVAILABLE_NAVIGATION_ITEMS)),
+    DEFAULT_NAVIGATION_ITEMS,
+  ),
+  pinnedNavigationItems: v.fallback(
+    v.array(v.picklist(AVAILABLE_NAVIGATION_ITEMS)),
+    DEFAULT_PINNED_NAVIGATION_ITEMS,
+  ),
   statusActionBarItems: v.fallback(
     v.array(v.picklist(AVAILABLE_STATUS_ACTION_BAR_ITEMS)),
     DEFAULT_STATUS_ACTION_BAR_ITEMS,

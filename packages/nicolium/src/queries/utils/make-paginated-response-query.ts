@@ -7,9 +7,10 @@ import {
 } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
-import type { PaginatedResponse, PlApiClient } from 'pl-api';
+import type { Features, PaginatedResponse, PlApiClient } from 'pl-api';
 
 class PaginatedResponseArray<T> extends Array<T> {
   declare total: number | undefined;
@@ -64,9 +65,11 @@ const makePaginatedResponseQuery =
       UseInfiniteQueryOptions<PaginatedResponse<T2, IsArray>>,
       'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam' | 'select' | 'enabled'
     >,
+    feature?: Exclude<keyof Features, 'version'>,
   ) =>
   (...params: T1) => {
     const client = useClient();
+    const features = useFeatures();
     const { data: account } = useOwnAccount();
 
     type PageParam = { next: (() => Promise<PaginatedResponse<T2, IsArray>>) | null };
@@ -96,11 +99,12 @@ const makePaginatedResponseQuery =
           return lastPage.items as T3;
         }),
       enabled:
-        enabled === 'isLoggedIn'
+        (enabled === 'isLoggedIn'
           ? !!account
           : enabled === 'isAdmin'
             ? !!(account?.is_admin ?? account?.is_moderator)
-            : (enabled?.(...params) ?? true),
+            : (enabled?.(...params) ?? true)) &&
+        (!feature || features[feature]),
       ...options,
     });
   };

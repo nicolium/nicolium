@@ -25,11 +25,9 @@ import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
 import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Account from '@/components/accounts/account';
@@ -38,13 +36,12 @@ import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
 import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
-import { scheduledStatusesCountQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { useScheduledStatusesCountQuery } from '@/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
 import { useAuthActions } from '@/stores/auth';
@@ -160,23 +157,13 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   const { verifyAccounts, logOut } = useAuthActions();
 
   const me = useCurrentAccount();
-  const client = useClient();
   const features = useFeatures();
-
-  const authenticatedScheduledStatusesCountQueryOptions = useMemo(
-    () => ({
-      ...scheduledStatusesCountQueryOptions(client),
-      enabled: !!me && features.scheduledStatuses,
-    }),
-    [me, client, features],
-  );
 
   const { data: account } = useAccount(me || undefined);
   const settings = useSettings();
   const followRequestsCount = useFollowRequestsCount().data ?? 0;
   const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
-  const scheduledStatusCount =
-    useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions).data ?? 0;
+  const scheduledStatusCount = useScheduledStatusesCountQuery().data ?? 0;
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
   // const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   // const { data: pendingReportsCount = 0 } = usePendingReportsCount();
