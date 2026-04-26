@@ -35,7 +35,6 @@ const ColumnHeader: React.FC<IColumnHeader> = ({
   const { history } = useRouter();
 
   const handleBackClick: React.MouseEventHandler = (event) => {
-    console.log('Back button clicked');
     event.preventDefault();
 
     if (!history.canGoBack) {

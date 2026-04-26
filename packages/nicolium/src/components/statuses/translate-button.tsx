@@ -13,7 +13,6 @@ interface ITranslateButton {
 
 const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   const translateInformation = useTranslate(status);
-  console.log('translateInformation', translateInformation);
   const { showSideBySideTranslations, statusActionBarItems } = useSettings();
   if (!translateInformation || statusActionBarItems.includes('translate')) return null;
 
