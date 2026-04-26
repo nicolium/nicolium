@@ -15,6 +15,7 @@ import HashtagLink from '../hashtag-link';
 import Emoji from '../ui/emoji';
 
 import { ParsedUrl } from './parsed-content';
+import StatusMention from './status-mention';
 
 import type { CustomEmoji, Mention } from 'pl-api';
 
@@ -433,20 +434,25 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
           case 'mention': {
             if (mentions) {
               const mention = mentions.find(({ acct }) => token.props.acct.slice(1) === acct);
+
               if (mention) {
+                const fallback = (
+                  <AccountLink
+                    account={mention}
+                    dir='ltr'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <HoverAccountWrapper accountId={mention.id} element='span'>
+                      @{mention.username}
+                    </HoverAccountWrapper>
+                  </AccountLink>
+                );
+
                 return (
                   <bdi>
-                    <AccountLink
-                      account={mention}
-                      dir='ltr'
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      <HoverAccountWrapper accountId={mention.id} element='span'>
-                        @{mention.username}
-                      </HoverAccountWrapper>
-                    </AccountLink>
+                    <StatusMention accountId={mention.id} fallback={fallback} />
                   </bdi>
                 );
               }
