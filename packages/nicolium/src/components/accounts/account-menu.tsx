@@ -12,6 +12,7 @@ import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.s
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconRss from '@phosphor-icons/core/regular/rss.svg';
 import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
 import iconSpeakerSimpleX from '@phosphor-icons/core/regular/speaker-simple-x.svg';
@@ -444,13 +445,13 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
           menu.push({
             text: intl.formatMessage(messages.hideReblogs, { name: account.username }),
             action: onReblogToggle,
-            icon: iconRepeat,
+            icon: settings.useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
           });
         } else {
           menu.push({
             text: intl.formatMessage(messages.showReblogs, { name: account.username }),
             action: onReblogToggle,
-            icon: iconRepeat,
+            icon: settings.useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
           });
         }
 

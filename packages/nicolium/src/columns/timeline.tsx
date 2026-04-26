@@ -2,6 +2,7 @@ import iconArrowLineDown from '@phosphor-icons/core/regular/arrow-line-down.svg'
 import iconCaretDoubleDown from '@phosphor-icons/core/regular/caret-double-down.svg';
 import iconCaretDoubleUp from '@phosphor-icons/core/regular/caret-double-up.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import clsx from 'clsx';
 import React, { useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
@@ -221,6 +222,7 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
 }) => {
   const features = useFeatures();
   const isReblogged = rebloggedBy.length > 0;
+  const { useRocketIconForReblogs } = useSettings();
 
   const { data: accounts } = useAccounts(rebloggedBy);
 
@@ -258,7 +260,13 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
       <StatusInfo
         className='mt-4'
         avatarSize={42}
-        icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
+        icon={
+          <Icon
+            src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
+            className='size-4 text-green-600'
+            aria-hidden
+          />
+        }
         text={
           reblogVisibility === 'private' ? (
             <FormattedMessage

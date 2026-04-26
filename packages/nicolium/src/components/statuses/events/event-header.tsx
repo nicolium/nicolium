@@ -21,6 +21,7 @@ import iconPushPinSlash from '@phosphor-icons/core/regular/push-pin-slash.svg';
 import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
 import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconSpeakerSimpleX from '@phosphor-icons/core/regular/speaker-simple-x.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import iconUsers from '@phosphor-icons/core/regular/users.svg';
@@ -152,7 +153,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const client = useClient();
   const features = useFeatures();
-  const { boostModal } = useSettings();
+  const { boostModal, useRocketIconForReblogs } = useSettings();
   const { data: ownAccount } = useOwnAccount();
   const { data: account } = useAccount(status?.account_id!);
   const isStaff = ownAccount ? (ownAccount.is_admin ?? ownAccount.is_moderator) : false;
@@ -370,7 +371,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                 handleReblogClick();
               },
             }),
-        icon: iconRepeat,
+        icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
       });
 
       if (features.quotePosts) {
@@ -388,7 +389,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         action: () => {
           handleReblogClick();
         },
-        icon: iconRepeat,
+        icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
       });
     }
 

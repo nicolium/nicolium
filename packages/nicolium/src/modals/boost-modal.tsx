@@ -3,6 +3,7 @@ import iconGlobe from '@phosphor-icons/core/regular/globe.svg';
 import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import iconMoon from '@phosphor-icons/core/regular/moon.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import clsx from 'clsx';
 import React, { Suspense } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -21,6 +22,7 @@ import {
 import { DatePicker } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
+import { useSettings } from '@/stores/settings';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
@@ -95,6 +97,7 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
 }) => {
   const features = useFeatures();
   const intl = useIntl();
+  const { useRocketIconForReblogs } = useSettings();
 
   const { data: status } = useMinimalStatus(statusId);
 
@@ -151,7 +154,7 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
                   <Icon
                     containerClassName='inline-block align-middle'
                     className='h-4 w-4'
-                    src={iconRepeat}
+                    src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
                   />
                 </span>
               ),

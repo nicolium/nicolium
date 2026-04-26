@@ -248,6 +248,7 @@ const settingsSchema = v.object({
   defaultTimeline: timelineSchema,
   showChatWidget: v.fallback(v.boolean(), true),
   showNestedQuotes: v.fallback(v.boolean(), false),
+  useRocketIconForReblogs: v.fallback(v.boolean(), false),
 
   theme: v.optional(
     coerceObject({

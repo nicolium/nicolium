@@ -32,6 +32,7 @@ import iconPushPinSlash from '@phosphor-icons/core/regular/push-pin-slash.svg';
 import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
 import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import iconSpeakerX from '@phosphor-icons/core/regular/speaker-x.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
@@ -501,7 +502,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const features = useFeatures();
   const intl = useIntl();
 
-  const { boostModal, missingDescriptionBoostModal } = useSettings();
+  const { boostModal, missingDescriptionBoostModal, useRocketIconForReblogs } = useSettings();
   const { openModal } = useModalsActions();
   const canReblog = useCanInteract(status, 'can_reblog');
   const canQuote = useCanInteract(status, 'can_quote');
@@ -509,7 +510,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const { mutate: reblogStatus } = useReblogStatus(status.id);
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
-  let reblogIcon = iconRepeat;
+  let reblogIcon = useRocketIconForReblogs ? iconRocketLaunch : iconRepeat;
 
   if (status.visibility === 'direct') {
     reblogIcon = iconAt;
@@ -630,7 +631,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
     {
       text: intl.formatMessage(status.reblogged ? messages.cancelReblogPrivate : messages.reblog),
       action: handleReblogClick,
-      icon: iconRepeat,
+      icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
     },
     {
       text: intl.formatMessage(messages.quotePost),
@@ -1193,7 +1194,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const navigate = useNavigate();
   const { mentionCompose, directCompose } = useComposeActions();
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
-  const { boostModal } = useSettings();
+  const { boostModal, useRocketIconForReblogs } = useSettings();
   const client = useClient();
 
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
@@ -1570,7 +1571,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     if (publicStatus && !status.reblogged && features.reblogVisibility) {
       menu.push({
         text: intl.formatMessage(messages.reblogVisibility),
-        icon: iconRepeat,
+        icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
         items: [
           {
             text: intl.formatMessage(messages.reblogVisibilityPublic),
@@ -1610,7 +1611,7 @@ const MenuButton: React.FC<IMenuButton> = ({
             status.reblogged ? messages.cancelReblogPrivate : messages.reblogPrivate,
           ),
           action: handleReblogClick,
-          icon: iconRepeat,
+          icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
         });
       }
 

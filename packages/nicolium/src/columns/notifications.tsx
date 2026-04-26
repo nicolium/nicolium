@@ -3,6 +3,7 @@ import iconBellSimpleRinging from '@phosphor-icons/core/regular/bell-simple-ring
 import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconChartBar from '@phosphor-icons/core/regular/chart-bar.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import { useQueryClient } from '@tanstack/react-query';
@@ -61,12 +62,12 @@ const messages = defineMessages({
 
 const FilterBar = () => {
   const intl = useIntl();
-  const settings = useSettings();
+  const { notifications: notificationsSettings, useRocketIconForReblogs } = useSettings();
   const { changeSetting } = useSettingsStoreActions();
   const features = useFeatures();
 
-  const selectedFilter = settings.notifications.quickFilter.active;
-  const advancedMode = settings.notifications.quickFilter.advanced;
+  const selectedFilter = notificationsSettings.quickFilter.active;
+  const advancedMode = notificationsSettings.quickFilter.advanced;
 
   const onClick = (filterType: FilterType) => () => {
     changeSetting(['notifications', 'quickFilter', 'active'], filterType);
@@ -114,7 +115,13 @@ const FilterBar = () => {
       name: 'favourite',
     });
     items.push({
-      text: <Icon className='size-4' src={iconRepeat} aria-hidden />,
+      text: (
+        <Icon
+          className='size-4'
+          src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
+          aria-hidden
+        />
+      ),
       title: intl.formatMessage(messages.boosts),
       action: onClick('reblog'),
       name: 'reblog',

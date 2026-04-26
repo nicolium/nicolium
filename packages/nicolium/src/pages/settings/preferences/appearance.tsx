@@ -1,3 +1,4 @@
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import debounce from 'lodash/debounce';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -7,6 +8,7 @@ import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import Icon from '@/components/ui/icon';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import StepSlider from '@/components/ui/step-slider';
 import ThemeToggle from '@/features/ui/components/theme-toggle';
@@ -277,6 +279,22 @@ const AppearancePreferences: React.FC = () => {
             <SettingToggle
               settings={settings}
               settingPath={['useSystemMediaControls']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.use_rocket_icon_for_reblogs_label'
+                defaultMessage='Use rocket icon ({icon}) for reposts'
+                values={{ icon: <Icon src={iconRocketLaunch} /> }}
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['useRocketIconForReblogs']}
               onChange={onToggleChange}
             />
           </ListItem>

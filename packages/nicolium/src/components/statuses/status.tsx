@@ -2,6 +2,7 @@ import iconHash from '@phosphor-icons/core/regular/hash.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import { Link, linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
@@ -215,7 +216,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const { deleted, showFiltered } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { replyCompose, mentionCompose } = useComposeActions();
-  const { boostModal, statusActionBarItems } = useSettings();
+  const { boostModal, statusActionBarItems, useRocketIconForReblogs } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
 
@@ -376,7 +377,13 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
+          icon={
+            <Icon
+              src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
+              className='size-4 text-green-600'
+              aria-hidden
+            />
+          }
           text={
             <FormattedMessage
               id='status.reblogged_by_with_group'
@@ -431,7 +438,13 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
+          icon={
+            <Icon
+              src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
+              className='size-4 text-green-600'
+              aria-hidden
+            />
+          }
           text={
             status.visibility === 'private' ? (
               <FormattedMessage

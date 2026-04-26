@@ -1672,6 +1672,7 @@
   "preferences.fields.unfollow_modal_label": "Show confirmation dialog before unfollowing someone",
   "preferences.fields.use_dedicated_compose_page": "Open compose in a separate window",
   "preferences.fields.use_dedicated_compose_page_hint": "Only applies to non-touch devices.",
+  "preferences.fields.use_rocket_icon_for_reblogs_label": "Use rocket icon ({icon}) for reposts",
   "preferences.fields.use_system_media_controls_label": "Use native media controls",
   "preferences.fields.web_include_boosts_label": "Include reposts in web view",
   "preferences.fields.web_layout_label": "Layout of the web view of your profile",

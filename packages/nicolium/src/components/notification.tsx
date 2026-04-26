@@ -8,6 +8,7 @@ import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconPencilSimpleLine from '@phosphor-icons/core/regular/pencil-simple-line.svg';
 import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
@@ -453,7 +454,11 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
         />
       );
     } else if (icons[displayedType]) {
-      return <Icon src={icons[displayedType]} className='⁂-notification__icon' aria-hidden />;
+      let icon = icons[displayedType];
+      if (displayedType === 'reblog' && settings.useRocketIconForReblogs) {
+        icon = iconRocketLaunch;
+      }
+      return <Icon src={icon} className='⁂-notification__icon' aria-hidden />;
     } else {
       return null;
     }

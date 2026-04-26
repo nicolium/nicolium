@@ -358,6 +358,16 @@
       .dark & {
         color: rgb(var(--color-gray-100));
       }
+
+      .⁂-icon {
+        display: inline;
+
+        svg {
+          display: inline;
+          width: 1rem;
+          height: 1rem;
+        }
+      }
     }
   }
 
