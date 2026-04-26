@@ -138,7 +138,7 @@ const useTranslate = (status: PartialStatus): TranslateInformation | null => {
       ? languageModelAvailability === 'downloading'
         ? 'downloading'
         : 'translating'
-      : languageModelAvailability !== 'downloadable'
+      : languageModelAvailability === 'downloadable'
         ? 'downloadable'
         : 'translatable';
 

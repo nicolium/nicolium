@@ -24,38 +24,40 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   };
 
   const translationLabel = () => {
-    if (state === 'translated') {
-      return showSideBySideTranslations ? (
-        <FormattedMessage id='status.hide_translation' defaultMessage='Hide translation' />
-      ) : (
-        <FormattedMessage id='status.show_original' defaultMessage='Show original' />
-      );
-    }
+    switch (state) {
+      case 'translated':
+        return showSideBySideTranslations ? (
+          <FormattedMessage id='status.hide_translation' defaultMessage='Hide translation' />
+        ) : (
+          <FormattedMessage id='status.show_original' defaultMessage='Show original' />
+        );
 
-    if (state === 'downloading') {
-      return (
-        <FormattedMessage id='status.translating.downloading' defaultMessage='Downloading model…' />
-      );
-    }
+      case 'downloading':
+        return (
+          <FormattedMessage
+            id='status.translating.downloading'
+            defaultMessage='Downloading model…'
+          />
+        );
 
-    if (state === 'translating') {
-      return <FormattedMessage id='status.translating' defaultMessage='Translating…' />;
-    }
+      case 'translating':
+        return <FormattedMessage id='status.translating' defaultMessage='Translating…' />;
 
-    if (state === 'downloadable') {
-      return (
-        <FormattedMessage
-          id='status.translate.download'
-          defaultMessage='Download model and translate locally'
-        />
-      );
-    }
+      case 'downloadable':
+        return (
+          <FormattedMessage
+            id='status.translate.download'
+            defaultMessage='Download model and translate locally'
+          />
+        );
 
-    if (state === 'translatable') {
-      return <FormattedMessage id='status.translate' defaultMessage='Translate' />;
+      case 'translatable':
+      default:
+        if (type === 'remote') {
+          return <FormattedMessage id='status.translate' defaultMessage='Translate' />;
+        }
+        return <FormattedMessage id='status.translate.local' defaultMessage='Translate locally' />;
     }
-
-    return <FormattedMessage id='status.translate.local' defaultMessage='Translate locally' />;
   };
 
   const button = (
