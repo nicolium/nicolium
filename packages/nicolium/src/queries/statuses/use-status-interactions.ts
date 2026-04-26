@@ -37,7 +37,7 @@ const messages = defineMessages({
     defaultMessage:
       '@{acct}’s instance most likely doesn’t understand emoji reactions. The user will not get notified of the reaction.',
   },
-  reblogScheduled: { id: 'status.reblog_scheduled', defaultMessage: 'Reblog scheduled' },
+  reblogScheduled: { id: 'status.reblog_scheduled', defaultMessage: 'Repost scheduled' },
 });
 
 const queryKey = {
@@ -319,7 +319,7 @@ const useReblogStatus = (statusId: string) => {
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSuccess: (status) => {
-      if ('scheduled_at' in status) {
+      if ('params' in status) {
         queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
         toast.success(messages.reblogScheduled, {
           actionLabel: messages.view,
