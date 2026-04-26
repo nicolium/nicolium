@@ -339,7 +339,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             : {})}
         >
           <span ref={spoilerNode}>
-            <Emojify text={spoilerText} emojis={status.emojis} />
+            <Emojify text={spoilerText} emojis={status.emojis} nyaize={account?.speak_as_cat} />
           </span>
           {hasSpoiler && (
             <button onClick={toggleSpoilerExpanded}>
