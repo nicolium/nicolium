@@ -24,6 +24,7 @@
     "no-non-null-asserted-optional-chain": "warn",
     "no-promise-executor-return": "off",
     "no-unassigned-import": "off",
+    "no-underscore-dangle": "off",
     "no-unused-vars": [
       "error",
       {
