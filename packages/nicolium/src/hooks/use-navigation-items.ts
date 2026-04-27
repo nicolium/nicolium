@@ -467,4 +467,4 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
   ]);
 };
 
-export { useNavigationItems };
+export { useNavigationItems, NAVIGATION_ITEMS_GATE };

@@ -43,11 +43,14 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
+import { useFeatures } from '@/hooks/use-features';
+import { NAVIGATION_ITEMS_GATE } from '@/hooks/use-navigation-items';
 import {
   AVAILABLE_NAVIGATION_ITEMS,
   DEFAULT_NAVIGATION_ITEMS,
   DEFAULT_PINNED_NAVIGATION_ITEMS,
 } from '@/schemas/frontend-settings';
+import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -191,11 +194,17 @@ const NavigationItem: StreamfieldComponent<(typeof AVAILABLE_NAVIGATION_ITEMS)[n
 
 const NavigationItems: React.FC = () => {
   const intl = useIntl();
+  const features = useFeatures();
+  const instance = useInstance();
 
   const settings = useSettings();
 
   const availableItems = AVAILABLE_NAVIGATION_ITEMS.filter(
     (item) => item === 'separator' || !settings.navigationItems.includes(item),
+  ).filter(
+    (item) =>
+      NAVIGATION_ITEMS_GATE[item] === undefined ||
+      NAVIGATION_ITEMS_GATE[item](features, instance, true),
   );
 
   const reset = () => {
