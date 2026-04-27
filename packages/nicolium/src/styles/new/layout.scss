@@ -240,6 +240,13 @@ body {
         color: rgb(var(--color-primary-500));
       }
     }
+
+    p {
+      @include mixins.text($weight: medium, $theme: inherit);
+
+      flex-grow: 1;
+      text-align: left;
+    }
   }
 
   &__account-switcher {

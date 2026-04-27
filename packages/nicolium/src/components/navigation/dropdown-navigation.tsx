@@ -27,6 +27,7 @@ import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
 
 import { AccountLink } from '../accounts/account-link';
+import Counter from '../ui/counter';
 
 import type { Account as AccountEntity } from 'pl-api';
 
@@ -96,19 +97,20 @@ interface IDropdownNavigationLink extends Partial<LinkOptions> {
   icon: string;
   text: string | React.JSX.Element;
   onClick: React.EventHandler<React.MouseEvent>;
+  count?: number;
 }
 
 const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(
-  ({ href, to, icon, text, onClick, ...rest }) => {
+  ({ href, to, icon, text, onClick, count, ...rest }) => {
     const body = (
       <>
         <div className='⁂-dropdown-navigation__link__icon'>
           <Icon src={icon} />
         </div>
 
-        <Text tag='span' weight='medium' theme='inherit'>
-          {text}
-        </Text>
+        <p>{text}</p>
+
+        {typeof count === 'number' && count > 0 && <Counter count={count} countMax={99} />}
       </>
     );
 
