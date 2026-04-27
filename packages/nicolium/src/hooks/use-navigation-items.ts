@@ -213,9 +213,21 @@ const NAVIGATION_ITEMS_GATE: Partial<
     (features: ReturnType<typeof useFeatures>, instance: Instance, isLoggedIn: boolean) => boolean
   >
 > = {
+  antennas: (features) => features.antennas,
+  bookmarks: (features) => features.bookmarks,
+  circles: (features) => features.circles,
   conversations: (features) => features.conversations,
-  groups: (features) => features.groups,
+  directory: (features) => features.profileDirectory,
+  'domain-blocks': (features) => features.federating,
   drive: (features) => features.drive,
+  events: (features) => features.events,
+  filters: (features) => features.filters || features.filtersV2,
+  'followed-hashtags': (features) => features.followedHashtagsList,
+  'interaction-requests': (features) => features.interactionRequests,
+  groups: (features) => features.groups,
+  lists: (features) => features.lists,
+  'rss-feed-subscriptions': (features) => features.rssFeedSubscriptions,
+  'scheduled-statuses': (features) => features.scheduledStatuses,
   'public-timeline': (features, { configuration }, isLoggedIn) =>
     features.publicTimeline &&
     (isLoggedIn
@@ -239,16 +251,6 @@ const NAVIGATION_ITEMS_GATE: Partial<
     (isLoggedIn
       ? configuration.timelines_access.live_feeds.wrenched !== 'disabled'
       : configuration.timelines_access.live_feeds.wrenched === 'public'),
-  bookmarks: (features) => features.bookmarks,
-  lists: (features) => features.lists,
-  circles: (features) => features.circles,
-  antennas: (features) => features.antennas,
-  events: (features) => features.events,
-  directory: (features) => features.profileDirectory,
-  'followed-hashtags': (features) => features.followedHashtagsList,
-  'rss-feed-subscriptions': (features) => features.rssFeedSubscriptions,
-  filters: (features) => features.filters || features.filtersV2,
-  'domain-blocks': (features) => features.federating,
 };
 
 type NavigationItemsMenuItem =
