@@ -191,9 +191,15 @@
   width: 100%;
   min-height: 2rem;
 
-  .⁂-icon svg {
+  &__drag-handle {
     width: 1.5rem !important;
     height: 1.5rem !important;
+  }
+
+  &__icon {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    color: rgb(var(--color-gray-600));
   }
 
   div {

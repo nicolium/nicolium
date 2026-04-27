@@ -69,7 +69,7 @@ const SidebarItem: StreamfieldComponent<(typeof AVAILABLE_SIDEBAR_ITEMS)[number]
 
   return (
     <div className='⁂-interface-item'>
-      <Icon src={iconDotsSixVertical} aria-hidden />
+      <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
       <div>
         <p>{intl.formatMessage(itemsMessages[value])}</p>
         <small>{intl.formatMessage(itemHintsMessages[value])}</small>

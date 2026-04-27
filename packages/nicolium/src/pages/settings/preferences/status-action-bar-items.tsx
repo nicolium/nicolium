@@ -1,4 +1,14 @@
+import iconArrowBendUpLeft from '@phosphor-icons/core/regular/arrow-bend-up-left.svg';
+import iconBookmark from '@phosphor-icons/core/regular/bookmark.svg';
 import iconDotsSixVertical from '@phosphor-icons/core/regular/dots-six-vertical.svg';
+import iconExport from '@phosphor-icons/core/regular/export.svg';
+import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
+import iconStar from '@phosphor-icons/core/regular/star.svg';
+import iconThumbsDown from '@phosphor-icons/core/regular/thumbs-down.svg';
+import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
+import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -34,6 +44,19 @@ const itemsMessages = {
   translate: { id: 'settings.status_action_bar_items.item.translate', defaultMessage: 'Translate' },
 };
 
+const itemsIcons = {
+  reply: iconArrowBendUpLeft,
+  reblog: iconRepeat,
+  quote: iconQuotes,
+  favourite: iconStar,
+  dislike: iconThumbsDown,
+  wrench: iconWrench,
+  reaction: iconSmiley,
+  bookmark: iconBookmark,
+  share: iconExport,
+  translate: iconTranslate,
+};
+
 const StatusActionBarItem: StreamfieldComponent<
   (typeof AVAILABLE_STATUS_ACTION_BAR_ITEMS)[number]
 > = ({ value }) => {
@@ -41,7 +64,8 @@ const StatusActionBarItem: StreamfieldComponent<
 
   return (
     <div className='⁂-interface-item'>
-      <Icon src={iconDotsSixVertical} aria-hidden />
+      <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
+      <Icon className='⁂-interface-item__icon' src={itemsIcons[value]} aria-hidden />
       <div>
         <p>{intl.formatMessage(itemsMessages[value])}</p>
       </div>
