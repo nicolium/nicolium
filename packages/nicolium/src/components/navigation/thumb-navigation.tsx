@@ -9,6 +9,7 @@ import ThumbNavigationLink, {
   type IThumbNavigationLink,
 } from '@/components/navigation/thumb-navigation-link';
 import Icon from '@/components/ui/icon';
+import { useLongPress } from '@/hooks/use-long-press';
 import { useNavigationItems } from '@/hooks/use-navigation-items';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
@@ -18,6 +19,8 @@ import { useModalsActions } from '@/stores/modals';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 
 import Avatar from '../ui/avatar';
+
+import ProfileDropdown from './profile-dropdown';
 
 const messages = defineMessages({
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
@@ -35,17 +38,34 @@ const ProfileLink: React.FC<IThumbNavigationLink> = ({
   ...props
 }) => {
   const { data: account } = useOwnAccount();
+  const profileLinkRef = React.useRef<HTMLAnchorElement>(null);
+
+  const bind = useLongPress((e) => {
+    e.stopPropagation();
+
+    if ('vibrate' in navigator) navigator.vibrate(1);
+    profileLinkRef.current?.querySelector('button')?.click();
+  });
 
   if (!account) return null;
 
   return (
     <Link
+      ref={profileLinkRef}
+      {...bind}
       {...props}
       activeOptions={{ exact }}
       className='⁂-thumb-navigation__item'
       activeProps={{ className: '⁂-thumb-navigation__item--active' }}
       title={text}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        profileLinkRef.current?.querySelector('button')?.click();
+      }}
     >
+      <ProfileDropdown account={account} />
       <Avatar
         src={account.avatar}
         alt={account.avatar_description}
