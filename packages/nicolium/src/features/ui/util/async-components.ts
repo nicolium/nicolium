@@ -6,6 +6,7 @@ export const AnnouncementsPanel = lazy(
   () => import('@/components/announcements/announcements-panel'),
 );
 export const BirthdayPanel = lazy(() => import('@/components/panels/birthday-panel'));
+export const ComposePanel = lazy(() => import('@/components/panels/compose-panel'));
 export const CryptoDonatePanel = lazy(
   () => import('@/features/crypto-donate/components/crypto-donate-panel'),
 );

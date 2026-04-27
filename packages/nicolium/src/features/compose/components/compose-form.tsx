@@ -394,9 +394,7 @@ const ComposeForm = <ID extends string>({
       <ContentTypeButton key='compose-type-button' composeId={id} compact={compact} />,
     );
   if (features.postLanguages)
-    selectButtons.push(
-      <LanguageDropdown key='language-dropdown' composeId={id} compact={compact} />,
-    );
+    selectButtons.push(<LanguageDropdown key='language-dropdown' composeId={id} />);
 
   const actionsMenu: Menu = [];
 

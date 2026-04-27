@@ -4,6 +4,7 @@ import {
   AccountNotePanel,
   AnnouncementsPanel,
   BirthdayPanel,
+  ComposePanel,
   CryptoDonatePanel,
   GroupMediaPanel,
   InstanceModerationPanel,
@@ -56,7 +57,7 @@ const AsideContent: React.FC<IAsideContent> = ({
   account,
   instance,
 }) => {
-  const { sidebarItems } = useSettings();
+  const { sidebarItems, composeInTimelines } = useSettings();
   const features = useFeatures();
   const { data: ownAccount } = useOwnAccount();
   const disclosed = useFederationRestrictionsDisclosed();
@@ -156,6 +157,12 @@ const AsideContent: React.FC<IAsideContent> = ({
           }
           if (layout === 'home' || layout === 'remote-instance') {
             items.push(<PromoPanel key='promo' />);
+          }
+          break;
+        }
+        case 'compose': {
+          if (layout !== 'home' || !composeInTimelines) {
+            items.push(<ComposePanel key='compose' />);
           }
           break;
         }
