@@ -121,7 +121,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
     }
 
     return menu;
-  }, [menuItems]);
+  }, [menuItems, intl.locale]);
 
   return (
     <div className={clsx('⁂-sidebar-navigation', { '⁂-sidebar-navigation--narrow': shrink })}>

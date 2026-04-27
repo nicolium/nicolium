@@ -454,7 +454,7 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
     filteredItems,
     instance.version,
     !!account,
-    intl.locale,
+    intl,
     unreadChatsCount,
     notificationCount,
     followRequestsCount,
