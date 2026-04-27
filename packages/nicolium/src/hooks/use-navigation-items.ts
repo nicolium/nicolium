@@ -56,6 +56,7 @@ import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
 import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
+import { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { useStatContext } from '@/contexts/stat-context';
@@ -84,7 +85,32 @@ const UNAUTHENTICATED_NAVIGATION_ITEMS = [
   'bubble-timeline',
   'fediverse-timeline',
   'wrenched-timeline',
-];
+] as const;
+
+const REQUIRED_NAVIGATION_ITEMS = [
+  'home',
+  'search',
+  'notifications',
+  'chats',
+  'groups',
+  'profile',
+  'drive',
+  'settings',
+  'dashboard',
+  'conversations',
+  'follow-requests',
+  'interaction-requests',
+  'bookmarks',
+  'lists',
+  'circles',
+  'antennas',
+  'events',
+  'directory',
+  'followed-hashtags',
+  'rss-feed-subscriptions',
+  'scheduled-statuses',
+  'drafts',
+] as const;
 
 const messages = defineMessages({
   antennas: { id: 'column.antennas', defaultMessage: 'Antennas' },
@@ -241,7 +267,7 @@ type NavigationItemsMenuItem =
     } & LinkOptions)
   | null;
 
-const useNavigationItems = (pinned?: boolean) => {
+const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
   const features = useFeatures();
   const instance = useInstance();
   const intl = useIntl();
@@ -260,18 +286,27 @@ const useNavigationItems = (pinned?: boolean) => {
   const { data: scheduledStatusCount = 0 } = useScheduledStatusesCountQuery();
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
 
-  let filteredItems: Array<(typeof AVAILABLE_NAVIGATION_ITEMS)[number]> =
-    pinned === true
-      ? pinnedNavigationItems
-      : pinned === false
-        ? navigationItems.filter((value) => !pinnedNavigationItems.includes(value))
-        : navigationItems;
+  let filteredItems = useMemo(() => {
+    let filteredItems: Array<(typeof AVAILABLE_NAVIGATION_ITEMS)[number]>;
+    if (remaining === true) {
+      filteredItems = REQUIRED_NAVIGATION_ITEMS.filter((item) => {
+        // Chats item falls back to conversations if chats are disabled
+        if (item === 'conversations' && navigationItems.includes('chats') && !features.chats)
+          return false;
+        return !navigationItems.includes(item);
+      });
+    } else if (pinned === undefined) filteredItems = navigationItems;
+    else if (pinned) filteredItems = pinnedNavigationItems;
+    else filteredItems = navigationItems.filter((value) => !pinnedNavigationItems.includes(value));
 
-  if (!account) {
-    filteredItems = filteredItems.filter((item) =>
-      standalone ? item === 'home' : UNAUTHENTICATED_NAVIGATION_ITEMS.includes(item),
-    );
-  }
+    if (!account) {
+      filteredItems = filteredItems.filter((item) =>
+        standalone ? item === 'home' : UNAUTHENTICATED_NAVIGATION_ITEMS.includes(item),
+      );
+    }
+
+    return filteredItems;
+  }, [navigationItems, pinnedNavigationItems, pinned, remaining, !!account]);
 
   const menu: Array<NavigationItemsMenuItem> = [];
 
@@ -363,24 +398,28 @@ const useNavigationItems = (pinned?: boolean) => {
         }
         break;
       case 'scheduled-statuses':
-        menu.push({
-          type: 'link',
-          to: '/scheduled_statuses',
-          text: intl.formatMessage(messages['scheduled-statuses']),
-          count: scheduledStatusCount,
-          icon: iconHourglass,
-          activeIcon: iconHourglassFill,
-        });
+        if (scheduledStatusCount > 0) {
+          menu.push({
+            type: 'link',
+            to: '/scheduled_statuses',
+            text: intl.formatMessage(messages['scheduled-statuses']),
+            count: scheduledStatusCount,
+            icon: iconHourglass,
+            activeIcon: iconHourglassFill,
+          });
+        }
         break;
       case 'drafts':
-        menu.push({
-          type: 'link',
-          to: '/draft_statuses',
-          text: intl.formatMessage(messages.drafts),
-          count: draftCount,
-          icon: iconPencilSimple,
-          activeIcon: iconPencilSimpleFill,
-        });
+        if (draftCount > 0) {
+          menu.push({
+            type: 'link',
+            to: '/draft_statuses',
+            text: intl.formatMessage(messages.drafts),
+            count: draftCount,
+            icon: iconPencilSimple,
+            activeIcon: iconPencilSimpleFill,
+          });
+        }
         break;
       default: {
         if (

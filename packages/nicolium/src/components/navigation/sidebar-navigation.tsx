@@ -1,23 +1,11 @@
 import iconSignInFill from '@phosphor-icons/core/fill/sign-in-fill.svg';
 import iconUserPlusFill from '@phosphor-icons/core/fill/user-plus-fill.svg';
-import iconAddressBook from '@phosphor-icons/core/regular/address-book.svg';
 import iconBookOpen from '@phosphor-icons/core/regular/book-open.svg';
-import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
-import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
-import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
-import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
 import iconCode from '@phosphor-icons/core/regular/code.svg';
 import iconDotsThreeCircle from '@phosphor-icons/core/regular/dots-three-circle.svg';
-import iconEnvelopeSimple from '@phosphor-icons/core/regular/envelope-simple.svg';
-import iconHash from '@phosphor-icons/core/regular/hash.svg';
-import iconHeartHalf from '@phosphor-icons/core/regular/heart-half.svg';
-import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
 import iconKeyboard from '@phosphor-icons/core/regular/keyboard.svg';
-import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
-import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconQuestion from '@phosphor-icons/core/regular/question.svg';
-import iconRss from '@phosphor-icons/core/regular/rss.svg';
 import iconSignIn from '@phosphor-icons/core/regular/sign-in.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import clsx from 'clsx';
@@ -91,117 +79,25 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
 
   const navigationItems = useNavigationItems();
+  const menuItems = useNavigationItems(undefined, true);
 
   const menu = useMemo((): Menu => {
     const menu: Menu = [];
 
     if (account) {
-      if (features.chats && features.conversations) {
-        menu.push({
-          to: '/conversations',
-          text: intl.formatMessage(messages.conversations),
-          icon: iconEnvelopeSimple,
-        });
-      }
+      for (const item of menuItems) {
+        if (item === null) {
+          menu.push(null);
+          continue;
+        }
 
-      if (account.locked || followRequestsCount > 0) {
-        menu.push({
-          to: '/follow_requests',
-          text: intl.formatMessage(messages.followRequests),
-          icon: iconUserPlus,
-          count: followRequestsCount,
-        });
-      }
-
-      if (interactionRequestsCount > 0) {
-        menu.push({
-          to: '/interaction_requests',
-          text: intl.formatMessage(messages.interactionRequests),
-          icon: iconHeartHalf,
-          count: interactionRequestsCount,
-        });
-      }
-
-      if (features.bookmarks) {
-        menu.push({
-          to: '/bookmarks',
-          text: intl.formatMessage(messages.bookmarks),
-          icon: iconBookmarks,
-        });
-      }
-
-      if (features.lists) {
-        menu.push({
-          to: '/lists',
-          text: intl.formatMessage(messages.lists),
-          icon: iconListDashes,
-        });
-      }
-
-      if (features.circles) {
-        menu.push({
-          to: '/circles',
-          text: intl.formatMessage(messages.circles),
-          icon: iconCirclesThree,
-        });
-      }
-
-      if (features.antennas) {
-        menu.push({
-          to: '/antennas',
-          text: intl.formatMessage({ id: 'column.antennas', defaultMessage: 'Antennas' }),
-          icon: iconBroadcast,
-        });
-      }
-
-      if (features.events) {
-        menu.push({
-          to: '/events',
-          text: intl.formatMessage(messages.events),
-          icon: iconCalendarDots,
-        });
-      }
-
-      if (features.profileDirectory) {
-        menu.push({
-          to: '/directory',
-          text: intl.formatMessage(messages.profileDirectory),
-          icon: iconAddressBook,
-        });
-      }
-
-      if (features.followedHashtagsList) {
-        menu.push({
-          to: '/followed_tags',
-          text: intl.formatMessage(messages.followedTags),
-          icon: iconHash,
-        });
-      }
-
-      if (features.rssFeedSubscriptions) {
-        menu.push({
-          to: '/rss_feed_subscriptions',
-          text: intl.formatMessage(messages.rssFeedSubscriptions),
-          icon: iconRss,
-        });
-      }
-
-      if (scheduledStatusCount > 0) {
-        menu.push({
-          to: '/scheduled_statuses',
-          icon: iconHourglass,
-          text: intl.formatMessage(messages.scheduledStatuses),
-          count: scheduledStatusCount,
-        });
-      }
-
-      if (draftCount > 0) {
-        menu.push({
-          to: '/draft_statuses',
-          icon: iconPencilSimple,
-          text: intl.formatMessage(messages.drafts),
-          count: draftCount,
-        });
+        switch (item.type) {
+          case 'compose':
+          case 'search-input':
+            break;
+          default:
+            menu.push(item);
+        }
       }
 
       menu.push(null);
