@@ -199,30 +199,38 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   };
 
   const renderNavigationItems = (items: ReturnType<typeof useNavigationItems>) =>
-    items.map((item, index) => {
-      if (item === null) return <Divider key={`separator-${index}`} />;
-
-      switch (item.type) {
-        case 'compose':
-        case 'search-input':
+    items
+      .filter((item) => item === null || (item.type !== 'compose' && item.type !== 'search-input'))
+      .map((item, index) => {
+        if (item === null) {
+          if (index > 0 && items[index - 1] !== null) return <Divider key={`separator-${index}`} />;
           return null;
-        case 'profile-link':
-          if (!account) return null;
-          return (
-            <React.Fragment key='profile-link'>
-              <AccountLink account={account} onClick={closeSidebar}>
-                <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} />
-              </AccountLink>
+        }
 
-              {!settings.demetricator && (
-                <ProfileStats account={account} onClickHandler={handleClose} />
-              )}
-            </React.Fragment>
-          );
-        default:
-          return <DropdownNavigationLink {...item} key={item.to} onClick={handleClose} />;
-      }
-    });
+        switch (item.type) {
+          case 'profile-link':
+            if (!account) return null;
+            return (
+              <React.Fragment key='profile-link'>
+                <AccountLink account={account} onClick={closeSidebar}>
+                  <Account
+                    account={account}
+                    showAccountHoverCard={false}
+                    withLinkToProfile={false}
+                  />
+                </AccountLink>
+
+                {!settings.demetricator && (
+                  <ProfileStats account={account} onClickHandler={handleClose} />
+                )}
+              </React.Fragment>
+            );
+          case 'link':
+            return <DropdownNavigationLink {...item} key={item.to} onClick={handleClose} />;
+          default:
+            return null;
+        }
+      });
 
   useEffect(() => {
     verifyAccounts();
