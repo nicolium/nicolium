@@ -64,7 +64,8 @@ const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
       </li>
     );
   }),
-  (prevProps, nextProps) => prevProps.count === nextProps.count,
+  (prevProps, nextProps) =>
+    prevProps.text === nextProps.text && prevProps.count === nextProps.count,
 );
 
 export { SidebarNavigationLink as default };
