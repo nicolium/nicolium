@@ -990,6 +990,12 @@ export const settingsPrivacyRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
+export const settingsNavigationItemsRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/navigation',
+  component: lazy(() => import('@/pages/settings/preferences/navigation-items')),
+});
+
 export const settingsSidebarItemsRoute = createRoute({
   getParentRoute: () => layouts.settings,
   path: '/settings/sidebar',
@@ -1547,6 +1553,7 @@ const routeTree = rootRoute.addChildren([
     settingsTokensRoute,
     settingsInteractionPoliciesRoute,
     settingsPrivacyRoute,
+    settingsNavigationItemsRoute,
     settingsSidebarItemsRoute,
     settingsStatusActionBarItemsRoute,
     blocksRoute,

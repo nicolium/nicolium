@@ -202,15 +202,58 @@
     color: rgb(var(--color-gray-600));
   }
 
-  div {
-    p {
-      @include mixins.text;
+  p {
+    @include mixins.text;
 
-      line-height: var(--leading-sm);
+    flex-grow: 1;
+    line-height: var(--leading-sm);
+  }
+
+  small {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+
+  &__pin {
+    padding: 0.25rem;
+    border-radius: var(--radius-full);
+    background: transparent;
+    transition: background-color 0.2s;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      color: rgb(var(--color-gray-500));
+      transition: color 0.2s;
+
+      .dark & {
+        color: rgb(var(--color-gray-300));
+      }
     }
 
-    small {
-      @include mixins.text($size: sm, $theme: muted);
+    &:hover {
+      background: rgb(var(--color-gray-200));
+
+      svg {
+        color: rgb(var(--color-gray-700));
+      }
+
+      .dark & {
+        background: rgb(var(--color-gray-800));
+
+        svg {
+          color: rgb(var(--color-gray-200));
+        }
+      }
+    }
+
+    &[aria-pressed='true'] {
+      svg {
+        color: rgb(var(--color-primary-600));
+
+        .dark & {
+          color: rgb(var(--color-primary-600));
+        }
+      }
     }
   }
 }

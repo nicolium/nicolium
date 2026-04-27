@@ -317,6 +317,16 @@ const AppearancePreferences: React.FC = () => {
 
         <List>
           <ListItem
+            to='/settings/navigation'
+            label={
+              <FormattedMessage
+                id='preferences.fields.navigation_items'
+                defaultMessage='Customize navigation menu items'
+              />
+            }
+          />
+
+          <ListItem
             to='/settings/sidebar'
             label={
               <FormattedMessage

@@ -5,6 +5,7 @@ import { locales } from '@/messages';
 import { coerceObject, filteredArray } from './utils';
 
 const AVAILABLE_NAVIGATION_ITEMS = [
+  'separator',
   'search-input',
   'home',
   'search',
@@ -39,7 +40,6 @@ const AVAILABLE_NAVIGATION_ITEMS = [
   'domain-blocks',
   'circle',
   'compose',
-  'separator',
 ] as const;
 
 const DEFAULT_PINNED_NAVIGATION_ITEMS = [
