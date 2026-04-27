@@ -1,6 +1,6 @@
 import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import IconButton from './icon-button';
@@ -57,23 +57,54 @@ const Streamfield = <T,>({
 }: IStreamfield<T>) => {
   const intl = useIntl();
 
-  const dragItem = useRef<number | null>(null);
-  const dragOverItem = useRef<number | null>(null);
+  const [draggedItem, setDraggedItem] = useState<{
+    index: number;
+    overIndex: number | null;
+    height: number;
+  } | null>(null);
 
-  const handleDragStart = (i: number) => () => {
-    dragItem.current = i;
+  const clearDraggedItem = () => {
+    setDraggedItem(null);
+  };
+
+  const handleDragStart = (i: number) => (event: React.DragEvent<HTMLDivElement>) => {
+    setDraggedItem({
+      index: i,
+      overIndex: i,
+      height: event.currentTarget.getBoundingClientRect().height,
+    });
+
+    event.dataTransfer.effectAllowed = 'move';
   };
 
   const handleDragEnter = (i: number) => () => {
-    dragOverItem.current = i;
+    setDraggedItem((current) => {
+      if (!current || current.overIndex === i) return current;
+      return { ...current, overIndex: i };
+    });
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
   };
 
   const handleDragEnd = () => {
+    if (
+      !draggedItem ||
+      draggedItem.overIndex === null ||
+      draggedItem.index === draggedItem.overIndex
+    ) {
+      clearDraggedItem();
+      return;
+    }
+
     const newData = [...values];
-    const item = newData.splice(dragItem.current!, 1)[0];
-    newData.splice(dragOverItem.current!, 0, item);
+    const item = newData.splice(draggedItem.index, 1)[0];
+    newData.splice(draggedItem.overIndex, 0, item);
 
     onChange(newData);
+    clearDraggedItem();
   };
 
   const handleChange = (i: number) => (value: T) => {
@@ -81,6 +112,13 @@ const Streamfield = <T,>({
     newData[i] = value;
     onChange(newData);
   };
+
+  const placeholderIndex =
+    draggedItem && draggedItem.overIndex !== null && draggedItem.index !== draggedItem.overIndex
+      ? draggedItem.index < draggedItem.overIndex
+        ? draggedItem.overIndex + 1
+        : draggedItem.overIndex
+      : null;
 
   return (
     <div className={clsx('⁂-streamfield', className)}>
@@ -92,37 +130,53 @@ const Streamfield = <T,>({
       ) : null}
 
       {values.length > 0 && (
-        <div className='⁂-streamfield__items'>
-          {values.map((value, i) =>
-            (value as Record<string, unknown>)?._destroy ? null : (
-              <div
-                className='⁂-streamfield__item'
-                key={i}
-                draggable={draggable}
-                onDragStart={handleDragStart(i)}
-                onDragEnter={handleDragEnter(i)}
-                onDragEnd={handleDragEnd}
-              >
-                <Component
-                  key={i}
-                  index={i}
-                  onChange={handleChange(i)}
-                  value={value}
-                  autoFocus={i > 0}
-                />
-                {values.length > minItems && onRemoveItem && (
-                  <IconButton
-                    iconClassName='h-4 w-4'
-                    className='bg-transparent text-gray-600 hover:text-gray-600'
-                    src={iconX}
-                    onClick={() => {
-                      onRemoveItem(i);
-                    }}
-                    title={intl.formatMessage(messages.remove)}
+        <div className='⁂-streamfield__items' onDragOver={handleDragOver}>
+          {values.map((value, i) => {
+            if ((value as Record<string, unknown>)?._destroy) return null;
+
+            return (
+              <React.Fragment key={`streamfield-item-${i}`}>
+                {placeholderIndex === i && (
+                  <div
+                    aria-hidden='true'
+                    className='⁂-streamfield__placeholder'
+                    style={{ height: `${draggedItem?.height ?? 0}px` }}
                   />
                 )}
-              </div>
-            ),
+
+                <div
+                  className={clsx('⁂-streamfield__item', {
+                    '⁂-streamfield__item--dragging': draggedItem?.index === i,
+                  })}
+                  draggable={draggable}
+                  onDragStart={handleDragStart(i)}
+                  onDragEnter={handleDragEnter(i)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={handleDragOver}
+                >
+                  <Component index={i} onChange={handleChange(i)} value={value} autoFocus={i > 0} />
+                  {values.length > minItems && onRemoveItem && (
+                    <IconButton
+                      iconClassName='h-4 w-4'
+                      className='bg-transparent text-gray-600 hover:text-gray-600'
+                      src={iconX}
+                      onClick={() => {
+                        onRemoveItem(i);
+                      }}
+                      title={intl.formatMessage(messages.remove)}
+                    />
+                  )}
+                </div>
+              </React.Fragment>
+            );
+          })}
+
+          {placeholderIndex === values.length && (
+            <div
+              aria-hidden='true'
+              className='⁂-streamfield__placeholder'
+              style={{ height: `${draggedItem?.height ?? 0}px` }}
+            />
           )}
         </div>
       )}

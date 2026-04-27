@@ -718,6 +718,32 @@ p.⁂-form-group__hint {
     display: flex;
     gap: 0.5rem;
     align-items: center;
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
+
+    &[draggable='true'] {
+      cursor: grab;
+    }
+
+    &--dragging {
+      opacity: 0.45;
+    }
+  }
+
+  &__placeholder {
+    flex: 0 0 auto;
+
+    width: 100%;
+    border: 1px dashed rgb(var(--color-primary-500));
+    border-radius: var(--radius-md);
+
+    background-color: rgb(var(--color-primary-500) / 10%);
+
+    .dark & {
+      border-color: rgb(var(--color-primary-400));
+      background-color: rgb(var(--color-primary-400) / 14%);
+    }
   }
 
   &__add-button {
