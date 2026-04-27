@@ -714,6 +714,7 @@ p.⁂-form-group__hint {
     gap: 0.25rem;
 
     &--droppable {
+      gap: 0;
       min-height: 3rem;
     }
   }
@@ -725,6 +726,10 @@ p.⁂-form-group__hint {
     transition:
       opacity 150ms ease,
       transform 150ms ease;
+
+    .⁂-streamfield__items--droppable &:not(:last-child) {
+      padding-bottom: 0.25rem;
+    }
 
     &[draggable='true'] {
       cursor: grab;
