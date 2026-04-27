@@ -99,6 +99,7 @@ const SidebarItems: React.FC = () => {
         </OutlineBox>
 
         <Streamfield
+          className='⁂-interface-items'
           component={SidebarItem}
           values={settings.sidebarItems}
           onChange={(values) => changeSetting(['sidebarItems'], values)}

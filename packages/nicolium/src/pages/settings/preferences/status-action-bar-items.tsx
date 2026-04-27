@@ -84,6 +84,7 @@ const StatusActionBarItems: React.FC = () => {
         </OutlineBox>
 
         <Streamfield
+          className='⁂-interface-items'
           component={StatusActionBarItem}
           values={settings.statusActionBarItems.filter((item) => availableItems[item])}
           onChange={(values) => changeSetting(['statusActionBarItems'], values)}

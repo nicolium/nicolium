@@ -1,4 +1,5 @@
 import iconX from '@phosphor-icons/core/regular/x.svg';
+import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
@@ -37,6 +38,7 @@ interface IStreamfield<T> {
   maxItems?: number;
   /** Allow changing order of the items. */
   draggable?: boolean;
+  className?: string;
 }
 
 /** List of inputs that can be added or removed. */
@@ -51,6 +53,7 @@ const Streamfield = <T,>({
   maxItems = Infinity,
   minItems = 0,
   draggable,
+  className,
 }: IStreamfield<T>) => {
   const intl = useIntl();
 
@@ -80,7 +83,7 @@ const Streamfield = <T,>({
   };
 
   return (
-    <div className='⁂-streamfield'>
+    <div className={clsx('⁂-streamfield', className)}>
       {label || hint ? (
         <div className='⁂-streamfield__text'>
           {label && <label>{label}</label>}
