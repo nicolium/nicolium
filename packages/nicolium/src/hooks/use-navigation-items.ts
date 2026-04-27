@@ -299,8 +299,10 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
         return !navigationItems.includes(item);
       });
     } else if (pinned === undefined) filteredItems = navigationItems;
-    else if (pinned) filteredItems = pinnedNavigationItems;
-    else filteredItems = navigationItems.filter((value) => !pinnedNavigationItems.includes(value));
+    else
+      filteredItems = navigationItems.filter((value) =>
+        pinned ? pinnedNavigationItems.includes(value) : !pinnedNavigationItems.includes(value),
+      );
 
     if (!account) {
       filteredItems = filteredItems.filter((item) =>
