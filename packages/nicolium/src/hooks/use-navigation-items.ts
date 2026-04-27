@@ -311,140 +311,158 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
     return filteredItems;
   }, [navigationItems, pinnedNavigationItems, pinned, remaining, !!account, instance.version]);
 
-  const menu: Array<NavigationItemsMenuItem> = [];
+  return useMemo(() => {
+    const menu: Array<NavigationItemsMenuItem> = [];
 
-  for (const item of filteredItems) {
-    switch (item) {
-      case 'separator':
-        menu.push(null);
-        break;
-      case 'search-input':
-      case 'compose':
-        menu.push({
-          type: item,
-        });
-        break;
-      case 'profile':
-        menu.push({
-          type: 'profile-link',
-          to: '/@{$username}',
-          params: { username: account?.acct || '' },
-          text: intl.formatMessage(messages.profile),
-          icon: iconUser,
-          activeIcon: iconUserFill,
-        });
-        break;
-      case 'chats':
-        if (features.chats) {
+    for (const item of filteredItems) {
+      switch (item) {
+        case 'separator':
+          menu.push(null);
+          break;
+        case 'search-input':
+        case 'compose':
+          menu.push({
+            type: item,
+          });
+          break;
+        case 'profile':
+          menu.push({
+            type: 'profile-link',
+            to: '/@{$username}',
+            params: { username: account?.acct || '' },
+            text: intl.formatMessage(messages.profile),
+            icon: iconUser,
+            activeIcon: iconUserFill,
+          });
+          break;
+        case 'chats':
+          if (features.chats) {
+            menu.push({
+              type: 'link',
+              to: '/chats',
+              text: intl.formatMessage(messages.chats),
+              count: unreadChatsCount,
+              icon: iconChatsTeardrop,
+              activeIcon: iconChatsTeardropFill,
+            });
+          } else if (
+            features.conversations &&
+            !filteredItems.includes('conversations') &&
+            !pinned
+          ) {
+            menu.push({
+              type: 'link',
+              to: '/conversations',
+              text: intl.formatMessage(messages.conversations),
+              icon: iconEnvelopeSimple,
+              activeIcon: iconEnvelopeSimpleFill,
+            });
+          }
+          break;
+        case 'notifications':
           menu.push({
             type: 'link',
-            to: '/chats',
-            text: intl.formatMessage(messages.chats),
-            count: unreadChatsCount,
-            icon: iconChatsTeardrop,
-            activeIcon: iconChatsTeardropFill,
+            to: '/notifications',
+            text: intl.formatMessage(messages.notifications),
+            count: notificationCount,
+            icon: iconBellSimple,
+            activeIcon: iconBellSimpleFill,
           });
-        } else if (features.conversations && !filteredItems.includes('conversations') && !pinned) {
+          break;
+        case 'follow-requests':
+          if (account?.locked || followRequestsCount > 0) {
+            menu.push({
+              type: 'link',
+              to: '/follow_requests',
+              text: intl.formatMessage(messages['follow-requests']),
+              count: followRequestsCount,
+              icon: iconUserPlus,
+              activeIcon: iconUserPlusFill,
+            });
+          }
+          break;
+        case 'interaction-requests':
+          if (interactionRequestsCount > 0) {
+            menu.push({
+              type: 'link',
+              to: '/interaction_requests',
+              text: intl.formatMessage(messages['interaction-requests']),
+              count: interactionRequestsCount,
+              icon: iconHeartHalf,
+              activeIcon: iconHeartHalfFill,
+            });
+          }
+          break;
+        case 'dashboard':
+          if (account && (account.is_admin ?? account.is_moderator)) {
+            menu.push({
+              type: 'link',
+              to: '/nicolium/admin',
+              text: intl.formatMessage(messages.dashboard),
+              count: dashboardCount,
+              icon: iconGauge,
+              activeIcon: iconGaugeFill,
+            });
+          }
+          break;
+        case 'scheduled-statuses':
+          if (scheduledStatusCount > 0) {
+            menu.push({
+              type: 'link',
+              to: '/scheduled_statuses',
+              text: intl.formatMessage(messages['scheduled-statuses']),
+              count: scheduledStatusCount,
+              icon: iconHourglass,
+              activeIcon: iconHourglassFill,
+            });
+          }
+          break;
+        case 'drafts':
+          if (draftCount > 0) {
+            menu.push({
+              type: 'link',
+              to: '/draft_statuses',
+              text: intl.formatMessage(messages.drafts),
+              count: draftCount,
+              icon: iconPencilSimple,
+              activeIcon: iconPencilSimpleFill,
+            });
+          }
+          break;
+        default: {
+          if (
+            NAVIGATION_ITEMS_GATE[item] &&
+            !NAVIGATION_ITEMS_GATE[item](features, instance, !!account)
+          ) {
+            break;
+          }
+          const { icon, activeIcon } = NAVIGATION_ITEM_ICONS[item] || {};
           menu.push({
             type: 'link',
-            to: '/conversations',
-            text: intl.formatMessage(messages.conversations),
-            icon: iconEnvelopeSimple,
-            activeIcon: iconEnvelopeSimpleFill,
+            to: NAVIGATION_ITEM_PATHS[item],
+            text: intl.formatMessage(messages[item]),
+            icon,
+            activeIcon,
           });
-        }
-        break;
-      case 'notifications':
-        menu.push({
-          type: 'link',
-          to: '/notifications',
-          text: intl.formatMessage(messages.notifications),
-          count: notificationCount,
-          icon: iconBellSimple,
-          activeIcon: iconBellSimpleFill,
-        });
-        break;
-      case 'follow-requests':
-        if (account?.locked || followRequestsCount > 0) {
-          menu.push({
-            type: 'link',
-            to: '/follow_requests',
-            text: intl.formatMessage(messages['follow-requests']),
-            count: followRequestsCount,
-            icon: iconUserPlus,
-            activeIcon: iconUserPlusFill,
-          });
-        }
-        break;
-      case 'interaction-requests':
-        if (interactionRequestsCount > 0) {
-          menu.push({
-            type: 'link',
-            to: '/interaction_requests',
-            text: intl.formatMessage(messages['interaction-requests']),
-            count: interactionRequestsCount,
-            icon: iconHeartHalf,
-            activeIcon: iconHeartHalfFill,
-          });
-        }
-        break;
-      case 'dashboard':
-        if (account && (account.is_admin ?? account.is_moderator)) {
-          menu.push({
-            type: 'link',
-            to: '/nicolium/admin',
-            text: intl.formatMessage(messages.dashboard),
-            count: dashboardCount,
-            icon: iconGauge,
-            activeIcon: iconGaugeFill,
-          });
-        }
-        break;
-      case 'scheduled-statuses':
-        if (scheduledStatusCount > 0) {
-          menu.push({
-            type: 'link',
-            to: '/scheduled_statuses',
-            text: intl.formatMessage(messages['scheduled-statuses']),
-            count: scheduledStatusCount,
-            icon: iconHourglass,
-            activeIcon: iconHourglassFill,
-          });
-        }
-        break;
-      case 'drafts':
-        if (draftCount > 0) {
-          menu.push({
-            type: 'link',
-            to: '/draft_statuses',
-            text: intl.formatMessage(messages.drafts),
-            count: draftCount,
-            icon: iconPencilSimple,
-            activeIcon: iconPencilSimpleFill,
-          });
-        }
-        break;
-      default: {
-        if (
-          NAVIGATION_ITEMS_GATE[item] &&
-          !NAVIGATION_ITEMS_GATE[item](features, instance, !!account)
-        ) {
           break;
         }
-        const { icon, activeIcon } = NAVIGATION_ITEM_ICONS[item] || {};
-        menu.push({
-          type: 'link',
-          to: NAVIGATION_ITEM_PATHS[item],
-          text: intl.formatMessage(messages[item]),
-          icon,
-          activeIcon,
-        });
-        break;
       }
     }
-  }
 
-  return menu;
+    return menu;
+  }, [
+    filteredItems,
+    instance.version,
+    !!account,
+    intl.locale,
+    unreadChatsCount,
+    notificationCount,
+    followRequestsCount,
+    interactionRequestsCount,
+    dashboardCount,
+    scheduledStatusCount,
+    draftCount,
+  ]);
 };
 
 export { useNavigationItems };
