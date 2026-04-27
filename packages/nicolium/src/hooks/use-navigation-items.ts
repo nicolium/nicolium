@@ -127,11 +127,11 @@ const messages = defineMessages({
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
   drive: { id: 'column.drive', defaultMessage: 'Drive' },
   'edit-profile': { id: 'column.edit_profile', defaultMessage: 'Edit profile' },
+  events: { id: 'column.events', defaultMessage: 'Events' },
   'fediverse-timeline': { id: 'tabs_bar.fediverse', defaultMessage: 'Fediverse' },
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
   'followed-hashtags': { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
   'follow-requests': { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
-  events: { id: 'column.events', defaultMessage: 'Events' },
   groups: { id: 'column.groups', defaultMessage: 'Groups' },
   home: { id: 'column.home', defaultMessage: 'Home' },
   'interaction-requests': {
