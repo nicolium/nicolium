@@ -15,14 +15,9 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import ComposeButton from '@/components/navigation/compose-button';
 import ProfileDropdown from '@/components/navigation/profile-dropdown';
 import Icon from '@/components/ui/icon';
-import { useFeatures } from '@/hooks/use-features';
 import { useNavigationItems } from '@/hooks/use-navigation-items';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
-import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
-import { useScheduledStatusesCountQuery } from '@/queries/statuses/scheduled-statuses';
-import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
-import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
 import { useModalsActions } from '@/stores/modals';
 import sourceCode from '@/utils/code';
 
@@ -69,14 +64,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const intl = useIntl();
   const { openModal } = useModalsActions();
 
-  const features = useFeatures();
   const { data: account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
-
-  const followRequestsCount = useFollowRequestsCount().data ?? 0;
-  const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
-  const { data: scheduledStatusCount = 0 } = useScheduledStatusesCountQuery();
-  const { data: draftCount = 0 } = useDraftStatusesCountQuery();
 
   const navigationItems = useNavigationItems();
   const menuItems = useNavigationItems(undefined, true);
@@ -132,14 +121,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
     }
 
     return menu;
-  }, [
-    !!account,
-    features,
-    followRequestsCount,
-    interactionRequestsCount,
-    scheduledStatusCount,
-    draftCount,
-  ]);
+  }, [menuItems]);
 
   return (
     <div className={clsx('⁂-sidebar-navigation', { '⁂-sidebar-navigation--narrow': shrink })}>

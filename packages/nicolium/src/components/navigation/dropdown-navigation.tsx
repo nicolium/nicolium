@@ -1,5 +1,7 @@
 import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
+import iconCaretLeft from '@phosphor-icons/core/regular/caret-left.svg';
 import iconCode from '@phosphor-icons/core/regular/code.svg';
+import iconDotsThreeCircle from '@phosphor-icons/core/regular/dots-three-circle.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconSignIn from '@phosphor-icons/core/regular/sign-in.svg';
 import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
@@ -7,7 +9,7 @@ import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
 import ProfileStats from '@/components/accounts/profile-stats';
@@ -27,6 +29,10 @@ import sourceCode from '@/utils/code';
 import { AccountLink } from '../accounts/account-link';
 
 import type { Account as AccountEntity } from 'pl-api';
+
+const messages = defineMessages({
+  back: { id: 'navigation_bar.back', defaultMessage: 'Back' },
+});
 
 interface IAccountSwitcher {
   handleClose: () => void;
@@ -114,10 +120,18 @@ const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(
       );
     }
 
+    if (href) {
+      return (
+        <a className='⁂-dropdown-navigation__link' href={href} target='_blank' onClick={onClick}>
+          {body}
+        </a>
+      );
+    }
+
     return (
-      <a className='⁂-dropdown-navigation__link' href={href} target='_blank' onClick={onClick}>
+      <button className='⁂-dropdown-navigation__link' onClick={onClick} type='button'>
         {body}
-      </a>
+      </button>
     );
   },
 );
@@ -125,13 +139,16 @@ const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(
 DropdownNavigationLink.displayName = 'DropdownNavigationLink';
 
 const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => {
+  const intl = useIntl();
   const isSidebarOpen = useIsSidebarOpen();
   const { closeSidebar } = useUiStoreActions();
   const { verifyAccounts, logOut } = useAuthActions();
+  const [page, setPage] = useState<'main' | 'more'>('main');
 
   const me = useCurrentAccount();
 
   const navigationItems = useNavigationItems(false);
+  const moreItems = useNavigationItems(undefined, true);
 
   const { data: account } = useAccount(me || undefined);
   const settings = useSettings();
@@ -179,16 +196,29 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
     touchEnd.current = null;
   };
 
-  const renderNavigationItems = () =>
-    navigationItems.map((item, index) => {
+  const renderNavigationItems = (items: ReturnType<typeof useNavigationItems>) =>
+    items.map((item, index) => {
       if (item === null) return <Divider key={`separator-${index}`} />;
 
       switch (item.type) {
         case 'compose':
         case 'search-input':
           return null;
+        case 'profile-link':
+          if (!account) return null;
+          return (
+            <React.Fragment key='profile-link'>
+              <AccountLink account={account} onClick={closeSidebar}>
+                <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} />
+              </AccountLink>
+
+              {!settings.demetricator && (
+                <ProfileStats account={account} onClickHandler={handleClose} />
+              )}
+            </React.Fragment>
+          );
         default:
-          return <DropdownNavigationLink {...item} key={item.to} onClick={onClickLogOut} />;
+          return <DropdownNavigationLink {...item} key={item.to} onClick={handleClose} />;
       }
     });
 
@@ -198,6 +228,8 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
   useEffect(() => {
     if (isSidebarOpen) containerRef.current?.querySelector('a')?.focus();
+    else setPage('main');
+
     setTimeout(
       () => {
         setSidebarVisible(isSidebarOpen);
@@ -222,92 +254,121 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
     >
       <div className='⁂-dropdown-navigation__overlay' role='button' onClick={handleClose} />
 
-      <div className='⁂-dropdown-navigation' id='dropdown-navigation' role='menu'>
-        {account ? (
-          <div>
-            <AccountLink account={account} onClick={closeSidebar}>
-              <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} />
-            </AccountLink>
+      <div
+        className='⁂-dropdown-navigation'
+        id='dropdown-navigation'
+        role='menu'
+        data-active-page={page}
+      >
+        <div className='⁂-dropdown-navigation__pages'>
+          <div className='⁂-dropdown-navigation__page' aria-hidden={page !== 'main'}>
+            {account ? (
+              <div>
+                <div className='flex flex-col gap-4'>
+                  {renderNavigationItems(navigationItems)}
 
-            {!settings.demetricator && (
-              <ProfileStats account={account} onClickHandler={handleClose} />
-            )}
+                  <Divider />
 
-            <div className='flex flex-col gap-4'>
-              <Divider />
+                  <DropdownNavigationLink
+                    href={sourceCode.url}
+                    icon={iconCode}
+                    text={
+                      <FormattedMessage id='navigation.source_code' defaultMessage='Source code' />
+                    }
+                    onClick={closeSidebar}
+                  />
 
-              {renderNavigationItems()}
+                  <Divider />
 
-              <Divider />
+                  <DropdownNavigationLink
+                    to='/logout'
+                    icon={iconSignOut}
+                    text={<FormattedMessage id='navigation_bar.logout' defaultMessage='Logout' />}
+                    onClick={onClickLogOut}
+                  />
 
-              <DropdownNavigationLink
-                to='/logout'
-                icon={iconSignOut}
-                text={<FormattedMessage id='navigation_bar.logout' defaultMessage='Logout' />}
-                onClick={onClickLogOut}
-              />
+                  <DropdownNavigationLink
+                    icon={iconDotsThreeCircle}
+                    text={<FormattedMessage id='navigation_bar.more' defaultMessage='More' />}
+                    onClick={() => setPage('more')}
+                  />
 
-              <Divider />
+                  <Divider />
 
-              <DropdownNavigationLink
-                href={sourceCode.url}
-                icon={iconCode}
-                text={<FormattedMessage id='navigation.source_code' defaultMessage='Source code' />}
-                onClick={closeSidebar}
-              />
+                  <div
+                    className={clsx('⁂-dropdown-navigation__account-switcher', {
+                      '⁂-dropdown-navigation__account-switcher--expanded': switcher,
+                    })}
+                  >
+                    <button type='button' onClick={handleSwitcherClick}>
+                      <Text tag='span'>
+                        <FormattedMessage
+                          id='profile_dropdown.switch_account'
+                          defaultMessage='Switch accounts'
+                        />
+                      </Text>
 
-              <Divider />
+                      <Icon src={iconCaretDown} />
+                    </button>
 
-              <div
-                className={clsx('⁂-dropdown-navigation__account-switcher', {
-                  '⁂-dropdown-navigation__account-switcher--expanded': switcher,
-                })}
-              >
-                <button type='button' onClick={handleSwitcherClick}>
-                  <Text tag='span'>
-                    <FormattedMessage
-                      id='profile_dropdown.switch_account'
-                      defaultMessage='Switch accounts'
-                    />
-                  </Text>
-
-                  <Icon src={iconCaretDown} />
-                </button>
-
-                {switcher && <AccountSwitcher handleClose={handleClose} />}
+                    {switcher && <AccountSwitcher handleClose={handleClose} />}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ) : (
-          <div>
-            {renderNavigationItems()}
+            ) : (
+              <div>
+                {renderNavigationItems(navigationItems)}
 
-            <DropdownNavigationLink
-              to='/login'
-              icon={iconSignIn}
-              text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
-              onClick={closeSidebar}
-            />
+                <DropdownNavigationLink
+                  to='/login'
+                  icon={iconSignIn}
+                  text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
+                  onClick={closeSidebar}
+                />
 
-            {isOpen && (
-              <DropdownNavigationLink
-                to='/signup'
-                icon={iconUserPlus}
-                text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
-                onClick={closeSidebar}
-              />
+                <Divider />
+
+                <DropdownNavigationLink
+                  href={sourceCode.url}
+                  icon={iconCode}
+                  text={
+                    <FormattedMessage id='navigation.source_code' defaultMessage='Source code' />
+                  }
+                  onClick={closeSidebar}
+                />
+
+                {isOpen && (
+                  <DropdownNavigationLink
+                    to='/signup'
+                    icon={iconUserPlus}
+                    text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
+                    onClick={closeSidebar}
+                  />
+                )}
+              </div>
             )}
-
-            <Divider />
-
-            <DropdownNavigationLink
-              href={sourceCode.url}
-              icon={iconCode}
-              text={<FormattedMessage id='navigation.source_code' defaultMessage='Source code' />}
-              onClick={closeSidebar}
-            />
           </div>
-        )}
+          {moreItems.length > 0 && (
+            <div className='⁂-dropdown-navigation__page' aria-hidden={page !== 'more'}>
+              <div className='⁂-dropdown-navigation__page__header'>
+                <button
+                  type='button'
+                  onClick={() => setPage('main')}
+                  title={intl.formatMessage(messages.back)}
+                  aria-label={intl.formatMessage(messages.back)}
+                  tabIndex={page === 'more' ? 0 : -1}
+                >
+                  <Icon src={iconCaretLeft} aria-hidden />
+                </button>
+                <p>
+                  <FormattedMessage id='navigation_bar.more' defaultMessage='More' />
+                </p>
+              </div>
+
+              {page === 'more' && renderNavigationItems(moreItems)}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

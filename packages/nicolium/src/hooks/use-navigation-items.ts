@@ -223,16 +223,19 @@ const NAVIGATION_ITEMS_GATE: Partial<
       : configuration.timelines_access.live_feeds.local === 'public'),
   'bubble-timeline': (features, { configuration }, isLoggedIn) =>
     features.publicTimeline &&
+    features.bubbleTimeline &&
     (isLoggedIn
       ? configuration.timelines_access.live_feeds.bubble !== 'disabled'
       : configuration.timelines_access.live_feeds.bubble === 'public'),
   'fediverse-timeline': (features, { configuration }, isLoggedIn) =>
     features.publicTimeline &&
+    features.federating &&
     (isLoggedIn
       ? configuration.timelines_access.live_feeds.remote !== 'disabled'
       : configuration.timelines_access.live_feeds.remote === 'public'),
   'wrenched-timeline': (features, { configuration }, isLoggedIn) =>
     features.publicTimeline &&
+    features.wrenchedTimeline &&
     (isLoggedIn
       ? configuration.timelines_access.live_feeds.wrenched !== 'disabled'
       : configuration.timelines_access.live_feeds.wrenched === 'public'),
@@ -306,7 +309,7 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
     }
 
     return filteredItems;
-  }, [navigationItems, pinnedNavigationItems, pinned, remaining, !!account]);
+  }, [navigationItems, pinnedNavigationItems, pinned, remaining, !!account, instance.version]);
 
   const menu: Array<NavigationItemsMenuItem> = [];
 
