@@ -68,6 +68,7 @@ const DEFAULT_NAVIGATION_ITEMS = [
   'separator',
   'settings',
   'dashboard',
+  'compose',
 ] as const;
 
 const AVAILABLE_STATUS_ACTION_BAR_ITEMS = [
