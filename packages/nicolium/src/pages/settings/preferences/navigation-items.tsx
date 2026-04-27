@@ -151,7 +151,7 @@ const NavigationItem: StreamfieldComponent<(typeof AVAILABLE_NAVIGATION_ITEMS)[n
   const pinnedNavigationItems = useSettings().pinnedNavigationItems;
   const pinned = pinnedNavigationItems.includes(value);
 
-  const canPin = index !== 1 && !UNPINNABLE_ITEMS.includes(value);
+  const canPin = index !== -1 && !UNPINNABLE_ITEMS.includes(value);
 
   return (
     <div className='⁂-interface-item'>
