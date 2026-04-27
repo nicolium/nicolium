@@ -50,4 +50,4 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({
   );
 };
 
-export { ThumbNavigationLink as default };
+export { ThumbNavigationLink as default, type IThumbNavigationLink };

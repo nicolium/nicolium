@@ -1,24 +1,61 @@
 import iconList from '@phosphor-icons/core/regular/list.svg';
 import iconPlusSquare from '@phosphor-icons/core/regular/plus-square.svg';
 import { useQueryClient } from '@tanstack/react-query';
-import { useMatch } from '@tanstack/react-router';
+import { Link, useMatch } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import ThumbNavigationLink from '@/components/navigation/thumb-navigation-link';
+import ThumbNavigationLink, {
+  type IThumbNavigationLink,
+} from '@/components/navigation/thumb-navigation-link';
 import Icon from '@/components/ui/icon';
 import { useNavigationItems } from '@/hooks/use-navigation-items';
+import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
 import { layouts } from '@/router';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 
+import Avatar from '../ui/avatar';
+
 const messages = defineMessages({
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
   openSidebar: { id: 'navigation.sidebar', defaultMessage: 'Open sidebar' },
   closeSidebar: { id: 'navigation.sidebar.close', defaultMessage: 'Close sidebar' },
 });
+
+const ProfileLink: React.FC<IThumbNavigationLink> = ({
+  count,
+  countMax,
+  icon,
+  activeIcon,
+  text,
+  exact,
+  ...props
+}) => {
+  const { data: account } = useOwnAccount();
+
+  if (!account) return null;
+
+  return (
+    <Link
+      {...props}
+      activeOptions={{ exact }}
+      className='⁂-thumb-navigation__item'
+      activeProps={{ className: '⁂-thumb-navigation__item--active' }}
+      title={text}
+    >
+      <Avatar
+        src={account.avatar}
+        alt={account.avatar_description}
+        isCat={account.is_cat}
+        size={32}
+        username={account.username}
+      />
+    </Link>
+  );
+};
 
 const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   const intl = useIntl();
@@ -42,7 +79,8 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
 
     const newNavigationItems = [...navigationItems];
     const [composeButton] = newNavigationItems.splice(composeButtonIndex, 1);
-    const newIndex = composeButtonIndex % 2 === 0 ? composeButtonIndex + 1 : composeButtonIndex - 1;
+    const newIndex =
+      navigationItems.length % 2 === 0 ? navigationItems.length / 2 - 1 : newNavigationItems.length;
     newNavigationItems.splice(newIndex, 0, composeButton);
 
     return newNavigationItems;
@@ -87,6 +125,8 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
                 <Icon src={iconPlusSquare} />
               </button>
             );
+          case 'profile-link':
+            return <ProfileLink key='profile-link' exact {...item} />;
           case 'link':
             return <ThumbNavigationLink key={item.to} exact {...item} />;
           default:

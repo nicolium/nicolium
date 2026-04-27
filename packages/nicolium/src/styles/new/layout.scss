@@ -358,6 +358,7 @@ body {
     flex: 1 1 0%;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 
     padding-top: 1rem;
     padding-right: 0.5rem;
@@ -392,6 +393,19 @@ body {
       .⁂-icon {
         width: 1.5rem;
         height: 1.5rem;
+      }
+    }
+
+    &:has(.⁂-avatar) {
+      padding: 0.5rem;
+    }
+
+    .⁂-avatar {
+      border-radius: var(--radius-full);
+      outline: 2px solid rgb(var(--color-gray-200));
+
+      .black & {
+        outline-color: rgb(var(--color-gray-800));
       }
     }
   }
