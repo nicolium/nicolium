@@ -301,7 +301,7 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
 
     if (!account) {
       filteredItems = filteredItems.filter((item) =>
-        standalone ? item === 'home' : UNAUTHENTICATED_NAVIGATION_ITEMS.includes(item),
+        standalone ? item === 'home' : UNAUTHENTICATED_NAVIGATION_ITEMS.includes(item as any),
       );
     }
 

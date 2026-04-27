@@ -95,8 +95,10 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
           case 'compose':
           case 'search-input':
             break;
-          default:
-            menu.push(item);
+          default: {
+            const { type, ...rest } = item;
+            menu.push(rest);
+          }
         }
       }
 
