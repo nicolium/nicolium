@@ -64,7 +64,6 @@ const DEFAULT_NAVIGATION_ITEMS = [
   'public-timeline',
   'bubble-timeline',
   'fediverse-timeline',
-  'wrenched-timeline',
   'separator',
   'settings',
   'dashboard',
