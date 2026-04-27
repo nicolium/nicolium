@@ -38,7 +38,9 @@ const AVAILABLE_NAVIGATION_ITEMS = [
   'filters',
   'domain-blocks',
   'circle',
-];
+  'compose',
+  'separator',
+] as const;
 
 const DEFAULT_PINNED_NAVIGATION_ITEMS = [
   'home',
@@ -47,7 +49,7 @@ const DEFAULT_PINNED_NAVIGATION_ITEMS = [
   'notifications',
   'chats',
   'compose',
-];
+] as const;
 
 const DEFAULT_NAVIGATION_ITEMS = [
   'search-input',
@@ -58,14 +60,15 @@ const DEFAULT_NAVIGATION_ITEMS = [
   'groups',
   'profile',
   'drive',
-  'settings',
-  'dashboard',
   'separator',
   'public-timeline',
   'bubble-timeline',
   'fediverse-timeline',
   'wrenched-timeline',
-];
+  'separator',
+  'settings',
+  'dashboard',
+] as const;
 
 const AVAILABLE_STATUS_ACTION_BAR_ITEMS = [
   'reply',
@@ -354,6 +357,7 @@ export {
   settingsSchema,
   type Settings,
   type TimelineFilters,
+  AVAILABLE_NAVIGATION_ITEMS,
   AVAILABLE_SIDEBAR_ITEMS,
   AVAILABLE_STATUS_ACTION_BAR_ITEMS,
 };

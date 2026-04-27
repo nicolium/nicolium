@@ -1,52 +1,25 @@
-import iconBellSimpleFill from '@phosphor-icons/core/fill/bell-simple-fill.svg';
-import iconChatsTeardropFill from '@phosphor-icons/core/fill/chats-teardrop-fill.svg';
-import iconCloudFill from '@phosphor-icons/core/fill/cloud-fill.svg';
-import iconEnvelopeSimpleFill from '@phosphor-icons/core/fill/envelope-simple-fill.svg';
-import iconFediverseLogoFill from '@phosphor-icons/core/fill/fediverse-logo-fill.svg';
-import iconGaugeFill from '@phosphor-icons/core/fill/gauge-fill.svg';
-import iconGraphFill from '@phosphor-icons/core/fill/graph-fill.svg';
-import iconHouseFill from '@phosphor-icons/core/fill/house-fill.svg';
-import iconMagnifyingGlassFill from '@phosphor-icons/core/fill/magnifying-glass-fill.svg';
-import iconPlanetFill from '@phosphor-icons/core/fill/planet-fill.svg';
 import iconSignInFill from '@phosphor-icons/core/fill/sign-in-fill.svg';
-import iconSlidersHorizontalFill from '@phosphor-icons/core/fill/sliders-horizontal-fill.svg';
-import iconUserFill from '@phosphor-icons/core/fill/user-fill.svg';
 import iconUserPlusFill from '@phosphor-icons/core/fill/user-plus-fill.svg';
-import iconUsersThreeFill from '@phosphor-icons/core/fill/users-three-fill.svg';
-import iconWrenchFill from '@phosphor-icons/core/fill/wrench-fill.svg';
 import iconAddressBook from '@phosphor-icons/core/regular/address-book.svg';
-import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
 import iconBookOpen from '@phosphor-icons/core/regular/book-open.svg';
 import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
 import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
 import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
-import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
-import iconCloud from '@phosphor-icons/core/regular/cloud.svg';
 import iconCode from '@phosphor-icons/core/regular/code.svg';
 import iconDotsThreeCircle from '@phosphor-icons/core/regular/dots-three-circle.svg';
 import iconEnvelopeSimple from '@phosphor-icons/core/regular/envelope-simple.svg';
-import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
-import iconGauge from '@phosphor-icons/core/regular/gauge.svg';
-import iconGraph from '@phosphor-icons/core/regular/graph.svg';
 import iconHash from '@phosphor-icons/core/regular/hash.svg';
 import iconHeartHalf from '@phosphor-icons/core/regular/heart-half.svg';
 import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
-import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import iconKeyboard from '@phosphor-icons/core/regular/keyboard.svg';
 import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
-import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
-import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
 import iconQuestion from '@phosphor-icons/core/regular/question.svg';
 import iconRss from '@phosphor-icons/core/regular/rss.svg';
 import iconSignIn from '@phosphor-icons/core/regular/sign-in.svg';
-import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
-import iconUser from '@phosphor-icons/core/regular/user.svg';
-import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
-import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -54,19 +27,14 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import ComposeButton from '@/components/navigation/compose-button';
 import ProfileDropdown from '@/components/navigation/profile-dropdown';
 import Icon from '@/components/ui/icon';
-import { useStatContext } from '@/contexts/stat-context';
 import { useFeatures } from '@/hooks/use-features';
 import { useNavigationItems } from '@/hooks/use-navigation-items';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
-import { usePendingUsersCount } from '@/queries/admin/use-accounts';
-import { usePendingReportsCount } from '@/queries/admin/use-reports';
-import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useScheduledStatusesCountQuery } from '@/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
-import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import sourceCode from '@/utils/code';
 
@@ -111,24 +79,16 @@ interface ISidebarNavigation {
 /** Desktop sidebar with links to different views in the app. */
 const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) => {
   const intl = useIntl();
-  const { unreadChatsCount } = useStatContext();
   const { openModal } = useModalsActions();
 
-  const instance = useInstance();
   const features = useFeatures();
   const { data: account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
 
-  const notificationCount = useNotificationsUnreadCount();
   const followRequestsCount = useFollowRequestsCount().data ?? 0;
   const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
-  const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
-  const { data: pendingReportsCount = 0 } = usePendingReportsCount();
-  const dashboardCount = pendingReportsCount + awaitingApprovalCount;
   const { data: scheduledStatusCount = 0 } = useScheduledStatusesCountQuery();
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
-
-  const timelineAccess = instance.configuration.timelines_access;
 
   const navigationItems = useNavigationItems();
 
@@ -322,6 +282,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
           if (item === null) return null;
 
           switch (item.type) {
+            case 'compose':
+              return null;
             case 'search-input':
               if (shrink) return null;
               return (
@@ -333,151 +295,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               return <SidebarNavigationLink key={item.to} {...item} />;
           }
         })}
-        <SidebarNavigationLink
-          to='/'
-          icon={iconHouse}
-          activeIcon={iconHouseFill}
-          text={<FormattedMessage id='tabs_bar.home' defaultMessage='Home' />}
-        />
-
-        <SidebarNavigationLink
-          to='/search'
-          icon={iconMagnifyingGlass}
-          activeIcon={iconMagnifyingGlassFill}
-          text={<FormattedMessage id='tabs_bar.search' defaultMessage='Search' />}
-        />
-
-        {account && (
-          <>
-            <SidebarNavigationLink
-              to='/notifications'
-              icon={iconBellSimple}
-              activeIcon={iconBellSimpleFill}
-              count={notificationCount}
-              text={<FormattedMessage id='tabs_bar.notifications' defaultMessage='Notifications' />}
-            />
-
-            {features.chats && (
-              <SidebarNavigationLink
-                to='/chats'
-                icon={iconChatsTeardrop}
-                activeIcon={iconChatsTeardropFill}
-                count={unreadChatsCount}
-                countMax={9}
-                text={<FormattedMessage id='column.chats' defaultMessage='Chats' />}
-              />
-            )}
-
-            {!features.chats && features.conversations && (
-              <SidebarNavigationLink
-                to='/conversations'
-                icon={iconEnvelopeSimple}
-                activeIcon={iconEnvelopeSimpleFill}
-                text={<FormattedMessage id='column.direct' defaultMessage='Direct messages' />}
-              />
-            )}
-
-            {features.groups && (
-              <SidebarNavigationLink
-                to='/groups'
-                icon={iconUsersThree}
-                activeIcon={iconUsersThreeFill}
-                text={<FormattedMessage id='column.groups' defaultMessage='Groups' />}
-              />
-            )}
-
-            <SidebarNavigationLink
-              to='/@{$username}'
-              params={{ username: account.username }}
-              icon={iconUser}
-              activeIcon={iconUserFill}
-              text={<FormattedMessage id='tabs_bar.profile' defaultMessage='Profile' />}
-            />
-
-            {features.drive && (
-              <SidebarNavigationLink
-                to='/drive/{-$folderId}'
-                icon={iconCloud}
-                activeIcon={iconCloudFill}
-                text={<FormattedMessage id='column.drive' defaultMessage='Drive' />}
-              />
-            )}
-
-            <SidebarNavigationLink
-              to='/settings'
-              icon={iconSlidersHorizontal}
-              activeIcon={iconSlidersHorizontalFill}
-              text={<FormattedMessage id='settings.settings' defaultMessage='Settings' />}
-            />
-
-            {(account.is_admin ?? account.is_moderator) && (
-              <SidebarNavigationLink
-                to='/nicolium/admin'
-                icon={iconGauge}
-                activeIcon={iconGaugeFill}
-                count={dashboardCount}
-                text={<FormattedMessage id='column.admin.dashboard' defaultMessage='Dashboard' />}
-              />
-            )}
-          </>
-        )}
-
-        {features.publicTimeline && (
-          <>
-            {(account
-              ? timelineAccess.live_feeds.local !== 'disabled'
-              : timelineAccess.live_feeds.local === 'public') && (
-              <SidebarNavigationLink
-                to='/timeline/local'
-                icon={iconPlanet}
-                activeIcon={iconPlanetFill}
-                text={
-                  features.federating ? (
-                    <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
-                  ) : (
-                    <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
-                  )
-                }
-              />
-            )}
-
-            {features.bubbleTimeline &&
-              (account
-                ? timelineAccess.live_feeds.bubble !== 'disabled'
-                : timelineAccess.live_feeds.bubble === 'public') && (
-                <SidebarNavigationLink
-                  to='/timeline/bubble'
-                  icon={iconGraph}
-                  activeIcon={iconGraphFill}
-                  text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-                />
-              )}
-
-            {features.federating &&
-              (account
-                ? timelineAccess.live_feeds.remote !== 'disabled'
-                : timelineAccess.live_feeds.remote === 'public') && (
-                <SidebarNavigationLink
-                  to='/timeline/fediverse'
-                  icon={iconFediverseLogo}
-                  activeIcon={iconFediverseLogoFill}
-                  text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                />
-              )}
-
-            {features.wrenchedTimeline &&
-              (account
-                ? timelineAccess.live_feeds.wrenched !== 'disabled'
-                : timelineAccess.live_feeds.wrenched === 'public') && (
-                <SidebarNavigationLink
-                  to='/timeline/wrenched'
-                  icon={iconWrench}
-                  activeIcon={iconWrenchFill}
-                  text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-                />
-              )}
-          </>
-        )}
 
         {menu.length > 0 && (
           <DropdownMenu items={menu} placement='top' width='16rem'>

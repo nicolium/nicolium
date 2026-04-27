@@ -1,30 +1,9 @@
-import iconAddressBook from '@phosphor-icons/core/regular/address-book.svg';
-import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
-import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
-import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
-import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
-import iconCloud from '@phosphor-icons/core/regular/cloud.svg';
 import iconCode from '@phosphor-icons/core/regular/code.svg';
-import iconEnvelopeSimple from '@phosphor-icons/core/regular/envelope-simple.svg';
-import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
-import iconGauge from '@phosphor-icons/core/regular/gauge.svg';
-import iconGraph from '@phosphor-icons/core/regular/graph.svg';
-import iconHash from '@phosphor-icons/core/regular/hash.svg';
-import iconHeartHalf from '@phosphor-icons/core/regular/heart-half.svg';
-import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
-import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
-import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
-import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
-import iconRss from '@phosphor-icons/core/regular/rss.svg';
 import iconSignIn from '@phosphor-icons/core/regular/sign-in.svg';
 import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
-import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
-import iconUser from '@phosphor-icons/core/regular/user.svg';
-import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
-import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -36,20 +15,14 @@ import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { useFeatures } from '@/hooks/use-features';
+import { useNavigationItems } from '@/hooks/use-navigation-items';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useAccount } from '@/queries/accounts/use-account';
-import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
 import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
-import { useScheduledStatusesCountQuery } from '@/queries/statuses/scheduled-statuses';
-import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
-import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
 import { useAuthActions } from '@/stores/auth';
-import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
-import { useIsStandalone } from '@/utils/state';
 
 import { AccountLink } from '../accounts/account-link';
 
@@ -157,25 +130,15 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   const { verifyAccounts, logOut } = useAuthActions();
 
   const me = useCurrentAccount();
-  const features = useFeatures();
+
+  const navigationItems = useNavigationItems(false);
 
   const { data: account } = useAccount(me || undefined);
   const settings = useSettings();
-  const followRequestsCount = useFollowRequestsCount().data ?? 0;
-  const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
-  const scheduledStatusCount = useScheduledStatusesCountQuery().data ?? 0;
-  const { data: draftCount = 0 } = useDraftStatusesCountQuery();
-  // const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
-  // const { data: pendingReportsCount = 0 } = usePendingReportsCount();
-  // const dashboardCount = pendingReportsCount + awaitingApprovalCount;
   const [sidebarVisible, setSidebarVisible] = useState(isSidebarOpen);
   const touchStart = useRef(0);
   const touchEnd = useRef<number | null>(null);
   const { isOpen } = useRegistrationStatus();
-  const standalone = useIsStandalone();
-
-  const instance = useInstance();
-  const timelineAccess = instance.configuration.timelines_access;
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -215,6 +178,19 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
     }
     touchEnd.current = null;
   };
+
+  const renderNavigationItems = () =>
+    navigationItems.map((item, index) => {
+      if (item === null) return <Divider key={`separator-${index}`} />;
+
+      switch (item.type) {
+        case 'compose':
+        case 'search-input':
+          return null;
+        default:
+          return <DropdownNavigationLink {...item} key={item.to} onClick={onClickLogOut} />;
+      }
+    });
 
   useEffect(() => {
     verifyAccounts();
@@ -260,243 +236,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
             <div className='flex flex-col gap-4'>
               <Divider />
 
-              <DropdownNavigationLink
-                to='/@{$username}'
-                params={{ username: account.acct }}
-                icon={iconUser}
-                text={<FormattedMessage id='account.profile' defaultMessage='Profile' />}
-                onClick={closeSidebar}
-              />
-
-              {(account.locked || followRequestsCount > 0) && (
-                <DropdownNavigationLink
-                  to='/follow_requests'
-                  icon={iconUserPlus}
-                  text={
-                    <FormattedMessage
-                      id='column.follow_requests'
-                      defaultMessage='Follow requests'
-                    />
-                  }
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {interactionRequestsCount > 0 && (
-                <DropdownNavigationLink
-                  to='/interaction_requests'
-                  icon={iconHeartHalf}
-                  text={
-                    <FormattedMessage
-                      id='column.interaction_requests'
-                      defaultMessage='Interaction requests'
-                    />
-                  }
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.conversations && (
-                <DropdownNavigationLink
-                  to='/conversations'
-                  icon={iconEnvelopeSimple}
-                  text={<FormattedMessage id='column.direct' defaultMessage='Direct messages' />}
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.bookmarks && (
-                <DropdownNavigationLink
-                  to='/bookmarks'
-                  icon={iconBookmarks}
-                  text={<FormattedMessage id='column.bookmarks' defaultMessage='Bookmarks' />}
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.groups && (
-                <DropdownNavigationLink
-                  to='/groups'
-                  icon={iconUsersThree}
-                  text={<FormattedMessage id='column.groups' defaultMessage='Groups' />}
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.lists && (
-                <DropdownNavigationLink
-                  to='/lists'
-                  icon={iconListDashes}
-                  text={<FormattedMessage id='column.lists' defaultMessage='Lists' />}
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.circles && (
-                <DropdownNavigationLink
-                  to='/circles'
-                  icon={iconCirclesThree}
-                  text={<FormattedMessage id='column.circles' defaultMessage='Circles' />}
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.antennas && (
-                <DropdownNavigationLink
-                  to='/antennas'
-                  icon={iconBroadcast}
-                  text={<FormattedMessage id='column.antennas' defaultMessage='Antennas' />}
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.drive && (
-                <DropdownNavigationLink
-                  to='/drive/{-$folderId}'
-                  icon={iconCloud}
-                  text={<FormattedMessage id='column.drive' defaultMessage='Drive' />}
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.events && (
-                <DropdownNavigationLink
-                  to='/events'
-                  icon={iconCalendarDots}
-                  text={<FormattedMessage id='column.events' defaultMessage='Events' />}
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.profileDirectory && (
-                <DropdownNavigationLink
-                  to='/directory'
-                  icon={iconAddressBook}
-                  text={
-                    <FormattedMessage id='column.directory' defaultMessage='Profile directory' />
-                  }
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {scheduledStatusCount > 0 && (
-                <DropdownNavigationLink
-                  to='/scheduled_statuses'
-                  icon={iconHourglass}
-                  text={
-                    <FormattedMessage
-                      id='column.scheduled_statuses'
-                      defaultMessage='Scheduled posts'
-                    />
-                  }
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {draftCount > 0 && (
-                <DropdownNavigationLink
-                  to='/draft_statuses'
-                  icon={iconPencilSimple}
-                  text={<FormattedMessage id='column.draft_statuses' defaultMessage='Drafts' />}
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.publicTimeline && (
-                <>
-                  <Divider />
-
-                  {timelineAccess.live_feeds.local !== 'disabled' && (
-                    <DropdownNavigationLink
-                      to='/timeline/local'
-                      icon={iconPlanet}
-                      text={
-                        features.federating ? (
-                          <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
-                        ) : (
-                          <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
-                        )
-                      }
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.bubbleTimeline && timelineAccess.live_feeds.bubble !== 'disabled' && (
-                    <DropdownNavigationLink
-                      to='/timeline/bubble'
-                      icon={iconGraph}
-                      text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.federating && timelineAccess.live_feeds.remote !== 'disabled' && (
-                    <DropdownNavigationLink
-                      to='/timeline/fediverse'
-                      icon={iconFediverseLogo}
-                      text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.wrenchedTimeline &&
-                    timelineAccess.live_feeds.wrenched !== 'disabled' && (
-                      <DropdownNavigationLink
-                        to='/timeline/wrenched'
-                        icon={iconWrench}
-                        text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-                        onClick={closeSidebar}
-                      />
-                    )}
-                </>
-              )}
-
-              <Divider />
-
-              <DropdownNavigationLink
-                to='/settings'
-                icon={iconSlidersHorizontal}
-                text={<FormattedMessage id='settings.settings' defaultMessage='Settings' />}
-                onClick={closeSidebar}
-              />
-
-              {features.followedHashtagsList && (
-                <DropdownNavigationLink
-                  to='/followed_tags'
-                  icon={iconHash}
-                  text={
-                    <FormattedMessage
-                      id='column.followed_tags'
-                      defaultMessage='Followed hashtags'
-                    />
-                  }
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {features.rssFeedSubscriptions && (
-                <DropdownNavigationLink
-                  to='/rss_feed_subscriptions'
-                  icon={iconRss}
-                  text={
-                    <FormattedMessage
-                      id='column.rss_feed_subscriptions'
-                      defaultMessage='Subscribed RSS feeds'
-                    />
-                  }
-                  onClick={closeSidebar}
-                />
-              )}
-
-              {(account.is_admin ?? account.is_moderator) && (
-                <DropdownNavigationLink
-                  to='/nicolium/admin'
-                  icon={iconGauge}
-                  text={<FormattedMessage id='column.admin.dashboard' defaultMessage='Dashboard' />}
-                  onClick={closeSidebar}
-                  // count={dashboardCount} WIP
-                />
-              )}
+              {renderNavigationItems()}
 
               <Divider />
 
@@ -540,53 +280,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
           </div>
         ) : (
           <div>
-            {!standalone &&
-              features.publicTimeline &&
-              timelineAccess.live_feeds.local === 'public' && (
-                <>
-                  <DropdownNavigationLink
-                    to='/timeline/local'
-                    icon={iconPlanet}
-                    text={
-                      features.federating ? (
-                        <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
-                      ) : (
-                        <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
-                      )
-                    }
-                    onClick={closeSidebar}
-                  />
-
-                  {features.bubbleTimeline && timelineAccess.live_feeds.bubble === 'public' && (
-                    <DropdownNavigationLink
-                      to='/timeline/bubble'
-                      icon={iconGraph}
-                      text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.federating && timelineAccess.live_feeds.remote === 'public' && (
-                    <DropdownNavigationLink
-                      to='/timeline/fediverse'
-                      icon={iconFediverseLogo}
-                      text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.wrenchedTimeline && timelineAccess.live_feeds.wrenched === 'public' && (
-                    <DropdownNavigationLink
-                      to='/timeline/wrenched'
-                      icon={iconWrench}
-                      text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  <Divider />
-                </>
-              )}
+            {renderNavigationItems()}
 
             <DropdownNavigationLink
               to='/login'

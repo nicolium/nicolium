@@ -370,7 +370,7 @@ const EditProfilePage: React.FC = () => {
   };
 
   const handleFieldChange =
-    <T = any>(key: keyof AccountCredentials) =>
+    <T = any,>(key: keyof AccountCredentials) =>
     (value: T) => {
       updateData(key, value);
     };
