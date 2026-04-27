@@ -689,3 +689,38 @@ p.⁂-form-group__hint {
     outline: none;
   }
 }
+
+.⁂-streamfield {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      @include mixins.text($size: sm, $weight: medium);
+    }
+
+    span {
+      @include mixins.text($size: xs, $theme: muted);
+    }
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  &__add-button {
+    @include mixins.button($theme: secondary, $block: true);
+  }
+}

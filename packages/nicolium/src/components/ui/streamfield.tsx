@@ -2,9 +2,7 @@ import iconX from '@phosphor-icons/core/regular/x.svg';
 import React, { useRef } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import Button from './button';
 import IconButton from './icon-button';
-import Text from './text';
 
 const messages = defineMessages({
   remove: { id: 'streamfield.remove', defaultMessage: 'Remove' },
@@ -82,28 +80,20 @@ const Streamfield = <T,>({
   };
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='⁂-streamfield'>
       {label || hint ? (
-        <div className='flex flex-col'>
-          {label && (
-            <Text size='sm' weight='medium'>
-              {label}
-            </Text>
-          )}
-          {hint && (
-            <Text size='xs' theme='muted'>
-              {hint}
-            </Text>
-          )}
+        <div className='⁂-streamfield__text'>
+          {label && <label>{label}</label>}
+          {hint && <span>{hint}</span>}
         </div>
       ) : null}
 
       {values.length > 0 && (
-        <div className='flex flex-col gap-1'>
+        <div className='⁂-streamfield__items'>
           {values.map((value, i) =>
             (value as Record<string, unknown>)?._destroy ? null : (
               <div
-                className='flex items-center gap-2'
+                className='⁂-streamfield__item'
                 key={i}
                 draggable={draggable}
                 onDragStart={handleDragStart(i)}
@@ -135,9 +125,9 @@ const Streamfield = <T,>({
       )}
 
       {onAddItem && values.length < maxItems && (
-        <Button onClick={onAddItem} theme='secondary' block>
+        <button className='⁂-streamfield__add-button' onClick={onAddItem} type='button'>
           <FormattedMessage id='streamfield.add' defaultMessage='Add' />
-        </Button>
+        </button>
       )}
     </div>
   );
