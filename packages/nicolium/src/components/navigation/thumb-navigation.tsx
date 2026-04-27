@@ -10,7 +10,7 @@ import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.s
 import iconPlusSquare from '@phosphor-icons/core/regular/plus-square.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMatch } from '@tanstack/react-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import ThumbNavigationLink from '@/components/navigation/thumb-navigation-link';
@@ -25,6 +25,7 @@ import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import { useIsStandalone } from '@/utils/state';
+import { useNavigationItems } from '@/hooks/use-navigation-items';
 
 const messages = defineMessages({
   home: { id: 'column.home', defaultMessage: 'Home' },
@@ -53,6 +54,23 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   const standalone = useIsStandalone();
   const notificationCount = useNotificationsUnreadCount();
 
+  const navigationItems = useNavigationItems(true);
+
+  const orderedNavigationItems = useMemo(() => {
+    const composeButtonIndex = navigationItems.findIndex((item) => item?.type === 'compose');
+
+    if (composeButtonIndex === -1) {
+      return navigationItems;
+    }
+
+    const newNavigationItems = [...navigationItems];
+    const [composeButton] = newNavigationItems.splice(composeButtonIndex, 1);
+    const newIndex = composeButtonIndex % 2 === 0 ? composeButtonIndex + 1 : composeButtonIndex - 1;
+    newNavigationItems.splice(newIndex, 0, composeButton);
+
+    return newNavigationItems;
+  }, [navigationItems]);
+
   const handleOpenComposeModal = () => {
     if (match?.params.groupId) {
       const group = queryClient.getQueryData(queryKeys.groups.show(match.params.groupId));
@@ -61,16 +79,6 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
       openModal('COMPOSE');
     }
   };
-
-  const composeButton = (
-    <button
-      className='⁂-thumb-navigation__item ⁂-thumb-navigation__item--compose'
-      onClick={handleOpenComposeModal}
-      title={intl.formatMessage(messages.compose)}
-    >
-      <Icon src={iconPlusSquare} />
-    </button>
-  );
 
   return (
     <div className='⁂-thumb-navigation'>
@@ -87,9 +95,38 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
         <Icon src={iconList} />
       </button>
 
+      {orderedNavigationItems.map((item) => {
+        if (item === null) return null;
+
+        switch (item.type) {
+          case 'compose':
+            return (
+              <button
+                key='compose'
+                className='⁂-thumb-navigation__item ⁂-thumb-navigation__item--compose'
+                onClick={handleOpenComposeModal}
+                title={intl.formatMessage(messages.compose)}
+              >
+                <Icon src={iconPlusSquare} />
+              </button>
+            );
+          case 'link':
+            return (
+              <ThumbNavigationLink
+                key={item.to}
+                exact
+                {...item}
+              />
+            );
+          default:
+            return null;
+          }
+
+      })}
+
       <ThumbNavigationLink
-        src={iconHouse}
-        activeSrc={iconHouseFill}
+        icon={iconHouse}
+        activeIcon={iconHouseFill}
         text={intl.formatMessage(messages.home)}
         to='/'
         exact
@@ -97,20 +134,18 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
 
       {/* {features.groups && (
         <ThumbNavigationLink
-          src={iconUsersThree}
-          activeSrc={iconUsersThreeFill}
+          icon={iconUsersThree}
+          activeIcon={iconUsersThreeFill}
           text={<FormattedMessage id='tabs_bar.groups' defaultMessage='Groups' />}
           to='/groups'
           exact
         />
       )} */}
 
-      {account && !features.chats && composeButton}
-
       {(!standalone || account) && (
         <ThumbNavigationLink
-          src={iconMagnifyingGlass}
-          activeSrc={iconMagnifyingGlassFill}
+          icon={iconMagnifyingGlass}
+          activeIcon={iconMagnifyingGlassFill}
           text={intl.formatMessage(messages.search)}
           to='/search'
           exact
@@ -119,8 +154,8 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
 
       {account && (
         <ThumbNavigationLink
-          src={iconBellSimple}
-          activeSrc={iconBellSimpleFill}
+          icon={iconBellSimple}
+          activeIcon={iconBellSimpleFill}
           text={intl.formatMessage(messages.notifications)}
           to='/notifications'
           exact
@@ -129,19 +164,14 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
       )}
 
       {account && features.chats && (
-        <>
-          <ThumbNavigationLink
-            src={iconChatsTeardrop}
-            activeSrc={iconChatsTeardropFill}
-            text={intl.formatMessage(messages.chats)}
-            to='/chats'
-            exact
-            count={unreadChatsCount}
-            countMax={9}
-          />
-
-          {composeButton}
-        </>
+        <ThumbNavigationLink
+          icon={iconChatsTeardrop}
+          activeIcon={iconChatsTeardropFill}
+          text={intl.formatMessage(messages.chats)}
+          to='/chats'
+          exact
+          count={unreadChatsCount}
+        />
       )}
     </div>
   );

@@ -56,6 +56,7 @@ import ProfileDropdown from '@/components/navigation/profile-dropdown';
 import Icon from '@/components/ui/icon';
 import { useStatContext } from '@/contexts/stat-context';
 import { useFeatures } from '@/hooks/use-features';
+import { useNavigationItems } from '@/hooks/use-navigation-items';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
@@ -128,6 +129,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
 
   const timelineAccess = instance.configuration.timelines_access;
+
+  const navigationItems = useNavigationItems();
 
   const menu = useMemo((): Menu => {
     const menu: Menu = [];
@@ -311,11 +314,25 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               )}
             </ProfileDropdown>
           </div>
-          {!shrink && <SearchInput />}
         </div>
       )}
 
       <ul className='⁂-sidebar-navigation__links'>
+        {navigationItems.map((item) => {
+          if (item === null) return null;
+
+          switch (item.type) {
+            case 'search-input':
+              if (shrink) return null;
+              return (
+                <li key='search-input'>
+                  <SearchInput />
+                </li>
+              );
+            default:
+              return <SidebarNavigationLink key={item.to} {...item} />;
+          }
+        })}
         <SidebarNavigationLink
           to='/'
           icon={iconHouse}
