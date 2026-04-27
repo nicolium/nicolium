@@ -20,6 +20,9 @@ type IListItem = {
   hint?: React.ReactNode;
   href?: string;
   onClick?(): void;
+  draggable?: boolean;
+  onDragStart?: React.DragEventHandler<HTMLAnchorElement | HTMLDivElement>;
+  onDragEnd?: React.DragEventHandler<HTMLAnchorElement | HTMLDivElement>;
   isSelected?: boolean;
   children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
   size?: 'sm' | 'md';
@@ -34,6 +37,9 @@ const ListItem: React.FC<IListItem> = ({
   children,
   href,
   onClick,
+  draggable,
+  onDragStart,
+  onDragEnd,
   isSelected,
   size = 'md',
   actionIcon,
@@ -136,7 +142,13 @@ const ListItem: React.FC<IListItem> = ({
       : {};
 
   return (
-    <Comp className={classNames} {...linkProps}>
+    <Comp
+      className={classNames}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      {...linkProps}
+    >
       {body}
     </Comp>
   );

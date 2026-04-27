@@ -9,6 +9,11 @@ const messages = defineMessages({
   remove: { id: 'streamfield.remove', defaultMessage: 'Remove' },
 });
 
+interface IExternalDragItem<T> {
+  value: T;
+  height: number;
+}
+
 /** Type of the inner Streamfield input component. */
 type StreamfieldComponent<T> = React.ComponentType<{
   index: number;
@@ -38,6 +43,10 @@ interface IStreamfield<T> {
   maxItems?: number;
   /** Allow changing order of the items. */
   draggable?: boolean;
+  getItemKey?: (value: T, index: number) => string;
+  externalDragItem?: IExternalDragItem<T> | null;
+  onDropItem?: (value: T, index: number) => void;
+  showEmptyDropTarget?: boolean;
   className?: string;
 }
 
@@ -53,58 +62,92 @@ const Streamfield = <T,>({
   maxItems = Infinity,
   minItems = 0,
   draggable,
+  getItemKey,
+  externalDragItem,
+  onDropItem,
+  showEmptyDropTarget,
   className,
 }: IStreamfield<T>) => {
   const intl = useIntl();
 
-  const [draggedItem, setDraggedItem] = useState<{
-    index: number;
-    overIndex: number | null;
-    height: number;
-  } | null>(null);
+  const [draggedItem, setDraggedItem] = useState<{ index: number; height: number } | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
 
-  const clearDraggedItem = () => {
+  const clearDragState = () => {
     setDraggedItem(null);
+    setDropTargetIndex(null);
   };
 
   const handleDragStart = (i: number) => (event: React.DragEvent<HTMLDivElement>) => {
     setDraggedItem({
       index: i,
-      overIndex: i,
       height: event.currentTarget.getBoundingClientRect().height,
     });
+    setDropTargetIndex(null);
 
     event.dataTransfer.effectAllowed = 'move';
   };
 
-  const handleDragEnter = (i: number) => () => {
-    setDraggedItem((current) => {
-      if (!current || current.overIndex === i) return current;
-      return { ...current, overIndex: i };
-    });
-  };
+  const handleItemDragOver = (i: number) => (event: React.DragEvent<HTMLDivElement>) => {
+    if (!draggedItem && !externalDragItem) return;
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
+
+    const { top, height } = event.currentTarget.getBoundingClientRect();
+    const nextDropTargetIndex = event.clientY >= top + height / 2 ? i + 1 : i;
+
+    setDropTargetIndex((current) =>
+      current === nextDropTargetIndex ? current : nextDropTargetIndex,
+    );
   };
 
-  const handleDragEnd = () => {
-    if (
-      !draggedItem ||
-      draggedItem.overIndex === null ||
-      draggedItem.index === draggedItem.overIndex
-    ) {
-      clearDraggedItem();
+  const handleItemsDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    if (!draggedItem && !externalDragItem) return;
+
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+
+    if (values.length === 0 || event.target === event.currentTarget) {
+      setDropTargetIndex(values.length);
+    }
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
+    if (dropTargetIndex === null) {
+      clearDragState();
       return;
     }
 
-    const newData = [...values];
-    const item = newData.splice(draggedItem.index, 1)[0];
-    newData.splice(draggedItem.overIndex, 0, item);
+    if (draggedItem) {
+      const destinationIndex =
+        dropTargetIndex > draggedItem.index ? dropTargetIndex - 1 : dropTargetIndex;
 
-    onChange(newData);
-    clearDraggedItem();
+      if (destinationIndex === draggedItem.index) {
+        clearDragState();
+        return;
+      }
+
+      const newData = [...values];
+      const item = newData.splice(draggedItem.index, 1)[0];
+      newData.splice(destinationIndex, 0, item);
+
+      onChange(newData);
+      clearDragState();
+      return;
+    }
+
+    if (externalDragItem && onDropItem) {
+      onDropItem(externalDragItem.value, dropTargetIndex);
+    }
+
+    setDropTargetIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    clearDragState();
   };
 
   const handleChange = (i: number) => (value: T) => {
@@ -113,12 +156,18 @@ const Streamfield = <T,>({
     onChange(newData);
   };
 
+  const isExternalDragActive = Boolean(externalDragItem && !draggedItem);
+  const placeholderHeight = draggedItem?.height ?? externalDragItem?.height ?? 0;
   const placeholderIndex =
-    draggedItem && draggedItem.overIndex !== null && draggedItem.index !== draggedItem.overIndex
-      ? draggedItem.index < draggedItem.overIndex
-        ? draggedItem.overIndex + 1
-        : draggedItem.overIndex
+    dropTargetIndex !== null &&
+    (isExternalDragActive ||
+      (draggedItem &&
+        dropTargetIndex !== draggedItem.index &&
+        dropTargetIndex !== draggedItem.index + 1))
+      ? dropTargetIndex
       : null;
+  const shouldRenderItems =
+    values.length > 0 || (showEmptyDropTarget && (draggable || Boolean(onDropItem)));
 
   return (
     <div className={clsx('⁂-streamfield', className)}>
@@ -129,18 +178,26 @@ const Streamfield = <T,>({
         </div>
       ) : null}
 
-      {values.length > 0 && (
-        <div className='⁂-streamfield__items' onDragOver={handleDragOver}>
+      {shouldRenderItems && (
+        <div
+          className={clsx('⁂-streamfield__items', {
+            '⁂-streamfield__items--droppable': showEmptyDropTarget && (draggable || onDropItem),
+          })}
+          onDragOver={handleItemsDragOver}
+          onDrop={handleDrop}
+        >
           {values.map((value, i) => {
             if ((value as Record<string, unknown>)?._destroy) return null;
 
+            const itemKey = getItemKey?.(value, i) ?? `streamfield-item-${i}`;
+
             return (
-              <React.Fragment key={`streamfield-item-${i}`}>
+              <React.Fragment key={itemKey}>
                 {placeholderIndex === i && (
                   <div
                     aria-hidden='true'
                     className='⁂-streamfield__placeholder'
-                    style={{ height: `${draggedItem?.height ?? 0}px` }}
+                    style={{ height: `${placeholderHeight}px` }}
                   />
                 )}
 
@@ -150,9 +207,8 @@ const Streamfield = <T,>({
                   })}
                   draggable={draggable}
                   onDragStart={handleDragStart(i)}
-                  onDragEnter={handleDragEnter(i)}
+                  onDragOver={handleItemDragOver(i)}
                   onDragEnd={handleDragEnd}
-                  onDragOver={handleDragOver}
                 >
                   <Component index={i} onChange={handleChange(i)} value={value} autoFocus={i > 0} />
                   {values.length > minItems && onRemoveItem && (
@@ -175,7 +231,7 @@ const Streamfield = <T,>({
             <div
               aria-hidden='true'
               className='⁂-streamfield__placeholder'
-              style={{ height: `${draggedItem?.height ?? 0}px` }}
+              style={{ height: `${placeholderHeight}px` }}
             />
           )}
         </div>
@@ -190,4 +246,5 @@ const Streamfield = <T,>({
   );
 };
 
-export { type StreamfieldComponent, Streamfield as default };
+export type { IExternalDragItem, StreamfieldComponent };
+export { Streamfield as default };

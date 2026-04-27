@@ -1,18 +1,17 @@
 import iconDotsSixVertical from '@phosphor-icons/core/regular/dots-six-vertical.svg';
-import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
-import List, { ListItem } from '@/components/list';
 import OutlineBox from '@/components/outline-box';
-import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import Icon from '@/components/ui/icon';
-import Streamfield, { type StreamfieldComponent } from '@/components/ui/streamfield';
+import StreamfieldPicker from '@/components/ui/streamfield-picker';
 import { AVAILABLE_SIDEBAR_ITEMS } from '@/schemas/frontend-settings';
 import { useSettings } from '@/stores/settings';
+
+import type { StreamfieldComponent } from '@/components/ui/streamfield';
 
 const messages = defineMessages({
   heading: { id: 'settings.sidebar_items.heading', defaultMessage: 'Sidebar items' },
@@ -98,45 +97,20 @@ const SidebarItems: React.FC = () => {
           />
         </OutlineBox>
 
-        <Streamfield
+        <StreamfieldPicker
           className='⁂-interface-items'
           component={SidebarItem}
           values={settings.sidebarItems}
+          availableValues={availableItems}
+          getItemKey={(item) => item}
           onChange={(values) => changeSetting(['sidebarItems'], values)}
-          onRemoveItem={(index) => {
-            changeSetting(
-              ['sidebarItems'],
-              settings.sidebarItems.filter((_, i) => i !== index),
-            );
-          }}
-          draggable
-        />
-
-        {availableItems.length > 0 && (
-          <>
-            <CardTitle
-              title={
-                <FormattedMessage
-                  id='settings.sidebar_items.available'
-                  defaultMessage='Available items'
-                />
-              }
+          availableTitle={
+            <FormattedMessage
+              id='settings.sidebar_items.available'
+              defaultMessage='Available items'
             />
-
-            <List>
-              {availableItems.map((item) => (
-                <ListItem
-                  key={item}
-                  label={intl.formatMessage(itemsMessages[item])}
-                  hint={intl.formatMessage(itemHintsMessages[item])}
-                  onClick={() => changeSetting(['sidebarItems'], [...settings.sidebarItems, item])}
-                  size='sm'
-                  actionIcon={iconPlus}
-                />
-              ))}
-            </List>
-          </>
-        )}
+          }
+        />
       </Form>
     </Column>
   );

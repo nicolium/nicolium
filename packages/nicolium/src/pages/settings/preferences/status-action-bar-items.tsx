@@ -1,19 +1,18 @@
 import iconDotsSixVertical from '@phosphor-icons/core/regular/dots-six-vertical.svg';
-import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
-import List, { ListItem } from '@/components/list';
 import OutlineBox from '@/components/outline-box';
-import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import Icon from '@/components/ui/icon';
-import Streamfield, { type StreamfieldComponent } from '@/components/ui/streamfield';
+import StreamfieldPicker from '@/components/ui/streamfield-picker';
 import { useFeatures } from '@/hooks/use-features';
 import { AVAILABLE_STATUS_ACTION_BAR_ITEMS } from '@/schemas/frontend-settings';
 import { useSettings } from '@/stores/settings';
+
+import type { StreamfieldComponent } from '@/components/ui/streamfield';
 
 const messages = defineMessages({
   heading: {
@@ -83,49 +82,20 @@ const StatusActionBarItems: React.FC = () => {
           />
         </OutlineBox>
 
-        <Streamfield
+        <StreamfieldPicker
           className='⁂-interface-items'
           component={StatusActionBarItem}
           values={settings.statusActionBarItems.filter((item) => availableItems[item])}
+          availableValues={unusedItems}
+          getItemKey={(item) => item}
           onChange={(values) => changeSetting(['statusActionBarItems'], values)}
-          onRemoveItem={(index) => {
-            changeSetting(
-              ['statusActionBarItems'],
-              settings.statusActionBarItems.filter((_, i) => i !== index),
-            );
-          }}
-          draggable
-        />
-
-        {unusedItems.length > 0 && (
-          <>
-            <CardTitle
-              title={
-                <FormattedMessage
-                  id='settings.status_action_bar_items.available'
-                  defaultMessage='Available items'
-                />
-              }
+          availableTitle={
+            <FormattedMessage
+              id='settings.status_action_bar_items.available'
+              defaultMessage='Available items'
             />
-
-            <List>
-              {unusedItems.map((item) => (
-                <ListItem
-                  key={item}
-                  label={intl.formatMessage(itemsMessages[item])}
-                  onClick={() =>
-                    changeSetting(
-                      ['statusActionBarItems'],
-                      [...settings.statusActionBarItems, item],
-                    )
-                  }
-                  size='sm'
-                  actionIcon={iconPlus}
-                />
-              ))}
-            </List>
-          </>
-        )}
+          }
+        />
       </Form>
     </Column>
   );

@@ -184,11 +184,17 @@
   cursor: grab;
 
   display: flex;
+  flex-direction: row !important;
   gap: 0.5rem;
   align-items: center;
 
   width: 100%;
   min-height: 2rem;
+
+  .⁂-icon svg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
 
   div {
     p {
