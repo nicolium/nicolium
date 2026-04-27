@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import OutlineBox from '@/components/outline-box';
 import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
@@ -75,6 +76,13 @@ const StatusActionBarItems: React.FC = () => {
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>
+        <OutlineBox className='⁂-interface-items__explanation'>
+          <FormattedMessage
+            id='settings.status_action_bar_items.description'
+            defaultMessage='You can decide what items are visible in your status action bar. This does not affect available functionality, they will be accessible in other ways, e.g., in the status menu.'
+          />
+        </OutlineBox>
+
         <Streamfield
           component={StatusActionBarItem}
           values={settings.statusActionBarItems.filter((item) => availableItems[item])}

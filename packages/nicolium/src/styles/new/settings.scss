@@ -161,6 +161,12 @@
   }
 }
 
+.⁂-interface-items {
+  &__explanation {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+}
+
 .⁂-interface-item {
   cursor: grab;
 

@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import OutlineBox from '@/components/outline-box';
 import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
@@ -90,6 +91,13 @@ const SidebarItems: React.FC = () => {
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>
+        <OutlineBox className='⁂-interface-items__explanation'>
+          <FormattedMessage
+            id='settings.sidebar_items.description'
+            defaultMessage='You can decide what items are visible in your sidebar.'
+          />
+        </OutlineBox>
+
         <Streamfield
           component={SidebarItem}
           values={settings.sidebarItems}
