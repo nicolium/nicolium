@@ -14,7 +14,7 @@ interface IStreamfieldPicker<T> {
   values: T[];
   availableValues: T[];
   component: StreamfieldComponent<T>;
-  getItemKey: (value: T) => string;
+  getItemKey: (value: T, index: number) => string;
   onChange: (values: T[]) => void;
   availableTitle: React.ReactNode;
   className?: string;
@@ -40,9 +40,9 @@ const StreamfieldPicker = <T,>({
   };
 
   const handleAvailableItemDragStart =
-    (value: T) => (event: React.DragEvent<HTMLAnchorElement | HTMLDivElement>) => {
+    (value: T, index: number) => (event: React.DragEvent<HTMLAnchorElement | HTMLDivElement>) => {
       setDraggedAvailableItem({
-        key: getItemKey(value),
+        key: getItemKey(value, index),
         value,
         height: event.currentTarget.getBoundingClientRect().height,
       });
@@ -65,7 +65,7 @@ const StreamfieldPicker = <T,>({
           onChange(values.filter((_, itemIndex) => itemIndex !== index));
         }}
         draggable
-        getItemKey={(value) => getItemKey(value)}
+        getItemKey={(value, index) => getItemKey(value, index)}
         externalDragItem={draggedAvailableItem}
         onDropItem={insertItem}
         showEmptyDropTarget
@@ -76,8 +76,8 @@ const StreamfieldPicker = <T,>({
           <CardTitle title={availableTitle} />
 
           <List>
-            {availableValues.map((value) => {
-              const itemKey = getItemKey(value);
+            {availableValues.map((value, index) => {
+              const itemKey = getItemKey(value, index);
               const isDragging = draggedAvailableItem?.key === itemKey;
 
               return (
@@ -93,7 +93,7 @@ const StreamfieldPicker = <T,>({
                   }
                   onClick={() => insertItem(value)}
                   draggable
-                  onDragStart={handleAvailableItemDragStart(value)}
+                  onDragStart={handleAvailableItemDragStart(value, index)}
                   onDragEnd={handleAvailableItemDragEnd}
                   size='sm'
                   actionIcon={iconPlus}

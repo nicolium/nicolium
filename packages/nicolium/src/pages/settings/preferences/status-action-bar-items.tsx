@@ -14,12 +14,17 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import OutlineBox from '@/components/outline-box';
+import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
 import { useFeatures } from '@/hooks/use-features';
-import { AVAILABLE_STATUS_ACTION_BAR_ITEMS } from '@/schemas/frontend-settings';
+import {
+  AVAILABLE_STATUS_ACTION_BAR_ITEMS,
+  DEFAULT_STATUS_ACTION_BAR_ITEMS,
+} from '@/schemas/frontend-settings';
 import { useSettings } from '@/stores/settings';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -96,6 +101,10 @@ const StatusActionBarItems: React.FC = () => {
     (item) => !settings.statusActionBarItems.includes(item) && availableItems[item],
   );
 
+  const reset = () => {
+    changeSetting(['statusActionBarItems'], DEFAULT_STATUS_ACTION_BAR_ITEMS);
+  };
+
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>
@@ -120,6 +129,12 @@ const StatusActionBarItems: React.FC = () => {
             />
           }
         />
+
+        <FormActions>
+          <Button theme='secondary' onClick={reset}>
+            <FormattedMessage id='settings.interface_items.reset' defaultMessage='Reset' />
+          </Button>
+        </FormActions>
       </Form>
     </Column>
   );

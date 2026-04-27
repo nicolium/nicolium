@@ -4,11 +4,13 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import OutlineBox from '@/components/outline-box';
+import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
-import { AVAILABLE_SIDEBAR_ITEMS } from '@/schemas/frontend-settings';
+import { AVAILABLE_SIDEBAR_ITEMS, DEFAULT_SIDEBAR_ITEMS } from '@/schemas/frontend-settings';
 import { useSettings } from '@/stores/settings';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -87,6 +89,10 @@ const SidebarItems: React.FC = () => {
     (item) => !settings.sidebarItems.includes(item),
   );
 
+  const reset = () => {
+    changeSetting(['sidebarItems'], DEFAULT_SIDEBAR_ITEMS);
+  };
+
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>
@@ -111,6 +117,12 @@ const SidebarItems: React.FC = () => {
             />
           }
         />
+
+        <FormActions>
+          <Button theme='secondary' onClick={reset}>
+            <FormattedMessage id='settings.interface_items.reset' defaultMessage='Reset' />
+          </Button>
+        </FormActions>
       </Form>
     </Column>
   );

@@ -1886,6 +1886,7 @@
   "select_bookmark_folder_modal.header_title": "Select folder",
   "settings.configure_mfa": "Configure MFA",
   "settings.edit_profile": "Edit profile",
+  "settings.interface_items.reset": "Reset",
   "settings.messages.fail": "Failed to update chat settings",
   "settings.messages.show_chat_widget.hint": "Show the chat widget in the bottom right corner. If disabled, you can still use chats on a separate page.",
   "settings.messages.show_chat_widget.label": "Show chat widget",
