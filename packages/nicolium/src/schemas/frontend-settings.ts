@@ -217,7 +217,13 @@ const settingsSchema = v.object({
     'text/plain',
   ),
   themeMode: v.fallback(v.picklist(['system', 'light', 'dark', 'black']), 'system'),
-  locale: v.fallback(v.pipe(v.fallback(v.string(), navigator.language), v.picklist(locales)), 'en'),
+  locale: v.fallback(
+    v.fallback(
+      v.pipe(v.fallback(v.string(), navigator.language), v.picklist(locales)),
+      navigator.language as 'en',
+    ),
+    'en',
+  ),
   showExplanationBox: v.fallback(v.boolean(), true),
   explanationBox: v.fallback(v.boolean(), true),
   autoloadTimelines: v.fallback(v.boolean(), true),
