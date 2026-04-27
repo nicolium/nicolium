@@ -5,6 +5,7 @@ import React, { type CSSProperties } from 'react';
 // ~~Shamelessly stolen~~ ported to React from Sharkey
 // https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/packages/frontend/src/components/global/MkMfm.ts
 import { Link } from '@/components/link';
+import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
 import nyaize from '@/utils/nyaize';
@@ -46,6 +47,7 @@ interface IParsedMfm {
 
 const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, speakAsCat }) => {
   const rootAst = mfm.parse(text);
+  const { domain } = useInstance();
   const { renderAdvancedMfm, renderAnimatedMfm } = useSettings();
 
   const emojiMap = makeEmojiMap(emojis);
@@ -433,7 +435,10 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
 
           case 'mention': {
             if (mentions) {
-              const mention = mentions.find(({ acct }) => token.props.acct.slice(1) === acct);
+              const acct = token.props.acct.slice(1);
+              const mention = mentions.find(
+                (mention) => mention.acct === acct || `${mention.acct}@${domain}` === acct,
+              );
 
               if (mention) {
                 const fallback = (
