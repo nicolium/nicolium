@@ -41,6 +41,9 @@ const ProfileLink: React.FC<IThumbNavigationLink> = ({
   const profileLinkRef = React.useRef<HTMLAnchorElement>(null);
 
   const bind = useLongPress((e) => {
+    if (e.type !== 'touchstart') return;
+
+    e.preventDefault();
     e.stopPropagation();
 
     if ('vibrate' in navigator) navigator.vibrate(1);
