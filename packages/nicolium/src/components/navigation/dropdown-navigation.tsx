@@ -264,63 +264,59 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
       >
         <div className='⁂-dropdown-navigation__pages'>
           <div className='⁂-dropdown-navigation__page' aria-hidden={page !== 'main'}>
+            {renderNavigationItems(navigationItems)}
+
             {account ? (
-              <div>
-                <div className='flex flex-col gap-4'>
-                  {renderNavigationItems(navigationItems)}
+              <>
+                <Divider />
 
-                  <Divider />
+                <DropdownNavigationLink
+                  href={sourceCode.url}
+                  icon={iconCode}
+                  text={
+                    <FormattedMessage id='navigation.source_code' defaultMessage='Source code' />
+                  }
+                  onClick={closeSidebar}
+                />
 
-                  <DropdownNavigationLink
-                    href={sourceCode.url}
-                    icon={iconCode}
-                    text={
-                      <FormattedMessage id='navigation.source_code' defaultMessage='Source code' />
-                    }
-                    onClick={closeSidebar}
-                  />
+                <Divider />
 
-                  <Divider />
+                <DropdownNavigationLink
+                  to='/logout'
+                  icon={iconSignOut}
+                  text={<FormattedMessage id='navigation_bar.logout' defaultMessage='Logout' />}
+                  onClick={onClickLogOut}
+                />
 
-                  <DropdownNavigationLink
-                    to='/logout'
-                    icon={iconSignOut}
-                    text={<FormattedMessage id='navigation_bar.logout' defaultMessage='Logout' />}
-                    onClick={onClickLogOut}
-                  />
+                <DropdownNavigationLink
+                  icon={iconDotsThreeCircle}
+                  text={<FormattedMessage id='navigation_bar.more' defaultMessage='More' />}
+                  onClick={() => setPage('more')}
+                />
 
-                  <DropdownNavigationLink
-                    icon={iconDotsThreeCircle}
-                    text={<FormattedMessage id='navigation_bar.more' defaultMessage='More' />}
-                    onClick={() => setPage('more')}
-                  />
+                <Divider />
 
-                  <Divider />
+                <div
+                  className={clsx('⁂-dropdown-navigation__account-switcher', {
+                    '⁂-dropdown-navigation__account-switcher--expanded': switcher,
+                  })}
+                >
+                  <button type='button' onClick={handleSwitcherClick}>
+                    <Text tag='span'>
+                      <FormattedMessage
+                        id='profile_dropdown.switch_account'
+                        defaultMessage='Switch accounts'
+                      />
+                    </Text>
 
-                  <div
-                    className={clsx('⁂-dropdown-navigation__account-switcher', {
-                      '⁂-dropdown-navigation__account-switcher--expanded': switcher,
-                    })}
-                  >
-                    <button type='button' onClick={handleSwitcherClick}>
-                      <Text tag='span'>
-                        <FormattedMessage
-                          id='profile_dropdown.switch_account'
-                          defaultMessage='Switch accounts'
-                        />
-                      </Text>
+                    <Icon src={iconCaretDown} />
+                  </button>
 
-                      <Icon src={iconCaretDown} />
-                    </button>
-
-                    {switcher && <AccountSwitcher handleClose={handleClose} />}
-                  </div>
+                  {switcher && <AccountSwitcher handleClose={handleClose} />}
                 </div>
-              </div>
+              </>
             ) : (
-              <div>
-                {renderNavigationItems(navigationItems)}
-
+              <>
                 <DropdownNavigationLink
                   to='/login'
                   icon={iconSignIn}
@@ -347,7 +343,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                     onClick={closeSidebar}
                   />
                 )}
-              </div>
+              </>
             )}
           </div>
           {moreItems.length > 0 && (
