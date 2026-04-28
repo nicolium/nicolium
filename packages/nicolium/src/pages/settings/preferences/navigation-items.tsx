@@ -52,6 +52,7 @@ import {
 } from '@/schemas/frontend-settings';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
+import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
 
@@ -59,6 +60,10 @@ const messages = defineMessages({
   heading: { id: 'settings.navigation_items.heading', defaultMessage: 'Navigation menu items' },
   pin: { id: 'settings.navigation_items.pin_item', defaultMessage: 'Pin item' },
   unpin: { id: 'settings.navigation_items.unpin_item', defaultMessage: 'Unpin item' },
+  resetSuccess: {
+    id: 'settings.navigation_items.reset.success',
+    defaultMessage: 'Navigation items reset to default',
+  },
 });
 
 const itemsMessages = {
@@ -210,6 +215,7 @@ const NavigationItems: React.FC = () => {
   const reset = () => {
     changeSetting(['navigationItems'], DEFAULT_NAVIGATION_ITEMS);
     changeSetting(['pinnedNavigationItems'], DEFAULT_PINNED_NAVIGATION_ITEMS);
+    toast.success(messages.resetSuccess);
   };
 
   return (

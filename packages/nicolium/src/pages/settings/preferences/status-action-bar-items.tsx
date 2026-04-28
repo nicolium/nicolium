@@ -26,6 +26,7 @@ import {
   DEFAULT_STATUS_ACTION_BAR_ITEMS,
 } from '@/schemas/frontend-settings';
 import { useSettings } from '@/stores/settings';
+import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
 
@@ -33,6 +34,10 @@ const messages = defineMessages({
   heading: {
     id: 'settings.status_action_bar_items.heading',
     defaultMessage: 'Status action items',
+  },
+  toastSuccess: {
+    id: 'settings.status_action_bar_items.reset.success',
+    defaultMessage: 'Status action items reset to default',
   },
 });
 
@@ -103,6 +108,7 @@ const StatusActionBarItems: React.FC = () => {
 
   const reset = () => {
     changeSetting(['statusActionBarItems'], DEFAULT_STATUS_ACTION_BAR_ITEMS);
+    toast.success(messages.resetSuccess);
   };
 
   return (
