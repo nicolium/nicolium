@@ -48,6 +48,7 @@ const StreamfieldPicker = <T,>({
       });
 
       event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', index.toString());
     };
 
   const handleAvailableItemDragEnd = () => {
