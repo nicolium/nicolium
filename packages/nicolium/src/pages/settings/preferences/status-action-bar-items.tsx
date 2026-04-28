@@ -35,7 +35,7 @@ const messages = defineMessages({
     id: 'settings.status_action_bar_items.heading',
     defaultMessage: 'Status action items',
   },
-  toastSuccess: {
+  resetSuccess: {
     id: 'settings.status_action_bar_items.reset.success',
     defaultMessage: 'Status action items reset to default',
   },
