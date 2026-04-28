@@ -1,0 +1,36 @@
+---
+import BaseHead from "@mkljczk/astro-theme/components/BaseHead.astro";
+import BaseBlogPost from "@mkljczk/astro-theme/layouts/BlogPost.astro";
+import { type CollectionEntry, getCollection } from "astro:content";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: post,
+  }));
+}
+type Props = CollectionEntry<"blog">["data"];
+
+const { title, description } = Astro.props;
+---
+
+<BaseBlogPost
+  {...Astro.props}
+  lang="en"
+  backToBlogText='Back to blog'
+  backToBlogHref="/blog"
+  updatedOnText='Updated on'
+>
+  <BaseHead
+    slot="head"
+    siteTitle="Nicolium"
+    title={title}
+    description={description}
+  />
+  <Header slot="header" />
+  <Footer slot="footer" />
+  <slot />
+</BaseBlogPost>

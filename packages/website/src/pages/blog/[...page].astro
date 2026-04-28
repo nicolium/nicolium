@@ -1,0 +1,52 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import BaseHead from "@mkljczk/astro-theme/components/BaseHead.astro";
+import BlogList from "@mkljczk/astro-theme/layouts/BlogList.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+
+interface Props {
+  page: {
+    data: CollectionEntry<"blog">[];
+    currentPage: number;
+    lastPage: number;
+  };
+}
+
+type Paginate = (
+  data: CollectionEntry<"blog">[],
+  options: { pageSize: number },
+) => unknown;
+
+export async function getStaticPaths({ paginate }: { paginate: Paginate }) {
+  const posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  );
+
+  return paginate(posts, { pageSize: 5 });
+}
+
+const { page } = Astro.props as Props;
+
+const pageTitle =
+  page.currentPage === 1 ? "Blog" : `Blog – Page ${page.currentPage}`;
+---
+
+<BlogList
+  posts={page.data}
+  currentPage={page.currentPage}
+  totalPages={page.lastPage}
+  lang="en"
+  basePath="/blog"
+  pageHeading="Blog"
+  readMoreText="Read more"
+  paginationLabel="Pagination"
+  paginationPage="Page"
+  paginationPrevious="Previous"
+  paginationNext="Next"
+>
+  <BaseHead slot="head" siteTitle="Nicolium" title={pageTitle} />
+  <Header slot="header" />
+  <Footer slot="footer" />
+</BlogList>
