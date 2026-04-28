@@ -1564,6 +1564,7 @@ const getFeatures = (instance: Instance) => {
     rssFeeds: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL,
+      v.software === ICESHRIMP_NET && gte(v.version, '2026.1.0'),
       v.software === MASTODON,
       v.software === PLEROMA,
     ]),
