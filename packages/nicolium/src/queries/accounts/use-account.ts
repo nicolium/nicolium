@@ -57,7 +57,9 @@ const useAccount = (accountId?: string, withRelationship = false) => {
   const isUnauthorized = getResponseStatus(accountQuery.error) === 401;
 
   const credentialIsAdmin = useMemo(
-    () => me === accountId && hasAdminPermission(credentialAccount?.role?.permissions),
+    () =>
+      me === accountId &&
+      (hasAdminPermission(credentialAccount?.role?.permissions) || credentialAccount?.is_admin),
     [credentialAccount?.role?.permissions, me, accountId],
   );
 
