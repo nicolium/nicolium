@@ -1,5 +1,56 @@
 # Changelog
 
+## Unreleased
+
+### Meta
+
+- Introduced a rule that forbids introducing LLM-generated first-party code.
+- Added a .devcontainer configuration.
+- Sponsors from GitHub Sponsors are now listed in the README.
+
+### Added
+
+- Option to reorganize, add, or remove items in the sidebar, navigation menu and status action bar.
+- Option to include custom CSS in instance configuration, either as a string or a stylesheet link.
+- Option to disallow unauthenticated users from visiting remote content.
+- Option to filter out posts containing media without alternative text.
+- Option to display nested quotes.
+- Boost scheduling on supported backends (Iceshrimp.NET).
+- MFA support for Iceshrimp.NET.
+- Pleroma instance configuration from the admin dashboard.
+- Text wrap toggle button for code blocks in posts.
+
+### Changed
+
+- Reorganized settings into categories.
+- Option to disable the Chats pane in settings.
+- Boost privacy can be set in a boost confirmation modal.
+- Post translations can be displayed side-by-side with the original text.
+- Longer profile bios are truncated with a "Show more" button.
+- Link previews are displayed when the quoted post is not available.
+- *Advanced mode* for filtering can be switched from the notifications page.
+- Improved unavailable posts display on Pleroma, and unavailable parent post information on Akkoma.
+- Improved display of followers count when partially hidden by the user.
+- Updated feature definitions for snac2, NeoDB, and Iceshrimp.NET.
+- Various changes to the UI animations.
+- Continued work on migrating styles from TailwindCSS.
+
+### Fixed
+
+- Nicolium no longer infinitely tries to load a timeline it's not authorized to access.
+- Scheduled posts with polls no longer crash.
+- Media modal works on scheduled/drafted posts page.
+- Ctrl+Enter hotkey for posting works in the subject field.
+- Private boosts are marked as such again in timelines.
+- Instance announcements management.
+- Upload progress is now correctly displayed.
+- Progress bar component state and animation.
+- Sidebar active state is now handled more consistently.
+- Dropdown menu overlay no longer blinks when opened on mobile.
+- Improved back button behavior in columns.
+- Avatars are correctly displayed next to usernames in MFM.
+- Interaction circles can be displayed as HTML instead of canvas, fixing CORS-related issues.
+
 ## v0.1.2
 
 ### Changed
