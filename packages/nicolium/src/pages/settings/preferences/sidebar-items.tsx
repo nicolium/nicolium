@@ -12,11 +12,16 @@ import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
 import { AVAILABLE_SIDEBAR_ITEMS, DEFAULT_SIDEBAR_ITEMS } from '@/schemas/frontend-settings';
 import { useSettings } from '@/stores/settings';
+import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
 
 const messages = defineMessages({
   heading: { id: 'settings.sidebar_items.heading', defaultMessage: 'Sidebar items' },
+  resetSuccess: {
+    id: 'settings.sidebar_items.reset.success',
+    defaultMessage: 'Sidebar items reset to default',
+  },
 });
 
 const itemsMessages = {
@@ -91,6 +96,7 @@ const SidebarItems: React.FC = () => {
 
   const reset = () => {
     changeSetting(['sidebarItems'], DEFAULT_SIDEBAR_ITEMS);
+    toast.success(messages.resetSuccess);
   };
 
   return (
