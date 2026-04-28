@@ -86,6 +86,7 @@ const Streamfield = <T,>({
     setDropTargetIndex(null);
 
     event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', i.toString());
   };
 
   const handleItemDragOver = (i: number) => (event: React.DragEvent<HTMLDivElement>) => {
