@@ -110,6 +110,7 @@ const REQUIRED_NAVIGATION_ITEMS = [
   'rss-feed-subscriptions',
   'scheduled-statuses',
   'drafts',
+  'compose',
 ] as const;
 
 const messages = defineMessages({

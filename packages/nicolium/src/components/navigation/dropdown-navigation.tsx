@@ -2,6 +2,7 @@ import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
 import iconCaretLeft from '@phosphor-icons/core/regular/caret-left.svg';
 import iconCode from '@phosphor-icons/core/regular/code.svg';
 import iconDotsThreeCircle from '@phosphor-icons/core/regular/dots-three-circle.svg';
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconSignIn from '@phosphor-icons/core/regular/sign-in.svg';
 import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
@@ -22,6 +23,7 @@ import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
 import { useAuthActions } from '@/stores/auth';
+import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
@@ -143,6 +145,7 @@ DropdownNavigationLink.displayName = 'DropdownNavigationLink';
 const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => {
   const intl = useIntl();
   const isSidebarOpen = useIsSidebarOpen();
+  const { openModal } = useModalsActions();
   const { closeSidebar } = useUiStoreActions();
   const { verifyAccounts, logOut } = useAuthActions();
   const [page, setPage] = useState<'main' | 'more'>('main');
@@ -182,6 +185,15 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
     logOut();
   };
 
+  const onOpenCompose: React.MouseEventHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    handleClose();
+
+    openModal('COMPOSE', undefined);
+  };
+
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (e.key === 'Escape') handleClose();
   };
@@ -200,7 +212,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
   const renderNavigationItems = (items: ReturnType<typeof useNavigationItems>) =>
     items
-      .filter((item) => item === null || (item.type !== 'compose' && item.type !== 'search-input'))
+      .filter((item) => item === null || item.type !== 'search-input')
       .map((item, index) => {
         if (item === null) {
           if (index > 0 && items[index - 1] !== null) return <Divider key={`separator-${index}`} />;
@@ -227,6 +239,15 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
             );
           case 'link':
             return <DropdownNavigationLink {...item} key={item.to} onClick={handleClose} />;
+          case 'compose':
+            return (
+              <DropdownNavigationLink
+                key='compose'
+                icon={iconNotePencil}
+                text={<FormattedMessage id='navigation.compose' defaultMessage='Compose' />}
+                onClick={onOpenCompose}
+              />
+            );
           default:
             return null;
         }
