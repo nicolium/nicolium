@@ -1322,6 +1322,8 @@
   "interactions_circle.download": "Download",
   "interactions_circle.error.image_loading": "Failed to load one of the avatars",
   "interactions_circle.error.image_loading.multiple": "Failed to load some of the avatars",
+  "interactions_circle.html_mode": "Use fallback mode",
+  "interactions_circle.html_mode.hint": "Some avatars failed to load on the canvas. You can try to display them in fallback mode. You won't be able to download the image directly.",
   "interactions_circle.start": "Generate",
   "interactions_circle.state.done": "Finalizing…",
   "interactions_circle.state.drawing": "Drawing circle",
