@@ -28,7 +28,7 @@
 - Post translations can be displayed side-by-side with the original text.
 - Longer profile bios are truncated with a "Show more" button.
 - Link previews are displayed when the quoted post is not available.
-- *Advanced mode* for filtering can be switched from the notifications page.
+- _Advanced mode_ for filtering can be switched from the notifications page.
 - Improved unavailable posts display on Pleroma, and unavailable parent post information on Akkoma.
 - Improved display of followers count when partially hidden by the user.
 - Updated feature definitions for snac2, NeoDB, and Iceshrimp.NET.

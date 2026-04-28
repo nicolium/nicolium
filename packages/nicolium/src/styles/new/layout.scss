@@ -371,12 +371,15 @@ body {
 
     .⁂-icon,
     .svg-icon {
-      width: 1.25rem;
-      height: 1.25rem;
       color: rgb(var(--color-gray-600));
 
       .dark.black & {
         color: #fff;
+      }
+
+      svg {
+        width: 1.25rem;
+        height: 1.25rem;
       }
     }
 
@@ -406,6 +409,31 @@ body {
 
       .black & {
         outline-color: rgb(var(--color-gray-800));
+      }
+    }
+  }
+
+  &--no-items {
+    width: fit-content;
+    margin: 0.5rem;
+    border-radius: var(--radius-full);
+    box-shadow: 0 8px 24px 0 rgb(0, 0, 0, 0.2);
+
+    .dark & {
+      border: 1px solid rgb(var(--color-gray-600));
+    }
+
+    .black & {
+      border: 1px solid rgb(var(--color-gray-200) / 0.5);
+    }
+
+    .⁂-thumb-navigation__item {
+      flex: 0;
+      padding: 0.75rem;
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
       }
     }
   }

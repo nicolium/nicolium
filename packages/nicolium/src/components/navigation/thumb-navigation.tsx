@@ -2,6 +2,7 @@ import iconList from '@phosphor-icons/core/regular/list.svg';
 import iconPlusSquare from '@phosphor-icons/core/regular/plus-square.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useMatch } from '@tanstack/react-router';
+import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -119,7 +120,12 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   };
 
   return (
-    <div className='⁂-thumb-navigation'>
+    <div
+      className={clsx(
+        '⁂-thumb-navigation',
+        orderedNavigationItems.length === 0 && '⁂-thumb-navigation--no-items',
+      )}
+    >
       <button
         className='⁂-thumb-navigation__item'
         onClick={isSidebarOpen ? closeSidebar : openSidebar}
