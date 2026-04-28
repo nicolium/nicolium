@@ -104,6 +104,12 @@ const NicoliumHead = () => {
       {['dark', 'black'].includes(theme) && (
         <InlineStyle>{':root { color-scheme: dark; }'}</InlineStyle>
       )}
+      {frontendConfig.customStylesheet && (
+        <InlineStyle>{frontendConfig.customStylesheet}</InlineStyle>
+      )}
+      {frontendConfig.customStylesheetLink && (
+        <link rel='stylesheet' href={frontendConfig.customStylesheetLink} />
+      )}
     </>
   );
 };

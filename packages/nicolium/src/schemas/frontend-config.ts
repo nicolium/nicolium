@@ -118,6 +118,9 @@ const frontendConfigSchemaShape = {
   mediaPreview: v.fallback(v.boolean(), false),
   sentryDsn: v.fallback(v.optional(v.string()), undefined),
   allowDisplayingRemoteNoLogin: v.fallback(v.boolean(), true),
+
+  customStylesheet: v.fallback(v.string(), ''),
+  customStylesheetLink: v.fallback(v.string(), ''),
 };
 
 const frontendConfigSchema = coerceObject(frontendConfigSchemaShape);
