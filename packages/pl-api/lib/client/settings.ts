@@ -53,18 +53,18 @@ const settings = (client: PlApiBaseClient) => ({
     const response = await client.request('/api/v1/accounts/verify_credentials');
     const credentialAccount = v.parse(credentialAccountSchema, response.json);
 
-    if (client.features.version.software === ICESHRIMP_NET) {
-      await client.getIceshrimpAccessToken();
-      try {
-        const iceshrimpResponse = await client.request<{
-          isAdmin: boolean;
-          isModerator: boolean;
-        }>('/api/iceshrimp/auth');
+    // if (client.features.version.software === ICESHRIMP_NET) {
+    //   await client.getIceshrimpAccessToken();
+    //   try {
+    //     const iceshrimpResponse = await client.request<{
+    //       isAdmin: boolean;
+    //       isModerator: boolean;
+    //     }>('/api/iceshrimp/auth');
 
-        credentialAccount.is_admin = iceshrimpResponse.json.isAdmin;
-        credentialAccount.is_moderator = iceshrimpResponse.json.isModerator;
-      } catch {}
-    }
+    //     credentialAccount.is_admin = iceshrimpResponse.json.isAdmin;
+    //     credentialAccount.is_moderator = iceshrimpResponse.json.isModerator;
+    //   } catch {}
+    // }
 
     return credentialAccount;
   },
