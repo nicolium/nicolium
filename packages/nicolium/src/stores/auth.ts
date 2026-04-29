@@ -87,6 +87,7 @@ const authUserSchema = v.object({
   access_token: v.string(),
   id: v.string(),
   url: v.string(),
+  iceshrimp_access_token: v.fallback(v.optional(v.string()), undefined),
 });
 
 const tokenWithAppSchema = v.object({
@@ -97,11 +98,7 @@ const tokenWithAppSchema = v.object({
 
 type TokenWithApp = v.InferOutput<typeof tokenWithAppSchema>;
 
-interface AuthUser {
-  access_token: string;
-  id: string;
-  url: string;
-}
+type AuthUser = v.InferOutput<typeof authUserSchema>;
 
 type Me = string | null | false;
 
@@ -153,6 +150,7 @@ interface AuthActions {
   fetchCaptcha: () => ReturnType<PlApiClient['oauth']['getCaptcha']>;
   updateMe: (params: UpdateCredentialsParams) => Promise<CredentialAccount>;
   verifyAccounts: () => void;
+  setIceshrimpToken: (accountUrl: string, token: string) => void;
 }
 
 const validUser = (user?: AuthUser) => {
@@ -220,6 +218,10 @@ const getLocalState = (): (AuthData & { clients: Record<string, PlApiClient> }) 
   for (const [url, user] of Object.entries(parsedUsers)) {
     clients[url] = new PlApiClient(parseBaseURL(url) || backendUrl, user.access_token, {
       instance,
+      iceshrimpAccessToken: user.iceshrimp_access_token,
+      onFetchIceshrimpAccessToken: (token: string) => {
+        useAuthStore.getState().actions.setIceshrimpToken(url, token);
+      },
     });
   }
 
@@ -405,8 +407,17 @@ const useAuthStore = create<AuthStore>()(
       return state.users[accountUrl!]?.access_token;
     };
 
-    const createClientForAccount = (accountUrl: string, token: string) => {
-      const client = new PlApiClient(parseBaseURL(accountUrl) || backendUrl, token);
+    const createClientForAccount = (
+      accountUrl: string,
+      token: string,
+      iceshrimpAccessToken?: string,
+    ) => {
+      const client = new PlApiClient(parseBaseURL(accountUrl) || backendUrl, token, {
+        iceshrimpAccessToken,
+        onFetchIceshrimpAccessToken: (token: string) => {
+          get().actions.setIceshrimpToken(accountUrl, token);
+        },
+      });
       set({ clients: { ...get().clients, [accountUrl]: client } });
       return client;
     };
@@ -542,7 +553,11 @@ const useAuthStore = create<AuthStore>()(
           });
 
           persistAuthAccount(account);
-          createClientForAccount(account.url, token);
+          createClientForAccount(
+            account.url,
+            token,
+            get().users[account.url]?.iceshrimp_access_token,
+          );
 
           persistAuth(get());
           const newMe = get().me;
@@ -588,9 +603,10 @@ const useAuthStore = create<AuthStore>()(
           });
 
           // Ensure we have a client for the account
-          const accessToken = get().users[account.url]?.access_token;
+          const user = get().users[account.url];
+          const accessToken = user?.access_token;
           if (accessToken && !get().clients[account.url]) {
-            createClientForAccount(account.url, accessToken);
+            createClientForAccount(account.url, accessToken, user?.iceshrimp_access_token);
           }
 
           persistAuth(get());
@@ -616,7 +632,7 @@ const useAuthStore = create<AuthStore>()(
           });
           for (const [url, user] of Object.entries(get().users)) {
             if (!get().clients[url]) {
-              createClientForAccount(url, user.access_token);
+              createClientForAccount(url, user.access_token, user.iceshrimp_access_token);
             }
           }
           persistAuth(get());
@@ -797,6 +813,16 @@ const useAuthStore = create<AuthStore>()(
                 });
             }
           });
+        },
+
+        setIceshrimpToken: (accountUrl, token) => {
+          set((state) => {
+            const user = state.users[accountUrl];
+            if (user) {
+              user.iceshrimp_access_token = token;
+            }
+          });
+          persistAuth(get());
         },
       },
     };
