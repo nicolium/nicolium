@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
 import Column from '@/components/ui/column';
+import ColumnLoading from '@/features/ui/components/column-loading';
 import { useFeatures } from '@/hooks/use-features';
 import { useMfaConfig } from '@/queries/security/use-mfa';
 
@@ -25,9 +26,11 @@ const MfaForm: React.FC = () => {
     setDisplayOtpForm(true);
   };
 
+  if (!mfa) return <ColumnLoading />;
+
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      {mfa?.settings.totp ? (
+      {mfa.settings.totp ? (
         <DisableOtpForm />
       ) : (
         <div className='flex flex-col gap-4'>
