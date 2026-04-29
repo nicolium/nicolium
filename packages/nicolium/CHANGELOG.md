@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Added toast on resetting customizable items to default.
+
+### Fixed
+
+- Improvements for RTL languages.
+- Drag and drop works correctly on WebKit browsers.
+
 ## v0.2.0
 
 ### Meta
