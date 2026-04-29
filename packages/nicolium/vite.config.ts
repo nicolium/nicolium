@@ -17,7 +17,8 @@ const config = defineConfig(() => ({
     rolldownOptions: {
       output: {
         assetFileNames: 'packs/assets/[name]-[hash].[ext]',
-        chunkFileNames: 'packs/js/[name]-[hash].js',
+        chunkFileNames: (chunkInfo) =>
+          `packs/js/${chunkInfo.facadeModuleId?.includes('/src/locales/') ? 'locales/' : ''}[name]-[hash].js`,
         entryFileNames: 'packs/[name]-[hash].js',
         codeSplitting: {
           minSize: 16 * 1024,
