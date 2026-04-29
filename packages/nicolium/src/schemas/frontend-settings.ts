@@ -220,7 +220,7 @@ const settingsSchema = v.object({
   locale: v.fallback(
     v.fallback(
       v.pipe(v.fallback(v.string(), navigator.language), v.picklist(locales)),
-      navigator.language as 'en',
+      navigator.language.split(/[-_]/)[0] as 'en',
     ),
     'en',
   ),
