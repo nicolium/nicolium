@@ -22,6 +22,8 @@ import type {
   AdminDimension,
   AdminDimensionKey,
   AdminDomain,
+  AdminDomainAllow,
+  AdminDomainBlock,
   AdminGetAccountsParams,
   AdminGetDimensionsParams,
   AdminGetMeasuresParams,
@@ -367,6 +369,14 @@ const admin = {
     const key = ['admin', 'retention', startAt, endAt, frequency] as const;
     return key as TaggedKey<typeof key, Array<AdminCohort>>;
   },
+  domainBlocks: ['admin', 'domainBlocks'] as TaggedKey<
+    ['admin', 'domainBlocks'],
+    InfiniteData<PaginatedResponse<AdminDomainBlock>>
+  >,
+  domainAllows: ['admin', 'domainAllows'] as TaggedKey<
+    ['admin', 'domainAllows'],
+    InfiniteData<PaginatedResponse<AdminDomainAllow>>
+  >,
 };
 
 const notifications = {
