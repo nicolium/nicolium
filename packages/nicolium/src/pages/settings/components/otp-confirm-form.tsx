@@ -9,6 +9,7 @@ import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Text from '@/components/ui/text';
+import ColumnLoading from '@/features/ui/components/column-loading';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useConfirmMfa } from '@/queries/security/use-mfa';
@@ -83,6 +84,8 @@ const OtpConfirmForm: React.FC = () => {
 
     e.preventDefault();
   };
+
+  if (!state.confirmKey) return <ColumnLoading />;
 
   return (
     <div className='flex flex-col gap-4'>
