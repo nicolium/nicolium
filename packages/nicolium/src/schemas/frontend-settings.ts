@@ -227,7 +227,7 @@ const settingsSchema = v.object({
   showExplanationBox: v.fallback(v.boolean(), true),
   explanationBox: v.fallback(v.boolean(), true),
   autoloadTimelines: v.fallback(v.boolean(), true),
-  autoloadMore: v.fallback(v.boolean(), true),
+  autoloadMore: v.fallback(v.boolean(), false),
   preserveSpoilers: v.fallback(v.boolean(), true),
   forceImplicitAddressing: v.fallback(v.boolean(), false),
   useDedicatedComposePage: v.fallback(v.boolean(), false),
