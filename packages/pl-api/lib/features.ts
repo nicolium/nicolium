@@ -644,6 +644,8 @@ const getFeatures = (instance: Instance) => {
      */
     deleteMedia: instance.api_versions.mastodon >= 4,
 
+    disableMfaWithCode: v.software === ICESHRIMP_NET,
+
     /**
      * Allow to register on a given domain
      * @see GET /api/v1/pleroma/admin/domains
@@ -1160,6 +1162,7 @@ const getFeatures = (instance: Instance) => {
      */
     manageMfa: any([
       v.software === AKKOMA,
+      v.software === ICESHRIMP_NET,
       v.software === PLEROMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
     ]),

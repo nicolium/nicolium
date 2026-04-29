@@ -449,6 +449,19 @@ const settings = (client: PlApiBaseClient) => ({
             },
           }));
           break;
+        case ICESHRIMP_NET:
+          await client.getIceshrimpAccessToken();
+          response = await client
+            .request<{
+              twoFactorEnrolled: boolean;
+            }>('/api/iceshrimp/settings')
+            .then(({ json }) => ({
+              settings: {
+                enabled: json.twoFactorEnrolled,
+                totp: json.twoFactorEnrolled,
+              },
+            }));
+          break;
         default:
           response = (await client.request('/api/pleroma/accounts/mfa')).json;
       }
@@ -491,6 +504,21 @@ const settings = (client: PlApiBaseClient) => ({
             key: new URL(data).searchParams.get('secret'),
           }));
           break;
+        case ICESHRIMP_NET:
+          await client.getIceshrimpAccessToken();
+          response = await client
+            .request<{
+              secret: string;
+              url: string;
+              qrPng: string;
+            }>('/api/iceshrimp/settings/2fa/enroll', {
+              method: 'POST',
+            })
+            .then(({ json }) => ({
+              provisioning_uri: json.url,
+              key: json.secret,
+            }));
+          break;
         default:
           response = (await client.request(`/api/pleroma/accounts/mfa/setup/${method}`)).json;
       }
@@ -513,6 +541,13 @@ const settings = (client: PlApiBaseClient) => ({
       switch (client.features.version.software) {
         case GOTOSOCIAL:
           response = await client.request('/api/v1/user/2fa/enable', {
+            method: 'POST',
+            body: { code },
+          });
+          break;
+        case ICESHRIMP_NET:
+          await client.getIceshrimpAccessToken();
+          response = await client.request('/api/iceshrimp/settings/2fa/confirm', {
             method: 'POST',
             body: { code },
           });
@@ -550,6 +585,22 @@ const settings = (client: PlApiBaseClient) => ({
             body: { password },
           });
       }
+
+      if (response.json?.error) throw response.json.error;
+
+      return response.json;
+    },
+
+    /**
+     * Requires features{@link Features.disableMfaWithCode}.
+     */
+    disableMfaWithCode: async (code: string) => {
+      await client.getIceshrimpAccessToken();
+
+      const response = await client.request('/api/iceshrimp/settings/2fa/disable', {
+        method: 'POST',
+        body: { code },
+      });
 
       if (response.json?.error) throw response.json.error;
 

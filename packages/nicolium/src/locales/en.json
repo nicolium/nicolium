@@ -1489,6 +1489,7 @@
   "mfa.disable.success_message": "MFA disabled",
   "mfa.disabled": "Disabled",
   "mfa.enabled": "Enabled",
+  "mfa.mfa_disable_enter_code": "Enter the code from your two-factor app to disable two-factor auth.",
   "mfa.mfa_disable_enter_password": "Enter your current password to disable two-factor auth.",
   "mfa.mfa_setup.code_hint": "Enter the code from your two-factor app.",
   "mfa.mfa_setup.code_placeholder": "Code",
