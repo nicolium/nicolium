@@ -173,6 +173,10 @@ body {
 
   &[data-active-page="more"] .⁂-dropdown-navigation__pages {
     left: -20rem;
+
+    [dir='rtl'] & {
+      left: 20rem;
+    }
   }
 
   &__page {
