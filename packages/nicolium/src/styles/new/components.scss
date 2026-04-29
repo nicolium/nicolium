@@ -295,10 +295,6 @@
     rgb(var(--color-gradient-end) / 0.1)
   );
 
-  [dir='rtl'] & {
-    flex-direction: row-reverse;
-  }
-
   &--md {
     padding: 0.5rem 1rem;
   }
@@ -1099,10 +1095,6 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
       color: rgb(var(--color-gray-300));
     }
 
-    [dir='rtl'] & {
-      flex-direction: row-reverse;
-    }
-
     &--destructive {
       color: rgb(var(--color-danger-600));
 
@@ -1155,6 +1147,11 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
 
       &:not(:last-child) {
         margin-right: 0.5rem;
+
+        [dir='rtl'] & {
+          margin-right: 0;
+          margin-left: 0.5rem;
+        }
       }
 
       div:first-child {
@@ -1180,6 +1177,11 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
 
     &__switch {
       margin-left: auto;
+
+      [dir='rtl'] & {
+        margin-right: auto;
+        margin-left: 0;
+      }
     }
 
     &__expand {

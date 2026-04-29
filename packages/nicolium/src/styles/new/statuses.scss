@@ -878,6 +878,11 @@ div:first-child:has(> .⁂-timeline-gap) {
 .⁂-timeline-status {
   &--connected-bottom .status__content-wrapper {
     padding-left: 54px;
+
+    [dir='rtl'] & {
+      padding-right: 54px;
+      padding-left: 0;
+    }
   }
 }
 
