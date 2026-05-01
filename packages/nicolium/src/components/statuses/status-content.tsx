@@ -334,7 +334,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             '⁂-status-title--clamp': !spoilerExpanded && lineClamp,
           })}
           key='spoiler'
-          {...(expandable
+          {...(expandable && displaySpoilers
             ? { onClick: toggleSpoilerExpanded, role: 'button', 'aria-expanded': spoilerExpanded }
             : {})}
         >
