@@ -20,9 +20,23 @@ const HeadTitle: React.FC<IHeadTitle> = ({ title }) => {
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
   const notificationCount = useNotificationsUnreadCount();
-  const unreadCount =
-    notificationCount + unreadChatsCount + awaitingApprovalCount + pendingReportsCount;
-  const { demetricator } = useSettings();
+
+  const { demetricator, navigationItems } = useSettings();
+
+  const unreadCount = React.useMemo(
+    () =>
+      notificationCount +
+      (navigationItems.includes('chats') ? unreadChatsCount : 0) +
+      awaitingApprovalCount +
+      pendingReportsCount,
+    [
+      notificationCount,
+      navigationItems,
+      unreadChatsCount,
+      awaitingApprovalCount,
+      pendingReportsCount,
+    ],
+  );
 
   const hasUnreadNotifications = React.useMemo(
     () => !(unreadCount < 1 || demetricator),
