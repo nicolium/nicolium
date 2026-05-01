@@ -746,6 +746,10 @@
     -webkit-line-clamp: 3;
   }
 
+  span:first-child {
+    overflow-wrap: anywhere
+  }
+
   button {
     @include mixins.button($theme: muted, $size: xs);
 
