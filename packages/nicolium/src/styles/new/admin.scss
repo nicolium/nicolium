@@ -276,8 +276,8 @@
 
   &__form {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
+    align-items: center;
 
     button {
       @include mixins.button($theme: primary);
@@ -289,9 +289,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  border-radius: var(--radius-lg);
-  background: rgb(var(--color-gray-100));
+
   padding: 1rem;
+  border-radius: var(--radius-lg);
+
+  background: rgb(var(--color-gray-100));
 
   .dark & {
     background: rgb(var(--color-primary-800));
@@ -306,13 +308,13 @@
   }
 
   &__domain {
-    @include mixins.text();
+    @include mixins.text;
   }
 
   &__tags {
     display: flex;
-    gap: 1rem;
     flex-wrap: wrap;
+    gap: 1rem;
 
     li {
       @include mixins.text($weight: bold);
@@ -320,7 +322,7 @@
   }
 
   &__comment {
-    @include mixins.text();
+    @include mixins.text;
 
     span {
       font-weight: bold;
@@ -329,8 +331,8 @@
 
   &__actions {
     display: flex;
-    justify-content: flex-end;
     gap: 0.5rem;
+    justify-content: flex-end;
 
     button {
       @include mixins.button($theme: primary);
