@@ -694,6 +694,34 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#delete}
        */
       deleteDomainBlock: async (domainBlockId: string) => {
+        if (client.features.version.software === PLEROMA) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig | undefined =
+            configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') ||
+            undefined;
+
+          if (simplePolicy) {
+            [':media_removal', ':report_removal', ':federated_timeline_removal', ':reject'].forEach(
+              (policy) => {
+                const entry = simplePolicy.value.find(({ tuple }) => tuple[0] === policy);
+                if (entry) {
+                  entry.tuple[1] = entry.tuple[1].filter(({ tuple }) => tuple[0] !== domainBlockId);
+                }
+              },
+            );
+
+            await client.request('/api/v1/pleroma/admin/config', {
+              method: 'PUT',
+              body: {
+                configs: [simplePolicy],
+              },
+            });
+          }
+
+          return {};
+        }
+
         const response = await client.request<EmptyObject>(
           `/api/v1/admin/domain_blocks/${domainBlockId}`,
           {
@@ -1118,19 +1146,21 @@ const admin = (client: PlApiBaseClient) => {
             undefined;
 
           if (simplePolicy) {
-            simplePolicy.value[1].tuple[1] = simplePolicy.value[1].tuple[1].filter(
-              ({ tuple }) => tuple[0] !== domainAllowId,
-            );
+            const accepts = simplePolicy.value.find(({ tuple }) => tuple[0] === ':accept');
 
-            await client.request('/api/v1/pleroma/admin/config', {
-              method: 'PUT',
-              body: {
-                configs: [simplePolicy],
-              },
-            });
+            if (accepts) {
+              accepts.tuple[1] = accepts.tuple[1].filter(({ tuple }) => tuple[0] !== domainAllowId);
 
-            return {};
+              await client.request('/api/v1/pleroma/admin/config', {
+                method: 'PUT',
+                body: {
+                  configs: [simplePolicy],
+                },
+              });
+            }
           }
+
+          return {};
         }
 
         const response = await client.request<EmptyObject>(
