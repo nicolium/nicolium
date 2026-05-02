@@ -645,9 +645,12 @@ const admin = (client: PlApiBaseClient) => {
               domainBlocks.push({
                 id: domain,
                 domain,
-                digest: new Uint8Array(
-                  await window.crypto.subtle.digest('SHA-256', encoder.encode(domain)),
-                ).toHex(),
+                // TODO: fix this
+                digest: (
+                  new Uint8Array(
+                    await window.crypto.subtle.digest('SHA-256', encoder.encode(domain)),
+                  ) as any
+                ).toHex() as `0x${string}`,
                 created_at: null,
                 severity: suspend.some(({ tuple }) => tuple[0] === domain)
                   ? 'suspend'
