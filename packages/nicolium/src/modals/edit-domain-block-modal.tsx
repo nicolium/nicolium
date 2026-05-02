@@ -210,22 +210,24 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
               </ListItem>
             </>
           )}
-          <ListItem
-            label={
-              <FormattedMessage
-                id='admin.edit_domain_block.fields.obfuscate_label'
-                defaultMessage='Obfuscate'
-              />
-            }
-            hint={
-              <FormattedMessage
-                id='admin.edit_domain_block.fields.obfuscate_hint'
-                defaultMessage='When checked, the domain name will be obfuscated in the public display'
-              />
-            }
-          >
-            <Toggle checked={obfuscate} onChange={({ target }) => setObfuscate(target.checked)} />
-          </ListItem>
+          {features.version.software !== PLEROMA && features.version.software !== AKKOMA && (
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='admin.edit_domain_block.fields.obfuscate_label'
+                  defaultMessage='Obfuscate'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='admin.edit_domain_block.fields.obfuscate_hint'
+                  defaultMessage='When checked, the domain name will be obfuscated in the public display'
+                />
+              }
+            >
+              <Toggle checked={obfuscate} onChange={({ target }) => setObfuscate(target.checked)} />
+            </ListItem>
+          )}
           {features.version.software !== GOTOSOCIAL && (
             <>
               <ListItem

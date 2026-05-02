@@ -25,7 +25,7 @@ import {
   trendsLinkSchema,
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-import { GOTOSOCIAL, MITRA, PLEROMA } from '@/features';
+import { AKKOMA, GOTOSOCIAL, MITRA, PLEROMA } from '@/features';
 import { PaginatedResponse } from '@/responses';
 
 import type { PlApiBaseClient } from '@/client-base';
@@ -164,6 +164,36 @@ const paginatedPleromaStatuses = async (
       : null,
     partial: response.status === 206,
   });
+};
+
+const updateSimplePolicy = (
+  simplePolicy: SimplePolicyConfig,
+  domain: string,
+  params: AdminUpdateDomainBlockParams,
+) => {
+  for (const policy of [
+    ':media_removal',
+    ':report_removal',
+    ':federated_timeline_removal',
+    ':reject',
+  ] as const) {
+    let entry = simplePolicy.value.find(({ tuple }) => tuple[0] === policy);
+    if (entry) {
+      entry.tuple[1] = entry.tuple[1].filter(({ tuple }) => tuple[0] !== domain);
+    } else {
+      entry = { tuple: [policy, []] };
+      simplePolicy.value.push(entry);
+    }
+
+    if (
+      (params.reject_media && policy === ':media_removal') ||
+      (params.reject_reports && policy === ':report_removal') ||
+      (params.severity === 'silence' && policy === ':federated_timeline_removal') ||
+      (params.severity == 'suspend' && policy === ':reject')
+    ) {
+      entry.tuple[1].push({ tuple: [domain, params.public_comment || ''] });
+    }
+  }
 };
 
 const admin = (client: PlApiBaseClient) => {
@@ -579,7 +609,10 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#get}
        */
       getDomainBlocks: async (params?: AdminGetDomainBlocksParams) => {
-        if (client.features.version.software === PLEROMA) {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
           const { configs } = await category.config.getPleromaConfig();
 
           const simplePolicy: SimplePolicyConfig | undefined =
@@ -649,7 +682,10 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#get-one}
        */
       getDomainBlock: async (domainBlockId: string) => {
-        if (client.features.version.software === PLEROMA) {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
           const domainBlocks = await category.domainBlocks.getDomainBlocks();
 
           return domainBlocks.items.find((block) => block.id === domainBlockId)!;
@@ -666,6 +702,32 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#create}
        */
       createDomainBlock: async (domain: string, params?: AdminCreateDomainBlockParams) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig = configs.find(
+            (config) => config.group === ':pleroma' && config.key === ':mrf_simple',
+          ) || {
+            group: ':pleroma',
+            key: ':mrf_simple',
+            value: [],
+          };
+
+          updateSimplePolicy(simplePolicy, domain, params || { severity: 'silence' });
+
+          await client.request('/api/v1/pleroma/admin/config', {
+            method: 'POST',
+            body: {
+              configs: [simplePolicy],
+            },
+          });
+
+          return {};
+        }
+
         const response = await client.request('/api/v1/admin/domain_blocks', {
           method: 'POST',
           body: { ...params, domain },
@@ -679,7 +741,33 @@ const admin = (client: PlApiBaseClient) => {
        * Change parameters for an existing domain block.
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#update}
        */
-      updateDomainBlock: async (domainBlockId: string, params?: AdminUpdateDomainBlockParams) => {
+      updateDomainBlock: async (domainBlockId: string, params: AdminUpdateDomainBlockParams) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig = configs.find(
+            (config) => config.group === ':pleroma' && config.key === ':mrf_simple',
+          ) || {
+            group: ':pleroma',
+            key: ':mrf_simple',
+            value: [],
+          };
+
+          updateSimplePolicy(simplePolicy, domainBlockId, params);
+
+          await client.request('/api/v1/pleroma/admin/config', {
+            method: 'POST',
+            body: {
+              configs: [simplePolicy],
+            },
+          });
+
+          return {};
+        }
+
         const response = await client.request(`/api/v1/admin/domain_blocks/${domainBlockId}`, {
           method: 'PUT',
           body: params,
@@ -694,7 +782,10 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#delete}
        */
       deleteDomainBlock: async (domainBlockId: string) => {
-        if (client.features.version.software === PLEROMA) {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
           const { configs } = await category.config.getPleromaConfig();
 
           const simplePolicy: SimplePolicyConfig | undefined =
@@ -1077,7 +1168,10 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#get}
        */
       getDomainAllows: async (params?: AdminGetDomainAllowsParams) => {
-        if (client.features.version.software === PLEROMA) {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
           const { configs } = await category.config.getPleromaConfig();
 
           const simplePolicy: SimplePolicyConfig | undefined =
@@ -1113,6 +1207,15 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#get-one}
        */
       getDomainAllow: async (domainAllowId: string) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const domainAllows = await category.domainAllows.getDomainAllows();
+
+          return domainAllows.items.find((allow) => allow.id === domainAllowId)!;
+        }
+
         const response = await client.request(`/api/v1/admin/domain_allows/${domainAllowId}`);
 
         return v.parse(adminDomainAllowSchema, response.json);
@@ -1124,6 +1227,41 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#create}
        */
       createDomainAllow: async (domain: string) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig | undefined =
+            configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') ||
+            undefined;
+
+          if (simplePolicy) {
+            let accepts = simplePolicy.value.find(({ tuple }) => tuple[0] === ':accept');
+
+            if (!accepts) {
+              accepts = { tuple: [':accept', []] };
+              simplePolicy.value.push(accepts);
+            }
+
+            if (accepts.tuple[1].find(({ tuple }) => tuple[0] === domain)) {
+              return {};
+            }
+
+            accepts.tuple[1].push({ tuple: [domain, ''] });
+
+            await client.request('/api/v1/pleroma/admin/config', {
+              method: 'POST',
+              body: {
+                configs: [simplePolicy],
+              },
+            });
+          }
+
+          return {};
+        }
+
         const response = await client.request('/api/v1/admin/domain_allows', {
           method: 'POST',
           body: { domain },
@@ -1138,7 +1276,10 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#delete}
        */
       deleteDomainAllow: async (domainAllowId: string) => {
-        if (client.features.version.software === PLEROMA) {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
           const { configs } = await category.config.getPleromaConfig();
 
           const simplePolicy: SimplePolicyConfig | undefined =
