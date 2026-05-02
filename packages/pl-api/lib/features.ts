@@ -361,6 +361,7 @@ const getFeatures = (instance: Instance) => {
      */
     adminDomainBlocks: any([
       v.software === AKKOMA,
+      v.software === GOTOSOCIAL,
       v.software === MASTODON,
       v.software === PLEROMA,
     ]),

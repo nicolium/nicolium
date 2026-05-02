@@ -1,3 +1,4 @@
+import { AKKOMA, GOTOSOCIAL, PLEROMA, type AdminDomainBlock } from 'pl-api';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -6,16 +7,39 @@ import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
+import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
+import { useFeatures } from '@/hooks/use-features';
+import {
+  useCreateDomainBlockMutation,
+  useUpdateDomainBlockMutation,
+} from '@/queries/admin/use-domain-blocks';
 import toast from '@/toast';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
-import type { AdminDomainBlock } from 'pl-api';
-import Textarea from '@/components/ui/textarea';
 
 const messages = defineMessages({
+  updateSuccess: {
+    id: 'admin.edit_domain_block.update_success',
+    defaultMessage: 'Domain block updated successfully',
+  },
+  updateError: {
+    id: 'admin.edit_domain_block.update_error',
+    defaultMessage: 'Failed to update domain block',
+  },
+  createSuccess: {
+    id: 'admin.edit_domain_block.create_success',
+    defaultMessage: 'Domain block created successfully',
+  },
+  createError: {
+    id: 'admin.edit_domain_block.create_error',
+    defaultMessage: 'Failed to create domain block',
+  },
   save: { id: 'admin.edit_domain_block.save', defaultMessage: 'Save' },
-  domainPlaceholder: { id: 'admin.edit_domain_block.fields.domain_placeholder', defaultMessage: 'Domain' },
+  domainPlaceholder: {
+    id: 'admin.edit_domain_block.fields.domain_placeholder',
+    defaultMessage: 'Domain',
+  },
   privateCommentPlaceholder: {
     id: 'admin.edit_domain_block.fields.private_comment_placeholder',
     defaultMessage: 'Only visible to admins',
@@ -36,8 +60,12 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
 }) => {
   const intl = useIntl();
 
+  const features = useFeatures();
+
   const [domain, setDomain] = useState('');
-  const [suspend, setSuspend] = useState(domainBlock ? domainBlock.severity === 'suspend' : false);
+  const [suspend, setSuspend] = useState(
+    domainBlock ? domainBlock.severity === 'suspend' : features.version.software === GOTOSOCIAL,
+  );
   const [silence, setSilence] = useState(domainBlock ? domainBlock.severity === 'silence' : true);
   const [rejectMedia, setRejectMedia] = useState(domainBlock?.reject_media ?? false);
   const [rejectReports, setRejectReports] = useState(domainBlock?.reject_reports ?? false);
@@ -45,12 +73,56 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
   const [privateComment, setPrivateComment] = useState(domainBlock?.private_comment ?? '');
   const [publicComment, setPublicComment] = useState(domainBlock?.public_comment ?? '');
 
+  const { mutate: createDomainBlock } = useCreateDomainBlockMutation();
+  const { mutate: updateDomainBlock } = useUpdateDomainBlockMutation(domainBlock?.id || '');
+
   const onClickClose = () => {
     onClose('EDIT_DOMAIN_BLOCK');
   };
 
   const handleSubmit = () => {
-    
+    if (domainBlock) {
+      updateDomainBlock(
+        {
+          severity: suspend ? 'suspend' : silence ? 'silence' : 'noop',
+          reject_media: rejectMedia,
+          reject_reports: rejectReports,
+          obfuscate,
+          private_comment: privateComment,
+          public_comment: publicComment,
+        },
+        {
+          onSuccess: () => {
+            toast.success(intl.formatMessage(messages.updateSuccess));
+            onClose('EDIT_DOMAIN_BLOCK');
+          },
+          onError: () => {
+            toast.error(intl.formatMessage(messages.updateError));
+          },
+        },
+      );
+    } else {
+      createDomainBlock(
+        {
+          domain,
+          severity: suspend ? 'suspend' : silence ? 'silence' : 'noop',
+          reject_media: rejectMedia,
+          reject_reports: rejectReports,
+          obfuscate,
+          private_comment: privateComment,
+          public_comment: publicComment,
+        },
+        {
+          onSuccess: () => {
+            toast.success(intl.formatMessage(messages.createSuccess));
+            onClose('EDIT_DOMAIN_BLOCK');
+          },
+          onError: () => {
+            toast.error(intl.formatMessage(messages.createError));
+          },
+        },
+      );
+    }
   };
 
   return (
@@ -77,7 +149,10 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
         {!domainBlock && (
           <FormGroup
             labelText={
-              <FormattedMessage id='admin.edit_domain_block.fields.domain_label' defaultMessage='Domain' />
+              <FormattedMessage
+                id='admin.edit_domain_block.fields.domain_label'
+                defaultMessage='Domain'
+              />
             }
           >
             <Input
@@ -91,38 +166,50 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
           </FormGroup>
         )}
         <List>
-          <ListItem
-            label={
-              <FormattedMessage
-                id='admin.edit_domain_block.fields.suspend_label'
-                defaultMessage='Suspend'
-              />
-            }
-            hint={
-              <FormattedMessage
-                id='admin.edit_domain_block.fields.suspend_hint'
-                defaultMessage='When checked, all incoming data from this domain will be rejected'
-              />
-            }
-          >
-            <Toggle checked={suspend} onChange={({ target }) => setSuspend(target.checked)} disabled={silence} />
-          </ListItem>
-          <ListItem
-            label={
-              <FormattedMessage
-                id='admin.edit_domain_block.fields.silence_label'
-                defaultMessage='Silence'
-              />
-            }
-            hint={
-              <FormattedMessage
-                id='admin.edit_domain_block.fields.silence_hint'
-                defaultMessage='When checked, incoming data from this domain will be accepted but hidden from users by default'
-              />
-            }
-          >
-            <Toggle checked={silence} onChange={({ target }) => setSilence(target.checked)} disabled={suspend} />
-          </ListItem>
+          {features.version.software !== GOTOSOCIAL && (
+            <>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='admin.edit_domain_block.fields.suspend_label'
+                    defaultMessage='Suspend'
+                  />
+                }
+                hint={
+                  <FormattedMessage
+                    id='admin.edit_domain_block.fields.suspend_hint'
+                    defaultMessage='When checked, all incoming data from this domain will be rejected'
+                  />
+                }
+              >
+                <Toggle
+                  checked={suspend}
+                  onChange={({ target }) => setSuspend(target.checked)}
+                  disabled={silence}
+                />
+              </ListItem>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='admin.edit_domain_block.fields.silence_label'
+                    defaultMessage='Silence'
+                  />
+                }
+                hint={
+                  <FormattedMessage
+                    id='admin.edit_domain_block.fields.silence_hint'
+                    defaultMessage='When checked, incoming data from this domain will be accepted but hidden from users by default'
+                  />
+                }
+              >
+                <Toggle
+                  checked={silence}
+                  onChange={({ target }) => setSilence(target.checked)}
+                  disabled={suspend}
+                />
+              </ListItem>
+            </>
+          )}
           <ListItem
             label={
               <FormattedMessage
@@ -139,49 +226,55 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
           >
             <Toggle checked={obfuscate} onChange={({ target }) => setObfuscate(target.checked)} />
           </ListItem>
-          <ListItem
-            label={
-              <FormattedMessage
-                id='admin.edit_domain_block.fields.reject_media_label'
-                defaultMessage='Reject media'
-              />
-            }
-          >
-            <Toggle
-              checked={rejectMedia}
-              onChange={({ target }) => setRejectMedia(target.checked)}
-              disabled={suspend}
-            />
-          </ListItem>
-          <ListItem
-            label={
-              <FormattedMessage
-                id='admin.edit_domain_block.fields.reject_reports_label'
-                defaultMessage='Reject reports'
-              />
-            }
-          >
-            <Toggle
-              checked={rejectReports}
-              onChange={({ target }) => setRejectReports(target.checked)}
-              disabled={suspend}
-            />
-          </ListItem>
+          {features.version.software !== GOTOSOCIAL && (
+            <>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='admin.edit_domain_block.fields.reject_media_label'
+                    defaultMessage='Reject media'
+                  />
+                }
+              >
+                <Toggle
+                  checked={rejectMedia}
+                  onChange={({ target }) => setRejectMedia(target.checked)}
+                  disabled={suspend}
+                />
+              </ListItem>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='admin.edit_domain_block.fields.reject_reports_label'
+                    defaultMessage='Reject reports'
+                  />
+                }
+              >
+                <Toggle
+                  checked={rejectReports}
+                  onChange={({ target }) => setRejectReports(target.checked)}
+                  disabled={suspend}
+                />
+              </ListItem>
+            </>
+          )}
         </List>
-        <FormGroup
-          labelText={
-            <FormattedMessage
-              id='admin.edit_domain_block.fields.private_comment_label'
-              defaultMessage='Private comment'
+        {features.version.software !== PLEROMA && features.version.software !== AKKOMA && (
+          <FormGroup
+            labelText={
+              <FormattedMessage
+                id='admin.edit_domain_block.fields.private_comment_label'
+                defaultMessage='Private comment'
+              />
+            }
+          >
+            <Textarea
+              placeholder={intl.formatMessage(messages.privateCommentPlaceholder)}
+              value={privateComment}
+              onChange={({ target }) => setPrivateComment(target.value)}
             />
-          }
-        >
-          <Textarea
-            placeholder={intl.formatMessage(messages.privateCommentPlaceholder)}
-            value={privateComment}
-            onChange={({ target }) => setPrivateComment(target.value)}
-          />
-        </FormGroup>
+          </FormGroup>
+        )}
         <FormGroup
           labelText={
             <FormattedMessage

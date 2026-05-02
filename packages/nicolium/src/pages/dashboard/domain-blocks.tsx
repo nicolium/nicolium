@@ -4,19 +4,23 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import {
   useDeleteDomainBlockMutation,
   useDomainBlocksQuery,
 } from '@/queries/admin/use-domain-blocks';
+import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
 import type { AdminDomainBlock } from 'pl-api';
-import { useModalsActions } from '@/stores/modals';
-import Icon from '@/components/ui/icon';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.domain_blocks', defaultMessage: 'Domain blocks' },
+  deleteConfirm: {
+    id: 'confirmations.admin.delete_domain_block.confirm',
+    defaultMessage: 'Delete',
+  },
   deleteSuccess: {
     id: 'admin.domain_blocks.delete_success',
     defaultMessage: 'Domain block deleted',
@@ -35,7 +39,7 @@ const DomainBlock: React.FC<IDomainBlock> = ({ domainBlock }) => {
   const intl = useIntl();
 
   const { mutate: deleteDomainBlock } = useDeleteDomainBlockMutation(domainBlock.id);
-  
+
   const { openModal } = useModalsActions();
 
   const handleEdit = () => {
@@ -43,12 +47,30 @@ const DomainBlock: React.FC<IDomainBlock> = ({ domainBlock }) => {
   };
 
   const handleDelete = () => {
-    deleteDomainBlock(undefined, {
-      onSuccess: () => {
-        toast.success(intl.formatMessage(messages.deleteSuccess));
-      },
-      onError: () => {
-        toast.error(intl.formatMessage(messages.deleteError));
+    openModal('CONFIRM', {
+      heading: (
+        <FormattedMessage
+          id='confirmations.admin.delete_domain_block.heading'
+          defaultMessage='Delete domain block'
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.admin.delete_domain_block.message'
+          defaultMessage='Are you sure you want to delete the block for {domain}?'
+          values={{ domain: domainBlock.domain }}
+        />
+      ),
+      confirm: intl.formatMessage(messages.deleteConfirm),
+      onConfirm: () => {
+        deleteDomainBlock(undefined, {
+          onSuccess: () => {
+            toast.success(intl.formatMessage(messages.deleteSuccess));
+          },
+          onError: () => {
+            toast.error(intl.formatMessage(messages.deleteError));
+          },
+        });
       },
     });
   };
@@ -81,6 +103,11 @@ const DomainBlock: React.FC<IDomainBlock> = ({ domainBlock }) => {
               id='admin.domain_blocks.reject_reports'
               defaultMessage='Reports rejected'
             />
+          </li>
+        )}
+        {domainBlock.obfuscate && (
+          <li>
+            <FormattedMessage id='admin.domain_blocks.obfuscate' defaultMessage='Obfuscated' />
           </li>
         )}
       </ul>
