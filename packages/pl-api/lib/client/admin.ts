@@ -74,6 +74,19 @@ import type {
 import type { EditStatusParams } from '@/params/statuses';
 import type { EmptyObject } from '@/utils/types';
 
+interface SimplePolicyConfig {
+  group: string;
+  key: string;
+  value: Array<{
+    tuple: [
+      string,
+      Array<{
+        tuple: [string, string];
+      }>,
+    ];
+  }>;
+}
+
 const paginatedPleromaAccounts = async (
   client: PlApiBaseClient,
   params: {
@@ -567,25 +580,31 @@ const admin = (client: PlApiBaseClient) => {
        */
       getDomainBlocks: async (params?: AdminGetDomainBlocksParams) => {
         if (client.features.version.software === PLEROMA) {
-          const { configs }  = await category.config.getPleromaConfig();
+          const { configs } = await category.config.getPleromaConfig();
 
-          const simplePolicy: {
-            value: Array<{
-              tuple: [string, Array<{
-                tuple: [string, string]
-              }>]
-            }>
-          } | undefined = configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') || undefined;
+          const simplePolicy: SimplePolicyConfig | undefined =
+            configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') ||
+            undefined;
 
           let domainBlocks: Array<AdminDomainBlock> = [];
 
           if (simplePolicy) {
-            const rejectMedia = simplePolicy.value.find(({ tuple }) => tuple[0] === ':media_removal')?.tuple[1] || [];
-            const rejectReports = simplePolicy.value.find(({ tuple }) => tuple[0] === ':report_removal')?.tuple[1] || [];
-            const silence = simplePolicy.value.find(({ tuple }) => tuple[0] === ':federated_timeline_removal')?.tuple[1] || [];
-            const suspend = simplePolicy.value.find(({ tuple }) => tuple[0] === ':reject')?.tuple[1] || [];
+            const rejectMedia =
+              simplePolicy.value.find(({ tuple }) => tuple[0] === ':media_removal')?.tuple[1] || [];
+            const rejectReports =
+              simplePolicy.value.find(({ tuple }) => tuple[0] === ':report_removal')?.tuple[1] ||
+              [];
+            const silence =
+              simplePolicy.value.find(({ tuple }) => tuple[0] === ':federated_timeline_removal')
+                ?.tuple[1] || [];
+            const suspend =
+              simplePolicy.value.find(({ tuple }) => tuple[0] === ':reject')?.tuple[1] || [];
 
-            const domains = new Set<string>([...rejectMedia, ...rejectReports, ...silence, ...suspend].map((value) => value.tuple[0]).filter((value) => value));
+            const domains = new Set<string>(
+              [...rejectMedia, ...rejectReports, ...silence, ...suspend]
+                .map((value) => value.tuple[0])
+                .filter((value) => value),
+            );
 
             const encoder = new TextEncoder();
 
@@ -593,13 +612,22 @@ const admin = (client: PlApiBaseClient) => {
               domainBlocks.push({
                 id: domain,
                 domain,
-                digest: new Uint8Array(await window.crypto.subtle.digest("SHA-256", encoder.encode(domain))).toHex(),
+                digest: new Uint8Array(
+                  await window.crypto.subtle.digest('SHA-256', encoder.encode(domain)),
+                ).toHex(),
                 created_at: null,
-                severity: suspend.some(({ tuple }) => tuple[0] === domain) ? 'suspend' : silence.some(({ tuple }) => tuple[0] === domain) ? 'silence' : 'noop',
+                severity: suspend.some(({ tuple }) => tuple[0] === domain)
+                  ? 'suspend'
+                  : silence.some(({ tuple }) => tuple[0] === domain)
+                    ? 'silence'
+                    : 'noop',
                 reject_media: rejectMedia.some(({ tuple }) => tuple[0] === domain),
                 reject_reports: rejectReports.some(({ tuple }) => tuple[0] === domain),
                 private_comment: null,
-                public_comment: [...suspend, ...silence, ...rejectMedia, ...rejectReports].find(({ tuple }) => tuple[0] === domain)?.tuple[1] || null,
+                public_comment:
+                  [...suspend, ...silence, ...rejectMedia, ...rejectReports].find(
+                    ({ tuple }) => tuple[0] === domain,
+                  )?.tuple[1] || null,
                 obfuscate: false,
               });
             }
@@ -608,7 +636,11 @@ const admin = (client: PlApiBaseClient) => {
           return new PaginatedResponse(domainBlocks);
         }
 
-        return client.paginatedGet('/api/v1/admin/domain_blocks', { params }, adminDomainBlockSchema)
+        return client.paginatedGet(
+          '/api/v1/admin/domain_blocks',
+          { params },
+          adminDomainBlockSchema,
+        );
       },
 
       /**
@@ -619,7 +651,7 @@ const admin = (client: PlApiBaseClient) => {
       getDomainBlock: async (domainBlockId: string) => {
         if (client.features.version.software === PLEROMA) {
           const domainBlocks = await category.domainBlocks.getDomainBlocks();
-          
+
           return domainBlocks.items.find((block) => block.id === domainBlockId)!;
         }
 
@@ -1020,18 +1052,15 @@ const admin = (client: PlApiBaseClient) => {
         if (client.features.version.software === PLEROMA) {
           const { configs } = await category.config.getPleromaConfig();
 
-          const simplePolicy: {
-            value: Array<{
-              tuple: [string, Array<{
-                tuple: [string, string]
-              }>]
-            }>
-          } | undefined = configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') || undefined;
+          const simplePolicy: SimplePolicyConfig | undefined =
+            configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') ||
+            undefined;
 
           let domainAllows: Array<AdminDomainAllow> = [];
 
           if (simplePolicy) {
-            const accepts = simplePolicy.value.find(({ tuple }) => tuple[0] === ':accept')?.tuple[1] || [];
+            const accepts =
+              simplePolicy.value.find(({ tuple }) => tuple[0] === ':accept')?.tuple[1] || [];
 
             domainAllows = accepts.map(({ tuple }) => ({
               id: tuple[0],
@@ -1043,7 +1072,11 @@ const admin = (client: PlApiBaseClient) => {
           return new PaginatedResponse(domainAllows);
         }
 
-        return client.paginatedGet('/api/v1/admin/domain_allows', { params }, adminDomainAllowSchema)
+        return client.paginatedGet(
+          '/api/v1/admin/domain_allows',
+          { params },
+          adminDomainAllowSchema,
+        );
       },
 
       /**
@@ -1077,6 +1110,29 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#delete}
        */
       deleteDomainAllow: async (domainAllowId: string) => {
+        if (client.features.version.software === PLEROMA) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig | undefined =
+            configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') ||
+            undefined;
+
+          if (simplePolicy) {
+            simplePolicy.value[1].tuple[1] = simplePolicy.value[1].tuple[1].filter(
+              ({ tuple }) => tuple[0] !== domainAllowId,
+            );
+
+            await client.request('/api/v1/pleroma/admin/config', {
+              method: 'PUT',
+              body: {
+                configs: [simplePolicy],
+              },
+            });
+
+            return {};
+          }
+        }
+
         const response = await client.request<EmptyObject>(
           `/api/v1/admin/domain_allows/${domainAllowId}`,
           {
