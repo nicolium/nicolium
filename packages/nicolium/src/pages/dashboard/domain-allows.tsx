@@ -9,6 +9,7 @@ import {
   useDeleteDomainAllowMutation,
   useDomainAllowsQuery,
 } from '@/queries/admin/use-domain-allows';
+import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
 import type { AdminDomainAllow } from 'pl-api';
@@ -16,6 +17,10 @@ import type { AdminDomainAllow } from 'pl-api';
 const messages = defineMessages({
   heading: { id: 'column.admin.domain_allows', defaultMessage: 'Domain allows' },
   domainPlaceholder: { id: 'admin.domain_allows.domain_placeholder', defaultMessage: 'Domain' },
+  deleteConfirm: {
+    id: 'confirmations.admin.delete_domain_allow.confirm',
+    defaultMessage: 'Delete',
+  },
   createSuccess: {
     id: 'admin.domain_allows.create_success',
     defaultMessage: 'Domain allow created',
@@ -41,15 +46,35 @@ interface IDomainAllow {
 const DomainAllow: React.FC<IDomainAllow> = ({ domainAllow }) => {
   const intl = useIntl();
 
+  const { openModal } = useModalsActions();
+
   const { mutate: deleteDomainAllow } = useDeleteDomainAllowMutation(domainAllow.id);
 
   const handleDelete = () => {
-    deleteDomainAllow(undefined, {
-      onSuccess: () => {
-        toast.success(intl.formatMessage(messages.deleteSuccess));
-      },
-      onError: () => {
-        toast.error(intl.formatMessage(messages.deleteError));
+    openModal('CONFIRM', {
+      heading: (
+        <FormattedMessage
+          id='confirmations.admin.delete_domain_allow.heading'
+          defaultMessage='Delete domain allow'
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.admin.delete_domain_allow.message'
+          defaultMessage='Are you sure you want to delete the allow for {domain}?'
+          values={{ domain: domainAllow.domain }}
+        />
+      ),
+      confirm: intl.formatMessage(messages.deleteConfirm),
+      onConfirm: () => {
+        deleteDomainAllow(undefined, {
+          onSuccess: () => {
+            toast.success(intl.formatMessage(messages.deleteSuccess));
+          },
+          onError: () => {
+            toast.error(intl.formatMessage(messages.deleteError));
+          },
+        });
       },
     });
   };
