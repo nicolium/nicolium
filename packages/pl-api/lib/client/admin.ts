@@ -712,7 +712,7 @@ const admin = (client: PlApiBaseClient) => {
             );
 
             await client.request('/api/v1/pleroma/admin/config', {
-              method: 'PUT',
+              method: 'POST',
               body: {
                 configs: [simplePolicy],
               },
@@ -1152,7 +1152,7 @@ const admin = (client: PlApiBaseClient) => {
               accepts.tuple[1] = accepts.tuple[1].filter(({ tuple }) => tuple[0] !== domainAllowId);
 
               await client.request('/api/v1/pleroma/admin/config', {
-                method: 'PUT',
+                method: 'POST',
                 body: {
                   configs: [simplePolicy],
                 },
