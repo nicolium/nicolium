@@ -23,6 +23,7 @@ import Purify from '@/utils/url-purify';
 
 import { AccountLink } from './accounts/account-link';
 import HoverAccountWrapper from './accounts/hover-account-wrapper';
+import StillImage from './still-image';
 import Avatar from './ui/avatar';
 
 const messages = defineMessages({
@@ -229,18 +230,18 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   const canvas = <Blurhash className='absolute inset-0 -z-10 size-full' hash={card.blurhash} />;
 
-  const thumbnail = (
-    <div
+  const thumbnail = card.image ? (
+    <StillImage
+      src={card.image}
       style={{
-        backgroundImage: `url(${card.image})`,
         width: horizontal ? width : undefined,
         height: horizontal ? height : undefined,
         aspectRatio: ratio,
       }}
+      alt={card.image_description || card.title}
       className='status-card__image-image'
-      title={card.image_description || undefined}
     />
-  );
+  ) : null;
 
   if (interactive && !disableUserProvidedMedia) {
     if (embedded) {
@@ -300,14 +301,10 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   } else if (card.image && !disableUserProvidedMedia) {
     embed = (
       <div
-        className={clsx(
-          'status-card__image',
-          'w-full flex-none rounded-l md:size-auto md:flex-auto',
-          {
-            'h-auto': horizontal,
-            'h-[200px]': !horizontal,
-          },
-        )}
+        className={clsx('status-card__image', 'w-full flex-none rounded-l md:w-min', {
+          'h-auto': horizontal,
+          'h-[200px]': !horizontal,
+        })}
       >
         {canvas}
         {thumbnail}
