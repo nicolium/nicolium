@@ -1139,10 +1139,28 @@ export const adminRulesRoute = createRoute({
 
 export const adminPleromaConfigRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/nicolium/admin/pleroma-config',
+  path: '/nicolium/admin/pleroma_config',
   component: lazy(() => import('@/pages/dashboard/pleroma-config')),
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || !features.pleromaAdminConfig) throw notFound();
+  }),
+});
+
+export const adminDomainBlocksRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/domain_blocks',
+  component: lazy(() => import('@/pages/dashboard/domain-blocks')),
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
+    if (!isAdmin || !features.adminDomainBlocks) throw notFound();
+  }),
+});
+
+export const adminDomainAllowsRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/domain_allows',
+  component: lazy(() => import('@/pages/dashboard/domain-allows')),
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
+    if (!isAdmin || !features.adminDomainBlocks) throw notFound();
   }),
 });
 
@@ -1445,6 +1463,8 @@ const routeTree = rootRoute.addChildren([
     adminDomainsRoute,
     adminRulesRoute,
     adminPleromaConfigRoute,
+    adminDomainBlocksRoute,
+    adminDomainAllowsRoute,
   ]),
   layouts.chats.addChildren([
     chatsRoute.addChildren([

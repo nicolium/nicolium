@@ -291,6 +291,29 @@ const Dashboard: React.FC = () => {
             />
           )}
 
+          {features.adminDomainBlocks &&
+            (instance.configuration.limited_federation ? (
+              <ListItem
+                to='/nicolium/admin/domain_allows'
+                label={
+                  <FormattedMessage
+                    id='column.admin.domain_allows'
+                    defaultMessage='Domain allows'
+                  />
+                }
+              />
+            ) : (
+              <ListItem
+                to='/nicolium/admin/domain_blocks'
+                label={
+                  <FormattedMessage
+                    id='column.admin.domain_blocks'
+                    defaultMessage='Domain blocks'
+                  />
+                }
+              />
+            ))}
+
           {features.pleromaAdminAnnouncements && (
             <ListItem
               to='/nicolium/admin/announcements'
@@ -309,7 +332,7 @@ const Dashboard: React.FC = () => {
 
           {features.pleromaAdminConfig && (
             <ListItem
-              to='/nicolium/admin/pleroma-config'
+              to='/nicolium/admin/pleroma_config'
               label={
                 <FormattedMessage
                   id='column.admin.pleroma_config'

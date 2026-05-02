@@ -348,6 +348,24 @@ const getFeatures = (instance: Instance) => {
     adminDeleteStatus: any([v.software === AKKOMA, v.software === MITRA, v.software === PLEROMA]),
 
     /**
+     * Ability to manage domain blocks and allows by admins.
+     * @see GET /api/v1/admin/domain_blocks
+     * @see GET /api/v1/admin/domain_blocks/:id
+     * @see POST /api/v1/admin/domain_blocks
+     * @see PUT /api/v1/admin/domain_blocks/:id
+     * @see DELETE /api/v1/admin/domain_blocks/:id
+     * @see GET /api/v1/admin/domain_allows
+     * @see GET /api/v1/admin/domain_allows/:id
+     * @see POST /api/v1/admin/domain_allows
+     * @see DELETE /api/v1/admin/domain_allows/:id
+     */
+    adminDomainBlocks: any([
+      v.software === AKKOMA,
+      v.software === MASTODON,
+      v.software === PLEROMA,
+    ]),
+
+    /**
      * Ability to manage instance rules by admins.
      * @see GET /api/v1/pleroma/admin/rules
      * @see POST /api/v1/pleroma/admin/rules

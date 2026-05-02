@@ -26,6 +26,7 @@ const MODAL_COMPONENTS = {
   EDIT_ANNOUNCEMENT: lazy(() => import('@/modals/edit-announcement-modal')),
   EDIT_BOOKMARK_FOLDER: lazy(() => import('@/modals/edit-bookmark-folder-modal')),
   EDIT_DOMAIN: lazy(() => import('@/modals/edit-domain-modal')),
+  EDIT_DOMAIN_BLOCK: lazy(() => import('@/modals/edit-domain-block-modal')),
   EDIT_FEDERATION: lazy(() => import('@/modals/edit-federation-modal')),
   EDIT_RULE: lazy(() => import('@/modals/edit-rule-modal')),
   EMBED: lazy(() => import('@/modals/embed-modal')),

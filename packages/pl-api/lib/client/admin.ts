@@ -32,6 +32,8 @@ import type { PlApiBaseClient } from '@/client-base';
 import type {
   AdminAccount,
   AdminAnnouncement,
+  AdminDomainAllow,
+  AdminDomainBlock,
   AdminModerationLogEntry,
   AdminReport,
   PleromaConfig,
@@ -563,8 +565,51 @@ const admin = (client: PlApiBaseClient) => {
        * Show information about all blocked domains.
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#get}
        */
-      getDomainBlocks: (params?: AdminGetDomainBlocksParams) =>
-        client.paginatedGet('/api/v1/admin/domain_blocks', { params }, adminDomainBlockSchema),
+      getDomainBlocks: async (params?: AdminGetDomainBlocksParams) => {
+        if (client.features.version.software === PLEROMA) {
+          const { configs }  = await category.config.getPleromaConfig();
+
+          const simplePolicy: {
+            value: Array<{
+              tuple: [string, Array<{
+                tuple: [string, string]
+              }>]
+            }>
+          } | undefined = configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') || undefined;
+
+          let domainBlocks: Array<AdminDomainBlock> = [];
+
+          if (simplePolicy) {
+            const rejectMedia = simplePolicy.value.find(({ tuple }) => tuple[0] === ':media_removal')?.tuple[1] || [];
+            const rejectReports = simplePolicy.value.find(({ tuple }) => tuple[0] === ':report_removal')?.tuple[1] || [];
+            const silence = simplePolicy.value.find(({ tuple }) => tuple[0] === ':federated_timeline_removal')?.tuple[1] || [];
+            const suspend = simplePolicy.value.find(({ tuple }) => tuple[0] === ':reject')?.tuple[1] || [];
+
+            const domains = new Set<string>([...rejectMedia, ...rejectReports, ...silence, ...suspend].map((value) => value.tuple[0]).filter((value) => value));
+
+            const encoder = new TextEncoder();
+
+            for (const domain of domains) {
+              domainBlocks.push({
+                id: domain,
+                domain,
+                digest: new Uint8Array(await window.crypto.subtle.digest("SHA-256", encoder.encode(domain))).toHex(),
+                created_at: null,
+                severity: suspend.some(({ tuple }) => tuple[0] === domain) ? 'suspend' : silence.some(({ tuple }) => tuple[0] === domain) ? 'silence' : 'noop',
+                reject_media: rejectMedia.some(({ tuple }) => tuple[0] === domain),
+                reject_reports: rejectReports.some(({ tuple }) => tuple[0] === domain),
+                private_comment: null,
+                public_comment: [...suspend, ...silence, ...rejectMedia, ...rejectReports].find(({ tuple }) => tuple[0] === domain)?.tuple[1] || null,
+                obfuscate: false,
+              });
+            }
+          }
+
+          return new PaginatedResponse(domainBlocks);
+        }
+
+        return client.paginatedGet('/api/v1/admin/domain_blocks', { params }, adminDomainBlockSchema)
+      },
 
       /**
        * Get a single blocked domain
@@ -572,6 +617,12 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#get-one}
        */
       getDomainBlock: async (domainBlockId: string) => {
+        if (client.features.version.software === PLEROMA) {
+          const domainBlocks = await category.domainBlocks.getDomainBlocks();
+          
+          return domainBlocks.items.find((block) => block.id === domainBlockId)!;
+        }
+
         const response = await client.request(`/api/v1/admin/domain_blocks/${domainBlockId}`);
 
         return v.parse(adminDomainBlockSchema, response.json);
@@ -965,8 +1016,35 @@ const admin = (client: PlApiBaseClient) => {
        * Show information about all allowed domains.
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#get}
        */
-      getDomainAllows: (params?: AdminGetDomainAllowsParams) =>
-        client.paginatedGet('/api/v1/admin/domain_allows', { params }, adminDomainAllowSchema),
+      getDomainAllows: async (params?: AdminGetDomainAllowsParams) => {
+        if (client.features.version.software === PLEROMA) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: {
+            value: Array<{
+              tuple: [string, Array<{
+                tuple: [string, string]
+              }>]
+            }>
+          } | undefined = configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') || undefined;
+
+          let domainAllows: Array<AdminDomainAllow> = [];
+
+          if (simplePolicy) {
+            const accepts = simplePolicy.value.find(({ tuple }) => tuple[0] === ':accept')?.tuple[1] || [];
+
+            domainAllows = accepts.map(({ tuple }) => ({
+              id: tuple[0],
+              domain: tuple[0],
+              created_at: null,
+            }));
+          }
+
+          return new PaginatedResponse(domainAllows);
+        }
+
+        return client.paginatedGet('/api/v1/admin/domain_allows', { params }, adminDomainAllowSchema)
+      },
 
       /**
        * Get a single allowed domain

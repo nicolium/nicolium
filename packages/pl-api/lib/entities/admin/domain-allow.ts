@@ -9,7 +9,7 @@ import { datetimeSchema } from '../utils';
 const adminDomainAllowSchema = v.object({
   id: v.string(),
   domain: v.string(),
-  created_at: datetimeSchema,
+  created_at: v.fallback(v.nullable(datetimeSchema), null),
 });
 
 /**
