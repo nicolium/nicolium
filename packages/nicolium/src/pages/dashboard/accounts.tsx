@@ -245,7 +245,14 @@ const AccountsPage: React.FC = () => {
         placeholderCount={20}
       >
         {(accountIds ?? []).map((id) => (
-          <AccountContainer key={id} id={id} withDate hideActions />
+          <AccountContainer
+            key={id}
+            id={id}
+            withDate
+            hideActions
+            to='/nicolium/admin/accounts/$accountId'
+            params={{ accountId: id }}
+          />
         ))}
       </ScrollableList>
     </Column>
