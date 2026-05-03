@@ -1841,3 +1841,68 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     border: 1px solid rgb(var(--color-gray-800));
   }
 }
+
+.⁂-still-image {
+  isolation: isolate;
+  position: relative;
+
+  &--hover-to-play {
+    .⁂-still-image__image {
+      opacity: 0;
+    }
+
+    &:hover,
+    .⁂-status-reactions-bar__button:hover & {
+      .⁂-still-image__image {
+        animation: still-image-show-awaited 1s forwards;
+      }
+
+      .⁂-still-image__static-image {
+        animation: still-image-hide-awaited 1s forwards;
+      }
+    }
+  }
+
+  &__static-image {
+    position: absolute;
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes still-image-show-awaited {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  50.01% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
+@keyframes still-image-hide-awaited {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  50.01% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

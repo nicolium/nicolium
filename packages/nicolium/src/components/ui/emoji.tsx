@@ -11,12 +11,11 @@ interface IEmoji extends Pick<
 > {
   /** Unicode emoji character. */
   emoji?: string;
-  noGroup?: boolean;
   staticSrc?: string;
 }
 
 /** A single emoji image. */
-const Emoji: React.FC<IEmoji> = ({ emoji, alt, src, staticSrc, noGroup, ...rest }) => {
+const Emoji: React.FC<IEmoji> = ({ emoji, alt, src, staticSrc, ...rest }) => {
   const { disableUserProvidedMedia, systemEmojiFont } = useSettings();
 
   let filename;
@@ -31,15 +30,7 @@ const Emoji: React.FC<IEmoji> = ({ emoji, alt, src, staticSrc, noGroup, ...rest 
   if (src) {
     if (disableUserProvidedMedia) return alt ?? <span className={rest.className}>{emoji}</span>;
     return (
-      <StillImage
-        alt={alt ?? emoji}
-        src={src}
-        staticSrc={staticSrc}
-        isGif
-        noGroup={noGroup}
-        letterboxed
-        {...rest}
-      />
+      <StillImage alt={alt ?? emoji} src={src} staticSrc={staticSrc} isGif letterboxed {...rest} />
     );
   }
 
