@@ -13,8 +13,8 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import type { Features, PaginatedResponse, PlApiClient } from 'pl-api';
 
 class PaginatedResponseArray<T> extends Array<T> {
-  declare total: number | undefined;
-  declare partial: boolean | undefined;
+  total: number | undefined;
+  partial: boolean | undefined;
 
   static override from<T>(items: ArrayLike<T> | Iterable<T>): PaginatedResponseArray<T> {
     const arr = new PaginatedResponseArray<T>();
@@ -24,20 +24,9 @@ class PaginatedResponseArray<T> extends Array<T> {
     return arr;
   }
 
-  /** Set metadata as non-enumerable to preserve TanStack Query structural sharing. */
   setMeta(total: number | undefined, partial: boolean | undefined): this {
-    Object.defineProperty(this, 'total', {
-      value: total,
-      writable: true,
-      enumerable: false,
-      configurable: true,
-    });
-    Object.defineProperty(this, 'partial', {
-      value: partial,
-      writable: true,
-      enumerable: false,
-      configurable: true,
-    });
+    this.total = total;
+    this.partial = partial;
     return this;
   }
 }
