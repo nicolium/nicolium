@@ -153,14 +153,16 @@
     }
 
     img,
-    svg {
+    svg,
+    canvas {
       max-width: 12rem;
       height: 1.25rem;
       transition: transform 150ms var(--ease-default);
     }
 
     &:hover img,
-    &:hover svg {
+    &:hover svg,
+    &:hover canvas {
       transform: scale(1.25);
     }
 

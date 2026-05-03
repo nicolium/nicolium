@@ -26,8 +26,6 @@ interface IStillImage {
   onLoad?: React.ReactEventHandler<HTMLImageElement>;
   /** Treat as animated, no matter the extension */
   isGif?: boolean;
-  /** Specify that the group is defined by the parent */
-  noGroup?: boolean;
 }
 
 /** Renders images on a canvas, only playing GIFs if autoPlayGif is enabled. */
@@ -43,7 +41,6 @@ const StillImage: React.FC<IStillImage> = ({
   onError,
   onLoad,
   isGif,
-  noGroup,
 }) => {
   const { autoPlayGif } = useSettings();
 
@@ -82,7 +79,7 @@ const StillImage: React.FC<IStillImage> = ({
   return (
     <span
       data-testid='still-image-container'
-      className={clsx(className, 'relative isolate', { group: !noGroup })}
+      className={clsx(className, '⁂-still-image', { '⁂-still-image--hover-to-play': hoverToPlay })}
       style={style}
     >
       <img
@@ -93,7 +90,7 @@ const StillImage: React.FC<IStillImage> = ({
         onLoad={handleImageLoad}
         onError={onError}
         className={clsx(baseClassName, {
-          'invisible group-hover:visible': hoverToPlay,
+          '⁂-still-image__image': hoverToPlay,
         })}
       />
 
@@ -103,13 +100,10 @@ const StillImage: React.FC<IStillImage> = ({
             src={staticSrc}
             alt={alt}
             title={alt}
-            className={clsx(baseClassName, 'absolute top-0 group-hover:invisible')}
+            className={clsx(baseClassName, '⁂-still-image__static-image')}
           />
         ) : (
-          <canvas
-            ref={canvas}
-            className={clsx(baseClassName, 'absolute top-0 group-hover:invisible')}
-          />
+          <canvas ref={canvas} className={clsx(baseClassName, '⁂-still-image__static-image')} />
         ))}
 
       {hoverToPlay && showExt && (
