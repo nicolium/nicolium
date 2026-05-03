@@ -1036,6 +1036,25 @@ export const adminDashboardRoute = createRoute({
   }),
 });
 
+export const adminAccountsRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/accounts',
+  component: lazy(() => import('@/pages/dashboard/accounts')),
+  validateSearch: v.object({
+    origin: v.optional(v.picklist(['local', 'remote'])),
+    status: v.optional(v.picklist(['active', 'pending', 'disabled', 'silenced', 'suspended'])),
+    permissions: v.optional(v.literal('staff')),
+    username: v.optional(v.string()),
+    display_name: v.optional(v.string()),
+    by_domain: v.optional(v.string()),
+    email: v.optional(v.string()),
+    ip: v.optional(v.string()),
+  }),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
 export const adminAccountRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/accounts/$accountId',
@@ -1081,18 +1100,6 @@ export const adminLogRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/log',
   component: lazy(() => import('@/pages/dashboard/moderation-log')),
-  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
-    if (!isAdmin) throw notFound();
-  }),
-});
-
-export const adminUsersRoute = createRoute({
-  getParentRoute: () => layouts.admin,
-  path: '/nicolium/admin/users',
-  component: lazy(() => import('@/pages/dashboard/user-index')),
-  validateSearch: v.object({
-    q: v.optional(v.string()),
-  }),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1457,12 +1464,12 @@ const redirectRoutes = [
 const routeTree = rootRoute.addChildren([
   layouts.adminHome.addChildren([adminDashboardRoute]),
   layouts.admin.addChildren([
+    adminAccountsRoute,
     adminAccountRoute,
     adminAwaitingApprovalRoute,
     adminReportsRoute,
     adminReportRoute,
     adminLogRoute,
-    adminUsersRoute,
     adminThemeRoute,
     adminRelaysRoute,
     adminAnnouncementsRoute,

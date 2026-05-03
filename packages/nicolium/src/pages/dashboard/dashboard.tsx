@@ -66,14 +66,16 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
                 measure='new_users'
                 startAt={monthAgo}
                 endAt={today}
-                to='/nicolium/admin/users'
+                to='/nicolium/admin/accounts'
+                search={{ origin: 'local' }}
                 label={
                   <FormattedMessage id='admin.counters.new_users' defaultMessage='new users' />
                 }
               />
             ) : (
               <DashCounter
-                to='/nicolium/admin/users'
+                to='/nicolium/admin/accounts'
+                search={{ origin: 'local' }}
                 count={userCount}
                 label={
                   <FormattedMessage
