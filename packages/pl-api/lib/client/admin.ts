@@ -189,7 +189,7 @@ const updateSimplePolicy = (
       (params.reject_media && policy === ':media_removal') ||
       (params.reject_reports && policy === ':report_removal') ||
       (params.severity === 'silence' && policy === ':federated_timeline_removal') ||
-      (params.severity == 'suspend' && policy === ':reject')
+      (params.severity === 'suspend' && policy === ':reject')
     ) {
       entry.tuple[1].push({ tuple: [domain, params.public_comment || ''] });
     }
