@@ -1002,7 +1002,8 @@ body {
     grid-column: span 12 / span 12;
   }
 
-  &__settings-sections {
+  &__settings-sections,
+  &__admin-sections {
     display: none;
     grid-column: span 3 / span 3;
 

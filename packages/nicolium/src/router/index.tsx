@@ -20,6 +20,7 @@ import Layout from '@/components/ui/layout';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import AdminHomeLayout from '@/layouts/admin-home-layout';
 import AdminLayout from '@/layouts/admin-layout';
 import ChatsLayout from '@/layouts/chats-layout';
 import DefaultLayout from '@/layouts/default-layout';
@@ -88,6 +89,11 @@ const layouts = {
     getParentRoute: () => rootRoute,
     id: 'admin-layout',
     component: AdminLayout,
+  }),
+  adminHome: createRoute({
+    getParentRoute: () => rootRoute,
+    id: 'admin-home-layout',
+    component: AdminHomeLayout,
   }),
   chats: createRoute({
     getParentRoute: () => rootRoute,
@@ -1022,7 +1028,7 @@ export const frontendConfigRoute = createRoute({
 
 // Admin routes
 export const adminDashboardRoute = createRoute({
-  getParentRoute: () => layouts.admin,
+  getParentRoute: () => layouts.adminHome,
   path: '/nicolium/admin',
   component: lazy(() => import('@/pages/dashboard/dashboard')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
@@ -1449,8 +1455,8 @@ const redirectRoutes = [
 ];
 
 const routeTree = rootRoute.addChildren([
+  layouts.adminHome.addChildren([adminDashboardRoute]),
   layouts.admin.addChildren([
-    adminDashboardRoute,
     adminAccountRoute,
     adminAwaitingApprovalRoute,
     adminReportsRoute,
