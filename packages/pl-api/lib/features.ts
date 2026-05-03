@@ -1229,6 +1229,7 @@ const getFeatures = (instance: Instance) => {
     mastodonAdminV2: any([
       v.software === GOTOSOCIAL,
       v.software === MASTODON && gte(v.version, '3.5.0'),
+      instance.api_versions['mastodon_admin_api.pleroma.pl-api'] >= 1,
     ]),
 
     /**
