@@ -2,14 +2,25 @@
 
 ## Unreleased
 
+### Added
+
+- Admin interface for managing domain allows/blocks.
+- Support for Iceshrimp.NET 2FA configuration.
+
 ### Changed
 
 - Added toast on resetting customizable items to default.
+- Iceshrimp.NET access token should now be persisted across sessions.
+- Infinite scroll is now disabled by default.
+- WebSocket connection is now retried on connection loss.
+- When autoplaying GIFs is disabled, you now have to hover it for 0.5 seconds to play it, instead of just hovering it.
 
 ### Fixed
 
 - Improvements for RTL languages.
 - Drag and drop works correctly on WebKit browsers.
+- Fixed styling issue with icon size in bottom navigation.
+- GIFs in preview cards are not displayed automatically, respecting the autoplay setting.
 
 ## v0.2.0
 
