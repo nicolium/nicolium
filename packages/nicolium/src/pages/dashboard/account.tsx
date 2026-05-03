@@ -242,12 +242,7 @@ const AdminAccountPage: React.FC = () => {
     <Column label={intl.formatMessage(messages.columnHeading, { acct: account.acct })}>
       <div className='flex flex-col gap-4'>
         <OutlineBox>
-          <Account
-            account={account}
-            showAccountHoverCard={false}
-            withLinkToProfile={false}
-            hideActions
-          />
+          <Account account={account} showAccountHoverCard={false} hideActions />
         </OutlineBox>
 
         <List>
