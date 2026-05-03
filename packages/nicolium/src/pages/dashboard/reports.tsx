@@ -44,7 +44,7 @@ const Reports: React.FC = () => {
   const handleUnsetAccounts = () => navigate({ search: (prev) => ({ resolved: prev.resolved }) });
 
   return (
-    <Column label={intl.formatMessage(messages.heading)}>
+    <Column label={intl.formatMessage(messages.heading)} bodyClassName='flex flex-col gap-4'>
       {(accountId ?? targetAccountId) && (
         <div className='flex items-center gap-2 border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'>
           <IconButton
@@ -101,7 +101,7 @@ const Reports: React.FC = () => {
         }
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
-        itemClassName='pt-4'
+        itemClassName='pt-4 first:pt-0'
       >
         {reportIds.map((report) => report && <Report id={report} key={report} />)}
       </ScrollableList>
