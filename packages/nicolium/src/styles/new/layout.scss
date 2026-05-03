@@ -1010,6 +1010,10 @@ body {
     .black & {
       margin-right: -1rem;
       border-left: 1px solid rgb(var(--color-gray-800));
+
+      .⁂-column {
+        padding-top: 0;
+      }
     }
 
     .⁂-card-header {
