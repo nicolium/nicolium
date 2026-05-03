@@ -1018,7 +1018,7 @@ export const settingsStatusActionBarItemsRoute = createRoute({
 
 // Frontend config
 export const frontendConfigRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.admin,
   path: '/nicolium/config',
   component: lazy(() => import('@/pages/dashboard/frontend-config')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
@@ -1100,7 +1100,7 @@ export const adminUsersRoute = createRoute({
 
 export const adminThemeRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/nicolium/admin/theme',
+  path: '/nicolium/config/theme',
   component: lazy(() => import('@/pages/dashboard/theme-editor')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
@@ -1471,6 +1471,7 @@ const routeTree = rootRoute.addChildren([
     adminPleromaConfigRoute,
     adminDomainBlocksRoute,
     adminDomainAllowsRoute,
+    frontendConfigRoute,
   ]),
   layouts.chats.addChildren([
     chatsRoute.addChildren([
@@ -1504,7 +1505,6 @@ const routeTree = rootRoute.addChildren([
     driveRoute,
     circleRoute,
     settingsRoute,
-    frontendConfigRoute,
     aboutRoute,
     shareRoute,
     developersRoute,
