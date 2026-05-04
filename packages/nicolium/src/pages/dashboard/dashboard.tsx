@@ -298,6 +298,13 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
             />
           )}
 
+          {(features.pleromaAdminAccounts || features.mastodonAdminV2) && (
+            <ListItem
+              to='/nicolium/admin/accounts'
+              label={<FormattedMessage id='column.admin.accounts' defaultMessage='Accounts' />}
+            />
+          )}
+
           {features.pleromaAdminModerationLog && (
             <ListItem
               to='/nicolium/admin/log'
