@@ -41,6 +41,7 @@ import type {
 } from '@/entities';
 import type {
   AdminAccountAction,
+  AdminAccountUpdateCredentialsParams,
   AdminCreateAccountParams,
   AdminCreateAnnouncementParams,
   AdminCreateCustomEmojiParams,
@@ -598,6 +599,17 @@ const admin = (client: PlApiBaseClient) => {
         });
 
         return response.json;
+      },
+
+      updateCredentials: async (accountId: string, params: AdminAccountUpdateCredentialsParams) => {
+        const { account } = await category.accounts.getAccount(accountId)!;
+
+        await client.request(`/api/v1/pleroma/admin/users/${account!.acct}/credentials`, {
+          method: 'PATCH',
+          body: params,
+        });
+
+        return category.accounts.getAccount(accountId);
       },
     },
 

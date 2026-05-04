@@ -18,7 +18,11 @@ import { useDeactivateUserModal, useDeleteUserModal } from '@/hooks/use-admin-mo
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
-import { useAdminSetRoleMutation, useAdminUpdateTagsMutation } from '@/queries/admin/use-accounts';
+import {
+  useAdminSetRoleMutation,
+  useAdminUpdateAccountCredentialsMutation,
+  useAdminUpdateTagsMutation,
+} from '@/queries/admin/use-accounts';
 import {
   useAdminSuggestAccountMutation,
   useAdminUnsuggestAccountMutation,
@@ -68,6 +72,10 @@ const messages = defineMessages({
   demotedToUser: {
     id: 'admin.users.actions.demote_to_user_message',
     defaultMessage: '@{acct} was demoted to a regular user',
+  },
+  actorTypeChanged: {
+    id: 'admin.users.actions.actor_type_changed_message',
+    defaultMessage: '@{acct} is now a {type, select, Service {bot} Person {person} other {user}}',
   },
 });
 
@@ -175,6 +183,7 @@ const AdminAccountPage: React.FC = () => {
   const deactivateUserModal = useDeactivateUserModal(accountId);
   const deleteUserModal = useDeleteUserModal(accountId);
   const { mutate: updateTags } = useAdminUpdateTagsMutation(accountId);
+  const { mutate: updateCredentials } = useAdminUpdateAccountCredentialsMutation(accountId);
 
   const accountBadges = account ? getBadges(account) : [];
   const [badges, setBadges] = useState<string[]>(accountBadges);
@@ -219,6 +228,26 @@ const AdminAccountPage: React.FC = () => {
         toast.success(intl.formatMessage(message, { acct: account.acct }));
       },
     });
+  };
+
+  const handleIsBotChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { checked } = e.target;
+
+    const newActorType = checked ? 'Service' : 'Person';
+
+    updateCredentials(
+      { actor_type: newActorType },
+      {
+        onSuccess: () => {
+          toast.success(
+            intl.formatMessage(messages.actorTypeChanged, {
+              acct: account.acct,
+              type: newActorType,
+            }),
+          );
+        },
+      },
+    );
   };
 
   const handleDeactivate = () => {
@@ -284,6 +313,19 @@ const AdminAccountPage: React.FC = () => {
               }
             >
               <Toggle checked={account.is_suggested === true} onChange={handleSuggestedChange} />
+            </ListItem>
+          )}
+
+          {features.pleromaAdminAccounts && (
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='account_moderation_modal.fields.bot'
+                  defaultMessage='This account is a bot'
+                />
+              }
+            >
+              <Toggle checked={account.bot === true} onChange={handleIsBotChange} />
             </ListItem>
           )}
 

@@ -18,12 +18,13 @@ import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-respo
 import { minifyAdminAccount, minifyAdminAccountList } from '../utils/minify-list';
 
 import type {
+  AdminAccount,
+  AdminAccountAction,
+  AdminAccountUpdateCredentialsParams,
+  AdminGetAccountsParams,
   AdminPerformAccountActionParams,
   PaginatedResponse,
-  AdminAccount,
-  AdminGetAccountsParams,
   PaginationParams,
-  AdminAccountAction,
 } from 'pl-api';
 
 const useAdminAccounts = makePaginatedResponseQuery(
@@ -289,6 +290,21 @@ const useAdminSetRoleMutation = (accountId: string) => {
   });
 };
 
+const useAdminUpdateAccountCredentialsMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'accounts', accountId, 'update'],
+    mutationFn: (params: AdminAccountUpdateCredentialsParams) =>
+      client.admin.accounts.updateCredentials(accountId, params),
+    onSuccess: ({ account, ...adminAccount }) => {
+      queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
+      if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+    },
+  });
+};
+
 export {
   useAdminAccount,
   useAdminAccounts,
@@ -305,4 +321,5 @@ export {
   useAdminUntagUserMutation,
   useAdminUpdateTagsMutation,
   useAdminSetRoleMutation,
+  useAdminUpdateAccountCredentialsMutation,
 };

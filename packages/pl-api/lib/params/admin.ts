@@ -43,6 +43,60 @@ type AdminAccountAction = 'none' | 'sensitive' | 'disable' | 'silence' | 'suspen
 /**
  * @category Request params
  */
+interface AdminAccountUpdateCredentialsParams {
+  email?: string;
+  password?: string;
+  /** String. The display name to use for the profile. */
+  name?: string;
+  /** String. The account bio. */
+  bio?: string;
+  /** Avatar image encoded using `multipart/form-data` */
+  avatar?: File | '';
+  /** Boolean. Whether manual approval of follow requests is required. */
+  locked?: boolean;
+  /** if true, html tags are stripped from all statuses requested from the API */
+  no_rich_text?: boolean;
+  /** the scope returned under privacy key in Source subentity */
+  default_scope?: string;
+  /** Header image encoded using `multipart/form-data` */
+  header?: File | '';
+  /** if true, user's follows will be hidden */
+  hide_follows?: boolean;
+  /** if true, user's followers will be hidden*/
+  hide_followers?: boolean;
+  /** if true, user's follower count will be hidden */
+  hide_followers_count?: boolean;
+  /** if true, user's follow count will be hidden */
+  hide_follows_count?: boolean;
+  /** if true, user's favorites timeline will be hidden */
+  hide_favorites?: boolean;
+  /** if true, allows automatically follow moved following accounts */
+  allow_following_move?: boolean;
+  /** if true, user's role (e.g admin, moderator) will be exposed to anyone in the API */
+  show_role?: boolean;
+  /** if true, skip filtering out broken threads */
+  skip_thread_containment?: boolean;
+  /** Hash. The profile fields to be set. Inside this hash, the key is an integer cast to a string (although the exact integer does not matter), and the value is another hash including name and value. By default, max 4 fields. */
+  fields?: Record<
+    string,
+    {
+      /** String. The name of the profile field. By default, max 255 characters. */
+      name: string;
+      /** String. The value of the profile field. By default, max 255 characters. */
+      value: string;
+    }
+  >;
+  /**
+   * Boolean. Whether the account should be shown in the profile directory.
+   * Requires features{@link Features.accountDiscoverability}
+   */
+  discoverable?: boolean;
+  actor_type?: 'Person' | 'Service';
+}
+
+/**
+ * @category Request params
+ */
 interface AdminPerformAccountActionParams {
   /** String. The ID of an associated report that caused this action to be taken. */
   report_id?: string;
@@ -364,6 +418,7 @@ export type {
   AdminGetAccountsParams,
   AdminCreateAccountParams,
   AdminAccountAction,
+  AdminAccountUpdateCredentialsParams,
   AdminPerformAccountActionParams,
   AdminGetDomainBlocksParams,
   AdminCreateDomainBlockParams,
