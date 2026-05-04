@@ -58,6 +58,10 @@ const messages = defineMessages({
     id: 'admin.pleroma_config.placeholder_value.kv_value',
     defaultMessage: 'value',
   },
+  valueType: {
+    id: 'admin.pleroma_config.value_type',
+    defaultMessage: 'Value type',
+  },
 });
 
 interface ISuggestions {
@@ -557,12 +561,7 @@ const UnionValueEditor = memo(
 
     return (
       <div className='⁂-admin-config__editor-stack'>
-        <FormGroup
-          labelText={intl.formatMessage({
-            id: 'admin.pleroma_config.value_type',
-            defaultMessage: 'Value type',
-          })}
-        >
+        <FormGroup labelText={intl.formatMessage(messages.valueType)}>
           <Select
             value={JSON.stringify(selectedType)}
             onChange={(event) => {

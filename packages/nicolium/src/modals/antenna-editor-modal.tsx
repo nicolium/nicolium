@@ -59,6 +59,19 @@ const messages = defineMessages({
   removeDomain: { id: 'antennas.domain.remove', defaultMessage: 'Remove domain' },
   removeKeyword: { id: 'antennas.keyword.remove', defaultMessage: 'Remove keyword' },
   removeTag: { id: 'antennas.tag.remove', defaultMessage: 'Remove tag' },
+  modeStl: { id: 'antennas.edit.mode.stl', defaultMessage: 'Social timeline mode' },
+  modeLtl: { id: 'antennas.edit.mode.ltl', defaultMessage: 'Local timeline mode' },
+  modeFiltering: { id: 'antennas.edit.mode.filtering', defaultMessage: 'Filtering' },
+  destinationHome: {
+    id: 'antennas.edit.destination.home',
+    defaultMessage: 'Insert to home timeline',
+  },
+  destinationList: { id: 'antennas.edit.destination.list', defaultMessage: 'Insert to list' },
+  destinationAntenna: {
+    id: 'antennas.edit.destination.antenna',
+    defaultMessage: 'Antenna timeline only',
+  },
+  listPlaceholder: { id: 'antennas.edit.list.select', defaultMessage: 'Select list' },
 });
 
 type Tab = 'info' | 'accounts' | 'excludedAccounts' | 'domains' | 'keywords' | 'tags';
@@ -557,18 +570,9 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
       <FormGroup labelText={<FormattedMessage id='antennas.edit.mode' defaultMessage='Mode' />}>
         <SelectDropdown
           items={{
-            stl: intl.formatMessage({
-              id: 'antennas.edit.mode.stl',
-              defaultMessage: 'Social timeline mode',
-            }),
-            ltl: intl.formatMessage({
-              id: 'antennas.edit.mode.ltl',
-              defaultMessage: 'Local timeline mode',
-            }),
-            filtering: intl.formatMessage({
-              id: 'antennas.edit.mode.filtering',
-              defaultMessage: 'Filtering',
-            }),
+            stl: intl.formatMessage(messages.modeStl),
+            ltl: intl.formatMessage(messages.modeLtl),
+            filtering: intl.formatMessage(messages.modeFiltering),
           }}
           defaultValue={stl ? 'stl' : ltl ? 'ltl' : 'filtering'}
           onChange={(e) => {
@@ -583,18 +587,9 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
       >
         <SelectDropdown
           items={{
-            home: intl.formatMessage({
-              id: 'antennas.edit.destination.home',
-              defaultMessage: 'Insert to home timeline',
-            }),
-            list: intl.formatMessage({
-              id: 'antennas.edit.destination.list',
-              defaultMessage: 'Insert to list',
-            }),
-            antenna: intl.formatMessage({
-              id: 'antennas.edit.destination.antenna',
-              defaultMessage: 'Antenna timeline only',
-            }),
+            home: intl.formatMessage(messages.destinationHome),
+            list: intl.formatMessage(messages.destinationList),
+            antenna: intl.formatMessage(messages.destinationAntenna),
           }}
           defaultValue={insertFeeds ? 'home' : listId ? 'list' : 'antenna'}
           onChange={(e) => {
@@ -621,10 +616,7 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
                       return acc;
                     },
                     {
-                      '': intl.formatMessage({
-                        id: 'antennas.edit.list.select',
-                        defaultMessage: 'Select list',
-                      }),
+                      '': intl.formatMessage(messages.listPlaceholder),
                     } as Record<string, string>,
                   )
                 : {}
