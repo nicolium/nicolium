@@ -65,6 +65,10 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
     setIndex(index % statusIds.length);
   };
 
+  if (statusIds.length === 1) {
+    return <StatusContainer id={statusIds[0]} />;
+  }
+
   return (
     <div className='relative -mx-1'>
       {index !== 0 && (
