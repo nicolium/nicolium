@@ -92,36 +92,44 @@ const Filters: React.FC = () => {
       }
     >
       <Form>
-        <FormGroup
-          labelText={
-            <FormattedMessage id='admin.accounts.filters.origin' defaultMessage='Account origin' />
-          }
-        >
-          <SelectDropdown
-            items={originItems}
-            defaultValue={params.origin}
-            onChange={({ target }) =>
-              navigate({
-                search: (params) => ({ ...params, origin: (target.value as any) || undefined }),
-              })
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+          <FormGroup
+            labelText={
+              <FormattedMessage
+                id='admin.accounts.filters.origin'
+                defaultMessage='Account origin'
+              />
             }
-          />
-        </FormGroup>
-        <FormGroup
-          labelText={
-            <FormattedMessage id='admin.accounts.filters.status' defaultMessage='Account status' />
-          }
-        >
-          <SelectDropdown
-            items={statusItems}
-            defaultValue={params.status}
-            onChange={({ target }) =>
-              navigate({
-                search: (params) => ({ ...params, status: (target.value as any) || undefined }),
-              })
+          >
+            <SelectDropdown
+              items={originItems}
+              defaultValue={params.origin}
+              onChange={({ target }) =>
+                navigate({
+                  search: (params) => ({ ...params, origin: (target.value as any) || undefined }),
+                })
+              }
+            />
+          </FormGroup>
+          <FormGroup
+            labelText={
+              <FormattedMessage
+                id='admin.accounts.filters.status'
+                defaultMessage='Account status'
+              />
             }
-          />
-        </FormGroup>
+          >
+            <SelectDropdown
+              items={statusItems}
+              defaultValue={params.status}
+              onChange={({ target }) =>
+                navigate({
+                  search: (params) => ({ ...params, status: (target.value as any) || undefined }),
+                })
+              }
+            />
+          </FormGroup>
+        </div>
         <List>
           <ListItem
             label={
@@ -144,73 +152,82 @@ const Filters: React.FC = () => {
             />
           </ListItem>
         </List>
-        <FormGroup
-          labelText={
-            <FormattedMessage
-              id='admin.accounts.filters.username'
-              defaultMessage='Search by username'
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+          <FormGroup
+            labelText={
+              <FormattedMessage
+                id='admin.accounts.filters.username'
+                defaultMessage='Search by username'
+              />
+            }
+          >
+            <Input
+              placeholder={intl.formatMessage(messages.usernamePlaceholder)}
+              value={params.username}
+              onChange={(e) =>
+                navigate({
+                  search: (params) => ({ ...params, username: e.target.value || undefined }),
+                })
+              }
             />
-          }
-        >
-          <Input
-            placeholder={intl.formatMessage(messages.usernamePlaceholder)}
-            value={params.username}
-            onChange={(e) =>
-              navigate({
-                search: (params) => ({ ...params, username: e.target.value || undefined }),
-              })
+          </FormGroup>
+          <FormGroup
+            labelText={
+              <FormattedMessage
+                id='admin.accounts.filters.display_name'
+                defaultMessage='Search by display name'
+              />
             }
-          />
-        </FormGroup>
-        <FormGroup
-          labelText={
-            <FormattedMessage
-              id='admin.accounts.filters.display_name'
-              defaultMessage='Search by display name'
+          >
+            <Input
+              placeholder={intl.formatMessage(messages.displayNamePlaceholder)}
+              value={params.display_name}
+              onChange={(e) =>
+                navigate({
+                  search: (params) => ({ ...params, display_name: e.target.value || undefined }),
+                })
+              }
             />
-          }
-        >
-          <Input
-            placeholder={intl.formatMessage(messages.displayNamePlaceholder)}
-            value={params.display_name}
-            onChange={(e) =>
-              navigate({
-                search: (params) => ({ ...params, display_name: e.target.value || undefined }),
-              })
+          </FormGroup>
+        </div>
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+          <FormGroup
+            labelText={
+              <FormattedMessage
+                id='admin.accounts.filters.domain'
+                defaultMessage='Search by domain'
+              />
             }
-          />
-        </FormGroup>
-        <FormGroup
-          labelText={
-            <FormattedMessage
-              id='admin.accounts.filters.domain'
-              defaultMessage='Search by domain'
+          >
+            <Input
+              placeholder={intl.formatMessage(messages.domainPlaceholder)}
+              value={params.by_domain}
+              onChange={(e) =>
+                navigate({
+                  search: (params) => ({ ...params, by_domain: e.target.value || undefined }),
+                })
+              }
             />
-          }
-        >
-          <Input
-            placeholder={intl.formatMessage(messages.domainPlaceholder)}
-            value={params.by_domain}
-            onChange={(e) =>
-              navigate({
-                search: (params) => ({ ...params, by_domain: e.target.value || undefined }),
-              })
+          </FormGroup>
+          <FormGroup
+            labelText={
+              <FormattedMessage
+                id='admin.accounts.filters.email'
+                defaultMessage='Search by email'
+              />
             }
-          />
-        </FormGroup>
-        <FormGroup
-          labelText={
-            <FormattedMessage id='admin.accounts.filters.email' defaultMessage='Search by email' />
-          }
-        >
-          <Input
-            placeholder={intl.formatMessage(messages.emailPlaceholder)}
-            value={params.email}
-            onChange={(e) =>
-              navigate({ search: (params) => ({ ...params, email: e.target.value || undefined }) })
-            }
-          />
-        </FormGroup>
+          >
+            <Input
+              placeholder={intl.formatMessage(messages.emailPlaceholder)}
+              value={params.email}
+              onChange={(e) =>
+                navigate({
+                  search: (params) => ({ ...params, email: e.target.value || undefined }),
+                })
+              }
+            />
+          </FormGroup>
+        </div>
         <FormActions>
           <Button theme='primary' onClick={() => navigate({ search: {} })}>
             <FormattedMessage id='admin.accounts.filters.clear' defaultMessage='Reset filters' />
