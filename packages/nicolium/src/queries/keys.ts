@@ -28,6 +28,7 @@ import type {
   AdminGetDimensionsParams,
   AdminGetMeasuresParams,
   AdminGetReportsParams,
+  AdminGetStatusesParams,
   AdminMeasure,
   AdminMeasureKey,
   AdminModerationLogEntry,
@@ -318,6 +319,10 @@ const admin = {
     show: (accountId: string) => {
       const key = ['admin', 'accounts', accountId] as const;
       return key as TaggedKey<typeof key, MinifiedAdminAccount>;
+    },
+    statuses: (accountId: string, params?: AdminGetStatusesParams) => {
+      const key = ['admin', 'accounts', 'statuses', accountId, params] as const;
+      return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
     },
   },
   accountLists: {

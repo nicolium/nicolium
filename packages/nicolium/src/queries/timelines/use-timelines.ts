@@ -181,21 +181,6 @@ const useAccountTimeline = (
   );
 };
 
-const useAdminAccountTimeline = (accountId: string) => {
-  const client = useClient();
-
-  return useTimeline(
-    `admin_account:${accountId}`,
-    (paginationParams) =>
-      client.admin.accounts.getAccountStatuses(accountId, {
-        with_private: true,
-        ...paginationParams,
-      }),
-    undefined,
-    { polling: false },
-  );
-};
-
 export {
   useHomeTimeline,
   usePublicTimeline,
@@ -208,5 +193,4 @@ export {
   useCircleTimeline,
   useWrenchedTimeline,
   useAccountTimeline,
-  useAdminAccountTimeline,
 };

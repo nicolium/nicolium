@@ -106,13 +106,14 @@ const paginatedPleromaAccounts = async (
   const adminAccounts = v.parse(filteredArray(adminAccountSchema), response.json?.users);
 
   return new PaginatedResponse(adminAccounts, {
-    previous: params.page
-      ? () => paginatedPleromaAccounts(client, { ...params, page: params.page! - 1 })
-      : null,
+    previous:
+      params.page && params.page > 1
+        ? () => paginatedPleromaAccounts(client, { ...params, page: params.page! - 1 })
+        : null,
     next:
       response.json?.count >
       params.page_size * ((params.page || 1) - 1) + response.json?.users?.length
-        ? () => paginatedPleromaAccounts(client, { ...params, page: (params.page || 0) + 1 })
+        ? () => paginatedPleromaAccounts(client, { ...params, page: (params.page ?? 1) + 1 })
         : null,
     partial: response.status === 206,
     total: response.json?.count,
@@ -131,13 +132,14 @@ const paginatedPleromaReports = async (
   const response = await client.request('/api/v1/pleroma/admin/reports', { params });
 
   return new PaginatedResponse(v.parse(filteredArray(adminReportSchema), response.json?.reports), {
-    previous: params.page
-      ? () => paginatedPleromaReports(client, { ...params, page: params.page! - 1 })
-      : null,
+    previous:
+      params.page && params.page > 1
+        ? () => paginatedPleromaReports(client, { ...params, page: params.page! - 1 })
+        : null,
     next:
       response.json?.total >
       params.page_size * ((params.page || 1) - 1) + response.json?.reports?.length
-        ? () => paginatedPleromaReports(client, { ...params, page: (params.page || 0) + 1 })
+        ? () => paginatedPleromaReports(client, { ...params, page: (params.page ?? 1) + 1 })
         : null,
     partial: response.status === 206,
     total: response.json?.total,
@@ -155,9 +157,7 @@ const paginatedPleromaStatuses = async (
     page?: number;
   },
 ): Promise<PaginatedResponse<Status>> => {
-  const response = await client.request(url, {
-    params: { ...params, offset: (params.page || 0) * (params.page_size ?? 20) },
-  });
+  const response = await client.request(url, { params });
 
   return new PaginatedResponse(
     v.parse(filteredArray(statusSchema), response.json.activities).toReversed(),
@@ -640,7 +640,7 @@ const admin = (client: PlApiBaseClient) => {
        */
       getAccountStatuses: (accountId: string, params?: AdminGetStatusesParams) =>
         paginatedPleromaStatuses(client, `/api/v1/pleroma/admin/users/${accountId}/statuses`, {
-          page_size: params?.limit || 100,
+          page_size: params?.limit || 20,
           page: 1,
           local_only: params?.local_only,
           with_reblogs: params?.with_reblogs,
