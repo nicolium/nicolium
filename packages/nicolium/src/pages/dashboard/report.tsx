@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
-import { AccountLink } from '@/components/accounts/account-link';
 import List, { ListItem } from '@/components/list';
 import ReactSwipeableViews from '@/components/react-swipeable-views';
 import StatusContainer from '@/components/statuses/status-container';
@@ -161,7 +160,11 @@ const ReportPage: React.FC = () => {
     <Column label={intl.formatMessage(messages.columnHeading, { id: reportId })}>
       <div className='mb-4 grid grid-cols-1 gap-2 md:grid-cols-2'>
         {report.target_account && (
-          <AccountLink account={report.target_account} className='h-fit'>
+          <Link
+            to='/nicolium/admin/accounts/$accountId'
+            params={{ accountId: report.target_account_id }}
+            className='h-fit'
+          >
             <Card variant='rounded'>
               <div className='flex flex-col gap-2'>
                 <Text size='md' weight='medium'>
@@ -173,7 +176,7 @@ const ReportPage: React.FC = () => {
                 <Account account={report.target_account} disabled hideActions />
               </div>
             </Card>
-          </AccountLink>
+          </Link>
         )}
         <table className='w-full'>
           <tbody>
