@@ -20,6 +20,24 @@ const adminReportSchema = v.pipe(
       account: (report.actor ? report.account : report.target_account)?.account || status.account,
     }));
 
+    if (report.createdAt) {
+      /**
+       * Convert Iceshrimp.NET report schema
+       */
+      return {
+        id: report.id,
+        action_taken: report.resolved,
+        comment: report.comment,
+        forwarded: report.forwarded,
+        created_at: report.createdAt,
+        account: report.reporter,
+        target_account: report.targetUser,
+        assigned_account: report.assignee,
+        statuses: report.notes,
+        rules: report.rules,
+      };
+    }
+
     if (report.actor) {
       /**
        * Convert Pleroma report schema

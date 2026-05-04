@@ -367,6 +367,11 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * @see POST /api/iceshrimp/moderation/reports/:id/forward
+     */
+    adminReportForwarding: v.software === ICESHRIMP_NET,
+
+    /**
      * Ability to manage instance rules by admins.
      * @see GET /api/v1/pleroma/admin/rules
      * @see POST /api/v1/pleroma/admin/rules
@@ -998,6 +1003,8 @@ const getFeatures = (instance: Instance) => {
       v.software === GOTOSOCIAL && gte(v.version, '0.15.0'),
       v.software === PLEROMA,
     ]),
+
+    iceshrimpAdmin: v.software === ICESHRIMP_NET,
 
     importArchive: false,
 

@@ -25,7 +25,7 @@ import {
   trendsLinkSchema,
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-import { AKKOMA, GOTOSOCIAL, MITRA, PLEROMA } from '@/features';
+import { AKKOMA, GOTOSOCIAL, ICESHRIMP_NET, MITRA, PLEROMA } from '@/features';
 import { PaginatedResponse } from '@/responses';
 
 import type { PlApiBaseClient } from '@/client-base';
@@ -881,7 +881,7 @@ const admin = (client: PlApiBaseClient) => {
        * View information about all reports.
        * @see {@link https://docs.joinmastodon.org/methods/admin/reports/#get}
        */
-      getReports: (params?: AdminGetReportsParams) => {
+      getReports: async (params?: AdminGetReportsParams) => {
         if (client.features.mastodonAdmin) {
           if (
             params?.unresolved &&
@@ -892,6 +892,13 @@ const admin = (client: PlApiBaseClient) => {
             params.resolved = false;
           }
           return client.paginatedGet('/api/v1/admin/reports', { params }, adminReportSchema);
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          return client.paginatedGet(
+            '/api/iceshrimp/moderation/reports',
+            { params },
+            adminReportSchema,
+          );
         }
 
         return paginatedPleromaReports(client, {
@@ -908,6 +915,9 @@ const admin = (client: PlApiBaseClient) => {
         let response;
         if (client.features.mastodonAdmin) {
           response = await client.request(`/api/v1/admin/reports/${reportId}`);
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request(`/api/iceshrimp/moderation/reports/${reportId}`);
         } else {
           response = await client.request(`/api/v1/pleroma/admin/reports/${reportId}`);
         }
@@ -971,6 +981,13 @@ const admin = (client: PlApiBaseClient) => {
             method: 'POST',
             body: { action_taken_comment },
           });
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          await client.request(`/api/iceshrimp/moderation/reports/${reportId}/resolve`, {
+            method: 'POST',
+          });
+
+          return category.reports.getReport(reportId);
         } else {
           response = await client.request(`/api/v1/pleroma/admin/reports/${reportId}`, {
             method: 'PATCH',
@@ -1000,6 +1017,20 @@ const admin = (client: PlApiBaseClient) => {
         }
 
         return v.parse(adminReportSchema, response.json);
+      },
+
+      /**
+       * Forward report
+       * Requires features{@link Features.adminReportForwarding}.
+       */
+      forwardReport: async (reportId: string) => {
+        await client.getIceshrimpAccessToken();
+
+        await client.request(`/api/iceshrimp/moderation/reports/${reportId}/forward`, {
+          method: 'POST',
+        });
+
+        return category.reports.getReport(reportId);
       },
     },
 

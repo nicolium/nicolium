@@ -13,6 +13,22 @@ import { adminIpSchema } from './ip';
 const adminAccountSchema = v.pipe(
   v.any(),
   v.transform((account: any) => {
+    if ('displayName' in account) {
+      /**
+       * Iceshrimp.NET account schema
+       * Doesn't have admin account schema so there's almost nothing there
+       */
+      return {
+        id: account.id,
+        account: null,
+        username: account.username,
+        domain: account.username.split('@')[1] || null,
+
+        actor_type: account.isBot ? 'Service' : 'Person',
+        display_name: account.displayName,
+      };
+    }
+
     if (!account.account) {
       /**
        * Convert Pleroma account schema
