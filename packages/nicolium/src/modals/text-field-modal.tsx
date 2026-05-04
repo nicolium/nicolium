@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
+import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 
 import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
@@ -10,6 +11,7 @@ import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface TextFieldModalProps {
   heading: React.ReactNode;
+  message?: React.ReactNode;
   placeholder?: string;
   confirm: React.ReactNode;
   onConfirm: (value: string) => void;
@@ -19,10 +21,12 @@ interface TextFieldModalProps {
   confirmationTheme?: ButtonThemes;
   text?: string;
   singleLine?: boolean;
+  type?: 'text' | 'password';
 }
 
 const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
   heading,
+  message,
   placeholder,
   confirm,
   clear,
@@ -33,6 +37,7 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
   confirmationTheme,
   text,
   singleLine,
+  type = 'text',
 }) => {
   const [value, setValue] = useState(text ?? '');
 
@@ -67,9 +72,11 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
       cancelAction={handleCancel}
     >
       <div className='flex flex-col gap-4'>
+        {message && <Text theme='muted'>{message}</Text>}
+
         {singleLine ? (
           <Input
-            type='text'
+            type={type}
             value={value}
             onChange={({ target }) => {
               setValue(target.value);

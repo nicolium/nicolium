@@ -32,6 +32,7 @@ import {
   useAdminUnverifyAccountMutation,
 } from '@/queries/admin/use-verify-account';
 import { adminAccountRoute } from '@/router';
+import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 import { badgeToTag, tagToBadge, getBadges } from '@/utils/badges';
 
@@ -76,6 +77,22 @@ const messages = defineMessages({
   actorTypeChanged: {
     id: 'admin.users.actions.actor_type_changed_message',
     defaultMessage: '@{acct} is now a {type, select, Service {bot} Person {person} other {user}}',
+  },
+  changeEmailPlaceholder: {
+    id: 'account_moderation_modal.change_email.placeholder',
+    defaultMessage: 'New e-mail address',
+  },
+  emailChanged: {
+    id: 'account_moderation_modal.change_email.success_message',
+    defaultMessage: 'E-mail address for @{acct} changed to {email}',
+  },
+  changePasswordPlaceholder: {
+    id: 'account_moderation_modal.change_password.placeholder',
+    defaultMessage: 'New password',
+  },
+  passwordChanged: {
+    id: 'account_moderation_modal.change_password.success_message',
+    defaultMessage: 'Password for @{acct} has been changed',
   },
 });
 
@@ -172,6 +189,7 @@ const AdminAccountPage: React.FC = () => {
   const { accountId } = adminAccountRoute.useParams();
 
   const intl = useIntl();
+  const { openModal } = useModalsActions();
 
   const { mutate: suggest } = useAdminSuggestAccountMutation(accountId);
   const { mutate: unsuggest } = useAdminUnsuggestAccountMutation(accountId);
@@ -248,6 +266,65 @@ const AdminAccountPage: React.FC = () => {
         },
       },
     );
+  };
+
+  const handleChangeEmail = () => {
+    openModal('TEXT_FIELD', {
+      heading: (
+        <FormattedMessage
+          id='account_moderation_modal.change_email.heading'
+          defaultMessage='Change e-mail address for @{acct}'
+          values={{ acct: account.acct }}
+        />
+      ),
+      placeholder: intl.formatMessage(messages.changeEmailPlaceholder),
+      confirm: <FormattedMessage id='common.save' defaultMessage='Save' />,
+      onConfirm: (value) => {
+        updateCredentials(
+          { email: value },
+          {
+            onSuccess: () => {
+              toast.success(
+                intl.formatMessage(messages.emailChanged, { acct: account.acct, email: value }),
+              );
+            },
+          },
+        );
+      },
+      singleLine: true,
+    });
+  };
+
+  const handleChangePassword = () => {
+    openModal('TEXT_FIELD', {
+      heading: (
+        <FormattedMessage
+          id='account_moderation_modal.change_password.heading'
+          defaultMessage='Change password for @{acct}'
+          values={{ acct: account.acct }}
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='account_moderation_modal.change_password.message'
+          defaultMessage='The user will be logged out from all sessions and required to use the new password the next time they log in.'
+        />
+      ),
+      placeholder: intl.formatMessage(messages.changePasswordPlaceholder),
+      confirm: <FormattedMessage id='common.save' defaultMessage='Save' />,
+      onConfirm: (value) => {
+        updateCredentials(
+          { password: value },
+          {
+            onSuccess: () => {
+              toast.success(intl.formatMessage(messages.passwordChanged, { acct: account.acct }));
+            },
+          },
+        );
+      },
+      singleLine: true,
+      type: 'password',
+    });
   };
 
   const handleDeactivate = () => {
@@ -349,6 +426,29 @@ const AdminAccountPage: React.FC = () => {
             </ListItem>
           )}
         </List>
+
+        {features.pleromaAdminAccounts && (
+          <List>
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='account_moderation_modal.fields.change_email'
+                  defaultMessage='Change e-mail address'
+                />
+              }
+              onClick={handleChangeEmail}
+            />
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='account_moderation_modal.fields.change_password'
+                  defaultMessage='Change password'
+                />
+              }
+              onClick={handleChangePassword}
+            />
+          </List>
+        )}
 
         <List>
           <ListItem
