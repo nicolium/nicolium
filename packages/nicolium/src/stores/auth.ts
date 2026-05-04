@@ -697,6 +697,7 @@ const useAuthStore = create<AuthStore>()(
           try {
             const account = await client.settings.verifyCredentials();
             queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+            queryClient.setQueryData(queryKeys.accountCredentials.show(account.id), account);
             get().actions.addCredentials(token, account);
             if (account.id === get().currentAccountId) fetchMeSuccess(account);
             return account;
@@ -721,6 +722,7 @@ const useAuthStore = create<AuthStore>()(
             try {
               const account = await KVStore.getItemOrError(`authAccount:${accountUrl}`);
               queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+              queryClient.setQueryData(queryKeys.accountCredentials.show(account.id), account);
               get().actions.setCurrentAccountIfUnset(account);
               if (account.id === get().currentAccountId) fetchMeSuccess(account);
             } catch {}
