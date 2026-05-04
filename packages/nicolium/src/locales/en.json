@@ -119,6 +119,7 @@
   "account_note.save": "Save note",
   "account_note.success": "Note saved",
   "admin.accounts.filters": "Filters ({count})",
+  "admin.accounts.filters.clear": "Reset filters",
   "admin.accounts.filters.display_name": "Search by display name",
   "admin.accounts.filters.display_name.placeholder": "Enter display name",
   "admin.accounts.filters.domain": "Search by domain",

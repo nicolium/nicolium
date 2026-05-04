@@ -7,8 +7,10 @@ import List, { ListItem } from '@/components/list';
 import PlaceholderAccount from '@/components/placeholders/placeholder-account';
 import ScrollableList from '@/components/scrollable-list';
 import Accordion from '@/components/ui/accordion';
+import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
@@ -209,6 +211,11 @@ const Filters: React.FC = () => {
             }
           />
         </FormGroup>
+        <FormActions>
+          <Button theme='primary' onClick={() => navigate({ search: {} })}>
+            <FormattedMessage id='admin.accounts.filters.clear' defaultMessage='Reset filters' />
+          </Button>
+        </FormActions>
       </Form>
     </Accordion>
   );
