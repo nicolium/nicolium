@@ -96,7 +96,7 @@
     "object-to-formdata": "^4.5.1",
     "path-browserify": "^1.0.1",
     "pl-api": "workspace:*",
-    "postcss": "^8.5.12",
+    "postcss": "^8.5.13",
     "punycode": "^2.3.1",
     "qrcode.react": "^4.2.0",
     "query-string": "^9.3.1",
