@@ -162,13 +162,14 @@ const paginatedPleromaStatuses = async (
   return new PaginatedResponse(
     v.parse(filteredArray(statusSchema), response.json.activities).toReversed(),
     {
-      previous: params.page
-        ? () => paginatedPleromaStatuses(client, url, { ...params, page: params.page! - 1 })
-        : null,
+      previous:
+        params.page && params.page > 1
+          ? () => paginatedPleromaStatuses(client, url, { ...params, page: params.page! - 1 })
+          : null,
       next:
         response.json?.total >
         (params.page_size ?? 20) * ((params.page || 1) - 1) + response.json?.activities?.length
-          ? () => paginatedPleromaStatuses(client, url, { ...params, page: (params.page || 0) + 1 })
+          ? () => paginatedPleromaStatuses(client, url, { ...params, page: (params.page ?? 1) + 1 })
           : null,
       partial: response.status === 206,
     },
