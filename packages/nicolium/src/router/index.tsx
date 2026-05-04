@@ -1068,6 +1068,10 @@ export const adminAccountStatusesRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/accounts/$accountId/statuses',
   component: lazy(() => import('@/pages/dashboard/account-statuses')),
+  validateSearch: v.object({
+    with_private: v.optional(v.boolean(), undefined),
+    with_reblogs: v.optional(v.boolean(), true),
+  }),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
