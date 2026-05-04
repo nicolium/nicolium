@@ -13,6 +13,8 @@ interface TextFieldModalProps {
   placeholder?: string;
   confirm: React.ReactNode;
   onConfirm: (value: string) => void;
+  clear?: React.ReactNode;
+  onClear?: () => void;
   onCancel?: () => void;
   confirmationTheme?: ButtonThemes;
   text?: string;
@@ -23,8 +25,10 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
   heading,
   placeholder,
   confirm,
+  clear,
   onClose,
   onConfirm,
+  onClear,
   onCancel,
   confirmationTheme,
   text,
@@ -37,6 +41,13 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
     onConfirm(value);
   };
 
+  const handleClear = onClear
+    ? () => {
+        onClose('TEXT_FIELD');
+        onClear();
+      }
+    : undefined;
+
   const handleCancel = () => {
     onClose('TEXT_FIELD');
     if (onCancel) onCancel();
@@ -48,6 +59,10 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
       confirmationAction={handleClick}
       confirmationText={confirm}
       confirmationTheme={confirmationTheme}
+      secondaryText={
+        clear || <FormattedMessage id='text_field_modal.clear' defaultMessage='Clear' />
+      }
+      secondaryAction={handleClear}
       cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
       cancelAction={handleCancel}
     >

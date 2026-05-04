@@ -252,6 +252,11 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         changeSetting(['accountNicknames', account.id], trimmed || undefined);
         toast.success(messages.nicknameSaved);
       },
+      clear: <FormattedMessage id='account.nickname.clear' defaultMessage='Reset' />,
+      onClear: () => {
+        changeSetting(['accountNicknames', account.id], undefined);
+        toast.success(messages.nicknameSaved);
+      },
       text: currentNickname,
       singleLine: true,
     });
