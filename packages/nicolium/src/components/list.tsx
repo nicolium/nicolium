@@ -27,6 +27,7 @@ type IListItem = {
   children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
   size?: 'sm' | 'md';
   actionIcon?: string;
+  disabled?: boolean;
 } & (LinkOptions | {});
 
 const ListItem: React.FC<IListItem> = ({
@@ -53,7 +54,7 @@ const ListItem: React.FC<IListItem> = ({
   const hintId = `${domId}-hint`;
 
   const onKeyDown: React.KeyboardEventHandler<HTMLAnchorElement | HTMLDivElement> = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !rest.disabled) {
       onClick!();
     }
   };
@@ -138,8 +139,16 @@ const ListItem: React.FC<IListItem> = ({
   const Comp = onClick || href ? 'a' : 'div';
   const linkProps =
     onClick || href
-      ? { onClick, onKeyDown, tabIndex: 0, role: 'link', ...(href && { href, target: '_blank' }) }
+      ? {
+          onClick: rest.disabled ? undefined : onClick,
+          onKeyDown,
+          tabIndex: 0,
+          role: 'link',
+          ...(href && { href, target: '_blank' }),
+        }
       : {};
+
+  (linkProps as any).disabled = rest.disabled;
 
   return (
     <Comp

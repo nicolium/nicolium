@@ -18,6 +18,7 @@ import Text from '@/components/ui/text';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { useFeatures } from '@/hooks/use-features';
 import {
+  useForwardReport,
   useReopenReport,
   useReport,
   useResolveReport,
@@ -46,6 +47,11 @@ const messages = defineMessages({
       'You can include an optional comment while resolving this report. If the report was created by a local account, the comment will be sent to the user.',
   },
   reportCommentConfirm: { id: 'report.resolve.comment.confirm', defaultMessage: 'Resolve report' },
+  reportForwardConfirm: {
+    id: 'confirmations.admin.report.forward.confirm',
+    defaultMessage: 'Forward',
+  },
+  reportForwardSuccess: { id: 'admin.report.forward.success', defaultMessage: 'Report forwarded' },
 });
 
 interface IReportStatuses {
@@ -108,6 +114,7 @@ const ReportPage: React.FC = () => {
   const { mutate: unassignReport } = useUnassignReport(reportId);
   const { mutate: resolveReport } = useResolveReport(reportId);
   const { mutate: reopenReport } = useReopenReport(reportId);
+  const { mutate: forwardReport } = useForwardReport(reportId);
 
   const handleSelfAssignReport = () => {
     selfAssignReport(undefined, {
@@ -144,6 +151,31 @@ const ReportPage: React.FC = () => {
     } else {
       onConfirm();
     }
+  };
+
+  const handleForwardReport = () => {
+    openModal('CONFIRM', {
+      heading: (
+        <FormattedMessage
+          id='confirmations.admin.report.forward.heading'
+          defaultMessage='Forward the report'
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.admin.report.forward.message'
+          defaultMessage='Are you sure you want to forward this report to the parent instance?'
+        />
+      ),
+      confirm: intl.formatMessage(messages.reportForwardConfirm),
+      onConfirm: () => {
+        forwardReport(undefined, {
+          onSuccess: () => {
+            toast.success(intl.formatMessage(messages.reportForwardSuccess));
+          },
+        });
+      },
+    });
   };
 
   const handleReopenReport = () => {
@@ -242,6 +274,25 @@ const ReportPage: React.FC = () => {
                 </Text>
               </td>
             </tr>
+            {report.forwarded !== undefined && (
+              <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
+                <td className='p-2.5'>
+                  <Text weight='medium' size='sm' tag='span'>
+                    {report.forwarded ? (
+                      <FormattedMessage
+                        id='admin.report.forwarded.true'
+                        defaultMessage='Forwarded'
+                      />
+                    ) : (
+                      <FormattedMessage
+                        id='admin.report.forwarded.false'
+                        defaultMessage='Not forwarded'
+                      />
+                    )}
+                  </Text>
+                </td>
+              </tr>
+            )}
             {features.mastodonAdmin && (
               <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
                 <td className='p-2.5'>
@@ -312,6 +363,13 @@ const ReportPage: React.FC = () => {
               />
             }
             onClick={handleResolveReport}
+          />
+        )}
+        {features.iceshrimpAdmin && (
+          <ListItem
+            label={<FormattedMessage id='admin.report.forward' defaultMessage='Forward report' />}
+            onClick={handleForwardReport}
+            disabled={report.forwarded}
           />
         )}
         <ListItem

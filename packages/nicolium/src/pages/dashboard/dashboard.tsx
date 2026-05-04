@@ -305,7 +305,9 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
             />
           )}
 
-          {(features.pleromaAdminAccounts || features.mastodonAdminV2) && (
+          {(features.pleromaAdminAccounts ||
+            features.mastodonAdminV2 ||
+            features.iceshrimpAdmin) && (
             <ListItem
               to='/nicolium/admin/reports'
               search={{ resolved: false }}
