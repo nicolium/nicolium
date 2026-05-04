@@ -184,6 +184,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
               <ListItem
                 size='sm'
                 to='/nicolium/admin/reports'
+                search={{ resolved: false }}
                 label={
                   <FormattedMessage
                     id='admin.links.pending_reports'
