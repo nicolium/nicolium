@@ -15,6 +15,7 @@ import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { useDeactivateUserModal, useDeleteUserModal } from '@/hooks/use-admin-modals';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -93,6 +94,14 @@ const messages = defineMessages({
   passwordChanged: {
     id: 'account_moderation_modal.change_password.success_message',
     defaultMessage: 'Password for @{acct} has been changed',
+  },
+  mfaDisabled: {
+    id: 'account_moderation_modal.disable_mfa.success_message',
+    defaultMessage: 'Multi-factor authentication disabled for @{acct}',
+  },
+  mfaDisableFailed: {
+    id: 'account_moderation_modal.disable_mfa.failure_message',
+    defaultMessage: 'Failed to disable multi-factor authentication for @{acct}',
   },
 });
 
@@ -188,6 +197,7 @@ const BadgeInput: React.FC<IBadgeInput> = ({ badges, onChange }) => {
 const AdminAccountPage: React.FC = () => {
   const { accountId } = adminAccountRoute.useParams();
 
+  const client = useClient();
   const intl = useIntl();
   const { openModal } = useModalsActions();
 
@@ -327,6 +337,17 @@ const AdminAccountPage: React.FC = () => {
     });
   };
 
+  const handleDisableMfa = () => {
+    client.admin.accounts
+      .disableMfa(account.id)
+      .then(() => {
+        toast.success(intl.formatMessage(messages.mfaDisabled, { acct: account.acct }));
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(messages.mfaDisableFailed, { acct: account.acct }));
+      });
+  };
+
   const handleDeactivate = () => {
     deactivateUserModal();
   };
@@ -438,6 +459,7 @@ const AdminAccountPage: React.FC = () => {
               }
               onClick={handleChangeEmail}
             />
+
             <ListItem
               label={
                 <FormattedMessage
@@ -446,6 +468,16 @@ const AdminAccountPage: React.FC = () => {
                 />
               }
               onClick={handleChangePassword}
+            />
+
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='account_moderation_modal.fields.disable_mfa'
+                  defaultMessage='Disable multi-factor authentication'
+                />
+              }
+              onClick={handleDisableMfa}
             />
           </List>
         )}

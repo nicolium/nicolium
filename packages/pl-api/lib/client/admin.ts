@@ -611,6 +611,17 @@ const admin = (client: PlApiBaseClient) => {
 
         return category.accounts.getAccount(accountId);
       },
+
+      disableMfa: async (accountId: string) => {
+        const { account } = await category.accounts.getAccount(accountId)!;
+
+        await client.request('api/pleroma/admin/users/disable_mfa', {
+          method: 'PUT',
+          body: { nickname: account!.acct },
+        });
+
+        return category.accounts.getAccount(accountId);
+      },
     },
 
     /** Disallow certain domains to federate. */
