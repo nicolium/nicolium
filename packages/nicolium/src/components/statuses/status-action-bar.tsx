@@ -602,7 +602,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
       active={status.reblogged}
       onClick={handleReblogClick}
       onLongPress={handleReblogLongPress}
-      count={status.reblogs_count + status.quotes_count}
+      count={status.reblogs_count + (withQuote ? status.quotes_count : 0)}
       text={withLabels ? intl.formatMessage(messages.reblog) : undefined}
     />
   );
