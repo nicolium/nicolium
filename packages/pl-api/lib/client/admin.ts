@@ -146,6 +146,7 @@ const paginatedPleromaReports = async (
 
 const paginatedPleromaStatuses = async (
   client: PlApiBaseClient,
+  url: string = '/api/v1/pleroma/admin/statuses',
   params: {
     page_size?: number;
     local_only?: boolean;
@@ -154,17 +155,24 @@ const paginatedPleromaStatuses = async (
     page?: number;
   },
 ): Promise<PaginatedResponse<Status>> => {
-  const response = await client.request('/api/v1/pleroma/admin/statuses', { params });
-
-  return new PaginatedResponse(v.parse(filteredArray(statusSchema), response.json), {
-    previous: params.page
-      ? () => paginatedPleromaStatuses(client, { ...params, page: params.page! - 1 })
-      : null,
-    next: response.json?.length
-      ? () => paginatedPleromaStatuses(client, { ...params, page: (params.page || 0) + 1 })
-      : null,
-    partial: response.status === 206,
+  const response = await client.request(url, {
+    params: { ...params, offset: (params.page || 0) * (params.page_size ?? 20) },
   });
+
+  return new PaginatedResponse(
+    v.parse(filteredArray(statusSchema), response.json.activities).toReversed(),
+    {
+      previous: params.page
+        ? () => paginatedPleromaStatuses(client, url, { ...params, page: params.page! - 1 })
+        : null,
+      next:
+        response.json?.total >
+        (params.page_size ?? 20) * ((params.page || 1) - 1) + response.json?.activities?.length
+          ? () => paginatedPleromaStatuses(client, url, { ...params, page: (params.page || 0) + 1 })
+          : null,
+      partial: response.status === 206,
+    },
+  );
 };
 
 const updateSimplePolicy = (
@@ -615,13 +623,28 @@ const admin = (client: PlApiBaseClient) => {
       disableMfa: async (accountId: string) => {
         const { account } = await category.accounts.getAccount(accountId)!;
 
-        await client.request('api/pleroma/admin/users/disable_mfa', {
+        await client.request('/api/v1/pleroma/admin/users/disable_mfa', {
           method: 'PUT',
           body: { nickname: account!.acct },
         });
 
         return category.accounts.getAccount(accountId);
       },
+
+      /**
+       * @param params Retrieve user's latest statuses.
+       *
+       * Requires features{@link Features.pleromaAdminStatuses}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminstatuses}
+       */
+      getAccountStatuses: (accountId: string, params?: AdminGetStatusesParams) =>
+        paginatedPleromaStatuses(client, `/api/v1/pleroma/admin/users/${accountId}/statuses`, {
+          page_size: params?.limit || 100,
+          page: 1,
+          local_only: params?.local_only,
+          with_reblogs: params?.with_reblogs,
+          godmode: params?.with_private,
+        }),
     },
 
     /** Disallow certain domains to federate. */
@@ -989,7 +1012,7 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminstatuses}
        */
       getStatuses: (params?: AdminGetStatusesParams) =>
-        paginatedPleromaStatuses(client, {
+        paginatedPleromaStatuses(client, undefined, {
           page_size: params?.limit || 100,
           page: 1,
           local_only: params?.local_only,

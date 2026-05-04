@@ -449,37 +449,52 @@ const AdminAccountPage: React.FC = () => {
         </List>
 
         {features.pleromaAdminAccounts && (
-          <List>
-            <ListItem
-              label={
-                <FormattedMessage
-                  id='account_moderation_modal.fields.change_email'
-                  defaultMessage='Change e-mail address'
-                />
-              }
-              onClick={handleChangeEmail}
-            />
+          <>
+            <List>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.statuses'
+                    defaultMessage='All posts'
+                  />
+                }
+                to='/nicolium/admin/accounts/$accountId/statuses'
+                params={{ accountId: account.id }}
+              />
+            </List>
 
-            <ListItem
-              label={
-                <FormattedMessage
-                  id='account_moderation_modal.fields.change_password'
-                  defaultMessage='Change password'
-                />
-              }
-              onClick={handleChangePassword}
-            />
+            <List>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.change_email'
+                    defaultMessage='Change e-mail address'
+                  />
+                }
+                onClick={handleChangeEmail}
+              />
 
-            <ListItem
-              label={
-                <FormattedMessage
-                  id='account_moderation_modal.fields.disable_mfa'
-                  defaultMessage='Disable multi-factor authentication'
-                />
-              }
-              onClick={handleDisableMfa}
-            />
-          </List>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.change_password'
+                    defaultMessage='Change password'
+                  />
+                }
+                onClick={handleChangePassword}
+              />
+
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.disable_mfa'
+                    defaultMessage='Disable multi-factor authentication'
+                  />
+                }
+                onClick={handleDisableMfa}
+              />
+            </List>
+          </>
         )}
 
         <List>

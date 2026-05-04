@@ -1064,6 +1064,15 @@ export const adminAccountRoute = createRoute({
   }),
 });
 
+export const adminAccountStatusesRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/accounts/$accountId/statuses',
+  component: lazy(() => import('@/pages/dashboard/account-statuses')),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
 export const adminAwaitingApprovalRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/approval',
@@ -1466,6 +1475,7 @@ const routeTree = rootRoute.addChildren([
   layouts.admin.addChildren([
     adminAccountsRoute,
     adminAccountRoute,
+    adminAccountStatusesRoute,
     adminAwaitingApprovalRoute,
     adminReportsRoute,
     adminReportRoute,

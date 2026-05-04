@@ -26,6 +26,7 @@ import { useAccounts } from '@/queries/accounts/use-accounts';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 import {
   useAccountTimeline,
+  useAdminAccountTimeline,
   useAntennaTimeline,
   useBubbleTimeline,
   useCircleTimeline,
@@ -763,6 +764,19 @@ const AccountTimelineColumn: React.FC<IAccountTimelineColumn> = ({
   return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };
 
+interface IAdminAccountTimelineColumn extends IBaseTimeline {
+  accountId: string;
+}
+
+const AdminAccountTimelineColumn: React.FC<IAdminAccountTimelineColumn> = ({
+  accountId,
+  ...props
+}) => {
+  const timelineQuery = useAdminAccountTimeline(accountId);
+
+  return <Timeline query={timelineQuery} contextType='public' {...props} />;
+};
+
 export {
   HomeTimelineColumn,
   PublicTimelineColumn,
@@ -775,4 +789,5 @@ export {
   CircleTimelineColumn,
   WrenchedTimelineColumn,
   AccountTimelineColumn,
+  AdminAccountTimelineColumn,
 };
