@@ -88,6 +88,8 @@ type AdminUpdateDomainBlockParams = AdminCreateDomainBlockParams;
 interface AdminGetReportsParams extends PaginationParams {
   /** Boolean. Filter for resolved reports? */
   resolved?: boolean;
+  /** Boolean. Filter for open reports? */
+  unresolved?: boolean;
   /** String. Filter for reports filed by this account. */
   account_id?: string;
   /** String. Filter for reports targeting this account. */

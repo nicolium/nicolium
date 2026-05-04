@@ -837,9 +837,9 @@ const admin = (client: PlApiBaseClient) => {
       getReports: (params?: AdminGetReportsParams) => {
         if (client.features.mastodonAdmin) {
           if (
-            params?.resolved === undefined &&
-            (client.features.version.software === GOTOSOCIAL ||
-              client.features.version.software === PLEROMA)
+            params?.unresolved &&
+            client.features.version.software === GOTOSOCIAL &&
+            !client.features.mastodonAdminUnresolvedReports
           ) {
             if (!params) params = {};
             params.resolved = false;

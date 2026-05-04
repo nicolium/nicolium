@@ -138,6 +138,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
                   startAt={monthAgo}
                   endAt={today}
                   to='/nicolium/admin/reports'
+                  search={{ resolved: false }}
                   label={
                     <FormattedMessage
                       id='admin.counters.opened_reports'
@@ -183,7 +184,6 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
               <ListItem
                 size='sm'
                 to='/nicolium/admin/reports'
-                search={{ resolved: false }}
                 label={
                   <FormattedMessage
                     id='admin.links.pending_reports'
@@ -302,6 +302,14 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
             <ListItem
               to='/nicolium/admin/accounts'
               label={<FormattedMessage id='column.admin.accounts' defaultMessage='Accounts' />}
+            />
+          )}
+
+          {(features.pleromaAdminAccounts || features.mastodonAdminV2) && (
+            <ListItem
+              to='/nicolium/admin/reports'
+              search={{ resolved: false }}
+              label={<FormattedMessage id='column.admin.reports' defaultMessage='Reports' />}
             />
           )}
 

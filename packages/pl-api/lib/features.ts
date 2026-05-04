@@ -1222,6 +1222,14 @@ const getFeatures = (instance: Instance) => {
     mastodonAdminMetrics: v.software === MASTODON && gte(v.version, '3.5.0'),
 
     /**
+     * @see GET /api/v1/admin/reports
+     */
+    mastodonAdminUnresolvedReports: any([
+      v.software === GOTOSOCIAL && gt(v.version, '0.21.2'),
+      instance.api_versions['mastodon_admin_api.pleroma.pl-api'] >= 1,
+    ]),
+
+    /**
      * Can perform moderation actions with account and reports.
      * @see {@link https://docs.joinmastodon.org/methods/admin/}
      * @see GET /api/v2/admin/accounts

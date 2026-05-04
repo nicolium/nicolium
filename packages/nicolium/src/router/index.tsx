@@ -1078,7 +1078,7 @@ export const adminReportsRoute = createRoute({
   path: '/nicolium/admin/reports',
   component: lazy(() => import('@/pages/dashboard/reports')),
   validateSearch: v.object({
-    resolved: v.optional(v.boolean(), false),
+    resolved: v.optional(v.boolean(), undefined),
     account_id: v.optional(v.string()),
     target_account_id: v.optional(v.string()),
   }),
