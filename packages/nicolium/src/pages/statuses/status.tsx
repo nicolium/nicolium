@@ -78,7 +78,7 @@ const StatusPage: React.FC = () => {
 
   const handleRefresh = () => {
     refetch();
-    refetchContext();
+    return refetchContext();
   };
 
   const items = useMemo(() => {
@@ -181,6 +181,7 @@ const StatusPage: React.FC = () => {
           <Thread
             key={status.id}
             status={status}
+            refetchContext={refetchContext}
             setExpandAllStatuses={(fn) => {
               setExpandAllStatuses(() => fn);
             }}
