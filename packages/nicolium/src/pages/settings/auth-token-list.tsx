@@ -167,7 +167,8 @@ const AuthTokenListPage: React.FC = () => {
           key={token.id}
           token={token}
           isCurrent={
-            (token.is_current || token.linked_session?.is_current) ??
+            token.is_current ||
+            token.linked_session?.is_current ||
             String(token.id) === currentTokenId
           }
         />
