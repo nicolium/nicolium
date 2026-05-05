@@ -63,14 +63,9 @@ const settings = (client: PlApiBaseClient) => ({
 
         credentialAccount.is_admin = iceshrimpResponse.json.isAdmin;
         credentialAccount.is_moderator = iceshrimpResponse.json.isModerator;
-        console.log(1);
-      } catch {
-        console.log('err');
-      }
+      } catch {}
     }
 
-    console.log(2);
-    console.log(credentialAccount);
     return credentialAccount;
   },
 
