@@ -659,14 +659,52 @@ const admin = (client: PlApiBaseClient) => {
       },
 
       disableMfa: async (accountId: string) => {
-        const { account } = await category.accounts.getAccount(accountId)!;
+        let response;
 
-        await client.request('/api/v1/pleroma/admin/users/disable_mfa', {
-          method: 'PUT',
-          body: { nickname: account!.acct },
-        });
+        if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/users/${accountId}/reset-2fa`,
+            {
+              method: 'POST',
+            },
+          );
+        } else {
+          const { account } = await category.accounts.getAccount(accountId)!;
+          response = await client.request<EmptyObject>('/api/v1/pleroma/admin/users/disable_mfa', {
+            method: 'PUT',
+            body: { nickname: account!.acct },
+          });
+        }
 
-        return category.accounts.getAccount(accountId);
+        return response.json;
+      },
+
+      resetPassword: async (accountId: string, password: string) => {
+        let response;
+
+        if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/users/${accountId}/reset-password`,
+            {
+              method: 'POST',
+              body: { password },
+            },
+          );
+        } else {
+          const { account } = await category.accounts.getAccount(accountId)!;
+
+          response = await client.request<EmptyObject>(
+            `/api/v1/pleroma/admin/users/${account!.acct}/credentials`,
+            {
+              method: 'PATCH',
+              body: { password },
+            },
+          );
+        }
+
+        return response.json;
       },
 
       /**
@@ -1345,6 +1383,7 @@ const admin = (client: PlApiBaseClient) => {
               id: tuple[0],
               domain: tuple[0],
               created_at: null,
+              is_imported: false,
             }));
           }
 
@@ -1475,7 +1514,7 @@ const admin = (client: PlApiBaseClient) => {
         } else if (client.features.version.software === ICESHRIMP_NET) {
           await client.getIceshrimpAccessToken();
           const response = await client.request<EmptyObject>(
-            `/api/iceshrimp/admin/instances/${domain}/disallow`,
+            `/api/iceshrimp/admin/instances/${domainAllowId}/disallow`,
             {
               method: 'POST',
             },

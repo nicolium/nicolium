@@ -20,6 +20,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
+  useAdminResetAccountPasswordMutation,
   useAdminSetRoleMutation,
   useAdminUpdateAccountCredentialsMutation,
   useAdminUpdateTagsMutation,
@@ -212,6 +213,7 @@ const AdminAccountPage: React.FC = () => {
   const deleteUserModal = useDeleteUserModal(accountId);
   const { mutate: updateTags } = useAdminUpdateTagsMutation(accountId);
   const { mutate: updateCredentials } = useAdminUpdateAccountCredentialsMutation(accountId);
+  const { mutate: resetPassword } = useAdminResetAccountPasswordMutation(accountId);
 
   const accountBadges = account ? getBadges(account) : [];
   const [badges, setBadges] = useState<string[]>(accountBadges);
@@ -323,14 +325,11 @@ const AdminAccountPage: React.FC = () => {
       placeholder: intl.formatMessage(messages.changePasswordPlaceholder),
       confirm: <FormattedMessage id='common.save' defaultMessage='Save' />,
       onConfirm: (value) => {
-        updateCredentials(
-          { password: value },
-          {
-            onSuccess: () => {
-              toast.success(intl.formatMessage(messages.passwordChanged, { acct: account.acct }));
-            },
+        resetPassword(value, {
+          onSuccess: () => {
+            toast.success(intl.formatMessage(messages.passwordChanged, { acct: account.acct }));
           },
-        );
+        });
       },
       singleLine: true,
       type: 'password',
@@ -448,7 +447,7 @@ const AdminAccountPage: React.FC = () => {
           )}
         </List>
 
-        {features.pleromaAdminAccounts && (
+        {features.pleromaAdminAccounts ? (
           <>
             <List>
               <ListItem
@@ -495,6 +494,30 @@ const AdminAccountPage: React.FC = () => {
               />
             </List>
           </>
+        ) : (
+          features.iceshrimpAdmin && (
+            <List>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.change_password'
+                    defaultMessage='Change password'
+                  />
+                }
+                onClick={handleChangePassword}
+              />
+
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.disable_mfa'
+                    defaultMessage='Disable multi-factor authentication'
+                  />
+                }
+                onClick={handleDisableMfa}
+              />
+            </List>
+          )
         )}
 
         <List>

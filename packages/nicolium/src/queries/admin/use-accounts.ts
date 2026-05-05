@@ -290,6 +290,20 @@ const useAdminSetRoleMutation = (accountId: string) => {
   });
 };
 
+const useAdminResetAccountPasswordMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'accounts', accountId, 'resetPassword'],
+    mutationFn: (password: string) => client.admin.accounts.resetPassword(accountId, password),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.accounts.show(accountId) });
+    },
+  });
+};
+
 const useAdminUpdateAccountCredentialsMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
@@ -321,5 +335,6 @@ export {
   useAdminUntagUserMutation,
   useAdminUpdateTagsMutation,
   useAdminSetRoleMutation,
+  useAdminResetAccountPasswordMutation,
   useAdminUpdateAccountCredentialsMutation,
 };
