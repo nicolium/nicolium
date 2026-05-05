@@ -54,7 +54,7 @@ const OtherActionsStep = ({
   }, [entries, selectedStatusIds]);
   const isBlocked = block;
   const isForward = forward;
-  const canForward = !account.local && features.federating;
+  const canForward = !account.local && features.federating && features.reportForwarding;
 
   const [showAdditionalStatuses, setShowAdditionalStatuses] = useState<boolean>(false);
 

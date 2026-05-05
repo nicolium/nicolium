@@ -1577,6 +1577,8 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '2.5.0'),
     ]),
 
+    reportForwarding: v.software === ICESHRIMP_NET,
+
     /**
      * Can request a password reset email through the API.
      * @see POST /auth/password
