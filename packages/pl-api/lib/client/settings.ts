@@ -630,6 +630,13 @@ const settings = (client: PlApiBaseClient) => ({
           formData: true,
         });
         break;
+      case ICESHRIMP_NET:
+        response = await client.request('/api/iceshrimp/settings/import/following', {
+          method: 'POST',
+          body: { file: list },
+          formData: true,
+        });
+        break;
       case MITRA:
         response = await client.request('/api/v1/settings/import_follows', {
           method: 'POST',
@@ -682,6 +689,13 @@ const settings = (client: PlApiBaseClient) => ({
           formData: true,
         });
         break;
+      case ICESHRIMP_NET:
+        response = await client.request('/api/iceshrimp/settings/import/blocking', {
+          method: 'POST',
+          body: { file: list },
+          formData: true,
+        });
+        break;
       default:
         response = await client.request('/api/pleroma/blocks_import', {
           method: 'POST',
@@ -708,6 +722,13 @@ const settings = (client: PlApiBaseClient) => ({
         response = await client.request('/api/v1/import', {
           method: 'POST',
           body: { data: list, type: 'blocks', mode },
+          formData: true,
+        });
+        break;
+      case ICESHRIMP_NET:
+        response = await client.request('/api/iceshrimp/settings/import/muting', {
+          method: 'POST',
+          body: { file: list },
           formData: true,
         });
         break;

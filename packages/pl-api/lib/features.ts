@@ -1012,10 +1012,12 @@ const getFeatures = (instance: Instance) => {
      * Import a .csv file with a list of blocked users.
      * @see POST /api/pleroma/blocks_import
      * @see POST /api/v1/import
+     * @see POST /api/iceshrimp/settings/import/blocking
      */
     importBlocks: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+      v.software === ICESHRIMP_NET,
       v.software === PLEROMA,
     ]),
 
@@ -1030,10 +1032,12 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/pleroma/follow_import
      * @see POST /api/v1/settings/import_follows
      * @see POST /api/v1/import
+     * @see POST /api/iceshrimp/settings/import/following
      */
     importFollows: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+      v.software === ICESHRIMP_NET,
       v.software === MITRA && gte(v.version, '1.10.0'),
       v.software === PLEROMA,
     ]),
@@ -1042,10 +1046,12 @@ const getFeatures = (instance: Instance) => {
      * Import a .csv file with a list of muted users.
      * @see POST /api/pleroma/mutes_import
      * @see POST /api/v1/import
+     * @see POST /api/iceshrimp/settings/import/muting
      */
     importMutes: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
+      v.software === ICESHRIMP_NET,
       v.software === PLEROMA,
     ]),
 
