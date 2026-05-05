@@ -212,12 +212,16 @@ const settings = (client: PlApiBaseClient) => ({
    * Requires features{@link Features.sessions}.
    * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#get-apioauth_tokens}
    */
-  getOauthTokens: () => {
+  getOauthTokens: async () => {
     let url;
 
     switch (client.features.version.software) {
       case GOTOSOCIAL:
         url = '/api/v1/tokens';
+        break;
+      case ICESHRIMP_NET:
+        await client.getIceshrimpAccessToken();
+        url = '/api/iceshrimp/sessions/mastodon';
         break;
       case MITRA:
         url = '/api/v1/settings/sessions';
