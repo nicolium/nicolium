@@ -332,7 +332,7 @@ const admin = (client: PlApiBaseClient) => {
 
       /**
        * Delete an account
-       * Permanently delete data for a suspended accountusers
+       * Permanently delete data for a suspended account.
        * @see {@link https://docs.joinmastodon.org/methods/admin/accounts/#delete}
        */
       deleteAccount: async (accountId: string) => {
@@ -341,6 +341,11 @@ const admin = (client: PlApiBaseClient) => {
         if (client.features.mastodonAdmin || client.features.version.software === MITRA) {
           response = await client.request(`/api/v1/admin/accounts/${accountId}`, {
             method: 'DELETE',
+          });
+        } else if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request(`/api/iceshrimp/moderation/users/${accountId}/purge`, {
+            method: 'POST',
           });
         } else {
           const account = await category.accounts.getAccount(accountId)!;
@@ -372,6 +377,22 @@ const admin = (client: PlApiBaseClient) => {
           response = await client.request(`/api/v1/admin/accounts/${accountId}/action`, {
             body: { ...params, type },
           });
+        } else if (client.features.iceshrimpAdmin) {
+          switch (type) {
+            case 'disable':
+            case 'suspend':
+              await client.getIceshrimpAccessToken();
+              response = await client.request(
+                `/api/iceshrimp/moderation/users/${accountId}/suspend`,
+                {
+                  method: 'POST',
+                },
+              );
+              break;
+            default:
+              response = { json: {} };
+              break;
+          }
         } else {
           const account = await category.accounts.getAccount(accountId)!;
 
@@ -407,6 +428,14 @@ const admin = (client: PlApiBaseClient) => {
           response = await client.request(`/api/v1/admin/accounts/${accountId}/enable`, {
             method: 'POST',
           });
+        } else if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request(
+            `/api/iceshrimp/moderation/users/${accountId}/unsuspend`,
+            {
+              method: 'POST',
+            },
+          );
         } else {
           const account = await category.accounts.getAccount(accountId)!;
           response = await client.request('/api/v1/pleroma/admin/users/activate', {
@@ -444,6 +473,14 @@ const admin = (client: PlApiBaseClient) => {
           response = await client.request(`/api/v1/admin/accounts/${accountId}/unsuspend`, {
             method: 'POST',
           });
+        } else if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request(
+            `/api/iceshrimp/moderation/users/${accountId}/unsuspend`,
+            {
+              method: 'POST',
+            },
+          );
         } else {
           const { account } = await category.accounts.getAccount(accountId)!;
 
@@ -1063,7 +1100,6 @@ const admin = (client: PlApiBaseClient) => {
        */
       forwardReport: async (reportId: string) => {
         await client.getIceshrimpAccessToken();
-
         await client.request(`/api/iceshrimp/moderation/reports/${reportId}/forward`, {
           method: 'POST',
         });
