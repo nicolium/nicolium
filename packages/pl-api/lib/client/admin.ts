@@ -718,12 +718,15 @@ const admin = (client: PlApiBaseClient) => {
 
           return new PaginatedResponse(domainBlocks);
         }
+        let url;
+        if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          url = '/api/iceshrimp/admin/instances/blocked';
+        } else {
+          url = '/api/v1/admin/domain_blocks';
+        }
 
-        return client.paginatedGet(
-          '/api/v1/admin/domain_blocks',
-          { params },
-          adminDomainBlockSchema,
-        );
+        return client.paginatedGet(url, { params }, adminDomainBlockSchema);
       },
 
       /**
@@ -776,6 +779,17 @@ const admin = (client: PlApiBaseClient) => {
           });
 
           return {};
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          const response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/instances/${domain}/block`,
+            {
+              method: 'POST',
+              params: { reason: params?.public_comment },
+            },
+          );
+
+          return response.json;
         }
 
         const response = await client.request('/api/v1/admin/domain_blocks', {
@@ -816,6 +830,20 @@ const admin = (client: PlApiBaseClient) => {
           });
 
           return {};
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          await client.request(`/api/iceshrimp/admin/instances/${domainBlockId}/unblock`, {
+            method: 'POST',
+          });
+          const response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/instances/${domainBlockId}/block`,
+            {
+              method: 'POST',
+              params: { reason: params.public_comment },
+            },
+          );
+
+          return response.json;
         }
 
         const response = await client.request(`/api/v1/admin/domain_blocks/${domainBlockId}`, {
@@ -861,6 +889,16 @@ const admin = (client: PlApiBaseClient) => {
           }
 
           return {};
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          const response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/instances/${domainBlockId}/unblock`,
+            {
+              method: 'POST',
+            },
+          );
+
+          return response.json;
         }
 
         const response = await client.request<EmptyObject>(
@@ -1274,12 +1312,15 @@ const admin = (client: PlApiBaseClient) => {
 
           return new PaginatedResponse(domainAllows);
         }
+        let url;
+        if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          url = '/api/iceshrimp/admin/instances/allowed';
+        } else {
+          url = '/api/v1/admin/domain_allows';
+        }
 
-        return client.paginatedGet(
-          '/api/v1/admin/domain_allows',
-          { params },
-          adminDomainAllowSchema,
-        );
+        return client.paginatedGet(url, { params }, adminDomainAllowSchema);
       },
 
       /**
@@ -1341,6 +1382,16 @@ const admin = (client: PlApiBaseClient) => {
           }
 
           return {};
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          const response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/instances/${domain}/allow`,
+            {
+              method: 'POST',
+            },
+          );
+
+          return response.json;
         }
 
         const response = await client.request('/api/v1/admin/domain_allows', {
@@ -1383,6 +1434,16 @@ const admin = (client: PlApiBaseClient) => {
           }
 
           return {};
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          const response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/instances/${domain}/disallow`,
+            {
+              method: 'POST',
+            },
+          );
+
+          return response.json;
         }
 
         const response = await client.request<EmptyObject>(

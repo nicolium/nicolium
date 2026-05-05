@@ -166,7 +166,7 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
           </FormGroup>
         )}
         <List>
-          {features.version.software !== GOTOSOCIAL && (
+          {features.version.software !== GOTOSOCIAL && !features.iceshrimpAdmin && (
             <>
               <ListItem
                 label={
@@ -210,7 +210,7 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
               </ListItem>
             </>
           )}
-          {features.version.software !== PLEROMA && features.version.software !== AKKOMA && (
+          {features.mastodonAdmin && (
             <ListItem
               label={
                 <FormattedMessage
@@ -228,7 +228,7 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
               <Toggle checked={obfuscate} onChange={({ target }) => setObfuscate(target.checked)} />
             </ListItem>
           )}
-          {features.version.software !== GOTOSOCIAL && (
+          {features.version.software !== GOTOSOCIAL && !features.iceshrimpAdmin && (
             <>
               <ListItem
                 label={
@@ -261,22 +261,24 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
             </>
           )}
         </List>
-        {features.version.software !== PLEROMA && features.version.software !== AKKOMA && (
-          <FormGroup
-            labelText={
-              <FormattedMessage
-                id='admin.edit_domain_block.fields.private_comment_label'
-                defaultMessage='Private comment'
+        {features.version.software !== PLEROMA &&
+          features.version.software !== AKKOMA &&
+          !features.iceshrimpAdmin && (
+            <FormGroup
+              labelText={
+                <FormattedMessage
+                  id='admin.edit_domain_block.fields.private_comment_label'
+                  defaultMessage='Private comment'
+                />
+              }
+            >
+              <Textarea
+                placeholder={intl.formatMessage(messages.privateCommentPlaceholder)}
+                value={privateComment}
+                onChange={({ target }) => setPrivateComment(target.value)}
               />
-            }
-          >
-            <Textarea
-              placeholder={intl.formatMessage(messages.privateCommentPlaceholder)}
-              value={privateComment}
-              onChange={({ target }) => setPrivateComment(target.value)}
-            />
-          </FormGroup>
-        )}
+            </FormGroup>
+          )}
         <FormGroup
           labelText={
             <FormattedMessage

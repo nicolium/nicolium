@@ -1177,7 +1177,7 @@ export const adminDomainBlocksRoute = createRoute({
   path: '/nicolium/admin/domain_blocks',
   component: lazy(() => import('@/pages/dashboard/domain-blocks')),
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
-    if (!isAdmin || !features.adminDomainBlocks) throw notFound();
+    if (!isAdmin || (!features.adminDomainBlocks && !features.iceshrimpAdmin)) throw notFound();
   }),
 });
 
@@ -1186,7 +1186,7 @@ export const adminDomainAllowsRoute = createRoute({
   path: '/nicolium/admin/domain_allows',
   component: lazy(() => import('@/pages/dashboard/domain-allows')),
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
-    if (!isAdmin || !features.adminDomainBlocks) throw notFound();
+    if (!isAdmin || (!features.adminDomainBlocks && !features.iceshrimpAdmin)) throw notFound();
   }),
 });
 

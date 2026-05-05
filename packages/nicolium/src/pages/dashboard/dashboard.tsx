@@ -328,7 +328,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
             />
           )}
 
-          {features.adminDomainBlocks &&
+          {(features.adminDomainBlocks || features.iceshrimpAdmin) &&
             (instance.configuration.limited_federation ? (
               <ListItem
                 to='/nicolium/admin/domain_allows'
