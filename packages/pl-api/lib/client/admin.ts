@@ -1740,7 +1740,14 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminrelay}
        */
       getRelays: async () => {
-        const response = await client.request('/api/v1/pleroma/admin/relay');
+        let response;
+
+        if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request('/api/iceshrimp/admin/relays');
+        } else {
+          response = await client.request('/api/v1/pleroma/admin/relay');
+        }
 
         return v.parse(filteredArray(adminRelaySchema), response.json);
       },
@@ -1752,12 +1759,22 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminrelay}
        */
       followRelay: async (relayUrl: string) => {
-        const response = await client.request('/api/v1/pleroma/admin/relay', {
-          method: 'POST',
-          body: { relay_url: relayUrl },
-        });
+        let response;
 
-        return v.parse(adminRelaySchema, response.json);
+        if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request('/api/iceshrimp/admin/relays', {
+            method: 'POST',
+            body: { inbox: relayUrl },
+          });
+        } else {
+          response = await client.request('/api/v1/pleroma/admin/relay', {
+            method: 'POST',
+            body: { relay_url: relayUrl },
+          });
+        }
+
+        return v.parse(v.optional(adminRelaySchema), response.json);
       },
 
       /**
@@ -1766,13 +1783,22 @@ const admin = (client: PlApiBaseClient) => {
        * Requires features{@link Features.pleromaAdminRelays}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#delete-apiv1pleromaadminrelay}
        */
-      unfollowRelay: async (relayUrl: string, force = false) => {
-        const response = await client.request('/api/v1/pleroma/admin/relay', {
-          method: 'DELETE',
-          body: { relay_url: relayUrl, force },
-        });
+      unfollowRelay: async (id: string, force = false) => {
+        let response;
 
-        return v.parse(adminRelaySchema, response.json);
+        if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request(`/api/iceshrimp/admin/relays/${id}`, {
+            method: 'DELETE',
+          });
+        } else {
+          response = await client.request('/api/v1/pleroma/admin/relay', {
+            method: 'DELETE',
+            body: { relay_url: id, force },
+          });
+        }
+
+        return v.parse(v.optional(adminRelaySchema), response.json);
       },
     },
 

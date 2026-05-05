@@ -5,6 +5,7 @@ import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import Indicator from '@/components/ui/indicator';
 import Input from '@/components/ui/input';
 import Text from '@/components/ui/text';
 import { useTextField } from '@/hooks/forms/use-text-field';
@@ -32,7 +33,7 @@ const Relay: React.FC<IRelay> = ({ relay }) => {
   const { unfollowRelay } = useRelays();
 
   const handleDeleteRelay = () => () => {
-    unfollowRelay(relay.actor, {
+    unfollowRelay(relay.id, {
       onSuccess: () => {
         toast.success(messages.relayDeleteSuccess);
       },
@@ -53,6 +54,31 @@ const Relay: React.FC<IRelay> = ({ relay }) => {
             <Text tag='span' size='sm' weight='medium'>
               <FormattedMessage id='admin.relays.followed_back' defaultMessage='Followed back' />
             </Text>
+          )}
+          {relay.status && (
+            <div className='flex items-center gap-2'>
+              <Indicator
+                state={
+                  relay.status === 'accepted'
+                    ? 'active'
+                    : relay.status === 'rejected'
+                      ? 'error'
+                      : 'pending'
+                }
+              />
+              <Text tag='span' size='sm' weight='medium'>
+                {relay.status === 'accepted' ? (
+                  <FormattedMessage id='admin.relays.status.accepted' defaultMessage='Accepted' />
+                ) : relay.status === 'rejected' ? (
+                  <FormattedMessage id='admin.relays.status.rejected' defaultMessage='Rejected' />
+                ) : (
+                  <FormattedMessage
+                    id='admin.relays.status.requesting'
+                    defaultMessage='Requesting'
+                  />
+                )}
+              </Text>
+            </div>
           )}
         </div>
         <div className='flex justify-end gap-2'>

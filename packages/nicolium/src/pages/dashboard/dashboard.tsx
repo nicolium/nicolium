@@ -379,7 +379,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
             />
           )}
 
-          {features.pleromaAdminRelays && (
+          {(features.pleromaAdminRelays || features.iceshrimpAdmin) && (
             <ListItem
               to='/nicolium/admin/relays'
               label={<FormattedMessage id='column.admin.relays' defaultMessage='Instance relays' />}
