@@ -174,6 +174,7 @@ const baseAccountSchema = v.object({
   following_count: v.fallback(v.number(), 0),
   roles: filteredArray(roleSchema),
   hide_collections: v.fallback(v.optional(v.boolean()), undefined),
+  email_subscriptions: v.fallback(v.optional(v.boolean()), undefined),
 
   fqn: v.string(),
   ap_id: v.fallback(v.nullable(v.string()), null),

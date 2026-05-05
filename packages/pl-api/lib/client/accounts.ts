@@ -447,6 +447,15 @@ const accounts = (client: PlApiBaseClient) => ({
 
     return response.json;
   },
+
+  subscribeByEmail: async (accountId: string, email: string) => {
+    const response = await client.request<EmptyObject>(
+      `/api/v1/accounts/${accountId}/email_subscriptions`,
+      { method: 'POST', body: { email } },
+    );
+
+    return response.json;
+  },
 });
 
 export { accounts };
