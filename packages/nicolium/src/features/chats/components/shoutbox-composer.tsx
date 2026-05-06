@@ -1,4 +1,5 @@
 import iconPaperPlaneRight from '@phosphor-icons/core/regular/paper-plane-right.svg';
+import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -22,10 +23,14 @@ interface IShoutboxComposer extends Pick<
   value: string;
   onSubmit: () => void;
   resetContentKey: number | null;
+  widget?: boolean;
 }
 
 const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxComposer>(
-  ({ onKeyDown, onChange, value, onSubmit, disabled = false, resetContentKey, onPaste }, ref) => {
+  (
+    { onKeyDown, onChange, value, onSubmit, disabled = false, resetContentKey, onPaste, widget },
+    ref,
+  ) => {
     const intl = useIntl();
 
     const maxCharacterCount = useInstance().configuration.chats.max_characters;
@@ -56,7 +61,7 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
     };
 
     return (
-      <div className='mt-auto px-4 py-5 shadow-3xl'>
+      <div className={clsx('mt-auto pt-5 shadow-3xl', !widget && 'px-4 pb-5')}>
         <div className='flex items-stretch justify-between gap-4'>
           <div className='flex flex-grow flex-col'>
             <Combobox onSelect={onSelectComboboxOption}>

@@ -87,6 +87,7 @@ const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className, widget }) => {
         onSubmit={sendMessage}
         resetContentKey={resetContentKey}
         disabled={!createShoutboxMessage}
+        widget={widget}
       />
     </div>
   );
