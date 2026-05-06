@@ -426,7 +426,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
               >
                 <a
                   href={
-                    sourceCode.ref ? `${sourceCode.url}/tree/${sourceCode.ref}` : sourceCode.url
+                    sourceCode.ref ? `${sourceCode.url}/commit/${sourceCode.ref}` : sourceCode.url
                   }
                   className='⁂-dashboard__source-code'
                   target='_blank'
