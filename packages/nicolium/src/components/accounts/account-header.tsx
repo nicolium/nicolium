@@ -335,7 +335,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
 
       <div
         className={clsx(
-          'relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none md:rounded-t-xl',
+          'relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none sm:rounded-t-xl',
           {
             'h-32 bg-gray-200 dark:bg-gray-900/50 lg:h-48': !settings.disableUserProvidedMedia,
           },

@@ -173,7 +173,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     return (
       <>
         <div className='-mx-4 -mt-4'>
-          <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-48' />
+          <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 sm:rounded-t-xl lg:h-48' />
         </div>
 
         <PlaceholderEventHeader />
@@ -504,13 +504,13 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   return (
     <>
       <div className='-mx-4 -mt-4'>
-        <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-48'>
+        <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 sm:rounded-t-xl lg:h-48'>
           {banner && (
             <a href={banner.url} onClick={handleHeaderClick} target='_blank'>
               <StillImage
                 src={banner.url}
                 alt={intl.formatMessage(messages.bannerHeader)}
-                className='absolute inset-0 h-full object-cover black:rounded-t-none md:rounded-t-xl'
+                className='absolute inset-0 h-full object-cover black:rounded-t-none sm:rounded-t-xl'
               />
             </a>
           )}
