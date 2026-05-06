@@ -1070,8 +1070,9 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
   align-items: center;
 
   width: fit-content;
-
+  
   color: rgb(var(--color-primary-600));
+  text-align: left;
 
   .dark & {
     color: rgb(var(--color-gray-600));
