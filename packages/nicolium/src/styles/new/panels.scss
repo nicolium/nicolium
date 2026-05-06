@@ -37,3 +37,47 @@
     max-height: 20rem;
   }
 }
+
+.⁂-announcements-widget {
+  .⁂-widget__body {
+    @include mixins.card($size: md, $variant: rounded);
+
+    position: relative;
+    gap: 0;
+
+    .black & {
+      border: 1px solid rgb(var(--color-gray-800));
+      border-radius: var(--radius-xl);
+    }
+  }
+
+  &__dots {
+    position: relative;
+
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+
+    button {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: var(--radius-full);
+      background-color: rgb(var(--color-gray-200));
+
+      &:hover {
+        background-color: rgb(var(--color-gray-300));
+      }
+
+      &:focus {
+        outline: 2px solid rgb(var(--color-primary-600));
+        outline-offset: 2px;
+      }
+
+      &[data-active='true'],
+      &[data-active='true']:hover {
+        background-color: rgb(var(--color-primary-600));
+      }
+    }
+  }
+}

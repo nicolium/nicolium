@@ -1971,3 +1971,26 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     }
   }
 }
+
+.⁂-announcement {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+
+  &__time {
+    @include mixins.text($theme: muted);
+  }
+
+  &__content {
+    font-size: var(--text-sm);
+    
+    [dir='ltr'] & {
+      margin-left: 0;
+    }
+
+    [dir='rtl'] & {
+      margin-right: 0;
+    }
+  }
+}
