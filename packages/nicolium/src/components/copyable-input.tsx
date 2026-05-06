@@ -23,13 +23,13 @@ const CopyableInput: React.FC<ICopyableInput> = ({ value, type = 'text', onCopy 
   };
 
   return (
-    <div className='flex items-center'>
+    <div className='flex min-w-0 items-center'>
       <Input
         ref={input}
         type={type}
         value={value}
         className='rounded-r-none rtl:rounded-l-none rtl:rounded-r-lg'
-        outerClassName='grow'
+        outerClassName='grow min-w-0'
         onClick={selectInput}
         readOnly
       />
