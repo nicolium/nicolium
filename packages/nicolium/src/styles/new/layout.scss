@@ -488,6 +488,7 @@ body {
 
   &--narrow {
     align-items: center;
+    width: fit-content;
 
     .⁂-site-logo {
       max-width: 2.5rem;
@@ -496,6 +497,11 @@ body {
 
     .⁂-sidebar-navigation-link > p {
       display: none;
+    }
+
+    .⁂-sidebar-navigation__compose-button {
+      width: fit-content;
+      padding: 0.75rem;
     }
   }
 
