@@ -17,6 +17,7 @@ import {
   ProfileFieldsPanel,
   ProfileMediaPanel,
   PromoPanel,
+  ShoutboxPanel,
   SignUpPanel,
   TrendsPanel,
   WhoToFollowPanel,
@@ -25,6 +26,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useSettings } from '@/stores/settings';
+import { useShoutboxIsLoading } from '@/stores/shoutbox';
 import { useFederationRestrictionsDisclosed, useIsStandalone } from '@/utils/state';
 
 import LinkFooter from './link-footer';
@@ -63,6 +65,7 @@ const AsideContent: React.FC<IAsideContent> = ({
   const disclosed = useFederationRestrictionsDisclosed();
   const standalone = useIsStandalone();
   const frontendConfig = useFrontendConfig();
+  const showShoutbox = !useShoutboxIsLoading();
 
   return useMemo(() => {
     const items: React.ReactNode[] = [];
@@ -171,6 +174,11 @@ const AsideContent: React.FC<IAsideContent> = ({
           items.push(<NotificationsPanel key='notifications' />);
           break;
         }
+        case 'shoutbox': {
+          if (!showShoutbox) break;
+          items.push(<ShoutboxPanel key='shoutbox' />);
+          break;
+        }
         case 'footer': {
           items.push(<LinkFooter key='footer' />);
           break;
@@ -179,7 +187,17 @@ const AsideContent: React.FC<IAsideContent> = ({
     }
 
     return <>{items}</>;
-  }, [sidebarItems, ownAccount?.id, features, disclosed, layout, group, account, instance]);
+  }, [
+    sidebarItems,
+    ownAccount?.id,
+    features,
+    disclosed,
+    layout,
+    group,
+    account,
+    instance,
+    showShoutbox,
+  ]);
 };
 
 export { AsideContent };

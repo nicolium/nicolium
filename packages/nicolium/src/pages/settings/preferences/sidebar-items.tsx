@@ -12,6 +12,7 @@ import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
 import { AVAILABLE_SIDEBAR_ITEMS, DEFAULT_SIDEBAR_ITEMS } from '@/schemas/frontend-settings';
 import { useSettings } from '@/stores/settings';
+import { useShoutboxIsLoading } from '@/stores/shoutbox';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -41,6 +42,10 @@ const itemsMessages = {
     id: 'settings.sidebar_items.item.notifications',
     defaultMessage: 'Notifications',
   },
+  shoutbox: {
+    id: 'settings.sidebar_items.item.shoutbox',
+    defaultMessage: 'Shoutbox',
+  },
 };
 
 const itemHintsMessages = {
@@ -69,6 +74,10 @@ const itemHintsMessages = {
     id: 'settings.sidebar_items.item.notifications.hint',
     defaultMessage: 'Notifications about mentions and interactions with your posts.',
   },
+  shoutbox: {
+    id: 'settings.sidebar_items.item.shoutbox.hint',
+    defaultMessage: 'Instance-wide real-time chat.',
+  },
 };
 
 const SidebarItem: StreamfieldComponent<(typeof AVAILABLE_SIDEBAR_ITEMS)[number]> = ({ value }) => {
@@ -88,10 +97,11 @@ const SidebarItem: StreamfieldComponent<(typeof AVAILABLE_SIDEBAR_ITEMS)[number]
 const SidebarItems: React.FC = () => {
   const intl = useIntl();
 
+  const showShoutbox = !useShoutboxIsLoading();
   const settings = useSettings();
 
   const availableItems = AVAILABLE_SIDEBAR_ITEMS.filter(
-    (item) => !settings.sidebarItems.includes(item),
+    (item) => !settings.sidebarItems.includes(item) && (item !== 'shoutbox' || showShoutbox),
   );
 
   const reset = () => {

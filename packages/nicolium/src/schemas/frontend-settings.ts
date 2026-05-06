@@ -99,6 +99,7 @@ const AVAILABLE_SIDEBAR_ITEMS = [
   'footer',
   'compose',
   'notifications',
+  'shoutbox',
 ] as const;
 
 const DEFAULT_SIDEBAR_ITEMS = [

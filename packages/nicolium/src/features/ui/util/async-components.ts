@@ -26,6 +26,7 @@ export const ProfileFieldsPanel = lazy(() => import('@/components/panels/profile
 export const ProfileInfoPanel = lazy(() => import('@/components/panels/profile-info-panel'));
 export const ProfileMediaPanel = lazy(() => import('@/components/panels/profile-media-panel'));
 export const PromoPanel = lazy(() => import('@/components/panels/promo-panel'));
+export const ShoutboxPanel = lazy(() => import('@/components/panels/shoutbox-panel'));
 export const SignUpPanel = lazy(() => import('@/components/panels/sign-up-panel'));
 export const TrendsPanel = lazy(() => import('@/components/panels/trends-panel'));
 export const UserPanel = lazy(() => import('@/components/panels/user-panel'));
