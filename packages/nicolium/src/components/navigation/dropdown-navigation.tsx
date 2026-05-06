@@ -148,7 +148,6 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   const { openModal } = useModalsActions();
   const { closeSidebar } = useUiStoreActions();
   const { verifyAccounts, logOut } = useAuthActions();
-  const [page, setPage] = useState<'main' | 'more'>('main');
 
   const me = useCurrentAccount();
 
@@ -157,14 +156,15 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
   const { data: account } = useAccount(me || undefined);
   const settings = useSettings();
-  const [sidebarVisible, setSidebarVisible] = useState(isSidebarOpen);
   const touchStart = useRef(0);
   const touchEnd = useRef<number | null>(null);
   const { isOpen } = useRegistrationStatus();
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const [switcher, setSwitcher] = React.useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(isSidebarOpen);
+  const [switcher, setSwitcher] = useState(false);
+  const [page, setPage] = useState<'main' | 'more'>('main');
 
   const handleSwitcherClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();

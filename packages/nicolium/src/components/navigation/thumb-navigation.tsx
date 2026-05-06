@@ -3,7 +3,7 @@ import iconPlusSquare from '@phosphor-icons/core/regular/plus-square.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useMatch } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import ThumbNavigationLink, {
@@ -17,6 +17,7 @@ import { queryKeys } from '@/queries/keys';
 import { layouts } from '@/router';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 
 import Avatar from '../ui/avatar';
@@ -28,6 +29,33 @@ const messages = defineMessages({
   openSidebar: { id: 'navigation.sidebar', defaultMessage: 'Open sidebar' },
   closeSidebar: { id: 'navigation.sidebar.close', defaultMessage: 'Close sidebar' },
 });
+
+const SidebarDot: React.FC = () => {
+  const navigationItems = useNavigationItems(false);
+  const isSidebarOpen = useIsSidebarOpen();
+  const { demetricator } = useSettings();
+
+  const [totalCount, setTotalCount] = useState(0);
+  const [showDot, setShowDot] = useState(false);
+
+  useMemo(() => {
+    const newCount = navigationItems.reduce((acc, item) => {
+      if (item && 'count' in item && item.count) return acc + item.count;
+      return acc;
+    }, 0);
+
+    if (newCount > totalCount) setShowDot(true);
+    setTotalCount(newCount);
+  }, [navigationItems]);
+
+  useEffect(() => {
+    if (isSidebarOpen) setShowDot(false);
+  }, [isSidebarOpen]);
+
+  return showDot && !demetricator ? (
+    <div className='⁂-thumb-navigation__sidebar-dot' aria-hidden />
+  ) : null;
+};
 
 const ProfileLink: React.FC<IThumbNavigationLink> = ({
   count,
@@ -137,6 +165,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
         aria-expanded={isSidebarOpen}
       >
         <Icon src={iconList} />
+        {orderedNavigationItems.length === 0 && <SidebarDot />}
       </button>
 
       {orderedNavigationItems.map((item) => {

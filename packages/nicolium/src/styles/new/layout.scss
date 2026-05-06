@@ -417,10 +417,26 @@ body {
     }
   }
 
+  &__sidebar-dot {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 1rem;
+    height: 1rem;
+    border-radius: var(--radius-full);
+
+    background: rgb(var(--color-primary-400));
+    box-shadow: var(--shadow-lg);
+  }
+
   &--no-items {
+    overflow: unset;
+
     width: fit-content;
     margin: 0.5rem;
     border-radius: var(--radius-full);
+
     box-shadow: 0 8px 24px 0 rgb(0, 0, 0, 0.2);
 
     .dark & {
