@@ -92,7 +92,11 @@ const Emojify: React.FC<IEmojify> = React.memo(
         );
 
         if (truncated) {
-          nodes.push(<span className='inline-flex'>{emoji}</span>);
+          nodes.push(
+            <span key={index} className='inline-flex'>
+              {emoji}
+            </span>,
+          );
         } else {
           nodes.push(emoji);
         }
@@ -113,7 +117,11 @@ const Emojify: React.FC<IEmojify> = React.memo(
         );
 
         if (truncated) {
-          nodes.push(<span className='inline-flex'>{emoji}</span>);
+          nodes.push(
+            <span key={index} className='inline-flex'>
+              {emoji}
+            </span>,
+          );
         } else {
           nodes.push(emoji);
         }
