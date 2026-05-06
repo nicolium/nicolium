@@ -435,7 +435,7 @@ const EditProfilePage: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
-        <div className='relative mb-12 flex'>
+        <div className='⁂-profile-images'>
           <HeaderPicker
             accept={attachmentTypes}
             disabled={isLoading}

@@ -60,7 +60,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
       <label
         ref={picker}
         className={clsx(
-          'absolute bottom-0 left-1/2 size-20 -translate-x-1/2 translate-y-1/2 cursor-pointer rounded-lg bg-primary-300 ring-2',
+          '⁂-avatar-picker absolute bottom-0 left-1/2 size-20 -translate-x-1/2 translate-y-1/2 cursor-pointer rounded-lg bg-primary-300 ring-2',
           {
             '!z-[99] overflow-hidden border-2 border-dashed border-primary-600': isDragging,
             'ring-white dark:ring-primary-900': !isDraggedOver,
@@ -68,7 +68,6 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
           },
           className,
         )}
-        style={{ height: 80, width: 80 }}
       >
         {src && (
           <Avatar className={clsx(onChangeDescription && '!rounded-lg')} src={src} size={80} />
