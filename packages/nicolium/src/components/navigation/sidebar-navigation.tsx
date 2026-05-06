@@ -158,8 +158,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
       )}
 
       <ul className='⁂-sidebar-navigation__links'>
-        {navigationItems.map((item) => {
-          if (item === null) return null;
+        {navigationItems.map((item, index) => {
+          if (item === null) return <hr key={`separator-${index}`} />;
 
           switch (item.type) {
             case 'compose':

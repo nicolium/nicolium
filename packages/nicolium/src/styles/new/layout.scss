@@ -503,6 +503,18 @@ body {
     display: flex;
     flex-direction: column;
     row-gap: 0.375rem;
+
+    hr {
+      border-color: rgb(var(--color-gray-200));
+
+      .dark & {
+        border-color: rgb(var(--color-gray-900));
+      }
+
+      .black & {
+        border-color: rgb(var(--color-gray-800));
+      }
+    }
   }
 
   &__compose-button {
