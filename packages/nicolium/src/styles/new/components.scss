@@ -1911,3 +1911,63 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     opacity: 0;
   }
 }
+
+.⁂-crypto-address {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  &__label {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    width: 1.5rem;
+  }
+
+  p {
+    @include mixins.text($weight: bold);
+
+    flex-grow: 1;
+  }
+
+  button {
+    color: rgb(var(--color-gray-500));
+  }
+}
+
+.⁂-copyable-input {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+
+  .⁂-input__wrapper {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  input {
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+
+    [dir='rtl'] & {
+      border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    }
+  }
+
+  button {
+    @include mixins.button($theme: primary);
+
+    height: 100%;
+    margin-top: 0.25rem;
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+
+    [dir='rtl'] & {
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    }
+  }
+}

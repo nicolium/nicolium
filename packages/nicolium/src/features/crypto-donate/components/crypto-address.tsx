@@ -29,21 +29,15 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props) => {
   const title = getTitle(ticker);
 
   return (
-    <div className='flex flex-col'>
-      <div className='mb-1 flex items-center'>
-        <CryptoIcon
-          className='mr-2.5 flex w-6 items-start justify-center rtl:ml-2.5 rtl:mr-0'
-          ticker={ticker}
-          title={title}
-        />
+    <div className='⁂-crypto-address'>
+      <div className='⁂-crypto-address__label'>
+        <CryptoIcon className='⁂-crypto-address__icon' ticker={ticker} title={title} />
 
-        <Text weight='bold'>{title || ticker.toUpperCase()}</Text>
+        <p>{title || ticker.toUpperCase()}</p>
 
-        <div className='ml-auto flex items-center'>
-          <a className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1' href='#' onClick={handleModalClick}>
-            <Icon src={iconQrCode} size={20} />
-          </a>
-        </div>
+        <button onClick={handleModalClick}>
+          <Icon src={iconQrCode} size={20} />
+        </button>
       </div>
 
       {note && <Text>{note}</Text>}
