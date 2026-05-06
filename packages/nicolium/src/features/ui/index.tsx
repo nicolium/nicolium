@@ -13,6 +13,7 @@ import { useUserStream } from '@/hooks/streaming/use-user-stream';
 import { useClient } from '@/hooks/use-client';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
+import { useMinWidth } from '@/hooks/use-min-width';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { prefetchFollowRequests } from '@/queries/accounts/use-follow-requests';
 import { useAdminConfig } from '@/queries/admin/use-config';
@@ -149,14 +150,16 @@ const UI: React.FC = React.memo(() => {
     resetErroredTimelines();
   }, [!!account]);
 
+  const shouldNotShrink = useMinWidth('(min-width: 976px)');
+
   // Wait for login to succeed or fail
   if (me === null) return null;
 
   const style: React.CSSProperties = {
     pointerEvents: isDropdownMenuOpen ? 'none' : undefined,
   };
-
   const fullWidth = false; // !!matchPath(history.location.pathname, '/deck');
+  const shrink = fullWidth || !shouldNotShrink;
 
   return (
     <GlobalHotkeys node={node}>
@@ -181,8 +184,8 @@ const UI: React.FC = React.memo(() => {
         <div className='⁂-layout__container'>
           <Layout fullWidth={fullWidth}>
             {!isNewStatusPage && (
-              <Layout.Sidebar shrink={fullWidth}>
-                {!(standalone && !me) && <SidebarNavigation shrink={fullWidth} />}
+              <Layout.Sidebar shrink={shrink}>
+                {!(standalone && !me) && <SidebarNavigation shrink={shrink} />}
               </Layout.Sidebar>
             )}
 

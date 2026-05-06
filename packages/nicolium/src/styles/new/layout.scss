@@ -442,7 +442,7 @@ body {
     }
   }
 
-  @media (min-width: variables.$breakpoint-lg) {
+  @media (min-width: variables.$breakpoint-sm) {
     display: none;
   }
 }
@@ -896,7 +896,17 @@ body {
     }
 
     &:not(&--full-width) {
+      @media (min-width: variables.$breakpoint-sm) {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem 1rem 0;
+      }
+
       @media (min-width: variables.$breakpoint-md) {
+        gap: 2rem;
+      }
+
+      @media (min-width: variables.$breakpoint-lg) {
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
         max-width: 80rem;
@@ -939,7 +949,7 @@ body {
       padding-bottom: 1rem;
     }
 
-    @media (min-width: variables.$breakpoint-lg) {
+    @media (min-width: variables.$breakpoint-sm) {
       display: block;
     }
   }
