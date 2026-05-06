@@ -1078,6 +1078,15 @@ body {
     [dir='rtl'] & {
       transform: rotate(180deg);
     }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  a.⁂-widget__icon {
+    padding: 0.25rem;
   }
 
   &__body {
