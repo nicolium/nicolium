@@ -32,5 +32,8 @@
 }
 
 .⁂-shoutbox-widget {
-  max-height: 20rem;
+  .⁂-widget__body {
+    height: 20rem;
+    max-height: 20rem;
+  }
 }
