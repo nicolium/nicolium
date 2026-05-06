@@ -1,5 +1,6 @@
 import iconQrCode from '@phosphor-icons/core/regular/qr-code.svg';
 import React from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 import CopyableInput from '@/components/copyable-input';
 import Icon from '@/components/ui/icon';
@@ -10,6 +11,13 @@ import { getTitle } from '../utils/coin-db';
 
 import CryptoIcon from './crypto-icon';
 
+const messages = defineMessages({
+  showQrCode: {
+    id: 'crypto.show_qr_code',
+    defaultMessage: 'Show QR code',
+  },
+});
+
 interface ICryptoAddress {
   address: string;
   ticker: string;
@@ -19,6 +27,7 @@ interface ICryptoAddress {
 const CryptoAddress: React.FC<ICryptoAddress> = (props) => {
   const { address, ticker, note } = props;
 
+  const intl = useIntl();
   const { openModal } = useModalsActions();
 
   const handleModalClick: React.MouseEventHandler<HTMLElement> = (e) => {
@@ -35,8 +44,12 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props) => {
 
         <p>{title || ticker.toUpperCase()}</p>
 
-        <button onClick={handleModalClick}>
-          <Icon src={iconQrCode} size={20} />
+        <button
+          onClick={handleModalClick}
+          title={intl.formatMessage(messages.showQrCode)}
+          aria-label={intl.formatMessage(messages.showQrCode)}
+        >
+          <Icon src={iconQrCode} size={20} aria-hidden />
         </button>
       </div>
 

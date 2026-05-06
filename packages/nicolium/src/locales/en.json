@@ -941,6 +941,7 @@
   "confirmations.wrench.message": "Are you sure you want to wrench this post? This can have disastrous consequences.",
   "copy.success": "Copied to clipboard!",
   "crypto.lightning": "Lightning",
+  "crypto.show_qr_code": "Show QR code",
   "crypto_donate.explanation_box.message": "{siteTitle} accepts cryptocurrency donations. You may send a donation to any of the addresses below. Thank you for your support!",
   "crypto_donate.explanation_box.title": "Sending cryptocurrency donations",
   "crypto_donate_panel.actions.view": "Click to see {count, plural, one {# wallet} other {# wallets}}",
