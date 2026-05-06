@@ -4,7 +4,6 @@ import React from 'react';
 import { FormattedNumber } from 'react-intl';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
 
-import Text from '@/components/ui/text';
 import { useMeasures } from '@/queries/admin/use-metrics';
 
 import type { AdminGetMeasuresParams, AdminMeasureKey } from 'pl-api';
@@ -51,10 +50,6 @@ const Counter: React.FC<ICounter> = ({
 
   if (!data) {
     content = null;
-    {
-      /* <span className='sparkline__value__total'><Skeleton width={43} /></span>
-    <span className='sparkline__value__change'><Skeleton width={43} /></span> */
-    }
   } else {
     const measure = data[0];
     const percentChange =
@@ -64,14 +59,13 @@ const Counter: React.FC<ICounter> = ({
 
     content = (
       <>
-        <Text tag='span' align='center' size='2xl' weight='medium'>
+        <span className='⁂-measure__total'>
           {measure.human_value ?? <FormattedNumber value={measure.total} />}
-        </Text>
+        </span>
         {measure.previous_total !== undefined && (
           <span
-            className={clsx('text-lg', {
-              'text-green-600': percentChange > 0,
-              'text-danger-600': percentChange < 0,
+            className={clsx('⁂-measure__previous', {
+              '⁂-measure__previous--negative': percentChange < 0,
             })}
           >
             {percentChange > 0 && '+'}
@@ -85,13 +79,11 @@ const Counter: React.FC<ICounter> = ({
 
   const inner = (
     <>
-      <div className='flex items-end justify-center gap-2.5 px-5 pb-2 pt-4 leading-[33px]'>
-        {content}
-      </div>
+      <div className='⁂-measure'>{content}</div>
 
-      <Text align='center'>{label}</Text>
+      <p className='⁂-measure__label'>{label}</p>
 
-      <div className='mt-auto'>
+      <div className='⁂-measure__sparklines'>
         <Sparklines width={259} height={55} data={data?.[0].data.map((x) => x.value * 1) ?? []}>
           <SparklinesCurve />
         </Sparklines>
@@ -99,20 +91,14 @@ const Counter: React.FC<ICounter> = ({
     </>
   );
 
-  const className = 'relative flex flex-col rounded bg-gray-200 font-medium dark:bg-gray-800';
-
   if ('to' in rest) {
     return (
-      <Link
-        {...rest}
-        className={clsx(className, 'transition-transform hover:-translate-y-1')}
-        target={target}
-      >
+      <Link {...rest} className='⁂-measure__container' target={target}>
         {inner}
       </Link>
     );
   } else {
-    return <div className={className}>{inner}</div>;
+    return <div className='⁂-measure__container'>{inner}</div>;
   }
 };
 
