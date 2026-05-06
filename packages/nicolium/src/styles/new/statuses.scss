@@ -706,15 +706,15 @@
   }
 
   &--quote + .⁂-read-more-button__container .⁂-read-more-button__gradient {
-    .⁂-quoted-status:hover & {
+    .⁂-quoted-status:not(.⁂-quoted-status--compose):hover & {
       background-image: linear-gradient(to bottom, transparent, rgb(var(--color-gray-100)));
     }
 
-    .dark.black .⁂-quoted-status:hover & {
+    .dark.black .⁂-quoted-status:not(.⁂-quoted-status--compose):hover & {
       background-image: linear-gradient(to bottom, transparent, rgb(var(--color-primary-800)));
     }
 
-    .dark .⁂-quoted-status:hover & {
+    .dark .⁂-quoted-status:not(.⁂-quoted-status--compose):hover & {
       background-image: linear-gradient(to bottom, transparent, rgb(var(--color-primary-800)));
     }
   }
