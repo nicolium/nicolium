@@ -322,6 +322,7 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
     for (const item of filteredItems) {
       switch (item) {
         case 'separator':
+          if (menu.length === 0 || menu.at(-1) === null) break;
           menu.push(null);
           break;
         case 'search-input':
