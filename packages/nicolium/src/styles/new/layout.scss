@@ -876,7 +876,6 @@ body {
     flex-grow: 1;
 
     width: 100%;
-    max-width: 48rem;
 
     // FIXME: min-h-[100dvh] is a workaround for some Ladybird bug
     min-height: 100dvh;
@@ -904,6 +903,7 @@ body {
 
       @media (min-width: variables.$breakpoint-md) {
         gap: 2rem;
+        padding: 1rem 2rem 0;
       }
 
       @media (min-width: variables.$breakpoint-lg) {
@@ -982,10 +982,6 @@ body {
       @media (min-width: variables.$breakpoint-xl) {
         padding-top: 0;
       }
-    }
-
-    @media (min-width: variables.$breakpoint-md) {
-      grid-column: span 12 / span 12;
     }
 
     @media (min-width: variables.$breakpoint-lg) {
