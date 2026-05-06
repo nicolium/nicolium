@@ -19,6 +19,7 @@ const ShoutboxPanel = () => {
           values={{ instance: instance.title }}
         />
       }
+      to='/chats/shoutbox'
     >
       <Shoutbox widget />
     </Widget>
