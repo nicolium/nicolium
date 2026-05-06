@@ -56,10 +56,7 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
     };
 
     return (
-      <div className='mt-auto px-4 shadow-3xl'>
-        {/* Spacer */}
-        <div className='h-5' />
-
+      <div className='mt-auto px-4 py-5 shadow-3xl'>
         <div className='flex items-stretch justify-between gap-4'>
           <div className='flex flex-grow flex-col'>
             <Combobox onSelect={onSelectComboboxOption}>
@@ -98,8 +95,6 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
             />
           </div>
         </div>
-
-        <div className='h-5' />
       </div>
     );
   },
