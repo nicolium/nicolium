@@ -48,11 +48,11 @@ const DevelopersPage: React.FC = () => {
   const showToast = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    toast.success('Hello world!', {
+    toast.success('meow!', {
       action: () => {
-        alert('hi');
+        alert('meow :3');
       },
-      actionLabel: 'Click me',
+      actionLabel: 'meow',
     });
   };
 
