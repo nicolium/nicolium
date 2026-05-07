@@ -301,7 +301,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   } else if (card.image && !disableUserProvidedMedia) {
     embed = (
       <div
-        className={clsx('status-card__image', 'w-full flex-none rounded-l md:w-min', {
+        className={clsx('status-card__image', 'mf:max-w-1/2 w-full flex-none rounded-l md:w-min', {
           'h-auto': horizontal,
           'h-[200px]': !horizontal,
         })}
