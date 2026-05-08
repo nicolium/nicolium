@@ -312,6 +312,10 @@ const useTimelinesStore = create<State>()(
 
           timeline.entries.splice(gapIndex, 1);
 
+          if (gapIndex === 0) {
+            timeline.newestStatusId = statuses[0].id;
+          }
+
           if (direction === 'up') {
             if (hasMore && statuses.length > 0) {
               const remainingGap: TimelineEntry = {
