@@ -74,7 +74,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
 
     return (
       <div
-        className={clsx('absolute z-[2]', {
+        className={clsx('absolute z-[3]', {
           'flex h-full w-full cursor-default justify-center rounded-md border-0 backdrop-blur-lg':
             !visible,
           'inset-0 bg-gray-800/75': !visible,
