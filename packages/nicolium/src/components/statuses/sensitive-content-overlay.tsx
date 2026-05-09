@@ -4,8 +4,7 @@ import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
-import Text from '@/components/ui/text';
+import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
@@ -74,34 +73,28 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
 
     return (
       <div
-        className={clsx('absolute z-[3]', {
-          'flex h-full w-full cursor-default justify-center rounded-md border-0 backdrop-blur-lg':
-            !visible,
-          'inset-0 bg-gray-800/75': !visible,
-          'bottom-1 right-1': visible,
+        className={clsx('⁂-sensitive-content-overlay__container', {
+          '⁂-sensitive-content-overlay__container--visible': visible,
         })}
         data-testid='sensitive-overlay'
       >
         {visible ? (
-          <Button
-            text={<FormattedMessage id='moderation_overlay.hide' defaultMessage='Hide content' />}
-            icon={iconEyeSlash}
-            onClick={toggleVisibility}
-            theme='primary'
-            size='sm'
-          />
+          <button onClick={toggleVisibility} type='button'>
+            <Icon src={iconEyeSlash} aria-hidden />
+            <FormattedMessage id='moderation_overlay.hide' defaultMessage='Hide content' />
+          </button>
         ) : (
-          <div className='flex max-h-screen items-center justify-center'>
-            <div className='mx-auto space-y-4 text-center' ref={ref}>
-              <div className='space-y-1'>
-                <Text theme='white' weight='semibold'>
+          <div className='⁂-sensitive-content-overlay'>
+            <div ref={ref}>
+              <div className='⁂-sensitive-content-overlay__content'>
+                <p>
                   <FormattedMessage
                     id='status.sensitive_warning'
                     defaultMessage='Sensitive content'
                   />
-                </Text>
+                </p>
 
-                <Text theme='white' size='sm' weight='medium'>
+                <p>
                   {filters.length ? (
                     <FormattedMessage
                       id='status.sensitive_warning.matches_filter'
@@ -117,19 +110,14 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
                       defaultMessage='This content may not be suitable for all audiences.'
                     />
                   )}
-                </Text>
+                </p>
               </div>
 
-              <div className='flex items-center justify-center gap-2'>
-                <Button
-                  type='button'
-                  theme='outlined'
-                  size='sm'
-                  icon={iconEye}
-                  onClick={toggleVisibility}
-                >
+              <div className='⁂-sensitive-content-overlay__actions'>
+                <button type='button' onClick={toggleVisibility}>
+                  <Icon src={iconEye} aria-hidden />
                   <FormattedMessage id='moderation_overlay.show' defaultMessage='Show content' />
-                </Button>
+                </button>
               </div>
             </div>
           </div>
