@@ -96,52 +96,46 @@ const FilterBar = () => {
     });
   } else {
     items.push({
-      text: <Icon className='size-4' src={iconAt} aria-hidden />,
+      text: <Icon src={iconAt} aria-hidden />,
       title: intl.formatMessage(messages.mentions),
       action: onClick('mention'),
       name: 'mention',
     });
     if (features.accountNotifies)
       items.push({
-        text: <Icon className='size-4' src={iconBellSimpleRinging} aria-hidden />,
+        text: <Icon src={iconBellSimpleRinging} aria-hidden />,
         title: intl.formatMessage(messages.statuses),
         action: onClick('status'),
         name: 'status',
       });
     items.push({
-      text: <Icon className='size-4' src={iconStar} aria-hidden />,
+      text: <Icon src={iconStar} aria-hidden />,
       title: intl.formatMessage(messages.favourites),
       action: onClick('favourite'),
       name: 'favourite',
     });
     items.push({
-      text: (
-        <Icon
-          className='size-4'
-          src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
-          aria-hidden
-        />
-      ),
+      text: <Icon src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat} aria-hidden />,
       title: intl.formatMessage(messages.boosts),
       action: onClick('reblog'),
       name: 'reblog',
     });
     if (features.polls)
       items.push({
-        text: <Icon className='size-4' src={iconChartBar} aria-hidden />,
+        text: <Icon src={iconChartBar} aria-hidden />,
         title: intl.formatMessage(messages.polls),
         action: onClick('poll'),
         name: 'poll',
       });
     if (features.events)
       items.push({
-        text: <Icon className='size-4' src={iconCalendarDots} aria-hidden />,
+        text: <Icon src={iconCalendarDots} aria-hidden />,
         title: intl.formatMessage(messages.events),
         action: onClick('events'),
         name: 'events',
       });
     items.push({
-      text: <Icon className='size-4' src={iconUserPlus} aria-hidden />,
+      text: <Icon src={iconUserPlus} aria-hidden />,
       title: intl.formatMessage(messages.follows),
       action: onClick('follow'),
       name: 'follow',
