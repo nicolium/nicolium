@@ -32,14 +32,6 @@ const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
 
     const isActive = matchRoute({ to, ...rest }) !== false;
 
-    const handleClick: React.EventHandler<React.MouseEvent> = (e) => {
-      if (onClick) {
-        onClick(e);
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    };
-
     return (
       <li>
         <LinkComponent
@@ -47,7 +39,7 @@ const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
           activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
           to={to}
           ref={ref}
-          onClick={handleClick}
+          onClick={onClick}
           className='⁂-sidebar-navigation-link'
           {...rest}
         >
