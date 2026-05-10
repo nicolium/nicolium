@@ -12,7 +12,7 @@ import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
+import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import OutlineBox from '@/components/outline-box';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
@@ -29,6 +29,7 @@ import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 
 const messages = defineMessages({
   heading: {
@@ -83,11 +84,17 @@ const StatusActionBarItem: StreamfieldComponent<
   );
 };
 
-const StatusActionBarItems: React.FC = () => {
+const StatusActionBarItems: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const features = useFeatures();
   const intl = useIntl();
 
-  const settings = useSettings();
+  const userSettings = useSettings();
+  const settings = settingsProp || userSettings;
 
   const availableItems = {
     reply: true,
@@ -140,6 +147,12 @@ const StatusActionBarItems: React.FC = () => {
           <Button theme='secondary' onClick={reset}>
             <FormattedMessage id='settings.interface_items.reset' defaultMessage='Reset' />
           </Button>
+
+          {onSave && (
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          )}
         </FormActions>
       </Form>
     </Column>

@@ -1012,6 +1012,7 @@ export const settingsNavigationItemsRoute = createRoute({
   getParentRoute: () => layouts.settings,
   path: '/settings/navigation',
   component: lazy(() => import('@/pages/settings/preferences/navigation-items')),
+  beforeLoad: requireAuth,
 });
 
 export const settingsSidebarItemsRoute = createRoute({
@@ -1078,6 +1079,37 @@ export const frontendConfigDefaultSettingsPrivacyRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/config/default_settings/privacy',
   component: wrapDefaultSettings(lazy(() => import('@/pages/settings/privacy'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsNavigationItemsRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/navigation',
+  component: wrapDefaultSettings(
+    lazy(() => import('@/pages/settings/preferences/navigation-items')),
+  ),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsSidebarItemsRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/sidebar',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/sidebar-items'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsStatusActionBarItemsRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/status_actions',
+  component: wrapDefaultSettings(
+    lazy(() => import('@/pages/settings/preferences/status-action-bar-items')),
+  ),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1555,6 +1587,9 @@ const routeTree = rootRoute.addChildren([
     frontendConfigDefaultSettingsContentRoute,
     frontendConfigDefaultSettingsComposeRoute,
     frontendConfigDefaultSettingsPrivacyRoute,
+    frontendConfigDefaultSettingsNavigationItemsRoute,
+    frontendConfigDefaultSettingsSidebarItemsRoute,
+    frontendConfigDefaultSettingsStatusActionBarItemsRoute,
   ]),
   layouts.chats.addChildren([
     chatsRoute.addChildren([

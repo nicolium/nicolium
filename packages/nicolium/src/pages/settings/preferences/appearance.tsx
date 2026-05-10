@@ -363,7 +363,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
 
         <List>
           <ListItem
-            to='/settings/navigation'
+            to={onSave ? '/nicolium/config/default_settings/navigation' : '/settings/navigation'}
             label={
               <FormattedMessage
                 id='preferences.fields.navigation_items'
@@ -373,7 +373,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           />
 
           <ListItem
-            to='/settings/sidebar'
+            to={onSave ? '/nicolium/config/default_settings/sidebar' : '/settings/sidebar'}
             label={
               <FormattedMessage
                 id='preferences.fields.sidebar_items'
@@ -383,7 +383,11 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           />
 
           <ListItem
-            to='/settings/status_actions'
+            to={
+              onSave
+                ? '/nicolium/config/default_settings/status_actions'
+                : '/settings/status_actions'
+            }
             label={
               <FormattedMessage
                 id='preferences.fields.status_actions_items'

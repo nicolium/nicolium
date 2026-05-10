@@ -32,10 +32,10 @@ import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
 import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
+import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import OutlineBox from '@/components/outline-box';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
@@ -55,6 +55,7 @@ import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 
 const messages = defineMessages({
   heading: { id: 'settings.navigation_items.heading', defaultMessage: 'Navigation menu items' },
@@ -156,53 +157,67 @@ const UNPINNABLE_ITEMS: (typeof AVAILABLE_NAVIGATION_ITEMS)[number][] = [
   'search-input',
 ];
 
-const NavigationItem: StreamfieldComponent<(typeof AVAILABLE_NAVIGATION_ITEMS)[number]> = ({
-  value,
-  index,
-}) => {
-  const intl = useIntl();
+const getNavigationItemComponent = (changeSetting: typeof defaultChangeSetting) => {
+  const NavigationItem: StreamfieldComponent<(typeof AVAILABLE_NAVIGATION_ITEMS)[number]> = ({
+    value,
+    index,
+  }) => {
+    const intl = useIntl();
 
-  const pinnedNavigationItems = useSettings().pinnedNavigationItems;
-  const pinned = pinnedNavigationItems.includes(value);
+    const pinnedNavigationItems = useSettings().pinnedNavigationItems;
+    const pinned = pinnedNavigationItems.includes(value);
 
-  const canPin = index !== -1 && !UNPINNABLE_ITEMS.includes(value);
+    const canPin = index !== -1 && !UNPINNABLE_ITEMS.includes(value);
 
-  return (
-    <div className='⁂-interface-item'>
-      <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
-      <Icon className='⁂-interface-item__icon' src={itemsIcons[value]} aria-hidden />
-      <p>{intl.formatMessage(itemsMessages[value])}</p>
-      {canPin && (
-        <button
-          className='⁂-interface-item__pin'
-          type='button'
-          aria-label={
-            pinned ? intl.formatMessage(messages.unpin) : intl.formatMessage(messages.pin)
-          }
-          title={pinned ? intl.formatMessage(messages.unpin) : intl.formatMessage(messages.pin)}
-          aria-pressed={pinned}
-          onClick={() =>
-            changeSetting(
-              ['pinnedNavigationItems'],
-              pinned
-                ? pinnedNavigationItems.filter((item) => item !== value)
-                : [...pinnedNavigationItems, value],
-            )
-          }
-        >
-          <Icon src={pinned ? iconPushPinSlash : iconPushPin} aria-hidden />
-        </button>
-      )}
-    </div>
-  );
+    return (
+      <div className='⁂-interface-item'>
+        <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
+        <Icon className='⁂-interface-item__icon' src={itemsIcons[value]} aria-hidden />
+        <p>{intl.formatMessage(itemsMessages[value])}</p>
+        {canPin && (
+          <button
+            className='⁂-interface-item__pin'
+            type='button'
+            aria-label={
+              pinned ? intl.formatMessage(messages.unpin) : intl.formatMessage(messages.pin)
+            }
+            title={pinned ? intl.formatMessage(messages.unpin) : intl.formatMessage(messages.pin)}
+            aria-pressed={pinned}
+            onClick={() =>
+              changeSetting(
+                ['pinnedNavigationItems'],
+                pinned
+                  ? pinnedNavigationItems.filter((item) => item !== value)
+                  : [...pinnedNavigationItems, value],
+              )
+            }
+          >
+            <Icon src={pinned ? iconPushPinSlash : iconPushPin} aria-hidden />
+          </button>
+        )}
+      </div>
+    );
+  };
+
+  NavigationItem.displayName = 'NavigationItem';
+
+  return NavigationItem;
 };
 
-const NavigationItems: React.FC = () => {
+const NavigationItems: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const intl = useIntl();
   const features = useFeatures();
   const instance = useInstance();
 
-  const settings = useSettings();
+  const userSettings = useSettings();
+  const settings = settingsProp || userSettings;
+
+  const NavigationItem = useMemo(() => getNavigationItemComponent(changeSetting), []);
 
   const availableItems = AVAILABLE_NAVIGATION_ITEMS.filter(
     (item) => item === 'separator' || !settings.navigationItems.includes(item),
@@ -247,6 +262,12 @@ const NavigationItems: React.FC = () => {
           <Button theme='secondary' onClick={reset}>
             <FormattedMessage id='settings.interface_items.reset' defaultMessage='Reset' />
           </Button>
+
+          {onSave && (
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          )}
         </FormActions>
       </Form>
     </Column>

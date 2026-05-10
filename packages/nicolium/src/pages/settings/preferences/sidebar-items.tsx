@@ -2,7 +2,7 @@ import iconDotsSixVertical from '@phosphor-icons/core/regular/dots-six-vertical.
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
+import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import OutlineBox from '@/components/outline-box';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
@@ -16,6 +16,7 @@ import { useShoutboxIsLoading } from '@/stores/shoutbox';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 
 const messages = defineMessages({
   heading: { id: 'settings.sidebar_items.heading', defaultMessage: 'Sidebar items' },
@@ -94,11 +95,18 @@ const SidebarItem: StreamfieldComponent<(typeof AVAILABLE_SIDEBAR_ITEMS)[number]
   );
 };
 
-const SidebarItems: React.FC = () => {
+const SidebarItems: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const intl = useIntl();
 
   const showShoutbox = !useShoutboxIsLoading();
-  const settings = useSettings();
+
+  const userSettings = useSettings();
+  const settings = settingsProp || userSettings;
 
   const availableItems = AVAILABLE_SIDEBAR_ITEMS.filter(
     (item) => !settings.sidebarItems.includes(item) && (item !== 'shoutbox' || showShoutbox),
@@ -138,6 +146,12 @@ const SidebarItems: React.FC = () => {
           <Button theme='secondary' onClick={reset}>
             <FormattedMessage id='settings.interface_items.reset' defaultMessage='Reset' />
           </Button>
+
+          {onSave && (
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          )}
         </FormActions>
       </Form>
     </Column>
