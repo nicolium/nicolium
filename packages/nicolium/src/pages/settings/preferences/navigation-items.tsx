@@ -246,8 +246,6 @@ const NavigationItems: React.FC<ISettingsPage> = ({
     toast.success(messages.resetSuccess);
   };
 
-  console.log(settings.navigationItems);
-
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>

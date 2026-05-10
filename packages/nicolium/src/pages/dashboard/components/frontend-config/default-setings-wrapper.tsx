@@ -61,7 +61,6 @@ const DefaultSettingsWrapper: React.FC<IDefaultSettingsWrapper> = ({
   };
 
   const changeSetting = (path: string[], value: any) => {
-    console.log(path, value);
     const updatedData = create(dataRef.current, (draft) => {
       recursiveChangeSetting(draft.defaultSettings, path, value, settings);
     });
