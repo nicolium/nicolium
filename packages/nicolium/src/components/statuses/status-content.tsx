@@ -7,7 +7,6 @@ import { FormattedMessage } from 'react-intl';
 import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
-import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
@@ -113,8 +112,8 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       displayMentionAvatars,
       showNestedQuotes,
       showSideBySideTranslations,
+      greentext,
     } = useSettings();
-    const { greentext } = useFrontendConfig();
     const { data: account } = useAccount(status.account_id);
 
     const [collapsed, setCollapsed] = useState<boolean | null>(null);

@@ -313,6 +313,41 @@ const AppearancePreferences: React.FC = () => {
               onChange={onToggleChange}
             />
           </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='frontend_config.display_fqn_label'
+                defaultMessage='Display domain (eg @user@domain) for local accounts.'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['displayFqn']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='frontend_config.greentext_label'
+                defaultMessage='<span>>render greentext</span>'
+                values={{
+                  span: (children) => (
+                    <span className='dark:text-accent-green text-lime-600'>{children}</span>
+                  ),
+                }}
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['greentext']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
         </List>
 
         <List>

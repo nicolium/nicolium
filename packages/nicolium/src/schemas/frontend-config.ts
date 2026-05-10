@@ -63,11 +63,9 @@ const frontendConfigSchemaShape = {
   ),
   copyright: v.fallback(v.string(), 'skibidi dop dop dop yes yes'),
   defaultSettings: v.fallback(v.partial(settingsSchema), {}),
-  greentext: v.fallback(v.boolean(), false),
   promoPanel: promoPanelSchema,
   navlinks: v.fallback(v.record(v.string(), filteredArray(footerItemSchema)), {}),
   verifiedIcon: v.fallback(v.string(), ''),
-  displayFqn: v.fallback(v.boolean(), true),
   cryptoAddresses: filteredArray(cryptoAddressSchema),
   cryptoDonatePanel: coerceObject({
     limit: v.fallback(v.number(), 1),

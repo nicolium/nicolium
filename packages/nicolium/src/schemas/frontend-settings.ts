@@ -259,6 +259,8 @@ const settingsSchema = v.object({
   showChatWidget: v.fallback(v.boolean(), true),
   showNestedQuotes: v.fallback(v.boolean(), false),
   useRocketIconForReblogs: v.fallback(v.boolean(), false),
+  greentext: v.fallback(v.boolean(), false),
+  displayFqn: v.fallback(v.boolean(), true),
 
   theme: v.optional(
     coerceObject({
