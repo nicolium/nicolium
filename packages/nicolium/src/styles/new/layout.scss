@@ -289,6 +289,23 @@ body {
     p {
       @include mixins.text($weight: medium);
     }
+
+    &:not(.⁂-sidebar-navigation-link--active) {
+      .⁂-sidebar-navigation-link__icon {
+        .dark & {
+          background-color: rgb(var(--color-gray-800));
+
+          svg {
+            color: rgb(var(--color-primary-500));
+          }
+        }
+      }
+    }
+
+    .black &:hover {
+      border-radius: var(--radius-lg);
+      background: rgb(var(--color-gray-800));
+    }
   }
 }
 
