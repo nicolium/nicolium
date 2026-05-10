@@ -1271,6 +1271,7 @@
   "frontend_config.greentext_label": "<span>>render greentext</span>",
   "frontend_config.headings.advanced": "Advanced",
   "frontend_config.headings.cryptocurrency": "Cryptocurrency",
+  "frontend_config.headings.default_settings": "Default settings",
   "frontend_config.headings.events": "Events",
   "frontend_config.headings.navigation": "Navigation",
   "frontend_config.headings.options": "Options",
