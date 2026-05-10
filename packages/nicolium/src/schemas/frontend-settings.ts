@@ -254,7 +254,7 @@ const settingsSchema = v.object({
   rememberTimelinePosition: v.fallback(v.boolean(), true),
   accountNicknames: v.fallback(v.record(v.string(), v.string()), {}),
   useSystemMediaControls: v.fallback(v.boolean(), false),
-  displayMentionAvatars: v.fallback(v.boolean(), false),
+  displayMentionAvatars: v.fallback(v.boolean(), true),
   defaultTimeline: timelineSchema,
   showChatWidget: v.fallback(v.boolean(), true),
   showNestedQuotes: v.fallback(v.boolean(), false),
