@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
+import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
@@ -13,15 +13,26 @@ import sourceCode from '@/utils/code';
 
 import MessagesSettings from '../components/messages-settings';
 import { languages } from '../components/preferences';
+import FormActions from '@/components/ui/form-actions';
+import Button from '@/components/ui/button';
+
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 
 const messages = defineMessages({
   heading: { id: 'preferences.heading.general', defaultMessage: 'General settings' },
 });
 
-const GeneralPreferences: React.FC = () => {
+const GeneralPreferences: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const features = useFeatures();
   const intl = useIntl();
-  const settings = useSettings();
+  const userSettings = useSettings();
+
+  const settings = settingsProp || userSettings;
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
     changeSetting(path, event.target.value, { showAlert: true });
@@ -207,7 +218,15 @@ const GeneralPreferences: React.FC = () => {
           </ListItem>
         </List>
 
-        {features.chats && <MessagesSettings />}
+        {!onSave && features.chats && <MessagesSettings />}
+
+        {onSave && (
+          <FormActions>
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          </FormActions>
+        )}
       </Form>
     </Column>
   );

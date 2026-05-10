@@ -84,6 +84,16 @@ const requireAuthMiddleware =
     next?.(options);
   };
 
+const wrapDefaultSettings = (Component: React.FC) => {
+  const Wrapper = React.lazy(() => import('@/pages/dashboard/components/frontend-config/default-setings-wrapper'));
+
+  return () => (
+    <React.Suspense fallback={<ColumnLoading />}>
+      <Wrapper settingsPage={Component} />
+    </React.Suspense>
+  );
+};
+
 const layouts = {
   admin: createRoute({
     getParentRoute: () => rootRoute,
@@ -1026,6 +1036,51 @@ export const frontendConfigRoute = createRoute({
   }),
 });
 
+export const frontendConfigDefaultSettingsGeneralRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/general',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/general'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsAppearanceRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/appearance',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/appearance'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsContentRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/content',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/content'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsComposeRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/compose',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/compose'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsTimelinesRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/timelines',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/timelines'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
 // Admin routes
 export const adminDashboardRoute = createRoute({
   getParentRoute: () => layouts.adminHome,
@@ -1493,6 +1548,11 @@ const routeTree = rootRoute.addChildren([
     adminDomainBlocksRoute,
     adminDomainAllowsRoute,
     frontendConfigRoute,
+    frontendConfigDefaultSettingsGeneralRoute,
+    frontendConfigDefaultSettingsAppearanceRoute,
+    frontendConfigDefaultSettingsContentRoute,
+    frontendConfigDefaultSettingsComposeRoute,
+    frontendConfigDefaultSettingsTimelinesRoute,
   ]),
   layouts.chats.addChildren([
     chatsRoute.addChildren([

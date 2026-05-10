@@ -57,7 +57,7 @@ const fetchFrontendConfigJson = (host: string | null) =>
     });
 
 const importFrontendConfig = (frontendConfig: APIEntity, host: string | null) => {
-  frontendConfig.brandColor ??= '#d80482';
+  if (!frontendConfig.brandColor) frontendConfig.brandColor = '#d80482';
 
   useSettingsStore.getState().actions.loadDefaultSettings(frontendConfig?.defaultSettings);
   useFrontendConfigStore.getState().actions.importConfig(frontendConfig, host || '');
