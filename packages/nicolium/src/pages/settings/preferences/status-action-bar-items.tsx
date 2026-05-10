@@ -25,7 +25,7 @@ import {
   AVAILABLE_STATUS_ACTION_BAR_ITEMS,
   DEFAULT_STATUS_ACTION_BAR_ITEMS,
 } from '@/schemas/frontend-settings';
-import { useSettings } from '@/stores/settings';
+import { useDefaultSettings, useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -92,6 +92,7 @@ const StatusActionBarItems: React.FC<ISettingsPage> = ({
 }) => {
   const features = useFeatures();
   const intl = useIntl();
+  const defaultSettings = useDefaultSettings();
 
   const userSettings = useSettings();
   const settings = settingsProp || userSettings;
@@ -114,7 +115,10 @@ const StatusActionBarItems: React.FC<ISettingsPage> = ({
   );
 
   const reset = () => {
-    changeSetting(['statusActionBarItems'], DEFAULT_STATUS_ACTION_BAR_ITEMS);
+    changeSetting(
+      ['statusActionBarItems'],
+      onSave ? DEFAULT_STATUS_ACTION_BAR_ITEMS : defaultSettings.statusActionBarItems,
+    );
     toast.success(messages.resetSuccess);
   };
 

@@ -11,7 +11,7 @@ import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
 import { AVAILABLE_SIDEBAR_ITEMS, DEFAULT_SIDEBAR_ITEMS } from '@/schemas/frontend-settings';
-import { useSettings } from '@/stores/settings';
+import { useDefaultSettings, useSettings } from '@/stores/settings';
 import { useShoutboxIsLoading } from '@/stores/shoutbox';
 import toast from '@/toast';
 
@@ -102,6 +102,7 @@ const SidebarItems: React.FC<ISettingsPage> = ({
   disabled,
 }) => {
   const intl = useIntl();
+  const defaultSettings = useDefaultSettings();
 
   const showShoutbox = !useShoutboxIsLoading();
 
@@ -113,7 +114,7 @@ const SidebarItems: React.FC<ISettingsPage> = ({
   );
 
   const reset = () => {
-    changeSetting(['sidebarItems'], DEFAULT_SIDEBAR_ITEMS);
+    changeSetting(['sidebarItems'], onSave ? DEFAULT_SIDEBAR_ITEMS : defaultSettings.sidebarItems);
     toast.success(messages.resetSuccess);
   };
 

@@ -51,7 +51,7 @@ import {
   DEFAULT_PINNED_NAVIGATION_ITEMS,
 } from '@/schemas/frontend-settings';
 import { useInstance } from '@/stores/instance';
-import { useSettings } from '@/stores/settings';
+import { useDefaultSettings, useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -157,14 +157,17 @@ const UNPINNABLE_ITEMS: (typeof AVAILABLE_NAVIGATION_ITEMS)[number][] = [
   'search-input',
 ];
 
-const getNavigationItemComponent = (changeSetting: typeof defaultChangeSetting) => {
+const getNavigationItemComponent = (
+  changeSetting: typeof defaultChangeSetting,
+  settings: ReturnType<typeof useSettings>,
+) => {
   const NavigationItem: StreamfieldComponent<(typeof AVAILABLE_NAVIGATION_ITEMS)[number]> = ({
     value,
     index,
   }) => {
     const intl = useIntl();
 
-    const pinnedNavigationItems = useSettings().pinnedNavigationItems;
+    const pinnedNavigationItems = settings.pinnedNavigationItems;
     const pinned = pinnedNavigationItems.includes(value);
 
     const canPin = index !== -1 && !UNPINNABLE_ITEMS.includes(value);
@@ -213,11 +216,15 @@ const NavigationItems: React.FC<ISettingsPage> = ({
   const intl = useIntl();
   const features = useFeatures();
   const instance = useInstance();
+  const defaultSettings = useDefaultSettings();
 
   const userSettings = useSettings();
   const settings = settingsProp || userSettings;
 
-  const NavigationItem = useMemo(() => getNavigationItemComponent(changeSetting), []);
+  const NavigationItem = useMemo(
+    () => getNavigationItemComponent(changeSetting, settings),
+    [changeSetting, settings],
+  );
 
   const availableItems = AVAILABLE_NAVIGATION_ITEMS.filter(
     (item) => item === 'separator' || !settings.navigationItems.includes(item),
@@ -228,10 +235,18 @@ const NavigationItems: React.FC<ISettingsPage> = ({
   );
 
   const reset = () => {
-    changeSetting(['navigationItems'], DEFAULT_NAVIGATION_ITEMS);
-    changeSetting(['pinnedNavigationItems'], DEFAULT_PINNED_NAVIGATION_ITEMS);
+    changeSetting(
+      ['navigationItems'],
+      onSave ? DEFAULT_NAVIGATION_ITEMS : defaultSettings.navigationItems,
+    );
+    changeSetting(
+      ['pinnedNavigationItems'],
+      onSave ? DEFAULT_PINNED_NAVIGATION_ITEMS : defaultSettings.pinnedNavigationItems,
+    );
     toast.success(messages.resetSuccess);
   };
+
+  console.log(settings.navigationItems);
 
   return (
     <Column title={intl.formatMessage(messages.heading)}>
