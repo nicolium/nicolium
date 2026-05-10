@@ -93,7 +93,7 @@ const NicoliumHead = () => {
     if (wcoVisible) {
       return window.getComputedStyle(document.body, null).getPropertyValue('background-color');
     }
-    return themeSettings?.brandColor ?? frontendConfig.brandColor;
+    return (themeSettings?.brandColor ?? frontendConfig.brandColor) || '#d80482';
   }, [frontendConfig.brandColor, themeSettings?.brandColor, theme, wcoVisible, wcoRight]);
 
   return (

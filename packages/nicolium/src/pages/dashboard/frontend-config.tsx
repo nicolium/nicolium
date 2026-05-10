@@ -88,6 +88,15 @@ const FrontendConfigEditor: React.FC = () => {
     setJsonValid(true);
   };
 
+  const handleReset = () => {
+    updateConfig(getUpdateFrontendConfigParams(undefined), {
+      onSuccess: () => {
+        toast.success(messages.saved);
+      },
+    });
+    e.preventDefault();
+  };
+
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     updateConfig(getUpdateFrontendConfigParams(data), {
       onSuccess: () => {
@@ -596,6 +605,9 @@ const FrontendConfigEditor: React.FC = () => {
         </fieldset>
 
         <FormActions>
+          <Button theme='secondary' onClick={handleReset} disabled={isPending}>
+            <FormattedMessage id='frontend_config.reset' defaultMessage='Reset' />
+          </Button>
           <Button type='submit'>
             <FormattedMessage id='frontend_config.save' defaultMessage='Save' />
           </Button>
