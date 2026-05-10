@@ -88,7 +88,7 @@ const FrontendConfigEditor: React.FC = () => {
     setJsonValid(true);
   };
 
-  const handleReset = () => {
+  const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     updateConfig(getUpdateFrontendConfigParams(undefined), {
       onSuccess: () => {
         toast.success(messages.saved);
