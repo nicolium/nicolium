@@ -85,7 +85,9 @@ const requireAuthMiddleware =
   };
 
 const wrapDefaultSettings = (Component: React.FC) => {
-  const Wrapper = React.lazy(() => import('@/pages/dashboard/components/frontend-config/default-setings-wrapper'));
+  const Wrapper = React.lazy(
+    () => import('@/pages/dashboard/components/frontend-config/default-setings-wrapper'),
+  );
 
   return () => (
     <React.Suspense fallback={<ColumnLoading />}>
@@ -1072,10 +1074,10 @@ export const frontendConfigDefaultSettingsComposeRoute = createRoute({
   }),
 });
 
-export const frontendConfigDefaultSettingsTimelinesRoute = createRoute({
+export const frontendConfigDefaultSettingsPrivacyRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/nicolium/config/default_settings/timelines',
-  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/timelines'))),
+  path: '/nicolium/config/default_settings/privacy',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/privacy'))),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1552,7 +1554,7 @@ const routeTree = rootRoute.addChildren([
     frontendConfigDefaultSettingsAppearanceRoute,
     frontendConfigDefaultSettingsContentRoute,
     frontendConfigDefaultSettingsComposeRoute,
-    frontendConfigDefaultSettingsTimelinesRoute,
+    frontendConfigDefaultSettingsPrivacyRoute,
   ]),
   layouts.chats.addChildren([
     chatsRoute.addChildren([

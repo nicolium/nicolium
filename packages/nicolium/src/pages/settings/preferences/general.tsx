@@ -3,8 +3,10 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import { useFeatures } from '@/hooks/use-features';
 import SettingToggle from '@/pages/settings/components/setting-toggle';
@@ -13,8 +15,6 @@ import sourceCode from '@/utils/code';
 
 import MessagesSettings from '../components/messages-settings';
 import { languages } from '../components/preferences';
-import FormActions from '@/components/ui/form-actions';
-import Button from '@/components/ui/button';
 
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 

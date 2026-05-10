@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 import { useMutative } from 'use-mutative';
 
-import { changeSetting, saveSettings } from '@/actions/settings';
+import { changeSetting as defaultChangeSetting, saveSettings } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
@@ -18,6 +18,7 @@ import KVStore from '@/storage/kv-store';
 import { useSettings } from '@/stores/settings';
 import { hasCanvasExtractPermission } from '@/utils/favicon-service';
 
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 import type { KVStoreRedirectServicesItem } from '@/utils/url-purify';
 
 const messages = defineMessages({
@@ -40,11 +41,17 @@ const messages = defineMessages({
   },
 });
 
-const Privacy = () => {
+const Privacy: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+}) => {
   const me = useCurrentAccount();
   const intl = useIntl();
 
-  const settings = useSettings();
+  const userSettings = useSettings();
+
+  const settings = settingsProp || userSettings;
   const { urlPrivacy } = settings;
 
   const [displayTargetHost, setDisplayTargetHost] = useState(urlPrivacy.displayTargetHost);
@@ -86,9 +93,13 @@ const Privacy = () => {
     changeSetting(['urlPrivacy'], value);
     changeSetting(['stripMetadata'], stripMetadata);
 
-    saveSettings({
-      showAlert: true,
-    });
+    if (onSave) {
+      setTimeout(onSave, 100);
+    } else {
+      saveSettings({
+        showAlert: true,
+      });
+    }
   };
 
   const handleChangeRedirectLinksMode = (event: React.ChangeEvent<HTMLSelectElement>) => {

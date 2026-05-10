@@ -3,11 +3,12 @@ import debounce from 'lodash/debounce';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting, saveSettings } from '@/actions/settings';
+import { changeSetting as defaultChangeSetting, saveSettings } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import StepSlider from '@/components/ui/step-slider';
@@ -18,6 +19,8 @@ import { useDefaultSettings, useSettings } from '@/stores/settings';
 import colors from '@/utils/colors';
 
 import SettingToggle from '../components/setting-toggle';
+
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 
 const INTERFACE_SIZES = ['sm', 'md', 'lg', 'xl'] as const;
 
@@ -48,11 +51,19 @@ const debouncedSave = debounce(() => {
   saveSettings({ showAlert: true });
 }, 1000);
 
-const AppearancePreferences: React.FC = () => {
+const AppearancePreferences: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const intl = useIntl();
-  const settings = useSettings();
   const defaultSettings = useDefaultSettings();
   const frontendConfig = useFrontendConfig();
+
+  const userSettings = useSettings();
+
+  const settings = settingsProp || userSettings;
 
   const brandColor = (settings.theme?.brandColor ?? frontendConfig.brandColor) || '#d80482';
 
@@ -381,6 +392,14 @@ const AppearancePreferences: React.FC = () => {
             }
           />
         </List>
+
+        {onSave && (
+          <FormActions>
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          </FormActions>
+        )}
       </Form>
     </Column>
   );
