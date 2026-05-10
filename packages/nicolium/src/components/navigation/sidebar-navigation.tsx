@@ -172,35 +172,45 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 </li>
               );
             default:
-              return <SidebarNavigationLink key={item.to} {...item} />;
+              return (
+                <li key={item.to}>
+                  <SidebarNavigationLink {...item} />
+                </li>
+              );
           }
         })}
 
         {menu.length > 0 && (
           <DropdownMenu items={menu} placement='top' width='16rem'>
-            <SidebarNavigationLink
-              icon={iconDotsThreeCircle}
-              text={<FormattedMessage id='tabs_bar.more' defaultMessage='More' />}
-            />
+            <li>
+              <SidebarNavigationLink
+                icon={iconDotsThreeCircle}
+                text={<FormattedMessage id='tabs_bar.more' defaultMessage='More' />}
+              />
+            </li>
           </DropdownMenu>
         )}
 
         {!account && (
           <div className='flex flex-col gap-1.5 xl:hidden'>
-            <SidebarNavigationLink
-              to='/login'
-              icon={iconSignIn}
-              activeIcon={iconSignInFill}
-              text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
-            />
+            <li>
+              <SidebarNavigationLink
+                to='/login'
+                icon={iconSignIn}
+                activeIcon={iconSignInFill}
+                text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
+              />
+            </li>
 
             {isOpen && (
-              <SidebarNavigationLink
-                to='/signup'
-                icon={iconUserPlus}
-                activeIcon={iconUserPlusFill}
-                text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
-              />
+              <li>
+                <SidebarNavigationLink
+                  to='/signup'
+                  icon={iconUserPlus}
+                  activeIcon={iconUserPlusFill}
+                  text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
+                />
+              </li>
             )}
           </div>
         )}

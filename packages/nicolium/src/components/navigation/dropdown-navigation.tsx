@@ -7,7 +7,7 @@ import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconSignIn from '@phosphor-icons/core/regular/sign-in.svg';
 import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
-import { Link, type LinkOptions } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -29,7 +29,8 @@ import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
 
 import { AccountLink } from '../accounts/account-link';
-import Counter from '../ui/counter';
+
+import SidebarNavigationLink from './sidebar-navigation-link';
 
 import type { Account as AccountEntity } from 'pl-api';
 
@@ -93,54 +94,6 @@ const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
     </div>
   );
 };
-
-interface IDropdownNavigationLink extends Partial<LinkOptions> {
-  href?: string;
-  icon: string;
-  text: string | React.JSX.Element;
-  onClick: React.EventHandler<React.MouseEvent>;
-  count?: number;
-}
-
-const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(
-  ({ href, to, icon, text, onClick, count, ...rest }) => {
-    const body = (
-      <>
-        <div className='⁂-dropdown-navigation__link__icon'>
-          <Icon src={icon} />
-        </div>
-
-        <p>{text}</p>
-
-        {typeof count === 'number' && count > 0 && <Counter count={count} countMax={99} />}
-      </>
-    );
-
-    if (to) {
-      return (
-        <Link className='⁂-dropdown-navigation__link' to={to} {...rest} onClick={onClick}>
-          {body}
-        </Link>
-      );
-    }
-
-    if (href) {
-      return (
-        <a className='⁂-dropdown-navigation__link' href={href} target='_blank' onClick={onClick}>
-          {body}
-        </a>
-      );
-    }
-
-    return (
-      <button className='⁂-dropdown-navigation__link' onClick={onClick} type='button'>
-        {body}
-      </button>
-    );
-  },
-);
-
-DropdownNavigationLink.displayName = 'DropdownNavigationLink';
 
 const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => {
   const intl = useIntl();
@@ -238,10 +191,10 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
               </React.Fragment>
             );
           case 'link':
-            return <DropdownNavigationLink {...item} key={item.to} onClick={handleClose} />;
+            return <SidebarNavigationLink {...item} key={item.to} onClick={handleClose} />;
           case 'compose':
             return (
-              <DropdownNavigationLink
+              <SidebarNavigationLink
                 key='compose'
                 icon={iconNotePencil}
                 text={<FormattedMessage id='navigation.compose' defaultMessage='Compose' />}
@@ -299,7 +252,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
               <>
                 <Divider />
 
-                <DropdownNavigationLink
+                <SidebarNavigationLink
                   href={sourceCode.url}
                   icon={iconCode}
                   text={
@@ -310,14 +263,14 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
                 <Divider />
 
-                <DropdownNavigationLink
+                <SidebarNavigationLink
                   to='/logout'
                   icon={iconSignOut}
                   text={<FormattedMessage id='navigation_bar.logout' defaultMessage='Logout' />}
                   onClick={onClickLogOut}
                 />
 
-                <DropdownNavigationLink
+                <SidebarNavigationLink
                   icon={iconDotsThreeCircle}
                   text={<FormattedMessage id='navigation_bar.more' defaultMessage='More' />}
                   onClick={() => setPage('more')}
@@ -346,7 +299,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
               </>
             ) : (
               <>
-                <DropdownNavigationLink
+                <SidebarNavigationLink
                   to='/login'
                   icon={iconSignIn}
                   text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
@@ -355,7 +308,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
                 <Divider />
 
-                <DropdownNavigationLink
+                <SidebarNavigationLink
                   href={sourceCode.url}
                   icon={iconCode}
                   text={
@@ -365,7 +318,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                 />
 
                 {isOpen && (
-                  <DropdownNavigationLink
+                  <SidebarNavigationLink
                     to='/signup'
                     icon={iconUserPlus}
                     text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}

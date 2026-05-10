@@ -204,56 +204,6 @@ body {
     }
   }
 
-  &__link {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-
-    border-radius: var(--radius-lg);
-
-    color: rgb(var(--color-gray-900));
-
-    &:hover {
-      background-color: rgb(var(--color-gray-50));
-    }
-
-    .dark & {
-      color: rgb(var(--color-gray-100));
-    }
-
-    .dark &:hover {
-      background-color: rgb(var(--color-gray-800));
-    }
-
-    &__icon {
-      position: relative;
-
-      display: inline-flex;
-
-      padding: 0.5rem;
-      border-radius: var(--radius-lg);
-
-      background-color: rgb(var(--color-primary-100));
-
-      .dark & {
-        background-color: rgb(var(--color-gray-800));
-      }
-
-      > div svg {
-        width: 1.25rem;
-        height: 1.25rem;
-        color: rgb(var(--color-primary-500));
-      }
-    }
-
-    p {
-      @include mixins.text($weight: medium, $theme: inherit);
-
-      flex-grow: 1;
-      text-align: left;
-    }
-  }
-
   &__account-switcher {
     display: flex;
     flex-direction: column;
@@ -325,6 +275,19 @@ body {
 
     &--expanded button .⁂-icon {
       transform: rotate(180deg);
+    }
+  }
+
+  .⁂-sidebar-navigation-link {
+    gap: 0.5rem;
+    padding: 0;
+
+    &__icon {
+      padding: 0.5rem;
+    }
+
+    p {
+      @include mixins.text($weight: medium);
     }
   }
 }

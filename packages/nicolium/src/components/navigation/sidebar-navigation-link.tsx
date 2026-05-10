@@ -18,6 +18,7 @@ interface ISidebarNavigationLink extends Partial<LinkOptions> {
   text: React.ReactNode;
   /** Callback when the link is clicked. */
   onClick?: React.EventHandler<React.MouseEvent>;
+  rel?: string;
 }
 
 /** Desktop sidebar navigation link. */
@@ -28,32 +29,35 @@ const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
     const matchRoute = useMatchRoute();
     const { demetricator } = useSettings();
 
-    const LinkComponent = (to === undefined ? 'button' : Link) as typeof Link;
+    const LinkComponent = (rest.href ? 'a' : to === undefined ? 'button' : Link) as typeof Link;
+
+    if (rest.href) {
+      rest.target = '_blank';
+      rest.rel = 'noopener noreferrer';
+    }
 
     const isActive = matchRoute({ to, ...rest }) !== false;
 
     return (
-      <li>
-        <LinkComponent
-          activeOptions={{ exact: true, includeSearch: false }}
-          activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
-          to={to}
-          ref={ref}
-          onClick={onClick}
-          className='⁂-sidebar-navigation-link'
-          {...rest}
-        >
-          <span className='⁂-sidebar-navigation-link__icon' aria-hidden>
-            <Icon
-              src={(isActive && activeIcon) || icon}
-              count={demetricator ? undefined : count}
-              countMax={countMax}
-            />
-          </span>
+      <LinkComponent
+        activeOptions={{ exact: true, includeSearch: false }}
+        activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
+        to={to}
+        ref={ref}
+        onClick={onClick}
+        className='⁂-sidebar-navigation-link'
+        {...rest}
+      >
+        <span className='⁂-sidebar-navigation-link__icon' aria-hidden>
+          <Icon
+            src={(isActive && activeIcon) || icon}
+            count={demetricator ? undefined : count}
+            countMax={countMax}
+          />
+        </span>
 
-          <p>{text}</p>
-        </LinkComponent>
-      </li>
+        <p>{text}</p>
+      </LinkComponent>
     );
   }),
   (prevProps, nextProps) =>
