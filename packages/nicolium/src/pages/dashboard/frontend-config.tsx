@@ -573,6 +573,51 @@ const FrontendConfigEditor: React.FC = () => {
             <CardTitle
               title={
                 <FormattedMessage
+                  id='frontend_config.headings.default_settings'
+                  defaultMessage='Default settings'
+                />
+              }
+            />
+          </CardHeader>
+
+          <List>
+            <ListItem
+              to='/nicolium/config/default_settings/general'
+              label={<FormattedMessage id='preferences.tab.general' defaultMessage='General' />}
+            />
+
+            <ListItem
+              to='/nicolium/config/default_settings/appearance'
+              label={
+                <FormattedMessage id='preferences.tab.appearance' defaultMessage='Appearance' />
+              }
+            />
+
+            <ListItem
+              to='/nicolium/config/default_settings/content'
+              label={
+                <FormattedMessage
+                  id='preferences.tab.content'
+                  defaultMessage='Content and filtering'
+                />
+              }
+            />
+
+            <ListItem
+              to='/nicolium/config/default_settings/compose'
+              label={<FormattedMessage id='preferences.tab.compose' defaultMessage='Compose' />}
+            />
+
+            <ListItem
+              to='/nicolium/config/default_settings/privacy'
+              label={<FormattedMessage id='column.privacy' defaultMessage='Privacy' />}
+            />
+          </List>
+
+          <CardHeader>
+            <CardTitle
+              title={
+                <FormattedMessage
                   id='frontend_config.headings.advanced'
                   defaultMessage='Advanced'
                 />

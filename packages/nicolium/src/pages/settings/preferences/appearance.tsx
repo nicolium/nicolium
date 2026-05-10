@@ -141,7 +141,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={<FormattedMessage id='preferences.fields.theme' defaultMessage='Theme' />}
           >
-            <ThemeToggle />
+            <ThemeToggle settings={settings} changeSetting={changeSetting} />
           </ListItem>
           <PaletteListItem
             label={intl.formatMessage(messages.brandColor)}
