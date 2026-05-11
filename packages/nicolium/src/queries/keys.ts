@@ -237,6 +237,10 @@ const statusLists = {
     ['statusLists', 'joinedEvents'],
     InfiniteData<PaginatedResponse<string>>
   >,
+  mutedThreads: ['statusLists', 'mutedThreads'] as TaggedKey<
+    ['statusLists', 'mutedThreads'],
+    InfiniteData<PaginatedResponse<string>>
+  >,
 };
 
 const statuses = {

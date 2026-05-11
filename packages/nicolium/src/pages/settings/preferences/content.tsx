@@ -115,6 +115,14 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
               to='/settings/interaction_policies'
             />
           )}
+          {features.mutedThreads && (
+            <ListItem
+              label={
+                <FormattedMessage id='column.muted_threads' defaultMessage='Muted conversations' />
+              }
+              to='/muted_threads'
+            />
+          )}
         </List>
 
         <List>

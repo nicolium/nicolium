@@ -580,6 +580,13 @@ export const mutesRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
+export const mutedThreadsRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/muted_threads',
+  component: lazy(() => import('@/pages/status-lists/muted-threads')),
+  beforeLoad: requireAuth,
+});
+
 // Filters
 export const filtersRoute = createRoute({
   getParentRoute: () => layouts.settings,
@@ -1703,6 +1710,7 @@ const routeTree = rootRoute.addChildren([
     blocksRoute,
     domainBlocksRoute,
     mutesRoute,
+    mutedThreadsRoute,
     filtersRoute,
     editFilterRoute,
   ]),
