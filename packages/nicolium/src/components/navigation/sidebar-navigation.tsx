@@ -28,7 +28,8 @@ import SearchInput from '../search-input';
 import SiteLogo from '../site-logo';
 import Avatar from '../ui/avatar';
 
-import SidebarNavigationLink, { SidebarNavigationAccountLink } from './sidebar-navigation-link';
+import { SidebarNavigationAccountLink } from './sidebar-navigation-dynamic-link';
+import SidebarNavigationLink from './sidebar-navigation-link';
 
 const messages = defineMessages({
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },

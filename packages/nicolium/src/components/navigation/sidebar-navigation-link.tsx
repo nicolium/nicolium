@@ -1,15 +1,9 @@
-import iconUserFill from '@phosphor-icons/core/fill/user-fill.svg';
-import iconUser from '@phosphor-icons/core/regular/user.svg';
 import { Link, useMatchRoute, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 
-import { useAccount } from '@/queries/accounts/use-account';
 import { useSettings } from '@/stores/settings';
 
 import Icon from '../ui/icon';
-
-import type { NavigationItemsMenuItem } from '@/hooks/use-navigation-items';
 
 interface ISidebarNavigationLink extends Partial<LinkOptions> {
   /** Notification count, if any. */
@@ -70,28 +64,4 @@ const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
     prevProps.text === nextProps.text && prevProps.count === nextProps.count,
 );
 
-const SidebarNavigationAccountLink: React.FC<
-  Extract<NavigationItemsMenuItem, { type: 'profile-link' }>
-> = ({ accountId, ownAccount }) => {
-  const { data: account } = useAccount(accountId);
-
-  if (!account) return null;
-
-  return (
-    <SidebarNavigationLink
-      to='/@{$username}'
-      params={{ username: account?.acct }}
-      icon={iconUser}
-      activeIcon={iconUserFill}
-      text={
-        ownAccount ? (
-          <FormattedMessage id='tabs_bar.profile' defaultMessage='Profile' />
-        ) : (
-          `@${account.username}`
-        )
-      }
-    />
-  );
-};
-
-export { SidebarNavigationLink as default, SidebarNavigationAccountLink };
+export { SidebarNavigationLink as default };

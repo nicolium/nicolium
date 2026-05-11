@@ -30,7 +30,8 @@ import sourceCode from '@/utils/code';
 
 import { AccountLink } from '../accounts/account-link';
 
-import SidebarNavigationLink, { SidebarNavigationAccountLink } from './sidebar-navigation-link';
+import { SidebarNavigationAccountLink } from './sidebar-navigation-dynamic-link';
+import SidebarNavigationLink from './sidebar-navigation-link';
 
 import type { Account as AccountEntity } from 'pl-api';
 
