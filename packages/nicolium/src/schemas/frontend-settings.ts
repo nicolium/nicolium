@@ -110,19 +110,13 @@ const DEFAULT_SIDEBAR_ITEMS = [
   'footer',
 ] as const;
 
-type NavigationItem =
-  | (typeof AVAILABLE_NAVIGATION_ITEMS)[number]
-  | `${'account' | 'list' | 'circle' | 'antenna' | 'instance'}:${string}`;
+type NavigationItem = (typeof AVAILABLE_NAVIGATION_ITEMS)[number] | `${'account'}:${string}`;
 
 const navigationItemSchema: v.BaseSchema<any, NavigationItem, v.BaseIssue<unknown>> = v.pipe(
   v.string(),
   v.transform((item) => {
     if (AVAILABLE_NAVIGATION_ITEMS.includes(item as 'separator')) return item as NavigationItem;
-    if (
-      ['account', 'list', 'circle', 'antenna', 'instance'].some((prefix) =>
-        item.startsWith(prefix + ':'),
-      )
-    ) {
+    if (['account'].some((prefix) => item.startsWith(prefix + ':'))) {
       return item as NavigationItem;
     } else {
       throw new Error('Invalid item');
@@ -381,6 +375,7 @@ type TimelineFilters = Settings['timelines']['home'];
 
 export {
   settingsSchema,
+  type NavigationItem,
   type Settings,
   type TimelineFilters,
   AVAILABLE_NAVIGATION_ITEMS,

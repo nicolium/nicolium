@@ -6,13 +6,11 @@ import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import ThumbNavigationLink, {
-  type IThumbNavigationLink,
-} from '@/components/navigation/thumb-navigation-link';
+import ThumbNavigationLink from '@/components/navigation/thumb-navigation-link';
 import Icon from '@/components/ui/icon';
 import { useLongPress } from '@/hooks/use-long-press';
-import { useNavigationItems } from '@/hooks/use-navigation-items';
-import { useOwnAccount } from '@/hooks/use-own-account';
+import { type NavigationItemsMenuItem, useNavigationItems } from '@/hooks/use-navigation-items';
+import { useAccount } from '@/queries/accounts/use-account';
 import { queryKeys } from '@/queries/keys';
 import { layouts } from '@/router';
 import { useComposeActions } from '@/stores/compose';
@@ -28,6 +26,7 @@ const messages = defineMessages({
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
   openSidebar: { id: 'navigation.sidebar', defaultMessage: 'Open sidebar' },
   closeSidebar: { id: 'navigation.sidebar.close', defaultMessage: 'Close sidebar' },
+  profile: { id: 'tabs_bar.profile', defaultMessage: 'Profile' },
 });
 
 const SidebarDot: React.FC = () => {
@@ -57,19 +56,15 @@ const SidebarDot: React.FC = () => {
   ) : null;
 };
 
-const ProfileLink: React.FC<IThumbNavigationLink> = ({
-  count,
-  countMax,
-  icon,
-  activeIcon,
-  text,
-  exact,
-  ...props
+const ProfileLink: React.FC<Extract<NavigationItemsMenuItem, { type: 'profile-link' }>> = ({
+  accountId,
+  ownAccount,
 }) => {
-  const { data: account } = useOwnAccount();
+  const intl = useIntl();
+  const { data: account } = useAccount(accountId);
   const profileLinkRef = React.useRef<HTMLAnchorElement>(null);
 
-  const bind = useLongPress((e) => {
+  let bind: any = useLongPress((e) => {
     if (e.type !== 'touchstart') return;
 
     e.preventDefault();
@@ -79,25 +74,29 @@ const ProfileLink: React.FC<IThumbNavigationLink> = ({
     profileLinkRef.current?.querySelector('button')?.click();
   });
 
+  if (!ownAccount) {
+    bind = undefined;
+  } else {
+    bind.onContextMenu = (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      profileLinkRef.current?.querySelector('button')?.click();
+    };
+  }
   if (!account) return null;
 
   return (
     <Link
       ref={profileLinkRef}
+      to='/@{$username}'
+      params={{ username: account.acct }}
       {...bind}
-      {...props}
-      activeOptions={{ exact }}
       className='⁂-thumb-navigation__item'
       activeProps={{ className: '⁂-thumb-navigation__item--active' }}
-      title={text}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        profileLinkRef.current?.querySelector('button')?.click();
-      }}
+      title={ownAccount ? intl.formatMessage(messages.profile) : `@${account.username}`}
     >
-      <ProfileDropdown account={account} />
+      {ownAccount && <ProfileDropdown account={account} />}
       <Avatar
         src={account.avatar}
         alt={account.avatar_description}
@@ -184,7 +183,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
               </button>
             );
           case 'profile-link':
-            return <ProfileLink key='profile-link' exact {...item} />;
+            return <ProfileLink key='profile-link' {...item} />;
           case 'link':
             return <ThumbNavigationLink key={item.to} exact {...item} />;
           default:

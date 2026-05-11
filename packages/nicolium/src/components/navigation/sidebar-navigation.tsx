@@ -8,6 +8,7 @@ import iconKeyboard from '@phosphor-icons/core/regular/keyboard.svg';
 import iconQuestion from '@phosphor-icons/core/regular/question.svg';
 import iconSignIn from '@phosphor-icons/core/regular/sign-in.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
+import iconUser from '@phosphor-icons/core/regular/user.svg';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -27,7 +28,7 @@ import SearchInput from '../search-input';
 import SiteLogo from '../site-logo';
 import Avatar from '../ui/avatar';
 
-import SidebarNavigationLink from './sidebar-navigation-link';
+import SidebarNavigationLink, { SidebarNavigationAccountLink } from './sidebar-navigation-link';
 
 const messages = defineMessages({
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
@@ -52,6 +53,7 @@ const messages = defineMessages({
   keyboardShortcuts: { id: 'navigation.keyboard_shortcuts', defaultMessage: 'Keyboard shortcuts' },
   docs: { id: 'navigation.docs', defaultMessage: 'Documentation' },
   sourceCode: { id: 'navigation.source_code', defaultMessage: 'Source code' },
+  profile: { id: 'tabs_bar.profile', defaultMessage: 'Profile' },
 });
 
 interface ISidebarNavigation {
@@ -83,6 +85,16 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         switch (item.type) {
           case 'compose':
           case 'search-input':
+            break;
+          case 'profile-link':
+            if (item.ownAccount) {
+              menu.push({
+                icon: iconUser,
+                text: intl.formatMessage(messages.profile),
+                to: '/@{$username}',
+                params: { username: account.acct },
+              });
+            }
             break;
           default: {
             const { type, ...rest } = item;
@@ -169,6 +181,12 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               return (
                 <li key='search-input'>
                   <SearchInput />
+                </li>
+              );
+            case 'profile-link':
+              return (
+                <li key='profile-link'>
+                  <SidebarNavigationAccountLink {...item} />
                 </li>
               );
             default:

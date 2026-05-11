@@ -73,9 +73,12 @@ import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import { useIsStandalone } from '@/utils/state';
 
-import type { AVAILABLE_NAVIGATION_ITEMS } from '@/schemas/frontend-settings';
+import type { AVAILABLE_NAVIGATION_ITEMS, NavigationItem } from '@/schemas/frontend-settings';
 import type { LinkOptions } from '@tanstack/react-router';
 import type { Instance } from 'pl-api';
+
+type AvailableNavigationItem = (typeof AVAILABLE_NAVIGATION_ITEMS)[number];
+type AccountNavigationItem = Extract<NavigationItem, `account:${string}`>;
 
 const UNAUTHENTICATED_NAVIGATION_ITEMS = [
   'search-input',
@@ -154,6 +157,14 @@ const messages = defineMessages({
   'wrenched-timeline': { id: 'tabs_bar.wrenched', defaultMessage: 'Wrenched' },
 });
 
+type NavigationLinkItem = keyof typeof messages;
+
+const isAccountNavigationItem = (item: NavigationItem): item is AccountNavigationItem =>
+  item.startsWith('account:');
+
+const isNavigationLinkItem = (item: AvailableNavigationItem): item is NavigationLinkItem =>
+  item in messages;
+
 const NAVIGATION_ITEM_PATHS: Record<string, LinkOptions['to']> = {
   home: '/',
   search: '/search',
@@ -210,7 +221,7 @@ const NAVIGATION_ITEM_ICONS: Record<string, { icon: string; activeIcon: string }
 
 const NAVIGATION_ITEMS_GATE: Partial<
   Record<
-    (typeof AVAILABLE_NAVIGATION_ITEMS)[number],
+    AvailableNavigationItem,
     (features: ReturnType<typeof useFeatures>, instance: Instance, isLoggedIn: boolean) => boolean
   >
 > = {
@@ -265,12 +276,11 @@ type NavigationItemsMenuItem =
       activeIcon?: string;
       count?: number;
     } & LinkOptions)
-  | ({
+  | {
       type: 'profile-link';
-      text: string;
-      icon: string;
-      activeIcon?: string;
-    } & LinkOptions)
+      accountId: string;
+      ownAccount: boolean;
+    }
   | null;
 
 const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
@@ -293,7 +303,7 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
 
   let filteredItems = useMemo(() => {
-    let filteredItems: Array<(typeof AVAILABLE_NAVIGATION_ITEMS)[number]>;
+    let filteredItems: Array<NavigationItem>;
     if (remaining === true) {
       filteredItems = REQUIRED_NAVIGATION_ITEMS.filter((item) => {
         // Chats item falls back to conversations if chats are disabled
@@ -332,13 +342,11 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
           });
           break;
         case 'profile':
+          if (!account) break;
           menu.push({
             type: 'profile-link',
-            to: '/@{$username}',
-            params: { username: account?.acct || '' },
-            text: intl.formatMessage(messages.profile),
-            icon: iconUser,
-            activeIcon: iconUserFill,
+            accountId: account.id,
+            ownAccount: true,
           });
           break;
         case 'chats':
@@ -436,17 +444,31 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
           }
           break;
         default: {
+          if (isAccountNavigationItem(item)) {
+            menu.push({
+              type: 'profile-link',
+              accountId: item.slice(8),
+              ownAccount: false,
+            });
+            break;
+          }
+
+          const fixedItem: AvailableNavigationItem = item;
+
           if (
-            NAVIGATION_ITEMS_GATE[item] &&
-            !NAVIGATION_ITEMS_GATE[item](features, instance, !!account)
+            NAVIGATION_ITEMS_GATE[fixedItem] &&
+            !NAVIGATION_ITEMS_GATE[fixedItem](features, instance, !!account)
           ) {
             break;
           }
-          const { icon, activeIcon } = NAVIGATION_ITEM_ICONS[item] || {};
+
+          if (!isNavigationLinkItem(fixedItem)) break;
+
+          const { icon, activeIcon } = NAVIGATION_ITEM_ICONS[fixedItem] || {};
           menu.push({
             type: 'link',
-            to: NAVIGATION_ITEM_PATHS[item],
-            text: intl.formatMessage(messages[item]),
+            to: NAVIGATION_ITEM_PATHS[fixedItem],
+            text: intl.formatMessage(messages[fixedItem]),
             icon,
             activeIcon,
           });
@@ -471,4 +493,4 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
   ]);
 };
 
-export { useNavigationItems, NAVIGATION_ITEMS_GATE };
+export { useNavigationItems, NAVIGATION_ITEMS_GATE, type NavigationItemsMenuItem };

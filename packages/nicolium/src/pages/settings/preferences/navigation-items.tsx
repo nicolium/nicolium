@@ -45,6 +45,7 @@ import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
 import { useFeatures } from '@/hooks/use-features';
 import { NAVIGATION_ITEMS_GATE } from '@/hooks/use-navigation-items';
+import { useAccount } from '@/queries/accounts/use-account';
 import {
   AVAILABLE_NAVIGATION_ITEMS,
   DEFAULT_NAVIGATION_ITEMS,
@@ -56,6 +57,11 @@ import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
+import type { NavigationItem as NavigationItemType } from '@/schemas/frontend-settings';
+
+type AvailableNavigationItem = (typeof AVAILABLE_NAVIGATION_ITEMS)[number];
+type DynamicNavigationItemPrefix = 'account';
+type DynamicNavigationItemComponent = React.FC<{ value: NavigationItemType }>;
 
 const messages = defineMessages({
   heading: { id: 'settings.navigation_items.heading', defaultMessage: 'Navigation menu items' },
@@ -74,6 +80,7 @@ const itemsMessages = {
   },
   compose: { id: 'settings.navigation_items.item.compose', defaultMessage: 'Compose button' },
   separator: { id: 'settings.navigation_items.item.separator', defaultMessage: 'Separator' },
+  account: { id: 'settings.navigation_items.item.account', defaultMessage: 'Account' },
   antennas: { id: 'column.antennas', defaultMessage: 'Antennas' },
   blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
@@ -114,7 +121,7 @@ const itemsMessages = {
   'wrenched-timeline': { id: 'tabs_bar.wrenched', defaultMessage: 'Wrenched' },
 };
 
-const itemsIcons: Record<(typeof AVAILABLE_NAVIGATION_ITEMS)[number], string> = {
+const itemsIcons: Record<AvailableNavigationItem, string> = {
   antennas: iconBroadcast,
   blocks: iconProhibit,
   bookmarks: iconBookmarks,
@@ -152,31 +159,72 @@ const itemsIcons: Record<(typeof AVAILABLE_NAVIGATION_ITEMS)[number], string> = 
   separator: iconMinus,
 };
 
-const UNPINNABLE_ITEMS: (typeof AVAILABLE_NAVIGATION_ITEMS)[number][] = [
-  'separator',
-  'search-input',
-];
+const UNPINNABLE_ITEMS: AvailableNavigationItem[] = ['separator', 'search-input'];
+
+const isAccountNavigationItem = (value: NavigationItemType): value is `account:${string}` =>
+  value.startsWith('account:');
+
+const isAvailableNavigationItem = (value: NavigationItemType): value is AvailableNavigationItem =>
+  AVAILABLE_NAVIGATION_ITEMS.includes(value as AvailableNavigationItem);
+
+const AccountNavigationItemLabel: DynamicNavigationItemComponent = ({ value }) => {
+  const intl = useIntl();
+  const { data: account } = useAccount(isAccountNavigationItem(value) ? value.slice(8) : undefined);
+
+  return account ? `@${account.acct}` : intl.formatMessage(itemsMessages.account);
+};
+
+const dynamicItems = {
+  account: {
+    icon: iconUser,
+    Label: AccountNavigationItemLabel,
+  },
+} satisfies Record<
+  DynamicNavigationItemPrefix,
+  {
+    icon: string;
+    Label: DynamicNavigationItemComponent;
+  }
+>;
+
+const getDynamicNavigationItem = (value: NavigationItemType) => {
+  const [prefix] = value.split(':', 1);
+
+  return dynamicItems[prefix as DynamicNavigationItemPrefix];
+};
 
 const getNavigationItemComponent = (
   changeSetting: typeof defaultChangeSetting,
   settings: ReturnType<typeof useSettings>,
 ) => {
-  const NavigationItem: StreamfieldComponent<(typeof AVAILABLE_NAVIGATION_ITEMS)[number]> = ({
-    value,
-    index,
-  }) => {
+  const NavigationItem: StreamfieldComponent<NavigationItemType> = ({ value, index }) => {
     const intl = useIntl();
 
     const pinnedNavigationItems = settings.pinnedNavigationItems;
     const pinned = pinnedNavigationItems.includes(value);
+    const dynamicItem = getDynamicNavigationItem(value);
+    const fixedItem = dynamicItem || !isAvailableNavigationItem(value) ? undefined : value;
 
-    const canPin = index !== -1 && !UNPINNABLE_ITEMS.includes(value);
+    const canPin =
+      index !== -1 && Boolean(dynamicItem || (fixedItem && !UNPINNABLE_ITEMS.includes(fixedItem)));
+    let icon: string;
+    let label: React.ReactNode;
+
+    if (dynamicItem) {
+      icon = dynamicItem.icon;
+      label = <dynamicItem.Label value={value} />;
+    } else if (fixedItem) {
+      icon = itemsIcons[fixedItem];
+      label = intl.formatMessage(itemsMessages[fixedItem]);
+    } else {
+      return null;
+    }
 
     return (
       <div className='⁂-interface-item'>
         <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
-        <Icon className='⁂-interface-item__icon' src={itemsIcons[value]} aria-hidden />
-        <p>{intl.formatMessage(itemsMessages[value])}</p>
+        <Icon className='⁂-interface-item__icon' src={icon} aria-hidden />
+        <p>{label}</p>
         {canPin && (
           <button
             className='⁂-interface-item__pin'

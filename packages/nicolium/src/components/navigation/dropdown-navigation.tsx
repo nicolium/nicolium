@@ -30,7 +30,7 @@ import sourceCode from '@/utils/code';
 
 import { AccountLink } from '../accounts/account-link';
 
-import SidebarNavigationLink from './sidebar-navigation-link';
+import SidebarNavigationLink, { SidebarNavigationAccountLink } from './sidebar-navigation-link';
 
 import type { Account as AccountEntity } from 'pl-api';
 
@@ -174,22 +174,28 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
         switch (item.type) {
           case 'profile-link':
-            if (!account) return null;
-            return (
-              <React.Fragment key='profile-link'>
-                <AccountLink account={account} onClick={closeSidebar}>
-                  <Account
-                    account={account}
-                    showAccountHoverCard={false}
-                    withLinkToProfile={false}
-                  />
-                </AccountLink>
+            if (item.ownAccount) {
+              if (!account) return null;
+              return (
+                <React.Fragment key='profile-link'>
+                  <AccountLink account={account} onClick={closeSidebar}>
+                    <Account
+                      account={account}
+                      showAccountHoverCard={false}
+                      withLinkToProfile={false}
+                    />
+                  </AccountLink>
 
-                {!settings.demetricator && (
-                  <ProfileStats account={account} onClickHandler={handleClose} />
-                )}
-              </React.Fragment>
-            );
+                  {!settings.demetricator && (
+                    <ProfileStats account={account} onClickHandler={handleClose} />
+                  )}
+                </React.Fragment>
+              );
+            } else {
+              return (
+                <SidebarNavigationAccountLink key={`profile-link:${item.accountId}`} {...item} />
+              );
+            }
           case 'link':
             return <SidebarNavigationLink {...item} key={item.to} onClick={handleClose} />;
           case 'compose':
