@@ -190,6 +190,10 @@ const messages = defineMessages({
   more: { id: 'status.more', defaultMessage: 'More' },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
+  muteConversationSuccess: {
+    id: 'status.mute_conversation.success',
+    defaultMessage: 'Conversation muted',
+  },
   open: { id: 'status.open', defaultMessage: 'Show post details' },
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
   quotePostShort: { id: 'status.quote.short', defaultMessage: 'Quote' },
@@ -237,6 +241,10 @@ const messages = defineMessages({
   share: { id: 'status.share', defaultMessage: 'Share' },
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
+  unmuteConversationSuccess: {
+    id: 'status.unmute_conversation.success',
+    defaultMessage: 'Conversation unmuted',
+  },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
   viewReactions: { id: 'status.view_reactions', defaultMessage: 'View reactions' },
   wrench: { id: 'status.wrench', defaultMessage: 'Wrench reaction' },
@@ -1364,7 +1372,13 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleConversationMuteClick: React.EventHandler<React.MouseEvent> = () => {
-      toggleMuteStatus(client, status);
+      toggleMuteStatus(client, status).then(() => {
+        toast.success(
+          mutingConversation
+            ? messages.unmuteConversationSuccess
+            : messages.muteConversationSuccess,
+        );
+      });
     };
 
     const handleLoadConversationClick = () => {
