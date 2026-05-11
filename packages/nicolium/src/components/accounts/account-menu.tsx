@@ -8,6 +8,7 @@ import iconFlag from '@phosphor-icons/core/regular/flag.svg';
 import iconGavel from '@phosphor-icons/core/regular/gavel.svg';
 import iconLinkSimpleHorizontal from '@phosphor-icons/core/regular/link-simple-horizontal.svg';
 import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconList from '@phosphor-icons/core/regular/list.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
@@ -121,6 +122,23 @@ const messages = defineMessages({
   noteSaveFailed: { id: 'account_note.fail', defaultMessage: 'Failed to save note' },
   share: { id: 'account.share', defaultMessage: "Share @{name}'s profile" },
   subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
+  addToNavigationItems: {
+    id: 'account.add_to_navigation_items',
+    defaultMessage: 'Add to navigation items',
+  },
+  addToNavigationItemsSuccess: {
+    id: 'account.add_to_navigation_items.success',
+    defaultMessage: 'Added to navigation items',
+  },
+  removeFromNavigationItems: {
+    id: 'account.remove_from_navigation_items',
+    defaultMessage: 'Remove from navigation items',
+  },
+  removeFromNavigationItemsSuccess: {
+    id: 'account.remove_from_navigation_items.success',
+    defaultMessage: 'Removed from navigation items',
+  },
+  view: { id: 'toast.view', defaultMessage: 'View' },
 });
 
 interface IAccountMenu {
@@ -259,6 +277,25 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       },
       text: currentNickname,
       singleLine: true,
+    });
+  };
+
+  const onAddToNavigationItems = () => {
+    changeSetting(['navigationItems'], [...settings.navigationItems, `account:${account.id}`]);
+    toast.success(messages.addToNavigationItemsSuccess, {
+      actionLinkOptions: { to: '/settings/navigation' },
+      actionLabel: intl.formatMessage(messages.view),
+    });
+  };
+
+  const onRemoveFromNavigationItems = () => {
+    changeSetting(
+      ['navigationItems'],
+      settings.navigationItems.filter((item) => item !== `account:${account.id}`),
+    );
+    toast.success(messages.removeFromNavigationItemsSuccess, {
+      actionLinkOptions: { to: '/settings/navigation' },
+      actionLabel: intl.formatMessage(messages.view),
     });
   };
 
@@ -514,6 +551,20 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         action: onEditNickname,
         icon: iconTag,
       });
+
+      if (!settings.navigationItems.includes(`account:${account.id}`)) {
+        menu.push({
+          text: intl.formatMessage(messages.addToNavigationItems),
+          action: onAddToNavigationItems,
+          icon: iconList,
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.removeFromNavigationItems),
+          action: onRemoveFromNavigationItems,
+          icon: iconList,
+        });
+      }
 
       menu.push(null);
 
