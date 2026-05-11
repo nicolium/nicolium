@@ -1,8 +1,10 @@
 import * as v from 'valibot';
 
 import { conversationSchema, markersSchema, statusSchema } from '@/entities';
-import { PIXELFED } from '@/features';
+import { ICESHRIMP_NET, PIXELFED } from '@/features';
+import { paginatedIceshrimpStatusesList } from '@/utils/iceshrimp-net';
 
+import type { statuses } from './statuses';
 import type { PlApiBaseClient } from '@/client-base';
 import type {
   AntennaTimelineParams,
@@ -19,14 +21,21 @@ import type {
 } from '@/params/timelines';
 import type { EmptyObject } from '@/utils/types';
 
-const timelines = (client: PlApiBaseClient) => ({
+const timelines = (client: PlApiBaseClient & { statuses: ReturnType<typeof statuses> }) => ({
   /**
    * View public timeline
    * View public statuses.
    * @see {@link https://docs.joinmastodon.org/methods/timelines/#public}
    */
   publicTimeline: (params?: PublicTimelineParams) =>
-    client.paginatedGet('/api/v1/timelines/public', { params }, statusSchema),
+    params?.instance && client.features.version.software === ICESHRIMP_NET
+      ? paginatedIceshrimpStatusesList(
+          client,
+          `/api/iceshrimp/timelines/remote/${params.instance}`,
+          params,
+          (response: Array<{ id: string }>) => response.map(({ id }) => id),
+        )
+      : client.paginatedGet('/api/v1/timelines/public', { params }, statusSchema),
 
   /**
    * View hashtag timeline

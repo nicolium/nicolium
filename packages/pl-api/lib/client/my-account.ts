@@ -11,12 +11,15 @@ import {
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
 import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from '@/features';
-import { getLinks } from '@/request';
-import { PaginatedResponse } from '@/responses';
+import {
+  paginatedIceshrimpAccountsList,
+  paginatedIceshrimpStatusesList,
+} from '@/utils/iceshrimp-net';
 
 import type { accounts } from './accounts';
+import type { statuses } from './statuses';
 import type { PlApiBaseClient } from '@/client-base';
-import type { Account } from '@/entities';
+import type { PaginationParams } from '@/params';
 import type {
   CreateBookmarkFolderParams,
   GetBookmarksParams,
@@ -28,28 +31,12 @@ import type {
 } from '@/params/my-account';
 import type { EmptyObject } from '@/utils/types';
 
-const paginatedIceshrimpAccountsList = async <T>(
-  client: PlApiBaseClient & { accounts: ReturnType<typeof accounts> },
-  url: string,
-  fn: (body: T) => Array<string>,
-): Promise<PaginatedResponse<Account>> => {
-  await client.getIceshrimpAccessToken();
-
-  const response = await client.request<T>(url);
-  const ids = fn(response.json);
-
-  const items = await client.accounts.getAccounts(ids);
-
-  const { prev: prevLink, next: nextLink } = getLinks(response);
-
-  return new PaginatedResponse(items, {
-    previous: prevLink ? () => paginatedIceshrimpAccountsList(client, prevLink, fn) : null,
-    next: nextLink ? () => paginatedIceshrimpAccountsList(client, nextLink, fn) : null,
-    partial: response.status === 206,
-  });
-};
-
-const myAccount = (client: PlApiBaseClient & { accounts: ReturnType<typeof accounts> }) => ({
+const myAccount = (
+  client: PlApiBaseClient & {
+    accounts: ReturnType<typeof accounts>;
+    statuses: ReturnType<typeof statuses>;
+  },
+) => ({
   /**
    * View bookmarked statuses
    * Statuses the user has bookmarked.
@@ -89,6 +76,7 @@ const myAccount = (client: PlApiBaseClient & { accounts: ReturnType<typeof accou
       return paginatedIceshrimpAccountsList(
         client,
         '/api/iceshrimp/follow_requests/outgoing',
+        params,
         (response: Array<{ user: { id: string } }>) => response.map(({ user }) => user.id),
       );
     }
@@ -362,6 +350,17 @@ const myAccount = (client: PlApiBaseClient & { accounts: ReturnType<typeof accou
 
     return response.json;
   },
+
+  /**
+   * Requires features{@link Features.mutedThreads}.
+   */
+  getMutedThreads: (params?: Omit<PaginationParams, 'since_id'>) =>
+    paginatedIceshrimpStatusesList(
+      client,
+      '/api/iceshrimp/misc/muted_threads',
+      params,
+      (response: Array<{ id: string }>) => response.map(({ id }) => id),
+    ),
 });
 
 export { myAccount };

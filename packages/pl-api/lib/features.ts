@@ -1072,6 +1072,7 @@ const getFeatures = (instance: Instance) => {
      */
     instanceTimeline: any([
       v.software === AKKOMA,
+      v.software === ICESHRIMP_NET,
       v.software === PLEROMA && gte(v.version, '2.7.0'),
     ]),
 
@@ -1281,6 +1282,8 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/statuses
      */
     multiLanguage: instance.api_versions['multi_language.pleroma.pl-api'] >= 1,
+
+    mutedThreads: v.software === ICESHRIMP_NET,
 
     /**
      * Ability to hide notifications from people you don't follow.
