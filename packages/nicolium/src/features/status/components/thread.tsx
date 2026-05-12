@@ -245,7 +245,11 @@ const Thread = ({
   const renderPendingStatus = (id: string) => {
     const idempotencyKey = id.replace(/^末pending-/, '');
 
-    return <PendingStatus key={id} idempotencyKey={idempotencyKey} variant='default' />;
+    return (
+      <div key={id} className={clsx('thread__status', { 'thread__status--linear': linear })}>
+        <PendingStatus idempotencyKey={idempotencyKey} variant='default' />
+      </div>
+    );
   };
 
   const renderChildren = (list: Array<string>) =>
