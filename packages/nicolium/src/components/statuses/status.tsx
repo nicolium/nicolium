@@ -185,6 +185,7 @@ interface IStatus {
   showInfo?: boolean;
   fromBookmarks?: boolean;
   className?: string;
+  expandable?: boolean;
 }
 
 const Status: React.FC<IStatus> = React.memo((props) => {
@@ -206,6 +207,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     fromBookmarks = false,
     className,
     contextType,
+    expandable = true,
   } = props;
 
   const intl = useIntl();
@@ -616,7 +618,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
               collapsable
               translatable
               withMedia
-              expandable
+              expandable={expandable}
             />
           )}
 

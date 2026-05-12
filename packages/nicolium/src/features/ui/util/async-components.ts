@@ -1,6 +1,9 @@
 import { lazy } from 'react';
 
 // Panels
+export const AccountLatestStatusPanel = lazy(
+  () => import('@/components/panels/account-latest-status-panel'),
+);
 export const AccountNotePanel = lazy(() => import('@/components/panels/account-note-panel'));
 export const AnnouncementsPanel = lazy(
   () => import('@/components/announcements/announcements-panel'),

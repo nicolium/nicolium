@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
 import {
+  AccountLatestStatusPanel,
   AccountNotePanel,
   AnnouncementsPanel,
   BirthdayPanel,
@@ -32,6 +33,9 @@ import { useFederationRestrictionsDisclosed, useIsStandalone } from '@/utils/sta
 import LinkFooter from './link-footer';
 
 import type { Account, Group } from 'pl-api';
+
+const isAccountSidebarItem = (item: string): item is `account:${string}` =>
+  item.startsWith('account:');
 
 interface IAsideContent {
   layout?:
@@ -75,6 +79,16 @@ const AsideContent: React.FC<IAsideContent> = ({
     }
 
     for (const item of sidebarItems) {
+      if (isAccountSidebarItem(item)) {
+        if (layout === 'profile' && account && `account:${account.id}` === item) {
+          continue;
+        }
+
+        const accountId = item.slice(8);
+        items.push(<AccountLatestStatusPanel key={item} accountId={accountId} />);
+        continue;
+      }
+
       switch (item) {
         case 'context': {
           switch (layout) {

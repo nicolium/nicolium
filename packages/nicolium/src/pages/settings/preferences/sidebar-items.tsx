@@ -10,6 +10,7 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
+import { useAccount } from '@/queries/accounts/use-account';
 import { AVAILABLE_SIDEBAR_ITEMS, DEFAULT_SIDEBAR_ITEMS } from '@/schemas/frontend-settings';
 import { useDefaultSettings, useSettings } from '@/stores/settings';
 import { useShoutboxIsLoading } from '@/stores/shoutbox';
@@ -17,6 +18,7 @@ import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
+import type { SidebarItem as SidebarItemType } from '@/schemas/frontend-settings';
 
 const messages = defineMessages({
   heading: { id: 'settings.sidebar_items.heading', defaultMessage: 'Sidebar items' },
@@ -46,6 +48,10 @@ const itemsMessages = {
   shoutbox: {
     id: 'settings.sidebar_items.item.shoutbox',
     defaultMessage: 'Shoutbox',
+  },
+  account: {
+    id: 'settings.sidebar_items.item.account',
+    defaultMessage: 'Account',
   },
 };
 
@@ -79,17 +85,30 @@ const itemHintsMessages = {
     id: 'settings.sidebar_items.item.shoutbox.hint',
     defaultMessage: 'Instance-wide real-time chat.',
   },
+  account: {
+    id: 'settings.sidebar_items.item.account.hint',
+    defaultMessage: "Shows the account's latest post.",
+  },
 };
 
-const SidebarItem: StreamfieldComponent<(typeof AVAILABLE_SIDEBAR_ITEMS)[number]> = ({ value }) => {
+const isAccountSidebarItem = (item: SidebarItemType): item is `account:${string}` =>
+  item.startsWith('account:');
+
+const SidebarItem: StreamfieldComponent<SidebarItemType> = ({ value }) => {
   const intl = useIntl();
+  const { data: account } = useAccount(isAccountSidebarItem(value) ? value.slice(8) : undefined);
+  const itemKey = isAccountSidebarItem(value) ? 'account' : value;
 
   return (
     <div className='⁂-interface-item'>
       <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
       <div>
-        <p>{intl.formatMessage(itemsMessages[value])}</p>
-        <small>{intl.formatMessage(itemHintsMessages[value])}</small>
+        <p>
+          {isAccountSidebarItem(value) && account
+            ? `@${account.username}`
+            : intl.formatMessage(itemsMessages[itemKey])}
+        </p>
+        <small>{intl.formatMessage(itemHintsMessages[itemKey])}</small>
       </div>
     </div>
   );

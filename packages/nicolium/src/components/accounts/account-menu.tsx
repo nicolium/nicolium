@@ -138,6 +138,22 @@ const messages = defineMessages({
     id: 'account.remove_from_navigation_items.success',
     defaultMessage: 'Removed from navigation items',
   },
+  addToSidebarItems: {
+    id: 'account.add_to_sidebar_items',
+    defaultMessage: 'Show latest post in sidebar',
+  },
+  addToSidebarItemsSuccess: {
+    id: 'account.add_to_sidebar_items.success',
+    defaultMessage: 'Added to sidebar items',
+  },
+  removeFromSidebarItems: {
+    id: 'account.remove_from_sidebar_items',
+    defaultMessage: "Don't show latest post in sidebar",
+  },
+  removeFromSidebarItemsSuccess: {
+    id: 'account.remove_from_sidebar_items.success',
+    defaultMessage: 'Removed from sidebar items',
+  },
   view: { id: 'toast.view', defaultMessage: 'View' },
 });
 
@@ -299,6 +315,25 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
     );
     toast.success(messages.removeFromNavigationItemsSuccess, {
       actionLinkOptions: { to: '/settings/navigation' },
+      actionLabel: intl.formatMessage(messages.view),
+    });
+  };
+
+  const onAddToSidebarItems = () => {
+    changeSetting(['sidebarItems'], [...settings.sidebarItems, `account:${account.id}`]);
+    toast.success(messages.addToSidebarItemsSuccess, {
+      actionLinkOptions: { to: '/settings/sidebar' },
+      actionLabel: intl.formatMessage(messages.view),
+    });
+  };
+
+  const onRemoveFromSidebarItems = () => {
+    changeSetting(
+      ['sidebarItems'],
+      settings.sidebarItems.filter((item) => item !== `account:${account.id}`),
+    );
+    toast.success(messages.removeFromSidebarItemsSuccess, {
+      actionLinkOptions: { to: '/settings/sidebar' },
       actionLabel: intl.formatMessage(messages.view),
     });
   };
@@ -567,6 +602,20 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
           text: intl.formatMessage(messages.removeFromNavigationItems),
           action: onRemoveFromNavigationItems,
           icon: iconList,
+        });
+      }
+
+      if (!settings.sidebarItems.includes(`account:${account.id}`)) {
+        menu.push({
+          text: intl.formatMessage(messages.addToSidebarItems),
+          action: onAddToSidebarItems,
+          icon: iconUser,
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.removeFromSidebarItems),
+          action: onRemoveFromSidebarItems,
+          icon: iconUser,
         });
       }
 

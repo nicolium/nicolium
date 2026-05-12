@@ -75,6 +75,10 @@ const accounts = {
     const key = ['accounts', accountId] as const;
     return key as TaggedKey<typeof key, Account>;
   },
+  latestStatus: (accountId: string) => {
+    const key = ['accounts', accountId, 'latestStatus'] as const;
+    return key as TaggedKey<typeof key, string | null>;
+  },
   lookup: (acct: string) => {
     const key = ['accounts', 'lookup', acct] as const;
     return key as TaggedKey<typeof key, string>;

@@ -110,6 +110,8 @@ const DEFAULT_SIDEBAR_ITEMS = [
   'footer',
 ] as const;
 
+type SidebarItem = (typeof AVAILABLE_SIDEBAR_ITEMS)[number] | `account:${string}`;
+
 type NavigationItem =
   | (typeof AVAILABLE_NAVIGATION_ITEMS)[number]
   | `${'account' | 'list' | 'circle' | 'antenna' | 'instance' | 'hashtag' | 'bookmark_folder'}:${string}`;
@@ -127,6 +129,15 @@ const navigationItemSchema: v.BaseSchema<any, NavigationItem, v.BaseIssue<unknow
     } else {
       throw new Error('Invalid item');
     }
+  }),
+);
+
+const sidebarItemSchema: v.BaseSchema<any, SidebarItem, v.BaseIssue<unknown>> = v.pipe(
+  v.string(),
+  v.transform((item) => {
+    if (AVAILABLE_SIDEBAR_ITEMS.includes(item as 'context')) return item as SidebarItem;
+    if (item.startsWith('account:')) return item as SidebarItem;
+    throw new Error('Invalid item');
   }),
 );
 
@@ -371,7 +382,7 @@ const settingsSchema = v.object({
     v.array(v.picklist(AVAILABLE_STATUS_ACTION_BAR_ITEMS)),
     DEFAULT_STATUS_ACTION_BAR_ITEMS,
   ),
-  sidebarItems: v.fallback(v.array(v.picklist(AVAILABLE_SIDEBAR_ITEMS)), DEFAULT_SIDEBAR_ITEMS),
+  sidebarItems: v.fallback(filteredArray(sidebarItemSchema), DEFAULT_SIDEBAR_ITEMS),
 
   deck: deckSettingsSchema,
 });
@@ -382,6 +393,7 @@ type TimelineFilters = Settings['timelines']['home'];
 export {
   settingsSchema,
   type NavigationItem,
+  type SidebarItem,
   type Settings,
   type TimelineFilters,
   AVAILABLE_NAVIGATION_ITEMS,
