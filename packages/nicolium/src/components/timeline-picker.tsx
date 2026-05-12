@@ -12,7 +12,7 @@ import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { useFeatures } from '@/hooks/use-features';
-import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAntennas } from '@/queries/accounts/use-antennas';
 import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
@@ -50,7 +50,9 @@ interface ITimelinePicker {
 const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
   const intl = useIntl();
   const features = useFeatures();
-  const { isLoggedIn } = useLoggedIn();
+  const { data: account } = useOwnAccount();
+  const isLoggedIn = !!account;
+  const isAdmin = !!account?.is_admin || !!account?.is_moderator;
   const timelineAccess = useInstance().configuration.timelines_access;
   const {
     defaultTimeline,
@@ -109,7 +111,9 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       features.publicTimeline &&
       (isLoggedIn
         ? timelineAccess.live_feeds.local !== 'disabled'
-        : timelineAccess.live_feeds.local === 'public')
+        : timelineAccess.live_feeds.local === 'restricted'
+          ? isAdmin
+          : timelineAccess.live_feeds.local === 'public')
     ) {
       items.push({
         to: '/timeline/local',
@@ -123,7 +127,9 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       features.bubbleTimeline &&
       (isLoggedIn
         ? timelineAccess.live_feeds.bubble !== 'disabled'
-        : timelineAccess.live_feeds.bubble === 'public')
+        : timelineAccess.live_feeds.bubble === 'restricted'
+          ? isAdmin
+          : timelineAccess.live_feeds.bubble === 'public')
     ) {
       items.push({
         to: '/timeline/bubble',
@@ -136,7 +142,9 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       features.publicTimeline &&
       (isLoggedIn
         ? timelineAccess.live_feeds.remote !== 'disabled'
-        : timelineAccess.live_feeds.remote === 'public')
+        : timelineAccess.live_feeds.remote === 'restricted'
+          ? isAdmin
+          : timelineAccess.live_feeds.remote === 'public')
     ) {
       items.push({
         to: '/timeline/fediverse',
@@ -149,7 +157,9 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
       features.wrenchedTimeline &&
       (isLoggedIn
         ? timelineAccess.live_feeds.wrenched !== 'disabled'
-        : timelineAccess.live_feeds.wrenched === 'public')
+        : timelineAccess.live_feeds.wrenched === 'restricted'
+          ? isAdmin
+          : timelineAccess.live_feeds.wrenched === 'public')
     ) {
       items.push({
         to: '/timeline/wrenched',
@@ -216,7 +226,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     }
 
     return items;
-  }, [active, lists, circles, antennas, features, isLoggedIn, defaultTimeline]);
+  }, [active, lists, circles, antennas, features, isLoggedIn, defaultTimeline, isAdmin]);
 
   if (items.length === 1) {
     return <div className='⁂-timeline-picker'>{heading}</div>;

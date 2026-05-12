@@ -46,6 +46,7 @@ import StreamfieldPicker from '@/components/ui/streamfield-picker';
 import { useDynamicContentLink } from '@/hooks/use-dynamic-content-link';
 import { useFeatures } from '@/hooks/use-features';
 import { NAVIGATION_ITEMS_GATE } from '@/hooks/use-navigation-items';
+import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
   AVAILABLE_NAVIGATION_ITEMS,
@@ -309,6 +310,7 @@ const NavigationItems: React.FC<ISettingsPage> = ({
   const features = useFeatures();
   const instance = useInstance();
   const defaultSettings = useDefaultSettings();
+  const { data: account } = useOwnAccount();
 
   const userSettings = useSettings();
   const settings = settingsProp || userSettings;
@@ -323,7 +325,12 @@ const NavigationItems: React.FC<ISettingsPage> = ({
   ).filter(
     (item) =>
       NAVIGATION_ITEMS_GATE[item] === undefined ||
-      NAVIGATION_ITEMS_GATE[item](features, instance, true),
+      NAVIGATION_ITEMS_GATE[item](
+        features,
+        instance,
+        true,
+        !!(account?.is_admin || account?.is_moderator),
+      ),
   );
 
   const reset = () => {

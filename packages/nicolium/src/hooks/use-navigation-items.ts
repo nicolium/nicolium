@@ -233,7 +233,12 @@ const NAVIGATION_ITEM_ICONS: Record<string, { icon: string; activeIcon: string }
 const NAVIGATION_ITEMS_GATE: Partial<
   Record<
     AvailableNavigationItem,
-    (features: ReturnType<typeof useFeatures>, instance: Instance, isLoggedIn: boolean) => boolean
+    (
+      features: ReturnType<typeof useFeatures>,
+      instance: Instance,
+      isLoggedIn: boolean,
+      isAdmin: boolean,
+    ) => boolean
   >
 > = {
   antennas: (features) => features.antennas,
@@ -251,29 +256,37 @@ const NAVIGATION_ITEMS_GATE: Partial<
   lists: (features) => features.lists,
   'rss-feed-subscriptions': (features) => features.rssFeedSubscriptions,
   'scheduled-statuses': (features) => features.scheduledStatuses,
-  'public-timeline': (features, { configuration }, isLoggedIn) =>
+  'public-timeline': (features, { configuration }, isLoggedIn, isAdmin: boolean) =>
     features.publicTimeline &&
     (isLoggedIn
       ? configuration.timelines_access.live_feeds.local !== 'disabled'
-      : configuration.timelines_access.live_feeds.local === 'public'),
-  'bubble-timeline': (features, { configuration }, isLoggedIn) =>
+      : configuration.timelines_access.live_feeds.local === 'restricted'
+        ? isAdmin
+        : configuration.timelines_access.live_feeds.local === 'public'),
+  'bubble-timeline': (features, { configuration }, isLoggedIn, isAdmin: boolean) =>
     features.publicTimeline &&
     features.bubbleTimeline &&
     (isLoggedIn
       ? configuration.timelines_access.live_feeds.bubble !== 'disabled'
-      : configuration.timelines_access.live_feeds.bubble === 'public'),
-  'fediverse-timeline': (features, { configuration }, isLoggedIn) =>
+      : configuration.timelines_access.live_feeds.bubble === 'restricted'
+        ? isAdmin
+        : configuration.timelines_access.live_feeds.bubble === 'public'),
+  'fediverse-timeline': (features, { configuration }, isLoggedIn, isAdmin: boolean) =>
     features.publicTimeline &&
     features.federating &&
     (isLoggedIn
       ? configuration.timelines_access.live_feeds.remote !== 'disabled'
-      : configuration.timelines_access.live_feeds.remote === 'public'),
-  'wrenched-timeline': (features, { configuration }, isLoggedIn) =>
+      : configuration.timelines_access.live_feeds.remote === 'restricted'
+        ? isAdmin
+        : configuration.timelines_access.live_feeds.remote === 'public'),
+  'wrenched-timeline': (features, { configuration }, isLoggedIn, isAdmin: boolean) =>
     features.publicTimeline &&
     features.wrenchedTimeline &&
     (isLoggedIn
       ? configuration.timelines_access.live_feeds.wrenched !== 'disabled'
-      : configuration.timelines_access.live_feeds.wrenched === 'public'),
+      : configuration.timelines_access.live_feeds.wrenched === 'restricted'
+        ? isAdmin
+        : configuration.timelines_access.live_feeds.wrenched === 'public'),
 };
 
 type NavigationItemsMenuItem =
@@ -482,7 +495,12 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
 
           if (
             NAVIGATION_ITEMS_GATE[fixedItem] &&
-            !NAVIGATION_ITEMS_GATE[fixedItem](features, instance, !!account)
+            !NAVIGATION_ITEMS_GATE[fixedItem](
+              features,
+              instance,
+              !!account,
+              !!(account?.is_admin || account?.is_moderator),
+            )
           ) {
             break;
           }
