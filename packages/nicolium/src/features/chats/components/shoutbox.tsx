@@ -68,14 +68,8 @@ const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className, widget }) => {
   }, [inputRef?.current]);
 
   return (
-    <div
-      className={clsx(
-        'flex grow flex-col overflow-hidden',
-        widget && '⁂-shoutbox-widget',
-        className,
-      )}
-    >
-      <div className='flex h-full grow justify-center overflow-hidden'>
+    <div className={clsx('⁂-chat', widget && '⁂-shoutbox-widget', className)}>
+      <div className='⁂-chat__messages'>
         <ShoutboxMessageList />
       </div>
 

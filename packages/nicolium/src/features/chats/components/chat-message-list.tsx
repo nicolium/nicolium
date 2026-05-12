@@ -267,8 +267,8 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
   }
 
   return (
-    <div className='flex h-full grow flex-col space-y-6'>
-      <div className='flex grow flex-col justify-end'>
+    <div className='⁂-chat-message-list__container'>
+      <div className='⁂-chat-message-list'>
         <Virtuoso
           ref={node}
           alignToBottom

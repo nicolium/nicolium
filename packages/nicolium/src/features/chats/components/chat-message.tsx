@@ -152,8 +152,8 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
   return (
     <div
       className={clsx({
-        'group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40': true,
-        'bg-gray-200/40 dark:bg-gray-800/40': isMenuOpen,
+        '⁂-chat-message__container group': true,
+        '⁂-chat-message__container--menu-open': isMenuOpen,
       })}
       data-testid='chat-message'
     >
