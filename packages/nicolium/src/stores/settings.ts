@@ -40,6 +40,50 @@ const messages = defineMessages({
 
 const settingsSchemaPartial = v.partial(settingsSchema);
 
+const isRecordObject = (value: unknown): value is APIEntity =>
+  typeof value === 'object' && !Array.isArray(value) && value !== null;
+
+const pickInputKeys = <T>(parsed: T, input: unknown): Partial<T> => {
+  if (!isRecordObject(parsed) || !isRecordObject(input)) return parsed as Partial<T>;
+
+  return Object.fromEntries(
+    Object.keys(input)
+      .filter((key) => key in parsed)
+      .map((key) => {
+        const parsedValue = parsed[key];
+        const inputValue = input[key];
+
+        if (isRecordObject(parsedValue) && isRecordObject(inputValue)) {
+          return [key, pickInputKeys(parsedValue, inputValue)];
+        }
+
+        return [key, parsedValue];
+      }),
+  ) as Partial<T>;
+};
+
+const mergeSettingsObject = <T>(defaultSettings: T, userSettings: Partial<T>): T => {
+  if (!isRecordObject(defaultSettings) || !isRecordObject(userSettings)) return userSettings as T;
+
+  const userSettingsRecord = userSettings as APIEntity;
+
+  return Object.fromEntries(
+    Array.from(new Set([...Object.keys(defaultSettings), ...Object.keys(userSettings)])).map(
+      (key) => {
+        const defaultValue = defaultSettings[key];
+        const userValue = userSettingsRecord[key];
+
+        if (userValue === undefined) return [key, defaultValue];
+        if (isRecordObject(defaultValue) && isRecordObject(userValue)) {
+          return [key, mergeSettingsObject(defaultValue, userValue)];
+        }
+
+        return [key, userValue];
+      },
+    ),
+  ) as T;
+};
+
 type State = {
   defaultSettings: Settings;
   userSettings: Partial<Settings>;
@@ -56,21 +100,20 @@ type State = {
   };
 };
 
-const changeSetting = (object: APIEntity, path: string[], value: any, root?: Settings) => {
+const changeSetting = (object: APIEntity, path: string[], value: any, _root?: Settings) => {
   if (path.length === 1) {
     object[path[0]] = value;
     return;
   }
 
-  if (typeof object[path[0]] !== 'object') {
-    const value = (root && (root[path[0] as keyof Settings] as APIEntity)) ?? {};
-    object[path[0]] = value;
+  if (!isRecordObject(object[path[0]])) {
+    object[path[0]] = {};
   }
   changeSetting(object[path[0]], path.slice(1), value);
 };
 
 const mergeSettings = (state: State, updating = false) => {
-  const mergedSettings = { ...state.defaultSettings, ...state.userSettings };
+  const mergedSettings = mergeSettingsObject(state.defaultSettings, state.userSettings);
   if (updating) {
     const currentAccountId = getCurrentAccountId();
     if (currentAccountId) {
@@ -164,7 +207,7 @@ const useSettingsStore = create<State>()(
           set((state: State) => {
             if (typeof settings !== 'object') return;
 
-            state.userSettings = v.parse(settingsSchemaPartial, settings);
+            state.userSettings = pickInputKeys(v.parse(settingsSchemaPartial, settings), settings);
 
             const currentAccountId = getCurrentAccountId();
             if (currentAccountId) {
@@ -246,7 +289,7 @@ const useSettingsStore = create<State>()(
         changeSetting: (path: string[], value: any) => {
           set((state: State) => {
             state.userSettings.saved = false;
-            changeSetting(state.userSettings, path, value, state.defaultSettings);
+            changeSetting(state.userSettings, path, value);
 
             mergeSettings(state, true);
           });
