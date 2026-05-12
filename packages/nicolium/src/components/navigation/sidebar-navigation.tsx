@@ -190,7 +190,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               );
             case 'profile-link':
               return (
-                <li key='profile-link'>
+                <li key={`profile-link:${item.accountId}`}>
                   <SidebarNavigationAccountLink {...item} />
                 </li>
               );

@@ -129,7 +129,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
               </button>
             );
           case 'profile-link':
-            return <ThumbNavigationProfileLink key='profile-link' {...item} />;
+            return <ThumbNavigationProfileLink key={`profile-link:${item.accountId}`} {...item} />;
           case 'dynamic-content-link':
             return (
               <ThumbNavigationDynamicContentLink key={`${item.contentType}:${item.id}`} {...item} />
