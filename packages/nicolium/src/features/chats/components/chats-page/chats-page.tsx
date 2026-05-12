@@ -30,7 +30,7 @@ const ChatsPage: React.FC = () => {
     const fullHeight = document.body.offsetHeight;
 
     // On mobile, account for bottom navigation.
-    const offset = document.body.clientWidth < 976 ? -53 : 0;
+    const offset = document.body.clientWidth < 581 ? -53 : 0;
 
     setHeight(fullHeight - top + offset);
   };
