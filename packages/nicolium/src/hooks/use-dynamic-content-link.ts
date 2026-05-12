@@ -27,10 +27,10 @@ type DynamicContentLink = {
   activeIcon: string;
 } & LinkOptions;
 
-const useDynamicContentLink = ({
-  contentType,
-  id,
-}: DynamicContentLinkItem): DynamicContentLink | null => {
+const useDynamicContentLink = (item: DynamicContentLinkItem | null): DynamicContentLink | null => {
+  const contentType = item?.contentType;
+  const id = item?.id ?? '';
+
   const { data: list } = useList(contentType === 'list' ? id : undefined);
   const { data: circle } = useCircle(contentType === 'circle' ? id : undefined);
   const { data: antenna } = useAntenna(contentType === 'antenna' ? id : undefined);
@@ -96,6 +96,8 @@ const useDynamicContentLink = ({
           }
         : null;
   }
+
+  return null;
 };
 
 export { useDynamicContentLink, type DynamicContentLinkItem };

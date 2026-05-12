@@ -43,6 +43,7 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
+import { useDynamicContentLink } from '@/hooks/use-dynamic-content-link';
 import { useFeatures } from '@/hooks/use-features';
 import { NAVIGATION_ITEMS_GATE } from '@/hooks/use-navigation-items';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -56,12 +57,23 @@ import { useDefaultSettings, useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
+import type { DynamicContentLinkItem } from '@/hooks/use-dynamic-content-link';
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 import type { NavigationItem as NavigationItemType } from '@/schemas/frontend-settings';
 
 type AvailableNavigationItem = (typeof AVAILABLE_NAVIGATION_ITEMS)[number];
 type DynamicNavigationItemPrefix = 'account';
+type DynamicContentNavigationItemPrefix = DynamicContentLinkItem['contentType'];
 type DynamicNavigationItemComponent = React.FC<{ value: NavigationItemType }>;
+
+const DYNAMIC_CONTENT_NAVIGATION_ITEM_PREFIXES = [
+  'list',
+  'circle',
+  'antenna',
+  'instance',
+  'hashtag',
+  'bookmark_folder',
+] as const satisfies readonly DynamicContentNavigationItemPrefix[];
 
 const messages = defineMessages({
   heading: { id: 'settings.navigation_items.heading', defaultMessage: 'Navigation menu items' },
@@ -167,6 +179,27 @@ const isAccountNavigationItem = (value: NavigationItemType): value is `account:$
 const isAvailableNavigationItem = (value: NavigationItemType): value is AvailableNavigationItem =>
   AVAILABLE_NAVIGATION_ITEMS.includes(value as AvailableNavigationItem);
 
+const isDynamicContentNavigationItemPrefix = (
+  value: string,
+): value is DynamicContentNavigationItemPrefix =>
+  DYNAMIC_CONTENT_NAVIGATION_ITEM_PREFIXES.includes(value as DynamicContentNavigationItemPrefix);
+
+const getDynamicContentNavigationItem = (
+  value: NavigationItemType,
+): DynamicContentLinkItem | null => {
+  const separatorIndex = value.indexOf(':');
+  if (separatorIndex === -1) return null;
+
+  const contentType = value.slice(0, separatorIndex);
+  if (!isDynamicContentNavigationItemPrefix(contentType)) return null;
+
+  return {
+    type: 'dynamic-content-link',
+    contentType,
+    id: value.slice(separatorIndex + 1),
+  };
+};
+
 const AccountNavigationItemLabel: DynamicNavigationItemComponent = ({ value }) => {
   const intl = useIntl();
   const { data: account } = useAccount(isAccountNavigationItem(value) ? value.slice(8) : undefined);
@@ -203,16 +236,27 @@ const getNavigationItemComponent = (
     const pinnedNavigationItems = settings.pinnedNavigationItems;
     const pinned = pinnedNavigationItems.includes(value);
     const dynamicItem = getDynamicNavigationItem(value);
-    const fixedItem = dynamicItem || !isAvailableNavigationItem(value) ? undefined : value;
+    const dynamicContentItem = getDynamicContentNavigationItem(value);
+    const dynamicContentLink = useDynamicContentLink(dynamicContentItem);
+    const fixedItem =
+      dynamicItem || dynamicContentItem || !isAvailableNavigationItem(value) ? undefined : value;
 
     const canPin =
-      index !== -1 && Boolean(dynamicItem || (fixedItem && !UNPINNABLE_ITEMS.includes(fixedItem)));
+      index !== -1 &&
+      Boolean(
+        dynamicItem || dynamicContentItem || (fixedItem && !UNPINNABLE_ITEMS.includes(fixedItem)),
+      );
     let icon: string;
     let label: React.ReactNode;
 
     if (dynamicItem) {
       icon = dynamicItem.icon;
       label = <dynamicItem.Label value={value} />;
+    } else if (dynamicContentItem && dynamicContentLink) {
+      icon = dynamicContentLink.icon;
+      label = dynamicContentLink.text;
+    } else if (dynamicContentItem) {
+      return null;
     } else if (fixedItem) {
       icon = itemsIcons[fixedItem];
       label = intl.formatMessage(itemsMessages[fixedItem]);
