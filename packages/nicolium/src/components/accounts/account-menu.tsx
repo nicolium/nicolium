@@ -293,6 +293,10 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       ['navigationItems'],
       settings.navigationItems.filter((item) => item !== `account:${account.id}`),
     );
+    changeSetting(
+      ['pinnedNavigationItems'],
+      settings.pinnedNavigationItems.filter((id) => id !== `account:${account.id}`),
+    );
     toast.success(messages.removeFromNavigationItemsSuccess, {
       actionLinkOptions: { to: '/settings/navigation' },
       actionLabel: intl.formatMessage(messages.view),

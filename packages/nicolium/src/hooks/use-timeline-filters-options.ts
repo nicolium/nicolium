@@ -1,9 +1,11 @@
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
+import iconList from '@phosphor-icons/core/regular/list.svg';
 import { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import { useSettings } from '@/stores/settings';
+import toast from '@/toast';
 
 import { useFeatures } from './use-features';
 import { useLoggedIn } from './use-logged-in';
@@ -34,6 +36,19 @@ const messages = defineMessages({
     id: 'timeline_filters.set_as_default',
     defaultMessage: 'Use as default timeline',
   },
+  includeInNavigationItems: {
+    id: 'timeline_filters.include_in_navigation_items',
+    defaultMessage: 'Include in navigation items',
+  },
+  addToNavigationItemsSuccess: {
+    id: 'account.add_to_navigation_items.success',
+    defaultMessage: 'Added to navigation items',
+  },
+  removeFromNavigationItemsSuccess: {
+    id: 'account.remove_from_navigation_items.success',
+    defaultMessage: 'Removed from navigation items',
+  },
+  view: { id: 'toast.view', defaultMessage: 'View' },
 });
 
 const defaultSettings = {
@@ -72,7 +87,7 @@ const useTimelineFiltersOptions = (
   const intl = useIntl();
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
-  const { timelines, defaultTimeline } = useSettings();
+  const { timelines, defaultTimeline, navigationItems, pinnedNavigationItems } = useSettings();
   const timelineSettings = timelines[timeline] || defaultSettings;
 
   return useMemo(() => {
@@ -154,8 +169,36 @@ const useTimelineFiltersOptions = (
       });
     }
 
+    if (['antenna', 'circle', 'group', 'hashtag', 'list'].includes(timeline) && timelineId) {
+      const navigationItemId = timelineId as any;
+      const isAdded = navigationItems.includes(navigationItemId);
+
+      items.push({
+        text: intl.formatMessage(messages.includeInNavigationItems),
+        icon: iconList,
+        type: 'toggle',
+        checked: isAdded,
+        onChange: (value) => {
+          if (value) {
+            changeSetting(['navigationItems'], [...navigationItems, navigationItemId]);
+            toast.success(intl.formatMessage(messages.addToNavigationItemsSuccess));
+          } else {
+            changeSetting(
+              ['navigationItems'],
+              navigationItems.filter((id) => id !== navigationItemId),
+            );
+            changeSetting(
+              ['pinnedNavigationItems'],
+              pinnedNavigationItems.filter((id) => id !== navigationItemId),
+            );
+            toast.success(intl.formatMessage(messages.removeFromNavigationItemsSuccess));
+          }
+        },
+      });
+    }
+
     return items;
-  }, [timeline, features, timelineSettings, defaultTimeline, timelineId]);
+  }, [timeline, features, timelineSettings, defaultTimeline, timelineId, navigationItems]);
 };
 
 export { useTimelineFiltersOptions, getUpdatedTimelineSettings };
