@@ -13,7 +13,7 @@ To install Nicolium in standalone mode, allowing to sign in to any instance impl
 ```caddy
 nicolium.example.com {
 	root * /var/www/nicolium
-  encode
+	encode
 	try_files {path} /index.html
 	file_server
 }
