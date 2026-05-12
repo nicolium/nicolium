@@ -980,12 +980,14 @@ body {
       }
     }
 
-    @media (min-width: variables.$breakpoint-lg) {
-      grid-column: span 9 / span 9;
-
+    @media (min-width: variables.$breakpoint-sm) {
       .dark.black & {
         border-left-width: 1px;
       }
+    }
+
+    @media (min-width: variables.$breakpoint-lg) {
+      grid-column: span 9 / span 9;
     }
 
     @media (min-width: variables.$breakpoint-xl) {
