@@ -5,6 +5,11 @@ import { FormattedMessage } from 'react-intl';
 
 import { useAccount } from '@/queries/accounts/use-account';
 
+import {
+  useDynamicContentLink,
+  type DynamicContentLinkItem,
+} from '../../hooks/use-dynamic-content-link';
+
 import SidebarNavigationLink from './sidebar-navigation-link';
 
 import type { NavigationItemsMenuItem } from '@/hooks/use-navigation-items';
@@ -33,4 +38,12 @@ const SidebarNavigationAccountLink: React.FC<
   );
 };
 
-export { SidebarNavigationAccountLink };
+const SidebarNavigationDynamicContentLink: React.FC<
+  DynamicContentLinkItem & { onClick?: React.MouseEventHandler }
+> = ({ onClick, ...item }) => {
+  const link = useDynamicContentLink(item);
+
+  return link ? <SidebarNavigationLink {...link} onClick={onClick} /> : null;
+};
+
+export { SidebarNavigationAccountLink, SidebarNavigationDynamicContentLink };

@@ -16,7 +16,10 @@ import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 
-import { ThumbNavigationProfileLink } from './thumb-navigation-dynamic-link';
+import {
+  ThumbNavigationDynamicContentLink,
+  ThumbNavigationProfileLink,
+} from './thumb-navigation-dynamic-link';
 
 const messages = defineMessages({
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
@@ -127,6 +130,10 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
             );
           case 'profile-link':
             return <ThumbNavigationProfileLink key='profile-link' {...item} />;
+          case 'dynamic-content-link':
+            return (
+              <ThumbNavigationDynamicContentLink key={`${item.contentType}:${item.id}`} {...item} />
+            );
           case 'link':
             return <ThumbNavigationLink key={item.to} exact {...item} />;
           default:

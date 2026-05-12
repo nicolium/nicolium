@@ -79,6 +79,10 @@ import type { Instance } from 'pl-api';
 
 type AvailableNavigationItem = (typeof AVAILABLE_NAVIGATION_ITEMS)[number];
 type AccountNavigationItem = Extract<NavigationItem, `account:${string}`>;
+type DynamicContentNavigationItem = Extract<
+  NavigationItem,
+  `${'list' | 'circle' | 'antenna' | 'instance' | 'hashtag' | 'bookmark_folder'}:${string}`
+>;
 
 const UNAUTHENTICATED_NAVIGATION_ITEMS = [
   'search-input',
@@ -161,6 +165,13 @@ type NavigationLinkItem = keyof typeof messages;
 
 const isAccountNavigationItem = (item: NavigationItem): item is AccountNavigationItem =>
   item.startsWith('account:');
+
+const isDynamicContentNavigationItem = (
+  item: NavigationItem,
+): item is DynamicContentNavigationItem =>
+  ['list', 'circle', 'antenna', 'instance', 'hashtag', 'bookmark_folder'].some((prefix) =>
+    item.startsWith(`${prefix}:`),
+  );
 
 const isNavigationLinkItem = (item: AvailableNavigationItem): item is NavigationLinkItem =>
   item in messages;
@@ -280,6 +291,11 @@ type NavigationItemsMenuItem =
       type: 'profile-link';
       accountId: string;
       ownAccount: boolean;
+    }
+  | {
+      type: 'dynamic-content-link';
+      contentType: DynamicContentNavigationItem extends `${infer Type}:${string}` ? Type : never;
+      id: string;
     }
   | null;
 
@@ -450,6 +466,15 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
               accountId: item.slice(8),
               ownAccount: false,
             });
+            break;
+          }
+
+          if (isDynamicContentNavigationItem(item)) {
+            const [contentType, id] = item.split(':', 2) as [
+              Extract<NavigationItemsMenuItem, { type: 'dynamic-content-link' }>['contentType'],
+              string,
+            ];
+            menu.push({ type: 'dynamic-content-link', contentType, id });
             break;
           }
 

@@ -30,7 +30,10 @@ import sourceCode from '@/utils/code';
 
 import { AccountLink } from '../accounts/account-link';
 
-import { SidebarNavigationAccountLink } from './sidebar-navigation-dynamic-link';
+import {
+  SidebarNavigationAccountLink,
+  SidebarNavigationDynamicContentLink,
+} from './sidebar-navigation-dynamic-link';
 import SidebarNavigationLink from './sidebar-navigation-link';
 
 import type { Account as AccountEntity } from 'pl-api';
@@ -199,6 +202,14 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
             }
           case 'link':
             return <SidebarNavigationLink {...item} key={item.to} onClick={handleClose} />;
+          case 'dynamic-content-link':
+            return (
+              <SidebarNavigationDynamicContentLink
+                key={`${item.contentType}:${item.id}`}
+                {...item}
+                onClick={handleClose}
+              />
+            );
           case 'compose':
             return (
               <SidebarNavigationLink

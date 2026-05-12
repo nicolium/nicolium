@@ -5,9 +5,14 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useLongPress } from '@/hooks/use-long-press';
 import { useAccount } from '@/queries/accounts/use-account';
 
+import {
+  useDynamicContentLink,
+  type DynamicContentLinkItem,
+} from '../../hooks/use-dynamic-content-link';
 import Avatar from '../ui/avatar';
 
 import ProfileDropdown from './profile-dropdown';
+import ThumbNavigationLink from './thumb-navigation-link';
 
 import type { NavigationItemsMenuItem } from '@/hooks/use-navigation-items';
 
@@ -66,4 +71,10 @@ const ThumbNavigationProfileLink: React.FC<
   );
 };
 
-export { ThumbNavigationProfileLink };
+const ThumbNavigationDynamicContentLink: React.FC<DynamicContentLinkItem> = (item) => {
+  const link = useDynamicContentLink(item);
+
+  return link ? <ThumbNavigationLink exact {...link} /> : null;
+};
+
+export { ThumbNavigationProfileLink, ThumbNavigationDynamicContentLink };

@@ -28,7 +28,10 @@ import SearchInput from '../search-input';
 import SiteLogo from '../site-logo';
 import Avatar from '../ui/avatar';
 
-import { SidebarNavigationAccountLink } from './sidebar-navigation-dynamic-link';
+import {
+  SidebarNavigationAccountLink,
+  SidebarNavigationDynamicContentLink,
+} from './sidebar-navigation-dynamic-link';
 import SidebarNavigationLink from './sidebar-navigation-link';
 
 const messages = defineMessages({
@@ -86,6 +89,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         switch (item.type) {
           case 'compose':
           case 'search-input':
+          case 'dynamic-content-link':
             break;
           case 'profile-link':
             if (item.ownAccount) {
@@ -188,6 +192,12 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               return (
                 <li key='profile-link'>
                   <SidebarNavigationAccountLink {...item} />
+                </li>
+              );
+            case 'dynamic-content-link':
+              return (
+                <li key={`${item.contentType}:${item.id}`}>
+                  <SidebarNavigationDynamicContentLink {...item} />
                 </li>
               );
             default:

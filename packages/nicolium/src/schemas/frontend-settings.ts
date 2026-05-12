@@ -110,13 +110,19 @@ const DEFAULT_SIDEBAR_ITEMS = [
   'footer',
 ] as const;
 
-type NavigationItem = (typeof AVAILABLE_NAVIGATION_ITEMS)[number] | `${'account'}:${string}`;
+type NavigationItem =
+  | (typeof AVAILABLE_NAVIGATION_ITEMS)[number]
+  | `${'account' | 'list' | 'circle' | 'antenna' | 'instance' | 'hashtag' | 'bookmark_folder'}:${string}`;
 
 const navigationItemSchema: v.BaseSchema<any, NavigationItem, v.BaseIssue<unknown>> = v.pipe(
   v.string(),
   v.transform((item) => {
     if (AVAILABLE_NAVIGATION_ITEMS.includes(item as 'separator')) return item as NavigationItem;
-    if (['account'].some((prefix) => item.startsWith(prefix + ':'))) {
+    if (
+      ['account', 'list', 'circle', 'antenna', 'instance', 'hashtag', 'bookmark_folder'].some(
+        (prefix) => item.startsWith(prefix + ':'),
+      )
+    ) {
       return item as NavigationItem;
     } else {
       throw new Error('Invalid item');
