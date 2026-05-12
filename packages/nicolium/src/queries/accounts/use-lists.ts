@@ -12,23 +12,28 @@ import { minifyAccountList } from '../utils/minify-list';
 
 import type { CreateListParams, List, UpdateListParams } from 'pl-api';
 
-function useLists<T>(select: (data: Array<List>) => T): UseQueryResult<T, Error>;
-function useLists(): UseQueryResult<Array<List>, Error>;
-function useLists<T = Array<List>>(select?: (data: Array<List>) => T) {
+function useLists<T>(select: (data: Array<List>) => T, enabled?: boolean): UseQueryResult<T, Error>;
+function useLists(enabled?: boolean): UseQueryResult<Array<List>, Error>;
+function useLists<T = Array<List>>(select?: ((data: Array<List>) => T) | boolean, enabled = true) {
   const client = useClient();
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
+  const selectFn = typeof select === 'function' ? select : undefined;
+  const isEnabled = typeof select === 'boolean' ? select : enabled;
 
   return useQuery({
     queryKey: queryKeys.lists.all,
     queryFn: () => client.lists.getLists(),
-    enabled: isLoggedIn && features.lists,
-    select,
+    enabled: isLoggedIn && features.lists && isEnabled,
+    select: selectFn,
   });
 }
 
 const useList = (listId?: string) =>
-  useLists((data) => (listId ? data.find((list) => list.id === listId) : undefined));
+  useLists(
+    (data) => (listId ? data.find((list) => list.id === listId) : undefined),
+    listId !== undefined,
+  );
 
 const useCreateList = () => {
   const client = useClient();

@@ -12,23 +12,34 @@ import { minifyAccountList } from '../utils/minify-list';
 
 import type { Antenna, CreateAntennaParams, UpdateAntennaParams } from 'pl-api';
 
-function useAntennas<T>(select: (data: Array<Antenna>) => T): UseQueryResult<T, Error>;
-function useAntennas(): UseQueryResult<Array<Antenna>, Error>;
-function useAntennas<T = Array<Antenna>>(select?: (data: Array<Antenna>) => T) {
+function useAntennas<T>(
+  select: (data: Array<Antenna>) => T,
+  enabled?: boolean,
+): UseQueryResult<T, Error>;
+function useAntennas(enabled?: boolean): UseQueryResult<Array<Antenna>, Error>;
+function useAntennas<T = Array<Antenna>>(
+  select?: ((data: Array<Antenna>) => T) | boolean,
+  enabled = true,
+) {
   const client = useClient();
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
+  const selectFn = typeof select === 'function' ? select : undefined;
+  const isEnabled = typeof select === 'boolean' ? select : enabled;
 
   return useQuery({
     queryKey: queryKeys.antennas.all,
     queryFn: () => client.antennas.fetchAntennas(),
-    enabled: isLoggedIn && features.antennas,
-    select,
+    enabled: isLoggedIn && features.antennas && isEnabled,
+    select: selectFn,
   });
 }
 
 const useAntenna = (antennaId?: string) =>
-  useAntennas((data) => (antennaId ? data.find((antenna) => antenna.id === antennaId) : undefined));
+  useAntennas(
+    (data) => (antennaId ? data.find((antenna) => antenna.id === antennaId) : undefined),
+    antennaId !== undefined,
+  );
 
 const useCreateAntenna = () => {
   const client = useClient();

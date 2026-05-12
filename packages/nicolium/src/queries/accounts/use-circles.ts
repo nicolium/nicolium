@@ -12,23 +12,34 @@ import { minifyAccountList } from '../utils/minify-list';
 
 import type { Circle } from 'pl-api';
 
-function useCircles<T>(select: (data: Array<Circle>) => T): UseQueryResult<T, Error>;
-function useCircles(): UseQueryResult<Array<Circle>, Error>;
-function useCircles<T = Array<Circle>>(select?: (data: Array<Circle>) => T) {
+function useCircles<T>(
+  select: (data: Array<Circle>) => T,
+  enabled?: boolean,
+): UseQueryResult<T, Error>;
+function useCircles(enabled?: boolean): UseQueryResult<Array<Circle>, Error>;
+function useCircles<T = Array<Circle>>(
+  select?: ((data: Array<Circle>) => T) | boolean,
+  enabled = true,
+) {
   const client = useClient();
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
+  const selectFn = typeof select === 'function' ? select : undefined;
+  const isEnabled = typeof select === 'boolean' ? select : enabled;
 
   return useQuery({
     queryKey: queryKeys.circles.all,
     queryFn: () => client.circles.fetchCircles(),
-    enabled: isLoggedIn && features.circles,
-    select,
+    enabled: isLoggedIn && features.circles && isEnabled,
+    select: selectFn,
   });
 }
 
 const useCircle = (circleId?: string) =>
-  useCircles((data) => (circleId ? data.find((circle) => circle.id === circleId) : undefined));
+  useCircles(
+    (data) => (circleId ? data.find((circle) => circle.id === circleId) : undefined),
+    circleId !== undefined,
+  );
 
 const useCreateCircle = () => {
   const client = useClient();
