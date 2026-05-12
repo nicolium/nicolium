@@ -460,6 +460,7 @@ const useAuthStore = create<AuthStore>()(
 
     const fetchMeSuccess = async (account: CredentialAccount) => {
       const client = getMeClient();
+      let settingsFound = false;
 
       setSentryAccount(account);
 
@@ -470,6 +471,7 @@ const useAuthStore = create<AuthStore>()(
         // lazy import to avoid circular dependency at module init
         const { useSettingsStore } = await import('@/stores/settings');
         useSettingsStore.getState().actions.loadUserSettings(settings);
+        settingsFound = true;
       }
 
       if (!client.features.frontendConfigurations && client.features.notes) {
@@ -487,6 +489,7 @@ const useAuthStore = create<AuthStore>()(
               }
               const { useSettingsStore } = await import('@/stores/settings');
               useSettingsStore.getState().actions.loadUserSettings(frontendConfig);
+              settingsFound = true;
               get().actions.setCurrentAccount(account);
               return frontendConfig;
             } catch (error) {
@@ -494,6 +497,11 @@ const useAuthStore = create<AuthStore>()(
             }
           }
         }
+      }
+
+      if (!settingsFound) {
+        const { useSettingsStore } = await import('@/stores/settings');
+        useSettingsStore.getState().actions.loadUserSettings(undefined);
       }
 
       const { useComposeStore } = await import('@/stores/compose');

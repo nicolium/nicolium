@@ -38,7 +38,10 @@ const saveSettings = (opts?: SettingOpts, isNotesChange?: boolean) => {
   const {
     userSettings,
     actions: { userSettingsSaving },
+    userSettingsLoaded,
   } = useSettingsStore.getState();
+
+  if (!userSettingsLoaded) return;
   if (userSettings.saved) return;
 
   const { saved, ...data } = userSettings;

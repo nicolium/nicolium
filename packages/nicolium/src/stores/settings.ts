@@ -87,6 +87,7 @@ const mergeSettingsObject = <T>(defaultSettings: T, userSettings: Partial<T>): T
 type State = {
   defaultSettings: Settings;
   userSettings: Partial<Settings>;
+  userSettingsLoaded?: boolean;
 
   settings: Settings;
 
@@ -205,6 +206,7 @@ const useSettingsStore = create<State>()(
 
         loadUserSettings: (settings?: unknown) => {
           set((state: State) => {
+            state.userSettingsLoaded = true;
             if (typeof settings !== 'object') return;
 
             state.userSettings = pickInputKeys(v.parse(settingsSchemaPartial, settings), settings);
