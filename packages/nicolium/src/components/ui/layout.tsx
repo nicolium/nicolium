@@ -5,6 +5,7 @@ import StickyBox from 'react-sticky-box';
 
 import { useFeatures } from '@/hooks/use-features';
 import { useMinWidth } from '@/hooks/use-min-width';
+import { useSettings } from '@/stores/settings';
 
 import tailwindConfig from '../../../tailwind.config';
 
@@ -131,8 +132,9 @@ const Aside: React.FC<IAside> = ({ children }) => {
   const wcoRect = useWindowControlsOverlay();
   const offsetTop =
     wcoRect && wcoRect.x + wcoRect.width < window.innerWidth ? 16 + wcoRect.height : 16;
+  const { sidebarItems } = useSettings();
 
-  if (!isVisible) {
+  if (!isVisible || sidebarItems.length === 0) {
     return null;
   }
 
