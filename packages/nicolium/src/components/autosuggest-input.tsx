@@ -1,3 +1,4 @@
+import { autoUpdate, flip, size, useFloating } from '@floating-ui/react';
 import clsx from 'clsx';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 
@@ -69,8 +70,25 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
 
     const inputRef = useRef<AutosuggestInputElement>(null);
     const suggestionsRef = useRef<HTMLUListElement>(null);
+    const { x, y, strategy, refs } = useFloating({
+      placement: 'bottom-start',
+      middleware: [
+        flip(),
+        size({
+          apply: ({ elements, rects }) => {
+            elements.floating.style.width = `${rects.reference.width}px`;
+          },
+        }),
+      ],
+      whileElementsMounted: autoUpdate,
+    });
 
     useImperativeHandle(forwardedRef, () => inputRef.current as AutosuggestInputElement);
+
+    const setInputRef = (node: AutosuggestInputElement | null) => {
+      inputRef.current = node;
+      refs.setReference(node);
+    };
 
     const onChange: React.ChangeEventHandler<AutosuggestInputElement> = (e) => {
       const [tokenStart, token] = textAtCursorMatchesToken(
@@ -257,16 +275,6 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
       ));
     };
 
-    const setPortalPosition = () => {
-      if (!inputRef.current) {
-        return {};
-      }
-
-      const { top, height, left, width } = inputRef.current.getBoundingClientRect();
-
-      return { left, width, top: top + height };
-    };
-
     const visible = !suggestionsHidden && (props.suggestions.length || (props.menu && props.value));
     const inputTypeProps = InputComponent === Input ? { type: 'text' } : {};
 
@@ -276,7 +284,7 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
           {...inputProps}
           {...inputTypeProps}
           className={props.className}
-          ref={inputRef}
+          ref={setInputRef}
           disabled={props.disabled}
           placeholder={props.placeholder}
           autoFocus={autoFocus}
@@ -297,7 +305,8 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
       </div>,
       <Portal key='portal'>
         <div
-          style={setPortalPosition()}
+          ref={refs.setFloating}
+          style={{ position: strategy, left: x ?? 0, top: y ?? 0 }}
           className={clsx({
             '⁂-autosuggest-suggestions': true,
             '⁂-autosuggest-suggestions--visible': visible,
