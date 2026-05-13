@@ -246,17 +246,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
   }, [notifications, markNotificationsRead]);
 
   const handleRefresh = useCallback(() => {
-    queryClient.setQueryData(queryKeys.notifications.list(activeFilter), (data) => {
-      if (!data) return data;
-
-      // from https://github.com/TanStack/query/discussions/875#discussioncomment-754458
-      // TODO: maybe needed in more places so maybe make a helper for this
-      return {
-        ...data,
-        pages: data.pages.slice(0, 1),
-        pageParams: data.pageParams.slice(0, 1),
-      };
-    });
+    queryClient.resetQueries({ queryKey: queryKeys.notifications.list(activeFilter) });
     refetch().catch(console.error);
   }, [refetch]);
 
