@@ -1714,6 +1714,7 @@
   "notifications.group": "{count, plural, one {# notification} other {# notifications}}",
   "notifications.queue_label": "Click to see {count} new {count, plural, one {notification} other {notifications}}",
   "notifications.queue_label.live_region": "{count} new {count, plural, one {notification} other {notifications}}.",
+  "notifications.refresh": "Refresh notifications",
   "notifications.view_all": "View all",
   "oauth_consumer.tooltip": "Sign in with {provider}",
   "oauth_consumers.title": "Other ways to sign in",
