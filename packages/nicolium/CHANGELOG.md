@@ -28,6 +28,7 @@
 - Reworked account list page in the admin dashboard.
 - Iceshrimp.NET access token should now be persisted across sessions.
 - Further work on migrating styles from TailwindCSS.
+- Legacy config path is no longer supported.
 
 ### Fixed
 
