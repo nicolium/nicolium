@@ -23,15 +23,15 @@ const messages = defineMessages({
   heading: { id: 'preferences.heading.content', defaultMessage: 'Content settings' },
   displayPostsDefault: {
     id: 'preferences.fields.display_media.default',
-    defaultMessage: 'Hide posts marked as sensitive',
+    defaultMessage: 'Hide media from posts marked as sensitive',
   },
   displayPostsHideAll: {
     id: 'preferences.fields.display_media.hide_all',
-    defaultMessage: 'Always hide media posts',
+    defaultMessage: 'Always hide media in posts',
   },
   displayPostsShowAll: {
     id: 'preferences.fields.display_media.show_all',
-    defaultMessage: 'Always show posts',
+    defaultMessage: 'Always show media',
   },
 });
 
