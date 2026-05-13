@@ -52,7 +52,6 @@
     "@lexical/utils": "^0.43.0",
     "@mkljczk/url-purify": "^0.0.5",
     "@phosphor-icons/core": "^2.1.1",
-    "@reach/combobox": "^0.18.0",
     "@reach/rect": "^0.18.0",
     "@reach/tabs": "^0.18.0",
     "@react-spring/web": "^10.0.3",
