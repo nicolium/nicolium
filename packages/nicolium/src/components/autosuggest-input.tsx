@@ -96,7 +96,6 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
         e.target.selectionStart ?? 0,
         searchTokens,
       );
-      console.log('changing', { token, tokenStart });
 
       if (token !== null && lastToken !== token) {
         setLastToken(token);
@@ -196,7 +195,6 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
     const onSuggestionClick: React.EventHandler<React.MouseEvent | React.TouchEvent> = (e) => {
       const index = Number(e.currentTarget?.getAttribute('data-index'));
       const suggestion = props.suggestions[index];
-      console.log(inputRef.current?.value, tokenStart, lastToken, suggestion);
       props.onSuggestionSelected(tokenStart!, lastToken, suggestion);
       props.onSuggestionsClearRequested();
       inputRef.current?.focus();
