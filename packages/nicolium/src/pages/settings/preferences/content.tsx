@@ -33,6 +33,18 @@ const messages = defineMessages({
     id: 'preferences.fields.display_media.show_all',
     defaultMessage: 'Always show media',
   },
+  displayPreviewCardsDefault: {
+    id: 'preferences.fields.display_preview_cards.default',
+    defaultMessage: 'Display full preview cards',
+  },
+  displayPreviewCardsHide: {
+    id: 'preferences.fields.display_preview_cards.hide',
+    defaultMessage: 'Hide preview cards',
+  },
+  displayPreviewCardsHideMedia: {
+    id: 'preferences.fields.display_preview_cards.hide_media',
+    defaultMessage: 'Hide media in preview cards',
+  },
 });
 
 const ContentPreferences: React.FC<ISettingsPage> = ({
@@ -70,6 +82,15 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
       default: intl.formatMessage(messages.displayPostsDefault),
       hide_all: intl.formatMessage(messages.displayPostsHideAll),
       show_all: intl.formatMessage(messages.displayPostsShowAll),
+    }),
+    [settings.locale],
+  );
+
+  const displayPreviewCardsOptions = React.useMemo(
+    () => ({
+      default: intl.formatMessage(messages.displayPreviewCardsDefault),
+      hide: intl.formatMessage(messages.displayPreviewCardsHide),
+      hide_media: intl.formatMessage(messages.displayPreviewCardsHideMedia),
     }),
     [settings.locale],
   );
@@ -150,6 +171,24 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
               settings={settings}
               settingPath={['displaySpoilers']}
               onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.preview_card_display_label'
+                defaultMessage='Preview cards'
+              />
+            }
+          >
+            <SelectDropdown
+              className='max-w-[200px]'
+              items={displayPreviewCardsOptions}
+              defaultValue={settings.displayPreviewCards}
+              onChange={(event) => {
+                onSelectChange(event, ['displayPreviewCards']);
+              }}
             />
           </ListItem>
 

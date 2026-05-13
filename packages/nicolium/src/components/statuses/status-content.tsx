@@ -113,6 +113,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       showNestedQuotes,
       showSideBySideTranslations,
       greentext,
+      displayPreviewCards,
     } = useSettings();
     const { data: account } = useAccount(status.account_id);
 
@@ -379,7 +380,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       }
 
       const media = (quote ||
-        status.card ||
+        (status.card && displayPreviewCards !== 'hide') ||
         (withMedia && status.media_attachments.length > 0)) && (
         <div className='flex flex-col gap-4' key='media'>
           {((withMedia && status.media_attachments.length > 0) ||
