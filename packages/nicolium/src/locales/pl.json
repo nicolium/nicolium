@@ -1500,7 +1500,7 @@
   "preferences.fields.media_display_label": "Wyświetlanie zawartości multimedialnej",
   "preferences.fields.missing_description_modal_label": "Pokazuj prośbę o potwierdzenie przed wysłaniem wpisu bez opisu multimediów",
   "preferences.fields.preserve_spoilers_label": "Pozostaw ostrzeżenie o zawartości, gdy odpowiadasz na wpis",
-  "preferences.fields.privacy_label": "Prywatność wpisów",
+  "preferences.fields.privacy_label": "Domyślna prywatność wpisów",
   "preferences.fields.reduce_motion_label": "Ogranicz ruch w animacjach",
   "preferences.fields.spoilers_display_label": "Automatycznie rozwijaj tekst za spoilerami",
   "preferences.fields.system_font_label": "Używaj domyślnej czcionki systemu",
