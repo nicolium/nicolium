@@ -45,7 +45,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
         </OutlineBox>
       );
     } else {
-      quote = <QuotedStatus statusId={status.quote_id} />;
+      quote = <QuotedStatus statusId={status.quote_id} state='accepted' />;
     }
   }
 

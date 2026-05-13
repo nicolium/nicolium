@@ -28,6 +28,7 @@ import StatusMedia from './status-media';
 import TranslateButton from './translate-button';
 
 import type { Sizes } from '@/components/ui/text';
+import type { FilterContextType } from '@/queries/settings/use-filters';
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
 
 const BIG_EMOJI_LIMIT = 10;
@@ -87,6 +88,7 @@ interface IStatusContent {
   isEvent?: boolean;
   expandable?: boolean;
   quoteDepth?: number;
+  contextType?: FilterContextType;
 }
 
 /** Renders the text content of a status */
@@ -104,6 +106,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     isEvent = false,
     expandable = false,
     quoteDepth = 0,
+    contextType,
   }) => {
     const {
       urlPrivacy,
@@ -375,7 +378,14 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             </OutlineBox>
           );
         } else {
-          quote = <QuotedStatus statusId={status.quote_id} quoteDepth={quoteDepth} />;
+          quote = (
+            <QuotedStatus
+              statusId={status.quote_id}
+              quoteDepth={quoteDepth}
+              state={status.quote_status}
+              contextType={contextType}
+            />
+          );
         }
       }
 

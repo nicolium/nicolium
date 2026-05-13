@@ -619,6 +619,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
               translatable
               withMedia
               expandable={expandable}
+              contextType={contextType}
             />
           )}
 

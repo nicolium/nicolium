@@ -14,6 +14,8 @@ const quoteStateSchema = v.picklist([
   'muted_account',
 ]);
 
+type QuoteState = v.InferOutput<typeof quoteStateSchema>;
+
 /**
  * @category Schemas
  * @see {@link https://docs.joinmastodon.org/entities/Quote/}
@@ -45,4 +47,4 @@ const shallowQuoteSchema = v.object({
  */
 type ShallowQuote = v.InferOutput<typeof shallowQuoteSchema>;
 
-export { quoteSchema, shallowQuoteSchema, type Quote, type ShallowQuote };
+export { quoteSchema, shallowQuoteSchema, type QuoteState, type Quote, type ShallowQuote };
