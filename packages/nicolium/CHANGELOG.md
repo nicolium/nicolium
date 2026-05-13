@@ -16,6 +16,7 @@
 - Admin dashboard on Pleroma/Akkoma/Mitra allows configuring default user interface settings.
 - Admin interface for managing domain allows/blocks.
 - Basic support for Iceshrimp.NET admin API, including reports and domain blocks management.
+- Filters/mutes handling in quoted posts.
 
 ### Changed
 
