@@ -10,7 +10,6 @@ import toast from '@/toast';
 
 import type { Settings } from '@/schemas/frontend-settings';
 
-const LEGACY_FE_NAME = NODE_ENV === 'production' ? 'pl_fe' : 'pl_fe_dev';
 const FE_NAME = NODE_ENV === 'production' ? 'nicolium' : 'nicolium_dev';
 
 /** Options when changing/saving settings. */
@@ -109,4 +108,4 @@ const updateSettingsStore = async (settings: Partial<Settings>, isNotesChange?: 
   }
 };
 
-export { FE_NAME, LEGACY_FE_NAME, changeSetting, saveSettings, updateSettingsStore };
+export { FE_NAME, changeSetting, saveSettings, updateSettingsStore };
