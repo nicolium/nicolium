@@ -2242,6 +2242,7 @@
   "timeline.gap.load_newer": "Load newer posts",
   "timeline.gap.load_older": "Load older posts",
   "timeline.gap.load_recent": "Load recent posts",
+  "timeline.refresh": "Refresh timeline",
   "timeline_filters.include_in_navigation_items": "Include in navigation items",
   "timeline_filters.set_as_default": "Use as default timeline",
   "timeline_filters.show_direct": "Show direct messages",

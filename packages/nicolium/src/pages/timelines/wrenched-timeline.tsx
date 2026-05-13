@@ -6,6 +6,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { WrenchedTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import { TimelinePicker } from '@/components/timeline-picker';
+import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 
@@ -23,7 +24,12 @@ const WrenchedTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='wrenched' />}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+      action={
+        <>
+          <TimelineRefreshButton timelineId='wrenched' />
+          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+        </>
+      }
     >
       <WrenchedTimelineColumn
         emptyMessageText={

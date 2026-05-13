@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { HashtagTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import List, { ListItem } from '@/components/list';
+import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
 import Toggle from '@/components/ui/toggle';
 import { useFeatures } from '@/hooks/use-features';
@@ -39,7 +40,12 @@ const HashtagTimelinePage: React.FC = () => {
   return (
     <Column
       label={`#${hashtag}`}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+      action={
+        <>
+          <TimelineRefreshButton timelineId={`hashtag:${hashtag}`} />
+          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+        </>
+      }
     >
       {features.followHashtags && isLoggedIn && (
         <List>

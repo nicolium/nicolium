@@ -10,6 +10,7 @@ import { AntennaTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 import { TimelinePicker } from '@/components/timeline-picker';
+import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 // import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
@@ -39,7 +40,8 @@ const AntennaTimelinePage: React.FC = () => {
   const { data: antenna, isFetching } = useAntenna(antennaId);
   const { mutate: deleteAntenna } = useDeleteAntenna();
 
-  const timelineFilterOptions = useTimelineFiltersOptions('antenna', `antenna:${antennaId}`);
+  const timelineId = `antenna:${antennaId}` as const;
+  const timelineFilterOptions = useTimelineFiltersOptions('antenna', timelineId);
 
   const handleEditClick = () => {
     openModal('ANTENNA_EDITOR', { antennaId });
@@ -97,8 +99,13 @@ const AntennaTimelinePage: React.FC = () => {
   return (
     <Column
       label={title}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
-      title={<TimelinePicker active={`antenna:${antennaId}`} />}
+      action={
+        <>
+          <TimelineRefreshButton timelineId={timelineId} />
+          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+        </>
+      }
+      title={<TimelinePicker active={timelineId} />}
       truncateTitle={false}
     >
       <AntennaTimelineColumn

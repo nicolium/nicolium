@@ -1314,6 +1314,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     &__action {
       display: flex;
       flex-grow: 1;
+      gap: 0.5rem;
       justify-content: end;
     }
   }

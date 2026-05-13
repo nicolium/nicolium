@@ -93,7 +93,7 @@ const useTimeline = (
   useEffect(() => {
     if (!timeline.isPending || timeline.isFetching || timeline.isError === 401) return;
     fetchInitial();
-  }, [timelineId]);
+  }, [timelineId, timeline.isPending]);
 
   const fetchInitial = useCallback(
     async (isRestoring = !!restoringMaxId) => {

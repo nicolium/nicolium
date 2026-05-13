@@ -7,6 +7,7 @@ import { HomeTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import { Link } from '@/components/link';
 import { TimelinePicker } from '@/components/timeline-picker';
+import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
@@ -58,7 +59,12 @@ const HomeTimelinePage: React.FC = () => {
       title={<TimelinePicker active='home' />}
       withBack={false}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+      action={
+        <>
+          <TimelineRefreshButton timelineId='home' />
+          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+        </>
+      }
     >
       <HomeTimelineColumn
         emptyMessageText={

@@ -10,6 +10,7 @@ import { CircleTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 import { TimelinePicker } from '@/components/timeline-picker';
+import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
@@ -35,7 +36,8 @@ const CircleTimelinePage: React.FC = () => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
   const navigate = useNavigate();
-  const timelineFilterOptions = useTimelineFiltersOptions('circle', `circle:${circleId}`);
+  const timelineId = `circle:${circleId}` as const;
+  const timelineFilterOptions = useTimelineFiltersOptions('circle', timelineId);
 
   const { data: circle, isFetching } = useCircle(circleId);
   const { mutate: deleteCircle } = useDeleteCircle();
@@ -96,8 +98,13 @@ const CircleTimelinePage: React.FC = () => {
   return (
     <Column
       label={title}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
-      title={<TimelinePicker active={`circle:${circleId}`} />}
+      action={
+        <>
+          <TimelineRefreshButton timelineId={timelineId} />
+          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+        </>
+      }
+      title={<TimelinePicker active={timelineId} />}
       truncateTitle={false}
     >
       <CircleTimelineColumn
