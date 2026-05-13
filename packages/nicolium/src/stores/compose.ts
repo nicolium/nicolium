@@ -690,22 +690,18 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
-        selectComposeSuggestion: (composeId, position, token, suggestion, path) => {
+        selectComposeSuggestion: (composeId, startPosition, token, suggestion, path) => {
           let completion = '';
-          let startPosition = position;
 
           if (typeof suggestion === 'object' && 'id' in suggestion) {
             completion = isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
-            startPosition = position - 1;
 
             useSettingsStore.getState().actions.rememberEmojiUse(suggestion);
             saveSettings();
           } else if (typeof suggestion === 'string' && suggestion[0] === '#') {
             completion = suggestion;
-            startPosition = position - 1;
           } else if (typeof suggestion === 'string') {
             completion = selectAccount(suggestion)!.acct;
-            startPosition = position;
           }
 
           get().actions.updateCompose(composeId, (compose) => {

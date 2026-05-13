@@ -16,6 +16,12 @@ import type { InputThemes } from '@/components/ui/input';
 import type { Emoji } from '@/features/emoji';
 import type { Location } from 'pl-api';
 
+const getStartPosition = (suggestion: AutoSuggestion, tokenStart: number) =>
+  (typeof suggestion === 'object' && 'id' in suggestion) ||
+  (typeof suggestion === 'string' && suggestion[0] === '#')
+    ? tokenStart! - 1
+    : tokenStart!;
+
 type AutoSuggestion = string | Emoji | Location;
 type AutosuggestInputElement = HTMLInputElement | HTMLTextAreaElement;
 type AutosuggestInputComponent = React.ElementType;
@@ -163,7 +169,8 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
             setSelectedSuggestion(firstIndex);
 
             if (selectedSuggestion < suggestions.length) {
-              props.onSuggestionSelected(tokenStart!, lastToken, suggestions[selectedSuggestion]);
+              const startPosition = getStartPosition(suggestions[selectedSuggestion], tokenStart!);
+              props.onSuggestionSelected(startPosition, lastToken, suggestions[selectedSuggestion]);
               props.onSuggestionsClearRequested();
             } else if (menu) {
               const item = menu[selectedSuggestion - suggestions.length];
@@ -195,7 +202,8 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
     const onSuggestionClick: React.EventHandler<React.MouseEvent | React.TouchEvent> = (e) => {
       const index = Number(e.currentTarget?.getAttribute('data-index'));
       const suggestion = props.suggestions[index];
-      props.onSuggestionSelected(tokenStart!, lastToken, suggestion);
+      const startPosition = getStartPosition(suggestion, tokenStart!);
+      props.onSuggestionSelected(startPosition, lastToken, suggestion);
       props.onSuggestionsClearRequested();
       inputRef.current?.focus();
       e.preventDefault();
