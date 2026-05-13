@@ -4,12 +4,35 @@
 
 ### Added
 
-- Admin interface for managing domain allows/blocks.
+- Links to specific accounts, lists and other pages can be added to the navigation menu.
+- A sidebar widget showing the most recent post from a specific account.
+- Refresh button for timmelines and notifications page for non-touchscreen devices.
+- Option to disable link previews or their media in posts.
+- `mastodon-async-refresh` header support ported from Mastodon.
 - Support for Iceshrimp.NET 2FA configuration.
+- Support for `restricted` timeline mode (only visible for admins) on backends that implement it.
+- Muted threads page on Iceshrimp.NET.
+- When no navigation items are pinned, thumb navigation menu conditionally displays a dot indicating unread notifications or messages.
+- Admin dashboard on Pleroma/Akkoma/Mitra allows configuring default user interface settings.
+- Admin interface for managing domain allows/blocks.
+- Basic support for Iceshrimp.NET admin API, including reports and domain blocks management.
 
 ### Changed
 
+- Default settings now disable autoloading new timeline items and infinite scroll.
+- Edit profile page offers autosuggestion for mentions, emojis and hashtags.
+- Chat message composer uses the autosuggest input component used in other places, replacing external combobox library.
+- Narrow mode is used for the navigation menu on some breakpoints.
+- Sidebar is now hidden when all items are removed from it, making the main column wider.
+- Reworked account list page in the admin dashboard.
 - Iceshrimp.NET access token should now be persisted across sessions.
+- Further work on migrating styles from TailwindCSS.
+
+### Fixed
+
+- About page doesn't render infinite loading animation anymore.
+- Pending posts render consistently with persisted posts in thread view.
+- Quotes are not counted with reblogs when quote button is displayed in post actions.
 
 ## v0.2.1
 
