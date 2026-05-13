@@ -77,12 +77,6 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form>
-        {/* <CardTitle
-          title={
-            <FormattedMessage id='settings.mutes_blocks' defaultMessage='Mutes and blocks' />
-          }
-        /> */}
-
         <List>
           <ListItem
             label={<FormattedMessage id='column.mutes' defaultMessage='Mutes' />}
