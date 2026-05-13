@@ -28,7 +28,7 @@ type AutosuggestInputComponent = React.ElementType;
 
 interface IAutosuggestInput extends Pick<
   React.HTMLAttributes<AutosuggestInputElement>,
-  'lang' | 'onChange' | 'onKeyUp' | 'onKeyDown'
+  'lang' | 'onBlur' | 'onChange' | 'onFocus' | 'onKeyUp' | 'onKeyDown'
 > {
   value: string;
   suggestions: Array<AutoSuggestion>;
@@ -190,13 +190,19 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
       }
     };
 
-    const onBlur = () => {
+    const hideSuggestions = () => {
       setSuggestionsHidden(true);
       setFocused(false);
     };
 
-    const onFocus = () => {
+    const onBlur: React.FocusEventHandler<AutosuggestInputElement> = (e) => {
+      hideSuggestions();
+      props.onBlur?.(e);
+    };
+
+    const onFocus: React.FocusEventHandler<AutosuggestInputElement> = (e) => {
       setFocused(true);
+      props.onFocus?.(e);
     };
 
     const onSuggestionClick: React.EventHandler<React.MouseEvent | React.TouchEvent> = (e) => {
@@ -249,7 +255,7 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
       item: MenuItem | null,
       e: React.MouseEvent | React.KeyboardEvent,
     ) => {
-      onBlur();
+      hideSuggestions();
       if (item?.action) {
         item.action(e);
       }

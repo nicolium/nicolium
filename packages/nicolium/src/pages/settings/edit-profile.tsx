@@ -3,6 +3,7 @@ import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import AutosuggestInput from '@/components/autosuggest-input';
 import BirthdayInput from '@/components/birthday-input';
 import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
@@ -16,16 +17,20 @@ import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Streamfield from '@/components/ui/streamfield';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
+import { isNativeEmoji } from '@/features/emoji';
 import { useImageField } from '@/hooks/forms/use-image-field';
 import { useClient } from '@/hooks/use-client';
+import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import AvatarPicker from '@/pages/settings/components/avatar-picker';
 import HeaderPicker from '@/pages/settings/components/header-picker';
+import { selectAccount } from '@/queries/accounts/selectors';
 import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
+import type { AutoSuggestion } from '@/components/autosuggest-input';
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
 
 /**
@@ -213,6 +218,77 @@ const accountToCredentials = (account: CredentialAccount): AccountCredentials =>
   };
 };
 
+type ProfileAutosuggestElement = HTMLInputElement | HTMLTextAreaElement;
+
+interface ProfileAutosuggestInputProps {
+  as?: React.ElementType;
+  className?: string;
+  inputProps?: Record<string, unknown>;
+  onBlur?: React.FocusEventHandler<ProfileAutosuggestElement>;
+  onChange: React.ChangeEventHandler<ProfileAutosuggestElement>;
+  onFocus?: React.FocusEventHandler<ProfileAutosuggestElement>;
+  placeholder?: string;
+  searchTokens: string[];
+  value?: string;
+}
+
+const getSuggestionCompletion = (suggestion: AutoSuggestion): string => {
+  if (typeof suggestion === 'object' && 'id' in suggestion) {
+    return isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
+  }
+
+  if (typeof suggestion === 'string' && suggestion[0] === '#') {
+    return suggestion;
+  }
+
+  if (typeof suggestion === 'string') {
+    return selectAccount(suggestion)?.acct ?? suggestion;
+  }
+
+  return '';
+};
+
+const ProfileAutosuggestInput: React.FC<ProfileAutosuggestInputProps> = ({
+  value = '',
+  onChange,
+  searchTokens,
+  ...props
+}) => {
+  const [token, setToken] = useState('');
+  const suggestions = useComposeSuggestions(token);
+
+  const onSuggestionSelected = (
+    tokenStart: number,
+    token: string | null,
+    suggestion: AutoSuggestion,
+  ) => {
+    if (!token) return;
+
+    const completion = getSuggestionCompletion(suggestion);
+    const nextValue = `${value.slice(0, tokenStart)}${completion} ${value.slice(
+      tokenStart + token.length,
+    )}`;
+
+    onChange({
+      target: { value: nextValue },
+      currentTarget: { value: nextValue },
+    } as React.ChangeEvent<ProfileAutosuggestElement>);
+  };
+
+  return (
+    <AutosuggestInput
+      {...props}
+      value={value}
+      onChange={onChange}
+      suggestions={suggestions}
+      onSuggestionsFetchRequested={setToken}
+      onSuggestionsClearRequested={() => setToken('')}
+      onSuggestionSelected={onSuggestionSelected}
+      searchTokens={searchTokens}
+    />
+  );
+};
+
 const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
   index,
   value,
@@ -221,47 +297,49 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
   const intl = useIntl();
 
   const handleChange =
-    (key: string): React.ChangeEventHandler<HTMLInputElement> =>
+    (key: string): React.ChangeEventHandler<ProfileAutosuggestElement> =>
     (e) => {
       onChange({ ...value, [key]: e.currentTarget.value });
     };
 
   return (
     <div className='flex flex-grow gap-2'>
-      <Input
-        type='text'
-        outerClassName='w-2/5 grow'
-        value={value.name}
-        onChange={handleChange('name')}
-        placeholder={
-          index === 0
-            ? intl.formatMessage(messages.firstMetaFieldLabel)
-            : intl.formatMessage(messages.metaFieldLabel)
-        }
-        onFocus={(e) => {
-          const field: HTMLElement | null = e.target.closest('[draggable=true]');
-          if (field) field.draggable = false;
-        }}
-        onBlur={(e) => {
-          const field: HTMLElement | null = e.target.closest('[draggable=false]');
-          if (field) field.draggable = true;
-        }}
-      />
-      <Input
-        type='text'
-        outerClassName='w-3/5 grow'
-        value={value.value}
-        onChange={handleChange('value')}
-        placeholder={intl.formatMessage(messages.metaFieldContent)}
-        onFocus={(e) => {
-          const field: HTMLElement | null = e.target.closest('[draggable=true]');
-          if (field) field.draggable = false;
-        }}
-        onBlur={(e) => {
-          const field: HTMLElement | null = e.target.closest('[draggable=false]');
-          if (field) field.draggable = true;
-        }}
-      />
+      <div className='w-2/5 grow'>
+        <ProfileAutosuggestInput
+          value={value.name}
+          onChange={handleChange('name')}
+          placeholder={
+            index === 0
+              ? intl.formatMessage(messages.firstMetaFieldLabel)
+              : intl.formatMessage(messages.metaFieldLabel)
+          }
+          onFocus={(e) => {
+            const field: HTMLElement | null = e.target.closest('[draggable=true]');
+            if (field) field.draggable = false;
+          }}
+          onBlur={(e) => {
+            const field: HTMLElement | null = e.target.closest('[draggable=false]');
+            if (field) field.draggable = true;
+          }}
+          searchTokens={['@', '#', ':']}
+        />
+      </div>
+      <div className='w-3/5 grow'>
+        <ProfileAutosuggestInput
+          value={value.value}
+          onChange={handleChange('value')}
+          placeholder={intl.formatMessage(messages.metaFieldContent)}
+          onFocus={(e) => {
+            const field: HTMLElement | null = e.target.closest('[draggable=true]');
+            if (field) field.draggable = false;
+          }}
+          onBlur={(e) => {
+            const field: HTMLElement | null = e.target.closest('[draggable=false]');
+            if (field) field.draggable = true;
+          }}
+          searchTokens={['@', '#', ':']}
+        />
+      </div>
     </div>
   );
 };
@@ -461,11 +539,11 @@ const EditProfilePage: React.FC = () => {
             />
           }
         >
-          <Input
-            type='text'
+          <ProfileAutosuggestInput
             value={data.display_name}
             onChange={handleTextChange('display_name')}
             placeholder={intl.formatMessage(messages.displayNamePlaceholder)}
+            searchTokens={[':']}
           />
         </FormGroup>
 
@@ -497,11 +575,13 @@ const EditProfilePage: React.FC = () => {
         <FormGroup
           labelText={<FormattedMessage id='edit_profile.fields.bio_label' defaultMessage='Bio' />}
         >
-          <Textarea
+          <ProfileAutosuggestInput
+            as={Textarea}
             value={data.note}
             onChange={handleTextChange('note')}
-            autoComplete='off'
             placeholder={intl.formatMessage(messages.bioPlaceholder)}
+            inputProps={{ autoComplete: 'off' }}
+            searchTokens={['@', '#', ':']}
           />
         </FormGroup>
 
