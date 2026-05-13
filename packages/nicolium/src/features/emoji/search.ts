@@ -41,9 +41,16 @@ const addCustomToPool = (customEmojis: CustomEmoji[]) => {
   }));
 };
 
-const search = (query: string, customEmojis: Array<CustomEmoji> = [], limit = 5): Emoji[] => {
+const search = (
+  query: string,
+  customEmojis: Array<CustomEmoji> = [],
+  limit = 5,
+  withCustom = true,
+): Emoji[] => {
+  const pool = withCustom ? [...nativeData, ...customData] : nativeData;
+
   return fuzzysort
-    .go(query.replaceAll('-', '_'), [...nativeData, ...customData], {
+    .go(query.replaceAll('-', '_'), pool, {
       keys: ['emojiId', 'emojiName', 'emojiKeywords'],
       limit,
     })
@@ -52,6 +59,9 @@ const search = (query: string, customEmojis: Array<CustomEmoji> = [], limit = 5)
 
       if (id[0] === 'c') {
         const customEmoji = customEmojis[Number(id.slice(1))];
+
+        if (!customEmoji) return undefined;
+
         return {
           id: customEmoji.shortcode,
           colons: ':' + customEmoji.shortcode + ':',
@@ -69,6 +79,8 @@ const search = (query: string, customEmojis: Array<CustomEmoji> = [], limit = 5)
           native: emojiData.skins[0].native,
         };
       }
+
+      return undefined;
     })
     .filter(Boolean) as Array<Emoji>;
 };

@@ -2,13 +2,8 @@ import iconPaperPlaneRight from '@phosphor-icons/core/regular/paper-plane-right.
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AutosuggestInput from '@/components/autosuggest-input';
 import Button from '@/components/ui/button';
-import Combobox, {
-  ComboboxInput,
-  ComboboxList,
-  ComboboxOption,
-  ComboboxPopover,
-} from '@/components/ui/combobox';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import { useChatContext } from '@/contexts/chat-context';
@@ -21,11 +16,11 @@ import {
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
-import { textAtCursorMatchesToken } from '@/utils/suggestions';
 
 import ChatTextarea from './chat-textarea';
 
-import type { Emoji, NativeEmoji } from '@/features/emoji';
+import type { AutoSuggestion } from '@/components/autosuggest-input';
+import type { Emoji } from '@/features/emoji';
 import type { MediaAttachment } from 'pl-api';
 
 const messages = defineMessages({
@@ -39,18 +34,6 @@ const messages = defineMessages({
   unblockHeading: { id: 'chat_settings.unblock.heading', defaultMessage: 'Unblock @{acct}' },
   unblockConfirm: { id: 'chat_settings.unblock.confirm', defaultMessage: 'Unblock' },
 });
-
-const initialSuggestionState = {
-  list: [],
-  tokenStart: 0,
-  token: '',
-};
-
-interface Suggestion {
-  list: Emoji[];
-  tokenStart: number;
-  token: string;
-}
 
 interface IChatComposer extends Pick<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
@@ -102,8 +85,8 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
 
     const maxCharacterCount = useInstance().configuration.chats.max_characters;
 
-    const [suggestions, setSuggestions] = useState<Suggestion>(initialSuggestionState);
-    const isSuggestionsAvailable = suggestions.list.length > 0;
+    const [suggestions, setSuggestions] = useState<Emoji[]>([]);
+    const isSuggestionsAvailable = suggestions.length > 0;
 
     const isOverCharacterLimit = maxCharacterCount && value?.length > maxCharacterCount;
     const isSubmitDisabled =
@@ -111,36 +94,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
 
     const overLimitText = maxCharacterCount ? maxCharacterCount - value?.length : '';
 
-    const renderSuggestionValue = (emoji: Emoji) =>
-      `${value.slice(0, suggestions.tokenStart)}${'native' in emoji ? emoji.native : emoji.colons} ${value.slice(suggestions.tokenStart + suggestions.token.length)}`;
-
-    const onSelectComboboxOption = (selection: string) => {
-      const event = { target: { value: selection } } as React.ChangeEvent<HTMLTextAreaElement>;
-
-      if (onChange) {
-        onChange(event);
-        setSuggestions(initialSuggestionState);
-      }
-    };
-
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const [tokenStart, token] = textAtCursorMatchesToken(
-        event.target.value,
-        event.target.selectionStart,
-        [':'],
-      );
-
-      if (token && tokenStart) {
-        const results = emojiSearch(token.replace(':', ''), customEmojis, 5);
-        setSuggestions({
-          list: results,
-          token,
-          tokenStart: tokenStart - 1,
-        });
-      } else {
-        setSuggestions(initialSuggestionState);
-      }
-
       if (onChange) {
         onChange(event);
       }
@@ -154,6 +108,36 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
       if (onKeyDown) {
         onKeyDown(event);
       }
+    };
+
+    const onSuggestionsFetchRequested = (token: string) => {
+      const results = emojiSearch(token.replace(':', ''), customEmojis ?? [], 5);
+
+      setSuggestions(results);
+    };
+
+    const onSuggestionsClearRequested = () => {
+      setSuggestions([]);
+    };
+
+    const onSuggestionSelected = (
+      tokenStart: number,
+      token: string | null,
+      emoji: AutoSuggestion,
+    ) => {
+      if (!token || typeof emoji === 'string' || 'origin_id' in emoji) {
+        return;
+      }
+
+      const insertion = `${'native' in emoji ? emoji.native : emoji.colons} `;
+      const nextValue = `${value.slice(0, tokenStart)}${insertion}${value.slice(tokenStart + token.length)}`;
+      const event = { target: { value: nextValue } } as React.ChangeEvent<HTMLTextAreaElement>;
+
+      if (onChange) {
+        onChange(event);
+      }
+
+      setSuggestions([]);
     };
 
     const handleUnblockUser = () => {
@@ -207,42 +191,33 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
           </div>
 
           <div className='flex grow flex-col'>
-            <Combobox onSelect={onSelectComboboxOption}>
-              <ComboboxInput
-                key={resetContentKey}
-                as={ChatTextarea}
-                autoFocus
-                ref={ref}
-                placeholder={intl.formatMessage(messages.placeholder)}
-                onKeyDown={handleKeyDown}
-                value={value}
-                onChange={handleChange}
-                onPaste={onPaste}
-                isResizeable={false}
-                autoGrow
-                maxRows={5}
-                disabled={disabled}
-                attachment={attachment}
-                onDeleteAttachment={onDeleteAttachment}
-                uploading={uploading}
-                uploadProgress={uploadProgress}
-              />
-              {isSuggestionsAvailable ? (
-                <ComboboxPopover>
-                  <ComboboxList>
-                    {suggestions.list.map((emojiSuggestion) => (
-                      <ComboboxOption
-                        key={emojiSuggestion.colons}
-                        value={renderSuggestionValue(emojiSuggestion)}
-                      >
-                        <span>{(emojiSuggestion as NativeEmoji).native}</span>
-                        <span className='ml-1'>{emojiSuggestion.colons}</span>
-                      </ComboboxOption>
-                    ))}
-                  </ComboboxList>
-                </ComboboxPopover>
-              ) : null}
-            </Combobox>
+            <AutosuggestInput
+              key={resetContentKey}
+              as={ChatTextarea}
+              autoFocus
+              ref={ref as React.ForwardedRef<HTMLInputElement | HTMLTextAreaElement>}
+              placeholder={intl.formatMessage(messages.placeholder)}
+              onKeyDown={handleKeyDown}
+              value={value}
+              onChange={handleChange}
+              disabled={disabled}
+              suggestions={suggestions}
+              onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+              onSuggestionsClearRequested={onSuggestionsClearRequested}
+              onSuggestionSelected={onSuggestionSelected}
+              searchTokens={[':']}
+              inputProps={{
+                onPaste,
+                isResizeable: false,
+                autoGrow: true,
+                maxRows: 5,
+                disabled,
+                attachment,
+                onDeleteAttachment,
+                uploading,
+                uploadProgress,
+              }}
+            />
           </div>
 
           <div className='mb-1.5 flex w-10 flex-col items-center justify-end gap-2'>
