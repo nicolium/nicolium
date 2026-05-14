@@ -290,3 +290,27 @@
     width: 100%;
   }
 }
+
+.⁂-list-members-modal {
+  &__form {
+    min-height: 6rem;
+
+    &__container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__accounts {
+      overflow-y: auto;
+      max-height: 12rem;
+    }
+
+    &__pending {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 6rem;
+    }
+  }
+}
