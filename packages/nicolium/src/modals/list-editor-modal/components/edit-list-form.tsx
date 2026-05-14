@@ -104,7 +104,7 @@ const ListForm: React.FC<IListForm> = ({ listId, onTabChange }) => {
             label={<FormattedMessage id='lists.exclusive' defaultMessage='Hide members in Home' />}
             hint={
               <FormattedMessage
-                id='lists.exclusive_hint'
+                id='lists.exclusive.hint'
                 defaultMessage='If someone is on this list, hide them in your Home feed to avoid seeing their posts twice.'
               />
             }
@@ -123,7 +123,7 @@ const ListForm: React.FC<IListForm> = ({ listId, onTabChange }) => {
             label={<FormattedMessage id='lists.notifications' defaultMessage='Subscribe' />}
             hint={
               <FormattedMessage
-                id='lists.notifications_hint'
+                id='lists.notifications.hint'
                 defaultMessage='Receive notifications for new posts in the list.'
               />
             }

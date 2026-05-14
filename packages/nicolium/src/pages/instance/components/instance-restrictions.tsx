@@ -117,7 +117,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
       return (
         <Restriction icon={iconX}>
           <FormattedMessage
-            id='remote_instance.federation_panel.restricted_message'
+            id='remote_instance.federation_panel.restricted.message'
             defaultMessage='{siteTitle} blocks all activities from {host}.'
             values={{ host, siteTitle }}
           />
@@ -128,7 +128,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
         <>
           <Restriction icon={iconLock}>
             <FormattedMessage
-              id='remote_instance.federation_panel.some_restrictions_message'
+              id='remote_instance.federation_panel.some_restrictions.message'
               defaultMessage='{siteTitle} has placed some restrictions on {host}.'
               values={{ host, siteTitle }}
             />
@@ -141,7 +141,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
       return (
         <Restriction icon={iconCheck}>
           <FormattedMessage
-            id='remote_instance.federation_panel.no_restrictions_message'
+            id='remote_instance.federation_panel.no_restrictions.message'
             defaultMessage='{siteTitle} has placed no restrictions on {host}.'
             values={{ host, siteTitle }}
           />

@@ -18,11 +18,11 @@ import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   accountPlaceholder: {
-    id: 'remote_interaction.account_placeholder',
+    id: 'remote_interaction.account.placeholder',
     defaultMessage: 'Enter your username@domain you want to act from',
   },
   userNotFoundError: {
-    id: 'remote_interaction.user_not_found_error',
+    id: 'remote_interaction.user_not_found.error',
     defaultMessage: "Couldn't find given user",
   },
 });
@@ -105,7 +105,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
     if (action === 'FOLLOW') {
       header = (
         <FormattedMessage
-          id='remote_interaction.follow_title'
+          id='remote_interaction.follow.title'
           defaultMessage='Follow {user} remotely'
           values={{ user: username }}
         />
@@ -116,7 +116,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
     } else if (action === 'REPLY') {
       header = (
         <FormattedMessage
-          id='remote_interaction.reply_title'
+          id='remote_interaction.reply.title'
           defaultMessage='Reply to a post remotely'
         />
       );
@@ -124,7 +124,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
     } else if (action === 'REBLOG') {
       header = (
         <FormattedMessage
-          id='remote_interaction.reblog_title'
+          id='remote_interaction.reblog.title'
           defaultMessage='Reblog a post remotely'
         />
       );
@@ -134,7 +134,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
     } else if (action === 'FAVOURITE') {
       header = (
         <FormattedMessage
-          id='remote_interaction.favourite_title'
+          id='remote_interaction.favourite.title'
           defaultMessage='Like a post remotely'
         />
       );
@@ -144,7 +144,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
     } else if (action === 'DISLIKE') {
       header = (
         <FormattedMessage
-          id='remote_interaction.dislike_title'
+          id='remote_interaction.dislike.title'
           defaultMessage='Dislike a post remotely'
         />
       );
@@ -154,7 +154,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
     } else if (action === 'POLL_VOTE') {
       header = (
         <FormattedMessage
-          id='remote_interaction.poll_vote_title'
+          id='remote_interaction.poll_vote.title'
           defaultMessage='Vote in a poll remotely'
         />
       );
@@ -164,7 +164,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
     } else if (action === 'JOIN') {
       header = (
         <FormattedMessage
-          id='remote_interaction.event_join_title'
+          id='remote_interaction.event_join.title'
           defaultMessage='Join an event remotely'
         />
       );

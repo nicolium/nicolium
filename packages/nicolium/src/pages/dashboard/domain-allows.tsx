@@ -16,25 +16,25 @@ import type { AdminDomainAllow } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.domain_allows', defaultMessage: 'Domain allows' },
-  domainPlaceholder: { id: 'admin.domain_allows.domain_placeholder', defaultMessage: 'Domain' },
+  domainPlaceholder: { id: 'admin.domain_allows.domain.placeholder', defaultMessage: 'Domain' },
   deleteConfirm: {
     id: 'confirmations.admin.delete_domain_allow.confirm',
     defaultMessage: 'Delete',
   },
   createSuccess: {
-    id: 'admin.domain_allows.create_success',
+    id: 'admin.domain_allows.create.success',
     defaultMessage: 'Domain allow created',
   },
   createError: {
-    id: 'admin.domain_allows.create_error',
+    id: 'admin.domain_allows.create.error',
     defaultMessage: 'Failed to create domain allow',
   },
   deleteSuccess: {
-    id: 'admin.domain_allows.delete_success',
+    id: 'admin.domain_allows.delete.success',
     defaultMessage: 'Domain allow deleted',
   },
   deleteError: {
-    id: 'admin.domain_allows.delete_error',
+    id: 'admin.domain_allows.delete.error',
     defaultMessage: 'Failed to delete domain allow',
   },
 });

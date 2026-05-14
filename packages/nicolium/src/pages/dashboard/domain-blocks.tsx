@@ -22,11 +22,11 @@ const messages = defineMessages({
     defaultMessage: 'Delete',
   },
   deleteSuccess: {
-    id: 'admin.domain_blocks.delete_success',
+    id: 'admin.domain_blocks.delete.success',
     defaultMessage: 'Domain block deleted',
   },
   deleteError: {
-    id: 'admin.domain_blocks.delete_error',
+    id: 'admin.domain_blocks.delete.error',
     defaultMessage: 'Failed to delete domain block',
   },
 });

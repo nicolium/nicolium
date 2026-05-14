@@ -66,8 +66,8 @@ import type { LinkNode } from '@lexical/link';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: "What's on your mind?" },
-  pollPlaceholder: { id: 'compose_form.poll_placeholder', defaultMessage: 'Add a poll topic…' },
-  eventPlaceholder: { id: 'compose_form.event_placeholder', defaultMessage: 'Post to this event' },
+  pollPlaceholder: { id: 'compose_form.poll.placeholder', defaultMessage: 'Add a poll topic…' },
+  eventPlaceholder: { id: 'compose_form.event.placeholder', defaultMessage: 'Post to this event' },
   publish: { id: 'compose_form.publish', defaultMessage: 'Post' },
   publishLoud: { id: 'compose_form.publish_loud', defaultMessage: '{publish}!' },
   message: { id: 'compose_form.message', defaultMessage: 'Message' },
@@ -522,13 +522,13 @@ const ComposeForm = <ID extends string>({
               className='mt-2'
               label={
                 <FormattedMessage
-                  id='compose.redact.overwrite_label'
+                  id='compose.redact.overwrite.label'
                   defaultMessage='Overwrite existing post'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='compose.redact.overwrite_hint'
+                  id='compose.redact.overwrite.hint'
                   defaultMessage='This will replace the post with a new one, without keeping edit history. The update will not federate.'
                 />
               }

@@ -107,10 +107,10 @@ const SettingsStore: React.FC = () => {
 
       <List>
         <ListItem
-          label={<FormattedMessage id='preferences.fields.demo_label' defaultMessage='Demo mode' />}
+          label={<FormattedMessage id='preferences.fields.demo.label' defaultMessage='Demo mode' />}
           hint={
             <FormattedMessage
-              id='preferences.fields.demo_hint'
+              id='preferences.fields.demo.hint'
               defaultMessage='Use the default Nicolium logo and color scheme. Useful for taking screenshots.'
             />
           }

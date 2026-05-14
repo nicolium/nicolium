@@ -384,7 +384,7 @@ const TupleEditor = memo(
       <div className='⁂-admin-config__editor-stack'>
         <p className='⁂-admin-config__feedback'>
           <FormattedMessage
-            id='admin.pleroma_config.tuple_hint'
+            id='admin.pleroma_config.tuple.hint'
             defaultMessage='Values are parsed as JSON when possible, otherwise kept as strings.'
           />
         </p>
@@ -674,7 +674,7 @@ const ConfigValueEditor = memo(
         <div className='⁂-admin-config__editor-stack'>
           <p className='⁂-admin-config__feedback'>
             <FormattedMessage
-              id='admin.pleroma_config.complex_hint'
+              id='admin.pleroma_config.complex.hint'
               defaultMessage='Edit this value as JSON.'
             />
           </p>

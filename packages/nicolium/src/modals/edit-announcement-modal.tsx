@@ -20,15 +20,15 @@ import type { AdminAnnouncement } from 'pl-api';
 const messages = defineMessages({
   save: { id: 'admin.edit_announcement.save', defaultMessage: 'Save' },
   announcementContentPlaceholder: {
-    id: 'admin.edit_announcement.fields.content_placeholder',
+    id: 'admin.edit_announcement.fields.content.placeholder',
     defaultMessage: 'Announcement content',
   },
   announcementStartTimePlaceholder: {
-    id: 'admin.edit_announcement.fields.start_time_placeholder',
+    id: 'admin.edit_announcement.fields.start_time.placeholder',
     defaultMessage: 'Announcement starts on:',
   },
   announcementEndTimePlaceholder: {
-    id: 'admin.edit_announcement.fields.end_time_placeholder',
+    id: 'admin.edit_announcement.fields.end_time.placeholder',
     defaultMessage: 'Announcement ends on:',
   },
   announcementCreateSuccess: {
@@ -133,7 +133,7 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
         <FormGroup
           labelText={
             <FormattedMessage
-              id='admin.edit_announcement.fields.content_label'
+              id='admin.edit_announcement.fields.content.label'
               defaultMessage='Content'
             />
           }
@@ -148,7 +148,7 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
         <FormGroup
           labelText={
             <FormattedMessage
-              id='admin.edit_announcement.fields.start_time_label'
+              id='admin.edit_announcement.fields.start_time.label'
               defaultMessage='Start date'
             />
           }
@@ -168,7 +168,7 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
         <FormGroup
           labelText={
             <FormattedMessage
-              id='admin.edit_announcement.fields.end_time_label'
+              id='admin.edit_announcement.fields.end_time.label'
               defaultMessage='End date'
             />
           }
@@ -188,13 +188,13 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
           <ListItem
             label={
               <FormattedMessage
-                id='admin.edit_announcement.fields.all_day_label'
+                id='admin.edit_announcement.fields.all_day.label'
                 defaultMessage='All-day event'
               />
             }
             hint={
               <FormattedMessage
-                id='admin.edit_announcement.fields.all_day_hint'
+                id='admin.edit_announcement.fields.all_day.hint'
                 defaultMessage='When checked, only the dates of the time range will be displayed'
               />
             }

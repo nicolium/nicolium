@@ -48,15 +48,15 @@ const hidesNetwork = ({ __meta }: Pick<CredentialAccount, '__meta'>): boolean =>
 const messages = defineMessages({
   heading: { id: 'column.edit_profile', defaultMessage: 'Edit profile' },
   metaFieldLabel: {
-    id: 'edit_profile.fields.meta_fields.label_placeholder',
+    id: 'edit_profile.fields.meta_fields.label.placeholder',
     defaultMessage: 'Label',
   },
   metaFieldContent: {
-    id: 'edit_profile.fields.meta_fields.content_placeholder',
+    id: 'edit_profile.fields.meta_fields.content.placeholder',
     defaultMessage: 'Content',
   },
   firstMetaFieldLabel: {
-    id: 'edit_profile.fields.meta_fields.label_placeholder.first',
+    id: 'edit_profile.fields.meta_fields.label.placeholder.first',
     defaultMessage: 'Label (e.g. pronouns)',
   },
   success: {
@@ -65,15 +65,15 @@ const messages = defineMessages({
   },
   error: { id: 'edit_profile.error', defaultMessage: 'Profile update failed' },
   bioPlaceholder: {
-    id: 'edit_profile.fields.bio_placeholder',
+    id: 'edit_profile.fields.bio.placeholder',
     defaultMessage: 'Tell us about yourself.',
   },
   displayNamePlaceholder: {
-    id: 'edit_profile.fields.display_name_placeholder',
+    id: 'edit_profile.fields.display_name.placeholder',
     defaultMessage: 'Name',
   },
   locationPlaceholder: {
-    id: 'edit_profile.fields.location_placeholder',
+    id: 'edit_profile.fields.location.placeholder',
     defaultMessage: 'Location',
   },
   mentionPolicyNone: { id: 'edit_profile.fields.mention_policy.none', defaultMessage: 'Everybody' },
@@ -105,7 +105,7 @@ const messages = defineMessages({
     id: 'edit_profile.fields.web_visibility.none',
     defaultMessage: 'Show no posts',
   },
-  customCSSLabel: { id: 'edit_profile.fields.custom_css_label', defaultMessage: 'Custom CSS' },
+  customCSSLabel: { id: 'edit_profile.fields.custom_css.label', defaultMessage: 'Custom CSS' },
 });
 
 /**
@@ -534,7 +534,7 @@ const EditProfilePage: React.FC = () => {
         <FormGroup
           labelText={
             <FormattedMessage
-              id='edit_profile.fields.display_name_label'
+              id='edit_profile.fields.display_name.label'
               defaultMessage='Display name'
             />
           }
@@ -550,7 +550,7 @@ const EditProfilePage: React.FC = () => {
         {features.birthdays && (
           <FormGroup
             labelText={
-              <FormattedMessage id='edit_profile.fields.birthday_label' defaultMessage='Birthday' />
+              <FormattedMessage id='edit_profile.fields.birthday.label' defaultMessage='Birthday' />
             }
           >
             <BirthdayInput value={data.birthday} onChange={handleBirthdayChange} />
@@ -560,7 +560,7 @@ const EditProfilePage: React.FC = () => {
         {features.accountLocation && (
           <FormGroup
             labelText={
-              <FormattedMessage id='edit_profile.fields.location_label' defaultMessage='Location' />
+              <FormattedMessage id='edit_profile.fields.location.label' defaultMessage='Location' />
             }
           >
             <Input
@@ -573,7 +573,7 @@ const EditProfilePage: React.FC = () => {
         )}
 
         <FormGroup
-          labelText={<FormattedMessage id='edit_profile.fields.bio_label' defaultMessage='Bio' />}
+          labelText={<FormattedMessage id='edit_profile.fields.bio.label' defaultMessage='Bio' />}
         >
           <ProfileAutosuggestInput
             as={Textarea}
@@ -590,7 +590,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.locked_label'
+                  id='edit_profile.fields.locked.label'
                   defaultMessage='Lock account'
                 />
               }
@@ -609,7 +609,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.hide_network_label'
+                  id='edit_profile.fields.hide_network.label'
                   defaultMessage='Hide network'
                 />
               }
@@ -640,7 +640,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.bot_label'
+                  id='edit_profile.fields.bot.label'
                   defaultMessage='This is a bot account'
                 />
               }
@@ -659,7 +659,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.stranger_notifications_label'
+                  id='edit_profile.fields.stranger_notifications.label'
                   defaultMessage='Block notifications from strangers'
                 />
               }
@@ -683,7 +683,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.discoverable_label'
+                  id='edit_profile.fields.discoverable.label'
                   defaultMessage='Allow account discovery'
                 />
               }
@@ -702,7 +702,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.rss_label'
+                  id='edit_profile.fields.rss.label'
                   defaultMessage='Enable RSS feed for public posts'
                 />
               }
@@ -716,7 +716,7 @@ const EditProfilePage: React.FC = () => {
               <ListItem
                 label={
                   <FormattedMessage
-                    id='edit_profile.fields.is_cat_label'
+                    id='edit_profile.fields.is_cat.label'
                     defaultMessage='The user is a cat'
                   />
                 }
@@ -733,7 +733,7 @@ const EditProfilePage: React.FC = () => {
               <ListItem
                 label={
                   <FormattedMessage
-                    id='edit_profile.fields.speak_as_cat_label'
+                    id='edit_profile.fields.speak_as_cat.label'
                     defaultMessage='The user speaks as a cat'
                   />
                 }
@@ -756,7 +756,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.web_layout_label'
+                  id='preferences.fields.web_layout.label'
                   defaultMessage='Layout of the web view of your profile'
                 />
               }
@@ -779,7 +779,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.web_visibility_label'
+                  id='preferences.fields.web_visibility.label'
                   defaultMessage='Visibility level of posts displayed on your profile'
                 />
               }
@@ -803,7 +803,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.web_include_boosts_label'
+                  id='preferences.fields.web_include_boosts.label'
                   defaultMessage='Include reposts in web view'
                 />
               }
@@ -825,7 +825,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.mention_policy_label'
+                  id='preferences.fields.mention_policy.label'
                   defaultMessage='Accept mentions from'
                 />
               }
@@ -857,7 +857,7 @@ const EditProfilePage: React.FC = () => {
           <Streamfield
             label={
               <FormattedMessage
-                id='edit_profile.fields.meta_fields_label'
+                id='edit_profile.fields.meta_fields.label'
                 defaultMessage='Profile fields'
               />
             }

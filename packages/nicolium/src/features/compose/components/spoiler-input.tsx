@@ -9,7 +9,7 @@ import type { AutoSuggestion } from '@/components/autosuggest-input';
 import type { InputThemes } from '@/components/ui/input';
 
 const messages = defineMessages({
-  placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Subject (optional)' },
+  placeholder: { id: 'compose_form.spoiler.placeholder', defaultMessage: 'Subject (optional)' },
 });
 
 interface ISpoilerInput {

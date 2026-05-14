@@ -18,9 +18,9 @@ import type { CredentialApplication, Token } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.app_create', defaultMessage: 'Create app' },
-  namePlaceholder: { id: 'app_create.name_placeholder', defaultMessage: "e.g. 'Nicolium'" },
+  namePlaceholder: { id: 'app_create.name.placeholder', defaultMessage: "e.g. 'Nicolium'" },
   scopesPlaceholder: {
-    id: 'app_create.scopes_placeholder',
+    id: 'app_create.scopes.placeholder',
     defaultMessage: "e.g. 'read write follow'",
   },
 });
@@ -113,27 +113,27 @@ const CreateAppPage: React.FC = () => {
         <div className='flex flex-col'>
           <Text size='lg' weight='medium'>
             <FormattedMessage
-              id='app_create.results.explanation_title'
+              id='app_create.results.explanation.title'
               defaultMessage='App created successfully'
             />
           </Text>
           <Text theme='muted'>
             <FormattedMessage
-              id='app_create.results.explanation_text'
+              id='app_create.results.explanation.text'
               defaultMessage='You created a new app and token! Please copy the credentials somewhere; you will not see them again after navigating away from this page.'
             />
           </Text>
         </div>
 
         <FormGroup
-          labelText={<FormattedMessage id='app_create.results.app_label' defaultMessage='App' />}
+          labelText={<FormattedMessage id='app_create.results.app.label' defaultMessage='App' />}
         >
           <Textarea value={JSON.stringify(app, null, 2)} rows={10} readOnly isCodeEditor />
         </FormGroup>
 
         <FormGroup
           labelText={
-            <FormattedMessage id='app_create.results.token_label' defaultMessage='OAuth token' />
+            <FormattedMessage id='app_create.results.token.label' defaultMessage='OAuth token' />
           }
         >
           <Textarea value={JSON.stringify(token, null, 2)} rows={10} readOnly isCodeEditor />
@@ -156,7 +156,7 @@ const CreateAppPage: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)} backHref='/developers'>
       <Form onSubmit={handleSubmit}>
         <FormGroup
-          labelText={<FormattedMessage id='app_create.name_label' defaultMessage='App name' />}
+          labelText={<FormattedMessage id='app_create.name.label' defaultMessage='App name' />}
         >
           <Input
             type='text'
@@ -168,7 +168,7 @@ const CreateAppPage: React.FC = () => {
         </FormGroup>
 
         <FormGroup
-          labelText={<FormattedMessage id='app_create.website_label' defaultMessage='Website' />}
+          labelText={<FormattedMessage id='app_create.website.label' defaultMessage='Website' />}
         >
           <Input
             type='text'
@@ -180,7 +180,7 @@ const CreateAppPage: React.FC = () => {
 
         <FormGroup
           labelText={
-            <FormattedMessage id='app_create.redirect_uri_label' defaultMessage='Redirect URIs' />
+            <FormattedMessage id='app_create.redirect_uri.label' defaultMessage='Redirect URIs' />
           }
         >
           <Input
@@ -193,7 +193,7 @@ const CreateAppPage: React.FC = () => {
         </FormGroup>
 
         <FormGroup
-          labelText={<FormattedMessage id='app_create.scopes_label' defaultMessage='Scopes' />}
+          labelText={<FormattedMessage id='app_create.scopes.label' defaultMessage='Scopes' />}
         >
           <Input
             type='text'

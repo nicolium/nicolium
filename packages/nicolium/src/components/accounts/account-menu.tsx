@@ -60,7 +60,7 @@ const messages = defineMessages({
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
-  copySuccess: { id: 'account.copy_success', defaultMessage: 'Profile URL copied to clipboard' },
+  copySuccess: { id: 'account.copy.success', defaultMessage: 'Profile URL copied to clipboard' },
   media: { id: 'account.media', defaultMessage: 'Media' },
   blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
@@ -112,11 +112,11 @@ const messages = defineMessages({
     id: 'account.load_activities.fail',
     defaultMessage: 'Failed to fetch latest posts',
   },
-  nickname: { id: 'account.nickname.modal_header', defaultMessage: 'Set nickname for @{name}' },
+  nickname: { id: 'account.nickname.modal.header', defaultMessage: 'Set nickname for @{name}' },
   nicknamePlaceholder: { id: 'account.nickname.placeholder', defaultMessage: 'Enter a nickname' },
   nicknameSave: { id: 'account.nickname.save', defaultMessage: 'Save nickname' },
   nicknameSaved: { id: 'account.nickname.success', defaultMessage: 'Nickname saved' },
-  note: { id: 'account_note.modal_header', defaultMessage: 'Edit note for @{name}' },
+  note: { id: 'account_note.modal.header', defaultMessage: 'Edit note for @{name}' },
   notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
   noteSaved: { id: 'account_note.success', defaultMessage: 'Note saved' },
   noteSaveFailed: { id: 'account_note.fail', defaultMessage: 'Failed to save note' },
@@ -248,7 +248,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
     openModal('TEXT_FIELD', {
       heading: (
         <FormattedMessage
-          id='account_note.modal_header'
+          id='account_note.modal.header'
           defaultMessage='Edit note for @{name}'
           values={{ name: account.acct }}
         />
@@ -274,7 +274,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
     openModal('TEXT_FIELD', {
       heading: (
         <FormattedMessage
-          id='account.nickname.modal_header'
+          id='account.nickname.modal.header'
           defaultMessage='Set nickname for @{name}'
           values={{ name: account.acct }}
         />

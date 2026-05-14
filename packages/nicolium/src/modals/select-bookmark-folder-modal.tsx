@@ -183,7 +183,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
     <Modal
       title={
         <FormattedMessage
-          id='select_bookmark_folder_modal.header_title'
+          id='select_bookmark_folder_modal.header.title'
           defaultMessage='Select folder'
         />
       }

@@ -14,9 +14,9 @@ import toast from '@/toast';
 
 const messages = defineMessages({
   disableFail: { id: 'mfa.disable.fail', defaultMessage: 'Incorrect password. Try again.' },
-  mfaDisableSuccess: { id: 'mfa.disable.success_message', defaultMessage: 'MFA disabled' },
-  codePlaceholder: { id: 'mfa.mfa_setup.code_placeholder', defaultMessage: 'Code' },
-  passwordPlaceholder: { id: 'mfa.mfa_setup.password_placeholder', defaultMessage: 'Password' },
+  mfaDisableSuccess: { id: 'mfa.disable.success', defaultMessage: 'MFA disabled' },
+  codePlaceholder: { id: 'mfa.mfa_setup.code.placeholder', defaultMessage: 'Code' },
+  passwordPlaceholder: { id: 'mfa.mfa_setup.password.placeholder', defaultMessage: 'Password' },
 });
 
 const DisableOtpForm: React.FC = () => {
@@ -48,12 +48,12 @@ const DisableOtpForm: React.FC = () => {
     <Form onSubmit={handleSubmit}>
       <div className='flex flex-col'>
         <Text weight='medium'>
-          <FormattedMessage id='mfa.otp_enabled_title' defaultMessage='OTP enabled' />
+          <FormattedMessage id='mfa.otp_enabled.title' defaultMessage='OTP enabled' />
         </Text>
 
         <Text theme='muted'>
           <FormattedMessage
-            id='mfa.otp_enabled_description'
+            id='mfa.otp_enabled.description'
             defaultMessage='You have enabled two-factor authentication via OTP.'
           />
         </Text>
@@ -61,7 +61,7 @@ const DisableOtpForm: React.FC = () => {
 
       {features.disableMfaWithCode ? (
         <FormGroup
-          labelText={<FormattedMessage id='mfa.mfa_setup.code_placeholder' defaultMessage='Code' />}
+          labelText={<FormattedMessage id='mfa.mfa_setup.code.placeholder' defaultMessage='Code' />}
           hintText={
             <FormattedMessage
               id='mfa.mfa_disable_enter_code'
@@ -83,7 +83,7 @@ const DisableOtpForm: React.FC = () => {
       ) : (
         <FormGroup
           labelText={
-            <FormattedMessage id='mfa.mfa_setup.password_placeholder' defaultMessage='Password' />
+            <FormattedMessage id='mfa.mfa_setup.password.placeholder' defaultMessage='Password' />
           }
           hintText={
             <FormattedMessage

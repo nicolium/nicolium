@@ -23,7 +23,7 @@ const messages = defineMessages({
   changeHeaderDescriptionConfirm: { id: 'group.upload_banner.alt.confirm', defaultMessage: 'Save' },
   clearHeader: { id: 'group.upload_banner.clear', defaultMessage: 'Clear header image' },
   changeDescription: {
-    id: 'group.upload_banner.change_description',
+    id: 'group.upload_banner.change.description',
     defaultMessage: 'Change alt text',
   },
 });

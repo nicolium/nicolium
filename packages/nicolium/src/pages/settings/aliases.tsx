@@ -203,7 +203,7 @@ const AliasesPage = () => {
             <div key={alias} className='flex items-center justify-between gap-1 p-2'>
               <div>
                 <Text tag='span' theme='muted'>
-                  <FormattedMessage id='aliases.account_label' defaultMessage='Old account:' />
+                  <FormattedMessage id='aliases.account.label' defaultMessage='Old account:' />
                 </Text>{' '}
                 <Text tag='span'>{alias}</Text>
               </div>

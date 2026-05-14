@@ -42,42 +42,42 @@ import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
   columnHeading: { id: 'column.admin.account', defaultMessage: 'Moderate @{acct}' },
-  userVerified: { id: 'admin.users.user_verified_message', defaultMessage: '@{acct} was verified' },
+  userVerified: { id: 'admin.users.user_verified.success', defaultMessage: '@{acct} was verified' },
   userUnverified: {
-    id: 'admin.users.user_unverified_message',
+    id: 'admin.users.user_unverified.success',
     defaultMessage: '@{acct} was unverified',
   },
   userSuggested: {
-    id: 'admin.users.user_suggested_message',
+    id: 'admin.users.user_suggested.success',
     defaultMessage: '@{acct} was suggested',
   },
   userUnsuggested: {
-    id: 'admin.users.user_unsuggested_message',
+    id: 'admin.users.user_unsuggested.success',
     defaultMessage: '@{acct} was unsuggested',
   },
-  badgesSaved: { id: 'admin.users.badges_saved_message', defaultMessage: 'Custom badges updated.' },
+  badgesSaved: { id: 'admin.users.badges_saved.success', defaultMessage: 'Custom badges updated.' },
   badgePlaceholder: { id: 'badge_input.placeholder', defaultMessage: 'Enter a badge…' },
   roleUser: { id: 'account_moderation_modal.roles.user', defaultMessage: 'User' },
   roleModerator: { id: 'account_moderation_modal.roles.moderator', defaultMessage: 'Moderator' },
   roleAdmin: { id: 'account_moderation_modal.roles.admin', defaultMessage: 'Admin' },
   promotedToAdmin: {
-    id: 'admin.users.actions.promote_to_admin_message',
+    id: 'admin.users.actions.promote_to_admin.success',
     defaultMessage: '@{acct} was promoted to an admin',
   },
   promotedToModerator: {
-    id: 'admin.users.actions.promote_to_moderator_message',
+    id: 'admin.users.actions.promote_to_moderator.success',
     defaultMessage: '@{acct} was promoted to a moderator',
   },
   demotedToModerator: {
-    id: 'admin.users.actions.demote_to_moderator_message',
+    id: 'admin.users.actions.demote_to_moderator.success',
     defaultMessage: '@{acct} was demoted to a moderator',
   },
   demotedToUser: {
-    id: 'admin.users.actions.demote_to_user_message',
+    id: 'admin.users.actions.demote_to_user.success',
     defaultMessage: '@{acct} was demoted to a regular user',
   },
   actorTypeChanged: {
-    id: 'admin.users.actions.actor_type_changed_message',
+    id: 'admin.users.actions.actor_type_changed.success',
     defaultMessage: '@{acct} is now a {type, select, Service {bot} Person {person} other {user}}',
   },
   changeEmailPlaceholder: {
@@ -85,7 +85,7 @@ const messages = defineMessages({
     defaultMessage: 'New e-mail address',
   },
   emailChanged: {
-    id: 'account_moderation_modal.change_email.success_message',
+    id: 'account_moderation_modal.change_email.success',
     defaultMessage: 'E-mail address for @{acct} changed to {email}',
   },
   changePasswordPlaceholder: {
@@ -93,15 +93,15 @@ const messages = defineMessages({
     defaultMessage: 'New password',
   },
   passwordChanged: {
-    id: 'account_moderation_modal.change_password.success_message',
+    id: 'account_moderation_modal.change_password.success',
     defaultMessage: 'Password for @{acct} has been changed',
   },
   mfaDisabled: {
-    id: 'account_moderation_modal.disable_mfa.success_message',
+    id: 'account_moderation_modal.disable_mfa.success',
     defaultMessage: 'Multi-factor authentication disabled for @{acct}',
   },
   mfaDisableFailed: {
-    id: 'account_moderation_modal.disable_mfa.failure_message',
+    id: 'account_moderation_modal.disable_mfa.fail',
     defaultMessage: 'Failed to disable multi-factor authentication for @{acct}',
   },
 });

@@ -79,7 +79,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
                 count={userCount}
                 label={
                   <FormattedMessage
-                    id='admin.dashcounters.user_count_label'
+                    id='admin.dashcounters.user_count.label'
                     defaultMessage='total users'
                   />
                 }
@@ -102,7 +102,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
                 count={mau}
                 label={
                   <FormattedMessage
-                    id='admin.dashcounters.mau_label'
+                    id='admin.dashcounters.mau.label'
                     defaultMessage='monthly active users'
                   />
                 }
@@ -113,7 +113,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
                 count={retention}
                 label={
                   <FormattedMessage
-                    id='admin.dashcounters.retention_label'
+                    id='admin.dashcounters.retention.label'
                     defaultMessage='user retention'
                   />
                 }
@@ -166,7 +166,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
               count={statusCount}
               label={
                 <FormattedMessage
-                  id='admin.dashcounters.status_count_label'
+                  id='admin.dashcounters.status_count.label'
                   defaultMessage='posts'
                 />
               }
@@ -175,7 +175,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
               count={domainCount}
               label={
                 <FormattedMessage
-                  id='admin.dashcounters.domain_count_label'
+                  id='admin.dashcounters.domain_count.label'
                   defaultMessage='peers'
                 />
               }
@@ -401,7 +401,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
                 <CardTitle
                   title={
                     <FormattedMessage
-                      id='admin.dashboard.registration_mode_label'
+                      id='admin.dashboard.registration_mode.label'
                       defaultMessage='Registrations'
                     />
                   }
@@ -414,7 +414,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
             <CardTitle
               title={
                 <FormattedMessage
-                  id='admin.dashwidgets.software_header'
+                  id='admin.dashwidgets.software.header'
                   defaultMessage='Software'
                 />
               }

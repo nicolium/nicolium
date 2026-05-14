@@ -56,7 +56,7 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
               }
               hint={
                 <FormattedMessage
-                  id='preferences.fields.store_settings_in_notes_hint'
+                  id='preferences.fields.store_settings_in_notes.hint'
                   defaultMessage='It allows you to sync your settings across devices. They are only visible to you.'
                 />
               }
@@ -75,13 +75,13 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.language_label'
+                id='preferences.fields.language.label'
                 defaultMessage='Display language'
               />
             }
             hint={
               <FormattedMessage
-                id='preferences.fields.language_hint'
+                id='preferences.fields.language.hint'
                 defaultMessage='You can help translating the {software} interface into your language on <link>Weblate</link>.'
                 values={{
                   software: sourceCode.displayName,
@@ -114,13 +114,13 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.remember_timeline_position_label'
+                id='preferences.fields.remember_timeline_position.label'
                 defaultMessage='Remember position of home timeline'
               />
             }
             hint={
               <FormattedMessage
-                id='preferences.fields.remember_timeline_position_hint'
+                id='preferences.fields.remember_timeline_position.hint'
                 defaultMessage='When enabled, the app will return to the place you left off in the home timeline last time you visited it.'
               />
             }
@@ -136,7 +136,7 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.compose_in_timelines_label'
+                id='preferences.fields.compose_in_timelines.label'
                 defaultMessage='Display post composer in timelines'
               />
             }
@@ -169,7 +169,7 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.autoload_timelines_label'
+                id='preferences.fields.autoload_timelines.label'
                 defaultMessage='Automatically load new posts when scrolled to the top of the page'
               />
             }
@@ -184,7 +184,7 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.autoload_more_label'
+                id='preferences.fields.autoload_more.label'
                 defaultMessage='Automatically load more items when scrolled to the bottom of the page'
               />
             }
@@ -199,7 +199,7 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.demetricator_label'
+                id='preferences.fields.demetricator.label'
                 defaultMessage='Hide social media counters'
               />
             }

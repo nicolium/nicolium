@@ -10,7 +10,7 @@ import { useInstance } from '@/stores/instance';
 
 const messages = defineMessages({
   birthdayPlaceholder: {
-    id: 'edit_profile.fields.birthday_placeholder',
+    id: 'edit_profile.fields.birthday.placeholder',
     defaultMessage: 'Your birthday',
   },
   previousMonth: { id: 'datepicker.previous_month', defaultMessage: 'Previous month' },

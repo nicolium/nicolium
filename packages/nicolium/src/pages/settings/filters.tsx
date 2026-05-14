@@ -73,7 +73,7 @@ const FiltersPage = () => {
               <div className='flex grow flex-col gap-1'>
                 <Text weight='medium'>
                   <FormattedMessage
-                    id='filters.filters_list_phrases_label'
+                    id='filters.filters_list_phrases.label'
                     defaultMessage='Keywords or phrases:'
                   />{' '}
                   <Text theme='muted' tag='span'>
@@ -82,7 +82,7 @@ const FiltersPage = () => {
                 </Text>
                 <Text weight='medium'>
                   <FormattedMessage
-                    id='filters.filters_list_context_label'
+                    id='filters.filters_list_context.label'
                     defaultMessage='Filter contexts:'
                   />{' '}
                   <Text theme='muted' tag='span'>

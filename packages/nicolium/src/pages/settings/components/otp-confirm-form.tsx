@@ -23,9 +23,9 @@ const messages = defineMessages({
     defaultMessage: 'Incorrect code or password. Try again.',
   },
   qrFail: { id: 'security.qr.fail', defaultMessage: 'Failed to fetch setup key' },
-  mfaConfirmSuccess: { id: 'mfa.confirm.success_message', defaultMessage: 'MFA confirmed' },
-  codePlaceholder: { id: 'mfa.mfa_setup.code_placeholder', defaultMessage: 'Code' },
-  passwordPlaceholder: { id: 'mfa.mfa_setup.password_placeholder', defaultMessage: 'Password' },
+  mfaConfirmSuccess: { id: 'mfa.confirm.success', defaultMessage: 'MFA confirmed' },
+  codePlaceholder: { id: 'mfa.mfa_setup.code.placeholder', defaultMessage: 'Code' },
+  passwordPlaceholder: { id: 'mfa.mfa_setup.password.placeholder', defaultMessage: 'Password' },
 });
 
 const OtpConfirmForm: React.FC = () => {
@@ -92,12 +92,12 @@ const OtpConfirmForm: React.FC = () => {
       <Form onSubmit={handleSubmit}>
         <div className='flex flex-col'>
           <Text weight='semibold' size='lg'>
-            1. <FormattedMessage id='mfa.mfa_setup_scan_title' defaultMessage='Scan' />
+            1. <FormattedMessage id='mfa.mfa_setup_scan.title' defaultMessage='Scan' />
           </Text>
 
           <Text theme='muted'>
             <FormattedMessage
-              id='mfa.mfa_setup_scan_description'
+              id='mfa.mfa_setup_scan.description'
               defaultMessage='Using your two-factor app, scan this QR code or enter the text key.'
             />
           </Text>
@@ -107,14 +107,14 @@ const OtpConfirmForm: React.FC = () => {
         {state.confirmKey}
 
         <Text weight='semibold' size='lg'>
-          2. <FormattedMessage id='mfa.mfa_setup_verify_title' defaultMessage='Verify' />
+          2. <FormattedMessage id='mfa.mfa_setup_verify.title' defaultMessage='Verify' />
         </Text>
 
         <FormGroup
-          labelText={<FormattedMessage id='mfa.mfa_setup.code_placeholder' defaultMessage='Code' />}
+          labelText={<FormattedMessage id='mfa.mfa_setup.code.placeholder' defaultMessage='Code' />}
           hintText={
             <FormattedMessage
-              id='mfa.mfa_setup.code_hint'
+              id='mfa.mfa_setup.code.hint'
               defaultMessage='Enter the code from your two-factor app.'
             />
           }
@@ -134,11 +134,11 @@ const OtpConfirmForm: React.FC = () => {
         {features.manageMfaRequiresPassword && (
           <FormGroup
             labelText={
-              <FormattedMessage id='mfa.mfa_setup.password_placeholder' defaultMessage='Password' />
+              <FormattedMessage id='mfa.mfa_setup.password.placeholder' defaultMessage='Password' />
             }
             hintText={
               <FormattedMessage
-                id='mfa.mfa_setup.password_hint'
+                id='mfa.mfa_setup.password.hint'
                 defaultMessage='Enter your current password to confirm your identity.'
               />
             }

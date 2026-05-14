@@ -65,16 +65,16 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
   const domainStateLabel = {
     active: (
       <FormattedMessage
-        id='admin.domains.resolve.success_label'
+        id='admin.domains.resolve.success.label'
         defaultMessage='Resolves correctly'
       />
     ),
     error: (
-      <FormattedMessage id='admin.domains.resolve.fail_label' defaultMessage='Not resolving' />
+      <FormattedMessage id='admin.domains.resolve.fail.label' defaultMessage='Not resolving' />
     ),
     pending: (
       <FormattedMessage
-        id='admin.domains.resolve.pending_label'
+        id='admin.domains.resolve.pending.label'
         defaultMessage='Pending resolve check'
       />
     ),

@@ -49,11 +49,11 @@ import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   queue: {
-    id: 'status_list.queue_label',
+    id: 'status_list.queue.label',
     defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}',
   },
   queueLiveRegion: {
-    id: 'status_list.queue_label.live_region',
+    id: 'status_list.queue.label.live_region',
     defaultMessage: '{count} new {count, plural, one {post} other {posts}}.',
   },
   gapExplanation: {

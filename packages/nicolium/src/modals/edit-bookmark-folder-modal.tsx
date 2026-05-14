@@ -23,7 +23,7 @@ import type { Emoji as EmojiType } from '@/features/emoji';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
-  label: { id: 'bookmark_folders.new.title_placeholder', defaultMessage: 'New folder title' },
+  label: { id: 'bookmark_folders.new.title.placeholder', defaultMessage: 'New folder title' },
   editSuccess: {
     id: 'bookmark_folders.edit.success',
     defaultMessage: 'Bookmark folder edited successfully',
@@ -158,7 +158,7 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
     <Modal
       title={
         <FormattedMessage
-          id='edit_bookmark_folder_modal.header_title'
+          id='edit_bookmark_folder_modal.header.title'
           defaultMessage='Edit folder'
         />
       }

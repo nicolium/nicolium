@@ -8,10 +8,10 @@ import type { FooterItem } from '@/schemas/frontend-config';
 
 const messages = defineMessages({
   label: {
-    id: 'frontend_config.home_footer.meta_fields.label_placeholder',
+    id: 'frontend_config.home_footer.meta_fields.label.placeholder',
     defaultMessage: 'Label',
   },
-  url: { id: 'frontend_config.home_footer.meta_fields.url_placeholder', defaultMessage: 'URL' },
+  url: { id: 'frontend_config.home_footer.meta_fields.url.placeholder', defaultMessage: 'URL' },
 });
 
 const PromoPanelInput: StreamfieldComponent<FooterItem> = ({ value, onChange }) => {

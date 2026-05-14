@@ -61,7 +61,7 @@ const ExportDataPage = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <CSVExporter
         action={() => exportFollows(client, currentAccountId as string)}
-        inputLabel={<FormattedMessage id='export_data.follows_label' defaultMessage='Follows' />}
+        inputLabel={<FormattedMessage id='export_data.follows.label' defaultMessage='Follows' />}
         inputHint={
           <FormattedMessage
             id='export_data.hints.follows'
@@ -77,7 +77,7 @@ const ExportDataPage = () => {
       />
       <CSVExporter
         action={() => exportBlocks(client)}
-        inputLabel={<FormattedMessage id='export_data.blocks_label' defaultMessage='Blocks' />}
+        inputLabel={<FormattedMessage id='export_data.blocks.label' defaultMessage='Blocks' />}
         inputHint={
           <FormattedMessage
             id='export_data.hints.blocks'
@@ -90,7 +90,7 @@ const ExportDataPage = () => {
       />
       <CSVExporter
         action={() => exportMutes(client)}
-        inputLabel={<FormattedMessage id='export_data.mutes_label' defaultMessage='Mutes' />}
+        inputLabel={<FormattedMessage id='export_data.mutes.label' defaultMessage='Mutes' />}
         inputHint={
           <FormattedMessage
             id='export_data.hints.mutes'

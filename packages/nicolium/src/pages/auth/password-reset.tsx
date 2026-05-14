@@ -53,12 +53,12 @@ const PasswordResetPage = () => {
           labelText={
             features.logInWithUsername ? (
               <FormattedMessage
-                id='password_reset.fields.username_placeholder'
+                id='password_reset.fields.username.placeholder'
                 defaultMessage='E-mail or username'
               />
             ) : (
               <FormattedMessage
-                id='password_reset.fields.email_placeholder'
+                id='password_reset.fields.email.placeholder'
                 defaultMessage='E-mail address'
               />
             )

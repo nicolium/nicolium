@@ -31,7 +31,7 @@ const messages = defineMessages({
   },
   search: { id: 'admin.pleroma_config.search', defaultMessage: 'Search settings' },
   searchPlaceholder: {
-    id: 'admin.pleroma_config.search_placeholder',
+    id: 'admin.pleroma_config.search.placeholder',
     defaultMessage: 'Search by label, key, group or description',
   },
 });
@@ -174,7 +174,7 @@ const PleromaConfigPage: React.FC = () => {
             <EmptyMessage
               text={
                 <FormattedMessage
-                  id='admin.pleroma_config.empty'
+                  id='admin.pleroma_config.empty_message'
                   defaultMessage='No configuration options available.'
                 />
               }
@@ -185,7 +185,7 @@ const PleromaConfigPage: React.FC = () => {
             <EmptyMessage
               text={
                 <FormattedMessage
-                  id='admin.pleroma_config.empty_search'
+                  id='admin.pleroma_config.empty_message_search'
                   defaultMessage='No settings match the current filters.'
                 />
               }

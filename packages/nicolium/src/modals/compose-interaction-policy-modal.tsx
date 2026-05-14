@@ -100,7 +100,7 @@ const ComposeInteractionPolicyModal: React.FC<
         <Warning
           message={
             <FormattedMessage
-              id='interaction_policies.preferences_hint'
+              id='interaction_policies.preferences.hint'
               defaultMessage='Control, who can interact with this post. You can also configure the default interaction policies in <link>Preferences > Interaction policies</link>.'
               values={{
                 link: (children: React.ReactNode) => (

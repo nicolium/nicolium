@@ -8,15 +8,15 @@ import type { CryptoAddress } from '@/schemas/frontend-config';
 
 const messages = defineMessages({
   ticker: {
-    id: 'frontend_config.crypto_address.meta_fields.ticker_placeholder',
+    id: 'frontend_config.crypto_address.meta_fields.ticker.placeholder',
     defaultMessage: 'Ticker',
   },
   address: {
-    id: 'frontend_config.crypto_address.meta_fields.address_placeholder',
+    id: 'frontend_config.crypto_address.meta_fields.address.placeholder',
     defaultMessage: 'Address',
   },
   note: {
-    id: 'frontend_config.crypto_address.meta_fields.note_placeholder',
+    id: 'frontend_config.crypto_address.meta_fields.note.placeholder',
     defaultMessage: 'Note (optional)',
   },
 });

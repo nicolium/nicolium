@@ -17,7 +17,7 @@ import type { AdminRelay as RelayEntity } from 'pl-api';
 const messages = defineMessages({
   heading: { id: 'column.admin.relays', defaultMessage: 'Instance relays' },
   relayDeleteSuccess: { id: 'admin.relays.deleted', defaultMessage: 'Relay unfollowed' },
-  label: { id: 'admin.relays.new.url_placeholder', defaultMessage: 'Instance relay URL' },
+  label: { id: 'admin.relays.new.url.placeholder', defaultMessage: 'Instance relay URL' },
   createSuccess: { id: 'admin.relays.add.success', defaultMessage: 'Instance relay followed' },
   createFail: {
     id: 'admin.relays.add.fail',

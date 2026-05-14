@@ -40,17 +40,17 @@ const messages = defineMessages({
   heading: { id: 'column.frontend_config', defaultMessage: 'Front-end configuration' },
   saved: { id: 'frontend_config.save.success', defaultMessage: 'Nicolium config saved!' },
   copyrightFooterLabel: {
-    id: 'frontend_config.copyright_footer.meta_fields.label_placeholder',
+    id: 'frontend_config.copyright_footer.meta_fields.label.placeholder',
     defaultMessage: 'Copyright footer',
   },
   cryptoDonatePanelLimitLabel: {
-    id: 'frontend_config.crypto_donate_panel_limit.meta_fields.limit_placeholder',
+    id: 'frontend_config.crypto_donate_panel_limit.meta_fields.limit.placeholder',
     defaultMessage: 'Number of items to display in the crypto homepage widget',
   },
   rawJSONInvalid: { id: 'frontend_config.raw_json_invalid', defaultMessage: 'is invalid' },
-  tileServerLabel: { id: 'frontend_config.tile_server_label', defaultMessage: 'Map tile server' },
+  tileServerLabel: { id: 'frontend_config.tile_server.label', defaultMessage: 'Map tile server' },
   tileServerAttributionLabel: {
-    id: 'frontend_config.tile_server_attribution_label',
+    id: 'frontend_config.tile_server_attribution.label',
     defaultMessage: 'Map tiles attribution',
   },
 });
@@ -219,7 +219,7 @@ const FrontendConfigEditor: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='frontend_config.fields.theme_label'
+                  id='frontend_config.fields.theme.label'
                   defaultMessage='Default theme'
                 />
               }
@@ -233,7 +233,7 @@ const FrontendConfigEditor: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='frontend_config.fields.edit_theme_label'
+                  id='frontend_config.fields.edit_theme.label'
                   defaultMessage='Edit theme'
                 />
               }
@@ -243,7 +243,7 @@ const FrontendConfigEditor: React.FC = () => {
 
           <FormGroup
             labelText={
-              <FormattedMessage id='frontend_config.fields.logo_label' defaultMessage='Logo' />
+              <FormattedMessage id='frontend_config.fields.logo.label' defaultMessage='Logo' />
             }
             hintText={
               <FormattedMessage
@@ -258,7 +258,7 @@ const FrontendConfigEditor: React.FC = () => {
           <FormGroup
             labelText={
               <FormattedMessage
-                id='frontend_config.fields.logo_dark_label'
+                id='frontend_config.fields.logo_dark.label'
                 defaultMessage='Logo (dark)'
               />
             }
@@ -319,13 +319,13 @@ const FrontendConfigEditor: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='frontend_config.media_preview_label'
+                  id='frontend_config.media_preview.label'
                   defaultMessage='Prefer preview media for thumbnails'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='frontend_config.media_preview_hint'
+                  id='frontend_config.media_preview.hint'
                   defaultMessage='Some backends provide an optimized version of media for display in timelines. However, these preview images may be too small without additional configuration.'
                 />
               }
@@ -339,13 +339,13 @@ const FrontendConfigEditor: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='frontend_config.allow_displaying_remote_no_login_label'
+                  id='frontend_config.allow_displaying_remote_no_login.label'
                   defaultMessage='Allow displaying remote content when not logged in'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='frontend_config.allow_displaying_remote_no_login_hint'
+                  id='frontend_config.allow_displaying_remote_no_login.hint'
                   defaultMessage='When disabled, users will be navigated to origin URLs when trying to view remote content.'
                 />
               }
@@ -359,13 +359,13 @@ const FrontendConfigEditor: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='frontend_config.redirect_root_no_login_label'
+                  id='frontend_config.redirect_root_no_login.label'
                   defaultMessage='Redirect homepage'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='frontend_config.redirect_root_no_login_hint'
+                  id='frontend_config.redirect_root_no_login.hint'
                   defaultMessage='Path to redirect the homepage when a user is not logged in.'
                 />
               }
@@ -381,13 +381,13 @@ const FrontendConfigEditor: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='frontend_config.sentry_dsn_label'
+                  id='frontend_config.sentry_dsn.label'
                   defaultMessage='Sentry DSN'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='frontend_config.sentry_dsn_hint'
+                  id='frontend_config.sentry_dsn.hint'
                   defaultMessage='DSN URL for error reporting. Works with Sentry and GlitchTip.'
                 />
               }
@@ -415,7 +415,7 @@ const FrontendConfigEditor: React.FC = () => {
           <Streamfield
             label={
               <FormattedMessage
-                id='frontend_config.fields.promo_panel_fields_label'
+                id='frontend_config.fields.promo_panel_fields.label'
                 defaultMessage='Promo panel items'
               />
             }
@@ -436,7 +436,7 @@ const FrontendConfigEditor: React.FC = () => {
           <Streamfield
             label={
               <FormattedMessage
-                id='frontend_config.fields.home_footer_fields_label'
+                id='frontend_config.fields.home_footer_fields.label'
                 defaultMessage='Home footer items'
               />
             }
@@ -457,7 +457,7 @@ const FrontendConfigEditor: React.FC = () => {
           <FormGroup
             labelText={
               <FormattedMessage
-                id='frontend_config.copyright_footer.meta_fields.label_placeholder'
+                id='frontend_config.copyright_footer.meta_fields.label.placeholder'
                 defaultMessage='Copyright footer'
               />
             }
@@ -486,7 +486,7 @@ const FrontendConfigEditor: React.FC = () => {
               <FormGroup
                 labelText={
                   <FormattedMessage
-                    id='frontend_config.tile_server_label'
+                    id='frontend_config.tile_server.label'
                     defaultMessage='Map tile server'
                   />
                 }
@@ -502,7 +502,7 @@ const FrontendConfigEditor: React.FC = () => {
               <FormGroup
                 labelText={
                   <FormattedMessage
-                    id='frontend_config.tile_server_attribution_label'
+                    id='frontend_config.tile_server_attribution.label'
                     defaultMessage='Map tiles attribution'
                   />
                 }
@@ -531,7 +531,7 @@ const FrontendConfigEditor: React.FC = () => {
           <Streamfield
             label={
               <FormattedMessage
-                id='frontend_config.fields.crypto_addresses_label'
+                id='frontend_config.fields.crypto_addresses.label'
                 defaultMessage='Cryptocurrency addresses'
               />
             }
@@ -552,7 +552,7 @@ const FrontendConfigEditor: React.FC = () => {
           <FormGroup
             labelText={
               <FormattedMessage
-                id='frontend_config.crypto_donate_panel_limit.meta_fields.limit_placeholder'
+                id='frontend_config.crypto_donate_panel_limit.meta_fields.limit.placeholder'
                 defaultMessage='Number of items to display in the crypto homepage widget'
               />
             }
@@ -628,7 +628,7 @@ const FrontendConfigEditor: React.FC = () => {
           <Accordion
             headline={
               <FormattedMessage
-                id='frontend_config.raw_json_label'
+                id='frontend_config.raw_json.label'
                 defaultMessage='Advanced: Edit raw JSON data'
               />
             }
@@ -638,7 +638,7 @@ const FrontendConfigEditor: React.FC = () => {
             <FormGroup
               hintText={
                 <FormattedMessage
-                  id='frontend_config.raw_json_hint'
+                  id='frontend_config.raw_json.hint'
                   defaultMessage='Edit the settings data directly. Changes made directly to the JSON file will override the form fields above. Click "Save" to apply your changes.'
                 />
               }

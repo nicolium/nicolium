@@ -240,11 +240,11 @@ const EditFilterPage: React.FC = () => {
 
         <div className='flex flex-col'>
           <Text size='sm' weight='medium'>
-            <FormattedMessage id='filters.context_header' defaultMessage='Filter contexts' />
+            <FormattedMessage id='filters.context.header' defaultMessage='Filter contexts' />
           </Text>
           <Text size='xs' theme='muted'>
             <FormattedMessage
-              id='filters.context_hint'
+              id='filters.context.hint'
               defaultMessage='One or multiple contexts where the filter should apply'
             />
           </Text>
@@ -321,13 +321,13 @@ const EditFilterPage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='column.filters.filter_action_header'
+                  id='column.filters.filter_action.header'
                   defaultMessage='Filter action'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='column.filters.filter_action_hint'
+                  id='column.filters.filter_action.hint'
                   defaultMessage='Choose which action to perform when a post matches the filter'
                 />
               }
@@ -363,12 +363,12 @@ const EditFilterPage: React.FC = () => {
               label={
                 features.filtersV2 ? (
                   <FormattedMessage
-                    id='column.filters.hide_header'
+                    id='column.filters.hide.header'
                     defaultMessage='Hide completely'
                   />
                 ) : (
                   <FormattedMessage
-                    id='column.filters.drop_header'
+                    id='column.filters.drop.header'
                     defaultMessage='Drop instead of hide'
                   />
                 )
@@ -376,12 +376,12 @@ const EditFilterPage: React.FC = () => {
               hint={
                 features.filtersV2 ? (
                   <FormattedMessage
-                    id='column.filters.hide_hint'
+                    id='column.filters.hide.hint'
                     defaultMessage='Completely hide the filtered content, instead of showing a warning'
                   />
                 ) : (
                   <FormattedMessage
-                    id='column.filters.drop_hint'
+                    id='column.filters.drop.hint'
                     defaultMessage='Filtered posts will disappear irreversibly, even if filter is later removed'
                   />
                 )

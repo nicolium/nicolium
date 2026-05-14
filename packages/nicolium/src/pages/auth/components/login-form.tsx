@@ -11,15 +11,15 @@ import { useFeatures } from '@/hooks/use-features';
 
 const messages = defineMessages({
   username: {
-    id: 'login.fields.username_label',
+    id: 'login.fields.username.label',
     defaultMessage: 'E-mail or username',
   },
   email: {
-    id: 'login.fields.email_label',
+    id: 'login.fields.email.label',
     defaultMessage: 'E-mail address',
   },
   password: {
-    id: 'login.fields.password_placeholder',
+    id: 'login.fields.password.placeholder',
     defaultMessage: 'Password',
   },
 });
@@ -56,7 +56,7 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
         labelText={passwordLabel}
         hintText={
           <Link to='/reset-password' className='hover:underline'>
-            <FormattedMessage id='login.reset_password_hint' defaultMessage='Trouble logging in?' />
+            <FormattedMessage id='login.reset_password.hint' defaultMessage='Trouble logging in?' />
           </Link>
         }
       >

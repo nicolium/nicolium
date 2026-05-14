@@ -174,13 +174,13 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.theme.dark_theme_preference_label'
+                  id='preferences.fields.theme.dark_theme_preference.label'
                   defaultMessage='Dark theme preference'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='preferences.fields.theme.dark_theme_preference_hint'
+                  id='preferences.fields.theme.dark_theme_preference.hint'
                   defaultMessage='Select dark theme to be used when theme is set to "System"'
                 />
               }
@@ -207,7 +207,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.auto_play_gif_label'
+                id='preferences.fields.auto_play_gif.label'
                 defaultMessage='Auto-play animated GIFs'
               />
             }
@@ -222,7 +222,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.reduce_motion_label'
+                id='preferences.fields.reduce_motion.label'
                 defaultMessage='Reduce motion in animations'
               />
             }
@@ -237,7 +237,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.system_font_label'
+                id='preferences.fields.system_font.label'
                 defaultMessage="Use system's default font"
               />
             }
@@ -252,7 +252,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.system_emoji_font_label'
+                id='preferences.fields.system_emoji_font.label'
                 defaultMessage='Use system emoji font'
               />
             }
@@ -267,7 +267,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.underline_links_label'
+                id='preferences.fields.underline_links.label'
                 defaultMessage='Always underline links in posts'
               />
             }
@@ -282,7 +282,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.use_system_media_controls_label'
+                id='preferences.fields.use_system_media_controls.label'
                 defaultMessage='Use native media controls'
               />
             }
@@ -297,7 +297,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.use_rocket_icon_for_reblogs_label'
+                id='preferences.fields.use_rocket_icon_for_reblogs.label'
                 defaultMessage='Use rocket icon ({icon}) for reposts'
                 values={{ icon: <Icon src={iconRocketLaunch} /> }}
               />
@@ -328,7 +328,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='frontend_config.display_fqn_label'
+                id='frontend_config.display_fqn.label'
                 defaultMessage='Display domain (eg @user@domain) for local accounts.'
               />
             }
@@ -343,7 +343,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='frontend_config.greentext_label'
+                id='frontend_config.greentext.label'
                 defaultMessage='<span>>render greentext</span>'
                 values={{
                   span: (children) => (

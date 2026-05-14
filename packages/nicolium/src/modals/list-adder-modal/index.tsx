@@ -27,7 +27,7 @@ const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accoun
   return (
     <Modal
       title={
-        <FormattedMessage id='list_adder.header_title' defaultMessage='Add or remove from lists' />
+        <FormattedMessage id='list_adder.header.title' defaultMessage='Add or remove from lists' />
       }
       onClose={onClickClose}
     >

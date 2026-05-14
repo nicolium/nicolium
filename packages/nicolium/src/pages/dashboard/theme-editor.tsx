@@ -33,7 +33,7 @@ const messages = defineMessages({
   export: { id: 'theme_editor.export', defaultMessage: 'Export theme' },
   import: { id: 'theme_editor.import', defaultMessage: 'Import theme' },
   importSuccess: {
-    id: 'theme_editor.import_success',
+    id: 'theme_editor.import.success',
     defaultMessage: 'Theme was successfully imported!',
   },
   colorPrimary: { id: 'theme_editor.colors.primary', defaultMessage: 'Primary' },

@@ -24,7 +24,7 @@ const messages = defineMessages({
     defaultMessage: 'You are about to leave the group. Do you want to continue?',
   },
   joinRequestSuccess: {
-    id: 'group.join.request_success',
+    id: 'group.join.request.success',
     defaultMessage: 'Request sent to group owner',
   },
   joinSuccess: { id: 'group.join.success', defaultMessage: 'Group joined successfully!' },

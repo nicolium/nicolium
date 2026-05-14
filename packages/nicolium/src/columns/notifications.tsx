@@ -48,7 +48,7 @@ const messages = defineMessages({
     defaultMessage: '{count} new {count, plural, one {notification} other {notifications}}.',
   },
   all: { id: 'notifications.filter.all', defaultMessage: 'All' },
-  mentions: { id: 'notifications.filter.mentions', defaultMessage: 'Mentions' },
+  mentions: { id: 'notifications.filter_mentions', defaultMessage: 'Mentions' },
   statuses: {
     id: 'notifications.filter.statuses',
     defaultMessage: 'Updates from people you follow',

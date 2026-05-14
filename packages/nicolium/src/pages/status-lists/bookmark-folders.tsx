@@ -22,9 +22,9 @@ import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
-  label: { id: 'bookmark_folders.new.title_placeholder', defaultMessage: 'New folder title' },
+  label: { id: 'bookmark_folders.new.title.placeholder', defaultMessage: 'New folder title' },
   labelWithSearch: {
-    id: 'bookmark_folders.new.title_with_search_placeholder',
+    id: 'bookmark_folders.new.title_with_search.placeholder',
     defaultMessage: 'Search or create new folder',
   },
   createSuccess: {
@@ -87,7 +87,7 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
         />
 
         <Button disabled={isPending} type='submit' theme='primary'>
-          <FormattedMessage id='bookmark_folders.new.create_title' defaultMessage='Add folder' />
+          <FormattedMessage id='bookmark_folders.new.create.title' defaultMessage='Add folder' />
         </Button>
       </div>
     </Form>

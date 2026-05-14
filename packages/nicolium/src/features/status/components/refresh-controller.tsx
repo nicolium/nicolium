@@ -21,11 +21,11 @@ const messages = defineMessages({
     defaultMessage: 'Loading',
   },
   success: {
-    id: 'status.context.loading_success',
+    id: 'status.context.loading.success',
     defaultMessage: 'New replies loaded',
   },
   error: {
-    id: 'status.context.loading_error',
+    id: 'status.context.loading.error',
     defaultMessage: "Couldn't load new replies",
   },
   retry: {

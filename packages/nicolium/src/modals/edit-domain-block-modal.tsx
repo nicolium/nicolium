@@ -20,32 +20,32 @@ import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   updateSuccess: {
-    id: 'admin.edit_domain_block.update_success',
+    id: 'admin.edit_domain_block.update.success',
     defaultMessage: 'Domain block updated successfully',
   },
   updateError: {
-    id: 'admin.edit_domain_block.update_error',
+    id: 'admin.edit_domain_block.update.error',
     defaultMessage: 'Failed to update domain block',
   },
   createSuccess: {
-    id: 'admin.edit_domain_block.create_success',
+    id: 'admin.edit_domain_block.create.success',
     defaultMessage: 'Domain block created successfully',
   },
   createError: {
-    id: 'admin.edit_domain_block.create_error',
+    id: 'admin.edit_domain_block.create.error',
     defaultMessage: 'Failed to create domain block',
   },
   save: { id: 'admin.edit_domain_block.save', defaultMessage: 'Save' },
   domainPlaceholder: {
-    id: 'admin.edit_domain_block.fields.domain_placeholder',
+    id: 'admin.edit_domain_block.fields.domain.placeholder',
     defaultMessage: 'Domain',
   },
   privateCommentPlaceholder: {
-    id: 'admin.edit_domain_block.fields.private_comment_placeholder',
+    id: 'admin.edit_domain_block.fields.private_comment.placeholder',
     defaultMessage: 'Only visible to admins',
   },
   publicCommentPlaceholder: {
-    id: 'admin.edit_domain_block.fields.public_comment_placeholder',
+    id: 'admin.edit_domain_block.fields.public_comment.placeholder',
     defaultMessage: 'Visible on public block list',
   },
 });
@@ -150,7 +150,7 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
           <FormGroup
             labelText={
               <FormattedMessage
-                id='admin.edit_domain_block.fields.domain_label'
+                id='admin.edit_domain_block.fields.domain.label'
                 defaultMessage='Domain'
               />
             }
@@ -171,13 +171,13 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
               <ListItem
                 label={
                   <FormattedMessage
-                    id='admin.edit_domain_block.fields.suspend_label'
+                    id='admin.edit_domain_block.fields.suspend.label'
                     defaultMessage='Suspend'
                   />
                 }
                 hint={
                   <FormattedMessage
-                    id='admin.edit_domain_block.fields.suspend_hint'
+                    id='admin.edit_domain_block.fields.suspend.hint'
                     defaultMessage='When checked, all incoming data from this domain will be rejected'
                   />
                 }
@@ -191,13 +191,13 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
               <ListItem
                 label={
                   <FormattedMessage
-                    id='admin.edit_domain_block.fields.silence_label'
+                    id='admin.edit_domain_block.fields.silence.label'
                     defaultMessage='Silence'
                   />
                 }
                 hint={
                   <FormattedMessage
-                    id='admin.edit_domain_block.fields.silence_hint'
+                    id='admin.edit_domain_block.fields.silence.hint'
                     defaultMessage='When checked, incoming data from this domain will be accepted but hidden from users by default'
                   />
                 }
@@ -214,13 +214,13 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
             <ListItem
               label={
                 <FormattedMessage
-                  id='admin.edit_domain_block.fields.obfuscate_label'
+                  id='admin.edit_domain_block.fields.obfuscate.label'
                   defaultMessage='Obfuscate'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='admin.edit_domain_block.fields.obfuscate_hint'
+                  id='admin.edit_domain_block.fields.obfuscate.hint'
                   defaultMessage='When checked, the domain name will be obfuscated in the public display'
                 />
               }
@@ -233,7 +233,7 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
               <ListItem
                 label={
                   <FormattedMessage
-                    id='admin.edit_domain_block.fields.reject_media_label'
+                    id='admin.edit_domain_block.fields.reject_media.label'
                     defaultMessage='Reject media'
                   />
                 }
@@ -247,7 +247,7 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
               <ListItem
                 label={
                   <FormattedMessage
-                    id='admin.edit_domain_block.fields.reject_reports_label'
+                    id='admin.edit_domain_block.fields.reject_reports.label'
                     defaultMessage='Reject reports'
                   />
                 }
@@ -267,7 +267,7 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
             <FormGroup
               labelText={
                 <FormattedMessage
-                  id='admin.edit_domain_block.fields.private_comment_label'
+                  id='admin.edit_domain_block.fields.private_comment.label'
                   defaultMessage='Private comment'
                 />
               }
@@ -282,7 +282,7 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
         <FormGroup
           labelText={
             <FormattedMessage
-              id='admin.edit_domain_block.fields.public_comment_label'
+              id='admin.edit_domain_block.fields.public_comment.label'
               defaultMessage='Public comment'
             />
           }

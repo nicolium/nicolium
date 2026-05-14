@@ -51,8 +51,8 @@ const LINK_MATCHERS = [
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: "What's on your mind?" },
-  eventPlaceholder: { id: 'compose_form.event_placeholder', defaultMessage: 'Post to this event' },
-  pollPlaceholder: { id: 'compose_form.poll_placeholder', defaultMessage: 'Add a poll topic…' },
+  eventPlaceholder: { id: 'compose_form.event.placeholder', defaultMessage: 'Post to this event' },
+  pollPlaceholder: { id: 'compose_form.poll.placeholder', defaultMessage: 'Add a poll topic…' },
 });
 
 interface IComposeEditor {

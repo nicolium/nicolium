@@ -149,7 +149,7 @@ const ImportDataPage = () => {
       {features.importFollows && (
         <DataImporter
           action={importFollows}
-          inputLabel={<FormattedMessage id='import_data.follows_label' defaultMessage='Follows' />}
+          inputLabel={<FormattedMessage id='import_data.follows.label' defaultMessage='Follows' />}
           inputHint={
             <FormattedMessage
               id='import_data.hints.follows'
@@ -168,7 +168,7 @@ const ImportDataPage = () => {
       {features.importBlocks && (
         <DataImporter
           action={importBlocks}
-          inputLabel={<FormattedMessage id='import_data.blocks_label' defaultMessage='Blocks' />}
+          inputLabel={<FormattedMessage id='import_data.blocks.label' defaultMessage='Blocks' />}
           inputHint={
             <FormattedMessage
               id='import_data.hints.blocks'
@@ -187,7 +187,7 @@ const ImportDataPage = () => {
       {features.importMutes && (
         <DataImporter
           action={importMutes}
-          inputLabel={<FormattedMessage id='import_data.mutes_label' defaultMessage='Mutes' />}
+          inputLabel={<FormattedMessage id='import_data.mutes.label' defaultMessage='Mutes' />}
           inputHint={
             <FormattedMessage
               id='import_data.hints.mutes'
@@ -203,7 +203,7 @@ const ImportDataPage = () => {
       {features.importArchive && (
         <DataImporter
           action={importArchive}
-          inputLabel={<FormattedMessage id='import_data.archive_label' defaultMessage='Archive' />}
+          inputLabel={<FormattedMessage id='import_data.archive.label' defaultMessage='Archive' />}
           inputHint={
             <FormattedMessage
               id='import_data.hints.archive'

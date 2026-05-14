@@ -16,7 +16,7 @@ import type { AutoSuggestion } from '@/components/autosuggest-input';
 
 const messages = defineMessages({
   optionPlaceholder: {
-    id: 'compose_form.poll.option_placeholder',
+    id: 'compose_form.poll.option.placeholder',
     defaultMessage: 'Answer #{number}',
   },
 });

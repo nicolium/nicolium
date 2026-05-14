@@ -7,7 +7,7 @@ import ConversationsList from '@/pages/status-lists/components/conversations-lis
 
 const messages = defineMessages({
   title: { id: 'column.direct', defaultMessage: 'Direct messages' },
-  searchPlaceholder: { id: 'direct.search_placeholder', defaultMessage: 'Send a message to…' },
+  searchPlaceholder: { id: 'direct.search.placeholder', defaultMessage: 'Send a message to…' },
 });
 
 const ConversationsTimeline = () => {

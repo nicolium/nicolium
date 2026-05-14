@@ -88,17 +88,17 @@ const messages = defineMessages({
     defaultMessage: 'File renamed successfully.',
   },
   fileRenameError: { id: 'drive.file.rename.error', defaultMessage: 'Failed to rename file.' },
-  updateDescription: { id: 'drive.file.update_description', defaultMessage: 'Edit description' },
+  updateDescription: { id: 'drive.file.update.description', defaultMessage: 'Edit description' },
   updateDescriptionPlaceholder: {
-    id: 'drive.file.update_description.placeholder',
+    id: 'drive.file.update.description.placeholder',
     defaultMessage: 'New description',
   },
   updateDescriptionSuccess: {
-    id: 'drive.file.update_description.success',
+    id: 'drive.file.update.description.success',
     defaultMessage: 'Description updated successfully.',
   },
   updateDescriptionError: {
-    id: 'drive.file.update_description.error',
+    id: 'drive.file.update.description.error',
     defaultMessage: 'Failed to update description.',
   },
   markSensitive: { id: 'drive.file.mark_sensitive', defaultMessage: 'Mark as sensitive' },
@@ -366,11 +366,11 @@ const File: React.FC<IFile> = ({ file, index, onMove }) => {
     const handleUpdateDescription = () => {
       openModal('TEXT_FIELD', {
         heading: (
-          <FormattedMessage id='drive.file.update_description' defaultMessage='Edit description' />
+          <FormattedMessage id='drive.file.update.description' defaultMessage='Edit description' />
         ),
         placeholder: intl.formatMessage(messages.updateDescriptionPlaceholder),
         confirm: (
-          <FormattedMessage id='drive.file.update_description.confirm' defaultMessage='Save' />
+          <FormattedMessage id='drive.file.update.description.confirm' defaultMessage='Save' />
         ),
         text: file.description ?? '',
         onConfirm: (value: string) => {
