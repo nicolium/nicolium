@@ -813,7 +813,7 @@
   "manage_group.fields.description.label": "Beskrivelse",
   "manage_group.fields.description.placeholder": "Beskrivelse",
   "manage_group.fields.hashtag.placeholder": "Legg til et emne",
-  "manage_group.fields.name_help": "Dette kan ikke endres etter at gruppen er opprettet.",
+  "manage_group.fields.name.hint": "Dette kan ikke endres etter at gruppen er opprettet.",
   "manage_group.fields.name.label": "Gruppenavn (påkrevd)",
   "manage_group.fields.name.label_optional": "Gruppenavn",
   "manage_group.fields.name.placeholder": "Navn på gruppe",

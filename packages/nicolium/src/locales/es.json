@@ -866,7 +866,7 @@
   "manage_group.fields.description.label": "Descripción",
   "manage_group.fields.description.placeholder": "Descripción",
   "manage_group.fields.hashtag.placeholder": "Añadir un tema",
-  "manage_group.fields.name_help": "Esto no se puede cambiar una vez creado el grupo.",
+  "manage_group.fields.name.hint": "Esto no se puede cambiar una vez creado el grupo.",
   "manage_group.fields.name.label": "Nombre del grupo (obligatorio)",
   "manage_group.fields.name.label_optional": "Nombre del grupo",
   "manage_group.fields.name.placeholder": "Nombre del grupo",

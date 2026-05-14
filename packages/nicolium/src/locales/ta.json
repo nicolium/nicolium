@@ -1137,7 +1137,7 @@
   "manage_group.fields.description.label": "விவரம்",
   "manage_group.fields.description.placeholder": "விவரம்",
   "manage_group.fields.hashtag.placeholder": "ஒரு தலைப்பைச் சேர்க்கவும்",
-  "manage_group.fields.name_help": "குழு உருவாக்கப்பட்ட பிறகு இதை மாற்ற முடியாது.",
+  "manage_group.fields.name.hint": "குழு உருவாக்கப்பட்ட பிறகு இதை மாற்ற முடியாது.",
   "manage_group.fields.name.label": "குழு பெயர் (தேவை)",
   "manage_group.fields.name.label_optional": "குழு பெயர்",
   "manage_group.fields.name.placeholder": "குழு பெயர்",

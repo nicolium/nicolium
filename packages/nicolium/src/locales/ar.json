@@ -846,7 +846,7 @@
   "manage_group.fields.description.label": "الوصف",
   "manage_group.fields.description.placeholder": "الوصف",
   "manage_group.fields.hashtag.placeholder": "إضافة موضوع",
-  "manage_group.fields.name_help": "لا يمكن تغيير هذا بعد إنشاء المجموعة.",
+  "manage_group.fields.name.hint": "لا يمكن تغيير هذا بعد إنشاء المجموعة.",
   "manage_group.fields.name.label": "اسم المجموعة (مطلوبة)",
   "manage_group.fields.name.label_optional": "اسم المجموعة",
   "manage_group.fields.name.placeholder": "اسم المجموعة",

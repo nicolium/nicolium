@@ -185,7 +185,7 @@ const PleromaConfigPage: React.FC = () => {
             <EmptyMessage
               text={
                 <FormattedMessage
-                  id='admin.pleroma_config.empty_message_search'
+                  id='admin.pleroma_config.empty_message.search'
                   defaultMessage='No settings match the current filters.'
                 />
               }

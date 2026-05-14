@@ -844,7 +844,7 @@
   "manage_group.fields.description.label": "說明",
   "manage_group.fields.description.placeholder": "說明",
   "manage_group.fields.hashtag.placeholder": "新增主題",
-  "manage_group.fields.name_help": "建立群組後無法變更。",
+  "manage_group.fields.name.hint": "建立群組後無法變更。",
   "manage_group.fields.name.label": "群組名稱（必填）",
   "manage_group.fields.name.label_optional": "群組名稱",
   "manage_group.fields.name.placeholder": "群組名稱",

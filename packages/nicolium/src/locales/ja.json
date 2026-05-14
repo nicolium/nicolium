@@ -793,7 +793,7 @@
   "manage_group.fields.description.label": "概要",
   "manage_group.fields.description.placeholder": "概要",
   "manage_group.fields.hashtag.placeholder": "話題を追加する",
-  "manage_group.fields.name_help": "グループ作成後に変更することはできません。",
+  "manage_group.fields.name.hint": "グループ作成後に変更することはできません。",
   "manage_group.fields.name.label": "グループ名(必須)",
   "manage_group.fields.name.label_optional": "グループ名",
   "manage_group.fields.name.placeholder": "グループ名",

@@ -1010,7 +1010,7 @@
   "manage_group.fields.description.label": "Descrizione",
   "manage_group.fields.description.placeholder": "Descrizione",
   "manage_group.fields.hashtag.placeholder": "Aggiungi un argomento",
-  "manage_group.fields.name_help": "Non potrà essere cambiato dopo la creazione del gruppo.",
+  "manage_group.fields.name.hint": "Non potrà essere cambiato dopo la creazione del gruppo.",
   "manage_group.fields.name.label": "Nome del gruppo (obbligatorio)",
   "manage_group.fields.name.label_optional": "Nome del gruppo",
   "manage_group.fields.name.placeholder": "Nome del gruppo",

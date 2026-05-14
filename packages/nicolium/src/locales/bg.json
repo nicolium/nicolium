@@ -720,7 +720,7 @@
   "manage_group.fields.description.label": "Описание",
   "manage_group.fields.description.placeholder": "Описание",
   "manage_group.fields.hashtag.placeholder": "Добавяне на тема",
-  "manage_group.fields.name_help": "Това не може да бъде променено след създаването на групата.",
+  "manage_group.fields.name.hint": "Това не може да бъде променено след създаването на групата.",
   "manage_group.fields.name.label": "Име на групата",
   "manage_group.fields.name.label_optional": "Име на групата",
   "manage_group.fields.name.placeholder": "Име на групата",

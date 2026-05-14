@@ -844,7 +844,7 @@
   "manage_group.fields.description.label": "Deskripsi",
   "manage_group.fields.description.placeholder": "Deskripsi",
   "manage_group.fields.hashtag.placeholder": "Tambahkan topik",
-  "manage_group.fields.name_help": "Hal ini tidak dapat diubah setelah grup dibuat.",
+  "manage_group.fields.name.hint": "Hal ini tidak dapat diubah setelah grup dibuat.",
   "manage_group.fields.name.label": "Nama grup (wajib diisi)",
   "manage_group.fields.name.label_optional": "Nama grup",
   "manage_group.fields.name.placeholder": "Nama Grup",

@@ -100,7 +100,7 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
         }
         hintText={
           <FormattedMessage
-            id='manage_group.fields.name_help'
+            id='manage_group.fields.name.hint'
             defaultMessage='This cannot be changed after the group is created.'
           />
         }

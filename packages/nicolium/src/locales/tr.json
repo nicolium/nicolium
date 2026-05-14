@@ -829,7 +829,7 @@
   "manage_group.fields.description.label": "Açıklama",
   "manage_group.fields.description.placeholder": "Açıklama",
   "manage_group.fields.hashtag.placeholder": "Bir konu ekleyin",
-  "manage_group.fields.name_help": "Grup oluşturulduktan sonra bu değiştirilemez.",
+  "manage_group.fields.name.hint": "Grup oluşturulduktan sonra bu değiştirilemez.",
   "manage_group.fields.name.label": "Grup adı (gerekli)",
   "manage_group.fields.name.label_optional": "Grup adı",
   "manage_group.fields.name.placeholder": "Grup Adı",

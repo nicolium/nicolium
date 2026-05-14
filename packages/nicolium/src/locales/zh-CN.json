@@ -1284,7 +1284,7 @@
   "manage_group.fields.description.label": "描述",
   "manage_group.fields.description.placeholder": "描述",
   "manage_group.fields.hashtag.placeholder": "添加一个主题",
-  "manage_group.fields.name_help": "创建群组后此设置将无法更改。",
+  "manage_group.fields.name.hint": "创建群组后此设置将无法更改。",
   "manage_group.fields.name.label": "群组名称（必填）",
   "manage_group.fields.name.label_optional": "群组名称",
   "manage_group.fields.name.placeholder": "群组名称",
