@@ -42,7 +42,7 @@ const messages: Record<string, MessageDescriptor> = defineMessages({
   },
   subscribers: {
     id: 'status.visibility.subscribers',
-    defaultMessage: 'The post is only visible to users subscribing the author',
+    defaultMessage: 'The post is only visible to users subscribing to the author',
   },
 });
 

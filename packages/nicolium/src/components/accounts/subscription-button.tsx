@@ -14,7 +14,7 @@ const messages = defineMessages({
   subscribe: { id: 'account.subscribe', defaultMessage: 'Subscribe to notifications from @{name}' },
   unsubscribe: {
     id: 'account.unsubscribe',
-    defaultMessage: 'Unsubscribe to notifications from @{name}',
+    defaultMessage: 'Unsubscribe from notifications from @{name}',
   },
   subscribeSuccess: {
     id: 'account.subscribe.success',
@@ -30,7 +30,7 @@ const messages = defineMessages({
   },
   unsubscribeFailure: {
     id: 'account.unsubscribe.failure',
-    defaultMessage: 'An error occurred trying to unsubscribe to this account.',
+    defaultMessage: 'An error occurred trying to unsubscribe from this account.',
   },
 });
 

@@ -100,7 +100,7 @@ const messages = defineMessages({
     id: 'account.unendorse.success',
     defaultMessage: 'You are no longer featuring @{acct}',
   },
-  userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
+  userBit: { id: 'account.bite.success', defaultMessage: 'You have bitten @{acct}' },
   userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
   profileExternal: { id: 'account.profile_external', defaultMessage: 'View profile on {domain}' },
   loadActivities: { id: 'account.load_activities', defaultMessage: 'Fetch latest posts' },

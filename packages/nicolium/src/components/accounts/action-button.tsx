@@ -28,7 +28,7 @@ import toast from '@/toast';
 import type { Account } from 'pl-api';
 
 const messages = defineMessages({
-  userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
+  userBit: { id: 'account.bite.success', defaultMessage: 'You have bitten @{acct}' },
   userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
   unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
 });

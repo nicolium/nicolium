@@ -151,7 +151,7 @@ const messages = defineMessages({
   deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
   deleteUser: { id: 'admin.users.actions.delete_user', defaultMessage: 'Delete @{name}' },
   direct: { id: 'status.direct', defaultMessage: 'Direct message @{name}' },
-  disfavourite: { id: 'status.disfavourite', defaultMessage: 'Disike' },
+  disfavourite: { id: 'status.disfavourite', defaultMessage: 'Dislike' },
   edit: { id: 'status.edit', defaultMessage: 'Edit' },
   embed: { id: 'status.embed', defaultMessage: 'Embed post' },
   external: { id: 'status.external', defaultMessage: 'View post on {domain}' },

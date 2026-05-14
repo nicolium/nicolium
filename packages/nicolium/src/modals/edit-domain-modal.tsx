@@ -116,7 +116,7 @@ const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({
             hint={
               <FormattedMessage
                 id='admin.edit_domain.fields.public_hint'
-                defaultMessage='When checked, everyone can sign up for an username with this domain'
+                defaultMessage='When checked, everyone can sign up for a username with this domain'
               />
             }
           >

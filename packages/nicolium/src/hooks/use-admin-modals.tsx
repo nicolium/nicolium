@@ -71,7 +71,7 @@ const messages = defineMessages({
   },
   markStatusNotSensitiveHeading: {
     id: 'confirmations.admin.mark_status_not_sensitive.heading',
-    defaultMessage: 'Mark post not sensitive.',
+    defaultMessage: 'Mark post not sensitive',
   },
   markStatusSensitivePrompt: {
     id: 'confirmations.admin.mark_status_sensitive.message',
