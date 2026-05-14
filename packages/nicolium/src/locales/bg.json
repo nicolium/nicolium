@@ -231,7 +231,6 @@
   "circles.new.create": "Добавяне на кръг",
   "circles.new.create_title": "Добавяне на кръг",
   "circles.new.title_placeholder": "Заглавие на новия кръг",
-  "circles.remove_from_circle": "Премахване от кръга",
   "circles.subheading": "Вашите кръгове",
   "column.admin.account": "Модериране на @{acct}",
   "column.admin.announcements": "Обявления",
