@@ -523,13 +523,13 @@ const ComposeForm = <ID extends string>({
               label={
                 <FormattedMessage
                   id='compose.redact.overwrite_label'
-                  defaultMessage='Overwrite existing status'
+                  defaultMessage='Overwrite existing post'
                 />
               }
               hint={
                 <FormattedMessage
                   id='compose.redact.overwrite_hint'
-                  defaultMessage='This will replace the status with a new one, without keeping edit history. The update will not federate.'
+                  defaultMessage='This will replace the post with a new one, without keeping edit history. The update will not federate.'
                 />
               }
             >

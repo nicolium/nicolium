@@ -391,7 +391,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
             label={
               <FormattedMessage
                 id='preferences.fields.status_actions_items'
-                defaultMessage='Customize status actions'
+                defaultMessage='Customize post actions'
               />
             }
           />

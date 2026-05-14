@@ -119,7 +119,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
             <Text theme='muted'>
               <FormattedMessage
                 id='report.reason.blankslate'
-                defaultMessage='You have removed all statuses from being selected.'
+                defaultMessage='You have removed all posts from being selected.'
               />
             </Text>
           </div>

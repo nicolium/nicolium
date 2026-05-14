@@ -81,7 +81,7 @@ const OtherActionsStep = ({
         <Text tag='h1' size='xl' weight='semibold'>
           <FormattedMessage
             id='report.other_actions.other_statuses'
-            defaultMessage='Include other statuses?'
+            defaultMessage='Include other posts?'
           />
         </Text>
 
@@ -89,7 +89,7 @@ const OtherActionsStep = ({
           labelText={
             <FormattedMessage
               id='report.other_actions.add_additional'
-              defaultMessage='Would you like to add additional statuses to this report?'
+              defaultMessage='Would you like to add additional posts to this report?'
             />
           }
         >
@@ -117,7 +117,7 @@ const OtherActionsStep = ({
                 >
                   <FormattedMessage
                     id='report.other_actions.hide_additional'
-                    defaultMessage='Hide additional statuses'
+                    defaultMessage='Hide additional posts'
                   />
                 </Button>
               </div>

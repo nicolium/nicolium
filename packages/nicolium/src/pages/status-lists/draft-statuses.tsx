@@ -18,7 +18,7 @@ const DraftStatusesPage = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.draft_statuses'
-      defaultMessage="You don't have any draft statuses yet. When you add one, it will show up here."
+      defaultMessage="You don't have any draft posts yet. When you add one, it will show up here."
     />
   );
 

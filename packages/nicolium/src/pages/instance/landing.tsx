@@ -89,7 +89,7 @@ const LandingPage = () => (
           <Text>
             <FormattedMessage
               id='landing.customizable.description'
-              defaultMessage='Nicolium lets you choose between three themes and adjust accent color to your liking. You can customize the UI elements like sidebar, navigation menu and status action bar.'
+              defaultMessage='Nicolium lets you choose between three themes and adjust accent color to your liking. You can customize the UI elements like sidebar, navigation menu and post action bar.'
             />
           </Text>
         </Card>

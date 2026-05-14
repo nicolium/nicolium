@@ -11,7 +11,7 @@ import type { Account } from 'pl-api';
 const messages = defineMessages({
   statusesCount: {
     id: 'account.statuses_count',
-    defaultMessage: '{count, plural, one {# status} other {# statuses}}',
+    defaultMessage: '{count, plural, one {# post} other {# posts}}',
   },
   followersCount: {
     id: 'account.followers_count',

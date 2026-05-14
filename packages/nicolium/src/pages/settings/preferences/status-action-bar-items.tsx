@@ -34,11 +34,11 @@ import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config
 const messages = defineMessages({
   heading: {
     id: 'settings.status_action_bar_items.heading',
-    defaultMessage: 'Status action items',
+    defaultMessage: 'Post action items',
   },
   resetSuccess: {
     id: 'settings.status_action_bar_items.reset.success',
-    defaultMessage: 'Status action items reset to default',
+    defaultMessage: 'Post action items reset to default',
   },
 });
 
@@ -128,7 +128,7 @@ const StatusActionBarItems: React.FC<ISettingsPage> = ({
         <OutlineBox className='⁂-interface-items__explanation'>
           <FormattedMessage
             id='settings.status_action_bar_items.description'
-            defaultMessage='You can decide what items are visible in your status action bar. This does not affect available functionality, they will be accessible in other ways, e.g., in the status menu.'
+            defaultMessage='You can decide what items are visible in your post action bar. This does not affect available functionality, they will be accessible in other ways, e.g., in the post menu.'
           />
         </OutlineBox>
 

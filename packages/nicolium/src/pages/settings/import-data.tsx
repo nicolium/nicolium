@@ -207,7 +207,7 @@ const ImportDataPage = () => {
           inputHint={
             <FormattedMessage
               id='import_data.hints.archive'
-              defaultMessage='File containing an archive of statuses'
+              defaultMessage='File containing an archive of posts'
             />
           }
           submitText={
