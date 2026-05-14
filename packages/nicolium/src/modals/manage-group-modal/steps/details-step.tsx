@@ -17,7 +17,7 @@ import type { CreateGroupParams } from 'pl-api';
 const messages = defineMessages({
   groupNamePlaceholder: {
     id: 'manage_group.fields.name_placeholder',
-    defaultMessage: 'Group Name',
+    defaultMessage: 'Group name',
   },
   groupDescriptionPlaceholder: {
     id: 'manage_group.fields.description_placeholder',

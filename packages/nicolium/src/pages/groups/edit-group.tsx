@@ -27,7 +27,7 @@ const messages = defineMessages({
   heading: { id: 'navigation_bar.edit_group', defaultMessage: 'Edit Group' },
   groupNamePlaceholder: {
     id: 'manage_group.fields.name_placeholder',
-    defaultMessage: 'Group Name',
+    defaultMessage: 'Group name',
   },
   groupDescriptionPlaceholder: {
     id: 'manage_group.fields.description_placeholder',

@@ -1592,7 +1592,7 @@
   "manage_group.fields.name_help": "This cannot be changed after the group is created.",
   "manage_group.fields.name_label": "Group name (required)",
   "manage_group.fields.name_label_optional": "Group name",
-  "manage_group.fields.name_placeholder": "Group Name",
+  "manage_group.fields.name_placeholder": "Group name",
   "manage_group.pending_requests": "Pending requests",
   "media-gallery.description": "Image description",
   "media.default_description.attachment": "Attachment",
