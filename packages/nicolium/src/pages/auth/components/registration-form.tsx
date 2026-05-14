@@ -152,7 +152,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
           <p>
             <FormattedMessage
               id='confirmations.register.needs_confirmation'
-              defaultMessage='Please check your inbox at {email} for confirmation instructions. You will need to verify your email address to continue.'
+              defaultMessage='Please check your inbox at {email} for confirmation instructions. You will need to verify your e-mail address to continue.'
               values={{ email: <strong>{params.email}</strong> }}
             />
           </p>

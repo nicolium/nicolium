@@ -12,7 +12,7 @@ import { useFeatures } from '@/hooks/use-features';
 const messages = defineMessages({
   username: {
     id: 'login.fields.username_label',
-    defaultMessage: 'Email or username',
+    defaultMessage: 'E-mail or username',
   },
   email: {
     id: 'login.fields.email_label',

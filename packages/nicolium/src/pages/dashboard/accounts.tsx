@@ -44,7 +44,7 @@ const messages = defineMessages({
   },
   emailPlaceholder: {
     id: 'admin.accounts.filters.email.placeholder',
-    defaultMessage: 'Enter email',
+    defaultMessage: 'Enter e-mail address',
   },
 });
 
@@ -213,7 +213,7 @@ const Filters: React.FC = () => {
             labelText={
               <FormattedMessage
                 id='admin.accounts.filters.email'
-                defaultMessage='Search by email'
+                defaultMessage='Search by e-mail address'
               />
             }
           >

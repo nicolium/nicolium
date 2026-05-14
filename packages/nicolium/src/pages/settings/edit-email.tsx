@@ -11,12 +11,12 @@ import { useClient } from '@/hooks/use-client';
 import toast from '@/toast';
 
 const messages = defineMessages({
-  header: { id: 'column.change_email', defaultMessage: 'Change email' },
+  header: { id: 'column.change_email', defaultMessage: 'Change e-mail' },
   updateEmailSuccess: {
     id: 'security.update_email.success',
-    defaultMessage: 'Email successfully updated.',
+    defaultMessage: 'E-mail successfully updated.',
   },
-  updateEmailFail: { id: 'security.update_email.fail', defaultMessage: 'Update email failed.' },
+  updateEmailFail: { id: 'security.update_email.fail', defaultMessage: 'Updating e-mail failed.' },
   emailFieldPlaceholder: { id: 'edit_email.placeholder', defaultMessage: 'me@example.com' },
 });
 
@@ -62,7 +62,7 @@ const EditEmailPage = () => {
       <Form onSubmit={handleSubmit}>
         <FormGroup
           labelText={
-            <FormattedMessage id='security.fields.email.label' defaultMessage='Email address' />
+            <FormattedMessage id='security.fields.email.label' defaultMessage='E-mail address' />
           }
         >
           <Input
