@@ -27,7 +27,6 @@
   "lightbox.minimize": "Minimise",
   "preferences.fields.missing_description_modal_label": "Show confirmation dialogue before sending a post without media descriptions",
   "preferences.fields.unfollow_modal_label": "Show confirmation dialogue before unfollowing someone",
-  "preferences.fields.wrench_label": "Display spanner reaction button",
   "status.disfavourite": "Dislike",
   "status.wrench": "Spanner reaction",
   "tabs_bar.wrenched": "Spannered"
