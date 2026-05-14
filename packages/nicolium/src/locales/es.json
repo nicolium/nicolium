@@ -1224,7 +1224,7 @@
   "theme_editor.import_success": "¡Tema importado con éxito!",
   "theme_editor.restore": "Restaurar tema por defecto",
   "theme_editor.save": "Guardar tema",
-  "theme_editor.saved": "¡Se actualizó el tema!",
+  "theme_editor.save.success": "¡Se actualizó el tema!",
   "theme_toggle.black": "Oscuro",
   "theme_toggle.dark": "Dark",
   "theme_toggle.light": "Light",

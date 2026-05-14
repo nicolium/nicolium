@@ -1193,7 +1193,7 @@
   "theme_editor.import_success": "Tema berhasil diimpor!",
   "theme_editor.restore": "Kembalikan tema default",
   "theme_editor.save": "Simpan tema",
-  "theme_editor.saved": "Tema diperbarui!",
+  "theme_editor.save.success": "Tema diperbarui!",
   "theme_toggle.dark": "Gelap",
   "theme_toggle.light": "Terang",
   "theme_toggle.system": "System",

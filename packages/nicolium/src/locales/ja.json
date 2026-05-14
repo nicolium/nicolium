@@ -1094,7 +1094,7 @@
   "theme_editor.import_success": "テーマをインポートしました!",
   "theme_editor.restore": "標準のテーマを復元",
   "theme_editor.save": "テーマを保存する",
-  "theme_editor.saved": "テーマを更新しました!",
+  "theme_editor.save.success": "テーマを更新しました!",
   "theme_toggle.dark": "ダーク",
   "theme_toggle.light": "ライト",
   "theme_toggle.system": "システム",

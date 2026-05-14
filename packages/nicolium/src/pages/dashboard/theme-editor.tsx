@@ -28,7 +28,7 @@ import type { ColorChangeHandler } from 'react-color';
 
 const messages = defineMessages({
   title: { id: 'admin.theme.title', defaultMessage: 'Theme' },
-  saved: { id: 'theme_editor.saved', defaultMessage: 'Theme updated!' },
+  saved: { id: 'theme_editor.save.success', defaultMessage: 'Theme updated!' },
   restore: { id: 'theme_editor.restore', defaultMessage: 'Restore default theme' },
   export: { id: 'theme_editor.export', defaultMessage: 'Export theme' },
   import: { id: 'theme_editor.import', defaultMessage: 'Import theme' },

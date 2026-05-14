@@ -1055,7 +1055,7 @@
   "theme_editor.import_success": "Das Thema wurde erfolgreich importiert!",
   "theme_editor.restore": "Standardthema wiederherstellen",
   "theme_editor.save": "Thema speichern",
-  "theme_editor.saved": "Thema aktualisiert!",
+  "theme_editor.save.success": "Thema aktualisiert!",
   "theme_toggle.dark": "Dunkel",
   "theme_toggle.light": "Hell",
   "theme_toggle.system": "System",

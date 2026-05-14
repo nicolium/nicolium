@@ -1811,7 +1811,7 @@
   "theme_editor.reset": "重置",
   "theme_editor.restore": "恢复默认主题",
   "theme_editor.save": "保存主题",
-  "theme_editor.saved": "主题已更新！",
+  "theme_editor.save.success": "主题已更新！",
   "theme_toggle.black": "黑色",
   "theme_toggle.dark": "黑暗",
   "theme_toggle.light": "明亮",

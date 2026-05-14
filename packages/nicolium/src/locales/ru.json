@@ -1265,7 +1265,7 @@
   "theme_editor.import_success": "Тема была успешно импортирована!",
   "theme_editor.restore": "Восстановить тему по умолчанию",
   "theme_editor.save": "Сохранить тему",
-  "theme_editor.saved": "Тема обновлена!",
+  "theme_editor.save.success": "Тема обновлена!",
   "theme_toggle.dark": "Dark",
   "theme_toggle.light": "Light",
   "theme_toggle.system": "System",

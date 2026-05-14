@@ -468,7 +468,7 @@
   "frontend_config.raw_json_hint": "𐑧𐑛𐑦𐑑 𐑞 𐑕𐑧𐑑𐑦𐑙𐑟 𐑛𐑱𐑑𐑩 𐑛𐑦𐑮𐑧𐑒𐑑𐑤𐑦. 𐑗𐑱𐑯𐑡𐑩𐑟 𐑥𐑱𐑛 𐑛𐑦𐑮𐑧𐑒𐑑𐑤𐑦 𐑑 𐑞 JSON 𐑓𐑲𐑤 𐑢𐑦𐑤 𐑴𐑝𐑼𐑮𐑲𐑛 𐑞 𐑓𐑹𐑥 𐑓𐑰𐑤𐑛𐑟 𐑩𐑚𐑳𐑝. 𐑒𐑤𐑦𐑒 𐑕𐑱𐑝 𐑑 𐑩𐑐𐑤𐑲 𐑘𐑹 𐑗𐑱𐑯𐑡𐑩𐑟.",
   "frontend_config.raw_json_label": "𐑩𐑛𐑝𐑭𐑯𐑕𐑑: 𐑧𐑛𐑦𐑑 raw JSON 𐑛𐑱𐑑𐑩",
   "frontend_config.save": "𐑕𐑱𐑝",
-  "frontend_config.saved": "·𐑕𐑴𐑐𐑚𐑪𐑒𐑕 𐑒𐑩𐑯𐑓𐑦𐑜 𐑕𐑱𐑝𐑛!",
+  "frontend_config.save.success": "·𐑕𐑴𐑐𐑚𐑪𐑒𐑕 𐑒𐑩𐑯𐑓𐑦𐑜 𐑕𐑱𐑝𐑛!",
   "getting_started.open_source_notice": "{code_name} 𐑦𐑟 𐑴𐑐𐑩𐑯 𐑕𐑹𐑕 𐑕𐑪𐑓𐑑𐑢𐑺. 𐑿 𐑒𐑨𐑯 𐑒𐑩𐑯𐑑𐑮𐑦𐑚𐑿𐑑 𐑹 𐑮𐑦𐑐𐑹𐑑 𐑦𐑖𐑵𐑟 𐑨𐑑 {code_link} (v{code_version}).",
   "icon_button.icons": "𐑲𐑒𐑪𐑯𐑟",
   "icon_button.label": "𐑕𐑦𐑤𐑧𐑒𐑑 𐑲𐑒𐑪𐑯",

@@ -24,9 +24,9 @@ import type { PleromaConfigDescription } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.pleroma_config', defaultMessage: 'Pleroma configuration' },
-  saved: { id: 'admin.pleroma_config.saved', defaultMessage: 'Configuration saved' },
+  saved: { id: 'admin.pleroma_config.save.success', defaultMessage: 'Configuration saved' },
   saveFailed: {
-    id: 'admin.pleroma_config.save_failed',
+    id: 'admin.pleroma_config.save.fail',
     defaultMessage: 'Failed to save configuration',
   },
   search: { id: 'admin.pleroma_config.search', defaultMessage: 'Search settings' },

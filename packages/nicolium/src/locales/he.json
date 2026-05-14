@@ -612,7 +612,7 @@
   "frontend_config.raw_json_hint": "ערוך את נתוני ההגדרות ישירות. שינויים שנעשו ישירות בקובץ JSON יעקפו את שדות הטופס שלמעלה. לחץ על \"שמור\" כדי להחיל את השינויים שלך.",
   "frontend_config.raw_json_label": "מתקדם: ערוך נתוני JSON גולמיים",
   "frontend_config.save": "שמור",
-  "frontend_config.saved": "תצורת סבוניה נשמרה!",
+  "frontend_config.save.success": "תצורת סבוניה נשמרה!",
   "getting_started.open_source_notice": "סבוניה היא תוכנה חופשית (בקוד פתוח). ניתן לתרום או לדווח על בעיות בגיטהאב: {code_link} (v{code_version}).",
   "group.cancel_request": "בטל בקשה",
   "group.delete.success": "הקבוצה נמחקה בהצלחה",

@@ -1193,7 +1193,7 @@
   "theme_editor.import_success": "已成功匯入佈景主題！",
   "theme_editor.restore": "還原預設佈景主題",
   "theme_editor.save": "儲存佈景主題",
-  "theme_editor.saved": "佈景主題已更新！",
+  "theme_editor.save.success": "佈景主題已更新！",
   "theme_toggle.dark": "深色",
   "theme_toggle.light": "淺色",
   "theme_toggle.system": "系統",

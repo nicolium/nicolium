@@ -1155,7 +1155,7 @@
   "theme_editor.import_success": "Temaet ble importert!",
   "theme_editor.restore": "Gjenopprett standardtema",
   "theme_editor.save": "Lagre tema",
-  "theme_editor.saved": "Tema oppdatert!",
+  "theme_editor.save.success": "Tema oppdatert!",
   "theme_toggle.dark": "Mørk",
   "theme_toggle.light": "Lyst",
   "theme_toggle.system": "System",

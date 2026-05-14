@@ -1177,7 +1177,7 @@
   "theme_editor.import_success": "Tema başarıyla içe aktarıldı!",
   "theme_editor.restore": "Varsayılan temayı geri yükle",
   "theme_editor.save": "Temayı kaydet",
-  "theme_editor.saved": "Tema güncellendi!",
+  "theme_editor.save.success": "Tema güncellendi!",
   "theme_toggle.dark": "Koyu",
   "theme_toggle.light": "Açık",
   "theme_toggle.system": "Sistem",

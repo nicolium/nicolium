@@ -989,7 +989,7 @@
   "theme_editor.import_success": "Tema je uspješno uvezena!",
   "theme_editor.restore": "Vrati zadanu temu",
   "theme_editor.save": "Spremi temu",
-  "theme_editor.saved": "Tema ažurirana!",
+  "theme_editor.save.success": "Tema ažurirana!",
   "theme_toggle.dark": "Dark",
   "theme_toggle.light": "Light",
   "theme_toggle.system": "System",

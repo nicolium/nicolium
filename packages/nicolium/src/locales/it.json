@@ -1381,7 +1381,7 @@
   "theme_editor.reset": "Annulla",
   "theme_editor.restore": "Ripristina il tema",
   "theme_editor.save": "Salva il tema",
-  "theme_editor.saved": "Tema aggiornato!",
+  "theme_editor.save.success": "Tema aggiornato!",
   "theme_toggle.black": "Nero",
   "theme_toggle.dark": "Notte",
   "theme_toggle.light": "Giorno",

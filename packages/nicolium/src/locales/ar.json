@@ -1195,7 +1195,7 @@
   "theme_editor.import_success": "تم استيراد السمة بنجاح!",
   "theme_editor.restore": "استعادة السمة الافتراضية",
   "theme_editor.save": "حفظ السمة",
-  "theme_editor.saved": "تم تحديث السمة!",
+  "theme_editor.save.success": "تم تحديث السمة!",
   "theme_toggle.dark": "داكنة",
   "theme_toggle.light": "فاتحة",
   "theme_toggle.system": "حسب النظام",
