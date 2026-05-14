@@ -354,7 +354,6 @@
   "circles.new.create": "Ajouter un cercle",
   "circles.new.create_title": "Ajouter un cercle",
   "circles.new.title_placeholder": "Nom du nouveau cercle",
-  "circles.remove_from_circle": "Retirer du cercle",
   "circles.subheading": "Vos cercles",
   "column.admin.account": "Modérer @{acct}",
   "column.admin.announcements": "Annonces",
