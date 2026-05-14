@@ -43,9 +43,7 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
         <div className='min-h-24'>
           <CardHeader>
             <CardTitle
-              title={
-                <FormattedMessage id='lists.account.remove' defaultMessage='Remove from list' />
-              }
+              title={<FormattedMessage id='lists.account.members' defaultMessage='List members' />}
             />
           </CardHeader>
           <div className='max-h-48 overflow-y-auto'>

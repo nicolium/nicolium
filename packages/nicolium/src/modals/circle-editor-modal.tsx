@@ -114,12 +114,7 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
             <div className='min-h-24'>
               <CardHeader>
                 <CardTitle
-                  title={
-                    <FormattedMessage
-                      id='circles.remove_from_circle'
-                      defaultMessage='Remove from circle'
-                    />
-                  }
+                  title={<FormattedMessage id='circles.members' defaultMessage='Circle members' />}
                 />
               </CardHeader>
               <div className='max-h-48 overflow-y-auto'>

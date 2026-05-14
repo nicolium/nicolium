@@ -125,13 +125,13 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
               title={
                 excluded ? (
                   <FormattedMessage
-                    id='antennas.account.excluded.remove'
-                    defaultMessage='Remove from excluded accounts'
+                    id='antennas.account.excluded.list'
+                    defaultMessage='Excluded accounts list'
                   />
                 ) : (
                   <FormattedMessage
-                    id='antennas.account.remove'
-                    defaultMessage='Remove from antenna'
+                    id='antennas.account.list'
+                    defaultMessage='Antenna members list'
                   />
                 )
               }
