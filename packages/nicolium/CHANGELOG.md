@@ -36,6 +36,7 @@
 - About page doesn't render infinite loading animation anymore.
 - Pending posts render consistently with persisted posts in thread view.
 - Quotes are not counted with reblogs when quote button is displayed in post actions.
+- Modified default post content type and visibility setting behavior to fix cases where they were not applied correctly.
 
 ## v0.2.1
 
