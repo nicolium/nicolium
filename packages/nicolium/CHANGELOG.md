@@ -29,6 +29,7 @@
 - Iceshrimp.NET access token should now be persisted across sessions.
 - Further work on migrating styles from TailwindCSS.
 - Legacy config path is no longer supported.
+- Made strings across the app more consistent.
 
 ### Fixed
 
