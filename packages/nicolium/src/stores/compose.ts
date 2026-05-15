@@ -5,7 +5,6 @@ import { mutative } from 'zustand-mutative';
 
 import { uploadFile, updateMedia } from '@/actions/media';
 import { saveSettings } from '@/actions/settings';
-import { FE_NAME } from '@/actions/settings';
 import { createStatus } from '@/actions/statuses';
 import { isNativeEmoji } from '@/features/emoji';
 import { useClient } from '@/hooks/use-client';
@@ -40,8 +39,6 @@ import type {
   UpdateMediaParams,
   Location,
   EditStatusParams,
-  CredentialAccount,
-  Instance,
   StatusSource,
 } from 'pl-api';
 
@@ -169,14 +166,14 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   poll: null,
   location: null,
 
-  contentType: 'text/plain',
+  contentType: 'default', // 'text/plain',
   interactionPolicy: null,
   quoteApprovalPolicy: null,
   language: null,
   localOnly: false,
   scheduledAt: null,
   sensitive: false,
-  visibility: 'public',
+  visibility: 'default', // 'public',
 
   draftId: null,
   groupId: null,
@@ -399,8 +396,6 @@ interface ComposeActions {
     path: ['spoiler_text'] | ['poll', 'options', number],
   ) => void;
 
-  importDefaultSettings: (account: CredentialAccount) => void;
-  importDefaultContentType: (instance: Instance) => void;
   handleTimelineDelete: (statusId: string) => void;
 }
 
@@ -715,32 +710,6 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
-        importDefaultSettings: (account) => {
-          set((state) => {
-            const settings = account.settings_store?.[FE_NAME];
-
-            if (!settings) return;
-
-            if (settings.defaultPrivacy) state.default.visibility = settings.defaultPrivacy;
-            if (settings.defaultContentType)
-              state.default.contentType = settings.defaultContentType;
-          });
-        },
-
-        importDefaultContentType: (instance) => {
-          set((state) => {
-            const postFormats = instance.pleroma.metadata.post_formats;
-
-            state.default.contentType =
-              postFormats.includes(state.default.contentType) ||
-              (postFormats.includes('text/markdown') && state.default.contentType === 'wysiwyg')
-                ? state.default.contentType
-                : postFormats.includes('text/markdown')
-                  ? 'text/markdown'
-                  : postFormats[0];
-          });
-        },
-
         handleTimelineDelete: (statusId) => {
           get().actions.updateAllCompose((compose) => {
             if (statusId === compose.inReplyToId) {
@@ -864,7 +833,15 @@ const useSubmitCompose = (composeId: string) => {
       }
 
       const idempotencyKey = compose.idempotencyKey;
-      const contentType = compose.contentType === 'wysiwyg' ? 'text/markdown' : compose.contentType;
+
+      const { defaultContentType, defaultPrivacy } = useSettingsStore.getState().settings;
+
+      let contentType = compose.contentType;
+      if (contentType === 'default') contentType = defaultContentType;
+      if (contentType === 'wysiwyg') contentType = 'text/markdown';
+
+      let visibility = compose.visibility;
+      if (visibility === 'default') visibility = defaultPrivacy;
 
       const params: CreateStatusParams = {
         status: statusText,
@@ -873,7 +850,7 @@ const useSubmitCompose = (composeId: string) => {
         media_ids: media.map((item) => item.id),
         sensitive: compose.sensitive,
         spoiler_text: compose.spoilerText,
-        visibility: compose.visibility,
+        visibility,
         content_type: contentType,
         scheduled_at: preview ? undefined : compose.scheduledAt?.toISOString(),
         language: compose.language ?? compose.suggestedLanguage ?? undefined,
@@ -925,7 +902,7 @@ const useSubmitCompose = (composeId: string) => {
         }
       }
 
-      if (compose.visibility === 'group' && compose.groupId) {
+      if (visibility === 'group' && compose.groupId) {
         params.group_id = compose.groupId;
       }
 

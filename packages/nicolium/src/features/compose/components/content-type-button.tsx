@@ -11,6 +11,7 @@ import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
 import { useCompose, useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
+import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   contentTypePlaintext: {
@@ -42,8 +43,10 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
   const intl = useIntl();
   const { updateCompose } = useComposeActions();
   const instance = useInstance();
+  const { defaultContentType } = useSettings();
 
-  const { contentType } = useCompose(composeId);
+  let { contentType } = useCompose(composeId);
+  if (contentType === 'default') contentType = defaultContentType;
 
   const handleChange = (value: string) => () =>
     updateCompose(composeId, (draft) => {

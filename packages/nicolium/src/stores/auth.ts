@@ -503,8 +503,6 @@ const useAuthStore = create<AuthStore>()(
         useSettingsStore.getState().actions.loadUserSettings(undefined);
       }
 
-      const { useComposeStore } = await import('@/stores/compose');
-      useComposeStore.getState().actions.importDefaultSettings(account);
       get().actions.setCurrentAccount(account);
     };
 
@@ -803,8 +801,6 @@ const useAuthStore = create<AuthStore>()(
           persistAuthAccount(response, params);
 
           queryClient.setQueryData(queryKeys.accounts.show(response.id), response);
-          const { useComposeStore } = await import('@/stores/compose');
-          useComposeStore.getState().actions.importDefaultSettings(response);
           get().actions.setCurrentAccount(response);
 
           return response;

@@ -19,6 +19,7 @@ import { getOrderedLists } from '@/pages/account-lists/lists';
 import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
 import { useCompose, useComposeActions } from '@/stores/compose';
+import { useSettings } from '@/stores/settings';
 
 import type { Circle, Features } from 'pl-api';
 
@@ -166,6 +167,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
   const intl = useIntl();
   const features = useFeatures();
   const { updateCompose } = useComposeActions();
+  const { defaultPrivacy } = useSettings();
 
   const compose = useCompose(composeId);
   const { data: lists = [] } = useLists(getOrderedLists);
@@ -173,7 +175,8 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
 
   const isReply = !!compose.inReplyToId;
 
-  const value = compose.visibility;
+  let value = compose.visibility;
+  if (value === 'default') value = defaultPrivacy;
   const unavailable = !!compose.editedId;
 
   const onChange = (value: string) =>

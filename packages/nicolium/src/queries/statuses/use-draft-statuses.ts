@@ -12,6 +12,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { filteredArray } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
 import { useComposeActions } from '@/stores/compose';
+import { useSettings } from '@/stores/settings';
 
 import { queryKeys } from '../keys';
 
@@ -93,12 +94,22 @@ const usePersistDraftStatus = () => {
   const { data: account } = useOwnAccount();
   const queryClient = useQueryClient();
   const { getCompose } = useComposeActions();
+  const { defaultContentType, defaultPrivacy } = useSettings();
 
   return (composeId: string) => {
     const compose = getCompose(composeId);
 
+    let contentType = compose.contentType;
+    if (contentType === 'default') contentType = defaultContentType;
+    if (contentType === 'wysiwyg') contentType = 'text/markdown';
+
+    let visibility = compose.visibility;
+    if (visibility === 'default') visibility = defaultPrivacy;
+
     const draft = {
       ...compose,
+      content_type: contentType,
+      visibility,
       draft_id: compose.draftId ?? crypto.randomUUID(),
     };
 
