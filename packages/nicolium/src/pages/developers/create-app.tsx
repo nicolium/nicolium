@@ -114,7 +114,7 @@ const CreateAppPage: React.FC = () => {
           <Text size='lg' weight='medium'>
             <FormattedMessage
               id='app_create.results.explanation.title'
-              defaultMessage='App created successfully'
+              defaultMessage='App created'
             />
           </Text>
           <Text theme='muted'>

@@ -55,7 +55,7 @@ const messages = defineMessages({
     id: 'admin.users.user_unsuggested.success',
     defaultMessage: '@{acct} was unsuggested',
   },
-  badgesSaved: { id: 'admin.users.badges_saved.success', defaultMessage: 'Custom badges updated.' },
+  badgesSaved: { id: 'admin.users.badges_saved.success', defaultMessage: 'Custom badges updated' },
   badgePlaceholder: { id: 'badge_input.placeholder', defaultMessage: 'Enter a badge…' },
   roleUser: { id: 'account_moderation_modal.roles.user', defaultMessage: 'User' },
   roleModerator: { id: 'account_moderation_modal.roles.moderator', defaultMessage: 'Moderator' },

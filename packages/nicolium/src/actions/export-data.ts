@@ -7,13 +7,13 @@ import type { Account, PaginatedResponse, PlApiClient } from 'pl-api';
 const messages = defineMessages({
   blocksSuccess: {
     id: 'export_data.success.blocks',
-    defaultMessage: 'Blocks exported successfully',
+    defaultMessage: 'Blocks exported',
   },
   followersSuccess: {
     id: 'export_data.success.followers',
-    defaultMessage: 'Followers exported successfully',
+    defaultMessage: 'Followers exported',
   },
-  mutesSuccess: { id: 'export_data.success.mutes', defaultMessage: 'Mutes exported successfully' },
+  mutesSuccess: { id: 'export_data.success.mutes', defaultMessage: 'Mutes exported' },
 });
 
 const fileExport = (content: string, fileName: string) => {

@@ -21,7 +21,7 @@ import type { BaseModalProps } from '@/features/ui/components/modal-root';
 const messages = defineMessages({
   updateSuccess: {
     id: 'admin.edit_domain_block.update.success',
-    defaultMessage: 'Domain block updated successfully',
+    defaultMessage: 'Domain block updated',
   },
   updateError: {
     id: 'admin.edit_domain_block.update.error',
@@ -29,7 +29,7 @@ const messages = defineMessages({
   },
   createSuccess: {
     id: 'admin.edit_domain_block.create.success',
-    defaultMessage: 'Domain block created successfully',
+    defaultMessage: 'Domain block created',
   },
   createError: {
     id: 'admin.edit_domain_block.create.error',

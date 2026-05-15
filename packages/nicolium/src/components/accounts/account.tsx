@@ -42,8 +42,7 @@ const messages = defineMessages({
   timeline: { id: 'account.instance_favicon', defaultMessage: 'Visit {domain} timeline' },
   accountLocked: {
     id: 'account.locked_info',
-    defaultMessage:
-      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
+    defaultMessage: 'This account is locked. The owner manually reviews who can follow them.',
   },
 });
 

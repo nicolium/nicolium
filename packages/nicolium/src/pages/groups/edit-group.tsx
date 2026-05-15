@@ -24,7 +24,7 @@ import { unescapeHTML } from '@/utils/html';
 import type { NicoliumResponse } from '@/api';
 
 const messages = defineMessages({
-  heading: { id: 'navigation_bar.edit_group', defaultMessage: 'Edit Group' },
+  heading: { id: 'navigation_bar.edit_group', defaultMessage: 'Edit group' },
   groupNamePlaceholder: {
     id: 'manage_group.fields.name.placeholder',
     defaultMessage: 'Group name',
@@ -33,7 +33,7 @@ const messages = defineMessages({
     id: 'manage_group.fields.description.placeholder',
     defaultMessage: 'Description',
   },
-  groupSaved: { id: 'group.update.success', defaultMessage: 'Group successfully saved' },
+  groupSaved: { id: 'group.update.success', defaultMessage: 'Group saved' },
 });
 
 const EditGroup: React.FC = () => {

@@ -9,11 +9,11 @@ import { queryKeys } from '../keys';
 const messages = defineMessages({
   createSuccess: {
     id: 'aliases.success.add',
-    defaultMessage: 'Account alias created successfully',
+    defaultMessage: 'Account alias created',
   },
   removeSuccess: {
     id: 'aliases.success.remove',
-    defaultMessage: 'Account alias removed successfully',
+    defaultMessage: 'Account alias removed',
   },
 });
 

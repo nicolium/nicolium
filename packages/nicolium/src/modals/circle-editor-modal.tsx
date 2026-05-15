@@ -26,8 +26,8 @@ import Search from './list-editor-modal/components/search';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
-  success: { id: 'circles.edit.success', defaultMessage: 'Circle updated successfully' },
-  error: { id: 'circles.edit.error', defaultMessage: 'Error updating circle' },
+  success: { id: 'circles.edit.success', defaultMessage: 'Circle updated' },
+  error: { id: 'circles.edit.error', defaultMessage: 'Failed to update circle' },
 });
 
 interface CircleEditorModalProps {

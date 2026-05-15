@@ -19,9 +19,9 @@ const messages = defineMessages({
   accounts: { id: 'column.filters.accounts', defaultMessage: 'Accounts' },
   deleteSuccess: {
     id: 'column.filters.delete.success',
-    defaultMessage: 'Filter deleted successfully',
+    defaultMessage: 'Filter deleted',
   },
-  deleteError: { id: 'column.filters.delete.error', defaultMessage: 'Error deleting filter' },
+  deleteError: { id: 'column.filters.delete.error', defaultMessage: 'Failed to delete filter' },
 });
 
 const contexts = {

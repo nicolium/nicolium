@@ -197,7 +197,7 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
   },
   bite: {
     id: 'notification.bite',
-    defaultMessage: '{name} has bit {hasStatus, plural, =0 {you} other {your post}}',
+    defaultMessage: '{name} has bitten {hasStatus, plural, =0 {you} other {your post}}',
   },
   reply: {
     id: 'notification.reply',

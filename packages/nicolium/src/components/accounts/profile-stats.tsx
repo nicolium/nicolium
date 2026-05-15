@@ -73,7 +73,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler, withSt
           title={intl.formatMessage(messages.statusesCount, { count: account.statuses_count })}
         >
           <strong>{shortNumberFormat(account.statuses_count)}</strong>
-          <FormattedMessage id='account.statuses' defaultMessage='Statuses' />
+          <FormattedMessage id='account.statuses' defaultMessage='Posts' />
         </StatusesComponent>
       )}
 

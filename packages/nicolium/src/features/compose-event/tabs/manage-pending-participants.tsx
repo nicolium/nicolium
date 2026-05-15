@@ -16,7 +16,7 @@ const messages = defineMessages({
   authorize: { id: 'compose_event.participation_requests.authorize', defaultMessage: 'Authorize' },
   authorizeSuccess: {
     id: 'compose_event.participation_requests.authorize.success',
-    defaultMessage: 'Event participation request authorized successfully',
+    defaultMessage: 'Event participation request authorized',
   },
   authorizeFail: {
     id: 'compose_event.participation_requests.authorize.fail',
@@ -25,7 +25,7 @@ const messages = defineMessages({
   reject: { id: 'compose_event.participation_requests.reject', defaultMessage: 'Reject' },
   rejectSuccess: {
     id: 'compose_event.participation_requests.reject.success',
-    defaultMessage: 'Event participation request rejected successfully',
+    defaultMessage: 'Event participation request rejected',
   },
   rejectFail: {
     id: 'compose_event.participation_requests.reject.fail',

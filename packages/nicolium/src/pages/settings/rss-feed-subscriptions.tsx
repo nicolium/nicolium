@@ -27,7 +27,7 @@ const messages = defineMessages({
   deleteFeed: { id: 'rss_feed_subscriptions.delete', defaultMessage: 'Delete feed' },
   createSuccess: {
     id: 'rss_feed_subscriptions.add.success',
-    defaultMessage: 'Successfully subscribed to RSS feed',
+    defaultMessage: 'Subscribed to RSS feed',
   },
   createFail: {
     id: 'rss_feed_subscriptions.add.fail',

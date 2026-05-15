@@ -34,8 +34,7 @@ const messages = defineMessages({
   },
   accountLocked: {
     id: 'account.locked_info',
-    defaultMessage:
-      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
+    defaultMessage: 'This account is locked. The owner manually reviews who can follow them.',
   },
   deactivated: { id: 'account.deactivated', defaultMessage: 'Deactivated' },
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },

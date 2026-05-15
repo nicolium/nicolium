@@ -26,7 +26,7 @@ const messages = defineMessages({
   label: { id: 'bookmark_folders.new.title.placeholder', defaultMessage: 'New folder title' },
   editSuccess: {
     id: 'bookmark_folders.edit.success',
-    defaultMessage: 'Bookmark folder edited successfully',
+    defaultMessage: 'Bookmark folder updated',
   },
   editFail: { id: 'bookmark_folders.edit.fail', defaultMessage: 'Failed to edit bookmark folder' },
 });

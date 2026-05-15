@@ -218,7 +218,7 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
               label={
                 <FormattedMessage
                   id='preferences.fields.check_emoji_react_supports.label'
-                  defaultMessage='Check whether remote hosts supports emoji reactions when reacting'
+                  defaultMessage='Check whether remote hosts support emoji reactions when reacting'
                 />
               }
               hint={

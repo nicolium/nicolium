@@ -89,7 +89,7 @@ const ComposeInteractionPolicyModal: React.FC<
       title={
         <FormattedMessage
           id='navigation_bar.interaction_policy'
-          defaultMessage='Status interaction rules'
+          defaultMessage='Post interaction rules'
         />
       }
       onClose={onClickClose}

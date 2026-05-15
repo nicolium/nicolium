@@ -17,7 +17,7 @@ const messages = defineMessages({
   heading: { id: 'column.migration', defaultMessage: 'Move account' },
   moveAccountSuccess: {
     id: 'migration.move_account.success',
-    defaultMessage: 'Account successfully moved.',
+    defaultMessage: 'Account moved',
   },
   moveAccountFail: {
     id: 'migration.move_account.fail',

@@ -52,10 +52,10 @@ import Search from './list-editor-modal/components/search';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
-  createSuccess: { id: 'antennas.create.success', defaultMessage: 'Antenna created successfully' },
-  editSuccess: { id: 'antennas.edit.success', defaultMessage: 'Antenna updated successfully' },
-  createError: { id: 'antennas.create.error', defaultMessage: 'Error creating antenna' },
-  editError: { id: 'antennas.edit.error', defaultMessage: 'Error updating antenna' },
+  createSuccess: { id: 'antennas.create.success', defaultMessage: 'Antenna created' },
+  editSuccess: { id: 'antennas.edit.success', defaultMessage: 'Antenna updated' },
+  createError: { id: 'antennas.create.error', defaultMessage: 'Failed to create antenna' },
+  editError: { id: 'antennas.edit.error', defaultMessage: 'Failed to create antenna' },
   removeDomain: { id: 'antennas.domain.remove', defaultMessage: 'Remove domain' },
   removeKeyword: { id: 'antennas.keyword.remove', defaultMessage: 'Remove keyword' },
   removeTag: { id: 'antennas.tag.remove', defaultMessage: 'Remove tag' },
@@ -642,23 +642,23 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
         </ListItem>
         <ListItem
           label={
-            <FormattedMessage id='antennas.edit.ignore_reblogs' defaultMessage='Ignore reblogs' />
+            <FormattedMessage id='antennas.edit.ignore_reblogs' defaultMessage='Ignore reposts' />
           }
           hint={
             <FormattedMessage
               id='antennas.edit.ignore_reblogs.hint'
-              defaultMessage='Reblogs will not be included in the antenna'
+              defaultMessage='Reposts will not be included in the antenna'
             />
           }
         >
           <Toggle checked={ignoreReblog} onChange={(e) => setIgnoreReblog(e.target.checked)} />
         </ListItem>
         <ListItem
-          label={<FormattedMessage id='antennas.edit.favourite' defaultMessage='Favourite' />}
+          label={<FormattedMessage id='antennas.edit.favourite' defaultMessage='Favorite' />}
           hint={
             <FormattedMessage
               id='antennas.edit.favourite.hint'
-              defaultMessage='The antenna will be marked as favourite (not used by Nicolium yet)'
+              defaultMessage='The antenna will be marked as favorite (not used by Nicolium yet)'
             />
           }
         >

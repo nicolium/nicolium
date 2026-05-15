@@ -63,7 +63,7 @@ const JoinEventModal: React.FC<BaseModalProps & JoinEventModalProps> = ({ onClos
         labelText={
           <FormattedMessage
             id='join_event.hint'
-            defaultMessage='You can tell the organizer why do you want to participate in this event:'
+            defaultMessage='You can tell the organizer why you want to participate in this event:'
           />
         }
       >

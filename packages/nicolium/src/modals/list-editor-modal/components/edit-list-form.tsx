@@ -20,8 +20,8 @@ const messages = defineMessages({
     id: 'lists.replies_policy.followed',
     defaultMessage: 'Any followed user',
   },
-  success: { id: 'lists.edit.success', defaultMessage: 'List updated successfully' },
-  error: { id: 'lists.edit.error', defaultMessage: 'Error updating list' },
+  success: { id: 'lists.edit.success', defaultMessage: 'List updated' },
+  error: { id: 'lists.edit.error', defaultMessage: 'Failed to update list' },
 });
 
 interface IListForm {

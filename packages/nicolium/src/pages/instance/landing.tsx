@@ -58,7 +58,7 @@ const LandingPage = () => (
           <Text>
             <FormattedMessage
               id='landing.feature_rich.description'
-              defaultMessage='Nicolium includes a lot features to improve your experience, like WYSIWYG text editor, draft posts and language detection.'
+              defaultMessage='Nicolium includes a lot of features to improve your experience, like WYSIWYG text editor, draft posts and language detection.'
             />
           </Text>
         </Card>

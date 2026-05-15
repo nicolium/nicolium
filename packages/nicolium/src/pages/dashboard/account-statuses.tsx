@@ -62,7 +62,7 @@ const AccountStatusesPage: React.FC = () => {
           label={
             <FormattedMessage
               id='admin.accounts.statuses.with_reblogs'
-              defaultMessage='Include reblogs'
+              defaultMessage='Include reposts'
             />
           }
         >

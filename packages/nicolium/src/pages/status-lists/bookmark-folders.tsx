@@ -29,7 +29,7 @@ const messages = defineMessages({
   },
   createSuccess: {
     id: 'bookmark_folders.add.success',
-    defaultMessage: 'Bookmark folder created successfully',
+    defaultMessage: 'Bookmark folder created',
   },
   createFail: {
     id: 'bookmark_folders.add.fail',

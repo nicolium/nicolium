@@ -14,7 +14,7 @@ import SettingToggle from './setting-toggle';
 const messages = defineMessages({
   success: {
     id: 'settings.messages.success',
-    defaultMessage: 'Chat settings updated successfully',
+    defaultMessage: 'Chat settings updated',
   },
   fail: { id: 'settings.messages.fail', defaultMessage: 'Failed to update chat settings' },
 });

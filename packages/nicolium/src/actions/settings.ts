@@ -21,7 +21,7 @@ type SettingOpts = {
 
 const saveSuccessMessage = defineMessage({
   id: 'settings.save.success',
-  defaultMessage: 'Your preferences have been saved!',
+  defaultMessage: 'Preferences saved',
 });
 
 const changeSetting = (path: string[], value: any, opts?: SettingOpts) => {

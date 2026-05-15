@@ -20,16 +20,16 @@ const messages = defineMessages({
   submit: { id: 'import_data.actions.import', defaultMessage: 'Import' },
   blocksSuccess: {
     id: 'import_data.success.blocks',
-    defaultMessage: 'Blocks imported successfully',
+    defaultMessage: 'Blocks imported',
   },
   followersSuccess: {
     id: 'import_data.success.followers',
-    defaultMessage: 'Followers imported successfully',
+    defaultMessage: 'Followers imported',
   },
-  mutesSuccess: { id: 'import_data.success.mutes', defaultMessage: 'Mutes imported successfully' },
+  mutesSuccess: { id: 'import_data.success.mutes', defaultMessage: 'Mutes imported' },
   archiveSuccess: {
     id: 'import_data.success.archive',
-    defaultMessage: 'Archive imported successfully',
+    defaultMessage: 'Archive imported',
   },
 });
 

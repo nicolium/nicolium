@@ -33,13 +33,13 @@ interface IFilterField {
 const messages = defineMessages({
   subheadingAddNew: { id: 'column.filters.subheading_add_new', defaultMessage: 'Add new filter' },
   keyword: { id: 'column.filters.keyword', defaultMessage: 'Keyword or phrase' },
-  createError: { id: 'column.filters.create.error', defaultMessage: 'Error adding filter' },
-  editError: { id: 'column.filters.edit.error', defaultMessage: 'Error editing filter' },
+  createError: { id: 'column.filters.create.error', defaultMessage: 'Failed to add filter' },
+  editError: { id: 'column.filters.edit.error', defaultMessage: 'Failed to edit filter' },
   createSuccess: {
     id: 'column.filters.create.success',
-    defaultMessage: 'Filter added successfully',
+    defaultMessage: 'Filter added',
   },
-  editSuccess: { id: 'column.filters.edit.success', defaultMessage: 'Filter edited successfully' },
+  editSuccess: { id: 'column.filters.edit.success', defaultMessage: 'Filter updated' },
   expirationNever: { id: 'column.filters.expiration.never', defaultMessage: 'Never' },
   expiration1800: { id: 'column.filters.expiration.1800', defaultMessage: '30 minutes' },
   expiration3600: { id: 'column.filters.expiration.3600', defaultMessage: '1 hour' },

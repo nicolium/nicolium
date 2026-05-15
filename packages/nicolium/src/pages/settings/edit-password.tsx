@@ -13,7 +13,7 @@ import toast from '@/toast';
 const messages = defineMessages({
   updatePasswordSuccess: {
     id: 'security.update_password.success',
-    defaultMessage: 'Password successfully updated.',
+    defaultMessage: 'Password updated',
   },
   updatePasswordFail: {
     id: 'security.update_password.fail',

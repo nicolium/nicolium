@@ -19,7 +19,7 @@ import type { BaseModalProps } from '@/features/ui/components/modal-root';
 const messages = defineMessages({
   accountPlaceholder: {
     id: 'remote_interaction.account.placeholder',
-    defaultMessage: 'Enter your username@domain you want to act from',
+    defaultMessage: 'Enter the username@domain you want to act from',
   },
   userNotFoundError: {
     id: 'remote_interaction.user_not_found.error',
@@ -125,7 +125,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
       header = (
         <FormattedMessage
           id='remote_interaction.reblog.title'
-          defaultMessage='Reblog a post remotely'
+          defaultMessage='Repost a post remotely'
         />
       );
       button = (

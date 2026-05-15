@@ -61,7 +61,7 @@ const messages = defineMessages({
   },
   success: {
     id: 'edit_profile.success',
-    defaultMessage: 'Your profile has been successfully saved!',
+    defaultMessage: 'Profile saved',
   },
   error: { id: 'edit_profile.error', defaultMessage: 'Profile update failed' },
   bioPlaceholder: {

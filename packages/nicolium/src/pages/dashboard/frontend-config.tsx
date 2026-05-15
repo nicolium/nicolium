@@ -38,7 +38,7 @@ import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.frontend_config', defaultMessage: 'Front-end configuration' },
-  saved: { id: 'frontend_config.save.success', defaultMessage: 'Nicolium config saved!' },
+  saved: { id: 'frontend_config.save.success', defaultMessage: 'Nicolium config saved' },
   copyrightFooterLabel: {
     id: 'frontend_config.copyright_footer.meta_fields.label.placeholder',
     defaultMessage: 'Copyright footer',
