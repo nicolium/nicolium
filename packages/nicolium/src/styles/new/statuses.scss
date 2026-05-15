@@ -1158,6 +1158,8 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
     gap: 0.25rem;
     align-items: center;
 
+    text-align: center;
+
     p:first-child {
       @include mixins.text($theme: white, $weight: semibold);
     }
