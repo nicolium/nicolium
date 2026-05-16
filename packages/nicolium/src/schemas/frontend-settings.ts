@@ -38,6 +38,8 @@ const AVAILABLE_NAVIGATION_ITEMS = [
   'blocks',
   'filters',
   'domain-blocks',
+  'announcements',
+  'birthdays',
   'circle',
   'compose',
 ] as const;

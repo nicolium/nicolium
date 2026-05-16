@@ -1,4 +1,5 @@
 import iconAddressBookFill from '@phosphor-icons/core/fill/address-book-fill.svg';
+import iconBalloonFill from '@phosphor-icons/core/fill/balloon-fill.svg';
 import iconBellSimpleFill from '@phosphor-icons/core/fill/bell-simple-fill.svg';
 import iconBookmarksFill from '@phosphor-icons/core/fill/bookmarks-fill.svg';
 import iconBroadcastFill from '@phosphor-icons/core/fill/broadcast-fill.svg';
@@ -18,6 +19,7 @@ import iconHourglassFill from '@phosphor-icons/core/fill/hourglass-fill.svg';
 import iconHouseFill from '@phosphor-icons/core/fill/house-fill.svg';
 import iconListDashesFill from '@phosphor-icons/core/fill/list-dashes-fill.svg';
 import iconMagnifyingGlassFill from '@phosphor-icons/core/fill/magnifying-glass-fill.svg';
+import iconMegaphoneFill from '@phosphor-icons/core/fill/megaphone-fill.svg';
 import iconPencilSimpleFill from '@phosphor-icons/core/fill/pencil-simple-fill.svg';
 import iconPlanetFill from '@phosphor-icons/core/fill/planet-fill.svg';
 import iconProhibitFill from '@phosphor-icons/core/fill/prohibit-fill.svg';
@@ -28,6 +30,7 @@ import iconUserPlusFill from '@phosphor-icons/core/fill/user-plus-fill.svg';
 import iconUsersThreeFill from '@phosphor-icons/core/fill/users-three-fill.svg';
 import iconWrenchFill from '@phosphor-icons/core/fill/wrench-fill.svg';
 import iconAddressBook from '@phosphor-icons/core/regular/address-book.svg';
+import iconBalloon from '@phosphor-icons/core/regular/balloon.svg';
 import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
 import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
 import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
@@ -47,6 +50,7 @@ import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconMegaphone from '@phosphor-icons/core/regular/megaphone.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
@@ -120,8 +124,12 @@ const REQUIRED_NAVIGATION_ITEMS = [
   'compose',
 ] as const;
 
+const REQUIRED_MOBILE_NAVIGATION_ITEMS = ['birthdays', 'announcements'] as const;
+
 const messages = defineMessages({
+  announcements: { id: 'announcements.title', defaultMessage: 'Announcements' },
   antennas: { id: 'column.antennas', defaultMessage: 'Antennas' },
+  birthdays: { id: 'birthday_panel.title', defaultMessage: 'Birthdays' },
   blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   'bubble-timeline': { id: 'tabs_bar.bubble', defaultMessage: 'Bubble' },
@@ -201,6 +209,8 @@ const NAVIGATION_ITEM_PATHS: Record<string, LinkOptions['to']> = {
   filters: '/filters',
   'domain-blocks': '/domain_blocks',
   circle: '/circle',
+  announcements: '/announcements',
+  birthdays: '/birthdays',
 };
 
 const NAVIGATION_ITEM_ICONS: Record<string, { icon: string; activeIcon: string }> = {
@@ -228,6 +238,8 @@ const NAVIGATION_ITEM_ICONS: Record<string, { icon: string; activeIcon: string }
   filters: { icon: iconFunnel, activeIcon: iconFunnelFill },
   'domain-blocks': { icon: iconProhibit, activeIcon: iconProhibitFill },
   circle: { icon: iconCircle, activeIcon: iconCircleFill },
+  announcements: { icon: iconMegaphone, activeIcon: iconMegaphoneFill },
+  birthdays: { icon: iconBalloon, activeIcon: iconBalloonFill },
 };
 
 const NAVIGATION_ITEMS_GATE: Partial<
@@ -241,7 +253,9 @@ const NAVIGATION_ITEMS_GATE: Partial<
     ) => boolean
   >
 > = {
+  announcements: (features) => features.announcements,
   antennas: (features) => features.antennas,
+  birthdays: (features) => features.birthdays,
   bookmarks: (features) => features.bookmarks,
   circles: (features) => features.circles,
   conversations: (features) => features.conversations,
@@ -312,7 +326,7 @@ type NavigationItemsMenuItem =
     }
   | null;
 
-const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
+const useNavigationItems = (pinned?: boolean, remaining?: boolean, mobile?: boolean) => {
   const features = useFeatures();
   const instance = useInstance();
   const intl = useIntl();
@@ -334,7 +348,10 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean) => {
   let filteredItems = useMemo(() => {
     let filteredItems: Array<NavigationItem>;
     if (remaining === true) {
-      filteredItems = REQUIRED_NAVIGATION_ITEMS.filter((item) => {
+      const requiredItems = mobile
+        ? [...REQUIRED_NAVIGATION_ITEMS, ...REQUIRED_MOBILE_NAVIGATION_ITEMS]
+        : REQUIRED_NAVIGATION_ITEMS;
+      filteredItems = requiredItems.filter((item) => {
         // Chats item falls back to conversations if chats are disabled
         if (item === 'conversations' && navigationItems.includes('chats') && !features.chats)
           return false;

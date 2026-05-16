@@ -1,4 +1,5 @@
 import iconAddressBook from '@phosphor-icons/core/regular/address-book.svg';
+import iconBalloon from '@phosphor-icons/core/regular/balloon.svg';
 import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
 import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
 import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
@@ -19,6 +20,7 @@ import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconMegaphone from '@phosphor-icons/core/regular/megaphone.svg';
 import iconMinus from '@phosphor-icons/core/regular/minus.svg';
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
@@ -94,7 +96,9 @@ const itemsMessages = {
   compose: { id: 'settings.navigation_items.item.compose', defaultMessage: 'Compose button' },
   separator: { id: 'settings.navigation_items.item.separator', defaultMessage: 'Separator' },
   account: { id: 'settings.navigation_items.item.account', defaultMessage: 'Account' },
+  announcements: { id: 'announcements.title', defaultMessage: 'Announcements' },
   antennas: { id: 'column.antennas', defaultMessage: 'Antennas' },
+  birthdays: { id: 'birthday_panel.title', defaultMessage: 'Birthdays' },
   blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   'bubble-timeline': { id: 'tabs_bar.bubble', defaultMessage: 'Bubble' },
@@ -135,8 +139,10 @@ const itemsMessages = {
 };
 
 const itemsIcons: Record<AvailableNavigationItem, string> = {
+  announcements: iconMegaphone,
   antennas: iconBroadcast,
   blocks: iconProhibit,
+  birthdays: iconBalloon,
   bookmarks: iconBookmarks,
   'bubble-timeline': iconGraph,
   chats: iconChatsTeardrop,

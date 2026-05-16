@@ -109,7 +109,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   const me = useCurrentAccount();
 
   const navigationItems = useNavigationItems(false);
-  const moreItems = useNavigationItems(undefined, true);
+  const moreItems = useNavigationItems(undefined, true, true);
 
   const { data: account } = useAccount(me || undefined);
   const settings = useSettings();
