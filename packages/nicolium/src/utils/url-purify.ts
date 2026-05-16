@@ -105,7 +105,7 @@ const DEFAULT_RULESET: SerializedRules = {
     },
     youtube: {
       urlPattern: '^https?:\\/\\/(?:[a-z0-9-]+\\.)*?(youtube\\.com|youtu\\.be)',
-      rules: ['feature', 'gclid', 'kw', 'si', 'pp'],
+      rules: ['feature', 'gclid', 'kw', 'si', 'pp', 'is'],
       exceptions: ['^https?:\\/\\/(?:[a-z0-9-]+\\.)*?youtube\\.com\\/signin\\?.*?'],
       redirections: ['^https?:\\/\\/(?:[a-z0-9-]+\\.)*?youtube\\.com\\/redirect?.*?q=([^&]*)'],
     },
