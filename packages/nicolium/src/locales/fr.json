@@ -934,7 +934,6 @@
   "confirmations.unfollow.heading": "Ne plus suivre {name}",
   "confirmations.unfollow.message": "Voulez-vous vraiment cesser de suivre {name} ?",
   "copy.success": "Copié dans le presse-papier !",
-  "crypto.lightning": "",
   "crypto.show_qr_code": "Afficher le QR code",
   "crypto_donate.explanation_box.message": "{siteTitle} accepte les dons en cryptomonnaies. Vous pouvez envoyer un don à l’une des adresses ci-dessous. Merci de votre soutien !",
   "crypto_donate.explanation_box.title": "Envoyer des dons en cryptomonnaie",
