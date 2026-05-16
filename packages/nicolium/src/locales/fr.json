@@ -16,7 +16,6 @@
   "account.birthday_today": "C’est le jour de votre anniversaire !",
   "account.bite": "Mordre @{name}",
   "account.bite.fail": "Impossible de mordre @{acct}",
-  "account.bite.success": "",
   "account.block": "Bloquer @{name}",
   "account.block_domain": "Tout masquer en provenance de {domain}",
   "account.blocked": "Bloqué",
