@@ -1,30 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 import Widget from '@/components/ui/widget';
+import { useCurrentDate } from '@/hooks/use-current-date';
 import { useBirthdayReminders } from '@/queries/accounts/use-birthday-reminders';
 import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({
   all: { id: 'birthday_panel.all', defaultMessage: 'All' },
 });
-
-const timeToMidnight = () => {
-  const now = new Date();
-  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-
-  return midnight.getTime() - now.getTime();
-};
-
-const getCurrentDate = () => {
-  const date = new Date();
-
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-
-  return [day, month];
-};
 
 interface IBirthdayPanel {
   limit: number;
@@ -34,29 +19,10 @@ const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
 
-  const [[day, month], setDate] = useState(getCurrentDate);
+  const [day, month] = useCurrentDate();
 
   const { data: birthdays = [] } = useBirthdayReminders(month, day);
   const birthdaysToRender = birthdays.slice(0, limit);
-
-  const timeout = useRef<NodeJS.Timeout | null>(null);
-
-  React.useEffect(() => {
-    const updateTimeout = () => {
-      timeout.current = setTimeout(() => {
-        setDate(getCurrentDate);
-        updateTimeout();
-      }, timeToMidnight());
-    };
-
-    updateTimeout();
-
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-    };
-  }, []);
 
   if (!birthdaysToRender.length) {
     return null;
@@ -77,4 +43,4 @@ const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
   );
 };
 
-export { BirthdayPanel as default, getCurrentDate };
+export { BirthdayPanel as default };
