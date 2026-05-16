@@ -609,7 +609,7 @@ export const editFilterRoute = createRoute({
 export const followedTagsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/followed_tags',
-  component: lazy(() => import('@/pages/settings')),
+  component: lazy(() => import('@/pages/settings/followed-tags')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.followedHashtagsList) throw notFound();
   }),
