@@ -383,6 +383,7 @@
   "alt_text_modal.describe_for_people_with_visual_impairments": "Describe this for people with visual impairments…",
   "alt_text_modal.header": "Add alt text",
   "alt_text_modal.save.fail": "Failed to save alt text",
+  "announcements.empty": "There are no announcements at the moment.",
   "announcements.title": "Announcements",
   "antennas.account.add": "Add to antenna",
   "antennas.account.excluded.add": "Add to excluded accounts",
