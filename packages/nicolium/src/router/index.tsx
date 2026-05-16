@@ -852,6 +852,15 @@ export const circleRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
+export const birthdaysRoute = createRoute({
+  getParentRoute: () => layouts.default,
+  path: '/birthdays',
+  component: lazy(() => import('@/pages/account-lists/birthdays')),
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.birthdays) throw notFound();
+  }),
+});
+
 // #region Settings
 
 export const settingsRoute = createRoute({
@@ -1634,6 +1643,7 @@ const routeTree = rootRoute.addChildren([
     draftStatusesRoute,
     driveRoute,
     circleRoute,
+    birthdaysRoute,
     settingsRoute,
     aboutRoute,
     shareRoute,
