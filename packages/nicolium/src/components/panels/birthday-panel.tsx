@@ -1,9 +1,14 @@
 import React, { useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 import Widget from '@/components/ui/widget';
 import { useBirthdayReminders } from '@/queries/accounts/use-birthday-reminders';
+import { useModalsActions } from '@/stores/modals';
+
+const messages = defineMessages({
+  all: { id: 'birthday_panel.all', defaultMessage: 'All' },
+});
 
 const timeToMidnight = () => {
   const now = new Date();
@@ -26,6 +31,9 @@ interface IBirthdayPanel {
 }
 
 const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
+  const intl = useIntl();
+  const { openModal } = useModalsActions();
+
   const [[day, month], setDate] = useState(getCurrentDate);
 
   const { data: birthdays = [] } = useBirthdayReminders(month, day);
@@ -55,7 +63,13 @@ const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
   }
 
   return (
-    <Widget title={<FormattedMessage id='birthday_panel.title' defaultMessage='Birthdays' />}>
+    <Widget
+      title={<FormattedMessage id='birthday_panel.title' defaultMessage='Birthdays' />}
+      onActionClick={
+        birthdays.length !== birthdaysToRender.length ? () => openModal('BIRTHDAYS') : undefined
+      }
+      actionTitle={intl.formatMessage(messages.all)}
+    >
       {birthdaysToRender.map((accountId) => (
         <AccountContainer key={accountId} id={accountId} withRelationship={false} />
       ))}
