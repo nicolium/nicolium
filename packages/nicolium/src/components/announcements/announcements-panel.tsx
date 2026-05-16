@@ -58,4 +58,4 @@ const AnnouncementsPanel = () => {
   );
 };
 
-export { AnnouncementsPanel as default };
+export { AnnouncementsPanel as default, makeCustomEmojiMap };

@@ -861,6 +861,15 @@ export const birthdaysRoute = createRoute({
   }),
 });
 
+export const announcementsRoute = createRoute({
+  getParentRoute: () => layouts.default,
+  path: '/announcements',
+  component: lazy(() => import('@/pages/instance/announcements')),
+  beforeLoad: ({ context: { features } }) => {
+    if (!features.announcements) throw notFound();
+  },
+});
+
 // #region Settings
 
 export const settingsRoute = createRoute({
@@ -1644,6 +1653,7 @@ const routeTree = rootRoute.addChildren([
     driveRoute,
     circleRoute,
     birthdaysRoute,
+    announcementsRoute,
     settingsRoute,
     aboutRoute,
     shareRoute,
