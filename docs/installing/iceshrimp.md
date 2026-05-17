@@ -33,7 +33,7 @@ server {
   server_name iceshrimp.example.com;
   root /var/www/nicolium/;
 
-  location ~ ^/(Components|openapi|scalar|swagger|css|_content|js|files|avatars|banners|api|inbox|oauth|admin|manifest.json|nodeinfo|.well-known|@(.+)$|[a-zA-Z0-9.]+.css$) {
+  location ~ ^/(Components|openapi|scalar|swagger|css|_content|js|files|avatars|banners|media|api|inbox|oauth|admin|manifest.json|nodeinfo|.well-known|@(.+)$|[a-zA-Z0-9.]+.css$) {
     try_files /dev/null @shrimp;
   }
 
