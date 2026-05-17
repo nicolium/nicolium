@@ -16,7 +16,7 @@ import type { AdminDomain } from 'pl-api';
 const messages = defineMessages({
   save: { id: 'admin.edit_domain.save', defaultMessage: 'Save' },
   domainPlaceholder: {
-    id: 'admin.edit_domain.fields.domain_placeholder',
+    id: 'admin.edit_domain.fields.domain.placeholder',
     defaultMessage: 'Domain name',
   },
   domainCreateSuccess: { id: 'admin.edit_domain.created', defaultMessage: 'Domain created' },
@@ -92,7 +92,7 @@ const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({
       <Form>
         <FormGroup
           labelText={
-            <FormattedMessage id='admin.edit_domain.fields.domain_label' defaultMessage='Domain' />
+            <FormattedMessage id='admin.edit_domain.fields.domain.label' defaultMessage='Domain' />
           }
         >
           <Input
@@ -109,14 +109,14 @@ const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({
           <ListItem
             label={
               <FormattedMessage
-                id='admin.edit_domain.fields.public_label'
+                id='admin.edit_domain.fields.public.label'
                 defaultMessage='Public'
               />
             }
             hint={
               <FormattedMessage
-                id='admin.edit_domain.fields.public_hint'
-                defaultMessage='When checked, everyone can sign up for an username with this domain'
+                id='admin.edit_domain.fields.public.hint'
+                defaultMessage='When checked, everyone can sign up for a username with this domain'
               />
             }
           >

@@ -12,6 +12,7 @@
     "max-lines": "off",
     "max-lines-per-function": "off",
     "no-inline-comments": "off",
+    "no-underscore-dangle": "off",
     "no-unused-vars": [
       "error",
       {

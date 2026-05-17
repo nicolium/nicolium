@@ -9,19 +9,19 @@ import Spinner from '@/components/ui/spinner';
 import toast from '@/toast';
 
 const messages = defineMessages({
-  instanceLabel: { id: 'login.fields.instance_label', defaultMessage: 'Instance' },
-  instancePlaceholder: { id: 'login.fields.instance_placeholder', defaultMessage: 'example.com' },
+  instanceLabel: { id: 'login.fields.instance.label', defaultMessage: 'Instance' },
+  instancePlaceholder: { id: 'login.fields.instance.placeholder', defaultMessage: 'example.com' },
   instanceFailed: {
-    id: 'login_external.errors.instance_fail',
+    id: 'login_external.error.instance',
     defaultMessage: 'The instance returned an error. Is the URL correct?',
   },
   corsFailed: {
-    id: 'login_external.errors.cors_fail',
+    id: 'login_external.error.cors',
     defaultMessage:
       'Connection failed, likely due to CORS configuration. Is the instance configured to allow logins from other origins?',
   },
   networkFailed: {
-    id: 'login_external.errors.network_fail',
+    id: 'login_external.error.network',
     defaultMessage: 'Connection failed. Is a browser extension blocking it?',
   },
 });
@@ -89,7 +89,7 @@ const ExternalLoginForm: React.FC = () => {
   return (
     <Form className='⁂-external-login' onSubmit={handleSubmit} data-testid='external-login'>
       <FormGroup
-        labelText={<FormattedMessage id='login.fields.instance_label' defaultMessage='Instance' />}
+        labelText={<FormattedMessage id='login.fields.instance.label' defaultMessage='Instance' />}
       >
         <Input
           aria-label={intl.formatMessage(messages.instancePlaceholder)}

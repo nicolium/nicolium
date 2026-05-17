@@ -58,7 +58,7 @@ const LandingPage = () => (
           <Text>
             <FormattedMessage
               id='landing.feature_rich.description'
-              defaultMessage='Nicolium includes a lot features to improve your experience, like WYSIWYG text editor, draft posts and language detection.'
+              defaultMessage='Nicolium includes a lot of features to improve your experience, like WYSIWYG text editor, draft posts and language detection.'
             />
           </Text>
         </Card>
@@ -89,7 +89,7 @@ const LandingPage = () => (
           <Text>
             <FormattedMessage
               id='landing.customizable.description'
-              defaultMessage='Nicolium lets you choose between three themes and adjust accent color to your liking.'
+              defaultMessage='Nicolium lets you choose between three themes and adjust accent color to your liking. You can customize the UI elements like sidebar, navigation menu and post action bar.'
             />
           </Text>
         </Card>

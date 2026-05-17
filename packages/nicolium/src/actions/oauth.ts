@@ -12,8 +12,11 @@ import * as BuildConfig from '@/build-config';
 import { getMe } from '@/stores/auth';
 import { parseBaseURL } from '@/utils/auth';
 
-const obtainOAuthToken = async (params: GetTokenParams, baseURL?: string) => {
-  const client = new PlApiClient((baseURL ?? BuildConfig.BACKEND_URL) || '');
+const obtainOAuthToken = async (
+  params: GetTokenParams,
+  baseURL?: string,
+  client: PlApiClient = new PlApiClient((baseURL ?? BuildConfig.BACKEND_URL) || ''),
+) => {
   await client.instance.getInstance();
 
   return client.oauth.getToken(params);

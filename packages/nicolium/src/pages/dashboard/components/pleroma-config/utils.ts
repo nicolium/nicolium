@@ -418,12 +418,4 @@ export {
   tupleArrayToMap,
 };
 
-export type {
-  ConfigDescriptionNode,
-  ConfigEntry,
-  ConfigType,
-  DynamicEntry,
-  PrimitiveValue,
-  TupleEntry,
-  TupleValue,
-};
+export type { ConfigDescriptionNode, ConfigType, DynamicEntry, TupleEntry };

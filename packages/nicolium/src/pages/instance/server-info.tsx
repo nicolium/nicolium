@@ -6,6 +6,7 @@ import PromoPanel from '@/components/panels/promo-panel';
 import Column from '@/components/ui/column';
 import Divider from '@/components/ui/divider';
 import Text from '@/components/ui/text';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/stores/instance';
 
 const messages = defineMessages({
@@ -15,6 +16,7 @@ const messages = defineMessages({
 const ServerInfoPage = () => {
   const intl = useIntl();
   const instance = useInstance();
+  const { promoPanel } = useFrontendConfig();
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -30,7 +32,7 @@ const ServerInfoPage = () => {
 
         <PromoPanel />
 
-        <Divider />
+        {promoPanel.items.length > 0 && <Divider />}
 
         <LinkFooter />
       </div>

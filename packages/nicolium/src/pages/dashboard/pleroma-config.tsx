@@ -1,5 +1,5 @@
 import React, { useCallback, useDeferredValue, useMemo, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { EmptyMessage } from '@/components/empty-message';
 import Column from '@/components/ui/column';
@@ -21,6 +21,20 @@ import {
 import toast from '@/toast';
 
 import type { PleromaConfigDescription } from 'pl-api';
+
+const messages = defineMessages({
+  heading: { id: 'column.admin.pleroma_config', defaultMessage: 'Pleroma configuration' },
+  saved: { id: 'admin.pleroma_config.save.success', defaultMessage: 'Configuration saved' },
+  saveFailed: {
+    id: 'admin.pleroma_config.save.fail',
+    defaultMessage: 'Failed to save configuration',
+  },
+  search: { id: 'admin.pleroma_config.search', defaultMessage: 'Search settings' },
+  searchPlaceholder: {
+    id: 'admin.pleroma_config.search.placeholder',
+    defaultMessage: 'Search by label, key, group or description',
+  },
+});
 
 type IndexedDescription = {
   description: PleromaConfigDescription;
@@ -97,20 +111,10 @@ const PleromaConfigPage: React.FC = () => {
 
       updateConfig(updates, {
         onSuccess: () => {
-          toast.success(
-            intl.formatMessage({
-              id: 'admin.pleroma_config.saved',
-              defaultMessage: 'Configuration saved',
-            }),
-          );
+          toast.success(intl.formatMessage(messages.saved));
         },
         onError: () => {
-          toast.error(
-            intl.formatMessage({
-              id: 'admin.pleroma_config.save_failed',
-              defaultMessage: 'Failed to save configuration',
-            }),
-          );
+          toast.error(intl.formatMessage(messages.saveFailed));
         },
       });
     },
@@ -126,12 +130,7 @@ const PleromaConfigPage: React.FC = () => {
     !descriptionsLoading && !!descriptions?.length && !filteredDescriptions.length;
 
   return (
-    <Column
-      label={intl.formatMessage({
-        id: 'column.admin.pleroma_config',
-        defaultMessage: 'Pleroma configuration',
-      })}
-    >
+    <Column label={intl.formatMessage(messages.heading)}>
       {descriptionsLoading || currentConfigLoading ? (
         <Spinner />
       ) : (
@@ -148,19 +147,11 @@ const PleromaConfigPage: React.FC = () => {
           ) : null}
 
           <div className='⁂-admin-config__filters'>
-            <FormGroup
-              labelText={intl.formatMessage({
-                id: 'admin.pleroma_config.search',
-                defaultMessage: 'Search settings',
-              })}
-            >
+            <FormGroup labelText={intl.formatMessage(messages.search)}>
               <Input
                 type='text'
                 value={searchInput}
-                placeholder={intl.formatMessage({
-                  id: 'admin.pleroma_config.search_placeholder',
-                  defaultMessage: 'Search by label, key, group or description',
-                })}
+                placeholder={intl.formatMessage(messages.searchPlaceholder)}
                 onChange={handleSearchChange}
               />
             </FormGroup>
@@ -183,7 +174,7 @@ const PleromaConfigPage: React.FC = () => {
             <EmptyMessage
               text={
                 <FormattedMessage
-                  id='admin.pleroma_config.empty'
+                  id='admin.pleroma_config.empty_message'
                   defaultMessage='No configuration options available.'
                 />
               }
@@ -194,7 +185,7 @@ const PleromaConfigPage: React.FC = () => {
             <EmptyMessage
               text={
                 <FormattedMessage
-                  id='admin.pleroma_config.empty_search'
+                  id='admin.pleroma_config.empty_message.search'
                   defaultMessage='No settings match the current filters.'
                 />
               }

@@ -8,8 +8,8 @@ import { useSettings } from '@/stores/settings';
 interface IThumbNavigationLink extends LinkOptions {
   count?: number;
   countMax?: number;
-  src: string;
-  activeSrc?: string;
+  icon: string;
+  activeIcon?: string;
   text: string;
   exact?: boolean;
 }
@@ -17,8 +17,8 @@ interface IThumbNavigationLink extends LinkOptions {
 const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({
   count,
   countMax,
-  src,
-  activeSrc,
+  icon,
+  activeIcon,
   text,
   exact,
   ...props
@@ -27,11 +27,11 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({
 
   const matchRoute = useMatchRoute();
 
-  const icon =
-    (activeSrc &&
+  const iconSrc =
+    (activeIcon &&
       matchRoute({ to: props.to, params: props.params, search: props.search }) !== false &&
-      activeSrc) ||
-    src;
+      activeIcon) ||
+    icon;
 
   return (
     <Link
@@ -42,12 +42,12 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({
       title={text}
     >
       {!demetricator && count !== undefined ? (
-        <IconWithCounter src={icon} count={count} countMax={countMax} />
+        <IconWithCounter src={iconSrc} count={count} countMax={countMax} />
       ) : (
-        <Icon src={icon} />
+        <Icon src={iconSrc} />
       )}
     </Link>
   );
 };
 
-export { ThumbNavigationLink as default };
+export { ThumbNavigationLink as default, type IThumbNavigationLink };

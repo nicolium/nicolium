@@ -76,7 +76,7 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = ({ children, group, isEna
             <Text theme='muted'>
               <FormattedMessage
                 id='group.popover.summary'
-                defaultMessage='You must be a member of the group in order to reply to this status.'
+                defaultMessage='You must be a member of the group in order to reply to this post.'
               />
             </Text>
           </div>

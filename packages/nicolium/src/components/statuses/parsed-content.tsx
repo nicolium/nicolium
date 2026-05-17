@@ -411,7 +411,7 @@ function parseContent(
 
 const ParsedContent: React.FC<IParsedContent> = React.memo(
   (props) => {
-    const { urlPrivacy, displayMentionAvatars } = useSettings();
+    const { urlPrivacy, displayMentionAvatars, greentext } = useSettings();
 
     props = { ...props };
 
@@ -419,6 +419,7 @@ const ParsedContent: React.FC<IParsedContent> = React.memo(
     props.redirectUrls ??= urlPrivacy.redirectLinksMode !== 'off';
     props.displayTargetHost ??= urlPrivacy.displayTargetHost;
     props.displayMentionAvatars ??= displayMentionAvatars;
+    props.greentext ??= greentext;
 
     return parseContent(props, false);
   },

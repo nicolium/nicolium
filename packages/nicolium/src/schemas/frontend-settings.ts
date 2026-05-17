@@ -4,6 +4,74 @@ import { locales } from '@/messages';
 
 import { coerceObject, filteredArray } from './utils';
 
+const AVAILABLE_NAVIGATION_ITEMS = [
+  'separator',
+  'search-input',
+  'home',
+  'search',
+  'notifications',
+  'chats',
+  'conversations',
+  'groups',
+  'profile',
+  'drive',
+  'settings',
+  'dashboard',
+  'public-timeline',
+  'bubble-timeline',
+  'fediverse-timeline',
+  'wrenched-timeline',
+  'follow-requests',
+  'interaction-requests',
+  'bookmarks',
+  'lists',
+  'circles',
+  'antennas',
+  'events',
+  'directory',
+  'followed-hashtags',
+  'rss-feed-subscriptions',
+  'scheduled-statuses',
+  'drafts',
+  'edit-profile',
+  'mutes',
+  'blocks',
+  'filters',
+  'domain-blocks',
+  'announcements',
+  'birthdays',
+  'circle',
+  'compose',
+] as const;
+
+const DEFAULT_PINNED_NAVIGATION_ITEMS = [
+  'home',
+  'groups',
+  'search',
+  'notifications',
+  'chats',
+  'compose',
+] as const;
+
+const DEFAULT_NAVIGATION_ITEMS = [
+  'search-input',
+  'home',
+  'search',
+  'notifications',
+  'chats',
+  'groups',
+  'profile',
+  'drive',
+  'separator',
+  'public-timeline',
+  'bubble-timeline',
+  'fediverse-timeline',
+  'separator',
+  'settings',
+  'dashboard',
+  'compose',
+] as const;
+
 const AVAILABLE_STATUS_ACTION_BAR_ITEMS = [
   'reply',
   'reblog',
@@ -14,6 +82,7 @@ const AVAILABLE_STATUS_ACTION_BAR_ITEMS = [
   'reaction',
   'bookmark',
   'share',
+  'translate',
 ] as const;
 
 const DEFAULT_STATUS_ACTION_BAR_ITEMS = [
@@ -32,6 +101,7 @@ const AVAILABLE_SIDEBAR_ITEMS = [
   'footer',
   'compose',
   'notifications',
+  'shoutbox',
 ] as const;
 
 const DEFAULT_SIDEBAR_ITEMS = [
@@ -41,6 +111,37 @@ const DEFAULT_SIDEBAR_ITEMS = [
   'promo',
   'footer',
 ] as const;
+
+type SidebarItem = (typeof AVAILABLE_SIDEBAR_ITEMS)[number] | `account:${string}`;
+
+type NavigationItem =
+  | (typeof AVAILABLE_NAVIGATION_ITEMS)[number]
+  | `${'account' | 'list' | 'circle' | 'antenna' | 'instance' | 'hashtag' | 'bookmark_folder'}:${string}`;
+
+const navigationItemSchema: v.BaseSchema<any, NavigationItem, v.BaseIssue<unknown>> = v.pipe(
+  v.string(),
+  v.transform((item) => {
+    if (AVAILABLE_NAVIGATION_ITEMS.includes(item as 'separator')) return item as NavigationItem;
+    if (
+      ['account', 'list', 'circle', 'antenna', 'instance', 'hashtag', 'bookmark_folder'].some(
+        (prefix) => item.startsWith(prefix + ':'),
+      )
+    ) {
+      return item as NavigationItem;
+    } else {
+      throw new Error('Invalid item');
+    }
+  }),
+);
+
+const sidebarItemSchema: v.BaseSchema<any, SidebarItem, v.BaseIssue<unknown>> = v.pipe(
+  v.string(),
+  v.transform((item) => {
+    if (AVAILABLE_SIDEBAR_ITEMS.includes(item as 'context')) return item as SidebarItem;
+    if (item.startsWith('account:')) return item as SidebarItem;
+    throw new Error('Invalid item');
+  }),
+);
 
 const timelineSchema = v.fallback(
   v.pipe(
@@ -136,6 +237,7 @@ const settingsSchema = v.object({
   underlineLinks: v.fallback(v.boolean(), false),
   autoPlayGif: v.fallback(v.boolean(), true),
   displayMedia: v.fallback(v.picklist(['default', 'hide_all', 'show_all']), 'default'),
+  displayPreviewCards: v.fallback(v.picklist(['default', 'hide', 'hide_media']), 'default'),
   displaySpoilers: v.fallback(v.boolean(), false),
   unfollowModal: v.fallback(v.boolean(), true),
   boostModal: v.fallback(v.boolean(), false),
@@ -150,11 +252,17 @@ const settingsSchema = v.object({
     'text/plain',
   ),
   themeMode: v.fallback(v.picklist(['system', 'light', 'dark', 'black']), 'system'),
-  locale: v.fallback(v.pipe(v.fallback(v.string(), navigator.language), v.picklist(locales)), 'en'),
+  locale: v.fallback(
+    v.fallback(
+      v.pipe(v.fallback(v.string(), navigator.language), v.picklist(locales)),
+      navigator.language.split(/[-_]/)[0] as 'en',
+    ),
+    'en',
+  ),
   showExplanationBox: v.fallback(v.boolean(), true),
   explanationBox: v.fallback(v.boolean(), true),
-  autoloadTimelines: v.fallback(v.boolean(), true),
-  autoloadMore: v.fallback(v.boolean(), true),
+  autoloadTimelines: v.fallback(v.boolean(), false),
+  autoloadMore: v.fallback(v.boolean(), false),
   preserveSpoilers: v.fallback(v.boolean(), true),
   forceImplicitAddressing: v.fallback(v.boolean(), false),
   useDedicatedComposePage: v.fallback(v.boolean(), false),
@@ -180,10 +288,13 @@ const settingsSchema = v.object({
   rememberTimelinePosition: v.fallback(v.boolean(), true),
   accountNicknames: v.fallback(v.record(v.string(), v.string()), {}),
   useSystemMediaControls: v.fallback(v.boolean(), false),
-  displayMentionAvatars: v.fallback(v.boolean(), false),
+  displayMentionAvatars: v.fallback(v.boolean(), true),
   defaultTimeline: timelineSchema,
   showChatWidget: v.fallback(v.boolean(), true),
   showNestedQuotes: v.fallback(v.boolean(), false),
+  useRocketIconForReblogs: v.fallback(v.boolean(), false),
+  greentext: v.fallback(v.boolean(), false),
+  displayFqn: v.fallback(v.boolean(), true),
 
   theme: v.optional(
     coerceObject({
@@ -265,15 +376,16 @@ const settingsSchema = v.object({
 
   demo: v.fallback(v.boolean(), false),
 
-  // navigationItems: v.fallback(
-  //   v.array(v.any()),
-  //   [],
-  // ),
+  navigationItems: v.fallback(filteredArray(navigationItemSchema), DEFAULT_NAVIGATION_ITEMS),
+  pinnedNavigationItems: v.fallback(
+    filteredArray(navigationItemSchema),
+    DEFAULT_PINNED_NAVIGATION_ITEMS,
+  ),
   statusActionBarItems: v.fallback(
     v.array(v.picklist(AVAILABLE_STATUS_ACTION_BAR_ITEMS)),
     DEFAULT_STATUS_ACTION_BAR_ITEMS,
   ),
-  sidebarItems: v.fallback(v.array(v.picklist(AVAILABLE_SIDEBAR_ITEMS)), DEFAULT_SIDEBAR_ITEMS),
+  sidebarItems: v.fallback(filteredArray(sidebarItemSchema), DEFAULT_SIDEBAR_ITEMS),
 
   deck: deckSettingsSchema,
 });
@@ -283,8 +395,15 @@ type TimelineFilters = Settings['timelines']['home'];
 
 export {
   settingsSchema,
+  type NavigationItem,
+  type SidebarItem,
   type Settings,
   type TimelineFilters,
+  AVAILABLE_NAVIGATION_ITEMS,
   AVAILABLE_SIDEBAR_ITEMS,
   AVAILABLE_STATUS_ACTION_BAR_ITEMS,
+  DEFAULT_NAVIGATION_ITEMS,
+  DEFAULT_PINNED_NAVIGATION_ITEMS,
+  DEFAULT_STATUS_ACTION_BAR_ITEMS,
+  DEFAULT_SIDEBAR_ITEMS,
 };

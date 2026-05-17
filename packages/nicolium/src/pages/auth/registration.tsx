@@ -16,12 +16,12 @@ const RegistrationPage: React.FC = () => {
     return (
       <BigCard
         title={
-          <FormattedMessage id='registration.closed_title' defaultMessage='Registrations closed' />
+          <FormattedMessage id='registration.closed.title' defaultMessage='Registrations closed' />
         }
       >
         <Text theme='muted' align='center'>
           <FormattedMessage
-            id='registration.closed_message'
+            id='registration.closed.message'
             defaultMessage='{instance} is not accepting new members'
             values={{ instance: instance.title }}
           />

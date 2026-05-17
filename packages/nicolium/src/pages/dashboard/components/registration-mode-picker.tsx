@@ -62,13 +62,13 @@ const RegistrationModePicker: React.FC = () => {
       <RadioItem
         label={
           <FormattedMessage
-            id='admin.dashboard.registration_mode.open_label'
+            id='admin.dashboard.registration_mode.open.label'
             defaultMessage='Open'
           />
         }
         hint={
           <FormattedMessage
-            id='admin.dashboard.registration_mode.open_hint'
+            id='admin.dashboard.registration_mode.open.hint'
             defaultMessage='Anyone can join.'
           />
         }
@@ -78,13 +78,13 @@ const RegistrationModePicker: React.FC = () => {
       <RadioItem
         label={
           <FormattedMessage
-            id='admin.dashboard.registration_mode.approval_label'
+            id='admin.dashboard.registration_mode.approval.label'
             defaultMessage='Approval Required'
           />
         }
         hint={
           <FormattedMessage
-            id='admin.dashboard.registration_mode.approval_hint'
+            id='admin.dashboard.registration_mode.approval.hint'
             defaultMessage='Users can sign up, but their account only gets activated when an admin approves it.'
           />
         }
@@ -94,13 +94,13 @@ const RegistrationModePicker: React.FC = () => {
       <RadioItem
         label={
           <FormattedMessage
-            id='admin.dashboard.registration_mode.closed_label'
+            id='admin.dashboard.registration_mode.closed.label'
             defaultMessage='Closed'
           />
         }
         hint={
           <FormattedMessage
-            id='admin.dashboard.registration_mode.closed_hint'
+            id='admin.dashboard.registration_mode.closed.hint'
             defaultMessage='Nobody can sign up. You can still invite people.'
           />
         }

@@ -345,7 +345,36 @@ const getFeatures = (instance: Instance) => {
      * @see DELETE /api/v1/pleroma/admin/statuses/:id
      * @see DELETE /api/v1/admin/posts/:id
      */
-    adminDeleteStatus: any([v.software === AKKOMA, v.software === MITRA, v.software === PLEROMA]),
+    adminDeleteStatus: any([
+      v.software === AKKOMA,
+      v.software === ICESHRIMP_NET,
+      v.software === MITRA,
+      v.software === PLEROMA,
+    ]),
+
+    /**
+     * Ability to manage domain blocks and allows by admins.
+     * @see GET /api/v1/admin/domain_blocks
+     * @see GET /api/v1/admin/domain_blocks/:id
+     * @see POST /api/v1/admin/domain_blocks
+     * @see PUT /api/v1/admin/domain_blocks/:id
+     * @see DELETE /api/v1/admin/domain_blocks/:id
+     * @see GET /api/v1/admin/domain_allows
+     * @see GET /api/v1/admin/domain_allows/:id
+     * @see POST /api/v1/admin/domain_allows
+     * @see DELETE /api/v1/admin/domain_allows/:id
+     */
+    adminDomainBlocks: any([
+      v.software === AKKOMA,
+      v.software === GOTOSOCIAL,
+      v.software === MASTODON,
+      v.software === PLEROMA,
+    ]),
+
+    /**
+     * @see POST /api/iceshrimp/moderation/reports/:id/forward
+     */
+    adminReportForwarding: v.software === ICESHRIMP_NET,
 
     /**
      * Ability to manage instance rules by admins.
@@ -643,6 +672,8 @@ const getFeatures = (instance: Instance) => {
      * @see DELETE /api/v1/media/:id
      */
     deleteMedia: instance.api_versions.mastodon >= 4,
+
+    disableMfaWithCode: v.software === ICESHRIMP_NET,
 
     /**
      * Allow to register on a given domain
@@ -978,16 +1009,20 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA,
     ]),
 
+    iceshrimpAdmin: v.software === ICESHRIMP_NET,
+
     importArchive: false,
 
     /**
      * Import a .csv file with a list of blocked users.
      * @see POST /api/pleroma/blocks_import
      * @see POST /api/v1/import
+     * @see POST /api/iceshrimp/settings/import/blocking
      */
     importBlocks: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+      v.software === ICESHRIMP_NET,
       v.software === PLEROMA,
     ]),
 
@@ -1002,10 +1037,12 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/pleroma/follow_import
      * @see POST /api/v1/settings/import_follows
      * @see POST /api/v1/import
+     * @see POST /api/iceshrimp/settings/import/following
      */
     importFollows: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+      v.software === ICESHRIMP_NET,
       v.software === MITRA && gte(v.version, '1.10.0'),
       v.software === PLEROMA,
     ]),
@@ -1014,10 +1051,12 @@ const getFeatures = (instance: Instance) => {
      * Import a .csv file with a list of muted users.
      * @see POST /api/pleroma/mutes_import
      * @see POST /api/v1/import
+     * @see POST /api/iceshrimp/settings/import/muting
      */
     importMutes: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
+      v.software === ICESHRIMP_NET,
       v.software === PLEROMA,
     ]),
 
@@ -1033,6 +1072,7 @@ const getFeatures = (instance: Instance) => {
      */
     instanceTimeline: any([
       v.software === AKKOMA,
+      v.software === ICESHRIMP_NET,
       v.software === PLEROMA && gte(v.version, '2.7.0'),
     ]),
 
@@ -1160,6 +1200,7 @@ const getFeatures = (instance: Instance) => {
      */
     manageMfa: any([
       v.software === AKKOMA,
+      v.software === ICESHRIMP_NET,
       v.software === PLEROMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
     ]),
@@ -1200,6 +1241,14 @@ const getFeatures = (instance: Instance) => {
     mastodonAdminMetrics: v.software === MASTODON && gte(v.version, '3.5.0'),
 
     /**
+     * @see GET /api/v1/admin/reports
+     */
+    mastodonAdminUnresolvedReports: any([
+      v.software === GOTOSOCIAL && gt(v.version, '0.21.2'),
+      instance.api_versions['mastodon_admin_api.pleroma.pl-api'] >= 1,
+    ]),
+
+    /**
      * Can perform moderation actions with account and reports.
      * @see {@link https://docs.joinmastodon.org/methods/admin/}
      * @see GET /api/v2/admin/accounts
@@ -1207,6 +1256,7 @@ const getFeatures = (instance: Instance) => {
     mastodonAdminV2: any([
       v.software === GOTOSOCIAL,
       v.software === MASTODON && gte(v.version, '3.5.0'),
+      instance.api_versions['mastodon_admin_api.pleroma.pl-api'] >= 1,
     ]),
 
     /**
@@ -1232,6 +1282,8 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/statuses
      */
     multiLanguage: instance.api_versions['multi_language.pleroma.pl-api'] >= 1,
+
+    mutedThreads: v.software === ICESHRIMP_NET,
 
     /**
      * Ability to hide notifications from people you don't follow.
@@ -1539,6 +1591,8 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '2.5.0'),
     ]),
 
+    reportForwarding: v.software !== ICESHRIMP_NET,
+
     /**
      * Can request a password reset email through the API.
      * @see POST /auth/password
@@ -1564,6 +1618,7 @@ const getFeatures = (instance: Instance) => {
     rssFeeds: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL,
+      v.software === ICESHRIMP_NET && gte(v.version, '2026.1.0'),
       v.software === MASTODON,
       v.software === PLEROMA,
     ]),
@@ -1577,6 +1632,12 @@ const getFeatures = (instance: Instance) => {
     rssFeedSubscriptions: instance.api_versions['rss_feed_subscriptions.pleroma.pl-api'] >= 1,
 
     /**
+     * Ability to schedule boosts to be posted at a later time.
+     * @see POST /api/v1/statuses/:id/reblog
+     */
+    scheduledReblogs: any([instance.api_versions['net.iceshrimp.scheduled_boosts'] >= 1]),
+
+    /**
      * Can schedule statuses to be posted at a later time.
      * @see POST /api/v1/statuses
      * @see {@link https://docs.joinmastodon.org/methods/scheduled_statuses/}
@@ -1588,6 +1649,7 @@ const getFeatures = (instance: Instance) => {
       v.software === GOTOSOCIAL && gte(v.version, '0.18.0'),
       v.software === MASTODON,
       v.software === PLEROMA,
+      instance.api_versions['net.iceshrimp.scheduled_boosts'] >= 1,
     ]),
 
     /**

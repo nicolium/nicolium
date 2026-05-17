@@ -10,25 +10,30 @@ import type { BookmarkFolder } from 'pl-api';
 
 function useBookmarkFolders<T>(
   select: (data: Array<BookmarkFolder>) => T,
+  enabled?: boolean,
 ): UseQueryResult<T, Error>;
-function useBookmarkFolders(): UseQueryResult<Array<BookmarkFolder>, Error>;
+function useBookmarkFolders(enabled?: boolean): UseQueryResult<Array<BookmarkFolder>, Error>;
 function useBookmarkFolders<T = Array<BookmarkFolder>>(
-  select?: (data: Array<BookmarkFolder>) => T,
+  select?: ((data: Array<BookmarkFolder>) => T) | boolean,
+  enabled = true,
 ) {
   const client = useClient();
   const features = useFeatures();
+  const selectFn = typeof select === 'function' ? select : undefined;
+  const isEnabled = typeof select === 'boolean' ? select : enabled;
 
   return useQuery({
     queryKey: queryKeys.bookmarkFolders.all,
     queryFn: () => client.myAccount.getBookmarkFolders(),
-    enabled: features.bookmarkFolders,
-    select,
+    enabled: features.bookmarkFolders && isEnabled,
+    select: selectFn,
   });
 }
 
 const useBookmarkFolder = (folderId?: string) =>
-  useBookmarkFolders((data) =>
-    folderId ? data.find((folder) => folder.id === folderId) : undefined,
+  useBookmarkFolders(
+    (data) => (folderId ? data.find((folder) => folder.id === folderId) : undefined),
+    folderId !== undefined,
   );
 
 interface CreateBookmarkFolderParams {

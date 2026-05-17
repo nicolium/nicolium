@@ -1,13 +1,18 @@
 import iconPaperPlaneRight from '@phosphor-icons/core/regular/paper-plane-right.svg';
-import React from 'react';
+import clsx from 'clsx';
+import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Combobox, { ComboboxInput } from '@/components/ui/combobox';
+import AutosuggestInput from '@/components/autosuggest-input';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
+import emojiSearch from '@/features/emoji/search';
 import { useInstance } from '@/stores/instance';
 
 import ChatTextarea from './chat-textarea';
+
+import type { AutoSuggestion } from '@/components/autosuggest-input';
+import type { Emoji } from '@/features/emoji';
 
 const messages = defineMessages({
   placeholder: { id: 'chat.input.placeholder', defaultMessage: 'Type a message' },
@@ -22,26 +27,23 @@ interface IShoutboxComposer extends Pick<
   value: string;
   onSubmit: () => void;
   resetContentKey: number | null;
+  widget?: boolean;
 }
 
 const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxComposer>(
-  ({ onKeyDown, onChange, value, onSubmit, disabled = false, resetContentKey, onPaste }, ref) => {
+  (
+    { onKeyDown, onChange, value, onSubmit, disabled = false, resetContentKey, onPaste, widget },
+    ref,
+  ) => {
     const intl = useIntl();
 
     const maxCharacterCount = useInstance().configuration.chats.max_characters;
+    const [suggestions, setSuggestions] = useState<Emoji[]>([]);
 
     const isOverCharacterLimit = maxCharacterCount && value?.length > maxCharacterCount;
     const isSubmitDisabled = disabled || isOverCharacterLimit || value.length === 0;
 
     const overLimitText = maxCharacterCount ? maxCharacterCount - value?.length : '';
-
-    const onSelectComboboxOption = (selection: string) => {
-      const event = { target: { value: selection } } as React.ChangeEvent<HTMLTextAreaElement>;
-
-      if (onChange) {
-        onChange(event);
-      }
-    };
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       if (onChange) {
@@ -55,30 +57,61 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
       }
     };
 
-    return (
-      <div className='mt-auto px-4 shadow-3xl'>
-        {/* Spacer */}
-        <div className='h-5' />
+    const onSuggestionsFetchRequested = (token: string) => {
+      setSuggestions(emojiSearch(token.replace(':', ''), [], 5, false));
+    };
 
+    const onSuggestionsClearRequested = () => {
+      setSuggestions([]);
+    };
+
+    const onSuggestionSelected = (
+      tokenStart: number,
+      token: string | null,
+      emoji: AutoSuggestion,
+    ) => {
+      if (!token || typeof emoji === 'string' || 'origin_id' in emoji) {
+        return;
+      }
+
+      const insertion = `${'native' in emoji ? emoji.native : emoji.colons} `;
+      const nextValue = `${value.slice(0, tokenStart)}${insertion}${value.slice(tokenStart + token.length)}`;
+      const event = { target: { value: nextValue } } as React.ChangeEvent<HTMLTextAreaElement>;
+
+      if (onChange) {
+        onChange(event);
+      }
+
+      setSuggestions([]);
+    };
+
+    return (
+      <div className={clsx('mt-auto pt-5 shadow-3xl', !widget && 'px-4 pb-5')}>
         <div className='flex items-stretch justify-between gap-4'>
           <div className='flex flex-grow flex-col'>
-            <Combobox onSelect={onSelectComboboxOption}>
-              <ComboboxInput
-                key={resetContentKey}
-                as={ChatTextarea}
-                autoFocus
-                ref={ref}
-                placeholder={intl.formatMessage(messages.placeholder)}
-                onKeyDown={handleKeyDown}
-                value={value}
-                onChange={handleChange}
-                onPaste={onPaste}
-                isResizeable={false}
-                autoGrow
-                maxRows={5}
-                disabled={disabled}
-              />
-            </Combobox>
+            <AutosuggestInput
+              key={resetContentKey}
+              as={ChatTextarea}
+              autoFocus
+              ref={ref as React.ForwardedRef<HTMLInputElement | HTMLTextAreaElement>}
+              placeholder={intl.formatMessage(messages.placeholder)}
+              onKeyDown={handleKeyDown}
+              value={value}
+              onChange={handleChange}
+              disabled={disabled}
+              suggestions={suggestions}
+              onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+              onSuggestionsClearRequested={onSuggestionsClearRequested}
+              onSuggestionSelected={onSuggestionSelected}
+              searchTokens={[':']}
+              inputProps={{
+                onPaste,
+                isResizeable: false,
+                autoGrow: true,
+                maxRows: 5,
+                disabled,
+              }}
+            />
           </div>
 
           <div className='mb-1.5 flex w-10 flex-col items-center justify-end gap-2'>
@@ -98,8 +131,6 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
             />
           </div>
         </div>
-
-        <div className='h-5' />
       </div>
     );
   },

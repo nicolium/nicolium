@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
 
 import {
+  AccountLatestStatusPanel,
   AccountNotePanel,
   AnnouncementsPanel,
   BirthdayPanel,
+  ComposePanel,
   CryptoDonatePanel,
   GroupMediaPanel,
   InstanceModerationPanel,
@@ -11,10 +13,12 @@ import {
   MyGroupsPanel,
   NewEventPanel,
   NewGroupPanel,
+  NotificationsPanel,
   PinnedAccountsPanel,
   ProfileFieldsPanel,
   ProfileMediaPanel,
   PromoPanel,
+  ShoutboxPanel,
   SignUpPanel,
   TrendsPanel,
   WhoToFollowPanel,
@@ -23,11 +27,15 @@ import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useSettings } from '@/stores/settings';
+import { useShoutboxIsLoading } from '@/stores/shoutbox';
 import { useFederationRestrictionsDisclosed, useIsStandalone } from '@/utils/state';
 
 import LinkFooter from './link-footer';
 
 import type { Account, Group } from 'pl-api';
+
+const isAccountSidebarItem = (item: string): item is `account:${string}` =>
+  item.startsWith('account:');
 
 interface IAsideContent {
   layout?:
@@ -40,6 +48,7 @@ interface IAsideContent {
     | 'group'
     | 'groups'
     | 'home'
+    | 'notifications'
     | 'profile'
     | 'remote-instance'
     | 'search';
@@ -54,12 +63,13 @@ const AsideContent: React.FC<IAsideContent> = ({
   account,
   instance,
 }) => {
-  const { sidebarItems } = useSettings();
+  const { sidebarItems, composeInTimelines } = useSettings();
   const features = useFeatures();
   const { data: ownAccount } = useOwnAccount();
   const disclosed = useFederationRestrictionsDisclosed();
   const standalone = useIsStandalone();
   const frontendConfig = useFrontendConfig();
+  const showShoutbox = !useShoutboxIsLoading();
 
   return useMemo(() => {
     const items: React.ReactNode[] = [];
@@ -69,6 +79,16 @@ const AsideContent: React.FC<IAsideContent> = ({
     }
 
     for (const item of sidebarItems) {
+      if (isAccountSidebarItem(item)) {
+        if (layout === 'profile' && account && `account:${account.id}` === item) {
+          continue;
+        }
+
+        const accountId = item.slice(8);
+        items.push(<AccountLatestStatusPanel key={item} accountId={accountId} />);
+        continue;
+      }
+
       switch (item) {
         case 'context': {
           switch (layout) {
@@ -157,6 +177,22 @@ const AsideContent: React.FC<IAsideContent> = ({
           }
           break;
         }
+        case 'compose': {
+          if (layout !== 'home' || !composeInTimelines) {
+            items.push(<ComposePanel key='compose' />);
+          }
+          break;
+        }
+        case 'notifications': {
+          if (layout === 'notifications') break;
+          items.push(<NotificationsPanel key='notifications' />);
+          break;
+        }
+        case 'shoutbox': {
+          if (!showShoutbox) break;
+          items.push(<ShoutboxPanel key='shoutbox' />);
+          break;
+        }
         case 'footer': {
           items.push(<LinkFooter key='footer' />);
           break;
@@ -165,7 +201,17 @@ const AsideContent: React.FC<IAsideContent> = ({
     }
 
     return <>{items}</>;
-  }, [sidebarItems, ownAccount?.id, features, disclosed, layout, group, account, instance]);
+  }, [
+    sidebarItems,
+    ownAccount?.id,
+    features,
+    disclosed,
+    layout,
+    group,
+    account,
+    instance,
+    showShoutbox,
+  ]);
 };
 
 export { AsideContent };

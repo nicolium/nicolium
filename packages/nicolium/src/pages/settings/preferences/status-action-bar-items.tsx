@@ -1,23 +1,44 @@
+import iconArrowBendUpLeft from '@phosphor-icons/core/regular/arrow-bend-up-left.svg';
+import iconBookmark from '@phosphor-icons/core/regular/bookmark.svg';
 import iconDotsSixVertical from '@phosphor-icons/core/regular/dots-six-vertical.svg';
-import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconExport from '@phosphor-icons/core/regular/export.svg';
+import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
+import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
+import iconStar from '@phosphor-icons/core/regular/star.svg';
+import iconThumbsDown from '@phosphor-icons/core/regular/thumbs-down.svg';
+import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
+import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
-import List, { ListItem } from '@/components/list';
-import { CardTitle } from '@/components/ui/card';
+import { changeSetting as defaultChangeSetting } from '@/actions/settings';
+import OutlineBox from '@/components/outline-box';
+import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
-import Streamfield, { type StreamfieldComponent } from '@/components/ui/streamfield';
+import StreamfieldPicker from '@/components/ui/streamfield-picker';
 import { useFeatures } from '@/hooks/use-features';
-import { AVAILABLE_STATUS_ACTION_BAR_ITEMS } from '@/schemas/frontend-settings';
-import { useSettings } from '@/stores/settings';
+import {
+  AVAILABLE_STATUS_ACTION_BAR_ITEMS,
+  DEFAULT_STATUS_ACTION_BAR_ITEMS,
+} from '@/schemas/frontend-settings';
+import { useDefaultSettings, useSettings } from '@/stores/settings';
+import toast from '@/toast';
+
+import type { StreamfieldComponent } from '@/components/ui/streamfield';
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 
 const messages = defineMessages({
   heading: {
     id: 'settings.status_action_bar_items.heading',
-    defaultMessage: 'Status action items',
+    defaultMessage: 'Post action items',
+  },
+  resetSuccess: {
+    id: 'settings.status_action_bar_items.reset.success',
+    defaultMessage: 'Post action items reset to default',
   },
 });
 
@@ -31,6 +52,20 @@ const itemsMessages = {
   reaction: { id: 'settings.status_action_bar_items.item.reaction', defaultMessage: 'React' },
   bookmark: { id: 'settings.status_action_bar_items.item.bookmark', defaultMessage: 'Bookmark' },
   share: { id: 'settings.status_action_bar_items.item.share', defaultMessage: 'Share' },
+  translate: { id: 'settings.status_action_bar_items.item.translate', defaultMessage: 'Translate' },
+};
+
+const itemsIcons = {
+  reply: iconArrowBendUpLeft,
+  reblog: iconRepeat,
+  quote: iconQuotes,
+  favourite: iconStar,
+  dislike: iconThumbsDown,
+  wrench: iconWrench,
+  reaction: iconSmiley,
+  bookmark: iconBookmark,
+  share: iconExport,
+  translate: iconTranslate,
 };
 
 const StatusActionBarItem: StreamfieldComponent<
@@ -40,7 +75,8 @@ const StatusActionBarItem: StreamfieldComponent<
 
   return (
     <div className='⁂-interface-item'>
-      <Icon src={iconDotsSixVertical} aria-hidden />
+      <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
+      <Icon className='⁂-interface-item__icon' src={itemsIcons[value]} aria-hidden />
       <div>
         <p>{intl.formatMessage(itemsMessages[value])}</p>
       </div>
@@ -48,12 +84,18 @@ const StatusActionBarItem: StreamfieldComponent<
   );
 };
 
-const StatusActionBarItems: React.FC = () => {
+const StatusActionBarItems: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const features = useFeatures();
   const intl = useIntl();
+  const defaultSettings = useDefaultSettings();
 
-  const settings = useSettings();
-  console.log(settings.statusActionBarItems);
+  const userSettings = useSettings();
+  const settings = settingsProp || userSettings;
 
   const availableItems = {
     reply: true,
@@ -65,57 +107,57 @@ const StatusActionBarItems: React.FC = () => {
     reaction: features.emojiReacts,
     bookmark: features.bookmarks,
     share: true,
+    translate: features.translations || 'Translator' in globalThis,
   };
 
   const unusedItems = AVAILABLE_STATUS_ACTION_BAR_ITEMS.filter(
     (item) => !settings.statusActionBarItems.includes(item) && availableItems[item],
   );
 
+  const reset = () => {
+    changeSetting(
+      ['statusActionBarItems'],
+      onSave ? DEFAULT_STATUS_ACTION_BAR_ITEMS : defaultSettings.statusActionBarItems,
+    );
+    toast.success(messages.resetSuccess);
+  };
+
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>
-        <Streamfield
+        <OutlineBox className='⁂-interface-items__explanation'>
+          <FormattedMessage
+            id='settings.status_action_bar_items.description'
+            defaultMessage='You can decide what items are visible in your post action bar. This does not affect available functionality, they will be accessible in other ways, e.g., in the post menu.'
+          />
+        </OutlineBox>
+
+        <StreamfieldPicker
+          className='⁂-interface-items'
           component={StatusActionBarItem}
           values={settings.statusActionBarItems.filter((item) => availableItems[item])}
+          availableValues={unusedItems}
+          getItemKey={(item) => item}
           onChange={(values) => changeSetting(['statusActionBarItems'], values)}
-          onRemoveItem={(index) => {
-            changeSetting(
-              ['statusActionBarItems'],
-              settings.statusActionBarItems.filter((_, i) => i !== index),
-            );
-          }}
-          draggable
+          availableTitle={
+            <FormattedMessage
+              id='settings.status_action_bar_items.available'
+              defaultMessage='Available items'
+            />
+          }
         />
 
-        {unusedItems.length > 0 && (
-          <>
-            <CardTitle
-              title={
-                <FormattedMessage
-                  id='settings.status_action_bar_items.available'
-                  defaultMessage='Available items'
-                />
-              }
-            />
+        <FormActions>
+          <Button theme='secondary' onClick={reset}>
+            <FormattedMessage id='settings.interface_items.reset' defaultMessage='Reset' />
+          </Button>
 
-            <List>
-              {unusedItems.map((item) => (
-                <ListItem
-                  key={item}
-                  label={intl.formatMessage(itemsMessages[item])}
-                  onClick={() =>
-                    changeSetting(
-                      ['statusActionBarItems'],
-                      [...settings.statusActionBarItems, item],
-                    )
-                  }
-                  size='sm'
-                  actionIcon={iconPlus}
-                />
-              ))}
-            </List>
-          </>
-        )}
+          {onSave && (
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          )}
+        </FormActions>
       </Form>
     </Column>
   );

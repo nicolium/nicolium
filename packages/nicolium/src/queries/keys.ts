@@ -22,10 +22,13 @@ import type {
   AdminDimension,
   AdminDimensionKey,
   AdminDomain,
+  AdminDomainAllow,
+  AdminDomainBlock,
   AdminGetAccountsParams,
   AdminGetDimensionsParams,
   AdminGetMeasuresParams,
   AdminGetReportsParams,
+  AdminGetStatusesParams,
   AdminMeasure,
   AdminMeasureKey,
   AdminModerationLogEntry,
@@ -71,6 +74,10 @@ const accounts = {
   show: (accountId: string) => {
     const key = ['accounts', accountId] as const;
     return key as TaggedKey<typeof key, Account>;
+  },
+  latestStatus: (accountId: string) => {
+    const key = ['accounts', accountId, 'latestStatus'] as const;
+    return key as TaggedKey<typeof key, string | null>;
   },
   lookup: (acct: string) => {
     const key = ['accounts', 'lookup', acct] as const;
@@ -234,6 +241,10 @@ const statusLists = {
     ['statusLists', 'joinedEvents'],
     InfiniteData<PaginatedResponse<string>>
   >,
+  mutedThreads: ['statusLists', 'mutedThreads'] as TaggedKey<
+    ['statusLists', 'mutedThreads'],
+    InfiniteData<PaginatedResponse<string>>
+  >,
 };
 
 const statuses = {
@@ -317,6 +328,10 @@ const admin = {
       const key = ['admin', 'accounts', accountId] as const;
       return key as TaggedKey<typeof key, MinifiedAdminAccount>;
     },
+    statuses: (accountId: string, params?: AdminGetStatusesParams) => {
+      const key = ['admin', 'accounts', 'statuses', accountId, params] as const;
+      return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+    },
   },
   accountLists: {
     root: ['admin', 'accountLists'] as const,
@@ -367,6 +382,14 @@ const admin = {
     const key = ['admin', 'retention', startAt, endAt, frequency] as const;
     return key as TaggedKey<typeof key, Array<AdminCohort>>;
   },
+  domainBlocks: ['admin', 'domainBlocks'] as TaggedKey<
+    ['admin', 'domainBlocks'],
+    InfiniteData<PaginatedResponse<AdminDomainBlock>>
+  >,
+  domainAllows: ['admin', 'domainAllows'] as TaggedKey<
+    ['admin', 'domainAllows'],
+    InfiniteData<PaginatedResponse<AdminDomainAllow>>
+  >,
 };
 
 const notifications = {

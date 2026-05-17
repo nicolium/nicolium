@@ -16,11 +16,11 @@ import type { AdminRule } from 'pl-api';
 const messages = defineMessages({
   save: { id: 'admin.edit_rule.save', defaultMessage: 'Save' },
   ruleTextPlaceholder: {
-    id: 'admin.edit_rule.fields.text_placeholder',
+    id: 'admin.edit_rule.fields.text.placeholder',
     defaultMessage: 'Instance rule text',
   },
   rulePriorityPlaceholder: {
-    id: 'admin.edit_rule.fields.priority_placeholder',
+    id: 'admin.edit_rule.fields.priority.placeholder',
     defaultMessage: 'Instance rule display priority',
   },
   ruleCreateSuccess: { id: 'admin.edit_rule.created', defaultMessage: 'Rule created' },
@@ -91,7 +91,7 @@ const EditRuleModal: React.FC<BaseModalProps & EditRuleModalProps> = ({ onClose,
       <Form>
         <FormGroup
           labelText={
-            <FormattedMessage id='admin.edit_rule.fields.text_label' defaultMessage='Rule text' />
+            <FormattedMessage id='admin.edit_rule.fields.text.label' defaultMessage='Rule text' />
           }
         >
           <Input placeholder={intl.formatMessage(messages.ruleTextPlaceholder)} {...text} />
@@ -100,7 +100,7 @@ const EditRuleModal: React.FC<BaseModalProps & EditRuleModalProps> = ({ onClose,
           <FormGroup
             labelText={
               <FormattedMessage
-                id='admin.edit_rule.fields.priority_label'
+                id='admin.edit_rule.fields.priority.label'
                 defaultMessage='Rule priority'
               />
             }

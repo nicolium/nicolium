@@ -1,10 +1,12 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
+import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
 import { Multiselect } from '@/components/ui/multiselect';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import { useFeatures } from '@/hooks/use-features';
@@ -15,28 +17,49 @@ import { useIsStandalone } from '@/utils/state';
 
 import { languages } from '../components/preferences';
 
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
+
 const messages = defineMessages({
   heading: { id: 'preferences.heading.content', defaultMessage: 'Content settings' },
   displayPostsDefault: {
     id: 'preferences.fields.display_media.default',
-    defaultMessage: 'Hide posts marked as sensitive',
+    defaultMessage: 'Hide media from posts marked as sensitive',
   },
   displayPostsHideAll: {
     id: 'preferences.fields.display_media.hide_all',
-    defaultMessage: 'Always hide media posts',
+    defaultMessage: 'Always hide media in posts',
   },
   displayPostsShowAll: {
     id: 'preferences.fields.display_media.show_all',
-    defaultMessage: 'Always show posts',
+    defaultMessage: 'Always show media',
+  },
+  displayPreviewCardsDefault: {
+    id: 'preferences.fields.display_preview_cards.default',
+    defaultMessage: 'Display full preview cards',
+  },
+  displayPreviewCardsHide: {
+    id: 'preferences.fields.display_preview_cards.hide',
+    defaultMessage: 'Hide preview cards',
+  },
+  displayPreviewCardsHideMedia: {
+    id: 'preferences.fields.display_preview_cards.hide_media',
+    defaultMessage: 'Hide media in preview cards',
   },
 });
 
-const ContentPreferences: React.FC = () => {
+const ContentPreferences: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const features = useFeatures();
   const instance = useInstance();
   const intl = useIntl();
-  const settings = useSettings();
   const standalone = useIsStandalone();
+  const userSettings = useSettings();
+
+  const settings = settingsProp || userSettings;
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
     changeSetting(path, event.target.value, { showAlert: true });
@@ -63,15 +86,18 @@ const ContentPreferences: React.FC = () => {
     [settings.locale],
   );
 
+  const displayPreviewCardsOptions = React.useMemo(
+    () => ({
+      default: intl.formatMessage(messages.displayPreviewCardsDefault),
+      hide: intl.formatMessage(messages.displayPreviewCardsHide),
+      hide_media: intl.formatMessage(messages.displayPreviewCardsHideMedia),
+    }),
+    [settings.locale],
+  );
+
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form>
-        {/* <CardTitle
-          title={
-            <FormattedMessage id='settings.mutes_blocks' defaultMessage='Mutes and blocks' />
-          }
-        /> */}
-
         <List>
           <ListItem
             label={<FormattedMessage id='column.mutes' defaultMessage='Mutes' />}
@@ -104,13 +130,21 @@ const ContentPreferences: React.FC = () => {
               to='/settings/interaction_policies'
             />
           )}
+          {features.mutedThreads && (
+            <ListItem
+              label={
+                <FormattedMessage id='column.muted_threads' defaultMessage='Muted conversations' />
+              }
+              to='/muted_threads'
+            />
+          )}
         </List>
 
         <List>
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.media_display_label'
+                id='preferences.fields.media_display.label'
                 defaultMessage='Sensitive content'
               />
             }
@@ -128,7 +162,7 @@ const ContentPreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.spoilers_display_label'
+                id='preferences.fields.spoilers_display.label'
                 defaultMessage='Automatically expand text behind spoilers'
               />
             }
@@ -143,13 +177,31 @@ const ContentPreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.disable_user_provided_media_label'
+                id='preferences.fields.preview_card_display.label'
+                defaultMessage='Preview cards'
+              />
+            }
+          >
+            <SelectDropdown
+              className='max-w-[200px]'
+              items={displayPreviewCardsOptions}
+              defaultValue={settings.displayPreviewCards}
+              onChange={(event) => {
+                onSelectChange(event, ['displayPreviewCards']);
+              }}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.disable_user_provided_media.label'
                 defaultMessage='Do not display user-provided media'
               />
             }
             hint={
               <FormattedMessage
-                id='preferences.fields.disable_user_provided_media_hint'
+                id='preferences.fields.disable_user_provided_media.hint'
                 defaultMessage='This will hide images, videos, and other media uploaded by users and display alternative text instead.'
               />
             }
@@ -165,13 +217,13 @@ const ContentPreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.check_emoji_react_supports_label'
-                  defaultMessage='Check whether remote hosts supports emoji reactions when reacting'
+                  id='preferences.fields.check_emoji_react_supports.label'
+                  defaultMessage='Check whether remote hosts support emoji reactions when reacting'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='preferences.fields.check_emoji_react_supports_hint'
+                  id='preferences.fields.check_emoji_react_supports.hint'
                   defaultMessage='This will expose your IP address to the instances you’re interacting with.'
                 />
               }
@@ -213,13 +265,13 @@ const ContentPreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.render_mfm_label'
+                  id='preferences.fields.render_mfm.label'
                   defaultMessage='Render Misskey Flavored Markdown'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='preferences.fields.render_mfm_hint'
+                  id='preferences.fields.render_mfm.hint'
                   defaultMessage='MFM support is experimental, not all node types are supported.'
                 />
               }
@@ -234,7 +286,7 @@ const ContentPreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.render_advanced_mfm_label'
+                  id='preferences.fields.render_advanced_mfm.label'
                   defaultMessage='Enable advanced MFM'
                 />
               }
@@ -250,7 +302,7 @@ const ContentPreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.render_animated_mfm_label'
+                  id='preferences.fields.render_animated_mfm.label'
                   defaultMessage='Enable animated MFM'
                 />
               }
@@ -270,7 +322,7 @@ const ContentPreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.auto_translate_label'
+                  id='preferences.fields.auto_translate.label'
                   defaultMessage='Automatically translate posts in unknown languages'
                 />
               }
@@ -291,7 +343,7 @@ const ContentPreferences: React.FC = () => {
               }
               hint={
                 <FormattedMessage
-                  id='preferences.fields.side_by_side_translations_hint'
+                  id='preferences.fields.side_by_side_translations.hint'
                   defaultMessage='When translation is enabled, display the translation alongside the original text.'
                 />
               }
@@ -307,7 +359,7 @@ const ContentPreferences: React.FC = () => {
               className='!overflow-visible'
               label={
                 <FormattedMessage
-                  id='preferences.fields.known_languages_label'
+                  id='preferences.fields.known_languages.label'
                   defaultMessage='Languages you know'
                 />
               }
@@ -323,6 +375,14 @@ const ContentPreferences: React.FC = () => {
               />
             </ListItem>
           </List>
+        )}
+
+        {onSave && (
+          <FormActions>
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          </FormActions>
         )}
       </Form>
     </Column>

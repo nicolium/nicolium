@@ -6,6 +6,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { PublicTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import { TimelinePicker } from '@/components/timeline-picker';
+import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 
@@ -23,7 +24,12 @@ const CommunityTimelinePage = () => {
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='local' />}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+      action={
+        <>
+          <TimelineRefreshButton timelineId='public:local' />
+          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+        </>
+      }
     >
       <PublicTimelineColumn
         local

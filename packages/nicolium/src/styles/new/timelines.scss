@@ -160,8 +160,6 @@
 }
 
 .⁂-timeline-picker {
-  cursor: pointer;
-
   display: flex;
   gap: 0.5rem;
   align-items: center;
@@ -172,15 +170,19 @@
 
   transition: background 150ms ease-in-out;
 
-  &:hover, &:focus-within, &[aria-expanded="true"] {
-    background: rgb(var(--color-primary-100));
+  &[type="button"] {
+    cursor: pointer;
 
-    .dark & {
-      background: rgb(var(--color-primary-800));
-    }
+    &:hover, &:focus-within, &[aria-expanded="true"] {
+      background: rgb(var(--color-primary-100));
 
-    .dark.black & {
-      background: rgb(var(--color-gray-900));
+      .dark & {
+        background: rgb(var(--color-primary-800));
+      }
+
+      .dark.black & {
+        background: rgb(var(--color-gray-900));
+      }
     }
   }
 }

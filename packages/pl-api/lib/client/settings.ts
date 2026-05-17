@@ -51,8 +51,22 @@ const settings = (client: PlApiBaseClient) => ({
    */
   verifyCredentials: async () => {
     const response = await client.request('/api/v1/accounts/verify_credentials');
+    const credentialAccount = v.parse(credentialAccountSchema, response.json);
 
-    return v.parse(credentialAccountSchema, response.json);
+    if (client.features.version.software === ICESHRIMP_NET) {
+      await client.getIceshrimpAccessToken();
+      try {
+        const iceshrimpResponse = await client.request<{
+          isAdmin: boolean;
+          isModerator: boolean;
+        }>('/api/iceshrimp/auth');
+
+        credentialAccount.is_admin = iceshrimpResponse.json.isAdmin;
+        credentialAccount.is_moderator = iceshrimpResponse.json.isModerator;
+      } catch {}
+    }
+
+    return credentialAccount;
   },
 
   /**
@@ -198,12 +212,16 @@ const settings = (client: PlApiBaseClient) => ({
    * Requires features{@link Features.sessions}.
    * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#get-apioauth_tokens}
    */
-  getOauthTokens: () => {
+  getOauthTokens: async () => {
     let url;
 
     switch (client.features.version.software) {
       case GOTOSOCIAL:
         url = '/api/v1/tokens';
+        break;
+      case ICESHRIMP_NET:
+        await client.getIceshrimpAccessToken();
+        url = '/api/iceshrimp/sessions/mastodon';
         break;
       case MITRA:
         url = '/api/v1/settings/sessions';
@@ -435,6 +453,19 @@ const settings = (client: PlApiBaseClient) => ({
             },
           }));
           break;
+        case ICESHRIMP_NET:
+          await client.getIceshrimpAccessToken();
+          response = await client
+            .request<{
+              twoFactorEnrolled: boolean;
+            }>('/api/iceshrimp/settings')
+            .then(({ json }) => ({
+              settings: {
+                enabled: json.twoFactorEnrolled,
+                totp: json.twoFactorEnrolled,
+              },
+            }));
+          break;
         default:
           response = (await client.request('/api/pleroma/accounts/mfa')).json;
       }
@@ -477,6 +508,21 @@ const settings = (client: PlApiBaseClient) => ({
             key: new URL(data).searchParams.get('secret'),
           }));
           break;
+        case ICESHRIMP_NET:
+          await client.getIceshrimpAccessToken();
+          response = await client
+            .request<{
+              secret: string;
+              url: string;
+              qrPng: string;
+            }>('/api/iceshrimp/settings/2fa/enroll', {
+              method: 'POST',
+            })
+            .then(({ json }) => ({
+              provisioning_uri: json.url,
+              key: json.secret,
+            }));
+          break;
         default:
           response = (await client.request(`/api/pleroma/accounts/mfa/setup/${method}`)).json;
       }
@@ -499,6 +545,13 @@ const settings = (client: PlApiBaseClient) => ({
       switch (client.features.version.software) {
         case GOTOSOCIAL:
           response = await client.request('/api/v1/user/2fa/enable', {
+            method: 'POST',
+            body: { code },
+          });
+          break;
+        case ICESHRIMP_NET:
+          await client.getIceshrimpAccessToken();
+          response = await client.request('/api/iceshrimp/settings/2fa/confirm', {
             method: 'POST',
             body: { code },
           });
@@ -541,6 +594,22 @@ const settings = (client: PlApiBaseClient) => ({
 
       return response.json;
     },
+
+    /**
+     * Requires features{@link Features.disableMfaWithCode}.
+     */
+    disableMfaWithCode: async (code: string) => {
+      await client.getIceshrimpAccessToken();
+
+      const response = await client.request('/api/iceshrimp/settings/2fa/disable', {
+        method: 'POST',
+        body: { code },
+      });
+
+      if (response.json?.error) throw response.json.error;
+
+      return response.json;
+    },
   },
 
   /**
@@ -558,6 +627,13 @@ const settings = (client: PlApiBaseClient) => ({
         response = await client.request('/api/v1/import', {
           method: 'POST',
           body: { data: list, type: 'following', mode },
+          formData: true,
+        });
+        break;
+      case ICESHRIMP_NET:
+        response = await client.request('/api/iceshrimp/settings/import/following', {
+          method: 'POST',
+          body: { file: list },
           formData: true,
         });
         break;
@@ -613,6 +689,13 @@ const settings = (client: PlApiBaseClient) => ({
           formData: true,
         });
         break;
+      case ICESHRIMP_NET:
+        response = await client.request('/api/iceshrimp/settings/import/blocking', {
+          method: 'POST',
+          body: { file: list },
+          formData: true,
+        });
+        break;
       default:
         response = await client.request('/api/pleroma/blocks_import', {
           method: 'POST',
@@ -639,6 +722,13 @@ const settings = (client: PlApiBaseClient) => ({
         response = await client.request('/api/v1/import', {
           method: 'POST',
           body: { data: list, type: 'blocks', mode },
+          formData: true,
+        });
+        break;
+      case ICESHRIMP_NET:
+        response = await client.request('/api/iceshrimp/settings/import/muting', {
+          method: 'POST',
+          body: { file: list },
           formData: true,
         });
         break;

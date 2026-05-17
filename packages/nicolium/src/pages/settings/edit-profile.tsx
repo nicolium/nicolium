@@ -3,6 +3,7 @@ import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import AutosuggestInput from '@/components/autosuggest-input';
 import BirthdayInput from '@/components/birthday-input';
 import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
@@ -16,16 +17,20 @@ import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Streamfield from '@/components/ui/streamfield';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
+import { isNativeEmoji } from '@/features/emoji';
 import { useImageField } from '@/hooks/forms/use-image-field';
 import { useClient } from '@/hooks/use-client';
+import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import AvatarPicker from '@/pages/settings/components/avatar-picker';
 import HeaderPicker from '@/pages/settings/components/header-picker';
+import { selectAccount } from '@/queries/accounts/selectors';
 import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
+import type { AutoSuggestion } from '@/components/autosuggest-input';
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
 
 /**
@@ -43,32 +48,32 @@ const hidesNetwork = ({ __meta }: Pick<CredentialAccount, '__meta'>): boolean =>
 const messages = defineMessages({
   heading: { id: 'column.edit_profile', defaultMessage: 'Edit profile' },
   metaFieldLabel: {
-    id: 'edit_profile.fields.meta_fields.label_placeholder',
+    id: 'edit_profile.fields.meta_fields.label.placeholder',
     defaultMessage: 'Label',
   },
   metaFieldContent: {
-    id: 'edit_profile.fields.meta_fields.content_placeholder',
+    id: 'edit_profile.fields.meta_fields.content.placeholder',
     defaultMessage: 'Content',
   },
   firstMetaFieldLabel: {
-    id: 'edit_profile.fields.meta_fields.label_placeholder.first',
+    id: 'edit_profile.fields.meta_fields.label.placeholder.first',
     defaultMessage: 'Label (e.g. pronouns)',
   },
   success: {
     id: 'edit_profile.success',
-    defaultMessage: 'Your profile has been successfully saved!',
+    defaultMessage: 'Profile saved',
   },
   error: { id: 'edit_profile.error', defaultMessage: 'Profile update failed' },
   bioPlaceholder: {
-    id: 'edit_profile.fields.bio_placeholder',
+    id: 'edit_profile.fields.bio.placeholder',
     defaultMessage: 'Tell us about yourself.',
   },
   displayNamePlaceholder: {
-    id: 'edit_profile.fields.display_name_placeholder',
+    id: 'edit_profile.fields.display_name.placeholder',
     defaultMessage: 'Name',
   },
   locationPlaceholder: {
-    id: 'edit_profile.fields.location_placeholder',
+    id: 'edit_profile.fields.location.placeholder',
     defaultMessage: 'Location',
   },
   mentionPolicyNone: { id: 'edit_profile.fields.mention_policy.none', defaultMessage: 'Everybody' },
@@ -100,7 +105,7 @@ const messages = defineMessages({
     id: 'edit_profile.fields.web_visibility.none',
     defaultMessage: 'Show no posts',
   },
-  customCSSLabel: { id: 'edit_profile.fields.custom_css_label', defaultMessage: 'Custom CSS' },
+  customCSSLabel: { id: 'edit_profile.fields.custom_css.label', defaultMessage: 'Custom CSS' },
 });
 
 /**
@@ -213,6 +218,77 @@ const accountToCredentials = (account: CredentialAccount): AccountCredentials =>
   };
 };
 
+type ProfileAutosuggestElement = HTMLInputElement | HTMLTextAreaElement;
+
+interface ProfileAutosuggestInputProps {
+  as?: React.ElementType;
+  className?: string;
+  inputProps?: Record<string, unknown>;
+  onBlur?: React.FocusEventHandler<ProfileAutosuggestElement>;
+  onChange: React.ChangeEventHandler<ProfileAutosuggestElement>;
+  onFocus?: React.FocusEventHandler<ProfileAutosuggestElement>;
+  placeholder?: string;
+  searchTokens: string[];
+  value?: string;
+}
+
+const getSuggestionCompletion = (suggestion: AutoSuggestion): string => {
+  if (typeof suggestion === 'object' && 'id' in suggestion) {
+    return isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
+  }
+
+  if (typeof suggestion === 'string' && suggestion[0] === '#') {
+    return suggestion;
+  }
+
+  if (typeof suggestion === 'string') {
+    return selectAccount(suggestion)?.acct ?? suggestion;
+  }
+
+  return '';
+};
+
+const ProfileAutosuggestInput: React.FC<ProfileAutosuggestInputProps> = ({
+  value = '',
+  onChange,
+  searchTokens,
+  ...props
+}) => {
+  const [token, setToken] = useState('');
+  const suggestions = useComposeSuggestions(token);
+
+  const onSuggestionSelected = (
+    tokenStart: number,
+    token: string | null,
+    suggestion: AutoSuggestion,
+  ) => {
+    if (!token) return;
+
+    const completion = getSuggestionCompletion(suggestion);
+    const nextValue = `${value.slice(0, tokenStart)}${completion} ${value.slice(
+      tokenStart + token.length,
+    )}`;
+
+    onChange({
+      target: { value: nextValue },
+      currentTarget: { value: nextValue },
+    } as React.ChangeEvent<ProfileAutosuggestElement>);
+  };
+
+  return (
+    <AutosuggestInput
+      {...props}
+      value={value}
+      onChange={onChange}
+      suggestions={suggestions}
+      onSuggestionsFetchRequested={setToken}
+      onSuggestionsClearRequested={() => setToken('')}
+      onSuggestionSelected={onSuggestionSelected}
+      searchTokens={searchTokens}
+    />
+  );
+};
+
 const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
   index,
   value,
@@ -221,47 +297,49 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
   const intl = useIntl();
 
   const handleChange =
-    (key: string): React.ChangeEventHandler<HTMLInputElement> =>
+    (key: string): React.ChangeEventHandler<ProfileAutosuggestElement> =>
     (e) => {
       onChange({ ...value, [key]: e.currentTarget.value });
     };
 
   return (
     <div className='flex flex-grow gap-2'>
-      <Input
-        type='text'
-        outerClassName='w-2/5 grow'
-        value={value.name}
-        onChange={handleChange('name')}
-        placeholder={
-          index === 0
-            ? intl.formatMessage(messages.firstMetaFieldLabel)
-            : intl.formatMessage(messages.metaFieldLabel)
-        }
-        onFocus={(e) => {
-          const field: HTMLElement | null = e.target.closest('[draggable=true]');
-          if (field) field.draggable = false;
-        }}
-        onBlur={(e) => {
-          const field: HTMLElement | null = e.target.closest('[draggable=false]');
-          if (field) field.draggable = true;
-        }}
-      />
-      <Input
-        type='text'
-        outerClassName='w-3/5 grow'
-        value={value.value}
-        onChange={handleChange('value')}
-        placeholder={intl.formatMessage(messages.metaFieldContent)}
-        onFocus={(e) => {
-          const field: HTMLElement | null = e.target.closest('[draggable=true]');
-          if (field) field.draggable = false;
-        }}
-        onBlur={(e) => {
-          const field: HTMLElement | null = e.target.closest('[draggable=false]');
-          if (field) field.draggable = true;
-        }}
-      />
+      <div className='w-2/5 grow'>
+        <ProfileAutosuggestInput
+          value={value.name}
+          onChange={handleChange('name')}
+          placeholder={
+            index === 0
+              ? intl.formatMessage(messages.firstMetaFieldLabel)
+              : intl.formatMessage(messages.metaFieldLabel)
+          }
+          onFocus={(e) => {
+            const field: HTMLElement | null = e.target.closest('[draggable=true]');
+            if (field) field.draggable = false;
+          }}
+          onBlur={(e) => {
+            const field: HTMLElement | null = e.target.closest('[draggable=false]');
+            if (field) field.draggable = true;
+          }}
+          searchTokens={['@', '#', ':']}
+        />
+      </div>
+      <div className='w-3/5 grow'>
+        <ProfileAutosuggestInput
+          value={value.value}
+          onChange={handleChange('value')}
+          placeholder={intl.formatMessage(messages.metaFieldContent)}
+          onFocus={(e) => {
+            const field: HTMLElement | null = e.target.closest('[draggable=true]');
+            if (field) field.draggable = false;
+          }}
+          onBlur={(e) => {
+            const field: HTMLElement | null = e.target.closest('[draggable=false]');
+            if (field) field.draggable = true;
+          }}
+          searchTokens={['@', '#', ':']}
+        />
+      </div>
     </div>
   );
 };
@@ -328,10 +406,15 @@ const EditProfilePage: React.FC = () => {
 
     if (fields_attributes?.length === 0)
       params.fields_attributes = { '0': { name: '', value: '' } };
-    else if (fields_attributes)
+    else if (fields_attributes) {
+      const padLength = fields_attributes.length.toString().length;
       params.fields_attributes = Object.fromEntries(
-        fields_attributes.map(({ name, value }, i) => [i.toString(), { name, value }]),
+        fields_attributes.map(({ name, value }, i) => [
+          i.toString().padStart(padLength, '0'),
+          { name, value },
+        ]),
       );
+    }
     if (header.file !== null) params.header = header.file ?? '';
     if (avatar.file !== null) params.avatar = avatar.file ?? '';
 
@@ -365,7 +448,7 @@ const EditProfilePage: React.FC = () => {
   };
 
   const handleFieldChange =
-    <T = any>(key: keyof AccountCredentials) =>
+    <T = any,>(key: keyof AccountCredentials) =>
     (value: T) => {
       updateData(key, value);
     };
@@ -430,7 +513,7 @@ const EditProfilePage: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
-        <div className='relative mb-12 flex'>
+        <div className='⁂-profile-images'>
           <HeaderPicker
             accept={attachmentTypes}
             disabled={isLoading}
@@ -451,23 +534,23 @@ const EditProfilePage: React.FC = () => {
         <FormGroup
           labelText={
             <FormattedMessage
-              id='edit_profile.fields.display_name_label'
+              id='edit_profile.fields.display_name.label'
               defaultMessage='Display name'
             />
           }
         >
-          <Input
-            type='text'
+          <ProfileAutosuggestInput
             value={data.display_name}
             onChange={handleTextChange('display_name')}
             placeholder={intl.formatMessage(messages.displayNamePlaceholder)}
+            searchTokens={[':']}
           />
         </FormGroup>
 
         {features.birthdays && (
           <FormGroup
             labelText={
-              <FormattedMessage id='edit_profile.fields.birthday_label' defaultMessage='Birthday' />
+              <FormattedMessage id='edit_profile.fields.birthday.label' defaultMessage='Birthday' />
             }
           >
             <BirthdayInput value={data.birthday} onChange={handleBirthdayChange} />
@@ -477,7 +560,7 @@ const EditProfilePage: React.FC = () => {
         {features.accountLocation && (
           <FormGroup
             labelText={
-              <FormattedMessage id='edit_profile.fields.location_label' defaultMessage='Location' />
+              <FormattedMessage id='edit_profile.fields.location.label' defaultMessage='Location' />
             }
           >
             <Input
@@ -490,13 +573,15 @@ const EditProfilePage: React.FC = () => {
         )}
 
         <FormGroup
-          labelText={<FormattedMessage id='edit_profile.fields.bio_label' defaultMessage='Bio' />}
+          labelText={<FormattedMessage id='edit_profile.fields.bio.label' defaultMessage='Bio' />}
         >
-          <Textarea
+          <ProfileAutosuggestInput
+            as={Textarea}
             value={data.note}
             onChange={handleTextChange('note')}
-            autoComplete='off'
             placeholder={intl.formatMessage(messages.bioPlaceholder)}
+            inputProps={{ autoComplete: 'off' }}
+            searchTokens={['@', '#', ':']}
           />
         </FormGroup>
 
@@ -505,7 +590,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.locked_label'
+                  id='edit_profile.fields.locked.label'
                   defaultMessage='Lock account'
                 />
               }
@@ -524,7 +609,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.hide_network_label'
+                  id='edit_profile.fields.hide_network.label'
                   defaultMessage='Hide network'
                 />
               }
@@ -555,7 +640,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.bot_label'
+                  id='edit_profile.fields.bot.label'
                   defaultMessage='This is a bot account'
                 />
               }
@@ -574,7 +659,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.stranger_notifications_label'
+                  id='edit_profile.fields.stranger_notifications.label'
                   defaultMessage='Block notifications from strangers'
                 />
               }
@@ -598,7 +683,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.discoverable_label'
+                  id='edit_profile.fields.discoverable.label'
                   defaultMessage='Allow account discovery'
                 />
               }
@@ -617,7 +702,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='edit_profile.fields.rss_label'
+                  id='edit_profile.fields.rss.label'
                   defaultMessage='Enable RSS feed for public posts'
                 />
               }
@@ -631,7 +716,7 @@ const EditProfilePage: React.FC = () => {
               <ListItem
                 label={
                   <FormattedMessage
-                    id='edit_profile.fields.is_cat_label'
+                    id='edit_profile.fields.is_cat.label'
                     defaultMessage='The user is a cat'
                   />
                 }
@@ -648,7 +733,7 @@ const EditProfilePage: React.FC = () => {
               <ListItem
                 label={
                   <FormattedMessage
-                    id='edit_profile.fields.speak_as_cat_label'
+                    id='edit_profile.fields.speak_as_cat.label'
                     defaultMessage='The user speaks as a cat'
                   />
                 }
@@ -671,7 +756,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.web_layout_label'
+                  id='preferences.fields.web_layout.label'
                   defaultMessage='Layout of the web view of your profile'
                 />
               }
@@ -694,7 +779,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.web_visibility_label'
+                  id='preferences.fields.web_visibility.label'
                   defaultMessage='Visibility level of posts displayed on your profile'
                 />
               }
@@ -718,7 +803,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.web_include_boosts_label'
+                  id='preferences.fields.web_include_boosts.label'
                   defaultMessage='Include reposts in web view'
                 />
               }
@@ -740,7 +825,7 @@ const EditProfilePage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.mention_policy_label'
+                  id='preferences.fields.mention_policy.label'
                   defaultMessage='Accept mentions from'
                 />
               }
@@ -772,7 +857,7 @@ const EditProfilePage: React.FC = () => {
           <Streamfield
             label={
               <FormattedMessage
-                id='edit_profile.fields.meta_fields_label'
+                id='edit_profile.fields.meta_fields.label'
                 defaultMessage='Profile fields'
               />
             }

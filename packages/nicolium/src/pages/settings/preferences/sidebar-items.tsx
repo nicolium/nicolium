@@ -1,20 +1,31 @@
 import iconDotsSixVertical from '@phosphor-icons/core/regular/dots-six-vertical.svg';
-import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
-import List, { ListItem } from '@/components/list';
-import { CardTitle } from '@/components/ui/card';
+import { changeSetting as defaultChangeSetting } from '@/actions/settings';
+import OutlineBox from '@/components/outline-box';
+import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
-import Streamfield, { type StreamfieldComponent } from '@/components/ui/streamfield';
-import { AVAILABLE_SIDEBAR_ITEMS } from '@/schemas/frontend-settings';
-import { useSettings } from '@/stores/settings';
+import StreamfieldPicker from '@/components/ui/streamfield-picker';
+import { useAccount } from '@/queries/accounts/use-account';
+import { AVAILABLE_SIDEBAR_ITEMS, DEFAULT_SIDEBAR_ITEMS } from '@/schemas/frontend-settings';
+import { useDefaultSettings, useSettings } from '@/stores/settings';
+import { useShoutboxIsLoading } from '@/stores/shoutbox';
+import toast from '@/toast';
+
+import type { StreamfieldComponent } from '@/components/ui/streamfield';
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
+import type { SidebarItem as SidebarItemType } from '@/schemas/frontend-settings';
 
 const messages = defineMessages({
   heading: { id: 'settings.sidebar_items.heading', defaultMessage: 'Sidebar items' },
+  resetSuccess: {
+    id: 'settings.sidebar_items.reset.success',
+    defaultMessage: 'Sidebar items reset to default',
+  },
 });
 
 const itemsMessages = {
@@ -33,6 +44,14 @@ const itemsMessages = {
   notifications: {
     id: 'settings.sidebar_items.item.notifications',
     defaultMessage: 'Notifications',
+  },
+  shoutbox: {
+    id: 'settings.sidebar_items.item.shoutbox',
+    defaultMessage: 'Shoutbox',
+  },
+  account: {
+    id: 'settings.sidebar_items.item.account',
+    defaultMessage: 'Account',
   },
 };
 
@@ -62,73 +81,98 @@ const itemHintsMessages = {
     id: 'settings.sidebar_items.item.notifications.hint',
     defaultMessage: 'Notifications about mentions and interactions with your posts.',
   },
+  shoutbox: {
+    id: 'settings.sidebar_items.item.shoutbox.hint',
+    defaultMessage: 'Instance-wide real-time chat.',
+  },
+  account: {
+    id: 'settings.sidebar_items.item.account.hint',
+    defaultMessage: "Shows the account's latest post.",
+  },
 };
 
-const SidebarItem: StreamfieldComponent<(typeof AVAILABLE_SIDEBAR_ITEMS)[number]> = ({ value }) => {
+const isAccountSidebarItem = (item: SidebarItemType): item is `account:${string}` =>
+  item.startsWith('account:');
+
+const SidebarItem: StreamfieldComponent<SidebarItemType> = ({ value }) => {
   const intl = useIntl();
+  const { data: account } = useAccount(isAccountSidebarItem(value) ? value.slice(8) : undefined);
+  const itemKey = isAccountSidebarItem(value) ? 'account' : value;
 
   return (
     <div className='⁂-interface-item'>
-      <Icon src={iconDotsSixVertical} aria-hidden />
+      <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
       <div>
-        <p>{intl.formatMessage(itemsMessages[value])}</p>
-        <small>{intl.formatMessage(itemHintsMessages[value])}</small>
+        <p>
+          {isAccountSidebarItem(value) && account
+            ? `@${account.username}`
+            : intl.formatMessage(itemsMessages[itemKey])}
+        </p>
+        <small>{intl.formatMessage(itemHintsMessages[itemKey])}</small>
       </div>
     </div>
   );
 };
 
-const SidebarItems: React.FC = () => {
+const SidebarItems: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const intl = useIntl();
+  const defaultSettings = useDefaultSettings();
 
-  const settings = useSettings();
-  console.log(settings.sidebarItems);
+  const showShoutbox = !useShoutboxIsLoading();
+
+  const userSettings = useSettings();
+  const settings = settingsProp || userSettings;
 
   const availableItems = AVAILABLE_SIDEBAR_ITEMS.filter(
-    (item) => !settings.sidebarItems.includes(item),
+    (item) => !settings.sidebarItems.includes(item) && (item !== 'shoutbox' || showShoutbox),
   );
+
+  const reset = () => {
+    changeSetting(['sidebarItems'], onSave ? DEFAULT_SIDEBAR_ITEMS : defaultSettings.sidebarItems);
+    toast.success(messages.resetSuccess);
+  };
 
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>
-        <Streamfield
+        <OutlineBox className='⁂-interface-items__explanation'>
+          <FormattedMessage
+            id='settings.sidebar_items.description'
+            defaultMessage='You can decide what items are visible in your sidebar.'
+          />
+        </OutlineBox>
+
+        <StreamfieldPicker
+          className='⁂-interface-items'
           component={SidebarItem}
           values={settings.sidebarItems}
+          availableValues={availableItems}
+          getItemKey={(item) => item}
           onChange={(values) => changeSetting(['sidebarItems'], values)}
-          onRemoveItem={(index) => {
-            changeSetting(
-              ['sidebarItems'],
-              settings.sidebarItems.filter((_, i) => i !== index),
-            );
-          }}
-          draggable
+          availableTitle={
+            <FormattedMessage
+              id='settings.sidebar_items.available'
+              defaultMessage='Available items'
+            />
+          }
         />
 
-        {availableItems.length > 0 && (
-          <>
-            <CardTitle
-              title={
-                <FormattedMessage
-                  id='settings.sidebar_items.available'
-                  defaultMessage='Available items'
-                />
-              }
-            />
+        <FormActions>
+          <Button theme='secondary' onClick={reset}>
+            <FormattedMessage id='settings.interface_items.reset' defaultMessage='Reset' />
+          </Button>
 
-            <List>
-              {availableItems.map((item) => (
-                <ListItem
-                  key={item}
-                  label={intl.formatMessage(itemsMessages[item])}
-                  hint={intl.formatMessage(itemHintsMessages[item])}
-                  onClick={() => changeSetting(['sidebarItems'], [...settings.sidebarItems, item])}
-                  size='sm'
-                  actionIcon={iconPlus}
-                />
-              ))}
-            </List>
-          </>
-        )}
+          {onSave && (
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          )}
+        </FormActions>
       </Form>
     </Column>
   );

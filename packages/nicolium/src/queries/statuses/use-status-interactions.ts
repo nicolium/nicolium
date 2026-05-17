@@ -37,6 +37,7 @@ const messages = defineMessages({
     defaultMessage:
       '@{acct}’s instance most likely doesn’t understand emoji reactions. The user will not get notified of the reaction.',
   },
+  reblogScheduled: { id: 'status.reblog_scheduled', defaultMessage: 'Repost scheduled' },
 });
 
 const queryKey = {
@@ -304,7 +305,8 @@ const useReblogStatus = (statusId: string) => {
 
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
-    mutationFn: (visibility?: string) => client.statuses.reblogStatus(statusId, visibility),
+    mutationFn: ({ visibility, scheduledAt }: { visibility?: string; scheduledAt?: string } = {}) =>
+      client.statuses.reblogStatus(statusId, visibility, scheduledAt),
     onMutate: () =>
       updateStatus(
         statusId,
@@ -316,9 +318,19 @@ const useReblogStatus = (statusId: string) => {
         queryClient,
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
-    onSettled: (status) => {
-      importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
+    onSuccess: (status) => {
+      if ('params' in status) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
+        toast.success(messages.reblogScheduled, {
+          actionLabel: messages.view,
+          actionLinkOptions: { to: '/draft_statuses' },
+        });
+      } else {
+        importEntities({ statuses: [status] });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.accountsLists.statusReblogs(statusId),
+        });
+      }
     },
   });
 };
@@ -341,7 +353,7 @@ const useUnreblogStatus = (statusId: string) => {
         queryClient,
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
-    onSettled: (status) => {
+    onSuccess: (status) => {
       importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
     },

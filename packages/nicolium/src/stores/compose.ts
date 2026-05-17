@@ -4,8 +4,7 @@ import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 import { uploadFile, updateMedia } from '@/actions/media';
-import { LEGACY_FE_NAME, saveSettings } from '@/actions/settings';
-import { FE_NAME } from '@/actions/settings';
+import { saveSettings } from '@/actions/settings';
 import { createStatus } from '@/actions/statuses';
 import { isNativeEmoji } from '@/features/emoji';
 import { useClient } from '@/hooks/use-client';
@@ -13,6 +12,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { router } from '@/router';
 import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';
@@ -39,8 +39,6 @@ import type {
   UpdateMediaParams,
   Location,
   EditStatusParams,
-  CredentialAccount,
-  Instance,
   StatusSource,
 } from 'pl-api';
 
@@ -49,10 +47,10 @@ const messages = defineMessages({
     id: 'compose.invalid_schedule',
     defaultMessage: 'You must schedule a post at least 5 minutes out.',
   },
-  success: { id: 'compose.submit_success', defaultMessage: 'Your post was sent!' },
-  editSuccess: { id: 'compose.edit_success', defaultMessage: 'Your post was edited' },
-  redactSuccess: { id: 'compose.redact_success', defaultMessage: 'The post was redacted' },
-  scheduledSuccess: { id: 'compose.scheduled_success', defaultMessage: 'Your post was scheduled' },
+  success: { id: 'compose.submit.success', defaultMessage: 'Your post was sent!' },
+  editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
+  redactSuccess: { id: 'compose.redact.success', defaultMessage: 'The post was redacted' },
+  scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
   uploadErrorPoll: {
     id: 'upload_error.poll',
@@ -168,14 +166,14 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   poll: null,
   location: null,
 
-  contentType: 'text/plain',
+  contentType: 'default', // 'text/plain',
   interactionPolicy: null,
   quoteApprovalPolicy: null,
   language: null,
   localOnly: false,
   scheduledAt: null,
   sensitive: false,
-  visibility: 'public',
+  visibility: 'default', // 'public',
 
   draftId: null,
   groupId: null,
@@ -398,8 +396,6 @@ interface ComposeActions {
     path: ['spoiler_text'] | ['poll', 'options', number],
   ) => void;
 
-  importDefaultSettings: (account: CredentialAccount) => void;
-  importDefaultContentType: (instance: Instance) => void;
   handleTimelineDelete: (statusId: string) => void;
 }
 
@@ -689,22 +685,18 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
-        selectComposeSuggestion: (composeId, position, token, suggestion, path) => {
+        selectComposeSuggestion: (composeId, startPosition, token, suggestion, path) => {
           let completion = '';
-          let startPosition = position;
 
           if (typeof suggestion === 'object' && 'id' in suggestion) {
             completion = isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
-            startPosition = position - 1;
 
             useSettingsStore.getState().actions.rememberEmojiUse(suggestion);
             saveSettings();
           } else if (typeof suggestion === 'string' && suggestion[0] === '#') {
             completion = suggestion;
-            startPosition = position - 1;
           } else if (typeof suggestion === 'string') {
             completion = selectAccount(suggestion)!.acct;
-            startPosition = position;
           }
 
           get().actions.updateCompose(composeId, (compose) => {
@@ -715,33 +707,6 @@ const useComposeStore = create<ComposeStore>()(
             } else if (compose.poll) {
               compose.poll.options[path[2]] = updateText(compose.poll.options[path[2]]);
             }
-          });
-        },
-
-        importDefaultSettings: (account) => {
-          set((state) => {
-            const settings =
-              account.settings_store?.[FE_NAME] || account.settings_store?.[LEGACY_FE_NAME];
-
-            if (!settings) return;
-
-            if (settings.defaultPrivacy) state.default.visibility = settings.defaultPrivacy;
-            if (settings.defaultContentType)
-              state.default.contentType = settings.defaultContentType;
-          });
-        },
-
-        importDefaultContentType: (instance) => {
-          set((state) => {
-            const postFormats = instance.pleroma.metadata.post_formats;
-
-            state.default.contentType =
-              postFormats.includes(state.default.contentType) ||
-              (postFormats.includes('text/markdown') && state.default.contentType === 'wysiwyg')
-                ? state.default.contentType
-                : postFormats.includes('text/markdown')
-                  ? 'text/markdown'
-                  : postFormats[0];
           });
         },
 
@@ -868,7 +833,15 @@ const useSubmitCompose = (composeId: string) => {
       }
 
       const idempotencyKey = compose.idempotencyKey;
-      const contentType = compose.contentType === 'wysiwyg' ? 'text/markdown' : compose.contentType;
+
+      const { defaultContentType, defaultPrivacy } = useSettingsStore.getState().settings;
+
+      let contentType = compose.contentType;
+      if (contentType === 'default') contentType = defaultContentType;
+      if (contentType === 'wysiwyg') contentType = 'text/markdown';
+
+      let visibility = compose.visibility;
+      if (visibility === 'default') visibility = defaultPrivacy;
 
       const params: CreateStatusParams = {
         status: statusText,
@@ -877,7 +850,7 @@ const useSubmitCompose = (composeId: string) => {
         media_ids: media.map((item) => item.id),
         sensitive: compose.sensitive,
         spoiler_text: compose.spoilerText,
-        visibility: compose.visibility,
+        visibility,
         content_type: contentType,
         scheduled_at: preview ? undefined : compose.scheduledAt?.toISOString(),
         language: compose.language ?? compose.suggestedLanguage ?? undefined,
@@ -929,7 +902,7 @@ const useSubmitCompose = (composeId: string) => {
         }
       }
 
-      if (compose.visibility === 'group' && compose.groupId) {
+      if (visibility === 'group' && compose.groupId) {
         params.group_id = compose.groupId;
       }
 
@@ -1001,6 +974,8 @@ const useSubmitCompose = (composeId: string) => {
             } else {
               toast.success(messages.scheduledSuccess, toastOptions);
             }
+
+            queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
           }
 
           onSuccess?.();

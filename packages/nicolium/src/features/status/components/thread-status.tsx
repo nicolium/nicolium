@@ -75,7 +75,7 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
 
   return (
     <div
-      className={clsx('thread__status relative pb-4', {
+      className={clsx('thread__status', {
         'thread__status--linear': props.linear,
         'thread__status--ancestor': props.isAncestor,
       })}

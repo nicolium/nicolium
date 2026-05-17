@@ -1,6 +1,5 @@
 import { staticFetch } from '@/api';
 import { getAuthUserUrl, getMeUrl, getClient } from '@/stores/auth';
-import { useComposeStore } from '@/stores/compose';
 import { useInstanceStore } from '@/stores/instance';
 
 /** Figure out the appropriate instance to fetch depending on the state */
@@ -20,7 +19,6 @@ const fetchInstance = async () => {
     const instance = await client.instance.getInstance();
 
     useInstanceStore.getState().actions.loadInstance(instance);
-    useComposeStore.getState().actions.importDefaultContentType(instance);
   } catch (error) {
     useInstanceStore.getState().actions.instanceFetchFailed(error);
   }

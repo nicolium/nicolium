@@ -1,11 +1,13 @@
 import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconList from '@phosphor-icons/core/regular/list.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import { useNavigate } from '@tanstack/react-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import DropdownMenu from '@/components/dropdown-menu';
+import { changeSetting } from '@/actions/settings';
+import DropdownMenu, { type MenuItem } from '@/components/dropdown-menu';
 import PullToRefresh from '@/components/pull-to-refresh';
 import StatusList from '@/components/statuses/status-list';
 import Column from '@/components/ui/column';
@@ -16,6 +18,7 @@ import {
 } from '@/queries/statuses/use-bookmark-folders';
 import { bookmarksRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -40,11 +43,25 @@ const messages = defineMessages({
     id: 'bookmarks.delete_folder.fail',
     defaultMessage: 'Failed to delete folder',
   },
+  includeInNavigationItems: {
+    id: 'timeline_filters.include_in_navigation_items',
+    defaultMessage: 'Include in navigation items',
+  },
+  addToNavigationItemsSuccess: {
+    id: 'account.add_to_navigation_items.success',
+    defaultMessage: 'Added to navigation items',
+  },
+  removeFromNavigationItemsSuccess: {
+    id: 'account.remove_from_navigation_items.success',
+    defaultMessage: 'Removed from navigation items',
+  },
+  view: { id: 'toast.view', defaultMessage: 'View' },
 });
 
 const BookmarksPage: React.FC = () => {
   const intl = useIntl();
   const navigate = useNavigate();
+  const { navigationItems, pinnedNavigationItems } = useSettings();
 
   let folderId: string | undefined = bookmarksRoute.useParams().folderId;
   if (folderId === 'all') folderId = undefined;
@@ -99,8 +116,10 @@ const BookmarksPage: React.FC = () => {
     />
   );
 
-  const items = folderId
-    ? [
+  const items: Array<MenuItem | null> = useMemo(() => {
+    const navigationItemId = `bookmark_folder:${folderId}`;
+    if (folderId) {
+      return [
         {
           text: intl.formatMessage(messages.editFolder),
           action: handleEditFolder,
@@ -111,8 +130,33 @@ const BookmarksPage: React.FC = () => {
           action: handleDeleteFolder,
           icon: iconTrash,
         },
-      ]
-    : [];
+        null,
+        {
+          text: intl.formatMessage(messages.includeInNavigationItems),
+          icon: iconList,
+          type: 'toggle',
+          checked: navigationItems.includes(navigationItemId as any),
+          onChange: (value) => {
+            if (value) {
+              changeSetting(['navigationItems'], [...navigationItems, navigationItemId]);
+              toast.success(intl.formatMessage(messages.addToNavigationItemsSuccess));
+            } else {
+              changeSetting(
+                ['navigationItems'],
+                navigationItems.filter((id) => id !== navigationItemId),
+              );
+              changeSetting(
+                ['pinnedNavigationItems'],
+                pinnedNavigationItems.filter((id) => id !== navigationItemId),
+              );
+              toast.success(intl.formatMessage(messages.removeFromNavigationItemsSuccess));
+            }
+          },
+        },
+      ];
+    }
+    return [];
+  }, [folderId, navigationItems, pinnedNavigationItems]);
 
   return (
     <Column

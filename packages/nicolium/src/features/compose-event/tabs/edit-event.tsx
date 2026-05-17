@@ -34,30 +34,30 @@ import UploadButton from '../components/upload-button';
 import type { Location } from 'pl-api';
 
 const messages = defineMessages({
-  eventNamePlaceholder: { id: 'compose_event.fields.name_placeholder', defaultMessage: 'Name' },
+  eventNamePlaceholder: { id: 'compose_event.fields.name.placeholder', defaultMessage: 'Name' },
   eventDescriptionPlaceholder: {
-    id: 'compose_event.fields.description_placeholder',
+    id: 'compose_event.fields.description.placeholder',
     defaultMessage: 'Description',
   },
   eventStartTimePlaceholder: {
-    id: 'compose_event.fields.start_time_placeholder',
+    id: 'compose_event.fields.start_time.placeholder',
     defaultMessage: 'Event begins on…',
   },
   eventEndTimePlaceholder: {
-    id: 'compose_event.fields.end_time_placeholder',
+    id: 'compose_event.fields.end_time.placeholder',
     defaultMessage: 'Event ends on…',
   },
   resetLocation: { id: 'compose_event.reset_location', defaultMessage: 'Reset location' },
   eventFetchFail: {
-    id: 'compose_event.fetch_fail',
+    id: 'compose_event.fetch.fail',
     defaultMessage: 'Failed to fetch edited event information',
   },
   eventHeaderDescription: {
-    id: 'compose_event.header_description',
+    id: 'compose_event.header.description',
     defaultMessage: 'Add header alt text.',
   },
   eventHeaderDescriptionPlaceholder: {
-    id: 'compose_event.header_description_placeholder',
+    id: 'compose_event.header.description.placeholder',
     defaultMessage: 'Event banner',
   },
 });
@@ -247,11 +247,11 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
     <Form className='⁂-edit-event' onSubmit={handleSubmit}>
       <FormGroup
         labelText={
-          <FormattedMessage id='compose_event.fields.banner_label' defaultMessage='Event banner' />
+          <FormattedMessage id='compose_event.fields.banner.label' defaultMessage='Event banner' />
         }
         hintText={
           <FormattedMessage
-            id='compose_event.fields.banner_hint'
+            id='compose_event.fields.banner.hint'
             defaultMessage='PNG, GIF or JPG. Landscape format is preferred.'
           />
         }
@@ -287,7 +287,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       </FormGroup>
       <FormGroup
         labelText={
-          <FormattedMessage id='compose_event.fields.name_label' defaultMessage='Event name' />
+          <FormattedMessage id='compose_event.fields.name.label' defaultMessage='Event name' />
         }
       >
         <Input
@@ -300,7 +300,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       <FormGroup
         labelText={
           <FormattedMessage
-            id='compose_event.fields.description_label'
+            id='compose_event.fields.description.label'
             defaultMessage='Event description'
           />
         }
@@ -321,7 +321,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       <FormGroup
         labelText={
           <FormattedMessage
-            id='compose_event.fields.location_label'
+            id='compose_event.fields.location.label'
             defaultMessage='Event location'
           />
         }
@@ -331,7 +331,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       <FormGroup
         labelText={
           <FormattedMessage
-            id='compose_event.fields.start_time_label'
+            id='compose_event.fields.start_time.label'
             defaultMessage='Event start date'
           />
         }
@@ -360,7 +360,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         <FormGroup
           labelText={
             <FormattedMessage
-              id='compose_event.fields.end_time_label'
+              id='compose_event.fields.end_time.label'
               defaultMessage='Event end date'
             />
           }

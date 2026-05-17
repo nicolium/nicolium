@@ -34,8 +34,7 @@ const messages = defineMessages({
   },
   accountLocked: {
     id: 'account.locked_info',
-    defaultMessage:
-      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
+    defaultMessage: 'This account is locked. The owner manually reviews who can follow them.',
   },
   deactivated: { id: 'account.deactivated', defaultMessage: 'Deactivated' },
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
@@ -51,10 +50,11 @@ interface IProfileInfoPanel {
   account?: Account & { original_display_name?: string };
   /** Username from URL params, in case the account isn't found. */
   username: string;
+  withStatusesLink: boolean;
 }
 
 /** User profile metadata, such as location, birthday, etc. */
-const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) => {
+const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, withStatusesLink }) => {
   const accountInfoNode = React.useRef<HTMLDivElement>(null);
   const intl = useIntl();
   const acct = useAcct(account);
@@ -223,7 +223,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
           </div>
         </div>
 
-        <ProfileStats account={account} />
+        <ProfileStats account={account} withStatusesLink={withStatusesLink} />
 
         <div className='⁂-account-info__container' ref={accountInfoNode}>
           <div className={clsx('⁂-account-info', { '⁂-account-info--collapsed': collapsed })}>
@@ -280,7 +280,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
               ) : null}
             </div>
 
-            {scrobble && <Scrobble scrobble={scrobble} />}
+            {scrobble && <Scrobble scrobble={scrobble} withComposeButton={ownAccount} />}
 
             {ownAccount ? null : <ProfileFamiliarFollowers account={account} />}
 

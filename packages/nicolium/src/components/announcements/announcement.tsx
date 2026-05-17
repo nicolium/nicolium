@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedDate } from 'react-intl';
 
-import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { getTextDirection } from '@/utils/rtl';
 
@@ -35,9 +34,9 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement, emojiMap }) => {
   const direction = getTextDirection(announcement.content);
 
   return (
-    <div className='flex w-full flex-col gap-2'>
+    <div className='⁂-announcement'>
       {hasTimeRange && (
-        <Text theme='muted' direction={direction}>
+        <p className='⁂-announcement__time' style={{ direction }}>
           <FormattedDate
             value={startsAt}
             hour12
@@ -57,7 +56,7 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement, emojiMap }) => {
             hour={skipTime ? undefined : 'numeric'}
             minute={skipTime ? undefined : '2-digit'}
           />
-        </Text>
+        </p>
       )}
 
       <AnnouncementContent announcement={announcement} />

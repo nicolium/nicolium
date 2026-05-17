@@ -18,7 +18,7 @@ import { mutative } from 'zustand-mutative';
 
 import { createApp } from '@/actions/apps';
 import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
-import { FE_NAME, LEGACY_FE_NAME } from '@/actions/settings';
+import { FE_NAME } from '@/actions/settings';
 import * as BuildConfig from '@/build-config';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -87,6 +87,7 @@ const authUserSchema = v.object({
   access_token: v.string(),
   id: v.string(),
   url: v.string(),
+  iceshrimp_access_token: v.fallback(v.optional(v.string()), undefined),
 });
 
 const tokenWithAppSchema = v.object({
@@ -97,11 +98,7 @@ const tokenWithAppSchema = v.object({
 
 type TokenWithApp = v.InferOutput<typeof tokenWithAppSchema>;
 
-interface AuthUser {
-  access_token: string;
-  id: string;
-  url: string;
-}
+type AuthUser = v.InferOutput<typeof authUserSchema>;
 
 type Me = string | null | false;
 
@@ -153,6 +150,7 @@ interface AuthActions {
   fetchCaptcha: () => ReturnType<PlApiClient['oauth']['getCaptcha']>;
   updateMe: (params: UpdateCredentialsParams) => Promise<CredentialAccount>;
   verifyAccounts: () => void;
+  setIceshrimpToken: (accountUrl: string, token: string) => void;
 }
 
 const validUser = (user?: AuthUser) => {
@@ -220,6 +218,10 @@ const getLocalState = (): (AuthData & { clients: Record<string, PlApiClient> }) 
   for (const [url, user] of Object.entries(parsedUsers)) {
     clients[url] = new PlApiClient(parseBaseURL(url) || backendUrl, user.access_token, {
       instance,
+      iceshrimpAccessToken: user.iceshrimp_access_token,
+      onFetchIceshrimpAccessToken: (token: string) => {
+        useAuthStore.getState().actions.setIceshrimpToken(url, token);
+      },
     });
   }
 
@@ -385,7 +387,6 @@ type AuthStore = AuthState & { actions: AuthActions };
 
 const useAuthStore = create<AuthStore>()(
   mutative((set, get) => {
-    const getMe = () => get().me;
     const getMeClient = () => {
       const { me, clients } = get();
       return me ? (clients[me] ?? get().defaultClient) : get().defaultClient;
@@ -406,8 +407,17 @@ const useAuthStore = create<AuthStore>()(
       return state.users[accountUrl!]?.access_token;
     };
 
-    const createClientForAccount = (accountUrl: string, token: string) => {
-      const client = new PlApiClient(parseBaseURL(accountUrl) || backendUrl, token);
+    const createClientForAccount = (
+      accountUrl: string,
+      token: string,
+      iceshrimpAccessToken?: string,
+    ) => {
+      const client = new PlApiClient(parseBaseURL(accountUrl) || backendUrl, token, {
+        iceshrimpAccessToken,
+        onFetchIceshrimpAccessToken: (token: string) => {
+          get().actions.setIceshrimpToken(accountUrl, token);
+        },
+      });
       set({ clients: { ...get().clients, [accountUrl]: client } });
       return client;
     };
@@ -450,16 +460,17 @@ const useAuthStore = create<AuthStore>()(
 
     const fetchMeSuccess = async (account: CredentialAccount) => {
       const client = getMeClient();
+      let settingsFound = false;
 
       setSentryAccount(account);
 
-      const settings =
-        account.settings_store?.[FE_NAME] ?? account.settings_store?.[LEGACY_FE_NAME];
+      const settings = account.settings_store?.[FE_NAME];
 
       if (settings) {
         // lazy import to avoid circular dependency at module init
         const { useSettingsStore } = await import('@/stores/settings');
         useSettingsStore.getState().actions.loadUserSettings(settings);
+        settingsFound = true;
       }
 
       if (!client.features.frontendConfigurations && client.features.notes) {
@@ -477,6 +488,7 @@ const useAuthStore = create<AuthStore>()(
               }
               const { useSettingsStore } = await import('@/stores/settings');
               useSettingsStore.getState().actions.loadUserSettings(frontendConfig);
+              settingsFound = true;
               get().actions.setCurrentAccount(account);
               return frontendConfig;
             } catch (error) {
@@ -486,8 +498,11 @@ const useAuthStore = create<AuthStore>()(
         }
       }
 
-      const { useComposeStore } = await import('@/stores/compose');
-      useComposeStore.getState().actions.importDefaultSettings(account);
+      if (!settingsFound) {
+        const { useSettingsStore } = await import('@/stores/settings');
+        useSettingsStore.getState().actions.loadUserSettings(undefined);
+      }
+
       get().actions.setCurrentAccount(account);
     };
 
@@ -543,7 +558,11 @@ const useAuthStore = create<AuthStore>()(
           });
 
           persistAuthAccount(account);
-          createClientForAccount(account.url, token);
+          createClientForAccount(
+            account.url,
+            token,
+            get().users[account.url]?.iceshrimp_access_token,
+          );
 
           persistAuth(get());
           const newMe = get().me;
@@ -589,9 +608,10 @@ const useAuthStore = create<AuthStore>()(
           });
 
           // Ensure we have a client for the account
-          const accessToken = get().users[account.url]?.access_token;
+          const user = get().users[account.url];
+          const accessToken = user?.access_token;
           if (accessToken && !get().clients[account.url]) {
-            createClientForAccount(account.url, accessToken);
+            createClientForAccount(account.url, accessToken, user?.iceshrimp_access_token);
           }
 
           persistAuth(get());
@@ -617,7 +637,7 @@ const useAuthStore = create<AuthStore>()(
           });
           for (const [url, user] of Object.entries(get().users)) {
             if (!get().clients[url]) {
-              createClientForAccount(url, user.access_token);
+              createClientForAccount(url, user.access_token, user.iceshrimp_access_token);
             }
           }
           persistAuth(get());
@@ -642,7 +662,7 @@ const useAuthStore = create<AuthStore>()(
               scope: getScopes(),
             };
 
-            const token = await obtainOAuthToken(params);
+            const token = await obtainOAuthToken(params, undefined, get().defaultClient);
             authLoggedIn(token, app);
             return token;
           } catch (error: any) {
@@ -658,10 +678,7 @@ const useAuthStore = create<AuthStore>()(
         },
 
         verifyOtp: async (code, mfaToken) => {
-          const { app } = get();
-          const me = getMe();
-          const baseUrl = parseBaseURL(me || undefined) || BuildConfig.BACKEND_URL;
-          const client = new PlApiClient(baseUrl);
+          const { app, defaultClient: client } = get();
 
           const token = await client.oauth.mfaChallenge({
             client_id: app?.client_id!,
@@ -669,6 +686,7 @@ const useAuthStore = create<AuthStore>()(
             mfa_token: mfaToken,
             code,
             challenge_type: 'totp',
+            scope: getScopes(),
           });
 
           authLoggedIn(token, app);
@@ -684,6 +702,7 @@ const useAuthStore = create<AuthStore>()(
           try {
             const account = await client.settings.verifyCredentials();
             queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+            queryClient.setQueryData(queryKeys.accountCredentials.show(account.id), account);
             get().actions.addCredentials(token, account);
             if (account.id === get().currentAccountId) fetchMeSuccess(account);
             return account;
@@ -708,6 +727,7 @@ const useAuthStore = create<AuthStore>()(
             try {
               const account = await KVStore.getItemOrError(`authAccount:${accountUrl}`);
               queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+              queryClient.setQueryData(queryKeys.accountCredentials.show(account.id), account);
               get().actions.setCurrentAccountIfUnset(account);
               if (account.id === get().currentAccountId) fetchMeSuccess(account);
             } catch {}
@@ -781,8 +801,6 @@ const useAuthStore = create<AuthStore>()(
           persistAuthAccount(response, params);
 
           queryClient.setQueryData(queryKeys.accounts.show(response.id), response);
-          const { useComposeStore } = await import('@/stores/compose');
-          useComposeStore.getState().actions.importDefaultSettings(response);
           get().actions.setCurrentAccount(response);
 
           return response;
@@ -800,6 +818,16 @@ const useAuthStore = create<AuthStore>()(
                 });
             }
           });
+        },
+
+        setIceshrimpToken: (accountUrl, token) => {
+          set((state) => {
+            const user = state.users[accountUrl];
+            if (user) {
+              user.iceshrimp_access_token = token;
+            }
+          });
+          persistAuth(get());
         },
       },
     };

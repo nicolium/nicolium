@@ -24,16 +24,16 @@ import { unescapeHTML } from '@/utils/html';
 import type { NicoliumResponse } from '@/api';
 
 const messages = defineMessages({
-  heading: { id: 'navigation_bar.edit_group', defaultMessage: 'Edit Group' },
+  heading: { id: 'navigation_bar.edit_group', defaultMessage: 'Edit group' },
   groupNamePlaceholder: {
-    id: 'manage_group.fields.name_placeholder',
-    defaultMessage: 'Group Name',
+    id: 'manage_group.fields.name.placeholder',
+    defaultMessage: 'Group name',
   },
   groupDescriptionPlaceholder: {
-    id: 'manage_group.fields.description_placeholder',
+    id: 'manage_group.fields.description.placeholder',
     defaultMessage: 'Description',
   },
-  groupSaved: { id: 'group.update.success', defaultMessage: 'Group successfully saved' },
+  groupSaved: { id: 'group.update.success', defaultMessage: 'Group saved' },
 });
 
 const EditGroup: React.FC = () => {
@@ -95,20 +95,20 @@ const EditGroup: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
-        <div className='relative mb-12 flex'>
+        <div className='⁂-profile-images'>
           <HeaderPicker accept={attachmentTypes} disabled={isUpdatePending} {...header} />
           <AvatarPicker accept={attachmentTypes} disabled={isUpdatePending} {...avatar} />
         </div>
         <FormGroup
           labelText={
             <FormattedMessage
-              id='manage_group.fields.name_label_optional'
+              id='manage_group.fields.name.label_optional'
               defaultMessage='Group name'
             />
           }
           hintText={
             <FormattedMessage
-              id='manage_group.fields.cannot_change_hint'
+              id='manage_group.fields.cannot_change.hint'
               defaultMessage='This cannot be changed after the group is created.'
             />
           }
@@ -125,7 +125,7 @@ const EditGroup: React.FC = () => {
         <FormGroup
           labelText={
             <FormattedMessage
-              id='manage_group.fields.description_label'
+              id='manage_group.fields.description.label'
               defaultMessage='Description'
             />
           }

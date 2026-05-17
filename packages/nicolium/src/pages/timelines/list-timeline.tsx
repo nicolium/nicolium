@@ -10,6 +10,7 @@ import { ListTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import { EmptyMessage } from '@/components/empty-message';
 import { TimelinePicker } from '@/components/timeline-picker';
+import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
@@ -36,7 +37,8 @@ const ListTimelinePage: React.FC = () => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
   const navigate = useNavigate();
-  const timelineFilterOptions = useTimelineFiltersOptions('list', `list:${listId}`);
+  const timelineId = `list:${listId}` as const;
+  const timelineFilterOptions = useTimelineFiltersOptions('list', timelineId);
 
   const { data: list, isFetching } = useList(listId);
   const { mutate: deleteList } = useDeleteList();
@@ -114,9 +116,14 @@ const ListTimelinePage: React.FC = () => {
   return (
     <Column
       label={title}
-      title={<TimelinePicker active={`list:${listId}`} />}
+      title={<TimelinePicker active={timelineId} />}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+      action={
+        <>
+          <TimelineRefreshButton timelineId={timelineId} />
+          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+        </>
+      }
     >
       <ListTimelineColumn
         listId={listId}

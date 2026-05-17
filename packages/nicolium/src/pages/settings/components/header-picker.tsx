@@ -7,7 +7,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import AltIndicator from '@/components/media/alt-indicator';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useModalsActions } from '@/stores/modals';
 
@@ -24,7 +23,7 @@ const messages = defineMessages({
   changeHeaderDescriptionConfirm: { id: 'group.upload_banner.alt.confirm', defaultMessage: 'Save' },
   clearHeader: { id: 'group.upload_banner.clear', defaultMessage: 'Clear header image' },
   changeDescription: {
-    id: 'group.upload_banner.change_description',
+    id: 'group.upload_banner.change.description',
     defaultMessage: 'Change alt text',
   },
 });
@@ -73,13 +72,10 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
     return (
       <label
         ref={picker}
-        className={clsx(
-          'dark:sm:shadow-inset relative h-24 w-full cursor-pointer overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-primary-400 sm:h-36 sm:shadow',
-          {
-            '!z-[99] border-2 border-dashed border-primary-600': isDragging,
-            'ring-2 ring-primary-600 ring-offset-2': isDraggedOver,
-          },
-        )}
+        className={clsx('⁂-header-picker', {
+          '⁂-header-picker--dragging': isDragging,
+          '⁂-header-picker--dragged-over': isDraggedOver,
+        })}
         title={intl.formatMessage(messages.title)}
         tabIndex={0}
       >
@@ -90,19 +86,12 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
             alt={intl.formatMessage(messages.title)}
           />
         )}
-        <div
-          className={clsx(
-            'absolute top-0 flex size-full items-center justify-center gap-1.5 transition-opacity',
-            {
-              'bg-primary-100 opacity-0 hover:opacity-90 dark:bg-gray-800': src,
-            },
-          )}
-        >
-          <Icon src={iconUpload} className='size-4.5' />
+        <div>
+          <Icon src={iconUpload} />
 
-          <Text size='md' theme='primary' weight='semibold'>
+          <p>
             <FormattedMessage id='group.upload_banner' defaultMessage='Upload photo' />
-          </Text>
+          </p>
 
           <input
             ref={ref}
@@ -113,7 +102,6 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
               onChange(target.files);
             }}
             disabled={disabled}
-            className='hidden'
           />
         </div>
         {onClear && src && (
@@ -121,15 +109,14 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
             onClick={handleClear}
             src={iconX}
             theme='dark'
-            className='absolute right-2 top-2 z-10 hover:scale-105 hover:bg-gray-900'
-            iconClassName='h-5 w-5'
+            className='⁂-header-picker__clear-button'
             title={intl.formatMessage(messages.clearHeader)}
           />
         )}
         {onChangeDescription && src && (
           <button
             type='button'
-            className='absolute left-2 top-2'
+            className='⁂-header-picker__alt-button'
             onClick={handleChangeDescriptionClick}
             title={intl.formatMessage(messages.changeDescription)}
           >

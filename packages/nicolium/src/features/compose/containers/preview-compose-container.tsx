@@ -63,7 +63,7 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
         <div className='flex items-center gap-1'>
           <Icon className='size-4 text-gray-700 dark:text-gray-600' src={iconEye} />
           <Text theme='muted' size='sm' className='grow'>
-            <FormattedMessage id='compose_form.preview_label' defaultMessage='Preview' />
+            <FormattedMessage id='compose_form.preview.label' defaultMessage='Preview' />
           </Text>
 
           <Text theme='muted' size='sm' className='inline-flex items-center gap-1' tag='label'>

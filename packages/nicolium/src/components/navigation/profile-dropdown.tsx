@@ -41,7 +41,7 @@ const LoggedInAccount: React.FC<ILoggedInAccount> = ({ accountId }) => {
 
 interface IProfileDropdown {
   account: AccountEntity;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 type IMenuItem = {

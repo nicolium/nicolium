@@ -5,11 +5,12 @@ import * as v from 'valibot';
  */
 const adminRelaySchema = v.pipe(
   v.any(),
-  v.transform((data: any) => ({ id: data.actor, ...data })),
+  v.transform((data: any) => ({ id: data.actor, actor: data.inbox, ...data })),
   v.object({
     actor: v.fallback(v.string(), ''),
     id: v.string(),
     followed_back: v.fallback(v.boolean(), false),
+    status: v.optional(v.picklist(['requesting', 'accepted', 'rejected'])),
   }),
 );
 

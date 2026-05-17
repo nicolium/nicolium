@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
-import { AccountLink } from '@/components/accounts/account-link';
 import List, { ListItem } from '@/components/list';
 import ReactSwipeableViews from '@/components/react-swipeable-views';
 import StatusContainer from '@/components/statuses/status-container';
@@ -19,6 +18,7 @@ import Text from '@/components/ui/text';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { useFeatures } from '@/hooks/use-features';
 import {
+  useForwardReport,
   useReopenReport,
   useReport,
   useResolveReport,
@@ -47,6 +47,11 @@ const messages = defineMessages({
       'You can include an optional comment while resolving this report. If the report was created by a local account, the comment will be sent to the user.',
   },
   reportCommentConfirm: { id: 'report.resolve.comment.confirm', defaultMessage: 'Resolve report' },
+  reportForwardConfirm: {
+    id: 'confirmations.admin.report.forward.confirm',
+    defaultMessage: 'Forward',
+  },
+  reportForwardSuccess: { id: 'admin.report.forward.success', defaultMessage: 'Report forwarded' },
 });
 
 interface IReportStatuses {
@@ -59,6 +64,10 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
   const handleChangeIndex = (index: number) => {
     setIndex(index % statusIds.length);
   };
+
+  if (statusIds.length === 1) {
+    return <StatusContainer id={statusIds[0]} />;
+  }
 
   return (
     <div className='relative -mx-1'>
@@ -109,6 +118,7 @@ const ReportPage: React.FC = () => {
   const { mutate: unassignReport } = useUnassignReport(reportId);
   const { mutate: resolveReport } = useResolveReport(reportId);
   const { mutate: reopenReport } = useReopenReport(reportId);
+  const { mutate: forwardReport } = useForwardReport(reportId);
 
   const handleSelfAssignReport = () => {
     selfAssignReport(undefined, {
@@ -147,6 +157,31 @@ const ReportPage: React.FC = () => {
     }
   };
 
+  const handleForwardReport = () => {
+    openModal('CONFIRM', {
+      heading: (
+        <FormattedMessage
+          id='confirmations.admin.report.forward.heading'
+          defaultMessage='Forward the report'
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.admin.report.forward.message'
+          defaultMessage='Are you sure you want to forward this report to the parent instance?'
+        />
+      ),
+      confirm: intl.formatMessage(messages.reportForwardConfirm),
+      onConfirm: () => {
+        forwardReport(undefined, {
+          onSuccess: () => {
+            toast.success(intl.formatMessage(messages.reportForwardSuccess));
+          },
+        });
+      },
+    });
+  };
+
   const handleReopenReport = () => {
     reopenReport(undefined, {
       onSuccess: () => {
@@ -161,7 +196,11 @@ const ReportPage: React.FC = () => {
     <Column label={intl.formatMessage(messages.columnHeading, { id: reportId })}>
       <div className='mb-4 grid grid-cols-1 gap-2 md:grid-cols-2'>
         {report.target_account && (
-          <AccountLink account={report.target_account} className='h-fit'>
+          <Link
+            to='/nicolium/admin/accounts/$accountId'
+            params={{ accountId: report.target_account_id }}
+            className='h-fit'
+          >
             <Card variant='rounded'>
               <div className='flex flex-col gap-2'>
                 <Text size='md' weight='medium'>
@@ -173,7 +212,7 @@ const ReportPage: React.FC = () => {
                 <Account account={report.target_account} disabled hideActions />
               </div>
             </Card>
-          </AccountLink>
+          </Link>
         )}
         <table className='w-full'>
           <tbody>
@@ -239,6 +278,25 @@ const ReportPage: React.FC = () => {
                 </Text>
               </td>
             </tr>
+            {report.forwarded !== undefined && (
+              <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
+                <td className='p-2.5'>
+                  <Text weight='medium' size='sm' tag='span'>
+                    {report.forwarded ? (
+                      <FormattedMessage
+                        id='admin.report.forwarded.true'
+                        defaultMessage='Forwarded'
+                      />
+                    ) : (
+                      <FormattedMessage
+                        id='admin.report.forwarded.false'
+                        defaultMessage='Not forwarded'
+                      />
+                    )}
+                  </Text>
+                </td>
+              </tr>
+            )}
             {features.mastodonAdmin && (
               <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
                 <td className='p-2.5'>
@@ -309,6 +367,13 @@ const ReportPage: React.FC = () => {
               />
             }
             onClick={handleResolveReport}
+          />
+        )}
+        {features.iceshrimpAdmin && (
+          <ListItem
+            label={<FormattedMessage id='admin.report.forward' defaultMessage='Forward report' />}
+            onClick={handleForwardReport}
+            disabled={report.forwarded}
           />
         )}
         <ListItem

@@ -32,6 +32,7 @@ import iconPushPinSlash from '@phosphor-icons/core/regular/push-pin-slash.svg';
 import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
 import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import iconSpeakerX from '@phosphor-icons/core/regular/speaker-x.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
@@ -57,6 +58,7 @@ import { useCanInteract } from '@/hooks/use-can-interact';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useTranslate } from '@/hooks/use-translate';
 import { languages } from '@/pages/settings/components/preferences';
 import { useUnblockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useChats } from '@/queries/chats';
@@ -149,7 +151,7 @@ const messages = defineMessages({
   deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
   deleteUser: { id: 'admin.users.actions.delete_user', defaultMessage: 'Delete @{name}' },
   direct: { id: 'status.direct', defaultMessage: 'Direct message @{name}' },
-  disfavourite: { id: 'status.disfavourite', defaultMessage: 'Disike' },
+  disfavourite: { id: 'status.disfavourite', defaultMessage: 'Dislike' },
   edit: { id: 'status.edit', defaultMessage: 'Edit' },
   embed: { id: 'status.embed', defaultMessage: 'Embed post' },
   external: { id: 'status.external', defaultMessage: 'View post on {domain}' },
@@ -188,6 +190,10 @@ const messages = defineMessages({
   more: { id: 'status.more', defaultMessage: 'More' },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
+  muteConversationSuccess: {
+    id: 'status.mute_conversation.success',
+    defaultMessage: 'Conversation muted',
+  },
   open: { id: 'status.open', defaultMessage: 'Show post details' },
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
   quotePostShort: { id: 'status.quote.short', defaultMessage: 'Quote' },
@@ -217,7 +223,7 @@ const messages = defineMessages({
   redraftMessage: {
     id: 'confirmations.redraft.message',
     defaultMessage:
-      'Are you sure you want to delete this post and re-draft it? Favorites and reposts will be lost, and replies to the original post will be orphaned.',
+      'Are you sure you want to delete this post and re-draft it? Likes and reposts will be lost, and replies to the original post will be orphaned.',
   },
   repliesDisabledGroup: {
     id: 'status.disabled_replies.group_membership',
@@ -235,6 +241,10 @@ const messages = defineMessages({
   share: { id: 'status.share', defaultMessage: 'Share' },
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
+  unmuteConversationSuccess: {
+    id: 'status.unmute_conversation.success',
+    defaultMessage: 'Conversation unmuted',
+  },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
   viewReactions: { id: 'status.view_reactions', defaultMessage: 'View reactions' },
   wrench: { id: 'status.wrench', defaultMessage: 'Wrench reaction' },
@@ -245,6 +255,10 @@ const messages = defineMessages({
   },
   translate: { id: 'status.translate', defaultMessage: 'Translate' },
   hideTranslation: { id: 'status.hide_translation', defaultMessage: 'Hide translation' },
+  downloadModelAndTranslate: {
+    id: 'status.translate.download',
+    defaultMessage: 'Download model and translate locally',
+  },
 
   favouriteInteractionPolicyHeader: {
     id: 'status.interaction_policy.favourite.header',
@@ -496,7 +510,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const features = useFeatures();
   const intl = useIntl();
 
-  const { boostModal, missingDescriptionBoostModal } = useSettings();
+  const { boostModal, missingDescriptionBoostModal, useRocketIconForReblogs } = useSettings();
   const { openModal } = useModalsActions();
   const canReblog = useCanInteract(status, 'can_reblog');
   const canQuote = useCanInteract(status, 'can_quote');
@@ -504,7 +518,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const { mutate: reblogStatus } = useReblogStatus(status.id);
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
-  let reblogIcon = iconRepeat;
+  let reblogIcon = useRocketIconForReblogs ? iconRocketLaunch : iconRepeat;
 
   if (status.visibility === 'direct') {
     reblogIcon = iconAt;
@@ -525,15 +539,18 @@ const ReblogButton: React.FC<IReblogButton> = ({
         return attachment.description.trim().endsWith(`.${extension}`);
       });
 
-      const doReblog = () => {
+      const doReblog = (visibility?: string, scheduledAt?: string) => {
         if (status.reblogged) {
           unreblogStatus();
         } else {
-          reblogStatus(undefined, {
-            onSuccess: () => {
-              if (canReblog.approvalRequired) toast.info(messages.reblogApprovalRequired);
+          reblogStatus(
+            { visibility, scheduledAt },
+            {
+              onSuccess: () => {
+                if (canReblog.approvalRequired) toast.info(messages.reblogApprovalRequired);
+              },
             },
-          });
+          );
         }
       };
 
@@ -593,7 +610,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
       active={status.reblogged}
       onClick={handleReblogClick}
       onLongPress={handleReblogLongPress}
-      count={status.reblogs_count + status.quotes_count}
+      count={status.reblogs_count + (withQuote ? status.quotes_count : 0)}
       text={withLabels ? intl.formatMessage(messages.reblog) : undefined}
     />
   );
@@ -622,7 +639,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
     {
       text: intl.formatMessage(status.reblogged ? messages.cancelReblogPrivate : messages.reblog),
       action: handleReblogClick,
-      icon: iconRepeat,
+      icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
     },
     {
       text: intl.formatMessage(messages.quotePost),
@@ -948,6 +965,42 @@ const ShareButton: React.FC<IActionButton> = ({ status }) => {
   );
 };
 
+const TranslateButton: React.FC<IActionButton> = ({ status }) => {
+  const intl = useIntl();
+  const translateInformation = useTranslate(status);
+  if (!translateInformation) return null;
+
+  const { translate, state } = translateInformation;
+
+  let title;
+
+  switch (state) {
+    case 'translated':
+      title = intl.formatMessage(messages.hideTranslation);
+      break;
+    case 'translatable':
+    case 'translating':
+      title = intl.formatMessage(messages.translate);
+      break;
+    case 'downloadable':
+      title = intl.formatMessage(messages.downloadModelAndTranslate);
+      break;
+    case 'downloading':
+      title = intl.formatMessage(messages.loadConversation);
+      break;
+  }
+
+  return (
+    <StatusActionButton
+      title={title}
+      icon={iconTranslate}
+      onClick={translate}
+      loading={state === 'translating' || state === 'downloading'}
+      active={state === 'translated'}
+    />
+  );
+};
+
 const useItems = (
   items: Array<(typeof STATUS_ACTIONS)[number]>,
   status: SelectedStatus | undefined,
@@ -1082,6 +1135,16 @@ const useItems = (
             />,
           );
           break;
+        case 'translate':
+          renderedItems.push(
+            <TranslateButton
+              key='translate'
+              status={status}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+            />,
+          );
+          break;
         default:
           break;
       }
@@ -1108,7 +1171,7 @@ const MenuButtonRemainingItems: React.FC<IMenuButtonRemainingItems> = ({
     return STATUS_ACTIONS.filter((action) => {
       if (statusActionBarItems.includes(action)) return false;
       if (action === 'quote' && statusActionBarItems.includes('reblog')) return false;
-      if (['wrench', 'bookmark', 'share'].includes(action)) return false;
+      if (['wrench', 'bookmark', 'share', 'translate'].includes(action)) return false;
       return true;
     });
   }, [statusActionBarItems]);
@@ -1139,7 +1202,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const navigate = useNavigate();
   const { mentionCompose, directCompose } = useComposeActions();
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
-  const { boostModal } = useSettings();
+  const { boostModal, useRocketIconForReblogs } = useSettings();
   const client = useClient();
 
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
@@ -1250,9 +1313,9 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleReblogClick = (e: React.MouseEvent | React.KeyboardEvent, visibility?: string) => {
-      const modalReblog = () => {
+      const modalReblog = (_?: string, scheduledAt?: string) => {
         if (status.reblogged) unreblogStatus();
-        else reblogStatus(visibility);
+        else reblogStatus({ visibility, scheduledAt });
       };
       if ((e && e.shiftKey) || !boostModal) {
         modalReblog();
@@ -1309,7 +1372,13 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleConversationMuteClick: React.EventHandler<React.MouseEvent> = () => {
-      toggleMuteStatus(client, status);
+      toggleMuteStatus(client, status).then(() => {
+        toast.success(
+          mutingConversation
+            ? messages.unmuteConversationSuccess
+            : messages.muteConversationSuccess,
+        );
+      });
     };
 
     const handleLoadConversationClick = () => {
@@ -1516,7 +1585,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     if (publicStatus && !status.reblogged && features.reblogVisibility) {
       menu.push({
         text: intl.formatMessage(messages.reblogVisibility),
-        icon: iconRepeat,
+        icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
         items: [
           {
             text: intl.formatMessage(messages.reblogVisibilityPublic),
@@ -1556,7 +1625,7 @@ const MenuButton: React.FC<IMenuButton> = ({
             status.reblogged ? messages.cancelReblogPrivate : messages.reblogPrivate,
           ),
           action: handleReblogClick,
-          icon: iconRepeat,
+          icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
         });
       }
 
@@ -1629,18 +1698,20 @@ const MenuButton: React.FC<IMenuButton> = ({
     }
 
     if (autoTranslating) {
-      if (targetLanguage) {
-        menu.push({
-          text: intl.formatMessage(messages.hideTranslation),
-          action: handleTranslate,
-          icon: iconTranslate,
-        });
-      } else {
-        menu.push({
-          text: intl.formatMessage(messages.translate),
-          action: handleTranslate,
-          icon: iconTranslate,
-        });
+      if (!statusActionBarItems.includes('translate')) {
+        if (targetLanguage) {
+          menu.push({
+            text: intl.formatMessage(messages.hideTranslation),
+            action: handleTranslate,
+            icon: iconTranslate,
+          });
+        } else {
+          menu.push({
+            text: intl.formatMessage(messages.translate),
+            action: handleTranslate,
+            icon: iconTranslate,
+          });
+        }
       }
 
       menu.push({

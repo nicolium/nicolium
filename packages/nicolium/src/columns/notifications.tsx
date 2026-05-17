@@ -3,6 +3,7 @@ import iconBellSimpleRinging from '@phosphor-icons/core/regular/bell-simple-ring
 import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconChartBar from '@phosphor-icons/core/regular/chart-bar.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import { useQueryClient } from '@tanstack/react-query';
@@ -47,7 +48,7 @@ const messages = defineMessages({
     defaultMessage: '{count} new {count, plural, one {notification} other {notifications}}.',
   },
   all: { id: 'notifications.filter.all', defaultMessage: 'All' },
-  mentions: { id: 'notifications.filter.mentions', defaultMessage: 'Mentions' },
+  mentions: { id: 'notifications.filter_mentions', defaultMessage: 'Mentions' },
   statuses: {
     id: 'notifications.filter.statuses',
     defaultMessage: 'Updates from people you follow',
@@ -61,12 +62,12 @@ const messages = defineMessages({
 
 const FilterBar = () => {
   const intl = useIntl();
-  const settings = useSettings();
+  const { notifications: notificationsSettings, useRocketIconForReblogs } = useSettings();
   const { changeSetting } = useSettingsStoreActions();
   const features = useFeatures();
 
-  const selectedFilter = settings.notifications.quickFilter.active;
-  const advancedMode = settings.notifications.quickFilter.advanced;
+  const selectedFilter = notificationsSettings.quickFilter.active;
+  const advancedMode = notificationsSettings.quickFilter.advanced;
 
   const onClick = (filterType: FilterType) => () => {
     changeSetting(['notifications', 'quickFilter', 'active'], filterType);
@@ -95,46 +96,46 @@ const FilterBar = () => {
     });
   } else {
     items.push({
-      text: <Icon className='size-4' src={iconAt} aria-hidden />,
+      text: <Icon src={iconAt} aria-hidden />,
       title: intl.formatMessage(messages.mentions),
       action: onClick('mention'),
       name: 'mention',
     });
     if (features.accountNotifies)
       items.push({
-        text: <Icon className='size-4' src={iconBellSimpleRinging} aria-hidden />,
+        text: <Icon src={iconBellSimpleRinging} aria-hidden />,
         title: intl.formatMessage(messages.statuses),
         action: onClick('status'),
         name: 'status',
       });
     items.push({
-      text: <Icon className='size-4' src={iconStar} aria-hidden />,
+      text: <Icon src={iconStar} aria-hidden />,
       title: intl.formatMessage(messages.favourites),
       action: onClick('favourite'),
       name: 'favourite',
     });
     items.push({
-      text: <Icon className='size-4' src={iconRepeat} aria-hidden />,
+      text: <Icon src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat} aria-hidden />,
       title: intl.formatMessage(messages.boosts),
       action: onClick('reblog'),
       name: 'reblog',
     });
     if (features.polls)
       items.push({
-        text: <Icon className='size-4' src={iconChartBar} aria-hidden />,
+        text: <Icon src={iconChartBar} aria-hidden />,
         title: intl.formatMessage(messages.polls),
         action: onClick('poll'),
         name: 'poll',
       });
     if (features.events)
       items.push({
-        text: <Icon className='size-4' src={iconCalendarDots} aria-hidden />,
+        text: <Icon src={iconCalendarDots} aria-hidden />,
         title: intl.formatMessage(messages.events),
         action: onClick('events'),
         name: 'events',
       });
     items.push({
-      text: <Icon className='size-4' src={iconUserPlus} aria-hidden />,
+      text: <Icon src={iconUserPlus} aria-hidden />,
       title: intl.formatMessage(messages.follows),
       action: onClick('follow'),
       name: 'follow',
@@ -245,17 +246,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
   }, [notifications, markNotificationsRead]);
 
   const handleRefresh = useCallback(() => {
-    queryClient.setQueryData(queryKeys.notifications.list(activeFilter), (data) => {
-      if (!data) return data;
-
-      // from https://github.com/TanStack/query/discussions/875#discussioncomment-754458
-      // TODO: maybe needed in more places so maybe make a helper for this
-      return {
-        ...data,
-        pages: data.pages.slice(0, 1),
-        pageParams: data.pageParams.slice(0, 1),
-      };
-    });
+    queryClient.resetQueries({ queryKey: queryKeys.notifications.list(activeFilter) });
     refetch().catch(console.error);
   }, [refetch]);
 

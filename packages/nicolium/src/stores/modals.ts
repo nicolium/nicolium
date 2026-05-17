@@ -16,6 +16,7 @@ import type { DislikesModalProps } from '@/modals/dislikes-modal';
 import type { DropdownMenuModalProps } from '@/modals/dropdown-menu-modal';
 import type { EditAnnouncementModalProps } from '@/modals/edit-announcement-modal';
 import type { EditBookmarkFolderModalProps } from '@/modals/edit-bookmark-folder-modal';
+import type { EditDomainBlockModalProps } from '@/modals/edit-domain-block-modal';
 import type { EditDomainModalProps } from '@/modals/edit-domain-modal';
 import type { EditFederationModalProps } from '@/modals/edit-federation-modal';
 import type { EditRuleModalProps } from '@/modals/edit-rule-modal';
@@ -60,6 +61,7 @@ type OpenModalProps =
   | [type: 'EDIT_ANNOUNCEMENT', props?: EditAnnouncementModalProps, element?: HTMLElement]
   | [type: 'EDIT_BOOKMARK_FOLDER', props: EditBookmarkFolderModalProps, element?: HTMLElement]
   | [type: 'EDIT_DOMAIN', props?: EditDomainModalProps, element?: HTMLElement]
+  | [type: 'EDIT_DOMAIN_BLOCK', props?: EditDomainBlockModalProps, element?: HTMLElement]
   | [type: 'EDIT_FEDERATION', props: EditFederationModalProps, element?: HTMLElement]
   | [type: 'EDIT_RULE', props?: EditRuleModalProps, element?: HTMLElement]
   | [type: 'EMBED', props: EmbedModalProps, element?: HTMLElement]

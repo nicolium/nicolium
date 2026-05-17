@@ -8,12 +8,13 @@ import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconPencilSimpleLine from '@phosphor-icons/core/regular/pencil-simple-line.svg';
 import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
 import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useCallback, useMemo, useRef } from 'react';
 import {
   defineMessages,
@@ -196,7 +197,7 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
   },
   bite: {
     id: 'notification.bite',
-    defaultMessage: '{name} has bit {hasStatus, plural, =0 {you} other {your status}}',
+    defaultMessage: '{name} has bitten {hasStatus, plural, =0 {you} other {your post}}',
   },
   reply: {
     id: 'notification.reply',
@@ -393,12 +394,12 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
         if (status.reblogged) {
           unreblogStatus();
         } else if (e?.shiftKey || !boostModal) {
-          reblogStatus(undefined);
+          reblogStatus({});
         } else {
           openModal('BOOST', {
             statusId: status.id,
-            onReblog: () => {
-              reblogStatus(undefined);
+            onReblog: (visibility, scheduledAt) => {
+              reblogStatus({ visibility, scheduledAt });
             },
           });
         }
@@ -453,7 +454,11 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
         />
       );
     } else if (icons[displayedType]) {
-      return <Icon src={icons[displayedType]} className='⁂-notification__icon' aria-hidden />;
+      let icon = icons[displayedType];
+      if (displayedType === 'reblog' && settings.useRocketIconForReblogs) {
+        icon = iconRocketLaunch;
+      }
+      return <Icon src={icon} className='⁂-notification__icon' aria-hidden />;
     } else {
       return null;
     }
@@ -574,6 +579,15 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
     />
   );
 
+  const timestamp = (
+    <RelativeTimestamp
+      timestamp={notification.latest_page_notification_at!}
+      theme='muted'
+      size='sm'
+      className='whitespace-nowrap'
+    />
+  );
+
   return (
     <Hotkeys handlers={handlers} data-testid='notification'>
       <div className='⁂-notification' tabIndex={0} aria-label={ariaLabel} ref={node}>
@@ -581,14 +595,17 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
           <div className='⁂-notification__header'>
             <div className='⁂-notification__info'>{statusInfo}</div>
 
-            <p className='⁂-notification__timestamp'>
-              <RelativeTimestamp
-                timestamp={notification.latest_page_notification_at!}
-                theme='muted'
-                size='sm'
-                className='whitespace-nowrap'
-              />
-            </p>
+            {compact && status ? (
+              <Link
+                to='/@{$username}/posts/$statusId'
+                params={{ username: status.account?.acct || 'undefined', statusId: status.id }}
+                className='⁂-notification__timestamp'
+              >
+                {timestamp}
+              </Link>
+            ) : (
+              <p className='⁂-notification__timestamp'>{timestamp}</p>
+            )}
           </div>
         ) : (
           statusInfo

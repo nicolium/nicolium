@@ -205,6 +205,11 @@
     opacity: 0.75;
   }
 
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
   @if $theme == primary {
     border-color: transparent;
     color: rgb(var(--color-gray-100));

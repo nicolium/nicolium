@@ -11,6 +11,7 @@ import { changeSetting } from '@/actions/settings';
 import { PublicTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import { TimelinePicker } from '@/components/timeline-picker';
+import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
@@ -85,7 +86,12 @@ const RemoteTimelinePage: React.FC = () => {
       label={instance}
       title={<TimelinePicker active={`instance:${instance}`} />}
       truncateTitle={false}
-      action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
+      action={
+        <>
+          <TimelineRefreshButton timelineId={`public:remote:${instance}`} />
+          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+        </>
+      }
     >
       {!isPinned && (
         <div className='mb-4 flex gap-2 px-2'>

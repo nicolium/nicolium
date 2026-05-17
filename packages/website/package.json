@@ -17,11 +17,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/rss": "^4.0.15",
-    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
     "@mkljczk/astro-theme": "github:mkljczk/mkljczk-astro-theme",
-    "astro": "^5.18.1",
+    "astro": "^6.1.10",
     "rehype-external-links": "^3.0.0",
     "sharp": "^0.34.3"
   }

@@ -1,5 +1,11 @@
 import iconLock from '@phosphor-icons/core/regular/lock.svg';
-import { Link, linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
+import {
+  Link,
+  type LinkOptions,
+  linkOptions,
+  useNavigate,
+  useRouter,
+} from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
@@ -36,8 +42,7 @@ const messages = defineMessages({
   timeline: { id: 'account.instance_favicon', defaultMessage: 'Visit {domain} timeline' },
   accountLocked: {
     id: 'account.locked_info',
-    defaultMessage:
-      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
+    defaultMessage: 'This account is locked. The owner manually reviews who can follow them.',
   },
 });
 
@@ -93,7 +98,7 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
   );
 };
 
-interface IAccount {
+type IAccount = {
   account: AccountSchema;
   action?: React.ReactElement;
   actionAlignment?: 'center' | 'top';
@@ -122,7 +127,7 @@ interface IAccount {
   disabled?: boolean;
   muteExpiresAt?: string | null;
   blockExpiresAt?: string | null;
-}
+} & (LinkOptions | {});
 
 const Account = ({
   account,
@@ -151,6 +156,7 @@ const Account = ({
   disabled,
   muteExpiresAt,
   blockExpiresAt,
+  ...params
 }: IAccount) => {
   const overflowRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef<HTMLDivElement>(null);
@@ -249,14 +255,24 @@ const Account = ({
             event.stopPropagation();
           },
         }
-      : {
-          to: '/@{$username}',
-          params: { username: account.acct },
-          title: account.acct,
-          onClick: (event: React.MouseEvent) => {
-            event.stopPropagation();
-          },
-        }
+      : 'to' in params
+        ? {
+            to: params.to,
+            params: params.params,
+            search: params.search,
+            title: account.acct,
+            onClick: (event: React.MouseEvent) => {
+              event.stopPropagation();
+            },
+          }
+        : {
+            to: '/@{$username}',
+            params: { username: account.acct },
+            title: account.acct,
+            onClick: (event: React.MouseEvent) => {
+              event.stopPropagation();
+            },
+          }
     : {};
 
   if (disabled)

@@ -17,9 +17,9 @@ import type { List as ListEntity } from 'pl-api';
 const messages = defineMessages({
   heading: { id: 'column.lists', defaultMessage: 'Lists' },
   subheading: { id: 'lists.subheading', defaultMessage: 'Your lists' },
-  label: { id: 'lists.new.title_placeholder', defaultMessage: 'New list title' },
+  label: { id: 'lists.new.title.placeholder', defaultMessage: 'New list title' },
   title: { id: 'lists.new.create', defaultMessage: 'Add list' },
-  create: { id: 'lists.new.create_title', defaultMessage: 'Add list' },
+  create: { id: 'lists.new.create.title', defaultMessage: 'Add list' },
 });
 
 const getOrderedLists = (lists: Array<Pick<ListEntity, 'title'>>) => {

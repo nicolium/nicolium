@@ -161,6 +161,19 @@ const useReopenReport = (reportId: string) => {
   });
 };
 
+const useForwardReport = (reportId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: queryKeys.admin.reports.show(reportId),
+    mutationFn: () => client.admin.reports.forwardReport(reportId),
+    onSuccess: (report) => {
+      queryClient.setQueryData(queryKeys.admin.reports.show(reportId), minifyAdminReport(report));
+    },
+  });
+};
+
 export {
   useReports,
   useReport,
@@ -170,4 +183,5 @@ export {
   useUnassignReport,
   useResolveReport,
   useReopenReport,
+  useForwardReport,
 };

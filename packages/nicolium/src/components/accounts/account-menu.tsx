@@ -8,10 +8,12 @@ import iconFlag from '@phosphor-icons/core/regular/flag.svg';
 import iconGavel from '@phosphor-icons/core/regular/gavel.svg';
 import iconLinkSimpleHorizontal from '@phosphor-icons/core/regular/link-simple-horizontal.svg';
 import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
+import iconList from '@phosphor-icons/core/regular/list.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconRss from '@phosphor-icons/core/regular/rss.svg';
 import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
 import iconSpeakerSimpleX from '@phosphor-icons/core/regular/speaker-simple-x.svg';
@@ -58,7 +60,7 @@ const messages = defineMessages({
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
-  copySuccess: { id: 'account.copy_success', defaultMessage: 'Profile URL copied to clipboard' },
+  copySuccess: { id: 'account.copy.success', defaultMessage: 'Profile URL copied to clipboard' },
   media: { id: 'account.media', defaultMessage: 'Media' },
   blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
@@ -98,7 +100,7 @@ const messages = defineMessages({
     id: 'account.unendorse.success',
     defaultMessage: 'You are no longer featuring @{acct}',
   },
-  userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
+  userBit: { id: 'account.bite.success', defaultMessage: 'You have bitten @{acct}' },
   userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
   profileExternal: { id: 'account.profile_external', defaultMessage: 'View profile on {domain}' },
   loadActivities: { id: 'account.load_activities', defaultMessage: 'Fetch latest posts' },
@@ -110,16 +112,49 @@ const messages = defineMessages({
     id: 'account.load_activities.fail',
     defaultMessage: 'Failed to fetch latest posts',
   },
-  nickname: { id: 'account.nickname.modal_header', defaultMessage: 'Set nickname for @{name}' },
+  nickname: { id: 'account.nickname.modal.header', defaultMessage: 'Set nickname for @{name}' },
   nicknamePlaceholder: { id: 'account.nickname.placeholder', defaultMessage: 'Enter a nickname' },
   nicknameSave: { id: 'account.nickname.save', defaultMessage: 'Save nickname' },
   nicknameSaved: { id: 'account.nickname.success', defaultMessage: 'Nickname saved' },
-  note: { id: 'account_note.modal_header', defaultMessage: 'Edit note for @{name}' },
+  note: { id: 'account_note.modal.header', defaultMessage: 'Edit note for @{name}' },
   notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
   noteSaved: { id: 'account_note.success', defaultMessage: 'Note saved' },
   noteSaveFailed: { id: 'account_note.fail', defaultMessage: 'Failed to save note' },
   share: { id: 'account.share', defaultMessage: "Share @{name}'s profile" },
   subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
+  addToNavigationItems: {
+    id: 'account.add_to_navigation_items',
+    defaultMessage: 'Add to navigation items',
+  },
+  addToNavigationItemsSuccess: {
+    id: 'account.add_to_navigation_items.success',
+    defaultMessage: 'Added to navigation items',
+  },
+  removeFromNavigationItems: {
+    id: 'account.remove_from_navigation_items',
+    defaultMessage: 'Remove from navigation items',
+  },
+  removeFromNavigationItemsSuccess: {
+    id: 'account.remove_from_navigation_items.success',
+    defaultMessage: 'Removed from navigation items',
+  },
+  addToSidebarItems: {
+    id: 'account.add_to_sidebar_items',
+    defaultMessage: 'Show latest post in sidebar',
+  },
+  addToSidebarItemsSuccess: {
+    id: 'account.add_to_sidebar_items.success',
+    defaultMessage: 'Added to sidebar items',
+  },
+  removeFromSidebarItems: {
+    id: 'account.remove_from_sidebar_items',
+    defaultMessage: "Don't show latest post in sidebar",
+  },
+  removeFromSidebarItemsSuccess: {
+    id: 'account.remove_from_sidebar_items.success',
+    defaultMessage: 'Removed from sidebar items',
+  },
+  view: { id: 'toast.view', defaultMessage: 'View' },
 });
 
 interface IAccountMenu {
@@ -213,7 +248,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
     openModal('TEXT_FIELD', {
       heading: (
         <FormattedMessage
-          id='account_note.modal_header'
+          id='account_note.modal.header'
           defaultMessage='Edit note for @{name}'
           values={{ name: account.acct }}
         />
@@ -239,7 +274,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
     openModal('TEXT_FIELD', {
       heading: (
         <FormattedMessage
-          id='account.nickname.modal_header'
+          id='account.nickname.modal.header'
           defaultMessage='Set nickname for @{name}'
           values={{ name: account.acct }}
         />
@@ -251,8 +286,55 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         changeSetting(['accountNicknames', account.id], trimmed || undefined);
         toast.success(messages.nicknameSaved);
       },
+      clear: <FormattedMessage id='account.nickname.clear' defaultMessage='Reset' />,
+      onClear: () => {
+        changeSetting(['accountNicknames', account.id], undefined);
+        toast.success(messages.nicknameSaved);
+      },
       text: currentNickname,
       singleLine: true,
+    });
+  };
+
+  const onAddToNavigationItems = () => {
+    changeSetting(['navigationItems'], [...settings.navigationItems, `account:${account.id}`]);
+    toast.success(messages.addToNavigationItemsSuccess, {
+      actionLinkOptions: { to: '/settings/navigation' },
+      actionLabel: intl.formatMessage(messages.view),
+    });
+  };
+
+  const onRemoveFromNavigationItems = () => {
+    changeSetting(
+      ['navigationItems'],
+      settings.navigationItems.filter((item) => item !== `account:${account.id}`),
+    );
+    changeSetting(
+      ['pinnedNavigationItems'],
+      settings.pinnedNavigationItems.filter((id) => id !== `account:${account.id}`),
+    );
+    toast.success(messages.removeFromNavigationItemsSuccess, {
+      actionLinkOptions: { to: '/settings/navigation' },
+      actionLabel: intl.formatMessage(messages.view),
+    });
+  };
+
+  const onAddToSidebarItems = () => {
+    changeSetting(['sidebarItems'], [...settings.sidebarItems, `account:${account.id}`]);
+    toast.success(messages.addToSidebarItemsSuccess, {
+      actionLinkOptions: { to: '/settings/sidebar' },
+      actionLabel: intl.formatMessage(messages.view),
+    });
+  };
+
+  const onRemoveFromSidebarItems = () => {
+    changeSetting(
+      ['sidebarItems'],
+      settings.sidebarItems.filter((item) => item !== `account:${account.id}`),
+    );
+    toast.success(messages.removeFromSidebarItemsSuccess, {
+      actionLinkOptions: { to: '/settings/sidebar' },
+      actionLabel: intl.formatMessage(messages.view),
     });
   };
 
@@ -444,13 +526,13 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
           menu.push({
             text: intl.formatMessage(messages.hideReblogs, { name: account.username }),
             action: onReblogToggle,
-            icon: iconRepeat,
+            icon: settings.useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
           });
         } else {
           menu.push({
             text: intl.formatMessage(messages.showReblogs, { name: account.username }),
             action: onReblogToggle,
-            icon: iconRepeat,
+            icon: settings.useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
           });
         }
 
@@ -508,6 +590,34 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         action: onEditNickname,
         icon: iconTag,
       });
+
+      if (!settings.navigationItems.includes(`account:${account.id}`)) {
+        menu.push({
+          text: intl.formatMessage(messages.addToNavigationItems),
+          action: onAddToNavigationItems,
+          icon: iconList,
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.removeFromNavigationItems),
+          action: onRemoveFromNavigationItems,
+          icon: iconList,
+        });
+      }
+
+      if (!settings.sidebarItems.includes(`account:${account.id}`)) {
+        menu.push({
+          text: intl.formatMessage(messages.addToSidebarItems),
+          action: onAddToSidebarItems,
+          icon: iconUser,
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.removeFromSidebarItems),
+          action: onRemoveFromSidebarItems,
+          icon: iconUser,
+        });
+      }
 
       menu.push(null);
 

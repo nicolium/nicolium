@@ -30,7 +30,7 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
   const total = accountIds?.total;
 
   const handleAction = () => {
-    navigate({ to: '/nicolium/admin/users' });
+    navigate({ to: '/nicolium/admin/accounts', search: { origin: 'local', status: 'active' } });
   };
 
   return (

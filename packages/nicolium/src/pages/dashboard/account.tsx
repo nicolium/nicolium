@@ -15,10 +15,16 @@ import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { useDeactivateUserModal, useDeleteUserModal } from '@/hooks/use-admin-modals';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
-import { useAdminSetRoleMutation, useAdminUpdateTagsMutation } from '@/queries/admin/use-accounts';
+import {
+  useAdminResetAccountPasswordMutation,
+  useAdminSetRoleMutation,
+  useAdminUpdateAccountCredentialsMutation,
+  useAdminUpdateTagsMutation,
+} from '@/queries/admin/use-accounts';
 import {
   useAdminSuggestAccountMutation,
   useAdminUnsuggestAccountMutation,
@@ -28,6 +34,7 @@ import {
   useAdminUnverifyAccountMutation,
 } from '@/queries/admin/use-verify-account';
 import { adminAccountRoute } from '@/router';
+import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 import { badgeToTag, tagToBadge, getBadges } from '@/utils/badges';
 
@@ -35,39 +42,67 @@ import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
   columnHeading: { id: 'column.admin.account', defaultMessage: 'Moderate @{acct}' },
-  userVerified: { id: 'admin.users.user_verified_message', defaultMessage: '@{acct} was verified' },
+  userVerified: { id: 'admin.users.user_verified.success', defaultMessage: '@{acct} was verified' },
   userUnverified: {
-    id: 'admin.users.user_unverified_message',
+    id: 'admin.users.user_unverified.success',
     defaultMessage: '@{acct} was unverified',
   },
   userSuggested: {
-    id: 'admin.users.user_suggested_message',
+    id: 'admin.users.user_suggested.success',
     defaultMessage: '@{acct} was suggested',
   },
   userUnsuggested: {
-    id: 'admin.users.user_unsuggested_message',
+    id: 'admin.users.user_unsuggested.success',
     defaultMessage: '@{acct} was unsuggested',
   },
-  badgesSaved: { id: 'admin.users.badges_saved_message', defaultMessage: 'Custom badges updated.' },
+  badgesSaved: { id: 'admin.users.badges_saved.success', defaultMessage: 'Custom badges updated' },
   badgePlaceholder: { id: 'badge_input.placeholder', defaultMessage: 'Enter a badge…' },
   roleUser: { id: 'account_moderation_modal.roles.user', defaultMessage: 'User' },
   roleModerator: { id: 'account_moderation_modal.roles.moderator', defaultMessage: 'Moderator' },
   roleAdmin: { id: 'account_moderation_modal.roles.admin', defaultMessage: 'Admin' },
   promotedToAdmin: {
-    id: 'admin.users.actions.promote_to_admin_message',
+    id: 'admin.users.actions.promote_to_admin.success',
     defaultMessage: '@{acct} was promoted to an admin',
   },
   promotedToModerator: {
-    id: 'admin.users.actions.promote_to_moderator_message',
+    id: 'admin.users.actions.promote_to_moderator.success',
     defaultMessage: '@{acct} was promoted to a moderator',
   },
   demotedToModerator: {
-    id: 'admin.users.actions.demote_to_moderator_message',
+    id: 'admin.users.actions.demote_to_moderator.success',
     defaultMessage: '@{acct} was demoted to a moderator',
   },
   demotedToUser: {
-    id: 'admin.users.actions.demote_to_user_message',
+    id: 'admin.users.actions.demote_to_user.success',
     defaultMessage: '@{acct} was demoted to a regular user',
+  },
+  actorTypeChanged: {
+    id: 'admin.users.actions.actor_type_changed.success',
+    defaultMessage: '@{acct} is now a {type, select, Service {bot} Person {person} other {user}}',
+  },
+  changeEmailPlaceholder: {
+    id: 'account_moderation_modal.change_email.placeholder',
+    defaultMessage: 'New e-mail address',
+  },
+  emailChanged: {
+    id: 'account_moderation_modal.change_email.success',
+    defaultMessage: 'E-mail address for @{acct} changed to {email}',
+  },
+  changePasswordPlaceholder: {
+    id: 'account_moderation_modal.change_password.placeholder',
+    defaultMessage: 'New password',
+  },
+  passwordChanged: {
+    id: 'account_moderation_modal.change_password.success',
+    defaultMessage: 'Password for @{acct} has been changed',
+  },
+  mfaDisabled: {
+    id: 'account_moderation_modal.disable_mfa.success',
+    defaultMessage: 'Multi-factor authentication disabled for @{acct}',
+  },
+  mfaDisableFailed: {
+    id: 'account_moderation_modal.disable_mfa.fail',
+    defaultMessage: 'Failed to disable multi-factor authentication for @{acct}',
   },
 });
 
@@ -163,7 +198,9 @@ const BadgeInput: React.FC<IBadgeInput> = ({ badges, onChange }) => {
 const AdminAccountPage: React.FC = () => {
   const { accountId } = adminAccountRoute.useParams();
 
+  const client = useClient();
   const intl = useIntl();
+  const { openModal } = useModalsActions();
 
   const { mutate: suggest } = useAdminSuggestAccountMutation(accountId);
   const { mutate: unsuggest } = useAdminUnsuggestAccountMutation(accountId);
@@ -175,6 +212,8 @@ const AdminAccountPage: React.FC = () => {
   const deactivateUserModal = useDeactivateUserModal(accountId);
   const deleteUserModal = useDeleteUserModal(accountId);
   const { mutate: updateTags } = useAdminUpdateTagsMutation(accountId);
+  const { mutate: updateCredentials } = useAdminUpdateAccountCredentialsMutation(accountId);
+  const { mutate: resetPassword } = useAdminResetAccountPasswordMutation(accountId);
 
   const accountBadges = account ? getBadges(account) : [];
   const [badges, setBadges] = useState<string[]>(accountBadges);
@@ -221,6 +260,93 @@ const AdminAccountPage: React.FC = () => {
     });
   };
 
+  const handleIsBotChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { checked } = e.target;
+
+    const newActorType = checked ? 'Service' : 'Person';
+
+    updateCredentials(
+      { actor_type: newActorType },
+      {
+        onSuccess: () => {
+          toast.success(
+            intl.formatMessage(messages.actorTypeChanged, {
+              acct: account.acct,
+              type: newActorType,
+            }),
+          );
+        },
+      },
+    );
+  };
+
+  const handleChangeEmail = () => {
+    openModal('TEXT_FIELD', {
+      heading: (
+        <FormattedMessage
+          id='account_moderation_modal.change_email.heading'
+          defaultMessage='Change e-mail address for @{acct}'
+          values={{ acct: account.acct }}
+        />
+      ),
+      placeholder: intl.formatMessage(messages.changeEmailPlaceholder),
+      confirm: <FormattedMessage id='common.save' defaultMessage='Save' />,
+      onConfirm: (value) => {
+        updateCredentials(
+          { email: value },
+          {
+            onSuccess: () => {
+              toast.success(
+                intl.formatMessage(messages.emailChanged, { acct: account.acct, email: value }),
+              );
+            },
+          },
+        );
+      },
+      singleLine: true,
+    });
+  };
+
+  const handleChangePassword = () => {
+    openModal('TEXT_FIELD', {
+      heading: (
+        <FormattedMessage
+          id='account_moderation_modal.change_password.heading'
+          defaultMessage='Change password for @{acct}'
+          values={{ acct: account.acct }}
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='account_moderation_modal.change_password.message'
+          defaultMessage='The user will be logged out from all sessions and required to use the new password the next time they log in.'
+        />
+      ),
+      placeholder: intl.formatMessage(messages.changePasswordPlaceholder),
+      confirm: <FormattedMessage id='common.save' defaultMessage='Save' />,
+      onConfirm: (value) => {
+        resetPassword(value, {
+          onSuccess: () => {
+            toast.success(intl.formatMessage(messages.passwordChanged, { acct: account.acct }));
+          },
+        });
+      },
+      singleLine: true,
+      type: 'password',
+    });
+  };
+
+  const handleDisableMfa = () => {
+    client.admin.accounts
+      .disableMfa(account.id)
+      .then(() => {
+        toast.success(intl.formatMessage(messages.mfaDisabled, { acct: account.acct }));
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(messages.mfaDisableFailed, { acct: account.acct }));
+      });
+  };
+
   const handleDeactivate = () => {
     deactivateUserModal();
   };
@@ -242,12 +368,7 @@ const AdminAccountPage: React.FC = () => {
     <Column label={intl.formatMessage(messages.columnHeading, { acct: account.acct })}>
       <div className='flex flex-col gap-4'>
         <OutlineBox>
-          <Account
-            account={account}
-            showAccountHoverCard={false}
-            withLinkToProfile={false}
-            hideActions
-          />
+          <Account account={account} showAccountHoverCard={false} hideActions />
         </OutlineBox>
 
         <List>
@@ -296,6 +417,19 @@ const AdminAccountPage: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
+                  id='account_moderation_modal.fields.bot'
+                  defaultMessage='This account is a bot'
+                />
+              }
+            >
+              <Toggle checked={account.bot === true} onChange={handleIsBotChange} />
+            </ListItem>
+          )}
+
+          {features.pleromaAdminAccounts && (
+            <ListItem
+              label={
+                <FormattedMessage
                   id='account_moderation_modal.fields.badges'
                   defaultMessage='Custom badges'
                 />
@@ -312,6 +446,79 @@ const AdminAccountPage: React.FC = () => {
             </ListItem>
           )}
         </List>
+
+        {features.pleromaAdminAccounts ? (
+          <>
+            <List>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.statuses'
+                    defaultMessage='All posts'
+                  />
+                }
+                to='/nicolium/admin/accounts/$accountId/statuses'
+                params={{ accountId: account.id }}
+              />
+            </List>
+
+            <List>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.change_email'
+                    defaultMessage='Change e-mail address'
+                  />
+                }
+                onClick={handleChangeEmail}
+              />
+
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.change_password'
+                    defaultMessage='Change password'
+                  />
+                }
+                onClick={handleChangePassword}
+              />
+
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.disable_mfa'
+                    defaultMessage='Disable multi-factor authentication'
+                  />
+                }
+                onClick={handleDisableMfa}
+              />
+            </List>
+          </>
+        ) : (
+          features.iceshrimpAdmin && (
+            <List>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.change_password'
+                    defaultMessage='Change password'
+                  />
+                }
+                onClick={handleChangePassword}
+              />
+
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='account_moderation_modal.fields.disable_mfa'
+                    defaultMessage='Disable multi-factor authentication'
+                  />
+                }
+                onClick={handleDisableMfa}
+              />
+            </List>
+          )
+        )}
 
         <List>
           <ListItem

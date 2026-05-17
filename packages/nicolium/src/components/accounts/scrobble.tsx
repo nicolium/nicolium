@@ -1,19 +1,43 @@
 import iconMusicNotesSimple from '@phosphor-icons/core/regular/music-notes-simple.svg';
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import clsx from 'clsx';
 import React, { useMemo, useRef } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
+import { useComposeActions } from '@/stores/compose';
+
+import IconButton from '../ui/icon-button';
 
 import type { MinifiedScrobble } from '@/queries/accounts/account-scrobble';
 
+const messages = defineMessages({
+  compose: {
+    id: 'account.scrobbling.compose',
+    defaultMessage: 'Create a #NowPlaying post',
+  },
+});
+
 interface IScrobble {
   scrobble: MinifiedScrobble;
+  withComposeButton?: boolean;
 }
 
-const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
+const Scrobble: React.FC<IScrobble> = ({ scrobble, withComposeButton }) => {
+  const intl = useIntl();
+  const { openComposeWithText } = useComposeActions();
+
   const textRef = useRef<HTMLParagraphElement>(null);
+
+  const handleCompose = () => {
+    openComposeWithText(
+      'compose-modal',
+      `#NowPlaying ${scrobble.artist ? `${scrobble.artist} - ` : ''}${scrobble.title}
+
+${scrobble.external_link ? scrobble.external_link : ''}`.trim(),
+    );
+  };
 
   const isRecent = Date.now() - new Date(scrobble.created_at).getTime() <= 60 * 60 * 1000;
 
@@ -75,6 +99,16 @@ const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
           />
         </Text>
       </div>
+
+      {withComposeButton && (
+        <IconButton
+          src={iconNotePencil}
+          onClick={handleCompose}
+          title={intl.formatMessage(messages.compose)}
+          className='-m-1'
+          iconClassName='h-4 w-4'
+        />
+      )}
     </div>
   );
 };

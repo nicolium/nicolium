@@ -131,21 +131,28 @@ const useStatus = (
     reblogQuery.data,
     quoteQuery.data,
     clientFilterResults,
-  ]) as unknown as UseQueryResult<SelectedStatus> & { refetchContext: () => void };
+  ]) as unknown as UseQueryResult<SelectedStatus> & { refetchContext: () => Promise<any> };
 };
 
 const useStatusContext = (statusId?: string) => {
   const client = useClient();
-  const { importContext } = useContextsActions();
+  const { importContext, setAsyncRefreshHeader, clearAsyncRefreshHeader } = useContextsActions();
 
   return useQuery({
     queryKey: queryKeys.statuses.contexts(statusId!),
     queryFn: () =>
       client.statuses.getContext(statusId!).then((context) => {
-        const { ancestors, descendants, references } = context;
+        const { ancestors, descendants, references, asyncRefreshHeader } = context;
         const statuses = [...ancestors, ...descendants, ...references];
         importContext(statusId!, context);
         importEntities({ statuses });
+
+        if (asyncRefreshHeader) {
+          setAsyncRefreshHeader(statusId!, asyncRefreshHeader);
+        } else {
+          clearAsyncRefreshHeader(statusId!);
+        }
+
         return minifyContext(context);
       }),
     enabled: !!statusId,

@@ -1,23 +1,34 @@
-import { infiniteQueryOptions, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { removePageItem } from '@/utils/queries';
 
 import { queryKeys } from '../keys';
+import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 
-import type { PlApiClient } from 'pl-api';
+const useScheduledStatusesQuery = makePaginatedResponseQuery(
+  queryKeys.scheduledStatuses.all,
+  (client) => client.scheduledStatuses.getScheduledStatuses(),
+  undefined,
+  'isLoggedIn',
+  undefined,
+  'scheduledStatuses',
+);
+
+const useScheduledStatusesCountQuery = makePaginatedResponseQuery(
+  queryKeys.scheduledStatuses.all,
+  (client) => client.scheduledStatuses.getScheduledStatuses(),
+  (data) => data.pages.flatMap((page) => page.items).length,
+  'isLoggedIn',
+  undefined,
+  'scheduledStatuses',
+);
 
 const scheduledStatusesQueryOptions = makePaginatedResponseQueryOptions(
   queryKeys.scheduledStatuses.all,
   (client) => client.scheduledStatuses.getScheduledStatuses(),
 );
-
-const scheduledStatusesCountQueryOptions = (client: PlApiClient) =>
-  infiniteQueryOptions({
-    ...scheduledStatusesQueryOptions(client),
-    select: (data) => data.pages.flatMap((page) => page.items).length,
-  });
 
 const useCancelScheduledStatusMutation = (scheduledStatusId: string) => {
   const client = useClient();
@@ -37,7 +48,8 @@ const useCancelScheduledStatusMutation = (scheduledStatusId: string) => {
 };
 
 export {
+  useScheduledStatusesQuery,
+  useScheduledStatusesCountQuery,
   scheduledStatusesQueryOptions,
-  scheduledStatusesCountQueryOptions,
   useCancelScheduledStatusMutation,
 };

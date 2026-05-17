@@ -1,6 +1,7 @@
+import { defineMessage, type IntlShape } from 'react-intl';
+
 import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from './data';
 import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
-import type { IntlShape } from 'react-intl';
 
 /*
  * TODO: Consolate emoji object types
@@ -15,6 +16,11 @@ import type { IntlShape } from 'react-intl';
  * and one type for the emoji-mart data
  * and one type that is used everywhere that the above two are converted into
  */
+
+const uncategorizedMessage = defineMessage({
+  id: 'emoji_button.uncategorized',
+  defaultMessage: 'Uncategorized',
+});
 
 interface CustomEmoji {
   id: string;
@@ -84,10 +90,7 @@ const buildCustomEmojiCategories = (customEmojis: Array<BaseCustomEmoji>, intl?:
       id: categoryName,
       name:
         categoryName === 'uncategorized' && intl
-          ? intl.formatMessage({
-              id: 'emoji_button.uncategorized',
-              defaultMessage: 'Uncategorized',
-            })
+          ? intl.formatMessage(uncategorizedMessage)
           : categoryName.replace(/^pack:/, ''),
       emojis,
     }));

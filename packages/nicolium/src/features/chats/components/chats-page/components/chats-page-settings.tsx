@@ -35,7 +35,7 @@ const messages = defineMessages({
   submit: { id: 'chat.page_settings.submit', defaultMessage: 'Save' },
   success: {
     id: 'settings.messages.success',
-    defaultMessage: 'Chat settings updated successfully',
+    defaultMessage: 'Chat settings updated',
   },
   fail: { id: 'settings.messages.fail', defaultMessage: 'Failed to update chat settings' },
   back: { id: 'chats.back', defaultMessage: 'Back to chats' },

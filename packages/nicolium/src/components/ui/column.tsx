@@ -34,11 +34,8 @@ const ColumnHeader: React.FC<IColumnHeader> = ({
   const navigate = useNavigate();
   const { history } = useRouter();
 
-  const handleBackClick = () => {
-    if (backHref) {
-      navigate({ to: backHref, params: backParams });
-      return;
-    }
+  const handleBackClick: React.MouseEventHandler = (event) => {
+    event.preventDefault();
 
     if (!history.canGoBack) {
       navigate({ to: '/' });
@@ -48,7 +45,12 @@ const ColumnHeader: React.FC<IColumnHeader> = ({
   };
 
   return (
-    <CardHeader className={className} onBackClick={withBack ? handleBackClick : undefined}>
+    <CardHeader
+      className={className}
+      backHref={backHref}
+      backParams={backParams}
+      onBackClick={withBack ? handleBackClick : undefined}
+    >
       <CardTitle title={title || label} truncate={truncateTitle} />
 
       {action && <div className='⁂-column__header__action'>{action}</div>}

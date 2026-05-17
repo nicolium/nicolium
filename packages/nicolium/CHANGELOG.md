@@ -1,5 +1,110 @@
 # Changelog
 
+## v0.3.0
+
+### Added
+
+- Links to specific accounts, lists and other pages can be added to the navigation menu.
+- A sidebar widget showing the most recent post from a specific account.
+- Refresh button for timmelines and notifications page for non-touchscreen devices.
+- Option to disable link previews or their media in posts.
+- `mastodon-async-refresh` header support ported from Mastodon.
+- Support for Iceshrimp.NET 2FA configuration.
+- Support for `restricted` timeline mode (only visible for admins) on backends that implement it.
+- Muted threads page on Iceshrimp.NET.
+- When no navigation items are pinned, thumb navigation menu conditionally displays a dot indicating unread notifications or messages.
+- Admin dashboard on Pleroma/Akkoma/Mitra allows configuring default user interface settings.
+- Admin interface for managing domain allows/blocks.
+- Basic support for Iceshrimp.NET admin API, including reports and domain blocks management.
+- Filters/mutes handling in quoted posts.
+
+### Changed
+
+- Default settings now disable autoloading new timeline items and infinite scroll.
+- Edit profile page offers autosuggestion for mentions, emojis and hashtags.
+- Chat message composer uses the autosuggest input component used in other places, replacing external combobox library.
+- Narrow mode is used for the navigation menu on some breakpoints.
+- Sidebar is now hidden when all items are removed from it, making the main column wider.
+- Reworked account list page in the admin dashboard.
+- Iceshrimp.NET access token should now be persisted across sessions.
+- Further work on migrating styles from TailwindCSS.
+- Legacy config path is no longer supported.
+- Made strings across the app more consistent.
+
+### Fixed
+
+- About page doesn't render infinite loading animation anymore.
+- Pending posts render consistently with persisted posts in thread view.
+- Quotes are not counted with reblogs when quote button is displayed in post actions.
+- Modified default post content type and visibility setting behavior to fix cases where they were not applied correctly.
+
+## v0.2.1
+
+### Changed
+
+- Added toast on resetting customizable items to default.
+- Infinite scroll is now disabled by default.
+- WebSocket connection is now retried on connection loss.
+- When autoplaying GIFs is disabled, you now have to hover it for 0.5 seconds to play it, instead of just hovering it.
+
+### Fixed
+
+- Improvements for RTL languages.
+- Drag and drop works correctly on WebKit browsers.
+- Fixed styling issue with icon size in bottom navigation.
+- GIFs in preview cards are not displayed automatically, respecting the autoplay setting.
+
+## v0.2.0
+
+### Meta
+
+- Introduced a rule that forbids introducing LLM-generated first-party code.
+- Added a .devcontainer configuration.
+- Sponsors from GitHub Sponsors are now listed in the README.
+
+### Added
+
+- Option to reorganize, add, or remove items in the sidebar, navigation menu and status action bar.
+- Option to include custom CSS in instance configuration, either as a string or a stylesheet link.
+- Option to disallow unauthenticated users from visiting remote content.
+- Option to filter out posts containing media without alternative text.
+- Option to display nested quotes.
+- Boost scheduling on supported backends (Iceshrimp.NET).
+- MFA support for Iceshrimp.NET.
+- Pleroma instance configuration from the admin dashboard.
+- Text wrap toggle button for code blocks in posts.
+
+### Changed
+
+- Reorganized settings into categories.
+- Option to disable the Chats pane in settings.
+- Boost privacy can be set in a boost confirmation modal.
+- Post translations can be displayed side-by-side with the original text.
+- Longer profile bios are truncated with a "Show more" button.
+- Link previews are displayed when the quoted post is not available.
+- _Advanced mode_ for filtering can be switched from the notifications page.
+- Improved unavailable posts display on Pleroma, and unavailable parent post information on Akkoma.
+- Improved display of followers count when partially hidden by the user.
+- Updated feature definitions for snac2, NeoDB, and Iceshrimp.NET.
+- Various changes to the UI animations.
+- Continued work on migrating styles from TailwindCSS.
+
+### Fixed
+
+- Nicolium no longer infinitely tries to load a timeline it's not authorized to access.
+- Scheduled posts with polls no longer crash.
+- Media modal works on scheduled/drafted posts page.
+- Ctrl+Enter hotkey for posting works in the subject field.
+- Private boosts are marked as such again in timelines.
+- Instance announcements management.
+- Upload progress is now correctly displayed.
+- Progress bar component state and animation.
+- Sidebar active state is now handled more consistently.
+- Dropdown menu overlay no longer blinks when opened on mobile.
+- Improved back button behavior in columns.
+- Avatars are correctly displayed next to usernames in MFM.
+- Interaction circles can be displayed as HTML instead of canvas, fixing CORS-related issues.
+
 ## v0.1.2
 
 ### Changed

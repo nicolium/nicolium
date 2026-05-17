@@ -8,21 +8,9 @@ import { importEntities } from '../queries/utils/import-entities';
 import type { CreateEventParams, Location, MediaAttachment, PlApiClient } from 'pl-api';
 
 const messages = defineMessages({
-  exceededImageSizeLimit: {
-    id: 'upload_error.image_size_limit',
-    defaultMessage: 'Image exceeds the current file size limit ({limit})',
-  },
-  success: { id: 'compose_event.submit_success', defaultMessage: 'Your event was created' },
-  editSuccess: { id: 'compose_event.edit_success', defaultMessage: 'Your event was edited' },
+  success: { id: 'compose_event.submit.success', defaultMessage: 'Your event was created' },
+  editSuccess: { id: 'compose_event.edit.success', defaultMessage: 'Your event was edited' },
   view: { id: 'toast.view', defaultMessage: 'View' },
-  authorized: {
-    id: 'compose_event.participation_requests.authorize_success',
-    defaultMessage: 'User accepted',
-  },
-  rejected: {
-    id: 'compose_event.participation_requests.reject_success',
-    defaultMessage: 'User rejected',
-  },
 });
 
 const submitEvent = async ({

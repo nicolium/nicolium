@@ -23,8 +23,11 @@ const toRad = (x: number) => x * (Math.PI / 180);
 
 import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
+import clsx from 'clsx';
 
 import avatarMissing from '@/assets/images/avatar-missing.png';
+import List, { ListItem } from '@/components/list';
+import Toggle from '@/components/ui/toggle';
 
 const HEIGHT = 1000;
 const WIDTH = 1000;
@@ -71,6 +74,11 @@ const CirclePage: React.FC = () => {
   const [expanded, setExpanded] = useState(false);
   const [users, setUsers] =
     useState<Array<{ id: string; avatar?: string; avatar_description?: string; acct: string }>>();
+  const [hasError, setHasError] = useState(false);
+  const [showHtmlCircle, setShowHtmlCircle] = useState(false);
+  const [imgElements, setImgElements] = useState<
+    Array<{ src: string; size: string; left: string; right: string }>
+  >([]);
 
   const intl = useIntl();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -121,6 +129,13 @@ const CirclePage: React.FC = () => {
 
         let imageLoadingErorrs = 0;
 
+        const imgs: Array<{
+          src: string;
+          size: string;
+          left: string;
+          right: string;
+        }> = [];
+
         for (const layer of [
           { index: 0, off: 0, distance: 0, count: 1, radius: 110, users: [{ avatar: ownAvatar }] },
           { index: 1, off: 1, distance: 200, count: 8, radius: 64, users: users.slice(0, 8) },
@@ -148,6 +163,13 @@ const CirclePage: React.FC = () => {
             try {
               // eslint-disable-next-line no-loop-func
               await new Promise((resolve) => {
+                imgs.push({
+                  src: avatarUrl,
+                  size: `${radius / 5}%`,
+                  left: `${(centerX - radius) / 10}%`,
+                  right: `${(centerY - radius) / 10}%`,
+                });
+
                 const img = new Image();
 
                 img.onload = () => {
@@ -168,16 +190,18 @@ const CirclePage: React.FC = () => {
                   resolve(null);
                 };
 
+                img.crossOrigin = 'anonymous';
                 img.setAttribute('crossorigin', 'anonymous');
                 img.src = avatarUrl;
               });
-            } catch (_) {
-              //
-            }
+            } catch {}
           }
         }
 
+        setImgElements(imgs);
+
         if (imageLoadingErorrs) {
+          setHasError(true);
           toast.info(
             imageLoadingErorrs > 1
               ? messages.imageLoadingMultipleError
@@ -228,7 +252,55 @@ const CirclePage: React.FC = () => {
           </div>
         )}
 
-        <canvas className='max-w-full' ref={canvasRef} width={1000} height={1000} />
+        {hasError && (
+          <List>
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='interactions_circle.html_mode'
+                  defaultMessage='Use fallback mode'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='interactions_circle.html_mode.hint'
+                  defaultMessage="Some avatars failed to load on the canvas. You can try to display them in fallback mode. You won't be able to download the image directly."
+                />
+              }
+            >
+              <Toggle
+                checked={showHtmlCircle}
+                onChange={({ target }) => setShowHtmlCircle(target.checked)}
+              />
+            </ListItem>
+          </List>
+        )}
+
+        {showHtmlCircle && (
+          <div className='relative aspect-1 w-full max-w-full'>
+            {imgElements.map((img, index) => (
+              <img
+                key={index}
+                src={img.src}
+                alt=''
+                className='pointer-events-none absolute rounded-full'
+                style={{
+                  width: img.size,
+                  height: img.size,
+                  left: img.left,
+                  top: img.right,
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        <canvas
+          className={clsx('max-w-full', showHtmlCircle && 'hidden')}
+          ref={canvasRef}
+          width={1000}
+          height={1000}
+        />
 
         <div className='w-full'>
           <Accordion
@@ -258,14 +330,16 @@ const CirclePage: React.FC = () => {
           </Accordion>
         </div>
 
-        <div className='flex gap-2'>
-          <Button onClick={onSave} icon={iconDownloadSimple}>
-            <FormattedMessage id='interactions_circle.download' defaultMessage='Download' />
-          </Button>
-          <Button onClick={onCompose} icon={iconNotePencil}>
-            <FormattedMessage id='interactions_circle.compose' defaultMessage='Share' />
-          </Button>
-        </div>
+        {!showHtmlCircle && (
+          <div className='flex gap-2'>
+            <Button onClick={onSave} icon={iconDownloadSimple}>
+              <FormattedMessage id='interactions_circle.download' defaultMessage='Download' />
+            </Button>
+            <Button onClick={onCompose} icon={iconNotePencil}>
+              <FormattedMessage id='interactions_circle.compose' defaultMessage='Share' />
+            </Button>
+          </div>
+        )}
       </div>
     </Column>
   );

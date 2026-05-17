@@ -138,6 +138,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
           translatable
           withMedia={withMedia}
           expandable
+          contextType='thread'
         />
       </div>
 

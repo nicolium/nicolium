@@ -93,8 +93,8 @@ const NicoliumHead = () => {
     if (wcoVisible) {
       return window.getComputedStyle(document.body, null).getPropertyValue('background-color');
     }
-    return frontendConfig.brandColor;
-  }, [frontendConfig.brandColor, theme, wcoVisible, wcoRight]);
+    return (themeSettings?.brandColor ?? frontendConfig.brandColor) || '#d80482';
+  }, [frontendConfig.brandColor, themeSettings?.brandColor, theme, wcoVisible, wcoRight]);
 
   return (
     <>
@@ -103,6 +103,12 @@ const NicoliumHead = () => {
       <InlineStyle>{`:root { ${themeCss} }`}</InlineStyle>
       {['dark', 'black'].includes(theme) && (
         <InlineStyle>{':root { color-scheme: dark; }'}</InlineStyle>
+      )}
+      {frontendConfig.customStylesheet && (
+        <InlineStyle>{frontendConfig.customStylesheet}</InlineStyle>
+      )}
+      {frontendConfig.customStylesheetLink && (
+        <link rel='stylesheet' href={frontendConfig.customStylesheetLink} />
       )}
     </>
   );

@@ -12,7 +12,7 @@ import { restorePreviousStatus, updateStatus } from './use-status-interactions';
 const messages = defineMessages({
   joinSuccess: { id: 'join_event.success', defaultMessage: 'Joined the event' },
   joinRequestSuccess: {
-    id: 'join_event.request_success',
+    id: 'join_event.request.success',
     defaultMessage: 'Requested to join the event',
   },
   view: { id: 'toast.view', defaultMessage: 'View' },

@@ -54,7 +54,7 @@ const OtherActionsStep = ({
   }, [entries, selectedStatusIds]);
   const isBlocked = block;
   const isForward = forward;
-  const canForward = !account.local && features.federating;
+  const canForward = !account.local && features.federating && features.reportForwarding;
 
   const [showAdditionalStatuses, setShowAdditionalStatuses] = useState<boolean>(false);
 
@@ -81,7 +81,7 @@ const OtherActionsStep = ({
         <Text tag='h1' size='xl' weight='semibold'>
           <FormattedMessage
             id='report.other_actions.other_statuses'
-            defaultMessage='Include other statuses?'
+            defaultMessage='Include other posts?'
           />
         </Text>
 
@@ -89,7 +89,7 @@ const OtherActionsStep = ({
           labelText={
             <FormattedMessage
               id='report.other_actions.add_additional'
-              defaultMessage='Would you like to add additional statuses to this report?'
+              defaultMessage='Would you like to add additional posts to this report?'
             />
           }
         >
@@ -117,7 +117,7 @@ const OtherActionsStep = ({
                 >
                   <FormattedMessage
                     id='report.other_actions.hide_additional'
-                    defaultMessage='Hide additional statuses'
+                    defaultMessage='Hide additional posts'
                   />
                 </Button>
               </div>
@@ -148,7 +148,7 @@ const OtherActionsStep = ({
         <FormGroup
           labelText={
             <FormattedMessage
-              id='report.block_hint'
+              id='report.block.hint'
               defaultMessage='Do you also want to block this account?'
             />
           }
@@ -170,7 +170,7 @@ const OtherActionsStep = ({
           <FormGroup
             labelText={
               <FormattedMessage
-                id='report.forward_hint'
+                id='report.forward.hint'
                 defaultMessage='The account is from another server. Send a copy of the report there as well?'
               />
             }

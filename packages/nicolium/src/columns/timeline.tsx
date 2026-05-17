@@ -2,12 +2,14 @@ import iconArrowLineDown from '@phosphor-icons/core/regular/arrow-line-down.svg'
 import iconCaretDoubleDown from '@phosphor-icons/core/regular/caret-double-down.svg';
 import iconCaretDoubleUp from '@phosphor-icons/core/regular/caret-double-up.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import clsx from 'clsx';
 import React, { useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
 import { AccountLink } from '@/components/accounts/account-link';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
+import { EmptyMessage } from '@/components/empty-message';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';
@@ -47,11 +49,11 @@ import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   queue: {
-    id: 'status_list.queue_label',
+    id: 'status_list.queue.label',
     defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}',
   },
   queueLiveRegion: {
-    id: 'status_list.queue_label.live_region',
+    id: 'status_list.queue.label.live_region',
     defaultMessage: '{count} new {count, plural, one {post} other {posts}}.',
   },
   gapExplanation: {
@@ -220,6 +222,7 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
 }) => {
   const features = useFeatures();
   const isReblogged = rebloggedBy.length > 0;
+  const { useRocketIconForReblogs } = useSettings();
 
   const { data: accounts } = useAccounts(rebloggedBy);
 
@@ -257,7 +260,13 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
       <StatusInfo
         className='mt-4'
         avatarSize={42}
-        icon={<Icon src={iconRepeat} className='size-4 text-green-600' aria-hidden />}
+        icon={
+          <Icon
+            src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
+            className='size-4 text-green-600'
+            aria-hidden
+          />
+        }
         text={
           reblogVisibility === 'private' ? (
             <FormattedMessage
@@ -397,6 +406,7 @@ const Timeline: React.FC<ITimeline> = ({
     fillGap,
     isFetching,
     isPending,
+    isError,
     hasNextPage,
     refetch,
   } = query;
@@ -518,6 +528,21 @@ const Timeline: React.FC<ITimeline> = ({
 
     return rendered;
   }, [entries, contextType, timelineId, featuredStatusIds, filters]);
+
+  if (isError === 401 && entries.length === 0) {
+    return (
+      <PullToRefresh onRefresh={refetch}>
+        <EmptyMessage
+          text={
+            <FormattedMessage
+              id='timeline.error.unauthorized'
+              defaultMessage='You are not authorized to view this timeline.'
+            />
+          }
+        />
+      </PullToRefresh>
+    );
+  }
 
   return (
     <>

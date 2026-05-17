@@ -1,45 +1,61 @@
-import iconBellSimpleFill from '@phosphor-icons/core/fill/bell-simple-fill.svg';
-import iconChatsTeardropFill from '@phosphor-icons/core/fill/chats-teardrop-fill.svg';
-import iconHouseFill from '@phosphor-icons/core/fill/house-fill.svg';
-import iconMagnifyingGlassFill from '@phosphor-icons/core/fill/magnifying-glass-fill.svg';
-import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
-import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
-import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import iconList from '@phosphor-icons/core/regular/list.svg';
-import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
 import iconPlusSquare from '@phosphor-icons/core/regular/plus-square.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMatch } from '@tanstack/react-router';
-import React from 'react';
+import clsx from 'clsx';
+import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import ThumbNavigationLink from '@/components/navigation/thumb-navigation-link';
 import Icon from '@/components/ui/icon';
-import { useStatContext } from '@/contexts/stat-context';
-import { useFeatures } from '@/hooks/use-features';
-import { useOwnAccount } from '@/hooks/use-own-account';
+import { useNavigationItems } from '@/hooks/use-navigation-items';
 import { queryKeys } from '@/queries/keys';
-import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { layouts } from '@/router';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
-import { useIsStandalone } from '@/utils/state';
+
+import {
+  ThumbNavigationDynamicContentLink,
+  ThumbNavigationProfileLink,
+} from './thumb-navigation-dynamic-link';
 
 const messages = defineMessages({
-  home: { id: 'column.home', defaultMessage: 'Home' },
-  search: { id: 'column.search', defaultMessage: 'Search' },
-  notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
-  chats: { id: 'column.chats', defaultMessage: 'Chats' },
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
   openSidebar: { id: 'navigation.sidebar', defaultMessage: 'Open sidebar' },
   closeSidebar: { id: 'navigation.sidebar.close', defaultMessage: 'Close sidebar' },
 });
 
+const SidebarDot: React.FC = () => {
+  const navigationItems = useNavigationItems(false);
+  const isSidebarOpen = useIsSidebarOpen();
+  const { demetricator } = useSettings();
+
+  const [totalCount, setTotalCount] = useState(0);
+  const [showDot, setShowDot] = useState(false);
+
+  useMemo(() => {
+    const newCount = navigationItems.reduce((acc, item) => {
+      if (item && 'count' in item && item.count) return acc + item.count;
+      return acc;
+    }, 0);
+
+    if (newCount > totalCount) setShowDot(true);
+    setTotalCount(newCount);
+  }, [navigationItems]);
+
+  useEffect(() => {
+    if (isSidebarOpen) setShowDot(false);
+  }, [isSidebarOpen]);
+
+  return showDot && !demetricator ? (
+    <div className='⁂-thumb-navigation__sidebar-dot' aria-hidden />
+  ) : null;
+};
+
 const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   const intl = useIntl();
-  const { data: account } = useOwnAccount();
-  const features = useFeatures();
   const queryClient = useQueryClient();
 
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
@@ -48,10 +64,24 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   const { openSidebar, closeSidebar } = useUiStoreActions();
   const { openModal } = useModalsActions();
   const { groupComposeModal } = useComposeActions();
-  const { unreadChatsCount } = useStatContext();
 
-  const standalone = useIsStandalone();
-  const notificationCount = useNotificationsUnreadCount();
+  const navigationItems = useNavigationItems(true);
+
+  const orderedNavigationItems = useMemo(() => {
+    const composeButtonIndex = navigationItems.findIndex((item) => item?.type === 'compose');
+
+    if (composeButtonIndex === -1) {
+      return navigationItems;
+    }
+
+    const newNavigationItems = [...navigationItems];
+    const [composeButton] = newNavigationItems.splice(composeButtonIndex, 1);
+    const newIndex =
+      navigationItems.length % 2 === 0 ? navigationItems.length / 2 - 1 : newNavigationItems.length;
+    newNavigationItems.splice(newIndex, 0, composeButton);
+
+    return newNavigationItems;
+  }, [navigationItems]);
 
   const handleOpenComposeModal = () => {
     if (match?.params.groupId) {
@@ -62,18 +92,13 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
     }
   };
 
-  const composeButton = (
-    <button
-      className='⁂-thumb-navigation__item ⁂-thumb-navigation__item--compose'
-      onClick={handleOpenComposeModal}
-      title={intl.formatMessage(messages.compose)}
-    >
-      <Icon src={iconPlusSquare} />
-    </button>
-  );
-
   return (
-    <div className='⁂-thumb-navigation'>
+    <div
+      className={clsx(
+        '⁂-thumb-navigation',
+        orderedNavigationItems.length === 0 && '⁂-thumb-navigation--no-items',
+      )}
+    >
       <button
         className='⁂-thumb-navigation__item'
         onClick={isSidebarOpen ? closeSidebar : openSidebar}
@@ -85,64 +110,36 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
         aria-expanded={isSidebarOpen}
       >
         <Icon src={iconList} />
+        {orderedNavigationItems.length === 0 && <SidebarDot />}
       </button>
 
-      <ThumbNavigationLink
-        src={iconHouse}
-        activeSrc={iconHouseFill}
-        text={intl.formatMessage(messages.home)}
-        to='/'
-        exact
-      />
+      {orderedNavigationItems.map((item) => {
+        if (item === null) return null;
 
-      {/* {features.groups && (
-        <ThumbNavigationLink
-          src={iconUsersThree}
-          activeSrc={iconUsersThreeFill}
-          text={<FormattedMessage id='tabs_bar.groups' defaultMessage='Groups' />}
-          to='/groups'
-          exact
-        />
-      )} */}
-
-      {account && !features.chats && composeButton}
-
-      {(!standalone || account) && (
-        <ThumbNavigationLink
-          src={iconMagnifyingGlass}
-          activeSrc={iconMagnifyingGlassFill}
-          text={intl.formatMessage(messages.search)}
-          to='/search'
-          exact
-        />
-      )}
-
-      {account && (
-        <ThumbNavigationLink
-          src={iconBellSimple}
-          activeSrc={iconBellSimpleFill}
-          text={intl.formatMessage(messages.notifications)}
-          to='/notifications'
-          exact
-          count={notificationCount}
-        />
-      )}
-
-      {account && features.chats && (
-        <>
-          <ThumbNavigationLink
-            src={iconChatsTeardrop}
-            activeSrc={iconChatsTeardropFill}
-            text={intl.formatMessage(messages.chats)}
-            to='/chats'
-            exact
-            count={unreadChatsCount}
-            countMax={9}
-          />
-
-          {composeButton}
-        </>
-      )}
+        switch (item.type) {
+          case 'compose':
+            return (
+              <button
+                key='compose'
+                className='⁂-thumb-navigation__item ⁂-thumb-navigation__item--compose'
+                onClick={handleOpenComposeModal}
+                title={intl.formatMessage(messages.compose)}
+              >
+                <Icon src={iconPlusSquare} />
+              </button>
+            );
+          case 'profile-link':
+            return <ThumbNavigationProfileLink key={`profile-link:${item.accountId}`} {...item} />;
+          case 'dynamic-content-link':
+            return (
+              <ThumbNavigationDynamicContentLink key={`${item.contentType}:${item.id}`} {...item} />
+            );
+          case 'link':
+            return <ThumbNavigationLink key={item.to} exact {...item} />;
+          default:
+            return null;
+        }
+      })}
     </div>
   );
 });

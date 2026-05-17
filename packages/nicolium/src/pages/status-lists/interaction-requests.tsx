@@ -1,5 +1,6 @@
 import iconArrowBendUpLeft from '@phosphor-icons/core/regular/arrow-bend-up-left.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
@@ -27,6 +28,7 @@ import {
   useRejectInteractionRequestMutation,
 } from '@/queries/statuses/use-interaction-requests';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
+import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -125,6 +127,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   const intl = useIntl();
   const { data: ownAccount } = useOwnAccount();
   const { data: account } = useAccount(interactionRequest.account_id);
+  const { useRocketIconForReblogs } = useSettings();
 
   const { mutate: authorize } = useAuthorizeInteractionRequestMutation(interactionRequest.id);
   const { mutate: reject } = useRejectInteractionRequestMutation(interactionRequest.id);
@@ -226,6 +229,11 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
     moveDown: handleMoveDown,
   };
 
+  let icon = icons[interactionRequest.type];
+  if (interactionRequest.type === 'reblog' && useRocketIconForReblogs) {
+    icon = iconRocketLaunch;
+  }
+
   return (
     <Hotkeys handlers={handlers} className='notification focusable' tabIndex={0}>
       <div className='focusable p-4'>
@@ -233,10 +241,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
           <div>
             <div className='flex items-center gap-3'>
               <div className='flex justify-end' style={{ flexBasis: avatarSize }}>
-                <Icon
-                  src={icons[interactionRequest.type]}
-                  className='flex-none text-primary-600 dark:text-primary-400'
-                />
+                <Icon src={icon} className='flex-none text-primary-600 dark:text-primary-400' />
               </div>
 
               <div className='truncate'>

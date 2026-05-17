@@ -16,7 +16,7 @@ import toast from '@/toast';
 const messages = defineMessages({
   confirmation: {
     id: 'password_reset.confirmation',
-    defaultMessage: 'Check your email for confirmation.',
+    defaultMessage: 'Check your e-mail for confirmation.',
   },
 });
 
@@ -53,12 +53,12 @@ const PasswordResetPage = () => {
           labelText={
             features.logInWithUsername ? (
               <FormattedMessage
-                id='password_reset.fields.username_placeholder'
-                defaultMessage='Email or username'
+                id='password_reset.fields.username.placeholder'
+                defaultMessage='E-mail or username'
               />
             ) : (
               <FormattedMessage
-                id='password_reset.fields.email_placeholder'
+                id='password_reset.fields.email.placeholder'
                 defaultMessage='E-mail address'
               />
             )

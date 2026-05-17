@@ -98,6 +98,10 @@ a.status-card {
       stroke-width: 1px;
     }
   }
+
+  img {
+    object-fit: cover;
+  }
 }
 
 .status-card.horizontal {

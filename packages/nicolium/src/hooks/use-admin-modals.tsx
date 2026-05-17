@@ -28,7 +28,7 @@ const messages = defineMessages({
     defaultMessage: 'Deactivate @{name}',
   },
   userDeactivated: {
-    id: 'admin.users.user_deactivated_message',
+    id: 'admin.users.user_deactivated.success',
     defaultMessage: '@{acct} was deactivated',
   },
   deleteUserHeading: {
@@ -48,7 +48,7 @@ const messages = defineMessages({
     id: 'confirmations.admin.delete_local_user.checkbox',
     defaultMessage: 'I understand that I am about to delete a local user.',
   },
-  userDeleted: { id: 'admin.users.user_deleted_message', defaultMessage: '@{acct} was deleted' },
+  userDeleted: { id: 'admin.users.user_deleted.success', defaultMessage: '@{acct} was deleted' },
   deleteStatusHeading: {
     id: 'confirmations.admin.delete_status.heading',
     defaultMessage: 'Delete post',
@@ -62,7 +62,7 @@ const messages = defineMessages({
     defaultMessage: 'Delete post',
   },
   statusDeleted: {
-    id: 'admin.statuses.status_deleted_message',
+    id: 'admin.statuses.status_deleted.success',
     defaultMessage: 'Post by @{acct} was deleted',
   },
   markStatusSensitiveHeading: {
@@ -71,7 +71,7 @@ const messages = defineMessages({
   },
   markStatusNotSensitiveHeading: {
     id: 'confirmations.admin.mark_status_not_sensitive.heading',
-    defaultMessage: 'Mark post not sensitive.',
+    defaultMessage: 'Mark post not sensitive',
   },
   markStatusSensitivePrompt: {
     id: 'confirmations.admin.mark_status_sensitive.message',

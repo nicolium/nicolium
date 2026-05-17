@@ -177,7 +177,7 @@ const EventInformationPage: React.FC = () => {
             <FormattedMessage id='event.description' defaultMessage='Description' />
           </h2>
 
-          <StatusContent status={status} translatable withMedia isEvent />
+          <StatusContent status={status} translatable withMedia isEvent contextType='thread' />
         </div>
       )}
 

@@ -136,7 +136,7 @@ const EventsPage = () => {
           emptyMessage={
             <FormattedMessage
               id='events.joined_events.empty'
-              defaultMessage="You haven't joined any event yet."
+              defaultMessage="You haven't joined any events yet."
             />
           }
         />

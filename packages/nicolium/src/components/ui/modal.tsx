@@ -61,6 +61,7 @@ interface IModal {
   children?: React.ReactNode;
   className?: string;
   onBack?: () => void;
+  modalActionsBody?: React.ReactNode;
 }
 
 /** Displays a modal dialog box. */
@@ -84,6 +85,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
       title,
       className,
       onBack,
+      modalActionsBody,
     },
     ref,
   ) => {
@@ -145,8 +147,10 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
         <div className='⁂-modal__body'>
           <div className='⁂-modal__children'>{children}</div>
 
-          {confirmationAction && (
+          {(confirmationAction || modalActionsBody) && (
             <div className='⁂-modal__actions' data-testid='modal-actions'>
+              {modalActionsBody}
+
               <div className='⁂-modal__actions__cancel'>
                 {cancelAction && (
                   <button className='⁂-modal__action-cancel' onClick={cancelAction}>

@@ -3,6 +3,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { LinkTimelineColumn } from '@/columns/timeline';
+import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
 import { linkTimelineRoute } from '@/router';
 
@@ -19,6 +20,7 @@ const LinkTimelinePage: React.FC = () => {
   return (
     <Column
       label={intl.formatMessage(messages.header, { url: decodedUrl.replace(/^https?:\/\//, '') })}
+      action={<TimelineRefreshButton timelineId={`link:${decodedUrl}`} />}
     >
       <LinkTimelineColumn
         url={decodedUrl}

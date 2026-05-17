@@ -1,12 +1,14 @@
 import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useNavigate } from '@tanstack/react-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
+import Tabs, { type Item } from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
+import { useFeatures } from '@/hooks/use-features';
 import Report from '@/pages/dashboard/components/report';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useReports } from '@/queries/admin/use-reports';
@@ -18,6 +20,7 @@ const messages = defineMessages({
 });
 
 const Reports: React.FC = () => {
+  const features = useFeatures();
   const intl = useIntl();
 
   const {
@@ -36,15 +39,53 @@ const Reports: React.FC = () => {
     hasNextPage,
     fetchNextPage,
   } = useReports({
-    resolved,
+    resolved: resolved !== false ? true : undefined,
+    unresolved: resolved !== true ? true : undefined,
     account_id: accountId,
     target_account_id: targetAccountId,
   });
 
   const handleUnsetAccounts = () => navigate({ search: (prev) => ({ resolved: prev.resolved }) });
 
+  const tabItems = useMemo(() => {
+    const items: Array<Item> = [];
+
+    if (features.mastodonAdminUnresolvedReports) {
+      items.push({
+        text: <FormattedMessage id='column.admin.reports.tabs.all' defaultMessage='All' />,
+        to: '/nicolium/admin/reports',
+        search: (query) => ({ ...query, resolved: undefined }),
+        name: 'all',
+      });
+    }
+
+    items.push(
+      {
+        text: <FormattedMessage id='column.admin.reports.tabs.open' defaultMessage='Open' />,
+        to: '/nicolium/admin/reports',
+        search: (query) => ({ ...query, resolved: false }),
+        name: 'open',
+      },
+      {
+        text: (
+          <FormattedMessage id='column.admin.reports.tabs.resolved' defaultMessage='Resolved' />
+        ),
+        to: '/nicolium/admin/reports',
+        search: (query) => ({ ...query, resolved: true }),
+        name: 'resolved',
+      },
+    );
+
+    return items;
+  }, [intl]);
+
   return (
-    <Column label={intl.formatMessage(messages.heading)}>
+    <Column label={intl.formatMessage(messages.heading)} bodyClassName='flex flex-col gap-4'>
+      <Tabs
+        items={tabItems}
+        activeItem={resolved ? 'resolved' : resolved === false ? 'open' : 'all'}
+      />
+
       {(accountId ?? targetAccountId) && (
         <div className='flex items-center gap-2 border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'>
           <IconButton
@@ -89,6 +130,7 @@ const Reports: React.FC = () => {
           </Text>
         </div>
       )}
+
       <ScrollableList
         scrollKey='adminReports'
         isLoading={isPending}
@@ -101,7 +143,7 @@ const Reports: React.FC = () => {
         }
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
-        itemClassName='pt-4'
+        itemClassName='pt-4 first:pt-0'
       >
         {reportIds.map((report) => report && <Report id={report} key={report} />)}
       </ScrollableList>

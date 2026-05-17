@@ -91,7 +91,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({
 
               {poll && <PollPreview poll={poll} />}
 
-              {status.quote_id && <QuotedStatus statusId={status.quote_id} />}
+              {status.quote_id && <QuotedStatus statusId={status.quote_id} state='accepted' />}
             </div>
           </div>
 

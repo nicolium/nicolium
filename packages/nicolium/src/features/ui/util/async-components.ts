@@ -1,11 +1,15 @@
 import { lazy } from 'react';
 
 // Panels
+export const AccountLatestStatusPanel = lazy(
+  () => import('@/components/panels/account-latest-status-panel'),
+);
 export const AccountNotePanel = lazy(() => import('@/components/panels/account-note-panel'));
 export const AnnouncementsPanel = lazy(
   () => import('@/components/announcements/announcements-panel'),
 );
 export const BirthdayPanel = lazy(() => import('@/components/panels/birthday-panel'));
+export const ComposePanel = lazy(() => import('@/components/panels/compose-panel'));
 export const CryptoDonatePanel = lazy(
   () => import('@/features/crypto-donate/components/crypto-donate-panel'),
 );
@@ -25,6 +29,7 @@ export const ProfileFieldsPanel = lazy(() => import('@/components/panels/profile
 export const ProfileInfoPanel = lazy(() => import('@/components/panels/profile-info-panel'));
 export const ProfileMediaPanel = lazy(() => import('@/components/panels/profile-media-panel'));
 export const PromoPanel = lazy(() => import('@/components/panels/promo-panel'));
+export const ShoutboxPanel = lazy(() => import('@/components/panels/shoutbox-panel'));
 export const SignUpPanel = lazy(() => import('@/components/panels/sign-up-panel'));
 export const TrendsPanel = lazy(() => import('@/components/panels/trends-panel'));
 export const UserPanel = lazy(() => import('@/components/panels/user-panel'));

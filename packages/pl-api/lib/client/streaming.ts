@@ -49,19 +49,24 @@ const streaming = (client: PlApiBaseClient) => ({
       );
     };
 
-    let disconnectCallbacks: Array<() => void> = [];
+    let disconnectCallbacks: Array<(event?: CloseEvent) => void> = [];
+    let disconnected = false;
+
+    const disconnect = (event?: CloseEvent) => {
+      if (disconnected) return;
+
+      disconnected = true;
+      client.socket = undefined;
+      disconnectCallbacks.forEach((fn) => fn(event));
+    };
 
     ws.onopen = () => {
       queue.forEach((fn) => fn());
+      queue.length = 0;
     };
 
-    ws.onerror = () => {
-      disconnectCallbacks.forEach((fn) => fn());
-    };
-
-    ws.onclose = () => {
-      client.socket = undefined;
-      disconnectCallbacks.forEach((fn) => fn());
+    ws.onclose = (event) => {
+      disconnect(event);
     };
 
     client.socket = {

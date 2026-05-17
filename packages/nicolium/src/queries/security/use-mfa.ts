@@ -37,11 +37,15 @@ const useConfirmMfa = () => {
 
 const useDisableMfa = () => {
   const client = useClient();
+  const features = useFeatures();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['settings', 'mfa'],
-    mutationFn: (password: string) => client.settings.mfa.disableMfa('totp', password),
+    mutationFn: (password: string) =>
+      features.disableMfaWithCode
+        ? client.settings.mfa.disableMfaWithCode(password)
+        : client.settings.mfa.disableMfa('totp', password),
     onSuccess: () => {
       queryClient.setQueryData(queryKeys.settings.mfa, {
         settings: {

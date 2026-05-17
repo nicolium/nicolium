@@ -240,12 +240,13 @@ const statuses = (client: PlApiBaseClient) => {
      *
      * Specifying reblog visibility requires features{@link Features.reblogVisibility}.
      */
-    reblogStatus: async (statusId: string, visibility?: string) => {
+    reblogStatus: async (statusId: string, visibility?: string, scheduledAt?: string) => {
       const response = await client.request(`/api/v1/statuses/${statusId}/reblog`, {
         method: 'POST',
-        body: { visibility },
+        body: { visibility, scheduled_at: scheduledAt },
       });
 
+      if (response.json?.scheduled_at) return v.parse(scheduledStatusSchema, response.json);
       return v.parse(statusSchema, response.json);
     },
 

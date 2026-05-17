@@ -4,7 +4,6 @@ import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { queryKeys } from '@/queries/keys';
 import { useAuthActions } from '@/stores/auth';
-import { useComposeActions } from '@/stores/compose';
 
 import type { UpdateCredentialsParams } from 'pl-api';
 
@@ -24,7 +23,6 @@ const useUpdateCredentials = () => {
   const currentAccount = useCurrentAccount();
   const queryClient = useQueryClient();
   const { setCurrentAccount } = useAuthActions();
-  const { importDefaultSettings } = useComposeActions();
 
   return useMutation({
     mutationKey: queryKeys.accountCredentials.show(currentAccount as string),
@@ -35,7 +33,6 @@ const useUpdateCredentials = () => {
         response,
       );
       queryClient.setQueryData(queryKeys.accounts.show(response.id), response);
-      importDefaultSettings(response);
       setCurrentAccount(response);
     },
   });

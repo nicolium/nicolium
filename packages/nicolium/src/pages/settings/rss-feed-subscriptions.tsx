@@ -23,11 +23,11 @@ import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.rss_feed_subscriptions', defaultMessage: 'Subscribed RSS feeds' },
-  label: { id: 'rss_feed_subscriptions.new.title_placeholder', defaultMessage: 'RSS feed URL' },
+  label: { id: 'rss_feed_subscriptions.new.title.placeholder', defaultMessage: 'RSS feed URL' },
   deleteFeed: { id: 'rss_feed_subscriptions.delete', defaultMessage: 'Delete feed' },
   createSuccess: {
     id: 'rss_feed_subscriptions.add.success',
-    defaultMessage: 'Successfully subscribed to RSS feed',
+    defaultMessage: 'Subscribed to RSS feed',
   },
   createFail: {
     id: 'rss_feed_subscriptions.add.fail',
@@ -68,7 +68,7 @@ const NewFeedForm: React.FC = () => {
 
         <Button disabled={isPending} type='submit' theme='primary'>
           <FormattedMessage
-            id='rss_feed_subscriptions.new.create_title'
+            id='rss_feed_subscriptions.new.create.title'
             defaultMessage='Subscribe'
           />
         </Button>

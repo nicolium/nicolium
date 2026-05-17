@@ -16,7 +16,7 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
-import { useThread, useThreadDepths } from '@/stores/contexts';
+import { useAsyncRefreshHeader, useThread, useThreadDepths } from '@/stores/contexts';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
@@ -24,6 +24,7 @@ import { selectChild } from '@/utils/scroll-utils';
 import { textForScreenReader } from '@/utils/status';
 
 import DetailedStatus from './detailed-status';
+import RefreshController from './refresh-controller';
 import ThreadStatus from './thread-status';
 
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
@@ -37,6 +38,7 @@ interface IThread {
   isModal?: boolean;
   itemClassName?: string;
   setExpandAllStatuses?: (fn: () => void) => void;
+  refetchContext?: () => Promise<void>;
 }
 
 const Thread = ({
@@ -45,6 +47,7 @@ const Thread = ({
   isModal,
   withMedia = true,
   setExpandAllStatuses,
+  refetchContext,
 }: IThread) => {
   const navigate = useNavigate();
   const intl = useIntl();
@@ -59,6 +62,8 @@ const Thread = ({
     threads: { displayMode },
     statusActionBarItems,
   } = useSettings();
+
+  const asyncRefreshHeader = useAsyncRefreshHeader(status.id);
 
   const { mutate: favouriteStatus } = useFavouriteStatus(status.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status.id);
@@ -90,12 +95,12 @@ const Thread = ({
     if (status.reblogged) {
       unreblogStatus();
     } else if ((e && e.shiftKey) || !boostModal) {
-      reblogStatus(undefined);
+      reblogStatus({});
     } else {
       openModal('BOOST', {
         statusId: status.id,
-        onReblog: () => {
-          reblogStatus(undefined);
+        onReblog: (visibility, scheduledAt) => {
+          reblogStatus({ visibility, scheduledAt });
         },
       });
     }
@@ -240,7 +245,11 @@ const Thread = ({
   const renderPendingStatus = (id: string) => {
     const idempotencyKey = id.replace(/^末pending-/, '');
 
-    return <PendingStatus key={id} idempotencyKey={idempotencyKey} variant='default' />;
+    return (
+      <div key={id} className={clsx('thread__status', { 'thread__status--linear': linear })}>
+        <PendingStatus idempotencyKey={idempotencyKey} variant='default' />
+      </div>
+    );
   };
 
   const renderChildren = (list: Array<string>) =>
@@ -433,6 +442,15 @@ const Thread = ({
         >
           {children}
         </ScrollableList>
+        {!isModal && refetchContext && (
+          <RefreshController
+            statusId={status.id}
+            statusCreatedAt={status.created_at}
+            isLocal={status.account.local ?? false}
+            asyncRefreshHeader={asyncRefreshHeader}
+            onLoadContext={refetchContext!}
+          />
+        )}
       </div>
     </div>
   );

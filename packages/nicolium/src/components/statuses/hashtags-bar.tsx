@@ -36,7 +36,9 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
           }}
           className='⁂-hashtags-bar__item'
         >
-          #<span>{hashtag}</span>
+          <bdi>
+            #<span>{hashtag}</span>
+          </bdi>
         </Link>
       ))}
 

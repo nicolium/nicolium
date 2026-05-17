@@ -18,7 +18,7 @@ const messages = defineMessages({
   heading: { id: 'column.delete_account', defaultMessage: 'Delete account' },
   deleteAccountSuccess: {
     id: 'security.delete_account.success',
-    defaultMessage: 'Account successfully deleted.',
+    defaultMessage: 'Account deleted',
   },
   deleteAccountFail: {
     id: 'security.delete_account.fail',

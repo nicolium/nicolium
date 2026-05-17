@@ -1,4 +1,4 @@
-import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -50,7 +50,7 @@ const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
       onClick={onOpenCompose}
     >
       {shrink ? (
-        <Icon src={iconPlus} />
+        <Icon src={iconNotePencil} />
       ) : (
         <FormattedMessage id='navigation.compose' defaultMessage='Compose' />
       )}
@@ -72,7 +72,7 @@ const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   return (
     <button className='⁂-sidebar-navigation__compose-button' onClick={onOpenCompose}>
       {shrink ? (
-        <Icon src={iconPlus} />
+        <Icon src={iconNotePencil} />
       ) : (
         <div className='flex items-center gap-3'>
           <Avatar

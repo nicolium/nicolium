@@ -1,6 +1,104 @@
 @use 'mixins';
 @use 'variables';
 
+.⁂-chats-page {
+  overflow: hidden;
+
+  height: 100vh;
+
+  color: rgb(var(--color-gray-900));
+
+  background: white;
+  box-shadow: var(--shadow-lg);
+
+  .dark & {
+    color: rgb(var(--color-gray-100));
+    background: rgb(var(--color-primary-900));
+    box-shadow: none;
+  }
+
+  .black & {
+    background: none;
+  }
+
+  > div {
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    height: 100%;
+  }
+
+  &__sidebar {
+    overflow: hidden;
+    display: flex;
+    grid-column: span 9 / span 9;
+    flex-direction: column;
+
+    background: linear-gradient(to right, white, rgb(var(--color-gray-100)));
+
+    &--hidden {
+      display: none;
+    }
+
+    .dark & {
+      background: rgb(var(--color-gray-900));
+    }
+    
+    .black & {
+      background: black;
+    }
+
+    @media (min-width: variables.$breakpoint-sm) {
+      grid-column: span 4 / span 4;
+      
+      .dark & {
+        border-right: 1px solid rgb(var(--color-primary-800));
+      }
+
+      .black & {
+        border-color: rgb(var(--color-gray-800));
+      }
+
+      &--hidden {
+        display: block;
+      }
+    }
+
+    @media (min-width: variables.$breakpoint-md) {
+      grid-column: span 3 / span 3;
+    }
+  }
+
+  &__main {
+    overflow: hidden;
+    display: flex;
+    grid-column: span 9 / span 9;
+    flex-direction: column;
+
+    height: 100%;
+
+    &--hidden {
+      display: none;
+    }
+
+    @media (min-width: variables.$breakpoint-sm) {
+      grid-column: span 5 / span 5;
+
+      &--hidden {
+        display: block;
+      }
+    }
+
+    @media (min-width: variables.$breakpoint-md) {
+      grid-column: span 6 / span 6;
+    }
+  }
+
+  @media (min-width: variables.$breakpoint-sm) {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+}
+
 .⁂-chat-widget {
   position: fixed;
   z-index: 99;
@@ -228,6 +326,84 @@
     button {
       @include mixins.button($theme: primary);
     }
+  }
+}
+
+.⁂-chat {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  &__messages {
+    overflow: hidden;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+
+    height: 100%;
+  }
+}
+
+.⁂-chat-message-list {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: end;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1.5rem;
+
+    height: 100;
+  }
+
+  &--placeholder {
+    padding-bottom: 1rem;
+
+    > div {
+      padding: 0 1rem;
+    }
+  }
+}
+
+.⁂-chat-message,
+.⁂-shoutbox-message {
+  &__container {
+    position: relative;
+    padding: 0.5rem 1rem;
+
+    &:hover {
+      background-color: rgb(var(--color-gray-200) / 0.4);
+
+      .dark & {
+        background-color: rgb(var(--color-gray-800) / 0.4);
+      }
+    }
+  }
+}
+
+.⁂-chat-message {
+  &__container--menu-open {
+    background-color: rgb(var(--color-gray-200) / 0.4);
+
+    .dark & {
+      background-color: rgb(var(--color-gray-800) / 0.4);
+    }
+  }
+}
+
+.⁂-shoutbox-message {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  justify-content: start;
+
+  &--my-message {
+    justify-content: end;
+    margin-left: auto;
   }
 }
 

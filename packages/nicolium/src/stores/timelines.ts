@@ -45,7 +45,7 @@ interface TimelineData {
   queuedAccountIds: Array<string>;
   isFetching: boolean;
   isPending: boolean;
-  isError: boolean;
+  isError: boolean | number;
   hasNextPage: boolean;
   oldestStatusId?: string;
   newestStatusId?: string;
@@ -65,7 +65,7 @@ interface State {
     receiveStreamingStatus: (timelineId: string, status: Status) => void;
     deleteStatus: (statusId: string) => void;
     setLoading: (timelineId: string, isFetching: boolean) => void;
-    setError: (timelineId: string, isError: boolean) => void;
+    setError: (timelineId: string, isError: boolean, statusCode?: number) => void;
     dequeueEntries: (timelineId: string) => void;
     fillGap: (
       timelineId: string,
@@ -80,6 +80,7 @@ interface State {
     filterTimelines: (accountId: string) => void;
     resetTimeline: (timelineId: string) => void;
     disablePolling: () => void;
+    resetErroredTimelines: () => void;
   };
 }
 
@@ -273,13 +274,13 @@ const useTimelinesStore = create<State>()(
           if (!isFetching) timeline.isPending = false;
           state.timelines[timelineId] = timeline;
         }),
-      setError: (timelineId, isError) =>
+      setError: (timelineId, isError, statusCode) =>
         set((state) => {
           const timeline = state.timelines[timelineId] ?? createEmptyTimeline();
 
           timeline.isFetching = false;
           timeline.isPending = false;
-          timeline.isError = isError;
+          timeline.isError = isError ? statusCode || true : false;
           state.timelines[timelineId] = timeline;
         }),
       dequeueEntries: (timelineId) =>
@@ -310,6 +311,10 @@ const useTimelinesStore = create<State>()(
           const newEntries = processPage(statuses);
 
           timeline.entries.splice(gapIndex, 1);
+
+          if (gapIndex === 0) {
+            timeline.newestStatusId = statuses[0].id;
+          }
 
           if (direction === 'up') {
             if (hasMore && statuses.length > 0) {
@@ -436,6 +441,18 @@ const useTimelinesStore = create<State>()(
       disablePolling: () =>
         set((state) => {
           state.pollingEnabled = false;
+        }),
+      resetErroredTimelines: () =>
+        set((state) => {
+          for (const timeline in Object.values(state.timelines)) {
+            if (
+              timeline in state.timelines &&
+              state.timelines[timeline].isError &&
+              state.timelines[timeline].entries.length === 0
+            ) {
+              delete state.timelines[timeline];
+            }
+          }
         }),
     },
   })),

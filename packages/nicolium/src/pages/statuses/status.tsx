@@ -34,7 +34,7 @@ const messages = defineMessages({
   redraftMessage: {
     id: 'confirmations.redraft.message',
     defaultMessage:
-      'Are you sure you want to delete this post and re-draft it? Favorites and reposts will be lost, and replies to the original post will be orphaned.',
+      'Are you sure you want to delete this post and re-draft it? Likes and reposts will be lost, and replies to the original post will be orphaned.',
   },
   revealAll: { id: 'status.show_more_all', defaultMessage: 'Show more for all' },
   hideAll: { id: 'status.show_less_all', defaultMessage: 'Show less for all' },
@@ -78,7 +78,7 @@ const StatusPage: React.FC = () => {
 
   const handleRefresh = () => {
     refetch();
-    refetchContext();
+    return refetchContext();
   };
 
   const items = useMemo(() => {
@@ -181,6 +181,7 @@ const StatusPage: React.FC = () => {
           <Thread
             key={status.id}
             status={status}
+            refetchContext={refetchContext}
             setExpandAllStatuses={(fn) => {
               setExpandAllStatuses(() => fn);
             }}

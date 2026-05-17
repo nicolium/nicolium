@@ -1,5 +1,5 @@
 import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
-import { Link } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -49,7 +49,9 @@ const Card = React.forwardRef<HTMLDivElement, ICard>(
 Card.displayName = 'Card';
 
 interface ICardHeader {
-  backHref?: string;
+  backHref?: LinkOptions['to'];
+  backParams?: LinkOptions['params'];
+  backSearch?: LinkOptions['search'];
   onBackClick?: (event: React.MouseEvent) => void;
   className?: string;
   children?: React.ReactNode;
@@ -63,6 +65,8 @@ const CardHeader: React.FC<ICardHeader> = ({
   className,
   children,
   backHref,
+  backParams,
+  backSearch,
   onBackClick,
 }): React.JSX.Element => {
   const intl = useIntl();
@@ -73,7 +77,9 @@ const CardHeader: React.FC<ICardHeader> = ({
     }
 
     const Comp: React.ElementType = backHref ? Link : 'button';
-    const backAttributes = backHref ? { to: backHref } : { onClick: onBackClick };
+    const backAttributes = backHref
+      ? { to: backHref, params: backParams, search: backSearch, onClick: onBackClick }
+      : { onClick: onBackClick };
 
     return (
       <Comp

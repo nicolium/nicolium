@@ -25,20 +25,20 @@ import CaptchaField from './captcha';
 import type { CreateAccountParams } from 'pl-api';
 
 const messages = defineMessages({
-  username: { id: 'registration.fields.username_placeholder', defaultMessage: 'Username' },
+  username: { id: 'registration.fields.username.placeholder', defaultMessage: 'Username' },
   usernameUnavailable: {
     id: 'registration.username_unavailable',
     defaultMessage: 'Username is already taken.',
   },
-  email: { id: 'registration.fields.email_placeholder', defaultMessage: 'E-mail address' },
-  password: { id: 'registration.fields.password_placeholder', defaultMessage: 'Password' },
+  email: { id: 'registration.fields.email.placeholder', defaultMessage: 'E-mail address' },
+  password: { id: 'registration.fields.password.placeholder', defaultMessage: 'Password' },
   passwordMismatch: {
     id: 'registration.password_mismatch',
     defaultMessage: "Passwords don't match.",
   },
-  confirm: { id: 'registration.fields.confirm_placeholder', defaultMessage: 'Password (again)' },
+  confirm: { id: 'registration.fields.confirm.placeholder', defaultMessage: 'Password (again)' },
   reasonHint: {
-    id: 'registration.reason_hint',
+    id: 'registration.reason.hint',
     defaultMessage: 'This will help us review your application',
   },
 });
@@ -152,7 +152,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
           <p>
             <FormattedMessage
               id='confirmations.register.needs_confirmation'
-              defaultMessage='Please check your inbox at {email} for confirmation instructions. You will need to verify your email address to continue.'
+              defaultMessage='Please check your inbox at {email} for confirmation instructions. You will need to verify your e-mail address to continue.'
               values={{ email: <strong>{params.email}</strong> }}
             />
           </p>
@@ -283,7 +283,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
         <FormGroup
           hintText={
             <FormattedMessage
-              id='registration.fields.username_hint'
+              id='registration.fields.username.hint'
               defaultMessage='Only letters, numbers, and underscores are allowed.'
             />
           }

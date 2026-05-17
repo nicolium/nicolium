@@ -7,13 +7,14 @@ import {
 } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
-import type { PaginatedResponse, PlApiClient } from 'pl-api';
+import type { Features, PaginatedResponse, PlApiClient } from 'pl-api';
 
 class PaginatedResponseArray<T> extends Array<T> {
-  declare total: number | undefined;
-  declare partial: boolean | undefined;
+  total: number | undefined;
+  partial: boolean | undefined;
 
   static override from<T>(items: ArrayLike<T> | Iterable<T>): PaginatedResponseArray<T> {
     const arr = new PaginatedResponseArray<T>();
@@ -23,20 +24,9 @@ class PaginatedResponseArray<T> extends Array<T> {
     return arr;
   }
 
-  /** Set metadata as non-enumerable to preserve TanStack Query structural sharing. */
   setMeta(total: number | undefined, partial: boolean | undefined): this {
-    Object.defineProperty(this, 'total', {
-      value: total,
-      writable: true,
-      enumerable: false,
-      configurable: true,
-    });
-    Object.defineProperty(this, 'partial', {
-      value: partial,
-      writable: true,
-      enumerable: false,
-      configurable: true,
-    });
+    this.total = total;
+    this.partial = partial;
     return this;
   }
 }
@@ -64,9 +54,11 @@ const makePaginatedResponseQuery =
       UseInfiniteQueryOptions<PaginatedResponse<T2, IsArray>>,
       'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam' | 'select' | 'enabled'
     >,
+    feature?: Exclude<keyof Features, 'version'>,
   ) =>
   (...params: T1) => {
     const client = useClient();
+    const features = useFeatures();
     const { data: account } = useOwnAccount();
 
     type PageParam = { next: (() => Promise<PaginatedResponse<T2, IsArray>>) | null };
@@ -96,11 +88,12 @@ const makePaginatedResponseQuery =
           return lastPage.items as T3;
         }),
       enabled:
-        enabled === 'isLoggedIn'
+        (enabled === 'isLoggedIn'
           ? !!account
           : enabled === 'isAdmin'
             ? !!(account?.is_admin ?? account?.is_moderator)
-            : (enabled?.(...params) ?? true),
+            : (enabled?.(...params) ?? true)) &&
+        (!feature || features[feature]),
       ...options,
     });
   };

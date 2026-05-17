@@ -1,15 +1,19 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
+import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import { useFeatures } from '@/hooks/use-features';
 import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
+
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 
 const messages = defineMessages({
   heading: { id: 'preferences.heading.compose', defaultMessage: 'Compose settings' },
@@ -34,11 +38,18 @@ const messages = defineMessages({
   },
 });
 
-const ComposePreferences: React.FC = () => {
+const ComposePreferences: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const intl = useIntl();
   const features = useFeatures();
   const instance = useInstance();
-  const settings = useSettings();
+  const userSettings = useSettings();
+
+  const settings = settingsProp || userSettings;
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
     changeSetting(path, event.target.value, { showAlert: true });
@@ -80,7 +91,7 @@ const ComposePreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.privacy_label'
+                  id='preferences.fields.privacy.label'
                   defaultMessage='Default post privacy'
                 />
               }
@@ -100,7 +111,7 @@ const ComposePreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.content_type_label'
+                  id='preferences.fields.content_type.label'
                   defaultMessage='Default post format'
                 />
               }
@@ -120,7 +131,7 @@ const ComposePreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.preserve_spoilers_label'
+                  id='preferences.fields.preserve_spoilers.label'
                   defaultMessage='Preserve content warning when replying'
                 />
               }
@@ -137,7 +148,7 @@ const ComposePreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.implicit_addressing_label'
+                  id='preferences.fields.implicit_addressing.label'
                   defaultMessage='Include mentions in post content when replying'
                 />
               }
@@ -159,7 +170,7 @@ const ComposePreferences: React.FC = () => {
             }
             hint={
               <FormattedMessage
-                id='preferences.fields.use_dedicated_compose_page_hint'
+                id='preferences.fields.use_dedicated_compose_page.hint'
                 defaultMessage='Only applies to non-touch devices.'
               />
             }
@@ -176,7 +187,7 @@ const ComposePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.boost_modal_label'
+                id='preferences.fields.boost_modal.label'
                 defaultMessage='Show confirmation dialog before reposting'
               />
             }
@@ -191,7 +202,7 @@ const ComposePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.delete_modal_label'
+                id='preferences.fields.delete_modal.label'
                 defaultMessage='Show confirmation dialog before deleting a post'
               />
             }
@@ -206,7 +217,7 @@ const ComposePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.missing_description_modal_label'
+                id='preferences.fields.missing_description_modal.label'
                 defaultMessage='Show confirmation dialog before sending a post without media descriptions'
               />
             }
@@ -221,7 +232,7 @@ const ComposePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.missing_description_boost_modal_label'
+                id='preferences.fields.missing_description_boost_modal.label'
                 defaultMessage='Show confirmation dialog before reposting a post without media descriptions'
               />
             }
@@ -236,7 +247,7 @@ const ComposePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.unfollow_modal_label'
+                id='preferences.fields.unfollow_modal.label'
                 defaultMessage='Show confirmation dialog before unfollowing someone'
               />
             }
@@ -252,13 +263,13 @@ const ComposePreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.wrench_modal_label'
+                  id='preferences.fields.wrench_modal.label'
                   defaultMessage='Show confirmation dialog before adding wrench reaction'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='preferences.fields.wrench_modal_hint'
+                  id='preferences.fields.wrench_modal.hint'
                   defaultMessage='Prevents the consequences of accidentally using the wrench button.'
                 />
               }
@@ -271,6 +282,14 @@ const ComposePreferences: React.FC = () => {
             </ListItem>
           )}
         </List>
+
+        {onSave && (
+          <FormActions>
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          </FormActions>
+        )}
       </Form>
     </Column>
   );

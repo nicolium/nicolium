@@ -29,7 +29,7 @@ const messages = defineMessages({
     defaultMessage: 'Describe this for people with hearing impairments…',
   },
   savingFailed: {
-    id: 'alt_text_modal.saving_failed',
+    id: 'alt_text_modal.save.fail',
     defaultMessage: 'Failed to save alt text',
   },
 });

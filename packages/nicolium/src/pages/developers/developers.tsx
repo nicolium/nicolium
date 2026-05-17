@@ -48,11 +48,11 @@ const DevelopersPage: React.FC = () => {
   const showToast = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    toast.success('Hello world!', {
+    toast.success('meow!', {
       action: () => {
-        alert('hi');
+        alert('meow :3');
       },
-      actionLabel: 'Click me',
+      actionLabel: 'meow',
     });
   };
 
@@ -65,7 +65,7 @@ const DevelopersPage: React.FC = () => {
 
             <Text>
               <FormattedMessage
-                id='developers.navigation.app_create_label'
+                id='developers.navigation.app_create.label'
                 defaultMessage='Create an app'
               />
             </Text>
@@ -76,7 +76,7 @@ const DevelopersPage: React.FC = () => {
 
             <Text>
               <FormattedMessage
-                id='developers.navigation.settings_store_label'
+                id='developers.navigation.settings_store.label'
                 defaultMessage='Settings store'
               />
             </Text>
@@ -87,7 +87,7 @@ const DevelopersPage: React.FC = () => {
 
             <Text>
               <FormattedMessage
-                id='developers.navigation.intentional_error_label'
+                id='developers.navigation.intentional_error.label'
                 defaultMessage='Trigger an error'
               />
             </Text>
@@ -98,7 +98,7 @@ const DevelopersPage: React.FC = () => {
 
             <Text>
               <FormattedMessage
-                id='developers.navigation.network_error_label'
+                id='developers.navigation.network_error.label'
                 defaultMessage='Network error'
               />
             </Text>
@@ -109,7 +109,7 @@ const DevelopersPage: React.FC = () => {
 
             <Text>
               <FormattedMessage
-                id='developers.navigation.service_worker_label'
+                id='developers.navigation.service_worker.label'
                 defaultMessage='Service Worker'
               />
             </Text>

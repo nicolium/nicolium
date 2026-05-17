@@ -28,18 +28,14 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
   if (!account) return null;
 
   return (
-    <div
-      key={message.id}
-      className='group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40'
-    >
+    <div key={message.id} className='⁂-shoutbox-message__container'>
       <div
-        className={clsx('flex items-end gap-2', {
-          'ml-auto justify-end': isMyMessage,
-          'justify-start': !isMyMessage,
+        className={clsx('⁂-shoutbox-message', {
+          '⁂-shoutbox-message--my-message': isMyMessage,
         })}
       >
         {!isMyMessage && (
-          <AccountLink className='mb-0.5' account={account} title={account.acct}>
+          <AccountLink account={account} title={account.acct}>
             <HoverAccountWrapper accountId={account.id} element='span'>
               <Avatar
                 src={account.avatar}
@@ -118,8 +114,8 @@ const ShoutboxMessageList: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className='flex grow flex-col justify-end pb-4'>
-        <div className='px-4'>
+      <div className='⁂-chat-message-list ⁂-chat-message-list--placeholder'>
+        <div>
           <PlaceholderChatMessage isMyMessage />
           <PlaceholderChatMessage />
           <PlaceholderChatMessage isMyMessage />
@@ -131,8 +127,8 @@ const ShoutboxMessageList: React.FC = () => {
   }
 
   return (
-    <div className='flex h-full grow flex-col space-y-6'>
-      <div className='flex grow flex-col justify-end'>
+    <div className='⁂-chat-message-list__container'>
+      <div className='⁂-chat-message-list'>
         <Virtuoso
           ref={node}
           alignToBottom

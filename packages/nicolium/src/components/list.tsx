@@ -20,10 +20,14 @@ type IListItem = {
   hint?: React.ReactNode;
   href?: string;
   onClick?(): void;
+  draggable?: boolean;
+  onDragStart?: React.DragEventHandler<HTMLAnchorElement | HTMLDivElement>;
+  onDragEnd?: React.DragEventHandler<HTMLAnchorElement | HTMLDivElement>;
   isSelected?: boolean;
   children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
   size?: 'sm' | 'md';
   actionIcon?: string;
+  disabled?: boolean;
 } & (LinkOptions | {});
 
 const ListItem: React.FC<IListItem> = ({
@@ -34,6 +38,9 @@ const ListItem: React.FC<IListItem> = ({
   children,
   href,
   onClick,
+  draggable,
+  onDragStart,
+  onDragEnd,
   isSelected,
   size = 'md',
   actionIcon,
@@ -47,7 +54,7 @@ const ListItem: React.FC<IListItem> = ({
   const hintId = `${domId}-hint`;
 
   const onKeyDown: React.KeyboardEventHandler<HTMLAnchorElement | HTMLDivElement> = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !rest.disabled) {
       onClick!();
     }
   };
@@ -132,11 +139,25 @@ const ListItem: React.FC<IListItem> = ({
   const Comp = onClick || href ? 'a' : 'div';
   const linkProps =
     onClick || href
-      ? { onClick, onKeyDown, tabIndex: 0, role: 'link', ...(href && { href, target: '_blank' }) }
+      ? {
+          onClick: rest.disabled ? undefined : onClick,
+          onKeyDown,
+          tabIndex: 0,
+          role: 'link',
+          ...(href && { href, target: '_blank' }),
+        }
       : {};
 
+  (linkProps as any).disabled = rest.disabled;
+
   return (
-    <Comp className={classNames} {...linkProps}>
+    <Comp
+      className={classNames}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      {...linkProps}
+    >
       {body}
     </Comp>
   );

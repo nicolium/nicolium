@@ -16,15 +16,15 @@ import type { CreateGroupParams } from 'pl-api';
 
 const messages = defineMessages({
   groupNamePlaceholder: {
-    id: 'manage_group.fields.name_placeholder',
-    defaultMessage: 'Group Name',
+    id: 'manage_group.fields.name.placeholder',
+    defaultMessage: 'Group name',
   },
   groupDescriptionPlaceholder: {
-    id: 'manage_group.fields.description_placeholder',
+    id: 'manage_group.fields.description.placeholder',
     defaultMessage: 'Description',
   },
   hashtagPlaceholder: {
-    id: 'manage_group.fields.hashtag_placeholder',
+    id: 'manage_group.fields.hashtag.placeholder',
     defaultMessage: 'Add a topic',
   },
 });
@@ -94,13 +94,13 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
       <FormGroup
         labelText={
           <FormattedMessage
-            id='manage_group.fields.name_label'
+            id='manage_group.fields.name.label'
             defaultMessage='Group name (required)'
           />
         }
         hintText={
           <FormattedMessage
-            id='manage_group.fields.name_help'
+            id='manage_group.fields.name.hint'
             defaultMessage='This cannot be changed after the group is created.'
           />
         }
@@ -117,7 +117,7 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
       <FormGroup
         labelText={
           <FormattedMessage
-            id='manage_group.fields.description_label'
+            id='manage_group.fields.description.label'
             defaultMessage='Description'
           />
         }

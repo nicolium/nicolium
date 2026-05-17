@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -24,7 +23,6 @@ const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({
   limit = 3,
 }): React.JSX.Element | null => {
   const intl = useIntl();
-  const navigate = useNavigate();
   const instance = useInstance();
 
   const addresses = useFrontendConfig().cryptoAddresses;
@@ -33,16 +31,12 @@ const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({
     return null;
   }
 
-  const handleAction = () => {
-    navigate({ to: '/donate/crypto' });
-  };
-
   return (
     <Widget
       title={
         <FormattedMessage id='crypto_donate_panel.heading' defaultMessage='Donate cryptocurrency' />
       }
-      onActionClick={handleAction}
+      to='/donate/crypto'
       actionTitle={intl.formatMessage(messages.actionTitle, { count: addresses.length })}
     >
       <Text>

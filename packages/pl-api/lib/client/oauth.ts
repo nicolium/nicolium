@@ -34,6 +34,7 @@ const oauth = (client: PlApiBaseClient) => ({
       const loginResponse = (
         await client.request<{
           token: string;
+          status: 'guest' | 'authenticated' | 'two_factor';
         }>('/api/iceshrimp/auth/login', {
           method: 'POST',
           body: {
@@ -43,6 +44,16 @@ const oauth = (client: PlApiBaseClient) => ({
         })
       ).json;
       client.setIceshrimpAccessToken(loginResponse.token);
+
+      if (loginResponse.status === 'two_factor') {
+        throw {
+          response: {
+            json: {
+              error: 'mfa_required',
+            },
+          },
+        };
+      }
 
       const mastodonTokenResponse = (
         await client.request<{
@@ -135,6 +146,50 @@ const oauth = (client: PlApiBaseClient) => ({
   },
 
   mfaChallenge: async (params: MfaChallengeParams) => {
+    if (client.features.version.software === ICESHRIMP_NET) {
+      const loginResponse = (
+        await client.request<{
+          token: string;
+          status: 'guest' | 'authenticated' | 'two_factor';
+        }>('/api/iceshrimp/auth/2fa', {
+          method: 'POST',
+          body: {
+            code: params.code,
+          },
+        })
+      ).json;
+      client.setIceshrimpAccessToken(loginResponse.token);
+
+      const mastodonTokenResponse = (
+        await client.request<{
+          id: string;
+          token: string;
+          created_at: string;
+          scopes: Array<string>;
+        }>('/api/iceshrimp/sessions/mastodon', {
+          method: 'POST',
+          body: {
+            appName: params.client_id,
+            scopes: params.scope?.split(' '),
+            flags: {
+              supportsHtmlFormatting: true,
+              autoDetectQuotes: false,
+              isPleroma: true,
+              supportsInlineMedia: true,
+            },
+          },
+        })
+      ).json;
+
+      return v.parse(tokenSchema, {
+        access_token: mastodonTokenResponse.token,
+        token_type: 'Bearer',
+        scope: mastodonTokenResponse.scopes.join(' '),
+        created_at: new Date(mastodonTokenResponse.created_at).getTime(),
+        id: mastodonTokenResponse.id,
+      });
+    }
+
     const response = await client.request('/oauth/mfa/challenge', { method: 'POST', body: params });
 
     return v.parse(tokenSchema, response.json);

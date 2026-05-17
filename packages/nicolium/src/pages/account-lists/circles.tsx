@@ -16,9 +16,9 @@ import { useCircles, useCreateCircle } from '@/queries/accounts/use-circles';
 const messages = defineMessages({
   heading: { id: 'column.circles', defaultMessage: 'Circles' },
   subheading: { id: 'circles.subheading', defaultMessage: 'Your circles' },
-  label: { id: 'circles.new.title_placeholder', defaultMessage: 'New circle title' },
+  label: { id: 'circles.new.title.placeholder', defaultMessage: 'New circle title' },
   title: { id: 'circles.new.create', defaultMessage: 'Add circle' },
-  create: { id: 'circles.new.create_title', defaultMessage: 'Add circle' },
+  create: { id: 'circles.new.create.title', defaultMessage: 'Add circle' },
 });
 
 const NewCircleForm: React.FC = () => {

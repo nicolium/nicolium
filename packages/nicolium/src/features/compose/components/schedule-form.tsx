@@ -92,4 +92,4 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
   );
 };
 
-export { ScheduleForm as default, isCurrentOrFutureDate };
+export { ScheduleForm as default, isCurrentOrFutureDate, isFiveMinutesFromNow };

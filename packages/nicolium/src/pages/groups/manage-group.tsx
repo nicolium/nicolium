@@ -18,7 +18,7 @@ import toast from '@/toast';
 const messages = defineMessages({
   heading: { id: 'column.manage_group', defaultMessage: 'Manage group' },
   deleteHeading: { id: 'confirmations.delete_group.heading', defaultMessage: 'Delete group' },
-  deleteSuccess: { id: 'group.delete.success', defaultMessage: 'Group successfully deleted' },
+  deleteSuccess: { id: 'group.delete.success', defaultMessage: 'Group deleted' },
 });
 
 const ManageGroup: React.FC = () => {

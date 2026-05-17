@@ -30,7 +30,7 @@ const ChatsPage: React.FC = () => {
     const fullHeight = document.body.offsetHeight;
 
     // On mobile, account for bottom navigation.
-    const offset = document.body.clientWidth < 976 ? -53 : 0;
+    const offset = document.body.clientWidth < 581 ? -53 : 0;
 
     setHeight(fullHeight - top + offset);
   };
@@ -48,29 +48,19 @@ const ChatsPage: React.FC = () => {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      style={{ height }}
-      className='h-screen overflow-hidden bg-white text-gray-900 shadow-lg black:bg-transparent dark:bg-primary-900 dark:text-gray-100 dark:shadow-none sm:rounded-t-xl'
-    >
-      <div
-        className='grid h-full grid-cols-9 overflow-hidden black:divide-gray-800 dark:divide-solid dark:divide-primary-800 sm:black:divide-x sm:dark:divide-x-2'
-        data-testid='chat-page'
-      >
+    <div ref={containerRef} style={{ height }} className='⁂-chats-page'>
+      <div data-testid='chat-page'>
         <div
-          className={clsx(
-            'dark:inset col-span-9 flex flex-col overflow-hidden bg-gradient-to-r from-white to-gray-100 black:bg-black dark:bg-gray-900 dark:bg-none sm:col-span-3',
-            {
-              'hidden sm:block': isSidebarHidden,
-            },
-          )}
+          className={clsx('⁂-chats-page__sidebar', {
+            '⁂-chats-page__sidebar--hidden': isSidebarHidden,
+          })}
         >
           <ChatsPageSidebar />
         </div>
 
         <div
-          className={clsx('col-span-9 flex h-full flex-col overflow-hidden sm:col-span-6', {
-            'hidden sm:block': !isSidebarHidden,
+          className={clsx('⁂-chats-page__main', {
+            '⁂-chats-page__main--hidden': !isSidebarHidden,
           })}
         >
           <Outlet />

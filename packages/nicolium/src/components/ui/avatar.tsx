@@ -81,6 +81,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
     const value = `${size / 16}rem`;
     return {
       width: value,
+      minWidth: value,
       height: value,
       fontSize: value,
       color,

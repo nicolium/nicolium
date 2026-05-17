@@ -135,6 +135,7 @@ const normalizeStatus = (
     group_id: group?.id ?? null,
     expectsCard: false,
     ...status,
+    quote_status: quote?.state ?? null,
     quote_id: status.quote_id ?? null,
     mentions,
     event,

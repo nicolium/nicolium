@@ -270,10 +270,10 @@
       inset-inline-end: 0;
 
       display: flex;
-      align-items: center;
 
       button {
-        height: 100%;
+        display: flex;
+        align-items: center;
         padding-inline: 0.5rem;
         color: rgb(var(--color-gray-700));
 
@@ -513,7 +513,7 @@ p.⁂-form-group__hint {
       height: 1.5rem;
 
       [dir='rtl'] & {
-        transform: translateX(1rem);
+        transform: translateX(-1rem);
       }
     }
 
@@ -684,8 +684,95 @@ p.⁂-form-group__hint {
     height: 2rem;
     margin-bottom: 0.5rem;
     padding: 0.25rem;
+    border: none;
 
     background-color: transparent;
     outline: none;
+  }
+}
+
+.⁂-streamfield {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      @include mixins.text($size: sm, $weight: medium);
+    }
+
+    span {
+      @include mixins.text($size: xs, $theme: muted);
+    }
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    &--droppable {
+      gap: 0;
+      min-height: 3rem;
+    }
+  }
+
+  &__item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
+
+    .⁂-streamfield__items--droppable &:not(:last-child) {
+      padding-bottom: 0.25rem;
+    }
+
+    &[draggable='true'] {
+      cursor: grab;
+    }
+
+    &--dragging {
+      opacity: 0.45;
+    }
+  }
+
+  &__placeholder {
+    flex: 0 0 auto;
+
+    width: 100%;
+    border: 1px dashed rgb(var(--color-primary-500));
+    border-radius: var(--radius-md);
+
+    background-color: rgb(var(--color-primary-500) / 10%);
+
+    .dark & {
+      border-color: rgb(var(--color-primary-400));
+      background-color: rgb(var(--color-primary-400) / 14%);
+    }
+  }
+
+  &__add-button {
+    @include mixins.button($theme: secondary, $block: true);
+  }
+}
+
+.⁂-streamfield-picker__item {
+  cursor: grab;
+  transition: opacity 150ms ease;
+
+  &--dragging {
+    opacity: 0.45;
+  }
+
+  &__label {
+    div {
+      display: flex;
+      flex-direction: column;
+    }
   }
 }

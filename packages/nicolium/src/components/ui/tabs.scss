@@ -48,6 +48,11 @@
       outline-offset: 0;
     }
   }
+
+  svg {
+    height: 1rem;
+    width: 1rem;
+  }
 }
 
 [data-reach-tab][data-selected] {

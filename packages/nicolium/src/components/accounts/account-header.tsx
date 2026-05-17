@@ -5,7 +5,7 @@ import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
-import { GOTOSOCIAL, MASTODON, mediaAttachmentSchema } from 'pl-api';
+import { GOTOSOCIAL, ICESHRIMP_NET, MASTODON, mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
@@ -301,7 +301,17 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
       return null;
     }
 
-    const href = software === MASTODON ? `${account.url}.rss` : `${account.url}/feed.rss`;
+    let href;
+    switch (software) {
+      case ICESHRIMP_NET:
+        href = `/users/${account.id}/feed.rss`;
+      case MASTODON:
+        href = `${account.url}.rss`;
+        break;
+      default:
+        href = `${account.url}/feed.rss`;
+        break;
+    }
 
     return (
       <IconButton
@@ -325,7 +335,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
 
       <div
         className={clsx(
-          'relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none md:rounded-t-xl',
+          'relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none sm:rounded-t-xl',
           {
             'h-32 bg-gray-200 dark:bg-gray-900/50 lg:h-48': !settings.disableUserProvidedMedia,
           },

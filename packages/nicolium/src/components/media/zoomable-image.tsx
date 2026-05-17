@@ -131,7 +131,7 @@ const ZoomableImage: React.FC<IZoomableImage> = ({
         if (value === MIN_SCALE) {
           onZoomChange(false);
         } else {
-          // onZoomChange(true);
+          onZoomChange(true);
         }
       },
     },
@@ -201,6 +201,8 @@ const ZoomableImage: React.FC<IZoomableImage> = ({
           return;
         }
 
+        onZoomChange?.(s > MIN_SCALE);
+
         if (first) {
           const { width, height, x, y } = imageRef.current.getBoundingClientRect();
           const tx = ox - (x + width / 2);
@@ -243,7 +245,7 @@ const ZoomableImage: React.FC<IZoomableImage> = ({
     zoomMatrixRef.current = createZoomMatrix(containerRef.current, imageRef.current, width, height);
 
     if (!zoomedIn) {
-      // void api.start({ scale: MIN_SCALE, x: 0, y: 0 });
+      void api.start({ scale: MIN_SCALE, x: 0, y: 0 });
     } else if (style.scale.get() === MIN_SCALE) {
       void api.start({ scale: zoomMatrixRef.current.initialScale, x: 0, y: 0 });
     }

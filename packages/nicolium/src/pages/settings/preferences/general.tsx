@@ -1,10 +1,12 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
+import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import { useFeatures } from '@/hooks/use-features';
 import SettingToggle from '@/pages/settings/components/setting-toggle';
@@ -14,14 +16,23 @@ import sourceCode from '@/utils/code';
 import MessagesSettings from '../components/messages-settings';
 import { languages } from '../components/preferences';
 
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
+
 const messages = defineMessages({
   heading: { id: 'preferences.heading.general', defaultMessage: 'General settings' },
 });
 
-const GeneralPreferences: React.FC = () => {
+const GeneralPreferences: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const features = useFeatures();
   const intl = useIntl();
-  const settings = useSettings();
+  const userSettings = useSettings();
+
+  const settings = settingsProp || userSettings;
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
     changeSetting(path, event.target.value, { showAlert: true });
@@ -45,7 +56,7 @@ const GeneralPreferences: React.FC = () => {
               }
               hint={
                 <FormattedMessage
-                  id='preferences.fields.store_settings_in_notes_hint'
+                  id='preferences.fields.store_settings_in_notes.hint'
                   defaultMessage='It allows you to sync your settings across devices. They are only visible to you.'
                 />
               }
@@ -64,13 +75,13 @@ const GeneralPreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.language_label'
+                id='preferences.fields.language.label'
                 defaultMessage='Display language'
               />
             }
             hint={
               <FormattedMessage
-                id='preferences.fields.language_hint'
+                id='preferences.fields.language.hint'
                 defaultMessage='You can help translating the {software} interface into your language on <link>Weblate</link>.'
                 values={{
                   software: sourceCode.displayName,
@@ -103,13 +114,13 @@ const GeneralPreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.remember_timeline_position_label'
+                id='preferences.fields.remember_timeline_position.label'
                 defaultMessage='Remember position of home timeline'
               />
             }
             hint={
               <FormattedMessage
-                id='preferences.fields.remember_timeline_position_hint'
+                id='preferences.fields.remember_timeline_position.hint'
                 defaultMessage='When enabled, the app will return to the place you left off in the home timeline last time you visited it.'
               />
             }
@@ -125,7 +136,7 @@ const GeneralPreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.compose_in_timelines_label'
+                id='preferences.fields.compose_in_timelines.label'
                 defaultMessage='Display post composer in timelines'
               />
             }
@@ -158,7 +169,7 @@ const GeneralPreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.autoload_timelines_label'
+                id='preferences.fields.autoload_timelines.label'
                 defaultMessage='Automatically load new posts when scrolled to the top of the page'
               />
             }
@@ -173,7 +184,7 @@ const GeneralPreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.autoload_more_label'
+                id='preferences.fields.autoload_more.label'
                 defaultMessage='Automatically load more items when scrolled to the bottom of the page'
               />
             }
@@ -188,7 +199,7 @@ const GeneralPreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.demetricator_label'
+                id='preferences.fields.demetricator.label'
                 defaultMessage='Hide social media counters'
               />
             }
@@ -207,7 +218,15 @@ const GeneralPreferences: React.FC = () => {
           </ListItem>
         </List>
 
-        {features.chats && <MessagesSettings />}
+        {!onSave && features.chats && <MessagesSettings />}
+
+        {onSave && (
+          <FormActions>
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          </FormActions>
+        )}
       </Form>
     </Column>
   );

@@ -20,6 +20,7 @@ import Layout from '@/components/ui/layout';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import AdminHomeLayout from '@/layouts/admin-home-layout';
 import AdminLayout from '@/layouts/admin-layout';
 import ChatsLayout from '@/layouts/chats-layout';
 import DefaultLayout from '@/layouts/default-layout';
@@ -32,6 +33,7 @@ import GroupLayout from '@/layouts/group-layout';
 import GroupsLayout from '@/layouts/groups-layout';
 import HomeLayout from '@/layouts/home-layout';
 import ManageGroupsLayout from '@/layouts/manage-groups-layout';
+import NotificationsLayout from '@/layouts/notifications-layout';
 import ProfileLayout from '@/layouts/profile-layout';
 import RemoteInstanceLayout from '@/layouts/remote-instance-layout';
 import SearchLayout from '@/layouts/search-layout';
@@ -82,11 +84,28 @@ const requireAuthMiddleware =
     next?.(options);
   };
 
+const wrapDefaultSettings = (Component: React.FC) => {
+  const Wrapper = React.lazy(
+    () => import('@/pages/dashboard/components/frontend-config/default-setings-wrapper'),
+  );
+
+  return () => (
+    <React.Suspense fallback={<ColumnLoading />}>
+      <Wrapper settingsPage={Component} />
+    </React.Suspense>
+  );
+};
+
 const layouts = {
   admin: createRoute({
     getParentRoute: () => rootRoute,
     id: 'admin-layout',
     component: AdminLayout,
+  }),
+  adminHome: createRoute({
+    getParentRoute: () => rootRoute,
+    id: 'admin-home-layout',
+    component: AdminHomeLayout,
   }),
   chats: createRoute({
     getParentRoute: () => rootRoute,
@@ -149,6 +168,12 @@ const layouts = {
     component: ManageGroupsLayout,
     beforeLoad: requireAuth,
   }),
+  notifications: createRoute({
+    getParentRoute: () => rootRoute,
+    id: 'notifications-layout',
+    component: NotificationsLayout,
+    beforeLoad: requireAuth,
+  }),
   profile: createRoute({
     getParentRoute: () => rootRoute,
     path: '/@{$username}',
@@ -179,14 +204,13 @@ const layouts = {
   }),
 };
 
-// Root routes
 export const homeRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/',
   component: lazy(() => import('./util')),
 });
 
-// Auth routes
+// #region Auth
 export const logoutRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/logout',
@@ -232,7 +256,10 @@ export const signupRoute = createRoute({
   },
 });
 
-// Timeline routes
+// #endregion
+
+// #region Timelines
+
 export const homeTimelineRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/timeline/home',
@@ -315,7 +342,6 @@ export const remoteTimelineRoute = createRoute({
   },
 });
 
-// Conversations
 export const conversationsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/conversations',
@@ -329,7 +355,6 @@ export const conversationsRoute = createRoute({
   },
 });
 
-// Tags and links
 export const hashtagTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/tags/$hashtag',
@@ -350,7 +375,6 @@ export const linkTimelineRoute = createRoute({
   component: lazy(() => import('@/pages/timelines/link-timeline')),
 });
 
-// Lists and circles
 export const listsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/lists',
@@ -405,7 +429,8 @@ export const antennaTimelineRoute = createRoute({
   }),
 });
 
-// Bookmarks
+// #endregion
+
 export const bookmarkFoldersRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/bookmarks',
@@ -426,15 +451,13 @@ export const bookmarksRoute = createRoute({
   }),
 });
 
-// Notifications
 export const notificationsRoute = createRoute({
-  getParentRoute: () => layouts.default,
+  getParentRoute: () => layouts.notifications,
   path: '/notifications',
   component: lazy(() => import('@/pages/notifications/notifications')),
   beforeLoad: requireAuth,
 });
 
-// Search and directory
 export const searchRoute = createRoute({
   getParentRoute: () => layouts.search,
   path: '/search',
@@ -459,7 +482,6 @@ export const directoryRoute = createRoute({
   },
 });
 
-// Events
 export const eventsRoute = createRoute({
   getParentRoute: () => layouts.events,
   path: '/events',
@@ -478,7 +500,8 @@ export const newEventRoute = createRoute({
   }),
 });
 
-// Chats
+// #region Chats
+
 export const chatsRoute = createRoute({
   getParentRoute: () => layouts.chats,
   path: '/chats',
@@ -515,7 +538,8 @@ export const chatsEmptyRoute = createRoute({
   component: ChatsPageEmpty,
 });
 
-// Follow requests and blocks
+// #endregion
+
 export const followRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/follow_requests',
@@ -531,6 +555,8 @@ export const outgoingFollowRequestsRoute = createRoute({
     if (!features.outgoingFollowRequests) throw notFound();
   }),
 });
+
+// #region Filtering
 
 export const blocksRoute = createRoute({
   getParentRoute: () => layouts.settings,
@@ -555,7 +581,13 @@ export const mutesRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
-// Filters
+export const mutedThreadsRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/muted_threads',
+  component: lazy(() => import('@/pages/status-lists/muted-threads')),
+  beforeLoad: requireAuth,
+});
+
 export const filtersRoute = createRoute({
   getParentRoute: () => layouts.settings,
   path: '/filters',
@@ -574,15 +606,16 @@ export const editFilterRoute = createRoute({
   }),
 });
 
-// Followed tags
 export const followedTagsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/followed_tags',
-  component: lazy(() => import('@/pages/settings')),
+  component: lazy(() => import('@/pages/settings/followed-tags')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.followedHashtagsList) throw notFound();
   }),
 });
+
+// #endregion
 
 export const rssFeedSubscriptionsRoute = createRoute({
   getParentRoute: () => layouts.default,
@@ -593,7 +626,6 @@ export const rssFeedSubscriptionsRoute = createRoute({
   }),
 });
 
-// Interaction requests
 export const interactionRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/interaction_requests',
@@ -603,7 +635,6 @@ export const interactionRequestsRoute = createRoute({
   }),
 });
 
-// Profile routes
 export const profileRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/',
@@ -658,7 +689,6 @@ export const profilePinsRoute = createRoute({
   component: lazy(() => import('@/pages/status-lists/pinned-statuses')),
 });
 
-// Status routes
 export const statusRoute = createRoute({
   getParentRoute: () => layouts.status,
   path: '/@{$username}/posts/$statusId',
@@ -671,7 +701,6 @@ export const statusQuotesRoute = createRoute({
   component: lazy(() => import('@/pages/status-lists/quotes')),
 });
 
-// Event routes
 export const eventInformationRoute = createRoute({
   getParentRoute: () => layouts.event,
   path: '/',
@@ -701,7 +730,8 @@ export const eventDiscussionRoute = createRoute({
   }),
 });
 
-// Groups routes
+// #region Groups
+
 export const groupsRoute = createRoute({
   getParentRoute: () => layouts.groups,
   path: '/groups',
@@ -774,7 +804,8 @@ export const groupMembershipRequestsRoute = createRoute({
   },
 });
 
-// Statuses
+// #endregion
+
 export const newStatusRoute = createRoute({
   getParentRoute: () => layouts.fullWidth,
   path: '/statuses/new',
@@ -805,7 +836,6 @@ export const draftStatusesRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
-// Drive
 export const driveRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/drive/{-$folderId}',
@@ -815,7 +845,6 @@ export const driveRoute = createRoute({
   }),
 });
 
-// Circle
 export const circleRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/circle',
@@ -823,7 +852,26 @@ export const circleRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
-// Settings routes
+export const birthdaysRoute = createRoute({
+  getParentRoute: () => layouts.default,
+  path: '/birthdays',
+  component: lazy(() => import('@/pages/account-lists/birthdays')),
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.birthdays) throw notFound();
+  }),
+});
+
+export const announcementsRoute = createRoute({
+  getParentRoute: () => layouts.default,
+  path: '/announcements',
+  component: lazy(() => import('@/pages/instance/announcements')),
+  beforeLoad: ({ context: { features } }) => {
+    if (!features.announcements) throw notFound();
+  },
+});
+
+// #region Settings
+
 export const settingsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings',
@@ -983,6 +1031,13 @@ export const settingsPrivacyRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
+export const settingsNavigationItemsRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/navigation',
+  component: lazy(() => import('@/pages/settings/preferences/navigation-items')),
+  beforeLoad: requireAuth,
+});
+
 export const settingsSidebarItemsRoute = createRoute({
   getParentRoute: () => layouts.settings,
   path: '/settings/sidebar',
@@ -997,21 +1052,33 @@ export const settingsStatusActionBarItemsRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
-// Frontend config
-export const frontendConfigRoute = createRoute({
-  getParentRoute: () => layouts.default,
-  path: '/nicolium/config',
-  component: lazy(() => import('@/pages/dashboard/frontend-config')),
+// #endregion
+
+// #region Admin dashboard
+
+export const adminDashboardRoute = createRoute({
+  getParentRoute: () => layouts.adminHome,
+  path: '/nicolium/admin',
+  component: lazy(() => import('@/pages/dashboard/dashboard')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
 });
 
-// Admin routes
-export const adminDashboardRoute = createRoute({
+export const adminAccountsRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/nicolium/admin',
-  component: lazy(() => import('@/pages/dashboard/dashboard')),
+  path: '/nicolium/admin/accounts',
+  component: lazy(() => import('@/pages/dashboard/accounts')),
+  validateSearch: v.object({
+    origin: v.optional(v.picklist(['local', 'remote'])),
+    status: v.optional(v.picklist(['active', 'pending', 'disabled', 'silenced', 'suspended'])),
+    permissions: v.optional(v.literal('staff')),
+    username: v.optional(v.string()),
+    display_name: v.optional(v.string()),
+    by_domain: v.optional(v.string()),
+    email: v.optional(v.string()),
+    ip: v.optional(v.string()),
+  }),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1021,6 +1088,19 @@ export const adminAccountRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/accounts/$accountId',
   component: lazy(() => import('@/pages/dashboard/account')),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const adminAccountStatusesRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/accounts/$accountId/statuses',
+  component: lazy(() => import('@/pages/dashboard/account-statuses')),
+  validateSearch: v.object({
+    with_private: v.optional(v.boolean(), undefined),
+    with_reblogs: v.optional(v.boolean(), true),
+  }),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1040,7 +1120,7 @@ export const adminReportsRoute = createRoute({
   path: '/nicolium/admin/reports',
   component: lazy(() => import('@/pages/dashboard/reports')),
   validateSearch: v.object({
-    resolved: v.optional(v.boolean(), false),
+    resolved: v.optional(v.boolean(), undefined),
     account_id: v.optional(v.string()),
     target_account_id: v.optional(v.string()),
   }),
@@ -1067,21 +1147,9 @@ export const adminLogRoute = createRoute({
   }),
 });
 
-export const adminUsersRoute = createRoute({
-  getParentRoute: () => layouts.admin,
-  path: '/nicolium/admin/users',
-  component: lazy(() => import('@/pages/dashboard/user-index')),
-  validateSearch: v.object({
-    q: v.optional(v.string()),
-  }),
-  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
-    if (!isAdmin) throw notFound();
-  }),
-});
-
 export const adminThemeRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/nicolium/admin/theme',
+  path: '/nicolium/config/theme',
   component: lazy(() => import('@/pages/dashboard/theme-editor')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
@@ -1126,14 +1194,118 @@ export const adminRulesRoute = createRoute({
 
 export const adminPleromaConfigRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/nicolium/admin/pleroma-config',
+  path: '/nicolium/admin/pleroma_config',
   component: lazy(() => import('@/pages/dashboard/pleroma-config')),
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || !features.pleromaAdminConfig) throw notFound();
   }),
 });
 
-// Info and other routes
+export const adminDomainBlocksRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/domain_blocks',
+  component: lazy(() => import('@/pages/dashboard/domain-blocks')),
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
+    if (!isAdmin || (!features.adminDomainBlocks && !features.iceshrimpAdmin)) throw notFound();
+  }),
+});
+
+export const adminDomainAllowsRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/domain_allows',
+  component: lazy(() => import('@/pages/dashboard/domain-allows')),
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
+    if (!isAdmin || (!features.adminDomainBlocks && !features.iceshrimpAdmin)) throw notFound();
+  }),
+});
+
+export const frontendConfigRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config',
+  component: lazy(() => import('@/pages/dashboard/frontend-config')),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsGeneralRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/general',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/general'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsAppearanceRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/appearance',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/appearance'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsContentRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/content',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/content'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsComposeRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/compose',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/compose'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsPrivacyRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/privacy',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/privacy'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsNavigationItemsRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/navigation',
+  component: wrapDefaultSettings(
+    lazy(() => import('@/pages/settings/preferences/navigation-items')),
+  ),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsSidebarItemsRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/sidebar',
+  component: wrapDefaultSettings(lazy(() => import('@/pages/settings/preferences/sidebar-items'))),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+export const frontendConfigDefaultSettingsStatusActionBarItemsRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/config/default_settings/status_actions',
+  component: wrapDefaultSettings(
+    lazy(() => import('@/pages/settings/preferences/status-action-bar-items')),
+  ),
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
+});
+
+// #endregion
+
 export const serverInfoRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/info',
@@ -1158,7 +1330,8 @@ export const shareRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
-// Developers routes
+// #region Developer
+
 export const developersRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers',
@@ -1204,13 +1377,14 @@ export const networkErrorRoute = createRoute({
   ),
 });
 
+// #endregion
+
 export const externalRedirectRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/external_redirect',
   component: lazy(() => import('@/pages/instance/external-redirect')),
 });
 
-// Crypto donate
 export const cryptoDonateRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/donate/crypto',
@@ -1220,7 +1394,6 @@ export const cryptoDonateRoute = createRoute({
   },
 });
 
-// Federation restrictions
 export const federationRestrictionsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/federation_restrictions',
@@ -1230,7 +1403,8 @@ export const federationRestrictionsRoute = createRoute({
   },
 });
 
-// Redirect routes
+// #region Redirects
+
 const redirectPlFeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/pl-fe/$',
@@ -1310,6 +1484,8 @@ const redirectWithRepliesRoute = createRoute({
     );
   },
 });
+
+// #endregion
 
 const redirectRoutes = [
   redirectPlFeRoute,
@@ -1418,20 +1594,32 @@ const redirectRoutes = [
 ];
 
 const routeTree = rootRoute.addChildren([
+  layouts.adminHome.addChildren([adminDashboardRoute]),
   layouts.admin.addChildren([
-    adminDashboardRoute,
+    adminAccountsRoute,
     adminAccountRoute,
+    adminAccountStatusesRoute,
     adminAwaitingApprovalRoute,
     adminReportsRoute,
     adminReportRoute,
     adminLogRoute,
-    adminUsersRoute,
     adminThemeRoute,
     adminRelaysRoute,
     adminAnnouncementsRoute,
     adminDomainsRoute,
     adminRulesRoute,
     adminPleromaConfigRoute,
+    adminDomainBlocksRoute,
+    adminDomainAllowsRoute,
+    frontendConfigRoute,
+    frontendConfigDefaultSettingsGeneralRoute,
+    frontendConfigDefaultSettingsAppearanceRoute,
+    frontendConfigDefaultSettingsContentRoute,
+    frontendConfigDefaultSettingsComposeRoute,
+    frontendConfigDefaultSettingsPrivacyRoute,
+    frontendConfigDefaultSettingsNavigationItemsRoute,
+    frontendConfigDefaultSettingsSidebarItemsRoute,
+    frontendConfigDefaultSettingsStatusActionBarItemsRoute,
   ]),
   layouts.chats.addChildren([
     chatsRoute.addChildren([
@@ -1454,7 +1642,6 @@ const routeTree = rootRoute.addChildren([
     antennaTimelineRoute,
     bookmarkFoldersRoute,
     bookmarksRoute,
-    notificationsRoute,
     directoryRoute,
     followRequestsRoute,
     outgoingFollowRequestsRoute,
@@ -1465,8 +1652,9 @@ const routeTree = rootRoute.addChildren([
     draftStatusesRoute,
     driveRoute,
     circleRoute,
+    birthdaysRoute,
+    announcementsRoute,
     settingsRoute,
-    frontendConfigRoute,
     aboutRoute,
     shareRoute,
     developersRoute,
@@ -1508,6 +1696,7 @@ const routeTree = rootRoute.addChildren([
     groupBlocksRoute,
     groupMembershipRequestsRoute,
   ]),
+  layouts.notifications.addChildren([notificationsRoute]),
   layouts.profile.addChildren([
     profileRoute,
     profileFollowersRoute,
@@ -1540,11 +1729,13 @@ const routeTree = rootRoute.addChildren([
     settingsTokensRoute,
     settingsInteractionPoliciesRoute,
     settingsPrivacyRoute,
+    settingsNavigationItemsRoute,
     settingsSidebarItemsRoute,
     settingsStatusActionBarItemsRoute,
     blocksRoute,
     domainBlocksRoute,
     mutesRoute,
+    mutedThreadsRoute,
     filtersRoute,
     editFilterRoute,
   ]),

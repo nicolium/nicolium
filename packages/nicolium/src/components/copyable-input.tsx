@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';
 import copy from '@/utils/copy';
 
@@ -23,24 +22,12 @@ const CopyableInput: React.FC<ICopyableInput> = ({ value, type = 'text', onCopy 
   };
 
   return (
-    <div className='flex items-center'>
-      <Input
-        ref={input}
-        type={type}
-        value={value}
-        className='rounded-r-none rtl:rounded-l-none rtl:rounded-r-lg'
-        outerClassName='grow'
-        onClick={selectInput}
-        readOnly
-      />
+    <div className='⁂-copyable-input'>
+      <Input ref={input} type={type} value={value} onClick={selectInput} readOnly />
 
-      <Button
-        theme='primary'
-        className='mt-1 h-full rounded-l-none rounded-r-lg rtl:rounded-l-lg rtl:rounded-r-none'
-        onClick={selectInput}
-      >
+      <button onClick={selectInput}>
         <FormattedMessage id='input.copy' defaultMessage='Copy' />
-      </Button>
+      </button>
     </div>
   );
 };

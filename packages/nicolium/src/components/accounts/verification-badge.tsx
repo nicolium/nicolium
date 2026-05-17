@@ -7,7 +7,7 @@ import Icon from '@/components/ui/icon';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 
 const messages = defineMessages({
-  verified: { id: 'account.verified', defaultMessage: 'Verified Account' },
+  verified: { id: 'account.verified', defaultMessage: 'Verified account' },
 });
 
 interface IVerificationBadge {

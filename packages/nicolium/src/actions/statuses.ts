@@ -1,7 +1,6 @@
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { updateStatus } from '@/queries/statuses/use-status-interactions';
-import { isLoggedIn } from '@/stores/auth';
 import { useComposeStore } from '@/stores/compose';
 import { useContextStore } from '@/stores/contexts';
 import { useModalsStore } from '@/stores/modals';
@@ -193,10 +192,8 @@ const fetchStatus = (client: PlApiClient, statusId: string, intl?: IntlShape) =>
   });
 };
 
-const muteStatus = (client: PlApiClient, statusId: string) => {
-  if (!isLoggedIn()) return;
-
-  return client.statuses.muteStatus(statusId).then(() => {
+const muteStatus = (client: PlApiClient, statusId: string) =>
+  client.statuses.muteStatus(statusId).then(() => {
     updateStatus(
       statusId,
       (status) => {
@@ -205,12 +202,9 @@ const muteStatus = (client: PlApiClient, statusId: string) => {
       queryClient,
     );
   });
-};
 
-const unmuteStatus = (client: PlApiClient, statusId: string) => {
-  if (!isLoggedIn()) return;
-
-  return client.statuses.unmuteStatus(statusId).then(() => {
+const unmuteStatus = (client: PlApiClient, statusId: string) =>
+  client.statuses.unmuteStatus(statusId).then(() => {
     updateStatus(
       statusId,
       (status) => {
@@ -219,7 +213,6 @@ const unmuteStatus = (client: PlApiClient, statusId: string) => {
       queryClient,
     );
   });
-};
 
 const toggleMuteStatus = (client: PlApiClient, status: Pick<Status, 'id' | 'muted'>) =>
   status.muted ? unmuteStatus(client, status.id) : muteStatus(client, status.id);

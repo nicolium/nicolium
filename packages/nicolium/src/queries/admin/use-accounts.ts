@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import { getTagDiff } from '@/utils/badges';
@@ -18,12 +19,13 @@ import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-respo
 import { minifyAdminAccount, minifyAdminAccountList } from '../utils/minify-list';
 
 import type {
+  AdminAccount,
+  AdminAccountAction,
+  AdminAccountUpdateCredentialsParams,
+  AdminGetAccountsParams,
   AdminPerformAccountActionParams,
   PaginatedResponse,
-  AdminAccount,
-  AdminGetAccountsParams,
   PaginationParams,
-  AdminAccountAction,
 } from 'pl-api';
 
 const useAdminAccounts = makePaginatedResponseQuery(
@@ -66,12 +68,15 @@ const pendingUsersQuery = makePaginatedResponseQueryOptions(
 const usePendingUsersCount = () => {
   const client = useClient();
   const { data: account } = useOwnAccount();
+  const features = useFeatures();
 
   return useInfiniteQuery({
     ...pendingUsersQuery(client),
     select: (data) =>
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,
-    enabled: !!(account?.is_admin ?? account?.is_moderator),
+    enabled:
+      !!(account?.is_admin ?? account?.is_moderator) &&
+      (features.pleromaAdminAccounts || features.mastodonAdminV2),
   });
 };
 
@@ -289,6 +294,35 @@ const useAdminSetRoleMutation = (accountId: string) => {
   });
 };
 
+const useAdminResetAccountPasswordMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'accounts', accountId, 'resetPassword'],
+    mutationFn: (password: string) => client.admin.accounts.resetPassword(accountId, password),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.accounts.show(accountId) });
+    },
+  });
+};
+
+const useAdminUpdateAccountCredentialsMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'accounts', accountId, 'update'],
+    mutationFn: (params: AdminAccountUpdateCredentialsParams) =>
+      client.admin.accounts.updateCredentials(accountId, params),
+    onSuccess: ({ account, ...adminAccount }) => {
+      queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
+      if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+    },
+  });
+};
+
 export {
   useAdminAccount,
   useAdminAccounts,
@@ -305,4 +339,6 @@ export {
   useAdminUntagUserMutation,
   useAdminUpdateTagsMutation,
   useAdminSetRoleMutation,
+  useAdminResetAccountPasswordMutation,
+  useAdminUpdateAccountCredentialsMutation,
 };

@@ -76,7 +76,7 @@ const ProfileLayout: React.FC = () => {
   }
 
   let activeItem;
-  const pathname = location.pathname.replace(`@${username}/`, '');
+  const pathname = location.pathname.replace(`/@${username}`, '');
   if (withReplies) {
     activeItem = 'replies';
   } else if (pathname.endsWith('/media')) {
@@ -104,6 +104,7 @@ const ProfileLayout: React.FC = () => {
             key={`profile-info-${account?.id}`}
             username={username}
             account={account}
+            withStatusesLink={pathname !== ''}
           />
 
           {account && showTabs && (

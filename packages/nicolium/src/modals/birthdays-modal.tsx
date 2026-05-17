@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import BirthdayAccount from '@/components/accounts/birthday-account';
-import { getCurrentDate } from '@/components/panels/birthday-panel';
 import ScrollableList from '@/components/scrollable-list';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
+import { getCurrentDate } from '@/hooks/use-current-date';
 import { useBirthdayReminders } from '@/queries/accounts/use-birthday-reminders';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';

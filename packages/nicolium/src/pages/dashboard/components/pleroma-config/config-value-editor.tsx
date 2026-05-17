@@ -58,6 +58,10 @@ const messages = defineMessages({
     id: 'admin.pleroma_config.placeholder_value.kv_value',
     defaultMessage: 'value',
   },
+  valueType: {
+    id: 'admin.pleroma_config.value_type',
+    defaultMessage: 'Value type',
+  },
 });
 
 interface ISuggestions {
@@ -380,7 +384,7 @@ const TupleEditor = memo(
       <div className='⁂-admin-config__editor-stack'>
         <p className='⁂-admin-config__feedback'>
           <FormattedMessage
-            id='admin.pleroma_config.tuple_hint'
+            id='admin.pleroma_config.tuple.hint'
             defaultMessage='Values are parsed as JSON when possible, otherwise kept as strings.'
           />
         </p>
@@ -557,12 +561,7 @@ const UnionValueEditor = memo(
 
     return (
       <div className='⁂-admin-config__editor-stack'>
-        <FormGroup
-          labelText={intl.formatMessage({
-            id: 'admin.pleroma_config.value_type',
-            defaultMessage: 'Value type',
-          })}
-        >
+        <FormGroup labelText={intl.formatMessage(messages.valueType)}>
           <Select
             value={JSON.stringify(selectedType)}
             onChange={(event) => {
@@ -675,7 +674,7 @@ const ConfigValueEditor = memo(
         <div className='⁂-admin-config__editor-stack'>
           <p className='⁂-admin-config__feedback'>
             <FormattedMessage
-              id='admin.pleroma_config.complex_hint'
+              id='admin.pleroma_config.complex.hint'
               defaultMessage='Edit this value as JSON.'
             />
           </p>
@@ -766,5 +765,3 @@ const ConfigValueEditor = memo(
 ConfigValueEditor.displayName = 'ConfigValueEditor';
 
 export { ConfigValueEditor };
-
-export type { IConfigValueEditor };

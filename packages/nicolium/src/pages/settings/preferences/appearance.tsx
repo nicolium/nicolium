@@ -1,12 +1,15 @@
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import debounce from 'lodash/debounce';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting, saveSettings } from '@/actions/settings';
+import { changeSetting as defaultChangeSetting, saveSettings } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import Icon from '@/components/ui/icon';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import StepSlider from '@/components/ui/step-slider';
 import ThemeToggle from '@/features/ui/components/theme-toggle';
@@ -16,6 +19,8 @@ import { useDefaultSettings, useSettings } from '@/stores/settings';
 import colors from '@/utils/colors';
 
 import SettingToggle from '../components/setting-toggle';
+
+import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 
 const INTERFACE_SIZES = ['sm', 'md', 'lg', 'xl'] as const;
 
@@ -46,11 +51,19 @@ const debouncedSave = debounce(() => {
   saveSettings({ showAlert: true });
 }, 1000);
 
-const AppearancePreferences: React.FC = () => {
+const AppearancePreferences: React.FC<ISettingsPage> = ({
+  changeSetting = defaultChangeSetting,
+  settings: settingsProp,
+  onSave,
+  disabled,
+}) => {
   const intl = useIntl();
-  const settings = useSettings();
   const defaultSettings = useDefaultSettings();
   const frontendConfig = useFrontendConfig();
+
+  const userSettings = useSettings();
+
+  const settings = settingsProp || userSettings;
 
   const brandColor = (settings.theme?.brandColor ?? frontendConfig.brandColor) || '#d80482';
 
@@ -128,7 +141,7 @@ const AppearancePreferences: React.FC = () => {
           <ListItem
             label={<FormattedMessage id='preferences.fields.theme' defaultMessage='Theme' />}
           >
-            <ThemeToggle />
+            <ThemeToggle settings={settings} changeSetting={changeSetting} />
           </ListItem>
           <PaletteListItem
             label={intl.formatMessage(messages.brandColor)}
@@ -161,13 +174,13 @@ const AppearancePreferences: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.theme.dark_theme_preference_label'
+                  id='preferences.fields.theme.dark_theme_preference.label'
                   defaultMessage='Dark theme preference'
                 />
               }
               hint={
                 <FormattedMessage
-                  id='preferences.fields.theme.dark_theme_preference_hint'
+                  id='preferences.fields.theme.dark_theme_preference.hint'
                   defaultMessage='Select dark theme to be used when theme is set to "System"'
                 />
               }
@@ -194,7 +207,7 @@ const AppearancePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.auto_play_gif_label'
+                id='preferences.fields.auto_play_gif.label'
                 defaultMessage='Auto-play animated GIFs'
               />
             }
@@ -209,7 +222,7 @@ const AppearancePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.reduce_motion_label'
+                id='preferences.fields.reduce_motion.label'
                 defaultMessage='Reduce motion in animations'
               />
             }
@@ -224,7 +237,7 @@ const AppearancePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.system_font_label'
+                id='preferences.fields.system_font.label'
                 defaultMessage="Use system's default font"
               />
             }
@@ -239,7 +252,7 @@ const AppearancePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.system_emoji_font_label'
+                id='preferences.fields.system_emoji_font.label'
                 defaultMessage='Use system emoji font'
               />
             }
@@ -254,7 +267,7 @@ const AppearancePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.underline_links_label'
+                id='preferences.fields.underline_links.label'
                 defaultMessage='Always underline links in posts'
               />
             }
@@ -269,7 +282,7 @@ const AppearancePreferences: React.FC = () => {
           <ListItem
             label={
               <FormattedMessage
-                id='preferences.fields.use_system_media_controls_label'
+                id='preferences.fields.use_system_media_controls.label'
                 defaultMessage='Use native media controls'
               />
             }
@@ -277,6 +290,22 @@ const AppearancePreferences: React.FC = () => {
             <SettingToggle
               settings={settings}
               settingPath={['useSystemMediaControls']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.use_rocket_icon_for_reblogs.label'
+                defaultMessage='Use rocket icon ({icon}) for reposts'
+                values={{ icon: <Icon src={iconRocketLaunch} /> }}
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['useRocketIconForReblogs']}
               onChange={onToggleChange}
             />
           </ListItem>
@@ -295,11 +324,56 @@ const AppearancePreferences: React.FC = () => {
               onChange={onToggleChange}
             />
           </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='frontend_config.display_fqn.label'
+                defaultMessage='Display domain (eg @user@domain) for local accounts.'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['displayFqn']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='frontend_config.greentext.label'
+                defaultMessage='<span>>render greentext</span>'
+                values={{
+                  span: (children) => (
+                    <span className='dark:text-accent-green text-lime-600'>{children}</span>
+                  ),
+                }}
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['greentext']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
         </List>
 
         <List>
           <ListItem
-            to='/settings/sidebar'
+            to={onSave ? '/nicolium/config/default_settings/navigation' : '/settings/navigation'}
+            label={
+              <FormattedMessage
+                id='preferences.fields.navigation_items'
+                defaultMessage='Customize navigation menu items'
+              />
+            }
+          />
+
+          <ListItem
+            to={onSave ? '/nicolium/config/default_settings/sidebar' : '/settings/sidebar'}
             label={
               <FormattedMessage
                 id='preferences.fields.sidebar_items'
@@ -309,15 +383,27 @@ const AppearancePreferences: React.FC = () => {
           />
 
           <ListItem
-            to='/settings/status_actions'
+            to={
+              onSave
+                ? '/nicolium/config/default_settings/status_actions'
+                : '/settings/status_actions'
+            }
             label={
               <FormattedMessage
                 id='preferences.fields.status_actions_items'
-                defaultMessage='Customize status actions'
+                defaultMessage='Customize post actions'
               />
             }
           />
         </List>
+
+        {onSave && (
+          <FormActions>
+            <Button type='submit' disabled={disabled} onClick={onSave}>
+              <FormattedMessage id='common.save' defaultMessage='Save' />
+            </Button>
+          </FormActions>
+        )}
       </Form>
     </Column>
   );

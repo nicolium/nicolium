@@ -4,7 +4,7 @@ import { mutative } from 'zustand-mutative';
 
 import { findStatuses } from '@/queries/statuses/use-status';
 
-import type { Context, Status } from 'pl-api';
+import type { AsyncRefreshHeader, Context, Status } from 'pl-api';
 
 /** Minimal status fields needed to process context. */
 type ContextStatus = Pick<Status, 'id' | 'in_reply_to_id' | 'parent_visible'>;
@@ -88,11 +88,16 @@ const importBranch = (state: State, statuses: ContextStatus[], statusId?: string
 interface State {
   inReplyTos: Record<string, string>;
   replies: Record<string, Array<string>>;
+  refreshing: Record<string, AsyncRefreshHeader>;
   actions: {
     /** Delete statuses from an account upon blocking or muting. */
     filterContexts: (relationship: { id: string }) => void;
     /** Import a status's ancestors and descendants. */
     importContext: (statusId: string, context: Context) => void;
+    /** Set the async refresh header for a status. */
+    setAsyncRefreshHeader: (statusId: string, header: AsyncRefreshHeader) => void;
+    /** Clear the async refresh header for a status. */
+    clearAsyncRefreshHeader: (statusId: string) => void;
     /** Add a fake status ID for a pending status. */
     importPendingStatus: (inReplyToId: string | null | undefined, idempotencyKey: string) => void;
     /** Delete a pending status from the reducer. */
@@ -158,6 +163,7 @@ const useContextStore = create<State>()(
   mutative((set) => ({
     inReplyTos: {},
     replies: {},
+    refreshing: {},
     actions: {
       filterContexts: (relationship) =>
         set((state) => {
@@ -175,6 +181,14 @@ const useContextStore = create<State>()(
           if (ancestors.length > 0 && !state.inReplyTos[statusId]) {
             insertTombstone(state, ancestors[ancestors.length - 1].id, statusId);
           }
+        }),
+      setAsyncRefreshHeader: (statusId: string, header: AsyncRefreshHeader) =>
+        set((state) => {
+          state.refreshing[statusId] = header;
+        }),
+      clearAsyncRefreshHeader: (statusId: string) =>
+        set((state) => {
+          delete state.refreshing[statusId];
         }),
       importPendingStatus: (inReplyToId, idempotencyKey) =>
         set((state) => {
@@ -348,6 +362,9 @@ const useReplyToId = (statusId?: string) =>
 const useReplyCount = (statusId?: string) =>
   useContextStore((state) => (statusId ? (state.replies[statusId]?.length ?? 0) : 0));
 
+const useAsyncRefreshHeader = (statusId?: string) =>
+  useContextStore((state) => (statusId ? state.refreshing[statusId] : undefined));
+
 const useContextsActions = () => useContextStore((state) => state.actions);
 
 export {
@@ -357,5 +374,6 @@ export {
   useThreadDepths,
   useReplyToId,
   useReplyCount,
+  useAsyncRefreshHeader,
   useContextsActions,
 };

@@ -8,7 +8,7 @@ order: 30
 
 Iceshrimp.NET does not have built-in support for alternative frontends. However, there are ways to use Nicolium as the frontend for Iceshrimp.NET by rerouting specific requests using a reverse proxy like Nginx.
 
-While this is the only way to use some of Iceshrimp.NET-specific features with Nicolium, because of Iceshrimp.NET CORS configuration, remember that it doesn't have full feature parity with the default Iceshrimp.NET frontend. You might prefer using Nicolium [in standalone mode](./standalone.md) instead.
+> Since Iceshrimp.NET v2026.1-beta release, it is possible to use all of its features with Nicolium [in standalone mode](./standalone.md). You no longer have to use the described method to use Iceshrimp.NET-specific features. Remember that it doesn't have full feature parity with the default Iceshrimp.NET frontend.
 
 ## Example Nginx configuration
 
@@ -33,7 +33,7 @@ server {
   server_name iceshrimp.example.com;
   root /var/www/nicolium/;
 
-  location ~ ^/(Components|openapi|scalar|swagger|css|_content|js|files|avatars|banners|api|inbox|oauth|admin|manifest.json|nodeinfo|.well-known|@(.+)$|[a-zA-Z0-9.]+.css$) {
+  location ~ ^/(Components|openapi|scalar|swagger|css|_content|js|files|avatars|banners|media|api|inbox|oauth|admin|manifest.json|nodeinfo|.well-known|@(.+)$|[a-zA-Z0-9.]+.css$) {
     try_files /dev/null @shrimp;
   }
 

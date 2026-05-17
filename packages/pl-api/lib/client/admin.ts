@@ -25,13 +25,15 @@ import {
   trendsLinkSchema,
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-import { GOTOSOCIAL, MITRA, PLEROMA } from '@/features';
+import { AKKOMA, GOTOSOCIAL, ICESHRIMP_NET, MITRA, PLEROMA } from '@/features';
 import { PaginatedResponse } from '@/responses';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type {
   AdminAccount,
   AdminAnnouncement,
+  AdminDomainAllow,
+  AdminDomainBlock,
   AdminModerationLogEntry,
   AdminReport,
   PleromaConfig,
@@ -39,6 +41,7 @@ import type {
 } from '@/entities';
 import type {
   AdminAccountAction,
+  AdminAccountUpdateCredentialsParams,
   AdminCreateAccountParams,
   AdminCreateAnnouncementParams,
   AdminCreateCustomEmojiParams,
@@ -72,6 +75,19 @@ import type {
 import type { EditStatusParams } from '@/params/statuses';
 import type { EmptyObject } from '@/utils/types';
 
+interface SimplePolicyConfig {
+  group: string;
+  key: string;
+  value: Array<{
+    tuple: [
+      string,
+      Array<{
+        tuple: [string, string];
+      }>,
+    ];
+  }>;
+}
+
 const paginatedPleromaAccounts = async (
   client: PlApiBaseClient,
   params: {
@@ -90,13 +106,14 @@ const paginatedPleromaAccounts = async (
   const adminAccounts = v.parse(filteredArray(adminAccountSchema), response.json?.users);
 
   return new PaginatedResponse(adminAccounts, {
-    previous: params.page
-      ? () => paginatedPleromaAccounts(client, { ...params, page: params.page! - 1 })
-      : null,
+    previous:
+      params.page && params.page > 1
+        ? () => paginatedPleromaAccounts(client, { ...params, page: params.page! - 1 })
+        : null,
     next:
       response.json?.count >
       params.page_size * ((params.page || 1) - 1) + response.json?.users?.length
-        ? () => paginatedPleromaAccounts(client, { ...params, page: (params.page || 0) + 1 })
+        ? () => paginatedPleromaAccounts(client, { ...params, page: (params.page ?? 1) + 1 })
         : null,
     partial: response.status === 206,
     total: response.json?.count,
@@ -115,13 +132,14 @@ const paginatedPleromaReports = async (
   const response = await client.request('/api/v1/pleroma/admin/reports', { params });
 
   return new PaginatedResponse(v.parse(filteredArray(adminReportSchema), response.json?.reports), {
-    previous: params.page
-      ? () => paginatedPleromaReports(client, { ...params, page: params.page! - 1 })
-      : null,
+    previous:
+      params.page && params.page > 1
+        ? () => paginatedPleromaReports(client, { ...params, page: params.page! - 1 })
+        : null,
     next:
       response.json?.total >
       params.page_size * ((params.page || 1) - 1) + response.json?.reports?.length
-        ? () => paginatedPleromaReports(client, { ...params, page: (params.page || 0) + 1 })
+        ? () => paginatedPleromaReports(client, { ...params, page: (params.page ?? 1) + 1 })
         : null,
     partial: response.status === 206,
     total: response.json?.total,
@@ -130,6 +148,7 @@ const paginatedPleromaReports = async (
 
 const paginatedPleromaStatuses = async (
   client: PlApiBaseClient,
+  url: string = '/api/v1/pleroma/admin/statuses',
   params: {
     page_size?: number;
     local_only?: boolean;
@@ -138,17 +157,53 @@ const paginatedPleromaStatuses = async (
     page?: number;
   },
 ): Promise<PaginatedResponse<Status>> => {
-  const response = await client.request('/api/v1/pleroma/admin/statuses', { params });
+  const response = await client.request(url, { params });
 
-  return new PaginatedResponse(v.parse(filteredArray(statusSchema), response.json), {
-    previous: params.page
-      ? () => paginatedPleromaStatuses(client, { ...params, page: params.page! - 1 })
-      : null,
-    next: response.json?.length
-      ? () => paginatedPleromaStatuses(client, { ...params, page: (params.page || 0) + 1 })
-      : null,
-    partial: response.status === 206,
-  });
+  return new PaginatedResponse(
+    v.parse(filteredArray(statusSchema), response.json.activities).toReversed(),
+    {
+      previous:
+        params.page && params.page > 1
+          ? () => paginatedPleromaStatuses(client, url, { ...params, page: params.page! - 1 })
+          : null,
+      next:
+        response.json?.total >
+        (params.page_size ?? 20) * ((params.page || 1) - 1) + response.json?.activities?.length
+          ? () => paginatedPleromaStatuses(client, url, { ...params, page: (params.page ?? 1) + 1 })
+          : null,
+      partial: response.status === 206,
+    },
+  );
+};
+
+const updateSimplePolicy = (
+  simplePolicy: SimplePolicyConfig,
+  domain: string,
+  params: AdminUpdateDomainBlockParams,
+) => {
+  for (const policy of [
+    ':media_removal',
+    ':report_removal',
+    ':federated_timeline_removal',
+    ':reject',
+  ] as const) {
+    let entry = simplePolicy.value.find(({ tuple }) => tuple[0] === policy);
+    if (entry) {
+      entry.tuple[1] = entry.tuple[1].filter(({ tuple }) => tuple[0] !== domain);
+    } else {
+      entry = { tuple: [policy, []] };
+      simplePolicy.value.push(entry);
+    }
+
+    if (
+      (params.reject_media && policy === ':media_removal') ||
+      (params.reject_reports && policy === ':report_removal') ||
+      (params.severity === 'silence' && policy === ':federated_timeline_removal') ||
+      (params.severity === 'suspend' && policy === ':reject')
+    ) {
+      entry.tuple[1].push({ tuple: [domain, params.public_comment || ''] });
+    }
+  }
 };
 
 const admin = (client: PlApiBaseClient) => {
@@ -277,7 +332,7 @@ const admin = (client: PlApiBaseClient) => {
 
       /**
        * Delete an account
-       * Permanently delete data for a suspended accountusers
+       * Permanently delete data for a suspended account.
        * @see {@link https://docs.joinmastodon.org/methods/admin/accounts/#delete}
        */
       deleteAccount: async (accountId: string) => {
@@ -286,6 +341,11 @@ const admin = (client: PlApiBaseClient) => {
         if (client.features.mastodonAdmin || client.features.version.software === MITRA) {
           response = await client.request(`/api/v1/admin/accounts/${accountId}`, {
             method: 'DELETE',
+          });
+        } else if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request(`/api/iceshrimp/moderation/users/${accountId}/purge`, {
+            method: 'POST',
           });
         } else {
           const account = await category.accounts.getAccount(accountId)!;
@@ -317,6 +377,22 @@ const admin = (client: PlApiBaseClient) => {
           response = await client.request(`/api/v1/admin/accounts/${accountId}/action`, {
             body: { ...params, type },
           });
+        } else if (client.features.iceshrimpAdmin) {
+          switch (type) {
+            case 'disable':
+            case 'suspend':
+              await client.getIceshrimpAccessToken();
+              response = await client.request(
+                `/api/iceshrimp/moderation/users/${accountId}/suspend`,
+                {
+                  method: 'POST',
+                },
+              );
+              break;
+            default:
+              response = { json: {} };
+              break;
+          }
         } else {
           const account = await category.accounts.getAccount(accountId)!;
 
@@ -352,6 +428,14 @@ const admin = (client: PlApiBaseClient) => {
           response = await client.request(`/api/v1/admin/accounts/${accountId}/enable`, {
             method: 'POST',
           });
+        } else if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request(
+            `/api/iceshrimp/moderation/users/${accountId}/unsuspend`,
+            {
+              method: 'POST',
+            },
+          );
         } else {
           const account = await category.accounts.getAccount(accountId)!;
           response = await client.request('/api/v1/pleroma/admin/users/activate', {
@@ -389,6 +473,14 @@ const admin = (client: PlApiBaseClient) => {
           response = await client.request(`/api/v1/admin/accounts/${accountId}/unsuspend`, {
             method: 'POST',
           });
+        } else if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request(
+            `/api/iceshrimp/moderation/users/${accountId}/unsuspend`,
+            {
+              method: 'POST',
+            },
+          );
         } else {
           const { account } = await category.accounts.getAccount(accountId)!;
 
@@ -554,6 +646,81 @@ const admin = (client: PlApiBaseClient) => {
 
         return response.json;
       },
+
+      updateCredentials: async (accountId: string, params: AdminAccountUpdateCredentialsParams) => {
+        const { account } = await category.accounts.getAccount(accountId)!;
+
+        await client.request(`/api/v1/pleroma/admin/users/${account!.acct}/credentials`, {
+          method: 'PATCH',
+          body: params,
+        });
+
+        return category.accounts.getAccount(accountId);
+      },
+
+      disableMfa: async (accountId: string) => {
+        let response;
+
+        if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/users/${accountId}/reset-2fa`,
+            {
+              method: 'POST',
+            },
+          );
+        } else {
+          const { account } = await category.accounts.getAccount(accountId)!;
+          response = await client.request<EmptyObject>('/api/v1/pleroma/admin/users/disable_mfa', {
+            method: 'PUT',
+            body: { nickname: account!.acct },
+          });
+        }
+
+        return response.json;
+      },
+
+      resetPassword: async (accountId: string, password: string) => {
+        let response;
+
+        if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/users/${accountId}/reset-password`,
+            {
+              method: 'POST',
+              body: { password },
+            },
+          );
+        } else {
+          const { account } = await category.accounts.getAccount(accountId)!;
+
+          response = await client.request<EmptyObject>(
+            `/api/v1/pleroma/admin/users/${account!.acct}/credentials`,
+            {
+              method: 'PATCH',
+              body: { password },
+            },
+          );
+        }
+
+        return response.json;
+      },
+
+      /**
+       * @param params Retrieve user's latest statuses.
+       *
+       * Requires features{@link Features.pleromaAdminStatuses}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminstatuses}
+       */
+      getAccountStatuses: (accountId: string, params?: AdminGetStatusesParams) =>
+        paginatedPleromaStatuses(client, `/api/v1/pleroma/admin/users/${accountId}/statuses`, {
+          page_size: params?.limit || 20,
+          page: 1,
+          local_only: params?.local_only,
+          with_reblogs: params?.with_reblogs,
+          godmode: params?.with_private,
+        }),
     },
 
     /** Disallow certain domains to federate. */
@@ -563,8 +730,79 @@ const admin = (client: PlApiBaseClient) => {
        * Show information about all blocked domains.
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#get}
        */
-      getDomainBlocks: (params?: AdminGetDomainBlocksParams) =>
-        client.paginatedGet('/api/v1/admin/domain_blocks', { params }, adminDomainBlockSchema),
+      getDomainBlocks: async (params?: AdminGetDomainBlocksParams) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig | undefined =
+            configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') ||
+            undefined;
+
+          let domainBlocks: Array<AdminDomainBlock> = [];
+
+          if (simplePolicy) {
+            const rejectMedia =
+              simplePolicy.value.find(({ tuple }) => tuple[0] === ':media_removal')?.tuple[1] || [];
+            const rejectReports =
+              simplePolicy.value.find(({ tuple }) => tuple[0] === ':report_removal')?.tuple[1] ||
+              [];
+            const silence =
+              simplePolicy.value.find(({ tuple }) => tuple[0] === ':federated_timeline_removal')
+                ?.tuple[1] || [];
+            const suspend =
+              simplePolicy.value.find(({ tuple }) => tuple[0] === ':reject')?.tuple[1] || [];
+
+            const domains = new Set<string>(
+              [...rejectMedia, ...rejectReports, ...silence, ...suspend]
+                .map((value) => value.tuple[0])
+                .filter((value) => value),
+            );
+
+            const encoder = new TextEncoder();
+
+            for (const domain of domains) {
+              domainBlocks.push({
+                id: domain,
+                domain,
+                // TODO: fix this
+                digest: (
+                  new Uint8Array(
+                    await window.crypto.subtle.digest('SHA-256', encoder.encode(domain)),
+                  ) as any
+                ).toHex() as `0x${string}`,
+                created_at: null,
+                severity: suspend.some(({ tuple }) => tuple[0] === domain)
+                  ? 'suspend'
+                  : silence.some(({ tuple }) => tuple[0] === domain)
+                    ? 'silence'
+                    : 'noop',
+                reject_media: rejectMedia.some(({ tuple }) => tuple[0] === domain),
+                reject_reports: rejectReports.some(({ tuple }) => tuple[0] === domain),
+                private_comment: null,
+                public_comment:
+                  [...suspend, ...silence, ...rejectMedia, ...rejectReports].find(
+                    ({ tuple }) => tuple[0] === domain,
+                  )?.tuple[1] || null,
+                obfuscate: false,
+              });
+            }
+          }
+
+          return new PaginatedResponse(domainBlocks);
+        }
+        let url;
+        if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          url = '/api/iceshrimp/admin/instances/blocked';
+        } else {
+          url = '/api/v1/admin/domain_blocks';
+        }
+
+        return client.paginatedGet(url, { params }, adminDomainBlockSchema);
+      },
 
       /**
        * Get a single blocked domain
@@ -572,6 +810,15 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#get-one}
        */
       getDomainBlock: async (domainBlockId: string) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const domainBlocks = await category.domainBlocks.getDomainBlocks();
+
+          return domainBlocks.items.find((block) => block.id === domainBlockId)!;
+        }
+
         const response = await client.request(`/api/v1/admin/domain_blocks/${domainBlockId}`);
 
         return v.parse(adminDomainBlockSchema, response.json);
@@ -583,6 +830,43 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#create}
        */
       createDomainBlock: async (domain: string, params?: AdminCreateDomainBlockParams) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig = configs.find(
+            (config) => config.group === ':pleroma' && config.key === ':mrf_simple',
+          ) || {
+            group: ':pleroma',
+            key: ':mrf_simple',
+            value: [],
+          };
+
+          updateSimplePolicy(simplePolicy, domain, params || { severity: 'silence' });
+
+          await client.request('/api/v1/pleroma/admin/config', {
+            method: 'POST',
+            body: {
+              configs: [simplePolicy],
+            },
+          });
+
+          return {};
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          const response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/instances/${domain}/block`,
+            {
+              method: 'POST',
+              params: { reason: params?.public_comment },
+            },
+          );
+
+          return response.json;
+        }
+
         const response = await client.request('/api/v1/admin/domain_blocks', {
           method: 'POST',
           body: { ...params, domain },
@@ -596,7 +880,47 @@ const admin = (client: PlApiBaseClient) => {
        * Change parameters for an existing domain block.
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#update}
        */
-      updateDomainBlock: async (domainBlockId: string, params?: AdminUpdateDomainBlockParams) => {
+      updateDomainBlock: async (domainBlockId: string, params: AdminUpdateDomainBlockParams) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig = configs.find(
+            (config) => config.group === ':pleroma' && config.key === ':mrf_simple',
+          ) || {
+            group: ':pleroma',
+            key: ':mrf_simple',
+            value: [],
+          };
+
+          updateSimplePolicy(simplePolicy, domainBlockId, params);
+
+          await client.request('/api/v1/pleroma/admin/config', {
+            method: 'POST',
+            body: {
+              configs: [simplePolicy],
+            },
+          });
+
+          return {};
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          await client.request(`/api/iceshrimp/admin/instances/${domainBlockId}/unblock`, {
+            method: 'POST',
+          });
+          const response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/instances/${domainBlockId}/block`,
+            {
+              method: 'POST',
+              params: { reason: params.public_comment },
+            },
+          );
+
+          return response.json;
+        }
+
         const response = await client.request(`/api/v1/admin/domain_blocks/${domainBlockId}`, {
           method: 'PUT',
           body: params,
@@ -611,6 +935,47 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_blocks/#delete}
        */
       deleteDomainBlock: async (domainBlockId: string) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig | undefined =
+            configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') ||
+            undefined;
+
+          if (simplePolicy) {
+            [':media_removal', ':report_removal', ':federated_timeline_removal', ':reject'].forEach(
+              (policy) => {
+                const entry = simplePolicy.value.find(({ tuple }) => tuple[0] === policy);
+                if (entry) {
+                  entry.tuple[1] = entry.tuple[1].filter(({ tuple }) => tuple[0] !== domainBlockId);
+                }
+              },
+            );
+
+            await client.request('/api/v1/pleroma/admin/config', {
+              method: 'POST',
+              body: {
+                configs: [simplePolicy],
+              },
+            });
+          }
+
+          return {};
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          const response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/instances/${domainBlockId}/unblock`,
+            {
+              method: 'POST',
+            },
+          );
+
+          return response.json;
+        }
+
         const response = await client.request<EmptyObject>(
           `/api/v1/admin/domain_blocks/${domainBlockId}`,
           {
@@ -629,17 +994,24 @@ const admin = (client: PlApiBaseClient) => {
        * View information about all reports.
        * @see {@link https://docs.joinmastodon.org/methods/admin/reports/#get}
        */
-      getReports: (params?: AdminGetReportsParams) => {
+      getReports: async (params?: AdminGetReportsParams) => {
         if (client.features.mastodonAdmin) {
           if (
-            params?.resolved === undefined &&
-            (client.features.version.software === GOTOSOCIAL ||
-              client.features.version.software === PLEROMA)
+            params?.unresolved &&
+            client.features.version.software === GOTOSOCIAL &&
+            !client.features.mastodonAdminUnresolvedReports
           ) {
             if (!params) params = {};
             params.resolved = false;
           }
           return client.paginatedGet('/api/v1/admin/reports', { params }, adminReportSchema);
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          return client.paginatedGet(
+            '/api/iceshrimp/moderation/reports',
+            { params },
+            adminReportSchema,
+          );
         }
 
         return paginatedPleromaReports(client, {
@@ -656,6 +1028,9 @@ const admin = (client: PlApiBaseClient) => {
         let response;
         if (client.features.mastodonAdmin) {
           response = await client.request(`/api/v1/admin/reports/${reportId}`);
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request(`/api/iceshrimp/moderation/reports/${reportId}`);
         } else {
           response = await client.request(`/api/v1/pleroma/admin/reports/${reportId}`);
         }
@@ -719,6 +1094,13 @@ const admin = (client: PlApiBaseClient) => {
             method: 'POST',
             body: { action_taken_comment },
           });
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          await client.request(`/api/iceshrimp/moderation/reports/${reportId}/resolve`, {
+            method: 'POST',
+          });
+
+          return category.reports.getReport(reportId);
         } else {
           response = await client.request(`/api/v1/pleroma/admin/reports/${reportId}`, {
             method: 'PATCH',
@@ -749,6 +1131,19 @@ const admin = (client: PlApiBaseClient) => {
 
         return v.parse(adminReportSchema, response.json);
       },
+
+      /**
+       * Forward report
+       * Requires features{@link Features.adminReportForwarding}.
+       */
+      forwardReport: async (reportId: string) => {
+        await client.getIceshrimpAccessToken();
+        await client.request(`/api/iceshrimp/moderation/reports/${reportId}/forward`, {
+          method: 'POST',
+        });
+
+        return category.reports.getReport(reportId);
+      },
     },
 
     statuses: {
@@ -761,7 +1156,7 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminstatuses}
        */
       getStatuses: (params?: AdminGetStatusesParams) =>
-        paginatedPleromaStatuses(client, {
+        paginatedPleromaStatuses(client, undefined, {
           page_size: params?.limit || 100,
           page: 1,
           local_only: params?.local_only,
@@ -806,9 +1201,11 @@ const admin = (client: PlApiBaseClient) => {
         const response = await client.request<EmptyObject>(
           client.features.version.software === MITRA
             ? `/api/v1/admin/posts/${statusId}`
-            : `/api/v1/pleroma/admin/statuses/${statusId}`,
+            : client.features.iceshrimpAdmin
+              ? `/api/iceshrimp/moderation/notes/${statusId}/delete`
+              : `/api/v1/pleroma/admin/statuses/${statusId}`,
           {
-            method: 'DELETE',
+            method: client.features.iceshrimpAdmin ? 'POST' : 'DELETE',
           },
         );
 
@@ -965,8 +1362,43 @@ const admin = (client: PlApiBaseClient) => {
        * Show information about all allowed domains.
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#get}
        */
-      getDomainAllows: (params?: AdminGetDomainAllowsParams) =>
-        client.paginatedGet('/api/v1/admin/domain_allows', { params }, adminDomainAllowSchema),
+      getDomainAllows: async (params?: AdminGetDomainAllowsParams) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig | undefined =
+            configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') ||
+            undefined;
+
+          let domainAllows: Array<AdminDomainAllow> = [];
+
+          if (simplePolicy) {
+            const accepts =
+              simplePolicy.value.find(({ tuple }) => tuple[0] === ':accept')?.tuple[1] || [];
+
+            domainAllows = accepts.map(({ tuple }) => ({
+              id: tuple[0],
+              domain: tuple[0],
+              created_at: null,
+              is_imported: false,
+            }));
+          }
+
+          return new PaginatedResponse(domainAllows);
+        }
+        let url;
+        if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          url = '/api/iceshrimp/admin/instances/allowed';
+        } else {
+          url = '/api/v1/admin/domain_allows';
+        }
+
+        return client.paginatedGet(url, { params }, adminDomainAllowSchema);
+      },
 
       /**
        * Get a single allowed domain
@@ -974,6 +1406,15 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#get-one}
        */
       getDomainAllow: async (domainAllowId: string) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const domainAllows = await category.domainAllows.getDomainAllows();
+
+          return domainAllows.items.find((allow) => allow.id === domainAllowId)!;
+        }
+
         const response = await client.request(`/api/v1/admin/domain_allows/${domainAllowId}`);
 
         return v.parse(adminDomainAllowSchema, response.json);
@@ -985,6 +1426,51 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#create}
        */
       createDomainAllow: async (domain: string) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig | undefined =
+            configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') ||
+            undefined;
+
+          if (simplePolicy) {
+            let accepts = simplePolicy.value.find(({ tuple }) => tuple[0] === ':accept');
+
+            if (!accepts) {
+              accepts = { tuple: [':accept', []] };
+              simplePolicy.value.push(accepts);
+            }
+
+            if (accepts.tuple[1].find(({ tuple }) => tuple[0] === domain)) {
+              return {};
+            }
+
+            accepts.tuple[1].push({ tuple: [domain, ''] });
+
+            await client.request('/api/v1/pleroma/admin/config', {
+              method: 'POST',
+              body: {
+                configs: [simplePolicy],
+              },
+            });
+          }
+
+          return {};
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          const response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/instances/${domain}/allow`,
+            {
+              method: 'POST',
+            },
+          );
+
+          return response.json;
+        }
+
         const response = await client.request('/api/v1/admin/domain_allows', {
           method: 'POST',
           body: { domain },
@@ -999,6 +1485,44 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/domain_allows/#delete}
        */
       deleteDomainAllow: async (domainAllowId: string) => {
+        if (
+          client.features.version.software === PLEROMA ||
+          client.features.version.software === AKKOMA
+        ) {
+          const { configs } = await category.config.getPleromaConfig();
+
+          const simplePolicy: SimplePolicyConfig | undefined =
+            configs.find((config) => config.group === ':pleroma' && config.key === ':mrf_simple') ||
+            undefined;
+
+          if (simplePolicy) {
+            const accepts = simplePolicy.value.find(({ tuple }) => tuple[0] === ':accept');
+
+            if (accepts) {
+              accepts.tuple[1] = accepts.tuple[1].filter(({ tuple }) => tuple[0] !== domainAllowId);
+
+              await client.request('/api/v1/pleroma/admin/config', {
+                method: 'POST',
+                body: {
+                  configs: [simplePolicy],
+                },
+              });
+            }
+          }
+
+          return {};
+        } else if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          const response = await client.request<EmptyObject>(
+            `/api/iceshrimp/admin/instances/${domainAllowId}/disallow`,
+            {
+              method: 'POST',
+            },
+          );
+
+          return response.json;
+        }
+
         const response = await client.request<EmptyObject>(
           `/api/v1/admin/domain_allows/${domainAllowId}`,
           {
@@ -1354,7 +1878,14 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminrelay}
        */
       getRelays: async () => {
-        const response = await client.request('/api/v1/pleroma/admin/relay');
+        let response;
+
+        if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request('/api/iceshrimp/admin/relays');
+        } else {
+          response = await client.request('/api/v1/pleroma/admin/relay');
+        }
 
         return v.parse(filteredArray(adminRelaySchema), response.json);
       },
@@ -1366,12 +1897,22 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminrelay}
        */
       followRelay: async (relayUrl: string) => {
-        const response = await client.request('/api/v1/pleroma/admin/relay', {
-          method: 'POST',
-          body: { relay_url: relayUrl },
-        });
+        let response;
 
-        return v.parse(adminRelaySchema, response.json);
+        if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request('/api/iceshrimp/admin/relays', {
+            method: 'POST',
+            body: { inbox: relayUrl },
+          });
+        } else {
+          response = await client.request('/api/v1/pleroma/admin/relay', {
+            method: 'POST',
+            body: { relay_url: relayUrl },
+          });
+        }
+
+        return v.parse(v.optional(adminRelaySchema), response.json);
       },
 
       /**
@@ -1380,13 +1921,22 @@ const admin = (client: PlApiBaseClient) => {
        * Requires features{@link Features.pleromaAdminRelays}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#delete-apiv1pleromaadminrelay}
        */
-      unfollowRelay: async (relayUrl: string, force = false) => {
-        const response = await client.request('/api/v1/pleroma/admin/relay', {
-          method: 'DELETE',
-          body: { relay_url: relayUrl, force },
-        });
+      unfollowRelay: async (id: string, force = false) => {
+        let response;
 
-        return v.parse(adminRelaySchema, response.json);
+        if (client.features.version.software === ICESHRIMP_NET) {
+          await client.getIceshrimpAccessToken();
+          response = await client.request(`/api/iceshrimp/admin/relays/${id}`, {
+            method: 'DELETE',
+          });
+        } else {
+          response = await client.request('/api/v1/pleroma/admin/relay', {
+            method: 'DELETE',
+            body: { relay_url: id, force },
+          });
+        }
+
+        return v.parse(v.optional(adminRelaySchema), response.json);
       },
     },
 

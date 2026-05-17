@@ -1,5 +1,6 @@
 import iconQrCode from '@phosphor-icons/core/regular/qr-code.svg';
 import React from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 import CopyableInput from '@/components/copyable-input';
 import Icon from '@/components/ui/icon';
@@ -10,6 +11,13 @@ import { getTitle } from '../utils/coin-db';
 
 import CryptoIcon from './crypto-icon';
 
+const messages = defineMessages({
+  showQrCode: {
+    id: 'crypto.show_qr_code',
+    defaultMessage: 'Show QR code',
+  },
+});
+
 interface ICryptoAddress {
   address: string;
   ticker: string;
@@ -19,6 +27,7 @@ interface ICryptoAddress {
 const CryptoAddress: React.FC<ICryptoAddress> = (props) => {
   const { address, ticker, note } = props;
 
+  const intl = useIntl();
   const { openModal } = useModalsActions();
 
   const handleModalClick: React.MouseEventHandler<HTMLElement> = (e) => {
@@ -29,21 +38,19 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props) => {
   const title = getTitle(ticker);
 
   return (
-    <div className='flex flex-col'>
-      <div className='mb-1 flex items-center'>
-        <CryptoIcon
-          className='mr-2.5 flex w-6 items-start justify-center rtl:ml-2.5 rtl:mr-0'
-          ticker={ticker}
-          title={title}
-        />
+    <div className='⁂-crypto-address'>
+      <div className='⁂-crypto-address__label'>
+        <CryptoIcon className='⁂-crypto-address__icon' ticker={ticker} title={title} />
 
-        <Text weight='bold'>{title || ticker.toUpperCase()}</Text>
+        <p>{title || ticker.toUpperCase()}</p>
 
-        <div className='ml-auto flex items-center'>
-          <a className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1' href='#' onClick={handleModalClick}>
-            <Icon src={iconQrCode} size={20} />
-          </a>
-        </div>
+        <button
+          onClick={handleModalClick}
+          title={intl.formatMessage(messages.showQrCode)}
+          aria-label={intl.formatMessage(messages.showQrCode)}
+        >
+          <Icon src={iconQrCode} size={20} aria-hidden />
+        </button>
       </div>
 
       {note && <Text>{note}</Text>}

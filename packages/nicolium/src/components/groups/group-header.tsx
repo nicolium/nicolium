@@ -38,7 +38,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
     return (
       <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6' data-testid='group-header-missing'>
         <div>
-          <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-48' />
+          <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 sm:rounded-t-xl lg:h-48' />
         </div>
 
         <div className='px-4 sm:px-6'>
@@ -92,7 +92,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         <StillImage
           src={group.header}
           alt={group.header_description || intl.formatMessage(messages.header)}
-          className='relative h-32 w-full bg-gray-200 object-center black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-52'
+          className='relative h-32 w-full bg-gray-200 object-center black:rounded-t-none dark:bg-gray-900/50 sm:rounded-t-xl lg:h-52'
           onError={() => {
             setIsHeaderMissing(true);
           }}
@@ -116,7 +116,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
     return (
       <div
         data-testid='group-header-image'
-        className='flex h-32 w-full items-center justify-center bg-gray-200 dark:bg-gray-800/30 md:rounded-t-xl lg:h-52'
+        className='flex h-32 w-full items-center justify-center bg-gray-200 dark:bg-gray-800/30 sm:rounded-t-xl lg:h-52'
       >
         {isHeaderMissing ? (
           <Icon src={iconImageSquare} className='size-6 text-gray-500 dark:text-gray-700' />

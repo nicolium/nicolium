@@ -7,7 +7,6 @@ import { FormattedMessage } from 'react-intl';
 import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
-import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
@@ -29,6 +28,7 @@ import StatusMedia from './status-media';
 import TranslateButton from './translate-button';
 
 import type { Sizes } from '@/components/ui/text';
+import type { FilterContextType } from '@/queries/settings/use-filters';
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
 
 const BIG_EMOJI_LIMIT = 10;
@@ -88,6 +88,7 @@ interface IStatusContent {
   isEvent?: boolean;
   expandable?: boolean;
   quoteDepth?: number;
+  contextType?: FilterContextType;
 }
 
 /** Renders the text content of a status */
@@ -105,6 +106,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     isEvent = false,
     expandable = false,
     quoteDepth = 0,
+    contextType,
   }) => {
     const {
       urlPrivacy,
@@ -113,8 +115,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       displayMentionAvatars,
       showNestedQuotes,
       showSideBySideTranslations,
+      greentext,
+      displayPreviewCards,
     } = useSettings();
-    const { greentext } = useFrontendConfig();
     const { data: account } = useAccount(status.account_id);
 
     const [collapsed, setCollapsed] = useState<boolean | null>(null);
@@ -334,12 +337,12 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             '⁂-status-title--clamp': !spoilerExpanded && lineClamp,
           })}
           key='spoiler'
-          {...(expandable
+          {...(expandable && displaySpoilers
             ? { onClick: toggleSpoilerExpanded, role: 'button', 'aria-expanded': spoilerExpanded }
             : {})}
         >
           <span ref={spoilerNode}>
-            <Emojify text={spoilerText} emojis={status.emojis} />
+            <Emojify text={spoilerText} emojis={status.emojis} nyaize={account?.speak_as_cat} />
           </span>
           {hasSpoiler && (
             <button onClick={toggleSpoilerExpanded}>
@@ -375,12 +378,19 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             </OutlineBox>
           );
         } else {
-          quote = <QuotedStatus statusId={status.quote_id} quoteDepth={quoteDepth} />;
+          quote = (
+            <QuotedStatus
+              statusId={status.quote_id}
+              quoteDepth={quoteDepth}
+              state={status.quote_status}
+              contextType={contextType}
+            />
+          );
         }
       }
 
       const media = (quote ||
-        status.card ||
+        (status.card && displayPreviewCards !== 'hide') ||
         (withMedia && status.media_attachments.length > 0)) && (
         <div className='flex flex-col gap-4' key='media'>
           {((withMedia && status.media_attachments.length > 0) ||

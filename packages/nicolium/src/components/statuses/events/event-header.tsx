@@ -21,6 +21,7 @@ import iconPushPinSlash from '@phosphor-icons/core/regular/push-pin-slash.svg';
 import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
 import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconSpeakerSimpleX from '@phosphor-icons/core/regular/speaker-simple-x.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import iconUsers from '@phosphor-icons/core/regular/users.svg';
@@ -152,7 +153,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const client = useClient();
   const features = useFeatures();
-  const { boostModal } = useSettings();
+  const { boostModal, useRocketIconForReblogs } = useSettings();
   const { data: ownAccount } = useOwnAccount();
   const { data: account } = useAccount(status?.account_id!);
   const isStaff = ownAccount ? (ownAccount.is_admin ?? ownAccount.is_moderator) : false;
@@ -172,7 +173,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     return (
       <>
         <div className='-mx-4 -mt-4'>
-          <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-48' />
+          <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 sm:rounded-t-xl lg:h-48' />
         </div>
 
         <PlaceholderEventHeader />
@@ -224,9 +225,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleReblogClick = (visibility?: string) => {
-    const modalReblog = () => {
+    const modalReblog = (selectedVisibility = visibility, scheduledAt?: string) => {
       if (status.reblogged) unreblogStatus();
-      else reblogStatus(visibility);
+      else reblogStatus({ visibility: selectedVisibility, scheduledAt });
     };
     if (!boostModal) {
       modalReblog();
@@ -370,7 +371,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                 handleReblogClick();
               },
             }),
-        icon: iconRepeat,
+        icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
       });
 
       if (features.quotePosts) {
@@ -388,7 +389,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         action: () => {
           handleReblogClick();
         },
-        icon: iconRepeat,
+        icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
       });
     }
 
@@ -503,13 +504,13 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   return (
     <>
       <div className='-mx-4 -mt-4'>
-        <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-48'>
+        <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 sm:rounded-t-xl lg:h-48'>
           {banner && (
             <a href={banner.url} onClick={handleHeaderClick} target='_blank'>
               <StillImage
                 src={banner.url}
                 alt={intl.formatMessage(messages.bannerHeader)}
-                className='absolute inset-0 h-full object-cover black:rounded-t-none md:rounded-t-xl'
+                className='absolute inset-0 h-full object-cover black:rounded-t-none sm:rounded-t-xl'
               />
             </a>
           )}

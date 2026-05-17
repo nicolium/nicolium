@@ -4,10 +4,14 @@ import React, { Suspense, useEffect, useState } from 'react';
 import StickyBox from 'react-sticky-box';
 
 import { useFeatures } from '@/hooks/use-features';
+import { useMinWidth } from '@/hooks/use-min-width';
+import { useSettings } from '@/stores/settings';
 
 import tailwindConfig from '../../../tailwind.config';
 
 const breakpoints = (tailwindConfig.theme?.screens as Record<string, string>) ?? {
+  sm: '581px',
+  md: '768px',
   lg: '976px',
   xl: '1280px',
 };
@@ -30,30 +34,6 @@ interface LayoutComponent extends React.FC<ILayout> {
   Main: React.FC<React.HTMLAttributes<HTMLDivElement>>;
   Aside: React.FC<IAside>;
 }
-
-const useMinWidth = (query: string) => {
-  const getMatch = () => (typeof window !== 'undefined' ? window.matchMedia(query).matches : false);
-
-  const [matches, setMatches] = useState(getMatch);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(query);
-
-    setMatches(mediaQuery.matches);
-
-    const onChange = (event: MediaQueryListEvent) => {
-      setMatches(event.matches);
-    };
-
-    mediaQuery.addEventListener('change', onChange);
-
-    return () => {
-      mediaQuery.removeEventListener('change', onChange);
-    };
-  }, [query]);
-
-  return matches;
-};
 
 interface WindowControlsOverlay extends EventTarget {
   visible: boolean;
@@ -109,7 +89,7 @@ const Layout: LayoutComponent = ({ children, fullWidth }) => (
 
 /** Left sidebar container in the UI. */
 const Sidebar: React.FC<ISidebar> = ({ children, shrink }) => {
-  const isVisible = useMinWidth(`(min-width: ${breakpoints.lg})`);
+  const isVisible = useMinWidth(`(min-width: ${breakpoints.sm})`);
   const wcoRect = useWindowControlsOverlay();
   const offsetTop = wcoRect && wcoRect.x > 0 ? 16 + wcoRect.y : 16;
 
@@ -152,8 +132,9 @@ const Aside: React.FC<IAside> = ({ children }) => {
   const wcoRect = useWindowControlsOverlay();
   const offsetTop =
     wcoRect && wcoRect.x + wcoRect.width < window.innerWidth ? 16 + wcoRect.height : 16;
+  const { sidebarItems } = useSettings();
 
-  if (!isVisible) {
+  if (!isVisible || sidebarItems.length === 0) {
     return null;
   }
 
@@ -170,4 +151,4 @@ Layout.Sidebar = Sidebar;
 Layout.Main = Main;
 Layout.Aside = Aside;
 
-export { Layout as default };
+export { Layout as default, useWindowControlsOverlay };

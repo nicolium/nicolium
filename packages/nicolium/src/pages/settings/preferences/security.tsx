@@ -24,7 +24,7 @@ const SecurityPreferences: React.FC = () => {
         <List>
           {features.changeEmail && (
             <ListItem
-              label={<FormattedMessage id='column.change_email' defaultMessage='Change email' />}
+              label={<FormattedMessage id='column.change_email' defaultMessage='Change e-mail' />}
               to='/settings/email'
             />
           )}

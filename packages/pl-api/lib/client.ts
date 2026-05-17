@@ -48,6 +48,8 @@ interface PlApiClientFullConstructorOpts extends PlApiClientConstructorOpts {
   onInstanceFetchSuccess?: (instance: Instance) => void;
   /** Executed when the initial instance fetch failed */
   onInstanceFetchError?: (error?: any) => void;
+  iceshrimpAccessToken?: string;
+  onFetchIceshrimpAccessToken?: (token: string) => void;
 }
 
 /**
@@ -92,6 +94,8 @@ class PlApiClient extends PlApiBaseClient {
   readonly trends = trends(this);
   readonly utils = utils(this);
 
+  #onFetchIceshrimpAccessToken?: (token: string) => void;
+
   constructor(
     baseURL: string,
     accessToken?: string,
@@ -100,6 +104,8 @@ class PlApiClient extends PlApiBaseClient {
       fetchInstanceSignal,
       onInstanceFetchSuccess,
       onInstanceFetchError,
+      iceshrimpAccessToken,
+      onFetchIceshrimpAccessToken,
       ...opts
     }: PlApiClientFullConstructorOpts = {},
   ) {
@@ -117,12 +123,22 @@ class PlApiClient extends PlApiBaseClient {
           onInstanceFetchError?.(error);
         });
     }
+
+    if (iceshrimpAccessToken) {
+      this.setIceshrimpAccessToken(iceshrimpAccessToken);
+    }
+
+    if (onFetchIceshrimpAccessToken) {
+      this.#onFetchIceshrimpAccessToken = onFetchIceshrimpAccessToken;
+    }
   }
 
   override getIceshrimpAccessToken = async (): Promise<void> => {
     if (this.iceshrimpAccessToken) return;
     if (this.features.version.software === ICESHRIMP_NET) {
-      this.setIceshrimpAccessToken(await this.settings.authorizeIceshrimp());
+      const token = await this.settings.authorizeIceshrimp();
+      this.setIceshrimpAccessToken(token);
+      this.#onFetchIceshrimpAccessToken?.(token);
     }
   };
 }

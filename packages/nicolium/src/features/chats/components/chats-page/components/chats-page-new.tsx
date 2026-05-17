@@ -9,7 +9,7 @@ import IconButton from '@/components/ui/icon-button';
 import ChatSearch from '../../chat-search/chat-search';
 
 const messages = defineMessages({
-  title: { id: 'chat.new_message.title', defaultMessage: 'New Message' },
+  title: { id: 'chat.new_message.title', defaultMessage: 'New message' },
   back: { id: 'chats.back', defaultMessage: 'Back to chats' },
 });
 

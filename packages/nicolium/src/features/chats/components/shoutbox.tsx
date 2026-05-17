@@ -12,9 +12,10 @@ const fileKeyGen = (): number => Math.floor(Math.random() * 0x10000);
 interface IShoutbox {
   inputRef?: RefObject<HTMLTextAreaElement | null>;
   className?: string;
+  widget?: boolean;
 }
 
-const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className }) => {
+const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className, widget }) => {
   const [content, setContent] = useState<string>('');
   const [resetContentKey, setResetContentKey] = useState<number>(fileKeyGen());
 
@@ -67,8 +68,8 @@ const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className }) => {
   }, [inputRef?.current]);
 
   return (
-    <div className={clsx('flex grow flex-col overflow-hidden', className)}>
-      <div className='flex h-full grow justify-center overflow-hidden'>
+    <div className={clsx('⁂-chat', widget && '⁂-shoutbox-widget', className)}>
+      <div className='⁂-chat__messages'>
         <ShoutboxMessageList />
       </div>
 
@@ -80,6 +81,7 @@ const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className }) => {
         onSubmit={sendMessage}
         resetContentKey={resetContentKey}
         disabled={!createShoutboxMessage}
+        widget={widget}
       />
     </div>
   );

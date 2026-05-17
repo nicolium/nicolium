@@ -57,26 +57,26 @@ const messages = defineMessages({
   },
   folderRenameSuccess: {
     id: 'drive.folder.rename.success',
-    defaultMessage: 'Folder renamed successfully.',
+    defaultMessage: 'Folder renamed',
   },
   folderRenameError: {
     id: 'drive.folder.rename.error',
-    defaultMessage: 'Failed to rename folder.',
+    defaultMessage: 'Failed to rename folder',
   },
   folderMove: { id: 'drive.folder.move', defaultMessage: 'Move folder' },
   folderMoveSuccess: {
     id: 'drive.folder.move.success',
-    defaultMessage: 'Folder moved successfully.',
+    defaultMessage: 'Folder moved',
   },
-  folderMoveError: { id: 'drive.folder.move.error', defaultMessage: 'Failed to move folder.' },
+  folderMoveError: { id: 'drive.folder.move.error', defaultMessage: 'Failed to move folder' },
   folderDelete: { id: 'drive.folder.delete', defaultMessage: 'Delete folder' },
   folderDeleteSuccess: {
     id: 'drive.folder.delete.success',
-    defaultMessage: 'Folder deleted successfully.',
+    defaultMessage: 'Folder deleted',
   },
   folderDeleteError: {
     id: 'drive.folder.delete.error',
-    defaultMessage: 'Failed to delete folder.',
+    defaultMessage: 'Failed to delete folder',
   },
   fileDropdown: { id: 'drive.file.dropdown', defaultMessage: 'File menu' },
   fileView: { id: 'drive.file.view', defaultMessage: 'View file' },
@@ -85,62 +85,62 @@ const messages = defineMessages({
   fileRenamePlaceholder: { id: 'drive.file.rename.placeholder', defaultMessage: 'New file name' },
   fileRenameSuccess: {
     id: 'drive.file.rename.success',
-    defaultMessage: 'File renamed successfully.',
+    defaultMessage: 'File renamed',
   },
-  fileRenameError: { id: 'drive.file.rename.error', defaultMessage: 'Failed to rename file.' },
-  updateDescription: { id: 'drive.file.update_description', defaultMessage: 'Edit description' },
+  fileRenameError: { id: 'drive.file.rename.error', defaultMessage: 'Failed to rename file' },
+  updateDescription: { id: 'drive.file.update.description', defaultMessage: 'Edit description' },
   updateDescriptionPlaceholder: {
-    id: 'drive.file.update_description.placeholder',
+    id: 'drive.file.update.description.placeholder',
     defaultMessage: 'New description',
   },
   updateDescriptionSuccess: {
-    id: 'drive.file.update_description.success',
-    defaultMessage: 'Description updated successfully.',
+    id: 'drive.file.update.description.success',
+    defaultMessage: 'Description updated',
   },
   updateDescriptionError: {
-    id: 'drive.file.update_description.error',
-    defaultMessage: 'Failed to update description.',
+    id: 'drive.file.update.description.error',
+    defaultMessage: 'Failed to update description',
   },
   markSensitive: { id: 'drive.file.mark_sensitive', defaultMessage: 'Mark as sensitive' },
   markSensitiveSuccess: {
     id: 'drive.file.mark_sensitive.success',
-    defaultMessage: 'File marked as sensitive.',
+    defaultMessage: 'File marked as sensitive',
   },
   markSensitiveError: {
     id: 'drive.file.mark_sensitive.error',
-    defaultMessage: 'Failed to mark file as sensitive.',
+    defaultMessage: 'Failed to mark file as sensitive',
   },
   unmarkSensitive: { id: 'drive.file.unmark_sensitive', defaultMessage: 'Unmark as sensitive' },
   unmarkSensitiveSuccess: {
     id: 'drive.file.unmark_sensitive.success',
-    defaultMessage: 'File unmarked as sensitive.',
+    defaultMessage: 'File unmarked as sensitive',
   },
   unmarkSensitiveError: {
     id: 'drive.file.unmark_sensitive.error',
-    defaultMessage: 'Failed to unmark file as sensitive.',
+    defaultMessage: 'Failed to unmark file as sensitive',
   },
   fileMove: { id: 'drive.file.move', defaultMessage: 'Move file' },
-  fileMoveSuccess: { id: 'drive.file.move.success', defaultMessage: 'File moved successfully.' },
-  fileMoveError: { id: 'drive.file.move.error', defaultMessage: 'Failed to move file.' },
+  fileMoveSuccess: { id: 'drive.file.move.success', defaultMessage: 'File moved' },
+  fileMoveError: { id: 'drive.file.move.error', defaultMessage: 'Failed to move file' },
   fileDelete: { id: 'drive.file.delete', defaultMessage: 'Delete file' },
   fileDeleteSuccess: {
     id: 'drive.file.delete.success',
-    defaultMessage: 'File deleted successfully.',
+    defaultMessage: 'File deleted',
   },
-  fileDeleteError: { id: 'drive.file.delete.error', defaultMessage: 'Failed to delete file.' },
+  fileDeleteError: { id: 'drive.file.delete.error', defaultMessage: 'Failed to delete file' },
   fileUpload: { id: 'drive.file.upload', defaultMessage: 'Upload file' },
   fileUploadSuccess: {
     id: 'drive.file.upload.success',
-    defaultMessage: 'File uploaded successfully.',
+    defaultMessage: 'File uploaded',
   },
-  fileUploadError: { id: 'drive.file.upload.error', defaultMessage: 'Failed to upload file.' },
+  fileUploadError: { id: 'drive.file.upload.error', defaultMessage: 'Failed to upload file' },
   newFolder: { id: 'drive.folder.new', defaultMessage: 'New folder' },
   newFolderPlaceholder: { id: 'drive.folder.new.placeholder', defaultMessage: 'Folder name' },
   newFolderSuccess: {
     id: 'drive.folder.new.success',
-    defaultMessage: 'Folder created successfully.',
+    defaultMessage: 'Folder created',
   },
-  newFolderError: { id: 'drive.folder.new.error', defaultMessage: 'Failed to create folder.' },
+  newFolderError: { id: 'drive.folder.new.error', defaultMessage: 'Failed to create folder' },
   home: { id: 'drive.breadcrumbs.home', defaultMessage: 'Home' },
 });
 
@@ -366,11 +366,11 @@ const File: React.FC<IFile> = ({ file, index, onMove }) => {
     const handleUpdateDescription = () => {
       openModal('TEXT_FIELD', {
         heading: (
-          <FormattedMessage id='drive.file.update_description' defaultMessage='Edit description' />
+          <FormattedMessage id='drive.file.update.description' defaultMessage='Edit description' />
         ),
         placeholder: intl.formatMessage(messages.updateDescriptionPlaceholder),
         confirm: (
-          <FormattedMessage id='drive.file.update_description.confirm' defaultMessage='Save' />
+          <FormattedMessage id='drive.file.update.description.confirm' defaultMessage='Save' />
         ),
         text: file.description ?? '',
         onConfirm: (value: string) => {

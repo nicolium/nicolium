@@ -7,7 +7,7 @@ import iconX from '@phosphor-icons/core/regular/x.svg';
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type RefCallback, useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import Audio from '@/components/media/audio';
@@ -21,7 +21,6 @@ import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Thread from '@/features/status/components/thread';
 import { useStatus } from '@/queries/statuses/use-status';
-import { userTouching } from '@/utils/is-mobile';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { MediaAttachment } from 'pl-api';
@@ -48,9 +47,9 @@ interface MediaModalProps {
 }
 
 const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
-  const { statusId, time = 0 } = props;
+  const { lang, statusId, time = 0 } = props;
 
-  const onClose = () => props.onClose('MEDIA');
+  const onClose = useCallback(() => props.onClose('MEDIA'), [props.onClose]);
 
   const intl = useIntl();
 
@@ -61,6 +60,10 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   const [zoomedIn, setZoomedIn] = useState(false);
   const [navigationHidden, setNavigationHidden] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(!status);
+  const [viewportDimensions, setViewportDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
 
   const [wrapperStyles, api] = useSpring(
     () => ({
@@ -91,38 +94,33 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     handleChangeIndex(index + 1, true);
   }, [handleChangeIndex, index]);
 
-  // const [viewportDimensions, setViewportDimensions] = useState<{
-  //     width: number;
-  //     height: number;
-  //   }>({ width: 0, height: 0 });
-
-  // const handleRef: RefCallback<HTMLDivElement> = useCallback((ele) => {
-  //   if (ele?.clientWidth && ele.clientHeight) {
-  //     setViewportDimensions({
-  //       width: ele.clientWidth,
-  //       height: ele.clientHeight,
-  //     });
-  //   }
-  // }, []);
+  const handleRef: RefCallback<HTMLDivElement> = useCallback((ele) => {
+    if (ele?.clientWidth && ele.clientHeight) {
+      setViewportDimensions({
+        width: ele.clientWidth,
+        height: ele.clientHeight,
+      });
+    }
+  }, []);
 
   const hasMultipleImages = media.length > 1;
 
   const navigationHiddenClassName = navigationHidden ? 'pointer-events-none opacity-0' : '';
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case 'ArrowLeft':
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
         handlePrevClick();
         e.preventDefault();
         e.stopPropagation();
-        break;
-      case 'ArrowRight':
+      } else if (e.key === 'ArrowRight') {
         handleNextClick();
         e.preventDefault();
         e.stopPropagation();
-        break;
-    }
-  };
+      }
+    },
+    [handleNextClick, handlePrevClick],
+  );
 
   const bind = useDrag(
     ({ active, movement: [mx], direction: [xDir], cancel, event }) => {
@@ -158,15 +156,19 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     window.open(mediaItem?.url);
   };
 
-  const toggleNavigation = () => {
-    setNavigationHidden((value) => !value && userTouching.matches);
-  };
+  const toggleNavigation = useCallback(() => {
+    setNavigationHidden((value) => !value);
+  }, []);
 
-  // const currentMedia = media[index];
+  const currentMedia = media[index];
 
-  // const zoomable =
-  //     currentMedia.type === 'image' && currentMedia.meta.original &&
-  //     (currentMedia.meta.original.width > viewportDimensions.width || currentMedia.meta.original.height > viewportDimensions.height);
+  const zoomable =
+    currentMedia?.type === 'image' &&
+    currentMedia.meta.original &&
+    viewportDimensions.width > 0 &&
+    viewportDimensions.height > 0 &&
+    (currentMedia.meta.original.width > viewportDimensions.width ||
+      currentMedia.meta.original.height > viewportDimensions.height);
 
   const handleZoomClick = useCallback(() => {
     setZoomedIn((prev) => !prev);
@@ -199,7 +201,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
               width={width!}
               height={height!}
               alt={attachment.description}
-              lang={props.lang}
+              lang={lang}
               key={attachment.url}
               onClick={toggleNavigation}
               onDoubleClick={handleZoomClick}
@@ -259,7 +261,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
         return null;
       }),
-    [media.length, index, zoomedIn, handleZoomClick],
+    [handleZoomClick, index, lang, media, onClose, status, time, toggleNavigation, zoomedIn],
   );
 
   useEffect(() => {
@@ -268,7 +270,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [index]);
+  }, [handleKeyDown]);
 
   const handleClickOutside: React.MouseEventHandler<HTMLElement> = (e) => {
     if ((e.target as HTMLElement).tagName === 'DIV') {
@@ -285,7 +287,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         {...bind()}
         onClick={handleClickOutside}
         className='⁂-media-modal__content'
-        // ref={handleRef}
+        ref={handleRef}
       >
         <animated.div
           style={wrapperStyles}
@@ -317,16 +319,16 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             />
 
             <div className='flex items-center gap-2'>
-              {/* {zoomable && (
+              {zoomable && (
                 <IconButton
                   title={intl.formatMessage(zoomedIn ? messages.zoomOut : messages.zoomIn)}
-                  src={zoomedIn ? iconMagnifyingGlassMinus : iconMagnifyingGlassPlus}
+                  src={zoomedIn ? iconArrowsInSimple : iconArrowsOutSimple}
                   theme='dark'
                   className='!p-1.5 hover:scale-105 hover:bg-gray-900'
                   iconClassName='h-5 w-5'
                   onClick={handleZoomClick}
                 />
-              )} */}
+              )}
 
               <IconButton
                 title={intl.formatMessage(messages.download)}

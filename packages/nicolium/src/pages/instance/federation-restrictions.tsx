@@ -43,7 +43,7 @@ const FederationRestrictionsPage = () => {
     />
   ) : (
     <FormattedMessage
-      id='federation_restrictions.not_disclosed_message'
+      id='federation_restrictions.not_disclosed.message'
       defaultMessage='{siteTitle} does not disclose federation restrictions through the API.'
       values={{ siteTitle: instance.title }}
     />

@@ -52,13 +52,26 @@ import Search from './list-editor-modal/components/search';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
-  createSuccess: { id: 'antennas.create.success', defaultMessage: 'Antenna created successfully' },
-  editSuccess: { id: 'antennas.edit.success', defaultMessage: 'Antenna updated successfully' },
-  createError: { id: 'antennas.create.error', defaultMessage: 'Error creating antenna' },
-  editError: { id: 'antennas.edit.error', defaultMessage: 'Error updating antenna' },
+  createSuccess: { id: 'antennas.create.success', defaultMessage: 'Antenna created' },
+  editSuccess: { id: 'antennas.edit.success', defaultMessage: 'Antenna updated' },
+  createError: { id: 'antennas.create.error', defaultMessage: 'Failed to create antenna' },
+  editError: { id: 'antennas.edit.error', defaultMessage: 'Failed to create antenna' },
   removeDomain: { id: 'antennas.domain.remove', defaultMessage: 'Remove domain' },
   removeKeyword: { id: 'antennas.keyword.remove', defaultMessage: 'Remove keyword' },
   removeTag: { id: 'antennas.tag.remove', defaultMessage: 'Remove tag' },
+  modeStl: { id: 'antennas.edit.mode.stl', defaultMessage: 'Social timeline mode' },
+  modeLtl: { id: 'antennas.edit.mode.ltl', defaultMessage: 'Local timeline mode' },
+  modeFiltering: { id: 'antennas.edit.mode.filtering', defaultMessage: 'Filtering' },
+  destinationHome: {
+    id: 'antennas.edit.destination.home',
+    defaultMessage: 'Insert to home timeline',
+  },
+  destinationList: { id: 'antennas.edit.destination.list', defaultMessage: 'Insert to list' },
+  destinationAntenna: {
+    id: 'antennas.edit.destination.antenna',
+    defaultMessage: 'Antenna timeline only',
+  },
+  listPlaceholder: { id: 'antennas.edit.list.select', defaultMessage: 'Select list' },
 });
 
 type Tab = 'info' | 'accounts' | 'excludedAccounts' | 'domains' | 'keywords' | 'tags';
@@ -104,27 +117,27 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
   };
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='⁂-list-members-modal__form__container'>
       {selectedAccountIds.length > 0 ? (
-        <div className='min-h-24'>
+        <div className='⁂-list-members-modal__form'>
           <CardHeader>
             <CardTitle
               title={
                 excluded ? (
                   <FormattedMessage
-                    id='antennas.account.excluded.remove'
-                    defaultMessage='Remove from excluded accounts'
+                    id='antennas.account.excluded.list'
+                    defaultMessage='Excluded accounts list'
                   />
                 ) : (
                   <FormattedMessage
-                    id='antennas.account.remove'
-                    defaultMessage='Remove from antenna'
+                    id='antennas.account.list'
+                    defaultMessage='Antenna members list'
                   />
                 )
               }
             />
           </CardHeader>
-          <div className='max-h-48 overflow-y-auto'>
+          <div className='⁂-list-members-modal__form__accounts'>
             {selectedAccountIds.map((accountId) => (
               <Account
                 key={accountId}
@@ -137,11 +150,11 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
           </div>
         </div>
       ) : (excluded ? isFetchingExcludedAccounts : isFetchingAccounts) ? (
-        <div className='flex min-h-24 items-center justify-center'>
+        <div className='⁂-list-members-modal__form__pending'>
           <Spinner />
         </div>
       ) : (
-        <div className='flex min-h-24 items-center justify-center'>
+        <div className='⁂-list-members-modal__form__pending'>
           <Text theme='muted' size='sm' align='center'>
             {excluded ? (
               <FormattedMessage
@@ -174,7 +187,7 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
           />
         </CardHeader>
         <Search value={searchValue} onSubmit={setSearchValue} />
-        <div className='max-h-48 overflow-y-auto'>
+        <div className='⁂-list-members-modal__form__accounts'>
           {searchAccountIds.map((accountId) => (
             <Account
               key={accountId}
@@ -247,13 +260,13 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
   };
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='⁂-list-members-modal__form__container'>
       {values.length > 0 ? (
         <div>
           <CardHeader>
             <CardTitle title={listTitle} />
           </CardHeader>
-          <div className='max-h-48 overflow-y-auto'>
+          <div className='⁂-list-members-modal__form__accounts'>
             {values.map((item) => (
               <div key={item} className='flex items-center justify-between gap-2 p-2.5'>
                 <Text>{item}</Text>
@@ -269,11 +282,11 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           </div>
         </div>
       ) : isFetching ? (
-        <div className='flex min-h-24 items-center justify-center'>
+        <div className='⁂-list-members-modal__form__pending'>
           <Spinner />
         </div>
       ) : (
-        <div className='flex min-h-24 items-center justify-center'>
+        <div className='⁂-list-members-modal__form__pending'>
           <Text theme='muted' size='sm' align='center'>
             {emptyValues}
           </Text>
@@ -302,7 +315,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           <CardHeader>
             <CardTitle title={listExcludedTitle} />
           </CardHeader>
-          <div className='max-h-48 overflow-y-auto'>
+          <div className='⁂-list-members-modal__form__accounts'>
             {excludedValues.map((item) => (
               <div key={item} className='flex items-center justify-between gap-2 p-2.5'>
                 <Text>{item}</Text>
@@ -318,11 +331,11 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           </div>
         </div>
       ) : isFetching ? (
-        <div className='flex min-h-24 items-center justify-center'>
+        <div className='⁂-list-members-modal__form__pending'>
           <Spinner />
         </div>
       ) : (
-        <div className='flex min-h-24 items-center justify-center'>
+        <div className='⁂-list-members-modal__form__pending'>
           <Text theme='muted' size='sm' align='center'>
             {emptyExcludedValues}
           </Text>
@@ -557,18 +570,9 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
       <FormGroup labelText={<FormattedMessage id='antennas.edit.mode' defaultMessage='Mode' />}>
         <SelectDropdown
           items={{
-            stl: intl.formatMessage({
-              id: 'antennas.edit.mode.stl',
-              defaultMessage: 'Social timeline mode',
-            }),
-            ltl: intl.formatMessage({
-              id: 'antennas.edit.mode.ltl',
-              defaultMessage: 'Local timeline mode',
-            }),
-            filtering: intl.formatMessage({
-              id: 'antennas.edit.mode.filtering',
-              defaultMessage: 'Filtering',
-            }),
+            stl: intl.formatMessage(messages.modeStl),
+            ltl: intl.formatMessage(messages.modeLtl),
+            filtering: intl.formatMessage(messages.modeFiltering),
           }}
           defaultValue={stl ? 'stl' : ltl ? 'ltl' : 'filtering'}
           onChange={(e) => {
@@ -583,18 +587,9 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
       >
         <SelectDropdown
           items={{
-            home: intl.formatMessage({
-              id: 'antennas.edit.destination.home',
-              defaultMessage: 'Insert to home timeline',
-            }),
-            list: intl.formatMessage({
-              id: 'antennas.edit.destination.list',
-              defaultMessage: 'Insert to list',
-            }),
-            antenna: intl.formatMessage({
-              id: 'antennas.edit.destination.antenna',
-              defaultMessage: 'Antenna timeline only',
-            }),
+            home: intl.formatMessage(messages.destinationHome),
+            list: intl.formatMessage(messages.destinationList),
+            antenna: intl.formatMessage(messages.destinationAntenna),
           }}
           defaultValue={insertFeeds ? 'home' : listId ? 'list' : 'antenna'}
           onChange={(e) => {
@@ -621,10 +616,7 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
                       return acc;
                     },
                     {
-                      '': intl.formatMessage({
-                        id: 'antennas.edit.list.select',
-                        defaultMessage: 'Select list',
-                      }),
+                      '': intl.formatMessage(messages.listPlaceholder),
                     } as Record<string, string>,
                   )
                 : {}
@@ -650,23 +642,23 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
         </ListItem>
         <ListItem
           label={
-            <FormattedMessage id='antennas.edit.ignore_reblogs' defaultMessage='Ignore reblogs' />
+            <FormattedMessage id='antennas.edit.ignore_reblogs' defaultMessage='Ignore reposts' />
           }
           hint={
             <FormattedMessage
               id='antennas.edit.ignore_reblogs.hint'
-              defaultMessage='Reblogs will not be included in the antenna'
+              defaultMessage='Reposts will not be included in the antenna'
             />
           }
         >
           <Toggle checked={ignoreReblog} onChange={(e) => setIgnoreReblog(e.target.checked)} />
         </ListItem>
         <ListItem
-          label={<FormattedMessage id='antennas.edit.favourite' defaultMessage='Favourite' />}
+          label={<FormattedMessage id='antennas.edit.favourite' defaultMessage='Favorite' />}
           hint={
             <FormattedMessage
               id='antennas.edit.favourite.hint'
-              defaultMessage='The antenna will be marked as favourite (not used by Nicolium yet)'
+              defaultMessage='The antenna will be marked as favorite (not used by Nicolium yet)'
             />
           }
         >

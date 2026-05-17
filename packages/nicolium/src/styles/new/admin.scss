@@ -258,3 +258,146 @@
     }
   }
 }
+
+.⁂-domain-blocks,
+.⁂-domain-allows {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: secondary);
+    }
+  }
+
+  &__form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.⁂-domain-allow, .⁂-domain-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+
+  background: rgb(var(--color-gray-100));
+
+  .dark & {
+    background: rgb(var(--color-primary-800));
+  }
+
+  &__container {
+    padding-bottom: 1.5rem;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  &__domain {
+    @include mixins.text;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    li {
+      @include mixins.text($weight: bold);
+    }
+  }
+
+  &__comment {
+    @include mixins.text;
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: primary);
+
+      &:last-child {
+        @include mixins.button($theme: danger);
+      }
+    }
+  }
+}
+
+.⁂-measure {
+  display: flex;
+  gap: 0.625rem;
+  align-items: end;
+  justify-content: center;
+
+  padding: 1rem 1.25rem 0.5rem;
+
+  line-height: 33px;
+
+  &__container {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    border-radius: var(--radius-md);
+
+    font-weight: medium;
+
+    background: rgb(var(--color-gray-200));
+
+    .dark & {
+      background: rgb(var(--color-gray-800));
+    }
+  }
+
+  &__total {
+    @include mixins.text($align: center, $size: 2xl, $weight: medium);
+  }
+
+  &__previous {
+    font-size: var(--text-lg);
+    line-height: var(--leading-lg);
+    color: rgb(var(--color-green-600));
+
+    &--negative {
+      color: rgb(var(--color-danger-600));
+    }
+  }
+
+  &__label {
+    @include mixins.text($align: center);
+  }
+
+  &__sparklines {
+    margin-top: auto;
+  }
+}
+
+a.⁂-measure__container {
+  transition: transform 0.15s ease-in-out;
+
+  &:hover {
+    transform: translateY(-0.25rem);
+  }
+}
