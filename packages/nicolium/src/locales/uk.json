@@ -365,7 +365,6 @@
   "status.chat": "Chat with @{name}",
   "status.copy": "Копіювати посилання до статусу",
   "status.delete": "Видалити",
-  "status.detailed_status": "Детальний вигляд бесіди",
   "status.direct": "Пряме повідомлення до @{name}",
   "status.embed": "Вбудувати",
   "status.external": "View post on {domain}",
