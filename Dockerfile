@@ -14,9 +14,7 @@ COPY ./package.json .
 
 COPY ./packages ./packages
 
-RUN pnpm install
-
-RUN pnpm install
+RUN pnpm install --ignore-scripts
 
 RUN pnpm -F pl-api build
 
