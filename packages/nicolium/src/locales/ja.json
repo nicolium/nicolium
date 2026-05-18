@@ -181,7 +181,7 @@
   "bundle_column_error.retry": "やり直す",
   "bundle_column_error.title": "ネットワークエラー",
   "chat.actions.send": "送信",
-  "chat.failed_to_send": "メッセージの送信に失敗しました。",
+  "chat.actions.send.error": "メッセージの送信に失敗しました。",
   "chat.input.placeholder": "メッセージを入力",
   "chat.new_message.title": "新しいメッセージ",
   "chat.page_settings.accepting_messages.label": "ユーザーがあなたと新しいチャットを開始することを許可する",

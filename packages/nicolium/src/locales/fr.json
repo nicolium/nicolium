@@ -425,7 +425,7 @@
   "card.back.label": "Retour",
   "chat.actions.remove_attachment": "Supprimer le ou les fichiers attachés",
   "chat.actions.send": "Envoyer",
-  "chat.failed_to_send": "L’envoi du message a échoué.",
+  "chat.actions.send.error": "L’envoi du message a échoué.",
   "chat.input.placeholder": "Écrire un message",
   "chat.new_message.title": "Nouveau message",
   "chat.page_settings.accepting_messages.label": "Permettre aux autres de commencer une discussion avec vous",

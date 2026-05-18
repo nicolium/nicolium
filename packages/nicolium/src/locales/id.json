@@ -185,7 +185,7 @@
   "bundle_column_error.title": "Kesalahan jaringan",
   "card.back.label": "Kembali",
   "chat.actions.send": "Kirim",
-  "chat.failed_to_send": "Pesan gagal terkirim.",
+  "chat.actions.send.error": "Pesan gagal terkirim.",
   "chat.input.placeholder": "Ketik pesan",
   "chat.new_message.title": "Pesan Baru",
   "chat.page_settings.accepting_messages.label": "Izinkan pengguna memulai obrolan baru dengan Anda",

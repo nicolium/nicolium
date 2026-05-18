@@ -156,7 +156,7 @@
   "boost_modal.title": "Ponovi?",
   "card.back.label": "Nazad",
   "chat.actions.send": "Pošalji",
-  "chat.failed_to_send": "Slanje poruke nije uspjelo.",
+  "chat.actions.send.error": "Slanje poruke nije uspjelo.",
   "chat.input.placeholder": "Unesite poruku",
   "chat.new_message.title": "Nova poruka",
   "chat.page_settings.accepting_messages.label": "Dozvolite korisnicima da započnu novi razgovor s vama",

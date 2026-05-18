@@ -185,7 +185,7 @@
   "bundle_column_error.title": "網路錯誤",
   "card.back.label": "返回",
   "chat.actions.send": "送出",
-  "chat.failed_to_send": "訊息發送失敗。",
+  "chat.actions.send.error": "訊息發送失敗。",
   "chat.input.placeholder": "輸入訊息",
   "chat.new_message.title": "新的訊息",
   "chat.page_settings.accepting_messages.label": "允許其他使用者與您開始新的聊天",

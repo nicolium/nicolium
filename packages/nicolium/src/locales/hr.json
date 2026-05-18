@@ -157,7 +157,7 @@
   "boost_modal.title": "Proslijedi objavu?",
   "card.back.label": "Natrag",
   "chat.actions.send": "Pošalji",
-  "chat.failed_to_send": "Slanje poruke nije uspjelo.",
+  "chat.actions.send.error": "Slanje poruke nije uspjelo.",
   "chat.input.placeholder": "Upišite poruku",
   "chat.new_message.title": "Nova poruka",
   "chat.page_settings.accepting_messages.label": "Dopustite korisnicima da započnu novi razgovor s vama",

@@ -21,7 +21,7 @@ const messages = defineMessages({
   },
   moveAccountFail: {
     id: 'migration.move_account.fail',
-    defaultMessage: 'Account migration failed.',
+    defaultMessage: 'Failed to migrate account',
   },
   moveAccountFailCooldownPeriod: {
     id: 'migration.move_account.fail.cooldown_period',

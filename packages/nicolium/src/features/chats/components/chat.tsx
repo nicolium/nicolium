@@ -16,7 +16,7 @@ import type { Chat as ChatEntity, MediaAttachment } from 'pl-api';
 const fileKeyGen = (): number => Math.floor(Math.random() * 0x10000);
 
 const messages = defineMessages({
-  failedToSend: { id: 'chat.failed_to_send', defaultMessage: 'Message failed to send.' },
+  failedToSend: { id: 'chat.actions.send.error', defaultMessage: 'Failed to send message' },
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
 });
 

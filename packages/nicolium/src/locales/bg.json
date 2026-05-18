@@ -181,7 +181,7 @@
   "bundle_column_error.title": "Мрежова грешка",
   "card.back.label": "Назад",
   "chat.actions.send": "Изпращане",
-  "chat.failed_to_send": "Съобщението не можа да бъде изпратено.",
+  "chat.actions.send.error": "Съобщението не можа да бъде изпратено.",
   "chat.input.placeholder": "Напишете съобщение",
   "chat.new_message.title": "Ново съобщение",
   "chat.page_settings.accepting_messages.label": "Разрешаване на потребителите да започват нов чат с вас",

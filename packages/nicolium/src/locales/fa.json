@@ -579,7 +579,7 @@
   "migration.hint": "This will move your followers to the new account. No other data will be moved. To perform migration, you need to {link} on your new account first.",
   "migration.hint.cooldown_period": "If you migrate your account, you will not be able to migrate your account for {cooldownPeriod, plural, one {one day} other {the next # days}}.",
   "migration.hint.link": "create an account alias",
-  "migration.move_account.fail": "Account migration failed.",
+  "migration.move_account.fail": "Failed to migrate account",
   "migration.move_account.fail.cooldown_period": "You have moved your account too recently. Please try again later.",
   "migration.move_account.success": "Account moved",
   "migration.submit": "Move followers",

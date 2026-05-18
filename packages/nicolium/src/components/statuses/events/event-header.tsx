@@ -78,6 +78,8 @@ const messages = defineMessages({
     id: 'status.copy_content.success',
     defaultMessage: 'Post content copied to clipboard',
   },
+  deleteSuccess: { id: 'event.delete.success', defaultMessage: 'Event deleted' },
+  deleteError: { id: 'event.delete.error', defaultMessage: 'Failed to delete event' },
   external: { id: 'event.external', defaultMessage: 'View event on {domain}' },
   bookmark: { id: 'status.bookmark', defaultMessage: 'Bookmark' },
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
@@ -257,7 +259,11 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         />
       ),
       confirm: <FormattedMessage id='confirmations.delete_event.confirm' defaultMessage='Delete' />,
-      onConfirm: () => deleteStatus(undefined),
+      onConfirm: () =>
+        deleteStatus(undefined, {
+          onSuccess: () => toast.success(messages.deleteSuccess),
+          onError: () => toast.error(messages.deleteError),
+        }),
     });
   };
 

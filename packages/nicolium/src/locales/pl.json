@@ -478,7 +478,7 @@
   "card.back.label": "Wstecz",
   "chat.actions.remove_attachment": "Usuń załącznik",
   "chat.actions.send": "Wyślij",
-  "chat.failed_to_send": "Nie udało się wysłać wiadomości.",
+  "chat.actions.send.error": "Nie udało się wysłać wiadomości.",
   "chat.input.placeholder": "Wprowadź wiadomość",
   "chat.new_message.title": "Nowa wiadomość",
   "chat.page_settings.accepting_messages.label": "Pozwól innym użytkownikom zacząć rozmowę z Tobą",

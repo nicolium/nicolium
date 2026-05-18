@@ -139,6 +139,7 @@ const messages = defineMessages({
   },
   delete: { id: 'status.delete', defaultMessage: 'Delete' },
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
+  deleteError: { id: 'status.delete.error', defaultMessage: 'Failed to delete post' },
   deleteFromGroupMessage: {
     id: 'confirmations.delete_from_group.message',
     defaultMessage: "Are you sure you want to delete @{name}'s post?",
@@ -149,6 +150,7 @@ const messages = defineMessages({
     defaultMessage: 'Are you sure you want to delete this post?',
   },
   deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
+  deleteSuccess: { id: 'status.delete.success', defaultMessage: 'Post deleted' },
   deleteUser: { id: 'admin.users.actions.delete_user', defaultMessage: 'Delete @{name}' },
   direct: { id: 'status.direct', defaultMessage: 'Direct message @{name}' },
   disfavourite: { id: 'status.disfavourite', defaultMessage: 'Dislike' },
@@ -1272,8 +1274,13 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const doDeleteStatus = (withRedraft = false) => {
+      const options = {
+        onSuccess: () => toast.success(messages.deleteSuccess),
+        onError: () => toast.error(messages.deleteError),
+      };
+
       if (!deleteModal) {
-        deleteStatus(withRedraft);
+        deleteStatus(withRedraft, options);
       } else {
         openModal('CONFIRM', {
           heading: intl.formatMessage(
@@ -1285,7 +1292,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           confirm: intl.formatMessage(
             withRedraft ? messages.redraftConfirm : messages.deleteConfirm,
           ),
-          onConfirm: () => deleteStatus(withRedraft),
+          onConfirm: () => deleteStatus(withRedraft, options),
         });
       }
     };

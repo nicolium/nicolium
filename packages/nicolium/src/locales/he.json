@@ -180,7 +180,7 @@
   "boost_modal.title": "Repost?",
   "card.back.label": "Back",
   "chat.actions.send": "שלח",
-  "chat.failed_to_send": "שליחת ההודעה נכשלה.",
+  "chat.actions.send.error": "שליחת ההודעה נכשלה.",
   "chat.input.placeholder": "הקלד הודעה",
   "chat.new_message.title": "הודעה חדשה",
   "chat.page_settings.accepting_messages.label": "אפשר לאחרים להתחיל שיחה איתך",
