@@ -569,7 +569,7 @@
   "edit_federation.success": "{host} federation was updated",
   "edit_federation.unlisted": "Force posts unlisted",
   "edit_password.header": "Change Password",
-  "edit_profile.error": "Profile update failed",
+  "edit_profile.error": "Failed to update profile",
   "edit_profile.fields.bio.label": "Описание профиля",
   "edit_profile.fields.bio.placeholder": "Tell us about yourself.",
   "edit_profile.fields.birthday.label": "Birthday",
