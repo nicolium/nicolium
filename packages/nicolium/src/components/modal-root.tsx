@@ -8,6 +8,7 @@ import { usePrevious } from '@/hooks/use-previous';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { useComposeStore } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 import type { ModalType } from '@/features/ui/components/modal-root';
 import type { Compose } from '@/stores/compose';
@@ -16,6 +17,8 @@ const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
   cancelEditing: { id: 'confirmations.cancel_editing.confirm', defaultMessage: 'Cancel editing' },
   saveDraft: { id: 'confirmations.cancel_editing.save_draft', defaultMessage: 'Save draft' },
+  draftSaved: { id: 'compose_form.save_draft.success', defaultMessage: 'Draft saved' },
+  view: { id: 'toast.view', defaultMessage: 'View' },
 });
 
 const checkComposeContent = (compose?: Compose) =>
@@ -109,7 +112,12 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
         onSecondary: isEditing
           ? undefined
           : () => {
-              persistDraftStatus('compose-modal');
+              persistDraftStatus('compose-modal').then(() => {
+                toast.success(messages.draftSaved, {
+                  actionLabel: messages.view,
+                  actionLinkOptions: { to: '/draft_statuses' },
+                });
+              });
               onClose('COMPOSE');
               actions.resetCompose('compose-modal');
             },

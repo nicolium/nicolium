@@ -9,6 +9,7 @@ import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { useCompose, useComposeActions, useUploadCompose } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
@@ -16,6 +17,8 @@ const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
   cancelEditing: { id: 'confirmations.cancel_editing.confirm', defaultMessage: 'Cancel editing' },
   saveDraft: { id: 'confirmations.cancel_editing.save_draft', defaultMessage: 'Save draft' },
+  draftSaved: { id: 'compose_form.save_draft.success', defaultMessage: 'Draft saved' },
+  view: { id: 'toast.view', defaultMessage: 'View' },
 });
 
 interface ComposeModalProps {
@@ -81,7 +84,12 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
         onSecondary: editedId
           ? undefined
           : () => {
-              persistDraftStatus(composeId);
+              persistDraftStatus(composeId).then(() => {
+                toast.success(messages.draftSaved, {
+                  actionLabel: messages.view,
+                  actionLinkOptions: { to: '/draft_statuses' },
+                });
+              });
               onClose('COMPOSE');
               resetCompose('compose-modal');
             },
