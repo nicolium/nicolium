@@ -1234,6 +1234,32 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
       display: none;
     }
   }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &__details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+      align-items: center;
+    }
+
+    button {
+      color: rgb(var(--color-gray-600));
+      text-decoration: underline;
+    }
+
+    span {
+      @include mixins.text($theme: muted, $weight: medium);
+    }
+  }
+
+  &__submit-button {
+    @include mixins.button($theme: primary, $block: true);
+  }
 }
 
 .⁂-poll-preview {

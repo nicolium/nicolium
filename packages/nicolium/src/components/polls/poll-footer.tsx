@@ -1,8 +1,6 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
-import Text from '@/components/ui/text';
 import Tooltip from '@/components/ui/tooltip';
 import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
 import { useStatusMetaActions } from '@/stores/status-meta';
@@ -74,20 +72,20 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
   }
 
   return (
-    <div className='flex flex-col gap-4' data-testid='poll-footer'>
+    <div className='⁂-poll__footer' data-testid='poll-footer'>
       {!showResults && poll.multiple && (
-        <Button onClick={handleVote} theme='primary' block>
+        <button className='⁂-poll__submit-button' onClick={handleVote}>
           <FormattedMessage id='poll.vote' defaultMessage='Submit vote' />
-        </Button>
+        </button>
       )}
 
-      <div className='flex flex-wrap items-center gap-1.5'>
+      <div className='⁂-poll__footer__details'>
         {poll.non_anonymous && (
           <>
             <Tooltip text={intl.formatMessage(messages.nonAnonymous)}>
-              <Text theme='muted' weight='medium'>
+              <span>
                 <FormattedMessage id='poll.non_anonymous' defaultMessage='Public poll' />
-              </Text>
+              </span>
             </Tooltip>
 
             <span className='⁂-separator' />
@@ -96,14 +94,10 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
 
         {showResults && (
           <>
-            <button
-              className='text-gray-600 underline'
-              onClick={handleRefresh}
-              data-testid='poll-refresh'
-            >
-              <Text theme='muted' weight='medium'>
+            <button onClick={handleRefresh} data-testid='poll-refresh'>
+              <span>
                 <FormattedMessage id='poll.refresh' defaultMessage='Refresh' />
-              </Text>
+              </span>
             </button>
 
             <span className='⁂-separator' />
@@ -113,35 +107,30 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
         {!poll.voted && !poll.expired && (
           <>
             <button
-              className='text-gray-600 underline'
               onClick={() => {
                 toggleShowPollResults(statusId);
               }}
               data-testid='poll-refresh'
             >
-              <Text theme='muted' weight='medium'>
+              <span>
                 {showResults ? (
                   <FormattedMessage id='poll.hide_results' defaultMessage='Hide results' />
                 ) : (
                   <FormattedMessage id='poll.show_results' defaultMessage='Show results' />
                 )}
-              </Text>
+              </span>
             </button>
 
             <span className='⁂-separator' />
           </>
         )}
 
-        <Text theme='muted' weight='medium'>
-          {votesCount}
-        </Text>
+        <span>{votesCount}</span>
 
         {poll.expires_at !== null && (
           <>
             <span className='⁂-separator' />
-            <Text weight='medium' theme='muted' data-testid='poll-expiration'>
-              {timeRemaining}
-            </Text>
+            <span data-testid='poll-expiration'>{timeRemaining}</span>
           </>
         )}
       </div>
