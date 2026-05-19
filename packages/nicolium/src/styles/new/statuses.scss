@@ -1235,3 +1235,9 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
     }
   }
 }
+
+.⁂-poll-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
