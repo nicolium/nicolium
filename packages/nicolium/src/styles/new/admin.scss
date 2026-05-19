@@ -455,7 +455,7 @@ a.⁂-measure__container {
       justify-content: end;
     }
 
-    @media (min-width: variables.$breakpoints-md) {
+    @media (min-width: variables.$breakpoint-md) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
@@ -471,7 +471,7 @@ a.⁂-measure__container {
       gap: 0.5rem;
 
       > p {
-        @include mixins.text($size: md, weight: medium);
+        @include mixins.text($size: md, $weight: medium);
       }
     }
   }
