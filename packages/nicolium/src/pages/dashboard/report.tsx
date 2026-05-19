@@ -10,11 +10,9 @@ import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
 import ReactSwipeableViews from '@/components/react-swipeable-views';
 import StatusContainer from '@/components/statuses/status-container';
-import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { useFeatures } from '@/hooks/use-features';
 import {
@@ -70,35 +68,33 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
   }
 
   return (
-    <div className='relative -mx-1'>
+    <div className='⁂-report-page__statuses'>
       {index !== 0 && (
-        <div className='absolute left-0 top-1/2 z-10 -mt-4'>
+        <div className='⁂-report-page__statuses__arrow ⁂-report-page__statuses__arrow--left'>
           <button
             onClick={() => {
               handleChangeIndex(index - 1);
             }}
-            className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon src={iconCaretLeft} className='size-6 text-black dark:text-white' />
+            <Icon src={iconCaretLeft} />
           </button>
         </div>
       )}
       <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
         {statusIds.map((statusId) => (
-          <div className='w-full' key={statusId}>
+          <div className='⁂-report-page__statuses__status' key={statusId}>
             <StatusContainer id={statusId} />
           </div>
         ))}
       </ReactSwipeableViews>
       {index !== statusIds.length - 1 && (
-        <div className='absolute right-0 top-1/2 z-10 -mt-4'>
+        <div className='⁂-report-page__statuses__arrow ⁂-report-page__statuses__arrow--right'>
           <button
             onClick={() => {
               handleChangeIndex(index + 1);
             }}
-            className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon src={iconCaretRight} className='size-6 text-black dark:text-white' />
+            <Icon src={iconCaretRight} />
           </button>
         </div>
       )}
@@ -194,133 +190,106 @@ const ReportPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.columnHeading, { id: reportId })}>
-      <div className='mb-4 grid grid-cols-1 gap-2 md:grid-cols-2'>
+      <div className='⁂-report-page__summary'>
         {report.target_account && (
           <Link
             to='/nicolium/admin/accounts/$accountId'
             params={{ accountId: report.target_account_id }}
-            className='h-fit'
+            className='⁂-report-page__account'
           >
-            <Card variant='rounded'>
-              <div className='flex flex-col gap-2'>
-                <Text size='md' weight='medium'>
-                  <FormattedMessage
-                    id='admin.report.target_account'
-                    defaultMessage='Reported account'
-                  />
-                </Text>
-                <Account account={report.target_account} disabled hideActions />
-              </div>
-            </Card>
+            <div className='⁂-report-page__account__card'>
+              <p>
+                <FormattedMessage
+                  id='admin.report.target_account'
+                  defaultMessage='Reported account'
+                />
+              </p>
+              <Account account={report.target_account} disabled hideActions />
+            </div>
           </Link>
         )}
-        <table className='w-full'>
+        <table>
           <tbody>
-            <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
-              <td className='p-2.5'>
-                <Text weight='medium' size='sm' tag='span'>
-                  <FormattedMessage id='admin.report.created_at' defaultMessage='Reported' />
-                </Text>
+            <tr>
+              <td>
+                <FormattedMessage id='admin.report.created_at' defaultMessage='Reported' />
               </td>
 
-              <td className='p-2.5 text-end'>
-                <Text size='sm'>
-                  <FormattedDate
-                    value={report.created_at}
-                    year='2-digit'
-                    month='short'
-                    day='2-digit'
-                    weekday='short'
-                  />
-                </Text>
+              <td>
+                <FormattedDate
+                  value={report.created_at}
+                  year='2-digit'
+                  month='short'
+                  day='2-digit'
+                  weekday='short'
+                />
               </td>
             </tr>
             {report.account && (
-              <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
-                <td className='p-2.5'>
-                  <Text weight='medium' size='sm' tag='span'>
-                    <FormattedMessage id='admin.report.reported_by' defaultMessage='Reported by' />
-                  </Text>
+              <tr>
+                <td>
+                  <FormattedMessage id='admin.report.reported_by' defaultMessage='Reported by' />
                 </td>
 
-                <td className='p-2.5 text-end'>
-                  <Text size='sm' className='hover:underline'>
-                    <Link
-                      to='/nicolium/admin/accounts/$accountId'
-                      params={{ accountId: report.account_id }}
-                    >
-                      @{report.account.acct}
-                    </Link>
-                  </Text>
+                <td>
+                  <Link
+                    to='/nicolium/admin/accounts/$accountId'
+                    params={{ accountId: report.account_id }}
+                  >
+                    @{report.account.acct}
+                  </Link>
                 </td>
               </tr>
             )}
-            <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
-              <td className='p-2.5'>
-                <Text weight='medium' size='sm' tag='span'>
-                  <FormattedMessage id='admin.report.action_taken' defaultMessage='Status' />
-                </Text>
+            <tr>
+              <td>
+                <FormattedMessage id='admin.report.action_taken' defaultMessage='Status' />
               </td>
 
-              <td className='p-2.5 text-end'>
-                <Text size='sm'>
-                  {report.action_taken ? (
-                    <FormattedMessage
-                      id='admin.report.action_taken.true'
-                      defaultMessage='Resolved'
-                    />
-                  ) : (
-                    <FormattedMessage
-                      id='admin.report.action_taken.false'
-                      defaultMessage='Unresolved'
-                    />
-                  )}
-                </Text>
+              <td>
+                {report.action_taken ? (
+                  <FormattedMessage id='admin.report.action_taken.true' defaultMessage='Resolved' />
+                ) : (
+                  <FormattedMessage
+                    id='admin.report.action_taken.false'
+                    defaultMessage='Unresolved'
+                  />
+                )}
               </td>
             </tr>
             {report.forwarded !== undefined && (
-              <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
-                <td className='p-2.5'>
-                  <Text weight='medium' size='sm' tag='span'>
-                    {report.forwarded ? (
-                      <FormattedMessage
-                        id='admin.report.forwarded.true'
-                        defaultMessage='Forwarded'
-                      />
-                    ) : (
-                      <FormattedMessage
-                        id='admin.report.forwarded.false'
-                        defaultMessage='Not forwarded'
-                      />
-                    )}
-                  </Text>
+              <tr>
+                <td>
+                  {report.forwarded ? (
+                    <FormattedMessage id='admin.report.forwarded.true' defaultMessage='Forwarded' />
+                  ) : (
+                    <FormattedMessage
+                      id='admin.report.forwarded.false'
+                      defaultMessage='Not forwarded'
+                    />
+                  )}
                 </td>
               </tr>
             )}
             {features.mastodonAdmin && (
-              <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
-                <td className='p-2.5'>
-                  <Text weight='medium' size='sm' tag='span'>
-                    <FormattedMessage
-                      id='admin.report.assigned_account'
-                      defaultMessage='Assigned moderator'
-                    />
-                  </Text>
+              <tr>
+                <td>
+                  <FormattedMessage
+                    id='admin.report.assigned_account'
+                    defaultMessage='Assigned moderator'
+                  />
                 </td>
 
-                <td className='p-2.5 text-end'>
+                <td>
                   {report.assigned_account ? (
-                    <div className='flex items-center justify-end gap-2'>
-                      <Text size='sm' className='hover:underline'>
-                        <Link
-                          to='/nicolium/admin/accounts/$accountId'
-                          params={{ accountId: report.assigned_account.id }}
-                        >
-                          @{report.assigned_account.acct}
-                        </Link>
-                      </Text>
+                    <div className='⁂-report-page__summary__action'>
+                      <Link
+                        to='/nicolium/admin/accounts/$accountId'
+                        params={{ accountId: report.assigned_account.id }}
+                      >
+                        @{report.assigned_account.acct}
+                      </Link>
                       <IconButton
-                        iconClassName='h-4 w-4'
                         src={iconX}
                         onClick={handleUnassignReport}
                         text={intl.formatMessage(messages.reportUnassign)}
@@ -329,7 +298,6 @@ const ReportPage: React.FC = () => {
                   ) : (
                     <IconButton
                       className='ml-auto'
-                      iconClassName='h-4 w-4'
                       src={iconPlus}
                       onClick={handleSelfAssignReport}
                       text={intl.formatMessage(messages.reportAssign)}
@@ -342,14 +310,12 @@ const ReportPage: React.FC = () => {
         </table>
       </div>
       {report.status_ids?.length > 0 && (
-        <Card variant='rounded' className='mb-4'>
-          <div className='flex flex-col gap-2'>
-            <Text size='md' weight='medium'>
-              <FormattedMessage id='admin.report.statuses' defaultMessage='Reported content' />
-            </Text>
-            <ReportStatuses statusIds={report.status_ids} />
-          </div>
-        </Card>
+        <div className='⁂-report-page__statuses__container'>
+          <p>
+            <FormattedMessage id='admin.report.statuses' defaultMessage='Reported content' />
+          </p>
+          <ReportStatuses statusIds={report.status_ids} />
+        </div>
       )}
       <List>
         {report.action_taken ? (

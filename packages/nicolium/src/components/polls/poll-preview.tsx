@@ -15,7 +15,7 @@ const PollPreview: React.FC<IPollPreview> = ({ poll }) => {
   }
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='⁂-poll-preview'>
       {poll.options.map((option, i) => (
         <PollOption
           key={i}

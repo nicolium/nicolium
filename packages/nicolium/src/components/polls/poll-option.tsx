@@ -57,19 +57,9 @@ const PollOptionText: React.FC<IPollOptionText> = ({
   };
 
   return (
-    <label
-      className={clsx(
-        'relative flex cursor-pointer rounded-3xl border border-solid bg-white p-2 hover:bg-primary-50 dark:bg-primary-900 dark:hover:bg-primary-800/50',
-        {
-          'border-primary-600 bg-primary-50 ring-1 ring-primary-600 dark:border-primary-300 dark:bg-primary-800/50 dark:ring-primary-300':
-            active,
-          'border-primary-300 dark:border-primary-500': !active,
-        },
-      )}
-    >
+    <label className={clsx('⁂-poll__option', { '⁂-poll__option--active': active })}>
       <input
-        className='hidden'
-        name='vote-options'
+        name='poll-option'
         type={poll.multiple ? 'checkbox' : 'radio'}
         value={index}
         checked={active}

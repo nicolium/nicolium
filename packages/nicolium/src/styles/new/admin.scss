@@ -401,3 +401,142 @@ a.⁂-measure__container {
     transform: translateY(-0.25rem);
   }
 }
+
+.⁂-report-page {
+  &__summary {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    table {
+      width: 100%;
+
+      tr {
+        border-bottom: 1px solid rgb(var(--color-primary-200));
+
+        &:last-child {
+          border: none;
+        }
+
+        .dark & {
+          border-color: rgb(var(--color-gray-800));
+        }
+      }
+
+      td {
+        @include mixins.text($size: sm);
+
+        padding: 0.675rem;
+
+        &:first-child {
+          @include mixins.text($weight: medium, $size: sm);
+        }
+
+        &:not(:first-child) {
+          text-align: right;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+      }
+
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+
+    &__action {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: end;
+    }
+
+    @media (min-width: variables.$breakpoints-md) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  &__account {
+    height: fit-content;
+
+    &__card {
+      @include mixins.card($variant: rounded);
+
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      > p {
+        @include mixins.text($size: md, weight: medium);
+      }
+    }
+  }
+
+  &__statuses {
+    position: relative;
+    margin: 0 -0.25rem;
+
+    &__container {
+      @include mixins.card($variant: rounded);
+
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+
+      > p {
+        @include mixins.text($size: md, $weight: medium);
+      }
+    }
+
+    &__arrow {
+      position: absolute;
+      z-index: 10;
+      top: 50%;
+      margin-top: -1rem;
+
+      &--left {
+        left: 0;
+      }
+
+      &--right {
+        right: 0;
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+
+        background: rgb(255, 255, 255, 0.5);
+        backdrop-filter: blur(8px);
+
+        .dark & {
+          background: rgb(var(--color-gray-900) / 0.5);
+        }
+
+        svg {
+          width: 1.5rem;
+          height: 1.5rem;
+          color: black;
+
+          .dark & {
+            color: white;
+          }
+        }
+      }
+    }
+
+    &__status {
+      width: 100%;
+    }
+  }
+}

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
 import { useModalsActions } from '@/stores/modals';
@@ -69,22 +68,22 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
-      className='⁂-poll'
+      className='⁂-poll__container'
       onClick={(e) => {
         e.stopPropagation();
       }}
     >
       {!showResults && poll.multiple && (
-        <Text className='mb-4' theme='muted' size='sm'>
+        <span className='⁂-poll__explanation'>
           <FormattedMessage
             id='poll.choose_multiple'
             defaultMessage="Choose as many as you'd like."
           />
-        </Text>
+        </span>
       )}
 
-      <div className='flex flex-col gap-4'>
-        <div className='flex flex-col gap-2'>
+      <div className='⁂-poll'>
+        <div className='⁂-poll__options'>
           {poll.options.map((option, i) => (
             <PollOption
               key={i}
