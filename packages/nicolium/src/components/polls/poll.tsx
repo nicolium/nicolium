@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -82,7 +83,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
         </span>
       )}
 
-      <div className='⁂-poll'>
+      <div className={clsx('⁂-poll', { '⁂-poll--truncate': truncate })}>
         <div className='⁂-poll__options'>
           {poll.options.map((option, i) => (
             <PollOption

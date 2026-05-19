@@ -17,7 +17,7 @@ $breakpoint-xl: 1280px;
   --text-3xl: 1.875rem;
   --leading-xs: 1rem;
   --leading-sm: 1.25rem;
-  --leading-base: 1.5rem;
+  --leading-base: var(--leading-sm);
   --leading-lg: 1.75rem;
   --leading-xl: var(--leading-lg);
   --leading-2xl: 2rem;

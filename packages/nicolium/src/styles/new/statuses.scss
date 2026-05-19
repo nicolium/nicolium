@@ -1185,9 +1185,10 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
   gap: 1rem;
 
   &__explanation {
-    @include mixins.text($theme: muted, $size: sm);
+    display: block;
+    @include mixins.text($theme: muted, $size: sm, $align: left);
 
-    margin: 1rem;
+    margin-bottom: 1rem;
   }
 
   &__options {
@@ -1197,6 +1198,69 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
   }
 
   &__option {
+    position: relative;
+
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+
+    background: white;
+
+    .dark & {
+      color: rgb(var(--color-primary-800));
+    }
+
+    &__label {
+      @include mixins.text($theme: inherit, $weight: medium);
+
+      position: relative;
+      overflow: hidden;
+      color: rgb(var(--color-primary-600));
+      overflow-wrap: break-word;
+
+      .dark & {
+        color: white;
+      }
+
+      .⁂-poll--truncate & {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    &__result {
+      position: relative;
+
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+
+      color: rgb(var(--color-primary-600));
+
+      .dark & {
+        color: rgb(var(--color-primary-800));
+      }
+
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      span {
+        @include mixins.text($weight: medium, $theme: inherit);
+
+        height: fit-content;
+      }
+    }
+  }
+
+  &__option-text {
     cursor: pointer;
 
     position: relative;
@@ -1221,7 +1285,7 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
     &--active {
       border-color: rgb(var(--color-primary-600));
       background: rgb(var(--color-primary-50));
-      outline: 1px solid rgb(var(--color-prmary-600));
+      outline: 1px solid rgb(var(--color-primary-600));
 
       .dark & {
         border-color: rgb(var(--color-primary-300));
@@ -1232,6 +1296,104 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
 
     input {
       display: none;
+    }
+
+    > div {
+      display: grid;
+      align-items: center;
+      width: 100%;
+    }
+
+    &__text {
+      @include mixins.text($theme: inherit, $weight: medium, $align: center);
+
+      overflow: hidden;
+      display: inline;
+      grid-column-start: 1;
+      grid-row-start: 1;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      justify-self: center;
+
+      max-width: 100%;
+      padding: 0 1.75rem 0 1.25rem;
+
+      color: rgb(var(--color-primary-600));
+      text-overflow: ellipsis;
+      overflow-wrap: break-word;
+
+      .dark & {
+        color: white;
+      }
+
+      .⁂-poll--truncate & {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    &__radio {
+      display: flex;
+      grid-column-start: 1;
+      grid-row-start: 1;
+      align-items: center;
+      justify-self: flex-end;
+
+      > span {
+        display: flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+
+        width: 1.5rem;
+        height: 1.5rem;
+        border: 1px solid rgb(var(--color-primary-300));
+        border-radius: 50%;
+
+        background: white;
+
+        .dark & {
+          border-color: rgb(var(--color-primary-500));
+          background: rgb(var(--color-primary-900));
+        }
+
+        .⁂-poll__option-text--active & {
+          border-color: rgb(var(--color-primary-600));
+          background: rgb(var(--color-primary-600));
+
+          .dark & {
+            border-color: rgb(var(--color-primary-300));
+            background: rgb(var(--color-primary-300));
+          }
+        }
+
+        svg {
+          width: 1rem;
+          height: 1rem;
+          color: white;
+
+          .dark & {
+            color: rgb(var(--color-primary-900));
+          }
+        }
+      }
+    }
+  }
+
+  &__percentage-bar {
+    position: absolute;
+    inset: 0;
+
+    display: inline-block;
+
+    height: 100%;
+    border-radius: 0.375rem 0 0 0.375rem;
+
+    background: rgb(var(--color-primary-100));
+
+    .dark & {
+      background: rgb(var(--color-primary-500));
     }
   }
 
@@ -1247,7 +1409,7 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
       align-items: center;
     }
 
-    button {
+    button:not(.⁂-poll__submit-button) {
       color: rgb(var(--color-gray-600));
       text-decoration: underline;
     }
