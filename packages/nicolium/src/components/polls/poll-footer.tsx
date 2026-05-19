@@ -77,7 +77,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
     <div className='flex flex-col gap-4' data-testid='poll-footer'>
       {!showResults && poll.multiple && (
         <Button onClick={handleVote} theme='primary' block>
-          <FormattedMessage id='poll.vote' defaultMessage='Submit Vote' />
+          <FormattedMessage id='poll.vote' defaultMessage='Submit vote' />
         </Button>
       )}
 
