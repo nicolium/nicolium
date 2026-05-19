@@ -152,19 +152,13 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
   return (
     <div
       className={clsx({
-        '⁂-chat-message__container group': true,
+        '⁂-chat-message__container': true,
         '⁂-chat-message__container--menu-open': isMenuOpen,
+        '⁂-chat-message__container--my-message': isMyMessage,
       })}
       data-testid='chat-message'
     >
-      <div
-        className={clsx({
-          'absolute z-10 flex items-center space-x-0.5 rounded-md bg-white p-1 opacity-0 shadow-lg transition-opacity focus:opacity-100 group-hover:opacity-100 dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
-          'right-2 top-2': !isMyMessage,
-          'left-2 top-2': isMyMessage,
-          '!opacity-100': isMenuOpen,
-        })}
-      >
+      <div className='⁂-chat-message__actions'>
         {menu.length > 0 && (
           <DropdownMenu
             items={menu}
@@ -189,7 +183,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         )}
       </div>
 
-      <div className={clsx('flex flex-col gap-1.5', { 'ml-auto': isMyMessage })}>
+      <div className='⁂-chat-message'>
         <div
           className={clsx('flex items-center', {
             'justify-end': isMyMessage,
@@ -234,24 +228,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
           </div>
         </div>
 
-        <div
-          className={clsx('flex items-center gap-2', {
-            'ml-auto': isMyMessage,
-          })}
-        >
-          <div
-            className={clsx({
-              'text-right': isMyMessage,
-              'order-2': !isMyMessage,
-            })}
-          >
-            <span className='flex items-center space-x-1.5'>
-              <Text theme='muted' size='xs'>
-                {intl.formatTime(chatMessage.created_at)}
-              </Text>
-            </span>
-          </div>
-        </div>
+        <span className='⁂-chat-message__details'>{intl.formatTime(chatMessage.created_at)}</span>
       </div>
     </div>
   );
