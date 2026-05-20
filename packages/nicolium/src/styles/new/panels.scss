@@ -86,4 +86,8 @@
   .⁂-card--slim {
     padding: 0;
   }
+
+  body:not(.dark) & .⁂-read-more-button__gradient {
+    background-image: linear-gradient(to bottom, transparent, rgb(var(--color-primary-50)));
+  }
 }
