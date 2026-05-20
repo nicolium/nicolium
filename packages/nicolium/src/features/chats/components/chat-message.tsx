@@ -155,6 +155,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         '⁂-chat-message__container': true,
         '⁂-chat-message__container--menu-open': isMenuOpen,
         '⁂-chat-message__container--my-message': isMyMessage,
+        '⁂-chat-message__container--pending': chatMessage.pending,
       })}
       data-testid='chat-message'
     >
@@ -184,48 +185,32 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
       </div>
 
       <div className='⁂-chat-message'>
-        <div
-          className={clsx('flex items-center', {
-            'justify-end': isMyMessage,
-            'justify-start': !isMyMessage,
-            'opacity-50': chatMessage.pending,
-          })}
-        >
-          <div
-            className={clsx({
-              'flex max-w-[85%] flex-col gap-0.5': true,
-              'flex-1': !!chatMessage.attachment,
-              'order-3 items-end': isMyMessage,
-              'order-1 items-start': !isMyMessage,
-            })}
-          >
-            {maybeRenderMedia(chatMessage)}
+        <div className='⁂-chat-message__content'>
+          {maybeRenderMedia(chatMessage)}
 
-            {content && (
-              <div className='flex max-w-full items-end'>
-                <div
-                  title={getFormattedTimestamp(chatMessage)}
-                  className={clsx({
-                    'relative max-w-full space-y-2 text-ellipsis break-words rounded-md px-3 py-2 [&_.mention]:underline': true,
-                    'rounded-tr-sm': !!chatMessage.attachment && isMyMessage,
-                    'rounded-tl-sm': !!chatMessage.attachment && !isMyMessage,
-                    '[&_.mention]:text-primary-600 dark:[&_.mention]:text-primary-400':
-                      !isMyMessage,
-                    'dark:[&_.mention]:white [&_.mention]:text-white': isMyMessage,
-                    'bg-primary-500 text-white': isMyMessage,
-                    'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100': !isMyMessage,
-                    'emoji-lg !bg-transparent !p-0': isOnlyEmoji,
-                  })}
-                  ref={setBubbleRef}
-                  tabIndex={0}
-                >
-                  <Text size='sm' theme='inherit' className='break-word-nested'>
-                    <ParsedContent html={content} emojis={chatMessage.emojis} />
-                  </Text>
-                </div>
+          {content && (
+            <div className='flex max-w-full items-end'>
+              <div
+                title={getFormattedTimestamp(chatMessage)}
+                className={clsx({
+                  'relative max-w-full space-y-2 text-ellipsis break-words rounded-md px-3 py-2 [&_.mention]:underline': true,
+                  'rounded-tr-sm': !!chatMessage.attachment && isMyMessage,
+                  'rounded-tl-sm': !!chatMessage.attachment && !isMyMessage,
+                  '[&_.mention]:text-primary-600 dark:[&_.mention]:text-primary-400': !isMyMessage,
+                  'dark:[&_.mention]:white [&_.mention]:text-white': isMyMessage,
+                  'bg-primary-500 text-white': isMyMessage,
+                  'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100': !isMyMessage,
+                  'emoji-lg !bg-transparent !p-0': isOnlyEmoji,
+                })}
+                ref={setBubbleRef}
+                tabIndex={0}
+              >
+                <Text size='sm' theme='inherit' className='break-word-nested'>
+                  <ParsedContent html={content} emojis={chatMessage.emojis} />
+                </Text>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         <span className='⁂-chat-message__details'>{intl.formatTime(chatMessage.created_at)}</span>

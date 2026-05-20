@@ -416,12 +416,27 @@
           left: 0.5rem;
         }
 
+        &__content {
+          align-items: flex-end;
+          margin-left: auto;
+        }
+
         &__details {
           text-align: right;
         }
       }
-      
     }
+
+    &--pending {
+      opacity: 0.5;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    max-width: 85%;
   }
 
   &__actions {
