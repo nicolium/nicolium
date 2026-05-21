@@ -61,8 +61,6 @@ ${scrobble.external_link ? scrobble.external_link : ''}`.trim(),
     [textRef.current],
   );
 
-  console.log(animate, textRef.current?.clientWidth, textRef.current?.parentElement?.clientWidth);
-
   if (!isRecent) return null;
 
   return (
