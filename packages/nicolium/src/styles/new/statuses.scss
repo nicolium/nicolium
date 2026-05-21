@@ -879,12 +879,57 @@ div:first-child:has(> .⁂-timeline-gap) {
 }
 
 .⁂-timeline-status {
+  position: relative;
+
+  .⁂-status-info {
+    margin-top: 1rem;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      color: rgb(var(--color-green-600));
+    }
+  }
+
   &--connected-bottom .status__content-wrapper {
     padding-left: 54px;
 
     [dir='rtl'] & {
       padding-right: 54px;
       padding-left: 0;
+    }
+  }
+
+  &--deleted {
+    padding: 1rem 2rem;
+  }
+  
+  &__connector {
+    position: absolute;
+    z-index: 1;
+    top: calc(28px + 42px);
+    left: 1.25rem;
+
+    width: 0.125rem;
+    height: calc(100% - 42px - 8px - 1rem);
+
+    background: rgb(var(--color-gray-200));
+
+    .dark & {
+      background: rgb(var(--color-primary-800));
+    }
+
+    .black.dark & {
+      background: rgb(var(--color-gray-800));
+    }
+
+    [dir='rtl'] & {
+      right: 1.25rem;
+      left: auto;
+    }
+
+    &__container {
+      position: relative;
     }
   }
 }

@@ -258,15 +258,8 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
 
     return (
       <StatusInfo
-        className='mt-4'
         avatarSize={42}
-        icon={
-          <Icon
-            src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
-            className='size-4 text-green-600'
-            aria-hidden
-          />
-        }
+        icon={<Icon src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat} aria-hidden />}
         text={
           reblogVisibility === 'private' ? (
             <FormattedMessage
@@ -286,7 +279,7 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
     );
   }
   if (timelineId.split(':')[0] === 'home' && features.followHashtags) {
-    return <StatusFollowedTagInfo className='mt-4' status={status} avatarSize={42} />;
+    return <StatusFollowedTagInfo status={status} avatarSize={42} />;
   }
 };
 
@@ -316,27 +309,16 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props) => {
 
   if (deleted) {
     return (
-      <div className='py-4 pb-8'>
+      <div className='⁂-timeline-status--deleted'>
         <Tombstone id={id} onMoveUp={props.onMoveUp} onMoveDown={props.onMoveDown} deleted />
       </div>
     );
   }
 
   const renderConnector = (): React.JSX.Element | null => {
-    const isConnected = isConnectedTop || isConnectedBottom;
+    if (!isConnectedBottom) return null;
 
-    if (!isConnected) return null;
-
-    return (
-      <div
-        className={clsx(
-          'absolute left-5 z-[1] hidden w-0.5 bg-gray-200 black:bg-gray-800 dark:bg-primary-800 rtl:left-auto rtl:right-5',
-          {
-            'top-[calc(28px+42px)] !block h-[calc(100%-42px-8px-1rem)]': isConnectedBottom,
-          },
-        )}
-      />
-    );
+    return <div className='⁂-timeline-status__connector' />;
   };
 
   const connector = renderConnector();
@@ -349,7 +331,7 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props) => {
 
   return (
     <div
-      className={clsx('⁂-timeline-status relative', {
+      className={clsx('⁂-timeline-status', {
         '⁂-timeline-status--connected-bottom': isConnectedBottom,
         '⁂-timeline-status--connected-top': isConnectedTop,
       })}
@@ -363,7 +345,7 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props) => {
         />
       )}
       {connector ? (
-        <div className='relative'>
+        <div className='⁂-timeline-status__connector__container'>
           {connector}
           {status}
         </div>
