@@ -889,6 +889,23 @@ div:first-child:has(> .⁂-timeline-gap) {
       height: 1rem;
       color: rgb(var(--color-green-600));
     }
+
+    a {
+      overflow: hidden;
+
+      font-family: bold;
+      color: rgb(var(--color-gray-800));
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      .dark & {
+        color: rgb(var(--color-gray-200));
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   &--connected-bottom .status__content-wrapper {

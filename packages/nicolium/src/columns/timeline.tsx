@@ -231,10 +231,7 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
       (account) =>
         !!account && (
           <HoverAccountWrapper key={account.id} accountId={account.id} element='bdi'>
-            <AccountLink
-              account={account}
-              className='truncate font-bold text-gray-800 hover:underline dark:text-gray-200'
-            >
+            <AccountLink account={account}>
               <Emojify text={account.display_name} emojis={account.emojis} />
             </AccountLink>
           </HoverAccountWrapper>
