@@ -4,7 +4,6 @@ import { FormattedList, FormattedMessage } from 'react-intl';
 import AvatarStack from '@/components/accounts/avatar-stack';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import VerificationBadge from '@/components/accounts/verification-badge';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFamiliarFollowers } from '@/queries/accounts/use-familiar-followers';
@@ -26,13 +25,11 @@ const FamiliarFollowerLink: React.FC<IFamiliarFollowerLink> = ({ id }) => {
   return (
     <AccountLink className='mention inline-block' account={account} key={account.id}>
       <HoverAccountWrapper accountId={account.id} element='span'>
-        <div className='flex flex-grow items-center gap-1'>
-          <Text size='sm' theme='primary' truncate>
-            <Emojify text={account.display_name} emojis={account.emojis} />
-          </Text>
+        <p>
+          <Emojify text={account.display_name} emojis={account.emojis} />
+        </p>
 
-          {account.verified && <VerificationBadge />}
-        </div>
+        {account.verified && <VerificationBadge />}
       </HoverAccountWrapper>
     </AccountLink>
   );
@@ -63,12 +60,7 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
 
   if (familiarFollowerIds.length > 2) {
     accounts.push(
-      <span
-        key='_'
-        className='cursor-pointer hover:underline'
-        role='presentation'
-        onClick={openFamiliarFollowersModal}
-      >
+      <span key='_' role='presentation' onClick={openFamiliarFollowersModal}>
         <FormattedMessage
           id='account.familiar_followers.more'
           defaultMessage='{count, plural, one {# other} other {# others}} you follow'
@@ -79,9 +71,9 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
   }
 
   return (
-    <div className='flex items-center gap-2'>
+    <div className='⁂-familiar-followers'>
       <AvatarStack accountIds={familiarFollowerIds} />
-      <Text theme='muted' size='sm' tag='div'>
+      <p>
         <FormattedMessage
           id='account.familiar_followers'
           defaultMessage='Followed by {accounts}'
@@ -89,7 +81,7 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
             accounts: <FormattedList type='conjunction' value={accounts} />,
           }}
         />
-      </Text>
+      </p>
     </div>
   );
 };

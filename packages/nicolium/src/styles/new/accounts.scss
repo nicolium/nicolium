@@ -607,3 +607,36 @@
     right: 0.5rem;
   }
 }
+
+.⁂-familiar-followers {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  
+  p {
+    @include mixins.text($size: sm, $theme: muted);
+
+    a {
+      display: inline-block;
+
+      span {
+        display: flex;
+        flex-grow: 1;
+        gap: 0.25rem;
+        align-items: center;
+
+        p {
+          @include mixins.text($size: sm, $theme: primary, $truncate: true);
+        }
+      }
+    }
+
+    span {
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
