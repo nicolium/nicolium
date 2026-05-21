@@ -24,7 +24,6 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
     return (
       <img
         draggable='false'
-        className='emojione m-0 block'
         alt={emoji}
         title={title}
         src={joinPublicPath(`packs/emoji/${unified}.svg`)}
@@ -35,15 +34,7 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
       (autoPlayGif && !reduceMotion) || hovered ? emojiMap[emoji].url : emojiMap[emoji].static_url;
     const shortCode = `:${emoji}:`;
 
-    return (
-      <img
-        draggable='false'
-        className='emojione m-0 block'
-        alt={shortCode}
-        title={shortCode}
-        src={filename}
-      />
-    );
+    return <img draggable='false' alt={shortCode} title={shortCode} src={filename} />;
   } else {
     return null;
   }

@@ -328,7 +328,7 @@ const InteractionRequestsPage = () => {
           emptyMessageText={emptyMessage}
           onLoadMore={() => fetchNextPage()}
           listClassName={clsx('⁂-status-list', {
-            'no-reduce-motion:animate-pulse': data?.length === 0,
+            '⁂-status-list--loading': isLoading,
           })}
         >
           {data?.map((request) => (

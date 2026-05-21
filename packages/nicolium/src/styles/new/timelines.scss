@@ -80,6 +80,10 @@
     border-color: rgb(var(--color-primary-800));
   }
 
+  .no-reduce-motion &--loading {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
   &__empty {
     display: flex;
     flex-direction: column;
