@@ -65,13 +65,16 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
           </div>
 
           {!!count && (
-            <Link
-              to='/links/$url'
-              params={{ url: encodeURIComponent(trendingLink.url) }}
-              className='hover:underline'
-            >
-              {accountsCountRenderer(count)}
-            </Link>
+            <>
+              {' · '}
+              <Link
+                to='/links/$url'
+                params={{ url: encodeURIComponent(trendingLink.url) }}
+                className='hover:underline'
+              >
+                {accountsCountRenderer(count)}
+              </Link>
+            </>
           )}
         </div>
       </div>

@@ -1,9 +1,3 @@
-.divide-x-dot > *:not(:last-child)::after {
-  content: '·';
-  padding-right: 0.25rem;
-  padding-left: 0.25rem;
-}
-
 .mention {
   color: rgb(var(--color-primary-600));
 
