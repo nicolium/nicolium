@@ -433,6 +433,10 @@
     gap: 0.5rem;
     align-items: center;
   }
+
+  &__verified {
+    flex: none;
+  }
 }
 
 .⁂-profile-fields-panel {

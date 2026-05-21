@@ -72,7 +72,7 @@ const ProfileField: React.FC<IProfileField> = ({ accountId, field, emojis }) => 
         <div className='⁂-profile-field__content'>
           {field.verified_at && (
             <span
-              className='flex-none'
+              className='⁂-profile-field__verified'
               title={intl.formatMessage(messages.linkVerifiedOn, {
                 date: intl.formatDate(field.verified_at, dateFormatOptions),
               })}
