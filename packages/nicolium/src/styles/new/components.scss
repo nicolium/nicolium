@@ -2032,3 +2032,22 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
   }
 }
 
+.⁂-load-gap {
+  display: block;
+
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 1rem;
+  border: 0;
+
+  color: rgb(var(--color-gray-900));
+
+  background: transparent;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    margin: 0 auto;
+  }
+}

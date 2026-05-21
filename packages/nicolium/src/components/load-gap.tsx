@@ -2,7 +2,7 @@ import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from '@/components/icon';
+import Icon from '@/components/ui/icon';
 
 const messages = defineMessages({
   loadMore: { id: 'status.load_more', defaultMessage: 'Load more' },
@@ -23,12 +23,13 @@ const LoadGap: React.FC<ILoadGap> = ({ disabled, maxId, onClick }) => {
 
   return (
     <button
-      className='m-0 box-border block w-full border-0 bg-transparent p-4 text-gray-900'
+      className='⁂-load-gap'
       disabled={disabled}
       onClick={handleClick}
+      title={intl.formatMessage(messages.loadMore)}
       aria-label={intl.formatMessage(messages.loadMore)}
     >
-      <Icon className='mx-auto' src={iconDotsThree} />
+      <Icon src={iconDotsThree} aria-hidden />
     </button>
   );
 };
