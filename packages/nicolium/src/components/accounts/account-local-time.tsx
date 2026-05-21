@@ -5,7 +5,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
 import Icon from '../ui/icon';
-import Text from '../ui/text';
 
 import type { Account } from 'pl-api';
 
@@ -82,19 +81,19 @@ const AccountLocalTime: React.FC<IAccountLocalTime> = ({ accountId, field }) => 
 
   return (
     <div
-      className='mt-1 flex items-center gap-0.5'
+      className='⁂-account-info__details__item'
       title={intl.formatMessage(messages.timezone, { timezone: field.value })}
     >
-      <Icon src={iconClock} className='size-4 text-gray-800 dark:text-gray-200' />
-      <Text size='sm'>
+      <Icon src={iconClock} />
+      <p>
         {localTime}
         {me !== accountId && isTimezoneEqual && (
-          <span className='text-green-500'>
+          <strong>
             {' '}
             <FormattedMessage id='account.timezone.equal' defaultMessage='(same as you)' />
-          </span>
+          </strong>
         )}
-      </Text>
+      </p>
     </div>
   );
 };
