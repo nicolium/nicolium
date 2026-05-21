@@ -3,7 +3,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import AccountComponent from '@/components/accounts/account';
-import Icon from '@/components/icon';
+import Icon from '@/components/ui/icon';
 import { useAccount } from '@/queries/accounts/use-account';
 
 const messages = defineMessages({
@@ -30,17 +30,17 @@ const BirthdayAccount: React.FC<IBirthdayAccount> = ({ accountId }) => {
   });
 
   return (
-    <div className='flex items-center justify-between gap-1 p-2.5'>
-      <div className='w-full'>
+    <div className='⁂-birthday-account'>
+      <div className='⁂-birthday-account__account'>
         <AccountComponent account={account} withRelationship={false} />
       </div>
       <div
-        className='flex items-center gap-0.5'
+        className='⁂-birthday-account__label'
         title={intl.formatMessage(messages.birthday, {
           date: formattedBirthday,
         })}
       >
-        <Icon src={iconCake} />
+        <Icon src={iconCake} aria-hidden />
         {formattedBirthday}
       </div>
     </div>
