@@ -68,16 +68,6 @@ const config: Config = {
         'gradient-end': true,
         greentext: true,
       }),
-      animation: {
-        'text-overflow': 'text-overflow 8s linear infinite',
-      },
-      keyframes: {
-        // https://stackoverflow.com/posts/78825869/revisions
-        'text-overflow': {
-          '10%, 90%': { transform: 'translate(0, 0)', left: '0%' },
-          '40%, 60%': { transform: 'translate(-100%, 0)', left: '100%' },
-        },
-      },
     },
   },
   plugins: [

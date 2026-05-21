@@ -211,6 +211,51 @@
   }
 }
 
+.⁂-recent-scrobble {
+  &__text {
+    position: relative;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+    width: 100%;
+
+    white-space: nowrap;
+
+    p {
+      position: relative;
+      display: inline-block;
+
+      .no-reduce-motion .⁂-recent-scrobble--animate & {
+        animation: text-overflow 8s linear infinite;
+      }
+    }
+  }
+
+  .⁂-icon-button {
+    margin: -0.25rem;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+
+@keyframes text-overflow {
+  10%,
+  90% {
+    left: 0%;
+    transform: translateX(0);
+  }
+
+  40%,
+  60% {
+    left: 100%;
+    transform: translateX(-100%);
+  }
+}
+
 .⁂-avatar {
   display: block;
   border-radius: var(--radius-lg);

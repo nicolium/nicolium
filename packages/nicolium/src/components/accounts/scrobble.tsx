@@ -5,7 +5,6 @@ import React, { useMemo, useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { useComposeActions } from '@/stores/compose';
 
 import IconButton from '../ui/icon-button';
@@ -59,23 +58,24 @@ ${scrobble.external_link ? scrobble.external_link : ''}`.trim(),
       textRef.current &&
       textRef.current.parentElement &&
       textRef.current.clientWidth > textRef.current.parentElement.clientWidth,
-    [],
+    [textRef.current],
   );
+
+  console.log(animate, textRef.current?.clientWidth, textRef.current?.parentElement?.clientWidth);
 
   if (!isRecent) return null;
 
   return (
-    <div className='flex items-center gap-0.5'>
-      <Icon src={iconMusicNotesSimple} className='size-4 text-gray-800 dark:text-gray-200' />
+    <div
+      className={clsx(
+        '⁂-account-info__details__item ⁂-recent-scrobble',
+        animate && '⁂-recent-scrobble--animate',
+      )}
+    >
+      <Icon src={iconMusicNotesSimple} />
 
-      <div className='relative box-border w-full overflow-hidden whitespace-nowrap'>
-        <Text
-          size='sm'
-          className={clsx('relative inline-block', {
-            'no-reduce-motion:animate-text-overflow': animate,
-          })}
-          ref={textRef}
-        >
+      <div className='⁂-recent-scrobble__text'>
+        <p ref={textRef}>
           <FormattedMessage
             id='account.scrobbling'
             defaultMessage='Playing {song}'
@@ -97,7 +97,7 @@ ${scrobble.external_link ? scrobble.external_link : ''}`.trim(),
               ),
             }}
           />
-        </Text>
+        </p>
       </div>
 
       {withComposeButton && (
@@ -105,8 +105,6 @@ ${scrobble.external_link ? scrobble.external_link : ''}`.trim(),
           src={iconNotePencil}
           onClick={handleCompose}
           title={intl.formatMessage(messages.compose)}
-          className='-m-1'
-          iconClassName='h-4 w-4'
         />
       )}
     </div>
