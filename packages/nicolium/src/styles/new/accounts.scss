@@ -211,6 +211,23 @@
   }
 }
 
+.⁂-verification-badge {
+  border-radius: var(--radius-full);
+  background-color: rgb(var(--color-accent-500));
+
+  img,
+  svg {
+    width: 1rem;
+    height: 1rem;
+    padding: 1px;
+    border-radius: var(--radius-full);
+
+    color: white;
+
+    background-color: rgb(var(--color-accent-500));
+  }
+}
+
 .⁂-recent-scrobble {
   &__text {
     position: relative;
