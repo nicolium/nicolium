@@ -422,8 +422,8 @@ const DropdownMenu: React.FC<IDropdownMenu> = ({
         <IconButton
           disabled={disabled}
           className={clsx({
-            'text-gray-600 hover:text-gray-700 dark:hover:text-gray-500': true,
-            'text-gray-700 dark:text-gray-500': isOpen,
+            '⁂-dropdown-menu__button': true,
+            '⁂-dropdown-menu__button--open': isOpen,
           })}
           title={title}
           src={src}

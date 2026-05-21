@@ -664,3 +664,16 @@
     }
   }
 }
+
+.⁂-follow-request-actions {
+  display: flex;
+  gap: 0.5rem;
+  
+  button:first-child {
+    @include mixins.button($theme: secondary, $size: sm);
+  }
+
+  button:last-child {
+    @include mixins.button($theme: danger, $size: sm);
+  }
+}

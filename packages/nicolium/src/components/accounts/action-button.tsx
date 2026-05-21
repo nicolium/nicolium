@@ -222,19 +222,13 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
 
   const followRequestAction = () => {
     return (
-      <div className='flex gap-2'>
-        <Button
-          theme='secondary'
-          size='sm'
-          text={<FormattedMessage id='follow_request.authorize' defaultMessage='Authorize' />}
-          onClick={handleAuthorize}
-        />
-        <Button
-          theme='danger'
-          size='sm'
-          text={<FormattedMessage id='follow_request.reject' defaultMessage='Reject' />}
-          onClick={handleReject}
-        />
+      <div className='⁂-follow-request-actions'>
+        <button onClick={handleAuthorize}>
+          <FormattedMessage id='follow_request.authorize' defaultMessage='Authorize' />
+        </button>
+        <button onClick={handleReject}>
+          <FormattedMessage id='follow_request.reject' defaultMessage='Reject' />
+        </button>
       </div>
     );
   };

@@ -996,6 +996,26 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     }
   }
 
+  &__button {
+    color: rgb(var(--color-gray-600));
+
+    &:hover {
+      color: rgb(var(--color-gray-700));
+
+      .dark & {
+        color: rgb(var(--color-gray-500));
+      }
+    }
+
+    &--open {
+      color: rgb(var(--color-gray-700));
+
+      .dark & {
+        color: rgb(var(--color-gray-500));
+      }
+    }
+  }
+
   &__arrow {
     pointer-events: none;
 
