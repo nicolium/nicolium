@@ -1,0 +1,23 @@
+@use 'mixins';
+
+.⁂-search-item {
+  &__account,
+  &__link {
+    padding-bottom: 1rem;
+  }
+
+  &__hashtag {
+    padding-bottom: 0.75rem;
+  }
+}
+
+.⁂-trends__empty-message {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+
+  button {
+    @include mixins.button($theme: muted);
+  }
+}

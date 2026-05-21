@@ -1994,3 +1994,41 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     }
   }
 }
+
+.⁂-empty-column-indicator {
+  display: flex;
+  flex: 1 1 0%;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 10rem;
+  border-radius: var(--radius-lg);
+
+  color: rgb(var(--color-gray-900));
+  text-align: center;
+
+  background-color: rgb(var(--color-primary-50));
+
+  .dark & {
+    color: rgb(var(--color-gray-100));
+    background-color: rgb(var(--color-primary-700));
+  }
+
+  & > span {
+    max-width: 400px;
+  }
+
+  a {
+    color: rgb(var(--color-primary-600));
+    text-decoration: none;
+
+    .dark & {
+      color: rgb(var(--color-primary-400));
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+

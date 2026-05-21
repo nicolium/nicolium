@@ -174,7 +174,7 @@ const AliasesPage = () => {
       </CardHeader>
       <Search onSubmit={setQuery} />
       {isFetched && searchAccountIds.length === 0 ? (
-        <div className='empty-column-indicator'>
+        <div className='⁂-empty-column-indicator'>
           <FormattedMessage
             id='empty_column.aliases.suggestions'
             defaultMessage='There are no account suggestions available for the provided term.'

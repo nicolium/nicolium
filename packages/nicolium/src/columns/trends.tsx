@@ -75,7 +75,7 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
               />
             }
             text={
-              <div className='flex flex-col items-center gap-4'>
+              <div className='⁂-trends__empty-message'>
                 {features.profileDirectory ? (
                   <>
                     <FormattedMessage
@@ -134,8 +134,8 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
       placeholderCount={20}
       listClassName={type === 'statuses' ? '⁂-status-list' : ''}
       itemClassName={clsx({
-        'pb-4': type === 'accounts' || type === 'links',
-        'pb-3': type === 'hashtags',
+        '⁂-search-item__account': type === 'accounts' || type === 'links',
+        '⁂-search-item__hashtag': type === 'hashtags',
       })}
       useWindowScroll={!multiColumn}
     >

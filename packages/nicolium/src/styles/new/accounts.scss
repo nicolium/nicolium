@@ -439,6 +439,27 @@
   }
 }
 
+.⁂-account-local-time {
+  display: flex;
+  gap: 0.125rem;
+  align-items: center;
+  margin-top: 0.25rem;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    color: rgb(var(--color-gray-800));
+
+    .dark & {
+      color: rgb(var(--color-gray-200));
+    }
+  }
+
+  strong {
+    color: rgb(var(--color-green-500));
+  }
+}
+
 .⁂-profile-fields-panel {
   .⁂-widget__body {
     display: flex;

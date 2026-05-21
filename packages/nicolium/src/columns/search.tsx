@@ -84,7 +84,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
         ));
       } else if (!isFetching) {
         return (
-          <div className='empty-column-indicator'>
+          <div className='⁂-empty-column-indicator'>
             <FormattedMessage
               id='empty_column.search.accounts'
               defaultMessage='There are no people results for "{term}"'
@@ -110,7 +110,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
         ));
       } else if (!isFetching) {
         return (
-          <div className='empty-column-indicator'>
+          <div className='⁂-empty-column-indicator'>
             <FormattedMessage
               id='empty_column.search.statuses'
               defaultMessage='There are no posts results for "{term}"'
@@ -131,7 +131,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
         ));
       } else if (!isFetching) {
         return (
-          <div className='empty-column-indicator'>
+          <div className='⁂-empty-column-indicator'>
             <FormattedMessage
               id='empty_column.search.statuses'
               defaultMessage='There are no posts results for "{term}"'
@@ -158,8 +158,8 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
       placeholderCount={20}
       listClassName={type === 'statuses' ? '⁂-status-list' : ''}
       itemClassName={clsx({
-        'pb-4': type === 'accounts' || type === 'links',
-        'pb-3': type === 'hashtags',
+        '⁂-search-item__account': type === 'accounts' || type === 'links',
+        '⁂-search-item__hashtag': type === 'hashtags',
       })}
       useWindowScroll={!multiColumn}
     >
