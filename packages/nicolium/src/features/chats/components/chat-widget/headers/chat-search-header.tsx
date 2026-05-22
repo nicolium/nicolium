@@ -21,14 +21,16 @@ const ChatSearchHeader = () => {
       data-testid='pane-header'
       title={
         <div className='⁂-chat-widget__search-header'>
-          <button
-            onClick={() => {
-              changeScreen(ChatWidgetScreens.INBOX);
-            }}
-            title={intl.formatMessage(messages.back)}
-          >
-            <Icon src={iconArrowLeft} className='⁂-chat-widget__back-icon' />
-          </button>
+          {isOpen && (
+            <button
+              onClick={() => {
+                changeScreen(ChatWidgetScreens.INBOX);
+              }}
+              title={intl.formatMessage(messages.back)}
+            >
+              <Icon src={iconArrowLeft} className='⁂-chat-widget__back-icon' />
+            </button>
+          )}
 
           <span className='⁂-chat-widget__title-text'>
             <FormattedMessage id='chat_search.title' defaultMessage='Messages' />
