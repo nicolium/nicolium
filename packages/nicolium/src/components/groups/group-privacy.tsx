@@ -23,9 +23,9 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
         <div className='⁂-group-privacy__popover__body'>
           <p className='⁂-group-privacy__popover__title'>
             {group.locked ? (
-              <FormattedMessage id='group.privacy.locked.full' defaultMessage='Private Group' />
+              <FormattedMessage id='group.privacy.locked.full' defaultMessage='Private group' />
             ) : (
-              <FormattedMessage id='group.privacy.public.full' defaultMessage='Public Group' />
+              <FormattedMessage id='group.privacy.public.full' defaultMessage='Public group' />
             )}
           </p>
 

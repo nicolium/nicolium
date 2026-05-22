@@ -1744,7 +1744,7 @@ const MenuButton: React.FC<IMenuButton> = ({
 
       if (canBanUser) {
         menu.push({
-          text: 'Ban from Group',
+          text: 'Ban from group',
           action: handleBlockFromGroup,
           icon: iconProhibit,
           destructive: true,
