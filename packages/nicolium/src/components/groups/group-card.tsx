@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useGroupQuery } from '@/queries/groups/use-group';
 
@@ -20,32 +19,26 @@ const GroupCard: React.FC<IGroupCard> = ({ groupId }) => {
   if (!group) return null;
 
   return (
-    <div
-      className='relative flex h-[240px] flex-col rounded-lg border border-solid border-gray-300 bg-white black:bg-black dark:border-primary-800 dark:bg-primary-900'
-      data-testid='group-card'
-    >
+    <div className='⁂-group-card ⁂-group-card--framed' data-testid='group-card'>
       {/* Group Cover Image */}
-      <div className='relative flex grow basis-1/2 flex-col rounded-t-lg bg-primary-100 dark:bg-gray-800'>
-        <GroupHeaderImage
-          group={group}
-          className='absolute inset-0 size-full rounded-t-lg object-cover'
-        />
+      <div className='⁂-group-card__cover'>
+        <GroupHeaderImage group={group} className='⁂-group-card__cover-image' />
       </div>
 
       {/* Group Avatar */}
-      <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
+      <div className='⁂-group-card__avatar'>
         <GroupAvatar group={group} size={64} withRing />
       </div>
 
       {/* Group Info */}
-      <div className='flex grow basis-1/2 flex-col items-center justify-end gap-0.5 py-4'>
-        <div className='flex items-center gap-1.5'>
-          <Text size='lg' weight='bold'>
+      <div className='⁂-group-card__info'>
+        <div className='⁂-group-card__name-row'>
+          <p className='⁂-group-card__name'>
             <Emojify text={group.display_name} emojis={group.emojis} />
-          </Text>
+          </p>
         </div>
 
-        <div className='flex flex-wrap gap-2 text-gray-700 dark:text-gray-600'>
+        <div className='⁂-group-card__meta'>
           <GroupRelationship group={group} />
           <GroupPrivacy group={group} />
           <GroupMemberCount group={group} />

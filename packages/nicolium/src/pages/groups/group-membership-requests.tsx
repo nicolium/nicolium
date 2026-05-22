@@ -44,8 +44,8 @@ const MembershipRequest: React.FC<IMembershipRequest> = ({ accountId, onAuthoriz
   const handleReject = () => onReject(account);
 
   return (
-    <div className='flex items-center justify-between gap-1 p-2.5'>
-      <div className='w-full'>
+    <div className='⁂-group-member-action-row'>
+      <div className='⁂-group-member-action-row__account'>
         <Account account={account} withRelationship={false} />
       </div>
 

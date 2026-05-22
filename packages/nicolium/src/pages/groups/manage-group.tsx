@@ -7,7 +7,6 @@ import List, { ListItem } from '@/components/list';
 import { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import ColumnForbidden from '@/features/ui/components/column-forbidden';
 import { useDeleteGroupMutation, useGroupQuery } from '@/queries/groups/use-group';
@@ -76,7 +75,7 @@ const ManageGroup: React.FC = () => {
       backHref='/groups/$groupId'
       backParams={{ groupId: group.id }}
     >
-      <CardBody className='space-y-4'>
+      <CardBody className='⁂-manage-group__body'>
         {isOwner && (
           <>
             <CardHeader>
@@ -141,12 +140,12 @@ const ManageGroup: React.FC = () => {
             <List>
               <ListItem
                 label={
-                  <Text theme='danger'>
+                  <span className='⁂-manage-group__danger-label'>
                     <FormattedMessage
                       id='manage_group.delete_group'
                       defaultMessage='Delete group'
                     />
-                  </Text>
+                  </span>
                 }
                 onClick={onDeleteGroup}
               />

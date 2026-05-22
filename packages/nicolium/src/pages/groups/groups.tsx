@@ -7,7 +7,6 @@ import GroupCard from '@/components/groups/group-card';
 import PlaceholderGroupCard from '@/components/placeholders/placeholder-group-card';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
-import Text from '@/components/ui/text';
 import { useGroupsQuery } from '@/queries/groups/use-groups';
 import { useModalsActions } from '@/stores/modals';
 
@@ -21,31 +20,31 @@ const Groups: React.FC = () => {
   };
 
   const renderBlankslate = () => (
-    <div className='flex flex-col items-center justify-center gap-4 py-6'>
-      <div className='flex max-w-sm flex-col gap-2'>
-        <Text size='2xl' weight='bold' tag='h2' align='center'>
+    <div className='⁂-groups-empty'>
+      <div className='⁂-groups-empty__content'>
+        <h2 className='⁂-groups-empty__title'>
           <FormattedMessage id='groups.empty.title' defaultMessage='No groups yet' />
-        </Text>
+        </h2>
 
-        <Text size='sm' theme='muted' align='center'>
+        <p className='⁂-groups-empty__subtitle'>
           <FormattedMessage
             id='groups.empty.subtitle'
             defaultMessage='Start discovering groups to join or create your own.'
           />
-        </Text>
+        </p>
       </div>
 
-      <Button className='self-center' onClick={createGroup} theme='secondary'>
+      <Button className='⁂-groups-empty__button' onClick={createGroup} theme='secondary'>
         <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
       </Button>
     </div>
   );
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='⁂-groups-page'>
       {!(!isFetching && groupIds.length === 0) && (
         <Button
-          className='xl:hidden'
+          className='⁂-groups-page__create-button'
           icon={iconUsersThree}
           onClick={createGroup}
           theme='secondary'
@@ -58,7 +57,7 @@ const Groups: React.FC = () => {
       <ScrollableList
         scrollKey='groups'
         emptyMessageText={renderBlankslate()}
-        itemClassName='pb-4 last:pb-0'
+        itemClassName='⁂-groups-page__item'
         isLoading={isFetching}
         showLoading={isLoading}
         placeholderComponent={PlaceholderGroupCard}

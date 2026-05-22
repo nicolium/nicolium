@@ -15,14 +15,11 @@ const GroupAvatar: React.FC<IGroupAvatar> = ({ group, size, withRing = false }) 
 
   return (
     <Avatar
-      className={clsx('relative rounded-lg', {
-        'shadow-[0_0_0_2px_theme(colors.primary.600),0_0_0_4px_theme(colors.white)]':
-          isOwner && withRing,
-        'dark:shadow-[0_0_0_2px_theme(colors.primary.600),0_0_0_4px_theme(colors.gray.800)]':
-          isOwner && withRing,
-        'shadow-[0_0_0_2px_theme(colors.primary.600)]': isOwner && !withRing,
-        'shadow-[0_0_0_2px_theme(colors.white)] dark:shadow-[0_0_0_2px_theme(colors.gray.800)]':
-          !isOwner && withRing,
+      className={clsx('⁂-group-avatar', {
+        '⁂-group-avatar--owner-ring': isOwner && withRing,
+
+        '⁂-group-avatar--owner': isOwner && !withRing,
+        '⁂-group-avatar--ring': !isOwner && withRing,
       })}
       src={group.avatar}
       alt={group.avatar_description}

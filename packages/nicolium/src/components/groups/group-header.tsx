@@ -8,7 +8,6 @@ import GroupAvatar from '@/components/groups/group-avatar';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import StillImage from '@/components/still-image';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useModalsActions } from '@/stores/modals';
 
@@ -36,15 +35,15 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
 
   if (!group) {
     return (
-      <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6' data-testid='group-header-missing'>
+      <div className='⁂-group-header' data-testid='group-header-missing'>
         <div>
-          <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 sm:rounded-t-xl lg:h-48' />
+          <div className='⁂-group-header__banner ⁂-group-header__banner--placeholder' />
         </div>
 
-        <div className='px-4 sm:px-6'>
-          <div className='-mt-12 flex items-end gap-5'>
-            <div className='relative flex'>
-              <div className='size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
+        <div className='⁂-group-header__placeholder-body'>
+          <div className='⁂-group-header__placeholder-row'>
+            <div className='⁂-group-header__avatar-frame'>
+              <div className='⁂-group-header__avatar-placeholder' />
             </div>
           </div>
         </div>
@@ -92,7 +91,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         <StillImage
           src={group.header}
           alt={group.header_description || intl.formatMessage(messages.header)}
-          className='relative h-32 w-full bg-gray-200 object-center black:rounded-t-none dark:bg-gray-900/50 sm:rounded-t-xl lg:h-52'
+          className='⁂-group-header__image'
           onError={() => {
             setIsHeaderMissing(true);
           }}
@@ -105,7 +104,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
             href={group.header}
             onClick={handleHeaderClick}
             target='_blank'
-            className='relative w-full'
+            className='⁂-group-header__image-link'
           >
             {header}
           </a>
@@ -114,12 +113,9 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
     }
 
     return (
-      <div
-        data-testid='group-header-image'
-        className='flex h-32 w-full items-center justify-center bg-gray-200 dark:bg-gray-800/30 sm:rounded-t-xl lg:h-52'
-      >
+      <div data-testid='group-header-image' className='⁂-group-header__image-container'>
         {isHeaderMissing ? (
-          <Icon src={iconImageSquare} className='size-6 text-gray-500 dark:text-gray-700' />
+          <Icon src={iconImageSquare} className='⁂-group-header__missing-icon' />
         ) : (
           header
         )}
@@ -128,42 +124,35 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
   };
 
   return (
-    <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
-      <div className='relative'>
+    <div className='⁂-group-header'>
+      <div className='⁂-group-header__banner'>
         {renderHeader()}
 
-        <div
-          className='absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2'
-          data-testid='group-avatar'
-        >
+        <div className='⁂-group-header__avatar' data-testid='group-avatar'>
           <a href={group.avatar} onClick={handleAvatarClick} target='_blank'>
             <GroupAvatar group={group} size={80} withRing />
           </a>
         </div>
       </div>
 
-      <div className='mx-auto mt-10 flex w-5/6 flex-col items-center gap-3 py-4'>
-        <Text size='xl' weight='bold' data-testid='group-name'>
+      <div className='⁂-group-header__body'>
+        <h1 className='⁂-group-header__name' data-testid='group-name'>
           <Emojify text={group.display_name} emojis={group.emojis} />
-        </Text>
+        </h1>
 
-        <div className='flex flex-col items-center gap-1' data-testid='group-meta'>
-          <div className='flex flex-wrap gap-2 text-gray-700 dark:text-gray-600'>
+        <div className='⁂-group-header__meta' data-testid='group-meta'>
+          <div className='⁂-group-header__meta-row'>
             <GroupRelationship group={group} />
             <GroupPrivacy group={group} />
             <GroupMemberCount group={group} />
           </div>
 
-          <Text
-            theme='muted'
-            align='center'
-            className='[&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-primary-400'
-          >
+          <p className='⁂-group-header__note'>
             <ParsedContent html={group.note} emojis={group.emojis} />
-          </Text>
+          </p>
         </div>
 
-        <div className='flex items-center gap-2' data-testid='group-actions'>
+        <div className='⁂-group-header__actions' data-testid='group-actions'>
           <GroupOptionsButton group={group} />
           <GroupActionButton group={group} />
         </div>

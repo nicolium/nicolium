@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 import Popover from '@/components/ui/popover';
-import Text from '@/components/ui/text';
 
 import type { Group } from 'pl-api';
 
@@ -15,26 +14,22 @@ interface IGroupPolicy {
 
 const GroupPrivacy = ({ group }: IGroupPolicy) => (
   <Popover
-    referenceElementClassName='cursor-help'
     content={
-      <div className='flex w-72 flex-col items-center gap-4'>
-        <div className='rounded-full bg-gray-200 p-3 dark:bg-gray-800'>
-          <Icon
-            src={group.locked ? iconLock : iconGlobe}
-            className='size-6 text-gray-600 dark:text-gray-600'
-          />
+      <div className='⁂-group-privacy__popover'>
+        <div className='⁂-group-privacy__popover__icon'>
+          <Icon src={group.locked ? iconLock : iconGlobe} />
         </div>
 
-        <div className='flex flex-col items-center gap-1'>
-          <Text size='lg' weight='bold' align='center'>
+        <div className='⁂-group-privacy__popover__body'>
+          <p className='⁂-group-privacy__popover__title'>
             {group.locked ? (
               <FormattedMessage id='group.privacy.locked.full' defaultMessage='Private Group' />
             ) : (
               <FormattedMessage id='group.privacy.public.full' defaultMessage='Public Group' />
             )}
-          </Text>
+          </p>
 
-          <Text theme='muted' align='center'>
+          <p className='⁂-group-privacy__popover__text'>
             {group.locked ? (
               <FormattedMessage
                 id='group.privacy.locked.info'
@@ -46,21 +41,21 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
                 defaultMessage='Discoverable. Anyone can join.'
               />
             )}
-          </Text>
+          </p>
         </div>
       </div>
     }
   >
-    <div className='flex items-center gap-1' data-testid='group-privacy'>
-      <Icon className='size-4' src={group.locked ? iconLock : iconGlobe} />
+    <div className='⁂-group-privacy' data-testid='group-privacy'>
+      <Icon src={group.locked ? iconLock : iconGlobe} />
 
-      <Text theme='inherit' tag='span' size='sm' weight='medium'>
+      <p>
         {group.locked ? (
           <FormattedMessage id='group.privacy.locked' defaultMessage='Private' />
         ) : (
           <FormattedMessage id='group.privacy.public' defaultMessage='Public' />
         )}
-      </Text>
+      </p>
     </div>
   </Popover>
 );

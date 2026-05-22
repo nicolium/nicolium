@@ -33,27 +33,18 @@ const GroupGallery: React.FC = () => {
   if (isLoading || groupIsLoading) {
     return (
       <Column transparent withHeader={false}>
-        <div className='pt-6'>
-          <Spinner />
-        </div>
+        <Spinner />
       </Column>
     );
   }
 
   if (!group) {
-    return (
-      <div className='pt-6'>
-        <MissingIndicator nested />
-      </div>
-    );
+    return <MissingIndicator nested />;
   }
 
   return (
     <Column label={group.display_name} transparent withHeader={false}>
-      <div
-        role='feed'
-        className='mt-4 grid grid-cols-2 gap-1 overflow-hidden rounded-md sm:grid-cols-3'
-      >
+      <div role='feed' className='⁂-group-gallery__grid'>
         {attachments.map((attachment, index) => (
           <MediaItem
             key={`${attachment.status_id}+${attachment.id}`}
@@ -64,7 +55,7 @@ const GroupGallery: React.FC = () => {
         ))}
 
         {!isLoading && attachments.length === 0 && (
-          <div className='⁂-empty-column-indicator col-span-2 sm:col-span-3'>
+          <div className='⁂-empty-column-indicator ⁂-group-gallery__empty'>
             <FormattedMessage id='account_gallery.none' defaultMessage='No media to show.' />
           </div>
         )}
@@ -72,7 +63,7 @@ const GroupGallery: React.FC = () => {
 
       {hasNextPage && (
         <LoadMore
-          className='mt-4'
+          className='⁂-group-gallery__load-more'
           disabled={isFetching}
           onClick={() => fetchNextPage({ cancelRefetch: false })}
         />

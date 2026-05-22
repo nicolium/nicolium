@@ -1,32 +1,26 @@
 import React from 'react';
 
-import Text from '@/components/ui/text';
 import { generateText, randomIntFromInterval } from '@/utils/placeholders';
 
 const PlaceholderGroupCard = () => {
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (
-    <div className='no-reduce-motion:animate-pulse'>
-      <div className='relative flex h-[240px] flex-col rounded-lg border border-solid border-gray-300 bg-white black:bg-black dark:border-primary-800 dark:bg-primary-900'>
-        {/* Group Cover Image */}
-        <div className='relative grow basis-1/2 rounded-t-lg bg-gray-300 dark:bg-gray-800' />
+    <div className='⁂-group-card ⁂-group-card--framed ⁂-group-card--placeholder'>
+      <div className='⁂-group-card__cover ⁂-group-card__cover--placeholder' />
 
-        {/* Group Avatar */}
-        <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
-          <div className='size-16 rounded-lg bg-gray-500 ring-2 ring-white dark:bg-primary-800 dark:ring-primary-900' />
-        </div>
+      <div className='⁂-group-card__avatar'>
+        <div className='⁂-group-card__avatar-placeholder' />
+      </div>
 
-        {/* Group Info */}
-        <div className='flex flex-grow basis-1/2 flex-col items-center justify-end gap-0.5 py-4'>
-          <Text size='lg' theme='subtle' weight='bold'>
-            {generateText(groupNameLength)}
-          </Text>
+      <div className='⁂-group-card__info'>
+        <p className='⁂-group-card__name ⁂-group-card__name--placeholder'>
+          {generateText(groupNameLength)}
+        </p>
 
-          <div className='flex flex-wrap gap-3 text-gray-400 dark:text-gray-600'>
-            <span>{generateText(6)}</span>
-            <span>{generateText(6)}</span>
-          </div>
+        <div className='⁂-group-card__meta ⁂-group-card__meta--placeholder'>
+          <span>{generateText(6)}</span>
+          <span>{generateText(6)}</span>
         </div>
       </div>
     </div>

@@ -203,14 +203,6 @@ const AccountGalleryPage = () => {
     return <MissingIndicator />;
   }
 
-  let loadOlder = null;
-
-  if (hasMore && !(isFetching && attachments.length === 0)) {
-    loadOlder = (
-      <LoadMore className='my-auto mt-4' visible={!isFetching} onClick={handleLoadOlder} />
-    );
-  }
-
   if (isUnavailable) {
     return (
       <Column>
@@ -226,7 +218,7 @@ const AccountGalleryPage = () => {
 
   return (
     <Column label={`@${account.acct}`} transparent withHeader={false}>
-      <div role='feed' className='grid grid-cols-2 gap-1 overflow-hidden rounded-md sm:grid-cols-3'>
+      <div role='feed' className='⁂-account-gallery__grid'>
         {attachments.map((attachment, index) => (
           <MediaItem
             key={`${attachment.status_id}+${attachment.id}`}
@@ -237,16 +229,22 @@ const AccountGalleryPage = () => {
         ))}
 
         {!isLoading && attachments.length === 0 && (
-          <div className='⁂-empty-column-indicator col-span-2 sm:col-span-3'>
+          <div className='⁂-empty-column-indicator ⁂-account-gallery__empty'>
             <FormattedMessage id='account_gallery.none' defaultMessage='No media to show.' />
           </div>
         )}
       </div>
 
-      {loadOlder}
+      {hasMore && (
+        <LoadMore
+          className='⁂-account-gallery__load-more'
+          disabled={isFetching}
+          onClick={handleLoadOlder}
+        />
+      )}
 
       {isFetching && attachments.length === 0 && (
-        <div className='relative flex-auto px-8 py-4'>
+        <div className='⁂-account-gallery__spinner'>
           <Spinner />
         </div>
       )}

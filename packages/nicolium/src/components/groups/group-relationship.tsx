@@ -5,7 +5,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 
 interface IGroupRelationship {
   group: Pick<Group, 'relationship'>;
@@ -20,19 +19,16 @@ const GroupRelationship = ({ group }: IGroupRelationship) => {
   }
 
   return (
-    <div
-      data-testid='group-relationship'
-      className='flex items-center gap-1 text-primary-600 dark:text-primary-400'
-    >
-      <Icon className='size-4' src={isOwner ? iconUsers : iconGavel} />
+    <div data-testid='group-relationship' className='⁂-group-relationship'>
+      <Icon src={isOwner ? iconUsers : iconGavel} />
 
-      <Text tag='span' weight='medium' size='sm' theme='inherit'>
+      <p>
         {isOwner ? (
           <FormattedMessage id='group.role.owner' defaultMessage='Owner' />
         ) : (
           <FormattedMessage id='group.role.admin' defaultMessage='Admin' />
         )}
-      </Text>
+      </p>
     </div>
   );
 };

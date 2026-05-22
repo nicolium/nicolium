@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 import Popover from '@/components/ui/popover';
@@ -15,7 +16,6 @@ interface IAltPopover {
 const AltPopover: React.FC<IAltPopover> = ({ alt, heading, message, title, className }) => (
   <Popover
     interaction='click'
-    referenceElementClassName='⁂-alt-popover__reference'
     content={
       <div className='⁂-alt-popover'>
         <p className='⁂-alt-popover__title'>{heading}</p>
@@ -25,7 +25,7 @@ const AltPopover: React.FC<IAltPopover> = ({ alt, heading, message, title, class
     isFlush
     title={title}
   >
-    <AltIndicator className={className} message={message} />
+    <AltIndicator className={clsx(className, '⁂-alt-popover__reference')} message={message} />
   </Popover>
 );
 

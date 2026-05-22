@@ -6,7 +6,6 @@ import { FormattedMessage } from 'react-intl';
 
 import GroupAvatar from '@/components/groups/group-avatar';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { shortNumberFormat } from '@/utils/numbers';
@@ -24,37 +23,37 @@ const GroupListItem: React.FC<IGroupListItem> = ({ groupId, withJoinAction = tru
   if (!group) return null;
 
   return (
-    <div className='flex items-center justify-between' data-testid='group-list-item'>
+    <div className='⁂-group-list-item' data-testid='group-list-item'>
       <Link
         key={group.id}
         to='/groups/$groupId'
         params={{ groupId: group.id }}
-        className='overflow-hidden'
+        className='⁂-group-list-item__link'
       >
-        <div className='flex items-center gap-2'>
+        <div className='⁂-group-list-item__main'>
           <GroupAvatar group={group} size={44} />
 
-          <div className='flex flex-col overflow-hidden'>
-            <Text weight='bold' truncate>
+          <div className='⁂-group-list-item__content'>
+            <p className='⁂-group-list-item__name'>
               <Emojify text={group.display_name} emojis={group.emojis} />
-            </Text>
+            </p>
 
-            <div className='flex items-center gap-1 text-gray-700 dark:text-gray-600'>
-              <Icon className='size-4.5' src={group.locked ? iconLock : iconGlobe} />
+            <div className='⁂-group-list-item__meta'>
+              <Icon src={group.locked ? iconLock : iconGlobe} />
 
-              <Text theme='inherit' tag='span' size='sm' weight='medium'>
+              <p>
                 {group.locked ? (
                   <FormattedMessage id='group.privacy.locked' defaultMessage='Private' />
                 ) : (
                   <FormattedMessage id='group.privacy.public' defaultMessage='Public' />
                 )}
-              </Text>
+              </p>
 
               {typeof group.members_count !== 'undefined' && (
                 <>
-                  <span>&bull;</span>
-                  <Text theme='inherit' tag='span' size='sm' weight='medium'>
-                    {shortNumberFormat(group.members_count)}{' '}
+                  {' · '}
+                  <p>
+                    <span>{shortNumberFormat(group.members_count)}</span>
                     <FormattedMessage
                       id='groups.discover.search.results.member_count'
                       defaultMessage='{members, plural, one {member} other {members}}'
@@ -62,7 +61,7 @@ const GroupListItem: React.FC<IGroupListItem> = ({ groupId, withJoinAction = tru
                         members: group.members_count,
                       }}
                     />
-                  </Text>
+                  </p>
                 </>
               )}
             </div>

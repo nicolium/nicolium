@@ -27,13 +27,8 @@ const GroupHeaderImage: React.FC<IGroupHeaderImage> = ({ className, group }) => 
 
   if (isHeaderMissing) {
     return (
-      <div
-        className={clsx(
-          className,
-          'flex items-center justify-center bg-gray-200 dark:bg-gray-800/30',
-        )}
-      >
-        <Icon src={iconImageSquare} className='size-6 text-gray-500 dark:text-gray-700' />
+      <div className={clsx(className, '⁂-group-header-image ⁂-group-header-image--missing')}>
+        <Icon src={iconImageSquare} className='⁂-group-header-image__missing-icon' />
       </div>
     );
   }

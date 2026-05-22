@@ -118,7 +118,7 @@ const EditGroup: React.FC = () => {
             placeholder={intl.formatMessage(messages.groupNamePlaceholder)}
             maxLength={maxName}
             {...displayName}
-            append={<Icon className='size-5 text-gray-600' src={iconLock} />}
+            append={<Icon className='⁂-edit-group__locked-icon' src={iconLock} />}
             disabled
           />
         </FormGroup>

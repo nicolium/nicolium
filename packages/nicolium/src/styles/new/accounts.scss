@@ -17,10 +17,10 @@
     border-radius: var(--radius-lg);
 
     background-color: rgb(var(--color-gray-400));
-    box-shadow: 0 0 0 4px white;
+    outline: 4px solid white;
 
     .dark & {
-      box-shadow: 0 0 0 4px rgb(var(--color-gray-800));
+      outline-color: rgb(var(--color-gray-800));
     }
   }
 
@@ -84,15 +84,15 @@
     position: relative;
     border-radius: var(--radius-lg);
     background-color: white;
-    box-shadow: 0 0 0 4px white;
+    outline: 4px solid white;
 
     .dark & {
       background-color: rgb(var(--color-primary-900));
-      box-shadow: 0 0 0 4px rgb(var(--color-primary-900));
+      outline: 4px solid rgb(var(--color-primary-900));
     }
 
     .black & {
-      box-shadow: 0 0 0 4px black;
+      outline: 4px solid black;
     }
   }
 
@@ -109,14 +109,14 @@
     padding: 2px !important;
     border-radius: var(--radius-full);
 
-    box-shadow: 0 0 0 2px white;
+    outline: 2px solid white;
 
     .dark & {
-      box-shadow: 0 0 0 2px rgb(var(--color-primary-900));
+      outline: 2px solid rgb(var(--color-primary-900));
     }
 
     .black & {
-      box-shadow: 0 0 0 2px black;
+      outline: 2px solid black;
     }
   }
 
@@ -980,5 +980,43 @@
 
   button:last-child {
     @include mixins.button($theme: danger, $size: sm);
+  }
+}
+
+.⁂-account-gallery,
+.⁂-group-gallery {
+  &__loading {
+    padding-top: 1.5rem;
+  }
+
+  &__grid {
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem;
+
+    border-radius: var(--radius-md);
+
+    @media (min-width: variables.$breakpoint-sm) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  &__empty {
+    grid-column: span 2 / span 2;
+
+    @media (min-width: variables.$breakpoint-sm) {
+      grid-column: span 3 / span 3;
+    }
+  }
+
+  &__load-more {
+    margin: 1rem auto 0;
+  }
+
+  &__spinner {
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem 2rem;
   }
 }

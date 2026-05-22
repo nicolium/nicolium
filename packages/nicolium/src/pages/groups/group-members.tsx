@@ -46,12 +46,12 @@ const GroupMembers: React.FC = () => {
       placeholderComponent={PlaceholderAccount}
       placeholderCount={3}
       className='⁂-status-list'
-      itemClassName='py-3 last:pb-0'
+      itemClassName='⁂-group-members__item'
       prepend={
         membershipRequests.length > 0 && (
           <div
-            className={clsx('py-3', {
-              'border-b border-gray-200 dark:border-gray-800': members.length,
+            className={clsx('⁂-group-members__pending-row', {
+              '⁂-group-members__pending-row--bordered': members.length,
             })}
           >
             <PendingItemsRow
