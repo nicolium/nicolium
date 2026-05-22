@@ -146,13 +146,7 @@ const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({
     <StatusInfo
       className={className}
       avatarSize={avatarSize}
-      icon={
-        <Icon
-          src={iconHash}
-          className='size-4 text-primary-600 dark:text-primary-400'
-          aria-hidden
-        />
-      }
+      icon={<Icon src={iconHash} className='text-primary-600 dark:text-primary-400' aria-hidden />}
       text={
         <FormattedMessage
           id='status.followed_tag'
@@ -382,7 +376,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
           icon={
             <Icon
               src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
-              className='size-4 text-green-600'
+              className='text-green-600'
               aria-hidden
             />
           }
@@ -443,7 +437,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
           icon={
             <Icon
               src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
-              className='size-4 text-green-600'
+              className='text-green-600'
               aria-hidden
             />
           }
@@ -469,13 +463,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={
-            <Icon
-              src={iconPushPin}
-              className='size-4 text-gray-600 dark:text-gray-400'
-              aria-hidden
-            />
-          }
+          icon={<Icon src={iconPushPin} className='text-gray-600 dark:text-gray-400' aria-hidden />}
           text={<FormattedMessage id='status.pinned' defaultMessage='Pinned post' />}
         />
       );
@@ -487,7 +475,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
           icon={
             <Icon
               src={iconUsersThree}
-              className='size-4 text-primary-600 dark:text-primary-400'
+              className='text-primary-600 dark:text-primary-400'
               aria-hidden
             />
           }
