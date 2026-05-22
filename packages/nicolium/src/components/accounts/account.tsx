@@ -17,7 +17,6 @@ import Avatar from '@/components/ui/avatar';
 import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
@@ -184,8 +183,8 @@ const Account = ({
           src={actionIcon}
           title={actionTitle}
           onClick={handleAction}
-          className='bg-transparent text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
-          iconClassName='h-4 w-4'
+          className='⁂-account-card__action-button'
+          iconClassName='⁂-account-card__action-icon'
         />
       );
     }
@@ -205,7 +204,7 @@ const Account = ({
       const actionWidth = actionRef.current?.clientWidth ?? 0;
 
       if (overflowRef.current) {
-        const maxWidth = overflowRef.current.classList.contains('w-fit')
+        const maxWidth = overflowRef.current.classList.contains('⁂-account-card__inner--fit')
           ? overflowRef.current.parentElement!.clientWidth
           : overflowRef.current.clientWidth;
         style.maxWidth = Math.max(
@@ -278,7 +277,7 @@ const Account = ({
         ref={overflowRef}
       >
         <div>
-          <div className='flex max-w-full items-center gap-3'>
+          <div className='⁂-account-card__row'>
             {disableUserProvidedMedia ? (
               <Avatar
                 src={account.avatar}
@@ -286,7 +285,9 @@ const Account = ({
                 username={account.username}
               />
             ) : (
-              <div className={clsx('rounded-lg', emoji && 'relative')}>
+              <div
+                className={clsx('⁂-account-card__avatar', emoji && '⁂-account-card__avatar--emoji')}
+              >
                 <Avatar
                   src={account.avatar}
                   size={avatarSize}
@@ -294,21 +295,15 @@ const Account = ({
                   isCat={account.is_cat}
                   username={account.username}
                 />
-                {emoji && (
-                  <Emoji
-                    className='!absolute -right-1.5 bottom-0 size-5'
-                    emoji={emoji}
-                    src={emojiUrl}
-                  />
-                )}
+                {emoji && <Emoji className='⁂-account-card__emoji' emoji={emoji} src={emojiUrl} />}
               </div>
             )}
 
-            <div className='grow overflow-hidden'>
-              <div className='flex flex-grow items-center gap-1'>
-                <Text size='sm' weight='semibold' truncate>
+            <div className='⁂-account-card__content'>
+              <div className='⁂-account-card__display-name'>
+                <p className='⁂-account-card__display-name__text'>
                   <Emojify text={account.display_name} emojis={account.emojis} />
-                </Text>
+                </p>
 
                 {account.verified && <VerificationBadge />}
 
@@ -320,17 +315,15 @@ const Account = ({
                 )}
               </div>
 
-              <div className='flex items-center gap-1'>
-                <Text theme='muted' size='sm' direction='ltr' truncate>
-                  @{username}
-                </Text>
+              <div className='⁂-account-card__meta'>
+                <p className='⁂-account-card__handle'>@{username}</p>
 
                 {withLocked && !timestamp && account.locked && (
                   <>
                     <Icon
                       src={iconLock}
                       alt={intl.formatMessage(messages.accountLocked)}
-                      className='size-4 text-gray-600'
+                      className='⁂-account-card__lock'
                     />
 
                     {account.favicon && !disableUserProvidedMedia && (
@@ -353,10 +346,9 @@ const Account = ({
       </div>
     );
 
-  const containerClassName = clsx(
-    'flex max-w-full items-center gap-3',
-    withAccountNote || note ? 'items-start' : 'items-center',
-  );
+  const containerClassName = clsx('⁂-account-card__row', {
+    '⁂-account-card__row--top': withAccountNote || note,
+  });
 
   const body = (
     <>
@@ -368,7 +360,10 @@ const Account = ({
             username={account.username}
           />
         ) : (
-          <LinkEl className={clsx('rounded-lg', emoji && 'relative')} {...linkProps}>
+          <LinkEl
+            className={clsx('⁂-account-card__avatar', emoji && '⁂-account-card__avatar--emoji')}
+            {...linkProps}
+          >
             <Avatar
               src={account.avatar}
               size={avatarSize}
@@ -376,22 +371,16 @@ const Account = ({
               isCat={account.is_cat}
               username={account.username}
             />
-            {emoji && (
-              <Emoji
-                className='!absolute -right-1.5 bottom-0 size-5'
-                emoji={emoji}
-                src={emojiUrl}
-              />
-            )}
+            {emoji && <Emoji className='⁂-account-card__emoji' emoji={emoji} src={emojiUrl} />}
           </LinkEl>
         ))}
 
-      <div className='grow overflow-hidden' style={style}>
+      <div className='⁂-account-card__content' style={style}>
         <LinkEl {...linkProps}>
-          <div className='flex flex-grow items-center gap-1'>
-            <Text size='sm' weight='semibold' truncate>
+          <div className='⁂-account-card__display-name'>
+            <p className='⁂-account-card__display-name__text'>
               <Emojify text={account.display_name} emojis={account.emojis} />
-            </Text>
+            </p>
 
             {account.verified && <VerificationBadge />}
 
@@ -404,19 +393,16 @@ const Account = ({
           </div>
         </LinkEl>
 
-        <div className='flex flex-col gap-1'>
-          {' '}
-          <div className='flex items-center gap-1'>
-            <Text theme='muted' size='sm' direction='ltr' truncate>
-              @{username}
-            </Text>
+        <div className='⁂-account-card__meta__container'>
+          <div className='⁂-account-card__meta'>
+            <p className='⁂-account-card__handle'>@{username}</p>
 
             {withLocked && !timestamp && account.locked && (
               <>
                 <Icon
                   src={iconLock}
                   alt={intl.formatMessage(messages.accountLocked)}
-                  className='size-4 text-gray-600'
+                  className='⁂-account-card__lock'
                 />
                 {account.favicon && !disableUserProvidedMedia && <span className='⁂-separator' />}
               </>
@@ -437,7 +423,7 @@ const Account = ({
                   timestamp={timestamp}
                   theme='muted'
                   size='sm'
-                  className='whitespace-nowrap'
+                  className='⁂-account-card__timestamp'
                   futureDate={futureTimestamp}
                 />
               </>
@@ -447,7 +433,7 @@ const Account = ({
               <>
                 <span className='⁂-separator' />
 
-                <Text tag='span' theme='muted' size='sm'>
+                <span className='⁂-account-card__meta-text'>
                   {approvalStatus === 'pending' ? (
                     <FormattedMessage
                       id='status.approval.pending'
@@ -456,7 +442,7 @@ const Account = ({
                   ) : (
                     <FormattedMessage id='status.approval.rejected' defaultMessage='Rejected' />
                   )}
-                </Text>
+                </span>
               </>
             )}
 
@@ -464,9 +450,9 @@ const Account = ({
               <>
                 <span className='⁂-separator' />
 
-                <Text theme='muted' size='sm'>
+                <p className='⁂-account-card__meta-text'>
                   <RelativeTimestamp timestamp={blockExpiresAt} futureDate />
-                </Text>
+                </p>
               </>
             ) : null}
 
@@ -474,31 +460,25 @@ const Account = ({
               <>
                 <span className='⁂-separator' />
 
-                <Text theme='muted' size='sm'>
+                <p className='⁂-account-card__meta-text'>
                   <RelativeTimestamp timestamp={muteExpiresAt} futureDate />
-                </Text>
+                </p>
               </>
             ) : null}
 
             {items}
           </div>
           {note ? (
-            <Text size='sm' className='mr-2'>
-              {note}
-            </Text>
+            <p className='⁂-account-card__note'>{note}</p>
           ) : (
             withAccountNote && (
-              <Text
-                truncate
-                size='sm'
-                className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
-              >
+              <p className='⁂-account-card__bio'>
                 <ParsedContent
                   html={account.note}
                   emojis={account.emojis}
                   speakAsCat={account.speak_as_cat}
                 />
-              </Text>
+              </p>
             )
           )}
         </div>
@@ -513,7 +493,7 @@ const Account = ({
         '⁂-account-card--action-top': actionAlignment === 'top',
       })}
     >
-      <div className='w-fit min-w-full' ref={overflowRef}>
+      <div className='⁂-account-card__inner ⁂-account-card__inner--fit' ref={overflowRef}>
         {showAccountHoverCard ? (
           <HoverAccountWrapper accountId={account.id} className={containerClassName}>
             {body}

@@ -5,10 +5,8 @@ import React, { useState, useRef, useLayoutEffect, type CSSProperties } from 're
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/icon';
-import AltIndicator from '@/components/media/alt-indicator';
 import Blurhash from '@/components/media/blurhash';
 import StillImage from '@/components/still-image';
-import Popover from '@/components/ui/popover';
 import Text from '@/components/ui/text';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
@@ -22,6 +20,8 @@ import {
   minimumAspectRatio,
   maximumAspectRatio,
 } from '@/utils/media-aspect-ratio';
+
+import AltPopover from './alt-popover';
 
 import type { MediaAttachment } from 'pl-api';
 
@@ -215,25 +215,14 @@ const Item: React.FC<IItem> = ({
           />
         </a>
         {attachment.description && (
-          <Popover
-            interaction='click'
-            referenceElementClassName='cursor-pointer'
-            content={
-              <div className='flex max-h-[32rem] max-w-96 flex-col gap-1 overflow-auto p-4'>
-                <Text weight='semibold'>
-                  <FormattedMessage
-                    id='media-gallery.description'
-                    defaultMessage='Image description'
-                  />
-                </Text>
-                <Text className='whitespace-pre-wrap'>{attachment.description}</Text>
-              </div>
+          <AltPopover
+            alt={attachment.description}
+            heading={
+              <FormattedMessage id='media-gallery.description' defaultMessage='Image description' />
             }
-            isFlush
             title={intl.formatMessage(messages.altText)}
-          >
-            <AltIndicator className='absolute bottom-2 left-2 z-10 opacity-80 transition-opacity hover:opacity-100' />
-          </Popover>
+            className='absolute bottom-2 left-2 z-10 opacity-80 transition-opacity hover:opacity-100'
+          />
         )}
       </>
     );

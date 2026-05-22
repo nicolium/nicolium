@@ -15,13 +15,10 @@ import ActionButton from '@/components/accounts/action-button';
 import SubscriptionButton from '@/components/accounts/subscription-button';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Badge from '@/components/badge';
-import AltIndicator from '@/components/media/alt-indicator';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Popover from '@/components/ui/popover';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -31,6 +28,8 @@ import { queryKeys } from '@/queries/keys';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
+
+import AltPopover from '../media/alt-popover';
 
 import { AccountMenu } from './account-menu';
 
@@ -106,7 +105,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
     return (
       <div className='⁂-account-header__container ⁂-account-header__container--placeholder'>
         <div />
-        <div className='relative mx-4 -mt-12 size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
+        <div className='⁂-account-header__avatar-placeholder' />
       </div>
     );
   }
@@ -202,31 +201,17 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
 
     if (settings.disableUserProvidedMedia) {
       if (!account.header_description || account.header_default) return null;
-      else
+      else {
         return (
-          <Popover
-            interaction='hover'
-            referenceElementClassName='cursor-pointer'
-            content={
-              <div className='flex max-h-[32rem] max-w-96 flex-col gap-1 overflow-auto p-4'>
-                <Text weight='semibold'>
-                  <FormattedMessage
-                    id='account.header.description'
-                    defaultMessage='Header description'
-                  />
-                </Text>
-                <Text className='whitespace-pre-wrap'>{account.header_description}</Text>
-              </div>
-            }
-            isFlush
+          <AltPopover
+            alt={account.header_description}
+            heading={intl.formatMessage(messages.headerAlt)}
+            message={<FormattedMessage id='account.header.alt' defaultMessage='Profile header' />}
             title={intl.formatMessage(messages.headerAlt)}
-          >
-            <AltIndicator
-              className='ml-6 mt-6 w-fit'
-              message={<FormattedMessage id='account.header.alt' defaultMessage='Profile header' />}
-            />
-          </Popover>
+            className='⁂-account-header__header-alt-indicator'
+          />
         );
+      }
     }
 
     if (account.header) {
@@ -263,8 +248,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
           }}
           title={intl.formatMessage(messages.chat, { name: account.username })}
           theme='outlined'
-          className='px-2'
-          iconClassName='h-4 w-4'
+          className='⁂-account-header__icon-button'
         />
       );
     } else {
@@ -285,8 +269,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
         onClick={handleShare}
         title={intl.formatMessage(messages.share, { name: account.username })}
         theme='outlined'
-        className='px-2'
-        iconClassName='h-4 w-4'
+        className='⁂-account-header__icon-button'
       />
     );
   };
@@ -319,8 +302,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
         href={href}
         title={intl.formatMessage(messages.subscribeFeed)}
         theme='outlined'
-        className='px-2'
-        iconClassName='h-4 w-4'
+        className='⁂-account-header__icon-button'
       />
     );
   };
@@ -334,41 +316,36 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
       )}
 
       <div
-        className={clsx(
-          'relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none sm:rounded-t-xl',
-          {
-            'h-32 bg-gray-200 dark:bg-gray-900/50 lg:h-48': !settings.disableUserProvidedMedia,
-          },
-        )}
+        className={clsx('⁂-account-header__banner', {
+          '⁂-account-header__banner--media': !settings.disableUserProvidedMedia,
+        })}
       >
         {renderHeader()}
 
-        <div className='absolute left-2 top-2'>
-          <div className='flex items-center gap-1'>{info}</div>
-        </div>
+        <div className='⁂-account-header__badges'>{info}</div>
       </div>
 
-      <div className='mx-4 -mt-12 flex items-end gap-5'>
-        <div className='relative flex'>
+      <div className='⁂-account-header__profile-row'>
+        <div className='⁂-account-header__avatar'>
           <a href={account.avatar} onClick={handleAvatarClick} target='_blank'>
             <Avatar
               src={account.avatar}
               alt={account.avatar_description}
               size={96}
-              className='relative size-24 rounded-lg bg-white ring-4 ring-white black:ring-black dark:bg-primary-900 dark:ring-primary-900'
+              className='⁂-account-header__avatar-image'
               isCat={account.is_cat}
               username={account.username}
               showAlt
             />
           </a>
           {account.verified && (
-            <div className='absolute -bottom-2 -right-2 z-[1]'>
-              <VerificationBadge className='!size-[24px] rounded-full !p-[2px] ring-2 ring-white black:ring-black dark:ring-primary-900' />
+            <div className='⁂-account-header__verification-badge'>
+              <VerificationBadge className='⁂-account-header__verification-icon' />
             </div>
           )}
         </div>
 
-        <div className='mt-6 flex w-full flex-wrap justify-end gap-2 sm:pb-1'>
+        <div className='⁂-account-header__actions'>
           {ownAccount && account.id !== ownAccount.id && <SubscriptionButton account={account} />}
           {renderMessageButton()}
           {renderShareButton()}

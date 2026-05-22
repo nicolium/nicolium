@@ -8,11 +8,9 @@ import missingAvatar from '@/assets/images/avatar-missing.png';
 import StillImage, { type IStillImage } from '@/components/still-image';
 import { useSettings } from '@/stores/settings';
 
-import AltIndicator from '../media/alt-indicator';
+import AltPopover from '../media/alt-popover';
 
 import Icon from './icon';
-import Popover from './popover';
-import Text from './text';
 
 const COLOR_CACHE = new Map<string, string>();
 
@@ -91,26 +89,14 @@ const Avatar: React.FC<IAvatar> = (props) => {
   if (disableUserProvidedMedia) {
     if (isAvatarMissing || !alt || isDefault) return null;
     return (
-      <Popover
-        interaction='hover'
-        referenceElementClassName='cursor-pointer'
-        content={
-          <div className='flex max-h-[32rem] max-w-96 flex-col gap-1 overflow-auto p-4'>
-            <Text weight='semibold'>
-              <FormattedMessage
-                id='account.avatar.description'
-                defaultMessage='Avatar description'
-              />
-            </Text>
-            <Text className='whitespace-pre-wrap'>{alt}</Text>
-          </div>
+      <AltPopover
+        alt={alt}
+        heading={
+          <FormattedMessage id='account.avatar.description' defaultMessage='Avatar description' />
         }
-        isFlush
-      >
-        <AltIndicator
-          message={<FormattedMessage id='account.avatar.alt' defaultMessage='Avatar' />}
-        />
-      </Popover>
+        message={<FormattedMessage id='account.avatar.alt' defaultMessage='Avatar' />}
+        className='⁂-avatar__alt-indicator'
+      />
     );
   }
 

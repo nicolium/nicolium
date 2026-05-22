@@ -9,9 +9,7 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import ActionButton from '@/components/accounts/action-button';
 import { isTimezoneLabel } from '@/components/accounts/profile-field';
 import Badge from '@/components/badge';
-import Card, { CardBody } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { UserPanel } from '@/features/ui/util/async-components';
 import { useTransitionStyles } from '@/hooks/use-transition-styles';
@@ -155,70 +153,64 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Card variant='rounded' className='isolate'>
-        <CardBody>
-          <div className='flex flex-col gap-2'>
-            <UserPanel
-              accountId={account.id}
-              action={<ActionButton account={account} small />}
-              badges={badges}
-            />
+      <div className='⁂-account-hover-card__card'>
+        <div className='⁂-account-hover-card__info'>
+          <UserPanel
+            accountId={account.id}
+            action={<ActionButton account={account} small />}
+            badges={badges}
+          />
 
-            {account.local ? (
-              <div
-                className='⁂-account-info__details__item'
-                title={intl.formatDate(account.created_at, dateFormatOptions)}
-              >
-                <Icon src={iconCalendarDots} />
+          {account.local ? (
+            <div
+              className='⁂-account-info__details__item'
+              title={intl.formatDate(account.created_at, dateFormatOptions)}
+            >
+              <Icon src={iconCalendarDots} />
 
-                <FormattedMessage
-                  id='account.member_since'
-                  defaultMessage='Joined {date}'
-                  values={{
-                    date: memberSinceDate,
-                  }}
-                />
-              </div>
-            ) : null}
-
-            {timezoneField && <AccountLocalTime accountId={account.id} field={timezoneField} />}
-
-            {account.pronouns.length > 0 && (
-              <div
-                className='⁂-account-info__details__item'
-                title={intl.formatMessage(messages.pronouns, {
-                  pronouns: account.pronouns.join('/'),
-                })}
-              >
-                <Icon src={iconTag} />
-
-                {account.pronouns.join('/')}
-              </div>
-            )}
-
-            {!!scrobble && <Scrobble scrobble={scrobble} />}
-
-            {account.note.length > 0 && (
-              <Text
-                truncate
-                size='sm'
-                className='mr-2 rtl:ml-2 rtl:mr-0 [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
-              >
-                <ParsedContent html={account.note} emojis={account.emojis} />
-              </Text>
-            )}
-          </div>
-
-          {followedBy && (
-            <div className='absolute left-2 top-2'>
-              <Badge
-                slug='opaque'
-                title={<FormattedMessage id='account.follows_you' defaultMessage='Follows you' />}
+              <FormattedMessage
+                id='account.member_since'
+                defaultMessage='Joined {date}'
+                values={{
+                  date: memberSinceDate,
+                }}
               />
             </div>
+          ) : null}
+
+          {timezoneField && <AccountLocalTime accountId={account.id} field={timezoneField} />}
+
+          {account.pronouns.length > 0 && (
+            <div
+              className='⁂-account-info__details__item'
+              title={intl.formatMessage(messages.pronouns, {
+                pronouns: account.pronouns.join('/'),
+              })}
+            >
+              <Icon src={iconTag} />
+
+              {account.pronouns.join('/')}
+            </div>
           )}
-        </CardBody>
-      </Card>
+
+          {!!scrobble && <Scrobble scrobble={scrobble} />}
+
+          {account.note.length > 0 && (
+            <p className='⁂-account-hover-card__note'>
+              <ParsedContent html={account.note} emojis={account.emojis} />
+            </p>
+          )}
+        </div>
+
+        {followedBy && (
+          <div className='⁂-account-hover-card__badge'>
+            <Badge
+              slug='opaque'
+              title={<FormattedMessage id='account.follows_you' defaultMessage='Follows you' />}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

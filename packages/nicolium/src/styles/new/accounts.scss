@@ -8,6 +8,148 @@
 }
 
 .⁂-account-header {
+  &__avatar-placeholder {
+    position: relative;
+
+    width: 6rem;
+    height: 6rem;
+    margin: -3rem 1rem 0;
+    border-radius: var(--radius-lg);
+
+    background-color: rgb(var(--color-gray-400));
+    box-shadow: 0 0 0 4px white;
+
+    .dark & {
+      box-shadow: 0 0 0 4px rgb(var(--color-gray-800));
+    }
+  }
+
+  &__banner {
+    isolation: isolate;
+    position: relative;
+
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 100%;
+
+    .black & {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    &--media {
+      height: 8rem;
+      background-color: rgb(var(--color-gray-200));
+
+      .dark & {
+        background-color: rgb(var(--color-gray-900) / 0.5);
+      }
+
+      @media (min-width: variables.$breakpoint-lg) {
+        height: 12rem;
+      }
+    }
+
+    @media (min-width: variables.$breakpoint-sm) {
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    }
+  }
+
+  &__badges {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+  }
+
+  &__profile-row {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-end;
+    margin: -3rem 1rem 0;
+  }
+
+  &__avatar {
+    position: relative;
+    display: flex;
+  }
+
+  &__avatar-image {
+    position: relative;
+    border-radius: var(--radius-lg);
+    background-color: white;
+    box-shadow: 0 0 0 4px white;
+
+    .dark & {
+      background-color: rgb(var(--color-primary-900));
+      box-shadow: 0 0 0 4px rgb(var(--color-primary-900));
+    }
+
+    .black & {
+      box-shadow: 0 0 0 4px black;
+    }
+  }
+
+  &__verification-badge {
+    position: absolute;
+    z-index: 1;
+    right: -0.5rem;
+    bottom: -0.5rem;
+  }
+
+  &__verification-icon {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    padding: 2px !important;
+    border-radius: var(--radius-full);
+
+    box-shadow: 0 0 0 2px white;
+
+    .dark & {
+      box-shadow: 0 0 0 2px rgb(var(--color-primary-900));
+    }
+
+    .black & {
+      box-shadow: 0 0 0 2px black;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+
+    width: 100%;
+    margin-top: 1.5rem;
+
+    @media (min-width: variables.$breakpoint-sm) {
+      padding-bottom: 0.25rem;
+    }
+  }
+
+  &__icon-button {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__header-alt-indicator {
+    width: fit-content;
+    margin-top: 1.5rem;
+    margin-left: 1.5rem;
+  }
+
   &__container {
     margin: -1rem -1rem 0;
 
@@ -208,6 +350,140 @@
     > div {
       align-items: flex-start;
     }
+  }
+
+  &__inner {
+    &--fit {
+      width: fit-content;
+      min-width: 100%;
+    }
+  }
+
+  &__row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    max-width: 100%;
+
+    &--top {
+      align-items: flex-start;
+    }
+  }
+
+  &__avatar {
+    border-radius: var(--radius-lg);
+
+    &--emoji {
+      position: relative;
+    }
+  }
+
+  &__emoji {
+    position: absolute !important;
+    right: -0.375rem;
+    bottom: 0;
+
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  &__content {
+    overflow: hidden;
+    flex-grow: 1;
+  }
+
+  &__display-name {
+    display: flex;
+    flex-grow: 1;
+    gap: 0.25rem;
+    align-items: center;
+
+    &__text {
+      @include mixins.text($size: sm, $weight: semibold, $truncate: true);
+    }
+  }
+
+  &__meta {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    &__container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+
+  &__handle {
+    @include mixins.text($size: sm, $theme: muted, $truncate: true);
+
+    direction: ltr;
+  }
+
+  &__meta-text {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+
+  &__lock {
+    width: 1rem;
+    height: 1rem;
+    color: rgb(var(--color-gray-600));
+  }
+
+  &__timestamp {
+    white-space: nowrap;
+  }
+
+  &__note {
+    @include mixins.text($size: sm);
+
+    margin-right: 0.5rem;
+  }
+
+  &__bio {
+    @include mixins.text($size: sm, $truncate: true);
+
+    overflow: hidden;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+
+    text-overflow: ellipsis;
+
+    br,
+    p {
+      display: none;
+    }
+
+    p:first-child {
+      overflow: hidden;
+      display: inline;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__action-button {
+    color: rgb(var(--color-gray-600));
+    background-color: transparent;
+
+    &:hover {
+      color: rgb(var(--color-gray-700));
+    }
+
+    .dark & {
+      color: rgb(var(--color-gray-600));
+    }
+
+    .dark &:hover {
+      color: rgb(var(--color-gray-500));
+    }
+  }
+
+  &__action-icon {
+    width: 1rem;
+    height: 1rem;
   }
 }
 
@@ -595,16 +871,45 @@
     }
   }
 
+  &__card {
+    @include mixins.card($variant: rounded);
+
+    isolation: isolate;
+  }
+
   &__info {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
+  &__note {
+    @include mixins.text($size: sm, $truncate: true);
+
+    margin-right: 0.5rem;
+
+    [dir="rtl"] & {
+      margin-right: 0;
+      margin-left: 0.5rem;
+    }
+
+    br,
+    p {
+      display: none;
+    }
+
+    p:first-child {
+      overflow: hidden;
+      display: inline;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
   &__badge {
     position: absolute;
     top: 0.5rem;
-    right: 0.5rem;
+    left: 0.5rem;
   }
 }
 

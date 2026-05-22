@@ -2071,3 +2071,28 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     margin: 0 auto;
   }
 }
+
+.⁂-alt-popover {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  max-width: 24rem;
+  max-height: 32rem;
+  padding: 1rem;
+
+  &__reference {
+    cursor: pointer;
+  }
+
+  &__title {
+    @include mixins.text($weight: semibold);
+  }
+
+  &__text {
+    @include mixins.text;
+
+    white-space: pre-wrap;
+  }
+}
