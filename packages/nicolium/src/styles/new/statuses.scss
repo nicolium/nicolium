@@ -1099,6 +1099,10 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
       }
     }
   }
+
+  &__link time {
+    white-space: nowrap;
+  }
 }
 
 .⁂-status-tombstone {
