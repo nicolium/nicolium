@@ -41,28 +41,26 @@ const ChatsPageSidebar = () => {
   };
 
   return (
-    <div className='flex h-full flex-col gap-4'>
-      <div className='flex items-center justify-between px-4 pt-6'>
+    <div className='⁂-chats-page-sidebar-panel'>
+      <div className='⁂-chats-page-sidebar-panel__header'>
         <CardTitle title={intl.formatMessage(messages.title)} />
 
-        <div className='flex gap-1'>
+        <div className='⁂-chats-page-sidebar-panel__actions'>
           <IconButton
             src={iconSlidersHorizontal}
-            iconClassName='h-5 w-5 text-gray-600'
             onClick={handleSettingsClick}
             title={intl.formatMessage(messages.settings)}
           />
 
           <IconButton
             src={iconPencilSimple}
-            iconClassName='h-5 w-5 text-gray-600'
             onClick={handleChatCreate}
             title={intl.formatMessage(messages.newChat)}
           />
         </div>
       </div>
 
-      <div className='flex h-full grow flex-col overflow-auto'>
+      <div className='⁂-chats-page-sidebar-panel__list'>
         <ChatList onClickChat={handleClickChat} />
       </div>
     </div>

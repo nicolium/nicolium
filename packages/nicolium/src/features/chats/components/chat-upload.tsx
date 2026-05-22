@@ -30,16 +30,19 @@ const ChatUpload: React.FC<IChatUpload> = ({ attachment, onDelete }) => {
   };
 
   return (
-    <div className='relative isolate inline-block size-24 overflow-hidden rounded-lg bg-gray-200 dark:bg-primary-900'>
-      <Blurhash hash={attachment.blurhash} className='absolute inset-0 -z-10 size-full' />
+    <div className='⁂-chat-upload'>
+      <Blurhash hash={attachment.blurhash} className='⁂-chat-upload__blurhash' />
 
-      <div className='absolute right-[6px] top-[6px]'>
+      <div className='⁂-chat-upload__remove'>
         <RemoveButton onClick={onDelete} />
       </div>
 
       <button
         onClick={clickable ? handleOpenModal : undefined}
-        className={clsx('size-full', { 'cursor-zoom-in': clickable, 'cursor-default': !clickable })}
+        className={clsx('⁂-chat-upload__button', {
+          '⁂-chat-upload__button--clickable': clickable,
+          '⁂-chat-upload__button--static': !clickable,
+        })}
       >
         <ChatUploadPreview attachment={attachment} />
       </button>
@@ -59,10 +62,10 @@ const RemoveButton: React.FC<IRemoveButton> = ({ onClick }) => {
     <button
       type='button'
       onClick={onClick}
-      className='flex size-5 items-center justify-center rounded-full bg-secondary-500 p-1'
+      className='⁂-chat-upload__remove-button'
       aria-label={intl.formatMessage(messages.removeAttachment)}
     >
-      <Icon className='size-3 text-white' src={iconX} />
+      <Icon src={iconX} />
     </button>
   );
 };

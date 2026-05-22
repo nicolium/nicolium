@@ -3,7 +3,6 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 
 import ChatPaneHeader from '../chat-pane-header';
@@ -28,15 +27,12 @@ const ChatSearchHeader = () => {
             }}
             title={intl.formatMessage(messages.back)}
           >
-            <Icon
-              src={iconArrowLeft}
-              className='size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180'
-            />
+            <Icon src={iconArrowLeft} className='⁂-chat-widget__back-icon' />
           </button>
 
-          <Text size='sm' weight='bold' truncate>
+          <span className='⁂-chat-widget__title-text'>
             <FormattedMessage id='chat_search.title' defaultMessage='Messages' />
-          </Text>
+          </span>
         </div>
       }
       isOpen={isOpen}

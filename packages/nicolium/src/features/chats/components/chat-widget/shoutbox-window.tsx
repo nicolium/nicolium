@@ -4,7 +4,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/stores/instance';
@@ -31,28 +30,25 @@ const ShoutboxWindow = () => {
     <>
       <ChatPaneHeader
         title={
-          <div className='flex items-center gap-2'>
+          <div className='⁂-chat-widget__title-row'>
             {isOpen && (
               <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
-                <Icon
-                  src={iconArrowLeft}
-                  className='size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180'
-                />
+                <Icon src={iconArrowLeft} className='⁂-chat-widget__back-icon' />
               </button>
             )}
 
-            <div className='flex items-center gap-3'>
-              {isOpen && <Avatar src={logo} alt='' size={40} className='flex-none' />}
+            <div className='⁂-chat-widget__account__container'>
+              {isOpen && <Avatar src={logo} alt='' size={40} className='⁂-chat-widget__avatar' />}
 
-              <div className='flex flex-col items-start'>
-                <div className='flex grow items-center space-x-1'>
-                  <Text size='sm' weight='bold' truncate>
+              <div className='⁂-chat-widget__account'>
+                <div className='⁂-chat-widget__account__name'>
+                  <span className='⁂-chat-widget__title-text'>
                     <FormattedMessage
                       id='chat_list_item_shoutbox'
                       defaultMessage='{instance} shoutbox'
                       values={{ instance: instance.title }}
                     />
-                  </Text>
+                  </span>
                 </div>
               </div>
             </div>
@@ -63,7 +59,7 @@ const ShoutboxWindow = () => {
         onToggle={toggleChatPane}
       />
 
-      <div className='flex h-full grow flex-col gap-2 overflow-hidden'>
+      <div className='⁂-chat-widget__chat-body ⁂-chat-widget__chat-body--shoutbox'>
         <Shoutbox />
       </div>
     </>

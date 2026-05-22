@@ -69,17 +69,17 @@
     gap: 0.5rem;
   }
 
-  &__title-row {
-    display: flex;
-    gap: 0.5rem;
-    align-items: flex-start;
-    width: 100%;
-  }
-
   &__title {
+    @include mixins.text($size: lg, $weight: bold);
+
     flex-grow: 1;
 
-    @include mixins.text($size: lg, $weight: bold);
+    &__container {
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+      width: 100%;
+    }
   }
 
   &__menu-button {

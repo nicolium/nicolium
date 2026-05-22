@@ -4,7 +4,6 @@ import { Virtuoso } from 'react-virtuoso';
 
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Avatar from '@/components/ui/avatar';
-import Text from '@/components/ui/text';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 
 import type { useAccountSearch } from '@/queries/search/use-search-accounts';
@@ -33,32 +32,28 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
       <button
         key={account.id}
         type='button'
-        className='flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 dark:hover:bg-gray-800'
+        className='⁂-chat-search__result'
         onClick={() => {
           onSelect(account.id);
         }}
         data-testid='account'
       >
-        <div className='flex items-center gap-2'>
-          <Avatar
-            src={account.avatar}
-            alt={account.avatar_description}
-            size={40}
-            isCat={account.is_cat}
-            username={account.username}
-          />
+        <Avatar
+          src={account.avatar}
+          alt={account.avatar_description}
+          size={40}
+          isCat={account.is_cat}
+          username={account.username}
+        />
 
-          <div className='flex flex-col items-start'>
-            <div className='flex grow items-center space-x-1'>
-              <Text weight='bold' size='sm' truncate>
-                {account.display_name}
-              </Text>
-              {account.verified && <VerificationBadge />}
-            </div>
-            <Text size='sm' weight='medium' theme='muted' direction='ltr' truncate>
-              @{account.acct}
-            </Text>
+        <div className='⁂-chat-search__result__content'>
+          <div className='⁂-chat-search__result__name'>
+            <span>{account.display_name}</span>
+            {account.verified && <VerificationBadge />}
           </div>
+          <span className='⁂-chat-search__result__acct' dir='ltr'>
+            {account.acct}
+          </span>
         </div>
       </button>
     ),
@@ -66,10 +61,12 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
   );
 
   return (
-    <div className='relative grow'>
+    <div className='⁂-chat-search__results'>
       <Virtuoso
         data={accounts}
-        itemContent={(_index, chat) => <div className='px-2'>{renderAccount(chat)}</div>}
+        itemContent={(_index, chat) => (
+          <div className='⁂-chat-search__result__container'>{renderAccount(chat)}</div>
+        )}
         endReached={handleLoadMore}
         atTopStateChange={(atTop) => {
           setNearTop(atTop);
@@ -80,22 +77,16 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
       />
 
       <div
-        className={clsx(
-          'pointer-events-none absolute inset-x-0 top-[58px] flex justify-center rounded-t-lg bg-gradient-to-b from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900',
-          {
-            'opacity-0': isNearTop,
-            'opacity-100': !isNearTop,
-          },
-        )}
+        className={clsx('⁂-chat-search__fade ⁂-chat-search__fade--top', {
+          '⁂-chat-search__fade--hidden': isNearTop,
+          '⁂-chat-search__fade--visible': !isNearTop,
+        })}
       />
       <div
-        className={clsx(
-          'pointer-events-none absolute inset-x-0 bottom-0 flex justify-center rounded-b-lg bg-gradient-to-t from-white to-transparent pb-8 pt-12 transition-opacity duration-500 black:from-black dark:from-gray-900',
-          {
-            'opacity-0': isNearBottom,
-            'opacity-100': !isNearBottom,
-          },
-        )}
+        className={clsx('⁂-chat-search__fade ⁂-chat-search__fade--bottom', {
+          '⁂-chat-search__fade--hidden': isNearBottom,
+          '⁂-chat-search__fade--visible': !isNearBottom,
+        })}
       />
     </div>
   );

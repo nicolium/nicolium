@@ -5,7 +5,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AutosuggestInput from '@/components/autosuggest-input';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import emojiSearch from '@/features/emoji/search';
 import { useInstance } from '@/stores/instance';
 
@@ -86,9 +85,13 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
     };
 
     return (
-      <div className={clsx('mt-auto pt-5 shadow-3xl', !widget && 'px-4 pb-5')}>
-        <div className='flex items-stretch justify-between gap-4'>
-          <div className='flex flex-grow flex-col'>
+      <div
+        className={clsx('⁂-chat-composer ⁂-chat-composer--shoutbox', {
+          '⁂-chat-composer--framed': !widget,
+        })}
+      >
+        <div className='⁂-chat-composer__row'>
+          <div className='⁂-chat-composer__field'>
             <AutosuggestInput
               key={resetContentKey}
               as={ChatTextarea}
@@ -114,17 +117,14 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
             />
           </div>
 
-          <div className='mb-1.5 flex w-10 flex-col items-center justify-end gap-2'>
+          <div className='⁂-chat-composer__side ⁂-chat-composer__side--send'>
             {isOverCharacterLimit ? (
-              <Text size='sm' theme='danger'>
-                {overLimitText}
-              </Text>
+              <span className='⁂-chat-composer__limit'>{overLimitText}</span>
             ) : null}
 
             <IconButton
               src={iconPaperPlaneRight}
-              iconClassName='h-5 w-5'
-              className='text-primary-500'
+              className='⁂-chat-composer__send-button'
               disabled={isSubmitDisabled}
               onClick={onSubmit}
               title={intl.formatMessage(messages.send)}

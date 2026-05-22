@@ -19,11 +19,11 @@ const ChatsPageNew: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className='flex h-full flex-col gap-4'>
-      <div className='flex items-center px-4 pt-6 sm:px-6'>
+    <div className='⁂-chats-page-panel'>
+      <div className='⁂-chats-page-panel__header'>
         <IconButton
           src={iconArrowLeft}
-          className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
+          className='⁂-chats-page-panel__back-button'
           onClick={() => navigate({ to: '/chats' })}
           title={intl.formatMessage(messages.back)}
         />

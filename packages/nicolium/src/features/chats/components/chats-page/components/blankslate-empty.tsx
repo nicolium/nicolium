@@ -2,22 +2,21 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import Text from '@/components/ui/text';
 
 /** To display on the chats main page when no message is selected. */
 const BlankslateEmpty: React.FC = () => (
-  <div className='flex h-full flex-col items-center justify-center gap-6 p-6'>
-    <div className='flex max-w-sm flex-col gap-2'>
-      <Text size='2xl' weight='bold' tag='h2' align='center'>
+  <div className='⁂-chats-page-blankslate'>
+    <div className='⁂-chats-page-blankslate__content'>
+      <h2 className='⁂-chats-page-blankslate__title'>
         <FormattedMessage id='chats.main.blankslate.title' defaultMessage='No messages yet' />
-      </Text>
+      </h2>
 
-      <Text size='sm' theme='muted' align='center'>
+      <p className='⁂-chats-page-blankslate__body'>
         <FormattedMessage
           id='chats.main.blankslate.subtitle'
           defaultMessage='Search for someone to chat with'
         />
-      </Text>
+      </p>
     </div>
 
     <Button theme='primary' to='/chats/new'>

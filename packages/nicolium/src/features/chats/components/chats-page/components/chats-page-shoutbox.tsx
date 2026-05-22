@@ -5,7 +5,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Avatar from '@/components/ui/avatar';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/stores/instance';
 
@@ -22,34 +21,32 @@ const ChatsPageShoutbox = () => {
   const { logo } = useFrontendConfig();
 
   return (
-    <div className='flex h-full flex-col overflow-hidden'>
-      <div className='flex w-full items-center gap-2 overflow-hidden p-4'>
-        <div className='flex items-center'>
+    <div className='⁂-chats-page-chat'>
+      <div className='⁂-chats-page-chat__header'>
+        <div className='⁂-chats-page-chat__avatar__container'>
           <IconButton
             src={iconArrowLeft}
-            className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
+            className='⁂-chats-page-chat__back-button'
             onClick={() => navigate({ to: '/chats' })}
             title={intl.formatMessage(messages.back)}
           />
 
-          <Avatar src={logo} alt='' size={40} className='flex-none' />
+          <Avatar src={logo} alt='' size={40} className='⁂-chats-page-chat__avatar' />
         </div>
 
-        <div className='flex h-11 flex-col items-start overflow-hidden'>
-          <div className='flex w-full grow items-center space-x-1'>
-            <Text weight='bold' size='sm' align='left' truncate>
-              <FormattedMessage
-                id='chat_list_item_shoutbox'
-                defaultMessage='{instance} shoutbox'
-                values={{ instance: instance.title }}
-              />
-            </Text>
-          </div>
+        <div className='⁂-chats-page-chat__title'>
+          <span className='⁂-chats-page-chat__title__name ⁂-chats-page-chat__title__text'>
+            <FormattedMessage
+              id='chat_list_item_shoutbox'
+              defaultMessage='{instance} shoutbox'
+              values={{ instance: instance.title }}
+            />
+          </span>
         </div>
       </div>
 
-      <div className='h-full overflow-hidden'>
-        <Shoutbox className='h-full' />
+      <div className='⁂-chats-page-chat__body'>
+        <Shoutbox className='⁂-chats-page-chat__chat' />
       </div>
     </div>
   );

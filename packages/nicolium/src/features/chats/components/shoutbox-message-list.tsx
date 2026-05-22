@@ -7,7 +7,6 @@ import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import PlaceholderChatMessage from '@/components/placeholders/placeholder-chat-message';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
-import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -49,31 +48,25 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
         )}
 
         <div
-          className={clsx('flex flex-col gap-0.5', {
-            'max-w-[85%]': true,
-            'order-3 items-end': isMyMessage,
-            'order-1 items-start': !isMyMessage,
+          className={clsx('⁂-shoutbox-message__content', {
+            '⁂-shoutbox-message__content--my-message': isMyMessage,
           })}
         >
           <div
             className={clsx({
-              'relative max-w-full space-y-2 text-ellipsis break-words rounded-md px-3 py-2 [&_.mention]:underline': true,
-              '[&_.mention]:text-primary-600 dark:[&_.mention]:text-primary-400': !isMyMessage,
-              'dark:[&_.mention]:white [&_.mention]:text-white': isMyMessage,
-              'bg-primary-500 text-white': isMyMessage,
-              'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100': !isMyMessage,
-              // '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
+              '⁂-shoutbox-message__bubble': true,
+              '⁂-shoutbox-message__bubble--my-message': isMyMessage,
             })}
             tabIndex={0}
           >
-            <Text size='sm' theme='inherit' className='break-word-nested'>
+            <div className='⁂-shoutbox-message__text'>
               <ParsedContent html={message.text} />
-            </Text>
+            </div>
           </div>
           {!isMyMessage && (
-            <Text size='xs' theme='muted'>
+            <span className='⁂-shoutbox-message__author'>
               <Emojify text={account.display_name} emojis={account.emojis} />
-            </Text>
+            </span>
           )}
         </div>
       </div>

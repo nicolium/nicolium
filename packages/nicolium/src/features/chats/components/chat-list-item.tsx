@@ -109,7 +109,7 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
     return (
       <Hotkeys
         handlers={handlers}
-        className='px-2'
+        className='⁂-chat-list-item__hotkey'
         tabIndex={0}
         role='button'
         key={chat.id}

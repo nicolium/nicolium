@@ -3,7 +3,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import Text from '@/components/ui/text';
 
 /** To display on the chats main page when no message is selected, but chats are present. */
 const BlankslateWithChats = () => {
@@ -14,21 +13,21 @@ const BlankslateWithChats = () => {
   };
 
   return (
-    <div className='flex h-full flex-col items-center justify-center gap-6 p-6'>
-      <div className='flex max-w-sm flex-col gap-2'>
-        <Text size='2xl' weight='bold' tag='h2' align='center'>
+    <div className='⁂-chats-page-blankslate'>
+      <div className='⁂-chats-page-blankslate__content'>
+        <h2 className='⁂-chats-page-blankslate__title'>
           <FormattedMessage
             id='chats.main.blankslate_with_chats.title'
             defaultMessage='Select a chat'
           />
-        </Text>
+        </h2>
 
-        <Text size='sm' theme='muted' align='center'>
+        <p className='⁂-chats-page-blankslate__body'>
           <FormattedMessage
             id='chats.main.blankslate_with_chats.subtitle'
             defaultMessage='Select from one of your open chats or create a new message.'
           />
-        </Text>
+        </p>
       </div>
 
       <Button theme='primary' onClick={handleNewChat}>

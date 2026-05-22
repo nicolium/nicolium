@@ -9,7 +9,6 @@ import { defineMessages, useIntl } from 'react-intl';
 import DropdownMenu from '@/components/dropdown-menu';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { MediaGallery } from '@/features/ui/util/async-components';
 import { useDeleteChatMessage, type ChatMessage as ChatMessageEntity } from '@/queries/chats';
@@ -74,9 +73,9 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
 
     return (
       <MediaGallery
-        className={clsx({
-          'rounded-br-sm': isMyMessage && content,
-          'rounded-bl-sm': !isMyMessage && content,
+        className={clsx('⁂-chat-message__media', {
+          '⁂-chat-message__media--with-content': content && !isMyMessage,
+          '⁂-chat-message__media--my-message': isMyMessage && content,
         })}
         media={[chatMessage.attachment]}
         onOpenMedia={onOpenMedia}
@@ -172,13 +171,12 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
           >
             <button
               title={intl.formatMessage(messages.more)}
-              className={clsx({
-                'rounded-md p-1.5 text-gray-600 hover:bg-gray-200 hover:text-gray-700 focus:text-gray-700 focus:ring-0 dark:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-500 dark:focus:text-gray-500': true,
-                '!text-gray-700 dark:!text-gray-500': isMenuOpen,
+              className={clsx('⁂-chat-message__menu-button', {
+                '⁂-chat-message__menu-button--open': isMenuOpen,
               })}
               data-testid='chat-message-menu'
             >
-              <Icon src={iconDotsThree} className='size-4' />
+              <Icon src={iconDotsThree} />
             </button>
           </DropdownMenu>
         )}
@@ -189,25 +187,21 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
           {maybeRenderMedia(chatMessage)}
 
           {content && (
-            <div className='flex max-w-full items-end'>
+            <div className='⁂-chat-message__bubble__container'>
               <div
                 title={getFormattedTimestamp(chatMessage)}
                 className={clsx({
-                  'relative max-w-full space-y-2 text-ellipsis break-words rounded-md px-3 py-2 [&_.mention]:underline': true,
-                  'rounded-tr-sm': !!chatMessage.attachment && isMyMessage,
-                  'rounded-tl-sm': !!chatMessage.attachment && !isMyMessage,
-                  '[&_.mention]:text-primary-600 dark:[&_.mention]:text-primary-400': !isMyMessage,
-                  'dark:[&_.mention]:white [&_.mention]:text-white': isMyMessage,
-                  'bg-primary-500 text-white': isMyMessage,
-                  'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100': !isMyMessage,
-                  'emoji-lg !bg-transparent !p-0': isOnlyEmoji,
+                  '⁂-chat-message__bubble': true,
+                  '⁂-chat-message__bubble--with-attachment': !!chatMessage.attachment,
+                  '⁂-chat-message__bubble--my-message': isMyMessage,
+                  '⁂-chat-message__bubble--emoji': isOnlyEmoji,
                 })}
                 ref={setBubbleRef}
                 tabIndex={0}
               >
-                <Text size='sm' theme='inherit' className='break-word-nested'>
+                <div className='⁂-chat-message__text'>
                   <ParsedContent html={content} emojis={chatMessage.emojis} />
-                </Text>
+                </div>
               </div>
             </div>
           )}

@@ -7,7 +7,6 @@ import Avatar from '@/components/ui/avatar';
 import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
 import Spinner from '@/components/ui/spinner';
-import Text from '@/components/ui/text';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import {
   useChatMessages,
@@ -44,7 +43,7 @@ const START_INDEX = 10000;
 
 const List: Components['List'] = React.forwardRef((props, ref) => {
   const { context, ...rest } = props;
-  return <div ref={ref} {...rest} className='mb-2' />;
+  return <div ref={ref} {...rest} className='⁂-chat-message-list__list' />;
 });
 
 List.displayName = 'ChatMessageListList';
@@ -197,7 +196,7 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
 
   if (isBlocked) {
     return (
-      <div className='flex h-full grow flex-col items-center gap-2'>
+      <div className='⁂-chat-message-list__blocked'>
         <Avatar
           src={chat.account.avatar}
           alt={chat.account.avatar_description}
@@ -205,42 +204,40 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
           isCat={chat.account.is_cat}
           username={chat.account.username}
         />
-        <Text align='center'>
+        <p className='⁂-chat-message-list__blocked-message'>
           <FormattedMessage
             id='chat_message_list.blocked_by'
             defaultMessage='You are blocked by @{acct}'
             values={{
               acct: (
-                <Text tag='span' theme='primary'>
-                  {chat.account.acct}
-                </Text>
+                <span className='⁂-chat-message-list__blocked-account'>{chat.account.acct}</span>
               ),
             }}
           />
-        </Text>
+        </p>
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className='flex h-full grow items-center justify-center gap-4'>
-        <div className='flex flex-col gap-1'>
-          <Text size='lg' weight='bold' align='center'>
+      <div className='⁂-chat-message-list__error'>
+        <div className='⁂-chat-message-list__error-text'>
+          <p className='⁂-chat-message-list__error-title'>
             <FormattedMessage
               id='chat_message_list.network_failure.title'
               defaultMessage='Whoops!'
             />
-          </Text>
-          <Text theme='muted' align='center'>
+          </p>
+          <p className='⁂-chat-message-list__error-summary'>
             <FormattedMessage
               id='chat_message_list.network_failure.subtitle'
               defaultMessage='We encountered a network failure.'
             />
-          </Text>
+          </p>
         </div>
 
-        <div className='mx-auto'>
+        <div className='⁂-chat-message-list__error-action'>
           <Button theme='primary' onClick={() => refetch()}>
             <FormattedMessage
               id='chat_message_list.network_failure.action'
@@ -254,8 +251,8 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
 
   if (isLoading) {
     return (
-      <div className='flex grow flex-col justify-end pb-4'>
-        <div className='px-4'>
+      <div className='⁂-chat-message-list__loading'>
+        <div className='⁂-chat-message-list__loading-body'>
           <PlaceholderChatMessage isMyMessage />
           <PlaceholderChatMessage />
           <PlaceholderChatMessage isMyMessage />

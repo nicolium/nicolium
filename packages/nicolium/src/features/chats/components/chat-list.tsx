@@ -90,7 +90,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
   const renderEmpty = () => {
     if (isFetching) {
       return (
-        <div className='flex flex-col gap-2'>
+        <div className='⁂-chat-list__placeholder'>
           <PlaceholderChat />
           <PlaceholderChat />
           <PlaceholderChat />

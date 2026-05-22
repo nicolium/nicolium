@@ -5,7 +5,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useFeatures } from '@/hooks/use-features';
 import {
@@ -101,22 +100,19 @@ const ChatSettings = () => {
         isToggleable={false}
         onToggle={minimizeChatPane}
         title={
-          <div className='flex items-center gap-2'>
+          <div className='⁂-chat-widget__title-row'>
             <button onClick={closeSettings} title={intl.formatMessage(messages.back)}>
-              <Icon
-                src={iconArrowLeft}
-                className='size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180'
-              />
+              <Icon src={iconArrowLeft} className='⁂-chat-widget__back-icon' />
             </button>
 
-            <Text weight='semibold'>
+            <span className='⁂-chat-widget__settings-title'>
               <FormattedMessage id='chat_settings.title' defaultMessage='Chat details' />
-            </Text>
+            </span>
           </div>
         }
       />
 
-      <div className='flex flex-col gap-4 px-4'>
+      <div className='⁂-chat-widget__settings-body'>
         <Account account={chat.account} hideActions />
 
         <List>

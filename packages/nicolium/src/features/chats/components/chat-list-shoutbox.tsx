@@ -52,7 +52,7 @@ const ChatListShoutbox: React.FC<IChatListShoutbox> = ({ onClick, onMoveUp, onMo
   return (
     <Hotkeys
       handlers={handlers}
-      className='px-2'
+      className='⁂-chat-list-item__hotkey'
       tabIndex={0}
       role='button'
       onClick={() => {
@@ -62,7 +62,7 @@ const ChatListShoutbox: React.FC<IChatListShoutbox> = ({ onClick, onMoveUp, onMo
     >
       <div className='⁂-chat-list-item ⁂-chat-list-item--shoutbox' data-testid='chat-list-item'>
         <div>
-          <Avatar src={logo} alt='' size={40} className='flex-none' />
+          <Avatar src={logo} alt='' size={40} className='⁂-chat-list-item__avatar' />
           <div className='⁂-chat-list-item__content'>
             <div className='⁂-chat-list-item__name'>
               <p>
@@ -82,7 +82,6 @@ const ChatListShoutbox: React.FC<IChatListShoutbox> = ({ onClick, onMoveUp, onMo
                       text={lastMessageAuthor.display_name}
                       emojis={lastMessageAuthor.emojis}
                     />
-                    {': '}
                   </span>
                 )}
                 <ParsedContent html={lastMessage.text} />

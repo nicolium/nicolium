@@ -518,7 +518,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         </div>
       </div>
       <div className='⁂-event-header__body'>
-        <div className='⁂-event-header__title-row'>
+        <div className='⁂-event-header__title__container'>
           <p className='⁂-event-header__title'>{event.name}</p>
 
           <DropdownMenu items={makeMenu()} placement='bottom-end'>

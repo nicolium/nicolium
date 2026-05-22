@@ -91,8 +91,8 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
   };
 
   return (
-    <div className='-mt-1 flex h-full grow flex-col gap-4'>
-      <div className='px-4 pt-1'>
+    <div className='⁂-chat-search'>
+      <div className='⁂-chat-search__form'>
         <Input
           data-testid='search'
           type='text'
@@ -102,7 +102,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
           onChange={(event) => {
             setValue(event.target.value);
           }}
-          outerClassName='mt-0'
+          outerClassName='⁂-chat-search__input'
           theme='search'
           append={
             <button
@@ -111,17 +111,13 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
                 hasSearchValue ? messages.clearSearch : messages.search,
               )}
             >
-              <Icon
-                src={hasSearchValue ? iconX : iconMagnifyingGlass}
-                className='size-4 text-gray-700 dark:text-gray-600'
-                aria-hidden='true'
-              />
+              <Icon src={hasSearchValue ? iconX : iconMagnifyingGlass} aria-hidden='true' />
             </button>
           }
         />
       </div>
 
-      <div className='flex grow flex-col' ref={parentRef}>
+      <div className='⁂-chat-search__body' ref={parentRef}>
         {renderBody()}
       </div>
     </div>

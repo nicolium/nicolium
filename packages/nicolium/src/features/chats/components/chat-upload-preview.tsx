@@ -21,17 +21,11 @@ const ChatUploadPreview: React.FC<IChatUploadPreview> = ({ attachment }) => {
   switch (attachment.type) {
     case 'image':
     case 'gifv':
-      return (
-        <img
-          className='pointer-events-none size-full object-cover'
-          src={attachment.preview_url}
-          alt=''
-        />
-      );
+      return <img className='⁂-chat-upload-preview' src={attachment.preview_url} alt='' />;
     case 'video':
       return (
         <video
-          className='pointer-events-none size-full object-cover'
+          className='⁂-chat-upload-preview'
           src={attachment.preview_url}
           autoPlay
           playsInline
@@ -42,11 +36,8 @@ const ChatUploadPreview: React.FC<IChatUploadPreview> = ({ attachment }) => {
       );
     default:
       return (
-        <div className='pointer-events-none flex size-full items-center justify-center'>
-          <Icon
-            className='mx-auto my-12 size-16 text-gray-800 dark:text-gray-200'
-            src={MIMETYPE_ICONS[mimeType ?? ''] || defaultIcon}
-          />
+        <div className='⁂-chat-upload-preview__fallback'>
+          <Icon src={MIMETYPE_ICONS[mimeType ?? ''] || defaultIcon} />
         </div>
       );
   }

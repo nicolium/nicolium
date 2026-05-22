@@ -12,7 +12,6 @@ import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Avatar from '@/components/ui/avatar';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import {
   useUnblockAccountMutation,
@@ -125,13 +124,13 @@ const ChatsPageChat = () => {
     });
 
   return (
-    <div className='flex h-full flex-col overflow-hidden'>
-      <div className='flex w-full items-center justify-between gap-2 p-4'>
-        <div className='flex items-center gap-2'>
-          <div className='flex items-center'>
+    <div className='⁂-chats-page-chat'>
+      <div className='⁂-chats-page-chat__header ⁂-chats-page-chat__header--between'>
+        <div className='⁂-chats-page-chat__title-row'>
+          <div className='⁂-chats-page-chat__avatar__container'>
             <IconButton
               src={iconArrowLeft}
-              className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
+              className='⁂-chats-page-chat__back-button'
               onClick={() => navigate({ to: '/chats' })}
               title={intl.formatMessage(messages.back)}
             />
@@ -141,19 +140,19 @@ const ChatsPageChat = () => {
                 src={chat.account.avatar}
                 alt={chat.account.avatar_description}
                 size={40}
-                className='flex-none'
+                className='⁂-chats-page-chat__avatar'
                 isCat={chat.account.is_cat}
                 username={chat.account.username}
               />
             </AccountLink>
           </div>
 
-          <div className='flex h-11 flex-col items-start overflow-hidden'>
-            <div className='flex w-full grow items-center space-x-1'>
+          <div className='⁂-chats-page-chat__title'>
+            <div className='⁂-chats-page-chat__title-name'>
               <AccountLink account={chat.account}>
-                <Text weight='bold' size='sm' align='left' truncate>
-                  {chat.account.display_name || `@${chat.account.username}`}
-                </Text>
+                <span className='⁂-chats-page-chat__title-text'>
+                  {chat.account.display_name || chat.account.username}
+                </span>
               </AccountLink>
               {chat.account.verified && <VerificationBadge />}
             </div>
@@ -163,7 +162,7 @@ const ChatsPageChat = () => {
         <DropdownMenu
           src={iconInfo}
           component={() => (
-            <div className='px-4 py-2'>
+            <div className='⁂-chats-page-chat__account-popover'>
               <Account account={chat.account} disabled hideActions />
             </div>
           )}
@@ -171,8 +170,8 @@ const ChatsPageChat = () => {
         />
       </div>
 
-      <div className='h-full overflow-hidden'>
-        <Chat className='h-full' chat={chat} inputRef={inputRef} />
+      <div className='⁂-chats-page-chat__body'>
+        <Chat className='⁂-chats-page-chat__chat' chat={chat} inputRef={inputRef} />
       </div>
     </div>
   );
