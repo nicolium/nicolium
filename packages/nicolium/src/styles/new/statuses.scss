@@ -887,7 +887,7 @@ div:first-child:has(> .⁂-timeline-gap) {
     svg {
       width: 1rem;
       height: 1rem;
-      color: rgb(var(--color-green-600));
+      color: var(--hex-green-600);
     }
 
     a {

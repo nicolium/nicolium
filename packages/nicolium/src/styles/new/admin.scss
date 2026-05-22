@@ -378,7 +378,7 @@
   &__previous {
     font-size: var(--text-lg);
     line-height: var(--leading-lg);
-    color: rgb(var(--color-green-600));
+    color: var(--hex-green-600);
 
     &--negative {
       color: rgb(var(--color-danger-600));
