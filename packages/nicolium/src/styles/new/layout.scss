@@ -518,6 +518,14 @@ body {
         border-color: rgb(var(--color-gray-800));
       }
     }
+
+    &__account {
+      display: contents;
+
+      @media (min-width: variables.$breakpoint-xl) {
+        display: none;
+      }
+    }
   }
 
   &__compose-button {

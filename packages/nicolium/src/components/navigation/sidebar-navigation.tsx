@@ -221,7 +221,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         )}
 
         {!account && (
-          <div className='flex flex-col gap-1.5 xl:hidden'>
+          <div className='⁂-sidebar-navigation__links__account'>
             <li>
               <SidebarNavigationLink
                 to='/login'
