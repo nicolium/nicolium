@@ -1548,3 +1548,40 @@ body {
     color: rgb(var(--color-danger-600));
   }
 }
+
+.⁂-navlinks {
+  position: relative;
+  max-width: 80rem;
+  margin: auto auto 0;
+  padding: 2rem 0;
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    li {
+      padding:0.5rem 1.25rem;
+
+      a {
+        @include mixins.text($size: sm, $theme: inherit);
+
+        color: rgb(var(--color-primary-600));
+
+        .dark & {
+          color: rgb(var(--color-primary-400));
+        }
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  &__copyright {
+    @include mixins.text($size: sm, $theme: muted, $align: center);
+
+    margin-top: 1.5rem;
+  }
+}

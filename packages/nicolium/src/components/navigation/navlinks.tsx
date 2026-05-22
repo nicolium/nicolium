@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 
-import Text from '@/components/ui/text';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useSettings } from '@/stores/settings';
 
@@ -14,8 +13,8 @@ const Navlinks: React.FC<INavlinks> = ({ type }) => {
   const { copyright, navlinks } = useFrontendConfig();
 
   return (
-    <footer className='relative mx-auto mt-auto max-w-7xl py-8'>
-      <div className='flex flex-wrap justify-center'>
+    <footer className='⁂-navlinks'>
+      <ul>
         {navlinks[type]?.map((link) => {
           const url = link.url;
           const isExternal = url.startsWith('http');
@@ -23,25 +22,14 @@ const Navlinks: React.FC<INavlinks> = ({ type }) => {
           const compProps = isExternal ? { href: url, target: '_blank' } : { to: url };
 
           return (
-            <div key={link.url} className='px-5 py-2'>
-              <Comp
-                {...compProps}
-                className='text-primary-600 hover:underline dark:text-primary-400'
-              >
-                <Text tag='span' theme='inherit' size='sm'>
-                  {link.titleLocales[locale] || link.title}
-                </Text>
-              </Comp>
-            </div>
+            <li key={link.url}>
+              <Comp {...compProps}>{link.titleLocales[locale] || link.title}</Comp>
+            </li>
           );
         })}
-      </div>
+      </ul>
 
-      <div className='mt-6'>
-        <Text theme='muted' align='center' size='sm'>
-          {copyright}
-        </Text>
-      </div>
+      {copyright && <p className='⁂-navlinks__copyright'>{copyright}</p>}
     </footer>
   );
 };
