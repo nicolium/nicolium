@@ -33,12 +33,11 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { AccountLink } from '@/components/accounts/account-link';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu as MenuType } from '@/components/dropdown-menu';
-import Icon from '@/components/icon';
 import PlaceholderEventHeader from '@/components/placeholders/placeholder-event-header';
 import StillImage from '@/components/still-image';
 import Button from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/use-admin-modals';
 import { useClient } from '@/hooks/use-client';
@@ -174,8 +173,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   if (!status || !status.event || !account) {
     return (
       <>
-        <div className='-mx-4 -mt-4'>
-          <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 sm:rounded-t-xl lg:h-48' />
+        <div className='⁂-event-header__banner-wrapper'>
+          <div className='⁂-event-header__banner' />
         </div>
 
         <PlaceholderEventHeader />
@@ -509,31 +508,24 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   return (
     <>
-      <div className='-mx-4 -mt-4'>
-        <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 sm:rounded-t-xl lg:h-48'>
+      <div className='⁂-event-header__banner-wrapper'>
+        <div className='⁂-event-header__banner'>
           {banner && (
             <a href={banner.url} onClick={handleHeaderClick} target='_blank'>
-              <StillImage
-                src={banner.url}
-                alt={intl.formatMessage(messages.bannerHeader)}
-                className='absolute inset-0 h-full overflow-hidden object-cover black:rounded-t-none sm:rounded-t-xl'
-              />
+              <StillImage src={banner.url} alt={intl.formatMessage(messages.bannerHeader)} />
             </a>
           )}
         </div>
       </div>
-      <div className='flex flex-col gap-2'>
-        <div className='flex w-full items-start gap-2'>
-          <Text className='grow' size='lg' weight='bold'>
-            {event.name}
-          </Text>
+      <div className='⁂-event-header__body'>
+        <div className='⁂-event-header__title-row'>
+          <p className='⁂-event-header__title'>{event.name}</p>
 
           <DropdownMenu items={makeMenu()} placement='bottom-end'>
             <IconButton
               src={iconDotsThree}
               theme='outlined'
-              className='h-[30px] px-2'
-              iconClassName='h-4 w-4'
+              className='⁂-event-header__menu-button'
             />
           </DropdownMenu>
 
@@ -551,8 +543,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           )}
         </div>
 
-        <div className='flex flex-col gap-1'>
-          <div className='flex items-center gap-2'>
+        <div className='⁂-event-header__details'>
+          <div className='⁂-event-header__detail'>
             <Icon src={iconFlagBanner} />
             <span>
               <FormattedMessage
@@ -560,8 +552,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                 defaultMessage='Organized by {name}'
                 values={{
                   name: (
-                    <AccountLink className='mention inline-block' account={account}>
-                      <div className='flex flex-grow items-center gap-1'>
+                    <AccountLink className='mention' account={account}>
+                      <div className='⁂-event-header__organizer'>
                         <span>
                           <Emojify text={account.display_name} emojis={account.emojis} />
                         </span>
@@ -575,9 +567,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           </div>
 
           {(event.join_mode !== 'external' || event.participants_count > 0) && (
-            <div className='flex items-center gap-2'>
+            <div className='⁂-event-header__detail'>
               <Icon src={iconUsers} />
-              <a href='#' className='hover:underline' onClick={handleParticipantsClick}>
+              <a href='#' onClick={handleParticipantsClick}>
                 <span>
                   <FormattedMessage
                     id='event.participants'
@@ -595,7 +587,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           <EventDate status={status} />
 
           {event.location && (
-            <div className='flex items-center gap-2'>
+            <div className='⁂-event-header__detail'>
               <Icon src={iconMapPin} />
               <span>{event.location.name}</span>
             </div>
