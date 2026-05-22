@@ -4,8 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import AccountContainer from '@/components/accounts/account-container';
 import Widget from '@/components/ui/widget';
 import Emojify from '@/features/emoji/emojify';
-import { WhoToFollowPanel } from '@/features/ui/util/async-components';
 import { useEndorsedAccounts } from '@/queries/accounts/use-endorsed-accounts';
+
+import WhoToFollowPanel from './who-to-follow-panel';
 
 import type { Account } from 'pl-api';
 

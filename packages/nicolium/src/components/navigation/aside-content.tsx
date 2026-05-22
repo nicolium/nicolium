@@ -1,28 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { lazy, useMemo } from 'react';
 
-import {
-  AccountLatestStatusPanel,
-  AccountNotePanel,
-  AnnouncementsPanel,
-  BirthdayPanel,
-  ComposePanel,
-  CryptoDonatePanel,
-  GroupMediaPanel,
-  InstanceModerationPanel,
-  LatestAccountsPanel,
-  MyGroupsPanel,
-  NewEventPanel,
-  NewGroupPanel,
-  NotificationsPanel,
-  PinnedAccountsPanel,
-  ProfileFieldsPanel,
-  ProfileMediaPanel,
-  PromoPanel,
-  ShoutboxPanel,
-  SignUpPanel,
-  TrendsPanel,
-  WhoToFollowPanel,
-} from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -33,6 +10,34 @@ import { useFederationRestrictionsDisclosed, useIsStandalone } from '@/utils/sta
 import LinkFooter from './link-footer';
 
 import type { Account, Group } from 'pl-api';
+
+const AccountLatestStatusPanel = lazy(
+  () => import('@/components/panels/account-latest-status-panel'),
+);
+const AccountNotePanel = lazy(() => import('@/components/panels/account-note-panel'));
+const AnnouncementsPanel = lazy(() => import('@/components/announcements/announcements-panel'));
+const BirthdayPanel = lazy(() => import('@/components/panels/birthday-panel'));
+const ComposePanel = lazy(() => import('@/components/panels/compose-panel'));
+const CryptoDonatePanel = lazy(
+  () => import('@/features/crypto-donate/components/crypto-donate-panel'),
+);
+const GroupMediaPanel = lazy(() => import('@/components/panels/group-media-panel'));
+const InstanceModerationPanel = lazy(() => import('@/components/panels/instance-moderation-panel'));
+const LatestAccountsPanel = lazy(
+  () => import('@/pages/dashboard/components/latest-accounts-panel'),
+);
+const MyGroupsPanel = lazy(() => import('@/components/panels/my-groups-panel'));
+const NewEventPanel = lazy(() => import('@/components/panels/new-event-panel'));
+const NewGroupPanel = lazy(() => import('@/components/panels/new-group-panel'));
+const NotificationsPanel = lazy(() => import('@/components/panels/notifications-panel'));
+const PinnedAccountsPanel = lazy(() => import('@/components/panels/pinned-accounts-panel'));
+const ProfileFieldsPanel = lazy(() => import('@/components/panels/profile-fields-panel'));
+const ProfileMediaPanel = lazy(() => import('@/components/panels/profile-media-panel'));
+const PromoPanel = lazy(() => import('@/components/panels/promo-panel'));
+const ShoutboxPanel = lazy(() => import('@/components/panels/shoutbox-panel'));
+const SignUpPanel = lazy(() => import('@/components/panels/sign-up-panel'));
+const TrendsPanel = lazy(() => import('@/components/panels/trends-panel'));
+const WhoToFollowPanel = lazy(() => import('@/components/panels/who-to-follow-panel'));
 
 const isAccountSidebarItem = (item: string): item is `account:${string}` =>
   item.startsWith('account:');
