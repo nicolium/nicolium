@@ -516,7 +516,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
               <StillImage
                 src={banner.url}
                 alt={intl.formatMessage(messages.bannerHeader)}
-                className='absolute inset-0 h-full object-cover black:rounded-t-none sm:rounded-t-xl'
+                className='absolute inset-0 h-full overflow-hidden object-cover black:rounded-t-none sm:rounded-t-xl'
               />
             </a>
           )}
