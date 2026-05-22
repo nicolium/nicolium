@@ -27,7 +27,6 @@ import {
 
 import AccountContainer from '@/components/accounts/account-container';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
-import Icon from '@/components/icon';
 import Markup from '@/components/markup';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import RelativeTimestamp from '@/components/relative-timestamp';
@@ -35,6 +34,7 @@ import { ParsedContent } from '@/components/statuses/parsed-content';
 import StatusContainer from '@/components/statuses/status-container';
 import StatusInfo from '@/components/statuses/status-info';
 import Emoji from '@/components/ui/emoji';
+import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useLoggedIn } from '@/hooks/use-logged-in';

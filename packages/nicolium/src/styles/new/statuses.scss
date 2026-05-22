@@ -40,6 +40,11 @@
     background-color: rgb(var(--color-primary-800));
   }
 
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
   p {
     @include mixins.text($theme: muted, $size: xs, $weight: medium, $truncate: true);
   }
@@ -884,12 +889,6 @@ div:first-child:has(> .⁂-timeline-gap) {
   .⁂-status-info {
     margin-top: 1rem;
 
-    svg {
-      width: 1rem;
-      height: 1rem;
-      color: var(--hex-green-600);
-    }
-
     a {
       overflow: hidden;
 
@@ -904,6 +903,12 @@ div:first-child:has(> .⁂-timeline-gap) {
 
       &:hover {
         text-decoration: underline;
+      }
+    }
+
+    &--reblog {
+      svg {
+        color: var(--hex-green-600);
       }
     }
   }

@@ -60,7 +60,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             icon={
               <Icon
                 src={iconUsersThree}
-                className='size-4 text-primary-600 dark:text-primary-400'
+                className='text-primary-600 dark:text-primary-400'
                 aria-hidden
               />
             }

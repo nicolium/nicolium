@@ -255,6 +255,7 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
 
     return (
       <StatusInfo
+        className='⁂-status-info--reblog'
         avatarSize={42}
         icon={<Icon src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat} aria-hidden />}
         text={
