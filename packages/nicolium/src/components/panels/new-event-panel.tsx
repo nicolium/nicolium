@@ -1,28 +1,29 @@
 import iconCalendarDot from '@phosphor-icons/core/regular/calendar-dot.svg';
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
-import Text from '@/components/ui/text';
+import Icon from '@/components/ui/icon';
 
 const NewEventPanel = () => (
-  <div className='flex flex-col gap-2'>
-    <div className='flex flex-col'>
-      <Text size='lg' weight='bold'>
+  <div className='⁂-new-event-panel'>
+    <div className='⁂-new-event-panel__content'>
+      <p className='⁂-new-event-panel__heading'>
         <FormattedMessage id='new_event_panel.title' defaultMessage='Create new event' />
-      </Text>
+      </p>
 
-      <Text theme='muted' size='sm'>
+      <p className='⁂-new-event-panel__text'>
         <FormattedMessage
           id='new_event_panel.subtitle'
           defaultMessage="Can't find what you're looking for? Schedule your own event."
         />
-      </Text>
+      </p>
     </div>
 
-    <Button icon={iconCalendarDot} theme='secondary' block to='/events/new'>
+    <Link to='/events/new'>
+      <Icon src={iconCalendarDot} aria-hidden />
       <FormattedMessage id='new_event_panel.action' defaultMessage='Create event' />
-    </Button>
+    </Link>
   </div>
 );
 
