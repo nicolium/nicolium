@@ -205,7 +205,12 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
         return (
           <AltPopover
             alt={account.header_description}
-            heading={intl.formatMessage(messages.headerAlt)}
+            heading={
+              <FormattedMessage
+                id='account.header.description'
+                defaultMessage='Header description'
+              />
+            }
             message={<FormattedMessage id='account.header.alt' defaultMessage='Profile header' />}
             title={intl.formatMessage(messages.headerAlt)}
             className='⁂-account-header__header-alt-indicator'
