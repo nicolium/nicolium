@@ -61,17 +61,17 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
       </Card>
     );
   }
+
   return (
-    <div className='relative -mx-1'>
+    <div className='⁂-event-carousel'>
       {index !== 0 && (
-        <div className='absolute left-3 top-1/2 z-10 -mt-4'>
+        <div className='⁂-event-carousel__button ⁂-event-carousel__button--left'>
           <button
             onClick={() => {
               handleChangeIndex(index - 1);
             }}
-            className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon src={iconCaretLeft} className='size-6 text-black dark:text-white' />
+            <Icon src={iconCaretLeft} />
           </button>
         </div>
       )}
@@ -81,14 +81,13 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
         ))}
       </ReactSwipeableViews>
       {index !== statusIds.length - 1 && (
-        <div className='absolute right-3 top-1/2 z-10 -mt-4'>
+        <div className='⁂-event-carousel__button ⁂-event-carousel__button--right'>
           <button
             onClick={() => {
               handleChangeIndex(index + 1);
             }}
-            className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon src={iconCaretRight} className='size-6 text-black dark:text-white' />
+            <Icon src={iconCaretRight} />
           </button>
         </div>
       )}

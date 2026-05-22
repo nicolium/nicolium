@@ -284,3 +284,50 @@
 .⁂-event-map-modal {
   max-width: 42rem;
 }
+
+.⁂-event-carousel {
+  position: relative;
+  margin: 0 -0.25rem;
+
+  &__button {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    margin-top: -1rem;
+
+    &--left {
+      left: 0.75rem;
+    }
+
+    &--right {
+      right: 0.75rem;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 2rem;
+      height: 2rem;
+      border-radius: var(--radius-full);
+
+      background: rgb(255 255 255 / 0.5);
+      backdrop-filter: blur(8px);
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        color: black;
+      }
+
+      .dark & {
+        background: rgb(var(--color-gray-900) / 0.5);
+
+        svg {
+          color: white;
+        }
+      }
+    }
+  }
+}

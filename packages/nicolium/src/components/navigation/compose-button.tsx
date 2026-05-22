@@ -74,13 +74,8 @@ const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
       {shrink ? (
         <Icon src={iconNotePencil} />
       ) : (
-        <div className='flex items-center gap-3'>
-          <Avatar
-            className='-my-1 border-2 border-white'
-            size={30}
-            src={group.avatar}
-            alt={group.avatar_description}
-          />
+        <div className='⁂-sidebar-navigation__compose-button__group'>
+          <Avatar size={30} src={group.avatar} alt={group.avatar_description} />
           <span>
             <FormattedMessage id='navigation.compose_group' defaultMessage='Compose to group' />
           </span>
