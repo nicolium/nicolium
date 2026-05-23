@@ -42,8 +42,8 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
 
         <div className='⁂-group-header__placeholder-body'>
           <div className='⁂-group-header__placeholder-row'>
-            <div className='⁂-group-header__avatar-frame'>
-              <div className='⁂-group-header__avatar-placeholder' />
+            <div className='⁂-group-header__avatar__container'>
+              <div className='⁂-group-header__avatar--placeholder' />
             </div>
           </div>
         </div>

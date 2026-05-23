@@ -32,11 +32,9 @@ const GroupCard: React.FC<IGroupCard> = ({ groupId }) => {
 
       {/* Group Info */}
       <div className='⁂-group-card__info'>
-        <div className='⁂-group-card__name-row'>
-          <p className='⁂-group-card__name'>
-            <Emojify text={group.display_name} emojis={group.emojis} />
-          </p>
-        </div>
+        <p className='⁂-group-card__name'>
+          <Emojify text={group.display_name} emojis={group.emojis} />
+        </p>
 
         <div className='⁂-group-card__meta'>
           <GroupRelationship group={group} />

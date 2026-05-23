@@ -50,8 +50,8 @@ const GroupMembers: React.FC = () => {
       prepend={
         membershipRequests.length > 0 && (
           <div
-            className={clsx('⁂-group-members__pending-row', {
-              '⁂-group-members__pending-row--bordered': members.length,
+            className={clsx('⁂-group-members__pending', {
+              '⁂-group-members__pending--bordered': members.length,
             })}
           >
             <PendingItemsRow

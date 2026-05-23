@@ -330,7 +330,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
         <div className='⁂-account-header__badges'>{info}</div>
       </div>
 
-      <div className='⁂-account-header__profile-row'>
+      <div className='⁂-account-header__profile'>
         <div className='⁂-account-header__avatar'>
           <a href={account.avatar} onClick={handleAvatarClick} target='_blank'>
             <Avatar
