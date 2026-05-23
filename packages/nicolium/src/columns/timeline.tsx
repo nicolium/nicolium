@@ -389,6 +389,7 @@ const Timeline: React.FC<ITimeline> = ({
     isError,
     hasNextPage,
     refetch,
+    hasStreamConfig,
   } = query;
 
   const handleMoveUp = (index: number) => {
@@ -526,13 +527,15 @@ const Timeline: React.FC<ITimeline> = ({
 
   return (
     <>
-      <ScrollTopButton
-        onClick={dequeueEntries}
-        count={queuedCount}
-        message={messages.queue}
-        liveRegionMessage={messages.queueLiveRegion}
-        accountIds={queuedAccountIds}
-      />
+      {hasStreamConfig && (
+        <ScrollTopButton
+          onClick={dequeueEntries}
+          count={queuedCount}
+          message={messages.queue}
+          liveRegionMessage={messages.queueLiveRegion}
+          accountIds={queuedAccountIds}
+        />
+      )}
       <PullToRefresh onRefresh={refetch} isPullable={!isFetching}>
         {featuredStatusIds && featuredStatusIds.length > 3 && entries?.length > 0 && (
           <SkipPinned onClick={handleSkipPinned} />

@@ -176,8 +176,16 @@ const useTimeline = (
   }, [timelineId, fetchInitial]);
 
   return useMemo(
-    () => ({ ...timeline, timelineId, fetchNextPage, dequeueEntries, fillGap, refetch }),
-    [timeline, timelineId, fetchNextPage, dequeueEntries, fillGap, refetch],
+    () => ({
+      ...timeline,
+      timelineId,
+      fetchNextPage,
+      dequeueEntries,
+      fillGap,
+      refetch,
+      hasStreamConfig: !!streamConfig,
+    }),
+    [timeline, timelineId, fetchNextPage, dequeueEntries, fillGap, refetch, !!streamConfig],
   );
 };
 
