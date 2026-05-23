@@ -24,6 +24,7 @@ const AVAILABLE_NAVIGATION_ITEMS = [
   'follow-requests',
   'interaction-requests',
   'bookmarks',
+  'favourites',
   'lists',
   'circles',
   'antennas',

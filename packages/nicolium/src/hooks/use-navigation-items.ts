@@ -14,6 +14,7 @@ import iconFunnelFill from '@phosphor-icons/core/fill/funnel-fill.svg';
 import iconGaugeFill from '@phosphor-icons/core/fill/gauge-fill.svg';
 import iconGraphFill from '@phosphor-icons/core/fill/graph-fill.svg';
 import iconHashFill from '@phosphor-icons/core/fill/hash-fill.svg';
+import iconHeartFill from '@phosphor-icons/core/fill/heart-fill.svg';
 import iconHeartHalfFill from '@phosphor-icons/core/fill/heart-half-fill.svg';
 import iconHourglassFill from '@phosphor-icons/core/fill/hourglass-fill.svg';
 import iconHouseFill from '@phosphor-icons/core/fill/house-fill.svg';
@@ -46,6 +47,7 @@ import iconGauge from '@phosphor-icons/core/regular/gauge.svg';
 import iconGraph from '@phosphor-icons/core/regular/graph.svg';
 import iconHash from '@phosphor-icons/core/regular/hash.svg';
 import iconHeartHalf from '@phosphor-icons/core/regular/heart-half.svg';
+import iconHeart from '@phosphor-icons/core/regular/heart.svg';
 import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
@@ -144,6 +146,7 @@ const messages = defineMessages({
   drive: { id: 'column.drive', defaultMessage: 'Drive' },
   'edit-profile': { id: 'column.edit_profile', defaultMessage: 'Edit profile' },
   events: { id: 'column.events', defaultMessage: 'Events' },
+  favourites: { id: 'column.favourites', defaultMessage: 'Likes' },
   'fediverse-timeline': { id: 'tabs_bar.fediverse', defaultMessage: 'Fediverse' },
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
   'followed-hashtags': { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
@@ -488,6 +491,17 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean, mobile?: bool
               activeIcon: iconPencilSimpleFill,
             });
           }
+          break;
+        case 'favourites':
+          if (!account) break;
+          menu.push({
+            type: 'link',
+            to: '/@{$username}/favorites',
+            params: { username: account?.acct },
+            text: intl.formatMessage(messages.favourites),
+            icon: iconHeart,
+            activeIcon: iconHeartFill,
+          });
           break;
         default: {
           if (isAccountNavigationItem(item)) {

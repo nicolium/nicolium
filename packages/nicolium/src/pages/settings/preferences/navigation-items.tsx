@@ -16,6 +16,7 @@ import iconGauge from '@phosphor-icons/core/regular/gauge.svg';
 import iconGraph from '@phosphor-icons/core/regular/graph.svg';
 import iconHash from '@phosphor-icons/core/regular/hash.svg';
 import iconHeartHalf from '@phosphor-icons/core/regular/heart-half.svg';
+import iconHeart from '@phosphor-icons/core/regular/heart.svg';
 import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
@@ -113,6 +114,7 @@ const itemsMessages = {
   drive: { id: 'column.drive', defaultMessage: 'Drive' },
   'edit-profile': { id: 'column.edit_profile', defaultMessage: 'Edit profile' },
   events: { id: 'column.events', defaultMessage: 'Events' },
+  favourites: { id: 'column.favourites', defaultMessage: 'Likes' },
   'fediverse-timeline': { id: 'tabs_bar.fediverse', defaultMessage: 'Fediverse' },
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
   'followed-hashtags': { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
@@ -156,6 +158,7 @@ const itemsIcons: Record<AvailableNavigationItem, string> = {
   drive: iconCloud,
   'edit-profile': iconUser,
   events: iconCalendarDots,
+  favourites: iconHeart,
   'fediverse-timeline': iconFediverseLogo,
   filters: iconFunnel,
   'followed-hashtags': iconHash,
