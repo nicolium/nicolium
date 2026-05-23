@@ -61,7 +61,7 @@
     "vite": "^8.0.6",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.1.5",
-    "ws": "^8.20.0"
+    "ws": "^8.20.1"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts}": [
