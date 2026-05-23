@@ -51,7 +51,10 @@ interface GetAccountSubscribersParams extends PaginationParams, WithRelationship
 interface FollowAccountParams {
   /** Boolean. Receive this account’s reblogs in home timeline? Defaults to true. */
   reblogs?: boolean;
-  /** Boolean. Receive notifications when this account posts a status? Defaults to false. */
+  /**
+   * Boolean. Receive notifications when this account posts a status? Defaults to false.
+   * Requires features{@link Features['accountNotifies']}.
+   */
   notify?: boolean;
   /**
    * Array of String (ISO 639-1 language two-letter code). Filter received statuses for these languages. If not provided, you will receive this account’s posts in all languages.
