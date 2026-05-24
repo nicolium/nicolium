@@ -1283,7 +1283,7 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
     background: white;
 
     .dark & {
-      color: rgb(var(--color-primary-800));
+      background: rgb(var(--color-primary-800));
     }
 
     &__label {
@@ -1315,7 +1315,7 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
       color: rgb(var(--color-primary-600));
 
       .dark & {
-        color: rgb(var(--color-primary-800));
+        color: white;
       }
 
       svg {
