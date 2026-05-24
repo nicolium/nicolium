@@ -26,7 +26,6 @@
   "account.follows.empty": "Šis lietotājs pagaidām nevienam neseko.",
   "account.follows_you": "Seko tev",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "Paslēpt paceltos ierakstus no lietotāja @{name}",
   "account.last_status": "Last active",
   "account.link_verified_on": "Šīs saites piederība ir pārbaudīta {date}",
   "account.locked_info": "Šī konta privātuma status ir iestatīts slēgts. Īpašnieks izskatīs un izvēlēsies kas viņam drīkst sekot.",

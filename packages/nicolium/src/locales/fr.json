@@ -44,7 +44,6 @@
   "account.header.alt": "En-tête du profil",
   "account.header.alt.popover": "Afficher le champs « alt » du profil",
   "account.header.description": "Description pour l’image de l’en-tête",
-  "account.hide_reblogs": "Masquer les partages de @{name}",
   "account.instance_favicon": "Visiter le fil de {domain}",
   "account.last_status": "Activité récente",
   "account.link_verified_on": "La propriété de ce lien a été vérifiée le {date}",

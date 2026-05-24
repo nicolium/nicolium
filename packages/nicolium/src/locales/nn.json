@@ -26,7 +26,6 @@
   "account.follows.empty": "Denne brukaren foljer ikkje nokon ennå.",
   "account.follows_you": "Føljar deg",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "Gøym fremhevingar for @{name}",
   "account.last_status": "Last active",
   "account.link_verified_on": "Eigerskap for denne linken er sist sjekket den {date}",
   "account.locked_info": "Brukarens privat-status er satt til lukka. Eigaren må manuelt døme kvem som kan følje honom.",

@@ -26,7 +26,6 @@
   "account.follows.empty": "Denne brukeren følger ingen enda.",
   "account.follows_you": "Følger deg",
   "account.header.alt": "Profiloverskrift",
-  "account.hide_reblogs": "Skjul reposteringer fra @{navn}",
   "account.last_status": "Sist aktiv",
   "account.link_verified_on": "Eierskapet til denne lenken ble kontrollert den {dato}",
   "account.locked_info": "Denne kontoens personvernstatus er satt til låst. Eieren vurderer manuelt hvem som kan følge dem.",

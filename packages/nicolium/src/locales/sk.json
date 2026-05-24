@@ -26,7 +26,6 @@
   "account.follows.empty": "Tento užívateľ ešte nikoho nenásleduje.",
   "account.follows_you": "Následuje ťa",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "Skry vyzdvihnutia od @{name}",
   "account.last_status": "Last active",
   "account.link_verified_on": "Vlastníctvo tohto odkazu bolo skontrolované {date}",
   "account.locked_info": "Stav súkromia pre tento účet je nastavený na zamknutý. Jeho vlastník sám prehodnocuje, kto ho môže sledovať.",

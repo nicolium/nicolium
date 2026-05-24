@@ -15,7 +15,6 @@
   "account.follows": "Sledi",
   "account.follows.empty": "Ta uporabnik še ne sledi nikomur.",
   "account.follows_you": "Sledi tebi",
-  "account.hide_reblogs": "Skrij spodbude od @{name}",
   "account.link_verified_on": "Lastništvo te povezave je bilo preverjeno {date}",
   "account.locked_info": "Stanje zasebnosti računa je nastavljeno na zaklenjeno. Lastnik ročno pregleda, kdo ga lahko spremlja.",
   "account.login": "Log in",

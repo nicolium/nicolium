@@ -14,7 +14,6 @@
   "account.follows": "Følger",
   "account.follows.empty": "Denne bruger følger endnu ikke nogen.",
   "account.follows_you": "Følger dig",
-  "account.hide_reblogs": "Skjul fremhævelserne fra @{name}",
   "account.link_verified_on": "Ejerskabet af dette link blev tjekket den %{date}",
   "account.locked_info": "Denne kontos privatlivsstatus er sat til låst. Ejeren bedømmer manuelt, hvem der kan følge dem.",
   "account.login": "Log in",

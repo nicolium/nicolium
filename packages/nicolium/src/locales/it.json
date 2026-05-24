@@ -33,7 +33,6 @@
   "account.follows_you": "Ti segue",
   "account.header.alt": "Testata del profilo",
   "account.header.description": "Descrizione testata",
-  "account.hide_reblogs": "Nascondi le condivisioni di @{name}",
   "account.last_status": "Ultima attività",
   "account.link_verified_on": "Link verificato il {date}",
   "account.load_activities": "Ottieni le ultime pubblicazioni",

@@ -27,7 +27,6 @@
   "account.follows.empty": "Bu kullanıcı henüz kimseyi takip etmiyor.",
   "account.follows_you": "Seni takip ediyor",
   "account.header.alt": "Profil başlığı",
-  "account.hide_reblogs": "@{name} adlı hesabın yeniden gönderilerini gizle",
   "account.last_status": "Son görülme",
   "account.link_verified_on": "Bu bağlantının sahipliği {date} tarihinde kontrol edildi",
   "account.locked_info": "Bu hesabın gizlilik durumu kilitli olarak ayarlanmış. Takip istekleri hesap sahibi tarafından onaylanır.",

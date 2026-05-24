@@ -26,7 +26,6 @@
   "account.follows.empty": "This user doesn't follow anyone yet.",
   "account.follows_you": "Sequas tu",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "Hide reposts from @{name}",
   "account.last_status": "Last active",
   "account.link_verified_on": "Ownership of this link was checked on {date}",
   "account.locked_info": "This account is locked. The owner manually reviews who can follow them.",

@@ -14,7 +14,6 @@
   "account.follows": "Ndjekje",
   "account.follows.empty": "Ky përdorues ende s’ndjek njeri.",
   "account.follows_you": "Ju ndjek",
-  "account.hide_reblogs": "Fshih përforcime nga @{name}",
   "account.link_verified_on": "Pronësia e kësaj lidhjeje qe kontrolluar më {date}",
   "account.locked_info": "Gjendja e privatësisë së kësaj llogarie është caktuar si e kyçur. I zoti merr dorazi në shqyrtim cilët mund ta ndjekin.",
   "account.login": "Log in",

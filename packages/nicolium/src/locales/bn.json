@@ -14,7 +14,6 @@
   "account.follows": "যাদেরকে অনুসরণ করেন",
   "account.follows.empty": "এই ব্যবহারকারী কাওকে এখনো অনুসরণ করেন না।",
   "account.follows_you": "আপনাকে অনুসরণ করে",
-  "account.hide_reblogs": "@{name}র সমর্থনগুলি সরিয়ে ফেলুন",
   "account.link_verified_on": "এই লিংকের মালিকানা চেক করা হয়েছে {date} তারিকে",
   "account.locked_info": "এই নিবন্ধনের গোপনীয়তার ক্ষেত্র তালা দেওয়া আছে। নিবন্ধনকারী অনুসরণ করার অনুমতি যাদেরকে দেবেন, শুধু তারাই অনুসরণ করতে পারবেন।",
   "account.login": "Log in",

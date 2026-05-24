@@ -26,7 +26,6 @@
   "account.follows.empty": "Корисник тренутно не прати никога.",
   "account.follows_you": "Прати Вас",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "Сакриј подршке које даје корисника @{name}",
   "account.last_status": "Last active",
   "account.link_verified_on": "Ownership of this link was checked on {date}",
   "account.locked_info": "This account is locked. The owner manually reviews who can follow them.",

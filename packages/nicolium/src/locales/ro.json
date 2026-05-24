@@ -26,7 +26,6 @@
   "account.follows.empty": "Acest utilizator nu urmărește pe nimeni incă.",
   "account.follows_you": "Te urmărește",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "Ascunde redistribuirile de la @{name}",
   "account.last_status": "Last active",
   "account.link_verified_on": "Deținerea acestui link a fost verificată la {date}",
   "account.locked_info": "Acest profil este privat. Această persoană gestioneaz manual cine o urmărește.",

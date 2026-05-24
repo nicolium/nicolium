@@ -45,7 +45,6 @@
   "account.header.alt": "个人资料标题栏",
   "account.header.alt.popover": "显示个人资料标头替代文本",
   "account.header.description": "头部描述",
-  "account.hide_reblogs": "隐藏来自 @{name} 的转发",
   "account.instance_favicon": "访问 {domain} 的时间轴",
   "account.last_status": "最后活跃",
   "account.link_verified_on": "此链接的所有权已在 {date} 被验证",

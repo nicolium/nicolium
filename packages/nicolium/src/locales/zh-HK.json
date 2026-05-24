@@ -24,7 +24,6 @@
   "account.follows": "正在追蹤",
   "account.follows.empty": "這位使用者尚未追蹤任何使用者。",
   "account.follows_you": "追蹤了你",
-  "account.hide_reblogs": "隱藏來自 @{name} 的轉推",
   "account.last_status": "最後活動",
   "account.link_verified_on": "已在 {date} 檢查此連結的擁有者權限",
   "account.locked_info": "這隻帳户的隱私狀態被設成鎖定。該擁有者會手動審核能追蹤這隻帳號的人。",

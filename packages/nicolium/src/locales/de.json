@@ -26,7 +26,6 @@
   "account.follows.empty": "Dieses Profil folgt noch niemandem.",
   "account.follows_you": "Folgt dir",
   "account.header.alt": "Profilkopf",
-  "account.hide_reblogs": "Verberge geteilte Beiträge",
   "account.last_status": "Zuletzt aktiv",
   "account.link_verified_on": "Besitz dieses Links wurde geprüft am {date}",
   "account.locked_info": "Der Privatsphärenstatus dieses Kontos wurde auf privat gesetzt. Die Person bestimmt manuell, wer ihr folgen darf.",

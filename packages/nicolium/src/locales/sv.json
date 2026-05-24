@@ -15,7 +15,6 @@
   "account.follows": "Följer",
   "account.follows.empty": "Den här användaren följer inte någon ännu.",
   "account.follows_you": "Följer dig",
-  "account.hide_reblogs": "Dölj knuffar från @{name}",
   "account.link_verified_on": "Ägarskapet för det här kontot kontrollerades den {date}",
   "account.locked_info": "Detta konto har en låst integritetsstatus. Ägaren väljer manuellt vem som kan följa.",
   "account.login": "Log in",
