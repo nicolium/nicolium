@@ -12,7 +12,6 @@ import * as v from 'valibot';
 
 import Account from '@/components/accounts/account';
 import ActionButton from '@/components/accounts/action-button';
-import SubscriptionButton from '@/components/accounts/subscription-button';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Badge from '@/components/badge';
 import StillImage from '@/components/still-image';
@@ -351,7 +350,6 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
         </div>
 
         <div className='⁂-account-header__actions'>
-          {ownAccount && account.id !== ownAccount.id && <SubscriptionButton account={account} />}
           {renderMessageButton()}
           {renderShareButton()}
 
@@ -359,7 +357,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
 
           {renderRssButton()}
 
-          <ActionButton account={account} />
+          <ActionButton account={account} manageFollow />
         </div>
       </div>
     </div>

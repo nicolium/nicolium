@@ -16,6 +16,8 @@ const relationshipSchema = v.object({
   muting_notifications: v.fallback(v.boolean(), false),
   note: v.fallback(v.string(), ''),
   notifying: v.fallback(v.boolean(), false),
+  notifying_reblogs: v.fallback(v.boolean(), false),
+  notifying_replies: v.fallback(v.boolean(), false),
   requested: v.fallback(v.boolean(), false),
   showing_reblogs: v.fallback(v.boolean(), false),
   languages: v.fallback(v.nullable(v.array(v.string())), null),

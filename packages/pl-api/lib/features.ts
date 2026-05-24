@@ -310,6 +310,8 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '2.5.0'),
     ]),
 
+    accountNotifiesControl: instance.api_versions['notifies_control.pleroma.pl-api'] >= 1,
+
     /**
      * @see PATCH /api/v1/accounts/update_credentials
      */

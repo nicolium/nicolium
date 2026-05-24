@@ -1,6 +1,8 @@
+import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
+import iconUserMinus from '@phosphor-icons/core/regular/user-minus.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -25,11 +27,88 @@ import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
+import DropdownMenu, { type Menu } from '../dropdown-menu';
+
 import type { Account } from 'pl-api';
 
 const messages = defineMessages({
   userBit: { id: 'account.bite.success', defaultMessage: 'You have bitten @{acct}' },
   userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
+  showReblogs: { id: 'account.show_reblogs', defaultMessage: 'Show reposts from @{name}' },
+  showReblogsSuccess: {
+    id: 'account.show_reblogs.success',
+    defaultMessage: 'You will now see reposts from @{name}',
+  },
+  hideReblogsSuccess: {
+    id: 'account.hide_reblogs.success',
+    defaultMessage: 'You will no longer see reposts from @{name}',
+  },
+  showReblogsFail: {
+    id: 'account.show_reblogs.fail',
+    defaultMessage: 'Failed to enable showing reposts from @{name}',
+  },
+  hideReblogsFail: {
+    id: 'account.hide_reblogs.fail',
+    defaultMessage: 'Failed to disable showing reposts from @{name}',
+  },
+  subscribe: { id: 'account.subscribe', defaultMessage: 'Subscribe to notifications from @{name}' },
+  subscribeSuccess: {
+    id: 'account.subscribe.success',
+    defaultMessage: 'You have subscribed to this account.',
+  },
+  unsubscribeSuccess: {
+    id: 'account.unsubscribe.success',
+    defaultMessage: 'You have unsubscribed from this account.',
+  },
+  subscribeFailure: {
+    id: 'account.subscribe.fail',
+    defaultMessage: 'Failed to subscribe to this account.',
+  },
+  unsubscribeFailure: {
+    id: 'account.unsubscribe.fail',
+    defaultMessage: 'Failed to unsubscribe from this account.',
+  },
+  notifyReblogs: {
+    id: 'account.notify_reblogs',
+    defaultMessage: 'Subscribe to reposts from @{name}',
+  },
+  notifyReblogsSuccess: {
+    id: 'account.notify_reblogs.success',
+    defaultMessage: 'You will now receive repost notifications from @{name}.',
+  },
+  notifyReblogsFailure: {
+    id: 'account.notify_reblogs.failure',
+    defaultMessage: 'Failed to subscribe to repost notifications from @{name}.',
+  },
+  notifyReblogsUnsubscribeSuccess: {
+    id: 'account.notify_reblogs.unsubscribe_success',
+    defaultMessage: 'You will no longer receive repost notifications from @{name}.',
+  },
+  notifyReblogsUnsubscribeFailure: {
+    id: 'account.notify_reblogs.unsubscribe_failure',
+    defaultMessage: 'Failed to unsubscribe from repost notifications from @{name}.',
+  },
+  notifyReplies: {
+    id: 'account.notify_replies',
+    defaultMessage: 'Subscribe to replies from @{name}',
+  },
+  notifyRepliesSuccess: {
+    id: 'account.notify_replies.success',
+    defaultMessage: 'You will now receive reply notifications from @{name}.',
+  },
+  notifyRepliesFailure: {
+    id: 'account.notify_replies.failure',
+    defaultMessage: 'Failed to subscribe to reply notifications from @{name}.',
+  },
+  notifyRepliesUnsubscribeSuccess: {
+    id: 'account.notify_replies.unsubscribe_success',
+    defaultMessage: 'You will no longer receive reply notifications from @{name}.',
+  },
+  notifyRepliesUnsubscribeFailure: {
+    id: 'account.notify_replies.unsubscribe_failure',
+    defaultMessage: 'Failed to unsubscribe from reply notifications from @{name}.',
+  },
+  unfollow: { id: 'account.unfollow', defaultMessage: 'Unfollow' },
   unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
 });
 
@@ -40,6 +119,8 @@ interface IActionButton {
   actionType?: 'muting' | 'blocking' | 'follow_request' | 'biting';
   /** Displays shorter text on the "Awaiting approval" button. */
   small?: boolean;
+  /** Allow managing follow (enabling notifies etc.) from the follow button. */
+  manageFollow?: boolean;
 }
 
 /**
@@ -47,7 +128,12 @@ interface IActionButton {
  * May say "Unblock" or something else, depending on the relationship and
  * `actionType` prop.
  */
-const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = true }) => {
+const ActionButton: React.FC<IActionButton> = ({
+  account,
+  actionType,
+  small = true,
+  manageFollow,
+}) => {
   const features = useFeatures();
   const intl = useIntl();
   const client = useClient();
@@ -325,6 +411,161 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
       );
     } else if (!relationship?.blocking && !relationship?.muting) {
       // Follow & Unfollow
+      if (isFollowing && manageFollow) {
+        const onReblogToggle = (reblogs: boolean) => {
+          followAccount(
+            { reblogs },
+            {
+              onSuccess: () => {
+                toast.success(
+                  intl.formatMessage(
+                    reblogs ? messages.showReblogsSuccess : messages.hideReblogsSuccess,
+                    { name: account.username },
+                  ),
+                );
+              },
+              onError: () => {
+                toast.error(
+                  intl.formatMessage(
+                    reblogs ? messages.showReblogsFail : messages.hideReblogsFail,
+                    { name: account.username },
+                  ),
+                );
+              },
+            },
+          );
+        };
+
+        const onSubscribeToggle = (notify: boolean) => {
+          followAccount(
+            { notify },
+            {
+              onSuccess: () => {
+                toast.success(
+                  intl.formatMessage(
+                    notify ? messages.subscribeSuccess : messages.unsubscribeSuccess,
+                  ),
+                );
+              },
+              onError: () => {
+                toast.error(
+                  intl.formatMessage(
+                    notify ? messages.subscribeFailure : messages.unsubscribeFailure,
+                  ),
+                );
+              },
+            },
+          );
+        };
+
+        const onNotifyReblogsToggle = (value: boolean) => {
+          followAccount(
+            { notify_reblogs: value },
+            {
+              onSuccess: () => {
+                toast.success(
+                  intl.formatMessage(
+                    value
+                      ? messages.notifyReblogsSuccess
+                      : messages.notifyReblogsUnsubscribeSuccess,
+                    { name: account.username },
+                  ),
+                );
+              },
+              onError: () => {
+                toast.error(
+                  intl.formatMessage(
+                    value
+                      ? messages.notifyReblogsFailure
+                      : messages.notifyReblogsUnsubscribeFailure,
+                    { name: account.username },
+                  ),
+                );
+              },
+            },
+          );
+        };
+
+        const onNotifyRepliesToggle = (value: boolean) => {
+          followAccount(
+            { notify_replies: value },
+            {
+              onSuccess: () => {
+                toast.success(
+                  intl.formatMessage(
+                    value
+                      ? messages.notifyRepliesSuccess
+                      : messages.notifyRepliesUnsubscribeSuccess,
+                    { name: account.username },
+                  ),
+                );
+              },
+              onError: () => {
+                toast.error(
+                  intl.formatMessage(
+                    value
+                      ? messages.notifyRepliesFailure
+                      : messages.notifyRepliesUnsubscribeFailure,
+                    { name: account.username },
+                  ),
+                );
+              },
+            },
+          );
+        };
+
+        const items: Menu = [
+          {
+            text: intl.formatMessage(messages.showReblogs, { name: account.username }),
+            type: 'toggle',
+            checked: relationship?.showing_reblogs,
+            onChange: onReblogToggle,
+          },
+        ];
+
+        if (features.accountNotifies) {
+          items.push({
+            text: intl.formatMessage(messages.subscribe, { name: account.username }),
+            type: 'toggle',
+            checked: relationship?.notifying,
+            onChange: onSubscribeToggle,
+          });
+        }
+
+        if (features.accountNotifiesControl) {
+          items.push(
+            {
+              text: intl.formatMessage(messages.notifyReblogs, { name: account.username }),
+              type: 'toggle',
+              checked: relationship?.notifying_reblogs,
+              disabled: !relationship?.notifying,
+              onChange: onNotifyReblogsToggle,
+            },
+            {
+              text: intl.formatMessage(messages.notifyReplies, { name: account.username }),
+              type: 'toggle',
+              checked: relationship?.notifying_replies,
+              disabled: !relationship?.notifying,
+              onChange: onNotifyRepliesToggle,
+            },
+          );
+        }
+
+        items.push(null, {
+          text: intl.formatMessage(messages.unfollow),
+          icon: iconUserMinus,
+          action: handleFollow,
+          destructive: true,
+        });
+
+        return (
+          <DropdownMenu items={items}>
+            <Button size='sm' theme={'secondary'} secondaryIcon={iconCaretDown}>
+              <FormattedMessage id='account.following' defaultMessage='Following' />
+            </Button>
+          </DropdownMenu>
+        );
+      }
       return (
         <Button
           size='sm'

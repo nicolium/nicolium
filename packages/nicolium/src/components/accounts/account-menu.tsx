@@ -12,8 +12,6 @@ import iconList from '@phosphor-icons/core/regular/list.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
-import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
-import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconRss from '@phosphor-icons/core/regular/rss.svg';
 import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
 import iconSpeakerSimpleX from '@phosphor-icons/core/regular/speaker-simple-x.svg';
@@ -33,7 +31,6 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import {
-  useFollowAccountMutation,
   usePinAccountMutation,
   useRemoveAccountFromFollowersMutation,
   useUnblockAccountMutation,
@@ -64,8 +61,6 @@ const messages = defineMessages({
   media: { id: 'account.media', defaultMessage: 'Media' },
   blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
-  hideReblogs: { id: 'account.hide_reblogs', defaultMessage: 'Hide reposts from @{name}' },
-  showReblogs: { id: 'account.show_reblogs', defaultMessage: 'Show reposts from @{name}' },
   settings: { id: 'settings.settings', defaultMessage: 'Settings' },
   blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
   mutes: { id: 'column.mutes', defaultMessage: 'Mutes' },
@@ -168,7 +163,6 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
 
   const features = useFeatures();
   const { data: ownAccount } = useOwnAccount();
-  const { mutate: followAccount } = useFollowAccountMutation(account?.id!);
   const { mutate: unblockAccount } = useUnblockAccountMutation(account?.id!);
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account?.id!);
   const { mutate: pinAccount } = usePinAccountMutation(account?.id!);
@@ -196,14 +190,6 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
 
   const onDirect = () => {
     directCompose(account);
-  };
-
-  const onReblogToggle = () => {
-    if (account.relationship?.showing_reblogs) {
-      followAccount({ reblogs: false });
-    } else {
-      followAccount({ reblogs: true });
-    }
   };
 
   const onEndorseToggle = () => {
@@ -522,20 +508,6 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       }
 
       if (account.relationship?.following) {
-        if (account.relationship?.showing_reblogs) {
-          menu.push({
-            text: intl.formatMessage(messages.hideReblogs, { name: account.username }),
-            action: onReblogToggle,
-            icon: settings.useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
-          });
-        } else {
-          menu.push({
-            text: intl.formatMessage(messages.showReblogs, { name: account.username }),
-            action: onReblogToggle,
-            icon: settings.useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
-          });
-        }
-
         if (features.lists) {
           menu.push({
             text: intl.formatMessage(messages.addOrRemoveFromList),
