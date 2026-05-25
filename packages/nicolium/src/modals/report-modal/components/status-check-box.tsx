@@ -63,13 +63,13 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({
   }
 
   return (
-    <div className='flex items-center justify-between'>
-      <div className='status-check-box__status flex flex-col gap-1 py-2'>
+    <div className='status-check-box'>
+      <div className='status-check-box__status'>
         <StatusContent status={status} />
         <Suspense>{media}</Suspense>
       </div>
 
-      <div className='flex items-center justify-center p-2.5'>
+      <div className='status-check-box__toggle'>
         <Toggle checked={checked} onChange={onToggle} disabled={disabled} />
       </div>
     </div>
