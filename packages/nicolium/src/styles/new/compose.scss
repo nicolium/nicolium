@@ -355,6 +355,18 @@
       }
     }
   }
+
+  &__upload-thumbnail {
+    &.video {
+      background-image: url('../assets/images/video-placeholder.png');
+      background-size: cover;
+    }
+
+    &.audio {
+      background-image: url('../assets/images/audio-placeholder.png');
+      background-size: cover;
+    }
+  }
 }
 
 .⁂-modal-root__container .⁂-compose-form__select-buttons {

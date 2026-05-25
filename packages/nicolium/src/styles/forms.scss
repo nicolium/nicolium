@@ -21,7 +21,7 @@ select {
 }
 
 // Adapted from [multiselect-react-dropdown](https://github.com/srigar/multiselect-react-dropdown), licensed under MIT License.
-.multiselect-container {
+.multiselect {
   position: relative;
   width: 100%;
   text-align: left;
@@ -52,7 +52,7 @@ select {
     }
   }
 
-  .searchWrapper {
+  &__search-wrapper {
     position: relative;
 
     display: flex;
@@ -111,7 +111,7 @@ select {
     }
   }
 
-  .chip {
+  &__chip {
     display: inline-flex;
     align-items: center;
 
@@ -128,7 +128,7 @@ select {
     background: rgb(var(--color-primary-600));
   }
 
-  .optionListContainer {
+  &__option-list {
     position: absolute;
     z-index: 2;
 
@@ -143,36 +143,28 @@ select {
     &--hidden {
       display: none;
     }
-  }
 
-  .displayBlock {
-    display: block;
-  }
-
-  .displayNone {
-    display: none;
-  }
-
-  .notFound {
-    display: block;
-    padding: 10px;
-  }
-
-  .optionContainer {
-    border-color: rgb(var(--color-gray-300));
-
-    .dark & {
-      border-color: rgb(var(--color-gray-800));
-      background: rgb(var(--color-gray-900));
-      outline: 2px solid rgb(var(--color-primary-700));
+    &__empty {
+      display: block;
+      padding: 10px;
     }
-  }
 
-  .option {
-    &:hover,
-    &:focus {
-      color: #fff;
-      background: rgb(var(--color-primary-600));
+    ul {
+      border-color: rgb(var(--color-gray-300));
+
+      .dark & {
+        border-color: rgb(var(--color-gray-800));
+        background: rgb(var(--color-gray-900));
+        outline: 2px solid rgb(var(--color-primary-700));
+      }
+
+      li {
+        &:hover,
+        &:focus {
+          color: #fff;
+          background: rgb(var(--color-primary-600));
+        }
+      }
     }
   }
 }

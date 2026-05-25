@@ -218,16 +218,10 @@ const Multiselect: React.FC<IMultiselect> = ({
 
   return (
     <div ref={containerRef} onBlur={onBlur} onKeyDown={onKeyDown}>
-      <div
-        className={clsx(
-          'multiselect-container',
-          { 'multiselect-container--disabled': disabled },
-          className,
-        )}
-      >
-        <div className='searchWrapper' ref={searchWrapperRef}>
+      <div className={clsx('multiselect', { 'multiselect--disabled': disabled }, className)}>
+        <div className='multiselect__search-wrapper' ref={searchWrapperRef}>
           {selectedValues.map((option) => (
-            <span className='chip' key={option.key}>
+            <span className='multiselect__chip' key={option.key}>
               {option.value}
               <button
                 type='button'
@@ -242,7 +236,6 @@ const Multiselect: React.FC<IMultiselect> = ({
           <input
             type='text'
             ref={searchBoxRef}
-            className='searchBox'
             name='search-name-input'
             onChange={onInputChange}
             value={inputValue}
@@ -253,23 +246,20 @@ const Multiselect: React.FC<IMultiselect> = ({
           />
         </div>
         <div
-          className={clsx('optionListContainer', !isOpen && 'optionListContainer--hidden')}
+          className={clsx(
+            'multiselect__option-list',
+            !isOpen && 'multiselect__option-list--hidden',
+          )}
           onMouseDown={(e) => e.preventDefault()}
         >
-          <ul className='optionContainer'>
+          <ul>
             {visibleOptions.length === 0 && (
-              <span className='notFound'>
+              <span className='multiselect__option-list__empty'>
                 <FormattedMessage id='select.no_options' defaultMessage='No options available' />
               </span>
             )}
             {visibleOptions.map((option, i) => (
-              <li
-                key={option.key}
-                className='option'
-                onClick={() => onSelectItem(option)}
-                data-index={i}
-                tabIndex={0}
-              >
+              <li key={option.key} onClick={() => onSelectItem(option)} data-index={i} tabIndex={0}>
                 {option.value}
               </li>
             ))}

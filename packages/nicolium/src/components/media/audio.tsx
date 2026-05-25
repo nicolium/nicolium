@@ -502,7 +502,7 @@ const Audio: React.FC<IAudio> = (props) => {
           <canvas
             role='button'
             tabIndex={0}
-            className='audio-player__canvas absolute left-0 top-0 w-full'
+            className='absolute left-0 top-0 w-full'
             width={width}
             height={height}
             ref={canvas}
