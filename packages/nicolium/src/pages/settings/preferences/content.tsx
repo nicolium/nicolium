@@ -322,21 +322,6 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
             <ListItem
               label={
                 <FormattedMessage
-                  id='preferences.fields.auto_translate.label'
-                  defaultMessage='Automatically translate posts in unknown languages'
-                />
-              }
-            >
-              <SettingToggle
-                settings={settings}
-                settingPath={['autoTranslate']}
-                onChange={onToggleChange}
-              />
-            </ListItem>
-
-            <ListItem
-              label={
-                <FormattedMessage
                   id='preferences.fields.side_by_side_translations'
                   defaultMessage='Show translations next to the original post'
                 />
@@ -351,6 +336,21 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
               <SettingToggle
                 settings={settings}
                 settingPath={['showSideBySideTranslations']}
+                onChange={onToggleChange}
+              />
+            </ListItem>
+
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='preferences.fields.auto_translate.label'
+                  defaultMessage='Automatically translate posts in unknown languages'
+                />
+              }
+            >
+              <SettingToggle
+                settings={settings}
+                settingPath={['autoTranslate']}
                 onChange={onToggleChange}
               />
             </ListItem>
