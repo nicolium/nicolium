@@ -17,7 +17,6 @@
   "account.follows": "Volgend",
   "account.follows.empty": "Deze gebruiker volgt nog niemand.",
   "account.follows_you": "Volgt jou",
-  "account.hide_reblogs": "Verberg reposts van @{name}",
   "account.link_verified_on": "Eigendom van deze link is gecontroleerd op {date}",
   "account.locked_info": "De privacystatus van dit account is op besloten gezet. De eigenaar bepaalt handmatig wie hen kan volgen.",
   "account.login": "Log in",

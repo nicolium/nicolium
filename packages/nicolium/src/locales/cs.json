@@ -19,7 +19,6 @@
   "account.follows": "Sledovaných",
   "account.follows.empty": "Tento uživatel ještě nikoho nesleduje.",
   "account.follows_you": "Sleduje vás",
-  "account.hide_reblogs": "Skrýt boosty od @{name}",
   "account.link_verified_on": "Vlastnictví tohoto odkazu bylo zkontrolováno dne {date}",
   "account.locked_info": "Stav soukromí tohoto účtu je nastaven na zamčeno. Jeho vlastník ručně posuzuje, kdo ho může sledovat.",
   "account.login": "Přihlásit se",

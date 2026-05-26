@@ -27,7 +27,6 @@
   "account.follows.empty": "משתמש זה לא עוקב אחר אף אחד עדיין.",
   "account.follows_you": "במעקב אחריך",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "להסתיר הידהודים מאת @{name}",
   "account.last_status": "פעיל הלפנה",
   "account.link_verified_on": "בעלות על הקישור הזה נבדקה לאחרונה ב{date}",
   "account.locked_info": "החשבון הוגדר כנעול. בעל החשבון בודק ידנית מי יכול לעקוב אחריו.",

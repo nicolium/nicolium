@@ -45,7 +45,6 @@
   "account.header.alt": "Nagłówek",
   "account.header.alt.popover": "Pokaż tekst alternatywny nagłówku profilu",
   "account.header.description": "Opis nagłówka",
-  "account.hide_reblogs": "Ukryj podbicia od @{name}",
   "account.instance_favicon": "Odwiedź oś czasu {timeline}",
   "account.last_status": "Ostatnia aktywność",
   "account.link_verified_on": "Własność tego odnośnika została potwierdzona {date}",

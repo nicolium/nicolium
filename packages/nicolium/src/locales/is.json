@@ -26,7 +26,6 @@
   "account.follows.empty": "Þessi notandi fylgist ekki með neinum ennþá.",
   "account.follows_you": "Fylgir þér",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "Fela endurbirtingar fyrir @{name}",
   "account.last_status": "Síðast virkur",
   "account.link_verified_on": "Eignarhald á þessum tengli var athugað þann {date}",
   "account.locked_info": "Þessi notanda hefur lokað á sig. Eigandinn fer handvirkt yfir hverjir geta fylgst með honum.",

@@ -35,7 +35,6 @@
   "account.follows_you": "Segue-te",
   "account.header.alt": "Cabeçalho",
   "account.header.description": "Descrição do cabeçalho",
-  "account.hide_reblogs": "Ocultar partilhas de @{name}",
   "account.instance_favicon": "Visitar linha do tempo de {domain}",
   "account.last_status": "Atividade recente",
   "account.link_verified_on": "A posse deste link foi verificada em {date}",

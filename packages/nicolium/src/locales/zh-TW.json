@@ -27,7 +27,6 @@
   "account.follows.empty": "這位使用者尚未追隨任何使用者。",
   "account.follows_you": "追隨你",
   "account.header.alt": "個人檔案標頭",
-  "account.hide_reblogs": "隱藏來自 @{name} 的轉貼",
   "account.last_status": "最後活動",
   "account.link_verified_on": "已在 {date} 檢查此連結的擁有者權限",
   "account.locked_info": "該帳戶的隱私狀態設定為鎖定。所有者會手動審核誰可以追隨他們。",

@@ -28,7 +28,6 @@
   "account.follows.empty": "Este usuario no sigue a nadie aún.",
   "account.follows_you": "Te sigue",
   "account.header.alt": "Encabezado del perfil",
-  "account.hide_reblogs": "Ocultar retoots de @{name}",
   "account.last_status": "Última vez activ*",
   "account.link_verified_on": "El proprietario de este enlace fue comprobado el {date}",
   "account.locked_info": "El estado de privacidad de esta cuenta está configurado como bloqueado. El proprietario debe revisar manualmente quien puede seguirlo.",

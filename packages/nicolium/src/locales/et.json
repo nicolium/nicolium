@@ -14,7 +14,6 @@
   "account.follows": "Jälgib",
   "account.follows.empty": "See kasutaja ei jälgi veel kedagi.",
   "account.follows_you": "Jälgib sind",
-  "account.hide_reblogs": "Peida upitused kasutajalt @{name}",
   "account.link_verified_on": "Selle lingi autorsust kontrolliti {date}",
   "account.locked_info": "Selle konto privaatsus on lukustatud. Omanik vaatab manuaalselt üle, kes teda jägida saab.",
   "account.login": "Log in",

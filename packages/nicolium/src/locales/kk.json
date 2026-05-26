@@ -26,7 +26,6 @@
   "account.follows.empty": "Ешкімге жазылмапты.",
   "account.follows_you": "Сізге жазылыпты",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "@{name} атты қолданушының әрекеттерін жасыру",
   "account.last_status": "Last active",
   "account.link_verified_on": "Сілтеме меншігі расталған күн {date}",
   "account.locked_info": "Бұл қолданушы өзі туралы мәліметтерді жасырған. Тек жазылғандар ғана көре алады.",

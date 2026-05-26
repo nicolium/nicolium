@@ -35,7 +35,6 @@
   "account.follows_you": "Подписан(а) на вас",
   "account.header.alt": "Шапка",
   "account.header.description": "Описание фона",
-  "account.hide_reblogs": "Скрыть реблоги от @{name}",
   "account.instance_favicon": "Посетить ленту {domain}",
   "account.last_status": "Последняя активность",
   "account.link_verified_on": "Владение этой ссылкой было проверено {date}",

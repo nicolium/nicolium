@@ -35,7 +35,6 @@
   "account.follows_you": "நீ பின் தொடர்கிறாய்",
   "account.header.alt": "சுயவிவர தலைப்பு",
   "account.header.description": "தலைப்பு விளக்கம்",
-  "account.hide_reblogs": "இருந்து ஊக்கியாக மறை @{name}",
   "account.instance_favicon": "{domain} காலவரிசையைப் பார்வையிடவும்",
   "account.last_status": "கடைசியாக செயலில்",
   "account.link_verified_on": "இந்த இணைப்பை உரிமையாளர் சரிபார்க்கப்பட்டது {date}",

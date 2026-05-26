@@ -27,7 +27,6 @@
   "account.follows.empty": "هذا الحساب لا يُتابع أي شخص.",
   "account.follows_you": "يتابعك",
   "account.header.alt": "ترويسة الحساب",
-  "account.hide_reblogs": "اخفاء المنشورات المعاد نشرها من @{name}",
   "account.last_status": "آخر تواجد",
   "account.link_verified_on": "أُكِّدت ملكية الحساب في {date}",
   "account.locked_info": "هذا الحساب خاص. يجب الموافقة على طلب المتابعة من قِبل صاحب الحساب.",

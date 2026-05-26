@@ -14,7 +14,6 @@
   "account.follows": "Seuraa",
   "account.follows.empty": "Tämä käyttäjä ei vielä seuraa ketään.",
   "account.follows_you": "Seuraa sinua",
-  "account.hide_reblogs": "Piilota buustaukset käyttäjältä @{name}",
   "account.link_verified_on": "Tämän linkin omistaja tarkistettiin {date}",
   "account.locked_info": "Tämän tili on yksityinen. Käyttäjä vahvistaa itse kuka voi seurata häntä.",
   "account.login": "Log in",

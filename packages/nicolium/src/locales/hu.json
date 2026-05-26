@@ -26,7 +26,6 @@
   "account.follows.empty": "Ez a felhasználó még senkit sem követ.",
   "account.follows_you": "Követ téged",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "@{name} megtolásainak némítása",
   "account.last_status": "Last active",
   "account.link_verified_on": "A linket ellenőriztük: {date}",
   "account.locked_info": "Ez a fiók zárt. A tulaj engedélyezi, ki követheti őt.",

@@ -26,7 +26,6 @@
   "account.follows.empty": "Esse usuário não segue ninguém no momento.",
   "account.follows_you": "Segue você",
   "account.header.alt": "Profile header",
-  "account.hide_reblogs": "Esconder compartilhamentos de @{name}",
   "account.last_status": "Last active",
   "account.link_verified_on": "A posse desse link foi verificada em {date}",
   "account.locked_info": "Essa conta está trancada. Se você a seguir sua solicitação será revisada manualmente.",
