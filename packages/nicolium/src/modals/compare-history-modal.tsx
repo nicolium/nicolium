@@ -61,7 +61,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                 </>
               )}
 
-              <div className='status__content'>{content}</div>
+              <div data-markup>{content}</div>
 
               {poll && (
                 <div className='poll'>

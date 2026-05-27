@@ -1,7 +1,7 @@
 @use '../new/variables';
 
 [column-type='filled'] .status__wrapper,
-[column-type='filled'] .status-placeholder {
+[column-type='filled'] .status--placeholder {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -22,30 +22,9 @@
     gap: 0.25rem;
     padding: 0.5rem 0;
 
-    .media-gallery {
-      max-width: 250px;
-    }
-
-    .status__content {
-      padding: 0;
-
-      font-size: var(--text-sm);
-      line-height: var(--leading-sm);
-      color: rgb(var(--color-gray-700));
-      white-space: normal;
-
-      .dark & {
-        color: rgb(var(--color-gray-500));
-      }
-    }
-
     .video-player {
       max-width: 250px;
       margin-top: 0.5rem;
-    }
-
-    .media-gallery__item-thumbnail {
-      cursor: default;
     }
   }
 
