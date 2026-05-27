@@ -4,6 +4,14 @@
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## v0.3.1
+
+### Added
+
 - Pages such as birthdays and announcements for narrow screens.
 - Option to hide notifications from accounts marked as automated.
 - You can add a link to your Favourites page to the navigation menu.
@@ -17,7 +25,7 @@
 
 ### Fixed
 
-- Hashtag visibility warining doesn't display when using default post visibility, when it's set to public.
+- Hashtag visibility warning doesn't display when using default post visibility, when it's set to public.
 - Iceshrimp.NET example Nginx config now doesn't break custom emojis.
 - Replies and other parameters of saved drafts are stored properly.
 
