@@ -5,9 +5,8 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
-import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
-import Text from '@/components/ui/text';
+import Icon from '@/components/ui/icon';
 import toast from '@/toast';
 import copy from '@/utils/copy';
 
@@ -44,97 +43,98 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
   }
 
   return (
-    <div className='flex flex-col gap-9'>
-      <div className='flex flex-col gap-3'>
-        <div className='flex flex-col'>
-          <label className='dark:sm:shadow-inset relative h-24 w-full cursor-pointer overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-primary-400 sm:h-36 sm:shadow'>
+    <div className='manage-group-modal__confirmation'>
+      <div className='manage-group-modal__confirmation-preview'>
+        <div className='manage-group-modal__group-image-stack'>
+          <label className='manage-group-modal__group-header'>
             {group.header && (
               <img
-                className='size-full object-cover'
+                className='manage-group-modal__group-header-image'
                 src={group.header}
                 alt={group.header_description}
               />
             )}
           </label>
 
-          <label className='z-[1] mx-auto -mt-10 cursor-pointer rounded-lg bg-primary-500 ring-2 ring-white dark:ring-primary-900'>
+          <label className='manage-group-modal__group-avatar'>
             {group.avatar && <Avatar src={group.avatar} alt={group.avatar_description} size={80} />}
           </label>
         </div>
 
-        <div className='flex flex-col'>
-          <Text size='2xl' weight='bold' align='center'>
-            {group.display_name}
-          </Text>
-          <Text
-            size='md'
-            className='mx-auto max-w-sm [&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-primary-400'
-          >
+        <div className='manage-group-modal__group-summary'>
+          <p className='manage-group-modal__group-name'>{group.display_name}</p>
+          <p className='manage-group-modal__group-note'>
             <ParsedContent html={group.note} emojis={group.emojis} />
-          </Text>
+          </p>
         </div>
       </div>
 
       <Divider />
 
-      <div className='flex flex-col gap-4'>
-        <Text size='3xl' weight='bold' align='center'>
+      <div className='manage-group-modal__confirmation-info'>
+        <p className='manage-group-modal__confirmation-title'>
           <FormattedMessage id='manage_group.confirmation.title' defaultMessage='You’re all set!' />
-        </Text>
+        </p>
 
-        <div className='flex flex-col gap-5'>
+        <div className='manage-group-modal__confirmation-info-list'>
           <InfoListItem number={1}>
-            <Text theme='muted'>
+            <p className='manage-group-modal__info-text'>
               <FormattedMessage
                 id='manage_group.confirmation.info_1'
                 defaultMessage='As the owner of this group, you can assign staff, delete posts and much more.'
               />
-            </Text>
+            </p>
           </InfoListItem>
 
           <InfoListItem number={2}>
-            <Text theme='muted'>
+            <p className='manage-group-modal__info-text'>
               <FormattedMessage
                 id='manage_group.confirmation.info_2'
                 defaultMessage="Post the group's first post and get the conversation started."
               />
-            </Text>
+            </p>
           </InfoListItem>
 
           <InfoListItem number={3}>
-            <Text theme='muted'>
+            <p className='manage-group-modal__info-text'>
               <FormattedMessage
                 id='manage_group.confirmation.info_3'
                 defaultMessage='Share your new group with friends, family and followers to grow its membership.'
               />
-            </Text>
+            </p>
           </InfoListItem>
         </div>
       </div>
 
-      <div className='flex justify-center gap-2'>
+      <div className='manage-group-modal__confirmation-actions'>
         {'share' in navigator && (
-          <Button
+          <button
+            type='button'
+            className='manage-group-modal__confirmation-button'
             onClick={handleShare}
-            theme='transparent'
-            icon={iconExport}
-            className='text-primary-600'
+            data-testid='button'
           >
-            <FormattedMessage
-              id='manage_group.confirmation.share'
-              defaultMessage='Share this group'
-            />
-          </Button>
+            <Icon src={iconExport} />
+            <span>
+              <FormattedMessage
+                id='manage_group.confirmation.share'
+                defaultMessage='Share this group'
+              />
+            </span>
+          </button>
         )}
 
-        <Button
+        <button
+          type='button'
+          className='manage-group-modal__confirmation-button'
           onClick={handleCopyLink}
-          theme='transparent'
-          icon={iconLinkSimple}
-          className='text-primary-600'
+          data-testid='button'
         >
-          <FormattedMessage id='manage_group.confirmation.copy' defaultMessage='Copy link' />
-        </Button>
+          <Icon src={iconLinkSimple} />
+          <span>
+            <FormattedMessage id='manage_group.confirmation.copy' defaultMessage='Copy link' />
+          </span>
+        </button>
       </div>
     </div>
   );
@@ -145,10 +145,8 @@ interface IInfoListNumber {
 }
 
 const InfoListNumber: React.FC<IInfoListNumber> = ({ number }) => (
-  <div className='flex size-7 shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-gray-800'>
-    <Text theme='primary' size='sm' weight='bold'>
-      {number}
-    </Text>
+  <div className='manage-group-modal__info-number'>
+    <p className='manage-group-modal__info-number-text'>{number}</p>
   </div>
 );
 
@@ -158,9 +156,9 @@ interface IInfoListItem {
 }
 
 const InfoListItem: React.FC<IInfoListItem> = ({ number, children }) => (
-  <div className='flex items-start gap-3'>
+  <div className='manage-group-modal__info-item'>
     <InfoListNumber number={number} />
-    <div className='mt-0.5'>{children}</div>
+    <div className='manage-group-modal__info-item-content'>{children}</div>
   </div>
 );
 

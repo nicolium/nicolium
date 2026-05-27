@@ -88,13 +88,14 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
 
   return (
     <Modal
+      className='manage-group-modal'
       title={renderModalTitle()}
       confirmationAction={handleNextStep}
       confirmationText={confirmationText}
       confirmationDisabled={isPending}
       onClose={handleClose}
     >
-      <div className='flex flex-col gap-2'>{renderStep()}</div>
+      <div className='manage-group-modal__steps'>{renderStep()}</div>
     </Modal>
   );
 };

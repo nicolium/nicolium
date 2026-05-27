@@ -1,3 +1,4 @@
+@use 'mixins';
 @use 'variables';
 
 .crypto-donate-modal {
@@ -6,6 +7,172 @@
 
 .hotkey-modal {
   max-width: 56rem;
+}
+
+.manage-group-modal {
+  &__steps,
+  &__profile-images,
+  &__confirmation,
+  &__confirmation-preview,
+  &__group-image-stack,
+  &__group-summary,
+  &__confirmation-info,
+  &__confirmation-info-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__steps {
+    gap: 0.5rem;
+  }
+
+  &__profile-images {
+    position: relative;
+    flex-direction: row;
+    margin-bottom: 3rem;
+  }
+
+  &__confirmation {
+    gap: 2.25rem;
+  }
+
+  &__confirmation-preview {
+    gap: 0.75rem;
+  }
+
+  &__group-header {
+    cursor: pointer;
+
+    position: relative;
+
+    overflow: hidden;
+
+    width: 100%;
+    height: 6rem;
+    border-radius: var(--radius-lg);
+
+    color: rgb(var(--color-primary-500));
+
+    background-color: rgb(var(--color-primary-100));
+
+    .dark & {
+      color: rgb(var(--color-primary-400));
+      background-color: rgb(var(--color-gray-800));
+    }
+
+    @media (min-width: variables.$breakpoint-sm) {
+      height: 9rem;
+      box-shadow: var(--shadow-sm);
+
+      .dark & {
+        box-shadow: var(--shadow-inset);
+      }
+    }
+  }
+
+  &__group-header-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__group-avatar {
+    cursor: pointer;
+
+    z-index: 1;
+
+    margin-top: -2.5rem;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: var(--radius-lg);
+
+    background-color: rgb(var(--color-primary-500));
+    box-shadow: 0 0 0 2px #fff;
+
+    .dark & {
+      box-shadow: 0 0 0 2px rgb(var(--color-primary-900));
+    }
+  }
+
+  &__group-name {
+    @include mixins.text($size: 2xl, $weight: bold, $align: center);
+  }
+
+  &__group-note {
+    @include mixins.text;
+
+    max-width: 24rem;
+    margin-right: auto;
+    margin-left: auto;
+
+    a {
+      color: rgb(var(--color-primary-600));
+
+      &:hover {
+        text-decoration-line: underline;
+      }
+
+      .dark & {
+        color: rgb(var(--color-primary-400));
+      }
+    }
+  }
+
+  &__confirmation-title {
+    @include mixins.text($size: 3xl, $weight: bold, $align: center);
+  }
+
+  &__confirmation-info {
+    gap: 1rem;
+  }
+
+  &__confirmation-info-list {
+    gap: 1.25rem;
+  }
+
+  &__confirmation-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  &__confirmation-button {
+    @include mixins.button($theme: transparent);
+  }
+
+  &__info-number {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid rgb(var(--color-gray-200));
+    border-radius: var(--radius-full);
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+    }
+  }
+
+  &__info-number-text {
+    @include mixins.text($theme: primary, $size: sm, $weight: bold);
+  }
+
+  &__info-text {
+    @include mixins.text($theme: muted);
+  }
+
+  &__info-item {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  &__info-item-content {
+    margin-top: 0.125rem;
+  }
 }
 
 .media-modal {

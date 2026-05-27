@@ -77,7 +77,7 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
 
   return (
     <Form>
-      <div className='relative mb-12 flex'>
+      <div className='manage-group-modal__profile-images'>
         <HeaderPicker
           src={headerSrc}
           accept={attachmentTypes}
