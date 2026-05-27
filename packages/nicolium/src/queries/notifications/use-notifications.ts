@@ -67,6 +67,9 @@ const normalizeNotification = (notification: Notification): NotificationGroup =>
 const useActiveFilter = () =>
   useSettingsStore((state) => state.settings.notifications.quickFilter.active);
 
+const useHideBotNotifications = () =>
+  useSettingsStore((state) => state.settings.notifications.hideBots);
+
 const excludeTypesFromFilter = (filters: string[]) =>
   NOTIFICATION_TYPES.filter((item) => !filters.includes(item)) as string[];
 
@@ -110,21 +113,23 @@ const shouldDisplayNotification = (
 };
 
 const notificationsQueryOptions = makePaginatedResponseQueryOptions(
-  (activeFilter: FilterType) => queryKeys.notifications.list(activeFilter),
-  (client, [activeFilter]) =>
+  (activeFilter: FilterType, hideBots: boolean) =>
+    queryKeys.notifications.list(activeFilter, hideBots),
+  (client, [activeFilter, hideBots]) =>
     client.groupedNotifications
       .getGroupedNotifications(
         buildNotificationsParams(activeFilter, client.features.notificationsIncludeTypes),
       )
-      .then(minifyGroupedNotifications),
+      .then((response) => minifyGroupedNotifications(response, hideBots)),
 );
 
 const useNotifications = (activeFilter: FilterType) => {
   const { me } = useLoggedIn();
   const client = useClient();
+  const hideBots = useHideBotNotifications();
 
   return useInfiniteQuery({
-    ...notificationsQueryOptions(client, activeFilter),
+    ...notificationsQueryOptions(client, activeFilter, hideBots),
     enabled: !!me,
   });
 };
@@ -152,11 +157,13 @@ const useProcessStreamNotification = () => {
   const { data: filters = [] } = useFiltersByContext('notifications');
   const activeFilter = useActiveFilter();
   const { sounds } = useSettingsStore((state) => state.settings.notifications);
+  const hideBots = useHideBotNotifications();
 
   const processStreamNotification = useCallback(
     (notification: Notification) => {
       if (!notification.type) return;
       if (notification.type === 'chat_mention') return;
+      if (hideBots && notification.account.bot) return;
 
       const playSound = sounds[notification.type];
       const status = 'status' in notification ? notification.status : null;
@@ -230,7 +237,7 @@ const useProcessStreamNotification = () => {
         normalizedNotification.sample_account_ids.forEach(appendFollowRequest);
       }
     },
-    [filters, sounds, activeFilter],
+    [filters, sounds, activeFilter, hideBots],
   );
 
   return processStreamNotification;
@@ -293,11 +300,12 @@ const usePrefetchNotifications = () => {
   const client = useClient();
   const { me } = useLoggedIn();
   const activeFilter = useActiveFilter();
+  const hideBots = useHideBotNotifications();
 
   useEffect(() => {
     if (!me) return;
-    queryClient.prefetchInfiniteQuery(notificationsQueryOptions(client, activeFilter));
-  }, [me]);
+    queryClient.prefetchInfiniteQuery(notificationsQueryOptions(client, activeFilter, hideBots));
+  }, [me, hideBots]);
 };
 
 const filterUnique = (
@@ -321,22 +329,24 @@ const comparator = (
 };
 
 const prependNotification = (notification: NotificationGroup, filter: FilterType) => {
-  queryClient.setQueryData(queryKeys.notifications.list(filter), (data) => {
-    if (!data || !data.pages.length) return data;
+  for (const hideBots of [false, true]) {
+    queryClient.setQueryData(queryKeys.notifications.list(filter, hideBots), (data) => {
+      if (!data || !data.pages.length) return data;
 
-    const [firstPage, ...restPages] = data.pages;
+      const [firstPage, ...restPages] = data.pages;
 
-    return {
-      ...data,
-      pages: [
-        new PaginatedResponse<Array<NotificationGroup>, false>(
-          [notification, ...firstPage.items].toSorted(comparator).filter(filterUnique),
-          firstPage,
-        ),
-        ...restPages,
-      ],
-    };
-  });
+      return {
+        ...data,
+        pages: [
+          new PaginatedResponse<Array<NotificationGroup>, false>(
+            [notification, ...firstPage.items].toSorted(comparator).filter(filterUnique),
+            firstPage,
+          ),
+          ...restPages,
+        ],
+      };
+    });
+  }
 };
 
 export {

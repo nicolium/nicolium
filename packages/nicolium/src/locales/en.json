@@ -1834,6 +1834,7 @@
   "preferences.hints.mention_policy": "Applies to direct messages and public posts",
   "preferences.hints.web_include_boosts": "Show reposts created by the account on the web view of your profile",
   "preferences.notifications.advanced": "Show all notification categories",
+  "preferences.notifications.include_bots": "Include automated accounts",
   "preferences.options.brand_color": "Base color",
   "preferences.options.content_type_html": "HTML",
   "preferences.options.content_type_markdown": "Markdown",

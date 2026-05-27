@@ -359,6 +359,7 @@ const settingsSchema = v.object({
   }),
 
   notifications: coerceObject({
+    hideBots: v.optional(v.boolean(), false),
     quickFilter: coerceObject({
       active: v.optional(
         v.picklist(['all', 'mention', 'favourite', 'reblog', 'poll', 'status', 'follow', 'events']),

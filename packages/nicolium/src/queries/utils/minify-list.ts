@@ -143,10 +143,23 @@ const minifyConversationList = (response: PaginatedResponse<Conversation>) =>
 
 const minifyGroupedNotifications = (
   response: PaginatedResponse<GroupedNotificationsResults, false>,
+  hideBots = false,
 ): PaginatedResponse<NotificationGroup[], false> =>
   minifyList(
     response,
-    (results) => results.notification_groups,
+    (results) => {
+      if (!hideBots) return results.notification_groups;
+
+      const botAccountIds = new Set(
+        results.accounts.filter((account) => account.bot).map((account) => account.id),
+      );
+
+      if (!botAccountIds.size) return results.notification_groups;
+
+      return results.notification_groups.filter(
+        (notification) => !notification.sample_account_ids.some((id) => botAccountIds.has(id)),
+      );
+    },
     (results) => {
       const { accounts, statuses } = results;
 

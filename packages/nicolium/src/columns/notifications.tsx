@@ -74,7 +74,7 @@ const FilterBar = () => {
     saveSettings();
     if (filterType === selectedFilter) {
       queryClient.refetchQueries({
-        queryKey: queryKeys.notifications.list(filterType),
+        queryKey: queryKeys.notifications.list(filterType, notificationsSettings.hideBots),
         exact: true,
       });
     }
@@ -246,7 +246,9 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
   }, [notifications, markNotificationsRead]);
 
   const handleRefresh = useCallback(() => {
-    queryClient.resetQueries({ queryKey: queryKeys.notifications.list(activeFilter) });
+    queryClient.resetQueries({
+      queryKey: queryKeys.notifications.list(activeFilter, settings.notifications.hideBots),
+    });
     refetch().catch(console.error);
   }, [refetch]);
 

@@ -20,19 +20,28 @@ const messages = defineMessages({
     id: 'preferences.notifications.advanced',
     defaultMessage: 'Show all notification categories',
   },
+  includeBots: {
+    id: 'preferences.notifications.include_bots',
+    defaultMessage: 'Include automated accounts',
+  },
   refresh: { id: 'notifications.refresh', defaultMessage: 'Refresh notifications' },
 });
 
 const RefreshButton = () => {
   const intl = useIntl();
   const queryClient = useQueryClient();
-  const activeFilter = useSettings().notifications.quickFilter.active;
-  const { isPending, refetch } = useNotifications(activeFilter);
+  const notificationSettings = useSettings().notifications;
+  const { isPending, refetch } = useNotifications(notificationSettings.quickFilter.active);
 
   if (userTouching.matches) return null;
 
   const handleClick = () => {
-    queryClient.resetQueries({ queryKey: queryKeys.notifications.list(activeFilter) });
+    queryClient.resetQueries({
+      queryKey: queryKeys.notifications.list(
+        notificationSettings.quickFilter.active,
+        notificationSettings.hideBots,
+      ),
+    });
     refetch();
   };
 
@@ -57,6 +66,12 @@ const NotificationsPage = () => {
       type: 'toggle',
       checked: settings.notifications.quickFilter.advanced,
       onChange: (value) => changeSetting(['notifications', 'quickFilter', 'advanced'], value),
+    },
+    {
+      text: intl.formatMessage(messages.includeBots),
+      type: 'toggle',
+      checked: !settings.notifications.hideBots,
+      onChange: (value) => changeSetting(['notifications', 'hideBots'], !value),
     },
   ];
 
