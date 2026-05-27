@@ -1596,3 +1596,38 @@ body {
     margin-top: 1.5rem;
   }
 }
+
+.⁂-logo-text {
+  overflow: hidden;
+
+  font-size: var(--text-5xl);
+  font-weight: 800;
+  line-height: 1.25;
+  color: transparent;
+  text-overflow: ellipsis;
+
+  background-image: linear-gradient(to right bottom, rgb(var(--color-accent-500)), rgb(var(--color-primary-500)), rgb(var(--color-gradient-end)));
+  background-clip: text;
+
+  @media (min-width: variables.$breakpoint-lg) {
+    font-size: var(--text-6xl);
+  }
+
+  @media (min-width: variables.$breakpoint-xl) {
+    font-size: var(--text-7xl);
+  }
+}
+
+.⁂-site-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .⁂-logo-text {
+    margin: -1.25rem 0;
+  }
+
+  [data-markup] {
+    @include mixins.text($size: lg);
+  }
+}

@@ -1961,6 +1961,50 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
   }
 }
 
+.⁂-detailed-crypto-address {
+  display: flex;
+  flex-direction: column;
+
+  &__label {
+    display: flex;
+    gap: 0.675rem;
+    align-items: center;
+    margin-bottom: 0.375rem;
+
+    div {
+      font-weight: bold;
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    width: 1.5rem;
+
+    svg {
+      width: 100%;
+    }
+  }
+
+  &__note {
+    margin-top: 0.675rem;
+  }
+
+  &__qr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 0.75rem;
+    padding: 0.675rem;
+
+    canvas {
+      border-radius: var(--radius-lg);
+    }
+  }
+}
+
 .⁂-copyable-input {
   display: flex;
   align-items: center;
