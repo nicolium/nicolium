@@ -13,7 +13,7 @@ The most straightforward way to install Nicolium as a frontend for Pleroma or Ak
 > **Note:** This assumes you want to use the stable release version of Nicolium. If you want to use the development version (which is more cutting-edge but can break sometimes), replace `release` with `develop` in the URLs and commands below.
 
 ```bash
-curl -O https://web.nicolium.app/release.zip
+curl -OL https://web.nicolium.app/release.zip
 unzip release.zip -d /opt/pleroma/instance/static/
 rm release.zip
 ```
