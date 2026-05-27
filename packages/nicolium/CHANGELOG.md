@@ -5,12 +5,15 @@
 ### Added
 
 - Pages such as birthdays and announcements for narrow screens.
+- Option to hide notifications from accounts marked as automated.
+- You can add a link to your Favourites page to the navigation menu.
 
 ### Changed
 
 - Updated URL cleaning rules for YouTube links.
 - Added feedback for saving drafts and a few more UI interactions.
 - Further work on migrating styles from TailwindCSS.
+- Subscription and follow settings are moved to the Following button displayed on profile page.
 
 ### Fixed
 
