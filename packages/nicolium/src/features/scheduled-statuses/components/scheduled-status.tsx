@@ -37,8 +37,8 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus, ...other
       tabIndex={0}
     >
       <div
-        className={clsx('status', `status-${status.visibility}`, {
-          'status-reply': !!status.in_reply_to_id,
+        className={clsx('status', `⁂-status--${status.visibility}`, {
+          '⁂-status--reply': !!status.in_reply_to_id,
         })}
         data-id={status.id}
       >
