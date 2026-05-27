@@ -12,13 +12,14 @@ import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-t
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
-import { onlyEmoji as isOnlyEmoji } from '@/utils/rich-content';
+import { onlyEmoji as isOnlyEmoji, onlyHour as isOnlyHour } from '@/utils/rich-content';
 import { getTextDirection } from '@/utils/rtl';
 
 import Markup from '../markup';
 import OutlineBox from '../outline-box';
 import Poll from '../polls/poll';
 
+import FakeNewsAlert from './fake-news-alert';
 import HashtagsBar from './hashtags-bar';
 import { parseContent } from './parsed-content';
 import { ParsedMfm } from './parsed-mfm';
@@ -123,6 +124,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     const [collapsed, setCollapsed] = useState<boolean | null>(null);
     const [isTranslationEqual, setIsTranslationEqual] = useState(false);
     const [onlyEmoji, setOnlyEmoji] = useState(false);
+    const [isTimeOff, setTimeOff] = useState<string | false>(false);
     const [lineClamp, setLineClamp] = useState(true);
 
     const contentNode = useRef<HTMLDivElement>(null);
@@ -163,6 +165,32 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       }
     };
 
+    const maybeSetTimeOff = (): void => {
+      if (!contentNode.current) return;
+
+      const time = isOnlyHour(contentNode.current, true);
+      const publishedHour = new Intl.DateTimeFormat('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hourCycle: 'h23',
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      }).format(new Date(status.created_at));
+
+      if (!time || !publishedHour) {
+        setTimeOff(false);
+        return;
+      }
+
+      const [hour, minute] = time.split(':').map(Number);
+      const [publishedHourValue, publishedMinute] = publishedHour.split(':').map(Number);
+
+      if (hour === publishedHourValue && Math.abs(minute - publishedMinute) === 1) {
+        setTimeOff(publishedHour);
+      } else {
+        setTimeOff(false);
+      }
+    };
+
     const toggleSpoilerExpanded: React.MouseEventHandler = (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -186,6 +214,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     useLayoutEffect(() => {
       maybeSetCollapsed();
       maybeSetOnlyEmoji();
+      maybeSetTimeOff();
     }, [spoilerExpanded]);
 
     const content = useMemo(
@@ -475,6 +504,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
 
       if (hashtags.length) {
         output.push(<HashtagsBar key='hashtags' hashtags={hashtags} />);
+      }
+
+      if (isTimeOff && !media && !status.poll_id) {
+        output.push(<FakeNewsAlert publishedAt={isTimeOff} />);
       }
     }
 

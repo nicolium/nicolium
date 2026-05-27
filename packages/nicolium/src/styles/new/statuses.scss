@@ -1500,3 +1500,40 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
   flex-direction: column;
   gap: 0.5rem;
 }
+
+.fake-news-alert {
+  @include mixins.card($variant: rounded);
+
+  .black & {
+    margin-top: 0.5rem;
+    border: 1px solid rgb(var(--color-gray-800));
+    border-radius: var(--radius-md);
+  }
+
+  h3 {
+    @include mixins.text($size: lg, $weight: semibold);
+
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    margin: -0.5rem -1rem 0;
+    padding: 0 1rem 0.25rem;
+    border-bottom: 1px solid rgb(var(--color-gray-200));
+
+    .black & {
+      border-bottom-color: rgb(var(--color-gray-800));
+    }
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  p {
+    @include mixins.text($theme: muted, $size: sm);
+
+    padding-top: 0.5rem;
+  }
+}
