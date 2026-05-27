@@ -212,7 +212,7 @@ const EditFilterPage: React.FC = () => {
   );
 
   return (
-    <Column className='filter-settings-panel' label={intl.formatMessage(messages.subheadingAddNew)}>
+    <Column label={intl.formatMessage(messages.subheadingAddNew)}>
       <Form onSubmit={handleAddNew}>
         {features.filtersV2 ? (
           <FormGroup

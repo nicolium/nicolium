@@ -47,9 +47,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
 
   let media: React.JSX.Element | null = null;
 
-  const renderLoadingMediaGallery = (): React.JSX.Element => (
-    <div className='media_gallery' style={{ height: '285px' }} />
-  );
+  const renderLoadingMediaGallery = (): React.JSX.Element => <div style={{ height: '285px' }} />;
 
   const renderLoadingVideoPlayer = (): React.JSX.Element => (
     <div

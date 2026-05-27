@@ -55,7 +55,7 @@ const FiltersPage = () => {
   );
 
   return (
-    <Column className='filter-settings-panel' label={intl.formatMessage(messages.heading)}>
+    <Column label={intl.formatMessage(messages.heading)}>
       <div className='mb-4 flex justify-end gap-2'>
         <Button to='/filters/$filterId' params={{ filterId: 'new' }} theme='primary' size='sm'>
           <FormattedMessage id='filters.create_filter' defaultMessage='Create filter' />

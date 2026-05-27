@@ -101,7 +101,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
                       defaultMessage='Matches filter “<span>{title}</span>”'
                       values={{
                         title: matchedFilters.join(', '),
-                        span: (chunks) => <span className='filter-name'>{chunks}</span>,
+                        span: (chunks) => <span>{chunks}</span>,
                       }}
                     />
                   ) : (

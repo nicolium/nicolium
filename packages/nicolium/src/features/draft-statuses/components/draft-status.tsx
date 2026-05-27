@@ -51,9 +51,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
 
   return (
     <div
-      className={clsx('status__wrapper py-4', `status__wrapper-${status.visibility}`, {
-        'status__wrapper-reply': !!status.in_reply_to_id,
-      })}
+      className={clsx('status__wrapper py-4', `status__wrapper-${status.visibility}`)}
       tabIndex={0}
     >
       <div

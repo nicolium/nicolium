@@ -64,28 +64,26 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
               <div data-markup>{content}</div>
 
               {poll && (
-                <div className='poll'>
-                  <div className='flex flex-col'>
-                    {poll.options.map((option) => (
-                      <div
-                        className='flex items-center p-1 text-gray-900 dark:text-gray-300'
-                        key={option.title}
-                      >
-                        <span
-                          className='mr-2.5 inline-block size-4 flex-none rounded-full border border-solid border-primary-600'
-                          aria-hidden
-                        />
+                <div className='flex flex-col'>
+                  {poll.options.map((option) => (
+                    <div
+                      className='flex items-center p-1 text-gray-900 dark:text-gray-300'
+                      key={option.title}
+                    >
+                      <span
+                        className='mr-2.5 inline-block size-4 flex-none rounded-full border border-solid border-primary-600'
+                        aria-hidden
+                      />
 
-                        <span>
-                          <ParsedContent
-                            html={option.title}
-                            emojis={version.emojis}
-                            speakAsCat={statusAccount?.speak_as_cat}
-                          />
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                      <span>
+                        <ParsedContent
+                          html={option.title}
+                          emojis={version.emojis}
+                          speakAsCat={statusAccount?.speak_as_cat}
+                        />
+                      </span>
+                    </div>
+                  ))}
                 </div>
               )}
 
