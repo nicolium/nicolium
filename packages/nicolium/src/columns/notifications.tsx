@@ -321,7 +321,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
       placeholderCount={20}
       onLoadMore={handleLoadOlder}
       onScrollToTop={handleScrollToTop}
-      listClassName={clsx('⁂-status-list', { '⁂-status-list--loading': isLoading })}
+      listClassName={clsx('status-list', { 'status-list--loading': isLoading })}
       useWindowScroll={!multiColumn}
     >
       {scrollableContent!}

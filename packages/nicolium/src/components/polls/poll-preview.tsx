@@ -15,7 +15,7 @@ const PollPreview: React.FC<IPollPreview> = ({ poll }) => {
   }
 
   return (
-    <div className='⁂-poll-preview'>
+    <div className='poll-preview'>
       {poll.options.map((option, i) => (
         <PollOption
           key={i}

@@ -79,7 +79,7 @@ const StillImage: React.FC<IStillImage> = ({
   return (
     <span
       data-testid='still-image-container'
-      className={clsx(className, '⁂-still-image', { '⁂-still-image--hover-to-play': hoverToPlay })}
+      className={clsx(className, 'still-image', { 'still-image--hover-to-play': hoverToPlay })}
       style={style}
     >
       <img
@@ -90,7 +90,7 @@ const StillImage: React.FC<IStillImage> = ({
         onLoad={handleImageLoad}
         onError={onError}
         className={clsx(baseClassName, {
-          '⁂-still-image__image': hoverToPlay,
+          'still-image__image': hoverToPlay,
         })}
       />
 
@@ -100,10 +100,10 @@ const StillImage: React.FC<IStillImage> = ({
             src={staticSrc}
             alt={alt}
             title={alt}
-            className={clsx(baseClassName, '⁂-still-image__static-image')}
+            className={clsx(baseClassName, 'still-image__static-image')}
           />
         ) : (
-          <canvas ref={canvas} className={clsx(baseClassName, '⁂-still-image__static-image')} />
+          <canvas ref={canvas} className={clsx(baseClassName, 'still-image__static-image')} />
         ))}
 
       {hoverToPlay && showExt && (

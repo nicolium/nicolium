@@ -308,7 +308,7 @@ const ActionButton: React.FC<IActionButton> = ({
 
   const followRequestAction = () => {
     return (
-      <div className='⁂-follow-request-actions'>
+      <div className='follow-request-actions'>
         <button onClick={handleAuthorize}>
           <FormattedMessage id='follow_request.authorize' defaultMessage='Authorize' />
         </button>

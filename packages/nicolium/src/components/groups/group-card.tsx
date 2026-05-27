@@ -19,24 +19,24 @@ const GroupCard: React.FC<IGroupCard> = ({ groupId }) => {
   if (!group) return null;
 
   return (
-    <div className='⁂-group-card ⁂-group-card--framed' data-testid='group-card'>
+    <div className='group-card group-card--framed' data-testid='group-card'>
       {/* Group Cover Image */}
-      <div className='⁂-group-card__cover'>
-        <GroupHeaderImage group={group} className='⁂-group-card__cover-image' />
+      <div className='group-card__cover'>
+        <GroupHeaderImage group={group} className='group-card__cover-image' />
       </div>
 
       {/* Group Avatar */}
-      <div className='⁂-group-card__avatar'>
+      <div className='group-card__avatar'>
         <GroupAvatar group={group} size={64} withRing />
       </div>
 
       {/* Group Info */}
-      <div className='⁂-group-card__info'>
-        <p className='⁂-group-card__name'>
+      <div className='group-card__info'>
+        <p className='group-card__name'>
           <Emojify text={group.display_name} emojis={group.emojis} />
         </p>
 
-        <div className='⁂-group-card__meta'>
+        <div className='group-card__meta'>
           <GroupRelationship group={group} />
           <GroupPrivacy group={group} />
           <GroupMemberCount group={group} />

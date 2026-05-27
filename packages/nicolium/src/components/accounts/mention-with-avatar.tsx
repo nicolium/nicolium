@@ -15,7 +15,7 @@ const MentionWithAvatar: React.FC<IMentionWithAvatar> = ({ id, username }) => {
   const { data: account } = useAccount(id);
 
   return (
-    <HoverAccountWrapper accountId={id} element='span' className='⁂-mention-with-avatar'>
+    <HoverAccountWrapper accountId={id} element='span' className='mention-with-avatar'>
       <Avatar size={16} src={account?.avatar || ''} alt={account?.avatar_description} />
       <span>@{username}</span>
     </HoverAccountWrapper>

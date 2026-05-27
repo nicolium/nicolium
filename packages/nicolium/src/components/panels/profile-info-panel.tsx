@@ -153,7 +153,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
 
     return (
       <div
-        className='⁂-account-info__details__item'
+        className='account-info__details__item'
         title={intl.formatMessage(messages.birthday, { date: formattedBirthday })}
       >
         <Icon src={hasBirthday ? iconCake : iconBalloon} />
@@ -173,9 +173,9 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
 
   if (!account) {
     return (
-      <div className='⁂-account-info-panel__container'>
-        <div className='⁂-account-info-panel'>
-          <p className='⁂-account-info-panel__name__handle'>@{username}</p>
+      <div className='account-info-panel__container'>
+        <div className='account-info-panel'>
+          <p className='account-info-panel__name__handle'>@{username}</p>
         </div>
       </div>
     );
@@ -185,10 +185,10 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
   const badges = getBadges();
 
   return (
-    <div className='⁂-account-info-panel__container'>
-      <div className='⁂-account-info-panel'>
-        <div className='⁂-account-info-panel__name'>
-          <div className='⁂-account-info-panel__name__display-name'>
+    <div className='account-info-panel__container'>
+      <div className='account-info-panel'>
+        <div className='account-info-panel__name'>
+          <div className='account-info-panel__name__display-name'>
             <p>
               <Emojify text={account.display_name} emojis={account.emojis} truncated />
             </p>
@@ -196,7 +196,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
             {((account.original_display_name &&
               account.original_display_name !== account.display_name) ||
               account.deactivated) && (
-              <p className='⁂-account-info-panel__name__original-display-name'>
+              <p className='account-info-panel__name__original-display-name'>
                 {'('}
                 {account.original_display_name &&
                 account.original_display_name !== account.display_name ? (
@@ -210,12 +210,10 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
 
             {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
 
-            {badges.length > 0 && (
-              <div className='⁂-account-info-panel__name__badges'>{badges}</div>
-            )}
+            {badges.length > 0 && <div className='account-info-panel__name__badges'>{badges}</div>}
           </div>
 
-          <div className='⁂-account-info-panel__name__handle'>
+          <div className='account-info-panel__name__handle'>
             @{acct}
             {account.locked && (
               <Icon src={iconLock} alt={intl.formatMessage(messages.accountLocked)} />
@@ -225,10 +223,10 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
 
         <ProfileStats account={account} withStatusesLink={withStatusesLink} />
 
-        <div className='⁂-account-info__container' ref={accountInfoNode}>
-          <div className={clsx('⁂-account-info', { '⁂-account-info--collapsed': collapsed })}>
+        <div className='account-info__container' ref={accountInfoNode}>
+          <div className={clsx('account-info', { 'account-info--collapsed': collapsed })}>
             {!!account.note && (
-              <p className='⁂-account-info__note break-words' data-markup>
+              <p className='account-info__note break-words' data-markup>
                 <ParsedContent
                   html={account.note}
                   emojis={account.emojis}
@@ -241,7 +239,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
             <div className='flex flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center'>
               {account.local ? (
                 <div
-                  className='⁂-account-info__details__item'
+                  className='account-info__details__item'
                   title={intl.formatDate(account.created_at, dateFormatOptions)}
                 >
                   <Icon src={iconCalendarDots} aria-hidden />
@@ -257,7 +255,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
               ) : null}
 
               {account.location ? (
-                <div className='⁂-account-info__details__item'>
+                <div className='account-info__details__item'>
                   <Icon src={iconMapPin} aria-hidden />
 
                   {account.location}
@@ -268,7 +266,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
 
               {account.pronouns.length > 0 ? (
                 <div
-                  className='⁂-account-info__details__item'
+                  className='account-info__details__item'
                   title={intl.formatMessage(messages.pronouns, {
                     pronouns: account.pronouns.join('/'),
                   })}
@@ -286,8 +284,8 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
 
             {account.fields.length > 0 && (
               <div
-                className={clsx('⁂-account-info__fields', {
-                  '⁂-account-info__fields--optional': isContextDisplayed,
+                className={clsx('account-info__fields', {
+                  'account-info__fields--optional': isContextDisplayed,
                 })}
               >
                 {account.fields.map((field, i) => (

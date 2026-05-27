@@ -13,7 +13,7 @@ interface ITag {
 
 /** A single editable Tag (used by TagInput). */
 const Tag: React.FC<ITag> = ({ tag, onDelete }) => (
-  <div className='⁂-tag'>
+  <div className='tag'>
     <Text theme='white'>{tag}</Text>
 
     <IconButton

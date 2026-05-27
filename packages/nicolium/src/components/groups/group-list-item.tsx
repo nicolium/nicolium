@@ -23,22 +23,22 @@ const GroupListItem: React.FC<IGroupListItem> = ({ groupId, withJoinAction = tru
   if (!group) return null;
 
   return (
-    <div className='⁂-group-list-item' data-testid='group-list-item'>
+    <div className='group-list-item' data-testid='group-list-item'>
       <Link
         key={group.id}
         to='/groups/$groupId'
         params={{ groupId: group.id }}
-        className='⁂-group-list-item__link'
+        className='group-list-item__link'
       >
-        <div className='⁂-group-list-item__main'>
+        <div className='group-list-item__main'>
           <GroupAvatar group={group} size={44} />
 
-          <div className='⁂-group-list-item__content'>
-            <p className='⁂-group-list-item__name'>
+          <div className='group-list-item__content'>
+            <p className='group-list-item__name'>
               <Emojify text={group.display_name} emojis={group.emojis} />
             </p>
 
-            <div className='⁂-group-list-item__meta'>
+            <div className='group-list-item__meta'>
               <Icon src={group.locked ? iconLock : iconGlobe} />
 
               <p>

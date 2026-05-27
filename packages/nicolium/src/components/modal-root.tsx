@@ -248,9 +248,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   return (
     <div
       ref={ref}
-      className={clsx('⁂-modal-root', {
-        '⁂-modal-root--visible': visible,
-        '⁂-modal-root--revealed': visible && revealed,
+      className={clsx('modal-root', {
+        'modal-root--visible': visible,
+        'modal-root--revealed': visible && revealed,
       })}
       data-modal-type={type}
     >
@@ -259,13 +259,13 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
           <div
             role='presentation'
             id='modal-overlay'
-            className='⁂-modal-root__overlay'
+            className='modal-root__overlay'
             onClick={handleOnClose}
           />
 
           <div
             role={type === 'CONFIRM' ? 'alertdialog' : 'dialog'}
-            className='⁂-modal-root__container'
+            className='modal-root__container'
             aria-modal
             aria-labelledby='modal-title'
             aria-describedby='modal-description'

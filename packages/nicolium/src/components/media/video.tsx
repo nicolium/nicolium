@@ -512,7 +512,7 @@ const Video: React.FC<IVideo> = ({
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
-      {!fullscreen && <Blurhash hash={blurhash} className='⁂-media-gallery__preview' />}
+      {!fullscreen && <Blurhash hash={blurhash} className='media-gallery__preview' />}
 
       <video
         className={clsx('relative z-[1] block h-full max-h-full', {

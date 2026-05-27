@@ -87,7 +87,7 @@ const ExternalLoginForm: React.FC = () => {
   }
 
   return (
-    <Form className='⁂-external-login' onSubmit={handleSubmit} data-testid='external-login'>
+    <Form className='external-login' onSubmit={handleSubmit} data-testid='external-login'>
       <FormGroup
         labelText={<FormattedMessage id='login.fields.instance.label' defaultMessage='Instance' />}
       >
@@ -103,7 +103,7 @@ const ExternalLoginForm: React.FC = () => {
         />
       </FormGroup>
 
-      <div className='⁂-form__actions'>
+      <div className='form__actions'>
         <button type='submit' disabled={isLoading}>
           <FormattedMessage id='login.log_in' defaultMessage='Log in' />
         </button>

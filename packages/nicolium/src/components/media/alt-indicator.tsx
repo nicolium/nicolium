@@ -12,7 +12,7 @@ interface IAltIndicator extends Pick<React.HTMLAttributes<HTMLSpanElement>, 'tit
 
 const AltIndicator: React.FC<IAltIndicator> = React.forwardRef<HTMLSpanElement, IAltIndicator>(
   ({ className, warning, message, ...props }, ref) => (
-    <span className={clsx('⁂-alt-indicator', className)} {...props} ref={ref}>
+    <span className={clsx('alt-indicator', className)} {...props} ref={ref}>
       {warning && <Icon src={iconWarning} aria-hidden />}
       {message ?? (
         <FormattedMessage id='upload_form.description_missing.indicator' defaultMessage='Alt' />

@@ -20,7 +20,7 @@ const ChatSearchHeader = () => {
     <ChatPaneHeader
       data-testid='pane-header'
       title={
-        <div className='⁂-chat-widget__search-header'>
+        <div className='chat-widget__search-header'>
           {isOpen && (
             <button
               onClick={() => {
@@ -28,11 +28,11 @@ const ChatSearchHeader = () => {
               }}
               title={intl.formatMessage(messages.back)}
             >
-              <Icon src={iconArrowLeft} className='⁂-chat-widget__back-icon' />
+              <Icon src={iconArrowLeft} className='chat-widget__back-icon' />
             </button>
           )}
 
-          <span className='⁂-chat-widget__title-text'>
+          <span className='chat-widget__title-text'>
             <FormattedMessage id='chat_search.title' defaultMessage='Messages' />
           </span>
         </div>

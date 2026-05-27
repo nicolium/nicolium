@@ -88,8 +88,8 @@ const StatusReaction: React.FC<IStatusReaction> = ({
 
   return (
     <button
-      className={clsx('⁂-status-reactions-bar__button', {
-        '⁂-status-reactions-bar__button--active': reaction.me,
+      className={clsx('status-reactions-bar__button', {
+        'status-reactions-bar__button--active': reaction.me,
       })}
       onClick={handleClick}
       title={intl.formatMessage(messages.emojiCount, {
@@ -128,7 +128,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
   );
 
   return (
-    <div className='⁂-status-reactions-bar'>
+    <div className='status-reactions-bar'>
       {sortedReactions.map((reaction) =>
         reaction.count ? (
           <StatusReaction
@@ -143,7 +143,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
       {me && (
         <EmojiPickerDropdown onPickEmoji={handlePickEmoji}>
           <button
-            className='⁂-status-reactions-bar__picker-button emoji-picker-dropdown'
+            className='status-reactions-bar__picker-button emoji-picker-dropdown'
             title={intl.formatMessage(messages.addEmoji)}
           >
             <Icon src={iconSmileySticker} aria-hidden />

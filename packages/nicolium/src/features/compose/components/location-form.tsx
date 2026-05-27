@@ -37,7 +37,7 @@ const LocationForm: React.FC<ILocationForm> = ({ composeId }) => {
   }
 
   return (
-    <div className='⁂-compose-form__schedule'>
+    <div className='compose-form__schedule'>
       {location ? (
         <div className='flex h-[38px] items-center gap-2 text-gray-700 dark:text-gray-500'>
           <Icon src={ADDRESS_ICONS[location.type] || iconMapPin} />

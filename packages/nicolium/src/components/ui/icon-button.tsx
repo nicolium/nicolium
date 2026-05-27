@@ -30,7 +30,7 @@ const IconButton = React.forwardRef(
       <Component
         ref={ref}
         type='button'
-        className={clsx('⁂-icon-button', `⁂-icon-button--${theme}`, className)}
+        className={clsx('icon-button', `icon-button--${theme}`, className)}
         {...filteredProps}
         data-testid={filteredProps['data-testid'] ?? 'icon-button'}
         {...(props.href ? { target: '_blank', rel: 'noopener noreferrer' } : {})}

@@ -1,14 +1,14 @@
 @use 'variables';
 
-.⁂-crypto-donate-modal {
+.crypto-donate-modal {
   max-width: 24rem;
 }
 
-.⁂-hotkey-modal {
+.hotkey-modal {
   max-width: 56rem;
 }
 
-.⁂-media-modal {
+.media-modal {
   pointer-events: auto;
   touch-action: pan-y;
   user-select: text;
@@ -97,20 +97,20 @@
   }
 
   &--fullscreen {
-    .⁂-media-modal__content {
+    .media-modal__content {
       @media (min-width: variables.$breakpoint-xl) {
         padding-right: 0;
       }
     }
 
-    .⁂-media-modal__closer,
-    .⁂-media-modal__navigation {
+    .media-modal__closer,
+    .media-modal__navigation {
       inset-inline-end: 0;
     }
   }
 }
 
-.⁂-zoomable-image {
+.zoomable-image {
   user-select: none;
   scrollbar-width: none;
 
@@ -177,12 +177,12 @@
     }
   }
 
-  .⁂-spinner__container {
+  .spinner__container {
     position: absolute;
   }
 }
 
-.⁂-dropdown-menu-modal {
+.dropdown-menu-modal {
   position: absolute;
   inset: 0;
 
@@ -284,13 +284,13 @@
     }
   }
 
-  .⁂-dropdown-menu__page,
-  .⁂-dropdown-menu__expanded-page {
+  .dropdown-menu__page,
+  .dropdown-menu__expanded-page {
     width: 100%;
   }
 }
 
-.⁂-list-members-modal {
+.list-members-modal {
   &__form {
     min-height: 6rem;
 

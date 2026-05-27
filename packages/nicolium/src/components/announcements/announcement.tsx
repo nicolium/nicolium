@@ -34,9 +34,9 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement, emojiMap }) => {
   const direction = getTextDirection(announcement.content);
 
   return (
-    <div className='⁂-announcement'>
+    <div className='announcement'>
       {hasTimeRange && (
-        <p className='⁂-announcement__time' style={{ direction }}>
+        <p className='announcement__time' style={{ direction }}>
           <FormattedDate
             value={startsAt}
             hour12

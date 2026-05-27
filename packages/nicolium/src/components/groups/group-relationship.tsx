@@ -19,7 +19,7 @@ const GroupRelationship = ({ group }: IGroupRelationship) => {
   }
 
   return (
-    <div data-testid='group-relationship' className='⁂-group-relationship'>
+    <div data-testid='group-relationship' className='group-relationship'>
       <Icon src={isOwner ? iconUsers : iconGavel} />
 
       <p>

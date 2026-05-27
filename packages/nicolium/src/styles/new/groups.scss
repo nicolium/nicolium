@@ -1,7 +1,7 @@
 @use 'mixins';
 @use 'variables';
 
-.⁂-group-avatar {
+.group-avatar {
   position: relative;
   border-radius: var(--radius-lg);
 
@@ -27,7 +27,7 @@
   }
 }
 
-.⁂-group-card {
+.group-card {
   position: relative;
 
   display: flex;
@@ -163,7 +163,7 @@
   }
 }
 
-.⁂-placeholder-group-search {
+.placeholder-group-search {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -237,7 +237,7 @@
   }
 }
 
-.⁂-group-header-image {
+.group-header-image {
   &--missing {
     display: flex;
     align-items: center;
@@ -260,7 +260,7 @@
   }
 }
 
-.⁂-group-header {
+.group-header {
   margin: -1rem -1rem 0;
 
   &__banner,
@@ -435,15 +435,15 @@
   }
 }
 
-.⁂-group-list-item,
-.⁂-group-member-list-item,
-.⁂-group-member-action-row {
+.group-list-item,
+.group-member-list-item,
+.group-member-action-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.⁂-group-list-item {
+.group-list-item {
   &__link {
     overflow: hidden;
   }
@@ -485,7 +485,7 @@
   }
 }
 
-.⁂-group-member-count {
+.group-member-count {
   &:hover {
     text-decoration: underline;
   }
@@ -499,7 +499,7 @@
   }
 }
 
-.⁂-group-options-button {
+.group-options-button {
   align-self: stretch;
   padding-right: 0.625rem;
   padding-left: 0.625rem;
@@ -510,7 +510,7 @@
   }
 }
 
-.⁂-group-privacy {
+.group-privacy {
   cursor: help;
   display: flex;
   gap: 0.25rem;
@@ -571,7 +571,7 @@
   }
 }
 
-.⁂-group-relationship {
+.group-relationship {
   display: flex;
   gap: 0.25rem;
   align-items: center;
@@ -591,7 +591,7 @@
   }
 }
 
-.⁂-group-popover {
+.group-popover {
   &__trigger {
     cursor: pointer;
     display: inline-block;
@@ -629,13 +629,13 @@
   }
 }
 
-.⁂-group-member-list-item,
-.⁂-group-member-action-row {
+.group-member-list-item,
+.group-member-action-row {
   gap: 0.25rem;
   padding: 0.625rem;
 }
 
-.⁂-group-member-list-item {
+.group-member-list-item {
   &__account {
     width: 100%;
   }
@@ -647,7 +647,7 @@
   }
 }
 
-.⁂-group-member-role {
+.group-member-role {
   @include mixins.text($size: xs, $weight: medium);
 
   display: inline-flex;
@@ -679,13 +679,13 @@
   }
 }
 
-.⁂-group-member-action-row {
+.group-member-action-row {
   &__account {
     width: 100%;
   }
 }
 
-.⁂-group-members {
+.group-members {
   &__item {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
@@ -709,13 +709,13 @@
   }
 }
 
-.⁂-edit-group__locked-icon {
+.edit-group__locked-icon {
   width: 1.25rem;
   height: 1.25rem;
   color: rgb(var(--color-gray-600));
 }
 
-.⁂-groups-page {
+.groups-page {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -735,7 +735,7 @@
   }
 }
 
-.⁂-groups-empty {
+.groups-empty {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -765,7 +765,7 @@
   }
 }
 
-.⁂-manage-group {
+.manage-group {
   &__body {
     display: flex;
     flex-direction: column;

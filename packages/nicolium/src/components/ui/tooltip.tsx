@@ -77,12 +77,12 @@ const Tooltip: React.FC<ITooltip> = ({ children, text, disabled = false }) => {
               left: x ?? 0,
               ...styles,
             }}
-            className='⁂-tooltip'
+            className='tooltip'
             {...getFloatingProps()}
           >
             {text}
 
-            <FloatingArrow ref={arrowRef} context={context} className='⁂-tooltip__arrow' />
+            <FloatingArrow ref={arrowRef} context={context} className='tooltip__arrow' />
           </div>
         </FloatingPortal>
       )}

@@ -64,14 +64,14 @@ const ChatWindow = () => {
     <>
       <ChatPaneHeader
         title={
-          <div className='⁂-chat-widget__title-row'>
+          <div className='chat-widget__title-row'>
             {isOpen && (
               <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
-                <Icon src={iconArrowLeft} className='⁂-chat-widget__back-icon' />
+                <Icon src={iconArrowLeft} className='chat-widget__back-icon' />
               </button>
             )}
 
-            <div className='⁂-chat-widget__account__container'>
+            <div className='chat-widget__account__container'>
               {isOpen && (
                 <AccountLink account={chat.account}>
                   <Avatar
@@ -84,14 +84,14 @@ const ChatWindow = () => {
                 </AccountLink>
               )}
 
-              <div className='⁂-chat-widget__account'>
+              <div className='chat-widget__account'>
                 <LinkWrapper
                   enabled={isOpen}
                   to='/@{$username}'
                   params={{ username: chat.account.acct }}
                 >
-                  <div className='⁂-chat-widget__account__name'>
-                    <span className='⁂-chat-widget__title-text'>
+                  <div className='chat-widget__account__name'>
+                    <span className='chat-widget__title-text'>
                       {chat.account.display_name || chat.account.acct}
                     </span>
                     {chat.account.verified && <VerificationBadge />}
@@ -111,7 +111,7 @@ const ChatWindow = () => {
         onToggle={toggleChatPane}
       />
 
-      <div className='⁂-chat-widget__chat-body'>
+      <div className='chat-widget__chat-body'>
         <Chat chat={chat} inputRef={inputRef} />
       </div>
     </>

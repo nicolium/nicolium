@@ -47,7 +47,7 @@ const ChatPane = () => {
   const renderBody = () => {
     if (Number(chats?.length) > 0 || showShoutbox || isLoading) {
       return (
-        <div className='⁂-chat-widget__list'>
+        <div className='chat-widget__list'>
           <ChatList onClickChat={handleClickChat} />
         </div>
       );

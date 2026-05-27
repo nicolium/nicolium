@@ -27,7 +27,7 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
 
     if (nineAttachments.length) {
       return (
-        <div className='⁂-media-panel__attachments'>
+        <div className='media-panel__attachments'>
           {nineAttachments.map((attachment, index) => (
             <MediaItem
               key={`${attachment.status_id}+${attachment.id}`}
@@ -40,7 +40,7 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
       );
     } else {
       return (
-        <p className='⁂-media-panel__empty'>
+        <p className='media-panel__empty'>
           <FormattedMessage id='media_panel.empty_message' defaultMessage='No media found.' />
         </p>
       );
@@ -49,7 +49,7 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
 
   return (
     <Widget
-      className='⁂-media-panel'
+      className='media-panel'
       title={<FormattedMessage id='media_panel.title' defaultMessage='Media' />}
     >
       {isLoading ? <Spinner /> : renderAttachments()}

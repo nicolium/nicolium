@@ -17,7 +17,7 @@ const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId, sta
   if (!statusUrl) return null;
 
   return (
-    <div className='⁂-quoted-status-indicator'>
+    <div className='quoted-status-indicator'>
       <Icon src={iconQuotes} aria-hidden />
       <p>{statusUrl}</p>
     </div>

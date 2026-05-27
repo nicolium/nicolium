@@ -1,7 +1,7 @@
 @use 'mixins';
 @use 'variables';
 
-.⁂-dashboard {
+.dashboard {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -32,7 +32,7 @@
   }
 }
 
-.⁂-dashcounter {
+.dashcounter {
   cursor: pointer;
 
   display: flex;
@@ -60,7 +60,7 @@
   }
 }
 
-.⁂-admin-config {
+.admin-config {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -81,7 +81,7 @@
     flex-direction: column;
     gap: 1rem;
 
-    .⁂-form__actions {
+    .form__actions {
       position: sticky;
       bottom: 0;
 
@@ -120,7 +120,7 @@
     @include mixins.text($size: lg, $weight: semibold);
   }
 
-  .dark & .⁂-accordion {
+  .dark & .accordion {
     background-color: rgb(var(--color-primary-900));
   }
 
@@ -128,14 +128,14 @@
     flex-grow: 1;
   }
 
-  p.⁂-admin-config__meta,
-  p.⁂-admin-config__feedback {
+  p.admin-config__meta,
+  p.admin-config__feedback {
     @include mixins.text($size: sm, $theme: muted);
 
     margin: 0;
   }
 
-  p.⁂-admin-config__feedback--danger {
+  p.admin-config__feedback--danger {
     @include mixins.text($size: sm, $theme: danger);
   }
 
@@ -207,12 +207,12 @@
     gap: 0.5rem;
     align-items: center;
 
-    .⁂-form-group__content > & {
+    .form-group__content > & {
       margin-top: 0.75rem;
     }
   }
 
-  p.⁂-admin-config__suggestions-label {
+  p.admin-config__suggestions-label {
     @include mixins.text($size: xs, $theme: muted);
 
     margin: 0;
@@ -233,34 +233,34 @@
     @include mixins.button($theme: secondary);
   }
 
-  .⁂-form-group:has(> .⁂-form-group__content > .⁂-admin-config__toggle-field) {
+  .form-group:has(> .form-group__content > .admin-config__toggle-field) {
     display: grid;
     grid-template-areas:
       'label toggle'
       'hint toggle';
 
-    .⁂-form-group__label {
+    .form-group__label {
       grid-area: label;
     }
 
-    .⁂-form-group__hint {
+    .form-group__hint {
       grid-area: hint;
     }
 
-    .⁂-admin-config__toggle-field {
+    .admin-config__toggle-field {
       display: flex;
       grid-area: toggle;
       align-items: center;
     }
 
-    .⁂-form-group__content {
+    .form-group__content {
       display: contents;
     }
   }
 }
 
-.⁂-domain-blocks,
-.⁂-domain-allows {
+.domain-blocks,
+.domain-allows {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -285,7 +285,7 @@
   }
 }
 
-.⁂-domain-allow, .⁂-domain-block {
+.domain-allow, .domain-block {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -344,7 +344,7 @@
   }
 }
 
-.⁂-measure {
+.measure {
   display: flex;
   gap: 0.625rem;
   align-items: end;
@@ -394,7 +394,7 @@
   }
 }
 
-a.⁂-measure__container {
+a.measure__container {
   transition: transform 0.15s ease-in-out;
 
   &:hover {
@@ -402,7 +402,7 @@ a.⁂-measure__container {
   }
 }
 
-.⁂-report-page {
+.report-page {
   &__summary {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -543,7 +543,7 @@ a.⁂-measure__container {
 
 
 
-.⁂-admin-accounts-page {
+.admin-accounts-page {
   display: flex;
   flex-direction: column;
   gap: 1rem;

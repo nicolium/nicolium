@@ -5,7 +5,7 @@ import { ComposeForm } from '@/features/ui/util/async-components';
 
 const ComposePanel: React.FC = () => {
   return (
-    <Widget className='⁂-compose-panel'>
+    <Widget className='compose-panel'>
       <ComposeForm id='home' shouldCondense autoFocus={false} transparent compact />
     </Widget>
   );

@@ -275,13 +275,13 @@ const getNavigationItemComponent = (
     }
 
     return (
-      <div className='⁂-interface-item'>
-        <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
-        <Icon className='⁂-interface-item__icon' src={icon} aria-hidden />
+      <div className='interface-item'>
+        <Icon className='interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
+        <Icon className='interface-item__icon' src={icon} aria-hidden />
         <p>{label}</p>
         {canPin && (
           <button
-            className='⁂-interface-item__pin'
+            className='interface-item__pin'
             type='button'
             aria-label={
               pinned ? intl.formatMessage(messages.unpin) : intl.formatMessage(messages.pin)
@@ -357,7 +357,7 @@ const NavigationItems: React.FC<ISettingsPage> = ({
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>
-        <OutlineBox className='⁂-interface-items__explanation'>
+        <OutlineBox className='interface-items__explanation'>
           <FormattedMessage
             id='settings.navigation_items.description'
             defaultMessage='You can decide what items are visible in your navigation menu. Pinned items are shown in the bottom navigation bar on smaller displays.'
@@ -365,7 +365,7 @@ const NavigationItems: React.FC<ISettingsPage> = ({
         </OutlineBox>
 
         <StreamfieldPicker
-          className='⁂-interface-items'
+          className='interface-items'
           component={NavigationItem}
           values={settings.navigationItems}
           availableValues={availableItems}

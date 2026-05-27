@@ -516,7 +516,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
               return (
                 <img
                   draggable={false}
-                  className='emojione ⁂-emoji !h-[2em] !w-[2em]'
+                  className='emojione emoji !h-[2em] !w-[2em]'
                   alt={token.props.name}
                   title={token.props.name}
                   src={filename}
@@ -528,9 +528,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
           }
 
           case 'unicodeEmoji': {
-            return (
-              <Emoji emoji={token.props.emoji} className='emojione ⁂-emoji !h-[2em] !w-[2em]' />
-            );
+            return <Emoji emoji={token.props.emoji} className='emojione emoji !h-[2em] !w-[2em]' />;
           }
 
           // TODO
@@ -556,7 +554,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
       .flat(Infinity);
 
   return (
-    <bdi className='⁂-mfm block overflow-hidden'>
+    <bdi className='mfm block overflow-hidden'>
       <span>{genEl(rootAst, 1)}</span>
     </bdi>
   );

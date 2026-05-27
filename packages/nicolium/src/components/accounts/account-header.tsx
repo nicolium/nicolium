@@ -49,8 +49,8 @@ interface IMovedNote {
 }
 
 const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
-  <div className='⁂-moved-note__container'>
-    <div className='⁂-moved-note'>
+  <div className='moved-note__container'>
+    <div className='moved-note'>
       <Icon src={iconSuitcase} />
 
       <p>
@@ -102,9 +102,9 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
 
   if (!account) {
     return (
-      <div className='⁂-account-header__container ⁂-account-header__container--placeholder'>
+      <div className='account-header__container account-header__container--placeholder'>
         <div />
-        <div className='⁂-account-header__avatar-placeholder' />
+        <div className='account-header__avatar-placeholder' />
       </div>
     );
   }
@@ -212,7 +212,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
             }
             message={<FormattedMessage id='account.header.alt' defaultMessage='Profile header' />}
             title={intl.formatMessage(messages.headerAlt)}
-            className='⁂-account-header__header-alt-indicator'
+            className='account-header__header-alt-indicator'
           />
         );
       }
@@ -252,7 +252,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
           }}
           title={intl.formatMessage(messages.chat, { name: account.username })}
           theme='outlined'
-          className='⁂-account-header__icon-button'
+          className='account-header__icon-button'
         />
       );
     } else {
@@ -273,7 +273,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
         onClick={handleShare}
         title={intl.formatMessage(messages.share, { name: account.username })}
         theme='outlined'
-        className='⁂-account-header__icon-button'
+        className='account-header__icon-button'
       />
     );
   };
@@ -306,7 +306,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
         href={href}
         title={intl.formatMessage(messages.subscribeFeed)}
         theme='outlined'
-        className='⁂-account-header__icon-button'
+        className='account-header__icon-button'
       />
     );
   };
@@ -314,42 +314,42 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
   const info = makeInfo();
 
   return (
-    <div className='⁂-account-header__container'>
+    <div className='account-header__container'>
       {account.moved && typeof account.moved === 'object' && (
         <MovedNote from={account} to={account.moved as AccountEntity} />
       )}
 
       <div
-        className={clsx('⁂-account-header__banner', {
-          '⁂-account-header__banner--media': !settings.disableUserProvidedMedia,
+        className={clsx('account-header__banner', {
+          'account-header__banner--media': !settings.disableUserProvidedMedia,
         })}
       >
         {renderHeader()}
 
-        <div className='⁂-account-header__badges'>{info}</div>
+        <div className='account-header__badges'>{info}</div>
       </div>
 
-      <div className='⁂-account-header__profile'>
-        <div className='⁂-account-header__avatar'>
+      <div className='account-header__profile'>
+        <div className='account-header__avatar'>
           <a href={account.avatar} onClick={handleAvatarClick} target='_blank'>
             <Avatar
               src={account.avatar}
               alt={account.avatar_description}
               size={96}
-              className='⁂-account-header__avatar-image'
+              className='account-header__avatar-image'
               isCat={account.is_cat}
               username={account.username}
               showAlt
             />
           </a>
           {account.verified && (
-            <div className='⁂-account-header__verification-badge'>
-              <VerificationBadge className='⁂-account-header__verification-icon' />
+            <div className='account-header__verification-badge'>
+              <VerificationBadge className='account-header__verification-icon' />
             </div>
           )}
         </div>
 
-        <div className='⁂-account-header__actions'>
+        <div className='account-header__actions'>
           {renderMessageButton()}
           {renderShareButton()}
 

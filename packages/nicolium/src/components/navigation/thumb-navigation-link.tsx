@@ -37,8 +37,8 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({
     <Link
       {...props}
       activeOptions={{ exact }}
-      className='⁂-thumb-navigation__item'
-      activeProps={{ className: '⁂-thumb-navigation__item--active' }}
+      className='thumb-navigation__item'
+      activeProps={{ className: 'thumb-navigation__item--active' }}
       title={text}
     >
       {!demetricator && count !== undefined ? (

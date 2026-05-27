@@ -37,7 +37,7 @@ const ModerationLogPage = () => {
         }
         hasMore={hasNextPage}
         onLoadMore={handleLoadMore}
-        listClassName='⁂-status-list'
+        listClassName='status-list'
       >
         {data.map((item) => item && <LogItem key={item.id} log={item} />)}
       </ScrollableList>

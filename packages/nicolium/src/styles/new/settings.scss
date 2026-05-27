@@ -1,7 +1,7 @@
 @use 'mixins';
 @use 'variables';
 
-.⁂-tokens {
+.tokens {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
@@ -11,7 +11,7 @@
   }
 }
 
-.⁂-token {
+.token {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -98,7 +98,7 @@
   }
 }
 
-.⁂-theme-selector {
+.theme-selector {
   position: relative;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
@@ -161,7 +161,7 @@
   }
 }
 
-.⁂-interface-items {
+.interface-items {
   padding: 0.5rem;
   border-radius: var(--radius-md);
   box-shadow: inset 0 0 6px 1px rgb(var(--color-gray-200));
@@ -180,7 +180,7 @@
   }
 }
 
-.⁂-interface-item {
+.interface-item {
   cursor: grab;
 
   display: flex;
@@ -258,13 +258,13 @@
   }
 }
 
-.⁂-profile-images {
+.profile-images {
   position: relative;
   display: flex;
   margin-bottom: 3rem;
 }
 
-.⁂-header-picker {
+.header-picker {
   cursor: pointer;
 
   position: relative;
@@ -370,7 +370,7 @@
   }
 }
 
-.⁂-avatar-picker {
+.avatar-picker {
   width: 5rem;
   height: 5rem;
 }

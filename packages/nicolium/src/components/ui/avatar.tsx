@@ -95,7 +95,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
           <FormattedMessage id='account.avatar.description' defaultMessage='Avatar description' />
         }
         message={<FormattedMessage id='account.avatar.alt' defaultMessage='Avatar' />}
-        className='⁂-avatar__alt-indicator'
+        className='avatar__alt-indicator'
       />
     );
   }
@@ -105,8 +105,8 @@ const Avatar: React.FC<IAvatar> = (props) => {
       <div
         style={style}
         className={clsx(
-          '⁂-avatar relative bg-gray-200 dark:bg-gray-900',
-          isCat && '⁂-avatar--cat',
+          'avatar relative bg-gray-200 dark:bg-gray-900',
+          isCat && 'avatar--cat',
           className,
         )}
       >
@@ -126,7 +126,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
 
   return (
     <StillImage
-      className={clsx('⁂-avatar', isCat && '⁂-avatar--cat', className)}
+      className={clsx('avatar', isCat && 'avatar--cat', className)}
       style={style}
       src={src || missingAvatar}
       alt={altText}

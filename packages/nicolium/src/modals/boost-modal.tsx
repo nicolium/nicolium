@@ -71,7 +71,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ visibility, onChange }) =
   const text = valueOption?.text || visibility;
 
   return (
-    <div className='⁂-compose-form__select-buttons'>
+    <div className='compose-form__select-buttons'>
       <DropdownMenu items={items} width='16rem'>
         <button type='button' title={intl.formatMessage(messages.changePrivacy)}>
           {valueOption?.icon && <Icon src={valueOption.icon} aria-hidden />}

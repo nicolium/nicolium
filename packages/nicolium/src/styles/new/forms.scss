@@ -1,7 +1,7 @@
 @use 'mixins';
 @use 'variables';
 
-.⁂-form {
+.form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -14,7 +14,7 @@
   }
 }
 
-.⁂-textarea {
+.textarea {
   resize: none;
 
   display: block;
@@ -120,7 +120,7 @@
   }
 }
 
-.⁂-input {
+.input {
   display: block;
   width: 100%;
   font-size: var(--text-base);
@@ -302,16 +302,16 @@
   }
 }
 
-.⁂-autosuggest-input {
+.autosuggest-input {
   position: relative;
   width: 100%;
 
-  .⁂-input__wrapper {
+  .input__wrapper {
     margin-top: 0;
   }
 }
 
-.⁂-form-group {
+.form-group {
   &__label {
     display: block;
 
@@ -381,7 +381,7 @@
   }
 }
 
-p.⁂-form-group__hint {
+p.form-group__hint {
   font-size: var(--text-xs);
   line-height: var(--leading-xs);
   color: rgb(var(--color-gray-700));
@@ -399,7 +399,7 @@ p.⁂-form-group__hint {
   }
 }
 
-.⁂-toggle {
+.toggle {
   flex: none;
 
   height: unset;
@@ -548,17 +548,17 @@ p.⁂-form-group__hint {
       border-radius: var(--radius-full);
     }
 
-    &.⁂-toggle:checked:not(:disabled) & {
+    &.toggle:checked:not(:disabled) & {
       background-color: rgb(var(--color-primary-600));
     }
 
-    &.⁂-toggle:checked:disabled & {
+    &.toggle:checked:disabled & {
       background-color: rgb(var(--color-primary-200));
     }
   }
 }
 
-.⁂-checkbox {
+.checkbox {
   width: 1rem;
   height: 1rem;
   border: 2px solid rgb(var(--color-gray-300));
@@ -581,7 +581,7 @@ p.⁂-form-group__hint {
   }
 }
 
-.⁂-file-input {
+.file-input {
   display: block;
   width: 100%;
   font-size: var(--text-sm);
@@ -622,7 +622,7 @@ p.⁂-form-group__hint {
   }
 }
 
-.⁂-tag-input {
+.tag-input {
   position: relative;
   flex-grow: 1;
   margin-top: 0.25rem;
@@ -691,7 +691,7 @@ p.⁂-form-group__hint {
   }
 }
 
-.⁂-streamfield {
+.streamfield {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -728,7 +728,7 @@ p.⁂-form-group__hint {
       opacity 150ms ease,
       transform 150ms ease;
 
-    .⁂-streamfield__items--droppable &:not(:last-child) {
+    .streamfield__items--droppable &:not(:last-child) {
       padding-bottom: 0.25rem;
     }
 
@@ -761,7 +761,7 @@ p.⁂-form-group__hint {
   }
 }
 
-.⁂-streamfield-picker__item {
+.streamfield-picker__item {
   cursor: grab;
   transition: opacity 150ms ease;
 

@@ -94,26 +94,26 @@ const Input = React.forwardRef<HTMLInputElement, IInput>((props, ref) => {
   }, []);
 
   return (
-    <div className={clsx('⁂-input__wrapper', `⁂-input__wrapper--${theme}`, outerClassName)}>
+    <div className={clsx('input__wrapper', `input__wrapper--${theme}`, outerClassName)}>
       {icon ? (
-        <div className='⁂-input__wrapper__icon'>
+        <div className='input__wrapper__icon'>
           <Icon src={icon} aria-hidden='true' />
         </div>
       ) : null}
 
-      {prepend ? <div className='⁂-input__wrapper__prepend'>{prepend}</div> : null}
+      {prepend ? <div className='input__wrapper__prepend'>{prepend}</div> : null}
 
       <input
         {...filteredProps}
         type={revealed ? 'text' : type}
         ref={ref}
         className={clsx(
-          '⁂-input',
-          `⁂-input--${theme}`,
+          'input',
+          `input--${theme}`,
           {
-            '⁂-input--with-icon': typeof icon !== 'undefined',
-            '⁂-input--with-prepend': typeof prepend !== 'undefined',
-            '⁂-input--with-trailing': isPassword || !!append,
+            'input--with-icon': typeof icon !== 'undefined',
+            'input--with-prepend': typeof prepend !== 'undefined',
+            'input--with-trailing': isPassword || !!append,
           },
           className,
         )}
@@ -124,7 +124,7 @@ const Input = React.forwardRef<HTMLInputElement, IInput>((props, ref) => {
         }
       />
 
-      {append ? <div className='⁂-input__wrapper__append'>{append}</div> : null}
+      {append ? <div className='input__wrapper__append'>{append}</div> : null}
 
       {isPassword ? (
         <Tooltip
@@ -134,7 +134,7 @@ const Input = React.forwardRef<HTMLInputElement, IInput>((props, ref) => {
               : intl.formatMessage(messages.showPassword)
           }
         >
-          <div className='⁂-input__wrapper__password-toggle'>
+          <div className='input__wrapper__password-toggle'>
             <button type='button' onClick={togglePassword} tabIndex={-1}>
               <SvgIcon src={revealed ? iconEyeSlash : iconEye} className='size-4' />
             </button>

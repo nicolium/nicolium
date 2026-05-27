@@ -1,7 +1,7 @@
 @use 'mixins';
 @use 'variables';
 
-.⁂-directory {
+.directory {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -37,7 +37,7 @@
   }
 }
 
-.⁂-directory-card {
+.directory-card {
   overflow: clip;
   display: flex;
   flex-direction: column;

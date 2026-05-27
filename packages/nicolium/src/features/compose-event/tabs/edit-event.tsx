@@ -244,7 +244,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
     );
 
   return (
-    <Form className='⁂-edit-event' onSubmit={handleSubmit}>
+    <Form className='edit-event' onSubmit={handleSubmit}>
       <FormGroup
         labelText={
           <FormattedMessage id='compose_event.fields.banner.label' defaultMessage='Event banner' />
@@ -256,7 +256,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           />
         }
       >
-        <div className='⁂-edit-event__banner__container'>
+        <div className='edit-event__banner__container'>
           {banner ? (
             <>
               <img
@@ -309,8 +309,8 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           <ContentTypeButton composeId={composeId} />
           <ComposeEditor
             key={String(isDisabled)}
-            className='⁂-edit-event__editor'
-            placeholderClassName='⁂-compose-form__editor__placeholder'
+            className='edit-event__editor'
+            placeholderClassName='compose-form__editor__placeholder'
             composeId={composeId}
             placeholder={intl.formatMessage(messages.eventDescriptionPlaceholder)}
             handleSubmit={handleSubmit}

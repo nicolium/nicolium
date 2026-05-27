@@ -205,18 +205,18 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
   }
 
   return (
-    <div className='⁂-group-member-list-item' data-testid='group-member-list-item'>
-      <div className='⁂-group-member-list-item__account'>
+    <div className='group-member-list-item' data-testid='group-member-list-item'>
+      <div className='group-member-list-item__account'>
         <Account account={account} withRelationship={false} />
       </div>
 
-      <div className='⁂-group-member-list-item__actions'>
+      <div className='group-member-list-item__actions'>
         {isMemberOwner || isMemberAdmin ? (
           <span
             data-testid='role-badge'
-            className={clsx('⁂-group-member-role', {
-              '⁂-group-member-role--owner': isMemberOwner,
-              '⁂-group-member-role--admin': isMemberAdmin,
+            className={clsx('group-member-role', {
+              'group-member-role--owner': isMemberOwner,
+              'group-member-role--admin': isMemberAdmin,
             })}
           >
             {member.role}

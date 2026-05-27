@@ -11,7 +11,7 @@ interface IProfileFieldsPanel {
 
 /** Custom profile fields for sidebar. */
 const ProfileFieldsPanel: React.FC<IProfileFieldsPanel> = ({ account }) => (
-  <Widget className='⁂-profile-fields-panel'>
+  <Widget className='profile-fields-panel'>
     {account.fields.map((field, i) => (
       <ProfileField field={field} key={i} emojis={account.emojis} accountId={account.id} />
     ))}

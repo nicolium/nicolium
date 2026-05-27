@@ -75,7 +75,7 @@ const ManageGroup: React.FC = () => {
       backHref='/groups/$groupId'
       backParams={{ groupId: group.id }}
     >
-      <CardBody className='⁂-manage-group__body'>
+      <CardBody className='manage-group__body'>
         {isOwner && (
           <>
             <CardHeader>
@@ -140,7 +140,7 @@ const ManageGroup: React.FC = () => {
             <List>
               <ListItem
                 label={
-                  <span className='⁂-manage-group__danger-label'>
+                  <span className='manage-group__danger-label'>
                     <FormattedMessage
                       id='manage_group.delete_group'
                       defaultMessage='Delete group'

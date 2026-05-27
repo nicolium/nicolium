@@ -37,7 +37,7 @@ const ScheduledStatusesPage = () => {
           isLoading={isLoading}
           onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
           emptyMessageText={emptyMessage}
-          listClassName='⁂-status-list'
+          listClassName='status-list'
         >
           {scheduledStatuses.map((status) => (
             <ScheduledStatus key={status.id} scheduledStatus={status} />

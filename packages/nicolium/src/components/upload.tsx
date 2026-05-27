@@ -184,10 +184,10 @@ const Upload: React.FC<IUpload> = ({
       onDragEnter={onDragEnter}
       onDragEnd={onDragEnd}
     >
-      <Blurhash hash={media.blurhash} className='⁂-media-gallery__preview' />
+      <Blurhash hash={media.blurhash} className='media-gallery__preview' />
       <animated.div
         className={clsx(
-          '⁂-compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat',
+          'compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat',
           mediaType,
         )}
         style={{

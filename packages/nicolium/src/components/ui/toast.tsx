@@ -103,14 +103,14 @@ const Toast: React.FC<IToast> = ({
       aria-atomic='true'
       aria-describedby={summaryId ? `${messageId} ${summaryId}` : messageId}
       className={clsx({
-        [`⁂-toast ⁂-toast--${type}`]: true,
-        '⁂-toast--visible': t.visible,
+        [`toast toast--${type}`]: true,
+        'toast--visible': t.visible,
       })}
     >
       <div>
-        <div className='⁂-toast__body'>
-          <div className='⁂-toast__content'>
-            <div className={`⁂-toast__icon`}>{renderIcon()}</div>
+        <div className='toast__body'>
+          <div className='toast__content'>
+            <div className={`toast__icon`}>{renderIcon()}</div>
 
             <p id={messageId} data-testid='toast-message'>
               {renderText(message)}
@@ -122,7 +122,7 @@ const Toast: React.FC<IToast> = ({
         </div>
 
         {/* Dismiss Button */}
-        <div className='⁂-toast__dismiss'>
+        <div className='toast__dismiss'>
           <button
             type='button'
             onClick={dismissToast}

@@ -41,11 +41,11 @@ const ChatsPageSidebar = () => {
   };
 
   return (
-    <div className='⁂-chats-page-sidebar-panel'>
-      <div className='⁂-chats-page-sidebar-panel__header'>
+    <div className='chats-page-sidebar-panel'>
+      <div className='chats-page-sidebar-panel__header'>
         <CardTitle title={intl.formatMessage(messages.title)} />
 
-        <div className='⁂-chats-page-sidebar-panel__actions'>
+        <div className='chats-page-sidebar-panel__actions'>
           <IconButton
             src={iconSlidersHorizontal}
             onClick={handleSettingsClick}
@@ -60,7 +60,7 @@ const ChatsPageSidebar = () => {
         </div>
       </div>
 
-      <div className='⁂-chats-page-sidebar-panel__list'>
+      <div className='chats-page-sidebar-panel__list'>
         <ChatList onClickChat={handleClickChat} />
       </div>
     </div>

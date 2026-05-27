@@ -42,20 +42,20 @@ const ChatPaneHeader: React.FC<IChatPaneHeader> = ({
   }
 
   return (
-    <div {...rest} className='⁂-chat-widget__header'>
-      <ButtonComp className='⁂-chat-widget__header__title' data-testid='title' {...buttonProps}>
+    <div {...rest} className='chat-widget__header'>
+      <ButtonComp className='chat-widget__header__title' data-testid='title' {...buttonProps}>
         <div>{title}</div>
 
         {!demetricator && unreadCount !== undefined && unreadCount > 0 && (
-          <div className='⁂-chat-widget__header__count'>
+          <div className='chat-widget__header__count'>
             <p data-testid='unread-count'>({unreadCount})</p>
 
-            <div className='⁂-chat-widget__header__count__dot' />
+            <div className='chat-widget__header__count__dot' />
           </div>
         )}
       </ButtonComp>
 
-      <div className='⁂-chat-widget__header__actions'>
+      <div className='chat-widget__header__actions'>
         {secondaryAction && secondaryActionIcon ? (
           <IconButton
             onClick={secondaryAction}
@@ -67,7 +67,7 @@ const ChatPaneHeader: React.FC<IChatPaneHeader> = ({
         <IconButton
           onClick={onToggle}
           src={iconCaretUp}
-          className='⁂-chat-widget__header__open-button'
+          className='chat-widget__header__open-button'
           title={
             isOpen ? intl.formatMessage(messages.collapse) : intl.formatMessage(messages.expand)
           }

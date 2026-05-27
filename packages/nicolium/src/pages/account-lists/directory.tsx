@@ -45,10 +45,10 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
   const followedBy = me !== account.id && account.relationship?.followed_by;
 
   return (
-    <div className='⁂-directory-card'>
-      <div className='⁂-directory-card__header'>
+    <div className='directory-card'>
+      <div className='directory-card__header'>
         {followedBy && (
-          <div className='⁂-directory-card__badge'>
+          <div className='directory-card__badge'>
             <Badge
               slug='opaque'
               title={<FormattedMessage id='account.follows_you' defaultMessage='Follows you' />}
@@ -56,7 +56,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           </div>
         )}
 
-        <div className='⁂-directory-card__action'>
+        <div className='directory-card__action'>
           <ActionButton account={account} small />
         </div>
 
@@ -65,10 +65,10 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
             src={account.header}
             staticSrc={account.header_static}
             alt={account.header_description}
-            className='⁂-directory-card__header__image'
+            className='directory-card__header__image'
           />
         ) : (
-          <div className='⁂-directory-card__header__image--empty' />
+          <div className='directory-card__header__image--empty' />
         )}
 
         <AccountLink account={account}>
@@ -76,7 +76,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
             <Avatar
               src={account.avatar}
               alt={account.avatar_description}
-              className='⁂-directory-card__avatar'
+              className='directory-card__avatar'
               size={64}
               isCat={account.is_cat}
               username={account.username}
@@ -85,11 +85,11 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
         </AccountLink>
       </div>
 
-      <div className='⁂-directory-card__account'>
+      <div className='directory-card__account'>
         <Account account={account} withAvatar={false} withRelationship={false} />
 
         {!!account.note && (
-          <p className='⁂-directory-card__bio'>
+          <p className='directory-card__bio'>
             <ParsedContent
               html={account.note}
               emojis={account.emojis}
@@ -99,7 +99,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
         )}
       </div>
 
-      <div className='⁂-directory-card__details'>
+      <div className='directory-card__details'>
         <div>
           <p>{shortNumberFormat(account.statuses_count)}</p>
 
@@ -162,8 +162,8 @@ const DirectoryPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.title)}>
-      <div className='⁂-directory'>
-        <div className='⁂-directory__filters'>
+      <div className='directory'>
+        <div className='directory__filters'>
           <div>
             <CardTitle
               title={<FormattedMessage id='directory.display_filter' defaultMessage='Ordered by' />}
@@ -212,8 +212,8 @@ const DirectoryPage = () => {
 
         <div
           className={clsx({
-            '⁂-directory__cards': true,
-            '⁂-directory__cards--loading': isLoading,
+            directory__cards: true,
+            'directory__cards--loading': isLoading,
           })}
         >
           {accountIds.map((accountId) => (

@@ -6,23 +6,23 @@ const PlaceholderGroupSearch = ({ withJoinAction = true }: { withJoinAction?: bo
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (
-    <div className='⁂-placeholder-group-search'>
-      <div className='⁂-placeholder-group-search__main'>
-        <div className='⁂-placeholder-group-search__avatar' />
+    <div className='placeholder-group-search'>
+      <div className='placeholder-group-search__main'>
+        <div className='placeholder-group-search__avatar' />
 
-        <div className='⁂-placeholder-group-search__content'>
-          <p className='⁂-placeholder-group-search__name'>{generateText(groupNameLength)}</p>
+        <div className='placeholder-group-search__content'>
+          <p className='placeholder-group-search__name'>{generateText(groupNameLength)}</p>
 
-          <div className='⁂-placeholder-group-search__meta'>
+          <div className='placeholder-group-search__meta'>
             <span>{generateText(6)}</span>
-            <span className='⁂-placeholder-group-search__meta-text--separated'>
+            <span className='placeholder-group-search__meta-text--separated'>
               {generateText(6)}
             </span>
           </div>
         </div>
       </div>
 
-      {withJoinAction && <div className='⁂-placeholder-group-search__action' />}
+      {withJoinAction && <div className='placeholder-group-search__action' />}
     </div>
   );
 };

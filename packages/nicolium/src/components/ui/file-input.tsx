@@ -6,7 +6,7 @@ interface IFileInput extends Pick<
 > {}
 
 const FileInput = forwardRef<HTMLInputElement, IFileInput>((props, ref) => (
-  <input {...props} ref={ref} type='file' className='⁂-file-input' />
+  <input {...props} ref={ref} type='file' className='file-input' />
 ));
 
 FileInput.displayName = 'FileInput';

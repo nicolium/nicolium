@@ -9,9 +9,9 @@ interface ILightningAddress {
 }
 
 const LightningAddress: React.FC<ILightningAddress> = ({ address }) => (
-  <div className='⁂-crypto-address'>
-    <div className='⁂-crypto-address__label'>
-      <Emoji className='⁂-crypto-address__icon' emoji='⚡' />
+  <div className='crypto-address'>
+    <div className='crypto-address__label'>
+      <Emoji className='crypto-address__icon' emoji='⚡' />
 
       <p>
         <FormattedMessage id='crypto.lightning' defaultMessage='Lightning' />

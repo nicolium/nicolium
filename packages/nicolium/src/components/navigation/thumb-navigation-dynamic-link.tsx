@@ -55,8 +55,8 @@ const ThumbNavigationProfileLink: React.FC<
       to='/@{$username}'
       params={{ username: account.acct }}
       {...bind}
-      className='⁂-thumb-navigation__item'
-      activeProps={{ className: '⁂-thumb-navigation__item--active' }}
+      className='thumb-navigation__item'
+      activeProps={{ className: 'thumb-navigation__item--active' }}
       title={ownAccount ? intl.formatMessage(messages.profile) : `@${account.username}`}
     >
       {ownAccount && <ProfileDropdown account={account} />}

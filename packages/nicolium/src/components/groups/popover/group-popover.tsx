@@ -31,13 +31,13 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = ({ children, group, isEna
     <Popover
       interaction='click'
       content={
-        <div className='⁂-group-popover__content'>
-          <div className='⁂-group-card ⁂-group-card--popover' data-testid='group-card'>
+        <div className='group-popover__content'>
+          <div className='group-card group-card--popover' data-testid='group-card'>
             {/* Group Cover Image */}
-            <div className='⁂-group-card__cover'>
+            <div className='group-card__cover'>
               {group.header && (
                 <img
-                  className='⁂-group-card__cover-image'
+                  className='group-card__cover-image'
                   src={group.header}
                   alt={group.header_description}
                 />
@@ -45,17 +45,17 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = ({ children, group, isEna
             </div>
 
             {/* Group Avatar */}
-            <div className='⁂-group-card__avatar'>
+            <div className='group-card__avatar'>
               <GroupAvatar group={group} size={64} withRing />
             </div>
 
             {/* Group Info */}
-            <div className='⁂-group-card__info'>
-              <p className='⁂-group-card__name'>
+            <div className='group-card__info'>
+              <p className='group-card__name'>
                 <Emojify text={group.display_name} emojis={group.emojis} />
               </p>
 
-              <div className='⁂-group-card__meta'>
+              <div className='group-card__meta'>
                 <GroupPrivacy group={group} />
                 <GroupMemberCount group={group} />
               </div>
@@ -64,11 +64,11 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = ({ children, group, isEna
 
           <Divider />
 
-          <div className='⁂-group-popover__message'>
-            <p className='⁂-group-popover__title'>
+          <div className='group-popover__message'>
+            <p className='group-popover__title'>
               <FormattedMessage id='group.popover.title' defaultMessage='Membership required' />
             </p>
-            <p className='⁂-group-popover__summary'>
+            <p className='group-popover__summary'>
               <FormattedMessage
                 id='group.popover.summary'
                 defaultMessage='You must be a member of the group in order to reply to this post.'
@@ -77,7 +77,7 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = ({ children, group, isEna
           </div>
 
           {!shouldHideAction && (
-            <div className='⁂-group-popover__action'>
+            <div className='group-popover__action'>
               <Link to='/groups/$groupId' params={{ groupId: group.id }}>
                 <Button type='button' theme='secondary' block>
                   <FormattedMessage id='group.popover.action' defaultMessage='View group' />
@@ -89,7 +89,7 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = ({ children, group, isEna
       }
       isFlush
     >
-      <div className='⁂-group-popover__reference'>{children}</div>
+      <div className='group-popover__reference'>{children}</div>
     </Popover>
   );
 };

@@ -10,7 +10,7 @@ interface IEmptyMessage {
 }
 
 const EmptyMessage: React.FC<IEmptyMessage> = ({ heading, text, icon = iconEmpty }) => (
-  <div className='⁂-empty-message'>
+  <div className='empty-message'>
     {icon !== false && <Icon src={icon} aria-hidden />}
 
     {heading && <h2>{heading}</h2>}

@@ -48,19 +48,19 @@ const ChatsPage: React.FC = () => {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ height }} className='⁂-chats-page'>
+    <div ref={containerRef} style={{ height }} className='chats-page'>
       <div data-testid='chat-page'>
         <div
-          className={clsx('⁂-chats-page__sidebar', {
-            '⁂-chats-page__sidebar--hidden': isSidebarHidden,
+          className={clsx('chats-page__sidebar', {
+            'chats-page__sidebar--hidden': isSidebarHidden,
           })}
         >
           <ChatsPageSidebar />
         </div>
 
         <div
-          className={clsx('⁂-chats-page__main', {
-            '⁂-chats-page__main--hidden': !isSidebarHidden,
+          className={clsx('chats-page__main', {
+            'chats-page__main--hidden': !isSidebarHidden,
           })}
         >
           <Outlet />

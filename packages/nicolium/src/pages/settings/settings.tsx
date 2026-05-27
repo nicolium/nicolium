@@ -37,7 +37,7 @@ const SettingsPage = () => {
               labelClassName='min-w-fit'
               to='/settings/profile'
             >
-              <span className='⁂-edit-profile-link__display-name truncate'>{displayName}</span>
+              <span className='edit-profile-link__display-name truncate'>{displayName}</span>
             </ListItem>
           </List>
         </CardBody>

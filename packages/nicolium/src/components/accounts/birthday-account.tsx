@@ -30,12 +30,12 @@ const BirthdayAccount: React.FC<IBirthdayAccount> = ({ accountId }) => {
   });
 
   return (
-    <div className='⁂-birthday-account'>
-      <div className='⁂-birthday-account__account'>
+    <div className='birthday-account'>
+      <div className='birthday-account__account'>
         <AccountComponent account={account} withRelationship={false} />
       </div>
       <div
-        className='⁂-birthday-account__label'
+        className='birthday-account__label'
         title={intl.formatMessage(messages.birthday, {
           date: formattedBirthday,
         })}

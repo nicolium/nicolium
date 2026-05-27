@@ -11,7 +11,7 @@ interface ICounter {
 
 /** A simple counter for notifications, etc. */
 const Counter: React.FC<ICounter> = ({ count, countMax }) => (
-  <span className='⁂-counter'>
+  <span className='counter'>
     <AnimatedNumber value={count} max={countMax} />
   </span>
 );

@@ -61,7 +61,7 @@ const ProfileField: React.FC<IProfileField> = ({ accountId, field, emojis }) => 
   }
 
   return (
-    <dl className={clsx('⁂-profile-field', { '⁂-profile-field--verified': field.verified_at })}>
+    <dl className={clsx('profile-field', { 'profile-field--verified': field.verified_at })}>
       <dt title={field.name}>
         <span data-markup>
           <Emojify text={field.name} emojis={emojis} />
@@ -69,10 +69,10 @@ const ProfileField: React.FC<IProfileField> = ({ accountId, field, emojis }) => 
       </dt>
 
       <dd title={unescapeHTML(field.value)}>
-        <div className='⁂-profile-field__content'>
+        <div className='profile-field__content'>
           {field.verified_at && (
             <span
-              className='⁂-profile-field__verified'
+              className='profile-field__verified'
               title={intl.formatMessage(messages.linkVerifiedOn, {
                 date: intl.formatDate(field.verified_at, dateFormatOptions),
               })}

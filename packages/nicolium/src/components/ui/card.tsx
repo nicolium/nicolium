@@ -35,8 +35,8 @@ const Card = React.forwardRef<HTMLDivElement, ICard>(
       {...filteredProps}
       className={clsx(
         {
-          [`⁂-card--rounded ⁂-card--${size}`]: variant === 'rounded',
-          '⁂-card--slim': variant === 'slim',
+          [`card--rounded card--${size}`]: variant === 'rounded',
+          'card--slim': variant === 'slim',
         },
         className,
       )}
@@ -84,7 +84,7 @@ const CardHeader: React.FC<ICardHeader> = ({
     return (
       <Comp
         {...backAttributes}
-        className='⁂-card-header__button'
+        className='card-header__button'
         aria-label={intl.formatMessage(messages.back)}
         title={intl.formatMessage(messages.back)}
       >
@@ -94,7 +94,7 @@ const CardHeader: React.FC<ICardHeader> = ({
   };
 
   return (
-    <div className={clsx('⁂-card-header', className)}>
+    <div className={clsx('card-header', className)}>
       {renderBackButton()}
 
       {children}
@@ -109,10 +109,7 @@ interface ICardTitle {
 
 /** A card's title. */
 const CardTitle: React.FC<ICardTitle> = ({ title, truncate = true }): React.JSX.Element => (
-  <h1
-    className={clsx('⁂-card-title', { '⁂-card-title--truncate': truncate })}
-    data-testid='card-title'
-  >
+  <h1 className={clsx('card-title', { 'card-title--truncate': truncate })} data-testid='card-title'>
     {title}
   </h1>
 );

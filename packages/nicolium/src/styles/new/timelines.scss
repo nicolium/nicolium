@@ -1,7 +1,7 @@
 @use 'mixins';
 @use 'variables';
 
-.⁂-layout__main--home {
+.layout__main--home {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -19,7 +19,7 @@
   }
 }
 
-.⁂-compose-block {
+.compose-block {
   position: relative;
   z-index: 1;
   border-color: rgb(var(--color-gray-200));
@@ -65,7 +65,7 @@
   @include mixins.card($variant: rounded);
 }
 
-.⁂-status-list {
+.status-list {
   & > :not([hidden]) ~ :not([hidden]) {
     border-color: rgb(var(--color-gray-200));
     border-style: solid;
@@ -102,7 +102,7 @@
   }
 }
 
-.⁂-skip-pinned {
+.skip-pinned {
   position: absolute;
   z-index: 10;
   right: 0;
@@ -159,11 +159,11 @@
   }
 }
 
-.⁂-load-more {
+.load-more {
   @include mixins.button($theme: primary, $block: true);
 }
 
-.⁂-timeline-picker {
+.timeline-picker {
   display: flex;
   gap: 0.5rem;
   align-items: center;

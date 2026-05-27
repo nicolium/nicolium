@@ -48,7 +48,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
 
   const handleMoveUp = (chatId: string) => {
     const elementIndex = getCurrentIndex(chatId) - 1;
-    selectChild(elementIndex, node, document.querySelector('.⁂-chat-widget__list') ?? undefined);
+    selectChild(elementIndex, node, document.querySelector('.chat-widget__list') ?? undefined);
   };
 
   const handleMoveDown = (chatId: string) => {
@@ -56,7 +56,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
     selectChild(
       elementIndex,
       node,
-      document.querySelector('.⁂-chat-widget__list') ?? undefined,
+      document.querySelector('.chat-widget__list') ?? undefined,
       allChats?.length,
     );
   };
@@ -90,7 +90,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
   const renderEmpty = () => {
     if (isFetching) {
       return (
-        <div className='⁂-chat-list__placeholder'>
+        <div className='chat-list__placeholder'>
           <PlaceholderChat />
           <PlaceholderChat />
           <PlaceholderChat />
@@ -105,8 +105,8 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
     <PullToRefresh
       onRefresh={handleRefresh}
       className={clsx({
-        '⁂-chat-widget__list--near-top': isNearTop,
-        '⁂-chat-widget__list--near-bottom': isNearBottom,
+        'chat-widget__list--near-top': isNearTop,
+        'chat-widget__list--near-bottom': isNearBottom,
       })}
     >
       <Virtuoso

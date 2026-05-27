@@ -65,7 +65,7 @@ const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose,
     <Modal
       title={<FormattedMessage id='column.event_map' defaultMessage='Event location' />}
       onClose={onClickClose}
-      className='⁂-event-map-modal'
+      className='event-map-modal'
     >
       <div className='flex flex-col items-center gap-6'>
         <div className='h-96 w-full' id='event-map' />

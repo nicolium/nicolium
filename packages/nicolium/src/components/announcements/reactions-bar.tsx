@@ -50,7 +50,7 @@ const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emoj
   });
 
   return (
-    <div className='⁂-status-reactions-bar'>
+    <div className='status-reactions-bar'>
       {transitions(({ scale }, reaction) => (
         <Reaction
           key={reaction.name}
@@ -64,7 +64,7 @@ const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emoj
       {visibleReactions.length < 8 && (
         <EmojiPickerDropdown onPickEmoji={handleEmojiPick}>
           <button
-            className='⁂-status-reactions-bar__picker-button emoji-picker-dropdown'
+            className='status-reactions-bar__picker-button emoji-picker-dropdown'
             title={intl.formatMessage(messages.addEmoji)}
           >
             <Icon src={iconSmileySticker} aria-hidden />

@@ -73,8 +73,8 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
 
     return (
       <div
-        className={clsx('⁂-sensitive-content-overlay__container', {
-          '⁂-sensitive-content-overlay__container--visible': visible,
+        className={clsx('sensitive-content-overlay__container', {
+          'sensitive-content-overlay__container--visible': visible,
         })}
         data-testid='sensitive-overlay'
       >
@@ -84,9 +84,9 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
             <FormattedMessage id='moderation_overlay.hide' defaultMessage='Hide content' />
           </button>
         ) : (
-          <div className='⁂-sensitive-content-overlay'>
+          <div className='sensitive-content-overlay'>
             <div ref={ref}>
-              <div className='⁂-sensitive-content-overlay__content'>
+              <div className='sensitive-content-overlay__content'>
                 <p>
                   <FormattedMessage
                     id='status.sensitive_warning'
@@ -113,7 +113,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
                 </p>
               </div>
 
-              <div className='⁂-sensitive-content-overlay__actions'>
+              <div className='sensitive-content-overlay__actions'>
                 <button type='button' onClick={toggleVisibility}>
                   <Icon src={iconEye} aria-hidden />
                   <FormattedMessage id='moderation_overlay.show' defaultMessage='Show content' />

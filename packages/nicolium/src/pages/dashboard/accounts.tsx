@@ -92,7 +92,7 @@ const Filters: React.FC = () => {
       }
     >
       <Form>
-        <div className='⁂-admin-accounts-page__filter-grid'>
+        <div className='admin-accounts-page__filter-grid'>
           <FormGroup
             labelText={
               <FormattedMessage
@@ -152,7 +152,7 @@ const Filters: React.FC = () => {
             />
           </ListItem>
         </List>
-        <div className='⁂-admin-accounts-page__filter-grid'>
+        <div className='admin-accounts-page__filter-grid'>
           <FormGroup
             labelText={
               <FormattedMessage
@@ -190,7 +190,7 @@ const Filters: React.FC = () => {
             />
           </FormGroup>
         </div>
-        <div className='⁂-admin-accounts-page__filter-grid'>
+        <div className='admin-accounts-page__filter-grid'>
           <FormGroup
             labelText={
               <FormattedMessage
@@ -253,7 +253,7 @@ const AccountsPage: React.FC = () => {
   } = useAdminAccounts(debouncedParams);
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} bodyClassName='⁂-admin-accounts-page'>
+    <Column label={intl.formatMessage(messages.heading)} bodyClassName='admin-accounts-page'>
       <Filters />
       <ScrollableList
         scrollKey='userIndex'
@@ -264,7 +264,7 @@ const AccountsPage: React.FC = () => {
         emptyMessageText={
           <FormattedMessage id='admin.user_index.empty' defaultMessage='No users found.' />
         }
-        itemClassName='⁂-admin-accounts-page__item'
+        itemClassName='admin-accounts-page__item'
         placeholderComponent={PlaceholderAccount}
         placeholderCount={20}
       >

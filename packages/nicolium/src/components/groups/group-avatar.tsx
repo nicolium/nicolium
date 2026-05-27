@@ -15,11 +15,11 @@ const GroupAvatar: React.FC<IGroupAvatar> = ({ group, size, withRing = false }) 
 
   return (
     <Avatar
-      className={clsx('⁂-group-avatar', {
-        '⁂-group-avatar--owner-ring': isOwner && withRing,
+      className={clsx('group-avatar', {
+        'group-avatar--owner-ring': isOwner && withRing,
 
-        '⁂-group-avatar--owner': isOwner && !withRing,
-        '⁂-group-avatar--ring': !isOwner && withRing,
+        'group-avatar--owner': isOwner && !withRing,
+        'group-avatar--ring': !isOwner && withRing,
       })}
       src={group.avatar}
       alt={group.avatar_description}

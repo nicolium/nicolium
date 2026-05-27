@@ -58,7 +58,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <div className='⁂-dashboard'>
+      <div className='dashboard'>
         {!aside && (
           <DashCounters>
             {features.mastodonAdminMetrics ? (
@@ -428,7 +428,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
                   href={
                     sourceCode.ref ? `${sourceCode.url}/commit/${sourceCode.ref}` : sourceCode.url
                   }
-                  className='⁂-dashboard__source-code'
+                  className='dashboard__source-code'
                   target='_blank'
                 >
                   <span>

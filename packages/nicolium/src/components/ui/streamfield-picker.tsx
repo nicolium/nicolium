@@ -84,11 +84,11 @@ const StreamfieldPicker = <T,>({
               return (
                 <ListItem
                   key={itemKey}
-                  className={clsx('⁂-streamfield-picker__item', {
-                    '⁂-streamfield-picker__item--dragging': isDragging,
+                  className={clsx('streamfield-picker__item', {
+                    'streamfield-picker__item--dragging': isDragging,
                   })}
                   label={
-                    <span className='⁂-streamfield-picker__item__label'>
+                    <span className='streamfield-picker__item__label'>
                       <Component value={value} index={-1} onChange={() => {}} autoFocus={false} />
                     </span>
                   }

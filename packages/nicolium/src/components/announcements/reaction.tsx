@@ -55,8 +55,8 @@ const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, sty
 
   return (
     <animated.button
-      className={clsx('⁂-status-reactions-bar__button', {
-        '⁂-status-reactions-bar__button--active': reaction.me,
+      className={clsx('status-reactions-bar__button', {
+        'status-reactions-bar__button--active': reaction.me,
       })}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}

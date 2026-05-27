@@ -171,7 +171,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
         {status.event ? (
           <EventPreview status={status} hideAction />
         ) : (
-          <div className='⁂-quoted-status__content'>
+          <div className='quoted-status__content'>
             <StatusContent
               status={status}
               collapsable
@@ -189,8 +189,8 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
   return (
     <div
       data-testid='quoted-status'
-      className={clsx('⁂-quoted-status', {
-        '⁂-quoted-status--compose': compose,
+      className={clsx('quoted-status', {
+        'quoted-status--compose': compose,
       })}
       onClick={handleExpandClick}
     >

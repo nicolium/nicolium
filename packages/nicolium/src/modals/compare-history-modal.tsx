@@ -36,7 +36,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
     body = <Spinner />;
   } else {
     body = (
-      <div className='⁂-status-list'>
+      <div className='status-list'>
         {versions?.map((version) => {
           const content = (
             <ParsedContent

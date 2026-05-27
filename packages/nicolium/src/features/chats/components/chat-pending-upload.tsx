@@ -8,7 +8,7 @@ interface IChatPendingUpload {
 
 /** Displays a loading thumbnail for an upload in the chat composer. */
 const ChatPendingUpload: React.FC<IChatPendingUpload> = ({ progress }) => (
-  <div className='⁂-chat-upload ⁂-chat-upload--pending'>
+  <div className='chat-upload chat-upload--pending'>
     <ProgressBar progress={progress} size='sm' />
   </div>
 );

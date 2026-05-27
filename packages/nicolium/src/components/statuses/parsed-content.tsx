@@ -79,7 +79,7 @@ const CodeBlock: React.FC<ICodeBlock> = ({ children }) => {
   const intl = useIntl();
 
   return (
-    <div className='⁂-code-block'>
+    <div className='code-block'>
       <label onClick={(e) => e.stopPropagation()} title={intl.formatMessage(messages.toggleWrap)}>
         <input type='checkbox' />
         <span className='sr-only'>

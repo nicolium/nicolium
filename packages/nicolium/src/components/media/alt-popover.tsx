@@ -17,15 +17,15 @@ const AltPopover: React.FC<IAltPopover> = ({ alt, heading, message, title, class
   <Popover
     interaction='click'
     content={
-      <div className='⁂-alt-popover'>
-        <p className='⁂-alt-popover__title'>{heading}</p>
-        <p className='⁂-alt-popover__text'>{alt}</p>
+      <div className='alt-popover'>
+        <p className='alt-popover__title'>{heading}</p>
+        <p className='alt-popover__text'>{alt}</p>
       </div>
     }
     isFlush
     title={title}
   >
-    <AltIndicator className={clsx(className, '⁂-alt-popover__reference')} message={message} />
+    <AltIndicator className={clsx(className, 'alt-popover__reference')} message={message} />
   </Popover>
 );
 

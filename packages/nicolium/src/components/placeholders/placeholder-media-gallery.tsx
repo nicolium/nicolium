@@ -78,7 +78,7 @@ const PlaceholderMediaGallery: React.FC<IPlaceholderMediaGallery> = ({ media, de
     return (
       <div
         key={i}
-        className='⁂-media-gallery__item bg-primary-200 no-reduce-motion:animate-pulse'
+        className='media-gallery__item bg-primary-200 no-reduce-motion:animate-pulse'
         style={{ position, float, left, top, right, bottom, height, width }}
       />
     );
@@ -87,7 +87,7 @@ const PlaceholderMediaGallery: React.FC<IPlaceholderMediaGallery> = ({ media, de
   const sizeData = getSizeData(media.length);
 
   return (
-    <div className='⁂-media-gallery' style={sizeData.style} ref={handleRef}>
+    <div className='media-gallery' style={sizeData.style} ref={handleRef}>
       {media.slice(0, 4).map((_, i) => renderItem(sizeData.itemsDimensions[i], i))}
     </div>
   );

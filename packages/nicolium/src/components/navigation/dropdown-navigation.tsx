@@ -62,7 +62,7 @@ const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
 
   const renderAccount = (account: AccountEntity) => (
     <a
-      className='⁂-dropdown-navigation__account-switcher__account'
+      className='dropdown-navigation__account-switcher__account'
       href='#'
       onClick={handleSwitchAccount(account)}
       key={account.id}
@@ -79,11 +79,11 @@ const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
   );
 
   return (
-    <div className='⁂-dropdown-navigation__account-switcher__accounts'>
+    <div className='dropdown-navigation__account-switcher__accounts'>
       {otherAccounts.map((account) => renderAccount(account))}
 
       <Link
-        className='⁂-dropdown-navigation__account-switcher__add'
+        className='dropdown-navigation__account-switcher__add'
         to='/login/add'
         onClick={handleClose}
       >
@@ -244,9 +244,9 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
     <div
       aria-expanded={isSidebarOpen}
       className={clsx({
-        '⁂-dropdown-navigation__container': true,
-        '⁂-dropdown-navigation__container--partially-visible': isSidebarOpen || sidebarVisible,
-        '⁂-dropdown-navigation__container--visible': isSidebarOpen && sidebarVisible,
+        'dropdown-navigation__container': true,
+        'dropdown-navigation__container--partially-visible': isSidebarOpen || sidebarVisible,
+        'dropdown-navigation__container--visible': isSidebarOpen && sidebarVisible,
       })}
       ref={containerRef}
       onKeyDown={handleKeyDown}
@@ -254,16 +254,16 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <div className='⁂-dropdown-navigation__overlay' role='button' onClick={handleClose} />
+      <div className='dropdown-navigation__overlay' role='button' onClick={handleClose} />
 
       <div
-        className='⁂-dropdown-navigation'
+        className='dropdown-navigation'
         id='dropdown-navigation'
         role='menu'
         data-active-page={page}
       >
-        <div className='⁂-dropdown-navigation__pages'>
-          <div className='⁂-dropdown-navigation__page' aria-hidden={page !== 'main'}>
+        <div className='dropdown-navigation__pages'>
+          <div className='dropdown-navigation__page' aria-hidden={page !== 'main'}>
             {renderNavigationItems(navigationItems)}
 
             {account ? (
@@ -297,8 +297,8 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                 <Divider />
 
                 <div
-                  className={clsx('⁂-dropdown-navigation__account-switcher', {
-                    '⁂-dropdown-navigation__account-switcher--expanded': switcher,
+                  className={clsx('dropdown-navigation__account-switcher', {
+                    'dropdown-navigation__account-switcher--expanded': switcher,
                   })}
                 >
                   <button type='button' onClick={handleSwitcherClick}>
@@ -347,8 +347,8 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
             )}
           </div>
           {moreItems.length > 0 && (
-            <div className='⁂-dropdown-navigation__page' aria-hidden={page !== 'more'}>
-              <div className='⁂-dropdown-navigation__page__header'>
+            <div className='dropdown-navigation__page' aria-hidden={page !== 'more'}>
+              <div className='dropdown-navigation__page__header'>
                 <button
                   type='button'
                   onClick={() => setPage('main')}

@@ -11,13 +11,13 @@ const NewGroupPanel = () => {
   };
 
   return (
-    <div className='⁂-new-group-panel'>
-      <div className='⁂-new-group-panel__content'>
-        <p className='⁂-new-group-panel__heading'>
+    <div className='new-group-panel'>
+      <div className='new-group-panel__content'>
+        <p className='new-group-panel__heading'>
           <FormattedMessage id='new_group_panel.title' defaultMessage='Create group' />
         </p>
 
-        <p className='⁂-new-group-panel__text'>
+        <p className='new-group-panel__text'>
           <FormattedMessage
             id='new_group_panel.subtitle'
             defaultMessage="Can't find what you're looking for? Start your own private or public group."

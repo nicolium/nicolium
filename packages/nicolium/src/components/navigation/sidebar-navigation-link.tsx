@@ -41,14 +41,14 @@ const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
     return (
       <LinkComponent
         activeOptions={{ exact: true, includeSearch: false }}
-        activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
+        activeProps={{ className: 'sidebar-navigation-link--active' }}
         to={to}
         ref={ref}
         onClick={onClick}
-        className='⁂-sidebar-navigation-link'
+        className='sidebar-navigation-link'
         {...rest}
       >
-        <span className='⁂-sidebar-navigation-link__icon' aria-hidden>
+        <span className='sidebar-navigation-link__icon' aria-hidden>
           <Icon
             src={(isActive && activeIcon) || icon}
             count={demetricator ? undefined : count}

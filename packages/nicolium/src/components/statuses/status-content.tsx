@@ -41,10 +41,10 @@ interface IReadMoreButton {
 
 /** Button to expand a truncated status (due to too much content) */
 const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, preview }) => (
-  <div className='⁂-read-more-button__container'>
-    <div className='⁂-read-more-button__gradient' />
+  <div className='read-more-button__container'>
+    <div className='read-more-button__gradient' />
     {!preview && (
-      <button className='⁂-read-more-button' onClick={onClick}>
+      <button className='read-more-button' onClick={onClick}>
         <FormattedMessage id='status.read_more' defaultMessage='Read more' />
         <Icon className='inline-block size-5' src={iconCaretRight} />
       </button>
@@ -59,11 +59,11 @@ interface IExpandButton {
 
 const ExpandButton: React.FC<IExpandButton> = ({ onClick, expanded }) => (
   <>
-    <div className='⁂-read-more-button__container'>
-      {!expanded && <div className='⁂-read-more-button__gradient' />}
+    <div className='read-more-button__container'>
+      {!expanded && <div className='read-more-button__gradient' />}
     </div>
     <button
-      className={clsx('⁂-expand-button', { '⁂-expand-button--expanded': expanded })}
+      className={clsx('expand-button', { 'expand-button--expanded': expanded })}
       onClick={onClick}
     >
       <Icon src={iconCaretDown} />
@@ -338,7 +338,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     const direction = getTextDirection(status.search_index);
     const className = useMemo(
       () =>
-        clsx('⁂-status-content', {
+        clsx('status-content', {
           'overflow-hidden': collapsed && !expanded,
           'max-h-[200px]': collapsed && !isQuote && !preview && !expanded,
           'max-h-[120px]': collapsed && isQuote && !expanded,
@@ -347,10 +347,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           'max-h-[202px]': collapsable && collapsed === null && isQuote && !expanded,
           'max-h-[82px]': collapsed === null && preview && !expanded,
           'big-emoji leading-normal': onlyEmoji,
-          '⁂-status-content--spoiler-expanded': !collapsable,
-          '⁂-status-content--quote': isQuote,
-          '⁂-status-content--preview': preview,
-          '⁂-status-content--poll': !!status.poll_id,
+          'status-content--spoiler-expanded': !collapsable,
+          'status-content--quote': isQuote,
+          'status-content--preview': preview,
+          'status-content--poll': !!status.poll_id,
         }),
       [collapsed, onlyEmoji, spoilerExpanded, expanded],
     );
@@ -362,8 +362,8 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     if (spoilerText) {
       output.push(
         <h2
-          className={clsx('⁂-status-title', {
-            '⁂-status-title--clamp': !spoilerExpanded && lineClamp,
+          className={clsx('status-title', {
+            'status-title--clamp': !spoilerExpanded && lineClamp,
           })}
           key='spoiler'
           {...(expandable && displaySpoilers
@@ -512,7 +512,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     }
 
     if (onClick) {
-      return <div className='⁂-status-content__container'>{output}</div>;
+      return <div className='status-content__container'>{output}</div>;
     } else {
       return output;
     }

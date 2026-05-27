@@ -117,9 +117,9 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
   };
 
   return (
-    <div className='⁂-list-members-modal__form__container'>
+    <div className='list-members-modal__form__container'>
       {selectedAccountIds.length > 0 ? (
-        <div className='⁂-list-members-modal__form'>
+        <div className='list-members-modal__form'>
           <CardHeader>
             <CardTitle
               title={
@@ -137,7 +137,7 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
               }
             />
           </CardHeader>
-          <div className='⁂-list-members-modal__form__accounts'>
+          <div className='list-members-modal__form__accounts'>
             {selectedAccountIds.map((accountId) => (
               <Account
                 key={accountId}
@@ -150,11 +150,11 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
           </div>
         </div>
       ) : (excluded ? isFetchingExcludedAccounts : isFetchingAccounts) ? (
-        <div className='⁂-list-members-modal__form__pending'>
+        <div className='list-members-modal__form__pending'>
           <Spinner />
         </div>
       ) : (
-        <div className='⁂-list-members-modal__form__pending'>
+        <div className='list-members-modal__form__pending'>
           <Text theme='muted' size='sm' align='center'>
             {excluded ? (
               <FormattedMessage
@@ -187,7 +187,7 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
           />
         </CardHeader>
         <Search value={searchValue} onSubmit={setSearchValue} />
-        <div className='⁂-list-members-modal__form__accounts'>
+        <div className='list-members-modal__form__accounts'>
           {searchAccountIds.map((accountId) => (
             <Account
               key={accountId}
@@ -260,13 +260,13 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
   };
 
   return (
-    <div className='⁂-list-members-modal__form__container'>
+    <div className='list-members-modal__form__container'>
       {values.length > 0 ? (
         <div>
           <CardHeader>
             <CardTitle title={listTitle} />
           </CardHeader>
-          <div className='⁂-list-members-modal__form__accounts'>
+          <div className='list-members-modal__form__accounts'>
             {values.map((item) => (
               <div key={item} className='flex items-center justify-between gap-2 p-2.5'>
                 <Text>{item}</Text>
@@ -282,11 +282,11 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           </div>
         </div>
       ) : isFetching ? (
-        <div className='⁂-list-members-modal__form__pending'>
+        <div className='list-members-modal__form__pending'>
           <Spinner />
         </div>
       ) : (
-        <div className='⁂-list-members-modal__form__pending'>
+        <div className='list-members-modal__form__pending'>
           <Text theme='muted' size='sm' align='center'>
             {emptyValues}
           </Text>
@@ -315,7 +315,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           <CardHeader>
             <CardTitle title={listExcludedTitle} />
           </CardHeader>
-          <div className='⁂-list-members-modal__form__accounts'>
+          <div className='list-members-modal__form__accounts'>
             {excludedValues.map((item) => (
               <div key={item} className='flex items-center justify-between gap-2 p-2.5'>
                 <Text>{item}</Text>
@@ -331,11 +331,11 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           </div>
         </div>
       ) : isFetching ? (
-        <div className='⁂-list-members-modal__form__pending'>
+        <div className='list-members-modal__form__pending'>
           <Spinner />
         </div>
       ) : (
-        <div className='⁂-list-members-modal__form__pending'>
+        <div className='list-members-modal__form__pending'>
           <Text theme='muted' size='sm' align='center'>
             {emptyExcludedValues}
           </Text>

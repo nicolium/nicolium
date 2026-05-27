@@ -11,7 +11,7 @@ interface IList {
   children: React.ReactNode;
 }
 
-const List: React.FC<IList> = ({ children }) => <div className='⁂-list'>{children}</div>;
+const List: React.FC<IList> = ({ children }) => <div className='list'>{children}</div>;
 
 type IListItem = {
   className?: string;
@@ -97,28 +97,28 @@ const ListItem: React.FC<IListItem> = ({
     [children, domId, labelId, hint, hintId],
   );
 
-  const classNames = clsx('⁂-list-item', className, {
-    '⁂-list-item--md': size === 'md',
-    '⁂-list-item--sm': size === 'sm',
-    '⁂-list-item--active': isActive,
+  const classNames = clsx('list-item', className, {
+    'list-item--md': size === 'md',
+    'list-item--sm': size === 'sm',
+    'list-item--active': isActive,
   });
 
   const body = (
     <>
-      <div className={clsx('⁂-list-item__label', labelClassName)}>
+      <div className={clsx('list-item__label', labelClassName)}>
         <LabelComp id={labelId} {...(LabelComp === 'label' ? { htmlFor: domId } : {})}>
           {label}
         </LabelComp>
 
         {hint ? (
-          <span id={hintId} className='⁂-list-item__hint'>
+          <span id={hintId} className='list-item__hint'>
             {hint}
           </span>
         ) : null}
       </div>
 
       {'to' in rest || href || onClick ? (
-        <div className='⁂-list-item__body'>
+        <div className='list-item__body'>
           {children}
 
           <Icon src={actionIcon || iconCaretRight} aria-hidden />

@@ -309,7 +309,7 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       onClose={() => {
         onClose('HOTKEYS');
       }}
-      className='⁂-hotkey-modal'
+      className='hotkey-modal'
     >
       <div className='flex flex-col text-xs lg:flex-row'>
         {columns.map((column, i) => (

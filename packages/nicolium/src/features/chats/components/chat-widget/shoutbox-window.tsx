@@ -30,19 +30,19 @@ const ShoutboxWindow = () => {
     <>
       <ChatPaneHeader
         title={
-          <div className='⁂-chat-widget__title-row'>
+          <div className='chat-widget__title-row'>
             {isOpen && (
               <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
-                <Icon src={iconArrowLeft} className='⁂-chat-widget__back-icon' />
+                <Icon src={iconArrowLeft} className='chat-widget__back-icon' />
               </button>
             )}
 
-            <div className='⁂-chat-widget__account__container'>
-              {isOpen && <Avatar src={logo} alt='' size={40} className='⁂-chat-widget__avatar' />}
+            <div className='chat-widget__account__container'>
+              {isOpen && <Avatar src={logo} alt='' size={40} className='chat-widget__avatar' />}
 
-              <div className='⁂-chat-widget__account'>
-                <div className='⁂-chat-widget__account__name'>
-                  <span className='⁂-chat-widget__title-text'>
+              <div className='chat-widget__account'>
+                <div className='chat-widget__account__name'>
+                  <span className='chat-widget__title-text'>
                     <FormattedMessage
                       id='chat_list_item_shoutbox'
                       defaultMessage='{instance} shoutbox'
@@ -59,7 +59,7 @@ const ShoutboxWindow = () => {
         onToggle={toggleChatPane}
       />
 
-      <div className='⁂-chat-widget__chat-body ⁂-chat-widget__chat-body--shoutbox'>
+      <div className='chat-widget__chat-body chat-widget__chat-body--shoutbox'>
         <Shoutbox />
       </div>
     </>

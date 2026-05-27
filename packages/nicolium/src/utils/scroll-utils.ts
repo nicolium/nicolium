@@ -11,7 +11,7 @@ const selectChild = (
   if (index < 0) return false;
 
   if (count !== undefined && index === count) {
-    const loadMoreButton = node.querySelector<HTMLButtonElement>('.⁂-load-more');
+    const loadMoreButton = node.querySelector<HTMLButtonElement>('.load-more');
     if (loadMoreButton) {
       loadMoreButton.focus({ preventScroll: false });
       return;

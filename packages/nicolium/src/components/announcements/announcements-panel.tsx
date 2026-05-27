@@ -31,7 +31,7 @@ const AnnouncementsPanel = () => {
   return (
     <Widget
       title={<FormattedMessage id='announcements.title' defaultMessage='Announcements' />}
-      className='⁂-announcements-widget'
+      className='announcements-widget'
     >
       <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
         {announcements
@@ -41,7 +41,7 @@ const AnnouncementsPanel = () => {
           .toReversed()}
       </ReactSwipeableViews>
       {announcements.length > 1 && (
-        <div className='⁂-announcements-widget__dots'>
+        <div className='announcements-widget__dots'>
           {announcements.map((_, i) => (
             <button
               key={i}

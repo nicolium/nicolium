@@ -76,9 +76,9 @@ const DomainBlock: React.FC<IDomainBlock> = ({ domainBlock }) => {
   };
 
   return (
-    <div className='⁂-domain-block'>
-      <div className='⁂-domain-block__domain'>{domainBlock.domain}</div>
-      <ul className='⁂-domain-block__tags'>
+    <div className='domain-block'>
+      <div className='domain-block__domain'>{domainBlock.domain}</div>
+      <ul className='domain-block__tags'>
         {domainBlock.severity === 'suspend' && (
           <li>
             <FormattedMessage id='admin.domain_blocks.suspend' defaultMessage='Suspended' />
@@ -112,7 +112,7 @@ const DomainBlock: React.FC<IDomainBlock> = ({ domainBlock }) => {
         )}
       </ul>
       {domainBlock.private_comment && (
-        <div className='⁂-domain-block__comment'>
+        <div className='domain-block__comment'>
           <span>
             <FormattedMessage
               id='admin.domain_blocks.private_comment'
@@ -123,7 +123,7 @@ const DomainBlock: React.FC<IDomainBlock> = ({ domainBlock }) => {
         </div>
       )}
       {domainBlock.public_comment && (
-        <div className='⁂-domain-block__comment'>
+        <div className='domain-block__comment'>
           <span>
             <FormattedMessage
               id='admin.domain_blocks.public_comment'
@@ -133,7 +133,7 @@ const DomainBlock: React.FC<IDomainBlock> = ({ domainBlock }) => {
           {domainBlock.public_comment}
         </div>
       )}
-      <div className='⁂-domain-block__actions'>
+      <div className='domain-block__actions'>
         <button onClick={handleEdit}>
           <FormattedMessage id='admin.domain_blocks.edit' defaultMessage='Modify' />
         </button>
@@ -155,8 +155,8 @@ const DomainBlocksPage = () => {
   if (!domainBlocks) return <ColumnLoading />;
 
   return (
-    <Column bodyClassName='⁂-domain-blocks' label={intl.formatMessage(messages.heading)}>
-      <div className='⁂-domain-blocks__actions'>
+    <Column bodyClassName='domain-blocks' label={intl.formatMessage(messages.heading)}>
+      <div className='domain-blocks__actions'>
         <button onClick={() => openModal('EDIT_DOMAIN_BLOCK')}>
           <Icon src={iconPlus} aria-hidden />
           <FormattedMessage id='admin.domain_blocks.add' defaultMessage='Create' />
@@ -170,7 +170,7 @@ const DomainBlocksPage = () => {
             defaultMessage='No blocked domains found'
           />
         }
-        itemClassName='⁂-domain-block__container'
+        itemClassName='domain-block__container'
       >
         {domainBlocks.map((domainBlock) => (
           <DomainBlock key={domainBlock.id} domainBlock={domainBlock} />

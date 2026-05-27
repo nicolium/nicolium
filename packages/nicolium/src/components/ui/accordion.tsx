@@ -56,8 +56,8 @@ const Accordion: React.FC<IAccordion> = ({
 
   return (
     <div
-      className={clsx('⁂-accordion', {
-        '⁂-accordion--expanded': expanded,
+      className={clsx('accordion', {
+        'accordion--expanded': expanded,
       })}
     >
       <button
@@ -65,26 +65,26 @@ const Accordion: React.FC<IAccordion> = ({
         onClick={handleToggle}
         title={intl.formatMessage(expanded ? messages.collapse : messages.expand)}
         aria-expanded={expanded}
-        className='⁂-accordion__header'
+        className='accordion__header'
       >
         <span>{headline}</span>
 
-        <div className='⁂-accordion__header__actions'>
+        <div className='accordion__header__actions'>
           {menu && <DropdownMenu items={menu} src={iconDotsThreeVertical} />}
           {action && actionIcon && (
             <button
-              className='⁂-accordion__header__action'
+              className='accordion__header__action'
               onClick={handleAction}
               title={actionLabel}
             >
               <Icon src={actionIcon} aria-hidden />
             </button>
           )}
-          <Icon src={iconCaretDown} className='⁂-accordion__header__chevron' aria-hidden />
+          <Icon src={iconCaretDown} className='accordion__header__chevron' aria-hidden />
         </div>
       </button>
 
-      <div className='⁂-accordion__body'>
+      <div className='accordion__body'>
         <p>{children}</p>
       </div>
     </div>

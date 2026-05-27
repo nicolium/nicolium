@@ -410,11 +410,11 @@ const InteractionPopover: React.FC<IInteractionPopover> = ({ type, allowed }) =>
         : 'mentioned';
 
   return (
-    <div className='⁂-interaction-popover'>
-      <p className='⁂-interaction-popover__header'>
+    <div className='interaction-popover'>
+      <p className='interaction-popover__header'>
         {intl.formatMessage(INTERACTION_POLICY_HEADERS[type])}
       </p>
-      <p className='⁂-interaction-popover__description'>
+      <p className='interaction-popover__description'>
         {intl.formatMessage(INTERACTION_POLICY_DESCRIPTIONS[type][allowedType])}
       </p>
     </div>
@@ -601,7 +601,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
 
   const reblogButton = (
     <StatusActionButton
-      className='⁂-status-action-bar__button--reblog'
+      className='status-action-bar__button--reblog'
       icon={reblogIcon}
       disabled={!publicStatus}
       title={
@@ -1182,7 +1182,7 @@ const MenuButtonRemainingItems: React.FC<IMenuButtonRemainingItems> = ({
 
   if (!items.length || !status) return null;
 
-  return <div className='⁂-status-action-bar__menu__items'>{items}</div>;
+  return <div className='status-action-bar__menu__items'>{items}</div>;
 };
 
 interface IMenuButton extends IActionButton {
@@ -1402,7 +1402,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     const handleCopyStatus = () => {
       let content = document
         .querySelector(
-          `article[data-status-id="${status.id}"] .⁂-status-content__container [data-markup="true"]`,
+          `article[data-status-id="${status.id}"] .status-content__container [data-markup="true"]`,
         )
         ?.textContent?.trim();
       if (content) {
@@ -1882,7 +1882,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   }
 
   return (
-    <div className={`⁂-status-action-bar ⁂-status-action-bar--${space}`} onClick={onContainerClick}>
+    <div className={`status-action-bar status-action-bar--${space}`} onClick={onContainerClick}>
       {items}
 
       <MenuButton

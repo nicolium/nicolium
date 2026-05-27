@@ -52,7 +52,7 @@ const ChatListShoutbox: React.FC<IChatListShoutbox> = ({ onClick, onMoveUp, onMo
   return (
     <Hotkeys
       handlers={handlers}
-      className='⁂-chat-list-item__hotkey'
+      className='chat-list-item__hotkey'
       tabIndex={0}
       role='button'
       onClick={() => {
@@ -60,11 +60,11 @@ const ChatListShoutbox: React.FC<IChatListShoutbox> = ({ onClick, onMoveUp, onMo
       }}
       onKeyDown={handleKeyDown}
     >
-      <div className='⁂-chat-list-item ⁂-chat-list-item--shoutbox' data-testid='chat-list-item'>
+      <div className='chat-list-item chat-list-item--shoutbox' data-testid='chat-list-item'>
         <div>
-          <Avatar src={logo} alt='' size={40} className='⁂-chat-list-item__avatar' />
-          <div className='⁂-chat-list-item__content'>
-            <div className='⁂-chat-list-item__name'>
+          <Avatar src={logo} alt='' size={40} className='chat-list-item__avatar' />
+          <div className='chat-list-item__content'>
+            <div className='chat-list-item__name'>
               <p>
                 <FormattedMessage
                   id='chat_list_item_shoutbox'
@@ -75,9 +75,9 @@ const ChatListShoutbox: React.FC<IChatListShoutbox> = ({ onClick, onMoveUp, onMo
             </div>
 
             {lastMessage && (
-              <p className='⁂-chat-list-item__message'>
+              <p className='chat-list-item__message'>
                 {lastMessageAuthor && (
-                  <span className='⁂-chat-list-item__message__author'>
+                  <span className='chat-list-item__message__author'>
                     <Emojify
                       text={lastMessageAuthor.display_name}
                       emojis={lastMessageAuthor.emojis}

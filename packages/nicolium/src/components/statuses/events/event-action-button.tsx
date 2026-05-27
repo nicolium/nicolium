@@ -44,7 +44,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
   if (event.join_mode === 'external') {
     return (
       <Button
-        className='⁂-event-action-button'
+        className='event-action-button'
         size='sm'
         theme={theme}
         icon={iconArrowSquareOut}
@@ -119,7 +119,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
 
   return (
     <Button
-      className='⁂-event-action-button'
+      className='event-action-button'
       size='sm'
       theme={theme}
       icon={buttonIcon}

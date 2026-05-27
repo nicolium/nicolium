@@ -38,15 +38,15 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
   };
 
   return (
-    <div className='⁂-list-members-modal__form__container'>
+    <div className='list-members-modal__form__container'>
       {accountIds.length > 0 ? (
-        <div className='⁂-list-members-modal__form'>
+        <div className='list-members-modal__form'>
           <CardHeader>
             <CardTitle
               title={<FormattedMessage id='lists.account.members' defaultMessage='List members' />}
             />
           </CardHeader>
-          <div className='⁂-list-members-modal__form__accounts'>
+          <div className='list-members-modal__form__accounts'>
             {accountIds.map((accountId) => (
               <Account
                 key={accountId}
@@ -59,11 +59,11 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
           </div>
         </div>
       ) : isFetching ? (
-        <div className='⁂-list-members-modal__form__pending'>
+        <div className='list-members-modal__form__pending'>
           <Spinner />
         </div>
       ) : (
-        <div className='⁂-list-members-modal__form__pending'>
+        <div className='list-members-modal__form__pending'>
           <Text theme='muted' size='sm' align='center'>
             <FormattedMessage
               id='empty_column.list_members'
@@ -80,7 +80,7 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
           />
         </CardHeader>
         <Search value={searchValue} onSubmit={setSearchValue} />
-        <div className='⁂-list-members-modal__form__accounts'>
+        <div className='list-members-modal__form__accounts'>
           {searchAccountIds.map((accountId) => (
             <Account
               key={accountId}

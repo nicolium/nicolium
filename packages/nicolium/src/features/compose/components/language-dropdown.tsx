@@ -192,7 +192,7 @@ const getLanguageDropdown =
 
     return (
       <>
-        <label className='⁂-language-dropdown__search'>
+        <label className='language-dropdown__search'>
           <span>
             <FormattedMessage
               id='compose.language_dropdown.search'
@@ -221,7 +221,7 @@ const getLanguageDropdown =
             <Icon src={isSearching ? iconBackspace : iconMagnifyingGlass} aria-hidden />
           </button>
         </label>
-        <div className='⁂-language-dropdown__options' tabIndex={-1} ref={node} role='listbox'>
+        <div className='language-dropdown__options' tabIndex={-1} ref={node} role='listbox'>
           {results.map(([code, name]) => {
             const active = code === language;
             const modified = code === modifiedLanguage;
@@ -233,15 +233,14 @@ const getLanguageDropdown =
                 key={code}
                 data-index={code}
                 onClick={handleOptionClick}
-                className={clsx('⁂-language-dropdown__option', {
-                  '⁂-language-dropdown__option--modified': modified,
-                  '⁂-language-dropdown__option--available':
-                    !hasMultipleLanguages || code in textMap,
-                  '⁂-language-dropdown__option--active': active,
+                className={clsx('language-dropdown__option', {
+                  'language-dropdown__option--modified': modified,
+                  'language-dropdown__option--available': !hasMultipleLanguages || code in textMap,
+                  'language-dropdown__option--active': active,
                 })}
                 aria-selected={active}
               >
-                <div className='⁂-language-dropdown__option__name'>{name}</div>
+                <div className='language-dropdown__option__name'>{name}</div>
                 {features.multiLanguage &&
                   !!language &&
                   !active &&
@@ -298,7 +297,7 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId, 
   const LanguageDropdown = useMemo(() => getLanguageDropdown(composeId), [composeId]);
 
   return (
-    <DropdownMenu component={LanguageDropdown} className='⁂-language-dropdown'>
+    <DropdownMenu component={LanguageDropdown} className='language-dropdown'>
       <button type='button' title={intl.formatMessage(messages.languagePrompt)}>
         <Icon src={iconTranslate} aria-hidden />
         {buttonLabel}

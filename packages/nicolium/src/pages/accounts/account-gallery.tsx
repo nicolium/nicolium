@@ -92,9 +92,11 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
       conditionalAttributes.autoPlay = true;
     }
     thumbnail = (
-      <div className={clsx('⁂-media-gallery__gifv', { autoplay: autoPlayGif })}>
+      <div
+        className={clsx('media-gallery__gifv', { 'media-gallery__gifv--autoplay': autoPlayGif })}
+      >
         <video
-          className={clsx('⁂-media-gallery__item-gifv-thumbnail overflow-hidden', {
+          className={clsx('media-gallery__item-gifv-thumbnail overflow-hidden', {
             'rounded-br-md': isLast,
           })}
           aria-label={attachment.description}
@@ -108,7 +110,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
           {...conditionalAttributes}
         />
 
-        <span className='⁂-media-gallery__gifv__label'>GIF</span>
+        <span className='media-gallery__gifv__label'>GIF</span>
       </div>
     );
   } else if (attachment.type === 'audio') {
@@ -116,18 +118,18 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
     const fileExtensionLastIndex = remoteURL.lastIndexOf('.');
     const fileExtension = remoteURL.slice(fileExtensionLastIndex + 1).toUpperCase();
     thumbnail = (
-      <div className={clsx('⁂-media-gallery__item-thumbnail', { 'rounded-br-md': isLast })}>
-        <span className='⁂-media-gallery__item__icons'>
+      <div className={clsx('media-gallery__item-thumbnail', { 'rounded-br-md': isLast })}>
+        <span className='media-gallery__item__icons'>
           <Icon src={iconSpeakerHigh} />
         </span>
-        <span className='⁂-media-gallery__file-extension__label'>{fileExtension}</span>
+        <span className='media-gallery__file-extension__label'>{fileExtension}</span>
       </div>
     );
   }
 
   if (!visible) {
     icon = (
-      <span className='⁂-media-gallery__item__icons'>
+      <span className='media-gallery__item__icons'>
         <Icon src={iconEyeSlash} />
       </span>
     );
@@ -136,7 +138,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
   return (
     <div className='col-span-1'>
       <Link
-        className='⁂-media-gallery__item-thumbnail aspect-1'
+        className='media-gallery__item-thumbnail aspect-1'
         to='/@{$username}/posts/$statusId'
         params={{ username: account?.acct ?? 'undefined', statusId: attachment.status_id }}
         onClick={handleClick}
@@ -144,7 +146,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
       >
         <Blurhash
           hash={attachment.blurhash}
-          className={clsx('⁂-media-gallery__preview', {
+          className={clsx('media-gallery__preview', {
             hidden: visible,
             'rounded-br-md': isLast,
           })}
@@ -206,7 +208,7 @@ const AccountGalleryPage = () => {
   if (isUnavailable) {
     return (
       <Column>
-        <div className='⁂-empty-column-indicator'>
+        <div className='empty-column-indicator'>
           <FormattedMessage
             id='empty_column.account_unavailable'
             defaultMessage='Profile unavailable'
@@ -218,7 +220,7 @@ const AccountGalleryPage = () => {
 
   return (
     <Column label={`@${account.acct}`} transparent withHeader={false}>
-      <div role='feed' className='⁂-account-gallery__grid'>
+      <div role='feed' className='account-gallery__grid'>
         {attachments.map((attachment, index) => (
           <MediaItem
             key={`${attachment.status_id}+${attachment.id}`}
@@ -229,7 +231,7 @@ const AccountGalleryPage = () => {
         ))}
 
         {!isLoading && attachments.length === 0 && (
-          <div className='⁂-empty-column-indicator ⁂-account-gallery__empty'>
+          <div className='empty-column-indicator account-gallery__empty'>
             <FormattedMessage id='account_gallery.none' defaultMessage='No media to show.' />
           </div>
         )}
@@ -237,14 +239,14 @@ const AccountGalleryPage = () => {
 
       {hasMore && (
         <LoadMore
-          className='⁂-account-gallery__load-more'
+          className='account-gallery__load-more'
           disabled={isFetching}
           onClick={handleLoadOlder}
         />
       )}
 
       {isFetching && attachments.length === 0 && (
-        <div className='⁂-account-gallery__spinner'>
+        <div className='account-gallery__spinner'>
           <Spinner />
         </div>
       )}

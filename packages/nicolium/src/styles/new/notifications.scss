@@ -1,6 +1,6 @@
 @use 'mixins';
 
-.⁂-notification {
+.notification {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -38,13 +38,13 @@
     @include mixins.text($size: xs, $theme: muted, $truncate: true);
   }
 
-  a.⁂-notification__timestamp {
+  a.notification__timestamp {
     &:hover {
       text-decoration: underline;
     }
   }
 
-  .⁂-status__wrapper {
+  .status__wrapper {
     padding: 0;
   }
 }

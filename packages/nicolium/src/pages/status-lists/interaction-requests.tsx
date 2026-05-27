@@ -327,8 +327,8 @@ const InteractionRequestsPage = () => {
           hasMore={hasNextPage}
           emptyMessageText={emptyMessage}
           onLoadMore={() => fetchNextPage()}
-          listClassName={clsx('⁂-status-list', {
-            '⁂-status-list--loading': isLoading,
+          listClassName={clsx('status-list', {
+            'status-list--loading': isLoading,
           })}
         >
           {data?.map((request) => (

@@ -17,7 +17,7 @@ const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
   const { data: accounts } = useAccounts(dedupAccountIds);
 
   return (
-    <div className='⁂-avatar-stack' aria-hidden>
+    <div className='avatar-stack' aria-hidden>
       {accounts.map((account, i) => (
         <div key={account.id} style={{ zIndex: limit - i }}>
           <Avatar

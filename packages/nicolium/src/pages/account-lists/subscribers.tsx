@@ -45,7 +45,7 @@ const SubscribersPage: React.FC = () => {
 
   if (isUnavailable) {
     return (
-      <div className='⁂-empty-column-indicator'>
+      <div className='empty-column-indicator'>
         <FormattedMessage
           id='empty_column.account_unavailable'
           defaultMessage='Profile unavailable'

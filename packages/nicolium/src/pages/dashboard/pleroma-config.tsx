@@ -134,7 +134,7 @@ const PleromaConfigPage: React.FC = () => {
       {descriptionsLoading || currentConfigLoading ? (
         <Spinner />
       ) : (
-        <div className='⁂-admin-config'>
+        <div className='admin-config'>
           {currentConfig?.need_reboot ? (
             <Warning
               message={
@@ -146,7 +146,7 @@ const PleromaConfigPage: React.FC = () => {
             />
           ) : null}
 
-          <div className='⁂-admin-config__filters'>
+          <div className='admin-config__filters'>
             <FormGroup labelText={intl.formatMessage(messages.search)}>
               <Input
                 type='text'
@@ -157,7 +157,7 @@ const PleromaConfigPage: React.FC = () => {
             </FormGroup>
           </div>
 
-          <div className='⁂-admin-config__sections'>
+          <div className='admin-config__sections'>
             {groupedEntries.map(([group, groupDescriptions]) => (
               <ConfigSection
                 key={group}

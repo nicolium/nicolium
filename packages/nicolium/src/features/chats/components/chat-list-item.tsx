@@ -109,7 +109,7 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
     return (
       <Hotkeys
         handlers={handlers}
-        className='⁂-chat-list-item__hotkey'
+        className='chat-list-item__hotkey'
         tabIndex={0}
         role='button'
         key={chat.id}
@@ -118,20 +118,20 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
         }}
         onKeyDown={handleKeyDown}
       >
-        <div className='⁂-chat-list-item' data-testid='chat-list-item'>
+        <div className='chat-list-item' data-testid='chat-list-item'>
           <div>
-            <div className='⁂-chat-list-item__info'>
+            <div className='chat-list-item__info'>
               <Avatar
                 src={chat.account.avatar}
                 alt={chat.account.avatar_description}
                 size={40}
-                className='⁂-chat-list-item__avatar'
+                className='chat-list-item__avatar'
                 isCat={chat.account.is_cat}
                 username={chat.account.username}
               />
 
-              <div className='⁂-chat-list-item__content'>
-                <div className='⁂-chat-list-item__name'>
+              <div className='chat-list-item__content'>
+                <div className='chat-list-item__name'>
                   <p>
                     <Emojify text={chat.account.display_name} emojis={chat.account.emojis} />
                   </p>
@@ -139,10 +139,10 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
                 </div>
 
                 <p
-                  className={clsx('⁂-chat-list-item__message', {
-                    '⁂-chat-list-item__message--unread':
+                  className={clsx('chat-list-item__message', {
+                    'chat-list-item__message--unread':
                       !(isBlocked ?? isBlocking) && chat.last_message?.unread,
-                    '⁂-chat-list-item__message--blocking': isBlocked ?? isBlocking,
+                    'chat-list-item__message--blocking': isBlocked ?? isBlocking,
                   })}
                 >
                   {isBlocked ? (
@@ -167,9 +167,9 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
               </div>
             </div>
 
-            <div className='⁂-chat-list-item__actions'>
+            <div className='chat-list-item__actions'>
               {features.chatsDelete && (
-                <div className='⁂-chat-list-item__menu'>
+                <div className='chat-list-item__menu'>
                   <DropdownMenu items={menu}>
                     <IconButton src={iconDotsThree} title={intl.formatMessage(messages.settings)} />
                   </DropdownMenu>
@@ -179,7 +179,7 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
               {chat.last_message && (
                 <>
                   {chat.last_message.unread && (
-                    <div className='⁂-chat-list-item__unread' data-testid='chat-unread-indicator' />
+                    <div className='chat-list-item__unread' data-testid='chat-unread-indicator' />
                   )}
 
                   <RelativeTimestamp

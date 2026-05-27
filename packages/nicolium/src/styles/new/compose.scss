@@ -1,7 +1,7 @@
 @use 'mixins';
 @use 'variables';
 
-.⁂-compose-form {
+.compose-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -15,7 +15,7 @@
     button {
       @include mixins.button($theme: muted, $size: xs);
 
-      .⁂-icon svg {
+      .icon svg {
         width: 1rem;
         height: 1rem;
       }
@@ -140,7 +140,7 @@
     gap: 0.25rem;
     align-items: center;
 
-    .⁂-icon-button {
+    .icon-button {
       padding: 0.5rem;
       color: rgb(var(--color-gray-600));
       background-color: transparent;
@@ -342,7 +342,7 @@
       align-items: center;
     }
 
-    .⁂-icon-button {
+    .icon-button {
       color: rgb(var(--color-gray-400));
       background: transparent;
 
@@ -369,11 +369,11 @@
   }
 }
 
-.⁂-modal-root__container .⁂-compose-form__select-buttons {
+.modal-root__container .compose-form__select-buttons {
   padding-top: 0.25rem;
 }
 
-.⁂-language-dropdown {
+.language-dropdown {
   &__search {
     position: relative;
 
@@ -460,7 +460,7 @@
         background-color: rgb(var(--color-gray-700));
       }
 
-      .⁂-language-dropdown__option__name {
+      .language-dropdown__option__name {
         color: #000;
 
         .dark & {

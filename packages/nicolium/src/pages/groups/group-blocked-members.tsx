@@ -44,8 +44,8 @@ const BlockedMember: React.FC<IBlockedMember> = ({ accountId, groupId }) => {
   };
 
   return (
-    <div className='⁂-group-member-action-row'>
-      <div className='⁂-group-member-action-row__account'>
+    <div className='group-member-action-row'>
+      <div className='group-member-action-row__account'>
         <Account account={account} withRelationship={false} />
       </div>
 

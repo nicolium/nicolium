@@ -40,18 +40,18 @@ interface IFolder {
 const Folder: React.FC<IFolder> = ({ folder, active, disabled, onSelect, onDoubleClick }) => {
   return (
     <button
-      className={clsx('⁂-drive-file ⁂-drive-folder', {
-        '⁂-drive-file--active': active,
-        '⁂-drive-file--disabled': disabled,
+      className={clsx('drive-file drive-folder', {
+        'drive-file--active': active,
+        'drive-file--disabled': disabled,
       })}
       tabIndex={disabled ? -1 : 0}
       onDoubleClick={disabled ? undefined : () => onDoubleClick?.(folder)}
       onClick={disabled ? undefined : () => onSelect?.(folder)}
       disabled={disabled}
     >
-      <Icon className='⁂-drive-file__icon' src={iconFolder} />
+      <Icon className='drive-file__icon' src={iconFolder} />
 
-      <span className='⁂-drive-file__label'>{folder.name}</span>
+      <span className='drive-file__label'>{folder.name}</span>
     </button>
   );
 };
@@ -68,9 +68,9 @@ const File: React.FC<IFile> = ({ file, active, disabled, onSelect }) => {
 
   return (
     <button
-      className={clsx('⁂-drive-file', {
-        '⁂-drive-file--active': active,
-        '⁂-drive-file--disabled': disabled,
+      className={clsx('drive-file', {
+        'drive-file--active': active,
+        'drive-file--disabled': disabled,
       })}
       tabIndex={disabled ? -1 : 0}
       onClick={disabled ? undefined : () => onSelect?.(file)}
@@ -80,12 +80,12 @@ const File: React.FC<IFile> = ({ file, active, disabled, onSelect }) => {
         <img src={file.thumbnail_url} alt={file.description ?? undefined} />
       ) : (
         <Icon
-          className='⁂-drive-file__icon'
+          className='drive-file__icon'
           src={MIMETYPE_ICONS[file.content_type || ''] || defaultIcon}
         />
       )}
 
-      <span className='⁂-drive-file__label'>{file.filename}</span>
+      <span className='drive-file__label'>{file.filename}</span>
     </button>
   );
 };
@@ -197,7 +197,7 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
       }
       confirmationDisabled={!selectedFile && type !== 'folder'}
     >
-      <div className='⁂-drive-breadcrumbs'>
+      <div className='drive-breadcrumbs'>
         <Breadcrumbs
           folderId={currentFolder}
           onClick={(folderId) => {
@@ -206,7 +206,7 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
         />
       </div>
       <ScrollableList
-        listClassName='⁂-drive-file-list ⁂-status-list'
+        listClassName='drive-file-list status-list'
         style={{ minHeight: 'calc(80vh - 192px)' }}
         isLoading={!folder}
         showLoading={!folder}

@@ -1,6 +1,6 @@
 @use 'mixins';
 
-.⁂-external-login {
+.external-login {
   button {
     @include mixins.button($theme: primary);
   }

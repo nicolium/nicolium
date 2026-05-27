@@ -21,18 +21,18 @@ const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({
   const title = getTitle(ticker);
 
   return (
-    <div className='⁂-detailed-crypto-address'>
-      <div className='⁂-detailed-crypto-address__label'>
+    <div className='detailed-crypto-address'>
+      <div className='detailed-crypto-address__label'>
         <CryptoIcon
-          className='⁂-detailed-crypto-address__icon'
+          className='detailed-crypto-address__icon'
           imgClassName='w-full'
           ticker={ticker}
           title={title}
         />
         <div>{title || ticker.toUpperCase()}</div>
       </div>
-      {note && <div className='⁂-detailed-crypto-address__note'>{note}</div>}
-      <div className='⁂-detailed-crypto-address__qr'>
+      {note && <div className='detailed-crypto-address__note'>{note}</div>}
+      <div className='detailed-crypto-address__qr'>
         <QRCode value={address} includeMargin />
       </div>
 

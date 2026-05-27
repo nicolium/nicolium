@@ -95,7 +95,7 @@ const EditGroup: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
-        <div className='⁂-profile-images'>
+        <div className='profile-images'>
           <HeaderPicker accept={attachmentTypes} disabled={isUpdatePending} {...header} />
           <AvatarPicker accept={attachmentTypes} disabled={isUpdatePending} {...avatar} />
         </div>
@@ -118,7 +118,7 @@ const EditGroup: React.FC = () => {
             placeholder={intl.formatMessage(messages.groupNamePlaceholder)}
             maxLength={maxName}
             {...displayName}
-            append={<Icon className='⁂-edit-group__locked-icon' src={iconLock} />}
+            append={<Icon className='edit-group__locked-icon' src={iconLock} />}
             disabled
           />
         </FormGroup>

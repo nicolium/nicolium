@@ -81,7 +81,7 @@ const AccountLocalTime: React.FC<IAccountLocalTime> = ({ accountId, field }) => 
 
   return (
     <div
-      className='⁂-account-info__details__item'
+      className='account-info__details__item'
       title={intl.formatMessage(messages.timezone, { timezone: field.value })}
     >
       <Icon src={iconClock} />

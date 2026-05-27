@@ -78,7 +78,7 @@ const Option: React.FC<IOption> = ({
   };
 
   return (
-    <div className='⁂-compose-form__poll__option'>
+    <div className='compose-form__poll__option'>
       <div className='flex flex-grow items-center gap-2'>
         <div className='w-6'>
           <Text weight='bold'>{index + 1}.</Text>
@@ -174,8 +174,8 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   }
 
   return (
-    <div className='⁂-compose-form__poll'>
-      <div className='⁂-compose-form__poll__options'>
+    <div className='compose-form__poll'>
+      <div className='compose-form__poll__options'>
         {options.map((title: string, i: number) => (
           <Option
             composeId={composeId}

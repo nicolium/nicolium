@@ -277,16 +277,16 @@ const ZoomableImage: React.FC<IZoomableImage> = ({
 
   return (
     <div
-      className={clsx('⁂-zoomable-image', {
-        '⁂-zoomable-image--zoomed-in': zoomedIn,
-        '⁂-zoomable-image--error': error,
-        '⁂-zoomable-image--dragging': dragging,
+      className={clsx('zoomable-image', {
+        'zoomable-image--zoomed-in': zoomedIn,
+        'zoomable-image--error': error,
+        'zoomable-image--dragging': dragging,
       })}
       ref={containerRef}
     >
       {!loaded && blurhash && (
         <div
-          className='⁂-zoomable-image__preview'
+          className='zoomable-image__preview'
           style={{
             aspectRatio: `${width}/${height}`,
             height: `min(${height}px, 100%)`,

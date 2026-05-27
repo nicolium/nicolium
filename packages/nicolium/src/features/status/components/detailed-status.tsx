@@ -100,7 +100,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
   if (!account) return null;
 
   return (
-    <div ref={node} className='⁂-detailed-status' tabIndex={-1}>
+    <div ref={node} className='detailed-status' tabIndex={-1}>
       {renderStatusInfo()}
 
       {actualStatus.rss_feed ? (
@@ -172,7 +172,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
                     {actualStatus.application && (
                       <>
-                        <span className='⁂-separator' />
+                        <span className='separator' />
                         <a
                           href={actualStatus.application.website ?? '#'}
                           target='_blank'
@@ -189,7 +189,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
                     {actualStatus.edited_at && (
                       <>
-                        <span className='⁂-separator' />
+                        <span className='separator' />
                         <button
                           className='inline hover:underline'
                           onClick={handleOpenCompareHistoryModal}

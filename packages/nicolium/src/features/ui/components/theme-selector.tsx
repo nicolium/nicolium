@@ -37,8 +37,8 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ id, value, onChange }) => {
   };
 
   return (
-    <div className='⁂-theme-selector'>
-      <div className='⁂-theme-selector__overlay'>
+    <div className='theme-selector'>
+      <div className='theme-selector__overlay'>
         {themeIconSrc ? <Icon src={themeIconSrc} aria-hidden /> : <div aria-hidden />}
       </div>
 
@@ -57,7 +57,7 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ id, value, onChange }) => {
         </option>
       </Select>
 
-      <div className='⁂-theme-selector__arrow'>
+      <div className='theme-selector__arrow'>
         <Icon src={iconCaretDown} />
       </div>
     </div>

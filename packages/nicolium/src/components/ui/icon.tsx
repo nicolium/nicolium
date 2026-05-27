@@ -31,13 +31,13 @@ const Icon: React.FC<IIcon> = React.forwardRef<HTMLDivElement, IIcon>(
     ref,
   ): React.JSX.Element => (
     <div
-      className={clsx('⁂-icon', containerClassName)}
+      className={clsx('icon', containerClassName)}
       data-testid={filteredProps['data-testid'] ?? 'icon'}
       title={title}
       ref={ref}
     >
       {count ? (
-        <span className='⁂-icon__counter'>
+        <span className='icon__counter'>
           <Counter count={count} countMax={countMax} />
         </span>
       ) : null}

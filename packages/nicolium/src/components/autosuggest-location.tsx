@@ -25,7 +25,7 @@ const AutosuggestLocation: React.FC<IAutosuggestLocation> = ({ location }) => {
   if (!location) return null;
 
   return (
-    <div className='⁂-autosuggest-location'>
+    <div className='autosuggest-location'>
       <Icon src={ADDRESS_ICONS[location.type] || mapPinIcon} />
       <div>
         <p>{location.description}</p>

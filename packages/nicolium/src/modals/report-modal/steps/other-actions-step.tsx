@@ -95,7 +95,7 @@ const OtherActionsStep = ({
         >
           {showAdditionalStatuses ? (
             <div className='flex flex-col gap-2'>
-              <div className='⁂-status-list'>
+              <div className='status-list'>
                 {statusIds.map((statusId) => (
                   <StatusCheckBox
                     id={statusId}

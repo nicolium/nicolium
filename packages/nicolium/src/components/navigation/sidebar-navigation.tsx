@@ -141,12 +141,12 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   }, [menuItems, intl.locale]);
 
   return (
-    <div className={clsx('⁂-sidebar-navigation', { '⁂-sidebar-navigation--narrow': shrink })}>
+    <div className={clsx('sidebar-navigation', { 'sidebar-navigation--narrow': shrink })}>
       <SiteLogo />
 
       {account && (
-        <div className='⁂-sidebar-navigation__header'>
-          <div className='⁂-sidebar-navigation__header__account'>
+        <div className='sidebar-navigation__header'>
+          <div className='sidebar-navigation__header__account'>
             <ProfileDropdown account={account}>
               {shrink ? (
                 <Avatar
@@ -162,7 +162,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                   action={
                     <Icon
                       src={iconCaretDown}
-                      className='⁂-sidebar-navigation__header__account__expand'
+                      className='sidebar-navigation__header__account__expand'
                     />
                   }
                   disabled
@@ -174,7 +174,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         </div>
       )}
 
-      <ul className='⁂-sidebar-navigation__links'>
+      <ul className='sidebar-navigation__links'>
         {navigationItems.map((item, index) => {
           if (item === null) return <hr key={`separator-${index}`} />;
 
@@ -221,7 +221,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         )}
 
         {!account && (
-          <div className='⁂-sidebar-navigation__links__account'>
+          <div className='sidebar-navigation__links__account'>
             <li>
               <SidebarNavigationLink
                 to='/login'

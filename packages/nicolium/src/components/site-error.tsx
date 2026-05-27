@@ -77,7 +77,7 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
   if (isNetworkError(error)) {
     return (
       <Column label={intl.formatMessage(messages.networkErrorTitle)}>
-        <div className='⁂-network-error'>
+        <div className='network-error'>
           <p>
             <FormattedMessage
               id='bundle_column_error.body'
@@ -90,23 +90,23 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
   }
 
   return (
-    <div className='⁂-site-error ⁂-card ⁂-card--rounded ⁂-card--md'>
+    <div className='site-error card card--rounded card--md'>
       <main>
         {logoSrc && (
-          <a href='/' className='⁂-site-error__logo'>
+          <a href='/' className='site-error__logo'>
             <SiteLogo />
           </a>
         )}
 
-        <div className='⁂-site-error__body'>
-          <div className='⁂-site-error__message'>
+        <div className='site-error__body'>
+          <div className='site-error__message'>
             <h1>
               <FormattedMessage
                 id='alert.unexpected.message'
                 defaultMessage='Something went wrong.'
               />
             </h1>
-            <p className='⁂-site-error__message__body'>
+            <p className='site-error__message__body'>
               <FormattedMessage
                 id='alert.unexpected.body'
                 defaultMessage="We're sorry for the interruption. If the problem persists, please report it in our {issueTracker}. You may also try to {clearCookies} (this will log you out)."
@@ -131,12 +131,12 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
               />
             </p>
 
-            <p className='⁂-site-error__message__version'>
+            <p className='site-error__message__version'>
               <span>{sourceCode.displayName}:</span> {sourceCode.version}
             </p>
           </div>
 
-          <div className='⁂-site-error__form'>
+          <div className='site-error__form'>
             {isProduction && sentryEnabled && sentryEventId && (
               <SentryFeedbackForm eventId={sentryEventId} />
             )}
@@ -145,7 +145,7 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
             )}
 
             {browser && (
-              <p className='⁂-site-error__browser'>
+              <p className='site-error__browser'>
                 <span>
                   <FormattedMessage id='alert.unexpected.browser' defaultMessage='Browser' />
                   {': '}

@@ -45,7 +45,7 @@ const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
 
   return (
     <button
-      className='⁂-sidebar-navigation__compose-button'
+      className='sidebar-navigation__compose-button'
       id='sidebar-compose'
       onClick={onOpenCompose}
     >
@@ -70,11 +70,11 @@ const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   };
 
   return (
-    <button className='⁂-sidebar-navigation__compose-button' onClick={onOpenCompose}>
+    <button className='sidebar-navigation__compose-button' onClick={onOpenCompose}>
       {shrink ? (
         <Icon src={iconNotePencil} />
       ) : (
-        <div className='⁂-sidebar-navigation__compose-button__group'>
+        <div className='sidebar-navigation__compose-button__group'>
           <Avatar size={30} src={group.avatar} alt={group.avatar_description} />
           <span>
             <FormattedMessage id='navigation.compose_group' defaultMessage='Compose to group' />

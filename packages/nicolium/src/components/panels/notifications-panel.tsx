@@ -13,7 +13,7 @@ const NotificationsPanel: React.FC = () => {
 
   return (
     <Widget
-      className='⁂-notifications-panel'
+      className='notifications-panel'
       title={<FormattedMessage id='column.notifications' defaultMessage='Notifications' />}
       to='/notifications'
       actionTitle={intl.formatMessage(messages.viewAll)}

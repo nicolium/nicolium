@@ -36,7 +36,7 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
 
     return (
       <>
-        <span className='⁂-separator' />
+        <span className='separator' />
 
         <DropdownMenu
           items={Object.keys(status.content_map).map((language) => ({

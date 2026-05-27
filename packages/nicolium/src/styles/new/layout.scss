@@ -71,7 +71,7 @@ body {
   height: 100%;
 }
 
-.⁂-dropdown-navigation {
+.dropdown-navigation {
   position: fixed;
   z-index: 1000;
   bottom: 60px;
@@ -145,7 +145,7 @@ body {
     }
 
     &--visible {
-      .⁂-dropdown-navigation {
+      .dropdown-navigation {
         transform: scale(1);
         opacity: 1;
 
@@ -156,7 +156,7 @@ body {
     }
 
     &:not(&--visible) {
-      .⁂-dropdown-navigation__overlay {
+      .dropdown-navigation__overlay {
         .no-reduce-motion & {
           opacity: 0;
         }
@@ -171,7 +171,7 @@ body {
     transition: left 150ms var(--ease-default);
   }
 
-  &[data-active-page="more"] .⁂-dropdown-navigation__pages {
+  &[data-active-page="more"] .dropdown-navigation__pages {
     left: -20rem;
 
     [dir='rtl'] & {
@@ -217,7 +217,7 @@ body {
       padding-top: 0.25rem;
       padding-bottom: 0.25rem;
 
-      .⁂-icon {
+      .icon {
         color: rgb(var(--color-gray-900));
         transition: transform 150ms var(--ease-default);
 
@@ -266,19 +266,19 @@ body {
         margin-left: 0.25rem;
       }
 
-      .⁂-icon svg {
+      .icon svg {
         width: 1rem;
         height: 1rem;
         color: rgb(var(--color-primary-500));
       }
     }
 
-    &--expanded button .⁂-icon {
+    &--expanded button .icon {
       transform: rotate(180deg);
     }
   }
 
-  .⁂-sidebar-navigation-link {
+  .sidebar-navigation-link {
     gap: 0.5rem;
     padding: 0;
 
@@ -290,8 +290,8 @@ body {
       @include mixins.text($weight: medium);
     }
 
-    &:not(.⁂-sidebar-navigation-link--active) {
-      .⁂-sidebar-navigation-link__icon {
+    &:not(.sidebar-navigation-link--active) {
+      .sidebar-navigation-link__icon {
         .dark & {
           background-color: rgb(var(--color-gray-800));
 
@@ -309,7 +309,7 @@ body {
   }
 }
 
-.⁂-thumb-navigation {
+.thumb-navigation {
   position: fixed;
   z-index: 50;
   right: 0;
@@ -353,7 +353,7 @@ body {
     line-height: var(--leading-lg);
     color: rgb(var(--color-gray-600));
 
-    .⁂-icon,
+    .icon,
     .svg-icon {
       color: rgb(var(--color-gray-600));
 
@@ -367,7 +367,7 @@ body {
       }
     }
 
-    &--active .⁂-icon {
+    &--active .icon {
       color: rgb(var(--color-primary-500));
     }
 
@@ -377,17 +377,17 @@ body {
       padding-bottom: 0.875rem;
       padding-left: 0.375rem;
 
-      .⁂-icon {
+      .icon {
         width: 1.5rem;
         height: 1.5rem;
       }
     }
 
-    &:has(.⁂-avatar) {
+    &:has(.avatar) {
       padding: 0.5rem;
     }
 
-    .⁂-avatar {
+    .avatar {
       border-radius: var(--radius-full);
       outline: 2px solid rgb(var(--color-gray-200));
 
@@ -427,7 +427,7 @@ body {
       border: 1px solid rgb(var(--color-gray-200) / 0.5);
     }
 
-    .⁂-thumb-navigation__item {
+    .thumb-navigation__item {
       flex: 0;
       padding: 0.75rem;
 
@@ -443,7 +443,7 @@ body {
   }
 }
 
-.⁂-sidebar-navigation {
+.sidebar-navigation {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -476,7 +476,7 @@ body {
     }
   }
 
-  .⁂-site-logo {
+  .site-logo {
     cursor: pointer;
     width: auto;
     height: 3rem;
@@ -486,16 +486,16 @@ body {
     align-items: center;
     width: fit-content;
 
-    .⁂-site-logo {
+    .site-logo {
       max-width: 2.5rem;
       height: auto;
     }
 
-    .⁂-sidebar-navigation-link > p {
+    .sidebar-navigation-link > p {
       display: none;
     }
 
-    .⁂-sidebar-navigation__compose-button {
+    .sidebar-navigation__compose-button {
       width: fit-content;
       padding: 0.75rem;
     }
@@ -541,7 +541,7 @@ body {
       gap: 0.75rem;
       align-items: center;
 
-      .⁂-still-image {
+      .still-image {
         margin: -0.25rem 0;
         border: 2px solid white;
       }
@@ -549,7 +549,7 @@ body {
   }
 }
 
-.⁂-sidebar-navigation-link {
+.sidebar-navigation-link {
   display: flex;
   gap: 1rem;
   align-items: center;
@@ -603,7 +603,7 @@ body {
       color: #fff;
     }
 
-    .⁂-sidebar-navigation-link__icon {
+    .sidebar-navigation-link__icon {
       background-color: rgb(var(--color-primary-600));
 
       svg {
@@ -627,7 +627,7 @@ body {
       color: rgb(var(--color-gray-200));
     }
 
-    .⁂-sidebar-navigation-link__icon {
+    .sidebar-navigation-link__icon {
       background-color: rgb(var(--color-primary-100));
 
       .dark & {
@@ -665,7 +665,7 @@ body {
   }
 }
 
-.⁂-profile-dropdown {
+.profile-dropdown {
   &__toggle {
     width: 100%;
     border-radius: var(--radius-lg);
@@ -764,10 +764,10 @@ body {
   }
 }
 
-.⁂-modal-root {
+.modal-root {
   opacity: 0;
 
-  &:not(.⁂-modal-root--visible) {
+  &:not(.modal-root--visible) {
     z-index: 50;
     transition: all 150ms var(--ease-default);
   }
@@ -831,7 +831,7 @@ body {
   }
 
   &[data-modal-type='DROPDOWN_MENU'] {
-    .⁂-modal-root__container {
+    .modal-root__container {
       margin-top: 0 !important;
       margin-bottom: 0 !important;
     }
@@ -847,7 +847,7 @@ body {
   }
 }
 
-.⁂-skip-links {
+.skip-links {
   position: absolute;
   z-index: 10;
   top: -4rem;
@@ -866,7 +866,7 @@ body {
   }
 }
 
-.⁂-dragging-area {
+.dragging-area {
   pointer-events: none;
 
   position: fixed;
@@ -882,7 +882,7 @@ body {
   }
 }
 
-.⁂-layout {
+.layout {
   z-index: 1;
   display: flex;
   flex-grow: 1;
@@ -1016,7 +1016,7 @@ body {
         border-right-width: 1px;
       }
 
-      .⁂-layout:not(:has(.⁂-layout__aside, .⁂-layout__settings-sections, .⁂-layout__admin-sections)) & {
+      .layout:not(:has(.layout__aside, .layout__settings-sections, .layout__admin-sections)) & {
         grid-column: span 9 / span 9;
       }
     }
@@ -1032,7 +1032,7 @@ body {
       min-height: calc(100vh - 1rem);
       padding-bottom: 1rem;
 
-      .⁂-layout__main--with-chats & {
+      .layout__main--with-chats & {
         padding-bottom: 3rem;
       }
 
@@ -1059,16 +1059,16 @@ body {
       margin-right: -1rem;
       border-left: 1px solid rgb(var(--color-gray-800));
 
-      .⁂-column {
+      .column {
         padding-top: 0;
       }
     }
 
-    .⁂-card-header {
+    .card-header {
       display: none;
     }
 
-    .⁂-edit-profile-link__display-name {
+    .edit-profile-link__display-name {
       display: none;
     }
 
@@ -1078,7 +1078,7 @@ body {
   }
 }
 
-.⁂-widget {
+.widget {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -1133,7 +1133,7 @@ body {
     }
   }
 
-  a.⁂-widget__icon {
+  a.widget__icon {
     padding: 0.25rem;
   }
 
@@ -1144,7 +1144,7 @@ body {
   }
 }
 
-.⁂-footer-text {
+.footer-text {
   @include mixins.text($size: sm, $theme: muted);
 
   a {
@@ -1154,14 +1154,14 @@ body {
   }
 }
 
-.⁂-separator::before {
+.separator::before {
   @include mixins.text($size: sm, $theme: muted);
 
   content: '·';
   user-select: none;
 }
 
-.⁂-site-error {
+.site-error {
   display: flex;
   flex-direction: column;
 
@@ -1352,7 +1352,7 @@ body {
   }
 }
 
-.⁂-network-error {
+.network-error {
   display: flex;
   gap: 1rem;
   align-items: center;
@@ -1367,11 +1367,11 @@ body {
   }
 }
 
-.⁂-layout__content .⁂-site-error {
+.layout__content .site-error {
   height: fit-content;
 }
 
-.⁂-toast {
+.toast {
   pointer-events: auto;
 
   overflow: hidden;
@@ -1484,7 +1484,7 @@ body {
     }
   }
 
-  &:has(> p) .⁂-toast__body p {
+  &:has(> p) .toast__body p {
     font-weight: medium;
   }
 
@@ -1539,7 +1539,7 @@ body {
     top: 1rem;
   }
 
-  &--success .⁂-toast__icon svg {
+  &--success .toast__icon svg {
     color: rgb(var(--color-success-500));
 
     .dark & {
@@ -1547,7 +1547,7 @@ body {
     }
   }
 
-  &--info .⁂-toast__icon svg {
+  &--info .toast__icon svg {
     color: rgb(var(--color-primary-600));
 
     .dark & {
@@ -1555,12 +1555,12 @@ body {
     }
   }
 
-  &--error .⁂-toast__icon svg {
+  &--error .toast__icon svg {
     color: rgb(var(--color-danger-600));
   }
 }
 
-.⁂-navlinks {
+.navlinks {
   position: relative;
   max-width: 80rem;
   margin: auto auto 0;
@@ -1597,7 +1597,7 @@ body {
   }
 }
 
-.⁂-logo-text {
+.logo-text {
   overflow: hidden;
 
   font-size: var(--text-5xl);
@@ -1618,12 +1618,12 @@ body {
   }
 }
 
-.⁂-site-banner {
+.site-banner {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 
-  .⁂-logo-text {
+  .logo-text {
     margin: -1.25rem 0;
   }
 

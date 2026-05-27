@@ -240,8 +240,8 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
           key={key}
           data-index={i}
           className={clsx({
-            '⁂-autosuggest-suggestions__item': true,
-            '⁂-autosuggest-suggestions__item--selected': i === selectedSuggestion,
+            'autosuggest-suggestions__item': true,
+            'autosuggest-suggestions__item--selected': i === selectedSuggestion,
           })}
           onMouseDown={onSuggestionClick}
           onTouchEnd={onSuggestionClick}
@@ -277,7 +277,7 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
 
       return menu.map((item, i) => (
         <a
-          className={'⁂-autosuggest-suggestions__menu-item'}
+          className={'autosuggest-suggestions__menu-item'}
           href='#'
           role='button'
           tabIndex={0}
@@ -295,7 +295,7 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
     const inputTypeProps = InputComponent === Input ? { type: 'text' } : {};
 
     return [
-      <div key='input' className='⁂-autosuggest-input'>
+      <div key='input' className='autosuggest-input'>
         <InputComponent
           {...inputProps}
           {...inputTypeProps}
@@ -324,11 +324,11 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
           ref={refs.setFloating}
           style={{ position: strategy, left: x ?? 0, top: y ?? 0 }}
           className={clsx({
-            '⁂-autosuggest-suggestions': true,
-            '⁂-autosuggest-suggestions--visible': visible,
+            'autosuggest-suggestions': true,
+            'autosuggest-suggestions--visible': visible,
           })}
         >
-          <ul className='⁂-autosuggest-suggestions__items' ref={suggestionsRef}>
+          <ul className='autosuggest-suggestions__items' ref={suggestionsRef}>
             {props.suggestions.map(renderSuggestion)}
           </ul>
 

@@ -7,7 +7,7 @@ import type { ICryptoAddress } from '@/features/crypto-donate/components/crypto-
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const CryptoDonateModal: React.FC<BaseModalProps & ICryptoAddress> = ({ onClose, ...props }) => (
-  <Modal onClose={onClose} className='⁂-crypto-donate-modal'>
+  <Modal onClose={onClose} className='crypto-donate-modal'>
     <DetailedCryptoAddress {...props} />
   </Modal>
 );

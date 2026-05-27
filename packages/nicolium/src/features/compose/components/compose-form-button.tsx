@@ -19,7 +19,7 @@ const ComposeFormButton: React.FC<IComposeFormButton> = ({
 }) => (
   <div>
     <IconButton
-      className='⁂-compose-form__button'
+      className='compose-form__button'
       src={icon}
       title={title}
       aria-label={title}

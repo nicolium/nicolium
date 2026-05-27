@@ -23,7 +23,7 @@ const LoadGap: React.FC<ILoadGap> = ({ disabled, maxId, onClick }) => {
 
   return (
     <button
-      className='⁂-load-gap'
+      className='load-gap'
       disabled={disabled}
       onClick={handleClick}
       title={intl.formatMessage(messages.loadMore)}

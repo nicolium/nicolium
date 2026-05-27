@@ -199,8 +199,8 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(
               <div onFocus={onFocus} onPaste={handlePaste} ref={onRef}>
                 <ContentEditable
                   tabIndex={0}
-                  className={clsx('⁂-compose-form__editor__editable', editableClassName, {
-                    '⁂-compose-form__editor__editable--condensed': condensed,
+                  className={clsx('compose-form__editor__editable', editableClassName, {
+                    'compose-form__editor__editable--condensed': condensed,
                   })}
                   lang={language ?? undefined}
                   data-compose-id={composeId}

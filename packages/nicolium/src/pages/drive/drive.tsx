@@ -164,8 +164,8 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
     if (onClick || depth === 0) {
       return (
         <button
-          className={clsx('⁂-drive-breadcrumbs__item ⁂-drive-breadcrumbs__home', {
-            '⁂-drive-breadcrumbs__item--current': depth === 0,
+          className={clsx('drive-breadcrumbs__item drive-breadcrumbs__home', {
+            'drive-breadcrumbs__item--current': depth === 0,
           })}
           onClick={() => onClick?.()}
           disabled={depth === 0}
@@ -181,7 +181,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
         <Link
           to='/drive/{-$folderId}'
           params={{ folderId: undefined }}
-          className='⁂-drive-breadcrumbs__home'
+          className='drive-breadcrumbs__home'
           aria-label={intl.formatMessage(messages.home)}
           title={intl.formatMessage(messages.home)}
         >
@@ -195,15 +195,15 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
   if (!data) return null;
 
   const spacer = (
-    <div className='⁂-drive-breadcrumbs__spacer' aria-hidden>
+    <div className='drive-breadcrumbs__spacer' aria-hidden>
       <Icon src={iconCaretRight} />
     </div>
   );
 
   const button = onClick ? (
     <button
-      className={clsx('⁂-drive-breadcrumbs__item', {
-        '⁂-drive-breadcrumbs__item--current': depth === 0,
+      className={clsx('drive-breadcrumbs__item', {
+        'drive-breadcrumbs__item--current': depth === 0,
       })}
       onClick={() => {
         onClick?.(folderId);
@@ -215,8 +215,8 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
     <Link
       to={'/drive/{-$folderId}'}
       params={{ folderId }}
-      className={clsx('⁂-drive-breadcrumbs__item', {
-        '⁂-drive-breadcrumbs__item--current': depth === 0,
+      className={clsx('drive-breadcrumbs__item', {
+        'drive-breadcrumbs__item--current': depth === 0,
       })}
     >
       {data.name}
@@ -228,7 +228,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
       <>
         <Breadcrumbs depth={depth + 1} onClick={onClick} />
         {spacer}
-        <div className='⁂-drive-breadcrumbs__spacer' aria-hidden>
+        <div className='drive-breadcrumbs__spacer' aria-hidden>
           <Icon src={iconDotsThree} />
         </div>
         {spacer}
@@ -513,14 +513,14 @@ const File: React.FC<IFile> = ({ file, index, onMove }) => {
   return (
     <div
       ref={fileRef}
-      className='⁂-drive-file'
+      className='drive-file'
       tabIndex={0}
       onDoubleClick={handleView}
       onKeyDown={handleFileKeyDown}
       onContextMenu={handleContextMenu}
       data-index={index}
     >
-      <div className='⁂-drive-file__button'>
+      <div className='drive-file__button'>
         <DropdownMenu
           items={items}
           placement='right-start'
@@ -543,12 +543,12 @@ const File: React.FC<IFile> = ({ file, index, onMove }) => {
         <img src={file.thumbnail_url} alt={file.description ?? undefined} />
       ) : (
         <Icon
-          className='⁂-drive-file__icon'
+          className='drive-file__icon'
           src={MIMETYPE_ICONS[file.content_type || ''] || defaultIcon}
         />
       )}
 
-      <span className='⁂-drive-file__label'>{file.filename}</span>
+      <span className='drive-file__label'>{file.filename}</span>
     </div>
   );
 };
@@ -710,7 +710,7 @@ const Folder: React.FC<IFolder> = ({ folder, index, onMove }) => {
 
   return (
     <div
-      className='⁂-drive-file ⁂-drive-folder'
+      className='drive-file drive-folder'
       ref={folderRef}
       tabIndex={0}
       onDoubleClick={handleEnterFolder}
@@ -718,7 +718,7 @@ const Folder: React.FC<IFolder> = ({ folder, index, onMove }) => {
       onContextMenu={handleContextMenu}
       data-index={index}
     >
-      <div className='⁂-drive-file__button'>
+      <div className='drive-file__button'>
         <DropdownMenu
           items={items}
           placement='right-start'
@@ -737,9 +737,9 @@ const Folder: React.FC<IFolder> = ({ folder, index, onMove }) => {
         </DropdownMenu>
       </div>
 
-      <Icon className='⁂-drive-file__icon' src={iconFolder} />
+      <Icon className='drive-file__icon' src={iconFolder} />
 
-      <span className='⁂-drive-file__label'>{folder.name}</span>
+      <span className='drive-file__label'>{folder.name}</span>
     </div>
   );
 };
@@ -820,13 +820,13 @@ const DrivePage: React.FC = () => {
 
   return (
     <Column
-      className='⁂-drive-page'
+      className='drive-page'
       label={data?.name ?? intl.formatMessage(messages.heading)}
       backHref={'/drive/{-$folderId}'}
       backParams={{ folderId: data?.parent_id ?? undefined }}
       action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
-      <div className='⁂-drive-breadcrumbs'>
+      <div className='drive-breadcrumbs'>
         <Breadcrumbs folderId={folderId} />
       </div>
       {isEmpty ? (
@@ -840,7 +840,7 @@ const DrivePage: React.FC = () => {
           icon={iconFolderOpen}
         />
       ) : (
-        <div className='⁂-drive-page__files' ref={filesRef}>
+        <div className='drive-page__files' ref={filesRef}>
           {data?.folders.map((folder, index) => (
             <Folder key={folder.id} folder={folder} index={index} onMove={handleMove} />
           ))}

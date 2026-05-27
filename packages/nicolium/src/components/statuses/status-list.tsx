@@ -143,7 +143,7 @@ const StatusList: React.FC<IStatusList> = ({
 
   if (isPartial) {
     return (
-      <div className='⁂-status-list__empty'>
+      <div className='status-list__empty'>
         <h2>
           <FormattedMessage
             id='regeneration_indicator.label'
@@ -172,7 +172,7 @@ const StatusList: React.FC<IStatusList> = ({
       placeholderComponent={() => <PlaceholderStatus variant='slim' />}
       placeholderCount={20}
       ref={node}
-      listClassName={clsx('⁂-status-list', className)}
+      listClassName={clsx('status-list', className)}
       {...other}
     >
       {scrollableContent}

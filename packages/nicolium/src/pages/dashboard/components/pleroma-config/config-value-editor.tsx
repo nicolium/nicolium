@@ -80,15 +80,15 @@ const Suggestions = memo(({ suggestions, onSelect }: ISuggestions) => {
   if (!suggestions.length) return null;
 
   return (
-    <div className='⁂-admin-config__suggestions'>
-      <p className='⁂-admin-config__suggestions-label'>
+    <div className='admin-config__suggestions'>
+      <p className='admin-config__suggestions-label'>
         <FormattedMessage id='admin.pleroma_config.suggestions' defaultMessage='Suggestions' />
       </p>
       {suggestions.map((suggestion) => (
         <button
           key={`${typeof suggestion}-${stringifyValue(suggestion)}`}
           type='button'
-          className='⁂-admin-config__suggestion-button'
+          className='admin-config__suggestion-button'
           onClick={() => onSelect(suggestion)}
         >
           {typeof suggestion === 'string' ? suggestion : stringifyValue(suggestion)}
@@ -114,7 +114,7 @@ const PrimitiveValueEditor = memo(({ node, value, onChange }: IConfigValueEditor
 
   if (typeName === 'boolean') {
     return (
-      <div className='⁂-admin-config__toggle-field'>
+      <div className='admin-config__toggle-field'>
         <Toggle checked={value === true} onChange={(event) => onChange(event.target.checked)} />
       </div>
     );
@@ -191,7 +191,7 @@ const JsonValueEditor = memo(({ value, onChange, onValidityChange }: IConfigValu
   }, [onValidityChange, value]);
 
   return (
-    <div className='⁂-admin-config__editor-stack'>
+    <div className='admin-config__editor-stack'>
       <Textarea
         isCodeEditor
         value={jsonText}
@@ -219,7 +219,7 @@ const JsonValueEditor = memo(({ value, onChange, onValidityChange }: IConfigValu
       />
 
       {jsonError ? (
-        <p className='⁂-admin-config__feedback ⁂-admin-config__feedback--danger'>
+        <p className='admin-config__feedback admin-config__feedback--danger'>
           <FormattedMessage id='admin.pleroma_config.json_invalid' defaultMessage='Invalid JSON' />
         </p>
       ) : null}
@@ -235,7 +235,7 @@ const PrimitiveListStreamfieldInput: StreamfieldComponent<string> = memo(({ valu
   return (
     <Input
       type='text'
-      outerClassName='⁂-admin-config__streamfield-row__input'
+      outerClassName='admin-config__streamfield-row__input'
       value={value}
       placeholder={intl.formatMessage(messages.placeholderValue)}
       onChange={(event) => onChange(event.target.value)}
@@ -267,7 +267,7 @@ const PrimitiveListEditor = memo(
     };
 
     return (
-      <div className='⁂-admin-config__editor-stack'>
+      <div className='admin-config__editor-stack'>
         <Streamfield
           values={entries}
           onChange={syncEntries}
@@ -312,17 +312,17 @@ DropdownValueEditor.displayName = 'DropdownValueEditor';
 const TupleStreamfieldInput: StreamfieldComponent<TupleEntry> = memo(({ value, onChange }) => {
   const intl = useIntl();
   return (
-    <div className='⁂-admin-config__streamfield-row'>
+    <div className='admin-config__streamfield-row'>
       <Input
         type='text'
-        outerClassName='⁂-admin-config__streamfield-row__input'
+        outerClassName='admin-config__streamfield-row__input'
         value={value.left}
         placeholder={intl.formatMessage(messages.placeholderValueLeft)}
         onChange={(event) => onChange({ ...value, left: event.target.value })}
       />
       <Input
         type='text'
-        outerClassName='⁂-admin-config__streamfield-row__input'
+        outerClassName='admin-config__streamfield-row__input'
         value={value.right}
         placeholder={intl.formatMessage(messages.placeholderValueRight)}
         onChange={(event) => onChange({ ...value, right: event.target.value })}
@@ -337,10 +337,10 @@ const DynamicStreamfieldInput: StreamfieldComponent<DynamicEntry> = memo(({ valu
   const intl = useIntl();
 
   return (
-    <div className='⁂-admin-config__streamfield-row ⁂-admin-config__streamfield-row--dynamic'>
+    <div className='admin-config__streamfield-row admin-config__streamfield-row--dynamic'>
       <Input
         type='text'
-        outerClassName='⁂-admin-config__streamfield-row__input'
+        outerClassName='admin-config__streamfield-row__input'
         value={value.key}
         placeholder={intl.formatMessage(messages.placeholderValueKVKey)}
         onChange={(event) => onChange({ ...value, key: event.target.value })}
@@ -381,8 +381,8 @@ const TupleEditor = memo(
     };
 
     return (
-      <div className='⁂-admin-config__editor-stack'>
-        <p className='⁂-admin-config__feedback'>
+      <div className='admin-config__editor-stack'>
+        <p className='admin-config__feedback'>
           <FormattedMessage
             id='admin.pleroma_config.tuple.hint'
             defaultMessage='Values are parsed as JSON when possible, otherwise kept as strings.'
@@ -441,7 +441,7 @@ const DynamicEntriesEditor = memo(
     };
 
     return (
-      <div className='⁂-admin-config__editor-stack'>
+      <div className='admin-config__editor-stack'>
         <Streamfield
           values={entries}
           onChange={syncEntries}
@@ -500,7 +500,7 @@ const GroupChildrenEditor = memo(
     }
 
     return (
-      <div className='⁂-admin-config__editor-stack'>
+      <div className='admin-config__editor-stack'>
         {node.children.map((child) => {
           if (!child.key) return null;
           const childKey = child.key;
@@ -560,7 +560,7 @@ const UnionValueEditor = memo(
     }, [options, value]);
 
     return (
-      <div className='⁂-admin-config__editor-stack'>
+      <div className='admin-config__editor-stack'>
         <FormGroup labelText={intl.formatMessage(messages.valueType)}>
           <Select
             value={JSON.stringify(selectedType)}
@@ -671,8 +671,8 @@ const ConfigValueEditor = memo(
 
     if (!isContainerDescriptor(node.type)) {
       return (
-        <div className='⁂-admin-config__editor-stack'>
-          <p className='⁂-admin-config__feedback'>
+        <div className='admin-config__editor-stack'>
+          <p className='admin-config__feedback'>
             <FormattedMessage
               id='admin.pleroma_config.complex.hint'
               defaultMessage='Edit this value as JSON.'

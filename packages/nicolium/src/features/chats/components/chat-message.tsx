@@ -73,9 +73,9 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
 
     return (
       <MediaGallery
-        className={clsx('⁂-chat-message__media', {
-          '⁂-chat-message__media--with-content': content && !isMyMessage,
-          '⁂-chat-message__media--my-message': isMyMessage && content,
+        className={clsx('chat-message__media', {
+          'chat-message__media--with-content': content && !isMyMessage,
+          'chat-message__media--my-message': isMyMessage && content,
         })}
         media={[chatMessage.attachment]}
         onOpenMedia={onOpenMedia}
@@ -151,14 +151,14 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
   return (
     <div
       className={clsx({
-        '⁂-chat-message__container': true,
-        '⁂-chat-message__container--menu-open': isMenuOpen,
-        '⁂-chat-message__container--my-message': isMyMessage,
-        '⁂-chat-message__container--pending': chatMessage.pending,
+        'chat-message__container': true,
+        'chat-message__container--menu-open': isMenuOpen,
+        'chat-message__container--my-message': isMyMessage,
+        'chat-message__container--pending': chatMessage.pending,
       })}
       data-testid='chat-message'
     >
-      <div className='⁂-chat-message__actions'>
+      <div className='chat-message__actions'>
         {menu.length > 0 && (
           <DropdownMenu
             items={menu}
@@ -171,8 +171,8 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
           >
             <button
               title={intl.formatMessage(messages.more)}
-              className={clsx('⁂-chat-message__menu-button', {
-                '⁂-chat-message__menu-button--open': isMenuOpen,
+              className={clsx('chat-message__menu-button', {
+                'chat-message__menu-button--open': isMenuOpen,
               })}
               data-testid='chat-message-menu'
             >
@@ -182,24 +182,24 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         )}
       </div>
 
-      <div className='⁂-chat-message'>
-        <div className='⁂-chat-message__content'>
+      <div className='chat-message'>
+        <div className='chat-message__content'>
           {maybeRenderMedia(chatMessage)}
 
           {content && (
-            <div className='⁂-chat-message__bubble__container'>
+            <div className='chat-message__bubble__container'>
               <div
                 title={getFormattedTimestamp(chatMessage)}
                 className={clsx({
-                  '⁂-chat-message__bubble': true,
-                  '⁂-chat-message__bubble--with-attachment': !!chatMessage.attachment,
-                  '⁂-chat-message__bubble--my-message': isMyMessage,
-                  '⁂-chat-message__bubble--emoji': isOnlyEmoji,
+                  'chat-message__bubble': true,
+                  'chat-message__bubble--with-attachment': !!chatMessage.attachment,
+                  'chat-message__bubble--my-message': isMyMessage,
+                  'chat-message__bubble--emoji': isOnlyEmoji,
                 })}
                 ref={setBubbleRef}
                 tabIndex={0}
               >
-                <div className='⁂-chat-message__text'>
+                <div className='chat-message__text'>
                   <ParsedContent html={content} emojis={chatMessage.emojis} />
                 </div>
               </div>
@@ -207,7 +207,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
           )}
         </div>
 
-        <span className='⁂-chat-message__details'>{intl.formatTime(chatMessage.created_at)}</span>
+        <span className='chat-message__details'>{intl.formatTime(chatMessage.created_at)}</span>
       </div>
     </div>
   );

@@ -36,7 +36,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
     // https://akkoma.dev/AkkomaGang/akkoma/src/branch/develop/lib/pleroma/web/mastodon_api/views/status_view.ex#L31
     if (status.in_reply_to_account_id === '_') {
       return (
-        <div className='⁂-status-reply-mentions ⁂-status-reply-mentions--unavailable'>
+        <div className='status-reply-mentions status-reply-mentions--unavailable'>
           <FormattedMessage id='reply_mentions.reply_empty' defaultMessage='Replying to post' />
         </div>
       );
@@ -51,8 +51,8 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   if (to.length === 0) {
     const body = (
       <div
-        className={clsx('⁂-status-reply-mentions', {
-          '⁂-status-reply-mentions--unavailable': status.parent_visible === false,
+        className={clsx('status-reply-mentions', {
+          'status-reply-mentions--unavailable': status.parent_visible === false,
         })}
       >
         <FormattedMessage id='reply_mentions.reply_empty' defaultMessage='Replying to post' />
@@ -118,8 +118,8 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
 
   return (
     <div
-      className={clsx('⁂-status-reply-mentions', {
-        '⁂-status-reply-mentions--unavailable': status.parent_visible === false,
+      className={clsx('status-reply-mentions', {
+        'status-reply-mentions--unavailable': status.parent_visible === false,
       })}
     >
       <FormattedMessage

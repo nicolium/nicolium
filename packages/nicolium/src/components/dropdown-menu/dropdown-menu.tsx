@@ -177,7 +177,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
   };
 
   const renderItems = (items: Menu | undefined) => (
-    <ul className='⁂-dropdown-menu__items'>
+    <ul className='dropdown-menu__items'>
       {items?.map((item, idx) => (
         <DropdownMenuItem
           key={idx}
@@ -192,17 +192,17 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
   );
 
   return (
-    <div className={clsx('⁂-dropdown-menu__content', className)} ref={ref}>
+    <div className={clsx('dropdown-menu__content', className)} ref={ref}>
       {items?.some((item) => item?.items?.length) ? (
         <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1} style={{ width }}>
-          <div className='⁂-dropdown-menu__page' style={{ width }}>
+          <div className='dropdown-menu__page' style={{ width }}>
             {Component && <Component handleClose={handleClose} />}
             {(items?.length || touchscreen) && renderItems(items)}
           </div>
-          <div className='⁂-dropdown-menu__expanded-page' style={{ width }}>
+          <div className='dropdown-menu__expanded-page' style={{ width }}>
             {tab !== undefined && (
               <>
-                <div className='⁂-dropdown-menu__header'>
+                <div className='dropdown-menu__header'>
                   <IconButton
                     theme='transparent'
                     src={iconArrowLeft}
@@ -422,8 +422,8 @@ const DropdownMenu: React.FC<IDropdownMenu> = ({
         <IconButton
           disabled={disabled}
           className={clsx({
-            '⁂-dropdown-menu__button': true,
-            '⁂-dropdown-menu__button--open': isOpen,
+            'dropdown-menu__button': true,
+            'dropdown-menu__button--open': isOpen,
           })}
           title={title}
           src={src}
@@ -438,7 +438,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = ({
           <div
             data-testid='dropdown-menu'
             ref={refs.setFloating}
-            className='⁂-dropdown-menu'
+            className='dropdown-menu'
             style={{
               position: strategy,
               top: y ?? 0,
@@ -455,7 +455,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = ({
               />
 
               {/* Arrow */}
-              <div ref={arrowRef} style={arrowProps} className='⁂-dropdown-menu__arrow' />
+              <div ref={arrowRef} style={arrowProps} className='dropdown-menu__arrow' />
             </div>
           </div>
         </Portal>

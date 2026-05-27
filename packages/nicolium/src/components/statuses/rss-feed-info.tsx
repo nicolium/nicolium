@@ -15,21 +15,21 @@ interface IRssFeedInfo {
 }
 
 const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp, url }) => (
-  <div className='⁂-rss-feed-info'>
-    <div className='⁂-rss-feed-info__avatar'>
+  <div className='rss-feed-info'>
+    <div className='rss-feed-info__avatar'>
       <Avatar src={feed.image_url || ''} size={42} alt={feed.title || ''} />
     </div>
 
-    <div className='⁂-rss-feed-info__content'>
-      <p className='⁂-rss-feed-info__title'>
+    <div className='rss-feed-info__content'>
+      <p className='rss-feed-info__title'>
         {feed.title}
 
-        <a href={url} target='_blank' rel='noopener noreferrer' className='⁂-rss-feed-info__link'>
+        <a href={url} target='_blank' rel='noopener noreferrer' className='rss-feed-info__link'>
           <RelativeTimestamp timestamp={timestamp} theme='muted' size='sm' />
         </a>
       </p>
 
-      <div className='⁂-rss-feed-info__details'>
+      <div className='rss-feed-info__details'>
         <p>
           <FormattedMessage id='rss_feed.label' defaultMessage='RSS Feed' />
         </p>

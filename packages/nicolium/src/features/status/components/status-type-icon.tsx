@@ -65,7 +65,7 @@ const StatusTypeIcon: React.FC<IStatusTypeIcon> = React.memo(({ visibility }) =>
 
   return (
     <>
-      <span className='⁂-separator' />
+      <span className='separator' />
 
       <Icon
         title={message ? intl.formatMessage(message) : undefined}

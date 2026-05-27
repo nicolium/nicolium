@@ -53,7 +53,7 @@ const ColumnHeader: React.FC<IColumnHeader> = ({
     >
       <CardTitle title={title || label} truncate={truncateTitle} />
 
-      {action && <div className='⁂-column__header__action'>{action}</div>}
+      {action && <div className='column__header__action'>{action}</div>}
     </CardHeader>
   );
 };
@@ -124,7 +124,7 @@ const Column: React.FC<IColumn> = ({
       column-type={transparent ? 'transparent' : 'filled'}
       size={size}
       variant={transparent ? undefined : 'rounded'}
-      className={clsx('⁂-column', className)}
+      className={clsx('column', className)}
     >
       <HeadTitle title={label} />
       {frontendConfig.appleAppId && (
@@ -140,8 +140,8 @@ const Column: React.FC<IColumn> = ({
           title={title}
           withBack={withBack}
           backHref={backHref}
-          className={clsx('⁂-column__header', {
-            '⁂-column__header--scrolled': isScrolled,
+          className={clsx('column__header', {
+            'column__header--scrolled': isScrolled,
           })}
           action={action}
           truncateTitle={truncateTitle}

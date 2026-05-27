@@ -18,8 +18,8 @@ const Tombstone: React.FC<ITombstone> = ({ id, onMoveUp, onMoveDown, deleted }) 
   };
 
   return (
-    <Hotkeys handlers={handlers} className='⁂-status-tombstone__container'>
-      <div className='focusable ⁂-status-tombstone' tabIndex={0}>
+    <Hotkeys handlers={handlers} className='status-tombstone__container'>
+      <div className='focusable status-tombstone' tabIndex={0}>
         {deleted ? (
           <FormattedMessage id='statuses.tombstone.deleted' defaultMessage='The post is deleted.' />
         ) : id.endsWith('-unavailable') ? (

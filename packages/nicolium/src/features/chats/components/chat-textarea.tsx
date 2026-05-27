@@ -17,11 +17,11 @@ interface IChatTextarea extends React.ComponentProps<typeof Textarea> {
 /** Custom textarea for chats. */
 const ChatTextarea = React.forwardRef<HTMLTextAreaElement, IChatTextarea>(
   ({ attachment, onDeleteAttachment, uploading, uploadProgress = 0, ...rest }, ref) => (
-    <div className='⁂-chat-textarea'>
+    <div className='chat-textarea'>
       {(attachment ?? uploading) && (
-        <div className='⁂-chat-textarea__attachments'>
+        <div className='chat-textarea__attachments'>
           {attachment && (
-            <div className='⁂-chat-textarea__attachment'>
+            <div className='chat-textarea__attachment'>
               <ChatUpload
                 key={attachment.id}
                 attachment={attachment}
@@ -31,14 +31,14 @@ const ChatTextarea = React.forwardRef<HTMLTextAreaElement, IChatTextarea>(
           )}
 
           {uploading && (
-            <div className='⁂-chat-textarea__attachment'>
+            <div className='chat-textarea__attachment'>
               <ChatPendingUpload progress={uploadProgress} />
             </div>
           )}
         </div>
       )}
 
-      <Textarea className='⁂-chat-textarea__input' ref={ref} theme='transparent' {...rest} />
+      <Textarea className='chat-textarea__input' ref={ref} theme='transparent' {...rest} />
     </div>
   ),
 );

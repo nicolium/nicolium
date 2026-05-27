@@ -10,8 +10,8 @@ interface ISpinner {
 
 /** Spinning loading placeholder. */
 const Spinner = ({ size = 30, withText = true }: ISpinner) => (
-  <div className='⁂-spinner__container'>
-    <div className='⁂-spinner' style={{ width: size, height: size }}>
+  <div className='spinner__container'>
+    <div className='spinner' style={{ width: size, height: size }}>
       {Array.from(Array(12).keys()).map((i) => (
         <div key={i}>&nbsp;</div>
       ))}

@@ -61,13 +61,13 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   };
 
   const button = (
-    <button className='⁂-translate-button' onClick={handleTranslate}>
-      <Icon src={iconTranslate} className='⁂-translate-button__icon' />
+    <button className='translate-button' onClick={handleTranslate}>
+      <Icon src={iconTranslate} className='translate-button__icon' />
       <span>{translationLabel()}</span>
       {(state === 'translating' || state === 'downloading') && (
         <Icon
           src={iconCircleNotch}
-          className='⁂-translate-button__icon ⁂-translate-button__icon--loading'
+          className='translate-button__icon translate-button__icon--loading'
         />
       )}
     </button>
@@ -77,9 +77,9 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
     const { provider } = translateInformation;
 
     return (
-      <div className='⁂-translate-button__container'>
+      <div className='translate-button__container'>
         {button}
-        <p className='⁂-translate-button__info'>
+        <p className='translate-button__info'>
           <FormattedMessage
             id='status.translated_from_with'
             defaultMessage='Translated from {lang} {provider}'

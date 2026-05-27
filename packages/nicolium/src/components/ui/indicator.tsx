@@ -8,7 +8,7 @@ interface IIndicator {
 
 /** Indicator dot component. */
 const Indicator: React.FC<IIndicator> = ({ state = 'inactive', size = 'sm' }) => (
-  <div className={clsx('⁂-indicator', `⁂-indicator--${size}`, `⁂-indicator--${state}`)} />
+  <div className={clsx('indicator', `indicator--${size}`, `indicator--${state}`)} />
 );
 
 export { Indicator as default };

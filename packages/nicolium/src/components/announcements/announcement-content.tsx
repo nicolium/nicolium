@@ -87,7 +87,7 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
   };
 
   return (
-    <div dir={direction} className='⁂-announcement__content' data-markup ref={node}>
+    <div dir={direction} className='announcement__content' data-markup ref={node}>
       <ParsedContent html={announcement.content} emojis={announcement.emojis} />
     </div>
   );
