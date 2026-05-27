@@ -512,7 +512,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
   if (filtered && showFiltered !== true) {
     const body = (
-      <div className={clsx('status__wrapper text-center')} ref={node}>
+      <div className={clsx('⁂-status__wrapper text-center')} ref={node}>
         <Text theme='muted'>
           <FormattedMessage id='status.filtered' defaultMessage='Filtered' />:{' '}
           {filterResults.map(({ filter }) => filter.title).join(', ')}.{' '}
@@ -566,7 +566,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     >
       <Card
         variant={variant}
-        className={clsx('⁂-status__wrapper status-wrapper', className, {
+        className={clsx('⁂-status__wrapper', className, {
           'py-6 sm:p-5': variant === 'rounded',
           muted,
           read: unread === false,
