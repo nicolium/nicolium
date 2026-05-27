@@ -11,6 +11,22 @@
   }
 }
 
+.status-media {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__overlay-container {
+    position: relative;
+
+    &:has(.sensitive-content-overlay__container) {
+      min-height: 6rem;
+    }
+  }
+}
+
 .status-info {
   cursor: default;
 
@@ -1535,5 +1551,41 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     @include mixins.text($theme: muted, $size: sm);
 
     padding-top: 0.5rem;
+  }
+}
+
+.status-translation {
+  display: grid;
+  gap: 1rem;
+
+  > div {
+    min-width: 0;
+    
+    &:first-child {
+      @media (min-width: variables.$breakpoint-sm) {
+        padding-right: 1rem;
+      }
+    }
+
+    &:last-child {
+      padding-top: 1rem;
+      border-top: 1px solid rgb(var(--color-gray-200));
+
+      .dark & {
+        border-color: rgb(var(--color-gray-800));
+      }
+
+      @media (min-width: variables.$breakpoint-sm) {
+        padding-top: 0;
+        padding-left: 1rem;
+        border-top: 0;
+        border-left: 1px solid rgb(var(--color-gray-200));
+      }
+    }
+  }
+
+  @media (min-width: variables.$breakpoint-sm) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
   }
 }

@@ -421,10 +421,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       const media = (quote ||
         (status.card && displayPreviewCards !== 'hide') ||
         (withMedia && status.media_attachments.length > 0)) && (
-        <div className='flex flex-col gap-4' key='media'>
+        <div className='status-media__container' key='media'>
           {((withMedia && status.media_attachments.length > 0) ||
             (status.card && (!quote || status.quote_visible === false))) && (
-            <div className='relative has-[div[data-testid="sensitive-overlay"]]:min-h-24'>
+            <div className='status-media__overlay-container'>
               <SensitiveContentOverlay status={status} />
               {withMedia && <StatusMedia status={status} muted={compose} />}
             </div>
@@ -452,9 +452,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
 
         if (translationContent && parsedTranslationContent && !isTranslationEqual) {
           output.push(
-            <div className='grid gap-4 sm:grid-cols-2 md:gap-6' key='translated-content'>
-              <div className='min-w-0'>{originalContent}</div>
-              <div className='min-w-0 border-t border-gray-200 pt-4 dark:border-gray-800 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0'>
+            <div className='status-translation' key='translated-content'>
+              <div>{originalContent}</div>
+              <div>
                 <Markup
                   ref={translationNode}
                   tabIndex={0}
