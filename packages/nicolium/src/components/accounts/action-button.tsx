@@ -460,7 +460,7 @@ const ActionButton: React.FC<IActionButton> = ({
 
         const onNotifyReblogsToggle = (value: boolean) => {
           followAccount(
-            { notify_reblogs: value },
+            { notify: true, notify_reblogs: value },
             {
               onSuccess: () => {
                 toast.success(
@@ -488,7 +488,7 @@ const ActionButton: React.FC<IActionButton> = ({
 
         const onNotifyRepliesToggle = (value: boolean) => {
           followAccount(
-            { notify_replies: value },
+            { notify: true, notify_replies: value },
             {
               onSuccess: () => {
                 toast.success(
