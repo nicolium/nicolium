@@ -47,9 +47,9 @@ const GroupTimelinePage: React.FC = () => {
   }
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='group-timeline'>
       {canComposeGroupStatus && (
-        <div className='border-b border-solid border-gray-200 py-6 dark:border-gray-800'>
+        <div className='group-timeline__compose'>
           <div
             className={clsx('compose-block', {
               'compose-block--dragging': isDragging,
