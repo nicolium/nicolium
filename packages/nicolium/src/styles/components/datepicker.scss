@@ -24,28 +24,28 @@
     width: 100%;
     border: 1px solid rgb(var(--color-gray-400));
     border-radius: var(--radius-md);
-  
+
     &:focus {
       border-color: rgb(var(--color-primary-500));
       outline: 1px solid rgb(var(--color-primary-500));
       outline-offset: 0;
     }
-  
+
     .dark & {
       border-color: rgb(var(--color-gray-800));
       color: rgb(var(--color-gray-100));
       background: rgb(var(--color-gray-900));
     }
-  
+
     .black & {
       background: black;
     }
-  
+
     &.has-error {
       border-color: rgb(var(--color-red-600));
       color: rgb(var(--color-red-600));
     }
-  
+
     @media (min-width: variables.$breakpoint-sm) {
       font-size: var(--text-sm);
     }
@@ -119,7 +119,7 @@
     .dark & {
       background-color: rgb(var(--color-gray-900) / 0.5);
     }
-  } 
+  }
 }
 
 .react-datepicker__navigation-icon {
@@ -277,15 +277,15 @@
 .react-datepicker__close-icon {
   &::after {
     content: '';
-  
+
     font-family: 'Font Awesome 5 Free';
     font-size: var(--text-base);
     font-weight: 900;
     line-height: var(--leading-base);
     color: rgb(var(--color-gray-600));
-  
+
     background: transparent;
-  
+
     .dark & {
       color: rgb(var(--color-gray-400));
     }

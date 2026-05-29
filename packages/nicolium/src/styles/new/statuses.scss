@@ -941,7 +941,7 @@ div:first-child:has(> .timeline-gap) {
   &--deleted {
     padding: 1rem 2rem;
   }
-  
+
   &__connector {
     position: absolute;
     z-index: 1;
@@ -1154,7 +1154,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   align-items: center;
 
   width: fit-content;
-  
+
   color: rgb(var(--color-primary-600));
   text-align: left;
 
@@ -1560,7 +1560,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 
   > div {
     min-width: 0;
-    
+
     &:first-child {
       @media (min-width: variables.$breakpoint-sm) {
         padding-right: 1rem;

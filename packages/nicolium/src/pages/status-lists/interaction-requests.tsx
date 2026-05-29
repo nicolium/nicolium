@@ -91,10 +91,12 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
   if (!status) return null;
 
   return (
-    <div className='relative flex flex-col gap-2 py-2'>
-      {hasReply && (
-        <div className='absolute left-5 top-[62px] z-[1] block h-[calc(100%-58px)] w-0.5 bg-gray-200 black:bg-gray-800 dark:bg-primary-800 rtl:left-auto rtl:right-5' />
-      )}
+    <div
+      className={clsx('interaction-request__status', {
+        'interaction-request__status--has-reply': hasReply,
+      })}
+    >
+      {hasReply && <div className='interaction-request__status__connector' />}
 
       <AccountContainer
         id={status.account_id}
@@ -104,7 +106,7 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
         action={actions ?? <></>}
       />
 
-      <div className={clsx('flex flex-col gap-2', hasReply && 'pl-[54px]')}>
+      <div className='interaction-request__status__content'>
         <StatusContent status={status} preview={!isReply} />
 
         {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}

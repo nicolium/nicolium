@@ -2048,7 +2048,7 @@ div[data-viewport-type='window']:has(.empty-message) {
 
   &__content {
     font-size: var(--text-sm);
-    
+
     [dir='ltr'] & {
       margin-left: 0;
     }
@@ -2171,4 +2171,53 @@ div[data-viewport-type='window']:has(.empty-message) {
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
+
+  &__status {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    padding: 0.5rem 0;
+
+    &--has-reply {
+      .interaction-request__content {
+        padding-left: 54px;
+      }
+    }
+
+    &__connector {
+      position: absolute;
+      z-index: 1;
+      top: 62px;
+      left: 1.25rem;
+
+      display: block;
+
+      width: 0.125rem;
+      height: calc(100% - 58px);
+
+      background-color: rgb(var(--color-gray-200));
+
+      .dark & {
+        background-color: rgb(var(--color-primary-800));
+      }
+
+      .black & {
+        background-color: rgb(var(--color-gray-800));
+      }
+
+      [dir='rtl'] & {
+        right: 1.25rem;
+        left: auto;
+      }
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+  }
 }
