@@ -584,7 +584,6 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
       timestamp={notification.latest_page_notification_at!}
       theme='muted'
       size='sm'
-      className='whitespace-nowrap'
     />
   );
 

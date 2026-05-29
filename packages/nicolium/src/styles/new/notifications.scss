@@ -36,6 +36,10 @@
     margin-left: auto;
 
     @include mixins.text($size: xs, $theme: muted, $truncate: true);
+
+    time {
+      white-space: nowrap;
+    }
   }
 
   a.notification__timestamp {

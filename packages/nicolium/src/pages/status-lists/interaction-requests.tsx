@@ -251,7 +251,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
               timestamp={interactionRequest.created_at}
               theme='muted'
               size='sm'
-              className='whitespace-nowrap'
+              cla='whitespace-nowrap'
             />
           </p>
         )}
