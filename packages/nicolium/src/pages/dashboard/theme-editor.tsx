@@ -253,7 +253,7 @@ const ThemeEditorPage: React.FC = () => {
         ref={fileInput}
         multiple
         accept='application/json'
-        className='hidden'
+        style={{ display: 'none' }}
         onChange={handleSelectFile}
       />
     </Column>
@@ -277,7 +277,7 @@ const PaletteListItem: React.FC<IPaletteListItem> = ({
   allowTintChange,
 }) =>
   typeof palette === 'string' ? null : (
-    <ListItem label={<div className='whitespace-nowrap'>{label}</div>}>
+    <ListItem label={<div className='palette-list-item__label'>{label}</div>}>
       <Palette
         palette={palette}
         onChange={onChange}
@@ -303,11 +303,7 @@ const ColorListItem: React.FC<IColorListItem> = ({ label, value, onChange }) => 
 
   return (
     <ListItem label={label}>
-      <ColorPicker
-        value={value}
-        onChange={handleChange}
-        className='h-8 w-10 overflow-hidden rounded-md'
-      />
+      <ColorPicker value={value} onChange={handleChange} className='color-list-item__preview' />
     </ListItem>
   );
 };

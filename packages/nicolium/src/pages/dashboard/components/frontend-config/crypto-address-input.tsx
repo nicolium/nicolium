@@ -31,24 +31,21 @@ const CryptoAddressInput: StreamfieldComponent<CryptoAddress> = ({ value, onChan
     };
 
   return (
-    <div className='grid grow grid-cols-6 gap-2'>
+    <div className='admin-crypto-address-input'>
       <Input
         type='text'
-        outerClassName='col-span-1 grow'
         value={value.ticker}
         onChange={handleChange('ticker')}
         placeholder={intl.formatMessage(messages.ticker)}
       />
       <Input
         type='text'
-        outerClassName='col-span-3 grow'
         value={value.address}
         onChange={handleChange('address')}
         placeholder={intl.formatMessage(messages.address)}
       />
       <Input
         type='text'
-        outerClassName='col-span-2 grow'
         value={value.note}
         onChange={handleChange('note')}
         placeholder={intl.formatMessage(messages.note)}

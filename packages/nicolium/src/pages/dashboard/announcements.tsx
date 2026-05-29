@@ -4,8 +4,8 @@ import { FormattedDate, FormattedMessage, defineMessages, useIntl } from 'react-
 
 import ScrollableList from '@/components/scrollable-list';
 import { ParsedContent } from '@/components/statuses/parsed-content';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { useAnnouncements, useDeleteAnnouncementMutation } from '@/queries/admin/use-announcements';
 import { useModalsActions } from '@/stores/modals';
@@ -59,13 +59,13 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
   };
 
   return (
-    <div key={announcement.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-      <div className='flex flex-col gap-2'>
+    <div key={announcement.id} className='admin-announcement'>
+      <div className='admin-announcement__content'>
         <Text>
           <ParsedContent html={announcement.content} emojis={announcement.emojis} />
         </Text>
         {(announcement.starts_at ?? announcement.ends_at ?? announcement.all_day) && (
-          <div className='flex flex-wrap gap-2'>
+          <div className='admin-announcement__dates'>
             {announcement.starts_at && (
               <Text size='sm'>
                 <Text tag='span' size='sm' weight='medium'>
@@ -104,13 +104,13 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
             )}
           </div>
         )}
-        <div className='flex justify-end gap-2'>
-          <Button theme='primary' onClick={handleEditAnnouncement}>
+        <div className='admin-announcement__actions'>
+          <button onClick={handleEditAnnouncement}>
             <FormattedMessage id='admin.announcements.edit' defaultMessage='Edit' />
-          </Button>
-          <Button theme='primary' onClick={handleDeleteAnnouncement}>
+          </button>
+          <button onClick={handleDeleteAnnouncement}>
             <FormattedMessage id='admin.announcements.delete' defaultMessage='Delete' />
-          </Button>
+          </button>
         </div>
       </div>
     </div>
@@ -136,16 +136,11 @@ const AdminAnnouncementsPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <div className='flex flex-col gap-4'>
-        <Button
-          className='sm:w-fit sm:self-end'
-          icon={iconPlus}
-          onClick={handleCreateAnnouncement}
-          theme='secondary'
-          block
-        >
+      <div className='admin-announcements-page'>
+        <button className='admin-announcements-page__add-button' onClick={handleCreateAnnouncement}>
+          <Icon src={iconPlus} aria-hidden />
           <FormattedMessage id='admin.announcements.action' defaultMessage='Create announcement' />
-        </Button>
+        </button>
         <ScrollableList
           scrollKey='announcements'
           emptyMessageText={emptyMessage}

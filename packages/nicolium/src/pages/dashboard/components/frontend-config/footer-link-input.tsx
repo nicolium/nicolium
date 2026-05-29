@@ -24,7 +24,7 @@ const PromoPanelInput: StreamfieldComponent<FooterItem> = ({ value, onChange }) 
     };
 
   return (
-    <div className='flex flex-grow gap-2'>
+    <div className='admin-footer-link-input'>
       <Input
         type='text'
         outerClassName='w-full grow'

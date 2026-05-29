@@ -17,7 +17,7 @@ const Color: React.FC<IColor> = ({ color, onChange }) => {
 
   return (
     <ColorPicker
-      className='size-full'
+      className='palette__swatch'
       value={color}
       onChange={onChange ? handleChange : undefined}
     />

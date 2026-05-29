@@ -29,7 +29,7 @@ const IconPickerDropdown: React.FC<IIconPickerDropdown> = ({ value, onPickIcon }
         isFlush
       >
         <div
-          className='flex size-[38px] cursor-pointer items-center justify-center text-lg'
+          className='admin-icon-picker__trigger'
           title={title}
           aria-label={title}
           role='button'

@@ -39,7 +39,7 @@ const AwaitingApproval: React.FC = () => {
         listClassName='status-list'
       >
         {accountIds.map((id) => (
-          <div key={id} className='px-5 py-4'>
+          <div key={id} className='admin-awaiting-approval-item'>
             <UnapprovedAccount accountId={id} />
           </div>
         ))}

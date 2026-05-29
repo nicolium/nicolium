@@ -26,12 +26,12 @@ const Report: React.FC<IReport> = ({ id }) => {
     <Link
       to='/nicolium/admin/reports/$reportId'
       params={{ reportId: id }}
-      className='block rounded-lg bg-gray-100 p-4 dark:bg-primary-800'
+      className='admin-report-card'
     >
-      <div className='flex h-full flex-col justify-between gap-2'>
+      <div className='admin-report-card__body'>
         {report.target_account && (
           <HoverAccountWrapper accountId={report.target_account.id} element='span'>
-            <div className='flex items-center gap-2'>
+            <div className='admin-report-card__target'>
               <Avatar
                 src={report.target_account.avatar}
                 alt={report.target_account.avatar_description}
@@ -39,7 +39,7 @@ const Report: React.FC<IReport> = ({ id }) => {
                 isCat={report.target_account.is_cat}
                 username={report.target_account.username}
               />
-              <div className='flex flex-col'>
+              <div className='admin-report-card__account-info'>
                 <Text size='sm' weight='semibold' truncate>
                   <Emojify
                     text={report.target_account.display_name}
@@ -55,10 +55,10 @@ const Report: React.FC<IReport> = ({ id }) => {
         )}
 
         {!!account && (
-          <div className='flex flex-wrap items-center gap-1'>
-            <Text size='sm' theme='muted'>
+          <div className='admin-report-card__meta'>
+            <p>
               <FormattedMessage id='admin.reports.account' defaultMessage='Reported by:' />
-            </Text>
+            </p>
             <HoverAccountWrapper accountId={account.id} element='span'>
               <Link to='/nicolium/admin/accounts/$accountId' params={{ accountId: account.id }}>
                 @{reporterAcct}
@@ -68,19 +68,19 @@ const Report: React.FC<IReport> = ({ id }) => {
         )}
 
         {!!report.comment && report.comment.length > 0 && (
-          <div className='flex flex-wrap items-center gap-1'>
-            <Text size='sm' theme='muted'>
+          <div className='admin-report-card__meta'>
+            <p>
               <FormattedMessage id='admin.reports.comment' defaultMessage='Comment:' />
-            </Text>
+            </p>
             {report.comment}
           </div>
         )}
 
         {statusCount > 0 && (
-          <div className='flex flex-wrap items-center gap-1'>
-            <Text size='sm' theme='muted'>
+          <div className='admin-report-card__meta'>
+            <p>
               <FormattedMessage id='admin.reports.statuses' defaultMessage='Reported posts:' />
-            </Text>
+            </p>
             {statusCount}
           </div>
         )}

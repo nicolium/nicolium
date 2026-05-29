@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedDate, FormattedMessage, FormattedNumber } from 'react-intl';
 
-import Text from '@/components/ui/text';
 import { useRetention } from '@/queries/admin/use-metrics';
 
 import type { AdminCohort } from 'pl-api';
@@ -33,11 +32,11 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
     content = <FormattedMessage id='loading_indicator.label' defaultMessage='Loading…' />;
   } else {
     content = (
-      <table className='text-xs'>
+      <table>
         <thead>
           <tr>
             <th>
-              <div className='p-2.5 pl-0 font-bold'>
+              <div className='admin-retention-table__header-cell admin-retention-table__header-cell--first'>
                 <FormattedMessage
                   id='admin.dashboard.retention.cohort'
                   defaultMessage='Sign-up month'
@@ -46,7 +45,7 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
             </th>
 
             <th>
-              <div className='p-2.5 font-bold'>
+              <div className='admin-retention-table__header-cell'>
                 <FormattedMessage
                   id='admin.dashboard.retention.cohort_size'
                   defaultMessage='New users'
@@ -55,21 +54,21 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
             </th>
 
             {data[0].data.slice(1).map((retention, i) => (
-              <th key={retention.date} className='w-14'>
-                <div className='p-2.5 font-bold'>{i + 1}</div>
+              <th key={retention.date} className='admin-retention-table__th-narrow'>
+                <div className='admin-retention-table__header-cell'>{i + 1}</div>
               </th>
             ))}
           </tr>
 
           <tr>
             <td>
-              <div className='p-2.5 pl-0 font-bold'>
+              <div className='admin-retention-table__header-cell admin-retention-table__header-cell--first'>
                 <FormattedMessage id='admin.dashboard.retention.average' defaultMessage='Average' />
               </div>
             </td>
 
             <td>
-              <div className='p-2.5 text-center'>
+              <div className='admin-retention-table__cell admin-retention-table__cell--center'>
                 <FormattedNumber
                   value={data.reduce(
                     (sum, cohort, i) => sum + (cohort.data[0].value * 1 - sum) / (i + 1),
@@ -90,8 +89,8 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
               return (
                 <td key={retention.date}>
                   <div
-                    className='bg-primary-200 p-2.5 font-medium dark:bg-gray-800'
-                    style={{ ['--tw-bg-opacity' as string]: 0.5 + average / 2 }}
+                    className='admin-retention-table__cell admin-retention-table__cell--colored'
+                    style={{ '--cell-opacity': 0.5 + average / 2 } as React.CSSProperties}
                   >
                     {/* eslint-disable-next-line react/style-prop-object */}
                     <FormattedNumber value={average} style='percent' />
@@ -106,11 +105,13 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
           {data.slice(0, -1).map((cohort) => (
             <tr key={cohort.period}>
               <td>
-                <div className='p-2.5 pl-0'>{dateForCohort(cohort)}</div>
+                <div className='admin-retention-table__cell admin-retention-table__cell--first'>
+                  {dateForCohort(cohort)}
+                </div>
               </td>
 
               <td>
-                <div className='p-2.5 text-center'>
+                <div className='admin-retention-table__cell admin-retention-table__cell--center'>
                   <FormattedNumber value={cohort.data[0].value} />
                 </div>
               </td>
@@ -118,8 +119,8 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
               {cohort.data.slice(1).map((retention) => (
                 <td key={retention.date}>
                   <div
-                    className='bg-primary-200 p-2.5 font-medium dark:bg-gray-800'
-                    style={{ ['--tw-bg-opacity' as string]: 0.5 + retention.rate / 2 }}
+                    className='admin-retention-table__cell admin-retention-table__cell--colored'
+                    style={{ '--cell-opacity': 0.5 + retention.rate / 2 } as React.CSSProperties}
                   >
                     {/* eslint-disable-next-line react/style-prop-object */}
                     <FormattedNumber value={retention.rate} style='percent' />
@@ -153,14 +154,8 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
   }
 
   return (
-    <div className='col-span-2'>
-      <Text
-        className='border-b border-primary-200 pb-1 dark:border-gray-800'
-        weight='medium'
-        size='sm'
-      >
-        {title}
-      </Text>
+    <div className='admin-retention-table'>
+      <p className='admin-retention-table__title'>{title}</p>
 
       {content}
     </div>

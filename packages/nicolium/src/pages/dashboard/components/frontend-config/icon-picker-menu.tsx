@@ -1,8 +1,5 @@
-import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-
-import Text from '@/components/ui/text';
 
 const messages = defineMessages({
   emoji: { id: 'icon_button.label', defaultMessage: 'Select icon' },
@@ -83,9 +80,9 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onPick }) => {
     const name = icon.replace('fa fa-', '');
 
     return (
-      <li key={icon} className='col-span-1 inline-block'>
+      <li key={icon} className='admin-icon-picker__menu__item'>
         <button
-          className='flex items-center justify-center rounded-full p-1.5 hover:bg-gray-50 dark:hover:bg-primary-800'
+          className='admin-icon-picker__menu__button'
           aria-label={name}
           title={name}
           onClick={() => {
@@ -93,7 +90,7 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onPick }) => {
           }}
           data-index={index}
         >
-          <i className={clsx(icon, 'size-[1.375rem] text-lg leading-[1.15]')} />
+          <i className={icon} />
         </button>
       </li>
     );
@@ -102,15 +99,11 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onPick }) => {
   const title = intl.formatMessage(messages.emoji);
 
   return (
-    <div
-      className='h-[270px] overflow-x-hidden overflow-y-scroll rounded bg-white p-1.5 text-gray-900 dark:bg-primary-900 dark:text-gray-100'
-      aria-label={title}
-      ref={containerNode}
-    >
-      <Text className='px-1.5 py-1'>
+    <div className='admin-icon-picker__menu' aria-label={title} ref={containerNode}>
+      <p className='admin-icon-picker__menu__header'>
         <FormattedMessage id='icon_button.icons' defaultMessage='Icons' />
-      </Text>
-      <ul className='grid grid-cols-8' onKeyDown={handleKeyDown}>
+      </p>
+      <ul className='admin-icon-picker__menu__list' onKeyDown={handleKeyDown}>
         {Object.values(icons)
           .flat()
           .map((icon, index) => renderIcon(icon, index))}

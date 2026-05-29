@@ -296,12 +296,13 @@ const ReportPage: React.FC = () => {
                       />
                     </div>
                   ) : (
-                    <IconButton
-                      className='ml-auto'
-                      src={iconPlus}
-                      onClick={handleSelfAssignReport}
-                      text={intl.formatMessage(messages.reportAssign)}
-                    />
+                    <div className='report-page__summary__action'>
+                      <IconButton
+                        src={iconPlus}
+                        onClick={handleSelfAssignReport}
+                        text={intl.formatMessage(messages.reportAssign)}
+                      />
+                    </div>
                   )}
                 </td>
               </tr>

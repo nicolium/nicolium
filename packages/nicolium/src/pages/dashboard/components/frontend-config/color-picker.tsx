@@ -11,7 +11,12 @@ interface IColorPicker {
 
 const ColorPicker: React.FC<IColorPicker> = ({ value, onChange, className }) => {
   const colorPreview = (
-    <div className='size-full' role='presentation' style={{ background: value }} title={value} />
+    <div
+      className='color-picker__preview'
+      role='presentation'
+      style={{ background: value }}
+      title={value}
+    />
   );
   return (
     <div className={className}>

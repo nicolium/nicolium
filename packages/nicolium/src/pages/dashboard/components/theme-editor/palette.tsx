@@ -55,8 +55,8 @@ const Palette: React.FC<IPalette> = ({
   }, [resetKey]);
 
   return (
-    <div className='flex w-full flex-col'>
-      <div className='flex h-8 overflow-hidden rounded-md'>
+    <div className='palette'>
+      <div className='palette__swatches'>
         {tints.map((tint) => (
           <Color
             key={tint}
