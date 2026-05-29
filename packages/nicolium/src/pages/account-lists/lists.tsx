@@ -90,7 +90,7 @@ const ListsPage: React.FC = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.lists'
-      defaultMessage="You don't have any lists yet. When you create one, it will show up here."
+      defaultMessage='You don’t have any lists yet. When you create one, it will show up here.'
     />
   );
 

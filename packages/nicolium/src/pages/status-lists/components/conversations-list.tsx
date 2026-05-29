@@ -55,7 +55,7 @@ const ConversationsList: React.FC = () => {
       emptyMessageText={
         <FormattedMessage
           id='empty_column.direct'
-          defaultMessage="You don't have any direct messages yet. When you send or receive one, it will show up here."
+          defaultMessage='You don’t have any direct messages yet. When you send or receive one, it will show up here.'
         />
       }
       listClassName='status-list'

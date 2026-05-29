@@ -58,7 +58,7 @@ const FollowingPage: React.FC = () => {
         emptyMessageText={
           <FormattedMessage
             id='account.follows.empty'
-            defaultMessage="This user doesn't follow anyone yet."
+            defaultMessage='This user doesn’t follow anyone yet.'
           />
         }
         itemClassName='pb-4'

@@ -264,7 +264,7 @@ const CirclePage: React.FC = () => {
               hint={
                 <FormattedMessage
                   id='interactions_circle.html_mode.hint'
-                  defaultMessage="Some avatars failed to load on the canvas. You can try to display them in fallback mode. You won't be able to download the image directly."
+                  defaultMessage='Some avatars failed to load on the canvas. You can try to display them in fallback mode. You won’t be able to download the image directly.'
                 />
               }
             >

@@ -101,7 +101,7 @@ const ListTimelinePage: React.FC = () => {
             <div className='flex flex-col items-center gap-4'>
               <FormattedMessage
                 id='list.not_found.text'
-                defaultMessage="It might have been deleted or you don't have permission to view it. Make sure you're viewing it from the correct account."
+                defaultMessage='It might have been deleted or you don’t have permission to view it. Make sure you’re viewing it from the correct account.'
               />
               <Button to='/lists' theme='muted'>
                 <FormattedMessage id='list.not_found.button' defaultMessage='Back to lists' />

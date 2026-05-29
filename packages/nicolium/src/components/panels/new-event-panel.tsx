@@ -15,7 +15,7 @@ const NewEventPanel = () => (
       <p className='new-event-panel__text'>
         <FormattedMessage
           id='new_event_panel.subtitle'
-          defaultMessage="Can't find what you're looking for? Schedule your own event."
+          defaultMessage='Can’t find what you’re looking for? Schedule your own event.'
         />
       </p>
     </div>

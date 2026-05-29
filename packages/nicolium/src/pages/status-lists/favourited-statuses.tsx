@@ -46,12 +46,12 @@ const FavouritedStatusesPage: React.FC = () => {
   const emptyMessage = isOwnAccount ? (
     <FormattedMessage
       id='empty_column.favourited_statuses'
-      defaultMessage="You don't have any liked posts yet. When you like one, it will show up here."
+      defaultMessage='You don’t have any liked posts yet. When you like one, it will show up here.'
     />
   ) : (
     <FormattedMessage
       id='empty_column.account_favourited_statuses'
-      defaultMessage="This user doesn't have any liked posts yet."
+      defaultMessage='This user doesn’t have any liked posts yet.'
     />
   );
 

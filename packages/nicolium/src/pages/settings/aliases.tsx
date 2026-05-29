@@ -137,7 +137,7 @@ const AliasesPage = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.aliases'
-      defaultMessage="You haven't created any account aliases yet."
+      defaultMessage='You haven’t created any account aliases yet.'
     />
   );
 

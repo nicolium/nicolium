@@ -65,7 +65,7 @@ import type { Emoji } from '@/features/emoji';
 import type { LinkNode } from '@lexical/link';
 
 const messages = defineMessages({
-  placeholder: { id: 'compose_form.placeholder', defaultMessage: "What's on your mind?" },
+  placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What’s on your mind?' },
   pollPlaceholder: { id: 'compose_form.poll.placeholder', defaultMessage: 'Add a poll topic…' },
   eventPlaceholder: { id: 'compose_form.event.placeholder', defaultMessage: 'Post to this event' },
   publish: { id: 'compose_form.publish', defaultMessage: 'Post' },

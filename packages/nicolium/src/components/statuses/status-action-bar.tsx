@@ -142,7 +142,7 @@ const messages = defineMessages({
   deleteError: { id: 'status.delete.error', defaultMessage: 'Failed to delete post' },
   deleteFromGroupMessage: {
     id: 'confirmations.delete_from_group.message',
-    defaultMessage: "Are you sure you want to delete @{name}'s post?",
+    defaultMessage: 'Are you sure you want to delete @{name}’s post?',
   },
   deleteHeading: { id: 'confirmations.delete.heading', defaultMessage: 'Delete post' },
   deleteMessage: {

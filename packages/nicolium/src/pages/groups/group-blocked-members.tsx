@@ -84,7 +84,7 @@ const GroupBlockedMembers: React.FC = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.group_blocks'
-      defaultMessage="The group hasn't banned any users yet."
+      defaultMessage='The group hasn’t banned any users yet.'
     />
   );
 

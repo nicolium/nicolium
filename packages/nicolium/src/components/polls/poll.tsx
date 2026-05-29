@@ -78,7 +78,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
         <span className='poll__explanation'>
           <FormattedMessage
             id='poll.choose_multiple'
-            defaultMessage="Choose as many as you'd like."
+            defaultMessage='Choose as many as you’d like.'
           />
         </span>
       )}

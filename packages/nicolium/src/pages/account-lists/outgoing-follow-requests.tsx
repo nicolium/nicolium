@@ -27,7 +27,7 @@ const OutgoingFollowRequestsPage: React.FC = () => {
       emptyMessageText={
         <FormattedMessage
           id='empty_column.outgoing_follow_requests'
-          defaultMessage="You don't have any outgoing follow requests yet. When you try to follow a user, it will show up here."
+          defaultMessage='You don’t have any outgoing follow requests yet. When you try to follow a user, it will show up here.'
         />
       }
       itemClassName='p-2.5'

@@ -58,7 +58,7 @@ const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
         message={
           <FormattedMessage
             id='compose_form.hashtag_warning'
-            defaultMessage="This post won't be listed under any hashtag as it is unlisted. Only public posts can be searched by hashtag."
+            defaultMessage='This post won’t be listed under any hashtag as it is unlisted. Only public posts can be searched by hashtag.'
           />
         }
         animated

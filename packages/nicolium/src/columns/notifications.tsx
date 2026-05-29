@@ -278,12 +278,12 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
     activeFilter === 'all' ? (
       <FormattedMessage
         id='empty_column.notifications'
-        defaultMessage="You don't have any notifications yet. Interact with others to start the conversation."
+        defaultMessage='You don’t have any notifications yet. Interact with others to start the conversation.'
       />
     ) : (
       <FormattedMessage
         id='empty_column.notifications_filtered'
-        defaultMessage="You don't have any notifications of this type yet."
+        defaultMessage='You don’t have any notifications of this type yet.'
       />
     );
 

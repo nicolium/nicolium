@@ -47,7 +47,7 @@ const messages = defineMessages({
   },
   descriptionMissingTitle: {
     id: 'upload_form.description_missing.title',
-    defaultMessage: "This attachment doesn't have a description",
+    defaultMessage: 'This attachment doesn’t have a description',
   },
   preview: { id: 'upload_form.preview', defaultMessage: 'Preview' },
   delete: { id: 'upload_form.undo', defaultMessage: 'Delete' },

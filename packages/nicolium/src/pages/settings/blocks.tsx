@@ -28,7 +28,7 @@ const BlocksPage: React.FC = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.blocks'
-      defaultMessage="You haven't blocked any users yet."
+      defaultMessage='You haven’t blocked any users yet.'
     />
   );
 

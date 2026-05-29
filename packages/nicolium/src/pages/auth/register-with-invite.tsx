@@ -15,7 +15,7 @@ const RegisterWithInvitePage: React.FC = () => {
   const title = (
     <FormattedMessage
       id='register_invite.title'
-      defaultMessage="You've been invited to join {siteTitle}!"
+      defaultMessage='You’ve been invited to join {siteTitle}!'
       values={{ siteTitle: instance.title }}
     />
   );

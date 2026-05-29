@@ -98,7 +98,7 @@ const FollowRequestsPage: React.FC = () => {
       emptyMessageText={
         <FormattedMessage
           id='empty_column.follow_requests'
-          defaultMessage="You don't have any follow requests yet. When you receive one, it will show up here."
+          defaultMessage='You don’t have any follow requests yet. When you receive one, it will show up here.'
         />
       }
     >

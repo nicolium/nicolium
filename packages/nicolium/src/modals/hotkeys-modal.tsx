@@ -131,7 +131,7 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       label: (
         <FormattedMessage
           id='keyboard_shortcuts.profile'
-          defaultMessage="to open author's profile"
+          defaultMessage='to open author’s profile'
         />
       ),
     },

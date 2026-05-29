@@ -26,7 +26,7 @@ const messages = defineMessages({
   },
   error: {
     id: 'status.context.loading.error',
-    defaultMessage: "Couldn't load new replies",
+    defaultMessage: 'Couldn’t load new replies',
   },
   retry: {
     id: 'status.context.retry',

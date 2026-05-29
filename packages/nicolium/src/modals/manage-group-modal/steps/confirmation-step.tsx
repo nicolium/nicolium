@@ -90,7 +90,7 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
             <p className='manage-group-modal__info-text'>
               <FormattedMessage
                 id='manage_group.confirmation.info_2'
-                defaultMessage="Post the group's first post and get the conversation started."
+                defaultMessage='Post the group’s first post and get the conversation started.'
               />
             </p>
           </InfoListItem>

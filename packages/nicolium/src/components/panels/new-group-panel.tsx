@@ -20,7 +20,7 @@ const NewGroupPanel = () => {
         <p className='new-group-panel__text'>
           <FormattedMessage
             id='new_group_panel.subtitle'
-            defaultMessage="Can't find what you're looking for? Start your own private or public group."
+            defaultMessage='Can’t find what you’re looking for? Start your own private or public group.'
           />
         </p>
       </div>

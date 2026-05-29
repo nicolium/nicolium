@@ -37,7 +37,7 @@ import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
   chat: { id: 'account.chat', defaultMessage: 'Chat with @{name}' },
-  share: { id: 'account.share', defaultMessage: "Share @{name}'s profile" },
+  share: { id: 'account.share', defaultMessage: 'Share @{name}’s profile' },
   header: { id: 'account.header.alt', defaultMessage: 'Profile header' },
   subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
   headerAlt: { id: 'account.header.alt.popover', defaultMessage: 'Show profile header alt text' },

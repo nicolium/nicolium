@@ -61,7 +61,7 @@ const DeleteAccountPage = () => {
             features.federating ? (
               <FormattedMessage
                 id='security.text.delete.without_password'
-                defaultMessage="To delete your account, click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It's not guaranteed that all servers will purge your account."
+                defaultMessage='To delete your account, click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It’s not guaranteed that all servers will purge your account.'
               />
             ) : (
               <FormattedMessage
@@ -72,7 +72,7 @@ const DeleteAccountPage = () => {
           ) : features.federating ? (
             <FormattedMessage
               id='security.text.delete'
-              defaultMessage="To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It's not guaranteed that all servers will purge your account."
+              defaultMessage='To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It’s not guaranteed that all servers will purge your account.'
             />
           ) : (
             <FormattedMessage

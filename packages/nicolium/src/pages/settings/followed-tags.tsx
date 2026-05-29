@@ -19,7 +19,7 @@ const FollowedTagsPage = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.followed_tags'
-      defaultMessage="You haven't followed any hashtag yet."
+      defaultMessage='You haven’t followed any hashtag yet.'
     />
   );
 

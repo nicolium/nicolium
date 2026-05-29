@@ -72,7 +72,7 @@ const HomeTimelinePage: React.FC = () => {
             <Text size='xl' weight='medium' align='center'>
               <FormattedMessage
                 id='empty_column.home.title'
-                defaultMessage="You're not following anyone yet"
+                defaultMessage='You’re not following anyone yet'
               />
             </Text>
 

@@ -107,12 +107,12 @@ const BookmarksPage: React.FC = () => {
   const emptyMessage = folderId ? (
     <FormattedMessage
       id='empty_column.bookmarks.folder'
-      defaultMessage="You don't have any bookmarks in this folder yet. When you add one, it will show up here."
+      defaultMessage='You don’t have any bookmarks in this folder yet. When you add one, it will show up here.'
     />
   ) : (
     <FormattedMessage
       id='empty_column.bookmarks'
-      defaultMessage="You don't have any bookmarks yet. When you add one, it will show up here."
+      defaultMessage='You don’t have any bookmarks yet. When you add one, it will show up here.'
     />
   );
 

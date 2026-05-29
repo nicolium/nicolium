@@ -65,7 +65,7 @@ const messages = defineMessages({
   blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
   mutes: { id: 'column.mutes', defaultMessage: 'Mutes' },
   endorse: { id: 'account.endorse', defaultMessage: 'Feature on profile' },
-  unendorse: { id: 'account.unendorse', defaultMessage: "Don't feature on profile" },
+  unendorse: { id: 'account.unendorse', defaultMessage: 'Don’t feature on profile' },
   bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
   removeFromFollowers: {
     id: 'account.remove_from_followers',
@@ -115,7 +115,7 @@ const messages = defineMessages({
   notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
   noteSaved: { id: 'account_note.success', defaultMessage: 'Note saved' },
   noteSaveFailed: { id: 'account_note.fail', defaultMessage: 'Failed to save note' },
-  share: { id: 'account.share', defaultMessage: "Share @{name}'s profile" },
+  share: { id: 'account.share', defaultMessage: 'Share @{name}’s profile' },
   subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
   addToNavigationItems: {
     id: 'account.add_to_navigation_items',
@@ -143,7 +143,7 @@ const messages = defineMessages({
   },
   removeFromSidebarItems: {
     id: 'account.remove_from_sidebar_items',
-    defaultMessage: "Don't show latest post in sidebar",
+    defaultMessage: 'Don’t show latest post in sidebar',
   },
   removeFromSidebarItemsSuccess: {
     id: 'account.remove_from_sidebar_items.success',

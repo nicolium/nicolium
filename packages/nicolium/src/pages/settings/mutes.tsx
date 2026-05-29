@@ -27,7 +27,7 @@ const MutesPage: React.FC = () => {
         emptyMessageText={
           <FormattedMessage
             id='empty_column.mutes'
-            defaultMessage="You haven't muted any users yet."
+            defaultMessage='You haven’t muted any users yet.'
           />
         }
       >

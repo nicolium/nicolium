@@ -87,7 +87,7 @@ const RssFeedSubscriptions = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.rss_feed_subscriptions'
-      defaultMessage="You haven't subscribed to any RSS feeds yet."
+      defaultMessage='You haven’t subscribed to any RSS feeds yet.'
     />
   );
 

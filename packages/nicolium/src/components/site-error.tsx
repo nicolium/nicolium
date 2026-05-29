@@ -109,7 +109,7 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
             <p className='site-error__message__body'>
               <FormattedMessage
                 id='alert.unexpected.body'
-                defaultMessage="We're sorry for the interruption. If the problem persists, please report it in our {issueTracker}. You may also try to {clearCookies} (this will log you out)."
+                defaultMessage='We’re sorry for the interruption. If the problem persists, please report it in our {issueTracker}. You may also try to {clearCookies} (this will log you out).'
                 values={{
                   issueTracker: (
                     <a href={sourceCode.url + '/issues'} target='_blank' rel='noopener noreferrer'>

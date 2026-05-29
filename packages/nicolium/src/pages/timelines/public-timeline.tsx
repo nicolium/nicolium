@@ -18,7 +18,7 @@ import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'column.public', defaultMessage: 'Fediverse timeline' },
-  dismiss: { id: 'fediverse_tab.explanation_box.dismiss', defaultMessage: "Don't show again" },
+  dismiss: { id: 'fediverse_tab.explanation_box.dismiss', defaultMessage: 'Don’t show again' },
 });
 
 const PublicTimelinePage = () => {
