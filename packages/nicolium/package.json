@@ -26,7 +26,7 @@
     "i18n": "npx formatjs extract 'src/**/*.{ts,tsx}' --ignore '**/*.d.ts' --out-file build/messages.json && npx formatjs compile build/messages.json --out-file src/locales/en.json",
     "lint": "${npm_execpath} run lint:js && ${npm_execpath} run lint:sass",
     "lint:js": "oxlint",
-    "lint:sass": "npx stylelint src/styles/**/*.scss",
+    "lint:sass": "npx stylelint src/styles/**/*.scss src/styles/*.scss",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "test": "vitest run",
@@ -166,6 +166,7 @@
       "oxlint",
       "oxfmt --check"
     ],
-    "src/styles/**/*.scss": "stylelint"
+    "src/styles/**/*.scss": "stylelint",
+    "src/styles/*.scss": "stylelint"
   }
 }
