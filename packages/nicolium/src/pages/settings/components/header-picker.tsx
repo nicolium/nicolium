@@ -79,13 +79,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
         title={intl.formatMessage(messages.title)}
         tabIndex={0}
       >
-        {src && (
-          <img
-            className='size-full object-cover'
-            src={src}
-            alt={intl.formatMessage(messages.title)}
-          />
-        )}
+        {src && <img src={src} alt={intl.formatMessage(messages.title)} />}
         <div>
           <Icon src={iconUpload} />
 

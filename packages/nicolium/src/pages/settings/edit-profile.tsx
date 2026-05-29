@@ -521,7 +521,6 @@ const EditProfilePage: React.FC = () => {
             {...header}
           />
           <AvatarPicker
-            className='!sm:left-6 !left-4 !translate-x-0'
             accept={attachmentTypes}
             disabled={isLoading}
             description={data.avatar_description}

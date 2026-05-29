@@ -60,27 +60,23 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
       <label
         ref={picker}
         className={clsx(
-          'avatar-picker absolute bottom-0 left-1/2 size-20 -translate-x-1/2 translate-y-1/2 cursor-pointer rounded-lg bg-primary-300 ring-2',
+          'avatar-picker',
           {
-            '!z-[99] overflow-hidden border-2 border-dashed border-primary-600': isDragging,
-            'ring-white dark:ring-primary-900': !isDraggedOver,
-            'ring-primary-600 ring-offset-2': isDraggedOver,
+            'avatar-picker--dragging': isDragging,
+            'avatar-picker--dragged-over': isDraggedOver,
           },
           className,
         )}
       >
         {src && (
-          <Avatar className={clsx(onChangeDescription && '!rounded-lg')} src={src} size={80} />
+          <Avatar
+            className={clsx(onChangeDescription && 'avatar-picker__avatar')}
+            src={src}
+            size={80}
+          />
         )}
-        <div
-          className={clsx(
-            'absolute left-0 top-0 flex size-full items-center justify-center rounded-lg transition-opacity',
-            {
-              'bg-primary-500 opacity-0 hover:opacity-90': src,
-            },
-          )}
-        >
-          <Icon src={iconCameraPlus} className='size-5 text-white' />
+        <div className={clsx('avatar-picker__overlay', src && 'avatar-picker__overlay--has-image')}>
+          <Icon src={iconCameraPlus} />
         </div>
         <span className='sr-only'>
           <FormattedMessage id='group.upload_avatar' defaultMessage='Upload avatar' />
@@ -99,7 +95,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
         {onChangeDescription && src && (
           <button
             type='button'
-            className='absolute left-1 top-1'
+            className='avatar-picker__alt-button'
             onClick={handleChangeDescriptionClick}
           >
             <AltIndicator warning={!description} />
