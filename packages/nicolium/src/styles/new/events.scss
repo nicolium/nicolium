@@ -284,6 +284,29 @@
   }
 }
 
+.manage-event-page {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.event-participation-request {
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+
+    button:first-child {
+      @include mixins.button($theme: secondary, $size: sm);
+    }
+
+    button:last-child {
+      @include mixins.button($theme: danger, $size: sm);
+    }
+  }
+}
+
 .edit-event {
   .content-type-button {
     position: absolute;
@@ -299,48 +322,135 @@
     }
   }
 
-  &__banner__container {
-    position: relative;
+  &__banner {
+    &__container {
+      position: relative;
 
-    overflow: hidden;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      height: 6rem;
+      border-radius: var(--radius-lg);
+
+      color: rgb(var(--color-primary-500));
+
+      background-color: rgb(var(--color-primary-100));
+
+      .dark & {
+        color: #fff;
+        background-color: rgb(var(--color-gray-800));
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .icon-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+      }
+
+      @media (min-width: variables.$breakpoint-sm) {
+        height: 8rem;
+        box-shadow:
+          0 1px 3px 0 #0001,
+          0 1px 2px -1px #0001;
+
+        .dark & {
+          box-shadow: inset 0 0 0 1px #fff1;
+        }
+      }
+    }
+
+    &__alt-button {
+      position: absolute;
+      bottom: 0.25rem;
+      left: 0.25rem;
+    }
+  }
+
+  &__upload-button {
+    cursor: pointer;
+
     display: flex;
+    gap: 0.75rem;
     align-items: center;
     justify-content: center;
 
-    height: 6rem;
-    border-radius: var(--radius-lg);
+    width: 100%;
+    height: 100%;
 
     color: rgb(var(--color-primary-500));
 
-    background-color: rgb(var(--color-primary-100));
+    .dark & {
+      color: rgb(var(--color-primary-400));
+    }
+
+    .svg-icon svg {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+
+    &__label {
+      @include mixins.text($size: sm, $theme: primary, $weight: semibold, $transform: uppercase);
+    }
+
+    input[type='file'] {
+      display: none;
+    }
+  }
+
+  &__description {
+    position: relative;
+  }
+
+  &__location {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    height: 2.375rem;
+
+    color: rgb(var(--color-gray-700));
 
     .dark & {
-      color: #fff;
-      background-color: rgb(var(--color-gray-800));
+      color: rgb(var(--color-gray-500));
     }
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    &__text {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
     }
 
-    .icon-button {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
+    &__name {
+      @include mixins.text;
     }
 
-    @media (min-width: variables.$breakpoint-sm) {
-      height: 8rem;
-      box-shadow:
-        0 1px 3px 0 #0001,
-        0 1px 2px -1px #0001;
-
-      .dark & {
-        box-shadow: inset 0 0 0 1px #fff1;
-      }
+    &__address {
+      @include mixins.text($size: xs, $theme: muted);
     }
+  }
+
+  &__toggle {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    &__label {
+      @include mixins.text($theme: muted);
+
+      cursor: pointer;
+    }
+  }
+
+  .form__actions button {
+    @include mixins.button($theme: primary);
   }
 
   &__editor {

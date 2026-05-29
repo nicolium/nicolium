@@ -3,7 +3,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 import ScrollableList from '@/components/scrollable-list';
-import Button from '@/components/ui/button';
 import Spinner from '@/components/ui/spinner';
 import {
   useAcceptEventParticipationRequestMutation,
@@ -56,11 +55,9 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
       id={id}
       note={participationMessage ?? undefined}
       action={
-        <div className='flex gap-2'>
-          <Button
-            theme='secondary'
-            size='sm'
-            text={intl.formatMessage(messages.authorize)}
+        <div className='event-participation-request__actions'>
+          <button
+            type='button'
             onClick={() => {
               acceptEventParticipationRequest(undefined, {
                 onSuccess: () => {
@@ -71,11 +68,11 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
                 },
               });
             }}
-          />
-          <Button
-            theme='danger'
-            size='sm'
-            text={intl.formatMessage(messages.reject)}
+          >
+            {intl.formatMessage(messages.authorize)}
+          </button>
+          <button
+            type='button'
             onClick={() => {
               rejectEventParticipationRequest(undefined, {
                 onSuccess: () => {
@@ -86,7 +83,9 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
                 },
               });
             }}
-          />
+          >
+            {intl.formatMessage(messages.reject)}
+          </button>
         </div>
       }
     />

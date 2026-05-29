@@ -3,7 +3,6 @@ import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/icon';
-import Text from '@/components/ui/text';
 import { useInstance } from '@/stores/instance';
 
 interface IUploadButton {
@@ -33,19 +32,18 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   };
 
   return (
-    <label className='flex size-full cursor-pointer items-center justify-center gap-3 text-primary-500 dark:text-primary-400'>
-      <Icon src={iconUpload} className='size-7' onClick={handleClick} />
+    <label className='edit-event__upload-button'>
+      <Icon src={iconUpload} onClick={handleClick} />
 
-      <Text size='sm' theme='primary' weight='semibold' transform='uppercase' tabIndex={0}>
+      <span className='edit-event__upload-button__label' tabIndex={0}>
         <FormattedMessage id='compose_event.upload_banner' defaultMessage='Upload event banner' />
-      </Text>
+      </span>
       <input
         ref={fileElement}
         type='file'
         accept={accept}
         onChange={handleChange}
         disabled={disabled}
-        className='hidden'
       />
     </label>
   );

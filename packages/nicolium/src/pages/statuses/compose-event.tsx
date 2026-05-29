@@ -52,7 +52,7 @@ const EditEventPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.manageEvent)}>
-      <div className='flex flex-col gap-2'>
+      <div className='manage-event-page__content'>
         {renderTabs()}
         {tab === 'edit' ? (
           <EditEvent statusId={statusId} />
