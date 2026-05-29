@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import pick from 'lodash/pick';
 import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from 'pl-api';
 import React, { useState, useEffect } from 'react';
@@ -7,10 +8,8 @@ import AutosuggestInput from '@/components/autosuggest-input';
 import BirthdayInput from '@/components/birthday-input';
 import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
@@ -303,8 +302,8 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
     };
 
   return (
-    <div className='flex flex-grow gap-2'>
-      <div className='w-2/5 grow'>
+    <div className='profile-field'>
+      <div className='profile-field__name'>
         <ProfileAutosuggestInput
           value={value.name}
           onChange={handleChange('name')}
@@ -324,7 +323,7 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
           searchTokens={['@', '#', ':']}
         />
       </div>
-      <div className='w-3/5 grow'>
+      <div className='profile-field__value'>
         <ProfileAutosuggestInput
           value={value.value}
           onChange={handleChange('value')}
@@ -891,7 +890,7 @@ const EditProfilePage: React.FC = () => {
                 isCodeEditor
                 rows={12}
               />
-              <p className='mt-0.5 text-right text-xs text-gray-700 dark:text-gray-600'>
+              <p className='profile-css-hint'>
                 <FormattedMessage
                   id='edit_profile.custom_css.remaining_characters'
                   defaultMessage='{remaining, plural, one {# character} other {# characters}} remaining'
@@ -902,15 +901,15 @@ const EditProfilePage: React.FC = () => {
           </Accordion>
         )}
 
-        <FormActions>
-          <Button to='/settings' theme='tertiary'>
+        <div className='profile-form__actions'>
+          <Link to='/settings'>
             <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
-          </Button>
+          </Link>
 
-          <Button theme='primary' type='submit' disabled={isLoading}>
+          <button type='submit' disabled={isLoading}>
             <FormattedMessage id='edit_profile.save' defaultMessage='Save' />
-          </Button>
-        </FormActions>
+          </button>
+        </div>
       </Form>
     </Column>
   );

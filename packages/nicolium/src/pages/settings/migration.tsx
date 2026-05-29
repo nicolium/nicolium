@@ -2,23 +2,17 @@ import { Link } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import Text from '@/components/ui/text';
 import { useClient } from '@/hooks/use-client';
 import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.migration', defaultMessage: 'Move account' },
-  moveAccountSuccess: {
-    id: 'migration.move_account.success',
-    defaultMessage: 'Account moved',
-  },
+  moveAccountSuccess: { id: 'migration.move_account.success', defaultMessage: 'Account moved' },
   moveAccountFail: {
     id: 'migration.move_account.fail',
     defaultMessage: 'Failed to migrate account',
@@ -80,16 +74,13 @@ const MigrationPage = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
-        <Text theme='muted'>
+        <p className='migration-form__hint'>
           <FormattedMessage
             id='migration.hint'
             defaultMessage='This will move your followers to the new account. No other data will be moved. To perform migration, you need to {link} on your new account first.'
             values={{
               link: (
-                <Link
-                  className='text-primary-600 hover:text-primary-800 hover:underline dark:text-primary-400 dark:hover:text-primary-500'
-                  to='/settings/aliases'
-                >
+                <Link to='/settings/aliases'>
                   <FormattedMessage
                     id='migration.hint.link'
                     defaultMessage='create an account alias'
@@ -108,7 +99,7 @@ const MigrationPage = () => {
               />
             </>
           )}
-        </Text>
+        </p>
         <FormGroup
           labelText={
             <FormattedMessage
@@ -141,14 +132,11 @@ const MigrationPage = () => {
             required
           />
         </FormGroup>
-        <FormActions>
-          <Button
-            theme='primary'
-            text={<FormattedMessage id='migration.submit' defaultMessage='Move followers' />}
-            type='submit'
-            disabled={isLoading}
-          />
-        </FormActions>
+        <div className='migration-form__actions'>
+          <button type='submit' disabled={isLoading}>
+            <FormattedMessage id='migration.submit' defaultMessage='Move followers' />
+          </button>
+        </div>
       </Form>
     </Column>
   );

@@ -2,9 +2,8 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
-import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
@@ -25,7 +24,7 @@ const SettingsPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.settings)} transparent withHeader={false}>
-      <Card className='flex flex-col gap-4' variant='rounded'>
+      <div className='settings-card card--rounded card--md'>
         <CardHeader>
           <CardTitle title={<FormattedMessage id='settings.profile' defaultMessage='Profile' />} />
         </CardHeader>
@@ -145,16 +144,16 @@ const SettingsPage = () => {
             {(features.deleteAccount || features.deleteAccountWithoutPassword) && (
               <ListItem
                 label={
-                  <Text theme='danger'>
+                  <span className='settings__danger-text'>
                     <FormattedMessage id='column.delete_account' defaultMessage='Delete account' />
-                  </Text>
+                  </span>
                 }
                 to='/settings/account'
               />
             )}
           </List>
         </CardBody>
-      </Card>
+      </div>
     </Column>
   );
 };

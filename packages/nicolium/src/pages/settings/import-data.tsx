@@ -3,13 +3,10 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import FileInput from '@/components/ui/file-input';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
-import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -17,20 +14,10 @@ import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.import_data', defaultMessage: 'Import data' },
-  submit: { id: 'import_data.actions.import', defaultMessage: 'Import' },
-  blocksSuccess: {
-    id: 'import_data.success.blocks',
-    defaultMessage: 'Blocks imported',
-  },
-  followersSuccess: {
-    id: 'import_data.success.followers',
-    defaultMessage: 'Followers imported',
-  },
+  blocksSuccess: { id: 'import_data.success.blocks', defaultMessage: 'Blocks imported' },
+  followersSuccess: { id: 'import_data.success.followers', defaultMessage: 'Followers imported' },
   mutesSuccess: { id: 'import_data.success.mutes', defaultMessage: 'Mutes imported' },
-  archiveSuccess: {
-    id: 'import_data.success.archive',
-    defaultMessage: 'Archive imported',
-  },
+  archiveSuccess: { id: 'import_data.success.archive', defaultMessage: 'Archive imported' },
 });
 
 interface IDataImporter {
@@ -57,13 +44,8 @@ const DataImporter: React.FC<IDataImporter> = ({
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {
     setIsLoading(true);
     action(file!, overwrite)
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-
+      .then(() => setIsLoading(false))
+      .catch(() => setIsLoading(false));
     event.preventDefault();
   };
 
@@ -74,10 +56,8 @@ const DataImporter: React.FC<IDataImporter> = ({
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Text size='xl' weight='bold' tag='label'>
-        {inputLabel}
-      </Text>
-      <FormGroup hintText={<Text theme='muted'>{inputHint}</Text>}>
+      <label className='data-importer__label'>{inputLabel}</label>
+      <FormGroup hintText={inputHint}>
         <FileInput accept={accept} onChange={handleFileChange} required />
       </FormGroup>
 
@@ -101,11 +81,11 @@ const DataImporter: React.FC<IDataImporter> = ({
         </List>
       )}
 
-      <FormActions>
-        <Button type='submit' theme='primary' disabled={isLoading || !file}>
+      <div className='data-importer__actions'>
+        <button type='submit' disabled={isLoading || !file}>
           {submitText}
-        </Button>
-      </FormActions>
+        </button>
+      </div>
     </Form>
   );
 };
@@ -132,7 +112,6 @@ const ImportDataPage = () => {
 
   const importArchive = (file: File) => {
     const form = serialize({ file, keep_unlisted: true }, { indices: true });
-
     return client
       .request('/api/pleroma/archive_import', {
         method: 'POST',

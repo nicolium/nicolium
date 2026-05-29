@@ -313,11 +313,11 @@
       width: 1rem;
       height: 1rem;
     }
-  
+
     p {
       @include mixins.text($theme: primary, $size: md, $weight: semibold);
     }
-  
+
     input {
       display: none;
     }
@@ -373,4 +373,569 @@
 .avatar-picker {
   width: 5rem;
   height: 5rem;
+}
+
+.settings-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.settings__danger-text {
+  @include mixins.text($theme: danger);
+}
+
+.settings-empty {
+  @include mixins.card($variant: rounded, $size: lg);
+
+  &__action {
+    @include mixins.text($size: sm, $theme: primary);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.backups-list {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  &__item {
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    background-color: rgb(var(--color-gray-100));
+
+    .dark & {
+      background-color: rgb(var(--color-primary-800));
+    }
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__date {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__actions {
+      display: flex;
+      justify-content: flex-end;
+
+      button, a {
+        @include mixins.button($theme: primary);
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+
+  @media (min-width: variables.$breakpoint-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.account-list__item {
+  padding-bottom: 1rem;
+
+  &--last {
+    padding-bottom: 0;
+  }
+}
+
+.domain-block {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.5rem;
+}
+
+.domain-blocks-list {
+  > * + * {
+    border-top: 1px solid rgb(var(--color-gray-200));
+
+    .dark & {
+      border-top-color: rgb(var(--color-primary-800));
+    }
+
+    .black & {
+      border-top-color: rgb(var(--color-gray-800));
+    }
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+
+  a {
+    @include mixins.button($theme: primary, $size: sm);
+  }
+}
+
+.filter-card {
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  background-color: rgb(var(--color-gray-100));
+
+  .dark & {
+    background-color: rgb(var(--color-primary-800));
+  }
+
+  &__container {
+    padding-bottom: 1rem;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 0.25rem;
+
+    p {
+      @include mixins.text($weight: medium);
+    }
+
+    span {
+      @include mixins.text($theme: muted);
+    }
+  }
+
+  &__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+
+    a {
+      @include mixins.button($theme: primary);
+    }
+
+    button {
+      @include mixins.button($theme: danger);
+    }
+  }
+}
+
+.edit-filter {
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+
+  &__contexts-header {
+    display: flex;
+    flex-direction: column;
+
+    p:first-child {
+      @include mixins.text($size: sm, $weight: medium);
+    }
+
+    p:last-child {
+      @include mixins.text($size: xs, $theme: muted);
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-grow: 1;
+    gap: 0.5rem;
+
+    &__keyword {
+      flex-grow: 1;
+      width: 40%;
+    }
+
+    &__options {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  }
+}
+
+.interaction-policy-config__title {
+  @include mixins.text($size: lg, $weight: bold);
+}
+
+.interaction-policies {
+  h3 {
+    @include mixins.text($size: md, $weight: medium);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.rss-feed-subscriptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+
+  width: 100%;
+
+  &__form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    > label {
+      flex-grow: 1;
+    }
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+
+  &__item {
+    &__avatar-fallback {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-full);
+
+      color: rgb(var(--color-gray-900));
+
+      background-color: rgb(var(--color-gray-200));
+
+      .dark & {
+        color: rgb(var(--color-gray-100));
+        background-color: rgb(var(--color-gray-700));
+      }
+    }
+
+    &__info {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    &__url {
+      @include mixins.text($size: sm, $theme: muted, $truncate: true);
+    }
+  }
+}
+
+.aliases {
+  &__search {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    > label {
+      position: relative;
+      flex-grow: 1;
+
+      input {
+        display: block;
+        width: 100%;
+        border-radius: var(--radius-full);
+        font-size: var(--text-sm);
+
+        &:focus {
+          border-color: rgb(var(--color-primary-500));
+          outline-color: rgb(var(--color-primary-500));
+        }
+
+        &:is(.dark *) {
+          color: #fff;
+          background-color: rgb(var(--color-gray-800));
+
+          &::placeholder {
+            color: rgb(var(--color-gray-500));
+          }
+        }
+      }
+    }
+
+    &__clear {
+      cursor: pointer;
+
+      position: absolute;
+      right: 0;
+      inset-block: 0;
+
+      display: flex;
+      align-items: center;
+
+      padding-inline: 0.75rem;
+
+      [dir='rtl'] & {
+        right: auto;
+        left: 0;
+      }
+
+      svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: rgb(var(--color-gray-600));
+      }
+
+      &:disabled {
+        display: none;
+      }
+    }
+
+    > button {
+      @include mixins.button($theme: secondary);
+    }
+  }
+
+  &__search-results {
+    overflow-y: auto;
+    max-height: 18rem;
+    margin-bottom: 1rem;
+  }
+
+  &__account {
+    width: 100%;
+
+    &__container {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0.625rem;
+
+
+      .icon-button {
+        color: rgb(var(--color-gray-400));
+
+        &:hover {
+          color: rgb(var(--color-gray-600));
+        }
+
+        svg {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+      }
+    }
+  }
+
+  &__alias {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0.5rem;
+  }
+
+  &__delete {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    @include mixins.text($theme: muted);
+  }
+}
+
+.csv-exporter {
+  &__label {
+    @include mixins.text($size: xl, $weight: bold);
+  }
+
+  &__hint {
+    @include mixins.text($theme: muted);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.data-importer {
+  &__label {
+    @include mixins.text($size: xl, $weight: bold);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.migration-form {
+  &__hint {
+    @include mixins.text($theme: muted);
+
+    a {
+      @include mixins.text($theme: primary);
+
+      &:hover {
+        color: rgb(var(--color-primary-800));
+        text-decoration: underline;
+
+        &:is(.dark *) {
+          color: rgb(var(--color-primary-500));
+        }
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.mfa-setup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.delete-account {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__hint {
+    @include mixins.text($theme: muted);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: danger);
+    }
+  }
+}
+
+.edit-email__actions,
+.edit-password__actions,
+.privacy__actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-end;
+
+  a {
+    @include mixins.button($theme: tertiary);
+  }
+
+  button {
+    @include mixins.button($theme: primary);
+  }
+}
+
+
+.profile-field {
+  display: flex;
+  flex-grow: 1;
+  gap: 0.5rem;
+
+  &__name {
+    flex-grow: 1;
+    width: 40%;
+  }
+
+  &__value {
+    flex-grow: 1;
+    width: 60%;
+  }
+}
+
+.profile-form__actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-end;
+
+  a {
+    @include mixins.button($theme: tertiary);
+  }
+
+  button {
+    @include mixins.button($theme: primary);
+  }
+}
+
+.profile-css-hint {
+  @include mixins.text($size: xs, $theme: muted, $align: right);
+
+  margin-top: 0.125rem;
+}
+
+.followed-tags-item {
+  padding-bottom: 0.75rem;
 }

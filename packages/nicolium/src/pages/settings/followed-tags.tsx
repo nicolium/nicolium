@@ -33,7 +33,7 @@ const FollowedTagsPage = () => {
         onLoadMore={fetchNextPage}
         placeholderComponent={PlaceholderHashtag}
         placeholderCount={5}
-        itemClassName='pb-3'
+        itemClassName='followed-tags-item'
       >
         {tags.map((tag) => (
           <Hashtag key={tag.name} hashtag={tag} />

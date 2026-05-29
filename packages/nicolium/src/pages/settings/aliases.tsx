@@ -1,18 +1,15 @@
 import iconBackspace from '@phosphor-icons/core/regular/backspace.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconX from '@phosphor-icons/core/regular/x.svg';
-import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountComponent from '@/components/accounts/account';
 import Icon from '@/components/icon';
 import ScrollableList from '@/components/scrollable-list';
-import Button from '@/components/ui/button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -22,6 +19,7 @@ import {
   useAddAccountAlias,
   useDeleteAccountAlias,
 } from '@/queries/settings/use-account-aliases';
+
 const messages = defineMessages({
   heading: { id: 'column.aliases', defaultMessage: 'Account aliases' },
   delete: { id: 'column.aliases.delete', defaultMessage: 'Delete' },
@@ -54,26 +52,14 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
 
   if (!account) return null;
 
-  let button;
-
-  if (!added && accountId !== me) {
-    button = (
-      <IconButton
-        src={iconPlus}
-        className='text-gray-400 hover:text-gray-600'
-        iconClassName='h-5 w-5'
-        title={intl.formatMessage(messages.add)}
-        onClick={handleOnAdd}
-      />
-    );
-  }
-
   return (
-    <div className='flex items-center justify-between gap-1 p-2.5'>
-      <div className='w-full'>
+    <div className='aliases__account__container'>
+      <div className='aliases__account'>
         <AccountComponent account={account} withRelationship={false} />
       </div>
-      {button}
+      {!added && accountId !== me && (
+        <IconButton src={iconPlus} title={intl.formatMessage(messages.add)} onClick={handleOnAdd} />
+      )}
     </div>
   );
 };
@@ -109,10 +95,9 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
   const hasValue = value.length > 0;
 
   return (
-    <div className='flex items-center gap-1'>
-      <label className='relative grow' title={intl.formatMessage(messages.search)}>
+    <div className='aliases__search'>
+      <label title={intl.formatMessage(messages.search)}>
         <input
-          className='block w-full rounded-full focus:border-primary-500 focus:ring-primary-500 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 sm:text-sm'
           type='text'
           value={value}
           onChange={handleChange}
@@ -122,20 +107,16 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
 
         <button
           disabled={!hasValue}
-          className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
+          className='aliases__search__clear'
           onClick={handleClear}
           title={intl.formatMessage(messages.clear)}
         >
-          <Icon
-            src={iconBackspace}
-            className={clsx('size-5 text-gray-600', { hidden: !hasValue })}
-            aria-hidden
-          />
+          <Icon src={iconBackspace} aria-hidden />
         </button>
       </label>
-      <Button onClick={handleSubmit}>
+      <button onClick={handleSubmit}>
         <FormattedMessage id='tabs_bar.search' defaultMessage='Search' />
-      </Button>
+      </button>
     </div>
   );
 };
@@ -181,7 +162,7 @@ const AliasesPage = () => {
           />
         </div>
       ) : (
-        <div className='mb-4 max-h-72 overflow-y-auto'>
+        <div className='aliases__search-results'>
           {searchAccountIds.map((accountId) => (
             <Account key={accountId} accountId={accountId} aliases={aliases} />
           ))}
@@ -200,25 +181,21 @@ const AliasesPage = () => {
       <div className='flex-1'>
         <ScrollableList scrollKey='aliases' emptyMessageText={emptyMessage}>
           {aliases.map((alias) => (
-            <div key={alias} className='flex items-center justify-between gap-1 p-2'>
+            <div key={alias} className='aliases__alias'>
               <div>
-                <Text tag='span' theme='muted'>
+                <span>
                   <FormattedMessage id='aliases.account.label' defaultMessage='Old account:' />
-                </Text>{' '}
-                <Text tag='span'>{alias}</Text>
+                </span>{' '}
+                <span>{alias}</span>
               </div>
               <button
                 onClick={handleAliasDelete}
                 data-value={alias}
                 aria-label={intl.formatMessage(messages.delete)}
+                className='aliases__delete'
               >
-                <Text theme='muted' className='flex items-center gap-1'>
-                  <Icon src={iconX} />
-                  <FormattedMessage
-                    id='aliases.aliases_list_delete'
-                    defaultMessage='Unlink alias'
-                  />
-                </Text>
+                <Icon src={iconX} />
+                <FormattedMessage id='aliases.aliases_list_delete' defaultMessage='Unlink alias' />
               </button>
             </div>
           ))}

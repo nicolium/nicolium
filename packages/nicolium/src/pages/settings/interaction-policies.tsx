@@ -3,14 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import { InlineMultiselect } from '@/components/ui/inline-multiselect';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Tabs from '@/components/ui/tabs';
-import Text from '@/components/ui/text';
 import Warning from '@/features/compose/components/warning';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -183,9 +180,9 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
 
           return (
             <React.Fragment key={policy}>
-              <Text size='lg' weight='bold'>
+              <h3 className='interaction-policy-config__title'>
                 {intl.formatMessage(titleMessages[singlePost ? 'single_post' : visibility][policy])}
-              </Text>
+              </h3>
 
               {policy === 'can_reply' && (
                 <Warning
@@ -235,9 +232,9 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
         })}
       {features.quoteApprovalPolicies && visibility !== 'private' && (
         <>
-          <Text size='lg' weight='bold'>
+          <h3 className='interaction-policy-title'>
             {intl.formatMessage(titleMessages[singlePost ? 'single_post' : visibility].can_quote)}
-          </Text>
+          </h3>
 
           <SelectDropdown
             key={quotePolicy === undefined ? '1' : '0'}
@@ -309,12 +306,8 @@ const InteractionPoliciesPage = () => {
       promises.push(
         new Promise<void>((resolve, reject) => {
           updateInteractionPolicies(interactionPolicies, {
-            onSuccess: () => {
-              resolve();
-            },
-            onError: () => {
-              reject();
-            },
+            onSuccess: () => resolve(),
+            onError: () => reject(),
           });
         }),
       );
@@ -340,23 +333,17 @@ const InteractionPoliciesPage = () => {
           items={[
             {
               text: intl.formatMessage(messages.public),
-              action: () => {
-                setVisibility('public');
-              },
+              action: () => setVisibility('public'),
               name: 'public',
             },
             {
               text: intl.formatMessage(messages.unlisted),
-              action: () => {
-                setVisibility('unlisted');
-              },
+              action: () => setVisibility('unlisted'),
               name: 'unlisted',
             },
             {
               text: intl.formatMessage(messages.private),
-              action: () => {
-                setVisibility('private');
-              },
+              action: () => setVisibility('private'),
               name: 'private',
             },
           ]}
@@ -374,11 +361,11 @@ const InteractionPoliciesPage = () => {
           disabled={isUpdating}
         />
 
-        <FormActions>
-          <Button type='submit' theme='primary' disabled={isUpdating}>
+        <div className='interaction-policies__actions'>
+          <button type='submit' disabled={isUpdating}>
             <FormattedMessage id='interaction_policies.update' defaultMessage='Update' />
-          </Button>
-        </FormActions>
+          </button>
+        </div>
       </Form>
     </Column>
   );
