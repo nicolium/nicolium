@@ -33,6 +33,8 @@
     "scss/operator-no-unspaced": null,
     "selector-class-pattern": null,
     "no-invalid-position-declaration": null,
-    "@stylistic/indentation": 2
+    "@stylistic/indentation": 2,
+    "@stylistic/block-opening-brace-newline-after": "always",
+    "@stylistic/block-closing-brace-newline-before": "always"
   }
 }

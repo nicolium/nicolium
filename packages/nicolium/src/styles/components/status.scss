@@ -190,10 +190,17 @@
     color: rgb(var(--color-gray-700));
     appearance: none;
 
-    &:hover { color: rgb(var(--color-gray-900)); }
+    &:hover {
+      color: rgb(var(--color-gray-900));
+    }
 
-    .dark & { color: rgb(var(--color-gray-200)); }
-    .dark &:hover { color: rgb(var(--color-gray-100)); }
+    .dark & {
+      color: rgb(var(--color-gray-200));
+    }
+
+    .dark &:hover {
+      color: rgb(var(--color-gray-100));
+    }
 
     svg {
       width: 1.5rem;
