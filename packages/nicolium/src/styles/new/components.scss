@@ -2165,3 +2165,10 @@ div[data-viewport-type='window']:has(.empty-message) {
     width: 40px;
   }
 }
+
+.interaction-request {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
