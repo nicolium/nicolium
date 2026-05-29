@@ -409,6 +409,22 @@
 
 .event-map-modal {
   max-width: 42rem;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  &__map {
+    width: 100%;
+    height: 24rem;
+  }
+
+  button {
+    @include mixins.button;
+  }
 }
 
 .event-carousel {

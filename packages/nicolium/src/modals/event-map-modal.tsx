@@ -7,7 +7,7 @@ import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import 'leaflet/dist/leaflet.css';
-import Button from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
@@ -67,11 +67,12 @@ const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose,
       onClose={onClickClose}
       className='event-map-modal'
     >
-      <div className='flex flex-col items-center gap-6'>
-        <div className='h-96 w-full' id='event-map' />
-        <Button onClick={onClickNavigate} icon={iconCompass}>
+      <div className='event-map-modal__content'>
+        <div className='event-map-modal__map' id='event-map' />
+        <button onClick={onClickNavigate}>
+          <Icon src={iconCompass} aria-hidden />
           <FormattedMessage id='event_map.navigate' defaultMessage='Navigate' />
-        </Button>
+        </button>
       </div>
     </Modal>
   );
