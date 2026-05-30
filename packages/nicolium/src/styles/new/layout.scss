@@ -1631,3 +1631,37 @@ body {
     @include mixins.text($size: lg);
   }
 }
+
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__heading {
+    @include mixins.text;
+  }
+
+  &__feature {
+    @include mixins.card($variant: rounded);
+    
+    h2 {
+      @include mixins.text($size: xl, $weight: bold);
+    }
+
+    p {
+      @include mixins.text;
+    }
+  }
+  
+  &__footer {
+    display: flex;
+    flex-direction: column;gap: 1rem;
+
+    margin-top: 1rem;
+    padding: 0 1rem;
+
+    @media (min-width: variables.$breakpoint-xl) {
+      display: none;
+    }
+  }
+}

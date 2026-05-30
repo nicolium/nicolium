@@ -3,9 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import LinkFooter from '@/components/navigation/link-footer';
 import Button from '@/components/ui/button';
-import Card, { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import Text from '@/components/ui/text';
 import sourceCode from '@/utils/code';
 
 import { LogoText } from '../timelines/landing-timeline';
@@ -13,16 +11,16 @@ import { LogoText } from '../timelines/landing-timeline';
 const LandingPage = () => (
   <>
     <Column withHeader={false}>
-      <div className='flex flex-col gap-4'>
+      <div className='landing-page'>
         <LogoText>
           <FormattedMessage id='landing.logo' defaultMessage='Nicolium' />
         </LogoText>
-        <Text>
+        <p className='landing-page__heading'>
           <FormattedMessage
             id='landing.description'
             defaultMessage='Nicolium is a feature-rich Fediverse web client.'
           />
-        </Text>
+        </p>
         <div className='flex justify-end gap-4'>
           <Button href={sourceCode.url}>
             <FormattedMessage id='landing.source_code' defaultMessage='Source code' />
@@ -31,97 +29,81 @@ const LandingPage = () => (
             <FormattedMessage id='landing.sign_in' defaultMessage='Sign in' />
           </Button>
         </div>
-        <Card variant='rounded'>
-          <CardTitle
-            title={
-              <FormattedMessage
-                id='landing.use_with_platform.title'
-                defaultMessage='Use with your favorite Fediverse platform.'
-              />
-            }
-            truncate={false}
-          />
-          <Text>
+        <div className='landing-page__feature'>
+          <h2>
+            <FormattedMessage
+              id='landing.use_with_platform.title'
+              defaultMessage='Use with your favorite Fediverse platform.'
+            />
+          </h2>
+          <p>
             <FormattedMessage
               id='landing.use_with_platform.description'
               defaultMessage='Nicolium works with any backend implementing Mastodon API.'
             />
-          </Text>
-        </Card>
-        <Card variant='rounded'>
-          <CardTitle
-            title={
-              <FormattedMessage id='landing.feature_rich.title' defaultMessage='Feature-rich.' />
-            }
-            truncate={false}
-          />
-          <Text>
+          </p>
+        </div>
+        <div className='landing-page__feature'>
+          <h2>
+            <FormattedMessage id='landing.feature_rich.title' defaultMessage='Feature-rich.' />
+          </h2>
+          <p>
             <FormattedMessage
               id='landing.feature_rich.description'
               defaultMessage='Nicolium includes a lot of features to improve your experience, like WYSIWYG text editor, draft posts and language detection.'
             />
-          </Text>
-        </Card>
-        <Card variant='rounded'>
-          <CardTitle
-            title={
-              <FormattedMessage
-                id='landing.pl_api.title'
-                defaultMessage='Get the most out of your Fediverse instance.'
-              />
-            }
-            truncate={false}
-          />
-          <Text>
+          </p>
+        </div>
+        <div className='landing-page__feature'>
+          <h2>
+            <FormattedMessage
+              id='landing.pl_api.title'
+              defaultMessage='Get the most out of your Fediverse instance.'
+            />
+          </h2>
+          <p>
             <FormattedMessage
               id='landing.pl_api.description'
               defaultMessage='Nicolium implements features not present in standard Mastodon API, like emoji reactions, chats or interaction policies.'
             />
-          </Text>
-        </Card>
-        <Card variant='rounded'>
-          <CardTitle
-            title={
-              <FormattedMessage id='landing.customizable.title' defaultMessage='Customizable.' />
-            }
-            truncate={false}
-          />
-          <Text>
+          </p>
+        </div>
+        <div className='landing-page__feature'>
+          <h2>
+            <FormattedMessage id='landing.customizable.title' defaultMessage='Customizable.' />
+          </h2>
+          <p>
             <FormattedMessage
               id='landing.customizable.description'
               defaultMessage='Nicolium lets you choose between three themes and adjust accent color to your liking. You can customize the UI elements like sidebar, navigation menu and post action bar.'
             />
-          </Text>
-        </Card>
-        <Card variant='rounded'>
-          <CardTitle
-            title={<FormattedMessage id='landing.private.title' defaultMessage='Stay private.' />}
-            truncate={false}
-          />
-          <Text>
+          </p>
+        </div>
+        <div className='landing-page__feature'>
+          <h2>
+            <FormattedMessage id='landing.private.title' defaultMessage='Stay private.' />
+          </h2>
+          <p>
             <FormattedMessage
               id='landing.private.description'
               defaultMessage='Nicolium includes features which help you maintain online privacy. This includes URL cleaning, which helps you remove unwanted parts of URLs used to mark your online activity.'
             />
-          </Text>
-        </Card>
-        <Card variant='rounded'>
-          <CardTitle
-            title={
-              <FormattedMessage id='landing.open_source.title' defaultMessage='Open source.' />
-            }
-            truncate={false}
-          />
-          <Text>
+          </p>
+        </div>
+        <div className='landing-page__feature'>
+          <h2>
+            <FormattedMessage id='landing.open_source.title' defaultMessage='Open source.' />
+          </h2>
+          <p>
             <FormattedMessage
               id='landing.open_source.description'
               defaultMessage='Nicolium is free and open source software. You can participate in development, contribute to the project or report bugs.'
             />
-          </Text>
-        </Card>
+          </p>
+        </div>
       </div>
     </Column>
-    <div className='mt-4 flex flex-col gap-4 px-4 xl:hidden'>
+    <div className='landing-page__footer'>
       <LinkFooter />
     </div>
   </>
