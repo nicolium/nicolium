@@ -90,7 +90,6 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
             onChange(target.files);
           }}
           disabled={disabled}
-          className='hidden'
         />
         {onChangeDescription && src && (
           <button

@@ -132,7 +132,7 @@ const MigrationPage = () => {
             required
           />
         </FormGroup>
-        <div className='migration-form__actions'>
+        <div className='migration-form__actions form__actions'>
           <button type='submit' disabled={isLoading}>
             <FormattedMessage id='migration.submit' defaultMessage='Move followers' />
           </button>

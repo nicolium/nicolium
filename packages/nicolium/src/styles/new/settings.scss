@@ -379,6 +379,10 @@
   background-color: rgb(var(--color-primary-300));
   outline: 2px solid white;
 
+  input {
+    display: none;
+  }
+
   .dark & {
     outline-color: rgb(var(--color-primary-900));
   }
@@ -510,11 +514,6 @@
   }
 
   &__footer {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: flex-end;
-
     button {
       @include mixins.button($theme: primary);
     }
@@ -628,11 +627,6 @@
 
 .edit-filter {
   &__actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: flex-end;
-
     button {
       @include mixins.button($theme: primary);
     }
@@ -679,11 +673,6 @@
   }
 
   &__actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: flex-end;
-
     button {
       @include mixins.button($theme: primary);
     }
@@ -872,11 +861,6 @@
   }
 
   &__actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: flex-end;
-
     button {
       @include mixins.button($theme: primary);
     }
@@ -889,11 +873,6 @@
   }
 
   &__actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: flex-end;
-
     button {
       @include mixins.button($theme: primary);
     }
@@ -919,11 +898,6 @@
   }
 
   &__actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: flex-end;
-
     button {
       @include mixins.button($theme: primary);
     }
@@ -936,6 +910,112 @@
   gap: 1rem;
 }
 
+.enable-otp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__warning {
+    @include mixins.text($theme: muted);
+  }
+
+  &__codes-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    padding: 1rem;
+    border: 2px solid rgb(var(--color-gray-200));
+    border-radius: var(--radius-lg);
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+    }
+  }
+
+  &__codes-title {
+    @include mixins.text($weight: medium, $align: center);
+  }
+
+  &__codes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+
+    border-radius: var(--radius-lg);
+
+    text-align: center;
+
+    p {
+      @include mixins.text($theme: muted, $size: sm);
+    }
+  }
+
+  &__actions {
+    a {
+      @include mixins.button($theme: tertiary);
+    }
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.disable-otp-form {
+  &__header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    @include mixins.text($weight: medium);
+  }
+
+  &__description {
+    @include mixins.text($theme: muted);
+  }
+
+  &__actions {
+    button {
+      @include mixins.button($theme: danger);
+    }
+  }
+}
+
+.otp-confirm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__qr {
+    border-radius: var(--radius-lg);
+  }
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__step-title {
+    @include mixins.text($size: lg, $weight: semibold);
+  }
+
+  &__description {
+    @include mixins.text($theme: muted);
+  }
+
+  &__actions {
+    button[type='button'] {
+      @include mixins.button($theme: tertiary);
+    }
+
+    button[type='submit'] {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
 .delete-account {
   display: flex;
   flex-direction: column;
@@ -946,11 +1026,6 @@
   }
 
   &__actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: flex-end;
-
     button {
       @include mixins.button($theme: danger);
     }

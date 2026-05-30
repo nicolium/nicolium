@@ -900,7 +900,7 @@ const EditProfilePage: React.FC = () => {
           </Accordion>
         )}
 
-        <div className='profile-form__actions'>
+        <div className='profile-form__actions form__actions'>
           <Link to='/settings'>
             <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
           </Link>

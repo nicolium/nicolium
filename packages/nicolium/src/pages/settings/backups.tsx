@@ -96,7 +96,7 @@ const BackupsPage = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       {body}
 
-      <div className='backups-list__footer'>
+      <div className='backups-list__footer form__actions'>
         <button disabled={isLoading} onClick={handleCreateBackup}>
           {intl.formatMessage(messages.create)}
         </button>
