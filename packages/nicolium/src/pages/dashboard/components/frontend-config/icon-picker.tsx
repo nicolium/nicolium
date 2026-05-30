@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 
-const IconPickerDropdown = React.lazy(() => import('./admin-icon-picker-dropdown'));
+const IconPickerDropdown = React.lazy(() => import('./icon-picker-dropdown'));
 
 interface IIconPicker {
   value: string;
