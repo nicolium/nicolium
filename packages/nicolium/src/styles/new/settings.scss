@@ -1035,11 +1035,6 @@
 .edit-email__actions,
 .edit-password__actions,
 .privacy__actions {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: flex-end;
-
   a {
     @include mixins.button($theme: tertiary);
   }
@@ -1067,11 +1062,6 @@
 }
 
 .profile-form__actions {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: flex-end;
-
   a {
     @include mixins.button($theme: tertiary);
   }

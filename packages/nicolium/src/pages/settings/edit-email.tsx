@@ -81,7 +81,7 @@ const EditEmailPage = () => {
           <Input type='password' name='password' onChange={handleInputChange} value={password} />
         </FormGroup>
 
-        <div className='edit-email__actions'>
+        <div className='form__actions edit-email__actions'>
           <Link to='/settings'>
             <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
           </Link>

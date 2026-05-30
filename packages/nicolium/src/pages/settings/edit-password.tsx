@@ -121,7 +121,7 @@ const EditPasswordPage = () => {
           />
         </FormGroup>
 
-        <div className='edit-password__actions'>
+        <div className='form__actions edit-password__actions'>
           <Link to='/settings/security'>
             <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
           </Link>
