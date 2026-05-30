@@ -361,7 +361,7 @@ const InteractionPoliciesPage = () => {
           disabled={isUpdating}
         />
 
-        <div className='interaction-policies__actions'>
+        <div className='interaction-policies__actions form__actions'>
           <button type='submit' disabled={isUpdating}>
             <FormattedMessage id='interaction_policies.update' defaultMessage='Update' />
           </button>

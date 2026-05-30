@@ -98,7 +98,7 @@ const DeleteAccountPage = () => {
             </FormGroup>
           )}
 
-          <div className='delete-account__actions'>
+          <div className='delete-account__actions form__actions'>
             <button type='submit' disabled={isLoading}>
               <FormattedMessage id='security.submit.delete' defaultMessage='Delete account' />
             </button>

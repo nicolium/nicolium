@@ -29,7 +29,7 @@ const CSVExporter: React.FC<ICSVExporter> = ({ inputLabel, inputHint, submitText
       <p className='csv-exporter__label'>{inputLabel}</p>
       <p className='csv-exporter__hint'>{inputHint}</p>
 
-      <div className='csv-exporter__actions'>
+      <div className='csv-exporter__actions form__actions'>
         <button onClick={handleClick} disabled={isLoading}>
           {submitText}
         </button>

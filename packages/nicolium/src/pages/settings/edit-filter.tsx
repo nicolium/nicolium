@@ -371,7 +371,7 @@ const EditFilterPage: React.FC = () => {
 
         {features.filtersV2 && keywordsField}
 
-        <div className='edit-filter__actions'>
+        <div className='edit-filter__actions form__actions'>
           <button type='submit' disabled={isFetchingFilter || isUpdating || isCreating}>
             {filterId !== 'new' ? (
               <FormattedMessage id='column.filters.edit' defaultMessage='Edit filter' />

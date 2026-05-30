@@ -346,7 +346,7 @@ const Privacy: React.FC<ISettingsPage> = ({
           </ListItem>
         </List>
 
-        <div className='privacy__actions'>
+        <div className='privacy__actions form__actions'>
           <button type='submit'>
             <FormattedMessage id='url_privacy.save' defaultMessage='Save' />
           </button>

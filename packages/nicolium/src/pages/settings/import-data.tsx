@@ -81,7 +81,7 @@ const DataImporter: React.FC<IDataImporter> = ({
         </List>
       )}
 
-      <div className='data-importer__actions'>
+      <div className='data-importer__actions form__actions'>
         <button type='submit' disabled={isLoading || !file}>
           {submitText}
         </button>
