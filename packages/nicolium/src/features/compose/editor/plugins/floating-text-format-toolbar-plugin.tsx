@@ -222,7 +222,7 @@ const BlockTypeDropdown = ({
       type='button'
     >
       <Icon src={icon} />
-      <Icon src={iconCaretDown} className='compose-editor__toolbar__caret' />
+      <Icon src={iconCaretDown} containerClassName='compose-editor__toolbar__caret' />
       {showDropDown && (
         <div className='compose-editor__toolbar__dropdown'>
           <ToolbarButton

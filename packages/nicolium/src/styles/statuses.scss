@@ -1939,3 +1939,129 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     color: rgb(var(--color-gray-600));
   }
 }
+
+.status--placeholder {
+  background-color: white;
+
+  .black & {
+    background-color: black;
+  }
+
+  .dark & {
+    background-color: rgb(var(--color-primary-900));
+  }
+
+  &--rounded {
+    padding: 1.5rem 1rem;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+    .dark & {
+      box-shadow: none;
+    }
+
+    @media (min-width: variables.$breakpoint-sm) {
+      padding: 1.25rem;
+      border-radius: var(--radius-xl);
+    }
+  }
+
+  &--slim {
+    padding-block: 1rem;
+  }
+
+  &__wrapper {
+    overflow: hidden;
+    width: 100%;
+
+    .no-reduce-motion & {
+      animation: pulse 2s ease-in-out infinite;
+    }
+  }
+
+  &__header {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  &__avatar {
+    flex-shrink: 0;
+  }
+
+  &__name {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__body {
+    margin-top: 1rem;
+  }
+}
+
+.status-card--placeholder {
+  .no-reduce-motion & {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  &__image {
+    width: 40%;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    background-color: rgb(var(--color-primary-200));
+
+    .dark & {
+      background-color: rgb(var(--color-primary-700));
+    }
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    width: 60%;
+    padding: 1rem;
+
+    color: rgb(var(--color-primary-50));
+    overflow-wrap: break-word;
+  }
+}
+
+.media-gallery__item--placeholder {
+  background-color: rgb(var(--color-primary-200));
+
+  .no-reduce-motion & {
+    animation: pulse 2s ease-in-out infinite;
+  }
+}
+
+.scheduled-status,
+.draft-status {
+  padding: 1rem 0;
+
+  &__account {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: primary, $size: sm);
+
+      &:last-child {
+        @include mixins.button($theme: danger, $size: xs);
+      }
+    }
+  }
+}

@@ -12,26 +12,23 @@ interface IPlaceholderStatus {
 /** Fake status to display while data is loading. */
 const PlaceholderStatus: React.FC<IPlaceholderStatus> = React.memo(({ variant = 'rounded' }) => (
   <div
-    className={clsx({
-      'status--placeholder bg-white black:bg-black dark:bg-primary-900': true,
-      'px-4 py-6 shadow-xl dark:shadow-none sm:rounded-xl sm:p-5': variant === 'rounded',
-      'py-4': variant === 'slim',
+    className={clsx('status--placeholder', {
+      'status--placeholder--rounded': variant === 'rounded',
+      'status--placeholder--slim': variant === 'slim',
     })}
   >
-    <div className='w-full overflow-hidden no-reduce-motion:animate-pulse'>
-      <div>
-        <div className='flex items-center gap-3'>
-          <div className='shrink-0'>
-            <PlaceholderAvatar size={42} />
-          </div>
+    <div className='status--placeholder__wrapper'>
+      <div className='status--placeholder__header'>
+        <div className='status--placeholder__avatar'>
+          <PlaceholderAvatar size={42} />
+        </div>
 
-          <div className='min-w-0 flex-1'>
-            <PlaceholderDisplayName minLength={3} maxLength={25} />
-          </div>
+        <div className='status--placeholder__name'>
+          <PlaceholderDisplayName minLength={3} maxLength={25} />
         </div>
       </div>
 
-      <div className='status__content-wrapper mt-4'>
+      <div className='status__content-wrapper status--placeholder__body'>
         <PlaceholderStatusContent minLength={5} maxLength={120} />
       </div>
     </div>

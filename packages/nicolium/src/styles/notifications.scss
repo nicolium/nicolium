@@ -52,3 +52,47 @@
     padding: 0;
   }
 }
+
+.notification--placeholder {
+  padding: 1rem;
+  background-color: white;
+
+  .black & {
+    background-color: black;
+  }
+
+  .dark & {
+    background-color: rgb(var(--color-primary-900));
+  }
+
+  &__wrapper {
+    width: 100%;
+
+    .no-reduce-motion & {
+      animation: pulse 2s ease-in-out infinite;
+    }
+  }
+
+  &__content {
+    margin-bottom: 0.5rem;
+  }
+
+  &__account {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  &__avatar {
+    flex-shrink: 0;
+  }
+
+  &__name {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__body {
+    margin-top: 1rem;
+  }
+}

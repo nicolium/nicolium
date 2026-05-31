@@ -51,7 +51,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
 
   return (
     <div
-      className={clsx('status__wrapper py-4', `status__wrapper-${status.visibility}`, {
+      className={clsx('status__wrapper draft-status', `status__wrapper-${status.visibility}`, {
         'status__wrapper-reply': !!status.in_reply_to_id,
       })}
       tabIndex={0}
@@ -62,19 +62,17 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
         })}
         data-id={status.id}
       >
-        <div className='mb-4'>
-          <div className='flex items-start justify-between'>
-            <Account
-              key={account.id}
-              account={account}
-              action={<DraftStatusActionBar source={draftStatus} status={status} {...other} />}
-            />
-          </div>
+        <div className='draft-status__account'>
+          <Account
+            key={account.id}
+            account={account}
+            action={<DraftStatusActionBar source={draftStatus} status={status} {...other} />}
+          />
         </div>
 
         <StatusReplyMentions status={status} />
 
-        <div className='flex flex-col gap-4'>
+        <div className='draft-status__content'>
           <StatusContent status={status} collapsable />
 
           {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}

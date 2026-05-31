@@ -214,8 +214,7 @@ const Streamfield = <T,>({
                   <Component index={i} onChange={handleChange(i)} value={value} autoFocus={i > 0} />
                   {values.length > minItems && onRemoveItem && (
                     <IconButton
-                      iconClassName='h-4 w-4'
-                      className='bg-transparent text-gray-600 hover:text-gray-600'
+                      className='streamfield__item__remove'
                       src={iconX}
                       onClick={() => {
                         onRemoveItem(i);

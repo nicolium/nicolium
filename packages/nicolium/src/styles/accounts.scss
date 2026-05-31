@@ -1024,3 +1024,18 @@
     padding: 1rem 2rem;
   }
 }
+
+.account--placeholder {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+
+  &__avatar {
+    flex-shrink: 0;
+  }
+
+  &__name {
+    flex: 1;
+    min-width: 0;
+  }
+}

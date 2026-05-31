@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Text from '@/components/ui/text';
 import { randomIntFromInterval } from '@/utils/placeholders';
 
 import PlaceholderAvatar from './placeholder-avatar';
@@ -13,56 +12,47 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
   return (
     <div
       data-testid='placeholder-chat-message'
-      className={clsx({
-        'flex max-w-[85%] flex-col gap-1 no-reduce-motion:animate-pulse': true,
-        'ml-auto': isMyMessage,
+      className={clsx('chat-message--placeholder', {
+        'chat-message--placeholder--mine': isMyMessage,
       })}
     >
-      <div
-        className={clsx('flex items-center', {
-          'justify-end': isMyMessage,
-          'justify-start': !isMyMessage,
-        })}
-      >
+      <div className='chat-message--placeholder__row'>
         <div
-          className={clsx({
-            'relative text-ellipsis break-words rounded-md p-2': true,
-            'mr-2': isMyMessage,
-            'order-2 ml-2': !isMyMessage,
+          className={clsx('chat-message--placeholder__bubble', {
+            'chat-message--placeholder__bubble--mine': isMyMessage,
+            'chat-message--placeholder__bubble--theirs': !isMyMessage,
           })}
         >
           <div
             style={{ width: messageLength, height: 20 }}
-            className='rounded-full bg-primary-50 dark:bg-primary-800'
+            className='chat-message--placeholder__text-block'
           />
         </div>
 
-        <div className={clsx({ 'order-1': !isMyMessage })}>
+        <div className={clsx({ 'chat-message--placeholder__avatar--first': !isMyMessage })}>
           <PlaceholderAvatar size={34} />
         </div>
       </div>
 
       <div
-        className={clsx('flex items-center gap-2', {
-          'ml-auto': isMyMessage,
+        className={clsx('chat-message--placeholder__meta', {
+          'chat-message--placeholder__meta--mine': isMyMessage,
         })}
       >
-        <Text
-          theme='muted'
-          size='xs'
+        <span
           className={clsx({
-            'text-right': isMyMessage,
-            'order-2': !isMyMessage,
+            'chat-message--placeholder__timestamp--mine': isMyMessage,
+            'chat-message--placeholder__timestamp--theirs': !isMyMessage,
           })}
         >
           <span
             style={{ width: 50, height: 12 }}
-            className='block rounded-full bg-primary-50 dark:bg-primary-800'
+            className='chat-message--placeholder__timestamp-block'
           />
-        </Text>
+        </span>
 
-        <div className={clsx({ 'order-1': !isMyMessage })}>
-          <div className='ml-2 w-[34px]' />
+        <div className={clsx({ 'chat-message--placeholder__spacer-wrapper': !isMyMessage })}>
+          <div className='chat-message--placeholder__spacer' />
         </div>
       </div>
     </div>

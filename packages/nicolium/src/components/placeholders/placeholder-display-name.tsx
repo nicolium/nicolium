@@ -15,7 +15,7 @@ const PlaceholderDisplayName: React.FC<IPlaceholderDisplayName> = React.memo(
     const acctLength = randomIntFromInterval(maxLength, minLength);
 
     return (
-      <div className='flex flex-col text-primary-50 dark:text-primary-800'>
+      <div className='placeholder-display-name'>
         <p>{generateText(length)}</p>
         {withSuffix && <p>{generateText(acctLength)}</p>}
       </div>

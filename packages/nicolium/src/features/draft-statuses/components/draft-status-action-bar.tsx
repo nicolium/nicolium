@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
-import Button from '@/components/ui/button';
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -77,13 +76,13 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   };
 
   return (
-    <div className='flex justify-end gap-2'>
-      <Button theme='primary' size='sm' onClick={handleEditClick}>
+    <div className='draft-status__actions'>
+      <button onClick={handleEditClick}>
         <FormattedMessage id='draft_status.edit' defaultMessage='Edit' />
-      </Button>
-      <Button theme='danger' size='sm' onClick={handleCancelClick}>
+      </button>
+      <button onClick={handleCancelClick}>
         <FormattedMessage id='draft_status.cancel' defaultMessage='Delete' />
-      </Button>
+      </button>
     </div>
   );
 };

@@ -78,7 +78,7 @@ const PlaceholderMediaGallery: React.FC<IPlaceholderMediaGallery> = ({ media, de
     return (
       <div
         key={i}
-        className='media-gallery__item bg-primary-200 no-reduce-motion:animate-pulse'
+        className='media-gallery__item media-gallery__item--placeholder'
         style={{ position, float, left, top, right, bottom, height, width }}
       />
     );

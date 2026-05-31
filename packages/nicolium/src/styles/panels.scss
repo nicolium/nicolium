@@ -116,3 +116,55 @@
     @include mixins.button($theme: secondary, $block: true);
   }
 }
+
+.sidebar-suggestion--placeholder {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+
+  .no-reduce-motion & {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  &__avatar {
+    display: block;
+    flex-shrink: 0;
+
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-full);
+
+    text-align: center;
+
+    background-color: rgb(var(--color-primary-200));
+
+    .dark & {
+      background-color: rgb(var(--color-primary-700));
+    }
+  }
+
+  &__name {
+    display: flex;
+    flex-direction: column;
+    color: rgb(var(--color-primary-200));
+
+    .dark & {
+      color: rgb(var(--color-primary-700));
+    }
+  }
+}
+
+.sidebar-trend--placeholder {
+  display: flex;
+  flex-direction: column;
+  color: rgb(var(--color-primary-200));
+
+  .no-reduce-motion & {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .dark & {
+    color: rgb(var(--color-primary-700));
+  }
+}

@@ -15,8 +15,8 @@ const PlaceholderStatusContent: React.FC<IPlaceholderStatusContent> = ({
   const length = randomIntFromInterval(maxLength, minLength);
 
   return (
-    <div className='flex flex-col text-primary-50 dark:text-primary-800'>
-      <p className='break-words'>{generateText(length)}</p>
+    <div className='placeholder-status-content'>
+      <p>{generateText(length)}</p>
     </div>
   );
 };
