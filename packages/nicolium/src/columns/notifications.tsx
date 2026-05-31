@@ -34,7 +34,7 @@ import { selectChild } from '@/utils/scroll-utils';
 import type { Item } from '@/components/ui/tabs';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
-import '@/styles/new/notifications.scss';
+import '@/styles/notifications.scss';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },

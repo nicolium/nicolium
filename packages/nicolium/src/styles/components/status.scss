@@ -1,5 +1,5 @@
-@use '../new/mixins';
-@use '../new/variables';
+@use '../mixins';
+@use '../variables';
 
 [column-type='filled'] .status__wrapper,
 [column-type='filled'] .status--placeholder {
@@ -283,5 +283,52 @@ a.status-card {
     .dark & {
       background-color: rgb(var(--color-gray-800) / 0.3);
     }
+  }
+}
+
+.thread__status {
+  position: relative;
+  padding-bottom: 1rem;
+
+  .status__wrapper {
+    padding: 0;
+    box-shadow: none;
+  }
+
+  &:not(&--linear) .status__content-wrapper {
+    padding-left: 54px;
+
+    dir[dir="rtl"] & {
+      padding-right: 54px;
+      padding-left: 0;
+    }
+  }
+
+  &--linear {
+    div:last-child > & hr {
+      display: none;
+    }
+  }
+}
+
+.thread-indent-border {
+  position: absolute;
+  top: -1rem;
+  bottom: 1rem;
+
+  width: 2px;
+
+  background: rgb(var(--color-gray-200));
+
+  .dark & {
+    background: rgb(var(--color-primary-800));
+  }
+
+  .black & {
+    background: rgb(var(--color-gray-800));
+  }
+
+  &:last-of-type:not(:first-child) {
+    top: 21px;
   }
 }
