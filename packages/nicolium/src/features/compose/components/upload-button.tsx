@@ -59,7 +59,7 @@ const UploadButton: React.FC<IUploadButton> = ({
   const src = icon ?? (onlyImages(attachmentTypes) ? iconImage : iconPaperclip);
 
   return (
-    <div>
+    <div className='upload-button'>
       <IconButton
         src={src}
         className={className}
@@ -78,7 +78,7 @@ const UploadButton: React.FC<IUploadButton> = ({
           accept={accept}
           onChange={handleChange}
           disabled={disabled}
-          className='hidden'
+          className='upload-button__input'
         />
       </label>
     </div>

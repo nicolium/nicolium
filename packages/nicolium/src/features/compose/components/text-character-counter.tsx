@@ -20,9 +20,8 @@ const TextCharacterCounter: React.FC<ITextCharacterCounter> = ({ text, max }) =>
 
   const checkRemainingText = (diff: number) => (
     <span
-      className={clsx('text-sm font-medium', {
-        'text-gray-700': diff >= 0,
-        'text-secondary-600': diff < 0,
+      className={clsx('character-counter__text', {
+        'character-counter__text--exceeded': diff < 0,
       })}
       title={intl.formatMessage(messages.characterCount, { value: diff, max })}
     >

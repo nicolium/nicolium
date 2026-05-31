@@ -11,7 +11,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
-import Input from '@/components/ui/input';
 import { useFeatures } from '@/hooks/use-features';
 import {
   type Language,
@@ -200,15 +199,14 @@ const getLanguageDropdown =
             />
           </span>
 
-          <Input
+          <input
             ref={input}
-            className='w-64'
+            className='input input--normal'
             type='text'
             value={searchValue}
             onChange={({ target }) => {
               setSearchValue(target.value);
             }}
-            outerClassName='mt-0'
             placeholder={intl.formatMessage(messages.search)}
           />
           <button

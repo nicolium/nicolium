@@ -30,10 +30,7 @@ const Warning: React.FC<IWarning> = ({
     immediate: !animate || reduceMotion,
   });
 
-  const className = clsx(
-    'rounded border border-solid border-gray-400 bg-transparent px-2.5 py-2 text-xs text-gray-900 dark:border-gray-800 dark:text-white',
-    customClassName,
-  );
+  const className = clsx('compose-warning', customClassName);
 
   if (!message) return null;
 

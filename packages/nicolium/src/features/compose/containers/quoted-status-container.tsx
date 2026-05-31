@@ -26,11 +26,7 @@ const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) 
     return null;
   }
 
-  return (
-    <div className='mb-2'>
-      <QuotedStatus status={status} onCancel={onCancel} compose />
-    </div>
-  );
+  return <QuotedStatus status={status} onCancel={onCancel} compose />;
 };
 
 export { QuotedStatusContainer as default };
