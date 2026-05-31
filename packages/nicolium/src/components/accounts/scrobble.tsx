@@ -81,7 +81,6 @@ ${scrobble.external_link ? scrobble.external_link : ''}`.trim(),
               song: scrobble.external_link ? (
                 <a
                   href={scrobble.external_link}
-                  className='underline'
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
