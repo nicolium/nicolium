@@ -1,8 +1,8 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import LinkFooter from '@/components/navigation/link-footer';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import sourceCode from '@/utils/code';
 
@@ -21,13 +21,13 @@ const LandingPage = () => (
             defaultMessage='Nicolium is a feature-rich Fediverse web client.'
           />
         </p>
-        <div className='flex justify-end gap-4'>
-          <Button href={sourceCode.url}>
+        <div className='landing-page__links'>
+          <a href={sourceCode.url} target='_blank' rel='noopener noreferrer'>
             <FormattedMessage id='landing.source_code' defaultMessage='Source code' />
-          </Button>
-          <Button to='/login/external' theme='primary'>
+          </a>
+          <Link to='/login/external'>
             <FormattedMessage id='landing.sign_in' defaultMessage='Sign in' />
-          </Button>
+          </Link>
         </div>
         <div className='landing-page__feature'>
           <h2>

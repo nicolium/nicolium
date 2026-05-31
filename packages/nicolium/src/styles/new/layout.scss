@@ -1641,6 +1641,16 @@ body {
     @include mixins.text;
   }
 
+  &__links {
+    a:first-child {
+      @include mixins.button;
+    }
+
+    a:last-child {
+      @include mixins.button($theme: primary);
+    }
+  }
+
   &__feature {
     @include mixins.card($variant: rounded);
     
