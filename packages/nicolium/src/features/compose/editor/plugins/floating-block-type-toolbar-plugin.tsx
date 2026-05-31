@@ -98,7 +98,7 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
         }
         onChange={handleChange}
         disabled={disabled}
-        className='hidden'
+        className='compose-editor__file-input'
       />
     </label>
   );
@@ -210,10 +210,7 @@ const BlockTypeFloatingToolbar = ({
   };
 
   return (
-    <div
-      ref={popupCharStylesEditorRef}
-      className='absolute left-0 top-0 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 opacity-0 shadow-lg transition-opacity dark:bg-gray-900'
-    >
+    <div ref={popupCharStylesEditorRef} className='compose-editor__toolbar'>
       {editor.isEditable() && (
         <>
           {composeAllowInlineImages && <UploadButton onSelectFile={createImage} />}

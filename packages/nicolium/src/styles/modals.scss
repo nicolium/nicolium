@@ -30,11 +30,11 @@
 
   &__hint {
     @include mixins.text;
-  
+
     .icon {
       display: inline-block;
       vertical-align: middle;
-  
+
       svg {
         width: 1rem;
         height: 1rem;

@@ -72,22 +72,21 @@ interface IComposeEditor {
 }
 
 const theme: InitialConfigType['theme'] = {
-  emoji: 'select-none',
-  hashtag:
-    'hover:underline text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-400',
-  link: 'hover:underline text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-400',
+  emoji: 'compose-editor__emoji',
+  hashtag: 'compose-editor__hashtag',
+  link: 'compose-editor__link',
   text: {
-    bold: 'font-bold',
-    code: 'font-mono',
-    italic: 'italic',
-    strikethrough: 'line-through',
-    underline: 'underline',
-    underlineStrikethrough: 'underline-line-through',
+    bold: 'compose-editor__text--bold',
+    code: 'compose-editor__text--code',
+    italic: 'compose-editor__text--italic',
+    strikethrough: 'compose-editor__text--strikethrough',
+    underline: 'compose-editor__text--underline',
+    underlineStrikethrough: 'compose-editor__text--underline-strikethrough',
   },
   heading: {
-    h1: 'text-2xl font-bold',
-    h2: 'text-xl font-bold',
-    h3: 'text-lg font-semibold',
+    h1: 'compose-editor__heading--h1',
+    h2: 'compose-editor__heading--h2',
+    h3: 'compose-editor__heading--h3',
   },
 };
 

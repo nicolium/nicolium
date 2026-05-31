@@ -82,11 +82,17 @@ class EmojiNode extends DecoratorNode<React.JSX.Element> {
           emoji={emoji.native}
           alt={emoji.colons}
           title={emoji.colons}
-          className='emojione size-4'
+          className='emojione compose-editor__emoji-icon'
         />
       );
     } else {
-      return <Component src={emoji.imageUrl} alt={emoji.colons} className='emojione size-4' />;
+      return (
+        <Component
+          src={emoji.imageUrl}
+          alt={emoji.colons}
+          className='emojione compose-editor__emoji-icon'
+        />
+      );
     }
   }
 }

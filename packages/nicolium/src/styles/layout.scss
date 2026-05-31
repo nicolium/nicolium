@@ -1653,7 +1653,7 @@ body {
 
   &__feature {
     @include mixins.card($variant: rounded);
-    
+
     h2 {
       @include mixins.text($size: xl, $weight: bold);
     }
@@ -1662,7 +1662,7 @@ body {
       @include mixins.text;
     }
   }
-  
+
   &__footer {
     display: flex;
     flex-direction: column;gap: 1rem;

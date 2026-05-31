@@ -242,7 +242,7 @@
     .black & {
       background-color: rgb(var(--color-primary-900));
     }
-  
+
     p {
       @include mixins.text($theme: muted);
 
@@ -256,12 +256,12 @@
     display: flex;
     gap: 0.25rem;
     align-items: center;
-    
+
     &__name {
       @include mixins.text($weight: medium);
     }
   }
-  
+
   // Wrapper for status card with attributions
   &__container {
     display: flex;

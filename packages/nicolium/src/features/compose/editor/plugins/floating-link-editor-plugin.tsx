@@ -160,15 +160,12 @@ const FloatingLinkEditor = ({
   }, [isEditMode]);
 
   return (
-    <div
-      ref={editorRef}
-      className='absolute left-0 top-0 z-10 w-full max-w-sm rounded-lg bg-white opacity-0 shadow-md transition-opacity will-change-transform dark:bg-gray-900'
-    >
-      <div className='relative mx-3 my-2 box-border block rounded-2xl border-0 bg-gray-100 px-3 py-2 text-sm text-gray-800 outline-0 dark:bg-gray-800 dark:text-gray-100'>
+    <div ref={editorRef} className='compose-editor__link-editor'>
+      <div className='compose-editor__link-editor__field'>
         {isEditMode ? (
           <>
             <input
-              className='-mx-3 -my-2 w-full border-0 bg-transparent px-3 py-2 text-sm text-gray-900 outline-0 dark:text-gray-100'
+              className='compose-editor__link-editor__input'
               ref={inputRef}
               value={linkUrl}
               onChange={(event) => {
@@ -192,7 +189,7 @@ const FloatingLinkEditor = ({
               }}
             />
             <div
-              className='absolute inset-y-0 right-0 flex w-9 cursor-pointer items-center justify-center'
+              className='compose-editor__link-editor__action'
               role='button'
               tabIndex={0}
               aria-label={intl.formatMessage(messages.removeLink)}
@@ -209,13 +206,13 @@ const FloatingLinkEditor = ({
                 }
               }}
             >
-              <Icon className='size-5' src={iconX} aria-hidden />
+              <Icon className='compose-editor__link-editor__action-icon' src={iconX} aria-hidden />
             </div>
           </>
         ) : (
           <>
             <a
-              className='mr-8 block truncate text-primary-600 no-underline hover:underline dark:text-primary-400'
+              className='compose-editor__link-editor__url'
               href={linkUrl}
               target='_blank'
               rel='noopener noreferrer'
@@ -223,7 +220,7 @@ const FloatingLinkEditor = ({
               {linkUrl}
             </a>
             <div
-              className='absolute inset-y-0 right-0 flex w-9 cursor-pointer items-center justify-center'
+              className='compose-editor__link-editor__action'
               role='button'
               tabIndex={0}
               aria-label={intl.formatMessage(messages.editLink)}
@@ -240,7 +237,11 @@ const FloatingLinkEditor = ({
                 }
               }}
             >
-              <Icon className='size-5' src={iconPencilSimple} aria-hidden />
+              <Icon
+                className='compose-editor__link-editor__action-icon'
+                src={iconPencilSimple}
+                aria-hidden
+              />
             </div>
           </>
         )}
