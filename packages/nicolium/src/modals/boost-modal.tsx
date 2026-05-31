@@ -10,9 +10,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
-import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
-import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import ReplyIndicator from '@/features/compose/components/reply-indicator';
 import {
@@ -87,6 +85,8 @@ interface BoostModalProps {
   statusId: string;
   onReblog: (selectedVisibility?: string, scheduledAt?: string) => void;
   visibility?: string;
+  hasMissingDescriptions?: boolean;
+  hasFilenameDescriptions?: boolean;
 }
 
 const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
@@ -94,6 +94,8 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
   onReblog,
   visibility,
   onClose,
+  hasMissingDescriptions,
+  hasFilenameDescriptions,
 }) => {
   const features = useFeatures();
   const intl = useIntl();
@@ -140,48 +142,59 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
         ) : undefined
       }
     >
-      <div className='flex flex-col gap-4'>
+      <div className='boost-modal__content'>
+        {(hasMissingDescriptions || hasFilenameDescriptions) && (
+          <p className='boost-modal__warning'>
+            {hasMissingDescriptions ? (
+              <FormattedMessage
+                id='confirmations.boost_missing_description.message'
+                defaultMessage='The post does not have a description for all attachments. Do you want to repost it anyway?'
+              />
+            ) : (
+              <FormattedMessage
+                id='confirmations.boost_missing_description.filename_warning'
+                defaultMessage="One or more attachments likely has a filename (e.g. 'image.jpg') as its description instead of meaningful alt text. Do you want to repost it anyway?"
+              />
+            )}
+          </p>
+        )}
+
         <ReplyIndicator status={status} hideActions />
 
-        <Text>
+        <p className='boost-modal__hint'>
           <FormattedMessage
             id='boost_modal.combo'
             defaultMessage='You can press {combo} to skip this next time'
             values={{
               combo: (
                 <span>
-                  Shift +{' '}
-                  <Icon
-                    containerClassName='inline-block align-middle'
-                    className='h-4 w-4'
-                    src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
-                  />
+                  Shift + <Icon src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat} />
                 </span>
               ),
             }}
           />
-        </Text>
+        </p>
 
         {features.scheduledReblogs && (
           <>
-            <label className='flex items-center gap-2'>
-              <Text tag='span'>
+            <label className='boost-modal__schedule__toggle'>
+              <span>
                 <FormattedMessage
                   id='boost_modal.schedule.toggle'
                   defaultMessage='Schedule repost for later'
                 />
-              </Text>
+              </span>
 
               <Toggle checked={!!scheduledAt} onChange={toggleSchedule} />
             </label>
 
             {scheduledAt && (
-              <div className='flex flex-col gap-2'>
-                <Text weight='medium'>
+              <div className='boost-modal__schedule__picker'>
+                <span className='boost-modal__schedule__label'>
                   <FormattedMessage id='boost_modal.schedule.label' defaultMessage='Schedule at:' />
-                </Text>
+                </span>
 
-                <Suspense fallback={<Input type='text' disabled />}>
+                <Suspense fallback={<input type='text' disabled className='input input--normal' />}>
                   <DatePicker
                     selected={scheduledAt}
                     showTimeSelect

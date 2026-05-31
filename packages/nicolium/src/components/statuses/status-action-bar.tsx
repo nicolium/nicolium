@@ -556,37 +556,47 @@ const ReblogButton: React.FC<IReblogButton> = ({
         }
       };
 
-      if (missingDescriptionBoostModal && (hasMissingDescriptions || hasFilenameDescriptions)) {
-        openModal('CONFIRM', {
-          heading: (
-            <FormattedMessage
-              id='confirmations.boost_missing_description.heading'
-              defaultMessage='Reposting a post with missing description'
-            />
-          ),
-          message: (
-            <>
-              {hasMissingDescriptions && (
-                <FormattedMessage
-                  id='confirmations.boost_missing_description.message'
-                  defaultMessage='The post does not have a description for all attachments. Do you want to repost it anyway?'
-                />
-              )}
-              {hasFilenameDescriptions && (
-                <FormattedMessage
-                  id='confirmations.boost_missing_description.filename_warning'
-                  defaultMessage="One or more attachments likely has a filename (e.g. 'image.jpg') as its description instead of meaningful alt text. Do you want to repost it anyway?"
-                />
-              )}
-            </>
-          ),
-          confirm: intl.formatMessage(messages.boostConfirm),
-          onConfirm: doReblog,
-        });
-      } else if ((e && e.shiftKey) || !boostModal) {
-        doReblog();
+      const showMissingDescWarning =
+        missingDescriptionBoostModal && (hasMissingDescriptions || hasFilenameDescriptions);
+
+      if ((e && e.shiftKey) || !boostModal) {
+        if (showMissingDescWarning && !(e && e.shiftKey)) {
+          openModal('CONFIRM', {
+            heading: (
+              <FormattedMessage
+                id='confirmations.boost_missing_description.heading'
+                defaultMessage='Reposting a post with missing description'
+              />
+            ),
+            message: (
+              <>
+                {hasMissingDescriptions && (
+                  <FormattedMessage
+                    id='confirmations.boost_missing_description.message'
+                    defaultMessage='The post does not have a description for all attachments. Do you want to repost it anyway?'
+                  />
+                )}
+                {hasFilenameDescriptions && (
+                  <FormattedMessage
+                    id='confirmations.boost_missing_description.filename_warning'
+                    defaultMessage="One or more attachments likely has a filename (e.g. 'image.jpg') as its description instead of meaningful alt text. Do you want to repost it anyway?"
+                  />
+                )}
+              </>
+            ),
+            confirm: intl.formatMessage(messages.boostConfirm),
+            onConfirm: doReblog,
+          });
+        } else {
+          doReblog();
+        }
       } else {
-        openModal('BOOST', { statusId: status.id, onReblog: doReblog });
+        openModal('BOOST', {
+          statusId: status.id,
+          onReblog: doReblog,
+          hasMissingDescriptions: showMissingDescWarning && hasMissingDescriptions,
+          hasFilenameDescriptions: showMissingDescWarning && hasFilenameDescriptions,
+        });
       }
     } else {
       onOpenUnauthorizedModal('REBLOG');

@@ -1,6 +1,50 @@
 @use 'mixins';
 @use 'variables';
 
+.boost-modal {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__warning {
+    @include mixins.text;
+  }
+
+  &__hint {
+    @include mixins.text;
+  
+    .icon {
+      display: inline-block;
+      vertical-align: middle;
+  
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+  }
+
+  &__schedule {
+    &__toggle {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    &__label {
+      @include mixins.text($weight: medium);
+    }
+
+    &__picker {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}
+
 .crypto-donate-modal {
   max-width: 24rem;
 }
