@@ -817,7 +817,6 @@
 
       padding: 0.625rem;
 
-
       .icon-button {
         color: rgb(var(--color-gray-400));
 
@@ -1043,7 +1042,6 @@
     @include mixins.button($theme: primary);
   }
 }
-
 
 .profile-field {
   display: flex;
