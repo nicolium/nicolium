@@ -1,7 +1,7 @@
 import iconCameraPlus from '@phosphor-icons/core/regular/camera-plus.svg';
 import clsx from 'clsx';
 import React, { useRef } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import AltIndicator from '@/components/media/alt-indicator';
 import Avatar from '@/components/ui/avatar';
@@ -19,6 +19,7 @@ const messages = defineMessages({
     defaultMessage: 'Image description',
   },
   changeDescriptionConfirm: { id: 'group.upload_avatar.alt.confirm', defaultMessage: 'Save' },
+  uploadAvatar: { id: 'group.upload_avatar', defaultMessage: 'Upload avatar' },
 });
 
 interface IMediaInput {
@@ -67,6 +68,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
           },
           className,
         )}
+        aria-label={intl.formatMessage(messages.uploadAvatar)}
       >
         {src && (
           <Avatar
@@ -78,9 +80,6 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
         <div className={clsx('avatar-picker__overlay', src && 'avatar-picker__overlay--has-image')}>
           <Icon src={iconCameraPlus} />
         </div>
-        <span className='sr-only'>
-          <FormattedMessage id='group.upload_avatar' defaultMessage='Upload avatar' />
-        </span>
         <input
           ref={ref}
           name='avatar'

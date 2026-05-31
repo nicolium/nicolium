@@ -26,7 +26,7 @@ import StatusMention from './status-mention';
 
 import type { CustomEmoji, Mention } from 'pl-api';
 
-const GREENTEXT_CLASS = 'dark:text-accent-green text-lime-600';
+const GREENTEXT_CLASS = 'parsed-content__greentext';
 
 const messages = defineMessages({
   toggleWrap: {
@@ -137,7 +137,7 @@ const ParsedUrl: React.FC<IParsedUrl> = React.memo((props) => {
       title={props.href}
     >
       {props.children}
-      {host && <span className='text-xs lowercase'> [{host}]</span>}
+      {host && <span className='parsed-content__host'> [{host}]</span>}
     </a>
   );
 });
@@ -389,7 +389,7 @@ function parseContent(
   if (hasSuspiciousUrl) {
     content = (
       <>
-        <div className='mb-2 rounded border border-solid border-gray-400 px-2.5 py-2 text-xs text-gray-900 dark:border-gray-800 dark:text-white'>
+        <div className='parsed-content__suspicious-warning'>
           <FormattedMessage
             id='suspicious_url_warning.body'
             defaultMessage='This post might include a suspicious link. Please be cautious before entering any personal data or payment information.'
