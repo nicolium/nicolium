@@ -105,7 +105,7 @@ const SidebarItem: StreamfieldComponent<SidebarItemType> = ({ value }) => {
       <div>
         <p>
           {isAccountSidebarItem(value) && account
-            ? `@${account.username}`
+            ? `@${account.acct}`
             : intl.formatMessage(itemsMessages[itemKey])}
         </p>
         <small>{intl.formatMessage(itemHintsMessages[itemKey])}</small>
