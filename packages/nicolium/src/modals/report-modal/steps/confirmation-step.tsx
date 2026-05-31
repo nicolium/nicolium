@@ -1,17 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Text from '@/components/ui/text';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 
 const termsOfServiceText = <FormattedMessage id='shared.tos' defaultMessage='Terms of Service' />;
 
 const renderTermsOfServiceLink = (href: string) => (
-  <a
-    href={href}
-    target='_blank'
-    className='text-primary-600 hover:text-primary-800 hover:underline dark:text-primary-400 dark:hover:text-primary-400'
-  >
+  <a href={href} target='_blank'>
     {termsOfServiceText}
   </a>
 );
@@ -20,15 +15,15 @@ const ConfirmationStep: React.FC = () => {
   const { links } = useFrontendConfig();
 
   return (
-    <div className='flex flex-col gap-1'>
-      <Text weight='semibold' tag='h1' size='xl'>
+    <div className='report-modal__confirmation-step'>
+      <h1 className='report-modal__confirmation-step__title'>
         <FormattedMessage
           id='report.confirmation.title'
           defaultMessage='Thanks for submitting your report.'
         />
-      </Text>
+      </h1>
 
-      <Text>
+      <p className='report-modal__confirmation-step__text'>
         <FormattedMessage
           id='report.confirmation.content'
           defaultMessage='If we find that this {entity} is violating the {link} we will take further action on the matter.'
@@ -41,7 +36,7 @@ const ConfirmationStep: React.FC = () => {
               : termsOfServiceText,
           }}
         />
-      </Text>
+      </p>
     </div>
   );
 };

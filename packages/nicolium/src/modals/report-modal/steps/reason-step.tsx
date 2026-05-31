@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import FormGroup from '@/components/ui/form-group';
-import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 import { useInstance } from '@/stores/instance';
 
@@ -74,17 +73,17 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
   }, [rules]);
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='report-modal__reason-step'>
       {shouldRequireRule && (
-        <div className='flex flex-col gap-2'>
-          <Text size='xl' weight='semibold' tag='h1'>
+        <div className='report-modal__reason-step__rules'>
+          <h1 className='report-modal__reason-step__title'>
             <FormattedMessage id='report.reason.title' defaultMessage='Reason for reporting' />
-          </Text>
+          </h1>
 
-          <div className='relative'>
+          <div className='report-modal__reason-step__rules-wrapper'>
             <div
               style={{ maxHeight: RULES_HEIGHT }}
-              className='-space-y-px overflow-y-auto rounded-lg'
+              className='report-modal__reason-step__rules-list'
               onScroll={handleRulesScrolling}
               ref={rulesListRef}
             >
@@ -98,25 +97,19 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
                     onClick={() => {
                       handleRuleChange(rule.id);
                     }}
-                    className={clsx({
-                      'relative flex w-full cursor-pointer items-center justify-between border border-solid border-gray-200 p-4 text-start hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-primary-800/30': true,
-                      'rounded-tl-lg rounded-tr-lg': idx === 0,
-                      'rounded-bl-lg rounded-br-lg': idx === rules.length - 1,
-                      'bg-gray-200 hover:bg-gray-200 dark:bg-primary-800/50': isSelected,
+                    className={clsx('report-modal__reason-step__rule', {
+                      'report-modal__reason-step__rule--selected': isSelected,
                     })}
                   >
-                    <div className='mr-3 flex flex-col'>
-                      <Text
-                        tag='span'
-                        size='sm'
-                        weight='medium'
-                        theme={isSelected ? 'primary' : 'default'}
+                    <div className='report-modal__reason-step__rule__content'>
+                      <span
+                        className={clsx('report-modal__reason-step__rule__text', {
+                          'report-modal__reason-step__rule__text--selected': isSelected,
+                        })}
                       >
                         {rule.text}
-                      </Text>
-                      <Text tag='span' theme='muted' size='sm'>
-                        {rule.hint}
-                      </Text>
+                      </span>
+                      <span className='report-modal__reason-step__rule__hint'>{rule.hint}</span>
                     </div>
 
                     <input
@@ -125,7 +118,7 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
                       value={rule.id}
                       checked={isSelected}
                       readOnly
-                      className='size-4 rounded border-2 border-gray-300 text-primary-600 checked:bg-primary-500 focus:ring-primary-500 dark:border-gray-800 dark:bg-gray-900 dark:checked:bg-primary-500 dark:focus:ring-primary-500'
+                      className='report-modal__reason-step__rule__checkbox'
                     />
                   </button>
                 );
@@ -134,19 +127,17 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
 
             <div
               className={clsx(
-                'pointer-events-none absolute inset-x-0 top-0 flex justify-center rounded-t-lg bg-gradient-to-b from-white pb-12 pt-8 transition-opacity duration-500 dark:from-gray-900',
+                'report-modal__reason-step__rules-fade report-modal__reason-step__rules-fade--top',
                 {
-                  'opacity-0': isNearTop,
-                  'opacity-100': !isNearTop,
+                  'report-modal__reason-step__rules-fade--hidden': isNearTop,
                 },
               )}
             />
             <div
               className={clsx(
-                'pointer-events-none absolute inset-x-0 bottom-0 flex justify-center rounded-b-lg bg-gradient-to-t from-white pb-8 pt-12 transition-opacity duration-500 dark:from-gray-900',
+                'report-modal__reason-step__rules-fade report-modal__reason-step__rules-fade--bottom',
                 {
-                  'opacity-0': isNearBottom,
-                  'opacity-100': !isNearBottom,
+                  'report-modal__reason-step__rules-fade--hidden': isNearBottom,
                 },
               )}
             />

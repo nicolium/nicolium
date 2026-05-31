@@ -3,9 +3,8 @@ import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import FormGroup from '@/components/ui/form-group';
-import Text from '@/components/ui/text';
+import Icon from '@/components/ui/icon';
 import Toggle from '@/components/ui/toggle';
 import { useFeatures } from '@/hooks/use-features';
 import StatusCheckBox from '@/modals/report-modal/components/status-check-box';
@@ -76,14 +75,14 @@ const OtherActionsStep = ({
   };
 
   return (
-    <div className='flex flex-col gap-4'>
-      <div className='flex flex-col gap-2'>
-        <Text tag='h1' size='xl' weight='semibold'>
+    <div className='report-modal__other-actions-step'>
+      <div className='report-modal__other-actions-step__section'>
+        <h1 className='report-modal__other-actions-step__title'>
           <FormattedMessage
             id='report.other_actions.other_statuses'
             defaultMessage='Include other posts?'
           />
-        </Text>
+        </h1>
 
         <FormGroup
           labelText={
@@ -94,7 +93,7 @@ const OtherActionsStep = ({
           }
         >
           {showAdditionalStatuses ? (
-            <div className='flex flex-col gap-2'>
+            <div className='report-modal__other-actions-step__statuses'>
               <div className='status-list'>
                 {statusIds.map((statusId) => (
                   <StatusCheckBox
@@ -106,44 +105,40 @@ const OtherActionsStep = ({
                 ))}
               </div>
 
-              <div>
-                <Button
-                  icon={iconArrowsInSimple}
-                  theme='tertiary'
-                  size='sm'
-                  onClick={() => {
-                    setShowAdditionalStatuses(false);
-                  }}
-                >
-                  <FormattedMessage
-                    id='report.other_actions.hide_additional'
-                    defaultMessage='Hide additional posts'
-                  />
-                </Button>
-              </div>
+              <button
+                onClick={() => {
+                  setShowAdditionalStatuses(false);
+                }}
+              >
+                <Icon src={iconArrowsInSimple} />
+                <FormattedMessage
+                  id='report.other_actions.hide_additional'
+                  defaultMessage='Hide additional posts'
+                />
+              </button>
             </div>
           ) : (
-            <Button
-              icon={iconPlus}
-              theme='tertiary'
-              size='sm'
-              onClick={() => {
-                setShowAdditionalStatuses(true);
-              }}
-            >
-              <FormattedMessage id='report.other_actions.add_more' defaultMessage='Add more' />
-            </Button>
+            <div className='report-modal__other-actions-step__statuses'>
+              <button
+                onClick={() => {
+                  setShowAdditionalStatuses(true);
+                }}
+              >
+                <Icon src={iconPlus} />
+                <FormattedMessage id='report.other_actions.add_more' defaultMessage='Add more' />
+              </button>
+            </div>
           )}
         </FormGroup>
       </div>
 
-      <div className='flex flex-col gap-2'>
-        <Text tag='h1' size='xl' weight='semibold'>
+      <div className='report-modal__other-actions-step__section'>
+        <h1 className='report-modal__other-actions-step__title'>
           <FormattedMessage
             id='report.other_actions.further_actions'
             defaultMessage='Further actions:'
           />
-        </Text>
+        </h1>
 
         <FormGroup
           labelText={
@@ -153,16 +148,16 @@ const OtherActionsStep = ({
             />
           }
         >
-          <div className='flex items-center gap-2'>
+          <div className='report-modal__other-actions-step__toggle'>
             <Toggle checked={isBlocked} onChange={handleBlockChange} id='report-block' />
 
-            <Text theme='muted' tag='label' size='sm' htmlFor='report-block'>
+            <label htmlFor='report-block'>
               <FormattedMessage
                 id='report.block'
                 defaultMessage='Block {target}'
                 values={{ target: `@${account.acct}` }}
               />
-            </Text>
+            </label>
           </div>
         </FormGroup>
 
@@ -175,7 +170,7 @@ const OtherActionsStep = ({
               />
             }
           >
-            <div className='flex items-center gap-2'>
+            <div className='report-modal__other-actions-step__toggle'>
               <Toggle
                 checked={isForward}
                 onChange={handleForwardChange}
@@ -183,13 +178,13 @@ const OtherActionsStep = ({
                 disabled={isSubmitting}
               />
 
-              <Text theme='muted' tag='label' size='sm' htmlFor='report-forward'>
+              <label htmlFor='report-forward'>
                 <FormattedMessage
                   id='report.forward'
                   defaultMessage='Forward to {target}'
                   values={{ target: getDomain(account) }}
                 />
-              </Text>
+              </label>
             </div>
           </FormGroup>
         )}
