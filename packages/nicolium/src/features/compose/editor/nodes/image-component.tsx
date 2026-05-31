@@ -75,7 +75,7 @@ const LazyImage = ({
   src,
 }: {
   altText: string;
-  className: string | null;
+  className?: string;
   imageRef: { current: null | HTMLImageElement };
   src: string;
 }): React.JSX.Element => {
