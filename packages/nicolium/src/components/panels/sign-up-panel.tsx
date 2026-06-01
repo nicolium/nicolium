@@ -88,7 +88,7 @@ const SignUpPanel = () => {
             <Text theme='muted' size='sm'>
               <FormattedMessage
                 id='signup_panel.subtitle'
-                defaultMessage="Sign up now to discuss what's happening."
+                defaultMessage='Sign up now to discuss what’s happening.'
               />
             </Text>
           </div>

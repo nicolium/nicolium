@@ -37,7 +37,7 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
       <p className='enable-otp-form__warning'>
         <FormattedMessage
           id='mfa.setup_warning'
-          defaultMessage="Write these codes down or save them somewhere secure - otherwise you won’t see them again. If you lose access to your 2FA app and recovery codes you'll be locked out of your account."
+          defaultMessage='Write these codes down or save them somewhere secure - otherwise you won’t see them again. If you lose access to your 2FA app and recovery codes you’ll be locked out of your account.'
         />
       </p>
 
