@@ -161,10 +161,7 @@ const Upload: React.FC<IUpload> = ({
   });
 
   const uploadIcon = mediaType === 'unknown' && (
-    <Icon
-      className='mx-auto my-12 size-16 text-gray-800 dark:text-gray-200'
-      src={MIMETYPE_ICONS[mimeType ?? ''] || defaultIcon}
-    />
+    <Icon src={MIMETYPE_ICONS[mimeType ?? ''] || defaultIcon} />
   );
 
   const backgroundImage =
@@ -176,7 +173,7 @@ const Upload: React.FC<IUpload> = ({
 
   return (
     <div
-      className='relative m-[5px] min-w-[40%] flex-1 overflow-hidden rounded'
+      className='compose-form__upload'
       tabIndex={0}
       role='button'
       draggable
@@ -186,10 +183,10 @@ const Upload: React.FC<IUpload> = ({
     >
       <Blurhash hash={media.blurhash} className='media-gallery__preview' />
       <animated.div
-        className={clsx(
-          'compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat',
-          mediaType,
-        )}
+        className={clsx('compose-form__upload-thumbnail', {
+          'compose-form__upload-thumbnail--video': mediaType === 'video' || mediaType === 'gifv',
+          'compose-form__upload-thumbnail--audio': mediaType === 'audio',
+        })}
         style={{
           scale: styles.scale,
           backgroundImage,
@@ -197,14 +194,12 @@ const Upload: React.FC<IUpload> = ({
             typeof x === 'number' && typeof y === 'number' ? `${x}% ${y}%` : undefined,
         }}
       >
-        <div className='absolute right-2 top-2 z-10 flex gap-2'>
+        <div className='compose-form__upload__actions'>
           {onDescriptionChange && (
             <IconButton
               onClick={handleOpenAltTextModal}
               src={editIcon}
               theme='dark'
-              className='hover:scale-105 hover:bg-gray-900'
-              iconClassName='h-5 w-5'
               title={intl.formatMessage(messages.description)}
             />
           )}
@@ -213,8 +208,6 @@ const Upload: React.FC<IUpload> = ({
               onClick={handleOpenModal}
               src={zoomInIcon}
               theme='dark'
-              className='hover:scale-105 hover:bg-gray-900'
-              iconClassName='h-5 w-5'
               title={intl.formatMessage(messages.preview)}
             />
           )}
@@ -223,15 +216,13 @@ const Upload: React.FC<IUpload> = ({
               onClick={handleUndoClick}
               src={xIcon}
               theme='dark'
-              className='hover:scale-105 hover:bg-gray-900'
-              iconClassName='h-5 w-5'
               title={intl.formatMessage(messages.delete)}
             />
           )}
         </div>
 
-        <div className='absolute inset-x-2 bottom-2 z-10 flex justify-between gap-2'>
-          <span className='overflow-hidden text-ellipsis rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white'>
+        <div className='compose-form__upload__footer'>
+          <span className='compose-form__upload__name' title={media.url}>
             {media.url.split('/').at(-1)}
           </span>
 
@@ -245,9 +236,13 @@ const Upload: React.FC<IUpload> = ({
           )}
         </div>
 
-        <div className={clsx('absolute inset-0 size-full', { 'z-[-1]': hasBackgroundImage })}>
+        <div
+          className={clsx('compose-form__upload__preview', {
+            'compose-form__upload__preview--with-background': hasBackgroundImage,
+          })}
+        >
           {mediaType === 'video' && (
-            <video className='size-full object-cover' autoPlay playsInline muted loop>
+            <video autoPlay playsInline muted loop>
               <source src={media.preview_url} />
             </video>
           )}

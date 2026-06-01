@@ -1647,34 +1647,34 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 .detailed-status {
   &__group {
     margin-bottom: 1rem;
-    
+
     &__info {
       margin-bottom: -0.25rem;
     }
-  
+
     a {
       &:hover {
         text-decoration: underline;
       }
-  
+
       bdi {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-  
+
         strong {
           color: rgb(var(--color-gray-800));
-  
+
           .dark & {
             color: rgb(var(--color-gray-200));
           }
         }
       }
     }
-  
+
     svg {
       color: rgb(var(--color-primary-600));
-  
+
       .dark & {
         color: rgb(var(--color-primary-400));
       }
@@ -1876,7 +1876,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   }
 
   &__count {
-    font-weight: 700;
+    @include mixins.text($weight: bold);
   }
 
   &__label {

@@ -1485,7 +1485,7 @@ body {
   }
 
   &:has(> p) .toast__body p {
-    font-weight: medium;
+    font-weight: 500;
   }
 
   &__icon {

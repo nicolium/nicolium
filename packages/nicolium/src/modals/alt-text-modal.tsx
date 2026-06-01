@@ -117,20 +117,16 @@ const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionCh
   }, [onPositionChange]);
 
   const uploadIcon = media.type === 'unknown' && (
-    <Icon
-      className='mx-auto my-12 size-16 text-gray-800 dark:text-gray-200'
-      src={MIMETYPE_ICONS[media.mime_type ?? ''] || defaultIcon}
-    />
+    <Icon src={MIMETYPE_ICONS[media.mime_type ?? ''] || defaultIcon} />
   );
 
   return (
-    <div className='relative overflow-hidden rounded-md'>
+    <div className='alt-text-modal__preview'>
       <Blurhash hash={media.blurhash} className='media-gallery__preview' />
       <div
-        className={clsx(
-          'relative h-64 max-h-96 w-full overflow-hidden bg-contain bg-center bg-no-repeat',
-          { 'cursor-grab': withFocalPoint },
-        )}
+        className={clsx('alt-text-modal__preview__image', {
+          'alt-text-modal__preview__image--with-focal-point': withFocalPoint,
+        })}
         style={{
           backgroundImage:
             media.type === 'image' || media.type === 'gifv'
@@ -142,14 +138,9 @@ const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionCh
               : undefined,
         }}
       >
-        <div
-          ref={setRef}
-          className='absolute inset-0 size-full'
-          onMouseDown={handleMouseDown}
-          onTouchStart={handleTouchStart}
-        >
+        <div ref={setRef} onMouseDown={handleMouseDown} onTouchStart={handleTouchStart}>
           {media.type === 'video' && (
-            <video className='size-full object-cover' autoPlay playsInline muted loop>
+            <video autoPlay playsInline muted loop>
               <source src={media.preview_url} />
             </video>
           )}
@@ -158,17 +149,14 @@ const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionCh
       </div>
       {withFocalPoint && (
         <div
-          className='pointer-events-none absolute size-24 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white'
+          className='alt-text-modal__focal-point'
           style={{
             top: `${y * 100}%`,
             left: `${x * 100}%`,
-            boxShadow: '0 0 0 9999em rgba(0,0,0,.35)',
           }}
         />
       )}
-      <span className='absolute inset-x-2 bottom-2 w-fit overflow-hidden text-ellipsis rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white'>
-        {media.url.split('/').at(-1)}
-      </span>
+      <span className='alt-text-modal__preview__name'>{media.url.split('/').at(-1)}</span>
     </div>
   );
 };
@@ -256,7 +244,7 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
       }}
       secondaryText={<FormattedMessage id='alt_text_modal.cancel' defaultMessage='Cancel' />}
     >
-      <div className='flex flex-col gap-2'>
+      <div className='alt-text-modal'>
         <Preview media={media} position={position} onPositionChange={handlePositionChange} />
         <form>
           <FormGroup
