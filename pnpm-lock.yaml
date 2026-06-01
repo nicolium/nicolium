@@ -134,9 +134,6 @@ importers:
       cryptocurrency-icons:
         specifier: ^0.18.1
         version: 0.18.1
-      detect-passive-events:
-        specifier: ^2.0.3
-        version: 2.0.3
       dompurify:
         specifier: ^3.4.1
         version: 3.4.1
@@ -3927,15 +3924,9 @@ packages:
   destr@2.0.5:
     resolution: {integrity: sha512-ugFTXCtDZunbzasqBxrK93Ik/DRYsO6S/fedkWEMKqt04xZ4csmnmwGDBAb07QWNaGMAmnTIemsYZCksjATwsA==}
 
-  detect-it@4.0.1:
-    resolution: {integrity: sha512-dg5YBTJYvogK1+dA2mBUDKzOWfYZtHVba89SyZUhc4+e3i2tzgjANFg5lDRCd3UOtRcw00vUTMK8LELcMdicug==}
-
   detect-libc@2.1.2:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
-
-  detect-passive-events@2.0.3:
-    resolution: {integrity: sha512-QN/1X65Axis6a9D8qg8Py9cwY/fkWAmAH/edTbmLMcv4m5dboLJ7LcAi8CfaCON2tjk904KwKX/HTdsHC6yeRg==}
 
   devalue@5.8.1:
     resolution: {integrity: sha512-4CXDYRBGqN+57wVJkuXBYmpAVUSg3L6JAQa/DFqm238G73E1wuyc/JhGQJzN7vUf/CMphYau2zXbfWzDR5aTEw==}
@@ -10774,13 +10765,7 @@ snapshots:
 
   destr@2.0.5: {}
 
-  detect-it@4.0.1: {}
-
   detect-libc@2.1.2: {}
-
-  detect-passive-events@2.0.3:
-    dependencies:
-      detect-it: 4.0.1
 
   devalue@5.8.1: {}
 

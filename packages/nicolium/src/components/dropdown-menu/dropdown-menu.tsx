@@ -11,7 +11,6 @@ import {
 import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
 import clsx from 'clsx';
-import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -53,8 +52,6 @@ interface IDropdownMenu {
   /** Forces the dropdown to be displayed as a dropdown menu, not in a modal. */
   forceDropdown?: boolean;
 }
-
-const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
 
 const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
   handleClose,
@@ -148,7 +145,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
   useEffect(() => {
     if (!touchscreen) {
       document.addEventListener('click', handleDocumentClick, false);
-      document.addEventListener('touchend', handleDocumentClick, listenerOptions);
+      document.addEventListener('touchend', handleDocumentClick, { passive: true });
     }
     document.addEventListener('keydown', handleKeyDown, false);
 
