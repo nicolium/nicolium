@@ -519,7 +519,7 @@ const ComposeForm = <ID extends string>({
         {compose.redacting && (
           <List>
             <ListItem
-              className='mt-2'
+              className='compose-form__redact'
               label={
                 <FormattedMessage
                   id='compose.redact.overwrite.label'

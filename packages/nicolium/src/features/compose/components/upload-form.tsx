@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import React, { useCallback, useRef } from 'react';
 
 import { useCompose, useComposeActions } from '@/stores/compose';
@@ -49,10 +48,10 @@ const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
   if (!isUploading && !mediaIds.length) return null;
 
   return (
-    <div className='overflow-hidden'>
+    <div className='upload-form'>
       <UploadProgress composeId={composeId} />
 
-      <div className={clsx('flex flex-wrap overflow-hidden', mediaIds.length > 0 && 'm-[-5px]')}>
+      <div className='upload-form__list'>
         {mediaIds.map((id: string) => (
           <Upload
             id={id}

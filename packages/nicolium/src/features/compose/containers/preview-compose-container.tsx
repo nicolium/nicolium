@@ -13,7 +13,6 @@ import StatusMedia from '@/components/statuses/status-media';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
@@ -59,23 +58,22 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
 
   return (
     <OutlineBox>
-      <div className='flex flex-col gap-2'>
-        <div className='flex items-center gap-1'>
-          <Icon className='size-4 text-gray-700 dark:text-gray-600' src={iconEye} />
-          <Text theme='muted' size='sm' className='grow'>
+      <div className='compose-preview'>
+        <div className='compose-preview__header'>
+          <Icon src={iconEye} />
+          <p className='compose-preview__label'>
             <FormattedMessage id='compose_form.preview.label' defaultMessage='Preview' />
-          </Text>
+          </p>
 
-          <Text theme='muted' size='sm' className='inline-flex items-center gap-1' tag='label'>
+          <label className='compose-preview__auto-update'>
             <FormattedMessage id='compose_form.preview.auto_update' defaultMessage='Auto-update' />
             <Toggle size='sm' checked={autoUpdate} onChange={handleSwitchAutoUpdate} />
-          </Text>
+          </label>
           <IconButton
             src={iconX}
             title={intl.formatMessage(messages.close)}
             onClick={handleClose}
-            className='bg-transparent text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
-            iconClassName='h-4 w-4'
+            className='compose-preview__close'
           />
         </div>
         <AccountContainer
@@ -91,13 +89,13 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
         {status.event ? (
           <EventPreview status={status} hideAction />
         ) : (
-          <div className='relative z-0 flex flex-col gap-4'>
+          <div className='compose-preview__body'>
             <StatusContent status={status} isQuote />
 
             {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} />}
 
             {status.media_attachments?.length > 0 && (
-              <div className='relative'>
+              <div className='compose-preview__media'>
                 <SensitiveContentOverlay status={status} />
                 <StatusMedia status={status} muted />
               </div>
