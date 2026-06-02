@@ -1065,3 +1065,70 @@ a.measure__container {
     border-radius: var(--radius-md);
   }
 }
+
+.site-preview {
+  position: relative;
+
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 10rem;
+  border: 1px solid rgb(var(--color-gray-200));
+  border-radius: var(--radius-lg);
+
+  font-size: var(--text-base);
+
+  background: white;
+
+  &--dark {
+    background: rgb(var(--color-gray-900));
+  }
+
+  &--black {
+    background: black;
+  }
+
+  &--dark, &--black {
+    .site-preview__header {
+      background: rgb(var(--color-gray-800));
+    }
+  }
+
+  .dark & {
+    border-color: rgb(var(--color-gray-600));
+  }
+
+  &__label {
+    position: absolute;
+    z-index: 2;
+
+    overflow: hidden;
+    align-self: center;
+
+    padding: 0.5rem;
+    border-radius: var(--radius-lg);
+
+    color: white;
+
+    background: rgb(var(--color-accent-500));
+  }
+
+  &__header {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+
+    display: flex;
+
+    height: 3rem;
+
+    background: white;
+    box-shadow: var(--shadow);
+
+    @media (min-width: variables.$breakpoint-lg) {
+      height: 4rem;
+    }
+  }
+}

@@ -24,32 +24,20 @@ const SitePreview: React.FC<ISitePreview> = ({ frontendConfig }) => {
 
   const themeCss = useThemeCss(frontendConfig);
 
-  const bodyClass = clsx(
-    'site-preview',
-    'align-center relative flex justify-center text-base',
-    'border border-solid border-gray-200 dark:border-gray-600',
-    'h-40 overflow-hidden rounded-lg',
-    {
-      'bg-white': !dark,
-      'bg-gray-900': dark && userTheme !== 'black',
-      'bg-black': userTheme === 'black',
-    },
-  );
+  const bodyClass = clsx('site-preview', {
+    'site-preview--dark': dark && userTheme !== 'black',
+    'site-preview--black': userTheme === 'black',
+  });
 
   return (
     <div className={bodyClass}>
       <InlineStyle>{`.site-preview {${themeCss}}`}</InlineStyle>
 
-      <div className='absolute z-[2] self-center overflow-hidden rounded-lg bg-accent-500 p-2 text-white'>
+      <div className='site-preview__label'>
         <FormattedMessage id='site_preview.preview' defaultMessage='Preview' />
       </div>
 
-      <div
-        className={clsx('absolute inset-0 z-[1] flex h-12 shadow lg:h-16', {
-          'bg-white': !dark,
-          'bg-gray-800': dark,
-        })}
-      />
+      <div className='site-preview__header' />
     </div>
   );
 };
