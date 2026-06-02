@@ -1,0 +1,59 @@
+@use 'mixins';
+@use 'variables';
+
+.developers {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.5rem;
+
+  &__widget {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+
+    background: rgb(var(--color-gray-200));
+
+    .dark & {
+      background: rgb(var(--color-gray-800));
+    }
+
+    &:hover {
+      background: rgb(var(--color-gray-300));
+
+      .dark & {
+        background: rgb(var(--color-gray-800) / 0.75);
+      }
+    }
+
+    svg {
+      color: rgb(var(--color-gray-700));
+
+      .dark & {
+        color: rgb(var(--color-gray-600));
+      }
+    }
+
+    p {
+      @include mixins.text;
+    }
+  }
+
+  &__footer {
+    @include mixins.text($align: center, $theme: subtle, $size: sm);
+
+    padding: 1rem;
+  }
+
+  @media (min-width: variables.$breakpoint-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: variables.$breakpoint-lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
