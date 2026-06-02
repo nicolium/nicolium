@@ -1,4 +1,4 @@
-import { Navigate } from '@tanstack/react-router';
+import { Link, Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -82,12 +82,12 @@ const LoginPage = () => {
           </p>
         </div>
 
-        <button to='/login/external'>
+        <Link to='/login/external' className='login__external'>
           <FormattedMessage
             id='login_form.external'
             defaultMessage='Sign in from remote instance'
           />
-        </button>
+        </Link>
       </div>
     </BigCard>
   );

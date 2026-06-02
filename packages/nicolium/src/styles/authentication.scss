@@ -33,7 +33,7 @@
     }
   }
 
-  button {
+  &__external {
     @include mixins.button($theme: secondary, $block: true);
   }
 }
