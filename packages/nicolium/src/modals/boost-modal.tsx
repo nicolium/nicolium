@@ -21,6 +21,7 @@ import { DatePicker } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useSettings } from '@/stores/settings';
+import { userTouching } from '@/utils/is-mobile';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
@@ -161,19 +162,21 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
 
         <ReplyIndicator status={status} hideActions />
 
-        <p className='boost-modal__hint'>
-          <FormattedMessage
-            id='boost_modal.combo'
-            defaultMessage='You can press {combo} to skip this next time'
-            values={{
-              combo: (
-                <span>
-                  Shift + <Icon src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat} />
-                </span>
-              ),
-            }}
-          />
-        </p>
+        {!userTouching.matches && (
+          <p className='boost-modal__hint'>
+            <FormattedMessage
+              id='boost_modal.combo'
+              defaultMessage='You can press {combo} to skip this next time'
+              values={{
+                combo: (
+                  <span>
+                    Shift + <Icon src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat} />
+                  </span>
+                ),
+              }}
+            />
+          </p>
+        )}
 
         {features.scheduledReblogs && (
           <>
