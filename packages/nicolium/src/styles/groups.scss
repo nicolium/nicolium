@@ -38,12 +38,12 @@
 
   background-color: white;
 
-  .black & {
-    background-color: black;
-  }
-
   .dark & {
     background-color: rgb(var(--color-primary-900));
+  }
+
+  .black & {
+    background-color: black;
   }
 
   &--framed {

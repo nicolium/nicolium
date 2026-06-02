@@ -415,14 +415,14 @@
       opacity: 1;
     }
 
-    .black &--top,
-    .black &--bottom {
-      background-image: linear-gradient(to bottom, black, transparent);
-    }
-
     .dark &--top,
     .dark &--bottom {
       background-image: linear-gradient(to bottom, rgb(var(--color-gray-900)), transparent);
+    }
+
+    .black &--top,
+    .black &--bottom {
+      background-image: linear-gradient(to bottom, black, transparent);
     }
 
     .black &--bottom,

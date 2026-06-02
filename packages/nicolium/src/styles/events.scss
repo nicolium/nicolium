@@ -690,14 +690,14 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  .black & {
-    border: 1px solid rgb(var(--color-gray-800));
-    background-color: black;
-  }
-
   .dark & {
     color: rgb(var(--color-primary-800));
     background-color: rgb(var(--color-primary-800));
+  }
+
+  .black & {
+    border: 1px solid rgb(var(--color-gray-800));
+    background-color: black;
   }
 
   &__cover {

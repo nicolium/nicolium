@@ -895,12 +895,12 @@
 
   background-color: rgb(var(--color-gray-100));
 
-  .black & {
-    background-color: rgb(var(--color-gray-900));
-  }
-
   .dark & {
     background-color: rgb(var(--color-gray-800));
+  }
+
+  .black & {
+    background-color: rgb(var(--color-gray-900));
   }
 
   &__content {

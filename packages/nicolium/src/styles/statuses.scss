@@ -490,12 +490,12 @@
   &__container {
     background-color: #fff;
 
-    .black & {
-      background-color: #000;
-    }
-
     .dark & {
       background-color: rgb(var(--color-primary-900));
+    }
+
+    .black & {
+      background-color: #000;
     }
 
     &--modal {
@@ -2146,12 +2146,12 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 .status--placeholder {
   background-color: white;
 
-  .black & {
-    background-color: black;
-  }
-
   .dark & {
     background-color: rgb(var(--color-primary-900));
+  }
+
+  .black & {
+    background-color: black;
   }
 
   &--rounded {
