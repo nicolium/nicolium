@@ -128,7 +128,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
       );
     default:
       return (
-        <div className='flex items-center gap-3'>
+        <div className='authorize-reject-buttons'>
           <AuthorizeRejectButton
             theme='danger'
             icon={iconX}
@@ -179,22 +179,20 @@ const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({
   disabled,
   title,
 }) => (
-  <div className='relative'>
-    <div
-      style={style}
-      className={clsx({
-        'authorize-button': theme === 'primary',
-        'reject-button': theme === 'danger',
-      })}
-    >
-      <IconButton
-        src={isLoading ? iconStopFill : icon}
-        onClick={action}
-        theme='seamless'
-        disabled={disabled}
-        title={title}
-      />
-    </div>
+  <div
+    style={style}
+    className={clsx({
+      'authorize-button': theme === 'primary',
+      'reject-button': theme === 'danger',
+    })}
+  >
+    <IconButton
+      src={isLoading ? iconStopFill : icon}
+      onClick={action}
+      theme='seamless'
+      disabled={disabled}
+      title={title}
+    />
   </div>
 );
 
