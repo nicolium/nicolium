@@ -79,7 +79,6 @@
   "account.unendorse.success": "Вы больше не представляете @{acct}",
   "account.unfollow": "Отписаться",
   "account.unmute": "Снять глушение",
-  "account.unsubscribe": "Отписаться от уведомлений от @{name}",
   "account.unsubscribe.fail": "Произошла ошибка при попытке отписаться от этого аккаунта.",
   "account.unsubscribe.success": "Вы отписались от этого аккаунта.",
   "account.verified": "Подтвержденный аккаунт",

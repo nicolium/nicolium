@@ -58,7 +58,6 @@
   "account.unendorse.success": "You are no longer featuring @{acct}",
   "account.unfollow": "𐑳𐑯𐑓𐑪𐑤𐑴",
   "account.unmute": "𐑳𐑯𐑥𐑿𐑑 @{name}",
-  "account.unsubscribe": "𐑳𐑯𐑕𐑩𐑚𐑕𐑒𐑮𐑲𐑚 𐑑 𐑯𐑴𐑑𐑦𐑓𐑦𐑒𐑱𐑖𐑩𐑯𐑟 𐑓𐑮𐑪𐑥 @{name}",
   "account.unsubscribe.fail": "An error occurred trying to unsubscribe to this account.",
   "account.unsubscribe.success": "You have unsubscribed from this account.",
   "account.verified": "Verified Account",

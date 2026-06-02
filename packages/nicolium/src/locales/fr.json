@@ -103,7 +103,6 @@
   "account.unendorse.success": "Vous n’affichez plus @{acct} dans votre sélection",
   "account.unfollow": "Ne plus suivre",
   "account.unmute": "Ne plus mettre en sourdine @{name}",
-  "account.unsubscribe": "Se désinscrire des notifications provenant de @{name}",
   "account.unsubscribe.fail": "Une erreur s’est produite en tentant de se désabonner de ce compte.",
   "account.unsubscribe.success": "Vous avez supprimé votre abonnement à ce profil.",
   "account.verified": "Compte vérifié",

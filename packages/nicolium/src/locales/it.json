@@ -72,7 +72,6 @@
   "account.unendorse.success": "Hai smesso di promuovere @{acct}",
   "account.unfollow": "Non seguire",
   "account.unmute": "Non silenziare @{name}",
-  "account.unsubscribe": "Annulla l'abbonamento a @{name}",
   "account.unsubscribe.fail": "Si è verificato un errore provando a rimuovere l'abbonamento.",
   "account.unsubscribe.success": "Hai rimosso l'abbonamento a questo profilo.",
   "account.verified": "Verificato",

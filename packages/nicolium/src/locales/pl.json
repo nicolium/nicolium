@@ -104,7 +104,6 @@
   "account.unendorse.success": "Już nie polecasz @{acct}",
   "account.unfollow": "Przestań obserwować",
   "account.unmute": "Cofnij wyciszenie @{name}",
-  "account.unsubscribe": "Przestań subskrybować wpisy @{name}",
   "account.unsubscribe.fail": "Wystąpił błąd podczas próby cofnięcia subskrybcji tego konta.",
   "account.unsubscribe.success": "Przestano subskrybować to konto.",
   "account.verified": "Zweryfikowane konto",

@@ -60,7 +60,6 @@
   "account.unendorse.success": "Anda tidak lagi tampil @{acct}",
   "account.unfollow": "Berhenti mengikuti",
   "account.unmute": "Berhenti membisukan @{name}",
-  "account.unsubscribe": "Berhenti berlangganan notifikasi dari @{name}",
   "account.unsubscribe.fail": "Terjadi kesalahan saat mencoba berhenti berlangganan akun ini.",
   "account.unsubscribe.success": "Anda telah berhenti berlangganan akun ini.",
   "account.verified": "Akun terverifikasi",

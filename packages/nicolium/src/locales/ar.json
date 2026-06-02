@@ -60,7 +60,6 @@
   "account.unendorse.success": "أُزيل @{acct} من ملفك الشخصي",
   "account.unfollow": "إلغاء المتابعة",
   "account.unmute": "إلغاء كتم @{name}",
-  "account.unsubscribe": "إلغاء متابعة الإشعارات من طرف @{name}",
   "account.unsubscribe.fail": "حدث خلل أثناء محاولة الغاء الاشتراك من هذا الحساب.",
   "account.unsubscribe.success": "لم تعد مشتركا في هذا الحساب.",
   "account.verified": "حساب موثّق",

@@ -119,7 +119,6 @@
   "account.unendorse.success": "您已不再推荐 @{acct}",
   "account.unfollow": "取消关注",
   "account.unmute": "不再静音 @{name}",
-  "account.unsubscribe": "取消来自 @{name} 的通知订阅",
   "account.unsubscribe.fail": "尝试取消订阅此账号时发生错误。",
   "account.unsubscribe.success": "您已取消订阅此账号。",
   "account.verified": "已验证账号",

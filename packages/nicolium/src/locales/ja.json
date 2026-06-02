@@ -59,7 +59,6 @@
   "account.unendorse": "プロフィールから外す",
   "account.unfollow": "フォロー解除",
   "account.unmute": "@{name}さんのミュートを解除",
-  "account.unsubscribe": "@{name} からの通知を受け取らないようにする",
   "account.unsubscribe.fail": "このアカウントの購読の解除中にエラーが発生しました。",
   "account.unsubscribe.success": "このアカウントの購読を解除しました。",
   "account.verified": "認証済みアカウント",
