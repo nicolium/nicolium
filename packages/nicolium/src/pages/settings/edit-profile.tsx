@@ -302,8 +302,8 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
     };
 
   return (
-    <div className='edit-profile__profile-field'>
-      <div className='edit-profile__profile-field__name'>
+    <div className='profile-form__profile-field'>
+      <div className='profile-form__profile-field__name'>
         <ProfileAutosuggestInput
           value={value.name}
           onChange={handleChange('name')}
@@ -323,7 +323,7 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
           searchTokens={['@', '#', ':']}
         />
       </div>
-      <div className='edit-profile__profile-field__value'>
+      <div className='profile-form__profile-field__value'>
         <ProfileAutosuggestInput
           value={value.value}
           onChange={handleChange('value')}
@@ -889,7 +889,7 @@ const EditProfilePage: React.FC = () => {
                 isCodeEditor
                 rows={12}
               />
-              <p className='profile-css-hint'>
+              <p className='profile-form__hint'>
                 <FormattedMessage
                   id='edit_profile.custom_css.remaining_characters'
                   defaultMessage='{remaining, plural, one {# character} other {# characters}} remaining'

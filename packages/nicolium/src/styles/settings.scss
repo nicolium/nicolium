@@ -1043,7 +1043,7 @@
   }
 }
 
-.edit-profile {
+.profile-form {
   &__profile-field {
     display: flex;
     flex-grow: 1;
@@ -1059,22 +1059,22 @@
       width: 60%;
     }
   }
-}
 
-.profile-form__actions {
-  a {
-    @include mixins.button($theme: tertiary);
+  &__actions {
+    a {
+      @include mixins.button($theme: tertiary);
+    }
+
+    button {
+      @include mixins.button($theme: primary);
+    }
   }
 
-  button {
-    @include mixins.button($theme: primary);
+  &__hint {
+    @include mixins.text($size: xs, $theme: muted, $align: right);
+
+    margin-top: 0.125rem;
   }
-}
-
-.profile-css-hint {
-  @include mixins.text($size: xs, $theme: muted, $align: right);
-
-  margin-top: 0.125rem;
 }
 
 .followed-tags-item {
