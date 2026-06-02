@@ -259,6 +259,18 @@
     }
   }
 
+  &__map-link {
+    color: rgb(var(--color-primary-600));
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    .dark & {
+      color: rgb(var(--color-primary-400));
+    }
+  }
+
   &__links {
     ul li {
       display: flex;
@@ -537,6 +549,32 @@
   }
 }
 
+.events-page {
+  &__title-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  &__create-button {
+    margin-left: auto;
+
+    @media (min-width: variables.$breakpoint-xl) {
+      display: none;
+    }
+  }
+
+  &__section {
+    margin-bottom: 0.5rem;
+  }
+
+  &__event {
+    width: 100%;
+    padding: 0 0.25rem;
+  }
+}
+
 .event-carousel {
   position: relative;
   margin: 0 -0.25rem;
@@ -602,6 +640,11 @@
     @media (min-width: variables.$breakpoint-sm) {
       padding: 0.5rem;
     }
+  }
+
+  &__tombstone {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
   }
 }
 

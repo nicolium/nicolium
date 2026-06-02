@@ -1,7 +1,122 @@
 @use 'mixins';
+@use 'variables';
 
 .external-login {
   button {
     @include mixins.button($theme: primary);
+  }
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__divider {
+    display: flex;
+    gap: 0.625rem;
+    align-items: center;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgb(var(--color-gray-300));
+
+      .dark & {
+        border-color: rgb(var(--color-gray-800));
+      }
+    }
+
+    p {
+      @include mixins.text($align: center);
+    }
+  }
+
+  button {
+    @include mixins.button($theme: secondary, $block: true);
+  }
+}
+
+.login-form {
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.registration-form {
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+.consumers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  padding: 0.5rem;
+
+  background-color: rgb(var(--color-gray-50));
+
+  .dark & {
+    background-color: rgb(var(--color-primary-800));
+  }
+
+  &:is(.black *) {
+    padding: 0;
+    background-color: #000;
+  }
+
+  p {
+    @include mixins.text($size: xs, $theme: muted);
+  }
+
+  &__providers {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: variables.$breakpoint-sm) {
+    border-radius: var(--radius-xl);
+  }
+}
+
+.consumer-button {
+  padding: 0.625rem;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.captcha {
+  &__hint {
+    @include mixins.text;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    border: 1px solid rgb(var(--color-gray-300));
+    border-radius: var(--radius-md);
+
+    background-color: #fff;
+
+    .dark & {
+      border-color: rgb(var(--color-gray-600));
+    }
   }
 }

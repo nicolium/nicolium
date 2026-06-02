@@ -279,7 +279,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
   return (
     <Form onSubmit={onSubmit} data-testid='registrations-open'>
-      <fieldset disabled={isLoading} className='space-y-3'>
+      <fieldset disabled={isLoading} className='registration-form__fields'>
         <FormGroup
           hintText={
             <FormattedMessage

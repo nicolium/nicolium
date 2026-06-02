@@ -39,7 +39,7 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
   const passwordLabel = intl.formatMessage(messages.password);
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form className='login-form' onSubmit={handleSubmit}>
       <FormGroup labelText={usernameLabel}>
         <Input
           aria-label={usernameLabel}
@@ -55,7 +55,7 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
       <FormGroup
         labelText={passwordLabel}
         hintText={
-          <Link to='/reset-password' className='hover:underline'>
+          <Link to='/reset-password'>
             <FormattedMessage id='login.reset_password.hint' defaultMessage='Trouble logging in?' />
           </Link>
         }

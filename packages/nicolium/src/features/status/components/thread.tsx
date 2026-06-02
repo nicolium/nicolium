@@ -220,7 +220,7 @@ const Thread = ({
   };
 
   const renderTombstone = (id: string) => (
-    <div className='py-4 pb-8'>
+    <div className='thread__deleted-status'>
       <Tombstone key={id} id={id} onMoveUp={handleMoveUp} onMoveDown={handleMoveDown} />
     </div>
   );
@@ -256,7 +256,12 @@ const Thread = ({
     list.map((id) => {
       if (id === status.id) {
         return (
-          <div className={clsx({ 'pb-4': hasDescendants })} key={status.id}>
+          <div
+            className={clsx('thread__focused', {
+              'thread__focused--has-descendants': hasDescendants,
+            })}
+            key={status.id}
+          >
             {deleted ? (
               <Tombstone
                 id={status.id}
@@ -273,7 +278,7 @@ const Thread = ({
               >
                 <div
                   ref={statusRef}
-                  className='relative'
+                  className='thread__detailed'
                   tabIndex={0}
                   // FIXME: no "reblogged by" text is added for the screen reader
                   aria-label={textForScreenReader(intl, status)}
@@ -286,7 +291,7 @@ const Thread = ({
 
                   {!status.rss_feed && statusActionBarItems.length > 0 && (
                     <>
-                      <hr className='-mx-4 mb-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
+                      <hr className='thread__divider thread__divider--above' />
 
                       <StatusActionBar status={status} expandable={isModal} space='lg' withLabels />
                     </>
@@ -295,9 +300,7 @@ const Thread = ({
               </Hotkeys>
             )}
 
-            {hasDescendants && (
-              <hr className='-mx-4 mt-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
-            )}
+            {hasDescendants && <hr className='thread__divider' />}
           </div>
         );
       }
@@ -360,7 +363,7 @@ const Thread = ({
   const children = useMemo(() => {
     const children = renderChildren(thread);
 
-    if (isModal) children.unshift(<div key='padding' className='h-4' />);
+    if (isModal) children.unshift(<div key='padding' className='thread__padding' />);
 
     return children;
   }, [thread, displayMode, status, isModal]);
@@ -412,19 +415,12 @@ const Thread = ({
   }, [thread]);
 
   return (
-    <div
-      className={clsx('flex flex-col gap-2', {
-        'h-full': isModal,
-        'mt-2': !isModal,
-      })}
-    >
+    <div className={clsx('thread', { 'thread--modal': isModal })}>
       {meta}
 
       <div
         ref={node}
-        className={clsx('bg-white black:bg-black dark:bg-primary-900', {
-          'h-full overflow-auto': isModal,
-        })}
+        className={clsx('thread__container', { 'thread__container--modal': isModal })}
       >
         <ScrollableList
           key={status.id}
@@ -434,9 +430,7 @@ const Thread = ({
           placeholderComponent={() => <PlaceholderStatus variant='slim' />}
           initialTopMostItemIndex={initialIndex}
           itemClassName={itemClassName}
-          listClassName={clsx({
-            'h-full': isModal,
-          })}
+          listClassName={clsx({ 'thread__list--modal': isModal })}
           useWindowScroll={!isModal}
           customScrollParent={isModal ? (node.current ?? undefined) : undefined}
         >

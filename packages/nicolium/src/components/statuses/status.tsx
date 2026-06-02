@@ -12,7 +12,6 @@ import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-
 import AccountContainer from '@/components/accounts/account-container';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
@@ -62,12 +61,12 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
   const { statusActionBarItems } = useSettings();
 
   return (
-    <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
+    <div className='status__account-info'>
       {!statusActionBarItems.length && <StatusActionBar status={status} fromBookmarks expandable />}
       <StatusLink
         status={status}
         account={status.account}
-        className='hover:underline'
+        className='status__timestamp-link'
         onClick={(event) => {
           event.stopPropagation();
         }}
@@ -76,7 +75,7 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
           timestamp={status.created_at}
           theme='muted'
           size='sm'
-          className='whitespace-nowrap'
+          className='status__timestamp'
         />
       </StatusLink>
       <StatusTypeIcon visibility={status.visibility} />
@@ -86,7 +85,7 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
           <span className='separator' />
 
           <Icon
-            className='size-4 text-gray-700 dark:text-gray-600'
+            className='status__edited-icon'
             src={iconPencilSimple}
             title={intl.formatMessage(messages.edited, {
               date: intl.formatDate(new Date(status.edited_at), {
@@ -146,7 +145,7 @@ const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({
     <StatusInfo
       className={className}
       avatarSize={avatarSize}
-      icon={<Icon src={iconHash} className='text-primary-600 dark:text-primary-400' aria-hidden />}
+      icon={<Icon src={iconHash} className='status-info__icon--tag' aria-hidden />}
       text={
         <FormattedMessage
           id='status.followed_tag'
@@ -371,12 +370,12 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     if (isReblog && showGroup && group) {
       return (
         <StatusInfo
-          className='-mb-1'
+          className='status-info--header'
           avatarSize={avatarSize}
           icon={
             <Icon
               src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
-              className='text-green-600'
+              className='status-info__icon--reblog'
               aria-hidden
             />
           }
@@ -386,9 +385,9 @@ const Status: React.FC<IStatus> = React.memo((props) => {
               defaultMessage='{name} reposted from {group}'
               values={{
                 name: (
-                  <AccountLink account={status.account} className='hover:underline'>
-                    <bdi className='truncate'>
-                      <strong className='text-gray-800 dark:text-gray-200'>
+                  <AccountLink account={status.account} className='status-info__link'>
+                    <bdi>
+                      <strong>
                         <Emojify
                           text={status.account.display_name}
                           emojis={status.account.emojis}
@@ -401,9 +400,9 @@ const Status: React.FC<IStatus> = React.memo((props) => {
                   <Link
                     to='/groups/$groupId'
                     params={{ groupId: group.id }}
-                    className='hover:underline'
+                    className='status-info__link'
                   >
-                    <strong className='text-gray-800 dark:text-gray-200'>
+                    <strong>
                       <Emojify text={group.display_name} emojis={group.emojis} />
                     </strong>
                   </Link>
@@ -418,11 +417,11 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         name: (
           <AccountLink
             account={status.account}
-            className='hover:underline'
+            className='status-info__link'
             key={status.account.acct}
           >
-            <bdi className='truncate'>
-              <strong className='text-gray-800 dark:text-gray-200'>
+            <bdi>
+              <strong>
                 <Emojify text={status.account.display_name} emojis={status.account.emojis} />
               </strong>
             </bdi>
@@ -432,12 +431,12 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
       return (
         <StatusInfo
-          className='-mb-1'
+          className='status-info--header'
           avatarSize={avatarSize}
           icon={
             <Icon
               src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat}
-              className='text-green-600'
+              className='status-info__icon--reblog'
               aria-hidden
             />
           }
@@ -461,24 +460,18 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     } else if (featured) {
       return (
         <StatusInfo
-          className='-mb-1'
+          className='status-info--header'
           avatarSize={avatarSize}
-          icon={<Icon src={iconPushPin} className='text-gray-600 dark:text-gray-400' aria-hidden />}
+          icon={<Icon src={iconPushPin} className='status-info__icon--pinned' aria-hidden />}
           text={<FormattedMessage id='status.pinned' defaultMessage='Pinned post' />}
         />
       );
     } else if (showGroup && group) {
       return (
         <StatusInfo
-          className='-mb-1'
+          className='status-info--header'
           avatarSize={avatarSize}
-          icon={
-            <Icon
-              src={iconUsersThree}
-              className='text-primary-600 dark:text-primary-400'
-              aria-hidden
-            />
-          }
+          icon={<Icon src={iconUsersThree} className='status-info__icon--group' aria-hidden />}
           text={
             <FormattedMessage
               id='status.group'
@@ -488,10 +481,10 @@ const Status: React.FC<IStatus> = React.memo((props) => {
                   <Link
                     to='/groups/$groupId'
                     params={{ groupId: group.id }}
-                    className='hover:underline'
+                    className='status-info__link'
                   >
-                    <bdi className='truncate'>
-                      <strong className='text-gray-800 dark:text-gray-200'>
+                    <bdi>
+                      <strong>
                         <Emojify text={group.display_name} emojis={group.emojis} />
                       </strong>
                     </bdi>
@@ -512,17 +505,14 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
   if (filtered && showFiltered !== true) {
     const body = (
-      <div className={clsx('status__wrapper text-center')} ref={node}>
-        <Text theme='muted'>
+      <div className='status__wrapper status__wrapper--filtered' ref={node}>
+        <p className='status__filtered'>
           <FormattedMessage id='status.filtered' defaultMessage='Filtered' />:{' '}
           {filterResults.map(({ filter }) => filter.title).join(', ')}.{' '}
-          <button
-            className='text-primary-600 hover:underline dark:text-primary-400'
-            onClick={handleUnfilter}
-          >
+          <button className='status__filtered-button' onClick={handleUnfilter}>
             <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
           </button>
-        </Text>
+        </p>
       </div>
     );
 
@@ -567,7 +557,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
       <Card
         variant={variant}
         className={clsx('status__wrapper', className, {
-          'py-6 sm:p-5': variant === 'rounded',
+          'status__wrapper--rounded': variant === 'rounded',
           muted,
           read: unread === false,
         })}
@@ -578,7 +568,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
           <RssFeedInfo feed={status.rss_feed} timestamp={status.created_at} url={status.url} />
         ) : (
           actualStatus.account_id && (
-            <div className='flex'>
+            <div className='status__account'>
               <AccountContainer
                 key={actualStatus.account_id}
                 id={actualStatus.account_id}
@@ -598,7 +588,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
           <StatusReplyMentions status={actualStatus} hoverable={hoverable} />
 
           {actualStatus.event ? (
-            <EventPreview className='shadow-xl' status={actualStatus} />
+            <EventPreview status={actualStatus} />
           ) : (
             <StatusContent
               status={actualStatus}
@@ -617,9 +607,8 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
               {!hideActionBar && statusActionBarItems.length > 0 && (
                 <div
-                  className={clsx({
-                    'pt-2': actualStatus.emoji_reactions.length,
-                    'pt-4': !actualStatus.emoji_reactions.length,
+                  className={clsx('status__actions', {
+                    'status__actions--reacted': actualStatus.emoji_reactions.length,
                   })}
                 >
                   <StatusActionBar

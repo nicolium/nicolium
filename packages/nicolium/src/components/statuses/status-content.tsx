@@ -46,7 +46,7 @@ const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, preview }) => (
     {!preview && (
       <button className='read-more-button' onClick={onClick}>
         <FormattedMessage id='status.read_more' defaultMessage='Read more' />
-        <Icon className='inline-block size-5' src={iconCaretRight} />
+        <Icon src={iconCaretRight} />
       </button>
     )}
   </div>
@@ -339,14 +339,16 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     const className = useMemo(
       () =>
         clsx('status-content', {
-          'overflow-hidden': collapsed && !expanded,
-          'max-h-[200px]': collapsed && !isQuote && !preview && !expanded,
-          'max-h-[120px]': collapsed && isQuote && !expanded,
-          'max-h-[80px]': collapsed && preview && !expanded,
-          'max-h-[282px]': collapsable && collapsed === null && !isQuote && !preview && !expanded,
-          'max-h-[202px]': collapsable && collapsed === null && isQuote && !expanded,
-          'max-h-[82px]': collapsed === null && preview && !expanded,
-          'big-emoji leading-normal': onlyEmoji,
+          'status-content--overflow': collapsed && !expanded,
+          'status-content--clamp-default': collapsed && !isQuote && !preview && !expanded,
+          'status-content--clamp-quote': collapsed && isQuote && !expanded,
+          'status-content--clamp-preview': collapsed && preview && !expanded,
+          'status-content--measure-default':
+            collapsable && collapsed === null && !isQuote && !preview && !expanded,
+          'status-content--measure-quote':
+            collapsable && collapsed === null && isQuote && !expanded,
+          'status-content--measure-preview': collapsed === null && preview && !expanded,
+          'big-emoji': onlyEmoji,
           'status-content--spoiler-expanded': !collapsable,
           'status-content--quote': isQuote,
           'status-content--preview': preview,

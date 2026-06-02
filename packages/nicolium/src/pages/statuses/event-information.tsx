@@ -61,11 +61,7 @@ const EventInformationPage: React.FC = () => {
       text.push(
         <React.Fragment key='event-map'>
           <br />
-          <a
-            href='#'
-            className='text-primary-600 hover:underline dark:text-primary-400'
-            onClick={handleShowMap}
-          >
+          <a href='#' className='event-information__map-link' onClick={handleShowMap}>
             <FormattedMessage id='event.show_on_map' defaultMessage='Show on map' />
           </a>
         </React.Fragment>,
@@ -151,11 +147,7 @@ const EventInformationPage: React.FC = () => {
           {status.event.links.map((link) => (
             <li key={link.id}>
               <Icon src={iconLinkSimple} />
-              <a
-                href={link.remote_url ?? link.url}
-                className='text-primary-600 hover:underline dark:text-primary-400'
-                target='_blank'
-              >
+              <a href={link.remote_url ?? link.url} target='_blank'>
                 {(link.remote_url ?? link.url).replace(/^https?:\/\//, '')}
               </a>
             </li>

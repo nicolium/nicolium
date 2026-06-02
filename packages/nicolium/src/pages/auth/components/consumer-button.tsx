@@ -45,8 +45,7 @@ const ConsumerButton: React.FC<IConsumerButton> = ({ provider }) => {
     <Tooltip text={intl.formatMessage(messages.tooltip, { provider: capitalize(provider) })}>
       <IconButton
         theme='outlined'
-        className='p-2.5'
-        iconClassName='h-6 w-6'
+        className='consumer-button'
         src={icon}
         onClick={handleClick}
         title={intl.formatMessage(messages.tooltip, { provider: capitalize(provider) })}

@@ -117,10 +117,9 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
 
   return (
     <div
-      className={clsx({
-        'absolute left-0 top-0 z-50 w-[500px] transition-opacity': true,
-        'opacity-100': visible,
-        'pointer-events-none opacity-0': !visible,
+      className={clsx('status-hover-card', {
+        'status-hover-card--visible': visible,
+        'status-hover-card--hidden': !visible,
       })}
       ref={refs.setFloating}
       style={{
@@ -133,7 +132,7 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
       onMouseLeave={handleMouseLeave}
     >
       <StatusContainer
-        className='isolate black:rounded-xl black:border black:border-gray-800'
+        className='status-hover-card__status'
         key={statusId}
         id={statusId}
         hoverable={false}

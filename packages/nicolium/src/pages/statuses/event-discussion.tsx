@@ -46,7 +46,7 @@ const EventDiscussionPage: React.FC = () => {
   };
 
   const renderTombstone = (id: string) => (
-    <div className='py-4 pb-8'>
+    <div className='event-discussion__tombstone'>
       <Tombstone key={id} id={id} onMoveUp={handleMoveUp} onMoveDown={handleMoveDown} />
     </div>
   );

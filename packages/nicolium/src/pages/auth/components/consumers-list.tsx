@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Card from '@/components/ui/card';
-import Text from '@/components/ui/text';
 import { useInstance } from '@/stores/instance';
 
 import ConsumerButton from './consumer-button';
@@ -14,16 +13,14 @@ const ConsumersList: React.FC = () => {
 
   if (providers.length > 0) {
     return (
-      <Card className='bg-gray-50 p-2 black:bg-black black:p-0 dark:bg-primary-800 sm:rounded-xl'>
-        <div className='flex flex-col gap-2'>
-          <Text size='xs' theme='muted'>
-            <FormattedMessage id='oauth_consumers.title' defaultMessage='Other ways to sign in' />
-          </Text>
-          <div className='flex gap-2'>
-            {providers.map((provider) => (
-              <ConsumerButton key={provider} provider={provider} />
-            ))}
-          </div>
+      <Card className='consumers-list'>
+        <p>
+          <FormattedMessage id='oauth_consumers.title' defaultMessage='Other ways to sign in' />
+        </p>
+        <div className='consumers-list__providers'>
+          {providers.map((provider) => (
+            <ConsumerButton key={provider} provider={provider} />
+          ))}
         </div>
       </Card>
     );

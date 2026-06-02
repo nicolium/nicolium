@@ -344,7 +344,7 @@ const RefreshController: React.FC<IRefreshController> = ({
   if (loadingState === 'loading') {
     return (
       <div
-        className='flex items-center justify-center'
+        className='refresh-controller'
         role='status'
         aria-live='polite'
         aria-label={intl.formatMessage(messages.loadingInitial)}

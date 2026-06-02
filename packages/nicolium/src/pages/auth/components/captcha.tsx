@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import Input from '@/components/ui/input';
-import Text from '@/components/ui/text';
 import { useAuthActions } from '@/stores/auth';
 
 const noOp = () => {};
@@ -78,13 +77,13 @@ const CaptchaField: React.FC<ICaptchaField> = ({
   switch (captcha.type) {
     case 'native':
       return (
-        <div>
-          <Text>
+        <div className='captcha'>
+          <p className='captcha__hint'>
             <FormattedMessage
               id='registration.captcha.hint'
               defaultMessage='Click the image to get a new captcha'
             />
-          </Text>
+          </p>
 
           <NativeCaptchaField
             captcha={captcha}
@@ -119,8 +118,8 @@ const NativeCaptchaField: React.FC<INativeCaptchaField> = ({
   const intl = useIntl();
 
   return (
-    <div className='flex flex-col gap-2'>
-      <div className='flex w-full items-center justify-center rounded-md border border-solid border-gray-300 bg-white dark:border-gray-600'>
+    <div className='captcha__field'>
+      <div className='captcha__image'>
         <img alt={intl.formatMessage(messages.captcha)} src={captcha.url} onClick={onClick} />
       </div>
 

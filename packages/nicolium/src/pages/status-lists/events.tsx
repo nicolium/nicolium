@@ -28,7 +28,7 @@ const Event = ({ id }: { id: string }) => {
 
   return (
     <Link
-      className='w-full px-1'
+      className='events-page__event'
       to='/@{$username}/events/$statusId'
       params={{ username: status.account.acct, statusId: status.id }}
     >
@@ -103,15 +103,15 @@ const EventsPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.title)}>
-      <div className='mb-2 flex justify-between gap-2'>
+      <div className='events-page__title-row'>
         <CardTitle
           title={<FormattedMessage id='events.recent_events' defaultMessage='Recent events' />}
         />
-        <Button className='ml-auto xl:hidden' theme='primary' size='sm' to='/events/new'>
+        <Button className='events-page__create-button' theme='primary' size='sm' to='/events/new'>
           <FormattedMessage id='events.create_event' defaultMessage='Create event' />
         </Button>
       </div>
-      <CardBody className='mb-2'>
+      <CardBody className='events-page__section'>
         <EventCarousel
           statusIds={recentEvents}
           isLoading={recentEventsLoading}
@@ -123,7 +123,7 @@ const EventsPage = () => {
           }
         />
       </CardBody>
-      <CardHeader className='mb-2'>
+      <CardHeader className='events-page__section'>
         <CardTitle
           title={<FormattedMessage id='events.joined_events' defaultMessage='Joined events' />}
         />
