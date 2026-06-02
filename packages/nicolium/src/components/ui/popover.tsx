@@ -109,7 +109,7 @@ const Popover: React.FC<IPopover> = ({
         <Portal>
           <div
             ref={refs.setFloating}
-            className='z-[101]'
+            className='popover'
             style={{
               position: strategy,
               top: y ?? 0,
@@ -118,19 +118,13 @@ const Popover: React.FC<IPopover> = ({
             }}
             role='dialog'
           >
-            <div
-              className={clsx(
-                'overflow-hidden rounded-lg bg-white shadow-2xl dark:bg-gray-900 dark:ring-2 dark:ring-primary-700',
-                { 'p-4': !isFlush },
-              )}
-              {...getFloatingProps()}
-            >
+            <div className={clsx('popover', { 'popover--flush': isFlush })} {...getFloatingProps()}>
               {content}
             </div>
             <FloatingArrow
               ref={arrowRef}
               context={context}
-              className='fill-white dark:fill-primary-700'
+              className='popover__arrow'
               tipRadius={3}
             />
           </div>

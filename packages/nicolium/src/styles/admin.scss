@@ -1194,7 +1194,7 @@ a.measure__container {
       gap: 1rem;
       align-items: center;
     }
-    
+
     &__name {
       @include mixins.text($size: sm);
     }

@@ -7,6 +7,7 @@ $breakpoint-xl: 1280px;
   --shadow-sm: 0 1px 2px 0 #0001;
   --shadow: 0 1px 3px 0 #0001, 0 1px 2px -1px #0001;
   --shadow-lg: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
+  --shadow-2xl: 0 25px 50px -12px #0002;
   --shadow-inset: inset 0 0 0 1px #fff1;
   --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
   --text-xs: 0.75rem;
@@ -173,7 +174,7 @@ $breakpoint-xl: 1280px;
   --hex-teal-700: #0f766e;
   --hex-teal-800: #115e59;
   --hex-teal-900: #134e4a;
-  --hex-teal-950: #042f2e;
+  --hex-teal-950: #042f2e; */
   --hex-cyan-50: #ecfeff;
   --hex-cyan-100: #cffafe;
   --hex-cyan-200: #a5f3fc;
@@ -185,7 +186,8 @@ $breakpoint-xl: 1280px;
   --hex-cyan-800: #155e75;
   --hex-cyan-900: #164e63;
   --hex-cyan-950: #083344;
-  --hex-sky-50: #f0f9ff;
+
+  /* --hex-sky-50: #f0f9ff;
   --hex-sky-100: #e0f2fe;
   --hex-sky-200: #bae6fd;
   --hex-sky-300: #7dd3fc;
@@ -239,7 +241,7 @@ $breakpoint-xl: 1280px;
   --hex-purple-700: #7e22ce;
   --hex-purple-800: #6b21a8;
   --hex-purple-900: #581c87;
-  --hex-purple-950: #3b0764;
+  --hex-purple-950: #3b0764; */
   --hex-fuchsia-50: #fdf4ff;
   --hex-fuchsia-100: #fae8ff;
   --hex-fuchsia-200: #f5d0fe;
@@ -251,7 +253,8 @@ $breakpoint-xl: 1280px;
   --hex-fuchsia-800: #86198f;
   --hex-fuchsia-900: #701a75;
   --hex-fuchsia-950: #4a044e;
-  --hex-pink-50: #fdf2f8;
+
+  /* --hex-pink-50: #fdf2f8;
   --hex-pink-100: #fce7f3;
   --hex-pink-200: #fbcfe8;
   --hex-pink-300: #f9a8d4;
