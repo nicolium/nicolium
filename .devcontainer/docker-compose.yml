@@ -8,3 +8,4 @@ services:
       - ..:/workspaces/nicolium:Z
     ports:
       -  "127.0.0.1:7312:7312"
+    userns_mode: "keep-id"
