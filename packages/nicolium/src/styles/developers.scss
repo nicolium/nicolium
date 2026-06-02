@@ -57,3 +57,66 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+.settings-store {
+  &__header {
+    margin-bottom: 1rem;
+  }
+}
+
+.create-app {
+  &__explanation {
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+      @include mixins.text($size: lg, $weight: medium);
+    }
+
+    &__text {
+      @include mixins.text($theme: muted);
+    }
+  }
+}
+
+.service-worker {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__status {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    p {
+      @include mixins.text($theme: muted);
+    }
+  }
+
+  &__url {
+    overflow: hidden;
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    min-width: 0;
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__actions {
+    button {
+      @include mixins.button($theme: tertiary);
+    }
+  }
+}

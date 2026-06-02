@@ -94,7 +94,7 @@ const SettingsStore: React.FC = () => {
         </FormActions>
       </Form>
 
-      <CardHeader className='mb-4'>
+      <CardHeader className='settings-store__header'>
         <CardTitle
           title={
             <FormattedMessage

@@ -7,7 +7,6 @@ import { getTextDirection } from '@/utils/rtl';
 import { accountsCountRenderer } from './hashtag';
 import Blurhash from './media/blurhash';
 import Icon from './ui/icon';
-import Text from './ui/text';
 
 import type { TrendsLink } from 'pl-api';
 
@@ -24,12 +23,12 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
 
   if (trendingLink.image) {
     media = (
-      <div className='relative size-32 overflow-hidden rounded-md'>
+      <div className='trending-link__media'>
         {trendingLink.blurhash && (
-          <Blurhash className='absolute inset-0 z-0 size-full' hash={trendingLink.blurhash} />
+          <Blurhash className='trending-link__blurhash' hash={trendingLink.blurhash} />
         )}
         <img
-          className='relative size-full object-cover'
+          className='trending-link__image'
           src={trendingLink.image}
           alt={trendingLink.image_description ?? undefined}
         />
@@ -38,30 +37,23 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
   }
 
   return (
-    <a
-      className='flex cursor-pointer gap-4 overflow-hidden rounded-lg border border-solid border-gray-200 p-4 text-sm text-gray-800 no-underline hover:bg-gray-100 hover:no-underline dark:border-gray-800 dark:text-gray-200 dark:hover:bg-primary-800/30'
-      href={trendingLink.url}
-      target='_blank'
-      rel='noopener noreferrer'
-    >
+    <a className='trending-link' href={trendingLink.url} target='_blank' rel='noopener noreferrer'>
       {media}
-      <div className='flex flex-1 flex-col gap-2 overflow-hidden'>
-        <Text className='line-clamp-2' weight='bold' direction={direction}>
+      <div className='trending-link__body'>
+        <p className='trending-link__title' style={{ direction }}>
           {trendingLink.title}
-        </Text>
+        </p>
         {trendingLink.description && (
-          <Text truncate direction={direction}>
+          <p className='trending-link__description' style={{ direction }}>
             {trendingLink.description}
-          </Text>
+          </p>
         )}
-        <div className='divide-x-dot flex flex-wrap items-center text-gray-700 dark:text-gray-600'>
-          <div className='flex items-center gap-1'>
-            <Text tag='span' theme='muted'>
-              <Icon src={iconLinkSimple} />
-            </Text>
-            <Text tag='span' theme='muted' size='sm' direction={direction}>
+        <div className='trending-link__meta'>
+          <div className='trending-link__provider'>
+            <Icon src={iconLinkSimple} />
+            <span className='trending-link__provider__name' style={{ direction }}>
               {trendingLink.provider_name}
-            </Text>
+            </span>
           </div>
 
           {!!count && (
@@ -70,7 +62,7 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
               <Link
                 to='/links/$url'
                 params={{ url: encodeURIComponent(trendingLink.url) }}
-                className='hover:underline'
+                className='trending-link__count'
               >
                 {accountsCountRenderer(count)}
               </Link>

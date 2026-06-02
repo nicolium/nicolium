@@ -3,12 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import Indicator from '@/components/ui/indicator';
-import Text from '@/components/ui/text';
 import { unregisterSW } from '@/utils/sw';
 
 const messages = defineMessages({
@@ -84,32 +81,30 @@ const ServiceWorkerInfo: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)} backHref='/developers'>
-      <div className='flex flex-col gap-4'>
+      <div className='service-worker'>
         <List>
           <ListItem label={intl.formatMessage(messages.status)}>
-            <div className='flex items-center gap-2'>
+            <div className='service-worker__status'>
               <Indicator state={getState()} />
-              <Text size='md' theme='muted'>
-                {getMessage()}
-              </Text>
+              <p>{getMessage()}</p>
             </div>
           </ListItem>
 
           {url && (
             <ListItem label={intl.formatMessage(messages.url)}>
-              <a href={url} target='_blank' className='flex items-center space-x-1 truncate'>
-                <span className='truncate'>{url}</span>
-                <Icon className='size-4' src={iconArrowSquareOut} />
+              <a href={url} target='_blank' className='service-worker__url'>
+                <span>{url}</span>
+                <Icon src={iconArrowSquareOut} />
               </a>
             </ListItem>
           )}
         </List>
 
-        <FormActions>
-          <Button theme='tertiary' type='button' onClick={handleRestart}>
+        <div className='form__actions service-worker__actions'>
+          <button type='button' onClick={handleRestart}>
             <FormattedMessage id='sw.restart' defaultMessage='Restart' />
-          </Button>
-        </FormActions>
+          </button>
+        </div>
       </div>
     </Column>
   );
