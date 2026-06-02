@@ -1141,3 +1141,67 @@
     color: rgb(var(--color-danger-600));
   }
 }
+
+.user-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__header {
+    position: relative;
+
+    overflow: hidden;
+
+    height: 6rem;
+    margin: -1rem -1rem 0;
+
+    background-color: rgb(var(--color-gray-200));
+
+    &__container {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &__avatar {
+    width: 5rem;
+    height: 5rem;
+    background-color: rgb(var(--color-gray-50));
+    outline: 2px solid white;
+
+    .dark & {
+      outline-color: rgb(var(--color-primary-900));
+    }
+
+    .black & {
+      outline-color: black;
+    }
+
+    &__link {
+      display: block;
+      margin-top: -3rem;
+    }
+  }
+
+  &__action {
+    margin-top: 0.5rem;
+  }
+
+  &__stats {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+
+    a {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+      @include mixins.text($weight: bold, $size: sm);
+
+      strong {
+        @include mixins.text($theme: primary, $weight: bold, $size: sm);
+      }
+    }
+  }
+}

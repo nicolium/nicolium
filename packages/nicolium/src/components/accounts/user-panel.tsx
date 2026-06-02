@@ -47,117 +47,99 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
   const verified = account.verified;
 
   return (
-    <div className='relative'>
-      <div className='flex flex-col gap-2'>
-        <div className='flex flex-col'>
-          {!disableUserProvidedMedia && (
-            <div className='relative -mx-4 -mt-4 h-24 overflow-hidden bg-gray-200'>
-              {header && <StillImage src={account.header} alt={account.header_description} />}
-            </div>
-          )}
-
-          <div
-            className={clsx('flex', disableUserProvidedMedia ? 'justify-end' : 'justify-between')}
-          >
-            {!disableUserProvidedMedia && (
-              <AccountLink account={account} title={acct} className='-mt-12 block'>
-                <Avatar
-                  src={account.avatar}
-                  alt={account.avatar_description}
-                  isCat={account.is_cat}
-                  username={account.username}
-                  showAlt
-                  size={80}
-                  className='size-20 bg-gray-50 ring-2 ring-white'
-                />
-              </AccountLink>
-            )}
-
-            {action && <div className='mt-2'>{action}</div>}
-          </div>
-        </div>
-
-        <div className='flex flex-col'>
-          <AccountLink account={account}>
-            <div className='flex items-center gap-1'>
-              <Text size='lg' weight='bold' truncate>
-                <Emojify text={account.display_name} emojis={account.emojis} />
-              </Text>
-
-              {account.original_display_name &&
-                account.original_display_name !== account.display_name && (
-                  <Text
-                    theme='muted'
-                    truncate
-                    title={intl.formatMessage(messages.originalDisplayName)}
-                  >
-                    {'('}
-                    <Emojify text={account.original_display_name} emojis={account.emojis} />
-                    {')'}
-                  </Text>
-                )}
-
-              {verified && <VerificationBadge />}
-
-              {badges && badges.length > 0 && (
-                <div className='flex items-center gap-1'>{badges}</div>
-              )}
-            </div>
-          </AccountLink>
-
-          <div className='flex items-center gap-1'>
-            <Text size='sm' theme='muted' direction='ltr' truncate>
-              @{displayedAcct}
-            </Text>
-
-            {account.locked && (
-              <Icon
-                src={iconLock}
-                alt={intl.formatMessage(messages.accountLocked)}
-                className='size-4 text-gray-600'
-              />
-            )}
-          </div>
-        </div>
-
-        {!demetricator && (
-          <div className='flex items-center gap-3'>
-            {account.followers_count >= 0 && (
-              <Link
-                to='/@{$username}/followers'
-                params={{ username: account.acct }}
-                title={intl.formatNumber(account.followers_count)}
-              >
-                <div className='flex items-center gap-1'>
-                  <Text theme='primary' weight='bold' size='sm'>
-                    {shortNumberFormat(account.followers_count)}
-                  </Text>
-                  <Text weight='bold' size='sm'>
-                    <FormattedMessage id='account.followers' defaultMessage='Followers' />
-                  </Text>
-                </div>
-              </Link>
-            )}
-
-            {account.following_count >= 0 && (
-              <Link
-                to='/@{$username}/following'
-                params={{ username: account.acct }}
-                title={intl.formatNumber(account.following_count)}
-              >
-                <div className='flex items-center gap-1'>
-                  <Text theme='primary' weight='bold' size='sm'>
-                    {shortNumberFormat(account.following_count)}
-                  </Text>
-                  <Text weight='bold' size='sm'>
-                    <FormattedMessage id='account.follows' defaultMessage='Following' />
-                  </Text>
-                </div>
-              </Link>
-            )}
+    <div className='user-panel'>
+      <div className='user-panel__header__container'>
+        {!disableUserProvidedMedia && (
+          <div className='user-panel__header'>
+            {header && <StillImage src={account.header} alt={account.header_description} />}
           </div>
         )}
+
+        <div className={clsx('flex', disableUserProvidedMedia ? 'justify-end' : 'justify-between')}>
+          {!disableUserProvidedMedia && (
+            <AccountLink account={account} title={acct} className='user-panel__avatar__link'>
+              <Avatar
+                src={account.avatar}
+                alt={account.avatar_description}
+                isCat={account.is_cat}
+                username={account.username}
+                showAlt
+                size={80}
+                className='user-panel__avatar'
+              />
+            </AccountLink>
+          )}
+
+          {action && <div className='user-panel__action'>{action}</div>}
+        </div>
       </div>
+
+      <div className='flex flex-col'>
+        <AccountLink account={account}>
+          <div className='flex items-center gap-1'>
+            <Text size='lg' weight='bold' truncate>
+              <Emojify text={account.display_name} emojis={account.emojis} />
+            </Text>
+
+            {account.original_display_name &&
+              account.original_display_name !== account.display_name && (
+                <Text
+                  theme='muted'
+                  truncate
+                  title={intl.formatMessage(messages.originalDisplayName)}
+                >
+                  {'('}
+                  <Emojify text={account.original_display_name} emojis={account.emojis} />
+                  {')'}
+                </Text>
+              )}
+
+            {verified && <VerificationBadge />}
+
+            {badges && badges.length > 0 && <div className='flex items-center gap-1'>{badges}</div>}
+          </div>
+        </AccountLink>
+
+        <div className='flex items-center gap-1'>
+          <Text size='sm' theme='muted' direction='ltr' truncate>
+            @{displayedAcct}
+          </Text>
+
+          {account.locked && (
+            <Icon
+              src={iconLock}
+              alt={intl.formatMessage(messages.accountLocked)}
+              className='size-4 text-gray-600'
+            />
+          )}
+        </div>
+      </div>
+
+      {!demetricator && (
+        <div className='user-panel__stats'>
+          {account.followers_count >= 0 && (
+            <Link
+              to='/@{$username}/followers'
+              params={{ username: account.acct }}
+              title={intl.formatNumber(account.followers_count)}
+            >
+              <strong>{shortNumberFormat(account.followers_count)}</strong>
+              <FormattedMessage id='account.followers' defaultMessage='Followers' />
+            </Link>
+          )}
+
+          {account.following_count >= 0 && (
+            <Link
+              to='/@{$username}/following'
+              params={{ username: account.acct }}
+              title={intl.formatNumber(account.following_count)}
+            >
+              <strong>{shortNumberFormat(account.following_count)}</strong>
+              <FormattedMessage id='account.follows' defaultMessage='Following' />
+            </Link>
+          )}
+        </div>
+      )}
     </div>
   );
 };
