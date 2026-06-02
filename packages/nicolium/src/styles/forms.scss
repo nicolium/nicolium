@@ -1011,3 +1011,62 @@ p.form-group__hint {
     }
   }
 }
+
+.inline-multiselect {
+  overflow: auto;
+  display: flex;
+
+  width: fit-content;
+  border: 1px solid rgb(var(--color-gray-400));
+  border-radius: var(--radius-md);
+
+  background: white;
+
+  .dark & {
+    border-color: rgb(var(--color-gray-800));
+    background: rgb(var(--color-gray-900));
+  }
+
+  .black & {
+    background: black;
+  }
+
+  label {
+    cursor: pointer;
+
+    padding: 0.5rem 0.75rem;
+    border-left: 1px solid rgb(var(--color-gray-400));
+
+    color: white;
+    white-space: nowrap;
+
+    background: rgb(var(--color-gray-500));
+
+    transition: background-color border-color 0.15s var(--ease-default);
+
+    &:hover {
+      background: rgb(var(--color-primary-700));
+    }
+
+    &:focus-within {
+      background: rgb(var(--color-primary-700));
+    }
+
+    &:has(input:disabled) {
+      cursor: unset;
+      opacity: 0.75rem;
+    }
+
+    &:has(input:checked) {
+      background: rgb(var(--color-primary-600));
+    }
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+    }
+
+    &:first-child {
+      border: none;
+    }
+  }
+}

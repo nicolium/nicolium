@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import React from 'react';
 
 interface IInlineMultiselect<T extends string> {
@@ -15,24 +14,12 @@ const InlineMultiselect = <T extends string>({
   onChange,
   disabled,
 }: IInlineMultiselect<T>) => (
-  <div className='flex w-fit overflow-auto rounded-md border border-gray-400 bg-white black:bg-black dark:border-gray-800 dark:bg-gray-900'>
-    {Object.entries(items).map(([key, label], i) => {
+  <div className='inline-multiselect'>
+    {Object.entries(items).map(([key, label]) => {
       const checked = value?.includes(key as T);
 
       return (
-        <label
-          className={clsx(
-            'whitespace-nowrap px-3 py-2 text-white transition-colors hover:bg-primary-700 [&:has(:focus-visible)]:bg-primary-700',
-            {
-              'cursor-pointer': !disabled,
-              'opacity-75': disabled,
-              'bg-gray-500': !checked,
-              'bg-primary-600': checked,
-              'border-l border-gray-400 dark:border-gray-800': i !== 0,
-            },
-          )}
-          key={key}
-        >
+        <label key={key}>
           <input
             name={key}
             type='checkbox'
