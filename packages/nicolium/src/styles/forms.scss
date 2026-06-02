@@ -462,6 +462,11 @@ select {
             color: rgb(var(--color-gray-400));
           }
         }
+
+        svg {
+          width: 1rem;
+          height: 1rem;
+        }
       }
     }
   }

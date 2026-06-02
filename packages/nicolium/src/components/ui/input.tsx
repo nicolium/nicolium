@@ -8,7 +8,6 @@ import { useLocale, useLocaleDirection } from '@/hooks/use-locale';
 import { getTextDirection } from '@/utils/rtl';
 
 import Icon from './icon';
-import SvgIcon from './svg-icon';
 import Tooltip from './tooltip';
 
 const messages = defineMessages({
@@ -135,8 +134,17 @@ const Input = React.forwardRef<HTMLInputElement, IInput>((props, ref) => {
           }
         >
           <div className='input__wrapper__password-toggle'>
-            <button type='button' onClick={togglePassword} tabIndex={-1}>
-              <SvgIcon src={revealed ? iconEyeSlash : iconEye} className='size-4' />
+            <button
+              type='button'
+              onClick={togglePassword}
+              tabIndex={-1}
+              aria-label={
+                revealed
+                  ? intl.formatMessage(messages.hidePassword)
+                  : intl.formatMessage(messages.showPassword)
+              }
+            >
+              <Icon src={revealed ? iconEyeSlash : iconEye} aria-hidden />
             </button>
           </div>
         </Tooltip>
