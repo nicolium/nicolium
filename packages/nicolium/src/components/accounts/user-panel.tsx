@@ -15,7 +15,7 @@ import { useAccount } from '@/queries/accounts/use-account';
 import { useSettings } from '@/stores/settings';
 import { shortNumberFormat } from '@/utils/numbers';
 
-import { AccountLink } from '../accounts/account-link';
+import { AccountLink } from './account-link';
 
 const messages = defineMessages({
   accountLocked: {
