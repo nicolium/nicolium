@@ -14,7 +14,7 @@ import {
   type Scope,
 } from '@/pages/settings/interaction-policies';
 import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';
-import { useCompose, useComposeActions } from '@/stores/compose';
+import { useCompose, useComposeActions, useComposeVisibility } from '@/stores/compose';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
@@ -34,8 +34,9 @@ const ComposeInteractionPolicyModal: React.FC<
     useState<CreateStatusParams['quote_approval_policy']>(undefined);
   const { interactionPolicies: initial } = useInteractionPolicies();
   const compose = useCompose(composeId);
+  const visibility = useComposeVisibility(composeId);
 
-  const canManageInteractionPolicies = MANAGABLE_VISIBILITIES.has(compose.visibility);
+  const canManageInteractionPolicies = MANAGABLE_VISIBILITIES.has(visibility);
 
   useEffect(() => {
     if (!canManageInteractionPolicies) {

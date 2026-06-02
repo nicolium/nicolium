@@ -1098,6 +1098,14 @@ const useChangeUploadCompose = (composeId: string) => {
   );
 };
 
+const useComposeVisibility = (composeId: string) => {
+  const { visibility } = useCompose(composeId);
+  const { defaultPrivacy } = useSettings();
+
+  if (visibility === 'default') return defaultPrivacy;
+  return visibility;
+};
+
 export {
   type Compose,
   appendMedia,
@@ -1110,4 +1118,5 @@ export {
   useSubmitCompose,
   useUploadCompose,
   useChangeUploadCompose,
+  useComposeVisibility,
 };

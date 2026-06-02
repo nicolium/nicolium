@@ -3,6 +3,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { useCompose } from '@/hooks/use-compose';
+import { useComposeVisibility } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
 import ComposeFormButton from './compose-form-button';
@@ -29,7 +30,8 @@ const InteractionPolicyButton: React.FC<IInteractionPolicyButton> = ({ composeId
     });
   };
 
-  const { visibility, interactionPolicy } = useCompose(composeId);
+  const { interactionPolicy } = useCompose(composeId);
+  const visibility = useComposeVisibility(composeId);
 
   if (!['public', 'unlisted', 'private'].includes(visibility)) return null;
 
