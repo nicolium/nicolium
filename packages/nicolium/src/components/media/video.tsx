@@ -500,10 +500,10 @@ const Video: React.FC<IVideo> = ({
   return (
     <div
       role='menuitem'
-      className={clsx(
-        'video-player relative box-border max-h-screen max-w-full overflow-hidden rounded-[10px] bg-black text-white [direction:ltr] focus:outline-0',
-        { 'm-0 h-full w-full': fullscreen },
-      )}
+      className={clsx('video-player', {
+        'video-player--fullscreen': fullscreen,
+        'video-player--detailed': detailed,
+      })}
       style={playerStyle}
       ref={player}
       onMouseEnter={handleMouseEnter}
@@ -512,12 +512,12 @@ const Video: React.FC<IVideo> = ({
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
-      {!fullscreen && <Blurhash hash={blurhash} className='⁂-media-gallery__preview' />}
+      {!fullscreen && <Blurhash hash={blurhash} className='media-gallery__preview' />}
 
       <video
-        className={clsx('relative z-[1] block h-full max-h-full', {
-          'object-contain': inline && !fullscreen,
-          '!max-h-full w-full !max-w-full outline-0': fullscreen,
+        className={clsx('video-player__video', {
+          'video-player__video--contain': inline && !fullscreen,
+          'video-player__video--fullscreen': fullscreen,
         })}
         ref={video}
         src={src}
@@ -546,30 +546,26 @@ const Video: React.FC<IVideo> = ({
           })}
         >
           <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
-            <div
-              className='absolute top-1 block h-1 rounded bg-black/20 dark:bg-white/20'
-              style={{ width: `${buffer}%` }}
-            />
-            <div
-              className='absolute top-1 block h-1 rounded bg-accent-500'
-              style={{ width: `${progress}%` }}
-            />
+            <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
+            <div className='video-player__seek__progress' style={{ width: `${progress}%` }} />
 
             <span
-              className={clsx('video-player__seek__handle', { 'opacity-100': dragging })}
+              className={clsx('video-player__seek__handle', {
+                'video-player__seek__handle--active': dragging,
+              })}
               tabIndex={0}
               style={{ left: `${progress}%` }}
               onKeyDown={handleVideoKeyDown}
             />
           </div>
 
-          <div className='mx-[-5px] my-0 flex justify-between'>
-            <div className='video-player__buttons left'>
+          <div className='video-player__controls__row'>
+            <div className='video-player__buttons'>
               <button
                 type='button'
                 title={intl.formatMessage(paused ? messages.play : messages.pause)}
                 aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
-                className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
+                className='video-player__button'
                 onClick={togglePlay}
                 autoFocus={autoFocus}
               >
@@ -580,7 +576,7 @@ const Video: React.FC<IVideo> = ({
                 type='button'
                 title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
                 aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-                className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
+                className='video-player__button'
                 onClick={toggleMute}
               >
                 <Icon src={muted ? iconSpeakerX : iconSpeakerHigh} />
@@ -603,21 +599,21 @@ const Video: React.FC<IVideo> = ({
               </div>
 
               {(detailed || fullscreen) && (
-                <span className='text-black dark:text-white'>
-                  <span className='text-sm font-medium'>{formatTime(currentTime)}</span>
-                  <span className='mx-1.5 my-0 inline-block text-sm font-medium'>/</span>
-                  <span className='text-sm font-medium'>{formatTime(duration)}</span>
+                <span className='video-player__time'>
+                  <span className='video-player__time__value'>{formatTime(currentTime)}</span>
+                  <span className='video-player__time__separator'>/</span>
+                  <span className='video-player__time__value'>{formatTime(duration)}</span>
                 </span>
               )}
 
               {link && <span className='video-player__link'>{link}</span>}
             </div>
 
-            <div className='video-player__buttons right'>
+            <div className='video-player__buttons'>
               <a
                 title={intl.formatMessage(messages.download)}
                 aria-label={intl.formatMessage(messages.download)}
-                className='player-button text-inherit'
+                className='video-player__button'
                 href={src}
                 download
                 target='_blank'
@@ -633,7 +629,7 @@ const Video: React.FC<IVideo> = ({
                 aria-label={intl.formatMessage(
                   fullscreen ? messages.exitFullscreen : messages.fullscreen,
                 )}
-                className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
+                className='video-player__button'
                 onClick={toggleFullscreen}
               >
                 <Icon src={fullscreen ? iconArrowsInSimple : iconArrowsOutSimple} />

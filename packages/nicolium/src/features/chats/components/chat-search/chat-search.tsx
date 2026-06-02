@@ -91,8 +91,8 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
   };
 
   return (
-    <div className='⁂-chat-search'>
-      <div className='⁂-chat-search__form'>
+    <div className='chat-search'>
+      <div className='chat-search__form'>
         <Input
           data-testid='search'
           type='text'
@@ -102,7 +102,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
           onChange={(event) => {
             setValue(event.target.value);
           }}
-          outerClassName='⁂-chat-search__input'
+          outerClassName='chat-search__input'
           theme='search'
           append={
             <button
@@ -117,7 +117,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
         />
       </div>
 
-      <div className='⁂-chat-search__body' ref={parentRef}>
+      <div className='chat-search__body' ref={parentRef}>
         {renderBody()}
       </div>
     </div>

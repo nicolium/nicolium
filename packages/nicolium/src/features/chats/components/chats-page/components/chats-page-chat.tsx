@@ -124,13 +124,13 @@ const ChatsPageChat = () => {
     });
 
   return (
-    <div className='⁂-chats-page-chat'>
-      <div className='⁂-chats-page-chat__header ⁂-chats-page-chat__header--between'>
-        <div className='⁂-chats-page-chat__title-row'>
-          <div className='⁂-chats-page-chat__avatar__container'>
+    <div className='chats-page-chat'>
+      <div className='chats-page-chat__header chats-page-chat__header--between'>
+        <div className='chats-page-chat__title-row'>
+          <div className='chats-page-chat__avatar__container'>
             <IconButton
               src={iconArrowLeft}
-              className='⁂-chats-page-chat__back-button'
+              className='chats-page-chat__back-button'
               onClick={() => navigate({ to: '/chats' })}
               title={intl.formatMessage(messages.back)}
             />
@@ -140,17 +140,17 @@ const ChatsPageChat = () => {
                 src={chat.account.avatar}
                 alt={chat.account.avatar_description}
                 size={40}
-                className='⁂-chats-page-chat__avatar'
+                className='chats-page-chat__avatar'
                 isCat={chat.account.is_cat}
                 username={chat.account.username}
               />
             </AccountLink>
           </div>
 
-          <div className='⁂-chats-page-chat__title'>
-            <div className='⁂-chats-page-chat__title-name'>
+          <div className='chats-page-chat__title'>
+            <div className='chats-page-chat__title-name'>
               <AccountLink account={chat.account}>
-                <span className='⁂-chats-page-chat__title-text'>
+                <span className='chats-page-chat__title-text'>
                   {chat.account.display_name || chat.account.username}
                 </span>
               </AccountLink>
@@ -162,7 +162,7 @@ const ChatsPageChat = () => {
         <DropdownMenu
           src={iconInfo}
           component={() => (
-            <div className='⁂-chats-page-chat__account-popover'>
+            <div className='chats-page-chat__account-popover'>
               <Account account={chat.account} disabled hideActions />
             </div>
           )}
@@ -170,8 +170,8 @@ const ChatsPageChat = () => {
         />
       </div>
 
-      <div className='⁂-chats-page-chat__body'>
-        <Chat className='⁂-chats-page-chat__chat' chat={chat} inputRef={inputRef} />
+      <div className='chats-page-chat__body'>
+        <Chat className='chats-page-chat__chat' chat={chat} inputRef={inputRef} />
       </div>
     </div>
   );

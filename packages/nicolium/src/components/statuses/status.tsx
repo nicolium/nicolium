@@ -83,7 +83,7 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
       <StatusLanguagePicker status={status} />
       {!!status.edited_at && (
         <>
-          <span className='⁂-separator' />
+          <span className='separator' />
 
           <Icon
             className='size-4 text-gray-700 dark:text-gray-600'
@@ -553,8 +553,8 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
   const body = (
     <div
-      className={clsx('⁂-status', {
-        '⁂-status--reply': !!status.in_reply_to_id,
+      className={clsx('status', {
+        'status--reply': !!status.in_reply_to_id,
       })}
       data-featured={featured ? 'true' : null}
       data-visibility={actualStatus.visibility}
@@ -566,7 +566,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     >
       <Card
         variant={variant}
-        className={clsx('⁂-status__wrapper status-wrapper', className, {
+        className={clsx('status__wrapper', className, {
           'py-6 sm:p-5': variant === 'rounded',
           muted,
           read: unread === false,

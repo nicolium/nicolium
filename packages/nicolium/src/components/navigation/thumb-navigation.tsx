@@ -50,7 +50,7 @@ const SidebarDot: React.FC = () => {
   }, [isSidebarOpen]);
 
   return showDot && !demetricator ? (
-    <div className='⁂-thumb-navigation__sidebar-dot' aria-hidden />
+    <div className='thumb-navigation__sidebar-dot' aria-hidden />
   ) : null;
 };
 
@@ -95,12 +95,12 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   return (
     <div
       className={clsx(
-        '⁂-thumb-navigation',
-        orderedNavigationItems.length === 0 && '⁂-thumb-navigation--no-items',
+        'thumb-navigation',
+        orderedNavigationItems.length === 0 && 'thumb-navigation--no-items',
       )}
     >
       <button
-        className='⁂-thumb-navigation__item'
+        className='thumb-navigation__item'
         onClick={isSidebarOpen ? closeSidebar : openSidebar}
         title={intl.formatMessage(isSidebarOpen ? messages.closeSidebar : messages.openSidebar)}
         aria-label={intl.formatMessage(
@@ -121,7 +121,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
             return (
               <button
                 key='compose'
-                className='⁂-thumb-navigation__item ⁂-thumb-navigation__item--compose'
+                className='thumb-navigation__item thumb-navigation__item--compose'
                 onClick={handleOpenComposeModal}
                 title={intl.formatMessage(messages.compose)}
               >

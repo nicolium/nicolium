@@ -2,12 +2,9 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useState, useCallback } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useDisableMfa } from '@/queries/security/use-mfa';
 import toast from '@/toast';
@@ -45,18 +42,18 @@ const DisableOtpForm: React.FC = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <div className='flex flex-col'>
-        <Text weight='medium'>
+    <Form className='disable-otp-form' onSubmit={handleSubmit}>
+      <div className='disable-otp-form__header'>
+        <p className='disable-otp-form__title'>
           <FormattedMessage id='mfa.otp_enabled.title' defaultMessage='OTP enabled' />
-        </Text>
+        </p>
 
-        <Text theme='muted'>
+        <p className='disable-otp-form__description'>
           <FormattedMessage
             id='mfa.otp_enabled.description'
             defaultMessage='You have enabled two-factor authentication via OTP.'
           />
-        </Text>
+        </p>
       </div>
 
       {features.disableMfaWithCode ? (
@@ -104,14 +101,11 @@ const DisableOtpForm: React.FC = () => {
         </FormGroup>
       )}
 
-      <FormActions>
-        <Button
-          disabled={isPending}
-          theme='danger'
-          type='submit'
-          text={<FormattedMessage id='column.mfa_disable_button' defaultMessage='Disable' />}
-        />
-      </FormActions>
+      <div className='disable-otp-form__actions form__actions'>
+        <button type='submit' disabled={isPending}>
+          <FormattedMessage id='column.mfa_disable_button' defaultMessage='Disable' />
+        </button>
+      </div>
     </Form>
   );
 };

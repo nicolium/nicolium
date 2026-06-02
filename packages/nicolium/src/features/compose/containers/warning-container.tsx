@@ -37,7 +37,7 @@ const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
             defaultMessage='Your account is not {locked}. Anyone can follow you to view your follower-only posts.'
             values={{
               locked: (
-                <Link className='underline' to='/settings/profile'>
+                <Link className='compose-warning__link' to='/settings/profile'>
                   <FormattedMessage
                     id='compose_form.lock_disclaimer.lock'
                     defaultMessage='locked'
@@ -58,7 +58,7 @@ const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
         message={
           <FormattedMessage
             id='compose_form.hashtag_warning'
-            defaultMessage="This post won't be listed under any hashtag as it is unlisted. Only public posts can be searched by hashtag."
+            defaultMessage='This post won’t be listed under any hashtag as it is unlisted. Only public posts can be searched by hashtag.'
           />
         }
         animated

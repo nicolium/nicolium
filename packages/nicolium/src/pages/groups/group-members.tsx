@@ -45,13 +45,13 @@ const GroupMembers: React.FC = () => {
       showLoading={!group || ((isFetchingPending ?? isLoading) && members.length === 0)}
       placeholderComponent={PlaceholderAccount}
       placeholderCount={3}
-      className='⁂-status-list'
-      itemClassName='⁂-group-members__item'
+      className='status-list'
+      itemClassName='group-members__item'
       prepend={
         membershipRequests.length > 0 && (
           <div
-            className={clsx('⁂-group-members__pending', {
-              '⁂-group-members__pending--bordered': members.length,
+            className={clsx('group-members__pending', {
+              'group-members__pending--bordered': members.length,
             })}
           >
             <PendingItemsRow

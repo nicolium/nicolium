@@ -47,7 +47,7 @@ const messages = defineMessages({
   },
   descriptionMissingTitle: {
     id: 'upload_form.description_missing.title',
-    defaultMessage: "This attachment doesn't have a description",
+    defaultMessage: 'This attachment doesn’t have a description',
   },
   preview: { id: 'upload_form.preview', defaultMessage: 'Preview' },
   delete: { id: 'upload_form.undo', defaultMessage: 'Delete' },
@@ -75,7 +75,7 @@ const LazyImage = ({
   src,
 }: {
   altText: string;
-  className: string | null;
+  className?: string;
   imageRef: { current: null | HTMLImageElement };
   src: string;
 }): React.JSX.Element => {
@@ -292,19 +292,21 @@ const ImageComponent = ({
   return (
     <Suspense fallback={null}>
       <div
-        className='relative'
+        className={clsx('compose-editor__image', {
+          'compose-editor__image--selected': isSelected,
+          'compose-editor__image--draggable': isSelected && $isNodeSelection(selection),
+        })}
         draggable={draggable}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
         role='button'
       >
-        <div className='absolute right-2 top-2 z-10 flex gap-2'>
+        <div className='compose-editor__image__actions'>
           <IconButton
             onClick={previewImage}
             src={iconMagnifyingGlassPlus}
             theme='dark'
-            className='!p-1.5 hover:scale-105 hover:bg-gray-900'
             iconClassName='h-5 w-5'
             title={intl.formatMessage(messages.preview)}
           />
@@ -312,19 +314,15 @@ const ImageComponent = ({
             onClick={deleteNode}
             src={iconX}
             theme='dark'
-            className='!p-1.5 hover:scale-105 hover:bg-gray-900'
             iconClassName='h-5 w-5'
             title={intl.formatMessage(messages.delete)}
           />
         </div>
 
         <div
-          className={clsx(
-            'absolute inset-x-0 bottom-0 z-[2px] bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900/80 p-2.5 opacity-0 transition-opacity duration-100 ease-linear',
-            {
-              'opacity-100': active,
-            },
-          )}
+          className={clsx('compose-editor__image__description', {
+            'compose-editor__image__description--active': active,
+          })}
         >
           <label>
             <span className='sr-only'>
@@ -335,7 +333,7 @@ const ImageComponent = ({
             </span>
 
             <textarea
-              className='m-0 w-full rounded-md border border-solid border-white/25 bg-transparent p-2.5 text-sm text-white placeholder:text-white/60'
+              className='compose-editor__image__alt-input'
               placeholder={intl.formatMessage(messages.description)}
               value={description}
               onFocus={handleInputFocus}
@@ -349,28 +347,16 @@ const ImageComponent = ({
         {missingDescriptionModal && !description && (
           <span
             title={intl.formatMessage(messages.descriptionMissingTitle)}
-            className={clsx(
-              'absolute bottom-2 left-2 z-10 inline-flex items-center gap-1 rounded bg-gray-900 px-2 py-1 text-xs font-medium uppercase text-white transition-opacity duration-100 ease-linear',
-              {
-                'pointer-events-none opacity-0': active,
-                'opacity-100': !active,
-              },
-            )}
+            className={clsx('compose-editor__image__missing-alt', {
+              'compose-editor__image__missing-alt--hidden': active,
+            })}
           >
-            <Icon className='size-4' src={iconWarning} />
+            <Icon src={iconWarning} />
             <FormattedMessage id='upload_form.description_missing.indicator' defaultMessage='Alt' />
           </span>
         )}
 
-        <LazyImage
-          className={clsx('mx-auto cursor-default', {
-            'select-none': isSelected,
-            'cursor-grab active:cursor-grabbing': isSelected && $isNodeSelection(selection),
-          })}
-          src={src}
-          altText={altText}
-          imageRef={imageRef}
-        />
+        <LazyImage src={src} altText={altText} imageRef={imageRef} />
       </div>
     </Suspense>
   );

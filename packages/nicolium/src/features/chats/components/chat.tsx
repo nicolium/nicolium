@@ -159,8 +159,8 @@ const Chat: React.FC<IChat> = ({ chat, inputRef, className }) => {
   }, [chat.id, inputRef?.current]);
 
   return (
-    <div className={clsx('⁂-chat', className)}>
-      <div className='⁂-chat__messages'>
+    <div className={clsx('chat', className)}>
+      <div className='chat__messages'>
         <ChatMessageList key={chat.id} chat={chat} />
       </div>
 

@@ -44,8 +44,8 @@ const BlockedMember: React.FC<IBlockedMember> = ({ accountId, groupId }) => {
   };
 
   return (
-    <div className='⁂-group-member-action-row'>
-      <div className='⁂-group-member-action-row__account'>
+    <div className='group-member-action-row'>
+      <div className='group-member-action-row__account'>
         <Account account={account} withRelationship={false} />
       </div>
 
@@ -84,7 +84,7 @@ const GroupBlockedMembers: React.FC = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.group_blocks'
-      defaultMessage="The group hasn't banned any users yet."
+      defaultMessage='The group hasn’t banned any users yet.'
     />
   );
 

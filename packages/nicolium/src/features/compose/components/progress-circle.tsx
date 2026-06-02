@@ -21,24 +21,20 @@ const ProgressCircle: React.FC<IProgressCircle> = ({
   const dashoffset = circumference * (1 - Math.min(progress, 1));
 
   return (
-    <div title={title} {...props}>
+    <div
+      className={clsx('character-counter__circle', {
+        'character-counter__circle--exceeded': progress > 1,
+      })}
+      title={title}
+      {...props}
+    >
       <svg
         width={actualRadius * 2}
         height={actualRadius * 2}
         viewBox={`0 0 ${actualRadius * 2} ${actualRadius * 2}`}
       >
+        <circle cx={actualRadius} cy={actualRadius} r={radius} fill='none' strokeWidth={stroke} />
         <circle
-          className='stroke-gray-500 dark:stroke-white/20'
-          cx={actualRadius}
-          cy={actualRadius}
-          r={radius}
-          fill='none'
-          strokeWidth={stroke}
-        />
-        <circle
-          className={clsx('stroke-primary-500', {
-            'stroke-secondary-500': progress > 1,
-          })}
           style={{
             strokeDashoffset: dashoffset,
             strokeDasharray: circumference,

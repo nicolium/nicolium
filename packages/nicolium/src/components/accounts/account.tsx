@@ -73,14 +73,14 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
         src={account.favicon}
         alt={account.domain}
         title={account.domain}
-        className='⁂-instance-favicon'
+        className='instance-favicon'
       />
     );
   }
 
   return (
     <button
-      className='⁂-instance-favicon'
+      className='instance-favicon'
       onClick={handleClick}
       disabled={disabled}
       title={intl.formatMessage(messages.timeline, { domain: account.domain })}
@@ -183,8 +183,8 @@ const Account = ({
           src={actionIcon}
           title={actionTitle}
           onClick={handleAction}
-          className='⁂-account-card__action-button'
-          iconClassName='⁂-account-card__action-icon'
+          className='account-card__action-button'
+          iconClassName='account-card__action-icon'
         />
       );
     }
@@ -204,7 +204,7 @@ const Account = ({
       const actionWidth = actionRef.current?.clientWidth ?? 0;
 
       if (overflowRef.current) {
-        const maxWidth = overflowRef.current.classList.contains('⁂-account-card__inner--fit')
+        const maxWidth = overflowRef.current.classList.contains('account-card__inner--fit')
           ? overflowRef.current.parentElement!.clientWidth
           : overflowRef.current.clientWidth;
         style.maxWidth = Math.max(
@@ -271,13 +271,13 @@ const Account = ({
     return (
       <div
         data-testid='account'
-        className={clsx('⁂-account-card', {
-          '⁂-account-card--action-top': actionAlignment === 'top',
+        className={clsx('account-card', {
+          'account-card--action-top': actionAlignment === 'top',
         })}
         ref={overflowRef}
       >
         <div>
-          <div className='⁂-account-card__row'>
+          <div className='account-card__row'>
             {disableUserProvidedMedia ? (
               <Avatar
                 src={account.avatar}
@@ -285,9 +285,7 @@ const Account = ({
                 username={account.username}
               />
             ) : (
-              <div
-                className={clsx('⁂-account-card__avatar', emoji && '⁂-account-card__avatar--emoji')}
-              >
+              <div className={clsx('account-card__avatar', emoji && 'account-card__avatar--emoji')}>
                 <Avatar
                   src={account.avatar}
                   size={avatarSize}
@@ -295,13 +293,13 @@ const Account = ({
                   isCat={account.is_cat}
                   username={account.username}
                 />
-                {emoji && <Emoji className='⁂-account-card__emoji' emoji={emoji} src={emojiUrl} />}
+                {emoji && <Emoji className='account-card__emoji' emoji={emoji} src={emojiUrl} />}
               </div>
             )}
 
-            <div className='⁂-account-card__content'>
-              <div className='⁂-account-card__display-name'>
-                <p className='⁂-account-card__display-name__text'>
+            <div className='account-card__content'>
+              <div className='account-card__display-name'>
+                <p className='account-card__display-name__text'>
                   <Emojify text={account.display_name} emojis={account.emojis} />
                 </p>
 
@@ -315,20 +313,18 @@ const Account = ({
                 )}
               </div>
 
-              <div className='⁂-account-card__meta'>
-                <p className='⁂-account-card__handle'>@{username}</p>
+              <div className='account-card__meta'>
+                <p className='account-card__handle'>@{username}</p>
 
                 {withLocked && !timestamp && account.locked && (
                   <>
                     <Icon
                       src={iconLock}
                       alt={intl.formatMessage(messages.accountLocked)}
-                      className='⁂-account-card__lock'
+                      className='account-card__lock'
                     />
 
-                    {account.favicon && !disableUserProvidedMedia && (
-                      <span className='⁂-separator' />
-                    )}
+                    {account.favicon && !disableUserProvidedMedia && <span className='separator' />}
                   </>
                 )}
 
@@ -346,8 +342,8 @@ const Account = ({
       </div>
     );
 
-  const containerClassName = clsx('⁂-account-card__row', {
-    '⁂-account-card__row--top': withAccountNote || note,
+  const containerClassName = clsx('account-card__row', {
+    'account-card__row--top': withAccountNote || note,
   });
 
   const body = (
@@ -361,7 +357,7 @@ const Account = ({
           />
         ) : (
           <LinkEl
-            className={clsx('⁂-account-card__avatar', emoji && '⁂-account-card__avatar--emoji')}
+            className={clsx('account-card__avatar', emoji && 'account-card__avatar--emoji')}
             {...linkProps}
           >
             <Avatar
@@ -371,14 +367,14 @@ const Account = ({
               isCat={account.is_cat}
               username={account.username}
             />
-            {emoji && <Emoji className='⁂-account-card__emoji' emoji={emoji} src={emojiUrl} />}
+            {emoji && <Emoji className='account-card__emoji' emoji={emoji} src={emojiUrl} />}
           </LinkEl>
         ))}
 
-      <div className='⁂-account-card__content' style={style}>
+      <div className='account-card__content' style={style}>
         <LinkEl {...linkProps}>
-          <div className='⁂-account-card__display-name'>
-            <p className='⁂-account-card__display-name__text'>
+          <div className='account-card__display-name'>
+            <p className='account-card__display-name__text'>
               <Emojify text={account.display_name} emojis={account.emojis} />
             </p>
 
@@ -393,18 +389,18 @@ const Account = ({
           </div>
         </LinkEl>
 
-        <div className='⁂-account-card__meta__container'>
-          <div className='⁂-account-card__meta'>
-            <p className='⁂-account-card__handle'>@{username}</p>
+        <div className='account-card__meta__container'>
+          <div className='account-card__meta'>
+            <p className='account-card__handle'>@{username}</p>
 
             {withLocked && !timestamp && account.locked && (
               <>
                 <Icon
                   src={iconLock}
                   alt={intl.formatMessage(messages.accountLocked)}
-                  className='⁂-account-card__lock'
+                  className='account-card__lock'
                 />
-                {account.favicon && !disableUserProvidedMedia && <span className='⁂-separator' />}
+                {account.favicon && !disableUserProvidedMedia && <span className='separator' />}
               </>
             )}
 
@@ -417,13 +413,13 @@ const Account = ({
 
             {timestamp ? (
               <>
-                <span className='⁂-separator' />
+                <span className='separator' />
 
                 <RelativeTimestamp
                   timestamp={timestamp}
                   theme='muted'
                   size='sm'
-                  className='⁂-account-card__timestamp'
+                  className='account-card__timestamp'
                   futureDate={futureTimestamp}
                 />
               </>
@@ -431,9 +427,9 @@ const Account = ({
 
             {approvalStatus && ['pending', 'rejected'].includes(approvalStatus) && (
               <>
-                <span className='⁂-separator' />
+                <span className='separator' />
 
-                <span className='⁂-account-card__meta-text'>
+                <span className='account-card__meta-text'>
                   {approvalStatus === 'pending' ? (
                     <FormattedMessage
                       id='status.approval.pending'
@@ -448,9 +444,9 @@ const Account = ({
 
             {actionType === 'blocking' && blockExpiresAt ? (
               <>
-                <span className='⁂-separator' />
+                <span className='separator' />
 
-                <p className='⁂-account-card__meta-text'>
+                <p className='account-card__meta-text'>
                   <RelativeTimestamp timestamp={blockExpiresAt} futureDate />
                 </p>
               </>
@@ -458,9 +454,9 @@ const Account = ({
 
             {actionType === 'muting' && muteExpiresAt ? (
               <>
-                <span className='⁂-separator' />
+                <span className='separator' />
 
-                <p className='⁂-account-card__meta-text'>
+                <p className='account-card__meta-text'>
                   <RelativeTimestamp timestamp={muteExpiresAt} futureDate />
                 </p>
               </>
@@ -469,10 +465,10 @@ const Account = ({
             {items}
           </div>
           {note ? (
-            <p className='⁂-account-card__note'>{note}</p>
+            <p className='account-card__note'>{note}</p>
           ) : (
             withAccountNote && (
-              <p className='⁂-account-card__bio'>
+              <p className='account-card__bio'>
                 <ParsedContent
                   html={account.note}
                   emojis={account.emojis}
@@ -489,11 +485,11 @@ const Account = ({
   return (
     <div
       data-testid='account'
-      className={clsx('⁂-account-card', {
-        '⁂-account-card--action-top': actionAlignment === 'top',
+      className={clsx('account-card', {
+        'account-card--action-top': actionAlignment === 'top',
       })}
     >
-      <div className='⁂-account-card__inner ⁂-account-card__inner--fit' ref={overflowRef}>
+      <div className='account-card__inner account-card__inner--fit' ref={overflowRef}>
         {showAccountHoverCard ? (
           <HoverAccountWrapper accountId={account.id} className={containerClassName}>
             {body}

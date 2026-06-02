@@ -1,10 +1,9 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import { useClient } from '@/hooks/use-client';
@@ -34,7 +33,6 @@ const EditEmailPage = () => {
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(
     (event) => {
       event.persist();
-
       setState((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
     },
     [],
@@ -83,14 +81,14 @@ const EditEmailPage = () => {
           <Input type='password' name='password' onChange={handleInputChange} value={password} />
         </FormGroup>
 
-        <FormActions>
-          <Button to='/settings' theme='tertiary'>
+        <div className='form__actions edit-email__actions'>
+          <Link to='/settings'>
             <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
-          </Button>
-          <Button type='submit' theme='primary' disabled={isLoading}>
+          </Link>
+          <button type='submit' disabled={isLoading}>
             <FormattedMessage id='security.submit' defaultMessage='Save changes' />
-          </Button>
-        </FormActions>
+          </button>
+        </div>
       </Form>
     </Column>
   );

@@ -28,7 +28,7 @@ const MaybeEmoji: React.FC<IMaybeEmoji> = ({ text, emojis, nyaize: shouldNyaize,
     const filename = emoji.static_url;
 
     if (filename?.length > 0) {
-      const emoji = <Emoji className='emojione ⁂-emoji' emoji={text} src={filename} />;
+      const emoji = <Emoji className='emojione emoji' emoji={text} src={filename} />;
       if (truncated) {
         return <span className='inline-flex'>{emoji}</span>;
       } else {
@@ -84,7 +84,7 @@ const Emojify: React.FC<IEmojify> = React.memo(
           <img
             key={index}
             draggable={false}
-            className='emojione ⁂-emoji'
+            className='emojione emoji'
             alt={c}
             title={`:${shortcode}:`}
             src={joinPublicPath(`packs/emoji/${unified}.svg`)}
@@ -109,7 +109,7 @@ const Emojify: React.FC<IEmojify> = React.memo(
           <img
             key={index}
             draggable={false}
-            className='emojione ⁂-emoji'
+            className='emojione emoji'
             alt={unqualified}
             title={`:${shortcode}:`}
             src={joinPublicPath(`packs/emoji/${unified}.svg`)}

@@ -1,5 +1,8 @@
+@use '../mixins';
+@use '../variables';
+
 [column-type='filled'] .status__wrapper,
-[column-type='filled'] .status-placeholder {
+[column-type='filled'] .status--placeholder {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -9,32 +12,28 @@
   }
 }
 
-.status-check-box__status {
-  .media-gallery {
-    max-width: 250px;
-  }
+.status-check-box {
+  display: flex;
+  align-items: cetner;
+  justify-content: space-between;
 
-  .status__content {
-    padding: 0;
+  &__status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem 0;
 
-    font-size: var(--text-sm);
-    line-height: var(--leading-sm);
-    color: rgb(var(--color-gray-700));
-    white-space: normal;
-
-    .dark & {
-      color: rgb(var(--color-gray-500));
+    .video-player {
+      max-width: 250px;
+      margin-top: 0.5rem;
     }
   }
 
-  .video-player,
-  .audio-player {
-    max-width: 250px;
-    margin-top: 0.5rem;
-  }
-
-  .media-gallery__item-thumbnail {
-    cursor: default;
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.675rem;
   }
 }
 
@@ -44,8 +43,12 @@
 }
 
 .status-card {
+  position: relative;
+  z-index: 1;
+
   overflow: hidden;
   display: flex;
+  flex-direction: column;
 
   border: 1px solid rgb(var(--color-gray-200));
   border-radius: var(--radius-lg);
@@ -55,14 +58,218 @@
   color: rgb(var(--color-gray-800));
   text-decoration: none;
 
+  background: white;
+
   .dark & {
     border-color: rgb(var(--color-gray-800));
     color: rgb(var(--color-gray-200));
+    background: rgb(var(--color-primary-900));
+  }
+
+  .black & {
+    background: black;
+  }
+
+  &--horizontal {
+    display: block;
+  }
+
+  &--compact {
+    border-color: rgb(var(--color-gray-200));
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+    }
   }
 
   iframe {
     width: 100% !important;
     height: 100%;
+  }
+
+  &__image {
+    position: relative;
+    overflow: hidden;
+    flex: 0 0 40%;
+
+    & > .svg-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 50% 50%;
+      transform: translate(-50%, -50%);
+
+      width: 2.5rem;
+      height: 2.5rem;
+
+      svg {
+        stroke-width: 1px;
+      }
+    }
+
+    .still-image {
+      display: block;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+      background-position: center;
+      background-size: cover;
+    }
+
+    img {
+      object-fit: cover;
+    }
+  }
+
+  &__description {
+    overflow: hidden;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    padding: 1rem;
+  }
+
+  &__title {
+    @include mixins.text($weight: bold);
+  }
+
+  &__provider {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    &__icon {
+      @include mixins.text($theme: muted);
+    }
+
+    &__name {
+      @include mixins.text($size: sm, $theme: muted);
+    }
+  }
+
+  &__blur {
+    position: absolute;
+    z-index: -10;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__controls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-full);
+
+    background-color: rgb(var(--color-gray-500) / 0.9);
+    box-shadow: var(--shadow-sm);
+
+    .dark & {
+      background-color: rgb(var(--color-gray-700) / 0.9);
+    }
+  }
+
+  &__embed-button {
+    color: rgb(var(--color-gray-700));
+    appearance: none;
+
+    &:hover {
+      color: rgb(var(--color-gray-900));
+    }
+
+    .dark & {
+      color: rgb(var(--color-gray-200));
+    }
+
+    .dark &:hover {
+      color: rgb(var(--color-gray-100));
+    }
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: inherit;
+    }
+  }
+
+  &__image {
+    &--link {
+      flex: none;
+      width: 100%;
+      height: 200px;
+
+      @media (min-width: variables.$breakpoint-md) {
+        width: min-content;
+        max-width: 50%;
+        height: auto;
+        border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+      }
+    }
+  }
+
+  &__attribution {
+    margin-top: -1rem;
+    padding: 0.5rem;
+    padding-top: 1.5rem;
+    border: 1px solid rgb(var(--color-gray-200));
+    border-top: 0;
+    border-radius: var(--radius-lg);
+
+    background-color: rgb(var(--color-gray-100));
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+      background-color: rgb(var(--color-primary-700));
+    }
+
+    .black & {
+      background-color: rgb(var(--color-primary-900));
+    }
+
+    p {
+      @include mixins.text($theme: muted);
+
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  }
+
+  &__author {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    &__name {
+      @include mixins.text($weight: medium);
+    }
+  }
+
+  // Wrapper for status card with attributions
+  &__container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (min-width: variables.$breakpoint-md) {
+    flex-direction: row;
   }
 }
 
@@ -79,50 +286,49 @@ a.status-card {
   }
 }
 
-.status-card__image {
+.thread__status {
   position: relative;
-  overflow: hidden;
-  flex: 0 0 40%;
+  padding-bottom: 1rem;
 
-  & > .svg-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: 50% 50%;
-    transform: translate(-50%, -50%);
+  .status__wrapper {
+    padding: 0;
+    box-shadow: none;
+  }
 
-    width: 2.5rem;
-    height: 2.5rem;
+  &:not(&--linear) .status__content-wrapper {
+    padding-left: 54px;
 
-    svg {
-      stroke-width: 1px;
+    dir[dir="rtl"] & {
+      padding-right: 54px;
+      padding-left: 0;
     }
   }
 
-  img {
-    object-fit: cover;
+  &--linear {
+    div:last-child > & hr {
+      display: none;
+    }
   }
 }
 
-.status-card.horizontal {
-  display: block;
-}
+.thread-indent-border {
+  position: absolute;
+  top: -1rem;
+  bottom: 1rem;
 
-.status-card.compact {
-  border-color: rgb(var(--color-gray-200));
+  width: 2px;
+
+  background: rgb(var(--color-gray-200));
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
+    background: rgb(var(--color-primary-800));
   }
-}
 
-.status-card__image-image {
-  display: block;
+  .black & {
+    background: rgb(var(--color-gray-800));
+  }
 
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-  background-position: center;
-  background-size: cover;
+  &:last-of-type:not(:first-child) {
+    top: 21px;
+  }
 }

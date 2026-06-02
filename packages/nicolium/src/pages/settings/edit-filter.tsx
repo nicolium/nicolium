@@ -4,16 +4,13 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Streamfield from '@/components/ui/streamfield';
-import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { useFeatures } from '@/hooks/use-features';
 import { useCreateFilter, useFilter, useUpdateFilter } from '@/queries/settings/use-filters';
@@ -35,10 +32,7 @@ const messages = defineMessages({
   keyword: { id: 'column.filters.keyword', defaultMessage: 'Keyword or phrase' },
   createError: { id: 'column.filters.create.error', defaultMessage: 'Failed to add filter' },
   editError: { id: 'column.filters.edit.error', defaultMessage: 'Failed to edit filter' },
-  createSuccess: {
-    id: 'column.filters.create.success',
-    defaultMessage: 'Filter added',
-  },
+  createSuccess: { id: 'column.filters.create.success', defaultMessage: 'Filter added' },
   editSuccess: { id: 'column.filters.edit.success', defaultMessage: 'Filter updated' },
   expirationNever: { id: 'column.filters.expiration.never', defaultMessage: 'Never' },
   expiration1800: { id: 'column.filters.expiration.1800', defaultMessage: '30 minutes' },
@@ -62,20 +56,21 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
     };
 
   return (
-    <div className='flex flex-grow gap-2'>
-      <Input
-        type='text'
-        outerClassName='w-2/5 grow'
-        value={value.keyword}
-        onChange={handleChange('keyword')}
-        placeholder={intl.formatMessage(messages.keyword)}
-      />
-      <div className='flex items-center gap-2'>
+    <div className='edit-filter__field'>
+      <div className='edit-filter__field__keyword'>
+        <Input
+          type='text'
+          value={value.keyword}
+          onChange={handleChange('keyword')}
+          placeholder={intl.formatMessage(messages.keyword)}
+        />
+      </div>
+      <div className='edit-filter__field__options'>
         <Toggle checked={value.whole_word} onChange={handleChange('whole_word')} />
 
-        <Text tag='span' theme='muted'>
+        <span>
           <FormattedMessage id='column.filters.whole_word' defaultMessage='Whole word' />
-        </Text>
+        </span>
       </div>
     </div>
   );
@@ -127,21 +122,11 @@ const EditFilterPage: React.FC = () => {
     e.preventDefault();
     const context: Array<FilterContext> = [];
 
-    if (homeTimeline) {
-      context.push('home');
-    }
-    if (publicTimeline) {
-      context.push('public');
-    }
-    if (notifications) {
-      context.push('notifications');
-    }
-    if (conversations) {
-      context.push('thread');
-    }
-    if (accounts) {
-      context.push('account');
-    }
+    if (homeTimeline) context.push('home');
+    if (publicTimeline) context.push('public');
+    if (notifications) context.push('notifications');
+    if (conversations) context.push('thread');
+    if (accounts) context.push('account');
 
     (filterId !== 'new' ? updateFilter : createFilter)(
       {
@@ -212,7 +197,7 @@ const EditFilterPage: React.FC = () => {
   );
 
   return (
-    <Column className='filter-settings-panel' label={intl.formatMessage(messages.subheadingAddNew)}>
+    <Column label={intl.formatMessage(messages.subheadingAddNew)}>
       <Form onSubmit={handleAddNew}>
         {features.filtersV2 ? (
           <FormGroup
@@ -238,16 +223,16 @@ const EditFilterPage: React.FC = () => {
           <SelectDropdown items={expirations} defaultValue='' onChange={handleSelectChange} />
         </FormGroup>
 
-        <div className='flex flex-col'>
-          <Text size='sm' weight='medium'>
+        <div className='edit-filter__contexts-header'>
+          <p>
             <FormattedMessage id='filters.context.header' defaultMessage='Filter contexts' />
-          </Text>
-          <Text size='xs' theme='muted'>
+          </p>
+          <p>
             <FormattedMessage
               id='filters.context.hint'
               defaultMessage='One or multiple contexts where the filter should apply'
             />
-          </Text>
+          </p>
         </div>
 
         <List>
@@ -258,9 +243,7 @@ const EditFilterPage: React.FC = () => {
           >
             <Toggle
               checked={homeTimeline}
-              onChange={({ target }) => {
-                setHomeTimeline(target.checked);
-              }}
+              onChange={({ target }) => setHomeTimeline(target.checked)}
             />
           </ListItem>
           <ListItem
@@ -273,9 +256,7 @@ const EditFilterPage: React.FC = () => {
           >
             <Toggle
               checked={publicTimeline}
-              onChange={({ target }) => {
-                setPublicTimeline(target.checked);
-              }}
+              onChange={({ target }) => setPublicTimeline(target.checked)}
             />
           </ListItem>
           <ListItem
@@ -285,9 +266,7 @@ const EditFilterPage: React.FC = () => {
           >
             <Toggle
               checked={notifications}
-              onChange={({ target }) => {
-                setNotifications(target.checked);
-              }}
+              onChange={({ target }) => setNotifications(target.checked)}
             />
           </ListItem>
           <ListItem
@@ -297,21 +276,14 @@ const EditFilterPage: React.FC = () => {
           >
             <Toggle
               checked={conversations}
-              onChange={({ target }) => {
-                setConversations(target.checked);
-              }}
+              onChange={({ target }) => setConversations(target.checked)}
             />
           </ListItem>
           {features.filtersV2 && (
             <ListItem
               label={<FormattedMessage id='column.filters.accounts' defaultMessage='Accounts' />}
             >
-              <Toggle
-                checked={accounts}
-                onChange={({ target }) => {
-                  setAccounts(target.checked);
-                }}
-              />
+              <Toggle checked={accounts} onChange={({ target }) => setAccounts(target.checked)} />
             </ListItem>
           )}
         </List>
@@ -399,19 +371,15 @@ const EditFilterPage: React.FC = () => {
 
         {features.filtersV2 && keywordsField}
 
-        <FormActions>
-          <Button
-            type='submit'
-            theme='primary'
-            disabled={isFetchingFilter || isUpdating || isCreating}
-          >
+        <div className='edit-filter__actions form__actions'>
+          <button type='submit' disabled={isFetchingFilter || isUpdating || isCreating}>
             {filterId !== 'new' ? (
               <FormattedMessage id='column.filters.edit' defaultMessage='Edit filter' />
             ) : (
               <FormattedMessage id='column.filters.add_new' defaultMessage='Add new filter' />
             )}
-          </Button>
-        </FormActions>
+          </button>
+        </div>
       </Form>
     </Column>
   );

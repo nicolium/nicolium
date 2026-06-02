@@ -80,7 +80,7 @@ const EventDate: React.FC<IEventDate> = ({ status }) => {
   }
 
   return (
-    <div className='⁂-event-date'>
+    <div className='event-date'>
       <Icon src={iconCalendarDots} />
       <span>{date}</span>
     </div>

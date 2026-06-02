@@ -112,16 +112,16 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
         ref={ref}
         data-testid='modal'
         className={clsx(
-          '⁂-modal',
+          'modal',
           {
-            '⁂-modal--first-render': firstRender,
-            '⁂-modal--close-position-left': closePosition === 'left',
+            'modal--first-render': firstRender,
+            'modal--close-position-left': closePosition === 'left',
           },
           className,
         )}
       >
         {title && (
-          <div className='⁂-modal__title'>
+          <div className='modal__title'>
             <div>
               {onBack && (
                 <IconButton
@@ -144,25 +144,25 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
           </div>
         )}
 
-        <div className='⁂-modal__body'>
-          <div className='⁂-modal__children'>{children}</div>
+        <div className='modal__body'>
+          <div className='modal__children'>{children}</div>
 
           {(confirmationAction || modalActionsBody) && (
-            <div className='⁂-modal__actions' data-testid='modal-actions'>
+            <div className='modal__actions' data-testid='modal-actions'>
               {modalActionsBody}
 
-              <div className='⁂-modal__actions__cancel'>
+              <div className='modal__actions__cancel'>
                 {cancelAction && (
-                  <button className='⁂-modal__action-cancel' onClick={cancelAction}>
+                  <button className='modal__action-cancel' onClick={cancelAction}>
                     {cancelText ?? <FormattedMessage id='common.cancel' defaultMessage='Cancel' />}
                   </button>
                 )}
               </div>
 
-              <div className='⁂-modal__actions__other'>
+              <div className='modal__actions__other'>
                 {secondaryAction && (
                   <button
-                    className='⁂-modal__action-secondary'
+                    className='modal__action-secondary'
                     onClick={secondaryAction}
                     disabled={secondaryDisabled}
                   >
@@ -171,8 +171,8 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
                 )}
 
                 <button
-                  className={clsx('⁂-modal__action', {
-                    '⁂-modal__action--danger': confirmationTheme === 'danger',
+                  className={clsx('modal__action', {
+                    'modal__action--danger': confirmationTheme === 'danger',
                   })}
                   onClick={confirmationAction}
                   disabled={confirmationDisabled}

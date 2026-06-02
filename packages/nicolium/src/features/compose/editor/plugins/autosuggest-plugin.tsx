@@ -369,11 +369,8 @@ const AutosuggestPlugin = ({
         tabIndex={0}
         key={key}
         data-index={i}
-        className={clsx({
-          'group snap-start snap-always px-4 py-2.5 text-sm text-gray-700 focus:bg-gray-100 dark:text-gray-500 dark:focus:bg-primary-800': true,
-          'hover:bg-gray-100 dark:hover:bg-gray-800': i !== selectedSuggestion,
-          'bg-gray-100 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-800':
-            i === selectedSuggestion,
+        className={clsx('compose-editor__suggestion', {
+          'compose-editor__suggestion--selected': i === selectedSuggestion,
         })}
         onMouseDown={handleSelectSuggestion}
       >
@@ -530,10 +527,8 @@ const AutosuggestPlugin = ({
         anchorElementRef.current
           ? ReactDOM.createPortal(
               <div
-                className={clsx({
-                  'relative z-[1000] mt-6 max-h-56 w-max snap-y snap-always space-y-0 overflow-y-auto scroll-smooth rounded-lg bg-white py-1 shadow will-change-scroll focus:outline-none dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
-                  hidden: suggestionsHidden || !suggestions.length,
-                  block: !suggestionsHidden && suggestions.length,
+                className={clsx('compose-editor__suggestions', {
+                  'compose-editor__suggestions--hidden': suggestionsHidden || !suggestions.length,
                 })}
               >
                 {suggestions.map(renderSuggestion)}

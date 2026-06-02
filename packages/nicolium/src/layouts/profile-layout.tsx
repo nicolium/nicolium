@@ -94,7 +94,7 @@ const ProfileLayout: React.FC = () => {
       {account?.local === false && <meta content='noindex, noarchive' name='robots' />}
       <Layout.Main>
         <Column
-          bodyClassName='⁂-account-layout'
+          bodyClassName='account-layout'
           size='lg'
           label={account ? `@${acct}` : ''}
           withHeader={false}

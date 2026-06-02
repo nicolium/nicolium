@@ -38,9 +38,9 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props) => {
   const title = getTitle(ticker);
 
   return (
-    <div className='⁂-crypto-address'>
-      <div className='⁂-crypto-address__label'>
-        <CryptoIcon className='⁂-crypto-address__icon' ticker={ticker} title={title} />
+    <div className='crypto-address'>
+      <div className='crypto-address__label'>
+        <CryptoIcon className='crypto-address__icon' ticker={ticker} title={title} />
 
         <p>{title || ticker.toUpperCase()}</p>
 

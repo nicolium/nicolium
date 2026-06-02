@@ -22,7 +22,7 @@ const ProgressBar: React.FC<IProgressBar> = ({ progress, size = 'md' }) => {
   });
 
   return (
-    <div className={clsx('⁂-progress-bar', { '⁂-progress-bar--sm': size === 'sm' })}>
+    <div className={clsx('progress-bar', { 'progress-bar--sm': size === 'sm' })}>
       <animated.div className='h-full bg-secondary-500' style={styles} />
     </div>
   );

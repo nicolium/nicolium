@@ -139,15 +139,15 @@ const Slider: React.FC<ISlider> = ({
 
   return (
     <div
-      className={clsx('⁂-slider', animateKeyboardInput && '⁂-slider--animate')}
+      className={clsx('slider', animateKeyboardInput && 'slider--animate')}
       onMouseDown={handleMouseDown}
       ref={node}
     >
-      <div className='⁂-slider__track' />
-      <div className='⁂-slider__fill' style={{ width: `${value * 100}%` }} />
+      <div className='slider__track' />
+      <div className='slider__fill' style={{ width: `${value * 100}%` }} />
       <span
         id={id}
-        className='⁂-slider__thumb'
+        className='slider__thumb'
         tabIndex={0}
         style={{ left: `${value * 100}%` }}
         role='slider'

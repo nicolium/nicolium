@@ -33,7 +33,6 @@ interface IAudio {
   duration?: number;
   width?: number;
   height?: number;
-  editable?: boolean;
   fullscreen?: boolean;
   cacheWidth?: (width: number) => void;
   backgroundColor?: string;
@@ -57,7 +56,6 @@ const Audio: React.FC<IAudio> = (props) => {
     cacheWidth,
     fullscreen,
     autoPlay,
-    editable,
     deployPictureInPicture = false,
   } = props;
 
@@ -465,10 +463,10 @@ const Audio: React.FC<IAudio> = (props) => {
 
   return (
     <div
-      className={clsx(
-        'relative box-border overflow-hidden rounded-[10px] bg-black [direction:ltr]',
-        { 'h-full rounded-none': editable, 'pb-11': !useSystemMediaControls },
-      )}
+      className={clsx('video-player video-player--audio', {
+        'video-player--fullscreen': fullscreen,
+        'video-player--system-controls': useSystemMediaControls,
+      })}
       ref={player}
       style={{
         backgroundColor: _getBackgroundColor(),
@@ -494,7 +492,7 @@ const Audio: React.FC<IAudio> = (props) => {
         onLoadedData={handleLoadedData}
         crossOrigin='anonymous'
         controls={useSystemMediaControls}
-        className={clsx(useSystemMediaControls && 'w-full')}
+        className='video-player__audio-controls'
       />
 
       {!useSystemMediaControls && (
@@ -502,7 +500,7 @@ const Audio: React.FC<IAudio> = (props) => {
           <canvas
             role='button'
             tabIndex={0}
-            className='audio-player__canvas absolute left-0 top-0 w-full'
+            className='video-player__canvas'
             width={width}
             height={height}
             ref={canvas}
@@ -516,7 +514,7 @@ const Audio: React.FC<IAudio> = (props) => {
             <img
               src={poster}
               alt=''
-              className='pointer-events-none absolute aspect-1 -translate-x-1/2 -translate-y-1/2 rounded-full object-cover'
+              className='video-player__poster'
               width={(_getRadius() - TICK_SIZE) * 2}
               height={(_getRadius() - TICK_SIZE) * 2}
               style={{
@@ -526,23 +524,18 @@ const Audio: React.FC<IAudio> = (props) => {
             />
           )}
 
-          <div
-            className='video-player__seek before:top-0 before:bg-white/10'
-            onMouseDown={handleMouseDown}
-            ref={seek}
-          >
-            <div
-              className='absolute top-0 block h-1 rounded bg-white/20'
-              style={{ width: `${buffer}%` }}
-            />
+          <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
+            <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
 
             <div
-              className='absolute top-0 block h-1 rounded bg-accent-500'
+              className='video-player__seek__progress'
               style={{ width: `${progress}%`, backgroundColor: accentColor }}
             />
 
             <span
-              className={clsx('video-player__seek__handle -top-1', { 'opacity-100': dragging })}
+              className={clsx('video-player__seek__handle', {
+                'video-player__seek__handle--active': dragging,
+              })}
               tabIndex={0}
               style={{ left: `${progress}%`, backgroundColor: accentColor }}
               onKeyDown={handleAudioKeyDown}
@@ -550,13 +543,13 @@ const Audio: React.FC<IAudio> = (props) => {
           </div>
 
           <div className='video-player__controls video-player__controls--visible'>
-            <div className='mx-[-5px] my-0 flex justify-between'>
-              <div className='video-player__buttons left'>
+            <div className='video-player__controls__row'>
+              <div className='video-player__buttons'>
                 <button
                   type='button'
                   title={intl.formatMessage(paused ? messages.play : messages.pause)}
                   aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
-                  className={clsx('player-button', fullscreen && 'py-2.5')}
+                  className='video-player__button'
                   onClick={togglePlay}
                 >
                   <Icon src={paused ? iconPlay : iconPause} />
@@ -566,7 +559,7 @@ const Audio: React.FC<IAudio> = (props) => {
                   type='button'
                   title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
                   aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-                  className={clsx('player-button', fullscreen && 'py-2.5')}
+                  className='video-player__button'
                   onClick={toggleMute}
                 >
                   <Icon src={muted ? iconSpeakerX : iconSpeakerHigh} />
@@ -588,16 +581,14 @@ const Audio: React.FC<IAudio> = (props) => {
                   />
                 </div>
 
-                <span className='my-0 inline flex-initial overflow-hidden text-ellipsis text-black dark:text-white'>
-                  <span className='text-sm font-medium text-current'>
+                <span className='video-player__time'>
+                  <span className='video-player__time__value'>
                     {formatTime(Math.floor(currentTime))}
                   </span>
                   {getDuration() && (
                     <>
-                      <span className='mx-1.5 my-0 inline-block text-sm font-medium text-current'>
-                        /
-                      </span>
-                      <span className='text-sm font-medium text-current'>
+                      <span className='video-player__time__separator'>/</span>
+                      <span className='video-player__time__value'>
                         {formatTime(Math.floor(getDuration()))}
                       </span>
                     </>
@@ -605,11 +596,11 @@ const Audio: React.FC<IAudio> = (props) => {
                 </span>
               </div>
 
-              <div className='video-player__buttons right'>
+              <div className='video-player__buttons'>
                 <a
                   title={intl.formatMessage(messages.download)}
                   aria-label={intl.formatMessage(messages.download)}
-                  className='player-button text-inherit'
+                  className='video-player__button'
                   href={src}
                   download
                   target='_blank'

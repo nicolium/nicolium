@@ -60,11 +60,11 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
   }
 
   return (
-    <div className='⁂-compose-form__schedule'>
-      <p className='⁂-compose-form__schedule__hint'>
+    <div className='compose-form__schedule'>
+      <p className='compose-form__schedule__hint'>
         <FormattedMessage id='datepicker.hint' defaultMessage='Scheduled to post at…' />
       </p>
-      <div className='⁂-compose-form__schedule__date'>
+      <div className='compose-form__schedule__date'>
         <Suspense fallback={<Input type='text' disabled />}>
           <DatePicker
             selected={scheduledAt}

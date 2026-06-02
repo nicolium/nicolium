@@ -76,10 +76,10 @@ const useWindowControlsOverlay = () => {
 
 /** Layout container, to hold Sidebar, Main, and Aside. */
 const Layout: LayoutComponent = ({ children, fullWidth }) => (
-  <div className='⁂-layout'>
+  <div className='layout'>
     <div
-      className={clsx('⁂-layout__content', {
-        '⁂-layout__content--full-width': fullWidth,
+      className={clsx('layout__content', {
+        'layout__content--full-width': fullWidth,
       })}
     >
       {children}
@@ -98,8 +98,8 @@ const Sidebar: React.FC<ISidebar> = ({ children, shrink }) => {
   }
 
   return (
-    <div className={clsx('⁂-layout__sidebar', { '⁂-layout__sidebar--shrink': shrink })}>
-      <StickyBox offsetTop={offsetTop} className='⁂-layout__sidebar__content'>
+    <div className={clsx('layout__sidebar', { 'layout__sidebar--shrink': shrink })}>
+      <StickyBox offsetTop={offsetTop} className='layout__sidebar__content'>
         {children}
       </StickyBox>
     </div>
@@ -114,8 +114,8 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
     <main
       className={clsx(
         {
-          '⁂-layout__main': true,
-          '⁂-layout__main--with-chats': features.chats,
+          layout__main: true,
+          'layout__main--with-chats': features.chats,
         },
         className,
       )}
@@ -139,8 +139,8 @@ const Aside: React.FC<IAside> = ({ children }) => {
   }
 
   return (
-    <aside className='⁂-layout__aside'>
-      <StickyBox offsetTop={offsetTop} className='⁂-layout__aside__content'>
+    <aside className='layout__aside'>
+      <StickyBox offsetTop={offsetTop} className='layout__aside__content'>
         <Suspense>{children}</Suspense>
       </StickyBox>
     </aside>

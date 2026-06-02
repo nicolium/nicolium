@@ -1,0 +1,42 @@
+---
+title: "Nicolium stickers! And v0.3.1 patch release"
+pubDate: 2026-05-27
+author: "nicole mikolajczyk"
+---
+This is a short post I mostly made to mention that you'll be able to get some Nicolium-themed stickers on events happening soon, and to announce the v0.3.1 patch release.
+
+### Nicolium stickers 🎉
+
+I've made some Nicolium-themed stickers that you can pick up at events I'll be attending, such as [P.I.W.O.](https://piwo.sh/) in Poznań, Poland on May 30th and [GPN](https://entropia.de/GPN24) in Karlsruhe, Germany on June 4th-7th. If you're attending any of those events, feel free to come say hi and grab a sticker! I'm keeping a list of the events I'm attending on my [website](https://mkljczk.pl/calendar/), so you can check it out if you want to see where I'll be.
+
+import { Image } from 'astro:assets';
+import stickers from "./nicolium-stickers-and-0-3-1/stickers.jpg";
+
+<Image src={stickers} width="2560" height="1439" alt="A set of Nicolium-themed stickers, mostly circle-shaped including pride flag variants and one that says '3 Billion Devices Run Nicolium'" />
+
+### Nicolium v0.3.1 patch release
+
+Nicolium v0.3.1 is a small patch release I mostly made because I noticed the rules for stripping tracking parameters from YouTube URLs were out of date. Here's the full changelog (I expected it to be bigger, but it turned out I spent most of the time migrating styles from Tailwind again):
+
+#### Added
+
+- Pages such as birthdays and announcements for narrow screens.
+- Option to hide notifications from accounts marked as automated.
+- You can add a link to your Favourites page to the navigation menu.
+
+#### Changed
+
+- Updated URL cleaning rules for YouTube links.
+- Added feedback for saving drafts and a few more UI interactions.
+- Further work on migrating styles from TailwindCSS.
+- Subscription and follow settings are moved to the Following button displayed on profile page.
+
+#### Fixed
+
+- Hashtag visibility warning doesn't display when using default post visibility, when it's set to public.
+- Iceshrimp.NET example Nginx config now doesn't break custom emojis.
+- Replies and other parameters of saved drafts are stored properly.
+
+## Try Nicolium
+
+You can try Nicolium out by visiting [web.nicolium.app](https://web.nicolium.app/) and find the source code on [Codeberg](https://codeberg.org/nicolium/nicolium). If you’ve encountered any bugs or want to suggest a feature, you can open an issue on Codeberg. [The documentation](https://nicolium.app/docs/) describes how to deploy Nicolium alongside your own Fediverse instance and how to start contributing. You can also join [Nicolium IRC channel](https://web.libera.chat/#nicolium) on libera.chat if you want to chat about it.

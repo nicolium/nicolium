@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
 
-import Text from '@/components/ui/text';
 import { useDimensions } from '@/queries/admin/use-metrics';
 
 import type { AdminDimensionKey, AdminGetDimensionsParams } from 'pl-api';
@@ -37,31 +36,26 @@ const Dimension: React.FC<IDimension> = ({ dimension, startAt, endAt, label, par
     const sum = data[0].data.reduce((sum, cur) => sum + +cur.value * 1, 0);
 
     content = (
-      <table className='w-full'>
+      <table className='admin-dimension-table__table'>
         <tbody>
           {data[0].data.map((item) => (
-            <tr
-              className='border-b border-primary-200 last:border-none dark:border-gray-800'
-              key={item.key}
-            >
-              <td className='p-2.5'>
+            <tr className='admin-dimension-table__row' key={item.key}>
+              <td className='admin-dimension-table__key'>
                 <span
-                  className='mr-2 inline-block size-2 rounded-full bg-green-500 shadow-sm'
+                  className='admin-dimension-table__dot'
                   style={{ opacity: +item.value / sum }}
                 />
-                <Text title={item.key} weight='medium' size='xs' tag='span'>
-                  {item.human_key}
-                </Text>
+                <span title={item.key}>{item.human_key}</span>
               </td>
 
-              <td className='p-2.5 text-end'>
-                <Text size='xs'>
+              <td className='admin-dimension-table__value'>
+                <span>
                   {typeof item.human_value !== 'undefined' ? (
                     item.human_value
                   ) : (
                     <FormattedNumber value={+item.value} />
                   )}
-                </Text>
+                </span>
               </td>
             </tr>
           ))}
@@ -71,16 +65,8 @@ const Dimension: React.FC<IDimension> = ({ dimension, startAt, endAt, label, par
   }
 
   return (
-    <div>
-      {label && (
-        <Text
-          className='border-b border-primary-200 pb-1 dark:border-gray-800'
-          weight='medium'
-          size='sm'
-        >
-          {label}
-        </Text>
-      )}
+    <div className='admin-dimension-table'>
+      {label && <p className='admin-dimension-table__label'>{label}</p>}
 
       {content}
     </div>

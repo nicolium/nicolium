@@ -4,7 +4,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import AnimatedNumber from '@/components/animated-number';
-import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
@@ -142,7 +141,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   };
 
   return (
-    <div className='flex gap-3'>
+    <div className='status-interaction-bar'>
       {getReposts()}
       {getQuotes()}
       {getFavourites()}
@@ -165,21 +164,18 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({
 }) => {
   const features = useFeatures();
 
-  const className = clsx({
-    'text-gray-600 dark:text-gray-700': true,
-    'hover:underline': features.exposableReactions,
-    'cursor-default': !features.exposableReactions,
+  const className = clsx('status-interaction-bar__counter', {
+    'status-interaction-bar__counter--hoverable': features.exposableReactions,
+    'status-interaction-bar__counter--static': !features.exposableReactions,
   });
 
   const body = (
-    <div className='flex items-center gap-1'>
-      <Text weight='bold'>
+    <div className='status-interaction-bar__body'>
+      <span className='status-interaction-bar__count'>
         <AnimatedNumber value={count} short />
-      </Text>
+      </span>
 
-      <Text tag='div' theme='muted'>
-        {children}
-      </Text>
+      <div className='status-interaction-bar__label'>{children}</div>
     </div>
   );
 

@@ -27,7 +27,7 @@ const Form: React.FC<IForm> = ({ onSubmit, children, className, ...filteredProps
     <form
       data-testid='form'
       onSubmit={handleSubmit}
-      className={clsx('⁂-form', className)}
+      className={clsx('form', className)}
       {...filteredProps}
     >
       {children}

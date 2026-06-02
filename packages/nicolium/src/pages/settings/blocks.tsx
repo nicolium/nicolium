@@ -28,7 +28,7 @@ const BlocksPage: React.FC = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.blocks'
-      defaultMessage="You haven't blocked any users yet."
+      defaultMessage='You haven’t blocked any users yet.'
     />
   );
 
@@ -39,7 +39,7 @@ const BlocksPage: React.FC = () => {
         onLoadMore={fetchNextPage}
         hasMore={hasNextPage}
         emptyMessageText={emptyMessage}
-        itemClassName={clsx('pb-4', { 'last:pb-0': !hasNextPage })}
+        itemClassName={clsx('account-list__item', { 'account-list__item--last': !hasNextPage })}
         isLoading={isFetching}
       >
         {data.map(([accountId, blockExpiresAt]) => (

@@ -34,18 +34,18 @@ const HomeLayout = () => {
 
   return (
     <>
-      <Layout.Main className='⁂-layout__main--home'>
+      <Layout.Main className='layout__main--home'>
         {composeInTimelines && me && (
           <div
-            className={clsx('⁂-compose-block', {
-              '⁂-compose-block--dragging': isDragging,
-              '⁂-compose-block--dragged-over': isDraggedOver,
+            className={clsx('compose-block', {
+              'compose-block--dragging': isDragging,
+              'compose-block--dragged-over': isDraggedOver,
             })}
             ref={composeBlock}
           >
-            <div className='⁂-compose-block__body'>
+            <div className='compose-block__body'>
               {!disableUserProvidedMedia && (
-                <AccountLink className='⁂-compose-block__avatar' account={account!}>
+                <AccountLink className='compose-block__avatar' account={account!}>
                   <Avatar
                     src={avatar}
                     alt={account?.avatar_description}
@@ -56,7 +56,7 @@ const HomeLayout = () => {
                 </AccountLink>
               )}
 
-              <div className='⁂-compose-block__form'>
+              <div className='compose-block__form'>
                 <ComposeForm
                   id={composeId}
                   shouldCondense

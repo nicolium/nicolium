@@ -50,7 +50,7 @@ const FormGroup: React.FC<IFormGroup> = ({
             <label
               htmlFor={formFieldId}
               data-testid='form-group-label'
-              className='⁂-form-group__label ⁂-form-group__label--checkbox'
+              className='form-group__label form-group__label--checkbox'
               title={labelTitle}
             >
               {labelText}
@@ -62,7 +62,7 @@ const FormGroup: React.FC<IFormGroup> = ({
               <p
                 id={`error-${formFieldId}`}
                 data-testid='form-group-error'
-                className='⁂-form-group__error'
+                className='form-group__error'
               >
                 {errors.join(', ')}
               </p>
@@ -70,10 +70,7 @@ const FormGroup: React.FC<IFormGroup> = ({
           )}
 
           {hintText && (
-            <p
-              data-testid='form-group-hint'
-              className='⁂-form-group__hint ⁂-form-group__hint--below'
-            >
+            <p data-testid='form-group-hint' className='form-group__hint form-group__hint--below'>
               {hintText}
             </p>
           )}
@@ -83,21 +80,21 @@ const FormGroup: React.FC<IFormGroup> = ({
   }
 
   return (
-    <div className='⁂-form-group'>
+    <div className='form-group'>
       {labelText && (
         <label
           htmlFor={formFieldId}
           data-testid='form-group-label'
-          className='⁂-form-group__label'
+          className='form-group__label'
           title={labelTitle}
         >
           {labelText}
         </label>
       )}
 
-      <div className='⁂-form-group__content'>
+      <div className='form-group__content'>
         {hintText && (
-          <p data-testid='form-group-hint' className='⁂-form-group__hint ⁂-form-group__hint--above'>
+          <p data-testid='form-group-hint' className='form-group__hint form-group__hint--above'>
             {hintText}
           </p>
         )}
@@ -109,7 +106,7 @@ const FormGroup: React.FC<IFormGroup> = ({
           <p
             id={`error-${formFieldId}`}
             data-testid='form-group-error'
-            className='⁂-form-group__error'
+            className='form-group__error'
           >
             {errors.join(', ')}
           </p>

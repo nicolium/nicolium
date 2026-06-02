@@ -6,7 +6,6 @@ import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import StatusContent from '@/components/statuses/status-content';
 import Modal from '@/components/ui/modal';
 import ProgressBar from '@/components/ui/progress-bar';
-import Text from '@/components/ui/text';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useReportAccountMutation } from '@/queries/accounts/use-report';
@@ -40,7 +39,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
   }
 
   return (
-    <div className='flex flex-col gap-2 rounded-lg bg-gray-100 p-4 dark:bg-gray-800'>
+    <div className='report-modal__selected-status'>
       <AccountContainer
         id={status.account_id}
         showAccountHoverCard={false}
@@ -115,13 +114,13 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
     switch (selectedStatusIds.length) {
       case 0:
         return (
-          <div className='flex w-full items-center justify-center rounded-lg bg-gray-100 p-4 dark:bg-gray-800'>
-            <Text theme='muted'>
+          <div className='report-modal__blank-slate'>
+            <p>
               <FormattedMessage
                 id='report.reason.blankslate'
                 defaultMessage='You have removed all posts from being selected.'
               />
-            </Text>
+            </p>
           </div>
         );
       default:
@@ -233,7 +232,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
       confirmationDisabled={isConfirmationButtonDisabled}
       skipFocus
     >
-      <div className='flex flex-col gap-4'>
+      <div className='report-modal__content'>
         <ProgressBar progress={calculateProgress()} />
 
         {currentStep !== Steps.THREE && !isReportingAccount && renderSelectedEntity()}

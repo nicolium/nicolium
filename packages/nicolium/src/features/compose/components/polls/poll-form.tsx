@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AutosuggestInput from '@/components/autosuggest-input';
-import Button from '@/components/ui/button';
-import Divider from '@/components/ui/divider';
-import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
 import { useCompose, useComposeActions } from '@/stores/compose';
@@ -78,14 +75,12 @@ const Option: React.FC<IOption> = ({
   };
 
   return (
-    <div className='⁂-compose-form__poll__option'>
-      <div className='flex flex-grow items-center gap-2'>
-        <div className='w-6'>
-          <Text weight='bold'>{index + 1}.</Text>
-        </div>
+    <div className='compose-form__poll__option'>
+      <div className='compose-form__poll__option__input'>
+        <span className='compose-form__poll__option__index'>{index + 1}.</span>
 
         <AutosuggestInput
-          className='rounded-md !bg-transparent dark:!bg-transparent'
+          className='compose-form__poll__option__field'
           placeholder={intl.formatMessage(messages.optionPlaceholder, { number: index + 1 })}
           maxLength={maxChars}
           value={title}
@@ -101,14 +96,16 @@ const Option: React.FC<IOption> = ({
       </div>
 
       {index > 1 && (
-        <div>
-          <Button theme='danger' size='sm' onClick={handleOptionRemove}>
-            <FormattedMessage
-              id='compose_form.poll.remove_option'
-              defaultMessage='Remove this answer'
-            />
-          </Button>
-        </div>
+        <button
+          type='button'
+          className='compose-form__poll__option__remove'
+          onClick={handleOptionRemove}
+        >
+          <FormattedMessage
+            id='compose_form.poll.remove_option'
+            defaultMessage='Remove this answer'
+          />
+        </button>
       )}
     </div>
   );
@@ -174,8 +171,8 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   }
 
   return (
-    <div className='⁂-compose-form__poll'>
-      <div className='⁂-compose-form__poll__options'>
+    <div className='compose-form__poll'>
+      <div className='compose-form__poll__options'>
         {options.map((title: string, i: number) => (
           <Option
             composeId={composeId}
@@ -190,45 +187,50 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
           />
         ))}
 
-        <div className='flex gap-2'>
-          <div className='w-6' />
+        <div className='compose-form__poll__add'>
+          <div className='compose-form__poll__add__padding' />
 
           {options.length < maxOptions && (
-            <Button theme='secondary' onClick={handleAddOption} size='sm' block>
+            <button type='button' onClick={handleAddOption}>
               <FormattedMessage id='compose_form.poll.add_option' defaultMessage='Add an answer' />
-            </Button>
+            </button>
           )}
         </div>
       </div>
 
-      <Divider />
-
-      <label className='text-start'>
-        <div className='flex items-center justify-between'>
-          <div className='flex flex-col'>
-            <Text weight='medium'>
-              <FormattedMessage id='compose_form.poll.multiselect' defaultMessage='Multi-select' />
-            </Text>
-
-            <Text theme='muted' size='sm'>
-              <FormattedMessage
-                id='compose_form.poll.multiselect_detail'
-                defaultMessage='Allow users to select multiple answers'
-              />
-            </Text>
-          </div>
-
-          <Toggle checked={isMultiple} onChange={handleToggleMultiple} />
+      <div className='divider' data-testid='divider'>
+        <div aria-hidden='true'>
+          <div />
         </div>
+      </div>
+
+      <label className='compose-form__poll__toggle'>
+        <div className='compose-form__poll__toggle__info'>
+          <span className='compose-form__poll__toggle__title'>
+            <FormattedMessage id='compose_form.poll.multiselect' defaultMessage='Multi-select' />
+          </span>
+
+          <span className='compose-form__poll__toggle__description'>
+            <FormattedMessage
+              id='compose_form.poll.multiselect_detail'
+              defaultMessage='Allow users to select multiple answers'
+            />
+          </span>
+        </div>
+
+        <Toggle checked={isMultiple} onChange={handleToggleMultiple} />
       </label>
 
-      <Divider />
+      <div className='divider' data-testid='divider'>
+        <div aria-hidden='true'>
+          <div />
+        </div>
+      </div>
 
-      {/* Duration */}
-      <div className='flex flex-col gap-2'>
-        <Text weight='medium'>
+      <div className='compose-form__poll__duration'>
+        <span className='compose-form__poll__duration__label'>
           <FormattedMessage id='compose_form.poll.duration' defaultMessage='Poll duration' />
-        </Text>
+        </span>
 
         <DurationSelector
           onDurationChange={handleSelectDuration}
@@ -236,9 +238,8 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
         />
       </div>
 
-      {/* Remove Poll */}
-      <div className='text-center'>
-        <button type='button' className='text-danger-500' onClick={onRemovePoll}>
+      <div className='compose-form__poll__remove'>
+        <button type='button' onClick={onRemovePoll}>
           <FormattedMessage id='compose_form.poll.remove' defaultMessage='Remove poll' />
         </button>
       </div>

@@ -100,12 +100,12 @@ const SidebarItem: StreamfieldComponent<SidebarItemType> = ({ value }) => {
   const itemKey = isAccountSidebarItem(value) ? 'account' : value;
 
   return (
-    <div className='⁂-interface-item'>
-      <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
+    <div className='interface-item'>
+      <Icon className='interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
       <div>
         <p>
           {isAccountSidebarItem(value) && account
-            ? `@${account.username}`
+            ? `@${account.acct}`
             : intl.formatMessage(itemsMessages[itemKey])}
         </p>
         <small>{intl.formatMessage(itemHintsMessages[itemKey])}</small>
@@ -140,7 +140,7 @@ const SidebarItems: React.FC<ISettingsPage> = ({
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>
-        <OutlineBox className='⁂-interface-items__explanation'>
+        <OutlineBox className='interface-items__explanation'>
           <FormattedMessage
             id='settings.sidebar_items.description'
             defaultMessage='You can decide what items are visible in your sidebar.'
@@ -148,7 +148,7 @@ const SidebarItems: React.FC<ISettingsPage> = ({
         </OutlineBox>
 
         <StreamfieldPicker
-          className='⁂-interface-items'
+          className='interface-items'
           component={SidebarItem}
           values={settings.sidebarItems}
           availableValues={availableItems}

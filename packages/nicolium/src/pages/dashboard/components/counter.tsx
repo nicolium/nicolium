@@ -59,13 +59,13 @@ const Counter: React.FC<ICounter> = ({
 
     content = (
       <>
-        <span className='⁂-measure__total'>
+        <span className='measure__total'>
           {measure.human_value ?? <FormattedNumber value={measure.total} />}
         </span>
         {measure.previous_total !== undefined && (
           <span
-            className={clsx('⁂-measure__previous', {
-              '⁂-measure__previous--negative': percentChange < 0,
+            className={clsx('measure__previous', {
+              'measure__previous--negative': percentChange < 0,
             })}
           >
             {percentChange > 0 && '+'}
@@ -79,11 +79,11 @@ const Counter: React.FC<ICounter> = ({
 
   const inner = (
     <>
-      <div className='⁂-measure'>{content}</div>
+      <div className='measure'>{content}</div>
 
-      <p className='⁂-measure__label'>{label}</p>
+      <p className='measure__label'>{label}</p>
 
-      <div className='⁂-measure__sparklines'>
+      <div className='measure__sparklines'>
         <Sparklines width={259} height={55} data={data?.[0].data.map((x) => x.value * 1) ?? []}>
           <SparklinesCurve />
         </Sparklines>
@@ -93,12 +93,12 @@ const Counter: React.FC<ICounter> = ({
 
   if ('to' in rest) {
     return (
-      <Link {...rest} className='⁂-measure__container' target={target}>
+      <Link {...rest} className='measure__container' target={target}>
         {inner}
       </Link>
     );
   } else {
-    return <div className='⁂-measure__container'>{inner}</div>;
+    return <div className='measure__container'>{inner}</div>;
   }
 };
 

@@ -450,7 +450,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
         <Emoji
           emoji={notification.emoji}
           src={notification.emoji_url ?? undefined}
-          className='⁂-notification__icon ⁂-notification__icon--emoji'
+          className='notification__icon notification__icon--emoji'
         />
       );
     } else if (icons[displayedType]) {
@@ -458,7 +458,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
       if (displayedType === 'reblog' && settings.useRocketIconForReblogs) {
         icon = iconRocketLaunch;
       }
-      return <Icon src={icon} className='⁂-notification__icon' aria-hidden />;
+      return <Icon src={icon} className='notification__icon' aria-hidden />;
     } else {
       return null;
     }
@@ -584,27 +584,26 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
       timestamp={notification.latest_page_notification_at!}
       theme='muted'
       size='sm'
-      className='whitespace-nowrap'
     />
   );
 
   return (
     <Hotkeys handlers={handlers} data-testid='notification'>
-      <div className='⁂-notification' tabIndex={0} aria-label={ariaLabel} ref={node}>
+      <div className='notification' tabIndex={0} aria-label={ariaLabel} ref={node}>
         {compact || !['mention', 'status'].includes(notification.type) ? (
-          <div className='⁂-notification__header'>
-            <div className='⁂-notification__info'>{statusInfo}</div>
+          <div className='notification__header'>
+            <div className='notification__info'>{statusInfo}</div>
 
             {compact && status ? (
               <Link
                 to='/@{$username}/posts/$statusId'
                 params={{ username: status.account?.acct || 'undefined', statusId: status.id }}
-                className='⁂-notification__timestamp'
+                className='notification__timestamp'
               >
                 {timestamp}
               </Link>
             ) : (
-              <p className='⁂-notification__timestamp'>{timestamp}</p>
+              <p className='notification__timestamp'>{timestamp}</p>
             )}
           </div>
         ) : (

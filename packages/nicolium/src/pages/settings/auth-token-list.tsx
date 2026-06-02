@@ -56,9 +56,9 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
   };
 
   return (
-    <div className={clsx('⁂-token', { '⁂-token--current': isCurrent })}>
-      <div className='⁂-token__content'>
-        <p className='⁂-token__name'>
+    <div className={clsx('token', { 'token--current': isCurrent })}>
+      <div className='token__content'>
+        <p className='token__name'>
           {token.app_name}
           {token.app_website && (
             <a href={token.app_website} target='_blank' rel='noopener noreferrer'>
@@ -67,7 +67,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
           )}
         </p>
         {token.scopes?.length > 0 && (
-          <div className='⁂-token__tokens'>
+          <div className='token__tokens'>
             <p>
               <FormattedMessage id='security.tokens.scopes' defaultMessage='Scopes:' />
             </p>
@@ -77,7 +77,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
           </div>
         )}
         {token.created_at && (
-          <p className='⁂-token__detail'>
+          <p className='token__detail'>
             <FormattedMessage
               id='security.tokens.created_at'
               defaultMessage='Created on {date}'
@@ -98,7 +98,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
           </p>
         )}
         {token.last_used && (
-          <p className='⁂-token__detail'>
+          <p className='token__detail'>
             <FormattedMessage
               id='security.tokens.last_used'
               defaultMessage='Last used on {date}'
@@ -119,7 +119,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
           </p>
         )}
         {token.valid_until && (
-          <p className='⁂-token__detail'>
+          <p className='token__detail'>
             <FormattedMessage
               id='security.tokens.valid_until'
               defaultMessage='Expires on {date}'
@@ -140,7 +140,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
           </p>
         )}
       </div>
-      <div className={clsx('⁂-token__actions')}>
+      <div className={clsx('token__actions')}>
         <button onClick={handleRevoke}>
           <FormattedMessage id='security.tokens.revoke' defaultMessage='Revoke' />
         </button>
@@ -161,7 +161,7 @@ const AuthTokenListPage: React.FC = () => {
   });
 
   const body = tokens ? (
-    <div className='⁂-tokens'>
+    <div className='tokens'>
       {tokens.map((token) => (
         <AuthToken
           key={token.id}

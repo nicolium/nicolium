@@ -3,7 +3,6 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { type Language, languages } from '@/pages/settings/components/preferences';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
@@ -32,11 +31,11 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
 
     if (!status.content_map || Object.keys(status.content_map).length < 2) return null;
 
-    const icon = <Icon className='size-4 text-gray-700 dark:text-gray-600' src={iconTranslate} />;
+    const icon = <Icon src={iconTranslate} />;
 
     return (
       <>
-        <span className='⁂-separator' />
+        <span className='separator' />
 
         <DropdownMenu
           items={Object.keys(status.content_map).map((language) => ({
@@ -47,13 +46,16 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
             active: language === (currentLanguage || status.language),
           }))}
         >
-          <button title={intl.formatMessage(messages.languageVersions)} className='hover:underline'>
+          <button
+            title={intl.formatMessage(messages.languageVersions)}
+            className='status-language-picker__toggle'
+          >
             {showLabel ? (
-              <div className='flex items-center gap-1'>
+              <div className='status-language-picker__inner'>
                 {icon}
-                <Text tag='span' theme='muted' size='sm'>
+                <span className='status-language-picker__language'>
                   {languages[currentLanguage as Language] || currentLanguage}
-                </Text>
+                </span>
               </div>
             ) : (
               icon

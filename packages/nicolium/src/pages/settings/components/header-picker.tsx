@@ -72,20 +72,14 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
     return (
       <label
         ref={picker}
-        className={clsx('⁂-header-picker', {
-          '⁂-header-picker--dragging': isDragging,
-          '⁂-header-picker--dragged-over': isDraggedOver,
+        className={clsx('header-picker', {
+          'header-picker--dragging': isDragging,
+          'header-picker--dragged-over': isDraggedOver,
         })}
         title={intl.formatMessage(messages.title)}
         tabIndex={0}
       >
-        {src && (
-          <img
-            className='size-full object-cover'
-            src={src}
-            alt={intl.formatMessage(messages.title)}
-          />
-        )}
+        {src && <img src={src} alt={intl.formatMessage(messages.title)} />}
         <div>
           <Icon src={iconUpload} />
 
@@ -109,14 +103,14 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
             onClick={handleClear}
             src={iconX}
             theme='dark'
-            className='⁂-header-picker__clear-button'
+            className='header-picker__clear-button'
             title={intl.formatMessage(messages.clearHeader)}
           />
         )}
         {onChangeDescription && src && (
           <button
             type='button'
-            className='⁂-header-picker__alt-button'
+            className='header-picker__alt-button'
             onClick={handleChangeDescriptionClick}
             title={intl.formatMessage(messages.changeDescription)}
           >

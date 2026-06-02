@@ -71,7 +71,7 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
   }
 
   return (
-    <div className='⁂-familiar-followers'>
+    <div className='familiar-followers'>
       <AvatarStack accountIds={familiarFollowerIds} />
       <p>
         <FormattedMessage

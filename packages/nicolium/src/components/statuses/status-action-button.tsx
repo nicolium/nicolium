@@ -74,7 +74,7 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
 
     const renderText = () => {
       if (text) {
-        return <span className='⁂-status-action-bar__button__text'>{text}</span>;
+        return <span className='status-action-bar__button__text'>{text}</span>;
       } else if (count) {
         return <StatusActionCounter count={count} />;
       }
@@ -85,10 +85,10 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
         ref={ref}
         type='button'
         className={clsx(
-          '⁂-status-action-bar__button',
+          'status-action-bar__button',
           {
-            '⁂-status-action-bar__button--active': active,
-            '⁂-status-action-bar__button--loading': loading,
+            'status-action-bar__button--active': active,
+            'status-action-bar__button--loading': loading,
           },
           className,
         )}

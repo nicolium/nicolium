@@ -140,8 +140,8 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
   return (
     <div
-      className={clsx('⁂-account-hover-card', {
-        '⁂-account-hover-card--hidden': !visible || !context.open,
+      className={clsx('account-hover-card', {
+        'account-hover-card--hidden': !visible || !context.open,
       })}
       ref={refs.setFloating}
       style={{
@@ -153,8 +153,8 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className='⁂-account-hover-card__card'>
-        <div className='⁂-account-hover-card__info'>
+      <div className='account-hover-card__card'>
+        <div className='account-hover-card__info'>
           <UserPanel
             accountId={account.id}
             action={<ActionButton account={account} small />}
@@ -163,7 +163,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
           {account.local ? (
             <div
-              className='⁂-account-info__details__item'
+              className='account-info__details__item'
               title={intl.formatDate(account.created_at, dateFormatOptions)}
             >
               <Icon src={iconCalendarDots} />
@@ -182,7 +182,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
           {account.pronouns.length > 0 && (
             <div
-              className='⁂-account-info__details__item'
+              className='account-info__details__item'
               title={intl.formatMessage(messages.pronouns, {
                 pronouns: account.pronouns.join('/'),
               })}
@@ -196,14 +196,14 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
           {!!scrobble && <Scrobble scrobble={scrobble} />}
 
           {account.note.length > 0 && (
-            <p className='⁂-account-hover-card__note'>
+            <p className='account-hover-card__note'>
               <ParsedContent html={account.note} emojis={account.emojis} />
             </p>
           )}
         </div>
 
         {followedBy && (
-          <div className='⁂-account-hover-card__badge'>
+          <div className='account-hover-card__badge'>
             <Badge
               slug='opaque'
               title={<FormattedMessage id='account.follows_you' defaultMessage='Follows you' />}

@@ -2,13 +2,10 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { deleteAccount } from '@/actions/security';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import Text from '@/components/ui/text';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -37,7 +34,6 @@ const DeleteAccountPage = () => {
 
   const handleInputChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist();
-
     setPassword(event.target.value);
   }, []);
 
@@ -59,8 +55,8 @@ const DeleteAccountPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)} backHref='/settings'>
-      <div className='flex flex-col gap-4'>
-        <Text theme='muted'>
+      <div className='delete-account'>
+        <p className='delete-account__hint'>
           {features.deleteAccountWithoutPassword ? (
             features.federating ? (
               <FormattedMessage
@@ -84,7 +80,7 @@ const DeleteAccountPage = () => {
               defaultMessage='To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone.'
             />
           )}
-        </Text>
+        </p>
 
         <Form onSubmit={handleSubmit}>
           {!features.deleteAccountWithoutPassword && (
@@ -102,11 +98,11 @@ const DeleteAccountPage = () => {
             </FormGroup>
           )}
 
-          <FormActions>
-            <Button type='submit' theme='danger' disabled={isLoading}>
+          <div className='delete-account__actions form__actions'>
+            <button type='submit' disabled={isLoading}>
               <FormattedMessage id='security.submit.delete' defaultMessage='Delete account' />
-            </Button>
-          </FormActions>
+            </button>
+          </div>
         </Form>
       </div>
     </Column>

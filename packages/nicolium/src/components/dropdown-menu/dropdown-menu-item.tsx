@@ -129,9 +129,9 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
 
   const itemContent = (
     <>
-      {item.icon && <Icon src={item.icon} className='⁂-dropdown-menu__item__icon' />}
+      {item.icon && <Icon src={item.icon} className='dropdown-menu__item__icon' />}
 
-      <div className='⁂-dropdown-menu__item__content'>
+      <div className='dropdown-menu__item__content'>
         {item.meta ? (
           <>
             <div>{item.text}</div>
@@ -143,13 +143,13 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
       </div>
 
       {item.count ? (
-        <span className='⁂-dropdown-menu__item__counter'>
+        <span className='dropdown-menu__item__counter'>
           <Counter count={item.count} />
         </span>
       ) : null}
 
       {(item.type === 'toggle' || item.type === 'radio') && (
-        <div className='⁂-dropdown-menu__item__switch'>
+        <div className='dropdown-menu__item__switch'>
           <Toggle
             checked={item.checked}
             onChange={handleChange}
@@ -160,7 +160,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
       )}
 
       {!!item.items?.length && (
-        <Icon src={iconCaretRight} containerClassName='⁂-dropdown-menu__item__expand' />
+        <Icon src={iconCaretRight} containerClassName='dropdown-menu__item__expand' />
       )}
     </>
   );
@@ -174,8 +174,8 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     onKeyDown: handleItemKeyDown,
     title: item.text,
     'aria-disabled': item.disabled,
-    className: clsx('⁂-dropdown-menu__item', {
-      '⁂-dropdown-menu__item--destructive': item.destructive,
+    className: clsx('dropdown-menu__item', {
+      'dropdown-menu__item--destructive': item.destructive,
     }),
   };
 

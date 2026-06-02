@@ -164,7 +164,7 @@ const UI: React.FC = React.memo(() => {
   return (
     <GlobalHotkeys node={node}>
       <div ref={node} style={style}>
-        <div className='⁂-skip-links'>
+        <div className='skip-links'>
           <button onClick={handleSkipToContent}>
             <FormattedMessage id='skip_links.skip_to_content' defaultMessage='Skip to content' />
           </button>
@@ -176,12 +176,12 @@ const UI: React.FC = React.memo(() => {
           </button>
         </div>
         <div
-          className={clsx('⁂-dragging-area', {
-            '⁂-dragging-area--dragging': isDragging,
+          className={clsx('dragging-area', {
+            'dragging-area--dragging': isDragging,
           })}
         />
 
-        <div className='⁂-layout__container'>
+        <div className='layout__container'>
           <Layout fullWidth={fullWidth}>
             {!isNewStatusPage && (
               <Layout.Sidebar shrink={shrink}>
@@ -197,8 +197,8 @@ const UI: React.FC = React.memo(() => {
           </Suspense>
 
           {me && features.chats && showChatWidget && !isNewStatusPage && (
-            <div className='⁂-chat-widget__container'>
-              <Suspense fallback={<div className='⁂-chat-widget ⁂-chat-widget--placeholder' />}>
+            <div className='chat-widget__container'>
+              <Suspense fallback={<div className='chat-widget chat-widget--placeholder' />}>
                 <ChatWidget />
               </Suspense>
             </div>
@@ -219,7 +219,7 @@ const UI: React.FC = React.memo(() => {
         <ModalRoot />
       </Suspense>
 
-      <Toaster position='top-right' containerClassName='⁂-toast__container' />
+      <Toaster position='top-right' containerClassName='toast__container' />
     </GlobalHotkeys>
   );
 });

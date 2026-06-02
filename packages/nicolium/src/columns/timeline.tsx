@@ -68,7 +68,7 @@ const messages = defineMessages({
 
 const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
   return (
-    <button className='⁂-skip-pinned' onClick={onClick}>
+    <button className='skip-pinned' onClick={onClick}>
       <Icon src={iconArrowLineDown} />
 
       <p>
@@ -79,7 +79,7 @@ const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
 };
 
 const PlaceholderTimelineStatus = () => (
-  <div className='⁂-timeline-status'>
+  <div className='timeline-status'>
     <PlaceholderStatus variant='slim' />
   </div>
 );
@@ -90,7 +90,7 @@ interface ITimelinePendingStatus {
 
 const TimelinePendingStatus: React.FC<ITimelinePendingStatus> = ({ idempotencyKey }) => {
   return (
-    <div className='⁂-timeline-status'>
+    <div className='timeline-status'>
       <PendingStatus idempotencyKey={idempotencyKey} variant='slim' />
     </div>
   );
@@ -181,7 +181,7 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
   };
 
   return (
-    <div className='⁂-timeline-gap'>
+    <div className='timeline-gap'>
       <button onClick={() => handleFill('down')} disabled={isLoading}>
         <Icon src={iconCaretDoubleDown} aria-hidden />
         {firstEntry ? (
@@ -190,7 +190,7 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
           <FormattedMessage id='timeline.gap.load_older' defaultMessage='Load older posts' />
         )}
       </button>
-      <div className='⁂-timeline-gap__separator'>
+      <div className='timeline-gap__separator'>
         <span
           title={intl.formatMessage(
             firstEntry ? messages.gapExplanationFirst : messages.gapExplanation,
@@ -255,7 +255,7 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
 
     return (
       <StatusInfo
-        className='⁂-status-info--reblog'
+        className='status-info--reblog'
         avatarSize={42}
         icon={<Icon src={useRocketIconForReblogs ? iconRocketLaunch : iconRepeat} aria-hidden />}
         text={
@@ -307,7 +307,7 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props) => {
 
   if (deleted) {
     return (
-      <div className='⁂-timeline-status--deleted'>
+      <div className='timeline-status--deleted'>
         <Tombstone id={id} onMoveUp={props.onMoveUp} onMoveDown={props.onMoveDown} deleted />
       </div>
     );
@@ -316,7 +316,7 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props) => {
   const renderConnector = (): React.JSX.Element | null => {
     if (!isConnectedBottom) return null;
 
-    return <div className='⁂-timeline-status__connector' />;
+    return <div className='timeline-status__connector' />;
   };
 
   const connector = renderConnector();
@@ -329,9 +329,9 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props) => {
 
   return (
     <div
-      className={clsx('⁂-timeline-status', {
-        '⁂-timeline-status--connected-bottom': isConnectedBottom,
-        '⁂-timeline-status--connected-top': isConnectedTop,
+      className={clsx('timeline-status', {
+        'timeline-status--connected-bottom': isConnectedBottom,
+        'timeline-status--connected-top': isConnectedTop,
       })}
     >
       {statusQuery.data && (
@@ -343,7 +343,7 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props) => {
         />
       )}
       {connector ? (
-        <div className='⁂-timeline-status__connector__container'>
+        <div className='timeline-status__connector__container'>
           {connector}
           {status}
         </div>

@@ -13,7 +13,7 @@ const Navlinks: React.FC<INavlinks> = ({ type }) => {
   const { copyright, navlinks } = useFrontendConfig();
 
   return (
-    <footer className='⁂-navlinks'>
+    <footer className='navlinks'>
       <ul>
         {navlinks[type]?.map((link) => {
           const url = link.url;
@@ -29,7 +29,7 @@ const Navlinks: React.FC<INavlinks> = ({ type }) => {
         })}
       </ul>
 
-      {copyright && <p className='⁂-navlinks__copyright'>{copyright}</p>}
+      {copyright && <p className='navlinks__copyright'>{copyright}</p>}
     </footer>
   );
 };

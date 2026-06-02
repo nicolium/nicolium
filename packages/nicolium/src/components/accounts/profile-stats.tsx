@@ -64,7 +64,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler, withSt
   const FollowingComponent = !account.hide_follows || ownAccount ? Link : 'div';
 
   return (
-    <div className='⁂-account-stats'>
+    <div className='account-stats'>
       {!demetricator && (
         <StatusesComponent
           to='/@{$username}'

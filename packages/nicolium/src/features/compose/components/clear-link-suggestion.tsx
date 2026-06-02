@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import { useCompose } from '@/hooks/use-compose';
 
 import Warning from './warning';
@@ -22,14 +21,14 @@ const ClearLinkSuggestion = ({ composeId, handleAccept, handleReject }: IClearLi
     <Warning
       animated
       message={
-        <div className='flex flex-col gap-1'>
+        <div className='clear-link-suggestion'>
           <span>
             <FormattedMessage
               id='compose.clear_link_suggestion.body'
               defaultMessage='The link {url} likely includes tracking elements used to mark your online activity. They are not required for the URL to work. Do you want to remove them?'
               values={{
                 url: (
-                  <span className='underline'>
+                  <span className='clear-link-suggestion__url'>
                     {suggestion.originalUrl.length > 20
                       ? suggestion.originalUrl.slice(0, 20) + '…'
                       : suggestion.originalUrl}
@@ -38,25 +37,23 @@ const ClearLinkSuggestion = ({ composeId, handleAccept, handleReject }: IClearLi
               }}
             />
           </span>
-          <div className='flex justify-end gap-2'>
-            <Button
-              theme='muted'
-              size='xs'
+          <div className='clear-link-suggestion__actions'>
+            <button
+              type='button'
               onClick={() => {
                 handleReject(suggestion.key);
               }}
             >
               <FormattedMessage id='compose.clear_link_suggestion.ignore' defaultMessage='Ignore' />
-            </Button>
-            <Button
-              theme='muted'
-              size='xs'
+            </button>
+            <button
+              type='button'
               onClick={() => {
                 handleAccept(suggestion.key);
               }}
             >
               <FormattedMessage id='compose.clear_link_suggestion.remove' defaultMessage='Remove' />
-            </Button>
+            </button>
           </div>
         </div>
       }

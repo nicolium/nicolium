@@ -100,19 +100,19 @@ const ChatSettings = () => {
         isToggleable={false}
         onToggle={minimizeChatPane}
         title={
-          <div className='⁂-chat-widget__title-row'>
+          <div className='chat-widget__title-row'>
             <button onClick={closeSettings} title={intl.formatMessage(messages.back)}>
-              <Icon src={iconArrowLeft} className='⁂-chat-widget__back-icon' />
+              <Icon src={iconArrowLeft} className='chat-widget__back-icon' />
             </button>
 
-            <span className='⁂-chat-widget__settings-title'>
+            <span className='chat-widget__settings-title'>
               <FormattedMessage id='chat_settings.title' defaultMessage='Chat details' />
             </span>
           </div>
         }
       />
 
-      <div className='⁂-chat-widget__settings-body'>
+      <div className='chat-widget__settings-body'>
         <Account account={chat.account} hideActions />
 
         <List>

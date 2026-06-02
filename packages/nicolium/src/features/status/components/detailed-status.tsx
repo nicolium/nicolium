@@ -12,7 +12,6 @@ import StatusLanguagePicker from '@/components/statuses/status-language-picker';
 import StatusReactionsBar from '@/components/statuses/status-reactions-bar';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
@@ -53,17 +52,11 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
   const renderStatusInfo = () => {
     if (status.group_id) {
       return (
-        <div className='mb-4'>
+        <div className='detailed-status__group'>
           <StatusInfo
-            className='-mb-1'
+            className='detailed-status__group-info'
             avatarSize={42}
-            icon={
-              <Icon
-                src={iconUsersThree}
-                className='text-primary-600 dark:text-primary-400'
-                aria-hidden
-              />
-            }
+            icon={<Icon src={iconUsersThree} className='detailed-status__group-icon' aria-hidden />}
             text={
               group ? (
                 <FormattedMessage
@@ -71,13 +64,9 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                   defaultMessage='Posted in {group}'
                   values={{
                     group: (
-                      <Link
-                        to='/groups/$groupId'
-                        params={{ groupId: status.group_id }}
-                        className='hover:underline'
-                      >
-                        <bdi className='truncate'>
-                          <strong className='text-gray-800 dark:text-gray-200'>
+                      <Link to='/groups/$groupId' params={{ groupId: status.group_id }}>
+                        <bdi>
+                          <strong>
                             <Emojify text={group.display_name} emojis={group.emojis} />
                           </strong>
                         </bdi>
@@ -100,7 +89,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
   if (!account) return null;
 
   return (
-    <div ref={node} className='⁂-detailed-status' tabIndex={-1}>
+    <div ref={node} className='detailed-status' tabIndex={-1}>
       {renderStatusInfo()}
 
       {actualStatus.rss_feed ? (
@@ -110,7 +99,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
           url={actualStatus.url}
         />
       ) : (
-        <div className='mb-4'>
+        <div className='detailed-status__header'>
           <Account
             key={account.id}
             account={account}
@@ -118,7 +107,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             hideActions
             action={
               statusActionBarItems.length === 0 ? (
-                <div className='-m-1.5'>
+                <div className='detailed-status__action-bar'>
                   <StatusActionBar status={status} />
                 </div>
               ) : undefined
@@ -131,7 +120,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
       <StatusReplyMentions status={actualStatus} hoverable={false} />
 
-      <div className='relative z-0 flex flex-col gap-4'>
+      <div className='detailed-status__body'>
         <StatusContent
           status={actualStatus}
           textSize='lg'
@@ -146,72 +135,70 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
         <>
           <StatusReactionsBar status={actualStatus} />
 
-          <div className='flex flex-wrap items-center justify-between gap-2 py-3'>
+          <div className='detailed-status__meta'>
             <StatusInteractionBar status={actualStatus} />
 
-            <div className='flex items-center gap-1'>
-              <span>
-                <Text tag='span' theme='muted' size='sm'>
-                  <div className='flex flex-wrap items-center gap-1'>
-                    <a
-                      href={actualStatus.url}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='hover:underline'
-                    >
-                      <FormattedDate
-                        value={new Date(actualStatus.created_at)}
-                        hour12
-                        year='numeric'
-                        month='short'
-                        day='2-digit'
-                        hour='numeric'
-                        minute='2-digit'
-                      />
-                    </a>
+            <div className='detailed-status__meta__end'>
+              <span className='detailed-status__meta__text'>
+                <div className='detailed-status__meta__info'>
+                  <a
+                    href={actualStatus.url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='detailed-status__meta__link'
+                  >
+                    <FormattedDate
+                      value={new Date(actualStatus.created_at)}
+                      hour12
+                      year='numeric'
+                      month='short'
+                      day='2-digit'
+                      hour='numeric'
+                      minute='2-digit'
+                    />
+                  </a>
 
-                    {actualStatus.application && (
-                      <>
-                        <span className='⁂-separator' />
-                        <a
-                          href={actualStatus.application.website ?? '#'}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className='hover:underline'
-                          title={intl.formatMessage(messages.applicationName, {
-                            name: actualStatus.application.name,
-                          })}
-                        >
-                          {actualStatus.application.name}
-                        </a>
-                      </>
-                    )}
+                  {actualStatus.application && (
+                    <>
+                      <span className='separator' />
+                      <a
+                        href={actualStatus.application.website ?? '#'}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='detailed-status__meta__link'
+                        title={intl.formatMessage(messages.applicationName, {
+                          name: actualStatus.application.name,
+                        })}
+                      >
+                        {actualStatus.application.name}
+                      </a>
+                    </>
+                  )}
 
-                    {actualStatus.edited_at && (
-                      <>
-                        <span className='⁂-separator' />
-                        <button
-                          className='inline hover:underline'
-                          onClick={handleOpenCompareHistoryModal}
-                        >
-                          <FormattedMessage
-                            id='status.edited'
-                            defaultMessage='Edited {date}'
-                            values={{
-                              date: intl.formatDate(new Date(actualStatus.edited_at), {
-                                hour12: true,
-                                month: 'short',
-                                day: '2-digit',
-                                hour: 'numeric',
-                                minute: '2-digit',
-                              }),
-                            }}
-                          />
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </Text>
+                  {actualStatus.edited_at && (
+                    <>
+                      <span className='separator' />
+                      <button
+                        className='detailed-status__history'
+                        onClick={handleOpenCompareHistoryModal}
+                      >
+                        <FormattedMessage
+                          id='status.edited'
+                          defaultMessage='Edited {date}'
+                          values={{
+                            date: intl.formatDate(new Date(actualStatus.edited_at), {
+                              hour12: true,
+                              month: 'short',
+                              day: '2-digit',
+                              hour: 'numeric',
+                              minute: '2-digit',
+                            }),
+                          }}
+                        />
+                      </button>
+                    </>
+                  )}
+                </div>
               </span>
 
               <StatusTypeIcon visibility={actualStatus.visibility} />

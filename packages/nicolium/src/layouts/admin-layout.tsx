@@ -10,7 +10,7 @@ const AdminSections = () => {
   const offsetTop = wcoRect && wcoRect.x > 0 ? 16 + wcoRect.y : 16;
 
   return (
-    <aside className='⁂-layout__admin-sections'>
+    <aside className='layout__admin-sections'>
       <StickyBox offsetTop={offsetTop}>
         <DashboardPage aside />
       </StickyBox>

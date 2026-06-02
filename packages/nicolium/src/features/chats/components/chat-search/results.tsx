@@ -32,7 +32,7 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
       <button
         key={account.id}
         type='button'
-        className='⁂-chat-search__result'
+        className='chat-search__result'
         onClick={() => {
           onSelect(account.id);
         }}
@@ -46,12 +46,12 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
           username={account.username}
         />
 
-        <div className='⁂-chat-search__result__content'>
-          <div className='⁂-chat-search__result__name'>
+        <div className='chat-search__result__content'>
+          <div className='chat-search__result__name'>
             <span>{account.display_name}</span>
             {account.verified && <VerificationBadge />}
           </div>
-          <span className='⁂-chat-search__result__acct' dir='ltr'>
+          <span className='chat-search__result__acct' dir='ltr'>
             {account.acct}
           </span>
         </div>
@@ -61,11 +61,11 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
   );
 
   return (
-    <div className='⁂-chat-search__results'>
+    <div className='chat-search__results'>
       <Virtuoso
         data={accounts}
         itemContent={(_index, chat) => (
-          <div className='⁂-chat-search__result__container'>{renderAccount(chat)}</div>
+          <div className='chat-search__result__container'>{renderAccount(chat)}</div>
         )}
         endReached={handleLoadMore}
         atTopStateChange={(atTop) => {
@@ -77,15 +77,15 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
       />
 
       <div
-        className={clsx('⁂-chat-search__fade ⁂-chat-search__fade--top', {
-          '⁂-chat-search__fade--hidden': isNearTop,
-          '⁂-chat-search__fade--visible': !isNearTop,
+        className={clsx('chat-search__fade chat-search__fade--top', {
+          'chat-search__fade--hidden': isNearTop,
+          'chat-search__fade--visible': !isNearTop,
         })}
       />
       <div
-        className={clsx('⁂-chat-search__fade ⁂-chat-search__fade--bottom', {
-          '⁂-chat-search__fade--hidden': isNearBottom,
-          '⁂-chat-search__fade--visible': !isNearBottom,
+        className={clsx('chat-search__fade chat-search__fade--bottom', {
+          'chat-search__fade--hidden': isNearBottom,
+          'chat-search__fade--visible': !isNearBottom,
         })}
       />
     </div>

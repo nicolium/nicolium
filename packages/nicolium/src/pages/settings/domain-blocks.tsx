@@ -6,7 +6,6 @@ import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
 import Spinner from '@/components/ui/spinner';
-import Text from '@/components/ui/text';
 import { useUnblockDomainMutation } from '@/queries/settings/domain-blocks';
 import { useDomainBlocksQuery } from '@/queries/settings/domain-blocks';
 
@@ -29,10 +28,9 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
   };
 
   return (
-    <div className='flex items-center justify-between gap-1 p-2'>
-      <Text tag='span'>{domain}</Text>
+    <div className='domain-block'>
+      <span>{domain}</span>
       <IconButton
-        iconClassName='h-5 w-5'
         src={iconLockOpen}
         title={intl.formatMessage(messages.unblockDomain, { domain })}
         onClick={handleDomainUnblock}
@@ -74,7 +72,7 @@ const DomainBlocksPage: React.FC = () => {
         onLoadMore={handleLoadMore}
         hasMore={hasNextPage}
         emptyMessageText={emptyMessage}
-        listClassName='divide-y divide-gray-200 black:divide-gray-800 dark:divide-primary-800'
+        listClassName='domain-blocks-list'
       >
         {domains.map((domain) => (
           <Domain key={domain} domain={domain} />

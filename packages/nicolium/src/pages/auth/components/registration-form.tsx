@@ -34,7 +34,7 @@ const messages = defineMessages({
   password: { id: 'registration.fields.password.placeholder', defaultMessage: 'Password' },
   passwordMismatch: {
     id: 'registration.password_mismatch',
-    defaultMessage: "Passwords don't match.",
+    defaultMessage: 'Passwords don’t match.',
   },
   confirm: { id: 'registration.fields.confirm.placeholder', defaultMessage: 'Password (again)' },
   reasonHint: {

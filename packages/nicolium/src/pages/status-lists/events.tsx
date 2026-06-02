@@ -63,9 +63,9 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
   }
 
   return (
-    <div className='⁂-event-carousel'>
+    <div className='event-carousel'>
       {index !== 0 && (
-        <div className='⁂-event-carousel__button ⁂-event-carousel__button--left'>
+        <div className='event-carousel__button event-carousel__button--left'>
           <button
             onClick={() => {
               handleChangeIndex(index - 1);
@@ -81,7 +81,7 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
         ))}
       </ReactSwipeableViews>
       {index !== statusIds.length - 1 && (
-        <div className='⁂-event-carousel__button ⁂-event-carousel__button--right'>
+        <div className='event-carousel__button event-carousel__button--right'>
           <button
             onClick={() => {
               handleChangeIndex(index + 1);
@@ -135,7 +135,7 @@ const EventsPage = () => {
           emptyMessage={
             <FormattedMessage
               id='events.joined_events.empty'
-              defaultMessage="You haven't joined any events yet."
+              defaultMessage='You haven’t joined any events yet.'
             />
           }
         />

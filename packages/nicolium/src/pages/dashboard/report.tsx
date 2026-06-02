@@ -68,9 +68,9 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
   }
 
   return (
-    <div className='⁂-report-page__statuses'>
+    <div className='report-page__statuses'>
       {index !== 0 && (
-        <div className='⁂-report-page__statuses__arrow ⁂-report-page__statuses__arrow--left'>
+        <div className='report-page__statuses__arrow report-page__statuses__arrow--left'>
           <button
             onClick={() => {
               handleChangeIndex(index - 1);
@@ -82,13 +82,13 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
       )}
       <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
         {statusIds.map((statusId) => (
-          <div className='⁂-report-page__statuses__status' key={statusId}>
+          <div className='report-page__statuses__status' key={statusId}>
             <StatusContainer id={statusId} />
           </div>
         ))}
       </ReactSwipeableViews>
       {index !== statusIds.length - 1 && (
-        <div className='⁂-report-page__statuses__arrow ⁂-report-page__statuses__arrow--right'>
+        <div className='report-page__statuses__arrow report-page__statuses__arrow--right'>
           <button
             onClick={() => {
               handleChangeIndex(index + 1);
@@ -190,14 +190,14 @@ const ReportPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.columnHeading, { id: reportId })}>
-      <div className='⁂-report-page__summary'>
+      <div className='report-page__summary'>
         {report.target_account && (
           <Link
             to='/nicolium/admin/accounts/$accountId'
             params={{ accountId: report.target_account_id }}
-            className='⁂-report-page__account'
+            className='report-page__account'
           >
-            <div className='⁂-report-page__account__card'>
+            <div className='report-page__account__card'>
               <p>
                 <FormattedMessage
                   id='admin.report.target_account'
@@ -282,7 +282,7 @@ const ReportPage: React.FC = () => {
 
                 <td>
                   {report.assigned_account ? (
-                    <div className='⁂-report-page__summary__action'>
+                    <div className='report-page__summary__action'>
                       <Link
                         to='/nicolium/admin/accounts/$accountId'
                         params={{ accountId: report.assigned_account.id }}
@@ -296,12 +296,13 @@ const ReportPage: React.FC = () => {
                       />
                     </div>
                   ) : (
-                    <IconButton
-                      className='ml-auto'
-                      src={iconPlus}
-                      onClick={handleSelfAssignReport}
-                      text={intl.formatMessage(messages.reportAssign)}
-                    />
+                    <div className='report-page__summary__action'>
+                      <IconButton
+                        src={iconPlus}
+                        onClick={handleSelfAssignReport}
+                        text={intl.formatMessage(messages.reportAssign)}
+                      />
+                    </div>
                   )}
                 </td>
               </tr>
@@ -310,7 +311,7 @@ const ReportPage: React.FC = () => {
         </table>
       </div>
       {report.status_ids?.length > 0 && (
-        <div className='⁂-report-page__statuses__container'>
+        <div className='report-page__statuses__container'>
           <p>
             <FormattedMessage id='admin.report.statuses' defaultMessage='Reported content' />
           </p>

@@ -7,8 +7,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import AccountContainer from '@/components/accounts/account-container';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
-import Text from '../ui/text';
-
 import EventPreview from './events/event-preview';
 import StatusContent from './status-content';
 import StatusReplyMentions from './status-reply-mentions';
@@ -121,7 +119,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
   const body =
     (['blocked_account', 'blocked_domain', 'muted_account'].includes(state!) || filtered) &&
     !statusMeta.showFiltered ? (
-      <Text theme='muted'>
+      <p className='quoted-status__filtered'>
         <FormattedMessage id='status.filtered' defaultMessage='Filtered' />:{' '}
         {state === 'blocked_account' ? (
           <FormattedMessage
@@ -145,13 +143,10 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
         {filterResults.length > 0 && (
           <>{filterResults.map(({ filter }) => filter.title).join(', ')}.</>
         )}{' '}
-        <button
-          className='text-primary-600 hover:underline dark:text-primary-400'
-          onClick={handleUnfilter}
-        >
+        <button className='quoted-status__unfilter' onClick={handleUnfilter}>
           <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
         </button>
-      </Text>
+      </p>
     ) : (
       <>
         {account.id && (
@@ -171,7 +166,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
         {status.event ? (
           <EventPreview status={status} hideAction />
         ) : (
-          <div className='⁂-quoted-status__content'>
+          <div className='quoted-status__content'>
             <StatusContent
               status={status}
               collapsable
@@ -189,8 +184,8 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
   return (
     <div
       data-testid='quoted-status'
-      className={clsx('⁂-quoted-status', {
-        '⁂-quoted-status--compose': compose,
+      className={clsx('quoted-status', {
+        'quoted-status--compose': compose,
       })}
       onClick={handleExpandClick}
     >

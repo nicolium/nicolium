@@ -25,7 +25,7 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
   const revealedHashtags = expanded ? hashtags : hashtags.slice(0, VISIBLE_HASHTAGS);
 
   return (
-    <div className='⁂-hashtags-bar'>
+    <div className='hashtags-bar'>
       {revealedHashtags.map((hashtag) => (
         <Link
           key={hashtag}
@@ -34,7 +34,7 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className='⁂-hashtags-bar__item'
+          className='hashtags-bar__item'
         >
           <bdi>
             #<span>{hashtag}</span>

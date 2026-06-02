@@ -173,8 +173,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   if (!status || !status.event || !account) {
     return (
       <>
-        <div className='⁂-event-header__banner-wrapper'>
-          <div className='⁂-event-header__banner' />
+        <div className='event-header__banner-wrapper'>
+          <div className='event-header__banner' />
         </div>
 
         <PlaceholderEventHeader />
@@ -508,8 +508,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   return (
     <>
-      <div className='⁂-event-header__banner-wrapper'>
-        <div className='⁂-event-header__banner'>
+      <div className='event-header__banner-wrapper'>
+        <div className='event-header__banner'>
           {banner && (
             <a href={banner.url} onClick={handleHeaderClick} target='_blank'>
               <StillImage src={banner.url} alt={intl.formatMessage(messages.bannerHeader)} />
@@ -517,15 +517,15 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           )}
         </div>
       </div>
-      <div className='⁂-event-header__body'>
-        <div className='⁂-event-header__title__container'>
-          <p className='⁂-event-header__title'>{event.name}</p>
+      <div className='event-header__body'>
+        <div className='event-header__title__container'>
+          <p className='event-header__title'>{event.name}</p>
 
           <DropdownMenu items={makeMenu()} placement='bottom-end'>
             <IconButton
               src={iconDotsThree}
               theme='outlined'
-              className='⁂-event-header__menu-button'
+              className='event-header__menu-button'
             />
           </DropdownMenu>
 
@@ -543,8 +543,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           )}
         </div>
 
-        <div className='⁂-event-header__details'>
-          <div className='⁂-event-header__detail'>
+        <div className='event-header__details'>
+          <div className='event-header__detail'>
             <Icon src={iconFlagBanner} />
             <span>
               <FormattedMessage
@@ -553,7 +553,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                 values={{
                   name: (
                     <AccountLink className='mention' account={account}>
-                      <div className='⁂-event-header__organizer'>
+                      <div className='event-header__organizer'>
                         <span>
                           <Emojify text={account.display_name} emojis={account.emojis} />
                         </span>
@@ -567,7 +567,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           </div>
 
           {(event.join_mode !== 'external' || event.participants_count > 0) && (
-            <div className='⁂-event-header__detail'>
+            <div className='event-header__detail'>
               <Icon src={iconUsers} />
               <a href='#' onClick={handleParticipantsClick}>
                 <span>
@@ -587,7 +587,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           <EventDate status={status} />
 
           {event.location && (
-            <div className='⁂-event-header__detail'>
+            <div className='event-header__detail'>
               <Icon src={iconMapPin} />
               <span>{event.location.name}</span>
             </div>

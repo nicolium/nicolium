@@ -8,16 +8,16 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
-import Icon from '@/components/icon';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import { buildLink } from '@/components/notification';
 import PullToRefresh from '@/components/pull-to-refresh';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import ScrollableList from '@/components/scrollable-list';
 import StatusContent from '@/components/statuses/status-content';
+import StatusInfo from '@/components/statuses/status-info';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import Text from '@/components/ui/text';
+import Icon from '@/components/ui/icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -91,10 +91,12 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
   if (!status) return null;
 
   return (
-    <div className='relative flex flex-col gap-2 py-2'>
-      {hasReply && (
-        <div className='absolute left-5 top-[62px] z-[1] block h-[calc(100%-58px)] w-0.5 bg-gray-200 black:bg-gray-800 dark:bg-primary-800 rtl:left-auto rtl:right-5' />
-      )}
+    <div
+      className={clsx('interaction-request__status', {
+        'interaction-request__status--has-reply': hasReply,
+      })}
+    >
+      {hasReply && <div className='interaction-request__status__connector' />}
 
       <AccountContainer
         id={status.account_id}
@@ -104,7 +106,7 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
         action={actions ?? <></>}
       />
 
-      <div className={clsx('flex flex-col gap-2', hasReply && 'pl-[54px]')}>
+      <div className='interaction-request__status__content'>
         <StatusContent status={status} preview={!isReply} />
 
         {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
@@ -235,48 +237,33 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   }
 
   return (
-    <Hotkeys handlers={handlers} className='notification focusable' tabIndex={0}>
-      <div className='focusable p-4'>
-        <div className='flex flex-col gap-2'>
-          <div>
-            <div className='flex items-center gap-3'>
-              <div className='flex justify-end' style={{ flexBasis: avatarSize }}>
-                <Icon src={icon} className='flex-none text-primary-600 dark:text-primary-400' />
-              </div>
-
-              <div className='truncate'>
-                <Text theme='muted' size='xs' truncate>
-                  {message}
-                </Text>
-              </div>
-
-              {interactionRequest.type !== 'reply' && (
-                <div className='ml-auto'>
-                  <Text theme='muted' size='xs' truncate>
-                    <RelativeTimestamp
-                      timestamp={interactionRequest.created_at}
-                      theme='muted'
-                      size='sm'
-                      className='whitespace-nowrap'
-                    />
-                  </Text>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {interactionRequest.status_id && (
-            <InteractionRequestStatus
-              id={interactionRequest.status_id}
-              hasReply={interactionRequest.type === 'reply'}
-              actions={interactionRequest.reply_id ? undefined : actions}
-            />
-          )}
-          {interactionRequest.reply_id && (
-            <InteractionRequestStatus id={interactionRequest.reply_id} isReply actions={actions} />
-          )}
+    <Hotkeys handlers={handlers} className='interaction-request notification' tabIndex={0}>
+      <div className='notification__header'>
+        <div className='notification__info'>
+          <StatusInfo
+            avatarSize={avatarSize}
+            icon={<Icon src={icon} className='notification__icon' aria-hidden />}
+            text={message}
+          />
         </div>
+
+        {interactionRequest.type !== 'reply' && (
+          <p className='notification__timestamp'>
+            <RelativeTimestamp timestamp={interactionRequest.created_at} theme='muted' size='sm' />
+          </p>
+        )}
       </div>
+
+      {interactionRequest.status_id && (
+        <InteractionRequestStatus
+          id={interactionRequest.status_id}
+          hasReply={interactionRequest.type === 'reply'}
+          actions={interactionRequest.reply_id ? undefined : actions}
+        />
+      )}
+      {interactionRequest.reply_id && (
+        <InteractionRequestStatus id={interactionRequest.reply_id} isReply actions={actions} />
+      )}
     </Hotkeys>
   );
 };
@@ -327,8 +314,8 @@ const InteractionRequestsPage = () => {
           hasMore={hasNextPage}
           emptyMessageText={emptyMessage}
           onLoadMore={() => fetchNextPage()}
-          listClassName={clsx('⁂-status-list', {
-            '⁂-status-list--loading': isLoading,
+          listClassName={clsx('status-list', {
+            'status-list--loading': isLoading,
           })}
         >
           {data?.map((request) => (

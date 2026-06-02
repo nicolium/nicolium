@@ -10,14 +10,12 @@ import { fetchStatus } from '@/actions/statuses';
 import { ADDRESS_ICONS } from '@/components/autosuggest-location';
 import LocationSearch from '@/components/location-search';
 import AltIndicator from '@/components/media/alt-indicator';
-import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
-import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import ContentTypeButton from '@/features/compose/components/content-type-button';
 import { isCurrentOrFutureDate } from '@/features/compose/components/schedule-form';
@@ -223,15 +221,15 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   const renderLocation = () =>
     location && (
-      <div className='flex h-[38px] items-center gap-2 text-gray-700 dark:text-gray-500'>
+      <div className='edit-event__location'>
         <Icon src={ADDRESS_ICONS[location.type] || iconMapPin} />
-        <div className='flex grow flex-col'>
-          <Text>{location.description}</Text>
-          <Text theme='muted' size='xs'>
+        <div className='edit-event__location__text'>
+          <p className='edit-event__location__name'>{location.description}</p>
+          <p className='edit-event__location__address'>
             {[location.street, location.locality, location.country]
               .filter((val) => val?.trim())
               .join(' · ')}
-          </Text>
+          </p>
         </div>
         <IconButton
           title={intl.formatMessage(messages.resetLocation)}
@@ -244,7 +242,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
     );
 
   return (
-    <Form className='⁂-edit-event' onSubmit={handleSubmit}>
+    <Form className='edit-event' onSubmit={handleSubmit}>
       <FormGroup
         labelText={
           <FormattedMessage id='compose_event.fields.banner.label' defaultMessage='Event banner' />
@@ -256,7 +254,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           />
         }
       >
-        <div className='⁂-edit-event__banner__container'>
+        <div className='edit-event__banner__container'>
           {banner ? (
             <>
               <img
@@ -273,7 +271,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
               />
               <button
                 type='button'
-                className='absolute bottom-1 left-1'
+                className='edit-event__banner__alt-button'
                 onClick={handleChangeDescriptionClick}
                 title={intl.formatMessage(messages.eventHeaderDescription)}
               >
@@ -305,12 +303,12 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           />
         }
       >
-        <div className='relative'>
+        <div className='edit-event__description'>
           <ContentTypeButton composeId={composeId} />
           <ComposeEditor
             key={String(isDisabled)}
-            className='⁂-edit-event__editor'
-            placeholderClassName='⁂-compose-form__editor__placeholder'
+            className='edit-event__editor'
+            placeholderClassName='compose-form__editor__placeholder'
             composeId={composeId}
             placeholder={intl.formatMessage(messages.eventDescriptionPlaceholder)}
             handleSubmit={handleSubmit}
@@ -347,14 +345,14 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           onChange={onChangeStartTime}
         />
       </FormGroup>
-      <div className='flex items-center gap-2'>
+      <div className='edit-event__toggle'>
         <Toggle checked={!!endTime} onChange={onChangeHasEndTime} id='has-end-time-toggle' />
-        <Text htmlFor='has-end-time-toggle' tag='label' theme='muted'>
+        <label htmlFor='has-end-time-toggle' className='edit-event__toggle__label'>
           <FormattedMessage
             id='compose_event.fields.has_end_time'
             defaultMessage='This event has an end date'
           />
-        </Text>
+        </label>
       </div>
       {endTime && (
         <FormGroup
@@ -378,28 +376,28 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         </FormGroup>
       )}
       {!statusId && (
-        <div className='flex items-center gap-2'>
+        <div className='edit-event__toggle'>
           <Toggle
             checked={approvalRequired}
             onChange={onChangeApprovalRequired}
             id='approval-required-toggle'
           />
-          <Text htmlFor='approval-required-toggle' tag='label' theme='muted'>
+          <label htmlFor='approval-required-toggle' className='edit-event__toggle__label'>
             <FormattedMessage
               id='compose_event.fields.approval_required'
               defaultMessage='I want to approve participation requests manually'
             />
-          </Text>
+          </label>
         </div>
       )}
       <FormActions>
-        <Button disabled={isDisabled} theme='primary' type='submit'>
+        <button type='submit' disabled={isDisabled}>
           {statusId ? (
             <FormattedMessage id='compose_event.update' defaultMessage='Update' />
           ) : (
             <FormattedMessage id='compose_event.create' defaultMessage='Create' />
           )}
-        </Button>
+        </button>
       </FormActions>
     </Form>
   );

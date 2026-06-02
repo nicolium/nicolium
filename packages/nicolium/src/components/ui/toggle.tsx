@@ -27,7 +27,7 @@ const Toggle: React.FC<IToggle> = ({
   radio,
 }) => (
   <input
-    className={`⁂-toggle ⁂-toggle--${size}`}
+    className={`toggle toggle--${size}`}
     type={radio ? 'radio' : 'checkbox'}
     id={id}
     name={name}

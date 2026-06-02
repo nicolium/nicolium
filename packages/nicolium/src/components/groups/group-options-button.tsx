@@ -96,7 +96,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
       <IconButton
         src={iconDotsThree}
         theme='secondary'
-        className='⁂-group-options-button'
+        className='group-options-button'
         data-testid='dropdown-menu-button'
         title={intl.formatMessage(messages.groupOptions)}
       />

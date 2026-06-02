@@ -1,10 +1,8 @@
 import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
-import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { PublicTimelineColumn } from '@/columns/timeline';
-import Markup from '@/components/markup';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
@@ -14,19 +12,13 @@ import { usePublicTimeline } from '@/queries/timelines/use-timelines';
 import { useInstance } from '@/stores/instance';
 import { getTextDirection } from '@/utils/rtl';
 
-interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'className' | 'dir'> {
+interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'dir'> {
   children: React.ReactNode;
 }
 
 /** Big text in site colors, for displaying the site name. Resizes itself according to the screen size. */
-const LogoText: React.FC<ILogoText> = ({ children, className, dir }) => (
-  <h1
-    className={clsx(
-      'overflow-hidden text-ellipsis bg-gradient-to-br from-accent-500 via-primary-500 to-gradient-end bg-clip-text text-5xl font-extrabold !leading-tight text-transparent lg:text-6xl xl:text-7xl',
-      className,
-    )}
-    dir={dir}
-  >
+const LogoText: React.FC<ILogoText> = ({ children, dir }) => (
+  <h1 className='logo-text' dir={dir}>
     {children}
   </h1>
 );
@@ -35,15 +27,13 @@ const SiteBanner: React.FC = () => {
   const instance = useInstance();
 
   return (
-    <div className='flex flex-col gap-6'>
-      <LogoText className='-my-5' dir={getTextDirection(instance.title)}>
-        {instance.title}
-      </LogoText>
+    <div className='site-banner'>
+      <LogoText dir={getTextDirection(instance.title)}>{instance.title}</LogoText>
 
       {instance.description.trim().length > 0 && (
-        <Markup size='lg' direction={getTextDirection(instance.description)} tag='div'>
+        <div data-markup dir={getTextDirection(instance.description)}>
           <ParsedContent html={instance.description} />
-        </Markup>
+        </div>
       )}
     </div>
   );

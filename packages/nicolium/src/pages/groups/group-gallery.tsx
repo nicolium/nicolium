@@ -44,7 +44,7 @@ const GroupGallery: React.FC = () => {
 
   return (
     <Column label={group.display_name} transparent withHeader={false}>
-      <div role='feed' className='⁂-group-gallery__grid'>
+      <div role='feed' className='group-gallery__grid'>
         {attachments.map((attachment, index) => (
           <MediaItem
             key={`${attachment.status_id}+${attachment.id}`}
@@ -55,7 +55,7 @@ const GroupGallery: React.FC = () => {
         ))}
 
         {!isLoading && attachments.length === 0 && (
-          <div className='⁂-empty-column-indicator ⁂-group-gallery__empty'>
+          <div className='empty-column-indicator group-gallery__empty'>
             <FormattedMessage id='account_gallery.none' defaultMessage='No media to show.' />
           </div>
         )}
@@ -63,7 +63,7 @@ const GroupGallery: React.FC = () => {
 
       {hasNextPage && (
         <LoadMore
-          className='⁂-group-gallery__load-more'
+          className='group-gallery__load-more'
           disabled={isFetching}
           onClick={() => fetchNextPage({ cancelRefetch: false })}
         />

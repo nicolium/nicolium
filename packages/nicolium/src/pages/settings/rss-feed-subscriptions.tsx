@@ -5,14 +5,11 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
 import Avatar from '@/components/ui/avatar';
-import Button from '@/components/ui/button';
-import Card, { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
-import Text from '@/components/ui/text';
 import { useTextField } from '@/hooks/forms/use-text-field';
 import {
   useCreateRssFeedSubscription,
@@ -59,19 +56,18 @@ const NewFeedForm: React.FC = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <div className='flex items-center gap-2'>
-        <label className='grow'>
+      <div className='rss-feed-subscriptions__form'>
+        <label>
           <span style={{ display: 'none' }}>{label}</span>
-
           <Input type='text' placeholder={label} disabled={isPending} {...url} />
         </label>
 
-        <Button disabled={isPending} type='submit' theme='primary'>
+        <button disabled={isPending} type='submit'>
           <FormattedMessage
             id='rss_feed_subscriptions.new.create.title'
             defaultMessage='Subscribe'
           />
-        </Button>
+        </button>
       </div>
     </Form>
   );
@@ -91,50 +87,44 @@ const RssFeedSubscriptions = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.rss_feed_subscriptions'
-      defaultMessage="You haven't subscribed to any RSS feeds yet."
+      defaultMessage='You haven’t subscribed to any RSS feeds yet.'
     />
   );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <div className='flex flex-col gap-4'>
-        <CardTitle
-          title={
-            <FormattedMessage
-              id='rss_feed_subscriptions.new.heading'
-              defaultMessage='Subscribe to a new RSS feed'
-            />
-          }
-        />
+      <div className='rss-feed-subscriptions'>
+        <h3 className='card-title'>
+          <FormattedMessage
+            id='rss_feed_subscriptions.new.heading'
+            defaultMessage='Subscribe to a new RSS feed'
+          />
+        </h3>
         <NewFeedForm />
 
-        <CardTitle
-          title={
-            <FormattedMessage
-              id='rss_feed_subscriptions.list.heading'
-              defaultMessage='Subscribed feeds'
-            />
-          }
-        />
+        <h3 className='card-title'>
+          <FormattedMessage
+            id='rss_feed_subscriptions.list.heading'
+            defaultMessage='Subscribed feeds'
+          />
+        </h3>
         {feeds?.length ? (
           <List>
             {feeds?.map((feed) => (
               <ListItem
                 key={feed.id}
                 label={
-                  <div className='flex w-full items-center gap-2'>
+                  <div className='rss-feed-subscriptions__item'>
                     {feed.image_url ? (
                       <Avatar size={40} src={feed.image_url} />
                     ) : (
-                      <div className='flex size-10 items-center justify-center rounded-full rounded-lg bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100'>
+                      <div className='rss-feed-subscriptions__item__avatar-fallback'>
                         <Icon src={iconRss} size={32} />
                       </div>
                     )}
-                    <div className='flex flex-1 flex-col'>
+                    <div className='rss-feed-subscriptions__item-info'>
                       <span>{feed.title}</span>
-                      <Text size='sm' theme='muted' truncate>
-                        {feed.url}
-                      </Text>
+                      <span className='rss-feed-subscriptions__item-url'>{feed.url}</span>
                     </div>
                   </div>
                 }
@@ -142,7 +132,6 @@ const RssFeedSubscriptions = () => {
                 <IconButton
                   onClick={handleDelete(feed.url)}
                   disabled={isPending}
-                  className='size-8 text-gray-700 dark:text-gray-600'
                   src={iconX}
                   title={intl.formatMessage(messages.deleteFeed)}
                 />
@@ -150,11 +139,7 @@ const RssFeedSubscriptions = () => {
             ))}
           </List>
         ) : (
-          !isLoading && (
-            <Card variant='rounded' size='lg'>
-              {emptyMessage}
-            </Card>
-          )
+          !isLoading && <div className='settings-empty'>{emptyMessage}</div>
         )}
       </div>
     </Column>

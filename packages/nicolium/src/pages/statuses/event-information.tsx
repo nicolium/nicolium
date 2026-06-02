@@ -74,11 +74,11 @@ const EventInformationPage: React.FC = () => {
 
     return (
       event.location && (
-        <div className='⁂-event-information__location'>
+        <div className='event-information__location'>
           <h2>
             <FormattedMessage id='event.location' defaultMessage='Location' />
           </h2>
-          <div className='⁂-event-information__location__body'>
+          <div className='event-information__location__body'>
             <Icon src={iconMapPin} />
             <p>{text}</p>
           </div>
@@ -102,11 +102,11 @@ const EventInformationPage: React.FC = () => {
       startDate.getFullYear() === endDate.getFullYear();
 
     return (
-      <div className='⁂-event-information__date'>
+      <div className='event-information__date'>
         <h2>
           <FormattedMessage id='event.date' defaultMessage='Date' />
         </h2>
-        <div className='⁂-event-information__date__body'>
+        <div className='event-information__date__body'>
           <Icon src={iconCalendarDots} />
           <p>
             <FormattedDate
@@ -142,7 +142,7 @@ const EventInformationPage: React.FC = () => {
     if (!status?.event?.links?.length) return null;
 
     return (
-      <div className='⁂-event-information__links'>
+      <div className='event-information__links'>
         <h2>
           <FormattedMessage id='event.website' defaultMessage='External links' />
         </h2>
@@ -170,9 +170,9 @@ const EventInformationPage: React.FC = () => {
   } else if (!status) return null;
 
   return (
-    <div className='⁂-event-information'>
+    <div className='event-information'>
       {!!status.content.trim() && (
-        <div className='⁂-event-information__content'>
+        <div className='event-information__content'>
           <h2>
             <FormattedMessage id='event.description' defaultMessage='Description' />
           </h2>

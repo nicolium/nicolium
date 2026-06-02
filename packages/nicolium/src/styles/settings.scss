@@ -1,0 +1,1080 @@
+@use 'mixins';
+@use 'variables';
+
+.tokens {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+
+  @media (min-width: variables.$breakpoint-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.token {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: space-between;
+
+  height: 100%;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+
+  background-color: rgb(var(--color-gray-100));
+
+  .dark & {
+    background-color: rgb(var(--color-primary-800));
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__name {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    @include mixins.text($size: md, $weight: medium);
+
+    svg {
+      display: inline;
+      width: 1rem;
+      height: 1rem;
+      color: inherit;
+    }
+  }
+
+  &__tokens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+
+    p {
+      @include mixins.text($size: sm, $theme: muted);
+    }
+  }
+
+  &__detail {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+
+  &--current button {
+    border-color: transparent;
+    color: rgb(var(--color-danger-600));
+    background-color: rgb(var(--color-danger-100));
+
+    &:hover {
+      color: rgb(var(--color-gray-100));
+      background-color: rgb(var(--color-danger-600));
+    }
+
+    &:focus {
+      outline-color: rgb(var(--color-danger-500));
+    }
+
+    .dark & {
+      color: rgb(var(--color-danger-200));
+      background-color: rgb(var(--color-danger-900));
+    }
+
+    .dark &:hover {
+      color: rgb(var(--color-gray-100));
+      background-color: rgb(var(--color-danger-500));
+    }
+  }
+}
+
+.theme-selector {
+  position: relative;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+
+  &__overlay {
+    pointer-events: none;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+
+    padding-left: 0.75rem;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      color: rgb(var(--color-gray-600));
+
+      .dark & {
+        color: rgb(var(--color-gray-700));
+      }
+    }
+
+    > div {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  select {
+    padding-left: 2.5rem !important;
+  }
+
+  &__arrow {
+    pointer-events: none;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    align-items: center;
+
+    padding-right: 0.75rem;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      color: rgb(var(--color-gray-600));
+
+      .dark & {
+        color: rgb(var(--color-gray-700));
+      }
+    }
+  }
+}
+
+.interface-items {
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 0 6px 1px rgb(var(--color-gray-200));
+
+  .dark & {
+    box-shadow: inset 0 0 6px 1px rgb(var(--color-gray-800));
+  }
+
+  .black & {
+    border: 1px solid rgb(var(--color-gray-800));
+    box-shadow: none;
+  }
+
+  &__explanation {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+}
+
+.interface-item {
+  cursor: grab;
+
+  display: flex;
+  flex-direction: row !important;
+  gap: 0.5rem;
+  align-items: center;
+
+  width: 100%;
+  min-height: 2rem;
+
+  &__drag-handle {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
+
+  &__icon {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    color: rgb(var(--color-gray-600));
+  }
+
+  p {
+    @include mixins.text;
+
+    flex-grow: 1;
+    line-height: var(--leading-sm);
+  }
+
+  small {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+
+  &__pin {
+    padding: 0.25rem;
+    border-radius: var(--radius-full);
+    background: transparent;
+    transition: background-color 0.2s;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      color: rgb(var(--color-gray-500));
+      transition: color 0.2s;
+
+      .dark & {
+        color: rgb(var(--color-gray-300));
+      }
+    }
+
+    &:hover {
+      background: rgb(var(--color-gray-200));
+
+      svg {
+        color: rgb(var(--color-gray-700));
+      }
+
+      .dark & {
+        background: rgb(var(--color-gray-800));
+
+        svg {
+          color: rgb(var(--color-gray-200));
+        }
+      }
+    }
+
+    &[aria-pressed='true'] {
+      svg {
+        color: rgb(var(--color-primary-600));
+
+        .dark & {
+          color: rgb(var(--color-primary-600));
+        }
+      }
+    }
+  }
+}
+
+.header-picker {
+  cursor: pointer;
+
+  position: relative;
+
+  overflow: hidden;
+
+  width: 100%;
+  height: 6rem;
+  border-radius: var(--radius-lg);
+
+  color: rgb(var(--color-primary-500));
+
+  background-color: rgb(var(--color-primary-100));
+
+  &--dragging {
+    z-index: 99 !important;
+    border: 2px dashed rgb(var(--color-primary-600));
+  }
+
+  &--dragged-over {
+    outline: 2px solid rgb(var(--color-primary-600));
+    outline-offset: 2px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  > div {
+    position: absolute;
+    top: 0;
+
+    display: flex;
+    gap: 0.375rem;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    transition: opacity 0.15s var(--ease-default);
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    p {
+      @include mixins.text($theme: primary, $size: md, $weight: semibold);
+    }
+
+    input {
+      display: none;
+    }
+  }
+
+  &:has(img) > div {
+    opacity: 0;
+    background: rgb(var(--color-primary-100));
+
+    .dark & {
+      background: rgb(var(--color-gray-800));
+    }
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &__clear-button {
+    position: absolute;
+    z-index: 10;
+    top: 0.5rem;
+    right: 0.5rem;
+
+    &:hover {
+      transform: scale(1.05);
+      background: rgb(var(--color-gray-900));
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__alt-button {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+  }
+
+  @media screen and (min-width: variables.$breakpoint-sm) {
+    height: 9rem;
+    box-shadow: var(--shadow-sm);
+
+    .dark & {
+      background-color: rgb(var(--color-gray-800));
+      box-shadow: var(--shadow-inset);
+    }
+  }
+}
+
+.avatar-picker {
+  cursor: pointer;
+
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(50%);
+
+  width: 5rem;
+  height: 5rem;
+  border-radius: var(--radius-lg);
+
+  background-color: rgb(var(--color-primary-300));
+  outline: 2px solid white;
+
+  input {
+    display: none;
+  }
+
+  .dark & {
+    outline-color: rgb(var(--color-primary-900));
+  }
+
+  &--dragging {
+    z-index: 99 !important;
+    overflow: hidden;
+    border: 2px dashed rgb(var(--color-primary-600));
+  }
+
+  &--dragged-over {
+    outline-color: rgb(var(--color-primary-600));
+    outline-offset: 2px;
+  }
+
+  &__avatar {
+    border-radius: var(--radius-lg) !important;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-lg);
+
+    transition: opacity 0.15s var(--ease-default);
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      color: white;
+    }
+
+    &--has-image {
+      opacity: 0;
+      background-color: rgb(var(--color-primary-500));
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+
+  &__alt-button {
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
+  }
+}
+
+.profile-images {
+  position: relative;
+  display: flex;
+  margin-bottom: 3rem;
+
+  .avatar-picker {
+    left: 1rem;
+    transform: translateY(50%);
+
+    @media (min-width: variables.$breakpoint-sm) {
+      left: 1.5rem;
+    }
+  }
+}
+
+.settings-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.settings__danger-text {
+  @include mixins.text($theme: danger);
+}
+
+.settings-empty {
+  @include mixins.card($variant: rounded, $size: lg);
+
+  &__action {
+    @include mixins.text($size: sm, $theme: primary);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.backups-list {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  &__item {
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    background-color: rgb(var(--color-gray-100));
+
+    .dark & {
+      background-color: rgb(var(--color-primary-800));
+    }
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__date {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__actions {
+      display: flex;
+      justify-content: flex-end;
+
+      button, a {
+        @include mixins.button($theme: primary);
+      }
+    }
+  }
+
+  &__footer {
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+
+  @media (min-width: variables.$breakpoint-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.account-list__item {
+  padding-bottom: 1rem;
+
+  &--last {
+    padding-bottom: 0;
+  }
+}
+
+.domain-block {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.5rem;
+}
+
+.domain-blocks-list {
+  > * + * {
+    border-top: 1px solid rgb(var(--color-gray-200));
+
+    .dark & {
+      border-top-color: rgb(var(--color-primary-800));
+    }
+
+    .black & {
+      border-top-color: rgb(var(--color-gray-800));
+    }
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+
+  a {
+    @include mixins.button($theme: primary, $size: sm);
+  }
+}
+
+.filter-card {
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  background-color: rgb(var(--color-gray-100));
+
+  .dark & {
+    background-color: rgb(var(--color-primary-800));
+  }
+
+  &__container {
+    padding-bottom: 1rem;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 0.25rem;
+
+    p {
+      @include mixins.text($weight: medium);
+    }
+
+    span {
+      @include mixins.text($theme: muted);
+    }
+  }
+
+  &__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+
+    a {
+      @include mixins.button($theme: primary);
+    }
+
+    button {
+      @include mixins.button($theme: danger);
+    }
+  }
+}
+
+.edit-filter {
+  &__actions {
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+
+  &__contexts-header {
+    display: flex;
+    flex-direction: column;
+
+    p:first-child {
+      @include mixins.text($size: sm, $weight: medium);
+    }
+
+    p:last-child {
+      @include mixins.text($size: xs, $theme: muted);
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-grow: 1;
+    gap: 0.5rem;
+
+    &__keyword {
+      flex-grow: 1;
+      width: 40%;
+    }
+
+    &__options {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  }
+}
+
+.interaction-policy-config__title {
+  @include mixins.text($size: lg, $weight: bold);
+}
+
+.interaction-policies {
+  h3 {
+    @include mixins.text($size: md, $weight: medium);
+  }
+
+  &__actions {
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.rss-feed-subscriptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+
+  width: 100%;
+
+  &__form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    > label {
+      flex-grow: 1;
+    }
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+
+  &__item {
+    &__avatar-fallback {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-full);
+
+      color: rgb(var(--color-gray-900));
+
+      background-color: rgb(var(--color-gray-200));
+
+      .dark & {
+        color: rgb(var(--color-gray-100));
+        background-color: rgb(var(--color-gray-700));
+      }
+    }
+
+    &__info {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    &__url {
+      @include mixins.text($size: sm, $theme: muted, $truncate: true);
+    }
+  }
+}
+
+.aliases {
+  &__search {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    > label {
+      position: relative;
+      flex-grow: 1;
+
+      input {
+        display: block;
+        width: 100%;
+        border-radius: var(--radius-full);
+        font-size: var(--text-sm);
+
+        &:focus {
+          border-color: rgb(var(--color-primary-500));
+          outline-color: rgb(var(--color-primary-500));
+        }
+
+        &:is(.dark *) {
+          color: #fff;
+          background-color: rgb(var(--color-gray-800));
+
+          &::placeholder {
+            color: rgb(var(--color-gray-500));
+          }
+        }
+      }
+    }
+
+    &__clear {
+      cursor: pointer;
+
+      position: absolute;
+      right: 0;
+      inset-block: 0;
+
+      display: flex;
+      align-items: center;
+
+      padding-inline: 0.75rem;
+
+      [dir='rtl'] & {
+        right: auto;
+        left: 0;
+      }
+
+      svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: rgb(var(--color-gray-600));
+      }
+
+      &:disabled {
+        display: none;
+      }
+    }
+
+    > button {
+      @include mixins.button($theme: secondary);
+    }
+  }
+
+  &__search-results {
+    overflow-y: auto;
+    max-height: 18rem;
+    margin-bottom: 1rem;
+  }
+
+  &__account {
+    width: 100%;
+
+    &__container {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0.625rem;
+
+      .icon-button {
+        color: rgb(var(--color-gray-400));
+
+        &:hover {
+          color: rgb(var(--color-gray-600));
+        }
+
+        svg {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+      }
+    }
+  }
+
+  &__alias {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0.5rem;
+  }
+
+  &__delete {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    @include mixins.text($theme: muted);
+  }
+}
+
+.csv-exporter {
+  &__label {
+    @include mixins.text($size: xl, $weight: bold);
+  }
+
+  &__hint {
+    @include mixins.text($theme: muted);
+  }
+
+  &__actions {
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.data-importer {
+  &__label {
+    @include mixins.text($size: xl, $weight: bold);
+  }
+
+  &__actions {
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.migration-form {
+  &__hint {
+    @include mixins.text($theme: muted);
+
+    a {
+      @include mixins.text($theme: primary);
+
+      &:hover {
+        color: rgb(var(--color-primary-800));
+        text-decoration: underline;
+
+        &:is(.dark *) {
+          color: rgb(var(--color-primary-500));
+        }
+      }
+    }
+  }
+
+  &__actions {
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.mfa-setup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.enable-otp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__warning {
+    @include mixins.text($theme: muted);
+  }
+
+  &__codes-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    padding: 1rem;
+    border: 2px solid rgb(var(--color-gray-200));
+    border-radius: var(--radius-lg);
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+    }
+  }
+
+  &__codes-title {
+    @include mixins.text($weight: medium, $align: center);
+  }
+
+  &__codes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+
+    border-radius: var(--radius-lg);
+
+    text-align: center;
+
+    p {
+      @include mixins.text($theme: muted, $size: sm);
+    }
+  }
+
+  &__actions {
+    a {
+      @include mixins.button($theme: tertiary);
+    }
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.disable-otp-form {
+  &__header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    @include mixins.text($weight: medium);
+  }
+
+  &__description {
+    @include mixins.text($theme: muted);
+  }
+
+  &__actions {
+    button {
+      @include mixins.button($theme: danger);
+    }
+  }
+}
+
+.otp-confirm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__qr {
+    border-radius: var(--radius-lg);
+  }
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__step-title {
+    @include mixins.text($size: lg, $weight: semibold);
+  }
+
+  &__description {
+    @include mixins.text($theme: muted);
+  }
+
+  &__actions {
+    button[type='button'] {
+      @include mixins.button($theme: tertiary);
+    }
+
+    button[type='submit'] {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.delete-account {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__hint {
+    @include mixins.text($theme: muted);
+  }
+
+  &__actions {
+    button {
+      @include mixins.button($theme: danger);
+    }
+  }
+}
+
+.edit-email__actions,
+.edit-password__actions,
+.privacy__actions {
+  a {
+    @include mixins.button($theme: tertiary);
+  }
+
+  button {
+    @include mixins.button($theme: primary);
+  }
+}
+
+.profile-field {
+  display: flex;
+  flex-grow: 1;
+  gap: 0.5rem;
+
+  &__name {
+    flex-grow: 1;
+    width: 40%;
+  }
+
+  &__value {
+    flex-grow: 1;
+    width: 60%;
+  }
+}
+
+.profile-form__actions {
+  a {
+    @include mixins.button($theme: tertiary);
+  }
+
+  button {
+    @include mixins.button($theme: primary);
+  }
+}
+
+.profile-css-hint {
+  @include mixins.text($size: xs, $theme: muted, $align: right);
+
+  margin-top: 0.125rem;
+}
+
+.followed-tags-item {
+  padding-bottom: 0.75rem;
+}

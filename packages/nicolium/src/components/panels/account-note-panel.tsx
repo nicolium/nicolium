@@ -54,7 +54,7 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
   return (
     <Widget
       title={
-        <div className='⁂-account-note-panel__header'>
+        <div className='account-note-panel__header'>
           <label htmlFor={`account-note-${account.id}`}>
             <FormattedMessage id='account_note.header' defaultMessage='Note' />
           </label>

@@ -1,10 +1,9 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import { useClient } from '@/hooks/use-client';
@@ -44,7 +43,6 @@ const EditPasswordPage = () => {
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(
     (event) => {
       event.persist();
-
       setState((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
     },
     [],
@@ -123,19 +121,14 @@ const EditPasswordPage = () => {
           />
         </FormGroup>
 
-        <FormActions>
-          <Button to='/settings/security' theme='tertiary'>
+        <div className='form__actions edit-password__actions'>
+          <Link to='/settings/security'>
             <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
-          </Button>
-
-          <Button
-            type='submit'
-            theme='primary'
-            disabled={isLoading || newPassword !== newPasswordConfirmation}
-          >
+          </Link>
+          <button type='submit' disabled={isLoading || newPassword !== newPasswordConfirmation}>
             <FormattedMessage id='security.submit' defaultMessage='Save changes' />
-          </Button>
-        </FormActions>
+          </button>
+        </div>
       </Form>
     </Column>
   );

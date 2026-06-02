@@ -15,7 +15,7 @@ const LinkFooter: React.FC = (): React.JSX.Element => {
 
   return (
     <>
-      <p className='⁂-footer-text'>
+      <p className='footer-text'>
         {frontendConfig.linkFooterMessage ? (
           <Emojify text={frontendConfig.linkFooterMessage} />
         ) : (
@@ -34,7 +34,7 @@ const LinkFooter: React.FC = (): React.JSX.Element => {
           />
         )}
       </p>
-      <p className='⁂-footer-text' aria-hidden>
+      <p className='footer-text' aria-hidden>
         <Emojify text={intl.formatMessage(messages.meow, { emoji: '🐱' })} />
       </p>
     </>

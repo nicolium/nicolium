@@ -1,55 +1,34 @@
 import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import iconWarningCircle from '@phosphor-icons/core/regular/warning-circle.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
-import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 
 interface IPendingItemsRow extends LinkOptions {
   /** Number of pending items. */
   count: number;
-  /** Size of the icon. */
-  size?: 'md' | 'lg';
 }
 
-const PendingItemsRow: React.FC<IPendingItemsRow> = ({ count, size = 'md', ...props }) => (
-  <Link {...props} className='group' data-testid='pending-items-row'>
-    <div className='flex items-center justify-between'>
-      <div className='flex items-center gap-2'>
-        <div
-          className={clsx(
-            'rounded-full bg-primary-200 text-primary-500 dark:bg-primary-800 dark:text-primary-200',
-            {
-              'p-3': size === 'lg',
-              'p-2.5': size === 'md',
-            },
-          )}
-        >
-          <Icon
-            src={iconWarningCircle}
-            className={clsx({
-              'h-5 w-5': size === 'md',
-              'h-7 w-7': size === 'lg',
-            })}
-          />
+const PendingItemsRow: React.FC<IPendingItemsRow> = ({ count, ...props }) => (
+  <Link {...props} className='pending-items-row' data-testid='pending-items-row'>
+    <div className='pending-items-row__content'>
+      <div className='pending-items-row__main'>
+        <div className='pending-items-row__badge'>
+          <Icon src={iconWarningCircle} />
         </div>
 
-        <Text weight='bold' size='md'>
+        <p className='pending-items-row__label'>
           <FormattedMessage
             id='groups.pending.count'
             defaultMessage='{number, plural, one {# pending request} other {# pending requests}}'
             values={{ number: count }}
           />
-        </Text>
+        </p>
       </div>
 
-      <Icon
-        src={iconCaretRight}
-        className='size-5 text-gray-600 transition-colors group-hover:text-gray-700 dark:text-gray-600 dark:group-hover:text-gray-500'
-      />
+      <Icon src={iconCaretRight} className='pending-items-row__caret' />
     </div>
   </Link>
 );

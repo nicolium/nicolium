@@ -152,9 +152,9 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
 
     if (isBlocking) {
       return (
-        <div className='⁂-chat-composer ⁂-chat-composer--blocked'>
-          <div className='⁂-chat-composer__blocked-body'>
-            <p className='⁂-chat-composer__blocked-message'>
+        <div className='chat-composer chat-composer--blocked'>
+          <div className='chat-composer__blocked-body'>
+            <p className='chat-composer__blocked-message'>
               <FormattedMessage
                 id='chat_message_list.blocked'
                 defaultMessage='You blocked this user'
@@ -174,21 +174,21 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
     }
 
     return (
-      <div className='⁂-chat-composer'>
+      <div className='chat-composer'>
         {/* Spacer */}
-        <div className='⁂-chat-composer__spacer' />
+        <div className='chat-composer__spacer' />
 
-        <div className='⁂-chat-composer__row'>
-          <div className='⁂-chat-composer__side ⁂-chat-composer__side--upload'>
+        <div className='chat-composer__row'>
+          <div className='chat-composer__side chat-composer__side--upload'>
             <UploadButton
               onSelectFile={onSelectFile}
               resetFileKey={resetFileKey}
-              className='⁂-chat-composer__send-button'
+              className='chat-composer__send-button'
               disabled={uploading ?? !!attachment}
             />
           </div>
 
-          <div className='⁂-chat-composer__field'>
+          <div className='chat-composer__field'>
             <AutosuggestInput
               key={resetContentKey}
               as={ChatTextarea}
@@ -218,14 +218,14 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
             />
           </div>
 
-          <div className='⁂-chat-composer__side ⁂-chat-composer__side--send'>
+          <div className='chat-composer__side chat-composer__side--send'>
             {isOverCharacterLimit ? (
-              <span className='⁂-chat-composer__limit'>{overLimitText}</span>
+              <span className='chat-composer__limit'>{overLimitText}</span>
             ) : null}
 
             <IconButton
               src={iconPaperPlaneRight}
-              className='⁂-chat-composer__send-button'
+              className='chat-composer__send-button'
               disabled={isSubmitDisabled}
               onClick={onSubmit}
               title={intl.formatMessage(messages.send)}
@@ -233,12 +233,12 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
           </div>
         </div>
 
-        <div className='⁂-chat-composer__error__container'>
+        <div className='chat-composer__error__container'>
           {errorMessage && (
             <>
-              <span className='⁂-chat-composer__error'>{errorMessage}</span>
+              <span className='chat-composer__error'>{errorMessage}</span>
 
-              <button onClick={onSubmit} className='⁂-chat-composer__retry'>
+              <button onClick={onSubmit} className='chat-composer__retry'>
                 <FormattedMessage id='chat.retry' defaultMessage='Retry?' />
               </button>
             </>

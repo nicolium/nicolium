@@ -229,12 +229,12 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
   }, [active, lists, circles, antennas, features, isLoggedIn, defaultTimeline, isAdmin]);
 
   if (items.length === 1) {
-    return <div className='⁂-timeline-picker'>{heading}</div>;
+    return <div className='timeline-picker'>{heading}</div>;
   }
 
   return (
     <DropdownMenu items={items} width='16rem' placement='bottom-start' forceDropdown>
-      <div className='⁂-timeline-picker' role='button' tabIndex={0}>
+      <div className='timeline-picker' role='button' tabIndex={0}>
         {heading}
         <Icon src={iconCaretDown} aria-hidden />
       </div>

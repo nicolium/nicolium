@@ -1,13 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer utilities {
-  .break-word-nested > p {
-    word-break: break-word;
-  }
-
-  .shadow-inset {
-    box-shadow: inset 0 0 0 1px #fff1;
-  }
-}

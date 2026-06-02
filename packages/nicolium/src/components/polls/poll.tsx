@@ -69,22 +69,22 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
-      className='⁂-poll__container'
+      className='poll__container'
       onClick={(e) => {
         e.stopPropagation();
       }}
     >
       {!showResults && poll.multiple && (
-        <span className='⁂-poll__explanation'>
+        <span className='poll__explanation'>
           <FormattedMessage
             id='poll.choose_multiple'
-            defaultMessage="Choose as many as you'd like."
+            defaultMessage='Choose as many as you’d like.'
           />
         </span>
       )}
 
-      <div className={clsx('⁂-poll', { '⁂-poll--truncate': truncate })}>
-        <div className='⁂-poll__options'>
+      <div className={clsx('poll', { 'poll--truncate': truncate })}>
+        <div className='poll__options'>
           {poll.options.map((option, i) => (
             <PollOption
               key={i}

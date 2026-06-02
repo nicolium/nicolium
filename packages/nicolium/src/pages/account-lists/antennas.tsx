@@ -49,7 +49,7 @@ const AntennasPage: React.FC = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.antennas'
-      defaultMessage="You don't have any antennas yet. When you create one, it will show up here."
+      defaultMessage='You don’t have any antennas yet. When you create one, it will show up here.'
     />
   );
 

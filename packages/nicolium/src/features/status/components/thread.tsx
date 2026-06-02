@@ -326,7 +326,7 @@ const Thread = ({
       });
 
       setTimeout(() => {
-        (node.current?.querySelector('.⁂-detailed-status') as HTMLDivElement)?.focus();
+        (node.current?.querySelector('.detailed-status') as HTMLDivElement)?.focus();
       }, 100);
     }, 0);
   }, [status.id, statusIndex]);

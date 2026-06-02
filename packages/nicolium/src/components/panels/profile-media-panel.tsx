@@ -33,7 +33,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
 
     if (publicAttachments.length) {
       return (
-        <div className='⁂-media-panel__attachments'>
+        <div className='media-panel__attachments'>
           {publicAttachments.map((attachment, index) => (
             <MediaItem
               key={`${attachment.status_id}+${attachment.id}`}
@@ -46,7 +46,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
       );
     } else {
       return (
-        <p className='⁂-media-panel__empty'>
+        <p className='media-panel__empty'>
           <FormattedMessage id='media_panel.empty_message' defaultMessage='No media found.' />
         </p>
       );
@@ -55,7 +55,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
 
   return (
     <Widget
-      className='⁂-media-panel'
+      className='media-panel'
       title={<FormattedMessage id='media_panel.title' defaultMessage='Media' />}
     >
       {children}

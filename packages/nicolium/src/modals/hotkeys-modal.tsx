@@ -131,7 +131,7 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       label: (
         <FormattedMessage
           id='keyboard_shortcuts.profile'
-          defaultMessage="to open author's profile"
+          defaultMessage='to open author’s profile'
         />
       ),
     },
@@ -309,7 +309,7 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       onClose={() => {
         onClose('HOTKEYS');
       }}
-      className='⁂-hotkey-modal'
+      className='hotkey-modal'
     >
       <div className='flex flex-col text-xs lg:flex-row'>
         {columns.map((column, i) => (

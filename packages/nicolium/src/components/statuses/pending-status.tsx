@@ -62,16 +62,16 @@ const PendingStatus: React.FC<IPendingStatus> = ({
   if (!ownAccount) return null;
 
   return (
-    <div className={clsx('opacity-50', className)}>
+    <div className={clsx('pending-status', className)}>
       <div data-id={status.id}>
         <Card
           className={clsx(`status-${status.visibility}`, {
-            'py-6 sm:p-5': variant === 'rounded',
+            'pending-status__card': variant === 'rounded',
             'status-reply': !!status.in_reply_to_id,
           })}
           variant={variant}
         >
-          <div className='mb-4 flex items-start justify-between'>
+          <div className='pending-status__header'>
             <Account
               key={ownAccount.id}
               account={ownAccount}
@@ -84,7 +84,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({
           <div className='status__content-wrapper'>
             <StatusReplyMentions status={status} />
 
-            <div className='flex flex-col gap-4'>
+            <div className='pending-status__content'>
               <StatusContent status={status} collapsable />
 
               <PendingStatusMedia status={status} />

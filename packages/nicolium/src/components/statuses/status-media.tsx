@@ -47,22 +47,14 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
 
   let media: React.JSX.Element | null = null;
 
-  const renderLoadingMediaGallery = (): React.JSX.Element => (
-    <div className='media_gallery' style={{ height: '285px' }} />
-  );
+  const renderLoadingMediaGallery = (): React.JSX.Element => <div style={{ height: '285px' }} />;
 
   const renderLoadingVideoPlayer = (): React.JSX.Element => (
-    <div
-      className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat'
-      style={{ height: '285px' }}
-    />
+    <div className='status-media__loading-player' style={{ height: '285px' }} />
   );
 
   const renderLoadingAudioPlayer = (): React.JSX.Element => (
-    <div
-      className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat'
-      style={{ height: '285px' }}
-    />
+    <div className='status-media__loading-player' style={{ height: '285px' }} />
   );
 
   const openMedia = (media: Array<MediaAttachment>, index: number) => {

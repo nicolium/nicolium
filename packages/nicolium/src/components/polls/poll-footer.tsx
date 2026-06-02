@@ -72,14 +72,14 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
   }
 
   return (
-    <div className='⁂-poll__footer' data-testid='poll-footer'>
+    <div className='poll__footer' data-testid='poll-footer'>
       {!showResults && poll.multiple && (
-        <button className='⁂-poll__submit-button' onClick={handleVote}>
+        <button className='poll__submit-button' onClick={handleVote}>
           <FormattedMessage id='poll.vote' defaultMessage='Submit vote' />
         </button>
       )}
 
-      <div className='⁂-poll__footer__details'>
+      <div className='poll__footer__details'>
         {poll.non_anonymous && (
           <>
             <Tooltip text={intl.formatMessage(messages.nonAnonymous)}>
@@ -88,7 +88,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
               </span>
             </Tooltip>
 
-            <span className='⁂-separator' />
+            <span className='separator' />
           </>
         )}
 
@@ -100,7 +100,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
               </span>
             </button>
 
-            <span className='⁂-separator' />
+            <span className='separator' />
           </>
         )}
 
@@ -121,7 +121,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
               </span>
             </button>
 
-            <span className='⁂-separator' />
+            <span className='separator' />
           </>
         )}
 
@@ -129,7 +129,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
 
         {poll.expires_at !== null && (
           <>
-            <span className='⁂-separator' />
+            <span className='separator' />
             <span data-testid='poll-expiration'>{timeRemaining}</span>
           </>
         )}

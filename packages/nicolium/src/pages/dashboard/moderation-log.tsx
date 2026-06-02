@@ -37,7 +37,7 @@ const ModerationLogPage = () => {
         }
         hasMore={hasNextPage}
         onLoadMore={handleLoadMore}
-        listClassName='⁂-status-list'
+        listClassName='status-list'
       >
         {data.map((item) => item && <LogItem key={item.id} log={item} />)}
       </ScrollableList>
@@ -50,7 +50,7 @@ interface ILogItem {
 }
 
 const LogItem: React.FC<ILogItem> = ({ log }) => (
-  <div className='flex flex-col gap-2 p-4'>
+  <div className='admin-log-item'>
     <Text>{log.message}</Text>
 
     <Text theme='muted' size='xs'>

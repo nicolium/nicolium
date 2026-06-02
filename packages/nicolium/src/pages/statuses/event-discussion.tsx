@@ -93,13 +93,13 @@ const EventDiscussionPage: React.FC = () => {
   }
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='event-discussion'>
       {me && (
-        <div className='border-b border-solid border-gray-200 p-2 pt-0 dark:border-gray-800'>
+        <div className='event-discussion__compose'>
           <ComposeForm id={`reply:${status.id}`} event={status.id} transparent />
         </div>
       )}
-      <div ref={node} className='thread p-0 shadow-none sm:p-2'>
+      <div ref={node} className='event-discussion__thread'>
         <ScrollableList
           scrollKey={`eventDiscussion:${status.id}`}
           id='thread'

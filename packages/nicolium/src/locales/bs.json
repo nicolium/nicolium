@@ -26,7 +26,6 @@
   "account.follows.empty": "Ovaj korisnik još nikoga ne prati.",
   "account.follows_you": "Prati te",
   "account.header.alt": "Zaglavlje profila",
-  "account.hide_reblogs": "Sakrij ponovne objave od @{name}",
   "account.last_status": "Zadnja aktivnost",
   "account.link_verified_on": "Vlasništvo ovog linka je provjereno {date}",
   "account.locked_info": "Status privatnosti ovog računa je zaključan. Korisnik ručno provjerava ko ga može pratiti.",

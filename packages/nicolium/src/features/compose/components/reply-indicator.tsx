@@ -59,12 +59,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
   }
 
   return (
-    <div
-      className={clsx(
-        'flex max-h-72 flex-col gap-2 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800',
-        className,
-      )}
-    >
+    <div className={clsx('reply-indicator', className)}>
       {account && (
         <Account
           {...actions}
@@ -77,7 +72,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
       )}
 
       <Markup
-        className='break-words'
+        className='reply-indicator__content'
         size='sm'
         direction={getTextDirection(status.search_index)}
         tag='div'

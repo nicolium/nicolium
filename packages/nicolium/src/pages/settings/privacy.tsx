@@ -5,10 +5,8 @@ import { useMutative } from 'use-mutative';
 
 import { changeSetting as defaultChangeSetting, saveSettings } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
@@ -348,11 +346,11 @@ const Privacy: React.FC<ISettingsPage> = ({
           </ListItem>
         </List>
 
-        <FormActions>
-          <Button type='submit'>
+        <div className='privacy__actions form__actions'>
+          <button type='submit'>
             <FormattedMessage id='url_privacy.save' defaultMessage='Save' />
-          </Button>
-        </FormActions>
+          </button>
+        </div>
       </Form>
     </Column>
   );

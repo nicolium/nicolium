@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { exportFollows, exportBlocks, exportMutes } from '@/actions/export-data';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
-import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 
@@ -23,33 +20,26 @@ const CSVExporter: React.FC<ICSVExporter> = ({ inputLabel, inputHint, submitText
   const handleClick: React.MouseEventHandler = () => {
     setIsLoading(true);
     action()
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
+      .then(() => setIsLoading(false))
+      .catch(() => setIsLoading(false));
   };
 
   return (
     <Form>
-      <Text size='xl' weight='bold'>
-        {inputLabel}
-      </Text>
-      <Text theme='muted'>{inputHint}</Text>
+      <p className='csv-exporter__label'>{inputLabel}</p>
+      <p className='csv-exporter__hint'>{inputHint}</p>
 
-      <FormActions>
-        <Button theme='primary' onClick={handleClick} disabled={isLoading}>
+      <div className='csv-exporter__actions form__actions'>
+        <button onClick={handleClick} disabled={isLoading}>
           {submitText}
-        </Button>
-      </FormActions>
+        </button>
+      </div>
     </Form>
   );
 };
 
 const messages = defineMessages({
   heading: { id: 'column.export_data', defaultMessage: 'Export data' },
-  submit: { id: 'export_data.actions.export', defaultMessage: 'Export' },
 });
 
 const ExportDataPage = () => {

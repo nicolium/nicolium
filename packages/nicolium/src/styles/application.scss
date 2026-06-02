@@ -8,10 +8,7 @@
 @use 'markup';
 
 // COMPONENTS
-@use 'components/modal';
-@use 'components/compose-form';
 @use 'components/status';
-@use 'components/detailed-status';
 @use 'components/video-player';
 @use 'components/icon';
 @use 'forms';
@@ -20,4 +17,20 @@
 @use 'mfm';
 @use 'ptr';
 
-@use 'new/index';
+@use 'components';
+@use 'layout';
+@use 'modals';
+@use 'panels';
+@use 'accounts';
+@use 'statuses';
+@use 'timelines';
+@use 'compose';
+@use 'authentication';
+@use 'admin';
+@use 'drive';
+@use 'chats';
+@use 'events';
+@use 'directory';
+@use 'settings';
+@use 'search';
+@use 'groups';

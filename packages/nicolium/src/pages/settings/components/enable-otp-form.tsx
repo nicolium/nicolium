@@ -1,17 +1,12 @@
-import { useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import React, { useState, useEffect } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
-import FormActions from '@/components/ui/form-actions';
 import Spinner from '@/components/ui/spinner';
-import Text from '@/components/ui/text';
 import { useClient } from '@/hooks/use-client';
 import toast from '@/toast';
 
 const messages = defineMessages({
-  mfaCancelButton: { id: 'column.mfa_cancel', defaultMessage: 'Cancel' },
-  mfaSetupButton: { id: 'column.mfa_setup', defaultMessage: 'Proceed to setup' },
   codesFail: { id: 'security.codes.fail', defaultMessage: 'Failed to fetch backup codes' },
 });
 
@@ -22,7 +17,6 @@ interface IEnableOtpForm {
 
 const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupProceedClick }) => {
   const intl = useIntl();
-  const navigate = useNavigate();
   const client = useClient();
 
   const [backupCodes, setBackupCodes] = useState<Array<string>>([]);
@@ -39,52 +33,42 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
   }, []);
 
   return (
-    <div className='flex flex-col gap-4'>
-      <div className='flex flex-col gap-4'>
-        <Text theme='muted'>
-          <FormattedMessage
-            id='mfa.setup_warning'
-            defaultMessage="Write these codes down or save them somewhere secure - otherwise you won't see them again. If you lose access to your 2FA app and recovery codes you'll be locked out of your account."
-          />
-        </Text>
+    <div className='enable-otp-form'>
+      <p className='enable-otp-form__warning'>
+        <FormattedMessage
+          id='mfa.setup_warning'
+          defaultMessage='Write these codes down or save them somewhere secure - otherwise you won’t see them again. If you lose access to your 2FA app and recovery codes you’ll be locked out of your account.'
+        />
+      </p>
 
-        <div className='rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-800'>
-          <div className='flex flex-col gap-3'>
-            <Text weight='medium' align='center'>
-              <FormattedMessage id='mfa.setup_recoverycodes' defaultMessage='Recovery codes' />
-            </Text>
+      <div className='enable-otp-form__codes-box'>
+        <p className='enable-otp-form__codes-title'>
+          <FormattedMessage id='mfa.setup_recoverycodes' defaultMessage='Recovery codes' />
+        </p>
 
-            {backupCodes.length > 0 ? (
-              <div className='grid grid-cols-2 gap-3 rounded-lg text-center'>
-                {backupCodes.map((code, i) => (
-                  <Text key={i} theme='muted' size='sm'>
-                    {code}
-                  </Text>
-                ))}
-              </div>
-            ) : (
-              <Spinner />
-            )}
+        {backupCodes.length > 0 ? (
+          <div className='enable-otp-form__codes-grid'>
+            {backupCodes.map((code) => (
+              <p key={code}>{code}</p>
+            ))}
           </div>
-        </div>
+        ) : (
+          <Spinner />
+        )}
       </div>
 
       {!displayOtpForm && (
-        <FormActions>
-          <Button
-            theme='tertiary'
-            text={intl.formatMessage(messages.mfaCancelButton)}
-            onClick={() => navigate({ to: '/settings/security' })}
-          />
+        <div className='enable-otp-form__actions form__actions'>
+          <Link to='/settings/security'>
+            <FormattedMessage id='column.mfa_cancel' defaultMessage='Cancel' />
+          </Link>
 
           {backupCodes.length > 0 && (
-            <Button
-              theme='primary'
-              text={intl.formatMessage(messages.mfaSetupButton)}
-              onClick={handleSetupProceedClick}
-            />
+            <button type='button' onClick={handleSetupProceedClick}>
+              <FormattedMessage id='column.mfa_setup' defaultMessage='Proceed to setup' />
+            </button>
           )}
-        </FormActions>
+        </div>
       )}
     </div>
   );

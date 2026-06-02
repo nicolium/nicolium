@@ -11,7 +11,7 @@ const ShoutboxPanel = () => {
 
   return (
     <Widget
-      className='⁂-shoutbox-widget'
+      className='shoutbox-widget'
       title={
         <FormattedMessage
           id='chat_list_item_shoutbox'

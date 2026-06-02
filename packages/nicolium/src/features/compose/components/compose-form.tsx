@@ -65,7 +65,7 @@ import type { Emoji } from '@/features/emoji';
 import type { LinkNode } from '@lexical/link';
 
 const messages = defineMessages({
-  placeholder: { id: 'compose_form.placeholder', defaultMessage: "What's on your mind?" },
+  placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What’s on your mind?' },
   pollPlaceholder: { id: 'compose_form.poll.placeholder', defaultMessage: 'Add a poll topic…' },
   eventPlaceholder: { id: 'compose_form.event.placeholder', defaultMessage: 'Post to this event' },
   publish: { id: 'compose_form.publish', defaultMessage: 'Post' },
@@ -109,14 +109,14 @@ const ComposeButton: React.FC<IComposeButton> = ({
   const intl = useIntl();
 
   return (
-    <div className='⁂-compose-form__send-button__container'>
-      <button {...props} disabled={disabled} className='⁂-compose-form__send-button'>
+    <div className='compose-form__send-button__container'>
+      <button {...props} disabled={disabled} className='compose-form__send-button'>
         {icon ? <Icon src={icon} /> : null}
         <span>{text}</span>
       </button>
       <DropdownMenu items={actionsMenu} placement='bottom' disabled={disabled}>
         <button
-          className='⁂-compose-form__send-button__actions'
+          className='compose-form__send-button__actions'
           title={intl.formatMessage(messages.more)}
         >
           <SvgIcon src={iconCaretDown} aria-hidden />
@@ -328,7 +328,7 @@ const ComposeForm = <ID extends string>({
 
   const renderButtons = useCallback(
     () => (
-      <div className='⁂-compose-form__buttons'>
+      <div className='compose-form__buttons'>
         <UploadButtonContainer composeId={id} />
         {features.drive && <DriveButton composeId={id} />}
         <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
@@ -353,7 +353,7 @@ const ComposeForm = <ID extends string>({
       compose.showLocationPicker);
 
   const composeModifiers = showModifiers && (
-    <div className='⁂-compose-form__modifiers'>
+    <div className='compose-form__modifiers'>
       <UploadForm composeId={id} onSubmit={handleSubmit} />
       <PollForm composeId={id} />
       <ScheduleForm composeId={id} />
@@ -417,9 +417,9 @@ const ComposeForm = <ID extends string>({
 
   return (
     <form
-      className={clsx('⁂-compose-form', {
-        '⁂-compose-form--transparent': transparent,
-        '⁂-compose-form--with-avatar': withAvatar,
+      className={clsx('compose-form', {
+        'compose-form--transparent': transparent,
+        'compose-form--with-avatar': withAvatar,
       })}
       ref={formRef}
       onClick={handleClick}
@@ -452,7 +452,7 @@ const ComposeForm = <ID extends string>({
       {!shouldCondense && !event && !group && <ReplyMentions composeId={id} />}
 
       {selectButtons.length > 0 && (
-        <div className='⁂-compose-form__select-buttons'>{selectButtons}</div>
+        <div className='compose-form__select-buttons'>{selectButtons}</div>
       )}
 
       {features.spoilers && (
@@ -460,12 +460,12 @@ const ComposeForm = <ID extends string>({
       )}
 
       <div>
-        <Suspense fallback={<div className='⁂-compose-form__editor-placeholder' />}>
+        <Suspense fallback={<div className='compose-form__editor-placeholder' />}>
           <ComposeEditor
             key={modifiedLanguage}
             ref={editorRef}
-            className='⁂-compose-form__editor'
-            placeholderClassName='⁂-compose-form__editor__placeholder'
+            className='compose-form__editor'
+            placeholderClassName='compose-form__editor__placeholder'
             composeId={id}
             condensed={condensed}
             eventDiscussion={!!event}
@@ -493,15 +493,15 @@ const ComposeForm = <ID extends string>({
       <PreviewComposeContainer composeId={id} />
 
       <div
-        className={clsx('⁂-compose-form__footer', {
-          '⁂-compose-form__footer--condensed': condensed,
+        className={clsx('compose-form__footer', {
+          'compose-form__footer--condensed': condensed,
         })}
       >
         {renderButtons()}
 
-        <div className='⁂-compose-form__actions'>
+        <div className='compose-form__actions'>
           {maxTootChars && (
-            <div className='⁂-compose-form__counter'>
+            <div className='compose-form__counter'>
               {!compact && <TextCharacterCounter max={maxTootChars} text={text} />}
               <VisualCharacterCounter max={maxTootChars} text={text} />
             </div>

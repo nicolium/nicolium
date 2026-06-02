@@ -19,7 +19,7 @@ const FollowedTagsPage = () => {
   const emptyMessage = (
     <FormattedMessage
       id='empty_column.followed_tags'
-      defaultMessage="You haven't followed any hashtag yet."
+      defaultMessage='You haven’t followed any hashtag yet.'
     />
   );
 
@@ -33,7 +33,7 @@ const FollowedTagsPage = () => {
         onLoadMore={fetchNextPage}
         placeholderComponent={PlaceholderHashtag}
         placeholderCount={5}
-        itemClassName='pb-3'
+        itemClassName='followed-tags-item'
       >
         {tags.map((tag) => (
           <Hashtag key={tag.name} hashtag={tag} />

@@ -10,7 +10,7 @@ const SettingsSections = () => {
   const offsetTop = wcoRect && wcoRect.x > 0 ? 16 + wcoRect.y : 16;
 
   return (
-    <div className='⁂-layout__settings-sections'>
+    <div className='layout__settings-sections'>
       <StickyBox offsetTop={offsetTop}>
         <SettingsPage />
       </StickyBox>

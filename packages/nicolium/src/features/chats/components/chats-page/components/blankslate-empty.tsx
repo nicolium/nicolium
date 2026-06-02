@@ -5,13 +5,13 @@ import Button from '@/components/ui/button';
 
 /** To display on the chats main page when no message is selected. */
 const BlankslateEmpty: React.FC = () => (
-  <div className='⁂-chats-page-blankslate'>
-    <div className='⁂-chats-page-blankslate__content'>
-      <h2 className='⁂-chats-page-blankslate__title'>
+  <div className='chats-page-blankslate'>
+    <div className='chats-page-blankslate__content'>
+      <h2 className='chats-page-blankslate__title'>
         <FormattedMessage id='chats.main.blankslate.title' defaultMessage='No messages yet' />
       </h2>
 
-      <p className='⁂-chats-page-blankslate__body'>
+      <p className='chats-page-blankslate__body'>
         <FormattedMessage
           id='chats.main.blankslate.subtitle'
           defaultMessage='Search for someone to chat with'

@@ -98,7 +98,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
       </span>
 
       <div
-        className={clsx('⁂-scroll-top-button', { '⁂-scroll-top-button--visible': visible })}
+        className={clsx('scroll-top-button', { 'scroll-top-button--visible': visible })}
         aria-hidden={!visible}
       >
         <button onClick={handleClick} tabIndex={visible ? 0 : -1} aria-label={buttonMessage}>

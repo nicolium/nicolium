@@ -33,15 +33,15 @@ const DropdownMenuModal: React.FC<BaseModalProps & DropdownMenuModalProps> = ({
   return (
     <div
       id='dropdown-menu-modal'
-      className={clsx('⁂-dropdown-menu-modal', {
-        '⁂-dropdown-menu-modal--first-render': firstRender,
+      className={clsx('dropdown-menu-modal', {
+        'dropdown-menu-modal--first-render': firstRender,
       })}
       role='presentation'
       onClick={handleClickOutside}
     >
       <div>
         {content}
-        <div className='⁂-dropdown-menu-modal__close'>
+        <div className='dropdown-menu-modal__close'>
           <button onClick={handleClick}>
             <FormattedMessage id='lightbox.close' defaultMessage='Close' />
           </button>

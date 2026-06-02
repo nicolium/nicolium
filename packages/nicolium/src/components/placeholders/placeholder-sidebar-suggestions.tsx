@@ -9,10 +9,10 @@ const PlaceholderSidebarSuggestions = ({ limit }: { limit: number }) => {
   return (
     <>
       {new Array(limit).fill(undefined).map((_, idx) => (
-        <div key={idx} className='flex w-full items-center gap-2 no-reduce-motion:animate-pulse'>
-          <div className='block size-9 rounded-full bg-primary-200 text-center dark:bg-primary-700' />
+        <div key={idx} className='sidebar-suggestion--placeholder'>
+          <div className='sidebar-suggestion--placeholder__avatar' />
 
-          <div className='flex flex-col text-primary-200 dark:text-primary-700'>
+          <div className='sidebar-suggestion--placeholder__name'>
             <p>{generateText(length)}</p>
             <p>{generateText(acctLength)}</p>
           </div>

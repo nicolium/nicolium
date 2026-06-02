@@ -238,7 +238,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
             label={
               <FormattedMessage
                 id='preferences.fields.system_font.label'
-                defaultMessage="Use system's default font"
+                defaultMessage='Use system’s default font'
               />
             }
           >

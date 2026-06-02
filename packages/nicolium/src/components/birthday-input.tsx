@@ -74,11 +74,9 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
     nextYearButtonDisabled: boolean;
     date: Date;
   }) => (
-    <div className='flex flex-col gap-2'>
-      <div className='flex items-center justify-between'>
+    <div className='birthday-input__header'>
+      <div className='birthday-input__months'>
         <IconButton
-          className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
-          iconClassName='size-4'
           src={iconCaretLeft}
           onClick={decreaseMonth}
           disabled={prevMonthButtonDisabled}
@@ -87,8 +85,6 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         />
         <FormattedDate value={date} month='long' />
         <IconButton
-          className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
-          iconClassName='size-4'
           src={iconCaretRight}
           onClick={increaseMonth}
           disabled={nextMonthButtonDisabled}
@@ -96,10 +92,8 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
           title={intl.formatMessage(messages.nextMonth)}
         />
       </div>
-      <div className='flex items-center justify-between'>
+      <div className='birthday-input__years'>
         <IconButton
-          className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
-          iconClassName='size-4'
           src={iconCaretLeft}
           onClick={decreaseYear}
           disabled={prevYearButtonDisabled}
@@ -108,8 +102,6 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         />
         <FormattedDate value={date} year='numeric' />
         <IconButton
-          className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
-          iconClassName='size-4'
           src={iconCaretRight}
           onClick={increaseYear}
           disabled={nextYearButtonDisabled}
@@ -129,7 +121,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
   };
 
   return (
-    <div className='relative mt-1 rounded-md shadow-sm'>
+    <div className='birthday-input__container'>
       <DatePicker
         selected={selected}
         onChange={handleChange}

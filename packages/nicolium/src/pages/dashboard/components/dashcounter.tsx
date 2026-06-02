@@ -18,7 +18,7 @@ const DashCounter: React.FC<IDashCounter> = ({ count, label, percent = false, ..
 
   const body = (
     <>
-      <p className='⁂-dashcounter__number'>
+      <p className='dashcounter__number'>
         <FormattedNumber
           value={count}
           style={percent ? 'unit' : undefined}
@@ -26,16 +26,16 @@ const DashCounter: React.FC<IDashCounter> = ({ count, label, percent = false, ..
           numberingSystem='latn'
         />
       </p>
-      <p className='⁂-dashcounter__label'>{label}</p>
+      <p className='dashcounter__label'>{label}</p>
     </>
   );
 
   if (!('to' in rest)) {
-    return <span className='⁂-dashcounter'>{body}</span>;
+    return <span className='dashcounter'>{body}</span>;
   }
 
   return (
-    <Link className='⁂-dashcounter' {...rest}>
+    <Link className='dashcounter' {...rest}>
       {body}
     </Link>
   );
@@ -47,7 +47,7 @@ interface IDashCounters {
 
 /** Wrapper container for dash counters. */
 const DashCounters: React.FC<IDashCounters> = ({ children }) => (
-  <div className='⁂-dashboard__counters'>{children}</div>
+  <div className='dashboard__counters'>{children}</div>
 );
 
 export { DashCounter, DashCounters };

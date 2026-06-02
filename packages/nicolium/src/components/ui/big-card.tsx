@@ -10,12 +10,12 @@ interface IBigCard {
 
 const BigCard: React.FC<IBigCard> = ({ title, subtitle, children }) => (
   <Card variant='rounded' size='xl'>
-    <div className='⁂-big-card__header'>
+    <div className='big-card__header'>
       <h1>{title}</h1>
       {subtitle && <p>{subtitle}</p>}
     </div>
 
-    <div className='⁂-big-card__body'>{children}</div>
+    <div className='big-card__body'>{children}</div>
   </Card>
 );
 

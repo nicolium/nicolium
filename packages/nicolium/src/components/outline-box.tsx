@@ -8,7 +8,7 @@ interface IOutlineBox extends React.HTMLAttributes<HTMLDivElement> {
 
 /** Wraps children in a container with an outline. */
 const OutlineBox: React.FC<IOutlineBox> = ({ children, className, ...rest }) => (
-  <div className={clsx('⁂-outline-box', className)} {...rest}>
+  <div className={clsx('outline-box', className)} {...rest}>
     {children}
   </div>
 );

@@ -37,7 +37,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
 
   if (to.length === 0) {
     return (
-      <a href='#' className='mb-1 text-sm text-gray-700 dark:text-gray-600' onClick={handleClick}>
+      <a href='#' className='reply-mentions' onClick={handleClick}>
         <FormattedMessage id='reply_mentions.reply_empty' defaultMessage='Replying to post' />
       </a>
     );
@@ -46,10 +46,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const accounts = to.slice(0, 2).map((acct: string) => {
     const username = acct.split('@')[0];
     return (
-      <span
-        key={acct}
-        className='inline-block text-primary-600 no-underline [direction:ltr] hover:text-primary-700 hover:underline dark:text-primary-400 dark:hover:text-primary-400'
-      >
+      <span key={acct} className='reply-mentions__account'>
         @{username}
       </span>
     );
@@ -66,7 +63,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   }
 
   return (
-    <a href='#' className='mb-1 text-sm text-gray-700 dark:text-gray-600' onClick={handleClick}>
+    <a href='#' className='reply-mentions' onClick={handleClick}>
       <FormattedMessage
         id='reply_mentions.reply'
         defaultMessage='Replying to {accounts}'

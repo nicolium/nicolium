@@ -89,7 +89,7 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, ma
   }
 
   return (
-    <span className='⁂-animated-number'>
+    <span className='animated-number'>
       {transitions((style, item) => (
         <animated.span
           key={item}

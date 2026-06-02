@@ -106,19 +106,19 @@ const StepSlider: React.FC<IStepSlider> = ({
   };
 
   return (
-    <div className='⁂-step-slider' onMouseDown={handleMouseDown} ref={node}>
-      <div className='⁂-step-slider__track' />
-      <div className='⁂-step-slider__fill' style={{ width: `${(value / (steps - 1)) * 100}%` }} />
+    <div className='step-slider' onMouseDown={handleMouseDown} ref={node}>
+      <div className='step-slider__track' />
+      <div className='step-slider__fill' style={{ width: `${(value / (steps - 1)) * 100}%` }} />
       {[...Array(steps).fill(undefined)].map((_, step) => (
         <span
           key={step}
-          className='⁂-step-slider__step'
+          className='step-slider__step'
           style={{ left: `${(step / (steps - 1)) * 100}%` }}
         />
       ))}
       <span
         id={id}
-        className='⁂-step-slider__thumb'
+        className='step-slider__thumb'
         tabIndex={0}
         role='slider'
         aria-valuemin={0}

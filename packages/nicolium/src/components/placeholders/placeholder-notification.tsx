@@ -6,25 +6,25 @@ import PlaceholderStatusContent from './placeholder-status-content';
 
 /** Fake notification to display while data is loading. */
 const PlaceholderNotification = React.memo(() => (
-  <div className='bg-white p-4 black:bg-black dark:bg-primary-900'>
-    <div className='w-full no-reduce-motion:animate-pulse'>
-      <div className='mb-2'>
+  <div className='notification--placeholder'>
+    <div className='notification--placeholder__wrapper'>
+      <div className='notification--placeholder__content'>
         <PlaceholderStatusContent minLength={20} maxLength={20} />
       </div>
 
       <div>
-        <div className='flex items-center gap-3'>
-          <div className='shrink-0'>
+        <div className='notification--placeholder__account'>
+          <div className='notification--placeholder__avatar'>
             <PlaceholderAvatar size={48} />
           </div>
 
-          <div className='min-w-0 flex-1'>
+          <div className='notification--placeholder__name'>
             <PlaceholderDisplayName minLength={3} maxLength={25} />
           </div>
         </div>
       </div>
 
-      <div className='mt-4'>
+      <div className='notification--placeholder__body'>
         <PlaceholderStatusContent minLength={5} maxLength={120} />
       </div>
     </div>

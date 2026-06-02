@@ -15,13 +15,13 @@ interface IGroupPolicy {
 const GroupPrivacy = ({ group }: IGroupPolicy) => (
   <Popover
     content={
-      <div className='⁂-group-privacy__popover'>
-        <div className='⁂-group-privacy__popover__icon'>
+      <div className='group-privacy__popover'>
+        <div className='group-privacy__popover__icon'>
           <Icon src={group.locked ? iconLock : iconGlobe} />
         </div>
 
-        <div className='⁂-group-privacy__popover__body'>
-          <p className='⁂-group-privacy__popover__title'>
+        <div className='group-privacy__popover__body'>
+          <p className='group-privacy__popover__title'>
             {group.locked ? (
               <FormattedMessage id='group.privacy.locked.full' defaultMessage='Private group' />
             ) : (
@@ -29,7 +29,7 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
             )}
           </p>
 
-          <p className='⁂-group-privacy__popover__text'>
+          <p className='group-privacy__popover__text'>
             {group.locked ? (
               <FormattedMessage
                 id='group.privacy.locked.info'
@@ -46,7 +46,7 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
       </div>
     }
   >
-    <div className='⁂-group-privacy' data-testid='group-privacy'>
+    <div className='group-privacy' data-testid='group-privacy'>
       <Icon src={group.locked ? iconLock : iconGlobe} />
 
       <p>

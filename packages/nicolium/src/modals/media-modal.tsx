@@ -280,18 +280,18 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   return (
     <div
-      className={clsx('⁂-media-modal', { '⁂-media-modal--fullscreen': isFullScreen })}
+      className={clsx('media-modal', { 'media-modal--fullscreen': isFullScreen })}
       role='presentation'
     >
       <div
         {...bind()}
         onClick={handleClickOutside}
-        className='⁂-media-modal__content'
+        className='media-modal__content'
         ref={handleRef}
       >
         <animated.div
           style={wrapperStyles}
-          className='⁂-media-modal__closer'
+          className='media-modal__closer'
           role='presentation'
           onClick={(e) => {
             e.preventDefault();
@@ -302,7 +302,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           {content}
         </animated.div>
 
-        <div className='⁂-media-modal__navigation'>
+        <div className='media-modal__navigation'>
           <div
             className={clsx(
               'pointer-events-auto z-10 flex flex-[0_0_60px] items-center justify-between p-4 transition-opacity',

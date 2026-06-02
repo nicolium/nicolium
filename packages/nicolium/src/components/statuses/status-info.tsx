@@ -16,7 +16,7 @@ const StatusInfo: React.FC<IStatusInfo> = ({ avatarSize, icon, text, className, 
 
   return (
     <div
-      className={clsx('⁂-status-info', className)}
+      className={clsx('status-info', className)}
       onClick={onClick}
       style={{
         marginLeft: Math.max(0, avatarSize - 25),

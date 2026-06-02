@@ -23,7 +23,7 @@ const messages = defineMessages({
   },
   userNotFoundError: {
     id: 'remote_interaction.user_not_found.error',
-    defaultMessage: "Couldn't find given user",
+    defaultMessage: 'Couldn’t find given user',
   },
 });
 

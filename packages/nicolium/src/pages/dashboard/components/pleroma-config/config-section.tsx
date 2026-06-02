@@ -48,7 +48,7 @@ const ConfigGroupEditor = memo(
           onSave(description, draftValue);
         }}
       >
-        <fieldset className='⁂-admin-config__fieldset' disabled={isPending}>
+        <fieldset className='admin-config__fieldset' disabled={isPending}>
           <ConfigValueEditor
             node={description}
             value={draftValue}
@@ -59,7 +59,7 @@ const ConfigGroupEditor = memo(
 
         <FormActions>
           {!isDirty ? (
-            <p className='⁂-admin-config__feedback'>
+            <p className='admin-config__feedback'>
               <FormattedMessage
                 id='admin.pleroma_config.no_changes'
                 defaultMessage='No changes yet'
@@ -70,7 +70,7 @@ const ConfigGroupEditor = memo(
           <button
             type='button'
             disabled={isPending || !isDirty}
-            className='⁂-admin-config__reset-button'
+            className='admin-config__reset-button'
             onClick={() => {
               setDraftValue(currentValue);
               setHasError(false);
@@ -82,7 +82,7 @@ const ConfigGroupEditor = memo(
           <button
             type='submit'
             disabled={isPending || hasError || !isDirty}
-            className='⁂-admin-config__submit-button'
+            className='admin-config__submit-button'
           >
             <FormattedMessage id='admin.pleroma_config.save' defaultMessage='Save' />
           </button>
@@ -112,12 +112,12 @@ const ConfigSection = memo(
     const [expandedKey, setExpandedKey] = useState<string | null>(null);
 
     return (
-      <section className='⁂-admin-config__section'>
-        <div className='⁂-admin-config__section-header'>
-          <h2 className='⁂-admin-config__section-title'>{group}</h2>
+      <section className='admin-config__section'>
+        <div className='admin-config__section-header'>
+          <h2 className='admin-config__section-title'>{group}</h2>
         </div>
 
-        <div className='⁂-admin-config__accordion-list'>
+        <div className='admin-config__accordion-list'>
           {descriptions.map((description) => {
             const accordionKey =
               description.key ?? description.label ?? `${group}-${description.type}`;
@@ -129,13 +129,13 @@ const ConfigSection = memo(
                 expanded={expandedKey === accordionKey}
                 onToggle={(open) => setExpandedKey(open ? accordionKey : null)}
                 headline={
-                  <div className='⁂-admin-config__accordion-headline'>
-                    <p className='⁂-admin-config__headline-title'>
+                  <div className='admin-config__accordion-headline'>
+                    <p className='admin-config__headline-title'>
                       {description.label ?? description.key}
                     </p>
 
                     {description.description ? (
-                      <p className='⁂-admin-config__meta'>{description.description}</p>
+                      <p className='admin-config__meta'>{description.description}</p>
                     ) : null}
                   </div>
                 }

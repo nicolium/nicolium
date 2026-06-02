@@ -38,28 +38,28 @@ const Widget: React.FC<IWidget> = ({
   const widgetId = useMemo(() => crypto.randomUUID(), []);
 
   return (
-    <div className={clsx('⁂-widget', className)} aria-labelledby={`widget-header-${widgetId}`}>
+    <div className={clsx('widget', className)} aria-labelledby={`widget-header-${widgetId}`}>
       {(title ?? action ?? ('onActionClick' in props || 'to' in props)) && (
-        <div className='⁂-widget__header'>
+        <div className='widget__header'>
           {title && <h1 id={`widget-header-${widgetId}`}>{title}</h1>}
           {action ??
             ('onActionClick' in props ? (
               <IconButton
-                className='⁂-widget__icon'
+                className='widget__icon'
                 src={actionIcon}
                 onClick={props.onActionClick}
                 title={actionTitle}
               />
             ) : (
               'to' in props && (
-                <Link className='⁂-widget__icon' title={actionTitle} {...props}>
+                <Link className='widget__icon' title={actionTitle} {...props}>
                   <Icon src={actionIcon} aria-hidden />
                 </Link>
               )
             ))}
         </div>
       )}
-      <div className='⁂-widget__body'>{children}</div>
+      <div className='widget__body'>{children}</div>
     </div>
   );
 };

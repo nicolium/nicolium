@@ -21,19 +21,19 @@ const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({
   const title = getTitle(ticker);
 
   return (
-    <div className='flex flex-col'>
-      <div className='mb-1.5 flex items-center'>
+    <div className='detailed-crypto-address'>
+      <div className='detailed-crypto-address__label'>
         <CryptoIcon
-          className='mr-2.5 flex w-6 items-start justify-center'
+          className='detailed-crypto-address__icon'
           imgClassName='w-full'
           ticker={ticker}
           title={title}
         />
-        <div className='font-bold'>{title || ticker.toUpperCase()}</div>
+        <div>{title || ticker.toUpperCase()}</div>
       </div>
-      {note && <div className='mb-2.5'>{note}</div>}
-      <div className='mb-3 flex items-center justify-center p-2.5'>
-        <QRCode className='rounded-lg' value={address} includeMargin />
+      {note && <div className='detailed-crypto-address__note'>{note}</div>}
+      <div className='detailed-crypto-address__qr'>
+        <QRCode value={address} includeMargin />
       </div>
 
       <CopyableInput value={address} />

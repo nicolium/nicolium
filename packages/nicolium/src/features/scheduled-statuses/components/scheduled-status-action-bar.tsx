@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import { useCancelScheduledStatusMutation } from '@/queries/statuses/scheduled-statuses';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -49,10 +48,10 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
   };
 
   return (
-    <div className='flex justify-end'>
-      <Button theme='danger' size='sm' onClick={handleCancelClick}>
+    <div className='scheduled-status__actions'>
+      <button onClick={handleCancelClick}>
         <FormattedMessage id='scheduled_status.cancel' defaultMessage='Cancel' />
-      </Button>
+      </button>
     </div>
   );
 };

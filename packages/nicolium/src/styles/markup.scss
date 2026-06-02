@@ -46,6 +46,11 @@ $vertical-lr-langs: mn-mong, mnmong;
     &:hover {
       text-decoration: underline;
     }
+
+    /* User setting to underline links */
+    body.underline-links & {
+      text-decoration: underline;
+    }
   }
 
   strong {
@@ -231,21 +236,11 @@ $vertical-lr-langs: mn-mong, mnmong;
 
       writing-mode: vertical-lr;
 
-      &.⁂-status-content--spoiler-expanded {
+      &.status-content--spoiler-expanded {
         overflow-x: auto;
         max-width: unset;
         max-height: 50vh;
       }
-    }
-  }
-}
-
-/* User setting to underline links */
-body.underline-links {
-  [data-markup],
-  [data-lexical-editor] {
-    a {
-      text-decoration: underline;
     }
   }
 }

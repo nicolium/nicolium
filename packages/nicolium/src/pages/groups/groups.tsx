@@ -20,13 +20,13 @@ const Groups: React.FC = () => {
   };
 
   const renderBlankslate = () => (
-    <div className='⁂-groups-empty'>
-      <div className='⁂-groups-empty__content'>
-        <h2 className='⁂-groups-empty__title'>
+    <div className='groups-empty'>
+      <div className='groups-empty__content'>
+        <h2 className='groups-empty__title'>
           <FormattedMessage id='groups.empty.title' defaultMessage='No groups yet' />
         </h2>
 
-        <p className='⁂-groups-empty__subtitle'>
+        <p className='groups-empty__subtitle'>
           <FormattedMessage
             id='groups.empty.subtitle'
             defaultMessage='Start discovering groups to join or create your own.'
@@ -34,17 +34,17 @@ const Groups: React.FC = () => {
         </p>
       </div>
 
-      <Button className='⁂-groups-empty__button' onClick={createGroup} theme='secondary'>
+      <Button className='groups-empty__button' onClick={createGroup} theme='secondary'>
         <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
       </Button>
     </div>
   );
 
   return (
-    <div className='⁂-groups-page'>
+    <div className='groups-page'>
       {!(!isFetching && groupIds.length === 0) && (
         <Button
-          className='⁂-groups-page__create-button'
+          className='groups-page__create-button'
           icon={iconUsersThree}
           onClick={createGroup}
           theme='secondary'
@@ -57,7 +57,7 @@ const Groups: React.FC = () => {
       <ScrollableList
         scrollKey='groups'
         emptyMessageText={renderBlankslate()}
-        itemClassName='⁂-groups-page__item'
+        itemClassName='groups-page__item'
         isLoading={isFetching}
         showLoading={isLoading}
         placeholderComponent={PlaceholderGroupCard}

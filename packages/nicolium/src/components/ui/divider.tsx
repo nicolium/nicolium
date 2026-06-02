@@ -11,13 +11,13 @@ interface IDivider {
 
 /** Divider */
 const Divider = ({ text, textSize = 'md' }: IDivider) => (
-  <div className='⁂-divider' data-testid='divider'>
+  <div className='divider' data-testid='divider'>
     <div aria-hidden='true'>
       <div />
     </div>
 
     {text && (
-      <div className='⁂-divider__text'>
+      <div className='divider__text'>
         <span data-testid='divider-text'>
           <Text size={textSize} tag='span' theme='inherit'>
             {text}

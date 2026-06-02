@@ -7,11 +7,10 @@ import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
 import OutlineBox from '@/components/outline-box';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import TagInput from '@/components/ui/tag-input';
-import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { useDeactivateUserModal, useDeleteUserModal } from '@/hooks/use-admin-modals';
@@ -230,10 +229,6 @@ const AdminAccountPage: React.FC = () => {
     );
   }
 
-  const handleAdminFE = () => {
-    window.open(`/pleroma/admin/#/users/${account.id}/`, '_blank');
-  };
-
   const handleVerifiedChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { checked } = e.target;
 
@@ -366,7 +361,7 @@ const AdminAccountPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.columnHeading, { acct: account.acct })}>
-      <div className='flex flex-col gap-4'>
+      <div className='admin-account-page'>
         <OutlineBox>
           <Account account={account} showAccountHoverCard={false} hideActions />
         </OutlineBox>
@@ -381,7 +376,7 @@ const AdminAccountPage: React.FC = () => {
                 />
               }
             >
-              <div className='w-auto'>
+              <div className='admin-account-page__role-picker'>
                 <StaffRolePicker account={account} />
               </div>
             </ListItem>
@@ -435,12 +430,12 @@ const AdminAccountPage: React.FC = () => {
                 />
               }
             >
-              <div className='grow'>
-                <div className='flex w-full items-center gap-2'>
+              <div className='admin-account-page__badges'>
+                <div className='admin-account-page__badges-row'>
                   <BadgeInput badges={badges} onChange={setBadges} />
-                  <Button onClick={handleSaveBadges}>
+                  <button onClick={handleSaveBadges}>
                     <FormattedMessage id='common.save' defaultMessage='Save' />
-                  </Button>
+                  </button>
                 </div>
               </div>
             </ListItem>
@@ -542,22 +537,27 @@ const AdminAccountPage: React.FC = () => {
           />
         </List>
 
-        <Text theme='subtle' size='xs'>
+        <p className='admin-account-page__id'>
           <FormattedMessage
             id='account_moderation_modal.info.id'
             defaultMessage='ID: {id}'
             values={{ id: account.id }}
           />
-        </Text>
+        </p>
 
         {features.version.software === PLEROMA && (
-          <div className='flex justify-center'>
-            <Button icon={iconArrowSquareOut} size='sm' theme='secondary' onClick={handleAdminFE}>
+          <div className='admin-account-page__admin-fe'>
+            <a
+              href={`/pleroma/admin/#/users/${account.id}/`}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <Icon src={iconArrowSquareOut} aria-hidden />
               <FormattedMessage
                 id='account_moderation_modal.admin_fe'
                 defaultMessage='Open in AdminFE'
               />
-            </Button>
+            </a>
           </div>
         )}
       </div>

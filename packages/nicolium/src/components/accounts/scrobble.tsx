@@ -66,13 +66,13 @@ ${scrobble.external_link ? scrobble.external_link : ''}`.trim(),
   return (
     <div
       className={clsx(
-        '⁂-account-info__details__item ⁂-recent-scrobble',
-        animate && '⁂-recent-scrobble--animate',
+        'account-info__details__item recent-scrobble',
+        animate && 'recent-scrobble--animate',
       )}
     >
       <Icon src={iconMusicNotesSimple} />
 
-      <div className='⁂-recent-scrobble__text'>
+      <div className='recent-scrobble__text'>
         <p ref={textRef}>
           <FormattedMessage
             id='account.scrobbling'
@@ -81,7 +81,6 @@ ${scrobble.external_link ? scrobble.external_link : ''}`.trim(),
               song: scrobble.external_link ? (
                 <a
                   href={scrobble.external_link}
-                  className='underline'
                   onClick={(e) => {
                     e.stopPropagation();
                   }}

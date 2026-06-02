@@ -70,11 +70,11 @@ const ChatsPageSettings = () => {
   };
 
   return (
-    <div className='⁂-chats-page-panel ⁂-chats-page-panel--settings'>
-      <div className='⁂-chats-page-panel__title-row'>
+    <div className='chats-page-panel chats-page-panel--settings'>
+      <div className='chats-page-panel__title-row'>
         <IconButton
           src={iconArrowLeft}
-          className='⁂-chats-page-panel__back-button'
+          className='chats-page-panel__back-button'
           onClick={() => navigate({ to: '/chats' })}
           title={intl.formatMessage(messages.back)}
         />

@@ -65,22 +65,22 @@ const EventPreview: React.FC<IEventPreview> = ({
     ));
 
   return (
-    <div className={clsx('⁂-event-card', className)}>
-      <div className='⁂-event-card__action__container'>{floatingAction && action}</div>
-      <div className='⁂-event-card__banner'>
+    <div className={clsx('event-card', className)}>
+      <div className='event-card__action__container'>{floatingAction && action}</div>
+      <div className='event-card__banner'>
         {banner && <img src={banner.url} alt={intl.formatMessage(messages.eventBanner)} />}
       </div>
-      <div className='⁂-event-card__body'>
-        <div className='⁂-event-card__heading'>
+      <div className='event-card__body'>
+        <div className='event-card__heading'>
           <p>{event.name}</p>
 
           {!floatingAction && action}
         </div>
 
-        <div className='⁂-event-card__info'>
-          <div className='⁂-event-card__author'>
+        <div className='event-card__info'>
+          <div className='event-card__author'>
             <Icon src={iconUser} />
-            <div className='⁂-event-card__author__name'>
+            <div className='event-card__author__name'>
               <span>
                 <Emojify text={account.display_name} emojis={account.emojis} />
               </span>
@@ -91,7 +91,7 @@ const EventPreview: React.FC<IEventPreview> = ({
           <EventDate status={status} />
 
           {event.location && (
-            <div className='⁂-event-card__location'>
+            <div className='event-card__location'>
               <Icon src={iconMapPin} />
               <span>{event.location.name}</span>
             </div>

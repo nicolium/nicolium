@@ -40,7 +40,6 @@ import iconTextHTwo from '@phosphor-icons/core/regular/text-h-two.svg';
 import iconTextItalic from '@phosphor-icons/core/regular/text-italic.svg';
 import iconTextStrikethrough from '@phosphor-icons/core/regular/text-strikethrough.svg';
 import iconTextUnderline from '@phosphor-icons/core/regular/text-underline.svg';
-import clsx from 'clsx';
 import {
   $createParagraphNode,
   $getSelection,
@@ -127,15 +126,8 @@ interface IToolbarButton extends React.HTMLAttributes<HTMLButtonElement> {
 }
 
 export const ToolbarButton: React.FC<IToolbarButton> = ({ active, icon, ...props }) => (
-  <button
-    className={clsx(
-      'flex cursor-pointer rounded-lg border-0 bg-none p-1 align-middle hover:bg-gray-100 disabled:cursor-not-allowed disabled:hover:bg-none dark:hover:bg-primary-700',
-      { 'bg-gray-100/30 dark:bg-gray-800/30': active },
-    )}
-    type='button'
-    {...props}
-  >
-    <Icon className='size-5' src={icon} />
+  <button type='button' aria-pressed={active} {...props}>
+    <Icon className='compose-editor__toolbar-icon' src={icon} />
   </button>
 );
 
@@ -225,14 +217,14 @@ const BlockTypeDropdown = ({
       onClick={() => {
         setShowDropDown(!showDropDown);
       }}
-      className='relative flex cursor-pointer rounded-lg border-0 bg-none p-1 align-middle hover:bg-gray-100 disabled:cursor-not-allowed disabled:hover:bg-none dark:hover:bg-primary-700'
+      className='compose-editor__toolbar-btn'
       aria-label={intl.formatMessage(messages.blockType)}
       type='button'
     >
       <Icon src={icon} />
-      <Icon src={iconCaretDown} className='-bottom-2 size-4' />
+      <Icon src={iconCaretDown} containerClassName='compose-editor__toolbar__caret' />
       {showDropDown && (
-        <div className='absolute left-0 top-9 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 shadow-lg transition-opacity dark:bg-gray-900'>
+        <div className='compose-editor__toolbar__dropdown'>
           <ToolbarButton
             onClick={formatParagraph}
             active={blockType === 'paragraph'}
@@ -399,10 +391,7 @@ const TextFormatFloatingToolbar = ({
   }, [editor, updateTextFormatFloatingToolbar]);
 
   return (
-    <div
-      ref={popupCharStylesEditorRef}
-      className='absolute left-0 top-0 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 opacity-0 shadow-lg transition-opacity dark:bg-gray-900'
-    >
+    <div ref={popupCharStylesEditorRef} className='compose-editor__toolbar'>
       {editor.isEditable() && (
         <>
           <BlockTypeDropdown

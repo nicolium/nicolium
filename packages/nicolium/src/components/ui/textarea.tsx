@@ -106,12 +106,12 @@ const Textarea = React.forwardRef(
         rows={rows}
         onChange={handleChange}
         className={clsx(
-          '⁂-textarea',
+          'textarea',
           {
-            '⁂-textarea--transparent': theme === 'transparent',
-            '⁂-textarea--mono': isCodeEditor,
-            '⁂-textarea--has-error': hasError,
-            '⁂-textarea--resizable': isResizeable,
+            'textarea--transparent': theme === 'transparent',
+            'textarea--mono': isCodeEditor,
+            'textarea--has-error': hasError,
+            'textarea--resizable': isResizeable,
           },
           className,
         )}
@@ -124,13 +124,13 @@ const Textarea = React.forwardRef(
     }
 
     return (
-      <div className='⁂-textarea__container'>
+      <div className='textarea__container'>
         {textarea}
 
         {maxLength && (
           <p
-            className={clsx('⁂-textarea__max-length', {
-              '⁂-textarea__max-length--exceeded': maxLength - length < 0,
+            className={clsx('textarea__max-length', {
+              'textarea__max-length--exceeded': maxLength - length < 0,
             })}
           >
             <FormattedMessage

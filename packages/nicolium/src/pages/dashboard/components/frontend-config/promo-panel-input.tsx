@@ -31,7 +31,7 @@ const PromoPanelInput: StreamfieldComponent<PromoPanelItem> = ({ value, onChange
     };
 
   return (
-    <div className='flex flex-grow items-center gap-2'>
+    <div className='admin-promo-panel-input'>
       <IconPicker value={value.icon} onChange={handleIconChange} />
 
       <Input

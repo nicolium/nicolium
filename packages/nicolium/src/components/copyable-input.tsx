@@ -22,7 +22,7 @@ const CopyableInput: React.FC<ICopyableInput> = ({ value, type = 'text', onCopy 
   };
 
   return (
-    <div className='⁂-copyable-input'>
+    <div className='copyable-input'>
       <Input ref={input} type={type} value={value} onClick={selectInput} readOnly />
 
       <button onClick={selectInput}>

@@ -74,9 +74,9 @@ const StatusActionBarItem: StreamfieldComponent<
   const intl = useIntl();
 
   return (
-    <div className='⁂-interface-item'>
-      <Icon className='⁂-interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
-      <Icon className='⁂-interface-item__icon' src={itemsIcons[value]} aria-hidden />
+    <div className='interface-item'>
+      <Icon className='interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
+      <Icon className='interface-item__icon' src={itemsIcons[value]} aria-hidden />
       <div>
         <p>{intl.formatMessage(itemsMessages[value])}</p>
       </div>
@@ -125,7 +125,7 @@ const StatusActionBarItems: React.FC<ISettingsPage> = ({
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>
-        <OutlineBox className='⁂-interface-items__explanation'>
+        <OutlineBox className='interface-items__explanation'>
           <FormattedMessage
             id='settings.status_action_bar_items.description'
             defaultMessage='You can decide what items are visible in your post action bar. This does not affect available functionality, they will be accessible in other ways, e.g., in the post menu.'
@@ -133,7 +133,7 @@ const StatusActionBarItems: React.FC<ISettingsPage> = ({
         </OutlineBox>
 
         <StreamfieldPicker
-          className='⁂-interface-items'
+          className='interface-items'
           component={StatusActionBarItem}
           values={settings.statusActionBarItems.filter((item) => availableItems[item])}
           availableValues={unusedItems}

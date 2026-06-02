@@ -21,21 +21,21 @@ const ChatsPageShoutbox = () => {
   const { logo } = useFrontendConfig();
 
   return (
-    <div className='⁂-chats-page-chat'>
-      <div className='⁂-chats-page-chat__header'>
-        <div className='⁂-chats-page-chat__avatar__container'>
+    <div className='chats-page-chat'>
+      <div className='chats-page-chat__header'>
+        <div className='chats-page-chat__avatar__container'>
           <IconButton
             src={iconArrowLeft}
-            className='⁂-chats-page-chat__back-button'
+            className='chats-page-chat__back-button'
             onClick={() => navigate({ to: '/chats' })}
             title={intl.formatMessage(messages.back)}
           />
 
-          <Avatar src={logo} alt='' size={40} className='⁂-chats-page-chat__avatar' />
+          <Avatar src={logo} alt='' size={40} className='chats-page-chat__avatar' />
         </div>
 
-        <div className='⁂-chats-page-chat__title'>
-          <span className='⁂-chats-page-chat__title__name ⁂-chats-page-chat__title__text'>
+        <div className='chats-page-chat__title'>
+          <span className='chats-page-chat__title__name chats-page-chat__title__text'>
             <FormattedMessage
               id='chat_list_item_shoutbox'
               defaultMessage='{instance} shoutbox'
@@ -45,8 +45,8 @@ const ChatsPageShoutbox = () => {
         </div>
       </div>
 
-      <div className='⁂-chats-page-chat__body'>
-        <Shoutbox className='⁂-chats-page-chat__chat' />
+      <div className='chats-page-chat__body'>
+        <Shoutbox className='chats-page-chat__chat' />
       </div>
     </div>
   );

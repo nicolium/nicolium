@@ -7,7 +7,6 @@ import { ADDRESS_ICONS } from '@/components/autosuggest-location';
 import LocationSearch from '@/components/location-search';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 import type { Location } from 'pl-api';
@@ -37,17 +36,17 @@ const LocationForm: React.FC<ILocationForm> = ({ composeId }) => {
   }
 
   return (
-    <div className='⁂-compose-form__schedule'>
+    <div className='compose-form__schedule'>
       {location ? (
-        <div className='flex h-[38px] items-center gap-2 text-gray-700 dark:text-gray-500'>
+        <div className='compose-form__location'>
           <Icon src={ADDRESS_ICONS[location.type] || iconMapPin} />
-          <div className='flex grow flex-col'>
-            <Text>{location.description}</Text>
-            <Text theme='muted' size='xs'>
+          <div className='compose-form__location__text'>
+            <span className='compose-form__location__name'>{location.description}</span>
+            <span className='compose-form__location__details'>
               {[location.street, location.locality, location.country]
                 .filter((val) => val?.trim())
                 .join(' · ')}
-            </Text>
+            </span>
           </div>
           <IconButton
             title={intl.formatMessage(messages.resetLocation)}

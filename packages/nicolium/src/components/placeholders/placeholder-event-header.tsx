@@ -9,10 +9,10 @@ const PlaceholderEventHeader = () => {
   const locationLength = randomIntFromInterval(5, 30);
 
   return (
-    <div className='flex flex-col gap-2 text-primary-50 no-reduce-motion:animate-pulse dark:text-primary-800'>
-      <p className='text-lg'>{generateText(eventNameLength)}</p>
+    <div className='event-header--placeholder'>
+      <p className='event-header--placeholder__title'>{generateText(eventNameLength)}</p>
 
-      <div className='flex flex-col gap-1'>
+      <div className='event-header--placeholder__details'>
         <p>{generateText(organizerNameLength)}</p>
         <p>{generateText(dateLength)}</p>
         <p>{generateText(locationLength)}</p>

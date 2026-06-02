@@ -36,10 +36,10 @@ const AwaitingApproval: React.FC = () => {
             defaultMessage='There is nobody waiting for approval. When a new user signs up, you can review them here.'
           />
         }
-        listClassName='⁂-status-list'
+        listClassName='status-list'
       >
         {accountIds.map((id) => (
-          <div key={id} className='px-5 py-4'>
+          <div key={id} className='admin-awaiting-approval-item'>
             <UnapprovedAccount accountId={id} />
           </div>
         ))}

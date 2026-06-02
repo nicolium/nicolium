@@ -6,16 +6,16 @@ import { FormattedMessage } from 'react-intl';
 import Icon from '@/components/ui/icon';
 
 const NewEventPanel = () => (
-  <div className='⁂-new-event-panel'>
-    <div className='⁂-new-event-panel__content'>
-      <p className='⁂-new-event-panel__heading'>
+  <div className='new-event-panel'>
+    <div className='new-event-panel__content'>
+      <p className='new-event-panel__heading'>
         <FormattedMessage id='new_event_panel.title' defaultMessage='Create new event' />
       </p>
 
-      <p className='⁂-new-event-panel__text'>
+      <p className='new-event-panel__text'>
         <FormattedMessage
           id='new_event_panel.subtitle'
-          defaultMessage="Can't find what you're looking for? Schedule your own event."
+          defaultMessage='Can’t find what you’re looking for? Schedule your own event.'
         />
       </p>
     </div>

@@ -15,7 +15,6 @@ import * as v from 'valibot';
 
 import Blurhash from '@/components/media/blurhash';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useSettings } from '@/stores/settings';
 import { getTextDirection } from '@/utils/rtl';
@@ -182,8 +181,8 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   const interactive = card.type !== 'link';
   const horizontal = interactive || embedded;
   const className = clsx(
-    'status-card relative z-[1] flex-col bg-white black:bg-black dark:bg-primary-900 md:flex-row',
-    { horizontal, compact, interactive },
+    'status-card',
+    { 'status-card--horizontal': horizontal, 'status-card--compact': compact },
     `status-card--${card.type}`,
   );
   const ratio = getRatio(card);
@@ -209,27 +208,27 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   );
 
   const description = (
-    <div className='flex flex-1 flex-col gap-1 overflow-hidden p-4'>
+    <div className='status-card__description'>
       {trimmedTitle && (
-        <Text weight='bold' direction={direction}>
+        <p className='status-card__title' style={{ direction }}>
           {title}
-        </Text>
+        </p>
       )}
-      {trimmedDescription && <Text direction={direction}>{trimmedDescription}</Text>}
-      <div className='flex items-center gap-1'>
-        <Text tag='span' theme='muted'>
+      {trimmedDescription && <p style={{ direction }}>{trimmedDescription}</p>}
+      <div className='status-card__provider'>
+        <span className='status-card__provider__icon'>
           <Icon src={iconLinkSimple} />
-        </Text>
-        <Text tag='span' theme='muted' size='sm' direction={direction}>
+        </span>
+        <span className='status-card__provider__name' style={{ direction }}>
           {card.provider_name}
-        </Text>
+        </span>
       </div>
     </div>
   );
 
   let embed: React.ReactNode = null;
 
-  const canvas = <Blurhash className='absolute inset-0 -z-10 size-full' hash={card.blurhash} />;
+  const canvas = <Blurhash className='status-card__blur' hash={card.blurhash} />;
 
   const thumbnail = card.image ? (
     <StillImage
@@ -248,45 +247,37 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     if (embedded) {
       embed = <PreviewCardVideo card={card} />;
     } else {
-      let iconVariant = iconPlay;
-
-      if (card.type === 'photo') {
-        iconVariant = iconMagnifyingGlassPlus;
-      }
+      const iconVariant = card.type === 'photo' ? iconMagnifyingGlassPlus : iconPlay;
 
       embed = (
         <div className='status-card__image'>
           {canvas}
           {thumbnail}
 
-          <div className='absolute inset-0 flex items-center justify-center'>
-            <div className='flex items-center justify-center rounded-full bg-gray-500/90 px-4 py-3 shadow-md dark:bg-gray-700/90'>
-              <div className='flex items-center gap-3'>
-                <button
-                  onClick={handleEmbedClick}
-                  className='appearance-none text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
-                  title={intl.formatMessage(
-                    card.type === 'photo' ? messages.expand : messages.play,
-                  )}
-                >
-                  <Icon src={iconVariant} className='size-6 text-inherit' />
-                </button>
+          <div className='status-card__overlay'>
+            <div className='status-card__controls'>
+              <button
+                onClick={handleEmbedClick}
+                className='status-card__embed-button'
+                title={intl.formatMessage(card.type === 'photo' ? messages.expand : messages.play)}
+              >
+                <Icon src={iconVariant} />
+              </button>
 
-                {horizontal && (
-                  <a
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    href={href}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
-                    title={intl.formatMessage(messages.externalLink)}
-                  >
-                    <Icon src={iconArrowSquareOut} className='size-6 text-inherit' />
-                  </a>
-                )}
-              </div>
+              {horizontal && (
+                <a
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  href={href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='status-card__embed-button'
+                  title={intl.formatMessage(messages.externalLink)}
+                >
+                  <Icon src={iconArrowSquareOut} />
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -301,16 +292,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     );
   } else if (displayPreviewCards === 'default' && card.image && !disableUserProvidedMedia) {
     embed = (
-      <div
-        className={clsx(
-          'status-card__image',
-          'w-full flex-none rounded-l md:w-min md:max-w-[50%]',
-          {
-            'h-auto': horizontal,
-            'h-[200px]': !horizontal,
-          },
-        )}
-      >
+      <div className='status-card__image status-card__image--link'>
         {canvas}
         {thumbnail}
       </div>
@@ -335,17 +317,17 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   if (card.authors.length) {
     return (
-      <div className='flex flex-col'>
+      <div className='status-card__container'>
         {link}
-        <div className='-mt-4 rounded-lg border border-t-0 border-solid border-gray-200 bg-gray-100 p-2 pt-6 black:bg-primary-900 dark:border-gray-800 dark:bg-primary-700'>
-          <Text theme='muted' className='flex items-center gap-2'>
+        <div className='status-card__attribution'>
+          <p>
             <FormattedMessage
               id='link_preview.more_from_author'
               defaultMessage='From {name}'
               values={{
                 name: card.authors.map((author) => {
                   const linkBody = (
-                    <div className='flex items-center gap-1'>
+                    <span className='status-card__author'>
                       {author.account && (
                         <Avatar
                           src={author.account?.avatar}
@@ -353,13 +335,13 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                           username={author.account.username}
                         />
                       )}
-                      <Text weight='medium'>
+                      <span className='status-card__author__name'>
                         <Emojify
                           text={author.account?.display_name ?? author.name}
                           emojis={author.account?.emojis}
                         />
-                      </Text>
-                    </div>
+                      </span>
+                    </span>
                   );
                   return (
                     <HoverAccountWrapper
@@ -379,7 +361,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                 }),
               }}
             />
-          </Text>
+          </p>
         </div>
       </div>
     );

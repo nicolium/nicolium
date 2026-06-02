@@ -45,16 +45,16 @@ const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
   };
 
   return (
-    <div className='⁂-tag-input'>
-      <div className='⁂-tag-input__list'>
+    <div className='tag-input'>
+      <div className='tag-input__list'>
         {tags.map((tag) => (
-          <div key={tag} className='⁂-tag-input__item'>
+          <div key={tag} className='tag-input__item'>
             <Tag tag={tag} onDelete={handleTagDelete} />
           </div>
         ))}
 
         <input
-          className='⁂-tag-input__field'
+          className='tag-input__field'
           value={input}
           placeholder={placeholder}
           onChange={(e) => {

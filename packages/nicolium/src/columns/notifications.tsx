@@ -34,7 +34,7 @@ import { selectChild } from '@/utils/scroll-utils';
 import type { Item } from '@/components/ui/tabs';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
-import '@/styles/new/notifications.scss';
+import '@/styles/notifications.scss';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
@@ -74,7 +74,7 @@ const FilterBar = () => {
     saveSettings();
     if (filterType === selectedFilter) {
       queryClient.refetchQueries({
-        queryKey: queryKeys.notifications.list(filterType),
+        queryKey: queryKeys.notifications.list(filterType, notificationsSettings.hideBots),
         exact: true,
       });
     }
@@ -246,7 +246,9 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
   }, [notifications, markNotificationsRead]);
 
   const handleRefresh = useCallback(() => {
-    queryClient.resetQueries({ queryKey: queryKeys.notifications.list(activeFilter) });
+    queryClient.resetQueries({
+      queryKey: queryKeys.notifications.list(activeFilter, settings.notifications.hideBots),
+    });
     refetch().catch(console.error);
   }, [refetch]);
 
@@ -276,12 +278,12 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
     activeFilter === 'all' ? (
       <FormattedMessage
         id='empty_column.notifications'
-        defaultMessage="You don't have any notifications yet. Interact with others to start the conversation."
+        defaultMessage='You don’t have any notifications yet. Interact with others to start the conversation.'
       />
     ) : (
       <FormattedMessage
         id='empty_column.notifications_filtered'
-        defaultMessage="You don't have any notifications of this type yet."
+        defaultMessage='You don’t have any notifications of this type yet.'
       />
     );
 
@@ -319,7 +321,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
       placeholderCount={20}
       onLoadMore={handleLoadOlder}
       onScrollToTop={handleScrollToTop}
-      listClassName={clsx('⁂-status-list', { '⁂-status-list--loading': isLoading })}
+      listClassName={clsx('status-list', { 'status-list--loading': isLoading })}
       useWindowScroll={!multiColumn}
     >
       {scrollableContent!}

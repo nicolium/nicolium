@@ -27,10 +27,10 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
   if (!account) return null;
 
   return (
-    <div key={message.id} className='⁂-shoutbox-message__container'>
+    <div key={message.id} className='shoutbox-message__container'>
       <div
-        className={clsx('⁂-shoutbox-message', {
-          '⁂-shoutbox-message--my-message': isMyMessage,
+        className={clsx('shoutbox-message', {
+          'shoutbox-message--my-message': isMyMessage,
         })}
       >
         {!isMyMessage && (
@@ -48,23 +48,23 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
         )}
 
         <div
-          className={clsx('⁂-shoutbox-message__content', {
-            '⁂-shoutbox-message__content--my-message': isMyMessage,
+          className={clsx('shoutbox-message__content', {
+            'shoutbox-message__content--my-message': isMyMessage,
           })}
         >
           <div
             className={clsx({
-              '⁂-shoutbox-message__bubble': true,
-              '⁂-shoutbox-message__bubble--my-message': isMyMessage,
+              'shoutbox-message__bubble': true,
+              'shoutbox-message__bubble--my-message': isMyMessage,
             })}
             tabIndex={0}
           >
-            <div className='⁂-shoutbox-message__text'>
+            <div className='shoutbox-message__text'>
               <ParsedContent html={message.text} />
             </div>
           </div>
           {!isMyMessage && (
-            <span className='⁂-shoutbox-message__author'>
+            <span className='shoutbox-message__author'>
               <Emojify text={account.display_name} emojis={account.emojis} />
             </span>
           )}
@@ -107,7 +107,7 @@ const ShoutboxMessageList: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className='⁂-chat-message-list ⁂-chat-message-list--placeholder'>
+      <div className='chat-message-list chat-message-list--placeholder'>
         <div>
           <PlaceholderChatMessage isMyMessage />
           <PlaceholderChatMessage />
@@ -120,8 +120,8 @@ const ShoutboxMessageList: React.FC = () => {
   }
 
   return (
-    <div className='⁂-chat-message-list__container'>
-      <div className='⁂-chat-message-list'>
+    <div className='chat-message-list__container'>
+      <div className='chat-message-list'>
         <Virtuoso
           ref={node}
           alignToBottom

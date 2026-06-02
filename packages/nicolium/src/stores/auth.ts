@@ -36,9 +36,21 @@ import type { NicoliumResponse } from '@/api';
 
 const messages = defineMessages({
   loggedOut: { id: 'auth.logged_out', defaultMessage: 'Logged out.' },
+  accountDisabled: {
+    id: 'auth.account_disabled',
+    defaultMessage: 'Your account is currently disabled',
+  },
   awaitingApproval: {
     id: 'auth.awaiting_approval',
     defaultMessage: 'Your account is awaiting approval',
+  },
+  missingConfirmedEmail: {
+    id: 'auth.missing_confirmed_email',
+    defaultMessage: 'You need to confirm your e-mail address',
+  },
+  passwordResetRequired: {
+    id: 'auth.password_reset_required',
+    defaultMessage: 'You need to reset your password',
   },
   invalidCredentials: {
     id: 'auth.invalid_credentials',
@@ -668,8 +680,24 @@ const useAuthStore = create<AuthStore>()(
           } catch (error: any) {
             if (error.response?.json?.error === 'mfa_required') {
               throw error;
-            } else if (error.response?.json?.identifier === 'awaiting_approval') {
-              toast.error(messages.awaitingApproval);
+            } else if (error.response?.json?.identifier) {
+              switch (error.response.json.identifier) {
+                case 'account_is_disabled':
+                  toast.error(messages.accountDisabled);
+                  break;
+                case 'password_reset_required':
+                  toast.error(messages.passwordResetRequired);
+                  break;
+                case 'missing_confirmed_email':
+                  toast.error(messages.missingConfirmedEmail);
+                  break;
+                case 'awaiting_approval':
+                  toast.error(messages.awaitingApproval);
+                  break;
+                default:
+                  toast.error(messages.invalidCredentials);
+                  break;
+              }
             } else {
               toast.error(messages.invalidCredentials);
             }

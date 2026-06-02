@@ -13,16 +13,16 @@ const BlankslateWithChats = () => {
   };
 
   return (
-    <div className='⁂-chats-page-blankslate'>
-      <div className='⁂-chats-page-blankslate__content'>
-        <h2 className='⁂-chats-page-blankslate__title'>
+    <div className='chats-page-blankslate'>
+      <div className='chats-page-blankslate__content'>
+        <h2 className='chats-page-blankslate__title'>
           <FormattedMessage
             id='chats.main.blankslate_with_chats.title'
             defaultMessage='Select a chat'
           />
         </h2>
 
-        <p className='⁂-chats-page-blankslate__body'>
+        <p className='chats-page-blankslate__body'>
           <FormattedMessage
             id='chats.main.blankslate_with_chats.subtitle'
             defaultMessage='Select from one of your open chats or create a new message.'

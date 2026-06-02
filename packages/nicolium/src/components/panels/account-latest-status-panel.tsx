@@ -36,7 +36,7 @@ const AccountLatestStatusPanel: React.FC<IAccountLatestStatusPanel> = ({ account
   if (!account || (!isFetching && !statusId)) return null;
 
   return (
-    <Widget className='⁂-account-latest-status-panel'>
+    <Widget className='account-latest-status-panel'>
       {statusId ? (
         <StatusContainer
           id={statusId}

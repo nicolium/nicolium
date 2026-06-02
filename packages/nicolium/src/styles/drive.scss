@@ -1,13 +1,13 @@
 @use 'mixins';
 
-.⁂-drive-page {
+.drive-page {
   &__files {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
   }
 
-  .⁂-drive-file {
+  .drive-file {
     position: relative;
 
     display: flex;
@@ -17,7 +17,7 @@
 
     width: 8rem;
 
-    .⁂-icon-button svg {
+    .icon-button svg {
       width: 1rem;
       height: 1rem;
     }
@@ -31,7 +31,7 @@
 
     &:hover,
     &:focus-within {
-      .⁂-drive-file__button {
+      .drive-file__button {
         opacity: 1;
       }
     }
@@ -81,7 +81,7 @@
   }
 }
 
-.⁂-drive-breadcrumbs {
+.drive-breadcrumbs {
   display: flex;
   flex-wrap: wrap;
   gap: 0.125rem;
@@ -122,8 +122,8 @@
   }
 }
 
-.⁂-drive-file-list {
-  .⁂-drive-file {
+.drive-file-list {
+  .drive-file {
     display: flex;
     gap: 0.25rem;
     align-items: center;

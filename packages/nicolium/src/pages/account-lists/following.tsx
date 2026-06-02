@@ -40,7 +40,7 @@ const FollowingPage: React.FC = () => {
 
   if (isUnavailable) {
     return (
-      <div className='⁂-empty-column-indicator'>
+      <div className='empty-column-indicator'>
         <FormattedMessage
           id='empty_column.account_unavailable'
           defaultMessage='Profile unavailable'
@@ -58,7 +58,7 @@ const FollowingPage: React.FC = () => {
         emptyMessageText={
           <FormattedMessage
             id='account.follows.empty'
-            defaultMessage="This user doesn't follow anyone yet."
+            defaultMessage='This user doesn’t follow anyone yet.'
           />
         }
         itemClassName='pb-4'

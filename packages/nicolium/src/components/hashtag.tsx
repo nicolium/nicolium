@@ -3,14 +3,13 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
 
-import Text from '@/components/ui/text';
 import { shortNumberFormat } from '@/utils/numbers';
 
 import type { Tag } from 'pl-api';
 
 const accountsCountRenderer = (count: number) =>
   !!count && (
-    <Text theme='muted' size='sm'>
+    <span>
       <FormattedMessage
         id='trends.count_by_accounts'
         defaultMessage='{count} {rawCount, plural, one {person} other {people}} talking'
@@ -19,7 +18,7 @@ const accountsCountRenderer = (count: number) =>
           count: <strong>{shortNumberFormat(count)}</strong>,
         }}
       />
-    </Text>
+    </span>
   );
 
 interface IHashtag {
@@ -30,19 +29,17 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
   const count = Number(hashtag.history?.[0]?.accounts);
 
   return (
-    <div className='flex items-center justify-between' data-testid='hashtag'>
-      <div className='flex flex-col'>
+    <div className='hashtag' data-testid='hashtag'>
+      <div className='hashtag__name'>
         <Link to='/tags/$hashtag' params={{ hashtag: hashtag.name }} className='hover:underline'>
-          <Text tag='span' size='sm' weight='semibold'>
-            #{hashtag.name}
-          </Text>
+          #{hashtag.name}
         </Link>
 
         {accountsCountRenderer(count)}
       </div>
 
       {hashtag.history && (
-        <div className='w-[40px]' data-testid='sparklines'>
+        <div className='hashtag__sparklines' data-testid='sparklines'>
           <Sparklines
             width={40}
             height={28}

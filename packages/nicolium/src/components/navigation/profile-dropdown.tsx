@@ -113,9 +113,9 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   }, [account, otherAccountIds.length, features]);
 
   return (
-    <DropdownMenu component={ProfileDropdownMenu} className='⁂-profile-dropdown'>
+    <DropdownMenu component={ProfileDropdownMenu} className='profile-dropdown'>
       <button
-        className='⁂-profile-dropdown__toggle'
+        className='profile-dropdown__toggle'
         type='button'
         title={intl.formatMessage(messages.openDropdown)}
         aria-label={intl.formatMessage(messages.openDropdown)}

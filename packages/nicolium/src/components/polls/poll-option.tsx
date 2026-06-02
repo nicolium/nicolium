@@ -23,7 +23,7 @@ const PollPercentageBar: React.FC<{ percent: number }> = ({ percent }): React.JS
     config: config.gentle,
   });
 
-  return <animated.span className='⁂-poll__percentage-bar' style={styles} />;
+  return <animated.span className='poll__percentage-bar' style={styles} />;
 };
 
 interface IPollOptionText extends IPollOption {
@@ -45,7 +45,7 @@ const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active
 
   return (
     <label
-      className={clsx('⁂-poll__option-text', { '⁂-poll__option-text--active': active })}
+      className={clsx('poll__option-text', { 'poll__option-text--active': active })}
       key={option.title}
     >
       <input
@@ -57,11 +57,11 @@ const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active
       />
 
       <div>
-        <div className='⁂-poll__option-text__text'>
+        <div className='poll__option-text__text'>
           <ParsedContent html={option.title} emojis={poll.emojis} />
         </div>
 
-        <div className='⁂-poll__option-text__radio'>
+        <div className='poll__option-text__radio'>
           <span
             tabIndex={0}
             role={poll.multiple ? 'checkbox' : 'radio'}
@@ -103,17 +103,17 @@ const PollOption: React.FC<IPollOption> = (props): React.JSX.Element | null => {
   if (!showResults) return <PollOptionText percent={percent} {...props} />;
 
   return (
-    <div className='⁂-poll__option' title={message} key={option.title}>
+    <div className='poll__option' title={message} key={option.title}>
       <PollPercentageBar percent={percent} />
 
-      <div className='⁂-poll__option__label'>
+      <div className='poll__option__label'>
         <ParsedContent
           html={(language && option.title_map && option.title_map[language]) ?? option.title}
           emojis={poll.emojis}
         />
       </div>
 
-      <div className='⁂-poll__option__result'>
+      <div className='poll__option__result'>
         {voted && <Icon src={iconCheckCircle} alt={intl.formatMessage(messages.voted)} />}
 
         <span>{Math.round(percent)}%</span>

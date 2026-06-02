@@ -12,13 +12,14 @@ import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-t
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
-import { onlyEmoji as isOnlyEmoji } from '@/utils/rich-content';
+import { onlyEmoji as isOnlyEmoji, onlyHour as isOnlyHour } from '@/utils/rich-content';
 import { getTextDirection } from '@/utils/rtl';
 
 import Markup from '../markup';
 import OutlineBox from '../outline-box';
 import Poll from '../polls/poll';
 
+import FakeNewsAlert from './fake-news-alert';
 import HashtagsBar from './hashtags-bar';
 import { parseContent } from './parsed-content';
 import { ParsedMfm } from './parsed-mfm';
@@ -40,10 +41,10 @@ interface IReadMoreButton {
 
 /** Button to expand a truncated status (due to too much content) */
 const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, preview }) => (
-  <div className='⁂-read-more-button__container'>
-    <div className='⁂-read-more-button__gradient' />
+  <div className='read-more-button__container'>
+    <div className='read-more-button__gradient' />
     {!preview && (
-      <button className='⁂-read-more-button' onClick={onClick}>
+      <button className='read-more-button' onClick={onClick}>
         <FormattedMessage id='status.read_more' defaultMessage='Read more' />
         <Icon className='inline-block size-5' src={iconCaretRight} />
       </button>
@@ -58,11 +59,11 @@ interface IExpandButton {
 
 const ExpandButton: React.FC<IExpandButton> = ({ onClick, expanded }) => (
   <>
-    <div className='⁂-read-more-button__container'>
-      {!expanded && <div className='⁂-read-more-button__gradient' />}
+    <div className='read-more-button__container'>
+      {!expanded && <div className='read-more-button__gradient' />}
     </div>
     <button
-      className={clsx('⁂-expand-button', { '⁂-expand-button--expanded': expanded })}
+      className={clsx('expand-button', { 'expand-button--expanded': expanded })}
       onClick={onClick}
     >
       <Icon src={iconCaretDown} />
@@ -123,6 +124,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     const [collapsed, setCollapsed] = useState<boolean | null>(null);
     const [isTranslationEqual, setIsTranslationEqual] = useState(false);
     const [onlyEmoji, setOnlyEmoji] = useState(false);
+    const [isTimeOff, setTimeOff] = useState<string | false>(false);
     const [lineClamp, setLineClamp] = useState(true);
 
     const contentNode = useRef<HTMLDivElement>(null);
@@ -163,6 +165,32 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       }
     };
 
+    const maybeSetTimeOff = (): void => {
+      if (!contentNode.current) return;
+
+      const time = isOnlyHour(contentNode.current, true);
+      const publishedHour = new Intl.DateTimeFormat('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hourCycle: 'h23',
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      }).format(new Date(status.created_at));
+
+      if (!time || !publishedHour) {
+        setTimeOff(false);
+        return;
+      }
+
+      const [hour, minute] = time.split(':').map(Number);
+      const [publishedHourValue, publishedMinute] = publishedHour.split(':').map(Number);
+
+      if (hour === publishedHourValue && Math.abs(minute - publishedMinute) === 1) {
+        setTimeOff(publishedHour);
+      } else {
+        setTimeOff(false);
+      }
+    };
+
     const toggleSpoilerExpanded: React.MouseEventHandler = (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -186,6 +214,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     useLayoutEffect(() => {
       maybeSetCollapsed();
       maybeSetOnlyEmoji();
+      maybeSetTimeOff();
     }, [spoilerExpanded]);
 
     const content = useMemo(
@@ -309,7 +338,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     const direction = getTextDirection(status.search_index);
     const className = useMemo(
       () =>
-        clsx('⁂-status-content', {
+        clsx('status-content', {
           'overflow-hidden': collapsed && !expanded,
           'max-h-[200px]': collapsed && !isQuote && !preview && !expanded,
           'max-h-[120px]': collapsed && isQuote && !expanded,
@@ -318,10 +347,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           'max-h-[202px]': collapsable && collapsed === null && isQuote && !expanded,
           'max-h-[82px]': collapsed === null && preview && !expanded,
           'big-emoji leading-normal': onlyEmoji,
-          '⁂-status-content--spoiler-expanded': !collapsable,
-          '⁂-status-content--quote': isQuote,
-          '⁂-status-content--preview': preview,
-          '⁂-status-content--poll': !!status.poll_id,
+          'status-content--spoiler-expanded': !collapsable,
+          'status-content--quote': isQuote,
+          'status-content--preview': preview,
+          'status-content--poll': !!status.poll_id,
         }),
       [collapsed, onlyEmoji, spoilerExpanded, expanded],
     );
@@ -333,8 +362,8 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     if (spoilerText) {
       output.push(
         <h2
-          className={clsx('⁂-status-title', {
-            '⁂-status-title--clamp': !spoilerExpanded && lineClamp,
+          className={clsx('status-title', {
+            'status-title--clamp': !spoilerExpanded && lineClamp,
           })}
           key='spoiler'
           {...(expandable && displaySpoilers
@@ -392,10 +421,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       const media = (quote ||
         (status.card && displayPreviewCards !== 'hide') ||
         (withMedia && status.media_attachments.length > 0)) && (
-        <div className='flex flex-col gap-4' key='media'>
+        <div className='status-media__container' key='media'>
           {((withMedia && status.media_attachments.length > 0) ||
             (status.card && (!quote || status.quote_visible === false))) && (
-            <div className='relative has-[div[data-testid="sensitive-overlay"]]:min-h-24'>
+            <div className='status-media__overlay-container'>
               <SensitiveContentOverlay status={status} />
               {withMedia && <StatusMedia status={status} muted={compose} />}
             </div>
@@ -423,9 +452,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
 
         if (translationContent && parsedTranslationContent && !isTranslationEqual) {
           output.push(
-            <div className='grid gap-4 sm:grid-cols-2 md:gap-6' key='translated-content'>
-              <div className='min-w-0'>{originalContent}</div>
-              <div className='min-w-0 border-t border-gray-200 pt-4 dark:border-gray-800 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0'>
+            <div className='status-translation' key='translated-content'>
+              <div>{originalContent}</div>
+              <div>
                 <Markup
                   ref={translationNode}
                   tabIndex={0}
@@ -476,10 +505,14 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       if (hashtags.length) {
         output.push(<HashtagsBar key='hashtags' hashtags={hashtags} />);
       }
+
+      if (isTimeOff && !media && !status.poll_id) {
+        output.push(<FakeNewsAlert publishedAt={isTimeOff} />);
+      }
     }
 
     if (onClick) {
-      return <div className='⁂-status-content__container'>{output}</div>;
+      return <div className='status-content__container'>{output}</div>;
     } else {
       return output;
     }

@@ -171,9 +171,9 @@ const Streamfield = <T,>({
     values.length > 0 || (showEmptyDropTarget && (draggable || Boolean(onDropItem)));
 
   return (
-    <div className={clsx('⁂-streamfield', className)}>
+    <div className={clsx('streamfield', className)}>
       {label || hint ? (
-        <div className='⁂-streamfield__text'>
+        <div className='streamfield__text'>
           {label && <label>{label}</label>}
           {hint && <span>{hint}</span>}
         </div>
@@ -181,8 +181,8 @@ const Streamfield = <T,>({
 
       {shouldRenderItems && (
         <div
-          className={clsx('⁂-streamfield__items', {
-            '⁂-streamfield__items--droppable': showEmptyDropTarget && (draggable || onDropItem),
+          className={clsx('streamfield__items', {
+            'streamfield__items--droppable': showEmptyDropTarget && (draggable || onDropItem),
           })}
           onDragOver={handleItemsDragOver}
           onDrop={handleDrop}
@@ -197,14 +197,14 @@ const Streamfield = <T,>({
                 {placeholderIndex === i && (
                   <div
                     aria-hidden='true'
-                    className='⁂-streamfield__placeholder'
+                    className='streamfield__placeholder'
                     style={{ height: `${placeholderHeight}px` }}
                   />
                 )}
 
                 <div
-                  className={clsx('⁂-streamfield__item', {
-                    '⁂-streamfield__item--dragging': draggedItem?.index === i,
+                  className={clsx('streamfield__item', {
+                    'streamfield__item--dragging': draggedItem?.index === i,
                   })}
                   draggable={draggable}
                   onDragStart={handleDragStart(i)}
@@ -214,8 +214,7 @@ const Streamfield = <T,>({
                   <Component index={i} onChange={handleChange(i)} value={value} autoFocus={i > 0} />
                   {values.length > minItems && onRemoveItem && (
                     <IconButton
-                      iconClassName='h-4 w-4'
-                      className='bg-transparent text-gray-600 hover:text-gray-600'
+                      className='streamfield__item__remove'
                       src={iconX}
                       onClick={() => {
                         onRemoveItem(i);
@@ -231,7 +230,7 @@ const Streamfield = <T,>({
           {placeholderIndex === values.length && (
             <div
               aria-hidden='true'
-              className='⁂-streamfield__placeholder'
+              className='streamfield__placeholder'
               style={{ height: `${placeholderHeight}px` }}
             />
           )}
@@ -239,7 +238,7 @@ const Streamfield = <T,>({
       )}
 
       {onAddItem && values.length < maxItems && (
-        <button className='⁂-streamfield__add-button' onClick={onAddItem} type='button'>
+        <button className='streamfield__add-button' onClick={onAddItem} type='button'>
           <FormattedMessage id='streamfield.add' defaultMessage='Add' />
         </button>
       )}

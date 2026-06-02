@@ -33,7 +33,7 @@ const MfaForm: React.FC = () => {
       {mfa.settings.totp ? (
         <DisableOtpForm />
       ) : (
-        <div className='flex flex-col gap-4'>
+        <div className='mfa-setup'>
           {features.manageMfaBackupCodes && (
             <EnableOtpForm
               displayOtpForm={displayOtpForm}

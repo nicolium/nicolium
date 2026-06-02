@@ -3,12 +3,9 @@ import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import Text from '@/components/ui/text';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -16,8 +13,6 @@ import { useConfirmMfa } from '@/queries/security/use-mfa';
 import toast from '@/toast';
 
 const messages = defineMessages({
-  mfaCancelButton: { id: 'column.mfa_cancel', defaultMessage: 'Cancel' },
-  mfaSetupConfirmButton: { id: 'column.mfa_confirm_button', defaultMessage: 'Confirm' },
   confirmFail: {
     id: 'security.confirm.fail',
     defaultMessage: 'Incorrect code or password. Try again.',
@@ -88,27 +83,27 @@ const OtpConfirmForm: React.FC = () => {
   if (!state.confirmKey) return <ColumnLoading />;
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='otp-confirm-form'>
       <Form onSubmit={handleSubmit}>
-        <div className='flex flex-col'>
-          <Text weight='semibold' size='lg'>
+        <div className='otp-confirm-form__step'>
+          <p className='otp-confirm-form__step-title'>
             1. <FormattedMessage id='mfa.mfa_setup_scan.title' defaultMessage='Scan' />
-          </Text>
+          </p>
 
-          <Text theme='muted'>
+          <p className='otp-confirm-form__description'>
             <FormattedMessage
               id='mfa.mfa_setup_scan.description'
               defaultMessage='Using your two-factor app, scan this QR code or enter the text key.'
             />
-          </Text>
+          </p>
         </div>
 
-        <QRCode className='rounded-lg' value={state.qrCodeURI} includeMargin />
+        <QRCode className='otp-confirm-form__qr' value={state.qrCodeURI} includeMargin />
         {state.confirmKey}
 
-        <Text weight='semibold' size='lg'>
+        <p className='otp-confirm-form__step-title'>
           2. <FormattedMessage id='mfa.mfa_setup_verify.title' defaultMessage='Verify' />
-        </Text>
+        </p>
 
         <FormGroup
           labelText={<FormattedMessage id='mfa.mfa_setup.code.placeholder' defaultMessage='Code' />}
@@ -155,22 +150,19 @@ const OtpConfirmForm: React.FC = () => {
           </FormGroup>
         )}
 
-        <FormActions>
-          <Button
+        <div className='otp-confirm-form__actions form__actions'>
+          <button
             type='button'
-            theme='tertiary'
-            text={intl.formatMessage(messages.mfaCancelButton)}
             onClick={() => navigate({ to: '/settings/security' })}
             disabled={isPending}
-          />
+          >
+            <FormattedMessage id='column.mfa_cancel' defaultMessage='Cancel' />
+          </button>
 
-          <Button
-            type='submit'
-            theme='primary'
-            text={intl.formatMessage(messages.mfaSetupConfirmButton)}
-            disabled={isPending}
-          />
-        </FormActions>
+          <button type='submit' disabled={isPending}>
+            <FormattedMessage id='column.mfa_confirm_button' defaultMessage='Confirm' />
+          </button>
+        </div>
       </Form>
     </div>
   );
