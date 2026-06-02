@@ -1132,3 +1132,103 @@ a.measure__container {
     }
   }
 }
+
+.domains,
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__create {
+    @include mixins.button($theme: secondary, $block: true);
+    @media (min-width: variables.$breakpoint-sm) {
+      align-self: flex-end;
+      width: fit-content;
+    }
+  }
+}
+
+.domains__domain,
+.rules__rule {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+
+  background: rgb(var(--color-gray-100));
+
+  .dark & {
+    background: rgb(var(--color-primary-800));
+  }
+
+  &__container {
+    padding: 0.75rem 0;
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.domains {
+  &__domain {
+    &__info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    &__name {
+      @include mixins.text($size: sm);
+    }
+
+    &__label,
+    &__visibility,
+    &__state {
+      @include mixins.text($size: sm, $weight: medium);
+    }
+
+    &__state__container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}
+
+.rules {
+  &__rule {
+    &__text {
+      @include mixins.text;
+    }
+
+    &__hint {
+      @include mixins.text($size: sm, $theme: muted);
+    }
+
+    &__priority {
+      @include mixins.text($size: sm);
+
+      span {
+        @include mixins.text($size: sm, $weight: medium);
+      }
+    }
+  }
+}

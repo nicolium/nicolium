@@ -3,9 +3,8 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import Text from '@/components/ui/text';
+import Icon from '@/components/ui/icon';
 import { useRules } from '@/queries/admin/use-rules';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
@@ -52,28 +51,24 @@ const Rule: React.FC<IRule> = ({ rule }) => {
   };
 
   return (
-    <div key={rule.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-      <div className='flex flex-col gap-2'>
-        <Text>{rule.text}</Text>
-        <Text tag='span' theme='muted' size='sm'>
-          {rule.hint}
-        </Text>
-        {rule.priority !== null && (
-          <Text size='sm'>
-            <Text tag='span' size='sm' weight='medium'>
-              <FormattedMessage id='admin.rule.priority' defaultMessage='Priority:' />
-            </Text>{' '}
-            {rule.priority}
-          </Text>
-        )}
-        <div className='flex justify-end gap-2'>
-          <Button theme='primary' onClick={handleEditRule(rule)}>
-            <FormattedMessage id='admin.rules.edit' defaultMessage='Edit' />
-          </Button>
-          <Button theme='primary' onClick={handleDeleteRule(rule.id)}>
-            <FormattedMessage id='admin.rules.delete' defaultMessage='Delete' />
-          </Button>
-        </div>
+    <div key={rule.id} className='rules__rule'>
+      <p className='rules__rule__text'>{rule.text}</p>
+      <span className='rules__rule__hint'>{rule.hint}</span>
+      {rule.priority !== null && (
+        <p className='rules__rule__priority'>
+          <span className='rules__rule__priority__label'>
+            <FormattedMessage id='admin.rule.priority' defaultMessage='Priority:' />
+          </span>{' '}
+          {rule.priority}
+        </p>
+      )}
+      <div className='rules__rule__actions'>
+        <button onClick={handleEditRule(rule)}>
+          <FormattedMessage id='admin.rules.edit' defaultMessage='Edit' />
+        </button>
+        <button onClick={handleDeleteRule(rule.id)}>
+          <FormattedMessage id='admin.rules.delete' defaultMessage='Delete' />
+        </button>
       </div>
     </div>
   );
@@ -98,20 +93,15 @@ const RulesPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <div className='flex flex-col gap-4'>
-        <Button
-          className='sm:w-fit sm:self-end'
-          icon={iconPlus}
-          onClick={handleCreateRule}
-          theme='secondary'
-          block
-        >
+      <div className='rules'>
+        <button className='rules__create' onClick={handleCreateRule}>
+          <Icon src={iconPlus} aria-hidden />
           <FormattedMessage id='admin.rules.action' defaultMessage='Create rule' />
-        </Button>
+        </button>
         <ScrollableList
           scrollKey='rules'
           emptyMessageText={emptyMessage}
-          itemClassName='py-3 first:pt-0 last:pb-0'
+          itemClassName='rules__rule__container'
           isLoading={isLoading}
           showLoading={isLoading}
         >

@@ -4,10 +4,9 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { dateFormatOptions } from '@/components/relative-timestamp';
 import ScrollableList from '@/components/scrollable-list';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
 import Indicator from '@/components/ui/indicator';
-import Text from '@/components/ui/text';
 import { useDomains } from '@/queries/admin/use-domains';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
@@ -86,37 +85,33 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
     : undefined;
 
   return (
-    <div key={domain.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-      <div className='flex flex-col gap-2'>
-        <div className='flex flex-wrap items-center gap-4'>
-          <Text size='sm'>
-            <Text tag='span' size='sm' weight='medium'>
-              <FormattedMessage id='admin.domains.name' defaultMessage='Domain:' />
-            </Text>{' '}
-            {domain.domain}
-          </Text>
-          <Text tag='span' size='sm' weight='medium'>
-            {domain.public ? (
-              <FormattedMessage id='admin.domains.public' defaultMessage='Public' />
-            ) : (
-              <FormattedMessage id='admin.domains.private' defaultMessage='Private' />
-            )}
-          </Text>
-          <div className='flex items-center gap-2' title={domainStateTitle}>
-            <Indicator state={domainState} />
-            <Text tag='span' size='sm' weight='medium'>
-              {domainStateLabel}
-            </Text>
-          </div>
+    <div key={domain.id} className='domains__domain'>
+      <div className='domains__domain__info'>
+        <p className='domains__domain__name'>
+          <span className='domains__domain__label'>
+            <FormattedMessage id='admin.domains.name' defaultMessage='Domain:' />
+          </span>{' '}
+          {domain.domain}
+        </p>
+        <span className='domains__domain__visibility'>
+          {domain.public ? (
+            <FormattedMessage id='admin.domains.public' defaultMessage='Public' />
+          ) : (
+            <FormattedMessage id='admin.domains.private' defaultMessage='Private' />
+          )}
+        </span>
+        <div className='domains__domain__state__container' title={domainStateTitle}>
+          <Indicator state={domainState} />
+          <span className='domains__domain__state'>{domainStateLabel}</span>
         </div>
-        <div className='flex justify-end gap-2'>
-          <Button theme='primary' onClick={handleEditDomain(domain)}>
-            <FormattedMessage id='admin.domains.edit' defaultMessage='Edit' />
-          </Button>
-          <Button theme='primary' onClick={handleDeleteDomain()}>
-            <FormattedMessage id='admin.domains.delete' defaultMessage='Delete' />
-          </Button>
-        </div>
+      </div>
+      <div className='domains__domain__actions'>
+        <button onClick={handleEditDomain(domain)}>
+          <FormattedMessage id='admin.domains.edit' defaultMessage='Edit' />
+        </button>
+        <button onClick={handleDeleteDomain()}>
+          <FormattedMessage id='admin.domains.delete' defaultMessage='Delete' />
+        </button>
       </div>
     </div>
   );
@@ -142,21 +137,16 @@ const AdminDomainsPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <div className='flex flex-col gap-4'>
-        <Button
-          className='sm:w-fit sm:self-end'
-          icon={iconPlus}
-          onClick={handleCreateDomain}
-          theme='secondary'
-          block
-        >
+      <div className='domains'>
+        <button className='domains__create' onClick={handleCreateDomain}>
+          <Icon src={iconPlus} aria-hidden />
           <FormattedMessage id='admin.domains.action' defaultMessage='Create domain' />
-        </Button>
+        </button>
         {domains && (
           <ScrollableList
             scrollKey='domains'
             emptyMessageText={emptyMessage}
-            itemClassName='py-3 first:pt-0 last:pb-0'
+            itemClassName='domains__domain__container'
             isLoading={isFetching}
             showLoading={isFetching && !domains?.length}
           >
