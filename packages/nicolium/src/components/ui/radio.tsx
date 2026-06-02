@@ -31,14 +31,8 @@ const RadioItem: React.FC<IRadioItem> = ({
   value,
   ...props
 }) => (
-  <ListItem label={label} hint={hint} {...props}>
-    <input
-      type='radio'
-      checked={checked}
-      onChange={onChange}
-      value={value}
-      className='size-4 border-gray-300 text-primary-600 focus:ring-primary-500'
-    />
+  <ListItem className='radio-item' label={label} hint={hint} {...props}>
+    <input type='radio' checked={checked} onChange={onChange} value={value} />
   </ListItem>
 );
 

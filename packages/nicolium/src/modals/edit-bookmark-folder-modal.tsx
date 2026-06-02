@@ -58,9 +58,8 @@ const EmojiPicker: React.FC<IEmojiPicker> = ({ emoji, emojiUrl, ...props }) => {
   };
 
   return (
-    <div className='relative'>
+    <div className='edit-bookmark-folder-modal__emoji-picker'>
       <button
-        className='mt-1 flex size-[38px] items-center justify-center rounded-md border border-solid border-gray-400 bg-white text-gray-900 ring-1 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-gray-800 dark:focus:border-primary-500 dark:focus:ring-primary-500'
         ref={refs.setReference}
         title={title}
         aria-label={title}
@@ -69,19 +68,12 @@ const EmojiPicker: React.FC<IEmojiPicker> = ({ emoji, emojiUrl, ...props }) => {
         onKeyDown={handleToggle}
         tabIndex={0}
       >
-        {emoji ? (
-          <Emoji className='size-5' emoji={emoji} src={emojiUrl} />
-        ) : (
-          <Icon
-            className='size-5 text-gray-600 hover:text-gray-700 dark:hover:text-gray-500'
-            src={iconSmiley}
-          />
-        )}
+        {emoji ? <Emoji emoji={emoji} src={emojiUrl} /> : <Icon src={iconSmiley} />}
       </button>
 
       {createPortal(
         <div
-          className='z-[101]'
+          className='edit-bookmark-folder-modal__emoji-picker__dropdown'
           ref={refs.setFloating}
           style={{
             position: strategy,
@@ -168,19 +160,12 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
         <FormattedMessage id='edit_bookmark_folder_modal.confirm' defaultMessage='Save' />
       }
     >
-      <div className='flex gap-2'>
+      <div className='edit-bookmark-folder-modal'>
         {features.bookmarkFolderEmojis && (
           <EmojiPicker emoji={emoji} emojiUrl={emojiUrl} onPickEmoji={handleEmojiPick} />
         )}
 
-        <Input
-          outerClassName='grow'
-          type='text'
-          placeholder={label}
-          title={label}
-          disabled={isPending}
-          {...name}
-        />
+        <Input type='text' placeholder={label} title={label} disabled={isPending} {...name} />
       </div>
     </Modal>
   );

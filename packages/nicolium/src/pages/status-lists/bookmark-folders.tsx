@@ -75,9 +75,8 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <div className='flex items-center gap-2'>
+      <div className='bookmark-folders__form'>
         <Input
-          outerClassName='grow'
           type='text'
           placeholder={label}
           title={label}
@@ -113,7 +112,7 @@ const BookmarkFoldersPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <div className='flex flex-col gap-4'>
+      <div className='bookmark-folders'>
         <NewFolderForm />
 
         <List>
@@ -121,7 +120,7 @@ const BookmarkFoldersPage: React.FC = () => {
             to='/bookmarks/$folderId'
             params={{ folderId: 'all' }}
             label={
-              <div className='flex items-center gap-2'>
+              <div className='bookmark-folder'>
                 <Icon src={iconBookmarks} size={20} />
                 <span>
                   <FormattedMessage
@@ -138,13 +137,9 @@ const BookmarkFoldersPage: React.FC = () => {
               to='/bookmarks/$folderId'
               params={{ folderId: folder.id }}
               label={
-                <div className='flex items-center gap-2'>
+                <div className='bookmark-folder'>
                   {folder.emoji ? (
-                    <Emoji
-                      emoji={folder.emoji}
-                      src={folder.emoji_url ?? undefined}
-                      className='size-5 flex-none'
-                    />
+                    <Emoji emoji={folder.emoji} src={folder.emoji_url ?? undefined} />
                   ) : (
                     <Icon src={iconFolderSimple} size={20} />
                   )}
