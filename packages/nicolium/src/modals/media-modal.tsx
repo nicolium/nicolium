@@ -105,8 +105,6 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   const hasMultipleImages = media.length > 1;
 
-  const navigationHiddenClassName = navigationHidden ? 'pointer-events-none opacity-0' : '';
-
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
@@ -302,30 +300,25 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           {content}
         </animated.div>
 
-        <div className='media-modal__navigation'>
-          <div
-            className={clsx(
-              'pointer-events-auto z-10 flex flex-[0_0_60px] items-center justify-between p-4 transition-opacity',
-              navigationHiddenClassName,
-            )}
-          >
+        <div
+          className={clsx('media-modal__navigation', {
+            'media-modal__navigation--hidden': navigationHidden,
+          })}
+        >
+          <div className={clsx('media-modal__buttons')}>
             <IconButton
               title={intl.formatMessage(messages.close)}
               src={iconX}
               onClick={onClose}
               theme='dark'
-              className='!p-1.5 hover:scale-105 hover:bg-gray-900'
-              iconClassName='h-5 w-5'
             />
 
-            <div className='flex items-center gap-2'>
+            <div className='media-modal__buttons__right'>
               {zoomable && (
                 <IconButton
                   title={intl.formatMessage(zoomedIn ? messages.zoomOut : messages.zoomIn)}
                   src={zoomedIn ? iconArrowsInSimple : iconArrowsOutSimple}
                   theme='dark'
-                  className='!p-1.5 hover:scale-105 hover:bg-gray-900'
-                  iconClassName='h-5 w-5'
                   onClick={handleZoomClick}
                 />
               )}
@@ -334,8 +327,6 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                 title={intl.formatMessage(messages.download)}
                 src={iconDownloadSimple}
                 theme='dark'
-                className='!p-1.5 hover:scale-105 hover:bg-gray-900'
-                iconClassName='h-5 w-5'
                 onClick={handleDownload}
               />
 
@@ -344,8 +335,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   src={isFullScreen ? iconArrowsInSimple : iconArrowsOutSimple}
                   title={intl.formatMessage(isFullScreen ? messages.minimize : messages.expand)}
                   theme='dark'
-                  className='hidden !p-1.5 hover:scale-105 hover:bg-gray-900 xl:block'
-                  iconClassName='h-5 w-5'
+                  className='media-modal__status-button'
                   onClick={() => {
                     setIsFullScreen(!isFullScreen);
                   }}
@@ -354,46 +344,29 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             </div>
           </div>
           {hasMultipleImages && (
-            <div className='z-10 mx-5 flex justify-between'>
-              <div
-                className={clsx(
-                  'pointer-events-auto z-10 flex h-fit items-center transition-opacity',
-                  navigationHiddenClassName,
-                )}
-              >
+            <div className='media-modal__arrows'>
+              <div className='media-modal__arrow'>
                 <button
                   tabIndex={0}
-                  className='flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
                   onClick={handlePrevClick}
                   aria-label={intl.formatMessage(messages.previous)}
                 >
-                  <Icon src={iconArrowLeft} className='size-5' />
+                  <Icon src={iconArrowLeft} />
                 </button>
               </div>
-              <div
-                className={clsx(
-                  'pointer-events-auto z-10 flex h-fit items-center transition-opacity',
-                  navigationHiddenClassName,
-                )}
-              >
+              <div className='media-modal__arrow'>
                 <button
                   tabIndex={0}
-                  className='flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
                   onClick={handleNextClick}
                   aria-label={intl.formatMessage(messages.next)}
                 >
-                  <Icon src={iconArrowRight} className='size-5' />
+                  <Icon src={iconArrowRight} />
                 </button>
               </div>
             </div>
           )}
           {status ? (
-            <div
-              className={clsx(
-                'pointer-events-auto flex flex-[0_0_60px] justify-center transition-opacity',
-                navigationHiddenClassName,
-              )}
-            >
+            <div className='media-modal__status-actions'>
               <StatusActionBar status={status} space='md' expandable />
             </div>
           ) : (
@@ -403,14 +376,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
       </div>
 
       {(status || (statusId && isPending)) && (
-        <div
-          className={clsx(
-            '-right-96 hidden bg-white transition-all xl:fixed xl:inset-y-0 xl:right-0 xl:flex xl:w-96 xl:flex-col',
-            {
-              'xl:!-right-96': isFullScreen,
-            },
-          )}
-        >
+        <div className='media-modal__thread'>
           {status ? (
             <Thread status={status} withMedia={false} itemClassName='px-4' isModal />
           ) : (

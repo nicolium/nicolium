@@ -565,6 +565,43 @@
     line-height: var(--leading-sm);
   }
 
+  &--missing {
+    position: relative;
+    background-color: rgb(var(--color-gray-200));
+
+    .dark & {
+      background-color: rgb(var(--color-gray-900));
+    }
+  }
+
+  &__placeholder {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: inherit;
+
+    background-color: rgb(var(--color-gray-200));
+
+    .dark & {
+      background-color: rgb(var(--color-gray-900));
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      color: rgb(var(--color-gray-500));
+
+      .dark & {
+        color: rgb(var(--color-gray-700));
+      }
+    }
+  }
+
   // Adapted from Iceshrimp which I guess took it from Misskey
   // https://iceshrimp.dev/iceshrimp/iceshrimp/src/branch/dev/packages/client/src/components/global/MkAvatar.vue
   &--cat {

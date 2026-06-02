@@ -1043,19 +1043,21 @@
   }
 }
 
-.profile-field {
-  display: flex;
-  flex-grow: 1;
-  gap: 0.5rem;
-
-  &__name {
+.edit-profile {
+  &__profile-field {
+    display: flex;
     flex-grow: 1;
-    width: 40%;
-  }
+    gap: 0.5rem;
 
-  &__value {
-    flex-grow: 1;
-    width: 60%;
+    &__name {
+      flex-grow: 1;
+      width: 40%;
+    }
+
+    &__value {
+      flex-grow: 1;
+      width: 60%;
+    }
   }
 }
 

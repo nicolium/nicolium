@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
 
@@ -25,11 +24,7 @@ const messages = defineMessages({
   joinerThen: { id: 'keyboard_shortcuts.joiners.then', defaultMessage: 'then' },
 });
 
-const Hotkey: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <kbd className='rounded-md border border-solid border-primary-200 bg-primary-50 px-1.5 py-1 font-sans text-xs dark:border-gray-700 dark:bg-gray-800'>
-    {children}
-  </kbd>
-);
+const Hotkey: React.FC<{ children: React.ReactNode }> = ({ children }) => <kbd>{children}</kbd>;
 
 const spokenKeyNames: Record<string, MessageDescriptor> = {
   '/': messages.keyNameSlash,
@@ -76,7 +71,7 @@ const HotkeyBinding: React.FC<{ keys: string[]; joiner?: KeyJoiner }> = ({
     .join(` ${intl.formatMessage(spokenJoiners[joiner])} `);
 
   return (
-    <span>
+    <span aria-label={spokenBinding}>
       <span aria-hidden='true'>
         {keys.map((keyName, idx) => (
           <React.Fragment key={keyName}>
@@ -85,15 +80,9 @@ const HotkeyBinding: React.FC<{ keys: string[]; joiner?: KeyJoiner }> = ({
           </React.Fragment>
         ))}
       </span>
-      <span className='sr-only'>{spokenBinding}</span>
     </span>
   );
 };
-
-const TableCell: React.FC<{ className?: string; children: React.ReactNode }> = ({
-  className,
-  children,
-}) => <td className={clsx(className, 'px-2 pb-3')}>{children}</td>;
 
 const getColumnSizes = (n: number) => {
   let part1 = Math.ceil(n / 3);
@@ -311,15 +300,15 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       }}
       className='hotkey-modal'
     >
-      <div className='flex flex-col text-xs lg:flex-row'>
+      <div>
         {columns.map((column, i) => (
           <table key={i}>
             <thead>
               <tr>
-                <th className='pb-2 font-bold'>
+                <th>
                   <FormattedMessage id='keyboard_shortcuts.hotkey' defaultMessage='Hotkey' />
                 </th>
-                <th className='pb-2 font-bold'>
+                <th>
                   <FormattedMessage id='keyboard_shortcuts.action' defaultMessage='Action' />
                 </th>
               </tr>
@@ -327,8 +316,8 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
             <tbody>
               {column.map((hotkey, i) => (
                 <tr key={i}>
-                  <TableCell className='whitespace-nowrap'>{hotkey.key}</TableCell>
-                  <TableCell>{hotkey.label}</TableCell>
+                  <td>{hotkey.key}</td>
+                  <td>{hotkey.label}</td>
                 </tr>
               ))}
             </tbody>

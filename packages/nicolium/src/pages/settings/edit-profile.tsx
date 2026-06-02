@@ -302,8 +302,8 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
     };
 
   return (
-    <div className='profile-field'>
-      <div className='profile-field__name'>
+    <div className='edit-profile__profile-field'>
+      <div className='edit-profile__profile-field__name'>
         <ProfileAutosuggestInput
           value={value.name}
           onChange={handleChange('name')}
@@ -323,7 +323,7 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
           searchTokens={['@', '#', ':']}
         />
       </div>
-      <div className='profile-field__value'>
+      <div className='edit-profile__profile-field__value'>
         <ProfileAutosuggestInput
           value={value.value}
           onChange={handleChange('value')}
