@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 
 const messages = defineMessages({
   authorize: { id: 'authorize.action', defaultMessage: 'Approve' },
@@ -158,11 +157,7 @@ interface IActionEmblem {
 }
 
 const ActionEmblem: React.FC<IActionEmblem> = ({ text }) => (
-  <div className='rounded-full bg-gray-100 px-4 py-2 dark:bg-gray-800'>
-    <Text theme='muted' size='sm'>
-      {text}
-    </Text>
-  </div>
+  <p className='authorize-reject-buttons__emblem'>{text}</p>
 );
 
 interface IAuthorizeRejectButton {
@@ -188,20 +183,14 @@ const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({
     <div
       style={style}
       className={clsx({
-        'flex h-11 w-11 items-center justify-center rounded-full': true,
-        'bg-danger-600/10': theme === 'danger',
-        'bg-primary-500/10': theme === 'primary',
+        'authorize-button': theme === 'primary',
+        'reject-button': theme === 'danger',
       })}
     >
       <IconButton
         src={isLoading ? iconStopFill : icon}
         onClick={action}
         theme='seamless'
-        className='size-10 items-center justify-center bg-white dark:!bg-gray-900'
-        iconClassName={clsx('size-6', {
-          'text-primary-500': theme === 'primary',
-          'text-danger-600': theme === 'danger',
-        })}
         disabled={disabled}
         title={title}
       />
