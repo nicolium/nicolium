@@ -9,8 +9,7 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Column from '@/components/ui/column';
-import SvgIcon from '@/components/ui/svg-icon';
-import Text from '@/components/ui/text';
+import Icon from '@/components/ui/icon';
 import toast from '@/toast';
 import sourceCode from '@/utils/code';
 
@@ -23,24 +22,16 @@ interface IDashWidget extends Partial<LinkOptions> {
   children: React.ReactNode;
 }
 
-const DashWidget: React.FC<IDashWidget> = ({ to, onClick, children, ...rest }) => {
-  const className =
-    'bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-800/75 p-4 rounded flex flex-col items-center justify-center space-y-2';
-
-  if (to) {
-    return (
-      <Link className={className} to={to} {...rest}>
-        {children}
-      </Link>
-    );
-  } else {
-    return (
-      <button className={className} onClick={onClick}>
-        {children}
-      </button>
-    );
-  }
-};
+const DashWidget: React.FC<IDashWidget> = ({ to, onClick, children, ...rest }) =>
+  to ? (
+    <Link className='developers__widget' to={to} {...rest}>
+      {children}
+    </Link>
+  ) : (
+    <button className='developers__widget' onClick={onClick}>
+      {children}
+    </button>
+  );
 
 const DevelopersPage: React.FC = () => {
   const intl = useIntl();
@@ -59,80 +50,78 @@ const DevelopersPage: React.FC = () => {
   return (
     <>
       <Column label={intl.formatMessage(messages.heading)}>
-        <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3'>
+        <div className='developers'>
           <DashWidget to='/developers/apps/create'>
-            <SvgIcon src={iconSquaresFour} className='text-gray-700 dark:text-gray-600' />
+            <Icon src={iconSquaresFour} aria-hidden />
 
-            <Text>
+            <p>
               <FormattedMessage
                 id='developers.navigation.app_create.label'
                 defaultMessage='Create an app'
               />
-            </Text>
+            </p>
           </DashWidget>
 
           <DashWidget to='/developers/settings_store'>
-            <SvgIcon src={iconCode} className='text-gray-700 dark:text-gray-600' />
+            <Icon src={iconCode} aria-hidden />
 
-            <Text>
+            <p>
               <FormattedMessage
                 id='developers.navigation.settings_store.label'
                 defaultMessage='Settings store'
               />
-            </Text>
+            </p>
           </DashWidget>
 
           <DashWidget to='/error'>
-            <SvgIcon src={iconBug} className='text-gray-700 dark:text-gray-600' />
+            <Icon src={iconBug} aria-hidden />
 
-            <Text>
+            <p>
               <FormattedMessage
                 id='developers.navigation.intentional_error.label'
                 defaultMessage='Trigger an error'
               />
-            </Text>
+            </p>
           </DashWidget>
 
           <DashWidget to='/error/network'>
-            <SvgIcon src={iconWifiX} className='text-gray-700 dark:text-gray-600' />
+            <Icon src={iconWifiX} aria-hidden />
 
-            <Text>
+            <p>
               <FormattedMessage
                 id='developers.navigation.network_error.label'
                 defaultMessage='Network error'
               />
-            </Text>
+            </p>
           </DashWidget>
 
           <DashWidget to='/developers/sw'>
-            <SvgIcon src={iconAppWindow} className='text-gray-700 dark:text-gray-600' />
+            <Icon src={iconAppWindow} aria-hidden />
 
-            <Text>
+            <p>
               <FormattedMessage
                 id='developers.navigation.service_worker.label'
                 defaultMessage='Service Worker'
               />
-            </Text>
+            </p>
           </DashWidget>
 
           <DashWidget onClick={showToast}>
-            <SvgIcon src={iconWarning} className='text-gray-700 dark:text-gray-600' />
+            <Icon src={iconWarning} aria-hidden />
 
-            <Text>
+            <p>
               <FormattedMessage
                 id='developers.navigation.show_toast'
                 defaultMessage='Trigger Toast'
               />
-            </Text>
+            </p>
           </DashWidget>
         </div>
       </Column>
 
-      <div className='p-4'>
-        <Text align='center' theme='subtle' size='sm'>
-          {sourceCode.displayName} {sourceCode.version}
-        </Text>
-      </div>
+      <p className='developers__footer'>
+        {sourceCode.displayName} {sourceCode.version}
+      </p>
     </>
   );
 };
