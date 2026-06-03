@@ -5,7 +5,6 @@ import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
@@ -51,7 +50,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
           const poll = typeof version.poll !== 'string' && version.poll;
 
           return (
-            <div className='flex flex-col gap-2 py-2 first:pt-0 last:pb-0' key={version.created_at}>
+            <div className='status-history' key={version.created_at}>
               {version.spoiler_text.length > 0 && (
                 <>
                   <span>
@@ -64,16 +63,10 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
               <div data-markup>{content}</div>
 
               {poll && (
-                <div className='flex flex-col'>
+                <div className='status-history__poll'>
                   {poll.options.map((option) => (
-                    <div
-                      className='flex items-center p-1 text-gray-900 dark:text-gray-300'
-                      key={option.title}
-                    >
-                      <span
-                        className='mr-2.5 inline-block size-4 flex-none rounded-full border border-solid border-primary-600'
-                        aria-hidden
-                      />
+                    <div className='status-history__poll__option' key={option.title}>
+                      <span className='status-history__poll__option__bar' aria-hidden />
 
                       <span>
                         <ParsedContent
@@ -89,7 +82,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
 
               {version.media_attachments.length > 0 && <AttachmentThumbs status={version} />}
 
-              <Text align='right' tag='span' theme='muted' size='sm'>
+              <time>
                 <FormattedDate
                   value={new Date(version.created_at)}
                   hour12
@@ -99,7 +92,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                   hour='numeric'
                   minute='2-digit'
                 />
-              </Text>
+              </time>
             </div>
           );
         })}

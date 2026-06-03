@@ -6,7 +6,6 @@ import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
-import Text from '@/components/ui/text';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
@@ -184,8 +183,8 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
           isOpen ? <FormattedMessage id='account.register' defaultMessage='Sign up' /> : undefined
         }
       >
-        <div className='flex flex-col gap-2.5'>
-          <Form className='flex w-full flex-col gap-2.5' onSubmit={onSubmit}>
+        <div className='unauthorized-modal'>
+          <Form onSubmit={onSubmit}>
             <Input
               placeholder={intl.formatMessage(messages.accountPlaceholder)}
               name='remote_follow[acct]'
@@ -199,23 +198,17 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
               {button}
             </Button>
           </Form>
-          <div
-            className={
-              "-mx-2.5 my-0 flex items-center gap-2.5 before:flex-1 before:border-b before:border-gray-300 before:content-[''] after:flex-1 after:border-b after:border-gray-300 after:content-[''] before:dark:border-gray-600 after:dark:border-gray-600"
-            }
-          >
-            <Text align='center'>
-              <FormattedMessage id='remote_interaction.divider' defaultMessage='or' />
-            </Text>
+          <div className={'unauthorized-modal__divider'}>
+            <FormattedMessage id='remote_interaction.divider' defaultMessage='or' />
           </div>
           {isOpen && (
-            <Text size='lg' weight='medium'>
+            <p className='unauthorized-modal__title'>
               <FormattedMessage
                 id='unauthorized_modal.title'
                 defaultMessage='Sign up for {site_title}'
                 values={{ site_title: instance.title }}
               />
-            </Text>
+            </p>
           )}
         </div>
       </Modal>
@@ -243,13 +236,13 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
         isOpen ? <FormattedMessage id='account.register' defaultMessage='Sign up' /> : undefined
       }
     >
-      <div className='flex flex-col'>
-        <Text>
+      <div className='unauthorized-modal'>
+        <p className='unauthorized-modal__text'>
           <FormattedMessage
             id='unauthorized_modal.text'
             defaultMessage='You need to be logged in to do that.'
           />
-        </Text>
+        </p>
       </div>
     </Modal>
   );

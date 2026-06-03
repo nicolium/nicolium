@@ -56,8 +56,7 @@ const ReplyMentionAccount: React.FC<IReplyMentionAccount> = ({ composeId, accoun
     button = (
       <IconButton
         src={iconX}
-        className='text-gray-400 hover:text-gray-600'
-        iconClassName='h-5 w-5'
+        className='reply-mentions__account__button'
         title={intl.formatMessage(messages.remove)}
         onClick={onRemove}
       />
@@ -66,8 +65,7 @@ const ReplyMentionAccount: React.FC<IReplyMentionAccount> = ({ composeId, accoun
     button = (
       <IconButton
         src={iconPlus}
-        className='text-gray-400 hover:text-gray-600'
-        iconClassName='h-5 w-5'
+        className='reply-mentions__account__button'
         title={intl.formatMessage(messages.add)}
         onClick={onAdd}
       />
@@ -75,7 +73,7 @@ const ReplyMentionAccount: React.FC<IReplyMentionAccount> = ({ composeId, accoun
   }
 
   return (
-    <div className='p-2'>
+    <div className='reply-mentions__account'>
       <AccountComponent
         account={account}
         withRelationship={false}
@@ -113,7 +111,7 @@ const ReplyMentionsModal: React.FC<BaseModalProps & ReplyMentionsModalProps> = (
       closeIcon={iconArrowLeft}
       closePosition='left'
     >
-      <div className='block min-h-[300px] flex-1 flex-row overflow-y-auto'>
+      <div className='reply-mentions'>
         {mentions.map((accountId) => (
           <ReplyMentionAccount
             composeId={composeId}

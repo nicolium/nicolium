@@ -1145,3 +1145,44 @@
   flex-direction: column;
   gap: 1rem;
 }
+
+.unauthorized-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+
+  &__text {
+    @include mixins.text;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    width: 100%;
+  }
+
+  &__divider {
+    @include mixins.text($align: center);
+
+    display: flex;
+    gap: 0.625rem;
+    align-items: center;
+    margin: 0 -0.625rem;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1 1 0%;
+      border-bottom: 1px solid rgb(var(--color-gray-300));
+
+      .dark & {
+        border-color: rgb(var(--color-gray-600));
+      }
+    }
+  }
+
+  &__title {
+    @include mixins.text($size: lg, $weight: medium);
+  }
+}

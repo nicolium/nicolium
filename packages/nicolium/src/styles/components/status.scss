@@ -33,7 +33,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.675rem;
+    padding: 0.625rem;
   }
 }
 
@@ -330,5 +330,72 @@ a.status-card {
 
   &:last-of-type:not(:first-child) {
     top: 21px;
+  }
+}
+
+.status-history {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &__poll {
+    display: flex;
+    flex-direction: column;
+
+    &__option {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      color: rgb(var(--color-gray-900));
+
+      .dark & {
+        color: rgb(var(--color-gray-300));
+      }
+
+      &__bar {
+        display: inline-block;
+        flex: none;
+
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.625rem;
+        border: 1px solid rgb(var(--color-primary-600));
+        border-radius: var(--radius-full);
+      }
+    }
+  }
+
+  time {
+    @include mixins.text($align: right, $theme: muted, $size: sm);
+  }
+}
+
+.reply-mentions {
+  overflow-y: auto;
+  display: block;
+  flex: 1 1 0%;
+  flex-direction: row;
+
+  min-height: 300px;
+
+  &__account {
+    padding: 0.5rem;
+
+    &__button {
+      color: rgb(var(--color-gray-400));
+
+      &:hover {
+        color: rgb(var(--color-gray-600));
+      }
+    }
   }
 }

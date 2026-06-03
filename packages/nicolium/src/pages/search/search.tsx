@@ -8,11 +8,10 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import SearchColumn from '@/columns/search';
 import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
-import SvgIcon from '@/components/ui/svg-icon';
 import Tabs from '@/components/ui/tabs';
-import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { queryKeys } from '@/queries/keys';
@@ -77,13 +76,8 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
   };
 
   return (
-    <div
-      className={clsx(
-        'z-10 w-full bg-white/90 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/90',
-        className,
-      )}
-    >
-      <div className='relative'>
+    <div className={clsx('search-input', className)}>
+      <div>
         <Input
           type='text'
           id='search'
@@ -94,12 +88,10 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
           onKeyDown={handleKeyDown}
           autoFocus
           theme='search'
-          className='pr-10 rtl:pl-10 rtl:pr-3'
         />
 
         <button
           tabIndex={value ? 0 : -1}
-          className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClick}
           title={
             query === value
@@ -107,11 +99,7 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
               : intl.formatMessage(messages.placeholder)
           }
         >
-          {query === value ? (
-            <SvgIcon src={iconX} className='size-4 text-gray-600' />
-          ) : (
-            <SvgIcon src={iconMagnifyingGlass} className='size-4 text-gray-600' />
-          )}
+          {query === value ? <Icon src={iconX} /> : <Icon src={iconMagnifyingGlass} />}
         </button>
       </div>
     </div>
@@ -188,21 +176,19 @@ const SearchResults = () => {
   return (
     <>
       {accountId ? (
-        <div className='flex items-center gap-2 border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'>
+        <div className='search-page__account'>
           <IconButton
-            className='text-gray-400 hover:text-gray-600'
-            iconClassName='h-5 w-5'
             src={iconX}
             onClick={handleUnsetAccount}
             title={intl.formatMessage(messages.clearAccountFilter)}
           />
-          <Text truncate>
+          <p>
             <FormattedMessage
               id='search_results.filter_message'
               defaultMessage='You are searching for posts from @{acct}.'
               values={{ acct: <strong className='break-words'>{account?.acct}</strong> }}
             />
-          </Text>
+          </p>
         </div>
       ) : (
         renderFilterBar()
@@ -220,8 +206,8 @@ const SearchPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <div className='space-y-4'>
-        <SearchInput className='sticky top-[calc(4.5rem+2px)]' query={query} />
+      <div className='search-page'>
+        <SearchInput className='search-page__input' query={query} />
         <SearchResults />
       </div>
     </Column>

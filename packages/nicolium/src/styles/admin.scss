@@ -428,7 +428,7 @@ a.measure__container {
       td {
         @include mixins.text($size: sm);
 
-        padding: 0.675rem;
+        padding: 0.625rem;
 
         &:first-child {
           @include mixins.text($weight: medium, $size: sm);
