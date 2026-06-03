@@ -1681,6 +1681,7 @@ const getFeatures = (instance: Instance) => {
       v.software === DITTO,
       v.software === GOTOSOCIAL,
       v.software === ICESHRIMP,
+      v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === PLEROMA,
     ]),
