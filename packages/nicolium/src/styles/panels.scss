@@ -168,3 +168,17 @@
     color: rgb(var(--color-primary-700));
   }
 }
+
+.promo-panel {
+  &__item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    .fa {
+      flex: none;
+      font-size: var(--text-lg);
+      line-height: var(--leading-lg);
+    }
+  }
+}

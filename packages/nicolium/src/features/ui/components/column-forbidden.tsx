@@ -1,14 +1,10 @@
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Column from '@/components/ui/column';
 
 const messages = defineMessages({
   title: { id: 'column_forbidden.title', defaultMessage: 'Forbidden' },
-  body: {
-    id: 'column_forbidden.body',
-    defaultMessage: 'You do not have permission to access this page.',
-  },
 });
 
 const ColumnForbidden = () => {
@@ -16,8 +12,11 @@ const ColumnForbidden = () => {
 
   return (
     <Column label={intl.formatMessage(messages.title)}>
-      <div className='flex min-h-[160px] flex-1 items-center justify-center rounded-lg bg-primary-50 p-10 text-center text-gray-900 dark:bg-gray-700 dark:text-gray-300'>
-        {intl.formatMessage(messages.body)}
+      <div className='column-forbidden'>
+        <FormattedMessage
+          id='column_forbidden.body'
+          defaultMessage='You do not have permission to access this page.'
+        />
       </div>
     </Column>
   );

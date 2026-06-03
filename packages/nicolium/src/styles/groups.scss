@@ -845,3 +845,32 @@
     }
   }
 }
+
+.group-privacy-blankslate {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+
+  padding: 2.5rem 0;
+
+  &__icon {
+    padding: 0.75rem;
+    border-radius: var(--radius-full);
+    background-color: rgb(var(--color-gray-200));
+
+    .dark & {
+      background: rgb(var(--color-gray-800));
+    }
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: rgb(var(--color-gray-600));
+    }
+  }
+
+  p {
+    @include mixins.text($theme: muted);
+  }
+}

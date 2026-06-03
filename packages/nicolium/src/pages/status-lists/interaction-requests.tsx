@@ -180,7 +180,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
       if (interactionRequest.status_id) {
         return (
           <Link
-            className='font-bold text-gray-800 hover:underline dark:text-gray-200'
+            className='link'
             to='/@{$username}/posts/$statusId'
             params={{ username: ownAccount?.acct ?? '', statusId: interactionRequest.status_id }}
           >

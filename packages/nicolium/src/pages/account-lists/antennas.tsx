@@ -6,7 +6,6 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import List, { ListItem } from '@/components/list';
-import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import Spinner from '@/components/ui/spinner';
@@ -58,13 +57,11 @@ const AntennasPage: React.FC = () => {
       label={intl.formatMessage(messages.heading)}
       action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
-      <div className='flex flex-col gap-4'>
+      <div className='lists'>
         {/* <NewListForm /> */}
 
         {!Object.keys(antennas).length ? (
-          <Card variant='rounded' size='lg'>
-            {emptyMessage}
-          </Card>
+          <div className='lists__empty'>{emptyMessage}</div>
         ) : (
           <List>
             {antennas.map((antenna) => (
@@ -73,7 +70,7 @@ const AntennasPage: React.FC = () => {
                 to='/antennas/$antennaId'
                 params={{ antennaId: antenna.id }}
                 label={
-                  <div className='flex items-center gap-2'>
+                  <div className='lists__list'>
                     <Icon src={iconListBullets} size={20} />
                     <span>{antenna.title}</span>
                   </div>

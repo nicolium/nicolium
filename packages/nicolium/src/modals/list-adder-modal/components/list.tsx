@@ -4,7 +4,7 @@ import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from '@/components/icon';
+import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import {
   useAddAccountsToList,
@@ -44,30 +44,16 @@ const List: React.FC<IList> = ({ listId, accountId, added }) => {
 
   if (added) {
     button = (
-      <IconButton
-        className='text-gray-400 hover:text-gray-600'
-        iconClassName='h-5 w-5'
-        src={iconX}
-        title={intl.formatMessage(messages.remove)}
-        onClick={onRemove}
-      />
+      <IconButton src={iconX} title={intl.formatMessage(messages.remove)} onClick={onRemove} />
     );
   } else {
-    button = (
-      <IconButton
-        className='text-gray-400 hover:text-gray-600'
-        iconClassName='h-5 w-5'
-        src={iconPlus}
-        title={intl.formatMessage(messages.add)}
-        onClick={onAdd}
-      />
-    );
+    button = <IconButton src={iconPlus} title={intl.formatMessage(messages.add)} onClick={onAdd} />;
   }
 
   return (
-    <div className='flex items-center gap-1.5 px-2 py-4 text-black dark:text-white'>
+    <div className='list-adder-modal__list'>
       <Icon src={iconListBullets} />
-      <span className='grow'>{list.title}</span>
+      <span>{list.title}</span>
       {button}
     </div>
   );

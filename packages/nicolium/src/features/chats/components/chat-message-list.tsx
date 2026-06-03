@@ -167,7 +167,7 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
   const renderChatMessage = useCallback(
     (index: number, chatMessage: ChatMessageEntity | { type: 'divider'; text: string }) => {
       if ('type' in chatMessage && chatMessage.type === 'divider') {
-        return <Divider key={index} text={chatMessage.text} textSize='xs' />;
+        return <Divider key={index} text={chatMessage.text} />;
       }
 
       return <ChatMessage key={chatMessage.id} chat={chat} chatMessage={chatMessage} />;

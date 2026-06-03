@@ -14,3 +14,19 @@
   width: 2.25rem !important;
   height: 2.25rem !important;
 }
+
+.sr-only {
+  position: absolute;
+
+  overflow: hidden;
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border-width: 0;
+
+  white-space: nowrap;
+
+  clip-path: inset(50%);
+}

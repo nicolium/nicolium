@@ -90,6 +90,10 @@
   &--transparent {
     background-color: transparent;
   }
+
+  span {
+    @include mixins.text($theme: inherit, $size: sm);
+  }
 }
 
 .accordion {
@@ -210,6 +214,8 @@
     justify-content: center;
 
     > span {
+      @include mixins.text($theme: inherit, $size: xs);
+
       padding: 0 0.5rem;
       color: rgb(var(--color-gray-700));
       background: white;
@@ -1509,6 +1515,17 @@ div[data-viewport-type='window']:has(.empty-message) {
   white-space: nowrap;
 
   background-color: rgb(var(--color-primary-500));
+
+  p {
+    @include mixins.text($theme: white);
+
+    &__delete {
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+  }
 }
 
 .progress-bar {
@@ -2518,6 +2535,56 @@ div[data-viewport-type='window']:has(.empty-message) {
 
     .dark & {
       fill: rgb(var(--color-gray-900));
+    }
+  }
+}
+
+.link {
+  font-weight: 700;
+  color: rgb(var(--color-gray-800));
+
+  .dark & {
+    color: rgb(var(--color-gray-200));
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.lists {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  &__empty {
+    @include mixins.card($variant: rounded, $size: lg);
+  }
+  
+  &__list {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  &__form {
+    display: flex;
+
+    label {
+      flex-grow: 1;
+
+      > span {
+        display: none;
+      }
+    }
+
+    button {
+      @include mixins.button($theme: primary);
     }
   }
 }

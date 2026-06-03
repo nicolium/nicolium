@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React from 'react';
 
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { useLongPress } from '@/hooks/use-long-press';
 import { useSettings } from '@/stores/settings';
 
@@ -18,9 +17,9 @@ const StatusActionCounter: React.FC<IStatusActionCounter> = React.memo(
     const { demetricator } = useSettings();
 
     return (
-      <Text size='xs' weight='semibold' theme='inherit'>
+      <p className='status-action-bar__button__counter'>
         <AnimatedNumber value={count} obfuscate={demetricator} short />
-      </Text>
+      </p>
     );
   },
 );

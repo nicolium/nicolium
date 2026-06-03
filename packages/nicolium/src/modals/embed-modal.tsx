@@ -5,7 +5,6 @@ import CopyableInput from '@/components/copyable-input';
 import SafeEmbed from '@/components/safe-embed';
 import Divider from '@/components/ui/divider';
 import Modal from '@/components/ui/modal';
-import Text from '@/components/ui/text';
 import useEmbed from '@/queries/embed';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -33,27 +32,24 @@ const EmbedModal: React.FC<BaseModalProps & EmbedModalProps> = ({ onClose, onErr
       title={<FormattedMessage id='status.embed' defaultMessage='Embed post' />}
       onClose={handleClose}
     >
-      <div className='flex flex-col gap-4'>
-        <Text theme='muted'>
+      <div className='embed-modal'>
+        <p className='embed-modal__instructions'>
           <FormattedMessage
             id='embed.instructions'
             defaultMessage='Embed this post on your website by copying the code below.'
           />
-        </Text>
+        </p>
 
         <CopyableInput value={embed?.html ?? ''} />
-      </div>
 
-      <div className='py-9'>
         <Divider />
-      </div>
 
-      <SafeEmbed
-        className='w-full overflow-hidden rounded-xl'
-        sandbox='allow-same-origin allow-scripts'
-        title='embedded-status'
-        html={embed?.html}
-      />
+        <SafeEmbed
+          sandbox='allow-same-origin allow-scripts'
+          title='embedded-status'
+          html={embed?.html}
+        />
+      </div>
     </Modal>
   );
 };

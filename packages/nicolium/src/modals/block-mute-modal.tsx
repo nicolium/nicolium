@@ -3,7 +3,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import FormGroup from '@/components/ui/form-group';
 import Modal from '@/components/ui/modal';
-import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
 import DurationSelector from '@/features/compose/components/polls/duration-selector';
@@ -140,8 +139,8 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
       cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
       cancelAction={handleCancel}
     >
-      <div className='flex flex-col gap-4'>
-        <Text>
+      <div className='block-mute-modal'>
+        <p className='block-mute-modal__message'>
           {action === 'MUTE' ? (
             <FormattedMessage
               id='confirmations.mute.message'
@@ -155,16 +154,16 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
               values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
             />
           )}
-        </Text>
+        </p>
 
         {action === 'MUTE' && (
-          <label className='flex items-center gap-2'>
-            <Text tag='span' theme='muted'>
+          <label className='block-mute-modal__toggle'>
+            <span>
               <FormattedMessage
                 id='mute_modal.hide_notifications'
                 defaultMessage='Hide notifications from this user?'
               />
-            </Text>
+            </span>
 
             <Toggle checked={notifications} onChange={toggleNotifications} />
           </label>
@@ -200,7 +199,6 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
             }
           >
             <Textarea
-              className='mt-1'
               value={note ?? currentNote ?? ''}
               onChange={({ target }) => {
                 setNote(target.value);
@@ -213,31 +211,29 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
 
         {canSetDuration && (
           <>
-            <label>
-              <div className='flex items-center gap-2'>
-                <Text tag='span'>
-                  {action === 'MUTE' ? (
-                    <FormattedMessage
-                      id='mute_modal.auto_expire'
-                      defaultMessage='Automatically expire mute?'
-                    />
-                  ) : (
-                    <FormattedMessage
-                      id='block_modal.auto_expire'
-                      defaultMessage='Automatically expire block?'
-                    />
-                  )}
-                </Text>
+            <label className='block-mute-modal__toggle'>
+              <span>
+                {action === 'MUTE' ? (
+                  <FormattedMessage
+                    id='mute_modal.auto_expire'
+                    defaultMessage='Automatically expire mute?'
+                  />
+                ) : (
+                  <FormattedMessage
+                    id='block_modal.auto_expire'
+                    defaultMessage='Automatically expire block?'
+                  />
+                )}
+              </span>
 
-                <Toggle checked={duration !== 0} onChange={toggleAutoExpire} />
-              </div>
+              <Toggle checked={duration !== 0} onChange={toggleAutoExpire} />
             </label>
 
             {duration !== 0 && (
-              <div className='flex flex-col gap-2'>
-                <Text weight='medium'>
+              <div className='block-mute-modal__duration'>
+                <p>
                   <FormattedMessage id='mute_modal.duration' defaultMessage='Duration' />:{' '}
-                </Text>
+                </p>
 
                 <DurationSelector onDurationChange={handleChangeMuteDuration} value={duration} />
               </div>

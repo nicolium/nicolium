@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React from 'react';
 
 import SvgIcon from './svg-icon';
-import Text from './text';
 
 interface IIconButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Class name for the <svg> icon. */
@@ -37,11 +36,7 @@ const IconButton = React.forwardRef(
       >
         <SvgIcon src={src} className={iconClassName} aria-hidden />
 
-        {text ? (
-          <Text tag='span' theme='inherit' size='sm'>
-            {text}
-          </Text>
-        ) : null}
+        {text ? <span>{text}</span> : null}
       </Component>
     );
   },

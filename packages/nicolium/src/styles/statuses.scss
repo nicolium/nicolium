@@ -423,6 +423,10 @@
       @include mixins.text($theme: inherit, $size: sm);
     }
 
+    &__counter {
+      @include mixins.text($theme: inherit, $size: xs, $weight: semibold);
+    }
+
     &:has(.status-action-bar__button__text) {
       gap: 0.5rem;
     }

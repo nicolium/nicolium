@@ -27,7 +27,6 @@ import {
 
 import AccountContainer from '@/components/accounts/account-container';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
-import Markup from '@/components/markup';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import { ParsedContent } from '@/components/statuses/parsed-content';
@@ -75,12 +74,7 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
 const buildLink = (
   account: Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id' | 'local' | 'url'>,
 ): React.JSX.Element => (
-  <AccountLink
-    className='font-bold text-gray-800 hover:underline dark:text-gray-200'
-    title={account.acct}
-    account={account}
-    key={account.id}
-  >
+  <AccountLink className='link' title={account.acct} account={account} key={account.id}>
     <HoverAccountWrapper key={account.acct} element='bdi' accountId={account.id}>
       <Emojify text={account.display_name} emojis={account.emojis} />
     </HoverAccountWrapper>
@@ -259,12 +253,7 @@ const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
 
   if (status.content) {
     output.push(
-      <Markup
-        truncate
-        className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
-        size='sm'
-        tag='div'
-      >
+      <div className='notification__status__preview' data-markup>
         <ParsedContent
           key='content'
           html={status.content}
@@ -272,7 +261,7 @@ const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
           hasQuote={!!status.quote_id}
           emojis={status.emojis}
         />
-      </Markup>,
+      </div>,
     );
   }
 

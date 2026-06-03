@@ -51,6 +51,33 @@
   .status__wrapper {
     padding: 0;
   }
+
+  &__status-preview {
+    @include mixins.text($truncate: true, $size: sm)
+      overflow: hidden;
+
+    display: -webkit-box;
+    display: inline;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+
+    text-overflow: ellipsis;
+
+    br {
+      display: none;
+    }
+
+    p {
+      display: none;
+
+      &:first-child {
+        overflow: hidden;
+        display: inline;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
 }
 
 .notification--placeholder {

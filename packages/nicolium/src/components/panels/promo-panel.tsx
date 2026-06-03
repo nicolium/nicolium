@@ -24,8 +24,8 @@ const PromoPanel: React.FC = () => {
             key={i}
             href={item.url}
             label={
-              <div className='flex items-center gap-2'>
-                <ForkAwesomeIcon id={item.icon} className='flex-none text-lg' fixedWidth />
+              <div className='promo-panel__item'>
+                <ForkAwesomeIcon id={item.icon} fixedWidth />
                 <span>{item.textLocales[locale] || item.text}</span>
               </div>
             }

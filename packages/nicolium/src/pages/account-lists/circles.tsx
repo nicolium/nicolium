@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
-import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import Icon from '@/components/ui/icon';
@@ -41,24 +39,22 @@ const NewCircleForm: React.FC = () => {
   const create = intl.formatMessage(messages.create);
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <div className='flex items-center gap-2'>
-        <label className='grow'>
-          <span style={{ display: 'none' }}>{label}</span>
+    <Form className='lists__list' onSubmit={handleSubmit}>
+      <label className='grow'>
+        <span style={{ display: 'none' }}>{label}</span>
 
-          <Input
-            type='text'
-            value={title}
-            disabled={isPending}
-            onChange={handleChange}
-            placeholder={label}
-          />
-        </label>
+        <Input
+          type='text'
+          value={title}
+          disabled={isPending}
+          onChange={handleChange}
+          placeholder={label}
+        />
+      </label>
 
-        <Button disabled={isPending} type='submit' theme='primary'>
-          {create}
-        </Button>
-      </div>
+      <button disabled={isPending} type='submit'>
+        {create}
+      </button>
     </Form>
   );
 };
@@ -85,13 +81,11 @@ const CirclesPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <div className='flex flex-col gap-4'>
+      <div className='lists'>
         <NewCircleForm />
 
         {!Object.keys(circles).length ? (
-          <Card variant='rounded' size='lg'>
-            {emptyMessage}
-          </Card>
+          <div className='lists__empty'>{emptyMessage}</div>
         ) : (
           <List>
             {circles.map((circle) => (
@@ -100,7 +94,7 @@ const CirclesPage: React.FC = () => {
                 to='/circles/$circleId'
                 params={{ circleId: circle.id }}
                 label={
-                  <div className='flex items-center gap-2'>
+                  <div className='lists__list'>
                     <Icon src={iconListBullets} size={20} />
                     <span>{circle.title}</span>
                   </div>

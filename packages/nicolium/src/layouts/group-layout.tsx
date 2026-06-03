@@ -9,7 +9,6 @@ import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
-import Text from '@/components/ui/text';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useGroupMembershipRequestsQuery } from '@/queries/groups/use-group-members';
 import { layouts } from '@/router';
@@ -21,17 +20,17 @@ const messages = defineMessages({
 });
 
 const PrivacyBlankslate = () => (
-  <div className='flex flex-col items-center gap-4 py-10'>
-    <div className='rounded-full bg-gray-200 p-3 dark:bg-gray-800'>
-      <Icon src={iconEyeSlash} className='size-6 text-gray-600 dark:text-gray-600' />
+  <div className='group-privacy-blankslate'>
+    <div className='group-privacy-blankslate__icon'>
+      <Icon src={iconEyeSlash} />
     </div>
 
-    <Text theme='muted'>
+    <p>
       <FormattedMessage
         id='group.private.message'
         defaultMessage='Content is only visible to group members'
       />
-    </Text>
+    </p>
   </div>
 );
 
