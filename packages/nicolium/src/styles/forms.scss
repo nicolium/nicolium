@@ -383,6 +383,7 @@ select {
     border-radius: var(--radius-md);
 
     &--search {
+      margin: 0;
       border-radius: var(--radius-full);
     }
 

@@ -29,7 +29,19 @@
 
   &__input {
     position: sticky;
+    z-index: 10;
     top: calc(4.5rem + 2px);
+
+    background: rgb(255 255 255 / 0.9);
+    backdrop-filter: blur(8px), saturate(2);
+
+    .dark & {
+      background: rgb(var(--color-primary-900) / 0.9);
+    }
+
+    .black & {
+      background: rgb(0 0 0 / 0.9);
+    }
   }
 
   &__account {
@@ -64,18 +76,7 @@
 }
 
 .search-input {
-  z-index: 10;
   width: 100%;
-  background: rgb(255 255 255 / 0.9);
-  backdrop-filter: blur(8px), saturate(2);
-
-  .dark & {
-    background: rgb(var(--color-primary-900) / 0.9);
-  }
-
-  .black & {
-    background: rgb(0 0 0 / 0.9);
-  }
 
   &__content {
     position: relative;

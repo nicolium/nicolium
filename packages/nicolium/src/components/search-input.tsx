@@ -1,7 +1,6 @@
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
 import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useNavigate } from '@tanstack/react-router';
-import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -72,8 +71,8 @@ const SearchInput = React.memo(() => {
   const hasValue = value.length > 0;
 
   return (
-    <div className='w-full'>
-      <div className='relative'>
+    <div className='search-input'>
+      <div className='search-input__content'>
         <AutosuggestAccountInput
           id='search'
           placeholder={intl.formatMessage(messages.placeholder)}
@@ -85,28 +84,20 @@ const SearchInput = React.memo(() => {
           menu={makeMenu()}
           autoSelect={false}
           theme='search'
-          className='pr-10 rtl:pl-10 rtl:pr-3'
         />
 
         <button
           tabIndex={hasValue ? 0 : -1}
-          className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClear}
           title={
             hasValue ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.placeholder)
           }
         >
-          <SvgIcon
-            src={iconMagnifyingGlass}
-            className={clsx('size-4 text-gray-600', { hidden: hasValue })}
-            aria-hidden
-          />
-
-          <SvgIcon
-            src={iconX}
-            className={clsx('size-4 text-gray-600', { hidden: !hasValue })}
-            aria-hidden
-          />
+          {hasValue ? (
+            <SvgIcon src={iconX} aria-hidden />
+          ) : (
+            <SvgIcon src={iconMagnifyingGlass} aria-hidden />
+          )}
         </button>
       </div>
     </div>
