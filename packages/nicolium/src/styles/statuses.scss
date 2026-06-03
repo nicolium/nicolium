@@ -2006,7 +2006,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   }
 
   &__host {
-    @include mixins.text($size: xs);
+    @include mixins.text($size: xs, $theme: inherit);
 
     text-transform: lowercase;
   }
