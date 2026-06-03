@@ -1010,6 +1010,10 @@
         background-color: rgb(var(--color-primary-800));
       }
     }
+
+    [data-markup]:empty {
+      display: none;
+    }
   }
 }
 
