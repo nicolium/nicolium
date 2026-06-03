@@ -70,16 +70,13 @@ const StillImage: React.FC<IStillImage> = ({
     }
   };
 
-  /** ClassNames shared between the `<img>` and `<canvas>` elements. */
-  const baseClassName = clsx('block size-full', innerClassName, {
-    'object-contain': letterboxed,
-    'object-cover': !letterboxed,
-  });
-
   return (
     <span
       data-testid='still-image-container'
-      className={clsx(className, 'still-image', { 'still-image--hover-to-play': hoverToPlay })}
+      className={clsx(className, 'still-image', {
+        'still-image--hover-to-play': hoverToPlay,
+        'still-image--letterboxed': letterboxed,
+      })}
       style={style}
     >
       <img
@@ -89,7 +86,7 @@ const StillImage: React.FC<IStillImage> = ({
         ref={img}
         onLoad={handleImageLoad}
         onError={onError}
-        className={clsx(baseClassName, {
+        className={clsx({
           'still-image__image': hoverToPlay,
         })}
       />
@@ -100,14 +97,14 @@ const StillImage: React.FC<IStillImage> = ({
             src={staticSrc}
             alt={alt}
             title={alt}
-            className={clsx(baseClassName, 'still-image__static-image')}
+            className={clsx(innerClassName, 'still-image__static-image')}
           />
         ) : (
-          <canvas ref={canvas} className={clsx(baseClassName, 'still-image__static-image')} />
+          <canvas ref={canvas} className={clsx(innerClassName, 'still-image__static-image')} />
         ))}
 
       {hoverToPlay && showExt && (
-        <div className='pointer-events-none absolute bottom-2 left-2 opacity-90 group-hover:hidden'>
+        <div className='extension-badge__container'>
           <ExtensionBadge ext='GIF' />
         </div>
       )}
@@ -122,9 +119,7 @@ interface IExtensionBadge {
 
 /** Badge displaying a file extension. */
 const ExtensionBadge: React.FC<IExtensionBadge> = ({ ext }) => (
-  <div className='inline-flex items-center rounded bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-900 dark:bg-gray-800 dark:text-gray-100'>
-    {ext}
-  </div>
+  <div className='extension-badge'>{ext}</div>
 );
 
 export { type IStillImage, StillImage as default };

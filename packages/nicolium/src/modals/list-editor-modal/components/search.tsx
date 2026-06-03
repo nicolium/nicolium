@@ -1,11 +1,9 @@
 import iconBackspace from '@phosphor-icons/core/regular/backspace.svg';
-import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Icon from '@/components/icon';
-import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
+import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 
 const messages = defineMessages({
@@ -34,36 +32,32 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
   const hasValue = searchValue.length > 0;
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <div className='flex gap-2'>
-        <label className='relative grow' title={intl.formatMessage(messages.search)}>
-          <Input
-            type='text'
-            value={searchValue}
-            onChange={handleChange}
-            placeholder={intl.formatMessage(messages.search)}
-          />
+    <Form onSubmit={handleSubmit} className='list-editor-modal__search'>
+      <label title={intl.formatMessage(messages.search)}>
+        <Input
+          type='text'
+          value={searchValue}
+          onChange={handleChange}
+          placeholder={intl.formatMessage(messages.search)}
+        />
+        {hasValue && (
           <div
             role='button'
             tabIndex={0}
-            className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
+            className='list-editor-modal__clear'
             onClick={() => {
               setSearchValue('');
               onSubmit('');
             }}
           >
-            <Icon
-              src={iconBackspace}
-              className={clsx('size-5 text-gray-600', { hidden: !hasValue })}
-              aria-hidden
-            />
+            <Icon src={iconBackspace} aria-hidden />
           </div>
-        </label>
+        )}
+      </label>
 
-        <Button onClick={handleSubmit}>
-          <FormattedMessage id='tabs_bar.search' defaultMessage='Search' />
-        </Button>
-      </div>
+      <button className='list-editor-modal__submit' onClick={handleSubmit}>
+        <FormattedMessage id='tabs_bar.search' defaultMessage='Search' />
+      </button>
     </Form>
   );
 };

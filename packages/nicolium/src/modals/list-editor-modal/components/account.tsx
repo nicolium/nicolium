@@ -27,31 +27,23 @@ const Account: React.FC<IAccount> = ({ accountId, added, onAdd, onRemove }) => {
     button = (
       <IconButton
         src={iconX}
-        className='text-gray-400 hover:text-gray-600'
-        iconClassName='h-5 w-5'
         title={intl.formatMessage(messages.remove)}
-        onClick={() => {
-          onRemove(accountId);
-        }}
+        onClick={() => onRemove(accountId)}
       />
     );
   } else {
     button = (
       <IconButton
         src={iconPlus}
-        className='text-gray-400 hover:text-gray-600'
-        iconClassName='h-5 w-5'
         title={intl.formatMessage(messages.add)}
-        onClick={() => {
-          onAdd(accountId);
-        }}
+        onClick={() => onAdd(accountId)}
       />
     );
   }
 
   return (
-    <div className='flex items-center justify-between gap-1 p-2.5'>
-      <div className='w-full'>
+    <div className='list-editor-modal__account'>
+      <div>
         <AccountContainer id={accountId} withRelationship={false} />
       </div>
       {button}

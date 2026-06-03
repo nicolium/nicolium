@@ -1572,7 +1572,7 @@ body {
     justify-content: center;
 
     li {
-      padding:0.5rem 1.25rem;
+      padding: 0.5rem 1.25rem;
 
       a {
         @include mixins.text($size: sm, $theme: inherit);

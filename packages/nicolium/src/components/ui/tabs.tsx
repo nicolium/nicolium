@@ -41,14 +41,11 @@ const AnimatedTabs: React.FC<IAnimatedTabs> = ({ children, ...rest }) => {
   return (
     <AnimatedContext.Provider value={setActiveRect}>
       <ReachTabs {...rest} ref={ref}>
-        <div className='absolute h-[3px] w-full bg-primary-200 dark:bg-gray-800' style={{ top }} />
+        <div className='tabs__bar' style={{ top }} />
         <div
-          className={clsx(
-            'absolute h-[3px] bg-primary-500 no-reduce-motion:transition-all no-reduce-motion:duration-200',
-            {
-              hidden: top <= 0,
-            },
-          )}
+          className={clsx('tabs__bar--active', {
+            'tabs__bar--hidden': top <= 0,
+          })}
           style={{ left, top, width }}
         />
         {children}
@@ -139,9 +136,9 @@ const Tabs = ({ items, activeItem }: ITabs) => {
 
     return (
       <AnimatedTab key={name} as='button' role='button' title={title || ''} index={idx}>
-        <div className='relative'>
+        <div>
           {count ? (
-            <span className='absolute left-full ml-2'>
+            <span className='tab__counter'>
               <Counter count={count} />
             </span>
           ) : null}

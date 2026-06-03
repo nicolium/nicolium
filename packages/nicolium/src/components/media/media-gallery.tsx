@@ -4,10 +4,9 @@ import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, type CSSProperties } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Icon from '@/components/icon';
 import Blurhash from '@/components/media/blurhash';
 import StillImage from '@/components/still-image';
-import Text from '@/components/ui/text';
+import Icon from '@/components/ui/icon';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useSettings } from '@/stores/settings';
@@ -171,10 +170,7 @@ const Item: React.FC<IItem> = ({
   if (attachment.type === 'unknown') {
     const filename = truncateFilename(attachment.url, MAX_FILENAME_LENGTH);
     const attachmentIcon = (
-      <Icon
-        className='size-16 text-gray-800 dark:text-gray-200'
-        src={MIMETYPE_ICONS[attachment.mime_type as string] || iconPaperclip}
-      />
+      <Icon src={MIMETYPE_ICONS[attachment.mime_type as string] || iconPaperclip} />
     );
 
     return (
@@ -207,7 +203,6 @@ const Item: React.FC<IItem> = ({
           target='_blank'
         >
           <StillImage
-            className='block size-full'
             src={mediaPreview ? attachment.preview_url : attachment.url}
             alt={attachment.description}
             letterboxed={letterboxed}
@@ -221,7 +216,6 @@ const Item: React.FC<IItem> = ({
               <FormattedMessage id='media-gallery.description' defaultMessage='Image description' />
             }
             title={intl.formatMessage(messages.altText)}
-            className='absolute bottom-2 left-2 z-10 opacity-80 transition-opacity hover:opacity-100'
           />
         )}
       </>
@@ -354,24 +348,22 @@ const MediaGallery: React.FC<IMediaGallery> = ({
 
   if (disableUserProvidedMedia) {
     return (
-      <div className='flex flex-col gap-2'>
+      <div className='media-gallery__fallback'>
         {media.map((attachment, index) => (
           <button
-            className='flex items-center gap-2'
             key={attachment.id}
             onClick={() => {
               handleClick(index);
             }}
           >
             <Icon
-              className='size-4 min-w-fit text-gray-800 dark:text-gray-200'
               src={
                 MIMETYPE_ICONS[
                   (attachment.type === 'unknown' && attachment.mime_type) || attachment.type
                 ] ?? iconPaperclip
               }
             />
-            <Text align='left'>
+            <p>
               {attachment.description ||
                 {
                   image: (
@@ -393,7 +385,7 @@ const MediaGallery: React.FC<IMediaGallery> = ({
                     />
                   ),
                 }[attachment.type]}
-            </Text>
+            </p>
           </button>
         ))}
       </div>
