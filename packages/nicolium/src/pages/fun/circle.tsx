@@ -7,12 +7,11 @@ import { uploadFile } from '@/actions/media';
 import Account from '@/components/accounts/account';
 import Accordion from '@/components/ui/accordion';
 import Avatar from '@/components/ui/avatar';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
+import Icon from '@/components/ui/icon';
 import ProgressBar from '@/components/ui/progress-bar';
-import Text from '@/components/ui/text';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { appendMedia, useComposeActions } from '@/stores/compose';
@@ -23,7 +22,6 @@ const toRad = (x: number) => x * (Math.PI / 180);
 
 import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
-import clsx from 'clsx';
 
 import avatarMissing from '@/assets/images/avatar-missing.png';
 import List, { ListItem } from '@/components/list';
@@ -217,23 +215,23 @@ const CirclePage: React.FC = () => {
   if (state === 'unrequested') {
     return (
       <Column label={intl.formatMessage(messages.heading)}>
-        <Form onSubmit={handleRequest}>
-          <Text size='xl' weight='semibold'>
+        <Form onSubmit={handleRequest} className='circle__confirmation'>
+          <p>
             <FormattedMessage
               id='interactions_circle.confirmation_heading'
               defaultMessage='Do you want to generate an interaction circle for the user @{username}?'
               values={{ username: account?.acct }}
             />
-          </Text>
+          </p>
 
-          <div className='mx-auto max-w-md rounded-lg p-2 black:border black:border-gray-800'>
+          <div className='circle__confirmation__account'>
             {account && <Account account={account} withRelationship={false} disabled />}
           </div>
 
           <FormActions>
-            <Button theme='primary' type='submit'>
+            <button>
               <FormattedMessage id='interactions_circle.start' defaultMessage='Generate' />
-            </Button>
+            </button>
           </FormActions>
         </Form>
       </Column>
@@ -241,14 +239,12 @@ const CirclePage: React.FC = () => {
   }
 
   return (
-    <Column label={intl.formatMessage(messages.heading)}>
-      <div className='flex flex-col items-center gap-4'>
+    <Column label={intl.formatMessage(messages.heading)} className='circle__column'>
+      <div className='circle'>
         {state !== 'done' && (
-          <div className='absolute inset-0 z-40 flex w-full flex-col items-center justify-center gap-4 bg-gray-800/75 p-4 backdrop-blur-lg'>
+          <div className='circle__progress'>
             <ProgressBar progress={progress / 100} size='md' />
-            <Text theme='white' weight='semibold'>
-              {intl.formatMessage(messages[state])}
-            </Text>
+            <p>{intl.formatMessage(messages[state])}</p>
           </div>
         )}
 
@@ -277,13 +273,12 @@ const CirclePage: React.FC = () => {
         )}
 
         {showHtmlCircle && (
-          <div className='relative aspect-1 w-full max-w-full'>
+          <div className='circle__fallback'>
             {imgElements.map((img, index) => (
               <img
                 key={index}
                 src={img.src}
                 alt=''
-                className='pointer-events-none absolute rounded-full'
                 style={{
                   width: img.size,
                   height: img.size,
@@ -295,14 +290,9 @@ const CirclePage: React.FC = () => {
           </div>
         )}
 
-        <canvas
-          className={clsx('max-w-full', showHtmlCircle && 'hidden')}
-          ref={canvasRef}
-          width={1000}
-          height={1000}
-        />
+        <canvas ref={canvasRef} width={1000} height={1000} />
 
-        <div className='w-full'>
+        <div className='circle__list__container'>
           <Accordion
             headline={
               <FormattedMessage id='interactions_circle.user_list' defaultMessage='User list' />
@@ -310,19 +300,17 @@ const CirclePage: React.FC = () => {
             expanded={expanded}
             onToggle={setExpanded}
           >
-            <div className='flex flex-col gap-2'>
+            <div className='circle__list'>
               {users?.map((user) => (
                 <Link key={user.id} to='/@{$username}' params={{ username: user.acct }}>
-                  <div className='flex items-center gap-2'>
+                  <div className='circle__account'>
                     <Avatar
                       size={20}
                       src={user.avatar!}
                       alt={user.avatar_description}
                       username={user.acct}
                     />
-                    <Text size='sm' weight='semibold' truncate>
-                      {user.acct}
-                    </Text>
+                    <p>{user.acct}</p>
                   </div>
                 </Link>
               ))}
@@ -331,13 +319,15 @@ const CirclePage: React.FC = () => {
         </div>
 
         {!showHtmlCircle && (
-          <div className='flex gap-2'>
-            <Button onClick={onSave} icon={iconDownloadSimple}>
+          <div className='circle__actions'>
+            <button onClick={onSave}>
+              <Icon src={iconDownloadSimple} aria-hidden />
               <FormattedMessage id='interactions_circle.download' defaultMessage='Download' />
-            </Button>
-            <Button onClick={onCompose} icon={iconNotePencil}>
+            </button>
+            <button onClick={onCompose}>
+              <Icon src={iconNotePencil} aria-hidden />
               <FormattedMessage id='interactions_circle.compose' defaultMessage='Share' />
-            </Button>
+            </button>
           </div>
         )}
       </div>

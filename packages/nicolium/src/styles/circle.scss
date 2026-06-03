@@ -1,0 +1,107 @@
+@use 'mixins';
+
+.circle {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+
+  &__column {
+    overflow: hidden;
+  }
+
+  &__progress {
+    position: absolute;
+    z-index: 40;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    padding: 1rem;
+
+    background: rgb(var(--color-gray-800) / 0.75);
+    backdrop-filter: blur(16px);
+
+    p {
+      @include mixins.text($theme: white, $weight: semibold);
+    }
+  }
+
+  &__fallback {
+    position: relative;
+    aspect-ratio: 1;
+    width: 100%;
+    max-width: 100%;
+
+    img {
+      pointer-events: none;
+      position: absolute;
+      border-radius: var(--radius-full);
+    }
+  }
+
+  canvas {
+    max-width: 100%;
+  }
+
+  &:has(.circle__fallback) canvas {
+    display: none;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &__container {
+      width: 100%;
+    }
+  }
+
+  &__account {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    p {
+      @include mixins.text($size: sm, $weight: semibold, $truncate: true);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+
+    button {
+      @include mixins.button;
+    }
+  }
+
+  &__confirmation {
+    p {
+      @include mixins.text($size: xl, $weight: semibold);
+    }
+
+    &__account {
+      max-width: 28rem;
+      margin: 0 auto;
+      padding: 0.5rem;
+      border-radius: var(--radius-lg);
+
+      .black & s{
+        border: 1px solid rgb(var(--color-gray-800));
+      }
+    }
+
+    .form__actions {
+      button {
+        @include mixins.button($theme: primary);
+      }
+    }
+  }
+}
