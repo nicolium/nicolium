@@ -52,7 +52,7 @@
   }
 
   &__closed {
-    @mixins.text($align: center, $theme: muted);
+    @include mixins.text($align: center, $theme: muted);
   }
 }
 
