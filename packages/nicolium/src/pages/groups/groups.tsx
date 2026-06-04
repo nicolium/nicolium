@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import GroupCard from '@/components/groups/group-card';
 import PlaceholderGroupCard from '@/components/placeholders/placeholder-group-card';
 import ScrollableList from '@/components/scrollable-list';
-import Button from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
 import { useGroupsQuery } from '@/queries/groups/use-groups';
 import { useModalsActions } from '@/stores/modals';
 
@@ -34,24 +34,19 @@ const Groups: React.FC = () => {
         </p>
       </div>
 
-      <Button className='groups-empty__button' onClick={createGroup} theme='secondary'>
+      <button className='groups-empty__button' onClick={createGroup}>
         <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
-      </Button>
+      </button>
     </div>
   );
 
   return (
     <div className='groups-page'>
       {!(!isFetching && groupIds.length === 0) && (
-        <Button
-          className='groups-page__create-button'
-          icon={iconUsersThree}
-          onClick={createGroup}
-          theme='secondary'
-          block
-        >
+        <button className='groups-page__create-button' onClick={createGroup}>
+          <Icon src={iconUsersThree} aria-hidden />
           <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
-        </Button>
+        </button>
       )}
 
       <ScrollableList

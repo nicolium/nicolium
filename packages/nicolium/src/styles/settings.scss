@@ -1175,3 +1175,9 @@
     white-space: nowrap;
   }
 }
+
+.preferences__actions {
+  button {
+    @include mixins.button;
+  }
+}

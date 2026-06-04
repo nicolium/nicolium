@@ -3,10 +3,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import { useFeatures } from '@/hooks/use-features';
 import SettingToggle from '@/pages/settings/components/setting-toggle';
@@ -284,11 +282,11 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
         </List>
 
         {onSave && (
-          <FormActions>
-            <Button type='submit' disabled={disabled} onClick={onSave}>
+          <div className='form__actions preferences__actions'>
+            <button type='submit' disabled={disabled} onClick={onSave}>
               <FormattedMessage id='common.save' defaultMessage='Save' />
-            </Button>
-          </FormActions>
+            </button>
+          </div>
         )}
       </Form>
     </Column>

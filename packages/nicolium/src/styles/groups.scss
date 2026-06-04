@@ -775,6 +775,8 @@
   gap: 1rem;
 
   &__create-button {
+    @include mixins.button($theme: secondary, $block: true);
+
     @media (min-width: variables.$breakpoint-xl) {
       display: none;
     }
@@ -815,6 +817,8 @@
   }
 
   &__button {
+    @include mixins.button($theme: secondary);
+
     align-self: center;
   }
 }
