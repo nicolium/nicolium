@@ -13,7 +13,6 @@ import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Spinner from '@/components/ui/spinner';
-import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import {
   useAddAccountsToAntenna,
@@ -289,13 +288,8 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
         <CardHeader>
           <CardTitle title={addTitle} />
         </CardHeader>
-        <div className='flex gap-2'>
-          <Input
-            type='text'
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            outerClassName='grow'
-          />
+        <div className='antenna-editor-modal__add-row'>
+          <Input type='text' value={value} onChange={(e) => setValue(e.target.value)} />
           <Button onClick={handleAdd}>
             <FormattedMessage id='common.add' defaultMessage='Add' />
           </Button>
@@ -326,9 +320,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
         </div>
       ) : (
         <div className='list-members-modal__form__pending'>
-          <Text theme='muted' size='sm' align='center'>
-            {emptyExcludedValues}
-          </Text>
+          <p>{emptyExcludedValues}</p>
         </div>
       )}
 
@@ -336,12 +328,11 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
         <CardHeader>
           <CardTitle title={addExcludedTitle} />
         </CardHeader>
-        <div className='flex gap-2'>
+        <div className='antenna-editor-modal__add-row'>
           <Input
             type='text'
             value={excludedValue}
             onChange={(e) => setExcludedValue(e.target.value)}
-            outerClassName='grow'
           />
           <Button onClick={handleAddExcluded}>
             <FormattedMessage id='common.add' defaultMessage='Add' />
@@ -549,7 +540,6 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
         labelText={<FormattedMessage id='antennas.edit.title' defaultMessage='Antenna title' />}
       >
         <Input
-          outerClassName='grow'
           type='text'
           value={title}
           onChange={(e) => {

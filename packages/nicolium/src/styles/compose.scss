@@ -884,7 +884,9 @@
 }
 
 .reply-indicator {
-  overflow-y: auto;
+  @include mixins.text($size: sm)
+    overflow-y: auto;
+
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

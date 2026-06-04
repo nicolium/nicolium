@@ -465,6 +465,18 @@
   @include mixins.text($theme: danger);
 }
 
+.settings-select {
+  max-width: 200px;
+
+  &--fit {
+    max-width: fit-content;
+  }
+}
+
+.settings__languages {
+  overflow: visible!;
+}
+
 .settings-empty {
   @include mixins.card($variant: rounded, $size: lg);
 
@@ -736,6 +748,12 @@
 }
 
 .aliases {
+  flex: 1 1 0%;
+
+  &__list {
+    flex: 1 1 0%;
+  }
+
   &__search {
     display: flex;
     gap: 0.25rem;
@@ -1114,5 +1132,41 @@
 
     font-size: 1.25rem;
     line-height: 1;
+  }
+}
+
+.appearance {
+  &__size-label {
+    white-space: nowrap;
+  }
+
+  &__slider {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &__reset {
+    button {
+      @include mixins.button($theme: secondary);
+    }
+  }
+}
+
+.general-preferences {
+  &__link {
+    text-decoration: underline;
+  }
+}
+
+.edit-profile-link {
+  &__label {
+    min-width: fit-content;
+  }
+
+  &__display-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

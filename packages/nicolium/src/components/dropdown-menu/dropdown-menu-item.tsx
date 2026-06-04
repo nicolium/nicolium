@@ -209,7 +209,6 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
             type='file'
             accept={item.accept}
             onChange={handleSelectFileChange}
-            className='hidden'
             disabled={item.disabled}
           />
         </label>

@@ -202,9 +202,9 @@ const FrontendConfigEditor: React.FC = () => {
   }, [rawJSON]);
 
   return (
-    <Column label={intl.formatMessage(messages.heading)}>
+    <Column label={intl.formatMessage(messages.heading)} className='frontend-config'>
       <Form onSubmit={handleSubmit}>
-        <fieldset className='space-y-6' disabled={isPending}>
+        <fieldset disabled={isPending}>
           <SitePreview frontendConfig={frontendConfig} />
 
           <CardHeader>

@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React from 'react';
 
 import Account from '@/components/accounts/account';
-import Markup from '@/components/markup';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
@@ -71,11 +70,10 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
         />
       )}
 
-      <Markup
+      <div
         className='reply-indicator__content'
-        size='sm'
-        direction={getTextDirection(status.search_index)}
-        tag='div'
+        dir={getTextDirection(status.search_index)}
+        data-markup
       >
         <ParsedContent
           html={status.content}
@@ -84,7 +82,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
           emojis={status.emojis}
           speakAsCat={account?.speak_as_cat}
         />
-      </Markup>
+      </div>
 
       {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
 

@@ -34,12 +34,11 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
     if (publicAttachments.length) {
       return (
         <div className='media-panel__attachments'>
-          {publicAttachments.map((attachment, index) => (
+          {publicAttachments.map((attachment) => (
             <MediaItem
               key={`${attachment.status_id}+${attachment.id}`}
               attachment={attachment}
               onOpenMedia={handleOpenMedia}
-              isLast={index === publicAttachments.length - 1}
             />
           ))}
         </div>

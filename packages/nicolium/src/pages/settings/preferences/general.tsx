@@ -87,7 +87,7 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
                   software: sourceCode.displayName,
                   link: (children: React.ReactNode) => (
                     <a
-                      className='underline'
+                      className='general-preferences__link'
                       href='https://hosted.weblate.org/projects/nicolium/nicolium/'
                       rel='noopener noreferrer'
                       target='_blank'
@@ -100,7 +100,7 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
             }
           >
             <SelectDropdown
-              className='max-w-[200px]'
+              className='settings-select'
               items={languages}
               defaultValue={settings.locale}
               onChange={(event) => {

@@ -1246,3 +1246,15 @@ a.measure__container {
     }
   }
 }
+
+.frontend-config {
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  select {
+    width: fit-content;
+  }
+}

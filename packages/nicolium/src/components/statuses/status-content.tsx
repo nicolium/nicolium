@@ -15,7 +15,6 @@ import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { onlyEmoji as isOnlyEmoji, onlyHour as isOnlyHour } from '@/utils/rich-content';
 import { getTextDirection } from '@/utils/rtl';
 
-import Markup from '../markup';
 import OutlineBox from '../outline-box';
 import Poll from '../polls/poll';
 
@@ -28,7 +27,6 @@ import SensitiveContentOverlay from './sensitive-content-overlay';
 import StatusMedia from './status-media';
 import TranslateButton from './translate-button';
 
-import type { Sizes } from '@/components/ui/text';
 import type { FilterContextType } from '@/queries/settings/use-filters';
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
 
@@ -81,7 +79,7 @@ interface IStatusContent {
   onClick?: () => void;
   collapsable?: boolean;
   translatable?: boolean;
-  textSize?: Sizes;
+  textSize?: 'md' | 'lg';
   isQuote?: boolean;
   preview?: boolean;
   withMedia?: boolean;
@@ -339,6 +337,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     const className = useMemo(
       () =>
         clsx('status-content', {
+          'status-content--lg': textSize === 'lg',
           'status-content--overflow': collapsed && !expanded,
           'status-content--clamp-default': collapsed && !isQuote && !preview && !expanded,
           'status-content--clamp-quote': collapsed && isQuote && !expanded,
@@ -438,18 +437,17 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
 
       if (status.content) {
         const originalContent = (
-          <Markup
+          <p
             ref={contentNode}
             tabIndex={0}
             key='content'
             className={className}
-            direction={direction}
+            dir={direction}
             lang={status.language ?? undefined}
-            size={textSize}
-            tag='div'
+            data-markup
           >
             {parsedContent}
-          </Markup>
+          </p>
         );
 
         if (translationContent && parsedTranslationContent && !isTranslationEqual) {
@@ -457,17 +455,16 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             <div className='status-translation' key='translated-content'>
               <div>{originalContent}</div>
               <div>
-                <Markup
+                <p
                   ref={translationNode}
                   tabIndex={0}
                   className={className}
-                  direction={direction}
+                  dir={direction}
                   lang={translationLanguage}
-                  size={textSize}
-                  tag='div'
+                  data-markup
                 >
                   {parsedTranslationContent}
-                </Markup>
+                </p>
               </div>
             </div>,
           );

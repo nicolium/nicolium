@@ -450,6 +450,10 @@
     background: white;
     transition: all 0.15s var(--ease-default);
 
+    &__item {
+      padding: 1rem 0;
+    }
+
     @media (min-width: variables.$breakpoint-xl) {
       position: fixed;
       top: 0;
@@ -730,6 +734,13 @@
         @include mixins.text($theme: muted, $size: sm, $align: center);
       }
     }
+  }
+}
+
+.antenna-editor-modal {
+  &__add-row {
+    display: flex;
+    gap: 0.5rem;
   }
 }
 

@@ -378,7 +378,12 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
       {(status || (statusId && isPending)) && (
         <div className='media-modal__thread'>
           {status ? (
-            <Thread status={status} withMedia={false} itemClassName='px-4' isModal />
+            <Thread
+              status={status}
+              withMedia={false}
+              itemClassName='media-modal__thread__item'
+              isModal
+            />
           ) : (
             <PlaceholderStatus />
           )}

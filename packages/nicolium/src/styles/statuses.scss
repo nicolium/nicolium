@@ -992,10 +992,17 @@
 }
 
 .status-content {
+  @include mixins.text($size: md);
+
   position: relative;
   color: rgb(var(--color-gray-900));
   text-overflow: ellipsis;
   overflow-wrap: anywhere;
+
+  &--lg {
+    font-size: var(--text-lg);
+    line-height: var(--leading-lg);
+  }
 
   &:focus {
     outline: 2px solid transparent;
@@ -2019,11 +2026,14 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   }
 }
 
-.parsed-content {
+.parsed-content,
+.appearance {
   &__greentext {
     color: rgb(var(--color-greentext));
   }
+}
 
+.parsed-content {
   &__host {
     @include mixins.text($size: xs, $theme: inherit);
 

@@ -889,6 +889,10 @@ div[data-viewport-type='window']:has(.empty-message) {
       }
     }
 
+    strong {
+      overflow-wrap: break-word;
+    }
+
     .icon-button {
       color: rgb(var(--color-gray-500));
 
@@ -1141,6 +1145,10 @@ div[data-viewport-type='window']:has(.empty-message) {
 
       &:focus-visible {
         outline: 2px solid rgb(var(--color-primary-500));
+      }
+
+      input[type='file'] {
+        display: none;
       }
     }
   }
@@ -2655,7 +2663,8 @@ div[data-viewport-type='window']:has(.empty-message) {
 
 .site-wallet,
 .crypto-donate,
-.server-info {
+.server-info,
+.status-page {
   display: flex;
   flex-direction: column;
   gap: 1rem;

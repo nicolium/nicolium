@@ -23,10 +23,9 @@ import { isIOS } from '@/utils/is-mobile';
 interface IMediaItem {
   attachment: AccountGalleryAttachment;
   onOpenMedia: (attachment: AccountGalleryAttachment) => void;
-  isLast?: boolean;
 }
 
-const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) => {
+const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
   const { autoPlayGif, displayMedia } = useSettings();
   const { data: account } = useAccount(attachment.account_id);
   const [visible, setVisible] = useState<boolean>(
@@ -95,9 +94,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
         className={clsx('media-gallery__gifv', { 'media-gallery__gifv--autoplay': autoPlayGif })}
       >
         <video
-          className={clsx('media-gallery__item-gifv-thumbnail', {
-            'rounded-br-md': isLast,
-          })}
+          className='media-gallery__item-gifv-thumbnail'
           aria-label={attachment.description}
           title={attachment.description}
           role='application'
@@ -117,7 +114,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
     const fileExtensionLastIndex = remoteURL.lastIndexOf('.');
     const fileExtension = remoteURL.slice(fileExtensionLastIndex + 1).toUpperCase();
     thumbnail = (
-      <div className={clsx('media-gallery__item-thumbnail', { 'rounded-br-md': isLast })}>
+      <div className='media-gallery__item-thumbnail'>
         <span className='media-gallery__item__icons'>
           <Icon src={iconSpeakerHigh} />
         </span>
@@ -217,12 +214,11 @@ const AccountGalleryPage = () => {
   return (
     <Column label={`@${account.acct}`} transparent withHeader={false}>
       <div role='feed' className='account-gallery__grid'>
-        {attachments.map((attachment, index) => (
+        {attachments.map((attachment) => (
           <MediaItem
             key={`${attachment.status_id}+${attachment.id}`}
             attachment={attachment}
             onOpenMedia={handleOpenMedia}
-            isLast={index === attachments.length - 1}
           />
         ))}
 

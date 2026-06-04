@@ -23,7 +23,7 @@ const FamiliarFollowerLink: React.FC<IFamiliarFollowerLink> = ({ id }) => {
   if (!account) return null;
 
   return (
-    <AccountLink className='mention inline-block' account={account} key={account.id}>
+    <AccountLink className='mention' account={account} key={account.id}>
       <HoverAccountWrapper accountId={account.id} element='span'>
         <p>
           <Emojify text={account.display_name} emojis={account.emojis} />

@@ -237,7 +237,7 @@ const Privacy: React.FC<ISettingsPage> = ({
             }
           >
             <SelectDropdown
-              className='max-w-fit'
+              className='settings-select settings-select--fit'
               items={{
                 off: intl.formatMessage(messages.redirectLinksModeOff),
                 auto: intl.formatMessage(messages.redirectLinksModeAuto),

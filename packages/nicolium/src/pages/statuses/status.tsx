@@ -150,7 +150,7 @@ const StatusPage: React.FC = () => {
   };
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='status-page'>
       <Column
         label={intl.formatMessage(titleMessage(), { username: status.account.acct })}
         action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}

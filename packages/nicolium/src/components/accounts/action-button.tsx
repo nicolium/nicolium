@@ -165,14 +165,14 @@ const ActionButton: React.FC<IActionButton> = ({
             <FormattedMessage
               id='confirmations.unfollow.heading'
               defaultMessage='Unfollow {name}'
-              values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+              values={{ name: <strong>@{account.acct}</strong> }}
             />
           ),
           message: (
             <FormattedMessage
               id='confirmations.unfollow.message'
               defaultMessage='Are you sure you want to unfollow {name}?'
-              values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+              values={{ name: <strong>@{account.acct}</strong> }}
             />
           ),
           confirm: intl.formatMessage(messages.unfollowConfirm),

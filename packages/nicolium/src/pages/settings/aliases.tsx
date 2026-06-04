@@ -142,7 +142,7 @@ const AliasesPage = () => {
   );
 
   return (
-    <Column className='flex-1' label={intl.formatMessage(messages.heading)}>
+    <Column className='aliases' label={intl.formatMessage(messages.heading)}>
       <CardHeader>
         <CardTitle
           title={
@@ -178,7 +178,7 @@ const AliasesPage = () => {
           }
         />
       </CardHeader>
-      <div className='flex-1'>
+      <div className='aliases__list'>
         <ScrollableList scrollKey='aliases' emptyMessageText={emptyMessage}>
           {aliases.map((alias) => (
             <div key={alias} className='aliases__alias'>

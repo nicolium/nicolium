@@ -153,7 +153,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           />
           <ListItem
             label={
-              <div className='whitespace-nowrap'>
+              <div className='appearance__size-label'>
                 <FormattedMessage
                   id='preferences.fields.interface_size'
                   defaultMessage='Interface size'
@@ -161,7 +161,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
               </div>
             }
           >
-            <div className='flex w-full flex-col'>
+            <div className='appearance__slider'>
               <StepSlider
                 value={INTERFACE_SIZES.indexOf(settings.theme?.interfaceSize ?? 'md')}
                 steps={4}
@@ -186,7 +186,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
               }
             >
               <SelectDropdown
-                className='max-w-[200px]'
+                className='settings-select'
                 items={systemDarkThemePreferenceOptions}
                 defaultValue={settings.theme?.systemDarkThemePreference ?? 'black'}
                 onChange={(event) => {
@@ -197,10 +197,10 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           )}
         </List>
 
-        <div className='flex justify-end'>
-          <Button theme='secondary' onClick={onThemeReset}>
+        <div className='form__actions appearance__reset'>
+          <button onClick={onThemeReset}>
             <FormattedMessage id='preferences.fields.theme_reset' defaultMessage='Reset theme' />
-          </Button>
+          </button>
         </div>
 
         <List>
@@ -346,9 +346,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
                 id='frontend_config.greentext.label'
                 defaultMessage='<span>>render greentext</span>'
                 values={{
-                  span: (children) => (
-                    <span className='dark:text-accent-green text-lime-600'>{children}</span>
-                  ),
+                  span: (children) => <span className='appearance__greentext'>{children}</span>,
                 }}
               />
             }

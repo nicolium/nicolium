@@ -150,7 +150,7 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
             }
           >
             <SelectDropdown
-              className='max-w-[200px]'
+              className='settings-select'
               items={displayMediaOptions}
               defaultValue={settings.displayMedia}
               onChange={(event) => {
@@ -183,7 +183,7 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
             }
           >
             <SelectDropdown
-              className='max-w-[200px]'
+              className='settings-select'
               items={displayPreviewCardsOptions}
               defaultValue={settings.displayPreviewCards}
               onChange={(event) => {
@@ -356,7 +356,7 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
             </ListItem>
 
             <ListItem
-              className='!overflow-visible'
+              className='settings__languages'
               label={
                 <FormattedMessage
                   id='preferences.fields.known_languages.label'
@@ -365,7 +365,7 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
               }
             >
               <Multiselect
-                className='max-w-[200px]'
+                className='settings-select'
                 items={languages}
                 value={settings.knownLanguages as string[] | undefined}
                 onChange={(selectedList) => {

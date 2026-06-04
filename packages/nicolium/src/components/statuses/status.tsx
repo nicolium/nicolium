@@ -558,8 +558,8 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         variant={variant}
         className={clsx('status__wrapper', className, {
           'status__wrapper--rounded': variant === 'rounded',
-          muted,
-          read: unread === false,
+          'status__wrapper--muted': muted,
+          'status__wrapper--read': unread === false,
         })}
       >
         {statusInfo}

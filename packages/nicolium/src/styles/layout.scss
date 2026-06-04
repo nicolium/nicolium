@@ -998,6 +998,12 @@ body {
       }
     }
 
+    &--groups {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
     .window-controls-overlay & {
       padding-top: env(titlebar-area-height);
 

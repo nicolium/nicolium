@@ -760,7 +760,7 @@ const EditProfilePage: React.FC = () => {
               }
             >
               <SelectDropdown
-                className='max-w-fit'
+                className='settings-select settings-select--fit'
                 items={{
                   microblog: intl.formatMessage(messages.webLayoutMicroblog),
                   gallery: intl.formatMessage(messages.webLayoutGallery),
@@ -783,7 +783,7 @@ const EditProfilePage: React.FC = () => {
               }
             >
               <SelectDropdown
-                className='max-w-fit'
+                className='settings-select settings-select--fit'
                 items={{
                   public: intl.formatMessage(messages.webVisibilityPublic),
                   unlisted: intl.formatMessage(messages.webVisibilityUnlisted),
@@ -836,7 +836,7 @@ const EditProfilePage: React.FC = () => {
             >
               <SelectDropdown
                 key={data.mention_policy ? 'true' : 'false'}
-                className='max-w-fit'
+                className='settings-select settings-select--fit'
                 items={{
                   none: intl.formatMessage(messages.mentionPolicyNone),
                   only_known: intl.formatMessage(messages.mentionPolicyOnlyKnown),

@@ -97,7 +97,7 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
               }
             >
               <SelectDropdown
-                className='max-w-[200px]'
+                className='settings-select'
                 items={defaultPrivacyOptions}
                 defaultValue={settings.defaultPrivacy}
                 onChange={(event) => {
@@ -117,7 +117,7 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
               }
             >
               <SelectDropdown
-                className='max-w-[200px]'
+                className='settings-select'
                 items={defaultContentTypeOptions}
                 defaultValue={settings.defaultContentType}
                 onChange={(event) => {

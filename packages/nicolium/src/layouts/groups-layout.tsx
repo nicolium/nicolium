@@ -10,7 +10,7 @@ const GroupsLayout = () => (
   <>
     <Layout.Main>
       <Column withHeader={false}>
-        <div className='space-y-4'>
+        <div className='layout__main--groups'>
           <Outlet />
         </div>
       </Column>
