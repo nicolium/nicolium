@@ -97,7 +97,7 @@ const ComposeInteractionPolicyModal: React.FC<
       closeIcon={composeId === 'compose-modal' ? iconArrowLeft : undefined}
       closePosition={composeId === 'compose-modal' ? 'left' : undefined}
     >
-      <div className='flex flex-col gap-4'>
+      <div className='compose-interaction-policy-modal'>
         <Warning
           message={
             <FormattedMessage

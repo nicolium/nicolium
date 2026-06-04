@@ -31,7 +31,7 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
   return (
     <div className='hashtag' data-testid='hashtag'>
       <div className='hashtag__name'>
-        <Link to='/tags/$hashtag' params={{ hashtag: hashtag.name }} className='hover:underline'>
+        <Link to='/tags/$hashtag' params={{ hashtag: hashtag.name }}>
           #{hashtag.name}
         </Link>
 

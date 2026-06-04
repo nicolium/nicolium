@@ -229,7 +229,7 @@ const Multiselect: React.FC<IMultiselect> = ({
                 title={intl.formatMessage(messages.removeItem)}
                 aria-label={intl.formatMessage(messages.removeItem)}
               >
-                <Icon className='ml-1 size-4 hover:cursor-pointer' src={iconX} />
+                <Icon src={iconX} />
               </button>
             </span>
           ))}

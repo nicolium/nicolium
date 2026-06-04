@@ -127,6 +127,16 @@ select {
     white-space: nowrap;
 
     background: rgb(var(--color-primary-600));
+
+    button svg {
+      width: 1rem;
+      height: 1rem;
+      margin-left: 0.25rem;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 
   &__option-list {

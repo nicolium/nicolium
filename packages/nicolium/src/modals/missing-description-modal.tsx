@@ -26,6 +26,7 @@ const MissingDescriptionModal: React.FC<BaseModalProps & MissingDescriptionModal
 
   return (
     <Modal
+      className='missing-description-modal'
       title={intl.formatMessage(messages.modalTitle)}
       confirmationAction={onContinue}
       confirmationText={intl.formatMessage(messages.post)}
@@ -35,7 +36,7 @@ const MissingDescriptionModal: React.FC<BaseModalProps & MissingDescriptionModal
         onClose('MISSING_DESCRIPTION');
       }}
     >
-      <p className='text-gray-600 dark:text-gray-300' id='modal-description'>
+      <p className='missing-description-modal__description' id='modal-description'>
         <FormattedMessage
           id='missing_description_modal.description'
           defaultMessage='Continue anyway?'
