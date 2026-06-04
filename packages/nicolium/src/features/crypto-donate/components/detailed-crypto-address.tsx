@@ -23,12 +23,7 @@ const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({
   return (
     <div className='detailed-crypto-address'>
       <div className='detailed-crypto-address__label'>
-        <CryptoIcon
-          className='detailed-crypto-address__icon'
-          imgClassName='w-full'
-          ticker={ticker}
-          title={title}
-        />
+        <CryptoIcon className='detailed-crypto-address__icon' ticker={ticker} title={title} />
         <div>{title || ticker.toUpperCase()}</div>
       </div>
       {note && <div className='detailed-crypto-address__note'>{note}</div>}

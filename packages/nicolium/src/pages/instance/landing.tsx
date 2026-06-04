@@ -21,7 +21,7 @@ const LandingPage = () => (
             defaultMessage='Nicolium is a feature-rich Fediverse web client.'
           />
         </p>
-        <div className='landing-page__links'>
+        <div className='landing-page__links form__actions'>
           <a href={sourceCode.url} target='_blank' rel='noopener noreferrer'>
             <FormattedMessage id='landing.source_code' defaultMessage='Source code' />
           </a>

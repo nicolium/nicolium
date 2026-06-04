@@ -80,9 +80,9 @@ const DomainAllow: React.FC<IDomainAllow> = ({ domainAllow }) => {
   };
 
   return (
-    <div className='domain-allow'>
-      <div className='domain-allow__domain'>{domainAllow.domain}</div>
-      <div className='domain-allow__actions'>
+    <div className='admin-domain-allow'>
+      <div className='admin-domain-allow__domain'>{domainAllow.domain}</div>
+      <div className='admin-domain-allow__actions'>
         <button onClick={handleDelete}>
           <FormattedMessage id='admin.domain_allows.delete' defaultMessage='Delete' />
         </button>
@@ -115,8 +115,8 @@ const DomainAllowsPage = () => {
   if (!domainAllows) return <ColumnLoading />;
 
   return (
-    <Column bodyClassName='domain-allows' label={intl.formatMessage(messages.heading)}>
-      <form className='domain-allows__form' onSubmit={handleCreate}>
+    <Column bodyClassName='admin-domain-allows' label={intl.formatMessage(messages.heading)}>
+      <form className='admin-domain-allows__form' onSubmit={handleCreate}>
         <input
           className='input input--normal'
           type='text'
@@ -136,7 +136,7 @@ const DomainAllowsPage = () => {
             defaultMessage='No whitelisted domains found'
           />
         }
-        itemClassName='domain-allow__container'
+        itemClassName='admin-domain-allow__container'
       >
         {domainAllows.map((domainAllow) => (
           <DomainAllow key={domainAllow.id} domainAllow={domainAllow} />

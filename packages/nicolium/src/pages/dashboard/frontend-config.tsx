@@ -286,7 +286,6 @@ const FrontendConfigEditor: React.FC = () => {
                 }
               >
                 <Select
-                  className='w-fit'
                   onChange={handleChange('logoAlignment', (e) => e.target.value)}
                   defaultValue={data.logoAlignment}
                 >

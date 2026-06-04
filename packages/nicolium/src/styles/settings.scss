@@ -455,7 +455,8 @@
   }
 }
 
-.settings-card {
+.settings-card,
+.mfa-setup {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -919,12 +920,6 @@
       @include mixins.button($theme: primary);
     }
   }
-}
-
-.mfa-setup {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
 
 .enable-otp-form {

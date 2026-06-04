@@ -2664,7 +2664,9 @@ div[data-viewport-type='window']:has(.empty-message) {
 .site-wallet,
 .crypto-donate,
 .server-info,
-.status-page {
+.status-page,
+.account-statuses,
+.account-layout {
   display: flex;
   flex-direction: column;
   gap: 1rem;

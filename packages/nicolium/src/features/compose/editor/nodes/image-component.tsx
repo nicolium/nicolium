@@ -307,14 +307,12 @@ const ImageComponent = ({
             onClick={previewImage}
             src={iconMagnifyingGlassPlus}
             theme='dark'
-            iconClassName='h-5 w-5'
             title={intl.formatMessage(messages.preview)}
           />
           <IconButton
             onClick={deleteNode}
             src={iconX}
             theme='dark'
-            iconClassName='h-5 w-5'
             title={intl.formatMessage(messages.delete)}
           />
         </div>

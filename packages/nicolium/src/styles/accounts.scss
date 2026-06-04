@@ -1,12 +1,6 @@
 @use 'mixins';
 @use 'variables';
 
-.account-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
 .account-header {
   &__avatar-placeholder {
     position: relative;

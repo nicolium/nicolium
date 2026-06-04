@@ -39,7 +39,7 @@ const AccountStatusesPage: React.FC = () => {
   return (
     <Column
       label={intl.formatMessage(messages.header, { acct: account?.acct || '' })}
-      bodyClassName='flex flex-col gap-4'
+      bodyClassName='account-statuses'
     >
       <List>
         <ListItem
