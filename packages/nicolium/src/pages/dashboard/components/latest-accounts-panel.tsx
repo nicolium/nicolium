@@ -3,6 +3,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
+import Spinner from '@/components/ui/spinner';
 import Widget from '@/components/ui/widget';
 import { useAdminAccounts } from '@/queries/admin/use-accounts';
 
@@ -21,7 +22,7 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
   const intl = useIntl();
   const navigate = useNavigate();
 
-  const { data: accountIds } = useAdminAccounts({
+  const { data: accountIds, isPending } = useAdminAccounts({
     origin: 'local',
     status: 'active',
     // limit,
@@ -33,6 +34,10 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
     navigate({ to: '/nicolium/admin/accounts', search: { origin: 'local', status: 'active' } });
   };
 
+  if (!accountIds?.length) {
+    return null;
+  }
+
   return (
     <Widget
       title={
@@ -41,9 +46,15 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
       onActionClick={handleAction}
       actionTitle={intl.formatMessage(messages.expand, { count: total })}
     >
-      {accountIds?.slice(0, limit).map((account) => (
-        <AccountContainer key={account} id={account} withRelationship={false} withDate />
-      ))}
+      {isPending ? (
+        <Spinner withText={false} />
+      ) : (
+        accountIds
+          .slice(0, limit)
+          .map((account) => (
+            <AccountContainer key={account} id={account} withRelationship={false} withDate />
+          ))
+      )}
     </Widget>
   );
 };
