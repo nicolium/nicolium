@@ -3,10 +3,12 @@ import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
 import iconUserMinus from '@phosphor-icons/core/regular/user-minus.svg';
+import { Link } from '@tanstack/react-router';
+import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
 import Spinner from '@/components/ui/spinner';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -236,26 +238,28 @@ const ActionButton: React.FC<IActionButton> = ({
     const isMuted = relationship?.muting;
 
     return (
-      <Button
-        theme={isMuted ? 'danger' : 'secondary'}
-        size='sm'
-        text={
-          isMuted ? (
-            <FormattedMessage
-              id='account.unmute'
-              defaultMessage='Unmute @{name}'
-              values={{ name: account.username }}
-            />
-          ) : (
-            <FormattedMessage
-              id='account.mute'
-              defaultMessage='Mute @{name}'
-              values={{ name: account.username }}
-            />
-          )
-        }
+      <button
+        className={clsx(
+          'account-action-button',
+          isMuted ? 'account-action-button--unmute' : 'account-action-button--mute',
+        )}
+        type='button'
         onClick={handleMute}
-      />
+      >
+        {isMuted ? (
+          <FormattedMessage
+            id='account.unmute'
+            defaultMessage='Unmute @{name}'
+            values={{ name: account.username }}
+          />
+        ) : (
+          <FormattedMessage
+            id='account.mute'
+            defaultMessage='Mute @{name}'
+            values={{ name: account.username }}
+          />
+        )}
+      </button>
     );
   };
 
@@ -264,45 +268,48 @@ const ActionButton: React.FC<IActionButton> = ({
     const isBlocked = relationship?.blocking;
 
     return (
-      <Button
-        theme={isBlocked ? 'danger' : 'secondary'}
-        size='sm'
-        text={
-          isBlocked ? (
-            <FormattedMessage
-              id='account.unblock'
-              defaultMessage='Unblock @{name}'
-              values={{ name: account.username }}
-            />
-          ) : (
-            <FormattedMessage
-              id='account.block'
-              defaultMessage='Block @{name}'
-              values={{ name: account.username }}
-            />
-          )
-        }
+      <button
+        className={clsx(
+          'account-action-button',
+          isBlocked ? 'account-action-button--unblock' : 'account-action-button--block',
+        )}
+        type='button'
         onClick={handleBlock}
-      />
+      >
+        {isBlocked ? (
+          <FormattedMessage
+            id='account.unblock'
+            defaultMessage='Unblock @{name}'
+            values={{ name: account.username }}
+          />
+        ) : (
+          <FormattedMessage
+            id='account.block'
+            defaultMessage='Block @{name}'
+            values={{ name: account.username }}
+          />
+        )}
+      </button>
     );
   };
 
   /** Handles actionType='blocking' */
   const bitingAction = () => {
     return (
-      <Button
-        theme='secondary'
-        size='sm'
-        text={
+      <button
+        className='account-action-button account-action-button--bite'
+        type='button'
+        onClick={handleBite}
+      >
+        <Icon src={iconTooth} aria-hidden />
+        <span>
           <FormattedMessage
             id='account.bite'
             defaultMessage='Bite @{name}'
             values={{ name: account.username }}
           />
-        }
-        onClick={handleBite}
-        icon={iconTooth}
-      />
+        </span>
+      </button>
     );
   };
 
@@ -324,12 +331,16 @@ const ActionButton: React.FC<IActionButton> = ({
     // Remote follow through the API.
     if (features.remoteInteractions) {
       return (
-        <Button
+        <button
+          className='account-action-button account-action-button--remote-follow'
+          type='button'
           onClick={handleRemoteFollow}
-          icon={iconPlus}
-          text={<FormattedMessage id='account.follow' defaultMessage='Follow' />}
-          size='sm'
-        />
+        >
+          <Icon src={iconPlus} aria-hidden />
+          <span>
+            <FormattedMessage id='account.follow' defaultMessage='Follow' />
+          </span>
+        </button>
       );
       // Pleroma's classic remote follow form.
     } else if (features.pleromaRemoteFollow) {
@@ -337,11 +348,12 @@ const ActionButton: React.FC<IActionButton> = ({
         <form method='POST' action='/main/ostatus'>
           <input type='hidden' name='nickname' value={account.acct} />
           <input type='hidden' name='profile' value='' />
-          <Button
-            text={<FormattedMessage id='account.remote_follow' defaultMessage='Remote follow' />}
+          <button
+            className='account-action-button account-action-button--remote-follow'
             type='submit'
-            size='sm'
-          />
+          >
+            <FormattedMessage id='account.remote_follow' defaultMessage='Remote follow' />
+          </button>
         </form>
       );
     }
@@ -382,32 +394,31 @@ const ActionButton: React.FC<IActionButton> = ({
 
     if (!relationship) {
       return (
-        <Button
-          size='xs'
-          theme='primary'
-          className='px-4'
+        <button
+          className='account-action-button account-action-button--loading'
+          type='button'
           disabled
-          text={<Spinner size={20} withText={false} />}
-        />
+        >
+          <Spinner size={20} withText={false} />
+        </button>
       );
     } else if (relationship?.requested) {
       // Awaiting acceptance
       return (
-        <Button
-          size='sm'
-          theme='tertiary'
-          text={
-            small ? (
-              <FormattedMessage id='account.requested_small' defaultMessage='Follow requested' />
-            ) : (
-              <FormattedMessage
-                id='account.requested'
-                defaultMessage='Follow requested. Click to cancel'
-              />
-            )
-          }
+        <button
+          className='account-action-button account-action-button--requested'
+          type='button'
           onClick={handleFollow}
-        />
+        >
+          {small ? (
+            <FormattedMessage id='account.requested_small' defaultMessage='Follow requested' />
+          ) : (
+            <FormattedMessage
+              id='account.requested'
+              defaultMessage='Follow requested. Click to cancel'
+            />
+          )}
+        </button>
       );
     } else if (!relationship?.blocking && !relationship?.muting) {
       // Follow & Unfollow
@@ -560,55 +571,64 @@ const ActionButton: React.FC<IActionButton> = ({
 
         return (
           <DropdownMenu items={items}>
-            <Button size='sm' theme='secondary' secondaryIcon={iconCaretDown}>
-              <FormattedMessage id='account.following' defaultMessage='Following' />
-            </Button>
+            <button
+              className='account-action-button account-action-button--following'
+              type='button'
+            >
+              <span>
+                <FormattedMessage id='account.following' defaultMessage='Following' />
+              </span>
+              <Icon src={iconCaretDown} aria-hidden />
+            </button>
           </DropdownMenu>
         );
       }
+      const followIcon = blockedBy ? iconProhibit : !isFollowing ? iconPlus : undefined;
+
       return (
-        <Button
-          size='sm'
+        <button
+          className={clsx(
+            'account-action-button',
+            isFollowing ? 'account-action-button--unfollow' : 'account-action-button--follow',
+          )}
+          type='button'
           disabled={blockedBy || isPendingFollow || isPendingUnfollow}
-          theme={isFollowing ? 'secondary' : 'primary'}
-          icon={blockedBy ? iconProhibit : !isFollowing ? iconPlus : undefined}
           onClick={handleFollow}
         >
-          {isFollowing ? (
-            <FormattedMessage id='account.unfollow' defaultMessage='Unfollow' />
-          ) : blockedBy ? (
-            <FormattedMessage id='account.blocked' defaultMessage='Blocked' />
-          ) : (
-            <FormattedMessage id='account.follow' defaultMessage='Follow' />
-          )}
-        </Button>
+          {followIcon ? <Icon src={followIcon} aria-hidden /> : null}
+          <span>
+            {isFollowing ? (
+              <FormattedMessage id='account.unfollow' defaultMessage='Unfollow' />
+            ) : blockedBy ? (
+              <FormattedMessage id='account.blocked' defaultMessage='Blocked' />
+            ) : (
+              <FormattedMessage id='account.follow' defaultMessage='Follow' />
+            )}
+          </span>
+        </button>
       );
     } else if (relationship?.blocking) {
       // Unblock
       return (
-        <Button
-          theme='danger'
-          size='sm'
-          text={
-            <FormattedMessage
-              id='account.unblock'
-              defaultMessage='Unblock @{name}'
-              values={{ name: account.username }}
-            />
-          }
+        <button
+          className='account-action-button account-action-button--unblock'
+          type='button'
           onClick={handleBlock}
-        />
+        >
+          <FormattedMessage
+            id='account.unblock'
+            defaultMessage='Unblock @{name}'
+            values={{ name: account.username }}
+          />
+        </button>
       );
     }
   } else {
     // Edit profile
     return (
-      <Button
-        theme='tertiary'
-        size='sm'
-        text={<FormattedMessage id='account.edit_profile' defaultMessage='Edit profile' />}
-        to='/settings/profile'
-      />
+      <Link className='account-action-button account-action-button--edit' to='/settings/profile'>
+        <FormattedMessage id='account.edit_profile' defaultMessage='Edit profile' />
+      </Link>
     );
   }
 

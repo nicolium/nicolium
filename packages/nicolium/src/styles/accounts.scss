@@ -1020,6 +1020,38 @@
   }
 }
 
+.account-action-button {
+  &--mute,
+  &--block,
+  &--bite,
+  &--following,
+  &--unfollow,
+  &--remote-follow {
+    @include mixins.button($theme: secondary, $size: sm);
+  }
+
+  &--follow {
+    @include mixins.button($theme: primary, $size: sm);
+  }
+
+  &--requested,
+  &--edit {
+    @include mixins.button($theme: tertiary, $size: sm);
+  }
+
+  &--unmute,
+  &--unblock {
+    @include mixins.button($theme: danger, $size: sm);
+  }
+
+  &--loading {
+    @include mixins.button($theme: primary, $size: xs);
+
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
+
 .account-gallery,
 .group-gallery {
   &__loading {
