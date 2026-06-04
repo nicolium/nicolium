@@ -7,9 +7,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useMinWidth } from '@/hooks/use-min-width';
 import { useSettings } from '@/stores/settings';
 
-import tailwindConfig from '../../../tailwind.config';
-
-const breakpoints = (tailwindConfig.theme?.screens as Record<string, string>) ?? {
+const breakpoints = {
   sm: '581px',
   md: '768px',
   lg: '976px',
