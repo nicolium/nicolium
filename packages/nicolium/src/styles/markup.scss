@@ -130,7 +130,7 @@ $vertical-lr-langs: mn-mong, mnmong;
   code,
   pre {
     cursor: text;
-    font-family: "Roboto Mono", ui-monospace, monospace;
+    font-family: var(--font-mono);
   }
 
   p > code,
