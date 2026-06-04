@@ -5,7 +5,6 @@ import { AccountTimelineColumn } from '@/columns/timeline';
 import MissingIndicator from '@/components/missing-indicator';
 import Card, { CardBody } from '@/components/ui/card';
 import Spinner from '@/components/ui/spinner';
-import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
@@ -34,13 +33,13 @@ const AccountTimelinePage: React.FC = () => {
     return (
       <Card>
         <CardBody>
-          <Text align='center'>
+          <p className='account-timeline__blocked'>
             <FormattedMessage
               id='empty_column.account_blocked'
               defaultMessage='You are blocked by @{accountUsername}.'
               values={{ accountUsername }}
             />
-          </Text>
+          </p>
         </CardBody>
       </Card>
     );

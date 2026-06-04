@@ -9,7 +9,6 @@ import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
-import Text from '@/components/ui/text';
 import {
   useAddAccountsToCircle,
   useCircle,
@@ -134,12 +133,12 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
             </div>
           ) : (
             <div className='list-members-modal__form__pending'>
-              <Text theme='muted' size='sm' align='center'>
+              <p>
                 <FormattedMessage
                   id='empty_column.circle_members'
                   defaultMessage='There are no members in this circle. Use search to find users to add.'
                 />
-              </Text>
+              </p>
             </div>
           )}
 

@@ -50,6 +50,10 @@
     flex-direction: column;
     gap: 0.75rem;
   }
+
+  &__closed {
+    @mixins.text($align: center, $theme: muted);
+  }
 }
 
 .consumers-list {

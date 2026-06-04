@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
-import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { captureSentryFeedback } from '@/sentry';
@@ -40,9 +39,9 @@ const SentryFeedbackForm: React.FC<ISentryFeedbackForm> = ({ eventId }) => {
 
   if (isSubmitted) {
     return (
-      <Text align='center'>
+      <p className='feedback-form__submitted'>
         <FormattedMessage id='alert.unexpected.thanks' defaultMessage='Thanks for your feedback!' />
-      </Text>
+      </p>
     );
   }
 

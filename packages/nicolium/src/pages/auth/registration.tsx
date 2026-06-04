@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { BigCard } from '@/components/ui/big-card';
-import Text from '@/components/ui/text';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useInstance } from '@/stores/instance';
 
@@ -19,13 +18,13 @@ const RegistrationPage: React.FC = () => {
           <FormattedMessage id='registration.closed.title' defaultMessage='Registrations closed' />
         }
       >
-        <Text theme='muted' align='center'>
+        <p className='confirmation-modal__description'>
           <FormattedMessage
             id='registration.closed.message'
             defaultMessage='{instance} is not accepting new members'
             values={{ instance: instance.title }}
           />
-        </Text>
+        </p>
       </BigCard>
     );
   }

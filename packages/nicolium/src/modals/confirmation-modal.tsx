@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
 import Modal from '@/components/ui/modal';
-import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 
 import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
@@ -67,7 +66,7 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
       secondaryAction={onSecondary && handleSecondary}
     >
       <div className='confirmation-modal'>
-        <Text id='modal-description'>{message}</Text>
+        <p id='modal-description'>{message}</p>
 
         {checkbox && (
           <List>

@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Spinner from '@/components/ui/spinner';
-import Text from '@/components/ui/text';
 import {
   useAddAccountsToList,
   useListAccounts,
@@ -64,12 +63,12 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
         </div>
       ) : (
         <div className='list-members-modal__form__pending'>
-          <Text theme='muted' size='sm' align='center'>
+          <p>
             <FormattedMessage
               id='empty_column.list_members'
               defaultMessage='There are no members in this list. Use search to find users to add.'
             />
-          </Text>
+          </p>
         </div>
       )}
 

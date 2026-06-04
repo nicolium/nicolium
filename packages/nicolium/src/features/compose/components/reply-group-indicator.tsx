@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Link from '@/components/link';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
@@ -24,7 +23,7 @@ const ReplyGroupIndicator: React.FC<IReplyGroupIndicator> = ({ composeId }) => {
   }
 
   return (
-    <Text theme='muted' size='sm'>
+    <p className='reply-group-indicator'>
       <FormattedMessage
         id='compose.reply_group_indicator.message'
         defaultMessage='Posting to {groupLink}'
@@ -36,7 +35,7 @@ const ReplyGroupIndicator: React.FC<IReplyGroupIndicator> = ({ composeId }) => {
           ),
         }}
       />
-    </Text>
+    </p>
   );
 };
 

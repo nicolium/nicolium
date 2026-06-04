@@ -1462,8 +1462,11 @@
   gap: 1rem;
 }
 
-.admin-modal > p {
-  @include mixins.text;
+.admin-modal,
+.confirmation-modal {
+  > p {
+    @include mixins.text;
+  }
 }
 
 .text-field-modal p {

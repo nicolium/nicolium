@@ -1494,3 +1494,7 @@
   flex-direction: column;
   gap: 1rem;
 }
+
+.reply-group-indicator {
+  @include mixins.text($size: sm, $theme: muted);
+}

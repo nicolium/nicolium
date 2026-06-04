@@ -2710,4 +2710,8 @@ div[data-viewport-type='window']:has(.empty-message) {
 
     margin: 0 auto;
   }
+
+  &__submitted {
+    @include mixins.text($align: center);
+  }
 }

@@ -794,6 +794,14 @@ a.measure__container {
     flex-wrap: wrap;
     gap: 1rem;
     align-items: center;
+
+    p {
+      @include mixins.text($size: sm);
+    }
+
+    span {
+      @include mixins.text($size: sm, $weight: medium);
+    }
   }
 
   &__status {
@@ -1246,8 +1254,8 @@ a.measure__container {
 
     &__state__container {
       display: flex;
-      flex-direction: column;
       gap: 0.5rem;
+      align-items: center;
     }
   }
 }

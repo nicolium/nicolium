@@ -6,7 +6,6 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import Indicator from '@/components/ui/indicator';
 import Input from '@/components/ui/input';
-import Text from '@/components/ui/text';
 import { useTextField } from '@/hooks/forms/use-text-field';
 import { useRelays } from '@/queries/admin/use-relays';
 import toast from '@/toast';
@@ -43,16 +42,16 @@ const Relay: React.FC<IRelay> = ({ relay }) => {
     <div key={relay.id} className='admin-relay'>
       <div className='admin-relay__content'>
         <div className='admin-relay__meta'>
-          <Text size='sm'>
-            <Text tag='span' size='sm' weight='medium'>
+          <p>
+            <span>
               <FormattedMessage id='admin.relays.url' defaultMessage='Instance URL:' />
-            </Text>{' '}
+            </span>{' '}
             {relay.actor}
-          </Text>
+          </p>
           {relay.followed_back && (
-            <Text tag='span' size='sm' weight='medium'>
+            <span>
               <FormattedMessage id='admin.relays.followed_back' defaultMessage='Followed back' />
-            </Text>
+            </span>
           )}
           {relay.status && (
             <div className='admin-relay__status'>
@@ -65,7 +64,7 @@ const Relay: React.FC<IRelay> = ({ relay }) => {
                       : 'pending'
                 }
               />
-              <Text tag='span' size='sm' weight='medium'>
+              <span>
                 {relay.status === 'accepted' ? (
                   <FormattedMessage id='admin.relays.status.accepted' defaultMessage='Accepted' />
                 ) : relay.status === 'rejected' ? (
@@ -76,7 +75,7 @@ const Relay: React.FC<IRelay> = ({ relay }) => {
                     defaultMessage='Requesting'
                   />
                 )}
-              </Text>
+              </span>
             </div>
           )}
         </div>

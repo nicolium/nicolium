@@ -1319,3 +1319,7 @@
 .account-list__item {
   padding-bottom: 1rem;
 }
+
+.account-timeline__blocked {
+  @include mixins.text($align: center);
+}
