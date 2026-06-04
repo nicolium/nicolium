@@ -48,7 +48,7 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
     body = (
       <ScrollableList
         emptyMessageText={emptyMessage}
-        itemClassName='pb-3'
+        itemClassName='modal__list__item'
         style={{ height: 'calc(80vh - 88px)' }}
         useWindowScroll={false}
       >

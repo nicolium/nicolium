@@ -4,7 +4,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 import OutlineBox from '@/components/outline-box';
-import Text from '@/components/ui/text';
 import { selectAccount } from '@/queries/accounts/selectors';
 import {
   useAdminDeleteAccountMutation,
@@ -117,13 +116,13 @@ const useDeactivateUserModal = (accountId: string) => {
           <AccountContainer id={accountId} hideActions />
         </OutlineBox>
 
-        <Text>
+        <p>
           <FormattedMessage
             id='confirmations.admin.deactivate_user.message'
             defaultMessage='You are about to deactivate @{acct}. Deactivating a user is a reversible action.'
             values={{ acct }}
           />
-        </Text>
+        </p>
       </div>
     );
 
@@ -161,13 +160,13 @@ const useDeleteUserModal = (accountId: string) => {
           <AccountContainer id={accountId} hideActions />
         </OutlineBox>
 
-        <Text>
+        <p>
           <FormattedMessage
             id='confirmations.admin.delete_user.message'
             defaultMessage='You are about to delete @{acct}. THIS IS A DESTRUCTIVE ACTION THAT CANNOT BE UNDONE.'
             values={{ acct }}
           />
-        </Text>
+        </p>
       </div>
     );
 

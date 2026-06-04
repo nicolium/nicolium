@@ -184,10 +184,7 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
 
                   <RelativeTimestamp
                     timestamp={chat.last_message.created_at}
-                    align='right'
-                    size='xs'
-                    theme={chat.last_message.unread ? 'default' : 'muted'}
-                    truncate
+                    className='chat-list-item__timestamp'
                   />
                 </>
               )}

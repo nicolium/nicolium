@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import Avatar from '@/components/ui/avatar';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useReport } from '@/queries/admin/use-reports';
 
@@ -40,15 +39,15 @@ const Report: React.FC<IReport> = ({ id }) => {
                 username={report.target_account.username}
               />
               <div className='admin-report-card__account-info'>
-                <Text size='sm' weight='semibold' truncate>
+                <p className='admin-report-card__account-info__display-name' dir='ltr'>
                   <Emojify
                     text={report.target_account.display_name}
                     emojis={report.target_account.emojis}
                   />
-                </Text>
-                <Text size='sm' theme='muted' direction='ltr' truncate>
+                </p>
+                <p className='admin-report-card__account-info__acct' dir='ltr'>
                   @{report.target_account.fqn}
-                </Text>
+                </p>
               </div>
             </div>
           </HoverAccountWrapper>

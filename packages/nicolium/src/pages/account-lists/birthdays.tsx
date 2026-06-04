@@ -29,8 +29,8 @@ const BirthdaysPage = () => {
             defaultMessage='None of your friends have birthday today.'
           />
         }
-        listClassName='max-w-full'
-        itemClassName='pb-3'
+        listClassName='modal__list'
+        itemClassName='modal__list__item'
       >
         {accountIds.map((id) => (
           <BirthdayAccount key={id} accountId={id} />

@@ -77,7 +77,7 @@ const AccountStatusesPage: React.FC = () => {
 
       <PullToRefresh onRefresh={handleRefresh}>
         <StatusList
-          loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
+          loadMoreClassName='status-list__load-more'
           statusIds={statusIds}
           scrollKey='account_statuses'
           hasMore={hasNextPage}

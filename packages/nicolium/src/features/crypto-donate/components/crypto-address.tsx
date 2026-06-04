@@ -4,7 +4,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import CopyableInput from '@/components/copyable-input';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { useModalsActions } from '@/stores/modals';
 
 import { getTitle } from '../utils/coin-db';
@@ -53,7 +52,7 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props) => {
         </button>
       </div>
 
-      {note && <Text>{note}</Text>}
+      {note && <p>{note}</p>}
 
       <CopyableInput value={address} />
     </div>

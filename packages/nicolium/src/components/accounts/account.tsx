@@ -417,8 +417,6 @@ const Account = ({
 
                 <RelativeTimestamp
                   timestamp={timestamp}
-                  theme='muted'
-                  size='sm'
                   className='account-card__timestamp'
                   futureDate={futureTimestamp}
                 />

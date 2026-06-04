@@ -32,8 +32,8 @@ const AnnouncementsPage = () => {
             defaultMessage='There are no announcements at the moment.'
           />
         }
-        listClassName='max-w-full'
-        itemClassName='border-b border-primary-200 py-3 last:border-none dark:border-gray-800'
+        listClassName='modal__list'
+        itemClassName='announcement__container'
       >
         {announcements.map((announcement) => (
           <Announcement key={announcement.id} announcement={announcement} emojiMap={emojiMap} />

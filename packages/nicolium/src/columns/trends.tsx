@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -11,7 +12,6 @@ import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
 import StatusContainer from '@/components/statuses/status-container';
 import TrendingLink from '@/components/trending-link';
-import Button from '@/components/ui/button';
 import { useFeatures } from '@/hooks/use-features';
 import { useSuggestedAccounts } from '@/queries/trends/use-suggested-accounts';
 import { useTrendingLinks } from '@/queries/trends/use-trending-links';
@@ -82,9 +82,9 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
                       id='trends.no_accounts'
                       defaultMessage='Try entering a search query or browsing the profile directory to find accounts to follow.'
                     />
-                    <Button to='/directory' theme='muted'>
+                    <Link to='/directory'>
                       <FormattedMessage id='column.directory' defaultMessage='Profile directory' />
-                    </Button>
+                    </Link>
                   </>
                 ) : (
                   <FormattedMessage

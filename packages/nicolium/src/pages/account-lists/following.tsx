@@ -61,7 +61,7 @@ const FollowingPage: React.FC = () => {
             defaultMessage='This user doesn’t follow anyone yet.'
           />
         }
-        itemClassName='pb-4'
+        itemClassName='account-list__item'
         isLoading={isFetching}
       >
         {data.map((accountId) => (

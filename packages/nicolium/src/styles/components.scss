@@ -2051,6 +2051,12 @@ div[data-viewport-type='window']:has(.empty-message) {
     display: flex;
     gap: 0.5rem;
     align-items: center;
+
+    p {
+      @include mixins.text($weight: bold);
+
+      flex-grow: 1;
+    }
   }
 
   &__icon {
@@ -2060,10 +2066,8 @@ div[data-viewport-type='window']:has(.empty-message) {
     width: 1.5rem;
   }
 
-  p {
-    @include mixins.text($weight: bold);
-
-    flex-grow: 1;
+  > p {
+    @include mixins.text;
   }
 
   button {
@@ -2151,6 +2155,19 @@ div[data-viewport-type='window']:has(.empty-message) {
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;
+
+  &__container {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgb(var(--color-gray-200));
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
 
   &__time {
     @include mixins.text($theme: muted);

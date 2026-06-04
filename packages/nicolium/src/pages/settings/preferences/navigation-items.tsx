@@ -40,10 +40,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import OutlineBox from '@/components/outline-box';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
 import { useDynamicContentLink } from '@/hooks/use-dynamic-content-link';
@@ -379,17 +377,17 @@ const NavigationItems: React.FC<ISettingsPage> = ({
           }
         />
 
-        <FormActions>
-          <Button theme='secondary' onClick={reset}>
+        <div className='from__actions interface-items__actions'>
+          <button type='button' onClick={reset}>
             <FormattedMessage id='settings.interface_items.reset' defaultMessage='Reset' />
-          </Button>
+          </button>
 
           {onSave && (
-            <Button type='submit' disabled={disabled} onClick={onSave}>
+            <button type='submit' disabled={disabled} onClick={onSave}>
               <FormattedMessage id='common.save' defaultMessage='Save' />
-            </Button>
+            </button>
           )}
-        </FormActions>
+        </div>
       </Form>
     </Column>
   );

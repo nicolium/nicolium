@@ -71,12 +71,7 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
           event.stopPropagation();
         }}
       >
-        <RelativeTimestamp
-          timestamp={status.created_at}
-          theme='muted'
-          size='sm'
-          className='status__timestamp'
-        />
+        <RelativeTimestamp timestamp={status.created_at} className='status__timestamp' />
       </StatusLink>
       <StatusTypeIcon visibility={status.visibility} />
       <StatusLanguagePicker status={status} />

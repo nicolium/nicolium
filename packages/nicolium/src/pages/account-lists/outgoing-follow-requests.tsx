@@ -30,7 +30,7 @@ const OutgoingFollowRequestsPage: React.FC = () => {
           defaultMessage='You don’t have any outgoing follow requests yet. When you try to follow a user, it will show up here.'
         />
       }
-      itemClassName='p-2.5'
+      itemClassName='follow-request__account'
     >
       {accountIds.map((id) => (
         <AccountContainer key={id} id={id} />

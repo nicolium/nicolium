@@ -238,7 +238,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
 
         {interactionRequest.type !== 'reply' && (
           <p className='notification__timestamp'>
-            <RelativeTimestamp timestamp={interactionRequest.created_at} theme='muted' size='sm' />
+            <RelativeTimestamp timestamp={interactionRequest.created_at} />
           </p>
         )}
       </div>

@@ -26,8 +26,8 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
       onClose={onClickClose}
     >
       <ScrollableList
-        listClassName='max-w-full'
-        itemClassName='pb-3'
+        listClassName='modal__list'
+        itemClassName='modal__list__item'
         style={{ height: 'calc(80vh - 88px)' }}
         isLoading={!accountIds}
         useWindowScroll={false}

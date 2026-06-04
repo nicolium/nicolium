@@ -568,13 +568,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
     />
   );
 
-  const timestamp = (
-    <RelativeTimestamp
-      timestamp={notification.latest_page_notification_at!}
-      theme='muted'
-      size='sm'
-    />
-  );
+  const timestamp = <RelativeTimestamp timestamp={notification.latest_page_notification_at!} />;
 
   return (
     <Hotkeys handlers={handlers} data-testid='notification'>

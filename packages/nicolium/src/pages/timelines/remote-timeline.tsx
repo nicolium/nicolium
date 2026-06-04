@@ -14,7 +14,6 @@ import { TimelinePicker } from '@/components/timeline-picker';
 import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
-import Text from '@/components/ui/text';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { remoteTimelineRoute } from '@/router';
 import { useSettings } from '@/stores/settings';
@@ -100,13 +99,13 @@ const RemoteTimelinePage: React.FC = () => {
             onClick={handleCloseClick}
             title={intl.formatMessage(messages.close)}
           />
-          <Text>
+          <p>
             <FormattedMessage
               id='remote_timeline.filter_message'
               defaultMessage='You are viewing the timeline of {instance}.'
               values={{ instance }}
             />
-          </Text>
+          </p>
         </div>
       )}
 

@@ -27,14 +27,12 @@ const PromoPanelInput: StreamfieldComponent<FooterItem> = ({ value, onChange }) 
     <div className='admin-footer-link-input'>
       <Input
         type='text'
-        outerClassName='w-full grow'
         placeholder={intl.formatMessage(messages.label)}
         value={value.title}
         onChange={handleChange('title')}
       />
       <Input
         type='text'
-        outerClassName='w-full grow'
         placeholder={intl.formatMessage(messages.url)}
         value={value.url}
         onChange={handleChange('url')}

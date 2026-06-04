@@ -83,7 +83,7 @@ const SubscribersPage: React.FC = () => {
             defaultMessage='No one subscribes to this user yet.'
           />
         }
-        itemClassName='pb-4'
+        itemClassName='account-list__item'
         isLoading={isFetching}
       >
         {data.map((accountId) => (

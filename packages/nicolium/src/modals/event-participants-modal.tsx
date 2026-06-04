@@ -46,8 +46,8 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
       <PullToRefresh onRefresh={refetch}>
         <ScrollableList
           emptyMessageText={emptyMessage}
-          listClassName='max-w-full'
-          itemClassName='pb-3'
+          listClassName='modal__list'
+          itemClassName='modal__list__item'
           style={{ height: 'calc(80vh - 88px)' }}
           hasMore={hasNextPage}
           isLoading={isLoading}

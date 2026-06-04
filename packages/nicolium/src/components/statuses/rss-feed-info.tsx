@@ -25,7 +25,7 @@ const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp, url }) => (
         {feed.title}
 
         <a href={url} target='_blank' rel='noopener noreferrer' className='rss-feed-info__link'>
-          <RelativeTimestamp timestamp={timestamp} theme='muted' size='sm' />
+          <RelativeTimestamp timestamp={timestamp} />
         </a>
       </p>
 

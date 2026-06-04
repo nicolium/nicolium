@@ -17,7 +17,7 @@
   gap: 1rem;
   align-items: center;
 
-  button {
+  a {
     @include mixins.button($theme: muted);
   }
 }

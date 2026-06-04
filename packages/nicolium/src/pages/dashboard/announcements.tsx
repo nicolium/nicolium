@@ -6,7 +6,6 @@ import ScrollableList from '@/components/scrollable-list';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { useAnnouncements, useDeleteAnnouncementMutation } from '@/queries/admin/use-announcements';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
@@ -61,19 +60,19 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
   return (
     <div key={announcement.id} className='admin-announcement'>
       <div className='admin-announcement__content'>
-        <Text>
+        <p>
           <ParsedContent html={announcement.content} emojis={announcement.emojis} />
-        </Text>
+        </p>
         {(announcement.starts_at ?? announcement.ends_at ?? announcement.all_day) && (
           <div className='admin-announcement__dates'>
             {announcement.starts_at && (
-              <Text size='sm'>
-                <Text tag='span' size='sm' weight='medium'>
+              <p>
+                <span>
                   <FormattedMessage
                     id='admin.announcements.starts_at'
                     defaultMessage='Starts at:'
                   />
-                </Text>{' '}
+                </span>{' '}
                 <FormattedDate
                   value={announcement.starts_at}
                   year='2-digit'
@@ -81,13 +80,13 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
                   day='2-digit'
                   weekday='short'
                 />
-              </Text>
+              </p>
             )}
             {announcement.ends_at && (
-              <Text size='sm'>
-                <Text tag='span' size='sm' weight='medium'>
+              <p>
+                <span>
                   <FormattedMessage id='admin.announcements.ends_at' defaultMessage='Ends at:' />
-                </Text>{' '}
+                </span>{' '}
                 <FormattedDate
                   value={announcement.ends_at}
                   year='2-digit'
@@ -95,12 +94,14 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
                   day='2-digit'
                   weekday='short'
                 />
-              </Text>
+              </p>
             )}
             {announcement.all_day && (
-              <Text weight='medium' size='sm'>
-                <FormattedMessage id='admin.announcements.all_day' defaultMessage='All day' />
-              </Text>
+              <p>
+                <span>
+                  <FormattedMessage id='admin.announcements.all_day' defaultMessage='All day' />
+                </span>
+              </p>
             )}
           </div>
         )}
@@ -144,7 +145,7 @@ const AdminAnnouncementsPage: React.FC = () => {
         <ScrollableList
           scrollKey='announcements'
           emptyMessageText={emptyMessage}
-          itemClassName='py-3 first:pt-0 last:pb-0'
+          itemClassName='admin-announcement__container'
           isLoading={isLoading}
           showLoading={isLoading && isPending}
         >

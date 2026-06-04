@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, type FormatDateOptions } from 'react-intl';
 
-import Text, { type IText } from './ui/text';
-
 const messages = defineMessages({
   justNow: { id: 'relative_time.just_now', defaultMessage: 'now' },
   seconds: { id: 'relative_time.seconds', defaultMessage: '{number}s' },
@@ -78,10 +76,11 @@ const getUnitDelay = (units: string) => {
   }
 };
 
-interface IRelativeTimestamp extends IText {
+interface IRelativeTimestamp {
   timestamp: string;
   year?: number;
   futureDate?: boolean;
+  className?: string;
 }
 
 /** Displays a timestamp compared to the current time, eg "1m" for one minute ago. */
@@ -89,7 +88,6 @@ const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
   timestamp,
   year = new Date().getFullYear(),
   futureDate,
-  theme = 'inherit',
   ...props
 }) => {
   const intl = useIntl();
@@ -173,9 +171,9 @@ const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
   }
 
   return (
-    <Text {...props} theme={theme} tag='time' title={intl.formatDate(date, dateFormatOptions)}>
+    <time {...props} title={intl.formatDate(date, dateFormatOptions)}>
       {relativeTime}
-    </Text>
+    </time>
   );
 };
 

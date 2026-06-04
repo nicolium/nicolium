@@ -178,6 +178,16 @@
   &__explanation {
     @include mixins.text($size: sm, $theme: muted);
   }
+
+  &__actions {
+    button {
+      @include mixins.button($theme: secondary);
+    }
+
+    button[type='submit'] {
+      @include mixins.button;
+    }
+  }
 }
 
 .interface-item {
@@ -475,7 +485,7 @@
 }
 
 .settings__languages {
-  overflow: visible!;
+  overflow: visible !important;
 }
 
 .settings-empty {

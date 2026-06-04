@@ -48,7 +48,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
     (poll.expired ? (
       intl.formatMessage(messages.closed)
     ) : (
-      <RelativeTimestamp weight='medium' timestamp={poll.expires_at} futureDate />
+      <RelativeTimestamp timestamp={poll.expires_at} futureDate />
     ));
 
   let votesCount = null;

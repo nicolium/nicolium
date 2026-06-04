@@ -1462,6 +1462,18 @@
   gap: 1rem;
 }
 
+.admin-modal > p {
+  @include mixins.text;
+}
+
 .text-field-modal p {
   @include mixins.text($theme: muted);
+}
+
+.modal__list {
+  max-width: 100%;
+
+  &__item {
+    padding-bottom: 0.75rem;
+  }
 }

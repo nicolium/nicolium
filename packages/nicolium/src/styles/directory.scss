@@ -168,5 +168,9 @@
         @include mixins.text($theme: muted, $size: sm);
       }
     }
+
+    time {
+      @include mixins.text($theme: inherit);
+    }
   }
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Text from '@/components/ui/text';
 import Widget from '@/components/ui/widget';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/stores/instance';
@@ -33,19 +32,20 @@ const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({
 
   return (
     <Widget
+      className='crypto-donate-panel'
       title={
         <FormattedMessage id='crypto_donate_panel.heading' defaultMessage='Donate cryptocurrency' />
       }
       to='/donate/crypto'
       actionTitle={intl.formatMessage(messages.actionTitle, { count: addresses.length })}
     >
-      <Text>
+      <p>
         <FormattedMessage
           id='crypto_donate_panel.intro.message'
           defaultMessage='{siteTitle} accepts cryptocurrency donations to fund our service. Thank you for your support!'
           values={{ siteTitle: instance.title }}
         />
-      </Text>
+      </p>
 
       <SiteWallet limit={limit} />
     </Widget>

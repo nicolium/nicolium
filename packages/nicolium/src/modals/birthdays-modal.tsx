@@ -33,8 +33,8 @@ const BirthdaysModal = ({ onClose }: BaseModalProps) => {
     body = (
       <ScrollableList
         emptyMessageText={emptyMessage}
-        listClassName='max-w-full'
-        itemClassName='pb-3'
+        listClassName='modal__list'
+        itemClassName='modal__list__item'
         useWindowScroll={false}
       >
         {accountIds.map((id) => (

@@ -51,6 +51,8 @@
   }
 
   &__timestamp {
+    @include mixins.text($theme: muted, $size: sm);
+
     white-space: nowrap;
   }
 
@@ -1462,6 +1464,8 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   }
 
   &__link time {
+    @include mixins.text($weight: medium, $theme: muted, $size: sm);
+
     white-space: nowrap;
   }
 }
@@ -2388,4 +2392,15 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.status-list__load-more {
+  @media (min-width: variables.$breakpoint-sm) {
+    padding-bottom: 1rem;
+
+    .black & {
+      margin: 0 1rem;
+      padding-bottom: 0;
+    }
+  }
 }

@@ -3,7 +3,6 @@ import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import Text from '@/components/ui/text';
 import { useModerationLog } from '@/queries/admin/use-moderation-log';
 
 import type { AdminModerationLogEntry } from 'pl-api';
@@ -51,9 +50,9 @@ interface ILogItem {
 
 const LogItem: React.FC<ILogItem> = ({ log }) => (
   <div className='admin-log-item'>
-    <Text>{log.message}</Text>
+    <p>{log.message}</p>
 
-    <Text theme='muted' size='xs'>
+    <time>
       <FormattedDate
         value={new Date(log.time * 1000)}
         hour12
@@ -63,7 +62,7 @@ const LogItem: React.FC<ILogItem> = ({ log }) => (
         hour='numeric'
         minute='2-digit'
       />
-    </Text>
+    </time>
   </div>
 );
 
