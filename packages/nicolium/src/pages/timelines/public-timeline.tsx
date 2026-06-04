@@ -74,7 +74,7 @@ const PublicTimelinePage = () => {
             values={{
               site_title: instance.title,
               local: (
-                <Link className='underline' to='/timeline/local'>
+                <Link className='mention' to='/timeline/local'>
                   <FormattedMessage
                     id='empty_column.home.local_tab'
                     defaultMessage='the Local tab'

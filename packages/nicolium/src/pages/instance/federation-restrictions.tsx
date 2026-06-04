@@ -59,7 +59,7 @@ const FederationRestrictionsPage = () => {
         {intl.formatMessage(messages.boxMessage, { siteTitle: instance.title })}
       </Accordion>
 
-      <div className='pt-4'>
+      <div className='restricted-instances'>
         <ScrollableList emptyMessageText={emptyMessage}>
           {hosts.map(([host]) => (
             <RestrictedInstance key={host} host={host} />

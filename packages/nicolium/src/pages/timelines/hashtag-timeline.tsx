@@ -50,7 +50,7 @@ const HashtagTimelinePage: React.FC = () => {
       {features.followHashtags && isLoggedIn && (
         <List>
           <ListItem
-            className='mb-3 black:mx-4 black:mb-0'
+            className='hashtag-follow_toggle'
             label={<FormattedMessage id='hashtag.follow' defaultMessage='Follow hashtag' />}
           >
             <Toggle checked={tag?.following} onChange={handleFollow} />

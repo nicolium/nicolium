@@ -30,9 +30,7 @@ const RestrictedInstance: React.FC<IRestrictedInstance> = ({ host }) => {
     >
       <a href='#' onClick={toggleExpanded}>
         <Icon src={expanded ? iconCaretDown : iconCaretRight} />
-        <div className={clsx({ 'line-through': remoteInstance.federation.reject })}>
-          {remoteInstance.host}
-        </div>
+        <div>{remoteInstance.host}</div>
       </a>
       <div
         className={clsx('restricted-instance__content', {
