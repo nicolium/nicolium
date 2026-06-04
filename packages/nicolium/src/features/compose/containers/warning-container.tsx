@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { useCompose } from '@/hooks/use-compose';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useSettings } from '@/stores/settings';
+import { useComposeVisibility } from '@/stores/compose';
 
 import Warning from '../components/warning';
 
@@ -18,14 +18,12 @@ interface IWarningWrapper {
 const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
   const compose = useCompose(composeId);
   const { data: account } = useOwnAccount();
-  const { defaultPrivacy } = useSettings();
+  const visibility = useComposeVisibility(composeId);
 
   const needsLockWarning =
     (compose.visibility === 'private' || compose.visibility === 'mutuals_only') && !account?.locked;
   const hashtagWarning =
-    HASHTAG_WARNING_VISIBILITIES.includes(
-      compose.visibility === 'default' ? defaultPrivacy : compose.visibility,
-    ) && APPROX_HASHTAG_RE.test(compose.text);
+    HASHTAG_WARNING_VISIBILITIES.includes(visibility) && APPROX_HASHTAG_RE.test(compose.text);
   const directMessageWarning = compose.visibility === 'direct';
 
   if (needsLockWarning) {
