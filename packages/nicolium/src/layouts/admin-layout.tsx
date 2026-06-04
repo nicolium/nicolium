@@ -3,7 +3,9 @@ import React from 'react';
 import StickyBox from 'react-sticky-box';
 
 import Layout, { useWindowControlsOverlay } from '@/components/ui/layout';
-import DashboardPage from '@/pages/dashboard/dashboard';
+import ColumnLoading from '@/features/ui/components/column-loading';
+
+const DashboardPage = React.lazy(() => import('@/pages/dashboard/dashboard'));
 
 const AdminSections = () => {
   const wcoRect = useWindowControlsOverlay();
@@ -12,7 +14,9 @@ const AdminSections = () => {
   return (
     <aside className='layout__admin-sections'>
       <StickyBox offsetTop={offsetTop}>
-        <DashboardPage aside />
+        <React.Suspense fallback={<ColumnLoading />}>
+          <DashboardPage aside />
+        </React.Suspense>
       </StickyBox>
     </aside>
   );

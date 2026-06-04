@@ -3,7 +3,9 @@ import React from 'react';
 import StickyBox from 'react-sticky-box';
 
 import Layout, { useWindowControlsOverlay } from '@/components/ui/layout';
-import SettingsPage from '@/pages/settings/settings';
+import ColumnLoading from '@/features/ui/components/column-loading';
+
+const SettingsPage = React.lazy(() => import('@/pages/settings/settings'));
 
 const SettingsSections = () => {
   const wcoRect = useWindowControlsOverlay();
@@ -12,7 +14,9 @@ const SettingsSections = () => {
   return (
     <div className='layout__settings-sections'>
       <StickyBox offsetTop={offsetTop}>
-        <SettingsPage />
+        <React.Suspense fallback={<ColumnLoading />}>
+          <SettingsPage />
+        </React.Suspense>
       </StickyBox>
     </div>
   );

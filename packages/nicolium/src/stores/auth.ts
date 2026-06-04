@@ -25,6 +25,7 @@ import { queryKeys } from '@/queries/keys';
 import { coerceObject } from '@/schemas/utils';
 import { setSentryAccount, unsetSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
+import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 import { validId, parseBaseURL } from '@/utils/auth';
 import sourceCode from '@/utils/code';
@@ -479,8 +480,6 @@ const useAuthStore = create<AuthStore>()(
       const settings = account.settings_store?.[FE_NAME];
 
       if (settings) {
-        // lazy import to avoid circular dependency at module init
-        const { useSettingsStore } = await import('@/stores/settings');
         useSettingsStore.getState().actions.loadUserSettings(settings);
         settingsFound = true;
       }
@@ -498,7 +497,6 @@ const useAuthStore = create<AuthStore>()(
               if (typeof frontendConfig === 'object' && frontendConfig !== null) {
                 frontendConfig.storeSettingsInNotes = true;
               }
-              const { useSettingsStore } = await import('@/stores/settings');
               useSettingsStore.getState().actions.loadUserSettings(frontendConfig);
               settingsFound = true;
               get().actions.setCurrentAccount(account);
@@ -511,7 +509,6 @@ const useAuthStore = create<AuthStore>()(
       }
 
       if (!settingsFound) {
-        const { useSettingsStore } = await import('@/stores/settings');
         useSettingsStore.getState().actions.loadUserSettings(undefined);
       }
 
