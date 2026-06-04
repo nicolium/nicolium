@@ -467,6 +467,10 @@ a.list-item,
   text-overflow: ellipsis;
   white-space: nowrap;
 
+  &--full-width {
+    width: 100%;
+  }
+
   &:focus {
     border-color: rgb(var(--color-primary-500));
     outline: 2px solid rgb(var(--color-primary-500));
@@ -2632,5 +2636,27 @@ div[data-viewport-type='window']:has(.empty-message) {
 
   &__sublabel {
     @include mixins.text($theme: muted, $align: center);
+  }
+}
+
+.site-wallet,
+.server-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.server-info {
+  &__name {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    @include mixins.text($size: lg, $weight: medium);
+  }
+
+  &__description {
+    @include mixins.text($theme: muted);
   }
 }

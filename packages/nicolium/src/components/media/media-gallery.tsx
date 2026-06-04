@@ -262,7 +262,7 @@ const Item: React.FC<IItem> = ({
         <span className='media-gallery__item__icons'>
           <Icon src={iconSpeakerHigh} />
         </span>
-        <span className='media-gallery__file-extension__label uppercase'>{ext}</span>
+        <span className='media-gallery__file-extension__label'>{ext}</span>
       </a>
     );
   } else if (attachment.type === 'video') {
@@ -277,7 +277,7 @@ const Item: React.FC<IItem> = ({
         <video muted loop onMouseOver={handleVideoHover} onMouseOut={handleVideoLeave}>
           <source src={attachment.url} />
         </video>
-        <span className='media-gallery__file-extension__label uppercase'>{ext}</span>
+        <span className='media-gallery__file-extension__label'>{ext}</span>
       </a>
     );
   }

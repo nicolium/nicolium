@@ -63,7 +63,6 @@ const LocationSearch: React.FC<ILocationSearch> = ({ id, onSelected }) => {
     <div className='location-search'>
       <AutosuggestInput
         id={id}
-        className='rounded-full'
         placeholder={intl.formatMessage(messages.placeholder)}
         value={value}
         onChange={handleChange}

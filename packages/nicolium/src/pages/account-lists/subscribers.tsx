@@ -58,7 +58,7 @@ const SubscribersPage: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)} transparent>
       <List>
         <ListItem
-          className='mb-3 black:mx-4 black:mb-0'
+          className='subscribers__toggle'
           label={
             <FormattedMessage
               id='account.subscribers.include_expired'

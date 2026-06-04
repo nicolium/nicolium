@@ -66,7 +66,7 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
       secondaryText={secondary}
       secondaryAction={onSecondary && handleSecondary}
     >
-      <div className='flex flex-col gap-4'>
+      <div className='confirmation-modal'>
         <Text id='modal-description'>{message}</Text>
 
         {checkbox && (

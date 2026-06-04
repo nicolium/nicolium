@@ -245,3 +245,47 @@
     }
   }
 }
+
+.timeline-refresh-button {
+  color: rgb(var(--color-gray-600));
+
+  &:hover {
+    color: rgb(var(--color-gray-700));
+
+    .dark & {
+      color: rgb(var(--color-gray-500));
+    }
+  }
+}
+
+.home-timeline {
+  padding-top: 0;
+  padding-bottom: 0;
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    h2 {
+      @include mixins.text($size: xl, $weight: medium, $align: center);
+    }
+
+    p {
+      @include mixins.text($theme: muted, $align: center);
+    }
+  }
+}
+
+.list-timeline {
+  &__not-found {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+
+    a {
+      @include mixins.button($theme: muted);
+    }
+  }
+}

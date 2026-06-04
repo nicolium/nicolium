@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
-import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 
 import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
@@ -71,8 +70,8 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
       cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
       cancelAction={handleCancel}
     >
-      <div className='flex flex-col gap-4'>
-        {message && <Text theme='muted'>{message}</Text>}
+      <div className='text-field-modal'>
+        {message && <p>{message}</p>}
 
         {singleLine ? (
           <Input

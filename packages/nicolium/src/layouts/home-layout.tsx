@@ -7,7 +7,6 @@ import { AccountLink } from '@/components/accounts/account-link';
 import { AsideContent } from '@/components/navigation/aside-content';
 import Avatar from '@/components/ui/avatar';
 import Layout from '@/components/ui/layout';
-import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Warning from '@/features/compose/components/warning';
 import { ComposeForm } from '@/features/ui/util/async-components';
@@ -72,8 +71,8 @@ const HomeLayout = () => {
 
         {BANNER_HTML && BANNER_HTML.length > 0 && (
           <Warning
-            message={<Text theme='muted' dangerouslySetInnerHTML={{ __html: BANNER_HTML }} />}
-            className='mx-4 black:m-4 sm:mx-0'
+            message={<p dangerouslySetInnerHTML={{ __html: BANNER_HTML }} />}
+            className='layout__main__banner'
           />
         )}
 

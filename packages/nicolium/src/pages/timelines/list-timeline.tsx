@@ -2,7 +2,7 @@ import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-verti
 import iconListBullets from '@phosphor-icons/core/regular/list-bullets.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -94,18 +94,18 @@ const ListTimelinePage: React.FC = () => {
     );
   } else if (!list) {
     return (
-      <Column label={intl.formatMessage(messages.notFound)}>
+      <Column label={intl.formatMessage(messages.notFound)} className='list-timeline'>
         <EmptyMessage
           heading={<FormattedMessage id='list.not_found.heading' defaultMessage='List not found' />}
           text={
-            <div className='flex flex-col items-center gap-4'>
+            <div className='list-timeline__not-found'>
               <FormattedMessage
                 id='list.not_found.text'
                 defaultMessage='It might have been deleted or you don’t have permission to view it. Make sure you’re viewing it from the correct account.'
               />
-              <Button to='/lists' theme='muted'>
+              <Link to='/lists'>
                 <FormattedMessage id='list.not_found.button' defaultMessage='Back to lists' />
-              </Button>
+              </Link>
             </div>
           }
         />

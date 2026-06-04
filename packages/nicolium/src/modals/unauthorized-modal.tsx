@@ -2,7 +2,6 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
@@ -194,9 +193,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
               onChange={onAccountChange}
               required
             />
-            <Button className='self-end' type='submit' theme='primary'>
-              {button}
-            </Button>
+            <button type='submit'>{button}</button>
           </Form>
           <div className={'unauthorized-modal__divider'}>
             <FormattedMessage id='remote_interaction.divider' defaultMessage='or' />

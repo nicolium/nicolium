@@ -14,7 +14,7 @@ const Select = React.forwardRef<HTMLSelectElement, ISelect>((props, ref) => {
     <select
       ref={ref}
       className={clsx('select', className, {
-        'w-full': full,
+        'select--full-width': full,
       })}
       {...filteredProps}
     >

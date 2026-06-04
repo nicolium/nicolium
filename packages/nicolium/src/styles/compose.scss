@@ -943,6 +943,18 @@
 }
 
 .upload-button {
+  .icon-button {
+    color: rgb(var(--color-gray-600));
+
+    &:hover {
+      color: rgb(var(--color-gray-700));
+
+      .dark & {
+        color: rgb(var(--color-gray-500));
+      }
+    }
+  }
+
   &__input {
     display: none;
   }

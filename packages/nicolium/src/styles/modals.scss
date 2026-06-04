@@ -1289,12 +1289,6 @@
   }
 }
 
-.select-bookmark-folder-modal {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
 .unauthorized-modal {
   display: flex;
   flex-direction: column;
@@ -1309,6 +1303,12 @@
     flex-direction: column;
     gap: 0.625rem;
     width: 100%;
+
+    button {
+      @include mixins.button($theme: primary);
+
+      justify-self: end;
+    }
   }
 
   &__divider {
@@ -1440,4 +1440,17 @@
       color: rgb(var(--color-gray-300));
     }
   }
+}
+
+.admin-modal,
+.confirmation-modal,
+.select-bookmark-folder-modal,
+.text-field-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.text-field-modal p {
+  @include mixins.text($theme: muted);
 }

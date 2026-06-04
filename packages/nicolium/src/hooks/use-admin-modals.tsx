@@ -112,7 +112,7 @@ const useDeactivateUserModal = (accountId: string) => {
     const name = selectAccount(accountId)!.username;
 
     const message = (
-      <div className='flex flex-col gap-4'>
+      <div className='admin-modal'>
         <OutlineBox>
           <AccountContainer id={accountId} hideActions />
         </OutlineBox>
@@ -156,7 +156,7 @@ const useDeleteUserModal = (accountId: string) => {
     const local = account.local;
 
     const message = (
-      <div className='flex flex-col gap-4'>
+      <div className='admin-modal'>
         <OutlineBox>
           <AccountContainer id={accountId} hideActions />
         </OutlineBox>

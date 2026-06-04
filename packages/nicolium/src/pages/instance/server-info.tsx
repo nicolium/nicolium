@@ -5,7 +5,6 @@ import LinkFooter from '@/components/navigation/link-footer';
 import PromoPanel from '@/components/panels/promo-panel';
 import Column from '@/components/ui/column';
 import Divider from '@/components/ui/divider';
-import Text from '@/components/ui/text';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/stores/instance';
 
@@ -20,12 +19,10 @@ const ServerInfoPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <div className='flex flex-col gap-4'>
-        <div className='flex flex-col'>
-          <Text size='lg' weight='medium'>
-            {instance.title}
-          </Text>
-          <Text theme='muted'>{instance.description}</Text>
+      <div className='server-info'>
+        <div className='server-info__name'>
+          <p className='server-info__title'>{instance.title}</p>
+          <p className='server-info__description'>{instance.description}</p>
         </div>
 
         <Divider />

@@ -9,7 +9,6 @@ import { Link } from '@/components/link';
 import { TimelinePicker } from '@/components/timeline-picker';
 import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
-import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { useInstance } from '@/stores/instance';
@@ -54,7 +53,7 @@ const HomeTimelinePage: React.FC = () => {
 
   return (
     <Column
-      className='py-0'
+      className='home-timeline'
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='home' />}
       withBack={false}
@@ -68,24 +67,24 @@ const HomeTimelinePage: React.FC = () => {
     >
       <HomeTimelineColumn
         emptyMessageText={
-          <div className='flex flex-col gap-1'>
-            <Text size='xl' weight='medium' align='center'>
+          <div className='home-timeline__empty'>
+            <h2>
               <FormattedMessage
                 id='empty_column.home.title'
                 defaultMessage='You’re not following anyone yet'
               />
-            </Text>
+            </h2>
 
-            <Text theme='muted' align='center'>
+            <p>
               <FormattedMessage
                 id='empty_column.home.subtitle'
                 defaultMessage='{siteTitle} gets more interesting once you follow other users.'
                 values={{ siteTitle: instance.title }}
               />
-            </Text>
+            </p>
 
             {features.federating && (
-              <Text theme='muted' align='center'>
+              <p>
                 <FormattedMessage
                   id='empty_column.home'
                   defaultMessage='Or you can visit {public} to get started and meet other users.'
@@ -100,7 +99,7 @@ const HomeTimelinePage: React.FC = () => {
                     ),
                   }}
                 />
-              </Text>
+              </p>
             )}
           </div>
         }

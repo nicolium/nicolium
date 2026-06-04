@@ -1007,6 +1007,21 @@ body {
       }
     }
 
+    &__banner {
+      @include mixins.text($theme: muted);
+
+      margin: 0 1rem;
+
+      .black & {
+        margin: 1rem;
+      }
+
+      @media (min-width: variables.$breakpoint-sm) {
+        margin-right: 0;
+        margin-left: 0;
+      }
+    }
+
     @media (min-width: variables.$breakpoint-sm) {
       .dark.black & {
         border-left-width: 1px;

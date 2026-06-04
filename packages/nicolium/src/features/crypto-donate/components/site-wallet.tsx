@@ -13,7 +13,7 @@ const SiteWallet: React.FC<ISiteWallet> = ({ limit }): React.JSX.Element => {
   const addresses = typeof limit === 'number' ? cryptoAddresses.slice(0, limit) : cryptoAddresses;
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='site-wallet'>
       {addresses.map((address) => (
         <CryptoAddress
           key={address.ticker}
