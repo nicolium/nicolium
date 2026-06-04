@@ -1106,6 +1106,22 @@ const useComposeVisibility = (composeId: string) => {
   return visibility;
 };
 
+const useComposeContentType = (composeId: string) => {
+  const { contentType } = useCompose(composeId);
+  const instance = useInstance();
+  const postFormats = instance.pleroma.metadata.post_formats;
+  const { defaultContentType } = useSettings();
+
+  if (contentType === 'default') {
+    const resolvedContentType =
+      defaultContentType === 'wysiwyg' ? 'text/markdown' : defaultContentType;
+    if (postFormats.includes(resolvedContentType)) return defaultContentType;
+    return postFormats[0] ?? 'text/plain';
+  }
+
+  return contentType;
+};
+
 export {
   type Compose,
   appendMedia,
@@ -1119,4 +1135,5 @@ export {
   useUploadCompose,
   useChangeUploadCompose,
   useComposeVisibility,
+  useComposeContentType,
 };
