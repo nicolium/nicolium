@@ -487,6 +487,17 @@ select {
 }
 
 .form-group {
+  &--checkbox {
+    display: flex;
+    gap: 0.5rem;
+    align-items: start;
+
+    .form-group__content {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
   &__label {
     display: block;
 

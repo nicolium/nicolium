@@ -1178,6 +1178,15 @@
       outline-color: black;
     }
 
+    &__container {
+      display: flex;
+      justify-content: space-between;
+
+      &:has(.user-panel__avatar) {
+        justify-content: end;
+      }
+    }
+
     &__link {
       display: block;
       margin-top: -3rem;
@@ -1186,6 +1195,47 @@
 
   &__action {
     margin-top: 0.5rem;
+  }
+
+  &__name {
+    display: flex;
+    flex-direction: column;
+
+    &__display-name {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+
+      p:first-child {
+        @include mixins.text($size: lg, $weight: bold, $truncate: true);
+      }
+
+      p:not(:first-child) {
+        @include mixins.text($theme: muted, $truncate: true);
+      }
+
+      &__badges {
+        display: flex;
+        gap: 0.25rem;
+        align-items: center;
+      }
+
+      &__acct {
+        display: flex;
+        gap: 0.25rem;
+        align-items: center;
+
+        p {
+          @include mixins.text($size: sm, $theme: muted, $truncate: true);
+        }
+
+        svg {
+          width: 1rem;
+          height: 1rem;
+          color: rgb(var(--color-gray-600));
+        }
+      }
+    }
   }
 
   &__stats {

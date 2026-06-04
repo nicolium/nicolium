@@ -41,7 +41,7 @@ const PublicTimelinePage = () => {
 
   return (
     <Column
-      className='-mt-3 sm:mt-0'
+      className='timeline-column'
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='federated' />}
       truncateTitle={false}

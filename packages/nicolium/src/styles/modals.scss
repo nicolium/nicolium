@@ -683,6 +683,10 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+
+      .input__wrapper {
+        flex-grow: 1;
+      }
     }
 
     &__accounts {
@@ -762,6 +766,16 @@
         width: 1.25rem;
         height: 1.25rem;
       }
+    }
+  }
+
+  &__form {
+    .input__wrapper {
+      flex-grow: 1;
+    }
+
+    select {
+      max-width: fit-content;
     }
   }
 }

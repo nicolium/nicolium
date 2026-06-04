@@ -61,10 +61,9 @@ const ListForm: React.FC<IListForm> = ({ listId, onTabChange }) => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} className='list-editor-modal__form'>
       <FormGroup labelText={<FormattedMessage id='lists.edit.title' defaultMessage='List title' />}>
         <Input
-          outerClassName='grow'
           type='text'
           value={title}
           onChange={(e) => {
@@ -85,7 +84,6 @@ const ListForm: React.FC<IListForm> = ({ listId, onTabChange }) => {
           >
             <SelectDropdown
               key={repliesPolicy}
-              className='max-w-fit'
               items={{
                 none: intl.formatMessage(messages.repliesPolicyNone),
                 list: intl.formatMessage(messages.repliesPolicyList),

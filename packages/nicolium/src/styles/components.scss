@@ -2588,3 +2588,17 @@ div[data-viewport-type='window']:has(.empty-message) {
     }
   }
 }
+
+.missing-indicator {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__label {
+    @include mixins.text($weight: medium, $align: center, $size: lg);
+  }
+
+  &__sublabel {
+    @include mixins.text($theme: muted, $align: center);
+  }
+}

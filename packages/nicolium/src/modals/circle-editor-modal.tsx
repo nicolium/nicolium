@@ -95,7 +95,6 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
               labelText={<FormattedMessage id='circles.edit.title' defaultMessage='Circle title' />}
             >
               <Input
-                outerClassName='grow'
                 type='text'
                 value={title}
                 onChange={(e) => {

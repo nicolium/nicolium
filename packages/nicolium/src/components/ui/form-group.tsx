@@ -42,10 +42,10 @@ const FormGroup: React.FC<IFormGroup> = ({
 
   if (isCheckboxFormGroup) {
     return (
-      <div className='flex items-start gap-2'>
+      <div className='form-group form-group--checkbox'>
         {firstChild}
 
-        <div className='flex flex-col'>
+        <div className='form-group__content'>
           {labelText && (
             <label
               htmlFor={formFieldId}

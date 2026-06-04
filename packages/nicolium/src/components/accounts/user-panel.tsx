@@ -1,6 +1,5 @@
 import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import { Link } from '@tanstack/react-router';
-import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -8,7 +7,6 @@ import VerificationBadge from '@/components/accounts/verification-badge';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -55,7 +53,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
           </div>
         )}
 
-        <div className={clsx('flex', disableUserProvidedMedia ? 'justify-end' : 'justify-between')}>
+        <div className='user-panel__avatar__container'>
           {!disableUserProvidedMedia && (
             <AccountLink account={account} title={acct} className='user-panel__avatar__link'>
               <Avatar
@@ -74,43 +72,35 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         </div>
       </div>
 
-      <div className='flex flex-col'>
+      <div className='user-panel__name'>
         <AccountLink account={account}>
-          <div className='flex items-center gap-1'>
-            <Text size='lg' weight='bold' truncate>
+          <div className='user-panel__name__display-name'>
+            <p>
               <Emojify text={account.display_name} emojis={account.emojis} />
-            </Text>
+            </p>
 
             {account.original_display_name &&
               account.original_display_name !== account.display_name && (
-                <Text
-                  theme='muted'
-                  truncate
-                  title={intl.formatMessage(messages.originalDisplayName)}
-                >
+                <p title={intl.formatMessage(messages.originalDisplayName)}>
                   {'('}
                   <Emojify text={account.original_display_name} emojis={account.emojis} />
                   {')'}
-                </Text>
+                </p>
               )}
 
             {verified && <VerificationBadge />}
 
-            {badges && badges.length > 0 && <div className='flex items-center gap-1'>{badges}</div>}
+            {badges && badges.length > 0 && (
+              <div className='user-panel__name__badges'>{badges}</div>
+            )}
           </div>
         </AccountLink>
 
-        <div className='flex items-center gap-1'>
-          <Text size='sm' theme='muted' direction='ltr' truncate>
-            @{displayedAcct}
-          </Text>
+        <div className='user-panel__name__acct'>
+          <p dir='ltr'>@{displayedAcct}</p>
 
           {account.locked && (
-            <Icon
-              src={iconLock}
-              alt={intl.formatMessage(messages.accountLocked)}
-              className='size-4 text-gray-600'
-            />
+            <Icon src={iconLock} alt={intl.formatMessage(messages.accountLocked)} />
           )}
         </div>
       </div>

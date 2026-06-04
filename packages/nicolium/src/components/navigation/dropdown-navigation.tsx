@@ -16,7 +16,6 @@ import Account from '@/components/accounts/account';
 import ProfileStats from '@/components/accounts/profile-stats';
 import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useNavigationItems } from '@/hooks/use-navigation-items';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
@@ -88,12 +87,12 @@ const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
         onClick={handleClose}
       >
         <Icon src={iconPlus} />
-        <Text size='sm' weight='medium'>
+        <p>
           <FormattedMessage
             id='profile_dropdown.add_account'
             defaultMessage='Add an existing account'
           />
-        </Text>
+        </p>
       </Link>
     </div>
   );
@@ -302,12 +301,12 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                   })}
                 >
                   <button type='button' onClick={handleSwitcherClick}>
-                    <Text tag='span'>
+                    <span>
                       <FormattedMessage
                         id='profile_dropdown.switch_account'
                         defaultMessage='Switch accounts'
                       />
-                    </Text>
+                    </span>
 
                     <Icon src={iconCaretDown} />
                   </button>

@@ -53,9 +53,9 @@
   }
 
   &__status-preview {
-    @include mixins.text($truncate: true, $size: sm)
-      overflow: hidden;
+    @include mixins.text($truncate: true, $size: sm);
 
+    overflow: hidden;
     display: -webkit-box;
     display: inline;
     -webkit-box-orient: vertical;

@@ -236,7 +236,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
               </p>
             )}
 
-            <div className='flex flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center'>
+            <div className='account-info__details'>
               {account.local ? (
                 <div
                   className='account-info__details__item'
