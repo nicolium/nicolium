@@ -105,7 +105,7 @@ const ComposeInteractionPolicyModal: React.FC<
               defaultMessage='Control, who can interact with this post. You can also configure the default interaction policies in <link>Preferences > Interaction policies</link>.'
               values={{
                 link: (children: React.ReactNode) => (
-                  <Link className='link' to={'/settings/interaction_policies'}>
+                  <Link className='link' to='/settings/interaction_policies'>
                     {children}
                   </Link>
                 ),

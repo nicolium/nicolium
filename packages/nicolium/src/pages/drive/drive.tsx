@@ -213,7 +213,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
     </button>
   ) : (
     <Link
-      to={'/drive/{-$folderId}'}
+      to='/drive/{-$folderId}'
       params={{ folderId }}
       className={clsx('drive-breadcrumbs__item', {
         'drive-breadcrumbs__item--current': depth === 0,
@@ -822,7 +822,7 @@ const DrivePage: React.FC = () => {
     <Column
       className='drive-page'
       label={data?.name ?? intl.formatMessage(messages.heading)}
-      backHref={'/drive/{-$folderId}'}
+      backHref='/drive/{-$folderId}'
       backParams={{ folderId: data?.parent_id ?? undefined }}
       action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >

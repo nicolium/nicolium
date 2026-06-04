@@ -46,7 +46,7 @@ const AccountAuthorize: React.FC<IAccountAuthorize> = ({ id }) => {
   if (!account) return null;
 
   return (
-    <div className='p-2.5'>
+    <div className='follow-request__account'>
       <Account
         account={account}
         action={

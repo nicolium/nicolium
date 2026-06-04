@@ -48,7 +48,7 @@ const RefreshButton = () => {
   return (
     <IconButton
       disabled={isPending}
-      className='text-gray-600 hover:text-gray-700 dark:hover:text-gray-500'
+      className='timeline-refresh-button'
       title={intl.formatMessage(messages.refresh)}
       src={iconArrowsClockwise}
       onClick={handleClick}

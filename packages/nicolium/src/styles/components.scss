@@ -1449,6 +1449,10 @@ div[data-viewport-type='window']:has(.empty-message) {
   &:hover {
     transform: scale(1.25);
   }
+
+  &__container {
+    display: inline-flex;
+  }
 }
 
 .alt-indicator {
@@ -2318,6 +2322,16 @@ div[data-viewport-type='window']:has(.empty-message) {
       gap: 0.55rem;
     }
   }
+
+  &__actions {
+    button:first-child {
+      @include mixins.button($theme: secondary, $size: sm);
+    }
+
+    button:last-child {
+      @include mixins.button($theme: danger, $size: sm);
+    }
+  }
 }
 
 .placeholder-avatar {
@@ -2640,6 +2654,7 @@ div[data-viewport-type='window']:has(.empty-message) {
 }
 
 .site-wallet,
+.crypto-donate,
 .server-info {
   display: flex;
   flex-direction: column;
@@ -2658,5 +2673,13 @@ div[data-viewport-type='window']:has(.empty-message) {
 
   &__description {
     @include mixins.text($theme: muted);
+  }
+}
+
+.feedback-form {
+  button {
+    @include mixins.button;
+
+    margin: 0 auto;
   }
 }

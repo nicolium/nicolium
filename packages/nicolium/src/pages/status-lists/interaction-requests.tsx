@@ -15,7 +15,6 @@ import RelativeTimestamp from '@/components/relative-timestamp';
 import ScrollableList from '@/components/scrollable-list';
 import StatusContent from '@/components/statuses/status-content';
 import StatusInfo from '@/components/statuses/status-info';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
@@ -194,23 +193,13 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   });
 
   const actions = (
-    <div className='flex gap-2'>
-      <Button
-        theme='secondary'
-        size='sm'
-        text={intl.formatMessage(messages.authorize)}
-        onClick={() => {
-          handleAuthorize();
-        }}
-      />
-      <Button
-        theme='danger'
-        size='sm'
-        text={intl.formatMessage(messages.reject)}
-        onClick={() => {
-          handleReject();
-        }}
-      />
+    <div className='interaction-request__actions'>
+      <button onClick={() => handleAuthorize()}>
+        <FormattedMessage id='interaction_request.authorize' defaultMessage='Accept' />
+      </button>
+      <button onClick={() => handleReject()}>
+        <FormattedMessage id='interaction_request.reject' defaultMessage='Reject' />
+      </button>
     </div>
   );
 

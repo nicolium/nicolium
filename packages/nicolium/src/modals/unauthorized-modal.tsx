@@ -195,7 +195,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
             />
             <button type='submit'>{button}</button>
           </Form>
-          <div className={'unauthorized-modal__divider'}>
+          <div className='unauthorized-modal__divider'>
             <FormattedMessage id='remote_interaction.divider' defaultMessage='or' />
           </div>
           {isOpen && (

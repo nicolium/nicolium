@@ -30,7 +30,7 @@ const MaybeEmoji: React.FC<IMaybeEmoji> = ({ text, emojis, nyaize: shouldNyaize,
     if (filename?.length > 0) {
       const emoji = <Emoji className='emojione emoji' emoji={text} src={filename} />;
       if (truncated) {
-        return <span className='inline-flex'>{emoji}</span>;
+        return <span className='emoji__container'>{emoji}</span>;
       } else {
         return emoji;
       }

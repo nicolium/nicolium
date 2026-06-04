@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
@@ -48,7 +47,7 @@ const SentryFeedbackForm: React.FC<ISentryFeedbackForm> = ({ eventId }) => {
   }
 
   return (
-    <Form onSubmit={handleSubmitFeedback}>
+    <Form onSubmit={handleSubmitFeedback} className='feedback-form'>
       <FormGroup>
         <Textarea
           value={feedback}
@@ -60,12 +59,12 @@ const SentryFeedbackForm: React.FC<ISentryFeedbackForm> = ({ eventId }) => {
       </FormGroup>
 
       <FormActions>
-        <Button type='submit' className='mx-auto' disabled={!feedback || isSubmitting}>
+        <button type='submit' disabled={!feedback || isSubmitting}>
           <FormattedMessage
             id='alert.unexpected.submit_feedback'
             defaultMessage='Submit feedback'
           />
-        </Button>
+        </button>
       </FormActions>
     </Form>
   );

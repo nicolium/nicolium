@@ -18,7 +18,7 @@ const CryptoDonatePage: React.FC = (): React.JSX.Element => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)} withHeader>
-      <div className='flex flex-col gap-5'>
+      <div className='crypto-donate'>
         <Accordion
           headline={
             <FormattedMessage

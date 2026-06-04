@@ -23,7 +23,7 @@ interface IRestriction {
 }
 
 const Restriction: React.FC<IRestriction> = ({ icon, children }) => (
-  <div className='instance-restriction'>
+  <div className='instance-restrictions__item'>
     <Icon src={icon} />
 
     <p>{children}</p>
@@ -149,7 +149,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
     }
   };
 
-  return <div className='flex flex-col gap-3'>{renderContent()}</div>;
+  return <div className='instance-restrictions'>{renderContent()}</div>;
 };
 
 export { InstanceRestrictions as default };

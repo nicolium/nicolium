@@ -488,6 +488,11 @@ body {
     cursor: pointer;
     width: auto;
     height: 3rem;
+    object-fit: contain;
+
+    &--left {
+      width: fit-content
+    }
   }
 
   &--narrow {
@@ -1777,18 +1782,24 @@ body {
   }
 }
 
-.instance-restriction {
+.instance-restrictions {
   display: flex;
+  flex-direction: column;
   gap: 0.75rem;
 
-  svg {
-    flex: none;
-    width: 1.25rem;
-    height: 1.25rem;
-  }
+  &__item {
+    display: flex;
+    gap: 0.75rem;
 
-  p {
-    @include mixins.text($theme: muted);
+    svg {
+      flex: none;
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    p {
+      @include mixins.text($theme: muted);
+    }
   }
 }
 

@@ -26,7 +26,7 @@ const SiteLogo: React.FC<ISiteLogo> = ({ className, theme, ...rest }) => {
     // eslint-disable-next-line jsx-a11y/alt-text
     <img
       alt={intl.formatMessage(messages.logo)}
-      className={clsx('site-logo object-contain', alignment === 'left' && 'w-fit', className)}
+      className={clsx('site-logo', alignment === 'left' && 'site-logo--left', className)}
       src={logoSrc}
       {...rest}
     />

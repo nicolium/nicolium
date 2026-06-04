@@ -5,7 +5,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 import PlaceholderSidebarSuggestions from '@/components/placeholders/placeholder-sidebar-suggestions';
-import Text from '@/components/ui/text';
 import Widget from '@/components/ui/widget';
 import { useFeatures } from '@/hooks/use-features';
 import {
@@ -44,10 +43,8 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
     <Widget
       title={<FormattedMessage id='who_to_follow.title' defaultMessage='People to follow' />}
       action={
-        <Link className='text-right' to='/search' search={{ type: 'accounts' }}>
-          <Text tag='span' theme='primary' size='sm' className='hover:underline'>
-            <FormattedMessage id='feed_suggestions.view_all' defaultMessage='View all' />
-          </Text>
+        <Link className='widget__action-link' to='/search' search={{ type: 'accounts' }}>
+          <FormattedMessage id='feed_suggestions.view_all' defaultMessage='View all' />
         </Link>
       }
     >

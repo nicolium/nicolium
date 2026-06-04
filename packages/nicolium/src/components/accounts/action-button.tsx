@@ -560,7 +560,7 @@ const ActionButton: React.FC<IActionButton> = ({
 
         return (
           <DropdownMenu items={items}>
-            <Button size='sm' theme={'secondary'} secondaryIcon={iconCaretDown}>
+            <Button size='sm' theme='secondary' secondaryIcon={iconCaretDown}>
               <FormattedMessage id='account.following' defaultMessage='Following' />
             </Button>
           </DropdownMenu>

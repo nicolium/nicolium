@@ -680,7 +680,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
 
   return (
     <DropdownMenu items={menu} placement='bottom-end'>
-      <IconButton src={iconDotsThree} theme='outlined' className='px-2' iconClassName='h-4 w-4' />
+      <IconButton src={iconDotsThree} theme='outlined' className='account-menu__button' />
     </DropdownMenu>
   );
 };

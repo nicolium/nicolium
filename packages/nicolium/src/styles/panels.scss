@@ -208,3 +208,11 @@
     @include mixins.text($size: lg, $weight: bold);
   }
 }
+
+.widget__action-link {
+  @include mixins.text($theme: primary, $size: sm, $align: right);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

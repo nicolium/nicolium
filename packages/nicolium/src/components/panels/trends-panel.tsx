@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 
 import Hashtag from '@/components/hashtag';
 import PlaceholderSidebarTrends from '@/components/placeholders/placeholder-sidebar-trends';
-import Text from '@/components/ui/text';
 import Widget from '@/components/ui/widget';
 import useTrendingTags from '@/queries/trends/use-trending-tags';
 
@@ -23,10 +22,8 @@ const TrendsPanel = ({ limit }: ITrendsPanel) => {
     <Widget
       title={<FormattedMessage id='trends.title' defaultMessage='Trends' />}
       action={
-        <Link className='text-right' to='/search' search={{ type: 'hashtags' }}>
-          <Text tag='span' theme='primary' size='sm' className='hover:underline'>
-            <FormattedMessage id='trends_panel.view_all' defaultMessage='View all' />
-          </Text>
+        <Link className='widget__action-link' to='/search' search={{ type: 'hashtags' }}>
+          <FormattedMessage id='trends_panel.view_all' defaultMessage='View all' />
         </Link>
       }
     >

@@ -277,7 +277,7 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
 
       return menu.map((item, i) => (
         <a
-          className={'autosuggest-suggestions__menu-item'}
+          className='autosuggest-suggestions__menu-item'
           href='#'
           role='button'
           tabIndex={0}
