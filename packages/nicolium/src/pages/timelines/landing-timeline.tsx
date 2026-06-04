@@ -51,7 +51,7 @@ const LandingTimelinePage = () => {
     <Column withHeader={false} className='landing-timeline'>
       <SiteBanner />
 
-      <div className='mb-4 flex justify-end gap-4 lg:hidden'>
+      <div className='landing-timeline__actions'>
         <Link to='/login'>
           <FormattedMessage id='account.login' defaultMessage='Log in' />
         </Link>

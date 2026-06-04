@@ -5,12 +5,12 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from '@/components/icon';
 import LoadMore from '@/components/load-more';
 import Blurhash from '@/components/media/blurhash';
 import MissingIndicator from '@/components/missing-indicator';
 import StillImage from '@/components/still-image';
 import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
 import Spinner from '@/components/ui/spinner';
 import { type AccountGalleryAttachment, useAccountGallery } from '@/hooks/use-account-gallery';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -80,7 +80,6 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
         src={attachment.preview_url}
         alt={attachment.description}
         style={{ objectPosition: `${x}% ${y}%` }}
-        className={clsx('size-full overflow-hidden', { 'rounded-br-md': isLast })}
       />
     );
   } else if (['gifv', 'video'].includes(attachment.type)) {
@@ -96,7 +95,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
         className={clsx('media-gallery__gifv', { 'media-gallery__gifv--autoplay': autoPlayGif })}
       >
         <video
-          className={clsx('media-gallery__item-gifv-thumbnail overflow-hidden', {
+          className={clsx('media-gallery__item-gifv-thumbnail', {
             'rounded-br-md': isLast,
           })}
           aria-label={attachment.description}
@@ -136,9 +135,9 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
   }
 
   return (
-    <div className='col-span-1'>
+    <div className='account-gallery__item'>
       <Link
-        className='media-gallery__item-thumbnail aspect-1'
+        className='media-gallery__item-thumbnail'
         to='/@{$username}/posts/$statusId'
         params={{ username: account?.acct ?? 'undefined', statusId: attachment.status_id }}
         onClick={handleClick}
@@ -146,10 +145,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
       >
         <Blurhash
           hash={attachment.blurhash}
-          className={clsx('media-gallery__preview', {
-            hidden: visible,
-            'rounded-br-md': isLast,
-          })}
+          className='media-gallery__preview'
           aria-label={!visible ? attachment.description : undefined}
           aria-hidden={visible}
         />

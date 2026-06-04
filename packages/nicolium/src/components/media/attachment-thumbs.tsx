@@ -27,7 +27,7 @@ const AttachmentThumbs = ({ status, onClick }: IAttachmentThumbs) => {
   const [visible] = useMediaVisible(status, displayMedia);
 
   return (
-    <div className='relative'>
+    <div className='attachment-thumbs'>
       <Suspense fallback={fallback}>
         <MediaGallery
           media={status.media_attachments}
@@ -38,7 +38,7 @@ const AttachmentThumbs = ({ status, onClick }: IAttachmentThumbs) => {
         />
       </Suspense>
 
-      {onClick && <div className='absolute inset-0 size-full cursor-pointer' onClick={onClick} />}
+      {onClick && <div className='attachment-thumbs__overlay' onClick={onClick} />}
     </div>
   );
 };

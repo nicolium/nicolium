@@ -1060,6 +1060,45 @@
     flex: 1 1 auto;
     padding: 1rem 2rem;
   }
+
+  &__item {
+    grid-column: span 1 / span 1;
+
+    .media-gallery {
+      &__item-thumbnail {
+        aspect-ratio: 1;
+      }
+
+      &__item-gifv {
+        &-thumbnail {
+          overflow: hidden;
+        }
+      }
+
+      &__preview {
+        &[aria-hidden='true'] {
+          display: none;
+        }
+
+        &:last-child {
+          border-bottom-right-radius: var(--radius-md);
+        }
+      }
+    }
+  }
+
+  .still-image {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  &:last-child {
+    .media-gallery__item-gifv-thumbnail,
+    .media-gallery__item-thumbnail,
+    .still-image {
+      border-bottom-right-radius: var(--radius-md);
+    }
+  }
 }
 
 .account--placeholder {

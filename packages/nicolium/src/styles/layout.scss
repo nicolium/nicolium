@@ -1084,6 +1084,22 @@ body {
       display: block;
     }
   }
+
+  &__chats {
+    flex-grow: 1;
+
+    @media (min-width: variables.$breakpoint.md) {
+      grid-column: span 12 / span 12;
+    }
+
+    @media (min-width: variables.$breakpoint.lg) {
+      grid-column: span 9 / span 9;
+
+      .black & {
+        border: 1px solid rgb(var(--color-gray-800));
+      }
+    }
+  }
 }
 
 .widget {
@@ -1713,37 +1729,6 @@ body {
   }
 }
 
-.landing-timeline {
-  .site-banner {
-    margin-top: 3rem;
-    margin-bottom: 1rem;
-    padding: 0 1rem;
-
-    @media (min-width: variables.$breakpoint-lg) {
-      margin-bottom: 3rem;
-    }
-  }
-
-  &__actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: end;
-    margin-bottom: 1rem;
-
-    a:first-child {
-      @include mixins.button($theme: tertiary);
-    }
-
-    a:not(:first-child) {
-      @include mixins.button;
-    }
-
-    @media (min-width: variables.$breakpoint-lg) {
-      display: none;
-    }
-  }
-}
-
 .restricted-instance {
   a {
     display: flex;
@@ -1808,6 +1793,43 @@ body {
 
       &:hover {
         text-decoration: underline;
+      }
+    }
+  }
+}
+
+.about-page {
+  &__card {
+    @include mixins.card($variant: rounded);
+  }
+
+  &__content {
+    @include mixins.text;
+
+    margin: 0 auto;
+    padding: 1rem 0;
+
+    @media (min-width: variables.$breakpoint-sm) {
+      padding: 1.5rem;
+    }
+  }
+
+  &__variants {
+    ul {
+      display: inline;
+      padding: 0;
+      list-style-type: none;
+    }
+
+    li {
+      display: inline;
+
+      &::after {
+        content: ' · ';
+      }
+
+      &:last-child {
+        content: none;
       }
     }
   }

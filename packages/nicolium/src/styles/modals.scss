@@ -1390,3 +1390,44 @@
     border-radius: var(--radius-xl);
   }
 }
+
+.compose-modal {
+  &--dragging {
+    z-index: 99 !important;
+    border: 2px dashed rgb(var(--color-primary-600));
+  }
+
+  &--dragged-over {
+    outline: 2px solid rgb(var(--color-primary-600));
+    outline-offset: 2px;
+  }
+}
+
+.reactions-modal {
+  &__emoji {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    span, img, .still-image {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__list {
+    max-width: 100%;
+
+    &:not(:empty) {
+      margin-top: 1rem;
+    }
+  }
+
+  &__item {
+    padding-bottom: 0.75rem;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+}

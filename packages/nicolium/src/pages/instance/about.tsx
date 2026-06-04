@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Navlinks } from '@/components/navigation/navlinks';
-import Card from '@/components/ui/card';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { languages } from '@/pages/settings/components/preferences';
 import { useAboutPage } from '@/queries/frontend/use-about-page';
@@ -29,10 +28,10 @@ const About: React.FC<IAbout> = ({ slug }) => {
   const { data: pageHtml } = useAboutPage(slug, fetchLocale ? locale : undefined);
 
   const alsoAvailable = defaultLocale && (
-    <div>
+    <div className='about-page__variants'>
       <FormattedMessage id='about.also_available' defaultMessage='Available in:' />{' '}
-      <ul className='inline list-none p-0'>
-        <li className="inline after:content-['_·_']">
+      <ul>
+        <li>
           <a
             href='#'
             onClick={() => {
@@ -44,7 +43,7 @@ const About: React.FC<IAbout> = ({ slug }) => {
           </a>
         </li>
         {pageLocales?.map((locale) => (
-          <li className="inline after:content-['_·_'] last:after:content-none" key={locale}>
+          <li key={locale}>
             <button
               onClick={() => {
                 setLocale(locale);
@@ -60,13 +59,13 @@ const About: React.FC<IAbout> = ({ slug }) => {
   );
 
   return (
-    <div>
-      <Card variant='rounded'>
-        <div className='prose mx-auto py-4 dark:prose-invert sm:p-6'>
+    <div className='about-page'>
+      <div className='about-page__card'>
+        <div className='about-page__content' data-markup>
           {pageHtml && <div dangerouslySetInnerHTML={{ __html: pageHtml }} />}
           {alsoAvailable}
         </div>
-      </Card>
+      </div>
 
       <Navlinks type='homeFooter' />
     </div>

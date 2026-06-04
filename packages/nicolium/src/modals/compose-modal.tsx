@@ -137,9 +137,9 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
       ref={node}
       title={renderTitle()}
       onClose={onClickClose}
-      className={clsx({
-        '!z-[99] border-2 border-dashed border-primary-600': isDragging,
-        'ring-2 ring-primary-600 ring-offset-2': isDraggedOver,
+      className={clsx('compose-modal', {
+        'compose-modal--dragging': isDragging,
+        'compose-modal--dragged-over': isDraggedOver,
       })}
     >
       <ComposeForm id={composeId} autoFocus />

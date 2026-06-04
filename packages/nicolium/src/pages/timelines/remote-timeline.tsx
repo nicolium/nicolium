@@ -94,10 +94,8 @@ const RemoteTimelinePage: React.FC = () => {
       }
     >
       {!isPinned && (
-        <div className='mb-4 flex gap-2 px-2'>
+        <div className='pinned-remote-timeline'>
           <IconButton
-            className='text-gray-400 hover:text-gray-600'
-            iconClassName='h-5 w-5'
             src={iconX}
             onClick={handleCloseClick}
             title={intl.formatMessage(messages.close)}

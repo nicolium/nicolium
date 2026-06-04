@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -57,8 +56,8 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({
     reactions!.forEach((reaction) =>
       items.push({
         text: (
-          <div className='flex items-center gap-1'>
-            <Emoji className='size-4' emoji={reaction.name} src={reaction.url ?? undefined} />
+          <div className='reactions-modal__emoji'>
+            <Emoji emoji={reaction.name} src={reaction.url ?? undefined} />
             {reaction.count}
           </div>
         ),
@@ -113,10 +112,8 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({
         <PullToRefresh onRefresh={refetch}>
           <ScrollableList
             emptyMessageText={emptyMessage}
-            listClassName={clsx('max-w-full', {
-              '!mt-4': reactions.length > 0,
-            })}
-            itemClassName='pb-3'
+            listClassName='reactions-modal'
+            itemClassName='reactions-modal__item'
             style={{ height: reactions.length > 0 ? 'calc(80vh - 159px)' : 'calc(80vh - 88px)' }}
             isLoading={isLoading}
             useWindowScroll={false}
@@ -139,6 +136,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({
     <Modal
       title={<FormattedMessage id='column.reactions' defaultMessage='Reactions' />}
       onClose={onClickClose}
+      className='reactions-modal'
     >
       {body}
     </Modal>
