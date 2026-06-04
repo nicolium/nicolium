@@ -3,7 +3,6 @@ import React, { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -290,9 +289,9 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
         </CardHeader>
         <div className='antenna-editor-modal__add-row'>
           <Input type='text' value={value} onChange={(e) => setValue(e.target.value)} />
-          <Button onClick={handleAdd}>
+          <button type='button' onClick={handleAdd}>
             <FormattedMessage id='common.add' defaultMessage='Add' />
-          </Button>
+          </button>
         </div>
       </Form>
 
@@ -334,9 +333,9 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
             value={excludedValue}
             onChange={(e) => setExcludedValue(e.target.value)}
           />
-          <Button onClick={handleAddExcluded}>
+          <button type='button' onClick={handleAddExcluded}>
             <FormattedMessage id='common.add' defaultMessage='Add' />
-          </Button>
+          </button>
         </div>
       </Form>
     </div>
@@ -694,13 +693,18 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
         )}
       </List>
       <FormActions>
-        <Button onClick={handleUpdate} disabled={disabled}>
+        <button
+          className='antenna-editor-modal__submit'
+          type='button'
+          onClick={handleUpdate}
+          disabled={disabled}
+        >
           {antennaId ? (
             <FormattedMessage id='antennas.edit.save' defaultMessage='Save antenna' />
           ) : (
             <FormattedMessage id='antennas.create.save' defaultMessage='Create antenna' />
           )}
-        </Button>
+        </button>
       </FormActions>
     </Form>
   );

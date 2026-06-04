@@ -441,6 +441,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  &__action {
+    @include mixins.button($theme: secondary);
+  }
+}
+
+.group-action-button {
+  @include mixins.button;
+
+  &--primary {
+    @include mixins.button($theme: primary);
+  }
+}
+
+.group-popover__action button {
+  @include mixins.button($theme: secondary, $block: true);
+}
+
+.edit-group__submit {
+  @include mixins.button($theme: primary, $block: true);
 }
 
 .group-list-item {

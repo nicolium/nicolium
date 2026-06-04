@@ -5,7 +5,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import { CardBody, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
 import IconButton from '@/components/ui/icon-button';
@@ -113,9 +112,13 @@ const ChatsPageSettings = () => {
           </List>
         </CardBody>
 
-        <Button type='submit' theme='primary' disabled={updateCredentials.isPending}>
+        <button
+          className='chats-page-panel__submit'
+          type='submit'
+          disabled={updateCredentials.isPending}
+        >
           {intl.formatMessage(messages.submit)}
-        </Button>
+        </button>
       </Form>
     </div>
   );

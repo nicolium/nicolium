@@ -11,7 +11,6 @@ import DropdownMenu from '@/components/dropdown-menu';
 import { EmptyMessage } from '@/components/empty-message';
 import { TimelinePicker } from '@/components/timeline-picker';
 import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
@@ -134,9 +133,9 @@ const ListTimelinePage: React.FC = () => {
               defaultMessage='There is nothing in this list yet. When members of this list create new posts, they will appear here.'
             />
             <br />
-            <Button onClick={handleEditClick}>
+            <button type='button' className='list-timeline__add' onClick={handleEditClick}>
               <FormattedMessage id='list.click_to_add' defaultMessage='Click here to add people' />
-            </Button>
+            </button>
           </div>
         }
         emptyMessageIcon={iconListBullets}

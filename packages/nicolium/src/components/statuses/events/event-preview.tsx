@@ -1,5 +1,6 @@
 import iconMapPin from '@phosphor-icons/core/regular/map-pin.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -8,7 +9,6 @@ import VerificationBadge from '@/components/accounts/verification-badge';
 import Icon from '@/components/icon';
 import EventActionButton from '@/components/statuses/events/event-action-button';
 import EventDate from '@/components/statuses/events/event-date';
-import Button from '@/components/ui/button';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -52,14 +52,13 @@ const EventPreview: React.FC<IEventPreview> = ({
   const action =
     !hideAction &&
     (account.id === me ? (
-      <Button
-        size='sm'
-        theme={floatingAction ? 'secondary' : 'primary'}
+      <Link
+        className={clsx('event-card__manage', !floatingAction && 'event-card__manage--primary')}
         to='/@{$username}/events/$statusId/edit'
         params={{ username: account.acct, statusId: status.id }}
       >
         <FormattedMessage id='event.manage' defaultMessage='Manage' />
-      </Button>
+      </Link>
     ) : (
       <EventActionButton status={status} theme={floatingAction ? 'secondary' : 'primary'} />
     ));

@@ -3,7 +3,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
 import ScrollableList from '@/components/scrollable-list';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import ColumnForbidden from '@/features/ui/components/column-forbidden';
@@ -49,11 +48,9 @@ const BlockedMember: React.FC<IBlockedMember> = ({ accountId, groupId }) => {
         <Account account={account} withRelationship={false} />
       </div>
 
-      <Button
-        theme='secondary'
-        text={intl.formatMessage(messages.unblock)}
-        onClick={handleUnblock}
-      />
+      <button className='group-member-action-row__action' type='button' onClick={handleUnblock}>
+        {intl.formatMessage(messages.unblock)}
+      </button>
     </div>
   );
 };

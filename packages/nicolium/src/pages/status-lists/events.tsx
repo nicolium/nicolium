@@ -7,7 +7,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import PlaceholderEventPreview from '@/components/placeholders/placeholder-event-preview';
 import ReactSwipeableViews from '@/components/react-swipeable-views';
 import EventPreview from '@/components/statuses/events/event-preview';
-import Button from '@/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
@@ -107,9 +106,9 @@ const EventsPage = () => {
         <CardTitle
           title={<FormattedMessage id='events.recent_events' defaultMessage='Recent events' />}
         />
-        <Button className='events-page__create-button' theme='primary' size='sm' to='/events/new'>
+        <Link className='events-page__create-button' to='/events/new'>
           <FormattedMessage id='events.create_event' defaultMessage='Create event' />
-        </Button>
+        </Link>
       </div>
       <CardBody className='events-page__section'>
         <EventCarousel

@@ -11,7 +11,6 @@ import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 import { TimelinePicker } from '@/components/timeline-picker';
 import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
@@ -117,12 +116,12 @@ const CircleTimelinePage: React.FC = () => {
             />
             <br />
             <br />
-            <Button onClick={handleEditClick}>
+            <button type='button' className='circle-timeline__add' onClick={handleEditClick}>
               <FormattedMessage
                 id='circle.click_to_add'
                 defaultMessage='Click here to add people'
               />
-            </Button>
+            </button>
           </div>
         }
         emptyMessageIcon={iconChatCenteredText}

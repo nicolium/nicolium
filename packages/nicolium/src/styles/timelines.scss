@@ -288,4 +288,12 @@
       @include mixins.button($theme: muted);
     }
   }
+
+  &__add {
+    @include mixins.button($theme: secondary);
+  }
+}
+
+.circle-timeline__add {
+  @include mixins.button($theme: secondary);
 }

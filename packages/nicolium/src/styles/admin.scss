@@ -547,6 +547,10 @@ a.measure__container {
   flex-direction: column;
   gap: 1rem;
 
+  &__reset {
+    @include mixins.button($theme: primary);
+  }
+
   &__filter-grid {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -1303,5 +1307,19 @@ a.measure__container {
 
   select {
     width: fit-content;
+  }
+
+  .form__actions button {
+    @include mixins.button($theme: secondary);
+  }
+}
+
+.theme-editor {
+  &__reset {
+    @include mixins.button($theme: secondary);
+  }
+
+  &__save {
+    @include mixins.button($theme: primary);
   }
 }

@@ -5,7 +5,6 @@ import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Textarea from '@/components/ui/textarea';
 
-import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface TextFieldModalProps {
@@ -17,7 +16,6 @@ interface TextFieldModalProps {
   clear?: React.ReactNode;
   onClear?: () => void;
   onCancel?: () => void;
-  confirmationTheme?: ButtonThemes;
   text?: string;
   singleLine?: boolean;
   type?: 'text' | 'password';
@@ -33,7 +31,6 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
   onConfirm,
   onClear,
   onCancel,
-  confirmationTheme,
   text,
   singleLine,
   type = 'text',
@@ -62,7 +59,6 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
       title={heading}
       confirmationAction={handleClick}
       confirmationText={confirm}
-      confirmationTheme={confirmationTheme}
       secondaryText={
         clear || <FormattedMessage id='text_field_modal.clear' defaultMessage='Clear' />
       }

@@ -6,7 +6,6 @@ import * as v from 'valibot';
 import { uploadMedia } from '@/actions/media';
 import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
-import Button from '@/components/ui/button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import FileInput from '@/components/ui/file-input';
@@ -649,12 +648,12 @@ const FrontendConfigEditor: React.FC = () => {
         </fieldset>
 
         <FormActions>
-          <Button theme='secondary' onClick={handleReset} disabled={isPending}>
+          <button type='button' onClick={handleReset} disabled={isPending}>
             <FormattedMessage id='frontend_config.reset' defaultMessage='Reset' />
-          </Button>
-          <Button type='submit'>
+          </button>
+          <button type='submit'>
             <FormattedMessage id='frontend_config.save' defaultMessage='Save' />
-          </Button>
+          </button>
         </FormActions>
       </Form>
     </Column>

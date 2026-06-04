@@ -7,7 +7,6 @@ import List, { ListItem } from '@/components/list';
 import PlaceholderAccount from '@/components/placeholders/placeholder-account';
 import ScrollableList from '@/components/scrollable-list';
 import Accordion from '@/components/ui/accordion';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -229,9 +228,13 @@ const Filters: React.FC = () => {
           </FormGroup>
         </div>
         <FormActions>
-          <Button theme='primary' onClick={() => navigate({ search: {} })}>
+          <button
+            className='admin-accounts-page__reset'
+            type='button'
+            onClick={() => navigate({ search: {} })}
+          >
             <FormattedMessage id='admin.accounts.filters.clear' defaultMessage='Reset filters' />
-          </Button>
+          </button>
         </FormActions>
       </Form>
     </Accordion>

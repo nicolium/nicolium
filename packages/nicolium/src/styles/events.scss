@@ -10,7 +10,21 @@
 }
 
 .event-action-button {
+  @include mixins.button($theme: secondary);
+
   min-width: max-content;
+
+  &--primary {
+    @include mixins.button($theme: primary, $size: sm);
+  }
+}
+
+.event-card__manage {
+  @include mixins.button($theme: secondary, $size: sm);
+
+  &--primary {
+    @include mixins.button($theme: primary, $size: sm);
+  }
 }
 
 .event-header {
@@ -91,6 +105,10 @@
       width: 1rem;
       height: 1rem;
     }
+  }
+
+  &__manage {
+    @include mixins.button($theme: secondary, $size: sm);
   }
 
   &__details {
@@ -558,6 +576,8 @@
   }
 
   &__create-button {
+    @include mixins.button($theme: primary, $size: sm);
+
     margin-left: auto;
 
     @media (min-width: variables.$breakpoint-xl) {

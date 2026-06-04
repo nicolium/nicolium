@@ -62,6 +62,10 @@
   &__header {
     margin-bottom: 1rem;
   }
+
+  &__submit {
+    @include mixins.button($theme: primary);
+  }
 }
 
 .create-app {
@@ -76,6 +80,11 @@
     &__text {
       @include mixins.text($theme: muted);
     }
+  }
+
+  &__reset,
+  &__submit {
+    @include mixins.button($theme: primary);
   }
 }
 

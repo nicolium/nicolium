@@ -29,6 +29,10 @@
     flex-direction: column;
     gap: 0.75rem;
     align-items: center;
+
+    button {
+      @include mixins.button($theme: secondary);
+    }
   }
 
   &__blocked-message {
@@ -456,6 +460,10 @@
   &__body {
     @include mixins.text($size: sm, $theme: muted, $align: center);
   }
+
+  &__action {
+    @include mixins.button($theme: primary);
+  }
 }
 
 .chats-page-panel,
@@ -513,6 +521,10 @@
       display: none;
       margin-right: 0;
     }
+  }
+
+  &__submit {
+    @include mixins.button($theme: primary);
   }
 }
 
@@ -997,6 +1009,10 @@
     > div {
       padding: 0 1rem;
     }
+  }
+
+  &__error-action button {
+    @include mixins.button($theme: primary);
   }
 }
 

@@ -4,7 +4,6 @@ import { type Components, Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
 import PlaceholderChatMessage from '@/components/placeholders/placeholder-chat-message';
 import Avatar from '@/components/ui/avatar';
-import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
 import Spinner from '@/components/ui/spinner';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
@@ -236,12 +235,12 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
         </div>
 
         <div className='chat-message-list__error-action'>
-          <Button theme='primary' onClick={() => refetch()}>
+          <button onClick={() => refetch()}>
             <FormattedMessage
               id='chat_message_list.network_failure.action'
               defaultMessage='Try again'
             />
-          </Button>
+          </button>
         </div>
       </div>
     );

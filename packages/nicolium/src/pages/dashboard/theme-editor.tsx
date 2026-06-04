@@ -9,7 +9,6 @@ import { fetchFrontendConfig } from '@/actions/frontend-config';
 import { getHost } from '@/actions/instance';
 import DropdownMenu from '@/components/dropdown-menu';
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -238,13 +237,13 @@ const ThemeEditorPage: React.FC = () => {
               },
             ]}
           />
-          <Button theme='secondary' onClick={resetTheme}>
+          <button className='theme-editor__reset' type='button' onClick={resetTheme}>
             <FormattedMessage id='theme_editor.reset' defaultMessage='Reset' />
-          </Button>
+          </button>
 
-          <Button type='submit' theme='primary' disabled={submitting}>
+          <button className='theme-editor__save' type='submit' disabled={submitting}>
             <FormattedMessage id='theme_editor.save' defaultMessage='Save theme' />
-          </Button>
+          </button>
         </FormActions>
       </Form>
 

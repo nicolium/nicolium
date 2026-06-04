@@ -3,7 +3,6 @@ import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
 import { createApp } from '@/actions/apps';
 import { obtainOAuthToken } from '@/actions/oauth';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -139,9 +138,9 @@ const CreateAppPage: React.FC = () => {
         </FormGroup>
 
         <FormActions>
-          <Button theme='primary' type='button' onClick={handleReset}>
+          <button className='create-app__reset' type='button' onClick={handleReset}>
             <FormattedMessage id='app_create.restart' defaultMessage='Create another' />
-          </Button>
+          </button>
         </FormActions>
       </Form>
     </Column>
@@ -204,9 +203,9 @@ const CreateAppPage: React.FC = () => {
         </FormGroup>
 
         <FormActions>
-          <Button theme='primary' type='submit' disabled={isLoading}>
+          <button className='create-app__submit' type='submit' disabled={isLoading}>
             <FormattedMessage id='app_create.submit' defaultMessage='Create app' />
-          </Button>
+          </button>
         </FormActions>
       </Form>
     </Column>

@@ -5,7 +5,6 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Emoji from '@/components/ui/emoji';
 import Form from '@/components/ui/form';
@@ -85,9 +84,9 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
           onChange={handleChange}
         />
 
-        <Button disabled={isPending} type='submit' theme='primary'>
+        <button disabled={isPending} type='submit'>
           <FormattedMessage id='bookmark_folders.new.create.title' defaultMessage='Add folder' />
-        </Button>
+        </button>
       </div>
     </Form>
   );

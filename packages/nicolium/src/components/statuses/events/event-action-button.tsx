@@ -1,10 +1,11 @@
 import iconArrowSquareOut from '@phosphor-icons/core/regular/arrow-square-out.svg';
 import iconCheck from '@phosphor-icons/core/regular/check.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
+import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import {
   useJoinEventMutation,
@@ -12,7 +13,6 @@ import {
 } from '@/queries/statuses/use-event-interactions';
 import { useModalsActions } from '@/stores/modals';
 
-import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
 import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 
 const messages = defineMessages({
@@ -27,7 +27,7 @@ const messages = defineMessages({
 
 interface IEventAction {
   status: Pick<StatusEntity, 'id' | 'event' | 'url'>;
-  theme?: ButtonThemes;
+  theme?: 'primary' | 'secondary';
 }
 
 const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary' }) => {
@@ -43,15 +43,20 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
 
   if (event.join_mode === 'external') {
     return (
-      <Button
-        className='event-action-button'
-        size='sm'
-        theme={theme}
-        icon={iconArrowSquareOut}
+      <a
+        className={clsx(
+          'event-action-button',
+          theme === 'secondary' && 'event-action-button--secondary',
+        )}
         href={status.url}
+        target='_blank'
+        rel='noopener noreferrer'
       >
-        <FormattedMessage id='event.join_state.empty' defaultMessage='Participate' />
-      </Button>
+        <Icon src={iconArrowSquareOut} aria-hidden />
+        <span>
+          <FormattedMessage id='event.join_state.empty' defaultMessage='Participate' />
+        </span>
+      </a>
     );
   }
 
@@ -118,16 +123,18 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
   }
 
   return (
-    <Button
-      className='event-action-button'
-      size='sm'
-      theme={theme}
-      icon={buttonIcon}
+    <button
+      className={clsx(
+        'event-action-button',
+        theme === 'secondary' && 'event-action-button--secondary',
+      )}
+      type='button'
       onClick={buttonAction}
       disabled={buttonDisabled}
     >
-      {buttonLabel}
-    </Button>
+      {buttonIcon ? <Icon src={buttonIcon} aria-hidden /> : null}
+      <span>{buttonLabel}</span>
+    </button>
   );
 };
 

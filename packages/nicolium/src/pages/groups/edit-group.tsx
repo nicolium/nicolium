@@ -2,7 +2,6 @@ import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -139,9 +138,9 @@ const EditGroup: React.FC = () => {
         </FormGroup>
 
         <FormActions>
-          <Button theme='primary' type='submit' disabled={isUpdatePending} block>
+          <button className='edit-group__submit' type='submit' disabled={isUpdatePending}>
             <FormattedMessage id='edit_profile.save' defaultMessage='Save' />
-          </Button>
+          </button>
         </FormActions>
       </Form>
     </Column>

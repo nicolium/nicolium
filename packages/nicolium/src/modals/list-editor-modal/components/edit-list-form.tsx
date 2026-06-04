@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
@@ -146,9 +145,9 @@ const ListForm: React.FC<IListForm> = ({ listId, onTabChange }) => {
       </List>
 
       <FormActions>
-        <Button onClick={handleUpdate} disabled={disabled}>
+        <button type='button' onClick={handleUpdate} disabled={disabled}>
           <FormattedMessage id='lists.edit.save' defaultMessage='Save list' />
-        </Button>
+        </button>
       </FormActions>
     </Form>
   );

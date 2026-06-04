@@ -9,8 +9,6 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 
 import IconButton from './icon-button';
 
-import type { ButtonThemes } from './button/useButtonStyles';
-
 const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
@@ -46,7 +44,7 @@ interface IModal {
   /** Confirmation button text. */
   confirmationText?: React.ReactNode;
   /** Confirmation button theme. */
-  confirmationTheme?: ButtonThemes;
+  confirmationTheme?: 'danger';
   /** Callback when the modal is closed. */
   onClose?: () => void;
   /** Callback when the secondary action is chosen. */

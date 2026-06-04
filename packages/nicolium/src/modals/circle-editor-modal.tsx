@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -103,9 +102,9 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
             </FormGroup>
 
             <FormActions>
-              <Button onClick={handleUpdate} disabled={disabled}>
+              <button type='button' onClick={handleUpdate} disabled={disabled}>
                 <FormattedMessage id='circles.edit.save' defaultMessage='Update title' />
-              </Button>
+              </button>
             </FormActions>
           </Form>
           {accountIds.length > 0 ? (

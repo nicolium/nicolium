@@ -3,7 +3,6 @@ import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
 import { changeSetting, updateSettingsStore } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
-import Button from '@/components/ui/button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
@@ -88,9 +87,13 @@ const SettingsStore: React.FC = () => {
         </FormGroup>
 
         <FormActions>
-          <Button theme='primary' type='submit' disabled={!jsonValid || isLoading}>
+          <button
+            className='settings-store__submit'
+            type='submit'
+            disabled={!jsonValid || isLoading}
+          >
             <FormattedMessage id='frontend_config.save' defaultMessage='Save' />
-          </Button>
+          </button>
         </FormActions>
       </Form>
 

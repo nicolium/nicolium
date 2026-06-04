@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AutosuggestInput from '@/components/autosuggest-input';
-import Button from '@/components/ui/button';
 import IconButton from '@/components/ui/icon-button';
 import { useChatContext } from '@/contexts/chat-context';
 import UploadButton from '@/features/compose/components/upload-button';
@@ -161,9 +160,9 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
               />
             </p>
 
-            <Button theme='secondary' onClick={handleUnblockUser}>
+            <button onClick={handleUnblockUser}>
               <FormattedMessage id='chat_composer.unblock' defaultMessage='Unblock' />
-            </Button>
+            </button>
           </div>
         </div>
       );

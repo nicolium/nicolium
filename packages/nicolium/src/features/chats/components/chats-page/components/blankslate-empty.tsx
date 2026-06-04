@@ -1,7 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-
-import Button from '@/components/ui/button';
 
 /** To display on the chats main page when no message is selected. */
 const BlankslateEmpty: React.FC = () => (
@@ -19,9 +18,9 @@ const BlankslateEmpty: React.FC = () => (
       </p>
     </div>
 
-    <Button theme='primary' to='/chats/new'>
+    <Link className='chats-page-blankslate__action' to='/chats/new'>
       <FormattedMessage id='chats.main.blankslate.new_chat' defaultMessage='Message someone' />
-    </Button>
+    </Link>
   </div>
 );
 

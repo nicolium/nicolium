@@ -2,8 +2,6 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
-
 /** To display on the chats main page when no message is selected, but chats are present. */
 const BlankslateWithChats = () => {
   const navigate = useNavigate();
@@ -30,9 +28,9 @@ const BlankslateWithChats = () => {
         </p>
       </div>
 
-      <Button theme='primary' onClick={handleNewChat}>
+      <button className='chats-page-blankslate__action' onClick={handleNewChat}>
         <FormattedMessage id='chats.main.blankslate.new_chat' defaultMessage='Message someone' />
-      </Button>
+      </button>
     </div>
   );
 };

@@ -26,7 +26,7 @@ import iconSpeakerSimpleX from '@phosphor-icons/core/regular/speaker-simple-x.sv
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import iconUsers from '@phosphor-icons/core/regular/users.svg';
 import iconWarning from '@phosphor-icons/core/regular/warning.svg';
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -35,7 +35,6 @@ import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu as MenuType } from '@/components/dropdown-menu';
 import PlaceholderEventHeader from '@/components/placeholders/placeholder-event-header';
 import StillImage from '@/components/still-image';
-import Button from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Emojify from '@/features/emoji/emojify';
@@ -530,14 +529,13 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           </DropdownMenu>
 
           {account.id === ownAccount?.id ? (
-            <Button
-              size='sm'
-              theme='secondary'
+            <Link
+              className='event-header__manage'
               to='/@{$username}/events/$statusId/edit'
               params={{ username: account.acct, statusId: status.id }}
             >
               <FormattedMessage id='event.manage' defaultMessage='Manage' />
-            </Button>
+            </Link>
           ) : (
             <EventActionButton status={status} />
           )}

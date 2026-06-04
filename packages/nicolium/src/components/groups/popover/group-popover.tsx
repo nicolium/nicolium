@@ -2,7 +2,6 @@ import { Link, useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
 import Popover from '@/components/ui/popover';
 import Emojify from '@/features/emoji/emojify';
@@ -79,9 +78,9 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = ({ children, group, isEna
           {!shouldHideAction && (
             <div className='group-popover__action'>
               <Link to='/groups/$groupId' params={{ groupId: group.id }}>
-                <Button type='button' theme='secondary' block>
+                <button type='button'>
                   <FormattedMessage id='group.popover.action' defaultMessage='View group' />
-                </Button>
+                </button>
               </Link>
             </div>
           )}

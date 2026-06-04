@@ -5,7 +5,6 @@ import List, { ListItem } from '@/components/list';
 import Modal from '@/components/ui/modal';
 import Toggle from '@/components/ui/toggle';
 
-import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface ConfirmationModalProps {
@@ -17,7 +16,6 @@ interface ConfirmationModalProps {
   onSecondary?: () => void;
   onCancel?: () => void;
   checkbox?: string | false;
-  confirmationTheme?: ButtonThemes;
 }
 
 const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
@@ -30,7 +28,6 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
   onSecondary,
   onCancel,
   checkbox,
-  confirmationTheme = 'danger',
 }) => {
   const [checked, setChecked] = useState(false);
 
@@ -59,7 +56,7 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
       confirmationAction={handleClick}
       confirmationText={confirm}
       confirmationDisabled={!!checkbox && !checked}
-      confirmationTheme={confirmationTheme}
+      confirmationTheme='danger'
       cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
       cancelAction={handleCancel}
       secondaryText={secondary}

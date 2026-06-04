@@ -1,8 +1,8 @@
+import { Link } from '@tanstack/react-router';
 import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import {
   useJoinGroupMutation,
   useLeaveGroupMutation,
@@ -78,40 +78,55 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
 
   if (isOwner || isAdmin) {
     return (
-      <Button theme='secondary' to='/groups/$groupId/manage' params={{ groupId: group.id }}>
+      <Link
+        className='group-action-button'
+        to='/groups/$groupId/manage'
+        params={{ groupId: group.id }}
+      >
         <FormattedMessage id='group.manage' defaultMessage='Manage group' />
-      </Button>
+      </Link>
     );
   }
 
   if (isNonMember) {
     return (
-      <Button theme='primary' onClick={onJoinGroup} disabled={isJoiningGroup || isLeavingGroup}>
+      <button
+        className='group-action-button group-action-button--primary'
+        type='button'
+        onClick={onJoinGroup}
+        disabled={isJoiningGroup || isLeavingGroup}
+      >
         {group.locked ? (
           <FormattedMessage id='group.join.private' defaultMessage='Request access' />
         ) : (
           <FormattedMessage id='group.join.public' defaultMessage='Join group' />
         )}
-      </Button>
+      </button>
     );
   }
 
   if (isRequested) {
     return (
-      <Button
-        theme='secondary'
+      <button
+        className='group-action-button'
+        type='button'
         onClick={onCancelRequest}
         disabled={isJoiningGroup || isLeavingGroup}
       >
         <FormattedMessage id='group.cancel_request' defaultMessage='Cancel request' />
-      </Button>
+      </button>
     );
   }
 
   return (
-    <Button theme='secondary' onClick={onLeaveGroup} disabled={isJoiningGroup || isLeavingGroup}>
+    <button
+      className='group-action-button'
+      type='button'
+      onClick={onLeaveGroup}
+      disabled={isJoiningGroup || isLeavingGroup}
+    >
       <FormattedMessage id='group.leave' defaultMessage='Leave group' />
-    </Button>
+    </button>
   );
 };
 

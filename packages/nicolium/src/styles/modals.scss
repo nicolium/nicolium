@@ -691,6 +691,10 @@
       .input__wrapper {
         flex-grow: 1;
       }
+
+      .form__actions button {
+        @include mixins.button($theme: secondary);
+      }
     }
 
     &__accounts {
@@ -741,10 +745,22 @@
   &__add-row {
     display: flex;
     gap: 0.5rem;
+
+    button {
+      @include mixins.button($theme: secondary);
+    }
+  }
+
+  &__submit {
+    @include mixins.button($theme: secondary);
   }
 }
 
 .list-editor-modal {
+  &__form .form__actions button {
+    @include mixins.button($theme: secondary);
+  }
+
   &__search {
     display: flex;
     gap: 0.5rem;
