@@ -283,6 +283,16 @@
   }
 }
 
+.icon-with-counter {
+  position: relative;
+
+  &__counter {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.75rem;
+  }
+}
+
 .list {
   display: flex;
   flex-direction: column;
@@ -755,6 +765,28 @@ a.list-item,
     p:last-child {
       @include mixins.text($size: xs, $theme: muted);
     }
+  }
+}
+
+.autosuggest-account {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.autosuggest-emoji {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+
+  font-size: var(--text-sm);
+  line-height: 18px;
+
+  img {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
   }
 }
 
@@ -2556,11 +2588,11 @@ div[data-viewport-type='window']:has(.empty-message) {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  
+
   &__empty {
     @include mixins.card($variant: rounded, $size: lg);
   }
-  
+
   &__list {
     display: flex;
     gap: 0.5rem;

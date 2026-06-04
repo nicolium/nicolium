@@ -692,6 +692,32 @@
     &__accounts {
       overflow-y: auto;
       max-height: 12rem;
+
+      &__item {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0.625rem;
+
+        p {
+          @include mixins.text;
+        }
+
+        .icon-button {
+          color: rgb(var(--color-gray-400));
+
+          &:hover {
+            color: rgb(var(--color-gray-600));
+          }
+
+          svg {
+            width: 1.25rem;
+            height: 1.25rem;
+          }
+        }
+      }
     }
 
     &__pending {
@@ -699,6 +725,10 @@
       align-items: center;
       justify-content: center;
       min-height: 6rem;
+
+      p {
+        @include mixins.text($theme: muted, $size: sm, $align: center);
+      }
     }
   }
 }

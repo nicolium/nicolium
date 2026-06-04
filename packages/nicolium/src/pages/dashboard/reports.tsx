@@ -7,7 +7,6 @@ import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
 import Tabs, { type Item } from '@/components/ui/tabs';
-import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import Report from '@/pages/dashboard/components/report';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -80,21 +79,20 @@ const Reports: React.FC = () => {
   }, [intl]);
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} bodyClassName='flex flex-col gap-4'>
+    <Column label={intl.formatMessage(messages.heading)} bodyClassName='reports-page'>
       <Tabs
         items={tabItems}
         activeItem={resolved ? 'resolved' : resolved === false ? 'open' : 'all'}
       />
 
       {(accountId ?? targetAccountId) && (
-        <div className='flex items-center gap-2 border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'>
+        <div className='reports-page__account'>
           <IconButton
-            iconClassName='h-5 w-5'
             src={iconX}
             onClick={handleUnsetAccounts}
             title={intl.formatMessage(messages.clearFilter)}
           />
-          <Text>
+          <p>
             <FormattedMessage
               id='column.admin.reports.filter_message'
               defaultMessage='You are displaying reports {query}.'
@@ -108,7 +106,7 @@ const Reports: React.FC = () => {
                           id='column.admin.reports.filter_message.account'
                           defaultMessage='from @{acct}'
                           values={{
-                            acct: <strong className='break-words'>{account?.acct}</strong>,
+                            acct: <strong>{account?.acct}</strong>,
                           }}
                         />
                       ),
@@ -118,7 +116,7 @@ const Reports: React.FC = () => {
                           id='column.admin.reports.filter_message.target_account'
                           defaultMessage='targeting @{acct}'
                           values={{
-                            acct: <strong className='break-words'>{targetAccount?.acct}</strong>,
+                            acct: <strong>{targetAccount?.acct}</strong>,
                           }}
                         />
                       ),
@@ -127,7 +125,7 @@ const Reports: React.FC = () => {
                 ),
               }}
             />
-          </Text>
+          </p>
         </div>
       )}
 
@@ -143,7 +141,7 @@ const Reports: React.FC = () => {
         }
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
-        itemClassName='pt-4 first:pt-0'
+        itemClassName='reports-page__report'
       >
         {reportIds.map((report) => report && <Report id={report} key={report} />)}
       </ScrollableList>

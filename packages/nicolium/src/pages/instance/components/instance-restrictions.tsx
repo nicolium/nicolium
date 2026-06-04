@@ -7,8 +7,7 @@ import iconX from '@phosphor-icons/core/regular/x.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from '@/components/icon';
-import Text from '@/components/ui/text';
+import Icon from '@/components/ui/icon';
 import { useInstance } from '@/stores/instance';
 
 import type { RemoteInstance } from '@/queries/instance/use-remote-instance';
@@ -24,10 +23,10 @@ interface IRestriction {
 }
 
 const Restriction: React.FC<IRestriction> = ({ icon, children }) => (
-  <div className='flex gap-3'>
-    <Icon className='size-5 flex-none' src={icon} />
+  <div className='instance-restriction'>
+    <Icon src={icon} />
 
-    <Text theme='muted'>{children}</Text>
+    <p>{children}</p>
   </div>
 );
 

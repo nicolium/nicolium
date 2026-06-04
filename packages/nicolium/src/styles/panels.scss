@@ -182,3 +182,29 @@
     }
   }
 }
+
+.sign-up-panel {
+  display: flex;flex-direction: column;
+  gap: 0.5rem;
+
+  &__registration {
+    display: flex;
+    flex-direction: col;
+
+    h2 {
+      @include mixins.text($size: lg, $weight: bold);
+    }
+
+    p {
+      @include mixins.text($theme: muted, $size: sm);
+    }
+
+    a {
+      @include mixins.button($theme: primary, $block: true);
+    }
+  }
+
+  &__heading {
+    @include mixins.text($size: lg, $weight: bold);
+  }
+}

@@ -1,10 +1,8 @@
-import { Navigate } from '@tanstack/react-router';
+import { Link, Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchInstance } from '@/actions/instance';
-import Button from '@/components/ui/button';
-import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import ExternalLoginForm from '@/pages/auth/components/external-login-form';
@@ -73,45 +71,45 @@ const SignUpPanel = () => {
   if (me) return null;
 
   return (
-    <div className='flex flex-col gap-2' data-testid='sign-up-panel'>
+    <div className='sign-up-panel' data-testid='sign-up-panel'>
       {isOpen && (
         <>
-          <div className='flex flex-col'>
-            <Text size='lg' weight='bold'>
+          <div className='sign-up-panel__registration'>
+            <h2>
               <FormattedMessage
                 id='signup_panel.title'
                 defaultMessage='New to {site_title}?'
                 values={{ site_title: instance.title }}
               />
-            </Text>
+            </h2>
 
-            <Text theme='muted' size='sm'>
+            <p>
               <FormattedMessage
                 id='signup_panel.subtitle'
                 defaultMessage='Sign up now to discuss what’s happening.'
               />
-            </Text>
+            </p>
           </div>
 
-          <Button theme='primary' to='/signup' block>
+          <Link to='/signup'>
             <FormattedMessage id='account.register' defaultMessage='Sign up' />
-          </Button>
+          </Link>
         </>
       )}
 
       {standalone ? (
         <>
-          <Text size='lg' weight='bold'>
+          <h2 className='sign-up-panel__heading'>
             <FormattedMessage
               id='signup_panel.sign_in.title.external'
               defaultMessage='Sign in to external instance'
             />
-          </Text>
+          </h2>
           <ExternalLoginForm />
         </>
       ) : (
         <>
-          <Text size='lg' weight='bold'>
+          <h2 className='sign-up-panel__heading'>
             {isOpen ? (
               <FormattedMessage
                 id='signup_panel.sign_in.title.or'
@@ -120,7 +118,7 @@ const SignUpPanel = () => {
             ) : (
               <FormattedMessage id='signup_panel.sign_in.title' defaultMessage='Sign in' />
             )}
-          </Text>
+          </h2>
 
           <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
         </>

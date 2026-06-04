@@ -89,7 +89,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
           }
 
           case 'italic': {
-            return <i className='italic'>{genEl(token.children, scale)}</i>;
+            return <i>{genEl(token.children, scale)}</i>;
           }
 
           case 'fn': {
@@ -390,7 +390,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
               );
             } else {
               return (
-                <span className='inline-block' style={style}>
+                <span className='fn' style={style}>
                   {genEl(token.children, scale)}
                 </span>
               );
@@ -398,12 +398,12 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
           }
 
           case 'small': {
-            return <small className='opacity-70'>{genEl(token.children, scale)}</small>;
+            return <small>{genEl(token.children, scale)}</small>;
           }
 
           case 'center': {
             return (
-              <div className='text-center'>
+              <div>
                 <bdi>{genEl(token.children, scale)}</bdi>
               </div>
             );
@@ -516,7 +516,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
               return (
                 <img
                   draggable={false}
-                  className='emojione emoji !h-[2em] !w-[2em]'
+                  className='emojione emoji'
                   alt={token.props.name}
                   title={token.props.name}
                   src={filename}
@@ -528,7 +528,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
           }
 
           case 'unicodeEmoji': {
-            return <Emoji emoji={token.props.emoji} className='emojione emoji !h-[2em] !w-[2em]' />;
+            return <Emoji emoji={token.props.emoji} className='emojione emoji' />;
           }
 
           // TODO
@@ -554,7 +554,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
       .flat(Infinity);
 
   return (
-    <bdi className='mfm block overflow-hidden'>
+    <bdi className='mfm'>
       <span>{genEl(rootAst, 1)}</span>
     </bdi>
   );

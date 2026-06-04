@@ -34,7 +34,7 @@ const ExternalRedirect: React.FC = () => {
           />
         }
         text={
-          <div className='flex flex-col items-center gap-4'>
+          <div className='external-redirect__text'>
             <p>
               <FormattedMessage
                 id='external_redirect.text'
@@ -42,11 +42,7 @@ const ExternalRedirect: React.FC = () => {
               />
             </p>
 
-            <a
-              href={redirectTarget}
-              rel='noopener noreferrer'
-              className='text-primary-600 hover:underline dark:text-primary-400'
-            >
+            <a href={redirectTarget} rel='noopener noreferrer'>
               {redirectTarget}
             </a>
           </div>

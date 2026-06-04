@@ -43,7 +43,10 @@
       background: rgb(0 0 0 / 0.9);
     }
   }
+}
 
+.search-page,
+.reports-page {
   &__account {
     display: flex;
     gap: 0.5rem;
@@ -71,6 +74,10 @@
 
     p {
       @include mixins.text($truncate: true);
+
+      strong {
+        overflow-wrap: break-word;
+      }
     }
   }
 }

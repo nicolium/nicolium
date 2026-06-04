@@ -17,9 +17,7 @@ const AutosuggestEmoji: React.FC<IAutosuggestEmoji> = ({ emoji }) => {
   let emojiElement;
 
   if (isCustomEmoji(emoji)) {
-    emojiElement = (
-      <img className='emojione mr-2 block size-4' src={emoji.imageUrl} alt={emoji.colons} />
-    );
+    emojiElement = <img className='emojione' src={emoji.imageUrl} alt={emoji.colons} />;
   } else {
     if (systemEmojiFont) emojiElement = emoji.native;
 
@@ -32,7 +30,7 @@ const AutosuggestEmoji: React.FC<IAutosuggestEmoji> = ({ emoji }) => {
 
     emojiElement = (
       <img
-        className='emojione mr-2 block size-4'
+        className='emojione'
         src={joinPublicPath(`packs/emoji/${mapping.unified}.svg`)}
         alt={emoji.native}
       />
@@ -40,10 +38,7 @@ const AutosuggestEmoji: React.FC<IAutosuggestEmoji> = ({ emoji }) => {
   }
 
   return (
-    <div
-      className='flex flex-row items-center justify-start text-sm leading-[18px]'
-      data-testid='emoji'
-    >
+    <div className='autosuggest-emoji' data-testid='emoji'>
       {emojiElement}
 
       {emoji.colons}

@@ -1,7 +1,35 @@
 // Shamelessly stolen from Sharkey
 // https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/packages/frontend/src/style.scss
 
-.-mfm {
+.mfm {
+  overflow: hidden;
+  display: block;
+
+  i {
+    font-style: italic;
+  }
+
+  small {
+    opacity: 0.7;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .fn {
+    display: inline-block;
+  }
+
+  bdi.block {
+    display: block;
+  }
+
+  img.emojione {
+    width: 0.5rem !important;
+    height: 0.5rem !important;
+  }
+
   ._mfm_blur_ {
     filter: blur(6px);
     transition: filter 0.3s;

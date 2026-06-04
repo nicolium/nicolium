@@ -155,7 +155,7 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
         </div>
       ) : (
         <div className='list-members-modal__form__pending'>
-          <Text theme='muted' size='sm' align='center'>
+          <p>
             {excluded ? (
               <FormattedMessage
                 id='empty_column.antenna_excluded_accounts'
@@ -167,7 +167,7 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
                 defaultMessage='There are no accounts in this antenna. Use search to find users to add.'
               />
             )}
-          </Text>
+          </p>
         </div>
       )}
 
@@ -268,15 +268,9 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           </CardHeader>
           <div className='list-members-modal__form__accounts'>
             {values.map((item) => (
-              <div key={item} className='flex items-center justify-between gap-2 p-2.5'>
-                <Text>{item}</Text>
-                <IconButton
-                  src={iconX}
-                  className='text-gray-400 hover:text-gray-600'
-                  iconClassName='h-5 w-5'
-                  title={removeTitle}
-                  onClick={() => onRemove(item)}
-                />
+              <div key={item} className='list-members-modal__form__accounts__item'>
+                <p>{item}</p>
+                <IconButton src={iconX} title={removeTitle} onClick={() => onRemove(item)} />
               </div>
             ))}
           </div>
@@ -287,9 +281,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
         </div>
       ) : (
         <div className='list-members-modal__form__pending'>
-          <Text theme='muted' size='sm' align='center'>
-            {emptyValues}
-          </Text>
+          <p>{emptyValues}</p>
         </div>
       )}
 
@@ -317,12 +309,10 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           </CardHeader>
           <div className='list-members-modal__form__accounts'>
             {excludedValues.map((item) => (
-              <div key={item} className='flex items-center justify-between gap-2 p-2.5'>
-                <Text>{item}</Text>
+              <div key={item} className='list-members-modal__form__accounts__item'>
+                <p>{item}</p>
                 <IconButton
                   src={iconX}
-                  className='text-gray-400 hover:text-gray-600'
-                  iconClassName='h-5 w-5'
                   title={removeTitle}
                   onClick={() => onRemoveExcluded(item)}
                 />

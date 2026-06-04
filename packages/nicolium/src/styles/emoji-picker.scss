@@ -12,3 +12,32 @@ em-emoji-picker {
 .black em-emoji-picker {
   --rgb-background: var(--color-gray-900);
 }
+
+.emoji-picker-dropdown {
+  z-index: 101;
+
+  &__container {
+    position: relative;
+
+    .icon-button {
+      margin: -0.25rem;
+      padding: 0.5rem;
+      color: rgb(var(--color-gray-600));
+      background: transparent;
+
+      &:hover {
+        color: rgb(var(--color-gray-800));
+        background: rgb(var(--color-primary-100));
+
+        .dark & {
+          color: white;
+          background: rgb(var(--color-primary-800));
+        }
+
+        .black & {
+          background: rgb(var(--color-gray-800));
+        }
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@ import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import Icon from '@/components/icon';
+import Icon from '@/components/ui/icon';
 import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 
 import InstanceRestrictions from './instance-restrictions';
@@ -23,17 +23,20 @@ const RestrictedInstance: React.FC<IRestrictedInstance> = ({ host }) => {
   };
 
   return (
-    <div>
-      <a href='#' className='flex items-center gap-1 py-2.5 no-underline' onClick={toggleExpanded}>
+    <div
+      className={clsx('restricted-instance', {
+        'restricted-instance--rejected': remoteInstance.federation.reject,
+      })}
+    >
+      <a href='#' onClick={toggleExpanded}>
         <Icon src={expanded ? iconCaretDown : iconCaretRight} />
         <div className={clsx({ 'line-through': remoteInstance.federation.reject })}>
           {remoteInstance.host}
         </div>
       </a>
       <div
-        className={clsx({
-          'h-0 overflow-hidden': !expanded,
-          'h-auto': expanded,
+        className={clsx('restricted-instance__content', {
+          'restricted-instance__content': expanded,
         })}
       >
         <InstanceRestrictions remoteInstance={remoteInstance} />

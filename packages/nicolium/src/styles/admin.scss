@@ -1232,3 +1232,17 @@ a.measure__container {
     }
   }
 }
+
+.reports-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__report {
+    padding-top: 1rem;
+
+    &:first-child {
+      padding-top: 0;
+    }
+  }
+}

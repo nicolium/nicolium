@@ -80,11 +80,10 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
   );
 
   return (
-    <div className='relative'>
+    <div className='emoji-pciker-dropdown__container'>
       {clonedChildren ?? (
         <IconButton
           theme='transparent'
-          className='emoji-picker-dropdown -m-1 bg-transparent p-2 text-gray-600 hover:bg-primary-100 hover:text-gray-800 black:hover:bg-gray-800 dark:hover:bg-primary-800 dark:hover:text-white'
           ref={refs.setReference}
           src={iconSmiley}
           title={title}
@@ -100,7 +99,7 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
       {isMounted && (
         <Portal>
           <div
-            className='z-[101]'
+            className='emoji-picker-dropdown'
             ref={refs.setFloating}
             style={{
               position: strategy,

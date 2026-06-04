@@ -1,10 +1,10 @@
 import iconChatCenteredText from '@phosphor-icons/core/regular/chat-centered-text.svg';
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { PublicTimelineColumn } from '@/columns/timeline';
 import { ParsedContent } from '@/components/statuses/parsed-content';
-import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { About } from '@/pages/instance/about';
@@ -48,19 +48,17 @@ const LandingTimelinePage = () => {
   const timelineEnabled = !instance.pleroma.metadata.restrict_unauthenticated.timelines.local;
 
   return (
-    <Column withHeader={false}>
-      <div className='mb-4 mt-12 px-4 lg:mb-12'>
-        <SiteBanner />
-      </div>
+    <Column withHeader={false} className='landing-timeline'>
+      <SiteBanner />
 
       <div className='mb-4 flex justify-end gap-4 lg:hidden'>
-        <Button theme='tertiary' to='/login'>
+        <Link to='/login'>
           <FormattedMessage id='account.login' defaultMessage='Log in' />
-        </Button>
+        </Link>
         {isOpen && (
-          <Button to='/signup'>
+          <Link to='/signup'>
             <FormattedMessage id='account.register' defaultMessage='Sign up' />
-          </Button>
+          </Link>
         )}
       </div>
 

@@ -1712,3 +1712,103 @@ body {
     margin-top: 0;
   }
 }
+
+.landing-timeline {
+  .site-banner {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+
+    @media (min-width: variables.$breakpoint-lg) {
+      margin-bottom: 3rem;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: end;
+    margin-bottom: 1rem;
+
+    a:first-child {
+      @include mixins.button($theme: tertiary);
+    }
+
+    a:not(:first-child) {
+      @include mixins.button;
+    }
+
+    @media (min-width: variables.$breakpoint-lg) {
+      display: none;
+    }
+  }
+}
+
+.restricted-instance {
+  a {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    padding: 0.625rem 0;
+
+    text-decoration: none;
+
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__content {
+    overflow: hidden;
+    height: 0;
+
+    &--expanded {
+      height: auto;
+    }
+  }
+
+  &--rejected {
+    a div {
+      text-decoration-line: line-through;
+    }
+  }
+}
+
+.instance-restriction {
+  display: flex;
+  gap: 0.75rem;
+
+  svg {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  p {
+    @include mixins.text($theme: muted);
+  }
+}
+
+.external-rediect {
+  &__text {
+    display: flex;
+    flex-direction:column;
+    gap: 1rem;
+    align-items: center;
+
+    a {
+      color: rgb(var(--color-primary-600));
+
+      .dark & {
+        color: rgb(var(--color-primary-400));
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
