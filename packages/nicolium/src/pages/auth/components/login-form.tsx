@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
@@ -73,9 +72,9 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
       </FormGroup>
 
       <FormActions>
-        <Button theme='primary' type='submit' disabled={isLoading}>
+        <button type='submit' disabled={isLoading}>
           <FormattedMessage id='login.sign_in' defaultMessage='Sign in' />
-        </Button>
+        </button>
       </FormActions>
     </Form>
   );

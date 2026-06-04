@@ -4,7 +4,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { resetPassword } from '@/actions/security';
 import { BigCard } from '@/components/ui/big-card';
-import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
@@ -48,7 +47,7 @@ const PasswordResetPage = () => {
     <BigCard
       title={<FormattedMessage id='password_reset.header' defaultMessage='Reset password' />}
     >
-      <Form onSubmit={handleSubmit}>
+      <Form className='password-reset' onSubmit={handleSubmit}>
         <FormGroup
           labelText={
             features.logInWithUsername ? (
@@ -68,9 +67,9 @@ const PasswordResetPage = () => {
         </FormGroup>
 
         <FormActions>
-          <Button type='submit' theme='primary' disabled={isLoading}>
+          <button type='submit' disabled={isLoading}>
             <FormattedMessage id='password_reset.reset' defaultMessage='Reset password' />
-          </Button>
+          </button>
         </FormActions>
       </Form>
     </BigCard>

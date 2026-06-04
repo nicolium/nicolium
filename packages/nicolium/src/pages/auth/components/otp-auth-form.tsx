@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { BigCard } from '@/components/ui/big-card';
-import Button from '@/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -55,7 +54,7 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token: mfaToken, small }) => 
   if (shouldRedirect) return <Navigate to='/' replace />;
 
   const form = (
-    <Form onSubmit={handleSubmit}>
+    <Form className='otp-auth-form' onSubmit={handleSubmit}>
       <FormGroup
         labelText={
           <FormattedMessage id='login.fields.otp_code.label' defaultMessage='Two-factor code:' />
@@ -72,9 +71,9 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token: mfaToken, small }) => 
       </FormGroup>
 
       <FormActions>
-        <Button theme='primary' type='submit' disabled={isLoading}>
+        <button type='submit' disabled={isLoading}>
           <FormattedMessage id='login.sign_in' defaultMessage='Sign in' />
-        </Button>
+        </button>
       </FormActions>
     </Form>
   );

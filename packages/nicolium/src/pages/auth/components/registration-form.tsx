@@ -5,7 +5,6 @@ import React, { useState, useRef, useCallback } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
 import BirthdayInput from '@/components/birthday-input';
-import Button from '@/components/ui/button';
 import Checkbox from '@/components/ui/checkbox';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -418,9 +417,9 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
         </FormGroup>
 
         <FormActions>
-          <Button type='submit'>
+          <button type='submit'>
             <FormattedMessage id='registration.sign_up' defaultMessage='Sign up' />
-          </Button>
+          </button>
         </FormActions>
       </fieldset>
     </Form>
