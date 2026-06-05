@@ -562,7 +562,7 @@ a.status-card {
 
   &__icon {
     &--reblog {
-      color: var(--hex-green-600);
+      color: var(--color-green-600);
     }
 
     &--pinned {
@@ -1665,7 +1665,7 @@ div:first-child:has(> .timeline-gap) {
 
     &--reblog {
       svg {
-        color: var(--hex-green-600);
+        color: var(--color-green-600);
       }
     }
   }

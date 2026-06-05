@@ -1532,23 +1532,23 @@ div[data-viewport-type='window']:has(.empty-message) {
   }
 
   &--active {
-    background: var(--hex-green-500);
-    outline: 2px solid var(--hex-green-400);
+    background: var(--color-green-500);
+    outline: 2px solid var(--color-green-400);
   }
 
   &--pending {
-    background: var(--hex-yellow-500);
-    outline: 2px solid var(--hex-yellow-400);
+    background: var(--color-yellow-500);
+    outline: 2px solid var(--color-yellow-400);
   }
 
   &--error {
-    background: var(--hex-red-500);
-    outline: 2px solid var(--hex-red-400);
+    background: var(--color-red-500);
+    outline: 2px solid var(--color-red-400);
   }
 
   &--inactive {
-    background: var(--hex-neutral-500);
-    outline: 2px solid var(--hex-neutral-400);
+    background: var(--color-neutral-500);
+    outline: 2px solid var(--color-neutral-400);
   }
 }
 
@@ -2564,7 +2564,7 @@ div[data-viewport-type='window']:has(.empty-message) {
 
   &--patron {
     color: white;
-    background-color: var(--hex-fuchsia-700);
+    background-color: var(--color-fuchsia-700);
   }
 
   &--admin {
@@ -2574,7 +2574,7 @@ div[data-viewport-type='window']:has(.empty-message) {
 
   &--moderator {
     color: white;
-    background: rgb(var(--hex-cyan-600));
+    background: rgb(var(--color-cyan-600));
   }
 
   &--opaque {

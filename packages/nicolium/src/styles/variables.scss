@@ -39,20 +39,20 @@ $breakpoint-xl: 1280px;
   --radius-2xl: 1rem;
   --radius-3xl: 1.5rem;
   --radius-full: 9999px;
-  --hex-indigo-500: #6366f1;
-  --hex-neutral-400: #a3a3a3;
-  --hex-neutral-500: #737373;
-  --hex-red-400: #f87171;
-  --hex-red-500: #ef4444;
-  --hex-red-600: #dc2626;
-  --hex-yellow-200: #fef08a;
-  --hex-yellow-400: #facc15;
-  --hex-yellow-500: #eab308;
-  --hex-green-400: #4ade80;
-  --hex-green-500: #22c55e;
-  --hex-green-600: #16a34a;
-  --hex-cyan-600: #0891b2;
-  --hex-fuchsia-700: #a21caf;
+  --color-indigo-500: #6366f1;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-yellow-200: #fef08a;
+  --color-yellow-400: #facc15;
+  --color-yellow-500: #eab308;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-cyan-600: #0891b2;
+  --color-fuchsia-700: #a21caf;
 }
 
 @function opaque($color, $amount) {

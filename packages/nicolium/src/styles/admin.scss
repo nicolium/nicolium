@@ -379,7 +379,7 @@
   &__previous {
     font-size: var(--text-lg);
     line-height: var(--leading-lg);
-    color: var(--hex-green-600);
+    color: var(--color-green-600);
 
     &--negative {
       color: rgb(var(--color-danger-600));
@@ -756,7 +756,7 @@ a.measure__container {
 
     vertical-align: middle;
 
-    background: var(--hex-green-500);
+    background: var(--color-green-500);
     box-shadow: var(--shadow-sm);
   }
 
