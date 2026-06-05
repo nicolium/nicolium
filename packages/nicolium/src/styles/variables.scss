@@ -54,3 +54,7 @@ $breakpoint-xl: 1280px;
   --hex-cyan-600: #0891b2;
   --hex-fuchsia-700: #a21caf;
 }
+
+@function opaque($color, $amount) {
+  @return color-mix(in srgb, $color, transparent $amount);
+}

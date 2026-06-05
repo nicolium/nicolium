@@ -397,7 +397,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = ({
   }
 
   const getClassName = () => {
-    const className = clsx('', {
+    const className = clsx({
       'no-reduce-motion:scale-90 no-reduce-motion:opacity-0': !(isDisplayed && isOpen),
       'scale-100 opacity-100': isDisplayed && isOpen,
       'origin-bottom': placement === 'top',
