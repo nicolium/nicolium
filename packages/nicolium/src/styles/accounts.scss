@@ -1247,10 +1247,10 @@
 
     &__container {
       display: flex;
-      justify-content: space-between;
+      justify-content: end;
 
       &:has(.user-panel__avatar) {
-        justify-content: end;
+        justify-content: space-between;
       }
     }
 
@@ -1286,21 +1286,21 @@
         gap: 0.25rem;
         align-items: center;
       }
+    }
 
-      &__acct {
-        display: flex;
-        gap: 0.25rem;
-        align-items: center;
+    &__acct {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
 
-        p {
-          @include mixins.text($size: sm, $theme: muted, $truncate: true);
-        }
+      p {
+        @include mixins.text($size: sm, $theme: muted, $truncate: true);
+      }
 
-        svg {
-          width: 1rem;
-          height: 1rem;
-          color: rgb(var(--color-gray-600));
-        }
+      svg {
+        width: 1rem;
+        height: 1rem;
+        color: rgb(var(--color-gray-600));
       }
     }
   }
