@@ -451,7 +451,7 @@
     transition: all 0.15s var(--ease-default);
 
     &__item {
-      padding: 1rem 0;
+      padding: 0 1rem;
     }
 
     @media (min-width: variables.$breakpoint-xl) {
