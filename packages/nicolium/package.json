@@ -162,7 +162,6 @@
       "oxfmt --check"
     ],
     "src/styles/**/*.scss": "stylelint",
-    "src/styles/*.css": "stylelint",
-    "src/styles/*.scss": "stylelint"
+    "src/styles/*.css": "stylelint"
   }
 }

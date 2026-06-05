@@ -1008,7 +1008,51 @@ div[data-viewport-type='window']:has(.empty-message) {
   z-index: 1001;
   display: flex;
 
-  > div {
+  &--opening {
+    .no-reduce-motion & {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+  }
+
+  &--open {
+    transform: scale(1);
+    opacity: 100;
+  }
+
+  &--top {
+    transform-origin: bottom;
+  }
+
+  &--right {
+    transform-origin: left;
+  }
+
+  &--bottom {
+    transform-origin: top;
+  }
+
+  &--right {
+    transform-origin: right;
+  }
+
+  &--top-start {
+    transform-origin: bottom left;
+  }
+
+  &--top-end {
+    transform-origin: bottom right;
+  }
+
+  &--bottom-start {
+    transform-origin: top left;
+  }
+
+  &--bottom-end {
+    transform-origin: top right;
+  }
+
+  &__wrapper {
     z-index: 1001;
 
     min-width: 14rem;
