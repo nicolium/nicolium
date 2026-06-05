@@ -27,7 +27,7 @@ import '@fontsource/inter/900.css';
 import '@fontsource/roboto-mono/400.css';
 import './styles/i18n.css';
 import './styles/application.scss';
-import './styles/tailwind.css';
+import './styles/reset.css';
 import './precheck';
 import ready from './init/ready';
 import { registerSW, lockSW } from './utils/sw';

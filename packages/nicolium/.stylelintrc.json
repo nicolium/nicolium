@@ -28,13 +28,14 @@
     "no-invalid-position-at-import-rule": null,
     "scss/at-rule-no-unknown": [
       true,
-      { "ignoreAtRules": ["tailwind", "apply", "layer", "config"] }
+      { "ignoreAtRules": ["apply", "layer", "config"] }
     ],
     "scss/operator-no-unspaced": null,
     "selector-class-pattern": null,
     "no-invalid-position-declaration": null,
     "@stylistic/indentation": 2,
     "@stylistic/block-opening-brace-newline-after": "always",
-    "@stylistic/block-closing-brace-newline-before": "always"
+    "@stylistic/block-closing-brace-newline-before": "always",
+    "no-irregular-whitespace": true
   }
 }

@@ -1,8 +1,9 @@
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 400;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/inter/files/inter-latin-400-normal.woff2') format('woff2'),
     url('@fontsource/inter/files/inter-latin-400-normal-normal.woff') format('woff');
@@ -11,9 +12,10 @@
 
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 200;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/tajawal/files/tajawal-arabic-200-normal.woff2') format('woff2'),
     url('@fontsource/tajawal/files/tajawal-arabic-200-normal.woff') format('woff');
@@ -22,9 +24,10 @@
 
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 300;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/tajawal/files/tajawal-arabic-300-normal.woff2') format('woff2'),
     url('@fontsource/tajawal/files/tajawal-arabic-300-normal.woff') format('woff');
@@ -33,9 +36,10 @@
 
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 400;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/tajawal/files/tajawal-arabic-400-normal.woff2') format('woff2'),
     url('@fontsource/tajawal/files/tajawal-arabic-400-normal.woff') format('woff');
@@ -44,9 +48,10 @@
 
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 500;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/tajawal/files/tajawal-arabic-500-normal.woff2') format('woff2'),
     url('@fontsource/tajawal/files/tajawal-arabic-500-normal.woff') format('woff');
@@ -55,9 +60,10 @@
 
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 700;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/tajawal/files/tajawal-arabic-700-normal.woff2') format('woff2'),
     url('@fontsource/tajawal/files/tajawal-arabic-700-normal.woff') format('woff');
@@ -66,9 +72,10 @@
 
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 800;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/tajawal/files/tajawal-arabic-800-normal.woff2') format('woff2'),
     url('@fontsource/tajawal/files/tajawal-arabic-800-normal.woff') format('woff');
@@ -77,9 +84,10 @@
 
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 900;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/tajawal/files/tajawal-arabic-900-normal.woff2') format('woff2'),
     url('@fontsource/tajawal/files/tajawal-arabic-900-normal.woff') format('woff');
@@ -89,55 +97,59 @@
 /* noto-sans-javanese-javanese-400-normal */
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 400;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-400-normal.woff2')
-      format('woff2'),
+    format('woff2'),
     url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-400-normal.woff')
-      format('woff');
+    format('woff');
   unicode-range: U+A980-A9DF;
 }
 
 /* noto-sans-javanese-javanese-500-normal */
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 500;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-500-normal.woff2')
-      format('woff2'),
+    format('woff2'),
     url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-500-normal.woff')
-      format('woff');
+    format('woff');
   unicode-range: U+A980-A9DF;
 }
 
 /* noto-sans-javanese-javanese-600-normal */
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 600;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-600-normal.woff2')
-      format('woff2'),
+    format('woff2'),
     url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-600-normal.woff')
-      format('woff');
+    format('woff');
   unicode-range: U+A980-A9DF;
 }
 
 /* noto-sans-javanese-javanese-700-normal */
 @font-face {
   font-family: 'nicolium i18n';
-  font-style: normal;
-  font-display: swap;
   font-weight: 700;
+  font-style: normal;
+
+  font-display: swap;
   src:
     url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-700-normal.woff2')
-      format('woff2'),
+    format('woff2'),
     url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-700-normal.woff')
-      format('woff');
+    format('woff');
   unicode-range: U+A980-A9DF;
 }
