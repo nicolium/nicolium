@@ -6,7 +6,17 @@
 
 ### Changed
 
+- Migrated away from TailwindCSS.
+- Changed color shifting and shading algorithm.
+
 ### Fixed
+
+- Display of content type in Iceshrimp.NET when set to default.
+- GoToSocial interaction policy management button is visible again.
+
+### Removed
+
+- Components such as <Button /> and <Text />.
 
 ## v0.3.1
 
