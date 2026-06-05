@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { useSettings } from '@/stores/settings';
-import { toTailwind } from '@/utils/tailwind';
+import { toPalette } from '@/utils/palette';
 import { generateAccent, generateThemeCss } from '@/utils/theme';
 
 import { useFrontendConfig } from './use-frontend-config';
@@ -53,7 +53,7 @@ const normalizeColors = (
     ),
   };
 
-  const normalizedColors = toTailwind({
+  const normalizedColors = toPalette({
     brandColor,
     accentColor,
     // @ts-expect-error

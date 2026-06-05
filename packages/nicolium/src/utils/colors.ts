@@ -25,7 +25,7 @@ SOFTWARE.
 // Adapted from:
 // https://github.com/javisperez/tailwindcolorshades/blob/master/src/composables/colors.ts
 
-import type { Rgb, TailwindColorObject } from '@/types/colors';
+import type { Rgb, ColorObject } from '@/types/colors';
 
 const hexToRgb = (hex: string): Rgb | null => {
   const sanitizedHex = hex.replaceAll('##', '#');
@@ -77,8 +77,8 @@ const darken = (hex: string, intensity: number): string => {
   return rgbToHex(r, g, b);
 };
 
-const colors = (baseColor: string): TailwindColorObject => {
-  const response: TailwindColorObject = {
+const colors = (baseColor: string): ColorObject => {
+  const response: ColorObject = {
     500: `#${baseColor}`.replaceAll('##', '#'),
   };
 

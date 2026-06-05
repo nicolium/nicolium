@@ -1,7 +1,7 @@
 import tintify from '@/utils/colors';
 import { generateAccent, generateNeutral } from '@/utils/theme';
 
-import type { TailwindColorPalette } from '@/types/colors';
+import type { ColorPalette } from '@/types/colors';
 
 type FrontendColors = Record<string, Record<string, string>>;
 
@@ -9,12 +9,12 @@ type FrontendColors = Record<string, Record<string, string>>;
 const isHex = (value: any): boolean => /^#([0-9A-F]{3}){1,2}$/i.test(value);
 
 /** Expand hex colors into tints */
-const expandPalette = (palette: TailwindColorPalette): TailwindColorPalette =>
+const expandPalette = (palette: ColorPalette): ColorPalette =>
   // Generate palette only for present colors
-  Object.entries(palette).reduce((result: TailwindColorPalette, colorData) => {
+  Object.entries(palette).reduce((result: ColorPalette, colorData) => {
     const [colorName, color] = colorData;
 
-    // Conditionally handle hex color and Tailwind color object
+    // Conditionally handle hex color and color object
     if (typeof color === 'string' && isHex(color)) {
       result[colorName] = tintify(color);
     } else if (color && typeof color === 'object') {
@@ -35,7 +35,7 @@ const fromBasicColors = ({
 }: {
   brandColor: string;
   accentColor: string | null;
-}): TailwindColorPalette => {
+}): ColorPalette => {
   const accent =
     typeof accentColor === 'string' && isHex(accentColor)
       ? accentColor
@@ -49,8 +49,8 @@ const fromBasicColors = ({
   });
 };
 
-/** Convert Nicolium Config into Tailwind colors */
-const toTailwind = (config: {
+/** Convert Nicolium Config into a color palette */
+const toPalette = (config: {
   brandColor: string;
   accentColor: string | null;
   colors: Record<string, Record<string, string>>;
@@ -69,4 +69,4 @@ const toTailwind = (config: {
   };
 };
 
-export { toTailwind };
+export { toPalette };

@@ -50,7 +50,7 @@ const messages = defineMessages({
   colorGradientEnd: { id: 'theme_editor.colors.gradient_end', defaultMessage: 'Gradient End' },
 });
 
-/** UI for editing Tailwind theme colors. */
+/** UI for editing theme colors. */
 const ThemeEditorPage: React.FC = () => {
   const intl = useIntl();
 

@@ -1,6 +1,6 @@
 import { hexToRgb } from './colors';
 
-import type { Rgb, Hsl, TailwindColorPalette, TailwindColorObject } from '@/types/colors';
+import type { Rgb, Hsl, ColorPalette, ColorObject } from '@/types/colors';
 
 // Taken from chromatism.js
 // https://github.com/graypegg/chromatism/blob/master/src/conversions/rgb.js
@@ -104,13 +104,13 @@ const parseShades = (
 };
 
 // Convert colors as CSS variables
-const parseColors = (colors: TailwindColorPalette): Record<string, string> =>
+const parseColors = (colors: ColorPalette): Record<string, string> =>
   Object.keys(colors).reduce((obj, color) => {
-    parseShades(obj, color, colors[color] as TailwindColorObject);
+    parseShades(obj, color, colors[color] as ColorObject);
     return obj;
   }, {});
 
-const colorsToCss = (colors: TailwindColorPalette): string => {
+const colorsToCss = (colors: ColorPalette): string => {
   const parsed = parseColors(colors);
   return Object.keys(parsed).reduce(
     (css, variable) => css + `${variable}:${parsed[variable]};`,
@@ -118,7 +118,7 @@ const colorsToCss = (colors: TailwindColorPalette): string => {
   );
 };
 
-const generateThemeCss = (colors: TailwindColorPalette): string => colorsToCss(colors);
+const generateThemeCss = (colors: ColorPalette): string => colorsToCss(colors);
 
 const hexToHsl = (hex: string): Hsl | null => {
   const rgb = hexToRgb(hex);
