@@ -109,7 +109,7 @@ const Popover: React.FC<IPopover> = ({
         <Portal>
           <div
             ref={refs.setFloating}
-            className='popover'
+            className='popover__container'
             style={{
               position: strategy,
               top: y ?? 0,
