@@ -112,7 +112,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({
         <PullToRefresh onRefresh={refetch}>
           <ScrollableList
             emptyMessageText={emptyMessage}
-            listClassName='reactions-modal'
+            listClassName='reactions-modal__list'
             itemClassName='reactions-modal__item'
             style={{ height: reactions.length > 0 ? 'calc(80vh - 159px)' : 'calc(80vh - 88px)' }}
             isLoading={isLoading}

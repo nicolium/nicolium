@@ -36,6 +36,7 @@
     "@stylistic/indentation": 2,
     "@stylistic/block-opening-brace-newline-after": "always",
     "@stylistic/block-closing-brace-newline-before": "always",
+    "@stylistic/declaration-colon-space-after": "always-single-line",
     "no-irregular-whitespace": true
   }
 }
