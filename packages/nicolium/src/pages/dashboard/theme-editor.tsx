@@ -19,11 +19,28 @@ import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/a
 import { frontendConfigSchema } from '@/schemas/frontend-config';
 import { useFrontendConfigStore } from '@/stores/frontend-config';
 import toast from '@/toast';
+import tintify from '@/utils/colors';
 import { download } from '@/utils/download';
 
 import Palette, { type ColorGroup } from './components/theme-editor/palette';
 
 import type { ColorChangeHandler } from 'react-color';
+
+const GENERATED_FAMILIES = ['primary', 'secondary', 'accent', 'gray'];
+
+const expandForEditing = (
+  colors: Record<string, Record<string, string> | string>,
+): Record<string, Record<string, string> | string> =>
+  Object.fromEntries(
+    Object.entries(colors).map(([key, value]) =>
+      GENERATED_FAMILIES.includes(key) && value && typeof value === 'object' && value['500']
+        ? [key, { ...tintify(value['500']), ...value }]
+        : [key, value],
+    ),
+  );
+
+const editorColors = (theme: Parameters<typeof normalizeColors>[0]) =>
+  expandForEditing(normalizeColors(theme));
 
 const messages = defineMessages({
   title: { id: 'admin.theme.title', defaultMessage: 'Theme' },
@@ -59,7 +76,7 @@ const ThemeEditorPage: React.FC = () => {
   const rawConfig = useFrontendConfigStore((state) => state.partialConfig);
   const { mutate: updateConfig } = useUpdateAdminConfig();
 
-  const [colors, setColors] = useState(normalizeColors(frontendConfig));
+  const [colors, setColors] = useState(() => editorColors(frontendConfig));
   const [isDefault, setIsDefault] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [resetKey, setResetKey] = useState(crypto.randomUUID());
@@ -96,7 +113,7 @@ const ThemeEditorPage: React.FC = () => {
   };
 
   const resetTheme = () => {
-    setTheme(normalizeColors(frontendConfig));
+    setTheme(editorColors(frontendConfig));
   };
 
   const updateTheme = () => {
@@ -111,7 +128,7 @@ const ThemeEditorPage: React.FC = () => {
 
   const restoreDefaultTheme = () => {
     const config = v.parse(frontendConfigSchema, { brandColor: '#d80482' });
-    setTheme(normalizeColors(config));
+    setTheme(editorColors(config));
     setIsDefault(true);
   };
 
