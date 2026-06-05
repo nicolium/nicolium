@@ -1,4 +1,5 @@
-import { hexToRgb } from './colors';
+import { hexToRgb, rgbToHex } from './colors';
+import { rotateHueOklab } from './colors/oklab';
 
 import type { Rgb, Hsl, ColorPalette, ColorObject } from '@/types/colors';
 
@@ -126,13 +127,10 @@ const hexToHsl = (hex: string): Hsl | null => {
 };
 
 const hueShift = (hex: string, delta: number): string => {
-  const { h, s, l } = hexToHsl(hex)!;
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
 
-  return hslToHex({
-    h: (h + delta) % 360,
-    s,
-    l,
-  });
+  return rgbToHex(rotateHueOklab(rgb, delta));
 };
 
 export { generateAccent, generateNeutral, generateThemeCss, hexToHsl, hueShift };
