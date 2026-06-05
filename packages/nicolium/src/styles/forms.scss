@@ -11,8 +11,8 @@ select {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
 
   &:focus {
-    border-color: rgb(var(--color-indigo-500));
-    outline: 2px solid rgb(var(--color-indigo-500));
+    border-color: var(--hex-indigo-500);
+    outline: 2px solid var(--hex-indigo-500);
   }
 
   @media (min-width: variables.$breakpoint-sm) {
@@ -259,8 +259,8 @@ select {
   }
 
   &--has-error {
-    border-color: rgb(220 38 38);
-    color: rgb(220 38 38);
+    border-color: var(--hex-red-600);
+    color: var(--hex-red-600);
   }
 
   &--resizable {

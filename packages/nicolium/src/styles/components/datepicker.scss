@@ -42,8 +42,8 @@
     }
 
     &.has-error {
-      border-color: rgb(var(--color-red-600));
-      color: rgb(var(--color-red-600));
+      border-color: var(--hex-red-600);
+      color: var(--hex-red-600);
     }
 
     @media (min-width: variables.$breakpoint-sm) {
