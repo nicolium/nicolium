@@ -47,37 +47,37 @@
   }
 
   @if $theme == default {
-    color: rgb(var(--color-gray-900));
+    color: var(--color-gray-900);
 
     &:is(.dark *) {
-      color: rgb(var(--color-gray-100));
+      color: var(--color-gray-100);
     }
   } @else if $theme == danger {
-    color: rgb(var(--color-danger-700));
+    color: var(--color-danger-700);
 
     &:is(.dark *) {
-      color: rgb(var(--color-danger-500));
+      color: var(--color-danger-500);
     }
   } @else if $theme == primary {
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
 
     &:is(.dark *) {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
     }
   } @else if $theme == muted {
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     &:is(.dark *) {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
   } @else if $theme == subtle {
-    color: rgb(var(--color-gray-400));
+    color: var(--color-gray-400);
 
     &:is(.dark *) {
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
     }
   } @else if $theme == success {
-    color: rgb(var(--color-success-600));
+    color: var(--color-success-600);
   } @else if $theme == inherit {
     color: inherit;
   } @else if $theme == white {
@@ -131,7 +131,7 @@
 
 @mixin card($variant: default, $size: md) {
   @if $variant == rounded {
-    color: rgb(var(--color-gray-900));
+    color: var(--color-gray-900);
     background-color: #fff;
     box-shadow: var(--shadow-lg);
 
@@ -140,8 +140,8 @@
     }
 
     &:is(.dark *) {
-      color: rgb(var(--color-gray-100));
-      background-color: rgb(var(--color-primary-900));
+      color: var(--color-gray-100);
+      background-color: var(--color-primary-900);
       box-shadow: none;
     }
 
@@ -212,157 +212,157 @@
 
   @if $theme == primary {
     border-color: transparent;
-    color: rgb(var(--color-gray-100));
-    background-color: rgb(var(--color-primary-500));
+    color: var(--color-gray-100);
+    background-color: var(--color-primary-500);
 
     &:hover {
-      background-color: rgb(var(--color-primary-400));
+      background-color: var(--color-primary-400);
     }
 
     &:focus {
-      background-color: rgb(var(--color-primary-500));
-      outline-color: rgb(var(--color-primary-300));
+      background-color: var(--color-primary-500);
+      outline-color: var(--color-primary-300);
     }
 
     &:hover:is(.dark *) {
-      background-color: rgb(var(--color-primary-600));
+      background-color: var(--color-primary-600);
     }
   } @else if $theme == secondary {
     border-color: transparent;
-    color: rgb(var(--color-primary-500));
-    background-color: rgb(var(--color-primary-100));
+    color: var(--color-primary-500);
+    background-color: var(--color-primary-100);
 
     &:hover {
-      background-color: rgb(var(--color-primary-50));
+      background-color: var(--color-primary-50);
     }
 
     &:focus {
-      background-color: rgb(var(--color-primary-100));
+      background-color: var(--color-primary-100);
     }
 
     &:is(.dark *) {
-      color: rgb(var(--color-primary-200));
-      background-color: rgb(var(--color-primary-800));
+      color: var(--color-primary-200);
+      background-color: var(--color-primary-800);
     }
 
     &:hover:is(.dark *) {
-      background-color: rgb(var(--color-primary-700));
+      background-color: var(--color-primary-700);
     }
 
     &:focus:is(.dark *) {
-      background-color: rgb(var(--color-primary-800));
+      background-color: var(--color-primary-800);
     }
   } @else if $theme == tertiary {
-    border-color: rgb(var(--color-gray-400));
-    color: rgb(var(--color-gray-900));
+    border-color: var(--color-gray-400);
+    color: var(--color-gray-900);
     background-color: #fff;
 
     &:hover {
-      border-color: rgb(var(--color-primary-300));
+      border-color: var(--color-primary-300);
     }
 
     &:focus {
-      border-color: rgb(var(--color-primary-500));
-      outline-color: rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
+      outline-color: var(--color-primary-500);
     }
 
     &:is(.dark *) {
-      border-color: rgb(var(--color-gray-800));
-      color: rgb(var(--color-gray-100));
-      background-color: rgb(var(--color-primary-900));
+      border-color: var(--color-gray-800);
+      color: var(--color-gray-100);
+      background-color: var(--color-primary-900);
     }
 
     &:hover:is(.dark *) {
-      border-color: rgb(var(--color-primary-700));
+      border-color: var(--color-primary-700);
     }
   } @else if $theme == accent {
     border-color: transparent;
     color: #fff;
-    background-color: rgb(var(--color-secondary-500));
+    background-color: var(--color-secondary-500);
 
     &:hover {
-      background-color: rgb(var(--color-secondary-400));
+      background-color: var(--color-secondary-400);
     }
 
     &:focus {
-      background-color: rgb(var(--color-secondary-500));
-      outline-color: rgb(var(--color-secondary-300));
+      background-color: var(--color-secondary-500);
+      outline-color: var(--color-secondary-300);
     }
   } @else if $theme == danger {
     border-color: transparent;
-    color: rgb(var(--color-danger-600));
-    background-color: rgb(var(--color-danger-100));
+    color: var(--color-danger-600);
+    background-color: var(--color-danger-100);
 
     &:hover,
     &:focus {
-      color: rgb(var(--color-gray-100));
-      background-color: rgb(var(--color-danger-600));
+      color: var(--color-gray-100);
+      background-color: var(--color-danger-600);
     }
 
     &:focus {
-      outline-color: rgb(var(--color-danger-500));
+      outline-color: var(--color-danger-500);
     }
 
     &:is(.dark *) {
-      color: rgb(var(--color-danger-200));
-      background-color: rgb(var(--color-danger-900));
+      color: var(--color-danger-200);
+      background-color: var(--color-danger-900);
     }
 
     &:hover:is(.dark *) {
-      color: rgb(var(--color-gray-100));
-      background-color: rgb(var(--color-danger-500));
+      color: var(--color-gray-100);
+      background-color: var(--color-danger-500);
     }
   } @else if $theme == transparent {
     border-color: transparent;
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
     background-color: transparent;
 
     &:hover {
-      background-color: rgb(var(--color-gray-200));
+      background-color: var(--color-gray-200);
     }
 
     &:is(.dark *) {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
       background-color: transparent;
     }
 
     &:hover:is(.dark *) {
-      background-color: rgb(var(--color-gray-800) / 0.5);
+      background-color: variables.opaque(--color-gray-800, 0.5);
     }
   } @else if $theme == outline {
-    border-color: rgb(var(--color-gray-100));
+    border-color: var(--color-gray-100);
     border-width: 2px;
-    color: rgb(var(--color-gray-100));
+    color: var(--color-gray-100);
     background-color: transparent;
 
     &:hover {
       background-color: #fff1;
     }
   } @else if $theme == muted {
-    border-color: rgb(var(--color-gray-400));
+    border-color: var(--color-gray-400);
     border-style: solid;
     border-width: 1px;
 
-    color: rgb(var(--color-gray-800));
+    color: var(--color-gray-800);
 
     background-color: transparent;
 
     &:hover {
-      border-color: rgb(var(--color-primary-300));
+      border-color: var(--color-primary-300);
     }
 
     &:focus {
-      border-color: rgb(var(--color-primary-500));
-      outline: 2px solid rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
+      outline: 2px solid var(--color-primary-500);
     }
 
     &:is(.dark *) {
-      border-color: rgb(var(--color-gray-800));
-      color: rgb(var(--color-gray-100));
+      border-color: var(--color-gray-800);
+      color: var(--color-gray-100);
     }
 
     &:hover:is(.dark *) {
-      border-color: rgb(var(--color-primary-700));
+      border-color: var(--color-primary-700);
     }
   } @else {
     @warn "Unknown button theme `#{$theme}`.";

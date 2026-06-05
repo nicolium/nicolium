@@ -108,16 +108,16 @@
     border-radius: var(--radius-lg);
 
     opacity: 0.8;
-    background: rgb(var(--color-primary-200));
+    background: var(--color-primary-200);
 
     transition: all 0.30s ease-in-out;
 
     .dark & {
-      background: rgb(var(--color-primary-700));
+      background: var(--color-primary-700);
     }
 
     .black & {
-      background: rgb(var(--color-primary-800));
+      background: var(--color-primary-800);
     }
 
     &--visible {
@@ -169,10 +169,10 @@
 
     &:hover {
       border-radius: var(--radius-full);
-      background: rgb(var(--color-primary-700) / 20);
+      background: variables.opaque(--color-primary-700, 0.2);
 
       .dark & {
-        background: rgb(var(--color-primary-200) / 20);
+        background: variables.opaque(--color-primary-200, 0.2);
       }
     }
 
@@ -223,7 +223,7 @@
       height: 0.25rem;
       border-radius: var(--radius-md);
 
-      background: rgb(var(--color-accent-500));
+      background: var(--color-accent-500);
     }
 
     &__handle {
@@ -238,7 +238,7 @@
       margin-left: -0.375rem;
       border-radius: 50%;
 
-      background: rgb(var(--color-accent-500));
+      background: var(--color-accent-500);
     }
   }
 
@@ -311,7 +311,7 @@
       height: 0.25rem;
       border-radius: var(--radius-md);
 
-      background: rgb(var(--color-accent-500));
+      background: var(--color-accent-500);
     }
 
     &__handle {
@@ -323,7 +323,7 @@
       margin-left: -0.375rem;
       border-radius: 50%;
 
-      background: rgb(var(--color-accent-500));
+      background: var(--color-accent-500);
 
       .no-reduce-motion & {
         transition: opacity 0.1s ease;

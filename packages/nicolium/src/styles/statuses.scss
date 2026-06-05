@@ -38,7 +38,7 @@
 }
 
 .focusable:focus {
-  outline: 2px solid rgb(var(--color-primary-300));
+  outline: 2px solid var(--color-primary-300);
   outline-offset: 0;
 }
 
@@ -50,20 +50,20 @@
   display: flex;
   flex-direction: column;
 
-  border: 1px solid rgb(var(--color-gray-200));
+  border: 1px solid var(--color-gray-200);
   border-radius: var(--radius-lg);
 
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
-  color: rgb(var(--color-gray-800));
+  color: var(--color-gray-800);
   text-decoration: none;
 
   background: white;
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
-    color: rgb(var(--color-gray-200));
-    background: rgb(var(--color-primary-900));
+    border-color: var(--color-gray-800);
+    color: var(--color-gray-200);
+    background: var(--color-primary-900);
   }
 
   .black & {
@@ -75,10 +75,10 @@
   }
 
   &--compact {
-    border-color: rgb(var(--color-gray-200));
+    border-color: var(--color-gray-200);
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
   }
 
@@ -178,28 +178,28 @@
     padding: 0.75rem 1rem;
     border-radius: var(--radius-full);
 
-    background-color: rgb(var(--color-gray-500) / 0.9);
+    background-color: variables.opaque(--color-gray-500, 0.9);
     box-shadow: var(--shadow-sm);
 
     .dark & {
-      background-color: rgb(var(--color-gray-700) / 0.9);
+      background-color: variables.opaque(--color-gray-700, 0.9);
     }
   }
 
   &__embed-button {
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
     appearance: none;
 
     &:hover {
-      color: rgb(var(--color-gray-900));
+      color: var(--color-gray-900);
     }
 
     .dark & {
-      color: rgb(var(--color-gray-200));
+      color: var(--color-gray-200);
     }
 
     .dark &:hover {
-      color: rgb(var(--color-gray-100));
+      color: var(--color-gray-100);
     }
 
     svg {
@@ -228,19 +228,19 @@
     margin-top: -1rem;
     padding: 0.5rem;
     padding-top: 1.5rem;
-    border: 1px solid rgb(var(--color-gray-200));
+    border: 1px solid var(--color-gray-200);
     border-top: 0;
     border-radius: var(--radius-lg);
 
-    background-color: rgb(var(--color-gray-100));
+    background-color: var(--color-gray-100);
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
-      background-color: rgb(var(--color-primary-700));
+      border-color: var(--color-gray-800);
+      background-color: var(--color-primary-700);
     }
 
     .black & {
-      background-color: rgb(var(--color-primary-900));
+      background-color: var(--color-primary-900);
     }
 
     p {
@@ -278,10 +278,10 @@ a.status-card {
 
   &:hover {
     text-decoration: none;
-    background-color: rgb(var(--color-gray-100));
+    background-color: var(--color-gray-100);
 
     .dark & {
-      background-color: rgb(var(--color-gray-800) / 0.3);
+      background-color: variables.opaque(--color-gray-800, 0.3);
     }
   }
 }
@@ -318,14 +318,14 @@ a.status-card {
 
   width: 2px;
 
-  background: rgb(var(--color-gray-200));
+  background: var(--color-gray-200);
 
   .dark & {
-    background: rgb(var(--color-primary-800));
+    background: var(--color-primary-800);
   }
 
   .black & {
-    background: rgb(var(--color-gray-800));
+    background: var(--color-gray-800);
   }
 
   &:last-of-type:not(:first-child) {
@@ -355,10 +355,10 @@ a.status-card {
       display: flex;
       align-items: center;
       padding: 1rem;
-      color: rgb(var(--color-gray-900));
+      color: var(--color-gray-900);
 
       .dark & {
-        color: rgb(var(--color-gray-300));
+        color: var(--color-gray-300);
       }
 
       &__bar {
@@ -368,7 +368,7 @@ a.status-card {
         width: 1rem;
         height: 1rem;
         margin-right: 0.625rem;
-        border: 1px solid rgb(var(--color-primary-600));
+        border: 1px solid var(--color-primary-600);
         border-radius: var(--radius-full);
       }
     }
@@ -391,10 +391,10 @@ a.status-card {
     padding: 0.5rem;
 
     &__button {
-      color: rgb(var(--color-gray-400));
+      color: var(--color-gray-400);
 
       &:hover {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
     }
   }
@@ -426,14 +426,14 @@ a.status-card {
   }
 
   &__filtered-button {
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
 
     &:hover {
       text-decoration: underline;
     }
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
     }
   }
 
@@ -462,10 +462,10 @@ a.status-card {
   &__edited-icon {
     width: 1rem;
     height: 1rem;
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     .dark & {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
   }
 
@@ -511,20 +511,20 @@ a.status-card {
   padding-right: 0.75rem;
   padding-bottom: 0.25rem;
   padding-left: 0.75rem;
-  border-color: rgb(var(--color-gray-200));
+  border-color: var(--color-gray-200);
   border-width: 1px;
   border-radius: var(--radius-full);
 
-  background-color: rgb(var(--color-gray-100));
+  background-color: var(--color-gray-100);
 
   .dark.black & {
-    border-color: rgb(var(--color-gray-800));
-    background-color: rgb(var(--color-gray-900));
+    border-color: var(--color-gray-800);
+    background-color: var(--color-gray-900);
   }
 
   .dark & {
     border-color: transparent;
-    background-color: rgb(var(--color-primary-800));
+    background-color: var(--color-primary-800);
   }
 
   svg {
@@ -552,10 +552,10 @@ a.status-card {
     }
 
     strong {
-      color: rgb(var(--color-gray-800));
+      color: var(--color-gray-800);
 
       .dark & {
-        color: rgb(var(--color-gray-200));
+        color: var(--color-gray-200);
       }
     }
   }
@@ -566,19 +566,19 @@ a.status-card {
     }
 
     &--pinned {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
 
       .dark & {
-        color: rgb(var(--color-gray-400));
+        color: var(--color-gray-400);
       }
     }
 
     &--group,
     &--tag {
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
 
       .dark & {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
   }
@@ -591,10 +591,10 @@ a.status-card {
 
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
-  color: rgb(var(--color-gray-700));
+  color: var(--color-gray-700);
 
   .dark & {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   &--unavailable {
@@ -626,7 +626,7 @@ a.status-card {
     padding-right: 0.375rem;
     padding-bottom: 0.25rem;
     padding-left: 0.375rem;
-    border-color: rgb(var(--color-gray-400));
+    border-color: var(--color-gray-400);
     border-width: 1px;
     border-radius: var(--radius-md);
 
@@ -635,58 +635,58 @@ a.status-card {
     transition: all 150ms var(--ease-default);
 
     .dark.black & {
-      border-color: rgb(var(--color-primary-800));
-      background-color: rgb(var(--color-primary-800));
+      border-color: var(--color-primary-800);
+      background-color: var(--color-primary-800);
     }
 
     .dark & {
-      border-color: rgb(var(--color-primary-700));
-      background-color: rgb(var(--color-primary-700));
+      border-color: var(--color-primary-700);
+      background-color: var(--color-primary-700);
     }
 
     &:not(:disabled) {
       cursor: pointer;
 
       &:hover {
-        background-color: rgb(var(--color-primary-100));
+        background-color: var(--color-primary-100);
       }
 
       .dark.black &:hover {
-        background-color: rgb(var(--color-primary-700));
+        background-color: var(--color-primary-700);
       }
 
       .dark &:hover {
-        border-color: rgb(var(--color-primary-600));
-        background-color: rgb(var(--color-primary-600));
+        border-color: var(--color-primary-600);
+        background-color: var(--color-primary-600);
       }
     }
 
     &--active {
-      background-color: rgb(var(--color-primary-100));
+      background-color: var(--color-primary-100);
 
       .dark.black & {
-        border-color: rgb(var(--color-primary-600));
-        background-color: rgb(var(--color-primary-600));
+        border-color: var(--color-primary-600);
+        background-color: var(--color-primary-600);
       }
 
       .dark & {
-        border-color: rgb(var(--color-primary-500));
-        background-color: rgb(var(--color-primary-500));
-        outline: 2px solid rgb(var(--color-primary-300));
+        border-color: var(--color-primary-500);
+        background-color: var(--color-primary-500);
+        outline: 2px solid var(--color-primary-300);
       }
 
       &:not(:disabled) {
         &:hover {
-          background-color: rgb(var(--color-primary-200));
+          background-color: var(--color-primary-200);
         }
 
         .dark.black &:hover {
-          background-color: rgb(var(--color-primary-500));
+          background-color: var(--color-primary-500);
         }
 
         .dark &:hover {
-          border-color: rgb(var(--color-primary-300));
-          background-color: rgb(var(--color-primary-300));
+          border-color: var(--color-primary-300);
+          background-color: var(--color-primary-300);
         }
       }
     }
@@ -714,7 +714,7 @@ a.status-card {
     cursor: pointer;
 
     padding: 0.375rem;
-    border-color: rgb(var(--color-gray-400));
+    border-color: var(--color-gray-400);
     border-width: 1px;
     border-radius: var(--radius-md);
 
@@ -729,26 +729,26 @@ a.status-card {
       stroke 150ms var(--ease-default);
 
     &:hover {
-      background-color: rgb(var(--color-gray-50));
+      background-color: var(--color-gray-50);
     }
 
     .dark.black & {
-      border-color: rgb(var(--color-primary-800));
-      background-color: rgb(var(--color-primary-800));
+      border-color: var(--color-primary-800);
+      background-color: var(--color-primary-800);
     }
 
     .dark.black &:hover {
-      background-color: rgb(var(--color-primary-700));
+      background-color: var(--color-primary-700);
     }
 
     .dark & {
-      border-color: rgb(var(--color-primary-700));
-      background-color: rgb(var(--color-primary-700));
+      border-color: var(--color-primary-700);
+      background-color: var(--color-primary-700);
     }
 
     .dark &:hover {
-      border-color: rgb(var(--color-primary-600));
-      background-color: rgb(var(--color-primary-600));
+      border-color: var(--color-primary-600);
+      background-color: var(--color-primary-600);
     }
 
     svg {
@@ -781,34 +781,34 @@ a.status-card {
     padding: 0.5rem;
     border-radius: var(--radius-full);
 
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
 
     background-color: transparent;
 
     transition: all 200ms var(--ease-default);
 
     &:hover {
-      color: rgb(var(--color-gray-800));
-      background-color: rgb(var(--color-primary-100));
+      color: var(--color-gray-800);
+      background-color: var(--color-primary-100);
     }
 
     &:focus {
-      outline: 2px solid rgb(var(--color-primary-500));
+      outline: 2px solid var(--color-primary-500);
       outline-offset: 2px;
     }
 
     .dark.black &:hover {
-      background-color: rgb(var(--color-gray-800));
+      background-color: var(--color-gray-800);
     }
 
     .dark &:hover {
       color: #fff;
-      background-color: rgb(var(--color-primary-800));
+      background-color: var(--color-primary-800);
     }
 
     &:not(:disabled) {
       &:hover {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
 
       .dark &:hover {
@@ -833,29 +833,29 @@ a.status-card {
     }
 
     &--active {
-      color: rgb(var(--color-accent-300));
+      color: var(--color-accent-300);
 
       &:hover {
-        color: rgb(var(--color-accent-300));
+        color: var(--color-accent-300);
       }
 
       .dark &:hover {
-        color: rgb(var(--color-accent-300));
+        color: var(--color-accent-300);
       }
 
       &.status-action-bar__button--reblog {
-        color: rgb(var(--color-success-600));
+        color: var(--color-success-600);
 
         &:hover {
-          color: rgb(var(--color-success-600));
+          color: var(--color-success-600);
         }
 
         .dark & {
-          color: rgb(var(--color-success-400));
+          color: var(--color-success-400);
         }
 
         .dark &:hover {
-          color: rgb(var(--color-success-400));
+          color: var(--color-success-400);
         }
       }
     }
@@ -873,10 +873,10 @@ a.status-card {
 
     margin: 0.5rem;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid rgb(var(--color-gray-100));
+    border-bottom: 2px solid var(--color-gray-100);
 
     .dark & {
-      border-bottom-color: rgb(var(--color-gray-800));
+      border-bottom-color: var(--color-gray-800);
     }
   }
 }
@@ -896,7 +896,7 @@ a.status-card {
     background-color: #fff;
 
     .dark & {
-      background-color: rgb(var(--color-primary-900));
+      background-color: var(--color-primary-900);
     }
 
     .black & {
@@ -945,14 +945,14 @@ a.status-card {
 
     width: 0.125rem;
 
-    background: rgb(var(--color-gray-200));
+    background: var(--color-gray-200);
 
     .dark & {
-      background: rgb(var(--color-primary-800));
+      background: var(--color-primary-800);
     }
 
     .black & {
-      background: rgb(var(--color-gray-800));
+      background: var(--color-gray-800);
     }
 
     [dir='rtl'] & {
@@ -972,14 +972,14 @@ a.status-card {
     margin-top: 0.5rem;
     margin-inline: -1rem;
     border: none;
-    border-top: 2px solid rgb(var(--color-gray-200));
+    border-top: 2px solid var(--color-gray-200);
 
     .black & {
       border-top-width: 1px;
     }
 
     .dark & {
-      border-top-color: rgb(var(--color-gray-800));
+      border-top-color: var(--color-gray-800);
     }
 
     &--above {
@@ -1026,10 +1026,10 @@ a.status-card {
       svg {
         width: 4rem;
         height: 4rem;
-        color: rgb(var(--color-gray-800));
+        color: var(--color-gray-800);
 
         .dark & {
-          color: rgb(var(--color-gray-200));
+          color: var(--color-gray-200);
         }
       }
     }
@@ -1069,7 +1069,7 @@ a.status-card {
       height: 100%;
 
       line-height: 0;
-      color: rgb(var(--color-gray-400));
+      color: var(--color-gray-400);
       text-decoration-line: none;
 
       .still-image {
@@ -1115,10 +1115,10 @@ a.status-card {
     height: 100%;
 
     object-fit: cover;
-    background-color: rgb(var(--color-gray-200));
+    background-color: var(--color-gray-200);
 
     .dark & {
-      background-color: rgb(var(--color-gray-900));
+      background-color: var(--color-gray-900);
     }
   }
 
@@ -1231,10 +1231,10 @@ a.status-card {
         width: 1rem;
         min-width: fit-content;
         height: 1rem;
-        color: rgb(var(--color-gray-800));
+        color: var(--color-gray-800);
 
         .dark & {
-          color: rgb(var(--color-gray-200));
+          color: var(--color-gray-200);
         }
       }
 
@@ -1290,18 +1290,18 @@ a.status-card {
       }
 
       &--active.status-action-bar__button--reblog {
-        color: rgb(var(--color-success-600));
+        color: var(--color-success-600);
 
         &:hover {
-          color: rgb(var(--color-success-600));
+          color: var(--color-success-600);
         }
 
         .dark & {
-          color: rgb(var(--color-success-400));
+          color: var(--color-success-400);
         }
 
         .dark &:hover {
-          color: rgb(var(--color-success-400));
+          color: var(--color-success-400);
         }
       }
     }
@@ -1316,7 +1316,7 @@ a.status-card {
   padding-top: 0.5rem;
   border-width: 0;
 
-  color: rgb(var(--color-gray-900));
+  color: var(--color-gray-900);
 
   background-color: transparent;
 
@@ -1329,7 +1329,7 @@ a.status-card {
   }
 
   .dark & {
-    color: rgb(var(--color-gray-300));
+    color: var(--color-gray-300);
   }
 
   svg {
@@ -1354,7 +1354,7 @@ a.status-card {
     }
 
     .dark & {
-      background-image: linear-gradient(to bottom, transparent, rgb(var(--color-primary-900)));
+      background-image: linear-gradient(to bottom, transparent, var(--color-primary-900));
     }
   }
 
@@ -1396,7 +1396,7 @@ a.status-card {
   @include mixins.text($size: md);
 
   position: relative;
-  color: rgb(var(--color-gray-900));
+  color: var(--color-gray-900);
   text-overflow: ellipsis;
   overflow-wrap: anywhere;
 
@@ -1411,7 +1411,7 @@ a.status-card {
   }
 
   .dark & {
-    color: rgb(var(--color-gray-100));
+    color: var(--color-gray-100);
   }
 
   &:has(button) {
@@ -1455,24 +1455,24 @@ a.status-card {
   }
 
   &--poll + .read-more-button__container .read-more-button__gradient {
-    background-image: linear-gradient(to bottom, transparent, rgb(var(--color-gray-100)));
+    background-image: linear-gradient(to bottom, transparent, var(--color-gray-100));
 
     .dark & {
-      background-image: linear-gradient(to bottom, transparent, rgb(var(--color-primary-800)));
+      background-image: linear-gradient(to bottom, transparent, var(--color-primary-800));
     }
   }
 
   &--quote + .read-more-button__container .read-more-button__gradient {
     .quoted-status:not(.quoted-status--compose):hover & {
-      background-image: linear-gradient(to bottom, transparent, rgb(var(--color-gray-100)));
+      background-image: linear-gradient(to bottom, transparent, var(--color-gray-100));
     }
 
     .dark.black .quoted-status:not(.quoted-status--compose):hover & {
-      background-image: linear-gradient(to bottom, transparent, rgb(var(--color-primary-800)));
+      background-image: linear-gradient(to bottom, transparent, var(--color-primary-800));
     }
 
     .dark .quoted-status:not(.quoted-status--compose):hover & {
-      background-image: linear-gradient(to bottom, transparent, rgb(var(--color-primary-800)));
+      background-image: linear-gradient(to bottom, transparent, var(--color-primary-800));
     }
   }
 
@@ -1484,10 +1484,10 @@ a.status-card {
     &:has(.poll) {
       padding: 1rem;
       border-radius: var(--radius-md);
-      background-color: rgb(var(--color-gray-100));
+      background-color: var(--color-gray-100);
 
       .dark & {
-        background-color: rgb(var(--color-primary-800));
+        background-color: var(--color-primary-800);
       }
     }
 
@@ -1538,7 +1538,7 @@ a.status-card {
   align-items: stretch;
 
   margin: 1rem auto;
-  border-color: rgb(var(--color-gray-200));
+  border-color: var(--color-gray-200);
   border-top-width: 1px;
   border-bottom-width: 1px;
 
@@ -1552,7 +1552,7 @@ a.status-card {
   }
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
   }
 
   .dark & {
@@ -1603,7 +1603,7 @@ a.status-card {
 
       font-size: var(--text-sm);
       font-style: italic;
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
       text-align: center;
 
       background:
@@ -1623,7 +1623,7 @@ a.status-card {
         top / 2rem calc(50% + 1px) repeat-x;
 
       .dark & {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
   }
@@ -1650,12 +1650,12 @@ div:first-child:has(> .timeline-gap) {
       overflow: hidden;
 
       font-weight: bold;
-      color: rgb(var(--color-gray-800));
+      color: var(--color-gray-800);
       text-overflow: ellipsis;
       white-space: nowrap;
 
       .dark & {
-        color: rgb(var(--color-gray-200));
+        color: var(--color-gray-200);
       }
 
       &:hover {
@@ -1692,14 +1692,14 @@ div:first-child:has(> .timeline-gap) {
     width: 0.125rem;
     height: calc(100% - 42px - 8px - 1rem);
 
-    background: rgb(var(--color-gray-200));
+    background: var(--color-gray-200);
 
     .dark & {
-      background: rgb(var(--color-primary-800));
+      background: var(--color-primary-800);
     }
 
     .black.dark & {
-      background: rgb(var(--color-gray-800));
+      background: var(--color-gray-800);
     }
 
     [dir='rtl'] & {
@@ -1716,10 +1716,10 @@ div:first-child:has(> .timeline-gap) {
 div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 + div:has(> .timeline-status) {
   .timeline-status {
-    border-top: 1px solid rgb(var(--color-gray-200));
+    border-top: 1px solid var(--color-gray-200);
 
     .dark & {
-      border-top-color: rgb(var(--color-gray-800));
+      border-top-color: var(--color-gray-800);
     }
   }
 }
@@ -1739,17 +1739,17 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     font-size: var(--text-xs);
     font-weight: 500;
     line-height: var(--leading-xs);
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
 
-    background-color: rgb(var(--color-gray-100));
+    background-color: var(--color-gray-100);
 
     .dark & {
       color: #fff;
-      background-color: rgb(var(--color-primary-700));
+      background-color: var(--color-primary-700);
     }
 
     .dark.black & {
-      background-color: rgb(var(--color-primary-900));
+      background-color: var(--color-primary-900);
     }
   }
 
@@ -1770,19 +1770,19 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   gap: 0.5rem;
 
   padding: 1rem;
-  border: 1px solid rgb(var(--color-gray-300));
+  border: 1px solid var(--color-gray-300);
   border-radius: var(--radius-lg);
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
   }
 
   &:not(&--compose) {
     &:hover:not(:has(.quoted-status:hover)) {
-      background: rgb(var(--color-gray-100));
+      background: var(--color-gray-100);
 
       .dark & {
-        background: rgb(var(--color-primary-800));
+        background: var(--color-primary-800);
       }
     }
   }
@@ -1854,10 +1854,10 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     svg {
       width: 1rem;
       height: 1rem;
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
 
       .dark & {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
     }
   }
@@ -1877,13 +1877,13 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   justify-content: center;
 
   height: 42px;
-  border: 2px solid rgb(var(--color-gray-200));
+  border: 2px solid var(--color-gray-200);
   border-radius: var(--radius-lg);
 
   text-align: center;
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
   }
 
   &__container {
@@ -1898,11 +1898,11 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 
   width: fit-content;
 
-  color: rgb(var(--color-primary-600));
+  color: var(--color-primary-600);
   text-align: left;
 
   .dark & {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   &:hover {
@@ -1977,7 +1977,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
       border: 0;
       border-radius: var(--radius-md);
 
-      background: rgb(var(--color-gray-800) / 0.75);
+      background: variables.opaque(--color-gray-800, 0.75);
       backdrop-filter: blur(16px);
     }
   }
@@ -2042,7 +2042,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     background: white;
 
     .dark & {
-      background: rgb(var(--color-primary-800));
+      background: var(--color-primary-800);
     }
 
     &__label {
@@ -2050,7 +2050,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 
       position: relative;
       overflow: hidden;
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
       overflow-wrap: break-word;
 
       .dark & {
@@ -2071,7 +2071,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
       gap: 0.5rem;
       align-items: center;
 
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
 
       .dark & {
         color: white;
@@ -2098,29 +2098,29 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     display: flex;
 
     padding: 0.5rem;
-    border: 1px solid rgb(var(--color-primary-300));
+    border: 1px solid var(--color-primary-300);
     border-radius: var(--radius-3xl);
 
     background: white;
 
     .dark & {
-      border-color: rgb(var(--color-primary-500));
-      background: rgb(var(--color-primary-900));
+      border-color: var(--color-primary-500);
+      background: var(--color-primary-900);
 
       &:hover {
-        background: rgb(var(--color-primary-800) / 0.5);
+        background: variables.opaque(--color-primary-800, 0.5);
       }
     }
 
     &--active {
-      border-color: rgb(var(--color-primary-600));
-      background: rgb(var(--color-primary-50));
-      outline: 1px solid rgb(var(--color-primary-600));
+      border-color: var(--color-primary-600);
+      background: var(--color-primary-50);
+      outline: 1px solid var(--color-primary-600);
 
       .dark & {
-        border-color: rgb(var(--color-primary-300));
-        background: rgb(var(--color-primary-800) / 0.5);
-        outline-color: rgb(var(--color-primary-300));
+        border-color: var(--color-primary-300);
+        background: variables.opaque(--color-primary-800, 0.5);
+        outline-color: var(--color-primary-300);
       }
     }
 
@@ -2148,7 +2148,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
       max-width: 100%;
       padding: 0 1.75rem 0 1.25rem;
 
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
       text-overflow: ellipsis;
       overflow-wrap: break-word;
 
@@ -2178,23 +2178,23 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 
         width: 1.5rem;
         height: 1.5rem;
-        border: 1px solid rgb(var(--color-primary-300));
+        border: 1px solid var(--color-primary-300);
         border-radius: 50%;
 
         background: white;
 
         .dark & {
-          border-color: rgb(var(--color-primary-500));
-          background: rgb(var(--color-primary-900));
+          border-color: var(--color-primary-500);
+          background: var(--color-primary-900);
         }
 
         .poll__option-text--active & {
-          border-color: rgb(var(--color-primary-600));
-          background: rgb(var(--color-primary-600));
+          border-color: var(--color-primary-600);
+          background: var(--color-primary-600);
 
           .dark & {
-            border-color: rgb(var(--color-primary-300));
-            background: rgb(var(--color-primary-300));
+            border-color: var(--color-primary-300);
+            background: var(--color-primary-300);
           }
         }
 
@@ -2204,7 +2204,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
           color: white;
 
           .dark & {
-            color: rgb(var(--color-primary-900));
+            color: var(--color-primary-900);
           }
         }
       }
@@ -2220,10 +2220,10 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     height: 100%;
     border-radius: 0.375rem 0 0 0.375rem;
 
-    background: rgb(var(--color-primary-100));
+    background: var(--color-primary-100);
 
     .dark & {
-      background: rgb(var(--color-primary-500));
+      background: var(--color-primary-500);
     }
   }
 
@@ -2240,7 +2240,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     }
 
     button:not(.poll__submit-button) {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
       text-decoration: underline;
     }
 
@@ -2265,7 +2265,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 
   .black & {
     margin-top: 0.5rem;
-    border: 1px solid rgb(var(--color-gray-800));
+    border: 1px solid var(--color-gray-800);
     border-radius: var(--radius-md);
   }
 
@@ -2278,10 +2278,10 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 
     margin: -0.5rem -1rem 0;
     padding: 0 1rem 0.25rem;
-    border-bottom: 1px solid rgb(var(--color-gray-200));
+    border-bottom: 1px solid var(--color-gray-200);
 
     .dark & {
-      border-bottom-color: rgb(var(--color-gray-800));
+      border-bottom-color: var(--color-gray-800);
     }
 
     svg {
@@ -2312,17 +2312,17 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 
     &:last-child {
       padding-top: 1rem;
-      border-top: 1px solid rgb(var(--color-gray-200));
+      border-top: 1px solid var(--color-gray-200);
 
       .dark & {
-        border-color: rgb(var(--color-gray-800));
+        border-color: var(--color-gray-800);
       }
 
       @media (min-width: variables.$breakpoint-sm) {
         padding-top: 0;
         padding-left: 1rem;
         border-top: 0;
-        border-left: 1px solid rgb(var(--color-gray-200));
+        border-left: 1px solid var(--color-gray-200);
       }
     }
   }
@@ -2352,20 +2352,20 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
         white-space: nowrap;
 
         strong {
-          color: rgb(var(--color-gray-800));
+          color: var(--color-gray-800);
 
           .dark & {
-            color: rgb(var(--color-gray-200));
+            color: var(--color-gray-200);
           }
         }
       }
     }
 
     svg {
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
 
       .dark & {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
   }
@@ -2432,7 +2432,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 .parsed-content,
 .appearance {
   &__greentext {
-    color: rgb(var(--color-greentext));
+    color: var(--color-greentext);
   }
 }
 
@@ -2446,15 +2446,15 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   &__suspicious-warning {
     margin-bottom: 0.5rem;
     padding: 0.5rem 0.625rem;
-    border: 1px solid rgb(var(--color-gray-400));
+    border: 1px solid var(--color-gray-400);
     border-radius: var(--radius-sm);
 
     font-size: var(--text-xs);
     line-height: var(--leading-xs);
-    color: rgb(var(--color-gray-900));
+    color: var(--color-gray-900);
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
       color: white;
     }
   }
@@ -2476,22 +2476,22 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 
     max-width: 200px;
 
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
     vertical-align: bottom;
 
     &:hover {
-      color: rgb(var(--color-primary-700));
+      color: var(--color-primary-700);
       text-decoration: underline;
     }
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
 
       &:hover {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
   }
@@ -2544,10 +2544,10 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   gap: 0.75rem;
 
   &__counter {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
 
     .dark & {
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
     }
 
     &--hoverable {
@@ -2580,10 +2580,10 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   svg {
     width: 1rem;
     height: 1rem;
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     .dark & {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
   }
 
@@ -2609,14 +2609,14 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     @include mixins.text($theme: muted);
 
     button {
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
 
       &:hover {
         text-decoration: underline;
       }
 
       .dark & {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
   }
@@ -2625,10 +2625,10 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 .status-type-icon {
   width: 1rem;
   height: 1rem;
-  color: rgb(var(--color-gray-700));
+  color: var(--color-gray-700);
 
   .dark & {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 }
 
@@ -2636,7 +2636,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   background-color: white;
 
   .dark & {
-    background-color: rgb(var(--color-primary-900));
+    background-color: var(--color-primary-900);
   }
 
   .black & {
@@ -2698,10 +2698,10 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   &__image {
     width: 40%;
     border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-    background-color: rgb(var(--color-primary-200));
+    background-color: var(--color-primary-200);
 
     .dark & {
-      background-color: rgb(var(--color-primary-700));
+      background-color: var(--color-primary-700);
     }
   }
 
@@ -2713,13 +2713,13 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     width: 60%;
     padding: 1rem;
 
-    color: rgb(var(--color-primary-50));
+    color: var(--color-primary-50);
     overflow-wrap: break-word;
   }
 }
 
 .media-gallery__item--placeholder {
-  background-color: rgb(var(--color-primary-200));
+  background-color: var(--color-primary-200);
 
   .no-reduce-motion & {
     animation: pulse 2s ease-in-out infinite;
@@ -2781,7 +2781,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     isolation: isolate;
 
     .black & {
-      border: 1px solid rgb(var(--color-gray-800));
+      border: 1px solid var(--color-gray-800);
       border-radius: var(--radius-xl);
     }
   }

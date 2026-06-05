@@ -21,10 +21,10 @@
   padding: 1rem;
   border-radius: var(--radius-lg);
 
-  background-color: rgb(var(--color-gray-100));
+  background-color: var(--color-gray-100);
 
   .dark & {
-    background-color: rgb(var(--color-primary-800));
+    background-color: var(--color-primary-800);
   }
 
   &__content {
@@ -74,26 +74,26 @@
 
   &--current button {
     border-color: transparent;
-    color: rgb(var(--color-danger-600));
-    background-color: rgb(var(--color-danger-100));
+    color: var(--color-danger-600);
+    background-color: var(--color-danger-100);
 
     &:hover {
-      color: rgb(var(--color-gray-100));
-      background-color: rgb(var(--color-danger-600));
+      color: var(--color-gray-100);
+      background-color: var(--color-danger-600);
     }
 
     &:focus {
-      outline-color: rgb(var(--color-danger-500));
+      outline-color: var(--color-danger-500);
     }
 
     .dark & {
-      color: rgb(var(--color-danger-200));
-      background-color: rgb(var(--color-danger-900));
+      color: var(--color-danger-200);
+      background-color: var(--color-danger-900);
     }
 
     .dark &:hover {
-      color: rgb(var(--color-gray-100));
-      background-color: rgb(var(--color-danger-500));
+      color: var(--color-gray-100);
+      background-color: var(--color-danger-500);
     }
   }
 }
@@ -119,10 +119,10 @@
     svg {
       width: 1rem;
       height: 1rem;
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
 
       .dark & {
-        color: rgb(var(--color-gray-700));
+        color: var(--color-gray-700);
       }
     }
 
@@ -152,10 +152,10 @@
     svg {
       width: 1rem;
       height: 1rem;
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
 
       .dark & {
-        color: rgb(var(--color-gray-700));
+        color: var(--color-gray-700);
       }
     }
   }
@@ -164,14 +164,14 @@
 .interface-items {
   padding: 0.5rem;
   border-radius: var(--radius-md);
-  box-shadow: inset 0 0 6px 1px rgb(var(--color-gray-200));
+  box-shadow: inset 0 0 6px 1px var(--color-gray-200);
 
   .dark & {
-    box-shadow: inset 0 0 6px 1px rgb(var(--color-gray-800));
+    box-shadow: inset 0 0 6px 1px var(--color-gray-800);
   }
 
   .black & {
-    border: 1px solid rgb(var(--color-gray-800));
+    border: 1px solid var(--color-gray-800);
     box-shadow: none;
   }
 
@@ -209,7 +209,7 @@
   &__icon {
     width: 1.25rem !important;
     height: 1.25rem !important;
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   p {
@@ -232,36 +232,36 @@
     svg {
       width: 1rem;
       height: 1rem;
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
       transition: color 0.2s;
 
       .dark & {
-        color: rgb(var(--color-gray-300));
+        color: var(--color-gray-300);
       }
     }
 
     &:hover {
-      background: rgb(var(--color-gray-200));
+      background: var(--color-gray-200);
 
       svg {
-        color: rgb(var(--color-gray-700));
+        color: var(--color-gray-700);
       }
 
       .dark & {
-        background: rgb(var(--color-gray-800));
+        background: var(--color-gray-800);
 
         svg {
-          color: rgb(var(--color-gray-200));
+          color: var(--color-gray-200);
         }
       }
     }
 
     &[aria-pressed='true'] {
       svg {
-        color: rgb(var(--color-primary-600));
+        color: var(--color-primary-600);
 
         .dark & {
-          color: rgb(var(--color-primary-600));
+          color: var(--color-primary-600);
         }
       }
     }
@@ -279,17 +279,17 @@
   height: 6rem;
   border-radius: var(--radius-lg);
 
-  color: rgb(var(--color-primary-500));
+  color: var(--color-primary-500);
 
-  background-color: rgb(var(--color-primary-100));
+  background-color: var(--color-primary-100);
 
   &--dragging {
     z-index: 99 !important;
-    border: 2px dashed rgb(var(--color-primary-600));
+    border: 2px dashed var(--color-primary-600);
   }
 
   &--dragged-over {
-    outline: 2px solid rgb(var(--color-primary-600));
+    outline: 2px solid var(--color-primary-600);
     outline-offset: 2px;
   }
 
@@ -329,10 +329,10 @@
 
   &:has(img) > div {
     opacity: 0;
-    background: rgb(var(--color-primary-100));
+    background: var(--color-primary-100);
 
     .dark & {
-      background: rgb(var(--color-gray-800));
+      background: var(--color-gray-800);
     }
 
     &:hover {
@@ -348,7 +348,7 @@
 
     &:hover {
       transform: scale(1.05);
-      background: rgb(var(--color-gray-900));
+      background: var(--color-gray-900);
     }
 
     svg {
@@ -368,7 +368,7 @@
     box-shadow: var(--shadow-sm);
 
     .dark & {
-      background-color: rgb(var(--color-gray-800));
+      background-color: var(--color-gray-800);
       box-shadow: var(--shadow-inset);
     }
   }
@@ -386,7 +386,7 @@
   height: 5rem;
   border-radius: var(--radius-lg);
 
-  background-color: rgb(var(--color-primary-300));
+  background-color: var(--color-primary-300);
   outline: 2px solid white;
 
   input {
@@ -394,17 +394,17 @@
   }
 
   .dark & {
-    outline-color: rgb(var(--color-primary-900));
+    outline-color: var(--color-primary-900);
   }
 
   &--dragging {
     z-index: 99 !important;
     overflow: hidden;
-    border: 2px dashed rgb(var(--color-primary-600));
+    border: 2px dashed var(--color-primary-600);
   }
 
   &--dragged-over {
-    outline-color: rgb(var(--color-primary-600));
+    outline-color: var(--color-primary-600);
     outline-offset: 2px;
   }
 
@@ -435,7 +435,7 @@
 
     &--has-image {
       opacity: 0;
-      background-color: rgb(var(--color-primary-500));
+      background-color: var(--color-primary-500);
 
       &:hover {
         opacity: 0.9;
@@ -509,10 +509,10 @@
   &__item {
     padding: 1rem;
     border-radius: var(--radius-lg);
-    background-color: rgb(var(--color-gray-100));
+    background-color: var(--color-gray-100);
 
     .dark & {
-      background-color: rgb(var(--color-primary-800));
+      background-color: var(--color-primary-800);
     }
 
     &__body {
@@ -566,14 +566,14 @@
 
 .domain-blocks-list {
   > * + * {
-    border-top: 1px solid rgb(var(--color-gray-200));
+    border-top: 1px solid var(--color-gray-200);
 
     .dark & {
-      border-top-color: rgb(var(--color-primary-800));
+      border-top-color: var(--color-primary-800);
     }
 
     .black & {
-      border-top-color: rgb(var(--color-gray-800));
+      border-top-color: var(--color-gray-800);
     }
   }
 }
@@ -592,10 +592,10 @@
 .filter-card {
   padding: 1rem;
   border-radius: var(--radius-lg);
-  background-color: rgb(var(--color-gray-100));
+  background-color: var(--color-gray-100);
 
   .dark & {
-    background-color: rgb(var(--color-primary-800));
+    background-color: var(--color-primary-800);
   }
 
   &__container {
@@ -735,13 +735,13 @@
       height: 2.5rem;
       border-radius: var(--radius-full);
 
-      color: rgb(var(--color-gray-900));
+      color: var(--color-gray-900);
 
-      background-color: rgb(var(--color-gray-200));
+      background-color: var(--color-gray-200);
 
       .dark & {
-        color: rgb(var(--color-gray-100));
-        background-color: rgb(var(--color-gray-700));
+        color: var(--color-gray-100);
+        background-color: var(--color-gray-700);
       }
     }
 
@@ -781,16 +781,16 @@
         font-size: var(--text-sm);
 
         &:focus {
-          border-color: rgb(var(--color-primary-500));
-          outline-color: rgb(var(--color-primary-500));
+          border-color: var(--color-primary-500);
+          outline-color: var(--color-primary-500);
         }
 
         &:is(.dark *) {
           color: #fff;
-          background-color: rgb(var(--color-gray-800));
+          background-color: var(--color-gray-800);
 
           &::placeholder {
-            color: rgb(var(--color-gray-500));
+            color: var(--color-gray-500);
           }
         }
       }
@@ -816,7 +816,7 @@
       svg {
         width: 1.25rem;
         height: 1.25rem;
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
 
       &:disabled {
@@ -847,10 +847,10 @@
       padding: 0.625rem;
 
       .icon-button {
-        color: rgb(var(--color-gray-400));
+        color: var(--color-gray-400);
 
         &:hover {
-          color: rgb(var(--color-gray-600));
+          color: var(--color-gray-600);
         }
 
         svg {
@@ -915,11 +915,11 @@
       @include mixins.text($theme: primary);
 
       &:hover {
-        color: rgb(var(--color-primary-800));
+        color: var(--color-primary-800);
         text-decoration: underline;
 
         &:is(.dark *) {
-          color: rgb(var(--color-primary-500));
+          color: var(--color-primary-500);
         }
       }
     }
@@ -947,11 +947,11 @@
     gap: 0.75rem;
 
     padding: 1rem;
-    border: 2px solid rgb(var(--color-gray-200));
+    border: 2px solid var(--color-gray-200);
     border-radius: var(--radius-lg);
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
   }
 

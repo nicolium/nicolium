@@ -23,7 +23,7 @@ body {
 
   font-size: var(--text-base);
 
-  background-color: rgb(var(--color-primary-50));
+  background-color: var(--color-primary-50);
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -33,7 +33,7 @@ body {
   }
 
   .dark & {
-    background-color: rgb(var(--color-gray-800));
+    background-color: var(--color-gray-800);
   }
 
   &.system-font,
@@ -104,9 +104,9 @@ body {
   }
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
     border-width: 1px;
-    background-color: rgb(var(--color-primary-900) / 0.9);
+    background-color: variables.opaque(--color-primary-900, 0.9);
     box-shadow: none;
   }
 
@@ -122,10 +122,10 @@ body {
     inset: 0;
 
     opacity: 0;
-    background-color: rgb(var(--color-gray-500));
+    background-color: var(--color-gray-500);
 
     .dark.black & {
-      background-color: rgb(var(--color-gray-900));
+      background-color: var(--color-gray-900);
     }
 
     .no-reduce-motion & {
@@ -133,7 +133,7 @@ body {
     }
 
     .dark & {
-      background-color: rgb(var(--color-gray-700));
+      background-color: var(--color-gray-700);
     }
   }
 
@@ -222,11 +222,11 @@ body {
       }
 
       .icon {
-        color: rgb(var(--color-gray-900));
+        color: var(--color-gray-900);
         transition: transform 150ms var(--ease-default);
 
         .dark & {
-          color: rgb(var(--color-gray-100));
+          color: var(--color-gray-100);
         }
 
         > svg {
@@ -237,7 +237,7 @@ body {
     }
 
     &__accounts {
-      border-color: rgb(var(--color-gray-100));
+      border-color: var(--color-gray-100);
       border-style: solid;
       border-top-width: 2px;
 
@@ -246,7 +246,7 @@ body {
       }
 
       .dark & {
-        border-color: rgb(var(--color-gray-800));
+        border-color: var(--color-gray-800);
       }
     }
 
@@ -273,7 +273,7 @@ body {
       .icon svg {
         width: 1rem;
         height: 1rem;
-        color: rgb(var(--color-primary-500));
+        color: var(--color-primary-500);
       }
 
       p {
@@ -301,10 +301,10 @@ body {
     &:not(.sidebar-navigation-link--active) {
       .sidebar-navigation-link__icon {
         .dark & {
-          background-color: rgb(var(--color-gray-800));
+          background-color: var(--color-gray-800);
 
           svg {
-            color: rgb(var(--color-primary-500));
+            color: var(--color-primary-500);
           }
         }
       }
@@ -312,7 +312,7 @@ body {
 
     .black &:hover {
       border-radius: var(--radius-lg);
-      background: rgb(var(--color-gray-800));
+      background: var(--color-gray-800);
     }
   }
 }
@@ -328,7 +328,7 @@ body {
   display: flex;
 
   width: 100%;
-  border-color: rgb(var(--color-gray-200));
+  border-color: var(--color-gray-200);
   border-style: solid;
   border-top-width: 1px;
 
@@ -341,8 +341,8 @@ body {
   }
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
-    background-color: rgb(var(--color-primary-900) / 0.9);
+    border-color: var(--color-gray-800);
+    background-color: variables.opaque(--color-primary-900, 0.9);
   }
 
   &__item {
@@ -359,11 +359,11 @@ body {
 
     font-size: var(--text-lg);
     line-height: var(--leading-lg);
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
 
     .icon,
     .svg-icon {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
 
       .dark.black & {
         color: #fff;
@@ -376,7 +376,7 @@ body {
     }
 
     &--active .icon {
-      color: rgb(var(--color-primary-500));
+      color: var(--color-primary-500);
     }
 
     &--compose {
@@ -397,10 +397,10 @@ body {
 
     .avatar {
       border-radius: var(--radius-full);
-      outline: 2px solid rgb(var(--color-gray-200));
+      outline: 2px solid var(--color-gray-200);
 
       .black & {
-        outline-color: rgb(var(--color-gray-800));
+        outline-color: var(--color-gray-800);
       }
     }
   }
@@ -414,7 +414,7 @@ body {
     height: 1rem;
     border-radius: var(--radius-full);
 
-    background: rgb(var(--color-primary-400));
+    background: var(--color-primary-400);
     box-shadow: var(--shadow-lg);
   }
 
@@ -428,11 +428,11 @@ body {
     box-shadow: 0 8px 24px 0 rgb(0, 0, 0, 0.2);
 
     .dark & {
-      border: 1px solid rgb(var(--color-gray-600));
+      border: 1px solid var(--color-gray-600);
     }
 
     .black & {
-      border: 1px solid rgb(var(--color-gray-200) / 0.5);
+      border: 1px solid variables.opaque(--color-gray-200, 0.5);
     }
 
     .thumb-navigation__item {
@@ -467,18 +467,18 @@ body {
       align-items: center;
 
       &__expand {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
 
         &:hover {
-          color: rgb(var(--color-gray-700));
+          color: var(--color-gray-700);
         }
 
         .dark & {
-          color: rgb(var(--color-gray-600));
+          color: var(--color-gray-600);
         }
 
         .dark &:hover {
-          color: rgb(var(--color-gray-500));
+          color: var(--color-gray-500);
         }
       }
     }
@@ -521,14 +521,14 @@ body {
 
     hr {
       margin: 0.5rem 0;
-      border-color: rgb(var(--color-gray-200));
+      border-color: var(--color-gray-200);
 
       .dark & {
-        border-color: rgb(var(--color-gray-900));
+        border-color: var(--color-gray-900);
       }
 
       .black & {
-        border-color: rgb(var(--color-gray-800));
+        border-color: var(--color-gray-800);
       }
     }
 
@@ -610,14 +610,14 @@ body {
   }
 
   &--active {
-    color: rgb(var(--color-gray-900));
+    color: var(--color-gray-900);
 
     .dark & {
       color: #fff;
     }
 
     .sidebar-navigation-link__icon {
-      background-color: rgb(var(--color-primary-600));
+      background-color: var(--color-primary-600);
 
       svg {
         color: #fff;
@@ -626,29 +626,29 @@ body {
   }
 
   &:not(&--active) {
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     &:hover {
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
     }
 
     .dark & {
-      color: rgb(var(--color-gray-400));
+      color: var(--color-gray-400);
     }
 
     .dark &:hover {
-      color: rgb(var(--color-gray-200));
+      color: var(--color-gray-200);
     }
 
     .sidebar-navigation-link__icon {
-      background-color: rgb(var(--color-primary-100));
+      background-color: var(--color-primary-100);
 
       .dark & {
-        background-color: rgb(var(--color-gray-900));
+        background-color: var(--color-gray-900);
       }
 
       svg {
-        color: rgb(var(--color-primary-700));
+        color: var(--color-primary-700);
 
         .dark & {
           color: #fff;
@@ -658,14 +658,14 @@ body {
   }
 
   &:hover:not(&--active) &__icon {
-    background-color: rgb(var(--color-primary-200));
+    background-color: var(--color-primary-200);
 
     .dark.black & {
-      background-color: rgb(var(--color-gray-800));
+      background-color: var(--color-gray-800);
     }
 
     .dark & {
-      background-color: rgb(var(--color-gray-700));
+      background-color: var(--color-gray-700);
     }
   }
 
@@ -684,26 +684,26 @@ body {
     border-radius: var(--radius-lg);
 
     &:focus {
-      outline: 2px solid rgb(var(--color-primary-500));
+      outline: 2px solid var(--color-primary-500);
       outline-offset: 2px;
     }
 
     .dark & {
-      outline-color: rgb(var(--color-gray-800));
+      outline-color: var(--color-gray-800);
       outline-offset: 0;
     }
 
     .dark &:focus {
-      outline-color: rgb(var(--color-primary-500));
+      outline-color: var(--color-primary-500);
     }
   }
 
   hr {
     margin: 0.25rem 0.5rem;
-    border-top: 2px solid rgb(var(--color-gray-100));
+    border-top: 2px solid var(--color-gray-100);
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
 
     .dark.black & {
@@ -722,10 +722,10 @@ body {
 
     font-size: var(--text-sm);
     line-height: var(--leading-sm);
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     .dark & {
-      color: rgb(var(--color-gray-400));
+      color: var(--color-gray-400);
     }
   }
 
@@ -741,7 +741,7 @@ body {
 
     font-size: var(--text-sm);
     line-height: var(--leading-sm);
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
     text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -753,22 +753,22 @@ body {
     }
 
     &:hover {
-      background-color: rgb(var(--color-gray-100));
+      background-color: var(--color-gray-100);
     }
 
     &:focus {
-      background-color: rgb(var(--color-gray-100));
-      outline: 2px solid rgb(var(--color-primary-500));
+      background-color: var(--color-gray-100);
+      outline: 2px solid var(--color-primary-500);
       outline-offset: 2px;
     }
 
     .dark & {
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
     }
 
     .dark &:hover,
     .dark &:focus {
-      background-color: rgb(var(--color-gray-800));
+      background-color: var(--color-gray-800);
     }
 
     .dark &:focus {
@@ -807,14 +807,14 @@ body {
   &__overlay {
     position: fixed;
     inset: 0;
-    background-color: rgb(var(--color-gray-500) / 0.9);
+    background-color: variables.opaque(--color-gray-500, 0.9);
 
     .dark.black & {
-      background-color: rgb(var(--color-gray-900) / 0.9);
+      background-color: variables.opaque(--color-gray-900, 0.9);
     }
 
     .dark & {
-      background-color: rgb(var(--color-gray-700) / 0.9);
+      background-color: variables.opaque(--color-gray-700, 0.9);
     }
   }
 
@@ -989,7 +989,7 @@ body {
     padding-bottom: 4rem;
 
     .dark.black & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
 
     &--with-chats {
@@ -1091,7 +1091,7 @@ body {
 
     .black & {
       margin-right: -2rem;
-      border-left: 1px solid rgb(var(--color-gray-800));
+      border-left: 1px solid var(--color-gray-800);
 
       .column {
         padding-top: 0;
@@ -1122,7 +1122,7 @@ body {
       grid-column: span 9 / span 9;
 
       .black & {
-        border: 1px solid rgb(var(--color-gray-800));
+        border: 1px solid var(--color-gray-800);
       }
     }
   }
@@ -1134,21 +1134,21 @@ body {
   gap: 1rem;
 
   padding-bottom: 1.5rem;
-  border-color: rgb(var(--color-gray-200));
+  border-color: var(--color-gray-200);
   border-style: solid;
   border-bottom-width: 1px;
 
   .dark & {
     @include mixins.card($variant: rounded);
 
-    border-color: rgb(var(--color-primary-800));
+    border-color: var(--color-primary-800);
     border-style: none;
   }
 
   .dark.black & {
     padding: 0;
     padding-bottom: 1.5rem;
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
     border-style: solid;
   }
 
@@ -1226,7 +1226,7 @@ body {
   }
 
   .dark & {
-    background-color: rgb(var(--color-primary-900));
+    background-color: var(--color-primary-900);
   }
 
   main {
@@ -1272,11 +1272,11 @@ body {
       font-size: 1.875%;
       font-weight: 800;
       line-height: var(--leading-3xl);
-      color: rgb(var(--color-gray-900));
+      color: var(--color-gray-900);
       letter-spacing: -0.025em;
 
       .dark & {
-        color: rgb(var(--color-gray-500));
+        color: var(--color-gray-500);
       }
 
       @media (min-width: variables.$breakpoint-sm) {
@@ -1288,21 +1288,21 @@ body {
     &__body {
       font-size: var(--text-lg);
       line-height: var(--leading-lg);
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
 
       .dark & {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
 
       a {
-        color: rgb(var(--color-primary-600));
+        color: var(--color-primary-600);
 
         &:hover {
           text-decoration-line: underline;
         }
 
         .dark & {
-          color: rgb(var(--color-primary-400));
+          color: var(--color-primary-400);
         }
       }
     }
@@ -1358,7 +1358,7 @@ body {
 
     span {
       display: inline-block;
-      border-color: rgb(var(--color-gray-300));
+      border-color: var(--color-gray-300);
       border-left-width: 1px;
     }
 
@@ -1366,14 +1366,14 @@ body {
       font-size: var(--text-sm);
       font-weight: 500;
       line-height: var(--leading-sm);
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
 
       &:hover {
         text-decoration-line: underline;
       }
 
       .dark & {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
     }
   }
@@ -1442,8 +1442,8 @@ body {
   }
 
   .dark & {
-    background-color: rgb(var(--color-gray-900));
-    outline: 2px solid rgb(var(--color-gray-800));
+    background-color: var(--color-gray-900);
+    outline: 2px solid var(--color-gray-800);
   }
 
   &--visible {
@@ -1503,7 +1503,7 @@ body {
       font-size: var(--text-sm);
       font-weight: 500;
       line-height: var(--leading-sm);
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
 
       &:hover {
         text-decoration-line: underline;
@@ -1514,7 +1514,7 @@ body {
       }
 
       .dark & {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
   }
@@ -1559,23 +1559,23 @@ body {
     button {
       display: inline-flex;
       border-radius: var(--radius-md);
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
 
       &:hover {
-        color: rgb(var(--color-gray-700));
+        color: var(--color-gray-700);
       }
 
       &:focus {
-        outline: 2px solid rgb(var(--color-primary-500));
+        outline: 2px solid var(--color-primary-500);
         outline-offset: 2px;
       }
 
       .dark & {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
 
       .dark &:hover {
-        color: rgb(var(--color-gray-500));
+        color: var(--color-gray-500);
       }
 
       svg {
@@ -1590,23 +1590,23 @@ body {
   }
 
   &--success .toast__icon svg {
-    color: rgb(var(--color-success-500));
+    color: var(--color-success-500);
 
     .dark & {
-      color: rgb(var(--color-success-400));
+      color: var(--color-success-400);
     }
   }
 
   &--info .toast__icon svg {
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
     }
   }
 
   &--error .toast__icon svg {
-    color: rgb(var(--color-danger-600));
+    color: var(--color-danger-600);
   }
 }
 
@@ -1627,10 +1627,10 @@ body {
       a {
         @include mixins.text($size: sm, $theme: inherit);
 
-        color: rgb(var(--color-primary-600));
+        color: var(--color-primary-600);
 
         .dark & {
-          color: rgb(var(--color-primary-400));
+          color: var(--color-primary-400);
         }
 
         &:hover {
@@ -1656,7 +1656,7 @@ body {
   color: transparent;
   text-overflow: ellipsis;
 
-  background-image: linear-gradient(to right bottom, rgb(var(--color-accent-500)), rgb(var(--color-primary-500)), rgb(var(--color-gradient-end)));
+  background-image: linear-gradient(to right bottom, var(--color-accent-500), var(--color-primary-500), var(--color-gradient-end));
   background-clip: text;
 
   @media (min-width: variables.$breakpoint-lg) {
@@ -1736,14 +1736,14 @@ body {
   padding: 2.5rem;
   border-radius: var(--radius-lg);
 
-  color: rgb(var(--color-gray-900));
+  color: var(--color-gray-900);
   text-align: center;
 
-  background: rgb(var(--color-primary-50));
+  background: var(--color-primary-50);
 
   .dark & {
-    color: rgb(var(--color-gray-300));
-    background: rgb(var(--color-gray-700));
+    color: var(--color-gray-300);
+    background: var(--color-gray-700);
   }
 }
 
@@ -1821,10 +1821,10 @@ body {
     align-items: center;
 
     a {
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
 
       .dark & {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
 
       &:hover {

@@ -2,18 +2,18 @@
 
 .react-datepicker {
   padding: 1rem;
-  border: 1px solid rgb(var(--color-gray-200));
+  border: 1px solid var(--color-gray-200);
   border-radius: var(--radius-md);
 
   font-family: var(--font-sans);
   font-size: var(--text-xs);
   line-height: var(--leading-xs);
-  color: rgb(var(--color-gray-900));
+  color: var(--color-gray-900);
 
   .dark & {
-    border-color: rgb(var(--color-gray-700));
-    color: rgb(var(--color-gray-300));
-    background: rgb(var(--color-gray-900));
+    border-color: var(--color-gray-700);
+    color: var(--color-gray-300);
+    background: var(--color-gray-900);
   }
 
   .black & {
@@ -22,19 +22,19 @@
 
   &__input-container > input {
     width: 100%;
-    border: 1px solid rgb(var(--color-gray-400));
+    border: 1px solid var(--color-gray-400);
     border-radius: var(--radius-md);
 
     &:focus {
-      border-color: rgb(var(--color-primary-500));
-      outline: 1px solid rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
+      outline: 1px solid var(--color-primary-500);
       outline-offset: 0;
     }
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
-      color: rgb(var(--color-gray-100));
-      background: rgb(var(--color-gray-900));
+      border-color: var(--color-gray-800);
+      color: var(--color-gray-100);
+      background: var(--color-gray-900);
     }
 
     .black & {
@@ -57,7 +57,7 @@
   border-bottom-color: white;
 
   .dark & {
-    border-bottom-color: rgb(var(--color-gray-900));
+    border-bottom-color: var(--color-gray-900);
   }
 
   .black & {
@@ -66,10 +66,10 @@
 }
 
 .react-datepicker-popper[data-placement^='bottom'] .react-datepicker__triangle::before {
-  border-bottom-color: rgb(var(--color-gray-200));
+  border-bottom-color: var(--color-gray-200);
 
   .dark & {
-    border-bottom-color: rgb(var(--color-gray-700));
+    border-bottom-color: var(--color-gray-700);
   }
 }
 
@@ -83,7 +83,7 @@
   background: white;
 
   .dark & {
-    background: rgb(var(--color-gray-900));
+    background: var(--color-gray-900);
   }
 
   .black & {
@@ -96,10 +96,10 @@
 .react-datepicker-year-header {
   font-size: var(--text-sm);
   font-weight: bold;
-  color: rgb(var(--color-gray-900));
+  color: var(--color-gray-900);
 
   .dark & {
-    color: rgb(var(--color-gray-300));
+    color: var(--color-gray-300);
   }
 }
 
@@ -114,10 +114,10 @@
   border-radius: 50%;
 
   &:hover {
-    background-color: rgb(var(--color-gray-100));
+    background-color: var(--color-gray-100);
 
     .dark & {
-      background-color: rgb(var(--color-gray-900) / 0.5);
+      background-color: variables.opaque(--color-gray-900, 0.5);
     }
   }
 }
@@ -169,7 +169,7 @@
 .react-datepicker__time {
   &-container & {
     .dark & {
-      background-color: rgb(var(--color-gray-900));
+      background-color: var(--color-gray-900);
     }
 
     .black & {
@@ -180,11 +180,11 @@
 
 .react-datepicker__time-container {
   .dark & {
-    border-color: rgb(var(--color-gray-700));
+    border-color: var(--color-gray-700);
   }
 
   .black & {
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
   }
 }
 
@@ -194,19 +194,19 @@
   width: 30px;
   height: 30px;
   line-height: 30px;
-  color: rgb(var(--color-gray-900));
+  color: var(--color-gray-900);
 
   .dark & {
-    color: rgb(var(--color-gray-300));
+    color: var(--color-gray-300);
   }
 }
 
 .react-datepicker__time-list-item--disabled,
 .react-datepicker__day--disabled {
-  color: rgb(var(--color-gray-400));
+  color: var(--color-gray-400);
 
   .dark & {
-    color: rgb(var(--color-gray-500));
+    color: var(--color-gray-500);
   }
 }
 
@@ -216,10 +216,10 @@
 .react-datepicker__year-text:hover,
 .react-datepicker__time-list-item:hover {
   border-radius: 50%;
-  background-color: rgb(var(--color-gray-100));
+  background-color: var(--color-gray-100);
 
   .dark & {
-    background-color: rgb(var(--color-gray-700));
+    background-color: var(--color-gray-700);
   }
 }
 
@@ -237,18 +237,18 @@
 .react-datepicker__year-text--in-range {
   border-radius: 50%;
   color: white;
-  background: rgb(var(--color-primary-600));
+  background: var(--color-primary-600);
 
   &:hover {
-    background: rgb(var(--color-primary-700));
+    background: var(--color-primary-700);
   }
 
   .dark & {
     color: black;
-    background: rgb(var(--color-gray-300));
+    background: var(--color-gray-300);
 
     &:hover {
-      background: rgb(var(--color-gray-200));
+      background: var(--color-gray-200);
     }
   }
 }
@@ -257,19 +257,19 @@
 .react-datepicker__month-text--keyboard-selected,
 .react-datepicker__quarter-text--keyboard-selected,
 .react-datepicker__year-text--keyboard-selected {
-  color: rgb(var(--color-primary-600));
-  background: rgb(var(--color-primary-50));
+  color: var(--color-primary-600);
+  background: var(--color-primary-50);
 
   &:hover {
-    background: rgb(var(--color-primary-100));
+    background: var(--color-primary-100);
   }
 
   .dark & {
-    color: rgb(var(--color-primary-400));
-    background: rgb(var(--color-gray-700));
+    color: var(--color-primary-400);
+    background: var(--color-gray-700);
 
     &:hover {
-      background: rgb(var(--color-gray-600));
+      background: var(--color-gray-600);
     }
   }
 }
@@ -282,12 +282,12 @@
     font-size: var(--text-base);
     font-weight: 900;
     line-height: var(--leading-base);
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
 
     background: transparent;
 
     .dark & {
-      color: rgb(var(--color-gray-400));
+      color: var(--color-gray-400);
     }
   }
 

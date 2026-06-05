@@ -10,11 +10,11 @@
     margin: -3rem 1rem 0;
     border-radius: var(--radius-lg);
 
-    background-color: rgb(var(--color-gray-400));
+    background-color: var(--color-gray-400);
     outline: 4px solid white;
 
     .dark & {
-      outline-color: rgb(var(--color-gray-800));
+      outline-color: var(--color-gray-800);
     }
   }
 
@@ -36,10 +36,10 @@
 
     &--media {
       height: 8rem;
-      background-color: rgb(var(--color-gray-200));
+      background-color: var(--color-gray-200);
 
       .dark & {
-        background-color: rgb(var(--color-gray-900) / 0.5);
+        background-color: variables.opaque(--color-gray-900, 0.5);
       }
 
       @media (min-width: variables.$breakpoint-lg) {
@@ -81,8 +81,8 @@
     outline: 4px solid white;
 
     .dark & {
-      background-color: rgb(var(--color-primary-900));
-      outline: 4px solid rgb(var(--color-primary-900));
+      background-color: var(--color-primary-900);
+      outline: 4px solid var(--color-primary-900);
     }
 
     .black & {
@@ -106,7 +106,7 @@
     outline: 2px solid white;
 
     .dark & {
-      outline: 2px solid rgb(var(--color-primary-900));
+      outline: 2px solid var(--color-primary-900);
     }
 
     .black & {
@@ -152,10 +152,10 @@
         position: relative;
         width: 100%;
         height: 8rem;
-        background-color: rgb(var(--color-gray-200));
+        background-color: var(--color-gray-200);
 
         .dark & {
-          background-color: rgb(var(--color-gray-900) / 0.5);
+          background-color: variables.opaque(--color-gray-900, 0.5);
         }
 
         .black & {
@@ -249,10 +249,10 @@
     @include mixins.text($weight: bold, $size: sm);
 
     strong {
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
 
       .dark * & {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
   }
@@ -299,10 +299,10 @@
       svg {
         width: 1rem;
         height: 1rem;
-        color: rgb(var(--color-gray-800));
+        color: var(--color-gray-800);
 
         .dark & {
-          color: rgb(var(--color-gray-200));
+          color: var(--color-gray-200);
         }
       }
     }
@@ -422,7 +422,7 @@
   &__lock {
     width: 1rem;
     height: 1rem;
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   &__timestamp {
@@ -461,19 +461,19 @@
   }
 
   &__action-button {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
     background-color: transparent;
 
     &:hover {
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
     }
 
     .dark & {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
 
     .dark &:hover {
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
     }
   }
 
@@ -485,7 +485,7 @@
 
 .verification-badge {
   border-radius: var(--radius-full);
-  background-color: rgb(var(--color-accent-500));
+  background-color: var(--color-accent-500);
 
   img,
   svg {
@@ -496,7 +496,7 @@
 
     color: white;
 
-    background-color: rgb(var(--color-accent-500));
+    background-color: var(--color-accent-500);
   }
 }
 
@@ -563,10 +563,10 @@
 
   &--missing {
     position: relative;
-    background-color: rgb(var(--color-gray-200));
+    background-color: var(--color-gray-200);
 
     .dark & {
-      background-color: rgb(var(--color-gray-900));
+      background-color: var(--color-gray-900);
     }
   }
 
@@ -581,19 +581,19 @@
 
     border-radius: inherit;
 
-    background-color: rgb(var(--color-gray-200));
+    background-color: var(--color-gray-200);
 
     .dark & {
-      background-color: rgb(var(--color-gray-900));
+      background-color: var(--color-gray-900);
     }
 
     svg {
       width: 1rem;
       height: 1rem;
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
 
       .dark & {
-        color: rgb(var(--color-gray-700));
+        color: var(--color-gray-700);
       }
     }
   }
@@ -601,7 +601,7 @@
   // Adapted from Iceshrimp which I guess took it from Misskey
   // https://iceshrimp.dev/iceshrimp/iceshrimp/src/branch/dev/packages/client/src/components/global/MkAvatar.vue
   &--cat {
-    background: rgb(var(--color-gray-200));
+    background: var(--color-gray-200);
 
     &::before,
     &::after {
@@ -628,7 +628,7 @@
     }
 
     .dark & {
-      background: rgb(var(--color-gray-900));
+      background: var(--color-gray-900);
     }
 
     img {
@@ -704,7 +704,7 @@
   }
 
   &:focus {
-    outline: 2px solid rgb(var(--color-primary-500));
+    outline: 2px solid var(--color-primary-500);
     outline-offset: 2px;
   }
 }
@@ -738,7 +738,7 @@
   }
 
   &--verified dd {
-    color: rgb(var(--color-success-500));
+    color: var(--color-success-500);
   }
 
   &__content {
@@ -761,10 +761,10 @@
   svg {
     width: 1rem;
     height: 1rem;
-    color: rgb(var(--color-gray-800));
+    color: var(--color-gray-800);
 
     .dark & {
-      color: rgb(var(--color-gray-200));
+      color: var(--color-gray-200);
     }
   }
 
@@ -796,10 +796,10 @@
 
   svg {
     flex: none;
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
     }
   }
 
@@ -823,14 +823,14 @@
 
   vertical-align: middle;
 
-  background: rgb(var(--color-gray-200));
+  background: var(--color-gray-200);
 
   .dark & {
-    background: rgb(var(--color-primary-800));
+    background: var(--color-primary-800);
   }
 
   .black & {
-    background: rgb(var(--color-gray-800));
+    background: var(--color-gray-800);
   }
 
   &:hover {
@@ -860,7 +860,7 @@
   display: flex;
 
   .dark & {
-    --avatar-stack-background: rgb(var(--color-primary-900));
+    --avatar-stack-background: var(--color-primary-900);
   }
 
   .black & {
@@ -903,7 +903,7 @@
     overflow: hidden;
 
     .black & {
-      border: 1px solid rgb(var(--color-gray-800));
+      border: 1px solid var(--color-gray-800);
       border-radius: var(--radius-xl) !important;
     }
   }
@@ -1152,11 +1152,11 @@
   &__emblem {
     padding: 0.5rem 1rem;
     border-radius: var(--radius-full);
-    background: rgb(var(--color-gray-100));
+    background: var(--color-gray-100);
     @include mixins.text($size: sm, $theme: muted);
 
     .dark & {
-      background: rgb(var(--color-gray-800));
+      background: var(--color-gray-800);
     }
   }
 }
@@ -1183,7 +1183,7 @@
     background: white;
 
     .dark & {
-      background: rgb(var(--color-gray-900));
+      background: var(--color-gray-900);
     }
 
     svg {
@@ -1194,18 +1194,18 @@
 }
 
 .authorize-button {
-  background-color: rgb(var(--color-primary-500) / 0.1);
+  background-color: variables.opaque(--color-primary-500, 0.1);
 
   .icon-button svg {
-    color: rgb(var(--color-primary-500));
+    color: var(--color-primary-500);
   }
 }
 
 .reject-button {
-  background-color: rgb(var(--color-danger-600) / 0.1);
+  background-color: variables.opaque(--color-danger-600, 0.1);
 
   .icon-button svg {
-    color: rgb(var(--color-danger-600));
+    color: var(--color-danger-600);
   }
 }
 
@@ -1223,7 +1223,7 @@
     height: 6rem;
     margin: -1rem -1rem 0;
 
-    background-color: rgb(var(--color-gray-200));
+    background-color: var(--color-gray-200);
 
     &__container {
       display: flex;
@@ -1234,11 +1234,11 @@
   &__avatar {
     width: 5rem;
     height: 5rem;
-    background-color: rgb(var(--color-gray-50));
+    background-color: var(--color-gray-50);
     outline: 2px solid white;
 
     .dark & {
-      outline-color: rgb(var(--color-primary-900));
+      outline-color: var(--color-primary-900);
     }
 
     .black & {
@@ -1300,7 +1300,7 @@
       svg {
         width: 1rem;
         height: 1rem;
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
     }
   }

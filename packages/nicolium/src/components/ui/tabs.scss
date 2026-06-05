@@ -24,27 +24,27 @@
   font-size: var(--text-sm);
   font-weight: 500;
   line-height: var(--leading-sm);
-  color: rgb(var(--color-gray-700));
+  color: var(--color-gray-700);
   text-align: center;
 
   .dark & {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   &:hover {
-    color: rgb(var(--color-gray-800));
+    color: var(--color-gray-800);
 
     .dark & {
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
     }
   }
 
   &:focus-visible {
-    outline: 2px solid rgb(var(--color-primary-500));
+    outline: 2px solid var(--color-primary-500);
     outline-offset: 2px;
 
     .dark & {
-      outline-color: rgb(var(--color-primary-500));
+      outline-color: var(--color-primary-500);
       outline-offset: 0;
     }
   }
@@ -60,10 +60,10 @@
 }
 
 [data-reach-tab][data-selected] {
-  color: rgb(var(--color-gray-900));
+  color: var(--color-gray-900);
 
   .dark & {
-    color: rgb(var(--color-gray-100));
+    color: var(--color-gray-100);
   }
 }
 
@@ -72,16 +72,16 @@
     position: absolute;
     height: 3px;
     width: 100%;
-    background: rgb(var(--color-primary-200));
+    background: var(--color-primary-200);
 
     .dark & {
-      background: rgb(var(--color-primary-800));
+      background: var(--color-primary-800);
     }
 
     &--active {
       position: absolute;
       height: 3px;
-      background: rgb(var(--color-primary-500));
+      background: var(--color-primary-500);
 
       .no-reduce-motion & {
         transition: all 0.2s var(--ease-default);

@@ -52,16 +52,16 @@
     0 1px 2px -1px #0001;
 
   & > :not([hidden]) ~ :not([hidden]) {
-    border-color: rgb(var(--color-gray-200));
+    border-color: var(--color-gray-200);
     border-top-width: 1px;
   }
 
   .dark & > :not([hidden]) ~ :not([hidden]) {
-    border-color: rgb(var(--color-primary-700));
+    border-color: var(--color-primary-700);
   }
 
   .dark & {
-    background-color: rgb(var(--color-primary-800));
+    background-color: var(--color-primary-800);
   }
 
   &__header {
@@ -78,10 +78,10 @@
       object-fit: cover;
 
       &--empty {
-        background-color: rgb(var(--color-gray-200));
+        background-color: var(--color-gray-200);
 
         .dark & {
-          background-color: rgb(var(--color-primary-700));
+          background-color: var(--color-primary-700);
         }
       }
     }
@@ -111,8 +111,8 @@
     outline: 2px solid #fff;
 
     .dark & {
-      background-color: rgb(var(--color-primary-900));
-      outline-color: rgb(var(--color-primary-900));
+      background-color: var(--color-primary-900);
+      outline-color: var(--color-primary-900);
     }
   }
 

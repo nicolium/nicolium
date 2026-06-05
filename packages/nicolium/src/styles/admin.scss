@@ -43,12 +43,12 @@
   padding: 1rem;
   border-radius: var(--radius-sm);
 
-  background-color: rgb(var(--color-gray-100));
+  background-color: var(--color-gray-100);
 
   transition: transform 0.15s ease-in-out;
 
   .dark & {
-    background-color: rgb(var(--color-gray-800));
+    background-color: var(--color-gray-800);
   }
 
   &__number {
@@ -92,7 +92,7 @@
       backdrop-filter: blur(12px) saturate(2);
 
       .dark & {
-        background-color: rgb(var(--color-primary-900) / 0.9);
+        background-color: variables.opaque(--color-primary-900, 0.9);
         backdrop-filter: blur(12px);
       }
 
@@ -121,7 +121,7 @@
   }
 
   .dark & .accordion {
-    background-color: rgb(var(--color-primary-900));
+    background-color: var(--color-primary-900);
   }
 
   &__feedback {
@@ -294,10 +294,10 @@
   padding: 1rem;
   border-radius: var(--radius-lg);
 
-  background: rgb(var(--color-gray-100));
+  background: var(--color-gray-100);
 
   .dark & {
-    background: rgb(var(--color-primary-800));
+    background: var(--color-primary-800);
   }
 
   &__container {
@@ -365,10 +365,10 @@
 
     font-weight: 500;
 
-    background: rgb(var(--color-gray-200));
+    background: var(--color-gray-200);
 
     .dark & {
-      background: rgb(var(--color-gray-800));
+      background: var(--color-gray-800);
     }
   }
 
@@ -382,7 +382,7 @@
     color: var(--color-green-600);
 
     &--negative {
-      color: rgb(var(--color-danger-600));
+      color: var(--color-danger-600);
     }
   }
 
@@ -414,14 +414,14 @@ a.measure__container {
       width: 100%;
 
       tr {
-        border-bottom: 1px solid rgb(var(--color-primary-200));
+        border-bottom: 1px solid var(--color-primary-200);
 
         &:last-child {
           border: none;
         }
 
         .dark & {
-          border-color: rgb(var(--color-gray-800));
+          border-color: var(--color-gray-800);
         }
       }
 
@@ -521,7 +521,7 @@ a.measure__container {
         backdrop-filter: blur(8px);
 
         .dark & {
-          background: rgb(var(--color-gray-900) / 0.5);
+          background: variables.opaque(--color-gray-900, 0.5);
         }
 
         svg {
@@ -610,10 +610,10 @@ a.measure__container {
   display: block;
   padding: 1rem;
   border-radius: var(--radius-lg);
-  background: rgb(var(--color-gray-100));
+  background: var(--color-gray-100);
 
   .dark & {
-    background: rgb(var(--color-primary-800));
+    background: var(--color-primary-800);
   }
 
   &__body {
@@ -665,10 +665,10 @@ a.measure__container {
     display: block;
     margin: 0;
     padding-bottom: 0.25rem;
-    border-bottom: 1px solid rgb(var(--color-primary-200));
+    border-bottom: 1px solid var(--color-primary-200);
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
   }
 
@@ -703,10 +703,10 @@ a.measure__container {
 
     &--colored {
       font-weight: 500;
-      background: rgb(var(--color-primary-200) / var(--cell-opacity, 1));
+      background: color-mix(in srgb, var(--color-primary-200), transparent var(--cell-opacity, 100%));
 
       .dark & {
-        background: rgb(var(--color-gray-800) / var(--cell-opacity, 1));
+        background: color-mix(in srgb, var(--color-gray-800), transparent var(--cell-opacity, 100%));
       }
     }
   }
@@ -719,10 +719,10 @@ a.measure__container {
     display: block;
     margin: 0;
     padding-bottom: 0.25rem;
-    border-bottom: 1px solid rgb(var(--color-primary-200));
+    border-bottom: 1px solid var(--color-primary-200);
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
   }
 
@@ -731,14 +731,14 @@ a.measure__container {
   }
 
   &__row {
-    border-bottom: 1px solid rgb(var(--color-primary-200));
+    border-bottom: 1px solid var(--color-primary-200);
 
     &:last-child {
       border: none;
     }
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
   }
 
@@ -769,10 +769,10 @@ a.measure__container {
 .admin-relay {
   padding: 1rem;
   border-radius: var(--radius-lg);
-  background: rgb(var(--color-gray-100));
+  background: var(--color-gray-100);
 
   .dark & {
-    background: rgb(var(--color-primary-800));
+    background: var(--color-primary-800);
   }
 
   &__container {
@@ -848,10 +848,10 @@ a.measure__container {
 .admin-announcement {
   padding: 1rem;
   border-radius: var(--radius-lg);
-  background: rgb(var(--color-gray-100));
+  background: var(--color-gray-100);
 
   .dark & {
-    background: rgb(var(--color-primary-800));
+    background: var(--color-primary-800);
   }
 
   &__container {
@@ -984,14 +984,14 @@ a.measure__container {
   position: relative;
 
   margin-top: 0.25rem;
-  border: 1px solid rgb(var(--color-gray-300));
+  border: 1px solid var(--color-gray-300);
   border-radius: var(--radius-md);
 
   box-shadow: var(--shadow-sm);
 
   .dark & {
-    border-color: rgb(var(--color-gray-600));
-    background-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-600);
+    background-color: var(--color-gray-800);
   }
 
   &__trigger {
@@ -1021,13 +1021,13 @@ a.measure__container {
     padding: 0.375rem;
     border-radius: var(--radius-sm);
 
-    color: rgb(var(--color-gray-900));
+    color: var(--color-gray-900);
 
     background: white;
 
     .dark & {
-      color: rgb(var(--color-gray-100));
-      background: rgb(var(--color-primary-900));
+      color: var(--color-gray-100);
+      background: var(--color-primary-900);
     }
 
     &__header {
@@ -1060,10 +1060,10 @@ a.measure__container {
       border-radius: var(--radius-full);
 
       &:hover {
-        background: rgb(var(--color-gray-50));
+        background: var(--color-gray-50);
 
         .dark & {
-          background: rgb(var(--color-primary-800));
+          background: var(--color-primary-800);
         }
       }
 
@@ -1126,7 +1126,7 @@ a.measure__container {
   justify-content: center;
 
   height: 10rem;
-  border: 1px solid rgb(var(--color-gray-200));
+  border: 1px solid var(--color-gray-200);
   border-radius: var(--radius-lg);
 
   font-size: var(--text-base);
@@ -1134,7 +1134,7 @@ a.measure__container {
   background: white;
 
   &--dark {
-    background: rgb(var(--color-gray-900));
+    background: var(--color-gray-900);
   }
 
   &--black {
@@ -1143,12 +1143,12 @@ a.measure__container {
 
   &--dark, &--black {
     .site-preview__header {
-      background: rgb(var(--color-gray-800));
+      background: var(--color-gray-800);
     }
   }
 
   .dark & {
-    border-color: rgb(var(--color-gray-600));
+    border-color: var(--color-gray-600);
   }
 
   &__label {
@@ -1163,7 +1163,7 @@ a.measure__container {
 
     color: white;
 
-    background: rgb(var(--color-accent-500));
+    background: var(--color-accent-500);
   }
 
   &__header {
@@ -1208,10 +1208,10 @@ a.measure__container {
   padding: 1rem;
   border-radius: var(--radius-lg);
 
-  background: rgb(var(--color-gray-100));
+  background: var(--color-gray-100);
 
   .dark & {
-    background: rgb(var(--color-primary-800));
+    background: var(--color-primary-800);
   }
 
   &__container {

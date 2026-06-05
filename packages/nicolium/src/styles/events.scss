@@ -36,7 +36,7 @@
     position: relative;
     width: 100%;
     height: 8rem;
-    background-color: rgb(var(--color-gray-200));
+    background-color: var(--color-gray-200);
 
     .black & {
       border-top-left-radius: 0;
@@ -44,7 +44,7 @@
     }
 
     .dark & {
-      background-color: rgb(var(--color-gray-900) / 0.5);
+      background-color: variables.opaque(--color-gray-900, 0.5);
     }
 
     @media (min-width: variables.$breakpoint-sm) {
@@ -153,16 +153,16 @@
   width: 100%;
   border-radius: var(--radius-lg);
 
-  background-color: rgb(var(--color-gray-100));
+  background-color: var(--color-gray-100);
 
   .dark.black & {
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
     border-width: 1px;
     background-color: #000;
   }
 
   .dark & {
-    background-color: rgb(var(--color-primary-800));
+    background-color: var(--color-primary-800);
   }
 
   &__action {
@@ -175,10 +175,10 @@
 
   &__banner {
     height: 10rem;
-    background-color: rgb(var(--color-primary-200));
+    background-color: var(--color-primary-200);
 
     .dark & {
-      background-color: rgb(var(--color-gray-600));
+      background-color: var(--color-gray-600);
     }
 
     img {
@@ -212,10 +212,10 @@
     row-gap: 0.25rem;
     column-gap: 0.5rem;
 
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     .dark & {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
   }
 
@@ -278,14 +278,14 @@
   }
 
   &__map-link {
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
 
     &:hover {
       text-decoration: underline;
     }
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
     }
   }
 
@@ -296,14 +296,14 @@
       align-items: center;
 
       a {
-        color: rgb(var(--color-primary-600));
+        color: var(--color-primary-600);
 
         &:hover {
           text-decoration-line: underline;
         }
 
         .dark & {
-          color: rgb(var(--color-primary-400));
+          color: var(--color-primary-400);
         }
       }
     }
@@ -364,13 +364,13 @@
       height: 6rem;
       border-radius: var(--radius-lg);
 
-      color: rgb(var(--color-primary-500));
+      color: var(--color-primary-500);
 
-      background-color: rgb(var(--color-primary-100));
+      background-color: var(--color-primary-100);
 
       .dark & {
         color: #fff;
-        background-color: rgb(var(--color-gray-800));
+        background-color: var(--color-gray-800);
       }
 
       img {
@@ -415,10 +415,10 @@
     width: 100%;
     height: 100%;
 
-    color: rgb(var(--color-primary-500));
+    color: var(--color-primary-500);
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
     }
 
     .svg-icon svg {
@@ -446,10 +446,10 @@
 
     height: 2.375rem;
 
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     .dark & {
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
     }
 
     &__text {
@@ -490,20 +490,20 @@
 
     width: 100%;
     padding: 0.5rem 0.75rem;
-    border: 1px solid rgb(var(--color-gray-400));
+    border: 1px solid var(--color-gray-400);
     border-radius: var(--radius-md);
 
-    color: rgb(var(--color-gray-900));
+    color: var(--color-gray-900);
 
     background-color: #fff;
     outline: 1px solid transparent;
 
     &::placeholder {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
 
     &:focus-within {
-      border-color: rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
     }
 
     .dark.black & {
@@ -511,28 +511,28 @@
     }
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
-      color: rgb(var(--color-gray-100));
-      background-color: rgb(var(--color-gray-900));
+      border-color: var(--color-gray-800);
+      color: var(--color-gray-100);
+      background-color: var(--color-gray-900);
     }
 
     .dark &::placeholder {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
 
     .dark &:focus-within {
-      border-color: rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
     }
 
     &:focus-within {
-      outline-color: rgb(var(--color-primary-500));
+      outline-color: var(--color-primary-500);
     }
 
     .dark & {
-      outline-color: rgb(var(--color-gray-800));
+      outline-color: var(--color-gray-800);
 
       &:focus-within {
-        outline-color: rgb(var(--color-primary-500));
+        outline-color: var(--color-primary-500);
       }
     }
 
@@ -632,7 +632,7 @@
       }
 
       .dark & {
-        background: rgb(var(--color-gray-900) / 0.5);
+        background: variables.opaque(--color-gray-900, 0.5);
 
         svg {
           color: white;
@@ -649,10 +649,10 @@
 
   &__compose {
     padding: 0.5rem 0;
-    border-bottom: 1px solid rgb(var(--color-gray-200));
+    border-bottom: 1px solid var(--color-gray-200);
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
   }
 
@@ -672,14 +672,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  color: rgb(var(--color-primary-50));
+  color: var(--color-primary-50);
 
   .no-reduce-motion & {
     animation: pulse 2s ease-in-out infinite;
   }
 
   .dark & {
-    color: rgb(var(--color-primary-800));
+    color: var(--color-primary-800);
   }
 
   &__title {
@@ -702,30 +702,30 @@
   width: 100%;
   border-radius: var(--radius-lg);
 
-  color: rgb(var(--color-primary-50));
+  color: var(--color-primary-50);
 
-  background-color: rgb(var(--color-gray-100));
+  background-color: var(--color-gray-100);
 
   .no-reduce-motion & {
     animation: pulse 2s ease-in-out infinite;
   }
 
   .dark & {
-    color: rgb(var(--color-primary-800));
-    background-color: rgb(var(--color-primary-800));
+    color: var(--color-primary-800);
+    background-color: var(--color-primary-800);
   }
 
   .black & {
-    border: 1px solid rgb(var(--color-gray-800));
+    border: 1px solid var(--color-gray-800);
     background-color: black;
   }
 
   &__cover {
     height: 10rem;
-    background-color: rgb(var(--color-primary-200));
+    background-color: var(--color-primary-200);
 
     .dark & {
-      background-color: rgb(var(--color-gray-600));
+      background-color: var(--color-gray-600);
     }
   }
 
@@ -746,10 +746,10 @@
     row-gap: 0.25rem;
     column-gap: 0.5rem;
 
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     .dark & {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
   }
 }
@@ -780,7 +780,7 @@
     svg {
       width: 1.25rem;
       height: 1.25rem;
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
   }
 }

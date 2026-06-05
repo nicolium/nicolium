@@ -28,7 +28,7 @@ html.body {
 
 ::selection {
   color: white;
-  background: rgb(var(--color-primary-600));
+  background: var(--color-primary-600);
 }
 
 .emojione {

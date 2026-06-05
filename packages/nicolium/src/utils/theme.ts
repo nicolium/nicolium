@@ -90,7 +90,7 @@ const parseShades = (
     if (!rgb) return;
 
     const { r, g, b } = rgb;
-    obj[`--color-${color}`] = `${r} ${g} ${b}`;
+    obj[`--color-${color}`] = `rgb(${r}, ${g}, ${b})`;
     return;
   }
 
@@ -99,7 +99,7 @@ const parseShades = (
     if (!rgb) return;
 
     const { r, g, b } = rgb;
-    obj[`--color-${color}-${shade}`] = `${r} ${g} ${b}`;
+    obj[`--color-${color}-${shade}`] = `rgb(${r}, ${g}, ${b})`;
   });
 };
 

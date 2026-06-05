@@ -92,11 +92,11 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
   const renderStyle = (selectedState: typeof state) => {
     if (state === 'authorizing' && selectedState === 'authorizing') {
       return {
-        background: `conic-gradient(rgb(var(--color-primary-500)) ${progress}deg, rgb(var(--color-primary-500) / 0.1) 0deg)`,
+        background: `conic-gradient(var(--color-primary-500) ${progress}deg, color-mix(in srgb, var(--color-primary-500), transparent 0.1) 0deg)`,
       };
     } else if (state === 'rejecting' && selectedState === 'rejecting') {
       return {
-        background: `conic-gradient(rgb(var(--color-danger-600)) ${progress}deg, rgb(var(--color-danger-600) / 0.1) 0deg)`,
+        background: `conic-gradient(var(--color-danger-600) ${progress}deg, color-mix(in srgb, var(--color-danger-600), transparent 0.1) 0deg)`,
       };
     }
 

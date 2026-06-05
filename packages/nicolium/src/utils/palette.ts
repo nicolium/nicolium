@@ -1,4 +1,3 @@
-import tintify from '@/utils/colors';
 import { generateAccent, generateNeutral } from '@/utils/theme';
 
 import type { ColorPalette } from '@/types/colors';
@@ -16,7 +15,7 @@ const expandPalette = (palette: ColorPalette): ColorPalette =>
 
     // Conditionally handle hex color and color object
     if (typeof color === 'string' && isHex(color)) {
-      result[colorName] = tintify(color);
+      result[colorName] = { 500: color };
     } else if (color && typeof color === 'object') {
       result[colorName] = color;
     }

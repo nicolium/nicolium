@@ -6,11 +6,11 @@
   justify-content: center;
 
   font-size: var(--text-xs);
-  color: rgb(var(--color-gray-50));
+  color: var(--color-gray-50);
   text-transform: uppercase;
 
   .dark & {
-    color: rgb(var(--color-gray-800));
+    color: var(--color-gray-800);
   }
 
   &__wrapper {
@@ -28,10 +28,10 @@
       height: 100vh;
 
       &__figure {
-        border-color: rgb(var(--color-gray-200));
+        border-color: var(--color-gray-200);
 
         .dark & {
-          border-color: rgb(var(--color-gray-800));
+          border-color: var(--color-gray-800);
         }
       }
     }
@@ -58,7 +58,7 @@
     background-color: transparent;
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
 
     .no-reduce-motion & {
@@ -75,7 +75,7 @@
   }
 
   29% {
-    background: rgb(var(--color-gray-200));
+    background: var(--color-gray-200);
   }
 
   30% {

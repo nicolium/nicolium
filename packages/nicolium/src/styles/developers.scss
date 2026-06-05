@@ -16,25 +16,25 @@
     padding: 1rem;
     border-radius: var(--radius-sm);
 
-    background: rgb(var(--color-gray-200));
+    background: var(--color-gray-200);
 
     .dark & {
-      background: rgb(var(--color-gray-800));
+      background: var(--color-gray-800);
     }
 
     &:hover {
-      background: rgb(var(--color-gray-300));
+      background: var(--color-gray-300);
 
       .dark & {
-        background: rgb(var(--color-gray-800) / 0.75);
+        background: variables.opaque(--color-gray-800, 0.75);
       }
     }
 
     svg {
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
 
       .dark & {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
     }
 

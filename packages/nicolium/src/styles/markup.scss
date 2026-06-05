@@ -37,10 +37,10 @@ $vertical-lr-langs: mn-mong, mnmong;
   }
 
   a {
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
     }
 
     &:hover {
@@ -91,11 +91,11 @@ $vertical-lr-langs: mn-mong, mnmong;
 
   blockquote {
     padding: 0.25rem 0 0.25rem 1rem;
-    border-left: 4px solid rgb(var(--color-gray-400));
-    color: rgb(var(--color-gray-500));
+    border-left: 4px solid var(--color-gray-400);
+    color: var(--color-gray-500);
 
     .dark & {
-      color: rgb(var(--color-gray-400));
+      color: var(--color-gray-400);
     }
 
     &:not(:last-child) {
@@ -110,10 +110,10 @@ $vertical-lr-langs: mn-mong, mnmong;
     margin: 1rem 0;
     border-radius: var(--radius-md);
 
-    background-color: rgb(var(--color-gray-200));
+    background-color: var(--color-gray-200);
 
     .dark & {
-      background-color: rgb(var(--color-gray-900));
+      background-color: var(--color-gray-900);
     }
   }
 
@@ -124,7 +124,7 @@ $vertical-lr-langs: mn-mong, mnmong;
   }
 
   table th {
-    border: 2px solid rgb(var(--color-gray-600));
+    border: 2px solid var(--color-gray-600);
   }
 
   code,
@@ -135,10 +135,10 @@ $vertical-lr-langs: mn-mong, mnmong;
 
   p > code,
   pre {
-    background: rgb(var(--color-gray-100));
+    background: var(--color-gray-100);
 
     .dark & {
-      background: rgb(var(--color-primary-800));
+      background: var(--color-primary-800);
     }
   }
 
@@ -189,18 +189,18 @@ $vertical-lr-langs: mn-mong, mnmong;
   }
 
   .status-link {
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
 
     &:hover {
-      color: rgb(var(--color-primary-800));
+      color: var(--color-primary-800);
       text-decoration: underline;
     }
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
 
       &:hover {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
   }

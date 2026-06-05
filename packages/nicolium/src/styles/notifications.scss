@@ -19,10 +19,10 @@
 
   &__icon {
     flex: none;
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
     }
 
     &--emoji {
@@ -85,7 +85,7 @@
   background-color: white;
 
   .dark & {
-    background-color: rgb(var(--color-primary-900));
+    background-color: var(--color-primary-900);
   }
 
   .black & {

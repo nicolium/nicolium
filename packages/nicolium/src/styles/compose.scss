@@ -42,12 +42,12 @@
       top: 0;
 
       font-size: var(--text-base);
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
 
       visibility: visible !important;
 
       .dark &::placeholder {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
     }
 
@@ -80,24 +80,24 @@
     padding-right: 0.75rem;
     padding-bottom: 0.5rem;
     padding-left: 0.75rem;
-    border: 1px solid rgb(var(--color-gray-400));
+    border: 1px solid var(--color-gray-400);
     border-radius: var(--radius-md);
 
     outline: 2px solid transparent;
 
     &:focus-within {
-      border-color: rgb(var(--color-primary-500));
-      outline-color: rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
+      outline-color: var(--color-primary-500);
     }
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
-      outline-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
+      outline-color: var(--color-gray-800);
     }
 
     .dark &:focus-within {
-      border-color: rgb(var(--color-primary-500));
-      outline-color: rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
+      outline-color: var(--color-primary-500);
     }
 
     &__placeholder {
@@ -113,7 +113,7 @@
     font-family: inherit;
     font-size: var(--text-sm);
     line-height: var(--leading-sm);
-    color: rgb(var(--color-gray-900));
+    color: var(--color-gray-900);
   }
 
   &__footer {
@@ -142,49 +142,49 @@
 
     .icon-button {
       padding: 0.5rem;
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
       background-color: transparent;
       transition: all 200ms var(--ease-default);
 
       &:hover {
-        color: rgb(var(--color-gray-800));
-        background-color: rgb(var(--color-primary-100));
+        color: var(--color-gray-800);
+        background-color: var(--color-primary-100);
       }
 
       .dark &:hover {
         color: #fff;
-        background-color: rgb(var(--color-primary-800));
+        background-color: var(--color-primary-800);
       }
 
       .black &:hover {
-        background-color: rgb(var(--color-gray-800));
+        background-color: var(--color-gray-800);
       }
     }
   }
 
   &__button {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
 
     &:hover {
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
     }
 
     .dark &:hover {
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
     }
 
     &[aria-pressed='true'] {
-      color: rgb(var(--color-primary-500));
+      color: var(--color-primary-500);
 
       &:hover {
-        color: rgb(var(--color-primary-600));
+        color: var(--color-primary-600);
       }
 
       .dark & {
-        color: rgb(var(--color-primary-500));
+        color: var(--color-primary-500);
 
         &:hover {
-          color: rgb(var(--color-primary-400));
+          color: var(--color-primary-400);
         }
       }
     }
@@ -224,17 +224,17 @@
     border-bottom-left-radius: 9999px;
 
     appearance: none;
-    background-color: rgb(var(--color-primary-500));
+    background-color: var(--color-primary-500);
 
     transition: all 150ms var(--ease-default);
 
     &:hover {
-      background-color: rgb(var(--color-primary-400));
+      background-color: var(--color-primary-400);
     }
 
     &:focus {
-      background-color: rgb(var(--color-primary-500));
-      outline: 2px solid rgb(var(--color-primary-300));
+      background-color: var(--color-primary-500);
+      outline: 2px solid var(--color-primary-300);
       outline-offset: 2px;
     }
 
@@ -244,7 +244,7 @@
     }
 
     .dark &:hover {
-      background-color: rgb(var(--color-primary-600));
+      background-color: var(--color-primary-600);
     }
 
     &__container {
@@ -255,7 +255,7 @@
       font-size: var(--text-sm);
       font-weight: 500;
       line-height: var(--leading-sm);
-      color: rgb(var(--color-gray-100));
+      color: var(--color-gray-100);
 
       svg {
         width: 1rem;
@@ -278,7 +278,7 @@
       border-width: 1px;
 
       appearance: none;
-      background-color: rgb(var(--color-primary-500));
+      background-color: var(--color-primary-500);
 
       transition: all 150ms var(--ease-default);
 
@@ -288,12 +288,12 @@
       }
 
       &:hover {
-        background-color: rgb(var(--color-primary-400));
+        background-color: var(--color-primary-400);
       }
 
       &:focus {
-        background-color: rgb(var(--color-primary-500));
-        outline: 2px solid rgb(var(--color-primary-300));
+        background-color: var(--color-primary-500);
+        outline: 2px solid var(--color-primary-300);
         outline-offset: 2px;
       }
 
@@ -303,7 +303,7 @@
       }
 
       .dark &:hover {
-        background-color: rgb(var(--color-primary-600));
+        background-color: var(--color-primary-600);
       }
     }
   }
@@ -417,11 +417,11 @@
     }
 
     .icon-button {
-      color: rgb(var(--color-gray-400));
+      color: var(--color-gray-400);
       background: transparent;
 
       &:hover {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
 
       svg {
@@ -437,10 +437,10 @@
 
     height: 2.375rem;
 
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     .dark & {
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
     }
 
     &__text {
@@ -480,7 +480,7 @@
       .icon-button {
         &:hover {
           transform: scale(1.05);
-          background-color: rgb(var(--color-gray-900));
+          background-color: var(--color-gray-900);
         }
 
         svg {
@@ -513,7 +513,7 @@
       color: white;
       text-overflow: ellipsis;
 
-      background-color: rgb(var(--color-gray-900));
+      background-color: var(--color-gray-900);
     }
 
     &__preview {
@@ -536,10 +536,10 @@
         width: 4rem;
         height: 4rem;
         margin: 3rem auto;
-        color: rgb(var(--color-gray-800));
+        color: var(--color-gray-800);
 
         .dark & {
-          color: rgb(var(--color-gray-200));
+          color: var(--color-gray-200);
         }
       }
     }
@@ -617,7 +617,7 @@
       svg {
         width: 1.25rem;
         height: 1.25rem;
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
     }
   }
@@ -640,31 +640,31 @@
 
     font-size: var(--text-sm);
     line-height: var(--leading-sm);
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
     text-align: left;
 
     .dark & {
-      color: rgb(var(--color-gray-400));
+      color: var(--color-gray-400);
     }
 
     &--modified {
       cursor: pointer;
-      background-color: rgb(var(--color-gray-100));
+      background-color: var(--color-gray-100);
 
       &:hover {
-        background-color: rgb(var(--color-gray-200));
+        background-color: var(--color-gray-200);
       }
 
       .dark.black & {
-        background-color: rgb(var(--color-gray-900));
+        background-color: var(--color-gray-900);
       }
 
       .dark & {
-        background-color: rgb(var(--color-gray-800));
+        background-color: var(--color-gray-800);
       }
 
       .dark &:hover {
-        background-color: rgb(var(--color-gray-700));
+        background-color: var(--color-gray-700);
       }
 
       .language-dropdown__option__name {
@@ -680,15 +680,15 @@
       cursor: pointer;
 
       &:hover {
-        background-color: rgb(var(--color-gray-100));
+        background-color: var(--color-gray-100);
       }
 
       .dark.black &:hover {
-        background-color: rgb(var(--color-gray-900));
+        background-color: var(--color-gray-900);
       }
 
       .dark &:hover {
-        background-color: rgb(var(--color-gray-800));
+        background-color: var(--color-gray-800);
       }
     }
 
@@ -699,10 +699,10 @@
     &__name {
       flex: 1 1 auto;
       flex-grow: 1;
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
 
       .dark & {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
 
@@ -721,7 +721,7 @@
   svg {
     width: 1.75rem;
     height: 1.75rem;
-    color: rgb(var(--color-gray-500));
+    color: var(--color-gray-500);
   }
 
   &__bar {
@@ -762,10 +762,10 @@
     .icon svg {
       width: 1rem;
       height: 1rem;
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
 
       .dark & {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
     }
   }
@@ -785,18 +785,18 @@
   }
 
   &__close {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
     background-color: transparent;
 
     &:hover {
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
     }
 
     .dark & {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
 
       &:hover {
-        color: rgb(var(--color-gray-500));
+        color: var(--color-gray-500);
       }
     }
 
@@ -834,16 +834,16 @@
   &__text {
     font-size: var(--text-sm);
     line-height: var(--leading-sm);
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     &--exceeded {
-      color: rgb(var(--color-secondary-600));
+      color: var(--color-secondary-600);
     }
   }
 
   &__circle {
     circle:first-child {
-      stroke: rgb(var(--color-gray-500));
+      stroke: var(--color-gray-500);
 
       .dark & {
         stroke: rgb(255 255 255 / 0.2);
@@ -851,12 +851,12 @@
     }
 
     circle:last-child {
-      stroke: rgb(var(--color-primary-500));
+      stroke: var(--color-primary-500);
     }
 
     &--exceeded {
       circle:last-child {
-        stroke: rgb(var(--color-secondary-500));
+        stroke: var(--color-secondary-500);
       }
     }
   }
@@ -864,17 +864,17 @@
 
 .compose-warning {
   padding: 0.5rem 0.625rem;
-  border: 1px solid rgb(var(--color-gray-400));
+  border: 1px solid var(--color-gray-400);
   border-radius: var(--radius-sm);
 
   font-size: var(--text-xs);
   line-height: var(--leading-xs);
-  color: rgb(var(--color-gray-900));
+  color: var(--color-gray-900);
 
   background-color: transparent;
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
     color: #fff;
   }
 
@@ -895,14 +895,14 @@
   padding: 1rem;
   border-radius: var(--radius-lg);
 
-  background-color: rgb(var(--color-gray-100));
+  background-color: var(--color-gray-100);
 
   .dark & {
-    background-color: rgb(var(--color-gray-800));
+    background-color: var(--color-gray-800);
   }
 
   .black & {
-    background-color: rgb(var(--color-gray-900));
+    background-color: var(--color-gray-900);
   }
 
   &__content {
@@ -917,28 +917,28 @@
 
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
-  color: rgb(var(--color-gray-700));
+  color: var(--color-gray-700);
 
   .dark & {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   &__account {
     direction: ltr;
     display: inline-block;
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
     text-decoration: none;
 
     &:hover {
-      color: rgb(var(--color-primary-700));
+      color: var(--color-primary-700);
       text-decoration: underline;
     }
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
 
       &:hover {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
   }
@@ -946,13 +946,13 @@
 
 .upload-button {
   .icon-button {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
 
     &:hover {
-      color: rgb(var(--color-gray-700));
+      color: var(--color-gray-700);
 
       .dark & {
-        color: rgb(var(--color-gray-500));
+        color: var(--color-gray-500);
       }
     }
   }
@@ -1014,19 +1014,19 @@
 
   &__hashtag,
   &__link {
-    color: rgb(var(--color-primary-600));
+    color: var(--color-primary-600);
     text-decoration: none;
 
     &:hover {
-      color: rgb(var(--color-primary-800));
+      color: var(--color-primary-800);
       text-decoration: underline;
     }
 
     .dark & {
-      color: rgb(var(--color-primary-400));
+      color: var(--color-primary-400);
 
       &:hover {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
   }
@@ -1092,7 +1092,7 @@
     transition: opacity 150ms;
 
     .dark & {
-      background-color: rgb(var(--color-gray-900));
+      background-color: var(--color-gray-900);
     }
 
     &__dropdown {
@@ -1115,7 +1115,7 @@
       transition: opacity 150ms;
 
       .dark & {
-        background-color: rgb(var(--color-gray-900));
+        background-color: var(--color-gray-900);
       }
     }
 
@@ -1134,7 +1134,7 @@
       background: none;
 
       &:hover {
-        background-color: rgb(var(--color-gray-100));
+        background-color: var(--color-gray-100);
       }
 
       &:disabled {
@@ -1146,14 +1146,14 @@
       }
 
       .dark &:hover {
-        background-color: rgb(var(--color-primary-700));
+        background-color: var(--color-primary-700);
       }
 
       &[aria-pressed='true'] {
-        background-color: rgb(var(--color-gray-100) / 30%);
+        background-color: variables.opaque(--color-gray-100, 0.3);
 
         .dark & {
-          background-color: rgb(var(--color-gray-800) / 30%);
+          background-color: variables.opaque(--color-gray-800, 0.3);
         }
       }
 
@@ -1201,7 +1201,7 @@
     transition: opacity 150ms;
 
     .dark & {
-      background-color: rgb(var(--color-gray-900));
+      background-color: var(--color-gray-900);
     }
 
     &__field {
@@ -1217,14 +1217,14 @@
 
       font-size: var(--text-sm);
       line-height: var(--leading-sm);
-      color: rgb(var(--color-gray-800));
+      color: var(--color-gray-800);
 
-      background-color: rgb(var(--color-gray-100));
+      background-color: var(--color-gray-100);
       outline: none;
 
       .dark & {
-        color: rgb(var(--color-gray-100));
-        background-color: rgb(var(--color-gray-800));
+        color: var(--color-gray-100);
+        background-color: var(--color-gray-800);
       }
     }
 
@@ -1236,13 +1236,13 @@
       border: none;
 
       font-size: var(--text-sm);
-      color: rgb(var(--color-gray-900));
+      color: var(--color-gray-900);
 
       background: transparent;
       outline: none;
 
       .dark & {
-        color: rgb(var(--color-gray-100));
+        color: var(--color-gray-100);
       }
     }
 
@@ -1252,7 +1252,7 @@
 
       margin-right: 2rem;
 
-      color: rgb(var(--color-primary-600));
+      color: var(--color-primary-600);
       text-decoration: none;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -1262,7 +1262,7 @@
       }
 
       .dark & {
-        color: rgb(var(--color-primary-400));
+        color: var(--color-primary-400);
       }
     }
 
@@ -1304,7 +1304,7 @@
 
         &:hover {
           transform: scale(1.05);
-          background-color: rgb(var(--color-gray-900));
+          background-color: var(--color-gray-900);
         }
 
         svg {
@@ -1369,7 +1369,7 @@
       color: white;
       text-transform: uppercase;
 
-      background-color: rgb(var(--color-gray-900));
+      background-color: var(--color-gray-900);
 
       transition: opacity 100ms linear;
 
@@ -1432,8 +1432,8 @@
     }
 
     .dark & {
-      background-color: rgb(var(--color-gray-900));
-      outline: 2px solid rgb(var(--color-primary-700));
+      background-color: var(--color-gray-900);
+      outline: 2px solid var(--color-primary-700);
     }
 
     &--hidden {
@@ -1449,40 +1449,40 @@
 
     font-size: var(--text-sm);
     line-height: var(--leading-sm);
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     &:hover {
-      background-color: rgb(var(--color-gray-100));
+      background-color: var(--color-gray-100);
     }
 
     &:focus {
-      background-color: rgb(var(--color-gray-100));
+      background-color: var(--color-gray-100);
     }
 
     .dark & {
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
 
       &:hover {
-        background-color: rgb(var(--color-gray-800));
+        background-color: var(--color-gray-800);
       }
 
       &:focus {
-        background-color: rgb(var(--color-primary-800));
+        background-color: var(--color-primary-800);
       }
     }
 
     &--selected {
-      background-color: rgb(var(--color-gray-100));
+      background-color: var(--color-gray-100);
 
       &:hover {
-        background-color: rgb(var(--color-gray-100));
+        background-color: var(--color-gray-100);
       }
 
       .dark & {
-        background-color: rgb(var(--color-gray-800));
+        background-color: var(--color-gray-800);
 
         &:hover {
-          background-color: rgb(var(--color-gray-800));
+          background-color: var(--color-gray-800);
         }
       }
     }

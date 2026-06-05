@@ -1,4 +1,5 @@
 @use 'mixins';
+@use 'variables';
 
 .search-item {
   &__account,
@@ -36,7 +37,7 @@
     backdrop-filter: blur(8px), saturate(2);
 
     .dark & {
-      background: rgb(var(--color-primary-900) / 0.9);
+      background: variables.opaque(--color-primary-900, 0.9);
     }
 
     .black & {
@@ -53,17 +54,17 @@
     align-items: center;
 
     padding: 0.5rem 0.5rem 1rem;
-    border-bottom: 1px solid rgb(var(--color-gray-200));
+    border-bottom: 1px solid var(--color-gray-200);
 
     .dark & {
-      border-color: rgb(var(--color-gray-800))
+      border-color: var(--color-gray-800)
     }
 
     .icon-button {
-      color: rgb(var(--color-gray-400));
+      color: var(--color-gray-400);
 
       &:hover {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
 
       svg {
@@ -118,7 +119,7 @@
     svg {
       width: 1rem;
       height: 1rem;
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
   }
 }

@@ -10,39 +10,39 @@
     gap: 0;
 
     & > :not([hidden]) ~ :not([hidden]) {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
   }
 
   .dark & > :not([hidden]) ~ :not([hidden]) {
-    border-color: rgb(var(--color-primary-800));
+    border-color: var(--color-primary-800);
   }
 }
 
 .compose-block {
   position: relative;
   z-index: 1;
-  border-color: rgb(var(--color-gray-200));
+  border-color: var(--color-gray-200);
   transition: all 150ms var(--ease-default);
 
   .dark.black & {
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
     border-bottom-width: 1px;
   }
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
   }
 
   &--dragging {
     z-index: 99;
-    border-color: rgb(var(--color-primary-600));
+    border-color: var(--color-primary-600);
     border-style: dashed;
     border-width: 2px;
   }
 
   &--dragged-over {
-    outline: 2px solid rgb(var(--color-primary-600));
+    outline: 2px solid var(--color-primary-600);
     outline-offset: 2px;
   }
 
@@ -67,17 +67,17 @@
 
 .status-list {
   & > :not([hidden]) ~ :not([hidden]) {
-    border-color: rgb(var(--color-gray-200));
+    border-color: var(--color-gray-200);
     border-style: solid;
     border-top-width: 1px;
   }
 
   .dark.black & > :not([hidden]) ~ :not([hidden]) {
-    border-color: rgb(var(--color-gray-800));
+    border-color: var(--color-gray-800);
   }
 
   .dark & > :not([hidden]) ~ :not([hidden]) {
-    border-color: rgb(var(--color-primary-800));
+    border-color: var(--color-primary-800);
   }
 
   .no-reduce-motion &--loading {
@@ -117,36 +117,36 @@
   padding-right: 0.75rem;
   padding-bottom: 0.25rem;
   padding-left: 0.75rem;
-  border-color: rgb(var(--color-gray-200));
+  border-color: var(--color-gray-200);
   border-width: 1px;
   border-radius: var(--radius-full);
 
-  color: rgb(var(--color-gray-700));
+  color: var(--color-gray-700);
 
-  background-color: rgb(var(--color-gray-100));
+  background-color: var(--color-gray-100);
 
   &:hover {
-    background-color: rgb(var(--color-gray-200));
+    background-color: var(--color-gray-200);
   }
 
   .dark.black & {
-    border-color: rgb(var(--color-gray-800));
-    background-color: rgb(var(--color-gray-900));
+    border-color: var(--color-gray-800);
+    background-color: var(--color-gray-900);
   }
 
   .dark.black &:hover {
-    background-color: rgb(var(--color-gray-800));
+    background-color: var(--color-gray-800);
   }
 
   .dark & {
     border-color: transparent;
-    color: rgb(var(--color-gray-600));
-    background-color: rgb(var(--color-primary-800));
+    color: var(--color-gray-600);
+    background-color: var(--color-primary-800);
   }
 
   .dark &:hover {
-    border-color: rgb(var(--color-primary-800));
-    background-color: rgb(var(--color-primary-900));
+    border-color: var(--color-primary-800);
+    background-color: var(--color-primary-900);
   }
 
   svg {
@@ -178,14 +178,14 @@
     cursor: pointer;
 
     &:hover, &:focus-within, &[aria-expanded="true"] {
-      background: rgb(var(--color-primary-100));
+      background: var(--color-primary-100);
 
       .dark & {
-        background: rgb(var(--color-primary-800));
+        background: var(--color-primary-800);
       }
 
       .dark.black & {
-        background: rgb(var(--color-gray-900));
+        background: var(--color-gray-900);
       }
     }
   }
@@ -198,10 +198,10 @@
   padding: 0 0.5rem;
 
   .icon-button {
-    color: rgb(var(--color-gray-400));
+    color: var(--color-gray-400);
 
     &:hover {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
 
     svg {
@@ -247,13 +247,13 @@
 }
 
 .timeline-refresh-button {
-  color: rgb(var(--color-gray-600));
+  color: var(--color-gray-600);
 
   &:hover {
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     .dark & {
-      color: rgb(var(--color-gray-500));
+      color: var(--color-gray-500);
     }
   }
 }

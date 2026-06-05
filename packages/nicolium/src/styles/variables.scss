@@ -1,7 +1,25 @@
+@use 'sass:math';
+
 $breakpoint-sm: 581px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 976px;
 $breakpoint-xl: 1280px;
+
+@layer color-ramp {
+  :root {
+    @each $family in ('primary', 'secondary', 'accent', 'gray') {
+      --color-#{$family}-50: color-mix(in oklab, var(--color-#{$family}-500) 6%, white);
+      --color-#{$family}-100: color-mix(in oklab, var(--color-#{$family}-500) 11%, white);
+      --color-#{$family}-200: color-mix(in oklab, var(--color-#{$family}-500) 28%, white);
+      --color-#{$family}-300: color-mix(in oklab, var(--color-#{$family}-500) 74%, white);
+      --color-#{$family}-400: color-mix(in oklab, var(--color-#{$family}-500) 84%, white);
+      --color-#{$family}-600: color-mix(in oklab, var(--color-#{$family}-500) 93%, black);
+      --color-#{$family}-700: color-mix(in oklab, var(--color-#{$family}-500) 81%, black);
+      --color-#{$family}-800: color-mix(in oklab, var(--color-#{$family}-500) 44%, black);
+      --color-#{$family}-900: color-mix(in oklab, var(--color-#{$family}-500) 34%, black);
+    }
+  }
+}
 
 :root {
   --shadow-sm: 0 1px 2px 0 #0001;
@@ -56,5 +74,5 @@ $breakpoint-xl: 1280px;
 }
 
 @function opaque($color, $amount) {
-  @return color-mix(in srgb, $color, transparent $amount);
+  @return color-mix(in srgb, var($color) math.percentage($amount), transparent);
 }

@@ -90,7 +90,7 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
                 <td key={retention.date}>
                   <div
                     className='admin-retention-table__cell admin-retention-table__cell--colored'
-                    style={{ '--cell-opacity': 0.5 + average / 2 } as React.CSSProperties}
+                    style={{ '--cell-opacity': `${50 + average * 50}%` } as React.CSSProperties}
                   >
                     {/* eslint-disable-next-line react/style-prop-object */}
                     <FormattedNumber value={average} style='percent' />
@@ -120,7 +120,9 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
                 <td key={retention.date}>
                   <div
                     className='admin-retention-table__cell admin-retention-table__cell--colored'
-                    style={{ '--cell-opacity': 0.5 + retention.rate / 2 } as React.CSSProperties}
+                    style={
+                      { '--cell-opacity': `${50 + retention.rate * 50}%` } as React.CSSProperties
+                    }
                   >
                     {/* eslint-disable-next-line react/style-prop-object */}
                     <FormattedNumber value={retention.rate} style='percent' />

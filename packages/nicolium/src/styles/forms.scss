@@ -3,7 +3,7 @@
 
 select {
   padding: 0.5rem 2.5rem 0.5rem 0.75rem;
-  border-color: rgb(var(--color-gray-300));
+  border-color: var(--color-gray-300);
   border-radius: var(--radius-md);
 
   font-size: var(--text-base);
@@ -64,7 +64,7 @@ select {
     max-width: 25rem;
     min-height: 38px;
     padding: 0 2.5rem 0 0.75rem;
-    border: 1px solid rgb(var(--color-gray-300));
+    border: 1px solid var(--color-gray-300);
     border-radius: var(--radius-md);
 
     font-size: var(--text-base);
@@ -72,19 +72,19 @@ select {
     background: white;
 
     &:focus {
-      border-color: rgb(var(--color-primary-500));
-      outline: 2px solid rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
+      outline: 2px solid var(--color-primary-500);
     }
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
-      color: rgb(var(--color-gray-100));
-      background: rgb(var(--color-gray-900));
-      outline: 2px solid rgb(var(--color-primary-700));
+      border-color: var(--color-gray-800);
+      color: var(--color-gray-100);
+      background: var(--color-gray-900);
+      outline: 2px solid var(--color-primary-700);
 
       &:focus {
-        border-color: rgb(var(--color-primary-500));
-        outline-color: rgb(var(--color-primary-500));
+        border-color: var(--color-primary-500);
+        outline-color: var(--color-primary-500);
       }
     }
 
@@ -126,7 +126,7 @@ select {
     color: #fff;
     white-space: nowrap;
 
-    background: rgb(var(--color-primary-600));
+    background: var(--color-primary-600);
 
     button svg {
       width: 1rem;
@@ -161,19 +161,19 @@ select {
     }
 
     ul {
-      border-color: rgb(var(--color-gray-300));
+      border-color: var(--color-gray-300);
 
       .dark & {
-        border-color: rgb(var(--color-gray-800));
-        background: rgb(var(--color-gray-900));
-        outline: 2px solid rgb(var(--color-primary-700));
+        border-color: var(--color-gray-800);
+        background: var(--color-gray-900);
+        outline: 2px solid var(--color-primary-700);
       }
 
       li {
         &:hover,
         &:focus {
           color: #fff;
-          background: rgb(var(--color-primary-600));
+          background: var(--color-primary-600);
         }
       }
     }
@@ -201,18 +201,18 @@ select {
   width: 100%;
   border-radius: var(--radius-md);
 
-  color: rgb(var(--color-gray-900));
+  color: var(--color-gray-900);
 
   &::placeholder {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   .dark & {
-    color: rgb(var(--color-gray-100));
+    color: var(--color-gray-100);
   }
 
   .dark &::placeholder {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   &--transparent {
@@ -223,13 +223,13 @@ select {
 
   &:not(&--transparent) {
     padding: 0.5rem;
-    border-color: rgb(var(--color-gray-300));
+    border-color: var(--color-gray-300);
     border-width: 1px;
     background-color: #fff;
 
     &:focus {
-      border-color: rgb(var(--color-primary-500));
-      outline: 2px solid rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
+      outline: 2px solid var(--color-primary-500);
       outline-offset: 0;
     }
 
@@ -242,15 +242,15 @@ select {
     }
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
-      color: rgb(var(--color-gray-100));
-      background-color: rgb(var(--color-gray-900));
-      outline: 1px solid rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
+      color: var(--color-gray-100);
+      background-color: var(--color-gray-900);
+      outline: 1px solid var(--color-gray-800);
     }
 
     .dark &:focus {
-      border-color: rgb(var(--color-primary-500));
-      outline-color: rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
+      outline-color: var(--color-primary-500);
     }
   }
 
@@ -283,10 +283,10 @@ select {
     }
 
     &--exceeded {
-      color: rgb(var(--color-danger-700));
+      color: var(--color-danger-700);
 
       .dark & {
-        color: rgb(var(--color-danger-500));
+        color: var(--color-danger-500);
       }
     }
   }
@@ -304,47 +304,47 @@ select {
   line-height: var(--leading-sm);
 
   &::placeholder {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   &:not(:disabled) {
-    color: rgb(var(--color-gray-900));
+    color: var(--color-gray-900);
 
     .dark & {
-      color: rgb(var(--color-gray-100));
+      color: var(--color-gray-100);
     }
   }
 
   &:disabled {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   &--normal,
   &--search {
     &:focus {
-      border-color: rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
       outline: none;
-      box-shadow: 0 0 0 1px rgb(var(--color-primary-500));
+      box-shadow: 0 0 0 1px var(--color-primary-500);
     }
 
     .dark & {
-      box-shadow: 0 0 0 1px rgb(var(--color-gray-800));
+      box-shadow: 0 0 0 1px var(--color-gray-800);
 
       &:focus {
-        border-color: rgb(var(--color-primary-500));
-        box-shadow: 0 0 0 1px rgb(var(--color-primary-500));
+        border-color: var(--color-primary-500);
+        box-shadow: 0 0 0 1px var(--color-primary-500);
       }
     }
   }
 
   &--normal {
-    border: 1px solid rgb(var(--color-gray-400));
+    border: 1px solid var(--color-gray-400);
     border-radius: var(--radius-md);
     background-color: white;
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
-      background-color: rgb(var(--color-gray-900));
+      border-color: var(--color-gray-800);
+      background-color: var(--color-gray-900);
     }
 
     .dark.black & {
@@ -353,17 +353,17 @@ select {
   }
 
   &--search {
-    border: 1px solid rgb(var(--color-gray-200));
+    border: 1px solid var(--color-gray-200);
     border-radius: var(--radius-full);
-    background-color: rgb(var(--color-gray-200));
+    background-color: var(--color-gray-200);
 
     &:focus {
       background-color: white;
     }
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
-      background-color: rgb(var(--color-gray-900));
+      border-color: var(--color-gray-800);
+      background-color: var(--color-gray-900);
     }
   }
 
@@ -411,10 +411,10 @@ select {
       svg {
         width: 1rem;
         height: 1rem;
-        color: rgb(var(--color-gray-700));
+        color: var(--color-gray-700);
 
         .dark & {
-          color: rgb(var(--color-gray-600));
+          color: var(--color-gray-600);
         }
       }
     }
@@ -453,22 +453,22 @@ select {
         display: flex;
         align-items: center;
         padding-inline: 0.5rem;
-        color: rgb(var(--color-gray-700));
+        color: var(--color-gray-700);
 
         &:hover {
-          color: rgb(var(--color-gray-500));
+          color: var(--color-gray-500);
         }
 
         &:focus {
           outline: none;
-          box-shadow: inset 0 0 0 2px rgb(var(--color-primary-500));
+          box-shadow: inset 0 0 0 2px var(--color-primary-500);
         }
 
         .dark & {
-          color: rgb(var(--color-gray-600));
+          color: var(--color-gray-600);
 
           &:hover {
-            color: rgb(var(--color-gray-400));
+            color: var(--color-gray-400);
           }
         }
 
@@ -512,10 +512,10 @@ select {
     font-size: var(--text-sm);
     font-weight: 500;
     line-height: var(--leading-sm);
-    color: rgb(var(--color-gray-900));
+    color: var(--color-gray-900);
 
     .dark & {
-      color: rgb(var(--color-gray-100));
+      color: var(--color-gray-100);
     }
 
     &--checkbox {
@@ -542,9 +542,9 @@ select {
 
     font-size: var(--text-xs);
     line-height: var(--leading-xs);
-    color: rgb(var(--color-danger-900));
+    color: var(--color-danger-900);
 
-    background-color: rgb(var(--color-danger-200));
+    background-color: var(--color-danger-200);
 
     &::before {
       pointer-events: none;
@@ -558,7 +558,7 @@ select {
       border-color: transparent;
       border-style: solid;
       border-width: 6px;
-      border-bottom-color: rgb(var(--color-danger-200));
+      border-bottom-color: var(--color-danger-200);
     }
 
     &::after {
@@ -578,10 +578,10 @@ select {
 p.form-group__hint {
   font-size: var(--text-xs);
   line-height: var(--leading-xs);
-  color: rgb(var(--color-gray-700));
+  color: var(--color-gray-700);
 
   .dark & {
-    color: rgb(var(--color-gray-600));
+    color: var(--color-gray-600);
   }
 
   &--above {
@@ -615,7 +615,7 @@ p.form-group__hint {
   }
 
   &:focus {
-    outline: 2px solid rgb(var(--color-primary-500));
+    outline: 2px solid var(--color-primary-500);
     outline-offset: 2px;
   }
 
@@ -629,19 +629,19 @@ p.form-group__hint {
     }
 
     &:not(:checked, :disabled) {
-      background-color: rgb(var(--color-gray-500));
+      background-color: var(--color-gray-500);
     }
 
     &:not(:checked):disabled {
-      background-color: rgb(var(--color-gray-200));
+      background-color: var(--color-gray-200);
     }
 
     &:checked:not(:disabled) {
-      background-color: rgb(var(--color-primary-600));
+      background-color: var(--color-primary-600);
     }
 
     &:checked:disabled {
-      background-color: rgb(var(--color-primary-200));
+      background-color: var(--color-primary-200);
     }
   }
 
@@ -657,23 +657,23 @@ p.form-group__hint {
     }
 
     &:not(:checked, :disabled) {
-      border-color: rgb(var(--color-gray-500));
+      border-color: var(--color-gray-500);
     }
 
     &:not(:checked):disabled {
-      border-color: rgb(var(--color-gray-200));
+      border-color: var(--color-gray-200);
     }
 
     &:checked:not(:disabled) {
-      border-color: rgb(var(--color-primary-600));
+      border-color: var(--color-primary-600);
     }
 
     &:checked:disabled {
-      border-color: rgb(var(--color-primary-200));
+      border-color: var(--color-primary-200);
     }
 
     &:checked::after {
-      background: rgb(var(--color-primary-500));
+      background: var(--color-primary-500);
     }
   }
 
@@ -743,11 +743,11 @@ p.form-group__hint {
     }
 
     &.toggle:checked:not(:disabled) & {
-      background-color: rgb(var(--color-primary-600));
+      background-color: var(--color-primary-600);
     }
 
     &.toggle:checked:disabled & {
-      background-color: rgb(var(--color-primary-200));
+      background-color: var(--color-primary-200);
     }
   }
 }
@@ -755,19 +755,19 @@ p.form-group__hint {
 .checkbox {
   width: 1rem;
   height: 1rem;
-  border: 2px solid rgb(var(--color-gray-300));
+  border: 2px solid var(--color-gray-300);
   border-radius: var(--radius-sm);
 
-  color: rgb(var(--color-primary-600));
+  color: var(--color-primary-600);
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgb(var(--color-primary-500));
+    box-shadow: 0 0 0 2px var(--color-primary-500);
   }
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
-    background-color: rgb(var(--color-gray-900));
+    border-color: var(--color-gray-800);
+    background-color: var(--color-gray-900);
   }
 
   .dark.black & {
@@ -779,40 +779,40 @@ p.form-group__hint {
   display: block;
   width: 100%;
   font-size: var(--text-sm);
-  color: rgb(var(--color-gray-800));
+  color: var(--color-gray-800);
 
   &::file-selector-button {
     cursor: pointer;
 
     margin-inline-end: 0.5rem;
     padding: 0.375rem 0.75rem;
-    border: 1px solid rgb(var(--color-gray-200));
+    border: 1px solid var(--color-gray-200);
     border-radius: var(--radius-full);
 
     font-size: var(--text-xs);
     font-weight: 500;
     line-height: var(--leading-xs);
-    color: rgb(var(--color-gray-700));
+    color: var(--color-gray-700);
 
     background-color: white;
 
     &:hover {
-      background-color: rgb(var(--color-gray-100));
+      background-color: var(--color-gray-100);
     }
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
-      color: rgb(var(--color-gray-500));
-      background-color: rgb(var(--color-gray-900));
+      border-color: var(--color-gray-800);
+      color: var(--color-gray-500);
+      background-color: var(--color-gray-900);
 
       &:hover {
-        background-color: rgb(var(--color-gray-800));
+        background-color: var(--color-gray-800);
       }
     }
   }
 
   .dark & {
-    color: rgb(var(--color-gray-200));
+    color: var(--color-gray-200);
   }
 }
 
@@ -830,35 +830,35 @@ p.form-group__hint {
     width: 100%;
     padding: 0.5rem;
     padding-bottom: 0;
-    border: 1px solid rgb(var(--color-gray-400));
+    border: 1px solid var(--color-gray-400);
     border-radius: var(--radius-md);
 
-    color: rgb(var(--color-gray-900));
+    color: var(--color-gray-900);
 
     background-color: white;
 
     &::placeholder {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
 
     &:focus {
-      border-color: rgb(var(--color-primary-500));
-      box-shadow: 0 0 0 1px rgb(var(--color-primary-500));
+      border-color: var(--color-primary-500);
+      box-shadow: 0 0 0 1px var(--color-primary-500);
     }
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
-      color: rgb(var(--color-gray-100));
-      background-color: rgb(var(--color-gray-900));
-      box-shadow: 0 0 0 1px rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
+      color: var(--color-gray-100);
+      background-color: var(--color-gray-900);
+      box-shadow: 0 0 0 1px var(--color-gray-800);
 
       &::placeholder {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
 
       &:focus {
-        border-color: rgb(var(--color-primary-500));
-        box-shadow: 0 0 0 1px rgb(var(--color-primary-500));
+        border-color: var(--color-primary-500);
+        box-shadow: 0 0 0 1px var(--color-primary-500);
       }
     }
 
@@ -935,11 +935,11 @@ p.form-group__hint {
     }
 
     &__remove {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
       background: transparent;
 
       &:hover {
-        color: rgb(var(--color-gray-600));
+        color: var(--color-gray-600);
       }
 
       svg {
@@ -953,14 +953,14 @@ p.form-group__hint {
     flex: 0 0 auto;
 
     width: 100%;
-    border: 1px dashed rgb(var(--color-primary-500));
+    border: 1px dashed var(--color-primary-500);
     border-radius: var(--radius-md);
 
-    background-color: rgb(var(--color-primary-500) / 10%);
+    background-color: variables.opaque(--color-primary-500, 0.1);
 
     .dark & {
-      border-color: rgb(var(--color-primary-400));
-      background-color: rgb(var(--color-primary-400) / 14%);
+      border-color: var(--color-primary-400);
+      background-color: variables.opaque(--color-primary-400, 0.14);
     }
   }
 
@@ -1007,10 +1007,10 @@ p.form-group__hint {
   }
 
   .icon-button {
-    color: rgb(var(--color-gray-400));
+    color: var(--color-gray-400);
 
     &:hover {
-      color: rgb(var(--color-gray-600));
+      color: var(--color-gray-600);
     }
 
     [dir='rtl'] & {
@@ -1028,11 +1028,11 @@ p.form-group__hint {
   input {
     width: 1rem;
     height: 1rem;
-    border: 1px solid rgb(var(--color-gray-300));
-    color: rgb(var(--color-primary-600));
+    border: 1px solid var(--color-gray-300);
+    color: var(--color-primary-600);
 
     &:focus {
-      outline: 1px solid rgb(var(--color-primary-500));
+      outline: 1px solid var(--color-primary-500);
     }
   }
 }
@@ -1042,14 +1042,14 @@ p.form-group__hint {
   display: flex;
 
   width: fit-content;
-  border: 1px solid rgb(var(--color-gray-400));
+  border: 1px solid var(--color-gray-400);
   border-radius: var(--radius-md);
 
   background: white;
 
   .dark & {
-    border-color: rgb(var(--color-gray-800));
-    background: rgb(var(--color-gray-900));
+    border-color: var(--color-gray-800);
+    background: var(--color-gray-900);
   }
 
   .black & {
@@ -1060,21 +1060,21 @@ p.form-group__hint {
     cursor: pointer;
 
     padding: 0.5rem 0.75rem;
-    border-left: 1px solid rgb(var(--color-gray-400));
+    border-left: 1px solid var(--color-gray-400);
 
     color: white;
     white-space: nowrap;
 
-    background: rgb(var(--color-gray-500));
+    background: var(--color-gray-500);
 
     transition: background-color border-color 0.15s var(--ease-default);
 
     &:hover {
-      background: rgb(var(--color-primary-700));
+      background: var(--color-primary-700);
     }
 
     &:focus-within {
-      background: rgb(var(--color-primary-700));
+      background: var(--color-primary-700);
     }
 
     &:has(input:disabled) {
@@ -1083,11 +1083,11 @@ p.form-group__hint {
     }
 
     &:has(input:checked) {
-      background: rgb(var(--color-primary-600));
+      background: var(--color-primary-600);
     }
 
     .dark & {
-      border-color: rgb(var(--color-gray-800));
+      border-color: var(--color-gray-800);
     }
 
     &:first-child {

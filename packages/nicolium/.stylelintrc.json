@@ -26,10 +26,7 @@
     "no-descending-specificity": null,
     "no-duplicate-selectors": null,
     "no-invalid-position-at-import-rule": null,
-    "scss/at-rule-no-unknown": [
-      true,
-      { "ignoreAtRules": ["apply", "layer", "config"] }
-    ],
+    "scss/at-rule-no-unknown": [true, { "ignoreAtRules": ["apply", "layer", "config"] }],
     "scss/operator-no-unspaced": null,
     "selector-class-pattern": null,
     "no-invalid-position-declaration": null,
