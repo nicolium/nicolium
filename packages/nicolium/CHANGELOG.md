@@ -8,6 +8,12 @@
 
 ### Fixed
 
+## v0.3.2
+
+### Fixed
+
+- something with report state stuff idk i'm drunk
+
 ## v0.3.1
 
 ### Added
