@@ -56,7 +56,7 @@ const useReport = (reportId: string) => {
 
 const pendingReportsQuery = makePaginatedResponseQueryOptions(
   queryKeys.admin.reportLists.show({ resolved: undefined }),
-  (client) => client.admin.reports.getReports({ resolved: undefined }).then(minifyAdminReportList),
+  (client) => client.admin.reports.getReports({ unresolved: true }).then(minifyAdminReportList),
 );
 
 const usePendingReportsCount = () => {
