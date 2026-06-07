@@ -50,7 +50,7 @@ const NewListForm: React.FC = () => {
   const create = intl.formatMessage(messages.create);
 
   return (
-    <Form className='lists__list' onSubmit={handleSubmit}>
+    <Form className='lists__form' onSubmit={handleSubmit}>
       <label className='grow'>
         <span>{label}</span>
 

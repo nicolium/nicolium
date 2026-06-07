@@ -2693,6 +2693,9 @@ div[data-viewport-type='window']:has(.empty-message) {
 
   &__form {
     display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
 
     label {
       flex-grow: 1;
