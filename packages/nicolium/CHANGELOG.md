@@ -18,6 +18,12 @@
 
 - Components such as <Button /> and <Text />.
 
+## v0.3.2
+
+### Fixed
+
+- Reports querying behavior for GoToSocial <=v0.21.2
+
 ## v0.3.1
 
 ### Added
