@@ -190,6 +190,37 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
       }
     };
 
+    const onDragOver: React.DragEventHandler<HTMLDivElement> = (e) => {
+      if (props.disabled) return;
+      if (
+        e.dataTransfer.types.includes('text/uri-list') ||
+        e.dataTransfer.types.includes('text/plain')
+      ) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+      }
+    };
+
+    const onDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
+      const input = inputRef.current;
+      const dropped = (
+        e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain')
+      ).trim();
+
+      if (props.disabled || !input || !dropped) return;
+      e.preventDefault();
+
+      const start = input.selectionStart ?? input.value.length;
+      const end = input.selectionEnd ?? input.value.length;
+      const caret = start + dropped.length;
+
+      const setValue = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(input), 'value')?.set;
+      setValue?.call(input, input.value.slice(0, start) + dropped + input.value.slice(end));
+      input.setSelectionRange(caret, caret);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.focus();
+    };
+
     const hideSuggestions = () => {
       setSuggestionsHidden(true);
       setFocused(false);
@@ -295,7 +326,7 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
     const inputTypeProps = InputComponent === Input ? { type: 'text' } : {};
 
     return [
-      <div key='input' className='autosuggest-input'>
+      <div key='input' className='autosuggest-input' onDragOver={onDragOver} onDrop={onDrop}>
         <InputComponent
           {...inputProps}
           {...inputTypeProps}
