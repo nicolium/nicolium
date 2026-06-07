@@ -210,16 +210,19 @@ const deckSettingsSchema = v.fallback(
   {
     columns: [
       {
+        id: crypto.randomUUID(),
         type: 'timeline',
         columnWidth: 'lg',
         timeline: 'home',
       },
       {
+        id: crypto.randomUUID(),
         type: 'notifications',
         columnWidth: 'md',
         filters: [],
       },
       {
+        id: crypto.randomUUID(),
         type: 'account',
         columnWidth: 'md',
         accountId: 'self',
