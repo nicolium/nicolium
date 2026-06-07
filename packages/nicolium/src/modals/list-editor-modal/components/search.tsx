@@ -44,7 +44,7 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
           <div
             role='button'
             tabIndex={0}
-            className='list-editor-modal__clear'
+            className='list-editor-modal__search__clear'
             onClick={() => {
               setSearchValue('');
               onSubmit('');
@@ -55,7 +55,7 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
         )}
       </label>
 
-      <button className='list-editor-modal__submit' onClick={handleSubmit}>
+      <button className='list-editor-modal__search__submit' onClick={handleSubmit}>
         <FormattedMessage id='tabs_bar.search' defaultMessage='Search' />
       </button>
     </Form>
