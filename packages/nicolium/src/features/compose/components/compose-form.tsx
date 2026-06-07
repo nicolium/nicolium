@@ -22,6 +22,7 @@ import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import {
   useCompose,
   useComposeActions,
+  useComposeContentType,
   useUploadCompose,
   useSubmitCompose,
 } from '@/stores/compose';
@@ -177,6 +178,7 @@ const ComposeForm = <ID extends string>({
     text,
     modifiedLanguage,
   } = compose;
+  const contentType = useComposeContentType(id);
 
   const hasPoll = !!compose.poll;
   const isEditing = compose.editedId !== null;
@@ -398,10 +400,7 @@ const ComposeForm = <ID extends string>({
 
   const actionsMenu: Menu = [];
 
-  if (
-    features.createStatusPreview ||
-    (renderMfm && compose.contentType === 'text/x.misskeymarkdown')
-  ) {
+  if (features.createStatusPreview || (renderMfm && contentType === 'text/x.misskeymarkdown')) {
     actionsMenu.push({
       text: intl.formatMessage(messages.preview),
       action: handlePreview,

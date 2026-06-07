@@ -164,7 +164,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     };
 
     const maybeSetTimeOff = (): void => {
-      if (!contentNode.current) return;
+      if (!contentNode.current || !status.created_at) return;
 
       const time = isOnlyHour(contentNode.current, true);
       const publishedHour = new Intl.DateTimeFormat('en-US', {

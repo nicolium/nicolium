@@ -736,6 +736,7 @@ const useSubmitCompose = (composeId: string) => {
   const { openModal, closeModal } = useModalsActions();
   const { removeSledzik } = useUiStoreActions();
   const settings = useSettings();
+  const instance = useInstance();
 
   const submitCompose = useCallback(
     async (
@@ -750,7 +751,15 @@ const useSubmitCompose = (composeId: string) => {
 
       const compose = actions.getCompose(composeId);
 
-      if (preview && compose.contentType === 'text/x.misskeymarkdown') {
+      const { defaultContentType } = useSettingsStore.getState().settings;
+
+      let contentType = getComposeContentType(
+        compose.contentType,
+        defaultContentType,
+        instance.pleroma.metadata.post_formats,
+      );
+
+      if (preview && contentType === 'text/x.misskeymarkdown') {
         const data: Partial<Status> = {
           text: compose.text,
           content: compose.text,
@@ -834,11 +843,7 @@ const useSubmitCompose = (composeId: string) => {
 
       const idempotencyKey = compose.idempotencyKey;
 
-      const { defaultContentType, defaultPrivacy } = useSettingsStore.getState().settings;
-
-      let contentType = compose.contentType;
-      if (contentType === 'default') contentType = defaultContentType;
-      if (contentType === 'wysiwyg') contentType = 'text/markdown';
+      const { defaultPrivacy } = useSettingsStore.getState().settings;
 
       let visibility = compose.visibility;
       if (visibility === 'default') visibility = defaultPrivacy;
@@ -1106,12 +1111,11 @@ const useComposeVisibility = (composeId: string) => {
   return visibility;
 };
 
-const useComposeContentType = (composeId: string) => {
-  const { contentType } = useCompose(composeId);
-  const instance = useInstance();
-  const postFormats = instance.pleroma.metadata.post_formats;
-  const { defaultContentType } = useSettings();
-
+const getComposeContentType = (
+  contentType: string,
+  defaultContentType: string,
+  postFormats: string[],
+) => {
   if (contentType === 'default') {
     const resolvedContentType =
       defaultContentType === 'wysiwyg' ? 'text/markdown' : defaultContentType;
@@ -1120,6 +1124,15 @@ const useComposeContentType = (composeId: string) => {
   }
 
   return contentType;
+};
+
+const useComposeContentType = (composeId: string) => {
+  const { contentType } = useCompose(composeId);
+  const instance = useInstance();
+  const postFormats = instance.pleroma.metadata.post_formats;
+  const { defaultContentType } = useSettings();
+
+  return getComposeContentType(contentType, defaultContentType, postFormats);
 };
 
 export {
