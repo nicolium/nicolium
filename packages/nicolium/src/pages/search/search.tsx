@@ -34,17 +34,13 @@ interface ISearchInput {
   className?: string;
   placeholder?: string;
   query?: string;
+  setQuery?: (value: string) => void;
 }
 
-const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) => {
-  const navigate = useNavigate({ from: searchRoute.fullPath });
+const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query, setQuery }) => {
   const [value, setValue] = useState(query ?? '');
 
   const intl = useIntl();
-
-  const setQuery = (value: string) => {
-    navigate({ search: (prev) => ({ ...prev, q: value }) });
-  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -202,16 +198,22 @@ const SearchResults = () => {
 const SearchPage = () => {
   const intl = useIntl();
 
+  const navigate = useNavigate({ from: searchRoute.fullPath });
+
   const { q: query } = searchRoute.useSearch();
+
+  const setQuery = (value: string) => {
+    navigate({ search: (prev) => ({ ...prev, q: value }) });
+  };
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <div className='search-page'>
-        <SearchInput className='search-page__input' query={query} />
+        <SearchInput className='search-page__input' query={query} setQuery={setQuery} />
         <SearchResults />
       </div>
     </Column>
   );
 };
 
-export { SearchInput, SearchPage as default };
+export { SearchInput, SearchResults, SearchPage as default };

@@ -12,7 +12,6 @@ import {
 import { instanceSchema } from 'pl-api';
 import React, { useMemo } from 'react';
 import * as v from 'valibot';
-import * as val from 'valibot';
 
 import { FE_SUBDIRECTORY } from '@/build-config';
 import SiteError from '@/components/site-error';
@@ -95,6 +94,8 @@ const wrapDefaultSettings = (Component: React.FC) => {
     </React.Suspense>
   );
 };
+
+wrapDefaultSettings.displayName = 'wrapDefaultSettings';
 
 const layouts = {
   admin: createRoute({
@@ -1403,8 +1404,14 @@ export const federationRestrictionsRoute = createRoute({
   },
 });
 
-// #region Redirects
+export const deckRoute = createRoute({
+  getParentRoute: () => layouts.fullWidth,
+  path: '/deck',
+  component: lazy(() => import('@/pages/deck/deck')),
+  beforeLoad: requireAuth,
+});
 
+// #region Redirects
 const redirectPlFeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/pl-fe/$',
@@ -1679,7 +1686,7 @@ const routeTree = rootRoute.addChildren([
   layouts.event.addChildren([eventInformationRoute, eventDiscussionRoute]),
   layouts.events.addChildren([eventsRoute, newEventRoute, eventEditRoute]),
   layouts.externalLogin.addChildren([loginExternalRoute]),
-  layouts.fullWidth.addChildren([newStatusRoute]),
+  layouts.fullWidth.addChildren([newStatusRoute, deckRoute]),
   layouts.group.addChildren([groupTimelineRoute, groupMembersRoute, groupGalleryRoute]),
   layouts.groups.addChildren([groupsRoute]),
   layouts.home.addChildren([
@@ -1761,7 +1768,7 @@ const router = createRouter({
   routeTree,
   basepath: FE_SUBDIRECTORY,
   context: {
-    instance: val.parse(instanceSchema, {}),
+    instance: v.parse(instanceSchema, {}),
     features: {} as Features,
     isLoggedIn: false,
     isAdmin: false,

@@ -165,6 +165,7 @@ const timelineSchema = v.fallback(
 );
 
 const baseDeckColumnSchema = v.object({
+  id: v.fallback(v.string(), crypto.randomUUID()),
   columnWidth: v.fallback(v.picklist(['xs', 'sm', 'md', 'lg', 'xl']), 'md'),
 });
 
@@ -209,7 +210,7 @@ const deckSettingsSchema = v.fallback(
     columns: [
       {
         type: 'timeline',
-        columnWidth: 'md',
+        columnWidth: 'lg',
         timeline: 'home',
       },
       {
@@ -392,6 +393,7 @@ const settingsSchema = v.object({
   deck: deckSettingsSchema,
 });
 
+type DeckColumn = v.InferOutput<typeof deckColumnSchema>;
 type Settings = v.InferOutput<typeof settingsSchema>;
 type TimelineFilters = Settings['timelines']['home'];
 
@@ -399,6 +401,7 @@ export {
   settingsSchema,
   type NavigationItem,
   type SidebarItem,
+  type DeckColumn,
   type Settings,
   type TimelineFilters,
   AVAILABLE_NAVIGATION_ITEMS,

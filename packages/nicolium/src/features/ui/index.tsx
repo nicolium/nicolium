@@ -23,7 +23,7 @@ import { usePrefetchNotificationsMarker } from '@/queries/markers/use-markers';
 import { usePrefetchNotifications } from '@/queries/notifications/use-notifications';
 import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
-import { newStatusRoute } from '@/router';
+import { deckRoute, newStatusRoute } from '@/router';
 import { useAuthStore } from '@/stores/auth';
 import { useInstance, useInstanceStore } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
@@ -151,6 +151,8 @@ const UI: React.FC = React.memo(() => {
   }, [!!account]);
 
   const shouldNotShrink = useMinWidth('(min-width: 976px)');
+  const fullWidth = !!useMatch({ from: deckRoute.id, shouldThrow: false });
+  const shrink = fullWidth || !shouldNotShrink;
 
   // Wait for login to succeed or fail
   if (me === null) return null;
@@ -158,8 +160,6 @@ const UI: React.FC = React.memo(() => {
   const style: React.CSSProperties = {
     pointerEvents: isDropdownMenuOpen ? 'none' : undefined,
   };
-  const fullWidth = false; // !!matchPath(history.location.pathname, '/deck');
-  const shrink = fullWidth || !shouldNotShrink;
 
   return (
     <GlobalHotkeys node={node}>

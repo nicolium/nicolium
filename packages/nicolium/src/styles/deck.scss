@@ -1,0 +1,109 @@
+@use 'mixins';
+@use 'variables';
+
+.deck {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  height: calc(100% - 3.25rem - 1px);
+  margin: 0 1rem;
+
+  .black & {
+    @media (min-width: variables.$breakpoint-sm) {
+      height: calc(100% - 3.25rem - 1px);
+    }
+
+    @media (min-width: variables.$breakpoint-lg) {
+      height: 100%;
+    }
+  }
+
+  &__columns {
+    display: flex;
+    gap: 1rem;
+    height: 100%;
+
+    .black & {
+      gap: 0;
+    }
+  }
+
+  &__column {
+    @include mixins.card($variant: rounded);
+
+    position: relative;
+    overflow: hidden;
+    width: 28rem;
+    height: 100%;
+
+    &--xs {
+      width: 20rem;
+    }
+
+    &--sm {
+      width: 24rem;
+    }
+
+    &--lg {
+      width: 32rem;
+    }
+
+    &--xl {
+      width: 36rem;
+    }
+
+    &__overlay {
+      position: absolute;
+      inset: 0;
+      background: variables.opaque(--color-gray-900, 0.05);
+    }
+
+    &__content {
+      position: relative;
+      height: 100%;
+      background: white;
+
+      &:has(.card-header) {
+        margin: 0 -1rem;
+        padding: 0 1rem;
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-lg);
+        
+        .card-header {
+          padding: 0.5rem 0;
+        }
+
+        .black & {
+          border-top: 1px solid var(--color-gray-800);
+        }
+      }
+
+      .dark & {
+        background: var(--color-primary-900);
+      }
+
+      .black & {
+        background: black;
+      }
+    }
+
+    .black & {
+      border-left: 1px solid var(--color-gray-800);
+    }
+  }
+
+  &__add-column-button {
+    @include mixins.button;
+
+    min-width: fit-content;
+  }
+
+  @media (min-width: variables.$breakpoint-sm) {
+    height: calc(100% - 3.25rem - 1px - 1rem);
+  }
+
+  @media (min-width: variables.$breakpoint-lg) {
+    height: calc(100% - 1rem);
+  }
+}
