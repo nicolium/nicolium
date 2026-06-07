@@ -43,6 +43,7 @@ const AVAILABLE_NAVIGATION_ITEMS = [
   'birthdays',
   'circle',
   'compose',
+  'deck',
 ] as const;
 
 const DEFAULT_PINNED_NAVIGATION_ITEMS = [

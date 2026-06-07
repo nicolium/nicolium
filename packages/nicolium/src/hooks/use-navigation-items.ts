@@ -8,6 +8,7 @@ import iconChatsTeardropFill from '@phosphor-icons/core/fill/chats-teardrop-fill
 import iconCircleFill from '@phosphor-icons/core/fill/circle-fill.svg';
 import iconCirclesThreeFill from '@phosphor-icons/core/fill/circles-three-fill.svg';
 import iconCloudFill from '@phosphor-icons/core/fill/cloud-fill.svg';
+import iconColumnsFill from '@phosphor-icons/core/fill/columns-fill.svg';
 import iconEnvelopeSimpleFill from '@phosphor-icons/core/fill/envelope-simple-fill.svg';
 import iconFediverseLogoFill from '@phosphor-icons/core/fill/fediverse-logo-fill.svg';
 import iconFunnelFill from '@phosphor-icons/core/fill/funnel-fill.svg';
@@ -40,6 +41,7 @@ import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconCircle from '@phosphor-icons/core/regular/circle.svg';
 import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
 import iconCloud from '@phosphor-icons/core/regular/cloud.svg';
+import iconColumns from '@phosphor-icons/core/regular/columns.svg';
 import iconEnvelopeSimple from '@phosphor-icons/core/regular/envelope-simple.svg';
 import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
 import iconFunnel from '@phosphor-icons/core/regular/funnel.svg';
@@ -140,6 +142,7 @@ const messages = defineMessages({
   circles: { id: 'column.circles', defaultMessage: 'Circles' },
   conversations: { id: 'column.direct', defaultMessage: 'Direct messages' },
   dashboard: { id: 'column.admin.dashboard', defaultMessage: 'Dashboard' },
+  deck: { id: 'column.deck', defaultMessage: 'Deck' },
   directory: { id: 'column.directory', defaultMessage: 'Profile directory' },
   'domain-blocks': { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
@@ -214,6 +217,7 @@ const NAVIGATION_ITEM_PATHS: Record<string, LinkOptions['to']> = {
   circle: '/circle',
   announcements: '/announcements',
   birthdays: '/birthdays',
+  deck: '/deck',
 };
 
 const NAVIGATION_ITEM_ICONS: Record<string, { icon: string; activeIcon: string }> = {
@@ -243,6 +247,7 @@ const NAVIGATION_ITEM_ICONS: Record<string, { icon: string; activeIcon: string }
   circle: { icon: iconCircle, activeIcon: iconCircleFill },
   announcements: { icon: iconMegaphone, activeIcon: iconMegaphoneFill },
   birthdays: { icon: iconBalloon, activeIcon: iconBalloonFill },
+  deck: { icon: iconColumns, activeIcon: iconColumnsFill },
 };
 
 const NAVIGATION_ITEMS_GATE: Partial<

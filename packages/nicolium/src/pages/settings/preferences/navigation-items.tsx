@@ -8,6 +8,7 @@ import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconCircle from '@phosphor-icons/core/regular/circle.svg';
 import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
 import iconCloud from '@phosphor-icons/core/regular/cloud.svg';
+import iconColumns from '@phosphor-icons/core/regular/columns.svg';
 import iconDotsSixVertical from '@phosphor-icons/core/regular/dots-six-vertical.svg';
 import iconEnvelopeSimple from '@phosphor-icons/core/regular/envelope-simple.svg';
 import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
@@ -106,6 +107,7 @@ const itemsMessages = {
   circles: { id: 'column.circles', defaultMessage: 'Circles' },
   conversations: { id: 'column.direct', defaultMessage: 'Direct messages' },
   dashboard: { id: 'column.admin.dashboard', defaultMessage: 'Dashboard' },
+  deck: { id: 'column.deck', defaultMessage: 'Deck' },
   directory: { id: 'column.directory', defaultMessage: 'Profile directory' },
   'domain-blocks': { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
@@ -150,6 +152,7 @@ const itemsIcons: Record<AvailableNavigationItem, string> = {
   circles: iconCirclesThree,
   conversations: iconEnvelopeSimple,
   dashboard: iconGauge,
+  deck: iconColumns,
   directory: iconAddressBook,
   'domain-blocks': iconProhibit,
   drafts: iconPencilSimple,
