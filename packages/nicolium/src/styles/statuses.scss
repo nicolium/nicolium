@@ -1575,14 +1575,14 @@ a.status-card {
       conic-gradient(
         from -45deg at bottom,
         transparent,
-        rgb(var(--separator-border)) 1deg 89deg,
+        var(--separator-border) 1deg 89deg,
         transparent 90deg
       )
       bottom/2rem calc(50% + 1px) repeat-x,
       conic-gradient(
         from 135deg at top,
         transparent,
-        rgb(var(--separator-border)) 1deg 89deg,
+        var(--separator-border) 1deg 89deg,
         transparent 90deg
       )
       top / 2rem calc(50% + 1px) repeat-x;
@@ -1610,14 +1610,14 @@ a.status-card {
         conic-gradient(
           from -45deg at bottom,
           transparent,
-          rgb(var(--separator-background)) 1deg 89deg,
+          var(--separator-background) 1deg 89deg,
           transparent 90deg
         )
         bottom/2rem calc(50% + 1px) repeat-x,
         conic-gradient(
           from 135deg at top,
           transparent,
-          rgb(var(--separator-background)) 1deg 89deg,
+          var(--separator-background) 1deg 89deg,
           transparent 90deg
         )
         top / 2rem calc(50% + 1px) repeat-x;
