@@ -84,6 +84,19 @@
       gap: 0.5rem;
     }
 
+    &__add-profile {
+      margin-left: auto;
+      color: var(--color-gray-600);
+
+      &:hover {
+        color: var(--color-gray-700);
+
+        .dark & {
+          color: var(--color-gray-500);
+        }
+      }
+    }
+
     &__overlay {
       position: absolute;
       z-index: 10;

@@ -1,6 +1,7 @@
 import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import iconArrowRight from '@phosphor-icons/core/regular/arrow-right.svg';
 import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import {
   createMemoryHistory,
@@ -39,6 +40,7 @@ import MissingIndicator from '@/components/missing-indicator';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import { useTimelineHeading } from '@/components/timeline-picker';
 import { CardHeader, CardTitle } from '@/components/ui/card';
+import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import Tabs from '@/components/ui/tabs';
 import { MultiColumnProvider } from '@/contexts/multi-column-context';
@@ -86,6 +88,10 @@ const messages = defineMessages({
   moveRight: { id: 'column.deck.position.right', defaultMessage: 'Move column right' },
   showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies' },
   showPinned: { id: 'column.deck.account.show_pinned', defaultMessage: 'Show pinned posts' },
+  addProfileColumn: {
+    id: 'column.deck.add_profile',
+    defaultMessage: 'Add profile to deck',
+  },
 });
 
 const SEARCH_FILTERS = ['accounts', 'statuses', 'hashtags', 'links'] as const;
@@ -132,15 +138,56 @@ interface RouterContext {
 const RootRoute: React.FC = () => {
   const intl = useIntl();
   const router = useRouter();
+  const columns = useSettings().deck.columns;
   const [content, setContent] = useState<HTMLElement | null>(null);
   const [canGoBack, setCanGoBack] = useState(() => router.history.canGoBack());
 
-  const title = useRouterState({
+  const { title, leaf } = useRouterState({
     select: (state) => {
-      const leaf = state.matches[state.matches.length - 1];
-      return (leaf?.staticData as { title?: MessageDescriptor } | undefined)?.title;
+      const match = state.matches[state.matches.length - 1];
+      const params = (match?.params ?? {}) as {
+        username?: string;
+        accountId?: string;
+        statusId?: string;
+      };
+      return {
+        title: (match?.staticData as { title?: MessageDescriptor } | undefined)?.title,
+        leaf: { routeId: match?.routeId as string | undefined, params },
+      };
     },
   });
+
+  const username = leaf.routeId === accountByUsernameRoute.id ? leaf.params.username : undefined;
+  const { data: lookedUpAccount } = useAccountLookup(username);
+  const accountId =
+    leaf.routeId === accountByUsernameRoute.id
+      ? lookedUpAccount?.id
+      : leaf.routeId === accountRoute.id && !leaf.params.statusId
+        ? leaf.params.accountId
+        : undefined;
+
+  const canAddProfile =
+    !!accountId &&
+    !columns.some((column) => column.type === 'account' && column.accountId === accountId);
+
+  const handleAddProfile = () => {
+    if (!accountId) return;
+    const current = useSettingsStore.getState().settings.deck.columns;
+    changeSetting(
+      ['deck', 'columns'],
+      [
+        ...current,
+        {
+          id: crypto.randomUUID(),
+          columnWidth: 'md',
+          type: 'account',
+          accountId,
+          excludeReplies: false,
+          showPinned: true,
+        },
+      ],
+    );
+  };
 
   const handleClickOutside: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
@@ -167,6 +214,14 @@ const RootRoute: React.FC = () => {
         {canGoBack && (
           <CardHeader onBackClick={() => router.history.back()}>
             {title && <CardTitle title={intl.formatMessage(title)} />}
+            {canAddProfile && (
+              <IconButton
+                className='deck__column__add-profile'
+                src={iconPlus}
+                onClick={handleAddProfile}
+                title={intl.formatMessage(messages.addProfileColumn)}
+              />
+            )}
           </CardHeader>
         )}
         <MultiColumnProvider scrollParent={content}>

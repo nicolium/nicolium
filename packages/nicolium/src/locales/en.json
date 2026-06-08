@@ -632,6 +632,7 @@
   "column.deck": "Deck",
   "column.deck.account.show_pinned": "Show pinned posts",
   "column.deck.add": "Add column",
+  "column.deck.add_profile": "Add profile to deck",
   "column.deck.error": "Failed to load column",
   "column.deck.position.left": "Move column left",
   "column.deck.position.right": "Move column right",
