@@ -633,6 +633,9 @@ a.status-card {
     border-width: 1px;
     border-radius: var(--radius-md);
 
+    font-size: 1.25rem;
+    line-height: 1;
+
     background-color: transparent;
 
     transition: all 150ms var(--ease-default);
