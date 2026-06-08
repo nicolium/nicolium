@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
@@ -46,6 +46,29 @@ const DeckPage = () => {
   const intl = useIntl();
   const { deck } = useSettings();
 
+  const [addedColumnId, setAddedColumnId] = useState<string | null>(null);
+  const knownColumnIds = useRef<Set<string> | null>(null);
+
+  useEffect(() => {
+    const currentIds = deck.columns.map((column) => column.id);
+
+    if (knownColumnIds.current === null) {
+      knownColumnIds.current = new Set(currentIds);
+      return;
+    }
+
+    const added = currentIds.find((id) => !knownColumnIds.current!.has(id));
+    knownColumnIds.current = new Set(currentIds);
+
+    if (added) setAddedColumnId(added);
+  }, [deck.columns]);
+
+  useEffect(() => {
+    if (!addedColumnId) return;
+    const timeout = setTimeout(() => setAddedColumnId(null), 22000);
+    return () => clearTimeout(timeout);
+  }, [addedColumnId]);
+
   const updateColumns = (columns: Array<DeckColumnSchema>) =>
     changeSetting(['deck', 'columns'], columns);
 
@@ -88,6 +111,7 @@ const DeckPage = () => {
                 column={column}
                 index={index}
                 columns={deck.columns.length}
+                highlight={column.id === addedColumnId}
                 onRemove={handleRemove}
                 onChangeWidth={handleChangeWidth}
                 onChangeIndex={handleChangeIndex}

@@ -14,9 +14,10 @@ import {
   useRouterState,
 } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
+import clsx from 'clsx';
 import iconChevronsLeftRight from 'lucide-static/icons/chevrons-left-right.svg';
 import iconChevronsRightLeft from 'lucide-static/icons/chevrons-right-left.svg';
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
@@ -621,6 +622,7 @@ interface IDeckColumn {
   column: DeckColumn;
   index: number;
   columns: number;
+  highlight?: boolean;
   onRemove: (id: string) => void;
   onChangeWidth: (id: string, newWidth: (typeof WIDTHS)[number]) => void;
   onChangeIndex: (id: string, newIndex: number) => void;
@@ -630,6 +632,7 @@ const DeckColumn: React.FC<IDeckColumn> = ({
   column,
   index,
   columns,
+  highlight,
   onRemove,
   onChangeWidth,
   onChangeIndex,
@@ -639,6 +642,18 @@ const DeckColumn: React.FC<IDeckColumn> = ({
   const features = useFeatures();
   const title = useColumnTitle(column);
   const router = getDeckColumnRouter(column);
+  const columnRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (highlight) {
+      columnRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'center',
+      });
+      columnRef.current?.focus();
+    }
+  }, [highlight]);
 
   const items = useMemo(() => {
     const handleWiden = () => {
@@ -725,7 +740,13 @@ const DeckColumn: React.FC<IDeckColumn> = ({
   );
 
   return (
-    <div className={`deck__column deck__column--${column.columnWidth}`}>
+    <div
+      ref={columnRef}
+      className={clsx('deck__column', `deck__column--${column.columnWidth}`, {
+        'deck__column--highlight': highlight,
+      })}
+      tabIndex={-1}
+    >
       <CardHeader className='deck__column__header'>
         <CardTitle title={title} />
         <div className='deck__column__actions'>
