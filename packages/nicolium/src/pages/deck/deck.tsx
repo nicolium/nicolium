@@ -1,13 +1,12 @@
-import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import HeadTitle from '@/components/helmet';
-import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';
 
 import { DeckColumn } from './components/deck-column';
+import { NewColumnButton } from './components/new-column-button';
 
 import type { DeckColumn as DeckColumnSchema } from '@/schemas/frontend-settings';
 
@@ -96,10 +95,7 @@ const DeckPage = () => {
             </ColumnErrorBoundary>
           ))}
         </div>
-        <button className='deck__add-column-button'>
-          <Icon src={iconPlus} aria-hidden />
-          <FormattedMessage id='column.deck.add' defaultMessage='Add column' />
-        </button>
+        <NewColumnButton />
       </div>
     </>
   );

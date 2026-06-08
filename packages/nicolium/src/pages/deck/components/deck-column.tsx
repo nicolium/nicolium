@@ -37,6 +37,7 @@ import AccountHeader from '@/components/accounts/account-header';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
+import { useTimelineHeading } from '@/components/timeline-picker';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Input from '@/components/ui/input';
 import Tabs from '@/components/ui/tabs';
@@ -112,13 +113,12 @@ const useDeckColumnConfig = <T extends DeckColumn>() => {
 
 const useColumnTitle = (column: DeckColumn): string => {
   const intl = useIntl();
+  const timelineHeading = useTimelineHeading(
+    column.type === 'timeline' ? (column.timeline as any) : null,
+  );
 
   if (column.type === 'timeline') {
-    const prefix = column.timeline.split(':')[0];
-    if (prefix in messages) {
-      return intl.formatMessage(messages[prefix as keyof typeof messages]);
-    }
-    return intl.formatMessage(messages.timeline);
+    return timelineHeading;
   }
 
   return intl.formatMessage(messages[column.type]);

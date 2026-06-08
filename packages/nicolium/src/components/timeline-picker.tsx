@@ -34,6 +34,45 @@ const messages = defineMessages({
   pinnedInstances: { id: 'timeline_picker.pinned_instances', defaultMessage: 'Pinned instances' },
 });
 
+const useTimelineHeading = (active: ITimelinePicker['active'] | null) => {
+  const intl = useIntl();
+  const { data: lists } = useLists(active?.startsWith('list:'));
+  const { data: circles } = useCircles(active?.startsWith('circle:'));
+  const { data: antennas } = useAntennas(active?.startsWith('antenna:'));
+
+  return useMemo(() => {
+    switch (active) {
+      case 'home':
+        return intl.formatMessage(messages.homeTimeline);
+      case 'local':
+        return intl.formatMessage(messages.localTimeline);
+      case 'bubble':
+        return intl.formatMessage(messages.bubbleTimeline);
+      case 'federated':
+        return intl.formatMessage(messages.federatedTimeline);
+      case 'wrenched':
+        return intl.formatMessage(messages.wrenchedTimeline);
+      default:
+        if (active?.startsWith('list:')) {
+          const list = lists?.find((list) => `list:${list.id}` === active);
+          return list?.title ?? '';
+        }
+        if (active?.startsWith('circle:')) {
+          const circle = circles?.find((circle) => `circle:${circle.id}` === active);
+          return circle?.title ?? '';
+        }
+        if (active?.startsWith('antenna:')) {
+          const antenna = antennas?.find((antenna) => `antenna:${antenna.id}` === active);
+          return antenna?.title ?? '';
+        }
+        if (active?.startsWith('instance:')) {
+          return active.replace('instance:', '');
+        }
+        return '';
+    }
+  }, [active, lists, circles, antennas]);
+};
+
 interface ITimelinePicker {
   active:
     | 'home'
@@ -63,37 +102,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
   const { data: circles } = useCircles();
   const { data: antennas } = useAntennas();
 
-  const heading = useMemo(() => {
-    switch (active) {
-      case 'home':
-        return intl.formatMessage(messages.homeTimeline);
-      case 'local':
-        return intl.formatMessage(messages.localTimeline);
-      case 'bubble':
-        return intl.formatMessage(messages.bubbleTimeline);
-      case 'federated':
-        return intl.formatMessage(messages.federatedTimeline);
-      case 'wrenched':
-        return intl.formatMessage(messages.wrenchedTimeline);
-      default:
-        if (active.startsWith('list:')) {
-          const list = lists?.find((list) => `list:${list.id}` === active);
-          return list?.title ?? '';
-        }
-        if (active.startsWith('circle:')) {
-          const circle = circles?.find((circle) => `circle:${circle.id}` === active);
-          return circle?.title ?? '';
-        }
-        if (active.startsWith('antenna:')) {
-          const antenna = antennas?.find((antenna) => `antenna:${antenna.id}` === active);
-          return antenna?.title ?? '';
-        }
-        if (active.startsWith('instance:')) {
-          return active.replace('instance:', '');
-        }
-        return '';
-    }
-  }, [active, lists, circles, antennas]);
+  const heading = useTimelineHeading(active);
 
   const items = useMemo(() => {
     const items: Menu = [];
@@ -242,4 +251,4 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
   );
 };
 
-export { TimelinePicker };
+export { TimelinePicker, useTimelineHeading };
