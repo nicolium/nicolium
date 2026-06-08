@@ -630,6 +630,7 @@
   "column.community": "Local timeline",
   "column.crypto_donate": "Donate cryptocurrency",
   "column.deck": "Deck",
+  "column.deck.account.show_pinned": "Show pinned posts",
   "column.deck.add": "Add column",
   "column.deck.error": "Failed to load column",
   "column.deck.position.left": "Move column left",

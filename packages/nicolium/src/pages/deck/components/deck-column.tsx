@@ -15,10 +15,11 @@ import {
 import { useNavigate } from '@tanstack/react-router';
 import iconChevronsLeftRight from 'lucide-static/icons/chevrons-left-right.svg';
 import iconChevronsRightLeft from 'lucide-static/icons/chevrons-right-left.svg';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
+import { changeSetting } from '@/actions/settings';
 import NotificationsColumn from '@/columns/notifications';
 import SearchColumn from '@/columns/search';
 import {
@@ -46,10 +47,13 @@ import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
+import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
 import { useStatus } from '@/queries/statuses/use-status';
 import { router as appRouter } from '@/router';
 import { useInstance } from '@/stores/instance';
+import { useSettings, useSettingsStore } from '@/stores/settings';
 
+import type { FilterType } from '@/queries/notifications/use-notifications';
 import type { DeckColumn } from '@/schemas/frontend-settings';
 import type { MessageDescriptor } from 'react-intl';
 
@@ -65,7 +69,7 @@ const messages = defineMessages({
   searchPlaceholder: { id: 'search.placeholder', defaultMessage: 'Search' },
   home: { id: 'column.home', defaultMessage: 'Home' },
   local: { id: 'column.community', defaultMessage: 'Local timeline' },
-  federated: { id: 'column.public', defaultMessage: 'Federated timeline' },
+  federated: { id: 'column.public', defaultMessage: 'Fediverse timeline' },
   bubble: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
   wrenched: { id: 'column.wrenched', defaultMessage: 'Wrenched timeline' },
   timeline: { id: 'column.deck.timeline', defaultMessage: 'Timeline' },
@@ -79,9 +83,32 @@ const messages = defineMessages({
   widen: { id: 'column.deck.width.widen', defaultMessage: 'Widen column' },
   moveLeft: { id: 'column.deck.position.left', defaultMessage: 'Move column left' },
   moveRight: { id: 'column.deck.position.right', defaultMessage: 'Move column right' },
+  showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies' },
+  showPinned: { id: 'column.deck.account.show_pinned', defaultMessage: 'Show pinned posts' },
 });
 
 const SEARCH_FILTERS = ['accounts', 'statuses', 'hashtags', 'links'] as const;
+
+const DeckColumnIdContext = createContext<string | null>(null);
+
+const updateDeckColumn = (columnId: string, changes: Partial<DeckColumn>) => {
+  const { columns } = useSettingsStore.getState().settings.deck;
+  changeSetting(
+    ['deck', 'columns'],
+    columns.map((column) => (column.id === columnId ? { ...column, ...changes } : column)),
+  );
+};
+
+const useDeckColumnConfig = <T extends DeckColumn>() => {
+  const columnId = useContext(DeckColumnIdContext);
+  const column = useSettings().deck.columns.find((item) => item.id === columnId) as T | undefined;
+
+  const update = (changes: Partial<T>) => {
+    if (columnId) updateDeckColumn(columnId, changes);
+  };
+
+  return [column, update] as const;
+};
 
 const useColumnTitle = (column: DeckColumn): string => {
   const intl = useIntl();
@@ -251,7 +278,17 @@ const instanceRoute = createRoute({
   staticData: { title: messages.timeline },
 });
 
-const NotificationsDeckColumn = () => <NotificationsColumn />;
+const NotificationsDeckColumn = () => {
+  const [column, updateColumn] =
+    useDeckColumnConfig<Extract<DeckColumn, { type: 'notifications' }>>();
+
+  return (
+    <NotificationsColumn
+      filter={column?.filter ?? 'all'}
+      onChangeFilter={(filter: FilterType) => updateColumn({ filter })}
+    />
+  );
+};
 const notificationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/notifications',
@@ -280,11 +317,19 @@ const SearchDeckColumn = () => {
     setValue(q);
   }, [q]);
 
-  const submit = (query: string) => navigate({ search: (prev) => ({ ...prev, q: query }) });
+  const [, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'search' }>>();
 
-  const items = SEARCH_FILTERS.filter((filter) => filter !== 'links').map((filter) => ({
+  const submit = (query: string) => {
+    navigate({ search: (prev) => ({ ...prev, q: query }) });
+    updateColumn({ query });
+  };
+
+  const items = (['accounts', 'statuses', 'hashtags'] as const).map((filter) => ({
     text: intl.formatMessage(searchTabMessages[filter]),
-    action: () => navigate({ search: (prev) => ({ ...prev, type: filter }) }),
+    action: () => {
+      navigate({ search: (prev) => ({ ...prev, type: filter }) });
+      updateColumn({ searchType: filter });
+    },
     name: filter,
   }));
 
@@ -328,9 +373,17 @@ interface IAccountColumnBody {
   account?: React.ComponentProps<typeof ProfileInfoPanel>['account'];
   username: string;
   accountId?: string;
+  excludeReplies?: boolean;
+  featuredStatusIds?: Array<string>;
 }
 
-const AccountColumnBody: React.FC<IAccountColumnBody> = ({ account, username, accountId }) => (
+const AccountColumnBody: React.FC<IAccountColumnBody> = ({
+  account,
+  username,
+  accountId,
+  excludeReplies,
+  featuredStatusIds,
+}) => (
   <>
     <AccountHeader key={`deck-header-${accountId}`} account={account} />
     <React.Suspense fallback={null}>
@@ -341,7 +394,13 @@ const AccountColumnBody: React.FC<IAccountColumnBody> = ({ account, username, ac
         withStatusesLink={false}
       />
     </React.Suspense>
-    {accountId && <AccountTimelineColumn accountId={accountId} />}
+    {accountId && (
+      <AccountTimelineColumn
+        accountId={accountId}
+        excludeReplies={excludeReplies}
+        featuredStatusIds={featuredStatusIds}
+      />
+    )}
   </>
 );
 
@@ -350,9 +409,17 @@ const AccountDeckColumn = () => {
   const ownAccount = useOwnAccount();
   const resolvedId = accountId === 'self' ? ownAccount.data?.id : accountId;
   const { data: account } = useAccount(resolvedId);
+  const [column] = useDeckColumnConfig<Extract<DeckColumn, { type: 'account' }>>();
+  const { data: featuredStatusIds } = usePinnedStatuses(resolvedId ?? '');
 
   return (
-    <AccountColumnBody account={account} username={account?.acct ?? ''} accountId={resolvedId} />
+    <AccountColumnBody
+      account={account}
+      username={account?.acct ?? ''}
+      accountId={resolvedId}
+      excludeReplies={column?.excludeReplies}
+      featuredStatusIds={column?.showPinned ? featuredStatusIds : undefined}
+    />
   );
 };
 
@@ -460,7 +527,7 @@ const columnSignature = (column: DeckColumn): string => {
     case 'account':
       return `account:${column.accountId ?? 'self'}`;
     case 'search':
-      return `search:${column.searchType}:${column.query}`;
+      return 'search';
     default:
       return 'unknown';
   }
@@ -573,8 +640,26 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       },
     ];
 
+    if (column.type === 'account') {
+      menu.unshift(
+        {
+          text: intl.formatMessage(messages.showReplies),
+          type: 'toggle',
+          checked: !column.excludeReplies,
+          onChange: (value) => updateDeckColumn(column.id, { excludeReplies: !value }),
+        },
+        {
+          text: intl.formatMessage(messages.showPinned),
+          type: 'toggle',
+          checked: column.showPinned,
+          onChange: (value) => updateDeckColumn(column.id, { showPinned: value }),
+        },
+        null,
+      );
+    }
+
     return menu;
-  }, [intl, index, columns, column.columnWidth]);
+  }, [intl, index, columns, column]);
 
   const context: RouterContext = useMemo(
     () => ({
@@ -592,7 +677,9 @@ const DeckColumn: React.FC<IDeckColumn> = ({
           <DropdownMenu items={items} src={iconDotsThreeVertical} />
         </div>
       </CardHeader>
-      <RouterProvider router={router} context={context} />
+      <DeckColumnIdContext.Provider value={column.id}>
+        <RouterProvider router={router} context={context} />
+      </DeckColumnIdContext.Provider>
     </div>
   );
 };

@@ -60,18 +60,27 @@ const messages = defineMessages({
   follows: { id: 'notifications.filter.follows', defaultMessage: 'Follows' },
 });
 
-const FilterBar = () => {
+interface IFilterBar {
+  selected?: FilterType;
+  onSelect?: (filter: FilterType) => void;
+}
+
+const FilterBar: React.FC<IFilterBar> = ({ selected, onSelect }) => {
   const intl = useIntl();
   const { notifications: notificationsSettings, useRocketIconForReblogs } = useSettings();
   const { changeSetting } = useSettingsStoreActions();
   const features = useFeatures();
 
-  const selectedFilter = notificationsSettings.quickFilter.active;
+  const selectedFilter = selected ?? notificationsSettings.quickFilter.active;
   const advancedMode = notificationsSettings.quickFilter.advanced;
 
   const onClick = (filterType: FilterType) => () => {
-    changeSetting(['notifications', 'quickFilter', 'active'], filterType);
-    saveSettings();
+    if (onSelect) {
+      onSelect(filterType);
+    } else {
+      changeSetting(['notifications', 'quickFilter', 'active'], filterType);
+      saveSettings();
+    }
     if (filterType === selectedFilter) {
       queryClient.refetchQueries({
         queryKey: queryKeys.notifications.list(filterType, notificationsSettings.hideBots),
@@ -148,9 +157,16 @@ const FilterBar = () => {
 interface INotificationsColumn {
   multiColumn?: boolean;
   compact?: boolean;
+  filter?: FilterType;
+  onChangeFilter?: (filter: FilterType) => void;
 }
 
-const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, compact }) => {
+const NotificationsColumn: React.FC<INotificationsColumn> = ({
+  multiColumn,
+  compact,
+  filter,
+  onChangeFilter,
+}) => {
   const features = useFeatures();
   const settings = useSettings();
   const { mutate: markNotificationsRead } = useMarkNotificationsReadMutation();
@@ -160,7 +176,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
     !compact &&
     (features.notificationsExcludeTypes || features.notificationsIncludeTypes) &&
     settings.notifications.quickFilter.show;
-  const activeFilter = compact ? 'all' : settings.notifications.quickFilter.active;
+  const activeFilter = compact ? 'all' : (filter ?? settings.notifications.quickFilter.active);
   const {
     data: notifications = [],
     isLoading,
@@ -289,7 +305,9 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn, comp
 
   let scrollableContent: Array<React.JSX.Element> | null = null;
 
-  const filterBarContainer = showFilterBar ? <FilterBar /> : null;
+  const filterBarContainer = showFilterBar ? (
+    <FilterBar selected={filter} onSelect={onChangeFilter} />
+  ) : null;
 
   if (isLoading && scrollableContentRef.current) {
     scrollableContent = scrollableContentRef.current;

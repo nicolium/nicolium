@@ -179,13 +179,18 @@ const timelineDeckColumnSchema = v.object({
 const notificationsColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('notifications'),
-  filters: v.fallback(v.array(v.string()), []),
+  filter: v.fallback(
+    v.picklist(['all', 'mention', 'favourite', 'reblog', 'poll', 'status', 'follow', 'events']),
+    'all',
+  ),
 });
 
 const accountColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('account'),
   accountId: v.fallback(v.optional(v.string()), undefined),
+  excludeReplies: v.fallback(v.boolean(), false),
+  showPinned: v.fallback(v.boolean(), false),
 });
 
 const searchColumnSchema = v.object({
@@ -219,13 +224,15 @@ const deckSettingsSchema = v.fallback(
         id: crypto.randomUUID(),
         type: 'notifications',
         columnWidth: 'md',
-        filters: [],
+        filter: 'all',
       },
       {
         id: crypto.randomUUID(),
         type: 'account',
         columnWidth: 'md',
         accountId: 'self',
+        excludeReplies: false,
+        showPinned: false,
       },
     ],
   },
