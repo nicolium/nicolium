@@ -110,10 +110,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     if (
       features.publicTimeline &&
       (isLoggedIn
-        ? timelineAccess.live_feeds.local !== 'disabled'
-        : timelineAccess.live_feeds.local === 'restricted'
+        ? timelineAccess.live_feeds.local === 'restricted'
           ? isAdmin
-          : timelineAccess.live_feeds.local === 'public')
+          : timelineAccess.live_feeds.local !== 'disabled'
+        : timelineAccess.live_feeds.local === 'public')
     ) {
       items.push({
         to: '/timeline/local',
@@ -126,10 +126,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     if (
       features.bubbleTimeline &&
       (isLoggedIn
-        ? timelineAccess.live_feeds.bubble !== 'disabled'
-        : timelineAccess.live_feeds.bubble === 'restricted'
+        ? timelineAccess.live_feeds.bubble === 'restricted'
           ? isAdmin
-          : timelineAccess.live_feeds.bubble === 'public')
+          : timelineAccess.live_feeds.bubble !== 'disabled'
+        : timelineAccess.live_feeds.bubble === 'public')
     ) {
       items.push({
         to: '/timeline/bubble',
@@ -141,10 +141,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     if (
       features.publicTimeline &&
       (isLoggedIn
-        ? timelineAccess.live_feeds.remote !== 'disabled'
-        : timelineAccess.live_feeds.remote === 'restricted'
+        ? timelineAccess.live_feeds.remote === 'restricted'
           ? isAdmin
-          : timelineAccess.live_feeds.remote === 'public')
+          : timelineAccess.live_feeds.remote !== 'disabled'
+        : timelineAccess.live_feeds.remote === 'public')
     ) {
       items.push({
         to: '/timeline/fediverse',
@@ -156,10 +156,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     if (
       features.wrenchedTimeline &&
       (isLoggedIn
-        ? timelineAccess.live_feeds.wrenched !== 'disabled'
-        : timelineAccess.live_feeds.wrenched === 'restricted'
+        ? timelineAccess.live_feeds.wrenched !== 'restricted'
           ? isAdmin
-          : timelineAccess.live_feeds.wrenched === 'public')
+          : timelineAccess.live_feeds.wrenched !== 'disabled'
+        : timelineAccess.live_feeds.wrenched === 'public')
     ) {
       items.push({
         to: '/timeline/wrenched',
