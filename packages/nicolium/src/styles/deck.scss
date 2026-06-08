@@ -12,10 +12,6 @@
 
   .black & {
     @media (min-width: variables.$breakpoint-sm) {
-      height: calc(100vh - 3.25rem - 1px);
-    }
-
-    @media (min-width: variables.$breakpoint-lg) {
       height: 100vh;
     }
   }
@@ -207,10 +203,6 @@
   }
 
   @media (min-width: variables.$breakpoint-sm) {
-    height: calc(100% - 3.25rem - 1px - 1rem);
-  }
-
-  @media (min-width: variables.$breakpoint-lg) {
     height: calc(100vh - 2rem);
   }
 }
