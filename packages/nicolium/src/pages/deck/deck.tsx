@@ -1,14 +1,19 @@
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
+import HeadTitle from '@/components/helmet';
 import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';
 
 import { DeckColumn } from './components/deck-column';
 
 import type { DeckColumn as DeckColumnSchema } from '@/schemas/frontend-settings';
+
+const messages = defineMessages({
+  deck: { id: 'column.deck', defaultMessage: 'Deck' },
+});
 
 interface IColumnErrorBoundary {
   fallback: React.ReactNode;
@@ -39,6 +44,7 @@ class ColumnErrorBoundary extends React.Component<IColumnErrorBoundary, { hasErr
 }
 
 const DeckPage = () => {
+  const intl = useIntl();
   const { deck } = useSettings();
 
   const updateColumns = (columns: Array<DeckColumnSchema>) =>
@@ -64,35 +70,38 @@ const DeckPage = () => {
   };
 
   return (
-    <div className='deck'>
-      <div className='deck__columns'>
-        {deck.columns.map((column, index) => (
-          <ColumnErrorBoundary
-            key={column.id}
-            fallback={
-              <div
-                className={`deck__column deck__column--error deck__column--${column.columnWidth}`}
-              >
-                <FormattedMessage id='column.deck.error' defaultMessage='Failed to load column' />
-              </div>
-            }
-          >
-            <DeckColumn
-              column={column}
-              index={index}
-              columns={deck.columns.length}
-              onRemove={handleRemove}
-              onChangeWidth={handleChangeWidth}
-              onChangeIndex={handleChangeIndex}
-            />
-          </ColumnErrorBoundary>
-        ))}
+    <>
+      <HeadTitle title={intl.formatMessage(messages.deck)} />
+      <div className='deck'>
+        <div className='deck__columns'>
+          {deck.columns.map((column, index) => (
+            <ColumnErrorBoundary
+              key={column.id}
+              fallback={
+                <div
+                  className={`deck__column deck__column--error deck__column--${column.columnWidth}`}
+                >
+                  <FormattedMessage id='column.deck.error' defaultMessage='Failed to load column' />
+                </div>
+              }
+            >
+              <DeckColumn
+                column={column}
+                index={index}
+                columns={deck.columns.length}
+                onRemove={handleRemove}
+                onChangeWidth={handleChangeWidth}
+                onChangeIndex={handleChangeIndex}
+              />
+            </ColumnErrorBoundary>
+          ))}
+        </div>
+        <button className='deck__add-column-button'>
+          <Icon src={iconPlus} aria-hidden />
+          <FormattedMessage id='column.deck.add' defaultMessage='Add column' />
+        </button>
       </div>
-      <button className='deck__add-column-button'>
-        <Icon src={iconPlus} aria-hidden />
-        <FormattedMessage id='column.deck.add' defaultMessage='Add column' />
-      </button>
-    </div>
+    </>
   );
 };
 
