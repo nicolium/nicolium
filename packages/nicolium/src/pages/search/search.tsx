@@ -34,7 +34,7 @@ interface ISearchInput {
   className?: string;
   placeholder?: string;
   query?: string;
-  setQuery?: (value: string) => void;
+  setQuery: (value: string) => void;
 }
 
 const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query, setQuery }) => {

@@ -131,7 +131,7 @@ const navigationItemSchema: v.BaseSchema<any, NavigationItem, v.BaseIssue<unknow
     ) {
       return item as NavigationItem;
     } else {
-      throw new Error('Invalid item');
+      return 0 as any as NavigationItem;
     }
   }),
 );
@@ -141,7 +141,7 @@ const sidebarItemSchema: v.BaseSchema<any, SidebarItem, v.BaseIssue<unknown>> = 
   v.transform((item) => {
     if (AVAILABLE_SIDEBAR_ITEMS.includes(item as 'context')) return item as SidebarItem;
     if (item.startsWith('account:')) return item as SidebarItem;
-    throw new Error('Invalid item');
+    return 0 as any as SidebarItem;
   }),
 );
 

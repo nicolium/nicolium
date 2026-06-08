@@ -24,10 +24,9 @@ interface ISearchColumn {
   type: 'accounts' | 'hashtags' | 'statuses' | 'links';
   query: string;
   accountId?: string;
-  multiColumn?: boolean;
 }
 
-const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiColumn }) => {
+const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId }) => {
   query = query.trim();
 
   const node = useRef<VirtuosoHandle | null>(null);
@@ -161,7 +160,6 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
         'search-item__account': type === 'accounts' || type === 'links',
         'search-item__hashtag': type === 'hashtags',
       })}
-      useWindowScroll={!multiColumn}
     >
       {searchResults ?? []}
     </ScrollableList>

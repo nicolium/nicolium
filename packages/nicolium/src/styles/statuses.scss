@@ -1,14 +1,17 @@
 @use 'mixins';
 @use 'variables';
 
-[column-type='filled'] .status__wrapper,
-[column-type='filled'] .status--placeholder {
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-
-  .dark & {
+[column-type='filled'],
+.deck__column__content {
+  .status__wrapper,
+  .status--placeholder {
+    border-radius: 0;
     background: transparent;
+    box-shadow: none;
+
+    .dark & {
+      background: transparent;
+    }
   }
 }
 

@@ -21,10 +21,9 @@ import useTrendingTags from '@/queries/trends/use-trending-tags';
 interface ITrendsColumn {
   type: 'accounts' | 'hashtags' | 'statuses' | 'links';
   emptyMessage?: React.JSX.Element;
-  multiColumn?: boolean;
 }
 
-const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
+const TrendsColumn: React.FC<ITrendsColumn> = ({ type }) => {
   const features = useFeatures();
 
   const {
@@ -137,7 +136,6 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
         'search-item__account': type === 'accounts' || type === 'links',
         'search-item__hashtag': type === 'hashtags',
       })}
-      useWindowScroll={!multiColumn}
     >
       {children ?? []}
     </ScrollableList>

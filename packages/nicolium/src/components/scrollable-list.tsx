@@ -12,6 +12,7 @@ import {
 
 import LoadMore from '@/components/load-more';
 import Spinner from '@/components/ui/spinner';
+import { useColumnScrollParent } from '@/contexts/multi-column-context';
 import { useSettings } from '@/stores/settings';
 
 import { EmptyMessage } from './empty-message';
@@ -122,6 +123,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
   ) => {
     const { autoloadMore } = useSettings();
     const { state: locationState } = useLocation();
+    const scrollParent = useColumnScrollParent() || params.customScrollParent;
 
     // Preserve scroll position
     const scrollDataKey = `nicolium:scrollData:${scrollKey}:${locationState.key}`;
@@ -255,8 +257,8 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
 
     return (
       <Virtuoso
-        useWindowScroll={useWindowScroll}
         {...params}
+        {...(scrollParent ? { customScrollParent: scrollParent } : { useWindowScroll })}
         overscan={window.innerHeight * 1.5}
         ref={ref}
         data={data}

@@ -1464,12 +1464,12 @@ div[data-viewport-type='window']:has(.empty-message) {
       background-color: #fffe;
       backdrop-filter: blur(8px) saturate(2);
 
-      .dark.black & {
-        background-color: #000b;
-      }
-
       .dark & {
         background-color: variables.opaque(--color-primary-900, 0.9);
+      }
+
+      .dark.black & {
+        background-color: #000b;
       }
 
       &--scrolled {

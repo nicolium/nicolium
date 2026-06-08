@@ -1,18 +1,19 @@
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';
 
 import { DeckColumn } from './components/deck-column';
 
-interface IErrorBoundary {
+interface IColumnErrorBoundary {
   fallback: React.ReactNode;
   children: React.ReactNode;
 }
 
-class ErrorBoundary extends React.Component<IErrorBoundary, { hasError: boolean }> {
-  constructor(props) {
+class ColumnErrorBoundary extends React.Component<IColumnErrorBoundary, { hasError: boolean }> {
+  constructor(props: IColumnErrorBoundary) {
     super(props);
     this.state = { hasError: false };
   }
@@ -41,23 +42,23 @@ const DeckPage = () => {
     <div className='deck'>
       <div className='deck__columns'>
         {deck.columns.map((column) => (
-          <ErrorBoundary
+          <ColumnErrorBoundary
             key={column.id}
             fallback={
               <div
-                className={`deck__column deck__column__error deck__column--${column.columnWidth}`}
+                className={`deck__column deck__column--error deck__column--${column.columnWidth}`}
               >
-                Failed to load column
+                <FormattedMessage id='column.deck.error' defaultMessage='Failed to load column' />
               </div>
             }
           >
             <DeckColumn column={column} />
-          </ErrorBoundary>
+          </ColumnErrorBoundary>
         ))}
       </div>
       <button className='deck__add-column-button'>
         <Icon src={iconPlus} aria-hidden />
-        Add column
+        <FormattedMessage id='column.deck.add' defaultMessage='Add column' />
       </button>
     </div>
   );
