@@ -2,10 +2,13 @@ import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { changeSetting } from '@/actions/settings';
 import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';
 
 import { DeckColumn } from './components/deck-column';
+
+import type { DeckColumn as DeckColumnSchema } from '@/schemas/frontend-settings';
 
 interface IColumnErrorBoundary {
   fallback: React.ReactNode;
@@ -38,10 +41,32 @@ class ColumnErrorBoundary extends React.Component<IColumnErrorBoundary, { hasErr
 const DeckPage = () => {
   const { deck } = useSettings();
 
+  const updateColumns = (columns: Array<DeckColumnSchema>) =>
+    changeSetting(['deck', 'columns'], columns);
+
+  const handleRemove = (id: string) =>
+    updateColumns(deck.columns.filter((column) => column.id !== id));
+
+  const handleChangeWidth = (id: string, newWidth: DeckColumnSchema['columnWidth']) =>
+    updateColumns(
+      deck.columns.map((column) =>
+        column.id === id ? { ...column, columnWidth: newWidth } : column,
+      ),
+    );
+
+  const handleChangeIndex = (id: string, newIndex: number) => {
+    const updatedColumns = [...deck.columns];
+    const oldIndex = updatedColumns.findIndex((column) => column.id === id);
+    if (oldIndex === -1) return;
+    const column = updatedColumns.splice(oldIndex, 1)[0];
+    updatedColumns.splice(newIndex, 0, column);
+    updateColumns(updatedColumns);
+  };
+
   return (
     <div className='deck'>
       <div className='deck__columns'>
-        {deck.columns.map((column) => (
+        {deck.columns.map((column, index) => (
           <ColumnErrorBoundary
             key={column.id}
             fallback={
@@ -52,7 +77,14 @@ const DeckPage = () => {
               </div>
             }
           >
-            <DeckColumn column={column} />
+            <DeckColumn
+              column={column}
+              index={index}
+              columns={deck.columns.length}
+              onRemove={handleRemove}
+              onChangeWidth={handleChangeWidth}
+              onChangeIndex={handleChangeIndex}
+            />
           </ColumnErrorBoundary>
         ))}
       </div>

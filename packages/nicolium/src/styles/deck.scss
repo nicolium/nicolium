@@ -61,10 +61,25 @@
       z-index: 10;
       top: 0;
 
+      justify-content: space-between;
+
       padding: 1rem;
 
       background-color: #fffe;
       backdrop-filter: blur(8px) saturate(2);
+
+      .dark & {
+        background-color: variables.opaque(--color-primary-900, 0.9);
+      }
+
+      .black & {
+        background: #000b;
+      }
+    }
+
+    &__actions  {
+      display: flex;
+      gap: 0.5rem;
     }
 
     &__overlay {

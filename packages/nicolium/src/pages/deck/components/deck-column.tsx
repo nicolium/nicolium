@@ -1,3 +1,7 @@
+import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
+import iconArrowRight from '@phosphor-icons/core/regular/arrow-right.svg';
+import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import {
   createMemoryHistory,
   createRootRoute,
@@ -8,6 +12,8 @@ import {
   useRouter,
 } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
+import iconChevronsLeftRight from 'lucide-static/icons/chevrons-left-right.svg';
+import iconChevronsRightLeft from 'lucide-static/icons/chevrons-right-left.svg';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
@@ -26,6 +32,7 @@ import {
   WrenchedTimelineColumn,
 } from '@/columns/timeline';
 import AccountHeader from '@/components/accounts/account-header';
+import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import { CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,7 +49,9 @@ import { useStatus } from '@/queries/statuses/use-status';
 import { router as appRouter } from '@/router';
 import { useInstance } from '@/stores/instance';
 
-import type { DeckColumn, DeckColumn as DeckColumnSchema } from '@/schemas/frontend-settings';
+import type { DeckColumn } from '@/schemas/frontend-settings';
+
+const WIDTHS = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 
 const searchTabMessages = defineMessages({
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },
@@ -70,7 +79,7 @@ const messages = defineMessages({
 
 const SEARCH_FILTERS = ['accounts', 'statuses', 'hashtags', 'links'] as const;
 
-const useColumnTitle = (column: DeckColumnSchema): string => {
+const useColumnTitle = (column: DeckColumn): string => {
   const intl = useIntl();
 
   if (column.type === 'timeline') {
@@ -326,7 +335,7 @@ const accountRoute = createRoute({
 });
 
 const AccountByUsernameDeckColumn = () => {
-  const { username } = profileRoute.useParams();
+  const { username } = accountByUsernameRoute.useParams();
   const { data: account } = useAccountLookup(username, true);
 
   return <AccountColumnBody account={account} username={username} accountId={account?.id} />;
@@ -374,7 +383,7 @@ const routeTree = rootRoute.addChildren([
   statusRoute,
 ]);
 
-const getInitialUrl = (column: DeckColumnSchema) => {
+const getInitialUrl = (column: DeckColumn) => {
   switch (column.type) {
     case 'notifications':
       return '/notifications';
@@ -411,7 +420,7 @@ const getInitialUrl = (column: DeckColumnSchema) => {
   }
 };
 
-const columnSignature = (column: DeckColumnSchema): string => {
+const columnSignature = (column: DeckColumn): string => {
   switch (column.type) {
     case 'timeline':
       return `timeline:${column.timeline}`;
@@ -437,7 +446,7 @@ type ColumnRouter = ReturnType<typeof createColumnRouter>;
 
 const registry = new Map<string, { router: ColumnRouter; signature: string }>();
 
-const getDeckColumnRouter = (column: DeckColumnSchema): ColumnRouter => {
+const getDeckColumnRouter = (column: DeckColumn): ColumnRouter => {
   const signature = columnSignature(column);
   const cached = registry.get(column.id);
 
@@ -456,14 +465,85 @@ const pruneDeckColumnRouters = (activeIds: Array<string>) => {
 };
 
 interface IDeckColumn {
-  column: DeckColumnSchema;
+  column: DeckColumn;
+  index: number;
+  columns: number;
+  onRemove: (id: string) => void;
+  onChangeWidth: (id: string, newWidth: (typeof WIDTHS)[number]) => void;
+  onChangeIndex: (id: string, newIndex: number) => void;
 }
 
-const DeckColumn: React.FC<IDeckColumn> = ({ column }) => {
+const DeckColumn: React.FC<IDeckColumn> = ({
+  column,
+  index,
+  columns,
+  onRemove,
+  onChangeWidth,
+  onChangeIndex,
+}) => {
+  const intl = useIntl();
   const instance = useInstance();
   const features = useFeatures();
   const title = useColumnTitle(column);
   const router = getDeckColumnRouter(column);
+
+  const items = useMemo(() => {
+    const handleWiden = () => {
+      const newWidth = WIDTHS[WIDTHS.indexOf(column.columnWidth) + 1];
+      if (!newWidth) return;
+      onChangeWidth(column.id, newWidth);
+    };
+
+    const handleShrink = () => {
+      const newWidth = WIDTHS[WIDTHS.indexOf(column.columnWidth) - 1];
+      if (!newWidth) return;
+      onChangeWidth(column.id, newWidth);
+    };
+
+    const handleMoveLeft = () => {
+      onChangeIndex(column.id, index - 1);
+    };
+
+    const handleMoveRight = () => {
+      onChangeIndex(column.id, index + 1);
+    };
+
+    const menu: Menu = [
+      {
+        text: intl.formatMessage(messages.widen),
+        icon: iconChevronsLeftRight,
+        action: handleWiden,
+        disabled: column.columnWidth === 'xl',
+      },
+      {
+        text: intl.formatMessage(messages.shrink),
+        icon: iconChevronsRightLeft,
+        action: handleShrink,
+        disabled: column.columnWidth === 'xs',
+      },
+      {
+        text: intl.formatMessage(messages.moveLeft),
+        icon: iconArrowLeft,
+        action: handleMoveLeft,
+        disabled: index === 0,
+      },
+      {
+        text: intl.formatMessage(messages.moveRight),
+        icon: iconArrowRight,
+        action: handleMoveRight,
+        disabled: index === columns - 1,
+      },
+      null,
+      {
+        text: intl.formatMessage(messages.remove),
+        icon: iconTrash,
+        action: () => onRemove(column.id),
+        destructive: true,
+      },
+    ];
+
+    return menu;
+  }, [intl, index, columns, column.columnWidth]);
 
   const context: RouterContext = useMemo(
     () => ({
@@ -477,6 +557,9 @@ const DeckColumn: React.FC<IDeckColumn> = ({ column }) => {
     <div className={`deck__column deck__column--${column.columnWidth}`}>
       <CardHeader className='deck__column__header'>
         <CardTitle title={title} />
+        <div className='deck__column__actions'>
+          <DropdownMenu items={items} src={iconDotsThreeVertical} />
+        </div>
       </CardHeader>
       <RouterProvider router={router} context={context} />
     </div>
