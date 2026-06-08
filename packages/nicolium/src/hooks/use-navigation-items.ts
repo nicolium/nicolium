@@ -281,34 +281,34 @@ const NAVIGATION_ITEMS_GATE: Partial<
   'public-timeline': (features, { configuration }, isLoggedIn, isAdmin: boolean) =>
     features.publicTimeline &&
     (isLoggedIn
-      ? configuration.timelines_access.live_feeds.local !== 'disabled'
-      : configuration.timelines_access.live_feeds.local === 'restricted'
+      ? configuration.timelines_access.live_feeds.local === 'restricted'
         ? isAdmin
-        : configuration.timelines_access.live_feeds.local === 'public'),
+        : configuration.timelines_access.live_feeds.local !== 'disabled'
+      : configuration.timelines_access.live_feeds.local === 'public'),
   'bubble-timeline': (features, { configuration }, isLoggedIn, isAdmin: boolean) =>
     features.publicTimeline &&
     features.bubbleTimeline &&
     (isLoggedIn
-      ? configuration.timelines_access.live_feeds.bubble !== 'disabled'
-      : configuration.timelines_access.live_feeds.bubble === 'restricted'
+      ? configuration.timelines_access.live_feeds.bubble === 'restricted'
         ? isAdmin
-        : configuration.timelines_access.live_feeds.bubble === 'public'),
+        : configuration.timelines_access.live_feeds.bubble !== 'disabled'
+      : configuration.timelines_access.live_feeds.bubble === 'public'),
   'fediverse-timeline': (features, { configuration }, isLoggedIn, isAdmin: boolean) =>
     features.publicTimeline &&
     features.federating &&
     (isLoggedIn
-      ? configuration.timelines_access.live_feeds.remote !== 'disabled'
-      : configuration.timelines_access.live_feeds.remote === 'restricted'
+      ? configuration.timelines_access.live_feeds.remote === 'restricted'
         ? isAdmin
-        : configuration.timelines_access.live_feeds.remote === 'public'),
+        : configuration.timelines_access.live_feeds.remote !== 'disabled'
+      : configuration.timelines_access.live_feeds.remote === 'public'),
   'wrenched-timeline': (features, { configuration }, isLoggedIn, isAdmin: boolean) =>
     features.publicTimeline &&
     features.wrenchedTimeline &&
     (isLoggedIn
-      ? configuration.timelines_access.live_feeds.wrenched !== 'disabled'
-      : configuration.timelines_access.live_feeds.wrenched === 'restricted'
+      ? configuration.timelines_access.live_feeds.wrenched === 'restricted'
         ? isAdmin
-        : configuration.timelines_access.live_feeds.wrenched === 'public'),
+        : configuration.timelines_access.live_feeds.wrenched !== 'disabled'
+      : configuration.timelines_access.live_feeds.wrenched === 'public'),
 };
 
 type NavigationItemsMenuItem =

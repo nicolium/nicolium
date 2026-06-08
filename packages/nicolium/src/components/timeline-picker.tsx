@@ -156,7 +156,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     if (
       features.wrenchedTimeline &&
       (isLoggedIn
-        ? timelineAccess.live_feeds.wrenched !== 'restricted'
+        ? timelineAccess.live_feeds.wrenched === 'restricted'
           ? isAdmin
           : timelineAccess.live_feeds.wrenched !== 'disabled'
         : timelineAccess.live_feeds.wrenched === 'public')
