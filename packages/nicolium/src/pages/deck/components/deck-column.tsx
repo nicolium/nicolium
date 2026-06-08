@@ -123,9 +123,18 @@ const useColumnTitle = (column: DeckColumn): string => {
   const timelineHeading = useTimelineHeading(
     column.type === 'timeline' ? (column.timeline as any) : null,
   );
+  const { data: ownAccount } = useOwnAccount();
+  const { data: account } = useAccount(
+    column.type === 'account' && column.accountId ? column.accountId : undefined,
+  );
 
   if (column.type === 'timeline') {
     return timelineHeading;
+  }
+
+  if (column.type === 'account') {
+    const acct = column.accountId === 'self' ? ownAccount?.acct : account?.acct;
+    if (acct !== undefined) return `@${acct}`;
   }
 
   return intl.formatMessage(messages[column.type]);
@@ -214,7 +223,11 @@ const RootRoute: React.FC = () => {
       <div className='deck__column__content' ref={setContent}>
         {canGoBack && (
           <CardHeader onBackClick={() => router.history.back()}>
-            {title && <CardTitle title={intl.formatMessage(title)} />}
+            {title && (
+              <CardTitle
+                title={lookedUpAccount ? `@${lookedUpAccount.acct}` : intl.formatMessage(title)}
+              />
+            )}
             {canAddProfile && (
               <IconButton
                 className='deck__column__add-profile'
