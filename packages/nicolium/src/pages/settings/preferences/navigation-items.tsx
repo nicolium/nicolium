@@ -380,7 +380,7 @@ const NavigationItems: React.FC<ISettingsPage> = ({
           }
         />
 
-        <div className='from__actions interface-items__actions'>
+        <div className='form__actions interface-items__actions'>
           <button type='button' onClick={reset}>
             <FormattedMessage id='settings.interface_items.reset' defaultMessage='Reset' />
           </button>
