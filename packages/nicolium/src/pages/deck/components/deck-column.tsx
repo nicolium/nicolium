@@ -10,6 +10,7 @@ import {
   Outlet,
   RouterProvider,
   useRouter,
+  useRouterState,
 } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
 import iconChevronsLeftRight from 'lucide-static/icons/chevrons-left-right.svg';
@@ -50,6 +51,7 @@ import { router as appRouter } from '@/router';
 import { useInstance } from '@/stores/instance';
 
 import type { DeckColumn } from '@/schemas/frontend-settings';
+import type { MessageDescriptor } from 'react-intl';
 
 const WIDTHS = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 
@@ -70,6 +72,8 @@ const messages = defineMessages({
   notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
   account: { id: 'column.account', defaultMessage: 'Profile' },
   search: { id: 'column.search', defaultMessage: 'Search' },
+  status: { id: 'column.status', defaultMessage: 'Post' },
+  hashtag: { id: 'column.hashtag', defaultMessage: 'Hashtag' },
   remove: { id: 'column.deck.remove', defaultMessage: 'Remove column' },
   shrink: { id: 'column.deck.width.shrink', defaultMessage: 'Shrink column' },
   widen: { id: 'column.deck.width.widen', defaultMessage: 'Widen column' },
@@ -99,9 +103,17 @@ interface RouterContext {
 }
 
 const RootRoute: React.FC = () => {
+  const intl = useIntl();
   const router = useRouter();
   const [content, setContent] = useState<HTMLElement | null>(null);
   const [canGoBack, setCanGoBack] = useState(() => router.history.canGoBack());
+
+  const title = useRouterState({
+    select: (state) => {
+      const leaf = state.matches[state.matches.length - 1];
+      return (leaf?.staticData as { title?: MessageDescriptor } | undefined)?.title;
+    },
+  });
 
   const handleClickOutside: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
@@ -125,7 +137,11 @@ const RootRoute: React.FC = () => {
         />
       )}
       <div className='deck__column__content' ref={setContent}>
-        {canGoBack && <CardHeader onBackClick={() => router.history.back()} />}
+        {canGoBack && (
+          <CardHeader onBackClick={() => router.history.back()}>
+            {title && <CardTitle title={intl.formatMessage(title)} />}
+          </CardHeader>
+        )}
         <MultiColumnProvider scrollParent={content}>
           <Outlet />
         </MultiColumnProvider>
@@ -156,6 +172,7 @@ const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/home',
   component: HomeTimelineDeckColumn,
+  staticData: { title: messages.home },
 });
 
 const LocalTimelineDeckColumn = () => <PublicTimelineColumn local />;
@@ -163,6 +180,7 @@ const localRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/local',
   component: LocalTimelineDeckColumn,
+  staticData: { title: messages.local },
 });
 
 const FederatedTimelineDeckColumn = () => <PublicTimelineColumn />;
@@ -170,6 +188,7 @@ const federatedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/federated',
   component: FederatedTimelineDeckColumn,
+  staticData: { title: messages.federated },
 });
 
 const BubbleTimelineDeckColumn = () => <BubbleTimelineColumn />;
@@ -177,6 +196,7 @@ const bubbleRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/bubble',
   component: BubbleTimelineDeckColumn,
+  staticData: { title: messages.bubble },
 });
 
 const WrenchedTimelineDeckColumn = () => <WrenchedTimelineColumn />;
@@ -184,6 +204,7 @@ const wrenchedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/wrenched',
   component: WrenchedTimelineDeckColumn,
+  staticData: { title: messages.wrenched },
 });
 
 const ListTimelineDeckColumn = () => {
@@ -194,6 +215,7 @@ const listRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/list/$listId',
   component: ListTimelineDeckColumn,
+  staticData: { title: messages.timeline },
 });
 
 const CircleTimelineDeckColumn = () => {
@@ -204,6 +226,7 @@ const circleRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/circle/$circleId',
   component: CircleTimelineDeckColumn,
+  staticData: { title: messages.timeline },
 });
 
 const AntennaTimelineDeckColumn = () => {
@@ -214,6 +237,7 @@ const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/antenna/$antennaId',
   component: AntennaTimelineDeckColumn,
+  staticData: { title: messages.timeline },
 });
 
 const InstanceTimelineDeckColumn = () => {
@@ -224,6 +248,7 @@ const instanceRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/instance/$instance',
   component: InstanceTimelineDeckColumn,
+  staticData: { title: messages.timeline },
 });
 
 const NotificationsDeckColumn = () => <NotificationsColumn />;
@@ -231,6 +256,7 @@ const notificationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/notifications',
   component: NotificationsDeckColumn,
+  staticData: { title: messages.notifications },
 });
 
 const HashtagDeckColumn = () => {
@@ -241,6 +267,7 @@ const hashtagRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/tags/$hashtag',
   component: HashtagDeckColumn,
+  staticData: { title: messages.hashtag },
 });
 
 const SearchDeckColumn = () => {
@@ -294,6 +321,7 @@ const searchRoute = createRoute({
     accountId: v.optional(v.string()),
   }),
   component: SearchDeckColumn,
+  staticData: { title: messages.search },
 });
 
 interface IAccountColumnBody {
@@ -332,6 +360,7 @@ const accountRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/account/$accountId',
   component: AccountDeckColumn,
+  staticData: { title: messages.account },
 });
 
 const AccountByUsernameDeckColumn = () => {
@@ -345,6 +374,7 @@ const accountByUsernameRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/@{$username}',
   component: AccountByUsernameDeckColumn,
+  staticData: { title: messages.account },
 });
 
 const StatusDeckColumn = () => {
@@ -363,6 +393,7 @@ const statusRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/@{$username}/posts/$statusId',
   component: StatusDeckColumn,
+  staticData: { title: messages.status },
 });
 
 const routeTree = rootRoute.addChildren([
