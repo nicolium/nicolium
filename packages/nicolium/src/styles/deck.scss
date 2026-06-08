@@ -2,13 +2,14 @@
 @use 'variables';
 
 .deck {
+  position: relative;
+
   display: flex;
-  gap: 1rem;
   align-items: center;
 
   min-width: max-content;
   height: calc(100% - 3.25rem - 1px);
-  margin: 0 1rem;
+  margin-left: 1rem;
 
   .black & {
     @media (min-width: variables.$breakpoint-sm) {
@@ -200,6 +201,42 @@
     @include mixins.button;
 
     min-width: fit-content;
+    margin: 0 1rem;
+  }
+
+  &__fade {
+    pointer-events: none;
+
+    position: sticky;
+    z-index: 20;
+    inset: 0;
+
+    width: 0;
+    height: 100%;
+
+    &::after {
+      content: '';
+
+      display: block;
+
+      width: 3rem;
+      height: 100%;
+
+      opacity: 0;
+      background: linear-gradient(to right, var(--color-gray-50) 0%, transparent 100%);
+  
+      .dark & {
+        background: linear-gradient(to right, var(--color-gray-800) 0%, transparent 100%);
+      }
+  
+      .black & {
+        background: linear-gradient(to right, black 0%, transparent 100%);
+      }
+    }
+
+    &--visible::after {
+      opacity: 1;
+    }
   }
 
   @media (min-width: variables.$breakpoint-sm) {

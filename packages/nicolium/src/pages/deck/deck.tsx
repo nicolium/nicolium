@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -45,9 +46,27 @@ class ColumnErrorBoundary extends React.Component<IColumnErrorBoundary, { hasErr
 const DeckPage = () => {
   const intl = useIntl();
   const { deck } = useSettings();
+  const fadeRef = useRef<HTMLDivElement>(null);
 
   const [addedColumnId, setAddedColumnId] = useState<string | null>(null);
   const knownColumnIds = useRef<Set<string> | null>(null);
+  const [isNearLeft, setNearLeft] = useState<boolean>(true);
+
+  useEffect(() => {
+    const scrollContainer = fadeRef.current?.parentElement?.parentElement;
+    if (!scrollContainer) return;
+
+    const handleScroll = () => {
+      const scrollLeft = scrollContainer.scrollLeft;
+      setNearLeft(scrollLeft < 32);
+    };
+
+    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      scrollContainer.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const currentIds = deck.columns.map((column) => column.id);
@@ -95,6 +114,12 @@ const DeckPage = () => {
     <>
       <HeadTitle title={intl.formatMessage(messages.deck)} />
       <div className='deck'>
+        <div
+          className={clsx('deck__fade', {
+            'deck__fade--visible': !isNearLeft,
+          })}
+          ref={fadeRef}
+        />
         <div className='deck__columns'>
           {deck.columns.map((column, index) => (
             <ColumnErrorBoundary

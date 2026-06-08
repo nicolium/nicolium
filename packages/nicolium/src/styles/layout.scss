@@ -953,6 +953,10 @@ body {
       gap: 1rem;
       padding-right: 2rem;
       padding-left: 2rem;
+
+      :has(.deck) & {
+        padding-right: 0;
+      }
     }
   }
 
@@ -1082,6 +1086,11 @@ body {
 
   &__full-width {
     grid-column: span 12 / span 12;
+
+    &:has(.deck) {
+      position: relative;
+      overflow-x: auto;
+    }
   }
 
   &__settings-sections,
