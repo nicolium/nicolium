@@ -20,7 +20,6 @@ import useTrendingTags from '@/queries/trends/use-trending-tags';
 
 interface ITrendsColumn {
   type: 'accounts' | 'hashtags' | 'statuses' | 'links';
-  emptyMessage?: React.JSX.Element;
 }
 
 const TrendsColumn: React.FC<ITrendsColumn> = ({ type }) => {

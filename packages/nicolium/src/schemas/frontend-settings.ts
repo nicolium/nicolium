@@ -202,11 +202,18 @@ const searchColumnSchema = v.object({
   accountId: v.fallback(v.optional(v.string()), undefined),
 });
 
+const trendingColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('trending'),
+  trendsType: v.fallback(v.picklist(['accounts', 'statuses', 'hashtags', 'links']), 'hashtags'),
+});
+
 const deckColumnSchema = v.variant('type', [
   timelineDeckColumnSchema,
   notificationsColumnSchema,
   accountColumnSchema,
   searchColumnSchema,
+  trendingColumnSchema,
 ]);
 
 const deckSettingsSchema = v.fallback(

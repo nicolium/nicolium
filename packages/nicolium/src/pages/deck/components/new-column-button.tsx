@@ -1,14 +1,18 @@
 import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
 import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
+import iconChartLine from '@phosphor-icons/core/regular/chart-line.svg';
 import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
 import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
 import iconGlobeSimple from '@phosphor-icons/core/regular/globe-simple.svg';
 import iconGraph from '@phosphor-icons/core/regular/graph.svg';
+import iconHash from '@phosphor-icons/core/regular/hash.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
+import iconLink from '@phosphor-icons/core/regular/link.svg';
 import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
 import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconUser from '@phosphor-icons/core/regular/user.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import iconTimeline from 'lucide-static/icons/timeline.svg';
 import React, { useMemo } from 'react';
@@ -40,6 +44,11 @@ const messages = defineMessages({
   timelines: { id: 'deck.columns.timelines', defaultMessage: 'Timelines' },
   notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
   search: { id: 'column.search', defaultMessage: 'Search' },
+  trending: { id: 'deck.columns.trending', defaultMessage: 'Trending' },
+  trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Trending accounts' },
+  trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
+  trendingHashtags: { id: 'deck.columns.trending_hashtags', defaultMessage: 'Trending hashtags' },
+  trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },
 });
 
 const NewColumnButton = () => {
@@ -191,6 +200,50 @@ const NewColumnButton = () => {
       icon: iconMagnifyingGlass,
       action: handleAdd({ type: 'search' }),
     });
+
+    const trends: Menu = [];
+
+    if (features.suggestions || features.suggestionsV2) {
+      trends.push({
+        text: intl.formatMessage(messages.trendingAccounts),
+        icon: iconUser,
+        action: handleAdd({ type: 'trending', trendsType: 'accounts' }),
+      });
+    }
+
+    if (features.trendingStatuses) {
+      trends.push({
+        text: intl.formatMessage(messages.trendingStatuses),
+        icon: iconTimeline,
+        action: handleAdd({ type: 'trending', trendsType: 'statuses' }),
+      });
+    }
+
+    if (features.trends) {
+      trends.push({
+        text: intl.formatMessage(messages.trendingHashtags),
+        icon: iconHash,
+        action: handleAdd({ type: 'trending', trendsType: 'hashtags' }),
+      });
+    }
+
+    if (features.trendingLinks) {
+      trends.push({
+        text: intl.formatMessage(messages.trendingLinks),
+        icon: iconLink,
+        action: handleAdd({ type: 'trending', trendsType: 'links' }),
+      });
+    }
+
+    if (trends.length > 1) {
+      items.push({
+        text: intl.formatMessage(messages.trending),
+        icon: iconChartLine,
+        items: trends,
+      });
+    } else if (trends.length === 1) {
+      items.push(trends[0]);
+    }
 
     return items;
   }, [lists, circles, antennas, features, defaultTimeline, isAdmin, deck.columns]);

@@ -36,6 +36,7 @@ import {
   PublicTimelineColumn,
   WrenchedTimelineColumn,
 } from '@/columns/timeline';
+import TrendsColumn from '@/columns/trends';
 import AccountHeader from '@/components/accounts/account-header';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
@@ -96,6 +97,10 @@ const messages = defineMessages({
     id: 'column.deck.add_profile',
     defaultMessage: 'Add profile to deck',
   },
+  trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Trending accounts' },
+  trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
+  trendingHashtags: { id: 'deck.columns.trending_hashtags', defaultMessage: 'Trending hashtags' },
+  trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },
 });
 
 const SEARCH_FILTERS = ['accounts', 'statuses', 'hashtags', 'links'] as const;
@@ -138,6 +143,19 @@ const useColumnTitle = (column: DeckColumn): string => {
   if (column.type === 'account') {
     const acct = column.accountId === 'self' ? ownAccount?.acct : account?.acct;
     if (acct !== undefined) return `@${acct}`;
+  }
+
+  if (column.type === 'trending') {
+    switch (column.trendsType) {
+      case 'accounts':
+        return intl.formatMessage(messages.trendingAccounts);
+      case 'statuses':
+        return intl.formatMessage(messages.trendingStatuses);
+      case 'hashtags':
+        return intl.formatMessage(messages.trendingHashtags);
+      case 'links':
+        return intl.formatMessage(messages.trendingLinks);
+    }
   }
 
   return intl.formatMessage(messages[column.type]);
@@ -441,6 +459,28 @@ const searchRoute = createRoute({
   staticData: { title: messages.search },
 });
 
+const TrendingDeckColumn = () => {
+  const { trendsType } = trendingRoute.useParams();
+
+  switch (trendsType) {
+    case 'accounts':
+      return <TrendsColumn type='accounts' />;
+    case 'statuses':
+      return <TrendsColumn type='statuses' />;
+    case 'links':
+      return <TrendsColumn type='links' />;
+    default:
+      return <TrendsColumn type='hashtags' />;
+  }
+};
+
+const trendingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/trending/$trendsType',
+  component: TrendingDeckColumn,
+  staticData: { title: messages.search },
+});
+
 interface IAccountColumnBody {
   account?: React.ComponentProps<typeof ProfileInfoPanel>['account'];
   username: string;
@@ -548,6 +588,7 @@ const routeTree = rootRoute.addChildren([
   notificationsRoute,
   hashtagRoute,
   searchRoute,
+  trendingRoute,
   accountRoute,
   accountByUsernameRoute,
   statusRoute,
@@ -585,6 +626,18 @@ const getInitialUrl = (column: DeckColumn) => {
           return '/home';
       }
     }
+    case 'trending': {
+      switch (column.trendsType) {
+        case 'accounts':
+          return '/trending/accounts';
+        case 'statuses':
+          return '/trending/statuses';
+        case 'links':
+          return '/trending/links';
+        default:
+          return '/trending/hashtags';
+      }
+    }
     default:
       return '/home';
   }
@@ -600,6 +653,8 @@ const columnSignature = (column: DeckColumn): string => {
       return `account:${column.accountId ?? 'self'}`;
     case 'search':
       return 'search';
+    case 'trending':
+      return `trending:${column.trendsType}`;
     default:
       return 'unknown';
   }
