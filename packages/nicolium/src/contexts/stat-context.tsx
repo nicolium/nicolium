@@ -5,8 +5,9 @@ type IStatContext = {
   setUnreadChatsCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const StatContext = createContext<any>({
+const StatContext = createContext<IStatContext>({
   unreadChatsCount: 0,
+  setUnreadChatsCount: () => {},
 });
 
 interface IStatProvider {
