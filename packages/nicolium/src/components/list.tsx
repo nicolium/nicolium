@@ -144,7 +144,7 @@ const ListItem: React.FC<IListItem> = ({
           onKeyDown,
           tabIndex: 0,
           role: 'link',
-          ...(href && { href, target: '_blank' }),
+          ...(href && { href, target: '_blank', rel: 'noopener noreferrer' }),
         }
       : {};
 

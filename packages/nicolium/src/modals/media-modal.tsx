@@ -151,7 +151,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   const handleDownload = () => {
     const mediaItem = hasMultipleImages ? media[index] : media[0];
-    window.open(mediaItem?.url);
+    window.open(mediaItem?.url, '_blank', 'noopener,noreferrer');
   };
 
   const toggleNavigation = useCallback(() => {
