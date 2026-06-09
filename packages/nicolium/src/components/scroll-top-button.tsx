@@ -6,6 +6,7 @@ import { useIntl, type MessageDescriptor } from 'react-intl';
 
 import AvatarStack from '@/components/accounts/avatar-stack';
 import Icon from '@/components/ui/icon';
+import { useColumnScrollParent } from '@/contexts/multi-column-context';
 import { useSettings } from '@/stores/settings';
 
 interface IScrollTopButton {
@@ -37,6 +38,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
 }) => {
   const intl = useIntl();
   const { autoloadTimelines, disableUserProvidedMedia } = useSettings();
+  const scrollParent = useColumnScrollParent() || window;
 
   // Whether we are scrolled past the `threshold`.
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -59,9 +61,9 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
 
   /** Scroll to top and trigger `onClick`. */
   const handleClick: React.MouseEventHandler = useCallback(() => {
-    window.scrollTo({ top: 0 });
+    scrollParent.scrollTo({ top: 0 });
     onClick();
-  }, [onClick]);
+  }, [scrollParent, onClick]);
 
   useEffect(() => {
     const handleScroll = throttle(
