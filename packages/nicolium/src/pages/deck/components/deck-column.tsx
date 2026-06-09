@@ -778,6 +778,13 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       console.log(columnRef.current);
       columnRef.current.querySelector<HTMLDivElement>('.focusable')?.focus();
     },
+    back: () => {
+      if (router.history.canGoBack()) {
+        router.history.back();
+      } else {
+        return false;
+      }
+    },
   };
 
   return (
