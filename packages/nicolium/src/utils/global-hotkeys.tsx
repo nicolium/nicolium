@@ -132,6 +132,20 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
       (document.getElementById('add-column') as HTMLButtonElement | null)?.click();
     };
 
+    const handleHotkeyFocusColumn = (e?: KeyboardEvent) => {
+      if (!e?.key) return;
+      const key = e.key;
+      if (key >= '1' && key <= '9') {
+        const index = parseInt(key, 10) - 1;
+        const column = document.querySelector(
+          `.deck__column[data-index="${index}"]`,
+        ) as HTMLDivElement | null;
+        if (column) {
+          column.focus();
+        }
+      }
+    };
+
     type HotkeyHandlers = { [key: string]: (keyEvent?: KeyboardEvent) => void };
 
     let handlers: HotkeyHandlers = {
@@ -153,6 +167,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
         goToMuted: handleHotkeyGoToMuted,
         goToRequests: handleHotkeyGoToRequests,
         addColumn: handleHotkeyAddColumn,
+        focusColumn: handleHotkeyFocusColumn,
       };
     }
     return handlers;
