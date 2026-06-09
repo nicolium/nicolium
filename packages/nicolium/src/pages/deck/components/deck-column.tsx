@@ -769,8 +769,12 @@ const DeckColumn: React.FC<IDeckColumn> = ({
   );
 
   const handlers = {
-    focusPreviousColumn: () => {
-      if (document.body.classList.contains('with-modals')) return false;
+    focusPreviousColumn: (event: KeyboardEvent) => {
+      if (
+        document.body.classList.contains('with-modals') ||
+        (event.target instanceof HTMLElement && event.target.closest('[data-reach-tab-list]'))
+      )
+        return false;
 
       const prevIndex = index - 1;
       if (prevIndex < 0) return;
@@ -779,8 +783,12 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       );
       prevColumn?.focus();
     },
-    focusNextColumn: () => {
-      if (document.body.classList.contains('with-modals')) return false;
+    focusNextColumn: (event: KeyboardEvent) => {
+      if (
+        document.body.classList.contains('with-modals') ||
+        (event.target instanceof HTMLElement && event.target.closest('[data-reach-tab-list]'))
+      )
+        return false;
 
       const nextIndex = index + 1;
       if (nextIndex >= columns) return;
