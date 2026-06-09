@@ -2,10 +2,6 @@
   z-index: 9999 !important;
 }
 
-.ellipsis::after {
-  content: '…';
-}
-
 .react-swipeable-view-container {
   height: 100%;
 }
@@ -23,8 +19,4 @@ body:not(.no-reduce-motion) .react-swipeable-view-container {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
-}
-
-.underline-line-through {
-  text-decoration: underline line-through;
 }

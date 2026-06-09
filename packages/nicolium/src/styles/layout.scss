@@ -1061,7 +1061,7 @@ body {
   }
 
   &__aside {
-    display: hidden;
+    display: none;
     grid-column: span 3 / span 3;
 
     &__content {
@@ -1278,7 +1278,7 @@ body {
     }
 
     h1 {
-      font-size: 1.875%;
+      font-size: 1.875rem;
       font-weight: 800;
       line-height: var(--leading-3xl);
       color: var(--color-gray-900);
@@ -1822,7 +1822,7 @@ body {
   }
 }
 
-.external-rediect {
+.external-redirect {
   &__text {
     display: flex;
     flex-direction: column;
