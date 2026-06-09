@@ -1,6 +1,7 @@
 import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
 import iconArrowRight from '@phosphor-icons/core/regular/arrow-right.svg';
 import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
+import iconFrameCorners from '@phosphor-icons/core/regular/frame-corners.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import {
@@ -86,6 +87,7 @@ const messages = defineMessages({
   remove: { id: 'column.deck.remove', defaultMessage: 'Remove column' },
   shrink: { id: 'column.deck.width.shrink', defaultMessage: 'Shrink column' },
   widen: { id: 'column.deck.width.widen', defaultMessage: 'Widen column' },
+  fill: { id: 'column.deck.width.fill', defaultMessage: 'Fill available width' },
   moveLeft: { id: 'column.deck.position.left', defaultMessage: 'Move column left' },
   moveRight: { id: 'column.deck.position.right', defaultMessage: 'Move column right' },
   showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies' },
@@ -640,6 +642,7 @@ interface IDeckColumn {
   onRemove: (id: string) => void;
   onChangeWidth: (id: string, newWidth: (typeof WIDTHS)[number]) => void;
   onChangeIndex: (id: string, newIndex: number) => void;
+  onToggleFill: (id: string) => void;
 }
 
 const DeckColumn: React.FC<IDeckColumn> = ({
@@ -650,6 +653,7 @@ const DeckColumn: React.FC<IDeckColumn> = ({
   onRemove,
   onChangeWidth,
   onChangeIndex,
+  onToggleFill,
 }) => {
   const intl = useIntl();
   const instance = useInstance();
@@ -682,6 +686,10 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       onChangeWidth(column.id, newWidth);
     };
 
+    const handleToggleFill = () => {
+      onToggleFill(column.id);
+    };
+
     const handleMoveLeft = () => {
       onChangeIndex(column.id, index - 1);
     };
@@ -702,6 +710,13 @@ const DeckColumn: React.FC<IDeckColumn> = ({
         icon: iconChevronsRightLeft,
         action: handleShrink,
         disabled: column.columnWidth === 'xs',
+      },
+      {
+        text: intl.formatMessage(messages.fill),
+        icon: iconFrameCorners,
+        onChange: handleToggleFill,
+        type: 'toggle',
+        checked: column.fillAvailableWidth,
       },
       {
         text: intl.formatMessage(messages.moveLeft),
@@ -793,6 +808,7 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       ref={columnRef}
       className={clsx('deck__column', `deck__column--${column.columnWidth}`, {
         'deck__column--highlight': highlight,
+        'deck__column--fill': column.fillAvailableWidth,
       })}
       tabIndex={-1}
       data-index={index}

@@ -110,6 +110,14 @@ const DeckPage = () => {
     updateColumns(updatedColumns);
   };
 
+  const handleToggleFill = (id: string) => {
+    updateColumns(
+      deck.columns.map((column) =>
+        column.id === id ? { ...column, fillAvailableWidth: !column.fillAvailableWidth } : column,
+      ),
+    );
+  };
+
   return (
     <>
       <HeadTitle title={intl.formatMessage(messages.deck)} />
@@ -143,6 +151,7 @@ const DeckPage = () => {
                 onRemove={handleRemove}
                 onChangeWidth={handleChangeWidth}
                 onChangeIndex={handleChangeIndex}
+                onToggleFill={handleToggleFill}
               />
             </ColumnErrorBoundary>
           ))}
