@@ -167,7 +167,6 @@ const Thread = ({
   };
 
   const handleHotkeyToggleSensitive = () => {
-    console.log('toggle sensitive');
     toggleStatusesMediaHidden([status.id]);
   };
 

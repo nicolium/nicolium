@@ -372,7 +372,6 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   };
 
   const handleHotkeyToggleSensitive = () => {
-    console.log('Toggling sensitive');
     toggleStatusesMediaHidden([actualStatus.id]);
   };
 
