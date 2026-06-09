@@ -290,18 +290,21 @@ const DropdownMenu: React.FC<IDropdownMenu> = ({
       const handleClose = () => {
         closeModal('DROPDOWN_MENU');
       };
-      openModal('DROPDOWN_MENU', {
-        element: refs.reference.current as HTMLButtonElement,
-        content: (
-          <DropdownMenuContent
-            handleClose={handleClose}
-            items={items}
-            component={component}
-            touchscreen
-            className={className}
-          />
-        ),
-      });
+      openModal(
+        'DROPDOWN_MENU',
+        {
+          content: (
+            <DropdownMenuContent
+              handleClose={handleClose}
+              items={items}
+              component={component}
+              touchscreen
+              className={className}
+            />
+          ),
+        },
+        refs.reference.current as HTMLButtonElement,
+      );
     } else {
       openDropdownMenu();
       setIsOpen(true);

@@ -151,7 +151,7 @@ const hotkeyMatcherMap = {
   // toggleHidden: just('x'),
   toggleSensitive: any('h', 'x'),
   // toggleComposeSpoilers: optionPlus('x'),
-  openMedia: just('e'),
+  openMedia: just('a'),
   // onTranslate: just('t'),
   goToHome: sequence('g', 'h'),
   goToNotifications: sequence('g', 'n'),
@@ -178,7 +178,7 @@ const hotkeyMatcherMap = {
   //   'a',
   //   'enter',
   // ),
-  addColumn: just('a'),
+  addColumn: just('c'),
 } as const;
 
 type HotkeyName = keyof typeof hotkeyMatcherMap;

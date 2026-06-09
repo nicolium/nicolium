@@ -110,7 +110,9 @@ const useModalsStore = create<State>()(
     (set) => ({
       modals: [],
       actions: {
-        openModal: (...[modalType, modalProps, element]) => {
+        openModal: (
+          ...[modalType, modalProps, element = document.activeElement as HTMLElement]
+        ) => {
           set((state) => {
             state.modals.push({ modalType, modalProps, element } as any);
           });

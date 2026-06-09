@@ -5,8 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface DropdownMenuModalProps {
-  /** The element initiating opening the modal. */
-  element?: HTMLElement;
   content?: React.JSX.Element;
 }
 
