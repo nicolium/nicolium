@@ -137,12 +137,26 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
       const key = e.key;
       if (key >= '1' && key <= '9') {
         const index = parseInt(key, 10) - 1;
-        const column = document.querySelector(
+        const column = document.querySelector<HTMLDivElement>(
           `.deck__column[data-index="${index}"]`,
-        ) as HTMLDivElement | null;
+        );
         if (column) {
           column.focus();
         }
+      }
+    };
+
+    const handleHotkeyFocusLastColumn = () => {
+      const column = document.querySelector<HTMLDivElement>('.deck__column:last-child');
+      if (column) {
+        column.focus();
+      }
+    };
+
+    const handleHotkeyFocusNextColumn = () => {
+      const column = document.querySelector<HTMLDivElement>('.deck__column:first-child');
+      if (column) {
+        column.focus();
       }
     };
 
@@ -168,6 +182,9 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
         goToRequests: handleHotkeyGoToRequests,
         addColumn: handleHotkeyAddColumn,
         focusColumn: handleHotkeyFocusColumn,
+        focusLastColumn: handleHotkeyFocusLastColumn,
+        focusNextColumn: handleHotkeyFocusNextColumn,
+        focusPreviousColumn: handleHotkeyFocusLastColumn,
       };
     }
     return handlers;

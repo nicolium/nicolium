@@ -3,6 +3,18 @@ import React, { useEffect, useRef } from 'react';
 
 const isKeyboardEvent = (event: Event): event is KeyboardEvent => 'key' in event;
 
+const mergeRefs =
+  <T,>(...refs: (React.Ref<T> | null | undefined)[]) =>
+  (node: T | null) => {
+    for (const ref of refs) {
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    }
+  };
+
 const normalizeKey = (key: string): string => {
   const lowerKey = key.toLowerCase();
 
@@ -122,6 +134,9 @@ const hotkeyMatcherMap = {
   new: just('n'),
   forceNew: optionPlus('n'),
   focusColumn: any('1', '2', '3', '4', '5', '6', '7', '8', '9'),
+  focusLastColumn: just('0'),
+  focusPreviousColumn: any('left', 'h'),
+  focusNextColumn: any('right', 'l'),
   // focusLoadMore: just('l'),
   reply: just('r'),
   favourite: just('f'),
@@ -291,23 +306,21 @@ interface IHotkeys extends React.HTMLAttributes<HTMLDivElement> {
  *
  * Now this function will be called when the 'open' hotkey is pressed by the user.
  */
-export const Hotkeys: React.FC<IHotkeys> = ({
-  handlers,
-  global,
-  focusable = true,
-  element: Element = 'div',
-  ...props
-}) => {
-  const ref = useHotkeys<HTMLDivElement>(handlers);
+export const Hotkeys = React.forwardRef<HTMLDivElement, IHotkeys>(
+  ({ handlers, global, focusable = true, element: Element = 'div', ...props }, forwardedRef) => {
+    const ref = useHotkeys<HTMLDivElement>(handlers);
 
-  Element = Element as 'div';
+    Element = Element as 'div';
 
-  return (
-    <Element
-      ref={global ? undefined : ref}
-      tabIndex={focusable ? -1 : undefined}
-      {...props}
-      className={clsx(props.className, focusable && 'focusable')}
-    />
-  );
-};
+    return (
+      <Element
+        ref={mergeRefs(global ? undefined : ref, forwardedRef)}
+        tabIndex={focusable ? -1 : undefined}
+        {...props}
+        className={clsx(props.className, focusable && 'focusable')}
+      />
+    );
+  },
+);
+
+Hotkeys.displayName = 'Hotkeys';

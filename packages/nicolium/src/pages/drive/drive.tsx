@@ -809,7 +809,7 @@ const DrivePage: React.FC = () => {
             ? index - 1
             : index + 1;
     if (newItem < 0 || newItem >= totalItems) return;
-    (filesRef.current?.querySelector(`div[data-index="${newItem}"]`) as HTMLDivElement)?.focus();
+    filesRef.current?.querySelector<HTMLDivElement>(`div[data-index="${newItem}"]`)?.focus();
   };
 
   if (isPending) {

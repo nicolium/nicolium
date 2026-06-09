@@ -7,6 +7,7 @@ const selectChild = (
   node: ParentNode = document,
   count?: number,
   align?: 'start' | 'center' | 'end',
+  direction?: 'up' | 'down',
 ) => {
   if (index < 0) return false;
 
@@ -19,7 +20,7 @@ const selectChild = (
     return false;
   }
 
-  const selector = `[data-index="${index}"] .focusable`;
+  const selector = `:scope [data-index="${index}"] .focusable${direction === 'up' ? ':last-child' : ''}`;
   const element = node.querySelector<HTMLDivElement>(selector);
 
   if (element) {

@@ -46,6 +46,7 @@ import Input from '@/components/ui/input';
 import Tabs from '@/components/ui/tabs';
 import { MultiColumnProvider } from '@/contexts/multi-column-context';
 import Thread from '@/features/status/components/thread';
+import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { ProfileInfoPanel } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -752,8 +753,35 @@ const DeckColumn: React.FC<IDeckColumn> = ({
     [features.version],
   );
 
+  const handlers = {
+    focusPreviousColumn: () => {
+      const prevIndex = index - 1;
+      if (prevIndex < 0) return;
+      const prevColumn = document.querySelector<HTMLDivElement>(
+        `.deck__column[data-index="${prevIndex}"]`,
+      );
+      console.log('focus previous column', prevIndex, prevColumn);
+      prevColumn?.focus();
+    },
+    focusNextColumn: () => {
+      const nextIndex = index + 1;
+      if (nextIndex >= columns) return;
+      const nextColumn = document.querySelector<HTMLDivElement>(
+        `.deck__column[data-index="${nextIndex}"]`,
+      );
+      console.log('focus next column', nextIndex, nextColumn);
+      nextColumn?.focus();
+    },
+    moveDown: () => {
+      if (!columnRef.current) return;
+      console.log(columnRef.current);
+      columnRef.current.querySelector<HTMLDivElement>('.focusable')?.focus();
+    },
+  };
+
   return (
-    <div
+    <Hotkeys
+      handlers={handlers}
       ref={columnRef}
       className={clsx('deck__column', `deck__column--${column.columnWidth}`, {
         'deck__column--highlight': highlight,
@@ -771,7 +799,7 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       <DeckColumnIdContext.Provider value={column.id}>
         <RouterProvider router={router} context={context} />
       </DeckColumnIdContext.Provider>
-    </div>
+    </Hotkeys>
   );
 };
 

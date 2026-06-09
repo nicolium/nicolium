@@ -21,6 +21,7 @@ import Tombstone from '@/components/statuses/tombstone';
 import Icon from '@/components/ui/icon';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
+import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
@@ -103,11 +104,20 @@ interface ITimelineGap {
     direction: 'up' | 'down',
   ) => Promise<void>;
   firstEntry: boolean;
+  onMoveUp: () => void | boolean;
+  onMoveDown: () => void | boolean;
 }
 
-const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => {
+const TimelineGap: React.FC<ITimelineGap> = ({
+  gap,
+  onFillGap,
+  firstEntry,
+  onMoveUp,
+  onMoveDown,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const intl = useIntl();
+  const node = useRef<HTMLDivElement>(null);
 
   const handleFill = async (direction: 'up' | 'down') => {
     setIsLoading(true);
@@ -180,9 +190,36 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
     }
   };
 
+  const handleMoveUp = (e: KeyboardEvent) => {
+    if (e.target instanceof HTMLButtonElement && e.target.dataset.direction === 'up') {
+      node.current?.querySelector<HTMLButtonElement>('button[data-direction="down"]')?.focus();
+      return;
+    }
+
+    return onMoveUp();
+  };
+  const handleMoveDown = (e: KeyboardEvent) => {
+    if (e.target instanceof HTMLButtonElement && e.target.dataset.direction === 'down') {
+      node.current?.querySelector<HTMLButtonElement>('button[data-direction="up"]')?.focus();
+      return;
+    }
+
+    return onMoveDown();
+  };
+
+  const handlers = {
+    moveUp: handleMoveUp,
+    moveDown: handleMoveDown,
+  };
+
   return (
-    <div className='timeline-gap'>
-      <button onClick={() => handleFill('down')} disabled={isLoading}>
+    <Hotkeys handlers={handlers} className='timeline-gap' focusable={false} ref={node}>
+      <button
+        className='focusable'
+        onClick={() => handleFill('down')}
+        disabled={isLoading}
+        data-direction='down'
+      >
         <Icon src={iconCaretDoubleDown} aria-hidden />
         {firstEntry ? (
           <FormattedMessage id='timeline.gap.load_recent' defaultMessage='Load recent posts' />
@@ -199,11 +236,16 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
           {renderTimeDistance()}
         </span>
       </div>
-      <button onClick={() => handleFill('up')} disabled={isLoading}>
+      <button
+        className='focusable'
+        onClick={() => handleFill('up')}
+        disabled={isLoading}
+        data-direction='up'
+      >
         <Icon src={iconCaretDoubleUp} aria-hidden />
         <FormattedMessage id='timeline.gap.load_newer' defaultMessage='Load newer posts' />
       </button>
-    </div>
+    </Hotkeys>
   );
 };
 
@@ -393,14 +435,21 @@ const Timeline: React.FC<ITimeline> = ({
   } = query;
 
   const handleMoveUp = (index: number) => {
-    selectChild(index - 1, node, document.getElementById('status-list') ?? undefined);
+    selectChild(
+      index - 1,
+      node,
+      document.getElementById(`status-list-${timelineId}`) ?? undefined,
+      undefined,
+      undefined,
+      'up',
+    );
   };
 
   const handleMoveDown = (index: number) => {
     selectChild(
       index + 1,
       node,
-      document.getElementById('status-list') ?? undefined,
+      document.getElementById(`status-list-${timelineId}`) ?? undefined,
       entries.length,
     );
   };
@@ -410,7 +459,7 @@ const Timeline: React.FC<ITimeline> = ({
       selectChild(
         featuredStatusIds?.length ?? 0,
         node,
-        document.getElementById('status-list') ?? undefined,
+        document.getElementById(`status-list-${timelineId}`) ?? undefined,
         (featuredStatusIds?.length ?? 0) + entries.length,
         'start',
       );
@@ -454,6 +503,8 @@ const Timeline: React.FC<ITimeline> = ({
           gap={entry}
           onFillGap={fillGap}
           firstEntry={index === 0}
+          onMoveUp={() => handleMoveUp(index)}
+          onMoveDown={() => handleMoveDown(index)}
         />
       );
     }
@@ -541,7 +592,7 @@ const Timeline: React.FC<ITimeline> = ({
           <SkipPinned onClick={handleSkipPinned} />
         )}
         <ScrollableList
-          id='status-list'
+          id={`status-list-${timelineId}`}
           key='scrollable-list'
           scrollKey={timelineId}
           isLoading={isFetching}
