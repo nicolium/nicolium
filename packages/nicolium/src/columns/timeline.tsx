@@ -416,6 +416,7 @@ const Timeline: React.FC<ITimeline> = ({
   filters,
   ...props
 }) => {
+  const columnId: string = useRef(`timeline-${crypto.randomUUID()}`).current;
   const node = useRef<VirtuosoHandle | null>(null);
 
   const {
@@ -438,7 +439,7 @@ const Timeline: React.FC<ITimeline> = ({
     selectChild(
       index - 1,
       node,
-      document.getElementById(`status-list-${timelineId}`) ?? undefined,
+      document.getElementById(columnId) ?? undefined,
       undefined,
       undefined,
       'up',
@@ -446,12 +447,7 @@ const Timeline: React.FC<ITimeline> = ({
   };
 
   const handleMoveDown = (index: number) => {
-    selectChild(
-      index + 1,
-      node,
-      document.getElementById(`status-list-${timelineId}`) ?? undefined,
-      entries.length,
-    );
+    selectChild(index + 1, node, document.getElementById(columnId) ?? undefined, entries.length);
   };
 
   const handleSkipPinned = () => {
@@ -459,7 +455,7 @@ const Timeline: React.FC<ITimeline> = ({
       selectChild(
         featuredStatusIds?.length ?? 0,
         node,
-        document.getElementById(`status-list-${timelineId}`) ?? undefined,
+        document.getElementById(columnId) ?? undefined,
         (featuredStatusIds?.length ?? 0) + entries.length,
         'start',
       );
@@ -592,7 +588,7 @@ const Timeline: React.FC<ITimeline> = ({
           <SkipPinned onClick={handleSkipPinned} />
         )}
         <ScrollableList
-          id={`status-list-${timelineId}`}
+          id={columnId}
           key='scrollable-list'
           scrollKey={timelineId}
           isLoading={isFetching}

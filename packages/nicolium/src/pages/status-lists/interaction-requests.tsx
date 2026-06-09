@@ -4,7 +4,7 @@ import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
@@ -258,6 +258,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
 };
 
 const InteractionRequestsPage = () => {
+  const columnId: string = useRef(`interaction-requests-${crypto.randomUUID()}`).current;
   const intl = useIntl();
 
   const {
@@ -287,7 +288,7 @@ const InteractionRequestsPage = () => {
   };
 
   const selectChild = (index: number) => {
-    const selector = `[data-index="${index}"] .focusable`;
+    const selector = `#${columnId} [data-index="${index}"] .focusable`;
     const element = document.querySelector<HTMLDivElement>(selector);
 
     if (element) element.focus();
@@ -298,6 +299,7 @@ const InteractionRequestsPage = () => {
       <PullToRefresh onRefresh={refetch}>
         <ScrollableList
           scrollKey='interactionRequests'
+          id={columnId}
           isLoading={isFetching}
           showLoading={isLoading}
           hasMore={hasNextPage}

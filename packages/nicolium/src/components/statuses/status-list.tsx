@@ -46,6 +46,7 @@ const StatusList: React.FC<IStatusList> = ({
   className,
   ...other
 }) => {
+  const columnId: string = useRef(`status-list-${crypto.randomUUID()}`).current;
   const node = useRef<VirtuosoHandle | null>(null);
 
   const contextType = timelineToFilterContextType(timelineId);
@@ -56,7 +57,7 @@ const StatusList: React.FC<IStatusList> = ({
 
   const handleMoveUp = (id: string) => {
     const elementIndex = getCurrentStatusIndex(id) - 1;
-    selectChild(elementIndex, node, document.getElementById('status-list') ?? undefined);
+    selectChild(elementIndex, node, document.getElementById(columnId) ?? undefined);
   };
 
   const handleMoveDown = (id: string) => {
@@ -64,7 +65,7 @@ const StatusList: React.FC<IStatusList> = ({
     selectChild(
       elementIndex,
       node,
-      document.getElementById('status-list') ?? undefined,
+      document.getElementById(columnId) ?? undefined,
       scrollableContent.length,
     );
   };
@@ -164,7 +165,7 @@ const StatusList: React.FC<IStatusList> = ({
 
   return (
     <ScrollableList
-      id='status-list'
+      id={columnId}
       key='scrollable-list'
       isLoading={isLoading}
       showLoading={isLoading && statusIds.length === 0}

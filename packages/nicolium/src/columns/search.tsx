@@ -29,6 +29,7 @@ interface ISearchColumn {
 const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId }) => {
   query = query.trim();
 
+  const columnId: string = useRef(`search-results-${crypto.randomUUID()}`).current;
   const node = useRef<VirtuosoHandle | null>(null);
 
   const searchAccountsQuery = useSearchAccounts((type === 'accounts' && query) || '');
@@ -50,7 +51,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId }) => {
     if (!resultsIds) return;
 
     const elementIndex = getCurrentIndex(id) - 1;
-    selectChild(elementIndex, node, document.getElementById('search-results') ?? undefined);
+    selectChild(elementIndex, node, document.getElementById(columnId) ?? undefined);
   };
 
   const handleMoveDown = (id: string) => {
@@ -60,7 +61,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId }) => {
     selectChild(
       elementIndex,
       node,
-      document.getElementById('search-results') ?? undefined,
+      document.getElementById(columnId) ?? undefined,
       resultsIds.length,
     );
   };
@@ -147,7 +148,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId }) => {
     <ScrollableList
       scrollKey={`search-results:${type}`}
       ref={node}
-      id='search-results'
+      id={columnId}
       key={type}
       isLoading={!!query && isFetching}
       showLoading={isLoading}

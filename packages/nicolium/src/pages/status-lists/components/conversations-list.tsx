@@ -12,6 +12,7 @@ import Conversation from './conversation';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
 const ConversationsList: React.FC = () => {
+  const columnId: string = useRef(`conversations-${crypto.randomUUID()}`).current;
   const ref = useRef<VirtuosoHandle | null>(null);
 
   const { conversations, isLoading, hasNextPage, isFetching, fetchNextPage } = useConversations();
@@ -20,7 +21,7 @@ const ConversationsList: React.FC = () => {
 
   const handleMoveUp = (id: string) => {
     const elementIndex = getCurrentIndex(id) - 1;
-    selectChild(elementIndex, ref, document.getElementById('direct-list') ?? undefined);
+    selectChild(elementIndex, ref, document.getElementById(columnId) ?? undefined);
   };
 
   const handleMoveDown = (id: string) => {
@@ -28,7 +29,7 @@ const ConversationsList: React.FC = () => {
     selectChild(
       elementIndex,
       ref,
-      document.getElementById('direct-list') ?? undefined,
+      document.getElementById(columnId) ?? undefined,
       conversations.length,
     );
   };
@@ -49,7 +50,7 @@ const ConversationsList: React.FC = () => {
       ref={ref}
       hasMore={hasNextPage}
       onLoadMore={handleLoadOlder}
-      id='direct-list'
+      id={columnId}
       isLoading={isFetching}
       showLoading={isLoading}
       emptyMessageText={

@@ -167,6 +167,8 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
   filter,
   onChangeFilter,
 }) => {
+  const columnId: string = useRef(`notifications-${crypto.randomUUID()}`).current;
+
   const features = useFeatures();
   const settings = useSettings();
   const { mutate: markNotificationsRead } = useMarkNotificationsReadMutation();
@@ -246,13 +248,18 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
   const handleMoveUp = (id: string) => {
     const elementIndex =
       displayedNotifications.findIndex((item) => item !== null && item.group_key === id) - 1;
-    selectChild(elementIndex, node);
+    selectChild(elementIndex, node, document.getElementById(columnId) ?? undefined);
   };
 
   const handleMoveDown = (id: string) => {
     const elementIndex =
       displayedNotifications.findIndex((item) => item !== null && item.group_key === id) + 1;
-    selectChild(elementIndex, node, undefined, displayedNotifications.length);
+    selectChild(
+      elementIndex,
+      node,
+      document.getElementById(columnId) ?? undefined,
+      displayedNotifications.length,
+    );
   };
 
   const handleDequeueNotifications = useCallback(() => {
@@ -330,6 +337,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
   const scrollContainer = (
     <ScrollableList
       ref={node}
+      id={columnId}
       scrollKey='notifications'
       isLoading={isFetching}
       showLoading={isLoading}

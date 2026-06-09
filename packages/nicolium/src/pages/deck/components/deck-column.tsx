@@ -755,6 +755,7 @@ const DeckColumn: React.FC<IDeckColumn> = ({
 
   const handlers = {
     focusPreviousColumn: () => {
+      console.log('focus previous column handler', index);
       const prevIndex = index - 1;
       if (prevIndex < 0) return;
       const prevColumn = document.querySelector<HTMLDivElement>(
