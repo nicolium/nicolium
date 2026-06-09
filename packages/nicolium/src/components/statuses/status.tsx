@@ -15,6 +15,7 @@ import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
+import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import { useStatus, type SelectedStatus } from '@/queries/statuses/use-status';
@@ -54,9 +55,10 @@ const messages = defineMessages({
 
 interface IAccountInfo {
   status: SelectedStatus;
+  columnId?: string;
 }
 
-const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
+const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status, columnId }) => {
   const intl = useIntl();
   const { statusActionBarItems } = useSettings();
 
@@ -67,6 +69,7 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
         status={status}
         account={status.account}
         className='status__timestamp-link'
+        columnId={columnId}
         onClick={(event) => {
           event.stopPropagation();
         }}
@@ -174,6 +177,7 @@ interface IStatus {
   fromBookmarks?: boolean;
   className?: string;
   expandable?: boolean;
+  columnId?: string;
 }
 
 const Status: React.FC<IStatus> = React.memo((props) => {
@@ -196,6 +200,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     className,
     contextType,
     expandable = true,
+    columnId,
   } = props;
 
   const intl = useIntl();
@@ -271,6 +276,8 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     if (!e || !(e.ctrlKey || e.metaKey)) {
       if (onClick) {
         onClick();
+      } else if (columnId) {
+        deckColumnRouterRegistry.get(columnId)?.router.navigate(link);
       } else {
         navigate(link);
       }
@@ -327,14 +334,27 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   };
 
   const handleHotkeyOpen = () => {
-    navigate({
+    const link = linkOptions({
       to: '/@{$username}/posts/$statusId',
       params: { username: actualStatus.account.acct, statusId: actualStatus.id },
     });
+    if (columnId) {
+      deckColumnRouterRegistry.get(columnId)?.router.navigate(link);
+    } else {
+      navigate(link);
+    }
   };
 
   const handleHotkeyOpenProfile = () => {
-    navigate({ to: '/@{$username}', params: { username: actualStatus.account.acct } });
+    const link = linkOptions({
+      to: '/@{$username}',
+      params: { username: actualStatus.account.acct },
+    });
+    if (columnId) {
+      deckColumnRouterRegistry.get(columnId)?.router.navigate(link);
+    } else {
+      navigate(link);
+    }
   };
 
   const handleHotkeyMoveUp = () => {
@@ -398,7 +418,11 @@ const Status: React.FC<IStatus> = React.memo((props) => {
               defaultMessage='{name} reposted from {group}'
               values={{
                 name: (
-                  <AccountLink account={status.account} className='status-info__link'>
+                  <AccountLink
+                    account={status.account}
+                    className='status-info__link'
+                    columnId={columnId}
+                  >
                     <bdi>
                       <strong>
                         <Emojify
@@ -432,6 +456,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
             account={status.account}
             className='status-info__link'
             key={status.account.acct}
+            columnId={columnId}
           >
             <bdi>
               <strong>
@@ -509,7 +534,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         />
       );
     }
-  }, [status.account, group?.id]);
+  }, [status.account, group?.id, columnId]);
 
   if (!status) return null;
 
@@ -585,7 +610,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
               <AccountContainer
                 key={actualStatus.account_id}
                 id={actualStatus.account_id}
-                action={<AccountInfo status={actualStatus} />}
+                action={<AccountInfo status={actualStatus} columnId={columnId} />}
                 showAccountHoverCard={hoverable}
                 withLinkToProfile={hoverable}
                 approvalStatus={actualStatus.approval_status}

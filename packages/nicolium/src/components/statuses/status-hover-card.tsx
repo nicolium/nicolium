@@ -17,7 +17,7 @@ interface IStatusHoverCard {
 const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   const router = useRouter();
 
-  const { statusId, ref } = useStatusHoverCardStore();
+  const { statusId, columnId, ref } = useStatusHoverCardStore();
   const { closeStatusHoverCard, updateStatusHoverCard } = useStatusHoverCardActions();
 
   useStatus(statusId ?? undefined);
@@ -135,6 +135,7 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
         className='status-hover-card__status'
         key={statusId}
         id={statusId}
+        columnId={columnId || undefined}
         hoverable={false}
         hideActionBar
         muted

@@ -1,13 +1,26 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 
+import { DeckColumnIdContext } from '@/pages/deck/components/deck-column';
 import { useStatusHoverCardActions } from '@/stores/status-hover-card';
 import { isMobile, userTouching } from '@/utils/is-mobile';
 
-const showStatusHoverCard = debounce((openStatusHoverCard, ref, statusId) => {
-  openStatusHoverCard(ref, statusId);
-}, 300);
+const showStatusHoverCard = debounce(
+  (
+    openStatusHoverCard: (
+      ref: React.RefObject<HTMLDivElement | null>,
+      statusId: string,
+      columnId?: string,
+    ) => void,
+    ref: React.RefObject<HTMLDivElement | null>,
+    statusId: string,
+    columnId?: string,
+  ) => {
+    openStatusHoverCard(ref, statusId, columnId);
+  },
+  300,
+);
 
 interface IHoverStatusWrapper {
   statusId: string;
@@ -26,11 +39,12 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
   const { openStatusHoverCard, closeStatusHoverCard } = useStatusHoverCardActions();
 
   const ref = useRef<HTMLDivElement>(null);
+  const columnId = useContext(DeckColumnIdContext) || undefined;
   const Elem: keyof React.JSX.IntrinsicElements = inline ? 'span' : 'div';
 
   const handleMouseEnter = () => {
     if (!isMobile(window.innerWidth)) {
-      showStatusHoverCard(openStatusHoverCard, ref, statusId);
+      showStatusHoverCard(openStatusHoverCard, ref, statusId, columnId);
     }
   };
 
@@ -46,7 +60,7 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
       event.preventDefault();
       event.stopPropagation();
 
-      openStatusHoverCard(ref as React.RefObject<HTMLDivElement>, statusId);
+      openStatusHoverCard(ref as React.RefObject<HTMLDivElement | null>, statusId, columnId);
       return;
     }
 
