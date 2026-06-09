@@ -93,12 +93,14 @@ const useStatusMetaStore = create<State>()(
           }
         });
       },
-      toggleStatusesMediaHidden: (statusIds) => (state: State) => {
-        for (const statusId of statusIds) {
-          if (!state.statuses[statusId]) state.statuses[statusId] = {};
+      toggleStatusesMediaHidden: (statusIds) => {
+        set((state: State) => {
+          for (const statusId of statusIds) {
+            if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-          state.statuses[statusId].mediaVisible = !state.statuses[statusId].mediaVisible;
-        }
+            state.statuses[statusId].mediaVisible = !state.statuses[statusId].mediaVisible;
+          }
+        });
       },
       fetchTranslation: (statusId, targetLanguage) => {
         set((state: State) => {

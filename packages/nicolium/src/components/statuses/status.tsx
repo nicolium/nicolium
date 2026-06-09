@@ -202,8 +202,15 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const navigate = useNavigate();
   const router = useRouter();
 
-  const { toggleStatusesMediaHidden, unfilterStatus } = useStatusMetaActions();
-  const { deleted, showFiltered } = useStatusMeta(status.id);
+  const {
+    expandStatuses,
+    collapseStatuses,
+    expandStatusSpoilers,
+    collapseStatusSpoilers,
+    toggleStatusesMediaHidden,
+    unfilterStatus,
+  } = useStatusMetaActions();
+  const { spoilerExpanded, deleted, showFiltered } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { replyCompose, mentionCompose } = useComposeActions();
   const { boostModal, statusActionBarItems, useRocketIconForReblogs } = useSettings();
@@ -345,7 +352,18 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   };
 
   const handleHotkeyToggleSensitive = () => {
+    console.log('Toggling sensitive');
     toggleStatusesMediaHidden([actualStatus.id]);
+  };
+
+  const handleHotkeyToggleHidden = () => {
+    if (!spoilerExpanded) {
+      expandStatusSpoilers([status.id]);
+      expandStatuses([status.id]);
+    } else {
+      collapseStatusSpoilers([status.id]);
+      collapseStatuses([status.id]);
+    }
   };
 
   const handleHotkeyReact = () => {
@@ -633,6 +651,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     moveUp: handleHotkeyMoveUp,
     moveDown: handleHotkeyMoveDown,
     toggleSensitive: handleHotkeyToggleSensitive,
+    toggleHidden: handleHotkeyToggleHidden,
     openMedia: handleHotkeyOpenMedia,
     react: handleHotkeyReact,
   };

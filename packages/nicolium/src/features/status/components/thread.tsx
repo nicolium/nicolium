@@ -53,9 +53,15 @@ const Thread = ({
   const intl = useIntl();
   const { replyCompose, mentionCompose } = useComposeActions();
 
-  const { deleted } = useStatusMeta(status.id);
-  const { expandStatusSpoilers, revealStatusesMedia, toggleStatusesMediaHidden } =
-    useStatusMetaActions();
+  const { spoilerExpanded, deleted } = useStatusMeta(status.id);
+  const {
+    expandStatuses,
+    collapseStatuses,
+    expandStatusSpoilers,
+    collapseStatusSpoilers,
+    revealStatusesMedia,
+    toggleStatusesMediaHidden,
+  } = useStatusMetaActions();
   const { openModal } = useModalsActions();
   const {
     boostModal,
@@ -161,7 +167,18 @@ const Thread = ({
   };
 
   const handleHotkeyToggleSensitive = () => {
+    console.log('toggle sensitive');
     toggleStatusesMediaHidden([status.id]);
+  };
+
+  const handleHotkeyToggleHidden = () => {
+    if (!spoilerExpanded) {
+      expandStatusSpoilers([status.id]);
+      expandStatuses([status.id]);
+    } else {
+      collapseStatusSpoilers([status.id]);
+      collapseStatuses([status.id]);
+    }
   };
 
   const handleHotkeyReact = () => {
@@ -356,6 +373,7 @@ const Thread = ({
     mention: handleHotkeyMention,
     openProfile: handleHotkeyOpenProfile,
     toggleSensitive: handleHotkeyToggleSensitive,
+    toggleHidden: handleHotkeyToggleHidden,
     openMedia: handleHotkeyOpenMedia,
     react: handleHotkeyReact,
   };

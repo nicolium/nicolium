@@ -48,7 +48,7 @@ import { useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
-import { useStatusMetaActions } from '@/stores/status-meta';
+import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
 import { AccountLink } from './accounts/account-link';
 
@@ -305,15 +305,22 @@ const getNotificationStatusId = (notification: NotificationGroup): string | null
 const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, ...props }) => {
   const { mentionCompose, replyCompose } = useComposeActions();
 
+  const notification = useNotification(props.notification);
+  const status = notification.status;
+
   const { me } = useLoggedIn();
-  const { toggleStatusesMediaHidden } = useStatusMetaActions();
+  const { spoilerExpanded } = useStatusMeta(status?.id || '');
+  const {
+    expandStatuses,
+    collapseStatuses,
+    expandStatusSpoilers,
+    collapseStatusSpoilers,
+    toggleStatusesMediaHidden,
+  } = useStatusMetaActions();
   const { openModal } = useModalsActions();
   const settings = useSettings();
 
   const node = useRef<HTMLDivElement>(null);
-
-  const notification = useNotification(props.notification);
-  const status = notification.status;
 
   const { mutate: favouriteStatus } = useFavouriteStatus(status?.id!);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status?.id!);
@@ -403,6 +410,18 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
     }
   }, [status]);
 
+  const handleHotkeyToggleHidden = useCallback(() => {
+    if (status && typeof status === 'object') {
+      if (!spoilerExpanded) {
+        expandStatusSpoilers([status.id]);
+        expandStatuses([status.id]);
+      } else {
+        collapseStatusSpoilers([status.id]);
+        collapseStatuses([status.id]);
+      }
+    }
+  }, [status, spoilerExpanded]);
+
   const handleMoveUp = () => {
     if (onMoveUp) {
       onMoveUp(notification.group_key);
@@ -425,6 +444,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
     moveUp: handleMoveUp,
     moveDown: handleMoveDown,
     toggleSensitive: handleHotkeyToggleSensitive,
+    toggleHidden: handleHotkeyToggleHidden,
   };
 
   const displayedType =
