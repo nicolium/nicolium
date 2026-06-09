@@ -168,6 +168,7 @@ const timelineSchema = v.fallback(
 const baseDeckColumnSchema = v.object({
   id: v.fallback(v.string(), crypto.randomUUID()),
   columnWidth: v.fallback(v.picklist(['xs', 'sm', 'md', 'lg', 'xl']), 'md'),
+  fillAvailableWidth: v.fallback(v.boolean(), false),
 });
 
 const timelineDeckColumnSchema = v.object({
@@ -218,18 +219,21 @@ const deckSettingsSchema = v.fallback(
         id: crypto.randomUUID(),
         type: 'timeline',
         columnWidth: 'lg',
+        fillAvailableWidth: false,
         timeline: 'home',
       },
       {
         id: crypto.randomUUID(),
         type: 'notifications',
         columnWidth: 'md',
+        fillAvailableWidth: false,
         filter: 'all',
       },
       {
         id: crypto.randomUUID(),
         type: 'account',
         columnWidth: 'md',
+        fillAvailableWidth: false,
         accountId: 'self',
         excludeReplies: false,
         showPinned: false,

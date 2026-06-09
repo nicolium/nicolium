@@ -126,7 +126,10 @@ const DeckPage = () => {
               key={column.id}
               fallback={
                 <div
-                  className={`deck__column deck__column--error deck__column--${column.columnWidth}`}
+                  className={clsx(
+                    `deck__column deck__column--error deck__column--${column.columnWidth}`,
+                    column.fillAvailableWidth && 'deck__column--fill',
+                  )}
                 >
                   <FormattedMessage id='column.deck.error' defaultMessage='Failed to load column' />
                 </div>

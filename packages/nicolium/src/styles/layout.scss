@@ -1091,6 +1091,10 @@ body {
       position: relative;
       overflow-x: auto;
     }
+
+    &:has(.deck__column--fill) {
+      flex-grow: 1;
+    }
   }
 
   &__settings-sections,

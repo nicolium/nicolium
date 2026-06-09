@@ -26,6 +26,10 @@
       gap: 0;
       border-right: 1px solid var(--color-gray-800);
     }
+
+    &:has(.deck__column--fill) {
+      flex-grow: 1;
+    }
   }
 
   &__column {
@@ -59,6 +63,10 @@
 
     &--xl {
       width: 36rem;
+    }
+
+    &--fill {
+      flex: 1 1 auto;
     }
 
     &__header {
