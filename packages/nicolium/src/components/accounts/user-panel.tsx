@@ -28,12 +28,13 @@ const messages = defineMessages({
 
 interface IUserPanel {
   accountId: string;
+  columnId?: string;
   action?: React.JSX.Element;
   badges?: React.JSX.Element[];
   domain?: string;
 }
 
-const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) => {
+const UserPanel: React.FC<IUserPanel> = ({ accountId, columnId, action, badges, domain }) => {
   const intl = useIntl();
   const { demetricator, disableUserProvidedMedia } = useSettings();
   const { data: account } = useAccount(accountId);
@@ -55,7 +56,12 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
 
         <div className='user-panel__avatar__container'>
           {!disableUserProvidedMedia && (
-            <AccountLink account={account} title={acct} className='user-panel__avatar__link'>
+            <AccountLink
+              account={account}
+              title={acct}
+              className='user-panel__avatar__link'
+              columnId={columnId}
+            >
               <Avatar
                 src={account.avatar}
                 alt={account.avatar_description}
@@ -73,7 +79,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
       </div>
 
       <div className='user-panel__name'>
-        <AccountLink account={account}>
+        <AccountLink account={account} columnId={columnId}>
           <div className='user-panel__name__display-name'>
             <p>
               <Emojify text={account.display_name} emojis={account.emojis} />

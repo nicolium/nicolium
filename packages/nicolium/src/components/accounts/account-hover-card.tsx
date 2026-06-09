@@ -70,7 +70,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const router = useRouter();
   const intl = useIntl();
 
-  const { accountId, ref } = useAccountHoverCardStore();
+  const { accountId, columnId, ref } = useAccountHoverCardStore();
   const { updateAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
   const me = useCurrentAccount();
@@ -157,6 +157,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
         <div className='account-hover-card__info'>
           <UserPanel
             accountId={account.id}
+            columnId={columnId || undefined}
             action={<ActionButton account={account} small />}
             badges={badges}
           />

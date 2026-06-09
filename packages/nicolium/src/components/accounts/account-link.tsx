@@ -3,14 +3,16 @@ import React from 'react';
 
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column';
 
 import type { Account, Mention } from 'pl-api';
 
 interface IAccountLink extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   account: Pick<Account, 'acct' | 'url' | 'local'> | Mention;
+  columnId?: string;
 }
 
-const AccountLink: React.FC<IAccountLink> = ({ account, ...props }) => {
+const AccountLink: React.FC<IAccountLink> = ({ account, columnId, ...props }) => {
   const { isLoggedIn } = useLoggedIn();
   const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
 
@@ -28,8 +30,24 @@ const AccountLink: React.FC<IAccountLink> = ({ account, ...props }) => {
     );
   }
 
+  const handleClick = columnId
+    ? (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        deckColumnRouterRegistry
+          .get(columnId)
+          ?.router.navigate({ to: '/@{$username}', params: { username: account.acct } });
+      }
+    : undefined;
+
   return (
-    <Link to='/@{$username}' params={{ username: account.acct }} title={account.acct} {...props} />
+    <Link
+      to='/@{$username}'
+      params={{ username: account.acct }}
+      title={account.acct}
+      onClick={handleClick}
+      {...props}
+    />
   );
 };
 

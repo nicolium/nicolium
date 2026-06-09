@@ -811,4 +811,9 @@ const DeckColumn: React.FC<IDeckColumn> = ({
   );
 };
 
-export { DeckColumn, pruneDeckColumnRouters };
+export {
+  DeckColumn,
+  pruneDeckColumnRouters,
+  DeckColumnIdContext,
+  registry as deckColumnRouterRegistry,
+};

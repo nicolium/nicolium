@@ -1,11 +1,16 @@
 import { create } from 'zustand';
 
 type State = {
-  ref: React.MutableRefObject<HTMLDivElement> | null;
+  ref: React.RefObject<HTMLDivElement> | null;
   accountId: string | null;
+  columnId: string | null;
   hovered: boolean;
   actions: {
-    openAccountHoverCard: (ref: React.MutableRefObject<HTMLDivElement>, accountId: string) => void;
+    openAccountHoverCard: (
+      ref: React.RefObject<HTMLDivElement | null>,
+      accountId: string,
+      columnId?: string,
+    ) => void;
     updateAccountHoverCard: () => void;
     closeAccountHoverCard: (force?: boolean) => void;
   };
@@ -14,12 +19,14 @@ type State = {
 const useAccountHoverCardStore = create<State>((set) => ({
   ref: null,
   accountId: null,
+  columnId: null,
   hovered: false,
   actions: {
-    openAccountHoverCard: (ref, accountId) => {
+    openAccountHoverCard: (ref, accountId, columnId) => {
       set({
-        ref,
+        ref: ref.current ? (ref as React.RefObject<HTMLDivElement>) : null,
         accountId,
+        columnId,
       });
     },
     updateAccountHoverCard: () => {
@@ -34,6 +41,7 @@ const useAccountHoverCardStore = create<State>((set) => ({
           : {
               ref: null,
               accountId: null,
+              columnId: null,
               hovered: false,
             },
       );

@@ -1,13 +1,26 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 
+import { DeckColumnIdContext } from '@/pages/deck/components/deck-column';
 import { useAccountHoverCardActions } from '@/stores/account-hover-card';
 import { isMobile } from '@/utils/is-mobile';
 
-const showAccountHoverCard = debounce((openAccountHoverCard, ref, accountId) => {
-  openAccountHoverCard(ref, accountId);
-}, 300);
+const showAccountHoverCard = debounce(
+  (
+    openAccountHoverCard: (
+      ref: React.RefObject<HTMLDivElement | null>,
+      accountId: string,
+      columnId?: string,
+    ) => void,
+    ref: React.RefObject<HTMLDivElement | null>,
+    accountId: string,
+    columnId?: string,
+  ) => {
+    openAccountHoverCard(ref, accountId, columnId);
+  },
+  300,
+);
 
 interface IHoverAccountWrapper {
   accountId?: string;
@@ -22,12 +35,13 @@ const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(
     const { openAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
     const ref = useRef<HTMLDivElement>(null);
+    const columnId = useContext(DeckColumnIdContext) || undefined;
 
     const handleMouseEnter = () => {
       if (!accountId) return;
 
       if (!isMobile(window.innerWidth)) {
-        showAccountHoverCard(openAccountHoverCard, ref, accountId);
+        showAccountHoverCard(openAccountHoverCard, ref, accountId, columnId);
       }
     };
 

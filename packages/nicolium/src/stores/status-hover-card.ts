@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 
 type State = {
-  ref: React.MutableRefObject<HTMLDivElement> | null;
+  ref: React.RefObject<HTMLDivElement> | null;
   statusId: string | null;
   hovered: boolean;
   actions: {
-    openStatusHoverCard: (ref: React.MutableRefObject<HTMLDivElement>, statusId: string) => void;
+    openStatusHoverCard: (ref: React.RefObject<HTMLDivElement>, statusId: string) => void;
     updateStatusHoverCard: () => void;
     closeStatusHoverCard: (force?: boolean) => void;
   };
