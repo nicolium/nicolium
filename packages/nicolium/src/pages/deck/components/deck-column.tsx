@@ -755,6 +755,8 @@ const DeckColumn: React.FC<IDeckColumn> = ({
 
   const handlers = {
     focusPreviousColumn: () => {
+      if (document.body.classList.contains('with-modals')) return false;
+
       const prevIndex = index - 1;
       if (prevIndex < 0) return;
       const prevColumn = document.querySelector<HTMLDivElement>(
@@ -763,6 +765,8 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       prevColumn?.focus();
     },
     focusNextColumn: () => {
+      if (document.body.classList.contains('with-modals')) return false;
+
       const nextIndex = index + 1;
       if (nextIndex >= columns) return;
       const nextColumn = document.querySelector<HTMLDivElement>(

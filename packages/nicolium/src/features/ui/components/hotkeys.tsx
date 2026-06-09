@@ -135,8 +135,8 @@ const hotkeyMatcherMap = {
   forceNew: optionPlus('n'),
   focusColumn: any('1', '2', '3', '4', '5', '6', '7', '8', '9'),
   focusLastColumn: just('0'),
-  focusPreviousColumn: any('left'),
-  focusNextColumn: any('right'),
+  focusPreviousColumn: just('left'),
+  focusNextColumn: just('right'),
   // focusLoadMore: just('l'),
   reply: just('r'),
   favourite: just('f'),
@@ -210,6 +210,7 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         !event.defaultPrevented &&
         !['input', 'textarea', 'select', 'em-emoji-picker'].includes(tagName) &&
         !(event.target as HTMLElement).closest('[contenteditable], .multiselect-container') &&
+        !(event.target as HTMLElement).closest('.dropdown-menu__content') &&
         !(['a', 'button'].includes(tagName) && normalizeKey(event.key) === 'enter');
 
       if (shouldHandleEvent) {

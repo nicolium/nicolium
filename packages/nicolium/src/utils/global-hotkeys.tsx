@@ -147,6 +147,8 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     };
 
     const handleHotkeyFocusLastColumn = () => {
+      if (document.body.classList.contains('with-modals')) return false;
+
       const column = document.querySelector<HTMLDivElement>('.deck__column:last-child');
       if (column) {
         column.focus();
@@ -154,6 +156,8 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     };
 
     const handleHotkeyFocusNextColumn = () => {
+      if (document.body.classList.contains('with-modals')) return false;
+
       const column = document.querySelector<HTMLDivElement>('.deck__column:first-child');
       if (column) {
         column.focus();
