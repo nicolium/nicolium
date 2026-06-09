@@ -755,13 +755,11 @@ const DeckColumn: React.FC<IDeckColumn> = ({
 
   const handlers = {
     focusPreviousColumn: () => {
-      console.log('focus previous column handler', index);
       const prevIndex = index - 1;
       if (prevIndex < 0) return;
       const prevColumn = document.querySelector<HTMLDivElement>(
         `.deck__column[data-index="${prevIndex}"]`,
       );
-      console.log('focus previous column', prevIndex, prevColumn);
       prevColumn?.focus();
     },
     focusNextColumn: () => {
@@ -770,12 +768,10 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       const nextColumn = document.querySelector<HTMLDivElement>(
         `.deck__column[data-index="${nextIndex}"]`,
       );
-      console.log('focus next column', nextIndex, nextColumn);
       nextColumn?.focus();
     },
     moveDown: () => {
       if (!columnRef.current) return;
-      console.log(columnRef.current);
       columnRef.current.querySelector<HTMLDivElement>('.focusable')?.focus();
     },
     back: () => {
