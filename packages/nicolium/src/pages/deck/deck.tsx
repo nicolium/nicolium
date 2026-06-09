@@ -4,6 +4,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import HeadTitle from '@/components/helmet';
+import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useSettings } from '@/stores/settings';
 
 import { DeckColumn } from './components/deck-column';
@@ -110,42 +111,49 @@ const DeckPage = () => {
     updateColumns(updatedColumns);
   };
 
+  const handlers = {};
+
   return (
     <>
       <HeadTitle title={intl.formatMessage(messages.deck)} />
-      <div className='deck'>
-        <div
-          className={clsx('deck__fade', {
-            'deck__fade--visible': !isNearLeft,
-          })}
-          ref={fadeRef}
-        />
-        <div className='deck__columns'>
-          {deck.columns.map((column, index) => (
-            <ColumnErrorBoundary
-              key={column.id}
-              fallback={
-                <div
-                  className={`deck__column deck__column--error deck__column--${column.columnWidth}`}
-                >
-                  <FormattedMessage id='column.deck.error' defaultMessage='Failed to load column' />
-                </div>
-              }
-            >
-              <DeckColumn
-                column={column}
-                index={index}
-                columns={deck.columns.length}
-                highlight={column.id === addedColumnId}
-                onRemove={handleRemove}
-                onChangeWidth={handleChangeWidth}
-                onChangeIndex={handleChangeIndex}
-              />
-            </ColumnErrorBoundary>
-          ))}
+      <Hotkeys handlers={handlers}>
+        <div className='deck'>
+          <div
+            className={clsx('deck__fade', {
+              'deck__fade--visible': !isNearLeft,
+            })}
+            ref={fadeRef}
+          />
+          <div className='deck__columns'>
+            {deck.columns.map((column, index) => (
+              <ColumnErrorBoundary
+                key={column.id}
+                fallback={
+                  <div
+                    className={`deck__column deck__column--error deck__column--${column.columnWidth}`}
+                  >
+                    <FormattedMessage
+                      id='column.deck.error'
+                      defaultMessage='Failed to load column'
+                    />
+                  </div>
+                }
+              >
+                <DeckColumn
+                  column={column}
+                  index={index}
+                  columns={deck.columns.length}
+                  highlight={column.id === addedColumnId}
+                  onRemove={handleRemove}
+                  onChangeWidth={handleChangeWidth}
+                  onChangeIndex={handleChangeIndex}
+                />
+              </ColumnErrorBoundary>
+            ))}
+          </div>
+          <NewColumnButton />
         </div>
-        <NewColumnButton />
-      </div>
+      </Hotkeys>
     </>
   );
 };

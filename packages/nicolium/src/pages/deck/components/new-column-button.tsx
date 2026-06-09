@@ -197,7 +197,7 @@ const NewColumnButton = () => {
 
   return (
     <DropdownMenu items={items} width='16rem'>
-      <button className='deck__add-column-button'>
+      <button id='add-column' className='deck__add-column-button'>
         <Icon src={iconPlus} aria-hidden />
         <FormattedMessage id='column.deck.add' defaultMessage='Add column' />
       </button>

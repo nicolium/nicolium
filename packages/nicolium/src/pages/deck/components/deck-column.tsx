@@ -759,6 +759,8 @@ const DeckColumn: React.FC<IDeckColumn> = ({
         'deck__column--highlight': highlight,
       })}
       tabIndex={-1}
+      data-index={index}
+      data-column-id={column.id}
     >
       <CardHeader className='deck__column__header'>
         <CardTitle title={title} />

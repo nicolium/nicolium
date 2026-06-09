@@ -128,6 +128,10 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
       navigate({ to: '/follow_requests' });
     };
 
+    const handleHotkeyAddColumn = () => {
+      (document.getElementById('add-column') as HTMLButtonElement | null)?.click();
+    };
+
     type HotkeyHandlers = { [key: string]: (keyEvent?: KeyboardEvent) => void };
 
     let handlers: HotkeyHandlers = {
@@ -148,6 +152,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
         goToBlocked: handleHotkeyGoToBlocked,
         goToMuted: handleHotkeyGoToMuted,
         goToRequests: handleHotkeyGoToRequests,
+        addColumn: handleHotkeyAddColumn,
       };
     }
     return handlers;

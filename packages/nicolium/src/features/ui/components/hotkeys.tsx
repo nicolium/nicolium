@@ -121,7 +121,7 @@ const hotkeyMatcherMap = {
   back: just('backspace'),
   new: just('n'),
   forceNew: optionPlus('n'),
-  // focusColumn: any('1', '2', '3', '4', '5', '6', '7', '8', '9'),
+  focusColumn: any('1', '2', '3', '4', '5', '6', '7', '8', '9'),
   // focusLoadMore: just('l'),
   reply: just('r'),
   favourite: just('f'),
@@ -163,6 +163,7 @@ const hotkeyMatcherMap = {
   //   'a',
   //   'enter',
   // ),
+  addColumn: just('a'),
 } as const;
 
 type HotkeyName = keyof typeof hotkeyMatcherMap;
