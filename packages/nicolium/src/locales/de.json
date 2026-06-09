@@ -58,7 +58,6 @@
   "account.unendorse.success": "Du schlägst @{acct} nicht mehr vor",
   "account.unfollow": "Entfolgen",
   "account.unmute": "Stummsch. aufheben",
-  "account.unsubscribe": "Benachrichtigungen von @{name} entabonnieren",
   "account.unsubscribe.fail": "Bei der Abboabmeldung dieses Accounts ist ein Fehler aufgetreten.",
   "account.unsubscribe.success": "Sie haben diesen Account deabonniert.",
   "account.verified": "Verifizierter Account",

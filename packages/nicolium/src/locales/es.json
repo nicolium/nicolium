@@ -61,7 +61,6 @@
   "account.unendorse.success": "Ya no estás presentando a @{acct}",
   "account.unfollow": "Dejar de seguir",
   "account.unmute": "Dejar de silenciar a @{name}",
-  "account.unsubscribe": "Darse de baja de las notificaciones de @{nombre}",
   "account.unsubscribe.fail": "Se ha producido un error al intentar cancelar la suscripción a esta cuenta.",
   "account.unsubscribe.success": "Te has dado de baja de esta cuenta.",
   "account.verified": "Cuenta verificada",

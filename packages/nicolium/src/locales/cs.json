@@ -46,7 +46,6 @@
   "account.unendorse": "Nepředstavit na profilu",
   "account.unfollow": "Přestat sledovat",
   "account.unmute": "Odkrýt uživatele @{name}",
-  "account.unsubscribe": "Odhlásit odběr oznámení o nových příspěvcích od uživatele @{name}",
   "account.unsubscribe.fail": "Při rušení odběru došlo k chybě.",
   "account.unsubscribe.success": "Zrušili jste odběr oznámení o nových příspěvcích.",
   "account.verified": "Ověřený účet",

@@ -58,7 +58,6 @@
   "account.unendorse.success": "@{acct} više nije zakačen",
   "account.unfollow": "Prestani pratiti",
   "account.unmute": "Uključi @{name}",
-  "account.unsubscribe": "Otkažite pretplatu na obavještenja od @{name}",
   "account.unsubscribe.fail": "Došlo je do greške pri pokušaju otkazivanja pretplate na ovaj račun.",
   "account.unsubscribe.success": "Odjavili ste se sa ovog naloga.",
   "account.verified": "Verifikovani Profil",

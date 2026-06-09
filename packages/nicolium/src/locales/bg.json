@@ -79,7 +79,6 @@
   "account.unendorse.success": "Вече не представяте @{acct}",
   "account.unfollow": "Отследване",
   "account.unmute": "Раззаглушаване на @{name}",
-  "account.unsubscribe": "Отписване от известия от @{name}",
   "account.unsubscribe.fail": "Възникна грешка при опита за отписване от този акаунт.",
   "account.unsubscribe.success": "Отписахте се от известия от този акаунт.",
   "account.verified": "Потвърден акаунт",

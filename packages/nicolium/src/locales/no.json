@@ -59,7 +59,6 @@
   "account.unendorse.success": "Du fremhever ikke lengre @{acct}",
   "account.unfollow": "Avfølg",
   "account.unmute": "Avdemp @{name}",
-  "account.unsubscribe": "Avslutt abonnementet på varsler fra @{name}",
   "account.unsubscribe.fail": "Det oppstod en feil da du prøvde å avslutte abonnementet på denne kontoen.",
   "account.unsubscribe.success": "Du har avsluttet abonnementet på denne kontoen.",
   "account.verified": "Bekreftet konto",

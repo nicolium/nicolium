@@ -60,7 +60,6 @@
   "account.unendorse.success": "Artık @{acct} adlı hesabı profilinizde öne çıkartmıyorsunuz",
   "account.unfollow": "Takipi bırak",
   "account.unmute": "@{name} adlı hesabı sessizden çıkart",
-  "account.unsubscribe": "@{name} tarafından gönderilen bildirimlerin aboneliğinden çıkın",
   "account.unsubscribe.fail": "Bu hesabın aboneliğinden çıkılırken bir hata oluştu.",
   "account.unsubscribe.success": "Bu hesabın aboneliğinden çıktınız.",
   "account.verified": "Onaylanmış Hesap",

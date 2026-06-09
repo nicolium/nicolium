@@ -58,7 +58,6 @@
   "account.unendorse.success": "You are no longer featuring @{acct}",
   "account.unfollow": "Nesekot",
   "account.unmute": "Noņemt apklusinājumu no lietotāja @{name}",
-  "account.unsubscribe": "Unsubscribe to notifications from @{name}",
   "account.unsubscribe.fail": "An error occurred trying to unsubscribe to this account.",
   "account.unsubscribe.success": "You have unsubscribed from this account.",
   "account.verified": "Verified Account",

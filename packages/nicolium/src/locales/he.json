@@ -60,7 +60,6 @@
   "account.unendorse.success": "You are no longer featuring @{acct}",
   "account.unfollow": "הפסקת מעקב",
   "account.unmute": "הפסקת השתקת @{name}",
-  "account.unsubscribe": "בטל הרשמה מ@{name}",
   "account.unsubscribe.fail": "An error occurred trying to unsubscribe to this account.",
   "account.unsubscribe.success": "You have unsubscribed from this account.",
   "account.verified": "Verified Account",

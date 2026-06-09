@@ -58,7 +58,6 @@
   "account.unendorse.success": "You are no longer featuring @{acct}",
   "account.unfollow": "Hætta að fylgja",
   "account.unmute": "Hætta að þagga niður í @{name}",
-  "account.unsubscribe": "Hætta að fylgjast með tilkynningum frá @{name}",
   "account.unsubscribe.fail": "An error occurred trying to unsubscribe to this account.",
   "account.unsubscribe.success": "You have unsubscribed from this account.",
   "account.verified": "Staðfestur reikningur",
