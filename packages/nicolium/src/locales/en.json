@@ -621,6 +621,7 @@
   "column.birthdays": "Birthdays",
   "column.blocks": "Blocks",
   "column.bookmarks": "Bookmarks",
+  "column.bookmarks.all": "All bookmarks",
   "column.bubble": "Bubble timeline",
   "column.change_email": "Change e-mail",
   "column.change_password": "Change password",

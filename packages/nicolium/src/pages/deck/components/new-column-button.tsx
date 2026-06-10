@@ -1,4 +1,5 @@
 import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
+import iconBookmarkSimple from '@phosphor-icons/core/regular/bookmark-simple.svg';
 import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
 import iconChartLine from '@phosphor-icons/core/regular/chart-line.svg';
 import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
@@ -26,6 +27,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAntennas } from '@/queries/accounts/use-antennas';
 import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
+import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 
@@ -49,6 +51,8 @@ const messages = defineMessages({
   trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
   trendingHashtags: { id: 'deck.columns.trending_hashtags', defaultMessage: 'Trending hashtags' },
   trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },
+  bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
+  allBookmarks: { id: 'column.bookmarks.all', defaultMessage: 'All bookmarks' },
 });
 
 const NewColumnButton = () => {
@@ -66,6 +70,7 @@ const NewColumnButton = () => {
   const { data: lists } = useLists();
   const { data: circles } = useCircles();
   const { data: antennas } = useAntennas();
+  const { data: bookmarkFolders } = useBookmarkFolders();
 
   const handleAdd = (blueprint: Partial<DeckColumn>) => () => {
     const newColumn: Partial<DeckColumn> = {
@@ -189,6 +194,33 @@ const NewColumnButton = () => {
       });
     }
 
+    if (features.bookmarks) {
+      if (bookmarkFolders?.length) {
+        items.push({
+          text: intl.formatMessage(messages.bookmarks),
+          icon: iconBookmarkSimple,
+          items: [
+            {
+              text: intl.formatMessage(messages.allBookmarks),
+              icon: iconBookmarkSimple,
+              action: handleAdd({ type: 'bookmarks' }),
+            },
+            ...bookmarkFolders.map((folder) => ({
+              text: folder.name,
+              icon: iconBookmarkSimple,
+              action: handleAdd({ type: 'bookmarks' as const, folderId: folder.id }),
+            })),
+          ],
+        });
+      } else {
+        items.push({
+          text: intl.formatMessage(messages.bookmarks),
+          icon: iconBookmarkSimple,
+          action: handleAdd({ type: 'bookmarks' }),
+        });
+      }
+    }
+
     items.push({
       text: intl.formatMessage(messages.notifications),
       icon: iconBellSimple,
@@ -246,7 +278,7 @@ const NewColumnButton = () => {
     }
 
     return items;
-  }, [lists, circles, antennas, features, defaultTimeline, isAdmin, deck.columns]);
+  }, [lists, circles, antennas, bookmarkFolders, features, defaultTimeline, isAdmin, deck.columns]);
 
   return (
     <DropdownMenu items={items} width='16rem'>

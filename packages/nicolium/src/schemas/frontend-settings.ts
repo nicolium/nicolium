@@ -208,12 +208,19 @@ const trendingColumnSchema = v.object({
   trendsType: v.fallback(v.picklist(['accounts', 'statuses', 'hashtags', 'links']), 'hashtags'),
 });
 
+const bookmarksColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('bookmarks'),
+  folderId: v.fallback(v.string(), 'all'),
+});
+
 const deckColumnSchema = v.variant('type', [
   timelineDeckColumnSchema,
   notificationsColumnSchema,
   accountColumnSchema,
   searchColumnSchema,
   trendingColumnSchema,
+  bookmarksColumnSchema,
 ]);
 
 const deckSettingsSchema = v.fallback(

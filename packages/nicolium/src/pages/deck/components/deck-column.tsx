@@ -23,6 +23,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import { changeSetting } from '@/actions/settings';
+import { BookmarksColumn } from '@/columns/bookmarks';
 import NotificationsColumn from '@/columns/notifications';
 import SearchColumn from '@/columns/search';
 import {
@@ -55,6 +56,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
+import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
 import { useStatus } from '@/queries/statuses/use-status';
 import { router as appRouter } from '@/router';
 import { useInstance } from '@/stores/instance';
@@ -101,6 +103,7 @@ const messages = defineMessages({
   trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
   trendingHashtags: { id: 'deck.columns.trending_hashtags', defaultMessage: 'Trending hashtags' },
   trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },
+  bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
 });
 
 const SEARCH_FILTERS = ['accounts', 'statuses', 'hashtags', 'links'] as const;
@@ -135,6 +138,9 @@ const useColumnTitle = (column: DeckColumn): string => {
   const { data: account } = useAccount(
     column.type === 'account' && column.accountId ? column.accountId : undefined,
   );
+  const { data: bookmarkFolder } = useBookmarkFolder(
+    column.type === 'bookmarks' && column.folderId !== 'all' ? column.folderId : undefined,
+  );
 
   if (column.type === 'timeline') {
     return timelineHeading;
@@ -156,6 +162,13 @@ const useColumnTitle = (column: DeckColumn): string => {
       case 'links':
         return intl.formatMessage(messages.trendingLinks);
     }
+  }
+
+  if (column.type === 'bookmarks') {
+    if (column.folderId === 'all') {
+      return intl.formatMessage(messages.bookmarks);
+    }
+    return bookmarkFolder?.name ?? intl.formatMessage(messages.bookmarks);
   }
 
   return intl.formatMessage(messages[column.type]);
@@ -481,6 +494,19 @@ const trendingRoute = createRoute({
   staticData: { title: messages.search },
 });
 
+const BookmarksDeckColumn = () => {
+  const { folderId } = bookmarksRoute.useParams();
+
+  return <BookmarksColumn folderId={folderId === 'all' ? undefined : folderId} />;
+};
+
+const bookmarksRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/bookmarks/$folderId',
+  component: BookmarksDeckColumn,
+  staticData: { title: messages.bookmarks },
+});
+
 interface IAccountColumnBody {
   account?: React.ComponentProps<typeof ProfileInfoPanel>['account'];
   username: string;
@@ -589,6 +615,7 @@ const routeTree = rootRoute.addChildren([
   hashtagRoute,
   searchRoute,
   trendingRoute,
+  bookmarksRoute,
   accountRoute,
   accountByUsernameRoute,
   statusRoute,
@@ -637,6 +664,12 @@ const getInitialUrl = (column: DeckColumn) => {
         default:
           return '/trending/hashtags';
       }
+    }
+    case 'bookmarks': {
+      if (column.folderId === 'all') {
+        return '/bookmarks/all';
+      }
+      return `/bookmarks/${column.folderId}`;
     }
     default:
       return '/home';
