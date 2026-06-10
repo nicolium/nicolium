@@ -209,6 +209,8 @@ const NewColumnButton = () => {
             ...bookmarkFolders.map((folder) => ({
               text: folder.name,
               icon: iconFolderSimple,
+              emoji: folder.emoji ?? undefined,
+              emojiUrl: folder.emoji_url ?? undefined,
               action: handleAdd({ type: 'bookmarks' as const, folderId: folder.id }),
             })),
           ],

@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 
 import Counter from '@/components/ui/counter';
+import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
 import Toggle from '@/components/ui/toggle';
 import { userTouching } from '@/utils/is-mobile';
@@ -18,6 +19,8 @@ type MenuItem = {
   destructive?: boolean;
   href?: string;
   icon?: string;
+  emoji?: string;
+  emojiUrl?: string;
   meta?: string;
   middleClick?(event: React.MouseEvent): void;
   onChange?: (value: boolean) => void;
@@ -129,7 +132,11 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
 
   const itemContent = (
     <>
-      {item.icon && <Icon src={item.icon} className='dropdown-menu__item__icon' />}
+      {item.emoji ? (
+        <Emoji emoji={item.emoji} src={item.emojiUrl} className='dropdown-menu__item__icon' />
+      ) : (
+        item.icon && <Icon src={item.icon} className='dropdown-menu__item__icon' />
+      )}
 
       <div className='dropdown-menu__item__content'>
         {item.meta ? (
