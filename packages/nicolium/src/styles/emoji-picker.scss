@@ -1,20 +1,21 @@
 em-emoji-picker {
-  --rgb-background: 255 255 255;
+  --rgb-background: 0 0 0 0;
   --rgb-accent: var(--color-primary-600);
   --tw-shadow: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
   --shadow: var(--shadow-lg);
 }
 
-.dark em-emoji-picker {
-  --rgb-background: var(--color-primary-900);
-}
-
-.black em-emoji-picker {
-  --rgb-background: var(--color-gray-900);
-}
-
 .emoji-picker-dropdown {
   z-index: 101;
+  background: white;
+
+  .dark & {
+    background: var(--color-primary-900);
+  }
+
+  .black & {
+    background: var(--color-gray-900);
+  }
 
   &__container {
     position: relative;
