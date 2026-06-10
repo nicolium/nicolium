@@ -423,14 +423,14 @@ const SearchDeckColumn = () => {
   const [, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'search' }>>();
 
   const submit = (query: string) => {
-    navigate({ search: (prev) => ({ ...prev, q: query }) });
+    navigate({ search: (prev) => ({ ...prev, q: query }), replace: true });
     updateColumn({ query });
   };
 
   const items = (['accounts', 'statuses', 'hashtags'] as const).map((filter) => ({
     text: intl.formatMessage(searchTabMessages[filter]),
     action: () => {
-      navigate({ search: (prev) => ({ ...prev, type: filter }) });
+      navigate({ search: (prev) => ({ ...prev, type: filter }), replace: true });
       updateColumn({ searchType: filter });
     },
     name: filter,
