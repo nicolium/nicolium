@@ -1003,7 +1003,7 @@
   "datetime.distance.years": "{distance} {distance, plural, one {year} other {years}}",
   "deck.columns.timelines": "Timelines",
   "deck.columns.trending": "Trending",
-  "deck.columns.trending_accounts": "Trending accounts",
+  "deck.columns.trending_accounts": "Suggested accounts",
   "deck.columns.trending_hashtags": "Trending hashtags",
   "deck.columns.trending_links": "Trending links",
   "deck.columns.trending_statuses": "Trending statuses",

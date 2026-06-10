@@ -99,7 +99,7 @@ const messages = defineMessages({
     id: 'column.deck.add_profile',
     defaultMessage: 'Add profile to deck',
   },
-  trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Trending accounts' },
+  trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Suggested accounts' },
   trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
   trendingHashtags: { id: 'deck.columns.trending_hashtags', defaultMessage: 'Trending hashtags' },
   trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },

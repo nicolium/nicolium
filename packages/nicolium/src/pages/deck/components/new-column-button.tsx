@@ -48,7 +48,7 @@ const messages = defineMessages({
   notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
   search: { id: 'column.search', defaultMessage: 'Search' },
   trending: { id: 'deck.columns.trending', defaultMessage: 'Trending' },
-  trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Trending accounts' },
+  trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Suggested accounts' },
   trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
   trendingHashtags: { id: 'deck.columns.trending_hashtags', defaultMessage: 'Trending hashtags' },
   trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },
