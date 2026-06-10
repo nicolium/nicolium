@@ -49,7 +49,7 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
               label={
                 <FormattedMessage
                   id='preferences.fields.store_settings_in_notes'
-                  defaultMessage='Store settings in account notes (recommended)'
+                  defaultMessage='Store settings in account notes (might cause issues with more complex configurations)'
                 />
               }
               hint={

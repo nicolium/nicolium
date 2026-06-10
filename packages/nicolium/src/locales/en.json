@@ -1827,7 +1827,7 @@
   "preferences.fields.sidebar_items": "Customize sidebar items",
   "preferences.fields.spoilers_display.label": "Automatically expand text behind spoilers",
   "preferences.fields.status_actions_items": "Customize post actions",
-  "preferences.fields.store_settings_in_notes": "Store settings in account notes (recommended)",
+  "preferences.fields.store_settings_in_notes": "Store settings in account notes (might cause issues with more complex configurations)",
   "preferences.fields.store_settings_in_notes.hint": "It allows you to sync your settings across devices. They are only visible to you.",
   "preferences.fields.system_emoji_font.label": "Use system emoji font",
   "preferences.fields.system_font.label": "Use system’s default font",
