@@ -8,6 +8,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import { BookmarksColumn } from '@/columns/bookmarks';
+import { BookmarkFolderPicker } from '@/components/bookmark-folder-picker';
 import DropdownMenu, { type MenuItem } from '@/components/dropdown-menu';
 import Column from '@/components/ui/column';
 import {
@@ -137,6 +138,7 @@ const BookmarksPage: React.FC = () => {
   return (
     <Column
       label={folder ? folder.name : intl.formatMessage(messages.heading)}
+      title={<BookmarkFolderPicker active={folderId ?? 'all'} />}
       action={<DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />}
     >
       <BookmarksColumn folderId={folderId} />
