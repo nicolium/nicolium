@@ -29,6 +29,11 @@
   &__spoiler-input {
     border-radius: var(--radius-md);
     background-color: transparent !important;
+
+    .dark &.input--normal {
+      outline-style: solid;
+      outline-width: 2px;
+    }
   }
 
   &__editor {

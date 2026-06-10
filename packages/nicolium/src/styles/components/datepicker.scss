@@ -27,8 +27,7 @@
 
     &:focus {
       border-color: var(--color-primary-500);
-      outline: 1px solid var(--color-primary-500);
-      outline-offset: 0;
+      outline: 2px solid var(--color-primary-500);
     }
 
     .dark & {

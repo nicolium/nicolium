@@ -245,7 +245,6 @@ select {
       border-color: var(--color-gray-800);
       color: var(--color-gray-100);
       background-color: var(--color-gray-900);
-      outline: 1px solid var(--color-gray-800);
     }
 
     .dark &:focus {
@@ -323,16 +322,15 @@ select {
   &--search {
     &:focus {
       border-color: var(--color-primary-500);
-      outline: none;
-      box-shadow: 0 0 0 1px var(--color-primary-500);
+      outline: 1px solid var(--color-primary-500);
     }
 
     .dark & {
-      box-shadow: 0 0 0 1px var(--color-gray-800);
+      outline-color: var(--color-gray-800);
 
       &:focus {
         border-color: var(--color-primary-500);
-        box-shadow: 0 0 0 1px var(--color-primary-500);
+        outline-color: var(--color-primary-500);
       }
     }
   }
@@ -761,8 +759,7 @@ p.form-group__hint {
   color: var(--color-primary-600);
 
   &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--color-primary-500);
+    outline: 2px solid var(--color-primary-500);
   }
 
   .dark & {
@@ -843,14 +840,14 @@ p.form-group__hint {
 
     &:focus {
       border-color: var(--color-primary-500);
-      box-shadow: 0 0 0 1px var(--color-primary-500);
+      outline: 1px solid var(--color-primary-500);
     }
 
     .dark & {
       border-color: var(--color-gray-800);
       color: var(--color-gray-100);
       background-color: var(--color-gray-900);
-      box-shadow: 0 0 0 1px var(--color-gray-800);
+      outline: 1px solid var(--color-gray-800);
 
       &::placeholder {
         color: var(--color-gray-600);
@@ -858,7 +855,7 @@ p.form-group__hint {
 
       &:focus {
         border-color: var(--color-primary-500);
-        box-shadow: 0 0 0 1px var(--color-primary-500);
+        outline-color: var(--color-primary-500);
       }
     }
 
