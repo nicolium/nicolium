@@ -95,15 +95,21 @@ type State = {
     loadDefaultSettings: (settings: unknown) => void;
     loadUserSettings: (settings: unknown) => void;
     userSettingsSaving: () => void;
-    changeSetting: (path: string[], value: any) => void;
+    changeSetting: (path: string[], value: any | ((previousValue: any) => any)) => void;
     rememberEmojiUse: (emoji: Emoji) => void;
     rememberLanguageUse: (language: string) => void;
   };
 };
 
-const changeSetting = (object: APIEntity, path: string[], value: any, _root?: Settings) => {
+const changeSetting = (
+  object: APIEntity,
+  path: string[],
+  value: any | ((previousValue: any) => any),
+  _root?: Settings,
+) => {
   if (path.length === 1) {
-    object[path[0]] = value;
+    const previousValue = object[path[0]];
+    object[path[0]] = typeof value === 'function' ? value(previousValue) : value;
     return;
   }
 

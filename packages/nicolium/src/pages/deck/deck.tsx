@@ -91,33 +91,33 @@ const DeckPage = () => {
     return () => clearTimeout(timeout);
   }, [addedColumnId]);
 
-  const updateColumns = (columns: Array<DeckColumnSchema>) =>
-    changeSetting(['deck', 'columns'], columns);
+  const updateColumns = (
+    updateFn: (oldColumns: Array<DeckColumnSchema>) => Array<DeckColumnSchema>,
+  ) => changeSetting(['deck', 'columns'], updateFn);
 
   const handleRemove = (id: string) => {
-    updateColumns(deck.columns.filter((column) => column.id !== id));
+    updateColumns((columns) => columns.filter((column) => column.id !== id));
     toast.success(messages.columnRemoved);
   };
 
   const handleChangeWidth = (id: string, newWidth: DeckColumnSchema['columnWidth']) =>
-    updateColumns(
-      deck.columns.map((column) =>
-        column.id === id ? { ...column, columnWidth: newWidth } : column,
-      ),
+    updateColumns((columns) =>
+      columns.map((column) => (column.id === id ? { ...column, columnWidth: newWidth } : column)),
     );
 
   const handleChangeIndex = (id: string, newIndex: number) => {
-    const updatedColumns = [...deck.columns];
-    const oldIndex = updatedColumns.findIndex((column) => column.id === id);
-    if (oldIndex === -1) return;
-    const column = updatedColumns.splice(oldIndex, 1)[0];
-    updatedColumns.splice(newIndex, 0, column);
-    updateColumns(updatedColumns);
+    updateColumns((columns) => {
+      const oldIndex = columns.findIndex((column) => column.id === id);
+      if (oldIndex === -1) return columns;
+      const column = columns.splice(oldIndex, 1)[0];
+      columns.splice(newIndex, 0, column);
+      return [...columns];
+    });
   };
 
   const handleToggleFill = (id: string) => {
-    updateColumns(
-      deck.columns.map((column) =>
+    updateColumns((columns) =>
+      columns.map((column) =>
         column.id === id ? { ...column, fillAvailableWidth: !column.fillAvailableWidth } : column,
       ),
     );

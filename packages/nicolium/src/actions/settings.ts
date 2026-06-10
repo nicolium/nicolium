@@ -24,7 +24,11 @@ const saveSuccessMessage = defineMessage({
   defaultMessage: 'Preferences saved',
 });
 
-const changeSetting = (path: string[], value: any, opts?: SettingOpts) => {
+const changeSetting = (
+  path: string[],
+  value: any | ((previousValue: any) => any),
+  opts?: SettingOpts,
+) => {
   useSettingsStore.getState().actions.changeSetting(path, value);
 
   if (opts?.save !== false) return saveSettings(opts, path[0] === 'storeSettingsInNotes');
