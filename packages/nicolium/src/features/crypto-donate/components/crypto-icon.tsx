@@ -1,12 +1,15 @@
 import genericIcon from 'cryptocurrency-icons/svg/color/generic.svg';
 import React from 'react';
 
+let modules: Record<string, any> | null = null;
+
 /** Get crypto icon URL by ticker symbol, or fall back to generic icon */
 const getIcon = (ticker: string): string => {
-  const modules: Record<string, any> = import.meta.glob(
-    '../../../../node_modules/cryptocurrency-icons/svg/color/*.svg',
-    { eager: true },
-  );
+  if (modules === null) {
+    modules = import.meta.glob('../../../../node_modules/cryptocurrency-icons/svg/color/*.svg', {
+      eager: true,
+    });
+  }
   const key = `../../../../node_modules/cryptocurrency-icons/svg/color/${ticker}.svg`;
   return modules[key]?.default ?? genericIcon;
 };
