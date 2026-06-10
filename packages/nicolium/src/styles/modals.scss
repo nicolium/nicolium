@@ -52,7 +52,7 @@
 .hotkey-modal {
   max-width: 56rem;
 
-  div {
+  .modal__children div {
     display: flex;
     flex-direction: column;
     font-size: var(--text-sm);
