@@ -326,6 +326,7 @@ const settingsSchema = v.object({
       accentColor: v.optional(v.string()),
       colors: v.optional(v.any()),
       interfaceSize: v.fallback(v.picklist(['sm', 'md', 'lg', 'xl']), 'md'),
+      borderRadiusIntensity: v.fallback(v.picklist(['none', 'reduced', 'default']), 'default'),
       systemDarkThemePreference: v.fallback(v.picklist(['dark', 'black']), 'black'),
     }),
     undefined,

@@ -76,13 +76,23 @@ const NicoliumHead = () => {
 
   useEffect(() => {
     document.documentElement.lang = locale;
-    document.documentElement.className = clsx(`body--${themeSettings?.interfaceSize ?? 'md'}`, {
-      dark: theme === 'dark',
-      'black dark': theme === 'black',
-      'window-controls-overlay': wcoVisible,
-      'window-controls-overlay--right': wcoRight,
-    });
-  }, [locale, themeSettings?.interfaceSize, theme, wcoVisible, wcoRight]);
+    document.documentElement.className = clsx(
+      `body--${themeSettings?.interfaceSize ?? 'md'} body--borders-${themeSettings?.borderRadiusIntensity ?? 'default'}`,
+      {
+        dark: theme === 'dark',
+        'black dark': theme === 'black',
+        'window-controls-overlay': wcoVisible,
+        'window-controls-overlay--right': wcoRight,
+      },
+    );
+  }, [
+    locale,
+    themeSettings?.interfaceSize,
+    themeSettings?.borderRadiusIntensity,
+    theme,
+    wcoVisible,
+    wcoRight,
+  ]);
 
   useEffect(() => {
     document.body.className = bodyClass;

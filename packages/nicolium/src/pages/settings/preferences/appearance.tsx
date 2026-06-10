@@ -21,6 +21,7 @@ import SettingToggle from '../components/setting-toggle';
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 
 const INTERFACE_SIZES = ['sm', 'md', 'lg', 'xl'] as const;
+const BORDER_RADIUS_INTENSITIES = ['none', 'reduced', 'default'] as const;
 
 const messages = defineMessages({
   heading: { id: 'preferences.heading.appearance', defaultMessage: 'Appearance settings' },
@@ -40,6 +41,18 @@ const messages = defineMessages({
   interfaceSizeExtraLarge: {
     id: 'preferences.options.interface_size.xl',
     defaultMessage: 'Extra large',
+  },
+  borderRadiusIntensityNone: {
+    id: 'preferences.options.border_radius_intensity.none',
+    defaultMessage: 'None',
+  },
+  borderRadiusIntensityReduced: {
+    id: 'preferences.options.border_radius_intensity.reduced',
+    defaultMessage: 'Reduced',
+  },
+  borderRadiusIntensityDefault: {
+    id: 'preferences.options.border_radius_intensity.default',
+    defaultMessage: 'Default',
   },
   dark: { id: 'theme_toggle.dark', defaultMessage: 'Dark' },
   black: { id: 'theme_toggle.black', defaultMessage: 'Black' },
@@ -104,6 +117,20 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
     debouncedSave();
   };
 
+  const onBorderRadiusIntensityChange = (value: number) => {
+    const theme = settings.theme ?? frontendConfig.defaultSettings.theme;
+
+    changeSetting(
+      ['theme'],
+      {
+        ...theme,
+        borderRadiusIntensity: BORDER_RADIUS_INTENSITIES[value],
+      },
+      { showAlert: true, save: false },
+    );
+    debouncedSave();
+  };
+
   const onThemeReset = () => {
     changeSetting(['themeMode'], defaultSettings.themeMode, { save: false });
     changeSetting(['theme'], defaultSettings.theme, { showAlert: true });
@@ -131,6 +158,19 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
         return intl.formatMessage(messages.interfaceSizeMedium);
     }
   }, [settings.theme?.interfaceSize, settings.locale]);
+
+  const borderRadiusIntensityValueText = React.useMemo(() => {
+    const intensity = settings.theme?.borderRadiusIntensity ?? 'default';
+
+    switch (intensity) {
+      case 'none':
+        return intl.formatMessage(messages.borderRadiusIntensityNone);
+      case 'reduced':
+        return intl.formatMessage(messages.borderRadiusIntensityReduced);
+      default:
+        return intl.formatMessage(messages.borderRadiusIntensityDefault);
+    }
+  }, [settings.theme?.borderRadiusIntensity, settings.locale]);
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -165,6 +205,27 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
                 steps={4}
                 onChange={onInterfaceSizeChange}
                 aria-valuetext={interfaceSizeValueText}
+              />
+            </div>
+          </ListItem>
+          <ListItem
+            label={
+              <div className='appearance__size-label'>
+                <FormattedMessage
+                  id='preferences.fields.border_radius_intensity'
+                  defaultMessage='Border radius intensity'
+                />
+              </div>
+            }
+          >
+            <div className='appearance__slider'>
+              <StepSlider
+                value={BORDER_RADIUS_INTENSITIES.indexOf(
+                  settings.theme?.borderRadiusIntensity ?? 'default',
+                )}
+                steps={3}
+                onChange={onBorderRadiusIntensityChange}
+                aria-valuetext={borderRadiusIntensityValueText}
               />
             </div>
           </ListItem>
