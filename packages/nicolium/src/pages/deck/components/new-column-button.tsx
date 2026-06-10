@@ -1,9 +1,10 @@
 import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
-import iconBookmarkSimple from '@phosphor-icons/core/regular/bookmark-simple.svg';
+import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
 import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
 import iconChartLine from '@phosphor-icons/core/regular/chart-line.svg';
 import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
 import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
+import iconFolderSimple from '@phosphor-icons/core/regular/folder-simple.svg';
 import iconGlobeSimple from '@phosphor-icons/core/regular/globe-simple.svg';
 import iconGraph from '@phosphor-icons/core/regular/graph.svg';
 import iconHash from '@phosphor-icons/core/regular/hash.svg';
@@ -198,16 +199,16 @@ const NewColumnButton = () => {
       if (bookmarkFolders?.length) {
         items.push({
           text: intl.formatMessage(messages.bookmarks),
-          icon: iconBookmarkSimple,
+          icon: iconBookmarks,
           items: [
             {
               text: intl.formatMessage(messages.allBookmarks),
-              icon: iconBookmarkSimple,
+              icon: iconBookmarks,
               action: handleAdd({ type: 'bookmarks' }),
             },
             ...bookmarkFolders.map((folder) => ({
               text: folder.name,
-              icon: iconBookmarkSimple,
+              icon: iconFolderSimple,
               action: handleAdd({ type: 'bookmarks' as const, folderId: folder.id }),
             })),
           ],
@@ -215,7 +216,7 @@ const NewColumnButton = () => {
       } else {
         items.push({
           text: intl.formatMessage(messages.bookmarks),
-          icon: iconBookmarkSimple,
+          icon: iconBookmarks,
           action: handleAdd({ type: 'bookmarks' }),
         });
       }
