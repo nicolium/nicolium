@@ -38,7 +38,8 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
 }) => {
   const intl = useIntl();
   const { autoloadTimelines, disableUserProvidedMedia } = useSettings();
-  const scrollParent = useColumnScrollParent() || window;
+  const columnScrollParent = useColumnScrollParent();
+  const scrollParent = columnScrollParent || window;
 
   // Whether we are scrolled past the `threshold`.
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -50,6 +51,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
 
   /** Number of pixels scrolled down from the top of the page. */
   const getScrollTop = (): number =>
+    columnScrollParent?.scrollTop ??
     (document.scrollingElement ?? document.documentElement).scrollTop;
 
   /** Unload feed items if scrolled to the top. */
@@ -80,12 +82,12 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
     // Delay adding the scroll listener so navigating back doesn't
     // unload feed items before the feed is rendered.
     setTimeout(() => {
-      window.addEventListener('scroll', handleScroll);
+      (scrollParent ?? window).addEventListener('scroll', handleScroll);
       handleScroll();
     }, 250);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      (scrollParent ?? window).removeEventListener('scroll', handleScroll);
     };
   }, []);
 
