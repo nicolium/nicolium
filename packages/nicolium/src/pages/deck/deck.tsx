@@ -5,6 +5,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { changeSetting } from '@/actions/settings';
 import HeadTitle from '@/components/helmet';
 import { useSettings } from '@/stores/settings';
+import toast from '@/toast';
 
 import { DeckColumn } from './components/deck-column';
 import { NewColumnButton } from './components/new-column-button';
