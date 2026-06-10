@@ -183,6 +183,15 @@ const mergeSettings = (state: State, updating = false) => {
       }
     }
   }
+
+  const previousSettings = useSettingsStore.getState().settings as APIEntity;
+  const merged = mergedSettings as APIEntity;
+  for (const key of Object.keys(merged)) {
+    if (key in previousSettings && isEqual(previousSettings[key], merged[key])) {
+      merged[key] = previousSettings[key];
+    }
+  }
+
   state.settings = mergedSettings;
 };
 
