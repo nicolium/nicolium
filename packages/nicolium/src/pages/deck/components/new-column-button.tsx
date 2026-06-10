@@ -97,7 +97,7 @@ const NewColumnButton = () => {
       features.publicTimeline &&
       (timelineAccess.live_feeds.local === 'restricted'
         ? isAdmin
-        : timelineAccess.live_feeds.local === 'public')
+        : timelineAccess.live_feeds.local !== 'disabled')
     ) {
       timelines.push({
         text: intl.formatMessage(messages.localTimeline),
@@ -110,7 +110,7 @@ const NewColumnButton = () => {
       features.bubbleTimeline &&
       (timelineAccess.live_feeds.bubble === 'restricted'
         ? isAdmin
-        : timelineAccess.live_feeds.bubble === 'public')
+        : timelineAccess.live_feeds.bubble !== 'disabled')
     ) {
       timelines.push({
         text: intl.formatMessage(messages.bubbleTimeline),
@@ -122,7 +122,7 @@ const NewColumnButton = () => {
       features.publicTimeline &&
       (timelineAccess.live_feeds.remote === 'restricted'
         ? isAdmin
-        : timelineAccess.live_feeds.remote === 'public')
+        : timelineAccess.live_feeds.remote !== 'disabled')
     ) {
       timelines.push({
         text: intl.formatMessage(messages.federatedTimeline),
@@ -134,7 +134,7 @@ const NewColumnButton = () => {
       features.wrenchedTimeline &&
       (timelineAccess.live_feeds.wrenched === 'restricted'
         ? isAdmin
-        : timelineAccess.live_feeds.wrenched === 'public')
+        : timelineAccess.live_feeds.wrenched !== 'disabled')
     ) {
       timelines.push({
         text: intl.formatMessage(messages.wrenchedTimeline),
