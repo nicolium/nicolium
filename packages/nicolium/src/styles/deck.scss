@@ -26,10 +26,6 @@
       gap: 0;
       border-right: 1px solid var(--color-gray-800);
     }
-
-    &:has(.deck__column--fill) {
-      flex-grow: 1;
-    }
   }
 
   &__column {
@@ -256,6 +252,21 @@
 
     &--visible::after {
       opacity: 1;
+    }
+  }
+
+  &:has(.deck__column--fill) {
+    .deck {
+      &__columns {
+        flex-grow: 1;
+      }
+
+      &__add-column-button {
+        flex-direction: column;
+        gap: 0;
+        font-size: 0;
+        line-height: 0;
+      }
     }
   }
 
