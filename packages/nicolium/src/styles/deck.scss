@@ -194,6 +194,10 @@
       .thread__container {
         flex: 1;
       }
+
+      .media-gallery {
+        max-height: 60vh;
+      }
     }
 
     &--error .deck__column__content {
