@@ -200,6 +200,18 @@
       }
     }
 
+    &--error .deck__column__content {
+      @include mixins.text($theme: muted, $align: center);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      button {
+        @include mixins.button($theme: danger);
+      }
+    }
+
     .black & {
       border-left: 1px solid var(--color-gray-800);
     }

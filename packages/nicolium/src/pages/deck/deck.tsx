@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import HeadTitle from '@/components/helmet';
@@ -8,6 +8,7 @@ import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import { DeckColumn } from './components/deck-column';
+import { DeckColumnError } from './components/deck-column-error';
 import { NewColumnButton } from './components/new-column-button';
 
 import type { DeckColumn as DeckColumnSchema } from '@/schemas/frontend-settings';
@@ -137,14 +138,12 @@ const DeckPage = () => {
             <ColumnErrorBoundary
               key={column.id}
               fallback={
-                <div
-                  className={clsx(
-                    `deck__column deck__column--error deck__column--${column.columnWidth}`,
-                    column.fillAvailableWidth && 'deck__column--fill',
-                  )}
-                >
-                  <FormattedMessage id='column.deck.error' defaultMessage='Failed to load column' />
-                </div>
+                <DeckColumnError
+                  column={column}
+                  index={index}
+                  columns={deck.columns.length}
+                  onRemove={handleRemove}
+                />
               }
             >
               <DeckColumn
