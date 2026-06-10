@@ -13,6 +13,7 @@ import type { DeckColumn as DeckColumnSchema } from '@/schemas/frontend-settings
 
 const messages = defineMessages({
   deck: { id: 'column.deck', defaultMessage: 'Deck' },
+  columnRemoved: { id: 'column.deck.remove.success', defaultMessage: 'Column removed' },
 });
 
 interface IColumnErrorBoundary {
@@ -91,8 +92,10 @@ const DeckPage = () => {
   const updateColumns = (columns: Array<DeckColumnSchema>) =>
     changeSetting(['deck', 'columns'], columns);
 
-  const handleRemove = (id: string) =>
+  const handleRemove = (id: string) => {
     updateColumns(deck.columns.filter((column) => column.id !== id));
+    toast.success(messages.columnRemoved);
+  };
 
   const handleChangeWidth = (id: string, newWidth: DeckColumnSchema['columnWidth']) =>
     updateColumns(

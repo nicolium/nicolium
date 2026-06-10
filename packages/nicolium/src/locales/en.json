@@ -637,6 +637,7 @@
   "column.deck.position.left": "Move column left",
   "column.deck.position.right": "Move column right",
   "column.deck.remove": "Remove column",
+  "column.deck.remove.success": "Column removed",
   "column.deck.timeline": "Timeline",
   "column.deck.width.fill": "Fill available width",
   "column.deck.width.shrink": "Shrink column",
