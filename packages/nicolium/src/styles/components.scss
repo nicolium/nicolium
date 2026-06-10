@@ -922,7 +922,7 @@ div[data-viewport-type='window']:has(.empty-message) {
     padding: 1.5rem;
   }
 
-  :has(.modal__title) &__body {
+  :has(&__title) &__body {
     padding-top: 0;
   }
 

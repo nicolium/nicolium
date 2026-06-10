@@ -298,7 +298,7 @@ body {
       @include mixins.text($weight: medium);
     }
 
-    &:not(.sidebar-navigation-link--active) {
+    &:not(&--active) {
       .sidebar-navigation-link__icon {
         .dark & {
           background-color: var(--color-gray-800);
@@ -780,7 +780,7 @@ body {
 .modal-root {
   opacity: 0;
 
-  &:not(.modal-root--visible) {
+  &:not(&--visible) {
     z-index: 50;
     transition: all 150ms var(--ease-default);
   }

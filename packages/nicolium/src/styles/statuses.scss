@@ -834,7 +834,7 @@ a.status-card {
       @include mixins.text($theme: inherit, $size: xs, $weight: semibold);
     }
 
-    &:has(.status-action-bar__button__text) {
+    &:has(&__text) {
       gap: 0.5rem;
     }
 
@@ -1385,7 +1385,7 @@ a.status-card {
     }
   }
 
-  &:not(.expand-button--expanded) {
+  &:not(&--expanded) {
     margin-top: -3rem;
   }
 

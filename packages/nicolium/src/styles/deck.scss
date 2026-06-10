@@ -259,7 +259,7 @@
     }
   }
 
-  &:has(.deck__column--fill) {
+  &:has(&__column--fill) {
     .deck {
       &__columns {
         flex-grow: 1;

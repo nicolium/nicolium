@@ -50,7 +50,7 @@
     max-width: 100%;
   }
 
-  &:has(.circle__fallback) canvas {
+  &:has(&__fallback) canvas {
     display: none;
   }
 
