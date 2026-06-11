@@ -167,6 +167,16 @@ const DeckColumn: React.FC<IDeckColumn> = ({
     [features.version],
   );
 
+  const backHandler = () => {
+    if (document.body.classList.contains('with-modals')) return;
+
+    if (router.history.canGoBack()) {
+      router.history.back();
+    } else {
+      return false;
+    }
+  };
+
   const handlers = {
     focusPreviousColumn: (event: KeyboardEvent) => {
       if (
@@ -200,13 +210,8 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       if (!columnRef.current) return;
       columnRef.current.querySelector<HTMLDivElement>('.focusable')?.focus();
     },
-    back: () => {
-      if (router.history.canGoBack()) {
-        router.history.back();
-      } else {
-        return false;
-      }
-    },
+    back: backHandler,
+    columnBack: backHandler,
   };
 
   return (

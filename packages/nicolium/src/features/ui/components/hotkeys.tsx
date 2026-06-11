@@ -179,6 +179,7 @@ const hotkeyMatcherMap = {
   //   'enter',
   // ),
   addColumn: just('c'),
+  columnBack: just('escape'),
 } as const;
 
 type HotkeyName = keyof typeof hotkeyMatcherMap;
