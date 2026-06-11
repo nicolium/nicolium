@@ -2224,7 +2224,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     display: inline-block;
 
     height: 100%;
-    border-radius: 0.375rem 0 0 0.375rem;
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
 
     background: var(--color-primary-100);
 

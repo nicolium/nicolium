@@ -805,8 +805,8 @@
     height: 4rem;
     min-height: 4rem;
     padding: 0.75rem 1rem;
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
+    border-top-left-radius: var(--radius-xl);
+    border-top-right-radius: var(--radius-xl);
 
     &__title {
       overflow: hidden;
@@ -916,15 +916,15 @@
 
       &::before {
         top: 0;
-        border-top-left-radius: 0.5rem;
-        border-top-right-radius: 0.5rem;
+        border-top-left-radius: var(--radius-lg);
+        border-top-right-radius: var(--radius-lg);
         background-image: linear-gradient(to bottom, var(--gradient-from), var(--gradient-to));
       }
 
       &::after {
         bottom: 0;
-        border-bottom-right-radius: 0.5rem;
-        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: var(--radius-lg);
+        border-bottom-left-radius: var(--radius-lg);
         background-image: linear-gradient(to top, var(--gradient-from), var(--gradient-to));
       }
 

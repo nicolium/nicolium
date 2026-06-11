@@ -592,8 +592,8 @@
     margin-left: auto;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
+    border-top-left-radius: var(--radius-xl);
+    border-top-right-radius: var(--radius-xl);
 
     background-color: #fff;
     box-shadow: var(--shadow-lg);
