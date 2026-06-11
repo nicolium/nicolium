@@ -171,6 +171,10 @@ const useColumnTitle = (column: DeckColumn): string => {
     return bookmarkFolder?.name ?? intl.formatMessage(messages.bookmarks);
   }
 
+  if (column.type === 'hashtag') {
+    return `#${column.hashtag}`;
+  }
+
   return intl.formatMessage(messages[column.type]);
 };
 
@@ -671,6 +675,8 @@ const getInitialUrl = (column: DeckColumn) => {
       }
       return `/bookmarks/${column.folderId}`;
     }
+    case 'hashtag':
+      return `/tags/${column.hashtag}`;
     default:
       return '/home';
   }
@@ -688,6 +694,8 @@ const columnSignature = (column: DeckColumn): string => {
       return 'search';
     case 'trending':
       return `trending:${column.trendsType}`;
+    case 'hashtag':
+      return `hashtag:${column.hashtag}`;
     default:
       return 'unknown';
   }

@@ -214,6 +214,12 @@ const bookmarksColumnSchema = v.object({
   folderId: v.fallback(v.string(), 'all'),
 });
 
+const hashtagColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('hashtag'),
+  hashtag: v.string(),
+});
+
 const deckColumnSchema = v.variant('type', [
   timelineDeckColumnSchema,
   notificationsColumnSchema,
@@ -221,6 +227,7 @@ const deckColumnSchema = v.variant('type', [
   searchColumnSchema,
   trendingColumnSchema,
   bookmarksColumnSchema,
+  hashtagColumnSchema,
 ]);
 
 const deckSettingsSchema = v.fallback(
