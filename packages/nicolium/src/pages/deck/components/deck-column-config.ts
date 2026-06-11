@@ -40,6 +40,8 @@ const messages = defineMessages({
   trendingHashtags: { id: 'deck.columns.trending_hashtags', defaultMessage: 'Trending hashtags' },
   trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
+  scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
+  drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
 });
 
 const DeckColumnIdContext = createContext<string | null>(null);
