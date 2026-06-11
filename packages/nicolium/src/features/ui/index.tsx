@@ -27,6 +27,7 @@ import { deckRoute, newStatusRoute } from '@/router';
 import { useAuthStore } from '@/stores/auth';
 import { useInstance, useInstanceStore } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
+import { usePictureInPictureType } from '@/stores/picture-in-picture';
 import { useSettings } from '@/stores/settings';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useTimelinesActions } from '@/stores/timelines';
@@ -42,6 +43,7 @@ import {
   AccountHoverCard,
   ChatWidget,
   DropdownNavigation,
+  PictureInPicture,
   StatusHoverCard,
 } from './util/async-components';
 
@@ -59,6 +61,7 @@ const UI: React.FC = React.memo(() => {
   const { resetErroredTimelines } = useTimelinesActions();
 
   const isDropdownMenuOpen = useIsDropdownMenuOpen();
+  const pipType = usePictureInPictureType();
   const standalone = useIsStandalone();
   const instanceFetched = useInstanceStore((state) => state.fetched);
   const { showChatWidget } = useSettings();
@@ -213,6 +216,12 @@ const UI: React.FC = React.memo(() => {
           <Suspense>
             <StatusHoverCard />
           </Suspense>
+
+          {pipType && (
+            <Suspense>
+              <PictureInPicture />
+            </Suspense>
+          )}
         </div>
       </div>
       <Suspense>

@@ -244,11 +244,11 @@
 
       opacity: 0;
       background: linear-gradient(to right, var(--color-gray-50) 0%, transparent 100%);
-  
+
       .dark & {
         background: linear-gradient(to right, var(--color-gray-800) 0%, transparent 100%);
       }
-  
+
       .black & {
         background: linear-gradient(to right, black 0%, transparent 100%);
       }

@@ -293,16 +293,16 @@ const Audio: React.FC<IAudio> = (props) => {
     if (audio.current) {
       setDuration(audio.current.duration);
 
-      if (currentTime) {
-        audio.current.currentTime = currentTime;
+      if (props.currentTime) {
+        audio.current.currentTime = props.currentTime;
       }
 
-      if (volume !== undefined) {
-        audio.current.volume = volume;
+      if (props.volume !== undefined) {
+        audio.current.volume = props.volume;
       }
 
-      if (muted !== undefined) {
-        audio.current.muted = muted;
+      if (props.muted !== undefined) {
+        audio.current.muted = props.muted;
       }
 
       if (autoPlay) {

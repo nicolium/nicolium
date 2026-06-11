@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useCallback } from 'react';
 
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import PlaceholderCard from '@/components/placeholders/placeholder-card';
@@ -6,6 +6,7 @@ import PreviewCard from '@/components/preview-card';
 import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
+import { usePictureInPictureActions } from '@/stores/picture-in-picture';
 import { useSettings } from '@/stores/settings';
 
 import { useMediaVisible } from './sensitive-content-overlay';
@@ -37,10 +38,23 @@ interface IStatusMedia {
 /** Render media attachments for a status. */
 const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick }) => {
   const { openModal } = useModalsActions();
+  const { deployPictureInPicture } = usePictureInPictureActions();
   const { displayMedia, disableUserProvidedMedia } = useSettings();
   const { data: account } = useAccount(status.account_id);
 
   const [visible] = useMediaVisible(status, displayMedia);
+
+  const handleDeployPictureInPicture = useCallback(
+    (type: string, opts: Record<string, any>) => {
+      deployPictureInPicture({
+        type: type as 'audio' | 'video',
+        statusId: status.id,
+        accountId: status.account_id,
+        ...opts,
+      });
+    },
+    [deployPictureInPicture, status.id, status.account_id],
+  );
 
   const size = status.media_attachments.length;
   const firstAttachment = status.media_attachments[0];
@@ -77,6 +91,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
             aspectRatio={Number(video.meta.original?.aspect)}
             height={285}
             visible={visible}
+            deployPictureInPicture={handleDeployPictureInPicture}
             inline
           />
         </Suspense>
@@ -98,6 +113,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
             foregroundColor={attachment.meta.colors?.foreground}
             accentColor={attachment.meta.colors?.accent}
             duration={attachment.meta.original?.duration ?? 0}
+            deployPictureInPicture={handleDeployPictureInPicture}
           />
         </Suspense>
       );

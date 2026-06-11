@@ -124,6 +124,11 @@ interface IVideo {
   link?: React.ReactNode;
   aspectRatio?: number;
   displayMedia?: string;
+  startVolume?: number;
+  startMuted?: boolean;
+  startPlaying?: boolean;
+  alwaysVisible?: boolean;
+  deployPictureInPicture?: (type: string, opts: Record<string, any>) => void;
 }
 
 const Video: React.FC<IVideo> = ({
@@ -140,6 +145,11 @@ const Video: React.FC<IVideo> = ({
   aspectRatio = 16 / 9,
   link,
   blurhash,
+  startVolume,
+  startMuted,
+  startPlaying,
+  alwaysVisible = false,
+  deployPictureInPicture,
 }) => {
   const intl = useIntl();
   const { useSystemMediaControls } = useSettings();
@@ -391,7 +401,7 @@ const Video: React.FC<IVideo> = ({
   const handleScroll = useCallback(
     throttle(
       () => {
-        if (!video.current) return;
+        if (!video.current || alwaysVisible) return;
 
         const { top, height } = video.current.getBoundingClientRect();
         const inView =
@@ -400,12 +410,16 @@ const Video: React.FC<IVideo> = ({
         if (!video.current.paused && !inView) {
           setPaused(true);
           video.current.pause();
+
+          if (deployPictureInPicture) {
+            deployPictureInPicture('video', _pack());
+          }
         }
       },
       150,
       { trailing: true },
     ),
-    [video.current],
+    [video.current, alwaysVisible, deployPictureInPicture],
   );
 
   const handleFullscreenChange = useCallback(() => {
@@ -434,11 +448,31 @@ const Video: React.FC<IVideo> = ({
   };
 
   const handleLoadedData = () => {
-    if (video.current && startTime) {
+    if (!video.current) return;
+
+    if (startTime) {
       video.current.currentTime = startTime;
+    }
+
+    if (startVolume !== undefined) {
+      video.current.volume = startVolume;
+    }
+
+    if (startMuted !== undefined) {
+      video.current.muted = startMuted;
+    }
+
+    if (startTime || startPlaying) {
       video.current.play();
     }
   };
+
+  const _pack = () => ({
+    src,
+    volume: video.current?.volume,
+    muted: video.current?.muted,
+    currentTime: video.current?.currentTime,
+  });
 
   const handleProgress = () => {
     if (video.current && video.current.buffered.length > 0) {
@@ -488,14 +522,18 @@ const Video: React.FC<IVideo> = ({
       document.removeEventListener('webkitfullscreenchange', handleFullscreenChange, true);
       document.removeEventListener('mozfullscreenchange', handleFullscreenChange, true);
       document.removeEventListener('MSFullscreenChange', handleFullscreenChange, true);
+
+      if (video.current && !video.current.paused && deployPictureInPicture && !alwaysVisible) {
+        deployPictureInPicture('video', _pack());
+      }
     };
   }, []);
 
   useEffect(() => {
-    if (!visible) {
+    if (!visible && !alwaysVisible) {
       video.current?.pause();
     }
-  }, [visible]);
+  }, [visible, alwaysVisible]);
 
   return (
     <div
