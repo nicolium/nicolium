@@ -397,7 +397,7 @@ const Video: React.FC<IVideo> = ({
         const inView =
           top <= (window.innerHeight || document.documentElement.clientHeight) && top + height >= 0;
 
-        if (!paused && !inView) {
+        if (!video.current.paused && !inView) {
           setPaused(true);
           video.current.pause();
         }
@@ -405,7 +405,7 @@ const Video: React.FC<IVideo> = ({
       150,
       { trailing: true },
     ),
-    [video.current, paused],
+    [video.current],
   );
 
   const handleFullscreenChange = useCallback(() => {

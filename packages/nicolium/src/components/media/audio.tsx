@@ -273,7 +273,7 @@ const Audio: React.FC<IAudio> = (props) => {
         const inView =
           top <= (window.innerHeight || document.documentElement.clientHeight) && top + height >= 0;
 
-        if (!paused && !inView) {
+        if (!audio.current.paused && !inView) {
           audio.current.pause();
 
           if (deployPictureInPicture) {
@@ -286,7 +286,7 @@ const Audio: React.FC<IAudio> = (props) => {
       150,
       { trailing: true },
     ),
-    [canvas.current, audio.current, paused],
+    [canvas.current, audio.current],
   );
 
   const handleLoadedData = () => {
