@@ -95,9 +95,9 @@ const messages = defineMessages({
   moveRight: { id: 'column.deck.position.right', defaultMessage: 'Move column right' },
   showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies' },
   showPinned: { id: 'column.deck.account.show_pinned', defaultMessage: 'Show pinned posts' },
-  addProfileColumn: {
-    id: 'column.deck.add_profile',
-    defaultMessage: 'Add profile to deck',
+  addColumn: {
+    id: 'column.deck.add_column',
+    defaultMessage: 'Add column to deck',
   },
   trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Suggested accounts' },
   trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
@@ -197,6 +197,7 @@ const RootRoute: React.FC = () => {
         username?: string;
         accountId?: string;
         statusId?: string;
+        hashtag?: string;
       };
       return {
         title: (match?.staticData as { title?: MessageDescriptor } | undefined)?.title,
@@ -213,28 +214,31 @@ const RootRoute: React.FC = () => {
       : leaf.routeId === accountRoute.id && !leaf.params.statusId
         ? leaf.params.accountId
         : undefined;
+  const hashtag = leaf.routeId === hashtagRoute.id ? leaf.params.hashtag : undefined;
 
-  const canAddProfile =
-    !!accountId &&
-    !columns.some((column) => column.type === 'account' && column.accountId === accountId);
+  const canAddColumn =
+    (!!accountId &&
+      !columns.some((column) => column.type === 'account' && column.accountId === accountId)) ||
+    (!!hashtag &&
+      !columns.some((column) => column.type === 'hashtag' && column.hashtag === hashtag));
 
-  const handleAddProfile = () => {
-    if (!accountId) return;
-    const current = useSettingsStore.getState().settings.deck.columns;
-    changeSetting(
-      ['deck', 'columns'],
-      [
-        ...current,
-        {
-          id: crypto.randomUUID(),
-          columnWidth: 'md',
-          type: 'account',
-          accountId,
-          excludeReplies: false,
-          showPinned: true,
-        },
-      ],
-    );
+  const handleAddColumn = () => {
+    if (!accountId && !hashtag) return;
+    changeSetting(['deck', 'columns'], (current: Array<DeckColumn>) => [
+      ...current,
+      {
+        id: crypto.randomUUID(),
+        columnWidth: 'md',
+        ...(hashtag
+          ? { type: 'hashtag', hashtag }
+          : {
+              type: 'account',
+              accountId,
+              excludeReplies: false,
+              showPinned: true,
+            }),
+      },
+    ]);
   };
 
   const handleClickOutside: React.MouseEventHandler<HTMLDivElement> = (e) => {
@@ -266,12 +270,12 @@ const RootRoute: React.FC = () => {
                 title={lookedUpAccount ? `@${lookedUpAccount.acct}` : intl.formatMessage(title)}
               />
             )}
-            {canAddProfile && (
+            {canAddColumn && (
               <IconButton
-                className='deck__column__add-profile'
+                className='deck__column__add-column'
                 src={iconPlus}
-                onClick={handleAddProfile}
-                title={intl.formatMessage(messages.addProfileColumn)}
+                onClick={handleAddColumn}
+                title={intl.formatMessage(messages.addColumn)}
               />
             )}
           </CardHeader>
