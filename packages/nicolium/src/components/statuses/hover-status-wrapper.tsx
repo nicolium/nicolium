@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useContext, useRef } from 'react';
 
-import { DeckColumnIdContext } from '@/pages/deck/components/deck-column';
+import { DeckColumnIdContext } from '@/pages/deck/components/deck-column-config';
 import { useStatusHoverCardActions } from '@/stores/status-hover-card';
 import { isMobile, userTouching } from '@/utils/is-mobile';
 

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column';
+import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
 
 import type { Account, Mention } from 'pl-api';
 

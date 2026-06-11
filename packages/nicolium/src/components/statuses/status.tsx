@@ -15,7 +15,7 @@ import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column';
+import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import { useStatus, type SelectedStatus } from '@/queries/statuses/use-status';
