@@ -214,6 +214,16 @@ const DeckColumn: React.FC<IDeckColumn> = ({
     moveColumnRight: () => {
       onChangeIndex(column.id, index + 1);
     },
+    shrinkColumn: () => {
+      const newWidth = WIDTHS[WIDTHS.indexOf(column.columnWidth) - 1];
+      if (!newWidth) return;
+      onChangeWidth(column.id, newWidth);
+    },
+    widenColumn: () => {
+      const newWidth = WIDTHS[WIDTHS.indexOf(column.columnWidth) + 1];
+      if (!newWidth) return;
+      onChangeWidth(column.id, newWidth);
+    },
     moveDown: () => {
       if (!columnRef.current) return;
       columnRef.current.querySelector<HTMLDivElement>('.focusable')?.focus();

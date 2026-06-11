@@ -42,11 +42,20 @@ const normalizeKey = (key: string): string => {
 };
 
 /**
+ * Modifier keys are matched against the event's modifier flags rather
+ * than the held-key set, so chords name them with these tokens.
+ */
+const MODIFIERS = ['alt', 'ctrl', 'meta', 'shift'] as const;
+
+const isModifier = (key: string): key is (typeof MODIFIERS)[number] =>
+  (MODIFIERS as readonly string[]).includes(key);
+
+/**
  * In case of multiple hotkeys matching the pressed key(s),
  * the hotkey with a higher priority is selected. All others
  * are ignored.
  */
-const hotkeyPriority = { singleKey: 0, combo: 1, sequence: 2 } as const;
+const hotkeyPriority = { singleKey: 0, combo: 1, sequence: 2, chord: 3 } as const;
 
 /**
  * This type of function receives a keyboard event and an array of
@@ -55,9 +64,16 @@ const hotkeyPriority = { singleKey: 0, combo: 1, sequence: 2 } as const;
  * (a weighting used to resolve conflicts when two hotkeys match the
  * pressed keys)
  */
+type MatcherContext = {
+  /** Keys pressed in order within the last second, used for sequences. */
+  bufferedKeys: string[];
+  /** Keys currently held down, used for chords pressed at once. */
+  pressedKeys: Set<string>;
+};
+
 type KeyMatcher = (
   event: KeyboardEvent,
-  bufferedKeys?: string[],
+  context: MatcherContext,
 ) => {
   /**
    * Whether the event.key matches the hotkey
@@ -85,8 +101,8 @@ function just(keyName: string): KeyMatcher {
  * Matches any single key out of those provided
  */
 function any(...keys: string[]): KeyMatcher {
-  return (event) => ({
-    isMatch: keys.some((keyName) => just(keyName)(event).isMatch),
+  return (event, context) => ({
+    isMatch: keys.some((keyName) => just(keyName)(event, context).isMatch),
     priority: hotkeyPriority.singleKey,
   });
 }
@@ -112,10 +128,35 @@ function shiftPlus(key: string): KeyMatcher {
 }
 
 /**
+ * Matches when all of the given keys are held down at the same time.
+ * Modifier tokens (alt/ctrl/meta/shift) are matched against the
+ * event's modifier flags; every other key must currently be held.
+ */
+function chord(...keys: string[]): KeyMatcher {
+  const requiredModifiers = keys.filter(isModifier);
+  const requiredKeys = keys.filter((key) => !isModifier(key)).map(normalizeKey);
+
+  return (event, { pressedKeys }) => {
+    const modifiersMatch =
+      requiredModifiers.includes('alt') === event.altKey &&
+      requiredModifiers.includes('ctrl') === event.ctrlKey &&
+      requiredModifiers.includes('meta') === event.metaKey &&
+      requiredModifiers.includes('shift') === event.shiftKey;
+
+    const keysMatch = requiredKeys.every((key) => pressedKeys.has(key));
+
+    return {
+      isMatch: modifiersMatch && keysMatch,
+      priority: hotkeyPriority.chord,
+    };
+  };
+}
+
+/**
  * Matches when all provided keys are pressed in sequence.
  */
 function sequence(...sequence: string[]): KeyMatcher {
-  return (event, bufferedKeys) => {
+  return (event, { bufferedKeys }) => {
     const lastKeyInSequence = sequence.at(-1);
     const startOfSequence = sequence.slice(0, -1);
     const relevantBufferedKeys = bufferedKeys?.slice(-startOfSequence.length);
@@ -145,6 +186,8 @@ const hotkeyMatcherMap = {
   focusLastColumn: just('0'),
   focusPreviousColumn: just('left'),
   focusNextColumn: just('right'),
+  shrinkColumn: chord('shift', 'r', 'left'),
+  widenColumn: chord('shift', 'r', 'right'),
   moveColumnLeft: shiftPlus('left'),
   moveColumnRight: shiftPlus('right'),
   // focusLoadMore: just('l'),
@@ -199,6 +242,7 @@ type HandlerMap = Partial<Record<HotkeyName, (event: KeyboardEvent) => void | bo
 function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
   const ref = useRef<T>(null);
   const bufferedKeys = useRef<string[]>([]);
+  const pressedKeys = useRef<Set<string>>(new Set());
   const sequenceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /**
@@ -214,6 +258,10 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
     const element = ref.current ?? document;
 
     function listener(event: Event) {
+      if (isKeyboardEvent(event)) {
+        pressedKeys.current.add(normalizeKey(event.key));
+      }
+
       // Ignore key presses from input, textarea, or select elements
       const tagName = (event.target as HTMLElement).tagName.toLowerCase();
       const shouldHandleEvent =
@@ -237,7 +285,10 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
           const handler = handlersRef.current[handlerName];
           const hotkeyMatcher = hotkeyMatcherMap[handlerName];
 
-          const { isMatch, priority } = hotkeyMatcher(event, bufferedKeys.current);
+          const { isMatch, priority } = hotkeyMatcher(event, {
+            bufferedKeys: bufferedKeys.current,
+            pressedKeys: pressedKeys.current,
+          });
 
           if (isMatch) {
             matchCandidates.push({ handler, priority });
@@ -268,10 +319,24 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         }, 1000);
       }
     }
+    function keyupListener(event: Event) {
+      if (isKeyboardEvent(event)) {
+        pressedKeys.current.delete(normalizeKey(event.key));
+      }
+    }
+
+    function clearPressedKeys() {
+      pressedKeys.current.clear();
+    }
+
     element.addEventListener('keydown', listener);
+    element.addEventListener('keyup', keyupListener);
+    window.addEventListener('blur', clearPressedKeys);
 
     return () => {
       element.removeEventListener('keydown', listener);
+      element.removeEventListener('keyup', keyupListener);
+      window.removeEventListener('blur', clearPressedKeys);
       if (sequenceTimer.current) {
         clearTimeout(sequenceTimer.current);
       }
