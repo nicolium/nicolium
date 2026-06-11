@@ -115,7 +115,7 @@ const RootRoute: React.FC = () => {
               type: 'account',
               accountId,
               excludeReplies: false,
-              showPinned: true,
+              showPinned: false,
             }),
       },
     ]);
