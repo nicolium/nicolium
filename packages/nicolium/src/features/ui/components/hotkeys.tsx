@@ -103,6 +103,14 @@ function optionPlus(key: string): KeyMatcher {
   });
 }
 
+/** Matches a single key combined with the shift modifier */
+function shiftPlus(key: string): KeyMatcher {
+  return (event) => ({
+    isMatch: event.shiftKey && normalizeKey(event.key) === key,
+    priority: hotkeyPriority.combo,
+  });
+}
+
 /**
  * Matches when all provided keys are pressed in sequence.
  */
@@ -137,6 +145,8 @@ const hotkeyMatcherMap = {
   focusLastColumn: just('0'),
   focusPreviousColumn: just('left'),
   focusNextColumn: just('right'),
+  moveColumnLeft: shiftPlus('left'),
+  moveColumnRight: shiftPlus('right'),
   // focusLoadMore: just('l'),
   reply: just('r'),
   favourite: just('f'),

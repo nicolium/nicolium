@@ -12,9 +12,16 @@ interface IDeckColumnError {
   index: number;
   columns: number;
   onRemove: (id: string) => void;
+  onChangeIndex: (id: string, newIndex: number) => void;
 }
 
-const DeckColumnError: React.FC<IDeckColumnError> = ({ column, index, columns, onRemove }) => {
+const DeckColumnError: React.FC<IDeckColumnError> = ({
+  column,
+  index,
+  columns,
+  onRemove,
+  onChangeIndex,
+}) => {
   const handlers = {
     focusPreviousColumn: (event: KeyboardEvent) => {
       if (
@@ -43,6 +50,14 @@ const DeckColumnError: React.FC<IDeckColumnError> = ({ column, index, columns, o
         `.deck__column[data-index="${nextIndex}"]`,
       );
       nextColumn?.focus();
+    },
+    handleMoveLeft: () => {
+      if (index === 0) return;
+      onChangeIndex(column.id, index - 1);
+    },
+    handleMoveRight: () => {
+      if (index === columns - 1) return;
+      onChangeIndex(column.id, index + 1);
     },
   };
 

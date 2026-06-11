@@ -90,10 +90,12 @@ const DeckColumn: React.FC<IDeckColumn> = ({
     };
 
     const handleMoveLeft = () => {
+      if (index === 0) return;
       onChangeIndex(column.id, index - 1);
     };
 
     const handleMoveRight = () => {
+      if (index === columns - 1) return;
       onChangeIndex(column.id, index + 1);
     };
 
@@ -205,6 +207,12 @@ const DeckColumn: React.FC<IDeckColumn> = ({
         `.deck__column[data-index="${nextIndex}"]`,
       );
       nextColumn?.focus();
+    },
+    moveColumnLeft: () => {
+      onChangeIndex(column.id, index - 1);
+    },
+    moveColumnRight: () => {
+      onChangeIndex(column.id, index + 1);
     },
     moveDown: () => {
       if (!columnRef.current) return;

@@ -143,6 +143,7 @@ const DeckPage = () => {
                   index={index}
                   columns={deck.columns.length}
                   onRemove={handleRemove}
+                  onChangeIndex={handleChangeIndex}
                 />
               }
             >
