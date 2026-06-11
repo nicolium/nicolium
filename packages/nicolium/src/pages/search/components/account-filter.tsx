@@ -3,20 +3,20 @@ import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import IconButton from '@/components/ui/icon-button';
-
-import type { Account } from 'pl-api';
+import { useAccount } from '@/queries/accounts/use-account';
 
 const messages = defineMessages({
   clearAccountFilter: { id: 'search.clear_account_filter', defaultMessage: 'Clear account filter' },
 });
 
 interface IAccountFilter {
-  account?: Pick<Account, 'acct'>;
+  accountId: string;
   handleUnsetAccount: () => void;
 }
 
-const AccountFilter: React.FC<IAccountFilter> = ({ account, handleUnsetAccount }) => {
+const AccountFilter: React.FC<IAccountFilter> = ({ accountId, handleUnsetAccount }) => {
   const intl = useIntl();
+  const { data: account } = useAccount(accountId);
 
   return (
     <div className='search-page__account'>

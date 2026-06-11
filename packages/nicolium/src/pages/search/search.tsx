@@ -7,7 +7,6 @@ import SearchColumn from '@/columns/search';
 import Column from '@/components/ui/column';
 import Tabs from '@/components/ui/tabs';
 import { useFeatures } from '@/hooks/use-features';
-import { useAccount } from '@/queries/accounts/use-account';
 import { queryKeys } from '@/queries/keys';
 import { searchRoute } from '@/router';
 
@@ -46,8 +45,6 @@ const SearchResults = () => {
       });
     } else navigate({ search: (prev) => ({ ...prev, type: newActiveFilter }) });
   };
-
-  const { data: account } = useAccount(accountId);
 
   const handleUnsetAccount = () => {
     navigate({ search: ({ accountId, ...prev }) => prev });
@@ -94,7 +91,7 @@ const SearchResults = () => {
   return (
     <>
       {accountId ? (
-        <AccountFilter account={account} handleUnsetAccount={handleUnsetAccount} />
+        <AccountFilter accountId={accountId} handleUnsetAccount={handleUnsetAccount} />
       ) : (
         renderFilterBar()
       )}

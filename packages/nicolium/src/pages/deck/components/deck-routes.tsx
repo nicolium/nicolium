@@ -38,6 +38,7 @@ import { MultiColumnProvider } from '@/contexts/multi-column-context';
 import Thread from '@/features/status/components/thread';
 import { ProfileInfoPanel } from '@/features/ui/util/async-components';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { AccountFilter } from '@/pages/search/components/account-filter';
 import HashtagFollowToggle from '@/pages/timelines/components/hashtag-follow-toggle';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
@@ -303,6 +304,7 @@ const hashtagRoute = createRoute({
 
 const SearchDeckColumn = () => {
   const intl = useIntl();
+  const { history } = useRouter();
   const navigate = useNavigate({ from: searchRoute.fullPath });
   const { q = '', type = 'accounts', accountId } = searchRoute.useSearch();
   const [value, setValue] = useState(q);
@@ -314,18 +316,25 @@ const SearchDeckColumn = () => {
   const [, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'search' }>>();
 
   const submit = (query: string) => {
-    navigate({ search: (prev) => ({ ...prev, q: query }), replace: true });
-    updateColumn({ query });
+    const hasHistory = history.canGoBack();
+    navigate({ search: (prev) => ({ ...prev, q: query }), replace: !hasHistory });
+    if (!hasHistory) updateColumn({ query });
   };
 
   const items = (['accounts', 'statuses', 'hashtags'] as const).map((filter) => ({
     text: intl.formatMessage(searchTabMessages[filter]),
     action: () => {
-      navigate({ search: (prev) => ({ ...prev, type: filter }), replace: true });
-      updateColumn({ searchType: filter });
+      const hasHistory = history.canGoBack();
+      navigate({ search: (prev) => ({ ...prev, type: filter }), replace: !hasHistory });
+      if (!hasHistory) updateColumn({ searchType: filter });
     },
     name: filter,
   }));
+
+  const unsetAccount = () => {
+    const hasHistory = history.canGoBack();
+    navigate({ search: ({ accountId, ...prev }) => prev, replace: !hasHistory });
+  };
 
   return (
     <div className='deck-search'>
@@ -344,7 +353,11 @@ const SearchDeckColumn = () => {
         }}
       />
 
-      <Tabs items={items} activeItem={type} />
+      {accountId ? (
+        <AccountFilter accountId={accountId} handleUnsetAccount={unsetAccount} />
+      ) : (
+        <Tabs items={items} activeItem={type} />
+      )}
 
       <SearchColumn query={q} type={type} accountId={accountId} />
     </div>
