@@ -53,6 +53,7 @@ import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { ProfileInfoPanel } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import HashtagFollowToggle from '@/pages/timelines/components/hashtag-follow-toggle';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
@@ -409,8 +410,14 @@ const notificationsRoute = createRoute({
 
 const HashtagDeckColumn = () => {
   const { hashtag } = hashtagRoute.useParams();
-  return <HashtagTimelineColumn hashtag={hashtag} />;
+  return (
+    <>
+      <HashtagFollowToggle hashtag={hashtag} />
+      <HashtagTimelineColumn hashtag={hashtag} />
+    </>
+  );
 };
+
 const hashtagRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/tags/$hashtag',

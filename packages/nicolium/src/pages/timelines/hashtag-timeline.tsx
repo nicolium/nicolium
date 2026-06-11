@@ -4,38 +4,17 @@ import { FormattedMessage } from 'react-intl';
 
 import { HashtagTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
-import List, { ListItem } from '@/components/list';
 import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
-import Toggle from '@/components/ui/toggle';
-import { useFeatures } from '@/hooks/use-features';
-import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
-import {
-  useFollowHashtagMutation,
-  useUnfollowHashtagMutation,
-} from '@/queries/hashtags/use-followed-tags';
-import { useHashtag } from '@/queries/hashtags/use-hashtag';
 import { hashtagTimelineRoute } from '@/router';
+
+import HashtagFollowToggle from './components/hashtag-follow-toggle';
 
 const HashtagTimelinePage: React.FC = () => {
   const { hashtag } = hashtagTimelineRoute.useParams();
 
-  const features = useFeatures();
-  const { data: tag } = useHashtag(hashtag);
-  const { isLoggedIn } = useLoggedIn();
   const items = useTimelineFiltersOptions('hashtag');
-
-  const { mutate: followHashtag } = useFollowHashtagMutation(hashtag);
-  const { mutate: unfollowHashtag } = useUnfollowHashtagMutation(hashtag);
-
-  const handleFollow = () => {
-    if (tag?.following) {
-      unfollowHashtag();
-    } else {
-      followHashtag();
-    }
-  };
 
   return (
     <Column
@@ -47,16 +26,7 @@ const HashtagTimelinePage: React.FC = () => {
         </>
       }
     >
-      {features.followHashtags && isLoggedIn && (
-        <List>
-          <ListItem
-            className='hashtag-follow_toggle'
-            label={<FormattedMessage id='hashtag.follow' defaultMessage='Follow hashtag' />}
-          >
-            <Toggle checked={tag?.following} onChange={handleFollow} />
-          </ListItem>
-        </List>
-      )}
+      <HashtagFollowToggle hashtag={hashtag} />
 
       <HashtagTimelineColumn
         hashtag={hashtag}
