@@ -105,10 +105,10 @@ const changeSetting = (
   object: APIEntity,
   path: string[],
   value: any | ((previousValue: any) => any),
-  _root?: Settings,
+  defaultSettingsObject?: APIEntity,
 ) => {
   if (path.length === 1) {
-    const previousValue = object[path[0]];
+    const previousValue = object[path[0]] || defaultSettingsObject?.[path[0]];
     object[path[0]] = typeof value === 'function' ? value(previousValue) : value;
     return;
   }
@@ -116,7 +116,8 @@ const changeSetting = (
   if (!isRecordObject(object[path[0]])) {
     object[path[0]] = {};
   }
-  changeSetting(object[path[0]], path.slice(1), value);
+
+  changeSetting(object[path[0]], path.slice(1), value, defaultSettingsObject?.[path[0]]);
 };
 
 const mergeSettings = (state: State, updating = false) => {
@@ -303,10 +304,10 @@ const useSettingsStore = create<State>()(
           });
         },
 
-        changeSetting: (path: string[], value: any) => {
+        changeSetting: (path, value) => {
           set((state: State) => {
             state.userSettings.saved = false;
-            changeSetting(state.userSettings, path, value);
+            changeSetting(state.userSettings, path, value, state.defaultSettings);
 
             mergeSettings(state, true);
           });
