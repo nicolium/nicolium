@@ -220,6 +220,11 @@ const hashtagColumnSchema = v.object({
   hashtag: v.string(),
 });
 
+const genericColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.picklist(['scheduled', 'drafts']),
+});
+
 const deckColumnSchema = v.variant('type', [
   timelineDeckColumnSchema,
   notificationsColumnSchema,
@@ -228,6 +233,7 @@ const deckColumnSchema = v.variant('type', [
   trendingColumnSchema,
   bookmarksColumnSchema,
   hashtagColumnSchema,
+  genericColumnSchema,
 ]);
 
 const deckSettingsSchema = v.fallback(
