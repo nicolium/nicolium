@@ -22,6 +22,7 @@ import { TRANSFORMERS } from '../transformers';
 import type { LanguageIdentificationModel } from 'fasttext.wasm.js/dist/models/language-identification/common.js';
 
 let lidModel: LanguageIdentificationModel;
+let browserLanguageDetector: LanguageDetector | undefined;
 
 interface IStatePlugin {
   composeId: string;
@@ -173,6 +174,28 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
       if (wordsLength < 4) return;
 
       (async () => {
+        if ('LanguageDetector' in globalThis) {
+          try {
+            const availability = await LanguageDetector.availability();
+            if (availability !== 'unavailable') {
+              if (!browserLanguageDetector) {
+                browserLanguageDetector = await LanguageDetector.create();
+              }
+              const [result] = await browserLanguageDetector.detect(text);
+              if (
+                result?.confidence &&
+                result.confidence > 0.5 &&
+                result.detectedLanguage !== 'und'
+              ) {
+                actions.updateCompose(composeId, (draft) => {
+                  draft.suggestedLanguage = result.detectedLanguage!;
+                });
+                return;
+              }
+            }
+          } catch {}
+        }
+
         if (!lidModel) {
           // eslint-disable-next-line import/extensions
           const { getLIDModel } = await import('fasttext.wasm.js/common');
