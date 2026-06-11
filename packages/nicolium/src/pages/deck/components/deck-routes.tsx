@@ -13,7 +13,9 @@ import * as v from 'valibot';
 
 import { changeSetting } from '@/actions/settings';
 import { BookmarksColumn } from '@/columns/bookmarks';
+import DraftStatusesColumn from '@/columns/draft-statuses';
 import NotificationsColumn from '@/columns/notifications';
+import ScheduledStatusesColumn from '@/columns/scheduled-statuses';
 import SearchColumn from '@/columns/search';
 import {
   AntennaTimelineColumn,
@@ -411,6 +413,20 @@ const bookmarksRoute = createRoute({
   staticData: { title: messages.bookmarks },
 });
 
+const scheduledStatusesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/scheduled_statuses',
+  component: () => <ScheduledStatusesColumn />,
+  staticData: { title: messages.scheduled },
+});
+
+const draftStatusesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/draft_statuses',
+  component: () => <DraftStatusesColumn />,
+  staticData: { title: messages.drafts },
+});
+
 interface IAccountColumnBody {
   account?: React.ComponentProps<typeof ProfileInfoPanel>['account'];
   username: string;
@@ -520,6 +536,8 @@ const routeTree = rootRoute.addChildren([
   searchRoute,
   trendingRoute,
   bookmarksRoute,
+  scheduledStatusesRoute,
+  draftStatusesRoute,
   accountRoute,
   accountByUsernameRoute,
   statusRoute,

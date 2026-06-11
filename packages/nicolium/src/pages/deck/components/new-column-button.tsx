@@ -8,10 +8,12 @@ import iconFolderSimple from '@phosphor-icons/core/regular/folder-simple.svg';
 import iconGlobeSimple from '@phosphor-icons/core/regular/globe-simple.svg';
 import iconGraph from '@phosphor-icons/core/regular/graph.svg';
 import iconHash from '@phosphor-icons/core/regular/hash.svg';
+import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import iconLink from '@phosphor-icons/core/regular/link.svg';
 import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
@@ -54,6 +56,8 @@ const messages = defineMessages({
   trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   allBookmarks: { id: 'column.bookmarks.all', defaultMessage: 'All bookmarks' },
+  scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
+  drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
 });
 
 const NewColumnButton = () => {
@@ -234,6 +238,20 @@ const NewColumnButton = () => {
       text: intl.formatMessage(messages.search),
       icon: iconMagnifyingGlass,
       action: handleAdd({ type: 'search' }),
+    });
+
+    if (features.scheduledStatuses) {
+      items.push({
+        text: intl.formatMessage(messages.scheduled),
+        icon: iconHourglass,
+        action: handleAdd({ type: 'scheduled' }),
+      });
+    }
+
+    items.push({
+      text: intl.formatMessage(messages.drafts),
+      icon: iconPencilSimple,
+      action: handleAdd({ type: 'drafts' }),
     });
 
     const trends: Menu = [];

@@ -56,6 +56,10 @@ const getInitialUrl = (column: DeckColumn) => {
     }
     case 'hashtag':
       return `/tags/${column.hashtag}`;
+    case 'scheduled':
+      return '/scheduled_statuses';
+    case 'drafts':
+      return '/draft_statuses';
     default:
       return '/home';
   }
