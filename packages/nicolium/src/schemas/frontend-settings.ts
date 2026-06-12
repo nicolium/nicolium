@@ -220,9 +220,15 @@ const hashtagColumnSchema = v.object({
   hashtag: v.string(),
 });
 
+const chatColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('chat'),
+  chatId: v.string(),
+});
+
 const genericColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
-  type: v.picklist(['scheduled', 'drafts']),
+  type: v.picklist(['chats', 'scheduled', 'drafts']),
 });
 
 const deckColumnSchema = v.variant('type', [
@@ -233,6 +239,7 @@ const deckColumnSchema = v.variant('type', [
   trendingColumnSchema,
   bookmarksColumnSchema,
   hashtagColumnSchema,
+  chatColumnSchema,
   genericColumnSchema,
 ]);
 

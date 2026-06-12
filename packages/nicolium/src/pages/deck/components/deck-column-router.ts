@@ -60,6 +60,10 @@ const getInitialUrl = (column: DeckColumn) => {
       return '/scheduled_statuses';
     case 'drafts':
       return '/draft_statuses';
+    case 'chats':
+      return '/chats';
+    case 'chat':
+      return `/chats/${column.chatId}`;
     default:
       return '/home';
   }
@@ -79,6 +83,10 @@ const columnSignature = (column: DeckColumn): string => {
       return `trending:${column.trendsType}`;
     case 'hashtag':
       return `hashtag:${column.hashtag}`;
+    case 'chats':
+      return 'chats';
+    case 'chat':
+      return `chat:${column.chatId}`;
     default:
       return 'unknown';
   }

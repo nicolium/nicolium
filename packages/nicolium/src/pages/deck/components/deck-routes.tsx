@@ -37,6 +37,8 @@ import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import Tabs from '@/components/ui/tabs';
 import { MultiColumnProvider } from '@/contexts/multi-column-context';
+import Chat from '@/features/chats/components/chat';
+import ChatList from '@/features/chats/components/chat-list';
 import Thread from '@/features/status/components/thread';
 import { ProfileInfoPanel } from '@/features/ui/util/async-components';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -44,15 +46,17 @@ import { AccountFilter } from '@/pages/search/components/account-filter';
 import HashtagFollowToggle from '@/pages/timelines/components/hashtag-follow-toggle';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
+import { useChat } from '@/queries/chats';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
 import { useStatus } from '@/queries/statuses/use-status';
 import { router as appRouter } from '@/router';
 import { useSettings } from '@/stores/settings';
 
-import { messages, useDeckColumnConfig } from './deck-column-config';
+import { deckMessages as messages, useDeckColumnConfig } from './deck-column-config';
 
 import type { FilterType } from '@/queries/notifications/use-notifications';
 import type { DeckColumn } from '@/schemas/frontend-settings';
+import type { Chat as ChatEntity } from 'pl-api';
 import type { MessageDescriptor } from 'react-intl';
 
 const searchTabMessages = defineMessages({
@@ -435,6 +439,43 @@ interface IAccountColumnBody {
   featuredStatusIds?: Array<string>;
 }
 
+const ChatsDeckColumn = () => {
+  const navigate = useNavigate();
+  const handleClickChat = (chat: ChatEntity | 'shoutbox') => {
+    if (chat === 'shoutbox') return;
+    navigate({ to: '/chats/$chatId', params: { chatId: chat.id } });
+  };
+
+  return (
+    <div className='deck-chats'>
+      <ChatList onClickChat={handleClickChat} />
+    </div>
+  );
+};
+
+const chatsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/chats',
+  component: ChatsDeckColumn,
+  staticData: { title: messages.chats },
+});
+
+const ChatDeckColumn = () => {
+  const { chatId } = chatRoute.useParams();
+  const { data: chat } = useChat(chatId);
+
+  if (!chat) return null;
+
+  return <Chat chat={chat} />;
+};
+
+const chatRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/chats/$chatId',
+  component: ChatDeckColumn,
+  staticData: { title: messages.chats },
+});
+
 const AccountColumnBody: React.FC<IAccountColumnBody> = ({
   account,
   username,
@@ -538,6 +579,8 @@ const routeTree = rootRoute.addChildren([
   bookmarksRoute,
   scheduledStatusesRoute,
   draftStatusesRoute,
+  chatsRoute,
+  chatRoute,
   accountRoute,
   accountByUsernameRoute,
   statusRoute,

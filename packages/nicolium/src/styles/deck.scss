@@ -199,6 +199,14 @@
       .media-gallery {
         max-height: 60vh;
       }
+
+      .deck-chats {
+        flex: 1;
+      }
+
+      .deck-chats, .chat {
+        margin: 0 -1rem;
+      }
     }
 
     &--error .deck__column__content {

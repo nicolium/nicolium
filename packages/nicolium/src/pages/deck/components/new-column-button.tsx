@@ -2,6 +2,7 @@ import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
 import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
 import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
 import iconChartLine from '@phosphor-icons/core/regular/chart-line.svg';
+import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
 import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
 import iconFolderSimple from '@phosphor-icons/core/regular/folder-simple.svg';
@@ -58,6 +59,7 @@ const messages = defineMessages({
   allBookmarks: { id: 'column.bookmarks.all', defaultMessage: 'All bookmarks' },
   scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
+  chats: { id: 'column.chats', defaultMessage: 'Chats' },
 });
 
 const NewColumnButton = () => {
@@ -226,6 +228,14 @@ const NewColumnButton = () => {
           action: handleAdd({ type: 'bookmarks' }),
         });
       }
+    }
+
+    if (features.chats) {
+      items.push({
+        text: intl.formatMessage(messages.chats),
+        icon: iconChatsTeardrop,
+        action: handleAdd({ type: 'chats' }),
+      });
     }
 
     items.push({

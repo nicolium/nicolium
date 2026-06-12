@@ -42,6 +42,8 @@ const messages = defineMessages({
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
+  chats: { id: 'column.chats', defaultMessage: 'Chats' },
+  chat: { id: 'column.chats', defaultMessage: 'Chats' },
 });
 
 const DeckColumnIdContext = createContext<string | null>(null);
@@ -114,4 +116,10 @@ const useColumnTitle = (column: DeckColumn): string => {
   return intl.formatMessage(messages[column.type]);
 };
 
-export { messages, DeckColumnIdContext, updateDeckColumn, useDeckColumnConfig, useColumnTitle };
+export {
+  messages as deckMessages,
+  DeckColumnIdContext,
+  updateDeckColumn,
+  useDeckColumnConfig,
+  useColumnTitle,
+};

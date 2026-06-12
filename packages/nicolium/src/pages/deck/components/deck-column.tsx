@@ -18,7 +18,7 @@ import { useInstance } from '@/stores/instance';
 
 import {
   DeckColumnIdContext,
-  messages,
+  deckMessages as messages,
   updateDeckColumn,
   useColumnTitle,
 } from './deck-column-config';
