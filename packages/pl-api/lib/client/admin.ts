@@ -1205,10 +1205,10 @@ const admin = (client: PlApiBaseClient) => {
           client.features.version.software === MITRA
             ? `/api/v1/admin/posts/${statusId}`
             : client.features.iceshrimpAdmin
-              ? `/api/iceshrimp/moderation/notes/${statusId}/delete`
+              ? `/api/iceshrimp/moderation/notes/${statusId}`
               : `/api/v1/pleroma/admin/statuses/${statusId}`,
           {
-            method: client.features.iceshrimpAdmin ? 'POST' : 'DELETE',
+            method: 'DELETE',
           },
         );
 
