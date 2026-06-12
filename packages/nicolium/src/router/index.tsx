@@ -1220,6 +1220,15 @@ export const adminDomainAllowsRoute = createRoute({
   }),
 });
 
+export const adminInvitesRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/invites',
+  component: lazy(() => import('@/pages/dashboard/invites')),
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
+    if (!isAdmin || !features.pleromaAdminInvites) throw notFound();
+  }),
+});
+
 export const frontendConfigRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/config',
@@ -1618,6 +1627,7 @@ const routeTree = rootRoute.addChildren([
     adminPleromaConfigRoute,
     adminDomainBlocksRoute,
     adminDomainAllowsRoute,
+    adminInvitesRoute,
     frontendConfigRoute,
     frontendConfigDefaultSettingsGeneralRoute,
     frontendConfigDefaultSettingsAppearanceRoute,

@@ -1425,6 +1425,16 @@ const getFeatures = (instance: Instance) => {
      */
     pleromaAdminConfig: any([v.software === AKKOMA, v.software === PLEROMA]),
 
+    /**
+     * Ability to manage user invite tokens by admins.
+     * @see GET /api/v1/pleroma/admin/users/invites
+     * @see POST /api/v1/pleroma/admin/users/invite_token
+     * @see POST /api/v1/pleroma/admin/users/revoke_invite
+     * @see POST /api/v1/pleroma/admin/users/email_invite
+     * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminusersinvites}
+     */
+    pleromaAdminInvites: any([v.software === AKKOMA, v.software === PLEROMA]),
+
     pleromaAdminModerationLog: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     pleromaAdminRelays: any([v.software === AKKOMA, v.software === PLEROMA]),

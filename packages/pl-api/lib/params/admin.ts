@@ -414,6 +414,26 @@ interface AdminUpdateCustomEmojiParams {
  */
 interface AdminGetGroupsParams {}
 
+/**
+ * @category Request params
+ */
+interface AdminCreateInviteTokenParams {
+  /** Integer. The maximum number of times the token can be used. */
+  max_use?: number;
+  /** String (ISO 8601 Datetime). The date when the token expires. */
+  expires_at?: string;
+}
+
+/**
+ * @category Request params
+ */
+interface AdminEmailInviteParams {
+  /** String. The email address to send an invite to. */
+  email: string;
+  /** String. The display name of the invited user. */
+  name?: string;
+}
+
 export type {
   AdminGetAccountsParams,
   AdminCreateAccountParams,
@@ -448,4 +468,6 @@ export type {
   AdminCreateCustomEmojiParams,
   AdminUpdateCustomEmojiParams,
   AdminGetGroupsParams,
+  AdminCreateInviteTokenParams,
+  AdminEmailInviteParams,
 };

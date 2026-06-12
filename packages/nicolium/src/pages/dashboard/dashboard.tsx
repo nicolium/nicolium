@@ -392,6 +392,13 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
               label={<FormattedMessage id='column.admin.domains' defaultMessage='Domains' />}
             />
           )}
+
+          {features.pleromaAdminInvites && (
+            <ListItem
+              to='/nicolium/admin/invites'
+              label={<FormattedMessage id='column.admin.invites' defaultMessage='Invites' />}
+            />
+          )}
         </List>
 
         {!aside && (

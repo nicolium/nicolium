@@ -10,6 +10,7 @@ export * from './admin/domain';
 export * from './admin/domain-allow';
 export * from './admin/domain-block';
 export * from './admin/email-domain-block';
+export * from './admin/invite';
 export * from './admin/ip';
 export * from './admin/ip-block';
 export * from './admin/measure';

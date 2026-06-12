@@ -11,6 +11,7 @@ import {
   adminDomainBlockSchema,
   adminDomainSchema,
   adminEmailDomainBlockSchema,
+  adminInviteSchema,
   adminIpBlockSchema,
   adminMeasureSchema,
   adminModerationLogEntrySchema,
@@ -71,6 +72,8 @@ import type {
   AdminUpdateReportParams,
   AdminUpdateRuleParams,
   AdminUpdateStatusParams,
+  AdminCreateInviteTokenParams,
+  AdminEmailInviteParams,
 } from '@/params/admin';
 import type { EditStatusParams } from '@/params/statuses';
 import type { EmptyObject } from '@/utils/types';
@@ -2100,6 +2103,61 @@ const admin = (client: PlApiBaseClient) => {
         });
 
         return v.parse(adminCustomEmojiSchema, response.json);
+      },
+    },
+
+    /** Manage user invite tokens. */
+    invites: {
+      /**
+       * List invite tokens.
+       *
+       * Requires features{@link Features.pleromaAdminInvites}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminusersinvites}
+       */
+      getInvites: async () => {
+        const response = await client.request('/api/v1/pleroma/admin/users/invites');
+
+        return v.parse(filteredArray(adminInviteSchema), response.json?.invites);
+      },
+
+      /**
+       * Create an invite token.
+       *
+       * Requires features{@link Features.pleromaAdminInvites}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminusersinvite_token}
+       */
+      createInviteToken: async (params: AdminCreateInviteTokenParams = {}) => {
+        const response = await client.request('/api/v1/pleroma/admin/users/invite_token', {
+          method: 'POST',
+          body: params,
+        });
+
+        return v.parse(adminInviteSchema, response.json);
+      },
+
+      /**
+       * Revoke an invite token.
+       *
+       * Requires features{@link Features.pleromaAdminInvites}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminusersrevoke_invite}
+       */
+      revokeInviteToken: (token: string) =>
+        client.request<EmptyObject>('/api/v1/pleroma/admin/users/revoke_invite', {
+          method: 'POST',
+          body: { token },
+        }),
+
+      /**
+       * Send a registration invite via email.
+       *
+       * Requires features{@link Features.pleromaAdminInvites}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminusersemail_invite}
+       */
+      emailInvite: async (params: AdminEmailInviteParams) => {
+        await client.request('/api/v1/pleroma/admin/users/email_invite', {
+          method: 'POST',
+          body: params,
+        });
       },
     },
   };

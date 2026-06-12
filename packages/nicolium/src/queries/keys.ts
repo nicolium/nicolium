@@ -29,6 +29,7 @@ import type {
   AdminGetMeasuresParams,
   AdminGetReportsParams,
   AdminGetStatusesParams,
+  AdminInvite,
   AdminMeasure,
   AdminMeasureKey,
   AdminModerationLogEntry,
@@ -390,6 +391,7 @@ const admin = {
     ['admin', 'domainAllows'],
     InfiniteData<PaginatedResponse<AdminDomainAllow>>
   >,
+  invites: ['admin', 'invites'] as TaggedKey<['admin', 'invites'], Array<AdminInvite>>,
 };
 
 const notifications = {

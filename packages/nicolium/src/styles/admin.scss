@@ -1323,3 +1323,97 @@ a.measure__container {
     @include mixins.button($theme: primary);
   }
 }
+
+.admin-invites-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+
+    > div:first-child {
+      flex-grow: 1;
+    }
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+}
+
+.admin-invite {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+
+  background: var(--color-gray-100);
+
+  .dark & {
+    background: var(--color-primary-800);
+  }
+
+  &__container {
+    padding-bottom: 1rem;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  &__token {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    code {
+      overflow: hidden;
+      flex-grow: 1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      @include mixins.text($size: sm, $family: mono);
+    }
+  }
+
+  &__copy {
+    display: flex;
+    align-items: center;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+
+    span {
+      @include mixins.text($size: sm, $theme: muted);
+    }
+  }
+
+  &__used {
+    @include mixins.text($size: sm, $weight: medium, $theme: danger);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      @include mixins.button($theme: danger);
+    }
+  }
+}
