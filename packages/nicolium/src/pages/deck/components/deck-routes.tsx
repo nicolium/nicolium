@@ -69,16 +69,17 @@ const RootRoute: React.FC = () => {
   const [content, setContent] = useState<HTMLElement | null>(null);
   const [canGoBack, setCanGoBack] = useState(() => router.history.canGoBack());
 
-  const { title, accountId, hashtag } = useColumnRouteTitle();
+  const { title, accountId, hashtag, chatId } = useColumnRouteTitle();
 
   const canAddColumn =
     (!!accountId &&
       !columns.some((column) => column.type === 'account' && column.accountId === accountId)) ||
     (!!hashtag &&
-      !columns.some((column) => column.type === 'hashtag' && column.hashtag === hashtag));
+      !columns.some((column) => column.type === 'hashtag' && column.hashtag === hashtag)) ||
+    (!!chatId && !columns.some((column) => column.type === 'chat' && column.chatId === chatId));
 
   const handleAddColumn = () => {
-    if (!accountId && !hashtag) return;
+    if (!accountId && !hashtag && !chatId) return;
     changeSetting(['deck', 'columns'], (current: Array<DeckColumn>) => [
       ...current,
       {
@@ -86,12 +87,14 @@ const RootRoute: React.FC = () => {
         columnWidth: 'md',
         ...(hashtag
           ? { type: 'hashtag', hashtag }
-          : {
-              type: 'account',
-              accountId,
-              excludeReplies: false,
-              showPinned: false,
-            }),
+          : chatId
+            ? { type: 'chat', chatId }
+            : {
+                type: 'account',
+                accountId,
+                excludeReplies: false,
+                showPinned: false,
+              }),
       },
     ]);
   };
@@ -561,6 +564,7 @@ export {
   antennaRoute,
   bookmarksRoute,
   bubbleRoute,
+  chatRoute,
   circleRoute,
   federatedRoute,
   hashtagRoute,

@@ -7,6 +7,7 @@ import { useTimelineHeading, type ITimelinePicker } from '@/components/timeline-
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
+import { useChat } from '@/queries/chats';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
 import { useSettings, useSettingsStore } from '@/stores/settings';
 
@@ -18,6 +19,7 @@ import {
   antennaRoute,
   bookmarksRoute,
   bubbleRoute,
+  chatRoute,
   circleRoute,
   federatedRoute,
   hashtagRoute,
@@ -71,6 +73,7 @@ const useColumnTitle = (column: DeckColumn): string => {
   const { data: bookmarkFolder } = useBookmarkFolder(
     column.type === 'bookmarks' && column.folderId !== 'all' ? column.folderId : undefined,
   );
+  const { data: chat } = useChat(column.type === 'chat' ? column.chatId : undefined);
 
   if (column.type === 'timeline') {
     return timelineHeading;
@@ -105,6 +108,10 @@ const useColumnTitle = (column: DeckColumn): string => {
     return `#${column.hashtag}`;
   }
 
+  if (column.type === 'chat') {
+    return intl.formatMessage(messages.chatWith, { acct: chat?.account.acct ?? column.chatId });
+  }
+
   return intl.formatMessage(messages[column.type]);
 };
 
@@ -118,6 +125,7 @@ interface RouteParams {
   hashtag?: string;
   trendsType?: string;
   folderId?: string;
+  chatId?: string;
 }
 
 const routeTimeline = (
@@ -174,6 +182,9 @@ const useColumnRouteTitle = () => {
     routeId === bookmarksRoute.id && params.folderId !== 'all' ? params.folderId : undefined,
   );
 
+  const chatId = routeId === chatRoute.id ? params.chatId : undefined;
+  const { data: chat } = useChat(chatId);
+
   const acct = lookedUpAccount?.acct ?? account?.acct;
 
   let title: string | undefined;
@@ -189,11 +200,18 @@ const useColumnRouteTitle = () => {
     );
   } else if (bookmarkFolder) {
     title = bookmarkFolder.name;
+  } else if (routeId === chatRoute.id && chat) {
+    title = intl.formatMessage(messages.chatWith, { acct: chat.account.acct });
   } else if (staticTitle) {
     title = intl.formatMessage(staticTitle);
   }
 
-  return { title, accountId: lookedUpAccount?.id ?? accountId, hashtag: params.hashtag };
+  return {
+    title,
+    accountId: lookedUpAccount?.id ?? accountId ?? chat?.account?.id,
+    hashtag: params.hashtag,
+    chatId: params.chatId,
+  };
 };
 
 export {

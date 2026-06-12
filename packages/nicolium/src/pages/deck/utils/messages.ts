@@ -33,7 +33,7 @@ const messages = defineMessages({
   scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
   chats: { id: 'column.chats', defaultMessage: 'Chats' },
-  chat: { id: 'column.chats', defaultMessage: 'Chats' },
+  chatWith: { id: 'column.chat.with', defaultMessage: 'Chat with @{acct}' },
 });
 
 export { messages as deckMessages };
