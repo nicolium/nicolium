@@ -6,7 +6,7 @@ const messages = defineMessages({
   local: { id: 'column.community', defaultMessage: 'Local timeline' },
   federated: { id: 'column.public', defaultMessage: 'Fediverse timeline' },
   bubble: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
-  wrenched: { id: 'column.wrenched', defaultMessage: 'Wrenched timeline' },
+  wrenched: { id: 'column.wrenched', defaultMessage: 'Recent wrenches timeline' },
   timeline: { id: 'column.deck.timeline', defaultMessage: 'Timeline' },
   notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
   account: { id: 'column.account', defaultMessage: 'Profile' },
