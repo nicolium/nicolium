@@ -52,7 +52,7 @@ const NewCircleForm: React.FC = () => {
         />
       </label>
 
-      <button disabled={isPending} type='submit'>
+      <button disabled={isPending || !title.trim()} type='submit'>
         {create}
       </button>
     </Form>

@@ -63,7 +63,7 @@ const NewListForm: React.FC = () => {
         />
       </label>
 
-      <button disabled={isPending} type='submit'>
+      <button disabled={isPending || !value.trim()} type='submit'>
         {create}
       </button>
     </Form>
