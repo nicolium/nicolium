@@ -1,0 +1,39 @@
+import { defineMessages } from 'react-intl';
+
+const messages = defineMessages({
+  searchPlaceholder: { id: 'search.placeholder', defaultMessage: 'Search' },
+  home: { id: 'column.home', defaultMessage: 'Home' },
+  local: { id: 'column.community', defaultMessage: 'Local timeline' },
+  federated: { id: 'column.public', defaultMessage: 'Fediverse timeline' },
+  bubble: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
+  wrenched: { id: 'column.wrenched', defaultMessage: 'Wrenched timeline' },
+  timeline: { id: 'column.deck.timeline', defaultMessage: 'Timeline' },
+  notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
+  account: { id: 'column.account', defaultMessage: 'Profile' },
+  search: { id: 'column.search', defaultMessage: 'Search' },
+  status: { id: 'column.status', defaultMessage: 'Post' },
+  hashtag: { id: 'column.hashtag', defaultMessage: 'Hashtag' },
+  remove: { id: 'column.deck.remove', defaultMessage: 'Remove column' },
+  shrink: { id: 'column.deck.width.shrink', defaultMessage: 'Shrink column' },
+  widen: { id: 'column.deck.width.widen', defaultMessage: 'Widen column' },
+  fill: { id: 'column.deck.width.fill', defaultMessage: 'Fill available width' },
+  moveLeft: { id: 'column.deck.position.left', defaultMessage: 'Move column left' },
+  moveRight: { id: 'column.deck.position.right', defaultMessage: 'Move column right' },
+  showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies' },
+  showPinned: { id: 'column.deck.account.show_pinned', defaultMessage: 'Show pinned posts' },
+  addColumn: {
+    id: 'column.deck.add_column',
+    defaultMessage: 'Add column to deck',
+  },
+  trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Suggested accounts' },
+  trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
+  trendingHashtags: { id: 'deck.columns.trending_hashtags', defaultMessage: 'Trending hashtags' },
+  trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },
+  bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
+  scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
+  drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
+  chats: { id: 'column.chats', defaultMessage: 'Chats' },
+  chat: { id: 'column.chats', defaultMessage: 'Chats' },
+});
+
+export { messages as deckMessages };

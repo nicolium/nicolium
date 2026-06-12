@@ -1,50 +1,42 @@
+import { useRouterState } from '@tanstack/react-router';
 import { createContext, useContext } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { useIntl, type MessageDescriptor } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
-import { useTimelineHeading } from '@/components/timeline-picker';
+import { useTimelineHeading, type ITimelinePicker } from '@/components/timeline-picker';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
 import { useSettings, useSettingsStore } from '@/stores/settings';
 
+import { deckMessages as messages } from '../utils/messages';
+
+import {
+  accountRoute,
+  accountByUsernameRoute,
+  antennaRoute,
+  bookmarksRoute,
+  bubbleRoute,
+  circleRoute,
+  federatedRoute,
+  hashtagRoute,
+  homeRoute,
+  instanceRoute,
+  listRoute,
+  localRoute,
+  trendingRoute,
+  wrenchedRoute,
+} from './deck-routes';
+
 import type { DeckColumn } from '@/schemas/frontend-settings';
 
-const messages = defineMessages({
-  searchPlaceholder: { id: 'search.placeholder', defaultMessage: 'Search' },
-  home: { id: 'column.home', defaultMessage: 'Home' },
-  local: { id: 'column.community', defaultMessage: 'Local timeline' },
-  federated: { id: 'column.public', defaultMessage: 'Fediverse timeline' },
-  bubble: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
-  wrenched: { id: 'column.wrenched', defaultMessage: 'Wrenched timeline' },
-  timeline: { id: 'column.deck.timeline', defaultMessage: 'Timeline' },
-  notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
-  account: { id: 'column.account', defaultMessage: 'Profile' },
-  search: { id: 'column.search', defaultMessage: 'Search' },
-  status: { id: 'column.status', defaultMessage: 'Post' },
-  hashtag: { id: 'column.hashtag', defaultMessage: 'Hashtag' },
-  remove: { id: 'column.deck.remove', defaultMessage: 'Remove column' },
-  shrink: { id: 'column.deck.width.shrink', defaultMessage: 'Shrink column' },
-  widen: { id: 'column.deck.width.widen', defaultMessage: 'Widen column' },
-  fill: { id: 'column.deck.width.fill', defaultMessage: 'Fill available width' },
-  moveLeft: { id: 'column.deck.position.left', defaultMessage: 'Move column left' },
-  moveRight: { id: 'column.deck.position.right', defaultMessage: 'Move column right' },
-  showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies' },
-  showPinned: { id: 'column.deck.account.show_pinned', defaultMessage: 'Show pinned posts' },
-  addColumn: {
-    id: 'column.deck.add_column',
-    defaultMessage: 'Add column to deck',
-  },
-  trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Suggested accounts' },
-  trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
-  trendingHashtags: { id: 'deck.columns.trending_hashtags', defaultMessage: 'Trending hashtags' },
-  trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },
-  bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
-  scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
-  drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
-  chats: { id: 'column.chats', defaultMessage: 'Chats' },
-  chat: { id: 'column.chats', defaultMessage: 'Chats' },
-});
+const trendingTitles = {
+  accounts: messages.trendingAccounts,
+  statuses: messages.trendingStatuses,
+  hashtags: messages.trendingHashtags,
+  links: messages.trendingLinks,
+};
 
 const DeckColumnIdContext = createContext<string | null>(null);
 
@@ -116,10 +108,98 @@ const useColumnTitle = (column: DeckColumn): string => {
   return intl.formatMessage(messages[column.type]);
 };
 
+interface RouteParams {
+  username?: string;
+  accountId?: string;
+  listId?: string;
+  circleId?: string;
+  antennaId?: string;
+  instance?: string;
+  hashtag?: string;
+  trendsType?: string;
+  folderId?: string;
+}
+
+const routeTimeline = (
+  routeId: string | undefined,
+  params: RouteParams,
+): ITimelinePicker['active'] | null => {
+  switch (routeId) {
+    case homeRoute.id:
+      return 'home';
+    case localRoute.id:
+      return 'local';
+    case federatedRoute.id:
+      return 'federated';
+    case bubbleRoute.id:
+      return 'bubble';
+    case wrenchedRoute.id:
+      return 'wrenched';
+    case listRoute.id:
+      return `list:${params.listId ?? ''}`;
+    case circleRoute.id:
+      return `circle:${params.circleId ?? ''}`;
+    case antennaRoute.id:
+      return `antenna:${params.antennaId ?? ''}`;
+    case instanceRoute.id:
+      return `instance:${params.instance ?? ''}`;
+    default:
+      return null;
+  }
+};
+
+const useColumnRouteTitle = () => {
+  const intl = useIntl();
+  const { routeId, params, staticTitle } = useRouterState({
+    select: (state) => {
+      const match = state.matches[state.matches.length - 1];
+      return {
+        routeId: match?.routeId as string | undefined,
+        params: (match?.params ?? {}) as RouteParams,
+        staticTitle: (match?.staticData as { title?: MessageDescriptor } | undefined)?.title,
+      };
+    },
+  });
+
+  const timelineHeading = useTimelineHeading(routeTimeline(routeId, params));
+
+  const username = routeId === accountByUsernameRoute.id ? params.username : undefined;
+  const { data: lookedUpAccount } = useAccountLookup(username);
+
+  const accountId = routeId === accountRoute.id ? params.accountId : undefined;
+  const { data: ownAccount } = useOwnAccount();
+  const { data: account } = useAccount(accountId === 'self' ? ownAccount?.id : accountId);
+
+  const { data: bookmarkFolder } = useBookmarkFolder(
+    routeId === bookmarksRoute.id && params.folderId !== 'all' ? params.folderId : undefined,
+  );
+
+  const acct = lookedUpAccount?.acct ?? account?.acct;
+
+  let title: string | undefined;
+  if (timelineHeading) {
+    title = timelineHeading;
+  } else if (acct !== undefined) {
+    title = `@${acct}`;
+  } else if (routeId === hashtagRoute.id && params.hashtag) {
+    title = `#${params.hashtag}`;
+  } else if (routeId === trendingRoute.id) {
+    title = intl.formatMessage(
+      trendingTitles[params.trendsType as keyof typeof trendingTitles] ?? trendingTitles.hashtags,
+    );
+  } else if (bookmarkFolder) {
+    title = bookmarkFolder.name;
+  } else if (staticTitle) {
+    title = intl.formatMessage(staticTitle);
+  }
+
+  return { title, accountId: lookedUpAccount?.id ?? accountId, hashtag: params.hashtag };
+};
+
 export {
-  messages as deckMessages,
   DeckColumnIdContext,
   updateDeckColumn,
   useDeckColumnConfig,
   useColumnTitle,
+  useColumnRouteTitle,
 };

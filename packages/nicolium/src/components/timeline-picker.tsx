@@ -251,4 +251,4 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
   );
 };
 
-export { TimelinePicker, useTimelineHeading };
+export { TimelinePicker, useTimelineHeading, type ITimelinePicker };

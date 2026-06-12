@@ -1,11 +1,5 @@
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
-import {
-  createRootRoute,
-  createRoute,
-  Outlet,
-  useRouter,
-  useRouterState,
-} from '@tanstack/react-router';
+import { createRootRoute, createRoute, Outlet, useRouter } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -52,12 +46,13 @@ import { useStatus } from '@/queries/statuses/use-status';
 import { router as appRouter } from '@/router';
 import { useSettings } from '@/stores/settings';
 
-import { deckMessages as messages, useDeckColumnConfig } from './deck-column-config';
+import { deckMessages as messages } from '../utils/messages';
+
+import { useDeckColumnConfig, useColumnRouteTitle } from './deck-column-config';
 
 import type { FilterType } from '@/queries/notifications/use-notifications';
 import type { DeckColumn } from '@/schemas/frontend-settings';
 import type { Chat as ChatEntity } from 'pl-api';
-import type { MessageDescriptor } from 'react-intl';
 
 const searchTabMessages = defineMessages({
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },
@@ -74,31 +69,7 @@ const RootRoute: React.FC = () => {
   const [content, setContent] = useState<HTMLElement | null>(null);
   const [canGoBack, setCanGoBack] = useState(() => router.history.canGoBack());
 
-  const { title, leaf } = useRouterState({
-    select: (state) => {
-      const match = state.matches[state.matches.length - 1];
-      const params = (match?.params ?? {}) as {
-        username?: string;
-        accountId?: string;
-        statusId?: string;
-        hashtag?: string;
-      };
-      return {
-        title: (match?.staticData as { title?: MessageDescriptor } | undefined)?.title,
-        leaf: { routeId: match?.routeId as string | undefined, params },
-      };
-    },
-  });
-
-  const username = leaf.routeId === accountByUsernameRoute.id ? leaf.params.username : undefined;
-  const { data: lookedUpAccount } = useAccountLookup(username);
-  const accountId =
-    leaf.routeId === accountByUsernameRoute.id
-      ? lookedUpAccount?.id
-      : leaf.routeId === accountRoute.id && !leaf.params.statusId
-        ? leaf.params.accountId
-        : undefined;
-  const hashtag = leaf.routeId === hashtagRoute.id ? leaf.params.hashtag : undefined;
+  const { title, accountId, hashtag } = useColumnRouteTitle();
 
   const canAddColumn =
     (!!accountId &&
@@ -149,11 +120,7 @@ const RootRoute: React.FC = () => {
       <div className='deck__column__content' ref={setContent}>
         {canGoBack && (
           <CardHeader onBackClick={() => router.history.back()}>
-            {title && (
-              <CardTitle
-                title={lookedUpAccount ? `@${lookedUpAccount.acct}` : intl.formatMessage(title)}
-              />
-            )}
+            {title && <CardTitle title={title} />}
             {canAddColumn && (
               <IconButton
                 className='deck__column__add-column'
@@ -586,4 +553,21 @@ const routeTree = rootRoute.addChildren([
   statusRoute,
 ]);
 
-export { routeTree, DeckEscape };
+export {
+  routeTree,
+  DeckEscape,
+  accountRoute,
+  accountByUsernameRoute,
+  antennaRoute,
+  bookmarksRoute,
+  bubbleRoute,
+  circleRoute,
+  federatedRoute,
+  hashtagRoute,
+  homeRoute,
+  instanceRoute,
+  listRoute,
+  localRoute,
+  trendingRoute,
+  wrenchedRoute,
+};

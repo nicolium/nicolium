@@ -16,12 +16,9 @@ import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/stores/instance';
 
-import {
-  DeckColumnIdContext,
-  deckMessages as messages,
-  updateDeckColumn,
-  useColumnTitle,
-} from './deck-column-config';
+import { deckMessages as messages } from '../utils/messages';
+
+import { DeckColumnIdContext, updateDeckColumn, useColumnTitle } from './deck-column-config';
 import { getDeckColumnRouter } from './deck-column-router';
 
 import type { DeckColumn } from '@/schemas/frontend-settings';
