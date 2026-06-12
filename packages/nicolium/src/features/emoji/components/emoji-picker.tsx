@@ -6,6 +6,8 @@ import { joinPublicPath } from '@/utils/static';
 
 import data from '../data';
 
+import pickerStyles from './styles.scss?inline';
+
 const getSpritesheetURL = () => spritesheetURL;
 
 const getImageURL = (set: string, name: string) => joinPublicPath(`/packs/emoji/${name}.svg`);
@@ -16,7 +18,11 @@ const Picker: React.FC<any> = (props) => {
   useEffect(() => {
     const input = { ...props, data, ref, autoFocus: true, getImageURL, getSpritesheetURL };
 
-    new EmojiPicker(input);
+    const emojiPicker = new EmojiPicker(input);
+
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(pickerStyles);
+    (emojiPicker as any as HTMLElement).shadowRoot!.adoptedStyleSheets = [sheet];
   }, []);
 
   return <div ref={ref} />;
