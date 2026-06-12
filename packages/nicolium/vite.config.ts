@@ -22,6 +22,94 @@ const config = defineConfig(() => ({
         entryFileNames: 'packs/[name]-[hash].js',
         codeSplitting: {
           minSize: 16 * 1024,
+          groups: [
+            {
+              name: 'react',
+              test: /[\\/]node_modules[\\/](react|react-dom|scheduler|use-sync-external-store)[\\/]/,
+              priority: 30,
+            },
+            {
+              name: 'lexical',
+              test: /[\\/]node_modules[\\/](lexical|@lexical)[\\/]/,
+              priority: 20,
+            },
+            {
+              name: 'emoji',
+              test: /[\\/]node_modules[\\/](emoji-mart|@emoji-mart|emoji-datasource)[\\/]/,
+              priority: 20,
+            },
+            {
+              name: 'tanstack',
+              test: /[\\/]node_modules[\\/]@tanstack[\\/]/,
+              priority: 20,
+            },
+            {
+              name: 'sentry',
+              test: /[\\/]node_modules[\\/]@sentry[\\/]/,
+              priority: 20,
+            },
+            {
+              name: 'intl',
+              test: /[\\/]node_modules[\\/](react-intl|intl-messageformat|intl-pluralrules|@formatjs)[\\/]/,
+              priority: 20,
+            },
+            {
+              name: 'leaflet',
+              test: /[\\/]node_modules[\\/]leaflet[\\/]/,
+              priority: 20,
+            },
+            {
+              name: 'vendor',
+              test: /[\\/]node_modules[\\/]/,
+              priority: 10,
+            },
+            {
+              name: 'common',
+              test: /[\\/]src[\\/](components|hooks|utils|stores|queries|contexts|actions|api|schemas)[\\/]/,
+              minShareCount: 2,
+              priority: 8,
+            },
+            {
+              name: 'admin',
+              test: /[\\/]src[\\/](pages[\\/]dashboard|layouts[\\/]admin-)/,
+              priority: 5,
+            },
+            {
+              name: 'settings',
+              test: /[\\/]src[\\/]pages[\\/]settings[\\/]/,
+              priority: 5,
+            },
+            {
+              name: 'chats',
+              test: /[\\/]src[\\/](features|pages)[\\/]chats[\\/]/,
+              priority: 5,
+            },
+            {
+              name: 'compose',
+              test: /[\\/]src[\\/](features[\\/]compose(-event)?|pages[\\/]compose)[\\/]/,
+              priority: 5,
+            },
+            {
+              name: 'crypto-donate',
+              test: /[\\/]src[\\/]features[\\/]crypto-donate[\\/]/,
+              priority: 5,
+            },
+            {
+              name: 'developers',
+              test: /[\\/]src[\\/]pages[\\/]developers[\\/]/,
+              priority: 5,
+            },
+            {
+              name: 'accounts',
+              test: /[\\/]src[\\/](pages[\\/](account-lists|accounts)|components[\\/]panels[\\/](account-note-panel|pinned-accounts-panel|profile-info-panel|profile-media-panel|profile-fields-panel))/,
+              priority: 5,
+            },
+            {
+              name: 'timelines',
+              test: /[\\/]src[\\/]columns[\\/]timelines[\\/]/,
+              priority: 5,
+            },
+          ],
         },
       },
     },
