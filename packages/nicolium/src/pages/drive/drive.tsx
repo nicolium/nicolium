@@ -20,86 +20,6 @@ import { DriveBrowser } from './components/drive-browser';
 
 const messages = defineMessages({
   heading: { id: 'column.drive', defaultMessage: 'Drive' },
-  folderDropdown: { id: 'drive.folder.dropdown', defaultMessage: 'Folder menu' },
-  folderView: { id: 'drive.folder.view', defaultMessage: 'View folder' },
-  folderRename: { id: 'drive.folder.rename', defaultMessage: 'Rename folder' },
-  folderRenamePlaceholder: {
-    id: 'drive.folder.rename.placeholder',
-    defaultMessage: 'New folder name',
-  },
-  folderRenameSuccess: {
-    id: 'drive.folder.rename.success',
-    defaultMessage: 'Folder renamed',
-  },
-  folderRenameError: {
-    id: 'drive.folder.rename.error',
-    defaultMessage: 'Failed to rename folder',
-  },
-  folderMove: { id: 'drive.folder.move', defaultMessage: 'Move folder' },
-  folderMoveSuccess: {
-    id: 'drive.folder.move.success',
-    defaultMessage: 'Folder moved',
-  },
-  folderMoveError: { id: 'drive.folder.move.error', defaultMessage: 'Failed to move folder' },
-  folderDelete: { id: 'drive.folder.delete', defaultMessage: 'Delete folder' },
-  folderDeleteSuccess: {
-    id: 'drive.folder.delete.success',
-    defaultMessage: 'Folder deleted',
-  },
-  folderDeleteError: {
-    id: 'drive.folder.delete.error',
-    defaultMessage: 'Failed to delete folder',
-  },
-  fileDropdown: { id: 'drive.file.dropdown', defaultMessage: 'File menu' },
-  fileView: { id: 'drive.file.view', defaultMessage: 'View file' },
-  fileDownload: { id: 'drive.file.download', defaultMessage: 'Download file' },
-  fileRename: { id: 'drive.file.rename', defaultMessage: 'Rename file' },
-  fileRenamePlaceholder: { id: 'drive.file.rename.placeholder', defaultMessage: 'New file name' },
-  fileRenameSuccess: {
-    id: 'drive.file.rename.success',
-    defaultMessage: 'File renamed',
-  },
-  fileRenameError: { id: 'drive.file.rename.error', defaultMessage: 'Failed to rename file' },
-  updateDescription: { id: 'drive.file.update.description', defaultMessage: 'Edit description' },
-  updateDescriptionPlaceholder: {
-    id: 'drive.file.update.description.placeholder',
-    defaultMessage: 'New description',
-  },
-  updateDescriptionSuccess: {
-    id: 'drive.file.update.description.success',
-    defaultMessage: 'Description updated',
-  },
-  updateDescriptionError: {
-    id: 'drive.file.update.description.error',
-    defaultMessage: 'Failed to update description',
-  },
-  markSensitive: { id: 'drive.file.mark_sensitive', defaultMessage: 'Mark as sensitive' },
-  markSensitiveSuccess: {
-    id: 'drive.file.mark_sensitive.success',
-    defaultMessage: 'File marked as sensitive',
-  },
-  markSensitiveError: {
-    id: 'drive.file.mark_sensitive.error',
-    defaultMessage: 'Failed to mark file as sensitive',
-  },
-  unmarkSensitive: { id: 'drive.file.unmark_sensitive', defaultMessage: 'Unmark as sensitive' },
-  unmarkSensitiveSuccess: {
-    id: 'drive.file.unmark_sensitive.success',
-    defaultMessage: 'File unmarked as sensitive',
-  },
-  unmarkSensitiveError: {
-    id: 'drive.file.unmark_sensitive.error',
-    defaultMessage: 'Failed to unmark file as sensitive',
-  },
-  fileMove: { id: 'drive.file.move', defaultMessage: 'Move file' },
-  fileMoveSuccess: { id: 'drive.file.move.success', defaultMessage: 'File moved' },
-  fileMoveError: { id: 'drive.file.move.error', defaultMessage: 'Failed to move file' },
-  fileDelete: { id: 'drive.file.delete', defaultMessage: 'Delete file' },
-  fileDeleteSuccess: {
-    id: 'drive.file.delete.success',
-    defaultMessage: 'File deleted',
-  },
-  fileDeleteError: { id: 'drive.file.delete.error', defaultMessage: 'Failed to delete file' },
   fileUpload: { id: 'drive.file.upload', defaultMessage: 'Upload file' },
   fileUploadSuccess: {
     id: 'drive.file.upload.success',
@@ -113,7 +33,6 @@ const messages = defineMessages({
     defaultMessage: 'Folder created',
   },
   newFolderError: { id: 'drive.folder.new.error', defaultMessage: 'Failed to create folder' },
-  home: { id: 'drive.breadcrumbs.home', defaultMessage: 'Home' },
 });
 
 const DrivePage: React.FC = () => {

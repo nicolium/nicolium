@@ -39,7 +39,6 @@ import { download } from '@/utils/download';
 import { Breadcrumbs } from './breadcrumbs';
 
 const messages = defineMessages({
-  heading: { id: 'column.drive', defaultMessage: 'Drive' },
   folderDropdown: { id: 'drive.folder.dropdown', defaultMessage: 'Folder menu' },
   folderView: { id: 'drive.folder.view', defaultMessage: 'View folder' },
   folderRename: { id: 'drive.folder.rename', defaultMessage: 'Rename folder' },
@@ -120,19 +119,6 @@ const messages = defineMessages({
     defaultMessage: 'File deleted',
   },
   fileDeleteError: { id: 'drive.file.delete.error', defaultMessage: 'Failed to delete file' },
-  fileUpload: { id: 'drive.file.upload', defaultMessage: 'Upload file' },
-  fileUploadSuccess: {
-    id: 'drive.file.upload.success',
-    defaultMessage: 'File uploaded',
-  },
-  fileUploadError: { id: 'drive.file.upload.error', defaultMessage: 'Failed to upload file' },
-  newFolder: { id: 'drive.folder.new', defaultMessage: 'New folder' },
-  newFolderPlaceholder: { id: 'drive.folder.new.placeholder', defaultMessage: 'Folder name' },
-  newFolderSuccess: {
-    id: 'drive.folder.new.success',
-    defaultMessage: 'Folder created',
-  },
-  newFolderError: { id: 'drive.folder.new.error', defaultMessage: 'Failed to create folder' },
 });
 
 interface IFile {
