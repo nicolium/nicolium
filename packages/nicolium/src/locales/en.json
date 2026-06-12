@@ -764,7 +764,7 @@
   "column.status": "Post",
   "column.subscribers": "Subscribers",
   "column.tokens": "Active sessions",
-  "column.wrenched": "Wrenched timeline",
+  "column.wrenched": "Recent wrenches timeline",
   "column_forbidden.body": "You do not have permission to access this page.",
   "column_forbidden.title": "Forbidden",
   "common.add": "Add",
