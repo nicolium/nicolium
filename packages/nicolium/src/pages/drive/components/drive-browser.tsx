@@ -121,10 +121,33 @@ const messages = defineMessages({
   fileDeleteError: { id: 'drive.file.delete.error', defaultMessage: 'Failed to delete file' },
 });
 
+type FocusDirection = 'home' | 'end' | 'previous' | 'next' | 'up' | 'down';
+
+const getFocusDirection = (key: string): FocusDirection | null => {
+  switch (key) {
+    case 'Home':
+    case 'PageUp':
+      return 'home';
+    case 'End':
+    case 'PageDown':
+      return 'end';
+    case 'ArrowLeft':
+      return 'previous';
+    case 'ArrowRight':
+      return 'next';
+    case 'ArrowUp':
+      return 'up';
+    case 'ArrowDown':
+      return 'down';
+    default:
+      return null;
+  }
+};
+
 interface IFile {
   file: DriveFile;
   index: number;
-  onMove: (index: number, direction: 'home' | 'end' | 'up' | 'down') => void;
+  onMove: (index: number, direction: FocusDirection) => void;
 }
 
 const File: React.FC<IFile> = ({ file, index, onMove }) => {
@@ -169,37 +192,18 @@ const File: React.FC<IFile> = ({ file, index, onMove }) => {
   const handleFileKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (isDropdownOpen) return;
 
-    switch (e.key) {
-      case 'Enter':
-      case ' ':
-        handleView();
-        e.preventDefault();
-        e.stopPropagation();
-        break;
-      case 'Home':
-      case 'PageUp':
-        onMove(index, 'home');
-        e.preventDefault();
-        e.stopPropagation();
-        break;
-      case 'End':
-      case 'PageDown':
-        onMove(index, 'end');
-        e.preventDefault();
-        e.stopPropagation();
-        break;
-      case 'ArrowUp':
-      case 'ArrowLeft':
-        onMove(index, 'up');
-        e.preventDefault();
-        e.stopPropagation();
-        break;
-      case 'ArrowDown':
-      case 'ArrowRight':
-        onMove(index, 'down');
-        e.preventDefault();
-        e.stopPropagation();
-        break;
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleView();
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    const direction = getFocusDirection(e.key);
+    if (direction) {
+      onMove(index, direction);
+      e.preventDefault();
+      e.stopPropagation();
     }
   };
 
@@ -431,7 +435,7 @@ const File: React.FC<IFile> = ({ file, index, onMove }) => {
 interface IFolder {
   folder: DriveFolder;
   index: number;
-  onMove: (index: number, direction: 'home' | 'end' | 'up' | 'down') => void;
+  onMove: (index: number, direction: FocusDirection) => void;
 }
 
 const Folder: React.FC<IFolder> = ({ folder, index, onMove }) => {
@@ -452,37 +456,18 @@ const Folder: React.FC<IFolder> = ({ folder, index, onMove }) => {
   const handleFolderKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (isDropdownOpen) return;
 
-    switch (e.key) {
-      case 'Enter':
-      case ' ':
-        handleEnterFolder();
-        e.preventDefault();
-        e.stopPropagation();
-        break;
-      case 'Home':
-      case 'PageUp':
-        onMove(index, 'home');
-        e.preventDefault();
-        e.stopPropagation();
-        break;
-      case 'End':
-      case 'PageDown':
-        onMove(index, 'end');
-        e.preventDefault();
-        e.stopPropagation();
-        break;
-      case 'ArrowUp':
-      case 'ArrowLeft':
-        onMove(index, 'up');
-        e.preventDefault();
-        e.stopPropagation();
-        break;
-      case 'ArrowDown':
-      case 'ArrowRight':
-        onMove(index, 'down');
-        e.preventDefault();
-        e.stopPropagation();
-        break;
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleEnterFolder();
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    const direction = getFocusDirection(e.key);
+    if (direction) {
+      onMove(index, direction);
+      e.preventDefault();
+      e.stopPropagation();
     }
   };
 
@@ -628,18 +613,50 @@ const DriveBrowser: React.FC<IDriveBrowser> = ({ folderId }) => {
 
   const { data, isPending } = useDriveFolderQuery(folderId);
 
-  const handleMove = (index: number, direction: 'home' | 'end' | 'up' | 'down') => {
-    const totalItems = data!.files.length + data!.folders.length;
-    const newItem =
-      direction === 'home'
-        ? 0
-        : direction === 'end'
-          ? totalItems - 1
-          : direction === 'up'
-            ? index - 1
-            : index + 1;
-    if (newItem < 0 || newItem >= totalItems) return;
-    filesRef.current?.querySelector<HTMLDivElement>(`div[data-index="${newItem}"]`)?.focus();
+  const handleMove = (index: number, direction: FocusDirection) => {
+    const container = filesRef.current;
+    if (!container) return;
+
+    const items = Array.from(container.querySelectorAll<HTMLDivElement>('[data-index]'));
+    const total = items.length;
+    if (!total) return;
+
+    let perRow = 1;
+    const firstTop = items[0].offsetTop;
+    while (perRow < total && items[perRow].offsetTop === firstTop) perRow++;
+
+    let target: number;
+    switch (direction) {
+      case 'home':
+        target = 0;
+        break;
+      case 'end':
+        target = total - 1;
+        break;
+      case 'previous':
+        target = index - 1;
+        break;
+      case 'next':
+        target = index + 1;
+        break;
+      case 'up':
+        target = index - perRow;
+        break;
+      case 'down':
+        target = index + perRow;
+        break;
+    }
+
+    if (
+      direction === 'down' &&
+      target >= total &&
+      Math.floor(index / perRow) < Math.floor((total - 1) / perRow)
+    ) {
+      target = total - 1;
+    }
+
+    if (target < 0 || target >= total) return;
+    container.querySelector<HTMLDivElement>(`div[data-index="${target}"]`)?.focus();
   };
 
   if (isPending) {
