@@ -8,7 +8,7 @@ import ScrollableList from '@/components/scrollable-list';
 import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';
 import { MIMETYPE_ICONS } from '@/components/upload';
-import { Breadcrumbs } from '@/pages/drive/drive';
+import { Breadcrumbs } from '@/pages/drive/components/breadcrumbs';
 import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
