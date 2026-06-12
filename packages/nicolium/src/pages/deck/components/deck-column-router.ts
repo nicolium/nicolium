@@ -114,11 +114,4 @@ const getDeckColumnRouter = (column: DeckColumn): ColumnRouter => {
   return router;
 };
 
-const pruneDeckColumnRouters = (activeIds: Array<string>) => {
-  const active = new Set(activeIds);
-  for (const id of registry.keys()) {
-    if (!active.has(id)) registry.delete(id);
-  }
-};
-
-export { getDeckColumnRouter, pruneDeckColumnRouters, registry as deckColumnRouterRegistry };
+export { getDeckColumnRouter, registry as deckColumnRouterRegistry };

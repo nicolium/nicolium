@@ -404,7 +404,6 @@ export {
   getUnionOptions,
   isContainerDescriptor,
   isStringOrImageType,
-  isTupleObject,
   isValueCompatibleWithType,
   mapToTupleArray,
   normalizeDynamicEntries,
