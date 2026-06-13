@@ -143,7 +143,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
       {me && (
         <EmojiPickerDropdown onPickEmoji={handlePickEmoji}>
           <button
-            className='status-reactions-bar__picker-button emoji-picker-dropdown'
+            className='status-reactions-bar__picker-button'
             title={intl.formatMessage(messages.addEmoji)}
           >
             <Icon src={iconSmileySticker} aria-hidden />

@@ -7,6 +7,7 @@ em-emoji-picker {
 
 .emoji-picker-dropdown {
   z-index: 101;
+  min-height: 400px;
   background: white;
 
   .dark & {
