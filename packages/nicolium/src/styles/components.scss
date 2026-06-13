@@ -2013,7 +2013,8 @@ div[data-viewport-type='window']:has(.empty-message) {
     opacity: 0;
   }
 
-  img {
+  img,
+  canvas {
     display: block;
     width: 100%;
     height: 100%;
