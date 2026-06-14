@@ -29,15 +29,15 @@ const messages = defineMessages({
     id: 'admin.invites.expires_at.placeholder',
     defaultMessage: 'Expiry date (optional)',
   },
-  emailPlaceholder: { id: 'admin.invites.email.placeholder', defaultMessage: 'Email address' },
+  emailPlaceholder: { id: 'admin.invites.email.placeholder', defaultMessage: 'E-mail address' },
   namePlaceholder: { id: 'admin.invites.name.placeholder', defaultMessage: 'Name (optional)' },
   createSuccess: { id: 'admin.invites.create.success', defaultMessage: 'Invite token created' },
   createError: {
     id: 'admin.invites.create.error',
     defaultMessage: 'Failed to create invite token',
   },
-  emailSuccess: { id: 'admin.invites.email.success', defaultMessage: 'Invite email sent' },
-  emailError: { id: 'admin.invites.email.error', defaultMessage: 'Failed to send invite email' },
+  emailSuccess: { id: 'admin.invites.email.success', defaultMessage: 'Invite e-mail sent' },
+  emailError: { id: 'admin.invites.email.error', defaultMessage: 'Failed to send invite e-mail' },
   emailErrorInvitesDisabled: {
     id: 'admin.invites.email.error.invites_disabled',
     defaultMessage: 'You need to enable user invitations for admins to use this feature',
@@ -231,7 +231,7 @@ const EmailInviteForm: React.FC = () => {
         onChange={(e) => setName(e.target.value)}
       />
       <button type='submit' disabled={isPending || !email}>
-        <FormattedMessage id='admin.invites.email.send' defaultMessage='Send email invite' />
+        <FormattedMessage id='admin.invites.email.send' defaultMessage='Send e-mail invite' />
       </button>
     </Form>
   );
