@@ -450,8 +450,12 @@ select {
       button {
         display: flex;
         align-items: center;
+
         padding-inline: 0.5rem;
+
         color: var(--color-gray-700);
+
+        background: transparent;
 
         &:hover {
           color: var(--color-gray-500);
