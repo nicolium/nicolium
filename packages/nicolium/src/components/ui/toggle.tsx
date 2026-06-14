@@ -13,6 +13,7 @@ interface IToggle extends Pick<
 > {
   size?: 'sm' | 'md';
   radio?: boolean;
+  inverted?: boolean;
 }
 
 /** A glorified checkbox. */
@@ -25,18 +26,26 @@ const Toggle: React.FC<IToggle> = ({
   required,
   disabled,
   radio,
-}) => (
-  <input
-    className={`toggle toggle--${size}`}
-    type={radio ? 'radio' : 'checkbox'}
-    id={id}
-    name={name}
-    checked={checked}
-    onChange={onChange}
-    required={required}
-    disabled={disabled}
-    switch={!radio}
-  />
-);
+  inverted,
+}) => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (inverted) event.target = { ...event.target, checked: !event.target.checked };
+    onChange?.(event);
+  };
+
+  return (
+    <input
+      className={`toggle toggle--${size}`}
+      type={radio ? 'radio' : 'checkbox'}
+      id={id}
+      name={name}
+      checked={!checked}
+      onChange={handleChange}
+      required={required}
+      disabled={disabled}
+      switch={!radio}
+    />
+  );
+};
 
 export { Toggle as default };

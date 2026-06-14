@@ -1835,6 +1835,7 @@
   "preferences.fields.known_languages.label": "Languages you know",
   "preferences.fields.language.hint": "You can help translating the {software} interface into your language on <link>Weblate</link>.",
   "preferences.fields.language.label": "Display language",
+  "preferences.fields.loop_videos.label": "Loop videos",
   "preferences.fields.media_display.label": "Sensitive content",
   "preferences.fields.mention_policy.label": "Accept mentions from",
   "preferences.fields.missing_description_boost_modal.label": "Show confirmation dialog before reposting a post without media descriptions",

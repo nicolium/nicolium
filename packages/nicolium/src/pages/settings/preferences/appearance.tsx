@@ -281,6 +281,21 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
+                id='preferences.fields.loop_videos.label'
+                defaultMessage='Loop videos'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['disableVideoLooping']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
                 id='preferences.fields.reduce_motion.label'
                 defaultMessage='Reduce motion in animations'
               />

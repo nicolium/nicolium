@@ -18,6 +18,8 @@ interface ISettingToggle {
   onChange: (settingPath: string[], checked: boolean) => void;
   /** Whether the toggle is disabled. */
   disabled?: boolean;
+  /** Whether the toggle state should be displayed inverted. */
+  inverted?: boolean;
 }
 
 /** Stateful toggle to change user settings. */
@@ -28,6 +30,7 @@ const SettingToggle: React.FC<ISettingToggle> = ({
   defaultValue,
   onChange,
   disabled,
+  inverted,
 }) => {
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
     onChange(settingPath, target.checked);
@@ -35,7 +38,15 @@ const SettingToggle: React.FC<ISettingToggle> = ({
 
   const checked = !!get(settings, settingPath, defaultValue);
 
-  return <Toggle id={id} checked={checked} onChange={handleChange} disabled={disabled} />;
+  return (
+    <Toggle
+      id={id}
+      checked={checked}
+      onChange={handleChange}
+      disabled={disabled}
+      inverted={inverted}
+    />
+  );
 };
 
 export { SettingToggle as default };

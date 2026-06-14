@@ -287,6 +287,7 @@ const settingsSchema = v.object({
   renderAnimatedMfm: v.fallback(v.boolean(), false),
   underlineLinks: v.fallback(v.boolean(), false),
   autoPlayGif: v.fallback(v.boolean(), true),
+  disableVideoLooping: v.fallback(v.boolean(), false),
   displayMedia: v.fallback(v.picklist(['default', 'hide_all', 'show_all']), 'default'),
   displayPreviewCards: v.fallback(v.picklist(['default', 'hide', 'hide_media']), 'default'),
   displaySpoilers: v.fallback(v.boolean(), false),

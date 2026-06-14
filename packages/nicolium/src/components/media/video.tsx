@@ -152,7 +152,7 @@ const Video: React.FC<IVideo> = ({
   deployPictureInPicture,
 }) => {
   const intl = useIntl();
-  const { useSystemMediaControls } = useSettings();
+  const { useSystemMediaControls, disableVideoLooping } = useSettings();
 
   const player = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -559,7 +559,7 @@ const Video: React.FC<IVideo> = ({
         })}
         ref={video}
         src={src}
-        loop
+        loop={!disableVideoLooping}
         role='button'
         tabIndex={0}
         aria-label={alt}
