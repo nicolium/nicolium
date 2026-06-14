@@ -31,7 +31,6 @@ const Toggle: React.FC<IToggle> = ({
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (inverted) event.target = { ...event.target, checked: !event.target.checked };
     onChange?.(event);
-    console.log(inverted, event.target.checked);
   };
 
   return (
