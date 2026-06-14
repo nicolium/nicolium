@@ -165,7 +165,6 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
     saveSettings();
 
     if (onPickEmoji) {
-      console.log(pickedEmoji);
       onPickEmoji(pickedEmoji);
     }
   };
