@@ -33,10 +33,11 @@ const onlyHour = (node: HTMLElement, ignoreMentions = true): string | false => {
       node.querySelectorAll('a.mention').forEach((m) => m.parentNode?.removeChild(m));
     }
 
-    const hour = node.textContent
+    const rawHour = node.textContent
       ?.replace(/^[\s\u2000-\u200f]+|[\s\u2000-\u200f]+$/g, '')
-      .match(/^([01]?\d|2[0-3]):[0-5]\d$/)?.[0];
-    if (!hour) return false;
+      .match(/^([01]?\d|2[0-3])?:[0-5]\d$/)?.[0];
+    if (!rawHour) return false;
+    const hour = rawHour?.includes(':') ? rawHour : `${rawHour.slice(0, -2)}:${rawHour.slice(-2)}`;
 
     const emojis = Array.from(node.querySelectorAll('img.emojione, span.emojione'));
     if (emojis.length > 1) return false;
