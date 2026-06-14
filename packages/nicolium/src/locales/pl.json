@@ -326,7 +326,6 @@
   "admin.pleroma_config.search": "Szukaj ustawień",
   "admin.pleroma_config.search.placeholder": "Szukaj po podpisie, kluczu, grupie lub opisie",
   "admin.pleroma_config.suggestions": "Propozycje",
-  "admin.pleroma_config.tuple.hint": "",
   "admin.pleroma_config.value_type": "Rodzaj wartości",
   "admin.relays.add.fail": "Nie udało się zaobserwować przekaźnika instancji",
   "admin.relays.add.success": "Zaobserwowano przekaźnik instancji",
