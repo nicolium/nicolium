@@ -290,6 +290,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
               settings={settings}
               settingPath={['disableVideoLooping']}
               onChange={onToggleChange}
+              inverted
             />
           </ListItem>
 

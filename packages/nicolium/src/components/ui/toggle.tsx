@@ -31,6 +31,7 @@ const Toggle: React.FC<IToggle> = ({
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (inverted) event.target = { ...event.target, checked: !event.target.checked };
     onChange?.(event);
+    console.log(inverted, event.target.checked);
   };
 
   return (
@@ -39,7 +40,7 @@ const Toggle: React.FC<IToggle> = ({
       type={radio ? 'radio' : 'checkbox'}
       id={id}
       name={name}
-      checked={!checked}
+      checked={inverted ? !checked : checked}
       onChange={handleChange}
       required={required}
       disabled={disabled}
