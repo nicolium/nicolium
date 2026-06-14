@@ -638,11 +638,11 @@ const Status: React.FC<IStatus> = React.memo((props) => {
             />
           )}
 
-          {!status.rss_feed && (
+          {!status.rss_feed && !hideActionBar && (
             <>
               <StatusReactionsBar status={actualStatus} collapsed />
 
-              {!hideActionBar && statusActionBarItems.length > 0 && (
+              {statusActionBarItems.length > 0 && (
                 <div
                   className={clsx('status__actions', {
                     'status__actions--reacted': actualStatus.emoji_reactions.length,
