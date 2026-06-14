@@ -62,6 +62,14 @@
     }
   }
 
+  table:not(:first-child) thead {
+    display: none;
+
+    @media (min-width: variables.$breakpoint-lg) {
+      display: table-header-group;
+    }
+  }
+
   th {
     padding-bottom: 0.5rem;
     font-weight: 700;
