@@ -10,7 +10,6 @@
   - Each column has separate routing.
   - Columns can be moved, resized and set to take all available width.
   - Hotkeys are available for switching, moving and resizing columns and in-column routing.
-  -
 - Option to disable video looping.
 - Support for creating invites on Pleroma.
 
@@ -37,7 +36,7 @@
 
 ### Removed
 
-- Components such as <Button /> and <Text />.
+- Components such as \<Button /\> and \<Text /\>.
 
 ## v0.3.2
 
