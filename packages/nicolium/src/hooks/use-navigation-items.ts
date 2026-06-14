@@ -126,6 +126,7 @@ const REQUIRED_NAVIGATION_ITEMS = [
   'scheduled-statuses',
   'drafts',
   'compose',
+  'deck',
 ] as const;
 
 const REQUIRED_MOBILE_NAVIGATION_ITEMS = ['birthdays', 'announcements'] as const;
