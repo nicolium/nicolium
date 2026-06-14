@@ -19,9 +19,12 @@ const messages = defineMessages({
   keyNameEnter: { id: 'keyboard_shortcuts.key_names.enter', defaultMessage: 'Enter' },
   keyNameEsc: { id: 'keyboard_shortcuts.key_names.esc', defaultMessage: 'Escape' },
   keyNameUp: { id: 'keyboard_shortcuts.key_names.up', defaultMessage: 'Arrow up' },
+  keyNameLeft: { id: 'keyboard_shortcuts.key_names.left', defaultMessage: 'Arrow left' },
+  keyNameRight: { id: 'keyboard_shortcuts.key_names.right', defaultMessage: 'Arrow right' },
   joinerOr: { id: 'keyboard_shortcuts.joiners.or', defaultMessage: 'or' },
   joinerPlus: { id: 'keyboard_shortcuts.joiners.plus', defaultMessage: 'plus' },
   joinerThen: { id: 'keyboard_shortcuts.joiners.then', defaultMessage: 'then' },
+  joinerRange: { id: 'keyboard_shortcuts.joiners.range', defaultMessage: 'to' },
 });
 
 const Hotkey: React.FC<{ children: React.ReactNode }> = ({ children }) => <kbd>{children}</kbd>;
@@ -35,6 +38,8 @@ const spokenKeyNames: Record<string, MessageDescriptor> = {
   enter: messages.keyNameEnter,
   esc: messages.keyNameEsc,
   up: messages.keyNameUp,
+  left: messages.keyNameLeft,
+  right: messages.keyNameRight,
 };
 
 const getSpokenKeyName = (keyName: string) => {
@@ -43,18 +48,20 @@ const getSpokenKeyName = (keyName: string) => {
   return keyName;
 };
 
-type KeyJoiner = 'or' | 'plus' | 'then';
+type KeyJoiner = 'or' | 'plus' | 'then' | 'range';
 
 const visualJoiners: Record<KeyJoiner, string> = {
   or: ', ',
   plus: ' + ',
   then: ' + ',
+  range: ' - ',
 };
 
 const spokenJoiners: Record<KeyJoiner, MessageDescriptor> = {
   or: messages.joinerOr,
   plus: messages.joinerPlus,
   then: messages.joinerThen,
+  range: messages.joinerRange,
 };
 
 const HotkeyBinding: React.FC<{ keys: string[]; joiner?: KeyJoiner }> = ({
@@ -267,6 +274,54 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
           />
         ),
       },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['1', '9']} joiner='range' />,
+      label: (
+        <FormattedMessage id='keyboard_shortcuts.focus_column' defaultMessage='to focus column' />
+      ),
+    },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['0']} />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.focus_last_column'
+          defaultMessage='to focus last column'
+        />
+      ),
+    },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['left']} />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.focus_previous_column'
+          defaultMessage='to focus previous column'
+        />
+      ),
+    },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['right']} />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.focus_next_column'
+          defaultMessage='to focus next column'
+        />
+      ),
+    },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['c']} />,
+      label: (
+        <FormattedMessage id='keyboard_shortcuts.add_column' defaultMessage='to add a new column' />
+      ),
+    },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['escape']} />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.column_back'
+          defaultMessage='to navigate back inside a column'
+        />
+      ),
+    },
     {
       key: <HotkeyBinding keys={['?']} />,
       label: (
