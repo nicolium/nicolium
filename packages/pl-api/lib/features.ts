@@ -511,6 +511,11 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * @see GET /api/v1/instance/bubble_domains
+     */
+    bubbleDomainList: instance.api_versions['chuckya'] >= 1,
+
+    /**
      * Can display a timeline of statuses from instances selected by instance admin.
      * @see GET /api/v1/timelines/bubble
      */

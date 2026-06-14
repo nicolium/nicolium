@@ -205,6 +205,15 @@ const instance = (client: PlApiBaseClient) => ({
 
     return v.parse(termsOfServiceSchema, response.json);
   },
+
+  /**
+   * Requires features{@link Features.bubbleDomainList}.
+   */
+  getInstanceBubbleDomains: async () => {
+    const response = await client.request('/api/v1/instance/bubble_domains');
+
+    return v.parse(v.array(v.string()), response.json);
+  },
 });
 
 export { instance };
