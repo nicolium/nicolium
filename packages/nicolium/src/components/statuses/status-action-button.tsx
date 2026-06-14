@@ -18,7 +18,7 @@ const StatusActionCounter: React.FC<IStatusActionCounter> = React.memo(
 
     return (
       <p className='status-action-bar__button__counter'>
-        <AnimatedNumber value={count} obfuscate={demetricator} short />
+        <AnimatedNumber value={count} obfuscate={demetricator !== 'off'} short />
       </p>
     );
   },

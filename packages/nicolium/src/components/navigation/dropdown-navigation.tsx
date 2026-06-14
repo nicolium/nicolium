@@ -189,7 +189,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                     />
                   </AccountLink>
 
-                  {!settings.demetricator && (
+                  {settings.demetricator === 'off' && (
                     <ProfileStats account={account} onClickHandler={handleClose} />
                   )}
                 </React.Fragment>

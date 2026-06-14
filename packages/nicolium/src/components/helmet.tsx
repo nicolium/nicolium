@@ -39,7 +39,7 @@ const HeadTitle: React.FC<IHeadTitle> = ({ title }) => {
   );
 
   const hasUnreadNotifications = React.useMemo(
-    () => !(unreadCount < 1 || demetricator),
+    () => !(unreadCount < 1 || demetricator !== 'off'),
     [unreadCount, demetricator],
   );
 

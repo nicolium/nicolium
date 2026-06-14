@@ -18,6 +18,18 @@ import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config
 
 const messages = defineMessages({
   heading: { id: 'preferences.heading.general', defaultMessage: 'General settings' },
+  demetricatorOff: {
+    id: 'preferences.fields.demetricator.off',
+    defaultMessage: 'Show counts',
+  },
+  demetricatorOn: {
+    id: 'preferences.fields.demetricator.on',
+    defaultMessage: 'Hide counts',
+  },
+  demetricatorAlways: {
+    id: 'preferences.fields.demetricator.always',
+    defaultMessage: 'Always hide counts, even in post details',
+  },
 });
 
 const GeneralPreferences: React.FC<ISettingsPage> = ({
@@ -208,10 +220,17 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
               />
             }
           >
-            <SettingToggle
-              settings={settings}
-              settingPath={['demetricator']}
-              onChange={onToggleChange}
+            <SelectDropdown
+              className='settings-select'
+              items={{
+                off: intl.formatMessage(messages.demetricatorOff),
+                on: intl.formatMessage(messages.demetricatorOn),
+                always: intl.formatMessage(messages.demetricatorAlways),
+              }}
+              defaultValue={settings.demetricator}
+              onChange={(event) => {
+                onSelectChange(event, ['demetricator']);
+              }}
             />
           </ListItem>
         </List>

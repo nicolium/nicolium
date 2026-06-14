@@ -46,7 +46,7 @@ const ChatPaneHeader: React.FC<IChatPaneHeader> = ({
       <ButtonComp className='chat-widget__header__title' data-testid='title' {...buttonProps}>
         <div>{title}</div>
 
-        {!demetricator && unreadCount !== undefined && unreadCount > 0 && (
+        {demetricator === 'off' && unreadCount !== undefined && unreadCount > 0 && (
           <div className='chat-widget__header__count'>
             <p data-testid='unread-count'>({unreadCount})</p>
 

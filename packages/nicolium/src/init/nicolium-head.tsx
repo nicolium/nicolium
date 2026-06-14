@@ -41,7 +41,8 @@ const NicoliumHead = () => {
   const bodyClass = clsx({
     'no-reduce-motion': !(reduceMotion || prefersReducedMotion.matches),
     'underline-links': underlineLinks,
-    demetricator: demetricator,
+    demetricator: demetricator !== 'off',
+    'demetricator-always': demetricator === 'always',
     'system-font': systemFont,
     'with-modals': withModals,
   });

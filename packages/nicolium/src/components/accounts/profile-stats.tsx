@@ -65,7 +65,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler, withSt
 
   return (
     <div className='account-stats'>
-      {!demetricator && (
+      {demetricator === 'off' && (
         <StatusesComponent
           to='/@{$username}'
           params={{ username: account.acct }}
@@ -84,7 +84,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler, withSt
           onClick={onClickHandler}
           title={intl.formatMessage(messages.followersCount, { count: account.followers_count })}
         >
-          {!demetricator && !(account.hide_followers_count && !ownAccount) && (
+          {demetricator === 'off' && !(account.hide_followers_count && !ownAccount) && (
             <strong>{shortNumberFormat(account.followers_count)}</strong>
           )}
 
@@ -103,7 +103,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler, withSt
           onClick={onClickHandler}
           title={intl.formatMessage(messages.followingCount, { count: account.following_count })}
         >
-          {!demetricator && !(account.hide_follows_count && !ownAccount) && (
+          {demetricator === 'off' && !(account.hide_follows_count && !ownAccount) && (
             <strong>{shortNumberFormat(account.following_count)}</strong>
           )}
 
@@ -124,7 +124,9 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler, withSt
             count: account.subscribers_count,
           })}
         >
-          {!demetricator && <strong>{shortNumberFormat(account.subscribers_count)}</strong>}
+          {demetricator === 'off' && (
+            <strong>{shortNumberFormat(account.subscribers_count)}</strong>
+          )}
 
           <FormattedMessage id='account.subscribers' defaultMessage='Subscribers' />
         </Link>

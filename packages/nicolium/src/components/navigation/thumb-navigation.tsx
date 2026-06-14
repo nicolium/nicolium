@@ -49,7 +49,7 @@ const SidebarDot: React.FC = () => {
     if (isSidebarOpen) setShowDot(false);
   }, [isSidebarOpen]);
 
-  return showDot && !demetricator ? (
+  return showDot && demetricator === 'off' ? (
     <div className='thumb-navigation__sidebar-dot' aria-hidden />
   ) : null;
 };

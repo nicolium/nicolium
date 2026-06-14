@@ -120,7 +120,8 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
     emojiReact(emoji.custom ? emoji.id : emoji.native);
   };
 
-  if ((demetricator || status.emoji_reactions.length === 0) && collapsed) return null;
+  if (demetricator === 'always') return null;
+  if ((demetricator === 'on' || status.emoji_reactions.length === 0) && collapsed) return null;
   if (status.emoji_reactions.length === 0 && !features.emojiReacts) return null;
 
   const sortedReactions = status.emoji_reactions.toSorted(
@@ -135,7 +136,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
             key={reaction.name}
             statusId={status.id}
             reaction={reaction}
-            obfuscate={demetricator}
+            obfuscate={demetricator !== 'off'}
             unauthenticated={!me}
           />
         ) : null,

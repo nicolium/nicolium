@@ -111,7 +111,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, columnId, action, badges, 
         </div>
       </div>
 
-      {!demetricator && (
+      {demetricator === 'off' && (
         <div className='user-panel__stats'>
           {account.followers_count >= 0 && (
             <Link

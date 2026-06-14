@@ -41,7 +41,7 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({
       activeProps={{ className: 'thumb-navigation__item--active' }}
       title={text}
     >
-      {!demetricator && count !== undefined ? (
+      {demetricator === 'off' && count !== undefined ? (
         <IconWithCounter src={iconSrc} count={count} countMax={countMax} />
       ) : (
         <Icon src={iconSrc} />

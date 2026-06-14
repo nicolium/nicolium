@@ -7,6 +7,7 @@ import AnimatedNumber from '@/components/animated-number';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 
@@ -18,6 +19,7 @@ interface IStatusInteractionBar {
     | 'dislikes_count'
     | 'favourited'
     | 'favourites_count'
+    | 'emoji_reactions'
     | 'reblogs_count'
     | 'quotes_count'
   >;
@@ -29,25 +31,14 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   const { openModal } = useModalsActions();
   const features = useFeatures();
   const { data: account } = useAccount(status.account_id);
+  const { demetricator } = useSettings();
 
   if (!account || typeof account !== 'object') return null;
-
-  const onOpenReblogsModal = (statusId: string): void => {
-    openModal('REBLOGS', { statusId });
-  };
-
-  const onOpenFavouritesModal = (statusId: string): void => {
-    openModal('FAVOURITES', { statusId });
-  };
-
-  const onOpenDislikesModal = (statusId: string): void => {
-    openModal('DISLIKES', { statusId });
-  };
 
   const handleOpenReblogsModal: React.EventHandler<React.MouseEvent> = (e) => {
     e.preventDefault();
 
-    onOpenReblogsModal(status.id);
+    openModal('REBLOGS', { statusId: status.id });
   };
 
   const getReposts = () => {
@@ -91,13 +82,19 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   ) => {
     e.preventDefault();
 
-    onOpenFavouritesModal(status.id);
+    openModal('FAVOURITES', { statusId: status.id });
   };
 
   const handleOpenDislikesModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     e.preventDefault();
 
-    onOpenDislikesModal(status.id);
+    openModal('DISLIKES', { statusId: status.id });
+  };
+
+  const handleOpenReactionsModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+    e.preventDefault();
+
+    openModal('REACTIONS', { statusId: status.id });
   };
 
   const getFavourites = () => {
@@ -140,12 +137,38 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
     return null;
   };
 
+  const getReactions = () => {
+    if (demetricator !== 'always') return null;
+
+    const reactionsCount = status.emoji_reactions.reduce(
+      (sum, reaction) => sum + (reaction.count || 0),
+      0,
+    );
+
+    if (reactionsCount) {
+      return (
+        <InteractionCounter
+          count={reactionsCount}
+          onClick={features.exposableReactions ? handleOpenReactionsModal : undefined}
+        >
+          <FormattedMessage
+            id='status.interactions.reactions'
+            defaultMessage='{count, plural, one {Reaction} other {Reactions}}'
+            values={{ count: reactionsCount }}
+          />
+        </InteractionCounter>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className='status-interaction-bar'>
       {getReposts()}
       {getQuotes()}
       {getFavourites()}
       {getDislikes()}
+      {getReactions()}
     </div>
   );
 };
@@ -163,6 +186,7 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({
   ...rest
 }) => {
   const features = useFeatures();
+  const { demetricator } = useSettings();
 
   const className = clsx('status-interaction-bar__counter', {
     'status-interaction-bar__counter--hoverable': features.exposableReactions,
@@ -172,7 +196,7 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({
   const body = (
     <div className='status-interaction-bar__body'>
       <span className='status-interaction-bar__count'>
-        <AnimatedNumber value={count} short />
+        <AnimatedNumber value={count} obfuscate={demetricator === 'always'} short />
       </span>
 
       <div className='status-interaction-bar__label'>{children}</div>

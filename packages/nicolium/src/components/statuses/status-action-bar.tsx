@@ -858,6 +858,7 @@ const EmojiPickerButton: React.FC<Omit<IActionButton, 'onOpenUnauthorizedModal'>
   me,
 }) => {
   const features = useFeatures();
+  const { demetricator } = useSettings();
 
   const { mutate: emojiReact } = useEmojiReactMutation(status.id);
 
@@ -867,7 +868,7 @@ const EmojiPickerButton: React.FC<Omit<IActionButton, 'onOpenUnauthorizedModal'>
 
   return (
     me &&
-    !withLabels &&
+    (!withLabels || demetricator === 'always') &&
     features.emojiReacts && <EmojiPickerDropdown onPickEmoji={handlePickEmoji} />
   );
 };

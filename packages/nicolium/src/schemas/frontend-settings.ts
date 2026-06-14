@@ -361,7 +361,16 @@ const settingsSchema = v.object({
 
   systemFont: v.fallback(v.boolean(), false),
   systemEmojiFont: v.fallback(v.boolean(), false),
-  demetricator: v.fallback(v.boolean(), false),
+  demetricator: v.fallback(
+    v.pipe(
+      v.any(),
+      v.transform((value) =>
+        value === true || value === 'on' ? 'on' : value === 'always' ? 'always' : 'off',
+      ),
+      v.picklist(['off', 'on', 'always']),
+    ),
+    'off',
+  ),
 
   chats: coerceObject({
     mainWindow: v.optional(v.picklist(['minimized', 'open']), 'minimized'),
