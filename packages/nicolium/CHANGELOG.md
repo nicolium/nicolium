@@ -4,15 +4,36 @@
 
 ### Added
 
+- Deck interface
+  - Available on separate page (`/deck`).
+  - Available column types: timelines, notifications, accounts, search, trending hashtags/accounts/statuses, bookmarks, chat lists and specific chats, scheduled posts and drafts.
+  - Each column has separate routing.
+  - Columns can be moved, resized and set to take all available width.
+  - Hotkeys are available for switching, moving and resizing columns and in-column routing.
+  - 
+- Option to disable video looping.
+- Support for creating invites on Pleroma.
+
 ### Changed
 
 - Migrated away from TailwindCSS.
 - Changed color shifting and shading algorithm.
+- Option to hide social media counters can now apply to detailed status view.
+- Improvements to timeline hotkey navigation.
+- Picture-in-picture mode for videos ported from Mastodon.
+- In-browser language detector is used instead of fastText when the API is available.
+- Bookmarks page uses the same picker in header as one used on timelines page.
+- Updated delete post moderation endpoint for Iceshrimp.NET.
 
 ### Fixed
 
 - Display of content type in Iceshrimp.NET when set to default.
 - GoToSocial interaction policy management button is visible again.
+- Custom emojis can't override unicode emojis when they have the same shortcode.
+- Up/down keys work correctly on drive page.
+- Emoji picker styles load correctly on Akkoma with its strict CSP configuration.
+- Videos now pause when scrolled out of view.
+- Fixed regressions related to default post privacy and content type handling change.
 
 ### Removed
 
