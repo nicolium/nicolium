@@ -74,10 +74,11 @@ const buildCustomEmojiCategories = (customEmojis: Array<BaseCustomEmoji>, intl?:
 
     const shortcode = emoji.shortcode;
     const url = emoji.static_url;
-    const name = shortcode.replace(':', '');
+    const name = shortcode.replaceAll(/^:|:$/g, '');
+    const id = `:${name}:`;
 
     category.push({
-      id: name,
+      id,
       name,
       keywords: [name],
       skins: [{ src: url }],

@@ -154,8 +154,8 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
       } as NativeEmoji;
     } else {
       pickedEmoji = {
-        id: emoji.id,
-        colons: emoji.shortcodes,
+        id: emoji.id.replaceAll(/^:|:$/g, ''),
+        colons: emoji.shortcodes.replaceAll(/^::|::$/g, ':'),
         custom: true,
         imageUrl: emoji.src,
       } as CustomEmoji;
@@ -165,6 +165,7 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
     saveSettings();
 
     if (onPickEmoji) {
+      console.log(pickedEmoji);
       onPickEmoji(pickedEmoji);
     }
   };
