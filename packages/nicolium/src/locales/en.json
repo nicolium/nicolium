@@ -795,6 +795,7 @@
   "compose.redact.success": "The post was redacted",
   "compose.reply_group_indicator.message": "Posting to {groupLink}",
   "compose.scheduled.success": "Your post was scheduled",
+  "compose.submit.fail": "Failed to submit your post",
   "compose.submit.success": "Your post was sent!",
   "compose_event.create": "Create",
   "compose_event.edit.success": "Your event was edited",
