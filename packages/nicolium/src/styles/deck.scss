@@ -312,8 +312,8 @@
     &--mobile-full-width {
       .deck__column {
         scroll-snap-align: center;
-        flex: 0 0 calc(100vw - 2rem);
-        width: calc(100vw - 2rem);
+        flex: 0 0 calc(100vw - 3rem);
+        width: calc(100vw - 3rem);
       }
 
       .deck__add-column-button {
