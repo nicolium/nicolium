@@ -1031,6 +1031,10 @@ body {
         margin: 1rem;
       }
 
+      a {
+        text-decoration-line: underline;
+      }
+
       @media (min-width: variables.$breakpoint-sm) {
         margin-right: 0;
         margin-left: 0;

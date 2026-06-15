@@ -2321,7 +2321,7 @@ div[data-viewport-type='window']:has(.empty-message) {
 .hashtag {
   display: flex;
   align-items: center;
-  justify-content: between;
+  justify-content: space-between;
 
   &__name {
     @include mixins.text($size: sm, $theme: muted);

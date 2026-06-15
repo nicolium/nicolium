@@ -94,6 +94,8 @@
 
     h2 {
       @include mixins.text($size: 2xl, $weight: bold, $align: center);
+
+      line-height: 2;
     }
 
     p {
@@ -265,10 +267,12 @@
   &__empty {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.5rem;
 
     h2 {
       @include mixins.text($size: xl, $weight: medium, $align: center);
+
+      line-height: 2;
     }
 
     p {
