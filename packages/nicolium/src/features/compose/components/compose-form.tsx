@@ -47,6 +47,7 @@ import InteractionPolicyButton from './interaction-policy-button';
 import LanguageDropdown from './language-dropdown';
 import LocationButton from './location-button';
 import LocationForm from './location-form';
+import PlainTextEditor, { type PlainTextEditorHandle } from './plain-text-editor';
 import PollButton from './poll-button';
 import PollForm from './polls/poll-form';
 import PrivacyDropdown from './privacy-dropdown';
@@ -64,6 +65,8 @@ import Warning from './warning';
 import type { Menu } from '@/components/dropdown-menu';
 import type { Emoji } from '@/features/emoji';
 import type { LinkNode } from '@lexical/link';
+
+const isServo = typeof navigator !== 'undefined' && /\bservo\b/i.test(navigator.userAgent);
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What’s on your mind?' },
@@ -186,8 +189,11 @@ const ComposeForm = <ID extends string>({
 
   const [composeFocused, setComposeFocused] = useState(false);
 
+  const usePlainText = isServo;
+
   const formRef = useRef<HTMLFormElement>(null);
   const editorRef = useRef<LexicalEditor>(null);
+  const plainTextRef = useRef<PlainTextEditorHandle>(null);
 
   const { isDraggedOver } = useDraggedFiles(formRef);
 
@@ -197,12 +203,20 @@ const ComposeForm = <ID extends string>({
   const condensed = shouldCondense && !isDraggedOver && !composeFocused && isEmpty && !isUploading;
   const shouldAutoFocus = autoFocus;
   const canSubmit =
-    !!editorRef.current &&
+    (usePlainText || !!editorRef.current) &&
     !isSubmitting &&
     !isUploading &&
     !isChangingUpload &&
     !isEmpty &&
     length(fulltext) <= maxTootChars;
+
+  const clearEditor = () => {
+    if (usePlainText) {
+      plainTextRef.current?.clear();
+    } else {
+      editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+    }
+  };
 
   const getClickableArea = () => (clickableAreaRef ? clickableAreaRef.current : formRef.current);
 
@@ -240,7 +254,7 @@ const ComposeForm = <ID extends string>({
     submitCompose({
       propagate: fullScreen,
       onSuccess: () => {
-        editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+        clearEditor();
         onSubmit?.();
       },
     });
@@ -258,7 +272,7 @@ const ComposeForm = <ID extends string>({
     persistDraftStatus(id);
     closeModal('COMPOSE');
     actions.resetCompose(id);
-    editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+    clearEditor();
 
     toast.success(messages.draftSaved, {
       actionLabel: messages.view,
@@ -267,6 +281,11 @@ const ComposeForm = <ID extends string>({
   };
 
   const handleEmojiPick = (data: Emoji) => {
+    if (usePlainText) {
+      plainTextRef.current?.insertEmoji(data);
+      return;
+    }
+
     const editor = editorRef.current;
     if (!editor) return;
 
@@ -460,20 +479,36 @@ const ComposeForm = <ID extends string>({
 
       <div>
         <Suspense fallback={<div className='compose-form__editor-placeholder' />}>
-          <ComposeEditor
-            key={modifiedLanguage}
-            ref={editorRef}
-            className='compose-form__editor'
-            placeholderClassName='compose-form__editor__placeholder'
-            composeId={id}
-            condensed={condensed}
-            eventDiscussion={!!event}
-            autoFocus={shouldAutoFocus}
-            hasPoll={hasPoll}
-            handleSubmit={handleSubmit}
-            onFocus={handleComposeFocus}
-            onPaste={onPaste}
-          />
+          {usePlainText ? (
+            <PlainTextEditor
+              key={modifiedLanguage}
+              ref={plainTextRef}
+              className='compose-form__editor'
+              composeId={id}
+              condensed={condensed}
+              eventDiscussion={!!event}
+              autoFocus={shouldAutoFocus}
+              hasPoll={hasPoll}
+              handleSubmit={handleSubmit}
+              onFocus={handleComposeFocus}
+              onPaste={onPaste}
+            />
+          ) : (
+            <ComposeEditor
+              key={modifiedLanguage}
+              ref={editorRef}
+              className='compose-form__editor'
+              placeholderClassName='compose-form__editor__placeholder'
+              composeId={id}
+              condensed={condensed}
+              eventDiscussion={!!event}
+              autoFocus={shouldAutoFocus}
+              hasPoll={hasPoll}
+              handleSubmit={handleSubmit}
+              onFocus={handleComposeFocus}
+              onPaste={onPaste}
+            />
+          )}
         </Suspense>
       </div>
 
