@@ -63,6 +63,7 @@ const messages = defineMessages({
     defaultMessage:
       'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?',
   },
+  submitError: { id: 'compose.submit.fail', defaultMessage: 'Failed to submit your post' },
 });
 
 const getResetFileKey = () => Math.floor(Math.random() * 0x10000);
@@ -985,6 +986,12 @@ const useSubmitCompose = (composeId: string) => {
 
           onSuccess?.();
         } catch (error) {
+          const message = (error as any).response?.json?.error || messages.submitError;
+          if (propagate) {
+            toast.propagate('error', message);
+          } else {
+            toast.error(message);
+          }
           actions.updateCompose(composeId, (draft) => {
             draft.isSubmitting = false;
           });
