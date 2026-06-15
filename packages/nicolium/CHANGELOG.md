@@ -12,17 +12,19 @@
   - Hotkeys are available for switching, moving and resizing columns and in-column routing.
 - Option to disable video looping.
 - Support for creating invites on Pleroma.
+- Picture-in-picture mode for videos ported from Mastodon.
 
 ### Changed
 
 - Migrated away from TailwindCSS.
 - Changed color shifting and shading algorithm.
-- Option to hide social media counters can now apply to detailed status view.
 - Improvements to timeline hotkey navigation.
-- Picture-in-picture mode for videos ported from Mastodon.
-- In-browser language detector is used instead of fastText when the API is available.
+- Option to control video looping (disabled by default).
+- Option to hide social media counters can now apply to detailed status view.
 - Bookmarks page uses the same picker in header as one used on timelines page.
+- In-browser language detector is used instead of fastText when the API is available.
 - Updated delete post moderation endpoint for Iceshrimp.NET.
+- Updated translations: Chinese (simplified Han, thanks to Poesty Li) French (thanks to Capitaine Caverne), Polish
 
 ### Fixed
 
@@ -30,9 +32,11 @@
 - GoToSocial interaction policy management button is visible again.
 - Custom emojis can't override unicode emojis when they have the same shortcode.
 - Up/down keys work correctly on drive page.
-- Emoji picker styles load correctly on Akkoma with its strict CSP configuration.
 - Videos now pause when scrolled out of view.
 - Fixed regressions related to default post privacy and content type handling change.
+- Emoji picker styles load correctly on Akkoma with its strict CSP configuration.
+- Opening emoji picker doesn't cause jumping issues.
+- Post composer falls back to simple textarea on Servo.
 
 ### Removed
 
