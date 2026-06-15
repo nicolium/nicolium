@@ -6,6 +6,7 @@ import List, { ListItem } from '@/components/list';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
+import { isServo } from '@/features/compose/components/compose-form';
 import { useFeatures } from '@/hooks/use-features';
 import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useInstance } from '@/stores/instance';
@@ -75,8 +76,9 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
       'text/html': intl.formatMessage(messages.contentTypeHtml),
     }).filter(([key]) => postFormats.includes(key));
 
-    if (postFormats.includes('text/markdown'))
+    if (postFormats.includes('text/markdown') && !isServo) {
       options.push(['wysiwyg', intl.formatMessage(messages.contentTypeWysiwyg)]);
+    }
 
     if (options.length > 1) return Object.fromEntries(options);
   }, [settings.locale]);

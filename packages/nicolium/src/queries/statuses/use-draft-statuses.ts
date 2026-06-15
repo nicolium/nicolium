@@ -8,6 +8,7 @@ import { create } from 'mutative';
 import { mediaAttachmentSchema } from 'pl-api';
 import * as v from 'valibot';
 
+import { isServo } from '@/features/compose/components/compose-form';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { filteredArray } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
@@ -102,7 +103,7 @@ const usePersistDraftStatus = () => {
 
     let contentType = compose.contentType;
     if (contentType === 'default') contentType = defaultContentType;
-    if (contentType === 'wysiwyg') contentType = 'text/markdown';
+    if (contentType === 'wysiwyg' && !isServo) contentType = 'text/markdown';
 
     let visibility = compose.visibility;
     if (visibility === 'default') visibility = defaultPrivacy;

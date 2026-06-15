@@ -6,6 +6,7 @@ import { mutative } from 'zustand-mutative';
 import { uploadFile, updateMedia } from '@/actions/media';
 import { saveSettings } from '@/actions/settings';
 import { createStatus } from '@/actions/statuses';
+import { isServo } from '@/features/compose/components/compose-form';
 import { isNativeEmoji } from '@/features/emoji';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -466,7 +467,9 @@ const useComposeStore = create<ComposeStore>()(
             compose.visibility = status.visibility;
             compose.caretPosition = null;
             const contentType =
-              source.content_type === 'text/markdown' && state.default.contentType === 'wysiwyg'
+              source.content_type === 'text/markdown' &&
+              state.default.contentType === 'wysiwyg' &&
+              !isServo
                 ? 'wysiwyg'
                 : source.content_type || 'text/plain';
             compose.contentType = contentType;

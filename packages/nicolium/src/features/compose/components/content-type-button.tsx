@@ -12,6 +12,8 @@ import Icon from '@/components/ui/icon';
 import { useComposeActions, useComposeContentType } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
 
+import { isServo } from './compose-form';
+
 const messages = defineMessages({
   contentTypePlaintext: {
     id: 'preferences.options.content_type_plaintext',
@@ -86,7 +88,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
     });
   }
 
-  if (postFormats.includes('text/markdown')) {
+  if (postFormats.includes('text/markdown') && !isServo) {
     options.push({
       icon: iconTextIndent,
       text: intl.formatMessage(messages.contentTypeWysiwyg),
