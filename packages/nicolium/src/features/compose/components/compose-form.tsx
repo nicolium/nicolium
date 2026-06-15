@@ -501,8 +501,8 @@ const ComposeForm = <ID extends string>({
         <div className='compose-form__actions'>
           {maxTootChars && (
             <div className='compose-form__counter'>
-              {!compact && <TextCharacterCounter max={maxTootChars} text={text} />}
-              <VisualCharacterCounter max={maxTootChars} text={text} />
+              {!compact && <TextCharacterCounter max={maxTootChars} text={fulltext} />}
+              <VisualCharacterCounter max={maxTootChars} text={fulltext} />
             </div>
           )}
 
