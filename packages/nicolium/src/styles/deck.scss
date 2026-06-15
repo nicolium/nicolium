@@ -8,7 +8,7 @@
   align-items: center;
 
   min-width: max-content;
-  height: calc(100% - 3.25rem - 1px);
+  height: calc(100vh - 3.25rem - 1px);
   margin-left: 1rem;
 
   .black & {
@@ -295,16 +295,19 @@
         flex-grow: 1;
       }
 
-      &__add-column-button {
-        flex-direction: column;
-        gap: 0;
-        font-size: 0;
-        line-height: 0;
-      }
-
       &__sidebar {
         align-items: center;
       }
+    }
+  }
+
+  &:has(&__column--fill),
+  &--mobile-full-width {
+    .deck__add-column-button {
+      flex-direction: column;
+      gap: 0;
+      font-size: 0;
+      line-height: 0;
     }
   }
 
