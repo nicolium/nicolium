@@ -86,9 +86,13 @@
       }
     }
 
-    &__actions  {
+    &__actions {
       display: flex;
       gap: 0.5rem;
+
+      .icon-button {
+        padding: 0;
+      }
     }
 
     &__add-column {
