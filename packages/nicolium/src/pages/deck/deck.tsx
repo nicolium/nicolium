@@ -1,8 +1,10 @@
+import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
+import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import HeadTitle from '@/components/helmet';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
@@ -16,6 +18,8 @@ import type { DeckColumn as DeckColumnSchema } from '@/schemas/frontend-settings
 const messages = defineMessages({
   deck: { id: 'column.deck', defaultMessage: 'Deck' },
   columnRemoved: { id: 'column.deck.remove.success', defaultMessage: 'Column removed' },
+  options: { id: 'deck.options', defaultMessage: 'Deck options' },
+  useAsHomepage: { id: 'deck.use_as_homepage', defaultMessage: 'Use as homepage' },
 });
 
 interface IColumnErrorBoundary {
@@ -48,7 +52,7 @@ class ColumnErrorBoundary extends React.Component<IColumnErrorBoundary, { hasErr
 
 const DeckPage = () => {
   const intl = useIntl();
-  const { deck } = useSettings();
+  const { deck, defaultTimeline } = useSettings();
   const fadeRef = useRef<HTMLDivElement>(null);
 
   const [addedColumnId, setAddedColumnId] = useState<string | null>(null);
@@ -123,6 +127,16 @@ const DeckPage = () => {
     );
   };
 
+  const deckOptions: Menu = [
+    {
+      text: intl.formatMessage(messages.useAsHomepage),
+      icon: iconHouse,
+      type: 'toggle',
+      checked: defaultTimeline === 'deck',
+      onChange: (value) => changeSetting(['defaultTimeline'], value ? 'deck' : 'home'),
+    },
+  ];
+
   return (
     <>
       <HeadTitle title={intl.formatMessage(messages.deck)} />
@@ -164,7 +178,15 @@ const DeckPage = () => {
             </ColumnErrorBoundary>
           ))}
         </div>
-        <NewColumnButton />
+        <div className='deck__sidebar'>
+          <DropdownMenu
+            items={deckOptions}
+            forceDropdown
+            title={intl.formatMessage(messages.options)}
+          />
+          <NewColumnButton />
+          <div className='deck__sidebar__spacer' />
+        </div>
       </div>
     </>
   );

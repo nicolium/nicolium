@@ -24,6 +24,7 @@ import Icon from './ui/icon';
 
 const messages = defineMessages({
   homeTimeline: { id: 'column.home', defaultMessage: 'Home' },
+  followingTimeline: { id: 'column.following_timeline', defaultMessage: 'Following timeline' },
   localTimeline: { id: 'column.community', defaultMessage: 'Local timeline' },
   bubbleTimeline: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
   federatedTimeline: { id: 'column.public', defaultMessage: 'Fediverse timeline' },
@@ -102,7 +103,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
   const { data: circles } = useCircles();
   const { data: antennas } = useAntennas();
 
-  const heading = useTimelineHeading(active);
+  const baseHeading = useTimelineHeading(active);
+  const homeMessage =
+    defaultTimeline === 'home' ? messages.homeTimeline : messages.followingTimeline;
+  const heading = active === 'home' ? intl.formatMessage(homeMessage) : baseHeading;
 
   const items = useMemo(() => {
     const items: Menu = [];
@@ -110,7 +114,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ active }) => {
     if (isLoggedIn) {
       items.push({
         to: defaultTimeline === 'home' ? '/' : '/timeline/home',
-        text: intl.formatMessage(messages.homeTimeline),
+        text: intl.formatMessage(homeMessage),
         icon: iconHouse,
         active: active === 'home',
       });

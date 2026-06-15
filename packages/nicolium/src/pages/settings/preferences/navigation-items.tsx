@@ -121,6 +121,7 @@ const itemsMessages = {
   'follow-requests': { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   groups: { id: 'column.groups', defaultMessage: 'Groups' },
   home: { id: 'column.home', defaultMessage: 'Home' },
+  following: { id: 'column.following_timeline', defaultMessage: 'Following timeline' },
   'interaction-requests': {
     id: 'column.interaction_requests',
     defaultMessage: 'Interaction requests',
@@ -270,7 +271,11 @@ const getNavigationItemComponent = (
       return null;
     } else if (fixedItem) {
       icon = itemsIcons[fixedItem];
-      label = intl.formatMessage(itemsMessages[fixedItem]);
+      label = intl.formatMessage(
+        fixedItem === 'home' && settings.defaultTimeline !== 'home'
+          ? itemsMessages.following
+          : itemsMessages[fixedItem],
+      );
     } else {
       return null;
     }

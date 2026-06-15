@@ -157,6 +157,7 @@ const messages = defineMessages({
   'follow-requests': { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   groups: { id: 'column.groups', defaultMessage: 'Groups' },
   home: { id: 'column.home', defaultMessage: 'Home' },
+  following: { id: 'tabs_bar.following', defaultMessage: 'Following' },
   'interaction-requests': {
     id: 'column.interaction_requests',
     defaultMessage: 'Interaction requests',
@@ -188,8 +189,9 @@ const isDynamicContentNavigationItem = (
     item.startsWith(`${prefix}:`),
   );
 
-const isNavigationLinkItem = (item: AvailableNavigationItem): item is NavigationLinkItem =>
-  item in messages;
+const isNavigationLinkItem = (
+  item: AvailableNavigationItem,
+): item is Exclude<NavigationLinkItem, 'following'> => item in messages;
 
 const NAVIGATION_ITEM_PATHS: Record<string, LinkOptions['to']> = {
   home: '/',
@@ -340,7 +342,7 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean, mobile?: bool
   const instance = useInstance();
   const intl = useIntl();
   const standalone = useIsStandalone();
-  const { navigationItems, pinnedNavigationItems } = useSettings();
+  const { navigationItems, pinnedNavigationItems, defaultTimeline } = useSettings();
 
   const { data: account } = useOwnAccount();
 
@@ -402,6 +404,17 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean, mobile?: bool
             type: 'profile-link',
             accountId: account.id,
             ownAccount: true,
+          });
+          break;
+        case 'home':
+          menu.push({
+            type: 'link',
+            to: defaultTimeline === 'home' ? '/' : '/timeline/home',
+            text: intl.formatMessage(
+              defaultTimeline === 'home' ? messages.home : messages.following,
+            ),
+            icon: iconHouse,
+            activeIcon: iconHouseFill,
           });
           break;
         case 'chats':
@@ -563,6 +576,7 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean, mobile?: bool
     instance.version,
     !!account,
     intl,
+    defaultTimeline,
     unreadChatsCount,
     notificationCount,
     followRequestsCount,

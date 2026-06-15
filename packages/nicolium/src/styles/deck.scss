@@ -226,11 +226,31 @@
     }
   }
 
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    height: 100%;
+    padding: 1rem;
+
+    &__spacer {
+      height: 4rem;
+    }
+  }
+
   &__add-column-button {
     @include mixins.button;
 
     min-width: fit-content;
-    margin: 0 1rem;
+  }
+
+  &__options-button {
+    @include mixins.button($theme: secondary);
+
+    min-width: fit-content;
+    margin: 0 1rem 0 0;
   }
 
   &__fade {
@@ -279,6 +299,10 @@
         gap: 0;
         font-size: 0;
         line-height: 0;
+      }
+
+      &__sidebar {
+        align-items: center;
       }
     }
   }

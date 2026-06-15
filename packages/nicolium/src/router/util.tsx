@@ -10,6 +10,7 @@ import { useIsStandalone } from '@/utils/state';
 const getTimelineLink = (timeline: string): LinkProps => {
   const idParam = timeline.split(':')[1];
 
+  if (timeline === 'deck') return { to: '/deck' };
   if (timeline === 'local') return { to: '/timeline/local' };
   if (timeline === 'bubble') return { to: '/timeline/bubble' };
   if (timeline === 'federated') return { to: '/timeline/fediverse' };

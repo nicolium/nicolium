@@ -165,6 +165,27 @@ const timelineSchema = v.fallback(
   'home',
 );
 
+const defaultTimelineSchema = v.fallback(
+  v.pipe(
+    v.string(),
+    v.transform((timeline) => {
+      if (timeline === 'deck') return timeline;
+      if (['home', 'local', 'bubble', 'federated', 'wrenched'].includes(timeline)) {
+        return timeline;
+      }
+      if (
+        ['list', 'circle', 'antenna', 'instance'].some((prefix) =>
+          timeline.startsWith(prefix + ':'),
+        )
+      ) {
+        return timeline;
+      }
+      return 'home';
+    }),
+  ),
+  'home',
+);
+
 const baseDeckColumnSchema = v.object({
   id: v.fallback(v.string(), crypto.randomUUID()),
   columnWidth: v.fallback(v.picklist(['xs', 'sm', 'md', 'lg', 'xl']), 'md'),
@@ -343,7 +364,7 @@ const settingsSchema = v.object({
   accountNicknames: v.fallback(v.record(v.string(), v.string()), {}),
   useSystemMediaControls: v.fallback(v.boolean(), false),
   displayMentionAvatars: v.fallback(v.boolean(), true),
-  defaultTimeline: timelineSchema,
+  defaultTimeline: defaultTimelineSchema,
   showChatWidget: v.fallback(v.boolean(), true),
   showNestedQuotes: v.fallback(v.boolean(), false),
   useRocketIconForReblogs: v.fallback(v.boolean(), false),

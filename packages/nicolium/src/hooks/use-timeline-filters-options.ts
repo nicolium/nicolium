@@ -34,7 +34,7 @@ const messages = defineMessages({
   },
   setAsDefault: {
     id: 'timeline_filters.set_as_default',
-    defaultMessage: 'Use as default timeline',
+    defaultMessage: 'Use as homepage',
   },
   includeInNavigationItems: {
     id: 'timeline_filters.include_in_navigation_items',
