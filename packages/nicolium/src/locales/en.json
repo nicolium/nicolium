@@ -1032,6 +1032,7 @@
   "deck.columns.trending_hashtags": "Trending hashtags",
   "deck.columns.trending_links": "Trending links",
   "deck.columns.trending_statuses": "Trending statuses",
+  "deck.mobile_full_width": "Fit columns to screen on mobile",
   "deck.options": "Deck options",
   "deck.use_as_homepage": "Use as homepage",
   "developers.navigation.app_create.label": "Create an app",

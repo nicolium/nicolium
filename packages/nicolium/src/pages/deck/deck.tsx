@@ -1,3 +1,4 @@
+import iconDeviceMobile from '@phosphor-icons/core/regular/device-mobile.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
@@ -20,6 +21,10 @@ const messages = defineMessages({
   columnRemoved: { id: 'column.deck.remove.success', defaultMessage: 'Column removed' },
   options: { id: 'deck.options', defaultMessage: 'Deck options' },
   useAsHomepage: { id: 'deck.use_as_homepage', defaultMessage: 'Use as homepage' },
+  mobileFullWidth: {
+    id: 'deck.mobile_full_width',
+    defaultMessage: 'Fit columns to screen on mobile',
+  },
 });
 
 interface IColumnErrorBoundary {
@@ -134,6 +139,13 @@ const DeckPage = () => {
       type: 'toggle',
       checked: defaultTimeline === 'deck',
       onChange: (value) => changeSetting(['defaultTimeline'], value ? 'deck' : 'home'),
+    },
+    {
+      text: intl.formatMessage(messages.mobileFullWidth),
+      icon: iconDeviceMobile,
+      type: 'toggle',
+      checked: deck.mobileFullWidth,
+      onChange: (value) => changeSetting(['deck', 'mobileFullWidth'], value),
     },
   ];
 
