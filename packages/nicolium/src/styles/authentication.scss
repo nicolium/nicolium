@@ -42,20 +42,12 @@
   a:hover {
     text-decoration: underline;
   }
-
-  button {
-    @include mixins.button($theme: primary);
-  }
 }
 
-.otp-auth-form {
-  button {
-    @include mixins.button($theme: primary);
-  }
-}
-
+.login-form,
+.otp-auth-form,
 .password-reset {
-  button {
+  .form__actions button {
     @include mixins.button($theme: primary);
   }
 }
