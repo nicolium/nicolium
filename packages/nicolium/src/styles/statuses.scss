@@ -620,6 +620,8 @@ a.status-card {
   &__button {
     cursor: pointer;
 
+    position: relative;
+
     overflow: hidden;
     display: flex;
     gap: 0.5rem;
