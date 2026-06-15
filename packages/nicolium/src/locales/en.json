@@ -90,6 +90,7 @@
   "account.remove_from_sidebar_items": "Don’t show latest post in sidebar",
   "account.remove_from_sidebar_items.success": "Removed from sidebar items",
   "account.report": "Report @{name}",
+  "account.request_follow": "Request follow",
   "account.requested": "Follow requested. Click to cancel",
   "account.requested_small": "Follow requested",
   "account.rss_feed": "Subscribe to RSS feed",

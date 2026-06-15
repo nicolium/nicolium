@@ -601,6 +601,8 @@ const ActionButton: React.FC<IActionButton> = ({
               <FormattedMessage id='account.unfollow' defaultMessage='Unfollow' />
             ) : blockedBy ? (
               <FormattedMessage id='account.blocked' defaultMessage='Blocked' />
+            ) : account.locked ? (
+              <FormattedMessage id='account.request_follow' defaultMessage='Request follow' />
             ) : (
               <FormattedMessage id='account.follow' defaultMessage='Follow' />
             )}
