@@ -283,6 +283,20 @@
     }
   }
 
+  @media (max-width: variables.$breakpoint-sm) {
+    &--mobile-full-width {
+      .deck__column {
+        scroll-snap-align: center;
+        flex: 0 0 calc(100vw - 2rem);
+        width: calc(100vw - 2rem);
+      }
+
+      .deck__add-column-button {
+        scroll-snap-align: center;
+      }
+    }
+  }
+
   @media (min-width: variables.$breakpoint-sm) {
     height: calc(100vh - 2rem);
   }

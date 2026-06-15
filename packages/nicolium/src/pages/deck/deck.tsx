@@ -126,7 +126,11 @@ const DeckPage = () => {
   return (
     <>
       <HeadTitle title={intl.formatMessage(messages.deck)} />
-      <div className='deck'>
+      <div
+        className={clsx('deck', {
+          'deck--mobile-full-width': deck.mobileFullWidth,
+        })}
+      >
         <div
           className={clsx('deck__fade', {
             'deck__fade--visible': !isNearLeft,

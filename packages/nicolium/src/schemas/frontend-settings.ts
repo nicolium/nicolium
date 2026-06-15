@@ -246,8 +246,10 @@ const deckColumnSchema = v.variant('type', [
 const deckSettingsSchema = v.fallback(
   v.object({
     columns: filteredArray(deckColumnSchema),
+    mobileFullWidth: v.fallback(v.boolean(), false),
   }),
   {
+    mobileFullWidth: false,
     columns: [
       {
         id: crypto.randomUUID(),
