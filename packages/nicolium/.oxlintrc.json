@@ -63,6 +63,7 @@
     "jsx-a11y/no-interactive-element-to-noninteractive-role": "warn",
     "jsx-a11y/no-noninteractive-element-interactions": "warn",
     "jsx-a11y/interactive-supports-focus": "warn",
+    "jsx-a11y/control-has-associated-label": "warn",
 
     "formatjs/enforce-default-message": "error",
     "formatjs/enforce-id": "error",

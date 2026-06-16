@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import ReactSwipeableViews from '@/components/react-swipeable-views';
 import Widget from '@/components/ui/widget';
@@ -10,6 +10,13 @@ import Announcement from './announcement';
 
 import type { CustomEmoji } from 'pl-api';
 
+const messages = {
+  announcementDotTitle: {
+    id: 'announcements.dot_title',
+    defaultMessage: 'Announcement {number}',
+  },
+};
+
 const makeCustomEmojiMap = (items: Array<CustomEmoji>) =>
   items.reduce<Record<string, CustomEmoji>>(
     (map, emoji) => ((map[emoji.shortcode] = emoji), map),
@@ -17,6 +24,7 @@ const makeCustomEmojiMap = (items: Array<CustomEmoji>) =>
   );
 
 const AnnouncementsPanel = () => {
+  const intl = useIntl();
   const { data: emojiMap = {} } = useCustomEmojis(makeCustomEmojiMap);
   const [index, setIndex] = useState(0);
 
@@ -50,6 +58,7 @@ const AnnouncementsPanel = () => {
                 setIndex(i);
               }}
               data-active={i === index}
+              aria-label={intl.formatMessage(messages.announcementDotTitle, { number: i + 1 })}
             />
           ))}
         </div>
