@@ -120,29 +120,27 @@ type NavigationItem =
   | (typeof AVAILABLE_NAVIGATION_ITEMS)[number]
   | `${'account' | 'list' | 'circle' | 'antenna' | 'instance' | 'hashtag' | 'bookmark_folder'}:${string}`;
 
-const navigationItemSchema: v.BaseSchema<any, NavigationItem, v.BaseIssue<unknown>> = v.pipe(
-  v.string(),
-  v.transform((item) => {
-    if (AVAILABLE_NAVIGATION_ITEMS.includes(item as 'separator')) return item as NavigationItem;
-    if (
-      ['account', 'list', 'circle', 'antenna', 'instance', 'hashtag', 'bookmark_folder'].some(
-        (prefix) => item.startsWith(prefix + ':'),
-      )
-    ) {
-      return item as NavigationItem;
-    } else {
-      return 0 as any as NavigationItem;
-    }
-  }),
+const NAVIGATION_ITEM_PREFIXES = [
+  'account',
+  'list',
+  'circle',
+  'antenna',
+  'instance',
+  'hashtag',
+  'bookmark_folder',
+];
+
+const navigationItemSchema = v.custom<NavigationItem>(
+  (item) =>
+    typeof item === 'string' &&
+    (AVAILABLE_NAVIGATION_ITEMS.includes(item as 'separator') ||
+      NAVIGATION_ITEM_PREFIXES.some((prefix) => item.startsWith(prefix + ':'))),
 );
 
-const sidebarItemSchema: v.BaseSchema<any, SidebarItem, v.BaseIssue<unknown>> = v.pipe(
-  v.string(),
-  v.transform((item) => {
-    if (AVAILABLE_SIDEBAR_ITEMS.includes(item as 'context')) return item as SidebarItem;
-    if (item.startsWith('account:')) return item as SidebarItem;
-    return 0 as any as SidebarItem;
-  }),
+const sidebarItemSchema = v.custom<SidebarItem>(
+  (item) =>
+    typeof item === 'string' &&
+    (AVAILABLE_SIDEBAR_ITEMS.includes(item as 'context') || item.startsWith('account:')),
 );
 
 const timelineSchema = v.fallback(
