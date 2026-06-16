@@ -49,6 +49,7 @@
     // "react/display-name": "error",
     "react/exhaustive-deps": "off",
     "react/rules-of-hooks": "error",
+    "react/no-unstable-nested-components": "warn",
 
     "jsx-a11y/anchor-is-valid": "warn",
     "jsx-a11y/click-events-have-key-events": "warn",
@@ -59,6 +60,9 @@
     "jsx-a11y/no-noninteractive-tabindex": "warn",
     "jsx-a11y/no-static-element-interactions": "warn",
     "jsx-a11y/prefer-tag-over-role": "warn",
+    "jsx-a11y/no-interactive-element-to-noninteractive-role": "warn",
+    "jsx-a11y/no-noninteractive-element-interactions": "warn",
+    "jsx-a11y/interactive-supports-focus": "warn",
 
     "formatjs/enforce-default-message": "error",
     "formatjs/enforce-id": "error",
