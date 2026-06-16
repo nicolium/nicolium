@@ -401,7 +401,9 @@ const instanceSchema = v.pipe(
             data.configuration?.statuses?.supported_mime_types ||
             (apiVersions['kmyblue_markdown.fedibird.pl-api']
               ? ['text/plain', 'text/markdown']
-              : []),
+              : data.version.includes('Sharkey')
+                ? ['text/x.misskeymarkdown']
+                : []),
         },
       };
     }
