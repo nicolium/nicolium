@@ -1257,7 +1257,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/admin/reports
      */
     mastodonAdminUnresolvedReports: any([
-      v.software === GOTOSOCIAL && gt(v.version, '0.21.2'),
+      v.software === GOTOSOCIAL && gte(v.version, '0.22.0'),
       instance.api_versions['mastodon_admin_api.pleroma.pl-api'] >= 1,
     ]),
 
