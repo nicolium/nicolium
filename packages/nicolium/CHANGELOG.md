@@ -5,6 +5,7 @@
 ### Fixed
 
 - 'Fill available width' toggle behavior.
+- Zoomed in media returns to the initial position when zoomed out for a while.
 
 ## v1.0.0-rc.1
 
