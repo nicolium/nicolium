@@ -124,10 +124,10 @@ const DeckPage = () => {
     });
   };
 
-  const handleToggleFill = (id: string) => {
+  const handleChangeFill = (id: string, value: boolean) => {
     updateColumns((columns) =>
       columns.map((column) =>
-        column.id === id ? { ...column, fillAvailableWidth: !column.fillAvailableWidth } : column,
+        column.id === id ? { ...column, fillAvailableWidth: value } : column,
       ),
     );
   };
@@ -185,7 +185,7 @@ const DeckPage = () => {
                 onRemove={handleRemove}
                 onChangeWidth={handleChangeWidth}
                 onChangeIndex={handleChangeIndex}
-                onToggleFill={handleToggleFill}
+                onChangeFill={handleChangeFill}
               />
             </ColumnErrorBoundary>
           ))}

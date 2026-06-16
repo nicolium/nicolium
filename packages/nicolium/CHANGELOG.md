@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- 'Fill available width' toggle behavior.
+
 ## v1.0.0-rc.1
 
 ### Changed

@@ -38,7 +38,7 @@ interface IDeckColumn {
   onRemove: (id: string) => void;
   onChangeWidth: (id: string, newWidth: (typeof WIDTHS)[number]) => void;
   onChangeIndex: (id: string, newIndex: number) => void;
-  onToggleFill: (id: string) => void;
+  onChangeFill: (id: string, value: boolean) => void;
 }
 
 const DeckColumn: React.FC<IDeckColumn> = ({
@@ -49,7 +49,7 @@ const DeckColumn: React.FC<IDeckColumn> = ({
   onRemove,
   onChangeWidth,
   onChangeIndex,
-  onToggleFill,
+  onChangeFill,
 }) => {
   const intl = useIntl();
   const instance = useInstance();
@@ -82,8 +82,8 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       onChangeWidth(column.id, newWidth);
     };
 
-    const handleToggleFill = () => {
-      onToggleFill(column.id);
+    const handleChangeFill = (value: boolean) => {
+      onChangeFill(column.id, value);
     };
 
     const handleMoveLeft = () => {
@@ -112,7 +112,7 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       {
         text: intl.formatMessage(messages.fill),
         icon: iconFrameCorners,
-        onChange: handleToggleFill,
+        onChange: (value) => handleChangeFill(value),
         type: 'toggle',
         checked: column.fillAvailableWidth,
       },
