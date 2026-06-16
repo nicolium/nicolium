@@ -238,6 +238,17 @@ const ZoomableImage: React.FC<IZoomableImage> = ({
   );
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      if (!zoomMatrixRef.current) return;
+      if (style.scale.get() === MIN_SCALE) {
+        void api.start({ x: 0, y: 0 });
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     if (!loaded || !containerRef.current || !imageRef.current) {
       return;
     }
