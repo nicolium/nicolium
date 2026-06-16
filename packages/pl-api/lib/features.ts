@@ -974,6 +974,7 @@ const getFeatures = (instance: Instance) => {
     groupedNotifications: any([
       instance.api_versions.mastodon >= 2,
       v.software === HOLLO && gte(v.version, '0.7.0'),
+      instance.api_versions['mastodon_api_grouped_notifications.pleroma.pl-api'] >= 1,
     ]),
 
     /**
