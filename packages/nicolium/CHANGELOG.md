@@ -1,6 +1,14 @@
 # Changelog
 
-## Unreleased
+## v1.0.0-rc.1
+
+### Changed
+
+- Follow button for locked accounts displays the text 'Request follow' now
+- Minor style improvements
+- Polish translation update
+
+## v1.0.0-rc.0
 
 ### Added
 
