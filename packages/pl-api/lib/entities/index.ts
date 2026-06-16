@@ -49,6 +49,8 @@ export * from './familiar-followers';
 export * from './featured-tag';
 export * from './filter';
 export * from './filter-result';
+export * from './gif-result';
+export * from './gif-results';
 export * from './group';
 export * from './group-member';
 export * from './group-relationship';

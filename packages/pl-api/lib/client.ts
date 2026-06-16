@@ -12,6 +12,7 @@ import { emails } from '@/client/emails';
 import { events } from '@/client/events';
 import { experimental } from '@/client/experimental';
 import { filtering } from '@/client/filtering';
+import { gifs } from '@/client/gifs';
 import { groupedNotifications } from '@/client/grouped-notifications';
 import { instance } from '@/client/instance';
 import { interactionRequests } from '@/client/interaction-requests';
@@ -70,6 +71,7 @@ class PlApiClient extends PlApiBaseClient {
   readonly events = events(this);
   readonly experimental = experimental(this);
   readonly filtering = filtering(this);
+  readonly gifs = gifs(this);
   readonly groupedNotifications = groupedNotifications(this);
   readonly instance = instance(this);
   readonly interactionRequests = interactionRequests(this);

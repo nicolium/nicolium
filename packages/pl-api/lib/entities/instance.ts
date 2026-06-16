@@ -210,6 +210,10 @@ const configurationSchema = coerceObject({
     public_key: v.fallback(v.string(), ''),
   }),
   limited_federation: v.optional(v.boolean(), undefined),
+  gif_search: coerceObject({
+    enabled: v.fallback(v.boolean(), false),
+    provider: v.fallback(v.nullable(v.string()), null),
+  }),
 });
 
 const contactSchema = coerceObject({

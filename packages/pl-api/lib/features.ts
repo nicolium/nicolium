@@ -513,7 +513,7 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see GET /api/v1/instance/bubble_domains
      */
-    bubbleDomainList: instance.api_versions['chuckya'] >= 1,
+    bubbleDomainList: instance.api_versions.chuckya >= 1,
 
     /**
      * Can display a timeline of statuses from instances selected by instance admin.
@@ -975,6 +975,11 @@ const getFeatures = (instance: Instance) => {
       instance.api_versions.mastodon >= 2,
       v.software === HOLLO && gte(v.version, '0.7.0'),
     ]),
+
+    /**
+     * @see GET /api/v1/gifs
+     */
+    gifPicker: instance.api_versions.chuckya >= 2,
 
     /**
      * Groups.
