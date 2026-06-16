@@ -9,6 +9,7 @@ import { TimelinePicker } from '@/components/timeline-picker';
 import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
+import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'column.community', defaultMessage: 'Local timeline' },
@@ -17,6 +18,7 @@ const messages = defineMessages({
 const CommunityTimelinePage = () => {
   const items = useTimelineFiltersOptions('public', 'local');
   const intl = useIntl();
+  const { defaultTimeline } = useSettings();
 
   return (
     <Column
@@ -30,6 +32,7 @@ const CommunityTimelinePage = () => {
           <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
         </>
       }
+      withBack={defaultTimeline !== 'local'}
     >
       <PublicTimelineColumn
         local

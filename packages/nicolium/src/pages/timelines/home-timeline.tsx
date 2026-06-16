@@ -12,6 +12,7 @@ import Column from '@/components/ui/column';
 import { useFeatures } from '@/hooks/use-features';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { useInstance } from '@/stores/instance';
+import { useSettings } from '@/stores/settings';
 import { useUiStore } from '@/stores/ui';
 
 const messages = defineMessages({
@@ -45,6 +46,7 @@ const HomeTimelinePage: React.FC = () => {
   const intl = useIntl();
   const features = useFeatures();
   const instance = useInstance();
+  const { defaultTimeline } = useSettings();
 
   const items = useTimelineFiltersOptions('home', 'home');
   const { isSledzikRemoved } = useUiStore();
@@ -56,7 +58,7 @@ const HomeTimelinePage: React.FC = () => {
       className='home-timeline'
       label={intl.formatMessage(messages.title)}
       title={<TimelinePicker active='home' />}
-      withBack={false}
+      withBack={defaultTimeline !== 'home'}
       truncateTitle={false}
       action={
         <>
