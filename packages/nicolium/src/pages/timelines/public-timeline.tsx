@@ -51,6 +51,7 @@ const PublicTimelinePage = () => {
           <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
         </>
       }
+      withBack={settings.defaultTimeline !== 'federated'}
     >
       {showExplanationBox && (
         <Accordion

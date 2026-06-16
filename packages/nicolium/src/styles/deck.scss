@@ -305,8 +305,7 @@
     }
   }
 
-  &:has(&__column--fill),
-  &--mobile-full-width {
+  &:has(&__column--fill) {
     .deck__add-column-button {
       flex-direction: column;
       gap: 0;
@@ -325,6 +324,12 @@
 
       .deck__add-column-button {
         scroll-snap-align: center;
+
+        flex-direction: column;
+        gap: 0;
+
+        font-size: 0;
+        line-height: 0;
       }
     }
   }

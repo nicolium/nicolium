@@ -9,6 +9,7 @@ import { TimelinePicker } from '@/components/timeline-picker';
 import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
+import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'column.wrenched', defaultMessage: 'Recent wrenches timeline' },
@@ -17,6 +18,7 @@ const messages = defineMessages({
 const WrenchedTimelinePage = () => {
   const intl = useIntl();
   const items = useTimelineFiltersOptions('wrenched', 'wrenched');
+  const { defaultTimeline } = useSettings();
 
   return (
     <Column
@@ -30,6 +32,7 @@ const WrenchedTimelinePage = () => {
           <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
         </>
       }
+      withBack={defaultTimeline !== 'wrenched'}
     >
       <WrenchedTimelineColumn
         emptyMessageText={
