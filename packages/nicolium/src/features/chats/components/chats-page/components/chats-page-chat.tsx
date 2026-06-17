@@ -126,7 +126,7 @@ const ChatsPageChat = () => {
   return (
     <div className='chats-page-chat'>
       <div className='chats-page-chat__header chats-page-chat__header--between'>
-        <div className='chats-page-chat__title-row'>
+        <div className='chats-page-chat__title__container'>
           <div className='chats-page-chat__avatar__container'>
             <IconButton
               src={iconArrowLeft}
@@ -148,9 +148,9 @@ const ChatsPageChat = () => {
           </div>
 
           <div className='chats-page-chat__title'>
-            <div className='chats-page-chat__title-name'>
+            <div className='chats-page-chat__title__name'>
               <AccountLink account={chat.account}>
-                <span className='chats-page-chat__title-text'>
+                <span className='chats-page-chat__title__text'>
                   {chat.account.display_name || chat.account.username}
                 </span>
               </AccountLink>

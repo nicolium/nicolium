@@ -100,7 +100,7 @@ const ChatSettings = () => {
         isToggleable={false}
         onToggle={minimizeChatPane}
         title={
-          <div className='chat-widget__title-row'>
+          <div className='chat-widget__title__container'>
             <button onClick={closeSettings} title={intl.formatMessage(messages.back)}>
               <Icon src={iconArrowLeft} className='chat-widget__back-icon' />
             </button>

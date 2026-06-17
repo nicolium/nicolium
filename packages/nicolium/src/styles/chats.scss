@@ -501,7 +501,7 @@
     }
   }
 
-  &__title-row {
+  &__title {
     display: flex;
     align-items: center;
   }
@@ -580,19 +580,11 @@
   }
 
   &__avatar__container,
-  &__title-row,
-  &__title-name {
+  &__title__container,
+  &__title__name {
     display: flex;
     gap: 0.25rem;
     align-items: center;
-  }
-
-  &__title-text {
-    @include mixins.text($size: sm, $weight: bold, $truncate: true);
-  }
-
-  &__title-row {
-    gap: 0.5rem;
   }
 
   &__back-button {
@@ -634,6 +626,14 @@
     justify-content: center;
 
     height: 2.75rem;
+
+    &__container {
+      gap: 0.5rem;
+    }
+
+    &__text {
+      @include mixins.text($size: sm, $weight: bold, $truncate: true);
+    }
   }
 
   &__account-popover {
@@ -1306,7 +1306,7 @@
 }
 
 .chat-widget {
-  &__title-row,
+  &__title__container,
   &__account__container,
   &__account__name {
     display: flex;
@@ -1330,8 +1330,14 @@
     }
   }
 
-  &__title-row {
-    gap: 0.5rem;
+  &__title {
+    &__container {
+      gap: 0.5rem;
+    }
+
+    &__text {
+      @include mixins.text($size: sm, $weight: bold, $truncate: true);
+    }
   }
 
   &__back-icon {
@@ -1354,10 +1360,6 @@
 
   &__avatar {
     flex: none;
-  }
-
-  &__title-text {
-    @include mixins.text($size: sm, $weight: bold, $truncate: true);
   }
 
   &__settings-body {
