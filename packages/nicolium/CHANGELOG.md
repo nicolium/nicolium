@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Picture-in-picture is not deployed on narrow screens.
+- Hardcoded `text/x.misskeymarkdown` as mimetype supported on Sharkey.
+
+### Fixed
+
+- When closing a modal triggered by long pressing an action, it brings focus back on correct element.
+
 ## v1.0.0-rc.2
 
 ### Fixed
