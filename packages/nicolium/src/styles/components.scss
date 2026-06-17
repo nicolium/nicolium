@@ -2025,8 +2025,11 @@ div[data-viewport-type='window']:has(.empty-message) {
     pointer-events: none;
   }
 
-  &--letterboxed img {
-    object-fit: contain;
+  &--letterboxed, {
+    img,
+    canvas {
+      object-fit: contain;
+    }
   }
 }
 
