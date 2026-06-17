@@ -604,8 +604,8 @@ const ReblogButton: React.FC<IReblogButton> = ({
   };
 
   const handleReblogLongPress = status.reblogs_count
-    ? () => {
-        openModal('REBLOGS', { statusId: status.id });
+    ? (event: React.MouseEvent<Element, MouseEvent> | React.TouchEvent<Element>) => {
+        openModal('REBLOGS', { statusId: status.id }, event.target as HTMLElement);
       }
     : undefined;
 
@@ -705,8 +705,8 @@ const FavouriteButton: React.FC<IActionButton> = ({
   };
 
   const handleFavouriteLongPress = status.favourites_count
-    ? () => {
-        openModal('FAVOURITES', { statusId: status.id });
+    ? (event: React.MouseEvent<Element, MouseEvent> | React.TouchEvent<Element>) => {
+        openModal('FAVOURITES', { statusId: status.id }, event.target as HTMLElement);
       }
     : undefined;
 
@@ -764,8 +764,8 @@ const DislikeButton: React.FC<IActionButton> = ({
   };
 
   const handleDislikeLongPress = status.dislikes_count
-    ? () => {
-        openModal('DISLIKES', { statusId: status.id });
+    ? (event: React.MouseEvent<Element, MouseEvent> | React.TouchEvent<Element>) => {
+        openModal('DISLIKES', { statusId: status.id }, event.target as HTMLElement);
       }
     : undefined;
 
@@ -831,11 +831,17 @@ const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
     }
   };
 
-  const handleWrenchLongPress = () => {
+  const handleWrenchLongPress = (
+    event: React.MouseEvent<Element, MouseEvent> | React.TouchEvent<Element>,
+  ) => {
     if (features.customEmojiReacts && hasLongerWrench) {
       checkConfirmation(() => emojiReact(hasLongerWrench.shortcode));
     } else if (wrenches?.count) {
-      openModal('REACTIONS', { statusId: status.id, reaction: wrenches.name });
+      openModal(
+        'REACTIONS',
+        { statusId: status.id, reaction: wrenches.name },
+        event.target as HTMLElement,
+      );
     }
   };
 
@@ -886,10 +892,16 @@ const BookmarkButton: React.FC<IActionButton> = ({ status, me }) => {
     else bookmarkStatus(undefined);
   };
 
-  const handleBookmarkLongPress = () => {
-    openModal('SELECT_BOOKMARK_FOLDER', {
-      statusId: status.id,
-    });
+  const handleBookmarkLongPress = (
+    event: React.MouseEvent<Element, MouseEvent> | React.TouchEvent<Element>,
+  ) => {
+    openModal(
+      'SELECT_BOOKMARK_FOLDER',
+      {
+        statusId: status.id,
+      },
+      event.target as HTMLElement,
+    );
   };
 
   return (

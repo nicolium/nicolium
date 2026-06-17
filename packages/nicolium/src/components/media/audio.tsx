@@ -13,6 +13,8 @@ import Icon from '@/components/icon';
 import { formatTime, getPointerPosition } from '@/components/media/video';
 import { useSettings } from '@/stores/settings';
 
+import { breakpoints } from '../ui/layout';
+
 import Visualizer from './visualizer';
 
 const messages = defineMessages({
@@ -276,7 +278,10 @@ const Audio: React.FC<IAudio> = (props) => {
         if (!audio.current.paused && !inView) {
           audio.current.pause();
 
-          if (deployPictureInPicture) {
+          if (
+            deployPictureInPicture &&
+            window.matchMedia(`(min-width: ${breakpoints.sm})`).matches
+          ) {
             deployPictureInPicture('audio', _pack());
           }
 
@@ -448,7 +453,12 @@ const Audio: React.FC<IAudio> = (props) => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
 
-      if (!paused && audio.current && deployPictureInPicture) {
+      if (
+        !paused &&
+        audio.current &&
+        deployPictureInPicture &&
+        window.matchMedia(`(min-width: ${breakpoints.sm})`).matches
+      ) {
         deployPictureInPicture('audio', _pack());
       }
     };

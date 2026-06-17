@@ -34,6 +34,7 @@ const ThumbNavigationProfileLink: React.FC<
     e.stopPropagation();
 
     if ('vibrate' in navigator) navigator.vibrate(1);
+    profileLinkRef.current?.focus();
     profileLinkRef.current?.querySelector('button')?.click();
   });
 
