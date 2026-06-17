@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.0.0-rc.3
 
 ### Changed
 
@@ -10,6 +10,7 @@
 ### Fixed
 
 - When closing a modal triggered by long pressing an action, it brings focus back on correct element.
+- Empty `options_map` is no longer provided when posting a poll.
 
 ## v1.0.0-rc.2
 
