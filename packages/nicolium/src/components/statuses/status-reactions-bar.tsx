@@ -1,6 +1,6 @@
 import iconSmileySticker from '@phosphor-icons/core/regular/smiley-sticker.svg';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Emoji from '@/components/ui/emoji';
@@ -49,6 +49,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({
   obfuscate,
   unauthenticated,
 }) => {
+  const node = useRef<HTMLButtonElement>(null);
   const intl = useIntl();
   const features = useFeatures();
   const { openModal } = useModalsActions();
@@ -62,6 +63,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({
     e.stopPropagation();
 
     if ('vibrate' in navigator) navigator.vibrate(1);
+    node.current?.focus();
     openModal('REACTIONS', { statusId: statusId, reaction: reaction.name });
   });
 
@@ -88,6 +90,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({
 
   return (
     <button
+      ref={node}
       className={clsx('status-reactions-bar__button', {
         'status-reactions-bar__button--active': reaction.me,
       })}
