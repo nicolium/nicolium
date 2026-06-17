@@ -214,7 +214,8 @@ const sanitizeState = (state: AuthData) => {
 };
 
 const persistAuth = (state: AuthData) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  const { actions: _, clients: __, defaultClient: ___, ...rest } = state as AuthStore;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
 };
 
 const getLocalState = (): (AuthData & { clients: Record<string, PlApiClient> }) | undefined => {
