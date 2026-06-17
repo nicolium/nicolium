@@ -22,6 +22,8 @@ import {
   maximumAspectRatio,
 } from '@/utils/media-aspect-ratio';
 
+import { breakpoints } from '../ui/layout';
+
 const DEFAULT_HEIGHT = 300;
 
 type Position = { x: number; y: number };
@@ -411,7 +413,10 @@ const Video: React.FC<IVideo> = ({
           setPaused(true);
           video.current.pause();
 
-          if (deployPictureInPicture) {
+          if (
+            deployPictureInPicture &&
+            window.matchMedia(`(min-width: ${breakpoints.sm})`).matches
+          ) {
             deployPictureInPicture('video', _pack());
           }
         }
@@ -523,7 +528,13 @@ const Video: React.FC<IVideo> = ({
       document.removeEventListener('mozfullscreenchange', handleFullscreenChange, true);
       document.removeEventListener('MSFullscreenChange', handleFullscreenChange, true);
 
-      if (video.current && !video.current.paused && deployPictureInPicture && !alwaysVisible) {
+      if (
+        video.current &&
+        !video.current.paused &&
+        deployPictureInPicture &&
+        !alwaysVisible &&
+        window.matchMedia(`(min-width: ${breakpoints.sm})`).matches
+      ) {
         deployPictureInPicture('video', _pack());
       }
     };

@@ -2845,9 +2845,6 @@ div[data-viewport-type='window']:has(.empty-message) {
   }
 
   @media (max-width: variables.$breakpoint-sm) {
-    inset-block-end: 0;
-    inset-inline-end: 0;
-    width: 100%;
-    border-radius: 0;
+    bottom: 4.5rem;
   }
 }
