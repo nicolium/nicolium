@@ -11,6 +11,7 @@
 
 - When closing a modal triggered by long pressing an action, it brings focus back on correct element.
 - Empty `options_map` is no longer provided when posting a poll.
+- 'Fact-checking' feature time matching.
 
 ## v1.0.0-rc.2
 

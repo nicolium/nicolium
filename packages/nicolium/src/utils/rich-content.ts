@@ -35,7 +35,7 @@ const onlyHour = (node: HTMLElement, ignoreMentions = true): string | false => {
 
     const rawHour = node.textContent
       ?.replace(/^[\s\u2000-\u200f]+|[\s\u2000-\u200f]+$/g, '')
-      .match(/^([01]?\d|2[0-3])?:[0-5]\d$/)?.[0];
+      .match(/^([01]?\d|2[0-3]):?[0-5]\d$/)?.[0];
     if (!rawHour) return false;
     const hour = rawHour?.includes(':') ? rawHour : `${rawHour.slice(0, -2)}:${rawHour.slice(-2)}`;
 
