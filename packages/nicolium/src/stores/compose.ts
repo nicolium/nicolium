@@ -890,8 +890,10 @@ const useSubmitCompose = (composeId: string) => {
           expires_in: compose.poll.expires_in,
           multiple: compose.poll.multiple,
           hide_totals: compose.poll.hide_totals,
-          options_map: compose.poll.options_map,
         };
+        if (compose.language && Object.keys(compose.textMap).length) {
+          params.poll.options_map = compose.poll.options_map;
+        }
       }
 
       if (compose.language && Object.keys(compose.textMap).length) {
