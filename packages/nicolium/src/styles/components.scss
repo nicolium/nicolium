@@ -2021,6 +2021,10 @@ div[data-viewport-type='window']:has(.empty-message) {
     object-fit: cover;
   }
 
+  canvas {
+    pointer-events: none;
+  }
+
   &--letterboxed img {
     object-fit: contain;
   }
