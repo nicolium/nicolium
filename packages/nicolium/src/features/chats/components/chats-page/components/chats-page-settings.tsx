@@ -70,7 +70,7 @@ const ChatsPageSettings = () => {
 
   return (
     <div className='chats-page-panel chats-page-panel--settings'>
-      <div className='chats-page-panel__title-row'>
+      <div className='chats-page-panel__title'>
         <IconButton
           src={iconArrowLeft}
           className='chats-page-panel__back-button'

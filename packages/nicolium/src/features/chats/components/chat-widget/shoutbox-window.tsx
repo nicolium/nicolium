@@ -30,7 +30,7 @@ const ShoutboxWindow = () => {
     <>
       <ChatPaneHeader
         title={
-          <div className='chat-widget__title-row'>
+          <div className='chat-widget__title__container'>
             {isOpen && (
               <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
                 <Icon src={iconArrowLeft} className='chat-widget__back-icon' />
@@ -42,7 +42,7 @@ const ShoutboxWindow = () => {
 
               <div className='chat-widget__account'>
                 <div className='chat-widget__account__name'>
-                  <span className='chat-widget__title-text'>
+                  <span className='chat-widget__title__text'>
                     <FormattedMessage
                       id='chat_list_item_shoutbox'
                       defaultMessage='{instance} shoutbox'

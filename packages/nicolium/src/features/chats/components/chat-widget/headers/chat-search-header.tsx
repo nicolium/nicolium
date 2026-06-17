@@ -32,7 +32,7 @@ const ChatSearchHeader = () => {
             </button>
           )}
 
-          <span className='chat-widget__title-text'>
+          <span className='chat-widget__title__text'>
             <FormattedMessage id='chat_search.title' defaultMessage='Messages' />
           </span>
         </div>

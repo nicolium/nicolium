@@ -64,7 +64,7 @@ const ChatWindow = () => {
     <>
       <ChatPaneHeader
         title={
-          <div className='chat-widget__title-row'>
+          <div className='chat-widget__title__container'>
             {isOpen && (
               <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
                 <Icon src={iconArrowLeft} className='chat-widget__back-icon' />
@@ -91,7 +91,7 @@ const ChatWindow = () => {
                   params={{ username: chat.account.acct }}
                 >
                   <div className='chat-widget__account__name'>
-                    <span className='chat-widget__title-text'>
+                    <span className='chat-widget__title__text'>
                       {chat.account.display_name || chat.account.acct}
                     </span>
                     {chat.account.verified && <VerificationBadge />}
