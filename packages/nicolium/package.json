@@ -1,7 +1,7 @@
 {
   "name": "nicolium",
   "displayName": "Nicolium",
-  "version": "1.0.0-rc.3",
+  "version": "1.0.0",
   "description": "Mastodon-compatible social media front-end",
   "keywords": [
     "fediverse",
