@@ -107,11 +107,15 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
     }
   };
 
-  const getCustomBadges = (): React.ReactNode[] => {
+  const getCustomBadges = (hasStaffBadge: boolean): React.ReactNode[] => {
     const badges = account?.roles ?? [];
 
     return badges
-      .filter((badge) => badge.highlighted)
+      .filter(
+        (badge) =>
+          badge.highlighted &&
+          (!hasStaffBadge || (badge.id !== 'admin' && badge.id !== 'moderator')),
+      )
       .map((badge) => (
         <Badge
           key={badge.id || badge.name}
@@ -123,8 +127,8 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
   };
 
   const getBadges = (): React.ReactNode[] => {
-    const custom = getCustomBadges();
     const staffBadge = getStaffBadge();
+    const custom = getCustomBadges(!!staffBadge);
 
     const badges = [];
 
