@@ -184,12 +184,17 @@
 }
 
 .sign-up-panel {
-  display: flex;flex-direction: column;
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
+
+  &__link {
+    @include mixins.button($theme: primary, $block: true);
+  }
 
   &__registration {
     display: flex;
-    flex-direction: col;
+    flex-direction: column;
 
     h2 {
       @include mixins.text($size: lg, $weight: bold);
@@ -197,10 +202,6 @@
 
     p {
       @include mixins.text($theme: muted, $size: sm);
-    }
-
-    a {
-      @include mixins.button($theme: primary, $block: true);
     }
   }
 

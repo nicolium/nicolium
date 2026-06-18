@@ -91,7 +91,7 @@ const SignUpPanel = () => {
             </p>
           </div>
 
-          <Link to='/signup'>
+          <Link className='sign-up-panel__link' to='/signup'>
             <FormattedMessage id='account.register' defaultMessage='Sign up' />
           </Link>
         </>
