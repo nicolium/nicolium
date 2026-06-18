@@ -10,6 +10,8 @@
 ### Fixed
 
 - When closing a modal triggered by long pressing an action, it brings focus back on correct element.
+- Admins and moderators no longer have their badge displayed twice.
+- Status collapse/expand and sensitive media display hotkeys use correct keys.
 - Empty `options_map` is no longer provided when posting a poll.
 - 'Fact-checking' feature time matching.
 
