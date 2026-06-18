@@ -1,0 +1,83 @@
+---
+title: "Nicolium v1.0.0 released"
+pubDate: 2026-06-18
+author: "nicole mikołajczyk"
+---
+Today I finally released Nicolium v1.0.0, the release with the deck, complete removal of TailwindCSS-related code and a few more new features.
+
+### The Deck
+
+It turns out the changelog for Nicolium v1.0.0 is way smaller than I expected it to be, mostly because the work was mainly related to the deck feature and the remaining style migrations. While the latter were boring and repetitive, error-prone work, it was quite exciting to work on the Deck feature. The Deck, as the name may suggest, is a TweetDeck-inspired multi-column interface, allowing you to create columns for specific timelines, user profiles, lists, chats and other kinds of content. You can rearrange the columns and control their width, which allows even further personalization of the Nicolium experience.
+
+While Nicolium is far from being the only client to support an interface like this—in fact, Mastodon initially didn’t have a single-column interface on desktop layout—I wanted to offer an experience that differs from most of the implementations. Most importantly, I wanted each of the columns to handle routing independently. If you click on a post in one of the columns, it opens in the same column. This is the main reason I changed the routing library used by Nicolium in December. This is how it works on TweetDeck and it’s honestly the most intuitive thing to do.
+
+I tried to make hotkey-based navigation in the Deck as capable as possible, which led to improvements affecting other parts of the UI. It is not perfect though—I need to work on implementing focus restoration when navigating between columns. There are more changes I want to make to further improve the deck, including adding more available columns and the ability to create more than one deck layout. Another thing related to the deck is the planned multi-account actions support, which is going to be the next milestone for Nicolium development.
+
+### Styling migration
+
+Ok, there’s nothing exciting to announce. I just finished migrating Nicolium from TailwindCSS to using just SCSS. I dropped the prefix from class names that was kept during the transition because of potential class name clashes. The most important reason for this is to make custom styling of Nicolium (for instance admins, but also end users with userstyles—and possibly through interface options soon) easier. I want Nicolium to be an unopinionated, customizable and hackable Fediverse client.
+
+I also changed the way color schemes are computed, which should make the UI contrast more consistent with custom accent colors. It is now also possible to control the border radius intensity across the UI. It looks very refreshing to see the UI where suddenly everything is not extremely rounded, so I recommend trying this option.
+
+### Other new features
+
+I ported the picture-in-picture feature from Mastodon. Now, when a currently played video or audio gets scrolled out of the view, it appears in a small pop-out in the interface, so you can continue playing it while on a different page. Pleroma admins can now create invites from the admin dashboard. There’s another level of toggling counters visibility, and that’s probably all that’s worth mentioning.
+
+Thanks to Poesty Li for updating the Chinese (simplified Han) translation and Capitaine Caverne for updating the French translation. If you want to help with translations, [join the project on Weblate](https://hosted.weblate.org/projects/nicolium/nicolium/).
+
+Here's the changelog copy-pasted:
+
+#### Added
+
+- Deck interface
+  - Available on separate page (`/deck`).
+  - Available column types: timelines, notifications, accounts, search, trending hashtags/accounts/statuses, bookmarks, chat lists and specific chats, scheduled posts and drafts.
+  - Each column has separate routing.
+  - Columns can be moved, resized and set to take all available width.
+  - Hotkeys are available for switching, moving and resizing columns and in-column routing.
+- Option to control video looping (disabled by default).
+- Option to hide social media counters can now apply to detailed status view.
+- Option to reduce border radius intensity across the UI.
+- Support for creating invites on Pleroma.
+- Picture-in-picture mode for videos ported from Mastodon.
+
+#### Changed
+
+- Migrated away from TailwindCSS.
+- Changed color shifting and shading algorithm.
+- Improvements to timeline hotkey navigation.
+- Bookmarks page uses the same picker in header as one used on timelines page.
+- In-browser language detector is used instead of fastText when the API is available.
+- Updated delete post moderation endpoint for Iceshrimp.NET.
+- Follow button for locked accounts displays the text 'Request follow' now
+- Minor style improvements
+- Picture-in-picture is not deployed on narrow screens.
+- Hardcoded `text/x.misskeymarkdown` as mimetype supported on Sharkey.
+- Updated translations: Chinese (simplified Han, thanks to Poesty Li) French (thanks to Capitaine Caverne), Polish
+
+#### Fixed
+
+- Display of content type in Iceshrimp.NET when set to default.
+- GoToSocial interaction policy management button is visible again.
+- Custom emojis can't override unicode emojis when they have the same shortcode.
+- Up/down keys work correctly on drive page.
+- Videos now pause when scrolled out of view.
+- Fixed regressions related to default post privacy and content type handling change.
+- Emoji picker styles load correctly on Akkoma with its strict CSP configuration.
+- Opening emoji picker doesn't cause jumping issues.
+- Post composer falls back to simple textarea on Servo.
+- 'Fill available width' toggle behavior.
+- Zoomed in media returns to the initial position when zoomed out for a while.
+- When closing a modal triggered by long pressing an action, it brings focus back on correct element.
+- Admins and moderators no longer have their badge displayed twice.
+- Status collapse/expand and sensitive media display hotkeys use correct keys.
+- Empty `options_map` is no longer provided when posting a poll.
+- 'Fact-checking' feature time matching.
+
+#### Removed
+
+- Components such as \<Button /\> and \<Text /\>.
+
+## Try Nicolium
+
+You can try Nicolium out by visiting [web.nicolium.app](https://web.nicolium.app/) and find the source code on [Codeberg](https://codeberg.org/nicolium/nicolium). If you’ve encountered any bugs or want to suggest a feature, you can open an issue on Codeberg. [The documentation](https://nicolium.app/docs/) describes how to deploy Nicolium alongside your own Fediverse instance and how to start contributing. You can also join [Nicolium IRC channel](https://web.libera.chat/#nicolium) on libera.chat if you want to chat about it.
