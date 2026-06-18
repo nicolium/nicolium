@@ -1,36 +1,6 @@
 # Changelog
 
-## v1.0.0-rc.3
-
-### Changed
-
-- Picture-in-picture is not deployed on narrow screens.
-- Hardcoded `text/x.misskeymarkdown` as mimetype supported on Sharkey.
-
-### Fixed
-
-- When closing a modal triggered by long pressing an action, it brings focus back on correct element.
-- Admins and moderators no longer have their badge displayed twice.
-- Status collapse/expand and sensitive media display hotkeys use correct keys.
-- Empty `options_map` is no longer provided when posting a poll.
-- 'Fact-checking' feature time matching.
-
-## v1.0.0-rc.2
-
-### Fixed
-
-- 'Fill available width' toggle behavior.
-- Zoomed in media returns to the initial position when zoomed out for a while.
-
-## v1.0.0-rc.1
-
-### Changed
-
-- Follow button for locked accounts displays the text 'Request follow' now
-- Minor style improvements
-- Polish translation update
-
-## v1.0.0-rc.0
+## v1.0.0
 
 ### Added
 
@@ -54,6 +24,10 @@
 - Bookmarks page uses the same picker in header as one used on timelines page.
 - In-browser language detector is used instead of fastText when the API is available.
 - Updated delete post moderation endpoint for Iceshrimp.NET.
+- Follow button for locked accounts displays the text 'Request follow' now
+- Minor style improvements
+- Picture-in-picture is not deployed on narrow screens.
+- Hardcoded `text/x.misskeymarkdown` as mimetype supported on Sharkey.
 - Updated translations: Chinese (simplified Han, thanks to Poesty Li) French (thanks to Capitaine Caverne), Polish
 
 ### Fixed
@@ -67,6 +41,13 @@
 - Emoji picker styles load correctly on Akkoma with its strict CSP configuration.
 - Opening emoji picker doesn't cause jumping issues.
 - Post composer falls back to simple textarea on Servo.
+- 'Fill available width' toggle behavior.
+- Zoomed in media returns to the initial position when zoomed out for a while.
+- When closing a modal triggered by long pressing an action, it brings focus back on correct element.
+- Admins and moderators no longer have their badge displayed twice.
+- Status collapse/expand and sensitive media display hotkeys use correct keys.
+- Empty `options_map` is no longer provided when posting a poll.
+- 'Fact-checking' feature time matching.
 
 ### Removed
 
