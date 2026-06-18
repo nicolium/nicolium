@@ -10,7 +10,9 @@
   - Each column has separate routing.
   - Columns can be moved, resized and set to take all available width.
   - Hotkeys are available for switching, moving and resizing columns and in-column routing.
-- Option to disable video looping.
+- Option to control video looping (disabled by default).
+- Option to hide social media counters can now apply to detailed status view.
+- Option to reduce border radius intensity across the UI.
 - Support for creating invites on Pleroma.
 - Picture-in-picture mode for videos ported from Mastodon.
 
@@ -19,8 +21,6 @@
 - Migrated away from TailwindCSS.
 - Changed color shifting and shading algorithm.
 - Improvements to timeline hotkey navigation.
-- Option to control video looping (disabled by default).
-- Option to hide social media counters can now apply to detailed status view.
 - Bookmarks page uses the same picker in header as one used on timelines page.
 - In-browser language detector is used instead of fastText when the API is available.
 - Updated delete post moderation endpoint for Iceshrimp.NET.
