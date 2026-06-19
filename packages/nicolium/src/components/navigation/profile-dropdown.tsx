@@ -13,6 +13,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { useLoggedInAccountUrls } from '@/queries/accounts/use-logged-in-accounts';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useAuthActions } from '@/stores/auth';
+import { useSettings } from '@/stores/settings';
 
 import ThemeToggle from '../../features/ui/components/theme-toggle';
 import Counter from '../ui/counter';
@@ -29,6 +30,7 @@ const messages = defineMessages({
 const LoggedInAccount: React.FC = () => {
   const { data: account } = useOwnAccount();
   const unreadCount = useNotificationsUnreadCount();
+  const { demetricator } = useSettings();
 
   if (!account) return <PlaceholderAccount />;
 
@@ -37,7 +39,13 @@ const LoggedInAccount: React.FC = () => {
       account={account}
       showAccountHoverCard={false}
       withLinkToProfile={false}
-      action={unreadCount ? <Counter count={unreadCount} /> : <></>}
+      action={
+        unreadCount ? (
+          <Counter count={unreadCount} countMax={demetricator !== 'off' ? 1 : undefined} />
+        ) : (
+          <></>
+        )
+      }
     />
   );
 };
