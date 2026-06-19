@@ -40,12 +40,12 @@ import {
 } from '@/queries/timelines/use-timelines';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta } from '@/stores/status-meta';
+import { useQueuedEntries, type TimelineEntry } from '@/stores/timelines';
 import { selectChild } from '@/utils/scroll-utils';
 import { hasActiveFilters, sortFilteredTimeline } from '@/utils/timeline-filter';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
 import type { TimelineFilters } from '@/schemas/frontend-settings';
-import type { TimelineEntry } from '@/stores/timelines';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
@@ -422,8 +422,6 @@ const Timeline: React.FC<ITimeline> = ({
   const {
     timelineId,
     entries,
-    queuedCount,
-    queuedAccountIds,
     fetchNextPage,
     dequeueEntries,
     fillGap,
@@ -434,6 +432,8 @@ const Timeline: React.FC<ITimeline> = ({
     refetch,
     hasStreamConfig,
   } = query;
+
+  const { queuedCount, queuedAccountIds } = useQueuedEntries(timelineId, filters);
 
   const handleMoveUp = (index: number) => {
     selectChild(
