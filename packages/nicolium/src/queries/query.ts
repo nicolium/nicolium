@@ -1,4 +1,5 @@
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
 
 import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { backendUrl } from '@/stores/auth';
@@ -25,12 +26,15 @@ function useAppQuery<
   const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   const { queryKey } = options;
-  const modifiedQueryKey = [accountOrInstanceUrl, ...queryKey] as unknown as TQueryKey;
+  const modifiedQueryKey = useMemo(
+    () => [accountOrInstanceUrl, ...queryKey] as unknown as TQueryKey,
+    [accountOrInstanceUrl, queryKey],
+  );
 
-  const placeholderData = () => {
+  const placeholderData = useCallback(() => {
     const instanceUrl = new URL(accountOrInstanceUrl).origin;
     return queryClient.getQueryData<NonFunctionGuard<TQueryFnData>>([instanceUrl, queryKey]);
-  };
+  }, [accountOrInstanceUrl, queryClient, queryKey]);
 
   return useQuery({ ...options, queryKey: modifiedQueryKey, placeholderData });
 }
@@ -48,15 +52,18 @@ function useAppInfiniteQuery<
   const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   const { queryKey } = options;
-  const modifiedQueryKey = [accountOrInstanceUrl, ...queryKey] as unknown as TQueryKey;
+  const modifiedQueryKey = useMemo(
+    () => [accountOrInstanceUrl, ...queryKey] as unknown as TQueryKey,
+    [accountOrInstanceUrl, queryKey],
+  );
 
-  const placeholderData = () => {
+  const placeholderData = useCallback(() => {
     const instanceUrl = new URL(accountOrInstanceUrl).origin;
     return queryClient.getQueryData<NonFunctionGuard<InfiniteData<TQueryFnData, TPageParam>>>([
       instanceUrl,
       queryKey,
     ]);
-  };
+  }, [accountOrInstanceUrl, queryClient, queryKey]);
 
   return useInfiniteQuery({ ...options, queryKey: modifiedQueryKey, placeholderData });
 }
