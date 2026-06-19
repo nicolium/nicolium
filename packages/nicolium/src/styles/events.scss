@@ -669,9 +669,12 @@
 }
 
 .event-header--placeholder {
+  pointer-events: none;
+
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
   color: var(--color-primary-50);
 
   .no-reduce-motion & {
@@ -695,6 +698,8 @@
 }
 
 .event-card--placeholder {
+  pointer-events: none;
+
   position: relative;
 
   overflow: hidden;

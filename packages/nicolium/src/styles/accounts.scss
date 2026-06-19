@@ -148,6 +148,8 @@
     margin: -1rem -1rem 0;
 
     &--placeholder {
+      pointer-events: none;
+
       div:first-child {
         position: relative;
         width: 100%;
@@ -1130,6 +1132,7 @@
 }
 
 .account--placeholder {
+  pointer-events: none;
   display: flex;
   gap: 0.75rem;
   align-items: center;

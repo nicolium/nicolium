@@ -2641,6 +2641,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 }
 
 .status--placeholder {
+  pointer-events: none;
   background-color: white;
 
   .dark & {
@@ -2699,6 +2700,8 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 }
 
 .status-card--placeholder {
+  pointer-events: none;
+
   .no-reduce-motion & {
     animation: pulse 2s ease-in-out infinite;
   }
