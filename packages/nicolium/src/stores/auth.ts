@@ -929,5 +929,6 @@ export {
   loadMastodonPreload,
   removeAccount,
   defaultClient,
+  backendUrl,
   type Me,
 };
