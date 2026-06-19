@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import 'intl-pluralrules';
 import omit from 'lodash/omit';
 import {
@@ -15,6 +15,7 @@ import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { appendFollowRequest } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
+import { useAppInfiniteQuery } from '@/queries/query';
 import { importEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQueryOptions } from '@/queries/utils/make-paginated-response-query-options';
 import { useSettingsStore } from '@/stores/settings';
@@ -128,7 +129,7 @@ const useNotifications = (activeFilter: FilterType) => {
   const client = useClient();
   const hideBots = useHideBotNotifications();
 
-  return useInfiniteQuery({
+  return useAppInfiniteQuery({
     ...notificationsQueryOptions(client, activeFilter, hideBots),
     enabled: !!me,
   });

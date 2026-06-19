@@ -1,32 +1,39 @@
 import React, { createContext, useContext, useMemo } from 'react';
 
-import { defaultClient, useAuthStore, useMe, type Me } from '@/stores/auth';
-
-import type { PlApiClient } from 'pl-api';
+import { useAuthStore, useMe, type Me } from '@/stores/auth';
 
 interface CurrentAccountContextValue {
   me: Me;
-  client: PlApiClient;
+  meUrl: string | null;
 }
 
 const CurrentAccountContext = createContext<CurrentAccountContextValue>({
   me: null,
-  client: defaultClient,
+  meUrl: null,
 });
 
-interface ICurrentAccountProvider {
+interface IDefaultCurrentAccountProvider {
   children: React.ReactNode;
 }
 
-const DefaultCurrentAccountProvider: React.FC<ICurrentAccountProvider> = ({ children }) => {
+const DefaultCurrentAccountProvider: React.FC<IDefaultCurrentAccountProvider> = ({ children }) => {
   const me = useMe();
-  const client = useAuthStore((state) => {
-    const { me: meUrl, clients, defaultClient } = state;
-    if (meUrl && clients[meUrl]) return clients[meUrl];
-    return defaultClient;
-  });
+  const meUrl = useAuthStore((state) => state.me);
 
-  const value = useMemo(() => ({ me, client }), [me, client]);
+  const value = useMemo(() => ({ me, meUrl }), [me, meUrl]);
+
+  return <CurrentAccountContext.Provider value={value}>{children}</CurrentAccountContext.Provider>;
+};
+
+interface ICurrentAccountProvider {
+  accountUrl: string;
+  children: React.ReactNode;
+}
+
+const CurrentAccountProvider: React.FC<ICurrentAccountProvider> = ({ accountUrl, children }) => {
+  const accountId = useAuthStore((state) => state.users[accountUrl]?.id);
+
+  const value = useMemo(() => ({ me: accountId, meUrl: accountUrl }), [accountId, accountUrl]);
 
   return <CurrentAccountContext.Provider value={value}>{children}</CurrentAccountContext.Provider>;
 };
@@ -42,6 +49,7 @@ const useCurrentAccountContext = () => useContext(CurrentAccountContext);
 export {
   CurrentAccountContext,
   DefaultCurrentAccountProvider,
+  CurrentAccountProvider,
   useCurrentAccount,
   useCurrentAccountContext,
 };

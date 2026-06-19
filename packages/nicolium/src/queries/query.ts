@@ -1,10 +1,14 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { backendUrl, useAuthStore } from '@/stores/auth';
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
+import { backendUrl } from '@/stores/auth';
 
 import type {
   DefaultError,
+  InfiniteData,
   QueryKey,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
@@ -18,7 +22,7 @@ function useAppQuery<
   TQueryKey extends QueryKey = QueryKey,
 >(options: UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>): UseQueryResult<TData, TError> {
   const queryClient = useQueryClient();
-  const accountOrInstanceUrl = useAuthStore((state) => state.me) || backendUrl;
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   const { queryKey } = options;
   const modifiedQueryKey = [accountOrInstanceUrl, ...queryKey] as unknown as TQueryKey;
@@ -31,4 +35,30 @@ function useAppQuery<
   return useQuery({ ...options, queryKey: modifiedQueryKey, placeholderData });
 }
 
-export { useAppQuery };
+function useAppInfiniteQuery<
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = InfiniteData<TQueryFnData>,
+  TQueryKey extends QueryKey = QueryKey,
+  TPageParam = unknown,
+>(
+  options: UseInfiniteQueryOptions<TQueryFnData, TError, TData, TQueryKey, TPageParam>,
+): UseInfiniteQueryResult<TData, TError> {
+  const queryClient = useQueryClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+
+  const { queryKey } = options;
+  const modifiedQueryKey = [accountOrInstanceUrl, ...queryKey] as unknown as TQueryKey;
+
+  const placeholderData = () => {
+    const instanceUrl = new URL(accountOrInstanceUrl).origin;
+    return queryClient.getQueryData<NonFunctionGuard<InfiniteData<TQueryFnData, TPageParam>>>([
+      instanceUrl,
+      queryKey,
+    ]);
+  };
+
+  return useInfiniteQuery({ ...options, queryKey: modifiedQueryKey, placeholderData });
+}
+
+export { useAppInfiniteQuery, useAppQuery };

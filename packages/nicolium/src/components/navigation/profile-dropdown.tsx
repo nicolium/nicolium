@@ -7,14 +7,15 @@ import { defineMessages, useIntl } from 'react-intl';
 import Account from '@/components/accounts/account';
 import DropdownMenu from '@/components/dropdown-menu';
 import PlaceholderAccount from '@/components/placeholders/placeholder-account';
+import { CurrentAccountProvider } from '@/contexts/current-account-context';
 import { useFeatures } from '@/hooks/use-features';
-import {
-  useLoggedInAccount,
-  useLoggedInAccountIds,
-} from '@/queries/accounts/use-logged-in-accounts';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { useLoggedInAccountUrls } from '@/queries/accounts/use-logged-in-accounts';
+import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useAuthActions } from '@/stores/auth';
 
 import ThemeToggle from '../../features/ui/components/theme-toggle';
+import Counter from '../ui/counter';
 
 import type { Account as AccountEntity } from 'pl-api';
 
@@ -25,17 +26,19 @@ const messages = defineMessages({
   logout: { id: 'profile_dropdown.logout', defaultMessage: 'Log out @{acct}' },
 });
 
-interface ILoggedInAccount {
-  accountId: string;
-}
-
-const LoggedInAccount: React.FC<ILoggedInAccount> = ({ accountId }) => {
-  const { data: account } = useLoggedInAccount(accountId);
+const LoggedInAccount: React.FC = () => {
+  const { data: account } = useOwnAccount();
+  const unreadCount = useNotificationsUnreadCount();
 
   if (!account) return <PlaceholderAccount />;
 
   return (
-    <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} hideActions />
+    <Account
+      account={account}
+      showAccountHoverCard={false}
+      withLinkToProfile={false}
+      action={unreadCount ? <Counter count={unreadCount} /> : <></>}
+    />
   );
 };
 
@@ -57,7 +60,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const intl = useIntl();
   const { logOut, switchAccountById } = useAuthActions();
 
-  const otherAccountIds = useLoggedInAccountIds();
+  const otherAccountUrls = useLoggedInAccountUrls();
 
   const handleLogOut = () => {
     logOut();
@@ -79,10 +82,14 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
       linkOptions: { to: '/@{$username}', params: { username: account.acct } },
     });
 
-    otherAccountIds.forEach((otherAccountId) => {
+    otherAccountUrls.forEach((otherAccountUrl) => {
       menu.push({
-        text: <LoggedInAccount accountId={otherAccountId} />,
-        action: handleSwitchAccount(otherAccountId),
+        text: (
+          <CurrentAccountProvider accountUrl={otherAccountUrl}>
+            <LoggedInAccount />
+          </CurrentAccountProvider>
+        ),
+        action: handleSwitchAccount(otherAccountUrl),
       });
     });
 
@@ -110,7 +117,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
         ))}
       </>
     );
-  }, [account, otherAccountIds.length, features]);
+  }, [account, otherAccountUrls.length, features]);
 
   return (
     <DropdownMenu component={ProfileDropdownMenu} className='profile-dropdown'>

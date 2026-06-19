@@ -1,11 +1,10 @@
-import { skipToken, useQueries } from '@tanstack/react-query';
+import { skipToken } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { queryKeys } from '@/queries/keys';
 import { useAppQuery } from '@/queries/query';
 import { useAuthStore } from '@/stores/auth';
-import { validId } from '@/utils/auth';
 
 import type { Account } from 'pl-api';
 
@@ -18,34 +17,31 @@ const useLoggedInAccount = (accountId: string) => {
   return query;
 };
 
-const useLoggedInAccountIds = () => {
+const useLoggedInAccountUrls = () => {
   const users = useAuthStore((state) => state.users);
   const currentAccountId = useCurrentAccount();
 
   return useMemo(
-    () =>
-      Object.values(users)
-        .map((authUser) => authUser?.id)
-        .filter((id): id is string => validId(id) && id !== currentAccountId),
+    () => Object.keys(users).filter((url) => users[url].id && users[url].id !== currentAccountId),
     [users, currentAccountId],
   );
 };
 
 /** doesn't fetch because it's a hack that should not exist like this */
 const useLoggedInAccounts = () => {
-  const otherAccountIds = useLoggedInAccountIds();
+  // const otherAccounts = useLoggedInAccountUrls();
 
-  const { accounts } = useQueries({
-    queries: otherAccountIds.map((accountId) => ({
-      queryKey: queryKeys.accounts.show(accountId),
-      queryFn: skipToken,
-    })),
-    combine: (results) => ({
-      accounts: results.map((q) => q.data).filter((account): account is Account => !!account),
-    }),
-  });
+  // const { accounts } = useQueries({
+  //   queries: otherAccountIds.map((accountId) => ({
+  //     queryKey: queryKeys.accounts.show(accountId),
+  //     queryFn: skipToken,
+  //   })),
+  //   combine: (results) => ({
+  //     accounts: results.map((q) => q.data).filter((account): account is Account => !!account),
+  //   }),
+  // });
 
-  return { accounts };
+  return { accounts: [] };
 };
 
-export { useLoggedInAccount, useLoggedInAccountIds, useLoggedInAccounts };
+export { useLoggedInAccount, useLoggedInAccountUrls, useLoggedInAccounts };
