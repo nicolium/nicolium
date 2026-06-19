@@ -1,7 +1,8 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -10,7 +11,7 @@ import type { AdminCreateInviteTokenParams, AdminEmailInviteParams, AdminInvite 
 const useInvites = () => {
   const client = useClient();
 
-  return useQuery<ReadonlyArray<AdminInvite>>({
+  return useAppQuery<ReadonlyArray<AdminInvite>>({
     queryKey: queryKeys.admin.invites,
     queryFn: () => client.admin.invites.getInvites(),
     placeholderData: [],

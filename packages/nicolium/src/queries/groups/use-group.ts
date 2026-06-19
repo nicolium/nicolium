@@ -1,7 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { useClient } from '@/hooks/use-client';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -12,7 +13,7 @@ import type { CreateGroupParams, UpdateGroupParams } from 'pl-api';
 const useGroupQuery = (groupId?: string, withRelationship = true) => {
   const client = useClient();
 
-  const groupQuery = useQuery({
+  const groupQuery = useAppQuery({
     queryKey: queryKeys.groups.show(groupId!),
     queryFn: () => client.experimental.groups.getGroup(groupId!),
     enabled: !!groupId,

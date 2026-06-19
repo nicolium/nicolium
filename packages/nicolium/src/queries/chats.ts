@@ -2,7 +2,6 @@ import {
   keepPreviousData,
   useInfiniteQuery,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
@@ -21,6 +20,7 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useAppQuery } from '@/queries/query';
 import { reOrderChatListItems } from '@/utils/chats';
 import { flattenPages, updatePageItem } from '@/utils/queries';
 
@@ -141,7 +141,7 @@ const useChat = (chatId?: string) => {
     }
   };
 
-  return useQuery<Chat | undefined>({
+  return useAppQuery<Chat | undefined>({
     queryKey: queryKeys.chats.chat(chatId),
     queryFn: getChat,
     gcTime: 0,

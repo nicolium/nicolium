@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
 import { translationSchema, type Translation } from 'pl-api';
 import * as v from 'valibot';
 
+import { useAppQuery } from '@/queries/query';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useLanguageModelAvailabilityActions } from '@/stores/language-model-availability';
 
@@ -14,7 +14,7 @@ const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) =>
 
   const sourceLanguage = status?.language;
 
-  return useQuery<Translation | false>({
+  return useAppQuery<Translation | false>({
     queryKey: queryKeys.statuses.localTranslations(statusId, targetLanguage!),
     enabled: !!status && !!sourceLanguage && !!targetLanguage,
     queryFn: async ({ signal }) => {

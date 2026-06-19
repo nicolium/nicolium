@@ -1,15 +1,16 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 const useBirthdayReminders = (month: number, day: number) => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
   const queryClient = useQueryClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.accountsLists.birthdayReminders(month, day),
     queryFn: () =>
       client.accounts.getBirthdays(day, month).then((accounts) => {

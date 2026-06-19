@@ -1,7 +1,8 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -25,7 +26,7 @@ const useRules = () => {
 
   const getRules = () => client.admin.rules.getRules();
 
-  const result = useQuery<ReadonlyArray<AdminRule>>({
+  const result = useAppQuery<ReadonlyArray<AdminRule>>({
     queryKey: queryKeys.admin.rules,
     queryFn: getRules,
     placeholderData: [],

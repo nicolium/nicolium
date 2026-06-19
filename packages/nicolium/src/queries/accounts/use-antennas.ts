@@ -1,9 +1,10 @@
-import { useMutation, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
 import { filterById } from '../utils/filter-id';
@@ -27,7 +28,7 @@ function useAntennas<T = Array<Antenna>>(
   const selectFn = typeof select === 'function' ? select : undefined;
   const isEnabled = typeof select === 'boolean' ? select : enabled;
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.antennas.all,
     queryFn: () => client.antennas.fetchAntennas(),
     enabled: isLoggedIn && features.antennas && isEnabled,
@@ -151,7 +152,7 @@ const useRemoveExcludedAccountsFromAntenna = (antennaId: string) => {
 const useAntennaDomains = (antennaId: string) => {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.antennas.domains(antennaId),
     queryFn: () => client.antennas.getAntennaDomains(antennaId),
   });
@@ -207,7 +208,7 @@ const useRemoveExcludedDomainsFromAntenna = (antennaId: string) => {
 const useAntennaKeywords = (antennaId: string) => {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.antennas.keywords(antennaId),
     queryFn: () => client.antennas.getAntennaKeywords(antennaId),
   });
@@ -264,7 +265,7 @@ const useRemoveExcludedKeywordsFromAntenna = (antennaId: string) => {
 const useAntennaTags = (antennaId: string) => {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.antennas.tags(antennaId),
     queryFn: () => client.antennas.getAntennaTags(antennaId),
   });

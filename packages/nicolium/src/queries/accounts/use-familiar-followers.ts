@@ -1,10 +1,11 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 const useFamiliarFollowers = (accountId: string) => {
   const client = useClient();
@@ -12,7 +13,7 @@ const useFamiliarFollowers = (accountId: string) => {
   const { isLoggedIn } = useLoggedIn();
   const queryClient = useQueryClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.accountsLists.familiarFollowers(accountId),
     queryFn: () =>
       batcher

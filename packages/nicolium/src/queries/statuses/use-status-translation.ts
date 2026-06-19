@@ -1,8 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -12,7 +11,7 @@ const useStatusTranslation = (statusId: string, targetLanguage?: string) => {
   const client = useClient();
   const features = useFeatures();
 
-  return useQuery<Translation | false>({
+  return useAppQuery<Translation | false>({
     queryKey: queryKeys.statuses.translations(statusId, targetLanguage!),
     queryFn: () =>
       (features.lazyTranslations && targetLanguage

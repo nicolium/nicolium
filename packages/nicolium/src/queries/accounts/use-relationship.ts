@@ -1,4 +1,4 @@
-import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { batcher } from '@/api/batcher';
@@ -6,6 +6,7 @@ import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 import { useContextsActions } from '@/stores/contexts';
 import { useTimelinesActions } from '@/stores/timelines';
 
@@ -52,7 +53,7 @@ const useRelationshipQuery = (accountId?: string) => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.accountRelationships.show(accountId!),
     queryFn: () =>
       batcher

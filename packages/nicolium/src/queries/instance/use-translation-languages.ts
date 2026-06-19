@@ -1,8 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useAppQuery } from '@/queries/query';
 import { useInstance } from '@/stores/instance';
 
 import { queryKeys } from '../keys';
@@ -28,7 +27,7 @@ const useTranslationLanguages = () => {
     return await client.instance.getInstanceTranslationLanguages();
   };
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.translationLanguages.all,
     queryFn: getTranslationLanguages,
     placeholderData: {},

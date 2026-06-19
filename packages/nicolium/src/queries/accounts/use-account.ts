@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { useClient } from '@/hooks/use-client';
@@ -7,6 +7,7 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 import { useSettings } from '@/stores/settings';
 
 import type { NicoliumResponse } from '@/api';
@@ -35,7 +36,7 @@ const useAccount = (accountId?: string, withRelationship = false) => {
 
   const nickname = accountNicknames[accountId ?? ''];
 
-  const accountQuery = useQuery({
+  const accountQuery = useAppQuery({
     queryKey: queryKeys.accounts.show(accountId!),
     queryFn: async () => {
       const account = await client.accounts.getAccount(accountId!);

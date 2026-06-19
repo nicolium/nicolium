@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
 import StatusContainer from '@/components/statuses/status-container';
@@ -6,6 +5,7 @@ import Widget from '@/components/ui/widget';
 import { useClient } from '@/hooks/use-client';
 import { useAccount } from '@/queries/accounts/use-account';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 import { importEntities } from '@/queries/utils/import-entities';
 
 import Spinner from '../ui/spinner';
@@ -18,7 +18,7 @@ const AccountLatestStatusPanel: React.FC<IAccountLatestStatusPanel> = ({ account
   const client = useClient();
   const { data: account } = useAccount(accountId);
 
-  const { data: statusId, isFetching } = useQuery({
+  const { data: statusId, isFetching } = useAppQuery({
     queryKey: queryKeys.accounts.latestStatus(accountId),
     queryFn: () =>
       client.accounts

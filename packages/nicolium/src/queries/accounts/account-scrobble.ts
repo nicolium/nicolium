@@ -1,8 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 import type { Scrobble } from 'pl-api';
 
@@ -14,7 +13,7 @@ const useAccountScrobbleQuery = (accountId?: string) => {
   const client = useClient();
   const features = useFeatures();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.scrobbles.show(accountId!),
     queryFn: async () => {
       const scrobbles = await client.accounts.getScrobbles(accountId!, { limit: 1 });

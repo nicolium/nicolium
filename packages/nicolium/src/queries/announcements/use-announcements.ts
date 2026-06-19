@@ -1,9 +1,10 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { announcementReactionSchema, type AnnouncementReaction, type Announcement } from 'pl-api';
 import * as v from 'valibot';
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -43,7 +44,7 @@ const updateReactions = (
 const useAnnouncements = () => {
   const client = useClient();
 
-  const { data, ...result } = useQuery<ReadonlyArray<Announcement>>({
+  const { data, ...result } = useAppQuery<ReadonlyArray<Announcement>>({
     queryKey: queryKeys.announcements.all,
     queryFn: () => client.announcements.getAnnouncements(),
     placeholderData: [],

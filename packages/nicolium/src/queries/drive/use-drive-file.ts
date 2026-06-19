@@ -1,7 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -11,7 +12,7 @@ const useDriveFileQuery = (fileId: string) => {
   const client = useClient();
   const features = useFeatures();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.drive.files.show(fileId),
     queryFn: () => client.drive.getFile(fileId),
     enabled: features.drive,

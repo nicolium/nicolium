@@ -2,7 +2,6 @@ import {
   type InfiniteData,
   notifyManager,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import { create } from 'mutative';
@@ -11,6 +10,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useAppQuery } from '@/queries/query';
 import { importEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
@@ -95,7 +95,7 @@ const useStatusReactions = (statusId: string, emoji?: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.accountsLists.statusReactions(statusId, emoji),
     queryFn: () =>
       client.statuses.getStatusReactions(statusId, emoji).then((reactions) => {

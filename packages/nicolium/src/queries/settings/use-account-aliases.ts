@@ -1,7 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
 import { useClient } from '@/hooks/use-client';
+import { useAppQuery } from '@/queries/query';
 import toast from '@/toast';
 
 import { queryKeys } from '../keys';
@@ -20,7 +21,7 @@ const messages = defineMessages({
 const useAccountAliases = () => {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.settings.accountAliases,
     queryFn: async (): Promise<Array<string>> =>
       (await client.settings.getAccountAliases()).aliases,

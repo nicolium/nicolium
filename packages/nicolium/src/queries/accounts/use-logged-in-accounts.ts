@@ -1,15 +1,16 @@
-import { skipToken, useQueries, useQuery } from '@tanstack/react-query';
+import { skipToken, useQueries } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 import { useAuthStore } from '@/stores/auth';
 import { validId } from '@/utils/auth';
 
 import type { Account } from 'pl-api';
 
 const useLoggedInAccount = (accountId: string) => {
-  const query = useQuery<Account>({
+  const query = useAppQuery<Account>({
     queryKey: queryKeys.accounts.show(accountId),
     queryFn: skipToken,
   });

@@ -1,8 +1,9 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useAppQuery } from '@/queries/query';
 import { useInstanceStore } from '@/stores/instance';
 
 import { useAccount } from '../accounts/use-account';
@@ -25,7 +26,7 @@ const useReports = makePaginatedResponseQuery(
 const useMinimalReport = (reportId: string) => {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.admin.reports.show(reportId),
     queryFn: () => client.admin.reports.getReport(reportId).then(minifyAdminReport),
   });

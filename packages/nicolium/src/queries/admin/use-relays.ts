@@ -1,7 +1,8 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -12,7 +13,7 @@ const useRelays = () => {
 
   const getRelays = () => client.admin.relays.getRelays();
 
-  const result = useQuery<ReadonlyArray<AdminRelay>>({
+  const result = useAppQuery<ReadonlyArray<AdminRelay>>({
     queryKey: queryKeys.admin.relays,
     queryFn: getRelays,
     placeholderData: [],

@@ -1,7 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { useClient } from '@/hooks/use-client';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 type Embed = {
   type: string;
@@ -22,7 +21,7 @@ type Embed = {
 const useEmbed = (url: string) => {
   const client = useClient();
 
-  return useQuery<Embed>({
+  return useAppQuery<Embed>({
     queryKey: queryKeys.embed.show(url),
     queryFn: () => client.oembed.getOembed(url),
   });

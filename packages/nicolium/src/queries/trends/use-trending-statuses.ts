@@ -1,7 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useAppQuery } from '@/queries/query';
 import { importEntities } from '@/queries/utils/import-entities';
 
 import { queryKeys } from '../keys';
@@ -18,7 +17,7 @@ const useTrendingStatuses = () => {
     return response.map(({ id }) => id);
   };
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.trends.statuses,
     queryFn: fetchTrendingStatuses,
     enabled: features.trendingStatuses,

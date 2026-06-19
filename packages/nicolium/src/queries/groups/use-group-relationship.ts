@@ -1,8 +1,9 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
@@ -13,7 +14,7 @@ const useGroupRelationshipQuery = (groupId?: string) => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.groupRelationships.show(groupId!),
     queryFn: () =>
       batcher

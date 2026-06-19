@@ -1,4 +1,4 @@
-import { skipToken, useQuery } from '@tanstack/react-query';
+import { skipToken } from '@tanstack/react-query';
 import clsx from 'clsx';
 import React from 'react';
 
@@ -12,6 +12,7 @@ import Card from '@/components/ui/card';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 import { usePendingStatus } from '@/stores/pending-statuses';
 import { buildStatus } from '@/utils/pending-status-builder';
 
@@ -52,7 +53,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({
   const status =
     pendingStatus && ownAccount ? buildStatus(ownAccount, pendingStatus, idempotencyKey) : null;
 
-  const { data: poll } = useQuery<Poll>({
+  const { data: poll } = useAppQuery<Poll>({
     queryKey: queryKeys.statuses.polls.show(status?.poll_id ?? ''),
     queryFn: skipToken,
     enabled: !!status?.poll_id,

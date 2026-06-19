@@ -1,6 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { staticFetch } from '@/api';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -15,7 +14,7 @@ const fetchAboutPage = async (slug: string, locale?: string) => {
 };
 
 const useAboutPage = (slug = 'index', locale?: string) =>
-  useQuery({
+  useAppQuery({
     queryKey: queryKeys.frontend.aboutPages(slug, locale),
     queryFn: () => fetchAboutPage(slug, locale),
   });

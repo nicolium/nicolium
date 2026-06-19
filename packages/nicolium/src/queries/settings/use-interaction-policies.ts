@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { type InteractionPolicies, interactionPoliciesSchema } from 'pl-api';
 import * as v from 'valibot';
 
@@ -6,6 +6,7 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryClient } from '@/queries/client';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -16,7 +17,7 @@ const useInteractionPolicies = () => {
   const { isLoggedIn } = useLoggedIn();
   const features = useFeatures();
 
-  const { data, ...result } = useQuery({
+  const { data, ...result } = useAppQuery({
     queryKey: queryKeys.interactionPolicies.all,
     queryFn: client.settings.getInteractionPolicies,
     placeholderData: emptySchema,

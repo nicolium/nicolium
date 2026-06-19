@@ -1,13 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
 const usePollQuery = (pollId: string) => {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.statuses.polls.show(pollId),
     queryFn: () => client.polls.getPoll(pollId),
     enabled: !!pollId,

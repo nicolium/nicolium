@@ -1,8 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useAppQuery } from '@/queries/query';
 import { useFrontendConfigActions } from '@/stores/frontend-config';
 import { useInstanceActions } from '@/stores/instance';
 
@@ -13,7 +14,7 @@ const useAdminConfig = () => {
   const features = useFeatures();
   const { data: ownAccount } = useOwnAccount();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.admin.config,
     queryFn: () => client.admin.config.getPleromaConfig(),
     enabled: ownAccount?.is_admin && features.pleromaAdminConfig,
@@ -25,7 +26,7 @@ const useAdminConfigDescriptions = () => {
   const features = useFeatures();
   const { data: ownAccount } = useOwnAccount();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.admin.configDescriptions,
     queryFn: () => client.admin.config.getPleromaConfigDescriptions(),
     enabled: ownAccount?.is_admin && features.pleromaAdminConfig,

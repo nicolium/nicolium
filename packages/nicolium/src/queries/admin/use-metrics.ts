@@ -1,6 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { useClient } from '@/hooks/use-client';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -14,7 +13,7 @@ import type {
 const useDimensions = (keys: AdminDimensionKey[], params?: AdminGetDimensionsParams) => {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.admin.dimensions(keys, params),
     queryFn: () => client.admin.dimensions.getDimensions(keys, params),
     enabled: client.features.mastodonAdminMetrics,
@@ -29,7 +28,7 @@ const useMeasures = (
 ) => {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.admin.measures(keys, startAt, endAt, params),
     queryFn: () => client.admin.measures.getMeasures(keys, startAt, endAt, params),
     enabled: client.features.mastodonAdminMetrics,
@@ -39,7 +38,7 @@ const useMeasures = (
 const useRetention = (startAt: string, endAt: string, frequency: 'day' | 'month') => {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.admin.retention(startAt, endAt, frequency),
     queryFn: () => client.admin.retention.getRetention(startAt, endAt, frequency),
     enabled: client.features.mastodonAdminMetrics,

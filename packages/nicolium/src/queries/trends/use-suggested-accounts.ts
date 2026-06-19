@@ -2,7 +2,6 @@ import {
   keepPreviousData,
   notifyManager,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 
@@ -10,6 +9,7 @@ import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useAppQuery } from '@/queries/query';
 import { removePageItem } from '@/utils/queries';
 
 import { queryKeys } from '../keys';
@@ -39,7 +39,7 @@ const useSuggestedAccounts = () => {
     return response.map(({ account, ...x }) => ({ ...x, account_id: account.id }));
   };
 
-  const query = useQuery({
+  const query = useAppQuery({
     queryKey: queryKeys.suggestions.all,
     queryFn: () => getSuggestions(),
     placeholderData: keepPreviousData,

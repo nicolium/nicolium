@@ -1,7 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -9,7 +10,7 @@ const useDriveFolderQuery = (folderId?: string) => {
   const client = useClient();
   const features = useFeatures();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.drive.folders.show(folderId),
     queryFn: () => (folderId ? client.drive.getFolder(folderId) : client.drive.getDrive()),
     enabled: features.drive,

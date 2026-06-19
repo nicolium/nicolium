@@ -1,7 +1,8 @@
-import { queryOptions, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { queryOptions, type UseQueryResult } from '@tanstack/react-query';
 
 import { addCustomToPool } from '@/features/emoji/search';
 import { useClient } from '@/hooks/use-client';
+import { useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
@@ -24,7 +25,7 @@ function useCustomEmojis(): UseQueryResult<Array<CustomEmoji>, Error>;
 function useCustomEmojis<T = Array<CustomEmoji>>(select?: (data: Array<CustomEmoji>) => T) {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     ...customEmojisQueryOptions(client),
     select,
   });

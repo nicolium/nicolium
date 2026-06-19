@@ -2,7 +2,6 @@ import {
   type InfiniteData,
   useInfiniteQuery,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 
@@ -10,6 +9,7 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useAppQuery } from '@/queries/query';
 import { getTagDiff } from '@/utils/badges';
 
 import { queryKeys } from '../keys';
@@ -40,7 +40,7 @@ const useAdminAccount = (accountId?: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
-  const query = useQuery<AdminAccount>({
+  const query = useAppQuery<AdminAccount>({
     queryKey: queryKeys.admin.accounts.show(accountId!),
     queryFn: () =>
       client.admin.accounts.getAccount(accountId!).then(({ account, ...adminAccount }) => {

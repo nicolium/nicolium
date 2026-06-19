@@ -1,7 +1,6 @@
 import {
   useMutation,
   useQueries,
-  useQuery,
   useQueryClient,
   type UseQueryResult,
 } from '@tanstack/react-query';
@@ -10,6 +9,7 @@ import { useMemo } from 'react';
 import { decrementReplyCount, incrementReplyCount } from '@/actions/statuses';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useAppQuery } from '@/queries/query';
 import { useFilters } from '@/queries/settings/use-filters';
 import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
 import { importEntities } from '@/queries/utils/import-entities';
@@ -51,7 +51,7 @@ const useMinimalStatus = (statusId?: string) => {
   const client = useClient();
   const contextsActions = useContextsActions();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.statuses.show(statusId!),
     queryFn: () =>
       client.statuses.getStatus(statusId!).then((status) => {
@@ -138,7 +138,7 @@ const useStatusContext = (statusId?: string) => {
   const client = useClient();
   const { importContext, setAsyncRefreshHeader, clearAsyncRefreshHeader } = useContextsActions();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.statuses.contexts(statusId!),
     queryFn: () =>
       client.statuses.getContext(statusId!).then((context) => {

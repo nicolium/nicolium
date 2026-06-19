@@ -1,7 +1,8 @@
-import { useMutation, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
@@ -22,7 +23,7 @@ function useBookmarkFolders<T = Array<BookmarkFolder>>(
   const selectFn = typeof select === 'function' ? select : undefined;
   const isEnabled = typeof select === 'boolean' ? select : enabled;
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.bookmarkFolders.all,
     queryFn: () => client.myAccount.getBookmarkFolders(),
     enabled: features.bookmarkFolders && isEnabled,
@@ -82,7 +83,7 @@ const useStatusBookmarkFolders = (statusId: string) => {
   const client = useClient();
   const features = useFeatures();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.bookmarkFolders.forStatus(statusId),
     queryFn: () =>
       client.statuses

@@ -1,9 +1,10 @@
-import { useMutation, useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryKeys } from '@/queries/keys';
+import { useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
 import { filterById } from '../utils/filter-id';
@@ -21,7 +22,7 @@ function useLists<T = Array<List>>(select?: ((data: Array<List>) => T) | boolean
   const selectFn = typeof select === 'function' ? select : undefined;
   const isEnabled = typeof select === 'boolean' ? select : enabled;
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.lists.all,
     queryFn: () => client.lists.getLists(),
     enabled: isLoggedIn && features.lists && isEnabled,
@@ -111,7 +112,7 @@ const useRemoveAccountsFromList = (listId: string) => {
 const useListsForAccount = (accountId: string) => {
   const client = useClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.lists.forAccount(accountId),
     queryFn: () =>
       client.accounts.getAccountLists(accountId).then((lists) => lists.map((list) => list.id)),

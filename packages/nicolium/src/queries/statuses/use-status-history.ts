@@ -1,6 +1,7 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -17,7 +18,7 @@ const useStatusHistory = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.statuses.history(statusId),
     queryFn: async () => {
       const history = await client.statuses.getStatusHistory(statusId);

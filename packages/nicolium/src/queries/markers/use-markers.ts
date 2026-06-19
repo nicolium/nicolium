@@ -1,8 +1,9 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -10,7 +11,7 @@ const useMarker = (timeline: 'home' | 'notifications') => {
   const client = useClient();
   const { me } = useLoggedIn();
 
-  return useQuery({
+  return useAppQuery({
     queryKey: queryKeys.markers.timeline(timeline),
     queryFn: async () => (await client.timelines.getMarkers([timeline]))[timeline] ?? null,
     enabled: !!me,
