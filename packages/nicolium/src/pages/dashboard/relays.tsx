@@ -46,28 +46,20 @@ const Relay: React.FC<IRelay> = ({ relay }) => {
             <span>
               <FormattedMessage id='admin.relays.url' defaultMessage='Instance URL:' />
             </span>{' '}
-            {relay.actor}
+            {relay.relay_actor_uri}
           </p>
           {relay.followed_back && (
             <span>
               <FormattedMessage id='admin.relays.followed_back' defaultMessage='Followed back' />
             </span>
           )}
-          {relay.status && (
+          {(relay.approved || relay.rejected) && (
             <div className='admin-relay__status'>
-              <Indicator
-                state={
-                  relay.status === 'accepted'
-                    ? 'active'
-                    : relay.status === 'rejected'
-                      ? 'error'
-                      : 'pending'
-                }
-              />
+              <Indicator state={relay.approved ? 'active' : relay.rejected ? 'error' : 'pending'} />
               <span>
-                {relay.status === 'accepted' ? (
+                {relay.approved ? (
                   <FormattedMessage id='admin.relays.status.accepted' defaultMessage='Accepted' />
-                ) : relay.status === 'rejected' ? (
+                ) : relay.rejected ? (
                   <FormattedMessage id='admin.relays.status.rejected' defaultMessage='Rejected' />
                 ) : (
                   <FormattedMessage

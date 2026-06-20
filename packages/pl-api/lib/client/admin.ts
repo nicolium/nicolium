@@ -2,15 +2,22 @@ import * as v from 'valibot';
 
 import {
   adminAccountSchema,
+  adminActionResponseSchema,
   adminAnnouncementSchema,
   adminCanonicalEmailBlockSchema,
   adminCohortSchema,
+  adminCustomEmojiCategorySchema,
   adminCustomEmojiSchema,
   adminDimensionSchema,
   adminDomainAllowSchema,
   adminDomainBlockSchema,
+  adminDomainLimitSchema,
+  adminDomainPermissionSchema,
+  adminDomainPermissionSubscriptionSchema,
   adminDomainSchema,
   adminEmailDomainBlockSchema,
+  adminHeaderFilterSchema,
+  adminInstanceSchema,
   adminInviteSchema,
   adminIpBlockSchema,
   adminMeasureSchema,
@@ -47,7 +54,12 @@ import type {
   AdminCreateAnnouncementParams,
   AdminCreateCustomEmojiParams,
   AdminCreateDomainBlockParams,
+  AdminCreateDomainLimitParams,
   AdminCreateDomainParams,
+  AdminCreateDomainPermissionDraftParams,
+  AdminCreateDomainPermissionExcludeParams,
+  AdminCreateDomainPermissionSubscriptionParams,
+  AdminCreateHeaderFilterParams,
   AdminCreateIpBlockParams,
   AdminCreateRuleParams,
   AdminDimensionKey,
@@ -58,17 +70,27 @@ import type {
   AdminGetDimensionsParams,
   AdminGetDomainAllowsParams,
   AdminGetDomainBlocksParams,
+  AdminGetDomainLimitsParams,
+  AdminGetDomainPermissionDraftsParams,
+  AdminGetDomainPermissionExcludesParams,
+  AdminGetDomainPermissionSubscriptionsParams,
   AdminGetEmailDomainBlocksParams,
+  AdminGetInstancesParams,
   AdminGetIpBlocksParams,
   AdminGetMeasuresParams,
   AdminGetModerationLogParams,
   AdminGetReportsParams,
   AdminGetStatusesParams,
   AdminMeasureKey,
+  AdminMediaCleanupParams,
   AdminPerformAccountActionParams,
+  AdminRelayMatcherParams,
   AdminUpdateAnnouncementParams,
   AdminUpdateCustomEmojiParams,
   AdminUpdateDomainBlockParams,
+  AdminUpdateDomainLimitParams,
+  AdminUpdateDomainPermissionSubscriptionParams,
+  AdminUpdateRelaySubscriptionParams,
   AdminUpdateReportParams,
   AdminUpdateRuleParams,
   AdminUpdateStatusParams,
@@ -988,6 +1010,22 @@ const admin = (client: PlApiBaseClient) => {
 
         return response.json;
       },
+
+      /**
+       * Force expiry of cached public keys for all accounts on the given domain stored in your database.
+       *
+       * Requires features{@link Features.adminDomainKeysExpire}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      expireDomainKeys: async (domain: string) => {
+        const response = await client.request('/api/v1/admin/domain_keys_expire', {
+          method: 'POST',
+          body: { domain },
+          formData: true,
+        });
+
+        return v.parse(adminActionResponseSchema, response.json);
+      },
     },
 
     /** Perform moderation actions with reports. */
@@ -1877,17 +1915,20 @@ const admin = (client: PlApiBaseClient) => {
       /**
        * List Relays
        *
-       * Requires features{@link Features.pleromaAdminRelays}.
+       * Requires features{@link Features.pleromaAdminRelays} or features{@link Features.iceshrimpAdmin} or features{@link Features.adminRelaySubscriptions}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminrelay}
        */
       getRelays: async () => {
         let response;
 
-        if (client.features.version.software === ICESHRIMP_NET) {
+        if (client.features.adminRelaySubscriptions) {
+          response = await client.request('/api/v1/admin/relay_subscriptions');
+        } else if (client.features.version.software === ICESHRIMP_NET) {
           await client.getIceshrimpAccessToken();
           response = await client.request('/api/iceshrimp/admin/relays');
         } else {
           response = await client.request('/api/v1/pleroma/admin/relay');
+          response.json = response.json.relays;
         }
 
         return v.parse(filteredArray(adminRelaySchema), response.json);
@@ -1896,22 +1937,27 @@ const admin = (client: PlApiBaseClient) => {
       /**
        * Follow a Relay
        *
-       * Requires features{@link Features.pleromaAdminRelays}.
+       * Requires features{@link Features.pleromaAdminRelays} or features{@link Features.iceshrimpAdmin} or features{@link Features.adminRelaySubscriptions}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminrelay}
        */
-      followRelay: async (relayUrl: string) => {
+      followRelay: async (relayActorUri: string, params?: AdminUpdateRelaySubscriptionParams) => {
         let response;
 
-        if (client.features.version.software === ICESHRIMP_NET) {
+        if (client.features.adminRelaySubscriptions) {
+          response = await client.request('/api/v1/admin/relay_subscriptions', {
+            method: 'POST',
+            body: { ...params, relay_actor_uri: relayActorUri },
+          });
+        } else if (client.features.version.software === ICESHRIMP_NET) {
           await client.getIceshrimpAccessToken();
           response = await client.request('/api/iceshrimp/admin/relays', {
             method: 'POST',
-            body: { inbox: relayUrl },
+            body: { inbox: relayActorUri },
           });
         } else {
           response = await client.request('/api/v1/pleroma/admin/relay', {
             method: 'POST',
-            body: { relay_url: relayUrl },
+            body: { relay_url: relayActorUri },
           });
         }
 
@@ -1921,25 +1967,107 @@ const admin = (client: PlApiBaseClient) => {
       /**
        * Unfollow a Relay
        *
-       * Requires features{@link Features.pleromaAdminRelays}.
+       * Requires features{@link Features.pleromaAdminRelays} or features{@link Features.iceshrimpAdmin} or features{@link Features.adminRelaySubscriptions}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#delete-apiv1pleromaadminrelay}
        */
-      unfollowRelay: async (id: string, force = false) => {
+      unfollowRelay: async (subscriptionId: string, force = false) => {
         let response;
 
-        if (client.features.version.software === ICESHRIMP_NET) {
+        if (client.features.adminRelaySubscriptions) {
+          response = await client.request(`/api/v1/admin/relay_subscriptions/${subscriptionId}`, {
+            method: 'DELETE',
+          });
+        } else if (client.features.version.software === ICESHRIMP_NET) {
           await client.getIceshrimpAccessToken();
-          response = await client.request(`/api/iceshrimp/admin/relays/${id}`, {
+          response = await client.request(`/api/iceshrimp/admin/relays/${subscriptionId}`, {
             method: 'DELETE',
           });
         } else {
           response = await client.request('/api/v1/pleroma/admin/relay', {
             method: 'DELETE',
-            body: { relay_url: id, force },
+            body: { relay_url: subscriptionId, force },
           });
         }
 
         return v.parse(v.optional(adminRelaySchema), response.json);
+      },
+
+      /**
+       * View relay subscription with the given ID.
+       *
+       * Requires features{@link Features.adminRelaySubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getRelay: async (subscriptionId: string) => {
+        const response = await client.request(
+          `/api/v1/admin/relay_subscriptions/${subscriptionId}`,
+        );
+
+        return v.parse(adminRelaySchema, response.json);
+      },
+
+      /**
+       * Update a relay subscription.
+       *
+       * Requires features{@link Features.adminRelaySubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      updateRelay: async (subscriptionId: string, params: AdminUpdateRelaySubscriptionParams) => {
+        const response = await client.request(
+          `/api/v1/admin/relay_subscriptions/${subscriptionId}`,
+          { method: 'PUT', body: params },
+        );
+
+        return v.parse(adminRelaySchema, response.json);
+      },
+
+      /**
+       * Add a relay matcher to a relay subscription.
+       *
+       * Requires features{@link Features.adminRelaySubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      createRelayMatcher: async (subscriptionId: string, params: AdminRelayMatcherParams) => {
+        const response = await client.request(
+          `/api/v1/admin/relay_subscriptions/${subscriptionId}/matchers`,
+          { method: 'POST', body: params },
+        );
+
+        return v.parse(adminRelaySchema, response.json);
+      },
+
+      /**
+       * Remove a relay matcher from a relay subscription.
+       *
+       * Requires features{@link Features.adminRelaySubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      deleteRelayMatcher: async (subscriptionId: string, matcherId: string) => {
+        const response = await client.request(
+          `/api/v1/admin/relay_subscriptions/${subscriptionId}/matchers/${matcherId}`,
+          { method: 'DELETE' },
+        );
+
+        return v.parse(adminRelaySchema, response.json);
+      },
+
+      /**
+       * Update a relay matcher on a relay subscription.
+       *
+       * Requires features{@link Features.adminRelaySubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      updateRelayMatcher: async (
+        subscriptionId: string,
+        matcherId: string,
+        params: AdminRelayMatcherParams,
+      ) => {
+        const response = await client.request(
+          `/api/v1/admin/relay_subscriptions/${subscriptionId}/matchers/${matcherId}`,
+          { method: 'PUT', body: params },
+        );
+
+        return v.parse(adminRelaySchema, response.json);
       },
     },
 
@@ -2054,6 +2182,18 @@ const admin = (client: PlApiBaseClient) => {
         client.paginatedGet('/api/v1/admin/custom_emojis', { params }, adminCustomEmojiSchema),
 
       /**
+       * Get a list of existing custom emoji categories.
+       *
+       * Requires features{@link Features.adminCustomEmojiCategories}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getCustomEmojiCategories: async () => {
+        const response = await client.request('/api/v1/admin/custom_emojis/categories');
+
+        return v.parse(filteredArray(adminCustomEmojiCategorySchema), response.json);
+      },
+
+      /**
        * Get the admin view of a single emoji.
        *
        * Requires features{@link Features.adminCustomEmojis}.
@@ -2158,6 +2298,517 @@ const admin = (client: PlApiBaseClient) => {
           method: 'POST',
           body: params,
         });
+      },
+    },
+
+    domainLimits: {
+      /**
+       * View domain limits currently in place.
+       *
+       * Requires features{@link Features.adminDomainLimits}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getDomainLimits: (params?: AdminGetDomainLimitsParams) =>
+        client.paginatedGet('/api/v1/admin/domain_limits', { params }, adminDomainLimitSchema),
+
+      /**
+       * Create a domain limit.
+       *
+       * Requires features{@link Features.adminDomainLimits}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      createDomainLimit: async (params: AdminCreateDomainLimitParams) => {
+        const response = await client.request('/api/v1/admin/domain_limits', {
+          method: 'POST',
+          body: params,
+        });
+
+        return v.parse(adminDomainLimitSchema, response.json);
+      },
+
+      /**
+       * Update a domain limit.
+       *
+       * Requires features{@link Features.adminDomainLimits}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      updateDomainLimit: async (domainLimitId: string, params: AdminUpdateDomainLimitParams) => {
+        const response = await client.request(`/api/v1/admin/domain_limits/${domainLimitId}`, {
+          method: 'PUT',
+          body: params,
+        });
+
+        return v.parse(adminDomainLimitSchema, response.json);
+      },
+
+      /**
+       * Delete domain limit with the given ID.
+       *
+       * Requires features{@link Features.adminDomainLimits}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      deleteDomainLimit: async (domainLimitId: string) => {
+        const response = await client.request(`/api/v1/admin/domain_limits/${domainLimitId}`, {
+          method: 'DELETE',
+        });
+
+        return v.parse(adminDomainLimitSchema, response.json);
+      },
+    },
+
+    domainPermissionDrafts: {
+      /**
+       * View domain permission drafts.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getDomainPermissionDrafts: (params?: AdminGetDomainPermissionDraftsParams) =>
+        client.paginatedGet(
+          '/api/v1/admin/domain_permission_drafts',
+          { params },
+          adminDomainPermissionSchema,
+        ),
+
+      /**
+       * Get domain permission draft with the given ID.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getDomainPermissionDraft: async (draftId: string) => {
+        const response = await client.request(`/api/v1/admin/domain_permission_drafts/${draftId}`);
+
+        return v.parse(adminDomainPermissionSchema, response.json);
+      },
+
+      /**
+       * Create a domain permission draft with the given parameters.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      createDomainPermissionDraft: async (params: AdminCreateDomainPermissionDraftParams) => {
+        const response = await client.request('/api/v1/admin/domain_permission_drafts', {
+          method: 'POST',
+          body: params,
+        });
+
+        return v.parse(adminDomainPermissionSchema, response.json);
+      },
+
+      /**
+       * Accept a domain permission draft, turning it into an enforced domain permission.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      acceptDomainPermissionDraft: async (draftId: string, overwrite?: boolean) => {
+        const response = await client.request(
+          `/api/v1/admin/domain_permission_drafts/${draftId}/accept`,
+          { method: 'POST', body: { overwrite } },
+        );
+
+        return v.parse(adminDomainPermissionSchema, response.json);
+      },
+
+      /**
+       * Remove a domain permission draft, optionally ignoring all future drafts targeting the given domain.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      removeDomainPermissionDraft: async (draftId: string, excludeTarget?: boolean) => {
+        const response = await client.request(
+          `/api/v1/admin/domain_permission_drafts/${draftId}/remove`,
+          { method: 'POST', body: { exclude_target: excludeTarget } },
+        );
+
+        return v.parse(adminDomainPermissionSchema, response.json);
+      },
+    },
+
+    domainPermissionExcludes: {
+      /**
+       * View domain permission excludes.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getDomainPermissionExcludes: (params?: AdminGetDomainPermissionExcludesParams) =>
+        client.paginatedGet(
+          '/api/v1/admin/domain_permission_excludes',
+          { params },
+          adminDomainPermissionSchema,
+        ),
+
+      /**
+       * Get domain permission exclude with the given ID.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getDomainPermissionExclude: async (excludeId: string) => {
+        const response = await client.request(
+          `/api/v1/admin/domain_permission_excludes/${excludeId}`,
+        );
+
+        return v.parse(adminDomainPermissionSchema, response.json);
+      },
+
+      /**
+       * Create a domain permission exclude with the given parameters.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      createDomainPermissionExclude: async (params: AdminCreateDomainPermissionExcludeParams) => {
+        const response = await client.request('/api/v1/admin/domain_permission_excludes', {
+          method: 'POST',
+          body: params,
+        });
+
+        return v.parse(adminDomainPermissionSchema, response.json);
+      },
+
+      /**
+       * Remove a domain permission exclude.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      deleteDomainPermissionExclude: async (excludeId: string) => {
+        const response = await client.request(
+          `/api/v1/admin/domain_permission_excludes/${excludeId}`,
+          { method: 'DELETE' },
+        );
+
+        return v.parse(adminDomainPermissionSchema, response.json);
+      },
+    },
+
+    domainPermissionSubscriptions: {
+      /**
+       * View domain permission subscriptions.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getDomainPermissionSubscriptions: (params?: AdminGetDomainPermissionSubscriptionsParams) =>
+        client.paginatedGet(
+          '/api/v1/admin/domain_permission_subscriptions',
+          { params },
+          adminDomainPermissionSubscriptionSchema,
+        ),
+
+      /**
+       * View all domain permission subscriptions of the given permission type, in priority order (highest to lowest).
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getDomainPermissionSubscriptionsPreview: async (permissionType: 'block' | 'allow') => {
+        const response = await client.request(
+          '/api/v1/admin/domain_permission_subscriptions/preview',
+          { params: { permission_type: permissionType } },
+        );
+
+        return v.parse(filteredArray(adminDomainPermissionSubscriptionSchema), response.json);
+      },
+
+      /**
+       * Get domain permission subscription with the given ID.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getDomainPermissionSubscription: async (subscriptionId: string) => {
+        const response = await client.request(
+          `/api/v1/admin/domain_permission_subscriptions/${subscriptionId}`,
+        );
+
+        return v.parse(adminDomainPermissionSubscriptionSchema, response.json);
+      },
+
+      /**
+       * Create a domain permission subscription with the given parameters.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      createDomainPermissionSubscription: async (
+        params: AdminCreateDomainPermissionSubscriptionParams,
+      ) => {
+        const response = await client.request('/api/v1/admin/domain_permission_subscriptions', {
+          method: 'POST',
+          body: params,
+        });
+
+        return v.parse(adminDomainPermissionSubscriptionSchema, response.json);
+      },
+
+      /**
+       * Update a domain permission subscription with the given parameters.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      updateDomainPermissionSubscription: async (
+        subscriptionId: string,
+        params: AdminUpdateDomainPermissionSubscriptionParams,
+      ) => {
+        const response = await client.request(
+          `/api/v1/admin/domain_permission_subscriptions/${subscriptionId}`,
+          { method: 'PATCH', body: params },
+        );
+
+        return v.parse(adminDomainPermissionSubscriptionSchema, response.json);
+      },
+
+      /**
+       * Test one domain permission subscription by making your instance fetch and parse it *without creating permissions*.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      testDomainPermissionSubscription: async (subscriptionId: string) => {
+        const response = await client.request(
+          `/api/v1/admin/domain_permission_subscriptions/${subscriptionId}/test`,
+          { method: 'POST' },
+        );
+
+        return v.parse(filteredArray(adminDomainPermissionSchema), response.json);
+      },
+
+      /**
+       * Remove a domain permission subscription.
+       *
+       * Requires features{@link Features.adminDomainPermissionSubscriptions}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      removeDomainPermissionSubscription: async (
+        subscriptionId: string,
+        removeChildren?: boolean,
+      ) => {
+        const response = await client.request(
+          `/api/v1/admin/domain_permission_subscriptions/${subscriptionId}/remove`,
+          { method: 'POST', body: { remove_children: removeChildren } },
+        );
+
+        return v.parse(adminDomainPermissionSubscriptionSchema, response.json);
+      },
+    },
+
+    headerFilters: {
+      /**
+       * Get all "allow" header filters currently in place.
+       *
+       * Requires features{@link Features.adminHeaderFilters}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getHeaderAllows: async () => {
+        const response = await client.request('/api/v1/admin/header_allows');
+
+        return v.parse(filteredArray(adminHeaderFilterSchema), response.json);
+      },
+
+      /**
+       * Get "allow" header filter with the given ID.
+       *
+       * Requires features{@link Features.adminHeaderFilters}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getHeaderAllow: async (headerFilterId: string) => {
+        const response = await client.request(`/api/v1/admin/header_allows/${headerFilterId}`);
+
+        return v.parse(adminHeaderFilterSchema, response.json);
+      },
+
+      /**
+       * Create new "allow" HTTP request header filter.
+       *
+       * Requires features{@link Features.adminHeaderFilters}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      createHeaderAllow: async (params: AdminCreateHeaderFilterParams) => {
+        const response = await client.request('/api/v1/admin/header_allows', {
+          method: 'POST',
+          body: params,
+        });
+
+        return v.parse(adminHeaderFilterSchema, response.json);
+      },
+
+      /**
+       * Delete the "allow" header filter with the given ID.
+       *
+       * Requires features{@link Features.adminHeaderFilters}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      deleteHeaderAllow: async (headerFilterId: string) => {
+        const response = await client.request<EmptyObject>(
+          `/api/v1/admin/header_allows/${headerFilterId}`,
+          { method: 'DELETE' },
+        );
+
+        return response.json;
+      },
+
+      /**
+       * Get all "block" header filters currently in place.
+       *
+       * Requires features{@link Features.adminHeaderFilters}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getHeaderBlocks: async () => {
+        const response = await client.request('/api/v1/admin/header_blocks');
+
+        return v.parse(filteredArray(adminHeaderFilterSchema), response.json);
+      },
+
+      /**
+       * Get "block" header filter with the given ID.
+       *
+       * Requires features{@link Features.adminHeaderFilters}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getHeaderBlock: async (headerFilterId: string) => {
+        const response = await client.request(`/api/v1/admin/header_blocks/${headerFilterId}`);
+
+        return v.parse(adminHeaderFilterSchema, response.json);
+      },
+
+      /**
+       * Create new "block" HTTP request header filter.
+       *
+       * Requires features{@link Features.adminHeaderFilters}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      createHeaderBlock: async (params: AdminCreateHeaderFilterParams) => {
+        const response = await client.request('/api/v1/admin/header_blocks', {
+          method: 'POST',
+          body: params,
+        });
+
+        return v.parse(adminHeaderFilterSchema, response.json);
+      },
+
+      /**
+       * Delete the "block" header filter with the given ID.
+       *
+       * Requires features{@link Features.adminHeaderFilters}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      deleteHeaderBlock: async (headerFilterId: string) => {
+        const response = await client.request<EmptyObject>(
+          `/api/v1/admin/header_blocks/${headerFilterId}`,
+          { method: 'DELETE' },
+        );
+
+        return response.json;
+      },
+    },
+
+    instances: {
+      /**
+       * Show admin view of instances.
+       *
+       * Requires features{@link Features.adminInstances}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getInstances: (params?: AdminGetInstancesParams) =>
+        client.paginatedGet('/api/v1/admin/instances', { params }, adminInstanceSchema),
+
+      /**
+       * Show admin view of one instance.
+       *
+       * Requires features{@link Features.adminInstances}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getInstance: async (instanceId: string) => {
+        const response = await client.request(`/api/v1/admin/instances/${instanceId}`);
+
+        return v.parse(adminInstanceSchema, response.json);
+      },
+
+      /**
+       * Clear delivery errors for instance with given ID.
+       *
+       * Requires features{@link Features.adminInstances}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      clearInstanceDeliveryErrors: async (instanceId: string) => {
+        const response = await client.request(
+          `/api/v1/admin/instances/${instanceId}/clear_delivery_errors`,
+          { method: 'POST' },
+        );
+
+        return v.parse(adminInstanceSchema, response.json);
+      },
+    },
+
+    /** Perform media moderation and housekeeping actions. */
+    media: {
+      /**
+       * Clean up remote media older than the specified number of days.
+       *
+       * Requires features{@link Features.adminMediaModeration}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      cleanupMedia: async (params?: AdminMediaCleanupParams) => {
+        const response = await client.request<EmptyObject>('/api/v1/admin/media_cleanup', {
+          method: 'POST',
+          params,
+        });
+
+        return response.json;
+      },
+
+      /**
+       * Purge all media (attachments, avatars, headers, emojis) from the given domain, completely removing them from storage.
+       *
+       * Requires features{@link Features.adminMediaModeration}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      purgeMedia: async (domain?: string) => {
+        const response = await client.request<EmptyObject>('/api/v1/admin/media_purge', {
+          method: 'POST',
+          params: { domain },
+        });
+
+        return response.json;
+      },
+
+      /** Refetch media specified in the database but missing from storage.
+       *
+       * Requires features{@link Features.adminMediaModeration}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      refetchMedia: async (domain?: string) => {
+        const response = await client.request<EmptyObject>('/api/v1/admin/media_refetch', {
+          method: 'POST',
+          params: { domain },
+        });
+
+        return response.json;
+      },
+    },
+
+    email: {
+      /**
+       * Send a generic test email to a specified email address.
+       *
+       * Requires features{@link Features.adminEmailTest}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      sendTestEmail: async (email: string, message?: string) => {
+        const response = await client.request<EmptyObject>('/api/v1/admin/email/test', {
+          method: 'POST',
+          body: { email, message },
+          formData: true,
+        });
+
+        return response.json;
       },
     },
   };

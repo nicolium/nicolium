@@ -343,6 +343,12 @@ const getFeatures = (instance: Instance) => {
     adminCustomEmojis: v.software === GOTOSOCIAL,
 
     /**
+     * Ability to list known custom emoji categories.
+     * @see GET /api/v1/admin/custom_emojis/categories
+     */
+    adminCustomEmojiCategories: v.software === GOTOSOCIAL,
+
+    /**
      * Ability to delete statuses by admins.
      * @see DELETE /api/v1/pleroma/admin/statuses/:id
      * @see DELETE /api/v1/admin/posts/:id
@@ -372,6 +378,89 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === PLEROMA,
     ]),
+
+    /**
+     * Ability to expire (and force re-fetch of) the public keys of all
+     * accounts on a given domain.
+     * @see POST /api/v1/admin/domain_keys_expire
+     */
+    adminDomainKeysExpire: v.software === GOTOSOCIAL,
+
+    /**
+     * Ability to manage per-domain account/follow/posting limits.
+     * @see GET /api/v1/admin/domain_limits
+     * @see POST /api/v1/admin/domain_limits
+     * @see GET /api/v1/admin/domain_limits/:id
+     * @see DELETE /api/v1/admin/domain_limits/:id
+     */
+    adminDomainLimits: v.software === GOTOSOCIAL,
+
+    /**
+     * Ability to manage domain permission (block/allow) drafts.
+     * @see GET /api/v1/admin/domain_permission_drafts
+     * @see POST /api/v1/admin/domain_permission_drafts
+     * @see GET /api/v1/admin/domain_permission_drafts/:id
+     * @see POST /api/v1/admin/domain_permission_drafts/:id/accept
+     * @see POST /api/v1/admin/domain_permission_drafts/:id/remove
+     * @see GET /api/v1/admin/domain_permission_excludes
+     * @see POST /api/v1/admin/domain_permission_excludes
+     * @see GET /api/v1/admin/domain_permission_excludes/:id
+     * @see DELETE /api/v1/admin/domain_permission_excludes/:id
+     * @see GET /api/v1/admin/domain_permission_subscriptions
+     * @see POST /api/v1/admin/domain_permission_subscriptions
+     * @see GET /api/v1/admin/domain_permission_subscriptions/preview
+     * @see GET /api/v1/admin/domain_permission_subscriptions/:id
+     * @see POST /api/v1/admin/domain_permission_subscriptions/:id/test
+     * @see POST /api/v1/admin/domain_permission_subscriptions/:id/remove
+     */
+    adminDomainPermissionSubscriptions: v.software === GOTOSOCIAL && gte(v.version, '0.18.0'),
+
+    /**
+     * Ability to send a test email to a given address.
+     * @see POST /api/v1/admin/email/test
+     */
+    adminEmailTest: v.software === GOTOSOCIAL,
+
+    /**
+     * Ability to manage HTTP request header filters (allow/block).
+     * @see GET /api/v1/admin/header_allows
+     * @see POST /api/v1/admin/header_allows
+     * @see GET /api/v1/admin/header_allows/:id
+     * @see DELETE /api/v1/admin/header_allows/:id
+     * @see GET /api/v1/admin/header_blocks
+     * @see POST /api/v1/admin/header_blocks
+     * @see GET /api/v1/admin/header_blocks/:id
+     * @see DELETE /api/v1/admin/header_blocks/:id
+     */
+    adminHeaderFilters: v.software === GOTOSOCIAL && gte(v.version, '0.16.0'),
+
+    /**
+     * Ability to view known instances (peers) and their details.
+     * @see GET /api/v1/admin/instances
+     * @see GET /api/v1/admin/instances/:id
+     * @see POST /api/v1/admin/instances/:id/clear_delivery_errors
+     */
+    adminInstances: v.software === GOTOSOCIAL,
+
+    /**
+     * Ability to perform media moderation actions.
+     * @see POST /api/v1/admin/media_cleanup
+     * @see POST /api/v1/admin/media_refetch
+     * @see POST /api/v1/admin/media_purge
+     */
+    adminMediaModeration: v.software === GOTOSOCIAL,
+
+    /**
+     * Ability to manage relay subscriptions and their matchers.
+     * @see GET /api/v1/admin/relay_subscriptions
+     * @see POST /api/v1/admin/relay_subscriptions
+     * @see GET /api/v1/admin/relay_subscriptions/:id
+     * @see DELETE /api/v1/admin/relay_subscriptions/:id
+     * @see GET /api/v1/admin/relay_subscriptions/:id/matchers
+     * @see POST /api/v1/admin/relay_subscriptions/:id/matchers
+     * @see DELETE /api/v1/admin/relay_subscriptions/:id/matchers/:matcher_id
+     */
+    adminRelaySubscriptions: v.software === GOTOSOCIAL,
 
     /**
      * @see POST /api/iceshrimp/moderation/reports/:id/forward
