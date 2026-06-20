@@ -21,6 +21,12 @@ import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
 
 const MANAGABLE_VISIBILITIES = new Set(['public', 'unlisted', 'private']);
 
+const interactionPoliciesLink = (children: React.ReactNode) => (
+  <Link className='link' to='/settings/interaction_policies'>
+    {children}
+  </Link>
+);
+
 interface ComposeInteractionPolicyModalProps {
   composeId: string;
 }
@@ -104,11 +110,7 @@ const ComposeInteractionPolicyModal: React.FC<
               id='interaction_policies.preferences.hint'
               defaultMessage='Control, who can interact with this post. You can also configure the default interaction policies in <link>Preferences > Interaction policies</link>.'
               values={{
-                link: (children: React.ReactNode) => (
-                  <Link className='link' to='/settings/interaction_policies'>
-                    {children}
-                  </Link>
-                ),
+                link: interactionPoliciesLink,
               }}
             />
           }
