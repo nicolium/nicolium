@@ -144,6 +144,7 @@ const minifyConversationList = (response: PaginatedResponse<Conversation>) =>
 const minifyGroupedNotifications = (
   response: PaginatedResponse<GroupedNotificationsResults, false>,
   hideBots = false,
+  accountOrInstanceUrl: string,
 ): PaginatedResponse<NotificationGroup[], false> =>
   minifyList(
     response,
@@ -163,7 +164,7 @@ const minifyGroupedNotifications = (
     (results) => {
       const { accounts, statuses } = results;
 
-      importEntities({ accounts, statuses });
+      importEntities(accountOrInstanceUrl, { accounts, statuses });
     },
     false,
   );

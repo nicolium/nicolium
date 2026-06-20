@@ -7,7 +7,7 @@ import { queryClient } from '@/queries/client';
 import { updateConversations } from '@/queries/conversations/use-conversations';
 import { queryKeys } from '@/queries/keys';
 import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
-import { importEntities } from '@/queries/utils/import-entities';
+import { useImportEntities } from '@/queries/utils/import-entities';
 import { useSettings } from '@/stores/settings';
 import { useTimelinesActions } from '@/stores/timelines';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
@@ -100,6 +100,7 @@ const useUserStream = () => {
   const settings = useSettings();
   const processStreamNotification = useProcessStreamNotification();
   const { deleteStatus, receiveStreamingStatus } = useTimelinesActions();
+  const importEntities = useImportEntities();
 
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {

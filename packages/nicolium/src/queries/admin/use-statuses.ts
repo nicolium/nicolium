@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
-import { importEntities } from '@/queries/utils/import-entities';
+import { useImportEntities } from '@/queries/utils/import-entities';
 import { useStatusMetaActions } from '@/stores/status-meta';
 import { useTimelinesActions } from '@/stores/timelines';
 
@@ -24,6 +24,7 @@ const useAdminDeleteStatusMutation = (statusId: string) => {
 
 const useAdminUpdateStatusMutation = (statusId: string) => {
   const client = useClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['admin', 'statuses', statusId, 'sensitivity'],

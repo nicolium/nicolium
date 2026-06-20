@@ -11,7 +11,7 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAppQuery } from '@/queries/query';
-import { importEntities } from '@/queries/utils/import-entities';
+import { useImportEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 import { useModalsActions } from '@/stores/modals';
@@ -116,6 +116,7 @@ const useStatusReactions = (statusId: string, emoji?: string) => {
 const useEmojiReactMutation = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'emojiReact', statusId],
@@ -154,6 +155,7 @@ const useEmojiUnreactMutation = (statusId: string) => {
   const intl = useIntl();
   const queryClient = useQueryClient();
   const { checkEmojiReactsSupport } = useSettings();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'emojiUnreact', statusId],
@@ -198,6 +200,7 @@ const useEmojiUnreactMutation = (statusId: string) => {
 const useFavouriteStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'favourite', statusId],
@@ -225,6 +228,7 @@ const useFavouriteStatus = (statusId: string) => {
 const useUnfavouriteStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'favourite', statusId],
@@ -252,6 +256,7 @@ const useUnfavouriteStatus = (statusId: string) => {
 const useDislikeStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'dislike', statusId],
@@ -277,6 +282,7 @@ const useDislikeStatus = (statusId: string) => {
 const useUndislikeStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'dislike', statusId],
@@ -302,6 +308,7 @@ const useUndislikeStatus = (statusId: string) => {
 const useReblogStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
@@ -338,6 +345,7 @@ const useReblogStatus = (statusId: string) => {
 const useUnreblogStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
@@ -365,6 +373,7 @@ const useBookmarkStatus = (statusId: string) => {
   const queryClient = useQueryClient();
   const features = useFeatures();
   const { openModal } = useModalsActions();
+  const importEntities = useImportEntities();
 
   let previouslyBookmarked = false;
   let previousFolder: string | null;
@@ -428,6 +437,7 @@ const useBookmarkStatus = (statusId: string) => {
 const useUnbookmarkStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'bookmark', statusId],
@@ -454,6 +464,7 @@ const usePinStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const { data: account } = useOwnAccount();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'pin', statusId],
@@ -471,6 +482,7 @@ const useUnpinStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const { data: account } = useOwnAccount();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'unpin', statusId],

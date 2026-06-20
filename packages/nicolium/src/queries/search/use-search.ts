@@ -1,7 +1,7 @@
 import { notifyManager, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
-import { importEntities } from '@/queries/utils/import-entities';
+import { useImportEntities } from '@/queries/utils/import-entities';
 
 import { queryKeys } from '../keys';
 
@@ -57,6 +57,7 @@ const useSearchStatuses = (
   params?: Omit<SearchParams, keyof PaginationParams | 'type' | 'offset'>,
 ) => {
   const client = useClient();
+  const importEntities = useImportEntities();
 
   return useInfiniteQuery({
     queryKey: queryKeys.search.statuses(query, params),

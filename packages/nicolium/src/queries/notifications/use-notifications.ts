@@ -11,12 +11,13 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import { getNotificationStatusId, notificationMessages } from '@/components/notification';
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { appendFollowRequest } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
 import { useAppInfiniteQuery } from '@/queries/query';
-import { importEntities } from '@/queries/utils/import-entities';
+import { useImportEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQueryOptions } from '@/queries/utils/make-paginated-response-query-options';
 import { useSettingsStore } from '@/stores/settings';
 import { compareId } from '@/utils/comparators';
@@ -116,22 +117,22 @@ const shouldDisplayNotification = (
 const notificationsQueryOptions = makePaginatedResponseQueryOptions(
   (activeFilter: FilterType, hideBots: boolean) =>
     queryKeys.notifications.list(activeFilter, hideBots),
-  (client, [activeFilter, hideBots]) =>
+  (client, [activeFilter, hideBots], accountOrInstanceUrl) =>
     client.groupedNotifications
       .getGroupedNotifications(
         buildNotificationsParams(activeFilter, client.features.notificationsIncludeTypes),
       )
-      .then((response) => minifyGroupedNotifications(response, hideBots)),
+      .then((response) => minifyGroupedNotifications(response, hideBots, accountOrInstanceUrl)),
 );
 
 const useNotifications = (activeFilter: FilterType) => {
-  const { me } = useLoggedIn();
+  const meUrl = useCurrentAccountContext().meUrl!;
   const client = useClient();
   const hideBots = useHideBotNotifications();
 
   return useAppInfiniteQuery({
-    ...notificationsQueryOptions(client, activeFilter, hideBots),
-    enabled: !!me,
+    ...notificationsQueryOptions(client, activeFilter, hideBots, meUrl),
+    enabled: !!meUrl,
   });
 };
 
@@ -159,6 +160,7 @@ const useProcessStreamNotification = () => {
   const activeFilter = useActiveFilter();
   const { sounds } = useSettingsStore((state) => state.settings.notifications);
   const hideBots = useHideBotNotifications();
+  const importEntities = useImportEntities();
 
   const processStreamNotification = useCallback(
     (notification: Notification) => {

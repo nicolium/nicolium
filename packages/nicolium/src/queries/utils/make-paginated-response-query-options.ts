@@ -22,13 +22,18 @@ const makePaginatedResponseQueryOptions =
     queryKey:
       | DataTag<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>
       | ((...params: T1) => DataTag<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>),
-    queryFn: (client: PlApiClient, params: T1) => Promise<PaginatedResponse<T2, IsArray>>,
+    queryFn: (
+      client: PlApiClient,
+      params: T1,
+      accountOrInstanceUrl: string,
+    ) => Promise<PaginatedResponse<T2, IsArray>>,
     select?: (data: InfiniteData<PaginatedResponse<T2, IsArray>>) => T3,
   ) =>
-  (client: PlApiClient, ...params: T1) =>
+  (client: PlApiClient, ...params: [...T1, accountOrInstanceUrl: string]) =>
     infiniteQueryOptions({
-      queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
-      queryFn: ({ pageParam }) => pageParam.next?.() ?? queryFn(client, params),
+      queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...(params.slice(0, -1) as T1)),
+      queryFn: ({ pageParam }) =>
+        pageParam.next?.() ?? queryFn(client, params.slice(0, -1) as T1, params.at(-1) as string),
       initialPageParam: { next: null as (() => Promise<PaginatedResponse<T2, IsArray>>) | null },
       getNextPageParam: (page) => (page.next ? page : undefined),
       select:

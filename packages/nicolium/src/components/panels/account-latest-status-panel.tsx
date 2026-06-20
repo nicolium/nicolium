@@ -6,7 +6,7 @@ import { useClient } from '@/hooks/use-client';
 import { useAccount } from '@/queries/accounts/use-account';
 import { queryKeys } from '@/queries/keys';
 import { useAppQuery } from '@/queries/query';
-import { importEntities } from '@/queries/utils/import-entities';
+import { useImportEntities } from '@/queries/utils/import-entities';
 
 import Spinner from '../ui/spinner';
 
@@ -17,6 +17,7 @@ interface IAccountLatestStatusPanel {
 const AccountLatestStatusPanel: React.FC<IAccountLatestStatusPanel> = ({ accountId }) => {
   const client = useClient();
   const { data: account } = useAccount(accountId);
+  const importEntities = useImportEntities();
 
   const { data: statusId, isFetching } = useAppQuery({
     queryKey: queryKeys.accounts.latestStatus(accountId),

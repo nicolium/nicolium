@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
 import { useClient } from '@/hooks/use-client';
-import { importEntities } from '@/queries/utils/import-entities';
+import { useImportEntities } from '@/queries/utils/import-entities';
 import toast from '@/toast';
 
 import { queryKeys } from '../keys';
@@ -21,6 +21,7 @@ const messages = defineMessages({
 const useJoinEventMutation = (statusId: string, withToast = true) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'joinEvent', statusId],
@@ -62,6 +63,7 @@ const useJoinEventMutation = (statusId: string, withToast = true) => {
 const useLeaveEventMutation = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const importEntities = useImportEntities();
 
   return useMutation({
     mutationKey: ['statuses', 'leaveEvent', statusId],

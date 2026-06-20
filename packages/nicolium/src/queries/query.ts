@@ -68,4 +68,8 @@ function useAppInfiniteQuery<
   return useInfiniteQuery({ ...options, queryKey: modifiedQueryKey, placeholderData });
 }
 
-export { useAppInfiniteQuery, useAppQuery };
+function scopedQueryKey<T extends QueryKey>(queryKey: T, accountOrInstanceUrl: string): T {
+  return [accountOrInstanceUrl, ...queryKey] as unknown as T;
+}
+
+export { useAppInfiniteQuery, useAppQuery, scopedQueryKey };

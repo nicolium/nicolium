@@ -12,7 +12,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useAppQuery } from '@/queries/query';
 import { useFilters } from '@/queries/settings/use-filters';
 import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
-import { importEntities } from '@/queries/utils/import-entities';
+import { useImportEntities } from '@/queries/utils/import-entities';
 import { useComposeActions } from '@/stores/compose';
 import { useContextsActions } from '@/stores/contexts';
 import { useModalsActions } from '@/stores/modals';
@@ -50,6 +50,7 @@ type SelectedStatus = NormalizedStatus & {
 const useMinimalStatus = (statusId?: string) => {
   const client = useClient();
   const contextsActions = useContextsActions();
+  const importEntities = useImportEntities();
 
   return useAppQuery({
     queryKey: queryKeys.statuses.show(statusId!),
@@ -137,6 +138,7 @@ const useStatus = (
 const useStatusContext = (statusId?: string) => {
   const client = useClient();
   const { importContext, setAsyncRefreshHeader, clearAsyncRefreshHeader } = useContextsActions();
+  const importEntities = useImportEntities();
 
   return useAppQuery({
     queryKey: queryKeys.statuses.contexts(statusId!),
@@ -161,6 +163,7 @@ const useStatusContext = (statusId?: string) => {
 
 const useStatuses = (statusIds: Array<string>) => {
   const client = useClient();
+  const importEntities = useImportEntities();
 
   return useQueries({
     queries: statusIds.map((id) => ({

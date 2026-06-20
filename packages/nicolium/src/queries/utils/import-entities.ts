@@ -1,10 +1,14 @@
 import { notifyManager } from '@tanstack/react-query';
 
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { normalizeStatus } from '@/queries/statuses/normalize';
+import { backendUrl } from '@/stores/auth';
 import { useContextStore } from '@/stores/contexts';
+
+import { scopedQueryKey } from '../query';
 
 import type {
   Account as BaseAccount,
@@ -23,23 +27,29 @@ type Status = (BaseStatus | StatusWithoutAccount) & {
 
 const isEmpty = (object: Record<string, any>) => !Object.values(object).some((value) => value);
 
+interface ImportEntitiesEntities {
+  accounts?: Array<BaseAccount | undefined | null>;
+  groups?: Array<BaseGroup | undefined | null>;
+  polls?: Array<BasePoll | undefined | null>;
+  statuses?: Array<Status | undefined | null>;
+  relationships?: Array<BaseRelationship | undefined | null>;
+}
+
+interface ImportEntitiesOptions {
+  // Whether to replace existing entities. Set to false when working with potentially outdated data. Currently, only implemented for accounts.
+  override?: boolean;
+  withParents?: boolean;
+  idempotencyKey?: string;
+}
+
 const importEntities = (
-  entities: {
-    accounts?: Array<BaseAccount | undefined | null>;
-    groups?: Array<BaseGroup | undefined | null>;
-    polls?: Array<BasePoll | undefined | null>;
-    statuses?: Array<Status | undefined | null>;
-    relationships?: Array<BaseRelationship | undefined | null>;
-  },
-  options: {
-    // Whether to replace existing entities. Set to false when working with potentially outdated data. Currently, only implemented for accounts.
-    override?: boolean;
-    withParents?: boolean;
-    idempotencyKey?: string;
-  } = {
+  accountOrInstanceUrl: string,
+  entities: ImportEntitiesEntities,
+  options: ImportEntitiesOptions = {
     withParents: true,
   },
 ) => {
+  if (typeof accountOrInstanceUrl !== 'string') return;
   const override = options.override ?? true;
 
   const accounts: Record<string, BaseAccount> = {};
@@ -96,9 +106,14 @@ const importEntities = (
   if (entities.statuses?.length === 1 && entities.statuses[0] && options.idempotencyKey) {
     const status = entities.statuses[0];
     useContextStore.getState().actions.importStatus(status, options.idempotencyKey);
-    const oldStatus = queryClient.getQueryData(queryKeys.statuses.show(status.id));
+    const oldStatus = queryClient.getQueryData(
+      scopedQueryKey(queryKeys.statuses.show(status.id), accountOrInstanceUrl),
+    );
     const normalized = normalizeStatus(status, oldStatus);
-    queryClient.setQueryData(queryKeys.statuses.show(status.id), normalized);
+    queryClient.setQueryData(
+      scopedQueryKey(queryKeys.statuses.show(status.id), accountOrInstanceUrl),
+      normalized,
+    );
     processStatus(status, false);
   } else {
     entities.statuses?.forEach((status) => status && processStatus(status, options.withParents));
@@ -107,26 +122,47 @@ const importEntities = (
   notifyManager.batch(() => {
     if (!isEmpty(accounts)) {
       for (const account of Object.values(accounts)) {
-        queryClient.setQueryData(queryKeys.accounts.lookup(account.acct.toLowerCase()), account.id);
-        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        queryClient.setQueryData(
+          scopedQueryKey(
+            queryKeys.accounts.lookup(account.acct.toLowerCase()),
+            accountOrInstanceUrl,
+          ),
+          account.id,
+        );
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.accounts.show(account.id), accountOrInstanceUrl),
+          account,
+        );
       }
     }
     if (!isEmpty(groups))
       for (const group of Object.values(groups)) {
-        queryClient.setQueryData(queryKeys.groups.show(group.id), group);
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.groups.show(group.id), accountOrInstanceUrl),
+          group,
+        );
         if (group.relationship) {
-          queryClient.setQueryData(queryKeys.groupRelationships.show(group.id), group.relationship);
+          queryClient.setQueryData(
+            scopedQueryKey(queryKeys.groupRelationships.show(group.id), accountOrInstanceUrl),
+            group.relationship,
+          );
         }
       }
     if (!isEmpty(polls)) {
       for (const poll of Object.values(polls)) {
-        queryClient.setQueryData(queryKeys.statuses.polls.show(poll.id), poll);
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.statuses.polls.show(poll.id), accountOrInstanceUrl),
+          poll,
+        );
       }
     }
     if (!isEmpty(relationships)) {
       for (const relationship of Object.values(relationships)) {
         queryClient.setQueryData(
-          queryKeys.accountRelationships.show(relationship.id),
+          scopedQueryKey(
+            queryKeys.accountRelationships.show(relationship.id),
+            accountOrInstanceUrl,
+          ),
           relationship,
         );
       }
@@ -136,16 +172,24 @@ const importEntities = (
 
     if (!isEmpty(statuses)) {
       for (const status of Object.values(statuses)) {
-        const oldStatus = queryClient.getQueryData(queryKeys.statuses.show(status.id));
+        const oldStatus = queryClient.getQueryData(
+          scopedQueryKey(queryKeys.statuses.show(status.id), accountOrInstanceUrl),
+        );
         const normalized = normalizeStatus(status, oldStatus);
-        queryClient.setQueryData(queryKeys.statuses.show(status.id), normalized);
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.statuses.show(status.id), accountOrInstanceUrl),
+          normalized,
+        );
       }
     }
     if (!isEmpty(translations)) {
       for (const [statusId, translationsByLanguage] of Object.entries(translations)) {
         for (const [language, translation] of Object.entries(translationsByLanguage)) {
           queryClient.setQueryData(
-            queryKeys.statuses.translations(statusId, language),
+            scopedQueryKey(
+              queryKeys.statuses.translations(statusId, language),
+              accountOrInstanceUrl,
+            ),
             translation,
           );
         }
@@ -154,4 +198,12 @@ const importEntities = (
   });
 };
 
-export { importEntities };
+const useImportEntities = () => {
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+
+  return (entities: ImportEntitiesEntities, options?: ImportEntitiesOptions) => {
+    importEntities(accountOrInstanceUrl, entities, options);
+  };
+};
+
+export { importEntities, useImportEntities };

@@ -1,12 +1,13 @@
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useAppQuery } from '@/queries/query';
-import { importEntities } from '@/queries/utils/import-entities';
+import { useImportEntities } from '@/queries/utils/import-entities';
 
 import { queryKeys } from '../keys';
 
 const useTrendingStatuses = () => {
   const client = useClient();
+  const importEntities = useImportEntities();
   const features = useFeatures();
 
   const fetchTrendingStatuses = async () => {

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
-import { importEntities } from '@/queries/utils/import-entities';
+import { useImportEntities } from '@/queries/utils/import-entities';
 import {
   useTimelinesStore,
   useTimeline as useStoreTimeline,
@@ -41,6 +41,7 @@ const useTimeline = (
   const timeline = useStoreTimeline(timelineId);
   const pollingEnabled = useTimelinesStore((state) => state.pollingEnabled);
   const timelineActions = useTimelinesActions();
+  const importEntities = useImportEntities();
 
   const { connected: streamingConnected } = useTimelineStream(
     streamConfig?.stream ?? '',
