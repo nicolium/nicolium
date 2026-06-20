@@ -13,6 +13,8 @@ import { selectChild } from '@/utils/scroll-utils';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
 
+const PlaceholderStatusSlim = () => <PlaceholderStatus variant='slim' />;
+
 interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   /** Unique key to preserve the scroll position when navigating back. */
   scrollKey: string;
@@ -170,7 +172,7 @@ const StatusList: React.FC<IStatusList> = ({
       isLoading={isLoading}
       showLoading={isLoading && statusIds.length === 0}
       onLoadMore={handleLoadOlder}
-      placeholderComponent={() => <PlaceholderStatus variant='slim' />}
+      placeholderComponent={PlaceholderStatusSlim}
       placeholderCount={20}
       ref={node}
       listClassName={clsx('status-list', className)}

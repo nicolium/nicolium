@@ -17,6 +17,8 @@ import { selectChild } from '@/utils/scroll-utils';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
 
+const PlaceholderStatusSlim = () => <PlaceholderStatus variant='slim' />;
+
 const EventDiscussionPage: React.FC = () => {
   const { statusId } = eventDiscussionRoute.useParams();
 
@@ -103,7 +105,7 @@ const EventDiscussionPage: React.FC = () => {
         <ScrollableList
           scrollKey={`eventDiscussion:${status.id}`}
           id='thread'
-          placeholderComponent={() => <PlaceholderStatus variant='slim' />}
+          placeholderComponent={PlaceholderStatusSlim}
           initialTopMostItemIndex={0}
           emptyMessageText={
             <FormattedMessage
