@@ -1,9 +1,7 @@
 import { compareId } from '@/utils/comparators';
 
 import type { TimelineFilters } from '@/schemas/frontend-settings';
-import type { TimelineEntry } from '@/stores/timelines';
-
-type StatusEntry = Extract<TimelineEntry, { type: 'status' }>;
+import type { TimelineEntry, StatusEntry } from '@/stores/timelines';
 
 const isEntryFiltered = (entry: StatusEntry, filters: TimelineFilters): boolean =>
   (filters?.showDirect === false && entry.isDirect) ||
@@ -85,4 +83,4 @@ const sortFilteredTimeline = (
   return result;
 };
 
-export { sortFilteredTimeline, hasActiveFilters };
+export { sortFilteredTimeline, hasActiveFilters, isEntryFiltered };

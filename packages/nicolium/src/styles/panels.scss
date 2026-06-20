@@ -118,9 +118,12 @@
 }
 
 .sidebar-suggestion--placeholder {
+  pointer-events: none;
+
   display: flex;
   gap: 0.5rem;
   align-items: center;
+
   width: 100%;
 
   .no-reduce-motion & {
@@ -156,6 +159,7 @@
 }
 
 .sidebar-trend--placeholder {
+  pointer-events: none;
   display: flex;
   flex-direction: column;
   color: var(--color-primary-200);

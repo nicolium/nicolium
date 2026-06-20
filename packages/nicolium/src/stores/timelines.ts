@@ -1,31 +1,36 @@
+import { useMemo } from 'react';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 import { findStatuses } from '@/queries/statuses/use-status';
+import { hasActiveFilters, isEntryFiltered } from '@/utils/timeline-filter';
 
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
+import type { TimelineFilters } from '@/schemas/frontend-settings';
 import type { CreateStatusParams, Status } from 'pl-api';
 
+interface StatusEntry {
+  type: 'status';
+  id: string;
+  // id of the topmost status where the target status was found, either the status itself or its reblog
+  originalId: string;
+  accountId: string;
+  rebloggedBy: Array<string>;
+  reblogIds: Array<string>;
+  reblogVisibility?: string;
+  isConnectedTop?: boolean;
+  isConnectedBottom?: boolean;
+  isReply: boolean;
+  // this actually indicates whether the status exclusively appeared as a reblog on the processed page
+  isReblog: boolean;
+  isQuote: boolean;
+  isDirect: boolean;
+  hasMedia: boolean;
+  hasMediaWithoutAltText: boolean;
+}
+
 type TimelineEntry =
-  | {
-      type: 'status';
-      id: string;
-      // id of the topmost status where the target status was found, either the status itself or its reblog
-      originalId: string;
-      accountId: string;
-      rebloggedBy: Array<string>;
-      reblogIds: Array<string>;
-      reblogVisibility?: string;
-      isConnectedTop?: boolean;
-      isConnectedBottom?: boolean;
-      isReply: boolean;
-      // this actually indicates whether the status exclusively appeared as a reblog on the processed page
-      isReblog: boolean;
-      isQuote: boolean;
-      isDirect: boolean;
-      hasMedia: boolean;
-      hasMediaWithoutAltText: boolean;
-    }
+  | StatusEntry
   | {
       type: 'pending-status';
       id: string;
@@ -477,4 +482,34 @@ const useTimelinesActions = () => useTimelinesStore((state) => state.actions);
 const useTimeline = (timelineId: string) =>
   useTimelinesStore((state) => state.timelines[timelineId] ?? emptyTimeline);
 
-export { useTimelinesStore, useTimelinesActions, useTimeline, type TimelineEntry };
+const useQueuedEntries = (timelineId: string, filters: TimelineFilters) => {
+  const timeline = useTimelinesStore((state) => state.timelines[timelineId] ?? emptyTimeline);
+
+  return useMemo(() => {
+    if (!hasActiveFilters(filters))
+      return {
+        queuedCount: timeline.queuedCount,
+        queuedAccountIds: timeline.queuedAccountIds,
+      };
+
+    const processed = processPage(timeline.queuedEntries);
+
+    const visible: Array<StatusEntry> = processed.filter(
+      (entry): entry is StatusEntry => entry.type === 'status' && !isEntryFiltered(entry, filters),
+    );
+
+    return {
+      queuedCount: visible.length,
+      queuedAccountIds: Array.from(new Set(visible.map((entry) => entry.accountId))).toReversed(),
+    };
+  }, [filters, timeline.queuedEntries]);
+};
+
+export {
+  useTimelinesStore,
+  useTimelinesActions,
+  useTimeline,
+  useQueuedEntries,
+  type TimelineEntry,
+  type StatusEntry,
+};

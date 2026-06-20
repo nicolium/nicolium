@@ -2449,6 +2449,7 @@ div[data-viewport-type='window']:has(.empty-message) {
 }
 
 .placeholder-display-name {
+  pointer-events: none;
   display: flex;
   flex-direction: column;
   color: var(--color-primary-50);
@@ -2459,6 +2460,7 @@ div[data-viewport-type='window']:has(.empty-message) {
 }
 
 .placeholder-status-content {
+  pointer-events: none;
   display: flex;
   flex-direction: column;
   color: var(--color-primary-50);
@@ -2473,6 +2475,7 @@ div[data-viewport-type='window']:has(.empty-message) {
 }
 
 .hashtag--placeholder {
+  pointer-events: none;
   color: var(--color-primary-200);
 
   .no-reduce-motion & {

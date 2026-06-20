@@ -150,10 +150,12 @@
   }
 
   &__name--placeholder {
+    pointer-events: none;
     color: var(--color-gray-500);
   }
 
   &__meta--placeholder {
+    pointer-events: none;
     gap: 0.75rem;
     color: var(--color-gray-400);
 
