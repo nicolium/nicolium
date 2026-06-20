@@ -1,9 +1,10 @@
-import { notifyManager, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { notifyManager, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useImportEntities } from '@/queries/utils/import-entities';
 
 import { queryKeys } from '../keys';
+import { useAppInfiniteQuery } from '../query';
 
 import type { PaginationParams, SearchParams } from 'pl-api';
 
@@ -14,7 +15,7 @@ const useSearchAccounts = (
   const client = useClient();
   const queryClient = useQueryClient();
 
-  return useInfiniteQuery({
+  return useAppInfiniteQuery({
     queryKey: queryKeys.search.accounts(query, params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.search
@@ -59,7 +60,7 @@ const useSearchStatuses = (
   const client = useClient();
   const importEntities = useImportEntities();
 
-  return useInfiniteQuery({
+  return useAppInfiniteQuery({
     queryKey: queryKeys.search.statuses(query, params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.search
@@ -93,7 +94,7 @@ const useSearchHashtags = (
 ) => {
   const client = useClient();
 
-  return useInfiniteQuery({
+  return useAppInfiniteQuery({
     queryKey: queryKeys.search.hashtags(query, params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.search
@@ -123,7 +124,7 @@ const useSearchGroups = (
   const client = useClient();
   const queryClient = useQueryClient();
 
-  return useInfiniteQuery({
+  return useAppInfiniteQuery({
     queryKey: queryKeys.search.groups(query, params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.search

@@ -1,8 +1,9 @@
-import { notifyManager, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { notifyManager, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 
 import { queryKeys } from '../keys';
+import { useAppInfiniteQuery } from '../query';
 
 import type { SearchAccountParams } from 'pl-api';
 
@@ -10,7 +11,7 @@ const useAccountSearch = (query: string, params?: Omit<SearchAccountParams, 'off
   const client = useClient();
   const queryClient = useQueryClient();
 
-  return useInfiniteQuery({
+  return useAppInfiniteQuery({
     queryKey: queryKeys.search.accountSearch(query.trim(), params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.accounts

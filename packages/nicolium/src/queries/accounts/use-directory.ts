@@ -1,13 +1,15 @@
-import { notifyManager, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { notifyManager, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { queryKeys } from '@/queries/keys';
+
+import { useAppInfiniteQuery } from '../query';
 
 const useDirectory = (order: 'active' | 'new', local: boolean = false) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
-  return useInfiniteQuery({
+  return useAppInfiniteQuery({
     queryKey: queryKeys.accountsLists.directory(order, local),
     queryFn: ({ pageParam: offset }) =>
       client.instance

@@ -1,14 +1,15 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { create } from 'mutative';
 import { useMemo } from 'react';
 
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { importEntities } from '@/queries/utils/import-entities';
 import { compareDate } from '@/utils/comparators';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
+import { useAppInfiniteQuery } from '../query';
+import { importEntities } from '../utils/import-entities';
 import {
   minifyConversation,
   minifyConversationList,
@@ -65,7 +66,7 @@ const useConversations = () => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
 
-  const query = useInfiniteQuery({
+  const query = useAppInfiniteQuery({
     queryKey: queryKeys.conversations.all,
     queryFn: async ({ pageParam }) => {
       if (pageParam.next) {

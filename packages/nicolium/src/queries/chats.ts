@@ -1,9 +1,4 @@
-import {
-  keepPreviousData,
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQueryClient } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
 import {
   type Chat,
@@ -20,7 +15,7 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useAppQuery } from '@/queries/query';
+import { useAppInfiniteQuery, useAppQuery } from '@/queries/query';
 import { reOrderChatListItems } from '@/utils/chats';
 import { flattenPages, updatePageItem } from '@/utils/queries';
 
@@ -64,7 +59,7 @@ const useChatMessages = (chat: Chat) => {
     return normalizeChatMessagesList(await client.chats.getChatMessages(chatId));
   };
 
-  const queryInfo = useInfiniteQuery({
+  const queryInfo = useAppInfiniteQuery({
     queryKey: queryKeys.chats.chatMessages(chat.id),
     queryFn: ({ pageParam }) => getChatMessages(chat.id, pageParam),
     enabled: !isBlocked,
@@ -106,7 +101,7 @@ const useChats = () => {
     return response;
   };
 
-  const queryInfo = useInfiniteQuery({
+  const queryInfo = useAppInfiniteQuery({
     queryKey: queryKeys.chats.search,
     queryFn: ({ pageParam }) => getChats(pageParam),
     placeholderData: keepPreviousData,

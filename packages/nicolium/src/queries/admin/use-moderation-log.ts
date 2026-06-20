@@ -1,9 +1,8 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-
 import { useClient } from '@/hooks/use-client';
 import { flattenPages } from '@/utils/queries';
 
 import { queryKeys } from '../keys';
+import { useAppInfiniteQuery } from '../query';
 
 import type { PaginatedResponse } from 'pl-api';
 import type { AdminModerationLogEntry } from 'pl-api';
@@ -16,7 +15,7 @@ const useModerationLog = () => {
   ): Promise<PaginatedResponse<AdminModerationLogEntry>> =>
     (pageParam?.next ?? client.admin.moderationLog.getModerationLog)();
 
-  const queryInfo = useInfiniteQuery({
+  const queryInfo = useAppInfiniteQuery({
     queryKey: queryKeys.admin.moderationLog,
     queryFn: ({ pageParam }) => getModerationLog(pageParam),
     initialPageParam: {

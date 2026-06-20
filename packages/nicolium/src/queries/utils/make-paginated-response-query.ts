@@ -1,15 +1,15 @@
-import {
-  useInfiniteQuery,
-  type DataTag,
-  type InfiniteData,
-  type QueryKey,
-  type UseInfiniteQueryOptions,
-} from '@tanstack/react-query';
-
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
+import { useAppInfiniteQuery } from '../query';
+
+import type {
+  DataTag,
+  InfiniteData,
+  QueryKey,
+  UseInfiniteQueryOptions,
+} from '@tanstack/react-query';
 import type { Features, PaginatedResponse, PlApiClient } from 'pl-api';
 
 class PaginatedResponseArray<T> extends Array<T> {
@@ -63,7 +63,7 @@ const makePaginatedResponseQuery =
 
     type PageParam = { next: (() => Promise<PaginatedResponse<T2, IsArray>>) | null };
 
-    return useInfiniteQuery({
+    return useAppInfiniteQuery({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
       queryFn: ({ pageParam }) => (pageParam as PageParam).next?.() ?? queryFn(client, params),
       initialPageParam: { next: null } as PageParam,

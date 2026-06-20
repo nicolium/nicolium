@@ -1,15 +1,10 @@
-import {
-  type InfiniteData,
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
-import { useAppQuery } from '@/queries/query';
+import { useAppInfiniteQuery, useAppQuery } from '@/queries/query';
 import { getTagDiff } from '@/utils/badges';
 
 import { queryKeys } from '../keys';
@@ -70,7 +65,7 @@ const usePendingUsersCount = () => {
   const { data: account } = useOwnAccount();
   const features = useFeatures();
 
-  return useInfiniteQuery({
+  return useAppInfiniteQuery({
     ...pendingUsersQuery(client),
     select: (data) =>
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,

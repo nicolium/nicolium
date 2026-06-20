@@ -1,4 +1,4 @@
-import { type InfiniteData, useInfiniteQuery, useMutation } from '@tanstack/react-query';
+import { type InfiniteData, useMutation } from '@tanstack/react-query';
 import { type InteractionRequest, PaginatedResponse } from 'pl-api';
 
 import { useClient } from '@/hooks/use-client';
@@ -7,6 +7,7 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import { importEntities } from '@/queries/utils/import-entities';
 
 import { queryKeys } from '../keys';
+import { useAppInfiniteQuery } from '../query';
 
 const minifyInteractionRequest = ({
   account,
@@ -44,7 +45,7 @@ const useInteractionRequests = <T>(
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
 
-  return useInfiniteQuery({
+  return useAppInfiniteQuery({
     queryKey: queryKeys.interactionRequests.all,
     queryFn: ({ pageParam }) =>
       pageParam.next?.() ??
