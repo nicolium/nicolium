@@ -701,7 +701,8 @@ a.status-card {
 
     img,
     svg,
-    canvas {
+    canvas,
+    > span {
       max-width: 12rem;
       height: 1.25rem;
       transition: transform 150ms var(--ease-default);
@@ -709,7 +710,8 @@ a.status-card {
 
     &:hover img,
     &:hover svg,
-    &:hover canvas {
+    &:hover canvas,
+    &:hover > span {
       transform: scale(1.25);
     }
 
