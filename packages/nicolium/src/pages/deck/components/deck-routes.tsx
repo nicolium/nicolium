@@ -8,6 +8,7 @@ import * as v from 'valibot';
 import { changeSetting } from '@/actions/settings';
 import { BookmarksColumn } from '@/columns/bookmarks';
 import DraftStatusesColumn from '@/columns/draft-statuses';
+import { FollowersList, FollowingList, SubscribersList } from '@/columns/follows';
 import NotificationsColumn from '@/columns/notifications';
 import ScheduledStatusesColumn from '@/columns/scheduled-statuses';
 import SearchColumn from '@/columns/search';
@@ -594,6 +595,39 @@ const reactionsRoute = createRoute({
   staticData: { title: messages.reactions },
 });
 
+const FollowersDeckColumn = () => {
+  const { username } = followersRoute.useParams();
+  return <FollowersList username={username} />;
+};
+const followersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/followers',
+  component: FollowersDeckColumn,
+  staticData: { title: messages.followers },
+});
+
+const FollowingDeckColumn = () => {
+  const { username } = followingRoute.useParams();
+  return <FollowingList username={username} />;
+};
+const followingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/following',
+  component: FollowingDeckColumn,
+  staticData: { title: messages.following },
+});
+
+const SubscribersDeckColumn = () => {
+  const { username } = subscribersRoute.useParams();
+  return <SubscribersList username={username} />;
+};
+const subscribersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/subscribers',
+  component: SubscribersDeckColumn,
+  staticData: { title: messages.subscribers },
+});
+
 const routeTree = rootRoute.addChildren([
   homeRoute,
   localRoute,
@@ -615,6 +649,9 @@ const routeTree = rootRoute.addChildren([
   chatRoute,
   accountRoute,
   accountByUsernameRoute,
+  followersRoute,
+  followingRoute,
+  subscribersRoute,
   statusRoute,
   reblogsRoute,
   quotesRoute,
