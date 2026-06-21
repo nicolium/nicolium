@@ -28,6 +28,7 @@ import { selectAccount } from '@/queries/accounts/selectors';
 import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
@@ -353,6 +354,7 @@ const EditProfilePage: React.FC = () => {
   const intl = useIntl();
   const instance = useInstance();
   const client = useClient();
+  const settings = useSettings();
 
   const { updateMe } = useAuthActions();
   const { data: account } = useOwnAccount();
@@ -458,7 +460,10 @@ const EditProfilePage: React.FC = () => {
     const missingHeaderDescription =
       features.accountAvatarDescription && (header.src || header.file) && !data.header_description;
 
-    if (missingAvatarDescription || missingHeaderDescription) {
+    if (
+      settings.missingDescriptionModal &&
+      (missingAvatarDescription || missingHeaderDescription)
+    ) {
       openModal('CONFIRM', {
         heading: (
           <FormattedMessage
