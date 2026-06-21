@@ -27,6 +27,7 @@ import HeaderPicker from '@/pages/settings/components/header-picker';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
+import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
@@ -105,6 +106,10 @@ const messages = defineMessages({
     defaultMessage: 'Show no posts',
   },
   customCSSLabel: { id: 'edit_profile.fields.custom_css.label', defaultMessage: 'Custom CSS' },
+  missingDescriptionConfirm: {
+    id: 'confirmations.edit_profile.missing_description.confirm',
+    defaultMessage: 'Continue anyway',
+  },
 });
 
 /**
@@ -355,6 +360,7 @@ const EditProfilePage: React.FC = () => {
   const maxFields = instance.configuration.accounts
     ? instance.configuration.accounts.max_profile_fields
     : instance.pleroma.metadata.fields_limits.max_fields;
+  const { openModal } = useModalsActions();
 
   const attachmentTypes = instance.configuration.media_attachments.supported_mime_types
     ?.filter((type) => type.startsWith('image/'))
@@ -396,54 +402,93 @@ const EditProfilePage: React.FC = () => {
   };
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {
-    const promises = [];
+    const onConfirm = () => {
+      const promises = [];
 
-    const { fields_attributes, ...rest } = data;
-    const params: UpdateCredentialsParams = {
-      ...rest,
+      const { fields_attributes, ...rest } = data;
+      const params: UpdateCredentialsParams = {
+        ...rest,
+      };
+
+      if (fields_attributes?.length === 0)
+        params.fields_attributes = { '0': { name: '', value: '' } };
+      else if (fields_attributes) {
+        const padLength = fields_attributes.length.toString().length;
+        params.fields_attributes = Object.fromEntries(
+          fields_attributes.map(({ name, value }, i) => [
+            i.toString().padStart(padLength, '0'),
+            { name, value },
+          ]),
+        );
+      }
+      if (header.file !== null) params.header = header.file ?? '';
+      if (avatar.file !== null) params.avatar = avatar.file ?? '';
+
+      if (!instance.configuration.accounts?.allow_custom_css) delete params.custom_css;
+
+      promises.push(updateMe(params as any));
+
+      if (features.muteStrangers) {
+        promises.push(
+          client.settings
+            .updateNotificationSettings({
+              block_from_strangers: muteStrangers,
+            })
+            .catch(console.error),
+        );
+      }
+
+      setLoading(true);
+
+      Promise.all(promises)
+        .then(() => {
+          setLoading(false);
+          toast.success(messages.success);
+        })
+        .catch(() => {
+          setLoading(false);
+          toast.error(intl.formatMessage(messages.error));
+        });
+
+      event.preventDefault();
     };
 
-    if (fields_attributes?.length === 0)
-      params.fields_attributes = { '0': { name: '', value: '' } };
-    else if (fields_attributes) {
-      const padLength = fields_attributes.length.toString().length;
-      params.fields_attributes = Object.fromEntries(
-        fields_attributes.map(({ name, value }, i) => [
-          i.toString().padStart(padLength, '0'),
-          { name, value },
-        ]),
-      );
-    }
-    if (header.file !== null) params.header = header.file ?? '';
-    if (avatar.file !== null) params.avatar = avatar.file ?? '';
+    const missingAvatarDescription =
+      features.accountAvatarDescription && (avatar.src || avatar.file) && !data.avatar_description;
+    const missingHeaderDescription =
+      features.accountAvatarDescription && (header.src || header.file) && !data.header_description;
 
-    if (!instance.configuration.accounts?.allow_custom_css) delete params.custom_css;
-
-    promises.push(updateMe(params as any));
-
-    if (features.muteStrangers) {
-      promises.push(
-        client.settings
-          .updateNotificationSettings({
-            block_from_strangers: muteStrangers,
-          })
-          .catch(console.error),
-      );
-    }
-
-    setLoading(true);
-
-    Promise.all(promises)
-      .then(() => {
-        setLoading(false);
-        toast.success(messages.success);
-      })
-      .catch(() => {
-        setLoading(false);
-        toast.error(intl.formatMessage(messages.error));
+    if (missingAvatarDescription || missingHeaderDescription) {
+      openModal('CONFIRM', {
+        heading: (
+          <FormattedMessage
+            id='confirmations.edit_profile.missing_description.heading'
+            defaultMessage='Missing description'
+          />
+        ),
+        message:
+          missingAvatarDescription && missingHeaderDescription ? (
+            <FormattedMessage
+              id='confirmations.edit_profile.missing_description.message'
+              defaultMessage='You have not entered a description for your avatar and header. Continue anyway?'
+            />
+          ) : missingAvatarDescription ? (
+            <FormattedMessage
+              id='confirmations.edit_profile.missing_description.avatar'
+              defaultMessage='You have not entered a description for your avatar. Continue anyway?'
+            />
+          ) : (
+            <FormattedMessage
+              id='confirmations.edit_profile.missing_description.header'
+              defaultMessage='You have not entered a description for your header. Continue anyway?'
+            />
+          ),
+        confirm: intl.formatMessage(messages.missingDescriptionConfirm),
+        onConfirm,
       });
-
-    event.preventDefault();
+    } else {
+      onConfirm();
+    }
   };
 
   const handleFieldChange =
