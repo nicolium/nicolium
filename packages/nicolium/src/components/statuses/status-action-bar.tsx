@@ -44,7 +44,7 @@ import iconWarning from '@phosphor-icons/core/regular/warning.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import { useMatch, useNavigate } from '@tanstack/react-router';
 import { type Account, type CustomEmoji, GroupRoles } from 'pl-api';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
@@ -59,6 +59,8 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useTranslate } from '@/hooks/use-translate';
+import { DeckColumnIdContext } from '@/pages/deck/components/deck-column-config';
+import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
 import { languages } from '@/pages/settings/components/preferences';
 import { useUnblockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useChats } from '@/queries/chats';
@@ -1230,6 +1232,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { boostModal, useRocketIconForReblogs } = useSettings();
   const client = useClient();
 
+  const columnId = useContext(DeckColumnIdContext);
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
   const { targetLanguage, spoilerExpanded } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
@@ -1394,7 +1397,14 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleOpenReactionsModal = () => {
-      openModal('REACTIONS', { statusId: status.id });
+      if (columnId) {
+        deckColumnRouterRegistry.get(columnId)?.router.navigate({
+          to: '/@{$username}/posts/$statusId/reactions' as any,
+          params: { username: status.account.acct, statusId: status.id } as any,
+        });
+      } else {
+        openModal('REACTIONS', { statusId: status.id });
+      }
     };
 
     const handleReport: React.EventHandler<React.MouseEvent> = () => {

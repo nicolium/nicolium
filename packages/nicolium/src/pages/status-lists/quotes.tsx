@@ -1,10 +1,8 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
-import PullToRefresh from '@/components/pull-to-refresh';
-import StatusList from '@/components/statuses/status-list';
+import { QuotesList } from '@/columns/status-interactions';
 import Column from '@/components/ui/column';
-import { useStatusQuotes } from '@/queries/statuses/use-status-quotes';
 import { statusQuotesRoute } from '@/router';
 
 const messages = defineMessages({
@@ -15,42 +13,9 @@ const QuotesPage: React.FC = () => {
   const intl = useIntl();
   const { statusId } = statusQuotesRoute.useParams();
 
-  const {
-    data: statusIds = [],
-    isLoading,
-    hasNextPage,
-    fetchNextPage,
-    refetch,
-  } = useStatusQuotes(statusId);
-
-  const handleRefresh = async () => {
-    await refetch();
-  };
-
-  const handleLoadMore = () => {
-    fetchNextPage({ cancelRefetch: false });
-  };
-
-  const emptyMessage = (
-    <FormattedMessage
-      id='empty_column.quotes'
-      defaultMessage='This post has not been quoted yet.'
-    />
-  );
-
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <PullToRefresh onRefresh={handleRefresh}>
-        <StatusList
-          loadMoreClassName='status-list__load-more'
-          statusIds={statusIds}
-          scrollKey={`quotes:${statusId}`}
-          hasMore={hasNextPage}
-          isLoading={isLoading}
-          onLoadMore={handleLoadMore}
-          emptyMessageText={emptyMessage}
-        />
-      </PullToRefresh>
+      <QuotesList statusId={statusId} />
     </Column>
   );
 };
