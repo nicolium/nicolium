@@ -2,10 +2,12 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { backendUrl } from '@/stores/auth';
 import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -34,6 +36,7 @@ interface IDraftStatusActionBar {
 const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status }) => {
   const intl = useIntl();
   const client = useClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   const { openModal } = useModalsActions();
   const { setComposeToStatus } = useComposeActions();
@@ -60,7 +63,7 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
       return;
     }
 
-    if (status.in_reply_to_id) fetchStatus(client, status.in_reply_to_id);
+    if (status.in_reply_to_id) fetchStatus(client, status.in_reply_to_id, accountOrInstanceUrl);
     const poll = status.poll_id
       ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
       : undefined;

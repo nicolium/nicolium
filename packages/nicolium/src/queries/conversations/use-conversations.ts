@@ -2,8 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { create } from 'mutative';
 import { useMemo } from 'react';
 
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { backendUrl } from '@/stores/auth';
 import { compareDate } from '@/utils/comparators';
 
 import { queryClient } from '../client';
@@ -28,15 +30,18 @@ const sortConversations = (items: MinifiedConversation[]) =>
     return compareDate(a.last_status_created_at, b.last_status_created_at);
   });
 
-const importConversationEntities = (conversations: Conversation[]) => {
-  importEntities({
+const importConversationEntities = (
+  conversations: Conversation[],
+  accountOrInstanceUrl: string,
+) => {
+  importEntities(accountOrInstanceUrl, {
     accounts: conversations.flatMap((conversation) => conversation.accounts),
     statuses: conversations.map((conversation) => conversation.last_status),
   });
 };
 
-const updateConversations = (conversation: Conversation) => {
-  importConversationEntities([conversation]);
+const updateConversations = (conversation: Conversation, accountOrInstanceUrl: string) => {
+  importConversationEntities([conversation], accountOrInstanceUrl);
 
   queryClient.setQueryData(queryKeys.conversations.all, (data) => {
     if (!data || !data.pages.length) return data;
@@ -65,6 +70,7 @@ const updateConversations = (conversation: Conversation) => {
 const useConversations = () => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   const query = useAppInfiniteQuery({
     queryKey: queryKeys.conversations.all,
@@ -74,7 +80,7 @@ const useConversations = () => {
       }
 
       const response = await client.timelines.getConversations();
-      return minifyConversationList(response);
+      return minifyConversationList(response, accountOrInstanceUrl);
     },
     initialPageParam: {
       next: null as (() => Promise<PaginatedResponse<MinifiedConversation>>) | null,

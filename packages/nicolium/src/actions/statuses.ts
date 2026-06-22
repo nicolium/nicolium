@@ -71,6 +71,7 @@ const createStatus = (
   params: CreateStatusParams,
   idempotencyKey: string,
   editedId: string | null,
+  accountOrInstanceUrl: string,
   redacting = false,
 ) => {
   if (!params.preview && !editedId) {
@@ -95,6 +96,7 @@ const createStatus = (
 
       if (status.scheduled_at === null) {
         importEntities(
+          accountOrInstanceUrl,
           { statuses: [{ ...status, expectsCard }] },
           { idempotencyKey, withParents: true },
         );
@@ -124,7 +126,7 @@ const createStatus = (
             .getStatus(status.id)
             .then((response) => {
               if (response.card) {
-                importEntities({ statuses: [response] });
+                importEntities(accountOrInstanceUrl, { statuses: [response] });
               } else if (retries > 0 && response) {
                 setTimeout(() => poll(retries - 1), delay);
               }
@@ -178,7 +180,12 @@ const redactStatus = (client: PlApiClient, statusId: string) => {
   });
 };
 
-const fetchStatus = (client: PlApiClient, statusId: string, intl?: IntlShape) => {
+const fetchStatus = (
+  client: PlApiClient,
+  statusId: string,
+  accountOrInstanceUrl: string,
+  intl?: IntlShape,
+) => {
   const params =
     intl && useSettingsStore.getState().settings.autoTranslate
       ? {
@@ -187,7 +194,7 @@ const fetchStatus = (client: PlApiClient, statusId: string, intl?: IntlShape) =>
       : undefined;
 
   return client.statuses.getStatus(statusId, params).then((status) => {
-    importEntities({ statuses: [status] });
+    importEntities(accountOrInstanceUrl, { statuses: [status] });
     return status;
   });
 };

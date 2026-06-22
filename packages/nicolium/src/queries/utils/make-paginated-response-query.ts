@@ -1,6 +1,8 @@
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { backendUrl } from '@/stores/auth';
 
 import { useAppInfiniteQuery } from '../query';
 
@@ -47,7 +49,11 @@ const makePaginatedResponseQuery =
     queryKey:
       | DataTag<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>
       | ((...params: T1) => DataTag<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>),
-    queryFn: (client: PlApiClient, params: T1) => Promise<PaginatedResponse<T2, IsArray>>,
+    queryFn: (
+      client: PlApiClient,
+      params: T1,
+      accountOrInstanceUrl: string,
+    ) => Promise<PaginatedResponse<T2, IsArray>>,
     select?: (data: InfiniteData<PaginatedResponse<T2, IsArray>>) => T3,
     enabled?: ((...params: T1) => boolean) | 'isLoggedIn' | 'isAdmin',
     options?: Omit<
@@ -60,12 +66,14 @@ const makePaginatedResponseQuery =
     const client = useClient();
     const features = useFeatures();
     const { data: account } = useOwnAccount();
+    const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
     type PageParam = { next: (() => Promise<PaginatedResponse<T2, IsArray>>) | null };
 
     return useAppInfiniteQuery({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
-      queryFn: ({ pageParam }) => (pageParam as PageParam).next?.() ?? queryFn(client, params),
+      queryFn: ({ pageParam }) =>
+        (pageParam as PageParam).next?.() ?? queryFn(client, params, accountOrInstanceUrl),
       initialPageParam: { next: null } as PageParam,
       getNextPageParam: (page) => (page.next ? page : undefined),
       select:

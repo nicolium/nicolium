@@ -302,12 +302,15 @@ const usePrefetchNotifications = () => {
   const queryClient = useQueryClient();
   const client = useClient();
   const { me } = useLoggedIn();
+  const meUrl = useCurrentAccountContext().meUrl!;
   const activeFilter = useActiveFilter();
   const hideBots = useHideBotNotifications();
 
   useEffect(() => {
     if (!me) return;
-    queryClient.prefetchInfiniteQuery(notificationsQueryOptions(client, activeFilter, hideBots));
+    queryClient.prefetchInfiniteQuery(
+      notificationsQueryOptions(client, activeFilter, hideBots, meUrl),
+    );
   }, [me, hideBots]);
 };
 

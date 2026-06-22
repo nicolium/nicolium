@@ -5,11 +5,11 @@ import { queryKeys } from '../keys';
 
 const useFavourites = makePaginatedResponseQuery(
   (accountId?: string) => queryKeys.statusLists.favourites(accountId!),
-  (client, [accountId]) =>
+  (client, [accountId], accountOrInstanceUrl) =>
     (accountId
       ? client.accounts.getAccountFavourites(accountId)
       : client.myAccount.getFavourites()
-    ).then(minifyStatusList),
+    ).then((response) => minifyStatusList(response, accountOrInstanceUrl)),
 );
 
 export { useFavourites };

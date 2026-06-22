@@ -4,6 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
 import { Column } from '@/components/ui/column';
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { buildPoll, buildStatus } from '@/features/draft-statuses/builder';
 import { ComposeForm } from '@/features/ui/util/async-components';
 import { useClient } from '@/hooks/use-client';
@@ -12,6 +13,7 @@ import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { useDraftStatusQuery } from '@/queries/statuses/use-draft-statuses';
 import { newStatusRoute } from '@/router';
+import { backendUrl } from '@/stores/auth';
 import { useComposeActions } from '@/stores/compose';
 
 const messages = defineMessages({
@@ -22,6 +24,7 @@ const NewStatusPage = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const client = useClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
   const { data: ownAccount } = useOwnAccount();
   const search = newStatusRoute.useSearch();
   const { data: draftStatus } = useDraftStatusQuery(search.draftId ?? '');
@@ -40,7 +43,7 @@ const NewStatusPage = () => {
     }
 
     if (inReplyTo) {
-      fetchStatus(client, inReplyTo).then(() => {
+      fetchStatus(client, inReplyTo, accountOrInstanceUrl).then(() => {
         const status = queryClient.getQueryData(queryKeys.statuses.show(inReplyTo));
         if (!status) return;
 
@@ -50,7 +53,7 @@ const NewStatusPage = () => {
     }
 
     if (quote) {
-      fetchStatus(client, quote).then(() => {
+      fetchStatus(client, quote, accountOrInstanceUrl).then(() => {
         const status = queryClient.getQueryData(queryKeys.statuses.show(quote));
         if (!status) return;
 
@@ -58,6 +61,7 @@ const NewStatusPage = () => {
       });
     }
   }, [
+    accountOrInstanceUrl,
     approvalRequired,
     client,
     inReplyTo,
@@ -77,7 +81,7 @@ const NewStatusPage = () => {
     const poll = buildPoll(draftStatus.poll);
 
     if (status.in_reply_to_id) {
-      fetchStatus(client, status.in_reply_to_id).catch(() => {});
+      fetchStatus(client, status.in_reply_to_id, accountOrInstanceUrl).catch(() => {});
     }
 
     setComposeToStatus(
@@ -88,7 +92,7 @@ const NewStatusPage = () => {
       draftStatus.draft_id,
       draftStatus.editorState,
     );
-  }, [client, draftStatus, ownAccount, setComposeToStatus]);
+  }, [accountOrInstanceUrl, client, draftStatus, ownAccount, setComposeToStatus]);
 
   return (
     <Column withBack={false} label={intl.formatMessage(messages.heading)}>

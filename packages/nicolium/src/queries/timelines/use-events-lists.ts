@@ -4,7 +4,7 @@ import { minifyStatusList } from '../utils/minify-list';
 
 const useRecentEventsTimeline = makePaginatedResponseQuery(
   queryKeys.statusLists.recentEvents,
-  (client) =>
+  (client, _params, accountOrInstanceUrl) =>
     client.timelines
       .publicTimeline({
         only_events: true,
@@ -13,7 +13,7 @@ const useRecentEventsTimeline = makePaginatedResponseQuery(
         res.items = res.items.filter(({ event }) => event);
         return res;
       })
-      .then(minifyStatusList),
+      .then((response) => minifyStatusList(response, accountOrInstanceUrl)),
   undefined,
   'isLoggedIn',
   { staleTime: 5 * 60 * 1000 }, // 5 minutes
@@ -21,7 +21,10 @@ const useRecentEventsTimeline = makePaginatedResponseQuery(
 
 const useJoinedEventsTimeline = makePaginatedResponseQuery(
   queryKeys.statusLists.joinedEvents,
-  (client) => client.events.getJoinedEvents().then(minifyStatusList),
+  (client, _params, accountOrInstanceUrl) =>
+    client.events
+      .getJoinedEvents()
+      .then((response) => minifyStatusList(response, accountOrInstanceUrl)),
   undefined,
   'isLoggedIn',
   { staleTime: 5 * 60 * 1000 }, // 5 minutes

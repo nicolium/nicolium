@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAppInfiniteQuery, useAppQuery } from '@/queries/query';
+import { backendUrl } from '@/stores/auth';
 import { useInstanceStore } from '@/stores/instance';
 
 import { useAccount } from '../accounts/use-account';
@@ -18,17 +20,24 @@ import type { AdminGetReportsParams, AdminUpdateReportParams, PaginationParams }
 const useReports = makePaginatedResponseQuery(
   (params: Omit<AdminGetReportsParams, keyof PaginationParams>) =>
     queryKeys.admin.reportLists.show(params),
-  (client, [params]) => client.admin.reports.getReports(params).then(minifyAdminReportList),
+  (client, [params], accountOrInstanceUrl) =>
+    client.admin.reports
+      .getReports(params)
+      .then((response) => minifyAdminReportList(response, accountOrInstanceUrl)),
   undefined,
   'isAdmin',
 );
 
 const useMinimalReport = (reportId: string) => {
   const client = useClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useAppQuery({
     queryKey: queryKeys.admin.reports.show(reportId),
-    queryFn: () => client.admin.reports.getReport(reportId).then(minifyAdminReport),
+    queryFn: () =>
+      client.admin.reports
+        .getReport(reportId)
+        .then((report) => minifyAdminReport(report, accountOrInstanceUrl)),
   });
 };
 
@@ -57,16 +66,20 @@ const useReport = (reportId: string) => {
 
 const pendingReportsQuery = makePaginatedResponseQueryOptions(
   queryKeys.admin.reportLists.show({ resolved: undefined }),
-  (client) => client.admin.reports.getReports({ unresolved: true }).then(minifyAdminReportList),
+  (client, _params, accountOrInstanceUrl) =>
+    client.admin.reports
+      .getReports({ unresolved: true })
+      .then((response) => minifyAdminReportList(response, accountOrInstanceUrl)),
 );
 
 const usePendingReportsCount = () => {
   const client = useClient();
   const { data: account } = useOwnAccount();
   const fetched = useInstanceStore((state) => state.fetched);
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useAppInfiniteQuery({
-    ...pendingReportsQuery(client),
+    ...pendingReportsQuery(client, accountOrInstanceUrl),
     select: (data) =>
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,
     enabled: fetched && !!(account?.is_admin ?? account?.is_moderator),
@@ -76,13 +89,17 @@ const usePendingReportsCount = () => {
 const useUpdateReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
     mutationFn: (params: AdminUpdateReportParams) =>
       client.admin.reports.updateReport(reportId, params),
     onSuccess: (report) => {
-      queryClient.setQueryData(queryKeys.admin.reports.show(reportId), minifyAdminReport(report));
+      queryClient.setQueryData(
+        queryKeys.admin.reports.show(reportId),
+        minifyAdminReport(report, accountOrInstanceUrl),
+      );
     },
   });
 };
@@ -90,12 +107,16 @@ const useUpdateReport = (reportId: string) => {
 const useSelfAssignReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
     mutationFn: () => client.admin.reports.assignReportToSelf(reportId),
     onSuccess: (report) => {
-      queryClient.setQueryData(queryKeys.admin.reports.show(reportId), minifyAdminReport(report));
+      queryClient.setQueryData(
+        queryKeys.admin.reports.show(reportId),
+        minifyAdminReport(report, accountOrInstanceUrl),
+      );
     },
   });
 };
@@ -103,12 +124,16 @@ const useSelfAssignReport = (reportId: string) => {
 const useUnassignReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
     mutationFn: () => client.admin.reports.unassignReport(reportId),
     onSuccess: (report) => {
-      queryClient.setQueryData(queryKeys.admin.reports.show(reportId), minifyAdminReport(report));
+      queryClient.setQueryData(
+        queryKeys.admin.reports.show(reportId),
+        minifyAdminReport(report, accountOrInstanceUrl),
+      );
     },
   });
 };
@@ -116,13 +141,17 @@ const useUnassignReport = (reportId: string) => {
 const useResolveReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
     mutationFn: (actionTakenComment?: string) =>
       client.admin.reports.resolveReport(reportId, actionTakenComment),
     onSuccess: (report) => {
-      queryClient.setQueryData(queryKeys.admin.reports.show(reportId), minifyAdminReport(report));
+      queryClient.setQueryData(
+        queryKeys.admin.reports.show(reportId),
+        minifyAdminReport(report, accountOrInstanceUrl),
+      );
       queryClient.setQueriesData(
         {
           queryKey: queryKeys.admin.reportLists.show({ resolved: undefined }),
@@ -141,12 +170,16 @@ const useResolveReport = (reportId: string) => {
 const useReopenReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
     mutationFn: () => client.admin.reports.reopenReport(reportId),
     onSuccess: (report) => {
-      queryClient.setQueryData(queryKeys.admin.reports.show(reportId), minifyAdminReport(report));
+      queryClient.setQueryData(
+        queryKeys.admin.reports.show(reportId),
+        minifyAdminReport(report, accountOrInstanceUrl),
+      );
       queryClient.setQueriesData(
         {
           queryKey: queryKeys.admin.reportLists.show({ resolved: true }),
@@ -165,12 +198,16 @@ const useReopenReport = (reportId: string) => {
 const useForwardReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
     mutationFn: () => client.admin.reports.forwardReport(reportId),
     onSuccess: (report) => {
-      queryClient.setQueryData(queryKeys.admin.reports.show(reportId), minifyAdminReport(report));
+      queryClient.setQueryData(
+        queryKeys.admin.reports.show(reportId),
+        minifyAdminReport(report, accountOrInstanceUrl),
+      );
     },
   });
 };

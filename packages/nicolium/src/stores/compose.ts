@@ -6,6 +6,7 @@ import { mutative } from 'zustand-mutative';
 import { uploadFile, updateMedia } from '@/actions/media';
 import { saveSettings } from '@/actions/settings';
 import { createStatus } from '@/actions/statuses';
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { isServo } from '@/features/compose/components/compose-form';
 import { isNativeEmoji } from '@/features/emoji';
 import { useClient } from '@/hooks/use-client';
@@ -16,7 +17,7 @@ import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { router } from '@/router';
-import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';
+import { isLoggedIn, getClient, getOwnAccount, backendUrl } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions, useModalsStore } from '@/stores/modals';
 import { useSettings, useSettingsStore } from '@/stores/settings';
@@ -736,6 +737,7 @@ const useSubmitCompose = (composeId: string) => {
   const actions = useComposeActions();
   const client = useClient();
   const { data: ownAccount } = useOwnAccount();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
   const features = useFeatures();
   const { openModal, closeModal } = useModalsActions();
   const { removeSledzik } = useUiStoreActions();
@@ -942,6 +944,7 @@ const useSubmitCompose = (composeId: string) => {
             params,
             idempotencyKey,
             editedId,
+            accountOrInstanceUrl,
             compose.redacting,
           );
 

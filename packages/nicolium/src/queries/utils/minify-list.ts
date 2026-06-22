@@ -42,11 +42,14 @@ const minifyList = <T1, T2, IsArray extends boolean = true>(
   });
 };
 
-const minifyStatusList = (response: PaginatedResponse<Status>): PaginatedResponse<string> =>
+const minifyStatusList = (
+  response: PaginatedResponse<Status>,
+  accountOrInstanceUrl: string,
+): PaginatedResponse<string> =>
   minifyList(
     response,
     (status) => status.id,
-    (statuses) => importEntities({ statuses }),
+    (statuses) => importEntities(accountOrInstanceUrl, { statuses }),
   );
 
 const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedResponse<string> =>
@@ -133,9 +136,12 @@ const minifyConversation = (conversation: Conversation) => ({
 
 type MinifiedConversation = ReturnType<typeof minifyConversation>;
 
-const minifyConversationList = (response: PaginatedResponse<Conversation>) =>
+const minifyConversationList = (
+  response: PaginatedResponse<Conversation>,
+  accountOrInstanceUrl: string,
+) =>
   minifyList(response, minifyConversation, (conversations) => {
-    importEntities({
+    importEntities(accountOrInstanceUrl, {
       accounts: conversations.flatMap((conversation) => conversation.accounts),
       statuses: conversations.map((conversation) => conversation.last_status),
     });
@@ -192,14 +198,17 @@ const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
     },
   );
 
-const minifyAdminReport = ({
-  account,
-  action_taken_by_account,
-  assigned_account,
-  target_account,
-  statuses,
-  ...adminReport
-}: AdminReport) => {
+const minifyAdminReport = (
+  {
+    account,
+    action_taken_by_account,
+    assigned_account,
+    target_account,
+    statuses,
+    ...adminReport
+  }: AdminReport,
+  accountOrInstanceUrl: string,
+) => {
   minifyAdminAccountList(
     new PaginatedResponse(
       [account, action_taken_by_account, assigned_account, target_account].filter(
@@ -209,7 +218,7 @@ const minifyAdminReport = ({
     ),
   );
 
-  importEntities({
+  importEntities(accountOrInstanceUrl, {
     accounts: [
       account.account,
       action_taken_by_account?.account,
@@ -230,7 +239,10 @@ const minifyAdminReport = ({
 
 type MinifiedAdminReport = ReturnType<typeof minifyAdminReport>;
 
-const minifyAdminReportList = (response: PaginatedResponse<AdminReport>) =>
+const minifyAdminReportList = (
+  response: PaginatedResponse<AdminReport>,
+  accountOrInstanceUrl: string,
+) =>
   minifyList(
     response,
     (report) => report.id,
@@ -239,7 +251,7 @@ const minifyAdminReportList = (response: PaginatedResponse<AdminReport>) =>
         for (const report of reports) {
           queryClient.setQueryData(
             queryKeys.admin.reports.show(report.id),
-            minifyAdminReport(report),
+            minifyAdminReport(report, accountOrInstanceUrl),
           );
         }
       });

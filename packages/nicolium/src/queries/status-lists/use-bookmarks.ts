@@ -5,7 +5,10 @@ import { queryKeys } from '../keys';
 
 const useBookmarks = makePaginatedResponseQuery(
   (folderId?: string) => queryKeys.statusLists.bookmarks(folderId),
-  (client, [folder_id]) => client.myAccount.getBookmarks({ folder_id }).then(minifyStatusList),
+  (client, [folder_id], accountOrInstanceUrl) =>
+    client.myAccount
+      .getBookmarks({ folder_id })
+      .then((response) => minifyStatusList(response, accountOrInstanceUrl)),
 );
 
 export { useBookmarks };

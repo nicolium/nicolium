@@ -17,11 +17,13 @@ import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import Toggle from '@/components/ui/toggle';
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import ContentTypeButton from '@/features/compose/components/content-type-button';
 import { isCurrentOrFutureDate } from '@/features/compose/components/schedule-form';
 import { ComposeEditor, DatePicker } from '@/features/ui/util/async-components';
 import { useClient } from '@/hooks/use-client';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
+import { backendUrl } from '@/stores/auth';
 import { useChangeUploadCompose, useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
@@ -67,6 +69,7 @@ interface IEditEvent {
 const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const intl = useIntl();
   const client = useClient();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
   const navigate = useNavigate();
   const { openModal } = useModalsActions();
 
@@ -179,6 +182,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       endTime,
       joinMode: approvalRequired ? 'restricted' : 'free',
       location,
+      accountOrInstanceUrl,
     })
       .then((status) => {
         if (status)
@@ -193,7 +197,10 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   useEffect(() => {
     if (statusId) {
-      Promise.all([initEventEdit(client, statusId), fetchStatus(client, statusId)])
+      Promise.all([
+        initEventEdit(client, statusId),
+        fetchStatus(client, statusId, accountOrInstanceUrl),
+      ])
         .then(([source, status]) => {
           if (!source || !status) throw new Error();
 

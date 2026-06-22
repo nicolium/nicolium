@@ -5,7 +5,10 @@ import { queryKeys } from '../keys';
 
 const useStatusQuotes = makePaginatedResponseQuery(
   (statusId: string) => queryKeys.statusLists.quotes(statusId),
-  (client, params) => client.statuses.getStatusQuotes(...params).then(minifyStatusList),
+  (client, params, accountOrInstanceUrl) =>
+    client.statuses
+      .getStatusQuotes(...params)
+      .then((response) => minifyStatusList(response, accountOrInstanceUrl)),
 );
 
 export { useStatusQuotes };

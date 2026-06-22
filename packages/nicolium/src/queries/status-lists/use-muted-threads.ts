@@ -5,7 +5,10 @@ import { queryKeys } from '../keys';
 
 const useMutedThreads = makePaginatedResponseQuery(
   () => queryKeys.statusLists.mutedThreads,
-  (client) => client.myAccount.getMutedThreads().then(minifyStatusList),
+  (client, _params, accountOrInstanceUrl) =>
+    client.myAccount
+      .getMutedThreads()
+      .then((response) => minifyStatusList(response, accountOrInstanceUrl)),
 );
 
 export { useMutedThreads };

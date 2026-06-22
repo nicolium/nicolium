@@ -1,10 +1,12 @@
 import { type InfiniteData, useMutation } from '@tanstack/react-query';
 import { type InteractionRequest, PaginatedResponse } from 'pl-api';
 
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { importEntities } from '@/queries/utils/import-entities';
+import { backendUrl } from '@/stores/auth';
 
 import { queryKeys } from '../keys';
 import { useAppInfiniteQuery } from '../query';
@@ -23,18 +25,22 @@ const minifyInteractionRequest = ({
 
 type MinifiedInteractionRequest = ReturnType<typeof minifyInteractionRequest>;
 
-const minifyInteractionRequestsList = ({
-  previous,
-  next,
-  items,
-  ...response
-}: PaginatedResponse<InteractionRequest>): PaginatedResponse<MinifiedInteractionRequest> => {
-  importEntities({ statuses: items.flatMap((item) => [item.status, item.reply]) });
+const minifyInteractionRequestsList = (
+  { previous, next, items, ...response }: PaginatedResponse<InteractionRequest>,
+  accountOrInstanceUrl: string,
+): PaginatedResponse<MinifiedInteractionRequest> => {
+  importEntities(accountOrInstanceUrl, {
+    statuses: items.flatMap((item) => [item.status, item.reply]),
+  });
 
   return new PaginatedResponse(items.map(minifyInteractionRequest), {
     ...response,
-    previous: previous ? () => previous().then(minifyInteractionRequestsList) : null,
-    next: next ? () => next().then(minifyInteractionRequestsList) : null,
+    previous: previous
+      ? () => previous().then((list) => minifyInteractionRequestsList(list, accountOrInstanceUrl))
+      : null,
+    next: next
+      ? () => next().then((list) => minifyInteractionRequestsList(list, accountOrInstanceUrl))
+      : null,
   });
 };
 
@@ -44,12 +50,15 @@ const useInteractionRequests = <T>(
   const client = useClient();
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useAppInfiniteQuery({
     queryKey: queryKeys.interactionRequests.all,
     queryFn: ({ pageParam }) =>
       pageParam.next?.() ??
-      client.interactionRequests.getInteractionRequests().then(minifyInteractionRequestsList),
+      client.interactionRequests
+        .getInteractionRequests()
+        .then((list) => minifyInteractionRequestsList(list, accountOrInstanceUrl)),
     initialPageParam: {
       next: null as (() => Promise<PaginatedResponse<MinifiedInteractionRequest>>) | null,
     },

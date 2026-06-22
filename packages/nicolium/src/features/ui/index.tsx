@@ -8,7 +8,7 @@ import { register as registerPushNotifications } from '@/actions/push-notificati
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
 import ThumbNavigation from '@/components/navigation/thumb-navigation';
 import Layout from '@/components/ui/layout';
-import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useCurrentAccount, useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useUserStream } from '@/hooks/streaming/use-user-stream';
 import { useClient } from '@/hooks/use-client';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
@@ -24,7 +24,7 @@ import { usePrefetchNotifications } from '@/queries/notifications/use-notificati
 import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { deckRoute, newStatusRoute } from '@/router';
-import { useAuthStore } from '@/stores/auth';
+import { backendUrl, useAuthStore } from '@/stores/auth';
 import { useInstance, useInstanceStore } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { usePictureInPictureType } from '@/stores/picture-in-picture';
@@ -51,6 +51,7 @@ const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();
   const node = useRef<HTMLDivElement | null>(null);
   const me = useCurrentAccount();
+  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
   const { data: account } = useOwnAccount();
   const features = useFeatures();
   const instance = useInstance();
@@ -107,7 +108,10 @@ const UI: React.FC = React.memo(() => {
 
     if (features.scheduledStatuses) {
       requestIdleCallback(
-        () => queryClient.prefetchInfiniteQuery(scheduledStatusesQueryOptions(client)),
+        () =>
+          queryClient.prefetchInfiniteQuery(
+            scheduledStatusesQueryOptions(client, accountOrInstanceUrl),
+          ),
         {
           timeout: 2000,
         },
