@@ -2,10 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { create } from 'mutative';
 import { useMemo } from 'react';
 
-import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { backendUrl } from '@/stores/auth';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { compareDate } from '@/utils/comparators';
 
 import { queryClient } from '../client';
@@ -67,7 +66,7 @@ const updateConversations = (conversation: Conversation, scopeUrl: string) => {
 const useConversations = () => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   const query = useAppInfiniteQuery({
     queryKey: queryKeys.conversations.all,

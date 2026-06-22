@@ -1,8 +1,7 @@
-import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { backendUrl } from '@/stores/auth';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import { useAppInfiniteQuery } from '../query';
 
@@ -66,7 +65,7 @@ const makePaginatedResponseQuery =
     const client = useClient();
     const features = useFeatures();
     const { data: account } = useOwnAccount();
-    const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+    const scopeUrl = useScopeUrl();
 
     type PageParam = { next: (() => Promise<PaginatedResponse<T2, IsArray>>) | null };
 

@@ -1,15 +1,14 @@
 import { useCallback } from 'react';
 
-import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useStatContext } from '@/contexts/stat-context';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { updateReactions } from '@/queries/announcements/use-announcements';
 import { queryClient } from '@/queries/client';
 import { updateConversations } from '@/queries/conversations/use-conversations';
 import { queryKeys } from '@/queries/keys';
 import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
 import { useImportEntities } from '@/queries/utils/import-entities';
-import { backendUrl } from '@/stores/auth';
 import { useSettings } from '@/stores/settings';
 import { useTimelinesActions } from '@/stores/timelines';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
@@ -103,7 +102,7 @@ const useUserStream = () => {
   const processStreamNotification = useProcessStreamNotification();
   const { deleteStatus, receiveStreamingStatus } = useTimelinesActions();
   const importEntities = useImportEntities();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {

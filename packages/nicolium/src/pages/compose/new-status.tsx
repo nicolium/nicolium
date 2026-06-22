@@ -4,16 +4,15 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
 import { Column } from '@/components/ui/column';
-import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { buildPoll, buildStatus } from '@/features/draft-statuses/builder';
 import { ComposeForm } from '@/features/ui/util/async-components';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { useDraftStatusQuery } from '@/queries/statuses/use-draft-statuses';
 import { newStatusRoute } from '@/router';
-import { backendUrl } from '@/stores/auth';
 import { useComposeActions } from '@/stores/compose';
 
 const messages = defineMessages({
@@ -24,7 +23,7 @@ const NewStatusPage = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const client = useClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
   const { data: ownAccount } = useOwnAccount();
   const search = newStatusRoute.useSearch();
   const { data: draftStatus } = useDraftStatusQuery(search.draftId ?? '');

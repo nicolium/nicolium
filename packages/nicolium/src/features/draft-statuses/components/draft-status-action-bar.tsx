@@ -2,12 +2,11 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
-import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
-import { backendUrl } from '@/stores/auth';
 import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -36,7 +35,7 @@ interface IDraftStatusActionBar {
 const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status }) => {
   const intl = useIntl();
   const client = useClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   const { openModal } = useModalsActions();
   const { setComposeToStatus } = useComposeActions();

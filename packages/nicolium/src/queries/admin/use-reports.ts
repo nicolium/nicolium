@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useAppInfiniteQuery, useAppQuery } from '@/queries/query';
-import { backendUrl } from '@/stores/auth';
 import { useInstanceStore } from '@/stores/instance';
 
 import { useAccount } from '../accounts/use-account';
@@ -30,7 +29,7 @@ const useReports = makePaginatedResponseQuery(
 
 const useMinimalReport = (reportId: string) => {
   const client = useClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   return useAppQuery({
     queryKey: queryKeys.admin.reports.show(reportId),
@@ -76,7 +75,7 @@ const usePendingReportsCount = () => {
   const client = useClient();
   const { data: account } = useOwnAccount();
   const fetched = useInstanceStore((state) => state.fetched);
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   return useAppInfiniteQuery({
     ...pendingReportsQuery(client, scopeUrl),
@@ -89,7 +88,7 @@ const usePendingReportsCount = () => {
 const useUpdateReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -107,7 +106,7 @@ const useUpdateReport = (reportId: string) => {
 const useSelfAssignReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -124,7 +123,7 @@ const useSelfAssignReport = (reportId: string) => {
 const useUnassignReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -141,7 +140,7 @@ const useUnassignReport = (reportId: string) => {
 const useResolveReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -170,7 +169,7 @@ const useResolveReport = (reportId: string) => {
 const useReopenReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -198,7 +197,7 @@ const useReopenReport = (reportId: string) => {
 const useForwardReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),

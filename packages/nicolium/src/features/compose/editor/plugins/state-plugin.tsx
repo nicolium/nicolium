@@ -8,12 +8,11 @@ import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
-import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
-import { backendUrl } from '@/stores/auth';
 import { useComposeActions, useSubmitCompose } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 import { getStatusIdsFromLinksInContent } from '@/utils/status';
@@ -34,7 +33,7 @@ interface IStatePlugin {
 const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const intl = useIntl();
   const client = useClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
   const { urlPrivacy, ignoreHashtagCasingSuggestions } = useSettings();

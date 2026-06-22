@@ -1,8 +1,7 @@
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
-import { useCurrentAccountContext } from '@/contexts/current-account-context';
-import { backendUrl } from '@/stores/auth';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import type {
   DefaultError,
@@ -23,7 +22,7 @@ function useAppQuery<
   TQueryKey extends QueryKey = QueryKey,
 >(options: UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>): UseQueryResult<TData, TError> {
   const queryClient = useQueryClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   const { queryKey } = options;
   const modifiedQueryKey = useMemo(
@@ -49,7 +48,7 @@ function useAppInfiniteQuery<
   options: UseInfiniteQueryOptions<TQueryFnData, TError, TData, TQueryKey, TPageParam>,
 ): UseInfiniteQueryResult<TData, TError> {
   const queryClient = useQueryClient();
-  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useScopeUrl();
 
   const { queryKey } = options;
   const modifiedQueryKey = useMemo(
