@@ -1,5 +1,6 @@
 import {
   type InfiniteData,
+  type QueryKey,
   notifyManager,
   useMutation,
   useQuery,
@@ -24,7 +25,7 @@ import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';
 
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
-import type { EmojiReaction, PaginatedResponse } from 'pl-api';
+import type { EmojiReaction, PaginatedResponse, Status } from 'pl-api';
 
 const messages = defineMessages({
   bookmarkAdded: { id: 'status.bookmarked', defaultMessage: 'Bookmark added.' },
@@ -195,109 +196,73 @@ const useEmojiUnreactMutation = (statusId: string) => {
   });
 };
 
-const useFavouriteStatus = (statusId: string) => {
-  const client = useClient();
-  const queryClient = useQueryClient();
+const makeStatusToggleMutation =
+  ({
+    mutationKey,
+    mutationFn,
+    apply,
+    listKey,
+  }: {
+    mutationKey: string;
+    mutationFn: (client: ReturnType<typeof useClient>, statusId: string) => Promise<Status>;
+    apply: (status: NormalizedStatus) => void;
+    listKey: (statusId: string) => QueryKey;
+  }) =>
+  (statusId: string) => {
+    const client = useClient();
+    const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationKey: ['statuses', 'favourite', statusId],
-    mutationFn: () => client.statuses.favouriteStatus(statusId),
-    onMutate: () =>
-      updateStatus(
-        statusId,
-        (status) => ({
-          ...status,
-          favourited: true,
-          favourites_count: status.favourites_count + 1,
-        }),
-        queryClient,
-      ),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
-    onSettled: (status) => {
-      importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.statusFavourites(statusId),
-      });
-    },
-  });
-};
+    return useMutation({
+      mutationKey: ['statuses', mutationKey, statusId],
+      mutationFn: () => mutationFn(client, statusId),
+      onMutate: () => updateStatus(statusId, apply, queryClient),
+      onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+      onSettled: (status) => {
+        importEntities({ statuses: [status] });
+        queryClient.invalidateQueries({ queryKey: listKey(statusId) });
+      },
+    });
+  };
 
-const useUnfavouriteStatus = (statusId: string) => {
-  const client = useClient();
-  const queryClient = useQueryClient();
+const useFavouriteStatus = makeStatusToggleMutation({
+  mutationKey: 'favourite',
+  mutationFn: (client, statusId) => client.statuses.favouriteStatus(statusId),
+  apply: (status) => {
+    status.favourited = true;
+    status.favourites_count += 1;
+  },
+  listKey: queryKeys.accountsLists.statusFavourites,
+});
 
-  return useMutation({
-    mutationKey: ['statuses', 'favourite', statusId],
-    mutationFn: () => client.statuses.unfavouriteStatus(statusId),
-    onMutate: () =>
-      updateStatus(
-        statusId,
-        (status) => ({
-          ...status,
-          favourited: false,
-          favourites_count: Math.max(0, status.favourites_count - 1),
-        }),
-        queryClient,
-      ),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
-    onSettled: (status) => {
-      importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.statusFavourites(statusId),
-      });
-    },
-  });
-};
+const useUnfavouriteStatus = makeStatusToggleMutation({
+  mutationKey: 'favourite',
+  mutationFn: (client, statusId) => client.statuses.unfavouriteStatus(statusId),
+  apply: (status) => {
+    status.favourited = false;
+    status.favourites_count = Math.max(0, status.favourites_count - 1);
+  },
+  listKey: queryKeys.accountsLists.statusFavourites,
+});
 
-const useDislikeStatus = (statusId: string) => {
-  const client = useClient();
-  const queryClient = useQueryClient();
+const useDislikeStatus = makeStatusToggleMutation({
+  mutationKey: 'dislike',
+  mutationFn: (client, statusId) => client.statuses.dislikeStatus(statusId),
+  apply: (status) => {
+    status.disliked = true;
+    status.dislikes_count += 1;
+  },
+  listKey: queryKeys.accountsLists.statusDislikes,
+});
 
-  return useMutation({
-    mutationKey: ['statuses', 'dislike', statusId],
-    mutationFn: () => client.statuses.dislikeStatus(statusId),
-    onMutate: () =>
-      updateStatus(
-        statusId,
-        (status) => ({
-          ...status,
-          disliked: true,
-          dislikes_count: status.dislikes_count + 1,
-        }),
-        queryClient,
-      ),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
-    onSettled: (status) => {
-      importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusDislikes(statusId) });
-    },
-  });
-};
-
-const useUndislikeStatus = (statusId: string) => {
-  const client = useClient();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationKey: ['statuses', 'dislike', statusId],
-    mutationFn: () => client.statuses.undislikeStatus(statusId),
-    onMutate: () =>
-      updateStatus(
-        statusId,
-        (status) => ({
-          ...status,
-          disliked: false,
-          dislikes_count: Math.max(0, status.dislikes_count - 1),
-        }),
-        queryClient,
-      ),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
-    onSettled: (status) => {
-      importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusDislikes(statusId) });
-    },
-  });
-};
+const useUndislikeStatus = makeStatusToggleMutation({
+  mutationKey: 'dislike',
+  mutationFn: (client, statusId) => client.statuses.undislikeStatus(statusId),
+  apply: (status) => {
+    status.disliked = false;
+    status.dislikes_count = Math.max(0, status.dislikes_count - 1);
+  },
+  listKey: queryKeys.accountsLists.statusDislikes,
+});
 
 const useReblogStatus = (statusId: string) => {
   const client = useClient();
