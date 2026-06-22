@@ -49,7 +49,6 @@ const importEntities = (
     withParents: true,
   },
 ) => {
-  if (typeof accountOrInstanceUrl !== 'string') return;
   const override = options.override ?? true;
 
   const accounts: Record<string, BaseAccount> = {};
