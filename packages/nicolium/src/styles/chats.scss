@@ -1191,7 +1191,7 @@
   }
 
   &__message {
-    @include mixins.text($theme: muted, $size: sm, $align: left, $truncate: true);
+    @include mixins.text($theme: muted, $size: sm, $align: inherit, $truncate: true);
 
     pointer-events: none;
     width: 100%;

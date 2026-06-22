@@ -950,11 +950,11 @@ body {
 
     @media (min-width: variables.$breakpoint-md) {
       gap: 1rem;
-      padding-right: 2rem;
-      padding-left: 2rem;
+      padding-inline-start: 2rem;
+      padding-inline-end: 2rem;
 
       :has(.deck) & {
-        padding-right: 0;
+        padding-inline-end: 0;
       }
     }
   }
@@ -1262,17 +1262,17 @@ body {
     max-width: 80rem;
     margin-right: auto;
     margin-left: auto;
-    padding-right: 1rem;
-    padding-left: 1rem;
+    padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
 
     @media (min-width: variables.$breakpoint-sm) {
-      padding-right: 1.5rem;
-      padding-left: 1.5rem;
+      padding-inline-start: 1.5rem;
+      padding-inline-end: 1.5rem;
     }
 
     @media (min-width: variables.$breakpoint-md) {
-      padding-right: 2rem;
-      padding-left: 2rem;
+      padding-inline-start: 2rem;
+      padding-inline-end: 2rem;
     }
   }
 

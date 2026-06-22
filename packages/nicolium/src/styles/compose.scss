@@ -217,11 +217,11 @@
     align-items: center;
 
     padding: 0.5rem 1rem;
-    padding-right: 0.5rem;
+    padding-inline-end: 0.5rem;
     border-color: transparent;
     border-width: 1px;
-    border-top-left-radius: 9999px;
-    border-bottom-left-radius: 9999px;
+    border-top-left-radius: var(--radius-full);
+    border-bottom-left-radius: var(--radius-full);
 
     appearance: none;
     background-color: var(--color-primary-500);
@@ -241,6 +241,13 @@
     &:disabled {
       cursor: default;
       opacity: 0.75;
+    }
+
+    [dir='rtl'] & {
+      border-top-left-radius: 0;
+      border-top-right-radius: var(--radius-full);
+      border-bottom-right-radius: var(--radius-full);
+      border-bottom-left-radius: 0;
     }
 
     .dark &:hover {
@@ -271,9 +278,9 @@
 
       height: 100%;
       padding-top: 0.625rem;
-      padding-right: 0.75rem;
       padding-bottom: 0.625rem;
-      padding-left: 0.25rem;
+      padding-inline-start: 0.25rem;
+      padding-inline-end: 0.75rem;
       border-color: transparent;
       border-width: 1px;
 
@@ -283,8 +290,8 @@
       transition: all 150ms var(--ease-default);
 
       &:last-child {
-        border-top-right-radius: 9999px;
-        border-bottom-right-radius: 9999px;
+        border-top-right-radius: var(--radius-full);
+        border-bottom-right-radius: var(--radius-full);
       }
 
       &:hover {
@@ -300,6 +307,13 @@
       &:disabled {
         cursor: default;
         opacity: 0.75;
+      }
+
+      [dir='rtl'] & {
+        border-top-left-radius: var(--radius-full);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: var(--radius-full);
       }
 
       .dark &:hover {

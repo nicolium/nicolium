@@ -407,7 +407,7 @@
     }
 
     > .icon {
-      margin-left: 0.25rem;
+      margin-inline-start: 0.25rem;
 
       [dir='rtl'] & {
         transform: rotate(180deg);
@@ -2746,8 +2746,8 @@ div[data-viewport-type='window']:has(.empty-message) {
 .picture-in-picture {
   position: fixed;
   z-index: 100;
-  right: 1.25rem;
   bottom: 1.25rem;
+  inset-inline-end: 1.25rem;
 
   overflow: hidden;
 

@@ -1514,7 +1514,7 @@ a.status-card {
   button {
     @include mixins.button($theme: muted, $size: xs);
 
-    margin-left: 0.5rem;
+    margin-inline-start: 0.5rem;
     vertical-align: middle;
 
     svg {
