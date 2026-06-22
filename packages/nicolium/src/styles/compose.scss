@@ -199,12 +199,7 @@
     display: flex;
     gap: 1rem;
     align-items: center;
-    margin-left: auto;
-
-    [dir='rtl'] & {
-      margin-right: auto;
-      margin-left: 0;
-    }
+    margin-inline-start: auto;
   }
 
   &__counter {
@@ -605,19 +600,14 @@
 
       position: absolute;
       top: 0;
-      right: 0;
       bottom: 0;
+      inset-inline-end: 0;
 
       display: flex;
       align-items: center;
 
       padding-right: 0.5rem;
       padding-left: 0.5rem;
-
-      [dir='rtl'] & {
-        right: auto;
-        left: 0;
-      }
 
       svg {
         width: 1.25rem;

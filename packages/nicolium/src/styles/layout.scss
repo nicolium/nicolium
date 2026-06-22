@@ -75,7 +75,7 @@ body {
   position: fixed;
   z-index: 1000;
   bottom: 60px;
-  left: 0.5rem;
+  inset-inline-start: 0.5rem;
   transform-origin: bottom left;
 
   overflow: hidden;
@@ -111,7 +111,6 @@ body {
   }
 
   [dir='rtl'] & {
-    right: 0.5rem;
     transform-origin: bottom right;
   }
 

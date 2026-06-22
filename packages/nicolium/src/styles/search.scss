@@ -91,11 +91,7 @@
   }
 
   input {
-    padding-right: 2.5rem;
-
-    [dir='rtl'] & {
-      padding-left: 2.5rem;
-    }
+    padding-inline-end: 2.5rem;
   }
 
   button {
@@ -103,18 +99,13 @@
 
     position: absolute;
     top: 0;
-    right: 0;
     bottom: 0;
+    inset-inline-end: 0;
 
     display: flex;
     align-items: center;
 
     padding: 0 0.75rem;
-
-    [dir='rtl'] & {
-      right: auto;
-      left: 0;
-    }
 
     svg {
       width: 1rem;

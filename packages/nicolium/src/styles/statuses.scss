@@ -299,12 +299,7 @@ a.status-card {
   }
 
   &:not(&--linear) .status__content-wrapper {
-    padding-left: 54px;
-
-    dir[dir="rtl"] & {
-      padding-right: 54px;
-      padding-left: 0;
-    }
+    padding-inline-start: 54px;
   }
 
   &--linear {
@@ -949,7 +944,7 @@ a.status-card {
   &__connector {
     position: absolute;
     z-index: 1;
-    left: 1.25rem;
+    inset-inline-start: 1.25rem;
 
     display: none;
 
@@ -963,11 +958,6 @@ a.status-card {
 
     .black & {
       background: var(--color-gray-800);
-    }
-
-    [dir='rtl'] & {
-      right: 1.25rem;
-      left: auto;
     }
 
     &--visible {
@@ -1681,12 +1671,7 @@ div:first-child:has(> .timeline-gap) {
   }
 
   &--connected-bottom .status__content-wrapper {
-    padding-left: 54px;
-
-    [dir='rtl'] & {
-      padding-right: 54px;
-      padding-left: 0;
-    }
+    padding-inline-start: 54px;
   }
 
   &--deleted {
@@ -1697,7 +1682,7 @@ div:first-child:has(> .timeline-gap) {
     position: absolute;
     z-index: 1;
     top: calc(28px + 42px);
-    left: 1.25rem;
+    inset-inline-start: 1.25rem;
 
     width: 0.125rem;
     height: calc(100% - 42px - 8px - 1rem);
@@ -1710,11 +1695,6 @@ div:first-child:has(> .timeline-gap) {
 
     .black.dark & {
       background: var(--color-gray-800);
-    }
-
-    [dir='rtl'] & {
-      right: 1.25rem;
-      left: auto;
     }
 
     &__container {
