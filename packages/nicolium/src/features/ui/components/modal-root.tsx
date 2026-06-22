@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 
 import Base from '@/components/modal-root';
+import { CurrentAccountProvider } from '@/contexts/current-account-context';
 import { useComposeActions } from '@/stores/compose';
 import { useModals, useModalsActions } from '@/stores/modals';
 
@@ -66,7 +67,11 @@ const ModalRoot: React.FC = () => {
   const { closeModal } = useModalsActions();
   const { resetCompose } = useComposeActions();
 
-  const { modalType: type, modalProps: props } = modals.at(-1) ?? {
+  const {
+    modalType: type,
+    modalProps: props,
+    accountUrl,
+  } = modals.at(-1) ?? {
     modalProps: {},
     modalType: null,
   };
@@ -91,13 +96,19 @@ const ModalRoot: React.FC = () => {
         ]
       : null;
 
+  let children = Component && !!type && (
+    <Suspense fallback={renderLoading(type)}>
+      <Component key={index} {...props} onClose={onClickClose} />
+    </Suspense>
+  );
+
+  if (children && accountUrl) {
+    children = <CurrentAccountProvider accountUrl={accountUrl}>{children}</CurrentAccountProvider>;
+  }
+
   return (
     <Base onClose={onClickClose} type={type} modalIndex={index}>
-      {Component && !!type && (
-        <Suspense fallback={renderLoading(type)}>
-          <Component key={index} {...props} onClose={onClickClose} />
-        </Suspense>
-      )}
+      {children}
     </Base>
   );
 };
