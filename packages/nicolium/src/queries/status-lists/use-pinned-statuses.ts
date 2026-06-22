@@ -5,10 +5,10 @@ import { queryKeys } from '../keys';
 
 const usePinnedStatuses = makePaginatedResponseQuery(
   (accountId: string) => queryKeys.statusLists.pins(accountId),
-  (client, [accountId], accountOrInstanceUrl) =>
+  (client, [accountId], scopeUrl) =>
     client.accounts
       .getAccountStatuses(accountId, { pinned: true })
-      .then((response) => minifyStatusList(response, accountOrInstanceUrl)),
+      .then((response) => minifyStatusList(response, scopeUrl)),
   undefined,
   (accountId: string) => !!accountId,
 );

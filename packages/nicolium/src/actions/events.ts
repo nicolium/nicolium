@@ -23,7 +23,7 @@ const submitEvent = async ({
   endTime,
   joinMode,
   location,
-  accountOrInstanceUrl,
+  scopeUrl,
 }: {
   client: PlApiClient;
   statusId: string | null;
@@ -34,7 +34,7 @@ const submitEvent = async ({
   endTime: Date | null;
   joinMode: 'restricted' | 'free';
   location: Location | null;
-  accountOrInstanceUrl: string;
+  scopeUrl: string;
 }) => {
   if (!name || !name.length) {
     return;
@@ -56,7 +56,7 @@ const submitEvent = async ({
     ? client.events.createEvent(params)
     : client.events.editEvent(statusId, params));
 
-  importEntities(accountOrInstanceUrl, { statuses: [data] });
+  importEntities(scopeUrl, { statuses: [data] });
   toast.success(statusId ? messages.editSuccess : messages.success, {
     actionLabel: messages.view,
     actionLinkOptions: {

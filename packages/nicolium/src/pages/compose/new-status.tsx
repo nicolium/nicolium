@@ -24,7 +24,7 @@ const NewStatusPage = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const client = useClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
   const { data: ownAccount } = useOwnAccount();
   const search = newStatusRoute.useSearch();
   const { data: draftStatus } = useDraftStatusQuery(search.draftId ?? '');
@@ -43,7 +43,7 @@ const NewStatusPage = () => {
     }
 
     if (inReplyTo) {
-      fetchStatus(client, inReplyTo, accountOrInstanceUrl).then(() => {
+      fetchStatus(client, inReplyTo, scopeUrl).then(() => {
         const status = queryClient.getQueryData(queryKeys.statuses.show(inReplyTo));
         if (!status) return;
 
@@ -53,7 +53,7 @@ const NewStatusPage = () => {
     }
 
     if (quote) {
-      fetchStatus(client, quote, accountOrInstanceUrl).then(() => {
+      fetchStatus(client, quote, scopeUrl).then(() => {
         const status = queryClient.getQueryData(queryKeys.statuses.show(quote));
         if (!status) return;
 
@@ -61,7 +61,7 @@ const NewStatusPage = () => {
       });
     }
   }, [
-    accountOrInstanceUrl,
+    scopeUrl,
     approvalRequired,
     client,
     inReplyTo,
@@ -81,7 +81,7 @@ const NewStatusPage = () => {
     const poll = buildPoll(draftStatus.poll);
 
     if (status.in_reply_to_id) {
-      fetchStatus(client, status.in_reply_to_id, accountOrInstanceUrl).catch(() => {});
+      fetchStatus(client, status.in_reply_to_id, scopeUrl).catch(() => {});
     }
 
     setComposeToStatus(
@@ -92,7 +92,7 @@ const NewStatusPage = () => {
       draftStatus.draft_id,
       draftStatus.editorState,
     );
-  }, [accountOrInstanceUrl, client, draftStatus, ownAccount, setComposeToStatus]);
+  }, [scopeUrl, client, draftStatus, ownAccount, setComposeToStatus]);
 
   return (
     <Column withBack={false} label={intl.formatMessage(messages.heading)}>

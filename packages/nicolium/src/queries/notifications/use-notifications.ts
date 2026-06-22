@@ -117,12 +117,12 @@ const shouldDisplayNotification = (
 const notificationsQueryOptions = makePaginatedResponseQueryOptions(
   (activeFilter: FilterType, hideBots: boolean) =>
     queryKeys.notifications.list(activeFilter, hideBots),
-  (client, [activeFilter, hideBots], accountOrInstanceUrl) =>
+  (client, [activeFilter, hideBots], scopeUrl) =>
     client.groupedNotifications
       .getGroupedNotifications(
         buildNotificationsParams(activeFilter, client.features.notificationsIncludeTypes),
       )
-      .then((response) => minifyGroupedNotifications(response, hideBots, accountOrInstanceUrl)),
+      .then((response) => minifyGroupedNotifications(response, hideBots, scopeUrl)),
 );
 
 const useNotifications = (activeFilter: FilterType) => {

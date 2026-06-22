@@ -51,7 +51,7 @@ const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();
   const node = useRef<HTMLDivElement | null>(null);
   const me = useCurrentAccount();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
   const { data: account } = useOwnAccount();
   const features = useFeatures();
   const instance = useInstance();
@@ -108,10 +108,7 @@ const UI: React.FC = React.memo(() => {
 
     if (features.scheduledStatuses) {
       requestIdleCallback(
-        () =>
-          queryClient.prefetchInfiniteQuery(
-            scheduledStatusesQueryOptions(client, accountOrInstanceUrl),
-          ),
+        () => queryClient.prefetchInfiniteQuery(scheduledStatusesQueryOptions(client, scopeUrl)),
         {
           timeout: 2000,
         },

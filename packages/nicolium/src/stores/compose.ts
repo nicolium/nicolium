@@ -737,7 +737,7 @@ const useSubmitCompose = (composeId: string) => {
   const actions = useComposeActions();
   const client = useClient();
   const { data: ownAccount } = useOwnAccount();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
   const features = useFeatures();
   const { openModal, closeModal } = useModalsActions();
   const { removeSledzik } = useUiStoreActions();
@@ -944,7 +944,7 @@ const useSubmitCompose = (composeId: string) => {
             params,
             idempotencyKey,
             editedId,
-            accountOrInstanceUrl,
+            scopeUrl,
             compose.redacting,
           );
 

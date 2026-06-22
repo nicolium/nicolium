@@ -36,7 +36,7 @@ interface IDraftStatusActionBar {
 const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status }) => {
   const intl = useIntl();
   const client = useClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   const { openModal } = useModalsActions();
   const { setComposeToStatus } = useComposeActions();
@@ -63,7 +63,7 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
       return;
     }
 
-    if (status.in_reply_to_id) fetchStatus(client, status.in_reply_to_id, accountOrInstanceUrl);
+    if (status.in_reply_to_id) fetchStatus(client, status.in_reply_to_id, scopeUrl);
     const poll = status.poll_id
       ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
       : undefined;

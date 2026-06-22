@@ -66,10 +66,10 @@ const usePendingUsersCount = () => {
   const client = useClient();
   const { data: account } = useOwnAccount();
   const features = useFeatures();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useAppInfiniteQuery({
-    ...pendingUsersQuery(client, accountOrInstanceUrl),
+    ...pendingUsersQuery(client, scopeUrl),
     select: (data) =>
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,
     enabled:

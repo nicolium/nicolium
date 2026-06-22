@@ -23,18 +23,18 @@ function useAppQuery<
   TQueryKey extends QueryKey = QueryKey,
 >(options: UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>): UseQueryResult<TData, TError> {
   const queryClient = useQueryClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   const { queryKey } = options;
   const modifiedQueryKey = useMemo(
-    () => [accountOrInstanceUrl, ...queryKey] as unknown as TQueryKey,
-    [accountOrInstanceUrl, queryKey],
+    () => [scopeUrl, ...queryKey] as unknown as TQueryKey,
+    [scopeUrl, queryKey],
   );
 
   const placeholderData = useCallback(() => {
-    const instanceUrl = new URL(accountOrInstanceUrl).origin;
+    const instanceUrl = new URL(scopeUrl).origin;
     return queryClient.getQueryData<NonFunctionGuard<TQueryFnData>>([instanceUrl, queryKey]);
-  }, [accountOrInstanceUrl, queryClient, queryKey]);
+  }, [scopeUrl, queryClient, queryKey]);
 
   return useQuery({ ...options, queryKey: modifiedQueryKey, placeholderData });
 }
@@ -49,27 +49,27 @@ function useAppInfiniteQuery<
   options: UseInfiniteQueryOptions<TQueryFnData, TError, TData, TQueryKey, TPageParam>,
 ): UseInfiniteQueryResult<TData, TError> {
   const queryClient = useQueryClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   const { queryKey } = options;
   const modifiedQueryKey = useMemo(
-    () => [accountOrInstanceUrl, ...queryKey] as unknown as TQueryKey,
-    [accountOrInstanceUrl, queryKey],
+    () => [scopeUrl, ...queryKey] as unknown as TQueryKey,
+    [scopeUrl, queryKey],
   );
 
   const placeholderData = useCallback(() => {
-    const instanceUrl = new URL(accountOrInstanceUrl).origin;
+    const instanceUrl = new URL(scopeUrl).origin;
     return queryClient.getQueryData<NonFunctionGuard<InfiniteData<TQueryFnData, TPageParam>>>([
       instanceUrl,
       queryKey,
     ]);
-  }, [accountOrInstanceUrl, queryClient, queryKey]);
+  }, [scopeUrl, queryClient, queryKey]);
 
   return useInfiniteQuery({ ...options, queryKey: modifiedQueryKey, placeholderData });
 }
 
-function scopedQueryKey<T extends QueryKey>(queryKey: T, accountOrInstanceUrl: string): T {
-  return [accountOrInstanceUrl, ...queryKey] as unknown as T;
+function scopedQueryKey<T extends QueryKey>(queryKey: T, scopeUrl: string): T {
+  return [scopeUrl, ...queryKey] as unknown as T;
 }
 
 export { useAppInfiniteQuery, useAppQuery, scopedQueryKey };

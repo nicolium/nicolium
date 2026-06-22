@@ -34,7 +34,7 @@ interface IStatePlugin {
 const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const intl = useIntl();
   const client = useClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
   const { urlPrivacy, ignoreHashtagCasingSuggestions } = useSettings();
@@ -149,7 +149,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
             break;
           }
 
-          const status = await fetchStatus(client, id, accountOrInstanceUrl, intl);
+          const status = await fetchStatus(client, id, scopeUrl, intl);
 
           if (status) {
             quoteId = status.id;

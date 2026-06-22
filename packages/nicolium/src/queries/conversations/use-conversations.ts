@@ -30,18 +30,15 @@ const sortConversations = (items: MinifiedConversation[]) =>
     return compareDate(a.last_status_created_at, b.last_status_created_at);
   });
 
-const importConversationEntities = (
-  conversations: Conversation[],
-  accountOrInstanceUrl: string,
-) => {
-  importEntities(accountOrInstanceUrl, {
+const importConversationEntities = (conversations: Conversation[], scopeUrl: string) => {
+  importEntities(scopeUrl, {
     accounts: conversations.flatMap((conversation) => conversation.accounts),
     statuses: conversations.map((conversation) => conversation.last_status),
   });
 };
 
-const updateConversations = (conversation: Conversation, accountOrInstanceUrl: string) => {
-  importConversationEntities([conversation], accountOrInstanceUrl);
+const updateConversations = (conversation: Conversation, scopeUrl: string) => {
+  importConversationEntities([conversation], scopeUrl);
 
   queryClient.setQueryData(queryKeys.conversations.all, (data) => {
     if (!data || !data.pages.length) return data;
@@ -70,7 +67,7 @@ const updateConversations = (conversation: Conversation, accountOrInstanceUrl: s
 const useConversations = () => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   const query = useAppInfiniteQuery({
     queryKey: queryKeys.conversations.all,
@@ -80,7 +77,7 @@ const useConversations = () => {
       }
 
       const response = await client.timelines.getConversations();
-      return minifyConversationList(response, accountOrInstanceUrl);
+      return minifyConversationList(response, scopeUrl);
     },
     initialPageParam: {
       next: null as (() => Promise<PaginatedResponse<MinifiedConversation>>) | null,

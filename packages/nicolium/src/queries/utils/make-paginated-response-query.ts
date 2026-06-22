@@ -52,7 +52,7 @@ const makePaginatedResponseQuery =
     queryFn: (
       client: PlApiClient,
       params: T1,
-      accountOrInstanceUrl: string,
+      scopeUrl: string,
     ) => Promise<PaginatedResponse<T2, IsArray>>,
     select?: (data: InfiniteData<PaginatedResponse<T2, IsArray>>) => T3,
     enabled?: ((...params: T1) => boolean) | 'isLoggedIn' | 'isAdmin',
@@ -66,14 +66,14 @@ const makePaginatedResponseQuery =
     const client = useClient();
     const features = useFeatures();
     const { data: account } = useOwnAccount();
-    const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+    const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
     type PageParam = { next: (() => Promise<PaginatedResponse<T2, IsArray>>) | null };
 
     return useAppInfiniteQuery({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
       queryFn: ({ pageParam }) =>
-        (pageParam as PageParam).next?.() ?? queryFn(client, params, accountOrInstanceUrl),
+        (pageParam as PageParam).next?.() ?? queryFn(client, params, scopeUrl),
       initialPageParam: { next: null } as PageParam,
       getNextPageParam: (page) => (page.next ? page : undefined),
       select:

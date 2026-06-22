@@ -103,7 +103,7 @@ const useUserStream = () => {
   const processStreamNotification = useProcessStreamNotification();
   const { deleteStatus, receiveStreamingStatus } = useTimelinesActions();
   const importEntities = useImportEntities();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {
@@ -123,7 +123,7 @@ const useUserStream = () => {
         processStreamNotification(event.payload);
         break;
       case 'conversation':
-        updateConversations(event.payload, accountOrInstanceUrl);
+        updateConversations(event.payload, scopeUrl);
         break;
       case 'filters_changed':
         queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });

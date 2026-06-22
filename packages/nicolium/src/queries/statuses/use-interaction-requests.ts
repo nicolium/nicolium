@@ -27,20 +27,18 @@ type MinifiedInteractionRequest = ReturnType<typeof minifyInteractionRequest>;
 
 const minifyInteractionRequestsList = (
   { previous, next, items, ...response }: PaginatedResponse<InteractionRequest>,
-  accountOrInstanceUrl: string,
+  scopeUrl: string,
 ): PaginatedResponse<MinifiedInteractionRequest> => {
-  importEntities(accountOrInstanceUrl, {
+  importEntities(scopeUrl, {
     statuses: items.flatMap((item) => [item.status, item.reply]),
   });
 
   return new PaginatedResponse(items.map(minifyInteractionRequest), {
     ...response,
     previous: previous
-      ? () => previous().then((list) => minifyInteractionRequestsList(list, accountOrInstanceUrl))
+      ? () => previous().then((list) => minifyInteractionRequestsList(list, scopeUrl))
       : null,
-    next: next
-      ? () => next().then((list) => minifyInteractionRequestsList(list, accountOrInstanceUrl))
-      : null,
+    next: next ? () => next().then((list) => minifyInteractionRequestsList(list, scopeUrl)) : null,
   });
 };
 
@@ -50,7 +48,7 @@ const useInteractionRequests = <T>(
   const client = useClient();
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useAppInfiniteQuery({
     queryKey: queryKeys.interactionRequests.all,
@@ -58,7 +56,7 @@ const useInteractionRequests = <T>(
       pageParam.next?.() ??
       client.interactionRequests
         .getInteractionRequests()
-        .then((list) => minifyInteractionRequestsList(list, accountOrInstanceUrl)),
+        .then((list) => minifyInteractionRequestsList(list, scopeUrl)),
     initialPageParam: {
       next: null as (() => Promise<PaginatedResponse<MinifiedInteractionRequest>>) | null,
     },

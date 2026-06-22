@@ -44,12 +44,12 @@ const minifyList = <T1, T2, IsArray extends boolean = true>(
 
 const minifyStatusList = (
   response: PaginatedResponse<Status>,
-  accountOrInstanceUrl: string,
+  scopeUrl: string,
 ): PaginatedResponse<string> =>
   minifyList(
     response,
     (status) => status.id,
-    (statuses) => importEntities(accountOrInstanceUrl, { statuses }),
+    (statuses) => importEntities(scopeUrl, { statuses }),
   );
 
 const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedResponse<string> =>
@@ -136,12 +136,9 @@ const minifyConversation = (conversation: Conversation) => ({
 
 type MinifiedConversation = ReturnType<typeof minifyConversation>;
 
-const minifyConversationList = (
-  response: PaginatedResponse<Conversation>,
-  accountOrInstanceUrl: string,
-) =>
+const minifyConversationList = (response: PaginatedResponse<Conversation>, scopeUrl: string) =>
   minifyList(response, minifyConversation, (conversations) => {
-    importEntities(accountOrInstanceUrl, {
+    importEntities(scopeUrl, {
       accounts: conversations.flatMap((conversation) => conversation.accounts),
       statuses: conversations.map((conversation) => conversation.last_status),
     });
@@ -150,7 +147,7 @@ const minifyConversationList = (
 const minifyGroupedNotifications = (
   response: PaginatedResponse<GroupedNotificationsResults, false>,
   hideBots = false,
-  accountOrInstanceUrl: string,
+  scopeUrl: string,
 ): PaginatedResponse<NotificationGroup[], false> =>
   minifyList(
     response,
@@ -170,7 +167,7 @@ const minifyGroupedNotifications = (
     (results) => {
       const { accounts, statuses } = results;
 
-      importEntities(accountOrInstanceUrl, { accounts, statuses });
+      importEntities(scopeUrl, { accounts, statuses });
     },
     false,
   );
@@ -207,7 +204,7 @@ const minifyAdminReport = (
     statuses,
     ...adminReport
   }: AdminReport,
-  accountOrInstanceUrl: string,
+  scopeUrl: string,
 ) => {
   minifyAdminAccountList(
     new PaginatedResponse(
@@ -218,7 +215,7 @@ const minifyAdminReport = (
     ),
   );
 
-  importEntities(accountOrInstanceUrl, {
+  importEntities(scopeUrl, {
     accounts: [
       account.account,
       action_taken_by_account?.account,
@@ -239,10 +236,7 @@ const minifyAdminReport = (
 
 type MinifiedAdminReport = ReturnType<typeof minifyAdminReport>;
 
-const minifyAdminReportList = (
-  response: PaginatedResponse<AdminReport>,
-  accountOrInstanceUrl: string,
-) =>
+const minifyAdminReportList = (response: PaginatedResponse<AdminReport>, scopeUrl: string) =>
   minifyList(
     response,
     (report) => report.id,
@@ -251,7 +245,7 @@ const minifyAdminReportList = (
         for (const report of reports) {
           queryClient.setQueryData(
             queryKeys.admin.reports.show(report.id),
-            minifyAdminReport(report, accountOrInstanceUrl),
+            minifyAdminReport(report, scopeUrl),
           );
         }
       });

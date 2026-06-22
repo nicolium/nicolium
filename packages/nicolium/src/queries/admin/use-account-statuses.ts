@@ -8,10 +8,10 @@ import type { AdminGetStatusesParams } from 'pl-api';
 const useAdminAccountStatuses = makePaginatedResponseQuery(
   (accountId: string, params?: AdminGetStatusesParams) =>
     queryKeys.admin.accounts.statuses(accountId!, params),
-  (client, [accountId, params], accountOrInstanceUrl) =>
+  (client, [accountId, params], scopeUrl) =>
     client.admin.accounts
       .getAccountStatuses(accountId!, params)
-      .then((response) => minifyStatusList(response, accountOrInstanceUrl)),
+      .then((response) => minifyStatusList(response, scopeUrl)),
 );
 
 export { useAdminAccountStatuses };

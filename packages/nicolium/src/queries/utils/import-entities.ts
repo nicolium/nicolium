@@ -43,7 +43,7 @@ interface ImportEntitiesOptions {
 }
 
 const importEntities = (
-  accountOrInstanceUrl: string,
+  scopeUrl: string,
   entities: ImportEntitiesEntities,
   options: ImportEntitiesOptions = {
     withParents: true,
@@ -106,11 +106,11 @@ const importEntities = (
     const status = entities.statuses[0];
     useContextStore.getState().actions.importStatus(status, options.idempotencyKey);
     const oldStatus = queryClient.getQueryData(
-      scopedQueryKey(queryKeys.statuses.show(status.id), accountOrInstanceUrl),
+      scopedQueryKey(queryKeys.statuses.show(status.id), scopeUrl),
     );
     const normalized = normalizeStatus(status, oldStatus);
     queryClient.setQueryData(
-      scopedQueryKey(queryKeys.statuses.show(status.id), accountOrInstanceUrl),
+      scopedQueryKey(queryKeys.statuses.show(status.id), scopeUrl),
       normalized,
     );
     processStatus(status, false);
@@ -122,27 +122,21 @@ const importEntities = (
     if (!isEmpty(accounts)) {
       for (const account of Object.values(accounts)) {
         queryClient.setQueryData(
-          scopedQueryKey(
-            queryKeys.accounts.lookup(account.acct.toLowerCase()),
-            accountOrInstanceUrl,
-          ),
+          scopedQueryKey(queryKeys.accounts.lookup(account.acct.toLowerCase()), scopeUrl),
           account.id,
         );
         queryClient.setQueryData(
-          scopedQueryKey(queryKeys.accounts.show(account.id), accountOrInstanceUrl),
+          scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
           account,
         );
       }
     }
     if (!isEmpty(groups))
       for (const group of Object.values(groups)) {
-        queryClient.setQueryData(
-          scopedQueryKey(queryKeys.groups.show(group.id), accountOrInstanceUrl),
-          group,
-        );
+        queryClient.setQueryData(scopedQueryKey(queryKeys.groups.show(group.id), scopeUrl), group);
         if (group.relationship) {
           queryClient.setQueryData(
-            scopedQueryKey(queryKeys.groupRelationships.show(group.id), accountOrInstanceUrl),
+            scopedQueryKey(queryKeys.groupRelationships.show(group.id), scopeUrl),
             group.relationship,
           );
         }
@@ -150,7 +144,7 @@ const importEntities = (
     if (!isEmpty(polls)) {
       for (const poll of Object.values(polls)) {
         queryClient.setQueryData(
-          scopedQueryKey(queryKeys.statuses.polls.show(poll.id), accountOrInstanceUrl),
+          scopedQueryKey(queryKeys.statuses.polls.show(poll.id), scopeUrl),
           poll,
         );
       }
@@ -158,10 +152,7 @@ const importEntities = (
     if (!isEmpty(relationships)) {
       for (const relationship of Object.values(relationships)) {
         queryClient.setQueryData(
-          scopedQueryKey(
-            queryKeys.accountRelationships.show(relationship.id),
-            accountOrInstanceUrl,
-          ),
+          scopedQueryKey(queryKeys.accountRelationships.show(relationship.id), scopeUrl),
           relationship,
         );
       }
@@ -172,11 +163,11 @@ const importEntities = (
     if (!isEmpty(statuses)) {
       for (const status of Object.values(statuses)) {
         const oldStatus = queryClient.getQueryData(
-          scopedQueryKey(queryKeys.statuses.show(status.id), accountOrInstanceUrl),
+          scopedQueryKey(queryKeys.statuses.show(status.id), scopeUrl),
         );
         const normalized = normalizeStatus(status, oldStatus);
         queryClient.setQueryData(
-          scopedQueryKey(queryKeys.statuses.show(status.id), accountOrInstanceUrl),
+          scopedQueryKey(queryKeys.statuses.show(status.id), scopeUrl),
           normalized,
         );
       }
@@ -185,10 +176,7 @@ const importEntities = (
       for (const [statusId, translationsByLanguage] of Object.entries(translations)) {
         for (const [language, translation] of Object.entries(translationsByLanguage)) {
           queryClient.setQueryData(
-            scopedQueryKey(
-              queryKeys.statuses.translations(statusId, language),
-              accountOrInstanceUrl,
-            ),
+            scopedQueryKey(queryKeys.statuses.translations(statusId, language), scopeUrl),
             translation,
           );
         }
@@ -198,10 +186,10 @@ const importEntities = (
 };
 
 const useImportEntities = () => {
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return (entities: ImportEntitiesEntities, options?: ImportEntitiesOptions) => {
-    importEntities(accountOrInstanceUrl, entities, options);
+    importEntities(scopeUrl, entities, options);
   };
 };
 

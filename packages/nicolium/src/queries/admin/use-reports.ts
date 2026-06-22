@@ -20,24 +20,24 @@ import type { AdminGetReportsParams, AdminUpdateReportParams, PaginationParams }
 const useReports = makePaginatedResponseQuery(
   (params: Omit<AdminGetReportsParams, keyof PaginationParams>) =>
     queryKeys.admin.reportLists.show(params),
-  (client, [params], accountOrInstanceUrl) =>
+  (client, [params], scopeUrl) =>
     client.admin.reports
       .getReports(params)
-      .then((response) => minifyAdminReportList(response, accountOrInstanceUrl)),
+      .then((response) => minifyAdminReportList(response, scopeUrl)),
   undefined,
   'isAdmin',
 );
 
 const useMinimalReport = (reportId: string) => {
   const client = useClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useAppQuery({
     queryKey: queryKeys.admin.reports.show(reportId),
     queryFn: () =>
       client.admin.reports
         .getReport(reportId)
-        .then((report) => minifyAdminReport(report, accountOrInstanceUrl)),
+        .then((report) => minifyAdminReport(report, scopeUrl)),
   });
 };
 
@@ -66,20 +66,20 @@ const useReport = (reportId: string) => {
 
 const pendingReportsQuery = makePaginatedResponseQueryOptions(
   queryKeys.admin.reportLists.show({ resolved: undefined }),
-  (client, _params, accountOrInstanceUrl) =>
+  (client, _params, scopeUrl) =>
     client.admin.reports
       .getReports({ unresolved: true })
-      .then((response) => minifyAdminReportList(response, accountOrInstanceUrl)),
+      .then((response) => minifyAdminReportList(response, scopeUrl)),
 );
 
 const usePendingReportsCount = () => {
   const client = useClient();
   const { data: account } = useOwnAccount();
   const fetched = useInstanceStore((state) => state.fetched);
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useAppInfiniteQuery({
-    ...pendingReportsQuery(client, accountOrInstanceUrl),
+    ...pendingReportsQuery(client, scopeUrl),
     select: (data) =>
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,
     enabled: fetched && !!(account?.is_admin ?? account?.is_moderator),
@@ -89,7 +89,7 @@ const usePendingReportsCount = () => {
 const useUpdateReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -98,7 +98,7 @@ const useUpdateReport = (reportId: string) => {
     onSuccess: (report) => {
       queryClient.setQueryData(
         queryKeys.admin.reports.show(reportId),
-        minifyAdminReport(report, accountOrInstanceUrl),
+        minifyAdminReport(report, scopeUrl),
       );
     },
   });
@@ -107,7 +107,7 @@ const useUpdateReport = (reportId: string) => {
 const useSelfAssignReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -115,7 +115,7 @@ const useSelfAssignReport = (reportId: string) => {
     onSuccess: (report) => {
       queryClient.setQueryData(
         queryKeys.admin.reports.show(reportId),
-        minifyAdminReport(report, accountOrInstanceUrl),
+        minifyAdminReport(report, scopeUrl),
       );
     },
   });
@@ -124,7 +124,7 @@ const useSelfAssignReport = (reportId: string) => {
 const useUnassignReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -132,7 +132,7 @@ const useUnassignReport = (reportId: string) => {
     onSuccess: (report) => {
       queryClient.setQueryData(
         queryKeys.admin.reports.show(reportId),
-        minifyAdminReport(report, accountOrInstanceUrl),
+        minifyAdminReport(report, scopeUrl),
       );
     },
   });
@@ -141,7 +141,7 @@ const useUnassignReport = (reportId: string) => {
 const useResolveReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -150,7 +150,7 @@ const useResolveReport = (reportId: string) => {
     onSuccess: (report) => {
       queryClient.setQueryData(
         queryKeys.admin.reports.show(reportId),
-        minifyAdminReport(report, accountOrInstanceUrl),
+        minifyAdminReport(report, scopeUrl),
       );
       queryClient.setQueriesData(
         {
@@ -170,7 +170,7 @@ const useResolveReport = (reportId: string) => {
 const useReopenReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -178,7 +178,7 @@ const useReopenReport = (reportId: string) => {
     onSuccess: (report) => {
       queryClient.setQueryData(
         queryKeys.admin.reports.show(reportId),
-        minifyAdminReport(report, accountOrInstanceUrl),
+        minifyAdminReport(report, scopeUrl),
       );
       queryClient.setQueriesData(
         {
@@ -198,7 +198,7 @@ const useReopenReport = (reportId: string) => {
 const useForwardReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
 
   return useMutation({
     mutationKey: queryKeys.admin.reports.show(reportId),
@@ -206,7 +206,7 @@ const useForwardReport = (reportId: string) => {
     onSuccess: (report) => {
       queryClient.setQueryData(
         queryKeys.admin.reports.show(reportId),
-        minifyAdminReport(report, accountOrInstanceUrl),
+        minifyAdminReport(report, scopeUrl),
       );
     },
   });

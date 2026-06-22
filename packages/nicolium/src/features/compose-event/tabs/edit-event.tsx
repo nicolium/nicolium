@@ -69,7 +69,7 @@ interface IEditEvent {
 const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const intl = useIntl();
   const client = useClient();
-  const accountOrInstanceUrl = useCurrentAccountContext().meUrl || backendUrl;
+  const scopeUrl = useCurrentAccountContext().meUrl || backendUrl;
   const navigate = useNavigate();
   const { openModal } = useModalsActions();
 
@@ -182,7 +182,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       endTime,
       joinMode: approvalRequired ? 'restricted' : 'free',
       location,
-      accountOrInstanceUrl,
+      scopeUrl,
     })
       .then((status) => {
         if (status)
@@ -197,10 +197,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   useEffect(() => {
     if (statusId) {
-      Promise.all([
-        initEventEdit(client, statusId),
-        fetchStatus(client, statusId, accountOrInstanceUrl),
-      ])
+      Promise.all([initEventEdit(client, statusId), fetchStatus(client, statusId, scopeUrl)])
         .then(([source, status]) => {
           if (!source || !status) throw new Error();
 
