@@ -21,6 +21,7 @@ import ScrollableList from '@/components/scrollable-list';
 import Icon from '@/components/ui/icon';
 import Tabs from '@/components/ui/tabs';
 import { useFeatures } from '@/hooks/use-features';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import {
@@ -32,9 +33,9 @@ import { useSettings, useSettingsStoreActions } from '@/stores/settings';
 import { selectChild } from '@/utils/scroll-utils';
 
 import type { Item } from '@/components/ui/tabs';
-import type { VirtuosoHandle } from 'react-virtuoso';
 
 import '@/styles/notifications.scss';
+import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
@@ -70,6 +71,7 @@ const FilterBar: React.FC<IFilterBar> = ({ selected, onSelect }) => {
   const { notifications: notificationsSettings, useRocketIconForReblogs } = useSettings();
   const { changeSetting } = useSettingsStoreActions();
   const features = useFeatures();
+  const scopeUrl = useScopeUrl();
 
   const selectedFilter = selected ?? notificationsSettings.quickFilter.active;
   const advancedMode = notificationsSettings.quickFilter.advanced;
@@ -83,7 +85,10 @@ const FilterBar: React.FC<IFilterBar> = ({ selected, onSelect }) => {
     }
     if (filterType === selectedFilter) {
       queryClient.refetchQueries({
-        queryKey: queryKeys.notifications.list(filterType, notificationsSettings.hideBots),
+        queryKey: [
+          scopeUrl,
+          ...queryKeys.notifications.list(filterType, notificationsSettings.hideBots),
+        ],
         exact: true,
       });
     }
@@ -173,6 +178,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
   const settings = useSettings();
   const { mutate: markNotificationsRead } = useMarkNotificationsReadMutation();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   const showFilterBar =
     !compact &&
@@ -270,7 +276,10 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
 
   const handleRefresh = useCallback(() => {
     queryClient.resetQueries({
-      queryKey: queryKeys.notifications.list(activeFilter, settings.notifications.hideBots),
+      queryKey: [
+        scopeUrl,
+        ...queryKeys.notifications.list(activeFilter, settings.notifications.hideBots),
+      ],
     });
     refetch().catch(console.error);
   }, [refetch]);

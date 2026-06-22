@@ -9,6 +9,7 @@ import NotificationsColumn from '@/columns/notifications';
 import DropdownMenu, { type MenuItem } from '@/components/dropdown-menu';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
 import { useNotifications } from '@/queries/notifications/use-notifications';
 import { useSettings } from '@/stores/settings';
@@ -32,15 +33,19 @@ const RefreshButton = () => {
   const queryClient = useQueryClient();
   const notificationSettings = useSettings().notifications;
   const { isPending, refetch } = useNotifications(notificationSettings.quickFilter.active);
+  const scopeUrl = useScopeUrl();
 
   if (userTouching.matches) return null;
 
   const handleClick = () => {
     queryClient.resetQueries({
-      queryKey: queryKeys.notifications.list(
-        notificationSettings.quickFilter.active,
-        notificationSettings.hideBots,
-      ),
+      queryKey: [
+        scopeUrl,
+        ...queryKeys.notifications.list(
+          notificationSettings.quickFilter.active,
+          notificationSettings.hideBots,
+        ),
+      ],
     });
     refetch();
   };

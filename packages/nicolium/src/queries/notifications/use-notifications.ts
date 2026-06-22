@@ -14,9 +14,10 @@ import { getNotificationStatusId, notificationMessages } from '@/components/noti
 import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { appendFollowRequest } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
-import { useAppInfiniteQuery } from '@/queries/query';
+import { scopedQueryKey, useAppInfiniteQuery } from '@/queries/query';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQueryOptions } from '@/queries/utils/make-paginated-response-query-options';
 import { useSettingsStore } from '@/stores/settings';
@@ -161,6 +162,7 @@ const useProcessStreamNotification = () => {
   const { sounds } = useSettingsStore((state) => state.settings.notifications);
   const hideBots = useHideBotNotifications();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   const processStreamNotification = useCallback(
     (notification: Notification) => {
@@ -230,10 +232,10 @@ const useProcessStreamNotification = () => {
 
       const normalizedNotification = normalizeNotification(notification);
 
-      prependNotification(normalizedNotification, 'all');
+      prependNotification(normalizedNotification, 'all', scopeUrl);
 
       if (shouldDisplayNotification(notification.type, activeFilter)) {
-        prependNotification(normalizedNotification, activeFilter);
+        prependNotification(normalizedNotification, activeFilter, scopeUrl);
       }
 
       if (normalizedNotification.type === 'follow_request') {
@@ -334,24 +336,31 @@ const comparator = (
     .localeCompare(a.most_recent_notification_id.padStart(length, '0'));
 };
 
-const prependNotification = (notification: NotificationGroup, filter: FilterType) => {
+const prependNotification = (
+  notification: NotificationGroup,
+  filter: FilterType,
+  scopeUrl: string,
+) => {
   for (const hideBots of [false, true]) {
-    queryClient.setQueryData(queryKeys.notifications.list(filter, hideBots), (data) => {
-      if (!data || !data.pages.length) return data;
+    queryClient.setQueryData(
+      scopedQueryKey(queryKeys.notifications.list(filter, hideBots), scopeUrl),
+      (data) => {
+        if (!data || !data.pages.length) return data;
 
-      const [firstPage, ...restPages] = data.pages;
+        const [firstPage, ...restPages] = data.pages;
 
-      return {
-        ...data,
-        pages: [
-          new PaginatedResponse<Array<NotificationGroup>, false>(
-            [notification, ...firstPage.items].toSorted(comparator).filter(filterUnique),
-            firstPage,
-          ),
-          ...restPages,
-        ],
-      };
-    });
+        return {
+          ...data,
+          pages: [
+            new PaginatedResponse<Array<NotificationGroup>, false>(
+              [notification, ...firstPage.items].toSorted(comparator).filter(filterUnique),
+              firstPage,
+            ),
+            ...restPages,
+          ],
+        };
+      },
+    );
   }
 };
 
