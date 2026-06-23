@@ -1,15 +1,11 @@
 @use 'mixins';
 
-.drive-page {
-  &__files {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-
-    &--list {
-      flex-direction: column;
-    }
-  }
+.drive-page__files,
+.drive-file-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-content: baseline;
 
   .drive-file {
     position: relative;
@@ -94,6 +90,65 @@
       background-color: var(--color-gray-900);
     }
   }
+
+  &--list {
+    flex-direction: column;
+
+    .drive-file {
+      display: flex;
+      flex-direction: row;
+      gap: 0.25rem;
+      align-items: center;
+
+      width: 100%;
+
+      img {
+        pointer-events: none;
+
+        overflow: hidden;
+
+        width: 2rem;
+        height: 2rem;
+        margin: 0.5rem;
+        border-radius: var(--radius-lg);
+
+        object-fit: cover;
+      }
+
+      &__icon {
+        width: 2rem;
+        height: 2rem;
+        margin: 0.5rem;
+        color: var(--color-gray-800);
+
+        .dark & {
+          color: var(--color-gray-200);
+        }
+      }
+
+      &__label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &--active {
+        background: var(--color-primary-100);
+
+        .dark & {
+          background: var(--color-primary-800);
+        }
+
+        .dark.black & {
+          background: var(--color-gray-900);
+        }
+      }
+
+      &:disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+  }
 }
 
 .drive-breadcrumbs {
@@ -101,8 +156,13 @@
   flex-wrap: wrap;
   gap: 0.125rem;
   align-items: center;
-
-  margin-bottom: 0.5rem;
+  
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
 
   &__spacer {
     padding: 0.25rem;
@@ -137,60 +197,39 @@
   }
 }
 
-.drive-file-list,
-.drive-page__files--list {
-  .drive-file {
+.drive-view-mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  button {
     display: flex;
-    flex-direction: row;
-    gap: 0.25rem;
+    gap: 0.5rem;
     align-items: center;
 
-    width: 100%;
+    padding: 0.25rem;
+    border-radius: var(--radius-sm);
 
-    img {
-      pointer-events: none;
+    color: var(--color-gray-800);
 
-      overflow: hidden;
-
-      width: 2rem;
-      height: 2rem;
-      margin: 0.5rem;
-      border-radius: var(--radius-lg);
-
-      object-fit: cover;
+    .dark & {
+      color: var(--color-gray-200);
     }
 
-    &__icon {
-      width: 2rem;
-      height: 2rem;
-      margin: 0.5rem;
-      color: var(--color-gray-800);
+    &:hover {
+      background-color: var(--color-gray-100);
 
       .dark & {
-        color: var(--color-gray-200);
+        background-color: var(--color-gray-800);
       }
     }
 
-    &__label {
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    &--active {
-      background: var(--color-primary-100);
+    &[aria-pressed='true'] {
+      background-color: var(--color-primary-100);
 
       .dark & {
-        background: var(--color-primary-800);
+        background-color: var(--color-primary-700);
       }
-
-      .dark.black & {
-        background: var(--color-gray-900);
-      }
-    }
-
-    &:disabled {
-      pointer-events: none;
-      opacity: 0.5;
     }
   }
 }

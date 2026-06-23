@@ -10,11 +10,13 @@ import iconFolders from '@phosphor-icons/core/regular/folders.svg';
 import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import { useNavigate } from '@tanstack/react-router';
+import { clsx } from 'clsx';
 import { mediaAttachmentSchema, type DriveFile, type DriveFolder } from 'pl-api';
 import React, { useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
+import { changeSetting } from '@/actions/settings';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import { EmptyMessage } from '@/components/empty-message';
 import Icon from '@/components/ui/icon';
@@ -33,10 +35,12 @@ import {
   useUpdateDriveFolderMutation,
 } from '@/queries/drive/use-drive-folder';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 import { download } from '@/utils/download';
 
 import { Breadcrumbs } from './breadcrumbs';
+import { ViewModeToggle } from './view-mode-toggle';
 
 const messages = defineMessages({
   folderDropdown: { id: 'drive.folder.dropdown', defaultMessage: 'Folder menu' },
@@ -610,6 +614,7 @@ interface IDriveBrowser {
 
 const DriveBrowser: React.FC<IDriveBrowser> = ({ folderId }) => {
   const filesRef = useRef<HTMLDivElement | null>(null);
+  const { driveViewMode } = useSettings();
 
   const { data, isPending } = useDriveFolderQuery(folderId);
 
@@ -667,8 +672,14 @@ const DriveBrowser: React.FC<IDriveBrowser> = ({ folderId }) => {
 
   return (
     <div>
-      <div className='drive-breadcrumbs'>
-        <Breadcrumbs folderId={folderId} />
+      <div className='drive-breadcrumbs__container'>
+        <div className='drive-breadcrumbs'>
+          <Breadcrumbs folderId={folderId} />
+        </div>
+        <ViewModeToggle
+          viewMode={driveViewMode}
+          onChange={(viewMode) => changeSetting(['driveViewMode'], viewMode)}
+        />
       </div>
       {isEmpty ? (
         <EmptyMessage
@@ -681,7 +692,10 @@ const DriveBrowser: React.FC<IDriveBrowser> = ({ folderId }) => {
           icon={iconFolderOpen}
         />
       ) : (
-        <div className='drive-page__files' ref={filesRef}>
+        <div
+          className={clsx('drive-page__files', `drive-page__files--${driveViewMode}`)}
+          ref={filesRef}
+        >
           {data?.folders.map((folder, index) => (
             <Folder key={folder.id} folder={folder} index={index} onMove={handleMove} />
           ))}
