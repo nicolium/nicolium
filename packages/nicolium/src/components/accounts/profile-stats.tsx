@@ -17,7 +17,7 @@ const messages = defineMessages({
     id: 'account.followers_count',
     defaultMessage: '{count, plural, one {# follower} other {# followers}}',
   },
-  followingCount: { id: 'account.following_count', defaultMessage: '{count} following' },
+  followingCount: { id: 'account.follows_count', defaultMessage: '{count} following' },
   subscribersCount: {
     id: 'account.subscribers_count',
     defaultMessage: '{count, plural, one {# subscriber} other {# subscribers}}',
@@ -111,7 +111,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler, withSt
         </FollowingComponent>
       ) : (
         <div>
-          <FormattedMessage id='account.following.hidden' defaultMessage='Follows hidden' />
+          <FormattedMessage id='account.follows.hidden' defaultMessage='Follows hidden' />
         </div>
       )}
 
