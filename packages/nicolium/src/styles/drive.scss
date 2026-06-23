@@ -5,6 +5,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+
+    &--list {
+      flex-direction: column;
+    }
   }
 
   .drive-file {
@@ -133,11 +137,14 @@
   }
 }
 
-.drive-file-list {
+.drive-file-list,
+.drive-page__files--list {
   .drive-file {
     display: flex;
+    flex-direction: row;
     gap: 0.25rem;
     align-items: center;
+
     width: 100%;
 
     img {
