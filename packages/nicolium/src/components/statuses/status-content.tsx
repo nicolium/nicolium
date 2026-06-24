@@ -17,6 +17,7 @@ import { getTextDirection } from '@/utils/rtl';
 
 import OutlineBox from '../outline-box';
 import Poll from '../polls/poll';
+import Emoji from '../ui/emoji';
 
 import FakeNewsAlert from './fake-news-alert';
 import HashtagsBar from './hashtags-bar';
@@ -367,6 +368,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           dir={direction}
           data-markup
         >
+          <Emoji emoji='🔒' aria-hidden />
           <em>
             <FormattedMessage
               id='status.decryption_error'
