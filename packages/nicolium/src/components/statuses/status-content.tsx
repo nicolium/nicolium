@@ -368,7 +368,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           dir={direction}
           data-markup
         >
-          <Emoji emoji='🔒' aria-hidden />
+          <Emoji emoji='🔒' className='emojione emoji' aria-hidden />
           <em>
             <FormattedMessage
               id='status.decryption_error'
