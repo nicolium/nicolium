@@ -2166,6 +2166,7 @@
   "status.copy.success": "Link to post copied to clipboard",
   "status.copy_content": "Copy post content",
   "status.copy_content.success": "Post content copied to clipboard",
+  "status.decryption_error": "Unable to decrypt message",
   "status.delete": "Delete",
   "status.delete.error": "Failed to delete post",
   "status.delete.success": "Post deleted",
