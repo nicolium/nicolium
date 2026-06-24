@@ -207,6 +207,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === PLEROMA && gte(v.version, '2.8.0'),
       instance.api_versions['chuckya'] >= 1,
+      instance.api_versions['mastodon'] >= 11,
     ]),
 
     /**
