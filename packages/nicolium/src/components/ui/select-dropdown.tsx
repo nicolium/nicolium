@@ -7,6 +7,7 @@ interface ISelectDropdown {
   label?: React.ReactNode;
   hint?: React.ReactNode;
   items: Record<string, string>;
+  value?: string;
   defaultValue?: string;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 }
