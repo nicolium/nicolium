@@ -24,6 +24,7 @@ import Emojify from '@/features/emoji/emojify';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccounts } from '@/queries/accounts/use-accounts';
+import { useRelationshipsQuery } from '@/queries/accounts/use-relationship';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 import {
   useAccountTimeline,
@@ -431,9 +432,41 @@ const Timeline: React.FC<ITimeline> = ({
     hasNextPage,
     refetch,
     hasStreamConfig,
+    options,
   } = query;
 
-  const { queuedCount, queuedAccountIds } = useQueuedEntries(timelineId, filters);
+  const repostAuthorIds = useMemo(() => {
+    if (
+      !options?.prefetchRebloggedRelationships ||
+      typeof filters?.hideFollowedReposts !== 'number'
+    )
+      return undefined;
+
+    const ids = new Set<string>();
+    for (const entry of entries) {
+      if (entry.type === 'status' && entry.isReblog) ids.add(entry.accountId);
+    }
+    return Array.from(ids);
+  }, [entries, filters?.hideFollowedReposts]);
+
+  const relationships = useRelationshipsQuery(repostAuthorIds);
+
+  const followedKey = relationships
+    .map((relationship) => (relationship.data?.following ? relationship.data.id : ''))
+    .filter(Boolean)
+    .sort()
+    .join(',');
+
+  const followedAccountIds = useMemo(
+    () => new Set(followedKey ? followedKey.split(',') : []),
+    [followedKey],
+  );
+
+  const { queuedCount, queuedAccountIds } = useQueuedEntries(
+    timelineId,
+    filters,
+    followedAccountIds,
+  );
 
   const handleMoveUp = (index: number) => {
     selectChild(
@@ -528,7 +561,7 @@ const Timeline: React.FC<ITimeline> = ({
     }
 
     const processedEntries = hasActiveFilters(filters)
-      ? sortFilteredTimeline(entries, filters)
+      ? sortFilteredTimeline(entries, filters, followedAccountIds)
       : entries;
 
     processedEntries.forEach((entry, entryIndex, arr) => {

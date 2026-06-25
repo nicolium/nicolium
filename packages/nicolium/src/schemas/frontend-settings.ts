@@ -422,6 +422,7 @@ const settingsSchema = v.object({
         showDirect: v.fallback(v.boolean(), true),
         showNonMedia: v.fallback(v.boolean(), true),
         showMediaWithoutAltText: v.fallback(v.boolean(), true),
+        hideFollowedReposts: v.fallback(v.nullable(v.number()), null),
       }),
     ),
     {},

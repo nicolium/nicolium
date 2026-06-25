@@ -27,6 +27,7 @@ interface StatusEntry {
   isDirect: boolean;
   hasMedia: boolean;
   hasMediaWithoutAltText: boolean;
+  createdAt: string;
 }
 
 type TimelineEntry =
@@ -156,6 +157,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
           isDirect: status.reblog.visibility === 'direct',
           hasMedia: status.reblog.media_attachments.length > 0,
           hasMediaWithoutAltText: hasMediaWithoutAltText(status.reblog),
+          createdAt: status.reblog.created_at,
         });
       }
       return -1;
@@ -175,6 +177,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
       isDirect: status.visibility === 'direct',
       hasMedia: status.media_attachments.length > 0,
       hasMediaWithoutAltText: hasMediaWithoutAltText(status),
+      createdAt: status.created_at,
     });
 
     return -1;
@@ -394,6 +397,7 @@ const useTimelinesStore = create<State>()(
                 isDirect: status.visibility === 'direct',
                 hasMedia: status.media_attachments.length > 0,
                 hasMediaWithoutAltText: hasMediaWithoutAltText(status),
+                createdAt: status.created_at,
               };
             }
           }
@@ -482,7 +486,11 @@ const useTimelinesActions = () => useTimelinesStore((state) => state.actions);
 const useTimeline = (timelineId: string) =>
   useTimelinesStore((state) => state.timelines[timelineId] ?? emptyTimeline);
 
-const useQueuedEntries = (timelineId: string, filters: TimelineFilters) => {
+const useQueuedEntries = (
+  timelineId: string,
+  filters: TimelineFilters,
+  followedAccountIds: Set<string>,
+) => {
   const timeline = useTimelinesStore((state) => state.timelines[timelineId] ?? emptyTimeline);
 
   return useMemo(() => {
@@ -495,14 +503,15 @@ const useQueuedEntries = (timelineId: string, filters: TimelineFilters) => {
     const processed = processPage(timeline.queuedEntries);
 
     const visible: Array<StatusEntry> = processed.filter(
-      (entry): entry is StatusEntry => entry.type === 'status' && !isEntryFiltered(entry, filters),
+      (entry): entry is StatusEntry =>
+        entry.type === 'status' && !isEntryFiltered(entry, filters, followedAccountIds),
     );
 
     return {
       queuedCount: visible.length,
       queuedAccountIds: Array.from(new Set(visible.map((entry) => entry.accountId))).toReversed(),
     };
-  }, [filters, timeline.queuedEntries]);
+  }, [filters, timeline.queuedEntries, followedAccountIds]);
 };
 
 export {
