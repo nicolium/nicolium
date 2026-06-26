@@ -9,7 +9,7 @@ import { compareDate } from '@/utils/comparators';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
-import { useAppInfiniteQuery } from '../query';
+import { useAppInfiniteQuery, scopedQueryKey } from '../query';
 import { importEntities } from '../utils/import-entities';
 import {
   minifyConversation,
@@ -39,7 +39,7 @@ const importConversationEntities = (conversations: Conversation[], scopeUrl: str
 const updateConversations = (conversation: Conversation, scopeUrl: string) => {
   importConversationEntities([conversation], scopeUrl);
 
-  queryClient.setQueryData(queryKeys.conversations.all, (data) => {
+  queryClient.setQueryData(scopedQueryKey(queryKeys.conversations.all, scopeUrl), (data) => {
     if (!data || !data.pages.length) return data;
 
     return create(data, (draft) => {
@@ -96,16 +96,18 @@ const useConversations = () => {
 const useMarkConversationRead = (conversationId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
+  const conversationsKey = scopedQueryKey(queryKeys.conversations.all, scopeUrl);
 
   return useMutation({
     mutationKey: ['conversations', conversationId, 'read'],
     mutationFn: () => client.timelines.markConversationRead(conversationId),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: queryKeys.conversations.all });
+      await queryClient.cancelQueries({ queryKey: conversationsKey });
 
-      const previous = queryClient.getQueryData(queryKeys.conversations.all);
+      const previous = queryClient.getQueryData(conversationsKey);
 
-      updatePaginatedResponse(queryKeys.conversations.all, (items) =>
+      updatePaginatedResponse(conversationsKey, (items) =>
         items.map((item) => (item.id === conversationId ? { ...item, unread: false } : item)),
       );
 
@@ -113,7 +115,7 @@ const useMarkConversationRead = (conversationId: string) => {
     },
     onError: (_, __, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(queryKeys.conversations.all, context.previous);
+        queryClient.setQueryData(conversationsKey, context.previous);
       }
     },
   });
