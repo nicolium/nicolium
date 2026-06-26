@@ -8,6 +8,7 @@ import { queryClient } from '@/queries/client';
 import { updateConversations } from '@/queries/conversations/use-conversations';
 import { queryKeys } from '@/queries/keys';
 import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
+import { scopedQueryKey } from '@/queries/query';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { useSettings } from '@/stores/settings';
 import { useTimelinesActions } from '@/stores/timelines';
@@ -23,8 +24,8 @@ import type {
   StreamingEvent,
 } from 'pl-api';
 
-const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
-  queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+const updateAnnouncementReactions = (reaction: AnnouncementReaction, scopeUrl: string) => {
+  queryClient.setQueryData(scopedQueryKey(queryKeys.announcements.all, scopeUrl), (prevResult) =>
     prevResult?.map((value) => {
       if (value.id !== reaction.announcement_id) return value;
 
@@ -36,8 +37,8 @@ const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
   );
 };
 
-const updateAnnouncement = (announcement: Announcement) =>
-  queryClient.setQueryData(queryKeys.announcements.all, (prevResult) => {
+const updateAnnouncement = (announcement: Announcement, scopeUrl: string) =>
+  queryClient.setQueryData(scopedQueryKey(queryKeys.announcements.all, scopeUrl), (prevResult) => {
     if (!prevResult) return;
 
     let updated = false;
@@ -49,8 +50,8 @@ const updateAnnouncement = (announcement: Announcement) =>
     if (!updated) return [announcement, ...result];
   });
 
-const deleteAnnouncement = (announcementId: string) =>
-  queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+const deleteAnnouncement = (announcementId: string, scopeUrl: string) =>
+  queryClient.setQueryData(scopedQueryKey(queryKeys.announcements.all, scopeUrl), (prevResult) =>
     prevResult?.filter((value) => value.id !== announcementId),
   );
 
@@ -67,10 +68,14 @@ const followStateToRelationship = (followState: FollowRelationshipUpdate['state'
   }
 };
 
-const updateFollowRelationships = (update: FollowRelationshipUpdate, me: string) => {
+const updateFollowRelationships = (
+  update: FollowRelationshipUpdate,
+  me: string,
+  scopeUrl: string,
+) => {
   if (update.follower.id === me) {
     queryClient.setQueryData(
-      queryKeys.accountRelationships.show(update.following.id),
+      scopedQueryKey(queryKeys.accountRelationships.show(update.following.id), scopeUrl),
       (relationship) =>
         relationship
           ? {
@@ -146,21 +151,24 @@ const useUserStream = () => {
         }
         break;
       case 'follow_relationships_update':
-        updateFollowRelationships(event.payload, me as string);
+        updateFollowRelationships(event.payload, me as string, scopeUrl);
         break;
       case 'announcement':
-        updateAnnouncement(event.payload);
+        updateAnnouncement(event.payload, scopeUrl);
         break;
       case 'announcement.reaction':
-        updateAnnouncementReactions(event.payload);
+        updateAnnouncementReactions(event.payload, scopeUrl);
         break;
       case 'announcement.delete':
-        deleteAnnouncement(event.payload);
+        deleteAnnouncement(event.payload, scopeUrl);
         break;
       case 'marker': {
         for (const timeline in event.payload) {
           queryClient.setQueryData(
-            queryKeys.markers.timeline(timeline as 'home' | 'notifications'),
+            scopedQueryKey(
+              queryKeys.markers.timeline(timeline as 'home' | 'notifications'),
+              scopeUrl,
+            ),
             event.payload[timeline] ?? null,
           );
         }
