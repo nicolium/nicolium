@@ -96,47 +96,54 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form>
-        <List>
-          <ListItem
-            label={<FormattedMessage id='column.mutes' defaultMessage='Mutes' />}
-            to='/mutes'
-          />
-          <ListItem
-            label={<FormattedMessage id='column.blocks' defaultMessage='Blocks' />}
-            to='/blocks'
-          />
-          {(features.filters || features.filtersV2) && (
+        {!onSave && (
+          <List>
             <ListItem
-              label={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
-              to='/filters'
+              label={<FormattedMessage id='column.mutes' defaultMessage='Mutes' />}
+              to='/mutes'
             />
-          )}
-          {features.federating && (
             <ListItem
-              label={<FormattedMessage id='column.domain_blocks' defaultMessage='Domain blocks' />}
-              to='/domain_blocks'
+              label={<FormattedMessage id='column.blocks' defaultMessage='Blocks' />}
+              to='/blocks'
             />
-          )}
-          {(features.interactionRequests || features.quoteApprovalPolicies) && (
-            <ListItem
-              label={
-                <FormattedMessage
-                  id='column.interaction_policies'
-                  defaultMessage='Interaction policies'
-                />
-              }
-              to='/settings/interaction_policies'
-            />
-          )}
-          {features.mutedThreads && (
-            <ListItem
-              label={
-                <FormattedMessage id='column.muted_threads' defaultMessage='Muted conversations' />
-              }
-              to='/muted_threads'
-            />
-          )}
-        </List>
+            {(features.filters || features.filtersV2) && (
+              <ListItem
+                label={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
+                to='/filters'
+              />
+            )}
+            {features.federating && (
+              <ListItem
+                label={
+                  <FormattedMessage id='column.domain_blocks' defaultMessage='Domain blocks' />
+                }
+                to='/domain_blocks'
+              />
+            )}
+            {(features.interactionRequests || features.quoteApprovalPolicies) && (
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='column.interaction_policies'
+                    defaultMessage='Interaction policies'
+                  />
+                }
+                to='/settings/interaction_policies'
+              />
+            )}
+            {features.mutedThreads && (
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='column.muted_threads'
+                    defaultMessage='Muted conversations'
+                  />
+                }
+                to='/muted_threads'
+              />
+            )}
+          </List>
+        )}
 
         <List>
           <ListItem
