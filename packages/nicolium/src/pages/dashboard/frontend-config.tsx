@@ -24,7 +24,7 @@ import CryptoAddressInput from '@/pages/dashboard/components/frontend-config/cry
 import FooterLinkInput from '@/pages/dashboard/components/frontend-config/footer-link-input';
 import PromoPanelInput from '@/pages/dashboard/components/frontend-config/promo-panel-input';
 import SitePreview from '@/pages/dashboard/components/frontend-config/site-preview';
-import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
+import { useUpdateFrontendConfig } from '@/queries/admin/use-config';
 import {
   cryptoAddressSchema,
   footerItemSchema,
@@ -34,10 +34,12 @@ import {
 } from '@/schemas/frontend-config';
 import { useFrontendConfigStore } from '@/stores/frontend-config';
 import toast from '@/toast';
+import { download } from '@/utils/download';
 
 const messages = defineMessages({
   heading: { id: 'column.frontend_config', defaultMessage: 'Front-end configuration' },
   saved: { id: 'frontend_config.save.success', defaultMessage: 'Nicolium config saved' },
+  exported: { id: 'frontend_config.export.success', defaultMessage: 'Configuration exported' },
   copyrightFooterLabel: {
     id: 'frontend_config.copyright_footer.meta_fields.label.placeholder',
     defaultMessage: 'Copyright footer',
@@ -68,7 +70,9 @@ const FrontendConfigEditor: React.FC = () => {
   const features = useFeatures();
 
   const initialData = useFrontendConfigStore((state) => state.partialConfig);
-  const { mutate: updateConfig, isPending } = useUpdateAdminConfig();
+  const { mutate: updateConfig, isPending } = useUpdateFrontendConfig();
+
+  const canStoreConfig = features.pleromaAdminConfig;
 
   const [data, setData] = useState(v.parse(frontendConfigSchema, initialData));
   const [jsonEditorExpanded, setJsonEditorExpanded] = useState(false);
@@ -88,21 +92,26 @@ const FrontendConfigEditor: React.FC = () => {
   };
 
   const handleReset: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    updateConfig(getUpdateFrontendConfigParams(undefined), {
+    e.preventDefault();
+    updateConfig(undefined, {
       onSuccess: () => {
         toast.success(messages.saved);
       },
     });
-    e.preventDefault();
   };
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
-    updateConfig(getUpdateFrontendConfigParams(data), {
+    e.preventDefault();
+    updateConfig(data, {
       onSuccess: () => {
-        toast.success(messages.saved);
+        if (canStoreConfig) {
+          toast.success(messages.saved);
+        } else {
+          download(JSON.stringify(data, null, 2), 'nicolium.json');
+          toast.success(messages.exported);
+        }
       },
     });
-    e.preventDefault();
   };
 
   const handleChange =
@@ -204,6 +213,16 @@ const FrontendConfigEditor: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)} className='frontend-config'>
       <Form onSubmit={handleSubmit}>
         <fieldset disabled={isPending}>
+          {!canStoreConfig && (
+            <p className='frontend-config__export-hint'>
+              <FormattedMessage
+                id='frontend_config.export.hint'
+                defaultMessage='This server doesn’t support saving the front-end configuration. You can adjust the settings, export them and serve under <code>/instance/nicolium.json</code> on your instance.'
+                values={{ code: (chunks) => <code>{chunks}</code> }}
+              />
+            </p>
+          )}
+
           <SitePreview frontendConfig={frontendConfig} />
 
           <CardHeader>
@@ -648,12 +667,20 @@ const FrontendConfigEditor: React.FC = () => {
         </fieldset>
 
         <FormActions>
-          <button type='button' onClick={handleReset} disabled={isPending}>
-            <FormattedMessage id='frontend_config.reset' defaultMessage='Reset' />
-          </button>
-          <button type='submit'>
-            <FormattedMessage id='frontend_config.save' defaultMessage='Save' />
-          </button>
+          {canStoreConfig ? (
+            <>
+              <button type='button' onClick={handleReset} disabled={isPending}>
+                <FormattedMessage id='frontend_config.reset' defaultMessage='Reset' />
+              </button>
+              <button type='submit'>
+                <FormattedMessage id='frontend_config.save' defaultMessage='Save' />
+              </button>
+            </>
+          ) : (
+            <button type='submit'>
+              <FormattedMessage id='frontend_config.export' defaultMessage='Export' />
+            </button>
+          )}
         </FormActions>
       </Form>
     </Column>

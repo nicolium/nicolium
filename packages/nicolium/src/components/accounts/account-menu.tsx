@@ -136,7 +136,7 @@ const messages = defineMessages({
   },
   emailSubscriptionSuccess: {
     id: 'account.email_subscription.success',
-    defaultMessage: 'Check your inbox for an email to finish signing up for e-mail updates.',
+    defaultMessage: 'Check your inbox for an e-mail to finish signing up for e-mail updates.',
   },
   emailSubscriptionFail: {
     id: 'account.email_subscription.fail',

@@ -3,10 +3,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useFrontendConfigActions } from '@/stores/frontend-config';
+import { useFrontendConfigActions, useFrontendConfigStore } from '@/stores/frontend-config';
 import { useInstanceActions } from '@/stores/instance';
 
 import { queryKeys } from '../keys';
+
+import type { PartialFrontendConfig } from '@/schemas/frontend-config';
 
 const useAdminConfig = () => {
   const client = useClient();
@@ -64,9 +66,36 @@ const getUpdateFrontendConfigParams = (data: any) => {
   ];
 };
 
+const useUpdateFrontendConfig = () => {
+  const client = useClient();
+  const features = useFeatures();
+  const queryClient = useQueryClient();
+  const instanceActions = useInstanceActions();
+  const frontendConfigActions = useFrontendConfigActions();
+
+  return useMutation({
+    mutationFn: async (config: PartialFrontendConfig | undefined) => {
+      if (features.pleromaAdminConfig) {
+        const data = await client.admin.config.updatePleromaConfig(
+          getUpdateFrontendConfigParams(config),
+        );
+        instanceActions.importAdminConfigs(data.configs);
+        frontendConfigActions.importAdminConfigs(data.configs);
+        queryClient.setQueryData(queryKeys.admin.config, data);
+      } else {
+        frontendConfigActions.rememberConfig(config ?? {});
+      }
+
+      return useFrontendConfigStore.getState().config;
+    },
+    retry: false,
+  });
+};
+
 export {
   useAdminConfig,
   useAdminConfigDescriptions,
   useUpdateAdminConfig,
+  useUpdateFrontendConfig,
   getUpdateFrontendConfigParams,
 };
