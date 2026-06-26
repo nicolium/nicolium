@@ -5,12 +5,8 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import { useAppInfiniteQuery } from '../query';
 
-import type {
-  DataTag,
-  InfiniteData,
-  QueryKey,
-  UseInfiniteQueryOptions,
-} from '@tanstack/react-query';
+import type { TaggedKey } from '../keys';
+import type { InfiniteData, QueryKey, UseInfiniteQueryOptions } from '@tanstack/react-query';
 import type { Features, PaginatedResponse, PlApiClient } from 'pl-api';
 
 class PaginatedResponseArray<T> extends Array<T> {
@@ -46,8 +42,8 @@ const makePaginatedResponseQuery =
     T3 = PaginatedResponseQueryResult<T2, IsArray>,
   >(
     queryKey:
-      | DataTag<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>
-      | ((...params: T1) => DataTag<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>),
+      | TaggedKey<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>
+      | ((...params: T1) => TaggedKey<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>),
     queryFn: (
       client: PlApiClient,
       params: T1,

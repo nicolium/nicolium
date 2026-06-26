@@ -58,7 +58,7 @@ const importEntities = (
   const translations: Record<string, Record<string, Translation>> = {};
 
   const processAccount = (account: BaseAccount, withSelf = true) => {
-    if (!override && selectAccount(account.id)) return;
+    if (!override && selectAccount(account.id, scopeUrl)) return;
 
     if (withSelf) accounts[account.id] = account;
 

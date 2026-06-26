@@ -705,4 +705,4 @@ const queryKeys = {
 } as const;
 
 export { queryKeys };
-export type { DataOf };
+export type { DataOf, TaggedKey };

@@ -1,15 +1,11 @@
-import {
-  type DataTag,
-  type InfiniteData,
-  infiniteQueryOptions,
-  type QueryKey,
-} from '@tanstack/react-query';
+import { type InfiniteData, infiniteQueryOptions, type QueryKey } from '@tanstack/react-query';
 
 import {
   PaginatedResponseArray,
   type PaginatedResponseQueryResult,
 } from './make-paginated-response-query';
 
+import type { TaggedKey } from '../keys';
 import type { PaginatedResponse, PlApiClient } from 'pl-api';
 
 const makePaginatedResponseQueryOptions =
@@ -20,8 +16,8 @@ const makePaginatedResponseQueryOptions =
     T3 = PaginatedResponseQueryResult<T2, IsArray>,
   >(
     queryKey:
-      | DataTag<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>
-      | ((...params: T1) => DataTag<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>),
+      | TaggedKey<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>
+      | ((...params: T1) => TaggedKey<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>),
     queryFn: (
       client: PlApiClient,
       params: T1,
