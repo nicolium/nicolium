@@ -3,6 +3,7 @@ import sumBy from 'lodash/sumBy';
 import { normalizeChatMessage } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 
 import { compareDate } from './comparators';
 import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from './queries';
@@ -20,8 +21,8 @@ const updateChatInChatSearchQuery = (newChat: Chat) => {
 /**
  * Re-order the ChatSearch query by the last message timestamp.
  */
-const reOrderChatListItems = () => {
-  sortQueryData(queryKeys.chats.search, (chatA, chatB) =>
+const reOrderChatListItems = (scopeUrl: string) => {
+  sortQueryData(scopedQueryKey(queryKeys.chats.search, scopeUrl), (chatA, chatB) =>
     compareDate(chatA.last_message?.created_at as string, chatB.last_message?.created_at as string),
   );
 };
@@ -31,8 +32,10 @@ const reOrderChatListItems = () => {
  * @param chatId - String
  * @returns Boolean
  */
-const checkIfChatExists = (chatId: string) => {
-  const currentChats = flattenPages(queryClient.getQueryData(queryKeys.chats.search));
+const checkIfChatExists = (chatId: string, scopeUrl: string) => {
+  const currentChats = flattenPages(
+    queryClient.getQueryData(scopedQueryKey(queryKeys.chats.search, scopeUrl)),
+  );
 
   return currentChats?.find((chat: Chat) => chat.id === chatId);
 };
@@ -40,37 +43,42 @@ const checkIfChatExists = (chatId: string) => {
 /**
  * Force a re-fetch of ChatSearch.
  */
-const invalidateChatSearchQuery = () => {
+const invalidateChatSearchQuery = (scopeUrl: string) => {
   queryClient.invalidateQueries({
-    queryKey: queryKeys.chats.search,
+    queryKey: scopedQueryKey(queryKeys.chats.search, scopeUrl),
   });
 };
 
-const updateChatListItem = (newChat: Chat) => {
+const updateChatListItem = (newChat: Chat, scopeUrl: string) => {
   const { id: chatId, last_message: lastMessage } = newChat;
 
-  const isChatAlreadyLoaded = checkIfChatExists(chatId);
+  const isChatAlreadyLoaded = checkIfChatExists(chatId, scopeUrl);
 
   if (isChatAlreadyLoaded) {
     // If the chat exists in the client, let's update it.
     updateChatInChatSearchQuery(newChat);
     // Now that we have the new chat loaded, let's re-sort to put
     // the most recent on top.
-    reOrderChatListItems();
+    reOrderChatListItems(scopeUrl);
   } else {
     // If this is a brand-new chat, let's invalid the queries.
-    invalidateChatSearchQuery();
+    invalidateChatSearchQuery(scopeUrl);
   }
 
   if (lastMessage) {
     // Update the Chat Messages query data.
-    appendPageItem(queryKeys.chats.chatMessages(newChat.id), normalizeChatMessage(lastMessage));
+    appendPageItem(
+      scopedQueryKey(queryKeys.chats.chatMessages(newChat.id), scopeUrl),
+      normalizeChatMessage(lastMessage),
+    );
   }
 };
 
 /** Get unread chats count. */
-const getUnreadChatsCount = (): number => {
-  const chats = flattenPages(queryClient.getQueryData(queryKeys.chats.search));
+const getUnreadChatsCount = (scopeUrl: string): number => {
+  const chats = flattenPages(
+    queryClient.getQueryData(scopedQueryKey(queryKeys.chats.search, scopeUrl)),
+  );
 
   return sumBy(chats, (chat) => chat.unread);
 };

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import {
   useTimelinesStore,
@@ -13,6 +14,7 @@ import {
 import { compareId } from '@/utils/comparators';
 
 import { queryKeys } from '../keys';
+import { scopedQueryKey } from '../query';
 
 import type { PaginatedResponse, PaginationParams, Status, StreamingParams } from 'pl-api';
 
@@ -49,6 +51,7 @@ const useTimeline = (
   const importEntities = useImportEntities();
   const queryClient = useQueryClient();
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   const { connected: streamingConnected } = useTimelineStream(
     streamConfig?.stream ?? '',
@@ -68,7 +71,9 @@ const useTimeline = (
       ...new Set(items.filter((status) => !!status.reblog).map((status) => status.account.id)),
     ].filter(
       (accountId) =>
-        queryClient.getQueryData(queryKeys.accountRelationships.show(accountId)) === undefined,
+        queryClient.getQueryData(
+          scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        ) === undefined,
     );
 
     if (missingRebloggedAccountIds.length > 0) {
@@ -76,7 +81,7 @@ const useTimeline = (
 
       for (const relationship of relationships) {
         queryClient.setQueryData(
-          queryKeys.accountRelationships.show(relationship.id),
+          scopedQueryKey(queryKeys.accountRelationships.show(relationship.id), scopeUrl),
           relationship,
         );
       }

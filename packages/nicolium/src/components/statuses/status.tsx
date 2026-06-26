@@ -15,6 +15,7 @@ import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
@@ -206,6 +207,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const router = useRouter();
+  const scopeUrl = useScopeUrl();
 
   const {
     expandStatuses,
@@ -586,7 +588,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
       data-featured={featured ? 'true' : null}
       data-visibility={actualStatus.visibility}
       data-id={status.id}
-      aria-label={textForScreenReader(intl, actualStatus, rebloggedByText)}
+      aria-label={textForScreenReader(intl, actualStatus, rebloggedByText, scopeUrl)}
       ref={node}
       onClick={handleClick}
       role='link'

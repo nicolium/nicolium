@@ -3,6 +3,7 @@ import * as v from 'valibot';
 
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { normalizeStatus } from '@/queries/statuses/normalize';
 
 import type { PendingStatus } from '@/stores/pending-statuses';
@@ -15,7 +16,12 @@ const buildMentions = (pendingStatus: PendingStatus) => {
   }
 };
 
-const buildStatus = (account: Account, pendingStatus: PendingStatus, idempotencyKey: string) => {
+const buildStatus = (
+  account: Account,
+  pendingStatus: PendingStatus,
+  idempotencyKey: string,
+  scopeUrl: string,
+) => {
   const inReplyToId = pendingStatus.in_reply_to_id;
 
   const status = {
@@ -23,14 +29,18 @@ const buildStatus = (account: Account, pendingStatus: PendingStatus, idempotency
     content: pendingStatus.status.replaceAll('\n', '<br>'),
     id: `末pending-${idempotencyKey}`,
     in_reply_to_account_id:
-      (inReplyToId && queryClient.getQueryData(queryKeys.statuses.show(inReplyToId))?.account_id) ||
+      (inReplyToId &&
+        queryClient.getQueryData(scopedQueryKey(queryKeys.statuses.show(inReplyToId), scopeUrl))
+          ?.account_id) ||
       null,
     in_reply_to_id: inReplyToId,
     media_attachments: (pendingStatus.media_ids ?? []).map((id: string) => ({ id })),
     mentions: buildMentions(pendingStatus),
     quote:
       (pendingStatus.quote_id &&
-        queryClient.getQueryData(queryKeys.statuses.show(pendingStatus.quote_id))) ||
+        queryClient.getQueryData(
+          scopedQueryKey(queryKeys.statuses.show(pendingStatus.quote_id), scopeUrl),
+        )) ||
       null,
     sensitive: pendingStatus.sensitive,
     visibility: pendingStatus.visibility,

@@ -5,7 +5,7 @@ import { decrementReplyCount, incrementReplyCount } from '@/actions/statuses';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { useAppQueries, useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQueries, useAppQuery } from '@/queries/query';
 import { useFilters } from '@/queries/settings/use-filters';
 import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
 import { useImportEntities } from '@/queries/utils/import-entities';
@@ -201,16 +201,22 @@ const useDeleteStatus = (statusId: string) => {
   return useMutation({
     mutationFn: (_withRedraft?: boolean) => client.statuses.deleteStatus(statusId),
     onMutate: () => {
-      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      const status = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+      );
       if (!status) return;
 
       decrementReplyCount(status, queryClient, scopeUrl);
     },
     onSuccess: (source, withRedraft) => {
-      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      const status = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+      );
 
       const poll = status?.poll_id
-        ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
+        ? queryClient.getQueryData(
+            scopedQueryKey(queryKeys.statuses.polls.show(status.poll_id), scopeUrl),
+          )
         : undefined;
 
       deletePendingStatus(statusId);
@@ -223,7 +229,9 @@ const useDeleteStatus = (statusId: string) => {
       }
     },
     onError: () => {
-      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      const status = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+      );
       if (!status) return;
 
       incrementReplyCount(status, queryClient, scopeUrl);
@@ -242,7 +250,9 @@ const useDeleteStatusFromGroup = (statusId: string, groupId: string) => {
   return useMutation({
     mutationFn: () => client.experimental.groups.deleteGroupStatus(statusId, groupId),
     onMutate: () => {
-      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      const status = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+      );
       if (!status) return;
 
       decrementReplyCount(status, queryClient, scopeUrl);
@@ -253,7 +263,9 @@ const useDeleteStatusFromGroup = (statusId: string, groupId: string) => {
       markStatusDeleted(statusId);
     },
     onError: () => {
-      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      const status = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+      );
       if (!status) return;
 
       incrementReplyCount(status, queryClient, scopeUrl);

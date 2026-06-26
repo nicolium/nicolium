@@ -5,7 +5,8 @@ import * as v from 'valibot';
 
 import { isServo } from '@/features/compose/components/compose-form';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { filteredArray } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
 import { useComposeActions } from '@/stores/compose';
@@ -93,6 +94,7 @@ const usePersistDraftStatus = () => {
   const queryClient = useQueryClient();
   const { getCompose } = useComposeActions();
   const { defaultContentType, defaultPrivacy } = useSettings();
+  const scopeUrl = useScopeUrl();
 
   return (composeId: string) => {
     const compose = getCompose(composeId);
@@ -111,33 +113,45 @@ const usePersistDraftStatus = () => {
       draft_id: compose.draftId ?? crypto.randomUUID(),
     };
 
-    const drafts = queryClient.getQueryData(queryKeys.draftStatuses.all) ?? {};
+    const drafts =
+      queryClient.getQueryData(scopedQueryKey(queryKeys.draftStatuses.all, scopeUrl)) ?? {};
 
     const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
       oldDrafts[draft.draft_id] = v.parse(draftStatusSchema, draft);
     });
     return persistDrafts(account!.url, newDrafts).then(() =>
-      queryClient.invalidateQueries({ queryKey: queryKeys.draftStatuses.all }),
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.draftStatuses.all, scopeUrl),
+      }),
     );
   };
 };
 
-const cancelDraftStatus = (queryClient: QueryClient, accountUrl: string, draftId: string) => {
-  const drafts = queryClient.getQueryData(queryKeys.draftStatuses.all) ?? {};
+const cancelDraftStatus = (
+  queryClient: QueryClient,
+  accountUrl: string,
+  draftId: string,
+  scopeUrl: string,
+) => {
+  const drafts =
+    queryClient.getQueryData(scopedQueryKey(queryKeys.draftStatuses.all, scopeUrl)) ?? {};
 
   const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
     delete oldDrafts[draftId];
   });
   return persistDrafts(accountUrl, newDrafts).then(() =>
-    queryClient.invalidateQueries({ queryKey: queryKeys.draftStatuses.all }),
+    queryClient.invalidateQueries({
+      queryKey: scopedQueryKey(queryKeys.draftStatuses.all, scopeUrl),
+    }),
   );
 };
 
 const useCancelDraftStatus = () => {
   const { data: account } = useOwnAccount();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
-  return (draftId: string) => cancelDraftStatus(queryClient, account!.url, draftId);
+  return (draftId: string) => cancelDraftStatus(queryClient, account!.url, draftId, scopeUrl);
 };
 
 export {

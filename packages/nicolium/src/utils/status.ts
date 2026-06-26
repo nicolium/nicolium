@@ -24,9 +24,10 @@ const shouldHaveCard = (status: Pick<Status, 'content'>): boolean =>
 const textForScreenReader = (
   intl: IntlShape,
   status: Pick<Status, 'account_id' | 'spoiler_text' | 'search_index' | 'created_at'>,
-  rebloggedByText?: string,
+  rebloggedByText: string | undefined,
+  scopeUrl: string,
 ): string => {
-  const account = selectAccount(status.account_id);
+  const account = selectAccount(status.account_id, scopeUrl);
   if (!account || typeof account !== 'object') return '';
 
   const displayName = account.display_name;

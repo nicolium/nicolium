@@ -9,6 +9,7 @@ import PendingStatus from '@/components/statuses/pending-status';
 import StatusActionBar from '@/components/statuses/status-action-bar';
 import Tombstone from '@/components/statuses/tombstone';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import {
   useFavouriteStatus,
   useReblogStatus,
@@ -70,6 +71,7 @@ const Thread = ({
     threads: { displayMode },
     statusActionBarItems,
   } = useSettings();
+  const scopeUrl = useScopeUrl();
 
   const asyncRefreshHeader = useAsyncRefreshHeader(status.id);
 
@@ -299,7 +301,7 @@ const Thread = ({
                   className='thread__detailed'
                   tabIndex={0}
                   // FIXME: no "reblogged by" text is added for the screen reader
-                  aria-label={textForScreenReader(intl, status)}
+                  aria-label={textForScreenReader(intl, status, undefined, scopeUrl)}
                 >
                   <DetailedStatus
                     status={status}

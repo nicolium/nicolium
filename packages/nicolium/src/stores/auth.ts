@@ -22,6 +22,7 @@ import { FE_NAME } from '@/actions/settings';
 import * as BuildConfig from '@/build-config';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { coerceObject } from '@/schemas/utils';
 import { setSentryAccount, unsetSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
@@ -394,8 +395,8 @@ const handleForbiddenMe = (currentAccountId: Me, error: { response: NicoliumResp
 };
 
 /** Look up an account in the React Query cache. */
-const selectAccount = (accountId: string) =>
-  queryClient.getQueryData(queryKeys.accounts.show(accountId));
+const selectAccount = (accountId: string, scopeUrl: string) =>
+  queryClient.getQueryData(scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl));
 
 type AuthStore = AuthState & { actions: AuthActions };
 
@@ -410,7 +411,7 @@ const useAuthStore = create<AuthStore>()(
       const state = get();
       const accountId = state.currentAccountId;
       if (typeof accountId === 'string') {
-        return selectAccount(accountId)?.url ?? state.me;
+        return selectAccount(accountId, state.me || backendUrl)?.url ?? state.me;
       }
       return state.me;
     };

@@ -3,7 +3,8 @@ import { useMutation, useQueryClient, type UseQueryResult } from '@tanstack/reac
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -60,6 +61,7 @@ const useFiltersByContext = (contextType: FilterContextType) =>
 const useFilter = (filterId?: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useAppQuery({
     queryKey: queryKeys.filters.show(filterId!),
@@ -69,20 +71,24 @@ const useFilter = (filterId?: string) => {
     },
     enabled: !!filterId,
     placeholderData: () =>
-      queryClient.getQueryData(queryKeys.filters.all)?.find((filter) => filter.id === filterId),
+      queryClient
+        .getQueryData(scopedQueryKey(queryKeys.filters.all, scopeUrl))
+        ?.find((filter) => filter.id === filterId),
   });
 };
 
 const useCreateFilter = () => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['filters', 'create'],
     mutationFn: (data: CreateFilterParams) => client.filtering.createFilter(data),
     onSettled: (data) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
-      if (data) queryClient.setQueryData(queryKeys.filters.show(data.id), data);
+      queryClient.invalidateQueries({ queryKey: scopedQueryKey(queryKeys.filters.all, scopeUrl) });
+      if (data)
+        queryClient.setQueryData(scopedQueryKey(queryKeys.filters.show(data.id), scopeUrl), data);
     },
   });
 };
@@ -90,13 +96,15 @@ const useCreateFilter = () => {
 const useUpdateFilter = (filterId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['filters', filterId, 'update'],
     mutationFn: (data: UpdateFilterParams) => client.filtering.updateFilter(filterId, data),
     onSettled: (data) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
-      if (data) queryClient.setQueryData(queryKeys.filters.show(filterId), data);
+      queryClient.invalidateQueries({ queryKey: scopedQueryKey(queryKeys.filters.all, scopeUrl) });
+      if (data)
+        queryClient.setQueryData(scopedQueryKey(queryKeys.filters.show(filterId), scopeUrl), data);
     },
   });
 };
@@ -104,13 +112,16 @@ const useUpdateFilter = (filterId: string) => {
 const useDeleteFilter = () => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['filters', 'delete'],
     mutationFn: (filterId: string) => client.filtering.deleteFilter(filterId),
     onSettled: (_, __, filterId) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
-      queryClient.invalidateQueries({ queryKey: queryKeys.filters.show(filterId) });
+      queryClient.invalidateQueries({ queryKey: scopedQueryKey(queryKeys.filters.all, scopeUrl) });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.filters.show(filterId), scopeUrl),
+      });
     },
   });
 };
