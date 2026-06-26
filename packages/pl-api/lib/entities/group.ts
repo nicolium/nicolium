@@ -28,6 +28,7 @@ const groupSchema = v.pipe(
                 {
                   founder: 'owner',
                   admin: 'admin',
+                  moderator: 'moderator',
                 }[group.self.role as string] || 'user',
               id: group.id,
             }

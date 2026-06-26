@@ -42,6 +42,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const isNonMember = !group.relationship?.member && !isRequested;
   const isOwner = group.relationship?.role === GroupRoles.OWNER;
   const isAdmin = group.relationship?.role === GroupRoles.ADMIN;
+  const isModerator = group.relationship?.role === GroupRoles.MODERATOR;
 
   const onJoinGroup = () =>
     joinGroup(undefined, {
@@ -76,7 +77,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
 
   const onCancelRequest = () => leaveGroup();
 
-  if (isOwner || isAdmin) {
+  if (isOwner || isAdmin || isModerator) {
     return (
       <Link
         className='group-action-button'

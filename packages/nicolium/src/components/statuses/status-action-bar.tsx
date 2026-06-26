@@ -1766,10 +1766,12 @@ const MenuButton: React.FC<IMenuButton> = ({
     if (isGroupStatus && !!status.group_id) {
       const isGroupOwner = group?.relationship?.role === GroupRoles.OWNER;
       const isGroupAdmin = group?.relationship?.role === GroupRoles.ADMIN;
+      const isGroupModerator = group?.relationship?.role === GroupRoles.MODERATOR;
+      const canModerate = isGroupOwner || isGroupAdmin || isGroupModerator;
       // const isStatusFromOwner = group.owner.id === account.id;
 
-      const canBanUser = match && (isGroupOwner || isGroupAdmin) && !ownAccount;
-      const canDeleteStatus = !ownAccount && (isGroupOwner || isGroupAdmin);
+      const canBanUser = match && canModerate && !ownAccount;
+      const canDeleteStatus = !ownAccount && canModerate;
 
       if (canBanUser || canDeleteStatus) {
         menu.push(null);

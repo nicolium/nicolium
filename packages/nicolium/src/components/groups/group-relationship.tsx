@@ -13,8 +13,9 @@ interface IGroupRelationship {
 const GroupRelationship = ({ group }: IGroupRelationship) => {
   const isOwner = group.relationship?.role === GroupRoles.OWNER;
   const isAdmin = group.relationship?.role === GroupRoles.ADMIN;
+  const isModerator = group.relationship?.role === GroupRoles.MODERATOR;
 
-  if (!isOwner && !isAdmin) {
+  if (!isOwner && !isAdmin && !isModerator) {
     return null;
   }
 
@@ -25,8 +26,10 @@ const GroupRelationship = ({ group }: IGroupRelationship) => {
       <p>
         {isOwner ? (
           <FormattedMessage id='group.role.owner' defaultMessage='Owner' />
-        ) : (
+        ) : isAdmin ? (
           <FormattedMessage id='group.role.admin' defaultMessage='Admin' />
+        ) : (
+          <FormattedMessage id='group.role.moderator' defaultMessage='Moderator' />
         )}
       </p>
     </div>
