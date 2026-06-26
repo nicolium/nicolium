@@ -1,10 +1,11 @@
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useContext } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import AnimatedNumber from '@/components/animated-number';
 import { useFeatures } from '@/hooks/use-features';
+import { DeckColumnIdContext } from '@/pages/deck/components/deck-column-config';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -32,6 +33,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   const features = useFeatures();
   const { data: account } = useAccount(status.account_id);
   const { demetricator } = useSettings();
+  const columnId = useContext(DeckColumnIdContext);
 
   if (!account || typeof account !== 'object') return null;
 
@@ -43,13 +45,29 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
 
   const getReposts = () => {
     if (status.reblogs_count) {
+      const message = (
+        <FormattedMessage
+          id='status.interactions.reblogs'
+          defaultMessage='{count, plural, one {Repost} other {Reposts}}'
+          values={{ count: status.reblogs_count }}
+        />
+      );
+
+      if (columnId) {
+        return (
+          <InteractionCounter
+            count={status.reblogs_count}
+            to={'/@{$username}/posts/$statusId/reblogs' as any}
+            params={{ username: account?.acct ?? '', statusId: status.id }}
+          >
+            {message}
+          </InteractionCounter>
+        );
+      }
+
       return (
         <InteractionCounter count={status.reblogs_count} onClick={handleOpenReblogsModal}>
-          <FormattedMessage
-            id='status.interactions.reblogs'
-            defaultMessage='{count, plural, one {Repost} other {Reposts}}'
-            values={{ count: status.reblogs_count }}
-          />
+          {message}
         </InteractionCounter>
       );
     }
@@ -99,16 +117,32 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
 
   const getFavourites = () => {
     if (status.favourites_count) {
+      const message = (
+        <FormattedMessage
+          id='status.interactions.favourites'
+          defaultMessage='{count, plural, one {Like} other {Likes}}'
+          values={{ count: status.favourites_count }}
+        />
+      );
+
+      if (columnId) {
+        return (
+          <InteractionCounter
+            count={status.favourites_count}
+            to={'/@{$username}/posts/$statusId/favourites' as any}
+            params={{ username: account?.acct ?? '', statusId: status.id }}
+          >
+            {message}
+          </InteractionCounter>
+        );
+      }
+
       return (
         <InteractionCounter
           count={status.favourites_count}
           onClick={features.exposableReactions ? handleOpenFavouritesModal : undefined}
         >
-          <FormattedMessage
-            id='status.interactions.favourites'
-            defaultMessage='{count, plural, one {Like} other {Likes}}'
-            values={{ count: status.favourites_count }}
-          />
+          {message}
         </InteractionCounter>
       );
     }
@@ -120,16 +154,32 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
     const dislikesCount = status.dislikes_count;
 
     if (dislikesCount) {
+      const message = (
+        <FormattedMessage
+          id='status.interactions.dislikes'
+          defaultMessage='{count, plural, one {Dislike} other {Dislikes}}'
+          values={{ count: dislikesCount }}
+        />
+      );
+
+      if (columnId) {
+        return (
+          <InteractionCounter
+            count={dislikesCount}
+            to={'/@{$username}/posts/$statusId/dislikes' as any}
+            params={{ username: account?.acct ?? '', statusId: status.id }}
+          >
+            {message}
+          </InteractionCounter>
+        );
+      }
+
       return (
         <InteractionCounter
           count={status.dislikes_count}
           onClick={features.exposableReactions ? handleOpenDislikesModal : undefined}
         >
-          <FormattedMessage
-            id='status.interactions.dislikes'
-            defaultMessage='{count, plural, one {Dislike} other {Dislikes}}'
-            values={{ count: dislikesCount }}
-          />
+          {message}
         </InteractionCounter>
       );
     }
@@ -146,16 +196,32 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
     );
 
     if (reactionsCount) {
+      const message = (
+        <FormattedMessage
+          id='status.interactions.reactions'
+          defaultMessage='{count, plural, one {Reaction} other {Reactions}}'
+          values={{ count: reactionsCount }}
+        />
+      );
+
+      if (columnId) {
+        return (
+          <InteractionCounter
+            count={reactionsCount}
+            to={'/@{$username}/posts/$statusId/reactions' as any}
+            params={{ username: account?.acct ?? '', statusId: status.id }}
+          >
+            {message}
+          </InteractionCounter>
+        );
+      }
+
       return (
         <InteractionCounter
           count={reactionsCount}
           onClick={features.exposableReactions ? handleOpenReactionsModal : undefined}
         >
-          <FormattedMessage
-            id='status.interactions.reactions'
-            defaultMessage='{count, plural, one {Reaction} other {Reactions}}'
-            values={{ count: reactionsCount }}
-          />
+          {message}
         </InteractionCounter>
       );
     }

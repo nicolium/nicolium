@@ -8,9 +8,17 @@ import * as v from 'valibot';
 import { changeSetting } from '@/actions/settings';
 import { BookmarksColumn } from '@/columns/bookmarks';
 import DraftStatusesColumn from '@/columns/draft-statuses';
+import { FollowersList, FollowingList, SubscribersList } from '@/columns/follows';
 import NotificationsColumn from '@/columns/notifications';
 import ScheduledStatusesColumn from '@/columns/scheduled-statuses';
 import SearchColumn from '@/columns/search';
+import {
+  DislikesList,
+  FavouritesList,
+  QuotesList,
+  ReactionsList,
+  ReblogsList,
+} from '@/columns/status-interactions';
 import {
   AntennaTimelineColumn,
   AccountTimelineColumn,
@@ -532,6 +540,94 @@ const statusRoute = createRoute({
   staticData: { title: messages.status },
 });
 
+const ReblogsDeckColumn = () => {
+  const { statusId } = reblogsRoute.useParams();
+  return <ReblogsList statusId={statusId} />;
+};
+const reblogsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/posts/$statusId/reblogs',
+  component: ReblogsDeckColumn,
+  staticData: { title: messages.reblogs },
+});
+
+const QuotesDeckColumn = () => {
+  const { statusId } = quotesRoute.useParams();
+  return <QuotesList statusId={statusId} />;
+};
+const quotesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/posts/$statusId/quotes',
+  component: QuotesDeckColumn,
+  staticData: { title: messages.quotes },
+});
+
+const FavouritesDeckColumn = () => {
+  const { statusId } = favouritesRoute.useParams();
+  return <FavouritesList statusId={statusId} />;
+};
+const favouritesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/posts/$statusId/favourites',
+  component: FavouritesDeckColumn,
+  staticData: { title: messages.favourites },
+});
+
+const DislikesDeckColumn = () => {
+  const { statusId } = dislikesRoute.useParams();
+  return <DislikesList statusId={statusId} />;
+};
+const dislikesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/posts/$statusId/dislikes',
+  component: DislikesDeckColumn,
+  staticData: { title: messages.dislikes },
+});
+
+const ReactionsDeckColumn = () => {
+  const { statusId } = reactionsRoute.useParams();
+  return <ReactionsList statusId={statusId} />;
+};
+const reactionsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/posts/$statusId/reactions',
+  component: ReactionsDeckColumn,
+  staticData: { title: messages.reactions },
+});
+
+const FollowersDeckColumn = () => {
+  const { username } = followersRoute.useParams();
+  return <FollowersList username={username} />;
+};
+const followersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/followers',
+  component: FollowersDeckColumn,
+  staticData: { title: messages.followers },
+});
+
+const FollowingDeckColumn = () => {
+  const { username } = followingRoute.useParams();
+  return <FollowingList username={username} />;
+};
+const followingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/following',
+  component: FollowingDeckColumn,
+  staticData: { title: messages.following },
+});
+
+const SubscribersDeckColumn = () => {
+  const { username } = subscribersRoute.useParams();
+  return <SubscribersList username={username} />;
+};
+const subscribersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/subscribers',
+  component: SubscribersDeckColumn,
+  staticData: { title: messages.subscribers },
+});
+
 const routeTree = rootRoute.addChildren([
   homeRoute,
   localRoute,
@@ -553,7 +649,15 @@ const routeTree = rootRoute.addChildren([
   chatRoute,
   accountRoute,
   accountByUsernameRoute,
+  followersRoute,
+  followingRoute,
+  subscribersRoute,
   statusRoute,
+  reblogsRoute,
+  quotesRoute,
+  favouritesRoute,
+  dislikesRoute,
+  reactionsRoute,
 ]);
 
 export {

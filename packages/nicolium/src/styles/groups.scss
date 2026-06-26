@@ -699,6 +699,15 @@
       background-color: var(--color-gray-800);
     }
   }
+
+  &--moderator {
+    color: var(--color-cyan-600);
+    background-color: variables.opaque(--color-cyan-600, 0.15);
+
+    .dark & {
+      background-color: variables.opaque(--color-cyan-600, 0.25);
+    }
+  }
 }
 
 .group-member-action-row {

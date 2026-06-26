@@ -58,6 +58,10 @@ const messages = defineMessages({
   black: { id: 'theme_toggle.black', defaultMessage: 'Black' },
 });
 
+const greentextWrapper = (children: React.ReactNode) => (
+  <span className='appearance__greentext'>{children}</span>
+);
+
 const debouncedSave = debounce(() => {
   saveSettings({ showAlert: true });
 }, 1000);
@@ -421,7 +425,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
                 id='frontend_config.greentext.label'
                 defaultMessage='<span>>render greentext</span>'
                 values={{
-                  span: (children) => <span className='appearance__greentext'>{children}</span>,
+                  span: greentextWrapper,
                 }}
               />
             }

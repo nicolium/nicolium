@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 
 import { useSettings } from '@/stores/settings';
 
-interface IStillImage {
+interface IStillImage extends Pick<React.ImgHTMLAttributes<HTMLImageElement>, 'dir'> {
   /** Image alt text. */
   alt?: string;
   /** Extra class names for the outer <div> container. */
@@ -41,6 +41,7 @@ const StillImage: React.FC<IStillImage> = ({
   onError,
   onLoad,
   isGif,
+  ...props
 }) => {
   const { autoPlayGif } = useSettings();
 
@@ -78,6 +79,7 @@ const StillImage: React.FC<IStillImage> = ({
         'still-image--letterboxed': letterboxed,
       })}
       style={style}
+      {...props}
     >
       <img
         src={src}

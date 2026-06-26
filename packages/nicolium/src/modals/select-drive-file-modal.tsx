@@ -1,7 +1,7 @@
 import iconFolder from '@phosphor-icons/core/regular/folder.svg';
 import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
 import clsx from 'clsx';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
@@ -9,6 +9,7 @@ import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import { Breadcrumbs } from '@/pages/drive/components/breadcrumbs';
+import { ViewModeToggle } from '@/pages/drive/components/view-mode-toggle';
 import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -101,9 +102,10 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
   const onClickClose = () => {
     onClose('SELECT_DRIVE_FILE');
   };
+  const [driveViewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  const [currentFolder, setCurrentFolder] = React.useState<string>();
-  const [selectedFile, setSelectedFile] = React.useState<string>();
+  const [currentFolder, setCurrentFolder] = useState<string>();
+  const [selectedFile, setSelectedFile] = useState<string>();
 
   const { data: folder } = useDriveFolderQuery(currentFolder);
 
@@ -197,23 +199,32 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
       }
       confirmationDisabled={!selectedFile && type !== 'folder'}
     >
-      <div className='drive-breadcrumbs'>
-        <Breadcrumbs
-          folderId={currentFolder}
-          onClick={(folderId) => {
-            setCurrentFolder(folderId);
-          }}
-        />
+      <div className='drive-breadcrumbs__container'>
+        <div className='drive-breadcrumbs'>
+          <Breadcrumbs
+            folderId={currentFolder}
+            onClick={(folderId) => {
+              setCurrentFolder(folderId);
+            }}
+          />
+        </div>
+        <ViewModeToggle viewMode={driveViewMode} onChange={(value) => setViewMode(value)} />
       </div>
-      <ScrollableList
-        listClassName='drive-file-list status-list'
-        style={{ minHeight: 'calc(80vh - 192px)' }}
-        isLoading={!folder}
-        showLoading={!folder}
-        useWindowScroll={false}
-      >
-        {files}
-      </ScrollableList>
+      {driveViewMode === 'grid' ? (
+        <div className='drive-file-list' style={{ minHeight: 'calc(80vh - 192px)' }}>
+          {files}
+        </div>
+      ) : (
+        <ScrollableList
+          listClassName='drive-file-list drive-file-list--list'
+          style={{ minHeight: 'calc(80vh - 192px)' }}
+          isLoading={!folder}
+          showLoading={!folder}
+          useWindowScroll={false}
+        >
+          {files}
+        </ScrollableList>
+      )}
     </Modal>
   );
 };

@@ -509,12 +509,10 @@
   &__back-button {
     width: 1.75rem;
     height: 1.75rem;
-    margin-right: 0.5rem;
+    margin-inline-end: 0.5rem;
 
     [dir="rtl"] & {
       transform: rotate(180deg);
-      margin-right: 0;
-      margin-left: 0.5rem;
     }
 
     @media (min-width: variables.$breakpoint-sm) {
@@ -590,12 +588,10 @@
   &__back-button {
     width: 1.75rem;
     height: 1.75rem;
-    margin-right: 0.5rem;
+    margin-inline-end: 0.5rem;
 
     [dir="rtl"] & {
       transform: rotate(180deg);
-      margin-right: 0;
-      margin-left: 0.5rem;
     }
 
     @media (min-width: variables.$breakpoint-sm) {
@@ -752,6 +748,7 @@
   position: fixed;
   z-index: 99;
   bottom: 0;
+  inset-inline-end: 1.25rem;
 
   display: flex;
   flex-direction: column;
@@ -762,14 +759,6 @@
 
   background: white;
   box-shadow: var(--shadow-3xl);
-
-  [dir='ltr'] & {
-    right: 1.25rem;
-  }
-
-  [dir='rtl'] & {
-    left: 1.25rem;
-  }
 
   .dark & {
     background: var(--color-gray-900);
@@ -1202,7 +1191,7 @@
   }
 
   &__message {
-    @include mixins.text($theme: muted, $size: sm, $align: left, $truncate: true);
+    @include mixins.text($theme: muted, $size: sm, $align: inherit, $truncate: true);
 
     pointer-events: none;
     width: 100%;

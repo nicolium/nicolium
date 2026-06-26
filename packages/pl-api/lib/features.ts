@@ -202,9 +202,12 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     accountAvatarDescription: any([
+      v.software === AKKOMA && gte(v.version, '3.19.0'),
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
       v.software === ICESHRIMP_NET,
       v.software === PLEROMA && gte(v.version, '2.8.0'),
+      instance.api_versions['chuckya'] >= 1,
+      instance.api_versions['mastodon'] >= 11,
     ]),
 
     /**

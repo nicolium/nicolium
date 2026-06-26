@@ -15,8 +15,8 @@ import FormActions from '@/components/ui/form-actions';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { normalizeColors } from '@/hooks/use-theme-css';
 import ColorPicker from '@/pages/dashboard/components/frontend-config/color-picker';
-import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
-import { frontendConfigSchema } from '@/schemas/frontend-config';
+import { useUpdateFrontendConfig } from '@/queries/admin/use-config';
+import { frontendConfigSchema, type PartialFrontendConfig } from '@/schemas/frontend-config';
 import { useFrontendConfigStore } from '@/stores/frontend-config';
 import toast from '@/toast';
 import tintify from '@/utils/colors';
@@ -74,7 +74,7 @@ const ThemeEditorPage: React.FC = () => {
   const frontendConfig = useFrontendConfig();
   const host = getHost();
   const rawConfig = useFrontendConfigStore((state) => state.partialConfig);
-  const { mutate: updateConfig } = useUpdateAdminConfig();
+  const { mutate: updateConfig } = useUpdateFrontendConfig();
 
   const [colors, setColors] = useState(() => editorColors(frontendConfig));
   const [isDefault, setIsDefault] = useState(false);
@@ -117,13 +117,13 @@ const ThemeEditorPage: React.FC = () => {
   };
 
   const updateTheme = () => {
-    let params;
+    let params: PartialFrontendConfig;
     if (isDefault) {
       params = { ...rawConfig, colors: undefined, brandColor: undefined, accentColor: undefined };
     } else {
-      params = { ...rawConfig, colors };
+      params = { ...rawConfig, colors: colors as PartialFrontendConfig['colors'] };
     }
-    return updateConfig(getUpdateFrontendConfigParams(params));
+    return updateConfig(params);
   };
 
   const restoreDefaultTheme = () => {

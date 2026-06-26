@@ -36,6 +36,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
 
   const isMember = group.relationship?.role === GroupRoles.USER;
   const isAdmin = group.relationship?.role === GroupRoles.ADMIN;
+  const isModerator = group.relationship?.role === GroupRoles.MODERATOR;
   const isInGroup = !!group.relationship?.member;
 
   const handleShare = () => {
@@ -75,7 +76,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
       });
     }
 
-    if (isAdmin) {
+    if (isAdmin || isModerator) {
       items.push(null);
       items.push({
         text: intl.formatMessage(messages.leave),
@@ -85,7 +86,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
     }
 
     return items;
-  }, [isMember, isAdmin, isInGroup]);
+  }, [isMember, isAdmin, isModerator, isInGroup]);
 
   if (menu.length === 0) {
     return null;

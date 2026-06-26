@@ -199,12 +199,7 @@
     display: flex;
     gap: 1rem;
     align-items: center;
-    margin-left: auto;
-
-    [dir='rtl'] & {
-      margin-right: auto;
-      margin-left: 0;
-    }
+    margin-inline-start: auto;
   }
 
   &__counter {
@@ -222,11 +217,11 @@
     align-items: center;
 
     padding: 0.5rem 1rem;
-    padding-right: 0.5rem;
+    padding-inline-end: 0.5rem;
     border-color: transparent;
     border-width: 1px;
-    border-top-left-radius: 9999px;
-    border-bottom-left-radius: 9999px;
+    border-top-left-radius: var(--radius-full);
+    border-bottom-left-radius: var(--radius-full);
 
     appearance: none;
     background-color: var(--color-primary-500);
@@ -248,8 +243,24 @@
       opacity: 0.75;
     }
 
+    [dir='rtl'] & {
+      border-top-left-radius: 0;
+      border-top-right-radius: var(--radius-full);
+      border-bottom-right-radius: var(--radius-full);
+      border-bottom-left-radius: 0;
+    }
+
     .dark &:hover {
       background-color: var(--color-primary-600);
+    }
+
+    .body--borders-reduced &,
+    .body--borders-none & {
+      padding: 0.5rem;
+
+      &__actions {
+        padding: 0.625rem 0.5rem;
+      }
     }
 
     &__container {
@@ -276,9 +287,9 @@
 
       height: 100%;
       padding-top: 0.625rem;
-      padding-right: 0.75rem;
       padding-bottom: 0.625rem;
-      padding-left: 0.25rem;
+      padding-inline-start: 0.25rem;
+      padding-inline-end: 0.75rem;
       border-color: transparent;
       border-width: 1px;
 
@@ -288,8 +299,8 @@
       transition: all 150ms var(--ease-default);
 
       &:last-child {
-        border-top-right-radius: 9999px;
-        border-bottom-right-radius: 9999px;
+        border-top-right-radius: var(--radius-full);
+        border-bottom-right-radius: var(--radius-full);
       }
 
       &:hover {
@@ -305,6 +316,13 @@
       &:disabled {
         cursor: default;
         opacity: 0.75;
+      }
+
+      [dir='rtl'] & {
+        border-top-left-radius: var(--radius-full);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: var(--radius-full);
       }
 
       .dark &:hover {
@@ -605,19 +623,14 @@
 
       position: absolute;
       top: 0;
-      right: 0;
       bottom: 0;
+      inset-inline-end: 0;
 
       display: flex;
       align-items: center;
 
       padding-right: 0.5rem;
       padding-left: 0.5rem;
-
-      [dir='rtl'] & {
-        right: auto;
-        left: 0;
-      }
 
       svg {
         width: 1.25rem;

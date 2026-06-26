@@ -32,6 +32,8 @@ import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { Account } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
+const PlaceholderStatusSlim = () => <PlaceholderStatus variant='slim' />;
+
 interface IThread {
   status: SelectedStatus;
   withMedia?: boolean;
@@ -444,7 +446,7 @@ const Thread = ({
           scrollKey={`thread:${status.id}`}
           id='thread'
           ref={scroller}
-          placeholderComponent={() => <PlaceholderStatus variant='slim' />}
+          placeholderComponent={PlaceholderStatusSlim}
           initialTopMostItemIndex={initialIndex}
           itemClassName={itemClassName}
           listClassName={clsx({ 'thread__list--modal': isModal })}

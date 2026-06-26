@@ -44,7 +44,7 @@ const useHomeTimeline = (
       });
     },
     { stream },
-    { restoringMaxId: maxId },
+    { restoringMaxId: maxId, prefetchRebloggedRelationships: true },
   );
 };
 

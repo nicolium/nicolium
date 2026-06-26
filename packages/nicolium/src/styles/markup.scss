@@ -226,6 +226,10 @@ $vertical-lr-langs: mn-mong, mnmong;
     }
   }
 
+  span.ellipsis::after {
+    content: '…';
+  }
+
   @each $lang in $vertical-lr-langs {
     &[lang='#{$lang}'] {
       overflow-x: hidden; // read more

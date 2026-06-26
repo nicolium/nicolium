@@ -800,18 +800,13 @@
       cursor: pointer;
 
       position: absolute;
-      right: 0;
       inset-block: 0;
+      inset-inline-end: 0;
 
       display: flex;
       align-items: center;
 
       padding-inline: 0.75rem;
-
-      [dir='rtl'] & {
-        right: auto;
-        left: 0;
-      }
 
       svg {
         width: 1.25rem;

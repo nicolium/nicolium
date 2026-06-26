@@ -287,7 +287,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
         )}
 
         <List>
-          {features.pleromaAdminAccounts && account.is_admin && (
+          {account.is_admin && (
             <ListItem
               to='/nicolium/config'
               label={

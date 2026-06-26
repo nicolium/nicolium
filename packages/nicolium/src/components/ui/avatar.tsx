@@ -105,6 +105,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
       <div
         style={style}
         className={clsx('avatar avatar--missing', isCat && 'avatar--cat', className)}
+        dir='ltr'
       >
         <div className='avatar__placeholder'>
           <Icon src={iconImageSquare} />
@@ -127,6 +128,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
       src={src || missingAvatar}
       alt={altText}
       onError={handleLoadFailure}
+      dir='ltr'
     />
   );
 };

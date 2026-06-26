@@ -9,7 +9,7 @@
 
   min-width: max-content;
   height: calc(100vh - 3.25rem - 1px);
-  margin-left: 1rem;
+  margin-inline-start: 1rem;
 
   .black & {
     @media (min-width: variables.$breakpoint-sm) {

@@ -1,6 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
+import { useClient } from '@/hooks/use-client';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import {
   useTimelinesStore,
@@ -9,6 +11,8 @@ import {
   type TimelineEntry,
 } from '@/stores/timelines';
 import { compareId } from '@/utils/comparators';
+
+import { queryKeys } from '../keys';
 
 import type { PaginatedResponse, PaginationParams, Status, StreamingParams } from 'pl-api';
 
@@ -22,6 +26,7 @@ interface StreamConfig {
 interface TimelineOptions {
   polling?: boolean;
   restoringMaxId?: string;
+  prefetchRebloggedRelationships?: boolean;
 }
 
 const POLLING_INTERVAL = 20_000;
@@ -42,6 +47,8 @@ const useTimeline = (
   const pollingEnabled = useTimelinesStore((state) => state.pollingEnabled);
   const timelineActions = useTimelinesActions();
   const importEntities = useImportEntities();
+  const queryClient = useQueryClient();
+  const client = useClient();
 
   const { connected: streamingConnected } = useTimelineStream(
     streamConfig?.stream ?? '',
@@ -53,6 +60,28 @@ const useTimeline = (
   fetcherRef.current = fetcher;
 
   const newestStatusId = useRef<string | undefined>(undefined);
+
+  const fetchMissingRelationships = async (items: Array<Status>) => {
+    if (!options?.prefetchRebloggedRelationships) return;
+
+    const missingRebloggedAccountIds = [
+      ...new Set(items.filter((status) => !!status.reblog).map((status) => status.account.id)),
+    ].filter(
+      (accountId) =>
+        queryClient.getQueryData(queryKeys.accountRelationships.show(accountId)) === undefined,
+    );
+
+    if (missingRebloggedAccountIds.length > 0) {
+      const relationships = await client.accounts.getRelationships(missingRebloggedAccountIds);
+
+      for (const relationship of relationships) {
+        queryClient.setQueryData(
+          queryKeys.accountRelationships.show(relationship.id),
+          relationship,
+        );
+      }
+    }
+  };
 
   useEffect(() => {
     if (timeline.entries[0]?.type === 'status') {
@@ -81,6 +110,8 @@ const useTimeline = (
         if (response.items.length === 0) return;
 
         importEntities({ statuses: response.items });
+        await fetchMissingRelationships(response.items);
+
         for (const status of response.items) {
           timelineActions.receiveStreamingStatus(timelineId, status);
         }
@@ -109,6 +140,8 @@ const useTimeline = (
                 .catch(() => true),
         ]);
         importEntities({ statuses: response.items });
+        await fetchMissingRelationships(response.items);
+
         timelineActions.expandTimeline(
           timelineId,
           response.items,
@@ -136,6 +169,7 @@ const useTimeline = (
       const response = await fetcher({ max_id: timeline.oldestStatusId });
 
       importEntities({ statuses: response.items });
+      await fetchMissingRelationships(response.items);
 
       timelineActions.expandTimeline(timelineId, response.items, !!response.next, false);
     } catch (error) {
@@ -166,6 +200,8 @@ const useTimeline = (
 
       const response = await fetcher(params);
       importEntities({ statuses: response.items });
+      await fetchMissingRelationships(response.items);
+
       timelineActions.fillGap(timelineId, gap.minId, response.items, !!response.next, direction);
     },
     [timelineId, fetcher],
@@ -185,6 +221,7 @@ const useTimeline = (
       fillGap,
       refetch,
       hasStreamConfig: !!streamConfig,
+      options,
     }),
     [timeline, timelineId, fetchNextPage, dequeueEntries, fillGap, refetch, !!streamConfig],
   );

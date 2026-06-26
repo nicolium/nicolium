@@ -28,9 +28,12 @@ const groupMemberSchema = v.pipe(
           {
             founder: 'owner',
             admin: 'admin',
+            moderator: 'moderator',
           }[groupMember.role as string] || 'user',
       };
     }
+
+    return groupMember;
   }),
   v.object({
     id: v.string(),

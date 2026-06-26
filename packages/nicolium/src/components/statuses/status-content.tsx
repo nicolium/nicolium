@@ -17,6 +17,7 @@ import { getTextDirection } from '@/utils/rtl';
 
 import OutlineBox from '../outline-box';
 import Poll from '../polls/poll';
+import Emoji from '../ui/emoji';
 
 import FakeNewsAlert from './fake-news-alert';
 import HashtagsBar from './hashtags-bar';
@@ -30,6 +31,7 @@ import TranslateButton from './translate-button';
 import type { FilterContextType } from '@/queries/settings/use-filters';
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
 
+const MATRIX_MODE = !!new URLSearchParams(window.location.search).get('matrix');
 const BIG_EMOJI_LIMIT = 10;
 
 interface IReadMoreButton {
@@ -355,6 +357,27 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
         }),
       [collapsed, onlyEmoji, spoilerExpanded, expanded],
     );
+
+    if (MATRIX_MODE) {
+      return (
+        <p
+          ref={contentNode}
+          tabIndex={0}
+          key='content'
+          className={className}
+          dir={direction}
+          data-markup
+        >
+          <Emoji emoji='🔒' className='emojione emoji' aria-hidden />
+          <em>
+            <FormattedMessage
+              id='status.decryption_error'
+              defaultMessage='Unable to decrypt message'
+            />
+          </em>
+        </p>
+      );
+    }
 
     const hasSpoiler = !displaySpoilers && !isEvent;
 

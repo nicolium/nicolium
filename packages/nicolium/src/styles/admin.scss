@@ -1305,6 +1305,10 @@ a.measure__container {
     gap: 1.5rem;
   }
 
+  &__export-hint {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+
   select {
     width: fit-content;
   }

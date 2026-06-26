@@ -1,12 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import AccountContainer from '@/components/accounts/account-container';
-import PullToRefresh from '@/components/pull-to-refresh';
-import ScrollableList from '@/components/scrollable-list';
+import { ReblogsList } from '@/columns/status-interactions';
 import Modal from '@/components/ui/modal';
-import Spinner from '@/components/ui/spinner';
-import { useStatusReblogs } from '@/queries/statuses/use-status-interactions';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
@@ -14,59 +10,13 @@ interface ReblogsModalProps {
   statusId: string;
 }
 
-const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, statusId }) => {
-  const {
-    data: accountIds,
-    isLoading,
-    hasNextPage,
-    fetchNextPage,
-    refetch,
-  } = useStatusReblogs(statusId);
-
-  const onClickClose = () => {
-    onClose('REBLOGS');
-  };
-
-  let body;
-
-  if (!accountIds) {
-    body = <Spinner />;
-  } else {
-    const emptyMessage = (
-      <FormattedMessage
-        id='status.reblogs.empty'
-        defaultMessage='No one has reposted this post yet. When someone does, they will show up here.'
-      />
-    );
-
-    body = (
-      <PullToRefresh onRefresh={refetch}>
-        <ScrollableList
-          emptyMessageText={emptyMessage}
-          listClassName='modal__list'
-          itemClassName='modal__list__item'
-          style={{ height: 'calc(80vh - 88px)' }}
-          hasMore={hasNextPage}
-          isLoading={isLoading}
-          onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-          useWindowScroll={false}
-        >
-          {accountIds.map((id) => (
-            <AccountContainer key={id} id={id} />
-          ))}
-        </ScrollableList>
-      </PullToRefresh>
-    );
-  }
-
-  return (
-    <Modal
-      title={<FormattedMessage id='column.reblogs' defaultMessage='Reposts' />}
-      onClose={onClickClose}
-    >
-      {body}
-    </Modal>
-  );
-};
+const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, statusId }) => (
+  <Modal
+    title={<FormattedMessage id='column.reblogs' defaultMessage='Reposts' />}
+    onClose={() => onClose('REBLOGS')}
+  >
+    <ReblogsList statusId={statusId} />
+  </Modal>
+);
 
 export { ReblogsModal as default, type ReblogsModalProps };

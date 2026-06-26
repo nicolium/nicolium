@@ -32,6 +32,17 @@ const messages = defineMessages({
   },
 });
 
+const translationsLink = (children: React.ReactNode) => (
+  <a
+    className='link'
+    href='https://hosted.weblate.org/projects/nicolium/'
+    target='_blank'
+    rel='noopener noreferrer'
+  >
+    {children}
+  </a>
+);
+
 const GeneralPreferences: React.FC<ISettingsPage> = ({
   changeSetting = defaultChangeSetting,
   settings: settingsProp,
@@ -95,16 +106,7 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
                 defaultMessage='You can help translating the {software} interface into your language on <link>Weblate</link>.'
                 values={{
                   software: sourceCode.displayName,
-                  link: (children: React.ReactNode) => (
-                    <a
-                      className='general-preferences__link'
-                      href='https://hosted.weblate.org/projects/nicolium/nicolium/'
-                      rel='noopener noreferrer'
-                      target='_blank'
-                    >
-                      {children}
-                    </a>
-                  ),
+                  link: translationsLink,
                 }}
               />
             }

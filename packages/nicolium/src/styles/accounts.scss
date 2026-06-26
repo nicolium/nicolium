@@ -925,12 +925,7 @@
   &__note {
     @include mixins.text($size: sm, $truncate: true);
 
-    margin-right: 0.5rem;
-
-    [dir="rtl"] & {
-      margin-right: 0;
-      margin-left: 0.5rem;
-    }
+    margin-inline-end: 0.5rem;
 
     br,
     p {

@@ -19,6 +19,10 @@ const GroupMembers: React.FC = () => {
   const { data: group, isFetching: isFetchingGroup } = useGroupQuery(groupId, true);
   const { data: owners, isFetching: isFetchingOwners } = useGroupMembers(groupId, GroupRoles.OWNER);
   const { data: admins, isFetching: isFetchingAdmins } = useGroupMembers(groupId, GroupRoles.ADMIN);
+  const { data: moderators, isFetching: isFetchingModerators } = useGroupMembers(
+    groupId,
+    GroupRoles.MODERATOR,
+  );
   const {
     data: users,
     isFetching: isFetchingUsers,
@@ -29,11 +33,16 @@ const GroupMembers: React.FC = () => {
     useGroupMembershipRequestsQuery(groupId);
 
   const isLoading =
-    isFetchingGroup || isFetchingOwners || isFetchingAdmins || isFetchingUsers || isFetchingPending;
+    isFetchingGroup ||
+    isFetchingOwners ||
+    isFetchingAdmins ||
+    isFetchingModerators ||
+    isFetchingUsers ||
+    isFetchingPending;
 
   const members = useMemo(
-    () => [...(owners ?? []), ...(admins ?? []), ...(users ?? [])],
-    [owners, admins, users],
+    () => [...(owners ?? []), ...(admins ?? []), ...(moderators ?? []), ...(users ?? [])],
+    [owners, admins, moderators, users],
   );
 
   return (
