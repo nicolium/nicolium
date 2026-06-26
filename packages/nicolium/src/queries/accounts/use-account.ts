@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { queryKeys } from '@/queries/keys';
@@ -33,6 +34,7 @@ const useAccount = (accountId?: string, withRelationship = false) => {
   const { me } = useLoggedIn();
   const queryClient = useQueryClient();
   const { accountNicknames } = useSettings();
+  const scopeUrl = useScopeUrl();
 
   const nickname = accountNicknames[accountId ?? ''];
 
@@ -40,7 +42,10 @@ const useAccount = (accountId?: string, withRelationship = false) => {
     queryKey: queryKeys.accounts.show(accountId!),
     queryFn: async () => {
       const account = await client.accounts.getAccount(accountId!);
-      queryClient.setQueryData(queryKeys.accounts.lookup(account.acct.toLowerCase()), account.id);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accounts.lookup(account.acct.toLowerCase()), scopeUrl),
+        account.id,
+      );
       return account;
     },
     enabled: !!accountId,

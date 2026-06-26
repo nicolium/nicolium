@@ -2,7 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -22,14 +23,15 @@ const useDriveFileQuery = (fileId: string) => {
 const useCreateDriveFileMutation = (folderId?: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['drive', 'files'],
     mutationFn: (file: File) => client.drive.createFile(file, folderId),
     onSuccess: (file) => {
-      queryClient.setQueryData(queryKeys.drive.files.show(file.id), file);
+      queryClient.setQueryData(scopedQueryKey(queryKeys.drive.files.show(file.id), scopeUrl), file);
       queryClient.invalidateQueries({
-        queryKey: queryKeys.drive.folders.show(folderId),
+        queryKey: scopedQueryKey(queryKeys.drive.folders.show(folderId), scopeUrl),
         exact: true,
       });
     },
@@ -39,13 +41,17 @@ const useCreateDriveFileMutation = (folderId?: string) => {
 const useUpdateDriveFileMutation = (fileId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['drive', 'files'],
     mutationFn: (params: UpdateFileParams) => client.drive.updateFile(fileId, params),
     onSuccess: (file) => {
-      queryClient.setQueryData(queryKeys.drive.files.show(file.id), file);
-      queryClient.invalidateQueries({ queryKey: queryKeys.drive.folders.root, exact: false });
+      queryClient.setQueryData(scopedQueryKey(queryKeys.drive.files.show(file.id), scopeUrl), file);
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.drive.folders.root, scopeUrl),
+        exact: false,
+      });
     },
   });
 };
@@ -53,12 +59,16 @@ const useUpdateDriveFileMutation = (fileId: string) => {
 const useDeleteDriveFileMutation = (fileId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['drive', 'files'],
     mutationFn: () => client.drive.deleteFile(fileId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.drive.folders.root, exact: false });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.drive.folders.root, scopeUrl),
+        exact: false,
+      });
     },
   });
 };
@@ -66,13 +76,17 @@ const useDeleteDriveFileMutation = (fileId: string) => {
 const useMoveDriveFileMutation = (fileId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['drive', 'files'],
     mutationFn: (folderId?: string) => client.drive.moveFile(fileId, folderId),
     onSuccess: (file) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.drive.folders.root, exact: false });
-      queryClient.setQueryData(queryKeys.drive.files.show(file.id), file);
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.drive.folders.root, scopeUrl),
+        exact: false,
+      });
+      queryClient.setQueryData(scopedQueryKey(queryKeys.drive.files.show(file.id), scopeUrl), file);
     },
   });
 };

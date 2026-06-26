@@ -1,8 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
-import { useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -23,6 +24,7 @@ interface UpdateRuleParams {
 
 const useRules = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   const getRules = () => client.admin.rules.getRules();
 
@@ -36,7 +38,7 @@ const useRules = () => {
     mutationFn: (params: CreateRuleParams) => client.admin.rules.createRule(params),
     retry: false,
     onSuccess: (data) =>
-      queryClient.setQueryData(queryKeys.admin.rules, (prevResult) =>
+      queryClient.setQueryData(scopedQueryKey(queryKeys.admin.rules, scopeUrl), (prevResult) =>
         prevResult ? [...prevResult, data] : undefined,
       ),
   });
@@ -45,7 +47,7 @@ const useRules = () => {
     mutationFn: ({ id, ...params }: UpdateRuleParams) => client.admin.rules.updateRule(id, params),
     retry: false,
     onSuccess: (data) =>
-      queryClient.setQueryData(queryKeys.admin.rules, (prevResult) =>
+      queryClient.setQueryData(scopedQueryKey(queryKeys.admin.rules, scopeUrl), (prevResult) =>
         prevResult?.map((rule) => (rule.id === data.id ? data : rule)),
       ),
   });
@@ -54,7 +56,7 @@ const useRules = () => {
     mutationFn: (id: string) => client.admin.rules.deleteRule(id),
     retry: false,
     onSuccess: (_, id) =>
-      queryClient.setQueryData(queryKeys.admin.rules, (prevResult) =>
+      queryClient.setQueryData(scopedQueryKey(queryKeys.admin.rules, scopeUrl), (prevResult) =>
         prevResult?.filter(({ id: ruleId }) => ruleId !== id),
       ),
   });

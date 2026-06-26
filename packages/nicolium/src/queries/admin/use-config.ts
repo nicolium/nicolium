@@ -3,7 +3,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useFrontendConfigActions, useFrontendConfigStore } from '@/stores/frontend-config';
 import { useInstanceActions } from '@/stores/instance';
 
@@ -40,6 +41,7 @@ const useUpdateAdminConfig = () => {
   const queryClient = useQueryClient();
   const instanceActions = useInstanceActions();
   const frontendConfigActions = useFrontendConfigActions();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationFn: (params: Parameters<typeof client.admin.config.updatePleromaConfig>[0]) =>
@@ -48,7 +50,7 @@ const useUpdateAdminConfig = () => {
     onSuccess: (data) => {
       instanceActions.importAdminConfigs(data.configs);
       frontendConfigActions.importAdminConfigs(data.configs);
-      queryClient.setQueryData(queryKeys.admin.config, data);
+      queryClient.setQueryData(scopedQueryKey(queryKeys.admin.config, scopeUrl), data);
     },
   });
 };
@@ -73,6 +75,7 @@ const useUpdateFrontendConfig = () => {
   const queryClient = useQueryClient();
   const instanceActions = useInstanceActions();
   const frontendConfigActions = useFrontendConfigActions();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationFn: async (config: PartialFrontendConfig | undefined) => {
@@ -82,7 +85,7 @@ const useUpdateFrontendConfig = () => {
         );
         instanceActions.importAdminConfigs(data.configs);
         frontendConfigActions.importAdminConfigs(data.configs);
-        queryClient.setQueryData(queryKeys.admin.config, data);
+        queryClient.setQueryData(scopedQueryKey(queryKeys.admin.config, scopeUrl), data);
       } else {
         frontendConfigActions.rememberConfig(config ?? {});
       }

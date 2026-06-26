@@ -83,6 +83,7 @@ const useChats = () => {
   const features = useFeatures();
   const { setUnreadChatsCount } = useStatContext();
   const { me } = useLoggedIn();
+  const scopeUrl = useScopeUrl();
 
   const getChats = async (
     pageParam?: Pick<PaginatedResponse<Chat>, 'next'>,
@@ -96,7 +97,10 @@ const useChats = () => {
     const fetcher = batcher.relationships(client).fetch;
     for (const { account } of items) {
       fetcher(account.id);
-      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+        account,
+      );
     }
 
     return response;
@@ -126,12 +130,16 @@ const useChats = () => {
 const useChat = (chatId?: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   const getChat = async () => {
     if (chatId) {
       const data = await client.chats.getChat(chatId);
 
-      queryClient.setQueryData(queryKeys.accounts.show(data.account.id), data.account);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accounts.show(data.account.id), scopeUrl),
+        data.account,
+      );
 
       return data;
     }
@@ -239,7 +247,7 @@ const useCreateChatMessage = () => {
     onError: (_error: any, variables, context) => {
       if (context) {
         queryClient.setQueryData(
-          queryKeys.chats.chatMessages(variables.chatId),
+          scopedQueryKey(queryKeys.chats.chatMessages(variables.chatId), scopeUrl),
           context.prevChatMessages,
         );
       }

@@ -1,13 +1,15 @@
 import { notifyManager, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
 
-import { useAppInfiniteQuery } from '../query';
+import { scopedQueryKey, useAppInfiniteQuery } from '../query';
 
 const useDirectory = (order: 'active' | 'new', local: boolean = false) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useAppInfiniteQuery({
     queryKey: queryKeys.accountsLists.directory(order, local),
@@ -21,7 +23,10 @@ const useDirectory = (order: 'active' | 'new', local: boolean = false) => {
         .then((accounts) => {
           notifyManager.batch(() => {
             for (const account of accounts) {
-              queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+              queryClient.setQueryData(
+                scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+                account,
+              );
             }
           });
           return accounts.map(({ id }) => id);

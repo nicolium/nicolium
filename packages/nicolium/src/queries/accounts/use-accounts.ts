@@ -1,14 +1,16 @@
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
-import { useAppQueries } from '@/queries/query';
+import { scopedQueryKey, useAppQueries } from '@/queries/query';
 
 import type { Account } from 'pl-api';
 
 const useAccounts = (accountIds: Array<string>) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useAppQueries({
     queries: accountIds.map((accountId) => ({
@@ -16,7 +18,7 @@ const useAccounts = (accountIds: Array<string>) => {
       queryFn: async () => {
         const response = await client.accounts.getAccount(accountId);
         queryClient.setQueryData(
-          queryKeys.accounts.lookup(response.acct.toLowerCase()),
+          scopedQueryKey(queryKeys.accounts.lookup(response.acct.toLowerCase()), scopeUrl),
           response.id,
         );
         return response;

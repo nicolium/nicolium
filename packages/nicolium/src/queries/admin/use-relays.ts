@@ -1,8 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
-import { useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -10,6 +11,7 @@ import type { AdminRelay } from 'pl-api';
 
 const useRelays = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   const getRelays = () => client.admin.relays.getRelays();
 
@@ -24,9 +26,11 @@ const useRelays = () => {
     retry: false,
     onSuccess: (data) => {
       if (!data) {
-        queryClient.invalidateQueries({ queryKey: queryKeys.admin.relays });
+        queryClient.invalidateQueries({
+          queryKey: scopedQueryKey(queryKeys.admin.relays, scopeUrl),
+        });
       } else {
-        queryClient.setQueryData(queryKeys.admin.relays, (prevResult) =>
+        queryClient.setQueryData(scopedQueryKey(queryKeys.admin.relays, scopeUrl), (prevResult) =>
           prevResult ? [...prevResult, data] : undefined,
         );
       }
@@ -37,7 +41,7 @@ const useRelays = () => {
     mutationFn: (id: string) => client.admin.relays.unfollowRelay(id),
     retry: false,
     onSuccess: (_, deletedId) =>
-      queryClient.setQueryData(queryKeys.admin.relays, (prevResult) =>
+      queryClient.setQueryData(scopedQueryKey(queryKeys.admin.relays, scopeUrl), (prevResult) =>
         prevResult?.filter(({ id }) => id !== deletedId),
       ),
   });

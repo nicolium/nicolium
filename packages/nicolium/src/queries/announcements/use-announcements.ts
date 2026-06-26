@@ -3,8 +3,9 @@ import { announcementReactionSchema, type AnnouncementReaction, type Announcemen
 import * as v from 'valibot';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
-import { useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -43,6 +44,7 @@ const updateReactions = (
 
 const useAnnouncements = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   const { data, ...result } = useAppQuery<ReadonlyArray<Announcement>>({
     queryKey: queryKeys.announcements.all,
@@ -55,27 +57,31 @@ const useAnnouncements = () => {
       client.announcements.addAnnouncementReaction(announcementId, name),
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
-      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
-        prevResult?.map((value) =>
-          value.id !== id
-            ? value
-            : {
-                ...value,
-                reactions: updateReactions(value.reactions, name, 1, true),
-              },
-        ),
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.announcements.all, scopeUrl),
+        (prevResult) =>
+          prevResult?.map((value) =>
+            value.id !== id
+              ? value
+              : {
+                  ...value,
+                  reactions: updateReactions(value.reactions, name, 1, true),
+                },
+          ),
       );
     },
     onError: (_, { announcementId: id, name }) => {
-      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
-        prevResult?.map((value) =>
-          value.id !== id
-            ? value
-            : {
-                ...value,
-                reactions: updateReactions(value.reactions, name, -1, false),
-              },
-        ),
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.announcements.all, scopeUrl),
+        (prevResult) =>
+          prevResult?.map((value) =>
+            value.id !== id
+              ? value
+              : {
+                  ...value,
+                  reactions: updateReactions(value.reactions, name, -1, false),
+                },
+          ),
       );
     },
   });
@@ -85,27 +91,31 @@ const useAnnouncements = () => {
       client.announcements.deleteAnnouncementReaction(announcementId, name),
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
-      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
-        prevResult?.map((value) =>
-          value.id !== id
-            ? value
-            : {
-                ...value,
-                reactions: updateReactions(value.reactions, name, -1, false),
-              },
-        ),
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.announcements.all, scopeUrl),
+        (prevResult) =>
+          prevResult?.map((value) =>
+            value.id !== id
+              ? value
+              : {
+                  ...value,
+                  reactions: updateReactions(value.reactions, name, -1, false),
+                },
+          ),
       );
     },
     onError: (_, { announcementId: id, name }) => {
-      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
-        prevResult?.map((value) =>
-          value.id !== id
-            ? value
-            : {
-                ...value,
-                reactions: updateReactions(value.reactions, name, 1, true),
-              },
-        ),
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.announcements.all, scopeUrl),
+        (prevResult) =>
+          prevResult?.map((value) =>
+            value.id !== id
+              ? value
+              : {
+                  ...value,
+                  reactions: updateReactions(value.reactions, name, 1, true),
+                },
+          ),
       );
     },
   });

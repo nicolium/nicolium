@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { useAppInfiniteQuery, useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppInfiniteQuery, useAppQuery } from '@/queries/query';
 import { useInstanceStore } from '@/stores/instance';
 
 import { useAccount } from '../accounts/use-account';
@@ -96,7 +96,7 @@ const useUpdateReport = (reportId: string) => {
       client.admin.reports.updateReport(reportId, params),
     onSuccess: (report) => {
       queryClient.setQueryData(
-        queryKeys.admin.reports.show(reportId),
+        scopedQueryKey(queryKeys.admin.reports.show(reportId), scopeUrl),
         minifyAdminReport(report, scopeUrl),
       );
     },
@@ -113,7 +113,7 @@ const useSelfAssignReport = (reportId: string) => {
     mutationFn: () => client.admin.reports.assignReportToSelf(reportId),
     onSuccess: (report) => {
       queryClient.setQueryData(
-        queryKeys.admin.reports.show(reportId),
+        scopedQueryKey(queryKeys.admin.reports.show(reportId), scopeUrl),
         minifyAdminReport(report, scopeUrl),
       );
     },
@@ -130,7 +130,7 @@ const useUnassignReport = (reportId: string) => {
     mutationFn: () => client.admin.reports.unassignReport(reportId),
     onSuccess: (report) => {
       queryClient.setQueryData(
-        queryKeys.admin.reports.show(reportId),
+        scopedQueryKey(queryKeys.admin.reports.show(reportId), scopeUrl),
         minifyAdminReport(report, scopeUrl),
       );
     },
@@ -148,18 +148,21 @@ const useResolveReport = (reportId: string) => {
       client.admin.reports.resolveReport(reportId, actionTakenComment),
     onSuccess: (report) => {
       queryClient.setQueryData(
-        queryKeys.admin.reports.show(reportId),
+        scopedQueryKey(queryKeys.admin.reports.show(reportId), scopeUrl),
         minifyAdminReport(report, scopeUrl),
       );
       queryClient.setQueriesData(
         {
-          queryKey: queryKeys.admin.reportLists.show({ resolved: undefined }),
+          queryKey: scopedQueryKey(
+            queryKeys.admin.reportLists.show({ resolved: undefined }),
+            scopeUrl,
+          ),
           exact: false,
         },
         filterById(reportId),
       );
       queryClient.invalidateQueries({
-        queryKey: queryKeys.admin.reportLists.show({ resolved: true }),
+        queryKey: scopedQueryKey(queryKeys.admin.reportLists.show({ resolved: true }), scopeUrl),
         exact: false,
       });
     },
@@ -176,18 +179,18 @@ const useReopenReport = (reportId: string) => {
     mutationFn: () => client.admin.reports.reopenReport(reportId),
     onSuccess: (report) => {
       queryClient.setQueryData(
-        queryKeys.admin.reports.show(reportId),
+        scopedQueryKey(queryKeys.admin.reports.show(reportId), scopeUrl),
         minifyAdminReport(report, scopeUrl),
       );
       queryClient.setQueriesData(
         {
-          queryKey: queryKeys.admin.reportLists.show({ resolved: true }),
+          queryKey: scopedQueryKey(queryKeys.admin.reportLists.show({ resolved: true }), scopeUrl),
           exact: false,
         },
         filterById(reportId),
       );
       queryClient.invalidateQueries({
-        queryKey: queryKeys.admin.reportLists.root,
+        queryKey: scopedQueryKey(queryKeys.admin.reportLists.root, scopeUrl),
         exact: false,
       });
     },
@@ -204,7 +207,7 @@ const useForwardReport = (reportId: string) => {
     mutationFn: () => client.admin.reports.forwardReport(reportId),
     onSuccess: (report) => {
       queryClient.setQueryData(
-        queryKeys.admin.reports.show(reportId),
+        scopedQueryKey(queryKeys.admin.reports.show(reportId), scopeUrl),
         minifyAdminReport(report, scopeUrl),
       );
     },

@@ -2,8 +2,9 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
-import { useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { useAccount } from './use-account';
 
@@ -16,6 +17,7 @@ const useAccountLookup = (acct: string | undefined, withRelationship = false) =>
   const client = useClient();
   const features = useFeatures();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   const accountIdQuery = useAppQuery({
     queryKey: queryKeys.accounts.lookup(acct?.toLowerCase()!),
@@ -36,7 +38,10 @@ const useAccountLookup = (acct: string | undefined, withRelationship = false) =>
       }
 
       if (account) {
-        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+          account,
+        );
         return account.id;
       }
     },

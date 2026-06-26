@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
-import { useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -20,12 +20,13 @@ const useInvites = () => {
 
 const useCreateInviteTokenMutation = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationFn: (params: AdminCreateInviteTokenParams) =>
       client.admin.invites.createInviteToken(params),
     onSuccess: (data) =>
-      queryClient.setQueryData(queryKeys.admin.invites, (prevResult) =>
+      queryClient.setQueryData(scopedQueryKey(queryKeys.admin.invites, scopeUrl), (prevResult) =>
         prevResult ? [...prevResult, data] : [data],
       ),
   });
@@ -33,11 +34,12 @@ const useCreateInviteTokenMutation = () => {
 
 const useRevokeInviteTokenMutation = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationFn: (token: string) => client.admin.invites.revokeInviteToken(token),
     onSuccess: (_, token) =>
-      queryClient.setQueryData(queryKeys.admin.invites, (prevResult) =>
+      queryClient.setQueryData(scopedQueryKey(queryKeys.admin.invites, scopeUrl), (prevResult) =>
         prevResult?.map((invite) => (invite.token === token ? { ...invite, used: true } : invite)),
       ),
   });

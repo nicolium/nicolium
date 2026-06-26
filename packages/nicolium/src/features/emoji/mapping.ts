@@ -109,6 +109,7 @@ const unicodeMapping = compileTime(() => {
 
   return generateMappings(data.emojis);
 });
+
 export default unicodeMapping;
 
 export type { UnicodeMap };

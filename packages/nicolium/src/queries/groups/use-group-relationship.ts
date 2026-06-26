@@ -3,7 +3,8 @@ import { useMutation } from '@tanstack/react-query';
 import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
@@ -27,6 +28,7 @@ const useGroupRelationshipQuery = (groupId?: string) => {
 
 const useJoinGroupMutation = (id: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['groupRelationships', id, 'join'],
@@ -34,30 +36,40 @@ const useJoinGroupMutation = (id: string) => {
     onMutate: () => {
       let previousRelationship: GroupRelationship | undefined = undefined;
 
-      queryClient.setQueryData(queryKeys.groupRelationships.show(id), (relationship) => {
-        previousRelationship = relationship;
-        if (!relationship) return undefined;
-        return {
-          ...relationship,
-          requested: true,
-        };
-      });
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.groupRelationships.show(id), scopeUrl),
+        (relationship) => {
+          previousRelationship = relationship;
+          if (!relationship) return undefined;
+          return {
+            ...relationship,
+            requested: true,
+          };
+        },
+      );
 
       return previousRelationship;
     },
     onError: (_, __, previousRelationship) => {
       if (previousRelationship) {
-        queryClient.setQueryData(queryKeys.groupRelationships.show(id), previousRelationship);
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.groupRelationships.show(id), scopeUrl),
+          previousRelationship,
+        );
       }
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.groupRelationships.show(id), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.groupRelationships.show(id), scopeUrl),
+        data,
+      );
     },
   });
 };
 
 const useLeaveGroupMutation = (id: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['groupRelationships', id, 'leave'],
@@ -65,26 +77,35 @@ const useLeaveGroupMutation = (id: string) => {
     onMutate: () => {
       let previousRelationship: GroupRelationship | undefined = undefined;
 
-      queryClient.setQueryData(queryKeys.groupRelationships.show(id), (relationship) => {
-        previousRelationship = relationship;
-        if (!relationship) return undefined;
-        return {
-          ...relationship,
-          requested: false,
-          member: false,
-          role: undefined,
-        };
-      });
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.groupRelationships.show(id), scopeUrl),
+        (relationship) => {
+          previousRelationship = relationship;
+          if (!relationship) return undefined;
+          return {
+            ...relationship,
+            requested: false,
+            member: false,
+            role: undefined,
+          };
+        },
+      );
 
       return previousRelationship;
     },
     onError: (_, __, previousRelationship) => {
       if (previousRelationship) {
-        queryClient.setQueryData(queryKeys.groupRelationships.show(id), previousRelationship);
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.groupRelationships.show(id), scopeUrl),
+          previousRelationship,
+        );
       }
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.groupRelationships.show(id), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.groupRelationships.show(id), scopeUrl),
+        data,
+      );
     },
   });
 };

@@ -21,15 +21,22 @@ const useDriveFolderQuery = (folderId?: string) => {
 const useCreateDriveFolderMutation = () => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['drive', 'folders'],
     mutationFn: ({ name, parentId }: { name: string; parentId?: string }) =>
       client.drive.createFolder(name, parentId),
     onSuccess: (folder) => {
-      queryClient.setQueryData(queryKeys.drive.folders.show(folder.id || undefined), folder);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.drive.folders.show(folder.id || undefined), scopeUrl),
+        folder,
+      );
       queryClient.invalidateQueries({
-        queryKey: queryKeys.drive.folders.show(folder.parent_id ?? undefined),
+        queryKey: scopedQueryKey(
+          queryKeys.drive.folders.show(folder.parent_id ?? undefined),
+          scopeUrl,
+        ),
         exact: true,
       });
     },

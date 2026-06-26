@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import { queryKeys } from '../keys';
 
@@ -31,18 +32,21 @@ const setVerified = (account: Account | undefined, verified: boolean): Account |
 const useAdminVerifyAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'accounts', accountId, 'verify'],
     mutationFn: () => client.admin.accounts.tagUser(accountId, ['verified']),
     onMutate: () => {
-      queryClient.setQueryData(queryKeys.accounts.show(accountId), (account) =>
-        setVerified(account, true),
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+        (account) => setVerified(account, true),
       );
     },
     onError: () => {
-      queryClient.setQueryData(queryKeys.accounts.show(accountId), (account) =>
-        setVerified(account, false),
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+        (account) => setVerified(account, false),
       );
     },
   });
@@ -51,18 +55,21 @@ const useAdminVerifyAccountMutation = (accountId: string) => {
 const useAdminUnverifyAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'accounts', accountId, 'unverify'],
     mutationFn: () => client.admin.accounts.untagUser(accountId, ['verified']),
     onMutate: () => {
-      queryClient.setQueryData(queryKeys.accounts.show(accountId), (account) =>
-        setVerified(account, false),
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+        (account) => setVerified(account, false),
       );
     },
     onError: () => {
-      queryClient.setQueryData(queryKeys.accounts.show(accountId), (account) =>
-        setVerified(account, true),
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+        (account) => setVerified(account, true),
       );
     },
   });

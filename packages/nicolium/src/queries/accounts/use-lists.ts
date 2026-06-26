@@ -3,8 +3,9 @@ import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
-import { useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
 import { filterById } from '../utils/filter-id';
@@ -38,22 +39,25 @@ const useList = (listId?: string) =>
 
 const useCreateList = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['lists', 'create'],
     mutationFn: (params: CreateListParams) => client.lists.createList(params),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.lists.all }),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: scopedQueryKey(queryKeys.lists.all, scopeUrl) }),
   });
 };
 
 const useDeleteList = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['lists', 'delete'],
     mutationFn: (listId: string) => client.lists.deleteList(listId),
     onSuccess: (_, deletedListId) => {
-      queryClient.setQueryData(queryKeys.lists.all, (prevData) =>
+      queryClient.setQueryData(scopedQueryKey(queryKeys.lists.all, scopeUrl), (prevData) =>
         prevData?.filter(({ id }) => id !== deletedListId),
       );
     },
@@ -62,30 +66,37 @@ const useDeleteList = () => {
 
 const useUpdateList = (listId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['lists', 'update', listId],
     mutationFn: (params: UpdateListParams) => client.lists.updateList(listId, params),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.lists.all }),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: scopedQueryKey(queryKeys.lists.all, scopeUrl) }),
   });
 };
 
 const useListAccounts = makePaginatedResponseQuery(
   (listId: string) => queryKeys.accountsLists.listMembers(listId),
-  (client, [listId]) => client.lists.getListAccounts(listId).then(minifyAccountList),
+  (client, [listId], scopeUrl) =>
+    client.lists.getListAccounts(listId).then((accounts) => minifyAccountList(accounts, scopeUrl)),
 );
 
 const useAddAccountsToList = (listId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['accountsLists', 'lists', listId, 'add'],
     mutationFn: (accountIds: Array<string>) => client.lists.addListAccounts(listId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.listMembers(listId) });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accountsLists.listMembers(listId), scopeUrl),
+      });
       accountIds.forEach((accountId) =>
-        queryClient.setQueryData(queryKeys.lists.forAccount(accountId), (listIds) =>
-          listIds ? [...listIds, listId] : undefined,
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.lists.forAccount(accountId), scopeUrl),
+          (listIds) => (listIds ? [...listIds, listId] : undefined),
         ),
       );
     },
@@ -94,15 +105,20 @@ const useAddAccountsToList = (listId: string) => {
 
 const useRemoveAccountsFromList = (listId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['accountsLists', 'lists', listId, 'remove'],
     mutationFn: (accountIds: Array<string>) => client.lists.deleteListAccounts(listId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.setQueryData(queryKeys.accountsLists.listMembers(listId), filterById(accountIds));
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountsLists.listMembers(listId), scopeUrl),
+        filterById(accountIds),
+      );
       accountIds.forEach((accountId) =>
-        queryClient.setQueryData(queryKeys.lists.forAccount(accountId), (listIds) =>
-          listIds?.filter((id) => id !== listId),
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.lists.forAccount(accountId), scopeUrl),
+          (listIds) => listIds?.filter((id) => id !== listId),
         ),
       );
     },

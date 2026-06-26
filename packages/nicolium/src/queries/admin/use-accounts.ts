@@ -5,7 +5,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useAccount } from '@/queries/accounts/use-account';
-import { useAppInfiniteQuery, useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppInfiniteQuery, useAppQuery } from '@/queries/query';
 import { getTagDiff } from '@/utils/badges';
 
 import { queryKeys } from '../keys';
@@ -35,12 +35,17 @@ const useAdminAccounts = makePaginatedResponseQuery(
 const useAdminAccount = (accountId?: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   const query = useAppQuery<AdminAccount>({
     queryKey: queryKeys.admin.accounts.show(accountId!),
     queryFn: () =>
       client.admin.accounts.getAccount(accountId!).then(({ account, ...adminAccount }) => {
-        if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        if (account)
+          queryClient.setQueryData(
+            scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+            account,
+          );
         return adminAccount as AdminAccount;
       }),
     enabled: !!accountId,
@@ -80,16 +85,27 @@ const usePendingUsersCount = () => {
 const useAdminApproveAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId],
     mutationFn: () => client.admin.accounts.approveAccount(accountId),
     onSuccess: ({ account, ...adminAccount }) => {
-      if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-      queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
+      if (account)
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+          account,
+        );
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.admin.accounts.show(adminAccount.id), scopeUrl),
+        adminAccount,
+      );
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: queryKeys.admin.accountLists.show({ status: 'pending' }),
+          queryKey: scopedQueryKey(
+            queryKeys.admin.accountLists.show({ status: 'pending' }),
+            scopeUrl,
+          ),
           exact: false,
         },
         filterById(accountId),
@@ -101,6 +117,7 @@ const useAdminApproveAccountMutation = (accountId: string) => {
 const useAdminRejectAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId],
@@ -108,7 +125,10 @@ const useAdminRejectAccountMutation = (accountId: string) => {
     onSuccess: () => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: queryKeys.admin.accountLists.show({ status: 'pending' }),
+          queryKey: scopedQueryKey(
+            queryKeys.admin.accountLists.show({ status: 'pending' }),
+            scopeUrl,
+          ),
           exact: false,
         },
         filterById(accountId),
@@ -120,6 +140,7 @@ const useAdminRejectAccountMutation = (accountId: string) => {
 const useAdminDeleteAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId],
@@ -127,7 +148,7 @@ const useAdminDeleteAccountMutation = (accountId: string) => {
     onSuccess: () => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: queryKeys.admin.accountLists.root,
+          queryKey: scopedQueryKey(queryKeys.admin.accountLists.root, scopeUrl),
           exact: false,
         },
         filterById(accountId),
@@ -139,13 +160,17 @@ const useAdminDeleteAccountMutation = (accountId: string) => {
 const useAdminPerformAccountActionMutation = (accountId: string, type: AdminAccountAction) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId],
     mutationFn: (params?: AdminPerformAccountActionParams) =>
       client.admin.accounts.performAccountAction(accountId, type, params),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.admin.accountLists.root, exact: false });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.admin.accountLists.root, scopeUrl),
+        exact: false,
+      });
     },
   });
 };
@@ -153,6 +178,7 @@ const useAdminPerformAccountActionMutation = (accountId: string, type: AdminAcco
 const useAdminEnableAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId],
@@ -160,12 +186,15 @@ const useAdminEnableAccountMutation = (accountId: string) => {
     onSuccess: (account) => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: queryKeys.admin.accountLists.show({ status: 'disabled' }),
+          queryKey: scopedQueryKey(
+            queryKeys.admin.accountLists.show({ status: 'disabled' }),
+            scopeUrl,
+          ),
           exact: false,
         },
         filterById(accountId),
       );
-      minifyAdminAccount(account);
+      minifyAdminAccount(account, scopeUrl);
     },
   });
 };
@@ -173,6 +202,7 @@ const useAdminEnableAccountMutation = (accountId: string) => {
 const useAdminUnsilenceAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId],
@@ -180,12 +210,15 @@ const useAdminUnsilenceAccountMutation = (accountId: string) => {
     onSuccess: (account) => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: queryKeys.admin.accountLists.show({ status: 'silenced' }),
+          queryKey: scopedQueryKey(
+            queryKeys.admin.accountLists.show({ status: 'silenced' }),
+            scopeUrl,
+          ),
           exact: false,
         },
         filterById(accountId),
       );
-      minifyAdminAccount(account);
+      minifyAdminAccount(account, scopeUrl);
     },
   });
 };
@@ -193,6 +226,7 @@ const useAdminUnsilenceAccountMutation = (accountId: string) => {
 const useAdminUnsuspendAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId],
@@ -200,24 +234,28 @@ const useAdminUnsuspendAccountMutation = (accountId: string) => {
     onSuccess: (account) => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: queryKeys.admin.accountLists.show({ status: 'suspended' }),
+          queryKey: scopedQueryKey(
+            queryKeys.admin.accountLists.show({ status: 'suspended' }),
+            scopeUrl,
+          ),
           exact: false,
         },
         filterById(accountId),
       );
-      minifyAdminAccount(account);
+      minifyAdminAccount(account, scopeUrl);
     },
   });
 };
 
 const useAdminUnsensitiveAccountMutation = (accountId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId],
     mutationFn: () => client.admin.accounts.unsensitiveAccount(accountId),
     onSuccess: (account) => {
-      minifyAdminAccount(account);
+      minifyAdminAccount(account, scopeUrl);
     },
   });
 };
@@ -225,13 +263,18 @@ const useAdminUnsensitiveAccountMutation = (accountId: string) => {
 const useAdminTagUserMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId, 'tag'],
     mutationFn: (tags: Array<string>) => client.admin.accounts.tagUser(accountId, tags),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.admin.accounts.show(accountId) });
-      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.admin.accounts.show(accountId), scopeUrl),
+      });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+      });
     },
   });
 };
@@ -239,12 +282,15 @@ const useAdminTagUserMutation = (accountId: string) => {
 const useAdminUntagUserMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId, 'untag'],
     mutationFn: (tags: Array<string>) => client.admin.accounts.untagUser(accountId, tags),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+      });
     },
   });
 };
@@ -252,6 +298,7 @@ const useAdminUntagUserMutation = (accountId: string) => {
 const useAdminUpdateTagsMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId, 'updateTags'],
@@ -264,7 +311,9 @@ const useAdminUpdateTagsMutation = (accountId: string) => {
       ]);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+      });
     },
   });
 };
@@ -272,6 +321,7 @@ const useAdminUpdateTagsMutation = (accountId: string) => {
 const useAdminSetRoleMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId, 'setRole'],
@@ -286,7 +336,9 @@ const useAdminSetRoleMutation = (accountId: string) => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+      });
     },
   });
 };
@@ -294,13 +346,18 @@ const useAdminSetRoleMutation = (accountId: string) => {
 const useAdminResetAccountPasswordMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'accounts', accountId, 'resetPassword'],
     mutationFn: (password: string) => client.admin.accounts.resetPassword(accountId, password),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
-      queryClient.invalidateQueries({ queryKey: queryKeys.admin.accounts.show(accountId) });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+      });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.admin.accounts.show(accountId), scopeUrl),
+      });
     },
   });
 };
@@ -308,14 +365,22 @@ const useAdminResetAccountPasswordMutation = (accountId: string) => {
 const useAdminUpdateAccountCredentialsMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'accounts', accountId, 'update'],
     mutationFn: (params: AdminAccountUpdateCredentialsParams) =>
       client.admin.accounts.updateCredentials(accountId, params),
     onSuccess: ({ account, ...adminAccount }) => {
-      queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
-      if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.admin.accounts.show(adminAccount.id), scopeUrl),
+        adminAccount,
+      );
+      if (account)
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+          account,
+        );
     },
   });
 };

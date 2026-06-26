@@ -34,4 +34,5 @@ const ColorPicker: React.FC<IColorPicker> = ({ value, onChange, className }) => 
     </div>
   );
 };
+
 export { ColorPicker as default };

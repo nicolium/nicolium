@@ -4,6 +4,7 @@ import * as v from 'valibot';
 
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { loadMastodonPreload, verifyCredentials } from '@/stores/auth';
 import { useFrontendConfigStore } from '@/stores/frontend-config';
 import { useInstanceStore } from '@/stores/instance';
@@ -53,7 +54,10 @@ const preloadMastodon = (data: Record<string, any>) => {
   for (const account of Object.values(data.accounts)) {
     try {
       const parsedAccount = v.parse(accountSchema, account);
-      queryClient.setQueryData(queryKeys.accounts.show(parsedAccount.id), parsedAccount);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accounts.show(parsedAccount.id), url),
+        parsedAccount,
+      );
     } catch {
       //
     }

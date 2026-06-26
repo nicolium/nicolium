@@ -4,14 +4,16 @@ import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
-import { useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 const useFamiliarFollowers = (accountId: string) => {
   const client = useClient();
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useAppQuery({
     queryKey: queryKeys.accountsLists.familiarFollowers(accountId),
@@ -21,7 +23,10 @@ const useFamiliarFollowers = (accountId: string) => {
         .fetch(accountId)
         .then(({ accounts }) => {
           for (const account of accounts) {
-            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+            queryClient.setQueryData(
+              scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+              account,
+            );
           }
           return accounts.map(({ id }) => id);
         }),

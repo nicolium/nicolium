@@ -17,6 +17,7 @@ import { importEntities } from '@/queries/utils/import-entities';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
+import { scopedQueryKey } from '../query';
 
 const minifyList = <T1, T2, IsArray extends boolean = true>(
   { previous, next, items, ...response }: PaginatedResponse<T1, IsArray>,
@@ -52,17 +53,23 @@ const minifyStatusList = (
     (statuses) => importEntities(scopeUrl, { statuses }),
   );
 
-const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedResponse<string> =>
+const minifyAccountList = (
+  response: PaginatedResponse<Account>,
+  scopeUrl: string,
+): PaginatedResponse<string> =>
   minifyList(
     response,
     (account) => account.id,
     (accounts) => {
       notifyManager.batch(() => {
         for (const account of accounts) {
-          queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+          queryClient.setQueryData(
+            scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+            account,
+          );
           if (account.relationship) {
             queryClient.setQueryData(
-              queryKeys.accountRelationships.show(account.id),
+              scopedQueryKey(queryKeys.accountRelationships.show(account.id), scopeUrl),
               account.relationship,
             );
           }
@@ -73,6 +80,7 @@ const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedRespo
 
 const minifyBlockedAccountList = (
   response: PaginatedResponse<BlockedAccount>,
+  scopeUrl: string,
 ): PaginatedResponse<[string, string | null]> =>
   minifyList(
     response,
@@ -80,10 +88,13 @@ const minifyBlockedAccountList = (
     (accounts) => {
       notifyManager.batch(() => {
         for (const account of accounts) {
-          queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+          queryClient.setQueryData(
+            scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+            account,
+          );
           if (account.relationship) {
             queryClient.setQueryData(
-              queryKeys.accountRelationships.show(account.id),
+              scopedQueryKey(queryKeys.accountRelationships.show(account.id), scopeUrl),
               account.relationship,
             );
           }
@@ -94,6 +105,7 @@ const minifyBlockedAccountList = (
 
 const minifyMutedAccountList = (
   response: PaginatedResponse<MutedAccount>,
+  scopeUrl: string,
 ): PaginatedResponse<[string, string | null]> =>
   minifyList(
     response,
@@ -101,10 +113,13 @@ const minifyMutedAccountList = (
     (accounts) => {
       notifyManager.batch(() => {
         for (const account of accounts) {
-          queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+          queryClient.setQueryData(
+            scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+            account,
+          );
           if (account.relationship) {
             queryClient.setQueryData(
-              queryKeys.accountRelationships.show(account.id),
+              scopedQueryKey(queryKeys.accountRelationships.show(account.id), scopeUrl),
               account.relationship,
             );
           }
@@ -113,14 +128,20 @@ const minifyMutedAccountList = (
     },
   );
 
-const minifyGroupList = (response: PaginatedResponse<Group>): PaginatedResponse<string> =>
+const minifyGroupList = (
+  response: PaginatedResponse<Group>,
+  scopeUrl: string,
+): PaginatedResponse<string> =>
   minifyList(
     response,
     (group) => group.id,
     (groups) => {
       notifyManager.batch(() => {
         for (const group of groups) {
-          queryClient.setQueryData(queryKeys.groups.show(group.id), group);
+          queryClient.setQueryData(
+            scopedQueryKey(queryKeys.groups.show(group.id), scopeUrl),
+            group,
+          );
         }
       });
     },
@@ -172,24 +193,38 @@ const minifyGroupedNotifications = (
     false,
   );
 
-const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount) => {
-  if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-  queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
+const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount, scopeUrl: string) => {
+  if (account)
+    queryClient.setQueryData(
+      scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+      account,
+    );
+  queryClient.setQueryData(
+    scopedQueryKey(queryKeys.admin.accounts.show(adminAccount.id), scopeUrl),
+    adminAccount,
+  );
 
   return adminAccount;
 };
 
 type MinifiedAdminAccount = ReturnType<typeof minifyAdminAccount>;
 
-const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
+const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>, scopeUrl: string) =>
   minifyList(
     response,
     (account) => account.id,
     (accounts) => {
       notifyManager.batch(() => {
         for (const { account, ...adminAccount } of accounts) {
-          if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-          queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
+          if (account)
+            queryClient.setQueryData(
+              scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+              account,
+            );
+          queryClient.setQueryData(
+            scopedQueryKey(queryKeys.admin.accounts.show(adminAccount.id), scopeUrl),
+            adminAccount,
+          );
         }
       });
     },
@@ -213,6 +248,7 @@ const minifyAdminReport = (
       ),
       { partial: false },
     ),
+    scopeUrl,
   );
 
   importEntities(scopeUrl, {
@@ -244,7 +280,7 @@ const minifyAdminReportList = (response: PaginatedResponse<AdminReport>, scopeUr
       notifyManager.batch(() => {
         for (const report of reports) {
           queryClient.setQueryData(
-            queryKeys.admin.reports.show(report.id),
+            scopedQueryKey(queryKeys.admin.reports.show(report.id), scopeUrl),
             minifyAdminReport(report, scopeUrl),
           );
         }

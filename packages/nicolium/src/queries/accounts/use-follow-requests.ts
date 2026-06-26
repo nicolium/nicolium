@@ -2,27 +2,35 @@ import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-
 import { PaginatedResponse, type PlApiClient } from 'pl-api';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 
+import { scopedQueryKey } from '../query';
 import { filterById } from '../utils/filter-id';
 
-const appendFollowRequest = (accountId: string) =>
-  queryClient.setQueryData(queryKeys.accountsLists.followRequests, (data) => {
-    if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
+const appendFollowRequest = (accountId: string, scopeUrl: string) =>
+  queryClient.setQueryData(
+    scopedQueryKey(queryKeys.accountsLists.followRequests, scopeUrl),
+    (data) => {
+      if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
 
-    return {
-      ...data,
-      pages: data.pages.map((page, index) =>
-        index === 0 ? new PaginatedResponse([accountId, ...page.items], page) : page,
-      ),
-    };
-  });
+      return {
+        ...data,
+        pages: data.pages.map((page, index) =>
+          index === 0 ? new PaginatedResponse([accountId, ...page.items], page) : page,
+        ),
+      };
+    },
+  );
 
-const removeFollowRequest = (accountId: string) =>
-  queryClient.setQueryData(queryKeys.accountsLists.followRequests, filterById(accountId));
+const removeFollowRequest = (accountId: string, scopeUrl: string) =>
+  queryClient.setQueryData(
+    scopedQueryKey(queryKeys.accountsLists.followRequests, scopeUrl),
+    filterById(accountId),
+  );
 
 const makeUseFollowRequests = <T>(select: (data: InfiniteData<PaginatedResponse<string>>) => T) =>
   makePaginatedResponseQuery(
@@ -46,13 +54,17 @@ const useOutgoingFollowRequests = makePaginatedResponseQuery(
 const useAcceptFollowRequestMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['accountsLists', 'followRequests', accountId],
     mutationFn: () => client.myAccount.acceptFollowRequest(accountId),
     onSettled: (relationship) => {
-      removeFollowRequest(accountId);
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), relationship);
+      removeFollowRequest(accountId, scopeUrl);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        relationship,
+      );
     },
   });
 };
@@ -60,13 +72,17 @@ const useAcceptFollowRequestMutation = (accountId: string) => {
 const useRejectFollowRequestMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['accountsLists', 'followRequests', accountId],
     mutationFn: () => client.myAccount.rejectFollowRequest(accountId),
     onSettled: (relationship) => {
-      removeFollowRequest(accountId);
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), relationship);
+      removeFollowRequest(accountId, scopeUrl);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        relationship,
+      );
     },
   });
 };
