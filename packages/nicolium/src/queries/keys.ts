@@ -14,7 +14,7 @@ import type {
   MinifiedConversation,
 } from './utils/minify-list';
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
-import type { DataTag, InfiniteData } from '@tanstack/react-query';
+import type { InfiniteData } from '@tanstack/react-query';
 import type {
   Account,
   AdminAnnouncement,
@@ -68,7 +68,11 @@ import type {
   TrendsLink,
 } from 'pl-api';
 
-type TaggedKey<TKey extends readonly unknown[], TData> = DataTag<TKey, TData>;
+type TaggedKey<TKey extends readonly unknown[], TData> = TKey & {
+  readonly ['~scopedData']?: TData;
+};
+
+type DataOf<TKey> = TKey extends { readonly ['~scopedData']?: infer TData } ? TData : unknown;
 
 const accounts = {
   root: ['accounts'] as const,
@@ -701,3 +705,4 @@ const queryKeys = {
 } as const;
 
 export { queryKeys };
+export type { DataOf };

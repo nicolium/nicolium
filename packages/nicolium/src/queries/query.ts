@@ -3,7 +3,9 @@ import { useCallback, useMemo } from 'react';
 
 import { useScopeUrl } from '@/hooks/use-scope-url';
 
+import type { DataOf } from '@/queries/keys';
 import type {
+  DataTag,
   DefaultError,
   InfiniteData,
   QueriesOptions,
@@ -95,8 +97,11 @@ function useAppQueries<T extends Array<unknown>, TCombinedResult = QueriesResult
   return useQueries({ ...options, queries: scopedQueries });
 }
 
-function scopedQueryKey<T extends QueryKey>(queryKey: T, scopeUrl: string): T {
-  return [scopeUrl, ...queryKey] as unknown as T;
+function scopedQueryKey<T extends QueryKey>(
+  queryKey: T,
+  scopeUrl: string,
+): DataTag<QueryKey, DataOf<T>> {
+  return [scopeUrl, ...queryKey] as unknown as DataTag<QueryKey, DataOf<T>>;
 }
 
 export { useAppInfiniteQuery, useAppQueries, useAppQuery, scopedQueryKey };
