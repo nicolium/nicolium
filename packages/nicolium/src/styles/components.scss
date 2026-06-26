@@ -386,6 +386,10 @@
     .dark & {
       color: var(--color-gray-600);
     }
+
+    a {
+      text-decoration: underline;
+    }
   }
 
   &__body {
