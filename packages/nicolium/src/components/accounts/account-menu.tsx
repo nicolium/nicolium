@@ -117,6 +117,39 @@ const messages = defineMessages({
   noteSaveFailed: { id: 'account_note.fail', defaultMessage: 'Failed to save note' },
   share: { id: 'account.share', defaultMessage: 'Share @{name}’s profile' },
   subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
+  subscribeByEmail: { id: 'account.email_subscription', defaultMessage: 'Subscribe by e-mail' },
+  emailSubscriptionHeader: {
+    id: 'account.email_subscription.modal.header',
+    defaultMessage: 'Sign up for e-mail updates from @{name}',
+  },
+  emailSubscriptionMessage: {
+    id: 'account.email_subscription.modal.message',
+    defaultMessage: 'Get posts in your inbox without creating an account. Unsubscribe at any time.',
+  },
+  emailSubscriptionPlaceholder: {
+    id: 'account.email_subscription.placeholder',
+    defaultMessage: 'E-mail address',
+  },
+  emailSubscriptionConfirm: {
+    id: 'account.email_subscription.confirm',
+    defaultMessage: 'Subscribe',
+  },
+  emailSubscriptionSuccess: {
+    id: 'account.email_subscription.success',
+    defaultMessage: 'Check your inbox for an email to finish signing up for e-mail updates.',
+  },
+  emailSubscriptionFail: {
+    id: 'account.email_subscription.fail',
+    defaultMessage: 'Failed to subscribe',
+  },
+  emailSubscriptionFailBlocked: {
+    id: 'account.email_subscription.fail.blocked',
+    defaultMessage: 'Blocked e-mail provider',
+  },
+  emailSubscriptionFailInvalid: {
+    id: 'account.email_subscription.fail.invalid',
+    defaultMessage: 'Invalid e-mail address',
+  },
   addToNavigationItems: {
     id: 'account.add_to_navigation_items',
     defaultMessage: 'Add to navigation items',
@@ -228,6 +261,32 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       .catch(() => {
         toast.error(intl.formatMessage(messages.loadActivitiesFail));
       });
+  };
+
+  const onSubscribeByEmail = () => {
+    openModal('TEXT_FIELD', {
+      heading: intl.formatMessage(messages.emailSubscriptionHeader, { name: account.acct }),
+      message: intl.formatMessage(messages.emailSubscriptionMessage),
+      placeholder: intl.formatMessage(messages.emailSubscriptionPlaceholder),
+      confirm: intl.formatMessage(messages.emailSubscriptionConfirm),
+      onConfirm: (value) => {
+        client.accounts
+          .subscribeByEmail(account.id, value)
+          .then(() => {
+            toast.success(messages.emailSubscriptionSuccess);
+          })
+          .catch((error) => {
+            if (error.response?.json?.error === 'ERR_BLOCKED') {
+              toast.error(messages.emailSubscriptionFailBlocked);
+            } else if (error.response?.json?.error === 'ERR_INVALID') {
+              toast.error(messages.emailSubscriptionFailInvalid);
+            } else {
+              toast.error(messages.emailSubscriptionFail);
+            }
+          });
+      },
+      singleLine: true,
+    });
   };
 
   const onEditNote = () => {
@@ -425,6 +484,14 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         icon: iconRss,
         href: software === MASTODON ? `${account.url}.rss` : `${account.url}/feed.rss`,
         target: '_blank',
+      });
+    }
+
+    if (account.email_subscriptions) {
+      menu.push({
+        text: intl.formatMessage(messages.subscribeByEmail),
+        action: onSubscribeByEmail,
+        icon: iconEnvelopeSimple,
       });
     }
 
