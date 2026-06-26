@@ -1,15 +1,10 @@
-import {
-  useMutation,
-  useQueries,
-  useQueryClient,
-  type UseQueryResult,
-} from '@tanstack/react-query';
+import { useMutation, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { decrementReplyCount, incrementReplyCount } from '@/actions/statuses';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useAppQuery } from '@/queries/query';
+import { useAppQueries, useAppQuery } from '@/queries/query';
 import { useFilters } from '@/queries/settings/use-filters';
 import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
 import { useImportEntities } from '@/queries/utils/import-entities';
@@ -165,7 +160,7 @@ const useStatuses = (statusIds: Array<string>) => {
   const client = useClient();
   const importEntities = useImportEntities();
 
-  return useQueries({
+  return useAppQueries({
     queries: statusIds.map((id) => ({
       queryKey: queryKeys.statuses.show(id),
       queryFn: () =>

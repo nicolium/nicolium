@@ -1,7 +1,8 @@
-import { useQueries, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { queryKeys } from '@/queries/keys';
+import { useAppQueries } from '@/queries/query';
 
 import type { Account } from 'pl-api';
 
@@ -9,7 +10,7 @@ const useAccounts = (accountIds: Array<string>) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
-  return useQueries({
+  return useAppQueries({
     queries: accountIds.map((accountId) => ({
       queryKey: queryKeys.accounts.show(accountId),
       queryFn: async () => {

@@ -31,7 +31,7 @@ const useLoggedInAccountUrls = () => {
 const useLoggedInAccounts = () => {
   // const otherAccounts = useLoggedInAccountUrls();
 
-  // const { accounts } = useQueries({
+  // const { accounts } = useAppQueries({
   //   queries: otherAccountIds.map((accountId) => ({
   //     queryKey: queryKeys.accounts.show(accountId),
   //     queryFn: skipToken,
