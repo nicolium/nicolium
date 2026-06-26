@@ -250,13 +250,16 @@ const useProcessStreamNotification = () => {
 
 const useMarkNotificationsReadMutation = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['markers', 'notifications', 'save'],
     mutationFn: async (lastReadId?: string | null) => {
       if (!lastReadId) return;
 
-      const currentMarker = queryClient.getQueryData(queryKeys.markers.timeline('notifications'));
+      const currentMarker = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.markers.timeline('notifications'), scopeUrl),
+      );
       if (currentMarker && compareId(currentMarker.last_read_id, lastReadId) >= 0) {
         return;
       }
@@ -270,7 +273,7 @@ const useMarkNotificationsReadMutation = () => {
     onSuccess: (markers) => {
       if (markers?.notifications) {
         queryClient.setQueryData(
-          queryKeys.markers.timeline('notifications'),
+          scopedQueryKey(queryKeys.markers.timeline('notifications'), scopeUrl),
           markers.notifications,
         );
       }

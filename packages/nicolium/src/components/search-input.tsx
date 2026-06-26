@@ -6,8 +6,10 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AutosuggestAccountInput from '@/components/autosuggest-account-input';
 import SvgIcon from '@/components/ui/svg-icon';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 
 const messages = defineMessages({
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
@@ -20,6 +22,7 @@ const SearchInput = React.memo(() => {
 
   const navigate = useNavigate();
   const intl = useIntl();
+  const scopeUrl = useScopeUrl();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -51,7 +54,9 @@ const SearchInput = React.memo(() => {
 
   const handleSelected = (accountId: string) => {
     setValue('');
-    const account = queryClient.getQueryData(queryKeys.accounts.show(accountId));
+    const account = queryClient.getQueryData(
+      scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+    );
     if (account) {
       navigate({
         to: '/@{$username}',

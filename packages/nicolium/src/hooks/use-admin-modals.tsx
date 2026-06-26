@@ -214,7 +214,7 @@ const useToggleStatusSensitivityModal = (statusId: string) => {
     const status = queryClient.getQueryData(
       scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
     );
-    const statusAccount = status ? selectAccount(status.account_id) : undefined;
+    const statusAccount = status ? selectAccount(status.account_id, scopeUrl) : undefined;
     const acct = statusAccount?.acct;
 
     openModal('CONFIRM', {
@@ -257,7 +257,7 @@ const useDeleteStatusModal = (statusId: string) => {
     const status = queryClient.getQueryData(
       scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
     );
-    const statusAccount = status ? selectAccount(status.account_id) : undefined;
+    const statusAccount = status ? selectAccount(status.account_id, scopeUrl) : undefined;
     const acct = statusAccount?.acct;
 
     openModal('CONFIRM', {

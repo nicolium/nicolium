@@ -9,7 +9,9 @@ import { defineMessages, useIntl } from 'react-intl';
 import ThumbNavigationLink from '@/components/navigation/thumb-navigation-link';
 import Icon from '@/components/ui/icon';
 import { useNavigationItems } from '@/hooks/use-navigation-items';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { layouts } from '@/router';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
@@ -57,6 +59,7 @@ const SidebarDot: React.FC = () => {
 const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   const intl = useIntl();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
 
@@ -85,7 +88,9 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
 
   const handleOpenComposeModal = () => {
     if (match?.params.groupId) {
-      const group = queryClient.getQueryData(queryKeys.groups.show(match.params.groupId));
+      const group = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.groups.show(match.params.groupId), scopeUrl),
+      );
       if (group) groupComposeModal(group);
     } else {
       openModal('COMPOSE');

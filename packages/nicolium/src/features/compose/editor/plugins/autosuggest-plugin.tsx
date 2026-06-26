@@ -35,8 +35,10 @@ import ReactDOM from 'react-dom';
 import { saveSettings } from '@/actions/settings';
 import AutosuggestEmoji from '@/components/autosuggest-emoji';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { useSettingsStoreActions } from '@/stores/settings';
 import { textAtCursorMatchesToken } from '@/utils/suggestions';
 
@@ -277,6 +279,7 @@ const AutosuggestPlugin = ({
   const [token, setToken] = useState('');
   const suggestions = useComposeSuggestions(token);
   const anchorElementRef = useMenuAnchorRef(resolution, setResolution);
+  const scopeUrl = useScopeUrl();
 
   const handleSelectSuggestion: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
@@ -315,7 +318,9 @@ const AutosuggestPlugin = ({
           (node as TextNode).setTextContent(`${suggestion} `);
           node.select();
         } else {
-          const account = queryClient.getQueryData(queryKeys.accounts.show(suggestion));
+          const account = queryClient.getQueryData(
+            scopedQueryKey(queryKeys.accounts.show(suggestion), scopeUrl),
+          );
           if (account) replaceMatch($createMentionNode(account));
         }
       }

@@ -2,7 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -38,13 +39,16 @@ const useCreateDriveFolderMutation = () => {
 const useUpdateDriveFolderMutation = (folderId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   let previousParentId: string | null;
 
   return useMutation({
     mutationKey: ['drive', 'folders'],
     mutationFn: (name: string) => {
-      const oldFolder = queryClient.getQueryData(queryKeys.drive.folders.show(folderId));
+      const oldFolder = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.drive.folders.show(folderId), scopeUrl),
+      );
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;
       } else {
@@ -53,10 +57,13 @@ const useUpdateDriveFolderMutation = (folderId: string) => {
       return client.drive.updateFolder(folderId, name);
     },
     onSuccess: (folder) => {
-      queryClient.setQueryData(queryKeys.drive.folders.show(folder.id!), folder);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.drive.folders.show(folder.id!), scopeUrl),
+        folder,
+      );
       if (previousParentId) {
         queryClient.invalidateQueries({
-          queryKey: queryKeys.drive.folders.show(previousParentId),
+          queryKey: scopedQueryKey(queryKeys.drive.folders.show(previousParentId), scopeUrl),
           exact: true,
         });
       }
@@ -67,13 +74,16 @@ const useUpdateDriveFolderMutation = (folderId: string) => {
 const useDeleteDriveFolderMutation = (folderId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   let previousParentId: string | null;
 
   return useMutation({
     mutationKey: ['drive', 'folders'],
     mutationFn: () => {
-      const oldFolder = queryClient.getQueryData(queryKeys.drive.folders.show(folderId));
+      const oldFolder = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.drive.folders.show(folderId), scopeUrl),
+      );
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;
       } else {
@@ -83,12 +93,12 @@ const useDeleteDriveFolderMutation = (folderId: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.drive.folders.show(folderId),
+        queryKey: scopedQueryKey(queryKeys.drive.folders.show(folderId), scopeUrl),
         exact: true,
       });
       if (previousParentId) {
         queryClient.invalidateQueries({
-          queryKey: queryKeys.drive.folders.show(previousParentId),
+          queryKey: scopedQueryKey(queryKeys.drive.folders.show(previousParentId), scopeUrl),
           exact: true,
         });
       }
@@ -99,13 +109,16 @@ const useDeleteDriveFolderMutation = (folderId: string) => {
 const useMoveDriveFolderMutation = (folderId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   let previousParentId: string | null;
 
   return useMutation({
     mutationKey: ['drive', 'folders'],
     mutationFn: (targetFolderId?: string) => {
-      const oldFolder = queryClient.getQueryData(queryKeys.drive.folders.show(folderId));
+      const oldFolder = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.drive.folders.show(folderId), scopeUrl),
+      );
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;
       } else {
@@ -115,16 +128,19 @@ const useMoveDriveFolderMutation = (folderId: string) => {
     },
     onSuccess: (_, targetFolderId) => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.drive.folders.show(folderId),
+        queryKey: scopedQueryKey(queryKeys.drive.folders.show(folderId), scopeUrl),
         exact: true,
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.drive.folders.show(targetFolderId),
+        queryKey: scopedQueryKey(queryKeys.drive.folders.show(targetFolderId), scopeUrl),
         exact: true,
       });
       if (previousParentId)
         queryClient.invalidateQueries({
-          queryKey: queryKeys.drive.folders.show(previousParentId || undefined),
+          queryKey: scopedQueryKey(
+            queryKeys.drive.folders.show(previousParentId || undefined),
+            scopeUrl,
+          ),
           exact: true,
         });
     },

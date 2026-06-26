@@ -3,8 +3,9 @@ import { defineMessage } from 'react-intl';
 import { NODE_ENV } from '@/build-config';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import KVStore from '@/storage/kv-store';
-import { updateMe, getClient, getCurrentAccountId } from '@/stores/auth';
+import { updateMe, getClient, getCurrentAccountId, useAuthStore } from '@/stores/auth';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 
@@ -78,6 +79,10 @@ const updateAuthAccount = async (url: string, settings: any) => {
 const updateSettingsStore = async (settings: Partial<Settings>, isNotesChange?: boolean) => {
   const client = getClient();
   const currentAccountId = getCurrentAccountId();
+  // we're not supporting changing settings for non-current user for now
+  const scopeUrl = useAuthStore.getState().me;
+
+  if (!scopeUrl) return;
 
   if (client.features.frontendConfigurations) {
     return updateMe({
@@ -105,7 +110,9 @@ const updateSettingsStore = async (settings: Partial<Settings>, isNotesChange?: 
 
     const accountId = currentAccountId;
     if (typeof accountId !== 'string') return;
-    const account = queryClient.getQueryData(queryKeys.accounts.show(accountId));
+    const account = queryClient.getQueryData(
+      scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+    );
     if (!account) return;
 
     return updateAuthAccount(account.url, settings);

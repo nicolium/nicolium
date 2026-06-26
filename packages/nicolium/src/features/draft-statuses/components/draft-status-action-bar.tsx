@@ -6,6 +6,7 @@ import { useClient } from '@/hooks/use-client';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
@@ -64,7 +65,9 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
 
     if (status.in_reply_to_id) fetchStatus(client, status.in_reply_to_id, scopeUrl);
     const poll = status.poll_id
-      ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
+      ? queryClient.getQueryData(
+          scopedQueryKey(queryKeys.statuses.polls.show(status.poll_id), scopeUrl),
+        )
       : undefined;
     setComposeToStatus(
       status,

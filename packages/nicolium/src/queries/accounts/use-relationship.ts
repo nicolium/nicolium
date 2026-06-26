@@ -5,8 +5,9 @@ import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
-import { useAppQueries, useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQueries, useAppQuery } from '@/queries/query';
 import { useContextsActions } from '@/stores/contexts';
 import { useTimelinesActions } from '@/stores/timelines';
 
@@ -21,9 +22,10 @@ const updateRelationship = (
   accountId: string,
   changes: Partial<Relationship> | ((relationship: Relationship) => Relationship),
   queryClient: ReturnType<typeof useQueryClient>,
+  scopeUrl: string,
 ) => {
   const previousRelationship = queryClient.getQueryData(
-    queryKeys.accountRelationships.show(accountId),
+    scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
   );
   if (!previousRelationship) return;
 
@@ -31,7 +33,10 @@ const updateRelationship = (
     typeof changes === 'function'
       ? changes(previousRelationship)
       : { ...previousRelationship, ...changes };
-  queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), newRelationship);
+  queryClient.setQueryData(
+    scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+    newRelationship,
+  );
 
   return { previousRelationship };
 };
@@ -40,10 +45,11 @@ const restorePreviousRelationship = (
   accountId: string,
   context: { previousRelationship?: Relationship } | undefined,
   queryClient: ReturnType<typeof useQueryClient>,
+  scopeUrl: string,
 ) => {
   if (context?.previousRelationship) {
     queryClient.setQueryData(
-      queryKeys.accountRelationships.show(accountId),
+      scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
       context.previousRelationship,
     );
   }
@@ -52,9 +58,10 @@ const restorePreviousRelationship = (
 const useRelationshipQuery = (accountId?: string) => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
+  const scopeUrl = useScopeUrl();
 
   return useAppQuery({
-    queryKey: queryKeys.accountRelationships.show(accountId!),
+    queryKey: scopedQueryKey(queryKeys.accountRelationships.show(accountId!), scopeUrl),
     queryFn: () =>
       batcher
         .relationships(client)
@@ -67,12 +74,13 @@ const useRelationshipQuery = (accountId?: string) => {
 const useRelationshipsQuery = (accountIds?: Array<string>) => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
+  const scopeUrl = useScopeUrl();
 
   const queries = useMemo(
     () =>
       isLoggedIn && accountIds
         ? accountIds.map((accountId) => ({
-            queryKey: queryKeys.accountRelationships.show(accountId),
+            queryKey: scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
             queryFn: () =>
               batcher
                 .relationships(client)
@@ -90,9 +98,10 @@ const useRelationshipsQuery = (accountIds?: Array<string>) => {
 const useFollowAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
     mutationFn: (params?: FollowAccountParams) => client.accounts.followAccount(accountId, params),
     onMutate: (params) => {
       return updateRelationship(
@@ -106,13 +115,17 @@ const useFollowAccountMutation = (accountId: string) => {
           notifying_replies: params?.notify_replies ?? relationship.notifying_replies,
         }),
         queryClient,
+        scopeUrl,
       );
     },
     onError: (_err, _variables, context) => {
-      restorePreviousRelationship(accountId, context, queryClient);
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
     },
   });
 };
@@ -120,9 +133,10 @@ const useFollowAccountMutation = (accountId: string) => {
 const useUnfollowAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
     mutationFn: () => client.accounts.unfollowAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -136,12 +150,16 @@ const useUnfollowAccountMutation = (accountId: string) => {
           showing_reblogs: false,
         },
         queryClient,
+        scopeUrl,
       ),
     onError: (_err, _variables, context) => {
-      restorePreviousRelationship(accountId, context, queryClient);
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
     },
   });
 };
@@ -151,9 +169,10 @@ const useBlockAccountMutation = (accountId: string) => {
   const queryClient = useQueryClient();
   const { filterContexts } = useContextsActions();
   const { filterTimelines } = useTimelinesActions();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
     mutationFn: (params?: BlockAccountParams) => client.filtering.blockAccount(accountId, params),
     onMutate: () =>
       updateRelationship(
@@ -168,21 +187,25 @@ const useBlockAccountMutation = (accountId: string) => {
           requested: false,
         },
         queryClient,
+        scopeUrl,
       ),
     onError: (_err, _variables, context) => {
-      restorePreviousRelationship(accountId, context, queryClient);
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
 
-      queryClient.setQueryData(queryKeys.suggestions.all, (suggestions) =>
+      queryClient.setQueryData(scopedQueryKey(queryKeys.suggestions.all, scopeUrl), (suggestions) =>
         suggestions
           ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
           : undefined,
       );
 
       queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.blocked,
+        queryKey: scopedQueryKey(queryKeys.accountsLists.blocked, scopeUrl),
       });
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
@@ -195,6 +218,7 @@ const useBlockAccountMutation = (accountId: string) => {
 const useUnblockAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.accountRelationships.show(accountId),
@@ -206,12 +230,16 @@ const useUnblockAccountMutation = (accountId: string) => {
           blocking: false,
         },
         queryClient,
+        scopeUrl,
       ),
     onError: (_err, _variables, context) => {
-      restorePreviousRelationship(accountId, context, queryClient);
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
     },
   });
 };
@@ -221,6 +249,7 @@ const useMuteAccountMutation = (accountId: string) => {
   const queryClient = useQueryClient();
   const { filterContexts } = useContextsActions();
   const { filterTimelines } = useTimelinesActions();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.accountRelationships.show(accountId),
@@ -232,21 +261,25 @@ const useMuteAccountMutation = (accountId: string) => {
           muting: true,
         },
         queryClient,
+        scopeUrl,
       ),
     onError: (_err, _variables, context) => {
-      restorePreviousRelationship(accountId, context, queryClient);
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
 
-      queryClient.setQueryData(queryKeys.suggestions.all, (suggestions) =>
+      queryClient.setQueryData(scopedQueryKey(queryKeys.suggestions.all, scopeUrl), (suggestions) =>
         suggestions
           ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
           : undefined,
       );
 
       queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.muted,
+        queryKey: scopedQueryKey(queryKeys.accountsLists.muted, scopeUrl),
       });
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
@@ -259,6 +292,7 @@ const useMuteAccountMutation = (accountId: string) => {
 const useUnmuteAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.accountRelationships.show(accountId),
@@ -270,12 +304,16 @@ const useUnmuteAccountMutation = (accountId: string) => {
           muting: false,
         },
         queryClient,
+        scopeUrl,
       ),
     onError: (_err, _variables, context) => {
-      restorePreviousRelationship(accountId, context, queryClient);
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
     },
   });
 };
@@ -284,6 +322,7 @@ const usePinAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const { data: account } = useOwnAccount();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.accountRelationships.show(accountId),
@@ -295,9 +334,10 @@ const usePinAccountMutation = (accountId: string) => {
           endorsed: true,
         },
         queryClient,
+        scopeUrl,
       ),
     onError: (_err, _variables, context) => {
-      restorePreviousRelationship(accountId, context, queryClient);
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
@@ -312,6 +352,7 @@ const useUnpinAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const { data: account } = useOwnAccount();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.accountRelationships.show(accountId),
@@ -323,14 +364,18 @@ const useUnpinAccountMutation = (accountId: string) => {
           endorsed: false,
         },
         queryClient,
+        scopeUrl,
       ),
     onError: (_err, _variables, context) => {
-      restorePreviousRelationship(accountId, context, queryClient);
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
       queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.endorsedAccounts(account!.id),
+        queryKey: scopedQueryKey(queryKeys.accountsLists.endorsedAccounts(account!.id), scopeUrl),
       });
     },
   });
@@ -339,6 +384,7 @@ const useUnpinAccountMutation = (accountId: string) => {
 const useRemoveAccountFromFollowersMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.accountRelationships.show(accountId),
@@ -350,12 +396,16 @@ const useRemoveAccountFromFollowersMutation = (accountId: string) => {
           followed_by: false,
         },
         queryClient,
+        scopeUrl,
       ),
     onError: (_err, _variables, context) => {
-      restorePreviousRelationship(accountId, context, queryClient);
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
     },
   });
 };
@@ -363,6 +413,7 @@ const useRemoveAccountFromFollowersMutation = (accountId: string) => {
 const useUpdateAccountNoteMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['accountNote', accountId],
@@ -374,12 +425,16 @@ const useUpdateAccountNoteMutation = (accountId: string) => {
           note,
         },
         queryClient,
+        scopeUrl,
       ),
     onError: (_err, _variables, context) => {
-      restorePreviousRelationship(accountId, context, queryClient);
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
     },
   });
 };

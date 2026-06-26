@@ -15,7 +15,8 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useAppInfiniteQuery, useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppInfiniteQuery, useAppQuery } from '@/queries/query';
 import { reOrderChatListItems } from '@/utils/chats';
 import { flattenPages, updatePageItem } from '@/utils/queries';
 
@@ -146,6 +147,7 @@ const useChat = (chatId?: string) => {
 
 const useMarkChatAsRead = (chatId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   const { setUnreadChatsCount } = useStatContext();
 
@@ -153,7 +155,7 @@ const useMarkChatAsRead = (chatId: string) => {
     mutationFn: (lastReadId: string) => client.chats.markChatAsRead(chatId, lastReadId),
     onSuccess: (data) => {
       updatePageItem(queryKeys.chats.search, data, (o, n) => o.id === n.id);
-      const queryData = queryClient.getQueryData(queryKeys.chats.search);
+      const queryData = queryClient.getQueryData(scopedQueryKey(queryKeys.chats.search, scopeUrl));
 
       if (queryData) {
         const flattenedQueryData: any = flattenPages(queryData)?.map((chat) => {
@@ -171,6 +173,7 @@ const useMarkChatAsRead = (chatId: string) => {
 const useCreateChatMessage = () => {
   const { data: account } = useOwnAccount();
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   const { chat } = useChatContext();
 
@@ -194,38 +197,41 @@ const useCreateChatMessage = () => {
       // Snapshot the previous value
       const prevContent = variables.content;
       const prevChatMessages = queryClient.getQueryData(
-        queryKeys.chats.chatMessages(variables.chatId),
+        scopedQueryKey(queryKeys.chats.chatMessages(variables.chatId), scopeUrl),
       );
       const pendingId = String(Date.now());
 
       // Optimistically update to the new value
-      queryClient.setQueryData(queryKeys.chats.chatMessages(variables.chatId), (prevResult) => {
-        if (!prevResult?.pages) return prevResult;
-        const newResult = { ...prevResult };
-        const [firstPage, ...restPages] = newResult.pages;
-        newResult.pages = [
-          new PaginatedResponse(
-            [
-              normalizeChatMessage({
-                ...v.parse(chatMessageSchema, {
-                  chat_id: variables.chatId,
-                  content: variables.content,
-                  id: pendingId,
-                  created_at: new Date().toISOString(),
-                  account_id: account?.id,
-                  unread: true,
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.chats.chatMessages(variables.chatId), scopeUrl),
+        (prevResult) => {
+          if (!prevResult?.pages) return prevResult;
+          const newResult = { ...prevResult };
+          const [firstPage, ...restPages] = newResult.pages;
+          newResult.pages = [
+            new PaginatedResponse(
+              [
+                normalizeChatMessage({
+                  ...v.parse(chatMessageSchema, {
+                    chat_id: variables.chatId,
+                    content: variables.content,
+                    id: pendingId,
+                    created_at: new Date().toISOString(),
+                    account_id: account?.id,
+                    unread: true,
+                  }),
+                  pending: true,
                 }),
-                pending: true,
-              }),
-              ...firstPage.items,
-            ],
-            firstPage,
-          ),
-          ...restPages,
-        ];
+                ...firstPage.items,
+              ],
+              firstPage,
+            ),
+            ...restPages,
+          ];
 
-        return newResult;
-      });
+          return newResult;
+        },
+      );
 
       return { prevChatMessages, prevContent, pendingId };
     },
