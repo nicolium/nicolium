@@ -14,8 +14,11 @@ import {
   useAdminUpdateStatusMutation,
 } from '@/queries/admin/use-statuses';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
+
+import { useScopeUrl } from './use-scope-url';
 
 const messages = defineMessages({
   deactivateUserHeading: {
@@ -147,6 +150,7 @@ const useDeleteUserModal = (accountId: string) => {
   const { mutate: deleteUser } = useAdminDeleteAccountMutation(accountId);
   const { openModal } = useModalsActions();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return () => {
     const account = selectAccount(accountId)!;
@@ -182,9 +186,14 @@ const useDeleteUserModal = (accountId: string) => {
         deleteUser(undefined, {
           onSuccess: () => {
             const message = intl.formatMessage(messages.userDeleted, { acct });
-            queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
             queryClient.invalidateQueries({
-              queryKey: queryKeys.accounts.lookup(acct.toLocaleLowerCase()),
+              queryKey: scopedQueryKey(queryKeys.accounts.show(accountId), scopeUrl),
+            });
+            queryClient.invalidateQueries({
+              queryKey: scopedQueryKey(
+                queryKeys.accounts.lookup(acct.toLocaleLowerCase()),
+                scopeUrl,
+              ),
             });
             toast.success(message);
           },
@@ -199,9 +208,12 @@ const useToggleStatusSensitivityModal = (statusId: string) => {
   const { mutate: updateStatus } = useAdminUpdateStatusMutation(statusId);
   const { openModal } = useModalsActions();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return (sensitive: boolean) => {
-    const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+    const status = queryClient.getQueryData(
+      scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+    );
     const statusAccount = status ? selectAccount(status.account_id) : undefined;
     const acct = statusAccount?.acct;
 
@@ -241,7 +253,10 @@ const useDeleteStatusModal = (statusId: string) => {
   const queryClient = useQueryClient();
 
   return () => {
-    const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+    const scopeUrl = useScopeUrl();
+    const status = queryClient.getQueryData(
+      scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+    );
     const statusAccount = status ? selectAccount(status.account_id) : undefined;
     const acct = statusAccount?.acct;
 

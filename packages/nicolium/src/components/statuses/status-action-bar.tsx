@@ -58,6 +58,7 @@ import { useCanInteract } from '@/hooks/use-can-interact';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useTranslate } from '@/hooks/use-translate';
 import { DeckColumnIdContext } from '@/pages/deck/components/deck-column-config';
 import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
@@ -1231,6 +1232,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
   const { boostModal, useRocketIconForReblogs } = useSettings();
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   const columnId = useContext(DeckColumnIdContext);
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
@@ -1337,7 +1339,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           to: '/@{$username}/events/$statusId/edit',
           params: { username: status.account.acct, statusId: status.id },
         });
-      else editStatus(client, status.id);
+      else editStatus(client, status.id, scopeUrl);
     };
 
     const handlePinClick: React.EventHandler<React.MouseEvent> = () => {
@@ -1412,7 +1414,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleConversationMuteClick: React.EventHandler<React.MouseEvent> = () => {
-      toggleMuteStatus(client, status).then(() => {
+      toggleMuteStatus(client, status, scopeUrl).then(() => {
         toast.success(
           mutingConversation
             ? messages.unmuteConversationSuccess
@@ -1514,7 +1516,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleRedactStatus: React.EventHandler<React.MouseEvent> = () => {
-      redactStatus(client, status.id);
+      redactStatus(client, status.id, scopeUrl);
     };
 
     const menu: Menu = [];
@@ -1855,6 +1857,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     status.account?.relationship,
     spoilerExpanded,
     statusActionBarItems,
+    scopeUrl,
   ]);
 
   return useMemo(

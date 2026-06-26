@@ -11,6 +11,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { useDraftStatusQuery } from '@/queries/statuses/use-draft-statuses';
 import { newStatusRoute } from '@/router';
 import { useComposeActions } from '@/stores/compose';
@@ -43,7 +44,9 @@ const NewStatusPage = () => {
 
     if (inReplyTo) {
       fetchStatus(client, inReplyTo, scopeUrl).then(() => {
-        const status = queryClient.getQueryData(queryKeys.statuses.show(inReplyTo));
+        const status = queryClient.getQueryData(
+          scopedQueryKey(queryKeys.statuses.show(inReplyTo), scopeUrl),
+        );
         if (!status) return;
 
         replyCompose(status, undefined, approvalRequired, false);
@@ -53,7 +56,9 @@ const NewStatusPage = () => {
 
     if (quote) {
       fetchStatus(client, quote, scopeUrl).then(() => {
-        const status = queryClient.getQueryData(queryKeys.statuses.show(quote));
+        const status = queryClient.getQueryData(
+          scopedQueryKey(queryKeys.statuses.show(quote), scopeUrl),
+        );
         if (!status) return;
 
         quoteCompose(status, approvalRequired, false);

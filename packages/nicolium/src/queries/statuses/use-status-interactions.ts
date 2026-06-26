@@ -68,9 +68,10 @@ const updateStatus = (
   statusId: string,
   changes: Partial<NormalizedStatus> | ((status: NormalizedStatus) => NormalizedStatus | void),
   queryClient: ReturnType<typeof useQueryClient>,
+  scopeUrl: string,
 ) => {
   const previousStatus = queryClient.getQueryData<NormalizedStatus>(
-    queryKeys.statuses.show(statusId),
+    scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
   );
   if (!previousStatus) return;
 
@@ -78,7 +79,7 @@ const updateStatus = (
     typeof changes === 'function'
       ? create(previousStatus, changes)
       : { ...previousStatus, ...changes };
-  queryClient.setQueryData(queryKeys.statuses.show(statusId), newStatus);
+  queryClient.setQueryData(scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl), newStatus);
 
   return { previousStatus };
 };
@@ -87,9 +88,13 @@ const restorePreviousStatus = (
   statusId: string,
   context: { previousStatus?: NormalizedStatus } | undefined,
   queryClient: ReturnType<typeof useQueryClient>,
+  scopeUrl: string,
 ) => {
   if (context?.previousStatus) {
-    queryClient.setQueryData(queryKeys.statuses.show(statusId), context.previousStatus);
+    queryClient.setQueryData(
+      scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+      context.previousStatus,
+    );
   }
 };
 
@@ -119,6 +124,7 @@ const useEmojiReactMutation = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['statuses', 'emojiReact', statusId],
@@ -130,7 +136,7 @@ const useEmojiReactMutation = (statusId: string) => {
         (status) => {
           const customEmoji =
             queryClient
-              .getQueryData(queryKeys.instance.customEmojis)
+              .getQueryData(scopedQueryKey(queryKeys.instance.customEmojis, scopeUrl))
               ?.find((e) => e.shortcode === emoji) ||
             status.emoji_reactions?.find((r) => r.name === emoji);
 
@@ -140,13 +146,14 @@ const useEmojiReactMutation = (statusId: string) => {
           };
         },
         queryClient,
+        scopeUrl,
       );
     },
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSettled: (status) => {
       importEntities({ statuses: [status] });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.statusReactions(statusId),
+        queryKey: scopedQueryKey(queryKeys.accountsLists.statusReactions(statusId), scopeUrl),
       });
     },
   });
@@ -158,6 +165,7 @@ const useEmojiUnreactMutation = (statusId: string) => {
   const queryClient = useQueryClient();
   const { checkEmojiReactsSupport } = useSettings();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['statuses', 'emojiUnreact', statusId],
@@ -188,12 +196,13 @@ const useEmojiUnreactMutation = (statusId: string) => {
           emoji_reactions: simulateUnEmojiReact(status.emoji_reactions, emoji),
         }),
         queryClient,
+        scopeUrl,
       ),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSettled: (status) => {
       importEntities({ statuses: [status] });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.statusReactions(statusId),
+        queryKey: scopedQueryKey(queryKeys.accountsLists.statusReactions(statusId), scopeUrl),
       });
     },
   });
@@ -220,8 +229,8 @@ const makeStatusToggleMutation =
     return useMutation({
       mutationKey: ['statuses', mutationKey, statusId],
       mutationFn: () => mutationFn(client, statusId),
-      onMutate: () => updateStatus(statusId, apply, queryClient),
-      onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+      onMutate: () => updateStatus(statusId, apply, queryClient, scopeUrl),
+      onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
       onSettled: (status) => {
         importEntities({ statuses: [status] });
         queryClient.invalidateQueries({ queryKey: scopedQueryKey(listKey(statusId), scopeUrl) });
@@ -273,6 +282,7 @@ const useReblogStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
@@ -287,11 +297,14 @@ const useReblogStatus = (statusId: string) => {
           reblogs_count: status.reblogs_count + 1,
         }),
         queryClient,
+        scopeUrl,
       ),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSuccess: (status) => {
       if ('params' in status) {
-        queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
+        queryClient.invalidateQueries({
+          queryKey: scopedQueryKey(queryKeys.scheduledStatuses.all, scopeUrl),
+        });
         toast.success(messages.reblogScheduled, {
           actionLabel: messages.view,
           actionLinkOptions: { to: '/draft_statuses' },
@@ -299,7 +312,7 @@ const useReblogStatus = (statusId: string) => {
       } else {
         importEntities({ statuses: [status] });
         queryClient.invalidateQueries({
-          queryKey: queryKeys.accountsLists.statusReblogs(statusId),
+          queryKey: scopedQueryKey(queryKeys.accountsLists.statusReblogs(statusId), scopeUrl),
         });
       }
     },
@@ -310,6 +323,7 @@ const useUnreblogStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
@@ -323,11 +337,14 @@ const useUnreblogStatus = (statusId: string) => {
           reblogs_count: Math.max(0, status.reblogs_count - 1),
         }),
         queryClient,
+        scopeUrl,
       ),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSuccess: (status) => {
       importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accountsLists.statusReblogs(statusId), scopeUrl),
+      });
     },
   });
 };
@@ -338,6 +355,7 @@ const useBookmarkStatus = (statusId: string) => {
   const features = useFeatures();
   const { openModal } = useModalsActions();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   let previouslyBookmarked = false;
   let previousFolder: string | null;
@@ -345,30 +363,38 @@ const useBookmarkStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'bookmark', statusId],
     mutationFn: (folderId?: string) => {
-      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      const status = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+      );
       previouslyBookmarked = status?.bookmarked ?? false;
       previousFolder = status?.bookmark_folder ?? null;
       return client.statuses.bookmarkStatus(statusId, folderId);
     },
-    onMutate: () => updateStatus(statusId, { bookmarked: true }, queryClient),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onMutate: () => updateStatus(statusId, { bookmarked: true }, queryClient, scopeUrl),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSettled: (status, _, folderId) => {
       importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accountsLists.statusReblogs(statusId), scopeUrl),
+      });
 
       if (previousFolder) {
         queryClient.setQueryData(
-          queryKeys.statusLists.bookmarks(previousFolder),
+          scopedQueryKey(queryKeys.statusLists.bookmarks(previousFolder), scopeUrl),
           filterById(statusId),
         );
       }
 
       if (!previouslyBookmarked) {
-        queryClient.invalidateQueries({ queryKey: queryKeys.statusLists.bookmarks(undefined) });
+        queryClient.invalidateQueries({
+          queryKey: scopedQueryKey(queryKeys.statusLists.bookmarks(undefined), scopeUrl),
+        });
       }
 
       if (folderId) {
-        queryClient.invalidateQueries({ queryKey: queryKeys.statusLists.bookmarks(folderId) });
+        queryClient.invalidateQueries({
+          queryKey: scopedQueryKey(queryKeys.statusLists.bookmarks(folderId), scopeUrl),
+        });
       }
 
       let opts: IToastOptions = {
@@ -402,18 +428,19 @@ const useUnbookmarkStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['statuses', 'bookmark', statusId],
     mutationFn: () => client.statuses.unbookmarkStatus(statusId),
-    onMutate: () => updateStatus(statusId, { bookmarked: false }, queryClient),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onMutate: () => updateStatus(statusId, { bookmarked: false }, queryClient, scopeUrl),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSettled: (status) => {
       importEntities({ statuses: [status] });
 
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: queryKeys.statusLists.bookmarksRoot,
+          queryKey: scopedQueryKey(queryKeys.statusLists.bookmarksRoot, scopeUrl),
           exact: false,
         },
         filterById(statusId),
@@ -429,15 +456,18 @@ const usePinStatus = (statusId: string) => {
   const queryClient = useQueryClient();
   const { data: account } = useOwnAccount();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['statuses', 'pin', statusId],
     mutationFn: () => client.statuses.pinStatus(statusId),
-    onMutate: () => updateStatus(statusId, { pinned: true }, queryClient),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onMutate: () => updateStatus(statusId, { pinned: true }, queryClient, scopeUrl),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSuccess: (status) => {
       importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.statusLists.pins(account!.id) });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.statusLists.pins(account!.id), scopeUrl),
+      });
     },
   });
 };
@@ -447,15 +477,19 @@ const useUnpinStatus = (statusId: string) => {
   const queryClient = useQueryClient();
   const { data: account } = useOwnAccount();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['statuses', 'unpin', statusId],
     mutationFn: () => client.statuses.unpinStatus(statusId),
-    onMutate: () => updateStatus(statusId, { pinned: false }, queryClient),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onMutate: () => updateStatus(statusId, { pinned: false }, queryClient, scopeUrl),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSuccess: (status) => {
       importEntities({ statuses: [status] });
-      queryClient.setQueryData(queryKeys.statusLists.pins(account!.id), filterById(statusId));
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.statusLists.pins(account!.id), scopeUrl),
+        filterById(statusId),
+      );
     },
   });
 };

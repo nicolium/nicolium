@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { decrementReplyCount, incrementReplyCount } from '@/actions/statuses';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useAppQueries, useAppQuery } from '@/queries/query';
 import { useFilters } from '@/queries/settings/use-filters';
 import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
@@ -195,6 +196,7 @@ const useDeleteStatus = (statusId: string) => {
   const { deleteStatus: deleteStatusFromTimelines } = useTimelinesActions();
   const { setComposeToStatus } = useComposeActions();
   const { openModal } = useModalsActions();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationFn: (_withRedraft?: boolean) => client.statuses.deleteStatus(statusId),
@@ -202,7 +204,7 @@ const useDeleteStatus = (statusId: string) => {
       const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
       if (!status) return;
 
-      decrementReplyCount(status, queryClient);
+      decrementReplyCount(status, queryClient, scopeUrl);
     },
     onSuccess: (source, withRedraft) => {
       const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
@@ -224,7 +226,7 @@ const useDeleteStatus = (statusId: string) => {
       const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
       if (!status) return;
 
-      incrementReplyCount(status, queryClient);
+      incrementReplyCount(status, queryClient, scopeUrl);
     },
   });
 };
@@ -235,6 +237,7 @@ const useDeleteStatusFromGroup = (statusId: string, groupId: string) => {
   const { markStatusDeleted } = useStatusMetaActions();
   const { deleteStatus: deletePendingStatus } = usePendingStatusesActions();
   const { deleteStatus: deleteStatusFromTimelines } = useTimelinesActions();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationFn: () => client.experimental.groups.deleteGroupStatus(statusId, groupId),
@@ -242,7 +245,7 @@ const useDeleteStatusFromGroup = (statusId: string, groupId: string) => {
       const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
       if (!status) return;
 
-      decrementReplyCount(status, queryClient);
+      decrementReplyCount(status, queryClient, scopeUrl);
     },
     onSuccess: () => {
       deletePendingStatus(statusId);
@@ -253,7 +256,7 @@ const useDeleteStatusFromGroup = (statusId: string, groupId: string) => {
       const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
       if (!status) return;
 
-      incrementReplyCount(status, queryClient);
+      incrementReplyCount(status, queryClient, scopeUrl);
     },
   });
 };

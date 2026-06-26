@@ -13,6 +13,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { useComposeActions, useSubmitCompose } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 import { getStatusIdsFromLinksInContent } from '@/utils/status';
@@ -143,7 +144,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
         for (const id of ids) {
           if (compose?.dismissedQuotes.includes(id)) continue;
 
-          if (queryClient.getQueryData(queryKeys.statuses.show(id))) {
+          if (queryClient.getQueryData(scopedQueryKey(queryKeys.statuses.show(id), scopeUrl))) {
             quoteId = id;
             break;
           }

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import toast from '@/toast';
 
@@ -22,6 +23,7 @@ const useJoinEventMutation = (statusId: string, withToast = true) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['statuses', 'joinEvent', statusId],
@@ -35,8 +37,9 @@ const useJoinEventMutation = (statusId: string, withToast = true) => {
           event: status.event ? { ...status.event, join_state: 'pending' as const } : null,
         }),
         queryClient,
+        scopeUrl,
       ),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSettled: (status) => {
       if (!status) return;
       importEntities({ statuses: [status] });
@@ -64,6 +67,7 @@ const useLeaveEventMutation = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['statuses', 'leaveEvent', statusId],
@@ -76,8 +80,9 @@ const useLeaveEventMutation = (statusId: string) => {
           event: status.event ? { ...status.event, join_state: null } : null,
         }),
         queryClient,
+        scopeUrl,
       ),
-    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSettled: (status) => {
       if (!status) return;
       importEntities({ statuses: [status] });

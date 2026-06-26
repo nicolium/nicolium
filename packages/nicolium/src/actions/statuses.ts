@@ -1,5 +1,6 @@
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { updateStatus } from '@/queries/statuses/use-status-interactions';
 import { useComposeStore } from '@/stores/compose';
 import { useContextStore } from '@/stores/contexts';
@@ -19,6 +20,7 @@ import type { IntlShape } from 'react-intl';
 const incrementReplyCount = (
   params: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>,
   queryClient: ReturnType<typeof useQueryClient>,
+  scopeUrl: string,
 ) => {
   if (params.in_reply_to_id) {
     updateStatus(
@@ -28,6 +30,7 @@ const incrementReplyCount = (
           (typeof parent.replies_count === 'number' ? parent.replies_count : 0) + 1;
       },
       queryClient,
+      scopeUrl,
     );
   }
   if (params.quote_id) {
@@ -38,6 +41,7 @@ const incrementReplyCount = (
           (typeof parent.quotes_count === 'number' ? parent.quotes_count : 0) + 1;
       },
       queryClient,
+      scopeUrl,
     );
   }
 };
@@ -45,6 +49,7 @@ const incrementReplyCount = (
 const decrementReplyCount = (
   params: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>,
   queryClient: ReturnType<typeof useQueryClient>,
+  scopeUrl: string,
 ) => {
   if (params.in_reply_to_id) {
     updateStatus(
@@ -53,6 +58,7 @@ const decrementReplyCount = (
         parent.replies_count = Math.max(0, parent.replies_count - 1);
       },
       queryClient,
+      scopeUrl,
     );
   }
   if (params.quote_id) {
@@ -62,6 +68,7 @@ const decrementReplyCount = (
         parent.quotes_count = Math.max(0, parent.quotes_count - 1);
       },
       queryClient,
+      scopeUrl,
     );
   }
 };
@@ -78,7 +85,7 @@ const createStatus = (
     usePendingStatusesStore.getState().actions.importStatus(params, idempotencyKey);
     useContextStore.getState().actions.importPendingStatus(params.in_reply_to_id, idempotencyKey);
     useTimelinesStore.getState().actions.importPendingStatus(params, idempotencyKey);
-    incrementReplyCount(params, queryClient);
+    incrementReplyCount(params, queryClient, scopeUrl);
   }
 
   return (
@@ -144,18 +151,22 @@ const createStatus = (
       useTimelinesStore.getState().actions.deletePendingStatus(idempotencyKey);
       useContextStore.getState().actions.deletePendingStatus(params.in_reply_to_id, idempotencyKey);
       if (!editedId) {
-        decrementReplyCount(params, queryClient);
+        decrementReplyCount(params, queryClient, scopeUrl);
       }
       throw error;
     });
 };
 
-const editStatus = (client: PlApiClient, statusId: string) => {
-  const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+const editStatus = (client: PlApiClient, statusId: string, scopeUrl: string) => {
+  const status = queryClient.getQueryData(
+    scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+  );
   if (!status) return;
 
   const poll = status.poll_id
-    ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
+    ? queryClient.getQueryData(
+        scopedQueryKey(queryKeys.statuses.polls.show(status.poll_id), scopeUrl),
+      )
     : undefined;
 
   return client.statuses.getStatusSource(statusId).then((response) => {
@@ -164,12 +175,16 @@ const editStatus = (client: PlApiClient, statusId: string) => {
   });
 };
 
-const redactStatus = (client: PlApiClient, statusId: string) => {
-  const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+const redactStatus = (client: PlApiClient, statusId: string, scopeUrl: string) => {
+  const status = queryClient.getQueryData(
+    scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+  );
   if (!status) return;
 
   const poll = status.poll_id
-    ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
+    ? queryClient.getQueryData(
+        scopedQueryKey(queryKeys.statuses.polls.show(status.poll_id), scopeUrl),
+      )
     : undefined;
 
   return client.statuses.getStatusSource(statusId).then((source) => {
@@ -194,7 +209,7 @@ const fetchStatus = (client: PlApiClient, statusId: string, scopeUrl: string, in
   });
 };
 
-const muteStatus = (client: PlApiClient, statusId: string) =>
+const muteStatus = (client: PlApiClient, statusId: string, scopeUrl: string) =>
   client.statuses.muteStatus(statusId).then(() => {
     updateStatus(
       statusId,
@@ -202,10 +217,11 @@ const muteStatus = (client: PlApiClient, statusId: string) =>
         status.muted = true;
       },
       queryClient,
+      scopeUrl,
     );
   });
 
-const unmuteStatus = (client: PlApiClient, statusId: string) =>
+const unmuteStatus = (client: PlApiClient, statusId: string, scopeUrl: string) =>
   client.statuses.unmuteStatus(statusId).then(() => {
     updateStatus(
       statusId,
@@ -213,11 +229,18 @@ const unmuteStatus = (client: PlApiClient, statusId: string) =>
         status.muted = false;
       },
       queryClient,
+      scopeUrl,
     );
   });
 
-const toggleMuteStatus = (client: PlApiClient, status: Pick<Status, 'id' | 'muted'>) =>
-  status.muted ? unmuteStatus(client, status.id) : muteStatus(client, status.id);
+const toggleMuteStatus = (
+  client: PlApiClient,
+  status: Pick<Status, 'id' | 'muted'>,
+  scopeUrl: string,
+) =>
+  status.muted
+    ? unmuteStatus(client, status.id, scopeUrl)
+    : muteStatus(client, status.id, scopeUrl);
 
 export {
   createStatus,
