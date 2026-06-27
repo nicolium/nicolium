@@ -441,6 +441,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
   rebloggedBy,
 }) => {
   const { replyCompose } = useComposeActions();
+  const scopeUrl = useScopeUrl();
   const intl = useIntl();
 
   const canReply = useCanInteract(status, 'can_reply');
@@ -462,7 +463,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
 
   const handleReplyClick: React.MouseEventHandler = () => {
     if (me) {
-      replyCompose(status, rebloggedBy, canReply.approvalRequired ?? false);
+      replyCompose(status, scopeUrl, rebloggedBy, canReply.approvalRequired ?? false);
     } else {
       onOpenUnauthorizedModal('REPLY');
     }
@@ -512,6 +513,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   withQuote,
 }) => {
   const { quoteCompose } = useComposeActions();
+  const scopeUrl = useScopeUrl();
   const features = useFeatures();
   const intl = useIntl();
 
@@ -644,7 +646,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
 
   const handleQuoteClick: React.EventHandler<React.MouseEvent> = () => {
     if (me) {
-      quoteCompose(status, canQuote.approvalRequired || false);
+      quoteCompose(status, scopeUrl, canQuote.approvalRequired || false);
     } else {
       onOpenUnauthorizedModal('REBLOG');
     }
@@ -929,6 +931,7 @@ const QuoteButton: React.FC<IActionButton> = ({
   onOpenUnauthorizedModal,
 }) => {
   const { quoteCompose } = useComposeActions();
+  const scopeUrl = useScopeUrl();
   const features = useFeatures();
   const intl = useIntl();
 
@@ -938,7 +941,7 @@ const QuoteButton: React.FC<IActionButton> = ({
 
   const handleQuoteClick: React.EventHandler<React.MouseEvent> = () => {
     if (me) {
-      quoteCompose(status, canQuote.approvalRequired || false);
+      quoteCompose(status, scopeUrl, canQuote.approvalRequired || false);
     } else {
       onOpenUnauthorizedModal('REBLOG');
     }

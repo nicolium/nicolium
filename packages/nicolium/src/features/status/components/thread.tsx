@@ -98,7 +98,7 @@ const Thread = ({
   };
 
   const handleReplyClick = (status: Parameters<typeof replyCompose>[0]) => {
-    replyCompose(status);
+    replyCompose(status, scopeUrl);
   };
 
   const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {

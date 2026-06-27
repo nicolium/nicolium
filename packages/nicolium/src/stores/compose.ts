@@ -375,12 +375,14 @@ interface ComposeActions {
       | 'spoiler_text'
       | 'visibility'
     >,
+    scopeUrl: string,
     rebloggedBy?: Pick<Account, 'acct' | 'id'>,
     approvalRequired?: boolean,
     openComposer?: boolean,
   ) => void;
   quoteCompose: (
     status: Pick<Status, 'id' | 'account_id' | 'visibility' | 'group_id' | 'list_id'>,
+    scopeUrl: string,
     approvalRequired?: boolean,
     openComposer?: boolean,
   ) => void;
@@ -390,11 +392,13 @@ interface ComposeActions {
   openComposeWithText: (composeId: string, text?: string) => void;
   eventDiscussionCompose: (
     composeId: string,
+    scopeUrl: string,
     status: Pick<Status, 'id' | 'account_id' | 'mentions'>,
   ) => void;
   resetCompose: (composeId?: string) => void;
   selectComposeSuggestion: (
     composeId: string,
+    scopeUrl: string,
     position: number,
     token: string | null,
     suggestion: AutoSuggestion,
@@ -506,7 +510,7 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
-        replyCompose: (status, rebloggedBy, approvalRequired, openComposer = true) => {
+        replyCompose: (status, scopeUrl, rebloggedBy, approvalRequired, openComposer = true) => {
           const { features } = getClient();
           const { forceImplicitAddressing, preserveSpoilers } =
             useSettingsStore.getState().settings;
@@ -526,14 +530,16 @@ const useComposeStore = create<ComposeStore>()(
             const compose = draft.composers['compose-modal'];
 
             const mentions = explicitAddressing
-              ? statusToMentionsArray(status, account, rebloggedBy)
+              ? statusToMentionsArray(status, account, rebloggedBy, scopeUrl)
               : [];
 
             compose.groupId = status.group_id;
             compose.inReplyToId = status.id;
             compose.to = mentions;
             compose.parentRebloggedById = rebloggedBy?.id ?? null;
-            compose.text = !explicitAddressing ? statusToTextMentions(status, account) : '';
+            compose.text = !explicitAddressing
+              ? statusToTextMentions(status, account, scopeUrl)
+              : '';
             compose.visibility = privacyPreference(
               status.visibility,
               draft.default.visibility,
@@ -558,7 +564,7 @@ const useComposeStore = create<ComposeStore>()(
           }
         },
 
-        quoteCompose: (status, approvalRequired, openComposer = true) => {
+        quoteCompose: (status, scopeUrl, approvalRequired, openComposer = true) => {
           set((draft) => {
             if (!draft.composers['compose-modal']) {
               draft.composers['compose-modal'] = {
@@ -568,7 +574,7 @@ const useComposeStore = create<ComposeStore>()(
             }
             const compose = draft.composers['compose-modal'];
 
-            const statusAccount = selectAccount(status.account_id);
+            const statusAccount = selectAccount(status.account_id, scopeUrl);
             const author = statusAccount?.acct ?? '';
 
             compose.quoteId = status.id;
@@ -667,14 +673,14 @@ const useComposeStore = create<ComposeStore>()(
           openComposeSurface({ text });
         },
 
-        eventDiscussionCompose: (composeId, status) => {
+        eventDiscussionCompose: (composeId, scopeUrl, status) => {
           const account = getOwnAccount();
 
           if (!account) return;
 
           get().actions.updateCompose(composeId, (compose) => {
             compose.inReplyToId = status.id;
-            compose.to = statusToMentionsArray(status, account);
+            compose.to = statusToMentionsArray(status, account, undefined, scopeUrl);
           });
         },
 
@@ -692,7 +698,7 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
-        selectComposeSuggestion: (composeId, startPosition, token, suggestion, path) => {
+        selectComposeSuggestion: (composeId, scopeUrl, startPosition, token, suggestion, path) => {
           let completion = '';
 
           if (typeof suggestion === 'object' && 'id' in suggestion) {
@@ -703,7 +709,7 @@ const useComposeStore = create<ComposeStore>()(
           } else if (typeof suggestion === 'string' && suggestion[0] === '#') {
             completion = suggestion;
           } else if (typeof suggestion === 'string') {
-            completion = selectAccount(suggestion)!.acct;
+            completion = selectAccount(suggestion, scopeUrl)!.acct;
           }
 
           get().actions.updateCompose(composeId, (compose) => {
@@ -956,7 +962,7 @@ const useSubmitCompose = (composeId: string) => {
 
           if (draftIdToCancel) {
             const accountUrl = ownAccount!.url;
-            cancelDraftStatus(queryClient, accountUrl, draftIdToCancel);
+            cancelDraftStatus(queryClient, accountUrl, draftIdToCancel, scopeUrl);
           }
 
           if (data.scheduled_at === null) {

@@ -37,6 +37,7 @@ import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useNotification } from '@/queries/notifications/use-notifications';
 import {
   useFavouriteStatus,
@@ -304,6 +305,7 @@ const getNotificationStatusId = (notification: NotificationGroup): string | null
 
 const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, ...props }) => {
   const { mentionCompose, replyCompose } = useComposeActions();
+  const scopeUrl = useScopeUrl();
 
   const notification = useNotification(props.notification);
   const status = notification.status;
@@ -365,12 +367,12 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
       e?.preventDefault();
 
       if (status) {
-        replyCompose(status, account);
+        replyCompose(status, scopeUrl, account);
       } else {
         mentionCompose(account);
       }
     },
-    [account],
+    [account, scopeUrl],
   );
 
   const handleHotkeyFavourite = useCallback(() => {

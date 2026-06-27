@@ -9,6 +9,7 @@ import Tombstone from '@/components/statuses/tombstone';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import ThreadStatus from '@/features/status/components/thread-status';
 import { ComposeForm } from '@/features/ui/util/async-components';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useStatus } from '@/queries/statuses/use-status';
 import { eventDiscussionRoute } from '@/router';
 import { useComposeActions } from '@/stores/compose';
@@ -23,6 +24,7 @@ const EventDiscussionPage: React.FC = () => {
   const { statusId } = eventDiscussionRoute.useParams();
 
   const { eventDiscussionCompose } = useComposeActions();
+  const scopeUrl = useScopeUrl();
 
   const { data: status, isPending } = useStatus(statusId);
 
@@ -34,8 +36,8 @@ const EventDiscussionPage: React.FC = () => {
   const scroller = useRef<VirtuosoHandle | null>(null);
 
   useEffect(() => {
-    if (status && me) eventDiscussionCompose(`reply:${statusId}`, status);
-  }, [status, me]);
+    if (status && me) eventDiscussionCompose(`reply:${statusId}`, scopeUrl, status);
+  }, [status, me, scopeUrl]);
 
   const handleMoveUp = (id: string) => {
     const index = descendantsIds.indexOf(id);

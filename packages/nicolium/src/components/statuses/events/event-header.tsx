@@ -42,6 +42,7 @@ import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/u
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useChats } from '@/queries/chats';
 import { useDeleteStatus } from '@/queries/statuses/use-status';
@@ -147,6 +148,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const { quoteCompose, mentionCompose, directCompose } = useComposeActions();
+  const scopeUrl = useScopeUrl();
 
   const { openModal } = useModalsActions();
   const { getOrCreateChatByAccountId } = useChats();
@@ -237,7 +239,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleQuoteClick = () => {
-    quoteCompose(status);
+    quoteCompose(status, scopeUrl);
   };
 
   const handlePinClick = () => {

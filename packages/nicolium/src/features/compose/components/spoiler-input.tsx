@@ -3,6 +3,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AutosuggestInput from '@/components/autosuggest-input';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
@@ -21,6 +22,7 @@ interface ISpoilerInput {
 const SpoilerInput: React.FC<ISpoilerInput> = ({ composeId, theme }) => {
   const intl = useIntl();
   const { selectComposeSuggestion, updateCompose } = useComposeActions();
+  const scopeUrl = useScopeUrl();
   const { language, modifiedLanguage, spoilerText, spoilerTextMap } = useCompose(composeId);
 
   const [token, setToken] = useState('');
@@ -45,7 +47,7 @@ const SpoilerInput: React.FC<ISpoilerInput> = ({ composeId, theme }) => {
     value: AutoSuggestion,
   ) => {
     if (token && typeof token === 'string') {
-      selectComposeSuggestion(composeId, tokenStart, token, value, ['spoiler_text']);
+      selectComposeSuggestion(composeId, scopeUrl, tokenStart, token, value, ['spoiler_text']);
     }
   };
 

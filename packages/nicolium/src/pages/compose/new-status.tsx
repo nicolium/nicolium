@@ -49,7 +49,7 @@ const NewStatusPage = () => {
         );
         if (!status) return;
 
-        replyCompose(status, undefined, approvalRequired, false);
+        replyCompose(status, scopeUrl, undefined, approvalRequired, false);
       });
       return;
     }
@@ -61,7 +61,7 @@ const NewStatusPage = () => {
         );
         if (!status) return;
 
-        quoteCompose(status, approvalRequired, false);
+        quoteCompose(status, scopeUrl, approvalRequired, false);
       });
     }
   }, [

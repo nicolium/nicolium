@@ -4,6 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import AutosuggestInput from '@/components/autosuggest-input';
 import Toggle from '@/components/ui/toggle';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useCompose, useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
 
@@ -40,6 +41,7 @@ const Option: React.FC<IOption> = ({
   title,
 }) => {
   const { selectComposeSuggestion } = useComposeActions();
+  const scopeUrl = useScopeUrl();
   const intl = useIntl();
 
   const [token, setToken] = useState('');
@@ -70,7 +72,11 @@ const Option: React.FC<IOption> = ({
     value: AutoSuggestion,
   ) => {
     if (token && typeof token === 'string') {
-      selectComposeSuggestion(composeId, tokenStart, token, value, ['poll', 'options', index]);
+      selectComposeSuggestion(composeId, scopeUrl, tokenStart, token, value, [
+        'poll',
+        'options',
+        index,
+      ]);
     }
   };
 

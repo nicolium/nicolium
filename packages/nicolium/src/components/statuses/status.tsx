@@ -303,7 +303,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     if (status.rss_feed) return;
 
     e?.preventDefault();
-    replyCompose(actualStatus, status.reblog_id ? status.account : undefined);
+    replyCompose(actualStatus, scopeUrl, status.reblog_id ? status.account : undefined);
   };
 
   const handleHotkeyFavourite = (e?: KeyboardEvent) => {
