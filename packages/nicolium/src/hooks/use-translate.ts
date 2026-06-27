@@ -15,6 +15,8 @@ import {
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
+import { useScopeUrl } from './use-scope-url';
+
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { Instance } from 'pl-api';
 
@@ -28,6 +30,7 @@ const canRemoteTranslate = (
   instance: Instance,
   supportedLanguages: Record<string, Array<string>>,
   locale: string,
+  scopeUrl: string,
   isLoggedIn?: boolean,
 ) => {
   const { allow_remote: allowRemote, allow_unauthenticated: allowUnauthenticated } =
@@ -43,7 +46,7 @@ const canRemoteTranslate = (
 
   if (!isLoggedIn && !allowUnauthenticated) return false;
 
-  const statusAccount = selectAccount(status.account_id);
+  const statusAccount = selectAccount(status.account_id, scopeUrl);
   if (statusAccount && !statusAccount.local && !allowRemote) return false;
 
   if (!supportedLanguages[status.language]?.includes(locale)) return false;
@@ -88,6 +91,7 @@ const useTranslate = (status: PartialStatus): TranslateInformation | null => {
   const knownLanguages = autoTranslate ? [...settings.knownLanguages, intl.locale] : [intl.locale];
 
   const me = useCurrentAccount();
+  const scopeUrl = useScopeUrl();
   const { data: translationLanguages = {} } = useTranslationLanguages();
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
   const { fetchLocalTranslation, hideLocalTranslation } = useStatusMetaActions();
@@ -106,7 +110,7 @@ const useTranslate = (status: PartialStatus): TranslateInformation | null => {
 
   const remoteTranslate =
     features.translations &&
-    canRemoteTranslate(status, instance, translationLanguages, intl.locale, !!me);
+    canRemoteTranslate(status, instance, translationLanguages, intl.locale, scopeUrl, !!me);
 
   useEffect(() => {
     localTranslationAvailability(status, intl.locale)

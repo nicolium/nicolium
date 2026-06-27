@@ -8,6 +8,9 @@ import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
+
+import { getScopeUrl } from './auth';
 
 import type { PlApiClient, ShoutMessage as BaseShoutMessage } from 'pl-api';
 
@@ -41,7 +44,8 @@ const useShoutboxStore = create<State>()(
             notifyManager.batch(() => {
               for (const { author } of messages.toReversed()) {
                 queryClient.setQueryData(
-                  queryKeys.accounts.show(author.id),
+                  // only support shoutbox on main account for now
+                  scopedQueryKey(queryKeys.accounts.show(author.id), getScopeUrl()),
                   (account) => account || author,
                 );
               }
@@ -52,7 +56,10 @@ const useShoutboxStore = create<State>()(
         },
         pushMessage: (message) => {
           set((state: State) => {
-            queryClient.setQueryData(queryKeys.accounts.show(message.author.id), message.author);
+            queryClient.setQueryData(
+              scopedQueryKey(queryKeys.accounts.show(message.author.id), getScopeUrl()),
+              message.author,
+            );
             state.messages.push(minifyMessage(message));
           });
         },

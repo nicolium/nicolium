@@ -728,8 +728,14 @@ const useAuthStore = create<AuthStore>()(
 
           try {
             const account = await client.settings.verifyCredentials();
-            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-            queryClient.setQueryData(queryKeys.accountCredentials.show(account.id), account);
+            queryClient.setQueryData(
+              scopedQueryKey(queryKeys.accounts.show(account.id), account.url),
+              account,
+            );
+            queryClient.setQueryData(
+              scopedQueryKey(queryKeys.accountCredentials.show(account.id), account.url),
+              account,
+            );
             get().actions.addCredentials(token, account);
             if (account.id === get().currentAccountId) fetchMeSuccess(account);
             return account;
@@ -753,8 +759,14 @@ const useAuthStore = create<AuthStore>()(
             // Try to remember the account from KVStore first
             try {
               const account = await KVStore.getItemOrError(`authAccount:${accountUrl}`);
-              queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-              queryClient.setQueryData(queryKeys.accountCredentials.show(account.id), account);
+              queryClient.setQueryData(
+                scopedQueryKey(queryKeys.accounts.show(account.id), account.url),
+                account,
+              );
+              queryClient.setQueryData(
+                scopedQueryKey(queryKeys.accountCredentials.show(account.id), account.url),
+                account,
+              );
               get().actions.setCurrentAccountIfUnset(account);
               if (account.id === get().currentAccountId) fetchMeSuccess(account);
             } catch {}
@@ -768,7 +780,10 @@ const useAuthStore = create<AuthStore>()(
         logOut: async () => {
           const state = get();
           const accountId = state.currentAccountId;
-          const account = typeof accountId === 'string' ? selectAccount(accountId) : undefined;
+          const account =
+            typeof accountId === 'string'
+              ? selectAccount(accountId, state.me || backendUrl)
+              : undefined;
           const standalone = isStandalone();
 
           if (!account) return;
@@ -792,7 +807,7 @@ const useAuthStore = create<AuthStore>()(
         },
 
         switchAccountById: (accountId) => {
-          const account = selectAccount(accountId);
+          const account = selectAccount(accountId, get().me || backendUrl);
           if (!account) return;
 
           const { currentAccountId } = get();
@@ -827,7 +842,10 @@ const useAuthStore = create<AuthStore>()(
           const response = await client.settings.updateCredentials(params);
           persistAuthAccount(response, params);
 
-          queryClient.setQueryData(queryKeys.accounts.show(response.id), response);
+          queryClient.setQueryData(
+            scopedQueryKey(queryKeys.accounts.show(response.id), response.url),
+            response,
+          );
           get().actions.setCurrentAccount(response);
 
           return response;
@@ -836,7 +854,7 @@ const useAuthStore = create<AuthStore>()(
         verifyAccounts: () => {
           const { users } = get();
           Object.values(users).forEach((user) => {
-            const account = selectAccount(user.id);
+            const account = selectAccount(user.id, user.url);
             if (!account) {
               get()
                 .actions.verifyCredentials(user.access_token, user.url)
@@ -876,7 +894,8 @@ const getClient = () => {
 
 const getOwnAccount = () => {
   const accountId = getCurrentAccountId();
-  if (typeof accountId === 'string') return selectAccount(accountId);
+  if (typeof accountId === 'string')
+    return selectAccount(accountId, useAuthStore.getState().me || backendUrl);
 };
 
 const getApp = () => useAuthStore.getState().app;
@@ -891,6 +910,8 @@ const getAuthUserUrl = () => {
 };
 
 const getMeUrl = () => getOwnAccount()?.url;
+
+const getScopeUrl = () => useAuthStore.getState().me || backendUrl;
 
 const verifyCredentials = (token: string, accountUrl?: string) =>
   useAuthStore.getState().actions.verifyCredentials(token, accountUrl);
@@ -923,6 +944,7 @@ export {
   isLoggedIn,
   getAuthUserUrl,
   getMeUrl,
+  getScopeUrl,
   verifyCredentials,
   switchAccount,
   updateMe,

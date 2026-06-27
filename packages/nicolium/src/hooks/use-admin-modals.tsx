@@ -108,10 +108,11 @@ const useDeactivateUserModal = (accountId: string) => {
     'suspend',
   );
   const { openModal } = useModalsActions();
+  const scopeUrl = useScopeUrl();
 
   return () => {
-    const acct = selectAccount(accountId)!.acct;
-    const name = selectAccount(accountId)!.username;
+    const acct = selectAccount(accountId, scopeUrl)!.acct;
+    const name = selectAccount(accountId, scopeUrl)!.username;
 
     const message = (
       <div className='admin-modal'>
@@ -153,7 +154,7 @@ const useDeleteUserModal = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return () => {
-    const account = selectAccount(accountId)!;
+    const account = selectAccount(accountId, scopeUrl)!;
     const acct = account.acct;
     const name = account.username;
     const local = account.local;

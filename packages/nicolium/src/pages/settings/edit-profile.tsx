@@ -22,6 +22,7 @@ import { useClient } from '@/hooks/use-client';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import AvatarPicker from '@/pages/settings/components/avatar-picker';
 import HeaderPicker from '@/pages/settings/components/header-picker';
 import { selectAccount } from '@/queries/accounts/selectors';
@@ -237,7 +238,7 @@ interface ProfileAutosuggestInputProps {
   value?: string;
 }
 
-const getSuggestionCompletion = (suggestion: AutoSuggestion): string => {
+const getSuggestionCompletion = (suggestion: AutoSuggestion, scopeUrl: string): string => {
   if (typeof suggestion === 'object' && 'id' in suggestion) {
     return isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
   }
@@ -247,7 +248,7 @@ const getSuggestionCompletion = (suggestion: AutoSuggestion): string => {
   }
 
   if (typeof suggestion === 'string') {
-    return selectAccount(suggestion)?.acct ?? suggestion;
+    return selectAccount(suggestion, scopeUrl)?.acct ?? suggestion;
   }
 
   return '';
@@ -261,6 +262,7 @@ const ProfileAutosuggestInput: React.FC<ProfileAutosuggestInputProps> = ({
 }) => {
   const [token, setToken] = useState('');
   const suggestions = useComposeSuggestions(token);
+  const scopeUrl = useScopeUrl();
 
   const onSuggestionSelected = (
     tokenStart: number,
@@ -269,7 +271,7 @@ const ProfileAutosuggestInput: React.FC<ProfileAutosuggestInputProps> = ({
   ) => {
     if (!token) return;
 
-    const completion = getSuggestionCompletion(suggestion);
+    const completion = getSuggestionCompletion(suggestion, scopeUrl);
     const nextValue = `${value.slice(0, tokenStart)}${completion} ${value.slice(
       tokenStart + token.length,
     )}`;
