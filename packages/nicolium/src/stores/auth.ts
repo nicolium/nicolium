@@ -232,8 +232,12 @@ const getLocalState = (): (AuthData & { clients: Record<string, PlApiClient> }) 
 
   const clients: Record<string, PlApiClient> = {};
   for (const [url, user] of Object.entries(parsedUsers)) {
-    clients[url] = new PlApiClient(parseBaseURL(url) || backendUrl, user.access_token, {
-      instance,
+    const baseUrl = parseBaseURL(url) || backendUrl;
+    const isMatchingInstance = instance && new URL(instance.domain).origin === baseUrl;
+
+    clients[url] = new PlApiClient(baseUrl, user.access_token, {
+      instance: isMatchingInstance ? instance : undefined,
+      fetchInstance: !isMatchingInstance,
       iceshrimpAccessToken: user.iceshrimp_access_token,
       onFetchIceshrimpAccessToken: (token: string) => {
         useAuthStore.getState().actions.setIceshrimpToken(url, token);
