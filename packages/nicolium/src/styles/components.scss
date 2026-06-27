@@ -2425,6 +2425,10 @@ div[data-viewport-type='window']:has(.empty-message) {
   .dark & {
     color: var(--color-primary-800);
   }
+
+  .no-reduce-motion & {
+    animation: pulse 2s ease-in-out infinite;
+  }
 }
 
 .placeholder-status-content {
@@ -2820,5 +2824,11 @@ div[data-viewport-type='window']:has(.empty-message) {
 
   @media (max-width: variables.$breakpoint-sm) {
     bottom: 4.5rem;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .5
   }
 }
