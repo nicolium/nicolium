@@ -668,6 +668,7 @@
   "column.deck.add_column": "Add column to deck",
   "column.deck.error": "Failed to load column",
   "column.deck.error.heading": "Column error",
+  "column.deck.login_required": "You need to log in to {accountUrl} to view this column.",
   "column.deck.not_found.account": "This profile could not be found. It might have been deleted or suspended.",
   "column.deck.not_found.antenna": "This antenna could not be found. It might have been deleted or you don’t have permission to view it.",
   "column.deck.not_found.bookmarks": "This bookmark folder could not be found. It might have been deleted or you don’t have permission to view it.",

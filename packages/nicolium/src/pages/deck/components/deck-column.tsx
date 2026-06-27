@@ -27,6 +27,7 @@ import {
   useColumnNotFound,
   useColumnTitle,
 } from './deck-column-config';
+import { DeckColumnLoginRequired } from './deck-column-login-required';
 import { DeckColumnNotFound } from './deck-column-not-found';
 import { getDeckColumnRouter } from './deck-column-router';
 
@@ -50,11 +51,16 @@ interface IDeckColumn {
   onChangeFill: (id: string, value: boolean) => void;
 }
 
-const DeckColumnInner: React.FC<IDeckColumn> = ({
+interface IDeckColumnInner extends IDeckColumn {
+  loginRequired?: boolean;
+}
+
+const DeckColumnInner: React.FC<IDeckColumnInner> = ({
   column,
   index,
   columns,
   highlight,
+  loginRequired,
   onRemove,
   onChangeWidth,
   onChangeIndex,
@@ -246,7 +252,7 @@ const DeckColumnInner: React.FC<IDeckColumn> = ({
       className={clsx('deck__column', `deck__column--${column.columnWidth}`, {
         'deck__column--highlight': highlight,
         'deck__column--fill': column.fillAvailableWidth,
-        'deck__column--not-found': !!notFoundResource,
+        'deck__column--not-found': !!notFoundResource || loginRequired,
       })}
       tabIndex={-1}
       data-index={index}
@@ -261,7 +267,9 @@ const DeckColumnInner: React.FC<IDeckColumn> = ({
           <DropdownMenu items={items} src={iconDotsThreeVertical} />
         </div>
       </CardHeader>
-      {notFoundResource ? (
+      {loginRequired && column.accountUrl ? (
+        <DeckColumnLoginRequired accountUrl={column.accountUrl} />
+      ) : notFoundResource ? (
         <DeckColumnNotFound resource={notFoundResource} onRemove={() => onRemove(column.id)} />
       ) : (
         <DeckColumnIdContext.Provider value={column.id}>
@@ -291,7 +299,7 @@ const DeckColumn: React.FC<IDeckColumn> = (props) => {
     );
   }
 
-  return <DeckColumnInner {...props} />;
+  return <DeckColumnInner {...props} loginRequired={!!accountUrl && !isKnownAccount} />;
 };
 
 export { DeckColumn };
