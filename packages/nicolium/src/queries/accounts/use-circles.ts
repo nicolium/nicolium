@@ -84,7 +84,10 @@ const useUpdateCircle = (circleId: string) => {
 
 const useCircleAccounts = makePaginatedResponseQuery(
   (circleId: string) => queryKeys.accountsLists.circleMembers(circleId),
-  (client, [circleId]) => client.circles.getCircleAccounts(circleId).then(minifyAccountList),
+  (client, [circleId], scopeUrl) =>
+    client.circles
+      .getCircleAccounts(circleId)
+      .then((accounts) => minifyAccountList(accounts, scopeUrl)),
 );
 
 const useAddAccountsToCircle = (circleId: string) => {

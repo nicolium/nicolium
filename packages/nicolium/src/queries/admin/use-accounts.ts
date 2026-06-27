@@ -27,7 +27,10 @@ import type {
 const useAdminAccounts = makePaginatedResponseQuery(
   (params: Omit<AdminGetAccountsParams, keyof PaginationParams>) =>
     queryKeys.admin.accountLists.show(params),
-  (client, [params]) => client.admin.accounts.getAccounts(params).then(minifyAdminAccountList),
+  (client, [params], scopeUrl) =>
+    client.admin.accounts
+      .getAccounts(params)
+      .then((accounts) => minifyAdminAccountList(accounts, scopeUrl)),
   undefined,
   'isAdmin',
 );
@@ -60,10 +63,10 @@ const useAdminAccount = (accountId?: string) => {
 
 const pendingUsersQuery = makePaginatedResponseQueryOptions(
   queryKeys.admin.accountLists.show({ origin: 'local', status: 'pending' }),
-  (client) =>
+  (client, _, scopeUrl) =>
     client.admin.accounts
       .getAccounts({ origin: 'local', status: 'pending' })
-      .then(minifyAdminAccountList),
+      .then((accounts) => minifyAdminAccountList(accounts, scopeUrl)),
 );
 
 const usePendingUsersCount = () => {

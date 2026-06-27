@@ -21,7 +21,7 @@ const updateChatInChatSearchQuery = (newChat: Chat) => {
 /**
  * Re-order the ChatSearch query by the last message timestamp.
  */
-const reOrderChatListItems = (scopeUrl: string) => {
+const reorderChatListItems = (scopeUrl: string) => {
   sortQueryData(scopedQueryKey(queryKeys.chats.search, scopeUrl), (chatA, chatB) =>
     compareDate(chatA.last_message?.created_at as string, chatB.last_message?.created_at as string),
   );
@@ -59,7 +59,7 @@ const updateChatListItem = (newChat: Chat, scopeUrl: string) => {
     updateChatInChatSearchQuery(newChat);
     // Now that we have the new chat loaded, let's re-sort to put
     // the most recent on top.
-    reOrderChatListItems(scopeUrl);
+    reorderChatListItems(scopeUrl);
   } else {
     // If this is a brand-new chat, let's invalid the queries.
     invalidateChatSearchQuery(scopeUrl);
@@ -83,4 +83,4 @@ const getUnreadChatsCount = (scopeUrl: string): number => {
   return sumBy(chats, (chat) => chat.unread);
 };
 
-export { updateChatListItem, getUnreadChatsCount, reOrderChatListItems };
+export { updateChatListItem, getUnreadChatsCount, reorderChatListItems };

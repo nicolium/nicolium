@@ -2,7 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
 import { useClient } from '@/hooks/use-client';
-import { useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import toast from '@/toast';
 
 import { queryKeys } from '../keys';
@@ -31,6 +32,7 @@ const useAccountAliases = () => {
 const useAddAccountAlias = () => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['settings', 'accountAliases'],
@@ -40,7 +42,7 @@ const useAddAccountAlias = () => {
     },
     onSettled: () =>
       queryClient.invalidateQueries({
-        queryKey: queryKeys.settings.accountAliases,
+        queryKey: scopedQueryKey(queryKeys.settings.accountAliases, scopeUrl),
       }),
   });
 };
@@ -48,6 +50,7 @@ const useAddAccountAlias = () => {
 const useDeleteAccountAlias = () => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['settings', 'accountAliases'],
@@ -57,7 +60,7 @@ const useDeleteAccountAlias = () => {
     },
     onSettled: () =>
       queryClient.invalidateQueries({
-        queryKey: queryKeys.settings.accountAliases,
+        queryKey: scopedQueryKey(queryKeys.settings.accountAliases, scopeUrl),
       }),
   });
 };

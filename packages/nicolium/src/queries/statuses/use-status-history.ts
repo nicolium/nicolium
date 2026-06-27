@@ -1,7 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
-import { useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -17,6 +18,7 @@ type MinifiedStatusEdit = ReturnType<typeof minifyStatusEdit>;
 const useStatusHistory = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useAppQuery({
     queryKey: queryKeys.statuses.history(statusId),
@@ -25,7 +27,10 @@ const useStatusHistory = (statusId: string) => {
       // All entries include a current version of the same account.
       const account = history[0]?.account;
       if (account) {
-        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+          account,
+        );
       }
       return history.map(minifyStatusEdit);
     },

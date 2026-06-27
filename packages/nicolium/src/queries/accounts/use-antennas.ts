@@ -45,11 +45,13 @@ const useAntenna = (antennaId?: string) =>
 
 const useCreateAntenna = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['antennas', 'create'],
     mutationFn: (params: CreateAntennaParams) => client.antennas.createAntenna(params),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.antennas.all }),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: scopedQueryKey(queryKeys.antennas.all, scopeUrl) }),
   });
 };
 
@@ -82,7 +84,10 @@ const useUpdateAntenna = (antennaId: string) => {
 
 const useAntennaAccounts = makePaginatedResponseQuery(
   (antennaId: string) => queryKeys.accountsLists.antennaMembers(antennaId),
-  (client, [antennaId]) => client.antennas.getAntennaAccounts(antennaId).then(minifyAccountList),
+  (client, [antennaId], scopeUrl) =>
+    client.antennas
+      .getAntennaAccounts(antennaId)
+      .then((accounts) => minifyAccountList(accounts, scopeUrl)),
 );
 
 const useAddAccountsToAntenna = (antennaId: string) => {
@@ -103,6 +108,7 @@ const useAddAccountsToAntenna = (antennaId: string) => {
 
 const useRemoveAccountsFromAntenna = (antennaId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['accountsLists', 'antennas', antennaId, 'remove'],
@@ -110,7 +116,7 @@ const useRemoveAccountsFromAntenna = (antennaId: string) => {
       client.antennas.removeAntennaAccounts(antennaId, accountIds),
     onSettled: (_, __, accountIds) => {
       queryClient.setQueryData(
-        queryKeys.accountsLists.antennaMembers(antennaId),
+        scopedQueryKey(queryKeys.accountsLists.antennaMembers(antennaId), scopeUrl),
         filterById(accountIds),
       );
     },
@@ -119,8 +125,10 @@ const useRemoveAccountsFromAntenna = (antennaId: string) => {
 
 const useAntennaExcludedAccounts = makePaginatedResponseQuery(
   (antennaId: string) => queryKeys.accountsLists.antennaExcludedAccounts(antennaId),
-  (client, [antennaId]) =>
-    client.antennas.getAntennaExcludedAccounts(antennaId).then(minifyAccountList),
+  (client, [antennaId], scopeUrl) =>
+    client.antennas
+      .getAntennaExcludedAccounts(antennaId)
+      .then((accounts) => minifyAccountList(accounts, scopeUrl)),
 );
 
 const useAddExcludedAccountsToAntenna = (antennaId: string) => {
@@ -133,7 +141,10 @@ const useAddExcludedAccountsToAntenna = (antennaId: string) => {
       client.antennas.addAntennaExcludedAccounts(antennaId, accountIds),
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.accountsLists.antennaMembers(antennaId), scopeUrl),
+        queryKey: scopedQueryKey(
+          queryKeys.accountsLists.antennaExcludedAccounts(antennaId),
+          scopeUrl,
+        ),
       });
     },
   });

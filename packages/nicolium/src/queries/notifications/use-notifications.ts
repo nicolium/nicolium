@@ -239,7 +239,9 @@ const useProcessStreamNotification = () => {
       }
 
       if (normalizedNotification.type === 'follow_request') {
-        normalizedNotification.sample_account_ids.forEach(appendFollowRequest);
+        normalizedNotification.sample_account_ids.forEach((accountId) =>
+          appendFollowRequest(accountId, scopeUrl),
+        );
       }
     },
     [filters, sounds, activeFilter, hideBots],

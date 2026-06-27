@@ -9,7 +9,8 @@ import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { removePageItem } from '@/utils/queries';
 
 import { queryKeys } from '../keys';
@@ -23,6 +24,7 @@ const useSuggestedAccounts = () => {
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   const getSuggestions = async (): Promise<MinifiedSuggestion[]> => {
     const response = await client.myAccount.getSuggestions();
@@ -32,7 +34,10 @@ const useSuggestedAccounts = () => {
     notifyManager.batch(() => {
       for (const { account } of response) {
         fetcher(account.id);
-        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        queryClient.setQueryData(
+          scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+          account,
+        );
       }
     });
 
@@ -51,11 +56,16 @@ const useSuggestedAccounts = () => {
 
 const useDismissSuggestion = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationFn: (accountId: string) => client.myAccount.dismissSuggestions(accountId),
     onMutate(accountId: string) {
-      removePageItem(queryKeys.suggestions.all, accountId, (item, newItem) => item === newItem);
+      removePageItem(
+        scopedQueryKey(queryKeys.suggestions.all, scopeUrl),
+        accountId,
+        (item, newItem) => item === newItem,
+      );
     },
   });
 };

@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
+import { scopedQueryKey } from '../query';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
 import type { Account } from 'pl-api';
@@ -15,6 +17,7 @@ const useDomainBlocksQuery = makePaginatedResponseQuery(queryKeys.settings.domai
 const useBlockDomainMutation = () => {
   const queryClient = useQueryClient();
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.settings.domainBlocks,
@@ -25,7 +28,7 @@ const useBlockDomainMutation = () => {
       const accounts = selectAccountsByDomain(domain);
       if (!accounts) return;
 
-      queryClient.setQueryData(queryKeys.suggestions.all, (suggestions) =>
+      queryClient.setQueryData(scopedQueryKey(queryKeys.suggestions.all, scopeUrl), (suggestions) =>
         suggestions
           ? suggestions.filter((suggestion) => !accounts.includes(suggestion.account_id))
           : undefined,
@@ -37,12 +40,15 @@ const useBlockDomainMutation = () => {
 const useUnblockDomainMutation = () => {
   const queryClient = useQueryClient();
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: queryKeys.settings.domainBlocks,
     mutationFn: (domain: string) => client.filtering.unblockDomain(domain),
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.settings.domainBlocks });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.settings.domainBlocks, scopeUrl),
+      });
     },
   });
 };

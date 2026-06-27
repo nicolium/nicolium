@@ -17,7 +17,7 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { scopedQueryKey, useAppInfiniteQuery, useAppQuery } from '@/queries/query';
-import { reOrderChatListItems } from '@/utils/chats';
+import { reorderChatListItems } from '@/utils/chats';
 import { flattenPages, updatePageItem } from '@/utils/queries';
 
 import { useRelationshipQuery } from './accounts/use-relationship';
@@ -162,7 +162,11 @@ const useMarkChatAsRead = (chatId: string) => {
   return useMutation({
     mutationFn: (lastReadId: string) => client.chats.markChatAsRead(chatId, lastReadId),
     onSuccess: (data) => {
-      updatePageItem(queryKeys.chats.search, data, (o, n) => o.id === n.id);
+      updatePageItem(
+        scopedQueryKey(queryKeys.chats.search, scopeUrl),
+        data,
+        (o, n) => o.id === n.id,
+      );
       const queryData = queryClient.getQueryData(scopedQueryKey(queryKeys.chats.search, scopeUrl));
 
       if (queryData) {
@@ -254,19 +258,24 @@ const useCreateChatMessage = () => {
     },
     onSuccess: (response, variables, context) => {
       const nextChat = { ...chat, last_message: response };
-      updatePageItem(queryKeys.chats.search, nextChat, (o, n) => o.id === n.id);
       updatePageItem(
-        queryKeys.chats.chatMessages(variables.chatId),
+        scopedQueryKey(queryKeys.chats.search, scopeUrl),
+        nextChat,
+        (o, n) => o.id === n.id,
+      );
+      updatePageItem(
+        scopedQueryKey(queryKeys.chats.chatMessages(variables.chatId), scopeUrl),
         normalizeChatMessage(response),
         (o) => o.id === context.pendingId,
       );
-      reOrderChatListItems();
+      reorderChatListItems(scopeUrl);
     },
   });
 };
 
 const useDeleteChat = (chatId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   const { changeScreen } = useChatContext();
 
@@ -274,20 +283,23 @@ const useDeleteChat = (chatId: string) => {
     mutationFn: () => client.chats.deleteChat(chatId),
     onSuccess() {
       changeScreen(ChatWidgetScreens.INBOX);
-      queryClient.invalidateQueries({ queryKey: queryKeys.chats.chatMessages(chatId) });
-      queryClient.invalidateQueries({ queryKey: queryKeys.chats.search });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.chats.chatMessages(chatId), scopeUrl),
+      });
+      queryClient.invalidateQueries({ queryKey: scopedQueryKey(queryKeys.chats.search, scopeUrl) });
     },
   });
 };
 
 const useDeleteChatMessage = (chatId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationFn: (chatMessageId: string) => client.chats.deleteChatMessage(chatId, chatMessageId),
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.chats.chatMessages(chatId),
+        queryKey: scopedQueryKey(queryKeys.chats.chatMessages(chatId), scopeUrl),
       });
     },
   });

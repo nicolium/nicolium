@@ -4,6 +4,7 @@ import { useClient } from '@/hooks/use-client';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import { queryKeys } from '../keys';
+import { scopedQueryKey } from '../query';
 
 import type { Account } from 'pl-api';
 

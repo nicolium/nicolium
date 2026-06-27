@@ -2,7 +2,8 @@ import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
@@ -44,22 +45,30 @@ interface CreateBookmarkFolderParams {
 
 const useCreateBookmarkFolder = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['bookmarkFolders', 'create'],
     mutationFn: (params: CreateBookmarkFolderParams) =>
       client.myAccount.createBookmarkFolder(params),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.bookmarkFolders.all }),
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.bookmarkFolders.all, scopeUrl),
+      }),
   });
 };
 
 const useDeleteBookmarkFolder = () => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['bookmarkFolders', 'delete'],
     mutationFn: (folderId: string) => client.myAccount.deleteBookmarkFolder(folderId),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.bookmarkFolders.all }),
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.bookmarkFolders.all, scopeUrl),
+      }),
   });
 };
 
@@ -70,12 +79,16 @@ interface UpdateBookmarkFolderParams {
 
 const useUpdateBookmarkFolder = (folderId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['bookmarkFolders', 'update', folderId],
     mutationFn: (params: UpdateBookmarkFolderParams) =>
       client.myAccount.updateBookmarkFolder(folderId, params),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.bookmarkFolders.all }),
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.bookmarkFolders.all, scopeUrl),
+      }),
   });
 };
 
@@ -95,23 +108,29 @@ const useStatusBookmarkFolders = (statusId: string) => {
 
 const useAddBookmarkToFolder = (statusId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['bookmarkFolders', 'add', statusId],
     mutationFn: (folderId: string) => client.myAccount.addBookmarkToFolder(statusId, folderId),
     onSettled: () =>
-      queryClient.invalidateQueries({ queryKey: queryKeys.bookmarkFolders.forStatus(statusId) }),
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.bookmarkFolders.forStatus(statusId), scopeUrl),
+      }),
   });
 };
 
 const useRemoveBookmarkFromFolder = (statusId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['bookmarkFolders', 'remove', statusId],
     mutationFn: (folderId: string) => client.myAccount.removeBookmarkFromFolder(statusId, folderId),
     onSettled: () =>
-      queryClient.invalidateQueries({ queryKey: queryKeys.bookmarkFolders.forStatus(statusId) }),
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.bookmarkFolders.forStatus(statusId), scopeUrl),
+      }),
   });
 };
 

@@ -101,7 +101,7 @@ const useFollowAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: (params?: FollowAccountParams) => client.accounts.followAccount(accountId, params),
     onMutate: (params) => {
       return updateRelationship(
@@ -136,7 +136,7 @@ const useUnfollowAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: () => client.accounts.unfollowAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -172,7 +172,7 @@ const useBlockAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: (params?: BlockAccountParams) => client.filtering.blockAccount(accountId, params),
     onMutate: () =>
       updateRelationship(
@@ -340,9 +340,12 @@ const usePinAccountMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
       queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.endorsedAccounts(account!.id),
+        queryKey: scopedQueryKey(queryKeys.accountsLists.endorsedAccounts(account!.id), scopeUrl),
       });
     },
   });

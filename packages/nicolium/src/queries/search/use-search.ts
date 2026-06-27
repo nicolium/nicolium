@@ -1,10 +1,11 @@
 import { notifyManager, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useImportEntities } from '@/queries/utils/import-entities';
 
 import { queryKeys } from '../keys';
-import { useAppInfiniteQuery } from '../query';
+import { scopedQueryKey, useAppInfiniteQuery } from '../query';
 
 import type { PaginationParams, SearchParams } from 'pl-api';
 
@@ -14,6 +15,7 @@ const useSearchAccounts = (
 ) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useAppInfiniteQuery({
     queryKey: queryKeys.search.accounts(query, params),
@@ -33,10 +35,13 @@ const useSearchAccounts = (
         .then(({ accounts }) => {
           notifyManager.batch(() => {
             for (const account of accounts) {
-              queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+              queryClient.setQueryData(
+                scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+                account,
+              );
               if (account.relationship) {
                 queryClient.setQueryData(
-                  queryKeys.accountRelationships.show(account.id),
+                  scopedQueryKey(queryKeys.accountRelationships.show(account.id), scopeUrl),
                   account.relationship,
                 );
               }
@@ -123,6 +128,7 @@ const useSearchGroups = (
 ) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useAppInfiniteQuery({
     queryKey: queryKeys.search.groups(query, params),
@@ -141,7 +147,10 @@ const useSearchGroups = (
         .then(({ groups }) => {
           notifyManager.batch(() => {
             for (const group of groups) {
-              queryClient.setQueryData(queryKeys.groups.show(group.id), group);
+              queryClient.setQueryData(
+                scopedQueryKey(queryKeys.groups.show(group.id), scopeUrl),
+                group,
+              );
             }
           });
           return groups.map(({ id }) => id);

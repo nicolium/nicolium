@@ -53,7 +53,8 @@ const makeUseStatusInteractions = (
 ) =>
   makePaginatedResponseQuery(
     (statusId: string) => queryKeys.accountsLists[queryKey[method]](statusId),
-    (client, params) => client.statuses[method](...params).then(minifyAccountList),
+    (client, params, scopeUrl) =>
+      client.statuses[method](...params).then((accounts) => minifyAccountList(accounts, scopeUrl)),
   );
 
 const useStatusDislikes = makeUseStatusInteractions('getDislikedBy');
@@ -101,6 +102,7 @@ const restorePreviousStatus = (
 const useStatusReactions = (statusId: string, emoji?: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return useAppQuery({
     queryKey: queryKeys.accountsLists.statusReactions(statusId, emoji),
@@ -109,7 +111,10 @@ const useStatusReactions = (statusId: string, emoji?: string) => {
         notifyManager.batch(() => {
           for (const { accounts } of reactions) {
             for (const account of accounts) {
-              queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+              queryClient.setQueryData(
+                scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
+                account,
+              );
             }
           }
         });

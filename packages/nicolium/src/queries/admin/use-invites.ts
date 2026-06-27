@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 

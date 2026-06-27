@@ -5,8 +5,9 @@ import * as v from 'valibot';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
-import { useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
@@ -16,6 +17,7 @@ const useInteractionPolicies = () => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
   const features = useFeatures();
+  const scopeUrl = useScopeUrl();
 
   const { data, ...result } = useAppQuery({
     queryKey: queryKeys.interactionPolicies.all,
@@ -28,7 +30,7 @@ const useInteractionPolicies = () => {
     mutationFn: (policy: InteractionPolicies) => client.settings.updateInteractionPolicies(policy),
     retry: false,
     onSuccess: (policy) => {
-      queryClient.setQueryData(queryKeys.interactionPolicies.all, policy);
+      queryClient.setQueryData(scopedQueryKey(queryKeys.interactionPolicies.all, scopeUrl), policy);
     },
   });
 

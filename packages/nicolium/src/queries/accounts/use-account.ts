@@ -8,7 +8,7 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { queryKeys } from '@/queries/keys';
-import { useAppQuery } from '@/queries/query';
+import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useSettings } from '@/stores/settings';
 
 import type { NicoliumResponse } from '@/api';

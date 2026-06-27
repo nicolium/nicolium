@@ -7,6 +7,7 @@ import { useImportEntities } from '@/queries/utils/import-entities';
 import toast from '@/toast';
 
 import { queryKeys } from '../keys';
+import { scopedQueryKey } from '../query';
 
 import { restorePreviousStatus, updateStatus } from './use-status-interactions';
 
@@ -43,7 +44,9 @@ const useJoinEventMutation = (statusId: string, withToast = true) => {
     onSettled: (status) => {
       if (!status) return;
       importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.joinedEvents });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accountsLists.joinedEvents, scopeUrl),
+      });
 
       if (withToast) {
         toast.success(
@@ -86,7 +89,9 @@ const useLeaveEventMutation = (statusId: string) => {
     onSettled: (status) => {
       if (!status) return;
       importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.joinedEvents });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accountsLists.joinedEvents, scopeUrl),
+      });
     },
   });
 };

@@ -13,6 +13,7 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useChats } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import toast from '@/toast';
 

@@ -1,9 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { removePageItem } from '@/utils/queries';
 
 import { queryKeys } from '../keys';
+import { scopedQueryKey } from '../query';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 
@@ -32,13 +34,14 @@ const scheduledStatusesQueryOptions = makePaginatedResponseQueryOptions(
 
 const useCancelScheduledStatusMutation = (scheduledStatusId: string) => {
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['scheduledStatuses', scheduledStatusId],
     mutationFn: () => client.scheduledStatuses.cancelScheduledStatus(scheduledStatusId),
     onSettled: () => {
       removePageItem(
-        queryKeys.scheduledStatuses.all,
+        scopedQueryKey(queryKeys.scheduledStatuses.all, scopeUrl),
         scheduledStatusId,
         (status: { id: string }, id: string) => status.id === id,
         true,
