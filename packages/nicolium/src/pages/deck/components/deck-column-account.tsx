@@ -16,6 +16,13 @@ import { updateDeckColumn } from './deck-column-config';
 
 import type { DeckColumn } from '@/schemas/frontend-settings';
 
+const canResolveAccount = (column: DeckColumn) => {
+  if (column.type === 'timeline' && column.timeline.match(`^(list|circle|antenna):`)) return false;
+  if (column.type === 'chat' || column.type === 'drafts') return false;
+
+  return true;
+};
+
 const CurrentAccountAvatar: React.FC = () => {
   const { data: account } = useOwnAccount();
 
@@ -136,6 +143,13 @@ const DeckColumnAccountButton: React.FC<IDeckColumnAccountButton> = ({ column })
   );
 
   if (accountUrls.length < 2 || !activeAccountUrl) return null;
+
+  if (!canResolveAccount(column))
+    return (
+      <CurrentAccountProvider accountUrl={activeAccountUrl}>
+        <CurrentAccountAvatar />
+      </CurrentAccountProvider>
+    );
 
   return (
     <DropdownMenu
