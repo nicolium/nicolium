@@ -26,6 +26,7 @@ import { scopedQueryKey } from '@/queries/query';
 import { coerceObject } from '@/schemas/utils';
 import { setSentryAccount, unsetSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
+import { useInstanceStore } from '@/stores/instance';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 import { validId, parseBaseURL } from '@/utils/auth';
@@ -724,10 +725,11 @@ const useAuthStore = create<AuthStore>()(
           const baseURL = parseBaseURL(accountUrl) || BuildConfig.BACKEND_URL;
           const client = new PlApiClient(baseURL, token);
 
-          await client.instance.getInstance();
+          const instanceData = await client.instance.getInstance();
 
           try {
             const account = await client.settings.verifyCredentials();
+            useInstanceStore.getState().actions.loadInstance(instanceData, account.url);
             queryClient.setQueryData(
               scopedQueryKey(queryKeys.accounts.show(account.id), account.url),
               account,

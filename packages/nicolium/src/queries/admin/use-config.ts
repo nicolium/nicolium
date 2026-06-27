@@ -48,7 +48,7 @@ const useUpdateAdminConfig = () => {
       client.admin.config.updatePleromaConfig(params),
     retry: false,
     onSuccess: (data) => {
-      instanceActions.importAdminConfigs(data.configs);
+      instanceActions.importAdminConfigs(data.configs, scopeUrl);
       frontendConfigActions.importAdminConfigs(data.configs);
       queryClient.setQueryData(scopedQueryKey(queryKeys.admin.config, scopeUrl), data);
     },
@@ -83,7 +83,7 @@ const useUpdateFrontendConfig = () => {
         const data = await client.admin.config.updatePleromaConfig(
           getUpdateFrontendConfigParams(config),
         );
-        instanceActions.importAdminConfigs(data.configs);
+        instanceActions.importAdminConfigs(data.configs, scopeUrl);
         frontendConfigActions.importAdminConfigs(data.configs);
         queryClient.setQueryData(scopedQueryKey(queryKeys.admin.config, scopeUrl), data);
       } else {

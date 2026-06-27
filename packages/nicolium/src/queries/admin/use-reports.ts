@@ -5,7 +5,7 @@ import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { scopedQueryKey, useAppInfiniteQuery, useAppQuery } from '@/queries/query';
-import { useInstanceStore } from '@/stores/instance';
+import { useInstanceFetched } from '@/stores/instance';
 
 import { useAccount } from '../accounts/use-account';
 import { queryKeys } from '../keys';
@@ -74,8 +74,8 @@ const pendingReportsQuery = makePaginatedResponseQueryOptions(
 const usePendingReportsCount = () => {
   const client = useClient();
   const { data: account } = useOwnAccount();
-  const fetched = useInstanceStore((state) => state.fetched);
   const scopeUrl = useScopeUrl();
+  const fetched = useInstanceFetched(scopeUrl);
 
   return useAppInfiniteQuery({
     ...pendingReportsQuery(client, scopeUrl),

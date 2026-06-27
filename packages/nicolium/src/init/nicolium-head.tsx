@@ -8,7 +8,7 @@ import { useLocale, useLocaleDirection } from '@/hooks/use-locale';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeCss } from '@/hooks/use-theme-css';
 import { startSentry } from '@/sentry';
-import { useInstanceStore } from '@/stores/instance';
+import { useInstanceFetched } from '@/stores/instance';
 import { useHasModals } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
@@ -31,7 +31,7 @@ const NicoliumHead = () => {
   const theme = useTheme();
   const [wcoVisible, setWcoVisible] = React.useState(false);
   const [wcoRight, setWcoRight] = React.useState(false);
-  const instanceFetched = useInstanceStore((state) => state.fetched);
+  const instanceFetched = useInstanceFetched();
 
   const withModals = useHasModals();
 

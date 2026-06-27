@@ -1,7 +1,7 @@
 import { getFeatures, HOLLO, ICESHRIMP_NET, PLEROMA, TOKI, type Instance } from 'pl-api';
 import gte from 'semver/functions/gte';
 
-import { useInstanceStore } from '@/stores/instance';
+import { getInstance } from '@/stores/instance';
 
 /**
  * Get the OAuth scopes to use for login & signup.
@@ -46,6 +46,6 @@ const getInstanceScopes = (
 
 /** Convenience function to get scopes from instance in store. */
 const getScopes = (admin?: boolean, external?: boolean) =>
-  getInstanceScopes(useInstanceStore.getState().instance, admin, external);
+  getInstanceScopes(getInstance(), admin, external);
 
 export { getInstanceScopes, getScopes };

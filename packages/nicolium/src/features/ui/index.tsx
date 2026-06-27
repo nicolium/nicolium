@@ -26,7 +26,7 @@ import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { deckRoute, newStatusRoute } from '@/router';
 import { useAuthStore } from '@/stores/auth';
-import { useInstance, useInstanceStore } from '@/stores/instance';
+import { useInstance, useInstanceFetched } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { usePictureInPictureType } from '@/stores/picture-in-picture';
 import { useSettings } from '@/stores/settings';
@@ -65,7 +65,7 @@ const UI: React.FC = React.memo(() => {
   const isDropdownMenuOpen = useIsDropdownMenuOpen();
   const pipType = usePictureInPictureType();
   const standalone = useIsStandalone();
-  const instanceFetched = useInstanceStore((state) => state.fetched);
+  const instanceFetched = useInstanceFetched(scopeUrl);
   const { showChatWidget } = useSettings();
   const isNewStatusPage = !!useMatch({ from: newStatusRoute.id, shouldThrow: false });
 

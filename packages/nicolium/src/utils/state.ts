@@ -5,7 +5,7 @@
 
 import * as BuildConfig from '@/build-config';
 import { isPrerendered } from '@/precheck';
-import { useInstanceStore } from '@/stores/instance';
+import { useInstance, useInstanceStore } from '@/stores/instance';
 
 /**
  * Determine whether Nicolium is running in standalone mode.
@@ -22,6 +22,6 @@ const useIsStandalone = () => {
 };
 
 const useFederationRestrictionsDisclosed = () =>
-  useInstanceStore((state) => !!state.instance.pleroma.metadata.federation.mrf_policies);
+  !!useInstance().pleroma.metadata.federation.mrf_policies;
 
 export { isStandalone, useIsStandalone, useFederationRestrictionsDisclosed };

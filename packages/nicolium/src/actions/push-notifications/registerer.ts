@@ -1,7 +1,7 @@
 import { createPushSubscription } from '@/actions/push-subscriptions';
 import { pushNotificationsSettings } from '@/settings';
 import { getApp, type Me } from '@/stores/auth';
-import { useInstanceStore } from '@/stores/instance';
+import { getInstance } from '@/stores/instance';
 import { usePushNotificationsStore } from '@/stores/push-notifications';
 import { decode as decodeBase64 } from '@/utils/base64';
 
@@ -28,8 +28,7 @@ const getPushSubscription = (registration: ServiceWorkerRegistration) =>
     .getSubscription()
     .then((subscription) => ({ registration, subscription }));
 
-const getVapidKey = () =>
-  getApp()?.vapid_key ?? useInstanceStore.getState().instance.configuration.vapid.public_key;
+const getVapidKey = () => getApp()?.vapid_key ?? getInstance().configuration.vapid.public_key;
 
 const subscribe = (registration: ServiceWorkerRegistration) =>
   registration.pushManager.subscribe({

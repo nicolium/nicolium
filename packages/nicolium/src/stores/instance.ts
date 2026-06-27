@@ -3,27 +3,30 @@ import * as v from 'valibot';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import KVStore from '@/storage/kv-store';
+import { backendUrl, getScopeUrl } from '@/stores/auth';
 import ConfigDB from '@/utils/config-db';
 
 const initialInstance: Instance = v.parse(instanceSchema, {});
 
-const getHost = (instance: { domain: string }) => {
-  const domain = instance.domain;
+const getInstanceHost = (url?: string | null): string => {
+  if (!url) return '';
   try {
-    return new URL(domain).host;
+    return new URL(url).host;
   } catch {
     try {
-      return new URL(`https://${domain}`).host;
+      return new URL(`https://${url}`).host;
     } catch {
-      return null;
+      return '';
     }
   }
 };
 
-const persistInstance = (instance: { domain: string }, host: string | null = getHost(instance)) => {
-  if (host) {
-    KVStore.setItem(`instance:${host}`, instance).catch(console.error);
+const persistInstance = (instance: { domain: string }, host: string) => {
+  const key = host || getInstanceHost(instance.domain);
+  if (key) {
+    KVStore.setItem(`instance:${key}`, instance).catch(console.error);
   }
 };
 
@@ -33,37 +36,45 @@ const getConfigValue = (instanceConfig: Array<any>, key: string) => {
 };
 
 type State = {
-  instance: Instance;
-  fetched: boolean;
+  instances: Record<string, Instance>;
+  fetched: Record<string, boolean>;
   /** Whether /api/v1/instance 404'd (and we should display the external auth form). */
   instanceFetchFailed: boolean;
   actions: {
-    loadInstance: (instance: Instance) => void;
+    loadInstance: (instance: Instance, scopeUrl?: string) => void;
     importPreload: (data: Record<string, any>) => void;
-    importAdminConfigs: (configs: PleromaConfig['configs']) => void;
-    instanceFetchFailed: (error: unknown) => void;
+    importAdminConfigs: (configs: PleromaConfig['configs'], scopeUrl?: string) => void;
+    instanceFetchFailed: (error: unknown, scopeUrl?: string) => void;
     setInstanceFetchFailed: (failed: boolean) => void;
   };
 };
 
 const useInstanceStore = create<State>()(
   mutative((set) => ({
-    instance: initialInstance,
-    fetched: false,
+    instances: {},
+    fetched: {},
     instanceFetchFailed: false,
     actions: {
-      loadInstance: (instance: Instance) => {
-        persistInstance(instance);
-        set({ instance, fetched: true });
+      loadInstance: (instance: Instance, scopeUrl: string = getScopeUrl()) => {
+        const host = getInstanceHost(scopeUrl);
+        persistInstance(instance, host);
+        set((state) => {
+          state.instances[host] = instance;
+          state.fetched[host] = true;
+        });
       },
       importPreload: (data: Record<string, any>) => {
         const instance = data['/api/v1/instance'];
         const parsed = v.safeParse(instanceSchema, instance);
         if (parsed.success) {
-          set({ instance: parsed.output, fetched: true });
+          const host = getInstanceHost(backendUrl);
+          set((state) => {
+            state.instances[host] = parsed.output;
+            state.fetched[host] = true;
+          });
         }
       },
-      importAdminConfigs: (configs: PleromaConfig['configs']) => {
+      importAdminConfigs: (configs: PleromaConfig['configs'], scopeUrl: string = getScopeUrl()) => {
         const config = ConfigDB.find(configs, ':pleroma', ':instance');
         if (!config) return;
 
@@ -75,19 +86,30 @@ const useInstanceStore = create<State>()(
           | boolean
           | undefined;
 
+        const host = getInstanceHost(scopeUrl);
+
         set((state) => {
-          state.instance.registrations = {
-            ...state.instance.registrations,
-            enabled: registrationsOpen ?? state.instance.registrations.enabled,
-            approval_required: approvalRequired ?? state.instance.registrations.approval_required,
+          const instance = state.instances[host] ?? initialInstance;
+          state.instances[host] = {
+            ...instance,
+            registrations: {
+              ...instance.registrations,
+              enabled: registrationsOpen ?? instance.registrations.enabled,
+              approval_required: approvalRequired ?? instance.registrations.approval_required,
+            },
           };
         });
       },
-      instanceFetchFailed: (error: unknown) => {
+      instanceFetchFailed: (error: unknown, scopeUrl: string = getScopeUrl()) => {
         if ((error as any)?.response?.status === 401) {
+          const host = getInstanceHost(scopeUrl);
           set((state) => {
-            state.instance.title = state.instance.title || '██████';
-            state.instance.description = state.instance.description || '████████████';
+            const instance = state.instances[host] ?? initialInstance;
+            state.instances[host] = {
+              ...instance,
+              title: instance.title || '██████',
+              description: instance.description || '████████████',
+            };
           });
         }
       },
@@ -98,7 +120,31 @@ const useInstanceStore = create<State>()(
   })),
 );
 
-const useInstance = () => useInstanceStore((state) => state.instance);
+const useInstance = (scopeUrl?: string): Instance => {
+  const currentScope = useScopeUrl();
+  const host = getInstanceHost(scopeUrl ?? currentScope);
+  return useInstanceStore((state) => state.instances[host] ?? initialInstance);
+};
+
+const useInstanceFetched = (scopeUrl?: string): boolean => {
+  const currentScope = useScopeUrl();
+  const host = getInstanceHost(scopeUrl ?? currentScope);
+  return useInstanceStore((state) => !!state.fetched[host]);
+};
+
+const getInstance = (scopeUrl: string = getScopeUrl()): Instance => {
+  const host = getInstanceHost(scopeUrl);
+  return useInstanceStore.getState().instances[host] ?? initialInstance;
+};
+
 const useInstanceActions = () => useInstanceStore((state) => state.actions);
 
-export { useInstanceStore, useInstance, useInstanceActions };
+export {
+  useInstanceStore,
+  useInstance,
+  useInstanceFetched,
+  useInstanceActions,
+  getInstance,
+  getInstanceHost,
+  initialInstance,
+};

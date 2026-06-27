@@ -1,7 +1,7 @@
 import { defineMessages, type IntlShape } from 'react-intl';
 
 import { isLoggedIn } from '@/stores/auth';
-import { useInstanceStore } from '@/stores/instance';
+import { getInstance } from '@/stores/instance';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 import { formatBytes, getVideoDuration } from '@/utils/media';
@@ -50,7 +50,7 @@ const uploadFile = async (
 
   const {
     configuration: { media_attachments },
-  } = useInstanceStore.getState().instance;
+  } = getInstance();
   const maxImageSize = media_attachments.image_size_limit;
   const maxVideoSize = media_attachments.video_size_limit;
   const maxVideoDuration = media_attachments.video_duration_limit;
