@@ -372,7 +372,11 @@ const Account = ({
           />
         ) : (
           <LinkEl
-            className={clsx('account-card__avatar', emoji && 'account-card__avatar--emoji')}
+            className={clsx(
+              'account-card__avatar',
+              emoji && 'account-card__avatar--emoji',
+              loading && 'placeholder-avatar',
+            )}
             {...linkProps}
           >
             <Avatar
@@ -389,7 +393,12 @@ const Account = ({
       <div className='account-card__content' style={style}>
         <LinkEl {...linkProps}>
           <div className='account-card__display-name'>
-            <p className='account-card__display-name__text'>
+            <p
+              className={clsx(
+                'account-card__display-name__text',
+                loading && 'placeholder-display-name',
+              )}
+            >
               <Emojify text={account.display_name} emojis={account.emojis} />
             </p>
 
@@ -406,7 +415,9 @@ const Account = ({
 
         <div className='account-card__meta__container'>
           <div className='account-card__meta'>
-            <p className='account-card__handle'>@{username}</p>
+            <p className={clsx('account-card__handle', loading && 'placeholder-display-name')}>
+              @{username}
+            </p>
 
             {withLocked && !timestamp && account.locked && (
               <>
