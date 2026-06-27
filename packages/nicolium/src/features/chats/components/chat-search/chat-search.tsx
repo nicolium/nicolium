@@ -9,6 +9,7 @@ import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useDebounce } from '@/hooks/use-debounce';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useChats } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -34,6 +35,7 @@ interface IChatSearch {
 const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const intl = useIntl();
+  const scopeUrl = useScopeUrl();
 
   const navigate = useNavigate();
 
@@ -62,7 +64,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
         changeScreen(ChatWidgetScreens.CHAT, response.id);
       }
 
-      queryClient.invalidateQueries({ queryKey: queryKeys.chats.search });
+      queryClient.invalidateQueries({ queryKey: scopedQueryKey(queryKeys.chats.search, scopeUrl) });
     },
   });
 

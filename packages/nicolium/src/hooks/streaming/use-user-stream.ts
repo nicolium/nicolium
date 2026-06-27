@@ -130,7 +130,9 @@ const useUserStream = () => {
         updateConversations(event.payload, scopeUrl);
         break;
       case 'filters_changed':
-        queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
+        queryClient.invalidateQueries({
+          queryKey: scopedQueryKey(queryKeys.filters.all, scopeUrl),
+        });
         break;
       case 'chat_update':
         {
@@ -139,14 +141,14 @@ const useUserStream = () => {
 
           // Don't update own messages from streaming
           if (!messageOwned) {
-            updateChatListItem(chat);
+            updateChatListItem(chat, scopeUrl);
 
             if (settings.chats.sound) {
               play(soundCache.chat);
             }
 
             // Increment unread counter
-            statContext?.setUnreadChatsCount(getUnreadChatsCount());
+            statContext?.setUnreadChatsCount(getUnreadChatsCount(scopeUrl));
           }
         }
         break;

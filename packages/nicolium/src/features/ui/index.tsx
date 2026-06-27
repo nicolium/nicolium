@@ -104,7 +104,7 @@ const UI: React.FC = React.memo(() => {
     prefetchCustomEmojis(client);
 
     if (account.locked) {
-      requestIdleCallback(() => prefetchFollowRequests(client), { timeout: 2000 });
+      requestIdleCallback(() => prefetchFollowRequests(client, scopeUrl), { timeout: 2000 });
     }
 
     if (features.scheduledStatuses) {

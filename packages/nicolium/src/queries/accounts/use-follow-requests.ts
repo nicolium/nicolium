@@ -35,7 +35,10 @@ const removeFollowRequest = (accountId: string, scopeUrl: string) =>
 const makeUseFollowRequests = <T>(select: (data: InfiniteData<PaginatedResponse<string>>) => T) =>
   makePaginatedResponseQuery(
     queryKeys.accountsLists.followRequests,
-    (client) => client.myAccount.getFollowRequests().then(minifyAccountList),
+    (client, _, scopeUrl) =>
+      client.myAccount
+        .getFollowRequests()
+        .then((accounts) => minifyAccountList(accounts, scopeUrl)),
     select,
     'isLoggedIn',
   );
@@ -48,7 +51,10 @@ const useFollowRequestsCount = makeUseFollowRequests(
 
 const useOutgoingFollowRequests = makePaginatedResponseQuery(
   queryKeys.accountsLists.outgoingFollowRequests,
-  (client) => client.myAccount.getOutgoingFollowRequests().then(minifyAccountList),
+  (client, _, scopeUrl) =>
+    client.myAccount
+      .getOutgoingFollowRequests()
+      .then((accounts) => minifyAccountList(accounts, scopeUrl)),
 );
 
 const useAcceptFollowRequestMutation = (accountId: string) => {
@@ -87,11 +93,14 @@ const useRejectFollowRequestMutation = (accountId: string) => {
   });
 };
 
-const prefetchFollowRequests = (client: PlApiClient) =>
+const prefetchFollowRequests = (client: PlApiClient, scopeUrl: string) =>
   queryClient.prefetchInfiniteQuery({
-    queryKey: queryKeys.accountsLists.followRequests,
+    queryKey: scopedQueryKey(queryKeys.accountsLists.followRequests, scopeUrl),
     queryFn: ({ pageParam }) =>
-      pageParam.next?.() ?? client.myAccount.getFollowRequests().then(minifyAccountList),
+      pageParam.next?.() ??
+      client.myAccount
+        .getFollowRequests()
+        .then((accounts) => minifyAccountList(accounts, scopeUrl)),
     initialPageParam: { next: null as (() => Promise<PaginatedResponse<string>>) | null },
   });
 

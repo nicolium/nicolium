@@ -11,6 +11,7 @@ import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import Card from '@/components/ui/card';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
 import { useAppQuery } from '@/queries/query';
 import { usePendingStatus } from '@/stores/pending-statuses';
@@ -49,9 +50,12 @@ const PendingStatus: React.FC<IPendingStatus> = ({
 }) => {
   const pendingStatus = usePendingStatus(idempotencyKey);
   const { data: ownAccount } = useOwnAccount();
+  const scopeUrl = useScopeUrl();
 
   const status =
-    pendingStatus && ownAccount ? buildStatus(ownAccount, pendingStatus, idempotencyKey) : null;
+    pendingStatus && ownAccount
+      ? buildStatus(ownAccount, pendingStatus, idempotencyKey, scopeUrl)
+      : null;
 
   const { data: poll } = useAppQuery<Poll>({
     queryKey: queryKeys.statuses.polls.show(status?.poll_id ?? ''),

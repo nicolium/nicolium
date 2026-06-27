@@ -21,9 +21,11 @@ import IconButton from '@/components/ui/icon-button';
 import Emojify from '@/features/emoji/emojify';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useChats } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
@@ -81,6 +83,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
   const { data: ownAccount } = useOwnAccount();
   const { openModal } = useModalsActions();
   const settings = useSettings();
+  const scopeUrl = useScopeUrl();
 
   const { software } = features.version;
 
@@ -95,7 +98,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
     onSuccess: (response) => {
       navigate({ to: '/chats/$chatId', params: { chatId: response.id } });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.chats.search,
+        queryKey: scopedQueryKey(queryKeys.chats.search, scopeUrl),
       });
     },
   });

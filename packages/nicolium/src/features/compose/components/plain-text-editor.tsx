@@ -6,6 +6,7 @@ import AutosuggestInput from '@/components/autosuggest-input';
 import Textarea from '@/components/ui/textarea';
 import { isNativeEmoji } from '@/features/emoji';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
@@ -37,7 +38,7 @@ interface IPlainTextEditor {
   placeholder?: string;
 }
 
-const getSuggestionCompletion = (suggestion: AutoSuggestion): string => {
+const getSuggestionCompletion = (suggestion: AutoSuggestion, scopeUrl: string): string => {
   if (typeof suggestion === 'object' && 'id' in suggestion) {
     return isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
   }
@@ -47,7 +48,7 @@ const getSuggestionCompletion = (suggestion: AutoSuggestion): string => {
   }
 
   if (typeof suggestion === 'string') {
-    return selectAccount(suggestion)?.acct ?? suggestion;
+    return selectAccount(suggestion, scopeUrl)?.acct ?? suggestion;
   }
 
   return '';
@@ -75,6 +76,7 @@ const PlainTextEditor = React.forwardRef<PlainTextEditorHandle, IPlainTextEditor
 
     const [token, setToken] = useState('');
     const suggestions = useComposeSuggestions(token);
+    const scopeUrl = useScopeUrl();
 
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -106,7 +108,7 @@ const PlainTextEditor = React.forwardRef<PlainTextEditorHandle, IPlainTextEditor
     ) => {
       if (!token) return;
 
-      const completion = getSuggestionCompletion(suggestion);
+      const completion = getSuggestionCompletion(suggestion, scopeUrl);
       setText(
         `${value.slice(0, tokenStart)}${completion} ${value.slice(tokenStart + token.length)}`,
       );

@@ -108,7 +108,9 @@ const createStatus = (
           { idempotencyKey, withParents: true },
         );
       } else {
-        queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
+        queryClient.invalidateQueries({
+          queryKey: scopedQueryKey(queryKeys.scheduledStatuses.all, scopeUrl),
+        });
       }
 
       useContextStore
