@@ -226,8 +226,9 @@ const newPoll = (params: Partial<ComposePoll> = {}): ComposePoll => ({
 const statusToTextMentions = (
   status: Pick<Status, 'account_id' | 'mentions'>,
   account: Pick<Account, 'acct'>,
+  scopeUrl: string,
 ) => {
-  const statusAccount = selectAccount(status.account_id);
+  const statusAccount = selectAccount(status.account_id, scopeUrl);
   const author = statusAccount?.acct;
   const mentions = status.mentions.map((m) => m.acct);
 
@@ -239,9 +240,10 @@ const statusToTextMentions = (
 const statusToMentionsArray = (
   status: Pick<Status, 'account_id' | 'mentions'>,
   account: Pick<Account, 'acct'>,
-  rebloggedBy?: Pick<Account, 'acct'>,
+  rebloggedBy: Pick<Account, 'acct'> | undefined,
+  scopeUrl: string,
 ) => {
-  const statusAccount = selectAccount(status.account_id);
+  const statusAccount = selectAccount(status.account_id, scopeUrl);
   const author = statusAccount?.acct;
   const mentions = status.mentions.map((m) => m.acct);
 
