@@ -119,6 +119,7 @@ type IAccount = {
   disabled?: boolean;
   muteExpiresAt?: string | null;
   blockExpiresAt?: string | null;
+  loading?: boolean;
 } & (LinkOptions | {});
 
 const Account = ({
@@ -148,6 +149,7 @@ const Account = ({
   disabled,
   muteExpiresAt,
   blockExpiresAt,
+  loading,
   ...params
 }: IAccount) => {
   const overflowRef = useRef<HTMLDivElement>(null);
@@ -285,7 +287,13 @@ const Account = ({
                 username={account.username}
               />
             ) : (
-              <div className={clsx('account-card__avatar', emoji && 'account-card__avatar--emoji')}>
+              <div
+                className={clsx(
+                  'account-card__avatar',
+                  emoji && 'account-card__avatar--emoji',
+                  loading && 'placeholder-avatar',
+                )}
+              >
                 <Avatar
                   src={account.avatar}
                   size={avatarSize}
@@ -299,7 +307,12 @@ const Account = ({
 
             <div className='account-card__content'>
               <div className='account-card__display-name'>
-                <p className='account-card__display-name__text'>
+                <p
+                  className={clsx(
+                    'account-card__display-name__text',
+                    loading && 'placeholder-display-name',
+                  )}
+                >
                   <Emojify text={account.display_name} emojis={account.emojis} />
                 </p>
 
@@ -314,7 +327,9 @@ const Account = ({
               </div>
 
               <div className='account-card__meta'>
-                <p className='account-card__handle'>@{username}</p>
+                <p className={clsx('account-card__handle', loading && 'placeholder-display-name')}>
+                  @{username}
+                </p>
 
                 {withLocked && !timestamp && account.locked && (
                   <>
