@@ -321,6 +321,8 @@
       opacity: 0;
       background: linear-gradient(to right, var(--color-gray-50) 0%, transparent 100%);
 
+      transition: opacity 500ms var(--ease-default);
+
       .dark & {
         background: linear-gradient(to right, var(--color-gray-800) 0%, transparent 100%);
       }
