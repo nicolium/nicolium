@@ -44,6 +44,7 @@ import ChatList from '@/features/chats/components/chat-list';
 import Thread from '@/features/status/components/thread';
 import { ProfileInfoPanel } from '@/features/ui/util/async-components';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { AccountFilter } from '@/pages/search/components/account-filter';
 import HashtagFollowToggle from '@/pages/timelines/components/hashtag-follow-toggle';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -76,6 +77,7 @@ const RootRoute: React.FC = () => {
   const columns = useSettings().deck.columns;
   const [content, setContent] = useState<HTMLElement | null>(null);
   const [canGoBack, setCanGoBack] = useState(() => router.history.canGoBack());
+  const scopeUrl = useScopeUrl();
 
   const { title, accountId, hashtag, chatId } = useColumnRouteTitle();
 
@@ -93,6 +95,7 @@ const RootRoute: React.FC = () => {
       {
         id: crypto.randomUUID(),
         columnWidth: 'md',
+        accountUrl: scopeUrl,
         ...(hashtag
           ? { type: 'hashtag', hashtag }
           : chatId
