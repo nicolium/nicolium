@@ -188,6 +188,7 @@ const baseDeckColumnSchema = v.object({
   id: v.fallback(v.string(), crypto.randomUUID()),
   columnWidth: v.fallback(v.picklist(['xs', 'sm', 'md', 'lg', 'xl']), 'md'),
   fillAvailableWidth: v.fallback(v.boolean(), false),
+  accountUrl: v.fallback(v.optional(v.string()), undefined),
 });
 
 const timelineDeckColumnSchema = v.object({

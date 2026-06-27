@@ -70,7 +70,7 @@ const ModalRoot: React.FC = () => {
   const {
     modalType: type,
     modalProps: props,
-    accountUrl,
+    scopeUrl,
   } = modals.at(-1) ?? {
     modalProps: {},
     modalType: null,
@@ -102,8 +102,8 @@ const ModalRoot: React.FC = () => {
     </Suspense>
   );
 
-  if (children && accountUrl) {
-    children = <CurrentAccountProvider accountUrl={accountUrl}>{children}</CurrentAccountProvider>;
+  if (children && scopeUrl) {
+    children = <CurrentAccountProvider accountUrl={scopeUrl}>{children}</CurrentAccountProvider>;
   }
 
   return (

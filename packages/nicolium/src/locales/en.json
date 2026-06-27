@@ -662,6 +662,8 @@
   "column.crypto_donate": "Donate cryptocurrency",
   "column.deck": "Deck",
   "column.deck.account.show_pinned": "Show pinned posts",
+  "column.deck.account_switcher.label": "Show as account",
+  "column.deck.account_switcher.title": "Choose which account this column is shown as",
   "column.deck.add": "Add column",
   "column.deck.add_column": "Add column to deck",
   "column.deck.error": "Failed to load column",

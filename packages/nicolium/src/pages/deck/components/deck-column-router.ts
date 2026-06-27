@@ -69,7 +69,10 @@ const getInitialUrl = (column: DeckColumn) => {
   }
 };
 
-const columnSignature = (column: DeckColumn): string => {
+const columnSignature = (column: DeckColumn): string =>
+  `${column.accountUrl ?? 'self'}|${baseColumnSignature(column)}`;
+
+const baseColumnSignature = (column: DeckColumn): string => {
   switch (column.type) {
     case 'timeline':
       return `timeline:${column.timeline}`;

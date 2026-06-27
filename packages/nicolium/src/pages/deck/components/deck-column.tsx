@@ -12,12 +12,15 @@ import { useIntl } from 'react-intl';
 
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import { CardHeader, CardTitle } from '@/components/ui/card';
+import { CurrentAccountProvider } from '@/contexts/current-account-context';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useFeatures } from '@/hooks/use-features';
+import { useAuthStore } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 
 import { deckMessages as messages } from '../utils/messages';
 
+import { DeckColumnAccountButton } from './deck-column-account';
 import { DeckColumnIdContext, updateDeckColumn, useColumnTitle } from './deck-column-config';
 import { getDeckColumnRouter } from './deck-column-router';
 
@@ -41,7 +44,7 @@ interface IDeckColumn {
   onChangeFill: (id: string, value: boolean) => void;
 }
 
-const DeckColumn: React.FC<IDeckColumn> = ({
+const DeckColumnInner: React.FC<IDeckColumn> = ({
   column,
   index,
   columns,
@@ -242,7 +245,10 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       data-column-id={column.id}
     >
       <CardHeader className='deck__column__header'>
-        <CardTitle title={title} />
+        <div className='deck__column__header__title'>
+          <DeckColumnAccountButton column={column} />
+          <CardTitle title={title} />
+        </div>
         <div className='deck__column__actions'>
           <DropdownMenu items={items} src={iconDotsThreeVertical} />
         </div>
@@ -252,6 +258,28 @@ const DeckColumn: React.FC<IDeckColumn> = ({
       </DeckColumnIdContext.Provider>
     </Hotkeys>
   );
+};
+
+/**
+ * Renders a deck column, optionally scoped to a specific logged-in account.
+ * When the column is pinned to a logged-in account, its whole subtree (title,
+ * features, queries and the embedded router) runs as that account.
+ */
+const DeckColumn: React.FC<IDeckColumn> = (props) => {
+  const { accountUrl } = props.column;
+  const isKnownAccount = useAuthStore((state) =>
+    accountUrl ? !!state.users[accountUrl]?.id : false,
+  );
+
+  if (accountUrl && isKnownAccount) {
+    return (
+      <CurrentAccountProvider accountUrl={accountUrl}>
+        <DeckColumnInner {...props} />
+      </CurrentAccountProvider>
+    );
+  }
+
+  return <DeckColumnInner {...props} />;
 };
 
 export { DeckColumn };

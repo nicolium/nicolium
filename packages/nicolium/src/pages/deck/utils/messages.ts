@@ -42,6 +42,11 @@ const messages = defineMessages({
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
   chats: { id: 'column.chats', defaultMessage: 'Chats' },
   chatWith: { id: 'column.chat.with', defaultMessage: 'Chat with @{acct}' },
+  showAsAccount: { id: 'column.deck.account_switcher.label', defaultMessage: 'Show as account' },
+  showAsAccountTitle: {
+    id: 'column.deck.account_switcher.title',
+    defaultMessage: 'Choose which account this column is shown as',
+  },
 });
 
 export { messages as deckMessages };

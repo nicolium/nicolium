@@ -84,14 +84,54 @@
       .black & {
         background: #000b;
       }
+
+      &__title {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
     }
 
     &__actions {
       display: flex;
       gap: 0.5rem;
+      align-items: center;
 
       .icon-button {
         padding: 0;
+      }
+    }
+
+    &__account-button {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+
+      .avatar {
+        flex: none;
+      }
+    }
+
+    &__account-option {
+      display: block;
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+
+      &:hover,
+      &:focus-visible {
+        background-color: var(--color-gray-100);
+
+        .dark & {
+          background-color: variables.opaque(--color-gray-800, 0.5);
+        }
+      }
+
+      &--active {
+        background-color: var(--color-gray-100);
+
+        .dark & {
+          background-color: variables.opaque(--color-gray-800, 0.5);
+        }
       }
     }
 
