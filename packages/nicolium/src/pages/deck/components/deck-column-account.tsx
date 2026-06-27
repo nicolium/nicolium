@@ -23,6 +23,7 @@ const CurrentAccountAvatar: React.FC = () => {
       src={account?.avatar_static ?? account?.avatar ?? ''}
       size={28}
       username={account?.acct}
+      isCat={account?.is_cat}
     />
   );
 };
