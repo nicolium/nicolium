@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
+import { useScopeUrl } from '@/hooks/use-scope-url';
+
 import type { ICryptoAddress } from '@/features/crypto-donate/components/crypto-address';
 import type { AltTextModalProps } from '@/modals/alt-text-modal';
 import type { AntennaEditorModalProps } from '@/modals/antenna-editor-modal';
@@ -222,8 +224,22 @@ const useModalsStore = create<State>()(
   ),
 );
 
-const useModalsActions = () => useModalsStore((state) => state.actions);
 const useModals = () => useModalsStore((state) => state.modals);
 const useHasModals = () => useModals().length > 0;
+
+const useModalsActions = () => {
+  const scopeUrl = useScopeUrl();
+  const actions = useModalsStore((state) => state.actions);
+
+  const openModal: (...args: OpenModalProps) => void = (...args) => {
+    const [type, props, element] = args;
+    actions.openModal(...([type, props, element, scopeUrl] as OpenModalProps));
+  };
+
+  return {
+    openModal,
+    closeModal: actions.closeModal,
+  };
+};
 
 export { useModalsStore, useModalsActions, useModals, useHasModals };
