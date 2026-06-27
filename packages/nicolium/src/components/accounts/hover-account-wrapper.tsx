@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useContext, useRef } from 'react';
 
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { DeckColumnIdContext } from '@/pages/deck/components/deck-column-config';
 import { useAccountHoverCardActions } from '@/stores/account-hover-card';
 import { isMobile } from '@/utils/is-mobile';
@@ -12,12 +13,14 @@ const showAccountHoverCard = debounce(
       ref: React.RefObject<HTMLDivElement | null>,
       accountId: string,
       columnId?: string,
+      scopeUrl?: string,
     ) => void,
     ref: React.RefObject<HTMLDivElement | null>,
     accountId: string,
     columnId?: string,
+    scopeUrl?: string,
   ) => {
-    openAccountHoverCard(ref, accountId, columnId);
+    openAccountHoverCard(ref, accountId, columnId, scopeUrl);
   },
   300,
 );
@@ -36,12 +39,13 @@ const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(
 
     const ref = useRef<HTMLDivElement>(null);
     const columnId = useContext(DeckColumnIdContext) || undefined;
+    const scopeUrl = useScopeUrl();
 
     const handleMouseEnter = () => {
       if (!accountId) return;
 
       if (!isMobile(window.innerWidth)) {
-        showAccountHoverCard(openAccountHoverCard, ref, accountId, columnId);
+        showAccountHoverCard(openAccountHoverCard, ref, accountId, columnId, scopeUrl);
       }
     };
 

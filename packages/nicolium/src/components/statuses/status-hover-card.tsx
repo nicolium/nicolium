@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 
 import { showStatusHoverCard } from '@/components/statuses/hover-status-wrapper';
 import StatusContainer from '@/components/statuses/status-container';
+import { CurrentAccountProvider } from '@/contexts/current-account-context';
 import { useTransitionStyles } from '@/hooks/use-transition-styles';
 import { useStatus } from '@/queries/statuses/use-status';
 import { useStatusHoverCardActions, useStatusHoverCardStore } from '@/stores/status-hover-card';
@@ -144,4 +145,19 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   );
 };
 
-export { StatusHoverCard as default };
+/** provides scopeUrl to StatusHoverCard */
+const ScopedStatusHoverCard: React.FC<IStatusHoverCard> = (props) => {
+  const scopeUrl = useStatusHoverCardStore((state) => state.scopeUrl);
+
+  if (scopeUrl) {
+    return (
+      <CurrentAccountProvider accountUrl={scopeUrl}>
+        <StatusHoverCard {...props} />
+      </CurrentAccountProvider>
+    );
+  }
+
+  return <StatusHoverCard {...props} />;
+};
+
+export { ScopedStatusHoverCard as default };

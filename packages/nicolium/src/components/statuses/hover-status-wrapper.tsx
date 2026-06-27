@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useContext, useRef } from 'react';
 
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { DeckColumnIdContext } from '@/pages/deck/components/deck-column-config';
 import { useStatusHoverCardActions } from '@/stores/status-hover-card';
 import { isMobile, userTouching } from '@/utils/is-mobile';
@@ -12,12 +13,14 @@ const showStatusHoverCard = debounce(
       ref: React.RefObject<HTMLDivElement | null>,
       statusId: string,
       columnId?: string,
+      scopeUrl?: string,
     ) => void,
     ref: React.RefObject<HTMLDivElement | null>,
     statusId: string,
     columnId?: string,
+    scopeUrl?: string,
   ) => {
-    openStatusHoverCard(ref, statusId, columnId);
+    openStatusHoverCard(ref, statusId, columnId, scopeUrl);
   },
   300,
 );
@@ -40,11 +43,12 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
 
   const ref = useRef<HTMLDivElement>(null);
   const columnId = useContext(DeckColumnIdContext) || undefined;
+  const scopeUrl = useScopeUrl();
   const Elem: keyof React.JSX.IntrinsicElements = inline ? 'span' : 'div';
 
   const handleMouseEnter = () => {
     if (!isMobile(window.innerWidth)) {
-      showStatusHoverCard(openStatusHoverCard, ref, statusId, columnId);
+      showStatusHoverCard(openStatusHoverCard, ref, statusId, columnId, scopeUrl);
     }
   };
 
@@ -60,7 +64,12 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
       event.preventDefault();
       event.stopPropagation();
 
-      openStatusHoverCard(ref as React.RefObject<HTMLDivElement | null>, statusId, columnId);
+      openStatusHoverCard(
+        ref as React.RefObject<HTMLDivElement | null>,
+        statusId,
+        columnId,
+        scopeUrl,
+      );
       return;
     }
 

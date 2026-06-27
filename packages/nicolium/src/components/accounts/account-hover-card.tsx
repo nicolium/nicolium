@@ -10,7 +10,7 @@ import ActionButton from '@/components/accounts/action-button';
 import { isTimezoneLabel } from '@/components/accounts/profile-field';
 import Badge from '@/components/badge';
 import Icon from '@/components/ui/icon';
-import { useCurrentAccount } from '@/contexts/current-account-context';
+import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-account-context';
 import { UserPanel } from '@/features/ui/util/async-components';
 import { useTransitionStyles } from '@/hooks/use-transition-styles';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
@@ -216,4 +216,19 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   );
 };
 
-export { AccountHoverCard as default };
+/** provides scopeUrl to AccountHoverCard */
+const ScopedAccountHoverCard: React.FC<IAccountHoverCard> = (props) => {
+  const scopeUrl = useAccountHoverCardStore((state) => state.scopeUrl);
+
+  if (scopeUrl) {
+    return (
+      <CurrentAccountProvider accountUrl={scopeUrl}>
+        <AccountHoverCard {...props} />
+      </CurrentAccountProvider>
+    );
+  }
+
+  return <AccountHoverCard {...props} />;
+};
+
+export { ScopedAccountHoverCard as default };
