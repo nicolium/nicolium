@@ -255,7 +255,8 @@
       }
     }
 
-    &--error .deck__column__content {
+    &--error .deck__column__content,
+    &--not-found .deck__column__content {
       @include mixins.text($theme: muted, $align: center);
 
       display: flex;

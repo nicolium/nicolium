@@ -21,7 +21,13 @@ import { useInstance } from '@/stores/instance';
 import { deckMessages as messages } from '../utils/messages';
 
 import { DeckColumnAccountButton } from './deck-column-account';
-import { DeckColumnIdContext, updateDeckColumn, useColumnTitle } from './deck-column-config';
+import {
+  DeckColumnIdContext,
+  updateDeckColumn,
+  useColumnNotFound,
+  useColumnTitle,
+} from './deck-column-config';
+import { DeckColumnNotFound } from './deck-column-not-found';
 import { getDeckColumnRouter } from './deck-column-router';
 
 import type { DeckColumn } from '@/schemas/frontend-settings';
@@ -58,6 +64,7 @@ const DeckColumnInner: React.FC<IDeckColumn> = ({
   const instance = useInstance();
   const features = useFeatures();
   const title = useColumnTitle(column);
+  const notFoundResource = useColumnNotFound(column);
   const router = getDeckColumnRouter(column);
   const columnRef = useRef<HTMLDivElement>(null);
 
@@ -239,6 +246,7 @@ const DeckColumnInner: React.FC<IDeckColumn> = ({
       className={clsx('deck__column', `deck__column--${column.columnWidth}`, {
         'deck__column--highlight': highlight,
         'deck__column--fill': column.fillAvailableWidth,
+        'deck__column--not-found': !!notFoundResource,
       })}
       tabIndex={-1}
       data-index={index}
@@ -253,9 +261,13 @@ const DeckColumnInner: React.FC<IDeckColumn> = ({
           <DropdownMenu items={items} src={iconDotsThreeVertical} />
         </div>
       </CardHeader>
-      <DeckColumnIdContext.Provider value={column.id}>
-        <RouterProvider router={router} context={context} />
-      </DeckColumnIdContext.Provider>
+      {notFoundResource ? (
+        <DeckColumnNotFound resource={notFoundResource} onRemove={() => onRemove(column.id)} />
+      ) : (
+        <DeckColumnIdContext.Provider value={column.id}>
+          <RouterProvider router={router} context={context} />
+        </DeckColumnIdContext.Provider>
+      )}
     </Hotkeys>
   );
 };

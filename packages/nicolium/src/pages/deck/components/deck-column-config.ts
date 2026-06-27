@@ -7,6 +7,9 @@ import { useTimelineHeading, type ITimelinePicker } from '@/components/timeline-
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
+import { useAntenna } from '@/queries/accounts/use-antennas';
+import { useCircle } from '@/queries/accounts/use-circles';
+import { useList } from '@/queries/accounts/use-lists';
 import { useChat } from '@/queries/chats';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
 import { useSettings, useSettingsStore } from '@/stores/settings';
@@ -115,6 +118,39 @@ const useColumnTitle = (column: DeckColumn): string => {
   return intl.formatMessage(messages[column.type]);
 };
 
+type DeckColumnResource = 'list' | 'circle' | 'antenna' | 'account' | 'chat' | 'bookmarks';
+
+const getResponseStatus = (error: unknown) =>
+  (error as { response?: { status?: number } } | null)?.response?.status;
+
+const useColumnNotFound = (column: DeckColumn): DeckColumnResource | null => {
+  const [timelineType, timelineValue] =
+    column.type === 'timeline' ? column.timeline.split(':') : [];
+
+  const list = useList(timelineType === 'list' ? timelineValue : undefined);
+  const circle = useCircle(timelineType === 'circle' ? timelineValue : undefined);
+  const antenna = useAntenna(timelineType === 'antenna' ? timelineValue : undefined);
+  const account = useAccount(
+    column.type === 'account' && column.accountId && column.accountId !== 'self'
+      ? column.accountId
+      : undefined,
+  );
+  const chat = useChat(column.type === 'chat' ? column.chatId : undefined);
+  const bookmarkFolder = useBookmarkFolder(
+    column.type === 'bookmarks' && column.folderId !== 'all' ? column.folderId : undefined,
+  );
+
+  if (timelineType === 'list') return list.isSuccess && !list.data ? 'list' : null;
+  if (timelineType === 'circle') return circle.isSuccess && !circle.data ? 'circle' : null;
+  if (timelineType === 'antenna') return antenna.isSuccess && !antenna.data ? 'antenna' : null;
+  if (column.type === 'bookmarks' && column.folderId !== 'all')
+    return bookmarkFolder.isSuccess && !bookmarkFolder.data ? 'bookmarks' : null;
+  if (column.type === 'account') return getResponseStatus(account.error) === 404 ? 'account' : null;
+  if (column.type === 'chat') return getResponseStatus(chat.error) === 404 ? 'chat' : null;
+
+  return null;
+};
+
 interface RouteParams {
   username?: string;
   accountId?: string;
@@ -219,5 +255,8 @@ export {
   updateDeckColumn,
   useDeckColumnConfig,
   useColumnTitle,
+  useColumnNotFound,
   useColumnRouteTitle,
 };
+
+export type { DeckColumnResource };
