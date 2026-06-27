@@ -332,7 +332,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     if (status.rss_feed) return;
 
     e?.preventDefault();
-    mentionCompose(actualStatus.account);
+    mentionCompose(actualStatus.account, scopeUrl);
   };
 
   const handleHotkeyOpen = () => {

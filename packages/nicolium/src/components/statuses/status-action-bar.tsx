@@ -1363,11 +1363,11 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleMentionClick: React.EventHandler<React.MouseEvent> = () => {
-      mentionCompose(status.account);
+      mentionCompose(status.account, scopeUrl);
     };
 
     const handleDirectClick: React.EventHandler<React.MouseEvent> = () => {
-      directCompose(status.account);
+      directCompose(status.account, scopeUrl);
     };
 
     const handleChatClick: React.EventHandler<React.MouseEvent> = () => {

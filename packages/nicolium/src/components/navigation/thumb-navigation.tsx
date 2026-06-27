@@ -91,7 +91,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
       const group = queryClient.getQueryData(
         scopedQueryKey(queryKeys.groups.show(match.params.groupId), scopeUrl),
       );
-      if (group) groupComposeModal(group);
+      if (group) groupComposeModal(group, scopeUrl);
     } else {
       openModal('COMPOSE');
     }

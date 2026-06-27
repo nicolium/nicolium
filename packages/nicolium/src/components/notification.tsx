@@ -357,9 +357,9 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
     (e?: KeyboardEvent) => {
       e?.preventDefault();
 
-      mentionCompose(account);
+      mentionCompose(account, scopeUrl);
     },
-    [account],
+    [account, scopeUrl],
   );
 
   const handleReply = useCallback(
@@ -369,7 +369,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
       if (status) {
         replyCompose(status, scopeUrl, account);
       } else {
-        mentionCompose(account);
+        mentionCompose(account, scopeUrl);
       }
     },
     [account, scopeUrl],

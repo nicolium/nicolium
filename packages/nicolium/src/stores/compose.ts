@@ -319,7 +319,11 @@ const openDedicatedComposeWindow = (search?: ComposePageSearch) =>
     'height=500,width=700',
   );
 
-const openComposeSurface = (search?: ComposePageSearch, modalProps?: { composeId?: string }) => {
+const openComposeSurface = (
+  scopeUrl: string,
+  search?: ComposePageSearch,
+  modalProps?: { composeId?: string },
+) => {
   const { useDedicatedComposePage } = useSettingsStore.getState().settings;
 
   if (useDedicatedComposePage && !userTouching.matches && !modalProps?.composeId) {
@@ -327,7 +331,7 @@ const openComposeSurface = (search?: ComposePageSearch, modalProps?: { composeId
     return;
   }
 
-  useModalsStore.getState().actions.openModal('COMPOSE', modalProps);
+  useModalsStore.getState().actions.openModal('COMPOSE', modalProps, undefined, scopeUrl);
 };
 
 interface ComposeState {
@@ -386,10 +390,10 @@ interface ComposeActions {
     approvalRequired?: boolean,
     openComposer?: boolean,
   ) => void;
-  mentionCompose: (account: Pick<Account, 'acct'>) => void;
-  directCompose: (account: Pick<Account, 'acct'>) => void;
-  groupComposeModal: (group: Pick<Group, 'id'>) => void;
-  openComposeWithText: (composeId: string, text?: string) => void;
+  mentionCompose: (account: Pick<Account, 'acct'>, scopeUrl: string) => void;
+  directCompose: (account: Pick<Account, 'acct'>, scopeUrl: string) => void;
+  groupComposeModal: (group: Pick<Group, 'id'>, scopeUrl: string) => void;
+  openComposeWithText: (composeId: string, text: string, scopeUrl: string) => void;
   eventDiscussionCompose: (
     composeId: string,
     scopeUrl: string,
@@ -557,7 +561,7 @@ const useComposeStore = create<ComposeStore>()(
           });
 
           if (openComposer) {
-            openComposeSurface({
+            openComposeSurface(scopeUrl, {
               approvalRequired,
               inReplyTo: status.id,
             });
@@ -598,14 +602,14 @@ const useComposeStore = create<ComposeStore>()(
           });
 
           if (openComposer) {
-            openComposeSurface({
+            openComposeSurface(scopeUrl, {
               approvalRequired,
               quote: status.id,
             });
           }
         },
 
-        mentionCompose: (account) => {
+        mentionCompose: (account, scopeUrl) => {
           if (!isLoggedIn()) return;
 
           if (
@@ -622,10 +626,10 @@ const useComposeStore = create<ComposeStore>()(
               .join(' ');
             compose.caretPosition = null;
           });
-          openComposeSurface();
+          openComposeSurface(scopeUrl);
         },
 
-        directCompose: (account) => {
+        directCompose: (account, scopeUrl) => {
           if (
             useSettingsStore.getState().settings.useDedicatedComposePage &&
             !userTouching.matches
@@ -644,20 +648,22 @@ const useComposeStore = create<ComposeStore>()(
             compose.visibility = 'direct';
             compose.caretPosition = null;
           });
-          openComposeSurface();
+          openComposeSurface(scopeUrl);
         },
 
-        groupComposeModal: (group) => {
+        groupComposeModal: (group, scopeUrl) => {
           const composeId = `group:${group.id}`;
           get().actions.updateCompose(composeId, (draft) => {
             draft.visibility = 'group';
             draft.groupId = group.id;
             draft.caretPosition = null;
           });
-          useModalsStore.getState().actions.openModal('COMPOSE', { composeId });
+          useModalsStore
+            .getState()
+            .actions.openModal('COMPOSE', { composeId }, undefined, scopeUrl);
         },
 
-        openComposeWithText: (composeId, text = '') => {
+        openComposeWithText: (composeId, text = '', scopeUrl) => {
           set((state) => {
             state.composers[composeId] = {
               ...state.default,
@@ -670,7 +676,7 @@ const useComposeStore = create<ComposeStore>()(
               text,
             };
           });
-          openComposeSurface({ text });
+          openComposeSurface(scopeUrl, { text });
         },
 
         eventDiscussionCompose: (composeId, scopeUrl, status) => {

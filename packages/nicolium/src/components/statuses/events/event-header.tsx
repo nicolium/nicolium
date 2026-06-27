@@ -268,7 +268,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleMentionClick = () => {
-    mentionCompose(account);
+    mentionCompose(account, scopeUrl);
   };
 
   const handleChatClick = () => {
@@ -278,7 +278,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleDirectClick = () => {
-    directCompose(account);
+    directCompose(account, scopeUrl);
   };
 
   const handleMuteClick = () => {

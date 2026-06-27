@@ -117,7 +117,7 @@ const Thread = ({
   };
 
   const handleMentionClick = (account: Pick<Account, 'acct'>) => {
-    mentionCompose(account);
+    mentionCompose(account, scopeUrl);
   };
 
   const handleHotkeyOpenMedia = (e?: KeyboardEvent) => {

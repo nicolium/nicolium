@@ -173,7 +173,7 @@ const editStatus = (client: PlApiClient, statusId: string, scopeUrl: string) => 
 
   return client.statuses.getStatusSource(statusId).then((response) => {
     useComposeStore.getState().actions.setComposeToStatus(status, poll, response);
-    useModalsStore.getState().actions.openModal('COMPOSE');
+    useModalsStore.getState().actions.openModal('COMPOSE', undefined, undefined, scopeUrl);
   });
 };
 
@@ -193,7 +193,7 @@ const redactStatus = (client: PlApiClient, statusId: string, scopeUrl: string) =
     useComposeStore
       .getState()
       .actions.setComposeToStatus(status, poll, source, false, null, null, true);
-    useModalsStore.getState().actions.openModal('COMPOSE');
+    useModalsStore.getState().actions.openModal('COMPOSE', undefined, undefined, scopeUrl);
   });
 };
 

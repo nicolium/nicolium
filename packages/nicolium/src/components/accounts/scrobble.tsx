@@ -5,6 +5,7 @@ import React, { useMemo, useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useComposeActions } from '@/stores/compose';
 
 import IconButton from '../ui/icon-button';
@@ -26,6 +27,7 @@ interface IScrobble {
 const Scrobble: React.FC<IScrobble> = ({ scrobble, withComposeButton }) => {
   const intl = useIntl();
   const { openComposeWithText } = useComposeActions();
+  const scopeUrl = useScopeUrl();
 
   const textRef = useRef<HTMLParagraphElement>(null);
 
@@ -35,6 +37,7 @@ const Scrobble: React.FC<IScrobble> = ({ scrobble, withComposeButton }) => {
       `#NowPlaying ${scrobble.artist ? `${scrobble.artist} - ` : ''}${scrobble.title}
 
 ${scrobble.external_link ? scrobble.external_link : ''}`.trim(),
+      scopeUrl,
     );
   };
 

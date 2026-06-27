@@ -30,6 +30,7 @@ import IconButton from '@/components/ui/icon-button';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import {
   usePinAccountMutation,
   useRemoveAccountFromFollowersMutation,
@@ -206,6 +207,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   const { mutate: unblockDomain } = useUnblockDomainMutation();
   const { openModal } = useModalsActions();
   const settings = useSettings();
+  const scopeUrl = useScopeUrl();
 
   const { software } = features.version;
 
@@ -218,11 +220,11 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   };
 
   const onMention = () => {
-    mentionCompose(account);
+    mentionCompose(account, scopeUrl);
   };
 
   const onDirect = () => {
-    directCompose(account);
+    directCompose(account, scopeUrl);
   };
 
   const onEndorseToggle = () => {

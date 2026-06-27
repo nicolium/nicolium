@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
@@ -62,11 +63,12 @@ const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const { groupComposeModal } = useComposeActions();
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
   const { data: group } = useGroupQuery(match?.params.groupId);
+  const scopeUrl = useScopeUrl();
 
   if (!group) return null;
 
   const onOpenCompose = () => {
-    groupComposeModal(group);
+    groupComposeModal(group, scopeUrl);
   };
 
   return (

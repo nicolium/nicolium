@@ -1,6 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { shareRoute } from '@/router';
 import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
@@ -10,6 +11,7 @@ const SharePage: React.FC = () => {
   const { openComposeWithText } = useComposeActions();
   const navigate = useNavigate();
   const { useDedicatedComposePage } = useSettings();
+  const scopeUrl = useScopeUrl();
 
   const params = shareRoute.useSearch();
 
@@ -25,7 +27,7 @@ const SharePage: React.FC = () => {
     navigate({ to: '/', replace: true });
 
     if (text) {
-      openComposeWithText('compose-modal', text);
+      openComposeWithText('compose-modal', text, scopeUrl);
     }
   }, []);
 
