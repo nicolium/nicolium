@@ -160,7 +160,6 @@ interface AuthActions {
   verifyCredentials: (token: string, accountUrl?: string) => Promise<CredentialAccount>;
   fetchMe: () => Promise<CredentialAccount | undefined>;
   logOut: () => Promise<void>;
-  switchAccountById: (accountId: string) => void;
   register: (params: CreateAccountParams) => Promise<Token | undefined>;
   fetchCaptcha: () => ReturnType<PlApiClient['oauth']['getCaptcha']>;
   updateMe: (params: UpdateCredentialsParams) => Promise<CredentialAccount>;
@@ -819,19 +818,6 @@ const useAuthStore = create<AuthStore>()(
           }
         },
 
-        switchAccountById: (accountId) => {
-          const account = selectAccount(accountId, get().me || backendUrl);
-          if (!account) return;
-
-          const { currentAccountId } = get();
-          if (typeof currentAccountId === 'string' && currentAccountId !== account.id) {
-            queryClient.invalidateQueries();
-            queryClient.clear();
-          }
-
-          get().actions.switchAccount(account);
-        },
-
         register: async (params) => {
           params.fullname = params.username;
 
@@ -929,9 +915,6 @@ const getScopeUrl = () => useAuthStore.getState().me || backendUrl;
 const verifyCredentials = (token: string, accountUrl?: string) =>
   useAuthStore.getState().actions.verifyCredentials(token, accountUrl);
 
-const switchAccount = (accountId: string) =>
-  useAuthStore.getState().actions.switchAccountById(accountId);
-
 const updateMe = (params: UpdateCredentialsParams) =>
   useAuthStore.getState().actions.updateMe(params);
 
@@ -959,7 +942,6 @@ export {
   getMeUrl,
   getScopeUrl,
   verifyCredentials,
-  switchAccount,
   updateMe,
   addToken,
   loadMastodonPreload,
