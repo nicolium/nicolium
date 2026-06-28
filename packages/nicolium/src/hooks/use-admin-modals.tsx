@@ -252,9 +252,9 @@ const useDeleteStatusModal = (statusId: string) => {
   const { mutate: deleteStatus } = useAdminDeleteStatusMutation(statusId);
   const { openModal } = useModalsActions();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   return () => {
-    const scopeUrl = useScopeUrl();
     const status = queryClient.getQueryData(
       scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
     );
