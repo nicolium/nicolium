@@ -21,7 +21,7 @@ interface IOtpAuthForm {
 
 const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token: mfaToken, small }) => {
   const intl = useIntl();
-  const { verifyOtp, verifyCredentials, switchAccountById } = useAuthActions();
+  const { verifyOtp, verifyCredentials, switchAccount } = useAuthActions();
 
   const [isLoading, setIsLoading] = useState(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
@@ -39,9 +39,9 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token: mfaToken, small }) => 
         setCodeError(false);
         return verifyCredentials(access_token);
       })
-      .then((account: Record<string, any>) => {
+      .then((account) => {
         setShouldRedirect(true);
-        return switchAccountById(account.id);
+        return switchAccount(account);
       })
       .catch(() => {
         setIsLoading(false);

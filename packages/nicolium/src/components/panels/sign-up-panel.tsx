@@ -20,7 +20,7 @@ const SignUpPanel = () => {
   const { isOpen } = useRegistrationStatus();
   const me = useCurrentAccount();
   const standalone = useIsStandalone();
-  const { logIn, switchAccountById, verifyCredentials } = useAuthActions();
+  const { logIn, switchAccount, verifyCredentials } = useAuthActions();
 
   const token = new URLSearchParams(window.location.search).get('token');
 
@@ -43,8 +43,8 @@ const SignUpPanel = () => {
         await fetchInstance();
         return account;
       })
-      .then((account: { id: string }) => {
-        switchAccountById(account.id);
+      .then((account) => {
+        switchAccount(account);
         if (typeof me !== 'string') {
           setShouldRedirect(true);
         }

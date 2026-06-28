@@ -18,7 +18,7 @@ import type { NicoliumResponse } from '@/api';
 
 const LoginPage = () => {
   const { closeModal } = useModalsActions();
-  const { logIn, verifyCredentials, switchAccountById } = useAuthActions();
+  const { logIn, verifyCredentials, switchAccount } = useAuthActions();
 
   const me = useCurrentAccount();
   const standalone = useIsStandalone();
@@ -42,9 +42,9 @@ const LoginPage = () => {
         await fetchInstance();
         return account;
       })
-      .then((account: { id: string }) => {
+      .then((account) => {
         closeModal();
-        switchAccountById(account.id);
+        switchAccount(account);
         if (typeof me !== 'string') {
           setShouldRedirect(true);
         }
