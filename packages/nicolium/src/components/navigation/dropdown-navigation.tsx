@@ -22,6 +22,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useLoggedInAccountUrls } from '@/queries/accounts/use-logged-in-accounts';
+import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useAuthActions, useAuthStore } from '@/stores/auth';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -29,6 +30,7 @@ import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
 
 import { AccountLink } from '../accounts/account-link';
+import Counter from '../ui/counter';
 
 import {
   SidebarNavigationAccountLink,
@@ -50,6 +52,8 @@ interface ISwitcherAccount {
 
 const SwitcherAccount: React.FC<ISwitcherAccount> = ({ onClick }) => {
   const { data: account } = useOwnAccount();
+  const unreadCount = useNotificationsUnreadCount();
+  const { demetricator } = useSettings();
 
   if (!account) return null;
 
@@ -61,6 +65,13 @@ const SwitcherAccount: React.FC<ISwitcherAccount> = ({ onClick }) => {
           showAccountHoverCard={false}
           withRelationship={false}
           withLinkToProfile={false}
+          action={
+            unreadCount ? (
+              <Counter count={unreadCount} countMax={demetricator !== 'off' ? 1 : undefined} />
+            ) : (
+              <></>
+            )
+          }
         />
       </div>
     </a>
