@@ -174,7 +174,7 @@ const messages = defineMessages({
   interactAsConfirmationMessage: {
     id: 'interact_as_modal.confirmation_message',
     defaultMessage:
-      'This option will request fetching the post from other accounts you’re logged in. Are you sure you want to proceed?',
+      'This option will ask the remote server to fetch the post on behalf of the other accounts you’re signed in with. That may reveal which accounts you use to the server that hosts the post, so only continue if you are comfortable with that risk. Are you sure you want to proceed?',
   },
   interactAsConfirmationConfirm: {
     id: 'interact_as_modal.confirmation.confirm',

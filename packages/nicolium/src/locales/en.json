@@ -1495,7 +1495,7 @@
   "input.password.show_password": "Show password",
   "interact_as_modal.confirmation.checkbox": "Don’t ask again",
   "interact_as_modal.confirmation.confirm": "Confirm",
-  "interact_as_modal.confirmation_message": "This option will request fetching the post from other accounts you’re logged in. Are you sure you want to proceed?",
+  "interact_as_modal.confirmation_message": "This option will ask the remote server to fetch the post on behalf of the other accounts you’re signed in with. That may reveal which accounts you use to the server that hosts the post, so only continue if you are comfortable with that risk. Are you sure you want to proceed?",
   "interact_as_modal.title": "Interact from accounts",
   "interact_as_modal.unavailable": "This post could not be found from this account.",
   "interaction_policies.entry.followers": "Followers",
