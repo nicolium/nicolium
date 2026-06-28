@@ -11,11 +11,13 @@ interface ConfirmationModalProps {
   heading?: React.ReactNode;
   message: React.ReactNode;
   confirm: React.ReactNode;
-  onConfirm: () => void;
+  onConfirm: (checked: boolean) => void;
   secondary?: React.ReactNode;
   onSecondary?: () => void;
   onCancel?: () => void;
   checkbox?: string | false;
+  checkboxRequired?: boolean;
+  theme?: 'default' | 'danger';
 }
 
 const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
@@ -28,12 +30,14 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
   onSecondary,
   onCancel,
   checkbox,
+  checkboxRequired,
+  theme = 'danger',
 }) => {
   const [checked, setChecked] = useState(false);
 
   const handleClick = () => {
     onClose('CONFIRM');
-    onConfirm();
+    onConfirm(checked);
   };
 
   const handleSecondary = () => {
@@ -55,8 +59,8 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
       title={heading}
       confirmationAction={handleClick}
       confirmationText={confirm}
-      confirmationDisabled={!!checkbox && !checked}
-      confirmationTheme='danger'
+      confirmationDisabled={!!checkboxRequired && !checked}
+      confirmationTheme={theme === 'danger' ? 'danger' : undefined}
       cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
       cancelAction={handleCancel}
       secondaryText={secondary}

@@ -167,6 +167,23 @@ const messages = defineMessages({
     id: 'status.interact_as',
     defaultMessage: 'Interact from other accounts',
   },
+  interactAsConfirmationHeading: {
+    id: 'interact_as_modal.title',
+    defaultMessage: 'Interact from accounts',
+  },
+  interactAsConfirmationMessage: {
+    id: 'interact_as_modal.confirmation_message',
+    defaultMessage:
+      'This option will request fetching the post from other accounts you’re logged in. Are you sure you want to proceed?',
+  },
+  interactAsConfirmationConfirm: {
+    id: 'interact_as_modal.confirmation.confirm',
+    defaultMessage: 'Confirm',
+  },
+  interactAsConfirmationCheckbox: {
+    id: 'interact_as_modal.confirmation.checkbox',
+    defaultMessage: 'Don’t ask again',
+  },
   groupBlockConfirm: { id: 'confirmations.block_from_group.confirm', defaultMessage: 'Ban user' },
   groupBlockFromGroupHeading: {
     id: 'confirmations.block_from_group.heading',
@@ -599,7 +616,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
               </>
             ),
             confirm: intl.formatMessage(messages.boostConfirm),
-            onConfirm: doReblog,
+            onConfirm: () => doReblog(),
           });
         } else {
           doReblog();
@@ -1283,7 +1300,13 @@ const MenuButton: React.FC<IMenuButton> = ({
 
   const features = useFeatures();
   const instance = useInstance();
-  const { autoTranslate, deleteModal, knownLanguages, statusActionBarItems } = useSettings();
+  const {
+    autoTranslate,
+    deleteModal,
+    knownLanguages,
+    statusActionBarItems,
+    skipInteractAsConfirmation,
+  } = useSettings();
 
   const { data: translationLanguages = {} } = useTranslationLanguages();
   const { mutate: reblogStatus } = useReblogStatus(status.id);
@@ -1309,9 +1332,14 @@ const MenuButton: React.FC<IMenuButton> = ({
   const isStaff = account ? (account.is_admin ?? account.is_moderator) : false;
   const isAdmin = account ? account.is_admin : false;
 
-  const multipleAccounts = useAuthStore(
+  const hasMultipleAccounts = useAuthStore(
     (state) => Object.values(state.users).filter((user) => user?.id).length > 1,
   );
+
+  const hasRemoteInstanceAccounts = useAuthStore((state) => {
+    const accounts = Object.values(state.users).filter((user) => user?.id);
+    return accounts.some((user) => new URL(user.url).origin !== new URL(scopeUrl).origin);
+  });
 
   const menu = useMemo(() => {
     const mutingConversation = status.muted;
@@ -1548,7 +1576,21 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleInteractAs: React.EventHandler<React.MouseEvent> = () => {
-      openModal('INTERACT_AS', { statusId: status.id });
+      if (skipInteractAsConfirmation || !hasRemoteInstanceAccounts) {
+        openModal('INTERACT_AS', { statusId: status.id });
+      } else {
+        openModal('CONFIRM', {
+          heading: intl.formatMessage(messages.interactAsConfirmationHeading),
+          message: intl.formatMessage(messages.interactAsConfirmationMessage),
+          confirm: intl.formatMessage(messages.interactAsConfirmationConfirm),
+          onConfirm: (value) => {
+            openModal('INTERACT_AS', { statusId: status.id });
+            if (value) changeSetting(['skipInteractAsConfirmation'], true);
+          },
+          checkbox: intl.formatMessage(messages.interactAsConfirmationCheckbox),
+          theme: 'default',
+        });
+      }
     };
 
     const menu: Menu = [];
@@ -1562,7 +1604,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       });
     }
 
-    if (multipleAccounts) {
+    if (hasMultipleAccounts) {
       menu.push({
         text: intl.formatMessage(messages.interactAs),
         action: handleInteractAs,
@@ -1898,7 +1940,9 @@ const MenuButton: React.FC<IMenuButton> = ({
     spoilerExpanded,
     statusActionBarItems,
     scopeUrl,
-    multipleAccounts,
+    hasMultipleAccounts,
+    hasRemoteInstanceAccounts,
+    skipInteractAsConfirmation,
   ]);
 
   return useMemo(

@@ -370,6 +370,7 @@ const settingsSchema = v.object({
   greentext: v.fallback(v.boolean(), false),
   displayFqn: v.fallback(v.boolean(), true),
   driveViewMode: v.fallback(v.picklist(['grid', 'list']), 'grid'),
+  skipInteractAsConfirmation: v.fallback(v.boolean(), false),
 
   theme: v.optional(
     coerceObject({
