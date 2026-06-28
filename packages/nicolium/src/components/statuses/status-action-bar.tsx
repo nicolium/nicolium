@@ -40,6 +40,7 @@ import iconThumbsDown from '@phosphor-icons/core/regular/thumbs-down.svg';
 import iconThumbsUp from '@phosphor-icons/core/regular/thumbs-up.svg';
 import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import iconWarning from '@phosphor-icons/core/regular/warning.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import { useMatch, useNavigate } from '@tanstack/react-router';
@@ -91,6 +92,7 @@ import {
 } from '@/queries/statuses/use-status-interactions';
 import { layouts } from '@/router';
 import { settingsSchema } from '@/schemas/frontend-settings';
+import { useAuthStore } from '@/stores/auth';
 import { useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
@@ -161,6 +163,10 @@ const messages = defineMessages({
   embed: { id: 'status.embed', defaultMessage: 'Embed post' },
   external: { id: 'status.external', defaultMessage: 'View post on {domain}' },
   favourite: { id: 'status.favourite', defaultMessage: 'Like' },
+  interactAs: {
+    id: 'status.interact_as',
+    defaultMessage: 'Interact from other accounts',
+  },
   groupBlockConfirm: { id: 'confirmations.block_from_group.confirm', defaultMessage: 'Ban user' },
   groupBlockFromGroupHeading: {
     id: 'confirmations.block_from_group.heading',
@@ -427,6 +433,7 @@ const InteractionPopover: React.FC<IInteractionPopover> = ({ type, allowed }) =>
 interface IActionButton extends Pick<IStatusActionBar, 'status' | 'withLabels'> {
   me: Me;
   onOpenUnauthorizedModal: (action?: UnauthorizedModalAction) => void;
+  withCounters?: boolean;
 }
 
 interface IReplyButton extends IActionButton {
@@ -439,6 +446,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
   me,
   onOpenUnauthorizedModal,
   rebloggedBy,
+  withCounters,
 }) => {
   const { replyCompose } = useComposeActions();
   const scopeUrl = useScopeUrl();
@@ -474,7 +482,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
       title={replyTitle}
       icon={status.in_reply_to_id ? iconArrowBendDoubleUpLeft : iconArrowBendUpLeft}
       onClick={handleReplyClick}
-      count={status.replies_count}
+      count={withCounters ? status.replies_count : undefined}
       text={withLabels ? intl.formatMessage(messages.reply) : undefined}
       disabled={replyDisabled}
     />
@@ -511,6 +519,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   onOpenUnauthorizedModal,
   publicStatus,
   withQuote,
+  withCounters,
 }) => {
   const { quoteCompose } = useComposeActions();
   const scopeUrl = useScopeUrl();
@@ -627,7 +636,9 @@ const ReblogButton: React.FC<IReblogButton> = ({
       active={status.reblogged}
       onClick={handleReblogClick}
       onLongPress={handleReblogLongPress}
-      count={status.reblogs_count + (withQuote ? status.quotes_count : 0)}
+      count={
+        withCounters ? status.reblogs_count + (withQuote ? status.quotes_count : 0) : undefined
+      }
       text={withLabels ? intl.formatMessage(messages.reblog) : undefined}
     />
   );
@@ -683,6 +694,7 @@ const FavouriteButton: React.FC<IActionButton> = ({
   me,
   withLabels,
   onOpenUnauthorizedModal,
+  withCounters,
 }) => {
   const features = useFeatures();
   const intl = useIntl();
@@ -723,7 +735,7 @@ const FavouriteButton: React.FC<IActionButton> = ({
       onClick={handleFavouriteClick}
       onLongPress={handleFavouriteLongPress}
       active={status.favourited}
-      count={status.favourites_count}
+      count={withCounters ? status.favourites_count : undefined}
       text={withLabels ? intl.formatMessage(messages.favourite) : undefined}
     />
   );
@@ -745,6 +757,7 @@ const DislikeButton: React.FC<IActionButton> = ({
   withLabels,
   me,
   onOpenUnauthorizedModal,
+  withCounters,
 }) => {
   const features = useFeatures();
   const intl = useIntl();
@@ -782,7 +795,7 @@ const DislikeButton: React.FC<IActionButton> = ({
       onClick={handleDislikeClick}
       onLongPress={handleDislikeLongPress}
       active={status.disliked}
-      count={status.dislikes_count}
+      count={withCounters ? status.dislikes_count : undefined}
       text={withLabels ? intl.formatMessage(messages.disfavourite) : undefined}
     />
   );
@@ -792,7 +805,7 @@ const getLongerWrench = (emojis: Array<CustomEmoji>) =>
   emojis.find(({ shortcode }) => shortcode === 'longestest_wrench') ??
   emojis.find(({ shortcode }) => shortcode === 'longest_wrench');
 
-const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
+const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me, withCounters }) => {
   const intl = useIntl();
   const features = useFeatures();
 
@@ -858,7 +871,7 @@ const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
       onClick={handleWrenchClick}
       onLongPress={handleWrenchLongPress}
       active={wrenches?.me}
-      count={wrenches?.count ?? undefined}
+      count={withCounters ? (wrenches?.count ?? undefined) : undefined}
     />
   );
 };
@@ -929,6 +942,7 @@ const QuoteButton: React.FC<IActionButton> = ({
   withLabels,
   me,
   onOpenUnauthorizedModal,
+  withCounters,
 }) => {
   const { quoteCompose } = useComposeActions();
   const scopeUrl = useScopeUrl();
@@ -952,7 +966,7 @@ const QuoteButton: React.FC<IActionButton> = ({
       title={intl.formatMessage(messages.quotePost)}
       icon={iconQuotes}
       onClick={handleQuoteClick}
-      count={status.quotes_count}
+      count={withCounters ? status.quotes_count : undefined}
       text={withLabels ? intl.formatMessage(messages.quotePostShort) : undefined}
     />
   );
@@ -1033,10 +1047,11 @@ const TranslateButton: React.FC<IActionButton> = ({ status }) => {
 };
 
 const useItems = (
-  items: Array<(typeof STATUS_ACTIONS)[number]>,
+  items: Readonly<Array<(typeof STATUS_ACTIONS)[number]>>,
   status: SelectedStatus | undefined,
   withLabels: boolean,
   rebloggedBy?: Account,
+  withCounters?: boolean,
 ) => {
   const features = useFeatures();
   const { openModal } = useModalsActions();
@@ -1070,6 +1085,7 @@ const useItems = (
               me={me}
               onOpenUnauthorizedModal={onOpenUnauthorizedModal}
               rebloggedBy={rebloggedBy}
+              withCounters={withCounters}
             />,
           );
           break;
@@ -1083,6 +1099,7 @@ const useItems = (
               onOpenUnauthorizedModal={onOpenUnauthorizedModal}
               publicStatus={publicStatus}
               withQuote={!items.includes('quote')}
+              withCounters={withCounters}
             />,
           );
           break;
@@ -1094,6 +1111,7 @@ const useItems = (
               withLabels={withLabels}
               me={me}
               onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+              withCounters={withCounters}
             />,
           );
           break;
@@ -1106,6 +1124,7 @@ const useItems = (
                 withLabels={withLabels}
                 me={me}
                 onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+                withCounters={withCounters}
               />,
             );
           }
@@ -1119,6 +1138,7 @@ const useItems = (
                 withLabels={withLabels}
                 me={me}
                 onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+                withCounters={withCounters}
               />,
             );
           }
@@ -1152,6 +1172,7 @@ const useItems = (
                 withLabels={withLabels}
                 me={me}
                 onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+                withCounters={withCounters}
               />,
             );
           }
@@ -1287,6 +1308,10 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { data: account } = useOwnAccount();
   const isStaff = account ? (account.is_admin ?? account.is_moderator) : false;
   const isAdmin = account ? account.is_admin : false;
+
+  const multipleAccounts = useAuthStore(
+    (state) => Object.values(state.users).filter((user) => user?.id).length > 1,
+  );
 
   const menu = useMemo(() => {
     const mutingConversation = status.muted;
@@ -1522,6 +1547,10 @@ const MenuButton: React.FC<IMenuButton> = ({
       redactStatus(client, status.id, scopeUrl);
     };
 
+    const handleInteractAs: React.EventHandler<React.MouseEvent> = () => {
+      openModal('INTERACT_AS', { statusId: status.id });
+    };
+
     const menu: Menu = [];
 
     if (expandable) {
@@ -1530,6 +1559,14 @@ const MenuButton: React.FC<IMenuButton> = ({
         icon: iconArrowsVertical,
         to: '/@{$username}/posts/$statusId',
         params: { username: status.account.acct, statusId: status.id },
+      });
+    }
+
+    if (multipleAccounts) {
+      menu.push({
+        text: intl.formatMessage(messages.interactAs),
+        action: handleInteractAs,
+        icon: iconUsersThree,
       });
     }
 
@@ -1861,6 +1898,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     spoilerExpanded,
     statusActionBarItems,
     scopeUrl,
+    multipleAccounts,
   ]);
 
   return useMemo(
@@ -1885,6 +1923,9 @@ interface IStatusActionBar {
   expandable?: boolean;
   space?: 'sm' | 'md' | 'lg';
   fromBookmarks?: boolean;
+  withCounters?: boolean;
+  withMenu?: boolean;
+  actionItems?: Readonly<Array<(typeof STATUS_ACTIONS)[number]>>;
 }
 
 const StatusActionBar: React.FC<IStatusActionBar> = ({
@@ -1894,6 +1935,9 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   space = 'sm',
   fromBookmarks = false,
   rebloggedBy,
+  withCounters = true,
+  withMenu = true,
+  actionItems,
 }) => {
   const { openModal } = useModalsActions();
   const { statusActionBarItems } = useSettings();
@@ -1916,7 +1960,13 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     });
   }, []);
 
-  const items = useItems(statusActionBarItems, status, withLabels, rebloggedBy);
+  const items = useItems(
+    actionItems || statusActionBarItems,
+    status,
+    withLabels,
+    rebloggedBy,
+    withCounters,
+  );
 
   if (!status || !status.account) {
     return null;
@@ -1926,16 +1976,18 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
     <div className={`status-action-bar status-action-bar--${space}`} onClick={onContainerClick}>
       {items}
 
-      <MenuButton
-        status={status}
-        withLabels={withLabels}
-        me={me}
-        onOpenUnauthorizedModal={onOpenUnauthorizedModal}
-        expandable={expandable}
-        fromBookmarks={fromBookmarks}
-        publicStatus={publicStatus}
-        rebloggedBy={rebloggedBy}
-      />
+      {withMenu && (
+        <MenuButton
+          status={status}
+          withLabels={withLabels}
+          me={me}
+          onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+          expandable={expandable}
+          fromBookmarks={fromBookmarks}
+          publicStatus={publicStatus}
+          rebloggedBy={rebloggedBy}
+        />
+      )}
     </div>
   );
 };

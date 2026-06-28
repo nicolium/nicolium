@@ -1498,3 +1498,48 @@
     padding-bottom: 0.75rem;
   }
 }
+
+.interact-as {
+  display: flex;
+  flex-direction: column;
+
+  &__account {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+
+    padding: 0.5rem 0;
+
+    & + & {
+      border-top: 1px solid var(--color-gray-100);
+
+      .dark & {
+        border-top-color: var(--color-gray-800);
+      }
+    }
+
+    > :first-child {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    @media (min-width: variables.$breakpoint-sm) {
+      flex-direction: row;
+    }
+  }
+
+  &__actions {
+    align-self: flex-start;
+
+    @media (min-width: variables.$breakpoint-sm) {
+      align-self: unset;
+    }
+  }
+
+  &__unavailable {
+    @include mixins.text($size: sm, $theme: muted);
+
+    text-align: right;
+  }
+}

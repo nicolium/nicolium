@@ -36,6 +36,7 @@ const MODAL_COMPONENTS = {
   FAMILIAR_FOLLOWERS: lazy(() => import('@/modals/familiar-followers-modal')),
   FAVOURITES: lazy(() => import('@/modals/favourites-modal')),
   HOTKEYS: lazy(() => import('@/modals/hotkeys-modal')),
+  INTERACT_AS: lazy(() => import('@/modals/interact-as-modal')),
   JOIN_EVENT: lazy(() => import('@/modals/join-event-modal')),
   LIST_ADDER: lazy(() => import('@/modals/list-adder-modal')),
   LIST_EDITOR: lazy(() => import('@/modals/list-editor-modal')),

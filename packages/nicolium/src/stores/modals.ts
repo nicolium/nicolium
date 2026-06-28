@@ -27,6 +27,7 @@ import type { EventMapModalProps } from '@/modals/event-map-modal';
 import type { EventParticipantsModalProps } from '@/modals/event-participants-modal';
 import type { FamiliarFollowersModalProps } from '@/modals/familiar-followers-modal';
 import type { FavouritesModalProps } from '@/modals/favourites-modal';
+import type { InteractAsModalProps } from '@/modals/interact-as-modal';
 import type { JoinEventModalProps } from '@/modals/join-event-modal';
 import type { ListAdderModalProps } from '@/modals/list-adder-modal';
 import type { ListEditorModalProps } from '@/modals/list-editor-modal';
@@ -117,6 +118,7 @@ type OpenModalProps =
       scopeUrl?: string,
     ]
   | [type: 'FAVOURITES', props: FavouritesModalProps, element?: HTMLElement, scopeUrl?: string]
+  | [type: 'INTERACT_AS', props: InteractAsModalProps, element?: HTMLElement, scopeUrl?: string]
   | [type: 'JOIN_EVENT', props: JoinEventModalProps, element?: HTMLElement, scopeUrl?: string]
   | [type: 'LIST_ADDER', props: ListAdderModalProps, element?: HTMLElement, scopeUrl?: string]
   | [type: 'LIST_EDITOR', props: ListEditorModalProps, element?: HTMLElement, scopeUrl?: string]
