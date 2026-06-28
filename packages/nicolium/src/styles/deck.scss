@@ -388,6 +388,37 @@
   flex-direction: column;
 }
 
+.dropdown-menu__page:has(.new-column-button__accounts) {
+  margin-bottom: auto;
+}
+
+.new-column-button {
+  &__accounts {
+    overflow-x: auto;
+    display: flex;
+    justify-content: space-around;
+
+    margin: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-gray-100);
+
+    .dark & {
+      border-bottom-color: var(--color-gray-800);
+    }
+  }
+
+  &__account {
+    display: flex;
+    margin: 0.25rem;
+
+    &--active {
+      .avatar {
+        outline: 2px solid var(--color-primary-500);
+      }
+    }
+  }
+}
+
 @keyframes deck-column-highlight {
   from {
     outline: 2px solid var(--color-primary-500);

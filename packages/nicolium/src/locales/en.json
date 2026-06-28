@@ -1057,6 +1057,7 @@
   "deck.columns.trending_links": "Trending links",
   "deck.columns.trending_statuses": "Trending statuses",
   "deck.mobile_full_width": "Fit columns to screen on mobile",
+  "deck.new_column.account": "Choose which account the new column uses",
   "deck.options": "Deck options",
   "deck.use_as_homepage": "Use as homepage",
   "developers.navigation.app_create.label": "Create an app",

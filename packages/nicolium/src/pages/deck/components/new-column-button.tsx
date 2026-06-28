@@ -19,19 +19,23 @@ import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
+import clsx from 'clsx';
 import iconTimeline from 'lucide-static/icons/timeline.svg';
-import React, { useMemo } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
+import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
+import { CurrentAccountProvider } from '@/contexts/current-account-context';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAntennas } from '@/queries/accounts/use-antennas';
 import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
 import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
+import { useAuthStore } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 
@@ -60,13 +64,87 @@ const messages = defineMessages({
   scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
   chats: { id: 'column.chats', defaultMessage: 'Chats' },
+  createAsAccount: {
+    id: 'deck.new_column.account',
+    defaultMessage: 'Choose which account the new column uses',
+  },
 });
 
-const NewColumnButton = () => {
+const AccountAvatar: React.FC = () => {
+  const { data: account } = useOwnAccount();
+
+  return (
+    <Avatar
+      src={account?.avatar_static ?? account?.avatar ?? ''}
+      size={32}
+      username={account?.acct}
+      isCat={account?.is_cat}
+    />
+  );
+};
+
+interface AccountSelectorContextValue {
+  accountUrls: Array<string>;
+  activeAccountUrl: string;
+  onSelect: (accountUrl: string) => void;
+}
+
+const AccountSelectorContext = createContext<AccountSelectorContextValue | null>(null);
+
+const AccountSelectorMenu: React.FC = () => {
+  const intl = useIntl();
+  const context = useContext(AccountSelectorContext);
+  const [initialCurrentAccount] = useState<string | null>(context?.activeAccountUrl ?? null);
+
+  if (!context) return null;
+
+  const { accountUrls, activeAccountUrl, onSelect } = context;
+
+  return (
+    <div
+      className='new-column-button__accounts'
+      role='group'
+      aria-label={intl.formatMessage(messages.createAsAccount)}
+    >
+      {accountUrls
+        .toSorted((a, b) =>
+          a === initialCurrentAccount ? -1 : b === initialCurrentAccount ? 1 : 0,
+        )
+        .map((url) => (
+          <CurrentAccountProvider key={url} accountUrl={url}>
+            <button
+              type='button'
+              className={clsx('new-column-button__account', {
+                'new-column-button__account--active': url === activeAccountUrl,
+              })}
+              aria-pressed={url === activeAccountUrl}
+              onClick={() => onSelect(url)}
+            >
+              <AccountAvatar />
+            </button>
+          </CurrentAccountProvider>
+        ))}
+    </div>
+  );
+};
+
+interface INewColumnButtonContent {
+  accountUrls: Array<string>;
+  activeAccountUrl: string | null;
+  mainAccountUrl: string | null;
+  onSelectAccount: (accountUrl: string) => void;
+}
+
+const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
+  accountUrls,
+  activeAccountUrl,
+  mainAccountUrl,
+  onSelectAccount,
+}) => {
   const intl = useIntl();
   const features = useFeatures();
   const { data: account } = useOwnAccount();
-  const isAdmin = account!.is_admin || account?.is_moderator;
+  const isAdmin = account?.is_admin || account?.is_moderator;
   const timelineAccess = useInstance().configuration.timelines_access;
   const {
     defaultTimeline,
@@ -83,6 +161,7 @@ const NewColumnButton = () => {
     const newColumn: Partial<DeckColumn> = {
       id: crypto.randomUUID(),
       columnWidth: 'md',
+      accountUrl: activeAccountUrl === mainAccountUrl ? undefined : (activeAccountUrl ?? undefined),
       ...blueprint,
     };
     changeSetting(['deck', 'columns'], [...deck.columns, newColumn]);
@@ -309,16 +388,65 @@ const NewColumnButton = () => {
     }
 
     return items;
-  }, [lists, circles, antennas, bookmarkFolders, features, defaultTimeline, isAdmin, deck.columns]);
+  }, [
+    lists,
+    circles,
+    antennas,
+    bookmarkFolders,
+    features,
+    defaultTimeline,
+    isAdmin,
+    deck.columns,
+    activeAccountUrl,
+    mainAccountUrl,
+  ]);
+
+  const selectorContext = useMemo(
+    () =>
+      accountUrls.length >= 2 && activeAccountUrl
+        ? { accountUrls, activeAccountUrl, onSelect: onSelectAccount }
+        : null,
+    [accountUrls, activeAccountUrl, onSelectAccount],
+  );
 
   return (
-    <DropdownMenu items={items} width='16rem'>
-      <button id='add-column' className='deck__add-column-button'>
-        <Icon src={iconPlus} aria-hidden />
-        <FormattedMessage id='column.deck.add' defaultMessage='Add column' />
-      </button>
-    </DropdownMenu>
+    <AccountSelectorContext.Provider value={selectorContext}>
+      <DropdownMenu
+        items={items}
+        component={selectorContext ? AccountSelectorMenu : undefined}
+        width='16rem'
+      >
+        <button id='add-column' className='deck__add-column-button'>
+          <Icon src={iconPlus} aria-hidden />
+          <FormattedMessage id='column.deck.add' defaultMessage='Add column' />
+        </button>
+      </DropdownMenu>
+    </AccountSelectorContext.Provider>
   );
+};
+
+const NewColumnButton = () => {
+  const users = useAuthStore((state) => state.users);
+  const mainAccountUrl = useAuthStore((state) => state.me);
+
+  const accountUrls = useMemo(() => Object.keys(users).filter((url) => users[url]?.id), [users]);
+
+  const [selectedAccountUrl, setSelectedAccountUrl] = useState<string | null>(null);
+  const activeAccountUrl =
+    selectedAccountUrl && users[selectedAccountUrl] ? selectedAccountUrl : mainAccountUrl;
+
+  const children = (
+    <NewColumnButtonContent
+      accountUrls={accountUrls}
+      activeAccountUrl={activeAccountUrl}
+      mainAccountUrl={mainAccountUrl}
+      onSelectAccount={setSelectedAccountUrl}
+    />
+  );
+
+  if (!activeAccountUrl) return children;
+
+  return <CurrentAccountProvider accountUrl={activeAccountUrl}>{children}</CurrentAccountProvider>;
 };
 
 export { NewColumnButton };
