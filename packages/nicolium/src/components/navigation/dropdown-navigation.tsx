@@ -16,12 +16,13 @@ import Account from '@/components/accounts/account';
 import ProfileStats from '@/components/accounts/profile-stats';
 import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
-import { useCurrentAccount } from '@/contexts/current-account-context';
+import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-account-context';
 import { useNavigationItems } from '@/hooks/use-navigation-items';
+import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useAccount } from '@/queries/accounts/use-account';
-import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
-import { useAuthActions } from '@/stores/auth';
+import { useLoggedInAccountUrls } from '@/queries/accounts/use-logged-in-accounts';
+import { useAuthActions, useAuthStore } from '@/stores/auth';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
@@ -35,8 +36,6 @@ import {
 } from './sidebar-navigation-dynamic-link';
 import SidebarNavigationLink from './sidebar-navigation-link';
 
-import type { Account as AccountEntity } from 'pl-api';
-
 const messages = defineMessages({
   back: { id: 'navigation_bar.back', defaultMessage: 'Back' },
 });
@@ -45,27 +44,17 @@ interface IAccountSwitcher {
   handleClose: () => void;
 }
 
-const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
-  const { accounts: otherAccounts } = useLoggedInAccounts();
+interface ISwitcherAccount {
+  onClick: React.MouseEventHandler;
+}
 
-  const { switchAccountById } = useAuthActions();
+const SwitcherAccount: React.FC<ISwitcherAccount> = ({ onClick }) => {
+  const { data: account } = useOwnAccount();
 
-  const handleSwitchAccount =
-    (account: AccountEntity): React.MouseEventHandler =>
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+  if (!account) return null;
 
-      switchAccountById(account.id);
-    };
-
-  const renderAccount = (account: AccountEntity) => (
-    <a
-      className='dropdown-navigation__account-switcher__account'
-      href='#'
-      onClick={handleSwitchAccount(account)}
-      key={account.id}
-    >
+  return (
+    <a className='dropdown-navigation__account-switcher__account' href='#' onClick={onClick}>
       <div>
         <Account
           account={account}
@@ -76,10 +65,31 @@ const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
       </div>
     </a>
   );
+};
+
+const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
+  const otherAccountUrls = useLoggedInAccountUrls();
+
+  const { switchAccount } = useAuthActions();
+
+  const handleSwitchAccount =
+    (accountUrl: string): React.MouseEventHandler =>
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const id = useAuthStore.getState().users[accountUrl]?.id;
+      if (!id) return;
+      switchAccount({ id, url: accountUrl });
+    };
 
   return (
     <div className='dropdown-navigation__account-switcher__accounts'>
-      {otherAccounts.map((account) => renderAccount(account))}
+      {otherAccountUrls.map((accountUrl) => (
+        <CurrentAccountProvider key={accountUrl} accountUrl={accountUrl}>
+          <SwitcherAccount onClick={handleSwitchAccount(accountUrl)} />
+        </CurrentAccountProvider>
+      ))}
 
       <Link
         className='dropdown-navigation__account-switcher__add'
