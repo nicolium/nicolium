@@ -1404,14 +1404,18 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleReblogClick = (e: React.MouseEvent | React.KeyboardEvent, visibility?: string) => {
-      const modalReblog = (_?: string, scheduledAt?: string) => {
+      if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
+        visibility = 'private';
+      }
+
+      const onReblog = (selectedVisibility = visibility, scheduledAt?: string) => {
         if (status.reblogged) unreblogStatus();
-        else reblogStatus({ visibility, scheduledAt });
+        else reblogStatus({ visibility: selectedVisibility, scheduledAt });
       };
       if ((e && e.shiftKey) || !boostModal) {
-        modalReblog();
+        onReblog();
       } else {
-        openModal('BOOST', { statusId: status.id, onReblog: modalReblog, visibility });
+        openModal('BOOST', { statusId: status.id, onReblog, visibility });
       }
     };
 

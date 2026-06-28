@@ -227,14 +227,22 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleReblogClick = (visibility?: string) => {
-    const modalReblog = (selectedVisibility = visibility, scheduledAt?: string) => {
+    if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
+      visibility = 'private';
+    }
+
+    const onReblog = (selectedVisibility = visibility, scheduledAt?: string) => {
       if (status.reblogged) unreblogStatus();
       else reblogStatus({ visibility: selectedVisibility, scheduledAt });
     };
     if (!boostModal) {
-      modalReblog();
+      onReblog();
     } else {
-      openModal('BOOST', { statusId: status.id, onReblog: modalReblog });
+      openModal('BOOST', {
+        statusId: status.id,
+        onReblog,
+        visibility,
+      });
     }
   };
 
