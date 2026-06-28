@@ -150,7 +150,7 @@ interface AuthActions {
   skipCredentials: () => void;
   onCredentialsFailed: (error: { response: NicoliumResponse }) => void;
   onTokenFailed: (token: string, error: { response: NicoliumResponse }) => void;
-  switchAccount: (account: AccountEntity) => void;
+  switchAccount: (account: Pick<AccountEntity, 'id' | 'url'>) => void;
   setCurrentAccount: (account: CredentialAccount) => void;
   setCurrentAccountIfUnset: (account: CredentialAccount) => void;
   loadMastodonPreload: (data: Record<string, any>) => void;

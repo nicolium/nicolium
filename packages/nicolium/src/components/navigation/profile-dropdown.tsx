@@ -12,7 +12,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useLoggedInAccountUrls } from '@/queries/accounts/use-logged-in-accounts';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
-import { useAuthActions } from '@/stores/auth';
+import { useAuthActions, useAuthStore } from '@/stores/auth';
 import { useSettings } from '@/stores/settings';
 
 import ThemeToggle from '../../features/ui/components/theme-toggle';
@@ -66,7 +66,7 @@ type IMenuItem = {
 const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const features = useFeatures();
   const intl = useIntl();
-  const { logOut, switchAccountById } = useAuthActions();
+  const { logOut, switchAccount } = useAuthActions();
 
   const otherAccountUrls = useLoggedInAccountUrls();
 
@@ -74,8 +74,11 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
     logOut();
   };
 
-  const handleSwitchAccount = (otherAccountId: string) => () => {
-    switchAccountById(otherAccountId);
+  const handleSwitchAccount = (otherAccountUrl: string) => () => {
+    console.log(otherAccountUrl, useAuthStore.getState().users[otherAccountUrl]);
+    const otherAccountId = useAuthStore.getState().users[otherAccountUrl]?.id;
+    if (!otherAccountId) return;
+    switchAccount({ id: otherAccountId, url: otherAccountUrl });
   };
 
   const renderAccount = (account: AccountEntity) => (
