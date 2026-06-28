@@ -43,124 +43,52 @@ import type { SelectDriveFileModalProps } from '@/modals/select-drive-file-modal
 import type { TextFieldModalProps } from '@/modals/text-field-modal';
 import type { UnauthorizedModalProps } from '@/modals/unauthorized-modal';
 
-type OpenModalProps =
-  | [type: 'ALT_TEXT', props: AltTextModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [
-      type: 'ANTENNA_EDITOR',
-      props: AntennaEditorModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [
-      type: 'BIRTHDAYS' | 'CREATE_GROUP' | 'HOTKEYS',
-      props?: undefined,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [type: 'BOOST', props: BoostModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'CIRCLE_EDITOR', props: CircleEditorModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [
-      type: 'COMPARE_HISTORY',
-      props: CompareHistoryModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [type: 'COMPONENT', props: ComponentModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'COMPOSE', props?: ComposeModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [
-      type: 'COMPOSE_INTERACTION_POLICY',
-      props?: ComposeInteractionPolicyModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [type: 'CONFIRM', props: ConfirmationModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'CRYPTO_DONATE', props: ICryptoAddress]
-  | [type: 'DISLIKES', props: DislikesModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'DROPDOWN_MENU', props: DropdownMenuModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [
-      type: 'EDIT_ANNOUNCEMENT',
-      props?: EditAnnouncementModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [
-      type: 'EDIT_BOOKMARK_FOLDER',
-      props: EditBookmarkFolderModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [type: 'EDIT_DOMAIN', props?: EditDomainModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [
-      type: 'EDIT_DOMAIN_BLOCK',
-      props?: EditDomainBlockModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [
-      type: 'EDIT_FEDERATION',
-      props: EditFederationModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [type: 'EDIT_RULE', props?: EditRuleModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'EMBED', props: EmbedModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'EVENT_MAP', props: EventMapModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [
-      type: 'EVENT_PARTICIPANTS',
-      props: EventParticipantsModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [
-      type: 'FAMILIAR_FOLLOWERS',
-      props: FamiliarFollowersModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [type: 'FAVOURITES', props: FavouritesModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'INTERACT_AS', props: InteractAsModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'JOIN_EVENT', props: JoinEventModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'LIST_ADDER', props: ListAdderModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'LIST_EDITOR', props: ListEditorModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'MEDIA', props: MediaModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'MENTIONS', props: MentionsModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [
-      type: 'MISSING_DESCRIPTION',
-      props: MissingDescriptionModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [type: 'BLOCK_MUTE', props: BlockMuteModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'REACTIONS', props: ReactionsModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [type: 'REBLOGS', props: ReblogsModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [
-      type: 'REPLY_MENTIONS',
-      props: ReplyMentionsModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [type: 'REPORT', props: ReportModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [
-      type: 'SELECT_BOOKMARK_FOLDER',
-      props: SelectBookmarkFolderModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [
-      type: 'SELECT_DRIVE_FILE',
-      props: SelectDriveFileModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ]
-  | [type: 'TEXT_FIELD', props: TextFieldModalProps, element?: HTMLElement, scopeUrl?: string]
-  | [
-      type: 'UNAUTHORIZED',
-      props?: UnauthorizedModalProps,
-      element?: HTMLElement,
-      scopeUrl?: string,
-    ];
+type OpenModalType = {
+  ALT_TEXT: AltTextModalProps;
+  ANTENNA_EDITOR: AntennaEditorModalProps;
+  BIRTHDAYS: undefined;
+  BLOCK_MUTE: BlockMuteModalProps;
+  BOOST: BoostModalProps;
+  CIRCLE_EDITOR: CircleEditorModalProps;
+  COMPARE_HISTORY: CompareHistoryModalProps;
+  COMPONENT: ComponentModalProps;
+  COMPOSE: ComposeModalProps;
+  COMPOSE_INTERACTION_POLICY: ComposeInteractionPolicyModalProps;
+  CONFIRM: ConfirmationModalProps;
+  CREATE_GROUP: undefined;
+  CRYPTO_DONATE: ICryptoAddress;
+  DISLIKES: DislikesModalProps;
+  DROPDOWN_MENU: DropdownMenuModalProps;
+  EDIT_ANNOUNCEMENT: EditAnnouncementModalProps;
+  EDIT_BOOKMARK_FOLDER: EditBookmarkFolderModalProps;
+  EDIT_DOMAIN: EditDomainModalProps;
+  EDIT_DOMAIN_BLOCK: EditDomainBlockModalProps;
+  EDIT_FEDERATION: EditFederationModalProps;
+  EDIT_RULE: EditRuleModalProps;
+  EMBED: EmbedModalProps;
+  EVENT_MAP: EventMapModalProps;
+  EVENT_PARTICIPANTS: EventParticipantsModalProps;
+  FAMILIAR_FOLLOWERS: FamiliarFollowersModalProps;
+  FAVOURITES: FavouritesModalProps;
+  HOTKEYS: undefined;
+  INTERACT_AS: InteractAsModalProps;
+  JOIN_EVENT: JoinEventModalProps;
+  LIST_ADDER: ListAdderModalProps;
+  LIST_EDITOR: ListEditorModalProps;
+  MEDIA: MediaModalProps;
+  MENTIONS: MentionsModalProps;
+  MISSING_DESCRIPTION: MissingDescriptionModalProps;
+  REACTIONS: ReactionsModalProps;
+  REBLOGS: ReblogsModalProps;
+  REPLY_MENTIONS: ReplyMentionsModalProps;
+  REPORT: ReportModalProps;
+  SELECT_BOOKMARK_FOLDER: SelectBookmarkFolderModalProps;
+  SELECT_DRIVE_FILE: SelectDriveFileModalProps;
+  TEXT_FIELD: TextFieldModalProps;
+  UNAUTHORIZED: UnauthorizedModalProps;
+};
 
-type ModalType = OpenModalProps[0];
+type ModalType = keyof OpenModalType;
 
 type Modal = {
   modalType: ModalType;
@@ -175,7 +103,12 @@ type State = {
   modals: Modals;
   actions: {
     /** Open a modal of the given type */
-    openModal: (...args: OpenModalProps) => void;
+    openModal: <T extends ModalType>(
+      type: T,
+      props?: OpenModalType[T],
+      element?: HTMLElement,
+      scopeUrl?: string,
+    ) => void;
     /** Close the modal */
     closeModal: (modalType?: ModalType | null, all?: boolean) => void;
   };
@@ -233,9 +166,13 @@ const useModalsActions = () => {
   const scopeUrl = useScopeUrl();
   const actions = useModalsStore((state) => state.actions);
 
-  const openModal: (...args: OpenModalProps) => void = (...args) => {
+  const openModal: <T extends ModalType>(
+    type: T,
+    props?: OpenModalType[T],
+    element?: HTMLElement,
+  ) => void = (...args) => {
     const [type, props, element] = args;
-    actions.openModal(...([type, props, element, scopeUrl] as OpenModalProps));
+    actions.openModal(type, props, element, scopeUrl);
   };
 
   return {
