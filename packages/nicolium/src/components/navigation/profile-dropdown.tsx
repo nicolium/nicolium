@@ -75,7 +75,6 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   };
 
   const handleSwitchAccount = (otherAccountUrl: string) => () => {
-    console.log(otherAccountUrl, useAuthStore.getState().users[otherAccountUrl]);
     const otherAccountId = useAuthStore.getState().users[otherAccountUrl]?.id;
     if (!otherAccountId) return;
     switchAccount({ id: otherAccountId, url: otherAccountUrl });
