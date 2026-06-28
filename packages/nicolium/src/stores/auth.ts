@@ -438,7 +438,19 @@ const useAuthStore = create<AuthStore>()(
       token: string,
       iceshrimpAccessToken?: string,
     ) => {
-      const client = new PlApiClient(parseBaseURL(accountUrl) || backendUrl, token, {
+      const baseUrl = parseBaseURL(accountUrl) || backendUrl;
+      const isMatchingInstance = instance && new URL(instance.domain).origin === baseUrl;
+
+      if (isMatchingInstance) {
+        useInstanceStore.getState().actions.loadInstance(instance, accountUrl);
+      }
+
+      const client = new PlApiClient(baseUrl, token, {
+        instance: isMatchingInstance ? instance : undefined,
+        fetchInstance: !isMatchingInstance,
+        onInstanceFetchSuccess: (instance) => {
+          useInstanceStore.getState().actions.loadInstance(instance, accountUrl);
+        },
         iceshrimpAccessToken,
         onFetchIceshrimpAccessToken: (token: string) => {
           get().actions.setIceshrimpToken(accountUrl, token);
