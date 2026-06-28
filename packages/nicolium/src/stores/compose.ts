@@ -1152,6 +1152,8 @@ const getComposeContentType = (
     return postFormats[0] ?? 'text/plain';
   }
 
+  if (contentType === 'wysiwyg' && postFormats.includes('text/markdown')) return 'text/markdown';
+
   return contentType;
 };
 
