@@ -4,9 +4,32 @@
 
 ### Added
 
+- Multi-account actions support
+  - You can view specific deck columns on behalf of other accounts you're logged in with.
+  - You can switch the account you're posting from in the compose modal.
+  - A new modal allows interacting (replying, favoriting, boosting, reacting) with posts from other accounts you're logged in with.
+  - You can check notification count for other logged in accounts from the account switcher menu.
+- Status history modal allows displaying difference between subsequent edits of a post.
+- Mastodon e-mail subscriptions support.
+- Option to hide reposts of posts from followed accounts depending on the age of the post.
+
 ### Changed
 
+- Frontend configuration editor is now available to non-Pleroma/Akkoma admins, allowing them to export configuration file for serving it statically.
+- Alt text reminder modal is displayed when editing profile on instance which allows providing avatar/header descriptions.
+- Drive page allows changing between grid and list modes.
+- Updated translations: Dutch, French (thanks to Capitaine Caverne), Polish.
+- Account follows and post interactions lists are now displayed inside deck columns, instead of opening a modal.
+
 ### Fixed
+
+- WYSIWYG posts work.
+- Async media processing on Mastodon is handled correctly.
+- Focal point selector is visible again.
+- Filtering applies for post queue.
+- Added missing `pulse` animation.
+- RTL mode improvements.
+- Added missing `.ellipsis` class for URL truncation.
 
 ### Removed
 
