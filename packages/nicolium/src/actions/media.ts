@@ -95,14 +95,14 @@ const uploadFile = async (
         // poll the server until it is, before showing the media attachment as uploaded
         if (data.url) {
           onSuccess(data);
-        } else if (data.url === null) {
+        } else if (data.url === '') {
           const poll = () => {
             client.media
               .getMedia(data.id)
               .then((data) => {
                 if (data.url) {
                   onSuccess(data);
-                } else if (data.url === null) {
+                } else if (data.url === '') {
                   setTimeout(() => {
                     poll();
                   }, 1000);
