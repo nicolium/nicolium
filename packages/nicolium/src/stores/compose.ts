@@ -1060,7 +1060,7 @@ const useSubmitCompose = (composeId: string) => {
         }
       }
     },
-    [composeId],
+    [composeId, client],
   );
 
   return submitCompose;
@@ -1124,7 +1124,7 @@ const useUploadCompose = (composeId: string) => {
         );
       });
     },
-    [instance, composeId],
+    [instance, composeId, client],
   );
 };
 
@@ -1168,7 +1168,7 @@ const useChangeUploadCompose = (composeId: string) => {
         });
       }
     },
-    [composeId],
+    [composeId, client],
   );
 };
 
