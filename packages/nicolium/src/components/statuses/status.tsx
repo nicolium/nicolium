@@ -15,6 +15,7 @@ import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
+import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
 import { useGroupQuery } from '@/queries/groups/use-group';
@@ -22,9 +23,7 @@ import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import { useStatus, type SelectedStatus } from '@/queries/statuses/use-status';
 import {
   useFavouriteStatus,
-  useReblogStatus,
   useUnfavouriteStatus,
-  useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
@@ -220,7 +219,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const { spoilerExpanded, deleted, showFiltered } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { replyCompose, mentionCompose } = useComposeActions();
-  const { boostModal, statusActionBarItems, useRocketIconForReblogs } = useSettings();
+  const { statusActionBarItems, useRocketIconForReblogs } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
 
@@ -231,8 +230,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
   const { mutate: favouriteStatus } = useFavouriteStatus(actualStatus.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(actualStatus.id);
-  const { mutate: reblogStatus } = useReblogStatus(actualStatus.id);
-  const { mutate: unreblogStatus } = useUnreblogStatus(actualStatus.id);
+  const reblog = useReblog(actualStatus);
 
   const isReblog = status.reblog_id;
 
@@ -317,15 +315,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const handleHotkeyBoost = (e?: KeyboardEvent) => {
     if (status.rss_feed) return;
 
-    const modalReblog = (visibility?: string, scheduledAt?: string) => {
-      if (status.reblogged) unreblogStatus();
-      else reblogStatus({ visibility, scheduledAt });
-    };
-    if ((e && e.shiftKey) || !boostModal) {
-      modalReblog();
-    } else {
-      openModal('BOOST', { statusId: actualStatus.id, onReblog: modalReblog });
-    }
+    reblog({ event: e });
   };
 
   const handleHotkeyMention = (e?: KeyboardEvent) => {

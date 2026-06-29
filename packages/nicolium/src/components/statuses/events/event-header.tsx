@@ -42,6 +42,7 @@ import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/u
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useChats } from '@/queries/chats';
@@ -49,10 +50,8 @@ import { useDeleteStatus } from '@/queries/statuses/use-status';
 import {
   useBookmarkStatus,
   usePinStatus,
-  useReblogStatus,
   useUnbookmarkStatus,
   useUnpinStatus,
-  useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
@@ -155,14 +154,13 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const client = useClient();
   const features = useFeatures();
-  const { boostModal, useRocketIconForReblogs } = useSettings();
+  const { useRocketIconForReblogs } = useSettings();
   const { data: ownAccount } = useOwnAccount();
   const { data: account } = useAccount(status?.account_id!);
   const isStaff = ownAccount ? (ownAccount.is_admin ?? ownAccount.is_moderator) : false;
   const isAdmin = ownAccount ? ownAccount.is_admin : false;
 
-  const { mutate: reblogStatus } = useReblogStatus(status?.id!);
-  const { mutate: unreblogStatus } = useUnreblogStatus(status?.id!);
+  const reblog = useReblog(status);
   const { mutate: bookmarkStatus } = useBookmarkStatus(status?.id!);
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status?.id!);
   const { mutate: pinStatus } = usePinStatus(status?.id!);
@@ -227,23 +225,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleReblogClick = (visibility?: string) => {
-    if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
-      visibility = 'private';
-    }
-
-    const onReblog = (selectedVisibility = visibility, scheduledAt?: string) => {
-      if (status.reblogged) unreblogStatus();
-      else reblogStatus({ visibility: selectedVisibility, scheduledAt });
-    };
-    if (!boostModal) {
-      onReblog();
-    } else {
-      openModal('BOOST', {
-        statusId: status.id,
-        onReblog,
-        visibility,
-      });
-    }
+    reblog({ visibility });
   };
 
   const handleQuoteClick = () => {

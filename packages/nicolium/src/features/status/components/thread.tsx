@@ -9,12 +9,11 @@ import PendingStatus from '@/components/statuses/pending-status';
 import StatusActionBar from '@/components/statuses/status-action-bar';
 import Tombstone from '@/components/statuses/tombstone';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
+import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import {
   useFavouriteStatus,
-  useReblogStatus,
   useUnfavouriteStatus,
-  useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
 import { useAsyncRefreshHeader, useThread, useThreadDepths } from '@/stores/contexts';
@@ -67,7 +66,6 @@ const Thread = ({
   } = useStatusMetaActions();
   const { openModal } = useModalsActions();
   const {
-    boostModal,
     threads: { displayMode },
     statusActionBarItems,
   } = useSettings();
@@ -77,8 +75,7 @@ const Thread = ({
 
   const { mutate: favouriteStatus } = useFavouriteStatus(status.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status.id);
-  const { mutate: reblogStatus } = useReblogStatus(status.id);
-  const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
+  const reblog = useReblog(status);
 
   const linear = displayMode === 'linear';
   const treeIndent = displayMode === 'tree-indent';
@@ -99,21 +96,6 @@ const Thread = ({
 
   const handleReplyClick = (status: Parameters<typeof replyCompose>[0]) => {
     replyCompose(status, scopeUrl);
-  };
-
-  const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {
-    if (status.reblogged) {
-      unreblogStatus();
-    } else if ((e && e.shiftKey) || !boostModal) {
-      reblogStatus({});
-    } else {
-      openModal('BOOST', {
-        statusId: status.id,
-        onReblog: (visibility, scheduledAt) => {
-          reblogStatus({ visibility, scheduledAt });
-        },
-      });
-    }
   };
 
   const handleMentionClick = (account: Pick<Account, 'acct'>) => {
@@ -154,7 +136,7 @@ const Thread = ({
   const handleHotkeyBoost = () => {
     if (status.rss_feed) return;
 
-    handleReblogClick(status);
+    reblog();
   };
 
   const handleHotkeyMention = (e?: KeyboardEvent) => {

@@ -37,17 +37,15 @@ import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useNotification } from '@/queries/notifications/use-notifications';
 import {
   useFavouriteStatus,
   useUnfavouriteStatus,
-  useReblogStatus,
-  useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
-import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
@@ -325,15 +323,13 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
     collapseStatusSpoilers,
     toggleStatusesMediaHidden,
   } = useStatusMetaActions();
-  const { openModal } = useModalsActions();
   const settings = useSettings();
 
   const node = useRef<HTMLDivElement>(null);
 
   const { mutate: favouriteStatus } = useFavouriteStatus(status?.id!);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status?.id!);
-  const { mutate: reblogStatus } = useReblogStatus(status?.id!);
-  const { mutate: unreblogStatus } = useUnreblogStatus(status?.id!);
+  const reblog = useReblog(status);
 
   const navigate = useNavigate();
   const intl = useIntl();
@@ -393,23 +389,9 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
 
   const handleHotkeyBoost = useCallback(
     (e?: KeyboardEvent) => {
-      if (status && typeof status === 'object') {
-        const boostModal = settings.boostModal;
-        if (status.reblogged) {
-          unreblogStatus();
-        } else if (e?.shiftKey || !boostModal) {
-          reblogStatus({});
-        } else {
-          openModal('BOOST', {
-            statusId: status.id,
-            onReblog: (visibility, scheduledAt) => {
-              reblogStatus({ visibility, scheduledAt });
-            },
-          });
-        }
-      }
+      reblog({ event: e });
     },
-    [status],
+    [reblog],
   );
 
   const handleHotkeyToggleSensitive = useCallback(() => {

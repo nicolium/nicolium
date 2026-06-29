@@ -59,6 +59,7 @@ import { useCanInteract } from '@/hooks/use-can-interact';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useTranslate } from '@/hooks/use-translate';
 import { DeckColumnIdContext } from '@/pages/deck/components/deck-column-config';
@@ -83,12 +84,10 @@ import {
   useEmojiUnreactMutation,
   useFavouriteStatus,
   usePinStatus,
-  useReblogStatus,
   useUnbookmarkStatus,
   useUndislikeStatus,
   useUnfavouriteStatus,
   useUnpinStatus,
-  useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { layouts } from '@/router';
 import { settingsSchema } from '@/schemas/frontend-settings';
@@ -123,10 +122,6 @@ const messages = defineMessages({
   bookmarkChangeFolder: {
     id: 'status.bookmark_folder_change',
     defaultMessage: 'Change bookmark folder',
-  },
-  boostConfirm: {
-    id: 'confirmations.boost_missing_description.confirm',
-    defaultMessage: 'Repost anyway',
   },
   cancelReblogPrivate: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
   cannotReblog: { id: 'status.cannot_reblog', defaultMessage: 'This post cannot be reposted' },
@@ -377,10 +372,6 @@ const messages = defineMessages({
     id: 'status.interaction_policy.favourite.approval_required',
     defaultMessage: 'The author needs to approve your like.',
   },
-  reblogApprovalRequired: {
-    id: 'status.interaction_policy.reblog.approval_required',
-    defaultMessage: 'The author needs to approve your repost.',
-  },
 });
 
 const STATUS_ACTIONS = settingsSchema.entries.statusActionBarItems.item.options;
@@ -543,13 +534,12 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const features = useFeatures();
   const intl = useIntl();
 
-  const { boostModal, missingDescriptionBoostModal, useRocketIconForReblogs } = useSettings();
+  const { useRocketIconForReblogs } = useSettings();
   const { openModal } = useModalsActions();
   const canReblog = useCanInteract(status, 'can_reblog');
   const canQuote = useCanInteract(status, 'can_quote');
 
-  const { mutate: reblogStatus } = useReblogStatus(status.id);
-  const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
+  const reblog = useReblog(status);
 
   let reblogIcon = useRocketIconForReblogs ? iconRocketLaunch : iconRepeat;
 
@@ -561,74 +551,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
 
   const handleReblogClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (me) {
-      const attachments = status.media_attachments.filter(
-        (attachment) => attachment.type !== 'unknown',
-      );
-
-      const hasMissingDescriptions = attachments.some((attachment) => !attachment.description);
-
-      const hasFilenameDescriptions = attachments.some((attachment) => {
-        const extension = (attachment.remote_url || attachment.url).split('.').pop()?.toLowerCase();
-        return attachment.description.trim().endsWith(`.${extension}`);
-      });
-
-      const doReblog = (visibility?: string, scheduledAt?: string) => {
-        if (status.reblogged) {
-          unreblogStatus();
-        } else {
-          reblogStatus(
-            { visibility, scheduledAt },
-            {
-              onSuccess: () => {
-                if (canReblog.approvalRequired) toast.info(messages.reblogApprovalRequired);
-              },
-            },
-          );
-        }
-      };
-
-      const showMissingDescWarning =
-        missingDescriptionBoostModal && (hasMissingDescriptions || hasFilenameDescriptions);
-
-      if ((e && e.shiftKey) || !boostModal) {
-        if (showMissingDescWarning && !(e && e.shiftKey)) {
-          openModal('CONFIRM', {
-            heading: (
-              <FormattedMessage
-                id='confirmations.boost_missing_description.heading'
-                defaultMessage='Reposting a post with missing description'
-              />
-            ),
-            message: (
-              <>
-                {hasMissingDescriptions && (
-                  <FormattedMessage
-                    id='confirmations.boost_missing_description.message'
-                    defaultMessage='The post does not have a description for all attachments. Do you want to repost it anyway?'
-                  />
-                )}
-                {hasFilenameDescriptions && (
-                  <FormattedMessage
-                    id='confirmations.boost_missing_description.filename_warning'
-                    defaultMessage="One or more attachments likely has a filename (e.g. 'image.jpg') as its description instead of meaningful alt text. Do you want to repost it anyway?"
-                  />
-                )}
-              </>
-            ),
-            confirm: intl.formatMessage(messages.boostConfirm),
-            onConfirm: () => doReblog(),
-          });
-        } else {
-          doReblog();
-        }
-      } else {
-        openModal('BOOST', {
-          statusId: status.id,
-          onReblog: doReblog,
-          hasMissingDescriptions: showMissingDescWarning && hasMissingDescriptions,
-          hasFilenameDescriptions: showMissingDescWarning && hasFilenameDescriptions,
-        });
-      }
+      reblog({ event: e, approvalRequired: canReblog.approvalRequired ?? false });
     } else {
       onOpenUnauthorizedModal('REBLOG');
     }
@@ -1271,7 +1194,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const navigate = useNavigate();
   const { mentionCompose, directCompose } = useComposeActions();
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
-  const { boostModal, useRocketIconForReblogs } = useSettings();
+  const { useRocketIconForReblogs } = useSettings();
   const client = useClient();
   const scopeUrl = useScopeUrl();
 
@@ -1309,8 +1232,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   } = useSettings();
 
   const { data: translationLanguages = {} } = useTranslationLanguages();
-  const { mutate: reblogStatus } = useReblogStatus(status.id);
-  const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
+  const reblog = useReblog(status);
 
   const autoTranslating = useMemo(() => {
     const { allow_remote: allowRemote, allow_unauthenticated: allowUnauthenticated } =
@@ -1401,22 +1323,6 @@ const MenuButton: React.FC<IMenuButton> = ({
     const handlePinClick: React.EventHandler<React.MouseEvent> = () => {
       if (status.pinned) unpinStatus();
       else pinStatus();
-    };
-
-    const handleReblogClick = (e: React.MouseEvent | React.KeyboardEvent, visibility?: string) => {
-      if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
-        visibility = 'private';
-      }
-
-      const onReblog = (selectedVisibility = visibility, scheduledAt?: string) => {
-        if (status.reblogged) unreblogStatus();
-        else reblogStatus({ visibility: selectedVisibility, scheduledAt });
-      };
-      if ((e && e.shiftKey) || !boostModal) {
-        onReblog();
-      } else {
-        openModal('BOOST', { statusId: status.id, onReblog, visibility });
-      }
     };
 
     const handleMentionClick: React.EventHandler<React.MouseEvent> = () => {
@@ -1718,21 +1624,21 @@ const MenuButton: React.FC<IMenuButton> = ({
           {
             text: intl.formatMessage(messages.reblogVisibilityPublic),
             action: (e) => {
-              handleReblogClick(e, 'public');
+              reblog({ event: e, visibility: 'public' });
             },
             icon: iconGlobe,
           },
           {
             text: intl.formatMessage(messages.reblogVisibilityUnlisted),
             action: (e) => {
-              handleReblogClick(e, 'unlisted');
+              reblog({ event: e, visibility: 'unlisted' });
             },
             icon: iconMoon,
           },
           {
             text: intl.formatMessage(messages.reblogVisibilityPrivate),
             action: (e) => {
-              handleReblogClick(e, 'private');
+              reblog({ event: e, visibility: 'private' });
             },
             icon: iconLock,
           },
@@ -1752,7 +1658,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           text: intl.formatMessage(
             status.reblogged ? messages.cancelReblogPrivate : messages.reblogPrivate,
           ),
-          action: handleReblogClick,
+          action: (e) => reblog({ event: e }),
           icon: useRocketIconForReblogs ? iconRocketLaunch : iconRepeat,
         });
       }
@@ -1947,6 +1853,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     hasMultipleAccounts,
     hasRemoteInstanceAccounts,
     skipInteractAsConfirmation,
+    reblog,
   ]);
 
   return useMemo(
