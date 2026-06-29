@@ -149,7 +149,7 @@ const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionCh
       </div>
       {withFocalPoint && (
         <div
-          className='alt-text-modal__focal-point'
+          className='alt-text-modal__preview__focal-point'
           style={{
             top: `${y * 100}%`,
             left: `${x * 100}%`,
