@@ -99,6 +99,14 @@ const biteNotificationSchema = v.object({
   status: v.fallback(v.nullable(statusSchema), null),
 });
 
+const subscribedReactionNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
+  type: v.literal('subscribed_reaction'),
+  status: statusSchema,
+  emoji: v.fallback(v.nullable(v.string()), null),
+  emoji_url: v.fallback(v.nullable(v.string()), null),
+});
+
 /**
  * @category Schemas
  * @see {@link https://docs.joinmastodon.org/entities/Notification/}
@@ -128,6 +136,7 @@ const notificationSchema: v.BaseSchema<any, Notification, v.BaseIssue<unknown>> 
     chatMentionNotificationSchema,
     eventParticipationRequestNotificationSchema,
     biteNotificationSchema,
+    subscribedReactionNotificationSchema,
   ]),
 );
 
@@ -146,6 +155,7 @@ type Notification = v.InferOutput<
   | typeof chatMentionNotificationSchema
   | typeof eventParticipationRequestNotificationSchema
   | typeof biteNotificationSchema
+  | typeof subscribedReactionNotificationSchema
 >;
 
 export { notificationSchema, type Notification };

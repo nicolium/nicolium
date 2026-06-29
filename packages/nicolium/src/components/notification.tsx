@@ -102,6 +102,7 @@ const icons: Partial<Record<NotificationType | 'reply', string>> = {
   reply: iconArrowBendUpLeft,
   quote: iconQuotes,
   quoted_update: iconPencilSimpleLine,
+  subscribed_reaction: iconSmiley,
 };
 
 // For use by the service worker
@@ -206,6 +207,10 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
     id: 'notification.quoted_update',
     defaultMessage: '{name} edited a post you quoted',
   },
+  subscribed_reaction: {
+    id: 'notification.pleroma:subscribed_reaction',
+    defaultMessage: '{name} reacted to a post',
+  },
 });
 
 const buildMessage = (
@@ -294,6 +299,7 @@ const STATUS_NOTIFICATION_TYPES: readonly NotificationType[] = [
   'bite',
   'quote',
   'quoted_update',
+  'subscribed_reaction',
 ] as const;
 
 const getNotificationStatusId = (notification: NotificationGroup): string | null => {
@@ -456,7 +462,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
       : notification.type;
 
   const icon = useMemo(() => {
-    if (type === 'emoji_reaction' && notification.emoji) {
+    if ((type === 'emoji_reaction' || type === 'subscribed_reaction') && notification.emoji) {
       return (
         <Emoji
           emoji={notification.emoji}
@@ -531,6 +537,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
       case 'participation_request':
       case 'quote':
       case 'quoted_update':
+      case 'subscribed_reaction':
         return status ? (
           compact ? (
             <StatusPreview status={status} />

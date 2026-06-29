@@ -111,6 +111,14 @@ const eventParticipationRequestNotificationGroupSchema = v.object({
   participation_message: v.fallback(v.nullable(v.string()), null),
 });
 
+const subscribedReactionNotificationGroupSchema = v.object({
+  ...baseNotificationGroupSchema.entries,
+  type: v.literal('subscribed_reaction'),
+  emoji: v.fallback(v.nullable(v.string()), null),
+  emoji_url: v.fallback(v.nullable(v.string()), null),
+  status_id: v.string(),
+});
+
 /**
  * @category Schemas
  * @see {@link https://docs.joinmastodon.org/entities/Notification/}
@@ -139,6 +147,7 @@ const notificationGroupSchema: v.BaseSchema<any, NotificationGroup, v.BaseIssue<
     emojiReactionNotificationGroupSchema,
     chatMentionNotificationGroupSchema,
     eventParticipationRequestNotificationGroupSchema,
+    subscribedReactionNotificationGroupSchema,
   ]),
 );
 
@@ -156,6 +165,7 @@ type NotificationGroup = v.InferOutput<
   | typeof emojiReactionNotificationGroupSchema
   | typeof chatMentionNotificationGroupSchema
   | typeof eventParticipationRequestNotificationGroupSchema
+  | typeof subscribedReactionNotificationGroupSchema
 >;
 
 /**

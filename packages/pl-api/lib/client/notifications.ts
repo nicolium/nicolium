@@ -31,6 +31,7 @@ const notifications = (client: PlApiBaseClient) => ({
       'participation_request',
       'event_reminder',
       'event_update',
+      'subscribed_reaction',
     ];
 
     if (params?.types)

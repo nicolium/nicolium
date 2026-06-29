@@ -1807,6 +1807,7 @@
   "notification.pleroma:event_reminder": "An event you are participating in starts soon",
   "notification.pleroma:participation_accepted": "You were accepted to join the event",
   "notification.pleroma:participation_request": "{name} wants to join your event",
+  "notification.pleroma:subscribed_reaction": "{name} reacted to a post",
   "notification.poll": "A poll you have voted in has ended",
   "notification.quote": "{name} quoted your post",
   "notification.quoted_update": "{name} edited a post you quoted",

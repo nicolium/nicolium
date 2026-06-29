@@ -20,6 +20,7 @@ const NOTIFICATION_TYPES = [
   'bite',
   'quote',
   'quoted_update',
+  'subscribed_reaction',
 ] as const;
 
 /** Notification types to exclude from the "All" filter by default. */
