@@ -331,18 +331,61 @@ a.status-card {
   }
 }
 
-.status-history {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
-
-  &:first-child {
-    padding-top: 0;
+.status-history-modal {
+  .modal__children {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
-  &:last-child {
-    padding-bottom: 0;
+  &__version {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  &__content {
+    white-space: pre-wrap;
+  }
+
+  &__diff {
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+
+    &--insert {
+      color: var(--color-success-700);
+      background-color: var(--color-success-100);
+
+      .dark & {
+        color: var(--color-success-200);
+        background-color: var(--color-success-900);
+      }
+    }
+
+    &--delete {
+      color: var(--color-danger-700);
+      text-decoration: line-through;
+      background-color: var(--color-danger-100);
+
+      .dark & {
+        color: var(--color-danger-200);
+        background-color: var(--color-danger-900);
+      }
+    }
+  }
+
+  &__original {
+    margin-right: 0.375rem;
+    font-weight: 600;
   }
 
   &__poll {

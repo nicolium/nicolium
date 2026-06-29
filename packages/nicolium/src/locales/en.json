@@ -793,6 +793,8 @@
   "common.save": "Save",
   "common.saved": "Saved",
   "compare_history_modal.header": "Edit history",
+  "compare_history_modal.highlight_diff": "Highlight difference",
+  "compare_history_modal.original": "Original",
   "compose.account_switcher.title": "Choose the account to post from",
   "compose.character_counter.title": "Used {chars} out of {maxChars} {maxChars, plural, one {character} other {characters}}",
   "compose.clear_link_suggestion.body": "The link {url} likely includes tracking elements used to mark your online activity. They are not required for the URL to work. Do you want to remove them?",
