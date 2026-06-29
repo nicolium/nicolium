@@ -217,6 +217,11 @@
     .dark & {
       color: var(--color-gray-600);
     }
+
+    .icon svg {
+      width: 1rem;
+      height: 1rem;
+    }
   }
 
   &__author {
@@ -243,6 +248,11 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
+
+  .icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
 }
 
 .event-information {
@@ -421,7 +431,7 @@
       color: var(--color-primary-400);
     }
 
-    .svg-icon svg {
+    .icon svg {
       width: 1.75rem;
       height: 1.75rem;
     }

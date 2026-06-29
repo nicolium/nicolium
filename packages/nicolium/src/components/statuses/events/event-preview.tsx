@@ -6,9 +6,9 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import VerificationBadge from '@/components/accounts/verification-badge';
-import Icon from '@/components/icon';
 import EventActionButton from '@/components/statuses/events/event-action-button';
 import EventDate from '@/components/statuses/events/event-date';
+import Icon from '@/components/ui/icon';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';

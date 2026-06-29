@@ -1,8 +1,8 @@
 import iconUpload from '@phosphor-icons/core/regular/upload.svg';
-import React, { useRef } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from '@/components/icon';
+import Icon from '@/components/ui/icon';
 import { useInstance } from '@/stores/instance';
 
 interface IUploadButton {
@@ -11,8 +11,6 @@ interface IUploadButton {
 }
 
 const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
-  const fileElement = useRef<HTMLInputElement>(null);
-
   const attachmentTypes =
     useInstance().configuration.media_attachments.supported_mime_types?.filter((type) =>
       type.startsWith('image/'),
@@ -27,24 +25,14 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
     }
   };
 
-  const handleClick = () => {
-    fileElement.current?.click();
-  };
-
   return (
     <label className='edit-event__upload-button'>
-      <Icon src={iconUpload} onClick={handleClick} />
+      <Icon src={iconUpload} />
 
       <span className='edit-event__upload-button__label' tabIndex={0}>
         <FormattedMessage id='compose_event.upload_banner' defaultMessage='Upload event banner' />
       </span>
-      <input
-        ref={fileElement}
-        type='file'
-        accept={accept}
-        onChange={handleChange}
-        disabled={disabled}
-      />
+      <input type='file' accept={accept} onChange={handleChange} disabled={disabled} />
     </label>
   );
 };

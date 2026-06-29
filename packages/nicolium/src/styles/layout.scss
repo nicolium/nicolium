@@ -360,8 +360,7 @@ body {
     line-height: var(--leading-lg);
     color: var(--color-gray-600);
 
-    .icon,
-    .svg-icon {
+    .icon {
       color: var(--color-gray-600);
 
       .dark.black & {

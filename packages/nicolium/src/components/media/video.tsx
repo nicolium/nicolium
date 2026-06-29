@@ -11,8 +11,8 @@ import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from '@/components/icon';
 import Blurhash from '@/components/media/blurhash';
+import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';
 import { isFullscreen, requestFullscreen, exitFullscreen } from '@/utils/fullscreen';
 import {

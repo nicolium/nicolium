@@ -2,7 +2,7 @@ import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import React from 'react';
 import { FormattedDate } from 'react-intl';
 
-import Icon from '@/components/icon';
+import Icon from '@/components/ui/icon';
 
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 

@@ -5,10 +5,10 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountComponent from '@/components/accounts/account';
-import Icon from '@/components/icon';
 import ScrollableList from '@/components/scrollable-list';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useFeatures } from '@/hooks/use-features';
@@ -111,7 +111,7 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
           onClick={handleClear}
           title={intl.formatMessage(messages.clear)}
         >
-          <Icon src={iconBackspace} aria-hidden />
+          <Icon src={iconBackspace} />
         </button>
       </label>
       <button onClick={handleSubmit}>

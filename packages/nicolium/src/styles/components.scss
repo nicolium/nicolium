@@ -749,6 +749,11 @@ a.list-item,
     .dark &:focus {
       background-color: var(--color-primary-800);
     }
+
+    .icon svg {
+      width: 1rem;
+      height: 1rem;
+    }
   }
 }
 

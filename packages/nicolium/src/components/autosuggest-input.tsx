@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 import AutosuggestEmoji from '@/components/autosuggest-emoji';
-import Icon from '@/components/icon';
+import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import Portal from '@/components/ui/portal';
 import AutosuggestAccount from '@/features/compose/components/autosuggest-account';
