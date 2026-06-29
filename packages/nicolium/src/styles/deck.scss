@@ -421,6 +421,10 @@
   }
 }
 
+.deck-column-search {
+  gap: 1rem;
+}
+
 @keyframes deck-column-highlight {
   from {
     outline: 2px solid var(--color-primary-500);

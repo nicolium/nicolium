@@ -58,6 +58,7 @@ import { useSettings } from '@/stores/settings';
 import { deckMessages as messages } from '../utils/messages';
 
 import { useDeckColumnConfig, useColumnRouteTitle } from './deck-column-config';
+import { DeckColumnSearch } from './deck-column-search';
 
 import type { FilterType } from '@/queries/notifications/use-notifications';
 import type { DeckColumn } from '@/schemas/frontend-settings';
@@ -286,6 +287,18 @@ const hashtagRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/tags/$hashtag',
   component: HashtagDeckColumn,
+  staticData: { title: messages.hashtag },
+});
+
+const HashtagPickerDeckColumn = () => {
+  const [, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'hashtag' }>>();
+  return <DeckColumnSearch mode='hashtag' onSelect={(hashtag) => updateColumn({ hashtag })} />;
+};
+
+const hashtagPickerRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/tags',
+  component: HashtagPickerDeckColumn,
   staticData: { title: messages.hashtag },
 });
 
@@ -524,6 +537,18 @@ const accountByUsernameRoute = createRoute({
   staticData: { title: messages.account },
 });
 
+const AccountPickerDeckColumn = () => {
+  const [, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'account' }>>();
+  return <DeckColumnSearch mode='account' onSelect={(accountId) => updateColumn({ accountId })} />;
+};
+
+const accountPickerRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/account',
+  component: AccountPickerDeckColumn,
+  staticData: { title: messages.account },
+});
+
 const StatusDeckColumn = () => {
   const { statusId } = statusRoute.useParams();
   const { data: status, isPending, refetchContext } = useStatus(statusId, { withContext: true });
@@ -643,6 +668,7 @@ const routeTree = rootRoute.addChildren([
   instanceRoute,
   notificationsRoute,
   hashtagRoute,
+  hashtagPickerRoute,
   searchRoute,
   trendingRoute,
   bookmarksRoute,
@@ -652,6 +678,7 @@ const routeTree = rootRoute.addChildren([
   chatRoute,
   accountRoute,
   accountByUsernameRoute,
+  accountPickerRoute,
   followersRoute,
   followingRoute,
   subscribersRoute,

@@ -237,7 +237,7 @@ const bookmarksColumnSchema = v.object({
 const hashtagColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('hashtag'),
-  hashtag: v.string(),
+  hashtag: v.fallback(v.optional(v.string()), undefined),
 });
 
 const chatColumnSchema = v.object({

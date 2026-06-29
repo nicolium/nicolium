@@ -54,6 +54,8 @@ const messages = defineMessages({
   timelines: { id: 'deck.columns.timelines', defaultMessage: 'Timelines' },
   notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
   search: { id: 'column.search', defaultMessage: 'Search' },
+  account: { id: 'column.account', defaultMessage: 'Profile' },
+  hashtag: { id: 'column.hashtag', defaultMessage: 'Hashtag' },
   trending: { id: 'deck.columns.trending', defaultMessage: 'Trending' },
   trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Suggested accounts' },
   trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
@@ -327,6 +329,18 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       text: intl.formatMessage(messages.search),
       icon: iconMagnifyingGlass,
       action: handleAdd({ type: 'search' }),
+    });
+
+    items.push({
+      text: intl.formatMessage(messages.account),
+      icon: iconUser,
+      action: handleAdd({ type: 'account', excludeReplies: false, showPinned: false }),
+    });
+
+    items.push({
+      text: intl.formatMessage(messages.hashtag),
+      icon: iconHash,
+      action: handleAdd({ type: 'hashtag' }),
     });
 
     if (features.scheduledStatuses) {

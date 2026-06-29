@@ -108,7 +108,8 @@ const useColumnTitle = (column: DeckColumn): string => {
   }
 
   if (column.type === 'hashtag') {
-    return `#${column.hashtag}`;
+    if (column.hashtag) return `#${column.hashtag}`;
+    return intl.formatMessage(messages.hashtag);
   }
 
   if (column.type === 'chat') {

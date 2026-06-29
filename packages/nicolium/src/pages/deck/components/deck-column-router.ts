@@ -9,7 +9,7 @@ const getInitialUrl = (column: DeckColumn) => {
     case 'notifications':
       return '/notifications';
     case 'account':
-      return `/account/${column.accountId ?? 'self'}`;
+      return column.accountId ? `/account/${column.accountId}` : '/account';
     case 'search': {
       const params = new URLSearchParams();
       if (column.query) params.set('q', column.query);
@@ -55,7 +55,7 @@ const getInitialUrl = (column: DeckColumn) => {
       return `/bookmarks/${column.folderId}`;
     }
     case 'hashtag':
-      return `/tags/${column.hashtag}`;
+      return column.hashtag ? `/tags/${column.hashtag}` : '/tags';
     case 'scheduled':
       return '/scheduled_statuses';
     case 'drafts':
@@ -79,13 +79,13 @@ const baseColumnSignature = (column: DeckColumn): string => {
     case 'notifications':
       return 'notifications';
     case 'account':
-      return `account:${column.accountId ?? 'self'}`;
+      return `account:${column.accountId ?? 'picker'}`;
     case 'search':
       return 'search';
     case 'trending':
       return `trending:${column.trendsType}`;
     case 'hashtag':
-      return `hashtag:${column.hashtag}`;
+      return `hashtag:${column.hashtag ?? 'picker'}`;
     case 'chats':
       return 'chats';
     case 'chat':
