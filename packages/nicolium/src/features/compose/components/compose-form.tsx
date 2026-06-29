@@ -40,6 +40,7 @@ import { $createEmojiNode } from '../editor/nodes/emoji-node';
 import { countableText } from '../util/counter';
 
 import ClearLinkSuggestion from './clear-link-suggestion';
+import ComposeAccountSwitcher from './compose-account-switcher';
 import ContentTypeButton from './content-type-button';
 import DriveButton from './drive-button';
 import HashtagCasingSuggestion from './hashtag-casing-suggestion';
@@ -142,6 +143,7 @@ interface IComposeForm<ID extends string> {
   withAvatar?: boolean;
   transparent?: boolean;
   compact?: boolean;
+  showAccountSwitcher?: boolean;
 }
 
 const ComposeForm = <ID extends string>({
@@ -156,6 +158,7 @@ const ComposeForm = <ID extends string>({
   withAvatar,
   transparent,
   compact,
+  showAccountSwitcher,
 }: IComposeForm<ID>) => {
   const intl = useIntl();
   const { configuration } = useInstance();
@@ -462,6 +465,10 @@ const ComposeForm = <ID extends string>({
       )}
 
       <WarningContainer composeId={id} />
+
+      {showAccountSwitcher && !shouldCondense && !group && (
+        <ComposeAccountSwitcher composeId={id} />
+      )}
 
       {!shouldCondense && !event && !group && groupId && <ReplyGroupIndicator composeId={id} />}
 

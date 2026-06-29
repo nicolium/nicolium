@@ -23,6 +23,7 @@ import { useModalsActions, useModalsStore } from '@/stores/modals';
 import { useSettings, useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 import { userTouching } from '@/utils/is-mobile';
+import { resolveAccount, resolveStatus } from '@/utils/resolve';
 
 import { useUiStoreActions } from './ui';
 
@@ -66,6 +67,14 @@ const messages = defineMessages({
       'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?',
   },
   submitError: { id: 'compose.submit.fail', defaultMessage: 'Failed to submit your post' },
+  resolveStatusError: {
+    id: 'compose.resolve_status.fail',
+    defaultMessage: 'Failed to resolve referenced post from the new account',
+  },
+  resolveAccountError: {
+    id: 'compose.resolve_account.fail',
+    defaultMessage: 'Failed to resolve referenced account from the new account',
+  },
 });
 
 const getResetFileKey = () => Math.floor(Math.random() * 0x10000);
@@ -410,6 +419,8 @@ interface ComposeActions {
   ) => void;
 
   handleTimelineDelete: (statusId: string) => void;
+
+  switchAccount: (composeId: string, sourceScope: string, targetScope: string) => Promise<void>;
 }
 
 type ComposeStore = ComposeState & { actions: ComposeActions };
@@ -738,6 +749,35 @@ const useComposeStore = create<ComposeStore>()(
               compose.quoteId = null;
             }
           });
+        },
+
+        switchAccount: async (composeId, sourceScope, targetScope) => {
+          const compose = get().composers[composeId];
+          if (!compose) return;
+
+          const [inReplyToId, quoteId, parentRebloggedById] = await Promise.all([
+            compose.inReplyToId
+              ? resolveStatus(compose.inReplyToId, sourceScope, targetScope)
+              : undefined,
+            compose.quoteId ? resolveStatus(compose.quoteId, sourceScope, targetScope) : undefined,
+            compose.parentRebloggedById
+              ? resolveAccount(compose.parentRebloggedById, sourceScope, targetScope)
+              : undefined,
+          ]);
+
+          if ((compose.inReplyToId && !inReplyToId) || (compose.quoteId && !quoteId)) {
+            toast.error(messages.resolveStatusError);
+          } else if (compose.parentRebloggedById && !parentRebloggedById) {
+            toast.error(messages.resolveAccountError);
+          }
+
+          get().actions.updateCompose(composeId, (compose) => {
+            compose.inReplyToId = inReplyToId ?? null;
+            compose.quoteId = quoteId ?? null;
+            compose.parentRebloggedById = parentRebloggedById ?? null;
+          });
+
+          useModalsStore.getState().actions.setScopeUrl(targetScope);
         },
       },
     }),

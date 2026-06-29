@@ -928,11 +928,9 @@
   }
 }
 
-.reply-mentions {
+.reply-mentions,
+.compose-account-switcher {
   display: block;
-
-  margin-bottom: 0.25rem;
-
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
   color: var(--color-gray-700);
@@ -958,6 +956,39 @@
       &:hover {
         color: var(--color-primary-400);
       }
+    }
+  }
+}
+
+.compose-account-switcher {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+  margin-bottom: -0.25rem;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &__accounts {
+    overflow-x: auto;
+    display: flex;
+  }
+
+  &__account {
+    display: flex;
+    margin: 0.25rem;
+
+    &[aria-pressed='true'] {
+      .avatar {
+        outline: 2px solid var(--color-primary-500);
+      }
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
     }
   }
 }

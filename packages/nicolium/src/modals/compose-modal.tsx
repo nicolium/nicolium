@@ -142,7 +142,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
         'compose-modal--dragged-over': isDraggedOver,
       })}
     >
-      <ComposeForm id={composeId} autoFocus />
+      <ComposeForm id={composeId} autoFocus showAccountSwitcher />
     </Modal>
   );
 };

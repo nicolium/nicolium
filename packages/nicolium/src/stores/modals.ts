@@ -111,6 +111,8 @@ type State = {
     ) => void;
     /** Close the modal */
     closeModal: (modalType?: ModalType | null, all?: boolean) => void;
+    /** Update the account scope of the topmost modal */
+    setScopeUrl: (scopeUrl: string) => void;
   };
 };
 
@@ -151,6 +153,12 @@ const useModalsStore = create<State>()(
             }
           });
         },
+        setScopeUrl: (scopeUrl) => {
+          set((state) => {
+            const modal = state.modals.at(-1);
+            if (modal) modal.scopeUrl = scopeUrl;
+          });
+        },
       },
     }),
     {
@@ -178,6 +186,7 @@ const useModalsActions = () => {
   return {
     openModal,
     closeModal: actions.closeModal,
+    setScopeUrl: actions.setScopeUrl,
   };
 };
 
