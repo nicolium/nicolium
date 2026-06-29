@@ -969,6 +969,13 @@
   svg {
     width: 1rem;
     height: 1rem;
+    transition: transform 150ms var(--ease-default);
+  }
+
+  &[aria-expanded='true'] {
+    svg {
+      transform: rotate(180deg);
+    }
   }
 
   &__accounts {
