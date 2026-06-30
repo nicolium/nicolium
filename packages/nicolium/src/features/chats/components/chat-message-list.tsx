@@ -248,7 +248,7 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
 
   if (isLoading) {
     return (
-      <div className='chat-message-list__loading'>
+      <div className='chat-message-list chat-message-list__loading'>
         <div className='chat-message-list__loading-body'>
           <PlaceholderChatMessage isMyMessage />
           <PlaceholderChatMessage />

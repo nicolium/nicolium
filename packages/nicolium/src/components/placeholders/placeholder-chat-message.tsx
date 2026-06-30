@@ -12,7 +12,7 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
   return (
     <div
       data-testid='placeholder-chat-message'
-      className={clsx('chat-message--placeholder', {
+      className={clsx('chat-message__container chat-message--placeholder', {
         'chat-message--placeholder--mine': isMyMessage,
       })}
     >
