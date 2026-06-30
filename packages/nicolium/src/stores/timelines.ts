@@ -453,13 +453,12 @@ const useTimelinesStore = create<State>()(
         }),
       resetErroredTimelines: () =>
         set((state) => {
-          for (const timeline in Object.values(state.timelines)) {
+          for (const timelineId in state.timelines) {
             if (
-              timeline in state.timelines &&
-              state.timelines[timeline].isError &&
-              state.timelines[timeline].entries.length === 0
+              state.timelines[timelineId].isError &&
+              state.timelines[timelineId].entries.length === 0
             ) {
-              delete state.timelines[timeline];
+              delete state.timelines[timelineId];
             }
           }
         }),
