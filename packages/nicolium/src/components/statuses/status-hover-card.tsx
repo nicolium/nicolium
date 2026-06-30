@@ -1,5 +1,5 @@
 import { autoUpdate, flip, shift, size, useFloating } from '@floating-ui/react';
-import { useRouter } from '@tanstack/react-router';
+import { useRouter, type ListenerFn, type RouterEvent } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 
@@ -25,21 +25,17 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   useStatus(statusId ?? undefined);
 
   useEffect(() => {
-    const unlisten = router.subscribe('onLoad', ({ pathChanged }) => {
+    const handler: ListenerFn<RouterEvent> = ({ pathChanged }) => {
       if (pathChanged) {
         showStatusHoverCard.cancel();
         closeStatusHoverCard(true);
       }
-    });
+    };
+
+    const unlisten = router.subscribe('onLoad', handler);
 
     const columnUnlisten =
-      columnId &&
-      deckColumnRouterRegistry.get(columnId)?.router.subscribe('onLoad', ({ pathChanged }) => {
-        if (pathChanged) {
-          showStatusHoverCard.cancel();
-          closeStatusHoverCard(true);
-        }
-      });
+      columnId && deckColumnRouterRegistry.get(columnId)?.router.subscribe('onLoad', handler);
 
     return () => {
       unlisten();

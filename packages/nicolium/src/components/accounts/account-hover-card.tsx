@@ -1,7 +1,7 @@
 import { autoUpdate, flip, shift, useFloating } from '@floating-ui/react';
 import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconTag from '@phosphor-icons/core/regular/tag.svg';
-import { useRouter } from '@tanstack/react-router';
+import { useRouter, type ListenerFn, type RouterEvent } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
@@ -80,21 +80,17 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const badges = getBadges(account);
 
   useEffect(() => {
-    const unlisten = router.subscribe('onLoad', ({ pathChanged }) => {
+    const handler: ListenerFn<RouterEvent> = ({ pathChanged }) => {
       if (pathChanged) {
         showAccountHoverCard.cancel();
         closeAccountHoverCard(true);
       }
-    });
+    };
+
+    const unlisten = router.subscribe('onLoad', handler);
 
     const columnUnlisten =
-      columnId &&
-      deckColumnRouterRegistry.get(columnId)?.router.subscribe('onLoad', ({ pathChanged }) => {
-        if (pathChanged) {
-          showAccountHoverCard.cancel();
-          closeAccountHoverCard(true);
-        }
-      });
+      columnId && deckColumnRouterRegistry.get(columnId)?.router.subscribe('onLoad', handler);
 
     return () => {
       unlisten();
