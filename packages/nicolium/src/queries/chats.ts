@@ -23,6 +23,7 @@ import { flattenPages, updatePageItem } from '@/utils/queries';
 import { useRelationshipQuery } from './accounts/use-relationship';
 import { queryClient } from './client';
 import { queryKeys } from './keys';
+import { useImportEntities } from './utils/import-entities';
 
 const normalizeChatMessage = (
   chatMessage: BaseChatMessage & { pending?: boolean; deleting?: boolean },
@@ -84,6 +85,7 @@ const useChats = () => {
   const { setUnreadChatsCount } = useStatContext();
   const { me } = useLoggedIn();
   const scopeUrl = useScopeUrl();
+  const importEntities = useImportEntities();
 
   const getChats = async (
     pageParam?: Pick<PaginatedResponse<Chat>, 'next'>,
@@ -93,14 +95,18 @@ const useChats = () => {
 
     setUnreadChatsCount(sumBy(data, (chat) => chat.unread));
 
+    importEntities({ accounts: items.map((chat) => chat.account) });
+
     // Fetch account relationships
     const fetcher = batcher.relationships(client).fetch;
     for (const { account } of items) {
-      fetcher(account.id);
-      queryClient.setQueryData(
-        scopedQueryKey(queryKeys.accounts.show(account.id), scopeUrl),
-        account,
-      );
+      if (
+        !queryClient.getQueryData(
+          scopedQueryKey(queryKeys.accountRelationships.show(account.id), scopeUrl),
+        )
+      ) {
+        fetcher(account.id);
+      }
     }
 
     return response;
