@@ -58,10 +58,9 @@ const restorePreviousRelationship = (
 const useRelationshipQuery = (accountId?: string) => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
-  const scopeUrl = useScopeUrl();
 
   return useAppQuery({
-    queryKey: scopedQueryKey(queryKeys.accountRelationships.show(accountId!), scopeUrl),
+    queryKey: queryKeys.accountRelationships.show(accountId!),
     queryFn: () =>
       batcher
         .relationships(client)
@@ -74,13 +73,12 @@ const useRelationshipQuery = (accountId?: string) => {
 const useRelationshipsQuery = (accountIds?: Array<string>) => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
-  const scopeUrl = useScopeUrl();
 
   const queries = useMemo(
     () =>
       isLoggedIn && accountIds
         ? accountIds.map((accountId) => ({
-            queryKey: scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+            queryKey: queryKeys.accountRelationships.show(accountId),
             queryFn: () =>
               batcher
                 .relationships(client)
