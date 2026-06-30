@@ -4,6 +4,8 @@ import { locales } from '@/messages';
 
 import { coerceObject, filteredArray } from './utils';
 
+import type { ITimelinePicker } from '@/components/timeline-picker';
+
 const AVAILABLE_NAVIGATION_ITEMS = [
   'separator',
   'search-input',
@@ -146,7 +148,7 @@ const sidebarItemSchema = v.custom<SidebarItem>(
 const timelineSchema = v.fallback(
   v.pipe(
     v.string(),
-    v.transform((timeline) => {
+    v.transform<any, ITimelinePicker['active']>((timeline) => {
       if (['home', 'local', 'bubble', 'federated', 'wrenched'].includes(timeline)) {
         return timeline;
       }
@@ -209,7 +211,7 @@ const timelineDeckColumnSchema = v.object({
   filters: v.fallback(v.optional(timelineFiltersSchema), undefined),
 });
 
-const notificationsColumnSchema = v.object({
+const notificationsDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('notifications'),
   filter: v.fallback(
@@ -218,7 +220,7 @@ const notificationsColumnSchema = v.object({
   ),
 });
 
-const accountColumnSchema = v.object({
+const accountDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('account'),
   accountId: v.fallback(v.optional(v.string()), undefined),
@@ -226,7 +228,7 @@ const accountColumnSchema = v.object({
   showPinned: v.fallback(v.boolean(), false),
 });
 
-const searchColumnSchema = v.object({
+const searchDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('search'),
   query: v.fallback(v.string(), ''),
@@ -234,53 +236,53 @@ const searchColumnSchema = v.object({
   accountId: v.fallback(v.optional(v.string()), undefined),
 });
 
-const trendingColumnSchema = v.object({
+const trendingDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('trending'),
   trendsType: v.fallback(v.picklist(['accounts', 'statuses', 'hashtags', 'links']), 'hashtags'),
 });
 
-const bookmarksColumnSchema = v.object({
+const bookmarksDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('bookmarks'),
   folderId: v.fallback(v.string(), 'all'),
 });
 
-const hashtagColumnSchema = v.object({
+const hashtagDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('hashtag'),
   hashtag: v.fallback(v.optional(v.string()), undefined),
   filters: v.fallback(v.optional(timelineFiltersSchema), undefined),
 });
 
-const chatColumnSchema = v.object({
+const chatDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('chat'),
   chatId: v.string(),
 });
 
-const driveColumnSchema = v.object({
+const driveDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('drive'),
   folderId: v.fallback(v.optional(v.string()), undefined),
 });
 
-const genericColumnSchema = v.object({
+const genericDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.picklist(['chats', 'scheduled', 'drafts']),
 });
 
 const deckColumnSchema = v.variant('type', [
   timelineDeckColumnSchema,
-  notificationsColumnSchema,
-  accountColumnSchema,
-  searchColumnSchema,
-  trendingColumnSchema,
-  bookmarksColumnSchema,
-  hashtagColumnSchema,
-  chatColumnSchema,
-  driveColumnSchema,
-  genericColumnSchema,
+  notificationsDeckColumnSchema,
+  accountDeckColumnSchema,
+  searchDeckColumnSchema,
+  trendingDeckColumnSchema,
+  bookmarksDeckColumnSchema,
+  hashtagDeckColumnSchema,
+  chatDeckColumnSchema,
+  driveDeckColumnSchema,
+  genericDeckColumnSchema,
 ]);
 
 const deckSettingsSchema = v.fallback(

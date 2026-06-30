@@ -73,7 +73,7 @@
       justify-content: space-between;
 
       min-height: 4rem;
-      padding: 1rem;
+      padding: 0.5rem 1rem;
 
       background-color: #fffe;
       backdrop-filter: blur(8px) saturate(2);
@@ -86,10 +86,28 @@
         background: #000b;
       }
 
+      &__icon {
+        width: 1.5rem;
+        height: 1.5rem;
+
+        font-size: 1.5rem;
+        line-height: 1;
+        color: var(--color-gray-600);
+      }
+
       &__title {
         display: flex;
         gap: 0.5rem;
         align-items: center;
+
+        .card-title {
+          font-size: var(--text-lg);
+          line-height: var(--leading-lg);
+        }
+      }
+
+      &__subtitle {
+        @include mixins.text($theme: muted, $size: xs);
       }
     }
 

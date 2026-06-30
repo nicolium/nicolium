@@ -1,3 +1,9 @@
+import iconChatTeardrop from '@phosphor-icons/core/regular/chat-teardrop.svg';
+import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
+import iconCloud from '@phosphor-icons/core/regular/cloud.svg';
+import iconGraph from '@phosphor-icons/core/regular/graph.svg';
+import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import { useRouterState } from '@tanstack/react-router';
 import { createContext, useContext } from 'react';
 import { useIntl, type MessageDescriptor } from 'react-intl';
@@ -65,31 +71,13 @@ const useDeckColumnConfig = <T extends DeckColumn>() => {
   return [column, update] as const;
 };
 
+// only ones without specialized handling in DeckColumnHeader
 const useColumnTitle = (column: DeckColumn): string => {
   const intl = useIntl();
-  const timelineHeading = useTimelineHeading(
-    column.type === 'timeline' ? (column.timeline as any) : null,
-  );
-  const { data: ownAccount } = useOwnAccount();
-  const { data: account } = useAccount(
-    column.type === 'account' && column.accountId ? column.accountId : undefined,
-  );
-  const { data: bookmarkFolder } = useBookmarkFolder(
-    column.type === 'bookmarks' && column.folderId !== 'all' ? column.folderId : undefined,
-  );
   const { data: chat } = useChat(column.type === 'chat' ? column.chatId : undefined);
   const { data: folder } = useDriveFolderQuery(
     column.type === 'drive' ? column.folderId : undefined,
   );
-
-  if (column.type === 'timeline') {
-    return timelineHeading;
-  }
-
-  if (column.type === 'account') {
-    const acct = column.accountId === 'self' ? ownAccount?.acct : account?.acct;
-    if (acct !== undefined) return `@${acct}`;
-  }
 
   if (column.type === 'trending') {
     switch (column.trendsType) {
@@ -104,18 +92,6 @@ const useColumnTitle = (column: DeckColumn): string => {
     }
   }
 
-  if (column.type === 'bookmarks') {
-    if (column.folderId === 'all') {
-      return intl.formatMessage(messages.bookmarks);
-    }
-    return bookmarkFolder?.name ?? intl.formatMessage(messages.bookmarks);
-  }
-
-  if (column.type === 'hashtag') {
-    if (column.hashtag) return `#${column.hashtag}`;
-    return intl.formatMessage(messages.hashtag);
-  }
-
   if (column.type === 'chat') {
     return intl.formatMessage(messages.chatWith, { acct: chat?.account.acct ?? column.chatId });
   }
@@ -125,6 +101,25 @@ const useColumnTitle = (column: DeckColumn): string => {
   }
 
   return intl.formatMessage(messages[column.type]);
+};
+
+const useColumnIcon = (column: DeckColumn) => {
+  switch (column.type) {
+    case 'chats':
+      return iconChatsTeardrop;
+    case 'chat':
+      return iconChatTeardrop;
+    case 'drive':
+      return iconCloud;
+    case 'trending':
+      return iconGraph;
+    case 'scheduled':
+      return iconHourglass;
+    case 'drafts':
+      return iconPencilSimple;
+    default:
+      return '';
+  }
 };
 
 type DeckColumnResource =
@@ -272,8 +267,10 @@ export {
   updateDeckColumn,
   useDeckColumnConfig,
   useColumnTitle,
+  useColumnIcon,
   useColumnNotFound,
   useColumnRouteTitle,
+  useTimelineHeading,
 };
 
 export type { DeckColumnResource };
