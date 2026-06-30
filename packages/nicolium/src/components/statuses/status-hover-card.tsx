@@ -7,6 +7,7 @@ import { showStatusHoverCard } from '@/components/statuses/hover-status-wrapper'
 import StatusContainer from '@/components/statuses/status-container';
 import { CurrentAccountProvider } from '@/contexts/current-account-context';
 import { useTransitionStyles } from '@/hooks/use-transition-styles';
+import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
 import { useStatus } from '@/queries/statuses/use-status';
 import { useStatusHoverCardActions, useStatusHoverCardStore } from '@/stores/status-hover-card';
 
@@ -31,8 +32,20 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
       }
     });
 
+    const columnUnlisten =
+      columnId &&
+      deckColumnRouterRegistry.get(columnId)?.router.subscribe('onLoad', ({ pathChanged }) => {
+        if (pathChanged) {
+          showStatusHoverCard.cancel();
+          closeStatusHoverCard(true);
+        }
+      });
+
     return () => {
       unlisten();
+      if (columnUnlisten) {
+        columnUnlisten();
+      }
     };
   }, []);
 

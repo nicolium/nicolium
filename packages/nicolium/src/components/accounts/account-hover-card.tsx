@@ -13,6 +13,7 @@ import Icon from '@/components/ui/icon';
 import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-account-context';
 import { UserPanel } from '@/features/ui/util/async-components';
 import { useTransitionStyles } from '@/hooks/use-transition-styles';
+import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountHoverCardActions, useAccountHoverCardStore } from '@/stores/account-hover-card';
@@ -86,8 +87,20 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
       }
     });
 
+    const columnUnlisten =
+      columnId &&
+      deckColumnRouterRegistry.get(columnId)?.router.subscribe('onLoad', ({ pathChanged }) => {
+        if (pathChanged) {
+          showAccountHoverCard.cancel();
+          closeAccountHoverCard(true);
+        }
+      });
+
     return () => {
       unlisten();
+      if (columnUnlisten) {
+        columnUnlisten();
+      }
     };
   }, []);
 
