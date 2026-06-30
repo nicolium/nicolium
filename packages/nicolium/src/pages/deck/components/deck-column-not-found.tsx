@@ -32,6 +32,11 @@ const messages = defineMessages({
     defaultMessage:
       'This bookmark folder could not be found. It might have been deleted or you don’t have permission to view it.',
   },
+  drive: {
+    id: 'column.deck.not_found.drive',
+    defaultMessage:
+      'This drive folder could not be found. It might have been deleted or you don’t have permission to view it.',
+  },
   remove: { id: 'column.deck.remove', defaultMessage: 'Remove column' },
 });
 

@@ -246,6 +246,12 @@ const chatColumnSchema = v.object({
   chatId: v.string(),
 });
 
+const driveColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('drive'),
+  folderId: v.fallback(v.optional(v.string()), undefined),
+});
+
 const genericColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.picklist(['chats', 'scheduled', 'drafts']),
@@ -260,6 +266,7 @@ const deckColumnSchema = v.variant('type', [
   bookmarksColumnSchema,
   hashtagColumnSchema,
   chatColumnSchema,
+  driveColumnSchema,
   genericColumnSchema,
 ]);
 

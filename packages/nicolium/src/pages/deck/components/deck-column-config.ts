@@ -11,6 +11,7 @@ import { useAntenna } from '@/queries/accounts/use-antennas';
 import { useCircle } from '@/queries/accounts/use-circles';
 import { useList } from '@/queries/accounts/use-lists';
 import { useChat } from '@/queries/chats';
+import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
 import { useSettings, useSettingsStore } from '@/stores/settings';
 
@@ -77,6 +78,9 @@ const useColumnTitle = (column: DeckColumn): string => {
     column.type === 'bookmarks' && column.folderId !== 'all' ? column.folderId : undefined,
   );
   const { data: chat } = useChat(column.type === 'chat' ? column.chatId : undefined);
+  const { data: folder } = useDriveFolderQuery(
+    column.type === 'drive' ? column.folderId : undefined,
+  );
 
   if (column.type === 'timeline') {
     return timelineHeading;
@@ -116,10 +120,21 @@ const useColumnTitle = (column: DeckColumn): string => {
     return intl.formatMessage(messages.chatWith, { acct: chat?.account.acct ?? column.chatId });
   }
 
+  if (column.type === 'drive' && column.folderId) {
+    return folder?.name ?? intl.formatMessage(messages.drive);
+  }
+
   return intl.formatMessage(messages[column.type]);
 };
 
-type DeckColumnResource = 'list' | 'circle' | 'antenna' | 'account' | 'chat' | 'bookmarks';
+type DeckColumnResource =
+  | 'list'
+  | 'circle'
+  | 'antenna'
+  | 'account'
+  | 'chat'
+  | 'bookmarks'
+  | 'drive';
 
 const getResponseStatus = (error: unknown) =>
   (error as { response?: { status?: number } } | null)?.response?.status;
@@ -248,6 +263,7 @@ const useColumnRouteTitle = () => {
     accountId: lookedUpAccount?.id ?? accountId ?? chat?.account?.id,
     hashtag: params.hashtag,
     chatId: params.chatId,
+    folderId: params.folderId,
   };
 };
 

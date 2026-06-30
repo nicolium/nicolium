@@ -4,6 +4,7 @@ import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
 import iconChartLine from '@phosphor-icons/core/regular/chart-line.svg';
 import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
+import iconCloud from '@phosphor-icons/core/regular/cloud.svg';
 import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
 import iconFolderSimple from '@phosphor-icons/core/regular/folder-simple.svg';
 import iconGlobeSimple from '@phosphor-icons/core/regular/globe-simple.svg';
@@ -66,6 +67,7 @@ const messages = defineMessages({
   scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
   chats: { id: 'column.chats', defaultMessage: 'Chats' },
+  drive: { id: 'column.drive', defaultMessage: 'Drive' },
   createAsAccount: {
     id: 'deck.new_column.account',
     defaultMessage: 'Choose which account the new column uses',
@@ -342,6 +344,14 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       icon: iconHash,
       action: handleAdd({ type: 'hashtag' }),
     });
+
+    if (features.drive) {
+      items.push({
+        text: intl.formatMessage(messages.drive),
+        icon: iconCloud,
+        action: handleAdd({ type: 'drive' }),
+      });
+    }
 
     if (features.scheduledStatuses) {
       items.push({

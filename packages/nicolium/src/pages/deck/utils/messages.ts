@@ -47,6 +47,7 @@ const messages = defineMessages({
     id: 'column.deck.account_switcher.title',
     defaultMessage: 'Choose which account this column is shown as',
   },
+  drive: { id: 'column.drive', defaultMessage: 'Drive' },
 });
 
 export { messages as deckMessages };

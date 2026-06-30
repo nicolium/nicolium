@@ -64,6 +64,8 @@ const getInitialUrl = (column: DeckColumn) => {
       return '/chats';
     case 'chat':
       return `/chats/${column.chatId}`;
+    case 'drive':
+      return column.folderId ? `/drive/${column.folderId}` : '/drive';
     default:
       return '/home';
   }
@@ -90,6 +92,8 @@ const baseColumnSignature = (column: DeckColumn): string => {
       return 'chats';
     case 'chat':
       return `chat:${column.chatId}`;
+    case 'drive':
+      return `drive:${column.folderId ?? 'root'}`;
     default:
       return 'unknown';
   }

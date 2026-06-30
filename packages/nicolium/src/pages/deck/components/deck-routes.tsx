@@ -45,6 +45,7 @@ import Thread from '@/features/status/components/thread';
 import { ProfileInfoPanel } from '@/features/ui/util/async-components';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
+import { DriveBrowser } from '@/pages/drive/components/drive-browser';
 import { AccountFilter } from '@/pages/search/components/account-filter';
 import HashtagFollowToggle from '@/pages/timelines/components/hashtag-follow-toggle';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -80,14 +81,16 @@ const RootRoute: React.FC = () => {
   const [canGoBack, setCanGoBack] = useState(() => router.history.canGoBack());
   const scopeUrl = useScopeUrl();
 
-  const { title, accountId, hashtag, chatId } = useColumnRouteTitle();
+  const { title, accountId, hashtag, chatId, folderId } = useColumnRouteTitle();
 
   const canAddColumn =
     (!!accountId &&
       !columns.some((column) => column.type === 'account' && column.accountId === accountId)) ||
     (!!hashtag &&
       !columns.some((column) => column.type === 'hashtag' && column.hashtag === hashtag)) ||
-    (!!chatId && !columns.some((column) => column.type === 'chat' && column.chatId === chatId));
+    (!!chatId && !columns.some((column) => column.type === 'chat' && column.chatId === chatId)) ||
+    (!!folderId &&
+      !columns.some((column) => column.type === 'drive' && column.folderId === folderId));
 
   const handleAddColumn = () => {
     if (!accountId && !hashtag && !chatId) return;
@@ -656,6 +659,25 @@ const subscribersRoute = createRoute({
   staticData: { title: messages.subscribers },
 });
 
+const DriveDeckColumn = () => {
+  const { folderId } = driveRoute.useParams();
+  const [column, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'drive' }>>();
+
+  useEffect(() => {
+    if (column && column.folderId !== folderId) {
+      updateColumn({ folderId });
+    }
+  }, [folderId]);
+
+  return <DriveBrowser folderId={folderId} />;
+};
+const driveRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/drive/{-$folderId}',
+  component: DriveDeckColumn,
+  staticData: { title: messages.drive },
+});
+
 const routeTree = rootRoute.addChildren([
   homeRoute,
   localRoute,
@@ -688,6 +710,7 @@ const routeTree = rootRoute.addChildren([
   favouritesRoute,
   dislikesRoute,
   reactionsRoute,
+  driveRoute,
 ]);
 
 export {
@@ -708,4 +731,5 @@ export {
   localRoute,
   trendingRoute,
   wrenchedRoute,
+  driveRoute,
 };
