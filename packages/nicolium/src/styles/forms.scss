@@ -876,13 +876,39 @@ p.form-group__hint {
     flex-grow: 1;
 
     width: 8rem;
-    height: 2rem;
     margin-bottom: 0.5rem;
-    padding: 0.25rem;
+    padding: 0 0.25rem;
     border: none;
+
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
 
     background-color: transparent;
     outline: none;
+  }
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+
+  color: white;
+  white-space: nowrap;
+
+  background-color: var(--color-primary-500);
+
+  p {
+    @include mixins.text($theme: white);
+  }
+
+  &__delete {
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
   }
 }
 
