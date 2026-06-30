@@ -184,6 +184,17 @@ const defaultTimelineSchema = v.fallback(
   'home',
 );
 
+const timelineFiltersSchema = coerceObject({
+  showReblogs: v.fallback(v.boolean(), true),
+  showSelfReblogs: v.fallback(v.boolean(), true),
+  showReplies: v.fallback(v.boolean(), true),
+  showQuotes: v.fallback(v.boolean(), true),
+  showDirect: v.fallback(v.boolean(), true),
+  showNonMedia: v.fallback(v.boolean(), true),
+  showMediaWithoutAltText: v.fallback(v.boolean(), true),
+  hideFollowedReposts: v.fallback(v.nullable(v.number()), null),
+});
+
 const baseDeckColumnSchema = v.object({
   id: v.fallback(v.string(), crypto.randomUUID()),
   columnWidth: v.fallback(v.picklist(['xs', 'sm', 'md', 'lg', 'xl']), 'md'),
@@ -195,6 +206,7 @@ const timelineDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('timeline'),
   timeline: timelineSchema,
+  filters: v.fallback(v.optional(timelineFiltersSchema), undefined),
 });
 
 const notificationsColumnSchema = v.object({
@@ -238,6 +250,7 @@ const hashtagColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('hashtag'),
   hashtag: v.fallback(v.optional(v.string()), undefined),
+  filters: v.fallback(v.optional(timelineFiltersSchema), undefined),
 });
 
 const chatColumnSchema = v.object({
@@ -423,16 +436,7 @@ const settingsSchema = v.object({
         'public',
         'wrenched',
       ]),
-      coerceObject({
-        showReblogs: v.fallback(v.boolean(), true),
-        showSelfReblogs: v.fallback(v.boolean(), true),
-        showReplies: v.fallback(v.boolean(), true),
-        showQuotes: v.fallback(v.boolean(), true),
-        showDirect: v.fallback(v.boolean(), true),
-        showNonMedia: v.fallback(v.boolean(), true),
-        showMediaWithoutAltText: v.fallback(v.boolean(), true),
-        hideFollowedReposts: v.fallback(v.nullable(v.number()), null),
-      }),
+      timelineFiltersSchema,
     ),
     {},
   ),
