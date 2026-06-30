@@ -585,7 +585,7 @@ a.measure__container {
     align-items: center;
     width: 100%;
 
-    button {
+    > button {
       @include mixins.button($theme: primary);
     }
   }
