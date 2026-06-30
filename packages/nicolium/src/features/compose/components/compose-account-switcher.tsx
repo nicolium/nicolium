@@ -74,7 +74,7 @@ const ComposeAccountSwitcher: React.FC<IComposeAccountSwitcher> = ({ composeId }
       aria-label={intl.formatMessage(messages.title)}
     >
       <FormattedMessage
-        id='reply_mentions.reply'
+        id='compose.account_switcher.posting_as'
         defaultMessage='Posting as {account}'
         values={{
           account: account ? `@${account.fqn}` : '',
