@@ -245,6 +245,8 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
         items: lists.map((list) => ({
           text: list.title,
           icon: iconListDashes,
+          emoji: list.emoji ?? undefined,
+          emojiUrl: list.emoji_url ?? undefined,
           action: handleAdd({ type: 'timeline', timeline: `list:${list.id}` }),
         })),
       });

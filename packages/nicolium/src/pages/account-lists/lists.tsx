@@ -4,6 +4,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
 import Column from '@/components/ui/column';
+import Emoji from '@/components/ui/emoji';
 import Form from '@/components/ui/form';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
@@ -106,7 +107,11 @@ const ListsPage: React.FC = () => {
                 params={{ listId: list.id }}
                 label={
                   <div className='lists__list'>
-                    <Icon src={iconListBullets} size={20} />
+                    {list.emoji ? (
+                      <Emoji emoji={list.emoji} src={list.emoji_url ?? undefined} />
+                    ) : (
+                      <Icon src={iconListBullets} size={20} />
+                    )}
                     <span>{list.title}</span>
                   </div>
                 }

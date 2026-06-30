@@ -1104,42 +1104,6 @@
   padding-bottom: 0.75rem;
 }
 
-.bookmark-folders {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  &__form {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-
-    .input__wrapper {
-      flex-grow: 1;
-    }
-
-    button {
-      @include mixins.button($theme: primary);
-    }
-  }
-}
-
-.bookmark-folder {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-
-  img, .icon svg, span:first-child {
-    flex: none;
-
-    width: 1.25rem !important;
-    height: 1.25rem !important;
-
-    font-size: 1.25rem;
-    line-height: 1;
-  }
-}
-
 .appearance {
   &__size-label {
     white-space: nowrap;
