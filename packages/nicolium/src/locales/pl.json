@@ -2228,7 +2228,7 @@
   "status.reblog": "Podbij",
   "status.reblog_private": "Podbij dla odbiorców oryginalnego wpisu",
   "status.reblog_scheduled": "Zaplanowano podbicie",
-  "status.reblog_visibility": "Podbij z okresloną widocznością",
+  "status.reblog_visibility": "Podbij z określona widocznością",
   "status.reblog_visibility_private": "Podbij dla obserwujących",
   "status.reblog_visibility_public": "Podbij publicznie",
   "status.reblog_visibility_unlisted": "Podbij niewidocznie",
