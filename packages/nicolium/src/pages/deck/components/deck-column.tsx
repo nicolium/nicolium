@@ -1,32 +1,15 @@
-import iconArrowLeft from '@phosphor-icons/core/regular/arrow-left.svg';
-import iconArrowRight from '@phosphor-icons/core/regular/arrow-right.svg';
-import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
-import iconFrameCorners from '@phosphor-icons/core/regular/frame-corners.svg';
-import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import { RouterProvider } from '@tanstack/react-router';
 import clsx from 'clsx';
-import iconChevronsLeftRight from 'lucide-static/icons/chevrons-left-right.svg';
-import iconChevronsRightLeft from 'lucide-static/icons/chevrons-right-left.svg';
 import React, { useEffect, useMemo, useRef } from 'react';
-import { useIntl } from 'react-intl';
 
-import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
-import { CardHeader, CardTitle } from '@/components/ui/card';
 import { CurrentAccountProvider } from '@/contexts/current-account-context';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useFeatures } from '@/hooks/use-features';
 import { useAuthStore } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 
-import { deckMessages as messages } from '../utils/messages';
-
-import { DeckColumnAccountButton } from './deck-column-account';
-import {
-  DeckColumnIdContext,
-  updateDeckColumn,
-  useColumnNotFound,
-  useColumnTitle,
-} from './deck-column-config';
+import { DeckColumnIdContext, useColumnNotFound } from './deck-column-config';
+import { DeckColumnHeader } from './deck-column-header';
 import { DeckColumnLoginRequired } from './deck-column-login-required';
 import { DeckColumnNotFound } from './deck-column-not-found';
 import { getDeckColumnRouter } from './deck-column-router';
@@ -66,10 +49,8 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
   onChangeIndex,
   onChangeFill,
 }) => {
-  const intl = useIntl();
   const instance = useInstance();
   const features = useFeatures();
-  const title = useColumnTitle(column);
   const notFoundResource = useColumnNotFound(column);
   const router = getDeckColumnRouter(column);
   const columnRef = useRef<HTMLDivElement>(null);
@@ -84,95 +65,6 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
       columnRef.current?.focus();
     }
   }, [highlight]);
-
-  const items = useMemo(() => {
-    const handleWiden = () => {
-      const newWidth = WIDTHS[WIDTHS.indexOf(column.columnWidth) + 1];
-      if (!newWidth) return;
-      onChangeWidth(column.id, newWidth);
-    };
-
-    const handleShrink = () => {
-      const newWidth = WIDTHS[WIDTHS.indexOf(column.columnWidth) - 1];
-      if (!newWidth) return;
-      onChangeWidth(column.id, newWidth);
-    };
-
-    const handleChangeFill = (value: boolean) => {
-      onChangeFill(column.id, value);
-    };
-
-    const handleMoveLeft = () => {
-      if (index === 0) return;
-      onChangeIndex(column.id, index - 1);
-    };
-
-    const handleMoveRight = () => {
-      if (index === columns - 1) return;
-      onChangeIndex(column.id, index + 1);
-    };
-
-    const menu: Menu = [
-      {
-        text: intl.formatMessage(messages.widen),
-        icon: iconChevronsLeftRight,
-        action: handleWiden,
-        disabled: column.columnWidth === 'xl',
-      },
-      {
-        text: intl.formatMessage(messages.shrink),
-        icon: iconChevronsRightLeft,
-        action: handleShrink,
-        disabled: column.columnWidth === 'xs',
-      },
-      {
-        text: intl.formatMessage(messages.fill),
-        icon: iconFrameCorners,
-        onChange: (value) => handleChangeFill(value),
-        type: 'toggle',
-        checked: column.fillAvailableWidth,
-      },
-      {
-        text: intl.formatMessage(messages.moveLeft),
-        icon: iconArrowLeft,
-        action: handleMoveLeft,
-        disabled: index === 0,
-      },
-      {
-        text: intl.formatMessage(messages.moveRight),
-        icon: iconArrowRight,
-        action: handleMoveRight,
-        disabled: index === columns - 1,
-      },
-      null,
-      {
-        text: intl.formatMessage(messages.remove),
-        icon: iconTrash,
-        action: () => onRemove(column.id),
-        destructive: true,
-      },
-    ];
-
-    if (column.type === 'account') {
-      menu.unshift(
-        {
-          text: intl.formatMessage(messages.showReplies),
-          type: 'toggle',
-          checked: !column.excludeReplies,
-          onChange: (value) => updateDeckColumn(column.id, { excludeReplies: !value }),
-        },
-        {
-          text: intl.formatMessage(messages.showPinned),
-          type: 'toggle',
-          checked: column.showPinned,
-          onChange: (value) => updateDeckColumn(column.id, { showPinned: value }),
-        },
-        null,
-      );
-    }
-
-    return menu;
-  }, [intl, index, columns, column]);
 
   const context: RouterContext = useMemo(
     () => ({
@@ -258,15 +150,15 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
       data-index={index}
       data-column-id={column.id}
     >
-      <CardHeader className='deck__column__header'>
-        <div className='deck__column__header__title'>
-          <DeckColumnAccountButton column={column} />
-          <CardTitle title={title} />
-        </div>
-        <div className='deck__column__actions'>
-          <DropdownMenu items={items} src={iconDotsThreeVertical} />
-        </div>
-      </CardHeader>
+      <DeckColumnHeader
+        column={column}
+        index={index}
+        columns={columns}
+        onRemove={onRemove}
+        onChangeWidth={onChangeWidth}
+        onChangeIndex={onChangeIndex}
+        onChangeFill={onChangeFill}
+      />
       {loginRequired && column.accountUrl ? (
         <DeckColumnLoginRequired accountUrl={column.accountUrl} />
       ) : notFoundResource ? (
@@ -280,11 +172,6 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
   );
 };
 
-/**
- * Renders a deck column, optionally scoped to a specific logged-in account.
- * When the column is pinned to a logged-in account, its whole subtree (title,
- * features, queries and the embedded router) runs as that account.
- */
 const DeckColumn: React.FC<IDeckColumn> = (props) => {
   const { accountUrl } = props.column;
   const isKnownAccount = useAuthStore((state) =>
@@ -302,4 +189,4 @@ const DeckColumn: React.FC<IDeckColumn> = (props) => {
   return <DeckColumnInner {...props} loginRequired={!!accountUrl && !isKnownAccount} />;
 };
 
-export { DeckColumn };
+export { DeckColumn, type IDeckColumn, WIDTHS };
