@@ -1,4 +1,4 @@
-import { defineMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
 import { NODE_ENV } from '@/build-config';
 import { queryClient } from '@/queries/client';
@@ -20,9 +20,16 @@ type SettingOpts = {
   save?: boolean;
 };
 
-const saveSuccessMessage = defineMessage({
-  id: 'settings.save.success',
-  defaultMessage: 'Preferences saved',
+const messages = defineMessages({
+  saveSuccess: {
+    id: 'settings.save.success',
+    defaultMessage: 'Preferences saved',
+  },
+  noteTooLong: {
+    id: 'settings.save.fail.note_too_long',
+    defaultMessage:
+      'Failed to save settings in note. Note is too long. Disabling "Store settings in account notes" option.',
+  },
 });
 
 const changeSetting = (
@@ -54,7 +61,7 @@ const saveSettings = (opts?: SettingOpts, isNotesChange?: boolean) => {
     .then(() => {
       userSettingsSaving();
       if (opts?.showAlert) {
-        toast.success(saveSuccessMessage);
+        toast.success(messages.saveSuccess);
       }
     })
     .catch((error) => {
@@ -105,7 +112,15 @@ const updateSettingsStore = async (settings: Partial<Settings>, isNotesChange?: 
       } else {
         newNote = note ? note.replace(/<nicolium-config>(.*)<\/nicolium-config>/, '') : '';
       }
-      client.accounts.updateAccountNote(currentAccountId as string, newNote);
+      client.accounts.updateAccountNote(currentAccountId as string, newNote).catch((error) => {
+        if (error.response?.status === 422 && settings.storeSettingsInNotes) {
+          toast.error(messages.noteTooLong);
+
+          if (newNote.includes('<nicolium-config>')) {
+            changeSetting(['storeSettingsInNotes'], false);
+          }
+        }
+      });
     }
 
     const accountId = currentAccountId;

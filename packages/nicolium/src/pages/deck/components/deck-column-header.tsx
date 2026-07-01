@@ -198,7 +198,7 @@ const getTimelineIcon = (timeline: ITimelinePicker['active']) => {
 
 const TIMELINE_SUBTITLES = {
   list: <FormattedMessage id='column.list' defaultMessage='List timeline' />,
-  circle: <FormattedMessage id='column.circle' defaultMessage='Circle timeline' />,
+  circle: <FormattedMessage id='column.circle_timeline' defaultMessage='Circle timeline' />,
   antenna: <FormattedMessage id='column.antenna' defaultMessage='Antenna timeline' />,
   instance: <FormattedMessage id='column.instance' defaultMessage='Instance timeline' />,
 } as const;
@@ -380,7 +380,7 @@ const NOTIFICATION_COLUMN_FILTER_TITLES = {
   reblog: <FormattedMessage id='notifications.filter.boosts' defaultMessage='Reposts' />,
   poll: <FormattedMessage id='notifications.filter.polls' defaultMessage='Poll results' />,
   events: <FormattedMessage id='notifications.filter.events' defaultMessage='Events' />,
-  follow: <FormattedMessage id='notifications.filter.follows' defaultMessage='New followers' />,
+  follow: <FormattedMessage id='notifications.filter.follows' defaultMessage='Follows' />,
 } as const;
 
 const DeckNotificationsColumnHeader: React.FC<
