@@ -143,8 +143,15 @@ const configurationSchema = coerceObject({
     v.nullable(
       v.object({
         allow_custom_css: v.boolean(),
-        max_featured_tags: v.pipe(v.number(), v.integer()),
-        max_profile_fields: v.pipe(v.number(), v.integer()),
+        max_display_name_length: v.fallback(v.optional(v.number()), undefined),
+        max_note_length: v.fallback(v.optional(v.number()), undefined),
+        max_avatar_description_length: v.fallback(v.optional(v.number()), undefined),
+        max_header_description_length: v.fallback(v.optional(v.number()), undefined),
+        max_featured_tags: v.fallback(v.optional(v.number()), undefined),
+        max_pinned_statuses: v.fallback(v.optional(v.number()), undefined),
+        max_profile_fields: v.fallback(v.optional(v.number()), undefined),
+        profile_field_name_limit: v.fallback(v.optional(v.number()), undefined),
+        profile_field_value_limit: v.fallback(v.optional(v.number()), undefined),
       }),
     ),
     null,
