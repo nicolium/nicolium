@@ -293,6 +293,8 @@ const useTimelineFiltersOptions = (
       onChange: handleOnChecked('showMediaWithoutAltText'),
     });
 
+    items.push(null);
+
     return items;
   }, [timelineType, filters]);
 };
