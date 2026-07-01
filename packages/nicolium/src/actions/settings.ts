@@ -114,7 +114,7 @@ const updateSettingsStore = async (settings: Partial<Settings>, isNotesChange?: 
       }
       client.accounts.updateAccountNote(currentAccountId as string, newNote).catch((error) => {
         if (error.response?.status === 422 && settings.storeSettingsInNotes) {
-          toast.error(messages.noteTooLong);
+          toast.info(messages.noteTooLong);
 
           if (newNote.includes('<nicolium-config>')) {
             changeSetting(['storeSettingsInNotes'], false);
