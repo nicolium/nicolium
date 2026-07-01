@@ -9,6 +9,7 @@ import iconPencilSimpleLine from '@phosphor-icons/core/regular/pencil-simple-lin
 import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
 import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
+import iconShapes from '@phosphor-icons/core/regular/shapes.svg';
 import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
@@ -101,6 +102,8 @@ const icons: Partial<Record<NotificationType | 'reply', string>> = {
   quote: iconQuotes,
   quoted_update: iconPencilSimpleLine,
   subscribed_reaction: iconSmiley,
+  added_to_collection: iconShapes,
+  collection_update: iconShapes,
 };
 
 // For use by the service worker
@@ -208,6 +211,14 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
   subscribed_reaction: {
     id: 'notification.pleroma:subscribed_reaction',
     defaultMessage: '{name} reacted to a post',
+  },
+  added_to_collection: {
+    id: 'notification.added_to_collection',
+    defaultMessage: '{name} added you to a collection',
+  },
+  collection_update: {
+    id: 'notification.collection_update',
+    defaultMessage: '{name} edited a collection you’re in',
   },
 });
 
