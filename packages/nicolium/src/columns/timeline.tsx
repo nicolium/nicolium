@@ -694,8 +694,8 @@ const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
       query={timelineQuery}
       contextType='home'
       onTopItemChanged={handleTopItemChanged}
-      filters={timelineFilters}
       {...props}
+      filters={props.filters ?? timelineFilters}
     />
   );
 };
@@ -716,7 +716,12 @@ const PublicTimelineColumn: React.FC<IPublicTimelineColumn> = ({
   const timelineQuery = usePublicTimeline({ local, remote, instance });
 
   return (
-    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+    <Timeline
+      query={timelineQuery}
+      contextType='public'
+      {...props}
+      filters={props.filters ?? timelineFilters}
+    />
   );
 };
 
@@ -729,7 +734,12 @@ const HashtagTimelineColumn: React.FC<IHashtagTimelineColumn> = ({ hashtag, ...p
   const timelineQuery = useHashtagTimeline(hashtag);
 
   return (
-    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+    <Timeline
+      query={timelineQuery}
+      contextType='public'
+      {...props}
+      filters={props.filters ?? timelineFilters}
+    />
   );
 };
 
@@ -751,7 +761,14 @@ const ListTimelineColumn: React.FC<IListTimelineColumn> = ({ listId, ...props })
   const timelineFilters = useSettings().timelines.list;
   const timelineQuery = useListTimeline(listId);
 
-  return <Timeline query={timelineQuery} contextType='home' filters={timelineFilters} {...props} />;
+  return (
+    <Timeline
+      query={timelineQuery}
+      contextType='home'
+      {...props}
+      filters={props.filters ?? timelineFilters}
+    />
+  );
 };
 
 interface IGroupTimelineColumn extends IBaseTimeline {
@@ -763,7 +780,12 @@ const GroupTimelineColumn: React.FC<IGroupTimelineColumn> = ({ groupId, ...props
   const timelineQuery = useGroupTimeline(groupId);
 
   return (
-    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+    <Timeline
+      query={timelineQuery}
+      contextType='public'
+      {...props}
+      filters={props.filters ?? timelineFilters}
+    />
   );
 };
 
@@ -772,7 +794,12 @@ const BubbleTimelineColumn: React.FC<IBaseTimeline> = (props) => {
   const timelineQuery = useBubbleTimeline();
 
   return (
-    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+    <Timeline
+      query={timelineQuery}
+      contextType='public'
+      {...props}
+      filters={props.filters ?? timelineFilters}
+    />
   );
 };
 
@@ -785,7 +812,12 @@ const AntennaTimelineColumn: React.FC<IAntennaTimelineColumn> = ({ antennaId, ..
   const timelineQuery = useAntennaTimeline(antennaId);
 
   return (
-    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+    <Timeline
+      query={timelineQuery}
+      contextType='public'
+      {...props}
+      filters={props.filters ?? timelineFilters}
+    />
   );
 };
 
@@ -798,7 +830,12 @@ const CircleTimelineColumn: React.FC<ICircleTimelineColumn> = ({ circleId, ...pr
   const timelineQuery = useCircleTimeline(circleId);
 
   return (
-    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+    <Timeline
+      query={timelineQuery}
+      contextType='public'
+      {...props}
+      filters={props.filters ?? timelineFilters}
+    />
   );
 };
 
@@ -807,7 +844,12 @@ const WrenchedTimelineColumn: React.FC<IBaseTimeline> = (props) => {
   const timelineQuery = useWrenchedTimeline();
 
   return (
-    <Timeline query={timelineQuery} contextType='public' filters={timelineFilters} {...props} />
+    <Timeline
+      query={timelineQuery}
+      contextType='public'
+      {...props}
+      filters={props.filters ?? timelineFilters}
+    />
   );
 };
 

@@ -262,6 +262,12 @@ const useColumnRouteTitle = () => {
   };
 };
 
+const useColumnFilters = () => {
+  const [column] = useDeckColumnConfig<Extract<DeckColumn, { type: 'timeline' | 'hashtag' }>>();
+
+  return column?.filters;
+};
+
 export {
   DeckColumnIdContext,
   updateDeckColumn,
@@ -270,7 +276,7 @@ export {
   useColumnIcon,
   useColumnNotFound,
   useColumnRouteTitle,
-  useTimelineHeading,
+  useColumnFilters,
 };
 
 export type { DeckColumnResource };

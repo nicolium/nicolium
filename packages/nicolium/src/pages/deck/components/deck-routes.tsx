@@ -58,7 +58,7 @@ import { useSettings } from '@/stores/settings';
 
 import { deckMessages as messages } from '../utils/messages';
 
-import { useDeckColumnConfig, useColumnRouteTitle } from './deck-column-config';
+import { useDeckColumnConfig, useColumnRouteTitle, useColumnFilters } from './deck-column-config';
 import { DeckColumnSearch } from './deck-column-search';
 
 import type { FilterType } from '@/queries/notifications/use-notifications';
@@ -174,7 +174,11 @@ const rootRoute = createRootRoute({
   notFoundComponent: DeckEscape,
 });
 
-const HomeTimelineDeckColumn = () => <HomeTimelineColumn />;
+const HomeTimelineDeckColumn = () => {
+  const filters = useColumnFilters();
+
+  return <HomeTimelineColumn filters={filters} />;
+};
 const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/home',
@@ -182,7 +186,11 @@ const homeRoute = createRoute({
   staticData: { title: messages.home },
 });
 
-const LocalTimelineDeckColumn = () => <PublicTimelineColumn local />;
+const LocalTimelineDeckColumn = () => {
+  const filters = useColumnFilters();
+
+  return <PublicTimelineColumn local filters={filters} />;
+};
 const localRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/local',
@@ -190,7 +198,11 @@ const localRoute = createRoute({
   staticData: { title: messages.local },
 });
 
-const FederatedTimelineDeckColumn = () => <PublicTimelineColumn />;
+const FederatedTimelineDeckColumn = () => {
+  const filters = useColumnFilters();
+
+  return <PublicTimelineColumn filters={filters} />;
+};
 const federatedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/federated',
@@ -198,7 +210,11 @@ const federatedRoute = createRoute({
   staticData: { title: messages.federated },
 });
 
-const BubbleTimelineDeckColumn = () => <BubbleTimelineColumn />;
+const BubbleTimelineDeckColumn = () => {
+  const filters = useColumnFilters();
+
+  return <BubbleTimelineColumn filters={filters} />;
+};
 const bubbleRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/bubble',
@@ -206,7 +222,11 @@ const bubbleRoute = createRoute({
   staticData: { title: messages.bubble },
 });
 
-const WrenchedTimelineDeckColumn = () => <WrenchedTimelineColumn />;
+const WrenchedTimelineDeckColumn = () => {
+  const filters = useColumnFilters();
+
+  return <WrenchedTimelineColumn filters={filters} />;
+};
 const wrenchedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/wrenched',
@@ -215,8 +235,10 @@ const wrenchedRoute = createRoute({
 });
 
 const ListTimelineDeckColumn = () => {
+  const filters = useColumnFilters();
   const { listId } = listRoute.useParams();
-  return <ListTimelineColumn listId={listId} />;
+
+  return <ListTimelineColumn listId={listId} filters={filters} />;
 };
 const listRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -226,8 +248,10 @@ const listRoute = createRoute({
 });
 
 const CircleTimelineDeckColumn = () => {
+  const filters = useColumnFilters();
   const { circleId } = circleRoute.useParams();
-  return <CircleTimelineColumn circleId={circleId} />;
+
+  return <CircleTimelineColumn circleId={circleId} filters={filters} />;
 };
 const circleRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -237,8 +261,10 @@ const circleRoute = createRoute({
 });
 
 const AntennaTimelineDeckColumn = () => {
+  const filters = useColumnFilters();
   const { antennaId } = antennaRoute.useParams();
-  return <AntennaTimelineColumn antennaId={antennaId} />;
+
+  return <AntennaTimelineColumn antennaId={antennaId} filters={filters} />;
 };
 const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -248,8 +274,10 @@ const antennaRoute = createRoute({
 });
 
 const InstanceTimelineDeckColumn = () => {
+  const filters = useColumnFilters();
   const { instance } = instanceRoute.useParams();
-  return <PublicTimelineColumn instance={instance} />;
+
+  return <PublicTimelineColumn instance={instance} filters={filters} />;
 };
 const instanceRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -277,11 +305,13 @@ const notificationsRoute = createRoute({
 });
 
 const HashtagDeckColumn = () => {
+  const filters = useColumnFilters();
   const { hashtag } = hashtagRoute.useParams();
+
   return (
     <>
       <HashtagFollowToggle hashtag={hashtag} />
-      <HashtagTimelineColumn hashtag={hashtag} />
+      <HashtagTimelineColumn hashtag={hashtag} filters={filters} />
     </>
   );
 };

@@ -23,28 +23,28 @@ import iconTimeline from 'lucide-static/icons/timeline.svg';
 import React, { useMemo } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
+import { changeSetting } from '@/actions/settings';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
+import { useTimelineHeading } from '@/components/timeline-picker';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
+import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { defaultFiltersSettings } from '@/hooks/use-timeline-filters-options';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useList } from '@/queries/accounts/use-lists';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
+import { useSettings } from '@/stores/settings';
 
 import { deckMessages as messages } from '../utils/messages';
 
 import { type IDeckColumn, WIDTHS } from './deck-column';
 import { DeckColumnAccountButton } from './deck-column-account';
-import {
-  updateDeckColumn,
-  useColumnIcon,
-  useColumnTitle,
-  useTimelineHeading,
-} from './deck-column-config';
+import { updateDeckColumn, useColumnIcon, useColumnTitle } from './deck-column-config';
 
 import type { ITimelinePicker } from '@/components/timeline-picker';
-import type { DeckColumn } from '@/schemas/frontend-settings';
+import type { DeckColumn, Settings, TimelineFilters } from '@/schemas/frontend-settings';
 
 type IDeckColumnHeaderInner = IDeckColumnHeader & {
   icon: string;
@@ -200,6 +200,102 @@ const TIMELINE_SUBTITLES = {
   instance: <FormattedMessage id='column.instance' defaultMessage='Instance timeline' />,
 } as const;
 
+const useTimelineFiltersOptions = (
+  column: Extract<DeckColumn, { type: 'timeline' | 'hashtag' }>,
+) => {
+  const intl = useIntl();
+  const features = useFeatures();
+
+  let timelineType = column.type === 'hashtag' ? 'hashtag' : column.timeline.split(':')[0];
+  if (timelineType === 'federated' || timelineType === 'instance') timelineType = 'public';
+
+  const defaultFilters = useSettings().timelines[timelineType as keyof Settings['timelines']];
+  const filters = column.filters ?? defaultFilters ?? defaultFiltersSettings;
+
+  return useMemo(() => {
+    const items: Menu = [];
+
+    const handleOnChecked =
+      (
+        key: Exclude<keyof Exclude<TimelineFilters, undefined>, 'hideFollowedReposts'>,
+        inverse: boolean = false,
+      ) =>
+      (checked: boolean) =>
+        changeSetting(['deck', 'columns'], (columns: Array<DeckColumn>) => {
+          const updatedColumn = columns.find(({ id }) => column.id === id);
+
+          if (
+            !updatedColumn ||
+            (updatedColumn.type !== 'timeline' && updatedColumn.type !== 'hashtag')
+          )
+            return columns;
+
+          if (!updatedColumn.filters) updatedColumn.filters = { ...filters! };
+
+          updatedColumn.filters[key] = inverse ? !checked : checked;
+
+          return [...columns];
+        });
+
+    if (['home', 'list', 'antenna'].includes(timelineType)) {
+      items.push({
+        text: intl.formatMessage(messages.showReblogs),
+        type: 'toggle',
+        checked: filters?.showReblogs,
+        onChange: handleOnChecked('showReblogs'),
+      });
+      items.push({
+        text: intl.formatMessage(messages.showSelfReblogs),
+        type: 'toggle',
+        checked: filters?.showSelfReblogs,
+        disabled: !filters?.showReblogs,
+        onChange: handleOnChecked('showSelfReblogs'),
+      });
+    }
+
+    items.push({
+      text: intl.formatMessage(messages.showReplies),
+      type: 'toggle',
+      checked: filters?.showReplies,
+      onChange: handleOnChecked('showReplies'),
+    });
+
+    if (features.quotePosts) {
+      items.push({
+        text: intl.formatMessage(messages.showQuotes),
+        type: 'toggle',
+        checked: filters?.showQuotes,
+        onChange: handleOnChecked('showQuotes'),
+      });
+    }
+
+    if (timelineType === 'home') {
+      items.push({
+        text: intl.formatMessage(messages.showDirect),
+        type: 'toggle',
+        checked: filters?.showDirect,
+        onChange: handleOnChecked('showDirect'),
+      });
+    }
+
+    items.push({
+      text: intl.formatMessage(messages.hideNonMedia),
+      type: 'toggle',
+      checked: !filters?.showNonMedia,
+      onChange: handleOnChecked('showNonMedia', true),
+    });
+
+    items.push({
+      text: intl.formatMessage(messages.showMediaWithoutAltText),
+      type: 'toggle',
+      checked: filters?.showMediaWithoutAltText,
+      onChange: handleOnChecked('showMediaWithoutAltText'),
+    });
+
+    return items;
+  }, [timelineType, filters]);
+};
+
 type ExtractedDeckTimelineColumnHeader<T> = IDeckColumnHeader & {
   column: Extract<DeckColumn, { type: T }>;
 };
@@ -210,6 +306,7 @@ const DeckTimelineColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'time
 }) => {
   const title = useTimelineHeading(column.timeline);
   const icon = getTimelineIcon(column.timeline);
+  const items = useTimelineFiltersOptions(column);
 
   const { data: list } = useList(
     column.timeline.startsWith('list:') ? column.timeline.split(':')[1] : undefined,
@@ -226,6 +323,7 @@ const DeckTimelineColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'time
       subtitle={
         TIMELINE_SUBTITLES[column.timeline.split(':')[0] as keyof typeof TIMELINE_SUBTITLES]
       }
+      items={items}
     />
   );
 };

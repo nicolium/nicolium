@@ -11,6 +11,7 @@ import { useFeatures } from './use-features';
 import { useLoggedIn } from './use-logged-in';
 
 import type { Menu } from '@/components/dropdown-menu';
+import type { TimelineFilters } from '@/schemas/frontend-settings';
 
 const messages = defineMessages({
   showReblogs: { id: 'timeline_filters.show_reblogs', defaultMessage: 'Show reposts' },
@@ -51,7 +52,7 @@ const messages = defineMessages({
   view: { id: 'toast.view', defaultMessage: 'View' },
 });
 
-const defaultSettings = {
+const defaultSettings: TimelineFilters = {
   showReblogs: true,
   showSelfReblogs: true,
   showReplies: true,
@@ -59,11 +60,12 @@ const defaultSettings = {
   showDirect: true,
   showNonMedia: true,
   showMediaWithoutAltText: true,
+  hideFollowedReposts: null,
 };
 
 const getUpdatedTimelineSettings = (
   timeline: typeof defaultSettings,
-  key: keyof typeof defaultSettings,
+  key: Exclude<keyof typeof defaultSettings, 'hideFollowedReposts'>,
   value: boolean,
 ): typeof defaultSettings => ({
   ...timeline,
@@ -94,7 +96,10 @@ const useTimelineFiltersOptions = (
     const items: Menu = [];
 
     const handleOnChecked =
-      (key: keyof typeof defaultSettings, inverse: boolean = false) =>
+      (
+        key: Exclude<keyof typeof defaultSettings, 'hideFollowedReposts'>,
+        inverse: boolean = false,
+      ) =>
       (checked: boolean) =>
         changeSetting(
           ['timelines', timeline],
@@ -201,4 +206,8 @@ const useTimelineFiltersOptions = (
   }, [timeline, features, timelineSettings, defaultTimeline, timelineId, navigationItems]);
 };
 
-export { useTimelineFiltersOptions, getUpdatedTimelineSettings };
+export {
+  useTimelineFiltersOptions,
+  getUpdatedTimelineSettings,
+  defaultSettings as defaultFiltersSettings,
+};

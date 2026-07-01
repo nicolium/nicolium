@@ -27,7 +27,6 @@ const messages = defineMessages({
   fill: { id: 'column.deck.width.fill', defaultMessage: 'Fill available width' },
   moveLeft: { id: 'column.deck.position.left', defaultMessage: 'Move column left' },
   moveRight: { id: 'column.deck.position.right', defaultMessage: 'Move column right' },
-  showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies' },
   showPinned: { id: 'column.deck.account.show_pinned', defaultMessage: 'Show pinned posts' },
   addColumn: {
     id: 'column.deck.add_column',
@@ -48,6 +47,25 @@ const messages = defineMessages({
     defaultMessage: 'Choose which account this column is shown as',
   },
   drive: { id: 'column.drive', defaultMessage: 'Drive' },
+  showReblogs: { id: 'timeline_filters.show_reblogs', defaultMessage: 'Show reposts' },
+  showSelfReblogs: {
+    id: 'timeline_filters.show_self_reblogs',
+    defaultMessage: 'Show self-reposts',
+  },
+  showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies' },
+  showQuotes: { id: 'timeline_filters.show_quotes', defaultMessage: 'Show quotes' },
+  showDirect: {
+    id: 'timeline_filters.show_direct',
+    defaultMessage: 'Show direct messages',
+  },
+  hideNonMedia: {
+    id: 'timeline_filters.show_media_only',
+    defaultMessage: 'Only show posts with media',
+  },
+  showMediaWithoutAltText: {
+    id: 'timeline_filters.show_media_without_alt_text',
+    defaultMessage: 'Show media without description',
+  },
 });
 
 export { messages as deckMessages };
