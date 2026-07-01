@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 
 import { FOCUS_EDITOR_COMMAND } from '@/features/compose/editor/plugins/focus-plugin';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { focusDeckColumn } from '@/pages/deck/utils/column-focus';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
@@ -137,31 +138,22 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
       const key = e.key;
       if (key >= '1' && key <= '9') {
         const index = parseInt(key, 10) - 1;
-        const column = document.querySelector<HTMLDivElement>(
-          `.deck__column[data-index="${index}"]`,
+        focusDeckColumn(
+          document.querySelector<HTMLDivElement>(`.deck__column[data-index="${index}"]`),
         );
-        if (column) {
-          column.focus();
-        }
       }
     };
 
     const handleHotkeyFocusLastColumn = () => {
       if (document.body.classList.contains('with-modals')) return false;
 
-      const column = document.querySelector<HTMLDivElement>('.deck__column:last-child');
-      if (column) {
-        column.focus();
-      }
+      focusDeckColumn(document.querySelector<HTMLDivElement>('.deck__column:last-child'));
     };
 
     const handleHotkeyFocusNextColumn = () => {
       if (document.body.classList.contains('with-modals')) return false;
 
-      const column = document.querySelector<HTMLDivElement>('.deck__column:first-child');
-      if (column) {
-        column.focus();
-      }
+      focusDeckColumn(document.querySelector<HTMLDivElement>('.deck__column:first-child'));
     };
 
     type HotkeyHandlers = { [key: string]: (keyEvent?: KeyboardEvent) => void };

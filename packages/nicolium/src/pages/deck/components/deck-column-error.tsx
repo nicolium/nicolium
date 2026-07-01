@@ -5,6 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 
+import { focusDeckColumn } from '../utils/column-focus';
+
 import type { DeckColumn } from '@/schemas/frontend-settings';
 
 interface IDeckColumnError {
@@ -32,10 +34,9 @@ const DeckColumnError: React.FC<IDeckColumnError> = ({
 
       const prevIndex = index - 1;
       if (prevIndex < 0) return;
-      const prevColumn = document.querySelector<HTMLDivElement>(
-        `.deck__column[data-index="${prevIndex}"]`,
+      focusDeckColumn(
+        document.querySelector<HTMLDivElement>(`.deck__column[data-index="${prevIndex}"]`),
       );
-      prevColumn?.focus();
     },
     focusNextColumn: (event: KeyboardEvent) => {
       if (
@@ -46,10 +47,9 @@ const DeckColumnError: React.FC<IDeckColumnError> = ({
 
       const nextIndex = index + 1;
       if (nextIndex >= columns) return;
-      const nextColumn = document.querySelector<HTMLDivElement>(
-        `.deck__column[data-index="${nextIndex}"]`,
+      focusDeckColumn(
+        document.querySelector<HTMLDivElement>(`.deck__column[data-index="${nextIndex}"]`),
       );
-      nextColumn?.focus();
     },
     handleMoveLeft: () => {
       if (index === 0) return;

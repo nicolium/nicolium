@@ -8,6 +8,13 @@ import { useFeatures } from '@/hooks/use-features';
 import { useAuthStore } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 
+import {
+  focusDeckColumn,
+  forgetColumnFocus,
+  rememberColumnFocus,
+  restoreStatusFocus,
+} from '../utils/column-focus';
+
 import { DeckColumnIdContext, useColumnNotFound } from './deck-column-config';
 import { DeckColumnHeader } from './deck-column-header';
 import { DeckColumnLoginRequired } from './deck-column-login-required';
@@ -54,6 +61,7 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
   const notFoundResource = useColumnNotFound(column);
   const router = getDeckColumnRouter(column);
   const columnRef = useRef<HTMLDivElement>(null);
+  const lastFocusedStatusId = useRef<string | null>(null);
 
   useEffect(() => {
     if (highlight) {
@@ -65,6 +73,53 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
       columnRef.current?.focus();
     }
   }, [highlight]);
+
+  useEffect(() => {
+    const columnElement = columnRef.current;
+    if (!columnElement) return;
+
+    const handleFocusIn = (event: FocusEvent) => {
+      const focusable = (event.target as HTMLElement | null)?.closest<HTMLElement>('.focusable');
+      if (!focusable || focusable === columnElement || !columnElement.contains(focusable)) return;
+
+      rememberColumnFocus(column.id, focusable);
+      const statusId = focusable.getAttribute('data-status-id');
+      if (statusId) lastFocusedStatusId.current = statusId;
+    };
+
+    columnElement.addEventListener('focusin', handleFocusIn);
+    return () => {
+      columnElement.removeEventListener('focusin', handleFocusIn);
+      forgetColumnFocus(column.id);
+    };
+  }, [column.id]);
+
+  useEffect(() => {
+    const getIndex = () =>
+      (router.history.location.state as { __TSR_index?: number } | undefined)?.__TSR_index ?? null;
+
+    let prevIndex = getIndex();
+
+    return router.history.subscribe(({ action }: { action?: { type?: string } }) => {
+      const nextIndex = getIndex();
+      const wentBack =
+        action?.type === 'BACK' ||
+        action?.type === 'POP' ||
+        (prevIndex !== null && nextIndex !== null && nextIndex < prevIndex);
+      prevIndex = nextIndex;
+
+      if (!wentBack) return;
+
+      const columnElement = columnRef.current;
+      const statusId = lastFocusedStatusId.current;
+      if (!columnElement || !statusId) return;
+
+      const active = document.activeElement;
+      if (active && active !== document.body && !columnElement.contains(active)) return;
+
+      restoreStatusFocus(columnElement, statusId);
+    });
+  }, [router]);
 
   const context: RouterContext = useMemo(
     () => ({
@@ -94,10 +149,9 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
 
       const prevIndex = index - 1;
       if (prevIndex < 0) return;
-      const prevColumn = document.querySelector<HTMLDivElement>(
-        `.deck__column[data-index="${prevIndex}"]`,
+      focusDeckColumn(
+        document.querySelector<HTMLDivElement>(`.deck__column[data-index="${prevIndex}"]`),
       );
-      prevColumn?.focus();
     },
     focusNextColumn: (event: KeyboardEvent) => {
       if (
@@ -108,10 +162,9 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
 
       const nextIndex = index + 1;
       if (nextIndex >= columns) return;
-      const nextColumn = document.querySelector<HTMLDivElement>(
-        `.deck__column[data-index="${nextIndex}"]`,
+      focusDeckColumn(
+        document.querySelector<HTMLDivElement>(`.deck__column[data-index="${nextIndex}"]`),
       );
-      nextColumn?.focus();
     },
     moveColumnLeft: () => {
       onChangeIndex(column.id, index - 1);
