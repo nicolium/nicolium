@@ -42,6 +42,7 @@ import { MultiColumnProvider } from '@/contexts/multi-column-context';
 import Chat from '@/features/chats/components/chat';
 import ChatList from '@/features/chats/components/chat-list';
 import Thread from '@/features/status/components/thread';
+import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { ProfileInfoPanel } from '@/features/ui/util/async-components';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
@@ -697,7 +698,21 @@ const DriveDeckColumn = () => {
     }
   }, [folderId]);
 
-  return <DriveBrowser folderId={folderId} />;
+  const handlers = {
+    columnBack: (event: KeyboardEvent) => {
+      if ((event.target as HTMLElement).closest('.drive-file')) {
+        (event.target as HTMLElement).closest<HTMLElement>('.deck__column')?.focus();
+      } else {
+        return false;
+      }
+    },
+  };
+
+  return (
+    <Hotkeys handlers={handlers}>
+      <DriveBrowser folderId={folderId} />
+    </Hotkeys>
+  );
 };
 const driveRoute = createRoute({
   getParentRoute: () => rootRoute,

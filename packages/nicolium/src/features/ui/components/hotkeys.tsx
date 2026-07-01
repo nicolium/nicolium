@@ -257,6 +257,8 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
   useEffect(() => {
     const element = ref.current ?? document;
 
+    const DRIVE_KEYS = ['up', 'down', 'left', 'right', 'home', 'end', 'pageup', 'pagedown'];
+
     function listener(event: Event) {
       if (isKeyboardEvent(event)) {
         pressedKeys.current.add(normalizeKey(event.key));
@@ -270,6 +272,10 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         !['input', 'textarea', 'select', 'em-emoji-picker'].includes(tagName) &&
         !(event.target as HTMLElement).closest(
           '[contenteditable], .multiselect-container, .dropdown-menu__content',
+        ) &&
+        !(
+          (event.target as HTMLElement)?.closest('.drive-file') &&
+          DRIVE_KEYS.includes(normalizeKey(event.key))
         ) &&
         !(['a', 'button'].includes(tagName) && normalizeKey(event.key) === 'enter');
 
