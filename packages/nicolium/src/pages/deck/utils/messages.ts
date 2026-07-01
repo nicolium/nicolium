@@ -66,6 +66,34 @@ const messages = defineMessages({
     id: 'timeline_filters.show_media_without_alt_text',
     defaultMessage: 'Show media without description',
   },
+  filterReblogs: {
+    id: 'column.deck.timeline.heading.hiding_reblogs',
+    defaultMessage: 'without reblogs',
+  },
+  filterSelfReblogs: {
+    id: 'column.deck.timeline.heading.hiding_self_reblogs',
+    defaultMessage: 'without self-reblogs',
+  },
+  filterReplies: {
+    id: 'column.deck.timeline.heading.hiding_replies',
+    defaultMessage: 'without replies',
+  },
+  filterQuotes: {
+    id: 'column.deck.timeline.heading.hiding_quotes',
+    defaultMessage: 'without quotes',
+  },
+  filterDirect: {
+    id: 'column.deck.timeline.heading.hiding_direct',
+    defaultMessage: 'without direct messages',
+  },
+  filterNonMedia: {
+    id: 'column.deck.timeline.heading.hiding_non_media',
+    defaultMessage: 'with media only',
+  },
+  filterMediaWithoutAltText: {
+    id: 'column.deck.timeline.heading.hiding_media_without_alt_text',
+    defaultMessage: 'without undescribed media',
+  },
 });
 
 export { messages as deckMessages };

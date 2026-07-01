@@ -99,6 +99,11 @@
         display: flex;
         gap: 0.5rem;
         align-items: center;
+        min-width: 0;
+
+        &__text {
+          min-width: 0;
+        }
 
         .card-title {
           font-size: var(--text-lg);
@@ -107,7 +112,7 @@
       }
 
       &__subtitle {
-        @include mixins.text($theme: muted, $size: xs);
+        @include mixins.text($theme: muted, $size: xs, $truncate: true);
       }
     }
 

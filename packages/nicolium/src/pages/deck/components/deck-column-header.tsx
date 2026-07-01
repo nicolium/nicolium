@@ -36,6 +36,7 @@ import { useAccount } from '@/queries/accounts/use-account';
 import { useList } from '@/queries/accounts/use-lists';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
 import { useSettings } from '@/stores/settings';
+import { hasActiveFilters } from '@/utils/timeline-filter';
 
 import { deckMessages as messages } from '../utils/messages';
 
@@ -296,6 +297,27 @@ const useTimelineFiltersOptions = (
   }, [timelineType, filters]);
 };
 
+const useTimelineFiltersList = (column: Extract<DeckColumn, { type: 'timeline' | 'hashtag' }>) => {
+  const intl = useIntl();
+  const filters = column.filters;
+
+  if (!filters || !hasActiveFilters(filters)) return null;
+
+  const list: Array<string> = [];
+
+  if (!filters.showReblogs) list.push(intl.formatMessage(messages.filterReblogs));
+  if (filters.showReblogs && !filters.showSelfReblogs)
+    list.push(intl.formatMessage(messages.filterSelfReblogs));
+  if (!filters.showReplies) list.push(intl.formatMessage(messages.filterReplies));
+  if (!filters.showQuotes) list.push(intl.formatMessage(messages.filterQuotes));
+  if (!filters.showDirect) list.push(intl.formatMessage(messages.filterDirect));
+  if (!filters.showNonMedia) list.push(intl.formatMessage(messages.filterNonMedia));
+  if (!filters.showMediaWithoutAltText)
+    list.push(intl.formatMessage(messages.filterMediaWithoutAltText));
+
+  return intl.formatList(list);
+};
+
 type ExtractedDeckTimelineColumnHeader<T> = IDeckColumnHeader & {
   column: Extract<DeckColumn, { type: T }>;
 };
@@ -307,6 +329,7 @@ const DeckTimelineColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'time
   const title = useTimelineHeading(column.timeline);
   const icon = getTimelineIcon(column.timeline);
   const items = useTimelineFiltersOptions(column);
+  const filtersList = useTimelineFiltersList(column);
 
   const { data: list } = useList(
     column.timeline.startsWith('list:') ? column.timeline.split(':')[1] : undefined,
@@ -321,7 +344,14 @@ const DeckTimelineColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'time
       emojiUrl={list?.emoji_url || undefined}
       title={title}
       subtitle={
-        TIMELINE_SUBTITLES[column.timeline.split(':')[0] as keyof typeof TIMELINE_SUBTITLES]
+        TIMELINE_SUBTITLES[column.timeline.split(':')[0] as keyof typeof TIMELINE_SUBTITLES] ||
+        (filtersList ? (
+          <FormattedMessage
+            id='column.deck.timeline.heading.filtered'
+            defaultMessage='Showing posts {filters}'
+            values={{ filters: filtersList }}
+          />
+        ) : undefined)
       }
       items={items}
     />
@@ -505,6 +535,7 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
   ...props
 }) => {
   const items = useTimelineFiltersOptions(column);
+  const filtersList = useTimelineFiltersList(column);
 
   return (
     <DeckColumHeaderInner
@@ -513,11 +544,19 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
       icon={iconHash}
       title={`#${column.hashtag}`}
       subtitle={
-        <FormattedMessage
-          id='column.deck.hashtag.heading'
-          defaultMessage='Posts tagged "{hashtag}"'
-          values={{ hashtag: column.hashtag }}
-        />
+        filtersList ? (
+          <FormattedMessage
+            id='column.deck.hashtag.heading.filtered'
+            defaultMessage='Posts tagged "{hashtag}" {filters}'
+            values={{ hashtag: column.hashtag, filters: filtersList }}
+          />
+        ) : (
+          <FormattedMessage
+            id='column.deck.hashtag.heading'
+            defaultMessage='Posts tagged "{hashtag}"'
+            values={{ hashtag: column.hashtag }}
+          />
+        )
       }
       items={items}
     />
