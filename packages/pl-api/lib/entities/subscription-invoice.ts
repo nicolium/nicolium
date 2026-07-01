@@ -32,7 +32,7 @@ const subscriptionInvoiceSchema = v.object({
   /** The date when invoice was created. */
   created_at: datetimeSchema,
   /** The date when invoice times out. */
-  invoice_expires_at: datetimeSchema,
+  expires_at: datetimeSchema,
 });
 
 /**
