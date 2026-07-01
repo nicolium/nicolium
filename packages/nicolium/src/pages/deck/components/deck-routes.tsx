@@ -512,14 +512,12 @@ const AccountColumnBody: React.FC<IAccountColumnBody> = ({
 }) => (
   <>
     <AccountHeader key={`deck-header-${accountId}`} account={account} />
-    <React.Suspense fallback={null}>
-      <ProfileInfoPanel
-        key={`deck-info-${accountId}`}
-        username={username}
-        account={account}
-        withStatusesLink={false}
-      />
-    </React.Suspense>
+    <ProfileInfoPanel
+      key={`deck-info-${accountId}`}
+      username={username}
+      account={account}
+      withStatusesLink={false}
+    />
     {accountId && (
       <AccountTimelineColumn
         accountId={accountId}
