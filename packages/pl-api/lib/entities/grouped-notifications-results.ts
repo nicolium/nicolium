@@ -5,6 +5,7 @@ import { pick } from '@/utils';
 import { accountSchema } from './account';
 import { accountWarningSchema } from './account-warning';
 import { chatMessageSchema } from './chat-message';
+import { collectionSchema } from './collection';
 import { relationshipSeveranceEventSchema } from './relationship-severance-event';
 import { reportSchema } from './report';
 import { statusSchema } from './status';
@@ -119,6 +120,12 @@ const subscribedReactionNotificationGroupSchema = v.object({
   status_id: v.string(),
 });
 
+const collectionNotificationGroupSchema = v.object({
+  ...baseNotificationGroupSchema.entries,
+  type: v.picklist(['added_to_collection', 'collection_update']),
+  collection: collectionSchema,
+});
+
 /**
  * @category Schemas
  * @see {@link https://docs.joinmastodon.org/entities/Notification/}
@@ -148,6 +155,7 @@ const notificationGroupSchema: v.BaseSchema<any, NotificationGroup, v.BaseIssue<
     chatMentionNotificationGroupSchema,
     eventParticipationRequestNotificationGroupSchema,
     subscribedReactionNotificationGroupSchema,
+    collectionNotificationGroupSchema,
   ]),
 );
 
@@ -166,6 +174,7 @@ type NotificationGroup = v.InferOutput<
   | typeof chatMentionNotificationGroupSchema
   | typeof eventParticipationRequestNotificationGroupSchema
   | typeof subscribedReactionNotificationGroupSchema
+  | typeof collectionNotificationGroupSchema
 >;
 
 /**

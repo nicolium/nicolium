@@ -39,6 +39,7 @@ export * from './bookmark-folder';
 export * from './chat';
 export * from './chat-message';
 export * from './circle';
+export * from './collection';
 export * from './context';
 export * from './conversation';
 export * from './custom-emoji';

@@ -657,6 +657,12 @@ const getFeatures = (instance: Instance) => {
 
     circles: instance.api_versions['kmyblue_circle_history.fedibird.pl-api'] >= 1,
 
+    /**
+     * Manage collections of accounts to be recommended to others.
+     * @see {@link https://docs.joinmastodon.org/methods/collections/}
+     */
+    collections: instance.api_versions.mastodon >= 10,
+
     composeAllowHeadings: any([
       v.software !== PLEROMA && v.software !== AKKOMA,
       instance.pleroma.metadata.markup.allow_headings,
