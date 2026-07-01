@@ -847,6 +847,8 @@ const useAuthStore = create<AuthStore>()(
             toast.info(response.message);
           } else {
             authLoggedIn(response, app);
+            const account = await verifyCredentials(response.access_token, client.baseURL);
+            useAuthStore.getState().actions.switchAccount(account);
             return response;
           }
         },
