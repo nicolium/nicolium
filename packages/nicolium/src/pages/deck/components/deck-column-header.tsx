@@ -503,21 +503,26 @@ const DeckBookmarksColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'boo
 const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hashtag'>> = ({
   column,
   ...props
-}) => (
-  <DeckColumHeaderInner
-    column={column}
-    {...props}
-    icon={iconHash}
-    title={`#${column.hashtag}`}
-    subtitle={
-      <FormattedMessage
-        id='column.deck.hashtag.heading'
-        defaultMessage='Posts tagged "{hashtag}"'
-        values={{ hashtag: column.hashtag }}
-      />
-    }
-  />
-);
+}) => {
+  const items = useTimelineFiltersOptions(column);
+
+  return (
+    <DeckColumHeaderInner
+      column={column}
+      {...props}
+      icon={iconHash}
+      title={`#${column.hashtag}`}
+      subtitle={
+        <FormattedMessage
+          id='column.deck.hashtag.heading'
+          defaultMessage='Posts tagged "{hashtag}"'
+          values={{ hashtag: column.hashtag }}
+        />
+      }
+      items={items}
+    />
+  );
+};
 
 const DeckFallbackColumnHeader: React.FC<IDeckColumnHeader> = ({ column, ...props }) => {
   const title = useColumnTitle(column);
