@@ -68,11 +68,11 @@ const messages = defineMessages({
   },
   filterReblogs: {
     id: 'column.deck.timeline.heading.reblogs',
-    defaultMessage: 'reblogs',
+    defaultMessage: 'reposts',
   },
   filterSelfReblogs: {
     id: 'column.deck.timeline.heading.self_reblogs',
-    defaultMessage: 'self-reblogs',
+    defaultMessage: 'self-reposts',
   },
   filterReplies: {
     id: 'column.deck.timeline.heading.replies',
