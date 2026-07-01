@@ -25,6 +25,7 @@ interface GetAccountStatusesParams
   pinned?: boolean;
   /** String. Filter for statuses using a specific hashtag. */
   tagged?: string;
+  exclude_direct?: boolean;
 }
 
 /**
