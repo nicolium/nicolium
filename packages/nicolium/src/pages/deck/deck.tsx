@@ -2,12 +2,13 @@ import iconDeviceMobile from '@phosphor-icons/core/regular/device-mobile.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import HeadTitle from '@/components/helmet';
-import { useSettings } from '@/stores/settings';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings, useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 
 import { DeckColumn } from './components/deck-column';
@@ -25,6 +26,11 @@ const messages = defineMessages({
     id: 'deck.mobile_full_width',
     defaultMessage: 'Fit columns to screen on mobile',
   },
+  resetColumns: {
+    id: 'deck.reset_columns',
+    defaultMessage: 'Reset columns to default',
+  },
+  confirm: { id: 'confirmations.deck.reset_columns.confirm', defaultMessage: 'Reset' },
 });
 
 interface IColumnErrorBoundary {
@@ -42,9 +48,6 @@ class ColumnErrorBoundary extends React.Component<IColumnErrorBoundary, { hasErr
     return { hasError: true };
   }
 
-  // componentDidCatch(error, info) {
-  // }
-
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
@@ -59,6 +62,7 @@ const DeckPage = () => {
   const intl = useIntl();
   const { deck, defaultTimeline } = useSettings();
   const fadeRef = useRef<HTMLDivElement>(null);
+  const { openModal } = useModalsActions();
 
   const [addedColumnId, setAddedColumnId] = useState<string | null>(null);
   const knownColumnIds = useRef<Set<string> | null>(null);
@@ -132,6 +136,29 @@ const DeckPage = () => {
     );
   };
 
+  const resetColumns = () => {
+    openModal('CONFIRM', {
+      heading: (
+        <FormattedMessage
+          id='confirmations.deck.reset_columns.heading'
+          defaultMessage='Reset deck columns'
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.deck.reset_columns.message'
+          defaultMessage='Are you sure you want to delete your current deck configuration?'
+        />
+      ),
+      confirm: intl.formatMessage(messages.confirm),
+      onConfirm: () =>
+        changeSetting(
+          ['deck', 'columns'],
+          useSettingsStore.getState().defaultSettings.deck.columns,
+        ),
+    });
+  };
+
   const deckOptions: Menu = [
     {
       text: intl.formatMessage(messages.useAsHomepage),
@@ -146,6 +173,12 @@ const DeckPage = () => {
       type: 'toggle',
       checked: deck.mobileFullWidth,
       onChange: (value) => changeSetting(['deck', 'mobileFullWidth'], value),
+    },
+    null,
+    {
+      text: intl.formatMessage(messages.resetColumns),
+      action: resetColumns,
+      destructive: true,
     },
   ];
 
