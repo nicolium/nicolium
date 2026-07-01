@@ -28,7 +28,6 @@ const restoreStatusFocus = (columnElement: HTMLElement, statusId: string) => {
     const element = columnElement.querySelector<HTMLElement>(
       `.focusable[data-status-id="${statusId}"]`,
     );
-    console.log(element);
     if (element) {
       element.focus({ preventScroll: false, focusVisible: true });
     }

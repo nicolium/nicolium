@@ -20,6 +20,7 @@ interface IChatList {
 }
 
 const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false }) => {
+  const listId: string = useRef(`chat-list-${crypto.randomUUID()}`).current;
   const node = useRef<VirtuosoHandle | null>(null);
 
   const showShoutbox = !useShoutboxIsLoading();
@@ -48,17 +49,12 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
 
   const handleMoveUp = (chatId: string) => {
     const elementIndex = getCurrentIndex(chatId) - 1;
-    selectChild(elementIndex, node, document.querySelector('.chat-widget__list') ?? undefined);
+    selectChild(elementIndex, node, document.getElementById(listId) ?? undefined);
   };
 
   const handleMoveDown = (chatId: string) => {
     const elementIndex = getCurrentIndex(chatId) + 1;
-    selectChild(
-      elementIndex,
-      node,
-      document.querySelector('.chat-widget__list') ?? undefined,
-      allChats?.length,
-    );
+    selectChild(elementIndex, node, document.getElementById(listId) ?? undefined, allChats?.length);
   };
 
   const renderChatListItem = useCallback(
@@ -110,6 +106,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
       })}
     >
       <Virtuoso
+        id={listId}
         ref={node}
         atTopStateChange={(atTop) => {
           setNearTop(atTop);
