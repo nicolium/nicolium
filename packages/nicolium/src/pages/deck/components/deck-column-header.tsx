@@ -348,7 +348,7 @@ const DeckTimelineColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'time
         (filtersList ? (
           <FormattedMessage
             id='column.deck.timeline.heading.filtered'
-            defaultMessage='Showing posts {filters}'
+            defaultMessage='Hiding {filters}'
             values={{ filters: filtersList }}
           />
         ) : undefined)
@@ -547,7 +547,7 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
         filtersList ? (
           <FormattedMessage
             id='column.deck.hashtag.heading.filtered'
-            defaultMessage='Posts tagged "{hashtag}" {filters}'
+            defaultMessage='Posts tagged "{hashtag}" without {filters}'
             values={{ hashtag: column.hashtag, filters: filtersList }}
           />
         ) : (

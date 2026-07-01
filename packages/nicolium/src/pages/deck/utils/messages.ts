@@ -67,32 +67,32 @@ const messages = defineMessages({
     defaultMessage: 'Show media without description',
   },
   filterReblogs: {
-    id: 'column.deck.timeline.heading.hiding_reblogs',
-    defaultMessage: 'without reblogs',
+    id: 'column.deck.timeline.heading.reblogs',
+    defaultMessage: 'reblogs',
   },
   filterSelfReblogs: {
-    id: 'column.deck.timeline.heading.hiding_self_reblogs',
-    defaultMessage: 'without self-reblogs',
+    id: 'column.deck.timeline.heading.self_reblogs',
+    defaultMessage: 'self-reblogs',
   },
   filterReplies: {
-    id: 'column.deck.timeline.heading.hiding_replies',
-    defaultMessage: 'without replies',
+    id: 'column.deck.timeline.heading.replies',
+    defaultMessage: 'replies',
   },
   filterQuotes: {
-    id: 'column.deck.timeline.heading.hiding_quotes',
-    defaultMessage: 'without quotes',
+    id: 'column.deck.timeline.heading.quotes',
+    defaultMessage: 'quotes',
   },
   filterDirect: {
-    id: 'column.deck.timeline.heading.hiding_direct',
-    defaultMessage: 'without direct messages',
+    id: 'column.deck.timeline.heading.direct',
+    defaultMessage: 'direct messages',
   },
   filterNonMedia: {
-    id: 'column.deck.timeline.heading.hiding_non_media',
-    defaultMessage: 'with media only',
+    id: 'column.deck.timeline.heading.non_media',
+    defaultMessage: 'posts without media',
   },
   filterMediaWithoutAltText: {
-    id: 'column.deck.timeline.heading.hiding_media_without_alt_text',
-    defaultMessage: 'without undescribed media',
+    id: 'column.deck.timeline.heading.media_without_alt_text',
+    defaultMessage: 'media without description',
   },
 });
 
