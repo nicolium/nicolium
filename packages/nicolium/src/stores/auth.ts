@@ -2,6 +2,7 @@ import trim from 'lodash/trim';
 import {
   type Account as AccountEntity,
   applicationSchema,
+  ICESHRIMP_NET,
   instanceSchema,
   PlApiClient,
   tokenSchema,
@@ -837,6 +838,10 @@ const useAuthStore = create<AuthStore>()(
           await createAppToken();
 
           const client = getMeClient();
+          if (client.features.version.software === ICESHRIMP_NET) {
+            params.client_id = app.client_id;
+            params.scopes = getScopes();
+          }
           const response = await client.settings.createAccount(params);
           if ('identifier' in response) {
             toast.info(response.message);

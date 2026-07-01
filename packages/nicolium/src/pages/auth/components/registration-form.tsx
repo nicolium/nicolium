@@ -1,6 +1,7 @@
 import iconAt from '@phosphor-icons/core/regular/at.svg';
 import { Link, useNavigate } from '@tanstack/react-router';
 import debounce from 'lodash/debounce';
+import { ICESHRIMP_NET } from 'pl-api';
 import React, { useState, useRef, useCallback } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
@@ -40,6 +41,7 @@ const messages = defineMessages({
     id: 'registration.reason.hint',
     defaultMessage: 'This will help us review your application',
   },
+  inviteCode: { id: 'registration.fields.invite_code.placeholder', defaultMessage: 'Invite code' },
 });
 
 interface IRegistrationForm {
@@ -58,8 +60,10 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const { openModal } = useModalsActions();
   const { register, verifyCredentials } = useAuthActions();
 
+  const isIceshrimp = features.version.software === ICESHRIMP_NET;
   const needsConfirmation = instance.pleroma.metadata.account_activation_required;
-  const needsApproval = instance.registrations.approval_required;
+  const needsApproval = instance.registrations.approval_required && !isIceshrimp;
+  const needsInvite = isIceshrimp && instance.registrations.approval_required;
   const supportsAccountLookup = features.accountLookup;
   const birthdayRequired =
     instance.pleroma.metadata.birthday_required || instance.registrations.min_age;
@@ -67,7 +71,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
     ? instance.pleroma.metadata.multitenancy.domains!.filter((domain) => domain.public)
     : undefined;
 
-  const [captchaLoading, setCaptchaLoading] = useState(true);
+  const [captchaLoading, setCaptchaLoading] = useState(!isIceshrimp);
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [params, setParams] = useState<CreateAccountParams>({
     username: '',
@@ -75,6 +79,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
     password: '',
     agreement: false,
     locale: '',
+    invite_code: isIceshrimp ? inviteToken : undefined,
   });
   const [captchaIdempotencyKey, setCaptchaIdempotencyKey] = useState(crypto.randomUUID());
   const [usernameUnavailable, setUsernameUnavailable] = useState(false);
@@ -317,17 +322,19 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
           </FormGroup>
         )}
 
-        <Input
-          type='email'
-          name='email'
-          placeholder={intl.formatMessage(messages.email)}
-          autoComplete='off'
-          autoCorrect='off'
-          autoCapitalize='off'
-          onChange={onInputChange}
-          value={params.email}
-          required
-        />
+        {!isIceshrimp && (
+          <Input
+            type='email'
+            name='email'
+            placeholder={intl.formatMessage(messages.email)}
+            autoComplete='off'
+            autoCorrect='off'
+            autoCapitalize='off'
+            onChange={onInputChange}
+            value={params.email}
+            required
+          />
+        )}
 
         <Input
           type='password'
@@ -358,6 +365,20 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
           />
         </FormGroup>
 
+        {needsInvite && (
+          <Input
+            type='text'
+            name='invite_code'
+            placeholder={intl.formatMessage(messages.inviteCode)}
+            autoComplete='off'
+            autoCorrect='off'
+            autoCapitalize='off'
+            onChange={onInputChange}
+            value={params.invite_code ?? ''}
+            required
+          />
+        )}
+
         {birthdayRequired && (
           <BirthdayInput value={params.date_of_birth ?? ''} onChange={onBirthdayChange} required />
         )}
@@ -383,15 +404,17 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
           </FormGroup>
         )}
 
-        <CaptchaField
-          onFetch={onFetchCaptcha}
-          onFetchFail={onFetchCaptchaFail}
-          onChange={onInputChange}
-          onClick={onCaptchaClick}
-          idempotencyKey={captchaIdempotencyKey}
-          name='captcha_solution'
-          value={params.captcha_solution ?? ''}
-        />
+        {!isIceshrimp && (
+          <CaptchaField
+            onFetch={onFetchCaptcha}
+            onFetchFail={onFetchCaptchaFail}
+            onChange={onInputChange}
+            onClick={onCaptchaClick}
+            idempotencyKey={captchaIdempotencyKey}
+            name='captcha_solution'
+            value={params.captcha_solution ?? ''}
+          />
+        )}
 
         <FormGroup
           labelText={

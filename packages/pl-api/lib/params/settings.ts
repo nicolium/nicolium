@@ -38,6 +38,10 @@ type CreateAccountParams = {
 
   /** Invite code */
   invite_code?: string;
+
+  /** for iceshrimp.net */
+  client_id?: string;
+  scopes?: string;
 } & (
   | {
       /** EIP-4361 message */

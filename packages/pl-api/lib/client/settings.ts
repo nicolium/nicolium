@@ -28,6 +28,52 @@ const settings = (client: PlApiBaseClient) => ({
    * @see {@link https://docs.joinmastodon.org/methods/accounts/#create}
    */
   createAccount: async (params: CreateAccountParams) => {
+    if (client.features.version.software === ICESHRIMP_NET) {
+      const registerResponse = (
+        await client.request<{
+          token: string;
+          status: 'guest' | 'authenticated' | 'two_factor';
+        }>('/api/iceshrimp/auth/register', {
+          method: 'POST',
+          body: {
+            username: params.username,
+            password: params.password,
+            invite: params.invite_code,
+          },
+        })
+      ).json;
+      client.setIceshrimpAccessToken(registerResponse.token);
+
+      const mastodonTokenResponse = (
+        await client.request<{
+          id: string;
+          token: string;
+          created_at: string;
+          scopes: Array<string>;
+        }>('/api/iceshrimp/sessions/mastodon', {
+          method: 'POST',
+          body: {
+            appName: params.client_id,
+            scopes: params.scopes?.split(' '),
+            flags: {
+              supportsHtmlFormatting: true,
+              autoDetectQuotes: false,
+              isPleroma: true,
+              supportsInlineMedia: true,
+            },
+          },
+        })
+      ).json;
+
+      return v.parse(tokenSchema, {
+        access_token: mastodonTokenResponse.token,
+        token_type: 'Bearer',
+        scope: mastodonTokenResponse.scopes.join(' '),
+        created_at: new Date(mastodonTokenResponse.created_at).getTime(),
+        id: mastodonTokenResponse.id,
+      });
+    }
+
     const response = await client.request('/api/v1/accounts', {
       method: 'POST',
       body: { language: params.locale, birthday: params.date_of_birth, ...params },
