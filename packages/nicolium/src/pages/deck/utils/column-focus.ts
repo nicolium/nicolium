@@ -21,12 +21,12 @@ const focusDeckColumn = (columnElement: HTMLElement | null) => {
   }
 };
 
-const restoreStatusFocus = (columnElement: HTMLElement, statusId: string) => {
+const restoreStatusFocus = (columnElement: HTMLElement, focusedId: string) => {
   let attempts = 0;
 
   const handleFocus = () => {
     const element = columnElement.querySelector<HTMLElement>(
-      `.focusable[data-status-id="${statusId}"]`,
+      `.focusable[data-${focusedId.split(':')[0]}-id="${focusedId.split(':')[1]}"]`,
     );
     if (element) {
       element.focus({ preventScroll: false, focusVisible: true });

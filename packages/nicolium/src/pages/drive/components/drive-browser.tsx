@@ -402,6 +402,7 @@ const File: React.FC<IFile> = ({ file, index, onMove }) => {
       onKeyDown={handleFileKeyDown}
       onContextMenu={handleContextMenu}
       data-index={index}
+      data-file-id={file.id}
     >
       <div className='drive-file__button'>
         <DropdownMenu
@@ -581,6 +582,7 @@ const Folder: React.FC<IFolder> = ({ folder, index, onMove }) => {
       onKeyDown={handleFolderKeyDown}
       onContextMenu={handleContextMenu}
       data-index={index}
+      data-file-id={folder.id}
     >
       <div className='drive-file__button'>
         <DropdownMenu

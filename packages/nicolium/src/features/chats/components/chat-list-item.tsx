@@ -117,6 +117,7 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
           onClick(chat);
         }}
         onKeyDown={handleKeyDown}
+        data-chat-id={chat.id}
       >
         <div className='chat-list-item' data-testid='chat-list-item'>
           <div>

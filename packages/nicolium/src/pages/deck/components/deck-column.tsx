@@ -61,7 +61,7 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
   const notFoundResource = useColumnNotFound(column);
   const router = getDeckColumnRouter(column);
   const columnRef = useRef<HTMLDivElement>(null);
-  const lastFocusedStatusId = useRef<string | null>(null);
+  const lastFocusedId = useRef<string | null>(null);
 
   useEffect(() => {
     if (highlight) {
@@ -83,8 +83,15 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
       if (!focusable || focusable === columnElement || !columnElement.contains(focusable)) return;
 
       rememberColumnFocus(column.id, focusable);
-      const statusId = focusable.getAttribute('data-status-id');
-      if (statusId) lastFocusedStatusId.current = statusId;
+      let focusedId;
+      if (focusable.hasAttribute('data-status-id')) {
+        focusedId = `status:${focusable.getAttribute('data-status-id')}`;
+      } else if (focusable.hasAttribute('data-chat-id')) {
+        focusedId = `chat:${focusable.getAttribute('data-chat-id')}`;
+      } else if (focusable.hasAttribute('data-file-id')) {
+        focusedId = `file:${focusable.getAttribute('data-file-id')}`;
+      }
+      if (focusedId) lastFocusedId.current = focusedId;
     };
 
     columnElement.addEventListener('focusin', handleFocusIn);
@@ -111,13 +118,13 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
       if (!wentBack) return;
 
       const columnElement = columnRef.current;
-      const statusId = lastFocusedStatusId.current;
-      if (!columnElement || !statusId) return;
+      const focusedId = lastFocusedId.current;
+      if (!columnElement || !focusedId) return;
 
       const active = document.activeElement;
       if (active && active !== document.body && !columnElement.contains(active)) return;
 
-      restoreStatusFocus(columnElement, statusId);
+      restoreStatusFocus(columnElement, focusedId);
     });
   }, [router]);
 

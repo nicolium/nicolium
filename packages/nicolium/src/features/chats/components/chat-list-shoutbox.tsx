@@ -59,6 +59,7 @@ const ChatListShoutbox: React.FC<IChatListShoutbox> = ({ onClick, onMoveUp, onMo
         onClick('shoutbox');
       }}
       onKeyDown={handleKeyDown}
+      data-chat-id='shoutbox'
     >
       <div className='chat-list-item chat-list-item--shoutbox' data-testid='chat-list-item'>
         <div>
