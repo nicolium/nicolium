@@ -713,6 +713,7 @@
   "column.domain_blocks": "Domain blocks",
   "column.draft_statuses": "Drafts",
   "column.drive": "Drive",
+  "column.drive.folder": "Drive folder",
   "column.edit_profile": "Edit profile",
   "column.event_map": "Event location",
   "column.event_participants": "Event participants",

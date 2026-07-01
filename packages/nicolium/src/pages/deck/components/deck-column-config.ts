@@ -1,6 +1,5 @@
 import iconChatTeardrop from '@phosphor-icons/core/regular/chat-teardrop.svg';
 import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
-import iconCloud from '@phosphor-icons/core/regular/cloud.svg';
 import iconGraph from '@phosphor-icons/core/regular/graph.svg';
 import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
@@ -17,7 +16,6 @@ import { useAntenna } from '@/queries/accounts/use-antennas';
 import { useCircle } from '@/queries/accounts/use-circles';
 import { useList } from '@/queries/accounts/use-lists';
 import { useChat } from '@/queries/chats';
-import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
 import { useSettings, useSettingsStore } from '@/stores/settings';
 
@@ -75,9 +73,6 @@ const useDeckColumnConfig = <T extends DeckColumn>() => {
 const useColumnTitle = (column: DeckColumn): string => {
   const intl = useIntl();
   const { data: chat } = useChat(column.type === 'chat' ? column.chatId : undefined);
-  const { data: folder } = useDriveFolderQuery(
-    column.type === 'drive' ? column.folderId : undefined,
-  );
 
   if (column.type === 'trending') {
     switch (column.trendsType) {
@@ -96,10 +91,6 @@ const useColumnTitle = (column: DeckColumn): string => {
     return intl.formatMessage(messages.chatWith, { acct: chat?.account.acct ?? column.chatId });
   }
 
-  if (column.type === 'drive' && column.folderId) {
-    return folder?.name ?? intl.formatMessage(messages.drive);
-  }
-
   return intl.formatMessage(messages[column.type]);
 };
 
@@ -109,8 +100,6 @@ const useColumnIcon = (column: DeckColumn) => {
       return iconChatsTeardrop;
     case 'chat':
       return iconChatTeardrop;
-    case 'drive':
-      return iconCloud;
     case 'trending':
       return iconGraph;
     case 'scheduled':

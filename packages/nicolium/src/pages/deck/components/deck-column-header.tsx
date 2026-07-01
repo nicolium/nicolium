@@ -4,6 +4,7 @@ import iconBell from '@phosphor-icons/core/regular/bell.svg';
 import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
 import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
 import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
+import iconCloud from '@phosphor-icons/core/regular/cloud.svg';
 import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import iconFediverseLogo from '@phosphor-icons/core/regular/fediverse-logo.svg';
 import iconFrameCorners from '@phosphor-icons/core/regular/frame-corners.svg';
@@ -34,6 +35,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { defaultFiltersSettings } from '@/hooks/use-timeline-filters-options';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useList } from '@/queries/accounts/use-lists';
+import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
 import { useSettings } from '@/stores/settings';
 import { hasActiveFilters } from '@/utils/timeline-filter';
@@ -565,6 +567,35 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
   );
 };
 
+const DeckDriveColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'drive'>> = ({
+  column,
+  ...props
+}) => {
+  const { data: folder } = useDriveFolderQuery(column.folderId);
+
+  return (
+    <DeckColumHeaderInner
+      column={column}
+      {...props}
+      icon={iconCloud}
+      title={
+        column.folderId ? (
+          folder?.name || (
+            <FormattedMessage id='column.drive.folder' defaultMessage='Drive folder' />
+          )
+        ) : (
+          <FormattedMessage id='column.drive' defaultMessage='Drive' />
+        )
+      }
+      subtitle={
+        column.folderId && folder ? (
+          <FormattedMessage id='column.drive.folder' defaultMessage='Drive folder' />
+        ) : undefined
+      }
+    />
+  );
+};
+
 const DeckFallbackColumnHeader: React.FC<IDeckColumnHeader> = ({ column, ...props }) => {
   const title = useColumnTitle(column);
   const icon = useColumnIcon(column);
@@ -588,6 +619,8 @@ const DeckColumnHeader: React.FC<IDeckColumnHeader> = ({ column, ...props }) => 
       return <DeckBookmarksColumnHeader column={column} {...props} />;
     case 'hashtag':
       return <DeckHashtagColumnHeader column={column} {...props} />;
+    case 'drive':
+      return <DeckDriveColumnHeader column={column} {...props} />;
     default:
       return <DeckFallbackColumnHeader column={column} {...props} />;
   }
