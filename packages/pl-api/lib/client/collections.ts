@@ -62,14 +62,14 @@ const collections = (client: PlApiBaseClient) => {
      * Requires features{@link Features.collections}.
      */
     getAccountCollections: (accountId: string, params?: GetCollectionsParams) =>
-      getCollections(`/api/v1/${accountId}/collections`, params),
+      getCollections(`/api/v1/accounts/${accountId}/collections`, params),
 
     /**
      * Get all Collections the given account is featured in
      * Requires features{@link Features.collections}.
      */
     getAccountInCollections: (accountId: string, params?: GetCollectionsParams) =>
-      getCollections(`/api/v1/${accountId}/in_collections`, params),
+      getCollections(`/api/v1/accounts/${accountId}/in_collections`, params),
 
     /**
      * Update an existing Collection.
