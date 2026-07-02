@@ -8,6 +8,7 @@ export {
   asyncRefreshes as asyncRefreshesCategory,
   chats as chatsCategory,
   circles as circlesCategory,
+  collections as collectionsCategory,
   drive as driveCategory,
   emails as emailsCategory,
   events as eventsCategory,

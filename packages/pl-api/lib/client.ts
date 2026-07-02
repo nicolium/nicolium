@@ -7,6 +7,7 @@ import { apps } from '@/client/apps';
 import { asyncRefreshes } from '@/client/async-refreshes';
 import { chats } from '@/client/chats';
 import { circles } from '@/client/circles';
+import { collections } from '@/client/circles';
 import { drive } from '@/client/drive';
 import { emails } from '@/client/emails';
 import { events } from '@/client/events';
@@ -66,6 +67,7 @@ class PlApiClient extends PlApiBaseClient {
   readonly asyncRefreshes = asyncRefreshes(this);
   readonly chats = chats(this);
   readonly circles = circles(this);
+  readonly collections = collections(this);
   readonly drive = drive(this);
   readonly emails = emails(this);
   readonly events = events(this);
@@ -155,6 +157,7 @@ export {
   asyncRefreshes,
   chats,
   circles,
+  collections,
   drive,
   emails,
   events,

@@ -4,6 +4,7 @@ export * from './antennas';
 export * from './apps';
 export * from './chats';
 export * from './circles';
+export * from './collections';
 export type { PaginationParams } from './common';
 export * from './drive';
 export * from './events';
