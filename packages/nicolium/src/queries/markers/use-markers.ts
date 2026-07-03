@@ -35,7 +35,7 @@ const usePrefetchMarker = (timeline: 'home' | 'notifications') => {
       queryKey: scopedQueryKey(queryKeys.markers.timeline(timeline), scopeUrl),
       queryFn: async () => (await client.timelines.getMarkers([timeline]))[timeline] ?? null,
     });
-  }, [me, timeline]);
+  }, [me, timeline, client]);
 };
 
 const usePrefetchHomeTimelineMarker = () => usePrefetchMarker('home');

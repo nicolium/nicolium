@@ -87,7 +87,7 @@ const useRelationshipsQuery = (accountIds?: Array<string>) => {
             enabled: !!accountId,
           }))
         : [],
-    [isLoggedIn, accountIds?.join(',')],
+    [isLoggedIn, client, accountIds?.join(',')],
   );
 
   return useAppQueries({ queries });

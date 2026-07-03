@@ -321,7 +321,7 @@ const usePrefetchNotifications = () => {
     queryClient.prefetchInfiniteQuery(
       notificationsQueryOptions(client, activeFilter, hideBots, meUrl),
     );
-  }, [me, hideBots]);
+  }, [me, hideBots, client, activeFilter]);
 };
 
 const filterUnique = (
