@@ -302,7 +302,10 @@ const useNotificationsUnreadCount = () => {
   const { data: marker } = useNotificationsMarker();
   const { data: notifications = [] } = useNotifications('all');
 
-  return countUnreadNotifications(notifications, marker?.last_read_id);
+  return useMemo(
+    () => countUnreadNotifications(notifications, marker?.last_read_id),
+    [notifications, marker?.last_read_id],
+  );
 };
 
 const usePrefetchNotifications = () => {
