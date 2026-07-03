@@ -139,6 +139,30 @@ const fieldSchema = v.object({
   verified_at: v.fallback(v.nullable(datetimeSchema), null),
 });
 
+/**
+ * @category Schemas
+ * @see {@link https://docs.joinmastodon.org/entities/Account/#feature_approval}
+ */
+const featureApprovalSchema = v.object({
+  automatic: v.fallback(
+    v.array(v.picklist(['public', 'followers', 'following', 'unsupported_policy'])),
+    [],
+  ),
+  manual: v.fallback(
+    v.array(v.picklist(['public', 'followers', 'following', 'unsupported_policy'])),
+    [],
+  ),
+  current_user: v.fallback(
+    v.picklist(['automatic', 'manual', 'denied', 'missing', 'unknown']),
+    'unknown',
+  ),
+});
+
+/**
+ * @category Entity types
+ */
+type FeatureApproval = v.InferOutput<typeof featureApprovalSchema>;
+
 const baseAccountSchema = v.object({
   id: v.string(),
   username: v.fallback(v.string(), ''),
@@ -175,6 +199,7 @@ const baseAccountSchema = v.object({
   roles: filteredArray(roleSchema),
   hide_collections: v.fallback(v.optional(v.boolean()), undefined),
   email_subscriptions: v.fallback(v.optional(v.boolean()), undefined),
+  feature_approval: v.fallback(v.optional(featureApprovalSchema), undefined),
 
   fqn: v.string(),
   ap_id: v.fallback(v.nullable(v.string()), null),
@@ -392,8 +417,10 @@ export {
   credentialAccountSchema,
   blockedAccountSchema,
   mutedAccountSchema,
+  featureApprovalSchema,
   type Account,
   type CredentialAccount,
   type BlockedAccount,
   type MutedAccount,
+  type FeatureApproval,
 };

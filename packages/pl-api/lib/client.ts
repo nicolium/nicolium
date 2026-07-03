@@ -7,7 +7,7 @@ import { apps } from '@/client/apps';
 import { asyncRefreshes } from '@/client/async-refreshes';
 import { chats } from '@/client/chats';
 import { circles } from '@/client/circles';
-import { collections } from '@/client/circles';
+import { collections } from '@/client/collections';
 import { drive } from '@/client/drive';
 import { emails } from '@/client/emails';
 import { events } from '@/client/events';

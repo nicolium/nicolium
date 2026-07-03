@@ -11,6 +11,7 @@ const roleSchema = v.object({
   color: v.fallback(hexSchema, ''),
   permissions: v.fallback(v.string(), ''),
   highlighted: v.fallback(v.boolean(), true),
+  collection_limit: v.fallback(v.optional(v.number()), undefined),
 });
 
 /**

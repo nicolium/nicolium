@@ -99,6 +99,7 @@ interface SearchAccountParams {
  */
 interface ReportAccountParams {
   status_ids?: string[];
+  collection_ids?: string[];
   comment?: string;
   forward?: boolean;
   category?: 'spam' | 'legal' | 'violation' | 'other';
