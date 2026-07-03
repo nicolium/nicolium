@@ -53,6 +53,10 @@ const pickInputKeys = <T>(parsed: T, input: unknown): Partial<T> => {
         const parsedValue = parsed[key];
         const inputValue = input[key];
 
+        if (key === 'deck') {
+          return [key, parsedValue];
+        }
+
         if (isRecordObject(parsedValue) && isRecordObject(inputValue)) {
           return [key, pickInputKeys(parsedValue, inputValue)];
         }
