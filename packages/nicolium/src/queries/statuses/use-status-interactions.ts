@@ -379,9 +379,6 @@ const useBookmarkStatus = (statusId: string) => {
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
     onSettled: (status, _, folderId) => {
       importEntities({ statuses: [status] });
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.accountsLists.statusReblogs(statusId), scopeUrl),
-      });
 
       if (previousFolder) {
         queryClient.setQueryData(
