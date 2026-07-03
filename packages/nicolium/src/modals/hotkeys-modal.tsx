@@ -308,6 +308,60 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       ),
     },
     isLoggedIn && {
+      key: <HotkeyBinding keys={['shift', 'left']} joiner='plus' />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.move_column_left'
+          defaultMessage='to move column to left'
+        />
+      ),
+    },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['shift', 'right']} joiner='plus' />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.move_column_right'
+          defaultMessage='to move column to right'
+        />
+      ),
+    },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['shift', 'r', 'left']} joiner='plus' />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.move_column_left'
+          defaultMessage='to shrink column width'
+        />
+      ),
+    },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['shift', 'r', 'right']} joiner='plus' />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.move_column_right'
+          defaultMessage='to expand column width'
+        />
+      ),
+    },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['shift', 'up']} joiner='plus' />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.move_column_up'
+          defaultMessage='to switch to previous deck layout'
+        />
+      ),
+    },
+    isLoggedIn && {
+      key: <HotkeyBinding keys={['shift', 'down']} joiner='plus' />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.move_column_down'
+          defaultMessage='to switch to next deck layout'
+        />
+      ),
+    },
+    isLoggedIn && {
       key: <HotkeyBinding keys={['c']} />,
       label: (
         <FormattedMessage id='keyboard_shortcuts.add_column' defaultMessage='to add a new column' />
