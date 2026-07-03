@@ -44,14 +44,19 @@ const updateActiveLayoutColumns = (updateFn: (columns: Array<DeckColumn>) => Arr
   );
 };
 
-const switchDeckLayout = (id: string) => changeSetting(['deck', 'activeLayout'], id);
+const switchDeckLayout = (id: string) => {
+  changeSetting(['deck', 'activeLayout'], id);
+  requestAnimationFrame(() => {
+    document.querySelector<HTMLDivElement>('.deck__column')?.focus({ preventScroll: true });
+  });
+};
 
 const switchToPreviousLayout = () => {
   const deck = useSettingsStore.getState().settings.deck;
   const layouts = deck.layouts;
   const currentIndex = layouts.findIndex((layout) => layout.id === deck.activeLayout);
   const prevIndex = (currentIndex - 1 + layouts.length) % layouts.length;
-  changeSetting(['deck', 'activeLayout'], layouts[prevIndex].id);
+  switchDeckLayout(layouts[prevIndex].id);
 };
 
 const switchToNextLayout = () => {
@@ -59,7 +64,7 @@ const switchToNextLayout = () => {
   const layouts = deck.layouts;
   const currentIndex = layouts.findIndex((layout) => layout.id === deck.activeLayout);
   const nextIndex = (currentIndex + 1) % layouts.length;
-  changeSetting(['deck', 'activeLayout'], layouts[nextIndex].id);
+  switchDeckLayout(layouts[nextIndex].id);
 };
 
 const createDeckLayout = () => {
