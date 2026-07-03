@@ -34,6 +34,26 @@ type PaginatedResponseQueryResult<T, IsArray extends boolean> = IsArray extends 
     ? PaginatedResponseArray<TItem>
     : T;
 
+const defaultSelect = <T2, IsArray extends boolean, T3>(
+  data: InfiniteData<PaginatedResponse<T2, IsArray>>,
+): T3 => {
+  const lastPage = data.pages.at(-1);
+
+  if (!lastPage) {
+    return new PaginatedResponseArray() as T3;
+  }
+
+  if (Array.isArray(lastPage.items)) {
+    const items = PaginatedResponseArray.from(
+      data.pages.flatMap((page) => (Array.isArray(page.items) ? page.items : [page.items])),
+    ).setMeta(lastPage.total, lastPage.partial);
+
+    return items as T3;
+  }
+
+  return lastPage.items as T3;
+};
+
 const makePaginatedResponseQuery =
   <
     T1 extends Array<any>,
@@ -71,25 +91,7 @@ const makePaginatedResponseQuery =
         (pageParam as PageParam).next?.() ?? queryFn(client, params, scopeUrl),
       initialPageParam: { next: null } as PageParam,
       getNextPageParam: (page) => (page.next ? page : undefined),
-      select:
-        select ??
-        ((data) => {
-          const lastPage = data.pages.at(-1);
-
-          if (!lastPage) {
-            return new PaginatedResponseArray() as T3;
-          }
-
-          if (Array.isArray(lastPage.items)) {
-            const items = PaginatedResponseArray.from(
-              data.pages.flatMap((page) => (Array.isArray(page.items) ? page.items : [page.items])),
-            ).setMeta(lastPage.total, lastPage.partial);
-
-            return items as T3;
-          }
-
-          return lastPage.items as T3;
-        }),
+      select: select ?? defaultSelect<T2, IsArray, T3>,
       enabled:
         (enabled === 'isLoggedIn'
           ? !!account
@@ -101,4 +103,9 @@ const makePaginatedResponseQuery =
     });
   };
 
-export { makePaginatedResponseQuery, PaginatedResponseArray, type PaginatedResponseQueryResult };
+export {
+  defaultSelect,
+  makePaginatedResponseQuery,
+  PaginatedResponseArray,
+  type PaginatedResponseQueryResult,
+};
