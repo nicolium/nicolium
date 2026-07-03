@@ -64,7 +64,7 @@ function useAppInfiniteQuery<
     const instanceUrl = new URL(scopeUrl).origin;
     return queryClient.getQueryData<NonFunctionGuard<InfiniteData<TQueryFnData, TPageParam>>>([
       instanceUrl,
-      queryKey,
+      ...queryKey,
     ]);
   }, [scopeUrl, queryClient, queryKey]);
 
@@ -88,7 +88,7 @@ function useAppQueries<T extends Array<unknown>, TCombinedResult = QueriesResult
         return {
           ...(query as object),
           queryKey: [scopeUrl, ...queryKey],
-          placeholderData: () => queryClient.getQueryData([instanceUrl, queryKey]),
+          placeholderData: () => queryClient.getQueryData([instanceUrl, ...queryKey]),
         };
       }) as unknown as readonly [...QueriesOptions<T>],
     [scopeUrl, queryClient, queries],
