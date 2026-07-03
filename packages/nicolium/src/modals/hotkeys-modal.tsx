@@ -112,6 +112,12 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
   const { isLoggedIn } = useLoggedIn();
 
   const hotkeys = [
+    {
+      key: <HotkeyBinding keys={['?']} />,
+      label: (
+        <FormattedMessage id='keyboard_shortcuts.legend' defaultMessage='to display this legend' />
+      ),
+    },
     isLoggedIn && {
       key: <HotkeyBinding keys={['r']} />,
       label: <FormattedMessage id='keyboard_shortcuts.reply' defaultMessage='to reply' />,
@@ -374,12 +380,6 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
           id='keyboard_shortcuts.column_back'
           defaultMessage='to navigate back inside a column'
         />
-      ),
-    },
-    {
-      key: <HotkeyBinding keys={['?']} />,
-      label: (
-        <FormattedMessage id='keyboard_shortcuts.legend' defaultMessage='to display this legend' />
       ),
     },
   ].filter((hotkey) => hotkey !== false);
