@@ -36,7 +36,7 @@ function useAppQuery<
 
   const placeholderData = useCallback(() => {
     const instanceUrl = new URL(scopeUrl).origin;
-    return queryClient.getQueryData<NonFunctionGuard<TQueryFnData>>([instanceUrl, queryKey]);
+    return queryClient.getQueryData<NonFunctionGuard<TQueryFnData>>([instanceUrl, ...queryKey]);
   }, [scopeUrl, queryClient, queryKey]);
 
   return useQuery({ ...options, queryKey: modifiedQueryKey, placeholderData });
