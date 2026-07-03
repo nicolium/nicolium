@@ -190,6 +190,8 @@ const hotkeyMatcherMap = {
   widenColumn: chord('shift', 'r', 'right'),
   moveColumnLeft: shiftPlus('left'),
   moveColumnRight: shiftPlus('right'),
+  switchToPreviousLayout: shiftPlus('up'),
+  switchToNextLayout: shiftPlus('down'),
   // focusLoadMore: just('l'),
   reply: just('r'),
   favourite: just('f'),

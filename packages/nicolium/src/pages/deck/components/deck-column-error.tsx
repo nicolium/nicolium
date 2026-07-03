@@ -6,6 +6,7 @@ import { CardHeader, CardTitle } from '@/components/ui/card';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 
 import { focusDeckColumn } from '../utils/column-focus';
+import { switchToPreviousLayout, switchToNextLayout } from '../utils/layouts';
 
 import type { DeckColumn } from '@/schemas/frontend-settings';
 
@@ -59,6 +60,8 @@ const DeckColumnError: React.FC<IDeckColumnError> = ({
       if (index === columns - 1) return;
       onChangeIndex(column.id, index + 1);
     },
+    switchToPreviousLayout,
+    switchToNextLayout,
   };
 
   return (

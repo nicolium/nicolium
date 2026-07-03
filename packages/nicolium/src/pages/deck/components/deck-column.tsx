@@ -14,6 +14,7 @@ import {
   rememberColumnFocus,
   restoreStatusFocus,
 } from '../utils/column-focus';
+import { switchToNextLayout, switchToPreviousLayout } from '../utils/layouts';
 
 import { DeckColumnIdContext, useColumnNotFound } from './deck-column-config';
 import { DeckColumnHeader } from './deck-column-header';
@@ -179,6 +180,8 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
     moveColumnRight: () => {
       onChangeIndex(column.id, index + 1);
     },
+    switchToPreviousLayout,
+    switchToNextLayout,
     shrinkColumn: () => {
       const newWidth = WIDTHS[WIDTHS.indexOf(column.columnWidth) - 1];
       if (!newWidth) return;

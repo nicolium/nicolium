@@ -1,8 +1,10 @@
-import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { CardHeader, CardTitle } from '@/components/ui/card';
+import { Hotkeys } from '@/features/ui/components/hotkeys';
+
+import { switchToPreviousLayout, switchToNextLayout } from '../utils/layouts';
 
 import { NewColumnButton } from './new-column-button';
 
@@ -11,8 +13,18 @@ interface IDeckColumnEmpty {
 }
 
 const DeckColumnEmpty: React.FC<IDeckColumnEmpty> = ({ hasMultipleLayouts = false }) => {
+  const handlers = {
+    switchToPreviousLayout,
+    switchToNextLayout,
+  };
+
   return (
-    <div className={clsx('deck__column deck__column--empty')} tabIndex={-1} data-index={0}>
+    <Hotkeys
+      handlers={handlers}
+      className='deck__column deck__column--empty'
+      tabIndex={-1}
+      data-index={0}
+    >
       <CardHeader className='deck__column__header'>
         <CardTitle
           title={
@@ -41,7 +53,7 @@ const DeckColumnEmpty: React.FC<IDeckColumnEmpty> = ({ hasMultipleLayouts = fals
         )}
         <NewColumnButton />
       </div>
-    </div>
+    </Hotkeys>
   );
 };
 
