@@ -9,6 +9,7 @@ import type { AntennaEditorModalProps } from '@/modals/antenna-editor-modal';
 import type { BlockMuteModalProps } from '@/modals/block-mute-modal';
 import type { BoostModalProps } from '@/modals/boost-modal';
 import type { CircleEditorModalProps } from '@/modals/circle-editor-modal';
+import type { CollectionEditorModalProps } from '@/modals/collection-editor-modal';
 import type { CompareHistoryModalProps } from '@/modals/compare-history-modal';
 import type { ComponentModalProps } from '@/modals/component-modal';
 import type { ComposeInteractionPolicyModalProps } from '@/modals/compose-interaction-policy-modal';
@@ -50,6 +51,7 @@ type OpenModalType = {
   BLOCK_MUTE: BlockMuteModalProps;
   BOOST: BoostModalProps;
   CIRCLE_EDITOR: CircleEditorModalProps;
+  COLLECTION_EDITOR: CollectionEditorModalProps;
   COMPARE_HISTORY: CompareHistoryModalProps;
   COMPONENT: ComponentModalProps;
   COMPOSE: ComposeModalProps;

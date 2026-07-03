@@ -30,6 +30,7 @@ const AVAILABLE_NAVIGATION_ITEMS = [
   'lists',
   'circles',
   'antennas',
+  'collections',
   'events',
   'directory',
   'followed-hashtags',

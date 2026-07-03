@@ -58,12 +58,14 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
 interface ReportModalProps {
   accountId: string;
   statusIds?: Array<string>;
+  collectionId?: string;
 }
 
 const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   onClose,
   accountId,
   statusIds = [],
+  collectionId,
 }) => {
   const { data: account } = useAccount(accountId || undefined);
 
@@ -90,6 +92,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
     reportAccount(
       {
         status_ids: selectedStatusIds,
+        collection_ids: collectionId ? [collectionId] : undefined,
         comment,
         forward,
         rule_ids: ruleIds,

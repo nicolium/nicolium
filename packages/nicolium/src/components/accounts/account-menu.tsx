@@ -13,6 +13,7 @@ import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.s
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import iconRss from '@phosphor-icons/core/regular/rss.svg';
+import iconShapes from '@phosphor-icons/core/regular/shapes.svg';
 import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
 import iconSpeakerSimpleX from '@phosphor-icons/core/regular/speaker-simple-x.svg';
 import iconTag from '@phosphor-icons/core/regular/tag.svg';
@@ -59,6 +60,7 @@ const messages = defineMessages({
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
   copySuccess: { id: 'account.copy.success', defaultMessage: 'Profile URL copied to clipboard' },
+  collections: { id: 'account.collections', defaultMessage: 'Collections' },
   media: { id: 'account.media', defaultMessage: 'Media' },
   blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
@@ -520,6 +522,15 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       action: handleCopy,
       icon: iconLinkSimpleHorizontal,
     });
+
+    if (features.collections) {
+      menu.push({
+        text: intl.formatMessage(messages.collections),
+        to: '/@{$username}/collections',
+        params: { username: account.acct },
+        icon: iconShapes,
+      });
+    }
 
     if (!ownAccount) return menu;
 

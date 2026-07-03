@@ -41,6 +41,7 @@ import type {
   BookmarkFolder,
   Chat,
   Circle,
+  Collection,
   CredentialAccount,
   CustomEmoji,
   DriveFile,
@@ -594,6 +595,22 @@ const antennas = {
   },
 };
 
+const collections = {
+  root: ['collections'] as const,
+  show: (collectionId: string) => {
+    const key = ['collections', collectionId] as const;
+    return key as TaggedKey<typeof key, Collection>;
+  },
+  byAccount: (accountId: string) => {
+    const key = ['collections', 'byAccount', accountId] as const;
+    return key as TaggedKey<typeof key, Array<Collection>>;
+  },
+  featuringAccount: (accountId: string) => {
+    const key = ['collections', 'featuringAccount', accountId] as const;
+    return key as TaggedKey<typeof key, Array<Collection>>;
+  },
+};
+
 const bookmarkFolders = {
   root: ['bookmarkFolders'] as const,
   all: ['bookmarkFolders'] as TaggedKey<['bookmarkFolders'], Array<BookmarkFolder>>,
@@ -693,6 +710,7 @@ const queryKeys = {
   lists,
   circles,
   antennas,
+  collections,
   bookmarkFolders,
   draftStatuses,
   scheduledStatuses,

@@ -26,6 +26,7 @@ import iconPencilSimpleFill from '@phosphor-icons/core/fill/pencil-simple-fill.s
 import iconPlanetFill from '@phosphor-icons/core/fill/planet-fill.svg';
 import iconProhibitFill from '@phosphor-icons/core/fill/prohibit-fill.svg';
 import iconRssFill from '@phosphor-icons/core/fill/rss-fill.svg';
+import iconShapesFill from '@phosphor-icons/core/fill/shapes-fill.svg';
 import iconSlidersHorizontalFill from '@phosphor-icons/core/fill/sliders-horizontal-fill.svg';
 import iconUserFill from '@phosphor-icons/core/fill/user-fill.svg';
 import iconUserPlusFill from '@phosphor-icons/core/fill/user-plus-fill.svg';
@@ -59,6 +60,7 @@ import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import iconRss from '@phosphor-icons/core/regular/rss.svg';
+import iconShapes from '@phosphor-icons/core/regular/shapes.svg';
 import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
@@ -119,6 +121,7 @@ const REQUIRED_NAVIGATION_ITEMS = [
   'lists',
   'circles',
   'antennas',
+  'collections',
   'events',
   'directory',
   'followed-hashtags',
@@ -141,6 +144,7 @@ const messages = defineMessages({
   chats: { id: 'column.chats', defaultMessage: 'Chats' },
   circle: { id: 'column.circle', defaultMessage: 'Interactions circle' },
   circles: { id: 'column.circles', defaultMessage: 'Circles' },
+  collections: { id: 'column.collections', defaultMessage: 'Collections' },
   conversations: { id: 'column.direct', defaultMessage: 'Direct messages' },
   dashboard: { id: 'column.admin.dashboard', defaultMessage: 'Dashboard' },
   deck: { id: 'column.deck', defaultMessage: 'Deck' },
@@ -520,6 +524,17 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean, mobile?: bool
             text: intl.formatMessage(messages.favourites),
             icon: iconHeart,
             activeIcon: iconHeartFill,
+          });
+          break;
+        case 'collections':
+          if (!account || !features.collections) break;
+          menu.push({
+            type: 'link',
+            to: '/@{$username}/collections',
+            params: { username: account.acct },
+            text: intl.formatMessage(messages.collections),
+            icon: iconShapes,
+            activeIcon: iconShapesFill,
           });
           break;
         default: {

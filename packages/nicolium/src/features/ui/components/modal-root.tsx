@@ -15,6 +15,7 @@ const MODAL_COMPONENTS = {
   BLOCK_MUTE: lazy(() => import('@/modals/block-mute-modal')),
   BOOST: lazy(() => import('@/modals/boost-modal')),
   CIRCLE_EDITOR: lazy(() => import('@/modals/circle-editor-modal')),
+  COLLECTION_EDITOR: lazy(() => import('@/modals/collection-editor-modal')),
   COMPARE_HISTORY: lazy(() => import('@/modals/compare-history-modal')),
   COMPONENT: lazy(() => import('@/modals/component-modal')),
   COMPOSE: lazy(() => import('@/modals/compose-modal')),

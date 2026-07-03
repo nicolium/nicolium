@@ -430,6 +430,15 @@ export const antennaTimelineRoute = createRoute({
   }),
 });
 
+export const collectionRoute = createRoute({
+  getParentRoute: () => layouts.default,
+  path: '/collections/$collectionId',
+  component: lazy(() => import('@/pages/account-lists/collection')),
+  beforeLoad: ({ context: { features } }) => {
+    if (!features.collections) throw notFound();
+  },
+});
+
 // #endregion
 
 export const bookmarkFoldersRoute = createRoute({
@@ -688,6 +697,15 @@ export const profilePinsRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/pins',
   component: lazy(() => import('@/pages/status-lists/pinned-statuses')),
+});
+
+export const profileCollectionsRoute = createRoute({
+  getParentRoute: () => layouts.profile,
+  path: '/collections',
+  component: lazy(() => import('@/pages/account-lists/account-collections')),
+  beforeLoad: ({ context: { features } }) => {
+    if (!features.collections) throw notFound();
+  },
 });
 
 export const statusRoute = createRoute({
@@ -1657,6 +1675,7 @@ const routeTree = rootRoute.addChildren([
     circleTimelineRoute,
     antennasRoute,
     antennaTimelineRoute,
+    collectionRoute,
     bookmarkFoldersRoute,
     bookmarksRoute,
     directoryRoute,
@@ -1723,6 +1742,7 @@ const routeTree = rootRoute.addChildren([
     profileTaggedRoute,
     profileFavoritesRoute,
     profilePinsRoute,
+    profileCollectionsRoute,
   ]),
   layouts.remoteInstance.addChildren([remoteTimelineRoute]),
   layouts.search.addChildren([searchRoute]),

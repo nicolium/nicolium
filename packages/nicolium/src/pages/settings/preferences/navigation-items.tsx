@@ -31,6 +31,7 @@ import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import iconPushPinSlash from '@phosphor-icons/core/regular/push-pin-slash.svg';
 import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
 import iconRss from '@phosphor-icons/core/regular/rss.svg';
+import iconShapes from '@phosphor-icons/core/regular/shapes.svg';
 import iconSlidersHorizontal from '@phosphor-icons/core/regular/sliders-horizontal.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
@@ -105,6 +106,7 @@ const itemsMessages = {
   chats: { id: 'column.chats', defaultMessage: 'Chats' },
   circle: { id: 'column.circle', defaultMessage: 'Interactions circle' },
   circles: { id: 'column.circles', defaultMessage: 'Circles' },
+  collections: { id: 'column.collections', defaultMessage: 'Collections' },
   conversations: { id: 'column.direct', defaultMessage: 'Direct messages' },
   dashboard: { id: 'column.admin.dashboard', defaultMessage: 'Dashboard' },
   deck: { id: 'column.deck', defaultMessage: 'Deck' },
@@ -151,6 +153,7 @@ const itemsIcons: Record<AvailableNavigationItem, string> = {
   chats: iconChatsTeardrop,
   circle: iconCircle,
   circles: iconCirclesThree,
+  collections: iconShapes,
   conversations: iconEnvelopeSimple,
   dashboard: iconGauge,
   deck: iconColumns,

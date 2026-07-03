@@ -28,6 +28,7 @@ import {
 
 import AccountContainer from '@/components/accounts/account-container';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
+import { CollectionNotification } from '@/components/collections/collection-notification';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import { ParsedContent } from '@/components/statuses/parsed-content';
@@ -517,6 +518,11 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
       case 'move':
         return notification.target ? (
           <AccountContainer id={notification.target_id} avatarSize={avatarSize} withRelationship />
+        ) : null;
+      case 'added_to_collection':
+      case 'collection_update':
+        return 'collection' in notification && notification.collection ? (
+          <CollectionNotification collection={notification.collection} />
         ) : null;
       case 'favourite':
       case 'mention':
