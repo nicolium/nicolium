@@ -20,6 +20,8 @@ const messages = defineMessages({
   followers: { id: 'column.followers', defaultMessage: 'Followers' },
   following: { id: 'column.following', defaultMessage: 'Following' },
   subscribers: { id: 'column.subscribers', defaultMessage: 'Subscribers' },
+  collections: { id: 'column.collections', defaultMessage: 'Collections' },
+  collection: { id: 'column.collection', defaultMessage: 'Collection' },
   hashtag: { id: 'column.hashtag', defaultMessage: 'Hashtag' },
   remove: { id: 'column.deck.remove', defaultMessage: 'Remove column' },
   shrink: { id: 'column.deck.width.shrink', defaultMessage: 'Shrink column' },

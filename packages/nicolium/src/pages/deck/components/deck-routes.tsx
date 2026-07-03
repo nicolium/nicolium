@@ -6,6 +6,8 @@ import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import { BookmarksColumn } from '@/columns/bookmarks';
+import CollectionColumn from '@/columns/collection';
+import AccountCollectionsColumn from '@/columns/collections';
 import DraftStatusesColumn from '@/columns/draft-statuses';
 import { FollowersList, FollowingList, SubscribersList } from '@/columns/follows';
 import NotificationsColumn from '@/columns/notifications';
@@ -687,6 +689,28 @@ const subscribersRoute = createRoute({
   staticData: { title: messages.subscribers },
 });
 
+const CollectionsDeckColumn = () => {
+  const { username } = collectionsRoute.useParams();
+  return <AccountCollectionsColumn username={username} />;
+};
+const collectionsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/collections',
+  component: CollectionsDeckColumn,
+  staticData: { title: messages.collections },
+});
+
+const CollectionDeckColumn = () => {
+  const { collectionId } = collectionRoute.useParams();
+  return <CollectionColumn collectionId={collectionId} />;
+};
+const collectionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/collections/$collectionId',
+  component: CollectionDeckColumn,
+  staticData: { title: messages.collection },
+});
+
 const DriveDeckColumn = () => {
   const { folderId } = driveRoute.useParams();
   const [column, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'drive' }>>();
@@ -746,6 +770,8 @@ const routeTree = rootRoute.addChildren([
   followersRoute,
   followingRoute,
   subscribersRoute,
+  collectionsRoute,
+  collectionRoute,
   statusRoute,
   reblogsRoute,
   quotesRoute,
