@@ -7,7 +7,6 @@ import { useRouterState } from '@tanstack/react-router';
 import { createContext, useContext } from 'react';
 import { useIntl, type MessageDescriptor } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
 import { useTimelineHeading, type ITimelinePicker } from '@/components/timeline-picker';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -17,8 +16,8 @@ import { useCircle } from '@/queries/accounts/use-circles';
 import { useList } from '@/queries/accounts/use-lists';
 import { useChat } from '@/queries/chats';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
-import { useSettings, useSettingsStore } from '@/stores/settings';
 
+import { useActiveDeckColumns, updateActiveLayoutColumns } from '../utils/layouts';
 import { deckMessages as messages } from '../utils/messages';
 
 import {
@@ -50,17 +49,17 @@ const trendingTitles = {
 
 const DeckColumnIdContext = createContext<string | null>(null);
 
-const updateDeckColumn = (columnId: string, changes: Partial<DeckColumn>) => {
-  const { columns } = useSettingsStore.getState().settings.deck;
-  changeSetting(
-    ['deck', 'columns'],
-    columns.map((column) => (column.id === columnId ? { ...column, ...changes } : column)),
+const updateDeckColumn = (columnId: string, changes: Partial<DeckColumn>) =>
+  updateActiveLayoutColumns(
+    (columns) =>
+      columns.map((column) =>
+        column.id === columnId ? { ...column, ...changes } : column,
+      ) as Array<DeckColumn>,
   );
-};
 
 const useDeckColumnConfig = <T extends DeckColumn>() => {
   const columnId = useContext(DeckColumnIdContext);
-  const column = useSettings().deck.columns.find((item) => item.id === columnId) as T | undefined;
+  const column = useActiveDeckColumns().find((item) => item.id === columnId) as T | undefined;
 
   const update = (changes: Partial<T>) => {
     if (columnId) updateDeckColumn(columnId, changes);

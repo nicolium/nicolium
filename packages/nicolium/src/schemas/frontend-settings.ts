@@ -286,38 +286,67 @@ const deckColumnSchema = v.variant('type', [
   genericDeckColumnSchema,
 ]);
 
-const deckSettingsSchema = v.fallback(
-  v.object({
-    columns: filteredArray(deckColumnSchema),
-    mobileFullWidth: v.fallback(v.boolean(), false),
-  }),
+const createDefaultDeckColumns = (): Array<v.InferOutput<typeof deckColumnSchema>> => [
   {
-    mobileFullWidth: false,
-    columns: [
-      {
-        id: crypto.randomUUID(),
-        type: 'timeline',
-        columnWidth: 'lg',
-        fillAvailableWidth: false,
-        timeline: 'home',
-      },
-      {
-        id: crypto.randomUUID(),
-        type: 'notifications',
-        columnWidth: 'md',
-        fillAvailableWidth: false,
-        filter: 'all',
-      },
-      {
-        id: crypto.randomUUID(),
-        type: 'account',
-        columnWidth: 'md',
-        fillAvailableWidth: false,
-        accountId: 'self',
-        excludeReplies: false,
-        showPinned: false,
-      },
-    ],
+    id: crypto.randomUUID(),
+    type: 'timeline',
+    columnWidth: 'lg',
+    fillAvailableWidth: false,
+    timeline: 'home',
+  },
+  {
+    id: crypto.randomUUID(),
+    type: 'notifications',
+    columnWidth: 'md',
+    fillAvailableWidth: false,
+    filter: 'all',
+  },
+  {
+    id: crypto.randomUUID(),
+    type: 'account',
+    columnWidth: 'md',
+    fillAvailableWidth: false,
+    accountId: 'self',
+    excludeReplies: false,
+    showPinned: false,
+  },
+];
+
+const deckLayoutSchema = v.object({
+  id: v.fallback(v.string(), () => crypto.randomUUID()),
+  name: v.fallback(v.string(), ''),
+  columns: filteredArray(deckColumnSchema),
+});
+
+const deckSettingsSchema = v.fallback(
+  v.pipe(
+    v.object({
+      layouts: v.fallback(v.optional(v.array(deckLayoutSchema)), undefined),
+      columns: v.fallback(v.optional(filteredArray(deckColumnSchema)), undefined),
+      activeLayout: v.fallback(v.optional(v.string()), undefined),
+      mobileFullWidth: v.fallback(v.boolean(), false),
+    }),
+    v.transform(({ layouts, columns, activeLayout, mobileFullWidth }) => {
+      const normalizedLayouts =
+        layouts && layouts.length
+          ? layouts
+          : [{ id: crypto.randomUUID(), name: '', columns: columns ?? createDefaultDeckColumns() }];
+      const active =
+        activeLayout && normalizedLayouts.some((layout) => layout.id === activeLayout)
+          ? activeLayout
+          : normalizedLayouts[0].id;
+
+      return { layouts: normalizedLayouts, activeLayout: active, mobileFullWidth };
+    }),
+  ),
+  () => {
+    const id = crypto.randomUUID();
+
+    return {
+      mobileFullWidth: false,
+      activeLayout: id,
+      layouts: [{ id, name: '', columns: createDefaultDeckColumns() }],
+    };
   },
 );
 
@@ -493,6 +522,7 @@ const settingsSchema = v.object({
 });
 
 type DeckColumn = v.InferOutput<typeof deckColumnSchema>;
+type DeckLayout = v.InferOutput<typeof deckLayoutSchema>;
 type Settings = v.InferOutput<typeof settingsSchema>;
 type TimelineFilters = Settings['timelines']['home'];
 
@@ -501,6 +531,7 @@ export {
   type NavigationItem,
   type SidebarItem,
   type DeckColumn,
+  type DeckLayout,
   type Settings,
   type TimelineFilters,
   AVAILABLE_NAVIGATION_ITEMS,

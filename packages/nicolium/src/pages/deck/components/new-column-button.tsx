@@ -25,7 +25,6 @@ import iconTimeline from 'lucide-static/icons/timeline.svg';
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
@@ -39,6 +38,8 @@ import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 import { useAuthStore } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
+
+import { updateActiveLayoutColumns } from '../utils/layouts';
 
 import type { DeckColumn } from '@/schemas/frontend-settings';
 
@@ -153,7 +154,6 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
   const {
     defaultTimeline,
     remote_timeline: { pinnedHosts },
-    deck,
   } = useSettings();
 
   const { data: lists } = useLists();
@@ -162,13 +162,13 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
   const { data: bookmarkFolders } = useBookmarkFolders();
 
   const handleAdd = (blueprint: Partial<DeckColumn>) => () => {
-    const newColumn: Partial<DeckColumn> = {
+    const newColumn = {
       id: crypto.randomUUID(),
       columnWidth: 'md',
       accountUrl: activeAccountUrl === mainAccountUrl ? undefined : (activeAccountUrl ?? undefined),
       ...blueprint,
-    };
-    changeSetting(['deck', 'columns'], [...deck.columns, newColumn]);
+    } as DeckColumn;
+    updateActiveLayoutColumns((columns) => [...columns, newColumn]);
   };
 
   const items = useMemo(() => {
@@ -422,7 +422,6 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
     features,
     defaultTimeline,
     isAdmin,
-    deck.columns,
     activeAccountUrl,
     mainAccountUrl,
   ]);

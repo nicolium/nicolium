@@ -24,7 +24,6 @@ import iconTimeline from 'lucide-static/icons/timeline.svg';
 import React, { useMemo } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from '@/actions/settings';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import { useTimelineHeading } from '@/components/timeline-picker';
 import { CardHeader, CardTitle } from '@/components/ui/card';
@@ -40,6 +39,7 @@ import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
 import { useSettings } from '@/stores/settings';
 import { hasActiveFilters } from '@/utils/timeline-filter';
 
+import { updateActiveLayoutColumns } from '../utils/layouts';
 import { deckMessages as messages } from '../utils/messages';
 
 import { type IDeckColumn, WIDTHS } from './deck-column';
@@ -224,21 +224,16 @@ const useTimelineFiltersOptions = (
         inverse: boolean = false,
       ) =>
       (checked: boolean) =>
-        changeSetting(['deck', 'columns'], (columns: Array<DeckColumn>) => {
-          const updatedColumn = columns.find(({ id }) => column.id === id);
+        updateActiveLayoutColumns((columns) =>
+          columns.map((item) => {
+            if (item.id !== column.id || (item.type !== 'timeline' && item.type !== 'hashtag'))
+              return item;
 
-          if (
-            !updatedColumn ||
-            (updatedColumn.type !== 'timeline' && updatedColumn.type !== 'hashtag')
-          )
-            return columns;
+            const baseFilters = item.filters ?? { ...filters! };
 
-          if (!updatedColumn.filters) updatedColumn.filters = { ...filters! };
-
-          updatedColumn.filters[key] = inverse ? !checked : checked;
-
-          return [...columns];
-        });
+            return { ...item, filters: { ...baseFilters, [key]: inverse ? !checked : checked } };
+          }),
+        );
 
     if (['home', 'list', 'antenna'].includes(timelineType)) {
       items.push({

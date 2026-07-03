@@ -1,5 +1,6 @@
 import iconDeviceMobile from '@phosphor-icons/core/regular/device-mobile.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -14,7 +15,9 @@ import toast from '@/toast';
 import { DeckColumn } from './components/deck-column';
 import { DeckColumnEmpty } from './components/deck-column-empty';
 import { DeckColumnError } from './components/deck-column-error';
+import { DeckLayoutSwitcher } from './components/deck-layout-switcher';
 import { NewColumnButton } from './components/new-column-button';
+import { useActiveDeckColumns, updateActiveLayoutColumns, createDeckLayout } from './utils/layouts';
 
 import type { DeckColumn as DeckColumnSchema } from '@/schemas/frontend-settings';
 
@@ -32,6 +35,7 @@ const messages = defineMessages({
     defaultMessage: 'Reset columns to default',
   },
   confirm: { id: 'confirmations.deck.reset_columns.confirm', defaultMessage: 'Reset' },
+  newLayout: { id: 'deck.layouts.new', defaultMessage: 'New layout' },
 });
 
 interface IColumnErrorBoundary {
@@ -62,11 +66,13 @@ class ColumnErrorBoundary extends React.Component<IColumnErrorBoundary, { hasErr
 const DeckPage = () => {
   const intl = useIntl();
   const { deck, defaultTimeline } = useSettings();
+  const columns = useActiveDeckColumns();
   const fadeRef = useRef<HTMLDivElement>(null);
   const { openModal } = useModalsActions();
 
   const [addedColumnId, setAddedColumnId] = useState<string | null>(null);
   const knownColumnIds = useRef<Set<string> | null>(null);
+  const knownLayoutId = useRef<string | null>(null);
   const [isNearLeft, setNearLeft] = useState<boolean>(true);
 
   useEffect(() => {
@@ -86,10 +92,11 @@ const DeckPage = () => {
   }, []);
 
   useEffect(() => {
-    const currentIds = deck.columns.map((column) => column.id);
+    const currentIds = columns.map((column) => column.id);
 
-    if (knownColumnIds.current === null) {
+    if (knownColumnIds.current === null || knownLayoutId.current !== deck.activeLayout) {
       knownColumnIds.current = new Set(currentIds);
+      knownLayoutId.current = deck.activeLayout;
       return;
     }
 
@@ -97,7 +104,7 @@ const DeckPage = () => {
     knownColumnIds.current = new Set(currentIds);
 
     if (added) setAddedColumnId(added);
-  }, [deck.columns]);
+  }, [columns, deck.activeLayout]);
 
   useEffect(() => {
     if (!addedColumnId) return;
@@ -105,9 +112,7 @@ const DeckPage = () => {
     return () => clearTimeout(timeout);
   }, [addedColumnId]);
 
-  const updateColumns = (
-    updateFn: (oldColumns: Array<DeckColumnSchema>) => Array<DeckColumnSchema>,
-  ) => changeSetting(['deck', 'columns'], updateFn);
+  const updateColumns = updateActiveLayoutColumns;
 
   const handleRemove = (id: string) => {
     updateColumns((columns) => columns.filter((column) => column.id !== id));
@@ -123,9 +128,10 @@ const DeckPage = () => {
     updateColumns((columns) => {
       const oldIndex = columns.findIndex((column) => column.id === id);
       if (oldIndex === -1) return columns;
-      const column = columns.splice(oldIndex, 1)[0];
-      columns.splice(newIndex, 0, column);
-      return [...columns];
+      const next = [...columns];
+      const [column] = next.splice(oldIndex, 1);
+      next.splice(newIndex, 0, column);
+      return next;
     });
   };
 
@@ -153,10 +159,7 @@ const DeckPage = () => {
       ),
       confirm: intl.formatMessage(messages.confirm),
       onConfirm: () =>
-        changeSetting(
-          ['deck', 'columns'],
-          useSettingsStore.getState().defaultSettings.deck.columns,
-        ),
+        updateColumns(() => useSettingsStore.getState().defaultSettings.deck.layouts[0].columns),
     });
   };
 
@@ -175,13 +178,21 @@ const DeckPage = () => {
       checked: deck.mobileFullWidth,
       onChange: (value) => changeSetting(['deck', 'mobileFullWidth'], value),
     },
-    null,
-    {
-      text: intl.formatMessage(messages.resetColumns),
-      action: resetColumns,
-      destructive: true,
-    },
   ];
+
+  if (deck.layouts.length === 1) {
+    deckOptions.push(null, {
+      text: intl.formatMessage(messages.newLayout),
+      icon: iconPlus,
+      action: createDeckLayout,
+    });
+  }
+
+  deckOptions.push(null, {
+    text: intl.formatMessage(messages.resetColumns),
+    action: resetColumns,
+    destructive: true,
+  });
 
   return (
     <>
@@ -198,14 +209,14 @@ const DeckPage = () => {
           ref={fadeRef}
         />
         <div className='deck__columns'>
-          {deck.columns.map((column, index) => (
+          {columns.map((column, index) => (
             <ColumnErrorBoundary
               key={column.id}
               fallback={
                 <DeckColumnError
                   column={column}
                   index={index}
-                  columns={deck.columns.length}
+                  columns={columns.length}
                   onRemove={handleRemove}
                   onChangeIndex={handleChangeIndex}
                 />
@@ -214,7 +225,7 @@ const DeckPage = () => {
               <DeckColumn
                 column={column}
                 index={index}
-                columns={deck.columns.length}
+                columns={columns.length}
                 highlight={column.id === addedColumnId}
                 onRemove={handleRemove}
                 onChangeWidth={handleChangeWidth}
@@ -223,15 +234,18 @@ const DeckPage = () => {
               />
             </ColumnErrorBoundary>
           ))}
-          {deck.columns.length === 0 && <DeckColumnEmpty />}
+          {columns.length === 0 && <DeckColumnEmpty hasMultipleLayouts={deck.layouts.length > 1} />}
         </div>
         <div className='deck__sidebar'>
-          <DropdownMenu
-            items={deckOptions}
-            forceDropdown
-            title={intl.formatMessage(messages.options)}
-          />
-          {deck.columns.length > 0 && <NewColumnButton />}
+          <div className='deck__sidebar__top'>
+            {deck.layouts.length > 1 && <DeckLayoutSwitcher />}
+            <DropdownMenu
+              items={deckOptions}
+              forceDropdown
+              title={intl.formatMessage(messages.options)}
+            />
+          </div>
+          {columns.length > 0 && <NewColumnButton />}
           <div className='deck__sidebar__spacer' />
         </div>
       </div>

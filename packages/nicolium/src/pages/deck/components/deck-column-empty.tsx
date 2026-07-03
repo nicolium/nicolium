@@ -6,21 +6,39 @@ import { CardHeader, CardTitle } from '@/components/ui/card';
 
 import { NewColumnButton } from './new-column-button';
 
-const DeckColumnEmpty: React.FC = () => {
+interface IDeckColumnEmpty {
+  hasMultipleLayouts?: boolean;
+}
+
+const DeckColumnEmpty: React.FC<IDeckColumnEmpty> = ({ hasMultipleLayouts = false }) => {
   return (
     <div className={clsx('deck__column deck__column--empty')} tabIndex={-1} data-index={0}>
       <CardHeader className='deck__column__header'>
         <CardTitle
           title={
-            <FormattedMessage id='column.deck.empty.heading' defaultMessage='No deck columns' />
+            hasMultipleLayouts ? (
+              <FormattedMessage
+                id='column.deck.empty.heading.multiple_layouts'
+                defaultMessage='Empty deck layout'
+              />
+            ) : (
+              <FormattedMessage id='column.deck.empty.heading' defaultMessage='No deck columns' />
+            )
           }
         />
       </CardHeader>
       <div className='deck__column__content'>
-        <FormattedMessage
-          id='column.deck.empty.message'
-          defaultMessage='Add a column to get started'
-        />
+        {hasMultipleLayouts ? (
+          <FormattedMessage
+            id='column.deck.empty.message.multiple_layouts'
+            defaultMessage='Add a column to get started or switch to a different layout'
+          />
+        ) : (
+          <FormattedMessage
+            id='column.deck.empty.message'
+            defaultMessage='Add a column to get started'
+          />
+        )}
         <NewColumnButton />
       </div>
     </div>

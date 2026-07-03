@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { changeSetting } from '@/actions/settings';
 import { BookmarksColumn } from '@/columns/bookmarks';
 import DraftStatusesColumn from '@/columns/draft-statuses';
 import { FollowersList, FollowingList, SubscribersList } from '@/columns/follows';
@@ -55,8 +54,8 @@ import { useChat } from '@/queries/chats';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
 import { useStatus } from '@/queries/statuses/use-status';
 import { router as appRouter } from '@/router';
-import { useSettings } from '@/stores/settings';
 
+import { useActiveDeckColumns, updateActiveLayoutColumns } from '../utils/layouts';
 import { deckMessages as messages } from '../utils/messages';
 
 import { useDeckColumnConfig, useColumnRouteTitle, useColumnFilters } from './deck-column-config';
@@ -77,7 +76,7 @@ const SEARCH_FILTERS = ['accounts', 'statuses', 'hashtags', 'links'] as const;
 const RootRoute: React.FC = () => {
   const intl = useIntl();
   const router = useRouter();
-  const columns = useSettings().deck.columns;
+  const columns = useActiveDeckColumns();
   const [content, setContent] = useState<HTMLElement | null>(null);
   const [canGoBack, setCanGoBack] = useState(() => router.history.canGoBack());
   const scopeUrl = useScopeUrl();
@@ -95,7 +94,7 @@ const RootRoute: React.FC = () => {
 
   const handleAddColumn = () => {
     if (!accountId && !hashtag && !chatId) return;
-    changeSetting(['deck', 'columns'], (current: Array<DeckColumn>) => [
+    updateActiveLayoutColumns((current) => [
       ...current,
       {
         id: crypto.randomUUID(),
@@ -111,7 +110,7 @@ const RootRoute: React.FC = () => {
                 excludeReplies: false,
                 showPinned: false,
               }),
-      },
+      } as DeckColumn,
     ]);
   };
 
