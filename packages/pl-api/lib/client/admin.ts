@@ -90,6 +90,7 @@ import type {
   AdminUpdateDomainBlockParams,
   AdminUpdateDomainLimitParams,
   AdminUpdateDomainPermissionSubscriptionParams,
+  AdminUpdateIpBlockParams,
   AdminUpdateRelaySubscriptionParams,
   AdminUpdateReportParams,
   AdminUpdateRuleParams,
@@ -1307,7 +1308,7 @@ const admin = (client: PlApiBaseClient) => {
        * @see {@link https://docs.joinmastodon.org/methods/admin/trends/#tags}
        */
       getTrendingTags: async () => {
-        const response = await client.request('/api/v1/admin/trends/links');
+        const response = await client.request('/api/v1/admin/trends/tags');
 
         return v.parse(filteredArray(adminTagSchema), response.json);
       },
@@ -1362,7 +1363,7 @@ const admin = (client: PlApiBaseClient) => {
           body: { email, canonical_email_hash },
         });
 
-        return v.parse(filteredArray(adminCanonicalEmailBlockSchema), response.json);
+        return v.parse(adminCanonicalEmailBlockSchema, response.json);
       },
 
       /**
@@ -1671,9 +1672,9 @@ const admin = (client: PlApiBaseClient) => {
        * Change parameters for an existing IP block.
        * @see {@link https://docs.joinmastodon.org/methods/admin/ip_blocks/#update}
        */
-      updateIpBlock: async (ipBlockId: string, params: AdminCreateIpBlockParams) => {
+      updateIpBlock: async (ipBlockId: string, params: AdminUpdateIpBlockParams) => {
         const response = await client.request(`/api/v1/admin/ip_blocks/${ipBlockId}`, {
-          method: 'POST',
+          method: 'PUT',
           body: params,
         });
 
