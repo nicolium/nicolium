@@ -12,7 +12,7 @@ import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { minifyAccountList } from '../utils/minify-list';
 
-import type { Antenna, CreateAntennaParams, UpdateAntennaParams } from 'pl-api';
+import type { Antenna, CreateAntennaParams, PlApiClient, UpdateAntennaParams } from 'pl-api';
 
 function useAntennas<T>(
   select: (data: Array<Antenna>) => T,
@@ -176,64 +176,47 @@ const useAntennaDomains = (antennaId: string) => {
   });
 };
 
-const useAddDomainsToAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
+const makeAntennaItemsMutation =
+  <T>(
+    kind: 'domains' | 'keywords' | 'tags',
+    action: 'add' | 'remove' | 'addExcluded' | 'removeExcluded',
+    mutationFn: (client: PlApiClient, antennaId: string, items: Array<string>) => Promise<T>,
+  ) =>
+  (antennaId: string) => {
+    const client = useClient();
+    const scopeUrl = useScopeUrl();
 
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'domains', 'add'],
-    mutationFn: (domains: Array<string>) => client.antennas.addAntennaDomains(antennaId, domains),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.domains(antennaId), scopeUrl),
-      }),
-  });
-};
+    return useMutation({
+      mutationKey: ['antennas', antennaId, kind, action],
+      mutationFn: (items: Array<string>) => mutationFn(client, antennaId, items),
+      onSettled: () =>
+        queryClient.invalidateQueries({
+          queryKey: scopedQueryKey(queryKeys.antennas[kind](antennaId), scopeUrl),
+        }),
+    });
+  };
 
-const useRemoveDomainsFromAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
+const useAddDomainsToAntenna = makeAntennaItemsMutation('domains', 'add', (client, id, domains) =>
+  client.antennas.addAntennaDomains(id, domains),
+);
 
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'domains', 'remove'],
-    mutationFn: (domains: Array<string>) =>
-      client.antennas.removeAntennaDomains(antennaId, domains),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.domains(antennaId), scopeUrl),
-      }),
-  });
-};
+const useRemoveDomainsFromAntenna = makeAntennaItemsMutation(
+  'domains',
+  'remove',
+  (client, id, domains) => client.antennas.removeAntennaDomains(id, domains),
+);
 
-const useAddExcludedDomainsToAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
+const useAddExcludedDomainsToAntenna = makeAntennaItemsMutation(
+  'domains',
+  'addExcluded',
+  (client, id, domains) => client.antennas.addAntennaExcludedDomains(id, domains),
+);
 
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'domains', 'addExcluded'],
-    mutationFn: (domains: Array<string>) =>
-      client.antennas.addAntennaExcludedDomains(antennaId, domains),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.domains(antennaId), scopeUrl),
-      }),
-  });
-};
-
-const useRemoveExcludedDomainsFromAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
-
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'domains', 'removeExcluded'],
-    mutationFn: (domains: Array<string>) =>
-      client.antennas.removeAntennaExcludedDomains(antennaId, domains),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.domains(antennaId), scopeUrl),
-      }),
-  });
-};
+const useRemoveExcludedDomainsFromAntenna = makeAntennaItemsMutation(
+  'domains',
+  'removeExcluded',
+  (client, id, domains) => client.antennas.removeAntennaExcludedDomains(id, domains),
+);
 
 const useAntennaKeywords = (antennaId: string) => {
   const client = useClient();
@@ -244,65 +227,29 @@ const useAntennaKeywords = (antennaId: string) => {
   });
 };
 
-const useAddKeywordsToAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
+const useAddKeywordsToAntenna = makeAntennaItemsMutation(
+  'keywords',
+  'add',
+  (client, id, keywords) => client.antennas.addAntennaKeywords(id, keywords),
+);
 
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'keywords', 'add'],
-    mutationFn: (keywords: Array<string>) =>
-      client.antennas.addAntennaKeywords(antennaId, keywords),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.keywords(antennaId), scopeUrl),
-      }),
-  });
-};
+const useRemoveKeywordsFromAntenna = makeAntennaItemsMutation(
+  'keywords',
+  'remove',
+  (client, id, keywords) => client.antennas.removeAntennaKeywords(id, keywords),
+);
 
-const useRemoveKeywordsFromAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
+const useAddExcludedKeywordsToAntenna = makeAntennaItemsMutation(
+  'keywords',
+  'addExcluded',
+  (client, id, keywords) => client.antennas.addAntennaExcludedKeywords(id, keywords),
+);
 
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'keywords', 'remove'],
-    mutationFn: (keywords: Array<string>) =>
-      client.antennas.removeAntennaKeywords(antennaId, keywords),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.keywords(antennaId), scopeUrl),
-      }),
-  });
-};
-
-const useAddExcludedKeywordsToAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
-
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'keywords', 'addExcluded'],
-    mutationFn: (keywords: Array<string>) =>
-      client.antennas.addAntennaExcludedKeywords(antennaId, keywords),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.keywords(antennaId), scopeUrl),
-      }),
-  });
-};
-
-const useRemoveExcludedKeywordsFromAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
-
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'keywords', 'removeExcluded'],
-    mutationFn: (keywords: Array<string>) =>
-      client.antennas.removeAntennaExcludedKeywords(antennaId, keywords),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.keywords(antennaId), scopeUrl),
-      }),
-  });
-};
+const useRemoveExcludedKeywordsFromAntenna = makeAntennaItemsMutation(
+  'keywords',
+  'removeExcluded',
+  (client, id, keywords) => client.antennas.removeAntennaExcludedKeywords(id, keywords),
+);
 
 const useAntennaTags = (antennaId: string) => {
   const client = useClient();
@@ -313,61 +260,25 @@ const useAntennaTags = (antennaId: string) => {
   });
 };
 
-const useAddTagsToAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
+const useAddTagsToAntenna = makeAntennaItemsMutation('tags', 'add', (client, id, tags) =>
+  client.antennas.addAntennaTags(id, tags),
+);
 
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'tags', 'add'],
-    mutationFn: (tags: Array<string>) => client.antennas.addAntennaTags(antennaId, tags),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.tags(antennaId), scopeUrl),
-      }),
-  });
-};
+const useRemoveTagsFromAntenna = makeAntennaItemsMutation('tags', 'remove', (client, id, tags) =>
+  client.antennas.removeAntennaTags(id, tags),
+);
 
-const useRemoveTagsFromAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
+const useAddExcludedTagsToAntenna = makeAntennaItemsMutation(
+  'tags',
+  'addExcluded',
+  (client, id, tags) => client.antennas.addAntennaExcludedTags(id, tags),
+);
 
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'tags', 'remove'],
-    mutationFn: (tags: Array<string>) => client.antennas.removeAntennaTags(antennaId, tags),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.tags(antennaId), scopeUrl),
-      }),
-  });
-};
-
-const useAddExcludedTagsToAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
-
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'tags', 'addExcluded'],
-    mutationFn: (tags: Array<string>) => client.antennas.addAntennaExcludedTags(antennaId, tags),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.tags(antennaId), scopeUrl),
-      }),
-  });
-};
-
-const useRemoveExcludedTagsFromAntenna = (antennaId: string) => {
-  const client = useClient();
-  const scopeUrl = useScopeUrl();
-
-  return useMutation({
-    mutationKey: ['antennas', antennaId, 'tags', 'removeExcluded'],
-    mutationFn: (tags: Array<string>) => client.antennas.removeAntennaExcludedTags(antennaId, tags),
-    onSettled: () =>
-      queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.antennas.tags(antennaId), scopeUrl),
-      }),
-  });
-};
+const useRemoveExcludedTagsFromAntenna = makeAntennaItemsMutation(
+  'tags',
+  'removeExcluded',
+  (client, id, tags) => client.antennas.removeAntennaExcludedTags(id, tags),
+);
 
 export {
   useAntennas,
