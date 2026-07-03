@@ -1,5 +1,6 @@
 import React, { Suspense, useCallback } from 'react';
 
+import { CollectionCard } from '@/components/collections/collection-card';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import PlaceholderCard from '@/components/placeholders/placeholder-card';
 import PreviewCard from '@/components/preview-card';
@@ -27,6 +28,7 @@ interface IStatusMedia {
     | 'quote_id'
     | 'quote_visible'
     | 'sensitive'
+    | 'tagged_collections'
     | 'visibility'
   >;
   /** Whether to display compact media. */
@@ -129,8 +131,19 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
         </Suspense>
       );
     }
-  } else if ((!status.quote_id || status.quote_visible === false) && status.card) {
-    media = <PreviewCard onOpenMedia={openMedia} card={status.card} compact />;
+  } else if (
+    (!status.quote_id || status.quote_visible === false) &&
+    (status.card || status.tagged_collections?.length)
+  ) {
+    if (status.tagged_collections?.length) {
+      media = (
+        <div className='collection-notification'>
+          <CollectionCard collection={status.tagged_collections[0]} />
+        </div>
+      );
+    } else {
+      media = <PreviewCard onOpenMedia={openMedia} card={status.card!} compact />;
+    }
   } else if (status.expectsCard) {
     media = <PlaceholderCard />;
   }

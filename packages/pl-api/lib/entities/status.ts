@@ -3,6 +3,7 @@ import * as v from 'valibot';
 import { pick } from '@/utils';
 
 import { type Account, accountSchema } from './account';
+import { collectionSchema } from './collection';
 import { customEmojiSchema } from './custom-emoji';
 import { emojiReactionSchema } from './emoji-reaction';
 import { filterResultSchema } from './filter-result';
@@ -100,6 +101,7 @@ const baseStatusSchema = v.object({
   group: v.fallback(v.nullable(groupSchema), null),
   scheduled_at: v.fallback(v.null(), null),
   quote_approval: v.fallback(v.nullable(quoteApprovalSchema), null),
+  tagged_collections: filteredArray(collectionSchema),
 
   quote_id: v.fallback(v.nullable(v.string()), null),
   local: v.fallback(v.optional(v.boolean()), undefined),
