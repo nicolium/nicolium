@@ -362,32 +362,32 @@ const useBookmarkStatus = (statusId: string) => {
   const importEntities = useImportEntities();
   const scopeUrl = useScopeUrl();
 
-  let previouslyBookmarked = false;
-  let previousFolder: string | null;
-
   return useMutation({
     mutationKey: ['statuses', 'bookmark', statusId],
-    mutationFn: (folderId?: string) => {
+    mutationFn: (folderId?: string) => client.statuses.bookmarkStatus(statusId, folderId),
+    onMutate: () => {
       const status = queryClient.getQueryData(
         scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
       );
-      previouslyBookmarked = status?.bookmarked ?? false;
-      previousFolder = status?.bookmark_folder ?? null;
-      return client.statuses.bookmarkStatus(statusId, folderId);
+
+      return {
+        ...updateStatus(statusId, { bookmarked: true }, queryClient, scopeUrl),
+        previouslyBookmarked: status?.bookmarked ?? false,
+        previousFolder: status?.bookmark_folder ?? null,
+      };
     },
-    onMutate: () => updateStatus(statusId, { bookmarked: true }, queryClient, scopeUrl),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
-    onSettled: (status, _, folderId) => {
+    onSettled: (status, _, folderId, context) => {
       importEntities({ statuses: [status] });
 
-      if (previousFolder) {
+      if (context?.previousFolder) {
         queryClient.setQueryData(
-          scopedQueryKey(queryKeys.statusLists.bookmarks(previousFolder), scopeUrl),
+          scopedQueryKey(queryKeys.statusLists.bookmarks(context.previousFolder), scopeUrl),
           filterById(statusId),
         );
       }
 
-      if (!previouslyBookmarked) {
+      if (!context?.previouslyBookmarked) {
         queryClient.invalidateQueries({
           queryKey: scopedQueryKey(queryKeys.statusLists.bookmarks(undefined), scopeUrl),
         });
