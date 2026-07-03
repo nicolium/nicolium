@@ -12,6 +12,7 @@ import { useSettings, useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 
 import { DeckColumn } from './components/deck-column';
+import { DeckColumnEmpty } from './components/deck-column-empty';
 import { DeckColumnError } from './components/deck-column-error';
 import { NewColumnButton } from './components/new-column-button';
 
@@ -222,6 +223,7 @@ const DeckPage = () => {
               />
             </ColumnErrorBoundary>
           ))}
+          {deck.columns.length === 0 && <DeckColumnEmpty />}
         </div>
         <div className='deck__sidebar'>
           <DropdownMenu
@@ -229,7 +231,7 @@ const DeckPage = () => {
             forceDropdown
             title={intl.formatMessage(messages.options)}
           />
-          <NewColumnButton />
+          {deck.columns.length > 0 && <NewColumnButton />}
           <div className='deck__sidebar__spacer' />
         </div>
       </div>

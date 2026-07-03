@@ -742,6 +742,8 @@
   "column.deck.add_column": "Add column to deck",
   "column.deck.bookmarks.heading.all": "All bookmarks",
   "column.deck.bookmarks.heading.folder": "Bookmark folder",
+  "column.deck.empty.heading": "No deck columns",
+  "column.deck.empty.message": "Add a column to get started",
   "column.deck.error": "Failed to load column",
   "column.deck.error.heading": "Column error",
   "column.deck.hashtag.heading": "Posts tagged \"{hashtag}\"",
