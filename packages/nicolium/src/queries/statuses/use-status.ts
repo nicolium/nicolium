@@ -178,15 +178,15 @@ const findStatuses = (
   predicate: (status: NormalizedStatus) => boolean,
 ): Array<[string, NormalizedStatus]> =>
   queryClient
-    .getQueriesData<NormalizedStatus>({ queryKey: queryKeys.statuses.root })
+    .getQueriesData<NormalizedStatus>({
+      predicate: ({ queryKey }) =>
+        queryKey.length === 3 && queryKey[1] === 'statuses' && typeof queryKey[2] === 'string',
+    })
     .filter(
-      (entry): entry is [readonly ['statuses', string], NormalizedStatus] =>
-        entry[0].length === 2 &&
-        typeof entry[0][1] === 'string' &&
-        entry[1] !== undefined &&
-        predicate(entry[1]),
+      (entry): entry is [readonly [string, 'statuses', string], NormalizedStatus] =>
+        entry[1] !== undefined && predicate(entry[1]),
     )
-    .map(([key, data]) => [key[1], data]);
+    .map(([key, data]) => [key[2], data]);
 
 const useDeleteStatus = (statusId: string) => {
   const client = useClient();
