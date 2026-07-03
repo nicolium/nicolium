@@ -406,35 +406,45 @@ const DeckAccountColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'accou
 
   const account = column.accountId === 'self' ? ownAccount : otherAccount;
 
-  const title = account ? `@${account.acct}` : column.accountId;
+  let title: React.ReactNode;
   let subtitle;
-  if (column.showPinned) {
-    if (column.excludeReplies) {
+  if (!column.accountId) {
+    title = (
+      <FormattedMessage
+        id='column.deck.account.heading.search'
+        defaultMessage='Search for account'
+      />
+    );
+  } else {
+    title = account ? `@${account.acct}` : column.accountId;
+    if (column.showPinned) {
+      if (column.excludeReplies) {
+        subtitle = (
+          <FormattedMessage
+            id='column.deck.account.heading.pinned'
+            defaultMessage='With pinned posts, no replies'
+          />
+        );
+      } else {
+        subtitle = (
+          <FormattedMessage
+            id='column.deck.account.heading.pinned_with_replies'
+            defaultMessage='With pinned posts and replies'
+          />
+        );
+      }
+    } else if (column.excludeReplies) {
       subtitle = (
-        <FormattedMessage
-          id='column.deck.account.heading.pinned'
-          defaultMessage='With pinned posts, no replies'
-        />
+        <FormattedMessage id='column.deck.account.heading' defaultMessage='Without replies' />
       );
     } else {
       subtitle = (
         <FormattedMessage
-          id='column.deck.account.heading.pinned_with_replies'
-          defaultMessage='With pinned posts and replies'
+          id='column.deck.account.heading.with_replies'
+          defaultMessage='With replies'
         />
       );
     }
-  } else if (column.excludeReplies) {
-    subtitle = (
-      <FormattedMessage id='column.deck.account.heading' defaultMessage='Without replies' />
-    );
-  } else {
-    subtitle = (
-      <FormattedMessage
-        id='column.deck.account.heading.with_replies'
-        defaultMessage='With replies'
-      />
-    );
   }
 
   const items = useMemo(() => {
@@ -546,21 +556,32 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
       column={column}
       {...props}
       icon={iconHash}
-      title={`#${column.hashtag}`}
-      subtitle={
-        filtersList ? (
-          <FormattedMessage
-            id='column.deck.hashtag.heading.filtered'
-            defaultMessage='Posts tagged "{hashtag}" without {filters}'
-            values={{ hashtag: column.hashtag, filters: filtersList }}
-          />
+      title={
+        column.hashtag ? (
+          `#${column.hashtag}`
         ) : (
           <FormattedMessage
-            id='column.deck.hashtag.heading'
-            defaultMessage='Posts tagged "{hashtag}"'
-            values={{ hashtag: column.hashtag }}
+            id='column.deck.hashtag.heading.search'
+            defaultMessage='Search for hashtag'
           />
         )
+      }
+      subtitle={
+        column.hashtag ? (
+          filtersList ? (
+            <FormattedMessage
+              id='column.deck.hashtag.heading.filtered'
+              defaultMessage='Posts tagged "{hashtag}" without {filters}'
+              values={{ hashtag: column.hashtag, filters: filtersList }}
+            />
+          ) : (
+            <FormattedMessage
+              id='column.deck.hashtag.heading'
+              defaultMessage='Posts tagged "{hashtag}"'
+              values={{ hashtag: column.hashtag }}
+            />
+          )
+        ) : undefined
       }
       items={items}
     />
