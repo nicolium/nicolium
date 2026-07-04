@@ -1,3 +1,5 @@
+import type React from 'react';
+
 const truncateFilename = (url: string, maxLength: number) => {
   const filename = url.split('/').pop();
 
@@ -22,6 +24,80 @@ const formatBytes = (bytes: number, decimals: number = 2) => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+};
+
+const formatTime = (secondsNum: number): string => {
+  const hours = Math.floor(secondsNum / 3600)
+    .toString()
+    .padStart(2, '0');
+  const minutes = Math.floor((secondsNum % 3600) / 60)
+    .toString()
+    .padStart(2, '0');
+  const seconds = (secondsNum % 60).toString().padStart(2, '0');
+
+  return (hours === '00' ? '' : `${hours}:`) + `${minutes}:${seconds}`;
+};
+
+type Position = { x: number; y: number };
+
+const findElementPosition = (el: HTMLElement) => {
+  let box;
+
+  if (el.getBoundingClientRect && el.parentNode) {
+    box = el.getBoundingClientRect();
+  }
+
+  if (!box) {
+    return {
+      left: 0,
+      top: 0,
+    };
+  }
+
+  const docEl = document.documentElement;
+  const body = document.body;
+
+  const clientLeft = docEl.clientLeft || body.clientLeft || 0;
+  const scrollLeft = window.pageXOffset || body.scrollLeft;
+  const left = box.left + scrollLeft - clientLeft;
+
+  const clientTop = docEl.clientTop || body.clientTop || 0;
+  const scrollTop = window.pageYOffset || body.scrollTop;
+  const top = box.top + scrollTop - clientTop;
+
+  return {
+    left: Math.round(left),
+    top: Math.round(top),
+  };
+};
+
+const getPointerPosition = (
+  el: HTMLElement,
+  event:
+    | Pick<MouseEvent, 'pageX' | 'pageY'>
+    | Pick<TouchEvent, 'changedTouches'>
+    | Pick<React.TouchEvent, 'changedTouches'>,
+): Position => {
+  const box = findElementPosition(el);
+  const boxW = el.offsetWidth;
+  const boxH = el.offsetHeight;
+  const boxY = box.top;
+  const boxX = box.left;
+
+  let pageX, pageY;
+
+  if ('changedTouches' in event) {
+    pageX = event.changedTouches[0].pageX;
+    pageY = event.changedTouches[0].pageY;
+  } else {
+    pageX = event.pageX;
+    pageY = event.pageY;
+  }
+
+  return {
+    y: Math.max(0, Math.min(1, (pageY - boxY) / boxH)),
+    x: Math.max(0, Math.min(1, (pageX - boxX) / boxW)),
+  };
 };
 
 const getVideoDuration = (file: File): Promise<number> => {
@@ -52,4 +128,4 @@ const getVideoDuration = (file: File): Promise<number> => {
   return promise;
 };
 
-export { getVideoDuration, formatBytes, truncateFilename };
+export { getVideoDuration, formatBytes, formatTime, getPointerPosition, truncateFilename };

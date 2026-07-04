@@ -15,6 +15,7 @@ import Blurhash from '@/components/media/blurhash';
 import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';
 import { isFullscreen, requestFullscreen, exitFullscreen } from '@/utils/fullscreen';
+import { formatTime, getPointerPosition } from '@/utils/media';
 import {
   isPanoramic,
   isPortrait,
@@ -26,8 +27,6 @@ import { breakpoints } from '../ui/layout';
 
 const DEFAULT_HEIGHT = 300;
 
-type Position = { x: number; y: number };
-
 const messages = defineMessages({
   play: { id: 'video.play', defaultMessage: 'Play' },
   pause: { id: 'video.pause', defaultMessage: 'Pause' },
@@ -37,78 +36,6 @@ const messages = defineMessages({
   fullscreen: { id: 'video.fullscreen', defaultMessage: 'Full screen' },
   exitFullscreen: { id: 'video.exit_fullscreen', defaultMessage: 'Exit full screen' },
 });
-
-const formatTime = (secondsNum: number): string => {
-  const hours = Math.floor(secondsNum / 3600)
-    .toString()
-    .padStart(2, '0');
-  const minutes = Math.floor((secondsNum % 3600) / 60)
-    .toString()
-    .padStart(2, '0');
-  const seconds = (secondsNum % 60).toString().padStart(2, '0');
-
-  return (hours === '00' ? '' : `${hours}:`) + `${minutes}:${seconds}`;
-};
-
-const findElementPosition = (el: HTMLElement) => {
-  let box;
-
-  if (el.getBoundingClientRect && el.parentNode) {
-    box = el.getBoundingClientRect();
-  }
-
-  if (!box) {
-    return {
-      left: 0,
-      top: 0,
-    };
-  }
-
-  const docEl = document.documentElement;
-  const body = document.body;
-
-  const clientLeft = docEl.clientLeft || body.clientLeft || 0;
-  const scrollLeft = window.pageXOffset || body.scrollLeft;
-  const left = box.left + scrollLeft - clientLeft;
-
-  const clientTop = docEl.clientTop || body.clientTop || 0;
-  const scrollTop = window.pageYOffset || body.scrollTop;
-  const top = box.top + scrollTop - clientTop;
-
-  return {
-    left: Math.round(left),
-    top: Math.round(top),
-  };
-};
-
-const getPointerPosition = (
-  el: HTMLElement,
-  event:
-    | Pick<MouseEvent, 'pageX' | 'pageY'>
-    | Pick<TouchEvent, 'changedTouches'>
-    | Pick<React.TouchEvent, 'changedTouches'>,
-): Position => {
-  const box = findElementPosition(el);
-  const boxW = el.offsetWidth;
-  const boxH = el.offsetHeight;
-  const boxY = box.top;
-  const boxX = box.left;
-
-  let pageX, pageY;
-
-  if ('changedTouches' in event) {
-    pageX = event.changedTouches[0].pageX;
-    pageY = event.changedTouches[0].pageY;
-  } else {
-    pageX = event.pageX;
-    pageY = event.pageY;
-  }
-
-  return {
-    y: Math.max(0, Math.min(1, (pageY - boxY) / boxH)),
-    x: Math.max(0, Math.min(1, (pageX - boxX) / boxW)),
-  };
-};
 
 interface IVideo {
   preview?: string;
@@ -691,4 +618,4 @@ const Video: React.FC<IVideo> = ({
   );
 };
 
-export { formatTime, getPointerPosition, Video as default };
+export { Video as default };

@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Blurhash from '@/components/media/blurhash';
-import { getPointerPosition } from '@/components/media/video';
 import FormGroup from '@/components/ui/form-group';
 import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';
@@ -13,6 +12,7 @@ import { MIMETYPE_ICONS } from '@/components/upload';
 import { useCompose } from '@/hooks/use-compose';
 import { useFeatures } from '@/hooks/use-features';
 import toast from '@/toast';
+import { getPointerPosition } from '@/utils/media';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { MediaAttachment } from 'pl-api';

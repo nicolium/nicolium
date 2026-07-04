@@ -9,9 +9,9 @@ import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { formatTime, getPointerPosition } from '@/components/media/video';
 import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';
+import { formatTime, getPointerPosition } from '@/utils/media';
 
 import { breakpoints } from '../ui/layout';
 
