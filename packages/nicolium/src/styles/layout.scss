@@ -327,6 +327,7 @@ body {
   display: flex;
 
   width: 100%;
+  padding-bottom: var(--safe-area-inset-bottom, 0);
   border-color: var(--color-gray-200);
   border-style: solid;
   border-top-width: 1px;
@@ -989,10 +990,10 @@ body {
   }
 
   &__main {
+    bottom: calc(3.25px + 1px + var(--safe-area-inset-bottom, 0px));
     width: 100%;
     min-width: 0;
     max-width: 100%;
-    padding-bottom: 4rem;
 
     .dark.black & {
       border-color: var(--color-gray-800);
