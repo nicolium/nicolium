@@ -14,6 +14,7 @@ import LoadMore from '@/components/load-more';
 import Spinner from '@/components/ui/spinner';
 import { useColumnScrollParent } from '@/contexts/multi-column-context';
 import { useSettings } from '@/stores/settings';
+import { selectChild } from '@/utils/scroll-utils';
 
 import { EmptyMessage } from './empty-message';
 
@@ -139,6 +140,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
     const { autoloadMore } = useSettings();
     const { state: locationState } = useLocation();
     const scrollParent = useColumnScrollParent() || params.customScrollParent;
+    const node = useRef<VirtuosoHandle | null>(null);
 
     // Preserve scroll position
     const scrollDataKey = `nicolium:scrollData:${scrollKey}:${locationState.key}`;
@@ -222,11 +224,18 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
       }
     };
 
+    const handleLoadMoreMoveUp = () => {
+      const parent = params.id ? (document.getElementById(params.id) ?? undefined) : undefined;
+      selectChild(data.length - 1, node, parent);
+    };
+
     const loadMore = () => {
       if (autoloadMore || !hasMore || !onLoadMore) {
         return null;
       } else {
-        const button = <LoadMore visible={!isLoading} onClick={onLoadMore} />;
+        const button = (
+          <LoadMore visible={!isLoading} onClick={onLoadMore} onMoveUp={handleLoadMoreMoveUp} />
+        );
 
         if (loadMoreClassName) return <div className={loadMoreClassName}>{button}</div>;
 
@@ -285,7 +294,14 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
         {...params}
         {...(scrollParent ? { customScrollParent: scrollParent } : { useWindowScroll })}
         overscan={window.innerHeight * 1.5}
-        ref={ref}
+        ref={(handle) => {
+          node.current = handle;
+          if (typeof ref === 'function') {
+            ref(handle);
+          } else if (ref) {
+            ref.current = handle;
+          }
+        }}
         data={data}
         totalCount={data.length}
         startReached={onScrollToTop}
