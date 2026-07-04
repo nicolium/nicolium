@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import QuotedStatus from '@/components/statuses/quoted-status';
 import { useStatus } from '@/queries/statuses/use-status';
@@ -11,7 +12,7 @@ interface IQuotedStatusContainer {
 /** QuotedStatus shown in post composer. */
 const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) => {
   const { updateCompose } = useComposeActions();
-  const { quoteId } = useCompose(composeId);
+  const { quoteId, sourceQuoteId } = useCompose(composeId);
 
   const { data: status } = useStatus(quoteId ?? undefined);
 
@@ -21,6 +22,19 @@ const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) 
       draft.quoteId = null;
     });
   };
+
+  if (quoteId === null && sourceQuoteId && !status) {
+    return (
+      <div className='quoted-status quoted-status--compose'>
+        <p className='quoted-status__filtered'>
+          <FormattedMessage
+            id='compose.reply.unresolved'
+            defaultMessage='The referenced post could not be resolved.'
+          />
+        </p>
+      </div>
+    );
+  }
 
   if (!status) {
     return null;

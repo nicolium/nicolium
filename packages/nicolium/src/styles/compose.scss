@@ -926,6 +926,12 @@
   &__content {
     overflow-wrap: break-word;
   }
+
+  &--unresolved {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
 .reply-mentions,

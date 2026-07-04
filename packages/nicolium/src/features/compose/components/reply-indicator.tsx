@@ -1,15 +1,21 @@
 import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import React from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
+import IconButton from '@/components/ui/icon-button';
 import { useAccount } from '@/queries/accounts/use-account';
 import { getTextDirection } from '@/utils/rtl';
 
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
+
+const messages = defineMessages({
+  dismiss: { id: 'compose.reply.dismiss', defaultMessage: 'Dismiss' },
+});
 
 interface IReplyIndicator {
   className?: string;
@@ -30,6 +36,7 @@ interface IReplyIndicator {
   >;
   onCancel?: () => void;
   hideActions: boolean;
+  hasUnresolvedStatus?: boolean;
 }
 
 const ReplyIndicator: React.FC<IReplyIndicator> = ({
@@ -37,11 +44,36 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
   status,
   hideActions,
   onCancel,
+  hasUnresolvedStatus,
 }) => {
+  const intl = useIntl();
+
   const handleClick = () => {
     onCancel!();
   };
   const { data: account } = useAccount(status?.account_id);
+
+  if (hasUnresolvedStatus) {
+    return (
+      <div className={clsx('reply-indicator reply-indicator--unresolved', className)}>
+        <p>
+          <FormattedMessage
+            id='compose.reply.unresolved'
+            defaultMessage='The referenced post could not be resolved.'
+          />
+        </p>
+        {onCancel && (
+          <IconButton
+            className='account-card__action-button'
+            iconClassName='account-card__action-icon'
+            src={iconX}
+            title={intl.formatMessage(messages.dismiss)}
+            onClick={handleClick}
+          />
+        )}
+      </div>
+    );
+  }
 
   if (!status) {
     return null;
@@ -53,7 +85,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
       onActionClick: handleClick,
       actionIcon: iconX,
       actionAlignment: 'top',
-      actionTitle: 'Dismiss',
+      actionTitle: intl.formatMessage(messages.dismiss),
     };
   }
 

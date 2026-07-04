@@ -67,10 +67,6 @@ const messages = defineMessages({
       'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?',
   },
   submitError: { id: 'compose.submit.fail', defaultMessage: 'Failed to submit your post' },
-  resolveStatusError: {
-    id: 'compose.resolve_status.fail',
-    defaultMessage: 'Failed to resolve referenced post from the new account',
-  },
   resolveAccountError: {
     id: 'compose.resolve_account.fail',
     defaultMessage: 'Failed to resolve referenced account from the new account',
@@ -135,6 +131,11 @@ interface Compose {
   to: Array<string>;
   parentRebloggedById: string | null;
 
+  // Used to store the original references when switching accounts, so we can try to resolve them on further switches
+  sourceInReplyToId: [string, string] | null;
+  sourceQuoteId: [string, string] | null;
+  sourceParentRebloggedById: [string, string] | null;
+
   // State flags
   isChangingUpload: boolean;
   isSubmitting: boolean;
@@ -194,6 +195,10 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   quoteId: null,
   to: [],
   parentRebloggedById: null,
+
+  sourceInReplyToId: null,
+  sourceQuoteId: null,
+  sourceParentRebloggedById: null,
 
   isChangingUpload: false,
   isSubmitting: false,
@@ -409,6 +414,7 @@ interface ComposeActions {
     status: Pick<Status, 'id' | 'account_id' | 'mentions'>,
   ) => void;
   resetCompose: (composeId?: string) => void;
+  composeResetInReplyTo: (composeId?: string) => void;
   selectComposeSuggestion: (
     composeId: string,
     scopeUrl: string,
@@ -715,6 +721,13 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
+        composeResetInReplyTo: (composeId = 'compose-modal') => {
+          get().actions.updateCompose(composeId, (compose) => {
+            compose.inReplyToId = null;
+            compose.sourceInReplyToId = null;
+          });
+        },
+
         selectComposeSuggestion: (composeId, scopeUrl, startPosition, token, suggestion, path) => {
           let completion = '';
 
@@ -755,25 +768,58 @@ const useComposeStore = create<ComposeStore>()(
           const compose = get().composers[composeId];
           if (!compose) return;
 
+          let inReplyToIdPromise: Promise<string | undefined> = Promise.resolve(undefined);
+          let quoteIdPromise: Promise<string | undefined> = Promise.resolve(undefined);
+          let parentRebloggedByIdPromise: Promise<string | undefined> = Promise.resolve(undefined);
+
+          if (compose.inReplyToId) {
+            inReplyToIdPromise = resolveStatus(compose.inReplyToId, sourceScope, targetScope);
+          } else if (compose.sourceInReplyToId) {
+            const [sourceId, sourceScopeUrl] = compose.sourceInReplyToId;
+            inReplyToIdPromise = resolveStatus(sourceId, sourceScopeUrl, targetScope);
+          }
+
+          if (compose.quoteId) {
+            quoteIdPromise = resolveStatus(compose.quoteId, sourceScope, targetScope);
+          } else if (compose.sourceQuoteId) {
+            const [sourceId, sourceScopeUrl] = compose.sourceQuoteId;
+            quoteIdPromise = resolveStatus(sourceId, sourceScopeUrl, targetScope);
+          }
+
+          if (compose.parentRebloggedById) {
+            parentRebloggedByIdPromise = resolveAccount(
+              compose.parentRebloggedById,
+              sourceScope,
+              targetScope,
+            );
+          } else if (compose.sourceParentRebloggedById) {
+            const [sourceId, sourceScopeUrl] = compose.sourceParentRebloggedById;
+            parentRebloggedByIdPromise = resolveAccount(sourceId, sourceScopeUrl, targetScope);
+          }
+
           const [inReplyToId, quoteId, parentRebloggedById] = await Promise.all([
-            compose.inReplyToId
-              ? resolveStatus(compose.inReplyToId, sourceScope, targetScope)
-              : undefined,
-            compose.quoteId ? resolveStatus(compose.quoteId, sourceScope, targetScope) : undefined,
-            compose.parentRebloggedById
-              ? resolveAccount(compose.parentRebloggedById, sourceScope, targetScope)
-              : undefined,
+            inReplyToIdPromise,
+            quoteIdPromise,
+            parentRebloggedByIdPromise,
           ]);
 
-          if ((compose.inReplyToId && !inReplyToId) || (compose.quoteId && !quoteId)) {
-            toast.error(messages.resolveStatusError);
-          } else if (compose.parentRebloggedById && !parentRebloggedById) {
-            toast.error(messages.resolveAccountError);
+          if (compose.parentRebloggedById && !parentRebloggedById) {
+            toast.info(messages.resolveAccountError);
           }
 
           get().actions.updateCompose(composeId, (compose) => {
+            console.log(!!compose.inReplyToId, !!inReplyToId);
+            if (compose.inReplyToId && !inReplyToId) {
+              compose.sourceInReplyToId = [compose.inReplyToId, sourceScope];
+            }
             compose.inReplyToId = inReplyToId ?? null;
+            if (compose.quoteId && !quoteId) {
+              compose.sourceQuoteId = [compose.quoteId, sourceScope];
+            }
             compose.quoteId = quoteId ?? null;
+            if (compose.parentRebloggedById && !parentRebloggedById) {
+              compose.sourceParentRebloggedById = [compose.parentRebloggedById, sourceScope];
+            }
             compose.parentRebloggedById = parentRebloggedById ?? null;
           });
 

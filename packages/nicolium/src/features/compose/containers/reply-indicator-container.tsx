@@ -10,17 +10,22 @@ interface IReplyIndicatorContainer {
 }
 
 const ReplyIndicatorContainer: React.FC<IReplyIndicatorContainer> = ({ composeId }) => {
-  const { inReplyToId, editedId } = useCompose(composeId);
+  const { inReplyToId, sourceInReplyToId, editedId } = useCompose(composeId);
   const { data: status } = useStatus(inReplyToId ?? undefined);
-  const { resetCompose } = useComposeActions();
+  const { composeResetInReplyTo } = useComposeActions();
 
   const onCancel = () => {
-    resetCompose('compose-modal');
+    composeResetInReplyTo('compose-modal');
   };
 
-  if (!status) return null;
-
-  return <ReplyIndicator status={status} hideActions={!!editedId} onCancel={onCancel} />;
+  return (
+    <ReplyIndicator
+      status={status}
+      hasUnresolvedStatus={inReplyToId === null && !!sourceInReplyToId}
+      hideActions={!!editedId}
+      onCancel={onCancel}
+    />
+  );
 };
 
 export { ReplyIndicatorContainer as default };
