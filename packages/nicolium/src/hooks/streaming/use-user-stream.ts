@@ -63,6 +63,8 @@ const followStateToRelationship = (followState: FollowRelationshipUpdate['state'
       return { following: true, requested: false };
     case 'follow_reject':
       return { following: false, requested: false };
+    case 'unfollow':
+      return { following: false, requested: false };
     default:
       return {};
   }

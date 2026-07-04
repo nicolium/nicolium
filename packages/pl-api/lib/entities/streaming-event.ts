@@ -13,7 +13,7 @@ import { statusSchema } from './status';
  * @category Schemas
  */
 const followRelationshipUpdateSchema = v.object({
-  state: v.picklist(['follow_pending', 'follow_accept', 'follow_reject']),
+  state: v.picklist(['unfollow', 'follow_pending', 'follow_accept', 'follow_reject']),
   follower: v.object({
     id: v.string(),
     follower_count: v.fallback(v.nullable(v.number()), null),
