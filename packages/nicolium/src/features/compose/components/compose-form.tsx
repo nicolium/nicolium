@@ -30,6 +30,7 @@ import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
+import { isServo } from '@/utils/browser';
 
 import PreviewComposeContainer from '../containers/preview-compose-container';
 import QuotedStatusContainer from '../containers/quoted-status-container';
@@ -66,8 +67,6 @@ import Warning from './warning';
 import type { Menu } from '@/components/dropdown-menu';
 import type { Emoji } from '@/features/emoji';
 import type { LinkNode } from '@lexical/link';
-
-const isServo = typeof navigator !== 'undefined' && /\bservo\b/i.test(navigator.userAgent);
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What’s on your mind?' },
@@ -586,4 +585,4 @@ const ComposeForm = <ID extends string>({
   );
 };
 
-export { ComposeForm as default, isServo };
+export { ComposeForm as default };

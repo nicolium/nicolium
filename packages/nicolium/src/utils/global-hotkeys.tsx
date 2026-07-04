@@ -1,15 +1,13 @@
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 
-import { FOCUS_EDITOR_COMMAND } from '@/features/compose/editor/plugins/focus-plugin';
+import { FOCUS_EDITOR_EVENT } from '@/features/compose/editor/focus-event';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { focusDeckColumn } from '@/pages/deck/utils/column-focus';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
 import { Hotkeys } from '../features/ui/components/hotkeys';
-
-import type { LexicalEditor } from 'lexical';
 
 // const keyMap = {
 //   help: '?',
@@ -58,10 +56,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
       ) as HTMLTextAreaElement;
 
       if (element) {
-        ((element as any).__lexicalEditor as LexicalEditor).dispatchCommand(
-          FOCUS_EDITOR_COMMAND,
-          undefined,
-        );
+        element.dispatchEvent(new Event(FOCUS_EDITOR_EVENT));
         return element.getAttribute('data-compose-id');
       } else {
         openModal('COMPOSE');

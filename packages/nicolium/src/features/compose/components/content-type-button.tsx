@@ -11,8 +11,7 @@ import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
 import { useComposeActions, useComposeContentType } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
-
-import { isServo } from './compose-form';
+import { isServo } from '@/utils/browser';
 
 const messages = defineMessages({
   contentTypePlaintext: {

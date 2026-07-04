@@ -6,11 +6,11 @@ import List, { ListItem } from '@/components/list';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
-import { isServo } from '@/features/compose/components/compose-form';
 import { useFeatures } from '@/hooks/use-features';
 import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
+import { isServo } from '@/utils/browser';
 
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 

@@ -6,7 +6,6 @@ import { mutative } from 'zustand-mutative';
 import { uploadFile, updateMedia } from '@/actions/media';
 import { saveSettings } from '@/actions/settings';
 import { createStatus } from '@/actions/statuses';
-import { isServo } from '@/features/compose/components/compose-form';
 import { isNativeEmoji } from '@/features/emoji';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -22,6 +21,7 @@ import { useInstance } from '@/stores/instance';
 import { useModalsActions, useModalsStore } from '@/stores/modals';
 import { useSettings, useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
+import { isServo } from '@/utils/browser';
 import { userTouching } from '@/utils/is-mobile';
 import { resolveAccount, resolveStatus } from '@/utils/resolve';
 

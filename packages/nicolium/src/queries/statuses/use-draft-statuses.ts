@@ -3,7 +3,6 @@ import { create } from 'mutative';
 import { mediaAttachmentSchema } from 'pl-api';
 import * as v from 'valibot';
 
-import { isServo } from '@/features/compose/components/compose-form';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
@@ -11,6 +10,7 @@ import { filteredArray } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
 import { useComposeActions } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
+import { isServo } from '@/utils/browser';
 
 import { queryKeys } from '../keys';
 
