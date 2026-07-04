@@ -1812,6 +1812,7 @@
   "location_button.hide_location_picker": "Hide location picker",
   "location_button.show_location_picker": "Show location picker",
   "location_search.placeholder": "Find an address",
+  "login.authorization_code": "Continue to log in",
   "login.fields.email.label": "E-mail address",
   "login.fields.instance.label": "Instance",
   "login.fields.instance.placeholder": "example.com",

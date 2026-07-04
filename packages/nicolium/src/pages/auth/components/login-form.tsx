@@ -2,11 +2,14 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import * as BuildConfig from '@/build-config';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import { useFeatures } from '@/hooks/use-features';
+
+import { handleExternalLogin } from './external-login-form';
 
 const messages = defineMessages({
   username: {
@@ -31,11 +34,31 @@ interface ILoginForm {
 const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
   const intl = useIntl();
   const features = useFeatures();
+  const [isAuthLoading, setAuthLoading] = React.useState(isLoading);
 
   const usernameLabel = intl.formatMessage(
     features.logInWithUsername ? messages.username : messages.email,
   );
   const passwordLabel = intl.formatMessage(messages.password);
+
+  const handleAuthorizationCodeAuth = () => {
+    setAuthLoading(true);
+    handleExternalLogin(BuildConfig.BACKEND_URL || window.location.origin).then(() => {
+      setAuthLoading(false);
+    });
+  };
+
+  if (!features.grantTypePassword) {
+    return (
+      <button
+        className='login__with-code'
+        onClick={handleAuthorizationCodeAuth}
+        disabled={isAuthLoading}
+      >
+        <FormattedMessage id='login.authorization_code' defaultMessage='Continue to log in' />
+      </button>
+    );
+  }
 
   return (
     <Form className='login-form' onSubmit={handleSubmit}>

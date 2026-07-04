@@ -33,6 +33,10 @@
     }
   }
 
+  &__with-code {
+    @include mixins.button($theme: primary, $block: true);
+  }
+
   &__external {
     @include mixins.button($theme: secondary, $block: true);
   }

@@ -26,6 +26,20 @@ const messages = defineMessages({
   },
 });
 
+const handleExternalLogin = (host: string) =>
+  externalLogin(host).catch((error) => {
+    console.error(error);
+    const status = error.response?.status;
+
+    if (status || !error.message) {
+      toast.error(messages.instanceFailed.defaultMessage);
+    } else if (error.message === 'NetworkError when attempting to fetch resource.') {
+      toast.error(messages.corsFailed.defaultMessage);
+    } else if (!status && ['Network request failed', 'Timeout'].includes(error.message)) {
+      toast.error(messages.networkFailed.defaultMessage);
+    }
+  });
+
 /** Form for logging into a remote instance */
 const ExternalLoginForm: React.FC = () => {
   const query = new URLSearchParams(window.location.search);
@@ -44,30 +58,9 @@ const ExternalLoginForm: React.FC = () => {
   const handleSubmit = () => {
     setLoading(true);
 
-    externalLogin(host)
-      .then(() => {
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        const status = error.response?.status;
-
-        if (status || !error.message) {
-          toast.error(intl.formatMessage(messages.instanceFailed));
-        } else if (error.message === 'NetworkError when attempting to fetch resource.') {
-          toast.error(intl.formatMessage(messages.corsFailed));
-        } else if (!status && ['Network request failed', 'Timeout'].includes(error.message)) {
-          toast.error(intl.formatMessage(messages.networkFailed));
-        }
-
-        // If the server was invalid, clear it from the URL.
-        // https://stackoverflow.com/a/40592892
-        if (server) {
-          window.history.pushState(null, '', window.location.pathname);
-        }
-
-        setLoading(false);
-      });
+    handleExternalLogin(host).finally(() => {
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
@@ -112,4 +105,4 @@ const ExternalLoginForm: React.FC = () => {
   );
 };
 
-export { ExternalLoginForm as default };
+export { ExternalLoginForm as default, handleExternalLogin };

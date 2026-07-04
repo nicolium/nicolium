@@ -1062,6 +1062,14 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA,
     ]),
 
+    // probably there's more to add, sadly `/.well-known/oauth-authorization-server` is not widely implemented
+    grantTypePassword: !any([
+      v.software === GOTOSOCIAL,
+      v.software === ICESHRIMP,
+      v.software === MASTODON && gte(v.version, '4.4.0'),
+      v.software === SHARKEY,
+    ]),
+
     /**
      * @see GET /api/v2/notifications/:group_key
      * @see GET /api/v2/notifications/:group_key
