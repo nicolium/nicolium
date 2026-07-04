@@ -21,6 +21,9 @@ import { EmptyMessage } from './empty-message';
 type Context = {
   itemClassName?: string;
   listClassName?: string;
+  prepend?: React.ReactNode;
+  footer?: React.ReactNode;
+  empty?: React.ReactNode;
 };
 
 /** Scroll position saved in sessionStorage. */
@@ -45,6 +48,18 @@ const List: Components<React.JSX.Element, Context>['List'] = React.forwardRef((p
 });
 
 List.displayName = 'List';
+
+const Header: Components<React.JSX.Element, Context>['Header'] = ({ context }) => (
+  <>{context?.prepend}</>
+);
+
+const Footer: Components<React.JSX.Element, Context>['Footer'] = ({ context }) => (
+  <>{context?.footer}</>
+);
+
+const EmptyPlaceholder: Components<React.JSX.Element, Context>['EmptyPlaceholder'] = ({
+  context,
+}) => <>{context?.empty}</>;
 
 interface IScrollableList extends VirtuosoProps<any, any> {
   /** Unique key to preserve the scroll position when navigating back. */
@@ -183,16 +198,14 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
       };
     }, []);
 
-    /* Render an empty state instead of the scrollable list. */
-    const renderEmpty = (): React.JSX.Element => {
-      return isLoading ? (
-        <Spinner />
-      ) : emptyMessageText ? (
-        <EmptyMessage text={emptyMessageText} icon={emptyMessageIcon} />
-      ) : (
-        <>{emptyMessage}</>
-      );
-    };
+    /* Empty state rendered instead of the scrollable list. */
+    const empty = isLoading ? (
+      <Spinner />
+    ) : emptyMessageText ? (
+      <EmptyMessage text={emptyMessageText} icon={emptyMessageIcon} />
+    ) : (
+      emptyMessage
+    );
 
     /** Render a single item. */
     const renderItem = (_i: number, element: React.JSX.Element): React.JSX.Element => {
@@ -220,6 +233,18 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
         return button;
       }
     };
+
+    const components = useMemo<Components<React.JSX.Element, Context>>(
+      () => ({
+        Header,
+        ScrollSeekPlaceholder: Placeholder as React.ComponentType<any>,
+        EmptyPlaceholder,
+        List,
+        Item,
+        Footer,
+      }),
+      [Placeholder],
+    );
 
     const handleRangeChange = (range: ListRange) => {
       // HACK: using the first index can be buggy.
@@ -272,15 +297,11 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
         context={{
           listClassName,
           itemClassName,
+          prepend,
+          footer: loadMore(),
+          empty,
         }}
-        components={{
-          Header: prepend ? () => prepend : undefined,
-          ScrollSeekPlaceholder: Placeholder as React.ComponentType<any>,
-          EmptyPlaceholder: renderEmpty,
-          List,
-          Item,
-          Footer: loadMore,
-        }}
+        components={components}
       />
     );
   },
