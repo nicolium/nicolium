@@ -808,7 +808,6 @@ const useComposeStore = create<ComposeStore>()(
           }
 
           get().actions.updateCompose(composeId, (compose) => {
-            console.log(!!compose.inReplyToId, !!inReplyToId);
             if (compose.inReplyToId && !inReplyToId) {
               compose.sourceInReplyToId = [compose.inReplyToId, sourceScope];
             }
