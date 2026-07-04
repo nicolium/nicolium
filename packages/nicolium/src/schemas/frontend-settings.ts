@@ -365,6 +365,7 @@ const settingsSchema = v.object({
   displayMedia: v.fallback(v.picklist(['default', 'hide_all', 'show_all']), 'default'),
   displayPreviewCards: v.fallback(v.picklist(['default', 'hide', 'hide_media']), 'default'),
   displaySpoilers: v.fallback(v.boolean(), false),
+  highlightSpoilers: v.fallback(v.boolean(), false),
   unfollowModal: v.fallback(v.boolean(), true),
   boostModal: v.fallback(v.boolean(), false),
   deleteModal: v.fallback(v.boolean(), true),

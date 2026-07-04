@@ -182,6 +182,21 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
+                id='preferences.fields.spoilers_highlight.label'
+                defaultMessage='Highlight content warnings'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['highlightSpoilers']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
                 id='preferences.fields.preview_card_display.label'
                 defaultMessage='Preview cards'
               />

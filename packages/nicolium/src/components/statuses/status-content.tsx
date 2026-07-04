@@ -1,5 +1,6 @@
 import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
 import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
+import iconWarning from '@phosphor-icons/core/regular/warning.svg';
 import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -112,6 +113,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     const {
       urlPrivacy,
       displaySpoilers,
+      highlightSpoilers,
       renderMfm,
       displayMentionAvatars,
       showNestedQuotes,
@@ -274,8 +276,11 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
         : status.spoiler_text;
 
     useLayoutEffect(() => {
-      setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);
-    }, [spoilerText]);
+      const spoilerBanner = !isEvent && highlightSpoilers;
+      setLineClamp(
+        !spoilerNode.current || spoilerNode.current.clientHeight >= (spoilerBanner ? 60 : 96),
+      );
+    }, [spoilerText, highlightSpoilers]);
 
     const activeTranslation =
       localTranslation && typeof localTranslation === 'object'
@@ -387,6 +392,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       output.push(
         <h2
           className={clsx('status-title', {
+            'status-title--spoiler': !isEvent && highlightSpoilers,
             'status-title--clamp': !spoilerExpanded && lineClamp,
           })}
           key='spoiler'
@@ -394,6 +400,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             ? { onClick: toggleSpoilerExpanded, role: 'button', 'aria-expanded': spoilerExpanded }
             : {})}
         >
+          {!isEvent && highlightSpoilers && <Icon src={iconWarning} aria-hidden />}
           <span ref={spoilerNode}>
             <Emojify text={spoilerText} emojis={status.emojis} nyaize={account?.speak_as_cat} />
           </span>
