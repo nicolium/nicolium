@@ -1,6 +1,7 @@
 import iconCaretLeft from '@phosphor-icons/core/regular/caret-left.svg';
 import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import { Link } from '@tanstack/react-router';
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -15,6 +16,7 @@ import {
   useJoinedEventsTimeline,
   useRecentEventsTimeline,
 } from '@/queries/timelines/use-events-lists';
+import { useSettingsStore } from '@/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'column.events', defaultMessage: 'Events' },
@@ -97,6 +99,10 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
 const EventsPage = () => {
   const intl = useIntl();
 
+  const widgetDisplayed = useSettingsStore((state) =>
+    state.settings.sidebarItems.includes('context'),
+  );
+
   const { data: recentEvents = [], isLoading: recentEventsLoading } = useRecentEventsTimeline();
   const { data: joinedEvents = [], isLoading: joinedEventsLoading } = useJoinedEventsTimeline();
 
@@ -106,7 +112,13 @@ const EventsPage = () => {
         <CardTitle
           title={<FormattedMessage id='events.recent_events' defaultMessage='Recent events' />}
         />
-        <Link className='events-page__create-button' to='/events/new'>
+        <Link
+          // conditionally hide the create event button (on lower breakpoints) if the context widget is displayed
+          className={clsx('events-page__create-button', {
+            'events-page__create-button--hidden': widgetDisplayed,
+          })}
+          to='/events/new'
+        >
           <FormattedMessage id='events.create_event' defaultMessage='Create event' />
         </Link>
       </div>

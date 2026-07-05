@@ -1,5 +1,6 @@
 import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import { Link } from '@tanstack/react-router';
+import { clsx } from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -9,9 +10,14 @@ import ScrollableList from '@/components/scrollable-list';
 import Icon from '@/components/ui/icon';
 import { useGroupsQuery } from '@/queries/groups/use-groups';
 import { useModalsActions } from '@/stores/modals';
+import { useSettingsStore } from '@/stores/settings';
 
 const Groups: React.FC = () => {
   const { openModal } = useModalsActions();
+
+  const widgetDisplayed = useSettingsStore((state) =>
+    state.settings.sidebarItems.includes('context'),
+  );
 
   const { data: groupIds = [], isFetching, isLoading } = useGroupsQuery();
 
@@ -43,7 +49,12 @@ const Groups: React.FC = () => {
   return (
     <div className='groups-page'>
       {!(!isFetching && groupIds.length === 0) && (
-        <button className='groups-page__create-button' onClick={createGroup}>
+        <button
+          className={clsx('groups-page__create-button', {
+            'groups-page__create-button--hidden': widgetDisplayed,
+          })}
+          onClick={createGroup}
+        >
           <Icon src={iconUsersThree} aria-hidden />
           <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
         </button>

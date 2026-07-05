@@ -591,8 +591,10 @@
 
     margin-left: auto;
 
-    @media (min-width: variables.$breakpoint-xl) {
-      display: none;
+    &--hidden {
+      @media (min-width: variables.$breakpoint-xl) {
+        display: none;
+      }
     }
   }
 
