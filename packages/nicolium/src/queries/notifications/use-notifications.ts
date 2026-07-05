@@ -299,12 +299,12 @@ const countUnreadNotifications = (
 };
 
 const useNotificationsUnreadCount = () => {
-  const { data: marker } = useNotificationsMarker();
+  const { data: marker, isError } = useNotificationsMarker();
   const { data: notifications = [] } = useNotifications('all');
 
   return useMemo(
-    () => countUnreadNotifications(notifications, marker?.last_read_id),
-    [notifications, marker?.last_read_id],
+    () => (!marker ? 0 : countUnreadNotifications(notifications, marker?.last_read_id)),
+    [notifications, marker?.last_read_id, isError],
   );
 };
 
