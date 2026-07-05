@@ -45,7 +45,7 @@ const HomeRoute = () => {
     if (defaultTimeline === 'home') return <HomeTimeline />;
     return <Navigate {...getTimelineLink(defaultTimeline)} replace />;
   }
-  if (standalone && WITH_LANDING_PAGE) return <LandingPage />;
+  if (standalone && !isGuest && WITH_LANDING_PAGE) return <LandingPage />;
   return <LandingTimeline />;
 };
 
