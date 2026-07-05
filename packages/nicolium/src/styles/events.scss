@@ -320,6 +320,7 @@
   }
 
   @media (min-width: variables.$breakpoint-sm) {
+    margin-top: 0;
     padding: 0.75rem;
   }
 }
