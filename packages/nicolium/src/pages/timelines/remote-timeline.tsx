@@ -4,19 +4,23 @@ import iconPushPinSlash from '@phosphor-icons/core/regular/push-pin-slash.svg';
 import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
 import iconX from '@phosphor-icons/core/regular/x.svg';
 import { useNavigate } from '@tanstack/react-router';
+import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import { PublicTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
+import InstanceModerationPanel from '@/components/panels/instance-moderation-panel';
 import { TimelinePicker } from '@/components/timeline-picker';
 import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
+import { useOwnAccount } from '@/hooks/use-own-account';
 import { useTimelineFiltersOptions } from '@/hooks/use-timeline-filters-options';
 import { remoteTimelineRoute } from '@/router';
 import { useSettings } from '@/stores/settings';
+import { useFederationRestrictionsDisclosed } from '@/utils/state';
 
 const messages = defineMessages({
   close: { id: 'remote_timeline.close', defaultMessage: 'Close remote timeline' },
@@ -32,12 +36,17 @@ const RemoteTimelinePage: React.FC = () => {
   const navigate = useNavigate();
 
   const settings = useSettings();
+  const { data: ownAccount } = useOwnAccount();
+  const disclosed = useFederationRestrictionsDisclosed();
 
   const {
     defaultTimeline,
     remote_timeline: { pinnedHosts },
   } = settings;
   const isPinned = pinnedHosts.includes(instance);
+
+  const showModeration = (disclosed || ownAccount?.is_admin) && !!instance;
+  const isContextDisplayed = settings.sidebarItems.includes('context');
 
   const timelineFiltersOptions = useTimelineFiltersOptions(
     'public',
@@ -92,6 +101,16 @@ const RemoteTimelinePage: React.FC = () => {
         </>
       }
     >
+      {showModeration && (
+        <div
+          className={clsx('remote-timeline__moderation', {
+            'remote-timeline__moderation--optional': isContextDisplayed,
+          })}
+        >
+          <InstanceModerationPanel host={instance} />
+        </div>
+      )}
+
       {!isPinned && (
         <div className='pinned-remote-timeline'>
           <IconButton

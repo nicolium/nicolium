@@ -193,6 +193,18 @@
   }
 }
 
+.remote-timeline {
+  &__moderation {
+    margin-bottom: 1rem;
+
+    &--optional {
+      @media (min-width: variables.$breakpoint-xl) {
+        display: none;
+      }
+    }
+  }
+}
+
 .pinned-remote-timeline {
   display: flex;
   gap: 0.5rem;
