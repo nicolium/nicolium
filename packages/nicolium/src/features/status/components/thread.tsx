@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
@@ -31,6 +31,10 @@ import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { Account } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
+
+const messages = defineMessages({
+  rebloggedBy: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
+});
 
 const PlaceholderStatusSlim = () => <PlaceholderStatus variant='slim' />;
 
@@ -282,8 +286,14 @@ const Thread = ({
                   ref={statusRef}
                   className='thread__detailed'
                   tabIndex={0}
-                  // FIXME: no "reblogged by" text is added for the screen reader
-                  aria-label={textForScreenReader(intl, status, undefined, scopeUrl)}
+                  aria-label={textForScreenReader(
+                    intl,
+                    status.reblog || status,
+                    status.reblog_id
+                      ? intl.formatMessage(messages.rebloggedBy, { name: status.account.acct })
+                      : undefined,
+                    scopeUrl,
+                  )}
                 >
                   <DetailedStatus
                     status={status}

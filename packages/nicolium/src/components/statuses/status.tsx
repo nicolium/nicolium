@@ -566,7 +566,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   }
 
   let rebloggedByText;
-  if (status.reblog_id === 'object') {
+  if (isReblog) {
     rebloggedByText = intl.formatMessage(messages.rebloggedBy, { name: status.account.acct });
   }
 
