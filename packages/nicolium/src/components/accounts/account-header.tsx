@@ -295,6 +295,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
     switch (software) {
       case ICESHRIMP_NET:
         href = `/users/${account.id}/feed.rss`;
+        break;
       case MASTODON:
         href = `${account.url}.rss`;
         break;
