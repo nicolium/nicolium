@@ -137,10 +137,11 @@ const useTimeline = (
       timelineActions.setLoading(timelineId, true);
       try {
         const [response, shouldInsertGap] = await Promise.all([
-          fetcher(),
+          fetcherRef.current(),
           !restoringMaxId
             ? Promise.resolve(false)
-            : fetcher({ since_id: restoringMaxId, limit: 1 })
+            : fetcherRef
+                .current({ since_id: restoringMaxId, limit: 1 })
                 .then((res) => res.items.length > 0)
                 .catch(() => true),
         ]);
@@ -171,7 +172,7 @@ const useTimeline = (
     timelineActions.setLoading(timelineId, true);
 
     try {
-      const response = await fetcher({ max_id: timeline.oldestStatusId });
+      const response = await fetcherRef.current({ max_id: timeline.oldestStatusId });
 
       importEntities({ statuses: response.items });
       await fetchMissingRelationships(response.items);
@@ -203,13 +204,13 @@ const useTimeline = (
         params = { max_id: gap.maxId, since_id: gap.minId };
       }
 
-      const response = await fetcher(params);
+      const response = await fetcherRef.current(params);
       importEntities({ statuses: response.items });
       await fetchMissingRelationships(response.items);
 
       timelineActions.fillGap(timelineId, gap.minId, response.items, !!response.next, direction);
     },
-    [timelineId, fetcher],
+    [timelineId],
   );
 
   const refetch = useCallback(() => {
