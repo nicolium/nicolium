@@ -529,7 +529,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
               <FormattedMessage id='event.manage' defaultMessage='Manage' />
             </Link>
           ) : (
-            <EventActionButton status={status} />
+            <EventActionButton status={status} theme='primary' />
           )}
         </div>
 

@@ -25,12 +25,12 @@ const messages = defineMessages({
   leaveConfirm: { id: 'confirmations.leave_event.confirm', defaultMessage: 'Leave event' },
 });
 
-interface IEventAction {
+interface IEventActionButton {
   status: Pick<StatusEntity, 'id' | 'event' | 'url'>;
   theme?: 'primary' | 'secondary';
 }
 
-const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary' }) => {
+const EventActionButton: React.FC<IEventActionButton> = ({ status, theme = 'secondary' }) => {
   const intl = useIntl();
 
   const { openModal } = useModalsActions();
@@ -46,7 +46,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
       <a
         className={clsx(
           'event-action-button',
-          theme === 'secondary' && 'event-action-button--secondary',
+          theme === 'secondary' ? 'event-action-button--secondary' : 'event-action-button--primary',
         )}
         href={status.url}
         target='_blank'
@@ -126,7 +126,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
     <button
       className={clsx(
         'event-action-button',
-        theme === 'secondary' && 'event-action-button--secondary',
+        theme === 'secondary' ? 'event-action-button--secondary' : 'event-action-button--primary',
       )}
       type='button'
       onClick={buttonAction}
