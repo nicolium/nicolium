@@ -23,7 +23,6 @@ import Emoji from '../ui/emoji';
 import FakeNewsAlert from './fake-news-alert';
 import HashtagsBar from './hashtags-bar';
 import { parseContent } from './parsed-content';
-import { ParsedMfm } from './parsed-mfm';
 import QuotedStatusIndicator from './quoted-status-indicator';
 import SensitiveContentOverlay from './sensitive-content-overlay';
 import StatusMedia from './status-media';
@@ -34,6 +33,10 @@ import type { NormalizedStatus } from '@/queries/statuses/normalize';
 
 const MATRIX_MODE = !!new URLSearchParams(window.location.search).get('matrix');
 const BIG_EMOJI_LIMIT = 10;
+
+const ParsedMfm = React.lazy(() =>
+  import('./parsed-mfm').then((module) => ({ default: module.ParsedMfm })),
+);
 
 interface IReadMoreButton {
   onClick?: React.MouseEventHandler;
@@ -247,7 +250,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       ) {
         return {
           content: (
-            <ParsedMfm text={status.text} emojis={status.emojis} mentions={status.mentions} />
+            <React.Suspense fallback={null}>
+              <ParsedMfm text={status.text} emojis={status.emojis} mentions={status.mentions} />
+            </React.Suspense>
           ),
           hashtags: [],
         };

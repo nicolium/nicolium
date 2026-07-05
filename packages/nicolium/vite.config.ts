@@ -59,6 +59,11 @@ const config = defineConfig(() => ({
               priority: 20,
             },
             {
+              name: 'mfm',
+              test: /[\\/]node_modules[\\/]@transfem-org[\\/]sfm-js[\\/]/,
+              priority: 20,
+            },
+            {
               name: 'vendor',
               test: /[\\/]node_modules[\\/]/,
               priority: 10,
