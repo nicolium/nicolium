@@ -97,7 +97,7 @@
       }
 
       @media (max-width: variables.$breakpoint-lg) {
-        bottom: calc(3.25px + 1px + var(--safe-area-inset-bottom, 0px));
+        bottom: calc(3.25rem + 1px + var(--safe-area-inset-bottom, 0px));
       }
     }
   }
