@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { externalLogin, loginWithCode } from '@/actions/external-auth';
+import { externalLogin, loginWithCode, viewAsGuest } from '@/actions/external-auth';
 import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
@@ -32,11 +32,11 @@ const handleExternalLogin = (host: string) =>
     const status = error.response?.status;
 
     if (status || !error.message) {
-      toast.error(messages.instanceFailed.defaultMessage);
+      toast.error(messages.instanceFailed);
     } else if (error.message === 'NetworkError when attempting to fetch resource.') {
-      toast.error(messages.corsFailed.defaultMessage);
+      toast.error(messages.corsFailed);
     } else if (!status && ['Network request failed', 'Timeout'].includes(error.message)) {
-      toast.error(messages.networkFailed.defaultMessage);
+      toast.error(messages.networkFailed);
     }
   });
 
@@ -55,12 +55,38 @@ const ExternalLoginForm: React.FC = () => {
     setHost(currentTarget.value);
   };
 
+  const handleError = (error: any) => {
+    console.error(error);
+    const status = error.response?.status;
+
+    if (status || !error.message) {
+      toast.error(intl.formatMessage(messages.instanceFailed));
+    } else if (error.message === 'NetworkError when attempting to fetch resource.') {
+      toast.error(intl.formatMessage(messages.corsFailed));
+    } else if (!status && ['Network request failed', 'Timeout'].includes(error.message)) {
+      toast.error(intl.formatMessage(messages.networkFailed));
+    }
+
+    setLoading(false);
+  };
+
   const handleSubmit = () => {
     setLoading(true);
 
     handleExternalLogin(host).finally(() => {
       setLoading(false);
     });
+  };
+
+  const handleGuest = () => {
+    if (!host) return;
+    setLoading(true);
+
+    viewAsGuest(host)
+      .then(() => {
+        setLoading(false);
+      })
+      .catch(handleError);
   };
 
   useEffect(() => {
@@ -97,6 +123,14 @@ const ExternalLoginForm: React.FC = () => {
       </FormGroup>
 
       <div className='form__actions'>
+        <button
+          type='button'
+          className='external-login__guest'
+          disabled={isLoading}
+          onClick={handleGuest}
+        >
+          <FormattedMessage id='login_external.view_as_guest' defaultMessage='View as guest' />
+        </button>
         <button type='submit' disabled={isLoading}>
           <FormattedMessage id='login.log_in' defaultMessage='Log in' />
         </button>

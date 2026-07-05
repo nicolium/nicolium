@@ -8,6 +8,7 @@ import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import { useFeatures } from '@/hooks/use-features';
+import { useGuestUrl } from '@/stores/auth';
 
 import { handleExternalLogin } from './external-login-form';
 
@@ -34,6 +35,7 @@ interface ILoginForm {
 const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
   const intl = useIntl();
   const features = useFeatures();
+  const guestUrl = useGuestUrl();
   const [isAuthLoading, setAuthLoading] = React.useState(isLoading);
 
   const usernameLabel = intl.formatMessage(
@@ -43,7 +45,7 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
 
   const handleAuthorizationCodeAuth = () => {
     setAuthLoading(true);
-    handleExternalLogin(BuildConfig.BACKEND_URL || window.location.origin).then(() => {
+    handleExternalLogin(guestUrl || BuildConfig.BACKEND_URL || window.location.origin).then(() => {
       setAuthLoading(false);
     });
   };

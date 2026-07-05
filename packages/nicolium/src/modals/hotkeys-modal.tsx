@@ -335,7 +335,7 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       key: <HotkeyBinding keys={['shift', 'r', 'left']} joiner='plus' />,
       label: (
         <FormattedMessage
-          id='keyboard_shortcuts.move_column_left'
+          id='keyboard_shortcuts.shrink_column'
           defaultMessage='to shrink column width'
         />
       ),
@@ -344,7 +344,7 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       key: <HotkeyBinding keys={['shift', 'r', 'right']} joiner='plus' />,
       label: (
         <FormattedMessage
-          id='keyboard_shortcuts.move_column_right'
+          id='keyboard_shortcuts.expand_column'
           defaultMessage='to expand column width'
         />
       ),

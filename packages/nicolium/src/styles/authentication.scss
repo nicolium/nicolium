@@ -2,8 +2,17 @@
 @use 'variables';
 
 .external-login {
+  .form__actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
   button {
     @include mixins.button($theme: primary);
+  }
+
+  &__guest {
+    @include mixins.button($theme: secondary);
   }
 }
 

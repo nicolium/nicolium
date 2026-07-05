@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { fetchInstance } from '@/actions/instance';
 import { BigCard } from '@/components/ui/big-card';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { useAuthActions } from '@/stores/auth';
+import { useAuthActions, useIsGuest } from '@/stores/auth';
 import { useModalsActions } from '@/stores/modals';
 import { getRedirectUrl } from '@/utils/redirect';
 import { useIsStandalone } from '@/utils/state';
@@ -22,6 +22,7 @@ const LoginPage = () => {
 
   const me = useCurrentAccount();
   const standalone = useIsStandalone();
+  const isGuest = useIsGuest();
 
   const token = new URLSearchParams(window.location.search).get('token');
 
@@ -61,7 +62,7 @@ const LoginPage = () => {
     event.preventDefault();
   };
 
-  if (standalone) return <Navigate to='/login/external' replace />;
+  if (standalone && !isGuest) return <Navigate to='/login/external' replace />;
 
   if (shouldRedirect) {
     const redirectUri = getRedirectUrl();

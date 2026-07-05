@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { FormattedMessage } from 'react-intl';
 
 import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
+import GuestBanner from '@/components/guest-banner';
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
 import ThumbNavigation from '@/components/navigation/thumb-navigation';
 import Layout from '@/components/ui/layout';
@@ -185,6 +186,8 @@ const UI: React.FC = React.memo(() => {
             'dragging-area--dragging': isDragging,
           })}
         />
+
+        <GuestBanner />
 
         <div className='layout__container'>
           <Layout fullWidth={fullWidth}>

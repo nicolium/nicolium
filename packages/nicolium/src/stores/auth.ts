@@ -132,6 +132,8 @@ interface AuthData {
   users: Record<string, AuthUser>;
   /** current user URL or id */
   me: string | null;
+  /** base URL of the instance being browsed unauthenticated (standalone guest mode) */
+  guestUrl: string | null;
 }
 
 interface AuthState extends AuthData {
@@ -156,6 +158,9 @@ interface AuthActions {
   setCurrentAccountIfUnset: (account: CredentialAccount) => void;
   loadMastodonPreload: (data: Record<string, any>) => void;
 
+  enterGuest: (host: string) => Promise<void>;
+  exitGuest: () => void;
+
   logIn: (username: string, password: string) => Promise<Token>;
   verifyOtp: (code: string, mfa_token: string) => Promise<Token>;
   verifyCredentials: (token: string, accountUrl?: string) => Promise<CredentialAccount>;
@@ -178,6 +183,8 @@ const validUser = (user?: AuthUser) => {
 
 const firstValidUser = (state: AuthData) => Object.values(state.users).find(validUser);
 
+const isGuestState = (state: AuthData) => !!state.guestUrl && state.me === state.guestUrl;
+
 const getUrlOrId = (user?: AuthUser): string | null => {
   try {
     if (!user) return null;
@@ -188,6 +195,7 @@ const getUrlOrId = (user?: AuthUser): string | null => {
 };
 
 const maybeShiftMe = (state: AuthData) => {
+  if (isGuestState(state)) return;
   const user = state.users[state.me!];
   if (validUser(user)) return;
   const nextUser = firstValidUser(state);
@@ -195,6 +203,7 @@ const maybeShiftMe = (state: AuthData) => {
 };
 
 const setSessionUser = (state: AuthData) => {
+  if (isGuestState(state)) return;
   const user = state.users[state.me!];
   state.me = getUrlOrId(validUser(user) ? user : undefined);
 };
@@ -252,6 +261,17 @@ const getLocalState = (): (AuthData & { clients: Record<string, PlApiClient> }) 
     });
   }
 
+  const guestUrl = typeof state.guestUrl === 'string' ? state.guestUrl : null;
+  if (guestUrl) {
+    const baseUrl = parseBaseURL(guestUrl) || backendUrl;
+    clients[guestUrl] = new PlApiClient(baseUrl, undefined, {
+      fetchInstance: true,
+      onInstanceFetchSuccess: (instance) => {
+        useInstanceStore.getState().actions.loadInstance(instance, guestUrl);
+      },
+    });
+  }
+
   return {
     app: state.app && v.parse(applicationSchema, state.app),
     tokens: Object.fromEntries(
@@ -259,6 +279,7 @@ const getLocalState = (): (AuthData & { clients: Record<string, PlApiClient> }) 
     ),
     users: parsedUsers,
     me: state.me,
+    guestUrl,
     clients,
   };
 };
@@ -278,6 +299,7 @@ const initialAuthData: AuthData = initializeAuthData({
   tokens: {},
   users: {},
   me: null,
+  guestUrl: null,
   ...localState,
 });
 
@@ -471,14 +493,14 @@ const useAuthStore = create<AuthStore>()(
       return token;
     };
 
-    const createAuthApp = async () => {
+    const createAuthApp = async (baseUrl?: string) => {
       const params = {
         client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
         redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
         scopes: getScopes(),
         website: sourceCode.homepage,
       };
-      const app = await createApp(params);
+      const app = await createApp(params, baseUrl);
       get().actions.setApp(app);
       return app;
     };
@@ -608,7 +630,7 @@ const useAuthStore = create<AuthStore>()(
         skipCredentials: () => {
           const oldMe = get().me;
           set((state) => {
-            state.me = null;
+            if (!isGuestState(state)) state.me = null;
             state.currentAccountId = false;
           });
           persistAuth(get());
@@ -640,6 +662,7 @@ const useAuthStore = create<AuthStore>()(
           set((state) => {
             state.me = account.url;
             state.currentAccountId = account.id;
+            state.guestUrl = null;
           });
 
           // Ensure we have a client for the account
@@ -682,9 +705,44 @@ const useAuthStore = create<AuthStore>()(
           }
         },
 
+        enterGuest: async (host) => {
+          const baseURL = parseBaseURL(host) || parseBaseURL(`https://${host}`);
+          if (!baseURL) throw new Error('Invalid instance host');
+
+          const client = new PlApiClient(baseURL, undefined, {
+            fetchInstance: true,
+            onInstanceFetchSuccess: (instance) => {
+              useInstanceStore.getState().actions.loadInstance(instance, baseURL);
+            },
+          });
+
+          const instance = await client.instance.getInstance();
+          useInstanceStore.getState().actions.loadInstance(instance, baseURL);
+
+          set((state) => {
+            state.guestUrl = baseURL;
+            state.me = baseURL;
+            state.currentAccountId = false;
+          });
+          set({ clients: { ...get().clients, [baseURL]: client } });
+          persistAuth(get());
+        },
+
+        exitGuest: () => {
+          const url = get().guestUrl;
+          set((state) => {
+            state.guestUrl = null;
+            if (state.me === url) state.me = null;
+            state.currentAccountId = false;
+          });
+          if (url) removeClientForAccount(url);
+          persistAuth(get());
+        },
+
         logIn: async (username, password) => {
           try {
-            await createAuthApp();
+            const guestUrl: string | undefined = get().guestUrl || undefined;
+            await createAuthApp(guestUrl);
 
             const { app } = get();
             const params = {
@@ -697,7 +755,7 @@ const useAuthStore = create<AuthStore>()(
               scope: getScopes(),
             };
 
-            const token = await obtainOAuthToken(params, undefined, get().defaultClient);
+            const token = await obtainOAuthToken(params, guestUrl, get().defaultClient);
             authLoggedIn(token, app);
             return token;
           } catch (error: any) {
@@ -899,6 +957,11 @@ const useAuthStore = create<AuthStore>()(
 
 const useMe = () => useAuthStore((state) => state.currentAccountId);
 
+const useIsGuest = () =>
+  useAuthStore((state) => isGuestState(state) && !validId(state.currentAccountId));
+
+const useGuestUrl = () => useAuthStore((state) => (isGuestState(state) ? state.guestUrl : null));
+
 const useAuthActions = () => useAuthStore((state) => state.actions);
 
 const getCurrentAccountId = () => useAuthStore.getState().currentAccountId;
@@ -951,6 +1014,8 @@ export {
   useAuthStore,
   useAuthActions,
   useMe,
+  useIsGuest,
+  useGuestUrl,
   getCurrentAccountId,
   getMe,
   getClient,

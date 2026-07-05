@@ -8,6 +8,7 @@ import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import ExternalLoginForm from '@/pages/auth/components/external-login-form';
 import LoginForm from '@/pages/auth/components/login-form';
 import OtpAuthForm from '@/pages/auth/components/otp-auth-form';
+import { useIsGuest } from '@/stores/auth';
 import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { getRedirectUrl } from '@/utils/redirect';
@@ -20,6 +21,7 @@ const SignUpPanel = () => {
   const { isOpen } = useRegistrationStatus();
   const me = useCurrentAccount();
   const standalone = useIsStandalone();
+  const isGuest = useIsGuest();
   const { logIn, switchAccount, verifyCredentials } = useAuthActions();
 
   const token = new URLSearchParams(window.location.search).get('token');
@@ -97,7 +99,7 @@ const SignUpPanel = () => {
         </>
       )}
 
-      {standalone ? (
+      {standalone && !isGuest ? (
         <>
           <h2 className='sign-up-panel__heading'>
             <FormattedMessage

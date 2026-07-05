@@ -92,4 +92,9 @@ const loginWithCode = async (code: string) => {
   window.location.href = '/';
 };
 
-export { externalLogin, loginWithCode };
+const viewAsGuest = async (host: string) => {
+  await useAuthStore.getState().actions.enterGuest(host);
+  window.location.href = '/';
+};
+
+export { externalLogin, loginWithCode, viewAsGuest };
