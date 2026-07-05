@@ -990,10 +990,10 @@ body {
   }
 
   &__main {
-    bottom: calc(3.25rem + 1px + var(--safe-area-inset-bottom, 0px));
     width: 100%;
     min-width: 0;
     max-width: 100%;
+    padding-bottom: calc(3.25rem + 1px + var(--safe-area-inset-bottom, 0px));
 
     .dark.black & {
       border-color: var(--color-gray-800);
