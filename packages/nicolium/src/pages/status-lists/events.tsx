@@ -115,7 +115,7 @@ const EventsPage = () => {
         <Link
           // conditionally hide the create event button (on lower breakpoints) if the context widget is displayed
           className={clsx('events-page__create-button', {
-            'events-page__create-button--hidden': widgetDisplayed,
+            'events-page__create-button--optional': widgetDisplayed,
           })}
           to='/events/new'
         >

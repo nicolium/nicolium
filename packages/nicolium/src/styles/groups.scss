@@ -808,7 +808,7 @@
   &__create-button {
     @include mixins.button($theme: secondary, $block: true);
 
-    &--hidden {
+    &--optional {
       @media (min-width: variables.$breakpoint-xl) {
         display: none;
       }

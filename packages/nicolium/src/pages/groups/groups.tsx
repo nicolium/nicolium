@@ -51,7 +51,7 @@ const Groups: React.FC = () => {
       {!(!isFetching && groupIds.length === 0) && (
         <button
           className={clsx('groups-page__create-button', {
-            'groups-page__create-button--hidden': widgetDisplayed,
+            'groups-page__create-button--optional': widgetDisplayed,
           })}
           onClick={createGroup}
         >
