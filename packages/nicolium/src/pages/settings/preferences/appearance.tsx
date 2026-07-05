@@ -15,6 +15,7 @@ import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { PaletteListItem } from '@/pages/dashboard/theme-editor';
 import { useDefaultSettings, useSettings } from '@/stores/settings';
 import colors from '@/utils/colors';
+import { generateAccent } from '@/utils/theme';
 
 import SettingToggle from '../components/setting-toggle';
 
@@ -26,6 +27,7 @@ const BORDER_RADIUS_INTENSITIES = ['none', 'reduced', 'default'] as const;
 const messages = defineMessages({
   heading: { id: 'preferences.heading.appearance', defaultMessage: 'Appearance settings' },
   brandColor: { id: 'preferences.options.brand_color', defaultMessage: 'Base color' },
+  accentColor: { id: 'preferences.options.accent_color', defaultMessage: 'Accent color' },
   interfaceSizeSmall: {
     id: 'preferences.options.interface_size.sm',
     defaultMessage: 'Small',
@@ -81,6 +83,10 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
   const settings = settingsProp || userSettings;
 
   const brandColor = (settings.theme?.brandColor ?? frontendConfig.brandColor) || '#d80482';
+  const accentColor =
+    (settings.theme?.accentColor ?? frontendConfig.accentColor) ||
+    generateAccent(brandColor) ||
+    '#b91c8b';
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
     changeSetting(path, event.target.value, { showAlert: true });
@@ -100,6 +106,23 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
       {
         ...theme,
         brandColor: newBrandColor,
+      },
+      { showAlert: true, save: false },
+    );
+
+    debouncedSave();
+  };
+
+  const onAccentColorChange = (newAccentColor: string) => {
+    if (newAccentColor === accentColor) return;
+
+    const theme = settings.theme ?? frontendConfig.defaultSettings.theme;
+
+    changeSetting(
+      ['theme'],
+      {
+        ...theme,
+        accentColor: newAccentColor,
       },
       { showAlert: true, save: false },
     );
@@ -190,6 +213,14 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
             palette={colors(brandColor)}
             onChange={(palette) => {
               onBrandColorChange(palette['500']);
+            }}
+            allowTintChange={false}
+          />
+          <PaletteListItem
+            label={intl.formatMessage(messages.accentColor)}
+            palette={colors(accentColor)}
+            onChange={(palette) => {
+              onAccentColorChange(palette['500']);
             }}
             allowTintChange={false}
           />
