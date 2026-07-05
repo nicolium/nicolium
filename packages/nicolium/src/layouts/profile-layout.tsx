@@ -87,8 +87,8 @@ const ProfileLayout: React.FC = () => {
     activeItem = 'profile';
   }
 
-  const showTabs = !['/following', '/followers', '/pins', '/collections'].some((path) =>
-    pathname.endsWith(path),
+  const showTabs = !['/following', '/followers', '/pins', '/collections', '/recommendations'].some(
+    (path) => pathname.endsWith(path),
   );
 
   return (

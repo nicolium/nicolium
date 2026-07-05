@@ -92,6 +92,8 @@
   "account.posts_with_replies": "Posts & replies",
   "account.profile_external": "View profile on {domain}",
   "account.pronouns.with_label": "Pronouns: {pronouns}",
+  "account.recommendations": "Recommended accounts",
+  "account.recommendations.empty": "@{acct} doesn’t feature any accounts on their profile.",
   "account.register": "Sign up",
   "account.remote_follow": "Remote follow",
   "account.remove_from_followers": "Remove this follower",

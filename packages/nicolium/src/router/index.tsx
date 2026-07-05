@@ -708,6 +708,15 @@ export const profileCollectionsRoute = createRoute({
   },
 });
 
+export const profileRecommendationsRoute = createRoute({
+  getParentRoute: () => layouts.profile,
+  path: '/recommendations',
+  component: lazy(() => import('@/pages/account-lists/recommendations')),
+  beforeLoad: ({ context: { features } }) => {
+    if (!features.accountEndorsements) throw notFound();
+  },
+});
+
 export const statusRoute = createRoute({
   getParentRoute: () => layouts.status,
   path: '/@{$username}/posts/$statusId',
@@ -1743,6 +1752,7 @@ const routeTree = rootRoute.addChildren([
     profileFavoritesRoute,
     profilePinsRoute,
     profileCollectionsRoute,
+    profileRecommendationsRoute,
   ]),
   layouts.remoteInstance.addChildren([remoteTimelineRoute]),
   layouts.search.addChildren([searchRoute]),

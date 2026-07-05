@@ -6,12 +6,13 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
-const useEndorsedAccounts = (accountId: string) => {
+const useEndorsedAccounts = (accountId: string, options?: { enabled?: boolean }) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const scopeUrl = useScopeUrl();
 
   return useAppQuery({
+    ...options,
     queryKey: queryKeys.accountsLists.endorsedAccounts(accountId),
     queryFn: () =>
       client.accounts.getAccountEndorsements(accountId).then(({ items: accounts }) => {

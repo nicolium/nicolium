@@ -21,6 +21,7 @@ import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
 import iconUserCheck from '@phosphor-icons/core/regular/user-check.svg';
 import iconUserMinus from '@phosphor-icons/core/regular/user-minus.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
+import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import { GOTOSOCIAL, ICESHRIMP_NET, MASTODON } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -28,10 +29,13 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { changeSetting } from '@/actions/settings';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import IconButton from '@/components/ui/icon-button';
+import { breakpoints } from '@/components/ui/layout';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useMinWidth } from '@/hooks/use-min-width';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useEndorsedAccounts } from '@/queries/accounts/use-endorsed-accounts';
 import {
   usePinAccountMutation,
   useRemoveAccountFromFollowersMutation,
@@ -61,6 +65,7 @@ const messages = defineMessages({
   copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
   copySuccess: { id: 'account.copy.success', defaultMessage: 'Profile URL copied to clipboard' },
   collections: { id: 'account.collections', defaultMessage: 'Collections' },
+  recommendations: { id: 'account.recommendations', defaultMessage: 'Recommended accounts' },
   media: { id: 'account.media', defaultMessage: 'Media' },
   blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
@@ -210,6 +215,15 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   const { openModal } = useModalsActions();
   const settings = useSettings();
   const scopeUrl = useScopeUrl();
+
+  const showRecommendations =
+    // don't show if recommended accounts widget is displayed in sidebar
+    !useMinWidth(`(min-width: ${breakpoints.xl})`) &&
+    features.accountEndorsements &&
+    !!account?.local;
+  const { data: endorsedAccounts = [] } = useEndorsedAccounts(account?.id!, {
+    enabled: showRecommendations,
+  });
 
   const { software } = features.version;
 
@@ -542,6 +556,15 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         to: '/@{$username}/collections',
         params: { username: account.acct },
         icon: iconShapes,
+      });
+    }
+
+    if (showRecommendations && endorsedAccounts.length) {
+      menu.push({
+        text: intl.formatMessage(messages.recommendations),
+        to: '/@{$username}/recommendations',
+        params: { username: account.acct },
+        icon: iconUsersThree,
       });
     }
 
