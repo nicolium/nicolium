@@ -2085,6 +2085,11 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   flex-direction: column;
   gap: 1rem;
 
+  &--pending {
+    pointer-events: none;
+    opacity: 0.75;
+  }
+
   &__explanation {
     display: block;
     @include mixins.text($theme: muted, $size: sm, $align: left);

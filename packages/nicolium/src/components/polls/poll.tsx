@@ -27,8 +27,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
   const isLoggedIn = useCurrentAccount();
 
   const { data: poll } = usePollQuery(id);
-  // TODO: handle pending mutation state
-  const { mutate: vote } = usePollVoteMutation(id);
+  const { mutate: vote, isPending } = usePollVoteMutation(id);
 
   const { showPollResults } = useStatusMeta(status.id);
 
@@ -42,6 +41,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
   };
 
   const toggleOption = (value: number) => {
+    if (isPending) return;
     if (isLoggedIn) {
       if (poll?.multiple) {
         const tmp = { ...selected };
@@ -83,7 +83,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
         </span>
       )}
 
-      <div className={clsx('poll', { 'poll--truncate': truncate })}>
+      <div className={clsx('poll', { 'poll--truncate': truncate, 'poll--pending': isPending })}>
         <div className='poll__options'>
           {poll.options.map((option, i) => (
             <PollOption

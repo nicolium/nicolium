@@ -29,11 +29,12 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
   const intl = useIntl();
 
   const { refetch } = usePollQuery(poll.id);
-  const { mutate: vote } = usePollVoteMutation(poll.id);
+  const { mutate: vote, isPending } = usePollVoteMutation(poll.id);
 
   const { toggleShowPollResults } = useStatusMetaActions();
 
   const handleVote = () => {
+    if (isPending) return;
     vote(Object.keys(selected).map((optionId) => parseInt(optionId, 10)));
   };
 
@@ -74,7 +75,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
   return (
     <div className='poll__footer' data-testid='poll-footer'>
       {!showResults && poll.multiple && (
-        <button className='poll__submit-button' onClick={handleVote}>
+        <button className='poll__submit-button' onClick={handleVote} disabled={isPending}>
           <FormattedMessage id='poll.vote' defaultMessage='Submit vote' />
         </button>
       )}
