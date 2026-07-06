@@ -66,7 +66,8 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   const handleOnClose = () => {
     const { actions } = useComposeStore.getState();
     const compose = actions.getCompose('compose-modal');
-    const hasComposeContent = checkComposeContent(compose);
+    const hasComposeContent =
+      checkComposeContent(compose) || actions.hasThreadContent('compose-modal');
 
     if (hasComposeContent && type === 'COMPOSE') {
       const isEditing = compose.editedId !== null;
@@ -109,18 +110,19 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
           onClose('CONFIRM');
         },
         secondary: intl.formatMessage(messages.saveDraft),
-        onSecondary: isEditing
-          ? undefined
-          : () => {
-              persistDraftStatus('compose-modal').then(() => {
-                toast.success(messages.draftSaved, {
-                  actionLabel: messages.view,
-                  actionLinkOptions: { to: '/draft_statuses' },
+        onSecondary:
+          isEditing || actions.hasThreadPosts('compose-modal')
+            ? undefined
+            : () => {
+                persistDraftStatus('compose-modal').then(() => {
+                  toast.success(messages.draftSaved, {
+                    actionLabel: messages.view,
+                    actionLinkOptions: { to: '/draft_statuses' },
+                  });
                 });
-              });
-              onClose('COMPOSE');
-              actions.resetCompose('compose-modal');
-            },
+                onClose('COMPOSE');
+                actions.resetCompose('compose-modal');
+              },
       });
     } else if (hasComposeContent && type === 'CONFIRM') {
       onClose('CONFIRM');

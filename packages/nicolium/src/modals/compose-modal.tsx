@@ -33,7 +33,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
   const node = useRef<HTMLDivElement>(null);
   const compose = useCompose(composeId);
   const uploadCompose = useUploadCompose(composeId);
-  const { resetCompose } = useComposeActions();
+  const { resetCompose, hasThreadContent, hasThreadPosts } = useComposeActions();
   const { openModal } = useModalsActions();
   const persistDraftStatus = usePersistDraftStatus();
 
@@ -44,7 +44,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
   });
 
   const onClickClose = () => {
-    if (checkComposeContent(compose)) {
+    if (checkComposeContent(compose) || hasThreadContent(composeId)) {
       openModal('CONFIRM', {
         heading: editedId ? (
           <FormattedMessage
@@ -81,18 +81,19 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
           resetCompose('compose-modal');
         },
         secondary: intl.formatMessage(messages.saveDraft),
-        onSecondary: editedId
-          ? undefined
-          : () => {
-              persistDraftStatus(composeId).then(() => {
-                toast.success(messages.draftSaved, {
-                  actionLabel: messages.view,
-                  actionLinkOptions: { to: '/draft_statuses' },
+        onSecondary:
+          editedId || hasThreadPosts(composeId)
+            ? undefined
+            : () => {
+                persistDraftStatus(composeId).then(() => {
+                  toast.success(messages.draftSaved, {
+                    actionLabel: messages.view,
+                    actionLinkOptions: { to: '/draft_statuses' },
+                  });
                 });
-              });
-              onClose('COMPOSE');
-              resetCompose('compose-modal');
-            },
+                onClose('COMPOSE');
+                resetCompose('compose-modal');
+              },
       });
     } else {
       onClose('COMPOSE');
@@ -142,7 +143,12 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
         'compose-modal--dragged-over': isDraggedOver,
       })}
     >
-      <ComposeForm id={composeId} autoFocus showAccountSwitcher />
+      <ComposeForm
+        id={composeId}
+        autoFocus
+        showAccountSwitcher
+        enableThread={!editedId && !compose.redacting}
+      />
     </Modal>
   );
 };

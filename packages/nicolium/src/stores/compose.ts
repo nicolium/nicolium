@@ -1,11 +1,13 @@
 import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import { length } from 'stringz';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 import { uploadFile, updateMedia } from '@/actions/media';
 import { saveSettings } from '@/actions/settings';
 import { createStatus } from '@/actions/statuses';
+import { countableText } from '@/features/compose/util/counter';
 import { isNativeEmoji } from '@/features/emoji';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -51,6 +53,11 @@ const messages = defineMessages({
     defaultMessage: 'You must schedule a post at least 5 minutes out.',
   },
   success: { id: 'compose.submit.success', defaultMessage: 'Your post was sent!' },
+  threadSuccess: { id: 'compose.thread.success', defaultMessage: 'Your thread was sent!' },
+  threadTooLong: {
+    id: 'compose.thread.too_long',
+    defaultMessage: 'One of the posts in your thread is too long.',
+  },
   editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
   redactSuccess: { id: 'compose.redact.success', defaultMessage: 'The post was redacted' },
   scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
@@ -351,12 +358,19 @@ const openComposeSurface = (
 interface ComposeState {
   default: Compose;
   composers: Record<string, Compose>;
+  threads: Record<string, string[]>;
 }
 
 interface ComposeActions {
   updateCompose: (composeId: string, updater: (draft: Compose) => void) => void;
   updateAllCompose: (updater: (draft: Compose) => void) => void;
   getCompose: (composeId: string) => Compose;
+
+  addThreadPost: (rootId: string) => string;
+  removeThreadPost: (rootId: string, childId: string) => void;
+  getThread: (rootId: string) => Array<string>;
+  hasThreadPosts: (rootId: string) => boolean;
+  hasThreadContent: (rootId: string) => boolean;
 
   setComposeToStatus: (
     status: Pick<
@@ -436,6 +450,7 @@ const useComposeStore = create<ComposeStore>()(
     (set, get) => ({
       default: newCompose({ idempotencyKey: crypto.randomUUID(), resetFileKey: getResetFileKey() }),
       composers: {},
+      threads: {},
 
       actions: {
         updateCompose: (composeId, updater) => {
@@ -459,6 +474,55 @@ const useComposeStore = create<ComposeStore>()(
         },
 
         getCompose: (composeId) => get().composers[composeId] ?? get().default,
+
+        addThreadPost: (rootId) => {
+          const childId = `${rootId}:thread:${crypto.randomUUID()}`;
+          set((state) => {
+            const root = state.composers[rootId] ?? state.default;
+            state.composers[childId] = {
+              ...state.default,
+              idempotencyKey: crypto.randomUUID(),
+              resetFileKey: getResetFileKey(),
+              visibility: root.visibility,
+              contentType: root.contentType,
+              language: root.language,
+              localOnly: root.localOnly,
+              groupId: root.groupId,
+              interactionPolicy: root.interactionPolicy,
+              quoteApprovalPolicy: root.quoteApprovalPolicy,
+            };
+            (state.threads[rootId] ??= []).push(childId);
+          });
+          return childId;
+        },
+
+        removeThreadPost: (rootId, childId) => {
+          set((state) => {
+            delete state.composers[childId];
+            const thread = state.threads[rootId];
+            if (!thread) return;
+            state.threads[rootId] = thread.filter((id) => id !== childId);
+            if (!state.threads[rootId].length) delete state.threads[rootId];
+          });
+        },
+
+        getThread: (rootId) => get().threads[rootId] ?? [],
+
+        hasThreadPosts: (rootId) => (get().threads[rootId] ?? []).length > 0,
+
+        hasThreadContent: (rootId) => {
+          const state = get();
+          return (state.threads[rootId] ?? []).some((id) => {
+            const compose = state.composers[id];
+            return (
+              !!compose &&
+              ((compose.editorState?.length ?? 0) > 0 ||
+                compose.spoilerText.length > 0 ||
+                compose.mediaAttachments.length > 0 ||
+                compose.poll !== null)
+            );
+          });
+        },
 
         setComposeToStatus: (
           status,
@@ -709,6 +773,11 @@ const useComposeStore = create<ComposeStore>()(
 
         resetCompose: (composeId = 'compose-modal') => {
           set((state) => {
+            const thread = state.threads[composeId];
+            if (thread) {
+              thread.forEach((id) => delete state.composers[id]);
+              delete state.threads[composeId];
+            }
             state.composers[composeId] = {
               ...state.default,
               idempotencyKey: crypto.randomUUID(),
@@ -832,7 +901,311 @@ const useComposeStore = create<ComposeStore>()(
   ),
 );
 
-const useSubmitCompose = (composeId: string) => {
+interface SubmitDeps {
+  actions: ComposeActions;
+  client: ReturnType<typeof useClient>;
+  ownAccount: Account | undefined;
+  scopeUrl: string;
+  features: ReturnType<typeof useFeatures>;
+  openModal: ReturnType<typeof useModalsActions>['openModal'];
+  closeModal: ReturnType<typeof useModalsActions>['closeModal'];
+  removeSledzik: () => void;
+  settings: ReturnType<typeof useSettings>;
+  instance: ReturnType<typeof useInstance>;
+}
+
+interface SubmitComposeOptions {
+  common?: Partial<Compose>;
+  force?: boolean;
+  preview?: boolean;
+  onSuccess?: () => void;
+  propagate?: boolean;
+  chained?: boolean;
+  inReplyToIdOverride?: string | null;
+}
+
+const submitCompose = async (
+  deps: SubmitDeps,
+  composeId: string,
+  opts: SubmitComposeOptions = {},
+) => {
+  const {
+    force = false,
+    preview = false,
+    onSuccess,
+    propagate = false,
+    chained = false,
+    inReplyToIdOverride,
+  } = opts;
+  const { actions, client, ownAccount, scopeUrl, features, openModal, closeModal, removeSledzik } =
+    deps;
+
+  const compose = actions.getCompose(composeId);
+
+  const { defaultContentType } = useSettingsStore.getState().settings;
+
+  const contentType = getComposeContentType(
+    opts.common?.contentType ?? compose.contentType,
+    defaultContentType,
+    deps.instance.pleroma.metadata.post_formats,
+  );
+
+  if (preview && contentType === 'text/x.misskeymarkdown') {
+    const data: Partial<Status> = {
+      text: compose.text,
+      content: compose.text,
+      spoiler_text: compose.spoilerText,
+      media_attachments: compose.mediaAttachments,
+      content_type: 'text/x.misskeymarkdown',
+      emojis: [],
+    };
+    actions.updateCompose(composeId, (draft) => {
+      draft.preview = data;
+    });
+    onSuccess?.();
+    return;
+  }
+
+  const statusText = compose.text;
+  const media = compose.mediaAttachments;
+  const editedId = compose.editedId;
+  let to = compose.to;
+  const { forceImplicitAddressing } = deps.settings;
+  const explicitAddressing = features.createStatusExplicitAddressing && !forceImplicitAddressing;
+
+  if (!preview) {
+    const scheduledAt = compose.scheduledAt;
+    if (scheduledAt) {
+      const fiveMinutesFromNow = new Date(Date.now() + 300000);
+      const valid =
+        scheduledAt.getTime() > fiveMinutesFromNow.getTime() ||
+        (features.scheduledStatusesBackwards && scheduledAt.getTime() < Date.now());
+      if (!valid) {
+        toast.error(messages.scheduleError);
+        return;
+      }
+    }
+
+    if ((!statusText || !statusText.length) && media.length === 0) {
+      return;
+    }
+
+    if (!force && !chained) {
+      const missingDescriptionModal = deps.settings.missingDescriptionModal;
+      const hasMissing = media.some((item) => !item.description);
+      if (missingDescriptionModal && hasMissing) {
+        openModal('MISSING_DESCRIPTION', {
+          onContinue: () => {
+            closeModal('MISSING_DESCRIPTION');
+            submitCompose(deps, composeId, { ...opts, force: true });
+          },
+        });
+        return;
+      }
+    }
+  }
+
+  const mentionsMatch: string[] | null = statusText.match(
+    /(?:^|\s)@([a-z\d_-]+(?:@(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]+)?)/gi,
+  );
+
+  if (mentionsMatch) {
+    to = [
+      ...new Set([
+        ...to,
+        ...mentionsMatch.map((mention) => mention.replaceAll('&#x20;', '').trim().slice(1)),
+      ]),
+    ];
+  }
+
+  if (!preview) {
+    actions.updateCompose(composeId, (draft) => {
+      draft.isSubmitting = true;
+    });
+
+    if (!chained) closeModal('COMPOSE');
+
+    if (compose.language && !editedId) {
+      useSettingsStore.getState().actions.rememberLanguageUse(compose.language);
+      saveSettings();
+    }
+  }
+
+  const idempotencyKey = compose.idempotencyKey;
+
+  const { defaultPrivacy } = useSettingsStore.getState().settings;
+
+  let visibility = opts.common?.visibility ?? compose.visibility;
+  if (visibility === 'default') visibility = defaultPrivacy;
+
+  const params: CreateStatusParams = {
+    status: statusText,
+    in_reply_to_id: inReplyToIdOverride ?? compose.inReplyToId ?? undefined,
+    quote_id: compose.quoteId ?? undefined,
+    media_ids: media.map((item) => item.id),
+    sensitive: opts.common?.sensitive ?? compose.sensitive,
+    spoiler_text: opts.common?.spoilerText ?? compose.spoilerText,
+    visibility,
+    content_type: contentType,
+    scheduled_at: preview ? undefined : compose.scheduledAt?.toISOString(),
+    language: opts.common?.language ?? compose.language ?? compose.suggestedLanguage ?? undefined,
+    to: explicitAddressing && to.length ? to : undefined,
+    local_only: compose.localOnly,
+    interaction_policy:
+      (['public', 'unlisted', 'private'].includes(visibility) &&
+        (opts.common?.interactionPolicy ?? compose.interactionPolicy)) ||
+      undefined,
+    quote_approval_policy:
+      opts.common?.quoteApprovalPolicy ?? compose.quoteApprovalPolicy ?? undefined,
+    location_id: compose.location?.origin_id ?? undefined,
+  };
+
+  if (compose.editedId) {
+    (params as EditStatusParams).media_attributes = media.map((item) => {
+      const focalPoint = (item.type === 'image' || item.type === 'gifv') && item.meta?.focus;
+      const focus = focalPoint
+        ? `${focalPoint.x.toFixed(2)},${focalPoint.y.toFixed(2)}`
+        : undefined;
+
+      return { id: item.id, description: item.description, focus };
+    }) as EditStatusParams['media_attributes'];
+  }
+
+  if (compose.poll) {
+    params.poll = {
+      options: compose.poll.options,
+      expires_in: compose.poll.expires_in,
+      multiple: compose.poll.multiple,
+      hide_totals: compose.poll.hide_totals,
+    };
+    if (compose.language && Object.keys(compose.textMap).length) {
+      params.poll.options_map = compose.poll.options_map;
+    }
+  }
+
+  if (compose.language && Object.keys(compose.textMap).length) {
+    params.status_map = compose.textMap;
+    params.status_map[compose.language] = statusText;
+
+    if (params.spoiler_text) {
+      params.spoiler_text_map = compose.spoilerTextMap;
+      params.spoiler_text_map[compose.language] = compose.spoilerText;
+    }
+
+    const pollParams = params.poll;
+    if (pollParams?.options_map) {
+      pollParams.options.forEach(
+        (option, index: number) => (pollParams.options_map![index][compose.language!] = option),
+      );
+    }
+  }
+
+  if (visibility === 'group' && compose.groupId) {
+    params.group_id = compose.groupId;
+  }
+
+  if (preview) {
+    try {
+      const data = await client.statuses.previewStatus(params);
+      actions.updateCompose(composeId, (draft) => {
+        draft.preview = data;
+        draft.preview.id = '';
+      });
+      onSuccess?.();
+    } catch {}
+    return;
+  }
+
+  if (compose.redacting) {
+    // @ts-expect-error
+    params.overwrite = compose.redactingOverwrite;
+  }
+
+  if (!compose.preview && compose.text.trim().toLocaleUpperCase() === '5P13RD4L4J-5L3D21U') {
+    removeSledzik();
+  }
+
+  try {
+    const data = await createStatus(
+      client,
+      params,
+      idempotencyKey,
+      editedId,
+      scopeUrl,
+      compose.redacting,
+    );
+
+    if (chained) {
+      if (data.scheduled_at !== null) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
+      }
+      onSuccess?.();
+      return data;
+    }
+
+    const draftIdToCancel = compose.draftId;
+
+    actions.resetCompose(composeId);
+
+    if (draftIdToCancel) {
+      const accountUrl = ownAccount!.url;
+      cancelDraftStatus(queryClient, accountUrl, draftIdToCancel, scopeUrl);
+    }
+
+    if (data.scheduled_at === null) {
+      const linkOptions: LinkOptions =
+        data.visibility === 'direct' && features.conversations
+          ? { to: '/conversations' }
+          : {
+              to: '/@{$username}/posts/$statusId',
+              params: { username: data.account.acct, statusId: data.id },
+            };
+      const toastMessage = compose.redacting
+        ? messages.redactSuccess
+        : editedId
+          ? messages.editSuccess
+          : messages.success;
+      const toastOptions = { actionLabel: messages.view, actionLinkOptions: linkOptions };
+
+      if (propagate) {
+        toast.propagate('success', toastMessage, toastOptions);
+      } else {
+        toast.success(toastMessage, toastOptions);
+      }
+    } else {
+      const toastOptions = {
+        actionLabel: messages.view,
+        actionLinkOptions: { to: '/scheduled_statuses' as const },
+      };
+
+      if (propagate) {
+        toast.propagate('success', messages.scheduledSuccess, toastOptions);
+      } else {
+        toast.success(messages.scheduledSuccess, toastOptions);
+      }
+
+      queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
+    }
+
+    onSuccess?.();
+    return data;
+  } catch (error) {
+    if (!chained) {
+      const message = (error as any).response?.json?.error || messages.submitError;
+      if (propagate) {
+        toast.propagate('error', message);
+      } else {
+        toast.error(message);
+      }
+    }
+    actions.updateCompose(composeId, (draft) => {
+      draft.isSubmitting = false;
+    });
+    return undefined;
+  }
+};
+
+const useSubmitDeps = (): SubmitDeps => {
   const actions = useComposeActions();
   const client = useClient();
   const { data: ownAccount } = useOwnAccount();
@@ -843,276 +1216,156 @@ const useSubmitCompose = (composeId: string) => {
   const settings = useSettings();
   const instance = useInstance();
 
-  const submitCompose = useCallback(
-    async (
-      opts: {
-        force?: boolean;
-        preview?: boolean;
-        onSuccess?: () => void;
-        propagate?: boolean;
-      } = {},
-    ) => {
-      const { force = false, preview = false, onSuccess, propagate = false } = opts;
+  return {
+    actions,
+    client,
+    ownAccount,
+    scopeUrl,
+    features,
+    openModal,
+    closeModal,
+    removeSledzik,
+    settings,
+    instance,
+  };
+};
 
-      const compose = actions.getCompose(composeId);
+const useSubmitCompose = (composeId: string) => {
+  const deps = useSubmitDeps();
 
-      const { defaultContentType } = useSettingsStore.getState().settings;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useCallback(
+    (opts: SubmitComposeOptions = {}) => submitCompose(deps, composeId, opts),
+    [composeId, deps.client],
+  );
+};
 
-      let contentType = getComposeContentType(
-        compose.contentType,
-        defaultContentType,
-        instance.pleroma.metadata.post_formats,
-      );
+const submitThread = async (
+  deps: SubmitDeps,
+  rootId: string,
+  opts: { force?: boolean; onSuccess?: () => void } = {},
+) => {
+  const { force = false, onSuccess } = opts;
+  const { actions, openModal, closeModal, ownAccount, scopeUrl, features, instance } = deps;
 
-      if (preview && contentType === 'text/x.misskeymarkdown') {
-        const data: Partial<Status> = {
-          text: compose.text,
-          content: compose.text,
-          spoiler_text: compose.spoilerText,
-          media_attachments: compose.mediaAttachments,
-          content_type: 'text/x.misskeymarkdown',
-          emojis: [],
-        };
-        actions.updateCompose(composeId, (draft) => {
-          draft.preview = data;
-        });
-        onSuccess?.();
-        return;
-      }
+  const rootCompose = actions.getCompose(rootId);
 
-      const statusText = compose.text;
-      const media = compose.mediaAttachments;
-      const editedId = compose.editedId;
-      let to = compose.to;
-      const { forceImplicitAddressing } = settings;
-      const explicitAddressing =
-        features.createStatusExplicitAddressing && !forceImplicitAddressing;
+  const hasContent = (compose: Compose) =>
+    !!(countableText(compose.text).trim() || compose.mediaAttachments.length || compose.poll);
 
-      if (!preview) {
-        const scheduledAt = compose.scheduledAt;
-        if (scheduledAt) {
-          const fiveMinutesFromNow = new Date(Date.now() + 300000);
-          const valid =
-            scheduledAt.getTime() > fiveMinutesFromNow.getTime() ||
-            (features.scheduledStatusesBackwards && scheduledAt.getTime() < Date.now());
-          if (!valid) {
-            toast.error(messages.scheduleError);
-            return;
-          }
-        }
+  const ids = [rootId, ...actions.getThread(rootId)].filter((id) =>
+    hasContent(actions.getCompose(id)),
+  );
+  if (!ids.length) return;
 
-        if ((!statusText || !statusText.length) && media.length === 0) {
-          return;
-        }
+  const maxChars = instance.configuration.statuses.max_characters;
+  const tooLong = ids.some((id) => {
+    const compose = actions.getCompose(id);
+    return length([compose.spoilerText, countableText(compose.text)].join('')) > maxChars;
+  });
+  if (tooLong) {
+    toast.error(messages.threadTooLong);
+    return;
+  }
 
-        if (!force) {
-          const missingDescriptionModal = settings.missingDescriptionModal;
-          const hasMissing = media.some((item) => !item.description);
-          if (missingDescriptionModal && hasMissing) {
-            openModal('MISSING_DESCRIPTION', {
-              onContinue: () => {
-                closeModal('MISSING_DESCRIPTION');
-                submitCompose({ force: true, onSuccess, propagate });
-              },
-            });
-            return;
-          }
-        }
-      }
+  if (!force) {
+    const hasMissing = ids.some((id) =>
+      actions.getCompose(id).mediaAttachments.some((item) => !item.description),
+    );
+    if (deps.settings.missingDescriptionModal && hasMissing) {
+      openModal('MISSING_DESCRIPTION', {
+        onContinue: () => {
+          closeModal('MISSING_DESCRIPTION');
+          submitThread(deps, rootId, { ...opts, force: true });
+        },
+      });
+      return;
+    }
+  }
 
-      const mentionsMatch: string[] | null = statusText.match(
-        /(?:^|\s)@([a-z\d_-]+(?:@(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]+)?)/gi,
-      );
-
-      if (mentionsMatch) {
-        to = [
-          ...new Set([
-            ...to,
-            ...mentionsMatch.map((mention) => mention.replaceAll('&#x20;', '').trim().slice(1)),
-          ]),
-        ];
-      }
-
-      if (!preview) {
-        actions.updateCompose(composeId, (draft) => {
-          draft.isSubmitting = true;
-        });
-
-        closeModal('COMPOSE');
-
-        if (compose.language && !editedId) {
-          useSettingsStore.getState().actions.rememberLanguageUse(compose.language);
-          saveSettings();
-        }
-      }
-
-      const idempotencyKey = compose.idempotencyKey;
-
-      const { defaultPrivacy } = useSettingsStore.getState().settings;
-
-      let visibility = compose.visibility;
-      if (visibility === 'default') visibility = defaultPrivacy;
-
-      const params: CreateStatusParams = {
-        status: statusText,
-        in_reply_to_id: compose.inReplyToId ?? undefined,
-        quote_id: compose.quoteId ?? undefined,
-        media_ids: media.map((item) => item.id),
-        sensitive: compose.sensitive,
-        spoiler_text: compose.spoilerText,
-        visibility,
-        content_type: contentType,
-        scheduled_at: preview ? undefined : compose.scheduledAt?.toISOString(),
-        language: compose.language ?? compose.suggestedLanguage ?? undefined,
-        to: explicitAddressing && to.length ? to : undefined,
-        local_only: compose.localOnly,
-        interaction_policy:
-          (['public', 'unlisted', 'private'].includes(compose.visibility) &&
-            compose.interactionPolicy) ||
-          undefined,
-        quote_approval_policy: compose.quoteApprovalPolicy ?? undefined,
-        location_id: compose.location?.origin_id ?? undefined,
-      };
-
-      if (compose.editedId) {
-        (params as EditStatusParams).media_attributes = media.map((item) => {
-          const focalPoint = (item.type === 'image' || item.type === 'gifv') && item.meta?.focus;
-          const focus = focalPoint
-            ? `${focalPoint.x.toFixed(2)},${focalPoint.y.toFixed(2)}`
-            : undefined;
-
-          return { id: item.id, description: item.description, focus };
-        }) as EditStatusParams['media_attributes'];
-      }
-
-      if (compose.poll) {
-        params.poll = {
-          options: compose.poll.options,
-          expires_in: compose.poll.expires_in,
-          multiple: compose.poll.multiple,
-          hide_totals: compose.poll.hide_totals,
-        };
-        if (compose.language && Object.keys(compose.textMap).length) {
-          params.poll.options_map = compose.poll.options_map;
-        }
-      }
-
-      if (compose.language && Object.keys(compose.textMap).length) {
-        params.status_map = compose.textMap;
-        params.status_map[compose.language] = statusText;
-
-        if (params.spoiler_text) {
-          params.spoiler_text_map = compose.spoilerTextMap;
-          params.spoiler_text_map[compose.language] = compose.spoilerText;
-        }
-
-        const pollParams = params.poll;
-        if (pollParams?.options_map) {
-          pollParams.options.forEach(
-            (option, index: number) => (pollParams.options_map![index][compose.language!] = option),
-          );
-        }
-      }
-
-      if (visibility === 'group' && compose.groupId) {
-        params.group_id = compose.groupId;
-      }
-
-      if (preview) {
-        try {
-          const data = await client.statuses.previewStatus(params);
-          actions.updateCompose(composeId, (draft) => {
-            draft.preview = data;
-            draft.preview.id = '';
-          });
-          onSuccess?.();
-        } catch {}
-      } else {
-        if (compose.redacting) {
-          // @ts-expect-error
-          params.overwrite = compose.redactingOverwrite;
-        }
-
-        if (!compose.preview && compose.text.trim().toLocaleUpperCase() === '5P13RD4L4J-5L3D21U') {
-          removeSledzik();
-        }
-
-        try {
-          const data = await createStatus(
-            client,
-            params,
-            idempotencyKey,
-            editedId,
-            scopeUrl,
-            compose.redacting,
-          );
-
-          const draftIdToCancel = compose.draftId;
-
-          actions.resetCompose(composeId);
-
-          if (draftIdToCancel) {
-            const accountUrl = ownAccount!.url;
-            cancelDraftStatus(queryClient, accountUrl, draftIdToCancel, scopeUrl);
-          }
-
-          if (data.scheduled_at === null) {
-            const linkOptions: LinkOptions =
-              data.visibility === 'direct' && features.conversations
-                ? { to: '/conversations' }
-                : {
-                    to: '/@{$username}/posts/$statusId',
-                    params: { username: data.account.acct, statusId: data.id },
-                  };
-            const toastMessage = compose.redacting
-              ? messages.redactSuccess
-              : editedId
-                ? messages.editSuccess
-                : messages.success;
-            const toastOptions = { actionLabel: messages.view, actionLinkOptions: linkOptions };
-
-            if (propagate) {
-              toast.propagate('success', toastMessage, toastOptions);
-            } else {
-              toast.success(toastMessage, toastOptions);
-            }
-          } else {
-            const toastOptions = {
-              actionLabel: messages.view,
-              actionLinkOptions: { to: '/scheduled_statuses' as const },
-            };
-
-            if (propagate) {
-              toast.propagate('success', messages.scheduledSuccess, toastOptions);
-            } else {
-              toast.success(messages.scheduledSuccess, toastOptions);
-            }
-
-            queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
-          }
-
-          onSuccess?.();
-        } catch (error) {
-          const message = (error as any).response?.json?.error || messages.submitError;
-          if (propagate) {
-            toast.propagate('error', message);
-          } else {
-            toast.error(message);
-          }
-          actions.updateCompose(composeId, (draft) => {
-            draft.isSubmitting = false;
-          });
-        }
-      }
-    },
-    [composeId, client],
+  ids.forEach((id) =>
+    actions.updateCompose(id, (draft) => {
+      draft.isSubmitting = true;
+    }),
   );
 
-  return submitCompose;
+  closeModal('COMPOSE');
+
+  const draftIdToCancel = rootCompose.draftId;
+  let firstStatus: any = null;
+  let inReplyToId: string | null | undefined;
+
+  const commonSettings: Partial<Compose> = {
+    contentType: rootCompose.contentType,
+    interactionPolicy: rootCompose.interactionPolicy,
+    quoteApprovalPolicy: rootCompose.quoteApprovalPolicy,
+    language: rootCompose.language,
+    localOnly: rootCompose.localOnly,
+    sensitive: rootCompose.sensitive,
+    visibility: rootCompose.visibility,
+  };
+
+  for (let i = 0; i < ids.length; i++) {
+    const status = await submitCompose(deps, ids[i], {
+      common: commonSettings,
+      force: true,
+      chained: true,
+      inReplyToIdOverride: i === 0 ? undefined : inReplyToId,
+    });
+
+    if (!status) {
+      ids.forEach((id) =>
+        actions.updateCompose(id, (draft) => {
+          draft.isSubmitting = false;
+        }),
+      );
+      toast.error(messages.submitError);
+      return;
+    }
+
+    if (i === 0) firstStatus = status;
+    inReplyToId = status.id;
+  }
+
+  actions.resetCompose(rootId);
+
+  if (draftIdToCancel) {
+    cancelDraftStatus(queryClient, ownAccount!.url, draftIdToCancel, scopeUrl);
+  }
+
+  const linkOptions: LinkOptions =
+    firstStatus!.visibility === 'direct' && features.conversations
+      ? { to: '/conversations' }
+      : {
+          to: '/@{$username}/posts/$statusId',
+          params: { username: firstStatus!.account.acct, statusId: firstStatus!.id },
+        };
+
+  toast.success(messages.threadSuccess, {
+    actionLabel: messages.view,
+    actionLinkOptions: linkOptions,
+  });
+
+  onSuccess?.();
+};
+
+const useSubmitThread = (rootId: string) => {
+  const deps = useSubmitDeps();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useCallback(
+    (opts: { onSuccess?: () => void } = {}) => submitThread(deps, rootId, opts),
+    [rootId, deps.client],
+  );
 };
 
 const useCompose = <ID extends string>(composeId: ID extends 'default' ? never : ID): Compose =>
   useComposeStore((state) => state.composers[composeId] ?? state.default);
+
+const EMPTY_THREAD: Array<string> = [];
+
+const useThread = (rootId: string): Array<string> =>
+  useComposeStore((state) => state.threads[rootId] ?? EMPTY_THREAD);
 
 const useComposeActions = () => useComposeStore((state) => state.actions);
 
@@ -1259,8 +1512,10 @@ export {
   statusToMentionsAccountIdsArray,
   useComposeStore,
   useCompose,
+  useThread,
   useComposeActions,
   useSubmitCompose,
+  useSubmitThread,
   useUploadCompose,
   useChangeUploadCompose,
   useComposeVisibility,

@@ -3,6 +3,8 @@ import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
 import iconEye from '@phosphor-icons/core/regular/eye.svg';
 import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import { $getNodeByKey, CLEAR_EDITOR_COMMAND, TextNode, type LexicalEditor } from 'lexical';
 import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
@@ -12,6 +14,7 @@ import { length } from 'stringz';
 import DropdownMenu from '@/components/dropdown-menu';
 import List, { ListItem } from '@/components/list';
 import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
 import SvgIcon from '@/components/ui/svg-icon';
 import Toggle from '@/components/ui/toggle';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
@@ -23,8 +26,10 @@ import {
   useCompose,
   useComposeActions,
   useComposeContentType,
+  useThread,
   useUploadCompose,
   useSubmitCompose,
+  useSubmitThread,
 } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
@@ -82,6 +87,10 @@ const messages = defineMessages({
   draftSaved: { id: 'compose_form.save_draft.success', defaultMessage: 'Draft saved' },
   view: { id: 'toast.view', defaultMessage: 'View' },
   more: { id: 'compose_form.more', defaultMessage: 'More' },
+  publishThread: { id: 'compose_form.publish_thread', defaultMessage: 'Post all {count}' },
+  addThreadPost: { id: 'compose_form.thread.add', defaultMessage: 'Add another post' },
+  removeThreadPost: { id: 'compose_form.thread.remove', defaultMessage: 'Remove post' },
+  threadPlaceholder: { id: 'compose_form.thread.placeholder', defaultMessage: 'Add another post…' },
 });
 
 interface IComposeButton extends Pick<
@@ -143,6 +152,10 @@ interface IComposeForm<ID extends string> {
   transparent?: boolean;
   compact?: boolean;
   showAccountSwitcher?: boolean;
+  enableThread?: boolean;
+  threadItem?: boolean;
+  onRemove?: () => void;
+  onThreadSubmit?: () => void;
 }
 
 const ComposeForm = <ID extends string>({
@@ -158,6 +171,10 @@ const ComposeForm = <ID extends string>({
   transparent,
   compact,
   showAccountSwitcher,
+  enableThread,
+  threadItem,
+  onRemove,
+  onThreadSubmit,
 }: IComposeForm<ID>) => {
   const intl = useIntl();
   const { configuration } = useInstance();
@@ -168,9 +185,14 @@ const ComposeForm = <ID extends string>({
   const compose = useCompose(id);
   const uploadCompose = useUploadCompose(id);
   const submitCompose = useSubmitCompose(id);
+  const submitThread = useSubmitThread(id);
+  const thread = useThread(id);
   const maxTootChars = configuration.statuses.max_characters;
   const features = useFeatures();
   const persistDraftStatus = usePersistDraftStatus();
+
+  const isThreadRoot = !!enableThread && !threadItem;
+  const hasThread = isThreadRoot && thread.length > 0;
 
   const {
     spoilerText,
@@ -250,8 +272,24 @@ const ComposeForm = <ID extends string>({
   };
 
   const handleSubmit = (e?: React.FormEvent) => {
-    if (!canSubmit) return;
     e?.preventDefault();
+
+    if (threadItem) {
+      onThreadSubmit?.();
+      return;
+    }
+
+    if (!canSubmit) return;
+
+    if (hasThread) {
+      submitThread({
+        onSuccess: () => {
+          clearEditor();
+          onSubmit?.();
+        },
+      });
+      return;
+    }
 
     submitCompose({
       propagate: fullScreen,
@@ -260,6 +298,10 @@ const ComposeForm = <ID extends string>({
         onSubmit?.();
       },
     });
+  };
+
+  const handleAddThreadPost = () => {
+    actions.addThreadPost(id);
   };
 
   const handlePreview = (e?: React.FormEvent) => {
@@ -356,7 +398,9 @@ const ComposeForm = <ID extends string>({
         {features.drive && <DriveButton composeId={id} />}
         <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
         {features.polls && <PollButton composeId={id} />}
-        {features.scheduledStatuses && <ScheduleButton composeId={id} />}
+        {features.scheduledStatuses && !hasThread && !threadItem && (
+          <ScheduleButton composeId={id} />
+        )}
         {anyMedia && features.spoilers && <SensitiveMediaButton composeId={id} />}
         {(features.interactionRequests || features.quoteApprovalPolicies) && (
           <InteractionPolicyButton composeId={id} />
@@ -364,7 +408,7 @@ const ComposeForm = <ID extends string>({
         {features.statusLocation && <LocationButton composeId={id} />}
       </div>
     ),
-    [features, id, anyMedia],
+    [features, id, anyMedia, hasThread, thread.length],
   );
 
   const showModifiers =
@@ -408,6 +452,11 @@ const ComposeForm = <ID extends string>({
     publishText = intl.formatMessage(messages.schedule);
   }
 
+  if (hasThread) {
+    publishText = intl.formatMessage(messages.publishThread, { count: thread.length + 1 });
+    publishIcon = undefined;
+  }
+
   const selectButtons = [];
 
   if (features.privacyScopes && !group && !groupId)
@@ -429,23 +478,105 @@ const ComposeForm = <ID extends string>({
     });
   }
 
-  actionsMenu.push({
-    text: intl.formatMessage(messages.saveDraft),
-    action: handleSaveDraft,
-    icon: iconPencilSimple,
-  });
+  if (!hasThread) {
+    actionsMenu.push({
+      text: intl.formatMessage(messages.saveDraft),
+      action: handleSaveDraft,
+      icon: iconPencilSimple,
+    });
+  }
+
+  const Wrapper: React.ElementType = threadItem ? 'div' : 'form';
+  const wrapperProps: Record<string, any> = threadItem
+    ? {}
+    : { ref: formRef, onClick: handleClick, onSubmit: handleSubmit };
+
+  const threadPlaceholder = threadItem ? intl.formatMessage(messages.threadPlaceholder) : undefined;
+
+  const composeButton = (
+    <ComposeButton
+      type='submit'
+      icon={publishIcon}
+      text={publishText}
+      disabled={!canSubmit}
+      actionsMenu={actionsMenu}
+    />
+  );
+
+  const composeFooter = (
+    <div
+      className={clsx('compose-form__footer', {
+        'compose-form__footer--condensed': condensed,
+      })}
+    >
+      {renderButtons()}
+      <div className='compose-form__actions'>
+        {maxTootChars && (
+          <div className='compose-form__counter'>
+            {!compact && <TextCharacterCounter max={maxTootChars} text={fulltext} />}
+            <VisualCharacterCounter max={maxTootChars} text={fulltext} />
+          </div>
+        )}
+
+        {threadItem ? (
+          <IconButton
+            src={iconX}
+            type='button'
+            className='compose-form__thread-remove'
+            aria-label={intl.formatMessage(messages.removeThreadPost)}
+            title={intl.formatMessage(messages.removeThreadPost)}
+            onClick={onRemove}
+            theme='secondary'
+          />
+        ) : (
+          !hasThread && composeButton
+        )}
+      </div>
+
+      {compose.redacting && !threadItem && (
+        <List>
+          <ListItem
+            className='compose-form__redact'
+            label={
+              <FormattedMessage
+                id='compose.redact.overwrite.label'
+                defaultMessage='Overwrite existing post'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='compose.redact.overwrite.hint'
+                defaultMessage='This will replace the post with a new one, without keeping edit history. The update will not federate.'
+              />
+            }
+          >
+            <Toggle
+              checked={compose.redactingOverwrite}
+              onChange={handleChangeRedactingOverwrite}
+            />
+          </ListItem>
+        </List>
+      )}
+    </div>
+  );
+
+  const addThreadPostButton = !scheduledAt && maxTootChars <= 1024 && (
+    <button type='button' className='compose-form__thread-add' onClick={handleAddThreadPost}>
+      <Icon src={iconPlus} />
+      <FormattedMessage id='compose_form.thread.add' defaultMessage='Add another post' />
+    </button>
+  );
 
   return (
-    <form
+    <Wrapper
       className={clsx('compose-form', {
         'compose-form--transparent': transparent,
         'compose-form--with-avatar': withAvatar,
+        'compose-form--thread-item': threadItem,
       })}
-      ref={formRef}
-      onClick={handleClick}
-      onSubmit={handleSubmit}
+      {...wrapperProps}
     >
-      {(compose.inReplyToId || compose.quoteId) && compose.approvalRequired && (
+      {!threadItem && (compose.inReplyToId || compose.quoteId) && compose.approvalRequired && (
         <Warning
           message={
             compose.quoteId ? (
@@ -463,23 +594,27 @@ const ComposeForm = <ID extends string>({
         />
       )}
 
-      <WarningContainer composeId={id} />
+      {!threadItem && <WarningContainer composeId={id} />}
 
-      {showAccountSwitcher && !shouldCondense && !group && (
+      {showAccountSwitcher && !shouldCondense && !group && !threadItem && (
         <ComposeAccountSwitcher composeId={id} />
       )}
 
-      {!shouldCondense && !event && !group && groupId && <ReplyGroupIndicator composeId={id} />}
+      {!shouldCondense && !event && !group && !threadItem && groupId && (
+        <ReplyGroupIndicator composeId={id} />
+      )}
 
-      {!shouldCondense && !event && !group && <ReplyIndicatorContainer composeId={id} />}
+      {!shouldCondense && !event && !group && !threadItem && (
+        <ReplyIndicatorContainer composeId={id} />
+      )}
 
-      {!shouldCondense && !event && !group && <ReplyMentions composeId={id} />}
+      {!shouldCondense && !event && !group && !threadItem && <ReplyMentions composeId={id} />}
 
-      {selectButtons.length > 0 && (
+      {selectButtons.length > 0 && !threadItem && (
         <div className='compose-form__select-buttons'>{selectButtons}</div>
       )}
 
-      {features.spoilers && (
+      {features.spoilers && !threadItem && (
         <SpoilerInput composeId={id} theme={transparent ? 'transparent' : 'normal'} />
       )}
 
@@ -498,6 +633,7 @@ const ComposeForm = <ID extends string>({
               handleSubmit={handleSubmit}
               onFocus={handleComposeFocus}
               onPaste={onPaste}
+              placeholder={threadPlaceholder}
             />
           ) : (
             <ComposeEditor
@@ -513,6 +649,7 @@ const ComposeForm = <ID extends string>({
               handleSubmit={handleSubmit}
               onFocus={handleComposeFocus}
               onPaste={onPaste}
+              placeholder={threadPlaceholder}
             />
           )}
         </Suspense>
@@ -528,60 +665,41 @@ const ComposeForm = <ID extends string>({
 
       {composeModifiers}
 
-      <QuotedStatusContainer composeId={id} />
+      {!threadItem && <QuotedStatusContainer composeId={id} />}
 
-      <PreviewComposeContainer composeId={id} />
+      {!threadItem && <PreviewComposeContainer composeId={id} />}
 
-      <div
-        className={clsx('compose-form__footer', {
-          'compose-form__footer--condensed': condensed,
-        })}
-      >
-        {renderButtons()}
+      {hasThread && composeFooter}
 
-        <div className='compose-form__actions'>
-          {maxTootChars && (
-            <div className='compose-form__counter'>
-              {!compact && <TextCharacterCounter max={maxTootChars} text={fulltext} />}
-              <VisualCharacterCounter max={maxTootChars} text={fulltext} />
-            </div>
-          )}
-
-          <ComposeButton
-            type='submit'
-            icon={publishIcon}
-            text={publishText}
-            disabled={!canSubmit}
-            actionsMenu={actionsMenu}
-          />
+      {isThreadRoot && (
+        <div className='compose-form__thread'>
+          {thread.map((childId) => (
+            <ComposeForm
+              key={childId}
+              id={childId}
+              threadItem
+              transparent={transparent}
+              onRemove={() => actions.removeThreadPost(id, childId)}
+              onThreadSubmit={handleSubmit}
+            />
+          ))}
+          {!hasThread && addThreadPostButton}
         </div>
+      )}
 
-        {compose.redacting && (
-          <List>
-            <ListItem
-              className='compose-form__redact'
-              label={
-                <FormattedMessage
-                  id='compose.redact.overwrite.label'
-                  defaultMessage='Overwrite existing post'
-                />
-              }
-              hint={
-                <FormattedMessage
-                  id='compose.redact.overwrite.hint'
-                  defaultMessage='This will replace the post with a new one, without keeping edit history. The update will not federate.'
-                />
-              }
-            >
-              <Toggle
-                checked={compose.redactingOverwrite}
-                onChange={handleChangeRedactingOverwrite}
-              />
-            </ListItem>
-          </List>
-        )}
-      </div>
-    </form>
+      {!hasThread ? (
+        composeFooter
+      ) : (
+        <div
+          className={clsx('compose-form__compose-actions', {
+            'compose-form__compose-actions--sticky': hasThread,
+          })}
+        >
+          {addThreadPostButton}
+          {composeButton}
+        </div>
+      )}
+    </Wrapper>
   );
 };
 
