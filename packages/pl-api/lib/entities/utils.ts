@@ -30,7 +30,11 @@ const filteredArray = <T>(schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>) =>
   );
 
 /** Validates the string as an emoji. */
-const emojiSchema = v.pipe(v.string(), v.emoji());
+const emojiSchema = v.pipe(
+  v.string(),
+  v.transform((string) => (string === '❤' ? '❤️' : string)),
+  v.emoji(),
+);
 
 /** MIME schema, eg `image/png`. */
 const mimeSchema = v.pipe(v.string(), v.regex(/^\w+\/[-+.\w]+$/));
