@@ -11,7 +11,6 @@ import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
-import { removePageItem } from '@/utils/queries';
 
 import { queryKeys } from '../keys';
 
@@ -57,14 +56,13 @@ const useSuggestedAccounts = () => {
 const useDismissSuggestion = () => {
   const client = useClient();
   const scopeUrl = useScopeUrl();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (accountId: string) => client.myAccount.dismissSuggestions(accountId),
     onMutate(accountId: string) {
-      removePageItem(
-        scopedQueryKey(queryKeys.suggestions.all, scopeUrl),
-        accountId,
-        (item, newItem) => item === newItem,
+      queryClient.setQueryData(scopedQueryKey(queryKeys.suggestions.all, scopeUrl), (data) =>
+        data?.filter((suggestion) => suggestion.account_id !== accountId),
       );
     },
   });
