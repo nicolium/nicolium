@@ -496,6 +496,14 @@ const ComposeForm = <ID extends string>({
     });
   }
 
+  if (!scheduledAt && maxTootChars > 1024) {
+    actionsMenu.push({
+      text: intl.formatMessage(messages.addThreadPost),
+      action: handleAddThreadPost,
+      icon: iconPlus,
+    });
+  }
+
   const Wrapper: React.ElementType = threadItem ? 'div' : 'form';
   const wrapperProps: Record<string, any> = threadItem
     ? {}
@@ -570,7 +578,7 @@ const ComposeForm = <ID extends string>({
     </div>
   );
 
-  const addThreadPostButton = !scheduledAt && maxTootChars <= 1024 && (
+  const addThreadPostButton = !scheduledAt && (
     <button type='button' className='compose-form__thread-add' onClick={handleAddThreadPost}>
       <Icon src={iconPlus} />
       <FormattedMessage id='compose_form.thread.add' defaultMessage='Add another post' />
@@ -693,7 +701,7 @@ const ComposeForm = <ID extends string>({
               onThreadSubmit={handleSubmit}
             />
           ))}
-          {!hasThread && addThreadPostButton}
+          {!hasThread && maxTootChars <= 1024 && addThreadPostButton}
         </div>
       )}
 
