@@ -432,28 +432,38 @@ const ComposeForm = <ID extends string>({
   let publishIcon: string | undefined = undefined;
 
   if (isEditing) {
-    publishText = intl.formatMessage(messages.saveChanges);
+    publishText = <FormattedMessage id='compose_form.save_changes' defaultMessage='Save changes' />;
   } else if (visibility === 'direct') {
     publishIcon = iconAt;
-    publishText = intl.formatMessage(messages.message);
+    publishText = <FormattedMessage id='compose_form.message' defaultMessage='Message' />;
   } else if (visibility === 'private' || visibility === 'mutuals_only') {
     publishIcon = iconLock;
-    publishText = intl.formatMessage(messages.publish);
+    publishText = <FormattedMessage id='compose_form.publish' defaultMessage='Post' />;
   } else {
     publishText =
-      visibility !== 'unlisted'
-        ? intl.formatMessage(messages.publishLoud, {
-            publish: intl.formatMessage(messages.publish),
-          })
-        : intl.formatMessage(messages.publish);
+      visibility !== 'unlisted' ? (
+        <FormattedMessage
+          id='compose_form.publish_loud'
+          defaultMessage='{publish}!'
+          values={{ publish: <FormattedMessage id='compose_form.publish' defaultMessage='Post' /> }}
+        />
+      ) : (
+        <FormattedMessage id='compose_form.publish' defaultMessage='Post' />
+      );
   }
 
   if (scheduledAt) {
-    publishText = intl.formatMessage(messages.schedule);
+    publishText = <FormattedMessage id='compose_form.schedule' defaultMessage='Schedule' />;
   }
 
   if (hasThread) {
-    publishText = intl.formatMessage(messages.publishThread, { count: thread.length + 1 });
+    publishText = (
+      <FormattedMessage
+        id='compose_form.publish_thread'
+        defaultMessage='Post all {count}'
+        values={{ count: thread.length + 1 }}
+      />
+    );
     publishIcon = undefined;
   }
 
