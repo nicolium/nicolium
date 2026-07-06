@@ -2015,6 +2015,7 @@
   "poll.votes": "{votes, plural, one {# vote} other {# votes}}",
   "poll_button.add_poll": "Add a poll",
   "poll_button.remove_poll": "Remove poll",
+  "preferences.fields.absolute_timestamps.label": "Show absolute timestamps on posts",
   "preferences.fields.auto_play_gif.label": "Auto-play animated GIFs",
   "preferences.fields.auto_translate.label": "Automatically translate posts in unknown languages",
   "preferences.fields.autoload_more.label": "Automatically load more items when scrolled to the bottom of the page",

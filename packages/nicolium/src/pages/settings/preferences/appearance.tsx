@@ -392,6 +392,21 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
+                id='preferences.fields.absolute_timestamps.label'
+                defaultMessage='Show absolute timestamps on posts'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['absoluteTimestamps']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
                 id='preferences.fields.use_system_media_controls.label'
                 defaultMessage='Use native media controls'
               />

@@ -360,6 +360,7 @@ const settingsSchema = v.object({
   renderAdvancedMfm: v.fallback(v.boolean(), true),
   renderAnimatedMfm: v.fallback(v.boolean(), false),
   underlineLinks: v.fallback(v.boolean(), false),
+  absoluteTimestamps: v.fallback(v.boolean(), false),
   autoPlayGif: v.fallback(v.boolean(), true),
   disableVideoLooping: v.fallback(v.boolean(), true),
   displayMedia: v.fallback(v.picklist(['default', 'hide_all', 'show_all']), 'default'),

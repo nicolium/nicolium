@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, type FormatDateOptions } from 'react-intl';
 
+import { useSettings } from '@/stores/settings';
+
 const messages = defineMessages({
   justNow: { id: 'relative_time.just_now', defaultMessage: 'now' },
   seconds: { id: 'relative_time.seconds', defaultMessage: '{number}s' },
@@ -38,6 +40,11 @@ const dateFormatOptions: FormatDateOptions = {
 const shortDateFormatOptions: FormatDateOptions = {
   month: 'short',
   day: 'numeric',
+};
+
+const absoluteTimeFormatOptions: FormatDateOptions = {
+  hour: 'numeric',
+  minute: '2-digit',
 };
 
 const SECOND = 1000;
@@ -91,6 +98,7 @@ const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
   ...props
 }) => {
   const intl = useIntl();
+  const { absoluteTimestamps } = useSettings();
   const [now, setNow] = useState(Date.now);
   const timerRef = useRef<NodeJS.Timeout>(undefined);
 
@@ -151,6 +159,18 @@ const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
       relativeTime = intl.formatMessage(messages.daysRemaining, {
         number: Math.floor(futureDelta / DAY),
       });
+    }
+  } else if (absoluteTimestamps) {
+    const nowDate = new Date(now);
+    if (date.toDateString() === nowDate.toDateString()) {
+      relativeTime = intl.formatDate(date, absoluteTimeFormatOptions);
+    } else if (date.getFullYear() === year) {
+      relativeTime = intl.formatDate(date, {
+        ...shortDateFormatOptions,
+        ...absoluteTimeFormatOptions,
+      });
+    } else {
+      relativeTime = intl.formatDate(date, { ...shortDateFormatOptions, year: 'numeric' });
     }
   } else if (delta < 10 * SECOND) {
     relativeTime = intl.formatMessage(messages.justNow);
