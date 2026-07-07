@@ -113,7 +113,7 @@ const useDeleteDriveFolderMutation = (folderId: string) => {
   });
 };
 
-const useMoveDriveFolderMutation = (folderId: string) => {
+const useMoveDriveFolderMutation = () => {
   const client = useClient();
   const queryClient = useQueryClient();
   const scopeUrl = useScopeUrl();
@@ -122,20 +122,20 @@ const useMoveDriveFolderMutation = (folderId: string) => {
 
   return useMutation({
     mutationKey: ['drive', 'folders'],
-    mutationFn: (targetFolderId?: string) => {
+    mutationFn: ({ id, targetFolderId }: { id: string; targetFolderId?: string }) => {
       const oldFolder = queryClient.getQueryData(
-        scopedQueryKey(queryKeys.drive.folders.show(folderId), scopeUrl),
+        scopedQueryKey(queryKeys.drive.folders.show(id), scopeUrl),
       );
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;
       } else {
         previousParentId = null;
       }
-      return client.drive.moveFolder(folderId, targetFolderId);
+      return client.drive.moveFolder(id, targetFolderId);
     },
-    onSuccess: (_, targetFolderId) => {
+    onSuccess: (_, { id, targetFolderId }) => {
       queryClient.invalidateQueries({
-        queryKey: scopedQueryKey(queryKeys.drive.folders.show(folderId), scopeUrl),
+        queryKey: scopedQueryKey(queryKeys.drive.folders.show(id), scopeUrl),
         exact: true,
       });
       queryClient.invalidateQueries({

@@ -73,14 +73,15 @@ const useDeleteDriveFileMutation = (fileId: string) => {
   });
 };
 
-const useMoveDriveFileMutation = (fileId: string) => {
+const useMoveDriveFileMutation = () => {
   const client = useClient();
   const queryClient = useQueryClient();
   const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['drive', 'files'],
-    mutationFn: (folderId?: string) => client.drive.moveFile(fileId, folderId),
+    mutationFn: ({ id, targetFolderId }: { id: string; targetFolderId?: string }) =>
+      client.drive.moveFile(id, targetFolderId),
     onSuccess: (file) => {
       queryClient.invalidateQueries({
         queryKey: scopedQueryKey(queryKeys.drive.folders.root, scopeUrl),

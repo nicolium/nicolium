@@ -7,6 +7,12 @@
   gap: 1rem;
   align-content: baseline;
 
+  &--drop-target:not(:has(.drive-file--drop-target)) {
+    border-radius: var(--radius-lg);
+    outline: 2px dashed var(--color-primary-500);
+    outline-offset: 2px;
+  }
+
   .drive-file {
     position: relative;
 
@@ -57,6 +63,15 @@
       .dark.black & {
         background: var(--color-gray-900);
       }
+    }
+
+    &--dragging {
+      opacity: 0.5;
+    }
+
+    &--drop-target {
+      outline: 2px solid var(--color-primary-500);
+      outline-offset: 2px;
     }
 
     img {
@@ -162,6 +177,15 @@
       .dark.black & {
         background: var(--color-gray-800);
       }
+    }
+  }
+
+  &__item--drop-target {
+    background: var(--color-primary-100);
+    outline: 2px solid var(--color-primary-500);
+
+    .dark & {
+      background: var(--color-primary-800);
     }
   }
 
