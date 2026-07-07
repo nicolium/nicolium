@@ -296,6 +296,7 @@ const NotificationsDeckColumn = () => {
     <NotificationsColumn
       filter={column?.filter ?? 'all'}
       onChangeFilter={(filter: FilterType) => updateColumn({ filter })}
+      advanced
     />
   );
 };

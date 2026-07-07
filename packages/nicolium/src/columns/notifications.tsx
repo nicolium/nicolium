@@ -64,9 +64,10 @@ const messages = defineMessages({
 interface IFilterBar {
   selected?: FilterType;
   onSelect?: (filter: FilterType) => void;
+  advanced?: boolean;
 }
 
-const FilterBar: React.FC<IFilterBar> = ({ selected, onSelect }) => {
+const FilterBar: React.FC<IFilterBar> = ({ selected, onSelect, advanced }) => {
   const intl = useIntl();
   const { notifications: notificationsSettings, useRocketIconForReblogs } = useSettings();
   const { changeSetting } = useSettingsStoreActions();
@@ -74,7 +75,7 @@ const FilterBar: React.FC<IFilterBar> = ({ selected, onSelect }) => {
   const scopeUrl = useScopeUrl();
 
   const selectedFilter = selected ?? notificationsSettings.quickFilter.active;
-  const advancedMode = notificationsSettings.quickFilter.advanced;
+  const advancedMode = advanced ?? notificationsSettings.quickFilter.advanced;
 
   const onClick = (filterType: FilterType) => () => {
     if (onSelect) {
@@ -164,6 +165,7 @@ interface INotificationsColumn {
   compact?: boolean;
   filter?: FilterType;
   onChangeFilter?: (filter: FilterType) => void;
+  advanced?: boolean;
 }
 
 const NotificationsColumn: React.FC<INotificationsColumn> = ({
@@ -171,6 +173,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
   compact,
   filter,
   onChangeFilter,
+  advanced,
 }) => {
   const columnId: string = useRef(`notifications-${crypto.randomUUID()}`).current;
 
@@ -322,7 +325,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
   let scrollableContent: Array<React.JSX.Element> | null = null;
 
   const filterBarContainer = showFilterBar ? (
-    <FilterBar selected={filter} onSelect={onChangeFilter} />
+    <FilterBar selected={filter} onSelect={onChangeFilter} advanced={advanced} />
   ) : null;
 
   if (isLoading && scrollableContentRef.current) {
