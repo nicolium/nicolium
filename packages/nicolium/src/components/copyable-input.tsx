@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Input from '@/components/ui/input';
+import Input, { type IInput } from '@/components/ui/input';
 import copy from '@/utils/copy';
 
-interface ICopyableInput {
+interface ICopyableInput extends IInput {
   /** Text to be copied. */
   value: string;
   /** Input type. */
@@ -14,7 +14,13 @@ interface ICopyableInput {
 }
 
 /** An input with copy abilities. */
-const CopyableInput: React.FC<ICopyableInput> = ({ value, type = 'text', onCopy }) => {
+const CopyableInput: React.FC<ICopyableInput> = ({
+  value,
+  type = 'text',
+  onCopy,
+  disabled,
+  ...rest
+}) => {
   const input = useRef<HTMLInputElement>(null);
 
   const selectInput = () => {
@@ -23,9 +29,17 @@ const CopyableInput: React.FC<ICopyableInput> = ({ value, type = 'text', onCopy 
 
   return (
     <div className='copyable-input'>
-      <Input ref={input} type={type} value={value} onClick={selectInput} readOnly />
+      <Input
+        {...rest}
+        ref={input}
+        type={type}
+        value={value}
+        onClick={selectInput}
+        readOnly
+        disabled={disabled}
+      />
 
-      <button onClick={selectInput}>
+      <button onClick={selectInput} disabled={disabled}>
         <FormattedMessage id='input.copy' defaultMessage='Copy' />
       </button>
     </div>

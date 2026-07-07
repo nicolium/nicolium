@@ -9,13 +9,14 @@ import { queryKeys } from '../keys';
 
 import type { AdminCreateInviteTokenParams, AdminEmailInviteParams, AdminInvite } from 'pl-api';
 
-const useInvites = () => {
+const useInvites = (enabled: boolean) => {
   const client = useClient();
 
   return useAppQuery<ReadonlyArray<AdminInvite>>({
     queryKey: queryKeys.admin.invites,
     queryFn: () => client.admin.invites.getInvites(),
     placeholderData: [],
+    enabled,
   });
 };
 

@@ -1279,7 +1279,7 @@ export const adminInvitesRoute = createRoute({
   path: '/nicolium/admin/invites',
   component: lazy(() => import('@/pages/dashboard/invites')),
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
-    if (!isAdmin || !features.pleromaAdminInvites) throw notFound();
+    if (!isAdmin || (!features.pleromaAdminInvites && !features.iceshrimpAdmin)) throw notFound();
   }),
 });
 

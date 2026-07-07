@@ -424,7 +424,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
             />
           )}
 
-          {features.pleromaAdminInvites && (
+          {(features.pleromaAdminInvites || features.iceshrimpAdmin) && (
             <ListItem
               to='/nicolium/admin/invites'
               label={<FormattedMessage id='column.admin.invites' defaultMessage='Invites' />}

@@ -1392,7 +1392,7 @@ a.measure__container {
       flex-grow: 1;
     }
 
-    button {
+    button[type='submit'] {
       @include mixins.button($theme: primary);
     }
   }

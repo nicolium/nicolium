@@ -2,11 +2,13 @@ import iconCopy from '@phosphor-icons/core/regular/copy.svg';
 import React, { useState } from 'react';
 import { FormattedDate, FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import CopyableInput from '@/components/copyable-input';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
+import { useFeatures } from '@/hooks/use-features';
 import {
   useInvites,
   useCreateInviteTokenMutation,
@@ -49,6 +51,14 @@ const messages = defineMessages({
   },
   revokeConfirm: { id: 'confirmations.admin.revoke_invite.confirm', defaultMessage: 'Revoke' },
   copied: { id: 'admin.invites.copied', defaultMessage: 'Token copied to clipboard' },
+  tokenPlaceholder: {
+    id: 'admin.invites.revoked_token.placeholder',
+    defaultMessage: 'Enter token to revoke…',
+  },
+  generatedTokenPlaceholder: {
+    id: 'admin.invites.generated_token.placeholder',
+    defaultMessage: 'Generated token will appear here',
+  },
 });
 
 interface IInvite {
@@ -62,7 +72,7 @@ const Invite: React.FC<IInvite> = ({ invite }) => {
   const { mutate } = useRevokeInviteTokenMutation();
 
   const handleCopy = () => {
-    copy(invite.token, () => toast.success(intl.formatMessage(messages.copied)));
+    copy(invite.token, () => toast.success(messages.copied));
   };
 
   const handleRevoke = () => {
@@ -82,8 +92,8 @@ const Invite: React.FC<IInvite> = ({ invite }) => {
       confirm: intl.formatMessage(messages.revokeConfirm),
       onConfirm: () => {
         mutate(invite.token, {
-          onSuccess: () => toast.success(intl.formatMessage(messages.revokeSuccess)),
-          onError: () => toast.error(intl.formatMessage(messages.revokeError)),
+          onSuccess: () => toast.success(messages.revokeSuccess),
+          onError: () => toast.error(messages.revokeError),
         });
       },
     });
@@ -140,9 +150,11 @@ const Invite: React.FC<IInvite> = ({ invite }) => {
 
 const NewInviteForm: React.FC = () => {
   const intl = useIntl();
+  const features = useFeatures();
 
   const [maxUse, setMaxUse] = useState('');
   const [expiresAt, setExpiresAt] = useState('');
+  const [token, setToken] = useState('');
 
   const { mutate, isPending } = useCreateInviteTokenMutation();
 
@@ -154,31 +166,42 @@ const NewInviteForm: React.FC = () => {
         expires_at: expiresAt || undefined,
       },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           setMaxUse('');
           setExpiresAt('');
-          toast.success(intl.formatMessage(messages.createSuccess));
+          toast.success(messages.createSuccess);
+          setToken(data.token);
         },
-        onError: () => toast.error(intl.formatMessage(messages.createError)),
+        onError: () => toast.error(messages.createError),
       },
     );
   };
 
   return (
     <Form onSubmit={handleSubmit} className='admin-invites-page__form'>
-      <Input
-        type='number'
-        min={1}
-        placeholder={intl.formatMessage(messages.maxUsePlaceholder)}
-        value={maxUse}
-        onChange={(e) => setMaxUse(e.target.value)}
-      />
-      <Input
-        type='date'
-        placeholder={intl.formatMessage(messages.expiresPlaceholder)}
-        value={expiresAt}
-        onChange={(e) => setExpiresAt(e.target.value)}
-      />
+      {features.pleromaAdminInvites ? (
+        <>
+          <Input
+            type='number'
+            min={1}
+            placeholder={intl.formatMessage(messages.maxUsePlaceholder)}
+            value={maxUse}
+            onChange={(e) => setMaxUse(e.target.value)}
+          />
+          <Input
+            type='date'
+            placeholder={intl.formatMessage(messages.expiresPlaceholder)}
+            value={expiresAt}
+            onChange={(e) => setExpiresAt(e.target.value)}
+          />
+        </>
+      ) : (
+        <CopyableInput
+          placeholder={intl.formatMessage(messages.generatedTokenPlaceholder)}
+          value={token}
+          disabled={!token}
+        />
+      )}
       <button type='submit' disabled={isPending}>
         <FormattedMessage id='admin.invites.create' defaultMessage='Generate token' />
       </button>
@@ -202,13 +225,13 @@ const EmailInviteForm: React.FC = () => {
         onSuccess: () => {
           setEmail('');
           setName('');
-          toast.success(intl.formatMessage(messages.emailSuccess));
+          toast.success(messages.emailSuccess);
         },
         onError: (error: any) => {
           if (error.response?.json?.error?.includes('invites_enabled')) {
-            toast.error(intl.formatMessage(messages.emailErrorInvitesDisabled));
+            toast.error(messages.emailErrorInvitesDisabled);
           } else {
-            toast.error(intl.formatMessage(messages.emailError));
+            toast.error(messages.emailError);
           }
         },
       },
@@ -237,10 +260,43 @@ const EmailInviteForm: React.FC = () => {
   );
 };
 
+const RevokeInviteForm: React.FC = () => {
+  const intl = useIntl();
+  const [token, setToken] = useState('');
+
+  const { mutate, isPending } = useRevokeInviteTokenMutation();
+
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    mutate(token, {
+      onSuccess: () => {
+        toast.success(messages.revokeSuccess);
+        setToken('');
+      },
+      onError: () => toast.error(messages.revokeError),
+    });
+  };
+
+  return (
+    <Form onSubmit={handleSubmit} className='admin-invites-page__form'>
+      <Input
+        required
+        placeholder={intl.formatMessage(messages.tokenPlaceholder)}
+        value={token}
+        onChange={(e) => setToken(e.target.value)}
+      />
+      <button type='submit' disabled={!token || isPending}>
+        <FormattedMessage id='admin.invites.revoke.action' defaultMessage='Revoke invite' />
+      </button>
+    </Form>
+  );
+};
+
 const InvitesPage: React.FC = () => {
   const intl = useIntl();
+  const features = useFeatures();
 
-  const { data: invites, isFetching } = useInvites();
+  const { data: invites, isFetching } = useInvites(features.pleromaAdminInvites);
 
   const emptyMessage = (
     <FormattedMessage
@@ -253,7 +309,8 @@ const InvitesPage: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <div className='admin-invites-page'>
         <NewInviteForm />
-        <EmailInviteForm />
+        {features.pleromaAdminInvites && <EmailInviteForm />}
+        {features.iceshrimpAdmin && <RevokeInviteForm />}
 
         {invites && (
           <ScrollableList
