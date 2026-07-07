@@ -1168,30 +1168,6 @@
   flex-direction: column;
   gap: 0.5rem;
 
-  &__field {
-    position: relative;
-
-    &__loading {
-      position: absolute;
-      inset: 0;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-
-  &__detect {
-    align-self: flex-start;
-
-    @include mixins.text($size: sm, $theme: primary, $weight: medium);
-
-    &:disabled {
-      cursor: default;
-      opacity: 0.5;
-    }
-  }
-
   &__preview {
     position: relative;
     overflow: hidden;

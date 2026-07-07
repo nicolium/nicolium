@@ -7,7 +7,6 @@ import Blurhash from '@/components/media/blurhash';
 import FormGroup from '@/components/ui/form-group';
 import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';
-import Spinner from '@/components/ui/spinner';
 import Textarea from '@/components/ui/textarea';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import { useCompose } from '@/hooks/use-compose';
@@ -32,14 +31,6 @@ const messages = defineMessages({
   savingFailed: {
     id: 'alt_text_modal.save.fail',
     defaultMessage: 'Failed to save alt text',
-  },
-  detectText: {
-    id: 'alt_text_modal.add_text_from_image',
-    defaultMessage: 'Add text from image',
-  },
-  detectFailed: {
-    id: 'alt_text_modal.detect.fail',
-    defaultMessage: 'Failed to detect text',
   },
 });
 
@@ -195,28 +186,7 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
   const [description, setDescription] = useState(previousDescription || '');
   const [position, setPosition] = useState(previousPosition || [0, 0]);
   const [isSaving, setIsSaving] = useState(false);
-  const [isDetecting, setIsDetecting] = useState(false);
   const dirtyRef = useRef(Boolean(previousDescription));
-
-  const handleDetectClick = useCallback(async () => {
-    setIsDetecting(true);
-
-    try {
-      const { createWorker } = await import('tesseract.js');
-
-      const worker = await createWorker('eng');
-      const result = await worker.recognize(media.url);
-
-      setDescription(result.data.text);
-      dirtyRef.current = true;
-      setIsDetecting(false);
-
-      await worker.terminate();
-    } catch {
-      setIsDetecting(false);
-      toast.error(messages.detectFailed);
-    }
-  }, [media.url]);
 
   const handleDescriptionChange: React.ChangeEventHandler<HTMLTextAreaElement> = useCallback(
     (e) => {
@@ -282,36 +252,19 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
               media.type === 'audio' ? messages.placeholderHearing : messages.placeholderVisual,
             )}
           >
-            <div className='alt-text-modal__field'>
-              <Textarea
-                value={isDetecting ? '' : description}
-                maxLength={descriptionLimit}
-                onChange={handleDescriptionChange}
-                onKeyUp={handleKeyUp}
-                lang={language ?? undefined}
-                minRows={3}
-                placeholder={intl.formatMessage(
-                  media.type === 'audio' ? messages.placeholderHearing : messages.placeholderVisual,
-                )}
-                disabled={isSaving || isDetecting}
-              />
-              {isDetecting && (
-                <div className='alt-text-modal__field__loading'>
-                  <Spinner size={30} withText={false} />
-                </div>
+            <Textarea
+              value={description}
+              maxLength={descriptionLimit}
+              onChange={handleDescriptionChange}
+              onKeyUp={handleKeyUp}
+              lang={language ?? undefined}
+              minRows={3}
+              placeholder={intl.formatMessage(
+                media.type === 'audio' ? messages.placeholderHearing : messages.placeholderVisual,
               )}
-            </div>
+              disabled={isSaving}
+            />
           </FormGroup>
-          {media.type === 'image' && (
-            <button
-              type='button'
-              className='alt-text-modal__detect'
-              onClick={handleDetectClick}
-              disabled={isSaving || isDetecting}
-            >
-              {intl.formatMessage(messages.detectText)}
-            </button>
-          )}
         </form>
       </div>
     </Modal>
