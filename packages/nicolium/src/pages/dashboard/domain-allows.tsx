@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormattedMessage, defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
