@@ -195,7 +195,6 @@
   }
 
   &__streamfield-row--dynamic {
-
     @media (min-width: variables.$breakpoint-md) {
       grid-template-columns: minmax(10rem, 0.75fr) minmax(0, 1.25fr);
     }
