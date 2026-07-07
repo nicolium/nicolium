@@ -18,18 +18,21 @@ import type { InfiniteData } from '@tanstack/react-query';
 import type {
   Account,
   AdminAnnouncement,
+  AdminCanonicalEmailBlock,
   AdminCohort,
   AdminDimension,
   AdminDimensionKey,
   AdminDomain,
   AdminDomainAllow,
   AdminDomainBlock,
+  AdminEmailDomainBlock,
   AdminGetAccountsParams,
   AdminGetDimensionsParams,
   AdminGetMeasuresParams,
   AdminGetReportsParams,
   AdminGetStatusesParams,
   AdminInvite,
+  AdminIpBlock,
   AdminMeasure,
   AdminMeasureKey,
   AdminModerationLogEntry,
@@ -395,6 +398,18 @@ const admin = {
   domainAllows: ['admin', 'domainAllows'] as TaggedKey<
     ['admin', 'domainAllows'],
     InfiniteData<PaginatedResponse<AdminDomainAllow>>
+  >,
+  emailDomainBlocks: ['admin', 'emailDomainBlocks'] as TaggedKey<
+    ['admin', 'emailDomainBlocks'],
+    InfiniteData<PaginatedResponse<AdminEmailDomainBlock>>
+  >,
+  ipBlocks: ['admin', 'ipBlocks'] as TaggedKey<
+    ['admin', 'ipBlocks'],
+    InfiniteData<PaginatedResponse<AdminIpBlock>>
+  >,
+  canonicalEmailBlocks: ['admin', 'canonicalEmailBlocks'] as TaggedKey<
+    ['admin', 'canonicalEmailBlocks'],
+    InfiniteData<PaginatedResponse<AdminCanonicalEmailBlock>>
   >,
   invites: ['admin', 'invites'] as TaggedKey<['admin', 'invites'], Array<AdminInvite>>,
 };

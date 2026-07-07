@@ -1247,6 +1247,33 @@ export const adminDomainAllowsRoute = createRoute({
   }),
 });
 
+export const adminEmailDomainBlocksRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/email_domain_blocks',
+  component: lazy(() => import('@/pages/dashboard/email-domain-blocks')),
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
+    if (!isAdmin || !features.adminEmailDomainBlocks) throw notFound();
+  }),
+});
+
+export const adminIpBlocksRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/ip_blocks',
+  component: lazy(() => import('@/pages/dashboard/ip-blocks')),
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
+    if (!isAdmin || !features.adminIpBlocks) throw notFound();
+  }),
+});
+
+export const adminCanonicalEmailBlocksRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/canonical_email_blocks',
+  component: lazy(() => import('@/pages/dashboard/canonical-email-blocks')),
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
+    if (!isAdmin || !features.adminCanonicalEmailBlocks) throw notFound();
+  }),
+});
+
 export const adminInvitesRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/invites',
@@ -1654,6 +1681,9 @@ const routeTree = rootRoute.addChildren([
     adminPleromaConfigRoute,
     adminDomainBlocksRoute,
     adminDomainAllowsRoute,
+    adminEmailDomainBlocksRoute,
+    adminIpBlocksRoute,
+    adminCanonicalEmailBlocksRoute,
     adminInvitesRoute,
     frontendConfigRoute,
     frontendConfigDefaultSettingsGeneralRoute,

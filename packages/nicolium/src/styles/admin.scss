@@ -260,7 +260,10 @@
 }
 
 .admin-domain-blocks,
-.admin-domain-allows {
+.admin-domain-allows,
+.admin-email-domain-blocks,
+.admin-ip-blocks,
+.admin-canonical-email-blocks {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -279,14 +282,25 @@
     gap: 0.5rem;
     align-items: center;
 
+    input {
+      flex-grow: 1;
+    }
+
     button {
       @include mixins.button($theme: primary);
+    }
+
+    button[type='button'] {
+      @include mixins.button($theme: secondary);
     }
   }
 }
 
 .admin-domain-allow,
-.admin-domain-block {
+.admin-domain-block,
+.admin-email-domain-block,
+.admin-ip-block,
+.admin-canonical-email-block {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -342,6 +356,40 @@
         @include mixins.button($theme: danger);
       }
     }
+  }
+}
+
+.admin-email-domain-block {
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+
+    span {
+      @include mixins.text($size: sm, $theme: muted);
+    }
+  }
+}
+
+.admin-ip-block {
+  &__ip code {
+    @include mixins.text($size: sm, $family: mono);
+  }
+
+  &__expiry {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+}
+
+.admin-canonical-email-block {
+  &__hash code {
+    @include mixins.text($size: sm, $family: mono);
+
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

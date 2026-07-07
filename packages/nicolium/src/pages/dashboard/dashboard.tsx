@@ -351,6 +351,37 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
               />
             ))}
 
+          {features.adminEmailDomainBlocks && (
+            <ListItem
+              to='/nicolium/admin/email_domain_blocks'
+              label={
+                <FormattedMessage
+                  id='column.admin.email_domain_blocks'
+                  defaultMessage='E-mail domain blocks'
+                />
+              }
+            />
+          )}
+
+          {features.adminIpBlocks && (
+            <ListItem
+              to='/nicolium/admin/ip_blocks'
+              label={<FormattedMessage id='column.admin.ip_blocks' defaultMessage='IP blocks' />}
+            />
+          )}
+
+          {features.adminCanonicalEmailBlocks && (
+            <ListItem
+              to='/nicolium/admin/canonical_email_blocks'
+              label={
+                <FormattedMessage
+                  id='column.admin.canonical_email_blocks'
+                  defaultMessage='Canonical e-mail blocks'
+                />
+              }
+            />
+          )}
+
           {features.pleromaAdminAnnouncements && (
             <ListItem
               to='/nicolium/admin/announcements'
