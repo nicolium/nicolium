@@ -4,6 +4,7 @@ allowBuilds:
   core-js: false
   esbuild: false
   sharp: false
+  tesseract.js: false
 minimumReleaseAgeExclude:
   - '@typescript/native-preview-darwin-arm64@7.0.0-dev.20260616.1'
   - '@typescript/native-preview-darwin-x64@7.0.0-dev.20260616.1'
