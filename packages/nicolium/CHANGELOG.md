@@ -10,16 +10,33 @@
   - A new modal allows interacting (replying, favoriting, boosting, reacting) with posts from other accounts you're logged in with.
   - You can check notification count for other logged in accounts from the account switcher menu.
 - Status history modal allows displaying difference between subsequent edits of a post.
+- Deck improvements
+  - Ability to create more than one Deck layout.
+  - Deck columns now include an icon and additional information in the header.
+  - Focus is properly restored when navigating through the deck. Several other improvements to keyboard navigation were made.
+  - The Deck Notifications column always displays all notification categories.
+  - Drive column.
+  - Ability to add an account/hashtag column from the new column button.
+- Ability to compose threads consisting of multiple posts in the compose form.
+- Mastodon Collections support.
 - Mastodon e-mail subscriptions support.
 - Option to hide reposts of posts from followed accounts depending on the age of the post.
+- IP blocks and email domain blocks management on Mastodon.
+- Support for generating and revoking invites from the dashboard on Iceshrimp.NET.
+- Additional mode of post spoilers display.
 
 ### Changed
 
 - Frontend configuration editor is now available to non-Pleroma/Akkoma admins, allowing them to export configuration file for serving it statically.
 - Alt text reminder modal is displayed when editing profile on instance which allows providing avatar/header descriptions.
 - Drive page allows changing between grid and list modes.
-- Updated translations: Dutch, French (thanks to Capitaine Caverne), Polish.
 - Account follows and post interactions lists are now displayed inside deck columns, instead of opening a modal.
+- Notification count is not be displayed on instances that don't support timeline markers.
+- Federation restrictions and account recommendations are displayed on lower breakpoints now.
+- When self-note limit is exceeded, a toast message is displayed and the setting backup is disabled.
+- Updated translations: Dutch, French (thanks to Capitaine Caverne), Polish.
+- Restored some tests.
+- Migrated from the deprecated Icon component.
 
 ### Fixed
 
@@ -30,6 +47,8 @@
 - Added missing `pulse` animation.
 - RTL mode improvements.
 - Added missing `.ellipsis` class for URL truncation.
+- Dismissing suggested accounts works correctly.
+- Correct RSS URL on Iceshrimp.NET.
 
 ### Removed
 
