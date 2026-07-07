@@ -337,6 +337,15 @@ const getFeatures = (instance: Instance) => {
     addressableLists: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
+     * @see GET /api/v1/admin/canonical_email_blocks
+     * @see GET /api/v1/admin/canonical_email_blocks/:id
+     * @see POST /api/v1/admin/canonical_email_blocks/test
+     * @see POST /api/v1/admin/canonical_email_blocks/
+     * @see DELETE /api/v1/admin/canonical_email_blocks/:id
+     */
+    adminCanonicalEmailBlocks: v.software === MASTODON && gte(v.version, '3.5.0'),
+
+    /**
      * @see GET /api/v1/admin/custom_emojis
      * @see GET /api/v1/admin/custom_emojis/:id
      * @see POST /api/v1/admin/custom_emojis
@@ -419,6 +428,14 @@ const getFeatures = (instance: Instance) => {
     adminDomainPermissionSubscriptions: v.software === GOTOSOCIAL && gte(v.version, '0.18.0'),
 
     /**
+     * @see GET /api/v1/admin/email_domain_blocks
+     * @see GET /api/v1/admin/email_domain_blocks/:id
+     * @see POST /api/v1/admin/email_domain_blocks/:id
+     * @see DELETE /api/v1/admin/email_domain_blocks/:id
+     */
+    adminEmailDomainBlocks: v.software === MASTODON && gte(v.version, '4.1.0'),
+
+    /**
      * Ability to send a test email to a given address.
      * @see POST /api/v1/admin/email/test
      */
@@ -444,6 +461,15 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/admin/instances/:id/clear_delivery_errors
      */
     adminInstances: v.software === GOTOSOCIAL,
+
+    /**
+     * @see GET /api/v1/admin/ip_blocks
+     * @see GET /api/v1/admin/ip_blocks/:id
+     * @see POST /api/v1/admin/ip_blocks/:id
+     * @see PUT /api/v1/admin/ip_blocks/:id
+     * @see DELETE /api/v1/admin/ip_blocks/:id
+     */
+    adminIpBlocks: v.software === MASTODON && gte(v.version, '4.0.0'),
 
     /**
      * Ability to perform media moderation actions.
