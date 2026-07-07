@@ -36,20 +36,22 @@ interface GetUnreadNotificationCountParams {
   account_id?: string;
 }
 
+type NotificationPolicyRule = 'accept' | 'filter' | 'drop';
+
 /**
  * @category Request params
  */
 interface UpdateNotificationPolicyRequest {
   /** Whether to `accept`, `filter` or `drop` notifications from accounts the user is not following. */
-  for_not_following?: boolean;
+  for_not_following?: NotificationPolicyRule;
   /** Whether to `accept`, `filter` or `drop` notifications from accounts that are not following the user. */
-  for_not_followers?: boolean;
+  for_not_followers?: NotificationPolicyRule;
   /** Whether to `accept`, `filter` or `drop` notifications from accounts created in the past 30 days. */
-  for_new_accounts?: boolean;
+  for_new_accounts?: NotificationPolicyRule;
   /** Whether to `accept`, `filter` or `drop` notifications from private mentions. drop will prevent creation of the notification object altogether (without preventing the underlying activity), */
-  for_private_mentions?: boolean;
+  for_private_mentions?: NotificationPolicyRule;
   /** Whether to `accept`, `filter` or `drop` notifications from accounts that were limited by a moderator. */
-  for_limited_accounts?: boolean;
+  for_limited_accounts?: NotificationPolicyRule;
 }
 
 /**
@@ -60,6 +62,7 @@ type GetNotificationRequestsParams = PaginationParams;
 export type {
   GetNotificationParams,
   GetUnreadNotificationCountParams,
+  NotificationPolicyRule,
   UpdateNotificationPolicyRequest,
   GetNotificationRequestsParams,
 };
