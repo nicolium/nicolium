@@ -452,18 +452,10 @@ const ActionButton: React.FC<IActionButton> = ({
             { notify },
             {
               onSuccess: () => {
-                toast.success(
-                  intl.formatMessage(
-                    notify ? messages.subscribeSuccess : messages.unsubscribeSuccess,
-                  ),
-                );
+                toast.success(notify ? messages.subscribeSuccess : messages.unsubscribeSuccess);
               },
               onError: () => {
-                toast.error(
-                  intl.formatMessage(
-                    notify ? messages.subscribeFailure : messages.unsubscribeFailure,
-                  ),
-                );
+                toast.error(notify ? messages.subscribeFailure : messages.unsubscribeFailure);
               },
             },
           );

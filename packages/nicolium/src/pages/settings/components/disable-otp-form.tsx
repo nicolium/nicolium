@@ -32,7 +32,7 @@ const DisableOtpForm: React.FC = () => {
         navigate({ to: '/settings/security' });
       },
       onError: () => {
-        toast.error(intl.formatMessage(messages.disableFail));
+        toast.error(messages.disableFail);
       },
     });
   }, [password, intl]);

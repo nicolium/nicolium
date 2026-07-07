@@ -451,7 +451,7 @@ const EditProfilePage: React.FC = () => {
         })
         .catch(() => {
           setLoading(false);
-          toast.error(intl.formatMessage(messages.error));
+          toast.error(messages.error);
         });
 
       event.preventDefault();

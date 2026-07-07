@@ -42,15 +42,6 @@ const messages = defineMessages({
   editError: { id: 'collections.edit.error', defaultMessage: 'Failed to update collection' },
   addAccount: { id: 'collections.account.add', defaultMessage: 'Add to collection' },
   removeAccount: { id: 'collections.account.remove', defaultMessage: 'Remove from collection' },
-  removeHeading: {
-    id: 'confirmations.remove_from_collection.heading',
-    defaultMessage: 'Remove account from collection?',
-  },
-  removeMessage: {
-    id: 'confirmations.remove_from_collection.message',
-    defaultMessage: 'Are you sure you want to remove this account from this collection?',
-  },
-  removeConfirm: { id: 'confirmations.remove_from_collection.confirm', defaultMessage: 'Remove' },
   languageNone: { id: 'collections.edit.language.none', defaultMessage: 'None' },
   visibilityPublic: { id: 'collections.edit.visibility.public', defaultMessage: 'Public' },
   visibilityUnlisted: { id: 'collections.edit.visibility.unlisted', defaultMessage: 'Unlisted' },
@@ -171,9 +162,24 @@ const CollectionAccountsForm: React.FC<ICollectionAccountsForm> = ({ collectionI
     if (!itemId) return;
 
     openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.removeHeading),
-      message: intl.formatMessage(messages.removeMessage),
-      confirm: intl.formatMessage(messages.removeConfirm),
+      heading: (
+        <FormattedMessage
+          id='confirmations.remove_from_collection.heading'
+          defaultMessage='Remove account from collection?'
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.remove_from_collection.message'
+          defaultMessage='Are you sure you want to remove this account from this collection?'
+        />
+      ),
+      confirm: (
+        <FormattedMessage
+          id='confirmations.remove_from_collection.confirm'
+          defaultMessage='Remove'
+        />
+      ),
       onConfirm: () => removeItem(itemId),
     });
   };
@@ -322,20 +328,20 @@ const EditCollectionForm: React.FC<IEditCollectionForm> = ({
     if (collectionId) {
       updateCollection(params, {
         onSuccess: () => {
-          toast.success(intl.formatMessage(messages.editSuccess));
+          toast.success(messages.editSuccess);
         },
         onError: () => {
-          toast.error(intl.formatMessage(messages.editError));
+          toast.error(messages.editError);
         },
       });
     } else {
       createCollection(params, {
         onSuccess: (created) => {
-          toast.success(intl.formatMessage(messages.createSuccess));
+          toast.success(messages.createSuccess);
           onCreated(created.id);
         },
         onError: () => {
-          toast.error(intl.formatMessage(messages.createError));
+          toast.error(messages.createError);
         },
       });
     }

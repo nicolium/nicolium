@@ -86,14 +86,9 @@ const messages = defineMessages({
   },
   search: { id: 'account.search', defaultMessage: 'Search from @{name}' },
   searchSelf: { id: 'account.search_self', defaultMessage: 'Search your posts' },
-  unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
   blockDomainConfirm: {
     id: 'confirmations.domain_block.confirm',
     defaultMessage: 'Hide entire domain',
-  },
-  removeFromFollowersConfirm: {
-    id: 'confirmations.remove_from_followers.confirm',
-    defaultMessage: 'Remove',
   },
   userEndorsed: {
     id: 'account.endorse.success',
@@ -126,21 +121,9 @@ const messages = defineMessages({
   share: { id: 'account.share', defaultMessage: 'Share @{name}’s profile' },
   subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
   subscribeByEmail: { id: 'account.email_subscription', defaultMessage: 'Subscribe by e-mail' },
-  emailSubscriptionHeader: {
-    id: 'account.email_subscription.modal.header',
-    defaultMessage: 'Sign up for e-mail updates from @{name}',
-  },
-  emailSubscriptionMessage: {
-    id: 'account.email_subscription.modal.message',
-    defaultMessage: 'Get posts in your inbox without creating an account. Unsubscribe at any time.',
-  },
   emailSubscriptionPlaceholder: {
     id: 'account.email_subscription.placeholder',
     defaultMessage: 'E-mail address',
-  },
-  emailSubscriptionConfirm: {
-    id: 'account.email_subscription.confirm',
-    defaultMessage: 'Subscribe',
   },
   emailSubscriptionSuccess: {
     id: 'account.email_subscription.success',
@@ -277,16 +260,29 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         toast.success(messages.loadActivitiesSuccess);
       })
       .catch(() => {
-        toast.error(intl.formatMessage(messages.loadActivitiesFail));
+        toast.error(messages.loadActivitiesFail);
       });
   };
 
   const onSubscribeByEmail = () => {
     openModal('TEXT_FIELD', {
-      heading: intl.formatMessage(messages.emailSubscriptionHeader, { name: account.acct }),
-      message: intl.formatMessage(messages.emailSubscriptionMessage),
+      heading: (
+        <FormattedMessage
+          id='account.email_subscription.modal.header'
+          defaultMessage='Sign up for e-mail updates from @{name}'
+          values={{ name: account.acct }}
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='account.email_subscription.modal.message'
+          defaultMessage='Get posts in your inbox without creating an account. Unsubscribe at any time.'
+        />
+      ),
       placeholder: intl.formatMessage(messages.emailSubscriptionPlaceholder),
-      confirm: intl.formatMessage(messages.emailSubscriptionConfirm),
+      confirm: (
+        <FormattedMessage id='account.email_subscription.confirm' defaultMessage='Subscribe' />
+      ),
       onConfirm: (value) => {
         client.accounts
           .subscribeByEmail(account.id, value)
@@ -429,7 +425,12 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
           values={{ domain: <strong>{domain}</strong> }}
         />
       ),
-      confirm: intl.formatMessage(messages.blockDomainConfirm),
+      confirm: (
+        <FormattedMessage
+          id='confirmations.domain_block.confirm'
+          defaultMessage='Hide entire domain'
+        />
+      ),
       onConfirm: () => {
         blockDomain(domain);
       },
@@ -464,7 +465,12 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
             values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
           />
         ),
-        confirm: intl.formatMessage(messages.removeFromFollowersConfirm),
+        confirm: (
+          <FormattedMessage
+            id='confirmations.remove_from_followers.confirm'
+            defaultMessage='Remove'
+          />
+        ),
         onConfirm: () => {
           removeFromFollowers();
         },

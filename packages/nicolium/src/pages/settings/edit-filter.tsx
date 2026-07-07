@@ -139,14 +139,10 @@ const EditFilterPage: React.FC = () => {
       {
         onSuccess: () => {
           navigate({ to: '/filters' });
-          toast.success(
-            intl.formatMessage(filterId !== 'new' ? messages.editSuccess : messages.createSuccess),
-          );
+          toast.success(filterId !== 'new' ? messages.editSuccess : messages.createSuccess);
         },
         onError: () => {
-          toast.error(
-            intl.formatMessage(filterId !== 'new' ? messages.editError : messages.createError),
-          );
+          toast.error(filterId !== 'new' ? messages.editError : messages.createError);
         },
       },
     );

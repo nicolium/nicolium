@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
@@ -36,8 +36,6 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
   circleId,
   onClose,
 }) => {
-  const intl = useIntl();
-
   const [searchValue, setSearchValue] = useState('');
 
   const { data: circle } = useCircle(circleId);
@@ -65,7 +63,7 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
         toast.success(messages.success);
       },
       onError: () => {
-        toast.error(intl.formatMessage(messages.error));
+        toast.error(messages.error);
       },
     });
   };

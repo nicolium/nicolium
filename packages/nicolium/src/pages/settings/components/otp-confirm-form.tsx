@@ -54,7 +54,7 @@ const OtpConfirmForm: React.FC = () => {
         }));
       })
       .catch(() => {
-        toast.error(intl.formatMessage(messages.qrFail));
+        toast.error(messages.qrFail);
       });
   }, []);
 
@@ -73,7 +73,7 @@ const OtpConfirmForm: React.FC = () => {
         navigate({ to: '/settings/security' });
       },
       onError: () => {
-        toast.error(intl.formatMessage(messages.confirmFail));
+        toast.error(messages.confirmFail);
       },
     });
 

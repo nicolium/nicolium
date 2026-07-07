@@ -45,10 +45,6 @@ const messages = defineMessages({
       'You can include an optional comment while resolving this report. If the report was created by a local account, the comment will be sent to the user.',
   },
   reportCommentConfirm: { id: 'report.resolve.comment.confirm', defaultMessage: 'Resolve report' },
-  reportForwardConfirm: {
-    id: 'confirmations.admin.report.forward.confirm',
-    defaultMessage: 'Forward',
-  },
   reportForwardSuccess: { id: 'admin.report.forward.success', defaultMessage: 'Report forwarded' },
 });
 
@@ -167,11 +163,16 @@ const ReportPage: React.FC = () => {
           defaultMessage='Are you sure you want to forward this report to the parent instance?'
         />
       ),
-      confirm: intl.formatMessage(messages.reportForwardConfirm),
+      confirm: (
+        <FormattedMessage
+          id='confirmations.admin.report.forward.confirm'
+          defaultMessage='Forward'
+        />
+      ),
       onConfirm: () => {
         forwardReport(undefined, {
           onSuccess: () => {
-            toast.success(intl.formatMessage(messages.reportForwardSuccess));
+            toast.success(messages.reportForwardSuccess);
           },
         });
       },

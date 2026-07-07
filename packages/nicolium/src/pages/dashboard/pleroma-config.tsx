@@ -111,10 +111,10 @@ const PleromaConfigPage: React.FC = () => {
 
       updateConfig(updates, {
         onSuccess: () => {
-          toast.success(intl.formatMessage(messages.saved));
+          toast.success(messages.saved);
         },
         onError: () => {
-          toast.error(intl.formatMessage(messages.saveFailed));
+          toast.error(messages.saveFailed);
         },
       });
     },

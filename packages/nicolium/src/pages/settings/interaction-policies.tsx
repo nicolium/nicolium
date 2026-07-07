@@ -322,7 +322,7 @@ const InteractionPoliciesPage = () => {
         toast.success(messages.success);
       })
       .catch(() => {
-        toast.error(intl.formatMessage(messages.fail));
+        toast.error(messages.fail);
       });
   };
 

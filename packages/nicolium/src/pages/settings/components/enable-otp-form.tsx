@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import React, { useState, useEffect } from 'react';
-import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import Spinner from '@/components/ui/spinner';
 import { useClient } from '@/hooks/use-client';
@@ -16,7 +16,6 @@ interface IEnableOtpForm {
 }
 
 const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupProceedClick }) => {
-  const intl = useIntl();
   const client = useClient();
 
   const [backupCodes, setBackupCodes] = useState<Array<string>>([]);
@@ -28,7 +27,7 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
         setBackupCodes(backupCodes);
       })
       .catch(() => {
-        toast.error(intl.formatMessage(messages.codesFail));
+        toast.error(messages.codesFail);
       });
   }, []);
 

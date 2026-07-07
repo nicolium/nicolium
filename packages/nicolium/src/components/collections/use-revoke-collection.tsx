@@ -1,4 +1,5 @@
-import { defineMessages, useIntl } from 'react-intl';
+import React from 'react';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useRevokeCollectionInclusion } from '@/queries/accounts/use-collections';
@@ -8,19 +9,6 @@ import toast from '@/toast';
 import type { Collection } from 'pl-api';
 
 const messages = defineMessages({
-  heading: {
-    id: 'confirmations.revoke_collection_inclusion.heading',
-    defaultMessage: 'Remove yourself from this collection?',
-  },
-  message: {
-    id: 'confirmations.revoke_collection_inclusion.message',
-    defaultMessage:
-      'The curator won’t be able to re-add you to this collection for 24 hours. To prevent them from adding you to collections permanently, you can block them.',
-  },
-  confirm: {
-    id: 'confirmations.revoke_collection_inclusion.confirm',
-    defaultMessage: 'Remove me',
-  },
   success: {
     id: 'collections.revoke_inclusion.success',
     defaultMessage: 'You’ve been removed from “{collection}”',
@@ -45,9 +33,24 @@ const useRevokeCollection = (collection?: Pick<Collection, 'id' | 'name' | 'item
 
   return () => {
     openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.heading),
-      message: intl.formatMessage(messages.message),
-      confirm: intl.formatMessage(messages.confirm),
+      heading: (
+        <FormattedMessage
+          id='confirmations.revoke_collection_inclusion.heading'
+          defaultMessage='Remove yourself from this collection?'
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.revoke_collection_inclusion.message'
+          defaultMessage='The curator won’t be able to re-add you to this collection for 24 hours. To prevent them from adding you to collections permanently, you can block them.'
+        />
+      ),
+      confirm: (
+        <FormattedMessage
+          id='confirmations.revoke_collection_inclusion.confirm'
+          defaultMessage='Remove me'
+        />
+      ),
       onConfirm: () => {
         revokeInclusion(
           { collectionId: collection.id, itemId: ownItemId },
@@ -56,7 +59,7 @@ const useRevokeCollection = (collection?: Pick<Collection, 'id' | 'name' | 'item
               toast.success(intl.formatMessage(messages.success, { collection: collection.name }));
             },
             onError: () => {
-              toast.error(intl.formatMessage(messages.error));
+              toast.error(messages.error);
             },
           },
         );

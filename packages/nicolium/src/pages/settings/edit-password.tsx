@@ -50,7 +50,7 @@ const EditPasswordPage = () => {
 
   const handleSubmit = React.useCallback(() => {
     if (newPassword !== newPasswordConfirmation) {
-      toast.error(intl.formatMessage(messages.passwordsNoMatch));
+      toast.error(messages.passwordsNoMatch);
       return;
     }
 
@@ -66,7 +66,7 @@ const EditPasswordPage = () => {
       })
       .catch(() => {
         resetState();
-        toast.error(intl.formatMessage(messages.updatePasswordFail));
+        toast.error(messages.updatePasswordFail);
       });
   }, [currentPassword, newPassword, newPasswordConfirmation, intl]);
 

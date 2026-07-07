@@ -51,7 +51,7 @@ const EditEmailPage = () => {
       })
       .catch(() => {
         setState((prevState) => ({ ...prevState, password: '' }));
-        toast.error(intl.formatMessage(messages.updateEmailFail));
+        toast.error(messages.updateEmailFail);
       });
   }, [email, password, intl]);
 

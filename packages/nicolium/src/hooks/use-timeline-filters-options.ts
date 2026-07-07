@@ -186,7 +186,7 @@ const useTimelineFiltersOptions = (
         onChange: (value) => {
           if (value) {
             changeSetting(['navigationItems'], [...navigationItems, navigationItemId]);
-            toast.success(intl.formatMessage(messages.addToNavigationItemsSuccess));
+            toast.success(messages.addToNavigationItemsSuccess);
           } else {
             changeSetting(
               ['navigationItems'],
@@ -196,7 +196,7 @@ const useTimelineFiltersOptions = (
               ['pinnedNavigationItems'],
               pinnedNavigationItems.filter((id) => id !== navigationItemId),
             );
-            toast.success(intl.formatMessage(messages.removeFromNavigationItemsSuccess));
+            toast.success(messages.removeFromNavigationItemsSuccess);
           }
         },
       });

@@ -10,7 +10,7 @@ import iconUserMinus from '@phosphor-icons/core/regular/user-minus.svg';
 import iconUsers from '@phosphor-icons/core/regular/users.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import { useLoggedIn } from '@/hooks/use-logged-in';
@@ -39,15 +39,6 @@ const messages = defineMessages({
   manageAccounts: { id: 'collections.manage_accounts', defaultMessage: 'Manage accounts' },
   editDetails: { id: 'collections.edit_details', defaultMessage: 'Edit details' },
   delete: { id: 'collections.delete_collection', defaultMessage: 'Delete collection' },
-  deleteHeading: {
-    id: 'confirmations.delete_collection.heading',
-    defaultMessage: 'Delete “{name}”?',
-  },
-  deleteMessage: {
-    id: 'confirmations.delete_collection.message',
-    defaultMessage: 'This will permanently delete the collection. This action cannot be undone.',
-  },
-  deleteConfirm: { id: 'confirmations.delete_collection.confirm', defaultMessage: 'Delete' },
   deleteSuccess: { id: 'collections.delete.success', defaultMessage: 'Collection deleted' },
   deleteError: { id: 'collections.delete.error', defaultMessage: 'Failed to delete collection' },
   revoke: {
@@ -77,20 +68,33 @@ const CollectionMenu: React.FC<ICollectionMenu> = ({ collection, context }) => {
 
   const handleDelete = () => {
     openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.deleteHeading, { name: collection.name }),
-      message: intl.formatMessage(messages.deleteMessage),
-      confirm: intl.formatMessage(messages.deleteConfirm),
+      heading: (
+        <FormattedMessage
+          id='confirmations.delete_collection.heading'
+          defaultMessage='Delete “{name}”?'
+          values={{ name: collection.name }}
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.delete_collection.message'
+          defaultMessage='This will permanently delete the collection. This action cannot be undone.'
+        />
+      ),
+      confirm: (
+        <FormattedMessage id='confirmations.delete_collection.confirm' defaultMessage='Delete' />
+      ),
       theme: 'danger',
       onConfirm: () => {
         deleteCollection(collection.id, {
           onSuccess: () => {
-            toast.success(intl.formatMessage(messages.deleteSuccess));
+            toast.success(messages.deleteSuccess);
             if (context === 'collection' && ownAccount) {
               navigate({ to: '/@{$username}/collections', params: { username: ownAccount.acct } });
             }
           },
           onError: () => {
-            toast.error(intl.formatMessage(messages.deleteError));
+            toast.error(messages.deleteError);
           },
         });
       },

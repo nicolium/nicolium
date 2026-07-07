@@ -521,13 +521,11 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
       },
       {
         onSuccess: () => {
-          toast.success(
-            intl.formatMessage(antennaId ? messages.editSuccess : messages.createSuccess),
-          );
+          toast.success(antennaId ? messages.editSuccess : messages.createSuccess);
           closeModal('ANTENNA_EDITOR');
         },
         onError: () => {
-          toast.error(intl.formatMessage(antennaId ? messages.editError : messages.createError));
+          toast.error(antennaId ? messages.editError : messages.createError);
         },
       },
     );

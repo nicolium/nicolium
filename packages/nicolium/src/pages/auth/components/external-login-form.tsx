@@ -60,11 +60,11 @@ const ExternalLoginForm: React.FC = () => {
     const status = error.response?.status;
 
     if (status || !error.message) {
-      toast.error(intl.formatMessage(messages.instanceFailed));
+      toast.error(messages.instanceFailed);
     } else if (error.message === 'NetworkError when attempting to fetch resource.') {
-      toast.error(intl.formatMessage(messages.corsFailed));
+      toast.error(messages.corsFailed);
     } else if (!status && ['Network request failed', 'Timeout'].includes(error.message)) {
-      toast.error(intl.formatMessage(messages.networkFailed));
+      toast.error(messages.networkFailed);
     }
 
     setLoading(false);

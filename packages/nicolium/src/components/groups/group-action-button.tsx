@@ -47,11 +47,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const onJoinGroup = () =>
     joinGroup(undefined, {
       onSuccess: () => {
-        toast.success(
-          group.locked
-            ? intl.formatMessage(messages.joinRequestSuccess)
-            : intl.formatMessage(messages.joinSuccess),
-        );
+        toast.success(group.locked ? messages.joinRequestSuccess : messages.joinSuccess);
       },
       // onError: (error) => {
       //   const message = error.response?.json?.error;

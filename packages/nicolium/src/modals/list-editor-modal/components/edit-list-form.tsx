@@ -53,7 +53,7 @@ const ListForm: React.FC<IListForm> = ({ listId, onTabChange }) => {
           toast.success(messages.success);
         },
         onError: () => {
-          toast.error(intl.formatMessage(messages.error));
+          toast.error(messages.error);
         },
       },
     );

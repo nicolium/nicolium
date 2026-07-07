@@ -1,6 +1,6 @@
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
@@ -36,8 +36,6 @@ interface IDomainBlock {
 }
 
 const DomainBlock: React.FC<IDomainBlock> = ({ domainBlock }) => {
-  const intl = useIntl();
-
   const { mutate: deleteDomainBlock } = useDeleteDomainBlockMutation(domainBlock.id);
 
   const { openModal } = useModalsActions();
@@ -61,14 +59,19 @@ const DomainBlock: React.FC<IDomainBlock> = ({ domainBlock }) => {
           values={{ domain: domainBlock.domain }}
         />
       ),
-      confirm: intl.formatMessage(messages.deleteConfirm),
+      confirm: (
+        <FormattedMessage
+          id='confirmations.admin.delete_domain_block.confirm'
+          defaultMessage='Delete'
+        />
+      ),
       onConfirm: () => {
         deleteDomainBlock(undefined, {
           onSuccess: () => {
-            toast.success(intl.formatMessage(messages.deleteSuccess));
+            toast.success(messages.deleteSuccess);
           },
           onError: () => {
-            toast.error(intl.formatMessage(messages.deleteError));
+            toast.error(messages.deleteError);
           },
         });
       },

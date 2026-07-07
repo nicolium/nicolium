@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
@@ -21,7 +21,6 @@ const messages = defineMessages({
 
 const MessagesSettings = () => {
   const { data: account } = useOwnAccount();
-  const intl = useIntl();
   const updateCredentials = useUpdateCredentials();
   const settings = useSettings();
 
@@ -33,7 +32,7 @@ const MessagesSettings = () => {
           toast.success(messages.success);
         },
         onError: () => {
-          toast.error(intl.formatMessage(messages.fail));
+          toast.error(messages.fail);
         },
       },
     );

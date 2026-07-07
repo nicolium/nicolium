@@ -81,7 +81,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
       })
       .catch((error) => {
         if (error.message === "Couldn't find user") {
-          toast.error(intl.formatMessage(messages.userNotFoundError));
+          toast.error(messages.userNotFoundError);
         }
       });
   };

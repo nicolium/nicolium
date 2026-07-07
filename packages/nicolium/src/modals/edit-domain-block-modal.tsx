@@ -93,11 +93,11 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
         },
         {
           onSuccess: () => {
-            toast.success(intl.formatMessage(messages.updateSuccess));
+            toast.success(messages.updateSuccess);
             onClose('EDIT_DOMAIN_BLOCK');
           },
           onError: () => {
-            toast.error(intl.formatMessage(messages.updateError));
+            toast.error(messages.updateError);
           },
         },
       );
@@ -114,11 +114,11 @@ const EditDomainBlockModal: React.FC<BaseModalProps & EditDomainBlockModalProps>
         },
         {
           onSuccess: () => {
-            toast.success(intl.formatMessage(messages.createSuccess));
+            toast.success(messages.createSuccess);
             onClose('EDIT_DOMAIN_BLOCK');
           },
           onError: () => {
-            toast.error(intl.formatMessage(messages.createError));
+            toast.error(messages.createError);
           },
         },
       );

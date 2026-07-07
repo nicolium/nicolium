@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
@@ -17,10 +17,6 @@ import type { AdminDomainAllow } from 'pl-api';
 const messages = defineMessages({
   heading: { id: 'column.admin.domain_allows', defaultMessage: 'Domain allows' },
   domainPlaceholder: { id: 'admin.domain_allows.domain.placeholder', defaultMessage: 'Domain' },
-  deleteConfirm: {
-    id: 'confirmations.admin.delete_domain_allow.confirm',
-    defaultMessage: 'Delete',
-  },
   createSuccess: {
     id: 'admin.domain_allows.create.success',
     defaultMessage: 'Domain allow created',
@@ -44,8 +40,6 @@ interface IDomainAllow {
 }
 
 const DomainAllow: React.FC<IDomainAllow> = ({ domainAllow }) => {
-  const intl = useIntl();
-
   const { openModal } = useModalsActions();
 
   const { mutate: deleteDomainAllow } = useDeleteDomainAllowMutation(domainAllow.id);
@@ -65,14 +59,19 @@ const DomainAllow: React.FC<IDomainAllow> = ({ domainAllow }) => {
           values={{ domain: domainAllow.domain }}
         />
       ),
-      confirm: intl.formatMessage(messages.deleteConfirm),
+      confirm: (
+        <FormattedMessage
+          id='confirmations.admin.delete_domain_allow.confirm'
+          defaultMessage='Delete'
+        />
+      ),
       onConfirm: () => {
         deleteDomainAllow(undefined, {
           onSuccess: () => {
-            toast.success(intl.formatMessage(messages.deleteSuccess));
+            toast.success(messages.deleteSuccess);
           },
           onError: () => {
-            toast.error(intl.formatMessage(messages.deleteError));
+            toast.error(messages.deleteError);
           },
         });
       },

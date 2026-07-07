@@ -63,7 +63,7 @@ const ChatsPageSettings = () => {
         toast.success(messages.success);
       },
       onError: () => {
-        toast.error(intl.formatMessage(messages.fail));
+        toast.error(messages.fail);
       },
     });
   };

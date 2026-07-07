@@ -38,7 +38,7 @@ const FiltersPage = () => {
   const handleFilterDelete = (id: string) => () => {
     deleteFilter(id, {
       onSuccess: () => toast.success(messages.deleteSuccess),
-      onError: () => toast.error(intl.formatMessage(messages.deleteError)),
+      onError: () => toast.error(messages.deleteError),
     });
   };
 

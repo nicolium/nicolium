@@ -49,7 +49,7 @@ const DeleteAccountPage = () => {
       })
       .catch(() => {
         setPassword('');
-        toast.error(intl.formatMessage(messages.deleteAccountFail));
+        toast.error(messages.deleteAccountFail);
       });
   }, [password, intl]);
 

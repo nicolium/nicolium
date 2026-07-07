@@ -1,6 +1,6 @@
 import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { resetPassword } from '@/actions/security';
 import { BigCard } from '@/components/ui/big-card';
@@ -20,7 +20,6 @@ const messages = defineMessages({
 });
 
 const PasswordResetPage = () => {
-  const intl = useIntl();
   const client = useClient();
   const features = useFeatures();
 
@@ -34,7 +33,7 @@ const PasswordResetPage = () => {
       .then(() => {
         setIsLoading(false);
         setSuccess(true);
-        toast.info(intl.formatMessage(messages.confirmation));
+        toast.info(messages.confirmation);
       })
       .catch(() => {
         setIsLoading(false);
