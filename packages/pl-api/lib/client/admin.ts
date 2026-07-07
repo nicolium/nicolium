@@ -2264,10 +2264,19 @@ const admin = (client: PlApiBaseClient) => {
       /**
        * Create an invite token.
        *
-       * Requires features{@link Features.pleromaAdminInvites}.
+       * Requires features{@link Features.pleromaAdminInvites} or features{@link Features.iceshrimpAdmin}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminusersinvite_token}
        */
       createInviteToken: async (params: AdminCreateInviteTokenParams = {}) => {
+        if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          const response = await client.request('/api/iceshrimp/admin/invites/generate', {
+            method: 'POST',
+          });
+
+          return v.parse(adminInviteSchema, { token: response.json.code });
+        }
+
         const response = await client.request('/api/v1/pleroma/admin/users/invite_token', {
           method: 'POST',
           body: params,
@@ -2279,14 +2288,22 @@ const admin = (client: PlApiBaseClient) => {
       /**
        * Revoke an invite token.
        *
-       * Requires features{@link Features.pleromaAdminInvites}.
+       * Requires features{@link Features.pleromaAdminInvites} or features{@link Features.iceshrimpAdmin}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminusersrevoke_invite}
        */
-      revokeInviteToken: (token: string) =>
-        client.request<EmptyObject>('/api/v1/pleroma/admin/users/revoke_invite', {
+      revokeInviteToken: async (token: string) => {
+        if (client.features.iceshrimpAdmin) {
+          await client.getIceshrimpAccessToken();
+          return client.request<EmptyObject>(`/api/iceshrimp/admin/invites/${token}/revoke`, {
+            method: 'POST',
+          });
+        }
+
+        return client.request<EmptyObject>('/api/v1/pleroma/admin/users/revoke_invite', {
           method: 'POST',
           body: { token },
-        }),
+        });
+      },
 
       /**
        * Send a registration invite via email.
