@@ -6,6 +6,7 @@ import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -47,6 +48,7 @@ const ExternalLoginForm: React.FC = () => {
   const server = query.get('server');
 
   const intl = useIntl();
+  const { isLoggedIn } = useLoggedIn();
 
   const [host, setHost] = useState(server ?? '');
   const [isLoading, setLoading] = useState(false);
@@ -123,14 +125,16 @@ const ExternalLoginForm: React.FC = () => {
       </FormGroup>
 
       <div className='form__actions'>
-        <button
-          type='button'
-          className='external-login__guest'
-          disabled={isLoading}
-          onClick={handleGuest}
-        >
-          <FormattedMessage id='login_external.view_as_guest' defaultMessage='View as guest' />
-        </button>
+        {!isLoggedIn && (
+          <button
+            type='button'
+            className='external-login__guest'
+            disabled={isLoading}
+            onClick={handleGuest}
+          >
+            <FormattedMessage id='login_external.view_as_guest' defaultMessage='View as guest' />
+          </button>
+        )}
         <button type='submit' disabled={isLoading}>
           <FormattedMessage id='login.log_in' defaultMessage='Log in' />
         </button>
