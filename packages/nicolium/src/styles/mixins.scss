@@ -215,7 +215,7 @@
     color: var(--color-gray-100);
     background-color: var(--color-primary-500);
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: var(--color-primary-400);
     }
 
@@ -224,7 +224,7 @@
       outline-color: var(--color-primary-300);
     }
 
-    &:hover:is(.dark *) {
+    &:hover:not(:disabled):is(.dark *) {
       background-color: var(--color-primary-600);
     }
   } @else if $theme == secondary {
@@ -232,7 +232,7 @@
     color: var(--color-primary-500);
     background-color: var(--color-primary-100);
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: var(--color-primary-50);
     }
 
@@ -245,7 +245,7 @@
       background-color: var(--color-primary-800);
     }
 
-    &:hover:is(.dark *) {
+    &:hover:not(:disabled):is(.dark *) {
       background-color: var(--color-primary-700);
     }
 
@@ -257,7 +257,7 @@
     color: var(--color-gray-900);
     background-color: #fff;
 
-    &:hover {
+    &:hover:not(:disabled) {
       border-color: var(--color-primary-300);
     }
 
@@ -272,7 +272,7 @@
       background-color: var(--color-primary-900);
     }
 
-    &:hover:is(.dark *) {
+    &:hover:not(:disabled):is(.dark *) {
       border-color: var(--color-primary-700);
     }
   } @else if $theme == accent {
@@ -280,7 +280,7 @@
     color: #fff;
     background-color: var(--color-secondary-500);
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: var(--color-secondary-400);
     }
 
@@ -293,7 +293,7 @@
     color: var(--color-danger-600);
     background-color: var(--color-danger-100);
 
-    &:hover,
+    &:hover:not(:disabled),
     &:focus {
       color: var(--color-gray-100);
       background-color: var(--color-danger-600);
@@ -308,7 +308,7 @@
       background-color: var(--color-danger-900);
     }
 
-    &:hover:is(.dark *) {
+    &:hover:not(:disabled):is(.dark *) {
       color: var(--color-gray-100);
       background-color: var(--color-danger-500);
     }
@@ -317,7 +317,7 @@
     color: var(--color-primary-600);
     background-color: transparent;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: var(--color-gray-200);
     }
 
@@ -326,7 +326,7 @@
       background-color: transparent;
     }
 
-    &:hover:is(.dark *) {
+    &:hover:not(:disabled):is(.dark *) {
       background-color: variables.opaque(--color-gray-800, 0.5);
     }
   } @else if $theme == outline {
@@ -335,7 +335,7 @@
     color: var(--color-gray-100);
     background-color: transparent;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: #fff1;
     }
   } @else if $theme == muted {
@@ -347,7 +347,7 @@
 
     background-color: transparent;
 
-    &:hover {
+    &:hover:not(:disabled) {
       border-color: var(--color-primary-300);
     }
 
@@ -361,7 +361,7 @@
       color: var(--color-gray-100);
     }
 
-    &:hover:is(.dark *) {
+    &:hover:not(:disabled):is(.dark *) {
       border-color: var(--color-primary-700);
     }
   } @else {
