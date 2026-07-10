@@ -1460,6 +1460,10 @@ div[data-viewport-type='window']:has(.empty-message) {
       background-color: #fffe;
       backdrop-filter: blur(8px) saturate(2);
 
+      .dark:not(.black) & {
+        backdrop-filter: blur(8px);
+      }
+
       .dark & {
         background-color: variables.opaque(--color-primary-900, 0.9);
       }
