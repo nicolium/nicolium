@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -132,7 +133,37 @@ interface IAccountWithReaction {
   id: string;
   reaction: string;
   reactionUrl?: string;
+  reactions?: Array<{ name: string; url?: string }>;
 }
+
+interface IReactionStack {
+  reactions: Array<{ name: string; url?: string }>;
+}
+
+const ReactionStack: React.FC<IReactionStack> = ({ reactions }) => {
+  const [expanded, setExpanded] = useState(false);
+  const reactionsToShow = expanded ? reactions : reactions.slice(0, 3);
+
+  return (
+    <div
+      className={clsx('reaction-stack', expanded && 'reaction-stack--expanded')}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (reactions.length > 1) setExpanded((value) => !value);
+      }}
+    >
+      {reactionsToShow.map((reaction, index) => (
+        <Emoji
+          key={index}
+          className='reaction-stack__emoji'
+          emoji={reaction.name}
+          src={reaction.url}
+        />
+      ))}
+    </div>
+  );
+};
 
 interface IReactionsList {
   statusId: string;
@@ -184,13 +215,20 @@ const ReactionsList: React.FC<IReactionsList> = ({ statusId, reaction: initialRe
           reactionUrl: reactionRecord.url ?? undefined,
         }));
     } else {
-      return reactions.flatMap(({ account_ids, name, url }) =>
-        account_ids.map((account) => ({
+      const uniqueAccounts = new Set<string>(reactions.flatMap(({ account_ids }) => account_ids));
+
+      return Array.from(uniqueAccounts).map((account) => {
+        const accountReactions = reactions.filter(({ account_ids }) =>
+          account_ids.includes(account),
+        );
+
+        return {
           id: account,
-          reaction: name,
-          reactionUrl: url ?? undefined,
-        })),
-      );
+          reaction: accountReactions[0]!.name,
+          reactionUrl: accountReactions[0]!.url ?? undefined,
+          reactions: accountReactions.map(({ name, url }) => ({ name, url })),
+        };
+      });
     }
   }, [reactions, reaction]);
 
@@ -223,8 +261,17 @@ const ReactionsList: React.FC<IReactionsList> = ({ statusId, reaction: initialRe
             <AccountContainer
               key={`${account.id}-${account.reaction}`}
               id={account.id}
-              emoji={account.reaction}
-              emojiUrl={account.reactionUrl}
+              emoji={
+                account.reactions && account.reactions.length > 1 ? (
+                  <ReactionStack reactions={account.reactions} />
+                ) : (
+                  <Emoji
+                    className='account-card__emoji'
+                    emoji={account.reaction}
+                    src={account.reactionUrl}
+                  />
+                )
+              }
             />
           ))}
         </ScrollableList>

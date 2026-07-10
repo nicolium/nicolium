@@ -14,7 +14,6 @@ import ActionButton from '@/components/accounts/action-button';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Avatar from '@/components/ui/avatar';
-import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import { useCurrentAccount } from '@/contexts/current-account-context';
@@ -112,8 +111,7 @@ type IAccount = {
   withRelationship?: boolean;
   withLocked?: boolean;
   approvalStatus?: StatusApprovalStatus | null;
-  emoji?: string;
-  emojiUrl?: string;
+  emoji?: React.JSX.Element;
   note?: string;
   items?: React.ReactNode;
   disabled?: boolean;
@@ -143,7 +141,6 @@ const Account = ({
   withLocked = true,
   approvalStatus,
   emoji,
-  emojiUrl,
   note,
   items,
   disabled,
@@ -301,7 +298,7 @@ const Account = ({
                   isCat={account.is_cat}
                   username={account.username}
                 />
-                {emoji && <Emoji className='account-card__emoji' emoji={emoji} src={emojiUrl} />}
+                {emoji}
               </div>
             )}
 
@@ -386,7 +383,7 @@ const Account = ({
               isCat={account.is_cat}
               username={account.username}
             />
-            {emoji && <Emoji className='account-card__emoji' emoji={emoji} src={emojiUrl} />}
+            {emoji}
           </LinkEl>
         ))}
 

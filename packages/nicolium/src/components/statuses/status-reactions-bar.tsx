@@ -99,7 +99,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({
         emoji: `:${shortCode}:`,
         count: reaction.count,
       })}
-      disabled={unauthenticated}
+      // disabled={unauthenticated}
       {...bind}
     >
       <Emoji emoji={reaction.name} src={reaction.url ?? undefined} />

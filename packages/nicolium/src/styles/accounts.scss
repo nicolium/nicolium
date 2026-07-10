@@ -377,7 +377,7 @@
 
   &__emoji {
     position: absolute !important;
-    right: -0.375rem;
+    right: -.375rem;
     bottom: 0;
 
     width: 1.25rem;
@@ -483,6 +483,42 @@
   &__action-icon {
     width: 1rem;
     height: 1rem;
+  }
+}
+
+.reaction-stack {
+  position: absolute !important;
+  z-index: 1;
+  right: -.375rem;
+  bottom: 0;
+
+  display: flex;
+
+  transition: all 0.2s var(--ease-default);
+
+  &__emoji {
+    position: relative;
+    z-index: 1;
+
+    width: 1.25rem;
+    min-width: 1.25rem;
+    height: 1.25rem;
+
+    transition: all 0.2s var(--ease-default);
+
+    &:not(:first-child) {
+      margin-left: -0.5rem;
+    }
+  }
+
+  &--expanded {
+    right: unset;
+    left: 0;
+    gap: 0.25rem;
+
+    .reaction-stack__emoji {
+      margin-left: 0;
+    }
   }
 }
 
