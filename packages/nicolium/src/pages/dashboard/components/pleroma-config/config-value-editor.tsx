@@ -764,4 +764,4 @@ const ConfigValueEditor = memo(
 
 ConfigValueEditor.displayName = 'ConfigValueEditor';
 
-export { ConfigValueEditor };
+export { ConfigValueEditor, PrimitiveListStreamfieldInput };

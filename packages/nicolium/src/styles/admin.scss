@@ -120,10 +120,6 @@
     @include mixins.text($size: lg, $weight: semibold);
   }
 
-  .dark & .accordion {
-    background-color: var(--color-primary-900);
-  }
-
   &__feedback {
     flex-grow: 1;
   }
@@ -237,6 +233,17 @@
 
   &__reset-button {
     @include mixins.button($theme: secondary);
+  }
+}
+
+.admin-config,
+.admin-policies {
+  .dark & .accordion {
+    background-color: var(--color-primary-900);
+  }
+
+  .dark:not(.black) & .accordion {
+    border: 1px solid var(--color-accent-900);
   }
 
   .form-group:has(> .form-group__content > .admin-config__toggle-field) {

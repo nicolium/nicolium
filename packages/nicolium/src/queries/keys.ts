@@ -412,6 +412,13 @@ const admin = {
     InfiniteData<PaginatedResponse<AdminCanonicalEmailBlock>>
   >,
   invites: ['admin', 'invites'] as TaggedKey<['admin', 'invites'], Array<AdminInvite>>,
+  policies: {
+    root: ['admin', 'policies'] as const,
+    one: (policyName: string) => {
+      const key = ['admin', 'policies', policyName] as const;
+      return key as TaggedKey<typeof key, Record<string, unknown>>;
+    },
+  },
 };
 
 const notifications = {

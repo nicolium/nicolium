@@ -2829,6 +2829,46 @@ const admin = (client: PlApiBaseClient) => {
         return response.json;
       },
     },
+
+    policies: {
+      /**
+       * Requires features{@link Features.iceshrimpAdmin}.
+       */
+      getPolicies: async () => {
+        await client.getIceshrimpAccessToken();
+        const response = await client.request<Array<string>>('/api/iceshrimp/admin/policy');
+
+        return response.json;
+      },
+
+      /**
+       * Requires features{@link Features.iceshrimpAdmin}.
+       */
+      getPolicy: async (policyName: string) => {
+        await client.getIceshrimpAccessToken();
+        const response = await client.request<{ enabled: boolean } & Record<string, unknown>>(
+          `/api/iceshrimp/admin/policy/${policyName}`,
+        );
+
+        return response.json;
+      },
+
+      /**
+       * Requires features{@link Features.iceshrimpAdmin}.
+       */
+      setPolicy: async (policyName: string, params: Record<string, unknown>) => {
+        await client.getIceshrimpAccessToken();
+        const response = await client.request<EmptyObject>(
+          `/api/iceshrimp/admin/policy/${policyName}`,
+          {
+            method: 'PUT',
+            body: params,
+          },
+        );
+
+        return response.json;
+      },
+    },
   };
   return category;
 };

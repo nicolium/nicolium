@@ -430,6 +430,18 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
               label={<FormattedMessage id='column.admin.invites' defaultMessage='Invites' />}
             />
           )}
+
+          {features.iceshrimpAdmin && (
+            <ListItem
+              to='/nicolium/admin/iceshrimp_policies'
+              label={
+                <FormattedMessage
+                  id='column.admin.iceshrimp_policies'
+                  defaultMessage='Iceshrimp.NET policies'
+                />
+              }
+            />
+          )}
         </List>
 
         {!aside && (

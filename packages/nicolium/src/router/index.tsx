@@ -1283,6 +1283,15 @@ export const adminInvitesRoute = createRoute({
   }),
 });
 
+export const adminIceshrimpPoliciesRoute = createRoute({
+  getParentRoute: () => layouts.admin,
+  path: '/nicolium/admin/iceshrimp_policies',
+  component: lazy(() => import('@/pages/dashboard/iceshrimp-policies')),
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
+    if (!isAdmin || !features.iceshrimpAdmin) throw notFound();
+  }),
+});
+
 export const frontendConfigRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/config',
@@ -1685,6 +1694,7 @@ const routeTree = rootRoute.addChildren([
     adminIpBlocksRoute,
     adminCanonicalEmailBlocksRoute,
     adminInvitesRoute,
+    adminIceshrimpPoliciesRoute,
     frontendConfigRoute,
     frontendConfigDefaultSettingsGeneralRoute,
     frontendConfigDefaultSettingsAppearanceRoute,
