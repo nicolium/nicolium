@@ -2261,6 +2261,7 @@
   "relative_time.minutes": "{number}m",
   "relative_time.seconds": "{number}s",
   "remote_instance.edit_federation": "Edit federation",
+  "remote_instance.federation_panel.bubble_domain": "This instance is in {siteTitle} bubble.",
   "remote_instance.federation_panel.heading": "Federation restrictions",
   "remote_instance.federation_panel.no_restrictions.message": "{siteTitle} has placed no restrictions on {host}.",
   "remote_instance.federation_panel.restricted.message": "{siteTitle} blocks all activities from {host}.",

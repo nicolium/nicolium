@@ -1,5 +1,6 @@
 import iconCheck from '@phosphor-icons/core/regular/check.svg';
 import iconEyeSlash from '@phosphor-icons/core/regular/eye-slash.svg';
+import iconGraph from '@phosphor-icons/core/regular/graph.svg';
 import iconImageBroken from '@phosphor-icons/core/regular/image-broken.svg';
 import iconLockOpen from '@phosphor-icons/core/regular/lock-open.svg';
 import iconLock from '@phosphor-icons/core/regular/lock.svg';
@@ -8,6 +9,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
+import { useBubbleDomains } from '@/queries/instance/use-bubble-domains';
 import { useInstance } from '@/stores/instance';
 
 import type { RemoteInstance } from '@/queries/instance/use-remote-instance';
@@ -36,6 +38,7 @@ interface IInstanceRestrictions {
 
 const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance }) => {
   const instance = useInstance();
+  const { data: bubbleDomains } = useBubbleDomains();
 
   const renderRestrictions = () => {
     const items = [];
@@ -149,7 +152,20 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
     }
   };
 
-  return <div className='instance-restrictions'>{renderContent()}</div>;
+  return (
+    <div className='instance-restrictions'>
+      {renderContent()}
+      {bubbleDomains && bubbleDomains.includes(remoteInstance.host) && (
+        <Restriction icon={iconGraph}>
+          <FormattedMessage
+            id='remote_instance.federation_panel.bubble_domain'
+            defaultMessage='This instance is in {siteTitle} bubble.'
+            values={{ siteTitle: instance.title }}
+          />
+        </Restriction>
+      )}
+    </div>
+  );
 };
 
 export { InstanceRestrictions as default };

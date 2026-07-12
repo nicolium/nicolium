@@ -691,6 +691,10 @@ const instance = {
     ['instance', 'customEmojis'],
     Array<CustomEmoji>
   >,
+  bubbleDomains: ['instance', 'bubbleDomains'] as TaggedKey<
+    ['instance', 'bubbleDomains'],
+    Array<string>
+  >,
 };
 
 const frontend = {
