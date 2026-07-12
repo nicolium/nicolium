@@ -189,7 +189,7 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
           </p>
         )}
 
-        {features.scheduledReblogs && (
+        {features.scheduledReblogs && !status?.reblogged && (
           <>
             <label className='boost-modal__schedule__toggle'>
               <span>
