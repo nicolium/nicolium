@@ -20,6 +20,7 @@ import {
 import { DatePicker } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
+import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { userTouching } from '@/utils/is-mobile';
 
@@ -86,6 +87,7 @@ interface BoostModalProps {
   statusId: string;
   onReblog: (selectedVisibility?: string, scheduledAt?: string) => void;
   visibility?: string;
+  selectedVisibility?: string;
   hasMissingDescriptions?: boolean;
   hasFilenameDescriptions?: boolean;
 }
@@ -94,6 +96,7 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
   statusId,
   onReblog,
   visibility,
+  selectedVisibility: initialSelectedVisibility,
   onClose,
   hasMissingDescriptions,
   hasFilenameDescriptions,
@@ -101,11 +104,19 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
   const features = useFeatures();
   const intl = useIntl();
   const { useRocketIconForReblogs } = useSettings();
+  const { updateModal } = useModalsActions();
 
   const { data: status } = useMinimalStatus(statusId);
 
-  const [selectedVisibility, setSelectedVisibility] = React.useState('public');
+  const [selectedVisibility, setSelectedVisibility] = React.useState(
+    initialSelectedVisibility || 'public',
+  );
   const [scheduledAt, setScheduledAt] = React.useState<Date | null>(null);
+
+  const handleChangeVisibility = (newVisibility: string) => {
+    setSelectedVisibility(newVisibility);
+    updateModal('BOOST', { selectedVisibility: newVisibility });
+  };
 
   const handleReblog = () => {
     onReblog(selectedVisibility, scheduledAt?.toISOString() || undefined);
@@ -139,7 +150,7 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
       confirmationText={buttonText}
       modalActionsBody={
         !status?.reblogged && features.reblogVisibility && !visibility ? (
-          <PrivacyDropdown visibility={selectedVisibility} onChange={setSelectedVisibility} />
+          <PrivacyDropdown visibility={selectedVisibility} onChange={handleChangeVisibility} />
         ) : undefined
       }
     >

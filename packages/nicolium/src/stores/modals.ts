@@ -115,6 +115,8 @@ type State = {
     ) => void;
     /** Close the modal */
     closeModal: (modalType?: ModalType | null, all?: boolean) => void;
+    /** Update the properties of an open modal */
+    updateModal: <T extends ModalType>(modalType: T, modalProps: Partial<OpenModalType[T]>) => void;
     /** Update the account scope of the topmost modal */
     setScopeUrl: (scopeUrl: string) => void;
   };
@@ -157,6 +159,14 @@ const useModalsStore = create<State>()(
             }
           });
         },
+        updateModal: (modalType, modalProps) => {
+          set((state) => {
+            const modal = state.modals.find((modal) => modal.modalType === modalType);
+            if (modal) {
+              modal.modalProps = { ...modal.modalProps, ...modalProps };
+            }
+          });
+        },
         setScopeUrl: (scopeUrl) => {
           set((state) => {
             const modal = state.modals.at(-1);
@@ -189,6 +199,7 @@ const useModalsActions = () => {
 
   return {
     openModal,
+    updateModal: actions.updateModal,
     closeModal: actions.closeModal,
     setScopeUrl: actions.setScopeUrl,
   };
