@@ -4,12 +4,13 @@ import List, { type IListItem, ListItem } from '../list';
 
 interface IRadioGroup {
   onChange: React.ChangeEventHandler;
-  children: React.ReactElement<{ onChange: React.ChangeEventHandler }>[];
+  disabled?: boolean;
+  children: React.ReactElement<{ onChange: React.ChangeEventHandler; disabled?: boolean }>[];
 }
 
-const RadioGroup = ({ onChange, children }: IRadioGroup) => {
+const RadioGroup = ({ onChange, disabled, children }: IRadioGroup) => {
   const childrenWithProps = React.Children.map(children, (child) =>
-    React.cloneElement(child, { onChange }),
+    React.cloneElement(child, { onChange, disabled }),
   );
 
   return <List>{childrenWithProps}</List>;
@@ -32,7 +33,13 @@ const RadioItem: React.FC<IRadioItem> = ({
   ...props
 }) => (
   <ListItem className='radio-item' label={label} hint={hint} {...props}>
-    <input type='radio' checked={checked} onChange={onChange} value={value} />
+    <input
+      type='radio'
+      checked={checked}
+      onChange={onChange}
+      value={value}
+      disabled={props.disabled}
+    />
   </ListItem>
 );
 

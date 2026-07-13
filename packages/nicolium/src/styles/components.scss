@@ -426,12 +426,7 @@ a.list-item,
 .list-item[role='link'] {
   cursor: pointer;
 
-  &[disabled] {
-    cursor: default;
-    opacity: 0.5;
-  }
-
-  &:not([disabled]):hover {
+  &:not([disabled], [aria-disabled='true']):hover {
     background-image: linear-gradient(
       to right,
       variables.opaque(--color-gradient-start, 0.2),
@@ -439,12 +434,20 @@ a.list-item,
     );
   }
 
-  .dark &:not([disabled]):hover {
+  .dark &:not([disabled], [aria-disabled='true']):hover {
     background-image: linear-gradient(
       to right,
       variables.opaque(--color-gradient-start, 0.05),
       variables.opaque(--color-gradient-end, 0.05)
     );
+  }
+}
+
+.list-item {
+  &[disabled],
+  &[aria-disabled='true'] {
+    cursor: default;
+    opacity: 0.5;
   }
 }
 

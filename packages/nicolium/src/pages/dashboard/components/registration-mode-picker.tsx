@@ -3,6 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { RadioGroup, RadioItem } from '@/components/ui/radio';
 import { useUpdateAdminConfig } from '@/queries/admin/use-config';
+import { useAdminConfig } from '@/queries/admin/use-config';
 import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
@@ -44,6 +45,7 @@ const modeFromInstance = ({ registrations }: Instance): RegistrationMode => {
 /** Allows changing the registration mode of the instance, eg "open", "closed", "approval" */
 const RegistrationModePicker: React.FC = () => {
   const instance = useInstance();
+  const { error } = useAdminConfig();
   const { mutate: updateConfig } = useUpdateAdminConfig();
 
   const mode = modeFromInstance(instance);
@@ -57,8 +59,12 @@ const RegistrationModePicker: React.FC = () => {
     });
   };
 
+  const configurationDisabled = (error as any)?.response?.json?.error?.includes(
+    'configurable_from_database',
+  );
+
   return (
-    <RadioGroup onChange={onChange}>
+    <RadioGroup onChange={onChange} disabled={configurationDisabled}>
       <RadioItem
         label={
           <FormattedMessage

@@ -14,6 +14,7 @@ import { Dimension } from '@/pages/dashboard/components/dimension';
 import RegistrationModePicker from '@/pages/dashboard/components/registration-mode-picker';
 import { Retention } from '@/pages/dashboard/components/retention';
 import { usePendingUsersCount } from '@/queries/admin/use-accounts';
+import { useAdminConfig } from '@/queries/admin/use-config';
 import { usePendingReportsCount } from '@/queries/admin/use-reports';
 import { useInstance } from '@/stores/instance';
 import sourceCode from '@/utils/code';
@@ -31,6 +32,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
   const instance = useInstance();
   const features = useFeatures();
   const { data: account } = useOwnAccount();
+  const { error } = useAdminConfig();
 
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
@@ -55,6 +57,10 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
   );
 
   if (!account) return null;
+
+  const configurationDisabled = (error as any)?.response?.json?.error?.includes(
+    'configurable_from_database',
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -407,6 +413,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
                   defaultMessage='Pleroma configuration'
                 />
               }
+              disabled={configurationDisabled}
             />
           )}
 

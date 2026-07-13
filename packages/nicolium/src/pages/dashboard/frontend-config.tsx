@@ -24,6 +24,7 @@ import CryptoAddressInput from '@/pages/dashboard/components/frontend-config/cry
 import FooterLinkInput from '@/pages/dashboard/components/frontend-config/footer-link-input';
 import PromoPanelInput from '@/pages/dashboard/components/frontend-config/promo-panel-input';
 import SitePreview from '@/pages/dashboard/components/frontend-config/site-preview';
+import { useAdminConfig } from '@/queries/admin/use-config';
 import { useUpdateFrontendConfig } from '@/queries/admin/use-config';
 import {
   cryptoAddressSchema,
@@ -71,8 +72,13 @@ const FrontendConfigEditor: React.FC = () => {
 
   const initialData = useFrontendConfigStore((state) => state.partialConfig);
   const { mutate: updateConfig, isPending } = useUpdateFrontendConfig();
+  const { error } = useAdminConfig();
 
-  const canStoreConfig = features.pleromaAdminConfig;
+  const configurationDisabled = (error as any)?.response?.json?.error?.includes(
+    'configurable_from_database',
+  );
+
+  const canStoreConfig = features.pleromaAdminConfig && !configurationDisabled;
 
   const [data, setData] = useState(v.parse(frontendConfigSchema, initialData));
   const [jsonEditorExpanded, setJsonEditorExpanded] = useState(false);
