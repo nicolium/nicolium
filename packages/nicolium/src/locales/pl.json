@@ -1338,7 +1338,6 @@
   "filters.filters_list_warn": "Wyświetl ostrzeżenie",
   "follow_request.authorize": "Autoryzuj",
   "follow_request.reject": "Odrzuć",
-  "footer.meow": "miau :3 {emoji}",
   "frontend_config.allow_displaying_remote_no_login.hint": "Jeśli wyłączono, odnośniki do zewnętrznej treści będą kierować na źródłowe adresy URL.",
   "frontend_config.allow_displaying_remote_no_login.label": "Pozwól niezalogowanym na przeglądanie treści z zewnątrz",
   "frontend_config.copyright_footer.meta_fields.label.placeholder": "Stopka praw autorskich",
