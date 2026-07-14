@@ -28,7 +28,7 @@ const Header: React.FC<IHeader> = ({ accountId, statusId, onClose }) => {
   return (
     <div className='picture-in-picture__header'>
       <Link
-        to='/@{$username}/posts/$statusId'
+        to='/@{-$username}/posts/$statusId'
         params={{ username: account.acct, statusId }}
         className='picture-in-picture__header__account'
       >

@@ -54,7 +54,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
 
     if (!compose && e.button === 0) {
       const link = linkOptions({
-        to: '/@{$username}/posts/$statusId',
+        to: '/@{-$username}/posts/$statusId',
         params: { username: account.acct, statusId: status.id },
       });
       if (!(e.ctrlKey || e.metaKey)) {

@@ -1163,7 +1163,7 @@ const submitCompose = async (
         data.visibility === 'direct' && features.conversations
           ? { to: '/conversations' }
           : {
-              to: '/@{$username}/posts/$statusId',
+              to: '/@{-$username}/posts/$statusId',
               params: { username: data.account.acct, statusId: data.id },
             };
       const toastMessage = compose.redacting
@@ -1346,7 +1346,7 @@ const submitThread = async (
     firstStatus!.visibility === 'direct' && features.conversations
       ? { to: '/conversations' }
       : {
-          to: '/@{$username}/posts/$statusId',
+          to: '/@{-$username}/posts/$statusId',
           params: { username: firstStatus!.account.acct, statusId: firstStatus!.id },
         };
 

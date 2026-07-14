@@ -135,8 +135,8 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
     <div className='account-gallery__item'>
       <Link
         className='media-gallery__item-thumbnail'
-        to='/@{$username}/posts/$statusId'
-        params={{ username: account?.acct ?? 'undefined', statusId: attachment.status_id }}
+        to='/@{-$username}/posts/$statusId'
+        params={{ username: account?.acct ?? '', statusId: attachment.status_id }}
         onClick={handleClick}
         title={title}
       >

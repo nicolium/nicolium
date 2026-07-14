@@ -1367,7 +1367,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     const handleOpenReactionsModal = () => {
       if (columnId) {
         deckColumnRouterRegistry.get(columnId)?.router.navigate({
-          to: '/@{$username}/posts/$statusId/reactions' as any,
+          to: '/@{-$username}/posts/$statusId/reactions' as any,
           params: { username: status.account.acct, statusId: status.id } as any,
         });
       } else {
@@ -1509,7 +1509,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.open),
         icon: iconArrowsVertical,
-        to: '/@{$username}/posts/$statusId',
+        to: '/@{-$username}/posts/$statusId',
         params: { username: status.account.acct, statusId: status.id },
       });
     }

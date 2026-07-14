@@ -123,10 +123,10 @@ const StatusPage: React.FC = () => {
     return <Navigate to='/external_redirect' state={{ redirectTarget: status.url }} replace />;
   }
 
-  if (username && status && username !== status.account.acct) {
+  if (status && username !== status.account.acct) {
     return (
       <Navigate
-        to='/@{$username}/posts/$statusId'
+        to='/@{-$username}/posts/$statusId'
         params={{ username: status.account.acct, statusId: status.id }}
         replace
       />

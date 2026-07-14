@@ -32,7 +32,7 @@ const StatusLink: React.FC<IStatusLink> = ({ status, account, columnId, ...props
         e.preventDefault();
         e.stopPropagation();
         deckColumnRouterRegistry.get(columnId)?.router.navigate({
-          to: '/@{$username}/posts/$statusId',
+          to: '/@{-$username}/posts/$statusId',
           params: { username: account.acct, statusId: status.id },
         });
       }
@@ -40,7 +40,7 @@ const StatusLink: React.FC<IStatusLink> = ({ status, account, columnId, ...props
 
   return (
     <Link
-      to='/@{$username}/posts/$statusId'
+      to='/@{-$username}/posts/$statusId'
       params={{ username: account.acct, statusId: status.id }}
       onClick={handleClick}
       {...props}

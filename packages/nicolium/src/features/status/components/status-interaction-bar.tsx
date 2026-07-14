@@ -57,7 +57,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
         return (
           <InteractionCounter
             count={status.reblogs_count}
-            to={'/@{$username}/posts/$statusId/reblogs' as any}
+            to={'/@{-$username}/posts/$statusId/reblogs' as any}
             params={{ username: account?.acct ?? '', statusId: status.id }}
           >
             {message}
@@ -80,7 +80,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
       return (
         <InteractionCounter
           count={status.quotes_count}
-          to='/@{$username}/posts/$statusId/quotes'
+          to='/@{-$username}/posts/$statusId/quotes'
           params={{ username: account?.acct ?? '', statusId: status.id }}
         >
           <FormattedMessage
@@ -129,7 +129,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
         return (
           <InteractionCounter
             count={status.favourites_count}
-            to={'/@{$username}/posts/$statusId/favourites' as any}
+            to={'/@{-$username}/posts/$statusId/favourites' as any}
             params={{ username: account?.acct ?? '', statusId: status.id }}
           >
             {message}
@@ -166,7 +166,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
         return (
           <InteractionCounter
             count={dislikesCount}
-            to={'/@{$username}/posts/$statusId/dislikes' as any}
+            to={'/@{-$username}/posts/$statusId/dislikes' as any}
             params={{ username: account?.acct ?? '', statusId: status.id }}
           >
             {message}
@@ -208,7 +208,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
         return (
           <InteractionCounter
             count={reactionsCount}
-            to={'/@{$username}/posts/$statusId/reactions' as any}
+            to={'/@{-$username}/posts/$statusId/reactions' as any}
             params={{ username: account?.acct ?? '', statusId: status.id }}
           >
             {message}

@@ -353,7 +353,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
   const handleOpen = () => {
     if (status && typeof status === 'object' && account && typeof account === 'object') {
       navigate({
-        to: '/@{$username}/posts/$statusId',
+        to: '/@{-$username}/posts/$statusId',
         params: { username: account.acct, statusId: status.id },
       });
     } else {
@@ -607,8 +607,8 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
 
             {compact && status ? (
               <Link
-                to='/@{$username}/posts/$statusId'
-                params={{ username: status.account?.acct || 'undefined', statusId: status.id }}
+                to='/@{-$username}/posts/$statusId'
+                params={{ username: status.account?.acct || '', statusId: status.id }}
                 className='notification__timestamp'
               >
                 {timestamp}

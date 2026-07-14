@@ -28,8 +28,8 @@ const Conversation: React.FC<IConversation> = ({ conversation, onMoveUp, onMoveD
 
     if (lastStatusId)
       navigate({
-        to: '/@{$username}/posts/$statusId',
-        params: { username: lastStatusAccount?.acct || 'undefined', statusId: lastStatusId },
+        to: '/@{-$username}/posts/$statusId',
+        params: { username: lastStatusAccount?.acct || '', statusId: lastStatusId },
       });
   };
 

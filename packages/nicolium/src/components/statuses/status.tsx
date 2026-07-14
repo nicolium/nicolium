@@ -269,7 +269,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     }
 
     const link = linkOptions({
-      to: '/@{$username}/posts/$statusId',
+      to: '/@{-$username}/posts/$statusId',
       params: { username: actualStatus.account.acct, statusId: actualStatus.id },
     });
 
@@ -327,7 +327,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
   const handleHotkeyOpen = () => {
     const link = linkOptions({
-      to: '/@{$username}/posts/$statusId',
+      to: '/@{-$username}/posts/$statusId',
       params: { username: actualStatus.account.acct, statusId: actualStatus.id },
     });
     if (columnId) {

@@ -180,7 +180,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
         return (
           <Link
             className='link'
-            to='/@{$username}/posts/$statusId'
+            to='/@{-$username}/posts/$statusId'
             params={{ username: ownAccount?.acct ?? '', statusId: interactionRequest.status_id }}
           >
             {children}

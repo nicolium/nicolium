@@ -597,7 +597,7 @@ const StatusDeckColumn = () => {
 
 const statusRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/@{$username}/posts/$statusId',
+  path: '/@{-$username}/posts/$statusId',
   component: StatusDeckColumn,
   staticData: { title: messages.status },
 });
@@ -608,7 +608,7 @@ const ReblogsDeckColumn = () => {
 };
 const reblogsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/@{$username}/posts/$statusId/reblogs',
+  path: '/@{-$username}/posts/$statusId/reblogs',
   component: ReblogsDeckColumn,
   staticData: { title: messages.reblogs },
 });
@@ -619,7 +619,7 @@ const QuotesDeckColumn = () => {
 };
 const quotesRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/@{$username}/posts/$statusId/quotes',
+  path: '/@{-$username}/posts/$statusId/quotes',
   component: QuotesDeckColumn,
   staticData: { title: messages.quotes },
 });
@@ -630,7 +630,7 @@ const FavouritesDeckColumn = () => {
 };
 const favouritesRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/@{$username}/posts/$statusId/favourites',
+  path: '/@{-$username}/posts/$statusId/favourites',
   component: FavouritesDeckColumn,
   staticData: { title: messages.favourites },
 });
@@ -641,7 +641,7 @@ const DislikesDeckColumn = () => {
 };
 const dislikesRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/@{$username}/posts/$statusId/dislikes',
+  path: '/@{-$username}/posts/$statusId/dislikes',
   component: DislikesDeckColumn,
   staticData: { title: messages.dislikes },
 });
@@ -652,7 +652,7 @@ const ReactionsDeckColumn = () => {
 };
 const reactionsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/@{$username}/posts/$statusId/reactions',
+  path: '/@{-$username}/posts/$statusId/reactions',
   component: ReactionsDeckColumn,
   staticData: { title: messages.reactions },
 });

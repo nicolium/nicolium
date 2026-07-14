@@ -74,7 +74,7 @@ const EventLayout = () => {
 
   if (status && !event) {
     navigate({
-      to: '/@{$username}/posts/$statusId',
+      to: '/@{-$username}/posts/$statusId',
       params: { username: status.account.acct, statusId: status.id },
     });
     return <PlaceholderStatus />;

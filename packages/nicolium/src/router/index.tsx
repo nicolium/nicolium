@@ -719,13 +719,13 @@ export const profileRecommendationsRoute = createRoute({
 
 export const statusRoute = createRoute({
   getParentRoute: () => layouts.status,
-  path: '/@{$username}/posts/$statusId',
+  path: '/@{-$username}/posts/$statusId',
   component: lazy(() => import('@/pages/statuses/status')),
 });
 
 export const statusQuotesRoute = createRoute({
   getParentRoute: () => layouts.status,
-  path: '/@{$username}/posts/$statusId/quotes',
+  path: '/@{-$username}/posts/$statusId/quotes',
   component: lazy(() => import('@/pages/status-lists/quotes')),
 });
 
@@ -1507,11 +1507,7 @@ const redirectNoticeStatusRoute = createRoute({
   component: () => {
     const { statusId } = redirectNoticeStatusRoute.useParams();
     return (
-      <Navigate
-        to='/@{$username}/posts/$statusId'
-        params={{ username: 'undefined', statusId }}
-        replace
-      />
+      <Navigate to='/@{-$username}/posts/$statusId' params={{ username: '', statusId }} replace />
     );
   },
 });
@@ -1520,7 +1516,7 @@ const redirectPleromaStatusRoute = createRoute({
   path: '/users/@{$username}/statuses/$statusId',
   component: () => {
     const { username, statusId } = redirectPleromaStatusRoute.useParams();
-    return <Navigate to='/@{$username}/posts/$statusId' params={{ username, statusId }} replace />;
+    return <Navigate to='/@{-$username}/posts/$statusId' params={{ username, statusId }} replace />;
   },
 });
 const redirectPleromaUsernameRoute = createRoute({
@@ -1536,13 +1532,7 @@ const redirectIceshrimpStatusRoute = createRoute({
   path: '/notes/$statusId',
   component: () => {
     const { statusId } = redirectIceshrimpStatusRoute.useParams();
-    return (
-      <Navigate
-        to='/@{$username}/posts/$statusId'
-        params={{ username: 'undefined', statusId }}
-        replace
-      />
-    );
+    return <Navigate to='/@{-$username}/posts/$statusId' params={{ statusId }} replace />;
   },
 });
 const redirectInviteRoute = createRoute({
