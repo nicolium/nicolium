@@ -37,7 +37,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const scopeUrl = useScopeUrl();
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
-  const { urlPrivacy, ignoreHashtagCasingSuggestions } = useSettings();
+  const { defaultLanguage, urlPrivacy, ignoreHashtagCasingSuggestions } = useSettings();
   const actions = useComposeActions();
   const submitCompose = useSubmitCompose(composeId);
 
@@ -170,7 +170,13 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
     debounce((text: string) => {
       const compose = actions.getCompose(composeId);
 
-      if (!features.postLanguages || features.languageDetection || compose?.language) return;
+      if (
+        !features.postLanguages ||
+        features.languageDetection ||
+        compose?.language ||
+        defaultLanguage !== 'detect'
+      )
+        return;
 
       const wordsLength = text.split(/\s+/).length;
 
@@ -214,7 +220,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
         }
       })();
     }, 750),
-    [],
+    [defaultLanguage],
   );
 
   useEffect(() => {

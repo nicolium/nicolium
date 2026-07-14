@@ -1033,10 +1033,16 @@ const submitCompose = async (
 
   const idempotencyKey = compose.idempotencyKey;
 
-  const { defaultPrivacy } = useSettingsStore.getState().settings;
+  const { defaultLanguage, defaultPrivacy } = useSettingsStore.getState().settings;
 
   let visibility = opts.common?.visibility ?? compose.visibility;
   if (visibility === 'default') visibility = defaultPrivacy;
+
+  const language =
+    opts.common?.language ??
+    compose.language ??
+    compose.suggestedLanguage ??
+    (defaultLanguage === 'detect' ? undefined : defaultLanguage || undefined);
 
   const params: CreateStatusParams = {
     status: statusText,
@@ -1048,7 +1054,7 @@ const submitCompose = async (
     visibility,
     content_type: contentType,
     scheduled_at: preview ? undefined : compose.scheduledAt?.toISOString(),
-    language: opts.common?.language ?? compose.language ?? compose.suggestedLanguage ?? undefined,
+    language,
     to: explicitAddressing && to.length ? to : undefined,
     local_only: compose.localOnly,
     interaction_policy:
@@ -1246,7 +1252,8 @@ const submitThread = async (
   opts: { force?: boolean; onSuccess?: () => void } = {},
 ) => {
   const { force = false, onSuccess } = opts;
-  const { actions, openModal, closeModal, ownAccount, scopeUrl, features, instance } = deps;
+  const { actions, openModal, closeModal, ownAccount, scopeUrl, features, instance, settings } =
+    deps;
 
   const rootCompose = actions.getCompose(rootId);
 
@@ -1299,7 +1306,9 @@ const submitThread = async (
     contentType: rootCompose.contentType,
     interactionPolicy: rootCompose.interactionPolicy,
     quoteApprovalPolicy: rootCompose.quoteApprovalPolicy,
-    language: rootCompose.language,
+    language:
+      rootCompose.language ||
+      (settings.defaultLanguage === 'detect' ? null : settings.defaultLanguage),
     localOnly: rootCompose.localOnly,
     sensitive: rootCompose.sensitive,
     visibility: rootCompose.visibility,

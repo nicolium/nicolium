@@ -379,6 +379,7 @@ const settingsSchema = v.object({
     v.picklist(['text/plain', 'text/markdown', 'text/html', 'wysiwyg']),
     'text/plain',
   ),
+  defaultLanguage: v.fallback(v.nullable(v.string()), 'detect'),
   themeMode: v.fallback(v.picklist(['system', 'light', 'dark', 'black']), 'system'),
   locale: v.fallback(
     v.fallback(

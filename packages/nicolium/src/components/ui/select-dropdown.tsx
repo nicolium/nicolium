@@ -10,6 +10,7 @@ interface ISelectDropdown {
   value?: string;
   defaultValue?: string;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  disabled?: boolean;
 }
 
 const SelectDropdown: React.FC<ISelectDropdown> = ({ label, hint, items, ...rest }) => {

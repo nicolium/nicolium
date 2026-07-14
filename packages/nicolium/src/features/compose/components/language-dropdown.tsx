@@ -274,12 +274,14 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId, 
   const intl = useIntl();
 
   const { language, modifiedLanguage, suggestedLanguage, textMap } = useCompose(composeId);
+  const { defaultLanguage } = useSettings();
 
   const languagesCount = Object.keys(textMap).length;
 
   let buttonLabel = compact ? undefined : intl.formatMessage(messages.languagePrompt);
-  if (language) {
-    const list: string[] = [languagesObject[(modifiedLanguage ?? language) as Language]];
+  if (language || (defaultLanguage && defaultLanguage !== 'detect')) {
+    let displayedLanguage: string | undefined = modifiedLanguage ?? language ?? defaultLanguage!;
+    const list: string[] = [languagesObject[displayedLanguage as Language]];
     if (languagesCount)
       list.push(
         intl.formatMessage(messages.multipleLanguages, {

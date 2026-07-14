@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting as defaultChangeSetting } from '@/actions/settings';
@@ -6,13 +6,18 @@ import List, { ListItem } from '@/components/list';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
+import Toggle from '@/components/ui/toggle';
 import { useFeatures } from '@/hooks/use-features';
 import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import { isServo } from '@/utils/browser';
 
+import { languages } from '../components/preferences';
+
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
+
+let fasttextWorks: boolean | null = null;
 
 const messages = defineMessages({
   heading: { id: 'preferences.heading.compose', defaultMessage: 'Compose settings' },
@@ -35,6 +40,10 @@ const messages = defineMessages({
     id: 'preferences.options.content_type_wysiwyg',
     defaultMessage: 'WYSIWYG',
   },
+  unset: {
+    id: 'preferences.fields.default_post_language.unset',
+    defaultMessage: 'No default language',
+  },
 });
 
 const ComposePreferences: React.FC<ISettingsPage> = ({
@@ -48,17 +57,21 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
   const instance = useInstance();
   const userSettings = useSettings();
 
+  const [languageDetectionAvailable, setLanguageDetectionAvailable] = useState(
+    'LanguageDetector' in globalThis || fasttextWorks === true,
+  );
+
   const settings = settingsProp || userSettings;
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
-    changeSetting(path, event.target.value, { showAlert: true });
+    changeSetting(path, event.target.value === '' ? null : event.target.value, { showAlert: true });
   };
 
   const onToggleChange = (key: string[], checked: boolean) => {
     changeSetting(key, checked);
   };
 
-  const defaultPrivacyOptions = React.useMemo(
+  const defaultPrivacyOptions = useMemo(
     () => ({
       public: intl.formatMessage(messages.privacyPublic),
       unlisted: intl.formatMessage(messages.privacyUnlisted),
@@ -67,7 +80,7 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
     [settings.locale],
   );
 
-  const defaultContentTypeOptions = React.useMemo(() => {
+  const defaultContentTypeOptions = useMemo(() => {
     const postFormats = instance.pleroma.metadata.post_formats;
 
     const options = Object.entries({
@@ -82,6 +95,29 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
 
     if (options.length > 1) return Object.fromEntries(options);
   }, [settings.locale]);
+
+  const availableLanguages = useMemo(
+    () => ({
+      '': intl.formatMessage(messages.unset),
+      ...languages,
+    }),
+    [intl],
+  );
+
+  useEffect(() => {
+    if ('LanguageDetector' in globalThis) return;
+    if (fasttextWorks === null) {
+      import('fasttext.wasm.js/common')
+        .then(() => {
+          fasttextWorks = true;
+          setLanguageDetectionAvailable(true);
+        })
+        .catch(() => {
+          fasttextWorks = false;
+          setLanguageDetectionAvailable(false);
+        });
+    }
+  }, []);
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -125,6 +161,52 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
                 }}
               />
             </ListItem>
+          )}
+
+          {features.postLanguages && (
+            <>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='preferences.fields.detect_language.label'
+                    defaultMessage='Detect post language automatically'
+                  />
+                }
+                disabled={!languageDetectionAvailable}
+              >
+                <Toggle
+                  checked={settings.defaultLanguage === 'detect'}
+                  disabled={!languageDetectionAvailable}
+                  onChange={({ target }) => {
+                    changeSetting(['defaultLanguage'], target.checked ? 'detect' : null, {
+                      showAlert: true,
+                    });
+                  }}
+                />
+              </ListItem>
+
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='preferences.fields.default_post_language.label'
+                    defaultMessage='Default post language'
+                  />
+                }
+                disabled={settings.defaultLanguage === 'detect' && languageDetectionAvailable}
+              >
+                <SelectDropdown
+                  className='settings-select'
+                  items={availableLanguages}
+                  defaultValue={
+                    (settings.defaultLanguage !== 'detect' && settings.defaultLanguage) || ''
+                  }
+                  onChange={(event) => {
+                    onSelectChange(event, ['defaultLanguage']);
+                  }}
+                  disabled={settings.defaultLanguage === 'detect' && languageDetectionAvailable}
+                />
+              </ListItem>
+            </>
           )}
 
           {features.spoilers && (
