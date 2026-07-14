@@ -1112,7 +1112,7 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see GET /api/v1/gifs
      */
-    gifPicker: instance.api_versions.chuckya >= 2,
+    gifPicker: instance.configuration.gif_search.enabled,
 
     /**
      * Groups.
