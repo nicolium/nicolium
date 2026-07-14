@@ -742,6 +742,10 @@ p.form-group__hint {
   &[type='radio'] {
     &::after {
       border-radius: var(--radius-full);
+
+      .body--borders-reduced & {
+        border-radius: var(--radius-xs);
+      }
     }
 
     &.toggle:checked:not(:disabled) & {
