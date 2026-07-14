@@ -133,6 +133,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
     uploadFile(
       client,
       files[0],
+      undefined,
       intl,
       (data) => {
         setBanner(data);

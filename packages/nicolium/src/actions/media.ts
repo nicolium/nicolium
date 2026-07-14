@@ -39,6 +39,7 @@ const uploadMedia = (
 const uploadFile = async (
   client: PlApiClient,
   file: File,
+  description: string | undefined = undefined,
   intl: IntlShape,
   onSuccess: (data: MediaAttachment) => void = () => {},
   onFail: (error: unknown) => void = () => {},
@@ -87,6 +88,7 @@ const uploadFile = async (
     .then((resized) => {
       const data = new FormData();
       data.append('file', resized);
+      data.append('description', description || '');
       // Account for disparity in size of original image and resized data
       changeTotal(resized.size - file.size);
 

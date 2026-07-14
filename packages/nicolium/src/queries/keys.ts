@@ -50,6 +50,7 @@ import type {
   DriveFile,
   DriveFolder,
   Filter,
+  GifResults,
   Group,
   GroupRelationship,
   GroupRole,
@@ -465,6 +466,10 @@ const search = {
   location: (query: string) => {
     const key = ['search', 'location', query] as const;
     return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<Location>>>;
+  },
+  gifs: (query: string) => {
+    const key = ['search', 'gifs', query] as const;
+    return key as TaggedKey<typeof key, GifResults>;
   },
 };
 

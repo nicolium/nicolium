@@ -62,6 +62,7 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
       uploadFile(
         client,
         e.target.files.item(0) as File,
+        undefined,
         intl,
         ({ url }) => {
           onSelectFile(url);

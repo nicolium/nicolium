@@ -1543,3 +1543,17 @@
     text-align: right;
   }
 }
+
+.gif-picker-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .no-reduce-motion &__results--loading {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  &__provider {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+}

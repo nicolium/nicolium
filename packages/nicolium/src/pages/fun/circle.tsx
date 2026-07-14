@@ -103,7 +103,7 @@ const CirclePage: React.FC = () => {
     canvasRef.current!.toBlob((blob) => {
       const file = new File([blob!], 'interactions_circle.png', { type: 'image/png' });
 
-      uploadFile(client, file, intl, (data) => {
+      uploadFile(client, file, undefined, intl, (data) => {
         updateCompose('compose-modal', (draft) => {
           appendMedia(draft, data);
         });

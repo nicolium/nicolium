@@ -49,6 +49,7 @@ import ClearLinkSuggestion from './clear-link-suggestion';
 import ComposeAccountSwitcher from './compose-account-switcher';
 import ContentTypeButton from './content-type-button';
 import DriveButton from './drive-button';
+import GifPickerButton from './gif-picker-button';
 import HashtagCasingSuggestion from './hashtag-casing-suggestion';
 import InteractionPolicyButton from './interaction-policy-button';
 import LanguageDropdown from './language-dropdown';
@@ -388,6 +389,7 @@ const ComposeForm = <ID extends string>({
       <div className='compose-form__buttons'>
         <UploadButtonContainer composeId={id} />
         {features.drive && <DriveButton composeId={id} />}
+        {!features.gifPicker && <GifPickerButton composeId={id} />}
         <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
         {features.polls && <PollButton composeId={id} />}
         {features.scheduledStatuses && !hasThread && !threadItem && (

@@ -1385,7 +1385,7 @@ const useUploadCompose = (composeId: string) => {
   const intl = useIntl();
 
   return useCallback(
-    (files: FileList) => {
+    (files: FileList | Array<File>, descriptions?: Array<string>) => {
       const compose =
         useComposeStore.getState().composers[composeId] || useComposeStore.getState().default;
 
@@ -1410,6 +1410,7 @@ const useUploadCompose = (composeId: string) => {
         uploadFile(
           client,
           f,
+          descriptions?.[i],
           intl,
           (data) =>
             updateCompose(composeId, (draft) => {

@@ -29,6 +29,7 @@ import type { EventMapModalProps } from '@/modals/event-map-modal';
 import type { EventParticipantsModalProps } from '@/modals/event-participants-modal';
 import type { FamiliarFollowersModalProps } from '@/modals/familiar-followers-modal';
 import type { FavouritesModalProps } from '@/modals/favourites-modal';
+import type { GifPickerModalProps } from '@/modals/gif-picker-modal';
 import type { InteractAsModalProps } from '@/modals/interact-as-modal';
 import type { JoinEventModalProps } from '@/modals/join-event-modal';
 import type { ListAdderModalProps } from '@/modals/list-adder-modal';
@@ -74,6 +75,7 @@ type OpenModalType = {
   EVENT_PARTICIPANTS: EventParticipantsModalProps;
   FAMILIAR_FOLLOWERS: FamiliarFollowersModalProps;
   FAVOURITES: FavouritesModalProps;
+  GIF_PICKER: GifPickerModalProps;
   HOTKEYS: undefined;
   INTERACT_AS: InteractAsModalProps;
   JOIN_EVENT: JoinEventModalProps;
