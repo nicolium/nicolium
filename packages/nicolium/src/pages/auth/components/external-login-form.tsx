@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useState, useEffect } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
@@ -27,8 +28,8 @@ const messages = defineMessages({
   },
 });
 
-const handleExternalLogin = (host: string) =>
-  externalLogin(host).catch((error) => {
+const handleExternalLogin = (host: string, switchAccount = true) =>
+  externalLogin(host, switchAccount).catch((error) => {
     console.error(error);
     const status = error.response?.status;
 
@@ -46,7 +47,9 @@ const ExternalLoginForm: React.FC = () => {
   const query = new URLSearchParams(window.location.search);
   const code = query.get('code');
   const server = query.get('server');
+  const switchAccount = query.get('switchAccount') !== 'false';
 
+  const navigate = useNavigate();
   const intl = useIntl();
   const { isLoggedIn } = useLoggedIn();
 
@@ -75,7 +78,7 @@ const ExternalLoginForm: React.FC = () => {
   const handleSubmit = () => {
     setLoading(true);
 
-    handleExternalLogin(host).finally(() => {
+    handleExternalLogin(host, switchAccount).finally(() => {
       setLoading(false);
     });
   };
@@ -93,7 +96,11 @@ const ExternalLoginForm: React.FC = () => {
 
   useEffect(() => {
     if (code) {
-      loginWithCode(code);
+      loginWithCode(code, switchAccount).then(() => {
+        if (!switchAccount) {
+          navigate({ to: '/deck' });
+        }
+      });
     }
   }, [code]);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import type { DeckColumnResource } from './deck-column-config';
 
@@ -37,7 +37,6 @@ const messages = defineMessages({
     defaultMessage:
       'This drive folder could not be found. It might have been deleted or you don’t have permission to view it.',
   },
-  remove: { id: 'column.deck.remove', defaultMessage: 'Remove column' },
 });
 
 interface IDeckColumnNotFound {
@@ -51,7 +50,9 @@ const DeckColumnNotFound: React.FC<IDeckColumnNotFound> = ({ resource, onRemove 
   return (
     <div className='deck__column__content'>
       <p>{intl.formatMessage(messages[resource])}</p>
-      <button onClick={onRemove}>{intl.formatMessage(messages.remove)}</button>
+      <button onClick={onRemove}>
+        <FormattedMessage id='column.deck.remove' defaultMessage='Remove column' />
+      </button>
     </div>
   );
 };

@@ -208,6 +208,7 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
         'deck__column--highlight': highlight,
         'deck__column--fill': column.fillAvailableWidth,
         'deck__column--not-found': !!notFoundResource || loginRequired,
+        'deck-column--login-required': loginRequired,
       })}
       tabIndex={-1}
       data-index={index}

@@ -30,10 +30,10 @@ const fetchExternalInstance = (baseURL: string) =>
       }
     });
 
-const createExternalApp = (instance: Instance, baseURL?: string) => {
+const createExternalApp = (instance: Instance, baseURL?: string, switchAccount?: boolean) => {
   const params = {
     client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
-    redirect_uris: `${window.location.origin}/login/external`,
+    redirect_uris: `${window.location.origin}/login/external?switchAccount=${switchAccount}`,
     website: sourceCode.homepage,
     scopes: getInstanceScopes(instance, undefined, true),
   };
@@ -41,10 +41,10 @@ const createExternalApp = (instance: Instance, baseURL?: string) => {
   return createApp(params, baseURL);
 };
 
-const externalAuthorize = (instance: Instance, baseURL: string) => {
+const externalAuthorize = (instance: Instance, baseURL: string, switchAccount: boolean) => {
   const scopes = getInstanceScopes(instance, undefined, true);
 
-  return createExternalApp(instance, baseURL).then((app) => {
+  return createExternalApp(instance, baseURL, switchAccount).then((app) => {
     const { client_id, redirect_uri } = app;
 
     const query = new URLSearchParams({
@@ -62,15 +62,15 @@ const externalAuthorize = (instance: Instance, baseURL: string) => {
   });
 };
 
-const externalLogin = (host: string) => {
+const externalLogin = (host: string, switchAccount = true) => {
   const baseURL = parseBaseURL(host) || parseBaseURL(`https://${host}`);
 
   return fetchExternalInstance(baseURL).then((instance) => {
-    externalAuthorize(instance, baseURL);
+    externalAuthorize(instance, baseURL, switchAccount);
   });
 };
 
-const loginWithCode = async (code: string) => {
+const loginWithCode = async (code: string, switchAccount = true) => {
   const app = JSON.parse(localStorage.getItem('nicolium:external:app')!);
   const { client_id, client_secret, redirect_uri } = app;
   const baseURL = localStorage.getItem('nicolium:external:baseurl')!;
@@ -88,8 +88,10 @@ const loginWithCode = async (code: string) => {
   const token = await obtainOAuthToken(params, baseURL);
   addToken(token, app);
   const account = await verifyCredentials(token.access_token, baseURL);
-  useAuthStore.getState().actions.switchAccount(account);
-  window.location.href = '/';
+  if (switchAccount) {
+    useAuthStore.getState().actions.switchAccount(account);
+    window.location.href = '/';
+  }
 };
 
 const viewAsGuest = async (host: string) => {

@@ -280,21 +280,28 @@
       }
     }
 
-    &--error .deck__column__content,
-    &--not-found .deck__column__content,
-    &--empty .deck__column__content {
-      @include mixins.text($theme: muted, $align: center);
+    &--error,
+    &--not-found,
+    &--empty,
+    &--login-required {
+      .deck__column__content {
+        @include mixins.text($theme: muted, $align: center);
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
 
 
-    &--error .deck__column__content,
-    &--not-found .deck__column__content {
-      button {
-        @include mixins.button($theme: danger);
+    &--error,
+    &--not-found,
+    &--login-required {
+      .deck__column__content {
+        button,
+        a {
+          @include mixins.button($theme: danger);
+        }
       }
     }
 
