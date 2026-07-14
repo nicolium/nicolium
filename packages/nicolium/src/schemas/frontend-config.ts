@@ -61,7 +61,7 @@ const frontendConfigSchemaShape = {
     ),
     null,
   ),
-  copyright: v.fallback(v.string(), 'skibidi dop dop dop yes yes'),
+  copyright: v.fallback(v.string(), 'meow :3 🐱'),
   defaultSettings: v.fallback(v.partial(settingsSchema), {}),
   promoPanel: promoPanelSchema,
   navlinks: v.fallback(v.record(v.string(), filteredArray(footerItemSchema)), {}),

@@ -1,16 +1,11 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import Emojify from '@/features/emoji/emojify';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import sourceCode from '@/utils/code';
 
-const messages = defineMessages({
-  meow: { id: 'footer.meow', defaultMessage: 'meow :3 {emoji}' },
-});
-
 const LinkFooter: React.FC = (): React.JSX.Element => {
-  const intl = useIntl();
   const frontendConfig = useFrontendConfig();
 
   return (
@@ -35,7 +30,7 @@ const LinkFooter: React.FC = (): React.JSX.Element => {
         )}
       </p>
       <p className='footer-text' aria-hidden>
-        <Emojify text={intl.formatMessage(messages.meow, { emoji: '🐱' })} />
+        <Emojify text={frontendConfig.copyright} />
       </p>
     </>
   );
