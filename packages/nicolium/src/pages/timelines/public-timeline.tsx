@@ -94,6 +94,7 @@ const PublicTimelinePage = () => {
           />
         }
         emptyMessageIcon={iconChatCenteredText}
+        conditionalPullToRefresh
       />
     </Column>
   );

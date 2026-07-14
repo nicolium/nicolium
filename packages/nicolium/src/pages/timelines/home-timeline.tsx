@@ -106,6 +106,7 @@ const HomeTimelinePage: React.FC = () => {
           </div>
         }
         emptyMessageIcon={iconChatCenteredText}
+        conditionalPullToRefresh
       />
     </Column>
   );

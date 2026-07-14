@@ -30,11 +30,11 @@ import {
   useNotifications,
 } from '@/queries/notifications/use-notifications';
 import { useSettings, useSettingsStoreActions } from '@/stores/settings';
+import { userTouching } from '@/utils/is-mobile';
 import { selectChild } from '@/utils/scroll-utils';
 
-import type { Item } from '@/components/ui/tabs';
-
 import '@/styles/notifications.scss';
+import type { Item } from '@/components/ui/tabs';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
@@ -166,6 +166,7 @@ interface INotificationsColumn {
   filter?: FilterType;
   onChangeFilter?: (filter: FilterType) => void;
   advanced?: boolean;
+  conditionalPullToRefresh?: boolean;
 }
 
 const NotificationsColumn: React.FC<INotificationsColumn> = ({
@@ -174,6 +175,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
   filter,
   onChangeFilter,
   advanced,
+  conditionalPullToRefresh,
 }) => {
   const columnId: string = useRef(`notifications-${crypto.randomUUID()}`).current;
 
@@ -377,7 +379,11 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
 
       {filterBarContainer}
 
-      <PullToRefresh onRefresh={handleRefresh}>{scrollContainer}</PullToRefresh>
+      {conditionalPullToRefresh && !userTouching.matches ? (
+        scrollContainer
+      ) : (
+        <PullToRefresh onRefresh={handleRefresh}>{scrollContainer}</PullToRefresh>
+      )}
     </>
   );
 };

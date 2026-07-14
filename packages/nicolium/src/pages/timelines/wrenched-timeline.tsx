@@ -42,6 +42,7 @@ const WrenchedTimelinePage = () => {
           />
         }
         emptyMessageIcon={iconWrench}
+        conditionalPullToRefresh
       />
     </Column>
   );

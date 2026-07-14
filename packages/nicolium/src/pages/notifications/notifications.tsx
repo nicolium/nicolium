@@ -90,7 +90,7 @@ const NotificationsPage = () => {
         </>
       }
     >
-      <NotificationsColumn />
+      <NotificationsColumn conditionalPullToRefresh />
     </Column>
   );
 };

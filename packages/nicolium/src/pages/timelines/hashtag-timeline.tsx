@@ -36,6 +36,7 @@ const HashtagTimelinePage: React.FC = () => {
             defaultMessage='There is nothing in this hashtag yet.'
           />
         }
+        conditionalPullToRefresh
       />
     </Column>
   );

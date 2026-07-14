@@ -139,6 +139,7 @@ const ListTimelinePage: React.FC = () => {
           </div>
         }
         emptyMessageIcon={iconListBullets}
+        conditionalPullToRefresh
       />
     </Column>
   );

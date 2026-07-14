@@ -43,6 +43,7 @@ const CommunityTimelinePage = () => {
           />
         }
         emptyMessageIcon={iconChatCenteredText}
+        conditionalPullToRefresh
       />
     </Column>
   );

@@ -125,6 +125,7 @@ const CircleTimelinePage: React.FC = () => {
           </div>
         }
         emptyMessageIcon={iconChatCenteredText}
+        conditionalPullToRefresh
       />
     </Column>
   );

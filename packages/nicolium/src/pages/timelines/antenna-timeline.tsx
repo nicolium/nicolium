@@ -118,6 +118,7 @@ const AntennaTimelinePage: React.FC = () => {
           </div>
         }
         emptyMessageIcon={iconChatCenteredText}
+        conditionalPullToRefresh
       />
     </Column>
   );

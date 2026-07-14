@@ -138,6 +138,7 @@ const RemoteTimelinePage: React.FC = () => {
         }
         emptyMessageIcon={iconChatCenteredText}
         instance={instance}
+        conditionalPullToRefresh
       />
     </Column>
   );

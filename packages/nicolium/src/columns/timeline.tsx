@@ -42,6 +42,7 @@ import {
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta } from '@/stores/status-meta';
 import { useQueuedEntries, type TimelineEntry } from '@/stores/timelines';
+import { userTouching } from '@/utils/is-mobile';
 import { selectChild } from '@/utils/scroll-utils';
 import { hasActiveFilters, sortFilteredTimeline } from '@/utils/timeline-filter';
 
@@ -403,6 +404,7 @@ type IBaseTimeline = Pick<
 > & {
   featuredStatusIds?: Array<string>;
   filters?: TimelineFilters;
+  conditionalPullToRefresh?: boolean;
 };
 
 interface ITimeline extends IBaseTimeline {
@@ -415,10 +417,13 @@ const Timeline: React.FC<ITimeline> = ({
   contextType = 'public',
   featuredStatusIds,
   filters,
+  conditionalPullToRefresh,
   ...props
 }) => {
   const columnId: string = useRef(`timeline-${crypto.randomUUID()}`).current;
   const node = useRef<VirtuosoHandle | null>(null);
+
+  const pullToRefreshEnabled = conditionalPullToRefresh ? userTouching.matches : true;
 
   const {
     timelineId,
@@ -591,19 +596,44 @@ const Timeline: React.FC<ITimeline> = ({
   }, [entries, contextType, timelineId, featuredStatusIds, filters]);
 
   if (isError === 401 && entries.length === 0) {
-    return (
-      <PullToRefresh onRefresh={refetch}>
-        <EmptyMessage
-          text={
-            <FormattedMessage
-              id='timeline.error.unauthorized'
-              defaultMessage='You are not authorized to view this timeline.'
-            />
-          }
-        />
-      </PullToRefresh>
+    const body = (
+      <EmptyMessage
+        text={
+          <FormattedMessage
+            id='timeline.error.unauthorized'
+            defaultMessage='You are not authorized to view this timeline.'
+          />
+        }
+      />
     );
+
+    if (!pullToRefreshEnabled) return body;
+
+    return <PullToRefresh onRefresh={refetch}>{body}</PullToRefresh>;
   }
+
+  const body = (
+    <>
+      {featuredStatusIds && featuredStatusIds.length > 3 && entries?.length > 0 && (
+        <SkipPinned onClick={handleSkipPinned} />
+      )}
+      <ScrollableList
+        id={columnId}
+        key='scrollable-list'
+        scrollKey={timelineId}
+        isLoading={isFetching}
+        showLoading={isPending}
+        placeholderComponent={PlaceholderTimelineStatus}
+        placeholderCount={20}
+        ref={node}
+        hasMore={hasNextPage}
+        onLoadMore={fetchNextPage}
+        {...props}
+      >
+        {renderedEntries}
+      </ScrollableList>
+    </>
+  );
 
   return (
     <>
@@ -616,26 +646,13 @@ const Timeline: React.FC<ITimeline> = ({
           accountIds={queuedAccountIds}
         />
       )}
-      <PullToRefresh onRefresh={refetch} isPullable={!isFetching}>
-        {featuredStatusIds && featuredStatusIds.length > 3 && entries?.length > 0 && (
-          <SkipPinned onClick={handleSkipPinned} />
-        )}
-        <ScrollableList
-          id={columnId}
-          key='scrollable-list'
-          scrollKey={timelineId}
-          isLoading={isFetching}
-          showLoading={isPending}
-          placeholderComponent={PlaceholderTimelineStatus}
-          placeholderCount={20}
-          ref={node}
-          hasMore={hasNextPage}
-          onLoadMore={fetchNextPage}
-          {...props}
-        >
-          {renderedEntries}
-        </ScrollableList>
-      </PullToRefresh>
+      {pullToRefreshEnabled ? (
+        <PullToRefresh onRefresh={refetch} isPullable={!isFetching}>
+          {body}
+        </PullToRefresh>
+      ) : (
+        body
+      )}
     </>
   );
 };

@@ -31,6 +31,7 @@ const LinkTimelinePage: React.FC = () => {
           />
         }
         emptyMessageIcon={iconChatCenteredText}
+        conditionalPullToRefresh
       />
     </Column>
   );

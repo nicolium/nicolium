@@ -39,6 +39,7 @@ const BubbleTimelinePage = () => {
           />
         }
         emptyMessageIcon={iconChatCenteredText}
+        conditionalPullToRefresh
       />
     </Column>
   );
