@@ -1377,6 +1377,7 @@
   "edit_profile.fields.display_name.label": "Display name",
   "edit_profile.fields.display_name.placeholder": "Name",
   "edit_profile.fields.hide_network.label": "Hide network",
+  "edit_profile.fields.hide_notification_content.label": "Hide notification content in push notifications",
   "edit_profile.fields.is_cat.label": "The user is a cat",
   "edit_profile.fields.location.label": "Location",
   "edit_profile.fields.location.placeholder": "Location",

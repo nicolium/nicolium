@@ -373,6 +373,7 @@ const EditProfilePage: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<AccountCredentials>({});
   const [muteStrangers, setMuteStrangers] = useState(false);
+  const [hideNotificationContent, setHideNotificationContent] = useState(false);
   const [customCSSEditorExpanded, setCustomCSSEditorExpanded] = useState(false);
 
   const avatar = useImageField({
@@ -393,6 +394,9 @@ const EditProfilePage: React.FC = () => {
           credentialAccount.__meta.pleroma?.notification_settings?.block_from_strangers === true;
         setData(credentials);
         setMuteStrangers(strangerNotifications);
+        setHideNotificationContent(
+          credentialAccount.__meta.pleroma?.hide_notification_content ?? false,
+        );
         setLoading(false);
       })
       .catch(() => {
@@ -437,6 +441,7 @@ const EditProfilePage: React.FC = () => {
           client.settings
             .updateNotificationSettings({
               block_from_strangers: muteStrangers,
+              hide_notification_contents: hideNotificationContent,
             })
             .catch(console.error),
         );
@@ -705,30 +710,6 @@ const EditProfilePage: React.FC = () => {
             </ListItem>
           )}
 
-          {features.muteStrangers && (
-            <ListItem
-              label={
-                <FormattedMessage
-                  id='edit_profile.fields.stranger_notifications.label'
-                  defaultMessage='Block notifications from strangers'
-                />
-              }
-              hint={
-                <FormattedMessage
-                  id='edit_profile.hints.stranger_notifications'
-                  defaultMessage='Only show notifications from people you follow'
-                />
-              }
-            >
-              <Toggle
-                checked={muteStrangers}
-                onChange={(e) => {
-                  setMuteStrangers(e.target.checked);
-                }}
-              />
-            </ListItem>
-          )}
-
           {features.accountDiscoverability && (
             <ListItem
               label={
@@ -900,6 +881,50 @@ const EditProfilePage: React.FC = () => {
                 }}
               />
             </ListItem>
+          )}
+        </List>
+
+        <List>
+          {features.muteStrangers && (
+            <>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='edit_profile.fields.stranger_notifications.label'
+                    defaultMessage='Block notifications from strangers'
+                  />
+                }
+                hint={
+                  <FormattedMessage
+                    id='edit_profile.hints.stranger_notifications'
+                    defaultMessage='Only show notifications from people you follow'
+                  />
+                }
+              >
+                <Toggle
+                  checked={muteStrangers}
+                  onChange={(e) => {
+                    setMuteStrangers(e.target.checked);
+                  }}
+                />
+              </ListItem>
+
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='edit_profile.fields.hide_notification_content.label'
+                    defaultMessage='Hide notification content in push notifications'
+                  />
+                }
+              >
+                <Toggle
+                  checked={hideNotificationContent}
+                  onChange={(e) => {
+                    setHideNotificationContent(e.target.checked);
+                  }}
+                />
+              </ListItem>
+            </>
           )}
         </List>
 
