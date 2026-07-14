@@ -27,7 +27,7 @@ const LocationSearch: React.FC<ILocationSearch> = ({ id, onSelected }) => {
 
   const [value, setValue] = useState('');
   const debouncedValue = useDebounce(value, 400);
-  const locationsQuery = useSearchLocation(debouncedValue);
+  const locationQuery = useSearchLocation(debouncedValue);
 
   const empty = !(value.length > 0);
 
@@ -66,7 +66,7 @@ const LocationSearch: React.FC<ILocationSearch> = ({ id, onSelected }) => {
         placeholder={intl.formatMessage(messages.placeholder)}
         value={value}
         onChange={handleChange}
-        suggestions={locationsQuery.data ?? []}
+        suggestions={locationQuery.data ?? []}
         onSuggestionsFetchRequested={noOp}
         onSuggestionsClearRequested={noOp}
         onSuggestionSelected={handleSelected}
