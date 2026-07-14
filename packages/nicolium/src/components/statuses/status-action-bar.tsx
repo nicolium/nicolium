@@ -44,6 +44,7 @@ import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import iconWarning from '@phosphor-icons/core/regular/warning.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import { useMatch, useNavigate } from '@tanstack/react-router';
+import clsx from 'clsx';
 import { type Account, type CustomEmoji, GroupRoles } from 'pl-api';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -52,8 +53,10 @@ import { changeSetting } from '@/actions/settings';
 import { editStatus, toggleMuteStatus, redactStatus } from '@/actions/statuses';
 import DropdownMenu from '@/components/dropdown-menu';
 import StatusActionButton from '@/components/statuses/status-action-button';
+import Emoji from '@/components/ui/emoji';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
+import unicodeMapping from '@/features/emoji/mapping';
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/use-admin-modals';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useClient } from '@/hooks/use-client';
@@ -272,6 +275,7 @@ const messages = defineMessages({
   viewReactions: { id: 'status.view_reactions', defaultMessage: 'View reactions' },
   wrench: { id: 'status.wrench', defaultMessage: 'Wrench reaction' },
   wrenchConfirm: { id: 'confirmations.wrench.confirm', defaultMessage: 'Wrench' },
+  quickReaction: { id: 'status.quick_reaction', defaultMessage: 'React with {emoji}' },
   addKnownLanguage: {
     id: 'status.add_known_language',
     defaultMessage: 'Do not auto-translate posts in {language}.',
@@ -837,6 +841,65 @@ const EmojiPickerButton: React.FC<Omit<IActionButton, 'onOpenUnauthorizedModal'>
   );
 };
 
+interface IQuickReactionButton {
+  status: SelectedStatus;
+  name: string;
+}
+
+const QuickReactionButton: React.FC<IQuickReactionButton> = ({ status, name }) => {
+  const intl = useIntl();
+  const { mutate: emojiReact } = useEmojiReactMutation(status.id);
+  const { mutate: emojiUnreact } = useEmojiUnreactMutation(status.id);
+
+  const custom = !unicodeMapping[name];
+  const { data: customEmoji } = useCustomEmojis((emojis) =>
+    emojis.find(({ shortcode }) => shortcode === name),
+  );
+
+  if (custom && !customEmoji) return null;
+
+  const reaction = status.emoji_reactions.find((emoji) => emoji.name === name);
+
+  const handleClick: React.EventHandler<React.MouseEvent> = () => {
+    if (reaction?.me) {
+      emojiUnreact(name);
+    } else {
+      emojiReact(name);
+    }
+  };
+
+  return (
+    <button
+      type='button'
+      className={clsx('status-action-bar__button', 'status-action-bar__button--quick-reaction', {
+        'status-action-bar__button--active': reaction?.me,
+      })}
+      title={intl.formatMessage(messages.quickReaction, { emoji: custom ? `:${name}:` : name })}
+      onClick={handleClick}
+    >
+      <Emoji emoji={custom ? undefined : name} src={customEmoji?.url} />
+    </button>
+  );
+};
+
+const QuickReactionButtons: React.FC<Omit<IActionButton, 'onOpenUnauthorizedModal'>> = ({
+  status,
+  withLabels,
+  me,
+}) => {
+  const { quickReactionEmojis } = useSettings();
+
+  if (!me || withLabels || !quickReactionEmojis.length) return null;
+
+  return (
+    <>
+      {quickReactionEmojis.map((name) => (
+        <QuickReactionButton key={name} status={status} name={name} />
+      ))}
+    </>
+  );
+};
+
 const BookmarkButton: React.FC<IActionButton> = ({ status, me }) => {
   const { openModal } = useModalsActions();
   const features = useFeatures();
@@ -1089,6 +1152,16 @@ const useItems = (
               <EmojiPickerButton key='emoji' status={status} withLabels={withLabels} me={me} />,
             );
           }
+          break;
+        case 'quick-reactions':
+          renderedItems.push(
+            <QuickReactionButtons
+              key='quick-reactions'
+              status={status}
+              withLabels={withLabels}
+              me={me}
+            />,
+          );
           break;
         case 'bookmark':
           if (features.bookmarks) {

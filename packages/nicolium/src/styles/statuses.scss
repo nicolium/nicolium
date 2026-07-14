@@ -913,6 +913,24 @@ a.status-card {
         animation: pulse 2s ease-in-out infinite;
       }
     }
+
+    &--quick-reaction {
+      img,
+      canvas,
+      span {
+        width: 1.5rem;
+        height: 1.5rem;
+        transition: transform 150ms var(--ease-default);
+      }
+
+      &:hover {
+        img,
+        canvas,
+        span {
+          transform: scale(1.25);
+        }
+      }
+    }
   }
 
   &__menu__items {

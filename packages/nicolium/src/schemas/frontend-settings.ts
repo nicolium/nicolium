@@ -85,6 +85,7 @@ const AVAILABLE_STATUS_ACTION_BAR_ITEMS = [
   'dislike',
   'wrench',
   'reaction',
+  'quick-reactions',
   'bookmark',
   'share',
   'translate',
@@ -519,6 +520,7 @@ const settingsSchema = v.object({
     v.array(v.picklist(AVAILABLE_STATUS_ACTION_BAR_ITEMS)),
     DEFAULT_STATUS_ACTION_BAR_ITEMS,
   ),
+  quickReactionEmojis: v.fallback(v.array(v.string()), []),
   sidebarItems: v.fallback(filteredArray(sidebarItemSchema), DEFAULT_SIDEBAR_ITEMS),
 
   deck: deckSettingsSchema,
