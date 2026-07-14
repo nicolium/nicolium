@@ -389,7 +389,7 @@ const ComposeForm = <ID extends string>({
       <div className='compose-form__buttons'>
         <UploadButtonContainer composeId={id} />
         {features.drive && <DriveButton composeId={id} />}
-        {!features.gifPicker && <GifPickerButton composeId={id} />}
+        {features.gifPicker && <GifPickerButton composeId={id} />}
         <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
         {features.polls && <PollButton composeId={id} />}
         {features.scheduledStatuses && !hasThread && !threadItem && (
