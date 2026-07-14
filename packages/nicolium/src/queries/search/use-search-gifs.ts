@@ -11,7 +11,6 @@ const useSearchGifs = (query: string) => {
     queryFn: ({ signal }) => client.gifs.searchGifs(query, { signal }),
     gcTime: 60 * 1000,
     enabled: !!query.trim(),
-    placeholderData: (previousData) => previousData,
   });
 };
 

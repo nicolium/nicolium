@@ -4,7 +4,7 @@ import iconBackspace from '@phosphor-icons/core/regular/backspace.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
 import { useDebounce } from '@uidotdev/usehooks';
 import clsx from 'clsx';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { EmptyMessage } from '@/components/empty-message';
@@ -19,7 +19,7 @@ import toast from '@/toast';
 import { isIOS } from '@/utils/is-mobile';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
-import type { GifResult } from 'pl-api';
+import type { GifResult, GifResults } from 'pl-api';
 
 const messages = {
   placeholder: { id: 'gif_picker_modal.search.placeholder', defaultMessage: 'Search GIFs' },
@@ -53,7 +53,7 @@ const GifItem: React.FC<IGifItem> = ({ gif, onSelect, disabled }) => {
     }
   };
 
-  const hoverToPlay = () => !autoPlayGif && attachment.type === 'gifv';
+  const hoverToPlay = () => !autoPlayGif;
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -114,6 +114,7 @@ const GifPickerModal: React.FC<BaseModalProps & GifPickerModalProps> = ({ compos
   const debouncedValue = useDebounce(value, 400);
   const { data: gifsResult, isFetching, isError } = useSearchGifs(debouncedValue);
   const [isUploading, setIsUploading] = useState(false);
+  const [previousResult, setPreviousResult] = useState<GifResults | undefined>(undefined);
 
   const isEmpty = value.trim().length === 0;
 
@@ -148,13 +149,21 @@ const GifPickerModal: React.FC<BaseModalProps & GifPickerModalProps> = ({ compos
       });
   };
 
+  useEffect(() => {
+    if (gifsResult) {
+      setPreviousResult(gifsResult);
+    }
+  }, [gifsResult]);
+
+  const gifsToDisplay = gifsResult || previousResult;
+
   return (
     <Modal
       title={<FormattedMessage id='gif_picker_modal.header.title' defaultMessage='Search GIFs' />}
       onClose={onClickClose}
     >
       <div className='gif-picker-modal'>
-        <div className='location-search'>
+        <div className='location-search gif-picker-modal__search'>
           <Input
             placeholder={intl.formatMessage(messages.placeholder)}
             value={value}
@@ -181,16 +190,16 @@ const GifPickerModal: React.FC<BaseModalProps & GifPickerModalProps> = ({ compos
             }
             icon={iconMagnifyingGlass}
           />
-        ) : !gifsResult && !isError ? (
+        ) : !gifsToDisplay && !isError ? (
           <Spinner />
-        ) : gifsResult && gifsResult.results.length > 0 ? (
+        ) : gifsToDisplay && gifsToDisplay.results.length > 0 ? (
           <div
             className={clsx(
               'gif-picker-modal__results account-gallery__grid',
               isFetching && 'gif-picker-modal__results--loading',
             )}
           >
-            {gifsResult.results.map((gif) => (
+            {gifsToDisplay.results.map((gif) => (
               <GifItem
                 key={gif.id}
                 gif={gif}
@@ -218,12 +227,12 @@ const GifPickerModal: React.FC<BaseModalProps & GifPickerModalProps> = ({ compos
             }
           />
         )}
-        {gifsResult?.provider && (
+        {gifsToDisplay?.provider && (
           <span className='gif-picker-modal__provider'>
             <FormattedMessage
               id='gif_picker_modal.provider'
               defaultMessage='Powered by {provider}'
-              values={{ provider: gifsResult.provider }}
+              values={{ provider: gifsToDisplay.provider }}
             />
           </span>
         )}

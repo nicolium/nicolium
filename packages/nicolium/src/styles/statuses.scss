@@ -1202,6 +1202,10 @@ a.status-card {
     height: 100%;
 
     object-fit: cover;
+
+    [disabled] & {
+      cursor: unset;
+    }
   }
 
   &__gifv__label,
