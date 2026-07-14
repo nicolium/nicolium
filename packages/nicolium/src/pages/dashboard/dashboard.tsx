@@ -8,6 +8,7 @@ import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { usePrivileges } from '@/hooks/use-privileges';
 import { Counter } from '@/pages/dashboard/components/counter';
 import { DashCounter, DashCounters } from '@/pages/dashboard/components/dashcounter';
 import { Dimension } from '@/pages/dashboard/components/dimension';
@@ -33,6 +34,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
   const features = useFeatures();
   const { data: account } = useOwnAccount();
   const { error } = useAdminConfig();
+  const { privileges, hasPrivilege } = usePrivileges();
 
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
@@ -61,6 +63,8 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
   const configurationDisabled = (error as any)?.response?.json?.error?.includes(
     'configurable_from_database',
   );
+
+  const canAdmin = !privileges || !!account.is_admin;
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -187,43 +191,47 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
               }
             />
             <List>
-              <ListItem
-                size='sm'
-                to='/nicolium/admin/reports'
-                search={{ resolved: false }}
-                label={
-                  <FormattedMessage
-                    id='admin.links.pending_reports'
-                    defaultMessage='{count, plural, one {{formattedCount} pending report} other {{formattedCount} pending reports}}'
-                    values={{
-                      count: pendingReportsCount,
-                      formattedCount: (
-                        <strong>
-                          <FormattedNumber value={pendingReportsCount} />
-                        </strong>
-                      ),
-                    }}
-                  />
-                }
-              />
-              <ListItem
-                size='sm'
-                to='/nicolium/admin/approval'
-                label={
-                  <FormattedMessage
-                    id='admin.links.pending_users'
-                    defaultMessage='{count, plural, one {{formattedCount} pending user} other {{formattedCount} pending users}}'
-                    values={{
-                      count: awaitingApprovalCount,
-                      formattedCount: (
-                        <strong>
-                          <FormattedNumber value={awaitingApprovalCount} />
-                        </strong>
-                      ),
-                    }}
-                  />
-                }
-              />
+              {hasPrivilege('reports_manage_reports') && (
+                <ListItem
+                  size='sm'
+                  to='/nicolium/admin/reports'
+                  search={{ resolved: false }}
+                  label={
+                    <FormattedMessage
+                      id='admin.links.pending_reports'
+                      defaultMessage='{count, plural, one {{formattedCount} pending report} other {{formattedCount} pending reports}}'
+                      values={{
+                        count: pendingReportsCount,
+                        formattedCount: (
+                          <strong>
+                            <FormattedNumber value={pendingReportsCount} />
+                          </strong>
+                        ),
+                      }}
+                    />
+                  }
+                />
+              )}
+              {hasPrivilege('users_read') && (
+                <ListItem
+                  size='sm'
+                  to='/nicolium/admin/approval'
+                  label={
+                    <FormattedMessage
+                      id='admin.links.pending_users'
+                      defaultMessage='{count, plural, one {{formattedCount} pending user} other {{formattedCount} pending users}}'
+                      values={{
+                        count: awaitingApprovalCount,
+                        formattedCount: (
+                          <strong>
+                            <FormattedNumber value={awaitingApprovalCount} />
+                          </strong>
+                        ),
+                      }}
+                    />
+                  }
+                />
+              )}
               {/* <ListItem size='sm' to='/nicolium/admin' label={<FormattedMessage id='admin.links.pending_tags' defaultMessage='{count} pending tags' values={{ count: <strong>0</strong> }} />} />
               <ListItem size='sm' to='/nicolium/admin' label={<FormattedMessage id='admin.links.pending_appeals' defaultMessage='{count} pending appeals' values={{ count: <strong>0</strong> }} />} /> */}
             </List>
@@ -305,24 +313,24 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
             />
           )}
 
-          {(features.pleromaAdminAccounts || features.mastodonAdminV2) && (
-            <ListItem
-              to='/nicolium/admin/accounts'
-              label={<FormattedMessage id='column.admin.accounts' defaultMessage='Accounts' />}
-            />
-          )}
+          {(features.pleromaAdminAccounts || features.mastodonAdminV2) &&
+            hasPrivilege('users_read') && (
+              <ListItem
+                to='/nicolium/admin/accounts'
+                label={<FormattedMessage id='column.admin.accounts' defaultMessage='Accounts' />}
+              />
+            )}
 
-          {(features.pleromaAdminAccounts ||
-            features.mastodonAdminV2 ||
-            features.iceshrimpAdmin) && (
-            <ListItem
-              to='/nicolium/admin/reports'
-              search={{ resolved: false }}
-              label={<FormattedMessage id='column.admin.reports' defaultMessage='Reports' />}
-            />
-          )}
+          {(features.pleromaAdminAccounts || features.mastodonAdminV2 || features.iceshrimpAdmin) &&
+            hasPrivilege('reports_manage_reports') && (
+              <ListItem
+                to='/nicolium/admin/reports'
+                search={{ resolved: false }}
+                label={<FormattedMessage id='column.admin.reports' defaultMessage='Reports' />}
+              />
+            )}
 
-          {features.pleromaAdminModerationLog && (
+          {features.pleromaAdminModerationLog && hasPrivilege('moderation_log_read') && (
             <ListItem
               to='/nicolium/admin/log'
               label={
@@ -335,6 +343,7 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
           )}
 
           {(features.adminDomainBlocks || features.iceshrimpAdmin) &&
+            canAdmin &&
             (instance.configuration.limited_federation ? (
               <ListItem
                 to='/nicolium/admin/domain_allows'
@@ -388,23 +397,27 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
             />
           )}
 
-          {features.pleromaAdminAnnouncements && (
-            <ListItem
-              to='/nicolium/admin/announcements'
-              label={
-                <FormattedMessage id='column.admin.announcements' defaultMessage='Announcements' />
-              }
-            />
-          )}
+          {features.pleromaAdminAnnouncements &&
+            hasPrivilege('announcements_manage_announcements') && (
+              <ListItem
+                to='/nicolium/admin/announcements'
+                label={
+                  <FormattedMessage
+                    id='column.admin.announcements'
+                    defaultMessage='Announcements'
+                  />
+                }
+              />
+            )}
 
-          {features.adminRules && (
+          {features.adminRules && canAdmin && (
             <ListItem
               to='/nicolium/admin/rules'
               label={<FormattedMessage id='column.admin.rules' defaultMessage='Instance rules' />}
             />
           )}
 
-          {features.pleromaAdminConfig && (
+          {features.pleromaAdminConfig && canAdmin && (
             <ListItem
               to='/nicolium/admin/pleroma_config'
               label={
@@ -417,21 +430,22 @@ const DashboardPage: React.FC<IDashboardPage> = ({ aside = false }) => {
             />
           )}
 
-          {(features.pleromaAdminRelays || features.iceshrimpAdmin) && (
+          {(features.pleromaAdminRelays || features.iceshrimpAdmin) && canAdmin && (
             <ListItem
               to='/nicolium/admin/relays'
               label={<FormattedMessage id='column.admin.relays' defaultMessage='Instance relays' />}
             />
           )}
 
-          {features.domains && (
+          {features.domains && canAdmin && (
             <ListItem
               to='/nicolium/admin/domains'
               label={<FormattedMessage id='column.admin.domains' defaultMessage='Domains' />}
             />
           )}
 
-          {(features.pleromaAdminInvites || features.iceshrimpAdmin) && (
+          {((features.pleromaAdminInvites && hasPrivilege('users_manage_invites')) ||
+            features.iceshrimpAdmin) && (
             <ListItem
               to='/nicolium/admin/invites'
               label={<FormattedMessage id='column.admin.invites' defaultMessage='Invites' />}

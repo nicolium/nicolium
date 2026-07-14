@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { usePrivileges } from '@/hooks/use-privileges';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { scopedQueryKey, useAppInfiniteQuery, useAppQuery } from '@/queries/query';
 import { useInstanceFetched } from '@/stores/instance';
@@ -74,6 +75,7 @@ const pendingReportsQuery = makePaginatedResponseQueryOptions(
 const usePendingReportsCount = () => {
   const client = useClient();
   const { data: account } = useOwnAccount();
+  const { hasPrivilege } = usePrivileges();
   const scopeUrl = useScopeUrl();
   const fetched = useInstanceFetched(scopeUrl);
 
@@ -81,7 +83,10 @@ const usePendingReportsCount = () => {
     ...pendingReportsQuery(client, scopeUrl),
     select: (data) =>
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,
-    enabled: fetched && !!(account?.is_admin ?? account?.is_moderator),
+    enabled:
+      fetched &&
+      !!(account?.is_admin ?? account?.is_moderator) &&
+      hasPrivilege('reports_manage_reports'),
   });
 };
 

@@ -3,6 +3,7 @@ import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { usePrivileges } from '@/hooks/use-privileges';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useAccount } from '@/queries/accounts/use-account';
 import { scopedQueryKey, useAppInfiniteQuery, useAppQuery } from '@/queries/query';
@@ -72,6 +73,7 @@ const pendingUsersQuery = makePaginatedResponseQueryOptions(
 const usePendingUsersCount = () => {
   const client = useClient();
   const { data: account } = useOwnAccount();
+  const { hasPrivilege } = usePrivileges();
   const features = useFeatures();
   const scopeUrl = useScopeUrl();
 
@@ -81,6 +83,7 @@ const usePendingUsersCount = () => {
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,
     enabled:
       !!(account?.is_admin ?? account?.is_moderator) &&
+      hasPrivilege('users_read') &&
       (features.pleromaAdminAccounts || features.mastodonAdminV2),
   });
 };
