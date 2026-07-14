@@ -1332,7 +1332,6 @@
   "filters.filters_list_warn": "Afficher les alertes",
   "follow_request.authorize": "Accepter",
   "follow_request.reject": "Rejeter",
-  "footer.meow": "meow :3 {emoji}",
   "frontend_config.allow_displaying_remote_no_login.hint": "Lorsque cette option est désactivé, la visualisation des contenus distants sera redirigée vers leur URL d’origine.",
   "frontend_config.allow_displaying_remote_no_login.label": "Autoriser l’affichage de contenu distant lorsque l’utilisateur⋅trice n’est pas connecté⋅e",
   "frontend_config.copyright_footer.meta_fields.label.placeholder": "Copyright du pied de page",

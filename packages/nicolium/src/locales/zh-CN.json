@@ -1276,7 +1276,6 @@
   "filters.filters_list_warn": "显示警告",
   "follow_request.authorize": "同意",
   "follow_request.reject": "拒绝",
-  "footer.meow": "喵 :3 {emoji}",
   "frontend_config.allow_displaying_remote_no_login.hint": "禁用后，用户在尝试查看远程内容时将被导航到原始网址。",
   "frontend_config.allow_displaying_remote_no_login.label": "允许在未登录时显示远程内容",
   "frontend_config.copyright_footer.meta_fields.label.placeholder": "版权页底",
