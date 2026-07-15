@@ -1,5 +1,3 @@
-import sumBy from 'lodash/sumBy';
-
 import { normalizeChatMessage } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -80,7 +78,7 @@ const getUnreadChatsCount = (scopeUrl: string): number => {
     queryClient.getQueryData(scopedQueryKey(queryKeys.chats.search, scopeUrl)),
   );
 
-  return sumBy(chats, (chat) => chat.unread);
+  return chats?.filter((chat) => chat.unread).length ?? 0;
 };
 
 export { updateChatListItem, getUnreadChatsCount, reorderChatListItems };
