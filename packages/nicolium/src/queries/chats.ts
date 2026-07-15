@@ -1,5 +1,4 @@
 import { keepPreviousData, useMutation, useQueryClient } from '@tanstack/react-query';
-import sumBy from 'lodash/sumBy';
 import {
   type Chat,
   type ChatMessage as BaseChatMessage,
@@ -93,7 +92,7 @@ const useChats = () => {
     const response = await (pageParam?.next ?? client.chats.getChats)();
     const { items } = response;
 
-    setUnreadChatsCount(sumBy(data, (chat) => chat.unread));
+    setUnreadChatsCount(items.filter((chat) => chat.unread).length);
 
     importEntities({ accounts: items.map((chat) => chat.account) });
 
@@ -182,7 +181,7 @@ const useMarkChatAsRead = (chatId: string) => {
           }
           return chat;
         });
-        setUnreadChatsCount(sumBy(flattenedQueryData, (chat: Chat) => chat.unread));
+        setUnreadChatsCount(flattenedQueryData.filter((chat: Chat) => chat.unread).length);
       }
     },
   });
