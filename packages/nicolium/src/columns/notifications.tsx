@@ -161,11 +161,20 @@ const FilterBar: React.FC<IFilterBar> = ({ selected, onSelect, advanced }) => {
 };
 
 interface INotificationsColumn {
+  /** Whether the container is used as scroll parent instead of the window. */
   multiColumn?: boolean;
+  /** Whether to display notifications in a more compacted form. */
   compact?: boolean;
+  /** Active notification filter. */
   filter?: FilterType;
+  /** Callback when the filter is changed. */
   onChangeFilter?: (filter: FilterType) => void;
+  /** Whether to display more items in the filter bar. */
   advanced?: boolean;
+  /**
+   * If true, pull to refresh is only enabled when the user uses a touchscreen device.
+   * Used to disable PTR when a refresh button is displayed.
+   */
   conditionalPullToRefresh?: boolean;
 }
 

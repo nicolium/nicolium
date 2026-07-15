@@ -402,13 +402,21 @@ type IBaseTimeline = Pick<
   IScrollableList,
   'emptyMessageIcon' | 'emptyMessageText' | 'onTopItemChanged'
 > & {
+  /* IDs of pinned statuses to show at the top of the timeline. */
   featuredStatusIds?: Array<string>;
+  /** Active timeline filters.  */
   filters?: TimelineFilters;
+  /**
+   * If true, pull to refresh is only enabled when the user uses a touchscreen device.
+   * Used to disable PTR when a refresh button is displayed.
+   */
   conditionalPullToRefresh?: boolean;
 };
 
 interface ITimeline extends IBaseTimeline {
+  /** Query result including timeline fetching information. */
   query: ReturnType<typeof useHomeTimeline>;
+  /** Context used to apply keyword filters. */
   contextType?: FilterContextType;
 }
 
@@ -718,8 +726,11 @@ const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
 };
 
 interface IPublicTimelineColumn extends IBaseTimeline {
+  /** Whether to display local posts only. */
   local?: boolean;
+  /** Whether to display remote posts only. */
   remote?: boolean;
+  /** If specified, only display posts from the given instance. */
   instance?: string;
 }
 
@@ -743,6 +754,7 @@ const PublicTimelineColumn: React.FC<IPublicTimelineColumn> = ({
 };
 
 interface IHashtagTimelineColumn extends IBaseTimeline {
+  /** The hashtag for which to display timeline items. */
   hashtag: string;
 }
 
@@ -761,6 +773,7 @@ const HashtagTimelineColumn: React.FC<IHashtagTimelineColumn> = ({ hashtag, ...p
 };
 
 interface ILinkTimelineColumn extends IBaseTimeline {
+  /** The URL for which to display timeline items. */
   url: string;
 }
 
@@ -771,6 +784,7 @@ const LinkTimelineColumn: React.FC<ILinkTimelineColumn> = ({ url, ...props }) =>
 };
 
 interface IListTimelineColumn extends IBaseTimeline {
+  /** The ID of the list for which to display timeline items. */
   listId: string;
 }
 
@@ -789,6 +803,7 @@ const ListTimelineColumn: React.FC<IListTimelineColumn> = ({ listId, ...props })
 };
 
 interface IGroupTimelineColumn extends IBaseTimeline {
+  /** The ID of the group for which to display timeline items. */
   groupId: string;
 }
 
@@ -821,6 +836,7 @@ const BubbleTimelineColumn: React.FC<IBaseTimeline> = (props) => {
 };
 
 interface IAntennaTimelineColumn extends IBaseTimeline {
+  /** The ID of the antenna for which to display timeline items. */
   antennaId: string;
 }
 
@@ -839,6 +855,7 @@ const AntennaTimelineColumn: React.FC<IAntennaTimelineColumn> = ({ antennaId, ..
 };
 
 interface ICircleTimelineColumn extends IBaseTimeline {
+  /** The ID of the circle for which to display timeline items. */
   circleId: string;
 }
 
@@ -871,7 +888,9 @@ const WrenchedTimelineColumn: React.FC<IBaseTimeline> = (props) => {
 };
 
 interface IAccountTimelineColumn extends IBaseTimeline {
+  /** The ID of the account for which to display timeline items. */
   accountId: string;
+  /** Whether to exclude replies from the timeline. */
   excludeReplies?: boolean;
 }
 
