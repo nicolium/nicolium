@@ -501,6 +501,7 @@
   "antennas.edit.destination.home": "In die Startseiten-Zeitleiste einfügen",
   "antennas.edit.destination.list": "Zu Liste hinzufügen",
   "antennas.edit.error": "Erstellen der Antenne fehlgeschlagen",
+  "antennas.edit.favourite": "Favoriten",
   "app_create.name.label": "Name der App",
   "app_create.redirect_uri.label": "URIs umleiten",
   "app_create.restart": "Weitere App erstellen",
