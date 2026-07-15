@@ -33,10 +33,13 @@ const messages = defineMessages({
 });
 
 interface IAccountLocalTime {
+  /** The ID of the displayed account. */
   accountId: string;
+  /** The field including timezone information. */
   field: Account['fields'][number];
 }
 
+/** Current time displayed according to the timezone present in profile fields. */
 const AccountLocalTime: React.FC<IAccountLocalTime> = ({ accountId, field }) => {
   const intl = useIntl();
 

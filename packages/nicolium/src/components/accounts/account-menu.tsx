@@ -180,6 +180,7 @@ interface IAccountMenu {
   account: Account;
 }
 
+/** Dropdown menu displayed in the header on the account page. */
 const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   const intl = useIntl();
   const { mentionCompose, directCompose } = useComposeActions();

@@ -8,6 +8,7 @@ interface IAvatarStack {
   limit?: number;
 }
 
+/** A stack of avatars overlaying each other. */
 const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
   const dedupAccountIds = React.useMemo(
     () => [...new Set(accountIds)].slice(0, limit),

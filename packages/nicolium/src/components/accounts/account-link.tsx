@@ -9,6 +9,10 @@ import type { Account, Mention } from 'pl-api';
 
 interface IAccountLink extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   account: Pick<Account, 'acct' | 'url' | 'local'> | Mention;
+  /**
+   * ID of the column rendering the account link.
+   * Used by AccountHoverCard for consistent navigation.
+   */
   columnId?: string;
 }
 
