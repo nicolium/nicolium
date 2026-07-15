@@ -61,7 +61,7 @@ const ComposeInteractionPolicyModal: React.FC<
     return null;
   }
 
-  const interactionPolicy = compose.interactionPolicy ?? initial[compose.visibility as 'public'];
+  const interactionPolicy = compose.interactionPolicy ?? initial[visibility as 'public'];
 
   const onClickClose = () => {
     onClose('COMPOSE_INTERACTION_POLICY');
@@ -120,7 +120,7 @@ const ComposeInteractionPolicyModal: React.FC<
           onChange={onChange}
           quotePolicy={initialQuotePolicy}
           onQuotePolicyChange={onQuotePolicyChange}
-          visibility={compose.visibility as 'public'}
+          visibility={visibility as 'public'}
           singlePost
         />
       </div>
