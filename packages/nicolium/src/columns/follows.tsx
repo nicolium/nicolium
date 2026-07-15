@@ -11,14 +11,17 @@ import { useFollowers, useFollowing, useSubscribers } from '@/queries/account-li
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 
 interface IAccountListBody {
+  /** Whether the displayed account is loaded. */
   hasAccount: boolean;
   isUnavailable?: boolean;
   isLoading?: boolean;
   isFetching?: boolean;
+  /** Array of IDs of the accounts displayed on the list. */
   accountIds: Array<string>;
   hasNextPage?: boolean;
   fetchNextPage: () => void;
   scrollKey: string;
+  /** Message displayed when there are no accounts on the list. */
   emptyMessage: React.ReactNode;
   prepend?: React.ReactNode;
 }

@@ -36,7 +36,13 @@ const messages = defineMessages({
 
 type SortBy = 'date_added' | 'alphabetical' | 'last_active' | 'most_followers';
 
-const AuthorNote: React.FC<{ accountId: string }> = ({ accountId }) => {
+interface IAuthorNote {
+  /** Collection author account ID. */
+  accountId: string;
+}
+
+/** Information about the collection author. */
+const AuthorNote: React.FC<IAuthorNote> = ({ accountId }) => {
   const { data: account } = useAccount(accountId);
 
   if (!account) {
@@ -64,10 +70,13 @@ const AuthorNote: React.FC<{ accountId: string }> = ({ accountId }) => {
 };
 
 interface ICollectionAccounts {
+  /** Collection entity. */
   collection: Collection;
+  /** Whether displayed by the collection author. */
   isOwnCollection: boolean;
 }
 
+/** List of accounts in a collection. */
 const CollectionAccounts: React.FC<ICollectionAccounts> = ({ collection, isOwnCollection }) => {
   const intl = useIntl();
   const [sortBy, setSortBy] = useState<SortBy>('date_added');
@@ -165,6 +174,7 @@ const CollectionAccounts: React.FC<ICollectionAccounts> = ({ collection, isOwnCo
 };
 
 interface ICollectionColumn {
+  /** The ID of the collection. */
   collectionId: string;
 }
 

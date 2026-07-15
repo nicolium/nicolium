@@ -6,6 +6,7 @@ import ScrollableList from '@/components/scrollable-list';
 import ScheduledStatus from '@/features/scheduled-statuses/components/scheduled-status';
 import { useScheduledStatusesQuery } from '@/queries/statuses/scheduled-statuses';
 
+/** Displays scheduled statuses fetched from the backend. */
 const ScheduledStatusesColumn = () => {
   const {
     data: scheduledStatuses = [],

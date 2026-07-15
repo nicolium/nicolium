@@ -66,6 +66,7 @@ const AccountInteractionList: React.FC<IAccountInteractionList> = ({
 };
 
 interface IStatusInteractionList {
+  /** ID of the status for which to fetch the interactions. */
   statusId: string;
 }
 
@@ -129,17 +130,11 @@ const DislikesList: React.FC<IStatusInteractionList> = ({ statusId }) => {
   );
 };
 
-interface IAccountWithReaction {
-  id: string;
-  reaction: string;
-  reactionUrl?: string;
-  reactions?: Array<{ name: string; url?: string }>;
-}
-
 interface IReactionStack {
   reactions: Array<{ name: string; url?: string }>;
 }
 
+/** User when a user reacted to a post with more than one emoji. */
 const ReactionStack: React.FC<IReactionStack> = ({ reactions }) => {
   const [expanded, setExpanded] = useState(false);
   const reactionsToShow = expanded ? reactions : reactions.slice(0, 3);
@@ -153,9 +148,9 @@ const ReactionStack: React.FC<IReactionStack> = ({ reactions }) => {
         if (reactions.length > 1) setExpanded((value) => !value);
       }}
     >
-      {reactionsToShow.map((reaction, index) => (
+      {reactionsToShow.map((reaction) => (
         <Emoji
-          key={index}
+          key={reaction.name}
           className='reaction-stack__emoji'
           emoji={reaction.name}
           src={reaction.url}
@@ -164,6 +159,13 @@ const ReactionStack: React.FC<IReactionStack> = ({ reactions }) => {
     </div>
   );
 };
+
+interface IAccountWithReaction {
+  id: string;
+  reaction: string;
+  reactionUrl?: string;
+  reactions?: Array<{ name: string; url?: string }>;
+}
 
 interface IReactionsList {
   statusId: string;

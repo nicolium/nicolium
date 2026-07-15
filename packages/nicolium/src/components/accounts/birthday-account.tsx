@@ -14,6 +14,7 @@ interface IBirthdayAccount {
   accountId: string;
 }
 
+/** Account displayed together with its birth date. */
 const BirthdayAccount: React.FC<IBirthdayAccount> = ({ accountId }) => {
   const intl = useIntl();
   const { data: account } = useAccount(accountId);

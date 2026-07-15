@@ -5,6 +5,7 @@ import ScrollableList from '@/components/scrollable-list';
 import DraftStatus from '@/features/draft-statuses/components/draft-status';
 import { useDraftStatusesQuery } from '@/queries/statuses/use-draft-statuses';
 
+/** Locally stored draft statuses from current account. */
 const DraftStatusesColumn = () => {
   const { data: drafts = [] } = useDraftStatusesQuery((data) => Object.values(data));
 

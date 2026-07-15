@@ -21,8 +21,11 @@ import TrendsColumn from './trends';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
 interface ISearchColumn {
+  /** Type of entities to search for. */
   type: 'accounts' | 'hashtags' | 'statuses' | 'links';
+  /** Search query. When empty, will fallback to trending items when available. */
   query: string;
+  /** ID of the account, when searching for posts from given account. */
   accountId?: string;
 }
 

@@ -19,6 +19,7 @@ import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
 import useTrendingTags from '@/queries/trends/use-trending-tags';
 
 interface ITrendsColumn {
+  /** Type of trending entities to display. */
   type: 'accounts' | 'hashtags' | 'statuses' | 'links';
 }
 

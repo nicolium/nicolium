@@ -6,6 +6,7 @@ import StatusList from '@/components/statuses/status-list';
 import { useBookmarks } from '@/queries/status-lists/use-bookmarks';
 
 interface IBookmarksColumn {
+  /** Bookmark folder ID. Leave `undefined` for all bookmarks. */
   folderId?: string;
 }
 

@@ -22,9 +22,16 @@ const messages = defineMessages({
 });
 
 interface ICollectionsList {
+  /** List of Collection entities */
   collections?: Array<Collection>;
+  /** Whether the collection list is being loaded. */
   isLoading: boolean;
+  /**
+   * Whether to display the collection author
+   * (hidden when displaying collections from a given account).
+   */
   withAuthorHandle: boolean;
+  /** Message displayed when there are no collections on a list. */
   emptyMessage: React.ReactNode;
 }
 
@@ -58,6 +65,7 @@ const CollectionsList: React.FC<ICollectionsList> = ({
 };
 
 interface IAccountCollectionsColumn {
+  /** Username of the account for which to display collections. */
   username: string;
 }
 
