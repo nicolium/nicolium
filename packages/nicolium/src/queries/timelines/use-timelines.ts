@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { incrementId } from '@/utils/strings';
 
@@ -27,10 +28,11 @@ const useHomeTimeline = (
   const client = useClient();
   const stream = 'user';
   const restoreMaxId = useRef(maxId);
+  const me = useCurrentAccount();
 
   return useTimeline(
     'home',
-    (paginationParams) => {
+    async (paginationParams) => {
       const initialPagination = restoreMaxId.current
         ? { max_id: incrementId(restoreMaxId.current) }
         : undefined;
@@ -38,10 +40,21 @@ const useHomeTimeline = (
         restoreMaxId.current = undefined;
       }
 
-      return client.timelines.homeTimeline({
+      let timeline = await client.timelines.homeTimeline({
         ...params,
         ...(paginationParams ?? initialPagination),
       });
+
+      if (!paginationParams && initialPagination && timeline.items.length === 0) {
+        restoreMaxId.current = undefined;
+        timeline = await client.timelines.homeTimeline({
+          ...params,
+        });
+
+        localStorage.removeItem(`nicolium:${me}:homeTimelinePosition`);
+      }
+
+      return timeline;
     },
     { stream },
     { restoringMaxId: maxId, prefetchRebloggedRelationships: true },
