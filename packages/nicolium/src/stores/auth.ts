@@ -820,6 +820,7 @@ const useAuthStore = create<AuthStore>()(
               account,
             );
             get().actions.addCredentials(token, account);
+            get().clients[account.url]?.setInstance(instanceData);
             if (account.id === get().currentAccountId) fetchMeSuccess(account);
             return account;
           } catch (error: any) {
