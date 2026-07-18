@@ -41,7 +41,9 @@ const changeSetting = (
 ) => {
   useSettingsStore.getState().actions.changeSetting(path, value);
 
-  if (opts?.save !== false) return saveSettings(opts, path[0] === 'storeSettingsInNotes');
+  if (opts?.save !== false) {
+    saveSettings(opts, path[0] === 'storeSettingsInNotes');
+  }
 };
 
 let savePromise: Promise<void> | undefined;
