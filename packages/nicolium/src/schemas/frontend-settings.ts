@@ -2,7 +2,7 @@ import * as v from 'valibot';
 
 import { locales } from '@/messages';
 
-import { coerceObject, filteredArray } from './utils';
+import { coerceObject, filteredArray, filteredRecord } from './utils';
 
 import type { ITimelinePicker } from '@/components/timeline-picker';
 
@@ -458,23 +458,20 @@ const settingsSchema = v.object({
     sound: v.optional(v.boolean(), true),
   }),
 
-  timelines: v.fallback(
-    v.record(
-      v.picklist([
-        'home',
-        'antenna',
-        'bubble',
-        'circle',
-        'local',
-        'group',
-        'hashtag',
-        'list',
-        'public',
-        'wrenched',
-      ]),
-      timelineFiltersSchema,
-    ),
-    {},
+  timelines: filteredRecord(
+    v.picklist([
+      'home',
+      'antenna',
+      'bubble',
+      'circle',
+      'local',
+      'group',
+      'hashtag',
+      'list',
+      'public',
+      'wrenched',
+    ]),
+    timelineFiltersSchema,
   ),
 
   account_timeline: coerceObject({
