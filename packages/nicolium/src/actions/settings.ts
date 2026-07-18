@@ -1,3 +1,4 @@
+import isEqual from 'lodash/isEqual';
 import { defineMessages } from 'react-intl';
 
 import { NODE_ENV } from '@/build-config';
@@ -9,6 +10,7 @@ import { updateMe, getClient, getCurrentAccountId, useAuthStore } from '@/stores
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 
+import type { NicoliumResponse } from '@/api';
 import type { Settings } from '@/schemas/frontend-settings';
 
 const FE_NAME = NODE_ENV === 'production' ? 'nicolium' : 'nicolium_dev';
@@ -42,31 +44,57 @@ const changeSetting = (
   if (opts?.save !== false) return saveSettings(opts, path[0] === 'storeSettingsInNotes');
 };
 
+let savePromise: Promise<void> | undefined;
+let pendingNotesChange = false;
+let showSuccessAlert = false;
+
 const saveSettings = (opts?: SettingOpts, isNotesChange?: boolean) => {
   const currentAccountId = getCurrentAccountId();
   if (typeof currentAccountId !== 'string') return;
 
-  const {
-    userSettings,
-    actions: { userSettingsSaving },
-    userSettingsLoaded,
-  } = useSettingsStore.getState();
+  const state = useSettingsStore.getState();
+  if (!state.userSettingsLoaded || state.userSettings.saved) return;
 
-  if (!userSettingsLoaded) return;
-  if (userSettings.saved) return;
+  pendingNotesChange ||= !!isNotesChange;
+  showSuccessAlert ||= !!opts?.showAlert;
 
-  const { saved, ...data } = userSettings;
+  if (savePromise) return savePromise;
 
-  updateSettingsStore(data, isNotesChange)
-    .then(() => {
-      userSettingsSaving();
-      if (opts?.showAlert) {
-        toast.success(messages.saveSuccess);
+  savePromise = (async () => {
+    try {
+      while (true) {
+        const {
+          userSettings,
+          actions: { userSettingsSaving },
+        } = useSettingsStore.getState();
+        const { saved, ...data } = userSettings;
+        const notesChange = pendingNotesChange;
+        pendingNotesChange = false;
+
+        try {
+          await updateSettingsStore(data, notesChange);
+        } catch (error) {
+          pendingNotesChange ||= notesChange;
+          throw error;
+        }
+
+        const { saved: _, ...currentData } = useSettingsStore.getState().userSettings;
+
+        if (isEqual(data, currentData)) {
+          userSettingsSaving();
+          if (showSuccessAlert) toast.success(messages.saveSuccess);
+          return;
+        }
       }
-    })
-    .catch((error) => {
-      toast.showAlertForError(error);
-    });
+    } catch (error) {
+      toast.showAlertForError(error as { response: NicoliumResponse });
+    } finally {
+      savePromise = undefined;
+      showSuccessAlert = false;
+    }
+  })();
+
+  return savePromise;
 };
 
 /** Update settings store for Mastodon, etc. */
