@@ -168,6 +168,9 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
       data.push(<Spinner />);
     }
 
+    const dataRef = useRef(data);
+    dataRef.current = data;
+
     const handleScroll = useCallback(
       debounce(
         () => {
@@ -205,12 +208,16 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
     }, [scrollParent, handleScroll]);
 
     /* Empty state rendered instead of the scrollable list. */
-    const empty = isLoading ? (
-      <Spinner />
-    ) : emptyMessageText ? (
-      <EmptyMessage text={emptyMessageText} icon={emptyMessageIcon} />
-    ) : (
-      emptyMessage
+    const empty = useMemo(
+      () =>
+        isLoading ? (
+          <Spinner />
+        ) : emptyMessageText ? (
+          <EmptyMessage text={emptyMessageText} icon={emptyMessageIcon} />
+        ) : (
+          emptyMessage
+        ),
+      [isLoading, emptyMessageText, emptyMessageIcon, emptyMessage],
     );
 
     /** Render a single item. */
@@ -228,24 +235,22 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
       }
     };
 
-    const handleLoadMoreMoveUp = () => {
+    const handleLoadMoreMoveUp = useCallback(() => {
       const parent = params.id ? (document.getElementById(params.id) ?? undefined) : undefined;
-      selectChild(data.length - 1, node, parent);
-    };
+      selectChild(dataRef.current.length - 1, node, parent);
+    }, [params.id]);
 
-    const loadMore = () => {
-      if (autoloadMore || !hasMore || !onLoadMore) {
-        return null;
-      } else {
-        const button = (
-          <LoadMore visible={!isLoading} onClick={onLoadMore} onMoveUp={handleLoadMoreMoveUp} />
-        );
+    const footer = useMemo(() => {
+      if (autoloadMore || !hasMore || !onLoadMore) return null;
 
-        if (loadMoreClassName) return <div className={loadMoreClassName}>{button}</div>;
+      const button = (
+        <LoadMore visible={!isLoading} onClick={onLoadMore} onMoveUp={handleLoadMoreMoveUp} />
+      );
 
-        return button;
-      }
-    };
+      if (loadMoreClassName) return <div className={loadMoreClassName}>{button}</div>;
+
+      return button;
+    }, [autoloadMore, hasMore, onLoadMore, isLoading, loadMoreClassName, handleLoadMoreMoveUp]);
 
     const components = useMemo<Components<React.JSX.Element, Context>>(
       () => ({
@@ -266,6 +271,11 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
       onTopItemChanged?.(range.startIndex);
       handleScroll();
     };
+
+    const context = useMemo<Context>(
+      () => ({ listClassName, itemClassName, prepend, footer, empty }),
+      [listClassName, itemClassName, prepend, footer, empty],
+    );
 
     /** Figure out the initial index to scroll to. */
     const initialIndex = useMemo<number | IndexLocationWithAlign>(() => {
@@ -314,13 +324,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
         itemContent={renderItem}
         initialTopMostItemIndex={initialIndex}
         rangeChanged={handleRangeChange}
-        context={{
-          listClassName,
-          itemClassName,
-          prepend,
-          footer: loadMore(),
-          empty,
-        }}
+        context={context}
         components={components}
       />
     );
