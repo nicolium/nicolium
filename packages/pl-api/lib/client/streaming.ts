@@ -73,10 +73,10 @@ const streaming = (client: PlApiBaseClient) => ({
       listen: (listener, stream) => listeners.push({ listener, stream }),
       unlisten: (listener) =>
         (listeners = listeners.filter((value) => value.listener !== listener)),
-      subscribe: (stream, { list, tag } = {}) =>
-        enqueue(() => ws.send(JSON.stringify({ type: 'subscribe', stream, list, tag }))),
-      unsubscribe: (stream, { list, tag } = {}) =>
-        enqueue(() => ws.send(JSON.stringify({ type: 'unsubscribe', stream, list, tag }))),
+      subscribe: (stream, params = {}) =>
+        enqueue(() => ws.send(JSON.stringify({ type: 'subscribe', stream, ...params }))),
+      unsubscribe: (stream, params = {}) =>
+        enqueue(() => ws.send(JSON.stringify({ type: 'unsubscribe', stream, ...params }))),
       onDisconnect: (callback) => {
         disconnectCallbacks.push(callback);
         return () => {

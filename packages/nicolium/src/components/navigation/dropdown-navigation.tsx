@@ -274,16 +274,11 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <div className='dropdown-navigation__overlay' role='button' onClick={handleClose} />
+      <div className='dropdown-navigation__overlay' role='presentation' onClick={handleClose} />
 
-      <div
-        className='dropdown-navigation'
-        id='dropdown-navigation'
-        role='menu'
-        data-active-page={page}
-      >
+      <nav className='dropdown-navigation' id='dropdown-navigation' data-active-page={page}>
         <div className='dropdown-navigation__pages'>
-          <div className='dropdown-navigation__page' aria-hidden={page !== 'main'}>
+          <div className='dropdown-navigation__page' inert={page !== 'main'}>
             {renderNavigationItems(navigationItems)}
 
             {account ? (
@@ -367,7 +362,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
             )}
           </div>
           {moreItems.length > 0 && (
-            <div className='dropdown-navigation__page' aria-hidden={page !== 'more'}>
+            <div className='dropdown-navigation__page' inert={page !== 'more'}>
               <div className='dropdown-navigation__page__header'>
                 <button
                   type='button'
@@ -387,7 +382,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
             </div>
           )}
         </div>
-      </div>
+      </nav>
     </div>
   );
 });
