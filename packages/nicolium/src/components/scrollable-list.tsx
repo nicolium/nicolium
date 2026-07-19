@@ -188,7 +188,6 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
     );
 
     useEffect(() => {
-      document.addEventListener('scroll', handleScroll);
       sessionStorage.removeItem(scrollDataKey);
 
       return () => {
@@ -196,9 +195,14 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
           const data: SavedScrollPosition = { index: topIndex.current, offset: topOffset.current };
           sessionStorage.setItem(scrollDataKey, JSON.stringify(data));
         }
-        document.removeEventListener('scroll', handleScroll);
       };
     }, []);
+
+    useEffect(() => {
+      const target: HTMLElement | Document = scrollParent ?? document;
+      target.addEventListener('scroll', handleScroll);
+      return () => target.removeEventListener('scroll', handleScroll);
+    }, [scrollParent, handleScroll]);
 
     /* Empty state rendered instead of the scrollable list. */
     const empty = isLoading ? (
