@@ -25,7 +25,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
     hoverable = false;
   }
 
-  const handleOpenMentionsModal: React.MouseEventHandler<HTMLSpanElement> = (e) => {
+  const handleOpenMentionsModal: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
 
     openModal('MENTIONS', { statusId: status.id });
@@ -100,10 +100,10 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
 
   if (to.length > 2) {
     accounts.push(
-      <span
+      <button
         key='more'
         className='status-reply-mentions__hover'
-        role='button'
+        type='button'
         onClick={handleOpenMentionsModal}
         tabIndex={0}
       >
@@ -112,7 +112,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
           defaultMessage='{count} more'
           values={{ count: to.length - 2 }}
         />
-      </span>,
+      </button>,
     );
   }
 
