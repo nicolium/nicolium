@@ -10,6 +10,11 @@ import Screenshot3 from "../assets/screenshot3.png";
 import Screenshot4 from "../assets/screenshot4.png";
 import Screenshot5 from "../assets/screenshot5.png";
 import Screenshot6 from "../assets/screenshot6.png";
+
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 1);
+const latestPost = posts[0];
 ---
 
 <!doctype html>
@@ -34,6 +39,8 @@ import Screenshot6 from "../assets/screenshot6.png";
         button2Text="Source code"
         button2Link="https://codeberg.org/nicolium/nicolium"
         button2Target="_blank"
+        latestPost={latestPost}
+        latestPostTag="New post"
       />
       <section class="sections">
         <div class="container">
