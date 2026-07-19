@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 import { findStatuses } from '@/queries/statuses/use-status';
+import { compareId } from '@/utils/comparators';
 import { hasActiveFilters, isEntryFiltered } from '@/utils/timeline-filter';
 
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
@@ -247,7 +248,7 @@ const useTimelinesStore = create<State>()(
           )
             return;
 
-          if (!timeline.newestStatusId || timeline.newestStatusId.localeCompare(status.id) < 0) {
+          if (!timeline.newestStatusId || compareId(status.id, timeline.newestStatusId) > 0) {
             timeline.newestStatusId = status.id;
           }
           timeline.queuedEntries.unshift(status);
@@ -299,7 +300,10 @@ const useTimelinesStore = create<State>()(
 
           const processedEntries = processPage(timeline.queuedEntries);
 
-          timeline.newestStatusId = timeline.queuedEntries.toSorted().at(-1)!.id;
+          timeline.newestStatusId = timeline.queuedEntries.reduce(
+            (newest, status) => (compareId(status.id, newest) > 0 ? status.id : newest),
+            timeline.queuedEntries[0].id,
+          );
           timeline.entries.unshift(...processedEntries);
           timeline.queuedEntries = [];
           timeline.queuedCount = 0;
