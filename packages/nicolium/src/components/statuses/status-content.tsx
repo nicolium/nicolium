@@ -472,7 +472,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
 
       if (status.content) {
         const originalContent = (
-          <p
+          <div
             ref={contentNode}
             tabIndex={0}
             key='content'
@@ -482,7 +482,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             data-markup
           >
             {parsedContent}
-          </p>
+          </div>
         );
 
         if (translationContent && parsedTranslationContent && !isTranslationEqual) {
@@ -490,7 +490,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             <div className='status-translation' key='translated-content'>
               <div>{originalContent}</div>
               <div>
-                <p
+                <div
                   ref={translationNode}
                   tabIndex={0}
                   className={className}
@@ -499,7 +499,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
                   data-markup
                 >
                   {parsedTranslationContent}
-                </p>
+                </div>
               </div>
             </div>,
           );

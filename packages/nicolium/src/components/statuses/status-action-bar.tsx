@@ -1518,7 +1518,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       openModal('CONFIRM', {
         heading: intl.formatMessage(messages.deleteHeading),
         message: intl.formatMessage(messages.deleteFromGroupMessage, {
-          name: <strong className='break-words'>{account.username}</strong>,
+          name: <strong>{account.username}</strong>,
         }),
         confirm: intl.formatMessage(messages.deleteConfirm),
         onConfirm: () => {

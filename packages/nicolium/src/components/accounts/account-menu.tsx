@@ -456,14 +456,14 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
           <FormattedMessage
             id='confirmations.remove_from_followers.heading'
             defaultMessage='Remove {name} from followers'
-            values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+            values={{ name: <strong>@{account.acct}</strong> }}
           />
         ),
         message: (
           <FormattedMessage
             id='confirmations.remove_from_followers.message'
             defaultMessage='Are you sure you want to remove {name} from your followers?'
-            values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+            values={{ name: <strong>@{account.acct}</strong> }}
           />
         ),
         confirm: (

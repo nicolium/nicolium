@@ -230,14 +230,14 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username, with
         <div className='account-info__container' ref={accountInfoNode}>
           <div className={clsx('account-info', { 'account-info--collapsed': collapsed })}>
             {!!account.note && (
-              <p className='account-info__note break-words' data-markup>
+              <div className='account-info__note' data-markup>
                 <ParsedContent
                   html={account.note}
                   emojis={account.emojis}
                   speakAsCat={account.speak_as_cat}
                   displayMentionAvatars={displayMentionAvatars}
                 />
-              </p>
+              </div>
             )}
 
             <div className='account-info__details'>

@@ -29,7 +29,7 @@ const AccountFilter: React.FC<IAccountFilter> = ({ accountId, handleUnsetAccount
         <FormattedMessage
           id='search_results.filter_message'
           defaultMessage='You are searching for posts from @{acct}.'
-          values={{ acct: <strong className='break-words'>{account?.acct}</strong> }}
+          values={{ acct: <strong>{account?.acct}</strong> }}
         />
       </p>
     </div>

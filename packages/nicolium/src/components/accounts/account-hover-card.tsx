@@ -206,9 +206,9 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
           {!!scrobble && <Scrobble scrobble={scrobble} />}
 
           {account.note.length > 0 && (
-            <p className='account-hover-card__note'>
+            <div className='account-hover-card__note'>
               <ParsedContent html={account.note} emojis={account.emojis} />
-            </p>
+            </div>
           )}
         </div>
 

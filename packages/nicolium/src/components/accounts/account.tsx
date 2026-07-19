@@ -489,13 +489,13 @@ const Account = ({
             <p className='account-card__note'>{note}</p>
           ) : (
             withAccountNote && (
-              <p className='account-card__bio'>
+              <div className='account-card__bio'>
                 <ParsedContent
                   html={account.note}
                   emojis={account.emojis}
                   speakAsCat={account.speak_as_cat}
                 />
-              </p>
+              </div>
             )
           )}
         </div>

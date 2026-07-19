@@ -145,13 +145,13 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
             <FormattedMessage
               id='confirmations.mute.message'
               defaultMessage='Are you sure you want to mute {name}?'
-              values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+              values={{ name: <strong>@{account.acct}</strong> }}
             />
           ) : (
             <FormattedMessage
               id='confirmations.block.message'
               defaultMessage='Are you sure you want to block {name}?'
-              values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+              values={{ name: <strong>@{account.acct}</strong> }}
             />
           )}
         </p>
