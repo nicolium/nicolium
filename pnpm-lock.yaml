@@ -502,7 +502,7 @@ importers:
         version: 3.7.2
       '@mkljczk/astro-theme':
         specifier: github:mkljczk/mkljczk-astro-theme
-        version: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/9518edadc526243437e67a637f8951c7353f7ec2(astro@6.1.10(@types/node@25.6.0)(lightningcss@1.32.0)(rollup@4.60.3)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(typescript@5.9.3)(yaml@2.8.3))
+        version: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/285f1003ddfb1676adbdb4a2d9024ec173b5af98(astro@6.1.10(@types/node@25.6.0)(lightningcss@1.32.0)(rollup@4.60.3)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(typescript@5.9.3)(yaml@2.8.3))
       astro:
         specifier: ^6.1.10
         version: 6.1.10(@types/node@25.6.0)(lightningcss@1.32.0)(rollup@4.60.3)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(typescript@5.9.3)(yaml@2.8.3)
@@ -1968,8 +1968,8 @@ packages:
   '@microsoft/tsdoc@0.15.1':
     resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
 
-  '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/9518edadc526243437e67a637f8951c7353f7ec2':
-    resolution: {gitHosted: true, integrity: sha512-b1VJJadfk+3xOjWHMCvJWma2/c/miJwggFHwdl780bYM8Slv3eveBexScBN14IR7VqhkzUkZ5a1WTMdjtbkm8w==, tarball: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/9518edadc526243437e67a637f8951c7353f7ec2}
+  '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/285f1003ddfb1676adbdb4a2d9024ec173b5af98':
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/285f1003ddfb1676adbdb4a2d9024ec173b5af98}
     version: 0.0.1
     peerDependencies:
       astro: ^5.0.0
@@ -8849,7 +8849,7 @@ snapshots:
 
   '@microsoft/tsdoc@0.15.1': {}
 
-  '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/9518edadc526243437e67a637f8951c7353f7ec2(astro@6.1.10(@types/node@25.6.0)(lightningcss@1.32.0)(rollup@4.60.3)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(typescript@5.9.3)(yaml@2.8.3))':
+  '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/285f1003ddfb1676adbdb4a2d9024ec173b5af98(astro@6.1.10(@types/node@25.6.0)(lightningcss@1.32.0)(rollup@4.60.3)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(typescript@5.9.3)(yaml@2.8.3))':
     dependencies:
       astro: 6.1.10(@types/node@25.6.0)(lightningcss@1.32.0)(rollup@4.60.3)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(typescript@5.9.3)(yaml@2.8.3)
 

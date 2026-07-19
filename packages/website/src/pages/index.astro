@@ -1,4 +1,5 @@
 ---
+import { getCollection } from "astro:content";
 import BaseHead from "@mkljczk/astro-theme/components/BaseHead.astro";
 import Hero from "@mkljczk/astro-theme/components/Hero.astro";
 import Section from "@mkljczk/astro-theme/components/Section.astro";
@@ -47,7 +48,19 @@ const latestPost = posts[0];
           <Section
             heading="Use with your favorite Fediverse platform."
             subheading="Nicolium works with any backend implementing Mastodon API."
-          />
+          >
+            <ul class="backends" slot="image">
+              <li>Mastodon</li>
+              <li>Pleroma</li>
+              <li>Akkoma</li>
+              <li>Iceshrimp.NET</li>
+              <li>GoToSocial</li>
+              <li>Sharkey</li>
+              <li>Hollo</li>
+              <li>Mitra</li>
+              <li class="backend--dashed">and more...</li>
+            </ul>
+          </Section>
           <Section
             heading="Feature-rich."
             subheading="Nicolium includes a lot of features to improve your experience, like WYSIWYG text editor, draft posts and language detection."
@@ -91,6 +104,29 @@ const latestPost = posts[0];
   </body><style>
     .sections {
       padding: 2rem 0;
+    }
+
+    .backends {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .5rem;
+      margin: 0 auto;
+
+      li {
+        padding: .25rem .875rem;
+        border: 1px solid var(--color-border);
+        border-radius: 256rem;
+        background-color: var(--color-card-bg);
+        font-size: .875rem;
+        color: var(--color-text-secondary);
+
+        &.backend--dashed {
+          background-color: transparent;
+          border-style: dashed;
+        }
+      }
     }
   </style>
 </html>
