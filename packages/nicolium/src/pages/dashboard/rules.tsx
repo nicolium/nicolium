@@ -78,7 +78,7 @@ const RulesPage: React.FC = () => {
   const intl = useIntl();
 
   const { openModal } = useModalsActions();
-  const { data, isLoading } = useRules();
+  const { data = [], isLoading } = useRules();
 
   const handleCreateRule = () => {
     openModal('EDIT_RULE');
@@ -105,7 +105,7 @@ const RulesPage: React.FC = () => {
           isLoading={isLoading}
           showLoading={isLoading}
         >
-          {data!.map((rule) => (
+          {data.map((rule) => (
             <Rule key={rule.id} rule={rule} />
           ))}
         </ScrollableList>
