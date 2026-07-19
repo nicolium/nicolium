@@ -29,6 +29,15 @@ const messages = defineMessages({
   deleteCircle: { id: 'circles.delete', defaultMessage: 'Delete circle' },
 });
 
+const FiltersHint = () => (
+  <p className='timeline-filters-options__hint'>
+    <FormattedMessage
+      id='timeline_filters.hint.circle'
+      defaultMessage='These filters apply to all circles.'
+    />
+  </p>
+);
+
 const CircleTimelinePage: React.FC = () => {
   const { circleId } = circleTimelineRoute.useParams();
 
@@ -100,7 +109,12 @@ const CircleTimelinePage: React.FC = () => {
       action={
         <>
           <TimelineRefreshButton timelineId={timelineId} />
-          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+          <DropdownMenu
+            items={items}
+            component={FiltersHint}
+            src={iconDotsThreeVertical}
+            forceDropdown
+          />
         </>
       }
       title={<TimelinePicker active={timelineId} />}

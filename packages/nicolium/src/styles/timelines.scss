@@ -315,3 +315,17 @@
 .circle-timeline__add {
   @include mixins.button($theme: secondary);
 }
+
+.timeline-filters-options__hint {
+  @include mixins.text($size: sm, $theme: muted,);
+
+  margin: 0.5rem;
+  padding: 0.5rem 0.5rem 1rem;
+  border-bottom: 1px solid var(--color-gray-100);
+  color: var(--color-gray-700);
+
+  .dark & {
+    border-color: var(--color-gray-800);
+    color: var(--color-gray-300);
+  }
+}

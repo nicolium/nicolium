@@ -11,6 +11,15 @@ import { hashtagTimelineRoute } from '@/router';
 
 import HashtagFollowToggle from './components/hashtag-follow-toggle';
 
+const FiltersHint = () => (
+  <p className='timeline-filters-options__hint'>
+    <FormattedMessage
+      id='timeline_filters.hint.hashtag'
+      defaultMessage='These filters apply to all hashtags.'
+    />
+  </p>
+);
+
 const HashtagTimelinePage: React.FC = () => {
   const { hashtag } = hashtagTimelineRoute.useParams();
 
@@ -22,7 +31,12 @@ const HashtagTimelinePage: React.FC = () => {
       action={
         <>
           <TimelineRefreshButton timelineId={`hashtag:${hashtag}`} />
-          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+          <DropdownMenu
+            items={items}
+            component={FiltersHint}
+            src={iconDotsThreeVertical}
+            forceDropdown
+          />
         </>
       }
     >

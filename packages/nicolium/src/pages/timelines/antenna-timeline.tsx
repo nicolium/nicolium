@@ -29,6 +29,15 @@ const messages = defineMessages({
   deleteAntenna: { id: 'antennas.delete', defaultMessage: 'Delete antenna' },
 });
 
+const FiltersHint = () => (
+  <p className='timeline-filters-options__hint'>
+    <FormattedMessage
+      id='timeline_filters.hint.antenna'
+      defaultMessage='These filters apply to all antennas.'
+    />
+  </p>
+);
+
 const AntennaTimelinePage: React.FC = () => {
   const { antennaId } = antennaTimelineRoute.useParams();
 
@@ -101,7 +110,12 @@ const AntennaTimelinePage: React.FC = () => {
       action={
         <>
           <TimelineRefreshButton timelineId={timelineId} />
-          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+          <DropdownMenu
+            items={items}
+            component={FiltersHint}
+            src={iconDotsThreeVertical}
+            forceDropdown
+          />
         </>
       }
       title={<TimelinePicker active={timelineId} />}

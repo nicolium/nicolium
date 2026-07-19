@@ -30,6 +30,15 @@ const messages = defineMessages({
   notFound: { id: 'list.not_found.heading', defaultMessage: 'List not found' },
 });
 
+const FiltersHint = () => (
+  <p className='timeline-filters-options__hint'>
+    <FormattedMessage
+      id='timeline_filters.hint.list'
+      defaultMessage='These filters apply to all lists.'
+    />
+  </p>
+);
+
 const ListTimelinePage: React.FC = () => {
   const { listId } = listTimelineRoute.useParams();
 
@@ -120,7 +129,12 @@ const ListTimelinePage: React.FC = () => {
       action={
         <>
           <TimelineRefreshButton timelineId={timelineId} />
-          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
+          <DropdownMenu
+            items={items}
+            component={FiltersHint}
+            src={iconDotsThreeVertical}
+            forceDropdown
+          />
         </>
       }
     >
