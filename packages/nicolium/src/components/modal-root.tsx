@@ -269,8 +269,10 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
             role={type === 'CONFIRM' ? 'alertdialog' : 'dialog'}
             className='modal-root__container'
             aria-modal
-            aria-labelledby='modal-title'
-            aria-describedby='modal-description'
+            aria-labelledby={document.getElementById('modal-title') ? 'modal-title' : undefined}
+            aria-describedby={
+              document.getElementById('modal-description') ? 'modal-description' : undefined
+            }
           >
             {children}
           </div>

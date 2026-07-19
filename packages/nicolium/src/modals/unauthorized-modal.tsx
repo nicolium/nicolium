@@ -234,7 +234,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
       }
     >
       <div className='unauthorized-modal'>
-        <p className='unauthorized-modal__text'>
+        <p className='unauthorized-modal__text' id='modal-description'>
           <FormattedMessage
             id='unauthorized_modal.text'
             defaultMessage='You need to be logged in to do that.'

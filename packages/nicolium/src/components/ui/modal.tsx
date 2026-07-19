@@ -151,7 +151,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
 
               <div className='modal__actions__cancel'>
                 {cancelAction && (
-                  <button className='modal__action-cancel' onClick={cancelAction}>
+                  <button className='modal__action-cancel' onClick={cancelAction} type='button'>
                     {cancelText ?? <FormattedMessage id='common.cancel' defaultMessage='Cancel' />}
                   </button>
                 )}
@@ -160,6 +160,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
               <div className='modal__actions__other'>
                 {secondaryAction && (
                   <button
+                    type='button'
                     className='modal__action-secondary'
                     onClick={secondaryAction}
                     disabled={secondaryDisabled}
@@ -169,6 +170,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
                 )}
 
                 <button
+                  type='button'
                   className={clsx('modal__action', {
                     'modal__action--danger': confirmationTheme === 'danger',
                   })}
