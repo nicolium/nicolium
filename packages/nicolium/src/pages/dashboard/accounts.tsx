@@ -1,3 +1,4 @@
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import { useNavigate } from '@tanstack/react-router';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -11,12 +12,15 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
+import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Toggle from '@/components/ui/toggle';
 import { useDebounce } from '@/hooks/use-debounce';
+import { useFeatures } from '@/hooks/use-features';
 import { useAdminAccounts } from '@/queries/admin/use-accounts';
 import { adminAccountsRoute } from '@/router';
+import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.accounts', defaultMessage: 'Accounts' },
@@ -243,6 +247,8 @@ const Filters: React.FC = () => {
 
 const AccountsPage: React.FC = () => {
   const intl = useIntl();
+  const features = useFeatures();
+  const { openModal } = useModalsActions();
 
   const params = adminAccountsRoute.useSearch();
   const debouncedParams = useDebounce(params, 1000);
@@ -255,8 +261,18 @@ const AccountsPage: React.FC = () => {
     fetchNextPage,
   } = useAdminAccounts(debouncedParams);
 
+  const handleCreateAccount = () => {
+    openModal('CREATE_ACCOUNT');
+  };
+
   return (
     <Column label={intl.formatMessage(messages.heading)} bodyClassName='admin-accounts-page'>
+      {features.pleromaAdminAccounts && (
+        <button className='admin-accounts-page__create' onClick={handleCreateAccount}>
+          <Icon src={iconPlus} aria-hidden />
+          <FormattedMessage id='admin.accounts.action' defaultMessage='Create account' />
+        </button>
+      )}
       <Filters />
       <ScrollableList
         scrollKey='userIndex'

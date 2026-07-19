@@ -608,6 +608,15 @@ a.measure__container {
   flex-direction: column;
   gap: 1rem;
 
+  &__create {
+    @include mixins.button($theme: secondary, $block: true);
+
+    @media (min-width: variables.$breakpoint-sm) {
+      align-self: flex-end;
+      width: fit-content;
+    }
+  }
+
   &__reset {
     @include mixins.button($theme: primary);
   }

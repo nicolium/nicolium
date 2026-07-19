@@ -33,6 +33,8 @@ interface AdminCreateAccountParams {
   nickname: string;
   email: string;
   password: string;
+  /** String. ID of the domain for the new account, when multitenancy mode is enabled. */
+  domain?: string;
 }
 
 /**

@@ -19,6 +19,7 @@ import type {
   AdminAccount,
   AdminAccountAction,
   AdminAccountUpdateCredentialsParams,
+  AdminCreateAccountParams,
   AdminGetAccountsParams,
   AdminPerformAccountActionParams,
   PaginatedResponse,
@@ -391,6 +392,23 @@ const useAdminUpdateAccountCredentialsMutation = (accountId: string) => {
   });
 };
 
+const useAdminCreateAccountMutation = () => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: ['admin', 'accounts', 'create'],
+    mutationFn: (params: AdminCreateAccountParams) => client.admin.accounts.createAccount(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.admin.accountLists.root, scopeUrl),
+        exact: false,
+      });
+    },
+  });
+};
+
 export {
   useAdminAccount,
   useAdminAccounts,
@@ -409,4 +427,5 @@ export {
   useAdminSetRoleMutation,
   useAdminResetAccountPasswordMutation,
   useAdminUpdateAccountCredentialsMutation,
+  useAdminCreateAccountMutation,
 };

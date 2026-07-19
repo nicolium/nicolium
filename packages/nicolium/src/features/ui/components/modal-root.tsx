@@ -21,6 +21,7 @@ const MODAL_COMPONENTS = {
   COMPOSE: lazy(() => import('@/modals/compose-modal')),
   COMPOSE_INTERACTION_POLICY: lazy(() => import('@/modals/compose-interaction-policy-modal')),
   CONFIRM: lazy(() => import('@/modals/confirmation-modal')),
+  CREATE_ACCOUNT: lazy(() => import('@/modals/create-account-modal')),
   CREATE_GROUP: lazy(() => import('@/modals/manage-group-modal')),
   CRYPTO_DONATE: lazy(() => import('@/modals/crypto-donate-modal')),
   DISLIKES: lazy(() => import('@/modals/dislikes-modal')),

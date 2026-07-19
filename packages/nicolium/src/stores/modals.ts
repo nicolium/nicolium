@@ -59,6 +59,7 @@ type OpenModalType = {
   COMPOSE: ComposeModalProps;
   COMPOSE_INTERACTION_POLICY: ComposeInteractionPolicyModalProps;
   CONFIRM: ConfirmationModalProps;
+  CREATE_ACCOUNT: undefined;
   CREATE_GROUP: undefined;
   CRYPTO_DONATE: ICryptoAddress;
   DISLIKES: DislikesModalProps;
