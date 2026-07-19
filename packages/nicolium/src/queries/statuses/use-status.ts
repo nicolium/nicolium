@@ -81,7 +81,8 @@ const useStatusQuery = (statusId?: string) => {
 
 const emptyFilters: Array<Filter> = [];
 const emptyFilterResults: Array<FilterResult> = [];
-const selectAllFilters = (data: Array<Filter>) => data;
+const selectActiveFilters = (data: Array<Filter>) =>
+  data.filter((filter) => filter.expires_at === null || Date.parse(filter.expires_at) > Date.now());
 const selectNoFilters = () => emptyFilters;
 
 const useStatus = (
@@ -94,7 +95,9 @@ const useStatus = (
   const features = useFeatures();
   const withClientSideFilters = !!(features.filters && !features.filtersV2 && withFilteredResults);
 
-  const { data: filters } = useFilters(withClientSideFilters ? selectAllFilters : selectNoFilters);
+  const { data: filters } = useFilters(
+    withClientSideFilters ? selectActiveFilters : selectNoFilters,
+  );
 
   const { refetch: refetchContext } = useStatusContext(withContext ? statusId : undefined);
 
