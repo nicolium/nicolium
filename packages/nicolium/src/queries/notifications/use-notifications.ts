@@ -232,10 +232,15 @@ const useProcessStreamNotification = () => {
 
       const normalizedNotification = normalizeNotification(notification);
 
-      prependNotification(normalizedNotification, 'all', scopeUrl);
+      prependNotification(normalizedNotification, 'all', scopeUrl, notification.account.bot);
 
       if (shouldDisplayNotification(notification.type, activeFilter)) {
-        prependNotification(normalizedNotification, activeFilter, scopeUrl);
+        prependNotification(
+          normalizedNotification,
+          activeFilter,
+          scopeUrl,
+          notification.account.bot,
+        );
       }
 
       if (normalizedNotification.type === 'follow_request') {
@@ -348,8 +353,11 @@ const prependNotification = (
   notification: NotificationGroup,
   filter: FilterType,
   scopeUrl: string,
+  isBot = false,
 ) => {
   for (const hideBots of [false, true]) {
+    if (hideBots && isBot) continue;
+
     queryClient.setQueryData(
       scopedQueryKey(queryKeys.notifications.list(filter, hideBots), scopeUrl),
       (data) => {
