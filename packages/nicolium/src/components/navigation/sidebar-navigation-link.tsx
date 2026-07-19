@@ -30,6 +30,7 @@ const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
     const { demetricator } = useSettings();
 
     const LinkComponent = (rest.href ? 'a' : to === undefined ? 'button' : Link) as typeof Link;
+    const isRouterLink = LinkComponent === Link;
 
     if (rest.href) {
       rest.target = '_blank';
@@ -38,10 +39,16 @@ const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
 
     const isActive = matchRoute({ to, ...rest }) !== false;
 
+    const activeLinkProps = isRouterLink
+      ? {
+          activeOptions: { exact: true, includeSearch: false },
+          activeProps: { className: 'sidebar-navigation-link--active' },
+        }
+      : {};
+
     return (
       <LinkComponent
-        activeOptions={{ exact: true, includeSearch: false }}
-        activeProps={{ className: 'sidebar-navigation-link--active' }}
+        {...activeLinkProps}
         to={to}
         ref={ref}
         onClick={onClick}
