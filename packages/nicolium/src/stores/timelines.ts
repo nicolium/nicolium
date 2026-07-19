@@ -324,7 +324,7 @@ const useTimelinesStore = create<State>()(
 
           timeline.entries.splice(gapIndex, 1);
 
-          if (gapIndex === 0) {
+          if (gapIndex === 0 && statuses.length > 0) {
             timeline.newestStatusId = statuses[0].id;
           }
 

@@ -28,18 +28,20 @@ const messages = defineMessages({
   },
 });
 
+const loginErrorMessage = (error: any) => {
+  if (error.response?.status || !error.message) {
+    return messages.instanceFailed;
+  }
+  if (error.message === 'Timeout') {
+    return messages.networkFailed;
+  }
+  return messages.corsFailed;
+};
+
 const handleExternalLogin = (host: string, switchAccount = true) =>
   externalLogin(host, switchAccount).catch((error) => {
     console.error(error);
-    const status = error.response?.status;
-
-    if (status || !error.message) {
-      toast.error(messages.instanceFailed);
-    } else if (error.message === 'NetworkError when attempting to fetch resource.') {
-      toast.error(messages.corsFailed);
-    } else if (!status && ['Network request failed', 'Timeout'].includes(error.message)) {
-      toast.error(messages.networkFailed);
-    }
+    toast.error(loginErrorMessage(error));
   });
 
 /** Form for logging into a remote instance */
@@ -55,6 +57,7 @@ const ExternalLoginForm: React.FC = () => {
 
   const [host, setHost] = useState(server ?? '');
   const [isLoading, setLoading] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   const handleHostChange: React.ChangeEventHandler<HTMLInputElement> = ({ currentTarget }) => {
     setHost(currentTarget.value);
@@ -62,25 +65,17 @@ const ExternalLoginForm: React.FC = () => {
 
   const handleError = (error: any) => {
     console.error(error);
-    const status = error.response?.status;
-
-    if (status || !error.message) {
-      toast.error(messages.instanceFailed);
-    } else if (error.message === 'NetworkError when attempting to fetch resource.') {
-      toast.error(messages.corsFailed);
-    } else if (!status && ['Network request failed', 'Timeout'].includes(error.message)) {
-      toast.error(messages.networkFailed);
-    }
+    toast.error(loginErrorMessage(error));
 
     setLoading(false);
+    setFailed(true);
   };
 
   const handleSubmit = () => {
     setLoading(true);
+    setFailed(false);
 
-    handleExternalLogin(host, switchAccount).finally(() => {
-      setLoading(false);
-    });
+    externalLogin(host).catch(handleError);
   };
 
   const handleGuest = () => {
@@ -110,7 +105,7 @@ const ExternalLoginForm: React.FC = () => {
     }
   }, [server]);
 
-  if (code || server) {
+  if ((code || server) && !failed) {
     return <Spinner />;
   }
 
@@ -124,6 +119,7 @@ const ExternalLoginForm: React.FC = () => {
           placeholder={intl.formatMessage(messages.instancePlaceholder)}
           type='text'
           name='host'
+          value={host}
           onChange={handleHostChange}
           autoCorrect='off'
           autoCapitalize='off'
