@@ -1,7 +1,7 @@
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import range from 'lodash/range';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { usePrevious } from '@/hooks/use-previous';
@@ -46,6 +46,8 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   const { openModal } = useModalsActions();
 
   const [revealed, setRevealed] = useState(!!children);
+  const [hasTitle, setHasTitle] = useState(false);
+  const [hasDescription, setHasDescription] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
   const activeElement = useRef<HTMLDivElement | null>(
@@ -247,6 +249,11 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
     }
   }, [children]);
 
+  useLayoutEffect(() => {
+    setHasTitle(document.getElementById('modal-title') !== null);
+    setHasDescription(document.getElementById('modal-description') !== null);
+  }, [visible]);
+
   return (
     <div
       ref={ref}
@@ -269,10 +276,8 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
             role={type === 'CONFIRM' ? 'alertdialog' : 'dialog'}
             className='modal-root__container'
             aria-modal
-            aria-labelledby={document.getElementById('modal-title') ? 'modal-title' : undefined}
-            aria-describedby={
-              document.getElementById('modal-description') ? 'modal-description' : undefined
-            }
+            aria-labelledby={hasTitle ? 'modal-title' : undefined}
+            aria-describedby={hasDescription ? 'modal-description' : undefined}
           >
             {children}
           </div>
