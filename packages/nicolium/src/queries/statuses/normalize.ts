@@ -79,9 +79,11 @@ const normalizeStatus = (
   const searchIndex = getSearchIndex(status, oldStatus, poll);
 
   // Sort the replied-to mention to the top
-  let mentions = status.mentions.toSorted((a, _b) => {
+  let mentions = status.mentions.toSorted((a, b) => {
     if (a.id === status.in_reply_to_account_id) {
       return -1;
+    } else if (b.id === status.in_reply_to_account_id) {
+      return 1;
     } else {
       return 0;
     }
@@ -93,7 +95,7 @@ const normalizeStatus = (
   const isSelfReply = accountId === status.in_reply_to_account_id;
   const hasSelfMention = status.mentions.some((mention) => accountId === mention.id);
 
-  if (isSelfReply && !hasSelfMention) {
+  if (isSelfReply && !hasSelfMention && account) {
     const selfMention = v.parse(mentionSchema, account);
     mentions = [selfMention, ...mentions];
   }
