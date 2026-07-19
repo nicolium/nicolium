@@ -129,6 +129,13 @@ const AntennaTimelinePage: React.FC = () => {
               id='empty_column.antenna'
               defaultMessage='There is nothing in this antenna yet. When posts matching the criteria will be created, they will appear here.'
             />
+            <br />
+            <button type='button' className='list-timeline__add' onClick={handleEditClick}>
+              <FormattedMessage
+                id='antenna.click_to_add'
+                defaultMessage='Click here to edit antenna'
+              />
+            </button>
           </div>
         }
         emptyMessageIcon={iconChatCenteredText}

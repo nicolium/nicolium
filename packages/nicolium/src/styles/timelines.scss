@@ -308,12 +308,9 @@
   }
 
   &__add {
+    margin-top: 1rem;
     @include mixins.button($theme: secondary);
   }
-}
-
-.circle-timeline__add {
-  @include mixins.button($theme: secondary);
 }
 
 .timeline-filters-options__hint {

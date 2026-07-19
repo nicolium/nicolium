@@ -129,8 +129,7 @@ const CircleTimelinePage: React.FC = () => {
               defaultMessage='There is nothing in this circle yet. When members of this circle create new posts, they will appear here.'
             />
             <br />
-            <br />
-            <button type='button' className='circle-timeline__add' onClick={handleEditClick}>
+            <button type='button' className='list-timeline__add' onClick={handleEditClick}>
               <FormattedMessage
                 id='circle.click_to_add'
                 defaultMessage='Click here to add people'

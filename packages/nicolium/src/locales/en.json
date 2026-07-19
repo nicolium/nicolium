@@ -486,6 +486,7 @@
   "alt_text_modal.save.fail": "Failed to save alt text",
   "announcements.empty": "There are no announcements at the moment.",
   "announcements.title": "Announcements",
+  "antenna.click_to_add": "Click here to edit antenna",
   "antennas.account.add": "Add to antenna",
   "antennas.account.excluded.add": "Add to excluded accounts",
   "antennas.account.excluded.list": "Excluded accounts list",
