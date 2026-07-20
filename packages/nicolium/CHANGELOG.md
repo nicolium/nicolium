@@ -34,7 +34,7 @@
 - Notification count is not be displayed on instances that don't support timeline markers.
 - Federation restrictions and account recommendations are displayed on lower breakpoints now.
 - When self-note limit is exceeded, a toast message is displayed and the setting backup is disabled.
-- Updated translations: Dutch, French (thanks to Capitaine Caverne), Polish.
+- Updated translations: Dutch, French (thanks to Capitaine Caverne and Aris), German (thanks to vinzw), Polish.
 - Restored some tests.
 - Migrated from the deprecated Icon component.
 
