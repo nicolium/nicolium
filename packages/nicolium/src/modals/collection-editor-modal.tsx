@@ -16,6 +16,7 @@ import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Spinner from '@/components/ui/spinner';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
+import Search from '@/modals/list-editor-modal/components/search';
 import { languages } from '@/pages/settings/components/preferences';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
@@ -29,8 +30,6 @@ import {
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
-
-import Search from './list-editor-modal/components/search';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { Account } from 'pl-api';

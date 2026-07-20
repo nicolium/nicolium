@@ -13,6 +13,7 @@ import Modal from '@/components/ui/modal';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Spinner from '@/components/ui/spinner';
 import Toggle from '@/components/ui/toggle';
+import { AccountMembersList } from '@/modals/list-editor-modal/components/account-members-list';
 import {
   useAddAccountsToAntenna,
   useAddDomainsToAntenna,
@@ -43,9 +44,6 @@ import { useLists } from '@/queries/accounts/use-lists';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
-
-import Account from './list-editor-modal/components/account';
-import Search from './list-editor-modal/components/search';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
@@ -116,87 +114,48 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
 
   return (
     <div className='list-members-modal__form__container'>
-      {selectedAccountIds.length > 0 ? (
-        <div className='list-members-modal__form'>
-          <CardHeader>
-            <CardTitle
-              title={
-                excluded ? (
-                  <FormattedMessage
-                    id='antennas.account.excluded.list'
-                    defaultMessage='Excluded accounts list'
-                  />
-                ) : (
-                  <FormattedMessage
-                    id='antennas.account.list'
-                    defaultMessage='Antenna members list'
-                  />
-                )
-              }
+      <AccountMembersList
+        accountIds={selectedAccountIds}
+        searchAccountIds={searchAccountIds}
+        isFetching={excluded ? isFetchingExcludedAccounts : isFetchingAccounts}
+        searchValue={searchValue}
+        onSearch={setSearchValue}
+        onAdd={onAdd}
+        onRemove={onRemove}
+        membersTitle={
+          excluded ? (
+            <FormattedMessage
+              id='antennas.account.excluded.list'
+              defaultMessage='Excluded accounts list'
             />
-          </CardHeader>
-          <div className='list-members-modal__form__accounts'>
-            {selectedAccountIds.map((accountId) => (
-              <Account
-                key={accountId}
-                accountId={accountId}
-                added={selectedAccountIds.includes(accountId)}
-                onAdd={onAdd}
-                onRemove={onRemove}
-              />
-            ))}
-          </div>
-        </div>
-      ) : (excluded ? isFetchingExcludedAccounts : isFetchingAccounts) ? (
-        <div className='list-members-modal__form__pending'>
-          <Spinner />
-        </div>
-      ) : (
-        <div className='list-members-modal__form__pending'>
-          <p>
-            {excluded ? (
-              <FormattedMessage
-                id='empty_column.antenna_excluded_accounts'
-                defaultMessage='There are no excluded accounts in this antenna. Use search to find users to exclude.'
-              />
-            ) : (
-              <FormattedMessage
-                id='empty_column.antenna_accounts'
-                defaultMessage='There are no accounts in this antenna. Use search to find users to add.'
-              />
-            )}
-          </p>
-        </div>
-      )}
-
-      <div>
-        <CardHeader>
-          <CardTitle
-            title={
-              excluded ? (
-                <FormattedMessage
-                  id='antennas.account.excluded.add'
-                  defaultMessage='Add to excluded accounts'
-                />
-              ) : (
-                <FormattedMessage id='antennas.account.add' defaultMessage='Add to antenna' />
-              )
-            }
-          />
-        </CardHeader>
-        <Search value={searchValue} onSubmit={setSearchValue} />
-        <div className='list-members-modal__form__accounts'>
-          {searchAccountIds.map((accountId) => (
-            <Account
-              key={accountId}
-              accountId={accountId}
-              added={selectedAccountIds.includes(accountId)}
-              onAdd={onAdd}
-              onRemove={onRemove}
+          ) : (
+            <FormattedMessage id='antennas.account.list' defaultMessage='Antenna members list' />
+          )
+        }
+        addTitle={
+          excluded ? (
+            <FormattedMessage
+              id='antennas.account.excluded.add'
+              defaultMessage='Add to excluded accounts'
             />
-          ))}
-        </div>
-      </div>
+          ) : (
+            <FormattedMessage id='antennas.account.add' defaultMessage='Add to antenna' />
+          )
+        }
+        emptyMessage={
+          excluded ? (
+            <FormattedMessage
+              id='empty_column.antenna_excluded_accounts'
+              defaultMessage='There are no excluded accounts in this antenna. Use search to find users to exclude.'
+            />
+          ) : (
+            <FormattedMessage
+              id='empty_column.antenna_accounts'
+              defaultMessage='There are no accounts in this antenna. Use search to find users to add.'
+            />
+          )
+        }
+      />
     </div>
   );
 };

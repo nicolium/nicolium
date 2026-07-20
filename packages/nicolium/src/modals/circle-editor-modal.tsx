@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { CardHeader, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
+import { AccountMembersList } from '@/modals/list-editor-modal/components/account-members-list';
 import {
   useAddAccountsToCircle,
   useCircle,
@@ -17,9 +17,6 @@ import {
 } from '@/queries/accounts/use-circles';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import toast from '@/toast';
-
-import Account from './list-editor-modal/components/account';
-import Search from './list-editor-modal/components/search';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
@@ -105,61 +102,25 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
               </button>
             </FormActions>
           </Form>
-          {accountIds.length > 0 ? (
-            <div className='list-members-modal__form'>
-              <CardHeader>
-                <CardTitle
-                  title={<FormattedMessage id='circles.members' defaultMessage='Circle members' />}
-                />
-              </CardHeader>
-              <div className='list-members-modal__form__accounts'>
-                {accountIds.map((accountId) => (
-                  <Account
-                    key={accountId}
-                    accountId={accountId}
-                    added={accountIds.includes(accountId)}
-                    onAdd={onAdd}
-                    onRemove={onRemove}
-                  />
-                ))}
-              </div>
-            </div>
-          ) : isFetchingAccounts ? (
-            <div className='list-members-modal__form__pending'>
-              <Spinner />
-            </div>
-          ) : (
-            <div className='list-members-modal__form__pending'>
-              <p>
-                <FormattedMessage
-                  id='empty_column.circle_members'
-                  defaultMessage='There are no members in this circle. Use search to find users to add.'
-                />
-              </p>
-            </div>
-          )}
-
-          <div>
-            <CardHeader>
-              <CardTitle
-                title={
-                  <FormattedMessage id='circles.add_to_circle' defaultMessage='Add to circle' />
-                }
+          <AccountMembersList
+            accountIds={accountIds}
+            searchAccountIds={searchAccountIds}
+            isFetching={isFetchingAccounts}
+            searchValue={searchValue}
+            onSearch={setSearchValue}
+            onAdd={onAdd}
+            onRemove={onRemove}
+            membersTitle={<FormattedMessage id='circles.members' defaultMessage='Circle members' />}
+            addTitle={
+              <FormattedMessage id='circles.add_to_circle' defaultMessage='Add to circle' />
+            }
+            emptyMessage={
+              <FormattedMessage
+                id='empty_column.circle_members'
+                defaultMessage='There are no members in this circle. Use search to find users to add.'
               />
-            </CardHeader>
-            <Search value={searchValue} onSubmit={setSearchValue} />
-            <div className='list-members-modal__form__accounts'>
-              {searchAccountIds.map((accountId) => (
-                <Account
-                  key={accountId}
-                  accountId={accountId}
-                  added={accountIds.includes(accountId)}
-                  onAdd={onAdd}
-                  onRemove={onRemove}
-                />
-              ))}
-            </div>
-          </div>
+            }
+          />
         </div>
       ) : (
         <Spinner />
