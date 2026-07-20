@@ -172,7 +172,8 @@ const CreateAccountModal: React.FC<BaseModalProps> = ({ onClose }) => {
         >
           <Input
             type='password'
-            name='password'
+            // don't autofill with current user password
+            name='create_account_password'
             placeholder={intl.formatMessage(messages.password)}
             autoComplete='off'
             autoCorrect='off'
