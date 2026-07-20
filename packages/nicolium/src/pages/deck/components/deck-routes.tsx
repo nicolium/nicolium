@@ -309,12 +309,19 @@ const notificationsRoute = createRoute({
 
 const HashtagDeckColumn = () => {
   const filters = useColumnFilters();
+  const [column] = useDeckColumnConfig<Extract<DeckColumn, { type: 'hashtag' }>>();
   const { hashtag } = hashtagRoute.useParams();
 
   return (
     <>
       <HashtagFollowToggle hashtag={hashtag} />
-      <HashtagTimelineColumn hashtag={hashtag} filters={filters} />
+      <HashtagTimelineColumn
+        hashtag={hashtag}
+        any={column?.any}
+        all={column?.all}
+        none={column?.none}
+        filters={filters}
+      />
     </>
   );
 };

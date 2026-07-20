@@ -78,14 +78,20 @@ const useHashtagTimeline = (
 ) => {
   const client = useClient();
 
+  const additionalTags = [
+    ...(params?.any ?? []).map((tag) => `any:${tag}`),
+    ...(params?.all ?? []).map((tag) => `all:${tag}`),
+    ...(params?.none ?? []).map((tag) => `none:${tag}`),
+  ];
+
   return useTimeline(
-    `hashtag:${hashtag}`,
+    additionalTags.length ? `hashtag:${hashtag}:${additionalTags.join(',')}` : `hashtag:${hashtag}`,
     (paginationParams) =>
       client.timelines.hashtagTimeline(hashtag, {
         ...params,
         ...paginationParams,
       }),
-    { stream: 'hashtag', params: { tag: hashtag } },
+    additionalTags.length ? undefined : { stream: 'hashtag', params: { tag: hashtag } },
   );
 };
 

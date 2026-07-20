@@ -254,6 +254,9 @@ const hashtagDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('hashtag'),
   hashtag: v.fallback(v.optional(v.string()), undefined),
+  any: v.fallback(v.array(v.string()), []),
+  all: v.fallback(v.array(v.string()), []),
+  none: v.fallback(v.array(v.string()), []),
   filters: v.fallback(v.optional(timelineFiltersSchema), undefined),
 });
 

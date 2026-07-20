@@ -756,11 +756,27 @@ const PublicTimelineColumn: React.FC<IPublicTimelineColumn> = ({
 interface IHashtagTimelineColumn extends IBaseTimeline {
   /** The hashtag for which to display timeline items. */
   hashtag: string;
+  /** Also include posts tagged with any of these additional hashtags. */
+  any?: Array<string>;
+  /** Only include posts tagged with all of these additional hashtags. */
+  all?: Array<string>;
+  /** Exclude posts tagged with any of these hashtags. */
+  none?: Array<string>;
 }
 
-const HashtagTimelineColumn: React.FC<IHashtagTimelineColumn> = ({ hashtag, ...props }) => {
+const HashtagTimelineColumn: React.FC<IHashtagTimelineColumn> = ({
+  hashtag,
+  any,
+  all,
+  none,
+  ...props
+}) => {
   const timelineFilters = useSettings().timelines.hashtag;
-  const timelineQuery = useHashtagTimeline(hashtag);
+  const timelineQuery = useHashtagTimeline(hashtag, {
+    any: any?.length ? any : undefined,
+    all: all?.length ? all : undefined,
+    none: none?.length ? none : undefined,
+  });
 
   return (
     <Timeline

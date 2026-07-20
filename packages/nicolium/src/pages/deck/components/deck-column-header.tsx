@@ -22,7 +22,7 @@ import iconChevronsLeftRight from 'lucide-static/icons/chevrons-left-right.svg';
 import iconChevronsRightLeft from 'lucide-static/icons/chevrons-right-left.svg';
 import iconTimeline from 'lucide-static/icons/timeline.svg';
 import React, { useMemo } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import { useTimelineHeading } from '@/components/timeline-picker';
@@ -546,6 +546,74 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
   const items = useTimelineFiltersOptions(column);
   const filtersList = useTimelineFiltersList(column);
 
+  const additionalTags = [column.any, column.all, column.none].flat().length;
+
+  const tagsList = useMemo(() => {
+    const entries: Array<React.ReactNode> = [];
+
+    if (column.any?.length) {
+      entries.push(
+        <FormattedMessage
+          id='column.deck.hashtag.heading.any'
+          defaultMessage='any of: {tags}'
+          values={{ tags: <FormattedList value={column.any.map((tag) => `#${tag}`)} /> }}
+        />,
+      );
+    }
+
+    if (column.all?.length) {
+      entries.push(
+        <FormattedMessage
+          id='column.deck.hashtag.heading.all'
+          defaultMessage='all of: {tags}'
+          values={{ tags: <FormattedList value={column.all.map((tag) => `#${tag}`)} /> }}
+        />,
+      );
+    }
+
+    if (column.none?.length) {
+      entries.push(
+        <FormattedMessage
+          id='column.deck.hashtag.heading.none'
+          defaultMessage='none of: {tags}'
+          values={{ tags: <FormattedList value={column.none.map((tag) => `#${tag}`)} /> }}
+        />,
+      );
+    }
+
+    return entries.length ? <FormattedList value={entries} /> : null;
+  }, [column]);
+
+  const subtitle = column.hashtag ? (
+    filtersList ? (
+      tagsList ? (
+        <FormattedMessage
+          id='column.deck.hashtag.heading.filtered.with_additional_tags'
+          defaultMessage='Posts tagged "{hashtag}" including {tags} without {filters}'
+          values={{ hashtag: column.hashtag, tags: tagsList, filters: filtersList }}
+        />
+      ) : (
+        <FormattedMessage
+          id='column.deck.hashtag.heading.filtered'
+          defaultMessage='Posts tagged "{hashtag}" without {filters}'
+          values={{ hashtag: column.hashtag, filters: filtersList }}
+        />
+      )
+    ) : tagsList ? (
+      <FormattedMessage
+        id='column.deck.hashtag.heading.with_additional_tags'
+        defaultMessage='Posts tagged "{hashtag}" including {tags}'
+        values={{ hashtag: column.hashtag, tags: tagsList }}
+      />
+    ) : (
+      <FormattedMessage
+        id='column.deck.hashtag.heading'
+        defaultMessage='Posts tagged "{hashtag}"'
+        values={{ hashtag: column.hashtag }}
+      />
+    )
+  ) : undefined;
+
   return (
     <DeckColumHeaderInner
       column={column}
@@ -553,7 +621,11 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
       icon={iconHash}
       title={
         column.hashtag ? (
-          `#${column.hashtag}`
+          additionalTags ? (
+            `#${column.hashtag} +${additionalTags}`
+          ) : (
+            `#${column.hashtag}`
+          )
         ) : (
           <FormattedMessage
             id='column.deck.hashtag.heading.search'
@@ -561,23 +633,7 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
           />
         )
       }
-      subtitle={
-        column.hashtag ? (
-          filtersList ? (
-            <FormattedMessage
-              id='column.deck.hashtag.heading.filtered'
-              defaultMessage='Posts tagged "{hashtag}" without {filters}'
-              values={{ hashtag: column.hashtag, filters: filtersList }}
-            />
-          ) : (
-            <FormattedMessage
-              id='column.deck.hashtag.heading'
-              defaultMessage='Posts tagged "{hashtag}"'
-              values={{ hashtag: column.hashtag }}
-            />
-          )
-        ) : undefined
-      }
+      subtitle={subtitle}
       items={items}
     />
   );
