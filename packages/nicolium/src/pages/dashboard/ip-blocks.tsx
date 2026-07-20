@@ -135,13 +135,16 @@ const IpBlocksPage = () => {
   if (!ipBlocks) return <ColumnLoading />;
 
   return (
-    <Column bodyClassName='admin-ip-blocks' label={intl.formatMessage(messages.heading)}>
-      <div className='admin-ip-blocks__actions'>
-        <button onClick={() => openModal('EDIT_IP_BLOCK')}>
+    <Column
+      bodyClassName='admin-ip-blocks'
+      label={intl.formatMessage(messages.heading)}
+      action={
+        <button className='admin-ip-blocks__create' onClick={() => openModal('EDIT_IP_BLOCK')}>
           <Icon src={iconPlus} aria-hidden />
           <FormattedMessage id='admin.ip_blocks.add' defaultMessage='Create' />
         </button>
-      </div>
+      }
+    >
       <ScrollableList
         scrollKey='ip_blocks'
         emptyMessageText={

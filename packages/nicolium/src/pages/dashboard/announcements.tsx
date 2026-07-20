@@ -136,24 +136,27 @@ const AdminAnnouncementsPage: React.FC = () => {
   );
 
   return (
-    <Column label={intl.formatMessage(messages.heading)}>
-      <div className='admin-announcements-page'>
+    <Column
+      label={intl.formatMessage(messages.heading)}
+      bodyClassName='admin-announcements-page'
+      action={
         <button className='admin-announcements-page__add-button' onClick={handleCreateAnnouncement}>
           <Icon src={iconPlus} aria-hidden />
           <FormattedMessage id='admin.announcements.action' defaultMessage='Create announcement' />
         </button>
-        <ScrollableList
-          scrollKey='announcements'
-          emptyMessageText={emptyMessage}
-          itemClassName='admin-announcement__container'
-          isLoading={isLoading}
-          showLoading={isLoading && isPending}
-        >
-          {announcements.map((announcement) => (
-            <Announcement key={announcement.id} announcement={announcement} />
-          ))}
-        </ScrollableList>
-      </div>
+      }
+    >
+      <ScrollableList
+        scrollKey='announcements'
+        emptyMessageText={emptyMessage}
+        itemClassName='admin-announcement__container'
+        isLoading={isLoading}
+        showLoading={isLoading && isPending}
+      >
+        {announcements.map((announcement) => (
+          <Announcement key={announcement.id} announcement={announcement} />
+        ))}
+      </ScrollableList>
     </Column>
   );
 };

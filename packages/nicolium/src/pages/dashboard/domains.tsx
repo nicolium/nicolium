@@ -136,26 +136,29 @@ const AdminDomainsPage: React.FC = () => {
   );
 
   return (
-    <Column label={intl.formatMessage(messages.heading)}>
-      <div className='domains'>
+    <Column
+      label={intl.formatMessage(messages.heading)}
+      bodyClassName='domains'
+      action={
         <button className='domains__create' onClick={handleCreateDomain}>
           <Icon src={iconPlus} aria-hidden />
           <FormattedMessage id='admin.domains.action' defaultMessage='Create domain' />
         </button>
-        {domains && (
-          <ScrollableList
-            scrollKey='domains'
-            emptyMessageText={emptyMessage}
-            itemClassName='domains__domain__container'
-            isLoading={isFetching}
-            showLoading={isFetching && !domains?.length}
-          >
-            {domains.map((domain) => (
-              <Domain key={domain.id} domain={domain} />
-            ))}
-          </ScrollableList>
-        )}
-      </div>
+      }
+    >
+      {domains && (
+        <ScrollableList
+          scrollKey='domains'
+          emptyMessageText={emptyMessage}
+          itemClassName='domains__domain__container'
+          isLoading={isFetching}
+          showLoading={isFetching && !domains?.length}
+        >
+          {domains.map((domain) => (
+            <Domain key={domain.id} domain={domain} />
+          ))}
+        </ScrollableList>
+      )}
     </Column>
   );
 };

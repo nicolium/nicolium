@@ -158,13 +158,19 @@ const DomainBlocksPage = () => {
   if (!domainBlocks) return <ColumnLoading />;
 
   return (
-    <Column bodyClassName='admin-domain-blocks' label={intl.formatMessage(messages.heading)}>
-      <div className='admin-domain-blocks__actions'>
-        <button onClick={() => openModal('EDIT_DOMAIN_BLOCK')}>
+    <Column
+      bodyClassName='admin-domain-blocks'
+      label={intl.formatMessage(messages.heading)}
+      action={
+        <button
+          className='admin-domain-blocks__create'
+          onClick={() => openModal('EDIT_DOMAIN_BLOCK')}
+        >
           <Icon src={iconPlus} aria-hidden />
           <FormattedMessage id='admin.domain_blocks.add' defaultMessage='Create' />
         </button>
-      </div>
+      }
+    >
       <ScrollableList
         scrollKey='domain_blocks'
         emptyMessageText={

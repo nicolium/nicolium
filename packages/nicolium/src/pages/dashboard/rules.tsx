@@ -92,24 +92,27 @@ const RulesPage: React.FC = () => {
   );
 
   return (
-    <Column label={intl.formatMessage(messages.heading)}>
-      <div className='rules'>
+    <Column
+      label={intl.formatMessage(messages.heading)}
+      bodyClassName='rules'
+      action={
         <button className='rules__create' onClick={handleCreateRule}>
           <Icon src={iconPlus} aria-hidden />
           <FormattedMessage id='admin.rules.action' defaultMessage='Create rule' />
         </button>
-        <ScrollableList
-          scrollKey='rules'
-          emptyMessageText={emptyMessage}
-          itemClassName='rules__rule__container'
-          isLoading={isLoading}
-          showLoading={isLoading}
-        >
-          {data.map((rule) => (
-            <Rule key={rule.id} rule={rule} />
-          ))}
-        </ScrollableList>
-      </div>
+      }
+    >
+      <ScrollableList
+        scrollKey='rules'
+        emptyMessageText={emptyMessage}
+        itemClassName='rules__rule__container'
+        isLoading={isLoading}
+        showLoading={isLoading}
+      >
+        {data.map((rule) => (
+          <Rule key={rule.id} rule={rule} />
+        ))}
+      </ScrollableList>
     </Column>
   );
 };

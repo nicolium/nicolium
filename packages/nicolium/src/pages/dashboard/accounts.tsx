@@ -266,13 +266,18 @@ const AccountsPage: React.FC = () => {
   };
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} bodyClassName='admin-accounts-page'>
-      {features.pleromaAdminAccounts && (
-        <button className='admin-accounts-page__create' onClick={handleCreateAccount}>
-          <Icon src={iconPlus} aria-hidden />
-          <FormattedMessage id='admin.accounts.action' defaultMessage='Create account' />
-        </button>
-      )}
+    <Column
+      label={intl.formatMessage(messages.heading)}
+      bodyClassName='admin-accounts-page'
+      action={
+        features.pleromaAdminAccounts && (
+          <button className='admin-accounts-page__create' onClick={handleCreateAccount}>
+            <Icon src={iconPlus} aria-hidden />
+            <FormattedMessage id='admin.accounts.action' defaultMessage='Create account' />
+          </button>
+        )
+      }
+    >
       <Filters />
       <ScrollableList
         scrollKey='userIndex'

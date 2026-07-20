@@ -277,19 +277,6 @@
 .admin-email-domain-blocks,
 .admin-ip-blocks,
 .admin-canonical-email-blocks {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  &__actions {
-    display: flex;
-    justify-content: flex-end;
-
-    button {
-      @include mixins.button($theme: secondary);
-    }
-  }
-
   &__form {
     display: flex;
     gap: 0.5rem;
@@ -604,19 +591,6 @@ a.measure__container {
 }
 
 .admin-accounts-page {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  &__create {
-    @include mixins.button($theme: secondary, $block: true);
-
-    @media (min-width: variables.$breakpoint-sm) {
-      align-self: flex-end;
-      width: fit-content;
-    }
-  }
-
   &__reset {
     @include mixins.button($theme: primary);
   }
@@ -971,21 +945,6 @@ a.measure__container {
   }
 }
 
-.admin-announcements-page {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  &__add-button {
-    @include mixins.button($theme: secondary, $block: true);
-
-    @media (min-width: variables.$breakpoint-sm) {
-      align-self: flex-end;
-      width: fit-content;
-    }
-  }
-}
-
 .admin-awaiting-approval-item {
   padding: 1rem 1.25rem;
 }
@@ -1255,17 +1214,20 @@ a.measure__container {
 }
 
 .domains,
-.rules {
+.rules,
+.admin-announcements-page,
+.admin-accounts-page,
+.admin-domain-blocks,
+.admin-domain-allows,
+.admin-email-domain-blocks,
+.admin-ip-blocks,
+.admin-canonical-email-blocks {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 
   &__create {
-    @include mixins.button($theme: secondary, $block: true);
-    @media (min-width: variables.$breakpoint-sm) {
-      align-self: flex-end;
-      width: fit-content;
-    }
+    @include mixins.button($theme: secondary);
   }
 }
 
