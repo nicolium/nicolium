@@ -1156,7 +1156,7 @@ const getFeatures = (instance: Instance) => {
 
     iceshrimpAdmin: v.software === ICESHRIMP_NET,
 
-    importArchive: false,
+    importArchives: instance.api_versions['import_archives.pleroma.pl-api'] >= 1,
 
     /**
      * Import a .csv file with a list of blocked users.

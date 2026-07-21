@@ -179,7 +179,7 @@ const ImportDataPage: React.FC = () => {
           allowOverwrite={features.importOverwrite}
         />
       )}
-      {features.importArchive && (
+      {features.importArchives && (
         <DataImporter
           action={importArchive}
           inputLabel={<FormattedMessage id='import_data.archive.label' defaultMessage='Archive' />}
