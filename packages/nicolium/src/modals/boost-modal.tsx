@@ -24,7 +24,7 @@ import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { userTouching } from '@/utils/is-mobile';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   public: { id: 'privacy.public.short', defaultMessage: 'Public' },

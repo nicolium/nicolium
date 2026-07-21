@@ -7,7 +7,7 @@ import { focusDeckColumn } from '@/pages/deck/utils/column-focus';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
-import { Hotkeys } from '../features/ui/components/hotkeys';
+import { Hotkeys } from '../components/hotkeys';
 
 // const keyMap = {
 //   help: '?',

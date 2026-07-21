@@ -9,7 +9,7 @@ import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFamiliarFollowers } from '@/queries/accounts/use-familiar-followers';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 interface FamiliarFollowersModalProps {
   accountId: string;

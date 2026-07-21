@@ -15,7 +15,7 @@ import { useNotificationsUnreadCount } from '@/queries/notifications/use-notific
 import { useAuthActions, useAuthStore } from '@/stores/auth';
 import { useSettings } from '@/stores/settings';
 
-import ThemeToggle from '../../features/ui/components/theme-toggle';
+import ThemeToggle from '../theme-toggle';
 import Counter from '../ui/counter';
 
 import type { Account as AccountEntity } from 'pl-api';

@@ -6,7 +6,7 @@ import Modal from '@/components/ui/modal';
 import Textarea from '@/components/ui/textarea';
 import { useJoinEventMutation } from '@/queries/statuses/use-event-interactions';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   placeholder: { id: 'join_event.placeholder', defaultMessage: 'Message to organizer' },

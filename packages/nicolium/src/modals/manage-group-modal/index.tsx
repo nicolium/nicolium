@@ -10,7 +10,7 @@ import ConfirmationStep from './steps/confirmation-step';
 import DetailsStep from './steps/details-step';
 
 import type { NicoliumResponse } from '@/api';
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { CreateGroupParams, Group } from 'pl-api';
 
 const messages = defineMessages({

@@ -3,12 +3,12 @@ import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
+import { Hotkeys } from '@/components/hotkeys';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
 import PendingStatus from '@/components/statuses/pending-status';
 import StatusActionBar from '@/components/statuses/status-action-bar';
 import Tombstone from '@/components/statuses/tombstone';
-import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import {

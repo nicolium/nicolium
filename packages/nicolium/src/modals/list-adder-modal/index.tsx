@@ -9,7 +9,7 @@ import { useLists, useListsForAccount } from '@/queries/accounts/use-lists';
 
 import List from './components/list';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 interface ListAdderModalProps {
   accountId: string;

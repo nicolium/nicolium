@@ -5,12 +5,12 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting as defaultChangeSetting, saveSettings } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import ThemeToggle from '@/components/theme-toggle';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import Icon from '@/components/ui/icon';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import StepSlider from '@/components/ui/step-slider';
-import ThemeToggle from '@/features/ui/components/theme-toggle';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { PaletteListItem } from '@/pages/dashboard/theme-editor';
 import { useDefaultSettings, useSettings } from '@/stores/settings';

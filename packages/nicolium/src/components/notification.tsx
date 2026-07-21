@@ -29,6 +29,7 @@ import {
 import AccountContainer from '@/components/accounts/account-container';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import { CollectionNotification } from '@/components/collections/collection-notification';
+import { Hotkeys } from '@/components/hotkeys';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import { ParsedContent } from '@/components/statuses/parsed-content';
@@ -37,7 +38,6 @@ import StatusInfo from '@/components/statuses/status-info';
 import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
-import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';

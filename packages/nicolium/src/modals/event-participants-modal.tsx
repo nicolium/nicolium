@@ -8,7 +8,7 @@ import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import { useEventParticipations } from '@/queries/events/use-event-participations';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 interface EventParticipantsModalProps {
   statusId: string;

@@ -14,7 +14,7 @@ import {
 } from '@/queries/admin/use-announcements';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { AdminAnnouncement } from 'pl-api';
 
 const messages = defineMessages({

@@ -3,9 +3,9 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import Announcement from '@/components/announcements/announcement';
 import { makeCustomEmojiMap } from '@/components/announcements/announcements-panel';
+import ColumnLoading from '@/components/column-loading';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import ColumnLoading from '@/features/ui/components/column-loading';
 import { useAnnouncements } from '@/queries/announcements/use-announcements';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 

@@ -7,13 +7,13 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import ColumnLoading from '@/components/column-loading';
 import List, { ListItem } from '@/components/list';
 import ReactSwipeableViews from '@/components/react-swipeable-views';
 import StatusContainer from '@/components/statuses/status-container';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import ColumnLoading from '@/features/ui/components/column-loading';
 import { useFeatures } from '@/hooks/use-features';
 import {
   useForwardReport,

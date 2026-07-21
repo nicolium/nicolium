@@ -8,7 +8,7 @@ import Spinner from '@/components/ui/spinner';
 import { getCurrentDate } from '@/hooks/use-current-date';
 import { useBirthdayReminders } from '@/queries/accounts/use-birthday-reminders';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const BirthdaysModal = ({ onClose }: BaseModalProps) => {
   const [[day, month]] = useState(getCurrentDate);

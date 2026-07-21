@@ -8,7 +8,7 @@ import { useList } from '@/queries/accounts/use-lists';
 import EditListForm from './components/edit-list-form';
 import ListMembersForm from './components/list-members-form';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 interface ListEditorModalProps {
   listId: string;

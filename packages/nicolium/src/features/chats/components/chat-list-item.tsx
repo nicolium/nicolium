@@ -7,13 +7,13 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu from '@/components/dropdown-menu';
+import { Hotkeys } from '@/components/hotkeys';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import IconButton from '@/components/ui/icon-button';
 import { useChatContext } from '@/contexts/chat-context';
 import Emojify from '@/features/emoji/emojify';
-import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useFeatures } from '@/hooks/use-features';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { useDeleteChat } from '@/queries/chats';

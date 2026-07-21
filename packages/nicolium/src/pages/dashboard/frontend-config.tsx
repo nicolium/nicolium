@@ -5,6 +5,7 @@ import * as v from 'valibot';
 
 import { uploadMedia } from '@/actions/media';
 import List, { ListItem } from '@/components/list';
+import ThemeSelector from '@/components/theme-selector';
 import Accordion from '@/components/ui/accordion';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
@@ -17,7 +18,6 @@ import Select from '@/components/ui/select';
 import Streamfield from '@/components/ui/streamfield';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
-import ThemeSelector from '@/features/ui/components/theme-selector';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import CryptoAddressInput from '@/pages/dashboard/components/frontend-config/crypto-address-input';

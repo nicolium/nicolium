@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { DislikesList } from '@/columns/status-interactions';
 import Modal from '@/components/ui/modal';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 interface DislikesModalProps {
   statusId: string;

@@ -18,7 +18,7 @@ import {
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   success: { id: 'circles.edit.success', defaultMessage: 'Circle updated' },

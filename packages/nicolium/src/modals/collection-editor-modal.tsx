@@ -31,7 +31,7 @@ import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 import { languages } from '@/utils/languages';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { Account } from 'pl-api';
 
 const messages = defineMessages({

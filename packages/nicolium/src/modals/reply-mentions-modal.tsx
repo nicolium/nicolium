@@ -13,7 +13,7 @@ import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useCompose, useComposeActions } from '@/stores/compose';
 import { statusToMentionsAccountIdsArray } from '@/stores/compose';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   remove: { id: 'reply_mentions.account.remove', defaultMessage: 'Remove from mentions' },

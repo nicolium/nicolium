@@ -9,7 +9,7 @@ import { useAdminConfig, useUpdateAdminConfig } from '@/queries/admin/use-config
 import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   mediaRemoval: { id: 'edit_federation.media_removal', defaultMessage: 'Strip media' },

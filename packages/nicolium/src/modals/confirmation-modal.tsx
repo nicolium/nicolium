@@ -5,7 +5,7 @@ import List, { ListItem } from '@/components/list';
 import Modal from '@/components/ui/modal';
 import Toggle from '@/components/ui/toggle';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 interface ConfirmationModalProps {
   heading?: React.ReactNode;

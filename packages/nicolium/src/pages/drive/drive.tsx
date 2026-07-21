@@ -4,9 +4,9 @@ import iconUpload from '@phosphor-icons/core/regular/upload.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import ColumnLoading from '@/components/column-loading';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Column from '@/components/ui/column';
-import ColumnLoading from '@/features/ui/components/column-loading';
 import { useCreateDriveFileMutation } from '@/queries/drive/use-drive-file';
 import {
   useCreateDriveFolderMutation,

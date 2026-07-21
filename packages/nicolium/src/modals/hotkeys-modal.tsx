@@ -5,7 +5,7 @@ import Modal from '@/components/ui/modal';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   keyNameSlash: { id: 'keyboard_shortcuts.key_names.slash', defaultMessage: 'Slash' },

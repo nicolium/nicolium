@@ -10,12 +10,12 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
+import { Hotkeys } from '@/components/hotkeys';
+import StatusTypeIcon from '@/components/statuses/status-type-icon';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
 import Emojify from '@/features/emoji/emojify';
-import StatusTypeIcon from '@/features/status/components/status-type-icon';
-import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useGroupQuery } from '@/queries/groups/use-group';

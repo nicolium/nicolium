@@ -3,12 +3,12 @@ import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import ColumnForbidden from '@/components/column-forbidden';
 import List, { ListItem } from '@/components/list';
 import { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import Emojify from '@/features/emoji/emojify';
-import ColumnForbidden from '@/features/ui/components/column-forbidden';
 import { useDeleteGroupMutation, useGroupQuery } from '@/queries/groups/use-group';
 import { manageGroupRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';

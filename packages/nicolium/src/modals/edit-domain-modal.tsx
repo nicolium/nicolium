@@ -10,7 +10,7 @@ import Toggle from '@/components/ui/toggle';
 import { useDomains } from '@/queries/admin/use-domains';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { AdminDomain } from 'pl-api';
 
 const messages = defineMessages({

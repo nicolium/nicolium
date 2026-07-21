@@ -7,7 +7,7 @@ import Divider from '@/components/ui/divider';
 import Modal from '@/components/ui/modal';
 import useEmbed from '@/queries/embed';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 interface EmbedModalProps {
   url: string;

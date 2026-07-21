@@ -12,7 +12,7 @@ import Modal from '@/components/ui/modal';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl,

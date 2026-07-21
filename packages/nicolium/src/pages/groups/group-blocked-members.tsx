@@ -2,10 +2,10 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import ColumnForbidden from '@/components/column-forbidden';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import ColumnForbidden from '@/features/ui/components/column-forbidden';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useGroupBlocks, useUnblockGroupUserMutation } from '@/queries/groups/use-group-blocks';

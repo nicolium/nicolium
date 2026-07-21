@@ -14,7 +14,7 @@ import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useStatusHistory } from '@/queries/statuses/use-status-history';
 import { unescapeHTML } from '@/utils/html';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { MinifiedStatusEdit } from '@/queries/statuses/use-status-history';
 import type { Change } from 'diff';
 import type { CustomEmoji } from 'pl-api';

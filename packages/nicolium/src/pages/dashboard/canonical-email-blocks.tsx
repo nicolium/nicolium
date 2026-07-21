@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import ColumnLoading from '@/components/column-loading';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import ColumnLoading from '@/features/ui/components/column-loading';
 import {
   useCanonicalEmailBlocksQuery,
   useCreateCanonicalEmailBlockMutation,

@@ -4,6 +4,7 @@ import React, { type ChangeEventHandler, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import ColumnLoading from '@/components/column-loading';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
 import OutlineBox from '@/components/outline-box';
@@ -12,7 +13,6 @@ import Icon from '@/components/ui/icon';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import TagInput from '@/components/ui/tag-input';
 import Toggle from '@/components/ui/toggle';
-import ColumnLoading from '@/features/ui/components/column-loading';
 import { useDeactivateUserModal, useDeleteUserModal } from '@/hooks/use-admin-modals';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';

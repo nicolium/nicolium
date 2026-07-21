@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { Hotkeys } from '@/components/hotkeys';
 import { CardHeader, CardTitle } from '@/components/ui/card';
-import { Hotkeys } from '@/features/ui/components/hotkeys';
 
 import { focusDeckColumn } from '../utils/column-focus';
 import { switchToPreviousLayout, switchToNextLayout } from '../utils/layouts';

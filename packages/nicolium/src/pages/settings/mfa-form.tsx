@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
+import ColumnLoading from '@/components/column-loading';
 import Column from '@/components/ui/column';
-import ColumnLoading from '@/features/ui/components/column-loading';
 import { useFeatures } from '@/hooks/use-features';
 import { useMfaConfig } from '@/queries/security/use-mfa';
 

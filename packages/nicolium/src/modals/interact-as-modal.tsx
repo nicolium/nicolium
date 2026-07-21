@@ -13,7 +13,7 @@ import { DEFAULT_STATUS_ACTION_BAR_ITEMS } from '@/schemas/frontend-settings';
 import { useAuthStore } from '@/stores/auth';
 import { resolveStatus } from '@/utils/resolve';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   title: { id: 'interact_as_modal.title', defaultMessage: 'Interact from accounts' },

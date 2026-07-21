@@ -11,7 +11,7 @@ import { useAdminCreateAccountMutation } from '@/queries/admin/use-accounts';
 import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   username: {

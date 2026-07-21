@@ -10,7 +10,7 @@ export const DropdownNavigation = lazy(() => import('@/components/navigation/dro
 export const EmojiPicker = lazy(() => import('@/features/emoji/components/emoji-picker'));
 export const EventHeader = lazy(() => import('@/components/statuses/events/event-header'));
 export const MediaGallery = lazy(() => import('@/components/media/media-gallery'));
-export const ModalRoot = lazy(() => import('@/features/ui/components/modal-root'));
+export const ModalRoot = lazy(() => import('@/modals/modal-root'));
 export const PictureInPicture = lazy(() => import('@/components/media/picture-in-picture'));
 export const ProfileField = lazy(() => import('@/components/accounts/profile-field'));
 export const ProfileInfoPanel = lazy(() => import('@/components/panels/profile-info-panel'));

@@ -11,7 +11,7 @@ import { useCompose, useComposeActions, useUploadCompose } from '@/stores/compos
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },

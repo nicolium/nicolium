@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Hotkeys } from '@/features/ui/components/hotkeys';
+import { Hotkeys } from '@/components/hotkeys';
 
 interface ITombstone {
   id: string;

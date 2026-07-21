@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { Hotkeys } from '@/components/hotkeys';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import Emojify from '@/features/emoji/emojify';
-import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useInstance } from '@/stores/instance';

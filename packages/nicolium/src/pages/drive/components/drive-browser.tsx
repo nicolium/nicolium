@@ -17,12 +17,12 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import { changeSetting } from '@/actions/settings';
+import ColumnLoading from '@/components/column-loading';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import { EmptyMessage } from '@/components/empty-message';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import { MIMETYPE_ICONS } from '@/components/upload';
-import ColumnLoading from '@/features/ui/components/column-loading';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import {
   useDeleteDriveFileMutation,

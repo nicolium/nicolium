@@ -2,9 +2,9 @@ import { RouterProvider } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
 
+import { Hotkeys } from '@/components/hotkeys';
 import { CurrentAccountProvider } from '@/contexts/current-account-context';
 import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
-import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useFeatures } from '@/hooks/use-features';
 import { useAuthStore } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';

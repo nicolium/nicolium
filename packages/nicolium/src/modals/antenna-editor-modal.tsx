@@ -45,7 +45,7 @@ import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   createSuccess: { id: 'antennas.create.success', defaultMessage: 'Antenna created' },

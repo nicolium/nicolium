@@ -20,7 +20,7 @@ import {
 import toast from '@/toast';
 
 import type { Emoji as EmojiType } from '@/features/emoji';
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   label: { id: 'bookmark_folders.new.title.placeholder', defaultMessage: 'New folder title' },

@@ -3,10 +3,10 @@ import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
+import ColumnLoading from '@/components/column-loading';
 import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import ColumnLoading from '@/features/ui/components/column-loading';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useConfirmMfa } from '@/queries/security/use-mfa';

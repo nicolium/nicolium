@@ -10,7 +10,7 @@ import { useComposeStore } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
-import type { ModalType } from '@/features/ui/components/modal-root';
+import type { ModalType } from '@/modals/modal-root';
 import type { Compose } from '@/stores/compose';
 
 const messages = defineMessages({

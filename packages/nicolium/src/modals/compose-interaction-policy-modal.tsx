@@ -16,7 +16,7 @@ import {
 import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';
 import { useCompose, useComposeActions, useComposeVisibility } from '@/stores/compose';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
 
 const MANAGABLE_VISIBILITIES = new Set(['public', 'unlisted', 'private']);

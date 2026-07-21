@@ -5,7 +5,7 @@ import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Textarea from '@/components/ui/textarea';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 interface TextFieldModalProps {
   heading: React.ReactNode;

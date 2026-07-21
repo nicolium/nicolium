@@ -10,7 +10,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useRules } from '@/queries/admin/use-rules';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { AdminRule } from 'pl-api';
 
 const messages = defineMessages({

@@ -5,9 +5,9 @@ import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import QuotedStatus from '@/components/statuses/quoted-status-container';
 import Icon from '@/components/ui/icon';
 import Emojify from '@/features/emoji/emojify';
-import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';

@@ -22,7 +22,7 @@ import {
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useBookmarkStatus } from '@/queries/statuses/use-status-interactions';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { BookmarkFolder } from 'pl-api';
 
 interface SelectBookmarkFolderModalProps {

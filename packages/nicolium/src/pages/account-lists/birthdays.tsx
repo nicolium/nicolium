@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import BirthdayAccount from '@/components/accounts/birthday-account';
+import ColumnLoading from '@/components/column-loading';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import ColumnLoading from '@/features/ui/components/column-loading';
 import { getCurrentDate } from '@/hooks/use-current-date';
 import { useBirthdayReminders } from '@/queries/accounts/use-birthday-reminders';
 

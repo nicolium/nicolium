@@ -2,8 +2,8 @@ import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 import StickyBox from 'react-sticky-box';
 
+import ColumnLoading from '@/components/column-loading';
 import Layout, { useWindowControlsOverlay } from '@/components/ui/layout';
-import ColumnLoading from '@/features/ui/components/column-loading';
 
 const DashboardPage = React.lazy(() => import('@/pages/dashboard/dashboard'));
 

@@ -18,7 +18,7 @@ import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 import { isIOS } from '@/utils/is-mobile';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { GifResult, GifResults } from 'pl-api';
 
 const messages = {

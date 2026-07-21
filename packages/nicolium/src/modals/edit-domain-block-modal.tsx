@@ -16,7 +16,7 @@ import {
 } from '@/queries/admin/use-domain-blocks';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({
   updateSuccess: {

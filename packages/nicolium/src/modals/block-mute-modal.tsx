@@ -16,7 +16,7 @@ import {
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { BlockAccountParams, MuteAccountParams } from 'pl-api';
 
 const messages = defineMessages({

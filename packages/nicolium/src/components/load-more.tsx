@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Hotkeys } from '@/features/ui/components/hotkeys';
+import { Hotkeys } from '@/components/hotkeys';
 
 interface ILoadMore {
   onClick: React.MouseEventHandler;

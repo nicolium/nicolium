@@ -8,6 +8,7 @@ import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
+import { Hotkeys } from '@/components/hotkeys';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import { buildLink } from '@/components/notification';
 import PullToRefresh from '@/components/pull-to-refresh';
@@ -17,7 +18,6 @@ import StatusContent from '@/components/statuses/status-content';
 import StatusInfo from '@/components/statuses/status-info';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
-import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import {

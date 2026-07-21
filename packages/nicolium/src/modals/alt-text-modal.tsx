@@ -14,7 +14,7 @@ import { useFeatures } from '@/hooks/use-features';
 import toast from '@/toast';
 import { getPointerPosition } from '@/utils/media';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { MediaAttachment } from 'pl-api';
 
 type FocalPoint = [number, number];

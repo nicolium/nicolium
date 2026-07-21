@@ -17,12 +17,12 @@ import ZoomableImage from '@/components/media/zoomable-image';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import StatusActionBar from '@/components/statuses/status-action-bar';
 import { StatusLink } from '@/components/statuses/status-link';
+import Thread from '@/components/statuses/thread';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Thread from '@/features/status/components/thread';
 import { useStatus } from '@/queries/statuses/use-status';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { MediaAttachment } from 'pl-api';
 
 const MIN_SWIPE_DISTANCE = 400;

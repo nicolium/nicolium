@@ -2,7 +2,7 @@ import React from 'react';
 
 import Modal from '@/components/ui/modal';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 interface ComponentModalProps {
   component: React.ComponentType<BaseModalProps>;

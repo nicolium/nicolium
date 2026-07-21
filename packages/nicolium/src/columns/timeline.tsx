@@ -10,6 +10,7 @@ import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-
 import { AccountLink } from '@/components/accounts/account-link';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import { EmptyMessage } from '@/components/empty-message';
+import { Hotkeys } from '@/components/hotkeys';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';
@@ -21,7 +22,6 @@ import Tombstone from '@/components/statuses/tombstone';
 import Icon from '@/components/ui/icon';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
-import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 import { useRelationshipsQuery } from '@/queries/accounts/use-relationship';

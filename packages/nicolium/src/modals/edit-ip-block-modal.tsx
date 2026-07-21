@@ -10,7 +10,7 @@ import Textarea from '@/components/ui/textarea';
 import { useCreateIpBlockMutation, useUpdateIpBlockMutation } from '@/queries/admin/use-ip-blocks';
 import toast from '@/toast';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { AdminIpBlock } from 'pl-api';
 
 const messages = defineMessages({

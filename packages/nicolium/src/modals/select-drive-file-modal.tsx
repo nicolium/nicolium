@@ -12,7 +12,7 @@ import { Breadcrumbs } from '@/pages/drive/components/breadcrumbs';
 import { ViewModeToggle } from '@/pages/drive/components/view-mode-toggle';
 import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 import type { DriveFile, DriveFolder } from 'pl-api';
 
 type SelectDriveFileModalProps = {

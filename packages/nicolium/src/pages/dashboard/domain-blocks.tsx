@@ -2,10 +2,10 @@ import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import ColumnLoading from '@/components/column-loading';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
-import ColumnLoading from '@/features/ui/components/column-loading';
 import {
   useDeleteDomainBlockMutation,
   useDomainBlocksQuery,

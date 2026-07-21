@@ -6,7 +6,7 @@ import ScrollableList from '@/components/scrollable-list';
 import Modal from '@/components/ui/modal';
 import { useStatus } from '@/queries/statuses/use-status';
 
-import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/modals/modal-root';
 
 interface MentionsModalProps {
   statusId: string;
