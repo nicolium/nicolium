@@ -3,8 +3,8 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import { type Language, languages } from '@/pages/settings/components/preferences';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
+import { type Language, languages } from '@/utils/languages';
 
 import DropdownMenu from '../dropdown-menu';
 

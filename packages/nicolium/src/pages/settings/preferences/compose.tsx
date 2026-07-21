@@ -13,7 +13,7 @@ import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import { isServo } from '@/utils/browser';
 
-import { languages } from '../components/preferences';
+import { languages } from '../../../utils/languages';
 
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 

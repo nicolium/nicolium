@@ -11,8 +11,8 @@ import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useSettings } from '@/stores/settings';
 import sourceCode from '@/utils/code';
 
+import { languages } from '../../../utils/languages';
 import MessagesSettings from '../components/messages-settings';
-import { languages } from '../components/preferences';
 
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 

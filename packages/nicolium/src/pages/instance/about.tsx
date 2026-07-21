@@ -3,10 +3,10 @@ import { FormattedMessage } from 'react-intl';
 
 import { Navlinks } from '@/components/navigation/navlinks';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { languages } from '@/pages/settings/components/preferences';
 import { useAboutPage } from '@/queries/frontend/use-about-page';
 import { aboutRoute } from '@/router';
 import { useSettings } from '@/stores/settings';
+import { languages } from '@/utils/languages';
 
 interface IAbout {
   slug: string;

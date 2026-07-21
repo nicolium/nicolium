@@ -67,7 +67,6 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useTranslate } from '@/hooks/use-translate';
 import { DeckColumnIdContext } from '@/pages/deck/components/deck-column-config';
 import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
-import { languages } from '@/pages/settings/components/preferences';
 import { useUnblockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useChats } from '@/queries/chats';
 import { useGroupQuery } from '@/queries/groups/use-group';
@@ -102,6 +101,7 @@ import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import toast from '@/toast';
 import copy from '@/utils/copy';
+import { languages } from '@/utils/languages';
 
 import GroupPopover from '../groups/popover/group-popover';
 import Popover from '../ui/popover';

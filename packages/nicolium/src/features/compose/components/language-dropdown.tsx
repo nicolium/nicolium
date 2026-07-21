@@ -12,12 +12,9 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
 import { useFeatures } from '@/hooks/use-features';
-import {
-  type Language,
-  languages as languagesObject,
-} from '@/pages/settings/components/preferences';
 import { useCompose, useComposeActions } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
+import { type Language, languages as languagesObject } from '@/utils/languages';
 
 const getFrequentlyUsedLanguages = (languageCounters: Record<string, number>) =>
   Object.keys(languageCounters)
