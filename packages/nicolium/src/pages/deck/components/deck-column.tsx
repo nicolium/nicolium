@@ -27,7 +27,7 @@ import type { DeckColumn } from '@/schemas/frontend-settings';
 
 const WIDTHS = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 
-interface RouterContext {
+interface DeckRouterContext {
   instance: ReturnType<typeof useInstance>;
   features: ReturnType<typeof useFeatures>;
 }
@@ -130,7 +130,7 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
     });
   }, [router]);
 
-  const context: RouterContext = useMemo(
+  const context: DeckRouterContext = useMemo(
     () => ({
       instance,
       features,
