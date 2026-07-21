@@ -4,8 +4,8 @@ import React, { useRef } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import StatusActionBar from '@/components/statuses/action-bar';
 import RssFeedInfo from '@/components/statuses/rss-feed-info';
-import StatusActionBar from '@/components/statuses/status-action-bar';
 import StatusContent from '@/components/statuses/status-content';
 import StatusInfo from '@/components/statuses/status-info';
 import StatusLanguagePicker from '@/components/statuses/status-language-picker';

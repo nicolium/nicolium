@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import Audio from '@/components/media/audio';
 import Video from '@/components/media/video';
-import StatusActionBar from '@/components/statuses/status-action-bar';
+import StatusActionBar from '@/components/statuses/action-bar';
 import { useStatus } from '@/queries/statuses/use-status';
 import { usePictureInPicture, usePictureInPictureActions } from '@/stores/picture-in-picture';
 

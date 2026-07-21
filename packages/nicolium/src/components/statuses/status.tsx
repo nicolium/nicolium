@@ -35,9 +35,9 @@ import { AccountLink } from '../accounts/account-link';
 import HashtagLink from '../hashtag-link';
 import RelativeTimestamp from '../relative-timestamp';
 
+import StatusActionBar from './action-bar';
 import EventPreview from './events/event-preview';
 import RssFeedInfo from './rss-feed-info';
-import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';
 import StatusInfo from './status-info';
 import StatusLanguagePicker from './status-language-picker';

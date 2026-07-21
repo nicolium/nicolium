@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
-import StatusActionBar from '@/components/statuses/status-action-bar';
+import StatusActionBar from '@/components/statuses/action-bar';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import { CurrentAccountProvider } from '@/contexts/current-account-context';

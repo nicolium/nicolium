@@ -15,7 +15,7 @@ import ExtendedVideoPlayer from '@/components/media/extended-video-player';
 import Video from '@/components/media/video';
 import ZoomableImage from '@/components/media/zoomable-image';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
-import StatusActionBar from '@/components/statuses/status-action-bar';
+import StatusActionBar from '@/components/statuses/action-bar';
 import { StatusLink } from '@/components/statuses/status-link';
 import Thread from '@/components/statuses/thread';
 import Icon from '@/components/ui/icon';
