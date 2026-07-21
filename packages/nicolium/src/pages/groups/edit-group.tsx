@@ -2,6 +2,8 @@ import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AvatarPicker from '@/components/settings/avatar-picker';
+import HeaderPicker from '@/components/settings/header-picker';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -12,8 +14,6 @@ import Spinner from '@/components/ui/spinner';
 import Textarea from '@/components/ui/textarea';
 import { useImageField } from '@/hooks/forms/use-image-field';
 import { useTextField } from '@/hooks/forms/use-text-field';
-import AvatarPicker from '@/pages/settings/components/avatar-picker';
-import HeaderPicker from '@/pages/settings/components/header-picker';
 import { useGroupQuery, useUpdateGroupMutation } from '@/queries/groups/use-group';
 import { editGroupRoute } from '@/router';
 import { useInstance } from '@/stores/instance';

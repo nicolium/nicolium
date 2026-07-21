@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import * as BuildConfig from '@/build-config';
-import { handleExternalLogin } from '@/pages/auth/components/external-login-form';
+import { handleExternalLogin } from '@/components/auth/external-login-form';
 
 interface IDeckColumnLoginRequired {
   accountUrl: string;

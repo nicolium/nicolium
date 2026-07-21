@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import AvatarPicker from '@/components/settings/avatar-picker';
+import HeaderPicker from '@/components/settings/header-picker';
 import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Textarea from '@/components/ui/textarea';
 import { usePreview } from '@/hooks/forms/use-preview';
-import AvatarPicker from '@/pages/settings/components/avatar-picker';
-import HeaderPicker from '@/pages/settings/components/header-picker';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import resizeImage from '@/utils/resize-image';

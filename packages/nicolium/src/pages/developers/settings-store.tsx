@@ -3,13 +3,13 @@ import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
 import { changeSetting, updateSettingsStore } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import SettingToggle from '@/components/settings/setting-toggle';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Textarea from '@/components/ui/textarea';
-import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useSettingsStore, useSettingsStoreActions } from '@/stores/settings';
 import toast from '@/toast';
 

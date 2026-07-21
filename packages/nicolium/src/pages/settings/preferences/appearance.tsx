@@ -5,7 +5,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting as defaultChangeSetting, saveSettings } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
-import ThemeToggle from '@/components/theme-toggle';
+import ThemeToggle from '@/components/settings/theme-toggle';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import Icon from '@/components/ui/icon';
@@ -17,7 +17,7 @@ import { useDefaultSettings, useSettings } from '@/stores/settings';
 import colors from '@/utils/colors';
 import { generateAccent } from '@/utils/theme';
 
-import SettingToggle from '../components/setting-toggle';
+import SettingToggle from '../../../components/settings/setting-toggle';
 
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 

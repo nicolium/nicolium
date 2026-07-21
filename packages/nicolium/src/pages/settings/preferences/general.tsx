@@ -3,11 +3,11 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import SettingToggle from '@/components/settings/setting-toggle';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import { useFeatures } from '@/hooks/use-features';
-import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useSettings } from '@/stores/settings';
 import sourceCode from '@/utils/code';
 

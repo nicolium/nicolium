@@ -5,12 +5,12 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import SettingToggle from '@/components/settings/setting-toggle';
 import { CardBody, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
 import IconButton from '@/components/ui/icon-button';
 import Toggle from '@/components/ui/toggle';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import SettingToggle from '@/pages/settings/components/setting-toggle';
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';

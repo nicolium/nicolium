@@ -9,7 +9,7 @@ import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
-import SettingToggle from './setting-toggle';
+import SettingToggle from '../../../components/settings/setting-toggle';
 
 const messages = defineMessages({
   success: {

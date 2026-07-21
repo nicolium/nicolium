@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchInstance } from '@/actions/instance';
+import ExternalLoginForm from '@/components/auth/external-login-form';
+import LoginForm from '@/components/auth/login-form';
+import OtpAuthForm from '@/components/auth/otp-auth-form';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
-import ExternalLoginForm from '@/pages/auth/components/external-login-form';
-import LoginForm from '@/pages/auth/components/login-form';
-import OtpAuthForm from '@/pages/auth/components/otp-auth-form';
 import { useIsGuest } from '@/stores/auth';
 import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';

@@ -5,7 +5,7 @@ import * as v from 'valibot';
 
 import { uploadMedia } from '@/actions/media';
 import List, { ListItem } from '@/components/list';
-import ThemeSelector from '@/components/theme-selector';
+import ThemeSelector from '@/components/settings/theme-selector';
 import Accordion from '@/components/ui/accordion';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';

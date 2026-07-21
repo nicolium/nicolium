@@ -10,9 +10,10 @@ import { useModalsActions } from '@/stores/modals';
 import { getRedirectUrl } from '@/utils/redirect';
 import { useIsStandalone } from '@/utils/state';
 
+import LoginForm from '../../components/auth/login-form';
+import OtpAuthForm from '../../components/auth/otp-auth-form';
+
 import ConsumersList from './components/consumers-list';
-import LoginForm from './components/login-form';
-import OtpAuthForm from './components/otp-auth-form';
 
 import type { NicoliumResponse } from '@/api';
 
