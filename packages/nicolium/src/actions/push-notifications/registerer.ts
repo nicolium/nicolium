@@ -1,4 +1,3 @@
-import { createPushSubscription } from '@/actions/push-subscriptions';
 import { pushNotificationsSettings } from '@/settings';
 import { getApp, type Me } from '@/stores/auth';
 import { getInstance } from '@/stores/instance';
@@ -63,7 +62,7 @@ const sendSubscriptionToBackend = (subscription: PushSubscription, me: Me, clien
     }
   }
 
-  return createPushSubscription(client, params);
+  return client.pushNotifications.createSubscription(params);
 };
 
 // Last one checks for payload support: https://web-push-book.gauntface.com/chapter-06/01-non-standards-browsers/#no-payload
