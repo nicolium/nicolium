@@ -228,19 +228,20 @@ const useContextStore = create<State>()(
 );
 
 const getAncestorsIds = (statusId: string, inReplyTos: Record<string, string>): Array<string> => {
-  let ancestorsIds: Array<string> = [];
-  let id: string = statusId;
+  const seen = new Set<string>();
+  let id: string | undefined = statusId;
 
-  while (id && !ancestorsIds.includes(id)) {
-    ancestorsIds = [id, ...ancestorsIds];
+  while (id && !seen.has(id)) {
+    seen.add(id);
     id = inReplyTos[id];
   }
 
-  return [...new Set(ancestorsIds)];
+  return [...seen].toReversed();
 };
 
 const getDescendantsIds = (statusId: string, contextReplies: Record<string, string[]>) => {
-  let descendantsIds: Array<string> = [];
+  const descendantsIds: Array<string> = [];
+  const added = new Set<string>();
   const ids = [statusId];
 
   while (ids.length > 0) {
@@ -249,12 +250,13 @@ const getDescendantsIds = (statusId: string, contextReplies: Record<string, stri
 
     const replies = contextReplies[id];
 
-    if (descendantsIds.includes(id)) {
+    if (added.has(id)) {
       break;
     }
 
     if (statusId !== id) {
-      descendantsIds = [...descendantsIds, id];
+      descendantsIds.push(id);
+      added.add(id);
     }
 
     if (replies) {
@@ -264,7 +266,7 @@ const getDescendantsIds = (statusId: string, contextReplies: Record<string, stri
     }
   }
 
-  return [...new Set(descendantsIds)];
+  return descendantsIds;
 };
 
 const useDescendantsIds = (statusId?: string) => {
