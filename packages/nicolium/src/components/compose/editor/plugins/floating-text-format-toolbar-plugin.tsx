@@ -315,7 +315,19 @@ const TextFormatFloatingToolbar = ({
 
   const insertLink = useCallback(() => {
     if (!isLink) {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://');
+      editor.getEditorState().read(() => {
+        let selectionText = $getSelection()?.getTextContent() ?? '';
+
+        if (!selectionText.match(/^https?:\/\//)) {
+          selectionText = 'https://' + selectionText;
+        }
+
+        if (URL.canParse(selectionText)) {
+          editor.dispatchCommand(TOGGLE_LINK_COMMAND, selectionText);
+        } else {
+          editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://');
+        }
+      });
     } else {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
