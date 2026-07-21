@@ -4,8 +4,8 @@ import React, { useContext } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import AnimatedNumber from '@/components/animated-number';
+import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { useFeatures } from '@/hooks/use-features';
-import { DeckColumnIdContext } from '@/pages/deck/components/deck-column-config';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';

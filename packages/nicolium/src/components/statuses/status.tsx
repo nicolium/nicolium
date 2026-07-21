@@ -12,12 +12,12 @@ import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-
 import AccountContainer from '@/components/accounts/account-container';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
+import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
 import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import { useStatus, type SelectedStatus } from '@/queries/statuses/use-status';

@@ -6,8 +6,8 @@ import React, { useEffect } from 'react';
 import { showStatusHoverCard } from '@/components/statuses/hover-status-wrapper';
 import StatusContainer from '@/components/statuses/status-container';
 import { CurrentAccountProvider } from '@/contexts/current-account-context';
+import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
 import { useTransitionStyles } from '@/hooks/use-transition-styles';
-import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
 import { useStatus } from '@/queries/statuses/use-status';
 import { useStatusHoverCardActions, useStatusHoverCardStore } from '@/stores/status-hover-card';
 

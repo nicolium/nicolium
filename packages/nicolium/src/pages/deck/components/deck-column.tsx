@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
 
 import { CurrentAccountProvider } from '@/contexts/current-account-context';
+import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useFeatures } from '@/hooks/use-features';
 import { useAuthStore } from '@/stores/auth';
@@ -16,7 +17,7 @@ import {
 } from '../utils/column-focus';
 import { switchToNextLayout, switchToPreviousLayout } from '../utils/layouts';
 
-import { DeckColumnIdContext, useColumnNotFound } from './deck-column-config';
+import { useColumnNotFound } from './deck-column-config';
 import { DeckColumnHeader } from './deck-column-header';
 import { DeckColumnLoginRequired } from './deck-column-login-required';
 import { DeckColumnNotFound } from './deck-column-not-found';

@@ -4,10 +4,11 @@ import iconGraph from '@phosphor-icons/core/regular/graph.svg';
 import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import { useRouterState } from '@tanstack/react-router';
-import { createContext, useContext } from 'react';
+import { useContext } from 'react';
 import { useIntl, type MessageDescriptor } from 'react-intl';
 
 import { useTimelineHeading, type ITimelinePicker } from '@/components/timeline-picker';
+import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
@@ -46,8 +47,6 @@ const trendingTitles = {
   hashtags: messages.trendingHashtags,
   links: messages.trendingLinks,
 };
-
-const DeckColumnIdContext = createContext<string | null>(null);
 
 const updateDeckColumn = (columnId: string, changes: Partial<DeckColumn>) =>
   updateActiveLayoutColumns(
@@ -257,7 +256,6 @@ const useColumnFilters = () => {
 };
 
 export {
-  DeckColumnIdContext,
   updateDeckColumn,
   useDeckColumnConfig,
   useColumnTitle,

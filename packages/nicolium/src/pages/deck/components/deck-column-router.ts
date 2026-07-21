@@ -1,5 +1,7 @@
 import { createMemoryHistory, createRouter } from '@tanstack/react-router';
 
+import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
+
 import { DeckEscape, routeTree } from './deck-routes';
 
 import type { DeckColumn } from '@/schemas/frontend-settings';
@@ -108,17 +110,15 @@ const createColumnRouter = (initialUrl: string) =>
 
 type ColumnRouter = ReturnType<typeof createColumnRouter>;
 
-const registry = new Map<string, { router: ColumnRouter; signature: string }>();
-
 const getDeckColumnRouter = (column: DeckColumn): ColumnRouter => {
   const signature = columnSignature(column);
-  const cached = registry.get(column.id);
+  const cached = deckColumnRouterRegistry.get(column.id);
 
   if (cached && cached.signature === signature) return cached.router;
 
   const router = createColumnRouter(getInitialUrl(column));
-  registry.set(column.id, { router, signature });
+  deckColumnRouterRegistry.set(column.id, { router, signature });
   return router;
 };
 
-export { getDeckColumnRouter, registry as deckColumnRouterRegistry };
+export { getDeckColumnRouter };

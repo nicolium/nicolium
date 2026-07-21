@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 
+import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { deckColumnRouterRegistry } from '@/pages/deck/components/deck-column-router';
 
 import type { Account, Status } from 'pl-api';
 

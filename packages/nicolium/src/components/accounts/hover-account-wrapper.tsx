@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useContext, useRef } from 'react';
 
+import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { DeckColumnIdContext } from '@/pages/deck/components/deck-column-config';
 import { useAccountHoverCardActions } from '@/stores/account-hover-card';
 import { isMobile } from '@/utils/is-mobile';
 
