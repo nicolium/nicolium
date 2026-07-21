@@ -3,8 +3,8 @@ import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 
+import { DatePicker } from '@/components/async-components';
 import IconButton from '@/components/ui/icon-button';
-import { DatePicker } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/stores/instance';
 

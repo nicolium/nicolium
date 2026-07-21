@@ -1,9 +1,9 @@
 import noop from 'lodash/noop';
 import React, { Suspense } from 'react';
 
+import { MediaGallery, Video, Audio } from '@/components/async-components';
 import StatusContent from '@/components/statuses/status-content';
 import Toggle from '@/components/ui/toggle';
-import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 
 interface IStatusCheckBox {

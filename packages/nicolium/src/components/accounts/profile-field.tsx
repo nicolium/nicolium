@@ -4,11 +4,11 @@ import React from 'react';
 import { defineMessages, useIntl, type FormatDateOptions } from 'react-intl';
 
 import AccountLocalTime from '@/components/accounts/account-local-time';
+import CryptoAddress from '@/components/crypto-donate/crypto-address';
+import LightningAddress from '@/components/crypto-donate/lightning-address';
+import coinDB from '@/components/crypto-donate/manifest-map';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Icon from '@/components/ui/icon';
-import CryptoAddress from '@/features/crypto-donate/components/crypto-address';
-import LightningAddress from '@/features/crypto-donate/components/lightning-address';
-import coinDB from '@/features/crypto-donate/utils/manifest-map';
 import Emojify from '@/features/emoji/emojify';
 import { unescapeHTML } from '@/utils/html';
 

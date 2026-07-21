@@ -4,12 +4,12 @@ import React, { useRef } from 'react';
 
 import { BANNER_HTML } from '@/build-config';
 import { AccountLink } from '@/components/accounts/account-link';
+import { ComposeForm } from '@/components/async-components';
 import { AsideContent } from '@/components/navigation/aside-content';
 import Avatar from '@/components/ui/avatar';
 import Layout from '@/components/ui/layout';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import Warning from '@/features/compose/components/warning';
-import { ComposeForm } from '@/features/ui/util/async-components';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useUploadCompose } from '@/stores/compose';

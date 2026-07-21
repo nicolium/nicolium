@@ -7,6 +7,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { cancelEventCompose, initEventEdit, submitEvent } from '@/actions/events';
 import { uploadFile } from '@/actions/media';
 import { fetchStatus } from '@/actions/statuses';
+import { ComposeEditor, DatePicker } from '@/components/async-components';
 import { ADDRESS_ICONS } from '@/components/autosuggest-location';
 import LocationSearch from '@/components/location-search';
 import AltIndicator from '@/components/media/alt-indicator';
@@ -19,7 +20,6 @@ import Input from '@/components/ui/input';
 import Toggle from '@/components/ui/toggle';
 import ContentTypeButton from '@/features/compose/components/content-type-button';
 import { isCurrentOrFutureDate } from '@/features/compose/components/schedule-form';
-import { ComposeEditor, DatePicker } from '@/features/ui/util/async-components';
 import { useClient } from '@/hooks/use-client';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
@@ -28,7 +28,7 @@ import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
-import UploadButton from '../components/upload-button';
+import UploadButton from './upload-button';
 
 import type { Location } from 'pl-api';
 

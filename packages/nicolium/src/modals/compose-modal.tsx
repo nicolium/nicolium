@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import { ComposeForm } from '@/components/async-components';
 import { checkComposeContent } from '@/components/modal-base';
 import Modal from '@/components/ui/modal';
-import { ComposeForm } from '@/features/ui/util/async-components';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { useCompose, useComposeActions, useUploadCompose } from '@/stores/compose';

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import { DatePicker } from '@/components/async-components';
 import List, { ListItem } from '@/components/list';
 import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
 import Modal from '@/components/ui/modal';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
-import { DatePicker } from '@/features/ui/util/async-components';
 import {
   useCreateAnnouncementMutation,
   useUpdateAnnouncementMutation,

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 
-import { MediaGallery } from '@/features/ui/util/async-components';
+import { MediaGallery } from '@/components/async-components';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { ComposeForm } from '@/components/async-components';
 import Widget from '@/components/ui/widget';
-import { ComposeForm } from '@/features/ui/util/async-components';
 
 const ComposePanel: React.FC = () => {
   return (

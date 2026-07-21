@@ -8,6 +8,9 @@ import { register as registerPushNotifications } from '@/actions/push-notificati
 import GuestBanner from '@/components/guest-banner';
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
 import ThumbNavigation from '@/components/navigation/thumb-navigation';
+// Dummy import, to make sure that <Status /> ends up in the application bundle.
+// Without this it ends up in ~8 very commonly used bundles.
+import '@/components/statuses/status';
 import Layout from '@/components/ui/layout';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useUserStream } from '@/hooks/streaming/use-user-stream';
@@ -34,9 +37,6 @@ import { useSettings } from '@/stores/settings';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useTimelinesActions } from '@/stores/timelines';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
-// Dummy import, to make sure that <Status /> ends up in the application bundle.
-// Without this it ends up in ~8 very commonly used bundles.
-import '@/components/statuses/status';
 import GlobalHotkeys from '@/utils/global-hotkeys';
 import { useIsStandalone } from '@/utils/state';
 
@@ -47,7 +47,7 @@ import {
   DropdownNavigation,
   PictureInPicture,
   StatusHoverCard,
-} from './util/async-components';
+} from '../components/async-components';
 
 const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();

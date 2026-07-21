@@ -6,8 +6,7 @@ import CopyableInput from '@/components/copyable-input';
 import Icon from '@/components/ui/icon';
 import { useModalsActions } from '@/stores/modals';
 
-import { getTitle } from '../utils/coin-db';
-
+import { getTitle } from './coin-db';
 import CryptoIcon from './crypto-icon';
 
 const messages = defineMessages({

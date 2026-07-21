@@ -3,7 +3,7 @@ import { mutative } from 'zustand-mutative';
 
 import { useScopeUrl } from '@/hooks/use-scope-url';
 
-import type { ICryptoAddress } from '@/features/crypto-donate/components/crypto-address';
+import type { ICryptoAddress } from '@/components/crypto-donate/crypto-address';
 import type { AltTextModalProps } from '@/modals/alt-text-modal';
 import type { AntennaEditorModalProps } from '@/modals/antenna-editor-modal';
 import type { BlockMuteModalProps } from '@/modals/block-mute-modal';

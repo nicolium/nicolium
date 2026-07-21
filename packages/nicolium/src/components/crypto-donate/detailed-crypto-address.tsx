@@ -3,8 +3,7 @@ import React from 'react';
 
 import CopyableInput from '@/components/copyable-input';
 
-import { getTitle } from '../utils/coin-db';
-
+import { getTitle } from './coin-db';
 import CryptoIcon from './crypto-icon';
 
 interface IDetailedCryptoAddress {

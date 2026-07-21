@@ -3,12 +3,12 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import AccountHeader from '@/components/accounts/account-header';
+import { ProfileInfoPanel } from '@/components/async-components';
 import { AsideContent } from '@/components/navigation/aside-content';
 import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { ProfileInfoPanel } from '@/features/ui/util/async-components';
 import { useAcct } from '@/hooks/use-acct';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';

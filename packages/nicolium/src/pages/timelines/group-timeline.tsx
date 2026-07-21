@@ -5,8 +5,8 @@ import { FormattedMessage } from 'react-intl';
 
 import { GroupTimelineColumn } from '@/columns/timeline';
 import { AccountLink } from '@/components/accounts/account-link';
+import { ComposeForm } from '@/components/async-components';
 import Avatar from '@/components/ui/avatar';
-import { ComposeForm } from '@/features/ui/util/async-components';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useGroupQuery } from '@/queries/groups/use-group';

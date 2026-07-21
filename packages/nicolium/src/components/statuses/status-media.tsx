@@ -1,10 +1,10 @@
 import React, { Suspense, useCallback } from 'react';
 
+import { MediaGallery, Video, Audio } from '@/components/async-components';
 import { CollectionCard } from '@/components/collections/collection-card';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import PlaceholderCard from '@/components/placeholders/placeholder-card';
 import PreviewCard from '@/components/preview-card';
-import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
 import { usePictureInPictureActions } from '@/stores/picture-in-picture';

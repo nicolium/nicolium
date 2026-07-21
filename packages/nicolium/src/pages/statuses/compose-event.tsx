@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { cancelEventCompose } from '@/actions/events';
+import { EditEvent } from '@/components/compose-event/edit-event';
+import { ManagePendingParticipants } from '@/components/compose-event/manage-pending-participants';
 import Column from '@/components/ui/column';
 import Tabs from '@/components/ui/tabs';
-import { EditEvent } from '@/features/compose-event/tabs/edit-event';
-import { ManagePendingParticipants } from '@/features/compose-event/tabs/manage-pending-participants';
 import { eventEditRoute } from '@/router';
 
 const messages = defineMessages({

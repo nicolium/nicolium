@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import SiteWallet from '@/components/crypto-donate/site-wallet';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
-import SiteWallet from '@/features/crypto-donate/components/site-wallet';
 import { useInstance } from '@/stores/instance';
 
 const messages = defineMessages({

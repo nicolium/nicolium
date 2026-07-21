@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import React, { Suspense, useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import { DatePicker } from '@/components/async-components';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
-import { DatePicker } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 import { useCompose, useComposeActions } from '@/stores/compose';
 

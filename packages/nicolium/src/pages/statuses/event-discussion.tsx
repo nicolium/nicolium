@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { ComposeForm } from '@/components/async-components';
 import MissingIndicator from '@/components/missing-indicator';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
@@ -8,7 +9,6 @@ import PendingStatus from '@/components/statuses/pending-status';
 import ThreadStatus from '@/components/statuses/thread-status';
 import Tombstone from '@/components/statuses/tombstone';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { ComposeForm } from '@/features/ui/util/async-components';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useStatus } from '@/queries/statuses/use-status';
 import { eventDiscussionRoute } from '@/router';

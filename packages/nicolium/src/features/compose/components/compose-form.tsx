@@ -11,6 +11,7 @@ import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { length } from 'stringz';
 
+import { ComposeEditor } from '@/components/async-components';
 import DropdownMenu from '@/components/dropdown-menu';
 import List, { ListItem } from '@/components/list';
 import Icon from '@/components/ui/icon';
@@ -18,7 +19,6 @@ import IconButton from '@/components/ui/icon-button';
 import SvgIcon from '@/components/ui/svg-icon';
 import Toggle from '@/components/ui/toggle';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
-import { ComposeEditor } from '@/features/ui/util/async-components';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';

@@ -3,13 +3,13 @@ import { Navigate } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { EventHeader } from '@/components/async-components';
 import { AsideContent } from '@/components/navigation/aside-content';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { EventHeader } from '@/features/ui/util/async-components';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useStatus } from '@/queries/statuses/use-status';
 import { layouts } from '@/router';

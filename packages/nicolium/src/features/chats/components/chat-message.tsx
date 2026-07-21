@@ -6,11 +6,11 @@ import escape from 'lodash/escape';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
+import { MediaGallery } from '@/components/async-components';
 import DropdownMenu from '@/components/dropdown-menu';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Icon from '@/components/ui/icon';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { MediaGallery } from '@/features/ui/util/async-components';
 import { useDeleteChatMessage, type ChatMessage as ChatMessageEntity } from '@/queries/chats';
 import { useModalsActions } from '@/stores/modals';
 import { stripHTML } from '@/utils/html';

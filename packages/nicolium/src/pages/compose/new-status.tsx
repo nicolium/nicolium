@@ -3,8 +3,8 @@ import React, { Suspense, useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
+import { ComposeForm } from '@/components/async-components';
 import { Column } from '@/components/ui/column';
-import { ComposeForm } from '@/features/ui/util/async-components';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';

@@ -8,11 +8,11 @@ import { useIntl, FormattedMessage } from 'react-intl';
 
 import ActionButton from '@/components/accounts/action-button';
 import { isTimezoneLabel } from '@/components/accounts/profile-field';
+import { UserPanel } from '@/components/async-components';
 import Badge from '@/components/badge';
 import Icon from '@/components/ui/icon';
 import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-account-context';
 import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
-import { UserPanel } from '@/features/ui/util/async-components';
 import { useTransitionStyles } from '@/hooks/use-transition-styles';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useAccount } from '@/queries/accounts/use-account';

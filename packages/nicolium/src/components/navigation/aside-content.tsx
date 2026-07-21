@@ -18,9 +18,7 @@ const AccountNotePanel = lazy(() => import('@/components/panels/account-note-pan
 const AnnouncementsPanel = lazy(() => import('@/components/announcements/announcements-panel'));
 const BirthdayPanel = lazy(() => import('@/components/panels/birthday-panel'));
 const ComposePanel = lazy(() => import('@/components/panels/compose-panel'));
-const CryptoDonatePanel = lazy(
-  () => import('@/features/crypto-donate/components/crypto-donate-panel'),
-);
+const CryptoDonatePanel = lazy(() => import('@/components/crypto-donate/crypto-donate-panel'));
 const GroupMediaPanel = lazy(() => import('@/components/panels/group-media-panel'));
 const InstanceModerationPanel = lazy(() => import('@/components/panels/instance-moderation-panel'));
 const LatestAccountsPanel = lazy(

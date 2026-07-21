@@ -59,7 +59,7 @@ interface RouterContext {
 }
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
-  component: lazy(() => import('@/features/ui')),
+  component: lazy(() => import('@/layouts/ui')),
 });
 
 const requireAuth = ({
