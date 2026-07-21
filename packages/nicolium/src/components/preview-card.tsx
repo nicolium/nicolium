@@ -15,7 +15,7 @@ import * as v from 'valibot';
 
 import Blurhash from '@/components/media/blurhash';
 import Icon from '@/components/ui/icon';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useSettings } from '@/stores/settings';
 import { getTextDirection } from '@/utils/rtl';
 import Purify from '@/utils/url-purify';

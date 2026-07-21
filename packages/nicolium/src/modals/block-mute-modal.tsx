@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import DurationSelector from '@/components/compose/polls/duration-selector';
 import FormGroup from '@/components/ui/form-group';
 import Modal from '@/components/ui/modal';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
-import DurationSelector from '@/features/compose/components/polls/duration-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import {

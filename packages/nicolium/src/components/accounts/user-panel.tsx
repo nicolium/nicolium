@@ -7,7 +7,7 @@ import VerificationBadge from '@/components/accounts/verification-badge';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useSettings } from '@/stores/settings';

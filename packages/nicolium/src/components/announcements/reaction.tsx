@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import AnimatedNumber from '@/components/animated-number';
-import unicodeMapping from '@/features/emoji/mapping';
+import unicodeMapping from '@/emoji/mapping';
 import { useAnnouncements } from '@/queries/announcements/use-announcements';
 
 import Emoji from './emoji';

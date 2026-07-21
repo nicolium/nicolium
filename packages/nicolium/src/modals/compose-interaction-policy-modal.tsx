@@ -4,8 +4,8 @@ import { create } from 'mutative';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import Warning from '@/components/compose/warning';
 import Modal from '@/components/ui/modal';
-import Warning from '@/features/compose/components/warning';
 import { useClient } from '@/hooks/use-client';
 import {
   InteractionPolicyConfig,

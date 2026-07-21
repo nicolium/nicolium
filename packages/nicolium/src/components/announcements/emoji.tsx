@@ -1,6 +1,6 @@
 import React from 'react';
 
-import unicodeMapping from '@/features/emoji/mapping';
+import unicodeMapping from '@/emoji/mapping';
 import { useSettings } from '@/stores/settings';
 import { joinPublicPath } from '@/utils/static';
 

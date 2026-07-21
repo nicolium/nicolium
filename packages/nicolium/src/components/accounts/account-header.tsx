@@ -18,7 +18,7 @@ import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';

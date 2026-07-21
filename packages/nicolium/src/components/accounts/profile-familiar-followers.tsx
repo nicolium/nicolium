@@ -4,7 +4,7 @@ import { FormattedList, FormattedMessage } from 'react-intl';
 import AvatarStack from '@/components/accounts/avatar-stack';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import VerificationBadge from '@/components/accounts/verification-badge';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFamiliarFollowers } from '@/queries/accounts/use-familiar-followers';
 import { useModalsActions } from '@/stores/modals';

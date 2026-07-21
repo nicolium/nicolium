@@ -13,7 +13,7 @@ import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import IconButton from '@/components/ui/icon-button';
 import { useChatContext } from '@/contexts/chat-context';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useFeatures } from '@/hooks/use-features';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { useDeleteChat } from '@/queries/chats';

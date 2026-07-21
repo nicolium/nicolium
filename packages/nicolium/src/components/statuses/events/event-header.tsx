@@ -37,7 +37,7 @@ import PlaceholderEventHeader from '@/components/placeholders/placeholder-event-
 import StillImage from '@/components/still-image';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/use-admin-modals';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';

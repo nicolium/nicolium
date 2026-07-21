@@ -3,17 +3,17 @@ import clsx from 'clsx';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 import AutosuggestEmoji from '@/components/autosuggest-emoji';
+import AutosuggestAccount from '@/components/compose/autosuggest-account';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import Portal from '@/components/ui/portal';
-import AutosuggestAccount from '@/features/compose/components/autosuggest-account';
 import { textAtCursorMatchesToken } from '@/utils/suggestions';
 
 import AutosuggestLocation from './autosuggest-location';
 
 import type { Menu, MenuItem } from '@/components/dropdown-menu';
 import type { InputThemes } from '@/components/ui/input';
-import type { Emoji } from '@/features/emoji';
+import type { Emoji } from '@/emoji';
 import type { Location } from 'pl-api';
 
 const getStartPosition = (suggestion: AutoSuggestion, tokenStart: number) =>

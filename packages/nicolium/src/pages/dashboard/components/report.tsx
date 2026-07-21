@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import Avatar from '@/components/ui/avatar';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useReport } from '@/queries/admin/use-reports';
 
 interface IReport {

@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AutosuggestInput from '@/components/autosuggest-input';
+import UploadButton from '@/components/compose/upload-button';
 import IconButton from '@/components/ui/icon-button';
 import { useChatContext } from '@/contexts/chat-context';
-import UploadButton from '@/features/compose/components/upload-button';
-import emojiSearch from '@/features/emoji/search';
+import emojiSearch from '@/emoji/search';
 import {
   useRelationshipQuery,
   useUnblockAccountMutation,
@@ -18,7 +18,7 @@ import { useModalsActions } from '@/stores/modals';
 import ChatTextarea from './chat-textarea';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
-import type { Emoji } from '@/features/emoji';
+import type { Emoji } from '@/emoji';
 import type { MediaAttachment } from 'pl-api';
 
 const messages = defineMessages({

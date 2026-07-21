@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 
 import GroupAvatar from '@/components/groups/group-avatar';
 import Icon from '@/components/ui/icon';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { shortNumberFormat } from '@/utils/numbers';
 

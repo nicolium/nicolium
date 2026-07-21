@@ -6,7 +6,7 @@ import { useCompose } from '@/hooks/use-compose';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useComposeVisibility } from '@/stores/compose';
 
-import Warning from '../components/warning';
+import Warning from './warning';
 
 const APPROX_HASHTAG_RE = /(?:^|[^/)\w])#(\w*[a-zA-Z·]\w*)/i;
 const HASHTAG_WARNING_VISIBILITIES = ['unlisted', 'private', 'mutuals_only'];

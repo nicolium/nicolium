@@ -21,8 +21,8 @@ import Emoji from '@/components/ui/emoji';
 import Form from '@/components/ui/form';
 import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
-import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
-import unicodeMapping from '@/features/emoji/mapping';
+import EmojiPickerDropdown from '@/emoji/containers/emoji-picker-dropdown-container';
+import unicodeMapping from '@/emoji/mapping';
 import { useFeatures } from '@/hooks/use-features';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import {
@@ -33,7 +33,7 @@ import { useDefaultSettings, useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
-import type { Emoji as EmojiType } from '@/features/emoji';
+import type { Emoji as EmojiType } from '@/emoji';
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 
 const messages = defineMessages({

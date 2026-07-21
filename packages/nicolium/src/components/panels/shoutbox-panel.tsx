@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Shoutbox from '@/features/chats/components/shoutbox';
+import Shoutbox from '@/components/chats/shoutbox';
 import { useInstance } from '@/stores/instance';
 
 import Widget from '../ui/widget';

@@ -16,7 +16,7 @@ import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Streamfield from '@/components/ui/streamfield';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
-import { isNativeEmoji } from '@/features/emoji';
+import { isNativeEmoji } from '@/emoji';
 import { useImageField } from '@/hooks/forms/use-image-field';
 import { useClient } from '@/hooks/use-client';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';

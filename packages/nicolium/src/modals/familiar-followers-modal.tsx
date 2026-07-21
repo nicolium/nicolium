@@ -5,7 +5,7 @@ import AccountContainer from '@/components/accounts/account-container';
 import ScrollableList from '@/components/scrollable-list';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFamiliarFollowers } from '@/queries/accounts/use-familiar-followers';
 

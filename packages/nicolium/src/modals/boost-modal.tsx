@@ -9,15 +9,12 @@ import React, { Suspense } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { DatePicker } from '@/components/async-components';
+import ReplyIndicator from '@/components/compose/reply-indicator';
+import { isCurrentOrFutureDate, isFiveMinutesFromNow } from '@/components/compose/schedule-form';
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';
 import Toggle from '@/components/ui/toggle';
-import ReplyIndicator from '@/features/compose/components/reply-indicator';
-import {
-  isCurrentOrFutureDate,
-  isFiveMinutesFromNow,
-} from '@/features/compose/components/schedule-form';
 import { useFeatures } from '@/hooks/use-features';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useModalsActions } from '@/stores/modals';

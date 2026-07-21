@@ -37,7 +37,7 @@ import StatusContainer from '@/components/statuses/status-container';
 import StatusInfo from '@/components/statuses/status-info';
 import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';

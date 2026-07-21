@@ -18,7 +18,7 @@ import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import SvgIcon from '@/components/ui/svg-icon';
 import Toggle from '@/components/ui/toggle';
-import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
+import EmojiPickerDropdown from '@/emoji/containers/emoji-picker-dropdown-container';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
@@ -37,18 +37,11 @@ import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 import { isServo } from '@/utils/browser';
 
-import PreviewComposeContainer from '../containers/preview-compose-container';
-import QuotedStatusContainer from '../containers/quoted-status-container';
-import ReplyIndicatorContainer from '../containers/reply-indicator-container';
-import UploadButtonContainer from '../containers/upload-button-container';
-import WarningContainer from '../containers/warning-container';
-import { $createEmojiNode } from '../editor/nodes/emoji-node';
-import { countableText } from '../util/counter';
-
 import ClearLinkSuggestion from './clear-link-suggestion';
 import ComposeAccountSwitcher from './compose-account-switcher';
 import ContentTypeButton from './content-type-button';
 import DriveButton from './drive-button';
+import { $createEmojiNode } from './editor/nodes/emoji-node';
 import GifPickerButton from './gif-picker-button';
 import HashtagCasingSuggestion from './hashtag-casing-suggestion';
 import InteractionPolicyButton from './interaction-policy-button';
@@ -58,20 +51,26 @@ import LocationForm from './location-form';
 import PlainTextEditor, { type PlainTextEditorHandle } from './plain-text-editor';
 import PollButton from './poll-button';
 import PollForm from './polls/poll-form';
+import PreviewComposeContainer from './preview-compose-container';
 import PrivacyDropdown from './privacy-dropdown';
+import QuotedStatusContainer from './quoted-status-container';
 import ReplyGroupIndicator from './reply-group-indicator';
+import ReplyIndicatorContainer from './reply-indicator-container';
 import ReplyMentions from './reply-mentions';
 import ScheduleButton from './schedule-button';
 import ScheduleForm from './schedule-form';
 import SensitiveMediaButton from './sensitive-media-button';
 import SpoilerInput from './spoiler-input';
 import TextCharacterCounter from './text-character-counter';
+import UploadButtonContainer from './upload-button-container';
 import UploadForm from './upload-form';
+import { countableText } from './util/counter';
 import VisualCharacterCounter from './visual-character-counter';
 import Warning from './warning';
+import WarningContainer from './warning-container';
 
 import type { Menu } from '@/components/dropdown-menu';
-import type { Emoji } from '@/features/emoji';
+import type { Emoji } from '@/emoji';
 import type { LinkNode } from '@lexical/link';
 
 const messages = defineMessages({

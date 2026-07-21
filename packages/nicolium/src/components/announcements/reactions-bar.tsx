@@ -3,7 +3,7 @@ import { useTransition } from '@react-spring/web';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
+import EmojiPickerDropdown from '@/emoji/containers/emoji-picker-dropdown-container';
 import { useAnnouncements } from '@/queries/announcements/use-announcements';
 import { useSettings } from '@/stores/settings';
 
@@ -11,7 +11,7 @@ import Icon from '../ui/icon';
 
 import Reaction from './reaction';
 
-import type { Emoji, NativeEmoji } from '@/features/emoji';
+import type { Emoji, NativeEmoji } from '@/emoji';
 import type { AnnouncementReaction, CustomEmoji } from 'pl-api';
 
 const messages = defineMessages({

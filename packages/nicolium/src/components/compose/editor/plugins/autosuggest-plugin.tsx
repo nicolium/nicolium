@@ -42,12 +42,12 @@ import { scopedQueryKey } from '@/queries/query';
 import { useSettingsStoreActions } from '@/stores/settings';
 import { textAtCursorMatchesToken } from '@/utils/suggestions';
 
-import AutosuggestAccount from '../../components/autosuggest-account';
+import AutosuggestAccount from '../../autosuggest-account';
 import { $createEmojiNode } from '../nodes/emoji-node';
 import { $createMentionNode } from '../nodes/mention-node';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
-import type { Emoji } from '@/features/emoji';
+import type { Emoji } from '@/emoji';
 
 type QueryMatch = {
   leadOffset: number;

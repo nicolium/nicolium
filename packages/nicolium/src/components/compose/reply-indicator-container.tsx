@@ -3,7 +3,7 @@ import React from 'react';
 import { useStatus } from '@/queries/statuses/use-status';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
-import ReplyIndicator from '../components/reply-indicator';
+import ReplyIndicator from './reply-indicator';
 
 interface IReplyIndicatorContainer {
   composeId: string;

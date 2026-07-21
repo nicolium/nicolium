@@ -16,7 +16,7 @@ import {
   updateRulesFromUrl,
 } from '@/utils/url-purify';
 
-import type { Emoji } from '@/features/emoji';
+import type { Emoji } from '@/emoji';
 import type { APIEntity } from '@/types/entities';
 
 const messages = defineMessages({

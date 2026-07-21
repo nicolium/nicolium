@@ -34,6 +34,8 @@ import {
 import TrendsColumn from '@/columns/trends';
 import AccountHeader from '@/components/accounts/account-header';
 import { ProfileInfoPanel } from '@/components/async-components';
+import Chat from '@/components/chats/chat';
+import ChatList from '@/components/chats/chat-list';
 import { Hotkeys } from '@/components/hotkeys';
 import MissingIndicator from '@/components/missing-indicator';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
@@ -43,8 +45,6 @@ import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import Tabs from '@/components/ui/tabs';
 import { MultiColumnProvider } from '@/contexts/multi-column-context';
-import Chat from '@/features/chats/components/chat';
-import ChatList from '@/features/chats/components/chat-list';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { DriveBrowser } from '@/pages/drive/components/drive-browser';

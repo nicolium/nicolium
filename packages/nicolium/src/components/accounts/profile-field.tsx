@@ -9,7 +9,7 @@ import LightningAddress from '@/components/crypto-donate/lightning-address';
 import coinDB from '@/components/crypto-donate/manifest-map';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Icon from '@/components/ui/icon';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { unescapeHTML } from '@/utils/html';
 
 import type { Account } from 'pl-api';

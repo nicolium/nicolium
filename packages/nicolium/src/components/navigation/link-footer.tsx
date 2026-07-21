@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import sourceCode from '@/utils/code';
 

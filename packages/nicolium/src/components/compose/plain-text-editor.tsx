@@ -4,14 +4,14 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AutosuggestInput from '@/components/autosuggest-input';
 import Textarea from '@/components/ui/textarea';
-import { isNativeEmoji } from '@/features/emoji';
+import { isNativeEmoji } from '@/emoji';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
-import type { Emoji } from '@/features/emoji';
+import type { Emoji } from '@/emoji';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What’s on your mind?' },

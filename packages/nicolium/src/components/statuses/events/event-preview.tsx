@@ -10,7 +10,7 @@ import EventActionButton from '@/components/statuses/events/event-action-button'
 import EventDate from '@/components/statuses/events/event-date';
 import Icon from '@/components/ui/icon';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 
 import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';

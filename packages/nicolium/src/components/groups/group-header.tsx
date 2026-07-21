@@ -8,7 +8,7 @@ import GroupAvatar from '@/components/groups/group-avatar';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import StillImage from '@/components/still-image';
 import Icon from '@/components/ui/icon';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useModalsActions } from '@/stores/modals';
 
 import GroupActionButton from './group-action-button';

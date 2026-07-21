@@ -5,13 +5,13 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AutosuggestInput from '@/components/autosuggest-input';
 import IconButton from '@/components/ui/icon-button';
-import emojiSearch from '@/features/emoji/search';
+import emojiSearch from '@/emoji/search';
 import { useInstance } from '@/stores/instance';
 
 import ChatTextarea from './chat-textarea';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
-import type { Emoji } from '@/features/emoji';
+import type { Emoji } from '@/emoji';
 
 const messages = defineMessages({
   placeholder: { id: 'chat.input.placeholder', defaultMessage: 'Type a message' },

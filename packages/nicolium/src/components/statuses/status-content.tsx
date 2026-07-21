@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 
 import QuotedStatus from '@/components/statuses/quoted-status-container';
 import Icon from '@/components/ui/icon';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';

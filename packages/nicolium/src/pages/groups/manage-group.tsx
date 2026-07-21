@@ -8,7 +8,7 @@ import List, { ListItem } from '@/components/list';
 import { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useDeleteGroupMutation, useGroupQuery } from '@/queries/groups/use-group';
 import { manageGroupRoute } from '@/router';
 import { useModalsActions } from '@/stores/modals';

@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Link from '@/components/link';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useCompose } from '@/stores/compose';

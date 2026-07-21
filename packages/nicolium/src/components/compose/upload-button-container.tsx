@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useCompose, useUploadCompose } from '@/stores/compose';
 
-import UploadButton from '../components/upload-button';
+import UploadButton from './upload-button';
 
 interface IUploadButtonContainer {
   composeId: string;

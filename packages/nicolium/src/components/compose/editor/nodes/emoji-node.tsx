@@ -2,7 +2,7 @@ import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import React from 'react';
 
 import Component from '@/components/ui/emoji';
-import { isNativeEmoji, type Emoji } from '@/features/emoji';
+import { isNativeEmoji, type Emoji } from '@/emoji';
 
 import type { EditorConfig, LexicalNode, NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 

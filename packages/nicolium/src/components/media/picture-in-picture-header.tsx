@@ -5,7 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Avatar from '@/components/ui/avatar';
 import IconButton from '@/components/ui/icon-button';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 
 const messages = defineMessages({

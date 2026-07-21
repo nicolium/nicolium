@@ -56,8 +56,8 @@ import StatusActionButton from '@/components/statuses/status-action-button';
 import Emoji from '@/components/ui/emoji';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { DeckColumnIdContext, deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
-import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
-import unicodeMapping from '@/features/emoji/mapping';
+import EmojiPickerDropdown from '@/emoji/containers/emoji-picker-dropdown-container';
+import unicodeMapping from '@/emoji/mapping';
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/use-admin-modals';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useClient } from '@/hooks/use-client';
@@ -106,7 +106,7 @@ import GroupPopover from '../groups/popover/group-popover';
 import Popover from '../ui/popover';
 
 import type { Menu } from '@/components/dropdown-menu';
-import type { Emoji as EmojiType } from '@/features/emoji';
+import type { Emoji as EmojiType } from '@/emoji';
 import type { UnauthorizedModalAction } from '@/modals/unauthorized-modal';
 import type { Me } from '@/stores/auth';
 

@@ -21,7 +21,7 @@ import StatusInfo from '@/components/statuses/status-info';
 import Tombstone from '@/components/statuses/tombstone';
 import Icon from '@/components/ui/icon';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 import { useRelationshipsQuery } from '@/queries/accounts/use-relationship';

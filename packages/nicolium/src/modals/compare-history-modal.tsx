@@ -8,7 +8,7 @@ import { ParsedContent } from '@/components/statuses/parsed-content';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import Toggle from '@/components/ui/toggle';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useStatusHistory } from '@/queries/statuses/use-status-history';

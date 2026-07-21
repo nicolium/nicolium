@@ -6,10 +6,10 @@ import { useTheme } from '@/hooks/use-theme';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useSettings, useSettingsStoreActions } from '@/stores/settings';
 
-import { EmojiPicker } from '../../../components/async-components';
-import { buildCustomEmojiCategories } from '../../emoji';
+import { buildCustomEmojiCategories } from '..';
+import { EmojiPicker } from '../../components/async-components';
 
-import type { Emoji, CustomEmoji, NativeEmoji } from '@/features/emoji';
+import type { Emoji, CustomEmoji, NativeEmoji } from '@/emoji';
 import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
 
 const messages = defineMessages({

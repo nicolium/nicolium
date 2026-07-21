@@ -1,6 +1,6 @@
 import { queryOptions, type UseQueryResult } from '@tanstack/react-query';
 
-import { addCustomToPool } from '@/features/emoji/search';
+import { addCustomToPool } from '@/emoji/search';
 import { useClient } from '@/hooks/use-client';
 import { useAppQuery } from '@/queries/query';
 

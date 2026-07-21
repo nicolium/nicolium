@@ -8,7 +8,7 @@ import PlaceholderChatMessage from '@/components/placeholders/placeholder-chat-m
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useShoutboxIsLoading, useShoutboxMessages, type ShoutMessage } from '@/stores/shoutbox';
 

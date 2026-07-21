@@ -12,7 +12,7 @@ import StatusLanguagePicker from '@/components/statuses/status-language-picker';
 import StatusReactionsBar from '@/components/statuses/status-reactions-bar';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import Icon from '@/components/ui/icon';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useSettings } from '@/stores/settings';

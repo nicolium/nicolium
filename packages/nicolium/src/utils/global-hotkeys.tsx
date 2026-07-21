@@ -1,7 +1,7 @@
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 
-import { FOCUS_EDITOR_EVENT } from '@/features/compose/editor/focus-event';
+import { FOCUS_EDITOR_EVENT } from '@/components/compose/editor/focus-event';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { focusDeckColumn } from '@/pages/deck/utils/column-focus';
 import { useComposeActions } from '@/stores/compose';

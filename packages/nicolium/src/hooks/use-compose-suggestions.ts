@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import emojiSearch from '@/features/emoji/search';
+import emojiSearch from '@/emoji/search';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useSearchHashtags } from '@/queries/search/use-search';

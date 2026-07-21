@@ -1,12 +1,12 @@
 import React, { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import Warning from '@/components/compose/warning';
 import { EmptyMessage } from '@/components/empty-message';
 import Column from '@/components/ui/column';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
-import Warning from '@/features/compose/components/warning';
 import { ConfigSection } from '@/pages/dashboard/components/pleroma-config/config-section';
 import {
   getConfigValueMap,

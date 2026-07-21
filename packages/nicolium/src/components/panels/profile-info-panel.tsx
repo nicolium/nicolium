@@ -17,7 +17,7 @@ import { dateFormatOptions } from '@/components/relative-timestamp';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Icon from '@/components/ui/icon';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useSettings } from '@/stores/settings';

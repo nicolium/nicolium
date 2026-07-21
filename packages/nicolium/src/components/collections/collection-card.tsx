@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 
 import type { Collection } from 'pl-api';

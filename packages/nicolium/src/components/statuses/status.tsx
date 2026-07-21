@@ -15,7 +15,7 @@ import StatusTypeIcon from '@/components/statuses/status-type-icon';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useGroupQuery } from '@/queries/groups/use-group';

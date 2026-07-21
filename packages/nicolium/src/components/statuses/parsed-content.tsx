@@ -11,7 +11,7 @@ import iconTextWrap from 'lucide-static/icons/text-wrap.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
 import Purify from '@/utils/url-purify';

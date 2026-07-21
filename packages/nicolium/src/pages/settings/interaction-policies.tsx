@@ -2,13 +2,13 @@ import { create } from 'mutative';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import Warning from '@/components/compose/warning';
 import List, { ListItem } from '@/components/list';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import { InlineMultiselect } from '@/components/ui/inline-multiselect';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Tabs from '@/components/ui/tabs';
-import Warning from '@/features/compose/components/warning';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';

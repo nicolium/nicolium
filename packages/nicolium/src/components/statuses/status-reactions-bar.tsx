@@ -5,8 +5,8 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
-import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
-import unicodeMapping from '@/features/emoji/mapping';
+import EmojiPickerDropdown from '@/emoji/containers/emoji-picker-dropdown-container';
+import unicodeMapping from '@/emoji/mapping';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useLongPress } from '@/hooks/use-long-press';
@@ -19,7 +19,7 @@ import { useSettings } from '@/stores/settings';
 
 import AnimatedNumber from '../animated-number';
 
-import type { Emoji as EmojiType } from '@/features/emoji';
+import type { Emoji as EmojiType } from '@/emoji';
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { EmojiReaction } from 'pl-api';
 

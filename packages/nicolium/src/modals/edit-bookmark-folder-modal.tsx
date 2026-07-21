@@ -8,8 +8,8 @@ import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
-import EmojiPickerDropdown from '@/features/emoji/components/emoji-picker-dropdown';
-import { messages as emojiMessages } from '@/features/emoji/containers/emoji-picker-dropdown-container';
+import EmojiPickerDropdown from '@/emoji/components/emoji-picker-dropdown';
+import { messages as emojiMessages } from '@/emoji/containers/emoji-picker-dropdown-container';
 import { useTextField } from '@/hooks/forms/use-text-field';
 import { useClickOutside } from '@/hooks/use-click-outside';
 import { useFeatures } from '@/hooks/use-features';
@@ -19,7 +19,7 @@ import {
 } from '@/queries/statuses/use-bookmark-folders';
 import toast from '@/toast';
 
-import type { Emoji as EmojiType } from '@/features/emoji';
+import type { Emoji as EmojiType } from '@/emoji';
 import type { BaseModalProps } from '@/modals/modal-root';
 
 const messages = defineMessages({

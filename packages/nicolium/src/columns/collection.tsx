@@ -17,7 +17,7 @@ import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import Spinner from '@/components/ui/spinner';
-import Emojify from '@/features/emoji/emojify';
+import Emojify from '@/emoji/emojify';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccounts } from '@/queries/accounts/use-accounts';
