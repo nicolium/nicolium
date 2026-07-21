@@ -140,7 +140,7 @@ const AdminAnnouncementsPage: React.FC = () => {
       label={intl.formatMessage(messages.heading)}
       bodyClassName='admin-announcements-page'
       action={
-        <button className='admin-announcements-page__add-button' onClick={handleCreateAnnouncement}>
+        <button className='admin-announcements-page__create' onClick={handleCreateAnnouncement}>
           <Icon src={iconPlus} aria-hidden />
           <FormattedMessage id='admin.announcements.action' defaultMessage='Create announcement' />
         </button>
