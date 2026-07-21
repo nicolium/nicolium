@@ -81,22 +81,22 @@ const config = defineConfig(() => ({
             },
             {
               name: 'settings',
-              test: /[\\/]src[\\/]pages[\\/]settings[\\/]/,
+              test: /[\\/]src[\\/](components|pages)[\\/]settings[\\/]/,
               priority: 5,
             },
             {
               name: 'chats',
-              test: /[\\/]src[\\/](features|pages)[\\/]chats[\\/]/,
+              test: /[\\/]src[\\/](components|pages)[\\/]chats[\\/]/,
               priority: 5,
             },
             {
               name: 'compose',
-              test: /[\\/]src[\\/](features[\\/]compose(-event)?|pages[\\/]compose)[\\/]/,
+              test: /[\\/]src[\\/](components[\\/]compose(-event)?|pages[\\/]compose)[\\/]/,
               priority: 5,
             },
             {
               name: 'crypto-donate',
-              test: /[\\/]src[\\/]features[\\/]crypto-donate[\\/]/,
+              test: /[\\/]src[\\/]components[\\/]crypto-donate[\\/]/,
               priority: 5,
             },
             {
