@@ -76,6 +76,10 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
             continue;
           }
 
+          if (!URL.canParse(link.getURL())) {
+            continue;
+          }
+
           const { originalUrl, cleanUrl, isDirty } = compareUrl(link.getURL());
           if (!isDirty) {
             continue;
