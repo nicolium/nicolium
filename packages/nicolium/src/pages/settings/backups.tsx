@@ -53,7 +53,7 @@ const Backup: React.FC<IBackup> = ({ backup }) => {
   );
 };
 
-const BackupsPage = () => {
+const BackupsPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: backups = [], isLoading } = useBackups();

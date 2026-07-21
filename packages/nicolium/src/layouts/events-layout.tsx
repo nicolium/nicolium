@@ -5,7 +5,7 @@ import { AsideContent } from '@/components/navigation/aside-content';
 import Layout from '@/components/ui/layout';
 
 /** Layout to display events list. */
-const EventsLayout = () => (
+const EventsLayout: React.FC = () => (
   <>
     <Layout.Main>
       <Outlet />

@@ -3,7 +3,7 @@ import React from 'react';
 import Card, { CardBody } from '@/components/ui/card';
 import Spinner from '@/components/ui/spinner';
 
-const ColumnLoading = () => (
+const ColumnLoading: React.FC = () => (
   <Card variant='rounded'>
     <CardBody>
       <Spinner />

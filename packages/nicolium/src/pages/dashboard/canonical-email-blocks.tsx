@@ -112,7 +112,7 @@ const CanonicalEmailBlock: React.FC<ICanonicalEmailBlock> = ({ canonicalEmailBlo
   );
 };
 
-const CanonicalEmailBlocksPage = () => {
+const CanonicalEmailBlocksPage: React.FC = () => {
   const intl = useIntl();
 
   const [email, setEmail] = useState('');

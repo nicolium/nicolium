@@ -7,7 +7,7 @@ const messages = defineMessages({
   title: { id: 'column_forbidden.title', defaultMessage: 'Forbidden' },
 });
 
-const ColumnForbidden = () => {
+const ColumnForbidden: React.FC = () => {
   const intl = useIntl();
 
   return (

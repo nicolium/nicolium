@@ -19,7 +19,7 @@ const messages = defineMessages({
   fail: { id: 'settings.messages.fail', defaultMessage: 'Failed to update chat settings' },
 });
 
-const MessagesSettings = () => {
+const MessagesSettings: React.FC = () => {
   const { data: account } = useOwnAccount();
   const updateCredentials = useUpdateCredentials();
   const settings = useSettings();

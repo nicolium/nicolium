@@ -6,7 +6,7 @@ import { useShoutboxIsLoading } from '@/stores/shoutbox';
 import BlankslateEmpty from './blankslate-empty';
 import BlankslateWithChats from './blankslate-with-chats';
 
-const ChatsPageEmpty = () => {
+const ChatsPageEmpty: React.FC = () => {
   const showShoutbox = !useShoutboxIsLoading();
   const {
     chatsQuery: { data: chats, isLoading },

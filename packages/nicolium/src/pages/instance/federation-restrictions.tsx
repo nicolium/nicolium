@@ -22,7 +22,7 @@ const messages = defineMessages({
   },
 });
 
-const FederationRestrictionsPage = () => {
+const FederationRestrictionsPage: React.FC = () => {
   const intl = useIntl();
   const instance = useInstance();
 

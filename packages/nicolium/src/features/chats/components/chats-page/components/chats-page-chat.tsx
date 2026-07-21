@@ -51,7 +51,7 @@ const messages = defineMessages({
   back: { id: 'chats.back', defaultMessage: 'Back to chats' },
 });
 
-const ChatsPageChat = () => {
+const ChatsPageChat: React.FC = () => {
   const intl = useIntl();
   const features = useFeatures();
   const navigate = useNavigate();

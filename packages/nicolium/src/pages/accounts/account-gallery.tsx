@@ -153,7 +153,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia }) => {
   );
 };
 
-const AccountGalleryPage = () => {
+const AccountGalleryPage: React.FC = () => {
   const { username } = profileMediaRoute.useParams();
   const { openModal } = useModalsActions();
 

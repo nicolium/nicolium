@@ -6,7 +6,7 @@ import { layouts } from '@/router';
 
 import ChatPane from '../chat-pane/chat-pane';
 
-const ChatWidget = () => {
+const ChatWidget: React.FC = () => {
   const match = useMatch({ from: layouts.chats.id, shouldThrow: false });
 
   if (match) {

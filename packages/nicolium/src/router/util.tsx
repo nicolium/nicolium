@@ -30,7 +30,7 @@ const HomeTimeline = lazyRouteComponent(() => import('@/pages/timelines/home-tim
 const LandingPage = lazyRouteComponent(() => import('@/pages/instance/landing'));
 const LandingTimeline = lazyRouteComponent(() => import('@/pages/timelines/landing-timeline'));
 
-const HomeRoute = () => {
+const HomeRoute: React.FC = () => {
   const { redirectRootNoLogin } = useFrontendConfig();
   const standalone = useIsStandalone();
   const { isLoggedIn } = useLoggedIn();

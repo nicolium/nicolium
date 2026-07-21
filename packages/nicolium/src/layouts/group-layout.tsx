@@ -19,7 +19,7 @@ const messages = defineMessages({
   media: { id: 'group.tabs.media', defaultMessage: 'Media' },
 });
 
-const PrivacyBlankslate = () => (
+const PrivacyBlankslate: React.FC = () => (
   <div className='group-privacy-blankslate'>
     <div className='group-privacy-blankslate__icon'>
       <Icon src={iconEyeSlash} />
@@ -35,7 +35,7 @@ const PrivacyBlankslate = () => (
 );
 
 /** Layout to display a group. */
-const GroupLayout = () => {
+const GroupLayout: React.FC = () => {
   const { groupId } = layouts.group.useParams();
 
   const intl = useIntl();

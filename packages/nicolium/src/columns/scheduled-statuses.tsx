@@ -7,7 +7,7 @@ import ScheduledStatus from '@/features/scheduled-statuses/components/scheduled-
 import { useScheduledStatusesQuery } from '@/queries/statuses/scheduled-statuses';
 
 /** Displays scheduled statuses fetched from the backend. */
-const ScheduledStatusesColumn = () => {
+const ScheduledStatusesColumn: React.FC = () => {
   const {
     data: scheduledStatuses = [],
     isLoading,

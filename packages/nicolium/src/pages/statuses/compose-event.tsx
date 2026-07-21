@@ -15,7 +15,7 @@ const messages = defineMessages({
   pending: { id: 'compose_event.tabs.pending', defaultMessage: 'Manage requests' },
 });
 
-const EditEventPage = () => {
+const EditEventPage: React.FC = () => {
   const intl = useIntl();
 
   const { statusId } = eventEditRoute.useParams();
@@ -64,7 +64,7 @@ const EditEventPage = () => {
   );
 };
 
-const ComposeEventPage = () => {
+const ComposeEventPage: React.FC = () => {
   const intl = useIntl();
 
   useEffect(

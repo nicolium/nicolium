@@ -28,7 +28,7 @@ const contexts = {
   account: messages.accounts,
 };
 
-const FiltersPage = () => {
+const FiltersPage: React.FC = () => {
   const intl = useIntl();
   const { filtersV2 } = useFeatures();
 

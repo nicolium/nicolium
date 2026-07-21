@@ -35,7 +35,7 @@ const LinkWrapper = ({
 };
 
 /** Floating desktop chat window. */
-const ChatWindow = () => {
+const ChatWindow: React.FC = () => {
   const { chat, currentChatId, screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
   const intl = useIntl();
 

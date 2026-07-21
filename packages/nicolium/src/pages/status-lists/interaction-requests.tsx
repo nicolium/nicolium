@@ -257,7 +257,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   );
 };
 
-const InteractionRequestsPage = () => {
+const InteractionRequestsPage: React.FC = () => {
   const columnId: string = useRef(`interaction-requests-${crypto.randomUUID()}`).current;
   const intl = useIntl();
 

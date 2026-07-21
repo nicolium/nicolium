@@ -6,7 +6,7 @@ import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 
 /** Layout to display groups. */
-const GroupsLayout = () => (
+const GroupsLayout: React.FC = () => (
   <>
     <Layout.Main>
       <Column withHeader={false}>

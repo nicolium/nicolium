@@ -29,7 +29,7 @@ const messages = defineMessages({
   leaveConfirm: { id: 'chat_settings.leave.confirm', defaultMessage: 'Leave chat' },
 });
 
-const ChatSettings = () => {
+const ChatSettings: React.FC = () => {
   const intl = useIntl();
   const features = useFeatures();
 

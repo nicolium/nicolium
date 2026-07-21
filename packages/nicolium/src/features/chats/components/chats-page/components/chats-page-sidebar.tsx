@@ -17,7 +17,7 @@ const messages = defineMessages({
   newChat: { id: 'chat_pane.header.new_chat', defaultMessage: 'New chat' },
 });
 
-const ChatsPageSidebar = () => {
+const ChatsPageSidebar: React.FC = () => {
   const intl = useIntl();
   const navigate = useNavigate();
 

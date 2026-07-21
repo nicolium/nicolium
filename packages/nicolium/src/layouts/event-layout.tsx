@@ -14,7 +14,7 @@ import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useStatus } from '@/queries/statuses/use-status';
 import { layouts } from '@/router';
 
-const EventLayout = () => {
+const EventLayout: React.FC = () => {
   const { statusId } = layouts.event.useParams();
 
   const me = useCurrentAccount();

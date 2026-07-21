@@ -148,7 +148,7 @@ const DomainBlock: React.FC<IDomainBlock> = ({ domainBlock }) => {
   );
 };
 
-const DomainBlocksPage = () => {
+const DomainBlocksPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: domainBlocks } = useDomainBlocksQuery();

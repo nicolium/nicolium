@@ -115,7 +115,7 @@ const EmailDomainBlock: React.FC<IEmailDomainBlock> = ({ emailDomainBlock }) => 
   );
 };
 
-const EmailDomainBlocksPage = () => {
+const EmailDomainBlocksPage: React.FC = () => {
   const intl = useIntl();
 
   const [domain, setDomain] = useState('');

@@ -18,7 +18,7 @@ import { selectChild } from '@/utils/scroll-utils';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
 
-const PlaceholderStatusSlim = () => <PlaceholderStatus variant='slim' />;
+const PlaceholderStatusSlim: React.FC = () => <PlaceholderStatus variant='slim' />;
 
 const EventDiscussionPage: React.FC = () => {
   const { statusId } = eventDiscussionRoute.useParams();

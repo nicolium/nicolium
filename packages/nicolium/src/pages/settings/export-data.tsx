@@ -42,7 +42,7 @@ const messages = defineMessages({
   heading: { id: 'column.export_data', defaultMessage: 'Export data' },
 });
 
-const ExportDataPage = () => {
+const ExportDataPage: React.FC = () => {
   const client = useClient();
   const currentAccountId = useCurrentAccount();
   const intl = useIntl();

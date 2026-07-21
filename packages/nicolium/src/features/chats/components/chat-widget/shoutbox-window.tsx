@@ -16,7 +16,7 @@ const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },
 });
 
-const ShoutboxWindow = () => {
+const ShoutboxWindow: React.FC = () => {
   const { changeScreen, isOpen, toggleChatPane } = useChatContext();
   const instance = useInstance();
   const intl = useIntl();

@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 /** To display on the chats main page when no message is selected, but chats are present. */
-const BlankslateWithChats = () => {
+const BlankslateWithChats: React.FC = () => {
   const navigate = useNavigate();
 
   const handleNewChat = () => {

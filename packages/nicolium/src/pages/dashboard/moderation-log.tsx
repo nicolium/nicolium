@@ -11,7 +11,7 @@ const messages = defineMessages({
   heading: { id: 'column.admin.moderation_log', defaultMessage: 'Moderation log' },
 });
 
-const ModerationLogPage = () => {
+const ModerationLogPage: React.FC = () => {
   const intl = useIntl();
 
   const { data, hasNextPage, isLoading, fetchNextPage } = useModerationLog();

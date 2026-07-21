@@ -6,7 +6,7 @@ import DraftStatus from '@/features/draft-statuses/components/draft-status';
 import { useDraftStatusesQuery } from '@/queries/statuses/use-draft-statuses';
 
 /** Locally stored draft statuses from current account. */
-const DraftStatusesColumn = () => {
+const DraftStatusesColumn: React.FC = () => {
   const { data: drafts = [] } = useDraftStatusesQuery((data) => Object.values(data));
 
   const emptyMessage = (

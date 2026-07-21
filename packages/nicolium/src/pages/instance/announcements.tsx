@@ -13,7 +13,7 @@ const messages = defineMessages({
   heading: { id: 'announcements.title', defaultMessage: 'Announcements' },
 });
 
-const AnnouncementsPage = () => {
+const AnnouncementsPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: emojiMap = {} } = useCustomEmojis(makeCustomEmojiMap);

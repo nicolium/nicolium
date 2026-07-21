@@ -16,7 +16,7 @@ import { useIsStandalone } from '@/utils/state';
 
 import type { NicoliumResponse } from '@/api';
 
-const SignUpPanel = () => {
+const SignUpPanel: React.FC = () => {
   const instance = useInstance();
   const { isOpen } = useRegistrationStatus();
   const me = useCurrentAccount();

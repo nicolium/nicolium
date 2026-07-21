@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-const Blankslate = () => (
+const Blankslate: React.FC = () => (
   <div className='chat-search__blankslate'>
     <p className='chat-search__blankslate__title'>
       <FormattedMessage id='chat_search.blankslate.title' defaultMessage='Start a chat' />

@@ -63,7 +63,7 @@ class ColumnErrorBoundary extends React.Component<IColumnErrorBoundary, { hasErr
   }
 }
 
-const DeckPage = () => {
+const DeckPage: React.FC = () => {
   const intl = useIntl();
   const { deck, defaultTimeline } = useSettings();
   const columns = useActiveDeckColumns();

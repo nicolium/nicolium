@@ -2,7 +2,7 @@ import React from 'react';
 
 import { generateText, randomIntFromInterval } from '@/utils/placeholders';
 
-const PlaceholderEventPreview = () => {
+const PlaceholderEventPreview: React.FC = () => {
   const eventNameLength = randomIntFromInterval(5, 25);
   const nameLength = randomIntFromInterval(5, 15);
 

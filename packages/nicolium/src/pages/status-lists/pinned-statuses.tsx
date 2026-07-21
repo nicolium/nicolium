@@ -12,7 +12,7 @@ const messages = defineMessages({
   heading: { id: 'column.pins', defaultMessage: 'Pinned posts' },
 });
 
-const PinnedStatusesPage = () => {
+const PinnedStatusesPage: React.FC = () => {
   const intl = useIntl();
   const { username } = profilePinsRoute.useParams();
 

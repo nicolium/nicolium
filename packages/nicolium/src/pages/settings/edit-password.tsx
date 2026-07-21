@@ -27,7 +27,7 @@ const messages = defineMessages({
 
 const initialState = { currentPassword: '', newPassword: '', newPasswordConfirmation: '' };
 
-const EditPasswordPage = () => {
+const EditPasswordPage: React.FC = () => {
   const intl = useIntl();
   const client = useClient();
 

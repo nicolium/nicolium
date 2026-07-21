@@ -4,7 +4,7 @@ import React from 'react';
 import { AsideContent } from '@/components/navigation/aside-content';
 import Layout from '@/components/ui/layout';
 
-const AdminHomeLayout = () => (
+const AdminHomeLayout: React.FC = () => (
   <>
     <Layout.Main>
       <Outlet />

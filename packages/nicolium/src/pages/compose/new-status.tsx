@@ -20,7 +20,7 @@ const messages = defineMessages({
   heading: { id: 'compose.heading', defaultMessage: 'Compose' },
 });
 
-const NewStatusPage = () => {
+const NewStatusPage: React.FC = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const client = useClient();

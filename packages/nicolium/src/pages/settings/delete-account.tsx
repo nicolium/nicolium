@@ -23,7 +23,7 @@ const messages = defineMessages({
   },
 });
 
-const DeleteAccountPage = () => {
+const DeleteAccountPage: React.FC = () => {
   const intl = useIntl();
   const client = useClient();
   const features = useFeatures();

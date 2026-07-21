@@ -12,7 +12,7 @@ const messages = defineMessages({
 });
 
 /** User settings page. */
-const SettingsPage = () => {
+const SettingsPage: React.FC = () => {
   const intl = useIntl();
 
   const features = useFeatures();

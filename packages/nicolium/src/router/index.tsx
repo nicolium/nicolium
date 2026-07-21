@@ -1873,7 +1873,7 @@ declare module '@tanstack/react-router' {
   }
 }
 
-const RouterWithContext = () => {
+const RouterWithContext: React.FC = () => {
   const instance = useInstance();
   const features = useFeatures();
   const { cryptoAddresses } = useFrontendConfig();

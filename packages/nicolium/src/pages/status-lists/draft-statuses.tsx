@@ -8,7 +8,7 @@ const messages = defineMessages({
   heading: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
 });
 
-const DraftStatusesPage = () => {
+const DraftStatusesPage: React.FC = () => {
   const intl = useIntl();
 
   return (

@@ -30,7 +30,7 @@ const messages = defineMessages({
   notFound: { id: 'list.not_found.heading', defaultMessage: 'List not found' },
 });
 
-const FiltersHint = () => (
+const FiltersHint: React.FC = () => (
   <p className='timeline-filters-options__hint'>
     <FormattedMessage
       id='timeline_filters.hint.list'

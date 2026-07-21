@@ -90,7 +90,7 @@ const DomainAllow: React.FC<IDomainAllow> = ({ domainAllow }) => {
   );
 };
 
-const DomainAllowsPage = () => {
+const DomainAllowsPage: React.FC = () => {
   const intl = useIntl();
 
   const [domain, setDomain] = useState('');

@@ -6,7 +6,7 @@ import PlaceholderGroupSearch from '@/components/placeholders/placeholder-group-
 import Widget from '@/components/ui/widget';
 import { useGroupsQuery } from '@/queries/groups/use-groups';
 
-const MyGroupsPanel = () => {
+const MyGroupsPanel: React.FC = () => {
   const { data: groupIds = [], isFetching, isError } = useGroupsQuery();
   const isEmpty = (!isFetching && groupIds.length === 0) ?? isError;
 

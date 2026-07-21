@@ -23,7 +23,7 @@ const messages = defineMessages({
   newChat: { id: 'chat_pane.header.new_chat', defaultMessage: 'New chat' },
 });
 
-const ChatPane = () => {
+const ChatPane: React.FC = () => {
   const intl = useIntl();
   const { unreadChatsCount } = useStatContext();
   const showShoutbox = !useShoutboxIsLoading();

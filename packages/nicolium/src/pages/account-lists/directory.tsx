@@ -134,7 +134,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
   );
 };
 
-const DirectoryPage = () => {
+const DirectoryPage: React.FC = () => {
   const intl = useIntl();
   const { order, local } = directoryRoute.useSearch();
   const navigate = useNavigate({ from: directoryRoute.fullPath });

@@ -6,7 +6,7 @@ import Layout from '@/components/ui/layout';
 import { layouts } from '@/router';
 
 /** Layout for viewing a remote instance timeline. */
-const RemoteInstanceLayout = () => {
+const RemoteInstanceLayout: React.FC = () => {
   const { instance } = layouts.remoteInstance.useParams();
 
   return (

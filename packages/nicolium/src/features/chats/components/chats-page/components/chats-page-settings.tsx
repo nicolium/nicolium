@@ -40,7 +40,7 @@ const messages = defineMessages({
   back: { id: 'chats.back', defaultMessage: 'Back to chats' },
 });
 
-const ChatsPageSettings = () => {
+const ChatsPageSettings: React.FC = () => {
   const { data: account } = useOwnAccount();
   const intl = useIntl();
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { generateText, randomIntFromInterval } from '@/utils/placeholders';
 
-const PlaceholderGroupCard = () => {
+const PlaceholderGroupCard: React.FC = () => {
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (

@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { useModalsActions } from '@/stores/modals';
 
-const NewGroupPanel = () => {
+const NewGroupPanel: React.FC = () => {
   const { openModal } = useModalsActions();
 
   const createGroup = () => {

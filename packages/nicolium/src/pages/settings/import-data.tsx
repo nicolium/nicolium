@@ -90,7 +90,7 @@ const DataImporter: React.FC<IDataImporter> = ({
   );
 };
 
-const ImportDataPage = () => {
+const ImportDataPage: React.FC = () => {
   const client = useClient();
   const intl = useIntl();
   const features = useFeatures();

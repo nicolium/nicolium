@@ -23,7 +23,7 @@ const messages = defineMessages({
   links: { id: 'search_results.links', defaultMessage: 'News' },
 });
 
-const SearchResults = () => {
+const SearchResults: React.FC = () => {
   const intl = useIntl();
   const features = useFeatures();
   const queryClient = useQueryClient();
@@ -101,7 +101,7 @@ const SearchResults = () => {
   );
 };
 
-const SearchPage = () => {
+const SearchPage: React.FC = () => {
   const intl = useIntl();
 
   const navigate = useNavigate({ from: searchRoute.fullPath });

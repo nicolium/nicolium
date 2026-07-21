@@ -8,7 +8,7 @@ import sourceCode from '@/utils/code';
 
 import { LogoText } from '../timelines/landing-timeline';
 
-const LandingPage = () => (
+const LandingPage: React.FC = () => (
   <>
     <Column withHeader={false}>
       <div className='landing-page'>

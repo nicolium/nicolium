@@ -15,7 +15,7 @@ const messages = defineMessages({
   title: { id: 'column.wrenched', defaultMessage: 'Recent wrenches timeline' },
 });
 
-const WrenchedTimelinePage = () => {
+const WrenchedTimelinePage: React.FC = () => {
   const intl = useIntl();
   const items = useTimelineFiltersOptions('wrenched', 'wrenched');
   const { defaultTimeline } = useSettings();

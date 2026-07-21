@@ -15,7 +15,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { useUploadCompose } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 
-const HomeLayout = () => {
+const HomeLayout: React.FC = () => {
   const me = useCurrentAccount();
   const { data: account } = useOwnAccount();
   const { disableUserProvidedMedia, composeInTimelines } = useSettings();

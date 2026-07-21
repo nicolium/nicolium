@@ -21,7 +21,7 @@ const messages = defineMessages({
 
 const initialState = { email: '', password: '' };
 
-const EditEmailPage = () => {
+const EditEmailPage: React.FC = () => {
   const intl = useIntl();
   const client = useClient();
 

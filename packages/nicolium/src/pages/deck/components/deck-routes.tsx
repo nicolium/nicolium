@@ -176,7 +176,7 @@ const rootRoute = createRootRoute({
   notFoundComponent: DeckEscape,
 });
 
-const HomeTimelineDeckColumn = () => {
+const HomeTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
 
   return <HomeTimelineColumn filters={filters} />;
@@ -188,7 +188,7 @@ const homeRoute = createRoute({
   staticData: { title: messages.home },
 });
 
-const LocalTimelineDeckColumn = () => {
+const LocalTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
 
   return <PublicTimelineColumn local filters={filters} />;
@@ -200,7 +200,7 @@ const localRoute = createRoute({
   staticData: { title: messages.local },
 });
 
-const FederatedTimelineDeckColumn = () => {
+const FederatedTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
 
   return <PublicTimelineColumn filters={filters} />;
@@ -212,7 +212,7 @@ const federatedRoute = createRoute({
   staticData: { title: messages.federated },
 });
 
-const BubbleTimelineDeckColumn = () => {
+const BubbleTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
 
   return <BubbleTimelineColumn filters={filters} />;
@@ -224,7 +224,7 @@ const bubbleRoute = createRoute({
   staticData: { title: messages.bubble },
 });
 
-const WrenchedTimelineDeckColumn = () => {
+const WrenchedTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
 
   return <WrenchedTimelineColumn filters={filters} />;
@@ -236,7 +236,7 @@ const wrenchedRoute = createRoute({
   staticData: { title: messages.wrenched },
 });
 
-const ListTimelineDeckColumn = () => {
+const ListTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
   const { listId } = listRoute.useParams();
 
@@ -249,7 +249,7 @@ const listRoute = createRoute({
   staticData: { title: messages.timeline },
 });
 
-const CircleTimelineDeckColumn = () => {
+const CircleTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
   const { circleId } = circleRoute.useParams();
 
@@ -262,7 +262,7 @@ const circleRoute = createRoute({
   staticData: { title: messages.timeline },
 });
 
-const AntennaTimelineDeckColumn = () => {
+const AntennaTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
   const { antennaId } = antennaRoute.useParams();
 
@@ -275,7 +275,7 @@ const antennaRoute = createRoute({
   staticData: { title: messages.timeline },
 });
 
-const InstanceTimelineDeckColumn = () => {
+const InstanceTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
   const { instance } = instanceRoute.useParams();
 
@@ -288,7 +288,7 @@ const instanceRoute = createRoute({
   staticData: { title: messages.timeline },
 });
 
-const NotificationsDeckColumn = () => {
+const NotificationsDeckColumn: React.FC = () => {
   const [column, updateColumn] =
     useDeckColumnConfig<Extract<DeckColumn, { type: 'notifications' }>>();
 
@@ -307,7 +307,7 @@ const notificationsRoute = createRoute({
   staticData: { title: messages.notifications },
 });
 
-const HashtagDeckColumn = () => {
+const HashtagDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
   const [column] = useDeckColumnConfig<Extract<DeckColumn, { type: 'hashtag' }>>();
   const { hashtag } = hashtagRoute.useParams();
@@ -333,7 +333,7 @@ const hashtagRoute = createRoute({
   staticData: { title: messages.hashtag },
 });
 
-const HashtagPickerDeckColumn = () => {
+const HashtagPickerDeckColumn: React.FC = () => {
   const [, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'hashtag' }>>();
   return <DeckColumnSearch mode='hashtag' onSelect={(hashtag) => updateColumn({ hashtag })} />;
 };
@@ -345,7 +345,7 @@ const hashtagPickerRoute = createRoute({
   staticData: { title: messages.hashtag },
 });
 
-const SearchDeckColumn = () => {
+const SearchDeckColumn: React.FC = () => {
   const intl = useIntl();
   const { history } = useRouter();
   const navigate = useNavigate({ from: searchRoute.fullPath });
@@ -419,7 +419,7 @@ const searchRoute = createRoute({
   staticData: { title: messages.search },
 });
 
-const TrendingDeckColumn = () => {
+const TrendingDeckColumn: React.FC = () => {
   const { trendsType } = trendingRoute.useParams();
 
   switch (trendsType) {
@@ -441,7 +441,7 @@ const trendingRoute = createRoute({
   staticData: { title: messages.search },
 });
 
-const BookmarksDeckColumn = () => {
+const BookmarksDeckColumn: React.FC = () => {
   const { folderId } = bookmarksRoute.useParams();
 
   return <BookmarksColumn folderId={folderId === 'all' ? undefined : folderId} />;
@@ -476,7 +476,7 @@ interface IAccountColumnBody {
   featuredStatusIds?: Array<string>;
 }
 
-const ChatsDeckColumn = () => {
+const ChatsDeckColumn: React.FC = () => {
   const navigate = useNavigate();
   const handleClickChat = (chat: ChatEntity | 'shoutbox') => {
     if (chat === 'shoutbox') return;
@@ -497,7 +497,7 @@ const chatsRoute = createRoute({
   staticData: { title: messages.chats },
 });
 
-const ChatDeckColumn = () => {
+const ChatDeckColumn: React.FC = () => {
   const { chatId } = chatRoute.useParams();
   const { data: chat } = useChat(chatId);
 
@@ -538,7 +538,7 @@ const AccountColumnBody: React.FC<IAccountColumnBody> = ({
   </>
 );
 
-const AccountDeckColumn = () => {
+const AccountDeckColumn: React.FC = () => {
   const { accountId } = accountRoute.useParams();
   const ownAccount = useOwnAccount();
   const resolvedId = accountId === 'self' ? ownAccount.data?.id : accountId;
@@ -564,7 +564,7 @@ const accountRoute = createRoute({
   staticData: { title: messages.account },
 });
 
-const AccountByUsernameDeckColumn = () => {
+const AccountByUsernameDeckColumn: React.FC = () => {
   const { username } = accountByUsernameRoute.useParams();
   const { data: account } = useAccountLookup(username, true);
 
@@ -578,7 +578,7 @@ const accountByUsernameRoute = createRoute({
   staticData: { title: messages.account },
 });
 
-const AccountPickerDeckColumn = () => {
+const AccountPickerDeckColumn: React.FC = () => {
   const [, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'account' }>>();
   return <DeckColumnSearch mode='account' onSelect={(accountId) => updateColumn({ accountId })} />;
 };
@@ -590,7 +590,7 @@ const accountPickerRoute = createRoute({
   staticData: { title: messages.account },
 });
 
-const StatusDeckColumn = () => {
+const StatusDeckColumn: React.FC = () => {
   const { statusId } = statusRoute.useParams();
   const { data: status, isPending, refetchContext } = useStatus(statusId, { withContext: true });
 
@@ -609,7 +609,7 @@ const statusRoute = createRoute({
   staticData: { title: messages.status },
 });
 
-const ReblogsDeckColumn = () => {
+const ReblogsDeckColumn: React.FC = () => {
   const { statusId } = reblogsRoute.useParams();
   return <ReblogsList statusId={statusId} />;
 };
@@ -620,7 +620,7 @@ const reblogsRoute = createRoute({
   staticData: { title: messages.reblogs },
 });
 
-const QuotesDeckColumn = () => {
+const QuotesDeckColumn: React.FC = () => {
   const { statusId } = quotesRoute.useParams();
   return <QuotesList statusId={statusId} />;
 };
@@ -631,7 +631,7 @@ const quotesRoute = createRoute({
   staticData: { title: messages.quotes },
 });
 
-const FavouritesDeckColumn = () => {
+const FavouritesDeckColumn: React.FC = () => {
   const { statusId } = favouritesRoute.useParams();
   return <FavouritesList statusId={statusId} />;
 };
@@ -642,7 +642,7 @@ const favouritesRoute = createRoute({
   staticData: { title: messages.favourites },
 });
 
-const DislikesDeckColumn = () => {
+const DislikesDeckColumn: React.FC = () => {
   const { statusId } = dislikesRoute.useParams();
   return <DislikesList statusId={statusId} />;
 };
@@ -653,7 +653,7 @@ const dislikesRoute = createRoute({
   staticData: { title: messages.dislikes },
 });
 
-const ReactionsDeckColumn = () => {
+const ReactionsDeckColumn: React.FC = () => {
   const { statusId } = reactionsRoute.useParams();
   return <ReactionsList statusId={statusId} />;
 };
@@ -664,7 +664,7 @@ const reactionsRoute = createRoute({
   staticData: { title: messages.reactions },
 });
 
-const FollowersDeckColumn = () => {
+const FollowersDeckColumn: React.FC = () => {
   const { username } = followersRoute.useParams();
   return <FollowersList username={username} />;
 };
@@ -675,7 +675,7 @@ const followersRoute = createRoute({
   staticData: { title: messages.followers },
 });
 
-const FollowingDeckColumn = () => {
+const FollowingDeckColumn: React.FC = () => {
   const { username } = followingRoute.useParams();
   return <FollowingList username={username} />;
 };
@@ -686,7 +686,7 @@ const followingRoute = createRoute({
   staticData: { title: messages.following },
 });
 
-const SubscribersDeckColumn = () => {
+const SubscribersDeckColumn: React.FC = () => {
   const { username } = subscribersRoute.useParams();
   return <SubscribersList username={username} />;
 };
@@ -697,7 +697,7 @@ const subscribersRoute = createRoute({
   staticData: { title: messages.subscribers },
 });
 
-const CollectionsDeckColumn = () => {
+const CollectionsDeckColumn: React.FC = () => {
   const { username } = collectionsRoute.useParams();
   return <AccountCollectionsColumn username={username} />;
 };
@@ -708,7 +708,7 @@ const collectionsRoute = createRoute({
   staticData: { title: messages.collections },
 });
 
-const CollectionDeckColumn = () => {
+const CollectionDeckColumn: React.FC = () => {
   const { collectionId } = collectionRoute.useParams();
   return <CollectionColumn collectionId={collectionId} />;
 };
@@ -719,7 +719,7 @@ const collectionRoute = createRoute({
   staticData: { title: messages.collection },
 });
 
-const DriveDeckColumn = () => {
+const DriveDeckColumn: React.FC = () => {
   const { folderId } = driveRoute.useParams();
   const [column, updateColumn] = useDeckColumnConfig<Extract<DeckColumn, { type: 'drive' }>>();
 

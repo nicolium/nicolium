@@ -19,7 +19,7 @@ const messages = defineMessages({
   },
 });
 
-const PasswordResetPage = () => {
+const PasswordResetPage: React.FC = () => {
   const client = useClient();
   const features = useFeatures();
 

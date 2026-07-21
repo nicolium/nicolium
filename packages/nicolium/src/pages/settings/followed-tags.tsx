@@ -11,7 +11,7 @@ const messages = defineMessages({
   heading: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
 });
 
-const FollowedTagsPage = () => {
+const FollowedTagsPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: tags = [], isLoading, hasNextPage, fetchNextPage } = useFollowedTags();

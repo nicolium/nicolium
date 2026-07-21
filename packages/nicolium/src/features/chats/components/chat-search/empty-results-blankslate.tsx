@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-const EmptyResultsBlankslate = () => (
+const EmptyResultsBlankslate: React.FC = () => (
   <div className='chat-search__blankslate'>
     <p className='chat-search__blankslate__title' data-testid='no-results'>
       <FormattedMessage

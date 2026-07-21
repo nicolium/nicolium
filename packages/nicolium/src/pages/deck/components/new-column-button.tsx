@@ -450,7 +450,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
   );
 };
 
-const NewColumnButton = () => {
+const NewColumnButton: React.FC = () => {
   const users = useAuthStore((state) => state.users);
   const mainAccountUrl = useAuthStore((state) => state.me);
 

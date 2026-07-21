@@ -17,7 +17,7 @@ const HeadTitle = React.lazy(() => import('@/components/helmet'));
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 /** Injects metadata into site head. */
-const NicoliumHead = () => {
+const NicoliumHead: React.FC = () => {
   const locale = useLocale();
   const direction = useLocaleDirection(locale);
   const {

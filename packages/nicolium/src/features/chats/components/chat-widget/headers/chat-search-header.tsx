@@ -11,7 +11,7 @@ const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },
 });
 
-const ChatSearchHeader = () => {
+const ChatSearchHeader: React.FC = () => {
   const intl = useIntl();
 
   const { changeScreen, isOpen, toggleChatPane } = useChatContext();

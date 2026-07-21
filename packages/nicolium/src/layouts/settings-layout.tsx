@@ -7,7 +7,7 @@ import ColumnLoading from '@/features/ui/components/column-loading';
 
 const SettingsPage = React.lazy(() => import('@/pages/settings/settings'));
 
-const SettingsSections = () => {
+const SettingsSections: React.FC = () => {
   const wcoRect = useWindowControlsOverlay();
   const offsetTop = wcoRect && wcoRect.x > 0 ? 16 + wcoRect.y : 16;
 
@@ -22,7 +22,7 @@ const SettingsSections = () => {
   );
 };
 
-const SettingsLayout = () => (
+const SettingsLayout: React.FC = () => (
   <>
     <SettingsSections />
 

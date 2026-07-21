@@ -14,7 +14,7 @@ const messages = defineMessages({
   back: { id: 'chats.back', defaultMessage: 'Back to chats' },
 });
 
-const ChatsPageShoutbox = () => {
+const ChatsPageShoutbox: React.FC = () => {
   const navigate = useNavigate();
   const intl = useIntl();
   const instance = useInstance();

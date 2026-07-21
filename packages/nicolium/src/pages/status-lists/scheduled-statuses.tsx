@@ -8,7 +8,7 @@ const messages = defineMessages({
   heading: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
 });
 
-const ScheduledStatusesPage = () => {
+const ScheduledStatusesPage: React.FC = () => {
   const intl = useIntl();
 
   return (

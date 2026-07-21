@@ -12,7 +12,7 @@ const messages = defineMessages({
   heading: { id: 'column.info', defaultMessage: 'Server information' },
 });
 
-const ServerInfoPage = () => {
+const ServerInfoPage: React.FC = () => {
   const intl = useIntl();
   const instance = useInstance();
   const { promoPanel } = useFrontendConfig();

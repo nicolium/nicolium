@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 
-const NewEventPanel = () => (
+const NewEventPanel: React.FC = () => (
   <div className='new-event-panel'>
     <div className='new-event-panel__content'>
       <p className='new-event-panel__heading'>

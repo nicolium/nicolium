@@ -57,7 +57,7 @@ const AccountAuthorize: React.FC<IAccountAuthorize> = ({ id }) => {
   );
 };
 
-const FollowRequestsTabs = () => {
+const FollowRequestsTabs: React.FC = () => {
   const intl = useIntl();
   const match = useMatch({ from: followRequestsRoute.id, shouldThrow: false });
   const features = useFeatures();

@@ -73,7 +73,7 @@ const NewFeedForm: React.FC = () => {
   );
 };
 
-const RssFeedSubscriptions = () => {
+const RssFeedSubscriptions: React.FC = () => {
   const intl = useIntl();
 
   const { data: feeds = [], isLoading } = useRssFeedSubscriptions();

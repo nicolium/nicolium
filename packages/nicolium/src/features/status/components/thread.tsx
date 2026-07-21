@@ -36,7 +36,7 @@ const messages = defineMessages({
   rebloggedBy: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
 
-const PlaceholderStatusSlim = () => <PlaceholderStatus variant='slim' />;
+const PlaceholderStatusSlim: React.FC = () => <PlaceholderStatus variant='slim' />;
 
 interface IThread {
   status: SelectedStatus;

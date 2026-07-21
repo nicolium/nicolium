@@ -28,7 +28,7 @@ const messages = defineMessages({
   refresh: { id: 'notifications.refresh', defaultMessage: 'Refresh notifications' },
 });
 
-const RefreshButton = () => {
+const RefreshButton: React.FC = () => {
   const intl = useIntl();
   const queryClient = useQueryClient();
   const notificationSettings = useSettings().notifications;
@@ -61,7 +61,7 @@ const RefreshButton = () => {
   );
 };
 
-const NotificationsPage = () => {
+const NotificationsPage: React.FC = () => {
   const intl = useIntl();
   const settings = useSettings();
 

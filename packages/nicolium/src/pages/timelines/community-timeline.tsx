@@ -15,7 +15,7 @@ const messages = defineMessages({
   title: { id: 'column.community', defaultMessage: 'Local timeline' },
 });
 
-const CommunityTimelinePage = () => {
+const CommunityTimelinePage: React.FC = () => {
   const items = useTimelineFiltersOptions('public', 'local');
   const intl = useIntl();
   const { defaultTimeline } = useSettings();

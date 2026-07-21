@@ -7,7 +7,7 @@ import ColumnLoading from '@/features/ui/components/column-loading';
 
 const DashboardPage = React.lazy(() => import('@/pages/dashboard/dashboard'));
 
-const AdminSections = () => {
+const AdminSections: React.FC = () => {
   const wcoRect = useWindowControlsOverlay();
   const offsetTop = wcoRect && wcoRect.x > 0 ? 16 + wcoRect.y : 16;
 
@@ -22,7 +22,7 @@ const AdminSections = () => {
   );
 };
 
-const AdminLayout = () => (
+const AdminLayout: React.FC = () => (
   <>
     <AdminSections />
 

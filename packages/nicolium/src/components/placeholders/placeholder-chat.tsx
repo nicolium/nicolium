@@ -4,7 +4,7 @@ import PlaceholderAvatar from './placeholder-avatar';
 import PlaceholderDisplayName from './placeholder-display-name';
 
 /** Fake chat to display while data is loading. */
-const PlaceholderChat = () => (
+const PlaceholderChat: React.FC = () => (
   <div className='chat-list-item--placeholder'>
     <div className='chat-list-item--placeholder__row'>
       <PlaceholderAvatar size={40} />

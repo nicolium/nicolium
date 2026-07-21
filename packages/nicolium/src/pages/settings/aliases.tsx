@@ -121,7 +121,7 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
   );
 };
 
-const AliasesPage = () => {
+const AliasesPage: React.FC = () => {
   const intl = useIntl();
 
   const [query, setQuery] = useState('');

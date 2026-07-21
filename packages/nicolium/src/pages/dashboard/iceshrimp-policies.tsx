@@ -154,7 +154,7 @@ const Policy: React.FC<IPolicy> = ({ name }) => {
   );
 };
 
-const IceshrimpPoliciesPage = () => {
+const IceshrimpPoliciesPage: React.FC = () => {
   const intl = useIntl();
   const { data: policies } = usePolicies();
 

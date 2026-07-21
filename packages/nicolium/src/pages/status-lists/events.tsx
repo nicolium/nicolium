@@ -96,7 +96,7 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
   );
 };
 
-const EventsPage = () => {
+const EventsPage: React.FC = () => {
   const intl = useIntl();
 
   const widgetDisplayed = useSettingsStore((state) =>

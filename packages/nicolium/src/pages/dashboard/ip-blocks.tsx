@@ -125,7 +125,7 @@ const IpBlock: React.FC<IIpBlock> = ({ ipBlock }) => {
   );
 };
 
-const IpBlocksPage = () => {
+const IpBlocksPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: ipBlocks } = useIpBlocksQuery();

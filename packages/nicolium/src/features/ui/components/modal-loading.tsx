@@ -3,7 +3,7 @@ import React from 'react';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 
-const ModalLoading = () => (
+const ModalLoading: React.FC = () => (
   <Modal>
     <Spinner />
   </Modal>

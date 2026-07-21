@@ -6,7 +6,7 @@ import { useInstance } from '@/stores/instance';
 
 import Widget from '../ui/widget';
 
-const ShoutboxPanel = () => {
+const ShoutboxPanel: React.FC = () => {
   const instance = useInstance();
 
   return (

@@ -16,7 +16,7 @@ import OtpAuthForm from './components/otp-auth-form';
 
 import type { NicoliumResponse } from '@/api';
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   const { closeModal } = useModalsActions();
   const { logIn, verifyCredentials, switchAccount } = useAuthActions();
 

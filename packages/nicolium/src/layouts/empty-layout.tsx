@@ -3,7 +3,7 @@ import React from 'react';
 
 import Layout from '@/components/ui/layout';
 
-const EmptyLayout = () => (
+const EmptyLayout: React.FC = () => (
   <>
     <Layout.Main>
       <Outlet />

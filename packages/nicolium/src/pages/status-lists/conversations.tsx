@@ -10,7 +10,7 @@ const messages = defineMessages({
   searchPlaceholder: { id: 'direct.search.placeholder', defaultMessage: 'Send a message to…' },
 });
 
-const ConversationsTimeline = () => {
+const ConversationsTimeline: React.FC = () => {
   const intl = useIntl();
 
   useDirectStream();

@@ -81,7 +81,7 @@ const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
   );
 };
 
-const PlaceholderTimelineStatus = () => (
+const PlaceholderTimelineStatus: React.FC = () => (
   <div className='timeline-status'>
     <PlaceholderStatus variant='slim' />
   </div>

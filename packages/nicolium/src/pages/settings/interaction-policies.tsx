@@ -252,7 +252,7 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
   );
 };
 
-const InteractionPoliciesPage = () => {
+const InteractionPoliciesPage: React.FC = () => {
   const client = useClient();
   const features = useFeatures();
   const { updateMe } = useAuthActions();

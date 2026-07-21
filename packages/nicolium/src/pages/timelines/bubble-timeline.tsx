@@ -14,7 +14,7 @@ const messages = defineMessages({
   title: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
 });
 
-const BubbleTimelinePage = () => {
+const BubbleTimelinePage: React.FC = () => {
   const intl = useIntl();
   const items = useTimelineFiltersOptions('bubble', 'bubble');
 

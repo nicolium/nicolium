@@ -29,7 +29,7 @@ const messages = defineMessages({
   deleteAntenna: { id: 'antennas.delete', defaultMessage: 'Delete antenna' },
 });
 
-const FiltersHint = () => (
+const FiltersHint: React.FC = () => (
   <p className='timeline-filters-options__hint'>
     <FormattedMessage
       id='timeline_filters.hint.antenna'

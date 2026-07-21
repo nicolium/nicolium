@@ -21,7 +21,7 @@ const messages = defineMessages({
   dismiss: { id: 'fediverse_tab.explanation_box.dismiss', defaultMessage: 'Don’t show again' },
 });
 
-const PublicTimelinePage = () => {
+const PublicTimelinePage: React.FC = () => {
   const intl = useIntl();
 
   const instance = useInstance();

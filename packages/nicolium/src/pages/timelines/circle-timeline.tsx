@@ -29,7 +29,7 @@ const messages = defineMessages({
   deleteCircle: { id: 'circles.delete', defaultMessage: 'Delete circle' },
 });
 
-const FiltersHint = () => (
+const FiltersHint: React.FC = () => (
   <p className='timeline-filters-options__hint'>
     <FormattedMessage
       id='timeline_filters.hint.circle'

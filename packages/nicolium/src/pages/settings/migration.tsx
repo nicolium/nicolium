@@ -27,7 +27,7 @@ const messages = defineMessages({
   },
 });
 
-const MigrationPage = () => {
+const MigrationPage: React.FC = () => {
   const intl = useIntl();
   const client = useClient();
   const instance = useInstance();

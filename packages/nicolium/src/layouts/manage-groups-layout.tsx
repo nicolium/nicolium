@@ -5,7 +5,7 @@ import { AsideContent } from '@/components/navigation/aside-content';
 import Layout from '@/components/ui/layout';
 
 /** Layout to display groups. */
-const ManageGroupsLayout = () => (
+const ManageGroupsLayout: React.FC = () => (
   <>
     <Layout.Main>
       <Outlet />
