@@ -19,7 +19,7 @@ interface IHeader {
 }
 
 /** Account row and close button shown above the picture-in-picture player. */
-const Header: React.FC<IHeader> = ({ accountId, statusId, onClose }) => {
+const PictureInPictureHeader: React.FC<IHeader> = ({ accountId, statusId, onClose }) => {
   const intl = useIntl();
   const { data: account } = useAccount(accountId);
 
@@ -49,4 +49,4 @@ const Header: React.FC<IHeader> = ({ accountId, statusId, onClose }) => {
   );
 };
 
-export { Header as default };
+export { PictureInPictureHeader as default };

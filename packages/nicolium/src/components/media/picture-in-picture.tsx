@@ -6,7 +6,7 @@ import StatusActionBar from '@/components/statuses/status-action-bar';
 import { useStatus } from '@/queries/statuses/use-status';
 import { usePictureInPicture, usePictureInPictureActions } from '@/stores/picture-in-picture';
 
-import Header from './components/header';
+import PictureInPictureHeader from './picture-in-picture-header';
 
 const PictureInPicture: React.FC = () => {
   const { removePictureInPicture } = usePictureInPictureActions();
@@ -70,7 +70,7 @@ const PictureInPicture: React.FC = () => {
 
   return (
     <div className='picture-in-picture'>
-      <Header accountId={accountId!} statusId={statusId!} onClose={handleClose} />
+      <PictureInPictureHeader accountId={accountId!} statusId={statusId!} onClose={handleClose} />
 
       {player}
 
