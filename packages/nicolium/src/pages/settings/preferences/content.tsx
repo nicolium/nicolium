@@ -11,9 +11,8 @@ import { SelectDropdown } from '@/components/ui/select-dropdown';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
+import { languages } from '@/utils/languages';
 import { useIsStandalone } from '@/utils/state';
-
-import { languages } from '../../../utils/languages';
 
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
 

@@ -3,13 +3,12 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
+import SettingToggle from '@/components/settings/setting-toggle';
 import Toggle from '@/components/ui/toggle';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
-
-import SettingToggle from '../../../components/settings/setting-toggle';
 
 const messages = defineMessages({
   success: {

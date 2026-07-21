@@ -10,8 +10,8 @@ import { SelectDropdown } from '@/components/ui/select-dropdown';
 import { useFeatures } from '@/hooks/use-features';
 import { useSettings } from '@/stores/settings';
 import sourceCode from '@/utils/code';
+import { languages } from '@/utils/languages';
 
-import { languages } from '../../../utils/languages';
 import MessagesSettings from '../components/messages-settings';
 
 import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config/default-setings-wrapper';
