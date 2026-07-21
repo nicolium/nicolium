@@ -7,13 +7,12 @@ import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import PollPreview from '@/components/polls/poll-preview';
 import StatusContent from '@/components/statuses/status-content';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
-import { buildPollFromParams } from '@/features/draft-statuses/builder';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useCancelScheduledStatusMutation } from '@/queries/statuses/scheduled-statuses';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
-
-import { buildStatusFromScheduledStatus } from '../../features/scheduled-statuses/builder';
+import { buildPollFromParams } from '@/utils/builder';
+import { buildStatusFromScheduledStatus } from '@/utils/builder';
 
 import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 import type { ScheduledStatus as ScheduledStatusEntity } from 'pl-api';

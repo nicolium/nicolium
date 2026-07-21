@@ -9,7 +9,6 @@ import OutlineBox from '@/components/outline-box';
 import PollPreview from '@/components/polls/poll-preview';
 import StatusContent from '@/components/statuses/status-content';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
-import { buildPollFromParams, buildStatusFromDraft } from '@/features/draft-statuses/builder';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -21,6 +20,7 @@ import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
+import { buildPollFromParams, buildStatusFromDraft } from '@/utils/builder';
 import { userTouching } from '@/utils/is-mobile';
 
 import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
