@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
-import DraftStatus from '@/features/draft-statuses/components/draft-status';
+import DraftStatus from '@/components/statuses/draft-status';
 import { useDraftStatusesQuery } from '@/queries/statuses/use-draft-statuses';
 
 /** Locally stored draft statuses from current account. */

@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollableList from '@/components/scrollable-list';
-import ScheduledStatus from '@/features/scheduled-statuses/components/scheduled-status';
+import ScheduledStatus from '@/components/statuses/scheduled-status';
 import { useScheduledStatusesQuery } from '@/queries/statuses/scheduled-statuses';
 
 /** Displays scheduled statuses fetched from the backend. */

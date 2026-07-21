@@ -3,7 +3,7 @@ import * as v from 'valibot';
 
 import { normalizeStatus } from '@/queries/statuses/normalize';
 
-const buildStatus = (account: Account, scheduledStatus: ScheduledStatus) => {
+const buildStatusFromScheduledStatus = (account: Account, scheduledStatus: ScheduledStatus) => {
   const poll = scheduledStatus.params.poll
     ? {
         id: `${scheduledStatus.id}-poll`,
@@ -33,4 +33,4 @@ const buildStatus = (account: Account, scheduledStatus: ScheduledStatus) => {
   return normalizeStatus(status);
 };
 
-export { buildStatus };
+export { buildStatusFromScheduledStatus };

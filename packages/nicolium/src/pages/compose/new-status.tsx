@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
 import { Column } from '@/components/ui/column';
-import { buildPoll, buildStatus } from '@/features/draft-statuses/builder';
+import { buildPollFromParams, buildStatusFromDraft } from '@/features/draft-statuses/builder';
 import { ComposeForm } from '@/features/ui/util/async-components';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -81,8 +81,8 @@ const NewStatusPage: React.FC = () => {
   useEffect(() => {
     if (!draftStatus || !ownAccount) return;
 
-    const status = buildStatus(ownAccount, draftStatus);
-    const poll = buildPoll(draftStatus.poll);
+    const status = buildStatusFromDraft(ownAccount, draftStatus);
+    const poll = buildPollFromParams(draftStatus.poll);
 
     if (status.in_reply_to_id) {
       fetchStatus(client, status.in_reply_to_id, scopeUrl).catch(() => {});

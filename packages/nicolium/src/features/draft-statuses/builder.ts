@@ -5,7 +5,7 @@ import { normalizeStatus } from '@/queries/statuses/normalize';
 
 import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
 
-const buildPoll = (draftPoll: DraftStatus['poll']) => {
+const buildPollFromParams = (draftPoll: DraftStatus['poll']) => {
   if (draftPoll?.options) {
     return v.parse(pollSchema, {
       ...draftPoll,
@@ -17,14 +17,11 @@ const buildPoll = (draftPoll: DraftStatus['poll']) => {
   }
 };
 
-const buildStatus = (account: Account, draftStatus: DraftStatus) => {
+const buildStatusFromDraft = (account: Account, draftStatus: DraftStatus) => {
   const status = v.parse(statusSchema, {
     id: 'draft',
     account,
-    content: draftStatus.text.replaceAll(
-      new RegExp('\n', 'g'),
-      '<br>',
-    ) /* eslint-disable-line no-control-regex */,
+    content: draftStatus.text.replaceAll(new RegExp('\n', 'g'), '<br>'),
     created_at: draftStatus.schedule,
     group: draftStatus.group_id,
     in_reply_to_id: draftStatus.in_reply_to,
@@ -35,9 +32,10 @@ const buildStatus = (account: Account, draftStatus: DraftStatus) => {
     uri: `/draft_statuses/${draftStatus.draft_id}`,
     url: `/draft_statuses/${draftStatus.draft_id}`,
     visibility: draftStatus.privacy,
+    poll: buildPollFromParams(draftStatus.poll),
   });
 
   return normalizeStatus(status);
 };
 
-export { buildStatus, buildPoll };
+export { buildStatusFromDraft, buildPollFromParams };
