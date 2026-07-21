@@ -30,7 +30,7 @@ const checkComposeContent = (compose?: Compose) =>
     compose.poll !== null,
   ].some((check) => check === true);
 
-interface IModalRoot {
+interface IModalBase {
   onCancel?: () => void;
   onClose: (type?: ModalType, all?: boolean) => void;
   type: ModalType;
@@ -38,7 +38,7 @@ interface IModalRoot {
   modalIndex: number;
 }
 
-const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, modalIndex }) => {
+const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, modalIndex }) => {
   const intl = useIntl();
   const router = useRouter();
   const navigate = useNavigate();
@@ -287,4 +287,4 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   );
 };
 
-export { checkComposeContent, ModalRoot as default };
+export { checkComposeContent, ModalBase as default };

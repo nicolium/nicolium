@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 
-import Base from '@/components/modal-root';
+import Base from '@/components/modal-base';
 import { CurrentAccountProvider } from '@/contexts/current-account-context';
 import { useComposeActions } from '@/stores/compose';
 import { useModals, useModalsActions } from '@/stores/modals';
