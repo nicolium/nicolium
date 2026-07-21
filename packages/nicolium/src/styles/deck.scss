@@ -278,6 +278,14 @@
       .deck-chats, .chat {
         margin: 0 -1rem;
       }
+
+      [data-virtuoso-scroller='true']:has(.empty-message) {
+        height: 100%;
+      }
+
+      [data-virtuoso-scroller='true'] .empty-message {
+        min-height: 100%;
+      }
     }
 
     &--error,
