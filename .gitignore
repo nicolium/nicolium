@@ -4,3 +4,5 @@ yarn-error.log*
 coverage/
 package-lock.json
 .pnpm-store
+packages/pl-viewer/dist
+packages/pl-viewer/public
