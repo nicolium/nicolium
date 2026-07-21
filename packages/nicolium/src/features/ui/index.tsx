@@ -157,7 +157,9 @@ const UI: React.FC = React.memo(() => {
   }, [!!account]);
 
   const shouldNotShrink = useMinWidth('(min-width: 976px)');
-  const fullWidth = !!useMatch({ from: deckRoute.id, shouldThrow: false });
+  const isDeckRoute = !!useMatch({ from: deckRoute.id, shouldThrow: false });
+  const isNewStatusRoute = !!useMatch({ from: newStatusRoute.id, shouldThrow: false });
+  const fullWidth = isDeckRoute || isNewStatusRoute;
   const shrink = fullWidth || !shouldNotShrink;
 
   // Wait for login to succeed or fail

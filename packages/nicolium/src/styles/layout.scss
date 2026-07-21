@@ -915,6 +915,7 @@ body {
 
     &--full-width {
       display: flex;
+      width: 100%;
 
       @media (min-width: variables.$breakpoint-sm) {
         padding-right: 0;
