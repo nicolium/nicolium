@@ -9,6 +9,37 @@ const messages = defineMessages({
   minutes: { id: 'relative_time.minutes', defaultMessage: '{number}m' },
   hours: { id: 'relative_time.hours', defaultMessage: '{number}h' },
   days: { id: 'relative_time.days', defaultMessage: '{number}d' },
+  weeks: { id: 'relative_time.weeks', defaultMessage: '{number}w' },
+  months: { id: 'relative_time.months', defaultMessage: '{number}mo' },
+  years: { id: 'relative_time.years', defaultMessage: '{number}y' },
+  secondsLong: {
+    id: 'relative_time.seconds.long',
+    defaultMessage: '{number, plural, one {# second} other {# seconds}} ago',
+  },
+  minutesLong: {
+    id: 'relative_time.minutes.long',
+    defaultMessage: '{number, plural, one {# minute} other {# minutes}} ago',
+  },
+  hoursLong: {
+    id: 'relative_time.hours.long',
+    defaultMessage: '{number, plural, one {# hour} other {# hours}} ago',
+  },
+  daysLong: {
+    id: 'relative_time.days.long',
+    defaultMessage: '{number, plural, one {# day} other {# days}} ago',
+  },
+  weeksLong: {
+    id: 'relative_time.weeks.long',
+    defaultMessage: '{number, plural, one {# week} other {# weeks}} ago',
+  },
+  monthsLong: {
+    id: 'relative_time.months.long',
+    defaultMessage: '{number, plural, one {# month} other {# months}} ago',
+  },
+  yearsLong: {
+    id: 'relative_time.years.long',
+    defaultMessage: '{number, plural, one {# year} other {# years}} ago',
+  },
   momentsRemaining: { id: 'time_remaining.moments', defaultMessage: 'Moments remaining' },
   secondsRemaining: {
     id: 'time_remaining.seconds',
@@ -25,6 +56,18 @@ const messages = defineMessages({
   daysRemaining: {
     id: 'time_remaining.days',
     defaultMessage: '{number, plural, one {# day} other {# days}} left',
+  },
+  weeksRemaining: {
+    id: 'time_remaining.weeks',
+    defaultMessage: '{number, plural, one {# week} other {# weeks}} left',
+  },
+  monthsRemaining: {
+    id: 'time_remaining.months',
+    defaultMessage: '{number, plural, one {# month} other {# months}} left',
+  },
+  yearsRemaining: {
+    id: 'time_remaining.years',
+    defaultMessage: '{number, plural, one {# year} other {# years}} left',
   },
 });
 
@@ -83,24 +126,19 @@ const getUnitDelay = (units: string) => {
   }
 };
 
-interface IRelativeTimestamp {
-  timestamp: string;
-  year?: number;
-  futureDate?: boolean;
-  className?: string;
-}
-
-/** Displays a timestamp compared to the current time, eg "1m" for one minute ago. */
-const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
+const useRelativeTimestamp = ({
   timestamp,
   year = new Date().getFullYear(),
   futureDate,
-  ...props
-}) => {
+  absolute,
+  long,
+}: IRelativeTimestamp) => {
   const intl = useIntl();
-  const { absoluteTimestamps } = useSettings();
+  const { absoluteTimestamps: absoluteTimestampsSetting } = useSettings();
   const [now, setNow] = useState(Date.now);
   const timerRef = useRef<NodeJS.Timeout>(undefined);
+
+  const absoluteTimestamps = absolute !== undefined ? absolute : absoluteTimestampsSetting;
 
   const scheduleNextUpdate = useCallback(() => {
     if (timerRef.current) {
@@ -176,19 +214,70 @@ const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
     relativeTime = intl.formatMessage(messages.justNow);
   } else if (delta < 7 * DAY) {
     if (delta < MINUTE) {
-      relativeTime = intl.formatMessage(messages.seconds, { number: Math.floor(delta / SECOND) });
+      relativeTime = intl.formatMessage(long ? messages.secondsLong : messages.seconds, {
+        number: Math.floor(delta / SECOND),
+      });
     } else if (delta < HOUR) {
-      relativeTime = intl.formatMessage(messages.minutes, { number: Math.floor(delta / MINUTE) });
+      relativeTime = intl.formatMessage(long ? messages.minutesLong : messages.minutes, {
+        number: Math.floor(delta / MINUTE),
+      });
     } else if (delta < DAY) {
-      relativeTime = intl.formatMessage(messages.hours, { number: Math.floor(delta / HOUR) });
+      relativeTime = intl.formatMessage(long ? messages.hoursLong : messages.hours, {
+        number: Math.floor(delta / HOUR),
+      });
     } else {
-      relativeTime = intl.formatMessage(messages.days, { number: Math.floor(delta / DAY) });
+      relativeTime = intl.formatMessage(long ? messages.daysLong : messages.days, {
+        number: Math.floor(delta / DAY),
+      });
+    }
+  } else if (absolute === false) {
+    if (delta > 365 * DAY) {
+      relativeTime = intl.formatMessage(long ? messages.yearsLong : messages.years, {
+        number: Math.floor(delta / (365 * DAY)),
+      });
+    } else if (delta > 30 * DAY) {
+      relativeTime = intl.formatMessage(long ? messages.monthsLong : messages.months, {
+        number: Math.floor(delta / (30 * DAY)),
+      });
+    } else {
+      relativeTime = intl.formatMessage(long ? messages.weeksLong : messages.weeks, {
+        number: Math.floor(delta / (7 * DAY)),
+      });
     }
   } else if (date.getFullYear() === year) {
     relativeTime = intl.formatDate(date, shortDateFormatOptions);
   } else {
     relativeTime = intl.formatDate(date, { ...shortDateFormatOptions, year: 'numeric' });
   }
+
+  return relativeTime;
+};
+
+interface IRelativeTimestamp {
+  timestamp: string;
+  year?: number;
+  futureDate?: boolean;
+  className?: string;
+  /**  */
+  absolute?: boolean;
+  /** Whether to display the timestamp in a longer format */
+  long?: boolean;
+}
+
+/** Displays a timestamp compared to the current time, eg "1m" for one minute ago. */
+const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
+  timestamp,
+  year = new Date().getFullYear(),
+  // TODO: why is this not checked in the component?
+  futureDate,
+  absolute,
+  long,
+  ...props
+}) => {
+  const intl = useIntl();
+  const relativeTime = useRelativeTimestamp({ timestamp, year, futureDate, absolute, long });
+
+  const date = new Date(timestamp);
 
   return (
     <time {...props} title={intl.formatDate(date, dateFormatOptions)}>
@@ -197,4 +286,4 @@ const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
   );
 };
 
-export { dateFormatOptions, RelativeTimestamp as default };
+export { dateFormatOptions, useRelativeTimestamp, RelativeTimestamp as default };
