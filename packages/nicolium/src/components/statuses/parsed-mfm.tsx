@@ -14,6 +14,7 @@ import nyaize from '@/utils/nyaize';
 
 import { AccountLink } from '../accounts/account-link';
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
+import { Formula } from '../async-components';
 import { isCurrentOrFutureDate } from '../compose/schedule-form';
 import HashtagLink from '../hashtag-link';
 import RelativeTimestamp from '../relative-timestamp';
@@ -578,11 +579,10 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
             return <Emoji emoji={token.props.emoji} className='emojione emoji' />;
           }
 
-          // TODO: implement formula rendering as in Sharkey
           case 'mathInline': {
             return (
               <bdi>
-                <code>{token.props.formula}</code>
+                <Formula formula={token.props.formula} />
               </bdi>
             );
           }
@@ -590,7 +590,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
           case 'mathBlock': {
             return (
               <bdi className='block'>
-                <code>{token.props.formula}</code>
+                <Formula formula={token.props.formula} block />
               </bdi>
             );
           }

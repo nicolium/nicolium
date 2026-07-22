@@ -5,6 +5,7 @@ export const Audio = lazy(() => import('@/components/media/audio'));
 export const ChatWidget = lazy(() => import('@/components/chats/chat-widget/chat-widget'));
 export const ComposeEditor = lazy(() => import('@/components/compose/editor'));
 export const ComposeForm = lazy(() => import('@/components/compose/compose-form'));
+export const Formula = lazy(() => import('@/components/formula'));
 export const DatePicker = lazy(() => import('@/components/ui/date-picker'));
 export const DropdownNavigation = lazy(() => import('@/components/navigation/dropdown-navigation'));
 export const EmojiPicker = lazy(() => import('@/emoji/components/emoji-picker'));
