@@ -105,7 +105,10 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
         searchTokens,
       );
 
-      if (token !== null && lastToken !== token) {
+      if (token && token[0] === '@' && token.match(/:.+/)) {
+        setLastToken(null);
+        props.onSuggestionsClearRequested();
+      } else if (token !== null && lastToken !== token) {
         setLastToken(token);
         setSelectedSuggestion(0);
         setTokenStart(tokenStart);

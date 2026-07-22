@@ -342,6 +342,11 @@ const AutosuggestPlugin = ({
         [':', '@'],
       );
 
+      if (matchingString && matchingString[0] === '@' && matchingString.match(/:.+/)) {
+        // probably a matrix.org mention, ignore
+        return null;
+      }
+
       if (!leadOffset || !matchingString) return null;
       return { leadOffset, matchingString };
     }
