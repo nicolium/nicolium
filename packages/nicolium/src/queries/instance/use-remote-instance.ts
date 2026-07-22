@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
 import { useAdminConfig } from '@/queries/admin/use-config';
 import { queryKeys } from '@/queries/keys';
@@ -23,21 +24,28 @@ const useSimplePolicy = () => {
   const { data: config } = useAdminConfig();
   const simplePolicy = useInstance().pleroma.metadata.federation.mrf_simple_info;
 
-  return {
-    ...simplePolicy,
-    ...ConfigDB.toSimplePolicy(config?.configs || []),
-  };
+  return useMemo(
+    () => ({
+      ...simplePolicy,
+      ...ConfigDB.toSimplePolicy(config?.configs || []),
+    }),
+    [simplePolicy, config],
+  );
 };
 
 const useRemoteInstanceFederation = (host: string) => {
   const simplePolicy = useSimplePolicy();
 
-  return Object.fromEntries(
-    Object.entries(simplePolicy).map(([key, hosts]) => [
-      key,
-      hosts.some((entry) => entry[0] === host),
-    ]),
-  ) as HostFederation;
+  return useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(simplePolicy).map(([key, hosts]) => [
+          key,
+          hosts.some((entry) => entry[0] === host),
+        ]),
+      ) as HostFederation,
+    [simplePolicy, host],
+  );
 };
 
 const useRemoteInstanceFavicon = (host: string) => {
@@ -58,11 +66,14 @@ const useRemoteInstance = (host: string) => {
   const federation = useRemoteInstanceFederation(host);
   const favicon = useRemoteInstanceFavicon(host);
 
-  return {
-    host,
-    favicon,
-    federation,
-  };
+  return useMemo<RemoteInstance>(
+    () => ({
+      host,
+      favicon,
+      federation,
+    }),
+    [host, favicon, federation],
+  );
 };
 
 const useHosts = () => {
