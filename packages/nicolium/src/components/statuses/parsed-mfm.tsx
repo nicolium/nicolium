@@ -379,7 +379,20 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
               }
               // TODO
               // case 'unixtime': {
-              // case 'clickable': {
+              case 'clickable': {
+                // TODO emitting
+                return (
+                  <span
+                    className='mfm-clickable'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                    }}
+                  >
+                    {genEl(token.children, scale)}
+                  </span>
+                );
+              }
             }
             if (style === undefined) {
               return (
