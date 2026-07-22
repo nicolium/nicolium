@@ -1378,6 +1378,8 @@ a.measure__container {
 
     button[type='submit'] {
       @include mixins.button($theme: primary);
+
+      margin-left: auto;
     }
   }
 }
