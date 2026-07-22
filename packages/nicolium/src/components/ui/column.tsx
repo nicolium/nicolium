@@ -99,12 +99,13 @@ const Column: React.FC<IColumn> = ({
   size,
   truncateTitle,
 }) => {
+  const ref = React.useRef<HTMLDivElement>(null);
   const frontendConfig = useFrontendConfig();
   const [isScrolled, setIsScrolled] = useState(false);
 
   const handleScroll = useCallback(
     throttle(() => {
-      setIsScrolled(window.pageYOffset > 32);
+      setIsScrolled(window.pageYOffset - (ref.current?.offsetTop || 0) > 16);
     }, 50),
     [],
   );
@@ -125,6 +126,7 @@ const Column: React.FC<IColumn> = ({
       size={size}
       variant={transparent ? undefined : 'rounded'}
       className={clsx('column', className)}
+      ref={ref}
     >
       <HeadTitle title={label} />
       {frontendConfig.appleAppId && (
