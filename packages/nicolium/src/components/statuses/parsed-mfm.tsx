@@ -342,7 +342,6 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
                 break;
               }
 
-              // TODO
               case 'followmouse': {
                 if (!renderAnimatedMfm) {
                   style = {};
