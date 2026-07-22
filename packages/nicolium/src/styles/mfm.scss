@@ -31,6 +31,7 @@
 
   img.emojione {
     width: 2rem !important;
+    min-width: 2rem !important;
     height: 2rem !important;
   }
 
@@ -114,6 +115,16 @@
       rgb(255, 0, 255) 100%
     );
     background-clip: text;
+  }
+
+  .mfm-follow-mouse{
+    position: absolute;
+    transform-origin: center center;
+
+    &__container {
+      position: relative;
+      display: inline-block;
+    }
   }
 }
 

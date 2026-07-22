@@ -3,7 +3,7 @@
 import iconClock from '@phosphor-icons/core/regular/clock.svg';
 import * as mfm from '@transfem-org/sfm-js';
 import clamp from 'lodash/clamp';
-import React, { type CSSProperties } from 'react';
+import React, { useEffect, type CSSProperties } from 'react';
 import { FormattedDate } from 'react-intl';
 
 import { Link } from '@/components/link';
@@ -25,6 +25,66 @@ import { ParsedUrl } from './parsed-content';
 import StatusMention from './status-mention';
 
 import type { CustomEmoji, Mention } from 'pl-api';
+
+interface IFollowMouse {
+  x: boolean;
+  y: boolean;
+  speed: string;
+  rotateByVelocity: boolean;
+  children: React.ReactNode;
+}
+
+// copy-pasted from https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/packages/frontend/src/components/CkFollowMouse.vue
+const FollowMouse: React.FC<IFollowMouse> = ({ x, y, speed, rotateByVelocity, children }) => {
+  const containerRef = React.useRef<HTMLSpanElement>(null);
+  const ref = React.useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    let lastX = 0;
+    let lastY = 0;
+    let oldAngle = 0;
+
+    const lerp = (a: number, b: number, alpha: number) => {
+      return a + alpha * (b - a);
+    };
+
+    const updatePosition = (mouseEvent: MouseEvent) => {
+      const container = ref.current?.closest('.mfm');
+
+      if (!container || !ref.current) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const newX = mouseEvent.clientX - containerRect.left;
+      const newY = mouseEvent.clientY - containerRect.top;
+      let transform = `translate(calc(${x ? newX : 0}px - 50%), calc(${y ? newY : 0}px - 50%))`;
+      if (rotateByVelocity) {
+        const deltaX = newX - lastX;
+        const deltaY = newY - lastY;
+        const angle = lerp(oldAngle, Math.atan2(deltaY, deltaX) * (180 / Math.PI), 0.1);
+        transform += ` rotate(${angle}deg)`;
+        oldAngle = angle;
+      }
+      ref.current.style.transform = transform;
+      ref.current.style.transition = `transform ${speed}`;
+      lastX = newX;
+      lastY = newY;
+    };
+
+    window.addEventListener('mousemove', updatePosition);
+
+    return () => {
+      window.removeEventListener('mousemove', updatePosition);
+    };
+  }, []);
+
+  return (
+    <span ref={containerRef} className='mfm-follow-mouse__container'>
+      <span ref={ref} className='mfm-follow-mouse'>
+        {children}
+      </span>
+    </span>
+  );
+};
 
 const safeParseFloat = (str: unknown): number | null => {
   if (typeof str !== 'string' || str === '') return null;
@@ -283,7 +343,31 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
               }
 
               // TODO
-              // case 'followmouse': {
+              case 'followmouse': {
+                if (!renderAnimatedMfm) {
+                  style = {};
+                  break;
+                }
+
+                let x = !!token.props.args.x;
+                let y = !!token.props.args.y;
+
+                if (!x && !y) {
+                  x = true;
+                  y = true;
+                }
+
+                return (
+                  <FollowMouse
+                    x={x}
+                    y={y}
+                    speed={validTime(token.props.args.speed) ?? '0.1s'}
+                    rotateByVelocity={!!token.props.args.rotateByVelocity}
+                  >
+                    {genEl(token.children, scale)}
+                  </FollowMouse>
+                );
+              }
 
               case 'position': {
                 if (!renderAdvancedMfm) break;
