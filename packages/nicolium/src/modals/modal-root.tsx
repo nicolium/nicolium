@@ -91,7 +91,7 @@ const ModalRoot: React.FC = () => {
         break;
     }
 
-    closeModal(type, all);
+    closeModal(typeof type === 'string' ? type : null, all);
   };
 
   const Component =
