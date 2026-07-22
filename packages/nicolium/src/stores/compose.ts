@@ -1492,6 +1492,7 @@ const getComposeContentType = (
   contentType: string,
   defaultContentType: string,
   postFormats: string[],
+  includeWysiwyg = false,
 ) => {
   if (contentType === 'default') {
     const resolvedContentType =
@@ -1500,18 +1501,20 @@ const getComposeContentType = (
     return postFormats[0] ?? 'text/plain';
   }
 
-  if (contentType === 'wysiwyg' && postFormats.includes('text/markdown')) return 'text/markdown';
+  if (contentType === 'wysiwyg' && postFormats.includes('text/markdown')) {
+    return includeWysiwyg ? 'wysiwyg' : 'text/markdown';
+  }
 
   return contentType;
 };
 
-const useComposeContentType = (composeId: string) => {
+const useComposeContentType = (composeId: string, includeWysiwyg = false) => {
   const { contentType } = useCompose(composeId);
   const instance = useInstance();
   const postFormats = instance.pleroma.metadata.post_formats;
   const { defaultContentType } = useSettings();
 
-  return getComposeContentType(contentType, defaultContentType, postFormats);
+  return getComposeContentType(contentType, defaultContentType, postFormats, includeWysiwyg);
 };
 
 export {

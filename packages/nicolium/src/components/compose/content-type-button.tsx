@@ -44,7 +44,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
   const { updateCompose } = useComposeActions();
   const instance = useInstance();
 
-  let contentType = useComposeContentType(composeId);
+  let contentType = useComposeContentType(composeId, true);
 
   const handleChange = (value: string) => () =>
     updateCompose(composeId, (draft) => {
