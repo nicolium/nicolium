@@ -578,9 +578,24 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
             return <Emoji emoji={token.props.emoji} className='emojione emoji' />;
           }
 
+          // TODO: implement formula rendering as in Sharkey
+          case 'mathInline': {
+            return (
+              <bdi>
+                <code>{token.props.formula}</code>
+              </bdi>
+            );
+          }
+
+          case 'mathBlock': {
+            return (
+              <bdi className='block'>
+                <code>{token.props.formula}</code>
+              </bdi>
+            );
+          }
+
           // TODO
-          // case 'mathInline':
-          // case 'mathBlock':
           // case 'search':
 
           case 'plain': {
