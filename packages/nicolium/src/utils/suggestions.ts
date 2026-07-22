@@ -3,7 +3,7 @@ type CursorMatch = [tokenStart: number | null, token: string | null];
 const textAtCursorMatchesToken = (
   str: string,
   caretPosition: number,
-  searchTokens: string[],
+  searchTokens: readonly string[],
 ): CursorMatch => {
   let word;
 

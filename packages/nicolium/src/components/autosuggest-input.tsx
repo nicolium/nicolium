@@ -26,6 +26,8 @@ type AutoSuggestion = string | Emoji | Location;
 type AutosuggestInputElement = HTMLInputElement | HTMLTextAreaElement;
 type AutosuggestInputComponent = React.ElementType;
 
+const DEFAULT_SEARCH_TOKENS = ['@', ':', '#'] as const;
+
 interface IAutosuggestInput extends Pick<
   React.HTMLAttributes<AutosuggestInputElement>,
   'lang' | 'onBlur' | 'onChange' | 'onFocus' | 'onKeyUp' | 'onKeyDown'
@@ -59,7 +61,7 @@ const AutosuggestInput = React.forwardRef<AutosuggestInputElement, IAutosuggestI
     {
       autoFocus = false,
       autoSelect = true,
-      searchTokens = ['@', ':', '#'],
+      searchTokens = DEFAULT_SEARCH_TOKENS,
       as: InputComponent = Input,
       inputProps,
       ...props
