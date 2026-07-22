@@ -1,9 +1,11 @@
+// ~~Shamelessly stolen~~ ported to React from Sharkey
+// https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/packages/frontend/src/components/global/MkMfm.ts
+import iconClock from '@phosphor-icons/core/regular/clock.svg';
 import * as mfm from '@transfem-org/sfm-js';
 import clamp from 'lodash/clamp';
 import React, { type CSSProperties } from 'react';
+import { FormattedDate } from 'react-intl';
 
-// ~~Shamelessly stolen~~ ported to React from Sharkey
-// https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/packages/frontend/src/components/global/MkMfm.ts
 import { Link } from '@/components/link';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
@@ -12,8 +14,11 @@ import nyaize from '@/utils/nyaize';
 
 import { AccountLink } from '../accounts/account-link';
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
+import { isCurrentOrFutureDate } from '../compose/schedule-form';
 import HashtagLink from '../hashtag-link';
+import RelativeTimestamp from '../relative-timestamp';
 import Emoji from '../ui/emoji';
+import Icon from '../ui/icon';
 
 import { ParsedUrl } from './parsed-content';
 import StatusMention from './status-mention';
@@ -377,8 +382,37 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
                 style = {};
                 break;
               }
-              // TODO
-              // case 'unixtime': {
+              case 'unixtime': {
+                const child = token.children[0];
+                const unixtime = parseInt(child?.type === 'text' ? child.props.text : '');
+                const date = new Date(unixtime * 1000);
+                if (Number.isNaN(date.getTime())) break;
+                return (
+                  <span className='mfm-unixtime'>
+                    <Icon src={iconClock} />
+                    <span>
+                      <time>
+                        <FormattedDate
+                          value={date}
+                          year='numeric'
+                          month='short'
+                          day='2-digit'
+                          hour='2-digit'
+                          minute='2-digit'
+                        />
+                      </time>{' '}
+                      (
+                      <RelativeTimestamp
+                        timestamp={date.toISOString()}
+                        absolute={false}
+                        futureDate={isCurrentOrFutureDate(date)}
+                        long
+                      />
+                      )
+                    </span>
+                  </span>
+                );
+              }
               case 'clickable': {
                 // TODO emitting
                 return (
