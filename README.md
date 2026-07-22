@@ -36,7 +36,7 @@ You can find more information about setting up the development environment in [t
 
 ## Sponsors
 
-Maintenance of Nicolium is possible thanks to the support of our sponsors. If you want to support the project, consider sponsoring [mkljczk](https://github.com/sponsors/mkljczk) or [pmysl](https://github.com/sponsors/pmysl) on GitHub Sponsors.
+Maintenance of Nicolium is possible thanks to the support of our sponsors. If you want to support the project, consider sponsoring [mkljczk](https://github.com/sponsors/mkljczk) or [pmysl](https://github.com/sponsors/pmysl) on GitHub Sponsors or donating to mkljczk via Monero: `8C9cVFPycccYt4EejmyqZhQRPSEUSi1Ht9MQL4gdBjsX5f2TvSHP8i5AS4PWCnKM9wW7UUFVAGiY1LhNoQZfJan8Lse6Ct7`.
 
 <!-- sponsors --><a href="https://github.com/j-g00da"><img src="https:&#x2F;&#x2F;github.com&#x2F;j-g00da.png" width="60px" alt="User avatar: Jagoda Estera Ślązak" /></a><a href="https://github.com/pmysl"><img src="https:&#x2F;&#x2F;github.com&#x2F;pmysl.png" width="60px" alt="User avatar: " /></a><a href="https://github.com/mkljczk"><img src="https:&#x2F;&#x2F;github.com&#x2F;mkljczk.png" width="60px" alt="User avatar: nicole mikołajczyk" /></a><!-- sponsors -->
 
