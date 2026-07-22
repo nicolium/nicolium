@@ -193,9 +193,21 @@ const useRelativeTimestamp = ({
       relativeTime = intl.formatMessage(messages.hoursRemaining, {
         number: Math.floor(futureDelta / HOUR),
       });
-    } else {
+    } else if (futureDelta < 7 * DAY) {
       relativeTime = intl.formatMessage(messages.daysRemaining, {
         number: Math.floor(futureDelta / DAY),
+      });
+    } else if (futureDelta < 30 * DAY) {
+      relativeTime = intl.formatMessage(messages.weeksRemaining, {
+        number: Math.floor(futureDelta / (7 * DAY)),
+      });
+    } else if (futureDelta < 365 * DAY) {
+      relativeTime = intl.formatMessage(messages.monthsRemaining, {
+        number: Math.floor(futureDelta / (30 * DAY)),
+      });
+    } else {
+      relativeTime = intl.formatMessage(messages.yearsRemaining, {
+        number: Math.floor(futureDelta / (365 * DAY)),
       });
     }
   } else if (absoluteTimestamps) {
