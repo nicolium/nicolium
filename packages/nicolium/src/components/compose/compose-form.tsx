@@ -278,7 +278,7 @@ const ComposeForm = <ID extends string>({
         onSuccess: () => {
           clearEditor();
           if (onSubmit) {
-            setImmediate(() => onSubmit());
+            setTimeout(() => onSubmit(), 0);
           }
         },
       });
@@ -290,7 +290,7 @@ const ComposeForm = <ID extends string>({
       onSuccess: () => {
         clearEditor();
         if (onSubmit) {
-          setImmediate(() => onSubmit());
+          setTimeout(() => onSubmit(), 0);
         }
       },
     });
