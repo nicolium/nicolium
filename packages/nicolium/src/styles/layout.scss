@@ -1151,6 +1151,8 @@ body {
 
       .black & {
         border: 1px solid var(--color-gray-800);
+        border-top: none;
+        border-bottom: none;
       }
     }
   }
