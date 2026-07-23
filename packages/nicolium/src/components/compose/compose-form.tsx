@@ -277,7 +277,9 @@ const ComposeForm = <ID extends string>({
       submitThread({
         onSuccess: () => {
           clearEditor();
-          onSubmit?.();
+          if (onSubmit) {
+            setImmediate(() => onSubmit());
+          }
         },
       });
       return;
@@ -287,7 +289,9 @@ const ComposeForm = <ID extends string>({
       propagate: fullScreen,
       onSuccess: () => {
         clearEditor();
-        onSubmit?.();
+        if (onSubmit) {
+          setImmediate(() => onSubmit());
+        }
       },
     });
   };
