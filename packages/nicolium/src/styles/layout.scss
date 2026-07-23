@@ -1094,6 +1094,7 @@ body {
 
   &__full-width {
     grid-column: span 12 / span 12;
+    width: 100%;
 
     &:has(.deck) {
       position: relative;
