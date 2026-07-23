@@ -29,9 +29,11 @@ const LinkFooter: React.FC = (): React.JSX.Element => {
           />
         )}
       </p>
-      <p className='footer-text' aria-hidden>
-        <Emojify text={frontendConfig.copyright} />
-      </p>
+      {frontendConfig.copyright.trim() && (
+        <p className='footer-text'>
+          <Emojify text={frontendConfig.copyright} />
+        </p>
+      )}
     </>
   );
 };
