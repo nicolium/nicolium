@@ -9,8 +9,6 @@ import * as v from 'valibot';
 
 import { unescapeHTML } from '@/utils/html';
 
-const domParser = new DOMParser();
-
 type StatusApprovalStatus = Exclude<BaseStatus['approval_status'], null>;
 
 type OldStatus = Pick<BaseStatus, 'content' | 'spoiler_text'> & {
@@ -56,9 +54,7 @@ const getSearchIndex = (
   ) {
     return oldStatus.search_index;
   } else {
-    const searchContent = buildSearchContent(status, poll);
-
-    return domParser.parseFromString(searchContent, 'text/html').documentElement.textContent || '';
+    return buildSearchContent(status, poll);
   }
 };
 

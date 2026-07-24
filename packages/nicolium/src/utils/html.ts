@@ -1,12 +1,10 @@
 /** Convert HTML to a plaintext representation, preserving whitespace. */
 // NB: This function can still return unsafe HTML
 const unescapeHTML = (html: string = ''): string => {
-  const wrapper = document.createElement('div');
-  wrapper.innerHTML = html
-    .replaceAll(/<br\s*\/?>/g, '\n')
-    .replaceAll(/<\/p><[^>]*>/g, '\n\n')
-    .replaceAll(/<[^>]*>/g, '');
-  return wrapper.textContent || '';
+  const document = new DOMParser().parseFromString(html, 'text/html');
+  document.querySelectorAll('br').forEach((br) => br.replaceWith('\n'));
+  document.querySelectorAll('p').forEach((p) => p.append('\n\n'));
+  return document.body.textContent || '';
 };
 
 /** Convert HTML to plaintext. */

@@ -213,7 +213,7 @@ const FloatingLinkEditor = ({
           <>
             <a
               className='compose-editor__link-editor__url'
-              href={linkUrl}
+              href={sanitizeUrl(linkUrl)}
               target='_blank'
               rel='noopener noreferrer'
             >
