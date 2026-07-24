@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: docker
     name: Test for pl-api formatting
     strategy:
       matrix:
