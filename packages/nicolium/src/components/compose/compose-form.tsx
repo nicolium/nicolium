@@ -344,7 +344,7 @@ const ComposeForm = <ID extends string>({
     if (!editor || !suggestion) return;
 
     editor.update(() => {
-      const node: LinkNode | null = $getNodeByKey(key);
+      const node = $getNodeByKey(key) as LinkNode | null;
       if (node) {
         node.setURL(suggestion.cleanUrl);
         const children = node.getChildren();
