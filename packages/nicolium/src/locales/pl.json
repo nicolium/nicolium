@@ -1419,7 +1419,7 @@
   "frontend_config.sentry_dsn.label": "DSN Sentry",
   "frontend_config.tile_server.label": "Serwer kafelków map",
   "frontend_config.tile_server_attribution.label": "Atrybucja kafelków map",
-  "getting_started.open_source_notice": "{code_name} jest oprogramowaniem o otwartym źródle. Możesz pomóc w rozwoju lub zgłaszać błędy na Codebergu tutaj: {code_link} (v{code_version}).",
+  "getting_started.open_source_notice": "{code_name} jest oprogramowaniem o otwartym źródle. Możesz pomóc w rozwoju lub zgłaszać błędy na git.pleroma.social tutaj: {code_link} (v{code_version}).",
   "group.cancel_request": "Zaniechaj zgłoszenie",
   "group.delete.success": "Usunięto grupę",
   "group.group_mod_authorize.fail": "Nie udało się przyjąć @{name}",

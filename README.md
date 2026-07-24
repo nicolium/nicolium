@@ -1,5 +1,6 @@
 # Nicolium
 
+[![git.pleroma.social Repo stars](https://img.shields.io/gitea/stars/nicolium/nicolium?gitea_url=https%3A%2F%2Fgit.pleroma.social&logo=forgejo)](https://git.pleroma.social/nicolium/nicolium)
 [![Codeberg Repo stars](https://img.shields.io/gitea/stars/nicolium/nicolium?gitea_url=https%3A%2F%2Fcodeberg.org&logo=Codeberg)](https://codeberg.org/nicolium/nicolium)
 [![GitHub Repo stars](https://img.shields.io/github/stars/nicolium/nicolium)](https://github.com/nicolium/nicolium)
 [![GitHub License](https://img.shields.io/github/license/nicolium/nicolium)](https://github.com/nicolium/nicolium?tab=AGPL-3.0-1-ov-file#readme)
@@ -30,17 +31,13 @@ The repository hosts Nicolium, but also libraries related to the project. Curren
 
 ## Contributing
 
-This project is hosted on [Codeberg](https://codeberg.org/nicolium/nicolium) and [GitHub](https://github.com/nicolium/nicolium). You can open issues on Codeberg or create pull requests on both platforms.
+This project is hosted on [git.pleroma.social](https://git.pleroma.social/nicolium/nicolium)). You can open issues and create pull requests there.
 
 You can find more information about setting up the development environment in [the documentation](https://nicolium.app/docs/contributing/nicolium/).
 
 ## Sponsors
 
-Maintenance of Nicolium is possible thanks to the support of our sponsors. If you want to support the project, consider sponsoring [mkljczk](https://github.com/sponsors/mkljczk) or [pmysl](https://github.com/sponsors/pmysl) on GitHub Sponsors or donating to mkljczk via Monero: `8C9cVFPycccYt4EejmyqZhQRPSEUSi1Ht9MQL4gdBjsX5f2TvSHP8i5AS4PWCnKM9wW7UUFVAGiY1LhNoQZfJan8Lse6Ct7`.
-
-<!-- sponsors --><a href="https://github.com/j-g00da"><img src="https:&#x2F;&#x2F;github.com&#x2F;j-g00da.png" width="60px" alt="User avatar: Jagoda Estera Ślązak" /></a><a href="https://github.com/pmysl"><img src="https:&#x2F;&#x2F;github.com&#x2F;pmysl.png" width="60px" alt="User avatar: " /></a><a href="https://github.com/mkljczk"><img src="https:&#x2F;&#x2F;github.com&#x2F;mkljczk.png" width="60px" alt="User avatar: nicole mikołajczyk" /></a><!-- sponsors -->
-
-(if you don't want to appear on the list above, but want to support the project, please let us know by contacting [Nicolium Fediverse account](https://pl.fediverse.pl/@Nicolium) or set your sponsorship to private)
+If you want to support the project, consider sponsoring [mkljczk](https://github.com/sponsors/mkljczk) or [pmysl](https://github.com/sponsors/pmysl) on GitHub Sponsors or donating to mkljczk via Monero: `8C9cVFPycccYt4EejmyqZhQRPSEUSi1Ht9MQL4gdBjsX5f2TvSHP8i5AS4PWCnKM9wW7UUFVAGiY1LhNoQZfJan8Lse6Ct7`.
 
 ## License
 
