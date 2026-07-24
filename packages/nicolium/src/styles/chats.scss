@@ -378,6 +378,8 @@
   }
 
   &__fade {
+    --gradient-from: white;
+
     pointer-events: none;
 
     position: absolute;
@@ -389,6 +391,14 @@
 
     transition: opacity 500ms var(--ease-default);
 
+    .dark & {
+      --gradient-from: var(--color-gray-900);
+    }
+
+    .black & {
+      --gradient-from: black;
+    }
+
     &--top {
       top: 0;
 
@@ -397,7 +407,7 @@
       border-top-left-radius: var(--radius-lg);
       border-top-right-radius: var(--radius-lg);
 
-      background-image: linear-gradient(to bottom, white, transparent);
+      background-image: linear-gradient(to bottom, var(--gradient-from), transparent);
     }
 
     &--bottom {
@@ -408,7 +418,7 @@
       border-bottom-right-radius: var(--radius-lg);
       border-bottom-left-radius: var(--radius-lg);
 
-      background-image: linear-gradient(to top, white, transparent);
+      background-image: linear-gradient(to top, var(--gradient-from), transparent);
     }
 
     &--hidden {
@@ -417,21 +427,6 @@
 
     &--visible {
       opacity: 1;
-    }
-
-    .dark &--top,
-    .dark &--bottom {
-      background-image: linear-gradient(to bottom, var(--color-gray-900), transparent);
-    }
-
-    .black &--top,
-    .black &--bottom {
-      background-image: linear-gradient(to bottom, black, transparent);
-    }
-
-    .black &--bottom,
-    .dark &--bottom {
-      background-image: linear-gradient(to top, currentcolor, transparent);
     }
   }
 }
