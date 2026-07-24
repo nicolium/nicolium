@@ -15,9 +15,6 @@ jobs:
         node-version: [22.x]
 
     steps:
-    - name: Install system dependencies
-      run: sudo apt install -y unzip
-
     - name: Checkout code
       uses: actions/checkout@v3
 
