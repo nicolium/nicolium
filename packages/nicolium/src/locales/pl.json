@@ -197,6 +197,7 @@
   "admin.announcements.ends_at": "Kończy się:",
   "admin.announcements.starts_at": "Rozpoczyna się:",
   "admin.awaiting_approval.empty_message": "Nikt nie oczekuje przyjęcia. Gdy zarejestruje się nowy użytkownik, możesz zatwierdzić go tutaj.",
+  "admin.canonical_email_blocks.delete": "Usuń",
   "admin.canonical_email_blocks.test.blocked": "Ten adres e-mail jest zablokowany",
   "admin.canonical_email_blocks.test.error": "Nie udało się przetestować adresu e-mail",
   "admin.canonical_email_blocks.test.not_blocked": "Tej adres e-mail nie jest zablokowany",
