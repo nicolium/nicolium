@@ -20,7 +20,7 @@ const useAdminConfig = () => {
   return useAppQuery({
     queryKey: queryKeys.admin.config,
     queryFn: () => client.admin.config.getPleromaConfig(),
-    enabled: (ownAccount?.is_admin && features.pleromaAdminConfig) || false,
+    enabled: !!(ownAccount?.is_admin && features.pleromaAdminConfig),
   });
 };
 
@@ -32,7 +32,7 @@ const useAdminConfigDescriptions = () => {
   return useAppQuery({
     queryKey: queryKeys.admin.configDescriptions,
     queryFn: () => client.admin.config.getPleromaConfigDescriptions(),
-    enabled: (ownAccount?.is_admin && features.pleromaAdminConfig) || false,
+    enabled: !!(ownAccount?.is_admin && features.pleromaAdminConfig),
   });
 };
 
