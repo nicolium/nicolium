@@ -13,3 +13,5 @@ minimumReleaseAgeExclude:
   - '@typescript/native-preview-win32-arm64@7.0.0-dev.20260616.1'
   - '@typescript/native-preview-win32-x64@7.0.0-dev.20260616.1'
   - '@typescript/native-preview@7.0.0-dev.20260616.1'
+overrides:
+  lodash: ^4.18.1
