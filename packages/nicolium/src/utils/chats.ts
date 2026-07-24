@@ -1,7 +1,9 @@
+import { changeSetting } from '@/actions/settings';
 import { normalizeChatMessage } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
+import { useSettingsStore } from '@/stores/settings';
 
 import { compareDate } from './comparators';
 import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from './queries';
@@ -81,4 +83,10 @@ const getUnreadChatsCount = (scopeUrl: string): number => {
   return chats?.filter((chat) => chat.unread).length ?? 0;
 };
 
-export { updateChatListItem, getUnreadChatsCount, reorderChatListItems };
+const toggleChatPane = () => {
+  const main = useSettingsStore.getState().settings.chats.mainWindow;
+  const state = main === 'minimized' ? 'open' : 'minimized';
+  changeSetting(['chats', 'mainWindow'], state);
+};
+
+export { updateChatListItem, getUnreadChatsCount, reorderChatListItems, toggleChatPane };
