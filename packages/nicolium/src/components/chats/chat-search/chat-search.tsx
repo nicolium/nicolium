@@ -46,7 +46,9 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
   const [value, setValue] = useState<string>('');
   const debouncedValue = useDebounce(value, 300);
 
-  const accountSearchResult = useAccountSearch(debouncedValue);
+  const accountSearchResult = useAccountSearch(debouncedValue, {
+    capabilities: ['accepts_chat_messages'],
+  });
   const { data: accounts, isFetching } = accountSearchResult;
 
   const hasSearchValue = debouncedValue && debouncedValue.length > 0;

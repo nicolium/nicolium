@@ -92,6 +92,8 @@ interface SearchAccountParams {
   resolve?: boolean;
   /** Boolean. Limit the search to users you are following. Defaults to false. */
   following?: boolean;
+  /** Array of Strings. Only include accounts with given capabilities. */
+  capabilities?: Array<'accepts_chat_messages'>;
 }
 
 /**
