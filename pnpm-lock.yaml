@@ -522,7 +522,7 @@ importers:
         version: 3.7.3
       '@mkljczk/astro-theme':
         specifier: github:mkljczk/mkljczk-astro-theme
-        version: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/b1a129af85e17c518771934dd588027031ae7095(astro@7.1.3(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@25.6.0)(rollup@4.60.3)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(yaml@2.9.0))
+        version: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/b1a129af85e17c518771934dd588027031ae7095(astro@7.1.3(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@26.1.1)(rollup@4.60.3)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(yaml@2.9.0))
       astro:
         specifier: ^7.1.3
         version: 7.1.3(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@26.1.1)(rollup@4.60.3)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(yaml@2.9.0)
@@ -2120,7 +2120,7 @@ packages:
     resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
 
   '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/b1a129af85e17c518771934dd588027031ae7095':
-    resolution: {gitHosted: true, integrity: sha512-Eq9Tv2DF8sjJWeC/2gqZp6wxgU+6hYv7tYyM5JtR7C+MuEytCx91TC9kDglrqgQdZ7+gjktjG8ZnSrWfYQR/RQ==, tarball: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/b1a129af85e17c518771934dd588027031ae7095}
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/b1a129af85e17c518771934dd588027031ae7095}
     version: 0.0.1
     peerDependencies:
       astro: ^5.0.0
