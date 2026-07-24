@@ -1,5 +1,4 @@
 /** Convert HTML to a plaintext representation, preserving whitespace. */
-// NB: This function can still return unsafe HTML
 const unescapeHTML = (html: string = ''): string => {
   const document = new DOMParser().parseFromString(html, 'text/html');
   document.querySelectorAll('br').forEach((br) => br.replaceWith('\n'));
