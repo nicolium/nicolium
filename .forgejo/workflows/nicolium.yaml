@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: docker
-    name: Test and upload artifacts
+    name: Check if the code builds and is formatted correctly
     strategy:
       matrix:
         node-version: [22.x]
