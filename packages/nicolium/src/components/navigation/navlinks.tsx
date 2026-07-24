@@ -14,20 +14,22 @@ const Navlinks: React.FC<INavlinks> = ({ type }) => {
 
   return (
     <footer className='navlinks'>
-      <ul>
-        {navlinks[type]?.map((link) => {
-          const url = link.url;
-          const isExternal = url.startsWith('http');
-          const Comp = (isExternal ? 'a' : Link) as 'a';
-          const compProps = isExternal ? { href: url, target: '_blank' } : { to: url };
+      {navlinks[type]?.length > 0 && (
+        <ul>
+          {navlinks[type]?.map((link) => {
+            const url = link.url;
+            const isExternal = url.startsWith('http');
+            const Comp = (isExternal ? 'a' : Link) as 'a';
+            const compProps = isExternal ? { href: url, target: '_blank' } : { to: url };
 
-          return (
-            <li key={link.url}>
-              <Comp {...compProps}>{link.titleLocales[locale] || link.title}</Comp>
-            </li>
-          );
-        })}
-      </ul>
+            return (
+              <li key={link.url}>
+                <Comp {...compProps}>{link.titleLocales[locale] || link.title}</Comp>
+              </li>
+            );
+          })}
+        </ul>
+      )}
 
       {copyright && <p className='navlinks__copyright'>{copyright}</p>}
     </footer>

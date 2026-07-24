@@ -163,6 +163,9 @@ const instance = (client: PlApiBaseClient) => ({
 
     switch (client.features.version.software) {
       case MITRA:
+        if (!client.accessToken) {
+          return {};
+        }
         response = (await client.request('/api/v1/accounts/verify_credentials')).json
           ?.client_config;
         break;

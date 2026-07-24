@@ -26,9 +26,15 @@ const LogoText: React.FC<ILogoText> = ({ children, dir }) => (
 const SiteBanner: React.FC = () => {
   const instance = useInstance();
 
+  if (instance.title.trim().length === 0 && instance.description.trim().length === 0) {
+    return null;
+  }
+
   return (
     <div className='site-banner'>
-      <LogoText dir={getTextDirection(instance.title)}>{instance.title}</LogoText>
+      {instance.title.trim().length === 0 && (
+        <LogoText dir={getTextDirection(instance.title)}>{instance.title}</LogoText>
+      )}
 
       {instance.description.trim().length > 0 && (
         <div data-markup dir={getTextDirection(instance.description)}>
