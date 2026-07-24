@@ -32,7 +32,7 @@ const SiteBanner: React.FC = () => {
 
   return (
     <div className='site-banner'>
-      {instance.title.trim().length === 0 && (
+      {instance.title.trim().length > 0 && (
         <LogoText dir={getTextDirection(instance.title)}>{instance.title}</LogoText>
       )}
 
