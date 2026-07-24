@@ -31,7 +31,7 @@ The repository hosts Nicolium, but also libraries related to the project. Curren
 
 ## Contributing
 
-This project is hosted on [git.pleroma.social](https://git.pleroma.social/nicolium/nicolium)). You can open issues and create pull requests there.
+This project is hosted on [git.pleroma.social](https://git.pleroma.social/nicolium/nicolium), [Codeberg](https://codeberg.org/nicolium/nicolium) and [GitHub](https://github.com/nicolium/nicolium). You can open issues and create pull requests on git.pleroma.social.
 
 You can find more information about setting up the development environment in [the documentation](https://nicolium.app/docs/contributing/nicolium/).
 
