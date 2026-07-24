@@ -17,7 +17,7 @@ const usePolicies = () => {
   return useAppQuery({
     queryKey: queryKeys.admin.policies.root,
     queryFn: () => client.admin.policies.getPolicies(),
-    enabled: ownAccount?.is_admin && features.iceshrimpAdmin,
+    enabled: !!(ownAccount?.is_admin && features.iceshrimpAdmin),
   });
 };
 
@@ -29,7 +29,7 @@ const usePolicy = (policyName: string) => {
   return useAppQuery({
     queryKey: queryKeys.admin.policies.one(policyName),
     queryFn: () => client.admin.policies.getPolicy(policyName),
-    enabled: ownAccount?.is_admin && features.iceshrimpAdmin,
+    enabled: !!(ownAccount?.is_admin && features.iceshrimpAdmin),
   });
 };
 
