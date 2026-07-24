@@ -4,6 +4,7 @@ import type {
   AccountWarning,
   Account as BaseAccount,
   Notification as BaseNotification,
+  Collection,
   RelationshipSeveranceEvent,
 } from 'pl-api';
 
@@ -84,7 +85,9 @@ const normalizeNotification = (notification: BaseNotification | DeduplicatedNoti
     id: string;
     group_key: string;
   } & (
-    | { type: 'follow' | 'follow_request' | 'admin.sign_up' | 'bite' }
+    | {
+        type: 'follow' | 'follow_request' | 'follow_request_accepted' | 'admin.sign_up' | 'bite';
+      }
     | {
         type: 'mention';
         subtype?: 'reply';
@@ -119,7 +122,7 @@ const normalizeNotification = (notification: BaseNotification | DeduplicatedNoti
         target_id: string;
       }
     | {
-        type: 'emoji_reaction';
+        type: 'emoji_reaction' | 'subscribed_reaction';
         emoji: string;
         emoji_url: string | null;
         status_id: string;
@@ -132,6 +135,10 @@ const normalizeNotification = (notification: BaseNotification | DeduplicatedNoti
         type: 'participation_accepted' | 'participation_request';
         status_id: string;
         participation_message: string | null;
+      }
+    | {
+        type: 'added_to_collection' | 'collection_update';
+        collection: Collection;
       }
   ) = {
     duplicate: false,

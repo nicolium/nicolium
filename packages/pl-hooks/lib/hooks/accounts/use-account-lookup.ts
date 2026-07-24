@@ -2,14 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 
 import { usePlHooksApiClient } from '@/contexts/api-client';
 import { usePlHooksQueryClient } from '@/contexts/query-client';
-import { useImportEntities } from '@/importer';
+import { importEntities } from '@/importer';
 
 import { useAccount, type UseAccountOpts } from './use-account';
 
 const useAccountLookup = (acct?: string, opts: UseAccountOpts = {}) => {
   const { client } = usePlHooksApiClient();
   const queryClient = usePlHooksQueryClient();
-  const importEntities = useImportEntities();
   const { features } = client;
 
   const accountIdQuery = useQuery(
