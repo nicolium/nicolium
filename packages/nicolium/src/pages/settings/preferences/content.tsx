@@ -105,12 +105,10 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
               label={<FormattedMessage id='column.blocks' defaultMessage='Blocks' />}
               to='/blocks'
             />
-            {(features.filters || features.filtersV2) && (
-              <ListItem
-                label={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
-                to='/filters'
-              />
-            )}
+            <ListItem
+              label={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
+              to='/filters'
+            />
             {features.federating && (
               <ListItem
                 label={

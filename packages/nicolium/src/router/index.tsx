@@ -602,18 +602,12 @@ export const filtersRoute = createRoute({
   getParentRoute: () => layouts.settings,
   path: '/filters',
   component: lazy(() => import('@/pages/settings/filters')),
-  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
-    if (!features.filters && !features.filtersV2) throw notFound();
-  }),
 });
 
 export const editFilterRoute = createRoute({
   getParentRoute: () => layouts.settings,
   path: '/filters/$filterId',
   component: lazy(() => import('@/pages/settings/edit-filter')),
-  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
-    if (!features.filters && !features.filtersV2) throw notFound();
-  }),
 });
 
 export const followedTagsRoute = createRoute({

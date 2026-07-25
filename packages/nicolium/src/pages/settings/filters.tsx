@@ -63,6 +63,15 @@ const FiltersPage: React.FC = () => {
           <div key={filter.id} className='filter-card'>
             <div className='filter-card__body'>
               <div className='filter-card__meta'>
+                {filter.title && (
+                  <p>
+                    <FormattedMessage
+                      id='filters.filters_list_title.label'
+                      defaultMessage='Title:'
+                    />{' '}
+                    <span>{filter.title}</span>
+                  </p>
+                )}
                 <p>
                   <FormattedMessage
                     id='filters.filters_list_phrases.label'
@@ -85,16 +94,16 @@ const FiltersPage: React.FC = () => {
                 </p>
                 <div className='filter-card__badges'>
                   <p>
-                    {filtersV2 ? (
+                    {filter.filter_action === 'blur' ? (
+                      <FormattedMessage
+                        id='filters.filters_list_blur'
+                        defaultMessage='Hide media with a warning'
+                      />
+                    ) : filtersV2 ? (
                       filter.filter_action === 'hide' ? (
                         <FormattedMessage
                           id='filters.filters_list_hide_completely'
                           defaultMessage='Hide content'
-                        />
-                      ) : filter.filter_action === 'blur' ? (
-                        <FormattedMessage
-                          id='filters.filters_list_blur'
-                          defaultMessage='Hide media with a warning'
                         />
                       ) : (
                         <FormattedMessage

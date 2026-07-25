@@ -93,7 +93,7 @@ const useStatus = (
   }: { withContext?: boolean; withFilteredResults?: boolean } = {},
 ) => {
   const features = useFeatures();
-  const withClientSideFilters = !!(features.filters && !features.filtersV2 && withFilteredResults);
+  const withClientSideFilters = !!(!features.filtersV2 && withFilteredResults);
 
   const { data: filters } = useFilters(
     withClientSideFilters ? selectActiveFilters : selectNoFilters,

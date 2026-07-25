@@ -179,6 +179,11 @@ const EditFilterPage: React.FC = () => {
 
   if (notFound) return <MissingIndicator />;
 
+  const multipleKeywords = !features.filtersV2;
+  const filterTitle = !features.filtersV2;
+  const accountsContextType = features.filtersV2;
+  const blurAction = features.filtersV2BlurAction || (!features.filters && !features.filtersV2);
+
   const disabled =
     isFetchingFilter ||
     isUpdating ||
@@ -194,14 +199,14 @@ const EditFilterPage: React.FC = () => {
       onAddItem={handleAddKeyword}
       onRemoveItem={handleRemoveKeyword}
       minItems={1}
-      maxItems={features.filtersV2 ? Infinity : 1}
+      maxItems={multipleKeywords ? Infinity : 1}
     />
   );
 
   return (
     <Column label={intl.formatMessage(messages.subheadingAddNew)}>
       <Form onSubmit={handleAddNew}>
-        {features.filtersV2 ? (
+        {filterTitle ? (
           <FormGroup
             labelText={<FormattedMessage id='column.filters.title' defaultMessage='Title' />}
           >
@@ -281,7 +286,7 @@ const EditFilterPage: React.FC = () => {
               onChange={({ target }) => setConversations(target.checked)}
             />
           </ListItem>
-          {features.filtersV2 && (
+          {accountsContextType && (
             <ListItem
               label={<FormattedMessage id='column.filters.accounts' defaultMessage='Accounts' />}
             >
@@ -291,7 +296,7 @@ const EditFilterPage: React.FC = () => {
         </List>
 
         <List>
-          {features.filtersV2BlurAction ? (
+          {blurAction ? (
             <ListItem
               label={
                 <FormattedMessage
@@ -371,7 +376,7 @@ const EditFilterPage: React.FC = () => {
           )}
         </List>
 
-        {features.filtersV2 && keywordsField}
+        {multipleKeywords && keywordsField}
 
         <div className='edit-filter__actions form__actions'>
           <button type='submit' disabled={disabled}>

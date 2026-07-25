@@ -278,7 +278,6 @@ const NAVIGATION_ITEMS_GATE: Partial<
   'domain-blocks': (features) => features.federating,
   drive: (features) => features.drive,
   events: (features) => features.events,
-  filters: (features) => features.filters || features.filtersV2,
   'followed-hashtags': (features) => features.followedHashtagsList,
   'interaction-requests': (features) => features.interactionRequests,
   groups: (features) => features.groups,

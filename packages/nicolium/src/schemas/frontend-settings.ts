@@ -1,3 +1,4 @@
+import { filterSchema } from 'pl-api';
 import * as v from 'valibot';
 
 import { locales } from '@/messages';
@@ -431,6 +432,7 @@ const settingsSchema = v.object({
   driveViewMode: v.fallback(v.picklist(['grid', 'list']), 'grid'),
   skipInteractAsConfirmation: v.fallback(v.boolean(), false),
   showFilteredStatusAuthor: v.fallback(v.boolean(), false),
+  filters: filteredArray(filterSchema),
 
   theme: v.optional(
     coerceObject({

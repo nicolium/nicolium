@@ -196,10 +196,12 @@ const useBlockAccountMutation = (accountId: string) => {
         data,
       );
 
-      queryClient.setQueryData(scopedQueryKey(queryKeys.suggestions.all, scopeUrl), (suggestions) =>
-        suggestions
-          ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
-          : undefined,
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.suggestions.all, scopeUrl),
+        (suggestions) =>
+          suggestions
+            ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
+            : undefined,
       );
 
       queryClient.invalidateQueries({
@@ -270,10 +272,12 @@ const useMuteAccountMutation = (accountId: string) => {
         data,
       );
 
-      queryClient.setQueryData(scopedQueryKey(queryKeys.suggestions.all, scopeUrl), (suggestions) =>
-        suggestions
-          ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
-          : undefined,
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.suggestions.all, scopeUrl),
+        (suggestions) =>
+          suggestions
+            ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
+            : undefined,
       );
 
       queryClient.invalidateQueries({
