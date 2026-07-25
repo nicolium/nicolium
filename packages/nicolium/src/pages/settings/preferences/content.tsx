@@ -196,6 +196,21 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
+                id='preferences.fields.show_filtered_status_author.label'
+                defaultMessage='Show the author of filtered posts'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['showFilteredStatusAuthor']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
                 id='preferences.fields.preview_card_display.label'
                 defaultMessage='Preview cards'
               />

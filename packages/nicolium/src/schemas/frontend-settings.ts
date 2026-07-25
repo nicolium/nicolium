@@ -430,6 +430,7 @@ const settingsSchema = v.object({
   displayFqn: v.fallback(v.boolean(), true),
   driveViewMode: v.fallback(v.picklist(['grid', 'list']), 'grid'),
   skipInteractAsConfirmation: v.fallback(v.boolean(), false),
+  showFilteredStatusAuthor: v.fallback(v.boolean(), false),
 
   theme: v.optional(
     coerceObject({

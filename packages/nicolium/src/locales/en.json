@@ -2162,6 +2162,7 @@
   "preferences.fields.render_animated_mfm.label": "Enable animated MFM",
   "preferences.fields.render_mfm.hint": "MFM support is experimental, not all node types are supported.",
   "preferences.fields.render_mfm.label": "Render Misskey Flavored Markdown",
+  "preferences.fields.show_filtered_status_author.label": "Show the author of filtered posts",
   "preferences.fields.show_nested_quotes": "Display quotes nested in other quoted posts",
   "preferences.fields.show_nested_quotes.hint": "Up to three posts in the quote chain will be displayed.",
   "preferences.fields.side_by_side_translations": "Show translations next to the original post",

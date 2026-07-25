@@ -6,6 +6,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
 import EventPreview from './events/event-preview';
@@ -49,6 +50,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
   const { unfilterStatus } = useStatusMetaActions();
   const statusMeta = useStatusMeta(status?.id || '');
   const { me } = useLoggedIn();
+  const { showFilteredStatusAuthor } = useSettings();
 
   const handleExpandClick: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!status) return;
@@ -121,39 +123,52 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
   const body =
     (['blocked_account', 'blocked_domain', 'muted_account'].includes(state!) || filtered) &&
     !statusMeta.showFiltered ? (
-      <p className='quoted-status__filtered'>
-        {status.account_id === me ? (
-          <FormattedMessage id='status.filtered.self' defaultMessage='Filtered (your own post)' />
-        ) : (
-          <FormattedMessage id='status.filtered' defaultMessage='Filtered' />
+      <>
+        {showFilteredStatusAuthor && account.id && (
+          <AccountContainer
+            {...actions}
+            id={account.id}
+            timestamp={status.created_at}
+            withRelationship={false}
+            showAccountHoverCard={!compose}
+            withLinkToProfile={!compose}
+            withLocked={false}
+          />
         )}
-        :{' '}
-        {state === 'blocked_account' ? (
-          <FormattedMessage
-            id='status.filtered_blocked_account'
-            defaultMessage='You have blocked @{acct}.'
-            values={{ acct: account.acct }}
-          />
-        ) : state === 'blocked_domain' ? (
-          <FormattedMessage
-            id='status.filtered_blocked_domain'
-            defaultMessage='You have blocked the domain {domain}.'
-            values={{ domain: account.acct.split('@')[1] }}
-          />
-        ) : state === 'muted_account' ? (
-          <FormattedMessage
-            id='status.filtered_muted_account'
-            defaultMessage='You have muted @{acct}.'
-            values={{ acct: account.acct }}
-          />
-        ) : null}
-        {filterResults.length > 0 && (
-          <>{filterResults.map(({ filter }) => filter.title).join(', ')}.</>
-        )}{' '}
-        <button className='quoted-status__unfilter' onClick={handleUnfilter}>
-          <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
-        </button>
-      </p>
+        <p className='quoted-status__filtered'>
+          {status.account_id === me ? (
+            <FormattedMessage id='status.filtered.self' defaultMessage='Filtered (your own post)' />
+          ) : (
+            <FormattedMessage id='status.filtered' defaultMessage='Filtered' />
+          )}
+          :{' '}
+          {state === 'blocked_account' ? (
+            <FormattedMessage
+              id='status.filtered_blocked_account'
+              defaultMessage='You have blocked @{acct}.'
+              values={{ acct: account.acct }}
+            />
+          ) : state === 'blocked_domain' ? (
+            <FormattedMessage
+              id='status.filtered_blocked_domain'
+              defaultMessage='You have blocked the domain {domain}.'
+              values={{ domain: account.acct.split('@')[1] }}
+            />
+          ) : state === 'muted_account' ? (
+            <FormattedMessage
+              id='status.filtered_muted_account'
+              defaultMessage='You have muted @{acct}.'
+              values={{ acct: account.acct }}
+            />
+          ) : null}
+          {filterResults.length > 0 && (
+            <>{filterResults.map(({ filter }) => filter.title).join(', ')}.</>
+          )}{' '}
+          <button className='quoted-status__unfilter' onClick={handleUnfilter}>
+            <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
+          </button>
+        </p>
+      </>
     ) : (
       <>
         {account.id && (

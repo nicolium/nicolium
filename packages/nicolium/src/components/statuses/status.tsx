@@ -220,7 +220,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const { spoilerExpanded, deleted, showFiltered } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { replyCompose, mentionCompose } = useComposeActions();
-  const { statusActionBarItems, useRocketIconForReblogs } = useSettings();
+  const { showFilteredStatusAuthor, statusActionBarItems, useRocketIconForReblogs } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
   const { me } = useLoggedIn();
@@ -536,7 +536,22 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
   if (filtered && showFiltered !== true) {
     const body = (
-      <div className='status__wrapper status__wrapper--filtered' ref={node}>
+      <Card variant={variant} className='status__wrapper status__wrapper--filtered' ref={node}>
+        {showFilteredStatusAuthor && actualStatus.account_id && (
+          <div className='status__account'>
+            <AccountContainer
+              key={actualStatus.account_id}
+              id={actualStatus.account_id}
+              action={<AccountInfo status={actualStatus} columnId={columnId} />}
+              showAccountHoverCard={hoverable}
+              withLinkToProfile={hoverable}
+              approvalStatus={actualStatus.approval_status}
+              avatarSize={avatarSize}
+              actionAlignment='top'
+              withLocked={false}
+            />
+          </div>
+        )}
         <p className='status__filtered'>
           {actualStatus.account_id === me ? (
             <FormattedMessage id='status.filtered.self' defaultMessage='Filtered (your own post)' />
@@ -548,7 +563,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
             <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
           </button>
         </p>
-      </div>
+      </Card>
     );
 
     if (muted) return body;
