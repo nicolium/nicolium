@@ -27,6 +27,7 @@ import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
 import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import iconSpeakerX from '@phosphor-icons/core/regular/speaker-x.svg';
+import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
 import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
@@ -637,6 +638,25 @@ const MenuButton: React.FC<IMenuButton> = ({
           text: intl.formatMessage(messages.direct, { name: username }),
           action: handleDirectClick,
           icon: iconChatCircle,
+        });
+      }
+
+      if (features.biteStatuses) {
+        const handleBiteClick = () => {
+          client.statuses
+            .biteStatus(status.id)
+            .then(() => {
+              toast.success(intl.formatMessage(messages.biteSuccess));
+            })
+            .catch(() => {
+              toast.error(intl.formatMessage(messages.biteFail));
+            });
+        };
+
+        menu.push({
+          text: intl.formatMessage(messages.bite),
+          action: handleBiteClick,
+          icon: iconTooth,
         });
       }
 

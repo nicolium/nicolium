@@ -551,13 +551,19 @@ const getFeatures = (instance: Instance) => {
 
     /**
      * Allow to bite users.
-     * see POST /api/v1/bite
+     * @see POST /api/v1/bite
      */
     bites: any([
       v.software === ICESHRIMP_NET,
       v.software === TOKI,
       instance.api_versions['bites.pleroma.pl-api'] >= 1,
     ]),
+
+    /**
+     * Allow to bite statuses.
+     * @see POST /api/iceshrimp/notes/:id/bite
+     */
+    biteStatuses: v.software === ICESHRIMP_NET,
 
     /** Whether people who blocked you are visible through the API. */
     blockersVisible:

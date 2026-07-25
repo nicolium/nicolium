@@ -605,6 +605,19 @@ const statuses = (client: PlApiBaseClient) => {
 
       return v.parse(filteredArray(bookmarkFolderSchema), response.json);
     },
+
+    /**
+     * Requires features{@link Features.biteStatuses}.
+     */
+    biteStatus: async (statusId: string) => {
+      await client.getIceshrimpAccessToken();
+
+      const response = await client.request<EmptyObject>(`/api/iceshrimp/notes/${statusId}/bite`, {
+        method: 'POST',
+      });
+
+      return response.json;
+    },
   };
 
   return category;
