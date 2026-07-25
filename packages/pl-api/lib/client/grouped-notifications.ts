@@ -4,6 +4,7 @@ import { accountSchema, groupedNotificationsResultsSchema } from '@/entities';
 import { filteredArray } from '@/entities/utils';
 import { PaginatedResponse } from '@/responses';
 import { pick, omit } from '@/utils';
+import { fixNotificationTypes } from '@/utils/notifications';
 
 import type { notifications } from './notifications';
 import type { PlApiBaseClient } from '@/client-base';
@@ -117,6 +118,14 @@ const groupedNotifications = (
      */
     getGroupedNotifications: async (params: GetGroupedNotificationsParams, meta?: RequestMeta) => {
       if (client.features.groupedNotifications) {
+        if (params?.types) {
+          params.types = fixNotificationTypes(params.types);
+        }
+
+        if (params?.exclude_types) {
+          params.exclude_types = fixNotificationTypes(params.exclude_types);
+        }
+
         return client.paginatedGet(
           '/api/v2/notifications',
           { ...meta, params },

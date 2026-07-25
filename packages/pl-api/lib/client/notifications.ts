@@ -5,6 +5,7 @@ import {
   notificationRequestSchema,
   notificationSchema,
 } from '@/entities';
+import { fixNotificationTypes } from '@/utils/notifications';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type {
@@ -23,32 +24,13 @@ const notifications = (client: PlApiBaseClient) => ({
    * @see {@link https://docs.joinmastodon.org/methods/notifications/#get}
    */
   getNotifications: (params?: GetNotificationParams, meta?: RequestMeta) => {
-    const PLEROMA_TYPES = [
-      'chat_mention',
-      'emoji_reaction',
-      'report',
-      'participation_accepted',
-      'participation_request',
-      'event_reminder',
-      'event_update',
-      'subscribed_reaction',
-    ];
+    if (params?.types) {
+      params.types = fixNotificationTypes(params.types);
+    }
 
-    if (params?.types)
-      params.types = [
-        ...params.types,
-        ...params.types
-          .filter((type) => PLEROMA_TYPES.includes(type))
-          .map((type) => `pleroma:${type}`),
-      ];
-
-    if (params?.exclude_types)
-      params.exclude_types = [
-        ...params.exclude_types,
-        ...params.exclude_types
-          .filter((type) => PLEROMA_TYPES.includes(type))
-          .map((type) => `pleroma:${type}`),
-      ];
+    if (params?.exclude_types) {
+      params.exclude_types = fixNotificationTypes(params.exclude_types);
+    }
 
     return client.paginatedGet('/api/v1/notifications', { ...meta, params }, notificationSchema);
   },
