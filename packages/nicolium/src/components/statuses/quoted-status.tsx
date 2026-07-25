@@ -5,6 +5,7 @@ import React, { useMemo, type MouseEventHandler } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
 import EventPreview from './events/event-preview';
@@ -47,6 +48,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
   const router = useRouter();
   const { unfilterStatus } = useStatusMetaActions();
   const statusMeta = useStatusMeta(status?.id || '');
+  const { me } = useLoggedIn();
 
   const handleExpandClick: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!status) return;
@@ -120,7 +122,12 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
     (['blocked_account', 'blocked_domain', 'muted_account'].includes(state!) || filtered) &&
     !statusMeta.showFiltered ? (
       <p className='quoted-status__filtered'>
-        <FormattedMessage id='status.filtered' defaultMessage='Filtered' />:{' '}
+        {status.account_id === me ? (
+          <FormattedMessage id='status.filtered.self' defaultMessage='Filtered (your own post)' />
+        ) : (
+          <FormattedMessage id='status.filtered' defaultMessage='Filtered' />
+        )}
+        :{' '}
         {state === 'blocked_account' ? (
           <FormattedMessage
             id='status.filtered_blocked_account'

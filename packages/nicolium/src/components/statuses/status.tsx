@@ -16,6 +16,7 @@ import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
 import Emojify from '@/emoji/emojify';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useGroupQuery } from '@/queries/groups/use-group';
@@ -222,6 +223,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const { statusActionBarItems, useRocketIconForReblogs } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
+  const { me } = useLoggedIn();
 
   const actualStatus =
     useStatus(status.reblog_id || undefined, { withFilteredResults: true }).data || status;
@@ -536,8 +538,12 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     const body = (
       <div className='status__wrapper status__wrapper--filtered' ref={node}>
         <p className='status__filtered'>
-          <FormattedMessage id='status.filtered' defaultMessage='Filtered' />:{' '}
-          {filterResults.map(({ filter }) => filter.title).join(', ')}.{' '}
+          {actualStatus.account_id === me ? (
+            <FormattedMessage id='status.filtered.self' defaultMessage='Filtered (your own post)' />
+          ) : (
+            <FormattedMessage id='status.filtered' defaultMessage='Filtered' />
+          )}
+          : {filterResults.map(({ filter }) => filter.title).join(', ')}.{' '}
           <button className='status__filtered-button' onClick={handleUnfilter}>
             <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
           </button>
