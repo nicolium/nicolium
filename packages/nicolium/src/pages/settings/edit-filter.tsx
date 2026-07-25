@@ -179,6 +179,12 @@ const EditFilterPage: React.FC = () => {
 
   if (notFound) return <MissingIndicator />;
 
+  const disabled =
+    isFetchingFilter ||
+    isUpdating ||
+    isCreating ||
+    !(homeTimeline || publicTimeline || notifications || conversations || accounts);
+
   const keywordsField = (
     <Streamfield
       label={<FormattedMessage id='column.filters.keywords' defaultMessage='Keywords or phrases' />}
@@ -368,7 +374,7 @@ const EditFilterPage: React.FC = () => {
         {features.filtersV2 && keywordsField}
 
         <div className='edit-filter__actions form__actions'>
-          <button type='submit' disabled={isFetchingFilter || isUpdating || isCreating}>
+          <button type='submit' disabled={disabled}>
             {filterId !== 'new' ? (
               <FormattedMessage id='column.filters.edit' defaultMessage='Edit filter' />
             ) : (
