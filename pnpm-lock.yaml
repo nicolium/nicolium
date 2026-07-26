@@ -250,9 +250,6 @@ importers:
       react-sticky-box:
         specifier: ^2.0.5
         version: 2.0.5(react@19.2.8)
-      react-swipeable-views:
-        specifier: ^0.14.1
-        version: 0.14.1(react@19.2.8)
       react-virtuoso:
         specifier: ^4.18.11
         version: 4.18.11(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -323,9 +320,6 @@ importers:
       '@types/react-sparklines':
         specifier: ^1.7.5
         version: 1.7.5
-      '@types/react-swipeable-views':
-        specifier: ^0.13.6
-        version: 0.13.6
       '@types/semver':
         specifier: ^7.7.1
         version: 7.7.1
@@ -3189,9 +3183,6 @@ packages:
   '@types/react-sparklines@1.7.5':
     resolution: {integrity: sha512-rIAmNyRKUqWWnaQMjNrxMNkgEFi5f9PrdczSNxj5DscAa48y4i9P0fRKZ72FmNcFsdg6Jx4o6CXWZtIaC0OJOg==}
 
-  '@types/react-swipeable-views@0.13.6':
-    resolution: {integrity: sha512-Pe9TxRRo098Lxi59YQ8KWVuyBOvt9nJK5AtAqGiRsnl+6PXLknuiLhg0+mGuM9Bn+nun+Ed65Kb1Yl171vCdyA==}
-
   '@types/react@19.2.17':
     resolution: {integrity: sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==}
 
@@ -4848,9 +4839,6 @@ packages:
     resolution: {integrity: sha512-Td8GCYSxDAoMhHOlKmCFMJ/hz5qlAAb71n66Dryw9nfCVfumLo7nhuotbvKom/XPADmrYC3O5QR71EPq4DarJQ==}
     hasBin: true
 
-  keycode@2.2.1:
-    resolution: {integrity: sha512-Rdgz9Hl9Iv4QKi8b0OlCRQEzp4AgVxyCtz5S/+VIHezDmrDhkp2N2TqBWOLz0/gbeREXOOiI9/4b8BY9uw2vFg==}
-
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
@@ -5669,11 +5657,6 @@ packages:
     peerDependencies:
       react: ^19.2.8
 
-  react-event-listener@0.6.7:
-    resolution: {integrity: sha512-DLxxUSjZT5Qg8u+51V0KPKW7FI4zCkbP7fjKNGpaRItjaYgO4WycwoqJDumw+UGGQ0DmmPbQ3RUH8LsqQgHWpQ==}
-    peerDependencies:
-      react: ^16.3.0
-
   react-from-dom@0.7.5:
     resolution: {integrity: sha512-CO92PmMKo/23uYPm6OFvh5CtZbMgHs/Xn+o095Lz/TZj9t8DSDhGdSOMLxBxwWI4sr0MF17KUn9yJWc5Q00R/w==}
     peerDependencies:
@@ -5720,24 +5703,6 @@ packages:
     resolution: {integrity: sha512-JEIuN7Q3razU1NNS0vddC12GXCUkj7T4aCpC9ZSTjgBddFsBdTcN1RhYXFLjCE/KDOQqX2Ix308BcdrqtSJbkQ==}
     peerDependencies:
       react: '>=16.8.0'
-
-  react-swipeable-views-core@0.14.1:
-    resolution: {integrity: sha512-0mmRN3OjAn5hPxM/tjL6hJBcnsGBADwMY67NM2PTyANSqKGoHcX0qzsL704jxwUrGcbPedr9/d1VYdQHBb4IAQ==}
-    engines: {node: '>=6.0.0'}
-    peerDependencies:
-      react: ^15.3.0 || ^16.0.0 || ^17.0.0
-
-  react-swipeable-views-utils@0.14.1:
-    resolution: {integrity: sha512-eX0Lo5uZ4G9TBTSpROLNYFGGhd1Ja5K19LL8ZHQmm7oBpJBJXIDH2D364aFMrBR9BdlSbZOVxw9eNHElwMFRyg==}
-    engines: {node: '>=6.0.0'}
-    peerDependencies:
-      react: ^15.3.0 || ^16.0.0 || ^17.0.0
-
-  react-swipeable-views@0.14.1:
-    resolution: {integrity: sha512-dbCicNAez5yWKve7zu7PVGWWIY28JGgMIJBKwSUkpmZaC14zmEL/HaVoZzKyZ7Vm/pSVU2IGVo8zfCYsWJb3pQ==}
-    engines: {node: '>=6.0.0'}
-    peerDependencies:
-      react: ^15.3.0 || ^16.0.0 || ^17.0.0
 
   react-virtuoso@4.18.11:
     resolution: {integrity: sha512-Qeeq9vqa5seCxACvzbQTUeq3s2/Bu+VlwOMF0jfy3E/ZKHLiXWwJpXBhv2rckqYkvm1XRVFLCBMCmqCU8JNEJg==}
@@ -6150,9 +6115,6 @@ packages:
   set-proto@1.0.0:
     resolution: {integrity: sha512-RJRdvCo6IAnPdsvP/7m6bsQqNnn1FCBX5ZNtFL98MmFF/4xAIJTIg1YbHW5DC2W5SKZanrC6i4HsJqlajw/dZw==}
     engines: {node: '>= 0.4'}
-
-  shallow-equal@1.2.1:
-    resolution: {integrity: sha512-S4vJDjHHMBaiZuT9NPb616CSmLf618jawtv3sufLl6ivK8WocjAo58cXwbRV1cgqxH0Qbv+iUt6m05eqEa2IRA==}
 
   sharp@0.35.3:
     resolution: {integrity: sha512-ej0zVHuZGHCiABXcNxeYhpRnPNPAcvbG8RMdBAhDAxLKkCRVSpK3Iyu7qbqw3JMzoj0REeM6f3tJLtVwl0023Q==}
@@ -7014,9 +6976,6 @@ packages:
   w3c-xmlserializer@5.0.0:
     resolution: {integrity: sha512-o8qghlI8NZHU1lLPrpi2+Uq7abh4GGPpYANlalzWxyWteJOCsr/P+oPBA49TOLu5FTZO4d3F9MnWJfiMo4BkmA==}
     engines: {node: '>=18'}
-
-  warning@4.0.3:
-    resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
 
   web-namespaces@2.0.1:
     resolution: {integrity: sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==}
@@ -9816,10 +9775,6 @@ snapshots:
     dependencies:
       '@types/react': 19.2.17
 
-  '@types/react-swipeable-views@0.13.6':
-    dependencies:
-      '@types/react': 19.2.17
-
   '@types/react@19.2.17':
     dependencies:
       csstype: 3.2.3
@@ -11723,8 +11678,6 @@ snapshots:
     dependencies:
       commander: 8.3.0
 
-  keycode@2.2.1: {}
-
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
@@ -12802,13 +12755,6 @@ snapshots:
       react: 19.2.8
       scheduler: 0.27.0
 
-  react-event-listener@0.6.7(react@19.2.8):
-    dependencies:
-      '@babel/runtime': 7.29.2
-      prop-types: 15.8.1
-      react: 19.2.8
-      warning: 4.0.3
-
   react-from-dom@0.7.5(react@19.2.8):
     dependencies:
       react: 19.2.8
@@ -12854,31 +12800,6 @@ snapshots:
   react-sticky-box@2.0.5(react@19.2.8):
     dependencies:
       react: 19.2.8
-
-  react-swipeable-views-core@0.14.1(react@19.2.8):
-    dependencies:
-      '@babel/runtime': 7.29.2
-      react: 19.2.8
-      warning: 4.0.3
-
-  react-swipeable-views-utils@0.14.1(react@19.2.8):
-    dependencies:
-      '@babel/runtime': 7.29.2
-      keycode: 2.2.1
-      prop-types: 15.8.1
-      react: 19.2.8
-      react-event-listener: 0.6.7(react@19.2.8)
-      react-swipeable-views-core: 0.14.1(react@19.2.8)
-      shallow-equal: 1.2.1
-
-  react-swipeable-views@0.14.1(react@19.2.8):
-    dependencies:
-      '@babel/runtime': 7.29.2
-      prop-types: 15.8.1
-      react: 19.2.8
-      react-swipeable-views-core: 0.14.1(react@19.2.8)
-      react-swipeable-views-utils: 0.14.1(react@19.2.8)
-      warning: 4.0.3
 
   react-virtuoso@4.18.11(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
@@ -13385,8 +13306,6 @@ snapshots:
       dunder-proto: 1.0.1
       es-errors: 1.3.0
       es-object-atoms: 1.1.1
-
-  shallow-equal@1.2.1: {}
 
   sharp@0.35.3(@types/node@26.1.1):
     dependencies:
@@ -14254,10 +14173,6 @@ snapshots:
   w3c-xmlserializer@5.0.0:
     dependencies:
       xml-name-validator: 5.0.0
-
-  warning@4.0.3:
-    dependencies:
-      loose-envify: 1.4.0
 
   web-namespaces@2.0.1: {}
 

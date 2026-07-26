@@ -14,9 +14,9 @@ import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import ReactSwipeableViews from '@/components/react-swipeable-views';
 import IconButton from '@/components/ui/icon-button';
 import Portal from '@/components/ui/portal';
+import SwipeableViews from '@/components/ui/swipeable-views';
 import { useModalsActions } from '@/stores/modals';
 import { useUiStoreActions } from '@/stores/ui';
 import { userTouching } from '@/utils/is-mobile';
@@ -191,7 +191,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
   return (
     <div className={clsx('dropdown-menu__content', className)} ref={ref}>
       {items?.some((item) => item?.items?.length) ? (
-        <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1} style={{ width }}>
+        <SwipeableViews animateHeight index={tab === undefined ? 0 : 1} style={{ width }}>
           <div className='dropdown-menu__page' style={{ width }}>
             {Component && <Component handleClose={handleClose} />}
             {(items?.length || touchscreen) && renderItems(items)}
@@ -213,7 +213,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
               </>
             )}
           </div>
-        </ReactSwipeableViews>
+        </SwipeableViews>
       ) : (
         <>
           {Component && <Component handleClose={handleClose} />}

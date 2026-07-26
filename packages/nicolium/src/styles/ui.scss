@@ -2,21 +2,6 @@
   z-index: 9999 !important;
 }
 
-.react-swipeable-view-container {
-  height: 100%;
-}
-
-.react-swipeable-view-container > * {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-body:not(.no-reduce-motion) .react-swipeable-view-container {
-  transition: none !important;
-}
-
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
-import ReactSwipeableViews from '@/components/react-swipeable-views';
+import SwipeableViews from '@/components/ui/swipeable-views';
 import Widget from '@/components/ui/widget';
 import { useAnnouncements } from '@/queries/announcements/use-announcements';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
@@ -41,13 +41,13 @@ const AnnouncementsPanel = () => {
       title={<FormattedMessage id='announcements.title' defaultMessage='Announcements' />}
       className='announcements-widget'
     >
-      <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
+      <SwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
         {announcements
           .map((announcement) => (
             <Announcement key={announcement.id} announcement={announcement} emojiMap={emojiMap} />
           ))
           .toReversed()}
-      </ReactSwipeableViews>
+      </SwipeableViews>
       {announcements.length > 1 && (
         <div className='announcements-widget__dots'>
           {announcements.map((_, i) => (

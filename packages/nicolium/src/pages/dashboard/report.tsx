@@ -9,11 +9,11 @@ import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-
 import Account from '@/components/accounts/account';
 import ColumnLoading from '@/components/column-loading';
 import List, { ListItem } from '@/components/list';
-import ReactSwipeableViews from '@/components/react-swipeable-views';
 import StatusContainer from '@/components/statuses/status-container';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
+import SwipeableViews from '@/components/ui/swipeable-views';
 import { useFeatures } from '@/hooks/use-features';
 import {
   useForwardReport,
@@ -76,13 +76,13 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
           </button>
         </div>
       )}
-      <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
+      <SwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
         {statusIds.map((statusId) => (
           <div className='report-page__statuses__status' key={statusId}>
             <StatusContainer id={statusId} />
           </div>
         ))}
-      </ReactSwipeableViews>
+      </SwipeableViews>
       {index !== statusIds.length - 1 && (
         <div className='report-page__statuses__arrow report-page__statuses__arrow--right'>
           <button

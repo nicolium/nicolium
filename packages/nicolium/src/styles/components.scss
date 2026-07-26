@@ -2891,3 +2891,26 @@ div[data-viewport-type='window']:has(.empty-message) {
     opacity: .5
   }
 }
+
+.swipeable-views {
+  touch-action: pan-y;
+  overflow: hidden;
+
+  .no-reduce-motion & {
+    transition: height 0.35s var(--ease-default);
+  }
+
+  &__track {
+    display: flex;
+    align-items: flex-start;
+
+    .no-reduce-motion & {
+      transition: transform 0.35s var(--ease-default);
+    }
+  }
+
+  &__view {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+}

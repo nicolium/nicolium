@@ -6,11 +6,11 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import PlaceholderEventPreview from '@/components/placeholders/placeholder-event-preview';
-import ReactSwipeableViews from '@/components/react-swipeable-views';
 import EventPreview from '@/components/statuses/events/event-preview';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
+import SwipeableViews from '@/components/ui/swipeable-views';
 import { useStatus } from '@/queries/statuses/use-status';
 import {
   useJoinedEventsTimeline,
@@ -76,11 +76,11 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
           </button>
         </div>
       )}
-      <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
+      <SwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
         {statusIds.map((statusId) => (
           <Event key={statusId} id={statusId} />
         ))}
-      </ReactSwipeableViews>
+      </SwipeableViews>
       {index !== statusIds.length - 1 && (
         <div className='event-carousel__button event-carousel__button--right'>
           <button
