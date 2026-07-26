@@ -44,6 +44,10 @@ jobs:
       working-directory: ./packages/nicolium
       run: pnpm lint
 
+    - name: Typecheck
+      working-directory: ./packages/nicolium
+      run: pnpm typecheck
+
     - name: Build
       env:
         NODE_ENV: production

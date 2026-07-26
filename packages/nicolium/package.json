@@ -29,6 +29,7 @@
     "lint:sass": "stylelint src/**/*.{css,scss}",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
+    "typecheck": "tsgo --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
