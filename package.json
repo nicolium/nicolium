@@ -29,5 +29,9 @@
     "svgo": "^4.0.2",
     "undici": "7.28.0",
     "yaml@2": "^2.9.0"
+  },
+  "packageManager": "pnpm@11.17.0",
+  "engines": {
+    "node": ">=22"
   }
 }
