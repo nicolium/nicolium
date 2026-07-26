@@ -71,4 +71,4 @@ const Palette: React.FC<IPalette> = ({
   );
 };
 
-export { Palette as default, ColorGroup };
+export { Palette as default, type ColorGroup };

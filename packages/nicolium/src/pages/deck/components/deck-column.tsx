@@ -23,7 +23,7 @@ import { DeckColumnLoginRequired } from './deck-column-login-required';
 import { DeckColumnNotFound } from './deck-column-not-found';
 import { getDeckColumnRouter } from './deck-column-router';
 
-import type { DeckColumn } from '@/schemas/frontend-settings';
+import type { DeckColumn as DeckColumnConfig } from '@/schemas/frontend-settings';
 
 const WIDTHS = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 
@@ -33,7 +33,7 @@ interface DeckRouterContext {
 }
 
 interface IDeckColumn {
-  column: DeckColumn;
+  column: DeckColumnConfig;
   index: number;
   columns: number;
   highlight?: boolean;

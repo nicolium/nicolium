@@ -1,7 +1,7 @@
 // Utility types
 type APIEntity = Record<string, any>;
 
-export {
+export type {
   // Utility types
   APIEntity,
 };

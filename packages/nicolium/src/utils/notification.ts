@@ -28,4 +28,4 @@ const EXCLUDE_TYPES = ['chat_mention'] as const;
 
 type NotificationType = Notification['type'];
 
-export { NOTIFICATION_TYPES, EXCLUDE_TYPES, NotificationType };
+export { NOTIFICATION_TYPES, EXCLUDE_TYPES, type NotificationType };

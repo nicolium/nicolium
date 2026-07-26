@@ -24,7 +24,6 @@ import { buildPollFromParams, buildStatusFromDraft } from '@/utils/builder';
 import { userTouching } from '@/utils/is-mobile';
 
 import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
-import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
 import type { DraftStatus as DraftStatusType } from '@/queries/statuses/use-draft-statuses';
 
 const messages = defineMessages({
@@ -40,7 +39,7 @@ const messages = defineMessages({
 });
 
 interface IDraftStatusActionBar {
-  source: DraftStatus;
+  source: DraftStatusType;
   status: StatusEntity;
 }
 
