@@ -48,7 +48,7 @@ pnpm -F pl-api lint
 And for formatter:
 
 ```bash
-pnpm -F nicolium fmt --check
+pnpm -F nicolium fmt:check
 ```
 
 While contributing code, try to follow the existing coding style. Common sense rules regarding contributions apply. Keep your changes focused on a single issue or feature. Do not create pull requests including larger changes you don't understand fully—whether it's from another project or some auto-generated code.
