@@ -2,7 +2,7 @@ import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import { createRootRoute, createRoute, Outlet, useRouter } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import { BookmarksColumn } from '@/columns/bookmarks';
@@ -533,6 +533,9 @@ const AccountColumnBody: React.FC<IAccountColumnBody> = ({
         accountId={accountId}
         excludeReplies={excludeReplies}
         featuredStatusIds={featuredStatusIds}
+        emptyMessageText={
+          <FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />
+        }
       />
     )}
   </>
