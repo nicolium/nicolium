@@ -1,7 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "precommit": "lint-staged",
     "prepare": "husky"
   },
   "devDependencies": {
