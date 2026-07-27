@@ -17,13 +17,13 @@ import ProfileStats from '@/components/accounts/profile-stats';
 import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
 import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-account-context';
+import { useAccountSwitcher } from '@/hooks/use-account-switcher';
 import { useNavigationItems } from '@/hooks/use-navigation-items';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useAccount } from '@/queries/accounts/use-account';
-import { useLoggedInAccountUrls } from '@/queries/accounts/use-logged-in-accounts';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
-import { useAuthActions, useAuthStore } from '@/stores/auth';
+import { useAuthActions } from '@/stores/auth';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
@@ -47,58 +47,59 @@ interface IAccountSwitcher {
 }
 
 interface ISwitcherAccount {
-  onClick: React.MouseEventHandler;
+  accountUrl: string;
+  switcher: ReturnType<typeof useAccountSwitcher>;
 }
 
-const SwitcherAccount: React.FC<ISwitcherAccount> = ({ onClick }) => {
+const SwitcherAccount: React.FC<ISwitcherAccount> = ({ accountUrl, switcher }) => {
   const { data: account } = useOwnAccount();
   const unreadCount = useNotificationsUnreadCount();
   const { demetricator } = useSettings();
 
   if (!account) return null;
 
+  const handleClick: React.MouseEventHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    switcher.handleSwitch(accountUrl);
+  };
+
   return (
-    <a className='dropdown-navigation__account-switcher__account' href='#' onClick={onClick}>
-      <div>
-        <Account
-          account={account}
-          showAccountHoverCard={false}
-          withRelationship={false}
-          withLinkToProfile={false}
-          action={
-            unreadCount ? (
-              <Counter count={unreadCount} countMax={demetricator !== 'off' ? 1 : undefined} />
-            ) : (
-              <></>
-            )
-          }
-        />
-      </div>
+    <a
+      href='#'
+      className={clsx('dropdown-navigation__account-switcher__account', {
+        'dropdown-navigation__account-switcher__account--dragging':
+          switcher.draggedUrl === accountUrl,
+      })}
+      {...switcher.getDragProps(accountUrl)}
+      onClick={handleClick}
+    >
+      <Account
+        account={account}
+        showAccountHoverCard={false}
+        withRelationship={false}
+        withLinkToProfile={false}
+        action={
+          unreadCount ? (
+            <Counter count={unreadCount} countMax={demetricator !== 'off' ? 1 : undefined} />
+          ) : (
+            <></>
+          )
+        }
+      />
     </a>
   );
 };
 
 const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
-  const otherAccountUrls = useLoggedInAccountUrls();
-
-  const { switchAccount } = useAuthActions();
-
-  const handleSwitchAccount =
-    (accountUrl: string): React.MouseEventHandler =>
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const id = useAuthStore.getState().users[accountUrl]?.id;
-      if (!id) return;
-      switchAccount({ id, url: accountUrl });
-    };
+  const switcher = useAccountSwitcher();
 
   return (
     <div className='dropdown-navigation__account-switcher__accounts'>
-      {otherAccountUrls.map((accountUrl) => (
+      {switcher.accountUrls.map((accountUrl) => (
         <CurrentAccountProvider key={accountUrl} accountUrl={accountUrl}>
-          <SwitcherAccount onClick={handleSwitchAccount(accountUrl)} />
+          <SwitcherAccount accountUrl={accountUrl} switcher={switcher} />
         </CurrentAccountProvider>
       ))}
 

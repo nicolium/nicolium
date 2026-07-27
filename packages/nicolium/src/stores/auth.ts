@@ -154,6 +154,7 @@ interface AuthActions {
   onCredentialsFailed: (error: { response: NicoliumResponse }) => void;
   onTokenFailed: (token: string, error: { response: NicoliumResponse }) => void;
   switchAccount: (account: Pick<AccountEntity, 'id' | 'url'>) => void;
+  reorderAccounts: (accountUrls: string[]) => void;
   setCurrentAccount: (account: CredentialAccount) => void;
   setCurrentAccountIfUnset: (account: CredentialAccount) => void;
   loadMastodonPreload: (data: Record<string, any>) => void;
@@ -677,6 +678,19 @@ const useAuthStore = create<AuthStore>()(
           if (userSwitched(oldMe, newMe, get().users)) {
             reload();
           }
+        },
+        reorderAccounts: (accountUrls) => {
+          const { users } = get();
+          const urls = Object.keys(users);
+          const moved = accountUrls.filter((url) => urls.includes(url));
+
+          let index = 0;
+          const ordered = urls.map((url) => (moved.includes(url) ? moved[index++] : url));
+
+          set((state) => {
+            state.users = Object.fromEntries(ordered.map((url) => [url, users[url]]));
+          });
+          persistAuth(get());
         },
         setCurrentAccount: (account) => {
           set((state) => {

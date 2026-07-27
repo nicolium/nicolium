@@ -253,10 +253,6 @@ body {
       display: block;
       padding-top: 0.5rem;
       padding-bottom: 0.5rem;
-
-      > div {
-        pointer-events: none;
-      }
     }
 
     &__add {
@@ -751,28 +747,35 @@ body {
       text-align: right;
     }
 
-    &:hover {
-      background-color: var(--color-gray-100);
-    }
-
-    &:focus {
-      background-color: var(--color-gray-100);
-      outline: 2px solid var(--color-primary-500);
-      outline-offset: 2px;
-    }
-
     .dark & {
       color: var(--color-gray-500);
     }
 
-    .dark &:hover,
-    .dark &:focus {
-      background-color: var(--color-gray-800);
+    &:hover {
+      background-color: var(--color-gray-100);
     }
 
-    .dark &:focus {
-      outline-offset: 0;
+    .dark &:hover {
+      background-color: var(--color-gray-800);
     }
+  }
+}
+
+.profile-dropdown a,
+.profile-dropdown button,
+.dropdown-navigation__account-switcher__account {
+  &:focus {
+    background-color: var(--color-gray-100);
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
+  }
+
+  .dark &:focus {
+    background-color: var(--color-gray-800);
+  }
+
+  .dark &:focus {
+    outline-offset: 0;
   }
 }
 

@@ -1,6 +1,7 @@
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
+import { clsx } from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -8,11 +9,11 @@ import Account from '@/components/accounts/account';
 import DropdownMenu from '@/components/dropdown-menu';
 import PlaceholderAccount from '@/components/placeholders/placeholder-account';
 import { CurrentAccountProvider } from '@/contexts/current-account-context';
+import { useAccountSwitcher } from '@/hooks/use-account-switcher';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useLoggedInAccountUrls } from '@/queries/accounts/use-logged-in-accounts';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
-import { useAuthActions, useAuthStore } from '@/stores/auth';
+import { useAuthActions } from '@/stores/auth';
 import { useSettings } from '@/stores/settings';
 
 import ThemeToggle from '../settings/theme-toggle';
@@ -50,34 +51,67 @@ const LoggedInAccount: React.FC = () => {
   );
 };
 
-interface IProfileDropdown {
-  account: AccountEntity;
-  children?: React.ReactNode;
+interface ISwitcherAccount {
+  accountUrl: string;
+  switcher: ReturnType<typeof useAccountSwitcher>;
 }
 
+const SwitcherAccount: React.FC<ISwitcherAccount> = ({ accountUrl, switcher }) => (
+  <div
+    className={clsx('profile-dropdown__account', {
+      'profile-dropdown__account--dragging': switcher.draggedUrl === accountUrl,
+    })}
+    {...switcher.getDragProps(accountUrl)}
+  >
+    <button
+      type='button'
+      className='profile-dropdown__account__switch'
+      onClick={() => {
+        switcher.handleSwitch(accountUrl);
+      }}
+    >
+      <LoggedInAccount />
+    </button>
+  </div>
+);
+
+const SwitcherAccounts: React.FC = () => {
+  const switcher = useAccountSwitcher();
+
+  if (!switcher.accountUrls.length) return null;
+
+  return (
+    <div className='profile-dropdown__accounts'>
+      {switcher.accountUrls.map((accountUrl) => (
+        <CurrentAccountProvider key={accountUrl} accountUrl={accountUrl}>
+          <SwitcherAccount accountUrl={accountUrl} switcher={switcher} />
+        </CurrentAccountProvider>
+      ))}
+    </div>
+  );
+};
+
 type IMenuItem = {
-  text: string | React.ReactElement | null;
+  text?: string | React.ReactElement | null;
+  node?: React.ReactNode;
   linkOptions?: LinkOptions;
   toggle?: React.JSX.Element;
   icon?: string;
   action?: (event: React.MouseEvent) => void;
 };
 
+interface IProfileDropdown {
+  account: AccountEntity;
+  children?: React.ReactNode;
+}
+
 const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const features = useFeatures();
   const intl = useIntl();
-  const { logOut, switchAccount } = useAuthActions();
-
-  const otherAccountUrls = useLoggedInAccountUrls();
+  const { logOut } = useAuthActions();
 
   const handleLogOut = () => {
     logOut();
-  };
-
-  const handleSwitchAccount = (otherAccountUrl: string) => () => {
-    const otherAccountId = useAuthStore.getState().users[otherAccountUrl]?.id;
-    if (!otherAccountId) return;
-    switchAccount({ id: otherAccountId, url: otherAccountUrl });
   };
 
   const renderAccount = (account: AccountEntity) => (
@@ -92,16 +126,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
       linkOptions: { to: '/@{$username}', params: { username: account.acct } },
     });
 
-    otherAccountUrls.forEach((otherAccountUrl) => {
-      menu.push({
-        text: (
-          <CurrentAccountProvider accountUrl={otherAccountUrl}>
-            <LoggedInAccount />
-          </CurrentAccountProvider>
-        ),
-        action: handleSwitchAccount(otherAccountUrl),
-      });
-    });
+    menu.push({ node: <SwitcherAccounts /> });
 
     menu.push({ text: null });
     menu.push({ text: intl.formatMessage(messages.theme), toggle: <ThemeToggle /> });
@@ -127,7 +152,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
         ))}
       </>
     );
-  }, [account, otherAccountUrls.length, features]);
+  }, [account, features]);
 
   return (
     <DropdownMenu component={ProfileDropdownMenu} className='profile-dropdown'>
@@ -149,7 +174,9 @@ interface MenuItemProps {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
-  if (menuItem.toggle) {
+  if (menuItem.node) {
+    return menuItem.node;
+  } else if (menuItem.toggle) {
     return (
       <label>
         <span>{menuItem.text}</span>
