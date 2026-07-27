@@ -725,7 +725,8 @@ body {
   }
 
   .profile-dropdown__account__switch,
-  a {
+  > a,
+  > button {
     cursor: pointer;
 
     overflow: hidden;
