@@ -1,7 +1,0 @@
-{
-  "name": "Nicolium",
-  "description": "Mastodon-compatible social media front-end.",
-  "keywords": ["fediverse"],
-  "website": "https://git.pleroma.social/nicolium/nicolium",
-  "stack": "container"
-}
