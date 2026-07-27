@@ -5,8 +5,8 @@ import parse, {
   domToReact,
   type DOMNode,
 } from 'html-react-parser';
-import groupBy from 'lodash/groupBy';
-import minBy from 'lodash/minBy';
+import { groupBy } from 'lodash-es';
+import { minBy } from 'lodash-es';
 import iconTextWrap from 'lucide-static/icons/text-wrap.svg';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';

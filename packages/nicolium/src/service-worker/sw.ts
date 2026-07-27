@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
-import unescape from 'lodash/unescape';
+import { unescape } from 'lodash-es';
 
 import iconExpand from '../assets/images/web-push/web-push-icon_expand.png';
 import iconFavourite from '../assets/images/web-push/web-push-icon_favourite.png';

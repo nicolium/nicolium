@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import pick from 'lodash/pick';
+import { pick } from 'lodash-es';
 import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from 'pl-api';
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';

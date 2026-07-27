@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import 'intl-pluralrules';
-import omit from 'lodash/omit';
+import { omit } from 'lodash-es';
 import {
   PaginatedResponse,
   type GetGroupedNotificationsParams,

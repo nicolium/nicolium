@@ -1,4 +1,4 @@
-import trimStart from 'lodash/trimStart';
+import { trimStart } from 'lodash-es';
 import * as v from 'valibot';
 
 import { mrfSimpleSchema, type MRFSimple } from '@/schemas/pleroma';

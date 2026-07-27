@@ -26,13 +26,13 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.101.4",
-    "lodash": "^4.18.1",
+    "@types/lodash-es": "^4.17.12",
+    "lodash-es": "^4.18.1",
     "pl-api": "workspace:*",
     "react": "^19.2.8",
     "valibot": "^1.4.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.24",
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "oxfmt": "^0.60.0",

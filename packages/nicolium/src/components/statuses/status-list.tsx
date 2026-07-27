@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useRef, useCallback, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 

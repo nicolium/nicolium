@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { Suspense, useEffect, useState } from 'react';
 import StickyBox from 'react-sticky-box';
 

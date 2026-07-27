@@ -1,5 +1,5 @@
 import { useLocation } from '@tanstack/react-router';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import {
   Virtuoso,

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useContext, useRef } from 'react';
 
 import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';

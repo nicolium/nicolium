@@ -1,4 +1,4 @@
-import mapValues from 'lodash/mapValues';
+import { mapValues } from 'lodash-es';
 import { accountSchema } from 'pl-api';
 import * as v from 'valibot';
 

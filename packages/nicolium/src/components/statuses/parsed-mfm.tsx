@@ -2,7 +2,7 @@
 // https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/packages/frontend/src/components/global/MkMfm.ts
 import iconClock from '@phosphor-icons/core/regular/clock.svg';
 import * as mfm from '@transfem-org/sfm-js';
-import clamp from 'lodash/clamp';
+import { clamp } from 'lodash-es';
 import React, { useEffect, type CSSProperties } from 'react';
 import { FormattedDate } from 'react-intl';
 

@@ -1,6 +1,6 @@
 import iconAt from '@phosphor-icons/core/regular/at.svg';
 import { Link, useNavigate } from '@tanstack/react-router';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import { ICESHRIMP_NET } from 'pl-api';
 import React, { useState, useRef, useCallback } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';

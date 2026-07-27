@@ -3,7 +3,7 @@ import { AutoLinkNode, LinkNode } from '@lexical/link';
 import { $convertToMarkdownString } from '@lexical/markdown';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $nodesOfType, $getRoot, type EditorState, $getNodeByKey } from 'lexical';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 

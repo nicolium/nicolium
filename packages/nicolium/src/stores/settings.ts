@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash-es';
 import { defineMessages } from 'react-intl';
 import * as v from 'valibot';
 import { create } from 'zustand';

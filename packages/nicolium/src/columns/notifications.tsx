@@ -8,7 +8,7 @@ import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 

@@ -6,8 +6,8 @@ import iconPlay from '@phosphor-icons/core/regular/play.svg';
 import iconSpeakerHigh from '@phosphor-icons/core/regular/speaker-high.svg';
 import iconSpeakerX from '@phosphor-icons/core/regular/speaker-x.svg';
 import clsx from 'clsx';
-import debounce from 'lodash/debounce';
-import throttle from 'lodash/throttle';
+import { debounce } from 'lodash-es';
+import { throttle } from 'lodash-es';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 

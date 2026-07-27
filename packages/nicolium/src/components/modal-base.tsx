@@ -1,6 +1,6 @@
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
-import range from 'lodash/range';
+import { range } from 'lodash-es';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 

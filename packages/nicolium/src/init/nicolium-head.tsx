@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React, { useEffect, useMemo } from 'react';
 
 import InlineStyle from '@/components/inline-style';

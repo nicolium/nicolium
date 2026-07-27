@@ -1,4 +1,4 @@
-import noop from 'lodash/noop';
+import { noop } from 'lodash-es';
 import React, { Suspense } from 'react';
 
 import { MediaGallery, Video, Audio } from '@/components/async-components';

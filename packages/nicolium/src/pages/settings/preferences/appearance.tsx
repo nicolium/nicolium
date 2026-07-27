@@ -1,5 +1,5 @@
 import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash-es';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 

@@ -1,6 +1,6 @@
 import { type LinkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import HeadTitle from '@/components/helmet';

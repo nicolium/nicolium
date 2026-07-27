@@ -1,6 +1,6 @@
 import iconArrowLineUp from '@phosphor-icons/core/regular/arrow-line-up.svg';
 import clsx from 'clsx';
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash-es';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useIntl, type MessageDescriptor } from 'react-intl';
 

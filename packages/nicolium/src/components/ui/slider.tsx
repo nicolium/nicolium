@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash-es';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getPointerPosition } from '@/utils/media';

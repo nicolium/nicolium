@@ -1,4 +1,4 @@
-import trim from 'lodash/trim';
+import { trim } from 'lodash-es';
 import {
   type Account as AccountEntity,
   applicationSchema,

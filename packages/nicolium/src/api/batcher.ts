@@ -1,5 +1,5 @@
 import { bufferScheduler, create, keyResolver } from '@yornaath/batshit';
-import memoize from 'lodash/memoize';
+import { memoize } from 'lodash-es';
 
 import type { PlApiClient } from 'pl-api';
 

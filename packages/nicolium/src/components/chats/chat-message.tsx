@@ -2,7 +2,7 @@ import iconClipboard from '@phosphor-icons/core/regular/clipboard.svg';
 import iconDotsThree from '@phosphor-icons/core/regular/dots-three.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import clsx from 'clsx';
-import escape from 'lodash/escape';
+import { escape } from 'lodash-es';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 

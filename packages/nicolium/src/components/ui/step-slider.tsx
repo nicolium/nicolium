@@ -1,4 +1,4 @@
-import throttle from 'lodash/throttle';
+import { throttle } from 'lodash-es';
 import React, { useCallback, useRef } from 'react';
 
 import { getPointerPosition } from '@/utils/media';
