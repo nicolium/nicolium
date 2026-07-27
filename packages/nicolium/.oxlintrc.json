@@ -77,7 +77,21 @@
       "error",
       { "fixMixedExportsWithInlineTypeSpecifier": true }
     ],
-    "typescript/no-import-type-side-effects": "error"
+    "typescript/no-import-type-side-effects": "error",
+
+    "await-thenable": "warn",
+    "consistent-return": "warn",
+    "no-base-to-string": "warn",
+    "no-meaningless-void-operator": "warn",
+    "no-misused-spread": "warn",
+    "no-unnecessary-boolean-literal-compare": "warn",
+    "no-unnecessary-type-arguments": "warn",
+    "no-unnecessary-type-assertion": "warn",
+    "no-unnecessary-type-conversion": "warn",
+    "no-unnecessary-type-parameters": "warn",
+    "no-unsafe-enum-comparison": "warn",
+    "no-useless-default-assignment": "warn",
+    "restrict-template-expressions": "warn"
   },
   "settings": {
     "jsx-a11y": {

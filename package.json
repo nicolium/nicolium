@@ -11,8 +11,6 @@
   "resolutions": {
     "@babel/core@7": "^7.29.7",
     "@babel/runtime": "^7.26.10",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
     "ajv@8": "^8.18.0",
     "brace-expansion@1": "^1.1.16",
     "brace-expansion@2": "^2.1.2",
