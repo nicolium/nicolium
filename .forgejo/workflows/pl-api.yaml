@@ -23,7 +23,7 @@ jobs:
       with:
         version: 11
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 22
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
@@ -37,3 +37,6 @@ jobs:
       working-directory: ./packages/pl-api
       run: pnpm lint
 
+    - name: Check formatting
+      working-directory: ./packages/pl-api
+      run: pnpm fmt:check
