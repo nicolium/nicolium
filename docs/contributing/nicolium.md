@@ -10,9 +10,7 @@ The page intends to provide a technical overview of the Nicolium codebase and gu
 
 ## Used technologies
 
-Nicolium is a single page application built using the [React](https://react.dev/) framework. It uses [TypeScript](https://www.typescriptlang.org/) as the programming language and [Vite](https://vitejs.dev/) as the build tool. Routing is handled by [TanStack Router](https://tanstack.com/router/latest). Client state management is done using [Zustand](https://zustand-demo.pmnd.rs/) and server state management using [TanStack Query](https://tanstack.com/query/latest).
-
-> **Note:** Important parts of Nicolium are currently being refactored to use a different set of libraries. You can find occurrences of tools being phased out, like Redux or TailwindCSS. Larger contributions should wait until the refactor is complete.
+Nicolium is a single page application built using the [React](https://react.dev/) framework. It uses [TypeScript](https://www.typescriptlang.org/) as the programming language and [Vite](https://vitejs.dev/) as the build tool. Routing is handled by [TanStack Router](https://tanstack.com/router/latest). Client state management is done using [Zustand](https://zustand-demo.pmnd.rs/) and server state management using [TanStack Query](https://tanstack.com/query/latest). Styles are written in SCSS, following BEM-like naming conventions.
 
 Nicolium also uses `pl-api` library for interacting with the Mastodon-compatible backends. The goal of `pl-api` is to provide a unified, type-safe API for multiple backends extending Mastodon API in incompatible ways. You can find the `pl-api` source code in the `packages/pl-api` directory of the Nicolium repository.
 
