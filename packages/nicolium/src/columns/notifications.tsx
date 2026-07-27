@@ -44,6 +44,10 @@ const messages = defineMessages({
     defaultMessage:
       'Click to see {count} new {count, plural, one {notification} other {notifications}}',
   },
+  queueInline: {
+    id: 'notifications.queue_label.inline',
+    defaultMessage: '{count} new {count, plural, one {notification} other {notifications}}',
+  },
   queueLiveRegion: {
     id: 'notifications.queue_label.live_region',
     defaultMessage: '{count} new {count, plural, one {notification} other {notifications}}.',
@@ -383,6 +387,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
         onClick={handleDequeueNotifications}
         count={queuedNotificationCount}
         message={messages.queue}
+        inlineMessage={messages.queueInline}
         liveRegionMessage={messages.queueLiveRegion}
       />
 

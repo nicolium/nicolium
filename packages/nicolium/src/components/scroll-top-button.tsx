@@ -1,13 +1,17 @@
 import iconArrowLineUp from '@phosphor-icons/core/regular/arrow-line-up.svg';
 import clsx from 'clsx';
 import { throttle } from 'lodash-es';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useIntl, type MessageDescriptor } from 'react-intl';
 
 import AvatarStack from '@/components/accounts/avatar-stack';
 import Icon from '@/components/ui/icon';
+import { useColumnHeaderSlot } from '@/contexts/column-header-context';
 import { useColumnScrollParent } from '@/contexts/multi-column-context';
 import { useSettings } from '@/stores/settings';
+
+const INLINE_MARGIN = 16;
 
 interface IScrollTopButton {
   /** Callback when clicked, and also when scrolled to the top. */
@@ -16,6 +20,8 @@ interface IScrollTopButton {
   count: number;
   /** Message to display in the button (should contain a `{count}` value). */
   message: MessageDescriptor;
+  /** Message to display when the button is rendered in the column header. If not provided, `message` will be used. */
+  inlineMessage?: MessageDescriptor;
   /** Message to announce in the live region (should contain a `{count}` value). If not provided, `message` will be used. */
   liveRegionMessage?: MessageDescriptor;
   /** Distance from the top of the screen (scrolling down) before the button appears. */
@@ -31,6 +37,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   onClick,
   count,
   message,
+  inlineMessage = message,
   threshold = 240,
   autoloadThreshold = 50,
   liveRegionMessage = message,
@@ -40,14 +47,20 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   const { autoloadTimelines, disableUserProvidedMedia } = useSettings();
   const columnScrollParent = useColumnScrollParent();
   const scrollParent = columnScrollParent || window;
+  const headerSlot = useColumnHeaderSlot();
 
   // Whether we are scrolled past the `threshold`.
   const [scrolled, setScrolled] = useState<boolean>(false);
   // Whether we are scrolled above the `autoloadThreshold`.
   const [scrolledTop, setScrolledTop] = useState<boolean>(false);
+  // Whether the button fits in the space left in the column header.
+  const [fitsInHeader, setFitsInHeader] = useState<boolean>(false);
+  const [button, setButton] = useState<HTMLButtonElement | null>(null);
 
+  const inline = fitsInHeader && !!headerSlot;
   const visible = count > 0 && (!autoloadTimelines || scrolled);
-  const buttonMessage = intl.formatMessage(message, { count });
+  const buttonMessage = intl.formatMessage(inline ? inlineMessage : message, { count });
+  const buttonLabel = intl.formatMessage(message, { count });
 
   /** Number of pixels scrolled down from the top of the page. */
   const getScrollTop = (): number =>
@@ -95,26 +108,52 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
     maybeUnload();
   }, [maybeUnload]);
 
+  useLayoutEffect(() => {
+    if (!headerSlot || !button) return;
+
+    const update = () =>
+      setFitsInHeader(headerSlot.clientWidth >= button.offsetWidth + INLINE_MARGIN);
+
+    const observer = new ResizeObserver(update);
+    observer.observe(headerSlot);
+    observer.observe(button);
+    update();
+
+    return () => observer.disconnect();
+  }, [headerSlot, button]);
+
+  const element = (
+    <div
+      className={clsx('scroll-top-button', {
+        'scroll-top-button--visible': visible,
+        'scroll-top-button--inline': inline,
+      })}
+      aria-hidden={!visible}
+    >
+      <button
+        ref={setButton}
+        onClick={handleClick}
+        tabIndex={visible ? 0 : -1}
+        aria-label={buttonLabel}
+      >
+        {accountIds?.length && !disableUserProvidedMedia ? (
+          <AvatarStack accountIds={accountIds} />
+        ) : (
+          <Icon src={iconArrowLineUp} aria-hidden />
+        )}
+
+        <p>{buttonMessage}</p>
+      </button>
+    </div>
+  );
+
   return (
     <>
       <span className='sr-only' role='status' aria-live='polite' aria-atomic='true'>
         {visible ? intl.formatMessage(liveRegionMessage, { count }) : ''}
       </span>
 
-      <div
-        className={clsx('scroll-top-button', { 'scroll-top-button--visible': visible })}
-        aria-hidden={!visible}
-      >
-        <button onClick={handleClick} tabIndex={visible ? 0 : -1} aria-label={buttonMessage}>
-          {accountIds?.length && !disableUserProvidedMedia ? (
-            <AvatarStack accountIds={accountIds} />
-          ) : (
-            <Icon src={iconArrowLineUp} aria-hidden />
-          )}
-
-          <p>{buttonMessage}</p>
-        </button>
-      </div>
+      {headerSlot && fitsInHeader ? createPortal(element, headerSlot) : element}
     </>
   );
 };

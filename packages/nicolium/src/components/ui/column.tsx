@@ -4,6 +4,7 @@ import { throttle } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import HeadTitle from '@/components/helmet';
+import { ColumnHeaderProvider } from '@/contexts/column-header-context';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
@@ -18,7 +19,9 @@ type IColumnHeader = Pick<
   | 'className'
   | 'action'
   | 'truncateTitle'
->;
+> & {
+  slotRef?: React.Ref<HTMLDivElement>;
+};
 
 /** Contains the column title with optional back button. */
 const ColumnHeader: React.FC<IColumnHeader> = ({
@@ -30,6 +33,7 @@ const ColumnHeader: React.FC<IColumnHeader> = ({
   className,
   action,
   truncateTitle,
+  slotRef,
 }) => {
   const navigate = useNavigate();
   const { history } = useRouter();
@@ -52,6 +56,8 @@ const ColumnHeader: React.FC<IColumnHeader> = ({
       onBackClick={withBack ? handleBackClick : undefined}
     >
       <CardTitle title={title || label} truncate={truncateTitle} />
+
+      <div className='column__header__slot' ref={slotRef} />
 
       {action && <div className='column__header__action'>{action}</div>}
     </CardHeader>
@@ -102,6 +108,7 @@ const Column: React.FC<IColumn> = ({
   const ref = React.useRef<HTMLDivElement>(null);
   const frontendConfig = useFrontendConfig();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [headerSlot, setHeaderSlot] = useState<HTMLDivElement | null>(null);
 
   const handleScroll = useCallback(
     throttle(() => {
@@ -147,10 +154,13 @@ const Column: React.FC<IColumn> = ({
           })}
           action={action}
           truncateTitle={truncateTitle}
+          slotRef={setHeaderSlot}
         />
       )}
 
-      <CardBody className={bodyClassName}>{children}</CardBody>
+      <ColumnHeaderProvider slot={headerSlot}>
+        <CardBody className={bodyClassName}>{children}</CardBody>
+      </ColumnHeaderProvider>
     </Card>
   );
 };

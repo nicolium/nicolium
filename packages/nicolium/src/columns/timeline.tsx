@@ -55,6 +55,10 @@ const messages = defineMessages({
     id: 'status_list.queue.label',
     defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}',
   },
+  queueInline: {
+    id: 'status_list.queue.label.inline',
+    defaultMessage: '{count} new {count, plural, one {post} other {posts}}',
+  },
   queueLiveRegion: {
     id: 'status_list.queue.label.live_region',
     defaultMessage: '{count} new {count, plural, one {post} other {posts}}.',
@@ -650,6 +654,7 @@ const Timeline: React.FC<ITimeline> = ({
           onClick={dequeueEntries}
           count={queuedCount}
           message={messages.queue}
+          inlineMessage={messages.queueInline}
           liveRegionMessage={messages.queueLiveRegion}
           accountIds={queuedAccountIds}
         />
