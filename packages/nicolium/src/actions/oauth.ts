@@ -22,9 +22,8 @@ const obtainOAuthToken = async (
   return client.oauth.getToken(params);
 };
 
-const revokeOAuthToken = async (params: RevokeTokenParams) => {
-  const me = getMe();
-  const baseURL = parseBaseURL(me || undefined) || BuildConfig.BACKEND_URL;
+const revokeOAuthToken = (params: RevokeTokenParams, accountUrl?: string) => {
+  const baseURL = parseBaseURL(accountUrl || getMe() || undefined) || BuildConfig.BACKEND_URL;
   const client = new PlApiClient(baseURL || '');
   return client.oauth.revokeToken(params);
 };

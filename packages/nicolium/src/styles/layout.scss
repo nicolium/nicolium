@@ -724,7 +724,7 @@ body {
     }
   }
 
-  button,
+  .profile-dropdown__account__switch,
   a {
     cursor: pointer;
 
@@ -759,10 +759,22 @@ body {
       background-color: var(--color-gray-800);
     }
   }
+
+  &__account--placeholder {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+
+    button svg {
+      width: 1rem;
+      min-width: 1rem;
+      height: 1rem;
+    }
+  }
 }
 
-.profile-dropdown a,
-.profile-dropdown button,
+.profile-dropdown__account__switch,
 .dropdown-navigation__account-switcher__account {
   &:focus {
     background-color: var(--color-gray-100);

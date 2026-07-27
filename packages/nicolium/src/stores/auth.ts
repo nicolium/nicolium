@@ -167,6 +167,7 @@ interface AuthActions {
   verifyCredentials: (token: string, accountUrl?: string) => Promise<CredentialAccount>;
   fetchMe: () => Promise<CredentialAccount | undefined>;
   logOut: () => Promise<void>;
+  logOutAccount: (accountUrl: string) => Promise<void>;
   register: (params: CreateAccountParams) => Promise<Token | undefined>;
   fetchCaptcha: () => ReturnType<PlApiClient['oauth']['getCaptcha']>;
   updateMe: (params: UpdateCredentialsParams) => Promise<CredentialAccount>;
@@ -882,26 +883,46 @@ const useAuthStore = create<AuthStore>()(
             typeof accountId === 'string'
               ? selectAccount(accountId, state.me || backendUrl)
               : undefined;
+
           const standalone = isStandalone();
 
           if (!account) return;
 
-          const token = state.users[account.url]?.access_token;
-          const params = {
-            client_id: state.tokens[token]?.client_id ?? state.app?.client_id!,
-            client_secret: state.tokens[token]?.client_secret ?? state.app?.client_secret!,
-            token,
-          };
+          await get().actions.logOutAccount(account?.url ?? state.me!);
 
-          try {
-            await revokeOAuthToken(params);
-          } finally {
-            queryClient.invalidateQueries();
-            queryClient.clear();
-            unsetSentryAccount();
-            get().actions.removeAccount(account, standalone);
-            toast.success(messages.loggedOut);
+          get().actions.removeAccount(account, standalone);
+          unsetSentryAccount();
+          queryClient.invalidateQueries();
+          queryClient.clear();
+        },
+
+        logOutAccount: async (accountUrl) => {
+          const state = get();
+
+          if (accountUrl === state.me || accountUrl === getMeUrl()) return get().actions.logOut();
+
+          const token = state.users[accountUrl]?.access_token;
+
+          if (token) {
+            const params = {
+              client_id: state.tokens[token]?.client_id ?? state.app?.client_id!,
+              client_secret: state.tokens[token]?.client_secret ?? state.app?.client_secret!,
+              token,
+            };
+
+            try {
+              await revokeOAuthToken(params, accountUrl);
+            } catch {}
           }
+
+          set((state) => {
+            deleteUser(state, { url: accountUrl });
+          });
+          removeClientForAccount(accountUrl);
+          persistAuth(get());
+          queryClient.removeQueries({ queryKey: [accountUrl] });
+          KVStore.removeItem(`authAccount:${accountUrl}`).catch(console.error);
+          toast.success(messages.loggedOut);
         },
 
         register: async (params) => {

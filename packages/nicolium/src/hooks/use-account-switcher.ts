@@ -16,7 +16,7 @@ const moveItem = (items: string[], accountUrl: string, targetIndex: number) => {
 
 const useAccountSwitcher = () => {
   const storedAccountUrls = useLoggedInAccountUrls();
-  const { switchAccount, reorderAccounts } = useAuthActions();
+  const { logOutAccount, switchAccount, reorderAccounts } = useAuthActions();
 
   const [order, setOrder] = useState<string[] | null>(null);
   const [draggedUrl, setDraggedUrl] = useState<string | null>(null);
@@ -67,6 +67,7 @@ const useAccountSwitcher = () => {
     draggedUrl,
     handleSwitch,
     getDragProps,
+    handleLogOut: (accountUrl: string) => logOutAccount(accountUrl),
   };
 };
 

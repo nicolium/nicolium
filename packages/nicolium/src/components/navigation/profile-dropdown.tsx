@@ -1,5 +1,6 @@
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import { clsx } from 'clsx';
 import React, { useMemo } from 'react';
@@ -18,6 +19,7 @@ import { useSettings } from '@/stores/settings';
 
 import ThemeToggle from '../settings/theme-toggle';
 import Counter from '../ui/counter';
+import Icon from '../ui/icon';
 
 import type { Account as AccountEntity } from 'pl-api';
 
@@ -26,14 +28,43 @@ const messages = defineMessages({
   add: { id: 'profile_dropdown.add_account', defaultMessage: 'Add an existing account' },
   theme: { id: 'profile_dropdown.theme', defaultMessage: 'Theme' },
   logout: { id: 'profile_dropdown.logout', defaultMessage: 'Log out @{acct}' },
+  removeAccount: { id: 'profile_dropdown.remove_account', defaultMessage: 'Remove account' },
 });
 
-const LoggedInAccount: React.FC = () => {
+interface ILoggedInAccount {
+  accountUrl: string;
+  switcher: ReturnType<typeof useAccountSwitcher>;
+}
+
+const LoggedInAccount: React.FC<ILoggedInAccount> = ({ accountUrl, switcher }) => {
+  const intl = useIntl();
   const { data: account } = useOwnAccount();
   const unreadCount = useNotificationsUnreadCount();
   const { demetricator } = useSettings();
 
-  if (!account) return <PlaceholderAccount />;
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    switcher.handleLogOut(accountUrl);
+  };
+
+  if (!account) {
+    return (
+      <div className='profile-dropdown__account--placeholder'>
+        <PlaceholderAccount />
+        <button
+          type='button'
+          className='profile-dropdown__account__remove'
+          title={intl.formatMessage(messages.removeAccount)}
+          aria-label={intl.formatMessage(messages.removeAccount)}
+          onClick={handleClick}
+        >
+          <Icon src={iconX} aria-hidden={true} />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <Account
@@ -70,7 +101,7 @@ const SwitcherAccount: React.FC<ISwitcherAccount> = ({ accountUrl, switcher }) =
         switcher.handleSwitch(accountUrl);
       }}
     >
-      <LoggedInAccount />
+      <LoggedInAccount accountUrl={accountUrl} switcher={switcher} />
     </button>
   </div>
 );
