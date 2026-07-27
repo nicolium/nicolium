@@ -44,6 +44,10 @@ jobs:
       working-directory: ./packages/nicolium
       run: pnpm lint
 
+    - name: Check formatting
+      working-directory: ./packages/nicolium
+      run: pnpm fmt:check
+
     - name: Typecheck
       working-directory: ./packages/nicolium
       run: pnpm typecheck
