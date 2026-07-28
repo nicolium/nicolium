@@ -1,40 +1,21 @@
-import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import React, { useEffect, useMemo, useRef } from 'react';
 
-import { Hotkeys } from '@/components/hotkeys';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import ScrollableList from '@/components/scrollable-list';
-import StatusActionBar from '@/components/statuses/action-bar';
 import PendingStatus from '@/components/statuses/pending-status';
+import Status from '@/components/statuses/status';
 import Tombstone from '@/components/statuses/tombstone';
-import { useReblog } from '@/hooks/use-reblog';
-import { useScopeUrl } from '@/hooks/use-scope-url';
-import {
-  useFavouriteStatus,
-  useUnfavouriteStatus,
-} from '@/queries/statuses/use-status-interactions';
-import { useComposeActions } from '@/stores/compose';
 import { useAsyncRefreshHeader, useThread, useThreadDepths } from '@/stores/contexts';
-import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { selectChild } from '@/utils/scroll-utils';
-import { textForScreenReader } from '@/utils/status';
 
-import DetailedStatus from './detailed-status';
 import RefreshController from './refresh-controller';
 import ThreadStatus from './thread-status';
 
-import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { SelectedStatus } from '@/queries/statuses/use-status';
-import type { Account } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
-
-const messages = defineMessages({
-  rebloggedBy: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
-});
 
 const PlaceholderStatusSlim: React.FC = () => <PlaceholderStatus variant='slim' />;
 
@@ -55,31 +36,13 @@ const Thread = ({
   setExpandAllStatuses,
   refetchContext,
 }: IThread) => {
-  const navigate = useNavigate();
-  const intl = useIntl();
-  const { replyCompose, mentionCompose } = useComposeActions();
-
-  const { spoilerExpanded, deleted } = useStatusMeta(status.id);
-  const {
-    expandStatuses,
-    collapseStatuses,
-    expandStatusSpoilers,
-    collapseStatusSpoilers,
-    revealStatusesMedia,
-    toggleStatusesMediaHidden,
-  } = useStatusMetaActions();
-  const { openModal } = useModalsActions();
+  const { deleted } = useStatusMeta(status.id);
+  const { expandStatusSpoilers, revealStatusesMedia } = useStatusMetaActions();
   const {
     threads: { displayMode },
-    statusActionBarItems,
   } = useSettings();
-  const scopeUrl = useScopeUrl();
 
   const asyncRefreshHeader = useAsyncRefreshHeader(status.id);
-
-  const { mutate: favouriteStatus } = useFavouriteStatus(status.id);
-  const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status.id);
-  const reblog = useReblog(status);
 
   const linear = displayMode === 'linear';
   const treeIndent = displayMode === 'tree-indent';
@@ -90,93 +53,7 @@ const Thread = ({
   const initialIndex = isModal && statusIndex !== 0 ? statusIndex + 1 : statusIndex;
 
   const node = useRef<HTMLDivElement>(null);
-  const statusRef = useRef<HTMLDivElement>(null);
   const scroller = useRef<VirtuosoHandle | null>(null);
-
-  const handleFavouriteClick = (status: SelectedStatus) => {
-    if (status.favourited) unfavouriteStatus();
-    else favouriteStatus();
-  };
-
-  const handleReplyClick = (status: Parameters<typeof replyCompose>[0]) => {
-    replyCompose(status, scopeUrl);
-  };
-
-  const handleMentionClick = (account: Pick<Account, 'acct'>) => {
-    mentionCompose(account, scopeUrl);
-  };
-
-  const handleHotkeyOpenMedia = (e?: KeyboardEvent) => {
-    const media = status.media_attachments;
-
-    e?.preventDefault();
-
-    if (media && media.length) {
-      openModal('MEDIA', { media, index: 0, statusId: status.id });
-    }
-  };
-
-  const handleHotkeyMoveUp = () => {
-    handleMoveUp(status.id);
-  };
-
-  const handleHotkeyMoveDown = () => {
-    handleMoveDown(status.id);
-  };
-
-  const handleHotkeyReply = (e?: KeyboardEvent) => {
-    if (status.rss_feed) return;
-
-    e?.preventDefault();
-    handleReplyClick(status);
-  };
-
-  const handleHotkeyFavourite = () => {
-    if (status.rss_feed) return;
-
-    handleFavouriteClick(status);
-  };
-
-  const handleHotkeyBoost = () => {
-    if (status.rss_feed) return;
-
-    reblog();
-  };
-
-  const handleHotkeyMention = (e?: KeyboardEvent) => {
-    if (status.rss_feed) return;
-
-    e?.preventDefault();
-    const { account } = status;
-    if (!account || typeof account !== 'object') return;
-    handleMentionClick(account);
-  };
-
-  const handleHotkeyOpenProfile = () => {
-    navigate({ to: '/@{$username}', params: { username: status.account.acct } });
-  };
-
-  const handleHotkeyToggleSensitive = () => {
-    toggleStatusesMediaHidden([status.id]);
-  };
-
-  const handleHotkeyToggleHidden = () => {
-    if (!spoilerExpanded) {
-      expandStatusSpoilers([status.id]);
-      expandStatuses([status.id]);
-    } else {
-      collapseStatusSpoilers([status.id]);
-      collapseStatuses([status.id]);
-    }
-  };
-
-  const handleHotkeyReact = () => {
-    if (status.rss_feed) return;
-
-    if (statusRef.current) {
-      (node.current?.querySelector('.emoji-picker-dropdown') as HTMLButtonElement)?.click();
-    }
-  };
 
   const handleMoveUp = (id: string) => {
     const modalOffset = isModal ? 1 : 0;
@@ -268,49 +145,17 @@ const Thread = ({
             })}
             key={status.id}
           >
-            {deleted ? (
-              <Tombstone
-                id={status.id}
+            <div className='thread__detailed'>
+              <Status
+                status={status}
+                detailed
+                variant='default'
+                contextType='thread'
+                withMedia={withMedia}
                 onMoveUp={handleMoveUp}
                 onMoveDown={handleMoveDown}
-                deleted
               />
-            ) : (
-              <Hotkeys
-                handlers={handlers}
-                element='article'
-                lang={status.language || undefined}
-                data-status-id={status.id}
-              >
-                <div
-                  ref={statusRef}
-                  className='thread__detailed'
-                  tabIndex={0}
-                  aria-label={textForScreenReader(
-                    intl,
-                    status.reblog || status,
-                    status.reblog_id
-                      ? intl.formatMessage(messages.rebloggedBy, { name: status.account.acct })
-                      : undefined,
-                    scopeUrl,
-                  )}
-                >
-                  <DetailedStatus
-                    status={status}
-                    onOpenCompareHistoryModal={handleOpenCompareHistoryModal}
-                    withMedia={withMedia}
-                  />
-
-                  {!status.rss_feed && statusActionBarItems.length > 0 && (
-                    <>
-                      <hr className='thread__divider thread__divider--above' />
-
-                      <StatusActionBar status={status} expandable={isModal} space='lg' withLabels />
-                    </>
-                  )}
-                </div>
-              </Hotkeys>
-            )}
+            </div>
 
             {hasDescendants && <hr className='thread__divider' />}
           </div>
@@ -341,37 +186,12 @@ const Thread = ({
       });
 
       setTimeout(() => {
-        node.current?.querySelector<HTMLDivElement>('.detailed-status')?.focus();
+        node.current?.querySelector<HTMLElement>('.thread__focused article')?.focus();
       }, 100);
     }, 0);
   }, [status.id, statusIndex]);
 
-  const handleOpenCompareHistoryModal = useCallback(
-    (status: Pick<Status, 'id'>) => {
-      openModal('COMPARE_HISTORY', {
-        statusId: status.id,
-      });
-    },
-    [status.id],
-  );
-
   const hasDescendants = thread.length > statusIndex + 1;
-
-  type HotkeyHandlers = { [key: string]: (keyEvent?: KeyboardEvent) => void };
-
-  const handlers: HotkeyHandlers = {
-    moveUp: handleHotkeyMoveUp,
-    moveDown: handleHotkeyMoveDown,
-    reply: handleHotkeyReply,
-    favourite: handleHotkeyFavourite,
-    boost: handleHotkeyBoost,
-    mention: handleHotkeyMention,
-    openProfile: handleHotkeyOpenProfile,
-    toggleSensitive: handleHotkeyToggleSensitive,
-    toggleHidden: handleHotkeyToggleHidden,
-    openMedia: handleHotkeyOpenMedia,
-    react: handleHotkeyReact,
-  };
 
   const children = useMemo(() => {
     const children = renderChildren(thread);
@@ -379,7 +199,7 @@ const Thread = ({
     if (isModal) children.unshift(<div key='padding' className='thread__padding' />);
 
     return children;
-  }, [thread, displayMode, status, isModal]);
+  }, [thread, displayMode, status, isModal, deleted]);
 
   const meta = useMemo(() => {
     const firstAttachment = status.media_attachments && status.media_attachments[0];

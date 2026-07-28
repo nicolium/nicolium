@@ -7,7 +7,13 @@ import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import { Link, linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
-import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
+import {
+  defineMessages,
+  useIntl,
+  FormattedDate,
+  FormattedList,
+  FormattedMessage,
+} from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 import { Hotkeys } from '@/components/hotkeys';
@@ -41,6 +47,7 @@ import EventPreview from './events/event-preview';
 import RssFeedInfo from './rss-feed-info';
 import StatusContent from './status-content';
 import StatusInfo from './status-info';
+import StatusInteractionBar from './status-interaction-bar';
 import StatusLanguagePicker from './status-language-picker';
 import { StatusLink } from './status-link';
 import StatusReactionsBar from './status-reactions-bar';
@@ -50,6 +57,7 @@ import Tombstone from './tombstone';
 import type { FilterContextType } from '@/queries/settings/use-filters';
 
 const messages = defineMessages({
+  applicationName: { id: 'status.application_name', defaultMessage: 'Sent from {name}' },
   edited: { id: 'status.edited', defaultMessage: 'Edited {date}' },
   rebloggedBy: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
@@ -103,6 +111,88 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status, columnId }) =>
 });
 
 AccountInfo.displayName = 'AccountInfo';
+
+interface IStatusMeta {
+  status: SelectedStatus;
+}
+
+const StatusMeta: React.FC<IStatusMeta> = ({ status }) => {
+  const intl = useIntl();
+  const { openModal } = useModalsActions();
+
+  const handleOpenCompareHistoryModal = () => {
+    openModal('COMPARE_HISTORY', { statusId: status.id });
+  };
+
+  return (
+    <div className='status__meta'>
+      <StatusInteractionBar status={status} />
+
+      <div className='status__meta-end'>
+        <div className='status__meta-info'>
+          <a
+            href={status.url}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='status__meta-link'
+          >
+            <FormattedDate
+              value={new Date(status.created_at)}
+              hour12
+              year='numeric'
+              month='short'
+              day='2-digit'
+              hour='numeric'
+              minute='2-digit'
+            />
+          </a>
+
+          {status.application && (
+            <>
+              <span className='separator' />
+              <a
+                href={status.application.website ?? '#'}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='status__meta-link'
+                title={intl.formatMessage(messages.applicationName, {
+                  name: status.application.name,
+                })}
+              >
+                {status.application.name}
+              </a>
+            </>
+          )}
+
+          {status.edited_at && (
+            <>
+              <span className='separator' />
+              <button className='status__history' onClick={handleOpenCompareHistoryModal}>
+                <FormattedMessage
+                  id='status.edited'
+                  defaultMessage='Edited {date}'
+                  values={{
+                    date: intl.formatDate(new Date(status.edited_at), {
+                      hour12: true,
+                      month: 'short',
+                      day: '2-digit',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                    }),
+                  }}
+                />
+              </button>
+            </>
+          )}
+        </div>
+
+        <StatusTypeIcon visibility={status.visibility} />
+
+        <StatusLanguagePicker status={status} showLabel />
+      </div>
+    </div>
+  );
+};
 
 interface IStatusFollowedTagInfo {
   className?: string;
@@ -179,6 +269,8 @@ interface IStatus {
   className?: string;
   expandable?: boolean;
   columnId?: string;
+  detailed?: boolean;
+  withMedia?: boolean;
 }
 
 const Status: React.FC<IStatus> = React.memo((props) => {
@@ -202,6 +294,8 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     contextType,
     expandable = true,
     columnId,
+    detailed = false,
+    withMedia = true,
   } = props;
 
   const intl = useIntl();
@@ -595,14 +689,14 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     <div
       className={clsx('status', {
         'status--reply': !!status.in_reply_to_id,
+        'status--detailed': detailed,
       })}
       data-featured={featured ? 'true' : null}
       data-visibility={actualStatus.visibility}
       data-id={status.id}
       aria-label={textForScreenReader(intl, actualStatus, rebloggedByText, scopeUrl)}
       ref={node}
-      onClick={handleClick}
-      role='link'
+      {...(detailed ? {} : { onClick: handleClick, role: 'link' })}
     >
       <Card
         variant={variant}
@@ -622,12 +716,27 @@ const Status: React.FC<IStatus> = React.memo((props) => {
               <AccountContainer
                 key={actualStatus.account_id}
                 id={actualStatus.account_id}
-                action={<AccountInfo status={actualStatus} columnId={columnId} />}
+                action={
+                  detailed ? (
+                    statusActionBarItems.length === 0 ? (
+                      <div className='status__account-actions'>
+                        <StatusActionBar
+                          status={actualStatus}
+                          rebloggedBy={isReblog ? status.account : undefined}
+                          fromBookmarks={fromBookmarks}
+                        />
+                      </div>
+                    ) : undefined
+                  ) : (
+                    <AccountInfo status={actualStatus} columnId={columnId} />
+                  )
+                }
+                hideActions={detailed}
                 showAccountHoverCard={hoverable}
                 withLinkToProfile={hoverable}
                 approvalStatus={actualStatus.approval_status}
                 avatarSize={avatarSize}
-                actionAlignment='top'
+                actionAlignment={detailed ? 'center' : 'top'}
                 withLocked={false}
               />
             </div>
@@ -635,25 +744,28 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         )}
 
         <div className='status__content-wrapper'>
-          <StatusReplyMentions status={actualStatus} hoverable={hoverable} />
+          <StatusReplyMentions status={actualStatus} hoverable={hoverable && !detailed} />
 
-          {actualStatus.event ? (
+          {actualStatus.event && !detailed ? (
             <EventPreview status={actualStatus} />
           ) : (
             <StatusContent
               status={actualStatus}
-              onClick={handleClick}
-              collapsable
+              onClick={detailed ? undefined : handleClick}
+              collapsable={!detailed}
               translatable
-              withMedia
-              expandable={expandable}
+              withMedia={withMedia}
+              textSize={detailed ? 'lg' : 'md'}
+              expandable={detailed || expandable}
               contextType={contextType}
             />
           )}
 
           {!status.rss_feed && !hideActionBar && (
             <>
-              <StatusReactionsBar status={actualStatus} collapsed />
+              <StatusReactionsBar status={actualStatus} collapsed={!detailed} />
+
+              {detailed && <StatusMeta status={actualStatus} />}
 
               {statusActionBarItems.length > 0 && (
                 <div
@@ -665,7 +777,9 @@ const Status: React.FC<IStatus> = React.memo((props) => {
                     status={actualStatus}
                     rebloggedBy={isReblog ? status.account : undefined}
                     fromBookmarks={fromBookmarks}
-                    expandable
+                    expandable={!detailed}
+                    space={detailed ? 'lg' : 'sm'}
+                    withLabels={detailed}
                   />
                 </div>
               )}
