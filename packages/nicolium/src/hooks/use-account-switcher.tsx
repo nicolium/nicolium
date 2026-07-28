@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { useLoggedInAccountUrls } from '@/queries/accounts/use-logged-in-accounts';
 import { useAuthActions, useAuthStore } from '@/stores/auth';
+import { useModalsActions } from '@/stores/modals';
 
 const moveItem = (items: string[], accountUrl: string, targetIndex: number) => {
   const index = items.indexOf(accountUrl);
@@ -15,6 +17,7 @@ const moveItem = (items: string[], accountUrl: string, targetIndex: number) => {
 };
 
 const useAccountSwitcher = () => {
+  const { openModal } = useModalsActions();
   const storedAccountUrls = useLoggedInAccountUrls();
   const { logOutAccount, switchAccount, reorderAccounts } = useAuthActions();
 
@@ -62,12 +65,34 @@ const useAccountSwitcher = () => {
     onDragEnd: handleOrder,
   });
 
+  const handleLogOut = (accountUrl: string) => {
+    openModal('CONFIRM', {
+      heading: (
+        <FormattedMessage
+          id='profile_dropdown.log_out.heading'
+          defaultMessage='Remove {account} from logged in accounts?'
+          values={{ account: accountUrl }}
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='profile_dropdown.log_out.description'
+          defaultMessage='Because the account is not currently available, this action will not invalidate the session.'
+        />
+      ),
+      confirm: <FormattedMessage id='profile_dropdown.log_out.confirm' defaultMessage='Remove' />,
+      onConfirm: () => {
+        logOutAccount(accountUrl);
+      },
+    });
+  };
+
   return {
     accountUrls,
     draggedUrl,
     handleSwitch,
     getDragProps,
-    handleLogOut: (accountUrl: string) => logOutAccount(accountUrl),
+    handleLogOut,
   };
 };
 
