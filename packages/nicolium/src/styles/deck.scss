@@ -315,6 +315,10 @@
     .black & {
       border-left: 1px solid var(--color-gray-800);
     }
+
+    &:focus-visible {
+      z-index: 20;
+    }
   }
 
   &__sidebar {
