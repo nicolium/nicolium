@@ -7,6 +7,7 @@ import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconSignIn from '@phosphor-icons/core/regular/sign-in.svg';
 import iconSignOut from '@phosphor-icons/core/regular/sign-out.svg';
 import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
+import iconX from '@phosphor-icons/core/regular/x.svg';
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -30,6 +31,7 @@ import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
 
 import { AccountLink } from '../accounts/account-link';
+import PlaceholderAccount from '../placeholders/placeholder-account';
 import Counter from '../ui/counter';
 
 import {
@@ -40,6 +42,7 @@ import SidebarNavigationLink from './sidebar-navigation-link';
 
 const messages = defineMessages({
   back: { id: 'navigation_bar.back', defaultMessage: 'Back' },
+  removeAccount: { id: 'profile_dropdown.remove_account', defaultMessage: 'Remove account' },
 });
 
 interface IAccountSwitcher {
@@ -52,18 +55,50 @@ interface ISwitcherAccount {
 }
 
 const SwitcherAccount: React.FC<ISwitcherAccount> = ({ accountUrl, switcher }) => {
+  const intl = useIntl();
   const { data: account } = useOwnAccount();
   const unreadCount = useNotificationsUnreadCount();
   const { demetricator } = useSettings();
 
-  if (!account) return null;
-
-  const handleClick: React.MouseEventHandler = (e) => {
+  const handleSwitch: React.MouseEventHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
     switcher.handleSwitch(accountUrl);
   };
+
+  const handleRemove: React.MouseEventHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    switcher.handleLogOut(accountUrl);
+  };
+
+  if (!account) {
+    return (
+      <a
+        href='#'
+        className={clsx('dropdown-navigation__account-switcher__account', {
+          'dropdown-navigation__account-switcher__account--dragging':
+            switcher.draggedUrl === accountUrl,
+        })}
+        {...switcher.getDragProps(accountUrl)}
+      >
+        <div className='profile-dropdown__account--placeholder'>
+          <PlaceholderAccount />
+          <button
+            type='button'
+            className='profile-dropdown__account__remove'
+            title={intl.formatMessage(messages.removeAccount)}
+            aria-label={intl.formatMessage(messages.removeAccount)}
+            onClick={handleRemove}
+          >
+            <Icon src={iconX} aria-hidden={true} />
+          </button>
+        </div>
+      </a>
+    );
+  }
 
   return (
     <a
@@ -73,7 +108,7 @@ const SwitcherAccount: React.FC<ISwitcherAccount> = ({ accountUrl, switcher }) =
           switcher.draggedUrl === accountUrl,
       })}
       {...switcher.getDragProps(accountUrl)}
-      onClick={handleClick}
+      onClick={handleSwitch}
     >
       <Account
         account={account}
