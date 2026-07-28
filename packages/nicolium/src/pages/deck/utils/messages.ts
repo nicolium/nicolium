@@ -96,6 +96,9 @@ const messages = defineMessages({
     id: 'column.deck.timeline.heading.media_without_alt_text',
     defaultMessage: 'media without description',
   },
+  editList: { id: 'lists.edit', defaultMessage: 'Edit list' },
+  editCircle: { id: 'circles.edit', defaultMessage: 'Edit circle' },
+  editAntenna: { id: 'antennas.edit', defaultMessage: 'Edit antenna' },
 });
 
 export { messages as deckMessages };

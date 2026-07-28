@@ -14,6 +14,7 @@ import iconHash from '@phosphor-icons/core/regular/hash.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
@@ -36,6 +37,7 @@ import { useAccount } from '@/queries/accounts/use-account';
 import { useList } from '@/queries/accounts/use-lists';
 import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
+import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { hasActiveFilters } from '@/utils/timeline-filter';
 
@@ -296,6 +298,52 @@ const useTimelineFiltersOptions = (
   }, [timelineType, filters]);
 };
 
+const useTimelineListOptions = (column: Extract<DeckColumn, { type: 'timeline' | 'hashtag' }>) => {
+  const intl = useIntl();
+  const { openModal } = useModalsActions();
+
+  return useMemo(() => {
+    if (column.type !== 'timeline') return [];
+
+    if (column.timeline.startsWith('list:')) {
+      return [
+        {
+          text: intl.formatMessage(messages.editList),
+          action: () => {
+            openModal('LIST_EDITOR', { listId: column.timeline.split(':')[1] });
+          },
+          icon: iconPencilSimple,
+        },
+        null,
+      ];
+    } else if (column.timeline.startsWith('circle:')) {
+      return [
+        {
+          text: intl.formatMessage(messages.editCircle),
+          action: () => {
+            openModal('CIRCLE_EDITOR', { circleId: column.timeline.split(':')[1] });
+          },
+          icon: iconPencilSimple,
+        },
+        null,
+      ];
+    } else if (column.timeline.startsWith('antenna:')) {
+      return [
+        {
+          text: intl.formatMessage(messages.editAntenna),
+          action: () => {
+            openModal('ANTENNA_EDITOR', { antennaId: column.timeline.split(':')[1] });
+          },
+          icon: iconPencilSimple,
+        },
+        null,
+      ];
+    }
+
+    return [];
+  }, [column]);
+};
+
 const useTimelineFiltersList = (column: Extract<DeckColumn, { type: 'timeline' | 'hashtag' }>) => {
   const intl = useIntl();
   const filters = column.filters;
@@ -327,8 +375,11 @@ const DeckTimelineColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'time
 }) => {
   const title = useTimelineHeading(column.timeline);
   const icon = getTimelineIcon(column.timeline);
-  const items = useTimelineFiltersOptions(column);
+  const filtersOptions = useTimelineFiltersOptions(column);
+  const listOptions = useTimelineListOptions(column);
   const filtersList = useTimelineFiltersList(column);
+
+  const items = useMemo(() => [...filtersOptions, ...listOptions], [filtersOptions, listOptions]);
 
   const { data: list } = useList(
     column.timeline.startsWith('list:') ? column.timeline.split(':')[1] : undefined,
