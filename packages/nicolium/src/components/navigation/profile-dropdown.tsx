@@ -38,7 +38,7 @@ interface ILoggedInAccount {
 
 const LoggedInAccount: React.FC<ILoggedInAccount> = ({ accountUrl, switcher }) => {
   const intl = useIntl();
-  const { data: account } = useOwnAccount();
+  const { data: account, isError } = useOwnAccount();
   const unreadCount = useNotificationsUnreadCount();
   const { demetricator } = useSettings();
 
@@ -53,15 +53,17 @@ const LoggedInAccount: React.FC<ILoggedInAccount> = ({ accountUrl, switcher }) =
     return (
       <div className='profile-dropdown__account--placeholder'>
         <PlaceholderAccount />
-        <button
-          type='button'
-          className='profile-dropdown__account__remove'
-          title={intl.formatMessage(messages.removeAccount)}
-          aria-label={intl.formatMessage(messages.removeAccount)}
-          onClick={handleClick}
-        >
-          <Icon src={iconX} aria-hidden={true} />
-        </button>
+        {isError && (
+          <button
+            type='button'
+            className='profile-dropdown__account__remove'
+            title={intl.formatMessage(messages.removeAccount)}
+            aria-label={intl.formatMessage(messages.removeAccount)}
+            onClick={handleClick}
+          >
+            <Icon src={iconX} aria-hidden={true} />
+          </button>
+        )}
       </div>
     );
   }
