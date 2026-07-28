@@ -27,21 +27,4 @@ const useLoggedInAccountUrls = () => {
   );
 };
 
-/** doesn't fetch because it's a hack that should not exist like this */
-const useLoggedInAccounts = () => {
-  // const otherAccounts = useLoggedInAccountUrls();
-
-  // const { accounts } = useAppQueries({
-  //   queries: otherAccountIds.map((accountId) => ({
-  //     queryKey: queryKeys.accounts.show(accountId),
-  //     queryFn: skipToken,
-  //   })),
-  //   combine: (results) => ({
-  //     accounts: results.map((q) => q.data).filter((account): account is Account => !!account),
-  //   }),
-  // });
-
-  return { accounts: [] };
-};
-
-export { useLoggedInAccount, useLoggedInAccountUrls, useLoggedInAccounts };
+export { useLoggedInAccount, useLoggedInAccountUrls };
