@@ -433,6 +433,7 @@ const settingsSchema = v.object({
   skipInteractAsConfirmation: v.fallback(v.boolean(), false),
   showFilteredStatusAuthor: v.fallback(v.boolean(), false),
   filters: filteredArray(filterSchema),
+  fitScrollTopButtonInHeader: v.fallback(v.boolean(), true),
 
   theme: v.optional(
     coerceObject({

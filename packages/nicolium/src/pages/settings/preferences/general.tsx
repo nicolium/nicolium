@@ -211,6 +211,21 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
           <ListItem
             label={
               <FormattedMessage
+                id='preferences.fields.fit_scroll_top_button_in_header.label'
+                defaultMessage='Place "Click to see new posts" button in the column header'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['fitScrollTopButtonInHeader']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
                 id='preferences.fields.demetricator.label'
                 defaultMessage='Hide social media counters'
               />

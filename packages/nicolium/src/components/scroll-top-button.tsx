@@ -44,7 +44,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   accountIds,
 }) => {
   const intl = useIntl();
-  const { autoloadTimelines, disableUserProvidedMedia } = useSettings();
+  const { autoloadTimelines, disableUserProvidedMedia, fitScrollTopButtonInHeader } = useSettings();
   const columnScrollParent = useColumnScrollParent();
   const scrollParent = columnScrollParent || window;
   const headerSlot = useColumnHeaderSlot();
@@ -109,7 +109,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   }, [maybeUnload]);
 
   useLayoutEffect(() => {
-    if (!headerSlot || !button) return;
+    if (!headerSlot || !button || !fitScrollTopButtonInHeader) return;
 
     const update = () =>
       setFitsInHeader(headerSlot.clientWidth >= button.offsetWidth + INLINE_MARGIN);
@@ -120,7 +120,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
     update();
 
     return () => observer.disconnect();
-  }, [headerSlot, button]);
+  }, [headerSlot, button, fitScrollTopButtonInHeader]);
 
   const element = (
     <div
