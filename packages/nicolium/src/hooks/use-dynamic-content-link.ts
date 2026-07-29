@@ -25,6 +25,8 @@ type DynamicContentLink = {
   text: string;
   icon: string;
   activeIcon: string;
+  emoji?: string;
+  emojiUrl?: string;
 } & LinkOptions;
 
 const useDynamicContentLink = (item: DynamicContentLinkItem | null): DynamicContentLink | null => {
@@ -47,6 +49,8 @@ const useDynamicContentLink = (item: DynamicContentLinkItem | null): DynamicCont
             text: list.title,
             icon: iconListDashes,
             activeIcon: iconListDashesFill,
+            emoji: list.emoji ?? undefined,
+            emojiUrl: list.emoji_url ?? undefined,
           }
         : null;
     case 'circle':
@@ -93,6 +97,8 @@ const useDynamicContentLink = (item: DynamicContentLinkItem | null): DynamicCont
             text: bookmarkFolder.name,
             icon: iconBookmarks,
             activeIcon: iconBookmarksFill,
+            emoji: bookmarkFolder.emoji ?? undefined,
+            emojiUrl: bookmarkFolder.emoji_url ?? undefined,
           }
         : null;
   }

@@ -3,6 +3,7 @@ import React from 'react';
 
 import { useSettings } from '@/stores/settings';
 
+import Emoji from '../ui/emoji';
 import Icon from '../ui/icon';
 
 interface ISidebarNavigationLink extends Partial<LinkOptions> {
@@ -14,6 +15,8 @@ interface ISidebarNavigationLink extends Partial<LinkOptions> {
   icon: string;
   /** URL to an SVG icon for active state. */
   activeIcon?: string;
+  emoji?: string;
+  emojiUrl?: string;
   /** Link label. */
   text: React.ReactNode;
   /** Callback when the link is clicked. */
@@ -24,7 +27,8 @@ interface ISidebarNavigationLink extends Partial<LinkOptions> {
 /** Desktop sidebar navigation link. */
 const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
   React.forwardRef((props, ref: React.ForwardedRef<HTMLAnchorElement>): React.JSX.Element => {
-    const { icon, activeIcon, text, to, count, countMax, onClick, ...rest } = props;
+    const { icon, activeIcon, emoji, emojiUrl, text, to, count, countMax, onClick, ...rest } =
+      props;
 
     const matchRoute = useMatchRoute();
     const { demetricator } = useSettings();
@@ -56,11 +60,15 @@ const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
         {...rest}
       >
         <span className='sidebar-navigation-link__icon' aria-hidden>
-          <Icon
-            src={(isActive && activeIcon) || icon}
-            count={demetricator !== 'off' ? undefined : count}
-            countMax={countMax}
-          />
+          {emoji || emojiUrl ? (
+            <Emoji emoji={emoji} src={emojiUrl} alt='' />
+          ) : (
+            <Icon
+              src={(isActive && activeIcon) || icon}
+              count={demetricator !== 'off' ? undefined : count}
+              countMax={countMax}
+            />
+          )}
         </span>
 
         <p>{text}</p>
@@ -68,7 +76,10 @@ const SidebarNavigationLink: React.FC<ISidebarNavigationLink> = React.memo(
     );
   }),
   (prevProps, nextProps) =>
-    prevProps.text === nextProps.text && prevProps.count === nextProps.count,
+    prevProps.text === nextProps.text &&
+    prevProps.count === nextProps.count &&
+    prevProps.emoji === nextProps.emoji &&
+    prevProps.emojiUrl === nextProps.emojiUrl,
 );
 
 export { SidebarNavigationLink as default };

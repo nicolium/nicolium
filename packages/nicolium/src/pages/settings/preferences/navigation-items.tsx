@@ -43,6 +43,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { changeSetting as defaultChangeSetting } from '@/actions/settings';
 import OutlineBox from '@/components/outline-box';
 import Column from '@/components/ui/column';
+import Emoji from '@/components/ui/emoji';
 import Form from '@/components/ui/form';
 import Icon from '@/components/ui/icon';
 import StreamfieldPicker from '@/components/ui/streamfield-picker';
@@ -262,6 +263,8 @@ const getNavigationItemComponent = (
         dynamicItem || dynamicContentItem || (fixedItem && !UNPINNABLE_ITEMS.includes(fixedItem)),
       );
     let icon: string;
+    let emoji: string | undefined;
+    let emojiUrl: string | undefined;
     let label: React.ReactNode;
 
     if (dynamicItem) {
@@ -269,6 +272,8 @@ const getNavigationItemComponent = (
       label = <dynamicItem.Label value={value} />;
     } else if (dynamicContentItem && dynamicContentLink) {
       icon = dynamicContentLink.icon;
+      emoji = dynamicContentLink.emoji;
+      emojiUrl = dynamicContentLink.emojiUrl;
       label = dynamicContentLink.text;
     } else if (dynamicContentItem) {
       return null;
@@ -286,7 +291,11 @@ const getNavigationItemComponent = (
     return (
       <div className='interface-item'>
         <Icon className='interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
-        <Icon className='interface-item__icon' src={icon} aria-hidden />
+        {emoji || emojiUrl ? (
+          <Emoji className='interface-item__icon' emoji={emoji} src={emojiUrl} alt='' />
+        ) : (
+          <Icon className='interface-item__icon' src={icon} aria-hidden />
+        )}
         <p>{label}</p>
         {canPin && (
           <button
