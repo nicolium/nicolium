@@ -1,12 +1,11 @@
-import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountCollectionsColumn from '@/columns/collections';
-import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
 import Spinner from '@/components/ui/spinner';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
@@ -17,7 +16,6 @@ import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({
   heading: { id: 'column.collections', defaultMessage: 'Collections' },
-  createCollection: { id: 'collections.new.create', defaultMessage: 'New collection' },
 });
 
 const AccountCollectionsPage: React.FC = () => {
@@ -50,29 +48,26 @@ const AccountCollectionsPage: React.FC = () => {
     );
   }
 
+  const handleCreateCollection = () => {
+    openModal('COLLECTION_EDITOR', {});
+  };
+
   const collectionLimit = credentialAccount?.role?.collection_limit;
   const canCreateMore =
     isOwnAccount &&
     (typeof collectionLimit !== 'number' || (createdQuery.data?.length ?? 0) < collectionLimit);
-
-  const items = [
-    {
-      text: intl.formatMessage(messages.createCollection),
-      action: () => {
-        openModal('COLLECTION_EDITOR', {});
-      },
-      icon: iconPlus,
-    },
-  ];
 
   return (
     <Column
       label={intl.formatMessage(messages.heading)}
       transparent
       action={
-        canCreateMore ? (
-          <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
-        ) : undefined
+        canCreateMore && (
+          <button className='collections__create' onClick={handleCreateCollection}>
+            <Icon src={iconPlus} aria-hidden />
+            <FormattedMessage id='collections.new.create' defaultMessage='New collection' />
+          </button>
+        )
       }
     >
       <AccountCollectionsColumn username={username} />

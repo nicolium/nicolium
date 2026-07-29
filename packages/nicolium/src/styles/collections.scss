@@ -1,6 +1,10 @@
 @use 'mixins';
 @use 'variables';
 
+.collections__create {
+  @include mixins.button($theme: secondary, $size: sm);
+}
+
 .collections-list {
   display: flex;
   flex-direction: column;
