@@ -142,6 +142,12 @@ const DeckPage: React.FC = () => {
     );
   };
 
+  const handleChangePin = (id: string, value: boolean) => {
+    updateColumns((columns) =>
+      columns.map((column) => (column.id === id ? { ...column, pinned: value } : column)),
+    );
+  };
+
   const resetColumns = () => {
     openModal('CONFIRM', {
       heading: (
@@ -230,6 +236,7 @@ const DeckPage: React.FC = () => {
                 onChangeWidth={handleChangeWidth}
                 onChangeIndex={handleChangeIndex}
                 onChangeFill={handleChangeFill}
+                onChangePin={handleChangePin}
               />
             </ColumnErrorBoundary>
           ))}

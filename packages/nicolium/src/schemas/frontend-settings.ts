@@ -205,6 +205,7 @@ const baseDeckColumnSchema = v.object({
   columnWidth: v.fallback(v.picklist(['xs', 'sm', 'md', 'lg', 'xl']), 'md'),
   fillAvailableWidth: v.fallback(v.boolean(), false),
   accountUrl: v.fallback(v.optional(v.string()), undefined),
+  pinned: v.fallback(v.boolean(), false),
 });
 
 const timelineDeckColumnSchema = v.object({
@@ -297,6 +298,7 @@ const createDefaultDeckColumns = (): Array<v.InferOutput<typeof deckColumnSchema
     type: 'timeline',
     columnWidth: 'lg',
     fillAvailableWidth: false,
+    pinned: false,
     timeline: 'home',
   },
   {
@@ -304,6 +306,7 @@ const createDefaultDeckColumns = (): Array<v.InferOutput<typeof deckColumnSchema
     type: 'notifications',
     columnWidth: 'md',
     fillAvailableWidth: false,
+    pinned: false,
     filter: 'all',
   },
   {
@@ -311,6 +314,7 @@ const createDefaultDeckColumns = (): Array<v.InferOutput<typeof deckColumnSchema
     type: 'account',
     columnWidth: 'md',
     fillAvailableWidth: false,
+    pinned: false,
     accountId: 'self',
     excludeReplies: false,
     showPinned: false,

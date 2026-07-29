@@ -16,6 +16,7 @@ import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
+import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
@@ -68,6 +69,7 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
   onChangeWidth,
   onChangeIndex,
   onChangeFill,
+  onChangePin,
   icon,
   emoji,
   emojiUrl,
@@ -94,6 +96,10 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
       onChangeFill(column.id, value);
     };
 
+    const handleChangePin = (value: boolean) => {
+      onChangePin(column.id, value);
+    };
+
     const handleMoveLeft = () => {
       if (index === 0) return;
       onChangeIndex(column.id, index - 1);
@@ -117,6 +123,19 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
         action: handleShrink,
         disabled: column.columnWidth === 'xs',
       },
+    ];
+
+    if (index === 0) {
+      menu.push({
+        text: intl.formatMessage(messages.pinColumn),
+        icon: iconPushPin,
+        onChange: (value) => handleChangePin(value),
+        type: 'toggle',
+        checked: column.pinned,
+      });
+    }
+
+    menu.push(
       {
         text: intl.formatMessage(messages.fill),
         icon: iconFrameCorners,
@@ -143,7 +162,7 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
         action: () => onRemove(column.id),
         destructive: true,
       },
-    ];
+    );
 
     if (items) {
       menu.unshift(...items);

@@ -41,6 +41,7 @@ interface IDeckColumn {
   onChangeWidth: (id: string, newWidth: (typeof WIDTHS)[number]) => void;
   onChangeIndex: (id: string, newIndex: number) => void;
   onChangeFill: (id: string, value: boolean) => void;
+  onChangePin: (id: string, value: boolean) => void;
 }
 
 interface IDeckColumnInner extends IDeckColumn {
@@ -57,6 +58,7 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
   onChangeWidth,
   onChangeIndex,
   onChangeFill,
+  onChangePin,
 }) => {
   const instance = useInstance();
   const features = useFeatures();
@@ -208,6 +210,7 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
       className={clsx('deck__column', `deck__column--${column.columnWidth}`, {
         'deck__column--highlight': highlight,
         'deck__column--fill': column.fillAvailableWidth,
+        'deck__column--pinned': index === 0 && column.pinned,
         'deck__column--not-found': !!notFoundResource || loginRequired,
         'deck-column--login-required': loginRequired,
       })}
@@ -223,6 +226,7 @@ const DeckColumnInner: React.FC<IDeckColumnInner> = ({
         onChangeWidth={onChangeWidth}
         onChangeIndex={onChangeIndex}
         onChangeFill={onChangeFill}
+        onChangePin={onChangePin}
       />
       {loginRequired && column.accountUrl ? (
         <DeckColumnLoginRequired accountUrl={column.accountUrl} />

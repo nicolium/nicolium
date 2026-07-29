@@ -841,6 +841,7 @@
   "column.deck.not_found.circle": "This circle could not be found. It might have been deleted or you don’t have permission to view it.",
   "column.deck.not_found.drive": "This drive folder could not be found. It might have been deleted or you don’t have permission to view it.",
   "column.deck.not_found.list": "This list could not be found. It might have been deleted or you don’t have permission to view it.",
+  "column.deck.pin": "Pin column",
   "column.deck.position.left": "Move column left",
   "column.deck.position.right": "Move column right",
   "column.deck.remove": "Remove column",

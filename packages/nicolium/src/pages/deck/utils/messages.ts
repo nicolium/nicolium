@@ -25,6 +25,7 @@ const messages = defineMessages({
   hashtag: { id: 'column.hashtag', defaultMessage: 'Hashtag' },
   remove: { id: 'column.deck.remove', defaultMessage: 'Remove column' },
   shrink: { id: 'column.deck.width.shrink', defaultMessage: 'Shrink column' },
+  pinColumn: { id: 'column.deck.pin', defaultMessage: 'Pin column' },
   widen: { id: 'column.deck.width.widen', defaultMessage: 'Widen column' },
   fill: { id: 'column.deck.width.fill', defaultMessage: 'Fill available width' },
   moveLeft: { id: 'column.deck.position.left', defaultMessage: 'Move column left' },
