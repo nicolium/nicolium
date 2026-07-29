@@ -4,6 +4,7 @@ import iconBellSimple from '@phosphor-icons/core/regular/bell-simple.svg';
 import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
 import iconBroadcast from '@phosphor-icons/core/regular/broadcast.svg';
 import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
+import iconCaretRight from '@phosphor-icons/core/regular/caret-right.svg';
 import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconCircle from '@phosphor-icons/core/regular/circle.svg';
 import iconCirclesThree from '@phosphor-icons/core/regular/circles-three.svg';
@@ -27,6 +28,7 @@ import iconMinus from '@phosphor-icons/core/regular/minus.svg';
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
+import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
 import iconPushPinSlash from '@phosphor-icons/core/regular/push-pin-slash.svg';
 import iconPushPin from '@phosphor-icons/core/regular/push-pin.svg';
@@ -41,6 +43,8 @@ import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting as defaultChangeSetting } from '@/actions/settings';
+import DropdownMenu, { type MenuItem } from '@/components/dropdown-menu';
+import { ListItem } from '@/components/list';
 import OutlineBox from '@/components/outline-box';
 import Column from '@/components/ui/column';
 import Emoji from '@/components/ui/emoji';
@@ -52,6 +56,10 @@ import { useFeatures } from '@/hooks/use-features';
 import { NAVIGATION_ITEMS_GATE } from '@/hooks/use-navigation-items';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useAntennas } from '@/queries/accounts/use-antennas';
+import { useCircles } from '@/queries/accounts/use-circles';
+import { useLists } from '@/queries/accounts/use-lists';
+import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 import {
   AVAILABLE_NAVIGATION_ITEMS,
   DEFAULT_NAVIGATION_ITEMS,
@@ -327,6 +335,134 @@ const getNavigationItemComponent = (
   return NavigationItem;
 };
 
+interface IDynamicItemPicker {
+  handleAddItem: (item: NavigationItemType) => void;
+}
+
+const ListPicker: React.FC<IDynamicItemPicker> = ({ handleAddItem }) => {
+  const features = useFeatures();
+
+  const { data: lists } = useLists();
+
+  const items = useMemo(
+    (): Array<MenuItem> =>
+      (lists || []).map((list) => ({
+        text: list.title,
+        icon: iconListDashes,
+        rightIcon: iconPlus,
+        emoji: list.emoji ?? undefined,
+        emojiUrl: list.emoji_url ?? undefined,
+        action: () => handleAddItem(`list:${list.id}`),
+      })),
+    [lists],
+  );
+
+  if (!features.lists || lists?.length === 0) return null;
+
+  return (
+    <DropdownMenu items={items} placement='right'>
+      <ListItem
+        className='interface-items__add-dynamic'
+        label={<FormattedMessage id='column.lists' defaultMessage='Lists' />}
+        actionIcon={iconCaretRight}
+        size='sm'
+      />
+    </DropdownMenu>
+  );
+};
+
+const CirclePicker: React.FC<IDynamicItemPicker> = ({ handleAddItem }) => {
+  const features = useFeatures();
+
+  const { data: circles } = useCircles();
+
+  const items = useMemo(
+    (): Array<MenuItem> =>
+      (circles || []).map((circle) => ({
+        text: circle.title,
+        icon: iconCirclesThree,
+        rightIcon: iconPlus,
+        action: () => handleAddItem(`circle:${circle.id}`),
+      })),
+    [circles],
+  );
+
+  if (!features.circles || circles?.length === 0) return null;
+
+  return (
+    <DropdownMenu items={items} placement='right'>
+      <ListItem
+        className='interface-items__add-dynamic'
+        label={<FormattedMessage id='column.circles' defaultMessage='Circles' />}
+        actionIcon={iconCaretRight}
+        size='sm'
+      />
+    </DropdownMenu>
+  );
+};
+
+const AntennaPicker: React.FC<IDynamicItemPicker> = ({ handleAddItem }) => {
+  const features = useFeatures();
+
+  const { data: antennas } = useAntennas();
+
+  const items = useMemo(
+    (): Array<MenuItem> =>
+      (antennas || []).map((antenna) => ({
+        text: antenna.title,
+        icon: iconBroadcast,
+        rightIcon: iconPlus,
+        action: () => handleAddItem(`antenna:${antenna.id}`),
+      })),
+    [antennas],
+  );
+
+  if (!features.antennas || antennas?.length === 0) return null;
+
+  return (
+    <DropdownMenu items={items} placement='right'>
+      <ListItem
+        className='interface-items__add-dynamic'
+        label={<FormattedMessage id='column.antennas' defaultMessage='Antennas' />}
+        actionIcon={iconCaretRight}
+        size='sm'
+      />
+    </DropdownMenu>
+  );
+};
+
+const BookmarkFolderPicker: React.FC<IDynamicItemPicker> = ({ handleAddItem }) => {
+  const features = useFeatures();
+
+  const { data: bookmarkFolders } = useBookmarkFolders();
+
+  const items = useMemo(
+    (): Array<MenuItem> =>
+      (bookmarkFolders || []).map((folder) => ({
+        text: folder.name,
+        icon: iconBookmarks,
+        rightIcon: iconPlus,
+        emoji: folder.emoji ?? undefined,
+        emojiUrl: folder.emoji_url ?? undefined,
+        action: () => handleAddItem(`bookmark_folder:${folder.id}`),
+      })),
+    [bookmarkFolders],
+  );
+
+  if (!features.bookmarkFolders || bookmarkFolders?.length === 0) return null;
+
+  return (
+    <DropdownMenu items={items} placement='right'>
+      <ListItem
+        className='interface-items__add-dynamic'
+        label={<FormattedMessage id='column.bookmark_folders' defaultMessage='Bookmark folders' />}
+        actionIcon={iconCaretRight}
+        size='sm'
+      />
+    </DropdownMenu>
+  );
+};
+
 const NavigationItems: React.FC<ISettingsPage> = ({
   changeSetting = defaultChangeSetting,
   settings: settingsProp,
@@ -372,6 +508,10 @@ const NavigationItems: React.FC<ISettingsPage> = ({
     toast.success(messages.resetSuccess);
   };
 
+  const handleAddItem = (item: NavigationItemType) => {
+    changeSetting(['navigationItems'], [...settings.navigationItems, item]);
+  };
+
   return (
     <Column title={intl.formatMessage(messages.heading)}>
       <Form>
@@ -394,6 +534,14 @@ const NavigationItems: React.FC<ISettingsPage> = ({
               id='settings.navigation_items.available'
               defaultMessage='Available items'
             />
+          }
+          additionalValues={
+            <>
+              <ListPicker handleAddItem={handleAddItem} />
+              <CirclePicker handleAddItem={handleAddItem} />
+              <AntennaPicker handleAddItem={handleAddItem} />
+              <BookmarkFolderPicker handleAddItem={handleAddItem} />
+            </>
           }
         />
 

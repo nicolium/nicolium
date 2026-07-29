@@ -30,137 +30,145 @@ type IListItem = {
   disabled?: boolean;
 } & (LinkOptions | {});
 
-const ListItem: React.FC<IListItem> = ({
-  className,
-  label,
-  labelClassName,
-  hint,
-  children,
-  href,
-  onClick,
-  draggable,
-  onDragStart,
-  onDragEnd,
-  isSelected,
-  size = 'md',
-  actionIcon,
-  ...rest
-}) => {
-  const matchRoute = useMatchRoute();
-  const isActive = 'to' in rest ? matchRoute({ to: rest.to }) !== false : false;
+const ListItem: React.FC<IListItem> = React.forwardRef<HTMLAnchorElement, IListItem>(
+  (
+    {
+      className,
+      label,
+      labelClassName,
+      hint,
+      children,
+      href,
+      onClick,
+      draggable,
+      onDragStart,
+      onDragEnd,
+      isSelected,
+      size = 'md',
+      actionIcon,
+      ...rest
+    },
+    ref,
+  ) => {
+    const matchRoute = useMatchRoute();
+    const isActive = 'to' in rest ? matchRoute({ to: rest.to }) !== false : false;
 
-  const [domId] = useState(`list-group-${crypto.randomUUID()}`);
-  const labelId = `${domId}-label`;
-  const hintId = `${domId}-hint`;
+    const [domId] = useState(`list-group-${crypto.randomUUID()}`);
+    const labelId = `${domId}-label`;
+    const hintId = `${domId}-hint`;
 
-  const onKeyDown: React.KeyboardEventHandler<HTMLAnchorElement | HTMLDivElement> = (e) => {
-    if (e.key === 'Enter' && !rest.disabled) {
-      onClick!();
-    }
-  };
+    const onKeyDown: React.KeyboardEventHandler<HTMLAnchorElement | HTMLDivElement> = (e) => {
+      if (e.key === 'Enter' && !rest.disabled) {
+        onClick!();
+      }
+    };
 
-  const LabelComp = 'to' in rest || href || onClick ? 'span' : 'label';
+    const LabelComp = 'to' in rest || href || onClick ? 'span' : 'label';
 
-  const renderChildren = React.useCallback(
-    () =>
-      children
-        ? React.Children.map(children, (child: React.ReactElement<any>) => {
-            if (React.isValidElement(child)) {
-              const props = child.props as any;
-              const isSelect = child.type === SelectDropdown || child.type === Select;
-              const childLabelledBy = props['aria-labelledby'];
-              const childDescribedBy = props['aria-describedby'];
-              const ariaLabelledBy = childLabelledBy ? `${childLabelledBy} ${labelId}` : labelId;
-              const ariaDescribedBy = hint
-                ? childDescribedBy
-                  ? `${childDescribedBy} ${hintId}`
-                  : hintId
-                : childDescribedBy;
+    const renderChildren = React.useCallback(
+      () =>
+        children
+          ? React.Children.map(children, (child: React.ReactElement<any>) => {
+              if (React.isValidElement(child)) {
+                const props = child.props as any;
+                const isSelect = child.type === SelectDropdown || child.type === Select;
+                const childLabelledBy = props['aria-labelledby'];
+                const childDescribedBy = props['aria-describedby'];
+                const ariaLabelledBy = childLabelledBy ? `${childLabelledBy} ${labelId}` : labelId;
+                const ariaDescribedBy = hint
+                  ? childDescribedBy
+                    ? `${childDescribedBy} ${hintId}`
+                    : hintId
+                  : childDescribedBy;
 
-              return React.cloneElement(child, {
-                // @ts-expect-error
-                id: domId,
-                'aria-labelledby': ariaLabelledBy,
-                'aria-describedby': ariaDescribedBy,
-                className: clsx(
-                  {
-                    'w-auto': isSelect,
-                  },
-                  props.className,
-                ),
-              });
-            }
+                return React.cloneElement(child, {
+                  // @ts-expect-error
+                  id: domId,
+                  'aria-labelledby': ariaLabelledBy,
+                  'aria-describedby': ariaDescribedBy,
+                  className: clsx(
+                    {
+                      'w-auto': isSelect,
+                    },
+                    props.className,
+                  ),
+                });
+              }
 
-            return null;
-          })
-        : null,
-    [children, domId, labelId, hint, hintId],
-  );
-
-  const classNames = clsx('list-item', className, {
-    'list-item--md': size === 'md',
-    'list-item--sm': size === 'sm',
-    'list-item--active': isActive,
-  });
-
-  const body = (
-    <>
-      <div className={clsx('list-item__label', labelClassName)}>
-        <LabelComp id={labelId} {...(LabelComp === 'label' ? { htmlFor: domId } : {})}>
-          {label}
-        </LabelComp>
-
-        {hint ? (
-          <span id={hintId} className='list-item__hint'>
-            {hint}
-          </span>
-        ) : null}
-      </div>
-
-      {'to' in rest || href || onClick ? (
-        <div className='list-item__body'>
-          {children}
-
-          <Icon src={actionIcon || iconCaretRight} aria-hidden />
-        </div>
-      ) : null}
-
-      {!('to' in rest) && typeof onClick === 'undefined' ? renderChildren() : null}
-    </>
-  );
-
-  if ('to' in rest)
-    return (
-      <Link className={classNames} {...rest}>
-        {body}
-      </Link>
+              return null;
+            })
+          : null,
+      [children, domId, labelId, hint, hintId],
     );
 
-  const Comp = onClick || href ? 'a' : 'div';
-  const linkProps =
-    onClick || href
-      ? {
-          onClick: rest.disabled ? undefined : onClick,
-          onKeyDown,
-          tabIndex: 0,
-          role: 'link',
-          ...(href && { href, target: '_blank', rel: 'noopener noreferrer' }),
-        }
-      : {};
+    const classNames = clsx('list-item', className, {
+      'list-item--md': size === 'md',
+      'list-item--sm': size === 'sm',
+      'list-item--active': isActive,
+    });
 
-  (linkProps as any).disabled = rest.disabled;
+    const body = (
+      <>
+        <div className={clsx('list-item__label', labelClassName)}>
+          <LabelComp id={labelId} {...(LabelComp === 'label' ? { htmlFor: domId } : {})}>
+            {label}
+          </LabelComp>
 
-  return (
-    <Comp
-      className={classNames}
-      draggable={draggable}
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      {...linkProps}
-    >
-      {body}
-    </Comp>
-  );
-};
+          {hint ? (
+            <span id={hintId} className='list-item__hint'>
+              {hint}
+            </span>
+          ) : null}
+        </div>
+
+        {'to' in rest || href || onClick ? (
+          <div className='list-item__body'>
+            {children}
+
+            <Icon src={actionIcon || iconCaretRight} aria-hidden />
+          </div>
+        ) : null}
+
+        {!('to' in rest) && typeof onClick === 'undefined' ? renderChildren() : null}
+      </>
+    );
+
+    if ('to' in rest)
+      return (
+        <Link className={classNames} {...rest} ref={ref}>
+          {body}
+        </Link>
+      );
+
+    const Comp = onClick || href ? 'a' : 'div';
+    const linkProps =
+      onClick || href
+        ? {
+            onClick: rest.disabled ? undefined : onClick,
+            onKeyDown,
+            tabIndex: 0,
+            role: 'link',
+            ...(href && { href, target: '_blank', rel: 'noopener noreferrer' }),
+          }
+        : {};
+
+    (linkProps as any).disabled = rest.disabled;
+
+    return (
+      <Comp
+        className={classNames}
+        draggable={draggable}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        {...linkProps}
+        ref={ref as React.Ref<any>}
+      >
+        {body}
+      </Comp>
+    );
+  },
+);
+
+ListItem.displayName = 'ListItem';
 
 export { List as default, type IListItem, ListItem };

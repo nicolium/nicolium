@@ -19,6 +19,7 @@ type MenuItem = {
   destructive?: boolean;
   href?: string;
   icon?: string;
+  rightIcon?: string;
   emoji?: string;
   emojiUrl?: string;
   meta?: string;
@@ -166,8 +167,12 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         </div>
       )}
 
-      {!!item.items?.length && (
+      {item.items?.length ? (
         <Icon src={iconCaretRight} containerClassName='dropdown-menu__item__expand' />
+      ) : (
+        item.rightIcon && (
+          <Icon src={item.rightIcon} containerClassName='dropdown-menu__item__expand' />
+        )
       )}
     </>
   );

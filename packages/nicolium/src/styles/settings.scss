@@ -179,6 +179,10 @@
     @include mixins.text($size: sm, $theme: muted);
   }
 
+  &__add-dynamic {
+    padding: 0.375rem 0.5rem 0.375rem 1rem;
+  }
+
   &__actions {
     button {
       @include mixins.button($theme: secondary);
