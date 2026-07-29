@@ -472,7 +472,15 @@ const draftStatusesRoute = createRoute({
 const ComposeDeckColumn: React.FC = () => {
   const columnId = useContext(DeckColumnIdContext);
 
-  return <ComposeForm id={`deck:${columnId}`} autoFocus={false} transparent showAccountSwitcher />;
+  return (
+    <ComposeForm
+      id={`deck:${columnId}`}
+      autoFocus={false}
+      transparent
+      showAccountSwitcher
+      expandAccountSwitcher
+    />
+  );
 };
 
 const composeRoute = createRoute({

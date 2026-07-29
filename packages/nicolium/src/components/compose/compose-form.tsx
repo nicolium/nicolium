@@ -144,6 +144,8 @@ interface IComposeForm<ID extends string> {
   transparent?: boolean;
   compact?: boolean;
   showAccountSwitcher?: boolean;
+  // Keep the avatars always visible.
+  expandAccountSwitcher?: boolean;
   enableThread?: boolean;
   threadItem?: boolean;
   onRemove?: () => void;
@@ -163,6 +165,7 @@ const ComposeForm = <ID extends string>({
   transparent,
   compact,
   showAccountSwitcher,
+  expandAccountSwitcher,
   enableThread,
   threadItem,
   onRemove,
@@ -612,7 +615,7 @@ const ComposeForm = <ID extends string>({
       {!threadItem && <WarningContainer composeId={id} />}
 
       {showAccountSwitcher && !shouldCondense && !group && !threadItem && (
-        <ComposeAccountSwitcher composeId={id} />
+        <ComposeAccountSwitcher composeId={id} expanded={expandAccountSwitcher} />
       )}
 
       {!shouldCondense && !event && !group && !threadItem && groupId && (

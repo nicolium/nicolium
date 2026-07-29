@@ -20,7 +20,7 @@
   - Improved empty column display.
 - Ability to compose threads consisting of multiple posts in the compose form.
 - Drag-and-drop support in the Deck.
-- *Guest mode* allowing to view public content of an instance without signing in in standalone mode.
+- _Guest mode_ allowing to view public content of an instance without signing in in standalone mode.
 - Mastodon Collections support.
 - Mastodon e-mail subscriptions support.
 - GIF picker for Chuckya instances.
@@ -45,8 +45,8 @@
 - When self-note limit is exceeded, a toast message is displayed and the setting backup is disabled.
 - When filtered, your own posts are marked as authored by you.
 - Account switcher now allows removing stale accounts.
-- Interface items editor now allows adding *dynamic* items and is displayed in two columns on wide screens.
-- *Show new posts* button can be placed inside the header of the column, if it fits the available width.
+- Interface items editor now allows adding _dynamic_ items and is displayed in two columns on wide screens.
+- _Show new posts_ button can be placed inside the header of the column, if it fits the available width.
 - Pull-to-refresh is disabled when a refresh button is displayed in the column header.
 - Updated translations: Dutch, French (thanks to Capitaine Caverne and Aris), German (thanks to vinzw), Polish.
 - Restored some tests.

@@ -35,9 +35,14 @@ const SwitcherAccount: React.FC = () => {
 
 interface IComposeAccountSwitcher {
   composeId: string;
+  // Keep the switcher always expanded.
+  expanded?: boolean;
 }
 
-const ComposeAccountSwitcher: React.FC<IComposeAccountSwitcher> = ({ composeId }) => {
+const ComposeAccountSwitcher: React.FC<IComposeAccountSwitcher> = ({
+  composeId,
+  expanded: alwaysExpanded,
+}) => {
   const intl = useIntl();
   const scopeUrl = useScopeUrl();
   const users = useAuthStore((state) => state.users);
@@ -45,7 +50,7 @@ const ComposeAccountSwitcher: React.FC<IComposeAccountSwitcher> = ({ composeId }
   const { switchAccount } = useComposeActions();
 
   const [switching, setSwitching] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(alwaysExpanded ?? false);
 
   const accountUrls = useMemo(() => Object.keys(users).filter((url) => users[url].id), [users]);
 
@@ -65,7 +70,17 @@ const ComposeAccountSwitcher: React.FC<IComposeAccountSwitcher> = ({ composeId }
 
   if (accountUrls.length < 2) return null;
 
-  const button = (
+  const button = alwaysExpanded ? (
+    <span className='compose-account-switcher'>
+      <FormattedMessage
+        id='compose.account_switcher.posting_as'
+        defaultMessage='Posting as {account}'
+        values={{
+          account: account ? `@${account.fqn}` : '',
+        }}
+      />
+    </span>
+  ) : (
     <button
       className='compose-account-switcher'
       onClick={handleToggleExpanded}
