@@ -186,6 +186,13 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
         </div>
       </div>
       <div className='deck__column__actions'>
+        {column.pinned && (
+          <Icon
+            src={iconPushPin}
+            className='deck__column__header__icon'
+            title={intl.formatMessage(messages.pinned)}
+          />
+        )}
         <DropdownMenu items={allItems} src={iconDotsThreeVertical} />
       </div>
     </CardHeader>
