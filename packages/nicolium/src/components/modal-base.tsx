@@ -227,7 +227,9 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
 
       handleModalOpen();
     } else if (!prevChildren) {
-      setRevealed(false);
+      requestAnimationFrame(() => {
+        setRevealed(true);
+      });
     }
 
     if (!children && !!prevChildren) {

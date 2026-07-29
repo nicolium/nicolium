@@ -900,6 +900,7 @@ div[data-viewport-type='window']:has(.empty-message) {
   &--first-render {
     .no-reduce-motion & {
       bottom: -8rem;
+      transform: scale(0.9);
     }
   }
 
