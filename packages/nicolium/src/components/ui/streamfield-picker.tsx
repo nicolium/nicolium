@@ -59,7 +59,7 @@ const StreamfieldPicker = <T,>({
   };
 
   return (
-    <>
+    <div className='streamfield-picker'>
       <Streamfield
         className={className}
         component={component}
@@ -108,7 +108,7 @@ const StreamfieldPicker = <T,>({
           </List>
         </>
       )}
-    </>
+    </div>
   );
 };
 

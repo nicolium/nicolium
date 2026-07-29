@@ -1000,18 +1000,48 @@ p.form-group__hint {
   }
 }
 
-.streamfield-picker__item {
-  cursor: grab;
-  transition: opacity 150ms ease;
+.streamfield-picker {
+  display: contents;
 
-  &--dragging {
-    opacity: 0.45;
+  &__item {
+    cursor: grab;
+    transition: opacity 150ms ease;
+
+    &--dragging {
+      opacity: 0.45;
+    }
+
+    &__label {
+      div {
+        display: flex;
+        flex-direction: column;
+      }
+    }
   }
 
-  &__label {
-    div {
-      display: flex;
-      flex-direction: column;
+  @media (min-width: variables.$breakpoint-md) {
+    display: grid;
+    grid-template-areas:
+      'items heading'
+      'items available';
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 1rem;
+
+    .interface-items {
+      position: sticky;
+      top: 4rem;
+      grid-area: items;
+      height: fit-content;
+    }
+
+    h1 {
+      grid-area: heading;
+      height: fit-content;
+    }
+
+    .list {
+      grid-area: available;
     }
   }
 }
