@@ -297,21 +297,6 @@
 }
 
 .collection-editor-modal {
-  &__member {
-    display: flex;
-    flex-grow: 1;
-    gap: 0.5rem;
-    align-items: center;
-
-    min-width: 0;
-
-    > div:first-child {
-      flex-grow: 1;
-      flex-shrink: unset;
-      min-width: 0;
-    }
-  }
-
   &__pending-badge {
     @include mixins.text($size: xs, $theme: muted, $weight: medium);
 

@@ -123,10 +123,7 @@ const CollectionSuggestion: React.FC<ICollectionSuggestion> = ({
 
   return (
     <div className='list-editor-modal__account'>
-      <div>
-        <AccountContainer id={accountId} withRelationship={false} />
-      </div>
-      {action}
+      <AccountContainer id={accountId} withRelationship={false} action={action} />
     </div>
   );
 };
@@ -210,21 +207,26 @@ const CollectionAccountsForm: React.FC<ICollectionAccountsForm> = ({ collectionI
             {items.map((item) =>
               item.account_id ? (
                 <div key={item.id} className='list-editor-modal__account'>
-                  <div className='collection-editor-modal__member'>
-                    <AccountContainer id={item.account_id} withRelationship={false} />
-                    {item.state === 'pending' && (
-                      <span className='collection-editor-modal__pending-badge'>
-                        <FormattedMessage
-                          id='collections.account.pending'
-                          defaultMessage='Pending'
+                  <AccountContainer
+                    id={item.account_id}
+                    withRelationship={false}
+                    action={
+                      <>
+                        {item.state === 'pending' && (
+                          <span className='collection-editor-modal__pending-badge'>
+                            <FormattedMessage
+                              id='collections.account.pending'
+                              defaultMessage='Pending'
+                            />
+                          </span>
+                        )}
+                        <IconButton
+                          src={iconX}
+                          title={intl.formatMessage(messages.removeAccount)}
+                          onClick={() => onRemove(item.account_id!)}
                         />
-                      </span>
-                    )}
-                  </div>
-                  <IconButton
-                    src={iconX}
-                    title={intl.formatMessage(messages.removeAccount)}
-                    onClick={() => onRemove(item.account_id!)}
+                      </>
+                    }
                   />
                 </div>
               ) : null,

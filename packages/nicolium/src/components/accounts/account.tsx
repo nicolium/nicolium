@@ -349,7 +349,9 @@ const Account = ({
             </div>
           </div>
 
-          <div ref={actionRef}>{renderAction()}</div>
+          <div className='account-card__action' ref={actionRef}>
+            {renderAction()}
+          </div>
         </div>
       </div>
     );
@@ -519,7 +521,9 @@ const Account = ({
           <div className={containerClassName}>{body}</div>
         )}
 
-        <div ref={actionRef}>{renderAction()}</div>
+        <div className='account-card__action' ref={actionRef}>
+          {renderAction()}
+        </div>
       </div>
     </div>
   );

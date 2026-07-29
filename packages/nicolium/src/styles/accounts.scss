@@ -463,6 +463,12 @@
     }
   }
 
+  &__action {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
   &__action-button {
     color: var(--color-gray-600);
     background-color: transparent;
