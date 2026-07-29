@@ -165,7 +165,7 @@ interface Compose {
   hashtagCasingSuggestion: string | null;
   hashtagCasingSuggestionIgnored: boolean | null;
   preview: Partial<BaseStatus> | null;
-  previewAutoUpdate: boolean;
+  previewAutoUpdate: boolean | null;
   suggestedLanguage: string | null;
   showLocationPicker: boolean;
 
@@ -225,7 +225,7 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   hashtagCasingSuggestion: null,
   hashtagCasingSuggestionIgnored: null,
   preview: null,
-  previewAutoUpdate: false,
+  previewAutoUpdate: null,
   suggestedLanguage: null,
   showLocationPicker: false,
 
@@ -961,6 +961,7 @@ const submitCompose = async (
     };
     actions.updateCompose(composeId, (draft) => {
       draft.preview = data;
+      draft.previewAutoUpdate = true;
     });
     onSuccess?.();
     return;

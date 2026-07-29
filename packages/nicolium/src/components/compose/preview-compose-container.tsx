@@ -67,7 +67,7 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
 
           <label className='compose-preview__auto-update'>
             <FormattedMessage id='compose_form.preview.auto_update' defaultMessage='Auto-update' />
-            <Toggle size='sm' checked={autoUpdate} onChange={handleSwitchAutoUpdate} />
+            <Toggle size='sm' checked={autoUpdate || false} onChange={handleSwitchAutoUpdate} />
           </label>
           <IconButton
             src={iconX}
