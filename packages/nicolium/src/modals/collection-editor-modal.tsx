@@ -505,11 +505,16 @@ interface CollectionEditorModalProps {
 
 const CollectionEditorModal: React.FC<BaseModalProps & CollectionEditorModalProps> = ({
   collectionId: initialCollectionId,
-  tab: initialTab,
+  tab,
   onClose,
 }) => {
   const [collectionId, setCollectionId] = useState<string | undefined>(initialCollectionId);
-  const [tab, setTab] = useState<Tab>(initialTab ?? 'details');
+
+  const { updateModal } = useModalsActions();
+
+  const setTab = (newTab: Tab) => {
+    updateModal('COLLECTION_EDITOR', { tab: newTab });
+  };
 
   const { isFetched } = useCollection(collectionId);
 
