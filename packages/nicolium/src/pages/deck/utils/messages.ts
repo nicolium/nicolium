@@ -51,6 +51,7 @@ const messages = defineMessages({
     defaultMessage: 'Choose which account this column is shown as',
   },
   drive: { id: 'column.drive', defaultMessage: 'Drive' },
+  compose: { id: 'column.compose', defaultMessage: 'Compose' },
   showReblogs: { id: 'timeline_filters.show_reblogs', defaultMessage: 'Show reposts' },
   showSelfReblogs: {
     id: 'timeline_filters.show_self_reblogs',

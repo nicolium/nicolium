@@ -274,6 +274,12 @@ const driveDeckColumnSchema = v.object({
   folderId: v.fallback(v.optional(v.string()), undefined),
 });
 
+const composeDeckColumnSchema = v.object({
+  ...baseDeckColumnSchema.entries,
+  type: v.literal('compose'),
+  openReplies: v.fallback(v.boolean(), false),
+});
+
 const genericDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.picklist(['chats', 'scheduled', 'drafts']),
@@ -289,6 +295,7 @@ const deckColumnSchema = v.variant('type', [
   hashtagDeckColumnSchema,
   chatDeckColumnSchema,
   driveDeckColumnSchema,
+  composeDeckColumnSchema,
   genericDeckColumnSchema,
 ]);
 

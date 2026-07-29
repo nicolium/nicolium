@@ -1,7 +1,7 @@
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import { createRootRoute, createRoute, Outlet, useRouter } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
@@ -33,7 +33,7 @@ import {
 } from '@/columns/timeline';
 import TrendsColumn from '@/columns/trends';
 import AccountHeader from '@/components/accounts/account-header';
-import { ProfileInfoPanel } from '@/components/async-components';
+import { ComposeForm, ProfileInfoPanel } from '@/components/async-components';
 import Chat from '@/components/chats/chat';
 import ChatList from '@/components/chats/chat-list';
 import { Hotkeys } from '@/components/hotkeys';
@@ -44,6 +44,7 @@ import { CardHeader, CardTitle } from '@/components/ui/card';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import Tabs from '@/components/ui/tabs';
+import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { MultiColumnProvider } from '@/contexts/multi-column-context';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
@@ -468,6 +469,19 @@ const draftStatusesRoute = createRoute({
   staticData: { title: messages.drafts },
 });
 
+const ComposeDeckColumn: React.FC = () => {
+  const columnId = useContext(DeckColumnIdContext);
+
+  return <ComposeForm id={`deck:${columnId}`} autoFocus={false} transparent showAccountSwitcher />;
+};
+
+const composeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/compose',
+  component: ComposeDeckColumn,
+  staticData: { title: messages.compose },
+});
+
 interface IAccountColumnBody {
   account?: React.ComponentProps<typeof ProfileInfoPanel>['account'];
   username: string;
@@ -773,6 +787,7 @@ const routeTree = rootRoute.addChildren([
   bookmarksRoute,
   scheduledStatusesRoute,
   draftStatusesRoute,
+  composeRoute,
   chatsRoute,
   chatRoute,
   accountRoute,

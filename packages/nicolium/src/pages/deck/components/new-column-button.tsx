@@ -15,6 +15,7 @@ import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import iconLink from '@phosphor-icons/core/regular/link.svg';
 import iconListDashes from '@phosphor-icons/core/regular/list-dashes.svg';
 import iconMagnifyingGlass from '@phosphor-icons/core/regular/magnifying-glass.svg';
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import iconPlanet from '@phosphor-icons/core/regular/planet.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
@@ -69,6 +70,7 @@ const messages = defineMessages({
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
   chats: { id: 'column.chats', defaultMessage: 'Chats' },
   drive: { id: 'column.drive', defaultMessage: 'Drive' },
+  compose: { id: 'column.compose', defaultMessage: 'Compose' },
   createAsAccount: {
     id: 'deck.new_column.account',
     defaultMessage: 'Choose which account the new column uses',
@@ -367,6 +369,12 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       text: intl.formatMessage(messages.drafts),
       icon: iconPencilSimple,
       action: handleAdd({ type: 'drafts' }),
+    });
+
+    items.push({
+      text: intl.formatMessage(messages.compose),
+      icon: iconNotePencil,
+      action: handleAdd({ type: 'compose', openReplies: false }),
     });
 
     const trends: Menu = [];

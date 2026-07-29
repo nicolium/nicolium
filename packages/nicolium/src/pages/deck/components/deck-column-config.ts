@@ -2,6 +2,7 @@ import iconChatTeardrop from '@phosphor-icons/core/regular/chat-teardrop.svg';
 import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconGraph from '@phosphor-icons/core/regular/graph.svg';
 import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
 import { useRouterState } from '@tanstack/react-router';
 import { useContext } from 'react';
@@ -104,6 +105,8 @@ const useColumnIcon = (column: DeckColumn) => {
       return iconHourglass;
     case 'drafts':
       return iconPencilSimple;
+    case 'compose':
+      return iconNotePencil;
     default:
       return '';
   }
