@@ -2426,6 +2426,7 @@
   "settings.messages.show_chat_widget.label": "Show chat widget",
   "settings.messages.success": "Chat settings updated",
   "settings.navigation_items.available": "Available items",
+  "settings.navigation_items.current": "Current items",
   "settings.navigation_items.description": "You can decide what items are visible in your navigation menu. Pinned items are shown in the bottom navigation bar on smaller displays.",
   "settings.navigation_items.heading": "Navigation menu items",
   "settings.navigation_items.pin_item": "Pin item",

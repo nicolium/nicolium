@@ -152,6 +152,12 @@ const SidebarItems: React.FC<ISettingsPage> = ({
           availableValues={availableItems}
           getItemKey={(item) => item}
           onChange={(values) => changeSetting(['sidebarItems'], values)}
+          title={
+            <FormattedMessage
+              id='settings.navigation_items.current'
+              defaultMessage='Current items'
+            />
+          }
           availableTitle={
             <FormattedMessage
               id='settings.sidebar_items.available'

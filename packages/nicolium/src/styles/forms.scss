@@ -1022,8 +1022,8 @@ p.form-group__hint {
   @media (min-width: variables.$breakpoint-md) {
     display: grid;
     grid-template-areas:
-      'items heading'
-      'items available';
+      'heading available-heading'
+      'items   available';
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto 1fr;
     gap: 1rem;
@@ -1036,8 +1036,12 @@ p.form-group__hint {
     }
 
     h1 {
-      grid-area: heading;
+      grid-area: available-heading;
       height: fit-content;
+    }
+
+    h1:first-child {
+      grid-area: heading;
     }
 
     .list {

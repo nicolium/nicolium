@@ -529,6 +529,12 @@ const NavigationItems: React.FC<ISettingsPage> = ({
           availableValues={availableItems}
           getItemKey={(item, index) => (item === 'separator' ? `separator-${index}` : item)}
           onChange={(values) => changeSetting(['navigationItems'], values)}
+          title={
+            <FormattedMessage
+              id='settings.navigation_items.current'
+              defaultMessage='Current items'
+            />
+          }
           availableTitle={
             <FormattedMessage
               id='settings.navigation_items.available'

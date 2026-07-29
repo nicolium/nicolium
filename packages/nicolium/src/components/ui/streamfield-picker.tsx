@@ -16,6 +16,7 @@ interface IStreamfieldPicker<T> {
   component: StreamfieldComponent<T>;
   getItemKey: (value: T, index: number) => string;
   onChange: (values: T[]) => void;
+  title: React.ReactNode;
   availableTitle: React.ReactNode;
   /** Optional items rendered inside available values list, not handled by the component. */
   additionalValues?: React.ReactNode;
@@ -28,6 +29,7 @@ const StreamfieldPicker = <T,>({
   component,
   getItemKey,
   onChange,
+  title,
   availableTitle,
   additionalValues,
   className,
@@ -60,6 +62,7 @@ const StreamfieldPicker = <T,>({
 
   return (
     <div className='streamfield-picker'>
+      {title && <CardTitle title={title} />}
       <Streamfield
         className={className}
         component={component}

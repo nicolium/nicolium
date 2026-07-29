@@ -212,6 +212,12 @@ const StatusActionBarItems: React.FC<ISettingsPage> = ({
               changeSetting(['quickReactionEmojis'], []);
             }
           }}
+          title={
+            <FormattedMessage
+              id='settings.navigation_items.current'
+              defaultMessage='Current items'
+            />
+          }
           availableTitle={
             <FormattedMessage
               id='settings.status_action_bar_items.available'
