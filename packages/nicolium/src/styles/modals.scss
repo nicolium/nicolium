@@ -771,11 +771,16 @@
 
   &__search {
     display: flex;
+    flex-direction: row;
     gap: 0.5rem;
 
     label {
       position: relative;
       flex-grow: 1;
+
+      .input__wrapper {
+        margin-top: 0;
+      }
     }
 
     &__clear {
