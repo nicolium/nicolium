@@ -273,6 +273,7 @@ const NAVIGATION_ITEMS_GATE: Partial<
   birthdays: (features) => features.birthdays,
   bookmarks: (features) => features.bookmarks,
   circles: (features) => features.circles,
+  collections: (features) => features.collections,
   conversations: (features) => features.conversations,
   directory: (features) => features.profileDirectory,
   'domain-blocks': (features) => features.federating,
