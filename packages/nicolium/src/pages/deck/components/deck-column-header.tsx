@@ -189,7 +189,7 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
         {column.pinned && (
           <Icon
             src={iconPushPin}
-            className='deck__column__header__icon'
+            className='deck__column__header__icon deck__column__header__icon--pinned'
             title={intl.formatMessage(messages.pinned)}
           />
         )}

@@ -83,6 +83,10 @@
             border-right: 1px solid var(--color-gray-800);
           }
         }
+
+        .deck__column__header__icon--pinned {
+          display: block;
+        }
       }
     }
 
@@ -114,6 +118,10 @@
         font-size: 1.5rem;
         line-height: 1;
         color: var(--color-gray-600);
+
+        &--pinned {
+          display: none;
+        }
       }
 
       &__title {
