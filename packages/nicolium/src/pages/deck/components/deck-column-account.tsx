@@ -142,6 +142,8 @@ const DeckColumnAccountButton: React.FC<IDeckColumnAccountButton> = ({ column })
     [accountUrls, activeAccountUrl, mainAccountUrl, column.id],
   );
 
+  if (column.type === 'compose') return null;
+
   if (accountUrls.length < 2 || !activeAccountUrl) return null;
 
   if (!canResolveAccount(column))
