@@ -17,13 +17,22 @@
   - The Deck Notifications column always displays all notification categories.
   - Drive column.
   - Ability to add an account/hashtag column from the new column button.
+  - Improved empty column display.
 - Ability to compose threads consisting of multiple posts in the compose form.
+- Drag-and-drop support in the Deck.
+- *Guest mode* allowing to view public content of an instance without signing in in standalone mode.
 - Mastodon Collections support.
 - Mastodon e-mail subscriptions support.
+- GIF picker for Chuckya instances.
+- Filters support for instances without backend support for filtering.
+- Option to bite posts on Iceshrimp.NET.
 - Option to hide reposts of posts from followed accounts depending on the age of the post.
-- IP blocks and email domain blocks management on Mastodon.
-- Support for generating and revoking invites from the dashboard on Iceshrimp.NET.
+- Option to add selected emoji reactions to status action bar.
 - Additional mode of post spoilers display.
+- Support for `clickable`, `followmouse`, `mathInline`, `mathBlock` and `unixtime` MFM extensions.
+- Support for generating and revoking invites from the dashboard on Iceshrimp.NET.
+- IP blocks and email domain blocks management on Mastodon.
+- User creation in the admin dashboard on Pleroma.
 
 ### Changed
 
@@ -34,9 +43,15 @@
 - Notification count is not be displayed on instances that don't support timeline markers.
 - Federation restrictions and account recommendations are displayed on lower breakpoints now.
 - When self-note limit is exceeded, a toast message is displayed and the setting backup is disabled.
+- When filtered, your own posts are marked as authored by you.
+- Account switcher now allows removing stale accounts.
+- Interface items editor now allows adding *dynamic* items and is displayed in two columns on wide screens.
+- *Show new posts* button can be placed inside the header of the column, if it fits the available width.
+- Pull-to-refresh is disabled when a refresh button is displayed in the column header.
 - Updated translations: Dutch, French (thanks to Capitaine Caverne and Aris), German (thanks to vinzw), Polish.
 - Restored some tests.
 - Migrated from the deprecated Icon component.
+- Removed `react-swipeable-views` dependency.
 
 ### Fixed
 
@@ -44,11 +59,16 @@
 - Async media processing on Mastodon is handled correctly.
 - Focal point selector is visible again.
 - Filtering applies for post queue.
+- Modal animation works.
 - Added missing `pulse` animation.
 - RTL mode improvements.
 - Added missing `.ellipsis` class for URL truncation.
 - Dismissing suggested accounts works correctly.
 - Correct RSS URL on Iceshrimp.NET.
+- Chats account search filters users by chat capability.
+- Edit federation modal works.
+- Expired filters are not applied.
+- Changing reblog visibility works on touch devices.
 
 ### Removed
 
