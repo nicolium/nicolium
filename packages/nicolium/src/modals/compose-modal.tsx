@@ -3,11 +3,15 @@ import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { ComposeForm } from '@/components/async-components';
-import { checkComposeContent } from '@/components/modal-base';
 import Modal from '@/components/ui/modal';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
-import { useCompose, useComposeActions, useUploadCompose } from '@/stores/compose';
+import {
+  checkComposeContent,
+  useCompose,
+  useComposeActions,
+  useUploadCompose,
+} from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 

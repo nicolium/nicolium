@@ -38,6 +38,7 @@ import { ComposeForm, ProfileInfoPanel } from '@/components/async-components';
 import Chat from '@/components/chats/chat';
 import ChatList from '@/components/chats/chat-list';
 import { Hotkeys } from '@/components/hotkeys';
+import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import Thread from '@/components/statuses/thread';
@@ -45,6 +46,7 @@ import { CardHeader, CardTitle } from '@/components/ui/card';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import Tabs from '@/components/ui/tabs';
+import Toggle from '@/components/ui/toggle';
 import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { MultiColumnProvider } from '@/contexts/multi-column-context';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
@@ -59,7 +61,7 @@ import { useChat } from '@/queries/chats';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
 import { useStatus } from '@/queries/statuses/use-status';
 import { router as appRouter } from '@/router';
-import { useUploadCompose } from '@/stores/compose';
+import { useCompose, useUploadCompose } from '@/stores/compose';
 
 import { useActiveDeckColumns, updateActiveLayoutColumns } from '../utils/layouts';
 import { deckMessages as messages } from '../utils/messages';
@@ -476,12 +478,24 @@ const ComposeDeckColumn: React.FC = () => {
   const columnId = useContext(DeckColumnIdContext);
   const composeId = `deck:${columnId}`;
   const composeBlock = useRef<HTMLDivElement>(null);
+  const [column] = useDeckColumnConfig<Extract<DeckColumn, { type: 'compose' }>>();
+  const { editorKey } = useCompose(composeId);
 
   const uploadCompose = useUploadCompose(composeId);
 
   const { isDragging, isDraggedOver } = useDraggedFiles(composeBlock, (files) => {
     uploadCompose(files);
   });
+
+  const handleChangeOpenInteractions: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+    updateActiveLayoutColumns((columns) =>
+      columns.map((item) =>
+        item.type === 'compose'
+          ? { ...item, openInteractions: target.checked && item.id === columnId }
+          : item,
+      ),
+    );
+  };
 
   return (
     <div
@@ -492,13 +506,27 @@ const ComposeDeckColumn: React.FC = () => {
       ref={composeBlock}
     >
       <ComposeForm
+        key={editorKey}
         id={composeId}
-        autoFocus={false}
+        autoFocus={!!editorKey}
         transparent
         showAccountSwitcher
         expandAccountSwitcher
         enableThread
       />
+
+      <List>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='column.deck.compose.open_interactions'
+              defaultMessage='Compose replies here'
+            />
+          }
+        >
+          <Toggle checked={!!column?.openInteractions} onChange={handleChangeOpenInteractions} />
+        </ListItem>
+      </List>
     </div>
   );
 };

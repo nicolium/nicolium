@@ -6,12 +6,11 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { usePrevious } from '@/hooks/use-previous';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
-import { useComposeStore } from '@/stores/compose';
+import { checkComposeContent, useComposeStore } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
 import type { ModalType } from '@/modals/modal-root';
-import type { Compose } from '@/stores/compose';
 
 const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
@@ -20,15 +19,6 @@ const messages = defineMessages({
   draftSaved: { id: 'compose_form.save_draft.success', defaultMessage: 'Draft saved' },
   view: { id: 'toast.view', defaultMessage: 'View' },
 });
-
-const checkComposeContent = (compose?: Compose) =>
-  !!compose &&
-  [
-    compose.editorState && compose.editorState.length > 0,
-    compose.spoilerText.length > 0,
-    compose.mediaAttachments.length > 0,
-    compose.poll !== null,
-  ].some((check) => check === true);
 
 interface IModalBase {
   onCancel?: () => void;
@@ -289,4 +279,4 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
   );
 };
 
-export { checkComposeContent, ModalBase as default };
+export { ModalBase as default };

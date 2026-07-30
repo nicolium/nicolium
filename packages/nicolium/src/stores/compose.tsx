@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import React, { useCallback } from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { length } from 'stringz';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
@@ -17,7 +17,7 @@ import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
-import { router } from '@/router';
+import { deckRoute, router } from '@/router';
 import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions, useModalsStore } from '@/stores/modals';
@@ -154,6 +154,7 @@ interface Compose {
   caretPosition: number | null;
   idempotencyKey: string;
   resetFileKey: number | null;
+  editorKey: string;
 
   // Currently modified language
   modifiedLanguage: Language | string | null;
@@ -216,6 +217,7 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   caretPosition: null,
   idempotencyKey: '',
   resetFileKey: null,
+  editorKey: '',
 
   modifiedLanguage: null,
 
@@ -354,6 +356,111 @@ const openComposeSurface = (
   }
 
   useModalsStore.getState().actions.openModal('COMPOSE', modalProps, undefined, scopeUrl);
+};
+
+const checkComposeContent = (compose?: Compose) =>
+  !!compose &&
+  [
+    compose.editorState && compose.editorState.length > 0,
+    compose.spoilerText.length > 0,
+    compose.mediaAttachments.length > 0,
+    compose.poll !== null,
+    compose.inReplyToId !== null,
+    compose.quoteId !== null,
+  ].some((check) => check === true);
+
+const setDeckColumnAccountUrl = (columnId: string, accountUrl: string) =>
+  useSettingsStore
+    .getState()
+    .actions.changeSetting(['deck', 'layouts'], (layouts: Array<DeckLayout>) => {
+      const column = layouts
+        .map((layout) => layout.columns)
+        .flat()
+        .find((column) => column.id === columnId);
+      if (column) {
+        column.accountUrl = accountUrl;
+      }
+      return layouts;
+    });
+
+const getInteractionsComposeColumn = () => {
+  if (!router.state.matches.some(({ routeId }) => routeId === deckRoute.id)) return null;
+
+  const { deck } = useSettingsStore.getState().settings;
+  const layout = deck.layouts.find(({ id }) => id === deck.activeLayout);
+
+  if (!layout) return null;
+
+  return (
+    layout?.columns.find((column) => column.type === 'compose' && column.openInteractions) ?? null
+  );
+};
+
+const scrollToDeckColumn = (columnId: string) =>
+  document
+    .querySelector(`.deck__column[data-column-id="${columnId}"]`)
+    ?.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+
+const composeInteraction = (
+  write: (composeId: string) => void,
+  scopeUrl: string,
+  search: ComposePageSearch,
+  openComposer: boolean,
+) => {
+  const composeInModal = () => {
+    write('compose-modal');
+    if (openComposer) openComposeSurface(scopeUrl, search);
+  };
+
+  const column = openComposer ? getInteractionsComposeColumn() : null;
+
+  if (!column) {
+    composeInModal();
+    return;
+  }
+
+  const composeId = `deck:${column.id}`;
+  const { actions, composers } = useComposeStore.getState();
+
+  const composeInColumn = () => {
+    actions.resetCompose(composeId);
+    write(composeId);
+    actions.updateCompose(composeId, (compose) => {
+      compose.editorKey = crypto.randomUUID();
+    });
+    setDeckColumnAccountUrl(column.id, scopeUrl);
+    scrollToDeckColumn(column.id);
+  };
+
+  if (checkComposeContent(composers[composeId]) || actions.hasThreadContent(composeId)) {
+    useModalsStore.getState().actions.openModal('CONFIRM', {
+      heading: (
+        <FormattedMessage
+          id='compose_column.overwrite.heading'
+          defaultMessage='Discard the post in the compose column?'
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='compose_column.overwrite.message'
+          defaultMessage='You’re already composing a post in the compose column. Discarding it will replace it with the new post.'
+        />
+      ),
+      confirm: <FormattedMessage id='compose_column.overwrite.confirm' defaultMessage='Discard' />,
+      onConfirm: composeInColumn,
+      theme: 'danger',
+      secondary: (
+        <FormattedMessage
+          id='compose_column.overwrite.compose_in_modal'
+          defaultMessage='Compose in a modal'
+        />
+      ),
+      onSecondary: composeInModal,
+    });
+    return;
+  }
+
+  composeInColumn();
 };
 
 interface ComposeState {
@@ -606,89 +713,91 @@ const useComposeStore = create<ComposeStore>()(
 
           if (!account) return;
 
-          set((draft) => {
-            if (!draft.composers['compose-modal']) {
-              draft.composers['compose-modal'] = {
-                ...draft.default,
-                idempotencyKey: crypto.randomUUID(),
-              };
-            }
-            const compose = draft.composers['compose-modal'];
+          const doCompose = (composeId: string) =>
+            set((draft) => {
+              if (!draft.composers[composeId]) {
+                draft.composers[composeId] = {
+                  ...draft.default,
+                  idempotencyKey: crypto.randomUUID(),
+                };
+              }
+              const compose = draft.composers[composeId];
 
-            const mentions = explicitAddressing
-              ? statusToMentionsArray(status, account, rebloggedBy, scopeUrl)
-              : [];
+              const mentions = explicitAddressing
+                ? statusToMentionsArray(status, account, rebloggedBy, scopeUrl)
+                : [];
 
-            compose.groupId = status.group_id;
-            compose.inReplyToId = status.id;
-            compose.to = mentions;
-            compose.parentRebloggedById = rebloggedBy?.id ?? null;
-            compose.text = !explicitAddressing
-              ? statusToTextMentions(status, account, scopeUrl)
-              : '';
-            compose.visibility = privacyPreference(
-              status.visibility,
-              draft.default.visibility,
-              status.list_id,
-              features.createStatusConversationScope,
-            );
-            compose.localOnly = status.local_only === true;
-            compose.caretPosition = null;
-            compose.contentType = draft.default.contentType;
-            compose.approvalRequired = approvalRequired ?? false;
-            if (preserveSpoilers && status.spoiler_text) {
-              compose.sensitive = true;
-              compose.spoilerText = status.spoiler_text;
-            }
-          });
-
-          if (openComposer) {
-            openComposeSurface(scopeUrl, {
-              approvalRequired,
-              inReplyTo: status.id,
+              compose.groupId = status.group_id;
+              compose.inReplyToId = status.id;
+              compose.to = mentions;
+              compose.parentRebloggedById = rebloggedBy?.id ?? null;
+              compose.text = !explicitAddressing
+                ? statusToTextMentions(status, account, scopeUrl)
+                : '';
+              compose.visibility = privacyPreference(
+                status.visibility,
+                draft.default.visibility,
+                status.list_id,
+                features.createStatusConversationScope,
+              );
+              compose.localOnly = status.local_only === true;
+              compose.caretPosition = null;
+              compose.contentType = draft.default.contentType;
+              compose.approvalRequired = approvalRequired ?? false;
+              if (preserveSpoilers && status.spoiler_text) {
+                compose.sensitive = true;
+                compose.spoilerText = status.spoiler_text;
+              }
             });
-          }
+
+          composeInteraction(
+            doCompose,
+            scopeUrl,
+            { approvalRequired, inReplyTo: status.id },
+            openComposer,
+          );
         },
 
         quoteCompose: (status, scopeUrl, approvalRequired, openComposer = true) => {
-          set((draft) => {
-            if (!draft.composers['compose-modal']) {
-              draft.composers['compose-modal'] = {
-                ...draft.default,
-                idempotencyKey: crypto.randomUUID(),
-              };
-            }
-            const compose = draft.composers['compose-modal'];
+          const doCompose = (composeId: string) =>
+            set((draft) => {
+              if (!draft.composers[composeId]) {
+                draft.composers[composeId] = {
+                  ...draft.default,
+                  idempotencyKey: crypto.randomUUID(),
+                };
+              }
+              const compose = draft.composers[composeId];
 
-            const statusAccount = selectAccount(status.account_id, scopeUrl);
-            const author = statusAccount?.acct ?? '';
+              const statusAccount = selectAccount(status.account_id, scopeUrl);
+              const author = statusAccount?.acct ?? '';
 
-            compose.quoteId = status.id;
-            compose.to = [author];
-            compose.parentRebloggedById = null;
-            compose.text = '';
-            compose.visibility = privacyPreference(
-              status.visibility,
-              draft.default.visibility,
-              status.list_id,
-            );
-            compose.caretPosition = null;
-            compose.contentType = draft.default.contentType;
-            compose.spoilerText = '';
-            compose.approvalRequired = approvalRequired ?? false;
+              compose.quoteId = status.id;
+              compose.to = [author];
+              compose.parentRebloggedById = null;
+              compose.text = '';
+              compose.visibility = privacyPreference(
+                status.visibility,
+                draft.default.visibility,
+                status.list_id,
+              );
+              compose.caretPosition = null;
+              compose.contentType = draft.default.contentType;
+              compose.spoilerText = '';
+              compose.approvalRequired = approvalRequired ?? false;
 
-            if (status.visibility === 'group') {
-              compose.groupId = status.group_id;
-              compose.visibility = 'group';
-            }
-          });
-
-          if (openComposer) {
-            openComposeSurface(scopeUrl, {
-              approvalRequired,
-              quote: status.id,
+              if (status.visibility === 'group') {
+                compose.groupId = status.group_id;
+                compose.visibility = 'group';
+              }
             });
-          }
+
+          composeInteraction(
+            doCompose,
+            scopeUrl,
+            { approvalRequired, quote: status.id },
+            openComposer,
+          );
         },
 
         mentionCompose: (account, scopeUrl) => {
@@ -895,18 +1004,7 @@ const useComposeStore = create<ComposeStore>()(
           if (composeId === 'compose-modal') {
             useModalsStore.getState().actions.setScopeUrl(targetScope);
           } else if (composeId.startsWith('deck:')) {
-            useSettingsStore
-              .getState()
-              .actions.changeSetting(['deck', 'layouts'], (layouts: Array<DeckLayout>) => {
-                const column = layouts
-                  .map((layout) => layout.columns)
-                  .flat()
-                  .find((column) => column.id === composeId.slice(5));
-                if (column) {
-                  column.accountUrl = targetScope;
-                }
-                return layouts;
-              });
+            setDeckColumnAccountUrl(composeId.slice(5), targetScope);
           }
         },
       },
@@ -1537,6 +1635,7 @@ const useComposeContentType = (composeId: string, includeWysiwyg = false) => {
 export {
   type Compose,
   appendMedia,
+  checkComposeContent,
   newPoll,
   openDedicatedComposeWindow,
   statusToMentionsAccountIdsArray,

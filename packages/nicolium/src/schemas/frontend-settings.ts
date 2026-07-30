@@ -277,7 +277,7 @@ const driveDeckColumnSchema = v.object({
 const composeDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
   type: v.literal('compose'),
-  openReplies: v.fallback(v.boolean(), false),
+  openInteractions: v.fallback(v.boolean(), false),
 });
 
 const genericDeckColumnSchema = v.object({

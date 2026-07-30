@@ -374,7 +374,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
     items.push({
       text: intl.formatMessage(messages.compose),
       icon: iconNotePencil,
-      action: handleAdd({ type: 'compose', openReplies: false }),
+      action: handleAdd({ type: 'compose', openInteractions: false }),
     });
 
     const trends: Menu = [];

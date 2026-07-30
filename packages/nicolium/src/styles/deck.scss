@@ -202,6 +202,12 @@
       }
     }
 
+    &__compose {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
     &__overlay {
       position: absolute;
       z-index: 10;

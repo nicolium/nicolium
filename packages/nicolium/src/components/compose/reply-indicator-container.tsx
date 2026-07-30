@@ -15,7 +15,7 @@ const ReplyIndicatorContainer: React.FC<IReplyIndicatorContainer> = ({ composeId
   const { composeResetInReplyTo } = useComposeActions();
 
   const onCancel = () => {
-    composeResetInReplyTo('compose-modal');
+    composeResetInReplyTo(composeId);
   };
 
   return (
