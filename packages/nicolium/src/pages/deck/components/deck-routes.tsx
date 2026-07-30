@@ -497,6 +497,7 @@ const ComposeDeckColumn: React.FC = () => {
         transparent
         showAccountSwitcher
         expandAccountSwitcher
+        enableThread
       />
     </div>
   );

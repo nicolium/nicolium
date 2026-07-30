@@ -186,7 +186,7 @@ const ComposeForm = <ID extends string>({
   const features = useFeatures();
   const persistDraftStatus = usePersistDraftStatus();
 
-  const isThreadRoot = !!enableThread && !threadItem;
+  const isThreadRoot = !threadItem;
   const hasThread = isThreadRoot && thread.length > 0;
 
   const {
@@ -300,6 +300,7 @@ const ComposeForm = <ID extends string>({
   };
 
   const handleAddThreadPost = () => {
+    console.log('Adding thread post');
     actions.addThreadPost(id);
   };
 
@@ -496,7 +497,7 @@ const ComposeForm = <ID extends string>({
     });
   }
 
-  if (!scheduledAt && maxTootChars > 1024 && !hasThread) {
+  if (!scheduledAt && (maxTootChars > 1024 || enableThread) && !hasThread) {
     actionsMenu.push({
       text: intl.formatMessage(messages.addThreadPost),
       action: handleAddThreadPost,
@@ -701,7 +702,7 @@ const ComposeForm = <ID extends string>({
               onThreadSubmit={handleSubmit}
             />
           ))}
-          {!hasThread && maxTootChars <= 1024 && addThreadPostButton}
+          {enableThread && !hasThread && maxTootChars <= 1024 && addThreadPostButton}
         </div>
       )}
 
@@ -710,7 +711,7 @@ const ComposeForm = <ID extends string>({
       ) : (
         <div
           className={clsx('compose-form__compose-actions', {
-            'compose-form__compose-actions--sticky': hasThread,
+            'compose-form__compose-actions--sticky': hasThread && id === 'compose-modal',
           })}
         >
           {addThreadPostButton}

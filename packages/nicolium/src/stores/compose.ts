@@ -836,13 +836,6 @@ const useComposeStore = create<ComposeStore>()(
 
         switchAccount: async (composeId, sourceScope, targetScope) => {
           const compose = get().composers[composeId] ?? get().default;
-          console.log(
-            'switching account for compose',
-            composeId,
-            sourceScope,
-            targetScope,
-            compose,
-          );
           if (!compose) return;
 
           let inReplyToIdPromise: Promise<string | undefined> = Promise.resolve(undefined);
@@ -902,16 +895,13 @@ const useComposeStore = create<ComposeStore>()(
           if (composeId === 'compose-modal') {
             useModalsStore.getState().actions.setScopeUrl(targetScope);
           } else if (composeId.startsWith('deck:')) {
-            console.log('switching account for deck compose', composeId, targetScope);
             useSettingsStore
               .getState()
               .actions.changeSetting(['deck', 'layouts'], (layouts: Array<DeckLayout>) => {
-                console.log('changing deck layouts', layouts);
                 const column = layouts
                   .map((layout) => layout.columns)
                   .flat()
                   .find((column) => column.id === composeId.slice(5));
-                console.log('found column', column);
                 if (column) {
                   column.accountUrl = targetScope;
                 }
