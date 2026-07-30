@@ -68,7 +68,7 @@
     &--pinned {
       @media (min-width: variables.$breakpoint-md) {
         position: sticky;
-        z-index: 21;
+        z-index: 61;
         left: 0;
         transition: box-shadow 150ms var(--ease-default);
 
