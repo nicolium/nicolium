@@ -84,7 +84,7 @@ const createStatus = (
   if (!params.preview && !editedId) {
     usePendingStatusesStore.getState().actions.importStatus(params, idempotencyKey);
     useContextStore.getState().actions.importPendingStatus(params.in_reply_to_id, idempotencyKey);
-    useTimelinesStore.getState().actions.importPendingStatus(params, idempotencyKey);
+    useTimelinesStore.getState().actions.importPendingStatus(scopeUrl, params, idempotencyKey);
     incrementReplyCount(params, queryClient, scopeUrl);
   }
 
@@ -121,9 +121,9 @@ const createStatus = (
         );
 
       if (status.scheduled_at === null) {
-        useTimelinesStore.getState().actions.replacePendingStatus(idempotencyKey, status);
+        useTimelinesStore.getState().actions.replacePendingStatus(scopeUrl, idempotencyKey, status);
       } else {
-        useTimelinesStore.getState().actions.deletePendingStatus(idempotencyKey);
+        useTimelinesStore.getState().actions.deletePendingStatus(scopeUrl, idempotencyKey);
       }
 
       // Poll the backend for the updated card
@@ -150,7 +150,7 @@ const createStatus = (
     })
     .catch((error) => {
       usePendingStatusesStore.getState().actions.deleteStatus(idempotencyKey);
-      useTimelinesStore.getState().actions.deletePendingStatus(idempotencyKey);
+      useTimelinesStore.getState().actions.deletePendingStatus(scopeUrl, idempotencyKey);
       useContextStore.getState().actions.deletePendingStatus(params.in_reply_to_id, idempotencyKey);
       if (!editedId) {
         decrementReplyCount(params, queryClient, scopeUrl);

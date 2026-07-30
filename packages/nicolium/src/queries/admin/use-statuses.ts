@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { useStatusMetaActions } from '@/stores/status-meta';
 import { useTimelinesActions } from '@/stores/timelines';
@@ -11,12 +12,13 @@ const useAdminDeleteStatusMutation = (statusId: string) => {
   const client = useClient();
   const { deleteStatus: deleteTimelineStatus } = useTimelinesActions();
   const { markStatusDeleted } = useStatusMetaActions();
+  const scopeUrl = useScopeUrl();
 
   return useMutation({
     mutationKey: ['admin', 'statuses', statusId],
     mutationFn: () => client.admin.statuses.deleteStatus(statusId),
     onSuccess: () => {
-      deleteTimelineStatus(statusId);
+      deleteTimelineStatus(scopeUrl, statusId);
       markStatusDeleted(statusId);
     },
   });

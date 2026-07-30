@@ -111,76 +111,79 @@ const useUserStream = () => {
   const importEntities = useImportEntities();
   const scopeUrl = useScopeUrl();
 
-  const listener = useCallback((event: StreamingEvent) => {
-    switch (event.event) {
-      case 'update': {
-        const timelineId = getTimelineFromStream(event.stream);
-        importEntities({ statuses: [event.payload] });
-        receiveStreamingStatus(timelineId, event.payload);
-        break;
-      }
-      case 'status.update':
-        importEntities({ statuses: [event.payload] });
-        break;
-      case 'delete':
-        deleteStatus(event.payload);
-        break;
-      case 'notification':
-        processStreamNotification(event.payload);
-        break;
-      case 'conversation':
-        updateConversations(event.payload, scopeUrl);
-        break;
-      case 'filters_changed':
-        queryClient.invalidateQueries({
-          queryKey: scopedQueryKey(queryKeys.filters.all, scopeUrl),
-        });
-        break;
-      case 'chat_update':
-        {
-          const chat = event.payload;
-          const messageOwned = chat.last_message?.account_id === me;
+  const listener = useCallback(
+    (event: StreamingEvent) => {
+      switch (event.event) {
+        case 'update': {
+          const timelineId = getTimelineFromStream(event.stream);
+          importEntities({ statuses: [event.payload] });
+          receiveStreamingStatus(scopeUrl, timelineId, event.payload);
+          break;
+        }
+        case 'status.update':
+          importEntities({ statuses: [event.payload] });
+          break;
+        case 'delete':
+          deleteStatus(scopeUrl, event.payload);
+          break;
+        case 'notification':
+          processStreamNotification(event.payload);
+          break;
+        case 'conversation':
+          updateConversations(event.payload, scopeUrl);
+          break;
+        case 'filters_changed':
+          queryClient.invalidateQueries({
+            queryKey: scopedQueryKey(queryKeys.filters.all, scopeUrl),
+          });
+          break;
+        case 'chat_update':
+          {
+            const chat = event.payload;
+            const messageOwned = chat.last_message?.account_id === me;
 
-          // Don't update own messages from streaming
-          if (!messageOwned) {
-            updateChatListItem(chat, scopeUrl);
+            // Don't update own messages from streaming
+            if (!messageOwned) {
+              updateChatListItem(chat, scopeUrl);
 
-            if (settings.chats.sound) {
-              play(soundCache.chat);
+              if (settings.chats.sound) {
+                play(soundCache.chat);
+              }
+
+              // Increment unread counter
+              statContext?.setUnreadChatsCount(getUnreadChatsCount(scopeUrl));
             }
-
-            // Increment unread counter
-            statContext?.setUnreadChatsCount(getUnreadChatsCount(scopeUrl));
           }
-        }
-        break;
-      case 'follow_relationships_update':
-        updateFollowRelationships(event.payload, me as string, scopeUrl);
-        break;
-      case 'announcement':
-        updateAnnouncement(event.payload, scopeUrl);
-        break;
-      case 'announcement.reaction':
-        updateAnnouncementReactions(event.payload, scopeUrl);
-        break;
-      case 'announcement.delete':
-        deleteAnnouncement(event.payload, scopeUrl);
-        break;
-      case 'marker': {
-        for (const timeline in event.payload) {
-          queryClient.setQueryData(
-            scopedQueryKey(
-              queryKeys.markers.timeline(timeline as 'home' | 'notifications'),
-              scopeUrl,
-            ),
-            event.payload[timeline] ?? null,
-          );
-        }
+          break;
+        case 'follow_relationships_update':
+          updateFollowRelationships(event.payload, me as string, scopeUrl);
+          break;
+        case 'announcement':
+          updateAnnouncement(event.payload, scopeUrl);
+          break;
+        case 'announcement.reaction':
+          updateAnnouncementReactions(event.payload, scopeUrl);
+          break;
+        case 'announcement.delete':
+          deleteAnnouncement(event.payload, scopeUrl);
+          break;
+        case 'marker': {
+          for (const timeline in event.payload) {
+            queryClient.setQueryData(
+              scopedQueryKey(
+                queryKeys.markers.timeline(timeline as 'home' | 'notifications'),
+                scopeUrl,
+              ),
+              event.payload[timeline] ?? null,
+            );
+          }
 
-        break;
+          break;
+        }
       }
-    }
-  }, []);
+    },
+    [scopeUrl, me],
+  );
 
   return useTimelineStream('user', {}, isLoggedIn, listener);
 };

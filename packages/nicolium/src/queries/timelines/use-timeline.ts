@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
 import { useClient } from '@/hooks/use-client';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { useImportEntities } from '@/queries/utils/import-entities';
+import { importEntities } from '@/queries/utils/import-entities';
 import {
   useTimelinesStore,
   useTimeline as useStoreTimeline,
@@ -45,13 +45,15 @@ const useTimeline = (
   const polling = options?.polling ?? true;
   const restoringMaxId = options?.restoringMaxId;
 
-  const timeline = useStoreTimeline(timelineId);
+  const scopeUrl = useScopeUrl();
+  const timeline = useStoreTimeline(scopeUrl, timelineId);
   const pollingEnabled = useTimelinesStore((state) => state.pollingEnabled);
   const timelineActions = useTimelinesActions();
-  const importEntities = useImportEntities();
   const queryClient = useQueryClient();
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+
+  const streamConfigRef = useRef(streamConfig);
+  streamConfigRef.current = streamConfig;
 
   const { connected: streamingConnected } = useTimelineStream(
     streamConfig?.stream ?? '',
@@ -101,7 +103,7 @@ const useTimeline = (
 
     const poll = async () => {
       const sinceId =
-        useTimelinesStore.getState().timelines[timelineId]?.newestStatusId ??
+        useTimelinesStore.getState().timelines[scopeUrl]?.[timelineId]?.newestStatusId ??
         newestStatusId.current;
       if (!sinceId) return;
 
@@ -114,27 +116,27 @@ const useTimeline = (
 
         if (response.items.length === 0) return;
 
-        importEntities({ statuses: response.items });
+        importEntities(scopeUrl, { statuses: response.items });
         await fetchMissingRelationships(response.items);
 
         for (const status of response.items) {
-          timelineActions.receiveStreamingStatus(timelineId, status);
+          timelineActions.receiveStreamingStatus(scopeUrl, timelineId, status);
         }
       } catch {}
     };
 
     const interval = setInterval(poll, POLLING_INTERVAL);
     return () => clearInterval(interval);
-  }, [timelineId, polling, pollingEnabled, streamingConnected, timeline.isPending]);
+  }, [scopeUrl, timelineId, polling, pollingEnabled, streamingConnected, timeline.isPending]);
 
   useEffect(() => {
     if (!timeline.isPending || timeline.isFetching || timeline.isError === 401) return;
     fetchInitial();
-  }, [timelineId, timeline.isPending]);
+  }, [scopeUrl, timelineId, timeline.isPending]);
 
   const fetchInitial = useCallback(
     async (isRestoring = !!restoringMaxId) => {
-      timelineActions.setLoading(timelineId, true);
+      timelineActions.setLoading(scopeUrl, timelineId, true);
       try {
         const [response, shouldInsertGap] = await Promise.all([
           fetcherRef.current(),
@@ -145,10 +147,11 @@ const useTimeline = (
                 .then((res) => res.items.length > 0)
                 .catch(() => true),
         ]);
-        importEntities({ statuses: response.items });
+        importEntities(scopeUrl, { statuses: response.items });
         await fetchMissingRelationships(response.items);
 
         timelineActions.expandTimeline(
+          scopeUrl,
           timelineId,
           response.items,
           !!response.next,
@@ -157,39 +160,41 @@ const useTimeline = (
         );
       } catch (error) {
         timelineActions.setError(
+          scopeUrl,
           timelineId,
           true,
           (error as { response?: { status?: number } }).response?.status,
         );
       }
     },
-    [timelineId, restoringMaxId],
+    [scopeUrl, timelineId, restoringMaxId],
   );
 
   const fetchNextPage = useCallback(async () => {
     if (timeline.isFetching) return;
 
-    timelineActions.setLoading(timelineId, true);
+    timelineActions.setLoading(scopeUrl, timelineId, true);
 
     try {
       const response = await fetcherRef.current({ max_id: timeline.oldestStatusId });
 
-      importEntities({ statuses: response.items });
+      importEntities(scopeUrl, { statuses: response.items });
       await fetchMissingRelationships(response.items);
 
-      timelineActions.expandTimeline(timelineId, response.items, !!response.next, false);
+      timelineActions.expandTimeline(scopeUrl, timelineId, response.items, !!response.next, false);
     } catch (error) {
       timelineActions.setError(
+        scopeUrl,
         timelineId,
         true,
         (error as { response?: { status?: number } }).response?.status,
       );
     }
-  }, [timelineId, timeline.oldestStatusId, timeline.isFetching]);
+  }, [scopeUrl, timelineId, timeline.oldestStatusId, timeline.isFetching]);
 
   const dequeueEntries = useCallback(() => {
-    timelineActions.dequeueEntries(timelineId);
-  }, [timelineId]);
+    timelineActions.dequeueEntries(scopeUrl, timelineId);
+  }, [scopeUrl, timelineId]);
 
   const fillGap = useCallback(
     async (gap: Extract<TimelineEntry, { type: 'gap' }>, direction: 'up' | 'down') => {
@@ -205,22 +210,30 @@ const useTimeline = (
       }
 
       const response = await fetcherRef.current(params);
-      importEntities({ statuses: response.items });
+      importEntities(scopeUrl, { statuses: response.items });
       await fetchMissingRelationships(response.items);
 
-      timelineActions.fillGap(timelineId, gap.minId, response.items, !!response.next, direction);
+      timelineActions.fillGap(
+        scopeUrl,
+        timelineId,
+        gap.minId,
+        response.items,
+        !!response.next,
+        direction,
+      );
     },
-    [timelineId],
+    [scopeUrl, timelineId],
   );
 
   const refetch = useCallback(() => {
-    timelineActions.resetTimeline(timelineId);
+    timelineActions.resetTimeline(scopeUrl, timelineId);
     return fetchInitial(false);
-  }, [timelineId, fetchInitial]);
+  }, [scopeUrl, timelineId, fetchInitial]);
 
   return useMemo(
     () => ({
       ...timeline,
+      scopeUrl,
       timelineId,
       fetchNextPage,
       dequeueEntries,
@@ -229,7 +242,16 @@ const useTimeline = (
       hasStreamConfig: !!streamConfig,
       options,
     }),
-    [timeline, timelineId, fetchNextPage, dequeueEntries, fillGap, refetch, !!streamConfig],
+    [
+      timeline,
+      scopeUrl,
+      timelineId,
+      fetchNextPage,
+      dequeueEntries,
+      fillGap,
+      refetch,
+      !!streamConfig,
+    ],
   );
 };
 

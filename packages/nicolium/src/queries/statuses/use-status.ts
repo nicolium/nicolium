@@ -179,11 +179,15 @@ const useStatuses = (statusIds: Array<string>) => {
 
 const findStatuses = (
   predicate: (status: NormalizedStatus) => boolean,
+  scopeUrl?: string,
 ): Array<[string, NormalizedStatus]> =>
   queryClient
     .getQueriesData<NormalizedStatus>({
       predicate: ({ queryKey }) =>
-        queryKey.length === 3 && queryKey[1] === 'statuses' && typeof queryKey[2] === 'string',
+        queryKey.length === 3 &&
+        queryKey[1] === 'statuses' &&
+        typeof queryKey[2] === 'string' &&
+        (!scopeUrl || queryKey[0] === scopeUrl),
     })
     .filter(
       (entry): entry is [readonly [string, 'statuses', string], NormalizedStatus] =>
@@ -223,7 +227,7 @@ const useDeleteStatus = (statusId: string) => {
         : undefined;
 
       deletePendingStatus(statusId);
-      deleteStatusFromTimelines(statusId);
+      deleteStatusFromTimelines(scopeUrl, statusId);
       markStatusDeleted(statusId);
 
       if (withRedraft && status) {
@@ -262,7 +266,7 @@ const useDeleteStatusFromGroup = (statusId: string, groupId: string) => {
     },
     onSuccess: () => {
       deletePendingStatus(statusId);
-      deleteStatusFromTimelines(statusId);
+      deleteStatusFromTimelines(scopeUrl, statusId);
       markStatusDeleted(statusId);
     },
     onError: () => {

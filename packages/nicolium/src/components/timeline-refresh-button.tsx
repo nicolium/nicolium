@@ -2,6 +2,7 @@ import iconArrowsClockwise from '@phosphor-icons/core/regular/arrows-clockwise.s
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useTimeline, useTimelinesActions } from '@/stores/timelines';
 import { userTouching } from '@/utils/is-mobile';
 
@@ -18,10 +19,11 @@ interface ITimelineRefreshButton {
 const TimelineRefreshButton: React.FC<ITimelineRefreshButton> = ({ timelineId }) => {
   const intl = useIntl();
   const { resetTimeline } = useTimelinesActions();
-  const timeline = useTimeline(timelineId);
+  const scopeUrl = useScopeUrl();
+  const timeline = useTimeline(scopeUrl, timelineId);
 
   const handleClick = () => {
-    resetTimeline(timelineId);
+    resetTimeline(scopeUrl, timelineId);
   };
 
   if (userTouching.matches) return null;

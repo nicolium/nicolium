@@ -438,6 +438,7 @@ const Timeline: React.FC<ITimeline> = ({
   const pullToRefreshEnabled = conditionalPullToRefresh ? userTouching.matches : true;
 
   const {
+    scopeUrl,
     timelineId,
     entries,
     fetchNextPage,
@@ -480,6 +481,7 @@ const Timeline: React.FC<ITimeline> = ({
   );
 
   const { queuedCount, queuedAccountIds } = useQueuedEntries(
+    scopeUrl,
     timelineId,
     filters,
     followedAccountIds,

@@ -210,7 +210,7 @@ const useBlockAccountMutation = (accountId: string) => {
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
       filterContexts(data);
-      filterTimelines(data.id);
+      filterTimelines(scopeUrl, data.id);
     },
   });
 };
@@ -286,7 +286,7 @@ const useMuteAccountMutation = (accountId: string) => {
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
       filterContexts(data);
-      filterTimelines(data.id);
+      filterTimelines(scopeUrl, data.id);
     },
   });
 };

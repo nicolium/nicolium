@@ -59,33 +59,39 @@ interface TimelineData {
 }
 
 interface State {
-  timelines: Record<string, TimelineData>;
+  timelines: Record<string, Record<string, TimelineData>>;
   pollingEnabled: boolean;
   actions: {
     expandTimeline: (
+      scopeUrl: string,
       timelineId: string,
       statuses: Array<Status>,
       hasMore?: boolean,
       initialFetch?: boolean,
       restoring?: boolean,
     ) => void;
-    receiveStreamingStatus: (timelineId: string, status: Status) => void;
-    deleteStatus: (statusId: string) => void;
-    setLoading: (timelineId: string, isFetching: boolean) => void;
-    setError: (timelineId: string, isError: boolean, statusCode?: number) => void;
-    dequeueEntries: (timelineId: string) => void;
+    receiveStreamingStatus: (scopeUrl: string, timelineId: string, status: Status) => void;
+    deleteStatus: (scopeUrl: string, statusId: string) => void;
+    setLoading: (scopeUrl: string, timelineId: string, isFetching: boolean) => void;
+    setError: (scopeUrl: string, timelineId: string, isError: boolean, statusCode?: number) => void;
+    dequeueEntries: (scopeUrl: string, timelineId: string) => void;
     fillGap: (
+      scopeUrl: string,
       timelineId: string,
       gapMinId: string,
       statuses: Array<Status>,
       hasMore: boolean,
       direction: 'up' | 'down',
     ) => void;
-    importPendingStatus: (params: CreateStatusParams, idempotencyKey: string) => void;
-    replacePendingStatus: (idempotencyKey: string, status: Status) => void;
-    deletePendingStatus: (idempotencyKey: string) => void;
-    filterTimelines: (accountId: string) => void;
-    resetTimeline: (timelineId: string) => void;
+    importPendingStatus: (
+      scopeUrl: string,
+      params: CreateStatusParams,
+      idempotencyKey: string,
+    ) => void;
+    replacePendingStatus: (scopeUrl: string, idempotencyKey: string, status: Status) => void;
+    deletePendingStatus: (scopeUrl: string, idempotencyKey: string) => void;
+    filterTimelines: (scopeUrl: string, accountId: string) => void;
+    resetTimeline: (scopeUrl: string, timelineId: string) => void;
     disablePolling: () => void;
     resetErroredTimelines: () => void;
   };
@@ -208,12 +214,19 @@ const getTimelinesForStatus = (
 
 const useTimelinesStore = create<State>()(
   mutative((set) => ({
-    timelines: {} as Record<string, TimelineData>,
+    timelines: {} as Record<string, Record<string, TimelineData>>,
     pollingEnabled: true,
     actions: {
-      expandTimeline: (timelineId, statuses, hasMore, initialFetch = false, restoring = false) =>
+      expandTimeline: (
+        scopeUrl,
+        timelineId,
+        statuses,
+        hasMore,
+        initialFetch = false,
+        restoring = false,
+      ) =>
         set((state) => {
-          const timeline = state.timelines[timelineId] ?? createEmptyTimeline();
+          const timeline = state.timelines[scopeUrl]?.[timelineId] ?? createEmptyTimeline();
           const entries = processPage(statuses);
 
           if (initialFetch) timeline.entries = entries;
@@ -235,11 +248,13 @@ const useTimelinesStore = create<State>()(
             const oldestStatus = statuses.at(-1);
             if (oldestStatus) timeline.oldestStatusId = oldestStatus.id;
           }
-          state.timelines[timelineId] = timeline;
+
+          if (!state.timelines[scopeUrl]) state.timelines[scopeUrl] = {};
+          state.timelines[scopeUrl][timelineId] = timeline;
         }),
-      receiveStreamingStatus: (timelineId, status) => {
+      receiveStreamingStatus: (scopeUrl, timelineId, status) => {
         set((state) => {
-          const timeline = state.timelines[timelineId];
+          const timeline = state.timelines[scopeUrl]?.[timelineId];
           if (!timeline) return;
 
           if (
@@ -256,9 +271,9 @@ const useTimelinesStore = create<State>()(
           timeline.queuedAccountIds.unshift((status.reblog || status).account.id);
         });
       },
-      deleteStatus: (statusId) => {
+      deleteStatus: (scopeUrl, statusId) => {
         set((state) => {
-          for (const timeline of Object.values(state.timelines)) {
+          for (const timeline of Object.values(state.timelines[scopeUrl] ?? {})) {
             const entryIndex = timeline.entries.findIndex(
               (entry) => entry.type === 'status' && entry.id === statusId,
             );
@@ -275,26 +290,29 @@ const useTimelinesStore = create<State>()(
           }
         });
       },
-      setLoading: (timelineId, isFetching) =>
+      setLoading: (scopeUrl, timelineId, isFetching) =>
         set((state) => {
-          const timeline = state.timelines[timelineId] ?? createEmptyTimeline();
+          const timeline = state.timelines[scopeUrl]?.[timelineId] ?? createEmptyTimeline();
 
           timeline.isFetching = isFetching;
           if (!isFetching) timeline.isPending = false;
-          state.timelines[timelineId] = timeline;
+
+          if (!state.timelines[scopeUrl]) state.timelines[scopeUrl] = {};
+          state.timelines[scopeUrl][timelineId] = timeline;
         }),
-      setError: (timelineId, isError, statusCode) =>
+      setError: (scopeUrl, timelineId, isError, statusCode) =>
         set((state) => {
-          const timeline = state.timelines[timelineId] ?? createEmptyTimeline();
+          const timeline = state.timelines[scopeUrl]?.[timelineId];
+
+          if (!timeline) return;
 
           timeline.isFetching = false;
           timeline.isPending = false;
           timeline.isError = isError ? statusCode || true : false;
-          state.timelines[timelineId] = timeline;
         }),
-      dequeueEntries: (timelineId) =>
+      dequeueEntries: (scopeUrl, timelineId) =>
         set((state) => {
-          const timeline = state.timelines[timelineId];
+          const timeline = state.timelines[scopeUrl]?.[timelineId];
 
           if (!timeline || timeline.queuedEntries.length === 0) return;
 
@@ -309,9 +327,9 @@ const useTimelinesStore = create<State>()(
           timeline.queuedCount = 0;
           timeline.queuedAccountIds = [];
         }),
-      fillGap: (timelineId, gapMinId, statuses, hasMore, direction) =>
+      fillGap: (scopeUrl, timelineId, gapMinId, statuses, hasMore, direction) =>
         set((state) => {
-          const timeline = state.timelines[timelineId];
+          const timeline = state.timelines[scopeUrl]?.[timelineId];
           if (!timeline) return;
 
           const gapIndex = timeline.entries.findIndex(
@@ -354,14 +372,14 @@ const useTimelinesStore = create<State>()(
             timeline.entries.splice(gapIndex, 0, ...newEntries);
           }
         }),
-      importPendingStatus: (params, idempotencyKey) =>
+      importPendingStatus: (scopeUrl, params, idempotencyKey) =>
         set((state) => {
           if (params.scheduled_at) return;
 
           const timelineIds = getTimelinesForStatus(params);
 
           for (const timelineId of timelineIds) {
-            const timeline = state.timelines[timelineId];
+            const timeline = state.timelines[scopeUrl]?.[timelineId];
             if (!timeline) continue;
 
             if (
@@ -372,9 +390,9 @@ const useTimelinesStore = create<State>()(
             timeline.entries.unshift({ type: 'pending-status', id: idempotencyKey });
           }
         }),
-      replacePendingStatus: (idempotencyKey, status) =>
+      replacePendingStatus: (scopeUrl, idempotencyKey, status) =>
         set((state) => {
-          for (const timeline of Object.values(state.timelines)) {
+          for (const timeline of Object.values(state.timelines[scopeUrl] ?? {})) {
             const idx = timeline.entries.findIndex(
               (e) => e.type === 'pending-status' && e.id === idempotencyKey,
             );
@@ -406,9 +424,9 @@ const useTimelinesStore = create<State>()(
             }
           }
         }),
-      deletePendingStatus: (idempotencyKey) =>
+      deletePendingStatus: (scopeUrl, idempotencyKey) =>
         set((state) => {
-          for (const timeline of Object.values(state.timelines)) {
+          for (const timeline of Object.values(state.timelines[scopeUrl] ?? {})) {
             const idx = timeline.entries.findIndex(
               (e) => e.type === 'pending-status' && e.id === idempotencyKey,
             );
@@ -417,10 +435,11 @@ const useTimelinesStore = create<State>()(
             }
           }
         }),
-      filterTimelines: (accountId) =>
+      filterTimelines: (scopeUrl, accountId) =>
         set((state) => {
           const ownedStatuses = findStatuses(
             (status: NormalizedStatus) => status.account_id === accountId,
+            scopeUrl,
           );
 
           const statusIdsToRemove = new Set<string>();
@@ -429,7 +448,7 @@ const useTimelinesStore = create<State>()(
             statusIdsToRemove.add(status.id);
           }
 
-          for (const timeline of Object.values(state.timelines)) {
+          for (const timeline of Object.values(state.timelines[scopeUrl] ?? {})) {
             timeline.entries = timeline.entries.filter((entry) => {
               if (entry.type !== 'status') return true;
               if (statusIdsToRemove.has(entry.id)) return false;
@@ -447,9 +466,10 @@ const useTimelinesStore = create<State>()(
             timeline.queuedAccountIds = timeline.queuedAccountIds.filter((id) => id !== accountId);
           }
         }),
-      resetTimeline: (timelineId) =>
+      resetTimeline: (scopeUrl, timelineId) =>
         set((state) => {
-          state.timelines[timelineId] = createEmptyTimeline();
+          if (!state.timelines[scopeUrl]) state.timelines[scopeUrl] = {};
+          state.timelines[scopeUrl][timelineId] = createEmptyTimeline();
         }),
       disablePolling: () =>
         set((state) => {
@@ -457,12 +477,11 @@ const useTimelinesStore = create<State>()(
         }),
       resetErroredTimelines: () =>
         set((state) => {
-          for (const timelineId in state.timelines) {
-            if (
-              state.timelines[timelineId].isError &&
-              state.timelines[timelineId].entries.length === 0
-            ) {
-              delete state.timelines[timelineId];
+          for (const scope of Object.values(state.timelines)) {
+            for (const timelineId in scope) {
+              if (scope[timelineId].isError && scope[timelineId].entries.length === 0) {
+                delete scope[timelineId];
+              }
             }
           }
         }),
@@ -486,15 +505,16 @@ const emptyTimeline = createEmptyTimeline();
 
 const useTimelinesActions = () => useTimelinesStore((state) => state.actions);
 
-const useTimeline = (timelineId: string) =>
-  useTimelinesStore((state) => state.timelines[timelineId] ?? emptyTimeline);
+const useTimeline = (scopeUrl: string, timelineId: string) =>
+  useTimelinesStore((state) => state.timelines[scopeUrl]?.[timelineId] ?? emptyTimeline);
 
 const useQueuedEntries = (
+  scopeUrl: string,
   timelineId: string,
   filters: TimelineFilters,
   followedAccountIds: Set<string>,
 ) => {
-  const timeline = useTimelinesStore((state) => state.timelines[timelineId] ?? emptyTimeline);
+  const timeline = useTimeline(scopeUrl, timelineId);
 
   return useMemo(() => {
     if (!hasActiveFilters(filters))
