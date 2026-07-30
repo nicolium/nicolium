@@ -4,6 +4,8 @@ import { useClient } from '@/hooks/use-client';
 import { useAuthStore } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 
+import { useScopeUrl } from '../use-scope-url';
+
 import type { StreamingEvent, StreamingParams } from 'pl-api';
 
 const useTimelineStream = (
@@ -22,6 +24,7 @@ const useTimelineStream = (
   const activeListener = useRef<typeof listener>(undefined);
 
   const client = useClient();
+  const scopeUrl = useScopeUrl();
 
   const instance = useInstance();
   const socket = useRef<{
@@ -34,11 +37,11 @@ const useTimelineStream = (
   } | null>(null);
   const disconnectCleanup = useRef<(() => void) | null>(null);
 
-  const accessToken = useAuthStore((state) => {
-    const me = state.me;
-    return me ? state.users[me]?.access_token : undefined;
-  });
+  const accessToken = useAuthStore((state) =>
+    scopeUrl ? state.users[scopeUrl]?.access_token : undefined,
+  );
   const streamingUrl = instance.configuration.urls.streaming;
+  console.log(accessToken, streamingUrl);
 
   const [connected, setConnected] = useState(false);
 
