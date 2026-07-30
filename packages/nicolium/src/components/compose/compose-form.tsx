@@ -497,7 +497,7 @@ const ComposeForm = <ID extends string>({
     });
   }
 
-  if (!scheduledAt && (maxTootChars > 1024 || enableThread) && !hasThread) {
+  if (!scheduledAt && (maxTootChars > 1024 || !enableThread) && !hasThread) {
     actionsMenu.push({
       text: intl.formatMessage(messages.addThreadPost),
       action: handleAddThreadPost,
