@@ -300,7 +300,6 @@ const ComposeForm = <ID extends string>({
   };
 
   const handleAddThreadPost = () => {
-    console.log('Adding thread post');
     actions.addThreadPost(id);
   };
 
