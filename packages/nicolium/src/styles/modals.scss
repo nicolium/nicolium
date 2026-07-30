@@ -1425,7 +1425,8 @@
   }
 }
 
-.compose-modal {
+.compose-modal,
+.deck__column__compose {
   &--dragging {
     z-index: 99 !important;
     border: 2px dashed var(--color-primary-600);

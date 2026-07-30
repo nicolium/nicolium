@@ -1,7 +1,8 @@
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import { createRootRoute, createRoute, Outlet, useRouter } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
-import React, { useContext, useEffect, useState } from 'react';
+import { clsx } from 'clsx';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
@@ -46,6 +47,7 @@ import Input from '@/components/ui/input';
 import Tabs from '@/components/ui/tabs';
 import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { MultiColumnProvider } from '@/contexts/multi-column-context';
+import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { DriveBrowser } from '@/pages/drive/components/drive-browser';
@@ -57,6 +59,7 @@ import { useChat } from '@/queries/chats';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
 import { useStatus } from '@/queries/statuses/use-status';
 import { router as appRouter } from '@/router';
+import { useUploadCompose } from '@/stores/compose';
 
 import { useActiveDeckColumns, updateActiveLayoutColumns } from '../utils/layouts';
 import { deckMessages as messages } from '../utils/messages';
@@ -471,15 +474,31 @@ const draftStatusesRoute = createRoute({
 
 const ComposeDeckColumn: React.FC = () => {
   const columnId = useContext(DeckColumnIdContext);
+  const composeId = `deck:${columnId}`;
+  const composeBlock = useRef<HTMLDivElement>(null);
+
+  const uploadCompose = useUploadCompose(composeId);
+
+  const { isDragging, isDraggedOver } = useDraggedFiles(composeBlock, (files) => {
+    uploadCompose(files);
+  });
 
   return (
-    <ComposeForm
-      id={`deck:${columnId}`}
-      autoFocus={false}
-      transparent
-      showAccountSwitcher
-      expandAccountSwitcher
-    />
+    <div
+      className={clsx('deck__column__compose', {
+        'deck__column__compose--dragging': isDragging,
+        'deck__column__compose--dragged-over': isDraggedOver,
+      })}
+      ref={composeBlock}
+    >
+      <ComposeForm
+        id={composeId}
+        autoFocus={false}
+        transparent
+        showAccountSwitcher
+        expandAccountSwitcher
+      />
+    </div>
   );
 };
 
