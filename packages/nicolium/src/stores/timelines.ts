@@ -212,6 +212,14 @@ const getTimelinesForStatus = (
   }
 };
 
+const getTimeline = (state: State, scopeUrl: string, timelineId: string) =>
+  state.timelines[scopeUrl]?.[timelineId];
+
+const getOrCreateTimeline = (state: State, scopeUrl: string, timelineId: string) => {
+  const scope = (state.timelines[scopeUrl] ??= {});
+  return (scope[timelineId] ??= createEmptyTimeline());
+};
+
 const useTimelinesStore = create<State>()(
   mutative((set) => ({
     timelines: {} as Record<string, Record<string, TimelineData>>,
@@ -226,7 +234,7 @@ const useTimelinesStore = create<State>()(
         restoring = false,
       ) =>
         set((state) => {
-          const timeline = state.timelines[scopeUrl]?.[timelineId] ?? createEmptyTimeline();
+          const timeline = getOrCreateTimeline(state, scopeUrl, timelineId);
           const entries = processPage(statuses);
 
           if (initialFetch) timeline.entries = entries;
@@ -248,13 +256,10 @@ const useTimelinesStore = create<State>()(
             const oldestStatus = statuses.at(-1);
             if (oldestStatus) timeline.oldestStatusId = oldestStatus.id;
           }
-
-          if (!state.timelines[scopeUrl]) state.timelines[scopeUrl] = {};
-          state.timelines[scopeUrl][timelineId] = timeline;
         }),
       receiveStreamingStatus: (scopeUrl, timelineId, status) => {
         set((state) => {
-          const timeline = state.timelines[scopeUrl]?.[timelineId];
+          const timeline = getTimeline(state, scopeUrl, timelineId);
           if (!timeline) return;
 
           if (
@@ -292,17 +297,14 @@ const useTimelinesStore = create<State>()(
       },
       setLoading: (scopeUrl, timelineId, isFetching) =>
         set((state) => {
-          const timeline = state.timelines[scopeUrl]?.[timelineId] ?? createEmptyTimeline();
+          const timeline = getOrCreateTimeline(state, scopeUrl, timelineId);
 
           timeline.isFetching = isFetching;
           if (!isFetching) timeline.isPending = false;
-
-          if (!state.timelines[scopeUrl]) state.timelines[scopeUrl] = {};
-          state.timelines[scopeUrl][timelineId] = timeline;
         }),
       setError: (scopeUrl, timelineId, isError, statusCode) =>
         set((state) => {
-          const timeline = state.timelines[scopeUrl]?.[timelineId];
+          const timeline = getTimeline(state, scopeUrl, timelineId);
 
           if (!timeline) return;
 
@@ -312,7 +314,7 @@ const useTimelinesStore = create<State>()(
         }),
       dequeueEntries: (scopeUrl, timelineId) =>
         set((state) => {
-          const timeline = state.timelines[scopeUrl]?.[timelineId];
+          const timeline = getTimeline(state, scopeUrl, timelineId);
 
           if (!timeline || timeline.queuedEntries.length === 0) return;
 
@@ -329,7 +331,7 @@ const useTimelinesStore = create<State>()(
         }),
       fillGap: (scopeUrl, timelineId, gapMinId, statuses, hasMore, direction) =>
         set((state) => {
-          const timeline = state.timelines[scopeUrl]?.[timelineId];
+          const timeline = getTimeline(state, scopeUrl, timelineId);
           if (!timeline) return;
 
           const gapIndex = timeline.entries.findIndex(
@@ -379,7 +381,7 @@ const useTimelinesStore = create<State>()(
           const timelineIds = getTimelinesForStatus(params);
 
           for (const timelineId of timelineIds) {
-            const timeline = state.timelines[scopeUrl]?.[timelineId];
+            const timeline = getTimeline(state, scopeUrl, timelineId);
             if (!timeline) continue;
 
             if (
