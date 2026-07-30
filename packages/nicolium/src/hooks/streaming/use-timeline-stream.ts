@@ -41,7 +41,6 @@ const useTimelineStream = (
     scopeUrl ? state.users[scopeUrl]?.access_token : undefined,
   );
   const streamingUrl = instance.configuration.urls.streaming;
-  console.log(accessToken, streamingUrl);
 
   const [connected, setConnected] = useState(false);
 
