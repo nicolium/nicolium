@@ -1045,6 +1045,14 @@ const admin = (client: PlApiBaseClient) => {
           ) {
             if (!params) params = {};
             params.resolved = false;
+          } else if (
+            params?.unresolved &&
+            !params?.resolved &&
+            client.features.version.software === GOTOSOCIAL &&
+            client.features.mastodonAdminUnresolvedReports
+          ) {
+            delete params.unresolved;
+            delete params.resolved;
           }
           return client.paginatedGet('/api/v1/admin/reports', { params }, adminReportSchema);
         } else if (client.features.version.software === ICESHRIMP_NET) {
