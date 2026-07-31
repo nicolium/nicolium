@@ -1297,7 +1297,12 @@ const submitCompose = async (
         : editedId
           ? messages.editSuccess
           : messages.success;
-      const toastOptions = { actionLabel: messages.view, actionLinkOptions: linkOptions };
+      const toastOptions = {
+        actionLabel: messages.view,
+        actionLinkOptions: linkOptions,
+        columnId,
+        scopeUrl,
+      };
 
       if (propagate) {
         toast.propagate('success', toastMessage, toastOptions);
