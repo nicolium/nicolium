@@ -22,7 +22,13 @@ const ProgressBar: React.FC<IProgressBar> = ({ progress, size = 'md' }) => {
   });
 
   return (
-    <div className={clsx('progress-bar', { 'progress-bar--sm': size === 'sm' })}>
+    <div
+      className={clsx('progress-bar', { 'progress-bar--sm': size === 'sm' })}
+      role='progressbar'
+      aria-valuenow={Math.round(progress * 100)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+    >
       <animated.div style={styles} />
     </div>
   );
