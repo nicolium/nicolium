@@ -78,7 +78,7 @@ const AccountLocalTime: React.FC<IAccountLocalTime> = ({ accountId, field }) => 
       if (timer) clearInterval(timer);
       clearInterval(init);
     };
-  }, [field.name]);
+  }, [field.value, intl.locale]);
 
   if (!localTime) return null;
 
