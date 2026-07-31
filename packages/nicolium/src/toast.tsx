@@ -17,6 +17,8 @@ interface IToastOptions {
   actionLabel?: ToastText;
   duration?: number;
   summary?: string;
+  scopeUrl?: string;
+  columnId?: string;
 }
 
 let broadcastChannel: BroadcastChannel | null = null;

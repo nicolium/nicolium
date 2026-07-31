@@ -8,6 +8,8 @@ import React from 'react';
 import toast, { type Toast as RHToast } from 'react-hot-toast';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
+
 import Icon from './icon';
 
 import type { ToastText, ToastType } from '@/toast';
@@ -32,6 +34,8 @@ interface IToast {
   actionLinkOptions?: LinkOptions;
   actionLabel?: ToastText;
   summary?: string;
+  scopeUrl?: string;
+  columnId?: string;
 }
 
 /**
@@ -45,6 +49,8 @@ const Toast: React.FC<IToast> = ({
   actionLinkOptions,
   actionLabel,
   summary,
+  // scopeUrl,
+  columnId,
 }) => {
   const intl = useIntl();
 
@@ -85,8 +91,17 @@ const Toast: React.FC<IToast> = ({
     }
 
     if (actionLinkOptions && actionLabel) {
+      const handleClick = columnId
+        ? (e: React.MouseEvent<HTMLAnchorElement>) => {
+            e.preventDefault();
+            e.stopPropagation();
+            deckColumnRouterRegistry.get(columnId)?.router.navigate(actionLinkOptions);
+            dismissToast();
+          }
+        : dismissToast;
+
       return (
-        <Link {...actionLinkOptions} onClick={dismissToast} data-testid='toast-action-link'>
+        <Link {...actionLinkOptions} data-testid='toast-action-link' onClick={handleClick}>
           {renderText(actionLabel)}
         </Link>
       );
