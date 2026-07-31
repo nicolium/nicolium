@@ -2,6 +2,7 @@ import * as v from 'valibot';
 
 import { authorizationServerMetadataSchema, tokenSchema, userInfoSchema } from '@/entities';
 import { ICESHRIMP_NET } from '@/features';
+import { authorizeIceshrimp, createIceshrimpMastodonSession } from '@/utils/iceshrimp-net';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type {
@@ -31,19 +32,10 @@ const oauth = (client: PlApiBaseClient) => ({
    */
   getToken: async (params: GetTokenParams) => {
     if (client.features.version.software === ICESHRIMP_NET && params.grant_type === 'password') {
-      const loginResponse = (
-        await client.request<{
-          token: string;
-          status: 'guest' | 'authenticated' | 'two_factor';
-        }>('/api/iceshrimp/auth/login', {
-          method: 'POST',
-          body: {
-            username: params.username,
-            password: params.password,
-          },
-        })
-      ).json;
-      client.setIceshrimpAccessToken(loginResponse.token);
+      const loginResponse = await authorizeIceshrimp(client, '/api/iceshrimp/auth/login', {
+        username: params.username,
+        password: params.password,
+      });
 
       if (loginResponse.status === 'two_factor') {
         throw {
@@ -55,33 +47,9 @@ const oauth = (client: PlApiBaseClient) => ({
         };
       }
 
-      const mastodonTokenResponse = (
-        await client.request<{
-          id: string;
-          token: string;
-          created_at: string;
-          scopes: Array<string>;
-        }>('/api/iceshrimp/sessions/mastodon', {
-          method: 'POST',
-          body: {
-            appName: params.client_id,
-            scopes: params.scope?.split(' '),
-            flags: {
-              supportsHtmlFormatting: true,
-              autoDetectQuotes: false,
-              isPleroma: true,
-              supportsInlineMedia: true,
-            },
-          },
-        })
-      ).json;
-
-      return v.parse(tokenSchema, {
-        access_token: mastodonTokenResponse.token,
-        token_type: 'Bearer',
-        scope: mastodonTokenResponse.scopes.join(' '),
-        created_at: new Date(mastodonTokenResponse.created_at).getTime(),
-        id: mastodonTokenResponse.id,
+      return createIceshrimpMastodonSession(client, {
+        appName: params.client_id,
+        scopes: params.scope,
       });
     }
     const response = await client.request('/oauth/token', {
@@ -147,46 +115,11 @@ const oauth = (client: PlApiBaseClient) => ({
 
   mfaChallenge: async (params: MfaChallengeParams) => {
     if (client.features.version.software === ICESHRIMP_NET) {
-      const loginResponse = (
-        await client.request<{
-          token: string;
-          status: 'guest' | 'authenticated' | 'two_factor';
-        }>('/api/iceshrimp/auth/2fa', {
-          method: 'POST',
-          body: {
-            code: params.code,
-          },
-        })
-      ).json;
-      client.setIceshrimpAccessToken(loginResponse.token);
+      await authorizeIceshrimp(client, '/api/iceshrimp/auth/2fa', { code: params.code });
 
-      const mastodonTokenResponse = (
-        await client.request<{
-          id: string;
-          token: string;
-          created_at: string;
-          scopes: Array<string>;
-        }>('/api/iceshrimp/sessions/mastodon', {
-          method: 'POST',
-          body: {
-            appName: params.client_id,
-            scopes: params.scope?.split(' '),
-            flags: {
-              supportsHtmlFormatting: true,
-              autoDetectQuotes: false,
-              isPleroma: true,
-              supportsInlineMedia: true,
-            },
-          },
-        })
-      ).json;
-
-      return v.parse(tokenSchema, {
-        access_token: mastodonTokenResponse.token,
-        token_type: 'Bearer',
-        scope: mastodonTokenResponse.scopes.join(' '),
-        created_at: new Date(mastodonTokenResponse.created_at).getTime(),
-        id: mastodonTokenResponse.id,
+      return createIceshrimpMastodonSession(client, {
+        appName: params.client_id,
+        scopes: params.scope,
       });
     }
 

@@ -9,6 +9,7 @@ import {
 } from '@/entities';
 import { coerceObject, filteredArray } from '@/entities/utils';
 import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED } from '@/features';
+import { authorizeIceshrimp, createIceshrimpMastodonSession } from '@/utils/iceshrimp-net';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type {
@@ -29,48 +30,15 @@ const settings = (client: PlApiBaseClient) => ({
    */
   createAccount: async (params: CreateAccountParams) => {
     if (client.features.version.software === ICESHRIMP_NET) {
-      const registerResponse = (
-        await client.request<{
-          token: string;
-          status: 'guest' | 'authenticated' | 'two_factor';
-        }>('/api/iceshrimp/auth/register', {
-          method: 'POST',
-          body: {
-            username: params.username,
-            password: params.password,
-            invite: params.invite_code,
-          },
-        })
-      ).json;
-      client.setIceshrimpAccessToken(registerResponse.token);
+      await authorizeIceshrimp(client, '/api/iceshrimp/auth/register', {
+        username: params.username,
+        password: params.password,
+        invite: params.invite_code,
+      });
 
-      const mastodonTokenResponse = (
-        await client.request<{
-          id: string;
-          token: string;
-          created_at: string;
-          scopes: Array<string>;
-        }>('/api/iceshrimp/sessions/mastodon', {
-          method: 'POST',
-          body: {
-            appName: params.client_id,
-            scopes: params.scopes?.split(' '),
-            flags: {
-              supportsHtmlFormatting: true,
-              autoDetectQuotes: false,
-              isPleroma: true,
-              supportsInlineMedia: true,
-            },
-          },
-        })
-      ).json;
-
-      return v.parse(tokenSchema, {
-        access_token: mastodonTokenResponse.token,
-        token_type: 'Bearer',
-        scope: mastodonTokenResponse.scopes.join(' '),
-        created_at: new Date(mastodonTokenResponse.created_at).getTime(),
-        id: mastodonTokenResponse.id,
+      return createIceshrimpMastodonSession(client, {
+        appName: params.client_id,
+        scopes: params.scopes,
       });
     }
 
