@@ -107,15 +107,19 @@ const ModalRoot: React.FC = () => {
     </Suspense>
   );
 
-  if (children && scopeUrl) {
-    children = <CurrentAccountProvider accountUrl={scopeUrl}>{children}</CurrentAccountProvider>;
-  }
+  const hasChildren = !!children;
 
-  return (
+  children = (
     <Base onClose={onClickClose} type={type} modalIndex={index}>
       {children}
     </Base>
   );
+
+  if (hasChildren && scopeUrl) {
+    children = <CurrentAccountProvider accountUrl={scopeUrl}>{children}</CurrentAccountProvider>;
+  }
+
+  return children;
 };
 
 export { type BaseModalProps, type ModalType, ModalRoot as default };
