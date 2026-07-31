@@ -1,6 +1,8 @@
+import { useContext } from 'react';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
+import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import type { ICryptoAddress } from '@/components/crypto-donate/crypto-address';
@@ -102,6 +104,7 @@ type Modal = {
   modalProps?: Record<string, any>;
   element?: HTMLElement;
   scopeUrl?: string;
+  columnId?: string;
 };
 
 type Modals = Array<Modal>;
@@ -115,6 +118,7 @@ type State = {
       props?: OpenModalType[T],
       element?: HTMLElement,
       scopeUrl?: string,
+      columnId?: string,
     ) => void;
     /** Close the modal */
     closeModal: (modalType?: ModalType | null, all?: boolean) => void;
@@ -131,10 +135,16 @@ const useModalsStore = create<State>()(
       modals: [],
       actions: {
         openModal: (
-          ...[modalType, modalProps, element = document.activeElement as HTMLElement, scopeUrl]
+          ...[
+            modalType,
+            modalProps,
+            element = document.activeElement as HTMLElement,
+            scopeUrl,
+            columnId,
+          ]
         ) => {
           set((state) => {
-            state.modals.push({ modalType, modalProps, element, scopeUrl } as any);
+            state.modals.push({ modalType, modalProps, element, scopeUrl, columnId } as any);
           });
         },
         closeModal: (modalType, all) => {
@@ -189,6 +199,7 @@ const useHasModals = () => useModals().length > 0;
 
 const useModalsActions = () => {
   const scopeUrl = useScopeUrl();
+  const columnId = useContext(DeckColumnIdContext) || undefined;
   const actions = useModalsStore((state) => state.actions);
 
   const openModal: <T extends ModalType>(
@@ -197,7 +208,7 @@ const useModalsActions = () => {
     element?: HTMLElement,
   ) => void = (...args) => {
     const [type, props, element] = args;
-    actions.openModal(type, props, element, scopeUrl);
+    actions.openModal(type, props, element, scopeUrl, columnId);
   };
 
   return {
