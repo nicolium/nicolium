@@ -50,6 +50,7 @@ import Toggle from '@/components/ui/toggle';
 import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { MultiColumnProvider } from '@/contexts/multi-column-context';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
+import { useDriveFileDrop } from '@/hooks/use-drive-drop';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { DriveBrowser } from '@/pages/drive/components/drive-browser';
@@ -61,7 +62,8 @@ import { useChat } from '@/queries/chats';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
 import { useStatus } from '@/queries/statuses/use-status';
 import { router as appRouter } from '@/router';
-import { useCompose, useUploadCompose } from '@/stores/compose';
+import { appendMedia, useCompose, useComposeActions, useUploadCompose } from '@/stores/compose';
+import { driveFileToMediaAttachment } from '@/utils/drive';
 
 import { useActiveDeckColumns, updateActiveLayoutColumns } from '../utils/layouts';
 import { deckMessages as messages } from '../utils/messages';
@@ -480,11 +482,22 @@ const ComposeDeckColumn: React.FC = () => {
   const composeBlock = useRef<HTMLDivElement>(null);
   const [column] = useDeckColumnConfig<Extract<DeckColumn, { type: 'compose' }>>();
   const { editorKey } = useCompose(composeId);
+  const { updateCompose } = useComposeActions();
 
   const uploadCompose = useUploadCompose(composeId);
 
   const { isDragging, isDraggedOver } = useDraggedFiles(composeBlock, (files) => {
     uploadCompose(files);
+  });
+
+  const {
+    isDragging: isDraggingDriveFile,
+    isDraggedOver: isDriveFileDraggedOver,
+    dropTargetProps,
+  } = useDriveFileDrop((file) => {
+    updateCompose(composeId, (draft) => {
+      appendMedia(draft, driveFileToMediaAttachment(file));
+    });
   });
 
   const handleChangeOpenInteractions: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
@@ -500,10 +513,11 @@ const ComposeDeckColumn: React.FC = () => {
   return (
     <div
       className={clsx('deck__column__compose', {
-        'deck__column__compose--dragging': isDragging,
-        'deck__column__compose--dragged-over': isDraggedOver,
+        'deck__column__compose--dragging': isDragging || isDraggingDriveFile,
+        'deck__column__compose--dragged-over': isDraggedOver || isDriveFileDraggedOver,
       })}
       ref={composeBlock}
+      {...dropTargetProps}
     >
       <ComposeForm
         key={editorKey}

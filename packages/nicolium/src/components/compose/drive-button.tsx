@@ -1,12 +1,11 @@
 import iconCloudArrowUp from '@phosphor-icons/core/regular/cloud-arrow-up.svg';
-import { mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import * as v from 'valibot';
 
 import { appendMedia, useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
+import { driveFileToMediaAttachment } from '@/utils/drive';
 
 import ComposeFormButton from './compose-form-button';
 
@@ -35,20 +34,7 @@ const DriveButton: React.FC<IDriveButton> = ({ composeId }) => {
           ? undefined
           : attachmentTypes,
       onSelect: (file) => {
-        let type = file.content_type.split('/')[0] as 'image' | 'video' | 'audio' | 'unknown';
-        if (!['image', 'video', 'audio', 'unknown'].includes(type)) {
-          type = 'unknown';
-        }
-
-        const mediaAttachment = v.parse(mediaAttachmentSchema, {
-          id: file.id,
-          url: file.url,
-          preview_url: file.thumbnail_url,
-          remote_url: file.url,
-          description: file.description ?? '',
-          type,
-          mime_type: file.content_type,
-        });
+        const mediaAttachment = driveFileToMediaAttachment(file);
 
         updateCompose(composeId, (draft) => {
           appendMedia(draft, mediaAttachment);

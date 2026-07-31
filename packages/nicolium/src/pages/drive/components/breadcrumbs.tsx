@@ -7,9 +7,8 @@ import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
+import { useDriveDropTarget, type DriveDragItem } from '@/hooks/use-drive-drop';
 import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
-
-import { useDriveDropTarget, type DriveDragItem } from './drive-browser';
 
 const messages = defineMessages({
   home: { id: 'drive.breadcrumbs.home', defaultMessage: 'Home' },

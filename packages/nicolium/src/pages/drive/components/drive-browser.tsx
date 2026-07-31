@@ -11,10 +11,8 @@ import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
 import iconTrash from '@phosphor-icons/core/regular/trash.svg';
 import { useNavigate } from '@tanstack/react-router';
 import { clsx } from 'clsx';
-import { mediaAttachmentSchema, type DriveFile, type DriveFolder } from 'pl-api';
 import React, { useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import * as v from 'valibot';
 
 import { changeSetting } from '@/actions/settings';
 import ColumnLoading from '@/components/column-loading';
@@ -23,6 +21,7 @@ import { EmptyMessage } from '@/components/empty-message';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import { MIMETYPE_ICONS } from '@/components/upload';
+import { setDriveDragItem, useDriveDropTarget, type DriveDragItem } from '@/hooks/use-drive-drop';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import {
   useDeleteDriveFileMutation,
@@ -39,9 +38,12 @@ import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 import { download } from '@/utils/download';
+import { driveFileToMediaAttachment } from '@/utils/drive';
 
 import { Breadcrumbs } from './breadcrumbs';
 import { ViewModeToggle } from './view-mode-toggle';
+
+import type { DriveFile, DriveFolder } from 'pl-api';
 
 const messages = defineMessages({
   folderDropdown: { id: 'drive.folder.dropdown', defaultMessage: 'Folder menu' },
@@ -126,75 +128,6 @@ const messages = defineMessages({
   fileDeleteError: { id: 'drive.file.delete.error', defaultMessage: 'Failed to delete file' },
 });
 
-const DRAG_DATA_TYPE = 'application/x-nicolium-drive-item';
-
-const dragDataType = (scopeUrl: string) =>
-  `${DRAG_DATA_TYPE};scope=${encodeURIComponent(scopeUrl)}`.toLowerCase();
-
-const dragSourceType = (scopeUrl: string, folderId?: string) =>
-  `${dragDataType(scopeUrl)};from=${folderId ?? ''}`.toLowerCase();
-
-interface DriveDragItem {
-  type: 'file' | 'folder';
-  id: string;
-  folderId?: string;
-}
-
-const parseDragItem = (dataTransfer: DataTransfer, dataType: string): DriveDragItem | null => {
-  try {
-    const item = JSON.parse(dataTransfer.getData(dataType));
-    if ((item.type === 'file' || item.type === 'folder') && typeof item.id === 'string') {
-      return item;
-    }
-  } catch {
-    return null;
-  }
-  return null;
-};
-
-const useDriveDropTarget = (
-  onDropItem: ((item: DriveDragItem) => void) | undefined,
-  targetFolderId?: string,
-  disabled = false,
-) => {
-  const scopeUrl = useScopeUrl();
-  const dataType = dragDataType(scopeUrl);
-  const sourceType = dragSourceType(scopeUrl, targetFolderId);
-  const [isDropTarget, setIsDropTarget] = useState(false);
-
-  const accepts = (dataTransfer: DataTransfer | null): dataTransfer is DataTransfer =>
-    !!dataTransfer?.types.includes(dataType) && !dataTransfer.types.includes(sourceType);
-
-  const handleDragOver: React.DragEventHandler = (e) => {
-    if (disabled || !accepts(e.dataTransfer)) return;
-    e.preventDefault();
-    e.stopPropagation();
-    e.dataTransfer.dropEffect = 'move';
-    setIsDropTarget(true);
-  };
-
-  const handleDragLeave: React.DragEventHandler = (e) => {
-    if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
-    setIsDropTarget(false);
-  };
-
-  const handleDrop: React.DragEventHandler = (e) => {
-    setIsDropTarget(false);
-    if (disabled || !accepts(e.dataTransfer)) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const item = parseDragItem(e.dataTransfer, dataType);
-    if (item) onDropItem?.(item);
-  };
-
-  return {
-    isDropTarget: isDropTarget && !disabled && !!onDropItem,
-    dropTargetProps: onDropItem
-      ? { onDragOver: handleDragOver, onDragLeave: handleDragLeave, onDrop: handleDrop }
-      : {},
-  };
-};
-
 type FocusDirection = 'home' | 'end' | 'previous' | 'next' | 'up' | 'down';
 
 const getFocusDirection = (key: string): FocusDirection | null => {
@@ -246,20 +179,7 @@ const File: React.FC<IFile> = ({ file, folderId, index, onMove, onDragStateChang
       return;
     }
 
-    let type = file.content_type.split('/')[0] as 'image' | 'video' | 'audio' | 'unknown';
-    if (!['image', 'video', 'audio', 'unknown'].includes(type)) {
-      type = 'unknown';
-    }
-
-    const mediaAttachment = v.parse(mediaAttachmentSchema, {
-      id: file.id,
-      url: file.url,
-      preview_url: file.thumbnail_url,
-      remote_url: file.url,
-      description: file.description ?? '',
-      type,
-      mime_type: file.content_type,
-    });
+    const mediaAttachment = driveFileToMediaAttachment(file);
 
     openModal('MEDIA', {
       media: [mediaAttachment],
@@ -293,10 +213,9 @@ const File: React.FC<IFile> = ({ file, folderId, index, onMove, onDragStateChang
   };
 
   const handleDragStart: React.DragEventHandler<HTMLDivElement> = (e) => {
-    const item: DriveDragItem = { type: 'file', id: file.id, folderId };
-    e.dataTransfer.setData(dragDataType(scopeUrl), JSON.stringify(item));
-    e.dataTransfer.setData(dragSourceType(scopeUrl, folderId), '1');
-    e.dataTransfer.effectAllowed = 'move';
+    const item: DriveDragItem = { type: 'file', file, folderId };
+    setDriveDragItem(e.dataTransfer, scopeUrl, item);
+    e.dataTransfer.effectAllowed = 'copyMove';
     onDragStateChange(item);
   };
 
@@ -600,8 +519,7 @@ const Folder: React.FC<IFolder> = ({
 
   const handleDragStart: React.DragEventHandler<HTMLDivElement> = (e) => {
     const item: DriveDragItem = { type: 'folder', id: folder.id!, folderId };
-    e.dataTransfer.setData(dragDataType(scopeUrl), JSON.stringify(item));
-    e.dataTransfer.setData(dragSourceType(scopeUrl, folderId), '1');
+    setDriveDragItem(e.dataTransfer, scopeUrl, item);
     e.dataTransfer.effectAllowed = 'move';
     onDragStateChange(item);
   };
@@ -765,8 +683,10 @@ const DriveBrowser: React.FC<IDriveBrowser> = ({ folderId }) => {
     if (item.folderId === targetFolderId) return;
     if (item.type === 'folder' && item.id === targetFolderId) return;
 
+    const id = item.type === 'file' ? item.file.id : item.id;
+
     (item.type === 'file' ? moveFile : moveFolder)(
-      { id: item.id, targetFolderId },
+      { id, targetFolderId },
       {
         onSuccess: () => {
           toast.success(
@@ -884,7 +804,7 @@ const DriveBrowser: React.FC<IDriveBrowser> = ({ folderId }) => {
               index={data.folders.length + index}
               onMove={handleMove}
               onDragStateChange={setDraggedItem}
-              isDragged={draggedItem?.type === 'file' && draggedItem.id === file.id}
+              isDragged={draggedItem?.type === 'file' && draggedItem.file.id === file.id}
             />
           ))}
         </div>
@@ -893,4 +813,4 @@ const DriveBrowser: React.FC<IDriveBrowser> = ({ folderId }) => {
   );
 };
 
-export { DriveBrowser, useDriveDropTarget, type DriveDragItem };
+export { DriveBrowser };
