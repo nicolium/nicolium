@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 
 import Base from '@/components/modal-base';
 import { CurrentAccountProvider } from '@/contexts/current-account-context';
+import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { useComposeActions } from '@/stores/compose';
 import { useModals, useModalsActions } from '@/stores/modals';
 
@@ -76,6 +77,7 @@ const ModalRoot: React.FC = () => {
     modalType: type,
     modalProps: props,
     scopeUrl,
+    columnId,
   } = modals.at(-1) ?? {
     modalProps: {},
     modalType: null,
@@ -117,6 +119,13 @@ const ModalRoot: React.FC = () => {
 
   if (hasChildren && scopeUrl) {
     children = <CurrentAccountProvider accountUrl={scopeUrl}>{children}</CurrentAccountProvider>;
+  }
+
+  if (hasChildren && columnId) {
+    console.log('ModalRoot: wrapping with DeckColumnIdContext', columnId);
+    children = (
+      <DeckColumnIdContext.Provider value={columnId}>{children}</DeckColumnIdContext.Provider>
+    );
   }
 
   return children;

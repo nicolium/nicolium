@@ -1,18 +1,10 @@
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { range } from 'lodash-es';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
-import { usePrevious } from '@/hooks/use-previous';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { checkComposeContent, useComposeStore } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
@@ -42,7 +34,7 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
   const navigate = useNavigate();
   const persistDraftStatus = usePersistDraftStatus();
   const { openModal } = useModalsActions();
-  const columnId = useContext(DeckColumnIdContext) || undefined;
+  const columnId = useColumnId();
 
   const [revealed, setRevealed] = useState(!!children);
   const [hasTitle, setHasTitle] = useState(false);
@@ -53,8 +45,6 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
     revealed ? (document.activeElement as HTMLDivElement | null) : null,
   );
   const unlistenHistory = useRef<(() => void) | null>(null);
-
-  const prevChildren = usePrevious(children);
 
   const visible = !!children;
 
@@ -202,9 +192,11 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
   };
 
   const getSiblings = () =>
-    [...Array.from(ref.current!.parentElement!.childNodes)]
-      .filter((node) => (node as HTMLDivElement).id !== '_rht_toaster')
-      .filter((node) => node !== ref.current);
+    [...Array.from(document.querySelector('#app > .focusable')?.childNodes || [])].filter(
+      (node) =>
+        (node as HTMLDivElement).classList.contains('toast__container') === false &&
+        (node as HTMLDivElement).classList.contains('modal-root') === false,
+    );
 
   useEffect(() => {
     if (!visible) return;
@@ -219,20 +211,24 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
   }, [visible]);
 
   useEffect(() => {
-    if (!!children && !prevChildren) {
+    if (children) {
       activeElement.current = document.activeElement as HTMLDivElement;
       getSiblings().forEach((sibling) => {
         (sibling as HTMLDivElement).setAttribute('inert', 'true');
       });
 
       handleModalOpen();
-    } else if (!prevChildren) {
+
       requestAnimationFrame(() => {
         setRevealed(true);
       });
-    }
 
-    if (!children && !!prevChildren) {
+      ensureHistoryBuffer();
+    }
+  }, [!!children]);
+
+  useEffect(() => {
+    return () => {
       activeElement.current?.focus();
       activeElement.current = null;
       getSiblings().forEach((sibling) => {
@@ -240,16 +236,8 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
       });
 
       handleModalClose();
-    }
-
-    if (children) {
-      requestAnimationFrame(() => {
-        setRevealed(true);
-      });
-
-      ensureHistoryBuffer();
-    }
-  }, [children]);
+    };
+  }, []);
 
   useLayoutEffect(() => {
     setHasTitle(document.getElementById('modal-title') !== null);

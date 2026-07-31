@@ -5,6 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { fetchStatus } from '@/actions/statuses';
 import { ComposeForm } from '@/components/async-components';
 import { Column } from '@/components/ui/column';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
@@ -29,6 +30,7 @@ const NewStatusPage: React.FC = () => {
   const search = newStatusRoute.useSearch();
   const { data: draftStatus } = useDraftStatusQuery(search.draftId ?? '');
   const { approvalRequired, inReplyTo, quote, text, visibility } = search;
+  const columnId = useColumnId();
   const { quoteCompose, replyCompose, resetCompose, setComposeToStatus, updateCompose } =
     useComposeActions();
 
@@ -49,7 +51,7 @@ const NewStatusPage: React.FC = () => {
         );
         if (!status) return;
 
-        replyCompose(status, scopeUrl, undefined, approvalRequired, false);
+        replyCompose(status, scopeUrl, columnId, undefined, approvalRequired, false);
       });
       return;
     }
@@ -61,7 +63,7 @@ const NewStatusPage: React.FC = () => {
         );
         if (!status) return;
 
-        quoteCompose(status, scopeUrl, approvalRequired, false);
+        quoteCompose(status, scopeUrl, columnId, approvalRequired, false);
       });
     }
   }, [

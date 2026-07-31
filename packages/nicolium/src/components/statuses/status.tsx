@@ -20,7 +20,7 @@ import { Hotkeys } from '@/components/hotkeys';
 import StatusTypeIcon from '@/components/statuses/status-type-icon';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
+import { deckColumnRouterRegistry, useColumnId } from '@/contexts/deck-column-id-context';
 import Emojify from '@/emoji/emojify';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useReblog } from '@/hooks/use-reblog';
@@ -293,7 +293,6 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     className,
     contextType,
     expandable = true,
-    columnId,
     detailed = false,
     withMedia = true,
   } = props;
@@ -314,6 +313,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const { spoilerExpanded, deleted, showFiltered } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { replyCompose, mentionCompose } = useComposeActions();
+  const columnId = useColumnId() || props.columnId;
   const { showFilteredStatusAuthor, statusActionBarItems, useRocketIconForReblogs } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
@@ -397,7 +397,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     if (status.rss_feed) return;
 
     e?.preventDefault();
-    replyCompose(actualStatus, scopeUrl, status.reblog_id ? status.account : undefined);
+    replyCompose(actualStatus, scopeUrl, columnId, status.reblog_id ? status.account : undefined);
   };
 
   const handleHotkeyFavourite = (e?: KeyboardEvent) => {
@@ -418,7 +418,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     if (status.rss_feed) return;
 
     e?.preventDefault();
-    mentionCompose(actualStatus.account, scopeUrl);
+    mentionCompose(actualStatus.account, scopeUrl, columnId);
   };
 
   const handleHotkeyOpen = () => {

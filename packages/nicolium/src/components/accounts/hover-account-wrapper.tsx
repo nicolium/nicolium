@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { debounce } from 'lodash-es';
-import React, { useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 
-import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useAccountHoverCardActions } from '@/stores/account-hover-card';
 import { isMobile } from '@/utils/is-mobile';
@@ -38,7 +38,7 @@ const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(
     const { openAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
     const ref = useRef<HTMLDivElement>(null);
-    const columnId = useContext(DeckColumnIdContext) || undefined;
+    const columnId = useColumnId();
     const scopeUrl = useScopeUrl();
 
     const handleMouseEnter = () => {

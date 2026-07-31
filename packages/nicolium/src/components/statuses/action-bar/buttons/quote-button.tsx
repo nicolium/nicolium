@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 
 import StatusActionButton from '@/components/statuses/status-action-button';
 import Popover from '@/components/ui/popover';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useFeatures } from '@/hooks/use-features';
 import { useScopeUrl } from '@/hooks/use-scope-url';
@@ -23,6 +24,7 @@ const QuoteButton: React.FC<IActionButton> = ({
 }) => {
   const { quoteCompose } = useComposeActions();
   const scopeUrl = useScopeUrl();
+  const columnId = useColumnId();
   const features = useFeatures();
   const intl = useIntl();
 
@@ -32,7 +34,7 @@ const QuoteButton: React.FC<IActionButton> = ({
 
   const handleQuoteClick: React.EventHandler<React.MouseEvent> = () => {
     if (me) {
-      quoteCompose(status, scopeUrl, canQuote.approvalRequired || false);
+      quoteCompose(status, scopeUrl, columnId, canQuote.approvalRequired || false);
     } else {
       onOpenUnauthorizedModal('REBLOG');
     }

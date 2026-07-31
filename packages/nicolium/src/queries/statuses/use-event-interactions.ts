@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useContext } from 'react';
 import { defineMessages } from 'react-intl';
 
-import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useClient } from '@/hooks/use-client';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useImportEntities } from '@/queries/utils/import-entities';
@@ -27,7 +26,7 @@ const useJoinEventMutation = (statusId: string, withToast = true) => {
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
   const scopeUrl = useScopeUrl();
-  const columnId = useContext(DeckColumnIdContext) || undefined;
+  const columnId = useColumnId();
 
   return useMutation({
     mutationKey: ['statuses', 'joinEvent', statusId],

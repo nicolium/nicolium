@@ -345,6 +345,7 @@ const openDedicatedComposeWindow = (search?: ComposePageSearch) =>
 
 const openComposeSurface = (
   scopeUrl: string,
+  columnId?: string,
   search?: ComposePageSearch,
   modalProps?: { composeId?: string },
 ) => {
@@ -355,7 +356,7 @@ const openComposeSurface = (
     return;
   }
 
-  useModalsStore.getState().actions.openModal('COMPOSE', modalProps, undefined, scopeUrl);
+  useModalsStore.getState().actions.openModal('COMPOSE', modalProps, undefined, scopeUrl, columnId);
 };
 
 const checkComposeContent = (compose?: Compose) =>
@@ -404,12 +405,13 @@ const scrollToDeckColumn = (columnId: string) =>
 const composeInteraction = (
   write: (composeId: string) => void,
   scopeUrl: string,
+  columnId: string | undefined,
   search: ComposePageSearch,
   openComposer: boolean,
 ) => {
   const composeInModal = () => {
     write('compose-modal');
-    if (openComposer) openComposeSurface(scopeUrl, search);
+    if (openComposer) openComposeSurface(scopeUrl, columnId, search);
   };
 
   const column = openComposer ? getInteractionsComposeColumn() : null;
@@ -516,6 +518,7 @@ interface ComposeActions {
       | 'visibility'
     >,
     scopeUrl: string,
+    columnId?: string,
     rebloggedBy?: Pick<Account, 'acct' | 'id'>,
     approvalRequired?: boolean,
     openComposer?: boolean,
@@ -523,12 +526,13 @@ interface ComposeActions {
   quoteCompose: (
     status: Pick<Status, 'id' | 'account_id' | 'visibility' | 'group_id' | 'list_id'>,
     scopeUrl: string,
+    columnId?: string,
     approvalRequired?: boolean,
     openComposer?: boolean,
   ) => void;
-  mentionCompose: (account: Pick<Account, 'acct'>, scopeUrl: string) => void;
-  directCompose: (account: Pick<Account, 'acct'>, scopeUrl: string) => void;
-  groupComposeModal: (group: Pick<Group, 'id'>, scopeUrl: string) => void;
+  mentionCompose: (account: Pick<Account, 'acct'>, scopeUrl: string, columnId?: string) => void;
+  directCompose: (account: Pick<Account, 'acct'>, scopeUrl: string, columnId?: string) => void;
+  groupComposeModal: (group: Pick<Group, 'id'>, scopeUrl: string, columnId?: string) => void;
   openComposeWithText: (composeId: string, text: string, scopeUrl: string) => void;
   eventDiscussionCompose: (
     composeId: string,
@@ -703,7 +707,14 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
-        replyCompose: (status, scopeUrl, rebloggedBy, approvalRequired, openComposer = true) => {
+        replyCompose: (
+          status,
+          scopeUrl,
+          columnId,
+          rebloggedBy,
+          approvalRequired,
+          openComposer = true,
+        ) => {
           const { features } = getClient();
           const { forceImplicitAddressing, preserveSpoilers } =
             useSettingsStore.getState().settings;
@@ -751,12 +762,13 @@ const useComposeStore = create<ComposeStore>()(
           composeInteraction(
             doCompose,
             scopeUrl,
+            columnId,
             { approvalRequired, inReplyTo: status.id },
             openComposer,
           );
         },
 
-        quoteCompose: (status, scopeUrl, approvalRequired, openComposer = true) => {
+        quoteCompose: (status, scopeUrl, columnId, approvalRequired, openComposer = true) => {
           const doCompose = (composeId: string) =>
             set((draft) => {
               draft.composers[composeId] = {
@@ -791,12 +803,13 @@ const useComposeStore = create<ComposeStore>()(
           composeInteraction(
             doCompose,
             scopeUrl,
+            columnId,
             { approvalRequired, quote: status.id },
             openComposer,
           );
         },
 
-        mentionCompose: (account, scopeUrl) => {
+        mentionCompose: (account, scopeUrl, columnId) => {
           if (!isLoggedIn()) return;
 
           if (
@@ -813,10 +826,10 @@ const useComposeStore = create<ComposeStore>()(
               .join(' ');
             compose.caretPosition = null;
           });
-          openComposeSurface(scopeUrl);
+          openComposeSurface(scopeUrl, columnId);
         },
 
-        directCompose: (account, scopeUrl) => {
+        directCompose: (account, scopeUrl, columnId) => {
           if (
             useSettingsStore.getState().settings.useDedicatedComposePage &&
             !userTouching.matches
@@ -835,10 +848,10 @@ const useComposeStore = create<ComposeStore>()(
             compose.visibility = 'direct';
             compose.caretPosition = null;
           });
-          openComposeSurface(scopeUrl);
+          openComposeSurface(scopeUrl, columnId);
         },
 
-        groupComposeModal: (group, scopeUrl) => {
+        groupComposeModal: (group, scopeUrl, columnId) => {
           const composeId = `group:${group.id}`;
           get().actions.updateCompose(composeId, (draft) => {
             draft.visibility = 'group';
@@ -847,7 +860,7 @@ const useComposeStore = create<ComposeStore>()(
           });
           useModalsStore
             .getState()
-            .actions.openModal('COMPOSE', { composeId }, undefined, scopeUrl);
+            .actions.openModal('COMPOSE', { composeId }, undefined, scopeUrl, columnId);
         },
 
         openComposeWithText: (composeId, text = '', scopeUrl) => {
@@ -863,7 +876,7 @@ const useComposeStore = create<ComposeStore>()(
               text,
             };
           });
-          openComposeSurface(scopeUrl, { text });
+          openComposeSurface(scopeUrl, undefined, { text });
         },
 
         eventDiscussionCompose: (composeId, scopeUrl, status) => {

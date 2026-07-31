@@ -37,6 +37,7 @@ import PlaceholderEventHeader from '@/components/placeholders/placeholder-event-
 import StillImage from '@/components/still-image';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import Emojify from '@/emoji/emojify';
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/use-admin-modals';
 import { useClient } from '@/hooks/use-client';
@@ -148,6 +149,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const navigate = useNavigate();
   const { quoteCompose, mentionCompose, directCompose } = useComposeActions();
   const scopeUrl = useScopeUrl();
+  const columnId = useColumnId();
 
   const { openModal } = useModalsActions();
   const { getOrCreateChatByAccountId } = useChats();
@@ -229,7 +231,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleQuoteClick = () => {
-    quoteCompose(status, scopeUrl);
+    quoteCompose(status, scopeUrl, columnId);
   };
 
   const handlePinClick = () => {
@@ -258,7 +260,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleMentionClick = () => {
-    mentionCompose(account, scopeUrl);
+    mentionCompose(account, scopeUrl, columnId);
   };
 
   const handleChatClick = () => {
@@ -268,7 +270,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleDirectClick = () => {
-    directCompose(account, scopeUrl);
+    directCompose(account, scopeUrl, columnId);
   };
 
   const handleMuteClick = () => {

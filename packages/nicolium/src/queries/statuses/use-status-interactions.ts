@@ -6,10 +6,9 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { create } from 'mutative';
-import { useContext } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -290,7 +289,7 @@ const useReblogStatus = (statusId: string) => {
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
   const scopeUrl = useScopeUrl();
-  const columnId = useContext(DeckColumnIdContext) || undefined;
+  const columnId = useColumnId();
 
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
@@ -365,7 +364,7 @@ const useBookmarkStatus = (statusId: string) => {
   const { openModal } = useModalsActions();
   const importEntities = useImportEntities();
   const scopeUrl = useScopeUrl();
-  const columnId = useContext(DeckColumnIdContext) || undefined;
+  const columnId = useColumnId();
 
   return useMutation({
     mutationKey: ['statuses', 'bookmark', statusId],

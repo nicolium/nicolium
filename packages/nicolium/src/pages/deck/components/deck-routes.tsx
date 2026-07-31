@@ -2,7 +2,7 @@ import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import { createRootRoute, createRoute, Outlet, useRouter } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
 import { clsx } from 'clsx';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
@@ -47,7 +47,7 @@ import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import Tabs from '@/components/ui/tabs';
 import Toggle from '@/components/ui/toggle';
-import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { MultiColumnProvider } from '@/contexts/multi-column-context';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useDriveFileDrop } from '@/hooks/use-drive-drop';
@@ -477,7 +477,7 @@ const draftStatusesRoute = createRoute({
 });
 
 const ComposeDeckColumn: React.FC = () => {
-  const columnId = useContext(DeckColumnIdContext);
+  const columnId = useColumnId();
   const composeId = `deck:${columnId}`;
   const composeBlock = useRef<HTMLDivElement>(null);
   const [column] = useDeckColumnConfig<Extract<DeckColumn, { type: 'compose' }>>();

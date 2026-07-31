@@ -29,6 +29,7 @@ import { changeSetting } from '@/actions/settings';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import IconButton from '@/components/ui/icon-button';
 import { breakpoints } from '@/components/ui/layout';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useMinWidth } from '@/hooks/use-min-width';
@@ -199,6 +200,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   const { openModal } = useModalsActions();
   const settings = useSettings();
   const scopeUrl = useScopeUrl();
+  const columnId = useColumnId();
 
   const showRecommendations =
     // don't show if recommended accounts widget is displayed in sidebar
@@ -220,11 +222,11 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   };
 
   const onMention = () => {
-    mentionCompose(account, scopeUrl);
+    mentionCompose(account, scopeUrl, columnId);
   };
 
   const onDirect = () => {
-    directCompose(account, scopeUrl);
+    directCompose(account, scopeUrl, columnId);
   };
 
   const onEndorseToggle = () => {

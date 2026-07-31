@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 import GroupPopover from '@/components/groups/popover/group-popover';
 import StatusActionButton from '@/components/statuses/status-action-button';
 import Popover from '@/components/ui/popover';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useGroupQuery } from '@/queries/groups/use-group';
@@ -31,6 +32,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
 }) => {
   const { replyCompose } = useComposeActions();
   const scopeUrl = useScopeUrl();
+  const columnId = useColumnId();
   const intl = useIntl();
 
   const canReply = useCanInteract(status, 'can_reply');
@@ -52,7 +54,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
 
   const handleReplyClick: React.MouseEventHandler = () => {
     if (me) {
-      replyCompose(status, scopeUrl, rebloggedBy, canReply.approvalRequired ?? false);
+      replyCompose(status, scopeUrl, columnId, rebloggedBy, canReply.approvalRequired ?? false);
     } else {
       onOpenUnauthorizedModal('REPLY');
     }

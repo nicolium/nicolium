@@ -1,8 +1,7 @@
-import { useContext } from 'react';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import type { ICryptoAddress } from '@/components/crypto-donate/crypto-address';
@@ -199,7 +198,7 @@ const useHasModals = () => useModals().length > 0;
 
 const useModalsActions = () => {
   const scopeUrl = useScopeUrl();
-  const columnId = useContext(DeckColumnIdContext) || undefined;
+  const columnId = useColumnId();
   const actions = useModalsStore((state) => state.actions);
 
   const openModal: <T extends ModalType>(
@@ -208,6 +207,13 @@ const useModalsActions = () => {
     element?: HTMLElement,
   ) => void = (...args) => {
     const [type, props, element] = args;
+    console.log('useModalsActions.openModal', {
+      type,
+      props,
+      element,
+      scopeUrl,
+      columnId,
+    });
     actions.openModal(type, props, element, scopeUrl, columnId);
   };
 

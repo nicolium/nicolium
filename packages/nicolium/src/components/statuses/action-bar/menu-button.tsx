@@ -34,14 +34,14 @@ import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import iconWarning from '@phosphor-icons/core/regular/warning.svg';
 import { useMatch, useNavigate } from '@tanstack/react-router';
 import { type Account, GroupRoles } from 'pl-api';
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import { editStatus, toggleMuteStatus, redactStatus } from '@/actions/statuses';
 import DropdownMenu from '@/components/dropdown-menu';
 import StatusActionButton from '@/components/statuses/status-action-button';
-import { DeckColumnIdContext, deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
+import { useColumnId, deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/hooks/use-admin-modals';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -135,7 +135,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const client = useClient();
   const scopeUrl = useScopeUrl();
 
-  const columnId = useContext(DeckColumnIdContext);
+  const columnId = useColumnId();
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
   const { targetLanguage, spoilerExpanded } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
@@ -263,11 +263,11 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleMentionClick: React.EventHandler<React.MouseEvent> = () => {
-      mentionCompose(status.account, scopeUrl);
+      mentionCompose(status.account, scopeUrl, columnId);
     };
 
     const handleDirectClick: React.EventHandler<React.MouseEvent> = () => {
-      directCompose(status.account, scopeUrl);
+      directCompose(status.account, scopeUrl, columnId);
     };
 
     const handleChatClick: React.EventHandler<React.MouseEvent> = () => {

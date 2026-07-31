@@ -37,6 +37,7 @@ import StatusContainer from '@/components/statuses/status-container';
 import StatusInfo from '@/components/statuses/status-info';
 import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import Emojify from '@/emoji/emojify';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useReblog } from '@/hooks/use-reblog';
@@ -321,6 +322,8 @@ const getNotificationStatusId = (notification: NotificationGroup): string | null
 
 const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, ...props }) => {
   const { mentionCompose, replyCompose } = useComposeActions();
+
+  const columnId = useColumnId();
   const scopeUrl = useScopeUrl();
 
   const notification = useNotification(props.notification);
@@ -371,9 +374,9 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
     (e?: KeyboardEvent) => {
       e?.preventDefault();
 
-      mentionCompose(account, scopeUrl);
+      mentionCompose(account, scopeUrl, columnId);
     },
-    [account, scopeUrl],
+    [account, scopeUrl, columnId],
   );
 
   const handleReply = useCallback(
@@ -381,12 +384,12 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
       e?.preventDefault();
 
       if (status) {
-        replyCompose(status, scopeUrl, account);
+        replyCompose(status, scopeUrl, columnId, account);
       } else {
-        mentionCompose(account, scopeUrl);
+        mentionCompose(account, scopeUrl, columnId);
       }
     },
-    [account, scopeUrl],
+    [account, scopeUrl, columnId],
   );
 
   const handleHotkeyFavourite = useCallback(() => {

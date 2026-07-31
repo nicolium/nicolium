@@ -1,10 +1,10 @@
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useContext } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import AnimatedNumber from '@/components/animated-number';
-import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
@@ -33,7 +33,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   const features = useFeatures();
   const { data: account } = useAccount(status.account_id);
   const { demetricator } = useSettings();
-  const columnId = useContext(DeckColumnIdContext);
+  const columnId = useColumnId();
 
   if (!account || typeof account !== 'object') return null;
 

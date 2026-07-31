@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { debounce } from 'lodash-es';
-import React, { useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 
-import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
+import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useStatusHoverCardActions } from '@/stores/status-hover-card';
 import { isMobile, userTouching } from '@/utils/is-mobile';
@@ -42,7 +42,7 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
   const { openStatusHoverCard, closeStatusHoverCard } = useStatusHoverCardActions();
 
   const ref = useRef<HTMLDivElement>(null);
-  const columnId = useContext(DeckColumnIdContext) || undefined;
+  const columnId = useColumnId();
   const scopeUrl = useScopeUrl();
   const Elem: keyof React.JSX.IntrinsicElements = inline ? 'span' : 'div';
 

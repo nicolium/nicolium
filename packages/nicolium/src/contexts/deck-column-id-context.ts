@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
 import type { AnyRouter } from '@tanstack/react-router';
 
@@ -11,4 +11,6 @@ interface DeckColumnRouterEntry {
 
 const deckColumnRouterRegistry = new Map<string, DeckColumnRouterEntry>();
 
-export { DeckColumnIdContext, deckColumnRouterRegistry, type DeckColumnRouterEntry };
+const useColumnId = () => useContext(DeckColumnIdContext) || undefined;
+
+export { DeckColumnIdContext, deckColumnRouterRegistry, useColumnId, type DeckColumnRouterEntry };
