@@ -1094,6 +1094,26 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA,
     ]),
 
+    /**
+     * Get multiple accounts.
+     * @see GET /api/v1/accounts
+     */
+    getAccounts: any([
+      v.software === ICESHRIMP_NET,
+      v.software === MASTODON && gte(v.version, '4.3.0'),
+    ]),
+
+    /**
+     * View multiple statuses.
+     * @see GET /api/v1/statuses
+     */
+    getStatuses: any([
+      v.software === GOTOSOCIAL && gte(v.version, '0.22.0'),
+      v.software === ICESHRIMP_NET,
+      v.software === MASTODON && gte(v.version, '4.3.0'),
+      v.software === MITRA && gt(v.version, '5.7.1'),
+    ]),
+
     // probably there's more to add, sadly `/.well-known/oauth-authorization-server` is not widely implemented
     grantTypePassword: !any([
       v.software === GOTOSOCIAL,
@@ -1746,6 +1766,7 @@ const getFeatures = (instance: Instance) => {
      */
     removeFromFollowers: any([
       v.software === AKKOMA,
+      v.software === GOTOSOCIAL && gte(v.version, '0.23.0'),
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '2.17.0'),
