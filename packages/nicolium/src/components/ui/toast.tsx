@@ -9,6 +9,7 @@ import toast, { type Toast as RHToast } from 'react-hot-toast';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 
 import Icon from './icon';
 
@@ -49,10 +50,11 @@ const Toast: React.FC<IToast> = ({
   actionLinkOptions,
   actionLabel,
   summary,
-  // scopeUrl,
+  scopeUrl,
   columnId,
 }) => {
   const intl = useIntl();
+  const currentScopeUrl = useScopeUrl();
 
   const dismissToast = () => {
     toast.dismiss(t.id);
@@ -90,7 +92,11 @@ const Toast: React.FC<IToast> = ({
       );
     }
 
-    if (actionLinkOptions && actionLabel) {
+    if (
+      actionLinkOptions &&
+      actionLabel &&
+      (!scopeUrl || columnId || scopeUrl === currentScopeUrl)
+    ) {
       const handleClick = columnId
         ? (e: React.MouseEvent<HTMLAnchorElement>) => {
             e.preventDefault();
