@@ -8,6 +8,9 @@ const useDraggedFiles = <R extends HTMLElement>(
   const [isDragging, setIsDragging] = useState(false);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
 
+  const timeoutRef = React.useRef<number | null>(null);
+  const draggedOverRef = React.useRef(false);
+
   const handleDocumentDragEnter = useCallback(
     (e: DragEvent) => {
       if (isDraggingFiles(e)) {
@@ -29,12 +32,14 @@ const useDraggedFiles = <R extends HTMLElement>(
   const handleDocumentDrop = useCallback(() => {
     setIsDragging(false);
     setIsDraggedOver(false);
+    draggedOverRef.current = false;
   }, [setIsDragging]);
 
   const handleDragEnter = useCallback(
     (e: DragEvent) => {
       if (isDraggingFiles(e)) {
         setIsDraggedOver(true);
+        draggedOverRef.current = true;
       }
     },
     [setIsDraggedOver],
@@ -44,6 +49,7 @@ const useDraggedFiles = <R extends HTMLElement>(
     (e: DragEvent) => {
       if (!node.current || isDraggedOutOfNode(e, node.current)) {
         setIsDraggedOver(false);
+        draggedOverRef.current = false;
       }
     },
     [setIsDraggedOver],
@@ -56,19 +62,33 @@ const useDraggedFiles = <R extends HTMLElement>(
       }
       setIsDragging(false);
       setIsDraggedOver(false);
+      draggedOverRef.current = false;
       e.preventDefault();
     },
     [onDrop],
   );
 
+  const handleDocumentDragOver = useCallback((e: DragEvent) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    timeoutRef.current = window.setTimeout(() => {
+      if (!draggedOverRef.current) {
+        setIsDragging(false);
+      }
+    }, 200);
+    e.preventDefault();
+  }, []);
+
   useEffect(() => {
     document.addEventListener('dragenter', handleDocumentDragEnter);
     document.addEventListener('dragleave', handleDocumentDragLeave);
     document.addEventListener('drop', handleDocumentDrop);
+    document.addEventListener('dragover', handleDocumentDragOver);
     return () => {
       document.removeEventListener('dragenter', handleDocumentDragEnter);
       document.removeEventListener('dragleave', handleDocumentDragLeave);
       document.removeEventListener('drop', handleDocumentDrop);
+      document.removeEventListener('dragover', handleDocumentDragOver);
     };
   }, []);
 
@@ -76,10 +96,12 @@ const useDraggedFiles = <R extends HTMLElement>(
     node.current?.addEventListener('dragenter', handleDragEnter);
     node.current?.addEventListener('dragleave', handleDragLeave);
     node.current?.addEventListener('drop', handleDrop);
+    node.current?.addEventListener('dragover', handleDocumentDragOver);
     return () => {
       node.current?.removeEventListener('dragenter', handleDragEnter);
       node.current?.removeEventListener('dragleave', handleDragLeave);
       node.current?.removeEventListener('drop', handleDrop);
+      node.current?.removeEventListener('dragover', handleDocumentDragOver);
     };
   }, [node.current]);
 
