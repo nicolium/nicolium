@@ -1,3 +1,4 @@
+import { throttle } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 
 /** Controls the state of files being dragged over a node. */
@@ -68,16 +69,20 @@ const useDraggedFiles = <R extends HTMLElement>(
     [onDrop],
   );
 
-  const handleDocumentDragOver = useCallback((e: DragEvent) => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  const handleDocumentDragOver = useCallback(
+    throttle((e: DragEvent) => {
+      console.log('drag over', e);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-    timeoutRef.current = window.setTimeout(() => {
-      if (!draggedOverRef.current) {
-        setIsDragging(false);
-      }
-    }, 200);
-    e.preventDefault();
-  }, []);
+      timeoutRef.current = window.setTimeout(() => {
+        if (!draggedOverRef.current) {
+          setIsDragging(false);
+        }
+      }, 200);
+      e.preventDefault();
+    }, 200),
+    [],
+  );
 
   useEffect(() => {
     document.addEventListener('dragenter', handleDocumentDragEnter);
