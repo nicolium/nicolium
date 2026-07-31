@@ -222,10 +222,14 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
       requestAnimationFrame(() => {
         setRevealed(true);
       });
-
-      ensureHistoryBuffer();
     }
   }, [!!children]);
+
+  useEffect(() => {
+    if (children) {
+      ensureHistoryBuffer();
+    }
+  }, [children]);
 
   useEffect(() => {
     return () => {
