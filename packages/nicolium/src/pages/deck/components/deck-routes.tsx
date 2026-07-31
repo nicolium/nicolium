@@ -292,7 +292,7 @@ const InstanceTimelineDeckColumn: React.FC = () => {
 };
 const instanceRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/instance/$instance',
+  path: '/timeline/$instance',
   component: InstanceTimelineDeckColumn,
   staticData: { title: messages.timeline },
 });
