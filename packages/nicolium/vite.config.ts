@@ -64,6 +64,11 @@ const config = defineConfig(() => ({
               priority: 20,
             },
             {
+              name: 'katex',
+              test: /[\\/]node_modules[\\/]katex[\\/]/,
+              priority: 20,
+            },
+            {
               name: 'vendor',
               test: /[\\/]node_modules[\\/]/,
               priority: 10,
