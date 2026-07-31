@@ -288,7 +288,10 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
   useEffect(() => {
     if (isSidebarOpen) containerRef.current?.querySelector('a')?.focus();
-    else setPage('main');
+    else {
+      document.querySelector<HTMLButtonElement>('.thumb-navigation__item')?.focus();
+      setPage('main');
+    }
 
     setTimeout(
       () => {
