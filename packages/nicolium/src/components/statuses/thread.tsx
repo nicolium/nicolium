@@ -47,6 +47,8 @@ const Thread = ({
   const linear = displayMode === 'linear';
   const treeIndent = displayMode === 'tree-indent';
   const thread = useThread(status.id, linear);
+  // non-pleromas don't return entire threads, just ancestors and descendants
+  useThread(linear && thread[0] === status.id ? undefined : thread[0]);
   const depths = useThreadDepths(treeIndent ? status.id : undefined);
 
   const statusIndex = thread.indexOf(status.id);
