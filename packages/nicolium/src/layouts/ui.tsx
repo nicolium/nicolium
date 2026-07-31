@@ -1,5 +1,4 @@
 import { Outlet, useMatch, useNavigate } from '@tanstack/react-router';
-import clsx from 'clsx';
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { FormattedMessage } from 'react-intl';
@@ -15,7 +14,6 @@ import Layout from '@/components/ui/layout';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useUserStream } from '@/hooks/streaming/use-user-stream';
 import { useClient } from '@/hooks/use-client';
-import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
 import { useMinWidth } from '@/hooks/use-min-width';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -75,8 +73,6 @@ const UI: React.FC = React.memo(() => {
   useFilters();
   usePrefetchNotifications();
   usePrefetchNotificationsMarker();
-
-  const { isDragging } = useDraggedFiles(node);
 
   const handleServiceWorkerPostMessage = ({ data }: MessageEvent) => {
     if (data.type === 'navigate') {
@@ -183,11 +179,6 @@ const UI: React.FC = React.memo(() => {
             />
           </button>
         </div>
-        <div
-          className={clsx('dragging-area', {
-            'dragging-area--dragging': isDragging,
-          })}
-        />
 
         <GuestBanner />
 

@@ -900,22 +900,6 @@ body {
   }
 }
 
-.dragging-area {
-  pointer-events: none;
-
-  position: fixed;
-  z-index: 90;
-
-  width: 100vw;
-  height: 100vh;
-
-  transition: all 150ms var(--ease-default);
-
-  &--dragging {
-    backdrop-filter: blur(8px);
-  }
-}
-
 .layout {
   z-index: 1;
   display: flex;
