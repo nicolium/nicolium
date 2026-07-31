@@ -125,7 +125,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
         />
       );
 
-      if (columnId) {
+      if (columnId && features.exposableReactions) {
         return (
           <InteractionCounter
             count={status.favourites_count}
@@ -162,7 +162,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
         />
       );
 
-      if (columnId) {
+      if (columnId && features.exposableReactions) {
         return (
           <InteractionCounter
             count={dislikesCount}
@@ -204,7 +204,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
         />
       );
 
-      if (columnId) {
+      if (columnId && features.exposableReactions) {
         return (
           <InteractionCounter
             count={reactionsCount}
