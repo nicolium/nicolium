@@ -1032,6 +1032,7 @@ interface SubmitComposeOptions {
   propagate?: boolean;
   chained?: boolean;
   inReplyToIdOverride?: string | null;
+  columnId?: string;
 }
 
 const submitCompose = async (
@@ -1046,6 +1047,7 @@ const submitCompose = async (
     propagate = false,
     chained = false,
     inReplyToIdOverride,
+    columnId,
   } = opts;
   const { actions, client, ownAccount, scopeUrl, features, openModal, closeModal, removeSledzik } =
     deps;
@@ -1293,6 +1295,8 @@ const submitCompose = async (
       const toastOptions = {
         actionLabel: messages.view,
         actionLinkOptions: { to: '/scheduled_statuses' as const },
+        columnId,
+        scopeUrl,
       };
 
       if (propagate) {
@@ -1360,9 +1364,9 @@ const useSubmitCompose = (composeId: string) => {
 const submitThread = async (
   deps: SubmitDeps,
   rootId: string,
-  opts: { force?: boolean; onSuccess?: () => void } = {},
+  opts: { force?: boolean; onSuccess?: () => void; columnId?: string } = {},
 ) => {
-  const { force = false, onSuccess } = opts;
+  const { force = false, onSuccess, columnId } = opts;
   const { actions, openModal, closeModal, ownAccount, scopeUrl, features, instance, settings } =
     deps;
 
@@ -1431,6 +1435,7 @@ const submitThread = async (
       force: true,
       chained: true,
       inReplyToIdOverride: i === 0 ? undefined : inReplyToId,
+      columnId,
     });
 
     if (!status) {
@@ -1464,6 +1469,8 @@ const submitThread = async (
   toast.success(messages.threadSuccess, {
     actionLabel: messages.view,
     actionLinkOptions: linkOptions,
+    scopeUrl,
+    columnId,
   });
 
   onSuccess?.();
@@ -1474,7 +1481,7 @@ const useSubmitThread = (rootId: string) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return useCallback(
-    (opts: { onSuccess?: () => void } = {}) => submitThread(deps, rootId, opts),
+    (opts: { onSuccess?: () => void; columnId?: string } = {}) => submitThread(deps, rootId, opts),
     [rootId, deps.client],
   );
 };

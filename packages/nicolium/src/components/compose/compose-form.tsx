@@ -7,7 +7,7 @@ import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconX from '@phosphor-icons/core/regular/x.svg';
 import clsx from 'clsx';
 import { $getNodeByKey, CLEAR_EDITOR_COMMAND, TextNode, type LexicalEditor } from 'lexical';
-import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import React, { Suspense, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { length } from 'stringz';
 
@@ -18,6 +18,7 @@ import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import SvgIcon from '@/components/ui/svg-icon';
 import Toggle from '@/components/ui/toggle';
+import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import EmojiPickerDropdown from '@/emoji/containers/emoji-picker-dropdown-container';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
@@ -176,6 +177,7 @@ const ComposeForm = <ID extends string>({
   const { closeModal } = useModalsActions();
   const actions = useComposeActions();
   const { renderMfm } = useSettings();
+  const columnId = useContext(DeckColumnIdContext) || undefined;
 
   const compose = useCompose(id);
   const uploadCompose = useUploadCompose(id);
@@ -284,6 +286,7 @@ const ComposeForm = <ID extends string>({
             setTimeout(() => onSubmit(), 0);
           }
         },
+        columnId,
       });
       return;
     }
@@ -296,6 +299,7 @@ const ComposeForm = <ID extends string>({
           setTimeout(() => onSubmit(), 0);
         }
       },
+      columnId,
     });
   };
 
@@ -320,6 +324,7 @@ const ComposeForm = <ID extends string>({
     toast.success(messages.draftSaved, {
       actionLabel: messages.view,
       actionLinkOptions: { to: '/draft_statuses' },
+      columnId,
     });
   };
 

@@ -1,9 +1,10 @@
 import clsx from 'clsx';
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { ComposeForm } from '@/components/async-components';
 import Modal from '@/components/ui/modal';
+import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import {
@@ -40,6 +41,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
   const { resetCompose, hasThreadContent, hasThreadPosts } = useComposeActions();
   const { openModal } = useModalsActions();
   const persistDraftStatus = usePersistDraftStatus();
+  const columnId = useContext(DeckColumnIdContext) || undefined;
 
   const { editedId, visibility, inReplyToId, quoteId, groupId } = compose;
 
@@ -93,6 +95,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
                   toast.success(messages.draftSaved, {
                     actionLabel: messages.view,
                     actionLinkOptions: { to: '/draft_statuses' },
+                    columnId,
                   });
                 });
                 onClose('COMPOSE');

@@ -63,6 +63,7 @@ const submitEvent = async ({
       to: '/@{$username}/events/$statusId',
       params: { username: data.account.acct, statusId: data.id },
     },
+    scopeUrl,
   });
 
   return data;

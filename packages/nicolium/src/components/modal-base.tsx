@@ -1,9 +1,17 @@
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { range } from 'lodash-es';
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import { DeckColumnIdContext } from '@/contexts/deck-column-id-context';
 import { usePrevious } from '@/hooks/use-previous';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { checkComposeContent, useComposeStore } from '@/stores/compose';
@@ -34,6 +42,7 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
   const navigate = useNavigate();
   const persistDraftStatus = usePersistDraftStatus();
   const { openModal } = useModalsActions();
+  const columnId = useContext(DeckColumnIdContext) || undefined;
 
   const [revealed, setRevealed] = useState(!!children);
   const [hasTitle, setHasTitle] = useState(false);
@@ -110,6 +119,7 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
                   toast.success(messages.draftSaved, {
                     actionLabel: messages.view,
                     actionLinkOptions: { to: '/draft_statuses' },
+                    columnId,
                   });
                 });
                 onClose('COMPOSE');
