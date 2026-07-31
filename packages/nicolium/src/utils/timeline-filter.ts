@@ -39,6 +39,7 @@ const hasActiveFilters = (filters: TimelineFilters | undefined): filters is Time
   !!filters &&
   (filters.showDirect === false ||
     filters.showReblogs === false ||
+    filters.showSelfReblogs === false ||
     filters.showReplies === false ||
     filters.showQuotes === false ||
     filters.showNonMedia === false ||
