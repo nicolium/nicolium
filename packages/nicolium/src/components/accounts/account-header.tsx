@@ -5,7 +5,7 @@ import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
-import { GOTOSOCIAL, ICESHRIMP_NET, MASTODON, mediaAttachmentSchema } from 'pl-api';
+import { ICESHRIMP_NET, MASTODON, mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
@@ -286,7 +286,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
       ownAccount ||
       !features.rssFeeds ||
       !account.local ||
-      (software === GOTOSOCIAL && !account.enable_rss)
+      (features.accountEnableRss && !account.enable_rss)
     ) {
       return null;
     }
