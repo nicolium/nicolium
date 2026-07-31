@@ -28,6 +28,7 @@ import {
   CircleTimelineColumn,
   HashtagTimelineColumn,
   HomeTimelineColumn,
+  LinkTimelineColumn,
   ListTimelineColumn,
   PublicTimelineColumn,
   WrenchedTimelineColumn,
@@ -351,6 +352,19 @@ const hashtagPickerRoute = createRoute({
   path: '/tags',
   component: HashtagPickerDeckColumn,
   staticData: { title: messages.hashtag },
+});
+
+const LinkTimelineDeckColumn: React.FC = () => {
+  const { url } = linkRoute.useParams();
+
+  return <LinkTimelineColumn url={decodeURIComponent(url)} />;
+};
+
+const linkRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/links/$url',
+  component: LinkTimelineDeckColumn,
+  staticData: { title: messages.link },
 });
 
 const SearchDeckColumn: React.FC = () => {
@@ -852,6 +866,7 @@ const routeTree = rootRoute.addChildren([
   notificationsRoute,
   hashtagRoute,
   hashtagPickerRoute,
+  linkRoute,
   searchRoute,
   trendingRoute,
   bookmarksRoute,
@@ -891,6 +906,7 @@ export {
   hashtagRoute,
   homeRoute,
   instanceRoute,
+  linkRoute,
   listRoute,
   localRoute,
   trendingRoute,

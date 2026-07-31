@@ -23,6 +23,7 @@ const messages = defineMessages({
   collections: { id: 'column.collections', defaultMessage: 'Collections' },
   collection: { id: 'column.collection', defaultMessage: 'Collection' },
   hashtag: { id: 'column.hashtag', defaultMessage: 'Hashtag' },
+  link: { id: 'column.deck.link_timeline', defaultMessage: 'Posts with link' },
   remove: { id: 'column.deck.remove', defaultMessage: 'Remove column' },
   shrink: { id: 'column.deck.width.shrink', defaultMessage: 'Shrink column' },
   pinColumn: { id: 'column.deck.pin', defaultMessage: 'Pin column' },
