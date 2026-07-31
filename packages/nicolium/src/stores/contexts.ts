@@ -14,10 +14,10 @@ const importStatus = (state: State, status: ContextStatus, idempotencyKey?: stri
   const { id, in_reply_to_id: inReplyToId, parent_visible: parentVisible } = status;
   if (!inReplyToId) return;
 
-  const replies = state.replies[inReplyToId] || [];
-  const newReplies = [...new Set([...replies, id])].toSorted();
-
   const parentId = parentVisible === false ? `${inReplyToId}-unavailable` : inReplyToId;
+
+  const replies = state.replies[parentId] || [];
+  const newReplies = [...new Set([...replies, id])].toSorted();
 
   state.replies[parentId] = newReplies;
   state.inReplyTos[id] = parentId;
@@ -126,7 +126,7 @@ const deleteStatus = (state: State, statusId: string) => {
     state.replies[parentId] = newParentReplies;
   }
 
-  const replies = (state.replies[statusId] = []);
+  const replies = state.replies[statusId] || [];
   replies.forEach((reply) => delete state.inReplyTos[reply]);
 
   delete state.inReplyTos[statusId];
@@ -241,29 +241,21 @@ const getAncestorsIds = (statusId: string, inReplyTos: Record<string, string>): 
 
 const getDescendantsIds = (statusId: string, contextReplies: Record<string, string[]>) => {
   const descendantsIds: Array<string> = [];
-  const added = new Set<string>();
+  const visited = new Set<string>([statusId]);
   const ids = [statusId];
 
   while (ids.length > 0) {
-    const id = ids.shift();
-    if (!id) break;
+    const id = ids.shift()!;
 
-    const replies = contextReplies[id];
-
-    if (added.has(id)) {
-      break;
-    }
-
-    if (statusId !== id) {
+    if (id !== statusId) {
       descendantsIds.push(id);
-      added.add(id);
     }
 
-    if (replies) {
-      replies.toReversed().forEach((reply: string) => {
-        ids.unshift(reply);
-      });
-    }
+    contextReplies[id]?.toReversed().forEach((reply: string) => {
+      if (visited.has(reply)) return;
+      visited.add(reply);
+      ids.unshift(reply);
+    });
   }
 
   return descendantsIds;
