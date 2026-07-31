@@ -715,12 +715,10 @@ const useComposeStore = create<ComposeStore>()(
 
           const doCompose = (composeId: string) =>
             set((draft) => {
-              if (!draft.composers[composeId]) {
-                draft.composers[composeId] = {
-                  ...draft.default,
-                  idempotencyKey: crypto.randomUUID(),
-                };
-              }
+              draft.composers[composeId] = {
+                ...draft.default,
+                idempotencyKey: crypto.randomUUID(),
+              };
               const compose = draft.composers[composeId];
 
               const mentions = explicitAddressing
@@ -761,12 +759,10 @@ const useComposeStore = create<ComposeStore>()(
         quoteCompose: (status, scopeUrl, approvalRequired, openComposer = true) => {
           const doCompose = (composeId: string) =>
             set((draft) => {
-              if (!draft.composers[composeId]) {
-                draft.composers[composeId] = {
-                  ...draft.default,
-                  idempotencyKey: crypto.randomUUID(),
-                };
-              }
+              draft.composers[composeId] = {
+                ...draft.default,
+                idempotencyKey: crypto.randomUUID(),
+              };
               const compose = draft.composers[composeId];
 
               const statusAccount = selectAccount(status.account_id, scopeUrl);
