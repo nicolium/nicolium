@@ -27,7 +27,7 @@ const messages = defineMessages({
   remove: { id: 'column.deck.remove', defaultMessage: 'Remove column' },
   shrink: { id: 'column.deck.width.shrink', defaultMessage: 'Shrink column' },
   pinColumn: { id: 'column.deck.pin', defaultMessage: 'Pin column' },
-  pinned: { id: 'column.deck.pinned', defaultMessage: 'Pinned column' },
+  unpinColumn: { id: 'column.deck.unpin', defaultMessage: 'Unpin column' },
   widen: { id: 'column.deck.width.widen', defaultMessage: 'Widen column' },
   fill: { id: 'column.deck.width.fill', defaultMessage: 'Fill available width' },
   moveLeft: { id: 'column.deck.position.left', defaultMessage: 'Move column left' },

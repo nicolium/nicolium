@@ -31,6 +31,7 @@ import { useTimelineHeading } from '@/components/timeline-picker';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { defaultFiltersSettings } from '@/hooks/use-timeline-filters-options';
@@ -187,10 +188,12 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
       </div>
       <div className='deck__column__actions'>
         {column.pinned && (
-          <Icon
+          <IconButton
             src={iconPushPin}
             className='deck__column__header__icon deck__column__header__icon--pinned'
-            title={intl.formatMessage(messages.pinned)}
+            theme='transparent'
+            onClick={() => onChangePin(column.id, false)}
+            title={intl.formatMessage(messages.unpinColumn)}
           />
         )}
         <DropdownMenu items={allItems} src={iconDotsThreeVertical} />

@@ -85,7 +85,7 @@
         }
 
         .deck__column__header__icon--pinned {
-          display: block;
+          display: inline-flex;
         }
       }
     }
@@ -121,6 +121,11 @@
 
         &--pinned {
           display: none;
+
+          &:hover,
+          &:focus-visible {
+            color: var(--color-primary-500);
+          }
         }
       }
 
