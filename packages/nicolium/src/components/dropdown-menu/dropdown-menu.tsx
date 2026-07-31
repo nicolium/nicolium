@@ -25,6 +25,7 @@ import DropdownMenuItem, { type Menu } from './dropdown-menu-item';
 
 const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },
+  title: { id: 'dropdown_menu.title', defaultMessage: 'Menu' },
 });
 
 interface IDropdownMenuContent {
@@ -234,11 +235,12 @@ const DropdownMenu: React.FC<IDropdownMenu> = ({
   onShiftClick,
   placement: initialPlacement = 'top',
   src = iconDotsThree,
-  title = 'Menu',
+  title,
   width,
   className,
   forceDropdown,
 }) => {
+  const intl = useIntl();
   const { openDropdownMenu, closeDropdownMenu } = useUiStoreActions();
   const { openModal, closeModal } = useModalsActions();
 
@@ -417,7 +419,7 @@ const DropdownMenu: React.FC<IDropdownMenu> = ({
             'dropdown-menu__button': true,
             'dropdown-menu__button--open': isOpen,
           })}
-          title={title}
+          title={title ?? intl.formatMessage(messages.title)}
           src={src}
           onClick={handleClick}
           onKeyPress={handleKeyPress}

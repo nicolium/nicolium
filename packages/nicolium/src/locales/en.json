@@ -1379,6 +1379,7 @@
   "drive.select_folder.heading": "Select folder",
   "drive.view_mode.grid": "Grid view",
   "drive.view_mode.list": "List view",
+  "dropdown_menu.title": "Menu",
   "edit_bookmark_folder_modal.confirm": "Save",
   "edit_bookmark_folder_modal.header.title": "Edit folder",
   "edit_email.placeholder": "me@example.com",
