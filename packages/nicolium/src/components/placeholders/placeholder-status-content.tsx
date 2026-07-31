@@ -15,7 +15,7 @@ const PlaceholderStatusContent: React.FC<IPlaceholderStatusContent> = ({
   const length = randomIntFromInterval(maxLength, minLength);
 
   return (
-    <div className='placeholder-status-content'>
+    <div className='placeholder-status-content' aria-hidden>
       <p>{generateText(length)}</p>
     </div>
   );

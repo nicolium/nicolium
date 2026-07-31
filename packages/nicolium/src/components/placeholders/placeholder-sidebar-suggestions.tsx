@@ -9,7 +9,7 @@ const PlaceholderSidebarSuggestions = ({ limit }: { limit: number }) => {
   return (
     <>
       {new Array(limit).fill(undefined).map((_, idx) => (
-        <div key={idx} className='sidebar-suggestion--placeholder'>
+        <div key={idx} className='sidebar-suggestion--placeholder' aria-hidden>
           <div className='sidebar-suggestion--placeholder__avatar' />
 
           <div className='sidebar-suggestion--placeholder__name'>

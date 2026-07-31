@@ -9,7 +9,7 @@ const PlaceholderEventHeader: React.FC = () => {
   const locationLength = randomIntFromInterval(5, 30);
 
   return (
-    <div className='event-header--placeholder'>
+    <div className='event-header--placeholder' aria-hidden>
       <p className='event-header--placeholder__title'>{generateText(eventNameLength)}</p>
 
       <div className='event-header--placeholder__details'>

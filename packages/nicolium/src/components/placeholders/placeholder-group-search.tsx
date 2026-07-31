@@ -6,7 +6,7 @@ const PlaceholderGroupSearch = ({ withJoinAction = true }: { withJoinAction?: bo
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (
-    <div className='placeholder-group-search'>
+    <div className='placeholder-group-search' aria-hidden>
       <div className='placeholder-group-search__main'>
         <div className='placeholder-group-search__avatar' />
 

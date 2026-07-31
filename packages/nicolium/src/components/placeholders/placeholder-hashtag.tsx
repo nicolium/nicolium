@@ -7,7 +7,7 @@ const PlaceholderHashtag: React.FC = () => {
   const length = randomIntFromInterval(15, 30);
 
   return (
-    <div className='hashtag--placeholder'>
+    <div className='hashtag--placeholder' aria-hidden>
       <p>{generateText(length)}</p>
     </div>
   );

@@ -7,7 +7,7 @@ const PlaceholderEventPreview: React.FC = () => {
   const nameLength = randomIntFromInterval(5, 15);
 
   return (
-    <div className='event-card--placeholder'>
+    <div className='event-card--placeholder' aria-hidden>
       <div className='event-card--placeholder__cover' />
       <div className='event-card--placeholder__body'>
         <p className='event-card--placeholder__title'>{generateText(eventNameLength)}</p>

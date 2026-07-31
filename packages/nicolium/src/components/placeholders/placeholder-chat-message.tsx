@@ -15,6 +15,7 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
       className={clsx('chat-message__container chat-message--placeholder', {
         'chat-message--placeholder--mine': isMyMessage,
       })}
+      aria-hidden
     >
       <div className='chat-message--placeholder__row'>
         <div

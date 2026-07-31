@@ -4,7 +4,7 @@ import { randomIntFromInterval, generateText } from '@/utils/placeholders';
 
 /** Fake link preview to display while data is loading. */
 const PlaceholderCard: React.FC = React.memo(() => (
-  <div className='status-card status-card--placeholder'>
+  <div className='status-card status-card--placeholder' aria-hidden>
     <div className='status-card--placeholder__image'>&nbsp;</div>
 
     <div className='status-card--placeholder__description'>

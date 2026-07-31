@@ -9,7 +9,7 @@ const PlaceholderSidebarTrends = ({ limit }: { limit: number }) => {
   return (
     <>
       {new Array(limit).fill(undefined).map((_, idx) => (
-        <div key={idx} className='sidebar-trend--placeholder'>
+        <div key={idx} className='sidebar-trend--placeholder' aria-hidden>
           <p>{generateText(trend)}</p>
           <p>{generateText(stat)}</p>
         </div>

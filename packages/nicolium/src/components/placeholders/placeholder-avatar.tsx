@@ -21,7 +21,7 @@ const PlaceholderAvatar: React.FC<IPlaceholderAvatar> = ({ size, withText = fals
   }, [size]);
 
   return (
-    <div className={clsx('placeholder-avatar', className)}>
+    <div className={clsx('placeholder-avatar', className)} aria-hidden>
       <div className='placeholder-avatar__image' style={style} />
 
       {withText && <div style={{ width: size, height: 15 }} className='placeholder-avatar__text' />}

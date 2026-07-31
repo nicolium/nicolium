@@ -5,7 +5,7 @@ import PlaceholderDisplayName from './placeholder-display-name';
 
 /** Fake account to display while data is loading. */
 const PlaceholderAccount: React.FC = React.memo(() => (
-  <div className='account--placeholder'>
+  <div className='account--placeholder' aria-hidden>
     <div className='account--placeholder__avatar'>
       <PlaceholderAvatar size={42} />
     </div>

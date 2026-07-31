@@ -6,7 +6,7 @@ const PlaceholderGroupCard: React.FC = () => {
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (
-    <div className='group-card group-card--framed group-card--placeholder'>
+    <div className='group-card group-card--framed group-card--placeholder' aria-hidden>
       <div className='group-card__cover group-card__cover--placeholder' />
 
       <div className='group-card__avatar'>

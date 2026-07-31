@@ -15,7 +15,7 @@ const PlaceholderDisplayName: React.FC<IPlaceholderDisplayName> = React.memo(
     const acctLength = randomIntFromInterval(maxLength, minLength);
 
     return (
-      <div className='placeholder-display-name'>
+      <div className='placeholder-display-name' aria-hidden>
         <p>{generateText(length)}</p>
         {withSuffix && <p>{generateText(acctLength)}</p>}
       </div>

@@ -16,6 +16,7 @@ const PlaceholderStatus: React.FC<IPlaceholderStatus> = React.memo(({ variant = 
       'status--placeholder--rounded': variant === 'rounded',
       'status--placeholder--slim': variant === 'slim',
     })}
+    aria-hidden
   >
     <div className='status--placeholder__wrapper'>
       <div className='status--placeholder__header'>

@@ -6,7 +6,7 @@ import PlaceholderStatusContent from './placeholder-status-content';
 
 /** Fake notification to display while data is loading. */
 const PlaceholderNotification = React.memo(() => (
-  <div className='notification--placeholder'>
+  <div className='notification--placeholder' aria-hidden>
     <div className='notification--placeholder__wrapper'>
       <div className='notification--placeholder__content'>
         <PlaceholderStatusContent minLength={20} maxLength={20} />

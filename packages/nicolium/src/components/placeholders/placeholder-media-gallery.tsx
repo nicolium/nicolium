@@ -87,7 +87,7 @@ const PlaceholderMediaGallery: React.FC<IPlaceholderMediaGallery> = ({ media, de
   const sizeData = getSizeData(media.length);
 
   return (
-    <div className='media-gallery' style={sizeData.style} ref={handleRef}>
+    <div className='media-gallery' style={sizeData.style} ref={handleRef} aria-hidden>
       {media.slice(0, 4).map((_, i) => renderItem(sizeData.itemsDimensions[i], i))}
     </div>
   );
