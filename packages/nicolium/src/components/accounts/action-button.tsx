@@ -25,6 +25,7 @@ import {
   useFollowAccountMutation,
   useUnfollowAccountMutation,
 } from '@/queries/accounts/use-relationship';
+import { useAuthStore } from '@/stores/auth';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
@@ -141,6 +142,7 @@ const ActionButton: React.FC<IActionButton> = ({
   const client = useClient();
   const settings = useSettings();
 
+  const defaultScopeUrl = useAuthStore((store) => store.me);
   const { openModal } = useModalsActions();
   const { isLoggedIn, me } = useLoggedIn();
 
@@ -625,7 +627,7 @@ const ActionButton: React.FC<IActionButton> = ({
         </button>
       );
     }
-  } else {
+  } else if (account.url === defaultScopeUrl) {
     // Edit profile
     return (
       <Link className='account-action-button account-action-button--edit' to='/settings/profile'>

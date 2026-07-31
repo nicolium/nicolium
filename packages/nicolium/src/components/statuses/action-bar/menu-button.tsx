@@ -134,6 +134,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { useRocketIconForReblogs } = useSettings();
   const client = useClient();
   const scopeUrl = useScopeUrl();
+  const defaultScopeUrl = useAuthStore((store) => store.me);
 
   const columnId = useColumnId();
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
@@ -749,19 +750,21 @@ const MenuButton: React.FC<IMenuButton> = ({
     if (isStaff) {
       menu.push(null);
 
-      menu.push({
-        text: intl.formatMessage(messages.adminAccount, { name: username }),
-        to: '/nicolium/admin/accounts/$accountId',
-        params: { accountId: status.account_id },
-        icon: iconGavel,
-      });
-
-      if (isAdmin && features.pleromaAdminStatuses) {
+      if (scopeUrl === defaultScopeUrl) {
         menu.push({
-          text: intl.formatMessage(messages.adminStatus),
-          href: `/pleroma/admin/#/statuses/${status.id}/`,
-          icon: iconPencilSimple,
+          text: intl.formatMessage(messages.adminAccount, { name: username }),
+          to: '/nicolium/admin/accounts/$accountId',
+          params: { accountId: status.account_id },
+          icon: iconGavel,
         });
+
+        if (isAdmin && features.pleromaAdminStatuses) {
+          menu.push({
+            text: intl.formatMessage(messages.adminStatus),
+            href: `/pleroma/admin/#/statuses/${status.id}/`,
+            icon: iconPencilSimple,
+          });
+        }
       }
 
       if (features.pleromaAdminStatuses) {

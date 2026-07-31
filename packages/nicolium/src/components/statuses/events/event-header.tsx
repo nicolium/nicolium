@@ -54,6 +54,7 @@ import {
   useUnbookmarkStatus,
   useUnpinStatus,
 } from '@/queries/statuses/use-status-interactions';
+import { useAuthStore } from '@/stores/auth';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -149,6 +150,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const navigate = useNavigate();
   const { quoteCompose, mentionCompose, directCompose } = useComposeActions();
   const scopeUrl = useScopeUrl();
+  const defaultScopeUrl = useAuthStore((store) => store.me);
   const columnId = useColumnId();
 
   const { openModal } = useModalsActions();
@@ -450,19 +452,21 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     if (isStaff) {
       menu.push(null);
 
-      menu.push({
-        text: intl.formatMessage(messages.adminAccount, { name: username }),
-        to: '/nicolium/admin/accounts/$accountId',
-        params: { accountId: account.id },
-        icon: iconGavel,
-      });
-
-      if (isAdmin && features.pleromaAdminStatuses) {
+      if (scopeUrl === defaultScopeUrl) {
         menu.push({
-          text: intl.formatMessage(messages.adminStatus),
-          href: `/pleroma/admin/#/statuses/${status.id}/`,
-          icon: iconPencilSimple,
+          text: intl.formatMessage(messages.adminAccount, { name: username }),
+          to: '/nicolium/admin/accounts/$accountId',
+          params: { accountId: account.id },
+          icon: iconGavel,
         });
+
+        if (isAdmin && features.pleromaAdminStatuses) {
+          menu.push({
+            text: intl.formatMessage(messages.adminStatus),
+            href: `/pleroma/admin/#/statuses/${status.id}/`,
+            icon: iconPencilSimple,
+          });
+        }
       }
 
       if (features.pleromaAdminStatuses) {

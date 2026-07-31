@@ -45,6 +45,7 @@ import {
   useUpdateAccountNoteMutation,
 } from '@/queries/accounts/use-relationship';
 import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/settings/domain-blocks';
+import { useAuthStore } from '@/stores/auth';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -200,6 +201,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   const { openModal } = useModalsActions();
   const settings = useSettings();
   const scopeUrl = useScopeUrl();
+  const defaultScopeUrl = useAuthStore((state) => state.me);
   const columnId = useColumnId();
 
   const showRecommendations =
@@ -580,33 +582,39 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       });
     }
 
-    if (menu.length) {
-      menu.push(null);
-    }
-
     if (account.id === ownAccount.id) {
-      menu.push({
-        text: intl.formatMessage(messages.editProfile),
-        to: '/settings/profile',
-        icon: iconUser,
-      });
-      menu.push({
-        text: intl.formatMessage(messages.settings),
-        to: '/settings',
-        icon: iconSlidersHorizontal,
-      });
-      menu.push(null);
-      menu.push({
-        text: intl.formatMessage(messages.mutes),
-        to: '/mutes',
-        icon: iconSpeakerSimpleX,
-      });
-      menu.push({
-        text: intl.formatMessage(messages.blocks),
-        to: '/blocks',
-        icon: iconProhibit,
-      });
+      if (scopeUrl === defaultScopeUrl) {
+        if (menu.length) {
+          menu.push(null);
+        }
+
+        menu.push({
+          text: intl.formatMessage(messages.editProfile),
+          to: '/settings/profile',
+          icon: iconUser,
+        });
+        menu.push({
+          text: intl.formatMessage(messages.settings),
+          to: '/settings',
+          icon: iconSlidersHorizontal,
+        });
+        menu.push(null);
+        menu.push({
+          text: intl.formatMessage(messages.mutes),
+          to: '/mutes',
+          icon: iconSpeakerSimpleX,
+        });
+        menu.push({
+          text: intl.formatMessage(messages.blocks),
+          to: '/blocks',
+          icon: iconProhibit,
+        });
+      }
     } else {
+      if (menu.length) {
+        menu.push(null);
+      }
+
       menu.push({
         text: intl.formatMessage(messages.mention, { name: account.username }),
         action: onMention,
@@ -677,32 +685,34 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         icon: iconTag,
       });
 
-      if (!settings.navigationItems.includes(`account:${account.id}`)) {
-        menu.push({
-          text: intl.formatMessage(messages.addToNavigationItems),
-          action: onAddToNavigationItems,
-          icon: iconList,
-        });
-      } else {
-        menu.push({
-          text: intl.formatMessage(messages.removeFromNavigationItems),
-          action: onRemoveFromNavigationItems,
-          icon: iconList,
-        });
-      }
+      if (scopeUrl === defaultScopeUrl) {
+        if (!settings.navigationItems.includes(`account:${account.id}`)) {
+          menu.push({
+            text: intl.formatMessage(messages.addToNavigationItems),
+            action: onAddToNavigationItems,
+            icon: iconList,
+          });
+        } else {
+          menu.push({
+            text: intl.formatMessage(messages.removeFromNavigationItems),
+            action: onRemoveFromNavigationItems,
+            icon: iconList,
+          });
+        }
 
-      if (!settings.sidebarItems.includes(`account:${account.id}`)) {
-        menu.push({
-          text: intl.formatMessage(messages.addToSidebarItems),
-          action: onAddToSidebarItems,
-          icon: iconUser,
-        });
-      } else {
-        menu.push({
-          text: intl.formatMessage(messages.removeFromSidebarItems),
-          action: onRemoveFromSidebarItems,
-          icon: iconUser,
-        });
+        if (!settings.sidebarItems.includes(`account:${account.id}`)) {
+          menu.push({
+            text: intl.formatMessage(messages.addToSidebarItems),
+            action: onAddToSidebarItems,
+            icon: iconUser,
+          });
+        } else {
+          menu.push({
+            text: intl.formatMessage(messages.removeFromSidebarItems),
+            action: onRemoveFromSidebarItems,
+            icon: iconUser,
+          });
+        }
       }
 
       menu.push(null);
@@ -774,7 +784,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       }
     }
 
-    if (ownAccount.is_admin || ownAccount.is_moderator) {
+    if (ownAccount.is_admin || (ownAccount.is_moderator && scopeUrl === defaultScopeUrl)) {
       menu.push(null);
 
       menu.push({
