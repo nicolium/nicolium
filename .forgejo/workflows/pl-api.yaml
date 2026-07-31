@@ -38,3 +38,7 @@ jobs:
     - name: Check formatting
       working-directory: ./packages/pl-api
       run: pnpm fmt:check
+
+    - name: Typecheck
+      working-directory: ./packages/pl-api
+      run: pnpm typecheck
