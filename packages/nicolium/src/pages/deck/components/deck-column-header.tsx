@@ -623,7 +623,9 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
   const items = useTimelineFiltersOptions(column);
   const filtersList = useTimelineFiltersList(column);
 
-  const additionalTags = [column.any, column.all, column.none].flat().length;
+  const additionalTags = [column.any, column.all, column.none]
+    .filter((value) => value)
+    .flat().length;
 
   const tagsList = useMemo(() => {
     const entries: Array<React.ReactNode> = [];
