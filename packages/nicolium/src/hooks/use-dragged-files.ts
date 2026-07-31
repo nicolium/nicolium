@@ -71,7 +71,6 @@ const useDraggedFiles = <R extends HTMLElement>(
 
   const handleDocumentDragOver = useCallback(
     throttle((e: DragEvent) => {
-      console.log('drag over', e);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
       timeoutRef.current = window.setTimeout(() => {
