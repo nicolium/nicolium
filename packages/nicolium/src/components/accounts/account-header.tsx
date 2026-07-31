@@ -5,7 +5,7 @@ import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
-import { ICESHRIMP_NET, MASTODON, mediaAttachmentSchema } from 'pl-api';
+import { mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
@@ -29,6 +29,7 @@ import { scopedQueryKey } from '@/queries/query';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
+import { getRssUrl } from '@/utils/accounts';
 
 import AltPopover from '../media/alt-popover';
 
@@ -291,18 +292,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
       return null;
     }
 
-    let href;
-    switch (software) {
-      case ICESHRIMP_NET:
-        href = `/users/${account.id}/feed.rss`;
-        break;
-      case MASTODON:
-        href = `${account.url}.rss`;
-        break;
-      default:
-        href = `${account.url}/feed.rss`;
-        break;
-    }
+    const href = getRssUrl(account, software);
 
     return (
       <IconButton

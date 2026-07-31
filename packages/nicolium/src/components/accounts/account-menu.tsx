@@ -22,7 +22,6 @@ import iconUserCheck from '@phosphor-icons/core/regular/user-check.svg';
 import iconUserMinus from '@phosphor-icons/core/regular/user-minus.svg';
 import iconUser from '@phosphor-icons/core/regular/user.svg';
 import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
-import { GOTOSOCIAL, ICESHRIMP_NET, MASTODON } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -49,6 +48,7 @@ import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
+import { getRssUrl } from '@/utils/accounts';
 import copy from '@/utils/copy';
 
 import type { Account } from 'pl-api';
@@ -503,19 +503,8 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       return [];
     }
 
-    if (features.rssFeeds && account.local && (software !== GOTOSOCIAL || account.enable_rss)) {
-      let href;
-      switch (software) {
-        case ICESHRIMP_NET:
-          href = `/users/${account.id}/feed.rss`;
-          break;
-        case MASTODON:
-          href = `${account.url}.rss`;
-          break;
-        default:
-          href = `${account.url}/feed.rss`;
-          break;
-      }
+    if (features.rssFeeds && account.local && (!features.accountEnableRss || account.enable_rss)) {
+      const href = getRssUrl(account, software);
 
       menu.push({
         text: intl.formatMessage(messages.subscribeFeed),

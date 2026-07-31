@@ -1,4 +1,4 @@
-import type { Account } from 'pl-api';
+import { ICESHRIMP_NET, MASTODON, type Account } from 'pl-api';
 
 const getDomainFromURL = (account: Pick<Account, 'url'>): string => {
   try {
@@ -22,4 +22,16 @@ const getBaseURL = (account: Pick<Account, 'url'>): string => {
   }
 };
 
-export { getDomain, getBaseURL };
+/** Get the URL of an account's RSS feed based on the software. */
+const getRssUrl = (account: Pick<Account, 'id' | 'url'>, software: string | null): string => {
+  switch (software) {
+    case ICESHRIMP_NET:
+      return `/users/${account.id}/feed.rss`;
+    case MASTODON:
+      return `${account.url}.rss`;
+    default:
+      return `${account.url}/feed.rss`;
+  }
+};
+
+export { getDomain, getBaseURL, getRssUrl };
