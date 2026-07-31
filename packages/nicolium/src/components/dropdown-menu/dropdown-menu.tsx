@@ -174,7 +174,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
   };
 
   const renderItems = (items: Menu | undefined) => (
-    <ul className='dropdown-menu__items'>
+    <ul className='dropdown-menu__items' role='menu'>
       {items?.map((item, idx) => (
         <DropdownMenuItem
           key={idx}
