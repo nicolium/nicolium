@@ -173,6 +173,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   const settings = useSettings();
   const touchStart = useRef(0);
   const touchEnd = useRef<number | null>(null);
+  const isFirstRender = useRef(true);
   const { isOpen } = useRegistrationStatus();
 
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -289,8 +290,10 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   useEffect(() => {
     if (isSidebarOpen) containerRef.current?.querySelector('a')?.focus();
     else {
-      document.querySelector<HTMLButtonElement>('.thumb-navigation__item')?.focus();
       setPage('main');
+      if (!isFirstRender.current) {
+        document.querySelector<HTMLButtonElement>('.thumb-navigation__item')?.focus();
+      }
     }
 
     setTimeout(
