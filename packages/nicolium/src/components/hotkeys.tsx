@@ -273,7 +273,7 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         !event.defaultPrevented &&
         !['input', 'textarea', 'select', 'em-emoji-picker'].includes(tagName) &&
         !(event.target as HTMLElement).closest(
-          '[contenteditable], .multiselect-container, .dropdown-menu__content',
+          '[contenteditable], .multiselect-container, .dropdown-menu__content, .video-player',
         ) &&
         !(
           (event.target as HTMLElement)?.closest('.drive-file') &&
