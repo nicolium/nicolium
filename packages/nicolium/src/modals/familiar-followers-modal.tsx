@@ -1,10 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import AccountContainer from '@/components/accounts/account-container';
-import ScrollableList from '@/components/scrollable-list';
+import AccountList from '@/components/accounts/account-list';
 import Modal from '@/components/ui/modal';
-import Spinner from '@/components/ui/spinner';
 import Emojify from '@/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFamiliarFollowers } from '@/queries/accounts/use-familiar-followers';
@@ -22,42 +20,11 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
   const { data: account } = useAccount(accountId);
   const { data: familiarFollowerIds } = useFamiliarFollowers(accountId);
 
-  const onClickClose = () => {
-    onClose('FAMILIAR_FOLLOWERS');
-  };
-
-  let body;
-
-  if (!account || !familiarFollowerIds) {
-    body = <Spinner />;
-  } else {
-    const emptyMessage = (
-      <FormattedMessage
-        id='account.familiar_followers.empty'
-        defaultMessage='No one you know follows {name}.'
-        values={{
-          name: (
-            <span>
-              <Emojify text={account.display_name} emojis={account.emojis} />
-            </span>
-          ),
-        }}
-      />
-    );
-
-    body = (
-      <ScrollableList
-        emptyMessageText={emptyMessage}
-        itemClassName='modal__list__item'
-        style={{ height: 'calc(80vh - 88px)' }}
-        useWindowScroll={false}
-      >
-        {familiarFollowerIds.map((id) => (
-          <AccountContainer key={id} id={id} />
-        ))}
-      </ScrollableList>
-    );
-  }
+  const displayName = !!account && (
+    <span>
+      <Emojify text={account.display_name} emojis={account.emojis} />
+    </span>
+  );
 
   return (
     <Modal
@@ -65,18 +32,21 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         <FormattedMessage
           id='column.familiar_followers'
           defaultMessage='People you know following {name}'
-          values={{
-            name: !!account && (
-              <span>
-                <Emojify text={account.display_name} emojis={account.emojis} />
-              </span>
-            ),
-          }}
+          values={{ name: displayName }}
         />
       }
-      onClose={onClickClose}
+      onClose={() => onClose('FAMILIAR_FOLLOWERS')}
     >
-      {body}
+      <AccountList
+        accountIds={account && familiarFollowerIds}
+        emptyMessage={
+          <FormattedMessage
+            id='account.familiar_followers.empty'
+            defaultMessage='No one you know follows {name}.'
+            values={{ name: displayName }}
+          />
+        }
+      />
     </Modal>
   );
 };

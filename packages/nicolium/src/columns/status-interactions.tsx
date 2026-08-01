@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
+import AccountList from '@/components/accounts/account-list';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollableList from '@/components/scrollable-list';
 import StatusList from '@/components/statuses/status-list';
@@ -24,47 +25,6 @@ const messages = defineMessages({
   all: { id: 'reactions.all', defaultMessage: 'All' },
 });
 
-interface IAccountInteractionList {
-  accountIds?: Array<string>;
-  isLoading?: boolean;
-  hasNextPage?: boolean;
-  fetchNextPage: () => void;
-  refetch: () => Promise<unknown>;
-  emptyMessage: React.ReactNode;
-}
-
-const AccountInteractionList: React.FC<IAccountInteractionList> = ({
-  accountIds,
-  isLoading,
-  hasNextPage,
-  fetchNextPage,
-  refetch,
-  emptyMessage,
-}) => {
-  const inColumn = !!useColumnScrollParent();
-
-  if (!accountIds) return <Spinner />;
-
-  return (
-    <PullToRefresh onRefresh={refetch}>
-      <ScrollableList
-        emptyMessageText={emptyMessage}
-        listClassName='modal__list'
-        itemClassName='modal__list__item'
-        style={inColumn ? undefined : { height: 'calc(80vh - 88px)' }}
-        hasMore={hasNextPage}
-        isLoading={isLoading}
-        onLoadMore={() => fetchNextPage()}
-        useWindowScroll={false}
-      >
-        {accountIds.map((id) => (
-          <AccountContainer key={id} id={id} />
-        ))}
-      </ScrollableList>
-    </PullToRefresh>
-  );
-};
-
 interface IStatusInteractionList {
   /** ID of the status for which to fetch the interactions. */
   statusId: string;
@@ -74,7 +34,7 @@ const ReblogsList: React.FC<IStatusInteractionList> = ({ statusId }) => {
   const { data, isLoading, hasNextPage, fetchNextPage, refetch } = useStatusReblogs(statusId);
 
   return (
-    <AccountInteractionList
+    <AccountList
       accountIds={data}
       isLoading={isLoading}
       hasNextPage={hasNextPage}
@@ -94,7 +54,7 @@ const FavouritesList: React.FC<IStatusInteractionList> = ({ statusId }) => {
   const { data, isLoading, hasNextPage, fetchNextPage, refetch } = useStatusFavourites(statusId);
 
   return (
-    <AccountInteractionList
+    <AccountList
       accountIds={data}
       isLoading={isLoading}
       hasNextPage={hasNextPage}
@@ -114,7 +74,7 @@ const DislikesList: React.FC<IStatusInteractionList> = ({ statusId }) => {
   const { data, isLoading, hasNextPage, fetchNextPage, refetch } = useStatusDislikes(statusId);
 
   return (
-    <AccountInteractionList
+    <AccountList
       accountIds={data}
       isLoading={isLoading}
       hasNextPage={hasNextPage}

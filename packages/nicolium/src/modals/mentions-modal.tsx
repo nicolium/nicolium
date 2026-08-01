@@ -1,8 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import AccountContainer from '@/components/accounts/account-container';
-import ScrollableList from '@/components/scrollable-list';
+import AccountList from '@/components/accounts/account-list';
 import Modal from '@/components/ui/modal';
 import { useStatus } from '@/queries/statuses/use-status';
 
@@ -14,28 +13,13 @@ interface MentionsModalProps {
 
 const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose, statusId }) => {
   const { data: status } = useStatus(statusId);
-  const accountIds = status ? status.mentions.map((m) => m.id) : null;
-
-  const onClickClose = () => {
-    onClose('MENTIONS');
-  };
 
   return (
     <Modal
       title={<FormattedMessage id='column.mentions' defaultMessage='Mentions' />}
-      onClose={onClickClose}
+      onClose={() => onClose('MENTIONS')}
     >
-      <ScrollableList
-        listClassName='modal__list'
-        itemClassName='modal__list__item'
-        style={{ height: 'calc(80vh - 88px)' }}
-        isLoading={!accountIds}
-        useWindowScroll={false}
-      >
-        {(accountIds ?? []).map((id) => (
-          <AccountContainer key={id} id={id} />
-        ))}
-      </ScrollableList>
+      <AccountList accountIds={status?.mentions.map((mention) => mention.id)} />
     </Modal>
   );
 };

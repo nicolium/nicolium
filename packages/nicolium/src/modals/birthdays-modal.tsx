@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import AccountList from '@/components/accounts/account-list';
 import BirthdayAccount from '@/components/accounts/birthday-account';
-import ScrollableList from '@/components/scrollable-list';
 import Modal from '@/components/ui/modal';
-import Spinner from '@/components/ui/spinner';
 import { getCurrentDate } from '@/hooks/use-current-date';
 import { useBirthdayReminders } from '@/queries/accounts/use-birthday-reminders';
 
@@ -14,42 +13,21 @@ const BirthdaysModal = ({ onClose }: BaseModalProps) => {
   const [[day, month]] = useState(getCurrentDate);
   const { data: accountIds } = useBirthdayReminders(month, day);
 
-  const onClickClose = () => {
-    onClose('BIRTHDAYS');
-  };
-
-  let body;
-
-  if (!accountIds) {
-    body = <Spinner />;
-  } else {
-    const emptyMessage = (
-      <FormattedMessage
-        id='birthdays_modal.empty'
-        defaultMessage='None of your friends have birthday today.'
-      />
-    );
-
-    body = (
-      <ScrollableList
-        emptyMessageText={emptyMessage}
-        listClassName='modal__list'
-        itemClassName='modal__list__item'
-        useWindowScroll={false}
-      >
-        {accountIds.map((id) => (
-          <BirthdayAccount key={id} accountId={id} />
-        ))}
-      </ScrollableList>
-    );
-  }
-
   return (
     <Modal
       title={<FormattedMessage id='column.birthdays' defaultMessage='Birthdays' />}
-      onClose={onClickClose}
+      onClose={() => onClose('BIRTHDAYS')}
     >
-      {body}
+      <AccountList
+        accountIds={accountIds}
+        renderAccount={(accountId) => <BirthdayAccount key={accountId} accountId={accountId} />}
+        emptyMessage={
+          <FormattedMessage
+            id='birthdays_modal.empty'
+            defaultMessage='None of your friends have birthday today.'
+          />
+        }
+      />
     </Modal>
   );
 };
