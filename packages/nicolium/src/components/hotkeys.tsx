@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 
+import { isFullscreen } from '@/utils/fullscreen';
+
 const isKeyboardEvent = (event: Event): event is KeyboardEvent => 'key' in event;
 
 const mergeRefs =
@@ -260,6 +262,7 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
     const element = ref.current ?? document;
 
     const DRIVE_KEYS = ['up', 'down', 'left', 'right', 'home', 'end', 'pageup', 'pagedown'];
+    const MEDIA_PLAYER_KEYS = ['k', 'm', 'f', 'j', 'l', ',', '.'];
 
     function listener(event: Event) {
       if (isKeyboardEvent(event)) {
@@ -273,11 +276,15 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         !event.defaultPrevented &&
         !['input', 'textarea', 'select', 'em-emoji-picker'].includes(tagName) &&
         !(event.target as HTMLElement).closest(
-          '[contenteditable], .multiselect-container, .dropdown-menu__content, .video-player',
+          '[contenteditable], .multiselect-container, .dropdown-menu__content',
         ) &&
         !(
           (event.target as HTMLElement)?.closest('.drive-file') &&
           DRIVE_KEYS.includes(normalizeKey(event.key))
+        ) &&
+        !(
+          (event.target as HTMLElement)?.closest('.video-player') &&
+          (MEDIA_PLAYER_KEYS.includes(normalizeKey(event.key)) || isFullscreen())
         ) &&
         !(['a', 'button'].includes(tagName) && normalizeKey(event.key) === 'enter');
 
