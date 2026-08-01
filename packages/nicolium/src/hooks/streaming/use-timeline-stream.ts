@@ -6,7 +6,7 @@ import { useInstance } from '@/stores/instance';
 
 import { useScopeUrl } from '../use-scope-url';
 
-import type { StreamingEvent, StreamingParams } from 'pl-api';
+import type { PlApiClient, StreamingEvent, StreamingParams } from 'pl-api';
 
 const useTimelineStream = (
   stream: string,
@@ -27,14 +27,7 @@ const useTimelineStream = (
   const scopeUrl = useScopeUrl();
 
   const instance = useInstance();
-  const socket = useRef<{
-    listen: (listener: (event: StreamingEvent) => void, stream?: string) => number;
-    unlisten: (listener: (event: StreamingEvent) => void) => void;
-    subscribe: (stream: string, params?: StreamingParams) => void;
-    unsubscribe: (stream: string, params?: StreamingParams) => void;
-    onDisconnect: (callback: (event?: CloseEvent) => void) => () => void;
-    close: () => void;
-  } | null>(null);
+  const socket = useRef<NonNullable<PlApiClient['socket']> | null>(null);
   const disconnectCleanup = useRef<(() => void) | null>(null);
 
   const accessToken = useAuthStore((state) =>
