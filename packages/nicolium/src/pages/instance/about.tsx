@@ -60,15 +60,14 @@ const About: React.FC<IAbout> = ({ slug }) => {
 
   return (
     <div className='about-page'>
-      {pageHtml ||
-        (alsoAvailable && (
-          <div className='about-page__card'>
-            <div className='about-page__content' data-markup>
-              {pageHtml && <div dangerouslySetInnerHTML={{ __html: pageHtml }} />}
-              {alsoAvailable}
-            </div>
+      {(pageHtml || alsoAvailable) && (
+        <div className='about-page__card'>
+          <div className='about-page__content' data-markup>
+            {pageHtml && <div dangerouslySetInnerHTML={{ __html: pageHtml }} />}
+            {alsoAvailable}
           </div>
-        ))}
+        </div>
+      )}
 
       <Navlinks type='homeFooter' />
     </div>
