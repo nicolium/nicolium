@@ -14,6 +14,7 @@ interface IStepSlider {
   steps: number;
   /** Callback when the value changes. */
   onChange(value: number): void;
+  titles?: Array<string>;
 }
 
 /** Slider allowing selecting integers in a given range. */
@@ -25,6 +26,7 @@ const StepSlider: React.FC<IStepSlider> = ({
   'aria-labelledby': ariaLabelledby,
   'aria-describedby': ariaDescribedby,
   'aria-valuetext': ariaValueText,
+  titles,
 }) => {
   const node = useRef<HTMLDivElement>(null);
 
@@ -114,6 +116,7 @@ const StepSlider: React.FC<IStepSlider> = ({
           key={step}
           className='step-slider__step'
           style={{ left: `${(step / (steps - 1)) * 100}%` }}
+          title={titles?.[step]}
         />
       ))}
       <span
@@ -129,7 +132,7 @@ const StepSlider: React.FC<IStepSlider> = ({
         aria-labelledby={ariaLabelledby}
         aria-describedby={ariaDescribedby}
         onKeyDown={handleKeyDown}
-        style={{ left: `calc(${(value / (steps - 1)) * 100}% + 0.125rem)` }}
+        style={{ left: `calc(${(value / (steps - 1)) * 100}%)` }}
       />
     </div>
   );

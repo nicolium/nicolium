@@ -217,18 +217,18 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
     }
   }, [settings.theme?.interfaceSize, settings.locale]);
 
-  const borderRadiusIntensityValueText = React.useMemo(() => {
-    const intensity = settings.theme?.borderRadiusIntensity ?? 'default';
+  const borderRadiusIntensityValueTitles = React.useMemo(
+    () => [
+      intl.formatMessage(messages.borderRadiusIntensityNone),
+      intl.formatMessage(messages.borderRadiusIntensityReduced),
+      intl.formatMessage(messages.borderRadiusIntensityDefault),
+    ],
+    [settings.locale],
+  );
 
-    switch (intensity) {
-      case 'none':
-        return intl.formatMessage(messages.borderRadiusIntensityNone);
-      case 'reduced':
-        return intl.formatMessage(messages.borderRadiusIntensityReduced);
-      default:
-        return intl.formatMessage(messages.borderRadiusIntensityDefault);
-    }
-  }, [settings.theme?.borderRadiusIntensity, settings.locale]);
+  const borderRadiusIntensity = settings.theme?.borderRadiusIntensity ?? 'default';
+  const borderRadiusIntensityValueText =
+    borderRadiusIntensityValueTitles[BORDER_RADIUS_INTENSITIES.indexOf(borderRadiusIntensity)];
 
   const contrastValueText = React.useMemo(() => {
     const contrast = settings.theme?.contrast ?? 'normal';
@@ -322,6 +322,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
                 )}
                 steps={3}
                 onChange={onBorderRadiusIntensityChange}
+                titles={borderRadiusIntensityValueTitles}
                 aria-valuetext={borderRadiusIntensityValueText}
               />
             </div>

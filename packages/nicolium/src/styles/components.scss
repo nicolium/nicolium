@@ -1784,12 +1784,28 @@ div[data-viewport-type='window']:has(.empty-message) {
     position: absolute;
     z-index: 10;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%) translateX(-50%);
 
-    width: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 2rem;
     height: 0.75rem;
 
-    background-color: var(--color-primary-500);
+    &::before {
+      pointer-events: none;
+      content: '';
+
+      position: absolute;
+
+      display: block;
+
+      width: 0.25rem;
+      height: 0.75rem;
+
+      background-color: var(--color-primary-500);
+    }
   }
 
   &__thumb {
