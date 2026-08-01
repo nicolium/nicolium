@@ -1,10 +1,13 @@
+import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
+import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import { Link } from '@tanstack/react-router';
 import React, { useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { processCircle } from '@/actions/circle';
 import { uploadFile } from '@/actions/media';
+import avatarMissing from '@/assets/images/avatar-missing.png';
 import Account from '@/components/accounts/account';
+import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
 import Avatar from '@/components/ui/avatar';
 import Column from '@/components/ui/column';
@@ -12,20 +15,15 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import ProgressBar from '@/components/ui/progress-bar';
+import Toggle from '@/components/ui/toggle';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { processCircle } from '@/pages/fun/utils/circle';
 import { appendMedia, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
 const toRad = (x: number) => x * (Math.PI / 180);
-
-import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
-import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
-
-import avatarMissing from '@/assets/images/avatar-missing.png';
-import List, { ListItem } from '@/components/list';
-import Toggle from '@/components/ui/toggle';
 
 const HEIGHT = 1000;
 const WIDTH = 1000;
