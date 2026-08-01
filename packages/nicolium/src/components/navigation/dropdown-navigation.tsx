@@ -284,6 +284,10 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
       });
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    }
+
     verifyAccounts();
   }, []);
 
