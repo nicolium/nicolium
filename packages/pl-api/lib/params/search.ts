@@ -3,7 +3,7 @@ import type { PaginationParams, WithRelationshipsParam } from './common';
 /**
  * @category Request params
  */
-interface SearchParams extends Exclude<PaginationParams, 'since_id'>, WithRelationshipsParam {
+interface SearchParams extends Omit<PaginationParams, 'since_id'>, WithRelationshipsParam {
   /** String. Specify whether to search for only `accounts`, `hashtags`, `statuses` */
   type?: 'accounts' | 'hashtags' | 'statuses' | 'groups';
   /** Boolean. Only relevant if `type` includes `accounts`. If `true` and (a) the search query is for a remote account (e.g., `someaccount@someother.server`) and (b) the local server does not know about the account, WebFinger is used to try and resolve the account at `someother.server`. This provides the best recall at higher latency. If `false` only accounts the server knows about are returned. */
