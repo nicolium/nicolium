@@ -3,6 +3,8 @@ import { serialize } from 'object-to-formdata';
 
 import { buildFullPath } from '@/utils/url';
 
+import { PlApiError } from './errors';
+
 import type { PlApiBaseClient } from '@/client-base';
 
 type Response<T = any> = {
@@ -74,6 +76,26 @@ const getAsyncRefreshHeader = (response: Pick<Response, 'headers'>): AsyncRefres
   return null;
 };
 
+const parseXhrHeaders = (rawHeaders: string) => {
+  const headers = new Headers();
+
+  // Adapted from https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders
+  for (const line of rawHeaders.trim().split(/[\r\n]+/)) {
+    const index = line.indexOf(':');
+    if (index === -1) continue;
+
+    try {
+      const parts = line.split(': ');
+      const header = parts.shift();
+      const value = parts.join(': ');
+      if (!header) continue;
+      headers.append(header, value);
+    } catch {}
+  }
+
+  return headers;
+};
+
 interface RequestBody<Params = Record<string, any>> {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   body?: any;
@@ -138,15 +160,19 @@ function request<T = any>(
         }
 
         if (xhr.status >= 400)
-          reject({
-            response: {
+          reject(
+            new PlApiError({
               status: xhr.status,
               statusText: xhr.statusText,
               url: xhr.responseURL,
               data,
               json,
-            },
-          });
+              headers: parseXhrHeaders(xhr.getAllResponseHeaders()),
+              ok: xhr.status >= 200 && xhr.status < 300,
+              redirected: false,
+              type: 'default',
+            }),
+          );
         else resolve({ status: xhr.status, data, json } as any as Response<T>);
       });
 
@@ -180,7 +206,7 @@ function request<T = any>(
     const response = { headers, ok, redirected, status, statusText, type, url, data, json };
 
     if (!ok) {
-      throw { response };
+      throw new PlApiError(response);
     }
     return response as any as Response<T>;
   });
