@@ -1,30 +1,15 @@
-import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
-import iconPause from '@phosphor-icons/core/regular/pause.svg';
-import iconPlay from '@phosphor-icons/core/regular/play.svg';
-import iconSpeakerHigh from '@phosphor-icons/core/regular/speaker-high.svg';
-import iconSpeakerX from '@phosphor-icons/core/regular/speaker-x.svg';
 import clsx from 'clsx';
 import { debounce } from 'lodash-es';
 import { throttle } from 'lodash-es';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from '@/components/ui/icon';
 import { useMediaPlayer } from '@/hooks/use-media-player';
 import { useSettings } from '@/stores/settings';
-import { formatTime } from '@/utils/media';
 
 import { breakpoints } from '../ui/layout';
 
+import { PlayerButtons, PlayerTime, SeekBar } from './player-controls';
 import Visualizer from './visualizer';
-
-const messages = defineMessages({
-  play: { id: 'video.play', defaultMessage: 'Play' },
-  pause: { id: 'video.pause', defaultMessage: 'Pause' },
-  mute: { id: 'video.mute', defaultMessage: 'Mute sound' },
-  unmute: { id: 'video.unmute', defaultMessage: 'Unmute sound' },
-  download: { id: 'video.download', defaultMessage: 'Download file' },
-});
 
 const TICK_SIZE = 10;
 const PADDING = 180;
@@ -62,12 +47,11 @@ const Audio: React.FC<IAudio> = (props) => {
     deployPictureInPicture = false,
   } = props;
 
-  const intl = useIntl();
   const { useSystemMediaControls } = useSettings();
 
   const [width, setWidth] = useState<number | undefined>(props.width);
   const [height, setHeight] = useState<number | undefined>(props.height);
-  const [duration, setDuration] = useState<number | undefined>(undefined);
+  const [duration, setDuration] = useState(0);
   const [paused, setPaused] = useState(true);
 
   const visualizer = useRef<Visualizer>(new Visualizer(TICK_SIZE));
@@ -394,92 +378,30 @@ const Audio: React.FC<IAudio> = (props) => {
             />
           )}
 
-          <div className='video-player__seek' onMouseDown={handleSeekMouseDown} ref={seek}>
-            <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
-
-            <div
-              className='video-player__seek__progress'
-              style={{ width: `${progress}%`, backgroundColor: accentColor }}
-            />
-
-            <span
-              className={clsx('video-player__seek__handle', {
-                'video-player__seek__handle--active': dragging,
-              })}
-              tabIndex={0}
-              style={{ left: `${progress}%`, backgroundColor: accentColor }}
-              onKeyDown={handleAudioKeyDown}
-            />
-          </div>
+          <SeekBar
+            ref={seek}
+            buffer={buffer}
+            progress={progress}
+            dragging={dragging}
+            accentColor={accentColor}
+            onMouseDown={handleSeekMouseDown}
+            onKeyDown={handleAudioKeyDown}
+          />
 
           <div className='video-player__controls video-player__controls--visible'>
-            <div className='video-player__controls__row'>
-              <div className='video-player__buttons'>
-                <button
-                  type='button'
-                  title={intl.formatMessage(paused ? messages.play : messages.pause)}
-                  aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
-                  className='video-player__button'
-                  onClick={togglePlay}
-                >
-                  <Icon src={paused ? iconPlay : iconPause} />
-                </button>
-
-                <button
-                  type='button'
-                  title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-                  aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-                  className='video-player__button'
-                  onClick={toggleMute}
-                >
-                  <Icon src={muted ? iconSpeakerX : iconSpeakerHigh} />
-                </button>
-
-                <div
-                  className='video-player__volume'
-                  onMouseDown={handleVolumeMouseDown}
-                  ref={slider}
-                >
-                  <div
-                    className='video-player__volume__current'
-                    style={{ width: `${volume * 100}%`, backgroundColor: _getAccentColor() }}
-                  />
-                  <span
-                    className='video-player__volume__handle'
-                    tabIndex={0}
-                    style={{ left: `${volume * 100}%`, backgroundColor: _getAccentColor() }}
-                  />
-                </div>
-
-                <span className='video-player__time'>
-                  <span className='video-player__time__value'>
-                    {formatTime(Math.floor(currentTime))}
-                  </span>
-                  {getDuration() && (
-                    <>
-                      <span className='video-player__time__separator'>/</span>
-                      <span className='video-player__time__value'>
-                        {formatTime(Math.floor(getDuration()))}
-                      </span>
-                    </>
-                  )}
-                </span>
-              </div>
-
-              <div className='video-player__buttons'>
-                <a
-                  title={intl.formatMessage(messages.download)}
-                  aria-label={intl.formatMessage(messages.download)}
-                  className='video-player__button'
-                  href={src}
-                  download
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
-                  <Icon src={iconDownloadSimple} />
-                </a>
-              </div>
-            </div>
+            <PlayerButtons
+              src={src}
+              paused={paused}
+              muted={muted}
+              volume={volume}
+              accentColor={accentColor}
+              togglePlay={togglePlay}
+              toggleMute={toggleMute}
+              onVolumeMouseDown={handleVolumeMouseDown}
+              volumeSlider={slider}
+            >
+              <PlayerTime currentTime={currentTime} duration={duration} />
+            </PlayerButtons>
           </div>
         </>
       )}

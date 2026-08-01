@@ -1,10 +1,5 @@
 import iconArrowsInSimple from '@phosphor-icons/core/regular/arrows-in-simple.svg';
 import iconArrowsOutSimple from '@phosphor-icons/core/regular/arrows-out-simple.svg';
-import iconDownloadSimple from '@phosphor-icons/core/regular/download-simple.svg';
-import iconPause from '@phosphor-icons/core/regular/pause.svg';
-import iconPlay from '@phosphor-icons/core/regular/play.svg';
-import iconSpeakerHigh from '@phosphor-icons/core/regular/speaker-high.svg';
-import iconSpeakerX from '@phosphor-icons/core/regular/speaker-x.svg';
 import clsx from 'clsx';
 import { debounce } from 'lodash-es';
 import { throttle } from 'lodash-es';
@@ -15,7 +10,6 @@ import Blurhash from '@/components/media/blurhash';
 import Icon from '@/components/ui/icon';
 import { useMediaPlayer } from '@/hooks/use-media-player';
 import { useSettings } from '@/stores/settings';
-import { formatTime } from '@/utils/media';
 import {
   isPanoramic,
   isPortrait,
@@ -25,14 +19,11 @@ import {
 
 import { breakpoints } from '../ui/layout';
 
+import { PlayerButtons, PlayerTime, SeekBar } from './player-controls';
+
 const DEFAULT_HEIGHT = 300;
 
 const messages = defineMessages({
-  play: { id: 'video.play', defaultMessage: 'Play' },
-  pause: { id: 'video.pause', defaultMessage: 'Pause' },
-  mute: { id: 'video.mute', defaultMessage: 'Mute sound' },
-  unmute: { id: 'video.unmute', defaultMessage: 'Unmute sound' },
-  download: { id: 'video.download', defaultMessage: 'Download file' },
   fullscreen: { id: 'video.fullscreen', defaultMessage: 'Full screen' },
   exitFullscreen: { id: 'video.exit_fullscreen', defaultMessage: 'Exit full screen' },
 });
@@ -339,82 +330,26 @@ const Video: React.FC<IVideo> = ({
             'video-player__controls--visible': paused || hovered,
           })}
         >
-          <div className='video-player__seek' onMouseDown={handleSeekMouseDown} ref={seek}>
-            <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
-            <div className='video-player__seek__progress' style={{ width: `${progress}%` }} />
+          <SeekBar
+            ref={seek}
+            buffer={buffer}
+            progress={progress}
+            dragging={dragging}
+            onMouseDown={handleSeekMouseDown}
+            onKeyDown={handleVideoKeyDown}
+          />
 
-            <span
-              className={clsx('video-player__seek__handle', {
-                'video-player__seek__handle--active': dragging,
-              })}
-              tabIndex={0}
-              style={{ left: `${progress}%` }}
-              onKeyDown={handleVideoKeyDown}
-            />
-          </div>
-
-          <div className='video-player__controls__row'>
-            <div className='video-player__buttons'>
-              <button
-                type='button'
-                title={intl.formatMessage(paused ? messages.play : messages.pause)}
-                aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
-                className='video-player__button'
-                onClick={togglePlay}
-                autoFocus={autoFocus}
-              >
-                <Icon src={paused ? iconPlay : iconPause} />
-              </button>
-
-              <button
-                type='button'
-                title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-                aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-                className='video-player__button'
-                onClick={toggleMute}
-              >
-                <Icon src={muted ? iconSpeakerX : iconSpeakerHigh} />
-              </button>
-
-              <div
-                className='video-player__volume'
-                onMouseDown={handleVolumeMouseDown}
-                ref={slider}
-              >
-                <div
-                  className='video-player__volume__current'
-                  style={{ width: `${volume * 100}%` }}
-                />
-                <span
-                  className='video-player__volume__handle'
-                  tabIndex={0}
-                  style={{ left: `${volume * 100}%` }}
-                />
-              </div>
-
-              {(detailed || fullscreen) && (
-                <span className='video-player__time'>
-                  <span className='video-player__time__value'>{formatTime(currentTime)}</span>
-                  <span className='video-player__time__separator'>/</span>
-                  <span className='video-player__time__value'>{formatTime(duration)}</span>
-                </span>
-              )}
-
-              {link && <span className='video-player__link'>{link}</span>}
-            </div>
-
-            <div className='video-player__buttons'>
-              <a
-                title={intl.formatMessage(messages.download)}
-                aria-label={intl.formatMessage(messages.download)}
-                className='video-player__button'
-                href={src}
-                download
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <Icon src={iconDownloadSimple} />
-              </a>
+          <PlayerButtons
+            src={src}
+            paused={paused}
+            muted={muted}
+            volume={volume}
+            autoFocus={autoFocus}
+            togglePlay={togglePlay}
+            toggleMute={toggleMute}
+            onVolumeMouseDown={handleVolumeMouseDown}
+            volumeSlider={slider}
+            actions={
               <button
                 type='button'
                 title={intl.formatMessage(
@@ -428,8 +363,14 @@ const Video: React.FC<IVideo> = ({
               >
                 <Icon src={fullscreen ? iconArrowsInSimple : iconArrowsOutSimple} />
               </button>
-            </div>
-          </div>
+            }
+          >
+            {(detailed || fullscreen) && (
+              <PlayerTime currentTime={currentTime} duration={duration} />
+            )}
+
+            {link && <span className='video-player__link'>{link}</span>}
+          </PlayerButtons>
         </div>
       )}
     </div>
