@@ -15,7 +15,6 @@ import Blurhash from '@/components/media/blurhash';
 import Icon from '@/components/ui/icon';
 import { useMediaPlayer } from '@/hooks/use-media-player';
 import { useSettings } from '@/stores/settings';
-import { isFullscreen, requestFullscreen, exitFullscreen } from '@/utils/fullscreen';
 import { formatTime } from '@/utils/media';
 import {
   isPanoramic,
@@ -90,8 +89,19 @@ const Video: React.FC<IVideo> = ({
   const [duration, setDuration] = useState(0);
   const [paused, setPaused] = useState(true);
   const [containerWidth, setContainerWidth] = useState(width);
-  const [fullscreen, setFullscreen] = useState(false);
   const [hovered, setHovered] = useState(false);
+
+  const togglePlay = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+
+    setPaused(!paused);
+
+    if (paused) {
+      video.current?.play();
+    } else {
+      video.current?.pause();
+    }
+  };
 
   const {
     seek,
@@ -102,13 +112,19 @@ const Video: React.FC<IVideo> = ({
     volume,
     muted,
     dragging,
+    fullscreen,
     toggleMute,
-    seekBy,
+    toggleFullscreen,
     handleProgress,
     handleVolumeChange,
     handleVolumeMouseDown,
     handleSeekMouseDown,
-  } = useMediaPlayer(video, { seekThrottle: 60, roundSeekTime: true });
+    handleKeyDown,
+  } = useMediaPlayer(video, player, togglePlay, {
+    seekThrottle: 60,
+    roundSeekTime: true,
+    allowFullscreen: true,
+  });
 
   const setDimensions = () => {
     if (player.current) {
@@ -156,80 +172,6 @@ const Video: React.FC<IVideo> = ({
     }
   };
 
-  // TODO: also migrate this to useMediaPlayer
-  const handleKeyDown: React.KeyboardEventHandler = (e) => {
-    const frameTime = 1 / 25;
-
-    switch (e.key) {
-      case 'k':
-        e.preventDefault();
-        e.stopPropagation();
-        togglePlay();
-        break;
-      case 'm':
-        e.preventDefault();
-        e.stopPropagation();
-        toggleMute();
-        break;
-      case 'f':
-        e.preventDefault();
-        e.stopPropagation();
-        toggleFullscreen();
-        break;
-      case 'j':
-        e.preventDefault();
-        e.stopPropagation();
-        seekBy(-10);
-        break;
-      case 'l':
-        e.preventDefault();
-        e.stopPropagation();
-        seekBy(10);
-        break;
-      case ',':
-        e.preventDefault();
-        e.stopPropagation();
-        seekBy(-frameTime);
-        break;
-      case '.':
-        e.preventDefault();
-        e.stopPropagation();
-        seekBy(frameTime);
-        break;
-    }
-
-    // If we are in fullscreen mode, we don't want any hotkeys
-    // interacting with the UI that's not visible
-    if (fullscreen) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (e.key === 'Escape') {
-        exitFullscreen();
-      }
-    }
-  };
-
-  const togglePlay = (e?: React.MouseEvent) => {
-    e?.stopPropagation();
-
-    setPaused(!paused);
-
-    if (paused) {
-      video.current?.play();
-    } else {
-      video.current?.pause();
-    }
-  };
-
-  const toggleFullscreen = () => {
-    if (isFullscreen()) {
-      exitFullscreen();
-    } else if (player.current) {
-      requestFullscreen(player.current);
-    }
-  };
-
   const handleResize = useCallback(
     debounce(
       () => {
@@ -269,10 +211,6 @@ const Video: React.FC<IVideo> = ({
     ),
     [video.current, alwaysVisible, deployPictureInPicture],
   );
-
-  const handleFullscreenChange = useCallback(() => {
-    setFullscreen(isFullscreen());
-  }, []);
 
   const handleMouseEnter = () => {
     setHovered(true);
@@ -328,22 +266,12 @@ const Video: React.FC<IVideo> = ({
   }
 
   useEffect(() => {
-    document.addEventListener('fullscreenchange', handleFullscreenChange, true);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange, true);
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange, true);
-    document.addEventListener('MSFullscreenChange', handleFullscreenChange, true);
-
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
-
-      document.removeEventListener('fullscreenchange', handleFullscreenChange, true);
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange, true);
-      document.removeEventListener('mozfullscreenchange', handleFullscreenChange, true);
-      document.removeEventListener('MSFullscreenChange', handleFullscreenChange, true);
 
       if (
         video.current &&

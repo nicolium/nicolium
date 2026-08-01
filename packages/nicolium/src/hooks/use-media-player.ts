@@ -1,17 +1,21 @@
 import { throttle } from 'lodash-es';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { isFullscreen, requestFullscreen, exitFullscreen } from '@/utils/fullscreen';
 import { getPointerPosition } from '@/utils/media';
 
 interface UseMediaPlayerOptions {
   seekThrottle: number;
   roundSeekTime?: boolean;
   alwaysResumeAfterSeek?: boolean;
+  allowFullscreen?: boolean;
 }
 
 const useMediaPlayer = <T extends HTMLMediaElement>(
   media: React.RefObject<T | null>,
-  { seekThrottle, roundSeekTime, alwaysResumeAfterSeek }: UseMediaPlayerOptions,
+  player: React.RefObject<HTMLDivElement | null>,
+  togglePlay: () => void,
+  { seekThrottle, roundSeekTime, alwaysResumeAfterSeek, allowFullscreen }: UseMediaPlayerOptions,
 ) => {
   const seek = useRef<HTMLDivElement>(null);
   const slider = useRef<HTMLDivElement>(null);
@@ -21,13 +25,32 @@ const useMediaPlayer = <T extends HTMLMediaElement>(
   const [volume, setVolume] = useState(0.5);
   const [muted, setMuted] = useState(false);
   const [dragging, setDragging] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
     if (media.current) {
       setVolume(media.current.volume);
       setMuted(media.current.muted);
     }
-  }, []);
+
+    if (allowFullscreen) {
+      const handleFullscreenChange = () => {
+        setFullscreen(isFullscreen());
+      };
+
+      document.addEventListener('fullscreenchange', handleFullscreenChange, true);
+      document.addEventListener('webkitfullscreenchange', handleFullscreenChange, true);
+      document.addEventListener('mozfullscreenchange', handleFullscreenChange, true);
+      document.addEventListener('MSFullscreenChange', handleFullscreenChange, true);
+
+      return () => {
+        document.removeEventListener('fullscreenchange', handleFullscreenChange, true);
+        document.removeEventListener('webkitfullscreenchange', handleFullscreenChange, true);
+        document.removeEventListener('mozfullscreenchange', handleFullscreenChange, true);
+        document.removeEventListener('MSFullscreenChange', handleFullscreenChange, true);
+      };
+    }
+  }, [allowFullscreen]);
 
   const handleProgress = () => {
     if (media.current) {
@@ -56,6 +79,14 @@ const useMediaPlayer = <T extends HTMLMediaElement>(
 
       media.current.muted = nextMuted;
       media.current.volume = nextVolume;
+    }
+  };
+
+  const toggleFullscreen = () => {
+    if (isFullscreen()) {
+      exitFullscreen();
+    } else if (player.current) {
+      requestFullscreen(player.current);
     }
   };
 
@@ -145,6 +176,61 @@ const useMediaPlayer = <T extends HTMLMediaElement>(
     });
   };
 
+  const handleKeyDown: React.KeyboardEventHandler = (e) => {
+    const frameTime = 1 / 25;
+
+    switch (e.key) {
+      case 'k':
+        e.preventDefault();
+        e.stopPropagation();
+        togglePlay();
+        break;
+      case 'm':
+        e.preventDefault();
+        e.stopPropagation();
+        toggleMute();
+        break;
+      case 'f':
+        if (allowFullscreen) {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleFullscreen();
+        }
+        break;
+      case 'j':
+        e.preventDefault();
+        e.stopPropagation();
+        seekBy(-10);
+        break;
+      case 'l':
+        e.preventDefault();
+        e.stopPropagation();
+        seekBy(10);
+        break;
+      case ',':
+        e.preventDefault();
+        e.stopPropagation();
+        seekBy(-frameTime);
+        break;
+      case '.':
+        e.preventDefault();
+        e.stopPropagation();
+        seekBy(frameTime);
+        break;
+    }
+
+    // If we are in fullscreen mode, we don't want any hotkeys
+    // interacting with the UI that's not visible
+    if (allowFullscreen && fullscreen) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (e.key === 'Escape') {
+        exitFullscreen();
+      }
+    }
+  };
+
   return {
     seek,
     slider,
@@ -154,12 +240,14 @@ const useMediaPlayer = <T extends HTMLMediaElement>(
     volume,
     muted,
     dragging,
+    fullscreen,
     toggleMute,
-    seekBy,
+    toggleFullscreen,
     handleProgress,
     handleVolumeChange,
     handleVolumeMouseDown,
     handleSeekMouseDown,
+    handleKeyDown,
   };
 };
 

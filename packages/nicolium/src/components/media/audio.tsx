@@ -77,6 +77,20 @@ const Audio: React.FC<IAudio> = (props) => {
   const audio = useRef<HTMLAudioElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
 
+  const togglePlay = () => {
+    if (!audioContext.current) {
+      _initAudioContext();
+    }
+
+    if (paused) {
+      audio.current?.play();
+    } else {
+      audio.current?.pause();
+    }
+
+    setPaused(!paused);
+  };
+
   const {
     seek,
     slider,
@@ -87,12 +101,12 @@ const Audio: React.FC<IAudio> = (props) => {
     muted,
     dragging,
     toggleMute,
-    seekBy,
     handleProgress,
     handleVolumeChange,
     handleVolumeMouseDown,
     handleSeekMouseDown,
-  } = useMediaPlayer(audio, { seekThrottle: 15, alwaysResumeAfterSeek: true });
+    handleKeyDown,
+  } = useMediaPlayer(audio, player, togglePlay, { seekThrottle: 15, alwaysResumeAfterSeek: true });
 
   const _pack = () => ({
     src: props.src,
@@ -117,20 +131,6 @@ const Audio: React.FC<IAudio> = (props) => {
       setWidth(width);
       setHeight(height);
     }
-  };
-
-  const togglePlay = () => {
-    if (!audioContext.current) {
-      _initAudioContext();
-    }
-
-    if (paused) {
-      audio.current?.play();
-    } else {
-      audio.current?.pause();
-    }
-
-    setPaused(!paused);
   };
 
   const handleResize = debounce(
@@ -286,31 +286,6 @@ const Audio: React.FC<IAudio> = (props) => {
       e.preventDefault();
       e.stopPropagation();
       togglePlay();
-    }
-  };
-
-  const handleKeyDown: React.KeyboardEventHandler = (e) => {
-    switch (e.key) {
-      case 'k':
-        e.preventDefault();
-        e.stopPropagation();
-        togglePlay();
-        break;
-      case 'm':
-        e.preventDefault();
-        e.stopPropagation();
-        toggleMute();
-        break;
-      case 'j':
-        e.preventDefault();
-        e.stopPropagation();
-        seekBy(-10);
-        break;
-      case 'l':
-        e.preventDefault();
-        e.stopPropagation();
-        seekBy(10);
-        break;
     }
   };
 
