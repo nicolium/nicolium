@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { useSettings } from '@/stores/settings';
 import { toPalette } from '@/utils/palette';
-import { generateAccent, generateThemeCss } from '@/utils/theme';
+import { generateAccent, generateThemeCss, paletteToGrayscale } from '@/utils/theme';
 
 import { useFrontendConfig } from './use-frontend-config';
 
@@ -76,13 +76,21 @@ const useThemeCss = (overwriteConfig?: FrontendConfig) => {
   return useMemo(() => {
     try {
       let baseTheme: Partial<FrontendConfig>;
-      if (overwriteConfig) baseTheme = overwriteConfig;
-      else if (demo) baseTheme = {};
-      else baseTheme = { ...frontendConfig, ...theme };
+      let grayscale: boolean;
+      if (overwriteConfig) {
+        baseTheme = overwriteConfig;
+        grayscale = !!overwriteConfig.defaultSettings.theme?.grayscale;
+      } else if (demo) {
+        baseTheme = {};
+        grayscale = false;
+      } else {
+        baseTheme = { ...frontendConfig, ...theme };
+        grayscale = !!theme?.grayscale;
+      }
 
       const colors = normalizeColors(baseTheme);
 
-      return generateThemeCss(colors);
+      return generateThemeCss(grayscale ? paletteToGrayscale(colors) : colors);
     } catch (_) {
       return generateThemeCss({});
     }

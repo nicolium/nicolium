@@ -1,5 +1,5 @@
 import { hexToRgb, rgbToHex } from './colors';
-import { rotateHueOklab } from './colors/oklab';
+import { desaturateOklab, rotateHueOklab } from './colors/oklab';
 
 import type { Rgb, Hsl, ColorPalette, ColorObject } from '@/types/colors';
 
@@ -133,4 +133,31 @@ const hueShift = (hex: string, delta: number): string => {
   return rgbToHex(rotateHueOklab(rgb, delta));
 };
 
-export { generateAccent, generateNeutral, generateThemeCss, hexToHsl, hueShift };
+const toGrayscale = (hex: string): string => {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+
+  return rgbToHex(desaturateOklab(rgb));
+};
+
+const paletteToGrayscale = (colors: ColorPalette): ColorPalette =>
+  Object.fromEntries(
+    Object.entries(colors).map(([name, shades]) => [
+      name,
+      typeof shades === 'string'
+        ? toGrayscale(shades)
+        : Object.fromEntries(
+            Object.entries(shades ?? {}).map(([shade, value]) => [shade, toGrayscale(value)]),
+          ),
+    ]),
+  );
+
+export {
+  generateAccent,
+  generateNeutral,
+  generateThemeCss,
+  hexToHsl,
+  hueShift,
+  toGrayscale,
+  paletteToGrayscale,
+};

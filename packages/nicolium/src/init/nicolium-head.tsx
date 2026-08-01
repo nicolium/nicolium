@@ -11,6 +11,7 @@ import { startSentry } from '@/sentry';
 import { useInstanceFetched } from '@/stores/instance';
 import { useHasModals } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
+import { toGrayscale } from '@/utils/theme';
 
 const HeadTitle = React.lazy(() => import('@/components/helmet'));
 
@@ -81,7 +82,7 @@ const NicoliumHead: React.FC = () => {
       `body--${themeSettings?.interfaceSize ?? 'md'} body--borders-${themeSettings?.borderRadiusIntensity ?? 'default'}`,
       {
         dark: theme === 'dark',
-        'black dark': theme === 'black',
+        'dark black': theme === 'black',
         'window-controls-overlay': wcoVisible,
         'window-controls-overlay--right': wcoRight,
       },
@@ -104,9 +105,16 @@ const NicoliumHead: React.FC = () => {
     if (wcoVisible) {
       return window.getComputedStyle(document.body, null).getPropertyValue('background-color');
     }
-    return (themeSettings?.brandColor ?? frontendConfig.brandColor) || '#d80482';
-  }, [frontendConfig.brandColor, themeSettings?.brandColor, theme, wcoVisible, wcoRight]);
-
+    const brandColor = (themeSettings?.brandColor ?? frontendConfig.brandColor) || '#d80482';
+    return themeSettings?.grayscale ? toGrayscale(brandColor) : brandColor;
+  }, [
+    frontendConfig.brandColor,
+    themeSettings?.brandColor,
+    themeSettings?.grayscale,
+    theme,
+    wcoVisible,
+    wcoRight,
+  ]);
   return (
     <>
       {instanceFetched && <HeadTitle />}

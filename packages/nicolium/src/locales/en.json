@@ -2155,6 +2155,8 @@
   "preferences.fields.display_preview_cards.hide": "Hide preview cards",
   "preferences.fields.display_preview_cards.hide_media": "Hide media in preview cards",
   "preferences.fields.fit_scroll_top_button_in_header.label": "Place \"Click to see new posts\" button in the column header",
+  "preferences.fields.grayscale": "Grayscale",
+  "preferences.fields.grayscale.hint": "Reduce colors in the interface. This doesn’t affect displayed media.",
   "preferences.fields.implicit_addressing.label": "Include mentions in post content when replying",
   "preferences.fields.interface_size": "Interface size",
   "preferences.fields.known_languages.label": "Languages you know",

@@ -58,4 +58,9 @@ const rotateHueOklab = (rgb: Rgb, degrees: number): Rgb => {
   return oklabToRgb({ L, a: chroma * Math.cos(hue), b: chroma * Math.sin(hue) });
 };
 
-export { rotateHueOklab };
+const desaturateOklab = (rgb: Rgb): Rgb => {
+  const { L } = rgbToOklab(rgb);
+  return oklabToRgb({ L, a: 0, b: 0 });
+};
+
+export { rotateHueOklab, desaturateOklab };

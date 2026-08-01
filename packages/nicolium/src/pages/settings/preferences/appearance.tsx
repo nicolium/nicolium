@@ -157,6 +157,19 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
     debouncedSave();
   };
 
+  const onGrayscaleChange = (_key: string[], checked: boolean) => {
+    const theme = settings.theme ?? frontendConfig.defaultSettings.theme;
+
+    changeSetting(
+      ['theme'],
+      {
+        ...theme,
+        grayscale: checked,
+      },
+      { showAlert: true },
+    );
+  };
+
   const onThemeReset = () => {
     changeSetting(['themeMode'], defaultSettings.themeMode, { save: false });
     changeSetting(['theme'], defaultSettings.theme, { showAlert: true });
@@ -262,6 +275,23 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
                 aria-valuetext={borderRadiusIntensityValueText}
               />
             </div>
+          </ListItem>
+          <ListItem
+            label={
+              <FormattedMessage id='preferences.fields.grayscale' defaultMessage='Grayscale' />
+            }
+            hint={
+              <FormattedMessage
+                id='preferences.fields.grayscale.hint'
+                defaultMessage='Reduce colors in the interface. This doesn’t affect displayed media.'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['theme', 'grayscale']}
+              onChange={onGrayscaleChange}
+            />
           </ListItem>
           {settings.themeMode === 'system' && (
             <ListItem
