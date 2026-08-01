@@ -30,10 +30,11 @@ const SwipeableViews: React.FC<ISwipeableViews> = ({
     const slide = activeRef.current;
     if (!animateHeight || !slide) return;
 
-    const update = () => setHeight(slide.getBoundingClientRect().height);
+    const update = () => {
+      setHeight(Math.max(slide.clientHeight, slide.getBoundingClientRect().height));
+    };
 
     update();
-    setTimeout(update, 100);
 
     const observer = new ResizeObserver(update);
     observer.observe(slide);
