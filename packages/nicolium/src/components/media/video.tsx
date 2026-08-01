@@ -13,9 +13,10 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Blurhash from '@/components/media/blurhash';
 import Icon from '@/components/ui/icon';
+import { useMediaPlayer } from '@/hooks/use-media-player';
 import { useSettings } from '@/stores/settings';
 import { isFullscreen, requestFullscreen, exitFullscreen } from '@/utils/fullscreen';
-import { formatTime, getPointerPosition } from '@/utils/media';
+import { formatTime } from '@/utils/media';
 import {
   isPanoramic,
   isPortrait,
@@ -85,19 +86,29 @@ const Video: React.FC<IVideo> = ({
 
   const player = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
-  const seek = useRef<HTMLDivElement>(null);
-  const slider = useRef<HTMLDivElement>(null);
 
-  const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.5);
   const [paused, setPaused] = useState(true);
-  const [dragging, setDragging] = useState(false);
   const [containerWidth, setContainerWidth] = useState(width);
   const [fullscreen, setFullscreen] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const [muted, setMuted] = useState(false);
-  const [buffer, setBuffer] = useState(0);
+
+  const {
+    seek,
+    slider,
+    currentTime,
+    setCurrentTime,
+    buffer,
+    volume,
+    muted,
+    dragging,
+    toggleMute,
+    seekBy,
+    handleProgress,
+    handleVolumeChange,
+    handleVolumeMouseDown,
+    handleSeekMouseDown,
+  } = useMediaPlayer(video, { seekThrottle: 60, roundSeekTime: true });
 
   const setDimensions = () => {
     if (player.current) {
@@ -113,13 +124,6 @@ const Video: React.FC<IVideo> = ({
 
   useLayoutEffect(() => {
     setDimensions();
-  }, []);
-
-  useEffect(() => {
-    if (video.current) {
-      setVolume(video.current.volume);
-      setMuted(video.current.muted);
-    }
   }, []);
 
   const handleClickRoot: React.MouseEventHandler = (e) => {
@@ -141,95 +145,6 @@ const Video: React.FC<IVideo> = ({
     }
   };
 
-  const handleVolumeMouseDown: React.MouseEventHandler = (e) => {
-    document.addEventListener('mousemove', handleMouseVolSlide, true);
-    document.addEventListener('mouseup', handleVolumeMouseUp, true);
-    document.addEventListener('touchmove', handleMouseVolSlide, true);
-    document.addEventListener('touchend', handleVolumeMouseUp, true);
-
-    handleMouseVolSlide(e);
-
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleVolumeMouseUp = () => {
-    document.removeEventListener('mousemove', handleMouseVolSlide, true);
-    document.removeEventListener('mouseup', handleVolumeMouseUp, true);
-    document.removeEventListener('touchmove', handleMouseVolSlide, true);
-    document.removeEventListener('touchend', handleVolumeMouseUp, true);
-  };
-
-  const handleMouseVolSlide = useCallback(
-    throttle((e) => {
-      if (video.current && slider.current) {
-        const { x } = getPointerPosition(slider.current, e);
-
-        if (!isNaN(x)) {
-          const volume = Math.max(0, Math.min(1, x));
-
-          setVolume(volume);
-          setMuted(volume === 0);
-          video.current.volume = volume;
-          video.current.muted = volume === 0;
-        }
-      }
-    }, 60),
-    [video.current, slider.current],
-  );
-
-  const handleMouseDown: React.MouseEventHandler = (e) => {
-    const wasPlaying = !paused;
-
-    const handleMouseUp = () => {
-      document.removeEventListener('mousemove', handleMouseMove, true);
-      document.removeEventListener('mouseup', handleMouseUp, true);
-      document.removeEventListener('touchmove', handleMouseMove, true);
-      document.removeEventListener('touchend', handleMouseUp, true);
-
-      setDragging(false);
-      if (wasPlaying) video.current?.play();
-    };
-
-    document.addEventListener('mousemove', handleMouseMove, true);
-    document.addEventListener('mouseup', handleMouseUp, true);
-    document.addEventListener('touchmove', handleMouseMove, true);
-    document.addEventListener('touchend', handleMouseUp, true);
-
-    setDragging(true);
-    video.current?.pause();
-    handleMouseMove(e);
-
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleMouseMove = useCallback(
-    throttle((e) => {
-      if (seek.current && video.current) {
-        const { x } = getPointerPosition(seek.current, e);
-        const currentTime = Math.floor(video.current.duration * x);
-
-        if (!isNaN(currentTime)) {
-          video.current.currentTime = currentTime;
-          setCurrentTime(currentTime);
-        }
-      }
-    }, 60),
-    [seek.current, video.current],
-  );
-
-  const seekBy = (time: number) => {
-    if (video.current) {
-      const currentTime = video.current.currentTime + time;
-
-      if (!isNaN(currentTime)) {
-        setCurrentTime(currentTime);
-        video.current.currentTime = currentTime;
-      }
-    }
-  };
-
   const handleVideoKeyDown: React.KeyboardEventHandler = (e) => {
     // On the video element or the seek bar, we can safely use the space bar
     // for playback control because there are no buttons to press
@@ -241,6 +156,7 @@ const Video: React.FC<IVideo> = ({
     }
   };
 
+  // TODO: also migrate this to useMediaPlayer
   const handleKeyDown: React.KeyboardEventHandler = (e) => {
     const frameTime = 1 / 25;
 
@@ -366,19 +282,6 @@ const Video: React.FC<IVideo> = ({
     setHovered(false);
   };
 
-  const toggleMute = () => {
-    if (video.current) {
-      const nextMuted = !video.current.muted;
-      const nextVolume = nextMuted ? 0 : 1;
-
-      setVolume(nextVolume);
-      setMuted(nextMuted);
-
-      video.current.muted = nextMuted;
-      video.current.volume = nextVolume;
-    }
-  };
-
   const handleLoadedData = () => {
     if (!video.current) return;
 
@@ -405,19 +308,6 @@ const Video: React.FC<IVideo> = ({
     muted: video.current?.muted,
     currentTime: video.current?.currentTime,
   });
-
-  const handleProgress = () => {
-    if (video.current && video.current.buffered.length > 0) {
-      setBuffer((video.current.buffered.end(0) / video.current.duration) * 100);
-    }
-  };
-
-  const handleVolumeChange = () => {
-    if (video.current) {
-      setVolume(video.current.volume);
-      setMuted(video.current.muted);
-    }
-  };
 
   const progress = (currentTime / duration) * 100;
   const playerStyle: React.CSSProperties = {};
@@ -521,7 +411,7 @@ const Video: React.FC<IVideo> = ({
             'video-player__controls--visible': paused || hovered,
           })}
         >
-          <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
+          <div className='video-player__seek' onMouseDown={handleSeekMouseDown} ref={seek}>
             <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
             <div className='video-player__seek__progress' style={{ width: `${progress}%` }} />
 

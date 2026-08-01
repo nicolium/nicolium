@@ -10,8 +10,9 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
+import { useMediaPlayer } from '@/hooks/use-media-player';
 import { useSettings } from '@/stores/settings';
-import { formatTime, getPointerPosition } from '@/utils/media';
+import { formatTime } from '@/utils/media';
 
 import { breakpoints } from '../ui/layout';
 
@@ -66,22 +67,32 @@ const Audio: React.FC<IAudio> = (props) => {
 
   const [width, setWidth] = useState<number | undefined>(props.width);
   const [height, setHeight] = useState<number | undefined>(props.height);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [buffer, setBuffer] = useState(0);
   const [duration, setDuration] = useState<number | undefined>(undefined);
   const [paused, setPaused] = useState(true);
-  const [muted, setMuted] = useState(false);
-  const [volume, setVolume] = useState(0.5);
-  const [dragging, setDragging] = useState(false);
 
   const visualizer = useRef<Visualizer>(new Visualizer(TICK_SIZE));
   const audioContext = useRef<AudioContext | null>(null);
 
   const player = useRef<HTMLDivElement>(null);
   const audio = useRef<HTMLAudioElement>(null);
-  const seek = useRef<HTMLDivElement>(null);
-  const slider = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
+
+  const {
+    seek,
+    slider,
+    currentTime,
+    setCurrentTime,
+    buffer,
+    volume,
+    muted,
+    dragging,
+    toggleMute,
+    seekBy,
+    handleProgress,
+    handleVolumeChange,
+    handleVolumeMouseDown,
+    handleSeekMouseDown,
+  } = useMediaPlayer(audio, { seekThrottle: 15, alwaysResumeAfterSeek: true });
 
   const _pack = () => ({
     src: props.src,
@@ -149,120 +160,12 @@ const Audio: React.FC<IAudio> = (props) => {
     audioContext.current?.suspend();
   };
 
-  const handleProgress = () => {
-    if (audio.current) {
-      const lastTimeRange = audio.current.buffered.length - 1;
-
-      if (lastTimeRange > -1) {
-        setBuffer(
-          Math.ceil((audio.current.buffered.end(lastTimeRange) / audio.current.duration) * 100),
-        );
-      }
-    }
-  };
-
-  const handleVolumeChange = () => {
-    if (audio.current) {
-      setVolume(audio.current.volume);
-      setMuted(audio.current.muted);
-    }
-  };
-
-  const toggleMute = () => {
-    if (audio.current) {
-      const nextMuted = !audio.current.muted;
-      const nextVolume = nextMuted ? 0 : 1;
-
-      setVolume(nextVolume);
-      setMuted(nextMuted);
-
-      audio.current.muted = nextMuted;
-      audio.current.volume = nextVolume;
-    }
-  };
-
-  const handleVolumeMouseDown: React.MouseEventHandler = (e) => {
-    document.addEventListener('mousemove', handleMouseVolSlide, true);
-    document.addEventListener('mouseup', handleVolumeMouseUp, true);
-    document.addEventListener('touchmove', handleMouseVolSlide, true);
-    document.addEventListener('touchend', handleVolumeMouseUp, true);
-
-    handleMouseVolSlide(e);
-
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleVolumeMouseUp = () => {
-    document.removeEventListener('mousemove', handleMouseVolSlide, true);
-    document.removeEventListener('mouseup', handleVolumeMouseUp, true);
-    document.removeEventListener('touchmove', handleMouseVolSlide, true);
-    document.removeEventListener('touchend', handleVolumeMouseUp, true);
-  };
-
-  const handleMouseDown: React.MouseEventHandler = (e) => {
-    document.addEventListener('mousemove', handleMouseMove, true);
-    document.addEventListener('mouseup', handleMouseUp, true);
-    document.addEventListener('touchmove', handleMouseMove, true);
-    document.addEventListener('touchend', handleMouseUp, true);
-
-    setDragging(true);
-    audio.current?.pause();
-    handleMouseMove(e);
-
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleMouseUp = () => {
-    document.removeEventListener('mousemove', handleMouseMove, true);
-    document.removeEventListener('mouseup', handleMouseUp, true);
-    document.removeEventListener('touchmove', handleMouseMove, true);
-    document.removeEventListener('touchend', handleMouseUp, true);
-
-    setDragging(false);
-    audio.current?.play();
-  };
-
-  const handleMouseMove = useCallback(
-    throttle((e) => {
-      if (audio.current && seek.current) {
-        const { x } = getPointerPosition(seek.current, e);
-        const currentTime = audio.current.duration * x;
-
-        if (!isNaN(currentTime)) {
-          setCurrentTime(currentTime);
-          audio.current.currentTime = currentTime;
-        }
-      }
-    }, 15),
-    [audio.current, seek.current],
-  );
-
   const handleTimeUpdate = () => {
     if (audio.current) {
       setCurrentTime(audio.current.currentTime);
       setDuration(audio.current.duration);
     }
   };
-
-  const handleMouseVolSlide = useCallback(
-    throttle((e) => {
-      if (audio.current && slider.current) {
-        const { x } = getPointerPosition(slider.current, e);
-
-        if (!isNaN(x)) {
-          const volume = Math.max(0, Math.min(1, x));
-
-          setVolume(volume);
-          setMuted(volume === 0);
-          audio.current.volume = volume;
-          audio.current.muted = volume === 0;
-        }
-      }
-    }, 60),
-    [audio.current, slider.current],
-  );
 
   const handleScroll = useCallback(
     throttle(
@@ -375,17 +278,6 @@ const Audio: React.FC<IAudio> = (props) => {
 
   const _getForegroundColor = (): string => foregroundColor ?? '#ffffff';
 
-  const seekBy = (time: number) => {
-    if (audio.current) {
-      const currentTime = audio.current.currentTime + time;
-
-      if (!isNaN(currentTime)) {
-        setCurrentTime(currentTime);
-        audio.current.currentTime = currentTime;
-      }
-    }
-  };
-
   const handleAudioKeyDown: React.KeyboardEventHandler = (e) => {
     // On the audio element or the seek bar, we can safely use the space bar
     // for playback control because there are no buttons to press
@@ -429,13 +321,6 @@ const Audio: React.FC<IAudio> = (props) => {
   useLayoutEffect(() => {
     if (player.current) {
       _setDimensions();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (audio.current) {
-      setVolume(audio.current.volume);
-      setMuted(audio.current.muted);
     }
   }, []);
 
@@ -534,7 +419,7 @@ const Audio: React.FC<IAudio> = (props) => {
             />
           )}
 
-          <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
+          <div className='video-player__seek' onMouseDown={handleSeekMouseDown} ref={seek}>
             <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
 
             <div
