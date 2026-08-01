@@ -79,7 +79,7 @@ const NicoliumHead: React.FC = () => {
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.className = clsx(
-      `body--${themeSettings?.interfaceSize ?? 'md'} body--borders-${themeSettings?.borderRadiusIntensity ?? 'default'}`,
+      `body--${themeSettings?.interfaceSize ?? 'md'} body--borders-${themeSettings?.borderRadiusIntensity ?? 'default'} body--contrast-${themeSettings?.contrast ?? 'normal'}`,
       {
         dark: theme === 'dark',
         'dark black': theme === 'black',
@@ -91,6 +91,7 @@ const NicoliumHead: React.FC = () => {
     locale,
     themeSettings?.interfaceSize,
     themeSettings?.borderRadiusIntensity,
+    themeSettings?.contrast,
     theme,
     wcoVisible,
     wcoRight,

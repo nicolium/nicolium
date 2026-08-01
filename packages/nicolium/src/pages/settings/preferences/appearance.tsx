@@ -22,6 +22,7 @@ import type { ISettingsPage } from '@/pages/dashboard/components/frontend-config
 
 const INTERFACE_SIZES = ['sm', 'md', 'lg', 'xl'] as const;
 const BORDER_RADIUS_INTENSITIES = ['none', 'reduced', 'default'] as const;
+const CONTRAST_LEVELS = ['low', 'normal', 'high', 'max'] as const;
 
 const messages = defineMessages({
   heading: { id: 'preferences.heading.appearance', defaultMessage: 'Appearance settings' },
@@ -55,6 +56,10 @@ const messages = defineMessages({
     id: 'preferences.options.border_radius_intensity.default',
     defaultMessage: 'Default',
   },
+  contrastLow: { id: 'preferences.options.contrast.low', defaultMessage: 'Low' },
+  contrastNormal: { id: 'preferences.options.contrast.normal', defaultMessage: 'Normal' },
+  contrastHigh: { id: 'preferences.options.contrast.high', defaultMessage: 'High' },
+  contrastMax: { id: 'preferences.options.contrast.max', defaultMessage: 'Max' },
   dark: { id: 'theme_toggle.dark', defaultMessage: 'Dark' },
   black: { id: 'theme_toggle.black', defaultMessage: 'Black' },
 });
@@ -170,6 +175,20 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
     );
   };
 
+  const onContrastChange = (value: number) => {
+    const theme = settings.theme ?? frontendConfig.defaultSettings.theme;
+
+    changeSetting(
+      ['theme'],
+      {
+        ...theme,
+        contrast: CONTRAST_LEVELS[value],
+      },
+      { showAlert: true, save: false },
+    );
+    debouncedSave();
+  };
+
   const onThemeReset = () => {
     changeSetting(['themeMode'], defaultSettings.themeMode, { save: false });
     changeSetting(['theme'], defaultSettings.theme, { showAlert: true });
@@ -211,6 +230,21 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
     }
   }, [settings.theme?.borderRadiusIntensity, settings.locale]);
 
+  const contrastValueText = React.useMemo(() => {
+    const contrast = settings.theme?.contrast ?? 'normal';
+
+    switch (contrast) {
+      case 'low':
+        return intl.formatMessage(messages.contrastLow);
+      case 'high':
+        return intl.formatMessage(messages.contrastHigh);
+      case 'max':
+        return intl.formatMessage(messages.contrastMax);
+      default:
+        return intl.formatMessage(messages.contrastNormal);
+    }
+  }, [settings.theme?.contrast, settings.locale]);
+
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form>
@@ -236,6 +270,22 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
             }}
             allowTintChange={false}
           />
+          <ListItem
+            label={
+              <div className='appearance__size-label'>
+                <FormattedMessage id='preferences.fields.contrast' defaultMessage='Contrast' />
+              </div>
+            }
+          >
+            <div className='appearance__slider'>
+              <StepSlider
+                value={CONTRAST_LEVELS.indexOf(settings.theme?.contrast ?? 'normal')}
+                steps={4}
+                onChange={onContrastChange}
+                aria-valuetext={contrastValueText}
+              />
+            </div>
+          </ListItem>
           <ListItem
             label={
               <div className='appearance__size-label'>
