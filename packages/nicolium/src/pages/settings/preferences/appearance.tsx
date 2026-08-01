@@ -202,20 +202,17 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
     [settings.locale],
   );
 
-  const interfaceSizeValueText = React.useMemo(() => {
-    const size = settings.theme?.interfaceSize ?? 'md';
-
-    switch (size) {
-      case 'sm':
-        return intl.formatMessage(messages.interfaceSizeSmall);
-      case 'lg':
-        return intl.formatMessage(messages.interfaceSizeLarge);
-      case 'xl':
-        return intl.formatMessage(messages.interfaceSizeExtraLarge);
-      default:
-        return intl.formatMessage(messages.interfaceSizeMedium);
-    }
-  }, [settings.theme?.interfaceSize, settings.locale]);
+  const interfaceSizeValueTitles = React.useMemo(
+    () => [
+      intl.formatMessage(messages.interfaceSizeSmall),
+      intl.formatMessage(messages.interfaceSizeLarge),
+      intl.formatMessage(messages.interfaceSizeExtraLarge),
+      intl.formatMessage(messages.interfaceSizeMedium),
+    ],
+    [settings.theme?.interfaceSize, settings.locale],
+  );
+  const interfaceSizeValueText =
+    interfaceSizeValueTitles[INTERFACE_SIZES.indexOf(settings.theme?.interfaceSize ?? 'md')];
 
   const borderRadiusIntensityValueTitles = React.useMemo(
     () => [
@@ -226,24 +223,23 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
     [settings.locale],
   );
 
-  const borderRadiusIntensity = settings.theme?.borderRadiusIntensity ?? 'default';
   const borderRadiusIntensityValueText =
-    borderRadiusIntensityValueTitles[BORDER_RADIUS_INTENSITIES.indexOf(borderRadiusIntensity)];
+    borderRadiusIntensityValueTitles[
+      BORDER_RADIUS_INTENSITIES.indexOf(settings.theme?.borderRadiusIntensity ?? 'default')
+    ];
 
-  const contrastValueText = React.useMemo(() => {
-    const contrast = settings.theme?.contrast ?? 'normal';
+  const contrastValueTitles = React.useMemo(
+    () => [
+      intl.formatMessage(messages.contrastLow),
+      intl.formatMessage(messages.contrastNormal),
+      intl.formatMessage(messages.contrastHigh),
+      intl.formatMessage(messages.contrastMax),
+    ],
+    [settings.locale],
+  );
 
-    switch (contrast) {
-      case 'low':
-        return intl.formatMessage(messages.contrastLow);
-      case 'high':
-        return intl.formatMessage(messages.contrastHigh);
-      case 'max':
-        return intl.formatMessage(messages.contrastMax);
-      default:
-        return intl.formatMessage(messages.contrastNormal);
-    }
-  }, [settings.theme?.contrast, settings.locale]);
+  const contrastValueText =
+    contrastValueTitles[CONTRAST_LEVELS.indexOf(settings.theme?.contrast ?? 'normal')];
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -282,6 +278,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
                 value={CONTRAST_LEVELS.indexOf(settings.theme?.contrast ?? 'normal')}
                 steps={4}
                 onChange={onContrastChange}
+                titles={contrastValueTitles}
                 aria-valuetext={contrastValueText}
               />
             </div>
@@ -301,6 +298,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
                 value={INTERFACE_SIZES.indexOf(settings.theme?.interfaceSize ?? 'md')}
                 steps={4}
                 onChange={onInterfaceSizeChange}
+                titles={interfaceSizeValueTitles}
                 aria-valuetext={interfaceSizeValueText}
               />
             </div>
