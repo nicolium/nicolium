@@ -8,9 +8,9 @@ import iconTwitterLogo from '@phosphor-icons/core/regular/twitter-logo.svg';
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { prepareRequest } from '@/actions/consumer-auth';
 import IconButton from '@/components/ui/icon-button';
 import Tooltip from '@/components/ui/tooltip';
+import { prepareRequest } from '@/utils/auth/consumer-auth';
 import { capitalize } from '@/utils/strings';
 
 const messages = defineMessages({

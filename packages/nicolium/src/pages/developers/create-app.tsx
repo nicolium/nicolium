@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { createApp } from '@/actions/apps';
-import { obtainOAuthToken } from '@/actions/oauth';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -11,6 +9,8 @@ import Input from '@/components/ui/input';
 import Textarea from '@/components/ui/textarea';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { getBaseURL } from '@/utils/accounts';
+import { createApp } from '@/utils/auth/apps';
+import { obtainOAuthToken } from '@/utils/auth/oauth';
 
 import type { CredentialApplication, Token } from 'pl-api';
 

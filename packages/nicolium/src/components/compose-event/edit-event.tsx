@@ -6,7 +6,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { cancelEventCompose, initEventEdit, submitEvent } from '@/actions/events';
 import { uploadFile } from '@/actions/media';
-import { fetchStatus } from '@/actions/statuses';
 import { ComposeEditor, DatePicker } from '@/components/async-components';
 import { ADDRESS_ICONS } from '@/components/autosuggest-location';
 import ContentTypeButton from '@/components/compose/content-type-button';
@@ -22,6 +21,7 @@ import Input from '@/components/ui/input';
 import Toggle from '@/components/ui/toggle';
 import { useClient } from '@/hooks/use-client';
 import { useScopeUrl } from '@/hooks/use-scope-url';
+import { fetchStatus } from '@/queries/statuses/status-actions';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useChangeUploadCompose, useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';

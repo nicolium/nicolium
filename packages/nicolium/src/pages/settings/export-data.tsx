@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { exportFollows, exportBlocks, exportMutes } from '@/actions/export-data';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
+import { exportFollows, exportBlocks, exportMutes } from '@/pages/settings/utils/export-data';
 
 interface ICSVExporter {
   inputLabel: React.ReactNode;

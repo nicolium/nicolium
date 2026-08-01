@@ -2,7 +2,6 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { Suspense, useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { fetchStatus } from '@/actions/statuses';
 import { ComposeForm } from '@/components/async-components';
 import { Column } from '@/components/ui/column';
 import { useColumnId } from '@/contexts/deck-column-id-context';
@@ -12,6 +11,7 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
+import { fetchStatus } from '@/queries/statuses/status-actions';
 import { useDraftStatusQuery } from '@/queries/statuses/use-draft-statuses';
 import { newStatusRoute } from '@/router';
 import { useComposeActions } from '@/stores/compose';

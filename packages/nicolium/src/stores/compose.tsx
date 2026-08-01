@@ -6,7 +6,6 @@ import { mutative } from 'zustand-mutative';
 
 import { uploadFile, updateMedia } from '@/actions/media';
 import { saveSettings } from '@/actions/settings';
-import { createStatus } from '@/actions/statuses';
 import { countableText } from '@/components/compose/util/counter';
 import { isNativeEmoji } from '@/emoji';
 import { useClient } from '@/hooks/use-client';
@@ -16,6 +15,7 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { createStatus } from '@/queries/statuses/status-actions';
 import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { deckRoute, router } from '@/router';
 import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';

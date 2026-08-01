@@ -10,7 +10,7 @@ import { useSettingsStore } from '@/stores/settings';
 import { useTimelinesStore } from '@/stores/timelines';
 import { shouldHaveCard } from '@/utils/status';
 
-import { importEntities } from '../queries/utils/import-entities';
+import { importEntities } from '../utils/import-entities';
 
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
 import type { useQueryClient } from '@tanstack/react-query';

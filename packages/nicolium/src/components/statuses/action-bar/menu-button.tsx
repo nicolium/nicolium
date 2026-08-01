@@ -38,7 +38,6 @@ import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
-import { editStatus, toggleMuteStatus, redactStatus } from '@/actions/statuses';
 import DropdownMenu from '@/components/dropdown-menu';
 import StatusActionButton from '@/components/statuses/status-action-button';
 import { useColumnId, deckColumnRouterRegistry } from '@/contexts/deck-column-id-context';
@@ -53,6 +52,7 @@ import { useChats } from '@/queries/chats';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
 import { useTranslationLanguages } from '@/queries/instance/use-translation-languages';
+import { editStatus, toggleMuteStatus, redactStatus } from '@/queries/statuses/status-actions';
 import {
   useDeleteStatus,
   useDeleteStatusFromGroup,

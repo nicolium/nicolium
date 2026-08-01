@@ -1,9 +1,9 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 
-import { preload } from '@/actions/preload';
 import { DefaultCurrentAccountProvider } from '@/contexts/current-account-context';
 import { StatProvider } from '@/contexts/stat-context';
+import { preload } from '@/init/preload';
 import { queryClient } from '@/queries/client';
 
 import NicoliumHead from './nicolium-head';

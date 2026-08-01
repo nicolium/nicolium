@@ -2,13 +2,13 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useState, useEffect } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { externalLogin, loginWithCode, viewAsGuest } from '@/actions/external-auth';
 import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import toast from '@/toast';
+import { externalLogin, loginWithCode, viewAsGuest } from '@/utils/auth/external-auth';
 
 const messages = defineMessages({
   instanceLabel: { id: 'login.fields.instance.label', defaultMessage: 'Instance' },

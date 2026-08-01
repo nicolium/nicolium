@@ -3,13 +3,10 @@ import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { FormattedMessage } from 'react-intl';
 
-import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
+import { register as registerPushNotifications } from '@/actions/push-notifications';
 import GuestBanner from '@/components/guest-banner';
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
 import ThumbNavigation from '@/components/navigation/thumb-navigation';
-// Dummy import, to make sure that <Status /> ends up in the application bundle.
-// Without this it ends up in ~8 very commonly used bundles.
-import '@/components/statuses/status';
 import Layout from '@/components/ui/layout';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useUserStream } from '@/hooks/streaming/use-user-stream';
@@ -46,6 +43,10 @@ import {
   PictureInPicture,
   StatusHoverCard,
 } from '../components/async-components';
+
+// Dummy import, to make sure that <Status /> ends up in the application bundle.
+// Without this it ends up in ~8 very commonly used bundles.
+import '@/components/statuses/status';
 
 const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();

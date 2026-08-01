@@ -17,8 +17,6 @@ import * as v from 'valibot';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import { createApp } from '@/actions/apps';
-import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
 import { FE_NAME } from '@/actions/settings';
 import * as BuildConfig from '@/build-config';
 import { queryClient } from '@/queries/client';
@@ -31,6 +29,8 @@ import { useInstanceStore } from '@/stores/instance';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 import { validId, parseBaseURL } from '@/utils/auth';
+import { createApp } from '@/utils/auth/apps';
+import { obtainOAuthToken, revokeOAuthToken } from '@/utils/auth/oauth';
 import sourceCode from '@/utils/code';
 import { normalizeUsername } from '@/utils/input';
 import { getScopes } from '@/utils/scopes';

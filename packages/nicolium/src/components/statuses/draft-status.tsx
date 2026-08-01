@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchStatus } from '@/actions/statuses';
 import Account from '@/components/accounts/account';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import OutlineBox from '@/components/outline-box';
@@ -16,6 +15,7 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
+import { fetchStatus } from '@/queries/statuses/status-actions';
 import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';

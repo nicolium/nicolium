@@ -9,10 +9,10 @@
 import { instanceSchema, PlApiClient, type Instance } from 'pl-api';
 import * as v from 'valibot';
 
-import { createApp } from '@/actions/apps';
-import { obtainOAuthToken } from '@/actions/oauth';
 import { useAuthStore, addToken, verifyCredentials } from '@/stores/auth';
 import { parseBaseURL } from '@/utils/auth';
+import { createApp } from '@/utils/auth/apps';
+import { obtainOAuthToken } from '@/utils/auth/oauth';
 import sourceCode from '@/utils/code';
 import { getInstanceScopes } from '@/utils/scopes';
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { deleteAccount } from '@/actions/security';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
@@ -10,6 +9,7 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import toast from '@/toast';
+import { deleteAccount } from '@/utils/auth/security';
 
 const messages = defineMessages({
   heading: { id: 'column.delete_account', defaultMessage: 'Delete account' },

@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { decrementReplyCount, incrementReplyCount } from '@/actions/statuses';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { scopedQueryKey, useAppQueries, useAppQuery } from '@/queries/query';
 import { useFilters } from '@/queries/settings/use-filters';
 import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
+import { decrementReplyCount, incrementReplyCount } from '@/queries/statuses/status-actions';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { useComposeActions } from '@/stores/compose';
 import { useContextsActions } from '@/stores/contexts';

@@ -7,13 +7,13 @@ import { debounce } from 'lodash-es';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { fetchStatus } from '@/actions/statuses';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
+import { fetchStatus } from '@/queries/statuses/status-actions';
 import { useComposeActions, useSubmitCompose } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 import { getStatusIdsFromLinksInContent } from '@/utils/status';

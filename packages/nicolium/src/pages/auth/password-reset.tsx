@@ -2,7 +2,6 @@ import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { resetPassword } from '@/actions/security';
 import { BigCard } from '@/components/ui/big-card';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
@@ -11,6 +10,7 @@ import Input from '@/components/ui/input';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import toast from '@/toast';
+import { resetPassword } from '@/utils/auth/security';
 
 const messages = defineMessages({
   confirmation: {
