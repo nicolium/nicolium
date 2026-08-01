@@ -386,6 +386,8 @@ const Audio: React.FC<IAudio> = (props) => {
             accentColor={accentColor}
             onMouseDown={handleSeekMouseDown}
             onKeyDown={handleAudioKeyDown}
+            currentTime={currentTime}
+            duration={duration}
           />
 
           <div className='video-player__controls video-player__controls--visible'>

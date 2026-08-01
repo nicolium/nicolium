@@ -2763,6 +2763,8 @@
   "video.mute": "Mute sound",
   "video.pause": "Pause",
   "video.play": "Play",
+  "video.seek": "Seek",
   "video.unmute": "Unmute sound",
+  "video.volume": "Volume",
   "who_to_follow.title": "People to follow"
 }

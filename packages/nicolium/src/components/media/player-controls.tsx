@@ -16,6 +16,8 @@ const messages = defineMessages({
   mute: { id: 'video.mute', defaultMessage: 'Mute sound' },
   unmute: { id: 'video.unmute', defaultMessage: 'Unmute sound' },
   download: { id: 'video.download', defaultMessage: 'Download file' },
+  seek: { id: 'video.seek', defaultMessage: 'Seek' },
+  volume: { id: 'video.volume', defaultMessage: 'Volume' },
 });
 
 interface ISeekBar {
@@ -23,30 +25,44 @@ interface ISeekBar {
   progress: number;
   dragging: boolean;
   accentColor?: string;
+  currentTime: number;
+  duration: number;
   onMouseDown: React.MouseEventHandler;
   onKeyDown: React.KeyboardEventHandler;
 }
 
 const SeekBar = React.forwardRef<HTMLDivElement, ISeekBar>(
-  ({ buffer, progress, dragging, accentColor, onMouseDown, onKeyDown }, ref) => (
-    <div className='video-player__seek' onMouseDown={onMouseDown} ref={ref}>
-      <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
+  (
+    { buffer, progress, dragging, accentColor, onMouseDown, onKeyDown, currentTime, duration },
+    ref,
+  ) => {
+    const intl = useIntl();
 
-      <div
-        className='video-player__seek__progress'
-        style={{ width: `${progress}%`, backgroundColor: accentColor }}
-      />
+    return (
+      <div className='video-player__seek' onMouseDown={onMouseDown} ref={ref}>
+        <div className='video-player__seek__buffer' style={{ width: `${buffer}%` }} />
 
-      <span
-        className={clsx('video-player__seek__handle', {
-          'video-player__seek__handle--active': dragging,
-        })}
-        tabIndex={0}
-        style={{ left: `${progress}%`, backgroundColor: accentColor }}
-        onKeyDown={onKeyDown}
-      />
-    </div>
-  ),
+        <div
+          className='video-player__seek__progress'
+          style={{ width: `${progress}%`, backgroundColor: accentColor }}
+        />
+
+        <span
+          className={clsx('video-player__seek__handle', {
+            'video-player__seek__handle--active': dragging,
+          })}
+          tabIndex={0}
+          style={{ left: `${progress}%`, backgroundColor: accentColor }}
+          onKeyDown={onKeyDown}
+          role='slider'
+          aria-label={intl.formatMessage(messages.seek)}
+          aria-valuemin={0}
+          aria-valuemax={Math.floor(duration)}
+          aria-valuenow={Math.floor(currentTime)}
+        />
+      </div>
+    );
+  },
 );
 
 SeekBar.displayName = 'SeekBar';
@@ -136,6 +152,11 @@ const PlayerButtons: React.FC<IPlayerButtons> = ({
             className='video-player__volume__handle'
             tabIndex={0}
             style={{ left: `${volume * 100}%`, backgroundColor: accentColor }}
+            role='slider'
+            aria-label={intl.formatMessage(messages.volume)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(volume * 100)}
           />
         </div>
 

@@ -337,6 +337,8 @@ const Video: React.FC<IVideo> = ({
             dragging={dragging}
             onMouseDown={handleSeekMouseDown}
             onKeyDown={handleVideoKeyDown}
+            currentTime={currentTime}
+            duration={duration}
           />
 
           <PlayerButtons
