@@ -1,15 +1,8 @@
 @use 'sass:list';
 @use 'sass:math';
 
-@function contrast-mix($mix, $shift) {
-  $base: math.div($mix, 100%);
-  $target: 0;
-
-  @if $shift > 0 {
-    $target: 1;
-  }
-
-  @return math.percentage($base + math.div(math.abs($shift), 100) * ($target - $base));
+@function contrast-mix($mix, $start, $end) {
+  @return math.percentage(math.div($start + math.div($mix * (100 - $start - $end), 100), 100));
 }
 
 $breakpoint-sm: 581px;
@@ -30,13 +23,13 @@ $breakpoint-xl: 1280px;
       --color-#{$family}-800: color-mix(in oklab, var(--color-#{$family}-500) 44%, black);
       --color-#{$family}-900: color-mix(in oklab, var(--color-#{$family}-500) 34%, black);
 
-      @each $contrast-level, $contrast-value in ('low': [-20, 40], 'high': [4, -10], 'max': [10, -30], 'low.dark': [0, -20], 'high.dark': [-4, 10], 'max.dark': [-6, 15]) {
+      @each $contrast-level, $contrast-value in ('low': [0, 30], 'high': [8, 16], 'max': [12, 8]) {
         &.body--contrast-#{$contrast-level} {
-          @each $shade, $mix in (50: 6%, 100: 11%, 200: 28%, 300: 74%, 400: 84%) {
-            --color-#{$family}-#{$shade}: color-mix(in oklab, var(--color-#{$family}-500) #{contrast-mix($mix, list.nth($contrast-value, 1))}, white);
+          @each $shade, $mix in (50: 0, 100: 5, 200: 22, 300: 68, 400: 78) {
+            --color-#{$family}-#{$shade}: color-mix(in oklab, var(--color-#{$family}-500) #{contrast-mix($mix, list.nth($contrast-value, 1), list.nth($contrast-value, 2))}, white);
           }
-          @each $shade, $mix in (600: 93%, 700: 81%, 800: 44%, 900: 34%) {
-            --color-#{$family}-#{$shade}: color-mix(in oklab, var(--color-#{$family}-500) #{contrast-mix($mix, list.nth($contrast-value, 2))}, black);
+          @each $shade, $mix in (600: 1, 700: 13, 800: 50, 900: 60) {
+            --color-#{$family}-#{$shade}: color-mix(in oklab, var(--color-#{$family}-500) #{100% - contrast-mix($mix, list.nth($contrast-value, 2), list.nth($contrast-value, 1))}, black);
           }
         }
       }
