@@ -284,14 +284,6 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
       });
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-    }
-
-    verifyAccounts();
-  }, []);
-
-  useEffect(() => {
     if (isSidebarOpen) containerRef.current?.querySelector('a')?.focus();
     else {
       setPage('main');
@@ -307,6 +299,14 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
       isSidebarOpen ? 0 : 150,
     );
   }, [isSidebarOpen]);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    }
+
+    verifyAccounts();
+  }, []);
 
   return (
     <div
