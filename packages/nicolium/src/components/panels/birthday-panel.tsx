@@ -34,7 +34,9 @@ const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
       onActionClick={
         birthdays.length !== birthdaysToRender.length ? () => openModal('BIRTHDAYS') : undefined
       }
-      actionTitle={intl.formatMessage(messages.all)}
+      actionTitle={
+        birthdays.length !== birthdaysToRender.length ? intl.formatMessage(messages.all) : undefined
+      }
     >
       {birthdaysToRender.map((accountId) => (
         <AccountContainer key={accountId} id={accountId} withRelationship={false} />
