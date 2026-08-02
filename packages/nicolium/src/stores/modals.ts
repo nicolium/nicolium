@@ -207,13 +207,6 @@ const useModalsActions = () => {
     element?: HTMLElement,
   ) => void = (...args) => {
     const [type, props, element] = args;
-    console.log('useModalsActions.openModal', {
-      type,
-      props,
-      element,
-      scopeUrl,
-      columnId,
-    });
     actions.openModal(type, props, element, scopeUrl, columnId);
   };
 

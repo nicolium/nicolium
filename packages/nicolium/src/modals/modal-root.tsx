@@ -122,7 +122,6 @@ const ModalRoot: React.FC = () => {
   }
 
   if (hasChildren && columnId) {
-    console.log('ModalRoot: wrapping with DeckColumnIdContext', columnId);
     children = (
       <DeckColumnIdContext.Provider value={columnId}>{children}</DeckColumnIdContext.Provider>
     );
