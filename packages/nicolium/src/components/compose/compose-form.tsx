@@ -224,7 +224,6 @@ const ComposeForm = <ID extends string>({
   const condensed = shouldCondense && !isDraggedOver && !composeFocused && isEmpty && !isUploading;
   const shouldAutoFocus = autoFocus;
   const canSubmit =
-    (usePlainText || !!editorRef.current) &&
     !isSubmitting &&
     !isUploading &&
     !isChangingUpload &&
