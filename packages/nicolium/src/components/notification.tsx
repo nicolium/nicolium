@@ -464,6 +464,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
         <Emoji
           emoji={notification.emoji}
           src={notification.emoji_url ?? undefined}
+          staticSrc={notification.emoji_static_url ?? undefined}
           className='notification__icon notification__icon--emoji'
         />
       );

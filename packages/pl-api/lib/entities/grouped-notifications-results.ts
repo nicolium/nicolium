@@ -119,6 +119,7 @@ const subscribedReactionNotificationGroupSchema = v.object({
   type: v.literal('subscribed_reaction'),
   emoji: v.fallback(v.nullable(v.string()), null),
   emoji_url: v.fallback(v.nullable(v.string()), null),
+  emoji_static_url: v.fallback(v.nullable(v.string()), null),
   status_id: v.string(),
 });
 

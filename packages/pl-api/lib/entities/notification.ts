@@ -108,6 +108,7 @@ const subscribedReactionNotificationSchema = v.object({
   status: statusSchema,
   emoji: v.fallback(v.nullable(v.string()), null),
   emoji_url: v.fallback(v.nullable(v.string()), null),
+  emoji_static_url: v.fallback(v.nullable(v.string()), null),
 });
 
 const collectionNotificationSchema = v.object({
