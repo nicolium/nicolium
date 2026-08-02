@@ -401,14 +401,19 @@ const useTimelinesStore = create<State>()(
             );
             if (idx !== -1) {
               if (
-                timeline.entries.some(
-                  (entry) => entry.type === 'status' && entry.id === status.id,
-                ) ||
-                timeline.queuedEntries.some((queued) => queued.id === status.id)
+                timeline.entries.some((entry) => entry.type === 'status' && entry.id === status.id)
               ) {
                 timeline.entries.splice(idx, 1);
                 return;
               }
+              const queuedEntryIndex = timeline.queuedEntries.findIndex(
+                (queued) => queued.id === status.id,
+              );
+
+              if (queuedEntryIndex !== -1) {
+                timeline.queuedEntries.splice(queuedEntryIndex, 1);
+              }
+
               timeline.entries[idx] = {
                 type: 'status',
                 id: status.id,
