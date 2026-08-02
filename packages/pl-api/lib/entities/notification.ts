@@ -1,6 +1,7 @@
 import * as v from 'valibot';
 
 import { pick } from '@/utils';
+import { normalizeEmojiReaction } from '@/utils/notifications';
 
 import { accountSchema } from './account';
 import { accountWarningSchema } from './account-warning';
@@ -78,6 +79,7 @@ const emojiReactionNotificationSchema = v.object({
   type: v.literal('emoji_reaction'),
   emoji: v.string(),
   emoji_url: v.fallback(v.nullable(v.string()), null),
+  emoji_static_url: v.fallback(v.nullable(v.string()), null),
   status: statusSchema,
 });
 
@@ -120,17 +122,22 @@ const collectionNotificationSchema = v.object({
  * */
 const notificationSchema: v.BaseSchema<any, Notification, v.BaseIssue<unknown>> = v.pipe(
   v.any(),
-  v.transform((notification: any) => ({
-    group_key: `ungrouped-${notification.id}`,
-    ...pick(notification.pleroma || {}, ['is_muted', 'is_seen']),
-    ...notification,
-    type:
-      notification.type === 'pleroma:report'
-        ? 'admin.report'
-        : notification.type === 'reaction'
-          ? 'emoji_reaction'
-          : notification.type?.replace(/^pleroma:/, ''),
-  })),
+  v.transform((notification: any) => {
+    const reaction = normalizeEmojiReaction(notification);
+
+    return {
+      ...reaction,
+      group_key: `ungrouped-${notification.id}`,
+      ...pick(notification.pleroma || {}, ['is_muted', 'is_seen']),
+      ...notification,
+      type:
+        notification.type === 'pleroma:report'
+          ? 'admin.report'
+          : notification.type === 'reaction'
+            ? 'emoji_reaction'
+            : notification.type?.replace(/^pleroma:/, ''),
+    };
+  }),
   v.variant('type', [
     accountNotificationSchema,
     mentionNotificationSchema,

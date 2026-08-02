@@ -16,4 +16,18 @@ const fixNotificationTypes = (types: Array<string>) => {
   ];
 };
 
-export { fixNotificationTypes };
+const normalizeEmojiReaction: (
+  notification: any,
+) => { emoji: string; emoji_url: string | null; emoji_static_url: string | null } | undefined = (
+  notification,
+) => {
+  if (typeof notification.reaction === 'object' && notification.reaction !== null) {
+    return {
+      emoji: notification.reaction.name,
+      emoji_url: notification.reaction.url,
+      emoji_static_url: notification.reaction.static_url,
+    };
+  }
+};
+
+export { fixNotificationTypes, normalizeEmojiReaction };
