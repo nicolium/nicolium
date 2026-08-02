@@ -1257,6 +1257,7 @@
   "confirmations.unfollow.confirm": "Unfollow",
   "confirmations.unfollow.heading": "Unfollow {name}",
   "confirmations.unfollow.message": "Are you sure you want to unfollow {name}?",
+  "confirmations.unfollow.message.locked": "Are you sure you want to unfollow {name}? You will have to request to follow them again if you change your mind.",
   "confirmations.wrench.confirm": "Wrench",
   "confirmations.wrench.heading": "Wrench the post",
   "confirmations.wrench.message": "Are you sure you want to wrench this post? This can have disastrous consequences.",

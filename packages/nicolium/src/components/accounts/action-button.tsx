@@ -172,7 +172,13 @@ const ActionButton: React.FC<IActionButton> = ({
               values={{ name: <strong>@{account.acct}</strong> }}
             />
           ),
-          message: (
+          message: account.locked ? (
+            <FormattedMessage
+              id='confirmations.unfollow.message.locked'
+              defaultMessage='Are you sure you want to unfollow {name}? You will have to request to follow them again if you change your mind.'
+              values={{ name: <strong>@{account.acct}</strong> }}
+            />
+          ) : (
             <FormattedMessage
               id='confirmations.unfollow.message'
               defaultMessage='Are you sure you want to unfollow {name}?'
