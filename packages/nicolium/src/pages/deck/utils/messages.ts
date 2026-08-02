@@ -103,6 +103,14 @@ const messages = defineMessages({
   editList: { id: 'lists.edit', defaultMessage: 'Edit list' },
   editCircle: { id: 'circles.edit', defaultMessage: 'Edit circle' },
   editAntenna: { id: 'antennas.edit', defaultMessage: 'Edit antenna' },
+  editAdditionalTags: {
+    id: 'hashtag.column_settings.edit_additional_tags',
+    defaultMessage: 'Edit additional tags',
+  },
+  additionalTagsPlaceholder: {
+    id: 'hashtag.column_settings.select.placeholder',
+    defaultMessage: 'Enter hashtags…',
+  },
 });
 
 export { messages as deckMessages };

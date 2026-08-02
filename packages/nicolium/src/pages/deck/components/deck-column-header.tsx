@@ -23,7 +23,7 @@ import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import iconChevronsLeftRight from 'lucide-static/icons/chevrons-left-right.svg';
 import iconChevronsRightLeft from 'lucide-static/icons/chevrons-right-left.svg';
 import iconTimeline from 'lucide-static/icons/timeline.svg';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
@@ -60,6 +60,7 @@ type IDeckColumnHeaderInner = IDeckColumnHeader & {
   title: React.ReactNode;
   subtitle?: React.ReactNode;
   items?: Menu;
+  settings?: React.ReactNode;
 };
 
 const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
@@ -77,6 +78,7 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
   title,
   subtitle,
   items,
+  settings,
 }) => {
   const intl = useIntl();
 
@@ -173,32 +175,39 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
   }, [intl, index, columns, column, items]);
 
   return (
-    <CardHeader className='deck__column__header'>
-      <div className='deck__column__header__title'>
-        <DeckColumnAccountButton column={column} />
-        {emoji ? (
-          <Emoji emoji={emoji} src={emojiUrl} className='deck__column__header__icon' />
-        ) : (
-          <Icon className='deck__column__header__icon' src={icon} />
-        )}
-        <div className='deck__column__header__title__text'>
-          <CardTitle title={title} truncate={false} />
-          {subtitle && <p className='deck__column__header__subtitle'>{subtitle}</p>}
+    <>
+      <CardHeader className='deck__column__header'>
+        <div className='deck__column__header__title'>
+          <DeckColumnAccountButton column={column} />
+          {emoji ? (
+            <Emoji emoji={emoji} src={emojiUrl} className='deck__column__header__icon' />
+          ) : (
+            <Icon className='deck__column__header__icon' src={icon} />
+          )}
+          <div className='deck__column__header__title__text'>
+            <CardTitle title={title} truncate={false} />
+            {subtitle && <p className='deck__column__header__subtitle'>{subtitle}</p>}
+          </div>
         </div>
-      </div>
-      <div className='deck__column__actions'>
-        {column.pinned && (
-          <IconButton
-            src={iconPushPin}
-            className='deck__column__header__icon deck__column__header__icon--pinned'
-            theme='transparent'
-            onClick={() => onChangePin(column.id, false)}
-            title={intl.formatMessage(messages.unpinColumn)}
-          />
-        )}
-        <DropdownMenu items={allItems} src={iconDotsThreeVertical} />
-      </div>
-    </CardHeader>
+        <div className='deck__column__actions'>
+          {column.pinned && (
+            <IconButton
+              src={iconPushPin}
+              className='deck__column__header__icon deck__column__header__icon--pinned'
+              theme='transparent'
+              onClick={() => onChangePin(column.id, false)}
+              title={intl.formatMessage(messages.unpinColumn)}
+            />
+          )}
+          <DropdownMenu items={allItems} src={iconDotsThreeVertical} />
+        </div>
+      </CardHeader>
+      {settings && (
+        <div className='deck__column__settings'>
+          {settings}
+        </div>
+      )}
+    </>
   );
 };
 
@@ -623,12 +632,26 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
   column,
   ...props
 }) => {
-  const items = useTimelineFiltersOptions(column);
+  const [showEditAdditionalTags, setShowEditAdditionalTags] = useState(false);
+  const intl = useIntl();
+
+  const filtersOptions = useTimelineFiltersOptions(column);
   const filtersList = useTimelineFiltersList(column);
 
   const additionalTags = [column.any, column.all, column.none]
     .filter((value) => value)
     .flat().length;
+
+  const items = useMemo(() => {
+    return [
+      ...filtersOptions,
+      null,
+      {
+        text: intl.formatMessage(messages.editAdditionalTags),
+        action: () => setShowEditAdditionalTags(true),
+      },
+    ];
+  }, [filtersOptions, intl]);
 
   const tagsList = useMemo(() => {
     const entries: Array<React.ReactNode> = [];
