@@ -385,6 +385,7 @@ const useTimelinesStore = create<State>()(
             if (!timeline) continue;
 
             if (
+              timeline.queuedEntries.length ||
               timeline.entries.some((e) => e.type === 'pending-status' && e.id === idempotencyKey)
             )
               continue;
