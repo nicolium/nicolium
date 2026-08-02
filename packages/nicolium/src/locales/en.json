@@ -986,6 +986,8 @@
   "compose.clear_link_suggestion.body": "The link {url} likely includes tracking elements used to mark your online activity. They are not required for the URL to work. Do you want to remove them?",
   "compose.clear_link_suggestion.ignore": "Ignore",
   "compose.clear_link_suggestion.remove": "Remove",
+  "compose.delete.fail": "Failed to delete post",
+  "compose.delete.success": "Post deleted",
   "compose.edit.success": "Your post was edited",
   "compose.hashtag_casing_suggestion.body": "Does the hashtag {hashtag} include more than one word? Prefer capitalizing the first letter of each word for improved readability and accessibility.",
   "compose.hashtag_casing_suggestion.disabled": "You will no longer receive suggestions about hashtag capitalization.",

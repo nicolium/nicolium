@@ -1604,7 +1604,7 @@ a.status-card {
     &:has(.poll) {
       padding: 1rem;
       border-radius: var(--radius-md);
-      background-color: var(--color-gray-100);
+      background-color: var(--color-gray-50);
 
       .dark & {
         background-color: var(--color-primary-800);
@@ -2203,7 +2203,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 
       position: relative;
       overflow: hidden;
-      color: var(--color-primary-600);
+      color: var(--color-primary-700);
       overflow-wrap: break-word;
 
       .dark & {
@@ -2224,7 +2224,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
       gap: 0.5rem;
       align-items: center;
 
-      color: var(--color-primary-600);
+      color: var(--color-primary-700);
 
       .dark & {
         color: white;
@@ -2373,10 +2373,10 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     height: 100%;
     border-radius: var(--radius-md) 0 0 var(--radius-md);
 
-    background: var(--color-primary-100);
+    background: var(--color-secondary-100);
 
     .dark & {
-      background: var(--color-primary-500);
+      background: var(--color-primary-600);
     }
   }
 

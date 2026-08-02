@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { defineMessages } from 'react-intl';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -15,6 +16,7 @@ import { useModalsActions } from '@/stores/modals';
 import { usePendingStatusesActions } from '@/stores/pending-statuses';
 import { useStatusMetaActions } from '@/stores/status-meta';
 import { useTimelinesActions } from '@/stores/timelines';
+import toast from '@/toast';
 import { checkFiltered } from '@/utils/filters';
 
 import { useAccount } from '../accounts/use-account';
@@ -22,6 +24,11 @@ import { queryClient } from '../client';
 import { queryKeys } from '../keys';
 
 import type { Context, AsyncRefreshHeader, Account, Filter, FilterResult } from 'pl-api';
+
+const messages = defineMessages({
+  deleteSuccess: { id: 'compose.delete.success', defaultMessage: 'Post deleted' },
+  deleteFail: { id: 'compose.delete.fail', defaultMessage: 'Failed to delete post' },
+});
 
 const minifyContext = ({
   ancestors,
@@ -234,6 +241,8 @@ const useDeleteStatus = (statusId: string) => {
         setComposeToStatus(status, poll, source, withRedraft);
         openModal('COMPOSE');
       }
+
+      toast.success(messages.deleteSuccess);
     },
     onError: () => {
       const status = queryClient.getQueryData(
@@ -242,6 +251,7 @@ const useDeleteStatus = (statusId: string) => {
       if (!status) return;
 
       incrementReplyCount(status, queryClient, scopeUrl);
+      toast.error(messages.deleteFail);
     },
   });
 };
