@@ -346,7 +346,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
     items.push({
       text: intl.formatMessage(messages.hashtag),
       icon: iconHash,
-      action: handleAdd({ type: 'hashtag' }),
+      action: handleAdd({ type: 'hashtag', any: [], all: [], none: [] }),
     });
 
     if (features.drive) {

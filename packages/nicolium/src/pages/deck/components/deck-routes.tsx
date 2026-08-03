@@ -112,7 +112,7 @@ const RootRoute: React.FC = () => {
         columnWidth: 'md',
         accountUrl: scopeUrl,
         ...(hashtag
-          ? { type: 'hashtag', hashtag }
+          ? { type: 'hashtag', hashtag, any: [], all: [], none: [] }
           : chatId
             ? { type: 'chat', chatId }
             : {
