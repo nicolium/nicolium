@@ -150,6 +150,36 @@
       }
     }
 
+    &__settings {
+      position: relative;
+      z-index: 20;
+
+      padding: 1rem;
+      padding-top: 0;
+
+      background: #fff;
+      box-shadow: var(--shadow-lg);
+
+      .dark & {
+        border-bottom: 1px solid var(--color-gray-800);
+        background: var(--color-primary-900);
+      }
+
+      .black & {
+        background: #000;
+      }
+
+      &__hashtag {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        h3 {
+          @include mixins.text($size: lg, $weight: bold);
+        }
+      }
+    }
+
     &__actions {
       display: flex;
       gap: 0.5rem;
@@ -229,6 +259,10 @@
 
       .black & {
         background: variables.opaque(--color-gray-200, 0.1);
+      }
+
+      &--settings {
+        top: 4rem;
       }
     }
 

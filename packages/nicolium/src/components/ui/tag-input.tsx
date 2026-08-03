@@ -6,11 +6,12 @@ interface ITagInput {
   tags: string[];
   onChange: (tags: string[]) => void;
   placeholder?: string;
+  canAddMore?: boolean;
 }
 
 /** Manage a list of tags. */
 // https://blog.logrocket.com/building-a-tag-input-field-component-for-react/
-const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
+const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder, canAddMore = true }) => {
   const [input, setInput] = useState('');
 
   const handleTagDelete = (tag: string) => {
@@ -56,11 +57,12 @@ const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
         <input
           className='tag-input__field'
           value={input}
-          placeholder={placeholder}
+          placeholder={canAddMore ? placeholder : undefined}
           onChange={(e) => {
             setInput(e.target.value);
           }}
           onKeyDown={handleKeyDown}
+          disabled={!canAddMore}
         />
       </div>
     </div>

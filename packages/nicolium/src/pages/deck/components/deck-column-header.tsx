@@ -49,6 +49,7 @@ import { deckMessages as messages } from '../utils/messages';
 import { type IDeckColumn, WIDTHS } from './deck-column';
 import { DeckColumnAccountButton } from './deck-column-account';
 import { updateDeckColumn, useColumnIcon, useColumnTitle } from './deck-column-config';
+import { HashtagDeckColumnSettings } from './hashtag-deck-column-settings';
 
 import type { ITimelinePicker } from '@/components/timeline-picker';
 import type { DeckColumn, Settings, TimelineFilters } from '@/schemas/frontend-settings';
@@ -61,6 +62,7 @@ type IDeckColumnHeaderInner = IDeckColumnHeader & {
   subtitle?: React.ReactNode;
   items?: Menu;
   settings?: React.ReactNode;
+  onHideSettings?: () => void;
 };
 
 const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
@@ -79,6 +81,7 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
   subtitle,
   items,
   settings,
+  onHideSettings,
 }) => {
   const intl = useIntl();
 
@@ -203,9 +206,17 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
         </div>
       </CardHeader>
       {settings && (
-        <div className='deck__column__settings'>
-          {settings}
-        </div>
+        <>
+          <div className='deck__column__settings'>{settings}</div>
+          {onHideSettings && (
+            <div
+              role='presentation'
+              className='deck__column__overlay deck__column__overlay--settings'
+              aria-hidden
+              onClick={onHideSettings}
+            />
+          )}
+        </>
       )}
     </>
   );
@@ -645,11 +656,12 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
   const items = useMemo(() => {
     return [
       ...filtersOptions,
-      null,
       {
         text: intl.formatMessage(messages.editAdditionalTags),
-        action: () => setShowEditAdditionalTags(true),
+        icon: iconPencilSimple,
+        action: () => setShowEditAdditionalTags((value) => !value),
       },
+      null,
     ];
   }, [filtersOptions, intl]);
 
@@ -740,6 +752,8 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
       }
       subtitle={subtitle}
       items={items}
+      settings={showEditAdditionalTags && <HashtagDeckColumnSettings columnId={column.id} />}
+      onHideSettings={() => setShowEditAdditionalTags(false)}
     />
   );
 };
