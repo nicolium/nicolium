@@ -19,7 +19,7 @@
   - Ability to add an account/hashtag column from the new column button.
   - Improved empty column display.
 - Ability to compose threads consisting of multiple posts in the compose form.
-- Drag-and-drop support in the Deck.
+- Drag-and-drop support in the Drive.
 - _Guest mode_ allowing to view public content of an instance without signing in in standalone mode.
 - Mastodon Collections support.
 - Mastodon e-mail subscriptions support.
