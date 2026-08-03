@@ -645,6 +645,7 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
 }) => {
   const [showEditAdditionalTags, setShowEditAdditionalTags] = useState(false);
   const intl = useIntl();
+  const features = useFeatures();
 
   const filtersOptions = useTimelineFiltersOptions(column);
   const filtersList = useTimelineFiltersList(column);
@@ -654,6 +655,8 @@ const DeckHashtagColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'hasht
     .flat().length;
 
   const items = useMemo(() => {
+    if (!features.additionalTags) return filtersOptions;
+
     return [
       ...filtersOptions,
       {

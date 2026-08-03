@@ -331,6 +331,16 @@ const getFeatures = (instance: Instance) => {
     accountWebVisibility: any([v.software === GOTOSOCIAL && gte(v.version, '0.17.0')]),
 
     /**
+     * @see GET /api/v1/tags/:tag
+     */
+    additionalTags: any([
+      v.software === AKKOMA,
+      v.software === ICESHRIMP_NET,
+      v.software === MASTODON,
+      v.software === PLEROMA,
+    ]),
+
+    /**
      * Ability to address a status to a list of users.
      * @see POST /api/v1/statuses
      */
