@@ -1024,21 +1024,11 @@
 }
 
 .birthday-account {
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0.625rem;
-
-  &__account {
-    width: 100%;
-  }
-
   &__label {
     display: flex;
-    gap: 0.125rem;
+    gap: 0.25rem;
     align-items: center;
+    min-width: fit-content;
 
     svg {
       width: 1rem;
