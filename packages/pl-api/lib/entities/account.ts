@@ -311,7 +311,7 @@ const untypedCredentialAccountSchema = v.pipe(
           language: v.fallback(v.optional(v.nullable(v.string())), null),
           follow_requests_count: v.fallback(
             v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),
-            0,
+            undefined,
           ),
           hide_collections: v.fallback(v.optional(v.boolean()), undefined),
           discoverable: v.fallback(v.optional(v.boolean()), undefined),
@@ -329,6 +329,10 @@ const untypedCredentialAccountSchema = v.pipe(
           web_layout: v.fallback(v.optional(v.picklist(['microblog', 'gallery'])), undefined),
           web_visibility: v.fallback(
             v.optional(v.picklist(['public', 'unlisted', 'none'])),
+            undefined,
+          ),
+          blocks_count: v.fallback(
+            v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),
             undefined,
           ),
         }),
