@@ -9,66 +9,72 @@
   - You can switch the account you're posting from in the compose modal.
   - A new modal allows interacting (replying, favoriting, boosting, reacting) with posts from other accounts you're logged in with.
   - You can check notification count for other logged in accounts from the account switcher menu.
-- Status history modal allows displaying difference between subsequent edits of a post.
 - Deck improvements
   - Ability to create more than one Deck layout.
-  - Deck columns now include an icon and additional information in the header.
-  - Focus is properly restored when navigating through the deck. Several other improvements to keyboard navigation were made.
-  - The Deck Notifications column always displays all notification categories.
+  - Compose column, allowing to compose posts without leaving the deck. You can enable replying/quoting from the compose column.
   - Drive column.
   - Ability to add an account/hashtag column from the new column button.
+  - Hashtag column can now use any/all/none parameters on compatible backends.
+  - The Deck Notifications column always displays all notification categories.
+  - Deck columns now include an icon and additional information in the header.
   - Improved empty column display.
+  - The leftmost column of the deck can be pinned to the left side of the screen, so that it is always visible.
+  - Account follows and post interactions lists are now displayed inside deck columns, instead of opening a modal.
+  - Focus is properly restored when navigating through the deck. Several other improvements to keyboard navigation were made.
 - Ability to compose threads consisting of multiple posts in the compose form.
+- Additional mode of post spoilers display.
 - Drag-and-drop support in the Drive.
+- Filters support for instances without backend support for filtering.
+- GIF picker for Chuckya instances.
 - _Guest mode_ allowing to view public content of an instance without signing in in standalone mode.
+- IP blocks and email domain blocks management on Mastodon.
 - Mastodon Collections support.
 - Mastodon e-mail subscriptions support.
-- GIF picker for Chuckya instances.
-- Filters support for instances without backend support for filtering.
-- Option to bite posts on Iceshrimp.NET.
-- Option to hide reposts of posts from followed accounts depending on the age of the post.
 - Option to add selected emoji reactions to status action bar.
-- Additional mode of post spoilers display.
+- Option to bite posts on Iceshrimp.NET.
+- Option to change interface accent color and adjust interface contrast.
+- Option to hide reposts of posts from followed accounts depending on the age of the post.
+- Status history modal allows displaying difference between subsequent edits of a post.
 - Support for `clickable`, `followmouse`, `mathInline`, `mathBlock` and `unixtime` MFM extensions.
 - Support for generating and revoking invites from the dashboard on Iceshrimp.NET.
-- IP blocks and email domain blocks management on Mastodon.
 - User creation in the admin dashboard on Pleroma.
 
 ### Changed
 
-- Frontend configuration editor is now available to non-Pleroma/Akkoma admins, allowing them to export configuration file for serving it statically.
+- Account switcher now allows removing stale accounts.
 - Alt text reminder modal is displayed when editing profile on instance which allows providing avatar/header descriptions.
 - Drive page allows changing between grid and list modes.
-- Account follows and post interactions lists are now displayed inside deck columns, instead of opening a modal.
-- Notification count is not be displayed on instances that don't support timeline markers.
 - Federation restrictions and account recommendations are displayed on lower breakpoints now.
-- When self-note limit is exceeded, a toast message is displayed and the setting backup is disabled.
-- When filtered, your own posts are marked as authored by you.
-- Account switcher now allows removing stale accounts.
+- Frontend configuration editor is now available to non-Pleroma/Akkoma admins, allowing them to export configuration file for serving it statically.
 - Interface items editor now allows adding _dynamic_ items and is displayed in two columns on wide screens.
-- _Show new posts_ button can be placed inside the header of the column, if it fits the available width.
-- Pull-to-refresh is disabled when a refresh button is displayed in the column header.
-- Updated translations: Dutch, French (thanks to Capitaine Caverne and Aris), German (thanks to vinzw), Polish.
-- Restored some tests.
 - Migrated from the deprecated Icon component.
+- Notification count is not be displayed on instances that don't support timeline markers.
+- Pull-to-refresh is disabled when a refresh button is displayed in the column header.
 - Removed `react-swipeable-views` dependency.
+- Restored some tests.
+- _Show new posts_ button can be placed inside the header of the column, if it fits the available width.
+- Unfollow confirmation modal includes additional information when unfollowing a locked account.
+- Updated translations: Dutch, French (thanks to Capitaine Caverne and Aris), German (thanks to vinzw), Polish.
+- When filtered, your own posts are marked as authored by you.
+- When self-note limit is exceeded, a toast message is displayed and the setting backup is disabled.
 
 ### Fixed
 
-- WYSIWYG posts work.
-- Async media processing on Mastodon is handled correctly.
-- Focal point selector is visible again.
-- Filtering applies for post queue.
-- Modal animation works.
-- Added missing `pulse` animation.
-- RTL mode improvements.
 - Added missing `.ellipsis` class for URL truncation.
-- Dismissing suggested accounts works correctly.
-- Correct RSS URL on Iceshrimp.NET.
+- Added missing `pulse` animation.
+- Async media processing on Mastodon is handled correctly.
+- Changing reblog visibility works on touch devices.
 - Chats account search filters users by chat capability.
+- Correct RSS URL on Iceshrimp.NET.
+- Dismissing suggested accounts works correctly.
 - Edit federation modal works.
 - Expired filters are not applied.
-- Changing reblog visibility works on touch devices.
+- Filtering applies for post queue.
+- Focal point selector is visible again.
+- Modal animation works.
+- RTL mode improvements.
+- Reaction notifications now work on Chuckya.
+- WYSIWYG posts work.
 
 ### Removed
 
