@@ -335,6 +335,11 @@ const untypedCredentialAccountSchema = v.pipe(
             v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),
             undefined,
           ),
+
+          outgoing_follow_requests_count: v.fallback(
+            v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),
+            undefined,
+          ),
         }),
       ),
       null,
