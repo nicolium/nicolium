@@ -693,21 +693,23 @@ const ComposeForm = <ID extends string>({
 
       {hasThread && composeFooter}
 
-      {isThreadRoot && (
-        <div className='compose-form__thread'>
-          {thread.map((childId) => (
-            <ComposeForm
-              key={childId}
-              id={childId}
-              threadItem
-              transparent={transparent}
-              onRemove={() => actions.removeThreadPost(id, childId)}
-              onThreadSubmit={handleSubmit}
-            />
-          ))}
-          {enableThread && !hasThread && maxTootChars <= 1024 && addThreadPostButton}
-        </div>
-      )}
+      {isThreadRoot &&
+        (thread?.length > 0 ||
+          (enableThread && !hasThread && maxTootChars <= 1024 && addThreadPostButton)) && (
+          <div className='compose-form__thread'>
+            {thread.map((childId) => (
+              <ComposeForm
+                key={childId}
+                id={childId}
+                threadItem
+                transparent={transparent}
+                onRemove={() => actions.removeThreadPost(id, childId)}
+                onThreadSubmit={handleSubmit}
+              />
+            ))}
+            {enableThread && !hasThread && maxTootChars <= 1024 && addThreadPostButton}
+          </div>
+        )}
 
       {!hasThread ? (
         composeFooter
