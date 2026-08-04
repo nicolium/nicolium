@@ -784,7 +784,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
       }
     }
 
-    if (ownAccount.is_admin || (ownAccount.is_moderator && scopeUrl === defaultScopeUrl)) {
+    if ((ownAccount.is_admin || ownAccount.is_moderator) && scopeUrl === defaultScopeUrl) {
       menu.push(null);
 
       menu.push({
