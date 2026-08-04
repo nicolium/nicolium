@@ -24,7 +24,7 @@
     "serialize-javascript": "^7.0.5",
     "sharp": "^0.35.3",
     "svgo": "^4.0.2",
-    "undici": "7.28.0",
+    "undici": "7.29.0",
     "yaml@2": "^2.9.0"
   },
   "packageManager": "pnpm@11.17.0",
