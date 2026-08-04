@@ -549,22 +549,21 @@ a.status-card {
 
     padding-block: 0.75rem;
 
-    &-end {
-      display: flex;
-      gap: 0.25rem;
-      align-items: center;
-    }
-
-    &-info {
-      @include mixins.text($theme: muted, $size: sm);
-
+    &__end {
       display: flex;
       flex-wrap: wrap;
       gap: 0.25rem;
       align-items: center;
+      justify-content: flex-end;
     }
 
-    &-link {
+    &__info {
+      @include mixins.text($theme: muted, $size: sm);
+
+      display: contents;
+    }
+
+    &__link {
       &:hover {
         text-decoration: underline;
       }

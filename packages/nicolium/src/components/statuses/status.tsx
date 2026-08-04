@@ -128,13 +128,13 @@ const StatusMeta: React.FC<IStatusMeta> = ({ status }) => {
     <div className='status__meta'>
       <StatusInteractionBar status={status} />
 
-      <div className='status__meta-end'>
-        <div className='status__meta-info'>
+      <div className='status__meta__end'>
+        <div className='status__meta__info'>
           <a
             href={status.url}
             target='_blank'
             rel='noopener noreferrer'
-            className='status__meta-link'
+            className='status__meta__link'
           >
             <FormattedDate
               value={new Date(status.created_at)}
@@ -154,7 +154,7 @@ const StatusMeta: React.FC<IStatusMeta> = ({ status }) => {
                 href={status.application.website ?? '#'}
                 target='_blank'
                 rel='noopener noreferrer'
-                className='status__meta-link'
+                className='status__meta__link'
                 title={intl.formatMessage(messages.applicationName, {
                   name: status.application.name,
                 })}
