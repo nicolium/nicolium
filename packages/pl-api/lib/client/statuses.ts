@@ -269,19 +269,19 @@ const statuses = (client: PlApiBaseClient) => {
      * @see {@link https://docs.joinmastodon.org/methods/statuses/#bookmark}
      */
     bookmarkStatus: async (statusId: string, folderId?: string) => {
-      if (!client.features.bookmarkFoldersMultiple) {
+      if (!folderId || !client.features.bookmarkFoldersMultiple) {
         const response = await client.request(`/api/v1/statuses/${statusId}/bookmark`, {
           method: 'POST',
           body: { folder_id: folderId },
         });
 
         return v.parse(statusSchema, response.json);
-      } else if (folderId && client.features.bookmarkFoldersMultiple) {
-        await client.request(`/api/v1/bookmark_categories/${folderId}/statuses`, {
-          method: 'POST',
-          params: { status_ids: [statusId] },
-        });
       }
+
+      await client.request(`/api/v1/bookmark_categories/${folderId}/statuses`, {
+        method: 'POST',
+        params: { status_ids: [statusId] },
+      });
 
       return category.getStatus(statusId);
     },
