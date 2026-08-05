@@ -70,6 +70,9 @@ const useDeleteAnnouncementMutation = () => {
       queryClient.invalidateQueries({
         queryKey: scopedQueryKey(queryKeys.announcements.root, scopeUrl),
       });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.admin.announcements, scopeUrl),
+      });
     },
   });
 };
