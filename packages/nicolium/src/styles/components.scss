@@ -2435,7 +2435,7 @@ div[data-viewport-type='window']:has(.empty-message) {
     &__content {
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      gap: 0.5rem;
     }
 
     &:has(&__connector) .interaction-request__status__content {
@@ -2444,6 +2444,9 @@ div[data-viewport-type='window']:has(.empty-message) {
   }
 
   &__actions {
+    display: flex;
+    gap: 0.5rem;
+
     button:first-child {
       @include mixins.button($theme: secondary, $size: sm);
     }
