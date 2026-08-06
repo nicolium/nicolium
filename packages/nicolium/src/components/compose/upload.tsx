@@ -6,6 +6,7 @@ import { useInstance } from '@/stores/instance';
 
 interface IUploadCompose {
   id: string;
+  index: number;
   composeId: string;
   onSubmit?(): void;
   onDragStart: (id: string) => void;
@@ -16,6 +17,7 @@ interface IUploadCompose {
 const UploadCompose: React.FC<IUploadCompose> = ({
   composeId,
   id,
+  index,
   onSubmit,
   onDragStart,
   onDragEnter,
@@ -42,9 +44,10 @@ const UploadCompose: React.FC<IUploadCompose> = ({
 
   const handleDelete = () => {
     updateCompose(composeId, (draft) => {
-      const prevSize = draft.mediaAttachments.length;
-      draft.mediaAttachments = draft.mediaAttachments.filter((item) => item.id !== media.id);
-      if (prevSize === 1) draft.sensitive = false;
+      if (draft.mediaAttachments.length === 1) {
+        draft.sensitive = false;
+      }
+      draft.mediaAttachments.splice(index, 1);
     });
   };
 

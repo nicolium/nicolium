@@ -52,10 +52,11 @@ const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
       <UploadProgress composeId={composeId} />
 
       <div className='upload-form__list'>
-        {mediaIds.map((id: string) => (
+        {mediaIds.map((id: string, index: number) => (
           <Upload
             id={id}
             key={id}
+            index={index}
             composeId={composeId}
             onSubmit={onSubmit}
             onDragStart={handleDragStart}
