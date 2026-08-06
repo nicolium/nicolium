@@ -2214,7 +2214,6 @@
   "status.filtered_muted_account": "Wyciszasz @{acct}.",
   "status.followed_tag": "Obserwujesz {tags}",
   "status.group": "Napisano w {group}",
-  "status.group.unknown": "Opublikowano w grupie",
   "status.group_mod_delete": "Usuń wpis z grupy",
   "status.hide_translation": "Ukryj tłumaczenie",
   "status.interaction_policy.favourite.approval_required": "Autor musi zatwierdzić Twoje polubienie.",

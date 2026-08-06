@@ -2136,7 +2136,6 @@
   "status.filtered_muted_account": "Vous avez mis en sourdine @{acct}.",
   "status.followed_tag": "Vous suivez {tags}",
   "status.group": "Publié dans {group}",
-  "status.group.unknown": "Publié dans un groupe",
   "status.group_mod_delete": "Supprimer la publication du groupe",
   "status.hide_translation": "Masquer la traduction",
   "status.interaction_policy.favourite.approval_required": "L’auteur doit approuver votre mise en favori.",

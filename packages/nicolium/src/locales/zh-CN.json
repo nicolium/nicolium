@@ -2103,7 +2103,6 @@
   "status.filtered_muted_account": "您已静音了 @{acct}。",
   "status.followed_tag": "您正在关注 {tags}",
   "status.group": "发帖于 {group}",
-  "status.group.unknown": "发布在一个群组中",
   "status.group_mod_delete": "将帖文移出群组",
   "status.hide_translation": "隐藏翻译",
   "status.interaction_policy.favourite.approval_required": "作者需要批准您的点赞。",
