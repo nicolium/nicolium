@@ -457,40 +457,43 @@ const AdminAccountPage: React.FC = () => {
               />
             </List>
 
-            <List>
-              <ListItem
-                label={
-                  <FormattedMessage
-                    id='account_moderation_modal.fields.change_email'
-                    defaultMessage='Change e-mail address'
-                  />
-                }
-                onClick={handleChangeEmail}
-              />
+            {account.local && (
+              <List>
+                <ListItem
+                  label={
+                    <FormattedMessage
+                      id='account_moderation_modal.fields.change_email'
+                      defaultMessage='Change e-mail address'
+                    />
+                  }
+                  onClick={handleChangeEmail}
+                />
 
-              <ListItem
-                label={
-                  <FormattedMessage
-                    id='account_moderation_modal.fields.change_password'
-                    defaultMessage='Change password'
-                  />
-                }
-                onClick={handleChangePassword}
-              />
+                <ListItem
+                  label={
+                    <FormattedMessage
+                      id='account_moderation_modal.fields.change_password'
+                      defaultMessage='Change password'
+                    />
+                  }
+                  onClick={handleChangePassword}
+                />
 
-              <ListItem
-                label={
-                  <FormattedMessage
-                    id='account_moderation_modal.fields.disable_mfa'
-                    defaultMessage='Disable multi-factor authentication'
-                  />
-                }
-                onClick={handleDisableMfa}
-              />
-            </List>
+                <ListItem
+                  label={
+                    <FormattedMessage
+                      id='account_moderation_modal.fields.disable_mfa'
+                      defaultMessage='Disable multi-factor authentication'
+                    />
+                  }
+                  onClick={handleDisableMfa}
+                />
+              </List>
+            )}
           </>
         ) : (
-          features.iceshrimpAdmin && (
+          features.iceshrimpAdmin &&
+          account.local && (
             <List>
               <ListItem
                 label={
