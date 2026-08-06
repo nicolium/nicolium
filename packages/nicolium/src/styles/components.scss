@@ -2437,6 +2437,10 @@ div[data-viewport-type='window']:has(.empty-message) {
       flex-direction: column;
       gap: 0.55rem;
     }
+
+    &:has(&__connector) .interaction-request__status__content {
+      padding-inline-start: 54px;
+    }
   }
 
   &__actions {

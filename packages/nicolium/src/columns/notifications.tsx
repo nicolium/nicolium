@@ -33,9 +33,10 @@ import { useSettings, useSettingsStoreActions } from '@/stores/settings';
 import { userTouching } from '@/utils/is-mobile';
 import { selectChild } from '@/utils/scroll-utils';
 
-import '@/styles/notifications.scss';
 import type { Item } from '@/components/ui/tabs';
 import type { VirtuosoHandle } from 'react-virtuoso';
+
+import '@/styles/notifications.scss';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },

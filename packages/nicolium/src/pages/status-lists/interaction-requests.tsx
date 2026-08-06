@@ -30,6 +30,8 @@ import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
+import '@/styles/notifications.scss';
+
 const messages = defineMessages({
   title: { id: 'column.interaction_requests', defaultMessage: 'Interaction requests' },
   favourite: {
