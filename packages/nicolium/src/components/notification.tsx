@@ -53,8 +53,9 @@ import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
 import { AccountLink } from './accounts/account-link';
+import StatusActionBar from './statuses/action-bar';
 
-import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
+import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { NotificationType } from '@/utils/notification';
 import type { Account, NotificationGroup } from 'pl-api';
 
@@ -262,7 +263,7 @@ const buildMessage = (
 const avatarSize = 48;
 
 interface IStatusPreview {
-  status: StatusEntity;
+  status: SelectedStatus;
 }
 
 const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
@@ -283,6 +284,10 @@ const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
 
   if (status.media_attachments.length) {
     output.push(<AttachmentThumbs key='attachments' status={status} />);
+  }
+
+  if (!status.rss_feed) {
+    output.push(<StatusActionBar key='action-bar' status={status} space='sm' />);
   }
 
   return output;
