@@ -25,7 +25,8 @@
       flex-grow: 1;
     }
 
-    .notification {
+    .notification,
+    .notification--placeholder {
       padding: 0.5rem;
     }
   }
