@@ -44,7 +44,7 @@ const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
 
   if (status.poll_id) {
     output.push(
-      <div className='quoted-status-indicator'>
+      <div key='poll' className='quoted-status-indicator'>
         <Icon src={iconChartBar} aria-hidden />
         <p>
           <FormattedMessage id='poll.hint' defaultMessage='Poll' />
