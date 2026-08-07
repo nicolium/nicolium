@@ -270,9 +270,8 @@ const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
 
   if (status.content) {
     output.push(
-      <div className='notification__status-preview' data-markup>
+      <div className='notification__status-preview' data-markup key='content'>
         <ParsedContent
-          key='content'
           html={status.content}
           mentions={status.mentions}
           hasQuote={!!status.quote_id}
