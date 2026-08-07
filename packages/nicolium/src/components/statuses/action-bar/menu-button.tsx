@@ -524,7 +524,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       });
     }
 
-    if (features.federating && !localAccount) {
+    if (features.federating && (!localAccount || status.account_id === '')) {
       const { hostname: domain } = new URL(status.uri);
       menu.push({
         text: intl.formatMessage(messages.external, { domain }),

@@ -318,7 +318,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       icon: iconLinkSimpleHorizontal,
     });
 
-    if (features.federating && !account.local) {
+    if (features.federating && (!account.local || status.account_id === '')) {
       menu.push({
         text: intl.formatMessage(messages.external, { domain }),
         icon: iconArrowSquareOut,
