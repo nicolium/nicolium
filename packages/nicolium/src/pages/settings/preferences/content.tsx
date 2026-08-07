@@ -9,6 +9,7 @@ import Form from '@/components/ui/form';
 import { Multiselect } from '@/components/ui/multiselect';
 import { SelectDropdown } from '@/components/ui/select-dropdown';
 import { useFeatures } from '@/hooks/use-features';
+import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import { languages } from '@/utils/languages';
@@ -55,6 +56,7 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
   const intl = useIntl();
   const standalone = useIsStandalone();
   const userSettings = useSettings();
+  const { data: account } = useCredentialAccount();
 
   const settings = settingsProp || userSettings;
 
@@ -104,7 +106,11 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
             <ListItem
               label={<FormattedMessage id='column.blocks' defaultMessage='Blocks' />}
               to='/blocks'
-            />
+            >
+              {account?.source?.blocks_count !== undefined ? (
+                <span>{account.source.blocks_count}</span>
+              ) : undefined}
+            </ListItem>
             <ListItem
               label={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
               to='/filters'
