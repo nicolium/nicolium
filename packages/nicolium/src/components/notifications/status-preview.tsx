@@ -26,6 +26,7 @@ const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
           mentions={status.mentions}
           hasQuote={!!status.quote_id}
           emojis={status.emojis}
+          speakAsCat={status.account.speak_as_cat}
         />
       </div>,
     );
