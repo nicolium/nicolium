@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { debounce } from 'lodash-es';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useId, useLayoutEffect, useState } from 'react';
 import StickyBox from 'react-sticky-box';
 
 import { useFeatures } from '@/hooks/use-features';
@@ -20,6 +20,10 @@ interface ISidebar {
 }
 interface IAside {
   children?: React.ReactNode;
+}
+
+interface IAsideSlot extends IAside {
+  owner: string;
 }
 
 interface ILayout {
@@ -43,6 +47,10 @@ declare global {
     windowControlsOverlay?: WindowControlsOverlay;
   }
 }
+
+const AsideContext = React.createContext<React.Dispatch<
+  React.SetStateAction<IAsideSlot | undefined>
+> | null>(null);
 
 const useWindowControlsOverlay = () => {
   const getRect = (): DOMRect | null => {
@@ -73,17 +81,24 @@ const useWindowControlsOverlay = () => {
 };
 
 /** Layout container, to hold Sidebar, Main, and Aside. */
-const Layout: LayoutComponent = ({ children, fullWidth }) => (
-  <div className='layout'>
-    <div
-      className={clsx('layout__content', {
-        'layout__content--full-width': fullWidth,
-      })}
-    >
-      {children}
-    </div>
-  </div>
-);
+const Layout: LayoutComponent = ({ children, fullWidth }) => {
+  const [aside, setAside] = useState<IAsideSlot>();
+
+  return (
+    <AsideContext value={setAside}>
+      <div className='layout'>
+        <div
+          className={clsx('layout__content', {
+            'layout__content--full-width': fullWidth,
+          })}
+        >
+          {children}
+          {aside && <AsideContainer>{aside.children}</AsideContainer>}
+        </div>
+      </div>
+    </AsideContext>
+  );
+};
 
 /** Left sidebar container in the UI. */
 const Sidebar: React.FC<ISidebar> = ({ children, shrink }) => {
@@ -125,7 +140,7 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
 };
 
 /** Right sidebar container in the UI. */
-const Aside: React.FC<IAside> = ({ children }) => {
+const AsideContainer: React.FC<IAside> = ({ children }) => {
   const isVisible = useMinWidth(`(min-width: ${breakpoints.xl})`);
   const wcoRect = useWindowControlsOverlay();
   const offsetTop =
@@ -143,6 +158,22 @@ const Aside: React.FC<IAside> = ({ children }) => {
       </StickyBox>
     </aside>
   );
+};
+
+const Aside: React.FC<IAside> = ({ children }) => {
+  const setAside = React.use(AsideContext);
+  const owner = useId();
+
+  useLayoutEffect(() => {
+    if (!setAside) return;
+
+    setAside({ children, owner });
+    return () => {
+      setAside((aside) => (aside?.owner === owner ? undefined : aside));
+    };
+  }, [children, owner, setAside]);
+
+  return null;
 };
 
 Layout.Sidebar = Sidebar;

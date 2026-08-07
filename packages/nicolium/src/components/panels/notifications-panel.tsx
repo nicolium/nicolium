@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import NotificationsColumn from '@/columns/notifications';
@@ -10,6 +10,11 @@ const messages = defineMessages({
 
 const NotificationsPanel: React.FC = () => {
   const intl = useIntl();
+
+  useEffect(() => {
+    console.log('notifications-panel mounted');
+    return () => console.log('notifications-panel unmounted');
+  }, []);
 
   return (
     <Widget
