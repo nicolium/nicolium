@@ -397,10 +397,25 @@ const getInteractionsComposeColumn = () => {
   );
 };
 
-const scrollToDeckColumn = (columnId: string) =>
-  document
-    .querySelector(`.deck__column[data-column-id="${columnId}"]`)
-    ?.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+const getInteractionsComposeTarget = () => {
+  const column = getInteractionsComposeColumn();
+  if (column) {
+    return {
+      composeId: `deck:${column.id}`,
+      element: document.querySelector(`.deck__column[data-column-id="${column.id}"]`),
+      column,
+    };
+  }
+
+  const { sidebarItems } = useSettingsStore.getState().settings;
+  const element = document.querySelector('.compose-panel');
+
+  if (sidebarItems.includes('compose:open-interactions') && element) {
+    return { composeId: 'home', element, column: null };
+  }
+
+  return null;
+};
 
 const composeInteraction = (
   write: (composeId: string) => void,
@@ -414,24 +429,24 @@ const composeInteraction = (
     if (openComposer) openComposeSurface(scopeUrl, columnId, search);
   };
 
-  const column = openComposer ? getInteractionsComposeColumn() : null;
+  const target = openComposer ? getInteractionsComposeTarget() : null;
 
-  if (!column) {
+  if (!target) {
     composeInModal();
     return;
   }
 
-  const composeId = `deck:${column.id}`;
+  const { composeId } = target;
   const { actions, composers } = useComposeStore.getState();
 
-  const composeInColumn = () => {
+  const composeInTarget = () => {
     actions.resetCompose(composeId);
     write(composeId);
     actions.updateCompose(composeId, (compose) => {
       compose.editorKey = crypto.randomUUID();
     });
-    setDeckColumnAccountUrl(column.id, scopeUrl);
-    scrollToDeckColumn(column.id);
+    if (target.column) setDeckColumnAccountUrl(target.column.id, scopeUrl);
+    target.element?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
   };
 
   if (checkComposeContent(composers[composeId]) || actions.hasThreadContent(composeId)) {
@@ -449,7 +464,7 @@ const composeInteraction = (
         />
       ),
       confirm: <FormattedMessage id='compose_column.overwrite.confirm' defaultMessage='Discard' />,
-      onConfirm: composeInColumn,
+      onConfirm: composeInTarget,
       theme: 'danger',
       secondary: (
         <FormattedMessage
@@ -462,7 +477,7 @@ const composeInteraction = (
     return;
   }
 
-  composeInColumn();
+  composeInTarget();
 };
 
 interface ComposeState {

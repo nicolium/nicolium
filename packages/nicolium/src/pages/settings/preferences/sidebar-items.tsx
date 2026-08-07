@@ -92,10 +92,17 @@ const itemHintsMessages = {
 const isAccountSidebarItem = (item: SidebarItemType): item is `account:${string}` =>
   item.startsWith('account:');
 
+const isComposeSidebarItem = (item: SidebarItemType) =>
+  item === 'compose' || item === 'compose:open-interactions';
+
 const SidebarItem: StreamfieldComponent<SidebarItemType> = ({ value }) => {
   const intl = useIntl();
   const { data: account } = useAccount(isAccountSidebarItem(value) ? value.slice(8) : undefined);
-  const itemKey = isAccountSidebarItem(value) ? 'account' : value;
+  const itemKey = isAccountSidebarItem(value)
+    ? 'account'
+    : isComposeSidebarItem(value)
+      ? 'compose'
+      : value;
 
   return (
     <div className='interface-item'>
@@ -127,7 +134,10 @@ const SidebarItems: React.FC<ISettingsPage> = ({
   const settings = settingsProp || userSettings;
 
   const availableItems = AVAILABLE_SIDEBAR_ITEMS.filter(
-    (item) => !settings.sidebarItems.includes(item) && (item !== 'shoutbox' || showShoutbox),
+    (item) =>
+      !settings.sidebarItems.includes(item) &&
+      !(item === 'compose' && settings.sidebarItems.some(isComposeSidebarItem)) &&
+      (item !== 'shoutbox' || showShoutbox),
   );
 
   const reset = () => {

@@ -180,9 +180,15 @@ const AsideContent: React.FC<IAsideContent> = ({
           }
           break;
         }
-        case 'compose': {
+        case 'compose':
+        case 'compose:open-interactions': {
           if (layout !== 'home' || !composeInTimelines) {
-            items.push(<ComposePanel key='compose' />);
+            items.push(
+              <ComposePanel
+                key='compose'
+                openInteractions={item === 'compose:open-interactions'}
+              />,
+            );
           }
           break;
         }

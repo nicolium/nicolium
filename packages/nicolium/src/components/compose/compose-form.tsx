@@ -622,15 +622,11 @@ const ComposeForm = <ID extends string>({
         <ComposeAccountSwitcher composeId={id} expanded={expandAccountSwitcher} />
       )}
 
-      {!shouldCondense && !event && !group && !threadItem && groupId && (
-        <ReplyGroupIndicator composeId={id} />
-      )}
+      {!event && !group && !threadItem && groupId && <ReplyGroupIndicator composeId={id} />}
 
-      {!shouldCondense && !event && !group && !threadItem && (
-        <ReplyIndicatorContainer composeId={id} />
-      )}
+      {!event && !group && !threadItem && <ReplyIndicatorContainer composeId={id} />}
 
-      {!shouldCondense && !event && !group && !threadItem && <ReplyMentions composeId={id} />}
+      {!event && !group && !threadItem && <ReplyMentions composeId={id} />}
 
       {selectButtons.length > 0 && !threadItem && (
         <div className='compose-form__select-buttons'>{selectButtons}</div>

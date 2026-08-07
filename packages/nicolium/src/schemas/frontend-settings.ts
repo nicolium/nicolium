@@ -119,7 +119,10 @@ const DEFAULT_SIDEBAR_ITEMS = [
   'footer',
 ] as const;
 
-type SidebarItem = (typeof AVAILABLE_SIDEBAR_ITEMS)[number] | `account:${string}`;
+type SidebarItem =
+  | (typeof AVAILABLE_SIDEBAR_ITEMS)[number]
+  | 'compose:open-interactions'
+  | `account:${string}`;
 
 type NavigationItem =
   | (typeof AVAILABLE_NAVIGATION_ITEMS)[number]
@@ -145,7 +148,9 @@ const navigationItemSchema = v.custom<NavigationItem>(
 const sidebarItemSchema = v.custom<SidebarItem>(
   (item) =>
     typeof item === 'string' &&
-    (AVAILABLE_SIDEBAR_ITEMS.includes(item as 'context') || item.startsWith('account:')),
+    (AVAILABLE_SIDEBAR_ITEMS.includes(item as 'context') ||
+      item === 'compose:open-interactions' ||
+      item.startsWith('account:')),
 );
 
 const timelineSchema = v.fallback(
