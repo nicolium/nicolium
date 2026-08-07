@@ -1669,7 +1669,7 @@
   "frontend_config.sentry_dsn.label": "Sentry DSN",
   "frontend_config.tile_server.label": "Map tile server",
   "frontend_config.tile_server_attribution.label": "Map tiles attribution",
-  "getting_started.open_source_notice": "{code_name} is open source software. You can contribute or report issues at {code_link} (v{code_version}).",
+  "getting_started.open_source_notice": "{code_name} is free and open source software. You can contribute or report issues at {code_link} (v{code_version}).",
   "gif_picker_modal.empty_message": "There are no GIFs matching your search.",
   "gif_picker_modal.error_message": "An error occurred while searching for GIFs.",
   "gif_picker_modal.header.title": "Search GIFs",

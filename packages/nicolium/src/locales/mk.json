@@ -464,7 +464,7 @@
   "frontend_config.raw_json.hint": "Edit the settings data directly. Changes made directly to the JSON file will override the form fields above. Click Save to apply your changes.",
   "frontend_config.raw_json.label": "Advanced: Edit raw JSON data",
   "frontend_config.save": "Save",
-  "getting_started.open_source_notice": "{code_name} is open source software. You can contribute or report issues at {code_link} (v{code_version}).",
+  "getting_started.open_source_notice": "{code_name} is free and open source software. You can contribute or report issues at {code_link} (v{code_version}).",
   "icon_button.icons": "Icons",
   "icon_button.label": "Select icon",
   "import_data.actions.import_blocks": "Import blocks",

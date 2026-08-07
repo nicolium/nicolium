@@ -16,7 +16,7 @@ const LinkFooter: React.FC = (): React.JSX.Element => {
         ) : (
           <FormattedMessage
             id='getting_started.open_source_notice'
-            defaultMessage='{code_name} is open source software. You can contribute or report issues at {code_link} (v{code_version}).'
+            defaultMessage='{code_name} is free and open source software. You can contribute or report issues at {code_link} (v{code_version}).'
             values={{
               code_name: sourceCode.displayName,
               code_link: (
