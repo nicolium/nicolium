@@ -394,6 +394,7 @@ const settingsSchema = v.object({
   missingDescriptionModal: v.fallback(v.boolean(), true),
   wrenchModal: v.fallback(v.boolean(), false),
   missingDescriptionBoostModal: v.fallback(v.boolean(), false),
+  missingLanguageModal: v.fallback(v.boolean(), false),
   ignoreHashtagCasingSuggestions: v.fallback(v.boolean(), false),
   defaultPrivacy: v.fallback(v.picklist(['public', 'unlisted', 'private', 'direct']), 'public'),
   defaultContentType: v.fallback(

@@ -325,6 +325,25 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
             />
           </ListItem>
 
+          {features.postLanguages && (
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='preferences.fields.missing_language_modal.label'
+                  defaultMessage='Show confirmation dialog before sending a post without language set'
+                />
+              }
+              disabled={!!settings.defaultLanguage && settings.defaultLanguage !== 'detect'}
+            >
+              <SettingToggle
+                settings={settings}
+                settingPath={['missingLanguageModal']}
+                onChange={onToggleChange}
+                disabled={!!settings.defaultLanguage && settings.defaultLanguage !== 'detect'}
+              />
+            </ListItem>
+          )}
+
           <ListItem
             label={
               <FormattedMessage

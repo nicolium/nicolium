@@ -25,6 +25,7 @@ import { useSettings, useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 import { isServo } from '@/utils/browser';
 import { userTouching } from '@/utils/is-mobile';
+import { languages } from '@/utils/languages';
 import { resolveAccount, resolveStatus } from '@/utils/resolve';
 
 import { useUiStoreActions } from './ui';
@@ -66,6 +67,23 @@ const messages = defineMessages({
   uploadErrorPoll: {
     id: 'upload_error.poll',
     defaultMessage: 'File upload not allowed with polls.',
+  },
+  missingLanguageHeading: {
+    id: 'confirmations.missing_language.heading',
+    defaultMessage: 'Posting without language selected',
+  },
+  missingLanguageMessage: {
+    id: 'confirmations.missing_language.message',
+    defaultMessage: 'You have not selected a language for your post. Do you want to post anyway?',
+  },
+  detectedLanguageMessage: {
+    id: 'confirmations.missing_language.message.detected',
+    defaultMessage:
+      'You have not selected a language for your post. The detected language is {language}. Do you want to post anyway, with this language?',
+  },
+  missingLanguageConfirm: {
+    id: 'confirmations.missing_language.confirm',
+    defaultMessage: 'Post',
   },
   view: { id: 'toast.view', defaultMessage: 'View' },
   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
@@ -1132,13 +1150,53 @@ const submitCompose = async (
     }
 
     if (!force && !chained) {
-      const missingDescriptionModal = deps.settings.missingDescriptionModal;
+      const { missingDescriptionModal, missingLanguageModal, defaultLanguage } = deps.settings;
       const hasMissing = media.some((item) => !item.description);
-      if (missingDescriptionModal && hasMissing) {
+      const showMissingDescription = missingDescriptionModal && hasMissing;
+      const showMissingLanguage =
+        missingLanguageModal &&
+        !opts.common?.language &&
+        !compose.language &&
+        (!defaultLanguage || defaultLanguage === 'detect');
+
+      const submitForced = () => submitCompose(deps, composeId, { ...opts, force: true });
+
+      if (showMissingLanguage) {
+        openModal('CONFIRM', {
+          heading: <FormattedMessage {...messages.missingLanguageHeading} />,
+          message: compose.suggestedLanguage ? (
+            <FormattedMessage
+              {...messages.detectedLanguageMessage}
+              values={{
+                language:
+                  languages[compose.suggestedLanguage as Language] ?? compose.suggestedLanguage,
+              }}
+            />
+          ) : (
+            <FormattedMessage {...messages.missingLanguageMessage} />
+          ),
+          confirm: <FormattedMessage {...messages.missingLanguageConfirm} />,
+          onConfirm: () => {
+            if (showMissingDescription) {
+              openModal('MISSING_DESCRIPTION', {
+                onContinue: () => {
+                  closeModal('MISSING_DESCRIPTION');
+                  submitForced();
+                },
+              });
+            } else {
+              submitForced();
+            }
+          },
+        });
+        return;
+      }
+
+      if (showMissingDescription) {
         openModal('MISSING_DESCRIPTION', {
           onContinue: () => {
             closeModal('MISSING_DESCRIPTION');
-            submitCompose(deps, composeId, { ...opts, force: true });
+            submitForced();
           },
         });
         return;
@@ -1424,14 +1482,55 @@ const submitThread = async (
   }
 
   if (!force) {
+    const { missingDescriptionModal, missingLanguageModal } = deps.settings;
     const hasMissing = ids.some((id) =>
       actions.getCompose(id).mediaAttachments.some((item) => !item.description),
     );
-    if (deps.settings.missingDescriptionModal && hasMissing) {
+    const showMissingDescription = missingDescriptionModal && hasMissing;
+    const showMissingLanguage =
+      missingLanguageModal &&
+      !rootCompose.language &&
+      (!settings.defaultLanguage || settings.defaultLanguage === 'detect');
+
+    const submitForced = () => submitThread(deps, rootId, { ...opts, force: true });
+
+    if (showMissingLanguage) {
+      openModal('CONFIRM', {
+        heading: <FormattedMessage {...messages.missingLanguageHeading} />,
+        message: rootCompose.suggestedLanguage ? (
+          <FormattedMessage
+            {...messages.detectedLanguageMessage}
+            values={{
+              language:
+                languages[rootCompose.suggestedLanguage as Language] ??
+                rootCompose.suggestedLanguage,
+            }}
+          />
+        ) : (
+          <FormattedMessage {...messages.missingLanguageMessage} />
+        ),
+        confirm: <FormattedMessage {...messages.missingLanguageConfirm} />,
+        onConfirm: () => {
+          if (showMissingDescription) {
+            openModal('MISSING_DESCRIPTION', {
+              onContinue: () => {
+                closeModal('MISSING_DESCRIPTION');
+                submitForced();
+              },
+            });
+          } else {
+            submitForced();
+          }
+        },
+      });
+      return;
+    }
+
+    if (showMissingDescription) {
       openModal('MISSING_DESCRIPTION', {
         onContinue: () => {
           closeModal('MISSING_DESCRIPTION');
-          submitThread(deps, rootId, { ...opts, force: true });
+          submitForced();
         },
       });
       return;
