@@ -18,7 +18,7 @@ const useAcct = (account?: Pick<Account, 'fqn' | 'acct' | 'local' | 'url'>): str
     const localHost = localUrl ? new URL(localUrl).host : null;
     const otherHost = new URL(account.url).host;
     if (account.local === false || (localHost && localHost !== otherHost)) return account.fqn;
-    return `${account.acct}@${instance.domain}`;
+    return instance.domain ? `${account.acct}@${instance.domain}` : account.acct;
   }, [account?.acct, fqn, instance.domain, localUrl]);
 };
 
