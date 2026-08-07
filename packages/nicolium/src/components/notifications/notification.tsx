@@ -30,9 +30,7 @@ import AccountContainer from '@/components/accounts/account-container';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import { CollectionNotification } from '@/components/collections/collection-notification';
 import { Hotkeys } from '@/components/hotkeys';
-import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import RelativeTimestamp from '@/components/relative-timestamp';
-import { ParsedContent } from '@/components/statuses/parsed-content';
 import StatusContainer from '@/components/statuses/status-container';
 import StatusInfo from '@/components/statuses/status-info';
 import Emoji from '@/components/ui/emoji';
@@ -52,11 +50,10 @@ import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
-import { AccountLink } from './accounts/account-link';
-import StatusActionBar from './statuses/action-bar';
-import QuotedStatusIndicator from './statuses/quoted-status-indicator';
+import { AccountLink } from '../accounts/account-link';
 
-import type { SelectedStatus } from '@/queries/statuses/use-status';
+import { StatusPreview } from './status-preview';
+
 import type { NotificationType } from '@/utils/notification';
 import type { Account, NotificationGroup } from 'pl-api';
 
@@ -262,54 +259,6 @@ const buildMessage = (
 };
 
 const avatarSize = 48;
-
-interface IStatusPreview {
-  status: SelectedStatus;
-}
-
-const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
-  const output: Array<React.ReactNode> = [];
-
-  if (status.content) {
-    output.push(
-      <div className='notification__status-preview' data-markup key='content'>
-        <ParsedContent
-          html={status.content}
-          mentions={status.mentions}
-          hasQuote={!!status.quote_id}
-          emojis={status.emojis}
-        />
-      </div>,
-    );
-  }
-
-  if (status.media_attachments.length) {
-    output.push(<AttachmentThumbs key='attachments' status={status} />);
-  }
-
-  if (status.quote_id) {
-    output.push(
-      <QuotedStatusIndicator key='quote' statusId={status.quote_id} statusUrl={status.quote_url} />,
-    );
-  }
-
-  if (status.poll_id) {
-    output.push(
-      <div className='quoted-status-indicator'>
-        <Icon src={iconChartBar} aria-hidden />
-        <p>
-          <FormattedMessage id='poll.hint' defaultMessage='Poll' />
-        </p>
-      </div>,
-    );
-  }
-
-  if (!status.rss_feed) {
-    output.push(<StatusActionBar key='action-bar' status={status} space='sm' />);
-  }
-
-  return output;
-};
 
 interface INotification {
   notification: NotificationGroup;

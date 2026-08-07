@@ -10,7 +10,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import AccountContainer from '@/components/accounts/account-container';
 import { Hotkeys } from '@/components/hotkeys';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
-import { buildLink } from '@/components/notification';
+import { buildLink } from '@/components/notifications/notification';
 import PullToRefresh from '@/components/pull-to-refresh';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import ScrollableList from '@/components/scrollable-list';

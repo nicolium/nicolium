@@ -13,7 +13,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { saveSettings } from '@/actions/settings';
-import Notification from '@/components/notification';
+import Notification from '@/components/notifications/notification';
 import PlaceholderNotification from '@/components/placeholders/placeholder-notification';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';

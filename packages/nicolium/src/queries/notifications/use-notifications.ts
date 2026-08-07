@@ -10,7 +10,10 @@ import {
 import { useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
-import { getNotificationStatusId, notificationMessages } from '@/components/notification';
+import {
+  getNotificationStatusId,
+  notificationMessages,
+} from '@/components/notifications/notification';
 import { useCurrentAccountContext } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
