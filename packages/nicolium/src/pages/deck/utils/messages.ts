@@ -45,6 +45,10 @@ const messages = defineMessages({
   scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
   chats: { id: 'column.chats', defaultMessage: 'Chats' },
+  'interaction-requests': {
+    id: 'column.interaction_requests',
+    defaultMessage: 'Interaction requests',
+  },
   chatWith: { id: 'column.chat.with', defaultMessage: 'Chat with @{acct}' },
   showAsAccount: { id: 'column.deck.account_switcher.label', defaultMessage: 'Show as account' },
   showAsAccountTitle: {

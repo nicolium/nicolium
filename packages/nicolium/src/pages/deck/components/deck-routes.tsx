@@ -11,6 +11,7 @@ import CollectionColumn from '@/columns/collection';
 import AccountCollectionsColumn from '@/columns/collections';
 import DraftStatusesColumn from '@/columns/draft-statuses';
 import { FollowersList, FollowingList, SubscribersList } from '@/columns/follows';
+import { InteractionRequestsColumn } from '@/columns/interaction-requests';
 import NotificationsColumn from '@/columns/notifications';
 import ScheduledStatusesColumn from '@/columns/scheduled-statuses';
 import SearchColumn from '@/columns/search';
@@ -490,6 +491,13 @@ const draftStatusesRoute = createRoute({
   staticData: { title: messages.drafts },
 });
 
+const interactionRequestsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/interaction_requests',
+  component: () => <InteractionRequestsColumn />,
+  staticData: { title: messages['interaction-requests'] },
+});
+
 const ComposeDeckColumn: React.FC = () => {
   const columnId = useColumnId();
   const composeId = `deck:${columnId}`;
@@ -872,6 +880,7 @@ const routeTree = rootRoute.addChildren([
   bookmarksRoute,
   scheduledStatusesRoute,
   draftStatusesRoute,
+  interactionRequestsRoute,
   composeRoute,
   chatsRoute,
   chatRoute,

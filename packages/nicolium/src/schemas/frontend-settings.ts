@@ -282,7 +282,7 @@ const composeDeckColumnSchema = v.object({
 
 const genericDeckColumnSchema = v.object({
   ...baseDeckColumnSchema.entries,
-  type: v.picklist(['chats', 'scheduled', 'drafts']),
+  type: v.picklist(['chats', 'scheduled', 'drafts', 'interaction-requests']),
 });
 
 const deckColumnSchema = v.variant('type', [

@@ -70,6 +70,8 @@ const getInitialUrl = (column: DeckColumn) => {
       return column.folderId ? `/drive/${column.folderId}` : '/drive';
     case 'compose':
       return '/compose';
+    case 'interaction-requests':
+      return '/interaction_requests';
     default:
       return '/home';
   }
@@ -100,6 +102,8 @@ const baseColumnSignature = (column: DeckColumn): string => {
       return `drive:${column.folderId ?? 'root'}`;
     case 'compose':
       return 'compose';
+    case 'interaction-requests':
+      return 'interaction-requests';
     default:
       return 'unknown';
   }

@@ -10,6 +10,7 @@ import iconFolderSimple from '@phosphor-icons/core/regular/folder-simple.svg';
 import iconGlobeSimple from '@phosphor-icons/core/regular/globe-simple.svg';
 import iconGraph from '@phosphor-icons/core/regular/graph.svg';
 import iconHash from '@phosphor-icons/core/regular/hash.svg';
+import iconHeartHalf from '@phosphor-icons/core/regular/heart-half.svg';
 import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
 import iconHouse from '@phosphor-icons/core/regular/house.svg';
 import iconLink from '@phosphor-icons/core/regular/link.svg';
@@ -69,6 +70,10 @@ const messages = defineMessages({
   scheduled: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
   chats: { id: 'column.chats', defaultMessage: 'Chats' },
+  interactionRequests: {
+    id: 'column.interaction_requests',
+    defaultMessage: 'Interaction requests',
+  },
   drive: { id: 'column.drive', defaultMessage: 'Drive' },
   compose: { id: 'column.compose', defaultMessage: 'Compose' },
   createAsAccount: {
@@ -330,6 +335,14 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       icon: iconBellSimple,
       action: handleAdd({ type: 'notifications' }),
     });
+
+    if (features.interactionRequests) {
+      items.push({
+        text: intl.formatMessage(messages.interactionRequests),
+        icon: iconHeartHalf,
+        action: handleAdd({ type: 'interaction-requests' }),
+      });
+    }
 
     items.push({
       text: intl.formatMessage(messages.search),

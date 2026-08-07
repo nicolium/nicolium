@@ -1,6 +1,7 @@
 import iconChatTeardrop from '@phosphor-icons/core/regular/chat-teardrop.svg';
 import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconGraph from '@phosphor-icons/core/regular/graph.svg';
+import iconHeartHalf from '@phosphor-icons/core/regular/heart-half.svg';
 import iconHourglass from '@phosphor-icons/core/regular/hourglass.svg';
 import iconNotePencil from '@phosphor-icons/core/regular/note-pencil.svg';
 import iconPencilSimple from '@phosphor-icons/core/regular/pencil-simple.svg';
@@ -106,6 +107,8 @@ const useColumnIcon = (column: DeckColumn) => {
       return iconPencilSimple;
     case 'compose':
       return iconNotePencil;
+    case 'interaction-requests':
+      return iconHeartHalf;
     default:
       return '';
   }
