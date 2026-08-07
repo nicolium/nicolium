@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ComposeForm } from '@/components/async-components';
 import Modal from '@/components/ui/modal';
 import { useColumnId } from '@/contexts/deck-column-id-context';
+import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import {
@@ -43,7 +44,8 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
   const persistDraftStatus = usePersistDraftStatus();
   const columnId = useColumnId();
 
-  const { editedId, visibility, inReplyToId, quoteId, groupId } = compose;
+  const { editedId } = compose;
+  const title = useComposeHeading(composeId);
 
   const { isDragging, isDraggedOver } = useDraggedFiles(node, (files) => {
     uploadCompose(files);
@@ -107,43 +109,10 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
     }
   };
 
-  const renderTitle = () => {
-    if (compose.draftId) {
-      return (
-        <FormattedMessage id='navigation_bar.compose_draft' defaultMessage='Edit draft post' />
-      );
-    } else if (compose.redacting) {
-      return <FormattedMessage id='navigation_bar.compose_redact' defaultMessage='Redact post' />;
-    } else if (editedId) {
-      return <FormattedMessage id='navigation_bar.compose_edit' defaultMessage='Edit post' />;
-    } else if (visibility === 'direct') {
-      return (
-        <FormattedMessage id='navigation_bar.compose_direct' defaultMessage='Direct message' />
-      );
-    } else if (inReplyToId && groupId) {
-      return (
-        <FormattedMessage
-          id='navigation_bar.compose_group_reply'
-          defaultMessage='Reply to group post'
-        />
-      );
-    } else if (groupId) {
-      return (
-        <FormattedMessage id='navigation_bar.compose_group' defaultMessage='Compose to group' />
-      );
-    } else if (inReplyToId) {
-      return <FormattedMessage id='navigation_bar.compose_reply' defaultMessage='Reply to post' />;
-    } else if (quoteId) {
-      return <FormattedMessage id='navigation_bar.compose_quote' defaultMessage='Quote post' />;
-    } else {
-      return <FormattedMessage id='navigation_bar.compose' defaultMessage='Compose new post' />;
-    }
-  };
-
   return (
     <Modal
       ref={node}
-      title={renderTitle()}
+      title={title}
       onClose={onClickClose}
       className={clsx('compose-modal', {
         'compose-modal--dragging': isDragging,

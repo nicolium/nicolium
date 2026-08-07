@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import iconDotsThreeVertical from '@phosphor-icons/core/regular/dots-three-vertical.svg';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import { ComposeForm } from '@/components/async-components';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Widget from '@/components/ui/widget';
+import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useCompose } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 
@@ -27,6 +28,7 @@ const ComposePanel: React.FC<IComposePanel> = ({ openInteractions }) => {
   const intl = useIntl();
   const { sidebarItems } = useSettings();
   const { editorKey } = useCompose('home');
+  const title = useComposeHeading('home', true);
 
   const handleChangeOpenInteractions = (value: boolean) => {
     changeSetting(
@@ -50,7 +52,7 @@ const ComposePanel: React.FC<IComposePanel> = ({ openInteractions }) => {
   return (
     <Widget
       className='compose-panel'
-      title={<FormattedMessage id='navigation.compose' defaultMessage='Compose' />}
+      title={title}
       action={<DropdownMenu items={menu} src={iconDotsThreeVertical} />}
     >
       <ComposeForm
