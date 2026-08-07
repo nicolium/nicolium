@@ -352,7 +352,7 @@ const useNavigationItems = (pinned?: boolean, remaining?: boolean, mobile?: bool
 
   const { unreadChatsCount } = useStatContext();
   const notificationCount = useNotificationsUnreadCount();
-  const followRequestsCount = useFollowRequestsCount().data ?? 0;
+  const followRequestsCount = useFollowRequestsCount() ?? 0;
   const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();

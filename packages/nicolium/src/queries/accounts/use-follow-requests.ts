@@ -11,6 +11,8 @@ import { minifyAccountList } from '@/queries/utils/minify-list';
 import { scopedQueryKey } from '../query';
 import { filterById } from '../utils/filter-id';
 
+import { useCredentialAccount } from './use-account-credentials';
+
 const appendFollowRequest = (accountId: string, scopeUrl: string) =>
   queryClient.setQueryData(
     scopedQueryKey(queryKeys.accountsLists.followRequests, scopeUrl),
@@ -32,7 +34,10 @@ const removeFollowRequest = (accountId: string, scopeUrl: string) =>
     filterById(accountId),
   );
 
-const makeUseFollowRequests = <T>(select: (data: InfiniteData<PaginatedResponse<string>>) => T) =>
+const makeUseFollowRequests = <T>(
+  select: (data: InfiniteData<PaginatedResponse<string>>) => T,
+  enabled?: (...params: Array<any>) => boolean,
+) =>
   makePaginatedResponseQuery(
     queryKeys.accountsLists.followRequests,
     (client, _, scopeUrl) =>
@@ -40,14 +45,28 @@ const makeUseFollowRequests = <T>(select: (data: InfiniteData<PaginatedResponse<
         .getFollowRequests()
         .then((accounts) => minifyAccountList(accounts, scopeUrl)),
     select,
-    'isLoggedIn',
+    enabled ?? 'isLoggedIn',
   );
 
 const useFollowRequests = makeUseFollowRequests((data) => data.pages.flatMap((page) => page.items));
 
-const useFollowRequestsCount = makeUseFollowRequests(
-  (data) => data.pages.flatMap((page) => page.items).length,
+const selectFollowRequestsCount = (data: InfiniteData<PaginatedResponse<string>>) =>
+  data.pages.flatMap((page) => page.items).length;
+
+const useFollowRequestsCountQuery = makeUseFollowRequests(
+  selectFollowRequestsCount,
+  (enabled: boolean) => enabled,
 );
+
+const useFollowRequestsCount = () => {
+  const { data: account } = useCredentialAccount();
+
+  const sourceCount = account?.source?.follow_requests_count;
+
+  const query = useFollowRequestsCountQuery(!!account && sourceCount === undefined);
+
+  return sourceCount ?? query.data ?? 0;
+};
 
 const useOutgoingFollowRequests = makePaginatedResponseQuery(
   queryKeys.accountsLists.outgoingFollowRequests,

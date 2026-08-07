@@ -13,8 +13,8 @@ import { useUserStream } from '@/hooks/streaming/use-user-stream';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useMinWidth } from '@/hooks/use-min-width';
-import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { prefetchFollowRequests } from '@/queries/accounts/use-follow-requests';
 import { useAdminConfig } from '@/queries/admin/use-config';
 import { queryClient } from '@/queries/client';
@@ -53,7 +53,7 @@ const UI: React.FC = React.memo(() => {
   const node = useRef<HTMLDivElement | null>(null);
   const me = useCurrentAccount();
   const scopeUrl = useScopeUrl();
-  const { data: account } = useOwnAccount();
+  const { data: account } = useCredentialAccount();
   const features = useFeatures();
   const instance = useInstance();
   const vapidKey =
@@ -101,7 +101,7 @@ const UI: React.FC = React.memo(() => {
 
     prefetchCustomEmojis(client);
 
-    if (account.locked) {
+    if (account.locked && account.source?.follow_requests_count === undefined) {
       requestIdleCallback(() => prefetchFollowRequests(client, scopeUrl), { timeout: 2000 });
     }
 
