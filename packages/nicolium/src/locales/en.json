@@ -2126,6 +2126,7 @@
   "poll.choose_multiple": "Choose as many as you’d like.",
   "poll.closed": "Closed",
   "poll.hide_results": "Hide results",
+  "poll.hint": "Poll",
   "poll.non_anonymous": "Public poll",
   "poll.non_anonymous.label": "Other instances may display the options you voted for",
   "poll.refresh": "Refresh",

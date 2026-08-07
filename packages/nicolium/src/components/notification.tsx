@@ -54,6 +54,7 @@ import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
 import { AccountLink } from './accounts/account-link';
 import StatusActionBar from './statuses/action-bar';
+import QuotedStatusIndicator from './statuses/quoted-status-indicator';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { NotificationType } from '@/utils/notification';
@@ -284,6 +285,23 @@ const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
 
   if (status.media_attachments.length) {
     output.push(<AttachmentThumbs key='attachments' status={status} />);
+  }
+
+  if (status.quote_id) {
+    output.push(
+      <QuotedStatusIndicator key='quote' statusId={status.quote_id} statusUrl={status.quote_url} />,
+    );
+  }
+
+  if (status.poll_id) {
+    output.push(
+      <div className='quoted-status-indicator'>
+        <Icon src={iconChartBar} aria-hidden />
+        <p>
+          <FormattedMessage id='poll.hint' defaultMessage='Poll' />
+        </p>
+      </div>,
+    );
   }
 
   if (!status.rss_feed) {
