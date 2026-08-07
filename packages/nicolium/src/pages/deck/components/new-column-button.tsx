@@ -31,16 +31,15 @@ import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Avatar from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
 import { CurrentAccountProvider } from '@/contexts/current-account-context';
-import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAntennas } from '@/queries/accounts/use-antennas';
 import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
 import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 import { useAuthStore } from '@/stores/auth';
-import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 
+import { useDeckColumnAvailable } from '../hooks/use-deck-column-available';
 import { updateActiveLayoutColumns } from '../utils/layouts';
 
 import type { DeckColumn } from '@/schemas/frontend-settings';
@@ -154,10 +153,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
   onSelectAccount,
 }) => {
   const intl = useIntl();
-  const features = useFeatures();
-  const { data: account } = useOwnAccount();
-  const isAdmin = account?.is_admin || account?.is_moderator;
-  const timelineAccess = useInstance().configuration.timelines_access;
+  const isColumnAvailable = useDeckColumnAvailable();
   const {
     defaultTimeline,
     remote_timeline: { pinnedHosts },
@@ -189,12 +185,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       },
     ];
 
-    if (
-      features.publicTimeline &&
-      (timelineAccess.live_feeds.local === 'restricted'
-        ? isAdmin
-        : timelineAccess.live_feeds.local !== 'disabled')
-    ) {
+    if (isColumnAvailable({ type: 'timeline', timeline: 'local' })) {
       timelines.push({
         text: intl.formatMessage(messages.localTimeline),
         icon: iconPlanet,
@@ -202,36 +193,21 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       });
     }
 
-    if (
-      features.bubbleTimeline &&
-      (timelineAccess.live_feeds.bubble === 'restricted'
-        ? isAdmin
-        : timelineAccess.live_feeds.bubble !== 'disabled')
-    ) {
+    if (isColumnAvailable({ type: 'timeline', timeline: 'bubble' })) {
       timelines.push({
         text: intl.formatMessage(messages.bubbleTimeline),
         icon: iconGraph,
         action: handleAdd({ type: 'timeline', timeline: 'bubble' }),
       });
     }
-    if (
-      features.publicTimeline &&
-      (timelineAccess.live_feeds.remote === 'restricted'
-        ? isAdmin
-        : timelineAccess.live_feeds.remote !== 'disabled')
-    ) {
+    if (isColumnAvailable({ type: 'timeline', timeline: 'federated' })) {
       timelines.push({
         text: intl.formatMessage(messages.federatedTimeline),
         icon: iconFediverseLogo,
         action: handleAdd({ type: 'timeline', timeline: 'federated' }),
       });
     }
-    if (
-      features.wrenchedTimeline &&
-      (timelineAccess.live_feeds.wrenched === 'restricted'
-        ? isAdmin
-        : timelineAccess.live_feeds.wrenched !== 'disabled')
-    ) {
+    if (isColumnAvailable({ type: 'timeline', timeline: 'wrenched' })) {
       timelines.push({
         text: intl.formatMessage(messages.wrenchedTimeline),
         icon: iconWrench,
@@ -293,7 +269,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       });
     }
 
-    if (features.bookmarks) {
+    if (isColumnAvailable({ type: 'bookmarks' })) {
       if (bookmarkFolders?.length) {
         items.push({
           text: intl.formatMessage(messages.bookmarks),
@@ -322,7 +298,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       }
     }
 
-    if (features.chats) {
+    if (isColumnAvailable({ type: 'chats' })) {
       items.push({
         text: intl.formatMessage(messages.chats),
         icon: iconChatsTeardrop,
@@ -336,7 +312,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       action: handleAdd({ type: 'notifications' }),
     });
 
-    if (features.interactionRequests) {
+    if (isColumnAvailable({ type: 'interaction-requests' })) {
       items.push({
         text: intl.formatMessage(messages.interactionRequests),
         icon: iconHeartHalf,
@@ -362,7 +338,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       action: handleAdd({ type: 'hashtag', any: [], all: [], none: [] }),
     });
 
-    if (features.drive) {
+    if (isColumnAvailable({ type: 'drive' })) {
       items.push({
         text: intl.formatMessage(messages.drive),
         icon: iconCloud,
@@ -370,7 +346,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       });
     }
 
-    if (features.scheduledStatuses) {
+    if (isColumnAvailable({ type: 'scheduled' })) {
       items.push({
         text: intl.formatMessage(messages.scheduled),
         icon: iconHourglass,
@@ -392,7 +368,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
 
     const trends: Menu = [];
 
-    if (features.suggestions || features.suggestionsV2) {
+    if (isColumnAvailable({ type: 'trending', trendsType: 'accounts' })) {
       trends.push({
         text: intl.formatMessage(messages.trendingAccounts),
         icon: iconUser,
@@ -400,7 +376,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       });
     }
 
-    if (features.trendingStatuses) {
+    if (isColumnAvailable({ type: 'trending', trendsType: 'statuses' })) {
       trends.push({
         text: intl.formatMessage(messages.trendingStatuses),
         icon: iconTimeline,
@@ -408,7 +384,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       });
     }
 
-    if (features.trends) {
+    if (isColumnAvailable({ type: 'trending', trendsType: 'hashtags' })) {
       trends.push({
         text: intl.formatMessage(messages.trendingHashtags),
         icon: iconHash,
@@ -416,7 +392,7 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
       });
     }
 
-    if (features.trendingLinks) {
+    if (isColumnAvailable({ type: 'trending', trendsType: 'links' })) {
       trends.push({
         text: intl.formatMessage(messages.trendingLinks),
         icon: iconLink,
@@ -440,9 +416,8 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
     circles,
     antennas,
     bookmarkFolders,
-    features,
     defaultTimeline,
-    isAdmin,
+    isColumnAvailable,
     activeAccountUrl,
     mainAccountUrl,
   ]);

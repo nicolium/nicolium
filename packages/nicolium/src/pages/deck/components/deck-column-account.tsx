@@ -10,6 +10,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAuthStore } from '@/stores/auth';
 import { resolveAccount } from '@/utils/resolve';
 
+import { useDeckColumnAvailable } from '../hooks/use-deck-column-available';
 import { deckMessages as messages } from '../utils/messages';
 
 import { updateDeckColumn } from './deck-column-config';
@@ -103,9 +104,17 @@ const AccountOptionBody: React.FC<IAccountOptionBody> = ({
   );
 };
 
+const AvailableAccountOption: React.FC<IAccountOptionBody> = (props) => {
+  const isColumnAvailable = useDeckColumnAvailable();
+
+  if (!isColumnAvailable(props.column)) return null;
+
+  return <AccountOptionBody {...props} />;
+};
+
 const AccountOption: React.FC<IAccountOptionBody> = (props) => (
   <CurrentAccountProvider accountUrl={props.accountUrl}>
-    <AccountOptionBody {...props} />
+    <AvailableAccountOption {...props} />
   </CurrentAccountProvider>
 );
 
