@@ -159,6 +159,18 @@ const useNotification = (notification: NotificationGroup) => {
   }, [notification, status, target, accounts.data]);
 };
 
+const getWrenchStrength: (emoji: string) => number | null = (emoji) => {
+  if (emoji !== '🔧' && !emoji.includes('wrench')) return null;
+
+  if (emoji.includes('longestest')) return 1;
+  if (emoji.includes('longest')) return 0.75;
+  if (emoji.includes('longer')) return 0.5;
+  if (emoji.includes('long')) return 0.25;
+  if (emoji.includes('pregnant') || emoji.includes('skibidi')) return 0.67;
+
+  return 0;
+};
+
 const handleShockStreamFromNotification = (notification: Notification) => {
   const hooks = useSettingsStore
     .getState()
@@ -184,7 +196,7 @@ const handleShockStreamFromNotification = (notification: Notification) => {
 
       return new RegExp(expr, 'ui').test(notification.status?.content ?? '');
     } else if (notification.type === 'emoji_reaction' && hook.type === 'wrench') {
-      return notification.emoji === '🔧';
+      return getWrenchStrength(notification.emoji) !== null;
     } else if (hook.type === 'notification') {
       return hook.notificationTypes.includes(notification.type);
     }
@@ -194,14 +206,24 @@ const handleShockStreamFromNotification = (notification: Notification) => {
   if (!hookForNotification) return;
 
   const actionType = hookForNotification.actionType;
-  const intensity =
+  const intensity = Math.round(
     hookForNotification.type === 'wrench'
-      ? hookForNotification.minIntensity
-      : hookForNotification.intensity;
-  const duration =
+      ? hookForNotification.minIntensity +
+          getWrenchStrength(
+            (notification as Extract<Notification, { type: 'emoji_reaction' }>).emoji,
+          )! *
+            (hookForNotification.maxIntensity - hookForNotification.minIntensity)
+      : hookForNotification.intensity,
+  );
+  const duration = Math.round(
     hookForNotification.type === 'wrench'
-      ? hookForNotification.minDuration
-      : hookForNotification.duration;
+      ? hookForNotification.minDuration +
+          getWrenchStrength(
+            (notification as Extract<Notification, { type: 'emoji_reaction' }>).emoji,
+          )! *
+            (hookForNotification.maxDuration - hookForNotification.minDuration)
+      : hookForNotification.duration,
+  );
 
   sendControlMessage(
     actionType,
