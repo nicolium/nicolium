@@ -1074,6 +1074,20 @@ export const settingsStatusActionBarItemsRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
+export const settingsIntegrationsRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/integrations',
+  component: lazy(() => import('@/pages/settings/preferences/integrations')),
+  beforeLoad: requireAuth,
+});
+
+export const settingsOpenShockIntegrationRoute = createRoute({
+  getParentRoute: () => layouts.settings,
+  path: '/settings/integrations/openshock',
+  component: lazy(() => import('@/pages/settings/preferences/integrations/openshock')),
+  beforeLoad: requireAuth,
+});
+
 // #endregion
 
 // #region Admin dashboard
@@ -1803,6 +1817,8 @@ const routeTree = rootRoute.addChildren([
     settingsNavigationItemsRoute,
     settingsSidebarItemsRoute,
     settingsStatusActionBarItemsRoute,
+    settingsIntegrationsRoute,
+    settingsOpenShockIntegrationRoute,
     blocksRoute,
     domainBlocksRoute,
     mutesRoute,

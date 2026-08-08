@@ -1109,6 +1109,7 @@ p.form-group__hint {
 .inline-multiselect {
   overflow: auto;
   display: flex;
+  gap: 1px;
 
   width: fit-content;
   border: 1px solid var(--color-gray-400);
@@ -1128,10 +1129,12 @@ p.form-group__hint {
   label {
     cursor: pointer;
 
+    flex: 1;
+
     padding: 0.5rem 0.75rem;
-    border-left: 1px solid var(--color-gray-400);
 
     color: white;
+    text-align: center;
     white-space: nowrap;
 
     background: var(--color-gray-500);

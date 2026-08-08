@@ -32,6 +32,7 @@ interface IInput extends Pick<
   | 'onClick'
   | 'readOnly'
   | 'min'
+  | 'max'
   | 'pattern'
   | 'onKeyDown'
   | 'onKeyUp'

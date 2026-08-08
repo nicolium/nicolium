@@ -373,6 +373,46 @@ const deckSettingsSchema = v.fallback(
 
 const skinToneSchema = v.picklist([1, 2, 3, 4, 5, 6]);
 
+const baseOpenshockHookSchema = v.object({
+  actionType: v.picklist(['Shock', 'Vibrate', 'Sound']),
+});
+
+const notificationOpenshockHookSchema = v.object({
+  ...baseOpenshockHookSchema.entries,
+  type: v.literal('notification'),
+  notificationTypes: v.array(v.string()),
+  intensity: v.pipe(v.number(), v.integer(), v.minValue(0), v.maxValue(100)),
+  duration: v.pipe(v.number(), v.integer(), v.minValue(300), v.maxValue(30000)),
+});
+
+const wrenchOpenshockHookSchema = v.object({
+  ...baseOpenshockHookSchema.entries,
+  type: v.literal('wrench'),
+  adaptive: v.fallback(v.boolean(), false),
+  minIntensity: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(0), v.maxValue(100)), 0),
+  maxIntensity: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(0), v.maxValue(100)), 100),
+  minDuration: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(300), v.maxValue(65535)), 500),
+  maxDuration: v.fallback(
+    v.pipe(v.number(), v.integer(), v.minValue(300), v.maxValue(65535)),
+    2000,
+  ),
+});
+
+const replyOpenshockHookSchema = v.object({
+  ...baseOpenshockHookSchema.entries,
+  type: v.literal('reply'),
+  intensity: v.pipe(v.number(), v.integer(), v.minValue(0), v.maxValue(100)),
+  duration: v.pipe(v.number(), v.integer(), v.minValue(300), v.maxValue(65535)),
+  keyword: v.fallback(v.string(), ''),
+  wholeWord: v.fallback(v.boolean(), false),
+});
+
+const openshockHookSchema = v.variant('type', [
+  notificationOpenshockHookSchema,
+  wrenchOpenshockHookSchema,
+  replyOpenshockHookSchema,
+]);
+
 const settingsSchema = v.object({
   onboarded: v.fallback(v.boolean(), false),
   skinTone: v.fallback(skinToneSchema, 1),
@@ -451,6 +491,15 @@ const settingsSchema = v.object({
   showFilteredStatusAuthor: v.fallback(v.boolean(), false),
   filters: filteredArray(filterSchema),
   fitScrollTopButtonInHeader: v.fallback(v.boolean(), true),
+
+  openshock: v.optional(
+    coerceObject({
+      baseUrl: v.string(),
+      token: v.string(),
+      defaultDevice: v.string(),
+      hooks: filteredArray(openshockHookSchema),
+    }),
+  ),
 
   theme: v.optional(
     coerceObject({
@@ -556,6 +605,7 @@ type TimelineFilters = Settings['timelines']['home'];
 
 export {
   settingsSchema,
+  openshockHookSchema,
   type NavigationItem,
   type SidebarItem,
   type DeckColumn,

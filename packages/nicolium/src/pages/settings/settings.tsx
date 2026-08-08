@@ -89,6 +89,13 @@ const SettingsPage: React.FC = () => {
                 />
               }
             />
+
+            <ListItem
+              to='/settings/integrations'
+              label={
+                <FormattedMessage id='preferences.tab.integrations' defaultMessage='Integrations' />
+              }
+            />
           </List>
         </CardBody>
 

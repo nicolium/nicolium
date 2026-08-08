@@ -140,7 +140,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
           </p>
         )}
       </div>
-      <div className={clsx('token__actions')}>
+      <div className='token__actions'>
         <button onClick={handleRevoke}>
           <FormattedMessage id='security.tokens.revoke' defaultMessage='Revoke' />
         </button>
