@@ -133,12 +133,14 @@
 
       img {
         width: 2rem;
+        min-width: 2rem;
         height: 2rem;
         margin: 0.5rem;
       }
 
       &__icon {
         width: 2rem;
+        min-width: 2rem;
         height: 2rem;
       }
     }
