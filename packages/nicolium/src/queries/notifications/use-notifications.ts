@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import 'intl-pluralrules';
-import { omit } from 'lodash-es';
+import { escapeRegExp, omit } from 'lodash-es';
 import {
   PaginatedResponse,
   type GetGroupedNotificationsParams,
@@ -28,6 +28,7 @@ import { compareId } from '@/utils/comparators';
 import { regexFromFilters } from '@/utils/filters';
 import { unescapeHTML } from '@/utils/html';
 import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from '@/utils/notification';
+import { sendControlMessage } from '@/utils/openshock';
 import { play, soundCache } from '@/utils/sounds';
 import { joinPublicPath } from '@/utils/static';
 
@@ -158,6 +159,58 @@ const useNotification = (notification: NotificationGroup) => {
   }, [notification, status, target, accounts.data]);
 };
 
+const handleShockStreamFromNotification = (notification: Notification) => {
+  const hooks = useSettingsStore
+    .getState()
+    .settings.openshock?.hooks.toSorted((hook) =>
+      hook.type === 'reply' || hook.type === 'wrench' ? 1 : 0,
+    );
+
+  if (!hooks?.length) return;
+
+  const hookForNotification = hooks.find((hook) => {
+    if (notification.type === 'mention' && hook.type === 'reply') {
+      let expr = escapeRegExp(hook.keyword);
+
+      if (hook.wholeWord) {
+        if (/^[\w]/.test(expr)) {
+          expr = `\\b${expr}`;
+        }
+
+        if (/[\w]$/.test(expr)) {
+          expr = `${expr}\\b`;
+        }
+      }
+
+      return new RegExp(expr, 'ui').test(notification.status?.content ?? '');
+    } else if (notification.type === 'emoji_reaction' && hook.type === 'wrench') {
+      return notification.emoji === '🔧';
+    } else if (hook.type === 'notification') {
+      return hook.notificationTypes.includes(notification.type);
+    }
+    return false;
+  });
+
+  if (!hookForNotification) return;
+
+  const actionType = hookForNotification.actionType;
+  const intensity =
+    hookForNotification.type === 'wrench'
+      ? hookForNotification.minIntensity
+      : hookForNotification.intensity;
+  const duration =
+    hookForNotification.type === 'wrench'
+      ? hookForNotification.minDuration
+      : hookForNotification.duration;
+
+  sendControlMessage(
+    actionType,
+    intensity,
+    duration,
+    hookForNotification.type === 'wrench' ? 'get wrenched :3' : undefined,
+  ).catch(console.error);
+};
+
 const useProcessStreamNotification = () => {
   const intl = useIntl();
   const { data: filters = [] } = useFiltersByContext('notifications');
@@ -224,6 +277,10 @@ const useProcessStreamNotification = () => {
       if (playSound && !filtered) {
         play(soundCache.boop);
       }
+
+      try {
+        handleShockStreamFromNotification(notification);
+      } catch {}
 
       importEntities({
         accounts: [

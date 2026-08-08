@@ -32,6 +32,7 @@ const sendControlMessage = (
   type: 'Shock' | 'Vibrate' | 'Sound',
   intensity: number,
   duration: number,
+  message?: string,
 ) => {
   const { baseUrl, token, defaultDevice } = getBaseUrlAndToken();
 
@@ -51,6 +52,7 @@ const sendControlMessage = (
           exclusive: true,
         },
       ],
+      customName: message,
     }),
   });
 };
