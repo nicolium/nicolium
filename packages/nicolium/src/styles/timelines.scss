@@ -22,7 +22,11 @@
 .compose-block {
   position: relative;
   z-index: 1;
+
+  overflow: hidden;
+
   border-color: var(--color-gray-200);
+
   transition: all 150ms var(--ease-default);
 
   .dark.black & {
