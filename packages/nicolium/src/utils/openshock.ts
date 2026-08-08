@@ -18,6 +18,7 @@ type DevicesResponse = {
   }>;
 };
 
+// i made it stateless because i was tired of how the url purify thing behaved lol
 const getBaseUrlAndToken = () => {
   const settings = useSettingsStore.getState().settings.openshock;
 
