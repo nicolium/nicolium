@@ -568,6 +568,12 @@ const OpenShockNewHookForm: React.FC = () => {
       setter(target.valueAsNumber || 0);
     };
 
+  const disabled =
+    !openshock?.defaultDevice ||
+    (type === 'notification' && notificationTypes.length === 0) ||
+    (type === 'reply' && !keyword) ||
+    (type === 'wrench' && adaptive && (minIntensity > maxIntensity || minDuration > maxDuration));
+
   return (
     <Form onSubmit={handleSave} className='openshock__new-hook-form'>
       <CardHeader>
@@ -806,7 +812,7 @@ const OpenShockNewHookForm: React.FC = () => {
         </>
       )}
       <div className='form__actions'>
-        <button type='submit' disabled={!openshock?.defaultDevice}>
+        <button type='submit' disabled={disabled}>
           <FormattedMessage
             id='integrations.openshock.new_hook_form.save'
             defaultMessage='Save hook'
