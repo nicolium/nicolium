@@ -181,7 +181,11 @@ const handleShockStreamFromNotification = (notification: Notification) => {
   if (!hooks?.length) return;
 
   const hookForNotification = hooks.find((hook) => {
-    if (notification.type === 'mention' && hook.type === 'reply') {
+    if (
+      notification.type === 'mention' &&
+      notification.subtype === 'reply' &&
+      hook.type === 'reply'
+    ) {
       let expr = escapeRegExp(hook.keyword);
 
       if (hook.wholeWord) {
