@@ -78,7 +78,7 @@ const messages = defineMessages({
   },
   hookTypeReply: {
     id: 'integrations.openshock.new_hook_form.type.reply',
-    defaultMessage: 'Reply',
+    defaultMessage: 'Mention',
   },
 });
 
@@ -364,7 +364,7 @@ const OpenShockHook: React.FC<IOpenShockHook> = ({ hook, index }) => {
                   ) : (
                     <FormattedMessage
                       id='integrations.openshock.hook.type.reply'
-                      defaultMessage='Reply'
+                      defaultMessage='Mention'
                     />
                   )}
                 </strong>
@@ -539,11 +539,11 @@ const OpenShockNewHookForm: React.FC = () => {
   const [actionType, setActionType] = useState<OpenshockHook['actionType']>('Sound');
 
   const [notificationTypes, setNotificationTypes] = useState<string[]>([]);
-  const [intensity, setIntensity] = useState(100);
+  const [intensity, setIntensity] = useState(50);
   const [duration, setDuration] = useState(1000);
 
   const [adaptive, setAdaptive] = useState(false);
-  const [minIntensity, setMinIntensity] = useState(0);
+  const [minIntensity, setMinIntensity] = useState(20);
   const [maxIntensity, setMaxIntensity] = useState(100);
   const [minDuration, setMinDuration] = useState(500);
   const [maxDuration, setMaxDuration] = useState(2000);
