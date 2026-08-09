@@ -7,7 +7,7 @@ import {
   type Notification,
   type NotificationGroup,
 } from 'pl-api';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 
 import {
@@ -241,6 +241,30 @@ const useProcessStreamNotification = () => {
   const hideBots = useHideBotNotifications();
   const importEntities = useImportEntities();
   const scopeUrl = useScopeUrl();
+  const hasShockLock = useRef(false);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let releaseLock: (() => void) | undefined;
+
+    navigator.locks
+      .request(`nicolium:openshock:${scopeUrl}`, { signal: controller.signal }, async () => {
+        hasShockLock.current = true;
+
+        await new Promise<void>((resolve) => {
+          releaseLock = resolve;
+        });
+
+        hasShockLock.current = false;
+      })
+      .catch(() => {});
+
+    return () => {
+      hasShockLock.current = false;
+      releaseLock?.();
+      controller.abort();
+    };
+  }, [scopeUrl]);
 
   const processStreamNotification = useCallback(
     (notification: Notification) => {
@@ -301,7 +325,7 @@ const useProcessStreamNotification = () => {
       }
 
       try {
-        handleShockStreamFromNotification(notification);
+        if (hasShockLock.current) handleShockStreamFromNotification(notification);
       } catch {}
 
       importEntities({
