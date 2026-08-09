@@ -212,20 +212,24 @@ const handleShockStreamFromNotification = (notification: Notification) => {
   const actionType = hookForNotification.actionType;
   const intensity = Math.round(
     hookForNotification.type === 'wrench'
-      ? hookForNotification.minIntensity +
+      ? hookForNotification.adaptive
+        ? hookForNotification.minIntensity +
           getWrenchStrength(
             (notification as Extract<Notification, { type: 'emoji_reaction' }>).emoji,
           )! *
             (hookForNotification.maxIntensity - hookForNotification.minIntensity)
+        : hookForNotification.minIntensity
       : hookForNotification.intensity,
   );
   const duration = Math.round(
     hookForNotification.type === 'wrench'
-      ? hookForNotification.minDuration +
+      ? hookForNotification.adaptive
+        ? hookForNotification.minDuration +
           getWrenchStrength(
             (notification as Extract<Notification, { type: 'emoji_reaction' }>).emoji,
           )! *
             (hookForNotification.maxDuration - hookForNotification.minDuration)
+        : hookForNotification.minDuration
       : hookForNotification.duration,
   );
 
@@ -248,6 +252,8 @@ const useProcessStreamNotification = () => {
   const hasShockLock = useRef(false);
 
   useEffect(() => {
+    if (!('locks' in navigator)) return;
+
     const controller = new AbortController();
     let releaseLock: (() => void) | undefined;
 
@@ -273,6 +279,11 @@ const useProcessStreamNotification = () => {
   const processStreamNotification = useCallback(
     (notification: Notification) => {
       if (!notification.type) return;
+
+      try {
+        if (hasShockLock.current) handleShockStreamFromNotification(notification);
+      } catch {}
+
       if (notification.type === 'chat_mention') return;
       if (hideBots && notification.account.bot) return;
 
@@ -327,10 +338,6 @@ const useProcessStreamNotification = () => {
       if (playSound && !filtered) {
         play(soundCache.boop);
       }
-
-      try {
-        if (hasShockLock.current) handleShockStreamFromNotification(notification);
-      } catch {}
 
       importEntities({
         accounts: [

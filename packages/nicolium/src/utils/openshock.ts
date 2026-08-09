@@ -54,7 +54,7 @@ const handleOpenshockError = (response: Response) => {
       },
     });
 
-    changeSetting(['openshock'], (openshock) => ({
+    changeSetting(['openshock'], (openshock: any) => ({
       ...openshock,
       baseUrl: '',
       token: '',

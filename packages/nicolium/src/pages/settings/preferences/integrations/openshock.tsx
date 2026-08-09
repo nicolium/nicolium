@@ -287,7 +287,7 @@ const OpenShockDevicesList: React.FC = () => {
     }
   }, [openshock?.baseUrl, openshock?.token]);
 
-  if (!devices?.shockers) {
+  if (devices !== false && !devices?.shockers) {
     return null;
   }
 
