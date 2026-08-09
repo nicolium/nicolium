@@ -1,5 +1,6 @@
 import { defineMessages } from 'react-intl';
 
+import { changeSetting } from '@/actions/settings';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 import { buildFullPath } from '@/utils/url';
@@ -52,6 +53,13 @@ const handleOpenshockError = (response: Response) => {
         href: '/settings/integrations/openshock',
       },
     });
+
+    changeSetting(['openshock'], (openshock) => ({
+      ...openshock,
+      baseUrl: '',
+      token: '',
+      defaultDevice: '',
+    }));
   }
   return response.json();
 };
