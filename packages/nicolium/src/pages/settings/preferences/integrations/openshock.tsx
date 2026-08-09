@@ -6,6 +6,7 @@ import * as v from 'valibot';
 import { changeSetting } from '@/actions/settings';
 import { EmptyMessage } from '@/components/empty-message';
 import List, { ListItem } from '@/components/list';
+import OutlineBox from '@/components/outline-box';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
@@ -890,6 +891,14 @@ const OpenShockIntegrationSettings: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
+      <OutlineBox>
+        <p>
+          <FormattedMessage
+            id='integrations.openshock.description'
+            defaultMessage='The OpenShock integration allows you to control your OpenShock devices based on notifications, wrench reactions, or replies. You can configure hooks to trigger specific actions on your devices. The actions will only be performed when you have Nicolium open in the browser.'
+          />
+        </p>
+      </OutlineBox>
       <OpenShockCredentialsForm />
       <OpenShockDevicesList />
       <OpenShockHooksList />

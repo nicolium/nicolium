@@ -1779,6 +1779,7 @@
   "integrations.openshock.check_and_save.success": "OpenShock integration settings saved",
   "integrations.openshock.default_device": "Default device",
   "integrations.openshock.delete_hook": "Delete",
+  "integrations.openshock.description": "The OpenShock integration allows you to control your OpenShock devices based on notifications, wrench reactions, or replies. You can configure hooks to trigger specific actions on your devices. The actions will only be performed when you have Nicolium open in the browser.",
   "integrations.openshock.devices": "Devices",
   "integrations.openshock.hook.action": "Action: {action}",
   "integrations.openshock.hook.adaptive": "Adaptive",
