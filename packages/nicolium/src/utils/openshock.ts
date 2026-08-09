@@ -1,5 +1,20 @@
+import { defineMessages } from 'react-intl';
+
 import { useSettingsStore } from '@/stores/settings';
+import toast from '@/toast';
 import { buildFullPath } from '@/utils/url';
+
+const messages = defineMessages({
+  requestFailedRevoking: {
+    id: 'integrations.openshock.request_fail',
+    defaultMessage:
+      'Request to OpenShock failed. Connection has been disabled. Visit integrations settings to re-enable it.',
+  },
+  requestFailedRevokingView: {
+    id: 'integrations.openshock.request_fail.view',
+    defaultMessage: 'View settings',
+  },
+});
 
 type DevicesResponse = {
   message: string;
@@ -29,6 +44,18 @@ const getBaseUrlAndToken = () => {
   };
 };
 
+const handleOpenshockError = (response: Response) => {
+  if (response.status === 401) {
+    toast.error(messages.requestFailedRevoking, {
+      actionLabel: messages.requestFailedRevokingView,
+      actionLinkOptions: {
+        href: '/settings/integrations/openshock',
+      },
+    });
+  }
+  return response.json();
+};
+
 const sendControlMessage = (
   type: 'Shock' | 'Vibrate' | 'Sound',
   intensity: number,
@@ -55,7 +82,7 @@ const sendControlMessage = (
       ],
       customName: message,
     }),
-  });
+  }).then(handleOpenshockError);
 };
 
 const getDeviceList = (): Promise<DevicesResponse> => {
@@ -66,16 +93,23 @@ const getDeviceList = (): Promise<DevicesResponse> => {
       'Content-Type': 'application/json',
       OpenShockToken: token,
     },
-  }).then((res) => res.json());
+  }).then(handleOpenshockError);
 };
 
-const checkToken = (baseUrl: string, token: string) =>
-  fetch(buildFullPath(`/2/tokens/self`, baseUrl), {
+const checkToken = async (baseUrl: string, token: string) => {
+  const response = await fetch(buildFullPath(`/2/tokens/self`, baseUrl), {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       OpenShockToken: token,
     },
-  }).then((res) => res.ok);
+  });
+
+  if (response.ok) return true;
+
+  if (response.status === 401) return 'invalid';
+
+  return false;
+};
 
 export { sendControlMessage, getDeviceList, checkToken, type DevicesResponse };

@@ -38,6 +38,11 @@ const messages = defineMessages({
     id: 'integrations.openshock.check_and_save.fail',
     defaultMessage: 'Failed to connect to OpenShock',
   },
+  checkFailed401: {
+    id: 'integrations.openshock.check_and_save.fail.401',
+    defaultMessage:
+      'Connected to OpenShock, but the API token is invalid. It might have been revoked or expired',
+  },
   checkSuccess: {
     id: 'integrations.openshock.check_and_save.success',
     defaultMessage: 'OpenShock integration settings saved',
@@ -91,7 +96,9 @@ const OpenShockCredentialsForm: React.FC = () => {
 
     checkToken(baseUrl, token)
       .then((isValid) => {
-        if (isValid) {
+        if (isValid === 'invalid') {
+          toast.error(messages.checkFailed401);
+        } else if (isValid) {
           if (!openshock) {
             changeSetting(['openshock'], {
               baseUrl,
@@ -261,13 +268,15 @@ const OpenShockDevice: React.FC<IOpenShockDevice> = ({ shocker }) => {
 
 const OpenShockDevicesList: React.FC = () => {
   const { openshock } = useSettings();
-  const [devices, setDevices] = React.useState<DevicesResponse['data'][number] | null>(null);
+  const [devices, setDevices] = React.useState<DevicesResponse['data'][number] | null | false>(
+    null,
+  );
 
   useEffect(() => {
     if (openshock?.baseUrl && openshock?.token) {
       getDeviceList()
         .then((res) => {
-          setDevices(res.data?.[0]);
+          setDevices(res.data?.[0] ?? false);
         })
         .catch(() => {
           toast.error(messages.checkFailed);
@@ -288,7 +297,17 @@ const OpenShockDevicesList: React.FC = () => {
           title={<FormattedMessage id='integrations.openshock.devices' defaultMessage='Devices' />}
         />
       </CardHeader>
-      {devices.shockers.length ? (
+      {devices === false ? (
+        <EmptyMessage
+          icon={iconLightningSlash}
+          text={
+            <FormattedMessage
+              id='integrations.openshock.no_hubs'
+              defaultMessage='The OpenShock account has no hubs visible to the API token.'
+            />
+          }
+        />
+      ) : devices.shockers.length ? (
         <div className='openshock__devices'>
           {devices.shockers.map((shocker) => (
             <OpenShockDevice key={shocker.id} shocker={shocker} />
