@@ -183,6 +183,8 @@ interface UpdateCredentialsParams {
    * Required features{@link Features.accountMentionPolicy}.
    */
   mention_policy?: 'none' | 'only_known' | 'only_contacts';
+
+  bite_controls?: 'public' | 'followers' | 'none';
 }
 
 /**

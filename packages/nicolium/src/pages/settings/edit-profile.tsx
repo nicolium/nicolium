@@ -190,6 +190,8 @@ interface AccountCredentials {
   web_layout?: UpdateCredentialsParams['web_layout'];
   web_visibility?: UpdateCredentialsParams['web_visibility'];
   custom_css?: string;
+
+  bite_controls?: UpdateCredentialsParams['bite_controls'];
 }
 
 /** Convert an account into an update_credentials request object. */
