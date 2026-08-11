@@ -24,6 +24,7 @@ import type { EditDomainBlockModalProps } from '@/modals/edit-domain-block-modal
 import type { EditDomainModalProps } from '@/modals/edit-domain-modal';
 import type { EditFederationModalProps } from '@/modals/edit-federation-modal';
 import type { EditIpBlockModalProps } from '@/modals/edit-ip-block-modal';
+import type { EditOpenShockHookModalProps } from '@/modals/edit-openshock-hook-modal';
 import type { EditRuleModalProps } from '@/modals/edit-rule-modal';
 import type { EmbedModalProps } from '@/modals/embed-modal';
 import type { EventMapModalProps } from '@/modals/event-map-modal';
@@ -71,6 +72,7 @@ type OpenModalType = {
   EDIT_DOMAIN_BLOCK: EditDomainBlockModalProps;
   EDIT_FEDERATION: EditFederationModalProps;
   EDIT_IP_BLOCK: EditIpBlockModalProps;
+  EDIT_OPENSHOCK_HOOK: EditOpenShockHookModalProps;
   EDIT_RULE: EditRuleModalProps;
   EMBED: EmbedModalProps;
   EVENT_MAP: EventMapModalProps;

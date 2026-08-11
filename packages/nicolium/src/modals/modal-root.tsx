@@ -33,6 +33,7 @@ const MODAL_COMPONENTS = {
   EDIT_DOMAIN_BLOCK: lazy(() => import('@/modals/edit-domain-block-modal')),
   EDIT_FEDERATION: lazy(() => import('@/modals/edit-federation-modal')),
   EDIT_IP_BLOCK: lazy(() => import('@/modals/edit-ip-block-modal')),
+  EDIT_OPENSHOCK_HOOK: lazy(() => import('@/modals/edit-openshock-hook-modal')),
   EDIT_RULE: lazy(() => import('@/modals/edit-rule-modal')),
   EMBED: lazy(() => import('@/modals/embed-modal')),
   EVENT_MAP: lazy(() => import('@/modals/event-map-modal')),
