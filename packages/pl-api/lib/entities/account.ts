@@ -235,8 +235,8 @@ const baseAccountSchema = v.object({
 
   pronouns: v.fallback(v.array(v.string()), []),
 
-  bite_controls: v.fallback(v.nullable(v.picklist(['public', 'followers', 'none'])), null),
-  can_bite: v.fallback(v.nullable(v.boolean()), null),
+  bite_controls: v.fallback(v.optional(v.picklist(['public', 'followers', 'none'])), undefined),
+  can_bite: v.fallback(v.optional(v.boolean()), undefined),
 
   /** Mention policy */
   mention_policy: v.fallback(v.picklist(['none', 'only_known', 'only_contacts']), 'none'),

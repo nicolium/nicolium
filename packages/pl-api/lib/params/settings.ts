@@ -180,10 +180,13 @@ interface UpdateCredentialsParams {
 
   /**
    * Mention policy
-   * Required features{@link Features.accountMentionPolicy}.
+   * Requires features{@link Features.accountMentionPolicy}.
    */
   mention_policy?: 'none' | 'only_known' | 'only_contacts';
 
+  /**
+   * Requires features{@link Features.biteControls}.
+   */
   bite_controls?: 'public' | 'followers' | 'none';
 }
 

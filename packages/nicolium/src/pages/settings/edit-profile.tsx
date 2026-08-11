@@ -112,6 +112,18 @@ const messages = defineMessages({
     id: 'confirmations.edit_profile.missing_description.confirm',
     defaultMessage: 'Continue anyway',
   },
+  biteControlsPublic: {
+    id: 'edit_profile.fields.bite_controls.public',
+    defaultMessage: 'Anybody',
+  },
+  biteControlsFollowers: {
+    id: 'edit_profile.fields.bite_controls.followers',
+    defaultMessage: 'Followers',
+  },
+  biteControlsNone: {
+    id: 'edit_profile.fields.bite_controls.none',
+    defaultMessage: 'Nobody',
+  },
 });
 
 /**
@@ -214,6 +226,7 @@ const accountToCredentials = (account: CredentialAccount): AccountCredentials =>
       'is_cat',
       'speak_as_cat',
       'mention_policy',
+      'bite_controls',
     ]),
     ...pick(account.source, ['note', 'web_include_boosts', 'web_layout', 'web_visibility']),
     fields_attributes: [...(account.__meta.source?.fields ?? [])],
@@ -785,6 +798,31 @@ const EditProfilePage: React.FC = () => {
             </>
           )}
 
+          {features.biteControls && (
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='preferences.fields.bite_controls.label'
+                  defaultMessage='Allow bites from'
+                />
+              }
+            >
+              <SelectDropdown
+                key={isLoading ? 'bite-controls-loading' : 'bite-controls'}
+                className='settings-select settings-select--fit'
+                items={{
+                  public: intl.formatMessage(messages.biteControlsPublic),
+                  followers: intl.formatMessage(messages.biteControlsFollowers),
+                  none: intl.formatMessage(messages.biteControlsNone),
+                }}
+                defaultValue={data.bite_controls ?? 'none'}
+                onChange={(event) => {
+                  handleFieldChange('bite_controls')(event.target.value);
+                }}
+              />
+            </ListItem>
+          )}
+
           {features.accountWebLayout && (
             <ListItem
               label={
@@ -795,6 +833,7 @@ const EditProfilePage: React.FC = () => {
               }
             >
               <SelectDropdown
+                key={isLoading ? 'web-layout-loading' : 'web-layout'}
                 className='settings-select settings-select--fit'
                 items={{
                   microblog: intl.formatMessage(messages.webLayoutMicroblog),
@@ -818,6 +857,7 @@ const EditProfilePage: React.FC = () => {
               }
             >
               <SelectDropdown
+                key={isLoading ? 'web-visibility-loading' : 'web-visibility'}
                 className='settings-select settings-select--fit'
                 items={{
                   public: intl.formatMessage(messages.webVisibilityPublic),
@@ -870,7 +910,7 @@ const EditProfilePage: React.FC = () => {
               }
             >
               <SelectDropdown
-                key={data.mention_policy ? 'true' : 'false'}
+                key={isLoading ? 'mention-policy-loading' : 'mention-policy'}
                 className='settings-select settings-select--fit'
                 items={{
                   none: intl.formatMessage(messages.mentionPolicyNone),

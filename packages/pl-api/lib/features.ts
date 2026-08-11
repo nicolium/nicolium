@@ -559,6 +559,8 @@ const getFeatures = (instance: Instance) => {
      */
     birthdays: v.software === PLEROMA,
 
+    biteControls: instance.api_versions['net.iceshrimp.bites'] >= 1,
+
     /**
      * Allow to bite users.
      * @see POST /api/v1/bite
