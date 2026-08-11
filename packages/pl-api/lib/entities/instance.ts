@@ -142,7 +142,7 @@ const configurationSchema = coerceObject({
   accounts: v.fallback(
     v.nullable(
       v.object({
-        allow_custom_css: v.boolean(),
+        allow_custom_css: v.fallback(v.boolean(), false),
         max_display_name_length: v.fallback(v.optional(v.number()), undefined),
         max_note_length: v.fallback(v.optional(v.number()), undefined),
         max_avatar_description_length: v.fallback(v.optional(v.number()), undefined),
