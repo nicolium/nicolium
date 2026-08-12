@@ -43,7 +43,7 @@ const BiteButton: React.FC<IActionButton> = ({ status }) => {
     return (
       <Popover
         interaction='click'
-        content={<BitePopover biteControls={status.account.bite_controls} />}
+        content={<BitePopover biteControls={status.account.bite_controls} status />}
       >
         {biteButton}
       </Popover>
