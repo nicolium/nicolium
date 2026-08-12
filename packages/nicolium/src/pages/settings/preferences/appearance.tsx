@@ -1,3 +1,4 @@
+import iconHeart from '@phosphor-icons/core/regular/heart.svg';
 import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import { debounce } from 'lodash-es';
 import React from 'react';
@@ -509,6 +510,22 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
             <SettingToggle
               settings={settings}
               settingPath={['useRocketIconForReblogs']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.use_heart_icon_for_favourites.label'
+                defaultMessage='Use heart icon ({icon}) for favourites'
+                values={{ icon: <Icon src={iconHeart} /> }}
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['useHeartIconForFavourites']}
               onChange={onToggleChange}
             />
           </ListItem>
