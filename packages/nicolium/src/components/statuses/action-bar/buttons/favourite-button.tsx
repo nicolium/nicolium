@@ -1,5 +1,7 @@
+import iconHeartFill from '@phosphor-icons/core/fill/heart-fill.svg';
 import iconStarFill from '@phosphor-icons/core/fill/star-fill.svg';
 import iconThumbsUpFill from '@phosphor-icons/core/fill/thumbs-up-fill.svg';
+import iconHeart from '@phosphor-icons/core/regular/heart.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconThumbsUp from '@phosphor-icons/core/regular/thumbs-up.svg';
 import React from 'react';
@@ -14,6 +16,7 @@ import {
   useUnfavouriteStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
 import { InteractionPopover } from '../interaction-popover';
@@ -31,6 +34,7 @@ const FavouriteButton: React.FC<IActionButton> = ({
   const features = useFeatures();
   const intl = useIntl();
 
+  const { useHeartIconForFavourites } = useSettings();
   const { openModal } = useModalsActions();
   const canFavourite = useCanInteract(status, 'can_favourite');
 
@@ -59,11 +63,23 @@ const FavouriteButton: React.FC<IActionButton> = ({
       }
     : undefined;
 
+  const favouriteIcon = features.statusDislikes
+    ? iconThumbsUp
+    : useHeartIconForFavourites
+      ? iconHeart
+      : iconStar;
+
+  const favouriteFilledIcon = features.statusDislikes
+    ? iconThumbsUpFill
+    : useHeartIconForFavourites
+      ? iconHeartFill
+      : iconStarFill;
+
   const favouriteButton = (
     <StatusActionButton
       title={intl.formatMessage(messages.favourite)}
-      icon={features.statusDislikes ? iconThumbsUp : iconStar}
-      filledIcon={features.statusDislikes ? iconThumbsUpFill : iconStarFill}
+      icon={favouriteIcon}
+      filledIcon={favouriteFilledIcon}
       onClick={handleFavouriteClick}
       onLongPress={handleFavouriteLongPress}
       active={status.favourited}
