@@ -30,7 +30,9 @@ import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
 
+import { BitePopover } from '../bite-popover';
 import DropdownMenu, { type Menu } from '../dropdown-menu';
+import Popover from '../ui/popover';
 
 import type { Account } from 'pl-api';
 
@@ -303,7 +305,7 @@ const ActionButton: React.FC<IActionButton> = ({
 
   /** Handles actionType='blocking' */
   const bitingAction = () => {
-    return (
+    const biteButton = (
       <button
         className='account-action-button account-action-button--bite'
         type='button'
@@ -319,6 +321,16 @@ const ActionButton: React.FC<IActionButton> = ({
         </span>
       </button>
     );
+
+    if (account.can_bite === false) {
+      return (
+        <Popover interaction='click' content={<BitePopover biteControls={account.bite_controls} />}>
+          {biteButton}
+        </Popover>
+      );
+    }
+
+    return biteButton;
   };
 
   const followRequestAction = () => {

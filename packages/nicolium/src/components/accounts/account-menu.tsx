@@ -655,7 +655,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         });
       }
 
-      if (features.bites) {
+      if (features.bites && account.can_bite !== false) {
         menu.push({
           text: intl.formatMessage(messages.bite, { name: account.username }),
           action: onBite,

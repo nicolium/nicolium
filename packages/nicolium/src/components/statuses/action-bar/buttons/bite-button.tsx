@@ -1,7 +1,8 @@
 import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
 import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
+import { BitePopover } from '@/components/bite-popover';
 import StatusActionButton from '@/components/statuses/status-action-button';
 import Popover from '@/components/ui/popover';
 import { useClient } from '@/hooks/use-client';
@@ -42,29 +43,7 @@ const BiteButton: React.FC<IActionButton> = ({ status }) => {
     return (
       <Popover
         interaction='click'
-        content={
-          <div className='interaction-popover'>
-            <p className='interaction-popover__header'>
-              <FormattedMessage
-                id='account.bite_controls.header'
-                defaultMessage='You can’t bite this user.'
-              />
-            </p>
-            <p className='interaction-popover__description'>
-              {status.account.bite_controls === 'none' ? (
-                <FormattedMessage
-                  id='account.bite_controls.none'
-                  defaultMessage='This user does not allow bites.'
-                />
-              ) : (
-                <FormattedMessage
-                  id='account.bite_controls.followers'
-                  defaultMessage='Only followers can bite this user.'
-                />
-              )}
-            </p>
-          </div>
-        }
+        content={<BitePopover biteControls={status.account.bite_controls} />}
       >
         {biteButton}
       </Popover>
