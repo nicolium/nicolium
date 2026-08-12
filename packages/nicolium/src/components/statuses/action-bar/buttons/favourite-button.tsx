@@ -72,7 +72,7 @@ const FavouriteButton: React.FC<IActionButton> = ({
     />
   );
 
-  if (me && !canFavourite.canInteract)
+  if (me && !canFavourite.canInteract) {
     return (
       <Popover
         interaction='click'
@@ -81,6 +81,8 @@ const FavouriteButton: React.FC<IActionButton> = ({
         {favouriteButton}
       </Popover>
     );
+  }
+
   return favouriteButton;
 };
 

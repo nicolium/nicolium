@@ -642,7 +642,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         });
       }
 
-      if (features.biteStatuses) {
+      if (features.biteStatuses && !statusActionBarItems.includes('bite')) {
         const handleBiteClick = () => {
           client.statuses
             .biteStatus(status.id)

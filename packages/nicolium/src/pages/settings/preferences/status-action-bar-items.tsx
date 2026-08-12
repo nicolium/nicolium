@@ -8,6 +8,7 @@ import iconSmileyWink from '@phosphor-icons/core/regular/smiley-wink.svg';
 import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
 import iconThumbsDown from '@phosphor-icons/core/regular/thumbs-down.svg';
+import iconTooth from '@phosphor-icons/core/regular/tooth.svg';
 import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
 import iconWrench from '@phosphor-icons/core/regular/wrench.svg';
 import iconX from '@phosphor-icons/core/regular/x.svg';
@@ -66,6 +67,7 @@ const itemsMessages = {
   bookmark: { id: 'settings.status_action_bar_items.item.bookmark', defaultMessage: 'Bookmark' },
   share: { id: 'settings.status_action_bar_items.item.share', defaultMessage: 'Share' },
   translate: { id: 'settings.status_action_bar_items.item.translate', defaultMessage: 'Translate' },
+  bite: { id: 'settings.status_action_bar_items.item.bite', defaultMessage: 'Bite post' },
 };
 
 const itemsIcons = {
@@ -80,6 +82,7 @@ const itemsIcons = {
   bookmark: iconBookmark,
   share: iconExport,
   translate: iconTranslate,
+  bite: iconTooth,
 };
 
 const StatusActionBarItem: StreamfieldComponent<
@@ -176,6 +179,7 @@ const StatusActionBarItems: React.FC<ISettingsPage> = ({
     bookmark: features.bookmarks,
     share: true,
     translate: features.translations || 'Translator' in globalThis,
+    bite: features.biteStatuses,
   };
 
   const unusedItems = AVAILABLE_STATUS_ACTION_BAR_ITEMS.filter(

@@ -90,6 +90,7 @@ const AVAILABLE_STATUS_ACTION_BAR_ITEMS = [
   'bookmark',
   'share',
   'translate',
+  'bite',
 ] as const;
 
 const DEFAULT_STATUS_ACTION_BAR_ITEMS = [

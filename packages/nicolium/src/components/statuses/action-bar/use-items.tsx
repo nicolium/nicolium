@@ -4,6 +4,7 @@ import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useFeatures } from '@/hooks/use-features';
 import { useModalsActions } from '@/stores/modals';
 
+import { BiteButton } from './buttons/bite-button';
 import { BookmarkButton } from './buttons/bookmark-button';
 import { DislikeButton } from './buttons/dislike-button';
 import { EmojiPickerButton } from './buttons/emoji-picker-button';
@@ -176,6 +177,16 @@ const useItems = (
           renderedItems.push(
             <TranslateButton
               key='translate'
+              status={status}
+              me={me}
+              onOpenUnauthorizedModal={onOpenUnauthorizedModal}
+            />,
+          );
+          break;
+        case 'bite':
+          renderedItems.push(
+            <BiteButton
+              key='bite'
               status={status}
               me={me}
               onOpenUnauthorizedModal={onOpenUnauthorizedModal}
