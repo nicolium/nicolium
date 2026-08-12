@@ -19,6 +19,7 @@
   "account.bite.success": "You have bitten @{acct}",
   "account.bite_controls.followers": "Only followers can bite this user.",
   "account.bite_controls.header": "You can’t bite this user.",
+  "account.bite_controls.header.status": "You can’t bite this post.",
   "account.bite_controls.none": "This user does not allow bites.",
   "account.block": "Block @{name}",
   "account.block_domain": "Hide everything from {domain}",

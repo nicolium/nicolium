@@ -5,15 +5,23 @@ import type { Account } from 'pl-api';
 
 interface IBitePopover {
   biteControls: Account['bite_controls'];
+  status?: boolean;
 }
 
-const BitePopover: React.FC<IBitePopover> = ({ biteControls }) => (
+const BitePopover: React.FC<IBitePopover> = ({ biteControls, status }) => (
   <div className='interaction-popover'>
     <p className='interaction-popover__header'>
-      <FormattedMessage
-        id='account.bite_controls.header'
-        defaultMessage='You can’t bite this user.'
-      />
+      {status ? (
+        <FormattedMessage
+          id='account.bite_controls.header.status'
+          defaultMessage='You can’t bite this post.'
+        />
+      ) : (
+        <FormattedMessage
+          id='account.bite_controls.header'
+          defaultMessage='You can’t bite this user.'
+        />
+      )}
     </p>
     <p className='interaction-popover__description'>
       {biteControls === 'none' ? (
