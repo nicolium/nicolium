@@ -1,4 +1,5 @@
 import iconArrowBendUpLeft from '@phosphor-icons/core/regular/arrow-bend-up-left.svg';
+import iconHeart from '@phosphor-icons/core/regular/heart.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
 import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
@@ -126,7 +127,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   const intl = useIntl();
   const { data: ownAccount } = useOwnAccount();
   const { data: account } = useAccount(interactionRequest.account_id);
-  const { useRocketIconForReblogs } = useSettings();
+  const { useHeartIconForFavourites, useRocketIconForReblogs } = useSettings();
 
   const { mutate: authorize } = useAuthorizeInteractionRequestMutation(interactionRequest.id);
   const { mutate: reject } = useRejectInteractionRequestMutation(interactionRequest.id);
@@ -221,6 +222,8 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   let icon = icons[interactionRequest.type];
   if (interactionRequest.type === 'reblog' && useRocketIconForReblogs) {
     icon = iconRocketLaunch;
+  } else if (interactionRequest.type === 'favourite' && useHeartIconForFavourites) {
+    icon = iconHeart;
   }
 
   return (

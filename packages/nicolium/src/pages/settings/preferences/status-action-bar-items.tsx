@@ -2,8 +2,10 @@ import iconArrowBendUpLeft from '@phosphor-icons/core/regular/arrow-bend-up-left
 import iconBookmark from '@phosphor-icons/core/regular/bookmark.svg';
 import iconDotsSixVertical from '@phosphor-icons/core/regular/dots-six-vertical.svg';
 import iconExport from '@phosphor-icons/core/regular/export.svg';
+import iconHeart from '@phosphor-icons/core/regular/heart.svg';
 import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
+import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconSmileyWink from '@phosphor-icons/core/regular/smiley-wink.svg';
 import iconSmiley from '@phosphor-icons/core/regular/smiley.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
@@ -90,10 +92,20 @@ const StatusActionBarItem: StreamfieldComponent<
 > = ({ value }) => {
   const intl = useIntl();
 
+  const { useHeartIconForFavourites, useRocketIconForReblogs } = useSettings();
+
+  const icon = itemsIcons[value];
+
+  if (value === 'reblog' && useRocketIconForReblogs) {
+    itemsIcons.reblog = iconRocketLaunch;
+  } else if (value === 'favourite' && useHeartIconForFavourites) {
+    itemsIcons.favourite = iconHeart;
+  }
+
   return (
     <div className='interface-item'>
       <Icon className='interface-item__drag-handle' src={iconDotsSixVertical} aria-hidden />
-      <Icon className='interface-item__icon' src={itemsIcons[value]} aria-hidden />
+      <Icon className='interface-item__icon' src={icon} aria-hidden />
       <div>
         <p>{intl.formatMessage(itemsMessages[value])}</p>
       </div>

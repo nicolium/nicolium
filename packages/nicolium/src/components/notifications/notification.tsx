@@ -5,6 +5,7 @@ import iconCalendarDot from '@phosphor-icons/core/regular/calendar-dot.svg';
 import iconCalendarStar from '@phosphor-icons/core/regular/calendar-star.svg';
 import iconChartBar from '@phosphor-icons/core/regular/chart-bar.svg';
 import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
+import iconHeart from '@phosphor-icons/core/regular/heart.svg';
 import iconPencilSimpleLine from '@phosphor-icons/core/regular/pencil-simple-line.svg';
 import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
@@ -443,6 +444,8 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
       let icon = icons[displayedType];
       if (displayedType === 'reblog' && settings.useRocketIconForReblogs) {
         icon = iconRocketLaunch;
+      } else if (displayedType === 'favourite' && settings.useHeartIconForFavourites) {
+        icon = iconHeart;
       }
       return <Icon src={icon} className='notification__icon' aria-hidden />;
     } else {
