@@ -2290,7 +2290,7 @@
   "preferences.fields.unfollow_modal.label": "Show confirmation dialog before unfollowing someone",
   "preferences.fields.use_dedicated_compose_page": "Open compose in a separate window",
   "preferences.fields.use_dedicated_compose_page.hint": "Only applies to non-touch devices.",
-  "preferences.fields.use_heart_icon_for_favourites.label": "Use heart icon ({icon}) for favourites",
+  "preferences.fields.use_heart_icon_for_favourites.label": "Use heart icon ({icon}) for likes",
   "preferences.fields.use_rocket_icon_for_reblogs.label": "Use rocket icon ({icon}) for reposts",
   "preferences.fields.use_system_media_controls.label": "Use native media controls",
   "preferences.fields.web_include_boosts.label": "Include reposts in web view",

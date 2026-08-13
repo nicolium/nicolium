@@ -518,7 +518,7 @@ const AppearancePreferences: React.FC<ISettingsPage> = ({
             label={
               <FormattedMessage
                 id='preferences.fields.use_heart_icon_for_favourites.label'
-                defaultMessage='Use heart icon ({icon}) for favourites'
+                defaultMessage='Use heart icon ({icon}) for likes'
                 values={{ icon: <Icon src={iconHeart} /> }}
               />
             }
