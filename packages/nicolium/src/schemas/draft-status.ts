@@ -3,13 +3,20 @@ import * as v from 'valibot';
 
 import { filteredArray } from '@/schemas/utils';
 
-import type { Compose } from '@/stores/compose';
+import type { Compose, RestoredDraft } from '@/stores/compose';
 
-const draftStatusSchema = v.pipe(
-  v.any(),
-  v.transform((draft) => ({
+const preprocess = (draft: any) => {
+  if (!draft || typeof draft !== 'object' || Array.isArray(draft)) return draft;
+
+  return {
     ...draft,
     content_type: draft.content_type ?? draft.contentType,
+    contentType:
+      draft.contentType ??
+      (draft.content_type === 'text/markdown' &&
+      (Boolean(draft.editorState) || Object.values(draft.editorStateMap ?? {}).some(Boolean))
+        ? 'wysiwyg'
+        : draft.content_type),
     draft_id: draft.draft_id ?? draft.draftId,
     group_id: draft.group_id ?? draft.groupId,
     edited_id: draft.edited_id ?? draft.editedId,
@@ -18,47 +25,66 @@ const draftStatusSchema = v.pipe(
     privacy: draft.visibility ?? draft.privacy,
     schedule: (() => {
       const schedule = draft.scheduledAt ?? draft.schedule;
-      return schedule instanceof Date ? schedule.toISOString() : schedule;
+      return schedule instanceof Date && !Number.isNaN(schedule.getTime())
+        ? schedule.toISOString()
+        : schedule;
     })(),
     spoiler_text: draft.spoiler_text ?? draft.spoilerText,
     spoiler_text_map: draft.spoiler_text_map ?? draft.spoilerTextMap,
     text_map: draft.text_map ?? draft.textMap,
     quote: draft.quote ?? draft.quoteId,
-  })),
+  };
+};
+
+const baseDraftStatusSchema = v.object({
+  content_type: v.fallback(v.string(), 'text/plain'),
+  contentType: v.optional(v.string()),
+  draft_id: v.string(),
+  editorState: v.fallback(v.nullable(v.string()), null),
+  editorStateMap: v.fallback(v.nullable(v.record(v.string(), v.nullable(v.string()))), null),
+  group_id: v.fallback(v.nullable(v.string()), null),
+  edited_id: v.fallback(v.nullable(v.string()), null),
+  in_reply_to: v.fallback(v.nullable(v.string()), null),
+  media_attachments: filteredArray(mediaAttachmentSchema),
+  poll: v.fallback(v.nullable(v.record(v.string(), v.any())), null),
+  privacy: v.fallback(v.string(), 'public'),
+  quote: v.fallback(v.nullable(v.string()), null),
+  schedule: v.fallback(v.nullable(v.string()), null),
+  location: v.fallback(v.nullable(locationSchema), null),
+  interactionPolicy: v.fallback(v.nullable(interactionPolicySchema), null),
+  quoteApprovalPolicy: v.fallback(v.nullable(v.picklist(['public', 'followers', 'nobody'])), null),
+  localOnly: v.fallback(v.boolean(), false),
+  sensitive: v.fallback(v.boolean(), false),
+  spoiler_text: v.fallback(v.string(), ''),
+  spoiler_text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
+  text: v.fallback(v.string(), ''),
+  text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
+  language: v.fallback(v.nullable(v.string()), null),
+  to: v.fallback(v.array(v.string()), []),
+  parentRebloggedById: v.fallback(v.nullable(v.string()), null),
+  sourceInReplyToId: v.fallback(v.nullable(v.tuple([v.string(), v.string()])), null),
+  sourceQuoteId: v.fallback(v.nullable(v.tuple([v.string(), v.string()])), null),
+  sourceParentRebloggedById: v.fallback(v.nullable(v.tuple([v.string(), v.string()])), null),
+  modifiedLanguage: v.fallback(v.nullable(v.string()), null),
+  approvalRequired: v.fallback(v.boolean(), false),
+  suggestedLanguage: v.fallback(v.nullable(v.string()), null),
+  redacting: v.fallback(v.boolean(), false),
+  redactingOverwrite: v.fallback(v.boolean(), false),
+});
+
+type DraftStatus = v.InferOutput<typeof baseDraftStatusSchema> & {
+  children: Array<DraftStatus>;
+};
+
+const draftStatusSchema: v.BaseSchema<any, DraftStatus, v.BaseIssue<unknown>> = v.pipe(
+  v.any(),
+  v.transform(preprocess),
   v.object({
-    content_type: v.fallback(v.string(), 'text/plain'),
-    draft_id: v.string(),
-    editorState: v.fallback(v.nullable(v.string()), null),
-    editorStateMap: v.fallback(v.nullable(v.record(v.string(), v.nullable(v.string()))), null),
-    group_id: v.fallback(v.nullable(v.string()), null),
-    edited_id: v.fallback(v.nullable(v.string()), null),
-    in_reply_to: v.fallback(v.nullable(v.string()), null),
-    media_attachments: filteredArray(mediaAttachmentSchema),
-    poll: v.fallback(v.nullable(v.record(v.string(), v.any())), null),
-    privacy: v.fallback(v.string(), 'public'),
-    quote: v.fallback(v.nullable(v.string()), null),
-    schedule: v.fallback(v.nullable(v.string()), null),
-    location: v.fallback(v.nullable(locationSchema), null),
-    interactionPolicy: v.fallback(v.nullable(interactionPolicySchema), null),
-    quoteApprovalPolicy: v.fallback(
-      v.nullable(v.picklist(['public', 'followers', 'nobody'])),
-      null,
-    ),
-    localOnly: v.fallback(v.boolean(), false),
-    sensitive: v.fallback(v.boolean(), false),
-    spoiler_text: v.fallback(v.string(), ''),
-    spoiler_text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
-    text: v.fallback(v.string(), ''),
-    text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
-    language: v.fallback(v.nullable(v.string()), null),
-    to: v.fallback(v.array(v.string()), []),
-    parentRebloggedById: v.fallback(v.nullable(v.string()), null),
+    ...baseDraftStatusSchema.entries,
+    children: filteredArray(v.lazy(() => draftStatusSchema)),
   }),
 );
-
-type DraftStatus = v.InferOutput<typeof draftStatusSchema>;
-
-const draftStatusToCompose = (draft: DraftStatus): Partial<Compose> => ({
+const draftStatusToCompose = (draft: DraftStatus): RestoredDraft => ({
   editorState: draft.editorState,
   editorStateMap: draft.editorStateMap ?? {},
   spoilerText: draft.spoiler_text,
@@ -69,7 +95,7 @@ const draftStatusToCompose = (draft: DraftStatus): Partial<Compose> => ({
   poll: draft.poll as Compose['poll'],
   location: draft.location,
   showLocationPicker: Boolean(draft.location),
-  contentType: draft.content_type,
+  contentType: draft.contentType ?? draft.content_type,
   interactionPolicy: draft.interactionPolicy,
   quoteApprovalPolicy: draft.quoteApprovalPolicy,
   language: draft.language,
@@ -84,6 +110,15 @@ const draftStatusToCompose = (draft: DraftStatus): Partial<Compose> => ({
   quoteId: draft.quote,
   to: draft.to,
   parentRebloggedById: draft.parentRebloggedById,
+  sourceInReplyToId: draft.sourceInReplyToId,
+  sourceQuoteId: draft.sourceQuoteId,
+  sourceParentRebloggedById: draft.sourceParentRebloggedById,
+  modifiedLanguage: draft.modifiedLanguage,
+  approvalRequired: draft.approvalRequired,
+  suggestedLanguage: draft.suggestedLanguage,
+  redacting: draft.redacting,
+  redactingOverwrite: draft.redactingOverwrite,
+  children: draft.children.map(draftStatusToCompose),
 });
 
 export { draftStatusSchema, draftStatusToCompose, type DraftStatus };

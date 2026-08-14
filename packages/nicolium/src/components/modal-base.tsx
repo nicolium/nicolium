@@ -101,20 +101,19 @@ const ModalBase: React.FC<IModalBase> = ({ children, onCancel, onClose, type, mo
           onClose('CONFIRM');
         },
         secondary: intl.formatMessage(messages.saveDraft),
-        onSecondary:
-          isEditing || actions.hasThreadPosts('compose-modal')
-            ? undefined
-            : () => {
-                persistDraftStatus('compose-modal').then(() => {
-                  toast.success(messages.draftSaved, {
-                    actionLabel: messages.view,
-                    actionLinkOptions: { to: '/draft_statuses' },
-                    columnId,
-                  });
+        onSecondary: isEditing
+          ? undefined
+          : () => {
+              persistDraftStatus('compose-modal').then(() => {
+                toast.success(messages.draftSaved, {
+                  actionLabel: messages.view,
+                  actionLinkOptions: { to: '/draft_statuses' },
+                  columnId,
                 });
-                onClose('COMPOSE');
-                actions.resetCompose('compose-modal');
-              },
+              });
+              onClose('COMPOSE');
+              actions.resetCompose('compose-modal');
+            },
       });
     } else if (hasComposeContent && type === 'CONFIRM') {
       onClose('CONFIRM');

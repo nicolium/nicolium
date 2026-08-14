@@ -53,32 +53,37 @@ const useDraftStatusesCountQuery = () =>
 const usePersistDraftStatus = () => {
   const { data: account } = useOwnAccount();
   const queryClient = useQueryClient();
-  const { getCompose } = useComposeActions();
+  const { getCompose, getThread } = useComposeActions();
   const { defaultContentType, defaultPrivacy } = useSettings();
   const scopeUrl = useScopeUrl();
 
   return (composeId: string) => {
-    const compose = getCompose(composeId);
+    const buildDraft = (id: string): DraftStatus => {
+      const compose = getCompose(id);
 
-    let contentType = compose.contentType;
-    if (contentType === 'default') contentType = defaultContentType;
-    if (contentType === 'wysiwyg' && !isServo) contentType = 'text/markdown';
+      let contentType = compose.contentType;
+      if (contentType === 'default') contentType = defaultContentType;
+      if (contentType === 'wysiwyg' && !isServo) contentType = 'text/markdown';
 
-    let visibility = compose.visibility;
-    if (visibility === 'default') visibility = defaultPrivacy;
+      let visibility = compose.visibility;
+      if (visibility === 'default') visibility = defaultPrivacy;
 
-    const draft = {
-      ...compose,
-      content_type: contentType,
-      visibility,
-      draft_id: compose.draftId ?? crypto.randomUUID(),
+      return v.parse(draftStatusSchema, {
+        ...compose,
+        content_type: contentType,
+        visibility,
+        draft_id: compose.draftId ?? crypto.randomUUID(),
+        children: getThread(id).map(buildDraft),
+      });
     };
+
+    const draft = buildDraft(composeId);
 
     const drafts =
       queryClient.getQueryData(scopedQueryKey(queryKeys.draftStatuses.all, scopeUrl)) ?? {};
 
     const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
-      oldDrafts[draft.draft_id] = v.parse(draftStatusSchema, draft);
+      oldDrafts[draft.draft_id] = draft;
     });
     return persistDrafts(account!.url, newDrafts).then(() =>
       queryClient.invalidateQueries({

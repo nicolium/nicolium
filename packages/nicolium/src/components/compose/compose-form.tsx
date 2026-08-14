@@ -492,13 +492,11 @@ const ComposeForm = <ID extends string>({
     });
   }
 
-  if (!hasThread) {
-    actionsMenu.push({
-      text: intl.formatMessage(messages.saveDraft),
-      action: handleSaveDraft,
-      icon: iconPencilSimple,
-    });
-  }
+  actionsMenu.push({
+    text: intl.formatMessage(messages.saveDraft),
+    action: handleSaveDraft,
+    icon: iconPencilSimple,
+  });
 
   if (!scheduledAt && (maxTootChars > 1024 || !enableThread) && !hasThread) {
     actionsMenu.push({

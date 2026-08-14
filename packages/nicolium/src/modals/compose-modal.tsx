@@ -39,7 +39,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
   const node = useRef<HTMLDivElement>(null);
   const compose = useCompose(composeId);
   const uploadCompose = useUploadCompose(composeId);
-  const { resetCompose, hasThreadContent, hasThreadPosts } = useComposeActions();
+  const { resetCompose, hasThreadContent } = useComposeActions();
   const { openModal } = useModalsActions();
   const persistDraftStatus = usePersistDraftStatus();
   const columnId = useColumnId();
@@ -89,20 +89,19 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
           resetCompose('compose-modal');
         },
         secondary: intl.formatMessage(messages.saveDraft),
-        onSecondary:
-          editedId || hasThreadPosts(composeId)
-            ? undefined
-            : () => {
-                persistDraftStatus(composeId).then(() => {
-                  toast.success(messages.draftSaved, {
-                    actionLabel: messages.view,
-                    actionLinkOptions: { to: '/draft_statuses' },
-                    columnId,
-                  });
+        onSecondary: editedId
+          ? undefined
+          : () => {
+              persistDraftStatus(composeId).then(() => {
+                toast.success(messages.draftSaved, {
+                  actionLabel: messages.view,
+                  actionLinkOptions: { to: '/draft_statuses' },
+                  columnId,
                 });
-                onClose('COMPOSE');
-                resetCompose('compose-modal');
-              },
+              });
+              onClose('COMPOSE');
+              resetCompose('compose-modal');
+            },
       });
     } else {
       onClose('COMPOSE');

@@ -1331,6 +1331,7 @@
   "directory.recently_active": "Recently active",
   "draft_status.cancel": "Delete",
   "draft_status.edit": "Edit",
+  "draft_status.replies": "{count, plural, one {1 reply in this thread} other {{count} replies in this thread}}",
   "drive.breadcrumbs.home": "Home",
   "drive.empty": "There are no files or folders in this folder.",
   "drive.file.delete": "Delete file",

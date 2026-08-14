@@ -1,3 +1,4 @@
+import iconArrowBendUpLeft from '@phosphor-icons/core/regular/arrow-bend-up-left.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
@@ -19,6 +20,8 @@ import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { buildPollFromParams, buildStatusFromDraft } from '@/utils/builder';
 import { userTouching } from '@/utils/is-mobile';
+
+import Icon from '../ui/icon';
 
 import type { NormalizedStatus as StatusEntity } from '@/queries/statuses/normalize';
 import type { DraftStatus as DraftStatusType } from '@/queries/statuses/use-draft-statuses';
@@ -150,6 +153,19 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
           {quote}
 
           {poll && <PollPreview poll={poll} />}
+
+          {draftStatus.children.length > 0 && (
+            <div className='quoted-status-indicator'>
+              <Icon src={iconArrowBendUpLeft} aria-hidden />
+              <p>
+                <FormattedMessage
+                  id='draft_status.replies'
+                  defaultMessage='{count, plural, one {1 reply in this thread} other {{count} replies in this thread}}'
+                  values={{ count: draftStatus.children.length }}
+                />
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

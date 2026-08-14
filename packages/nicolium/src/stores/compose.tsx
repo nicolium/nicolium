@@ -118,6 +118,8 @@ interface ComposePoll {
   hide_totals: boolean;
 }
 
+type RestoredDraft = Partial<Compose> & { children?: Array<RestoredDraft> };
+
 interface ClearLinkSuggestion {
   key: string;
   originalUrl: string;
@@ -515,7 +517,7 @@ interface ComposeActions {
   hasThreadPosts: (rootId: string) => boolean;
   hasThreadContent: (rootId: string) => boolean;
 
-  restoreCompose: (composeId: string, compose: Partial<Compose>) => void;
+  restoreCompose: (composeId: string, draft: RestoredDraft) => void;
 
   setComposeToStatus: (
     status: Pick<
@@ -671,18 +673,42 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
-        restoreCompose: (composeId, restoredCompose) => {
+        restoreCompose: (composeId, draft) => {
           set((state) => {
-            state.composers[composeId] = newCompose({
-              ...state.default,
-              ...restoredCompose,
-              idempotencyKey: crypto.randomUUID(),
-              caretPosition: null,
-              isChangingUpload: false,
-              isSubmitting: false,
-              isUploading: false,
-              progress: 0,
-            });
+            const removeThread = (parentId: string) => {
+              state.threads[parentId]?.forEach((childId) => {
+                removeThread(childId);
+                delete state.composers[childId];
+              });
+              delete state.threads[parentId];
+            };
+
+            const restore = (targetId: string, restored: RestoredDraft, isRoot = false) => {
+              const { children = [], ...compose } = restored;
+              state.composers[targetId] = newCompose({
+                ...state.default,
+                ...compose,
+                draftId: isRoot ? (compose.draftId ?? null) : null,
+                idempotencyKey: crypto.randomUUID(),
+                resetFileKey: getResetFileKey(),
+                caretPosition: null,
+                isChangingUpload: false,
+                isSubmitting: false,
+                isUploading: false,
+                progress: 0,
+              });
+
+              if (children.length) {
+                state.threads[targetId] = children.map((child) => {
+                  const childId = `${targetId}:thread:${crypto.randomUUID()}`;
+                  restore(childId, child);
+                  return childId;
+                });
+              }
+            };
+
+            removeThread(composeId);
+            restore(composeId, draft, true);
           });
         },
 
@@ -942,11 +968,14 @@ const useComposeStore = create<ComposeStore>()(
 
         resetCompose: (composeId = 'compose-modal') => {
           set((state) => {
-            const thread = state.threads[composeId];
-            if (thread) {
-              thread.forEach((id) => delete state.composers[id]);
-              delete state.threads[composeId];
-            }
+            const removeThread = (parentId: string) => {
+              state.threads[parentId]?.forEach((childId) => {
+                removeThread(childId);
+                delete state.composers[childId];
+              });
+              delete state.threads[parentId];
+            };
+            removeThread(composeId);
             state.composers[composeId] = {
               ...state.default,
               idempotencyKey: crypto.randomUUID(),
@@ -1786,6 +1815,7 @@ const useComposeContentType = (composeId: string, includeWysiwyg = false) => {
 
 export {
   type Compose,
+  type RestoredDraft,
   appendMedia,
   checkComposeContent,
   newPoll,
