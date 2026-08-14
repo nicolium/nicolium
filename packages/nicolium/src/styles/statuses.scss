@@ -1872,6 +1872,7 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 }
 
 .hashtags-bar {
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
