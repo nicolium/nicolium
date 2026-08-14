@@ -20,6 +20,7 @@ const draftStatusSchema = v.pipe(
     content_type: draft.contentType,
     draft_id: draft.draftId,
     group_id: draft.groupId,
+    edited_id: draft.editedId,
     in_reply_to: draft.inReplyToId,
     media_attachments: draft.mediaAttachments,
     spoiler_text: draft.spoilerText,
@@ -34,7 +35,9 @@ const draftStatusSchema = v.pipe(
     content_type: v.fallback(v.string(), 'text/plain'),
     draft_id: v.string(),
     editorState: v.fallback(v.nullable(v.string()), null),
+    editorStateMap: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
     group_id: v.fallback(v.nullable(v.string()), null),
+    edited_id: v.fallback(v.nullable(v.string()), null),
     in_reply_to: v.fallback(v.nullable(v.string()), null),
     media_attachments: filteredArray(mediaAttachmentSchema),
     poll: v.fallback(v.nullable(v.record(v.string(), v.any())), null),
@@ -47,6 +50,7 @@ const draftStatusSchema = v.pipe(
     text: v.fallback(v.string(), ''),
     text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
     language: v.fallback(v.string(), ''),
+    to: v.fallback(v.array(v.string()), []),
   }),
 );
 
