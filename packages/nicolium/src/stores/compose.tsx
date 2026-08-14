@@ -515,6 +515,8 @@ interface ComposeActions {
   hasThreadPosts: (rootId: string) => boolean;
   hasThreadContent: (rootId: string) => boolean;
 
+  restoreCompose: (composeId: string, compose: Partial<Compose>) => void;
+
   setComposeToStatus: (
     status: Pick<
       Status,
@@ -666,6 +668,21 @@ const useComposeStore = create<ComposeStore>()(
                 compose.mediaAttachments.length > 0 ||
                 compose.poll !== null)
             );
+          });
+        },
+
+        restoreCompose: (composeId, restoredCompose) => {
+          set((state) => {
+            state.composers[composeId] = newCompose({
+              ...state.default,
+              ...restoredCompose,
+              idempotencyKey: crypto.randomUUID(),
+              caretPosition: null,
+              isChangingUpload: false,
+              isSubmitting: false,
+              isUploading: false,
+              progress: 0,
+            });
           });
         },
 

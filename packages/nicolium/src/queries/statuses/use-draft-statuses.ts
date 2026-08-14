@@ -1,60 +1,17 @@
 import { type QueryClient, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { create } from 'mutative';
-import { mediaAttachmentSchema } from 'pl-api';
 import * as v from 'valibot';
 
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
-import { filteredArray } from '@/schemas/utils';
+import { draftStatusSchema, draftStatusToCompose, type DraftStatus } from '@/schemas/draft-status';
 import KVStore from '@/storage/kv-store';
 import { useComposeActions } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 import { isServo } from '@/utils/browser';
 
 import { queryKeys } from '../keys';
-
-const draftStatusSchema = v.pipe(
-  v.any(),
-  v.transform((draft) => ({
-    content_type: draft.contentType,
-    draft_id: draft.draftId,
-    group_id: draft.groupId,
-    edited_id: draft.editedId,
-    in_reply_to: draft.inReplyToId,
-    media_attachments: draft.mediaAttachments,
-    spoiler_text: draft.spoilerText,
-    spoiler_text_map: draft.spoilerTextMap,
-    text: draft.text,
-    text_map: draft.textMap,
-    language: draft.language,
-    quote: draft.quoteId,
-    ...draft,
-  })),
-  v.object({
-    content_type: v.fallback(v.string(), 'text/plain'),
-    draft_id: v.string(),
-    editorState: v.fallback(v.nullable(v.string()), null),
-    editorStateMap: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
-    group_id: v.fallback(v.nullable(v.string()), null),
-    edited_id: v.fallback(v.nullable(v.string()), null),
-    in_reply_to: v.fallback(v.nullable(v.string()), null),
-    media_attachments: filteredArray(mediaAttachmentSchema),
-    poll: v.fallback(v.nullable(v.record(v.string(), v.any())), null),
-    privacy: v.fallback(v.string(), 'public'),
-    quote: v.fallback(v.nullable(v.string()), null),
-    schedule: v.fallback(v.nullable(v.string()), null),
-    sensitive: v.fallback(v.boolean(), false),
-    spoiler_text: v.fallback(v.string(), ''),
-    spoiler_text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
-    text: v.fallback(v.string(), ''),
-    text_map: v.fallback(v.nullable(v.record(v.string(), v.string())), null),
-    language: v.fallback(v.string(), ''),
-    to: v.fallback(v.array(v.string()), []),
-  }),
-);
-
-type DraftStatus = v.InferOutput<typeof draftStatusSchema>;
 
 const getDrafts = async (accountUrl: string) => {
   const drafts = (await KVStore.getItem<Array<unknown>>(`drafts:${accountUrl}`)) ?? [];
@@ -160,6 +117,7 @@ const useCancelDraftStatus = () => {
 
 export {
   draftStatusSchema,
+  draftStatusToCompose,
   useDraftStatusesQuery,
   useDraftStatusQuery,
   useDraftStatusesCountQuery,

@@ -12,10 +12,9 @@ import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
 import { fetchStatus } from '@/queries/statuses/status-actions';
-import { useDraftStatusQuery } from '@/queries/statuses/use-draft-statuses';
+import { draftStatusToCompose, useDraftStatusQuery } from '@/queries/statuses/use-draft-statuses';
 import { newStatusRoute } from '@/router';
 import { useComposeActions } from '@/stores/compose';
-import { buildPollFromParams, buildStatusFromDraft } from '@/utils/builder';
 
 const messages = defineMessages({
   heading: { id: 'compose.heading', defaultMessage: 'Compose' },
@@ -31,7 +30,7 @@ const NewStatusPage: React.FC = () => {
   const { data: draftStatus } = useDraftStatusQuery(search.draftId ?? '');
   const { approvalRequired, inReplyTo, quote, text, visibility } = search;
   const columnId = useColumnId();
-  const { quoteCompose, replyCompose, resetCompose, setComposeToStatus, updateCompose } =
+  const { quoteCompose, replyCompose, resetCompose, restoreCompose, updateCompose } =
     useComposeActions();
 
   useEffect(() => {
@@ -83,22 +82,12 @@ const NewStatusPage: React.FC = () => {
   useEffect(() => {
     if (!draftStatus || !ownAccount) return;
 
-    const status = buildStatusFromDraft(ownAccount, draftStatus);
-    const poll = buildPollFromParams(draftStatus.poll);
-
-    if (status.in_reply_to_id) {
-      fetchStatus(client, status.in_reply_to_id, scopeUrl).catch(() => {});
+    if (draftStatus.in_reply_to) {
+      fetchStatus(client, draftStatus.in_reply_to, scopeUrl).catch(() => {});
     }
 
-    setComposeToStatus(
-      status,
-      poll,
-      { ...draftStatus, location: null },
-      false,
-      draftStatus.draft_id,
-      draftStatus.editorState,
-    );
-  }, [scopeUrl, client, draftStatus, ownAccount, setComposeToStatus]);
+    restoreCompose('compose-modal', draftStatusToCompose(draftStatus));
+  }, [scopeUrl, client, draftStatus, ownAccount, restoreCompose]);
 
   return (
     <Column withBack={false} label={intl.formatMessage(messages.heading)}>

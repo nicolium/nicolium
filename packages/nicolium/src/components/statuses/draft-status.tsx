@@ -12,11 +12,8 @@ import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { queryClient } from '@/queries/client';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey } from '@/queries/query';
 import { fetchStatus } from '@/queries/statuses/status-actions';
-import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { draftStatusToCompose, useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -49,7 +46,7 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   const scopeUrl = useScopeUrl();
 
   const { openModal } = useModalsActions();
-  const { setComposeToStatus } = useComposeActions();
+  const { restoreCompose } = useComposeActions();
   const settings = useSettings();
   const cancelDraftStatus = useCancelDraftStatus();
 
@@ -74,19 +71,7 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
     }
 
     if (status.in_reply_to_id) fetchStatus(client, status.in_reply_to_id, scopeUrl);
-    const poll = status.poll_id
-      ? queryClient.getQueryData(
-          scopedQueryKey(queryKeys.statuses.polls.show(status.poll_id), scopeUrl),
-        )
-      : undefined;
-    setComposeToStatus(
-      status,
-      poll,
-      { ...source, location: null },
-      false,
-      source.draft_id,
-      source.editorState,
-    );
+    restoreCompose('compose-modal', draftStatusToCompose(source));
     openModal('COMPOSE');
   };
 
