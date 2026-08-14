@@ -2,6 +2,7 @@ import iconAt from '@phosphor-icons/core/regular/at.svg';
 import iconBellSimpleRinging from '@phosphor-icons/core/regular/bell-simple-ringing.svg';
 import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconChartBar from '@phosphor-icons/core/regular/chart-bar.svg';
+import iconHeart from '@phosphor-icons/core/regular/heart.svg';
 import iconRepeat from '@phosphor-icons/core/regular/repeat.svg';
 import iconRocketLaunch from '@phosphor-icons/core/regular/rocket-launch.svg';
 import iconStar from '@phosphor-icons/core/regular/star.svg';
@@ -74,7 +75,11 @@ interface IFilterBar {
 
 const FilterBar: React.FC<IFilterBar> = ({ selected, onSelect, advanced }) => {
   const intl = useIntl();
-  const { notifications: notificationsSettings, useRocketIconForReblogs } = useSettings();
+  const {
+    notifications: notificationsSettings,
+    useHeartIconForFavourites,
+    useRocketIconForReblogs,
+  } = useSettings();
   const { changeSetting } = useSettingsStoreActions();
   const features = useFeatures();
   const scopeUrl = useScopeUrl();
@@ -129,7 +134,7 @@ const FilterBar: React.FC<IFilterBar> = ({ selected, onSelect, advanced }) => {
         name: 'status',
       });
     items.push({
-      text: <Icon src={iconStar} aria-hidden />,
+      text: <Icon src={useHeartIconForFavourites ? iconHeart : iconStar} aria-hidden />,
       title: intl.formatMessage(messages.favourites),
       action: onClick('favourite'),
       name: 'favourite',
