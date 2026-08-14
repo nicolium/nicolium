@@ -403,6 +403,11 @@ const instanceSchema = v.pipe(
       data.version = `0.0.0 (compatible; GoToSocial ${data.version})`;
     }
 
+    // Detect TinyAP
+    if (data.contact?.account?.created_at === '0000-01-01T00:00:00Z') {
+      data.version = `0.0.0 (compatible; TinyAP ${data.version})`;
+    }
+
     const apiVersions = getApiVersions(data);
 
     if (!data.pleroma) {

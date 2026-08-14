@@ -139,6 +139,14 @@ const SNAC = 'snac';
 const TAKAHE = 'Takahe';
 
 /**
+ * TinyAP, Tiny ActivityPub Micro-blogging.
+ *
+ * @category Software
+ * @see {@link https://github.com/izkluxcvy/tinyap}
+ */
+const TINYAP = 'TinyAP';
+
+/**
  * Toki, a C# Fediverse server.
  *
  * @category Software
@@ -1132,6 +1140,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === MASTODON && gte(v.version, '4.4.0'),
       v.software === SHARKEY,
+      v.software === TINYAP,
     ]),
 
     /**
@@ -1270,6 +1279,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON && gte(v.compatVersion, '4.0.0'),
       v.software === MITRA && gte(v.version, '2.18.0'),
       v.software === PLEROMA && gte(v.version, '2.7.0'),
+      v.software === TINYAP,
     ]),
 
     interactionRequests: v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
@@ -2106,6 +2116,7 @@ export {
   SHARKEY,
   SNAC,
   TAKAHE,
+  TINYAP,
   TOKI,
   WORDPRESS,
   GLITCH,
