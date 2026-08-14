@@ -770,8 +770,16 @@ const useAuthStore = create<AuthStore>()(
               scope: getScopes(),
             };
 
-            const token = await obtainOAuthToken(params, guestUrl, get().defaultClient);
-            authLoggedIn(token, app);
+            const token = await obtainOAuthToken(
+              params,
+              guestUrl,
+              guestUrl ? undefined : get().defaultClient,
+            );
+            if (guestUrl) {
+              addToken(token, app);
+            } else {
+              authLoggedIn(token, app);
+            }
             return token;
           } catch (error: any) {
             if (error.response?.json?.error === 'mfa_required') {
