@@ -57,7 +57,7 @@ const usePersistDraftStatus = () => {
   const { defaultContentType, defaultPrivacy } = useSettings();
   const scopeUrl = useScopeUrl();
 
-  return (composeId: string) => {
+  return async (composeId: string) => {
     const buildDraft = (id: string): DraftStatus => {
       const compose = getCompose(id);
 
@@ -85,11 +85,14 @@ const usePersistDraftStatus = () => {
     const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
       oldDrafts[draft.draft_id] = draft;
     });
-    return persistDrafts(account!.url, newDrafts).then(() =>
+
+    await persistDrafts(account!.url, newDrafts).then(() =>
       queryClient.invalidateQueries({
         queryKey: scopedQueryKey(queryKeys.draftStatuses.all, scopeUrl),
       }),
     );
+
+    return draft.draft_id;
   };
 };
 

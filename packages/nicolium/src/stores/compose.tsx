@@ -16,7 +16,7 @@ import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { createStatus } from '@/queries/statuses/status-actions';
-import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { cancelDraftStatus, usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { deckRoute, router } from '@/router';
 import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
@@ -1114,6 +1114,7 @@ interface SubmitDeps {
   removeSledzik: () => void;
   settings: ReturnType<typeof useSettings>;
   instance: ReturnType<typeof useInstance>;
+  persistDraftStatus: (composeId: string) => Promise<string>;
 }
 
 interface SubmitComposeOptions {
@@ -1141,8 +1142,17 @@ const submitCompose = async (
     inReplyToIdOverride,
     columnId,
   } = opts;
-  const { actions, client, ownAccount, scopeUrl, features, openModal, closeModal, removeSledzik } =
-    deps;
+  const {
+    actions,
+    client,
+    ownAccount,
+    scopeUrl,
+    features,
+    openModal,
+    closeModal,
+    removeSledzik,
+    persistDraftStatus,
+  } = deps;
 
   const compose = actions.getCompose(composeId);
 
@@ -1263,10 +1273,14 @@ const submitCompose = async (
     ];
   }
 
+  let newDraftId: string | undefined;
+
   if (!preview) {
     actions.updateCompose(composeId, (draft) => {
       draft.isSubmitting = true;
     });
+
+    newDraftId = (await persistDraftStatus(composeId).catch(() => {})) ?? undefined;
 
     if (!chained) closeModal('COMPOSE');
 
@@ -1394,7 +1408,7 @@ const submitCompose = async (
       return data;
     }
 
-    const draftIdToCancel = compose.draftId;
+    const draftIdToCancel = compose.draftId || newDraftId;
 
     actions.resetCompose(composeId);
 
@@ -1473,6 +1487,7 @@ const useSubmitDeps = (): SubmitDeps => {
   const { removeSledzik } = useUiStoreActions();
   const settings = useSettings();
   const instance = useInstance();
+  const persistDraftStatus = usePersistDraftStatus();
 
   return {
     actions,
@@ -1485,6 +1500,7 @@ const useSubmitDeps = (): SubmitDeps => {
     removeSledzik,
     settings,
     instance,
+    persistDraftStatus,
   };
 };
 
@@ -1504,8 +1520,17 @@ const submitThread = async (
   opts: { force?: boolean; onSuccess?: () => void; columnId?: string } = {},
 ) => {
   const { force = false, onSuccess, columnId } = opts;
-  const { actions, openModal, closeModal, ownAccount, scopeUrl, features, instance, settings } =
-    deps;
+  const {
+    actions,
+    openModal,
+    closeModal,
+    ownAccount,
+    scopeUrl,
+    features,
+    instance,
+    settings,
+    persistDraftStatus,
+  } = deps;
 
   const rootCompose = actions.getCompose(rootId);
 
@@ -1589,9 +1614,11 @@ const submitThread = async (
     }),
   );
 
+  const newDraftId = await persistDraftStatus(rootId).catch(() => {});
+
   closeModal('COMPOSE');
 
-  const draftIdToCancel = rootCompose.draftId;
+  const draftIdToCancel = rootCompose.draftId || newDraftId;
   let firstStatus: any = null;
   let inReplyToId: string | null | undefined;
 
