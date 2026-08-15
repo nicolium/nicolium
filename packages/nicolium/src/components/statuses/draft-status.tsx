@@ -16,6 +16,7 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { fetchStatus } from '@/queries/statuses/status-actions';
 import { draftStatusToCompose, useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { openDedicatedComposeWindow, useComposeActions } from '@/stores/compose';
+import { useDraftState } from '@/stores/draft-state';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { buildPollFromParams, buildStatusFromDraft } from '@/utils/builder';
@@ -41,9 +42,10 @@ const messages = defineMessages({
 interface IDraftStatusActionBar {
   source: DraftStatusType;
   status: StatusEntity;
+  disabled?: boolean;
 }
 
-const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status }) => {
+const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status, disabled }) => {
   const intl = useIntl();
   const client = useClient();
   const scopeUrl = useScopeUrl();
@@ -80,10 +82,10 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
 
   return (
     <div className='draft-status__actions'>
-      <button onClick={handleEditClick}>
+      <button onClick={handleEditClick} disabled={disabled}>
         <FormattedMessage id='draft_status.edit' defaultMessage='Edit' />
       </button>
-      <button onClick={handleCancelClick}>
+      <button onClick={handleCancelClick} disabled={disabled}>
         <FormattedMessage id='draft_status.cancel' defaultMessage='Delete' />
       </button>
     </div>
@@ -96,6 +98,7 @@ interface IDraftStatus {
 
 const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
   const { data: ownAccount } = useOwnAccount();
+  const draftState = useDraftState(draftStatus.draft_id);
 
   if (!ownAccount || !draftStatus) return null;
 
@@ -139,7 +142,14 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
           <Account
             key={account.id}
             account={account}
-            action={<DraftStatusActionBar source={draftStatus} status={status} {...other} />}
+            action={
+              <DraftStatusActionBar
+                source={draftStatus}
+                status={status}
+                disabled={draftState === 'isSubmitting'}
+                {...other}
+              />
+            }
           />
         </div>
 
@@ -167,6 +177,16 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
             </div>
           )}
         </div>
+
+        {draftState === 'isSubmitting' ? (
+          <div className='draft-status__state draft-status__state--submitting'>
+            <FormattedMessage id='draft_status.submitting' defaultMessage='Submitting…' />
+          </div>
+        ) : draftState === 'isError' ? (
+          <div className='draft-status__state draft-status__state--error'>
+            <FormattedMessage id='draft_status.submit_error' defaultMessage='Failed to submit' />
+          </div>
+        ) : null}
       </div>
     </div>
   );

@@ -2818,6 +2818,20 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
   }
 }
 
+.draft-status__state {
+  margin-top: 0.25rem;
+
+  &--submitting {
+    @include mixins.text($theme: muted, $size: sm);
+
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  &--error {
+    @include mixins.text($theme: danger, $size: sm);
+  }
+}
+
 .status-hover-card {
   position: absolute;
   z-index: 50;

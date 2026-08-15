@@ -22,12 +22,13 @@ import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions, useModalsStore } from '@/stores/modals';
 import { useSettings, useSettingsStore } from '@/stores/settings';
-import toast from '@/toast';
+import toast, { type IToastOptions } from '@/toast';
 import { isServo } from '@/utils/browser';
 import { userTouching } from '@/utils/is-mobile';
 import { languages } from '@/utils/languages';
 import { resolveAccount, resolveStatus } from '@/utils/resolve';
 
+import { useDraftStateStore } from './draft-state';
 import { useUiStoreActions } from './ui';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
@@ -86,6 +87,7 @@ const messages = defineMessages({
     defaultMessage: 'Post',
   },
   view: { id: 'toast.view', defaultMessage: 'View' },
+  viewDrafts: { id: 'compose.submit.fail.view_drafts', defaultMessage: 'View drafts' },
   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
   replyMessage: {
     id: 'confirmations.reply.message',
@@ -1273,14 +1275,25 @@ const submitCompose = async (
     ];
   }
 
-  let newDraftId: string | undefined;
+  let draftId = compose.draftId;
 
   if (!preview) {
     actions.updateCompose(composeId, (draft) => {
       draft.isSubmitting = true;
     });
 
-    newDraftId = (await persistDraftStatus(composeId).catch(() => {})) ?? undefined;
+    const newDraftId = (await persistDraftStatus(composeId).catch(() => {})) ?? undefined;
+
+    if (newDraftId) {
+      draftId = newDraftId;
+      actions.updateCompose(composeId, (draft) => {
+        draft.draftId = newDraftId;
+      });
+    }
+
+    if (draftId) {
+      useDraftStateStore.getState().actions.updateDraftState(draftId, 'isSubmitting');
+    }
 
     if (!chained) closeModal('COMPOSE');
 
@@ -1408,13 +1421,15 @@ const submitCompose = async (
       return data;
     }
 
-    const draftIdToCancel = compose.draftId || newDraftId;
-
     actions.resetCompose(composeId);
 
-    if (draftIdToCancel) {
+    if (draftId) {
       const accountUrl = ownAccount!.url;
-      cancelDraftStatus(queryClient, accountUrl, draftIdToCancel, scopeUrl);
+      cancelDraftStatus(queryClient, accountUrl, draftId, scopeUrl);
+
+      if (draftId) {
+        useDraftStateStore.getState().actions.updateDraftState(draftId, undefined);
+      }
     }
 
     if (data.scheduled_at === null) {
@@ -1443,7 +1458,7 @@ const submitCompose = async (
         toast.success(toastMessage, toastOptions);
       }
     } else {
-      const toastOptions = {
+      const toastOptions: IToastOptions = {
         actionLabel: messages.view,
         actionLinkOptions: { to: '/scheduled_statuses' as const },
         columnId,
@@ -1463,11 +1478,22 @@ const submitCompose = async (
     return data;
   } catch (error) {
     if (!chained) {
+      const toastOptions: IToastOptions = {
+        actionLabel: messages.viewDrafts,
+        actionLinkOptions: { to: '/draft_statuses' as const },
+        columnId,
+        scopeUrl,
+      };
+
       const message = (error as any).response?.json?.error || messages.submitError;
       if (propagate) {
-        toast.propagate('error', message);
+        toast.propagate('error', message, toastOptions);
       } else {
-        toast.error(message);
+        toast.error(message, toastOptions);
+      }
+
+      if (draftId) {
+        useDraftStateStore.getState().actions.updateDraftState(draftId, 'isError');
       }
     }
     actions.updateCompose(composeId, (draft) => {
