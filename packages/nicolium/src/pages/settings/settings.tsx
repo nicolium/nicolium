@@ -1,6 +1,7 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import { KINKY } from '@/build-config';
 import List, { ListItem } from '@/components/list';
 import { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
@@ -90,12 +91,17 @@ const SettingsPage: React.FC = () => {
               }
             />
 
-            <ListItem
-              to='/settings/integrations'
-              label={
-                <FormattedMessage id='preferences.tab.integrations' defaultMessage='Integrations' />
-              }
-            />
+            {KINKY && (
+              <ListItem
+                to='/settings/integrations'
+                label={
+                  <FormattedMessage
+                    id='preferences.tab.integrations'
+                    defaultMessage='Integrations'
+                  />
+                }
+              />
+            )}
           </List>
         </CardBody>
 

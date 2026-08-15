@@ -3,7 +3,9 @@ import React, { useEffect } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
+import { KINKY } from '@/build-config';
 import { EmptyMessage } from '@/components/empty-message';
+import MissingIndicator from '@/components/missing-indicator';
 import OpenShockHookForm from '@/components/openshock-hook-form';
 import OutlineBox from '@/components/outline-box';
 import { CardHeader, CardTitle } from '@/components/ui/card';
@@ -559,6 +561,8 @@ const OpenShockHooksList: React.FC = () => {
 
 const OpenShockIntegrationSettings: React.FC = () => {
   const intl = useIntl();
+
+  if (!KINKY) return <MissingIndicator />;
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

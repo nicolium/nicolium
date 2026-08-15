@@ -10,6 +10,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 
+import { KINKY } from '@/build-config';
 import {
   getNotificationStatusId,
   notificationMessages,
@@ -248,7 +249,7 @@ const useProcessStreamNotification = () => {
   const hasShockLock = useRef(false);
 
   useEffect(() => {
-    if (!('locks' in navigator)) return;
+    if (!('locks' in navigator) || !KINKY) return;
 
     const controller = new AbortController();
     let releaseLock: (() => void) | undefined;
@@ -277,7 +278,7 @@ const useProcessStreamNotification = () => {
       if (!notification.type) return;
 
       try {
-        if (hasShockLock.current) handleShockStreamFromNotification(notification);
+        if (KINKY && hasShockLock.current) handleShockStreamFromNotification(notification);
       } catch {}
 
       if (notification.type === 'chat_mention') return;
