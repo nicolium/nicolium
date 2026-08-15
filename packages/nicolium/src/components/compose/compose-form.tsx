@@ -20,6 +20,7 @@ import SvgIcon from '@/components/ui/svg-icon';
 import Toggle from '@/components/ui/toggle';
 import { useColumnId } from '@/contexts/deck-column-id-context';
 import EmojiPickerDropdown from '@/emoji/containers/emoji-picker-dropdown-container';
+import { useComposeAutosave } from '@/hooks/use-compose-autosave';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
@@ -190,6 +191,8 @@ const ComposeForm = <ID extends string>({
 
   const isThreadRoot = !threadItem;
   const hasThread = isThreadRoot && thread.length > 0;
+
+  useComposeAutosave(id, !threadItem);
 
   const {
     spoilerText,
