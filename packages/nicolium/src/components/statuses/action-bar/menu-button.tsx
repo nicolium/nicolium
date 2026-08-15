@@ -76,11 +76,20 @@ import copy from '@/utils/copy';
 import { languages } from '@/utils/languages';
 
 import messages from './messages';
-import { STATUS_ACTIONS } from './types';
+import { STATUS_ACTIONS, type StatusAction } from './types';
 import { useItems } from './use-items';
 
 import type { IActionButton } from './types';
 import type { Menu } from '@/components/dropdown-menu';
+
+const OPTIONAL_STATUS_ACTIONS: Array<StatusAction> = [
+  'wrench',
+  'bookmark',
+  'share',
+  'translate',
+  'quick-reactions',
+  'bite',
+] as const;
 
 interface IMenuButtonRemainingItems {
   statusId: string;
@@ -99,8 +108,7 @@ const MenuButtonRemainingItems: React.FC<IMenuButtonRemainingItems> = ({
     return STATUS_ACTIONS.filter((action) => {
       if (statusActionBarItems.includes(action)) return false;
       if (action === 'quote' && statusActionBarItems.includes('reblog')) return false;
-      if (['wrench', 'bookmark', 'share', 'translate', 'quick-reactions'].includes(action))
-        return false;
+      if (OPTIONAL_STATUS_ACTIONS.includes(action)) return false;
       return true;
     });
   }, [statusActionBarItems]);
