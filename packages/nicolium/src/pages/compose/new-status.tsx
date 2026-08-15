@@ -6,6 +6,7 @@ import { ComposeForm } from '@/components/async-components';
 import { Column } from '@/components/ui/column';
 import { useColumnId } from '@/contexts/deck-column-id-context';
 import { useClient } from '@/hooks/use-client';
+import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
@@ -32,6 +33,7 @@ const NewStatusPage: React.FC = () => {
   const columnId = useColumnId();
   const { quoteCompose, replyCompose, resetCompose, restoreCompose, updateCompose } =
     useComposeActions();
+  const heading = useComposeHeading('compose-modal');
 
   useEffect(() => {
     resetCompose('compose-modal');
@@ -90,7 +92,7 @@ const NewStatusPage: React.FC = () => {
   }, [scopeUrl, client, draftStatus, ownAccount, restoreCompose]);
 
   return (
-    <Column withBack={false} label={intl.formatMessage(messages.heading)}>
+    <Column withBack={false} label={intl.formatMessage(messages.heading)} title={heading}>
       <Suspense>
         <ComposeForm
           fullScreen
