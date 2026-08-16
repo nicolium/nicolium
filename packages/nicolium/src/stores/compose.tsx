@@ -1286,9 +1286,6 @@ const submitCompose = async (
 
     if (newDraftId) {
       draftId = newDraftId;
-      actions.updateCompose(composeId, (draft) => {
-        draft.draftId = newDraftId;
-      });
     }
 
     if (draftId) {

@@ -53,7 +53,7 @@ const useDraftStatusesCountQuery = () =>
 const usePersistDraftStatus = () => {
   const { data: account } = useOwnAccount();
   const queryClient = useQueryClient();
-  const { getCompose, getThread } = useComposeActions();
+  const { getCompose, getThread, updateCompose } = useComposeActions();
   const { defaultContentType, defaultPrivacy } = useSettings();
   const scopeUrl = useScopeUrl();
 
@@ -91,6 +91,10 @@ const usePersistDraftStatus = () => {
         queryKey: scopedQueryKey(queryKeys.draftStatuses.all, scopeUrl),
       }),
     );
+
+    updateCompose(composeId, (composeDraft) => {
+      composeDraft.draftId = draft.draft_id;
+    });
 
     return draft.draft_id;
   };
