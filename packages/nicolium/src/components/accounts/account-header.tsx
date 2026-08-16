@@ -176,6 +176,19 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
           title={<FormattedMessage id='account.blocked' defaultMessage='Blocked' />}
         />,
       );
+    } else if (ownAccount.id !== account.id && account.relationship?.requested_by) {
+      info.push(
+        <Badge
+          key='requested'
+          slug='opaque'
+          title={
+            <FormattedMessage
+              id='account.requested_follow'
+              defaultMessage='Requested to follow you'
+            />
+          }
+        />,
+      );
     }
 
     if (ownAccount.id !== account.id && account.relationship?.muting) {
