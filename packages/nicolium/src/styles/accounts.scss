@@ -834,22 +834,16 @@
 }
 
 .moved-note {
+  @include mixins.text($size: sm, $theme: muted, $truncate: true);
+
   display: flex;
   gap: 0.375rem;
   align-items: center;
   margin-bottom: 0.5rem;
 
   svg {
-    flex: none;
-    color: var(--color-primary-600);
-
-    .dark & {
-      color: var(--color-primary-400);
-    }
-  }
-
-  p {
-    @include mixins.text($size: sm, $theme: muted, $truncate: true);
+    width: 1rem;
+    height: 1rem;
   }
 
   &__container {

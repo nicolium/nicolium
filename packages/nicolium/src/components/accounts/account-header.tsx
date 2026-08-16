@@ -323,7 +323,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
   return (
     <div className='account-header__container'>
       {account.moved && typeof account.moved === 'object' && (
-        <MovedNote from={account} to={account.moved as AccountEntity} />
+        <MovedNote from={account} to={account} />
       )}
 
       <div
