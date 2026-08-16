@@ -2,6 +2,7 @@ import iconChatsTeardrop from '@phosphor-icons/core/regular/chats-teardrop.svg';
 import iconExport from '@phosphor-icons/core/regular/export.svg';
 import iconRss from '@phosphor-icons/core/regular/rss.svg';
 import iconSuitcase from '@phosphor-icons/core/regular/suitcase.svg';
+import iconUserPlus from '@phosphor-icons/core/regular/user-plus.svg';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
@@ -22,6 +23,10 @@ import Emojify from '@/emoji/emojify';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useScopeUrl } from '@/hooks/use-scope-url';
+import {
+  useAcceptFollowRequestMutation,
+  useRejectFollowRequestMutation,
+} from '@/queries/accounts/use-follow-requests';
 import { useChats } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -71,6 +76,48 @@ const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
     <Account account={to} withRelationship={false} />
   </div>
 );
+
+interface IFollowRequestNote {
+  account: AccountEntity;
+}
+
+const FollowRequestNote: React.FC<IFollowRequestNote> = ({ account }) => {
+  const { mutate: authorizeFollowRequest } = useAcceptFollowRequestMutation(account.id);
+  const { mutate: rejectFollowRequest } = useRejectFollowRequestMutation(account.id);
+
+  const handleAuthorize = () => {
+    authorizeFollowRequest();
+  };
+
+  const handleReject = () => {
+    rejectFollowRequest();
+  };
+
+  return (
+    <div className='follow-request-note'>
+      <Icon src={iconUserPlus} />
+
+      <p>
+        <FormattedMessage
+          id='notification.follow_request'
+          defaultMessage='{name} requested to follow you'
+          values={{
+            name: <Emojify text={account.display_name} emojis={account.emojis} />,
+          }}
+        />
+      </p>
+
+      <div className='follow-request-actions'>
+        <button onClick={handleAuthorize}>
+          <FormattedMessage id='follow_request.authorize' defaultMessage='Authorize' />
+        </button>
+        <button onClick={handleReject}>
+          <FormattedMessage id='follow_request.reject' defaultMessage='Reject' />
+        </button>
+      </div>
+    </div>
+  );
+};
 
 interface IAccountHeader {
   account?: AccountEntity;
@@ -325,6 +372,8 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
       {account.moved && typeof account.moved === 'object' && (
         <MovedNote from={account} to={account} />
       )}
+
+      {account.relationship?.requested_by && <FollowRequestNote account={account} />}
 
       <div
         className={clsx('account-header__banner', {
