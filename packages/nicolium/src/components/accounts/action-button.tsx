@@ -1,3 +1,4 @@
+import iconBellSimpleRinging from '@phosphor-icons/core/regular/bell-simple-ringing.svg';
 import iconCaretDown from '@phosphor-icons/core/regular/caret-down.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconProhibit from '@phosphor-icons/core/regular/prohibit.svg';
@@ -112,6 +113,10 @@ const messages = defineMessages({
   notifyRepliesUnsubscribeFailure: {
     id: 'account.notify_replies.unsubscribe_failure',
     defaultMessage: 'Failed to unsubscribe from reply notifications from @{name}.',
+  },
+  notifying: {
+    id: 'account.notifying',
+    defaultMessage: 'You are subscribed to notifications from @{name}',
   },
   unfollow: { id: 'account.unfollow', defaultMessage: 'Unfollow' },
   unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
@@ -595,6 +600,13 @@ const ActionButton: React.FC<IActionButton> = ({
               className='account-action-button account-action-button--following'
               type='button'
             >
+              {relationship?.notifying ? (
+                <Icon
+                  src={iconBellSimpleRinging}
+                  aria-label={intl.formatMessage(messages.notifying, { name: account.username })}
+                  title={intl.formatMessage(messages.notifying, { name: account.username })}
+                />
+              ) : null}
               <span>
                 <FormattedMessage id='account.following' defaultMessage='Following' />
               </span>
