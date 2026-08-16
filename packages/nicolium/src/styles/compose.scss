@@ -1,6 +1,17 @@
 @use 'mixins';
 @use 'variables';
 
+.compose-header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+
+  > output {
+    @include mixins.text($theme: success);
+  }
+}
+
 .compose-form {
   display: flex;
   flex-direction: column;

@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
-import React, { Suspense, useEffect } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { ComposeForm } from '@/components/async-components';
 import { Column } from '@/components/ui/column';
@@ -34,6 +34,17 @@ const NewStatusPage: React.FC = () => {
   const { quoteCompose, replyCompose, resetCompose, restoreCompose, updateCompose } =
     useComposeActions();
   const heading = useComposeHeading('compose-modal');
+
+  const [saved, setSaved] = useState(false);
+  const savedTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const handleAutosave = () => {
+    setSaved(true);
+    clearTimeout(savedTimeout.current);
+    savedTimeout.current = setTimeout(() => setSaved(false), 2000);
+  };
+
+  useEffect(() => () => clearTimeout(savedTimeout.current), []);
 
   useEffect(() => {
     resetCompose('compose-modal');
@@ -92,11 +103,25 @@ const NewStatusPage: React.FC = () => {
   }, [scopeUrl, client, draftStatus, ownAccount, restoreCompose]);
 
   return (
-    <Column withBack={false} label={intl.formatMessage(messages.heading)} title={heading}>
+    <Column
+      withBack={false}
+      label={intl.formatMessage(messages.heading)}
+      title={
+        <div className='compose-header'>
+          <span>{heading}</span>
+          {saved && (
+            <output aria-live='polite' aria-atomic='true'>
+              <FormattedMessage id='common.saved' defaultMessage='Saved' />
+            </output>
+          )}
+        </div>
+      }
+    >
       <Suspense>
         <ComposeForm
           fullScreen
           id='compose-modal'
+          onAutosave={handleAutosave}
           onSubmit={() => {
             window.close();
             navigate({ replace: true, to: '/' });

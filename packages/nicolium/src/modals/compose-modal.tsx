@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { ComposeForm } from '@/components/async-components';
@@ -46,6 +46,16 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
 
   const { editedId } = compose;
   const title = useComposeHeading(composeId);
+  const [saved, setSaved] = useState(false);
+  const savedTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const handleAutosave = () => {
+    setSaved(true);
+    clearTimeout(savedTimeout.current);
+    savedTimeout.current = setTimeout(() => setSaved(false), 2000);
+  };
+
+  useEffect(() => () => clearTimeout(savedTimeout.current), []);
 
   const { isDragging, isDraggedOver } = useDraggedFiles(node, (files) => {
     uploadCompose(files);
@@ -111,7 +121,16 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
   return (
     <Modal
       ref={node}
-      title={title}
+      title={
+        <div className='compose-header'>
+          <span>{title}</span>
+          {saved && (
+            <output aria-live='polite' aria-atomic='true'>
+              <FormattedMessage id='common.saved' defaultMessage='Saved' />
+            </output>
+          )}
+        </div>
+      }
       onClose={onClickClose}
       className={clsx('compose-modal', {
         'compose-modal--dragging': isDragging,
@@ -120,6 +139,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
     >
       <ComposeForm
         id={composeId}
+        onAutosave={handleAutosave}
         autoFocus
         showAccountSwitcher
         enableThread={!editedId && !compose.redacting}

@@ -270,12 +270,6 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
                 defaultMessage='Automatically save posts as drafts while composing'
               />
             }
-            hint={
-              <FormattedMessage
-                id='preferences.fields.autosave_drafts.hint'
-                defaultMessage='Keeps a draft up to date so your post isn’t lost if the composer is closed.'
-              />
-            }
           >
             <SettingToggle
               settings={settings}

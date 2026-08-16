@@ -29,6 +29,7 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
 
   const [value, setValue] = useState<string | undefined>(account.relationship?.note);
   const [saved, setSaved] = useState(false);
+  const savedTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setValue(e.target.value);
@@ -36,12 +37,13 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
     debouncedUpdateAccountNote(e.target.value, {
       onSuccess: () => {
         setSaved(true);
-        setTimeout(() => {
-          setSaved(false);
-        }, 2000);
+        clearTimeout(savedTimeout.current);
+        savedTimeout.current = setTimeout(() => setSaved(false), 2000);
       },
     });
   };
+
+  useEffect(() => () => clearTimeout(savedTimeout.current), []);
 
   useEffect(() => {
     setValue(account.relationship?.note);
@@ -59,9 +61,9 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
             <FormattedMessage id='account_note.header' defaultMessage='Note' />
           </label>
           {saved && (
-            <span role='status' aria-live='polite' aria-atomic='true'>
+            <output aria-live='polite' aria-atomic='true'>
               <FormattedMessage id='common.saved' defaultMessage='Saved' />
-            </span>
+            </output>
           )}
         </div>
       }

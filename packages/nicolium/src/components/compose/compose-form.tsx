@@ -141,6 +141,7 @@ interface IComposeForm<ID extends string> {
   event?: string;
   fullScreen?: boolean;
   group?: string;
+  onAutosave?: () => void;
   onSubmit?: () => void;
   withAvatar?: boolean;
   transparent?: boolean;
@@ -162,6 +163,7 @@ const ComposeForm = <ID extends string>({
   event,
   fullScreen,
   group,
+  onAutosave,
   onSubmit,
   withAvatar,
   transparent,
@@ -192,7 +194,7 @@ const ComposeForm = <ID extends string>({
   const isThreadRoot = !threadItem;
   const hasThread = isThreadRoot && thread.length > 0;
 
-  useComposeAutosave(id, !threadItem);
+  useComposeAutosave(id, !threadItem, onAutosave);
 
   const {
     spoilerText,
