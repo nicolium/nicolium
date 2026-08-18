@@ -4,7 +4,16 @@ import { accountSchema } from './account';
 import { emojiSchema, filteredArray } from './utils';
 
 const baseEmojiReactionSchema = v.object({
-  count: v.fallback(v.nullable(v.number()), null),
+  // TODO: revert when snac stops sending count as string
+  count: v.fallback(
+    v.nullable(
+      v.pipe(
+        v.unknown(),
+        v.transform((val) => (val === null || isNaN(val as number) ? null : Number(val))),
+      ),
+    ),
+    null,
+  ),
   me: v.fallback(v.boolean(), false),
   name: emojiSchema,
   url: v.fallback(v.undefined(), undefined),
