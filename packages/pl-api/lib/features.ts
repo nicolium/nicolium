@@ -982,6 +982,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MITRA && gte(v.version, '4.5.0'),
       v.software === NEODB,
       v.software === SHARKEY,
+      v.software === SNAC,
       v.software === TAKAHE && gte(v.version, '0.6.1'),
       v.software === TOKI,
       instance.api_versions['exposable_reactions.pleroma.pl-api'] >= 1,
@@ -1140,6 +1141,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === MASTODON && gte(v.version, '4.4.0'),
       v.software === SHARKEY,
+      v.software === SNAC,
       v.software === TINYAP,
     ]),
 

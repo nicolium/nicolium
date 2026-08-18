@@ -11,6 +11,7 @@ const baseEmojiReactionSchema = v.object({
   static_url: v.fallback(v.undefined(), undefined),
   accounts: filteredArray(accountSchema),
   account_ids: v.fallback(filteredArray(v.string()), []),
+  visible_in_picker: v.fallback(v.optional(v.boolean()), undefined),
 });
 
 const customEmojiReactionSchema = v.object({

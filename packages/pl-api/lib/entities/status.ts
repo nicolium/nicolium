@@ -171,30 +171,31 @@ const preprocess = (status: any) => {
   }
 
   status = {
-    // @ts-expect-error only overrides if present in pleroma object
     emoji_reactions: status.reactions,
-    ...pick(status.pleroma || {}, [
-      'local',
-      'conversation_id',
-      'direct_conversation_id',
-      'in_reply_to_account_acct',
-      'expires_at',
-      'thread_muted',
-      'emoji_reactions',
-      'parent_visible',
-      'pinned_at',
-      'quote_url',
-      'quote_visible',
-      'quotes_count',
-      'bookmark_folder',
-      'list_id',
+    ...(status.pleroma
+      ? pick(status.pleroma, [
+          'local',
+          'conversation_id',
+          'direct_conversation_id',
+          'in_reply_to_account_acct',
+          'expires_at',
+          'thread_muted',
+          'emoji_reactions',
+          'parent_visible',
+          'pinned_at',
+          'quote_url',
+          'quote_visible',
+          'quotes_count',
+          'bookmark_folder',
+          'list_id',
 
-      'event',
-      'translation',
-      'rss_feed',
-      'location',
-    ]),
-    ...pick(status.friendica || {}, ['dislikes_count', 'disliked']),
+          'event',
+          'translation',
+          'rss_feed',
+          'location',
+        ])
+      : undefined),
+    ...(status.friendica ? pick(status.friendica, ['dislikes_count', 'disliked']) : undefined),
     ...status,
     quote,
     quote_id: quotedStatusId,
