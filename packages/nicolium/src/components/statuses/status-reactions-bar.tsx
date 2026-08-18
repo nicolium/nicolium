@@ -118,9 +118,16 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
   const features = useFeatures();
 
   const { mutate: emojiReact } = useEmojiReactMutation(status.id);
+  const { mutate: emojiUnreact } = useEmojiUnreactMutation(status.id);
 
   const handlePickEmoji = (emoji: EmojiType) => {
-    emojiReact(emoji.custom ? emoji.id : emoji.native);
+    if (
+      status.emoji_reactions.find((r) => r.name === (emoji.custom ? emoji.id : emoji.native))?.me
+    ) {
+      emojiUnreact(emoji.custom ? emoji.id : emoji.native);
+    } else {
+      emojiReact(emoji.custom ? emoji.id : emoji.native);
+    }
   };
 
   if (demetricator === 'always') return null;
