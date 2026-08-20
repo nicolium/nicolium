@@ -46,7 +46,12 @@ const handleExternalLogin = (host: string, switchAccount = true) =>
 
 /** Form for logging into a remote instance */
 const ExternalLoginForm: React.FC = () => {
-  const query = new URLSearchParams(window.location.search);
+  const search = window.location.search.match(/^\?switchAccount={true|false}\?/)
+    ? window.location.search.replace(/^\?switchAccount=(true|false)\?/, (match) =>
+        match === '?switchAccount=true?' ? '?switchAccount=true&' : '?',
+      )
+    : window.location.search;
+  const query = new URLSearchParams(search);
   const code = query.get('code');
   const server = query.get('server');
   const switchAccount = query.get('switchAccount') !== 'false';
