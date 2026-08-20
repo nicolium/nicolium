@@ -38,6 +38,10 @@
 - Support for `clickable`, `followmouse`, `mathInline`, `mathBlock` and `unixtime` MFM extensions.
 - Support for generating and revoking invites from the dashboard on Iceshrimp.NET.
 - User creation in the admin dashboard on Pleroma.
+- Incoming follow request information is displayed on the follower profile page, allowing to accept or reject from there. Requires `requested_by` to be provided by the backend.
+- Option to auto-save posts as drafts when composing posts.
+- Integration with OpenShock API, allowing to send messages to the shocker on specified actions.
+- Option to replace star icon with a heart icon for the favourite button.
 
 ### Changed
 
@@ -57,6 +61,7 @@
 - Updated translations: Dutch, French (thanks to Capitaine Caverne and Aris), German (thanks to vinzw), Polish.
 - When filtered, your own posts are marked as authored by you.
 - When self-note limit is exceeded, a toast message is displayed and the setting backup is disabled.
+- Compose form in the sidebar now can be used to reply/quote posts.
 
 ### Fixed
 
@@ -75,6 +80,8 @@
 - RTL mode improvements.
 - Reaction notifications now work on Chuckya.
 - WYSIWYG posts work.
+- Unreacting from reaction picker is now possible.
+- Interaction requests page is now styled correctly.
 
 ### Removed
 
