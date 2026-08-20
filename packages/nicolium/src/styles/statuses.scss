@@ -2634,6 +2634,10 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 }
 
 .status-language-picker {
+  &:hover {
+    text-decoration: underline;
+  }
+
   svg {
     width: 1rem;
     height: 1rem;
@@ -2641,12 +2645,6 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
 
     .dark & {
       color: var(--color-gray-600);
-    }
-  }
-
-  &__toggle {
-    &:hover {
-      text-decoration: underline;
     }
   }
 

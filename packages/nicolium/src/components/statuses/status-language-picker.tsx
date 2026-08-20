@@ -48,7 +48,7 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
         >
           <button
             title={intl.formatMessage(messages.languageVersions)}
-            className='status-language-picker__toggle'
+            className='status-language-picker'
           >
             {showLabel ? (
               <div className='status-language-picker__inner'>
