@@ -167,7 +167,7 @@ interface AuthActions {
   verifyCredentials: (token: string, accountUrl?: string) => Promise<CredentialAccount>;
   fetchMe: () => Promise<CredentialAccount | undefined>;
   logOut: () => Promise<void>;
-  logOutAccount: (accountUrl: string) => Promise<void>;
+  logOutAccount: (accountUrl: string, recursive?: boolean) => Promise<void>;
   register: (params: CreateAccountParams) => Promise<Token | undefined>;
   fetchCaptcha: () => ReturnType<PlApiClient['oauth']['getCaptcha']>;
   updateMe: (params: UpdateCredentialsParams) => Promise<CredentialAccount>;
@@ -896,7 +896,7 @@ const useAuthStore = create<AuthStore>()(
 
           if (!account) return;
 
-          await get().actions.logOutAccount(account?.url ?? state.me!);
+          await get().actions.logOutAccount(account?.url ?? state.me!, true);
 
           get().actions.removeAccount(account, standalone);
           unsetSentryAccount();
@@ -904,10 +904,11 @@ const useAuthStore = create<AuthStore>()(
           queryClient.clear();
         },
 
-        logOutAccount: async (accountUrl) => {
+        logOutAccount: async (accountUrl, recursive) => {
           const state = get();
 
-          if (accountUrl === state.me || accountUrl === getMeUrl()) return get().actions.logOut();
+          if ((accountUrl === state.me || accountUrl === getMeUrl()) && !recursive)
+            return get().actions.logOut();
 
           const token = state.users[accountUrl]?.access_token;
 
