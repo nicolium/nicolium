@@ -1,3 +1,5 @@
+import iconLockFill from '@phosphor-icons/core/fill/lock-fill.svg';
+import iconRocketLaunchFill from '@phosphor-icons/core/fill/rocket-launch-fill.svg';
 import iconAt from '@phosphor-icons/core/regular/at.svg';
 import iconLock from '@phosphor-icons/core/regular/lock.svg';
 import iconQuotes from '@phosphor-icons/core/regular/quotes.svg';
@@ -51,11 +53,14 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const reblog = useReblog(status);
 
   let reblogIcon = useRocketIconForReblogs ? iconRocketLaunch : iconRepeat;
+  let reblogFilledIcon = useRocketIconForReblogs ? iconRocketLaunchFill : iconRepeat;
 
   if (status.visibility === 'direct') {
     reblogIcon = iconAt;
+    reblogFilledIcon = iconAt;
   } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
     reblogIcon = iconLock;
+    reblogFilledIcon = iconLockFill;
   }
 
   const handleReblogClick: React.EventHandler<React.MouseEvent> = (e) => {
@@ -76,6 +81,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
     <StatusActionButton
       className='status-action-bar__button--reblog'
       icon={reblogIcon}
+      filledIcon={reblogFilledIcon}
       disabled={!publicStatus}
       title={
         !publicStatus
