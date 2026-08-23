@@ -58,10 +58,10 @@
 - Restored some tests.
 - _Show new posts_ button can be placed inside the header of the column, if it fits the available width.
 - Unfollow confirmation modal includes additional information when unfollowing a locked account.
-- Updated translations: Dutch, French (thanks to Capitaine Caverne and Aris), German (thanks to vinzw), Polish.
 - When filtered, your own posts are marked as authored by you.
 - When self-note limit is exceeded, a toast message is displayed and the setting backup is disabled.
 - Compose form in the sidebar now can be used to reply/quote posts.
+- Updated translations: Dutch, French (thanks to Capitaine Caverne and Aris), German (thanks to vinzw), Polish.
 
 ### Fixed
 
