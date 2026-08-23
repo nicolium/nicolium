@@ -12,7 +12,7 @@ import iconUsersThree from '@phosphor-icons/core/regular/users-three.svg';
 import React, { useMemo } from 'react';
 import { useIntl, defineMessages, type IntlShape } from 'react-intl';
 
-import DropdownMenu, { type MenuItem } from '@/components/dropdown-menu';
+import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
 import { useFeatures } from '@/hooks/use-features';
 import { getOrderedLists } from '@/pages/account-lists/lists';
@@ -186,7 +186,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
     () => getItems(features, lists, circles, isReply, intl),
     [features, lists, circles, isReply],
   );
-  const items: Array<MenuItem> = options.map((item) => ({
+  const items: Menu = options.map((item) => ({
     ...item,
     action: item.value ? () => onChange(item.value) : undefined,
     active: item.value === value || item.items?.some((item) => item.value === value),
@@ -198,7 +198,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
   }));
 
   if (features.localOnlyStatuses)
-    items.push({
+    items.push(null, {
       icon: iconPlanet,
       text: intl.formatMessage(messages.localShort),
       meta: intl.formatMessage(messages.localLong),
