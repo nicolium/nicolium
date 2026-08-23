@@ -222,11 +222,11 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
     return null;
   }
 
-  const text = compose.visibility
-    ? valueOption?.text
-    : intl.formatMessage(messages.local, {
+  const text = compose.localOnly
+    ? intl.formatMessage(messages.local, {
         privacy: valueOption?.text,
-      });
+      })
+    : valueOption?.text;
 
   return (
     <DropdownMenu items={items} width='16rem'>
