@@ -2,6 +2,7 @@ import { translationSchema, type Translation } from 'pl-api';
 import * as v from 'valibot';
 
 import { useAppQuery } from '@/queries/query';
+import { usePollQuery } from '@/queries/statuses/use-poll';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useLanguageModelAvailabilityActions } from '@/stores/language-model-availability';
 
@@ -9,6 +10,7 @@ import { queryKeys } from '../keys';
 
 const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) => {
   const { data: status } = useMinimalStatus(statusId);
+  const { data: poll } = usePollQuery(status?.poll_id ?? '');
   const { setLanguageModelAvailability, setLanguageModelDownloadProgress } =
     useLanguageModelAvailabilityActions();
 
@@ -38,13 +40,34 @@ const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) =>
           signal,
         });
 
-        return translator.translate(status.content, { signal }).then((translatedText) =>
-          v.parse(translationSchema, {
-            id: statusId,
-            content: translatedText,
-            detected_source_language: sourceLanguage,
-          }),
-        );
+        const translate = (text: string) =>
+          text ? translator.translate(text, { signal }) : Promise.resolve('');
+
+        const [content, spoilerText, pollOptions, mediaAttachments] = await Promise.all([
+          translate(status.content),
+          translate(status.spoiler_text),
+          Promise.all((poll?.options ?? []).map(({ title }) => translate(title))),
+          Promise.all(
+            status.media_attachments.map(async ({ id, description }) => ({
+              id,
+              description: await translate(description ?? ''),
+            })),
+          ),
+        ]);
+
+        return v.parse(translationSchema, {
+          id: statusId,
+          content,
+          spoiler_text: spoilerText,
+          poll: poll
+            ? {
+                id: poll.id,
+                options: pollOptions.map((title) => ({ title })),
+              }
+            : undefined,
+          media_attachments: mediaAttachments,
+          detected_source_language: sourceLanguage,
+        });
       } catch (e) {
         return false;
       }
