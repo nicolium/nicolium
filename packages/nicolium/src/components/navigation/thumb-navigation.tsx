@@ -98,7 +98,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   };
 
   return (
-    <div
+    <nav
       className={clsx(
         'thumb-navigation',
         orderedNavigationItems.length === 0 && 'thumb-navigation--no-items',
@@ -145,7 +145,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
             return null;
         }
       })}
-    </div>
+    </nav>
   );
 });
 
