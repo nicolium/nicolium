@@ -208,7 +208,7 @@ const useCreateChatMessage = () => {
     onMutate: async (variables) => {
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
-        queryKey: queryKeys.chats.chatMessages(variables.chatId),
+        queryKey: scopedQueryKey(queryKeys.chats.chatMessages(variables.chatId), scopeUrl),
       });
 
       // Snapshot the previous value

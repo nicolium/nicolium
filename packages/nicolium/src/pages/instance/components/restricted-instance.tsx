@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 
 import Icon from '@/components/ui/icon';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 
 import InstanceRestrictions from './instance-restrictions';
@@ -13,7 +14,8 @@ interface IRestrictedInstance {
 }
 
 const RestrictedInstance: React.FC<IRestrictedInstance> = ({ host }) => {
-  const remoteInstance = useRemoteInstance(host);
+  const scopeUrl = useScopeUrl();
+  const remoteInstance = useRemoteInstance(host, scopeUrl);
 
   const [expanded, setExpanded] = useState(false);
 

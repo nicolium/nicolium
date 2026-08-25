@@ -99,7 +99,7 @@ const UI: React.FC = React.memo(() => {
   const loadAccountData = () => {
     if (!account) return;
 
-    prefetchCustomEmojis(client);
+    prefetchCustomEmojis(client, scopeUrl);
 
     if (account.locked && account.source?.follow_requests_count === undefined) {
       requestIdleCallback(() => prefetchFollowRequests(client, scopeUrl), { timeout: 2000 });

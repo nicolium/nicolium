@@ -15,6 +15,7 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 import { createStatus } from '@/queries/statuses/status-actions';
 import { cancelDraftStatus, usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { deckRoute, router } from '@/router';
@@ -1412,7 +1413,9 @@ const submitCompose = async (
 
     if (chained) {
       if (data.scheduled_at !== null) {
-        queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
+        queryClient.invalidateQueries({
+          queryKey: scopedQueryKey(queryKeys.scheduledStatuses.all, scopeUrl),
+        });
       }
       onSuccess?.();
       return data;
@@ -1468,7 +1471,9 @@ const submitCompose = async (
         toast.success(messages.scheduledSuccess, toastOptions);
       }
 
-      queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.scheduledStatuses.all, scopeUrl),
+      });
     }
 
     onSuccess?.();

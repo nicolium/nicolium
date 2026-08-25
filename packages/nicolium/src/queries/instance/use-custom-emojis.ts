@@ -9,9 +9,11 @@ import { queryKeys } from '../keys';
 
 import type { CustomEmoji, PlApiClient } from 'pl-api';
 
-const customEmojisQueryOptions = (client: PlApiClient) =>
+const customEmojisQueryOptions = (client: PlApiClient, prefixUrl?: string) =>
   queryOptions({
-    queryKey: queryKeys.instance.customEmojis,
+    queryKey: prefixUrl
+      ? [...queryKeys.instance.customEmojis, prefixUrl]
+      : queryKeys.instance.customEmojis,
     queryFn: () =>
       client.instance.getCustomEmojis().then((emojis) => {
         addCustomToPool(emojis);
@@ -31,7 +33,7 @@ function useCustomEmojis<T = Array<CustomEmoji>>(select?: (data: Array<CustomEmo
   });
 }
 
-const prefetchCustomEmojis = (client: PlApiClient) =>
-  queryClient.prefetchQuery(customEmojisQueryOptions(client));
+const prefetchCustomEmojis = (client: PlApiClient, prefixUrl: string) =>
+  queryClient.prefetchQuery(customEmojisQueryOptions(client, prefixUrl));
 
 export { useCustomEmojis, prefetchCustomEmojis };

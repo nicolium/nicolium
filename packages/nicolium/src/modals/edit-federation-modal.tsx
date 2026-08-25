@@ -5,6 +5,7 @@ import { getUpdatedMrf } from '@/actions/mrf';
 import List, { ListItem } from '@/components/list';
 import Modal from '@/components/ui/modal';
 import Toggle from '@/components/ui/toggle';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useAdminConfig, useUpdateAdminConfig } from '@/queries/admin/use-config';
 import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 import toast from '@/toast';
@@ -36,9 +37,10 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
   onClose,
 }) => {
   const intl = useIntl();
+  const scopeUrl = useScopeUrl();
 
   const { data: config } = useAdminConfig();
-  const remoteInstance = useRemoteInstance(host);
+  const remoteInstance = useRemoteInstance(host, scopeUrl);
   const { mutate: updateConfig } = useUpdateAdminConfig();
 
   const [data, setData] = useState<Record<string, any>>({});

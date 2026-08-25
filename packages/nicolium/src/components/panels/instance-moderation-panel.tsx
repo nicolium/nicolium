@@ -6,6 +6,7 @@ import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import DropdownMenu from '@/components/dropdown-menu';
 import Widget from '@/components/ui/widget';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import InstanceRestrictions from '@/pages/instance/components/instance-restrictions';
 import { useRemoteInstance } from '@/queries/instance/use-remote-instance';
 import { useModalsActions } from '@/stores/modals';
@@ -23,9 +24,10 @@ interface IInstanceModerationPanel {
 const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({ host }) => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
+  const scopeUrl = useScopeUrl();
 
   const { data: account } = useOwnAccount();
-  const remoteInstance = useRemoteInstance(host);
+  const remoteInstance = useRemoteInstance(host, scopeUrl);
 
   const handleEditFederation = () => {
     openModal('EDIT_FEDERATION', { host });

@@ -7,6 +7,8 @@ import { useInstance } from '@/stores/instance';
 import { getDomain } from '@/utils/accounts';
 import ConfigDB from '@/utils/config-db';
 
+import { scopedQueryKey } from '../query';
+
 import type { MRFSimple } from '@/schemas/pleroma';
 import type { Account } from 'pl-api';
 
@@ -48,12 +50,12 @@ const useRemoteInstanceFederation = (host: string) => {
   );
 };
 
-const useRemoteInstanceFavicon = (host: string) => {
+const useRemoteInstanceFavicon = (host: string, scopeUrl: string) => {
   const queryClient = useQueryClient();
 
   return (
     queryClient
-      .getQueriesData<Account>({ queryKey: queryKeys.accounts.root })
+      .getQueriesData<Account>({ queryKey: scopedQueryKey(queryKeys.accounts.root, scopeUrl) })
       .map(([, account]) => account)
       .find(
         (account): account is Account =>
@@ -62,9 +64,9 @@ const useRemoteInstanceFavicon = (host: string) => {
   );
 };
 
-const useRemoteInstance = (host: string) => {
+const useRemoteInstance = (host: string, scopeUrl: string) => {
   const federation = useRemoteInstanceFederation(host);
-  const favicon = useRemoteInstanceFavicon(host);
+  const favicon = useRemoteInstanceFavicon(host, scopeUrl);
 
   return useMemo<RemoteInstance>(
     () => ({

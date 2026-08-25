@@ -23,9 +23,11 @@ const useBlockDomainMutation = () => {
     mutationKey: queryKeys.settings.domainBlocks,
     mutationFn: (domain: string) => client.filtering.blockDomain(domain),
     onSettled: (_, __, domain) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.settings.domainBlocks });
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.settings.domainBlocks, scopeUrl),
+      });
 
-      const accounts = selectAccountsByDomain(domain);
+      const accounts = selectAccountsByDomain(domain, scopeUrl);
       if (!accounts) return;
 
       queryClient.setQueryData(
@@ -55,9 +57,9 @@ const useUnblockDomainMutation = () => {
   });
 };
 
-const selectAccountsByDomain = (domain: string): string[] => {
+const selectAccountsByDomain = (domain: string, scopeUrl: string): string[] => {
   const accounts = queryClient
-    .getQueriesData<Account>({ queryKey: queryKeys.accounts.root })
+    .getQueriesData<Account>({ queryKey: scopedQueryKey(queryKeys.accounts.root, scopeUrl) })
     .map(([, account]) => account)
     .filter((account): account is Account => !!account && typeof account.id === 'string')
     .filter((account) => account.acct.endsWith(`@${domain}`))
