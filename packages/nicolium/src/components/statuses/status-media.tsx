@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback } from 'react';
+import React, { Suspense, useCallback, useMemo } from 'react';
 
 import { MediaGallery, Video, Audio } from '@/components/async-components';
 import { CollectionCard } from '@/components/collections/collection-card';
@@ -13,7 +13,7 @@ import { useSettings } from '@/stores/settings';
 import { useMediaVisible } from './sensitive-content-overlay';
 
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
-import type { MediaAttachment } from 'pl-api';
+import type { MediaAttachment, Translation } from 'pl-api';
 
 interface IStatusMedia {
   /** Status entity to render media for. */
@@ -35,10 +35,16 @@ interface IStatusMedia {
   muted?: boolean;
   /** Callback when compact media is clicked. */
   onClick?: () => void;
+  translatedAttachments?: Translation['media_attachments'];
 }
 
 /** Render media attachments for a status. */
-const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick }) => {
+const StatusMedia: React.FC<IStatusMedia> = ({
+  status,
+  muted = false,
+  onClick,
+  translatedAttachments,
+}) => {
   const { openModal } = useModalsActions();
   const { deployPictureInPicture } = usePictureInPictureActions();
   const { displayMedia, disableUserProvidedMedia } = useSettings();
@@ -58,8 +64,23 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
     [deployPictureInPicture, status.id, status.account_id],
   );
 
-  const size = status.media_attachments.length;
-  const firstAttachment = status.media_attachments[0];
+  const mediaAttachments = useMemo(() => {
+    const descriptions = new Map(
+      translatedAttachments?.map(({ id, description }) => [id, description]),
+    );
+
+    return status.media_attachments.map((attachment) => {
+      const description = descriptions.get(attachment.id);
+      return description === undefined ? attachment : { ...attachment, description };
+    });
+  }, [status.media_attachments, translatedAttachments]);
+
+  const translatedStatus = useMemo(
+    () => ({ ...status, media_attachments: mediaAttachments }),
+    [mediaAttachments, status],
+  );
+  const size = mediaAttachments.length;
+  const firstAttachment = mediaAttachments[0];
 
   let media: React.JSX.Element | null = null;
 
@@ -79,7 +100,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
 
   if (size > 0 && firstAttachment) {
     if (muted) {
-      media = <AttachmentThumbs status={status} onClick={onClick} />;
+      media = <AttachmentThumbs status={translatedStatus} onClick={onClick} />;
     } else if (size === 1 && firstAttachment.type === 'video' && !disableUserProvidedMedia) {
       const video = firstAttachment;
 
@@ -123,7 +144,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
       media = (
         <Suspense fallback={renderLoadingMediaGallery()}>
           <MediaGallery
-            media={status.media_attachments}
+            media={mediaAttachments}
             height={285}
             onOpenMedia={openMedia}
             visible={visible}

@@ -11,6 +11,7 @@ import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
 import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
+import type { Translation } from 'pl-api';
 
 type Selected = Record<number, boolean>;
 
@@ -18,10 +19,17 @@ interface IPoll {
   id: string;
   status: Pick<Status, 'id' | 'url'>;
   language?: string;
+  translatedOptions?: NonNullable<Translation['poll']>['options'];
   truncate?: boolean;
 }
 
-const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.Element | null => {
+const Poll: React.FC<IPoll> = ({
+  id,
+  status,
+  language,
+  translatedOptions,
+  truncate,
+}): React.JSX.Element | null => {
   const { openModal } = useModalsActions();
 
   const isLoggedIn = useCurrentAccount();
@@ -89,7 +97,9 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
             <PollOption
               key={i}
               poll={poll}
-              option={option}
+              option={
+                translatedOptions?.[i] ? { ...option, title: translatedOptions[i].title } : option
+              }
               index={i}
               showResults={showResults}
               active={!!selected[i]}

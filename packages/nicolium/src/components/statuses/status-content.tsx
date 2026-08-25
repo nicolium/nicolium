@@ -275,8 +275,16 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       );
     }, [content, renderMfm, account?.speak_as_cat, displayMentionAvatars]);
 
-    const spoilerText =
-      status.spoiler_text_map && statusMeta.currentLanguage
+    const activeTranslation =
+      localTranslation && typeof localTranslation === 'object'
+        ? localTranslation
+        : translation && typeof translation === 'object'
+          ? translation
+          : null;
+
+    const spoilerText = activeTranslation?.spoiler_text
+      ? activeTranslation.spoiler_text
+      : status.spoiler_text_map && statusMeta.currentLanguage
         ? status.spoiler_text_map[statusMeta.currentLanguage] || status.spoiler_text
         : status.spoiler_text;
 
@@ -286,13 +294,6 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
         !spoilerNode.current || spoilerNode.current.clientHeight >= (spoilerBanner ? 60 : 96),
       );
     }, [spoilerText, highlightSpoilers]);
-
-    const activeTranslation =
-      localTranslation && typeof localTranslation === 'object'
-        ? localTranslation
-        : translation && typeof translation === 'object'
-          ? translation
-          : null;
 
     const translationContent =
       showSideBySideTranslations && translatable ? (activeTranslation?.content ?? null) : null;
@@ -462,7 +463,13 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             (status.card && (!quote || status.quote_visible === false))) && (
             <div className='status-media__overlay-container'>
               <SensitiveContentOverlay status={status} />
-              {withMedia && <StatusMedia status={status} muted={compose} />}
+              {withMedia && (
+                <StatusMedia
+                  status={status}
+                  muted={compose}
+                  translatedAttachments={activeTranslation?.media_attachments}
+                />
+              )}
             </div>
           )}
 
@@ -523,6 +530,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             key='poll'
             status={status}
             language={statusMeta.currentLanguage}
+            translatedOptions={activeTranslation?.poll?.options}
             truncate={collapsable}
           />,
         );
