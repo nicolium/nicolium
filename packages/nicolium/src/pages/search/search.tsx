@@ -7,6 +7,7 @@ import SearchColumn from '@/columns/search';
 import Column from '@/components/ui/column';
 import Tabs from '@/components/ui/tabs';
 import { useFeatures } from '@/hooks/use-features';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
 import { searchRoute } from '@/router';
 
@@ -27,6 +28,7 @@ const SearchResults: React.FC = () => {
   const intl = useIntl();
   const features = useFeatures();
   const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
 
   const { q: value = '', type: selectedFilter = 'accounts', accountId } = searchRoute.useSearch();
   const navigate = useNavigate({ from: searchRoute.fullPath });
@@ -37,10 +39,13 @@ const SearchResults: React.FC = () => {
     if (newActiveFilter === selectedFilter) {
       if (newActiveFilter === 'links') return;
       queryClient.refetchQueries({
-        queryKey: queryKeys.search[newActiveFilter](
-          value,
-          newActiveFilter === 'statuses' ? { account_id: accountId } : undefined,
-        ),
+        queryKey: [
+          scopeUrl,
+          queryKeys.search[newActiveFilter](
+            value,
+            newActiveFilter === 'statuses' ? { account_id: accountId } : undefined,
+          ),
+        ],
         exact: true,
       });
     } else navigate({ search: (prev) => ({ ...prev, type: newActiveFilter }) });
