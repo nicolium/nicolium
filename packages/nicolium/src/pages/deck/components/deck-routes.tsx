@@ -93,16 +93,14 @@ const RootRoute: React.FC = () => {
   const [canGoBack, setCanGoBack] = useState(() => router.history.canGoBack());
   const scopeUrl = useScopeUrl();
 
-  const { title, accountId, hashtag, chatId, folderId } = useColumnRouteTitle();
+  const { title, accountId, hashtag, chatId } = useColumnRouteTitle();
 
   const canAddColumn =
     (!!accountId &&
       !columns.some((column) => column.type === 'account' && column.accountId === accountId)) ||
     (!!hashtag &&
       !columns.some((column) => column.type === 'hashtag' && column.hashtag === hashtag)) ||
-    (!!chatId && !columns.some((column) => column.type === 'chat' && column.chatId === chatId)) ||
-    (!!folderId &&
-      !columns.some((column) => column.type === 'drive' && column.folderId === folderId));
+    (!!chatId && !columns.some((column) => column.type === 'chat' && column.chatId === chatId));
 
   const handleAddColumn = () => {
     if (!accountId && !hashtag && !chatId) return;
