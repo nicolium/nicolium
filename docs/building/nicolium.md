@@ -35,3 +35,6 @@ Following environment variables can be used to customize the instance in build p
 - `BACKEND_URL` - URL of the Mastodon-compatible instance to connect to. If not set, tries fetching /api/v1/instance from the origin and falls back to standalone mode.
 - `FE_SUBDIRECTORY` - The path where Nicolium is mounted to. Defaults to `/`.
 - `WITH_LANDING_PAGE` - Displays the landing page on the home page, when running in standalone mode.
+- `BANNER_HTML` - HTML code to be displayed in the banner on the home page. Previously used on https://pl.mkljczk.pl to indicate the deployed version might be unstable.
+- `KINKY` - Currently enables OpenShock integration. Defaults to `true`.
+- `CLIENT_NAME` - The name of the registered client application. Defaults to `Nicolium (${new URL(window.origin).host})`.
