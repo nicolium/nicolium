@@ -8,7 +8,8 @@ const createProviderApp = () => {
   const scopes = getScopes(undefined, true);
 
   const params = {
-    client_name: BuildConfig.CLIENT_NAME,
+    client_name:
+      BuildConfig.CLIENT_NAME || `${sourceCode.displayName} (${new URL(window.origin).host})`,
     redirect_uris: `${window.location.origin}/login/external`,
     website: sourceCode.homepage,
     scopes,

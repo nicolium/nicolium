@@ -2,8 +2,6 @@
  * Build config: configuration set at build time.
  * @module @/build-config
  */
-import sourceCode from '@/utils/code';
-
 const TRUTHISH = ['1', 'true', 'yes', 'on'];
 const FALSEISH = ['0', 'false', 'no', 'off'];
 
@@ -36,7 +34,7 @@ const env = compileTime(() => {
     WITH_LANDING_PAGE: TRUTHISH.includes(WITH_LANDING_PAGE?.toLowerCase() ?? ''),
     BANNER_HTML,
     KINKY: !FALSEISH.includes(KINKY?.toLowerCase() ?? ''),
-    CLIENT_NAME: CLIENT_NAME ?? `${sourceCode.displayName} (${new URL(window.origin).host})`,
+    CLIENT_NAME,
   };
 });
 

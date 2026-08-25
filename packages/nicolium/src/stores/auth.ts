@@ -498,7 +498,7 @@ const useAuthStore = create<AuthStore>()(
 
     const createAuthApp = async (baseUrl?: string) => {
       const params = {
-        client_name: CLIENT_NAME,
+        client_name: CLIENT_NAME || `${sourceCode.displayName} (${new URL(window.origin).host})`,
         redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
         scopes: getScopes(),
         website: sourceCode.homepage,

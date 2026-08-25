@@ -33,7 +33,7 @@ const fetchExternalInstance = (baseURL: string) =>
 
 const createExternalApp = (instance: Instance, baseURL?: string, switchAccount?: boolean) => {
   const params = {
-    client_name: CLIENT_NAME,
+    client_name: CLIENT_NAME || `${sourceCode.displayName} (${new URL(window.origin).host})`,
     redirect_uris: `${window.location.origin}/login/external?switchAccount=${switchAccount}`,
     website: sourceCode.homepage,
     scopes: getInstanceScopes(instance, undefined, true),
