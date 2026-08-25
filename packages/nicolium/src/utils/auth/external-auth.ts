@@ -9,6 +9,7 @@
 import { instanceSchema, PlApiClient, type Instance } from 'pl-api';
 import * as v from 'valibot';
 
+import { CLIENT_NAME } from '@/build-config';
 import { useAuthStore, addToken, verifyCredentials } from '@/stores/auth';
 import { parseBaseURL } from '@/utils/auth';
 import { createApp } from '@/utils/auth/apps';
@@ -32,7 +33,7 @@ const fetchExternalInstance = (baseURL: string) =>
 
 const createExternalApp = (instance: Instance, baseURL?: string, switchAccount?: boolean) => {
   const params = {
-    client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
+    client_name: CLIENT_NAME,
     redirect_uris: `${window.location.origin}/login/external?switchAccount=${switchAccount}`,
     website: sourceCode.homepage,
     scopes: getInstanceScopes(instance, undefined, true),

@@ -19,6 +19,7 @@ import { mutative } from 'zustand-mutative';
 
 import { FE_NAME } from '@/actions/settings';
 import * as BuildConfig from '@/build-config';
+import { CLIENT_NAME } from '@/build-config';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
@@ -497,7 +498,7 @@ const useAuthStore = create<AuthStore>()(
 
     const createAuthApp = async (baseUrl?: string) => {
       const params = {
-        client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
+        client_name: CLIENT_NAME,
         redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
         scopes: getScopes(),
         website: sourceCode.homepage,
