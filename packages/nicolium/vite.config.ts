@@ -291,6 +291,9 @@ const config = defineConfig(() => ({
     setupFiles: ['./tests/test-setup.ts'],
     include: ['tests/**/*.test.{ts,tsx}'],
     css: false,
+    alias: {
+      '@mkljczk/url-purify': '@mkljczk/url-purify/dist/main.es.js',
+    },
   },
 }));
 
