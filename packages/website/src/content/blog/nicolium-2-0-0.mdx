@@ -1,0 +1,149 @@
+---
+title: "Nicolium v2.0.0—multi-account actions, improved Deck and more!"
+pubDate: 2026-08-21
+author: "nicole mikołajczyk"
+---
+Today I'm releasing Nicolium v2.0.0. This release focuses on introducing multi-account actions support, extending Deck features and options to change Nicolium appearance. Additionally, support for features of other platforms was improved and a lot of regressions from recent refactorings have been fixed.
+
+### Multi-account actions
+
+The biggest thing I wanted to work on for Nicolium v2.0.0 is support for interacting on behalf of other accounts you're logged in to. While Nicolium has always allowed to log in to multiple accounts, you could only use one at once. Boosting a post you found while browsing your main account timeline from your organization profile, convenient continuing a thread started from your public account with a more private one, using your Iceshrimp.NET alt to emoji-react a post because GoToSocial doesn't support reactions… The new 'Interact from accounts' modal lets you do that while saving a lot of clicks.
+
+The place where you can make the most of the multi-account feautres is the Deck. For most columns of the deck, you can now change the account they're rendered from. You can also change the account you're posting from in the Compose modal/column/widget. And the account switcher menu now lets you check the amount of unread notifications on each of the account—this is the feature I worked on first, because it was easiest to implement and felt really rewarding to me.
+
+import { Image } from 'astro:assets';
+import deckMultiAccountScreenshot from "./nicolium-2-0-0/deck-multi-account.png";
+
+<Image src={deckMultiAccountScreenshot} width="1280" height="800" alt="Screenshot showing the Nicolium deck with a Compose column allowing to select used account, a home column and a Drive column, all rendered from different accounts" />
+
+I tried to make the interface provide useful feedback in cases such as unavailability of some account or feature difference. I think it works comparably well to centralized platforms offering the same features.
+
+### Further work on the Deck
+
+Additionally to including multi-account functionality to the Deck, I made numerous other improvements to it. It is now possible to create more than just one Deck layout, so you can switch between them (for example, one dedicated to your interests and one for work). New columns were added—compose column allowing to write new posts from the deck (it’s possible to use it for replies and quotes as well), drive column for Iceshrimp.NET (additionally, drive pages now support drag-and-drop) and interaction requests column for GoToSocial.
+
+I changed the design of deck columns header, so they now incloude icons and additional information about column settings. Hashtag columns can use the advanced hashtag parameters on supported platforms. The leftmost column of the deck can be pinned to the left side of the screen, so that it is always visible.
+
+### Post composing
+
+The compose form now lets you compose threads consisting of multiple posts. Drafts functionality was refactored, and it’s possible to enable auto-saving of composed posts as drafts. The compose widget in the sidebar can now be used to reply and quote posts.
+
+### Appearance options
+
+It is now possible to change the interface accent color and adjust interface contrast. A grayscale toggle was added as well. Thanks to vinzw contribution, you can now also choose to replace the star icon with a heart icon for the favourite button. A new mode of displaying post subjects was added, more distinctly marking them as warnings.
+
+Status action bar customization options now include a 'Quick reaction' entry, allowing to select reactions for quick access. The customization pages now also allow to easily add dynamic (referring to user-created content) items, such as user lists and was improved to be more readable on wide screens.
+
+import appearanceSettingsScreenshot from "./nicolium-2-0-0/appearance-settings.png";
+
+<Image src={appearanceSettingsScreenshot} width="1200" height="640" alt="Screenshot showing the Appearance section of settings, with theme selector, base and accent color slider, contrast slider, interface size and border intensity sliders and grayscale toggle" />
+
+### Backend support
+
+Support for Collections in Mastodon was added, basing on code from Mastodon front-end. GIF picker is now available for Chuckya users. Biting posts and bite permissions were implemented for Iceshrimp.NET. Several missing MFM tags were implemented—`clickable`, `followmouse`, `mathInline`, `mathBlock` and `unixtime` (still don’t know what to do about the `search` element). Users on Mastodon will now see when a user has requested to follow them, and can accept or reject the request from the follower profile page.
+
+I fixed issues with snac2 compatibility and improved feature definitions for supported software. Support for administrative features was further extended, including IP blocks and email domain blocks management on Mastodon, user creation in the admin dashboard on Pleroma and generating/revoking user invites on Iceshrimp.NET. Post filtering was made available on instances that don’t support it natively.
+
+### Other new features
+
+I added integration with OpenShock API, allowing users to configure messaging connected shocker devices on specified actions, such as receiving a `Bite` activity (on supported platforms) or a mention including specified keyword. To use it, you need to provide the OpenShock API URL (you can host it yourself) and API token, select default device and start creating hooks. Thanks to [magmaus3](https://magmaus3.eu.org/) for being the test subject :3 (it is possible to build Nicolium without OpenShock integration by setting the environment value `KINKY` to false-ish value, e.g. `KINKY=false`)
+
+For edited posts, it is possible to view the difference between subsequent edits in the status history modal. A guest mode was added to the standalone mode, allowing to view public content of provided instance without signing in.
+
+Thanks to Capitaine Caverne and Aris for updating the French translation and vinzw for updating the German translation. If you want to help with translations, [join the project on Weblate](https://hosted.weblate.org/projects/nicolium/nicolium/).
+
+**Here's the changelog copy-pasted:**
+
+### Added
+
+- Multi-account actions support
+  - You can view specific deck columns on behalf of other accounts you're logged in with.
+  - You can switch the account you're posting from in the compose modal.
+  - A new modal allows interacting (replying, favoriting, boosting, reacting) with posts from other accounts you're logged in with.
+  - You can check notification count for other logged in accounts from the account switcher menu.
+- Deck improvements
+  - Ability to create more than one Deck layout.
+  - Compose column, allowing to compose posts without leaving the deck. You can enable replying/quoting from the compose column.
+  - Drive column.
+  - Ability to add an account/hashtag column from the new column button.
+  - Hashtag column can now use any/all/none parameters on compatible backends.
+  - The Deck Notifications column always displays all notification categories.
+  - Deck columns now include an icon and additional information in the header.
+  - Improved empty column display.
+  - The leftmost column of the deck can be pinned to the left side of the screen, so that it is always visible.
+  - Account follows and post interactions lists are now displayed inside deck columns, instead of opening a modal.
+  - Focus is properly restored when navigating through the deck. Several other improvements to keyboard navigation were made.
+- Ability to compose threads consisting of multiple posts in the compose form.
+- Additional mode of post spoilers display.
+- Drag-and-drop support in the Drive.
+- Filters support for instances without backend support for filtering.
+- GIF picker for Chuckya instances.
+- _Guest mode_ allowing to view public content of an instance without signing in in standalone mode.
+- IP blocks and email domain blocks management on Mastodon.
+- Mastodon Collections support.
+- Mastodon e-mail subscriptions support.
+- Option to add selected emoji reactions to status action bar.
+- Option to bite posts on Iceshrimp.NET.
+- Option to change interface accent color and adjust interface contrast.
+- Option to hide reposts of posts from followed accounts depending on the age of the post.
+- Status history modal allows displaying difference between subsequent edits of a post.
+- Support for `clickable`, `followmouse`, `mathInline`, `mathBlock` and `unixtime` MFM extensions.
+- Support for generating and revoking invites from the dashboard on Iceshrimp.NET.
+- User creation in the admin dashboard on Pleroma.
+- Incoming follow request information is displayed on the follower profile page, allowing to accept or reject from there. Requires `requested_by` to be provided by the backend.
+- Option to auto-save posts as drafts when composing posts.
+- Integration with OpenShock API, allowing to send messages to the shocker on specified actions.
+- Option to replace star icon with a heart icon for the favourite button.
+
+### Changed
+
+- Account switcher now allows removing stale accounts.
+- Alt text reminder modal is displayed when editing profile on instance which allows providing avatar/header descriptions.
+- Drive page allows changing between grid and list modes.
+- Federation restrictions and account recommendations are displayed on lower breakpoints now.
+- Frontend configuration editor is now available to non-Pleroma/Akkoma admins, allowing them to export configuration file for serving it statically.
+- Interface items editor now allows adding _dynamic_ items and is displayed in two columns on wide screens.
+- Migrated from the deprecated Icon component.
+- Notification count is not be displayed on instances that don't support timeline markers.
+- Pull-to-refresh is disabled when a refresh button is displayed in the column header.
+- Removed `react-swipeable-views` dependency.
+- Restored some tests.
+- _Show new posts_ button can be placed inside the header of the column, if it fits the available width.
+- Unfollow confirmation modal includes additional information when unfollowing a locked account.
+- When filtered, your own posts are marked as authored by you.
+- When self-note limit is exceeded, a toast message is displayed and the setting backup is disabled.
+- Compose form in the sidebar now can be used to reply/quote posts.
+- More fields from the posts (including polls, media descriptions) are displayed translated, when supported by the backend/browser.
+- Updated translations: Dutch, French (thanks to Capitaine Caverne and Aris), German (thanks to vinzw), Polish.
+
+### Fixed
+
+- Added missing `.ellipsis` class for URL truncation.
+- Added missing `pulse` animation.
+- Async media processing on Mastodon is handled correctly.
+- Changing reblog visibility works on touch devices.
+- Chats account search filters users by chat capability.
+- Correct RSS URL on Iceshrimp.NET.
+- Dismissing suggested accounts works correctly.
+- Edit federation modal works.
+- Expired filters are not applied.
+- Filtering applies for post queue.
+- Focal point selector is visible again.
+- Modal animation works.
+- RTL mode improvements.
+- Reaction notifications now work on Chuckya.
+- WYSIWYG posts work.
+- Unreacting from reaction picker is now possible.
+- Interaction requests page is now styled correctly.
+
+## Future of the project
+
+When I started working on Nicolium in 2024, I shortly decided on the goals—I wanted it to be an unopinionated, maximalistic Fediverse client, allowing to use all features of the platforms it supports. I wanted it to implement 'power-user' features such as a multi-column interface and extensive multi-account support. I spent hunderds of hours refactoring Nicolium to make sure it becomes a sustaniable project instead of unreadable ton of code it’d probably become if I just keep adding more features. That’s why I made `pl-api`—a Mastodon API client library focused on backends extending Mastodon API with additional features. That’s why I spent a lot of time migrating Nicolium from three different remote state management solutions to just TanStack Query, which I could easily integrate in the multi-account flow and from React Router to TanStack Router, which allowed me to nest in-memory routers for Deck columns inside a standard browser history router. I also migrated theming system from TailwindCSS to just SCSS, mostly with the goal of making it easier for the users to make their own changes to the interface.
+
+This made me progress on the Deck and multi-account features very quickly, which felt very rewarding, but in some way made me think of Nicolium as a feature-complete project which probably doesn’t require that much work to be done on it (more projects should do the same). Hence, I will probably not work on new major features, except for implementing new/missing features of supported platforms. The work on Nicolium will mostly be focused on fixing bugs, improving compatibility with Fediverse software and stability.
+
+This doesn’t mean I will ignore suggestions received in the Issues section. I’m just likely done with my own ideas for new features and I’m not so excited about working on *bigger* features anymore. Because the versioning became somewhat resembling [*pride versioning*](https://mastodon.online/@nikitonsky/113691789641950263), I will probably switch the project to CalVer to not keep it under v2.x.x forever. Also, it will be funny to bump the version by major versions at once without bringing any significant changes lol
+
+## Try Nicolium
+
+You can try Nicolium out by visiting [web.nicolium.app](https://web.nicolium.app/) and find the source code on [git.pleroma.social](https://git.pleroma.social/nicolium/nicolium). If you’ve encountered any bugs or want to suggest a feature, you can open an issue there. [The documentation](https://nicolium.app/docs/) describes how to deploy Nicolium alongside your own Fediverse instance and how to start contributing. You can also join [Nicolium IRC channel](https://web.libera.chat/#nicolium) on libera.chat if you want to chat about it.
