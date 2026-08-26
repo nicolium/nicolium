@@ -61,6 +61,7 @@
 - When filtered, your own posts are marked as authored by you.
 - When self-note limit is exceeded, a toast message is displayed and the setting backup is disabled.
 - Compose form in the sidebar now can be used to reply/quote posts.
+- More fields from the posts (including polls, media descriptions) are displayed translated, when supported by the backend/browser.
 - Updated translations: Dutch, French (thanks to Capitaine Caverne and Aris), German (thanks to vinzw), Polish.
 
 ### Fixed

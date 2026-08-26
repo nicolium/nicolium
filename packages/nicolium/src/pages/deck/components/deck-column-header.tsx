@@ -32,6 +32,7 @@ import { CardHeader, CardTitle } from '@/components/ui/card';
 import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
+import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { defaultFiltersSettings } from '@/hooks/use-timeline-filters-options';
@@ -790,6 +791,15 @@ const DeckDriveColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'drive'>
   );
 };
 
+const DeckComposeColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'compose'>> = ({
+  column,
+  ...props
+}) => {
+  const title = useComposeHeading(`deck:${column.id}`, true);
+
+  return <DeckColumHeaderInner column={column} {...props} icon={iconPencilSimple} title={title} />;
+};
+
 const DeckFallbackColumnHeader: React.FC<IDeckColumnHeader> = ({ column, ...props }) => {
   const title = useColumnTitle(column);
   const icon = useColumnIcon(column);
@@ -815,6 +825,8 @@ const DeckColumnHeader: React.FC<IDeckColumnHeader> = ({ column, ...props }) => 
       return <DeckHashtagColumnHeader column={column} {...props} />;
     case 'drive':
       return <DeckDriveColumnHeader column={column} {...props} />;
+    case 'compose':
+      return <DeckComposeColumnHeader column={column} {...props} />;
     default:
       return <DeckFallbackColumnHeader column={column} {...props} />;
   }
