@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Pixel arts are rendered with `image-rendering: pixelated`.
+
 ## v2.0.0
 
 ### Added

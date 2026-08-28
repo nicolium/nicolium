@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { useSettings } from '@/stores/settings';
 
@@ -44,6 +44,7 @@ const StillImage: React.FC<IStillImage> = ({
   ...props
 }) => {
   const { autoPlayGif } = useSettings();
+  const [isPixelArt, setPixelArt] = useState(false);
 
   const canvas = useRef<HTMLCanvasElement>(null);
   const img = useRef<HTMLImageElement>(null);
@@ -56,6 +57,10 @@ const StillImage: React.FC<IStillImage> = ({
       (src && staticSrc && src !== staticSrc));
 
   const handleImageLoad: React.ReactEventHandler<HTMLImageElement> = (e) => {
+    if (img.current) {
+      setPixelArt(img.current.naturalHeight * img.current.naturalWidth <= 128 * 128);
+    }
+
     if (hoverToPlay && !staticSrc && canvas.current && img.current) {
       canvas.current.width = img.current.naturalWidth;
       canvas.current.height = img.current.naturalHeight;
@@ -77,6 +82,7 @@ const StillImage: React.FC<IStillImage> = ({
       className={clsx(className, 'still-image', {
         'still-image--hover-to-play': hoverToPlay,
         'still-image--letterboxed': letterboxed,
+        'still-image--pixelated': isPixelArt,
       })}
       style={style}
       {...props}

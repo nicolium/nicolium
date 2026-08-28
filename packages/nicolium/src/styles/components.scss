@@ -2077,6 +2077,13 @@ div[data-viewport-type='window']:has(.empty-message) {
       object-fit: contain;
     }
   }
+
+  &--pixelated {
+    img,
+    canvas {
+      image-rendering: pixelated;
+    }
+  }
 }
 
 @keyframes still-image-show-awaited {
