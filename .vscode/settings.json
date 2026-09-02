@@ -7,5 +7,6 @@
   },
   "files.eol": "\n",
   "files.insertFinalNewline": false,
-  "scss.validate": false
+  "scss.validate": false,
+  "js/ts.experimental.useTsgo": true
 }
