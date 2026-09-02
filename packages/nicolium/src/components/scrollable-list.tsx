@@ -1,6 +1,7 @@
 import { useLocation } from '@tanstack/react-router';
 import { debounce } from 'lodash-es';
-import React, { useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import {
   Virtuoso,
   type Components,
@@ -141,6 +142,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
     const { state: locationState } = useLocation();
     const scrollParent = useColumnScrollParent() || params.customScrollParent;
     const node = useRef<VirtuosoHandle | null>(null);
+    const [printing, setPrinting] = useState(false);
 
     // Preserve scroll position
     const scrollDataKey = `nicolium:scrollData:${scrollKey}:${locationState.key}`;
@@ -198,6 +200,24 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
           const data: SavedScrollPosition = { index: topIndex.current, offset: topOffset.current };
           sessionStorage.setItem(scrollDataKey, JSON.stringify(data));
         }
+      };
+    }, []);
+
+    useEffect(() => {
+      const beforeprint = () => {
+        flushSync(() => setPrinting(true));
+      };
+
+      const afterprint = () => {
+        setPrinting(false);
+      };
+
+      window.addEventListener('beforeprint', beforeprint);
+      window.addEventListener('afterprint', afterprint);
+
+      return () => {
+        window.removeEventListener('beforeprint', beforeprint);
+        window.removeEventListener('afterprint', afterprint);
       };
     }, []);
 
@@ -302,6 +322,26 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
 
       return 0;
     }, [showLoading, initialTopMostItemIndex]);
+
+    if (printing) {
+      return (
+        <div className={className} id={params.id} style={params.style}>
+          {prepend}
+          {data.length > 0 ? (
+            <div className={listClassName}>
+              {React.Children.map(data, (element, index) => (
+                <div className={itemClassName}>
+                  {renderItem(index, element as React.JSX.Element)}
+                </div>
+              ))}
+            </div>
+          ) : (
+            empty
+          )}
+          {footer}
+        </div>
+      );
+    }
 
     return (
       <Virtuoso
