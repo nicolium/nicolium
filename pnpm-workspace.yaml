@@ -14,6 +14,7 @@ minimumReleaseAgeExclude:
   - '@typescript/native-preview-win32-arm64@7.0.0-dev.20260616.1'
   - '@typescript/native-preview-win32-x64@7.0.0-dev.20260616.1'
   - '@typescript/native-preview@7.0.0-dev.20260616.1'
+  - astro@7.3.0
 overrides:
   "@babel/core@7": ^7.29.7
   "@babel/runtime": ^7.26.10
