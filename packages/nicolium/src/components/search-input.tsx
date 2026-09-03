@@ -36,7 +36,9 @@ const SearchInput = React.memo(() => {
 
   const handleSubmit = () => {
     setValue('');
-    const guessedType = /(?:\/statuses\/|\/notice\/|\/objects\/|\/@[\w.-]+\/\d+)/.test(value)
+    const guessedType = /(?:\/statuses\/|\/notice\/|\/notes\/|\/objects\/|\/@[\w.-]+\/\d+)/.test(
+      value,
+    )
       ? 'statuses'
       : 'accounts';
     navigate({ to: '/search', search: { q: value, type: guessedType } });
