@@ -98,7 +98,8 @@ const latestPost = posts[0];
       </section>
     </main>
     <Footer />
-  </body><style>
+  </body><style lang="scss">
+    @use "@mkljczk/astro-theme/styles/variables";
     .sections {
       padding: 2rem 0;
     }
@@ -113,15 +114,26 @@ const latestPost = posts[0];
 
       li {
         padding: .25rem .875rem;
-        border: 1px solid var(--color-border);
+        border: 1px solid variables.$color-border;
         border-radius: 256rem;
-        background-color: var(--color-card-bg);
+        background-color: variables.$color-card-bg;
         font-size: .875rem;
-        color: var(--color-text-secondary);
+        color: variables.$color-text-secondary;
 
         &.backend--dashed {
           background-color: transparent;
           border-style: dashed;
+        }
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .backends li {
+        border-color: variables.$color-border-dark;
+        background-color: variables.$color-card-bg-dark;
+
+        &.backend--dashed {
+          background-color: transparent;
         }
       }
     }
