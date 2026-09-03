@@ -81,7 +81,7 @@ const notify = (options: ExtendedNotificationOptions): Promise<void> =>
         title: formatMessage('notifications.group', options.data.preferred_locale, {
           count: notifications.length + 1,
         }),
-        body: notifications.map((notification) => notification.title).join('\n'),
+        body: [options.title, ...notifications.map((n) => n.title)].join('\n'),
         tag: GROUP_TAG,
         data: {
           url: new URL('/notifications', self.location.href).href,
