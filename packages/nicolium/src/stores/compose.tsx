@@ -795,7 +795,7 @@ const useComposeStore = create<ComposeStore>()(
           openComposer = true,
         ) => {
           const { features } = getClient();
-          const { forceImplicitAddressing, preserveSpoilers } =
+          const { forceImplicitAddressing, preserveSpoilers, defaultPrivacy } =
             useSettingsStore.getState().settings;
           const explicitAddressing =
             features.createStatusExplicitAddressing && !forceImplicitAddressing;
@@ -824,7 +824,7 @@ const useComposeStore = create<ComposeStore>()(
                 : '';
               compose.visibility = privacyPreference(
                 status.visibility,
-                draft.default.visibility,
+                draft.default.visibility === 'default' ? defaultPrivacy : draft.default.visibility,
                 status.list_id,
                 features.createStatusConversationScope,
               );
@@ -850,6 +850,8 @@ const useComposeStore = create<ComposeStore>()(
         quoteCompose: (status, scopeUrl, columnId, approvalRequired, openComposer = true) => {
           const doCompose = (composeId: string) =>
             set((draft) => {
+              const { defaultPrivacy } = useSettingsStore.getState().settings;
+
               draft.composers[composeId] = {
                 ...draft.default,
                 idempotencyKey: crypto.randomUUID(),
@@ -865,7 +867,7 @@ const useComposeStore = create<ComposeStore>()(
               compose.text = '';
               compose.visibility = privacyPreference(
                 status.visibility,
-                draft.default.visibility,
+                draft.default.visibility === 'default' ? defaultPrivacy : draft.default.visibility,
                 status.list_id,
               );
               compose.caretPosition = null;
