@@ -29,74 +29,78 @@ const latestPost = posts[0];
     <HeaderMeta />
   </head>
   <body>
-    <Header />
-    <main>
-      <Hero
-        heading="Nicolium"
-        subheading="A feature-rich Fediverse web client for Mastodon-compatible backends"
-        buttonText="Try Nicolium"
-        buttonLink="https://web.nicolium.app"
-        buttonTarget="_blank"
-        button2Text="Source code"
-        button2Link="https://git.pleroma.social/nicolium/nicolium"
-        button2Target="_blank"
-        latestPost={latestPost}
-        latestPostTag="New post"
-      />
-      <section class="sections">
-        <div class="container">
-          <Section
-            heading="Use with your favorite Fediverse platform."
-            subheading="Nicolium works with any backend implementing Mastodon API."
-          >
-            <ul class="backends" slot="image">
-              <li>Mastodon</li>
-              <li>Pleroma</li>
-              <li>Akkoma</li>
-              <li>Iceshrimp.NET</li>
-              <li>GoToSocial</li>
-              <li>Sharkey</li>
-              <li>Hollo</li>
-              <li>Mitra</li>
-              <li class="backend--dashed">and more...</li>
-            </ul>
-          </Section>
-          <Section
-            heading="Feature-rich."
-            subheading="Nicolium includes a lot of features to improve your experience, like WYSIWYG text editor, draft posts and language detection."
-            imageSrc={Screenshot2}
-            imageAlt="Screenshot of post editor with WYSIWYG formatting options"
-          />
-          <Section
-            heading="Get the most out of your Fediverse instance."
-            subheading="Nicolium implements features not present in standard Mastodon API, like emoji reactions, chats or interaction policies."
-            imageSrc={Screenshot3}
-            imageAlt="Screenshot of a post with emoji reactions picker open"
-          />
-          <Section
-            heading="Customizable."
-            subheading="Nicolium lets you choose between three themes and adjust accent color to your liking. You can customize the UI elements like sidebar, navigation menu and status action bar."
-            imageSrc={Screenshot4}
-            imageAlt="Screenshot of theme settings with theme and accent color options"
-          />
-          <Section
-            heading="Stay private."
-            subheading="Nicolium includes features which help you maintain online privacy. This includes URL cleaning, which helps you remove unwanted parts of URLs used to mark your online activity."
-            imageSrc={Screenshot5}
-            imageAlt="Screenshot of post composer prompting to clean URL from tracking parameters"
-          />
-          <Section
-            heading="Open source."
-            subheading="Nicolium is free and open source software. You can participate in development, contribute to the project or report bugs."
-            buttonText="View source code"
-            buttonLink="https://git.pleroma.social/nicolium/nicolium"
+    <div class="page">
+      <div class="page-inner">
+        <Header />
+        <main>
+          <Hero
+            heading="Nicolium"
+            subheading="A feature-rich Fediverse web client for Mastodon-compatible backends"
+            buttonText="Try Nicolium"
+            buttonLink="https://web.nicolium.app"
             buttonTarget="_blank"
-            imageSrc={Screenshot6}
-            imageAlt="Screenshot of a part of pl-api source code"
+            button2Text="Source code"
+            button2Link="https://git.pleroma.social/nicolium/nicolium"
+            button2Target="_blank"
+            latestPost={latestPost}
+            latestPostTag="New post"
           />
-        </div>
-      </section>
-    </main>
+          <section class="sections">
+            <div class="container">
+              <Section
+                heading="Use with your favorite Fediverse platform."
+                subheading="Nicolium works with any backend implementing Mastodon API."
+              >
+                <ul class="backends" slot="image">
+                  <li>Mastodon</li>
+                  <li>Pleroma</li>
+                  <li>Akkoma</li>
+                  <li>Iceshrimp.NET</li>
+                  <li>GoToSocial</li>
+                  <li>Sharkey</li>
+                  <li>Hollo</li>
+                  <li>Mitra</li>
+                  <li class="backend--dashed">and more...</li>
+                </ul>
+              </Section>
+              <Section
+                heading="Feature-rich."
+                subheading="Nicolium includes a lot of features to improve your experience, like WYSIWYG text editor, draft posts and language detection."
+                imageSrc={Screenshot2}
+                imageAlt="Screenshot of post editor with WYSIWYG formatting options"
+              />
+              <Section
+                heading="Get the most out of your Fediverse instance."
+                subheading="Nicolium implements features not present in standard Mastodon API, like emoji reactions, chats or interaction policies."
+                imageSrc={Screenshot3}
+                imageAlt="Screenshot of a post with emoji reactions picker open"
+              />
+              <Section
+                heading="Customizable."
+                subheading="Nicolium lets you choose between three themes and adjust accent color to your liking. You can customize the UI elements like sidebar, navigation menu and status action bar."
+                imageSrc={Screenshot4}
+                imageAlt="Screenshot of theme settings with theme and accent color options"
+              />
+              <Section
+                heading="Stay private."
+                subheading="Nicolium includes features which help you maintain online privacy. This includes URL cleaning, which helps you remove unwanted parts of URLs used to mark your online activity."
+                imageSrc={Screenshot5}
+                imageAlt="Screenshot of post composer prompting to clean URL from tracking parameters"
+              />
+              <Section
+                heading="Open source."
+                subheading="Nicolium is free and open source software. You can participate in development, contribute to the project or report bugs."
+                buttonText="View source code"
+                buttonLink="https://git.pleroma.social/nicolium/nicolium"
+                buttonTarget="_blank"
+                imageSrc={Screenshot6}
+                imageAlt="Screenshot of a part of pl-api source code"
+              />
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
     <Footer />
   </body><style lang="scss">
     @use "@mkljczk/astro-theme/styles/variables";
