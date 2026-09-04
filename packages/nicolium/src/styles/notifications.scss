@@ -63,6 +63,11 @@
 
     text-overflow: ellipsis;
 
+    > div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     br {
       display: none;
     }
