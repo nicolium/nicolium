@@ -329,7 +329,12 @@ const NewColumnButtonContent: React.FC<INewColumnButtonContent> = ({
     items.push({
       text: intl.formatMessage(messages.account),
       icon: iconUser,
-      action: handleAdd({ type: 'account', excludeReplies: false, showPinned: false }),
+      action: handleAdd({
+        type: 'account',
+        excludeReplies: false,
+        excludeReblogs: false,
+        showPinned: false,
+      }),
     });
 
     items.push({

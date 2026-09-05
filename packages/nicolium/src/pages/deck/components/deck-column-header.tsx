@@ -522,31 +522,67 @@ const DeckAccountColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'accou
     title = account ? `@${account.acct}` : column.accountId;
     if (column.showPinned) {
       if (column.excludeReplies) {
+        if (column.excludeReblogs) {
+          subtitle = (
+            <FormattedMessage
+              id='column.deck.account.heading.without_reblogs.pinned'
+              defaultMessage='With pinned posts, no replies and reposts'
+            />
+          );
+        } else {
+          subtitle = (
+            <FormattedMessage
+              id='column.deck.account.heading.pinned'
+              defaultMessage='With pinned posts, no replies'
+            />
+          );
+        }
+      } else {
+        if (column.excludeReblogs) {
+          subtitle = (
+            <FormattedMessage
+              id='column.deck.account.heading.pinned_with_replies.without_reblogs'
+              defaultMessage='With pinned posts and replies, without reposts'
+            />
+          );
+        } else {
+          subtitle = (
+            <FormattedMessage
+              id='column.deck.account.heading.pinned_with_replies'
+              defaultMessage='With pinned posts and replies'
+            />
+          );
+        }
+      }
+    } else if (column.excludeReplies) {
+      if (column.excludeReblogs) {
         subtitle = (
           <FormattedMessage
-            id='column.deck.account.heading.pinned'
-            defaultMessage='With pinned posts, no replies'
+            id='column.deck.account.heading.without_reblogs'
+            defaultMessage='Without replies and reposts'
+          />
+        );
+      } else {
+        subtitle = (
+          <FormattedMessage id='column.deck.account.heading' defaultMessage='Without replies' />
+        );
+      }
+    } else {
+      if (column.excludeReblogs) {
+        subtitle = (
+          <FormattedMessage
+            id='column.deck.account.heading.with_replies.without_reblogs'
+            defaultMessage='With replies, without reposts'
           />
         );
       } else {
         subtitle = (
           <FormattedMessage
-            id='column.deck.account.heading.pinned_with_replies'
-            defaultMessage='With pinned posts and replies'
+            id='column.deck.account.heading.with_replies'
+            defaultMessage='With replies'
           />
         );
       }
-    } else if (column.excludeReplies) {
-      subtitle = (
-        <FormattedMessage id='column.deck.account.heading' defaultMessage='Without replies' />
-      );
-    } else {
-      subtitle = (
-        <FormattedMessage
-          id='column.deck.account.heading.with_replies'
-          defaultMessage='With replies'
-        />
-      );
     }
   }
 
@@ -558,6 +594,12 @@ const DeckAccountColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'accou
           type: 'toggle',
           checked: !column.excludeReplies,
           onChange: (value) => updateDeckColumn(column.id, { excludeReplies: !value }),
+        },
+        {
+          text: intl.formatMessage(messages.showReblogs),
+          type: 'toggle',
+          checked: !column.excludeReblogs,
+          onChange: (value) => updateDeckColumn(column.id, { excludeReblogs: !value }),
         },
         {
           text: intl.formatMessage(messages.showPinned),
@@ -584,7 +626,7 @@ const DeckAccountColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'accou
       items={items}
       actions={
         <TimelineRefreshButton
-          timelineId={`account:${column.accountId === 'self' ? ownAccount?.id : column.accountId}${column.excludeReplies ? ':exclude_replies' : ''}`}
+          timelineId={`account:${column.accountId === 'self' ? ownAccount?.id : column.accountId}${column.excludeReplies ? ':exclude_replies' : ''}${column.excludeReblogs ? ':exclude_reblogs' : ''}`}
         />
       }
     />

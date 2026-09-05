@@ -915,14 +915,20 @@ interface IAccountTimelineColumn extends IBaseTimeline {
   accountId: string;
   /** Whether to exclude replies from the timeline. */
   excludeReplies?: boolean;
+  /** Whether to exclude reblogs from the timeline. */
+  excludeReblogs?: boolean;
 }
 
 const AccountTimelineColumn: React.FC<IAccountTimelineColumn> = ({
   accountId,
   excludeReplies = false,
+  excludeReblogs = false,
   ...props
 }) => {
-  const timelineQuery = useAccountTimeline(accountId, { exclude_replies: excludeReplies });
+  const timelineQuery = useAccountTimeline(accountId, {
+    exclude_replies: excludeReplies,
+    exclude_reblogs: excludeReblogs,
+  });
 
   return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };

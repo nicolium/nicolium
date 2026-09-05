@@ -235,6 +235,7 @@ const accountDeckColumnSchema = v.object({
   type: v.literal('account'),
   accountId: v.fallback(v.optional(v.string()), undefined),
   excludeReplies: v.fallback(v.boolean(), false),
+  excludeReblogs: v.fallback(v.boolean(), false),
   showPinned: v.fallback(v.boolean(), false),
 });
 
@@ -330,6 +331,7 @@ const createDefaultDeckColumns = (): Array<v.InferOutput<typeof deckColumnSchema
     pinned: false,
     accountId: 'self',
     excludeReplies: false,
+    excludeReblogs: false,
     showPinned: false,
   },
 ];

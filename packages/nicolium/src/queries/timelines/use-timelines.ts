@@ -189,7 +189,7 @@ const useAccountTimeline = (
   const client = useClient();
 
   return useTimeline(
-    `account:${accountId}${params?.exclude_replies ? ':exclude_replies' : ''}`,
+    `account:${accountId}${params?.exclude_replies ? ':exclude_replies' : ''}${params?.exclude_reblogs ? ':exclude_reblogs' : ''}`,
     (paginationParams) =>
       client.accounts.getAccountStatuses(accountId, {
         ...params,

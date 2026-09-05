@@ -118,6 +118,7 @@ const RootRoute: React.FC = () => {
                 type: 'account',
                 accountId,
                 excludeReplies: false,
+                excludeReblogs: false,
                 showPinned: false,
               }),
       } as DeckColumn,
@@ -579,6 +580,7 @@ interface IAccountColumnBody {
   username: string;
   accountId?: string;
   excludeReplies?: boolean;
+  excludeReblogs?: boolean;
   featuredStatusIds?: Array<string>;
 }
 
@@ -624,6 +626,7 @@ const AccountColumnBody: React.FC<IAccountColumnBody> = ({
   username,
   accountId,
   excludeReplies,
+  excludeReblogs,
   featuredStatusIds,
 }) => (
   <>
@@ -638,6 +641,7 @@ const AccountColumnBody: React.FC<IAccountColumnBody> = ({
       <AccountTimelineColumn
         accountId={accountId}
         excludeReplies={excludeReplies}
+        excludeReblogs={excludeReblogs}
         featuredStatusIds={featuredStatusIds}
         emptyMessageText={
           <FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />
@@ -662,6 +666,7 @@ const AccountDeckColumn: React.FC = () => {
       username={account?.acct ?? ''}
       accountId={resolvedId}
       excludeReplies={column?.excludeReplies}
+      excludeReblogs={column?.excludeReblogs}
       featuredStatusIds={column?.showPinned ? featuredStatusIds : undefined}
     />
   );
