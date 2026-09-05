@@ -63,6 +63,7 @@ type IDeckColumnHeaderInner = IDeckColumnHeader & {
   subtitle?: React.ReactNode;
   items?: Menu;
   settings?: React.ReactNode;
+  actions?: React.ReactNode;
   onHideSettings?: () => void;
 };
 
@@ -82,6 +83,7 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
   subtitle,
   items,
   settings,
+  actions,
   onHideSettings,
 }) => {
   const intl = useIntl();
@@ -203,6 +205,7 @@ const DeckColumHeaderInner: React.FC<IDeckColumnHeaderInner> = ({
               title={intl.formatMessage(messages.unpinColumn)}
             />
           )}
+          {actions}
           <DropdownMenu items={allItems} src={iconDotsThreeVertical} />
         </div>
       </CardHeader>
