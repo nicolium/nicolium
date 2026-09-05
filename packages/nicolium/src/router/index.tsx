@@ -89,7 +89,6 @@ const requireAuthMiddleware =
 const requireInstanceMiddleware =
   (next?: (options: { context: RouterContext; location: ParsedLocation }) => void) =>
   (options: { context: RouterContext; location: ParsedLocation }) => {
-    console.log(options.context);
     if (options.context.isStandalonePrompt) {
       throw redirect({
         to: '/',
