@@ -30,7 +30,11 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
         <img
           className='trending-link__image'
           src={trendingLink.image}
-          alt={trendingLink.image_description ?? undefined}
+          alt={
+            (trendingLink.image_description !== trendingLink.title &&
+              trendingLink.image_description) ||
+            undefined
+          }
         />
       </div>
     );

@@ -238,7 +238,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
         height: horizontal ? height : undefined,
         aspectRatio: ratio,
       }}
-      alt={card.image_description || card.title}
+      alt={card.image_description !== card.title ? card.image_description : undefined}
       className='status-card__image-image'
     />
   ) : null;
