@@ -187,7 +187,7 @@ const rootRoute = createRootRoute({
 const HomeTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
 
-  return <HomeTimelineColumn filters={filters} />;
+  return <HomeTimelineColumn filters={filters} conditionalPullToRefresh />;
 };
 const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -199,7 +199,7 @@ const homeRoute = createRoute({
 const LocalTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
 
-  return <PublicTimelineColumn local filters={filters} />;
+  return <PublicTimelineColumn local filters={filters} conditionalPullToRefresh />;
 };
 const localRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -211,7 +211,7 @@ const localRoute = createRoute({
 const FederatedTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
 
-  return <PublicTimelineColumn filters={filters} />;
+  return <PublicTimelineColumn filters={filters} conditionalPullToRefresh />;
 };
 const federatedRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -223,7 +223,7 @@ const federatedRoute = createRoute({
 const BubbleTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
 
-  return <BubbleTimelineColumn filters={filters} />;
+  return <BubbleTimelineColumn filters={filters} conditionalPullToRefresh />;
 };
 const bubbleRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -235,7 +235,7 @@ const bubbleRoute = createRoute({
 const WrenchedTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
 
-  return <WrenchedTimelineColumn filters={filters} />;
+  return <WrenchedTimelineColumn filters={filters} conditionalPullToRefresh />;
 };
 const wrenchedRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -248,7 +248,7 @@ const ListTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
   const { listId } = listRoute.useParams();
 
-  return <ListTimelineColumn listId={listId} filters={filters} />;
+  return <ListTimelineColumn listId={listId} filters={filters} conditionalPullToRefresh />;
 };
 const listRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -261,7 +261,7 @@ const CircleTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
   const { circleId } = circleRoute.useParams();
 
-  return <CircleTimelineColumn circleId={circleId} filters={filters} />;
+  return <CircleTimelineColumn circleId={circleId} filters={filters} conditionalPullToRefresh />;
 };
 const circleRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -274,7 +274,7 @@ const AntennaTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
   const { antennaId } = antennaRoute.useParams();
 
-  return <AntennaTimelineColumn antennaId={antennaId} filters={filters} />;
+  return <AntennaTimelineColumn antennaId={antennaId} filters={filters} conditionalPullToRefresh />;
 };
 const antennaRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -287,7 +287,7 @@ const InstanceTimelineDeckColumn: React.FC = () => {
   const filters = useColumnFilters();
   const { instance } = instanceRoute.useParams();
 
-  return <PublicTimelineColumn instance={instance} filters={filters} />;
+  return <PublicTimelineColumn instance={instance} filters={filters} conditionalPullToRefresh />;
 };
 const instanceRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -305,6 +305,7 @@ const NotificationsDeckColumn: React.FC = () => {
       filter={column?.filter ?? 'all'}
       onChangeFilter={(filter: FilterType) => updateColumn({ filter })}
       advanced
+      conditionalPullToRefresh
     />
   );
 };
@@ -329,6 +330,7 @@ const HashtagDeckColumn: React.FC = () => {
         all={column?.all}
         none={column?.none}
         filters={filters}
+        conditionalPullToRefresh
       />
     </>
   );
@@ -356,7 +358,7 @@ const hashtagPickerRoute = createRoute({
 const LinkTimelineDeckColumn: React.FC = () => {
   const { url } = linkRoute.useParams();
 
-  return <LinkTimelineColumn url={decodeURIComponent(url)} />;
+  return <LinkTimelineColumn url={decodeURIComponent(url)} conditionalPullToRefresh />;
 };
 
 const linkRoute = createRoute({
@@ -640,6 +642,7 @@ const AccountColumnBody: React.FC<IAccountColumnBody> = ({
         emptyMessageText={
           <FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />
         }
+        conditionalPullToRefresh
       />
     )}
   </>

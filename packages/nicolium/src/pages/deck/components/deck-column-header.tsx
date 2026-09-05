@@ -28,6 +28,7 @@ import { FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import { useTimelineHeading } from '@/components/timeline-picker';
+import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
@@ -36,6 +37,7 @@ import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { defaultFiltersSettings } from '@/hooks/use-timeline-filters-options';
+import { NotificationsRefreshButton } from '@/pages/notifications/notifications';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useList } from '@/queries/accounts/use-lists';
 import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
@@ -457,6 +459,7 @@ const DeckTimelineColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'time
         ) : undefined)
       }
       items={items}
+      actions={<TimelineRefreshButton timelineId={column.timeline} />}
     />
   );
 };
@@ -491,6 +494,7 @@ const DeckNotificationsColumnHeader: React.FC<
     icon={iconBell}
     title={<FormattedMessage id='column.notifications' defaultMessage='Notifications' />}
     subtitle={NOTIFICATION_COLUMN_FILTER_TITLES[column.filter]}
+    actions={<NotificationsRefreshButton activeFilter={column.filter} />}
   />
 );
 
@@ -578,6 +582,11 @@ const DeckAccountColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'accou
       title={title}
       subtitle={subtitle}
       items={items}
+      actions={
+        <TimelineRefreshButton
+          timelineId={`account:${column.accountId === 'self' ? ownAccount?.id : column.accountId}${column.excludeReplies ? ':exclude_replies' : ''}`}
+        />
+      }
     />
   );
 };

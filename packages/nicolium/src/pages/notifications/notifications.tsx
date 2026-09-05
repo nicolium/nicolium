@@ -11,7 +11,7 @@ import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
-import { useNotifications } from '@/queries/notifications/use-notifications';
+import { type FilterType, useNotifications } from '@/queries/notifications/use-notifications';
 import { useSettings } from '@/stores/settings';
 import { userTouching } from '@/utils/is-mobile';
 
@@ -28,24 +28,26 @@ const messages = defineMessages({
   refresh: { id: 'notifications.refresh', defaultMessage: 'Refresh notifications' },
 });
 
-const RefreshButton: React.FC = () => {
+interface INotificationsRefreshButton {
+  activeFilter?: FilterType;
+  hideBots?: boolean;
+}
+
+const NotificationsRefreshButton: React.FC<INotificationsRefreshButton> = (props) => {
   const intl = useIntl();
   const queryClient = useQueryClient();
   const notificationSettings = useSettings().notifications;
   const { isPending, refetch } = useNotifications(notificationSettings.quickFilter.active);
   const scopeUrl = useScopeUrl();
 
+  const activeFilter = props.activeFilter ?? notificationSettings.quickFilter.active;
+  const hideBots = props.hideBots ?? notificationSettings.hideBots;
+
   if (userTouching.matches) return null;
 
   const handleClick = () => {
     queryClient.resetQueries({
-      queryKey: [
-        scopeUrl,
-        ...queryKeys.notifications.list(
-          notificationSettings.quickFilter.active,
-          notificationSettings.hideBots,
-        ),
-      ],
+      queryKey: [scopeUrl, ...queryKeys.notifications.list(activeFilter, hideBots)],
     });
     refetch();
   };
@@ -85,7 +87,7 @@ const NotificationsPage: React.FC = () => {
       label={intl.formatMessage(messages.title)}
       action={
         <>
-          <RefreshButton />
+          <NotificationsRefreshButton />
           <DropdownMenu items={items} src={iconDotsThreeVertical} forceDropdown />
         </>
       }
@@ -95,4 +97,4 @@ const NotificationsPage: React.FC = () => {
   );
 };
 
-export { NotificationsPage as default };
+export { NotificationsPage as default, NotificationsRefreshButton };
