@@ -155,7 +155,7 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-static-copy": "^3.4.0",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts,tsx}": [
