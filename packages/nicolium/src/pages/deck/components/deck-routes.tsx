@@ -311,6 +311,7 @@ const NotificationsDeckColumn: React.FC = () => {
       onChangeFilter={(filter: FilterType) => updateColumn({ filter })}
       advanced
       conditionalPullToRefresh
+      disableAutoMarkRead
     />
   );
 };
