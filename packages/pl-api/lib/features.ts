@@ -147,6 +147,14 @@ const TINYAP = 'TinyAP';
 const TOKI = 'Toki';
 
 /**
+ * Wafrn, federated social media inspired by tumblr.
+ * 
+ * @category Software
+ * @see {@link https://wafrn.net/}
+ */
+const WAFRN = 'Wafrn';
+
+/**
  * WordPress, through the Enable Mastodon App plugin.
  * I am not affiliated with WP Engine in any way, finyancially or otherwise. ~mkljczk
  *
@@ -287,6 +295,7 @@ const getFeatures = (instance: Instance) => {
       v.software === SNAC,
       v.software === TAKAHE && gte(v.version, '0.6.1'),
       v.software === TOKI,
+      v.software === WAFRN,
       v.software === WORDPRESS,
     ]),
 
@@ -538,6 +547,7 @@ const getFeatures = (instance: Instance) => {
       v.software === SHARKEY,
       v.software === SNAC,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
+      v.software === WAFRN,
     ]),
 
     /**
@@ -1057,6 +1067,7 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === SNAC && gte(v.version, '2.69.0'),
       v.software === TAKAHE && gte(v.version, '0.9.0'),
+      v.software === WAFRN,
     ]),
 
     /**
@@ -1074,6 +1085,7 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === SNAC && gte(v.version, '2.69.0'),
       v.software === TAKAHE && gte(v.version, '0.9.0'),
+      v.software === WAFRN,
     ]),
 
     /**
@@ -1111,6 +1123,7 @@ const getFeatures = (instance: Instance) => {
     getAccounts: any([
       v.software === ICESHRIMP_NET,
       v.software === MASTODON && gte(v.version, '4.3.0'),
+      v.software === WAFRN,
     ]),
 
     /**
@@ -1122,6 +1135,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON && gte(v.version, '4.3.0'),
       v.software === MITRA && gt(v.version, '5.7.1'),
+      v.software === WAFRN,
     ]),
 
     // probably there's more to add, sadly `/.well-known/oauth-authorization-server` is not widely implemented
@@ -1457,6 +1471,7 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA,
       v.software === TAKAHE,
       v.software === TOKI,
+      v.software === WAFRN,
       v.software === WORDPRESS,
     ]),
 
@@ -1662,6 +1677,7 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === SNAC && gte(v.version, '2.82.0'),
       v.software === SHARKEY,
+      v.software === WAFRN,
     ]),
 
     /**
@@ -1733,6 +1749,7 @@ const getFeatures = (instance: Instance) => {
       v.software === SNAC,
       v.software === TAKAHE,
       v.software === TOKI,
+      v.software === WAFRN,
       v.software === WORDPRESS,
     ]),
 
@@ -1760,6 +1777,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === PLEROMA,
+      v.software === WAFRN,
     ]),
 
     /**
@@ -2103,6 +2121,7 @@ export {
   TAKAHE,
   TINYAP,
   TOKI,
+  WAFRN,
   WORDPRESS,
   GLITCH,
   HOMETOWN,
