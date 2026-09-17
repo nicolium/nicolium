@@ -51,6 +51,7 @@ import ChatsPageShoutbox from '../components/chats/chats-page/components/chats-p
 import ColumnLoading from '../components/column-loading';
 
 import type { Features } from 'pl-api';
+import { useAuthStore } from '@/stores/auth';
 
 interface RouterContext {
   instance: ReturnType<typeof useInstance>;
@@ -1936,13 +1937,14 @@ const RouterWithContext: React.FC = () => {
   const { cryptoAddresses } = useFrontendConfig();
   const hasCrypto = cryptoAddresses.length > 0;
   const { data: account } = useOwnAccount();
+  const hasGuestUrl = useAuthStore((state) => !!state.guestUrl);
 
   const context: RouterContext = useMemo(
     () => ({
       instance,
       features,
       isLoggedIn: !!account,
-      isStandalonePrompt: standalone && me === false,
+      isStandalonePrompt: standalone && me === false && !hasGuestUrl,
       isAdmin: !!(account?.is_admin ?? account?.is_moderator),
       hasCrypto,
     }),
