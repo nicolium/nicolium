@@ -9,14 +9,6 @@ import type { Instance } from '@/entities/instance';
 const any = (arr: Array<any>): boolean => arr.some(Boolean);
 
 /**
- * Ditto, a Nostr server with Mastodon API.
- *
- * @category Software
- * @see {@link https://gitlab.com/soapbox-pub/ditto-v1}
- */
-const DITTO = 'Ditto';
-
-/**
  * Egregoros, a fediverse server pulled from the akashic records [TODO: fact check this claim ~nicole].
  *
  * @category Software
@@ -282,7 +274,6 @@ const getFeatures = (instance: Instance) => {
      */
     accountLookup: any([
       v.software === AKKOMA,
-      v.software === DITTO,
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
       v.software === HOLLO,
@@ -620,7 +611,6 @@ const getFeatures = (instance: Instance) => {
      */
     bookmarks: any([
       v.software === AKKOMA,
-      v.software === DITTO,
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
       v.software === HOLLO,
@@ -762,7 +752,6 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/statuses
      */
     createStatusExplicitAddressing: any([
-      v.software === DITTO,
       instance.api_versions['explicit_addressing.pleroma.pl-api'] >= 1,
     ]),
 
@@ -809,7 +798,6 @@ const getFeatures = (instance: Instance) => {
      */
     customEmojiReacts: any([
       instance.api_versions['custom_emoji_reactions.pleroma.pl-api'] >= 1,
-      v.software === DITTO && gt(v.version, '1.2.0'),
       v.software === HOLLO,
       v.software === MITRA && gte(v.version, '3.4.0'),
     ]),
@@ -993,7 +981,6 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/accounts/familiar_followers
      */
     familiarFollowers: any([
-      v.software === DITTO,
       v.software === HOLLO,
       v.software === MASTODON,
       v.software === NEODB,
@@ -1113,7 +1100,6 @@ const getFeatures = (instance: Instance) => {
      */
     frontendConfigurations: any([
       v.software === AKKOMA,
-      v.software === DITTO,
       v.software === MITRA && gte(v.version, '1.20.0'),
       v.software === PLEROMA,
     ]),
@@ -1423,7 +1409,6 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/admin/accounts/:account_id/approve
      */
     mastodonAdmin: any([
-      v.software === DITTO,
       v.software === GOTOSOCIAL,
       v.software === MASTODON,
       instance.api_versions['mastodon_admin_api.pleroma.pl-api'] >= 1,
@@ -1708,7 +1693,6 @@ const getFeatures = (instance: Instance) => {
      */
     profileFields: any([
       v.software === AKKOMA,
-      v.software === DITTO,
       v.software === GOTOSOCIAL,
       v.software === HOLLO,
       v.software === ICESHRIMP,
@@ -1735,7 +1719,6 @@ const getFeatures = (instance: Instance) => {
      */
     publicTimeline: any([
       v.software === AKKOMA,
-      v.software === DITTO,
       v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === GOTOSOCIAL,
@@ -1886,7 +1869,6 @@ const getFeatures = (instance: Instance) => {
      */
     searchFromAccount: any([
       v.software === AKKOMA,
-      v.software === DITTO,
       v.software === GOTOSOCIAL,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
@@ -2012,7 +1994,6 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/trends/statuses
      */
     trendingStatuses: any([
-      v.software === DITTO,
       v.software === FIREFISH,
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === ICESHRIMP,
@@ -2033,7 +2014,6 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/trends
      */
     trends: any([
-      v.software === DITTO,
       v.software === FIREFISH,
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === ICESHRIMP,
@@ -2106,7 +2086,6 @@ const parseVersion = (version: string): Backend => {
 
 export {
   AKKOMA,
-  DITTO,
   EGREGOROS,
   FIREFISH,
   FRIENDICA,
