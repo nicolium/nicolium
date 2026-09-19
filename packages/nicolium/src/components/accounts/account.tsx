@@ -7,7 +7,7 @@ import {
   useRouter,
 } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import ActionButton from '@/components/accounts/action-button';
@@ -21,6 +21,7 @@ import Emojify from '@/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
+import { type EmojiMatch, useSystemForAccount } from '@/stores/pluraldawn';
 import { useSettings } from '@/stores/settings';
 
 import Badge from '../badge';
@@ -118,6 +119,7 @@ type IAccount = {
   muteExpiresAt?: string | null;
   blockExpiresAt?: string | null;
   loading?: boolean;
+  pluraldownMatch?: EmojiMatch;
 } & (LinkOptions | {});
 
 const Account = ({
@@ -147,6 +149,7 @@ const Account = ({
   muteExpiresAt,
   blockExpiresAt,
   loading,
+  pluraldownMatch,
   ...params
 }: IAccount) => {
   const overflowRef = useRef<HTMLDivElement>(null);
@@ -160,6 +163,17 @@ const Account = ({
   const username = useAcct(account);
   const { disableUserProvidedMedia } = useSettings();
   const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
+
+  const system = useSystemForAccount(account.id);
+  const systemMember = useMemo(() => {
+    console.log(system, pluraldownMatch);
+    if (pluraldownMatch && system && system !== 'pending' && system[pluraldownMatch.shortcode]) {
+      return {
+        ...system[pluraldownMatch.shortcode],
+        emoji_url: pluraldownMatch.url,
+      };
+    }
+  }, [system, pluraldownMatch]);
 
   const withExternalLink = !me && !allowDisplayingRemoteNoLogin && account && !account.local;
 
@@ -292,7 +306,7 @@ const Account = ({
                 )}
               >
                 <Avatar
-                  src={account.avatar}
+                  src={systemMember?.emoji_url || account.avatar}
                   size={avatarSize}
                   alt={account.avatar_description}
                   isCat={account.is_cat}
@@ -310,7 +324,10 @@ const Account = ({
                     loading && 'placeholder-display-name',
                   )}
                 >
-                  <Emojify text={account.display_name} emojis={account.emojis} />
+                  <Emojify
+                    text={systemMember?.name || account.display_name}
+                    emojis={account.emojis}
+                  />
                 </p>
 
                 {account.verified && <VerificationBadge />}
@@ -326,6 +343,7 @@ const Account = ({
               <div className='account-card__meta'>
                 <p className={clsx('account-card__handle', loading && 'placeholder-display-name')}>
                   @{username}
+                  {systemMember ? `/${systemMember.id}` : null}
                 </p>
 
                 {withLocked && !timestamp && account.locked && (
@@ -379,7 +397,7 @@ const Account = ({
             {...linkProps}
           >
             <Avatar
-              src={account.avatar}
+              src={systemMember?.emoji_url || account.avatar}
               size={avatarSize}
               alt={account.avatar_description}
               isCat={account.is_cat}
@@ -398,7 +416,7 @@ const Account = ({
                 loading && 'placeholder-display-name',
               )}
             >
-              <Emojify text={account.display_name} emojis={account.emojis} />
+              <Emojify text={systemMember?.name || account.display_name} emojis={account.emojis} />
             </p>
 
             {account.verified && <VerificationBadge />}
@@ -415,7 +433,7 @@ const Account = ({
         <div className='account-card__meta__container'>
           <div className='account-card__meta'>
             <p className={clsx('account-card__handle', loading && 'placeholder-display-name')}>
-              @{username}
+              @{systemMember ? username?.replace('@', `/${systemMember.id}@`) : username}
             </p>
 
             {withLocked && !timestamp && account.locked && (

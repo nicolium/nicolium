@@ -39,6 +39,9 @@ importers:
 
   packages/nicolium:
     dependencies:
+      '@cantoo/upng':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@emoji-mart/data':
         specifier: ^1.2.1
         version: 1.2.1
@@ -165,6 +168,9 @@ importers:
       fasttext.wasm.js:
         specifier: ^1.0.0
         version: 1.0.0
+      fflate:
+        specifier: ^0.8.3
+        version: 0.8.3
       fuzzysort:
         specifier: ^3.1.0
         version: 3.1.0
@@ -1288,6 +1294,9 @@ packages:
 
   '@cacheable/utils@2.5.0':
     resolution: {integrity: sha512-buipgOVDkkPXNR5+xBpDw7Zk2n1EvU7qBJCNUcL7rhQ//kfpOXPAvQ511Os0vpLYJ1pZnvudNytkQt2hst3wqA==}
+
+  '@cantoo/upng@1.0.0':
+    resolution: {integrity: sha512-Z7Sg8ncfp3xI7zC+wpBvjYo+T2x1hgUtoGhj/o8hgsYFIckAn7yTMZhONZEcI5jvYW9FqMy39D56LsT0YQcAnw==}
 
   '@capsizecss/unpack@4.0.0':
     resolution: {integrity: sha512-VERIM64vtTP1C4mxQ5thVT9fK0apjPFobqybMtA1UdUujWka24ERHbRHFGmpbbhp73MhV+KSsHQH9C6uOTdEQA==}
@@ -4203,6 +4212,9 @@ packages:
     peerDependenciesMeta:
       picomatch:
         optional: true
+
+  fflate@0.8.3:
+    resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
 
   file-entry-cache@11.1.5:
     resolution: {integrity: sha512-+PFTHITI08JIGhnNpGNI8T8inUpgZfk3GNEqfT9R2zZV2iFXg3CvqzSl/uEhs7TSGujYRELEANyDvS8Fj7+S7Q==}
@@ -8113,6 +8125,10 @@ snapshots:
       hashery: 1.5.1
       keyv: 5.6.0
 
+  '@cantoo/upng@1.0.0':
+    dependencies:
+      fflate: 0.8.3
+
   '@capsizecss/unpack@4.0.0':
     dependencies:
       fontkitten: 1.0.3
@@ -10878,6 +10894,8 @@ snapshots:
   fdir@6.5.0(picomatch@4.0.5):
     optionalDependencies:
       picomatch: 4.0.5
+
+  fflate@0.8.3: {}
 
   file-entry-cache@11.1.5:
     dependencies:

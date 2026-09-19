@@ -501,6 +501,12 @@ const settingsSchema = v.object({
   invertColumnsOrder: v.fallback(v.boolean(), false),
   sidebarNavigationDense: v.fallback(v.boolean(), false),
 
+  pluraldawn: v.optional(
+    coerceObject({
+      enabled: v.fallback(v.boolean(), false),
+    }),
+  ),
+
   openshock: v.optional(
     coerceObject({
       baseUrl: v.string(),
