@@ -296,6 +296,27 @@ const ContentPreferences: React.FC<ISettingsPage> = ({
               />
             </ListItem>
           )}
+
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.pluraldawn'
+                defaultMessage='Parse Pluraldawn indicator emojis'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='preferences.fields.pluraldawn.hint'
+                defaultMessage='When matched, presents avatar and name basing on avatar metadata. Only emojis will be loaded as avatars.'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['pluraldawn', 'enabled']}
+              onChange={onToggleChange}
+            />
+          </ListItem>
         </List>
 
         {instance.pleroma.metadata.post_formats.includes('text/x.misskeymarkdown') && (

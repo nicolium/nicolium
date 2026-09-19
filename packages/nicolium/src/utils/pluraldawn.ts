@@ -188,7 +188,7 @@ const decodeSystemFromAvatar = async (avatarUrl: string) => {
     let json: {
       members: Array<{
         id: string;
-        emoji: string;
+        emoji: string | Array<string>;
         name: string;
       }>;
     } | null = null;

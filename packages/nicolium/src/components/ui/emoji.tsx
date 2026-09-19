@@ -30,7 +30,15 @@ const Emoji: React.FC<IEmoji> = ({ emoji, alt, src, staticSrc, ...rest }) => {
   if (src) {
     if (disableUserProvidedMedia) return alt ?? <span className={rest.className}>{emoji}</span>;
     return (
-      <StillImage alt={alt ?? emoji} src={src} staticSrc={staticSrc} isGif letterboxed {...rest} />
+      <StillImage
+        alt={alt ?? emoji}
+        src={src}
+        staticSrc={staticSrc}
+        isGif
+        letterboxed
+        data-custom-emoji
+        {...rest}
+      />
     );
   }
 

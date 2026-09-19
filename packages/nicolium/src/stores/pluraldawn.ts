@@ -49,14 +49,26 @@ const usePluraldawnStore = create<State>()(
 
         return decodeSystemFromAvatar(account.avatar_static).then((system) => {
           set((state) => {
-            state.systems[key] = Object.fromEntries(system.map((member) => [member.emoji, member]));
+            state.systems[key] = {};
+            for (const member of system) {
+              if (typeof member.emoji === 'string') {
+                state.systems[key][member.emoji] = member;
+              } else {
+                for (const emoji of member.emoji) {
+                  state.systems[key][emoji] = member;
+                }
+              }
+            }
           });
+          console.log(system);
           return system;
         });
       },
     },
   })),
 );
+
+const usePluraldawnActions = () => usePluraldawnStore((state) => state.actions);
 
 const useSystemForAccount = (accountId: string) => {
   const scopeUrl = useScopeUrl();
@@ -65,4 +77,4 @@ const useSystemForAccount = (accountId: string) => {
   return usePluraldawnStore((state) => state.systems[key]);
 };
 
-export { usePluraldawnStore, useSystemForAccount, type EmojiMatch };
+export { usePluraldawnStore, usePluraldawnActions, useSystemForAccount, type EmojiMatch };

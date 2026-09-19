@@ -8,9 +8,11 @@ import { FormattedMessage } from 'react-intl';
 import QuotedStatus from '@/components/statuses/quoted-status-container';
 import Icon from '@/components/ui/icon';
 import Emojify from '@/emoji/emojify';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
+import { usePluraldawnActions } from '@/stores/pluraldawn';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { onlyEmoji as isOnlyEmoji, onlyHour as isOnlyHour } from '@/utils/rich-content';
@@ -123,8 +125,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       showSideBySideTranslations,
       greentext,
       displayPreviewCards,
+      pluraldawn,
     } = useSettings();
     const { data: account } = useAccount(status.account_id);
+    const scopeUrl = useScopeUrl();
 
     const [collapsed, setCollapsed] = useState<boolean | null>(null);
     const [isTranslationEqual, setIsTranslationEqual] = useState(false);
@@ -144,6 +148,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       status.id,
       statusMeta.localTargetLanguage,
     );
+    const pluraldawnActions = usePluraldawnActions();
 
     const withSpoiler = status.spoiler_text.length > 0;
     const { expanded } = statusMeta;
@@ -345,6 +350,36 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           normalizeText(translationNode.current?.innerText),
       );
     }, [parsedContent, parsedTranslationContent, translationContent]);
+
+    useLayoutEffect(() => {
+      if (!contentNode.current) return;
+      if (pluraldawn?.enabled) {
+        // ideally move this to parseContent
+        const isFirst = (element?: Element) => {
+          if (!element) return false;
+          if (element === contentNode.current) return true;
+          if (element.previousSibling) return false;
+          return isFirst(element.parentElement || undefined);
+        };
+        const isLast = (element?: Element) => {
+          if (!element) return false;
+          if (element === contentNode.current) return true;
+          if (element.nextSibling) return false;
+          return isLast(element.parentElement || undefined);
+        };
+        const customEmojis = [...contentNode.current.querySelectorAll('[data-custom-emoji]')];
+        const firstEmoji = customEmojis[0];
+        const lastEmoji = customEmojis.at(-1);
+        const match = isFirst(firstEmoji) ? firstEmoji : isLast(lastEmoji) ? lastEmoji : undefined;
+        match?.setAttribute('data-pluraldawn-match', 'true');
+        const img = match?.querySelector('img');
+
+        if (img) {
+          pluraldawnActions.setMatch(status.id, { url: img.src, shortcode: img.title });
+          if (account) pluraldawnActions.fetchSystem(account.id, scopeUrl);
+        }
+      }
+    }, [parsedContent]);
 
     const direction = getTextDirection(status.search_index);
     const className = useMemo(

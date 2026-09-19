@@ -2275,6 +2275,8 @@
   "preferences.fields.missing_description_modal.label": "Show confirmation dialog before sending a post without media descriptions",
   "preferences.fields.missing_language_modal.label": "Show confirmation dialog before sending a post without language set",
   "preferences.fields.navigation_items": "Customize navigation menu items",
+  "preferences.fields.pluraldawn": "Parse Pluraldawn indicator emojis",
+  "preferences.fields.pluraldawn.hint": "When matched, presents avatar and name basing on avatar metadata. Only emojis will be loaded as avatars.",
   "preferences.fields.preserve_spoilers.label": "Preserve content warning when replying",
   "preferences.fields.preview_card_display.label": "Preview cards",
   "preferences.fields.privacy.label": "Default post privacy",

@@ -119,7 +119,7 @@ type IAccount = {
   muteExpiresAt?: string | null;
   blockExpiresAt?: string | null;
   loading?: boolean;
-  pluraldownMatch?: EmojiMatch;
+  pluraldawnMatch?: EmojiMatch;
 } & (LinkOptions | {});
 
 const Account = ({
@@ -149,7 +149,7 @@ const Account = ({
   muteExpiresAt,
   blockExpiresAt,
   loading,
-  pluraldownMatch,
+  pluraldawnMatch,
   ...params
 }: IAccount) => {
   const overflowRef = useRef<HTMLDivElement>(null);
@@ -166,14 +166,13 @@ const Account = ({
 
   const system = useSystemForAccount(account.id);
   const systemMember = useMemo(() => {
-    console.log(system, pluraldownMatch);
-    if (pluraldownMatch && system && system !== 'pending' && system[pluraldownMatch.shortcode]) {
+    if (pluraldawnMatch && system && system !== 'pending' && system[pluraldawnMatch.shortcode]) {
       return {
-        ...system[pluraldownMatch.shortcode],
-        emoji_url: pluraldownMatch.url,
+        ...system[pluraldawnMatch.shortcode],
+        emoji_url: pluraldawnMatch.url,
       };
     }
-  }, [system, pluraldownMatch]);
+  }, [system, pluraldawnMatch]);
 
   const withExternalLink = !me && !allowDisplayingRemoteNoLogin && account && !account.local;
 
@@ -284,6 +283,7 @@ const Account = ({
     return (
       <div
         data-testid='account'
+        data-system-member={!!systemMember}
         className={clsx('account-card', {
           'account-card--action-top': actionAlignment === 'top',
         })}
@@ -526,6 +526,7 @@ const Account = ({
   return (
     <div
       data-testid='account'
+      data-system-member={!!systemMember}
       className={clsx('account-card', {
         'account-card--action-top': actionAlignment === 'top',
       })}
