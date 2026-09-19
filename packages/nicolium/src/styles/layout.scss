@@ -1149,8 +1149,8 @@ body {
       min-height: calc(100vh - 1rem);
       padding-bottom: 1rem;
 
-      .layout__main--with-chats & {
-        padding-bottom: 3rem;
+      :root:has(.layout__main--with-chats) & {
+        padding-bottom: 5rem;
       }
 
       & > :not([hidden]) ~ :not([hidden]) {
