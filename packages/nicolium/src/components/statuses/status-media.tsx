@@ -98,7 +98,16 @@ const StatusMedia: React.FC<IStatusMedia> = ({
     openModal('MEDIA', { media, statusId: status.id, index });
   };
 
-  if (size > 0 && firstAttachment) {
+  const preferPreviewCard = useMemo(() => {
+    return (
+      status.media_attachments.length === 1 &&
+      status.media_attachments[0].type === 'unknown' &&
+      status.card &&
+      status.card.url === status.media_attachments[0].url
+    );
+  }, [status.media_attachments, status.card]);
+
+  if (size > 0 && firstAttachment && !preferPreviewCard) {
     if (muted) {
       media = <AttachmentThumbs status={translatedStatus} onClick={onClick} />;
     } else if (size === 1 && firstAttachment.type === 'video' && !disableUserProvidedMedia) {
