@@ -46,7 +46,7 @@ const loadFrontendConfig = async () => {
 };
 
 const fetchFrontendConfigJson = (host: string | null) =>
-  staticFetch('/instance/nicolium.json')
+  staticFetch('/instance/nicolium.json', undefined, true)
     .then(({ json: data }) => {
       if (!isObject(data)) throw 'nicolium.json fetch failed';
       importFrontendConfig(data, host);

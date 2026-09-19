@@ -12,11 +12,27 @@ type NicoliumResponse<T = any> = Response & { data: string; json: T };
  * It uses FE_SUBDIRECTORY and parses JSON if possible.
  * No authorization is needed.
  */
-const staticFetch = async (input: URL | RequestInfo, init?: RequestInit) => {
+const staticFetch = async (input: URL | RequestInfo, init?: RequestInit, retry?: boolean) => {
+  let retried = false;
+
   const fullPath = buildFullPath(input.toString(), BuildConfig.BACKEND_URL);
 
-  const response = await fetch(fullPath, init);
-  if (!response.ok) throw { response };
+  let response = await fetch(fullPath, init).catch((err) => {
+    if (retry && BuildConfig.BACKEND_URL) {
+      retried = true;
+      const fullPath = buildFullPath(input.toString());
+
+      return fetch(fullPath, init);
+    } else throw err;
+  });
+
+  if (!response.ok && !retried) {
+    if (retry && BuildConfig.BACKEND_URL) {
+      const fullPath = buildFullPath(input.toString());
+
+      response = await fetch(fullPath, init);
+    } else throw { response };
+  }
 
   const data = await response.text();
 
