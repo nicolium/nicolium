@@ -16,7 +16,7 @@ const useCredentialAccount = (enabled = true) => {
   return useAppQuery({
     queryKey: queryKeys.accountCredentials.show(currentAccount as string),
     queryFn: () => client.settings.verifyCredentials(),
-    enabled: currentAccount !== 'unauthenticated' && enabled,
+    enabled: currentAccount !== false && currentAccount !== 'unauthenticated' && enabled,
   });
 };
 
