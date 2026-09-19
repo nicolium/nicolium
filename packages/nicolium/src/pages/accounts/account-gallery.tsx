@@ -214,13 +214,15 @@ const AccountGalleryPage: React.FC = () => {
   return (
     <Column label={`@${account.acct}`} transparent withHeader={false}>
       <div role='feed' className='account-gallery__grid'>
-        {attachments.map((attachment) => (
-          <MediaItem
-            key={`${attachment.status_id}+${attachment.id}`}
-            attachment={attachment}
-            onOpenMedia={handleOpenMedia}
-          />
-        ))}
+        {attachments
+          .filter((attachment) => attachment.type !== 'unknown')
+          .map((attachment) => (
+            <MediaItem
+              key={`${attachment.status_id}+${attachment.id}`}
+              attachment={attachment}
+              onOpenMedia={handleOpenMedia}
+            />
+          ))}
 
         {!isLoading && attachments.length === 0 && (
           <div className='empty-column-indicator account-gallery__empty'>

@@ -45,13 +45,15 @@ const GroupGallery: React.FC = () => {
   return (
     <Column label={group.display_name} transparent withHeader={false}>
       <div role='feed' className='group-gallery__grid'>
-        {attachments.map((attachment) => (
-          <MediaItem
-            key={`${attachment.status_id}+${attachment.id}`}
-            attachment={attachment}
-            onOpenMedia={handleOpenMedia}
-          />
-        ))}
+        {attachments
+          .filter((attachment) => attachment.type !== 'unknown')
+          .map((attachment) => (
+            <MediaItem
+              key={`${attachment.status_id}+${attachment.id}`}
+              attachment={attachment}
+              onOpenMedia={handleOpenMedia}
+            />
+          ))}
 
         {!isLoading && attachments.length === 0 && (
           <div className='empty-column-indicator group-gallery__empty'>

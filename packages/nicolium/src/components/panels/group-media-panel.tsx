@@ -28,13 +28,15 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
     if (nineAttachments.length) {
       return (
         <div className='media-panel__attachments'>
-          {nineAttachments.map((attachment) => (
-            <MediaItem
-              key={`${attachment.status_id}+${attachment.id}`}
-              attachment={attachment}
-              onOpenMedia={handleOpenMedia}
-            />
-          ))}
+          {nineAttachments
+            .filter((attachment) => attachment.type !== 'unknown')
+            .map((attachment) => (
+              <MediaItem
+                key={`${attachment.status_id}+${attachment.id}`}
+                attachment={attachment}
+                onOpenMedia={handleOpenMedia}
+              />
+            ))}
         </div>
       );
     } else {

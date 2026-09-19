@@ -28,7 +28,10 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
     const publicVisibilities = new Set(['public', 'unlisted']);
 
     const publicAttachments = attachments
-      .filter((attachment) => publicVisibilities.has(attachment.visibility))
+      .filter(
+        (attachment) =>
+          attachment.type !== 'unknown' && publicVisibilities.has(attachment.visibility),
+      )
       .slice(0, 9);
 
     if (publicAttachments.length) {
