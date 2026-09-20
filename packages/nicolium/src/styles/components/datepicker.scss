@@ -45,8 +45,8 @@
       color: var(--color-red-600);
     }
 
-    @media (min-width: variables.$breakpoint-sm) {
-      font-size: var(--text-sm);
+    @supports (-webkit-text-size-adjust:none) and (font: -apple-system-body) {
+      font-size: 1rem;
     }
   }
 }

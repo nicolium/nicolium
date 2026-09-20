@@ -102,13 +102,9 @@ select {
         outline: none;
       }
 
-      @media (min-width: variables.$breakpoint-sm) {
-        font-size: var(--text-sm);
+      @supports (-webkit-text-size-adjust:none) and (font: -apple-system-body) {
+        font-size: 1rem;
       }
-    }
-
-    @media (min-width: variables.$breakpoint-sm) {
-      font-size: var(--text-sm);
     }
   }
 
@@ -302,6 +298,10 @@ select {
   font-size: var(--text-base);
   line-height: var(--leading-sm);
 
+  @supports (-webkit-text-size-adjust:none) and (font: -apple-system-body) {
+    font-size: 1rem;
+  }
+
   &::placeholder {
     color: var(--color-gray-600);
   }
@@ -480,10 +480,6 @@ select {
         }
       }
     }
-  }
-
-  @media (min-width: variables.$breakpoint-sm) {
-    font-size: var(--text-sm);
   }
 }
 

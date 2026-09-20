@@ -73,6 +73,10 @@
       min-height: 99px;
       font-size: var(--text-base);
 
+      @supports (-webkit-text-size-adjust:none) and (font: -apple-system-body) {
+        font-size: 1rem;
+      }
+
       &--condensed {
         min-height: 39px;
       }
