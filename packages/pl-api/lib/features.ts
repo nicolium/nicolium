@@ -148,7 +148,7 @@ const TOKI = 'Toki';
 
 /**
  * Wafrn, federated social media inspired by tumblr.
- * 
+ *
  * @category Software
  * @see {@link https://wafrn.net/}
  */
@@ -577,7 +577,9 @@ const getFeatures = (instance: Instance) => {
     bites: any([
       v.software === ICESHRIMP_NET,
       v.software === TOKI,
+      v.software === WAFRN,
       instance.api_versions['bites.pleroma.pl-api'] >= 1,
+      instance.api_versions['net.iceshrimp.bites'] >= 1,
     ]),
 
     /**
