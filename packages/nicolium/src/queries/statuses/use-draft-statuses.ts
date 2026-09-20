@@ -93,7 +93,7 @@ const usePersistDraftStatus = () => {
     );
 
     updateCompose(composeId, (composeDraft) => {
-      if (!draft.draft_id) composeDraft.autoSavedDraft = true;
+      if (!composeDraft.draftId) composeDraft.autoSavedDraft = true;
       composeDraft.draftId = draft.draft_id;
     });
 
