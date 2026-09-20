@@ -61,7 +61,6 @@ const usePluraldawnStore = create<State>()(
               }
             }
           });
-          console.log(system);
           return system;
         });
       },
