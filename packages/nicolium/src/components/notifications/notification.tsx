@@ -124,7 +124,7 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
   },
   follow_request: {
     id: 'notification.follow_request',
-    defaultMessage: '{name} has requested to follow you',
+    defaultMessage: '{name} requested to follow you',
   },
   follow_request_accepted: {
     id: 'notification.follow_request_accepted',
