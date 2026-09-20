@@ -6,7 +6,7 @@ import { useCompose } from './use-compose';
 const useComposeHeading = (composeId: string, compact?: boolean) => {
   const compose = useCompose(composeId);
 
-  if (compose.draftId) {
+  if (compose.draftId && !compose.autoSavedDraft) {
     return <FormattedMessage id='navigation_bar.compose_draft' defaultMessage='Edit draft post' />;
   } else if (compose.redacting) {
     return <FormattedMessage id='navigation_bar.compose_redact' defaultMessage='Redact post' />;

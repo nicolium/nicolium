@@ -178,6 +178,7 @@ interface Compose {
   idempotencyKey: string;
   resetFileKey: number | null;
   editorKey: string;
+  autoSavedDraft: boolean;
 
   // Currently modified language
   modifiedLanguage: Language | string | null;
@@ -241,6 +242,7 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   idempotencyKey: '',
   resetFileKey: null,
   editorKey: '',
+  autoSavedDraft: false,
 
   modifiedLanguage: null,
 
