@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { checkComposeContent, useCompose } from '@/stores/compose';
@@ -16,6 +16,7 @@ const useComposeAutosave = (
   const compose = useCompose(composeId);
   const { autosaveDrafts } = useSettings();
   const persistDraftStatus = usePersistDraftStatus();
+  const isFirstRender = useRef(true);
 
   const active = enabled && autosaveDrafts && !compose.editedId && !compose.redacting;
 
@@ -35,9 +36,15 @@ const useComposeAutosave = (
     if (!active || debouncedSignature === null) return;
     if (!checkComposeContent(compose)) return;
 
-    persistDraftStatus(composeId);
-    onAutosave?.();
+    if (!isFirstRender.current) {
+      persistDraftStatus(composeId);
+      onAutosave?.();
+    }
   }, [debouncedSignature]);
+
+  useEffect(() => {
+    isFirstRender.current = false;
+  }, []);
 };
 
 export { useComposeAutosave };
