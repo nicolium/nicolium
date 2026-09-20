@@ -399,7 +399,7 @@ const instanceSchema = v.pipe(
     }
 
     // Detect GoToSocial
-    if (typeof data.configuration?.accounts?.allow_custom_css === 'boolean') {
+    if (data.source_url === 'https://codeberg.org/superseriousbusiness/gotosocial') {
       data.version = `0.0.0 (compatible; GoToSocial ${data.version})`;
     }
 
