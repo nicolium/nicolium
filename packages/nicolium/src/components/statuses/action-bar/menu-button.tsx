@@ -667,8 +667,15 @@ const MenuButton: React.FC<IMenuButton> = ({
             .then(() => {
               toast.success(intl.formatMessage(messages.biteSuccess));
             })
-            .catch(() => {
-              toast.error(intl.formatMessage(messages.biteFail));
+            .catch((error) => {
+              // TODO: don't repeat this all over the code
+              if (error.response?.json?.message === 'This user does not accept bites') {
+                toast.error(
+                  intl.formatMessage(messages.biteFailNotAllowed, { acct: status.account.acct }),
+                );
+              } else {
+                toast.error(intl.formatMessage(messages.biteFail));
+              }
             });
         };
 

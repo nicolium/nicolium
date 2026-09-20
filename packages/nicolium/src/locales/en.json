@@ -16,6 +16,7 @@
   "account.birthday_today": "Birthday is today!",
   "account.bite": "Bite @{name}",
   "account.bite.fail": "Failed to bite @{acct}",
+  "account.bite.fail.not_allowed": "@{acct} does not accept bites",
   "account.bite.success": "You have bitten @{acct}",
   "account.bite_controls.followers": "Only followers can bite this user.",
   "account.bite_controls.header": "You can’t bite this user.",

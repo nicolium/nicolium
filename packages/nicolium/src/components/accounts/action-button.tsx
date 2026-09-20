@@ -40,6 +40,10 @@ import type { Account } from 'pl-api';
 const messages = defineMessages({
   userBit: { id: 'account.bite.success', defaultMessage: 'You have bitten @{acct}' },
   userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
+  userBiteFailNotAllowed: {
+    id: 'account.bite.fail.not_allowed',
+    defaultMessage: '@{acct} does not accept bites',
+  },
   showReblogs: { id: 'account.show_reblogs', defaultMessage: 'Show reposts from @{name}' },
   showReblogsSuccess: {
     id: 'account.show_reblogs.success',
@@ -235,8 +239,12 @@ const ActionButton: React.FC<IActionButton> = ({
       .then(() => {
         toast.success(intl.formatMessage(messages.userBit, { acct: account.acct }));
       })
-      .catch(() => {
-        toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct }));
+      .catch((error) => {
+        if (error.response?.json?.message === 'This user does not accept bites') {
+          toast.error(intl.formatMessage(messages.userBiteFailNotAllowed, { acct: account.acct }));
+        } else {
+          toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct }));
+        }
       });
   };
 

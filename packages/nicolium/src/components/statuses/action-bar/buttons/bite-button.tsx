@@ -26,8 +26,14 @@ const BiteButton: React.FC<IActionButton> = ({ status }) => {
       .then(() => {
         toast.success(intl.formatMessage(messages.biteSuccess));
       })
-      .catch(() => {
-        toast.error(intl.formatMessage(messages.biteFail));
+      .catch((error) => {
+        if (error.response?.json?.message === 'This user does not accept bites') {
+          toast.error(
+            intl.formatMessage(messages.biteFailNotAllowed, { acct: status.account.acct }),
+          );
+        } else {
+          toast.error(intl.formatMessage(messages.biteFail));
+        }
       });
   };
 

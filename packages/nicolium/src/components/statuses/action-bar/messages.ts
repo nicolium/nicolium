@@ -9,6 +9,10 @@ const messages = defineMessages({
   bite: { id: 'status.bite', defaultMessage: 'Bite post' },
   biteSuccess: { id: 'status.bite.success', defaultMessage: 'Post bitten' },
   biteFail: { id: 'status.bite.fail', defaultMessage: 'Failed to bite post' },
+  biteFailNotAllowed: {
+    id: 'account.bite.fail.not_allowed',
+    defaultMessage: '@{acct} does not accept bites',
+  },
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
   blocked: { id: 'group.group_mod_block.success', defaultMessage: '@{name} is banned' },
