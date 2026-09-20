@@ -164,7 +164,7 @@ const Account = ({
   const { disableUserProvidedMedia } = useSettings();
   const { allowDisplayingRemoteNoLogin } = useFrontendConfig();
 
-  const system = useSystemForAccount(account.id);
+  const system = useSystemForAccount(account?.id || '');
   const systemMember = useMemo(() => {
     if (pluraldawnMatch && system && system !== 'pending' && system[pluraldawnMatch.shortcode]) {
       return {
