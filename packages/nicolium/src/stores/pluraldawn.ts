@@ -8,6 +8,7 @@ import { scopedQueryKey } from '@/queries/query';
 import { decodeSystemFromAvatar, type PluraldawnSystem } from '@/utils/pluraldawn';
 
 import { backendUrl } from './auth';
+import { useSettings } from './settings';
 
 type EmojiMatch = { shortcode: string; url: string };
 
@@ -70,6 +71,13 @@ const usePluraldawnStore = create<State>()(
 
 const usePluraldawnActions = () => usePluraldawnStore((state) => state.actions);
 
+const usePluraldawnMatch = (statusId?: string) => {
+  const { pluraldawn: pluraldawnSettings } = useSettings();
+  return usePluraldawnStore((state) =>
+    pluraldawnSettings?.enabled && statusId ? state.matches[statusId] : undefined,
+  );
+};
+
 const useSystemForAccount = (accountId: string) => {
   const scopeUrl = useScopeUrl();
   const key = `${new URL(scopeUrl).origin}:${accountId}`;
@@ -77,4 +85,10 @@ const useSystemForAccount = (accountId: string) => {
   return usePluraldawnStore((state) => state.systems[key]);
 };
 
-export { usePluraldawnStore, usePluraldawnActions, useSystemForAccount, type EmojiMatch };
+export {
+  usePluraldawnStore,
+  usePluraldawnActions,
+  usePluraldawnMatch,
+  useSystemForAccount,
+  type EmojiMatch,
+};

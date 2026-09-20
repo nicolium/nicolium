@@ -577,7 +577,12 @@ a.status-card {
       text-decoration: underline;
     }
   }
+}
 
+.status,
+.interaction-request__status,
+.quoted-status,
+.report-modal__selected-status {
   &:has([data-system-member]) [data-pluraldawn-match] {
     display: none;
   }

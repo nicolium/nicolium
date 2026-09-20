@@ -12,6 +12,7 @@ import { useReportAccountMutation } from '@/queries/accounts/use-report';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useAccountTimeline } from '@/queries/timelines/use-timelines';
 import { useInstance } from '@/stores/instance';
+import { usePluraldawnMatch } from '@/stores/pluraldawn';
 
 import ConfirmationStep from './steps/confirmation-step';
 import OtherActionsStep from './steps/other-actions-step';
@@ -33,6 +34,7 @@ const reportSteps = {
 
 const SelectedStatus = ({ statusId }: { statusId: string }) => {
   const { data: status } = useMinimalStatus(statusId);
+  const pluraldawnMatch = usePluraldawnMatch(statusId);
 
   if (!status) {
     return null;
@@ -46,6 +48,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
         withLinkToProfile={false}
         timestamp={status.created_at}
         hideActions
+        pluraldawnMatch={pluraldawnMatch}
       />
 
       <StatusContent status={status} />

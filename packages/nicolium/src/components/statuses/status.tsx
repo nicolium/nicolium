@@ -34,7 +34,7 @@ import {
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
-import { usePluraldawnStore } from '@/stores/pluraldawn';
+import { usePluraldawnMatch } from '@/stores/pluraldawn';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { textForScreenReader } from '@/utils/status';
@@ -315,14 +315,11 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const { openModal } = useModalsActions();
   const { replyCompose, mentionCompose } = useComposeActions();
   const columnId = useColumnId() || props.columnId;
-  const { showFilteredStatusAuthor, statusActionBarItems, useRocketIconForReblogs, pluraldawn } =
-    useSettings();
+  const { showFilteredStatusAuthor, statusActionBarItems, useRocketIconForReblogs } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
   const { me } = useLoggedIn();
-  const pluraldawnMatch = usePluraldawnStore((state) =>
-    pluraldawn?.enabled ? state.matches[status.id] : undefined,
-  );
+  const pluraldawnMatch = usePluraldawnMatch(status.id);
 
   const actualStatus =
     useStatus(status.reblog_id || undefined, { withFilteredResults: true }).data || status;

@@ -27,10 +27,11 @@ import {
   useRejectInteractionRequestMutation,
 } from '@/queries/statuses/use-interaction-requests';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
+import { usePluraldawnMatch } from '@/stores/pluraldawn';
 import { useSettings } from '@/stores/settings';
-import toast from '@/toast';
 
 import '@/styles/notifications.scss';
+import toast from '@/toast';
 
 const messages = defineMessages({
   favourite: {
@@ -85,6 +86,7 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
   actions,
 }) => {
   const { data: status } = useMinimalStatus(statusId);
+  const pluraldawnMatch = usePluraldawnMatch(statusId);
 
   if (!status) return null;
 
@@ -102,6 +104,7 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
         withLinkToProfile={false}
         timestamp={status.created_at}
         action={actions ?? <></>}
+        pluraldawnMatch={pluraldawnMatch}
       />
 
       <div className='interaction-request__status__content'>

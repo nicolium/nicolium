@@ -6,6 +6,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { usePluraldawnMatch } from '@/stores/pluraldawn';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
@@ -51,6 +52,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
   const statusMeta = useStatusMeta(status?.id || '');
   const { me } = useLoggedIn();
   const { showFilteredStatusAuthor } = useSettings();
+  const pluraldawnMatch = usePluraldawnMatch(status?.id);
 
   const handleExpandClick: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!status) return;
@@ -180,6 +182,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
             showAccountHoverCard={!compose}
             withLinkToProfile={!compose}
             withLocked={false}
+            pluraldawnMatch={pluraldawnMatch}
           />
         )}
 
