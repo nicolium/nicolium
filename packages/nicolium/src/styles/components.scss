@@ -1121,7 +1121,7 @@ div[data-viewport-type='window']:has(.empty-message) {
     border-radius: var(--radius-md);
 
     background-color: #fff;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-actually-lg);
 
     transition-timing-function: var(--ease-default);
     transition-duration: 100ms;
