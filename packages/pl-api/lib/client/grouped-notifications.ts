@@ -29,6 +29,8 @@ const GROUPED_TYPES = [
   'event_reminder',
   'participation_accepted',
   'participation_request',
+  'update',
+  'quoted_update',
 ];
 
 const groupNotifications = (
@@ -54,7 +56,9 @@ const groupNotifications = (
     if (existingGroup) {
       existingGroup.notifications_count += 1;
       existingGroup.page_min_id = notification.id;
-      existingGroup.sample_account_ids.push(notification.account.id);
+      if (!existingGroup.sample_account_ids.includes(notification.account.id)) {
+        existingGroup.sample_account_ids.push(notification.account.id);
+      }
     } else {
       notificationGroups.push({
         ...omit(notification, ['account', 'status', 'target']),

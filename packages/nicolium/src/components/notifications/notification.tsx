@@ -117,7 +117,10 @@ defineMessages({
   showMore: { id: 'status.show_more', defaultMessage: 'Show more' },
 });
 
-const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMessages({
+const messages: Record<
+  NotificationType | 'reply' | 'updateMultiple' | 'quoted_updateMultiple',
+  MessageDescriptor
+> = defineMessages({
   follow: {
     id: 'notification.follow',
     defaultMessage: '{name} followed you',
@@ -166,6 +169,11 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
     id: 'notification.update',
     defaultMessage: '{name} edited a post you interacted with',
   },
+  updateMultiple: {
+    id: 'notification.update.multiple',
+    defaultMessage:
+      '{name} edited a post you interacted with {notificationCount, plural, one {once} other {# times}}',
+  },
   event_reminder: {
     id: 'notification.pleroma:event_reminder',
     defaultMessage: 'An event you are participating in starts soon',
@@ -210,6 +218,11 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
     id: 'notification.quoted_update',
     defaultMessage: '{name} edited a post you quoted',
   },
+  quoted_updateMultiple: {
+    id: 'notification.quoted_update.multiple',
+    defaultMessage:
+      '{name} edited a post you quoted {notificationCount, plural, one {once} other {# times}}',
+  },
   subscribed_reaction: {
     id: 'notification.pleroma:subscribed_reaction',
     defaultMessage: '{name} reacted to a post',
@@ -232,6 +245,7 @@ const buildMessage = (
   instanceTitle: string,
   hasStatus: boolean,
   isReblog: boolean,
+  notificationCount: number,
 ): React.ReactNode => {
   const renderedAccounts = accounts
     .slice(0, 2)
@@ -249,13 +263,19 @@ const buildMessage = (
     );
   }
 
-  return intl.formatMessage(messages[type], {
+  const message =
+    (type === 'update' || type === 'quoted_update') && notificationCount >= 2
+      ? messages[type === 'update' ? 'updateMultiple' : 'quoted_updateMultiple']
+      : messages[type];
+
+  return intl.formatMessage(message, {
     name: <FormattedList type='conjunction' value={renderedAccounts} />,
     targetName,
     instance: instanceTitle,
     count: accounts.length,
     hasStatus: +hasStatus,
     isReblog: isReblog ? 1 : 0,
+    notificationCount,
   });
 };
 
@@ -538,6 +558,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
 
   const targetName = notification.type === 'move' ? notification.target!.acct : '';
 
+  console.log(notification);
   const message: React.ReactNode = notification.accounts.length
     ? buildMessage(
         intl,
@@ -547,6 +568,7 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
         instance.title,
         !!status,
         !!status?.reblog_id,
+        notification.notifications_count,
       )
     : null;
 
