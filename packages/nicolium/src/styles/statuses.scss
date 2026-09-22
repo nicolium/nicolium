@@ -220,6 +220,7 @@
 
       @media (min-width: variables.$breakpoint-md) {
         width: min-content;
+        min-width: 33%;
         max-width: 50%;
         height: auto;
         border-radius: var(--radius-lg) 0 0 var(--radius-lg);
