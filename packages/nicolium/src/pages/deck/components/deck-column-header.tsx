@@ -645,42 +645,53 @@ const DeckAccountColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'accou
 const DeckSearchColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'search'>> = ({
   column,
   ...props
-}) => (
-  <DeckColumHeaderInner
-    column={column}
-    {...props}
-    icon={iconMagnifyingGlass}
-    title={<FormattedMessage id='column.search' defaultMessage='Search' />}
-    subtitle={
-      column.searchType === 'accounts' ? (
-        <FormattedMessage
-          id='column.deck.search.heading.accounts'
-          defaultMessage='Accounts matching "{term}"'
-          values={{ term: column.query }}
+}) => {
+  const { data: account } = useAccount(column.accountId);
+  return (
+    <DeckColumHeaderInner
+      column={column}
+      {...props}
+      icon={iconMagnifyingGlass}
+      title={<FormattedMessage id='column.search' defaultMessage='Search' />}
+      subtitle={
+        column.searchType === 'accounts' ? (
+          <FormattedMessage
+            id='column.deck.search.heading.accounts'
+            defaultMessage='Accounts matching "{term}"'
+            values={{ term: column.query }}
+          />
+        ) : column.searchType === 'statuses' ? (
+          column.accountId ? (
+            <FormattedMessage
+              id='column.deck.search.heading.statuses.filtered'
+              defaultMessage='Posts from @{acct} matching "{term}"'
+              values={{ term: column.query, acct: account?.acct || column.accountId }}
+            />
+          ) : (
+            <FormattedMessage
+              id='column.deck.search.heading.statuses'
+              defaultMessage='Posts matching "{term}"'
+              values={{ term: column.query }}
+            />
+          )
+        ) : (
+          <FormattedMessage
+            id='column.deck.search.heading.hashtags'
+            defaultMessage='Hashtags matching "{term}"'
+            values={{ term: column.query }}
+          />
+        )
+      }
+      actions={
+        <SearchRefreshButton
+          type={column.searchType || 'hashtags'}
+          query={column.query}
+          accountId={column.accountId}
         />
-      ) : column.searchType === 'statuses' ? (
-        <FormattedMessage
-          id='column.deck.search.heading.statuses'
-          defaultMessage='Posts matching "{term}"'
-          values={{ term: column.query }}
-        />
-      ) : (
-        <FormattedMessage
-          id='column.deck.search.heading.hashtags'
-          defaultMessage='Hashtags matching "{term}"'
-          values={{ term: column.query }}
-        />
-      )
-    }
-    actions={
-      <SearchRefreshButton
-        type={column.searchType}
-        query={column.query}
-        accountId={column.accountId}
-      />
-    }
-  />
-);
+      }
+    />
+  );
+};
 
 const DeckBookmarksColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'bookmarks'>> = ({
   column,
