@@ -26,6 +26,7 @@ import iconTimeline from 'lucide-static/icons/timeline.svg';
 import React, { useMemo, useState } from 'react';
 import { FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
+import { SearchRefreshButton } from '@/columns/search';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import { useTimelineHeading } from '@/components/timeline-picker';
 import { TimelineRefreshButton } from '@/components/timeline-refresh-button';
@@ -670,6 +671,13 @@ const DeckSearchColumnHeader: React.FC<ExtractedDeckTimelineColumnHeader<'search
           values={{ term: column.query }}
         />
       )
+    }
+    actions={
+      <SearchRefreshButton
+        type={column.searchType}
+        query={column.query}
+        accountId={column.accountId}
+      />
     }
   />
 );

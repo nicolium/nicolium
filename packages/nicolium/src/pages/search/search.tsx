@@ -3,7 +3,7 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import SearchColumn from '@/columns/search';
+import SearchColumn, { SearchRefreshButton } from '@/columns/search';
 import Column from '@/components/ui/column';
 import Tabs from '@/components/ui/tabs';
 import { useFeatures } from '@/hooks/use-features';
@@ -111,14 +111,17 @@ const SearchPage: React.FC = () => {
 
   const navigate = useNavigate({ from: searchRoute.fullPath });
 
-  const { q: query } = searchRoute.useSearch();
+  const { q: query, type, accountId } = searchRoute.useSearch();
 
   const setQuery = (value: string) => {
     navigate({ search: (prev) => ({ ...prev, q: value }) });
   };
 
   return (
-    <Column label={intl.formatMessage(messages.heading)}>
+    <Column
+      label={intl.formatMessage(messages.heading)}
+      action={<SearchRefreshButton query={query || ''} type={type} accountId={accountId} />}
+    >
       <div className='search-page'>
         <SearchInput className='search-page__input' query={query} setQuery={setQuery} />
         <SearchResults />
