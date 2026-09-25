@@ -558,7 +558,6 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
 
   const targetName = notification.type === 'move' ? notification.target!.acct : '';
 
-  console.log(notification);
   const message: React.ReactNode = notification.accounts.length
     ? buildMessage(
         intl,
