@@ -311,6 +311,14 @@ const deckColumnSchema = v.variant('type', [
 const createDefaultDeckColumns = (): Array<v.InferOutput<typeof deckColumnSchema>> => [
   {
     id: crypto.randomUUID(),
+    type: 'compose',
+    columnWidth: 'sm',
+    fillAvailableWidth: false,
+    pinned: true,
+    openInteractions: true,
+  },
+  {
+    id: crypto.randomUUID(),
     type: 'timeline',
     columnWidth: 'lg',
     fillAvailableWidth: false,
