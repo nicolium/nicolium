@@ -1404,6 +1404,15 @@
 
 .account-list__item {
   padding-bottom: 1rem;
+
+  .status-list & {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  &--last {
+    padding-bottom: 0;
+  }
 }
 
 .account-timeline__blocked {

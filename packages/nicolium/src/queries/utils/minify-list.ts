@@ -1,6 +1,7 @@
 import { notifyManager } from '@tanstack/react-query';
 import {
   PaginatedResponse,
+  type NotificationRequest,
   type Account,
   type AdminAccount,
   type AdminReport,
@@ -193,6 +194,25 @@ const minifyGroupedNotifications = (
     false,
   );
 
+const minifyNotificationRequest = ({ account, last_status, ...request }: NotificationRequest) => ({
+  ...request,
+  account_id: account.id,
+  last_status_id: last_status?.id ?? null,
+});
+
+type MinifiedNotificationRequest = ReturnType<typeof minifyNotificationRequest>;
+
+const minifyNotificationRequests = (
+  response: PaginatedResponse<NotificationRequest>,
+  scopeUrl: string,
+) =>
+  minifyList(response, minifyNotificationRequest, (items) => {
+    importEntities(scopeUrl, {
+      accounts: items.map((item) => item.account),
+      statuses: items.map((item) => item.last_status),
+    });
+  });
+
 const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount, scopeUrl: string) => {
   if (account)
     queryClient.setQueryData(
@@ -298,11 +318,13 @@ export {
   minifyConversation,
   minifyConversationList,
   minifyGroupedNotifications,
+  minifyNotificationRequests,
   minifyAdminAccount,
   minifyAdminAccountList,
   minifyAdminReport,
   minifyAdminReportList,
   type MinifiedConversation,
+  type MinifiedNotificationRequest,
   type MinifiedAdminAccount,
   type MinifiedAdminReport,
 };

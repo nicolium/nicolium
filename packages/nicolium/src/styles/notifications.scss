@@ -129,3 +129,26 @@
     margin-top: 1rem;
   }
 }
+
+.filtered-notifications-banner {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  padding: 1rem;
+  border-bottom: 1px solid var(--card-border);
+
+  .icon svg {
+    width: 2rem;
+    height: 2rem;
+    color: var(--color-gray-700);
+
+    .dark & {
+      color: var(--color-gray-600);
+    }
+  }
+
+  p {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+}

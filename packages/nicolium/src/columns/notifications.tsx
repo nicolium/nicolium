@@ -14,6 +14,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { saveSettings } from '@/actions/settings';
+import { FilteredNotificationsBanner } from '@/components/notifications/filtered-notifications-banner';
 import Notification from '@/components/notifications/notification';
 import PlaceholderNotification from '@/components/placeholders/placeholder-notification';
 import PullToRefresh from '@/components/pull-to-refresh';
@@ -35,9 +36,9 @@ import { userTouching } from '@/utils/is-mobile';
 import { selectChild } from '@/utils/scroll-utils';
 
 import type { Item } from '@/components/ui/tabs';
-import type { VirtuosoHandle } from 'react-virtuoso';
 
 import '@/styles/notifications.scss';
+import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
@@ -409,6 +410,8 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({
       />
 
       {filterBarContainer}
+
+      <FilteredNotificationsBanner />
 
       {conditionalPullToRefresh && !userTouching.matches ? (
         scrollContainer

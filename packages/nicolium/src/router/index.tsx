@@ -39,6 +39,7 @@ import RemoteInstanceLayout from '@/layouts/remote-instance-layout';
 import SearchLayout from '@/layouts/search-layout';
 import SettingsLayout from '@/layouts/settings-layout';
 import StatusLayout from '@/layouts/status-layout';
+import { useAuthStore } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
 import { useIsStandalone } from '@/utils/state';
@@ -51,7 +52,6 @@ import ChatsPageShoutbox from '../components/chats/chats-page/components/chats-p
 import ColumnLoading from '../components/column-loading';
 
 import type { Features } from 'pl-api';
-import { useAuthStore } from '@/stores/auth';
 
 interface RouterContext {
   instance: ReturnType<typeof useInstance>;
@@ -510,6 +510,15 @@ export const notificationsRoute = createRoute({
   path: '/notifications',
   component: lazy(() => import('@/pages/notifications/notifications')),
   beforeLoad: requireAuth,
+});
+
+export const notificationRequestsRoute = createRoute({
+  getParentRoute: () => instanceLayouts.default,
+  path: '/notifications/requests',
+  component: lazy(() => import('@/pages/notifications/notification-requests')),
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.notificationsPolicy) throw notFound();
+  }),
 });
 
 export const searchRoute = createRoute({
@@ -1769,6 +1778,7 @@ const routeTree = rootRoute.addChildren([
     collectionRoute,
     bookmarkFoldersRoute,
     bookmarksRoute,
+    notificationRequestsRoute,
     directoryRoute,
     followRequestsRoute,
     outgoingFollowRequestsRoute,

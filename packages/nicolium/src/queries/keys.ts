@@ -12,6 +12,7 @@ import type {
   MinifiedAdminAccount,
   MinifiedAdminReport,
   MinifiedConversation,
+  MinifiedNotificationRequest,
 } from './utils/minify-list';
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { InfiniteData } from '@tanstack/react-query';
@@ -330,12 +331,14 @@ const notifications = {
   fromAccount: (accountId: string) =>
     key<InfiniteData<PaginatedResponse<Notification>>>()('notifications', 'fromAccount', accountId),
   notificationPolicy: key<NotificationPolicy>()('notifications', 'notificationPolicy'),
-  notificationRequests: key<InfiniteData<PaginatedResponse<NotificationRequest>>>()(
-    'notifications',
-    'notificationRequests',
-  ),
-  notificationRequest: (requestId: string) =>
-    key<NotificationRequest>()('notifications', 'notificationRequests', requestId),
+  notificationRequests: {
+    root: key<InfiniteData<PaginatedResponse<MinifiedNotificationRequest>>>()(
+      'notifications',
+      'notificationRequests',
+    ),
+    one: (requestId: string) =>
+      key<NotificationRequest>()('notifications', 'notificationRequests', requestId),
+  },
 };
 
 const markers = {
