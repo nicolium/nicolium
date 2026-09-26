@@ -152,3 +152,17 @@
     @include mixins.text($size: sm, $theme: muted);
   }
 }
+
+.notification-requests-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  h3 {
+    @include mixins.text($size: lg, $weight: bold);
+  }
+
+  select {
+    max-width: 8rem;
+  }
+}

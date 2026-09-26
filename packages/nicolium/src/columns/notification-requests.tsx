@@ -12,10 +12,13 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AccountContainer from '@/components/accounts/account-container';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
+import List, { ListItem } from '@/components/list';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollableList from '@/components/scrollable-list';
 import Counter from '@/components/ui/counter';
 import IconButton from '@/components/ui/icon-button';
+import { SelectDropdown } from '@/components/ui/select-dropdown';
+import { useFeatures } from '@/hooks/use-features';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
@@ -23,6 +26,10 @@ import {
   useUnmuteAccountMutation,
 } from '@/queries/accounts/use-relationship';
 import { queryKeys } from '@/queries/keys';
+import {
+  useNotificationPolicy,
+  useUpdateNotificationPolicy,
+} from '@/queries/notifications/use-notification-policy';
 import {
   useAcceptNotificationRequestMutation,
   useDismissNotificationRequestMutation,
@@ -32,6 +39,7 @@ import { useModalsActions } from '@/stores/modals';
 import { userTouching } from '@/utils/is-mobile';
 
 import type { MinifiedNotificationRequest } from '@/queries/utils/minify-list';
+import type { UpdateNotificationPolicyRequest } from 'pl-api';
 
 const messages = defineMessages({
   unmuteAccount: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
@@ -42,11 +50,182 @@ const messages = defineMessages({
   accept: { id: 'notification_requests.accept', defaultMessage: 'Accept' },
   dismiss: { id: 'notification_requests.dismiss', defaultMessage: 'Dismiss' },
   view: { id: 'notification_requests.view', defaultMessage: 'View notifications' },
+  acceptOption: { id: 'notifications.policy.accept', defaultMessage: 'Accept' },
+  filter: { id: 'notifications.policy.filter', defaultMessage: 'Filter' },
+  drop: { id: 'notifications.policy.drop', defaultMessage: 'Ignore' },
 });
 
 interface INotificationRequest {
   request: MinifiedNotificationRequest;
 }
+
+const NotificationRequestsSettings = () => {
+  const intl = useIntl();
+  const { data: policy } = useNotificationPolicy();
+  const { mutate: updatePolicy } = useUpdateNotificationPolicy();
+  const features = useFeatures();
+
+  const options = {
+    accept: intl.formatMessage(messages.acceptOption),
+    filter: intl.formatMessage(messages.filter),
+    drop: intl.formatMessage(messages.drop),
+  };
+
+  if (!policy) return null;
+
+  const handleChange =
+    (
+      key: keyof UpdateNotificationPolicyRequest,
+    ): React.ChangeEventHandler<HTMLSelectElement, Element> =>
+    (event) => {
+      updatePolicy({ [key]: event.target.value });
+    };
+
+  return (
+    <div className='notification-requests-settings'>
+      <h3>
+        <FormattedMessage
+          id='notifications.policy.title'
+          defaultMessage='Manage notifications from…'
+        />
+      </h3>
+      <List>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='notifications.policy.filter_not_following_title'
+              defaultMessage="People you don't follow"
+            />
+          }
+          hint={
+            <FormattedMessage
+              id='notifications.policy.filter_not_following_hint'
+              defaultMessage='Until you manually approve them'
+            />
+          }
+          size='sm'
+        >
+          <SelectDropdown
+            defaultValue={policy.for_not_following}
+            onChange={handleChange('for_not_following')}
+            items={options}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
+              id='notifications.policy.filter_not_followers_title'
+              defaultMessage='People not following you'
+            />
+          }
+          hint={
+            <FormattedMessage
+              id='notifications.policy.filter_not_followers_hint'
+              defaultMessage='Including people who have been following you fewer than {days, plural, one {one day} other {# days}}'
+              values={{ days: 3 }}
+            />
+          }
+          size='sm'
+        >
+          <SelectDropdown
+            defaultValue={policy.for_not_followers}
+            onChange={handleChange('for_not_followers')}
+            items={options}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
+              id='notifications.policy.filter_new_accounts_title'
+              defaultMessage='New accounts'
+            />
+          }
+          hint={
+            <FormattedMessage
+              id='notifications.policy.filter_new_accounts.hint'
+              defaultMessage='Created within the past {days, plural, one {one day} other {# days}}'
+              values={{ days: 30 }}
+            />
+          }
+          size='sm'
+        >
+          <SelectDropdown
+            items={options}
+            defaultValue={policy.for_new_accounts}
+            onChange={handleChange('for_new_accounts')}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
+              id='notifications.policy.filter_private_mentions_title'
+              defaultMessage='Unsolicited private mentions'
+            />
+          }
+          hint={
+            <FormattedMessage
+              id='notifications.policy.filter_private_mentions_hint'
+              defaultMessage="Filtered unless it's in reply to your own mention or if you follow the sender"
+            />
+          }
+          size='sm'
+        >
+          <SelectDropdown
+            defaultValue={policy.for_private_mentions}
+            onChange={handleChange('for_private_mentions')}
+            items={options}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
+              id='notifications.policy.filter_limited_accounts_title'
+              defaultMessage='Moderated accounts'
+            />
+          }
+          hint={
+            <FormattedMessage
+              id='notifications.policy.filter_limited_accounts_hint'
+              defaultMessage='Limited by server moderators'
+            />
+          }
+          size='sm'
+        >
+          <SelectDropdown
+            defaultValue={policy.for_limited_accounts}
+            onChange={handleChange('for_limited_accounts')}
+            items={options}
+          />
+        </ListItem>
+
+        {features.notificationsPolicyForBots && (
+          <ListItem
+            label={
+              <FormattedMessage id='notifications.policy.filter_bots_title' defaultMessage='Bots' />
+            }
+            hint={
+              <FormattedMessage
+                id='notifications.policy.filter_bots_hint'
+                defaultMessage='Accounts marked as automated'
+              />
+            }
+            size='sm'
+          >
+            <SelectDropdown
+              defaultValue={policy.for_bots}
+              onChange={handleChange('for_bots')}
+              items={options}
+            />
+          </ListItem>
+        )}
+      </List>
+    </div>
+  );
+};
 
 const NotificationRequest: React.FC<INotificationRequest> = ({ request }) => {
   const intl = useIntl();
@@ -202,4 +381,4 @@ const NotificationRequestsColumn: React.FC<INotificationRequestsColumn> = ({ mul
   return scrollContainer;
 };
 
-export { NotificationRequestsColumn };
+export { NotificationRequestsColumn, NotificationRequestsSettings };

@@ -88,7 +88,7 @@ const useNotificationsFromAccount = makePaginatedResponseQuery(
       })
       .then((response) => minifyNotifications(response, scopeUrl)),
   undefined,
-  ([accountId]) => !!accountId,
+  (accountId) => !!accountId,
 );
 
 export {
