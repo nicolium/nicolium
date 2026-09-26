@@ -58,7 +58,4 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 ---
 
-Follow [my Pleroma account](https://pl.fediverse.pl/@mkljczk) to stay up to date on Nicolium development.
-
-
 This project is tested with BrowserStack.
