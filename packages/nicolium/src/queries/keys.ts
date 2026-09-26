@@ -329,7 +329,11 @@ const notifications = {
     >;
   },
   fromAccount: (accountId: string) =>
-    key<InfiniteData<PaginatedResponse<Notification>>>()('notifications', 'fromAccount', accountId),
+    key<InfiniteData<PaginatedResponse<NotificationGroup>>>()(
+      'notifications',
+      'fromAccount',
+      accountId,
+    ),
   notificationPolicy: key<NotificationPolicy>()('notifications', 'notificationPolicy'),
   notificationRequests: {
     root: key<InfiniteData<PaginatedResponse<MinifiedNotificationRequest>>>()(

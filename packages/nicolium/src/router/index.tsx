@@ -521,6 +521,15 @@ export const notificationRequestsRoute = createRoute({
   }),
 });
 
+export const notificationRequestRoute = createRoute({
+  getParentRoute: () => instanceLayouts.default,
+  path: '/notifications/requests/$requestId',
+  component: lazy(() => import('@/pages/notifications/notification-request')),
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.notificationsPolicy) throw notFound();
+  }),
+});
+
 export const searchRoute = createRoute({
   getParentRoute: () => instanceLayouts.search,
   path: '/search',
@@ -1779,6 +1788,7 @@ const routeTree = rootRoute.addChildren([
     bookmarkFoldersRoute,
     bookmarksRoute,
     notificationRequestsRoute,
+    notificationRequestRoute,
     directoryRoute,
     followRequestsRoute,
     outgoingFollowRequestsRoute,

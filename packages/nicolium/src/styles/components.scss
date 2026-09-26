@@ -1476,6 +1476,10 @@ div[data-viewport-type='window']:has(.empty-message) {
       display: flex;
       gap: 0.5rem;
       justify-content: end;
+
+      .icon-button {
+        padding: 0 0.25rem;
+      }
     }
   }
 

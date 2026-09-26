@@ -10,6 +10,7 @@ import {
   type Group,
   type GroupedNotificationsResults,
   type MutedAccount,
+  type Notification,
   type NotificationGroup,
   type Status,
 } from 'pl-api';
@@ -18,6 +19,7 @@ import { importEntities } from '@/queries/utils/import-entities';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
+import { normalizeNotification } from '../notifications/use-notifications';
 import { scopedQueryKey } from '../query';
 
 const minifyList = <T1, T2, IsArray extends boolean = true>(
@@ -194,6 +196,19 @@ const minifyGroupedNotifications = (
     false,
   );
 
+const minifyNotifications = (response: PaginatedResponse<Notification>, scopeUrl: string) =>
+  minifyList(response, (notification) => {
+    importEntities(scopeUrl, {
+      accounts:
+        'target' in notification
+          ? [notification.account, notification.target]
+          : [notification.account],
+      statuses: 'status' in notification ? [notification.status] : undefined,
+    });
+
+    return normalizeNotification(notification);
+  });
+
 const minifyNotificationRequest = ({ account, last_status, ...request }: NotificationRequest) => ({
   ...request,
   account_id: account.id,
@@ -318,6 +333,8 @@ export {
   minifyConversation,
   minifyConversationList,
   minifyGroupedNotifications,
+  minifyNotifications,
+  minifyNotificationRequest,
   minifyNotificationRequests,
   minifyAdminAccount,
   minifyAdminAccountList,

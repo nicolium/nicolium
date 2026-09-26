@@ -502,4 +502,5 @@ export {
   useNotificationsUnreadCount,
   usePrefetchNotifications,
   useProcessStreamNotification,
+  normalizeNotification,
 };

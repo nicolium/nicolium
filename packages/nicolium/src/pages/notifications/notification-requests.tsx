@@ -5,7 +5,7 @@ import { NotificationRequestsColumn } from '@/columns/notification-requests';
 import Column from '@/components/ui/column';
 
 const messages = defineMessages({
-  title: { id: 'columns.filtered_notifications', defaultMessage: 'Filtered notifications' },
+  title: { id: 'columns.notification_requests', defaultMessage: 'Filtered notifications' },
 });
 
 const NotificationRequestsPage = () => {
