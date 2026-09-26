@@ -259,11 +259,19 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({
     'status-interaction-bar__counter--static': !features.exposableReactions,
   });
 
+  if (
+    demetricator === 'always' &&
+    !('to' in rest && rest.to === '/@{-$username}/posts/$statusId/quotes')
+  )
+    return null;
+
   const body = (
     <div className='status-interaction-bar__body'>
-      <span className='status-interaction-bar__count'>
-        <AnimatedNumber value={count} obfuscate={demetricator === 'always'} short />
-      </span>
+      {demetricator !== 'always' && (
+        <span className='status-interaction-bar__count'>
+          <AnimatedNumber value={count} short />
+        </span>
+      )}
 
       <div className='status-interaction-bar__label'>{children}</div>
     </div>

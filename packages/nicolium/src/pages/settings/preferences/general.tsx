@@ -24,11 +24,15 @@ const messages = defineMessages({
   },
   demetricatorOn: {
     id: 'preferences.fields.demetricator.on',
-    defaultMessage: 'Hide counts',
+    defaultMessage: 'Obfuscate counts',
   },
   demetricatorAlways: {
     id: 'preferences.fields.demetricator.always',
     defaultMessage: 'Always hide counts, even in post details',
+  },
+  demetricatorFullyHide: {
+    id: 'preferences.fields.demetricator.fully_hide',
+    defaultMessage: 'Fully hide counts',
   },
 });
 
@@ -274,6 +278,7 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
               items={{
                 off: intl.formatMessage(messages.demetricatorOff),
                 on: intl.formatMessage(messages.demetricatorOn),
+                fully_hide: intl.formatMessage(messages.demetricatorFullyHide),
                 always: intl.formatMessage(messages.demetricatorAlways),
               }}
               defaultValue={settings.demetricator}
@@ -282,6 +287,23 @@ const GeneralPreferences: React.FC<ISettingsPage> = ({
               }}
             />
           </ListItem>
+
+          {features.emojiReacts && settings.demetricator !== 'off' && (
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='preferences.fields.demetricator_emoji_exception.label'
+                  defaultMessage='Display emoji reactions while keeping counters hidden'
+                />
+              }
+            >
+              <SettingToggle
+                settings={settings}
+                settingPath={['demetricatorEmojiException']}
+                onChange={onToggleChange}
+              />
+            </ListItem>
+          )}
         </List>
 
         {!onSave && features.chats && <MessagesSettings />}

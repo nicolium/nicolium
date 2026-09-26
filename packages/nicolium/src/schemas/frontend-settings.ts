@@ -547,10 +547,11 @@ const settingsSchema = v.object({
       v.transform((value) =>
         value === true || value === 'on' ? 'on' : value === 'always' ? 'always' : 'off',
       ),
-      v.picklist(['off', 'on', 'always']),
+      v.picklist(['off', 'on', 'always', 'fully_hide']),
     ),
     'off',
   ),
+  demetricatorEmojiException: v.fallback(v.boolean(), false),
 
   chats: coerceObject({
     mainWindow: v.optional(v.picklist(['minimized', 'open']), 'minimized'),

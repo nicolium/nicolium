@@ -40,6 +40,7 @@ interface IStatusReaction {
   statusId: string;
   reaction: EmojiReaction;
   obfuscate?: boolean;
+  hideCounts?: boolean;
   unauthenticated?: boolean;
 }
 
@@ -47,6 +48,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({
   reaction,
   statusId,
   obfuscate,
+  hideCounts,
   unauthenticated,
 }) => {
   const node = useRef<HTMLButtonElement>(null);
@@ -104,9 +106,11 @@ const StatusReaction: React.FC<IStatusReaction> = ({
     >
       <Emoji emoji={reaction.name} src={reaction.url ?? undefined} />
 
-      <p>
-        <AnimatedNumber value={reaction.count} obfuscate={obfuscate} short />
-      </p>
+      {!hideCounts && (
+        <p>
+          <AnimatedNumber value={reaction.count} obfuscate={obfuscate} short />
+        </p>
+      )}
     </button>
   );
 };
@@ -114,7 +118,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({
 const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }) => {
   const intl = useIntl();
   const { me } = useLoggedIn();
-  const { demetricator } = useSettings();
+  const { demetricator, demetricatorEmojiException } = useSettings();
   const features = useFeatures();
 
   const { mutate: emojiReact } = useEmojiReactMutation(status.id);
@@ -130,8 +134,12 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
     }
   };
 
-  if (demetricator === 'always') return null;
-  if ((demetricator === 'on' || status.emoji_reactions.length === 0) && collapsed) return null;
+  if (
+    (((demetricator === 'on' || demetricator === 'always') && !demetricatorEmojiException) ||
+      status.emoji_reactions.length === 0) &&
+    collapsed
+  )
+    return null;
   if (status.emoji_reactions.length === 0 && !features.emojiReacts) return null;
 
   const sortedReactions = status.emoji_reactions.toSorted(
@@ -146,7 +154,8 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
             key={reaction.name}
             statusId={status.id}
             reaction={reaction}
-            obfuscate={demetricator !== 'off'}
+            obfuscate={demetricator === 'on' && collapsed}
+            hideCounts={(demetricator === 'fully_hide' && collapsed) || demetricator === 'always'}
             unauthenticated={!me}
           />
         ) : null,

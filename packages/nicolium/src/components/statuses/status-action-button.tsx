@@ -12,17 +12,17 @@ interface IStatusActionCounter {
 }
 
 /** Action button numerical counter, eg "5" likes. */
-const StatusActionCounter: React.FC<IStatusActionCounter> = React.memo(
-  ({ count = 0 }): React.JSX.Element => {
-    const { demetricator } = useSettings();
+const StatusActionCounter: React.FC<IStatusActionCounter> = React.memo(({ count = 0 }) => {
+  const { demetricator } = useSettings();
 
-    return (
-      <p className='status-action-bar__button__counter'>
-        <AnimatedNumber value={count} obfuscate={demetricator !== 'off'} short />
-      </p>
-    );
-  },
-);
+  if (demetricator === 'fully_hide' || demetricator === 'always') return null;
+
+  return (
+    <p className='status-action-bar__button__counter'>
+      <AnimatedNumber value={count} obfuscate={demetricator !== 'off'} short />
+    </p>
+  );
+});
 
 StatusActionCounter.displayName = 'StatusActionCounter';
 

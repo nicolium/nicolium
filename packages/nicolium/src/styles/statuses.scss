@@ -2635,7 +2635,8 @@ div:has(> .timeline-status:not(.timeline-status--connected-bottom))
     align-items: center;
   }
 
-  &__count {
+  &__count,
+  &:not(:has(.status-interaction-bar__count)) &__label {
     @include mixins.text($weight: bold);
   }
 
