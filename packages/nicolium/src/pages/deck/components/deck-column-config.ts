@@ -248,7 +248,6 @@ const useColumnRouteTitle = () => {
       trendingTitles[params.trendsType as keyof typeof trendingTitles] ?? trendingTitles.hashtags,
     );
   } else if (routeId === notificationRequestRoute.id) {
-    console.log('huj');
     title = intl.formatMessage(messages.notificationsFrom, {
       name: account?.display_name,
     });
