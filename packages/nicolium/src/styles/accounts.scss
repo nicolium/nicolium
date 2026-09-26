@@ -848,6 +848,7 @@
   display: flex;
   gap: 0.375rem;
   align-items: center;
+  white-space: unset;
 
   svg {
     width: 1rem;
@@ -864,7 +865,14 @@
 }
 
 .follow-request-note {
+  flex-wrap: wrap;
   padding: 1rem;
+
+  &__header {
+    display: flex;
+    gap: 0.375rem;
+    align-items: center;
+  }
 
   .follow-request-actions {
     justify-content: flex-end;

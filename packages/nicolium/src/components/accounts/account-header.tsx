@@ -95,17 +95,19 @@ const FollowRequestNote: React.FC<IFollowRequestNote> = ({ account }) => {
 
   return (
     <div className='follow-request-note'>
-      <Icon src={iconUserPlus} />
+      <div className='follow-request-note__header'>
+        <Icon src={iconUserPlus} />
 
-      <p>
-        <FormattedMessage
-          id='notification.follow_request'
-          defaultMessage='{name} requested to follow you'
-          values={{
-            name: <Emojify text={account.display_name} emojis={account.emojis} />,
-          }}
-        />
-      </p>
+        <p>
+          <FormattedMessage
+            id='notification.follow_request'
+            defaultMessage='{name} requested to follow you'
+            values={{
+              name: <Emojify text={account.display_name} emojis={account.emojis} />,
+            }}
+          />
+        </p>
+      </div>
 
       <div className='follow-request-actions'>
         <button onClick={handleAuthorize}>
