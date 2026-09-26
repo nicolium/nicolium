@@ -9,6 +9,18 @@ const messages = defineMessages({
   wrenched: { id: 'column.wrenched', defaultMessage: 'Recent wrenches timeline' },
   timeline: { id: 'column.deck.timeline', defaultMessage: 'Timeline' },
   notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
+  notificationRequests: {
+    id: 'column.notification_requests',
+    defaultMessage: 'Filtered notifications',
+  },
+  notificationsFromPlaceholder: {
+    id: 'column.notifications_from.placeholder',
+    defaultMessage: 'Notifications from user',
+  },
+  notificationsFrom: {
+    id: 'column.notifications_from',
+    defaultMessage: 'Notifications from {name}',
+  },
   account: { id: 'column.account', defaultMessage: 'Profile' },
   search: { id: 'column.search', defaultMessage: 'Search' },
   status: { id: 'column.status', defaultMessage: 'Post' },

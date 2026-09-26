@@ -17,6 +17,7 @@ import { useAntenna } from '@/queries/accounts/use-antennas';
 import { useCircle } from '@/queries/accounts/use-circles';
 import { useList } from '@/queries/accounts/use-lists';
 import { useChat } from '@/queries/chats';
+import { useNotificationRequest } from '@/queries/notifications/use-notification-requests';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
 
 import { useActiveDeckColumns, updateActiveLayoutColumns } from '../utils/layouts';
@@ -36,6 +37,7 @@ import {
   instanceRoute,
   listRoute,
   localRoute,
+  notificationRequestRoute,
   trendingRoute,
   wrenchedRoute,
 } from './deck-routes';
@@ -165,6 +167,7 @@ interface RouteParams {
   trendsType?: string;
   folderId?: string;
   chatId?: string;
+  requestId?: string;
 }
 
 const routeTimeline = (
@@ -213,7 +216,16 @@ const useColumnRouteTitle = () => {
   const username = routeId === accountByUsernameRoute.id ? params.username : undefined;
   const { data: lookedUpAccount } = useAccountLookup(username);
 
-  const accountId = routeId === accountRoute.id ? params.accountId : undefined;
+  const { data: request } = useNotificationRequest(
+    routeId === notificationRequestRoute.id ? params.requestId : undefined,
+  );
+
+  const accountId =
+    routeId === accountRoute.id
+      ? params.accountId
+      : routeId === notificationRequestRoute.id
+        ? request?.account_id
+        : undefined;
   const { data: ownAccount } = useOwnAccount();
   const { data: account } = useAccount(accountId === 'self' ? ownAccount?.id : accountId);
 
@@ -229,18 +241,23 @@ const useColumnRouteTitle = () => {
   let title: string | undefined;
   if (timelineHeading) {
     title = timelineHeading;
-  } else if (acct !== undefined) {
-    title = `@${acct}`;
   } else if (routeId === hashtagRoute.id && params.hashtag) {
     title = `#${params.hashtag}`;
   } else if (routeId === trendingRoute.id) {
     title = intl.formatMessage(
       trendingTitles[params.trendsType as keyof typeof trendingTitles] ?? trendingTitles.hashtags,
     );
+  } else if (routeId === notificationRequestRoute.id) {
+    console.log('huj');
+    title = intl.formatMessage(messages.notificationsFrom, {
+      name: account?.display_name,
+    });
   } else if (bookmarkFolder) {
     title = bookmarkFolder.name;
   } else if (routeId === chatRoute.id && chat) {
     title = intl.formatMessage(messages.chatWith, { acct: chat.account.acct });
+  } else if (acct !== undefined) {
+    title = `@${acct}`;
   } else if (staticTitle) {
     title = intl.formatMessage(staticTitle);
   }
@@ -251,6 +268,7 @@ const useColumnRouteTitle = () => {
     hashtag: params.hashtag,
     chatId: params.chatId,
     folderId: params.folderId,
+    requestId: params.requestId,
   };
 };
 

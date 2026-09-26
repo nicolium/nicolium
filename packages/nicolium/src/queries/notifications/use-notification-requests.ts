@@ -27,19 +27,19 @@ const useNotificationRequests = makePaginatedResponseQuery(
   'notificationsPolicy',
 );
 
-const useNotificationRequest = (requestId: string) => {
+const useNotificationRequest = (requestId?: string) => {
   const client = useClient();
   const features = useFeatures();
   const importEntities = useImportEntities();
 
   return useAppQuery({
-    queryKey: queryKeys.notifications.notificationRequests.one(requestId),
+    queryKey: queryKeys.notifications.notificationRequests.one(requestId!),
     queryFn: () =>
-      client.notifications.getNotificationRequest(requestId).then((response) => {
+      client.notifications.getNotificationRequest(requestId!).then((response) => {
         importEntities({ accounts: [response.account], statuses: [response.last_status] });
         return minifyNotificationRequest(response);
       }),
-    enabled: features.notificationsPolicy,
+    enabled: !!requestId && features.notificationsPolicy,
   });
 };
 

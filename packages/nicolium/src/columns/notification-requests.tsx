@@ -325,12 +325,7 @@ const NotificationRequest: React.FC<INotificationRequest> = ({ request }) => {
   );
 };
 
-interface INotificationRequestsColumn {
-  /** Whether the container is used as scroll parent instead of the window. */
-  multiColumn?: boolean;
-}
-
-const NotificationRequestsColumn: React.FC<INotificationRequestsColumn> = ({ multiColumn }) => {
+const NotificationRequestsColumn: React.FC = () => {
   const columnId: string = useRef(`notificationRequests-${crypto.randomUUID()}`).current;
 
   const {
@@ -368,7 +363,6 @@ const NotificationRequestsColumn: React.FC<INotificationRequestsColumn> = ({ mul
       onLoadMore={() => fetchNextPage()}
       listClassName={clsx('status-list', { 'status-list--loading': isLoading })}
       itemClassName='account-list__item'
-      useWindowScroll={!multiColumn}
     >
       {requests.map((request) => (
         <NotificationRequest key={request.id} request={request} />

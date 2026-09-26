@@ -14,6 +14,8 @@ import AccountCollectionsColumn from '@/columns/collections';
 import DraftStatusesColumn from '@/columns/draft-statuses';
 import { FollowersList, FollowingList, SubscribersList } from '@/columns/follows';
 import { InteractionRequestsColumn } from '@/columns/interaction-requests';
+import { NotificationRequestColumn } from '@/columns/notification-request';
+import { NotificationRequestsColumn } from '@/columns/notification-requests';
 import NotificationsColumn from '@/columns/notifications';
 import ScheduledStatusesColumn from '@/columns/scheduled-statuses';
 import SearchColumn from '@/columns/search';
@@ -97,10 +99,11 @@ const RootRoute: React.FC = () => {
   const [canGoBack, setCanGoBack] = useState(() => router.history.canGoBack());
   const scopeUrl = useScopeUrl();
 
-  const { title, accountId, hashtag, chatId } = useColumnRouteTitle();
+  const { title, accountId, hashtag, chatId, requestId } = useColumnRouteTitle();
 
   const canAddColumn =
     (!!accountId &&
+      !requestId &&
       !columns.some((column) => column.type === 'account' && column.accountId === accountId)) ||
     (!!hashtag &&
       !columns.some((column) => column.type === 'hashtag' && column.hashtag === hashtag)) ||
@@ -315,11 +318,32 @@ const NotificationsDeckColumn: React.FC = () => {
     />
   );
 };
+
 const notificationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/notifications',
   component: NotificationsDeckColumn,
   staticData: { title: messages.notifications },
+});
+
+const notificationRequestsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/notifications/requests',
+  component: NotificationRequestsColumn,
+  staticData: { title: messages.notificationRequests },
+});
+
+const NotificationRequestDeckColumn: React.FC = () => {
+  const { requestId } = notificationRequestRoute.useParams();
+
+  return <NotificationRequestColumn requestId={requestId} />;
+};
+
+const notificationRequestRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/notifications/requests/$requestId',
+  component: NotificationRequestDeckColumn,
+  staticData: { title: messages.notificationsFromPlaceholder },
 });
 
 const HashtagDeckColumn: React.FC = () => {
@@ -915,6 +939,8 @@ const routeTree = rootRoute.addChildren([
   antennaRoute,
   instanceRoute,
   notificationsRoute,
+  notificationRequestsRoute,
+  notificationRequestRoute,
   hashtagRoute,
   hashtagPickerRoute,
   linkRoute,
@@ -961,6 +987,7 @@ export {
   linkRoute,
   listRoute,
   localRoute,
+  notificationRequestRoute,
   trendingRoute,
   wrenchedRoute,
   driveRoute,

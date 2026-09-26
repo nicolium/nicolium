@@ -15,14 +15,9 @@ import type { VirtuosoHandle } from 'react-virtuoso';
 
 interface INotificationRequestColumn {
   requestId: string;
-  /** Whether the container is used as scroll parent instead of the window. */
-  multiColumn?: string;
 }
 
-const NotificationRequestColumn: React.FC<INotificationRequestColumn> = ({
-  requestId,
-  multiColumn,
-}) => {
+const NotificationRequestColumn: React.FC<INotificationRequestColumn> = ({ requestId }) => {
   const columnId: string = useRef(`notificationRequest-${requestId}`).current;
   const node = useRef<VirtuosoHandle | null>(null);
 
@@ -72,7 +67,6 @@ const NotificationRequestColumn: React.FC<INotificationRequestColumn> = ({
       placeholderCount={20}
       onLoadMore={() => fetchNextPage()}
       listClassName={clsx('status-list', { 'status-list--loading': isLoading })}
-      useWindowScroll={!multiColumn}
     >
       {notifications.map((notification) => (
         <Notification
