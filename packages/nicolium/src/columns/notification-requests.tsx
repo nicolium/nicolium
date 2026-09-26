@@ -158,10 +158,8 @@ const NotificationRequestsColumn: React.FC<INotificationRequestsColumn> = ({ mul
     data: requests = [],
     isLoading,
     isFetching,
-    // isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-    // refetch,
   } = useNotificationRequests();
   const queryClient = useQueryClient();
   const scopeUrl = useScopeUrl();
@@ -181,7 +179,6 @@ const NotificationRequestsColumn: React.FC<INotificationRequestsColumn> = ({ mul
 
   const scrollContainer = (
     <ScrollableList
-      // ref={node}
       id={columnId}
       scrollKey='notification_requests'
       isLoading={isFetching}
