@@ -52,6 +52,8 @@ interface UpdateNotificationPolicyRequest {
   for_private_mentions?: NotificationPolicyRule;
   /** Whether to `accept`, `filter` or `drop` notifications from accounts that were limited by a moderator. */
   for_limited_accounts?: NotificationPolicyRule;
+  /** Whether to `accept`, `filter` or `drop` notifications from accounts that were marked as automated. */
+  for_bots?: NotificationPolicyRule;
 }
 
 /**

@@ -12,6 +12,7 @@ const notificationPolicySchema = v.object({
   for_new_accounts: notificationPolicyRuleSchema,
   for_private_mentions: notificationPolicyRuleSchema,
   for_limited_accounts: notificationPolicyRuleSchema,
+  for_bots: v.fallback(notificationPolicyRuleSchema, 'accept'),
   summary: v.object({
     pending_requests_count: v.pipe(v.number(), v.integer()),
     pending_notifications_count: v.pipe(v.number(), v.integer()),
