@@ -18,6 +18,8 @@ const MKLJCZK_ACCOUNTS = [
   'https://pl.fediverse.pl/users/mkljczk',
   'https://gts.mkljczk.pl/users/mkljczk',
   'https://gts.mkljczk.pl/@mkljczk',
+  'https://twojstary.gay/users/a8hjg35etyprng8m',
+  'https://twojstary.gay/@mkljczk',
 ];
 
 const paymentOptionSchema = v.variant('type', [
