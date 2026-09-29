@@ -170,7 +170,7 @@ const CreateAppPage: React.FC = () => {
         >
           <Input
             type='text'
-            placeholder='https://git.pleroma.social/nicolium/nicolium'
+            placeholder='https://codeberg.org/nicolium/nicolium'
             onChange={handleParamChange('website')}
             value={params.website}
           />
@@ -183,7 +183,7 @@ const CreateAppPage: React.FC = () => {
         >
           <Input
             type='text'
-            placeholder='https://git.pleroma.social/nicolium/nicolium'
+            placeholder='https://codeberg.org/nicolium/nicolium'
             onChange={handleParamChange('redirect_uris')}
             value={params.redirect_uris}
             required

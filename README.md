@@ -1,6 +1,5 @@
 # Nicolium
 
-[![git.pleroma.social Repo stars](https://img.shields.io/gitea/stars/nicolium/nicolium?gitea_url=https%3A%2F%2Fgit.pleroma.social&logo=forgejo)](https://git.pleroma.social/nicolium/nicolium)
 [![Codeberg Repo stars](https://img.shields.io/gitea/stars/nicolium/nicolium?gitea_url=https%3A%2F%2Fcodeberg.org&logo=Codeberg)](https://codeberg.org/nicolium/nicolium)
 [![GitHub Repo stars](https://img.shields.io/github/stars/nicolium/nicolium)](https://github.com/nicolium/nicolium)
 [![GitHub License](https://img.shields.io/github/license/nicolium/nicolium)](https://github.com/nicolium/nicolium?tab=AGPL-3.0-1-ov-file#readme)
@@ -31,7 +30,7 @@ The repository hosts Nicolium, but also libraries related to the project. Curren
 
 ## Contributing
 
-This project is hosted on [git.pleroma.social](https://git.pleroma.social/nicolium/nicolium), [Codeberg](https://codeberg.org/nicolium/nicolium) and [GitHub](https://github.com/nicolium/nicolium). You can open issues and create pull requests on git.pleroma.social.
+This project is hosted on [Codeberg](https://codeberg.org/nicolium/nicolium) and [GitHub](https://github.com/nicolium/nicolium). You can open issues and create pull requests on Codeberg.
 
 You can find more information about setting up the development environment in [the documentation](https://nicolium.app/docs/contributing/nicolium/).
 
