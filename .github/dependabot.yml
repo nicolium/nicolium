@@ -3,9 +3,10 @@ updates:
   - package-ecosystem: "npm"
     directories:
       - "/"
+      - "/packages/nicolium"
+      - "/packages/nicolium-website"
       - "/packages/pl-api"
       - "/packages/pl-hooks"
-      - "/packages/nicolium"
       - "/packages/website"
     schedule:
       interval: "weekly"
