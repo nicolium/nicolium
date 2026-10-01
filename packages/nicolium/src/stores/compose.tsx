@@ -49,6 +49,7 @@ import type {
   Location,
   EditStatusParams,
   StatusSource,
+  ScheduledStatus,
 } from 'pl-api';
 
 const messages = defineMessages({
@@ -157,6 +158,7 @@ interface Compose {
   draftId: string | null;
   groupId: string | null;
   editedId: string | null;
+  scheduledStatusId: string | null;
   inReplyToId: string | null;
   quoteId: string | null;
   to: Array<string>;
@@ -224,6 +226,7 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   draftId: null,
   groupId: null,
   editedId: null,
+  scheduledStatusId: null,
   inReplyToId: null,
   quoteId: null,
   to: [],
@@ -547,6 +550,7 @@ interface ComposeActions {
     editorState?: string | null,
     redacting?: boolean,
   ) => void;
+  setComposeToScheduledStatus: (scheduledStatus: ScheduledStatus) => void;
   replyCompose: (
     status: Pick<
       Status,
@@ -784,6 +788,37 @@ const useComposeStore = create<ComposeStore>()(
 
             if (editorState) {
               compose.editorState = editorState;
+            }
+          });
+        },
+
+        setComposeToScheduledStatus: (scheduledStatus) => {
+          set((state) => {
+            state.composers['compose-modal'] = {
+              ...state.default,
+              idempotencyKey: crypto.randomUUID(),
+            };
+
+            const compose = state.composers['compose-modal'];
+            compose.scheduledStatusId = scheduledStatus.id;
+            compose.text = scheduledStatus.params.text || '';
+            compose.mediaAttachments = scheduledStatus.media_attachments;
+            compose.sensitive = scheduledStatus.params.sensitive || false;
+            compose.spoilerText = scheduledStatus.params.spoiler_text || '';
+            compose.visibility = scheduledStatus.params.visibility;
+            compose.inReplyToId = scheduledStatus.params.in_reply_to_id;
+            compose.language = scheduledStatus.params.language;
+            compose.scheduledAt = new Date(scheduledStatus.scheduled_at);
+            compose.quoteId = scheduledStatus.params.quoted_status_id;
+            compose.quoteApprovalPolicy = scheduledStatus.params.quote_approval_policy;
+
+            const poll = scheduledStatus.params.poll;
+            if (poll) {
+              compose.poll = newPoll({
+                options: poll.options,
+                multiple: poll.multiple,
+                expires_in: +poll.expires_in,
+              });
             }
           });
         },
@@ -1403,6 +1438,13 @@ const submitCompose = async (
 
   if (!compose.preview && compose.text.trim().toLocaleUpperCase() === '5P13RD4L4J-5L3D21U') {
     removeSledzik();
+  }
+
+  if (compose.scheduledStatusId) {
+    await client.scheduledStatuses.cancelScheduledStatus(compose.scheduledStatusId);
+    queryClient.invalidateQueries({
+      queryKey: scopedQueryKey(queryKeys.scheduledStatuses.all, scopeUrl),
+    });
   }
 
   try {

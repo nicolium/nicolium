@@ -462,7 +462,13 @@ const ComposeForm = <ID extends string>({
   }
 
   if (scheduledAt) {
-    publishText = <FormattedMessage id='compose_form.schedule' defaultMessage='Schedule' />;
+    if (compose.scheduledStatusId) {
+      publishText = (
+        <FormattedMessage id='compose_form.save_changes' defaultMessage='Save changes' />
+      );
+    } else {
+      publishText = <FormattedMessage id='compose_form.schedule' defaultMessage='Schedule' />;
+    }
   }
 
   if (hasThread) {

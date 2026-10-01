@@ -9,6 +9,7 @@ import StatusContent from '@/components/statuses/status-content';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useCancelScheduledStatusMutation } from '@/queries/statuses/scheduled-statuses';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { buildPollFromParams } from '@/utils/builder';
@@ -32,11 +33,16 @@ const messages = defineMessages({
 
 interface IScheduledStatusActionBar {
   status: StatusEntity;
+  scheduledStatus: ScheduledStatusEntity;
 }
 
-const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status }) => {
+const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({
+  status,
+  scheduledStatus,
+}) => {
   const intl = useIntl();
 
+  const { setComposeToScheduledStatus } = useComposeActions();
   const { mutate: cancelScheduledStatus } = useCancelScheduledStatusMutation(status.id);
   const { openModal } = useModalsActions();
   const settings = useSettings();
@@ -57,8 +63,16 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
     }
   };
 
+  const handleEditClick = () => {
+    setComposeToScheduledStatus(scheduledStatus);
+    openModal('COMPOSE');
+  };
+
   return (
     <div className='scheduled-status__actions'>
+      <button onClick={handleEditClick}>
+        <FormattedMessage id='scheduled_status.edit' defaultMessage='Edit' />
+      </button>
       <button onClick={handleCancelClick}>
         <FormattedMessage id='scheduled_status.cancel' defaultMessage='Cancel' />
       </button>
@@ -101,7 +115,13 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus, ...other
             account={ownAccount}
             timestamp={status.created_at}
             futureTimestamp
-            action={<ScheduledStatusActionBar status={status} {...other} />}
+            action={
+              <ScheduledStatusActionBar
+                status={status}
+                scheduledStatus={scheduledStatus}
+                {...other}
+              />
+            }
           />
         </div>
 
