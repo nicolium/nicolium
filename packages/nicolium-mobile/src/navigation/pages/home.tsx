@@ -127,32 +127,38 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
 
   let menuContent;
 
+  const navigate: typeof navigation.navigate = (...props) => {
+    navigation.navigate(...props);
+    setMenuPage('timelines');
+    setShowTimelineMenu(false);
+  };
+
   switch (menuPage) {
     case 'timelines': {
       menuContent = (
         <>
           <Menu.Item
-            onPress={() => navigation.navigate('home')}
+            onPress={() => navigate('home')}
             title={<FormattedMessage id='column.home' defaultMessage='Home' />}
             leadingIcon={HouseIcon}
           />
           {features.publicTimeline && timelineAccess.live_feeds.local !== 'disabled' && (
             <Menu.Item
-              onPress={() => navigation.navigate('local')}
+              onPress={() => navigate('local')}
               title={<FormattedMessage id='column.community' defaultMessage='Local timeline' />}
               leadingIcon={PlanetIcon}
             />
           )}
           {features.bubbleTimeline && timelineAccess.live_feeds.bubble !== 'disabled' && (
             <Menu.Item
-              onPress={() => navigation.navigate('bubble')}
+              onPress={() => navigate('bubble')}
               title={<FormattedMessage id='column.bubble' defaultMessage='Bubble timeline' />}
               leadingIcon={GraphIcon}
             />
           )}
           {features.publicTimeline && timelineAccess.live_feeds.remote !== 'disabled' && (
             <Menu.Item
-              onPress={() => navigation.navigate('federated')}
+              onPress={() => navigate('federated')}
               title={<FormattedMessage id='column.public' defaultMessage='Fediverse timeline' />}
               leadingIcon={FediverseLogoIcon}
             />
@@ -187,7 +193,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               lists.map((list) => (
                 <Menu.Item
                   key={list.id}
-                  onPress={() => navigation.navigate('list', { id: list.id })}
+                  onPress={() => navigate('list', { id: list.id })}
                   title={list.title}
                   leadingIcon={ListDashesIcon}
                 />
@@ -352,7 +358,12 @@ const HomeStack = createNativeStackNavigator<TimelineStackParams>();
 
 const HomeStackScreen = () => {
   return (
-    <HomeStack.Navigator screenOptions={{ header: TimelineHeader, animation: 'slide_from_right' }}>
+    <HomeStack.Navigator
+      screenOptions={{
+        header: (props) => <TimelineHeader key={props.route.path} {...props} />,
+        animation: 'slide_from_right',
+      }}
+    >
       <HomeStack.Screen
         name='home'
         component={HomeTimelineScreen}
