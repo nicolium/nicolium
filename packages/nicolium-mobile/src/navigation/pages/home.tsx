@@ -163,7 +163,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               }
               title={<FormattedMessage id='column.bubble' defaultMessage='Bubble timeline' />}
               leadingIcon={GraphIcon}
-              />
+            />
           )}
           {features.publicTimeline && timelineAccess.live_feeds.remote !== 'disabled' && (
             <Menu.Item
@@ -196,21 +196,33 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     case 'lists': {
       menuContent = (
         <>
-          <Menu.Item leadingIcon={CaretLeftIcon} onPress={() => setMenuPage('timelines')} title='Back' />
-            <Divider />
-          {lists?.map((list) => (
-            <Menu.Item
-              key={list.id}
-              onPress={() =>
-                navigation.navigate('app', {
-                  screen: 'timeline',
-                  params: { screen: 'list' },
-                })
-              }
-              title={list.title}
-              leadingIcon={ListDashesIcon}
-            />
-          )) || <ActivityIndicator style={{ paddingVertical: 8 }} />}
+          <Menu.Item
+            leadingIcon={CaretLeftIcon}
+            onPress={() => setMenuPage('timelines')}
+            title='Back'
+          />
+          <Divider />
+          {lists ? (
+            lists.length ? (
+              lists.map((list) => (
+                <Menu.Item
+                  key={list.id}
+                  onPress={() =>
+                    navigation.navigate('app', {
+                      screen: 'timeline',
+                      params: { screen: 'list' },
+                    })
+                  }
+                  title={list.title}
+                  leadingIcon={ListDashesIcon}
+                />
+              ))
+            ) : (
+              <Menu.Item title='You have no lists yet.' />
+            )
+          ) : (
+            <ActivityIndicator style={{ paddingVertical: 8 }} />
+          )}
         </>
       );
       break;
