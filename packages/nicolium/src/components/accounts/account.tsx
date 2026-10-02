@@ -364,7 +364,7 @@ const Account = ({
                   @{systemMember ? username?.replace('@', `/${systemMember.id}@`) : username}
                 </p>
 
-                {pronouns && (
+                {withLinkToProfile && pronouns && (
                   <>
                     <span className='separator' />
                     <p
@@ -468,7 +468,7 @@ const Account = ({
               @{systemMember ? username?.replace('@', `/${systemMember.id}@`) : username}
             </p>
 
-            {pronouns && (
+            {withLinkToProfile && pronouns && (
               <>
                 <span className='separator' />
                 <p
