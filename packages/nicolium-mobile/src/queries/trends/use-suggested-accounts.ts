@@ -16,7 +16,7 @@ import type { Suggestion } from 'pl-api';
 
 type MinifiedSuggestion = Omit<Suggestion, 'account'> & { account_id: string };
 
-const useSuggestedAccounts = () => {
+const useSuggestedAccounts = (enabled?: boolean) => {
   const client = useClient();
   const features = useFeatures();
   const queryClient = useQueryClient();
@@ -44,7 +44,7 @@ const useSuggestedAccounts = () => {
     queryKey: queryKeys.suggestions.all,
     queryFn: () => getSuggestions(),
     placeholderData: keepPreviousData,
-    enabled: features.suggestions || features.suggestionsV2,
+    enabled: enabled !== false && (features.suggestions || features.suggestionsV2),
   });
 
   return query;

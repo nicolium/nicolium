@@ -4,7 +4,7 @@ import { useClient, useFeatures } from '@/stores/auth';
 
 import { queryKeys } from '../keys';
 
-const useTrendingStatuses = () => {
+const useTrendingStatuses = (enabled?: boolean) => {
   const client = useClient();
   const importEntities = useImportEntities();
   const features = useFeatures();
@@ -20,7 +20,7 @@ const useTrendingStatuses = () => {
   return useAppQuery({
     queryKey: queryKeys.trends.statuses,
     queryFn: fetchTrendingStatuses,
-    enabled: features.trendingStatuses,
+    enabled: enabled !== false && features.trendingStatuses,
   });
 };
 

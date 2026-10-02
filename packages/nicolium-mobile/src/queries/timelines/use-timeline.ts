@@ -4,19 +4,19 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 // import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { importEntities } from '@/queries/utils/import-entities';
+import { useClient } from '@/stores/auth';
+// import { compareId } from '@/utils/comparators';
 import {
   // useTimelinesStore,
   useTimeline as useStoreTimeline,
   useTimelinesActions,
   type TimelineEntry,
 } from '@/stores/timelines';
-// import { compareId } from '@/utils/comparators';
 
 import { queryKeys } from '../keys';
 import { scopedQueryKey } from '../query';
 
 import type { PaginatedResponse, PaginationParams, Status, StreamingParams } from 'pl-api';
-import { useClient } from '@/stores/auth';
 
 type TimelineFetcher = (params?: PaginationParams) => Promise<PaginatedResponse<Status>>;
 

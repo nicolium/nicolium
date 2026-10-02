@@ -4,19 +4,30 @@ import {
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
 import { debounce } from '@tanstack/react-pacer/debouncer';
-import React, { useCallback } from 'react';
-import { ScrollView, View } from 'react-native';
-import { ActivityIndicator, Divider, Searchbar, Text, TouchableRipple, useTheme } from 'react-native-paper';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+import {
+  ActivityIndicator,
+  Divider,
+  Searchbar,
+  Text,
+  TouchableRipple,
+  useTheme,
+} from 'react-native-paper';
 import { TabsProvider, Tabs, TabScreen } from 'react-native-paper-tabs';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Account } from '@/components/account';
-import { Status } from '@/components/status';
+import { Status } from '@/components/statuses/status';
+import { EmptyMessage } from '@/components/ui/empty-message';
 import { useSearchAccounts, useSearchStatuses } from '@/queries/search/use-search';
+import { useSuggestedAccounts } from '@/queries/trends/use-suggested-accounts';
+import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
+import { useFeatures } from '@/stores/auth';
 
 import type { SearchStackParams } from '../router';
 
-const SEARCH_TYPES = ['accounts', 'statuses', 'hashtags'] as const;
+const SEARCH_TYPES = ['accounts', 'statuses', 'hashtags', 'links'] as const;
 
 const SearchScreen = ({
   route,
@@ -24,17 +35,28 @@ const SearchScreen = ({
 }: NativeStackScreenProps<SearchStackParams, 'search'>) => {
   const { top: topInset } = useSafeAreaInsets();
   const { colors } = useTheme();
+  const features = useFeatures();
+  const [forcedRerenderKey, setForcedRerenderKey] = useState(0);
 
   const { type: activeType = 'accounts', query: activeQuery = '' } = route.params || {};
 
   const [enteredQuery, setEnteredQuery] = React.useState(activeQuery || '');
+
+  const hasQuery = activeQuery.trim().length > 0;
+
+  useEffect(() => {
+    if (activeType === 'links' && hasQuery) {
+      navigation.setParams({ type: 'accounts' });
+      setForcedRerenderKey((value) => value + 1);
+    }
+  }, [activeType, activeQuery]);
 
   const debouncedNavigate = useCallback(
     debounce(
       (query: string) => {
         navigation.setParams({ query: query });
       },
-      { wait: 900 },
+      { wait: 400 },
     ),
     [],
   );
@@ -46,8 +68,10 @@ const SearchScreen = ({
     debouncedNavigate(query);
   };
 
-  const accountsQuery = useSearchAccounts((activeType === 'accounts' && activeQuery) || '');
-  const statusesQuery = useSearchStatuses((activeType === 'statuses' && activeQuery) || '');
+  const accountsQuery = useSearchAccounts((activeType === 'accounts' && activeQuery.trim()) || '');
+  const statusesQuery = useSearchStatuses((activeType === 'statuses' && activeQuery.trim()) || '');
+  const trendingAccountsQuery = useSuggestedAccounts(activeType === 'accounts' && !hasQuery);
+  const trendingStatusesQuery = useTrendingStatuses(activeType === 'statuses' && !hasQuery);
 
   return (
     <>
@@ -60,23 +84,46 @@ const SearchScreen = ({
       <TabsProvider
         defaultIndex={SEARCH_TYPES.indexOf(route.params?.type || 'accounts')}
         onChangeIndex={handleChangeIndex}
+        key={forcedRerenderKey}
       >
         <Tabs style={{ backgroundColor: colors.background }} uppercase={false}>
           <TabScreen label='Accounts'>
             <FlashList
-              data={accountsQuery.data}
+              data={
+                hasQuery
+                  ? accountsQuery.data
+                  : trendingAccountsQuery.data?.map(({ account_id: id }) => id)
+              }
               renderItem={({ item }) => (
-                <TouchableRipple onPress={() => {}} key={item} style={{ paddingVertical: 8, paddingHorizontal: 12 }}>
-                  <Account.FromServer key={item} id={item} />
+                <TouchableRipple
+                  onPress={() => {}}
+                  key={item}
+                  style={{ paddingVertical: 8, paddingHorizontal: 12 }}
+                >
+                  <Account key={item} id={item} />
                 </TouchableRipple>
               )}
               ItemSeparatorComponent={Divider}
               onEndReached={
-                accountsQuery.hasNextPage && !accountsQuery.isFetching
+                hasQuery && accountsQuery.hasNextPage && !accountsQuery.isFetching
                   ? accountsQuery.fetchNextPage
                   : undefined
               }
               onEndReachedThreshold={0.1}
+
+              ListEmptyComponent={
+                !accountsQuery.isPending ? (
+                  <EmptyMessage
+                    emptyMessageText={
+                      <FormattedMessage
+                        id='empty_column.search.accounts'
+                        defaultMessage='There are no people results for "{term}"'
+                        values={{ term: activeQuery }}
+                      />
+                    }
+                  />
+                ) : null
+              }
               ListFooterComponent={
                 accountsQuery.isFetching ? (
                   <ActivityIndicator style={{ marginVertical: 8 }} />
@@ -86,19 +133,32 @@ const SearchScreen = ({
           </TabScreen>
           <TabScreen label='Posts'>
             <FlashList
-              data={statusesQuery.data}
+              data={(hasQuery ? statusesQuery : trendingStatusesQuery).data}
               renderItem={({ item }) => (
-                <TouchableRipple onPress={() => {}} key={item} style={{ paddingVertical: 16, paddingHorizontal: 12 }}>
-                  <Status.FromServer id={item} />
+                <TouchableRipple onPress={() => {}} key={item} style={{ padding: 16 }}>
+                  <Status id={item} />
                 </TouchableRipple>
               )}
               ItemSeparatorComponent={Divider}
               onEndReached={
-                statusesQuery.hasNextPage && !statusesQuery.isFetching
+                hasQuery && statusesQuery.hasNextPage && !statusesQuery.isFetching
                   ? statusesQuery.fetchNextPage
                   : undefined
               }
               onEndReachedThreshold={0.1}
+              ListEmptyComponent={
+                !statusesQuery.isPending ? (
+                  <EmptyMessage
+                    emptyMessageText={
+                      <FormattedMessage
+                        id='empty_column.search.statuses'
+                        defaultMessage='There are no posts results for "{term}"'
+                        values={{ term: activeQuery }}
+                      />
+                    }
+                  />
+                ) : null
+              }
               ListFooterComponent={
                 statusesQuery.isFetching ? (
                   <ActivityIndicator style={{ marginVertical: 8 }} />
@@ -107,8 +167,13 @@ const SearchScreen = ({
             />
           </TabScreen>
           <TabScreen label='Hashtags'>
-            <Text>meow3</Text>
+            <Text>Hashtags</Text>
           </TabScreen>
+          {features.trendingLinks && !hasQuery && (
+            <TabScreen label='Links'>
+              <Text>Links</Text>
+            </TabScreen>
+          )}
         </Tabs>
       </TabsProvider>
     </>

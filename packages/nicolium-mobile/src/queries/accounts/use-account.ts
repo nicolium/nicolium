@@ -83,10 +83,10 @@ const useAccount = (accountId?: string, _withRelationship = false) => {
   // }, [accountQuery.data, relationship, credentialIsAdmin, nickname]);
 
   return accountQuery;
-    // isRelationshipLoading,
-    // isUnauthorized,
-    // isUnavailable,
-    // data: account,
+  // isRelationshipLoading,
+  // isUnauthorized,
+  // isUnavailable,
+  // data: account,
 };
 
 export { useAccount };

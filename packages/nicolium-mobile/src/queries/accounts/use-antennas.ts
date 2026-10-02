@@ -3,6 +3,7 @@ import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { useClient, useFeatures } from '@/stores/auth';
 
 import { queryClient } from '../client';
 import { filterById } from '../utils/filter-id';
@@ -10,7 +11,6 @@ import { makePaginatedResponseQuery } from '../utils/make-paginated-response-que
 import { minifyAccountList } from '../utils/minify-list';
 
 import type { Antenna, CreateAntennaParams, PlApiClient, UpdateAntennaParams } from 'pl-api';
-import { useClient, useFeatures } from '@/stores/auth';
 
 function useAntennas<T>(
   select: (data: Array<Antenna>) => T,

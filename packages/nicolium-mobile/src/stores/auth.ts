@@ -2,6 +2,10 @@ import { PlApiClient, type Features } from 'pl-api';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
+import { queryClient } from '@/queries/client';
+
+import { useTimelinesStore } from './timelines';
+
 interface AuthData {
   instance: string | null;
   token: string | null;
@@ -38,10 +42,13 @@ const useAuthStore = create<AuthStore>()(
             },
             onInstanceFetchError: () => reject(),
           });
-        })
+        });
       },
       signOut: () => {
         set((state) => {
+          queryClient.removeQueries({ queryKey: [state.instance] });
+          useTimelinesStore.getState().actions.resetTimelines(state.instance!);
+
           state.instance = null;
           state.token = null;
           state.client = null as any;

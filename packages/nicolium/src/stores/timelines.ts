@@ -92,6 +92,7 @@ interface State {
     deletePendingStatus: (scopeUrl: string, idempotencyKey: string) => void;
     filterTimelines: (scopeUrl: string, accountId: string) => void;
     resetTimeline: (scopeUrl: string, timelineId: string) => void;
+    resetTimelines: (scopeUrl: string) => void;
     disablePolling: () => void;
     resetErroredTimelines: () => void;
   };
@@ -480,6 +481,10 @@ const useTimelinesStore = create<State>()(
         set((state) => {
           if (!state.timelines[scopeUrl]) state.timelines[scopeUrl] = {};
           state.timelines[scopeUrl][timelineId] = createEmptyTimeline();
+        }),
+      resetTimelines: (scopeUrl) =>
+        set((state) => {
+          delete state.timelines[scopeUrl];
         }),
       disablePolling: () =>
         set((state) => {

@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { useAuthStore } from '@/stores/auth';
 
-import { Header } from '../components/header';
+import { Header } from '../components/ui/header';
 
 import { LoginScreen } from './pages/login';
 import { SettingsScreen } from './pages/settings';
@@ -20,7 +20,7 @@ type TimelineStackParams = {
   antenna: { id: string };
 };
 type SearchStackParams = {
-  search?: { type: 'statuses' | 'accounts' | 'hashtags'; query: string };
+  search?: { type: 'statuses' | 'accounts' | 'hashtags' | 'links'; query: string };
 };
 type TabsParams = {
   timeline: NavigatorScreenParams<TimelineStackParams>;

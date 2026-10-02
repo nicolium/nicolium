@@ -1,11 +1,11 @@
 import { GlobeIcon } from 'phosphor-react-native';
 import React from 'react';
 import { Image, View } from 'react-native';
-import { Appbar, Avatar, Button, Divider, Text, TextInput, useTheme } from 'react-native-paper';
+import { Appbar, Button, Divider, Text, TextInput, useTheme } from 'react-native-paper';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { UIAccount } from '@/components/statuses/account';
 import { useAuthStoreActions } from '@/stores/auth';
-import { Account } from '@/components/account';
 
 const LoginScreen = () => {
   const { bottom: bottomInset } = useSafeAreaInsets();
@@ -39,7 +39,7 @@ const LoginScreen = () => {
             source={require('@/assets/logo.svg')}
           />
 
-          <Account displayName='Nicolium' acct='@nicolium' />
+          <UIAccount displayName='Nicolium' acct='@nicolium' />
 
           <View style={{ gap: 12 }}>
             <Text variant='headlineSmall'>Welcome!</Text>
@@ -98,4 +98,4 @@ const LoginScreen = () => {
   );
 };
 
-export { LoginScreen }
+export { LoginScreen };
