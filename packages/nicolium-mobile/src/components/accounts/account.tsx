@@ -14,10 +14,14 @@ const Account: React.FC<IAccount> = ({ id, ...props }) => {
 
   if (!account) return null;
 
-  const pronouns = account.fields.find(
-    ({ name, value }) =>
-      name.toLocaleLowerCase().includes('pronouns') && value.length <= 24 && !value.startsWith('<'),
-  );
+  const pronouns = account.pronouns.length
+    ? account.pronouns.join('/')
+    : account.fields.find(
+        ({ name, value }) =>
+          name.toLocaleLowerCase().includes('pronouns') &&
+          value.length <= 24 &&
+          !value.startsWith('<'),
+      );
 
   return (
     <UIAccount

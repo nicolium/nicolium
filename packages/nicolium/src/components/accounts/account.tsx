@@ -43,6 +43,8 @@ const messages = defineMessages({
     id: 'account.locked_info',
     defaultMessage: 'This account is locked. The owner manually reviews who can follow them.',
   },
+  pronouns: { id: 'account.pronouns.with_label', defaultMessage: 'Pronouns: {pronouns}' },
+  pronounsTranslatable: { id: 'account.pronouns', defaultMessage: 'pronouns' },
 });
 
 const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
@@ -173,6 +175,23 @@ const Account = ({
       };
     }
   }, [system, pluraldawnMatch]);
+
+  const pronouns = useMemo(() => {
+    if (account.pronouns.length) {
+      return account.pronouns.join('/');
+    } else {
+      const localized = intl.formatMessage(messages.pronounsTranslatable).toLocaleLowerCase();
+      const pronouns = account.fields.find(
+        ({ name, value }) =>
+          (name.toLocaleLowerCase().includes('pronouns') ||
+            name.toLocaleLowerCase().includes(localized)) &&
+          value.length <= 24 &&
+          !value.startsWith('<'),
+      )?.value;
+
+      return pronouns;
+    }
+  }, [account.pronouns, account.fields]);
 
   const withExternalLink = !me && !allowDisplayingRemoteNoLogin && account && !account.local;
 
@@ -342,9 +361,22 @@ const Account = ({
 
               <div className='account-card__meta'>
                 <p className={clsx('account-card__handle', loading && 'placeholder-display-name')}>
-                  @{username}
-                  {systemMember ? `/${systemMember.id}` : null}
+                  @{systemMember ? username?.replace('@', `/${systemMember.id}@`) : username}
                 </p>
+
+                {pronouns && (
+                  <>
+                    <span className='separator' />
+                    <p
+                      className='account-card__handle'
+                      title={intl.formatMessage(messages.pronouns, {
+                        pronouns,
+                      })}
+                    >
+                      {pronouns}
+                    </p>
+                  </>
+                )}
 
                 {withLocked && !timestamp && account.locked && (
                   <>
@@ -436,6 +468,20 @@ const Account = ({
               @{systemMember ? username?.replace('@', `/${systemMember.id}@`) : username}
             </p>
 
+            {pronouns && (
+              <>
+                <span className='separator' />
+                <p
+                  className='account-card__handle'
+                  title={intl.formatMessage(messages.pronouns, {
+                    pronouns,
+                  })}
+                >
+                  {pronouns}
+                </p>
+              </>
+            )}
+
             {withLocked && !timestamp && account.locked && (
               <>
                 <Icon
@@ -443,6 +489,7 @@ const Account = ({
                   alt={intl.formatMessage(messages.accountLocked)}
                   className='account-card__lock'
                 />
+
                 {account.favicon && !disableUserProvidedMedia && <span className='separator' />}
               </>
             )}

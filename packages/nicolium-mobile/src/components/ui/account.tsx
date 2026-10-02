@@ -36,7 +36,7 @@ const UIAccount: React.FC<IUIAccount> = ({
           </Text>
           {displayNameDetail && (
             <Text variant='bodySmall' numberOfLines={1} style={{ flex: 1, color: colors.outline }}>
-              {' · '}
+              {'· '}
               {displayNameDetail}
             </Text>
           )}

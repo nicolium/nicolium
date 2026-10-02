@@ -106,7 +106,7 @@ const SearchScreen = ({
                 <TouchableRipple
                   onPress={() => {}}
                   key={item}
-                  style={{ paddingVertical: 8, paddingHorizontal: 12 }}
+                  style={{ paddingVertical: 8, padding: 12 }}
                 >
                   <Account key={item} id={item} />
                 </TouchableRipple>

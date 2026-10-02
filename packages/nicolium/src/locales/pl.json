@@ -90,6 +90,7 @@
   "account.posts": "Wpisy",
   "account.posts_with_replies": "Wpisy i odpowiedzi",
   "account.profile_external": "Wyświetl profil na {domain}",
+  "account.pronouns": "zaimki",
   "account.pronouns.with_label": "Zaimki: {pronouns}",
   "account.recommendations": "Polecane konta",
   "account.recommendations.empty": "@{acct} nie wyróżnia żadnego konta na swoim profilu.",

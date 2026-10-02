@@ -3,7 +3,7 @@ import iconCalendarDots from '@phosphor-icons/core/regular/calendar-dots.svg';
 import iconTag from '@phosphor-icons/core/regular/tag.svg';
 import { useRouter, type ListenerFn, type RouterEvent } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import ActionButton from '@/components/accounts/action-button';
@@ -29,6 +29,7 @@ import type { Account } from 'pl-api';
 
 const messages = {
   pronouns: { id: 'account.pronouns.with_label', defaultMessage: 'Pronouns: {pronouns}' },
+  pronounsTranslatable: { id: 'account.pronouns', defaultMessage: 'pronouns' },
 };
 
 const getBadges = (account?: Pick<Account, 'is_admin' | 'is_moderator'>): React.JSX.Element[] => {
@@ -141,6 +142,24 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
     closeAccountHoverCard(true);
   };
 
+  const pronouns = useMemo(() => {
+    if (!account) return null;
+    if (account.pronouns.length) {
+      return account.pronouns.join('/');
+    } else {
+      const localized = intl.formatMessage(messages.pronounsTranslatable).toLocaleLowerCase();
+      const pronouns = account.fields.find(
+        ({ name, value }) =>
+          (name.toLocaleLowerCase().includes('pronouns') ||
+            name.toLocaleLowerCase().includes(localized)) &&
+          value.length <= 24 &&
+          !value.startsWith('<'),
+      )?.value;
+
+      return pronouns;
+    }
+  }, [account?.pronouns, account?.fields]);
+
   if (!account) return null;
   const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
   const followedBy = me !== account.id && account.relationship?.followed_by === true;
@@ -190,16 +209,16 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
           {timezoneField && <AccountLocalTime accountId={account.id} field={timezoneField} />}
 
-          {account.pronouns.length > 0 && (
+          {pronouns && (
             <div
               className='account-info__details__item'
               title={intl.formatMessage(messages.pronouns, {
-                pronouns: account.pronouns.join('/'),
+                pronouns,
               })}
             >
               <Icon src={iconTag} />
 
-              {account.pronouns.join('/')}
+              {pronouns}
             </div>
           )}
 

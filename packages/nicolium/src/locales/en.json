@@ -97,6 +97,7 @@
   "account.posts": "Posts",
   "account.posts_with_replies": "Posts & replies",
   "account.profile_external": "View profile on {domain}",
+  "account.pronouns": "pronouns",
   "account.pronouns.with_label": "Pronouns: {pronouns}",
   "account.recommendations": "Recommended accounts",
   "account.recommendations.empty": "@{acct} doesn’t feature any accounts on their profile.",
