@@ -1,5 +1,6 @@
 import {
   createNativeStackNavigator,
+  type NativeStackScreenProps,
   type NativeStackHeaderProps,
   type NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
@@ -44,7 +45,6 @@ import { useClient, useFeatures, useInstance } from '@/stores/auth';
 
 import type { TimelineStackParams } from '../router';
 import type { TimelineEntry } from '@/stores/timelines';
-import type { ParamListBase } from '@react-navigation/native';
 
 const messages = defineMessages({
   homeTimeline: { id: 'column.home', defaultMessage: 'Home' },
@@ -99,7 +99,7 @@ const useTimelineHeadingAndIcon = (active: ITimelinePicker['active'] | null): [s
 };
 
 interface ITimelinePicker {
-  navigation: NativeStackNavigationProp<ParamListBase, string, undefined>;
+  navigation: NativeStackNavigationProp<TimelineStackParams>;
   active?:
     | 'home'
     | 'local'
@@ -132,47 +132,27 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
       menuContent = (
         <>
           <Menu.Item
-            onPress={() =>
-              navigation.navigate('app', {
-                screen: 'timeline',
-                params: { screen: 'home' },
-              })
-            }
+            onPress={() => navigation.navigate('home')}
             title={<FormattedMessage id='column.home' defaultMessage='Home' />}
             leadingIcon={HouseIcon}
           />
           {features.publicTimeline && timelineAccess.live_feeds.local !== 'disabled' && (
             <Menu.Item
-              onPress={() =>
-                navigation.navigate('app', {
-                  screen: 'timeline',
-                  params: { screen: 'local' },
-                })
-              }
+              onPress={() => navigation.navigate('local')}
               title={<FormattedMessage id='column.community' defaultMessage='Local timeline' />}
               leadingIcon={PlanetIcon}
             />
           )}
           {features.bubbleTimeline && timelineAccess.live_feeds.bubble !== 'disabled' && (
             <Menu.Item
-              onPress={() =>
-                navigation.navigate('app', {
-                  screen: 'timeline',
-                  params: { screen: 'bubble' },
-                })
-              }
+              onPress={() => navigation.navigate('bubble')}
               title={<FormattedMessage id='column.bubble' defaultMessage='Bubble timeline' />}
               leadingIcon={GraphIcon}
             />
           )}
           {features.publicTimeline && timelineAccess.live_feeds.remote !== 'disabled' && (
             <Menu.Item
-              onPress={() =>
-                navigation.navigate('app', {
-                  screen: 'timeline',
-                  params: { screen: 'federated' },
-                })
-              }
+              onPress={() => navigation.navigate('federated')}
               title={<FormattedMessage id='column.public' defaultMessage='Fediverse timeline' />}
               leadingIcon={FediverseLogoIcon}
             />
@@ -207,12 +187,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               lists.map((list) => (
                 <Menu.Item
                   key={list.id}
-                  onPress={() =>
-                    navigation.navigate('app', {
-                      screen: 'timeline',
-                      params: { screen: 'list' },
-                    })
-                  }
+                  onPress={() => navigation.navigate('list', { id: list.id })}
                   title={list.title}
                   leadingIcon={ListDashesIcon}
                 />
@@ -263,9 +238,11 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
 const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
   const [showMenu, setShowMenu] = React.useState(false);
 
+  const activeKey = route.params?.id ? `${route.name}:${route.params.id}` : route.name;
+
   return (
     <Appbar.Header>
-      <Appbar.Content title={<TimelinePicker navigation={navigation} active={route.name} />} />
+      <Appbar.Content title={<TimelinePicker navigation={navigation} active={activeKey} />} />
 
       <Menu
         visible={showMenu}
@@ -286,14 +263,14 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
   );
 };
 
-const HomeTimelineScreen = () => {
-  const client = useClient();
+interface ITimeline {
+  query: ReturnType<typeof useTimeline>;
+}
 
-  const timelineQuery = useTimeline('home', (params) => client.timelines.homeTimeline(params));
-
+const Timeline: React.FC<ITimeline> = ({ query }) => {
   return (
     <FlashList
-      data={timelineQuery.entries}
+      data={query.entries}
       renderItem={({ item }) =>
         item.type === 'status' ? (
           <TouchableRipple onPress={() => {}} key={item.id} style={{ padding: 16 }}>
@@ -305,33 +282,70 @@ const HomeTimelineScreen = () => {
         if (leadingItem.type === 'status' && leadingItem.isConnectedBottom) return null;
         return <Divider />;
       }}
+      onRefresh={query.refetch}
+      onEndReached={query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined}
+      onEndReachedThreshold={0.1}
+      ListFooterComponent={
+        query.isFetching && !query.isPending ? (
+          <ActivityIndicator style={{ marginVertical: 8 }} />
+        ) : undefined
+      }
     />
   );
 };
 
-const FederatedTimelineScreen = () => {
+const HomeTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'home'>> = () => {
+  const client = useClient();
+
+  const timelineQuery = useTimeline('home', (params) => client.timelines.homeTimeline(params));
+
+  return <Timeline query={timelineQuery} />;
+};
+
+const LocalTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'local'>> = () => {
+  const client = useClient();
+
+  const timelineQuery = useTimeline('public:local', (paginationParams) =>
+    client.timelines.publicTimeline({ ...paginationParams, local: true }),
+  );
+
+  return <Timeline query={timelineQuery} />;
+};
+
+const BubbleTimelineScreen: React.FC<
+  NativeStackScreenProps<TimelineStackParams, 'bubble'>
+> = () => {
+  const client = useClient();
+
+  const timelineQuery = useTimeline('bubble', (paginationParams) =>
+    client.timelines.bubbleTimeline(paginationParams),
+  );
+
+  return <Timeline query={timelineQuery} />;
+};
+
+const FederatedTimelineScreen: React.FC<
+  NativeStackScreenProps<TimelineStackParams, 'federated'>
+> = () => {
   const client = useClient();
 
   const timelineQuery = useTimeline('public', (paginationParams) =>
     client.timelines.publicTimeline(paginationParams),
   );
 
-  return (
-    <FlashList
-      data={timelineQuery.entries}
-      renderItem={({ item }) =>
-        item.type === 'status' ? (
-          <TouchableRipple onPress={() => {}} key={item.id} style={{ padding: 16 }}>
-            <Status.FromServer id={item.id} isConnectedBottom={item.isConnectedBottom} />
-          </TouchableRipple>
-        ) : null
-      }
-      ItemSeparatorComponent={({ leadingItem }: { leadingItem: TimelineEntry }) => {
-        if (leadingItem.type === 'status' && leadingItem.isConnectedBottom) return null;
-        return <Divider />;
-      }}
-    />
+  return <Timeline query={timelineQuery} />;
+};
+
+const ListTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'list'>> = ({
+  route,
+}) => {
+  const client = useClient();
+
+  const timelineQuery = useTimeline(`list:${route.params.id}`, (paginationParams) =>
+    client.timelines.listTimeline(route.params.id, paginationParams),
   );
+
+  return <Timeline query={timelineQuery} />;
 };
 
 const HomeStack = createNativeStackNavigator<TimelineStackParams>();
@@ -344,7 +358,10 @@ const HomeStackScreen = () => {
         component={HomeTimelineScreen}
         options={{ animation: 'slide_from_left' }}
       />
+      <HomeStack.Screen name='local' component={LocalTimelineScreen} />
+      <HomeStack.Screen name='bubble' component={BubbleTimelineScreen} />
       <HomeStack.Screen name='federated' component={FederatedTimelineScreen} />
+      <HomeStack.Screen name='list' component={ListTimelineScreen} />
     </HomeStack.Navigator>
   );
 };

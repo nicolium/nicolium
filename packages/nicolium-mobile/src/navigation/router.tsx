@@ -12,7 +12,12 @@ import type { NavigatorScreenParams } from '@react-navigation/native';
 
 type TimelineStackParams = {
   home: undefined;
+  local: undefined;
+  bubble: undefined;
   federated: undefined;
+  list: { id: string };
+  circle: { id: string };
+  antenna: { id: string };
 };
 type SearchStackParams = {
   search?: { type: 'statuses' | 'accounts' | 'hashtags'; query: string };
