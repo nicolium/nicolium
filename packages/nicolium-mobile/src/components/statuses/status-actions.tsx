@@ -7,7 +7,7 @@ import {
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import { IconButton, Tooltip } from 'react-native-paper';
+import { IconButton, Text, Tooltip, useTheme } from 'react-native-paper';
 
 import { useStatus } from '@/queries/statuses/use-status';
 import {
@@ -34,6 +34,7 @@ interface IStatusActions {
 
 const StatusActions: React.FC<IStatusActions> = ({ id }) => {
   const intl = useIntl();
+  const theme = useTheme();
 
   const { data: status } = useStatus(id);
 
@@ -45,39 +46,63 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
   if (!status) return null;
 
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }}>
       <Tooltip
         title={intl.formatMessage(status.in_reply_to_id ? messages.replyAll : messages.reply)}
       >
         <IconButton
           icon={iconHelper(status.in_reply_to_id ? ArrowBendDoubleUpLeftIcon : ArrowBendUpLeftIcon)}
           onPress={() => {}}
-          style={{ margin: -4, marginTop: 0, height: 40, width: 40 }}
+          style={{ margin: -4, height: 40, width: 40 }}
           accessibilityLabel={intl.formatMessage(
             status.in_reply_to_id ? messages.replyAll : messages.reply,
           )}
         />
       </Tooltip>
-      <IconButton
-        icon={(props) => <RepeatIcon {...props} weight={status.reblogged ? 'fill' : undefined} />}
-        onPress={() => (status.reblogged ? unreblogStatus : reblogStatus)({})}
-        disabled={isPendingReblog}
-        style={{ margin: -4, marginTop: 0, height: 40, width: 40 }}
-        selected={status.reblogged}
-        accessibilityLabel={intl.formatMessage(
-          status.reblogged ? messages.unreblog : messages.reblog,
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        <IconButton
+          icon={(props) => <RepeatIcon {...props} weight={status.reblogged ? 'fill' : undefined} />}
+          onPress={() => (status.reblogged ? unreblogStatus : reblogStatus)({})}
+          disabled={isPendingReblog}
+          style={{ margin: -4, height: 40, width: 40 }}
+          selected={status.reblogged}
+          accessibilityLabel={intl.formatMessage(
+            status.reblogged ? messages.unreblog : messages.reblog,
+          )}
+        />
+        {status.reblogs_count > 0 && (
+          <Text
+            variant='labelMedium'
+            style={{
+              color: status.reblogged ? theme.colors.primary : theme.colors.onSurfaceVariant,
+            }}
+          >
+            {status.reblogs_count}
+          </Text>
         )}
-      />
-      <IconButton
-        icon={(props) => <StarIcon {...props} weight={status.favourited ? 'fill' : undefined} />}
-        onPress={() => (status.favourited ? unfavouriteStatus : favouriteStatus)()}
-        disabled={isPendingFavourite}
-        style={{ margin: -4, marginTop: 0, height: 40, width: 40 }}
-        selected={status.favourited}
-        accessibilityLabel={intl.formatMessage(
-          status.favourited ? messages.unfavourite : messages.favourite,
+      </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        <IconButton
+          icon={(props) => <StarIcon {...props} weight={status.favourited ? 'fill' : undefined} />}
+          onPress={() => (status.favourited ? unfavouriteStatus : favouriteStatus)()}
+          disabled={isPendingFavourite}
+          style={{ margin: -4, height: 40, width: 40 }}
+          selected={status.favourited}
+          accessibilityLabel={intl.formatMessage(
+            status.favourited ? messages.unfavourite : messages.favourite,
+          )}
+        />
+        {status.favourites_count > 0 && (
+          <Text
+            variant='labelMedium'
+            style={{
+              color: status.favourited ? theme.colors.primary : theme.colors.onSurfaceVariant,
+            }}
+          >
+            {status.favourites_count}
+          </Text>
         )}
-      />
+      </View>
     </View>
   );
 };

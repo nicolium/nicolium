@@ -25,7 +25,7 @@ const Status: React.FC<IStatus> = ({ id, isConnectedBottom }) => {
     <UIStatus
       account={
         <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'space-between', flex: 1 }}>
-          <Account id={status.account_id!} />
+          <Account id={status.account_id!} timestamp={status.created_at} />
           <IconButton
             icon={iconHelper(DotsThreeVerticalIcon)}
             onPress={() => {}}

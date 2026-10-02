@@ -1,0 +1,296 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { defineMessages, useIntl, type FormatDateOptions } from 'react-intl';
+
+const messages = defineMessages({
+  justNow: { id: 'relative_time.just_now', defaultMessage: 'now' },
+  seconds: { id: 'relative_time.seconds', defaultMessage: '{number}s' },
+  minutes: { id: 'relative_time.minutes', defaultMessage: '{number}m' },
+  hours: { id: 'relative_time.hours', defaultMessage: '{number}h' },
+  days: { id: 'relative_time.days', defaultMessage: '{number}d' },
+  weeks: { id: 'relative_time.weeks', defaultMessage: '{number}w' },
+  months: { id: 'relative_time.months', defaultMessage: '{number}mo' },
+  years: { id: 'relative_time.years', defaultMessage: '{number}y' },
+  secondsLong: {
+    id: 'relative_time.seconds.long',
+    defaultMessage: '{number, plural, one {# second} other {# seconds}} ago',
+  },
+  minutesLong: {
+    id: 'relative_time.minutes.long',
+    defaultMessage: '{number, plural, one {# minute} other {# minutes}} ago',
+  },
+  hoursLong: {
+    id: 'relative_time.hours.long',
+    defaultMessage: '{number, plural, one {# hour} other {# hours}} ago',
+  },
+  daysLong: {
+    id: 'relative_time.days.long',
+    defaultMessage: '{number, plural, one {# day} other {# days}} ago',
+  },
+  weeksLong: {
+    id: 'relative_time.weeks.long',
+    defaultMessage: '{number, plural, one {# week} other {# weeks}} ago',
+  },
+  monthsLong: {
+    id: 'relative_time.months.long',
+    defaultMessage: '{number, plural, one {# month} other {# months}} ago',
+  },
+  yearsLong: {
+    id: 'relative_time.years.long',
+    defaultMessage: '{number, plural, one {# year} other {# years}} ago',
+  },
+  momentsRemaining: { id: 'time_remaining.moments', defaultMessage: 'Moments remaining' },
+  secondsRemaining: {
+    id: 'time_remaining.seconds',
+    defaultMessage: '{number, plural, one {# second} other {# seconds}} left',
+  },
+  minutesRemaining: {
+    id: 'time_remaining.minutes',
+    defaultMessage: '{number, plural, one {# minute} other {# minutes}} left',
+  },
+  hoursRemaining: {
+    id: 'time_remaining.hours',
+    defaultMessage: '{number, plural, one {# hour} other {# hours}} left',
+  },
+  daysRemaining: {
+    id: 'time_remaining.days',
+    defaultMessage: '{number, plural, one {# day} other {# days}} left',
+  },
+  weeksRemaining: {
+    id: 'time_remaining.weeks',
+    defaultMessage: '{number, plural, one {# week} other {# weeks}} left',
+  },
+  monthsRemaining: {
+    id: 'time_remaining.months',
+    defaultMessage: '{number, plural, one {# month} other {# months}} left',
+  },
+  yearsRemaining: {
+    id: 'time_remaining.years',
+    defaultMessage: '{number, plural, one {# year} other {# years}} left',
+  },
+});
+
+const dateFormatOptions: FormatDateOptions = {
+  hour12: true,
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+  hour: 'numeric',
+  minute: '2-digit',
+};
+
+const shortDateFormatOptions: FormatDateOptions = {
+  month: 'short',
+  day: 'numeric',
+};
+
+const absoluteTimeFormatOptions: FormatDateOptions = {
+  hour: 'numeric',
+  minute: '2-digit',
+};
+
+const SECOND = 1000;
+const MINUTE = 1000 * 60;
+const HOUR = 1000 * 60 * 60;
+const DAY = 1000 * 60 * 60 * 24;
+
+const MAX_DELAY = 2147483647;
+
+const selectUnits = (delta: number) => {
+  const absDelta = Math.abs(delta);
+
+  if (absDelta < MINUTE) {
+    return 'second';
+  } else if (absDelta < HOUR) {
+    return 'minute';
+  } else if (absDelta < DAY) {
+    return 'hour';
+  }
+
+  return 'day';
+};
+
+const getUnitDelay = (units: string) => {
+  switch (units) {
+    case 'second':
+      return SECOND;
+    case 'minute':
+      return MINUTE;
+    case 'hour':
+      return HOUR;
+    case 'day':
+      return DAY;
+    default:
+      return MAX_DELAY;
+  }
+};
+
+const useRelativeTimestamp = ({
+  timestamp,
+  year = new Date().getFullYear(),
+  futureDate,
+  absolute,
+  long,
+}: IRelativeTimestamp) => {
+  const intl = useIntl();
+  const [now, setNow] = useState(Date.now);
+  const timerRef = useRef<NodeJS.Timeout>(undefined);
+
+  const scheduleNextUpdate = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    const delta = new Date(timestamp).getTime() - now;
+    const unitDelay = getUnitDelay(selectUnits(delta));
+    const unitRemainder = Math.abs(delta % unitDelay);
+    const updateInterval = 1000 * 10;
+    const delay =
+      delta < 0
+        ? Math.max(updateInterval, unitDelay - unitRemainder)
+        : Math.max(updateInterval, unitRemainder);
+
+    timerRef.current = setTimeout(() => {
+      setNow(Date.now());
+    }, delay);
+  }, [timestamp, now]);
+
+  useEffect(() => {
+    setNow(Date.now());
+  }, [timestamp]);
+
+  useEffect(() => {
+    scheduleNextUpdate();
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [scheduleNextUpdate]);
+
+  const date = new Date(timestamp);
+  const delta = now - date.getTime();
+
+  let relativeTime: string;
+  if (futureDate) {
+    const futureDelta = date.getTime() - now;
+
+    if (futureDelta < 10 * SECOND) {
+      relativeTime = intl.formatMessage(messages.momentsRemaining);
+    } else if (futureDelta < MINUTE) {
+      relativeTime = intl.formatMessage(messages.secondsRemaining, {
+        number: Math.floor(futureDelta / SECOND),
+      });
+    } else if (futureDelta < HOUR) {
+      relativeTime = intl.formatMessage(messages.minutesRemaining, {
+        number: Math.floor(futureDelta / MINUTE),
+      });
+    } else if (futureDelta < DAY) {
+      relativeTime = intl.formatMessage(messages.hoursRemaining, {
+        number: Math.floor(futureDelta / HOUR),
+      });
+    } else if (futureDelta < 7 * DAY) {
+      relativeTime = intl.formatMessage(messages.daysRemaining, {
+        number: Math.floor(futureDelta / DAY),
+      });
+    } else if (futureDelta < 30 * DAY) {
+      relativeTime = intl.formatMessage(messages.weeksRemaining, {
+        number: Math.floor(futureDelta / (7 * DAY)),
+      });
+    } else if (futureDelta < 365 * DAY) {
+      relativeTime = intl.formatMessage(messages.monthsRemaining, {
+        number: Math.floor(futureDelta / (30 * DAY)),
+      });
+    } else {
+      relativeTime = intl.formatMessage(messages.yearsRemaining, {
+        number: Math.floor(futureDelta / (365 * DAY)),
+      });
+    }
+  } else if (absolute) {
+    const nowDate = new Date(now);
+    if (date.toDateString() === nowDate.toDateString()) {
+      relativeTime = intl.formatDate(date, absoluteTimeFormatOptions);
+    } else if (date.getFullYear() === year) {
+      relativeTime = intl.formatDate(date, {
+        ...shortDateFormatOptions,
+        ...absoluteTimeFormatOptions,
+      });
+    } else {
+      relativeTime = intl.formatDate(date, { ...shortDateFormatOptions, year: 'numeric' });
+    }
+  } else if (delta < 10 * SECOND) {
+    relativeTime = intl.formatMessage(messages.justNow);
+  } else if (delta < 7 * DAY) {
+    if (delta < MINUTE) {
+      relativeTime = intl.formatMessage(long ? messages.secondsLong : messages.seconds, {
+        number: Math.floor(delta / SECOND),
+      });
+    } else if (delta < HOUR) {
+      relativeTime = intl.formatMessage(long ? messages.minutesLong : messages.minutes, {
+        number: Math.floor(delta / MINUTE),
+      });
+    } else if (delta < DAY) {
+      relativeTime = intl.formatMessage(long ? messages.hoursLong : messages.hours, {
+        number: Math.floor(delta / HOUR),
+      });
+    } else {
+      relativeTime = intl.formatMessage(long ? messages.daysLong : messages.days, {
+        number: Math.floor(delta / DAY),
+      });
+    }
+  } else if (absolute === false) {
+    if (delta > 365 * DAY) {
+      relativeTime = intl.formatMessage(long ? messages.yearsLong : messages.years, {
+        number: Math.floor(delta / (365 * DAY)),
+      });
+    } else if (delta > 30 * DAY) {
+      relativeTime = intl.formatMessage(long ? messages.monthsLong : messages.months, {
+        number: Math.floor(delta / (30 * DAY)),
+      });
+    } else {
+      relativeTime = intl.formatMessage(long ? messages.weeksLong : messages.weeks, {
+        number: Math.floor(delta / (7 * DAY)),
+      });
+    }
+  } else if (date.getFullYear() === year) {
+    relativeTime = intl.formatDate(date, shortDateFormatOptions);
+  } else {
+    relativeTime = intl.formatDate(date, { ...shortDateFormatOptions, year: 'numeric' });
+  }
+
+  return relativeTime;
+};
+
+interface IRelativeTimestamp {
+  timestamp: string;
+  year?: number;
+  futureDate?: boolean;
+  className?: string;
+  /**  */
+  absolute?: boolean;
+  /** Whether to display the timestamp in a longer format */
+  long?: boolean;
+}
+
+/** Displays a timestamp compared to the current time, eg "1m" for one minute ago. */
+const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
+  timestamp,
+  year = new Date().getFullYear(),
+  // TODO: why is this not checked in the component?
+  futureDate,
+  absolute,
+  long,
+  ...props
+}) => {
+  const intl = useIntl();
+  const relativeTime = useRelativeTimestamp({ timestamp, year, futureDate, absolute, long });
+
+  const date = new Date(timestamp);
+
+  return (
+    <time {...props} title={intl.formatDate(date, dateFormatOptions)}>
+      {relativeTime}
+    </time>
+  );
+};
+
+export { dateFormatOptions, useRelativeTimestamp, RelativeTimestamp as default };

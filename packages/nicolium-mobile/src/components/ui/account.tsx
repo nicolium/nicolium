@@ -2,13 +2,16 @@ import React from 'react';
 import { View } from 'react-native';
 import { Avatar, Text, useTheme } from 'react-native-paper';
 
+import RelativeTimestamp from '@/utils/relative-timestamp';
+
 interface IUIAccount {
   avatarSrc?: string;
   displayName: string;
   acct: string;
+  timestamp?: string;
 }
 
-const UIAccount: React.FC<IUIAccount> = ({ avatarSrc, displayName, acct }) => {
+const UIAccount: React.FC<IUIAccount> = ({ avatarSrc, displayName, acct, timestamp }) => {
   const { colors } = useTheme();
 
   return (
@@ -25,6 +28,12 @@ const UIAccount: React.FC<IUIAccount> = ({ avatarSrc, displayName, acct }) => {
         </Text>
         <Text variant='bodyMedium' numberOfLines={1} style={{ color: colors.outline }}>
           @{acct}
+          {timestamp && (
+            <>
+              {' · '}
+              <RelativeTimestamp timestamp={timestamp} />
+            </>
+          )}
         </Text>
       </View>
     </View>
