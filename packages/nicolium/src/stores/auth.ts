@@ -37,6 +37,8 @@ import { normalizeUsername } from '@/utils/input';
 import { getScopes } from '@/utils/scopes';
 import { isStandalone } from '@/utils/state';
 
+import { useTimelinesStore } from './timelines';
+
 import type { NicoliumResponse } from '@/api';
 
 const messages = defineMessages({
@@ -931,6 +933,7 @@ const useAuthStore = create<AuthStore>()(
           removeClientForAccount(accountUrl);
           persistAuth(get());
           queryClient.removeQueries({ queryKey: [accountUrl] });
+          useTimelinesStore.getState().actions.resetTimelines(accountUrl);
           KVStore.removeItem(`authAccount:${accountUrl}`).catch(console.error);
           toast.success(messages.loggedOut);
         },
