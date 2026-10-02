@@ -17,7 +17,7 @@ import {
 import { TabsProvider, Tabs, TabScreen } from 'react-native-paper-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Account } from '@/components/account';
+import { Account } from '@/components/accounts/account';
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { useSearchAccounts, useSearchStatuses } from '@/queries/search/use-search';

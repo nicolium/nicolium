@@ -4,7 +4,7 @@ import { Image, View } from 'react-native';
 import { Appbar, Button, Divider, Text, TextInput, useTheme } from 'react-native-paper';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { UIAccount } from '@/components/statuses/account';
+import { UIAccount } from '@/components/ui/account';
 import { useAuthStoreActions } from '@/stores/auth';
 
 const LoginScreen = () => {
@@ -39,7 +39,7 @@ const LoginScreen = () => {
             source={require('@/assets/logo.svg')}
           />
 
-          <UIAccount displayName='Nicolium' acct='@nicolium' />
+          <UIAccount displayName='Nicolium' acct='nicolium' />
 
           <View style={{ gap: 12 }}>
             <Text variant='headlineSmall'>Welcome!</Text>

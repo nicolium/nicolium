@@ -12,14 +12,14 @@ const UIAccount: React.FC<IUIAccount> = ({ avatarSrc, displayName, acct }) => {
   const { colors } = useTheme();
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
       {avatarSrc ? (
         <Avatar.Image size={40} source={{ uri: avatarSrc }} />
       ) : (
         <Avatar.Text size={40} label={(displayName || acct).slice(0, 2)} />
       )}
 
-      <View style={{ justifyContent: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center' }}>
         <Text variant='titleMedium' numberOfLines={1}>
           {displayName}
         </Text>

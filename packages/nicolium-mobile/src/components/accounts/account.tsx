@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useAccount } from '@/queries/accounts/use-account';
 
-import { UIAccount } from './statuses/account';
+import { UIAccount } from '../ui/account';
 
 interface IAccount {
   id: string;
