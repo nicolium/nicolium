@@ -5,7 +5,7 @@ import {
 import { FlashList } from '@shopify/flash-list';
 import { debounce } from '@tanstack/react-pacer/debouncer';
 import React, { useCallback, useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import {
   ActivityIndicator,
   Divider,
@@ -27,12 +27,20 @@ import { useFeatures } from '@/stores/auth';
 
 import type { SearchStackParams } from '../router';
 
+const messages = defineMessages({
+  accounts: { id: 'search_results.accounts', defaultMessage: 'People' },
+  statuses: { id: 'search_results.statuses', defaultMessage: 'Posts' },
+  hashtags: { id: 'search_results.hashtags', defaultMessage: 'Hashtags' },
+  links: { id: 'search_results.links', defaultMessage: 'News' },
+});
+
 const SEARCH_TYPES = ['accounts', 'statuses', 'hashtags', 'links'] as const;
 
 const SearchScreen = ({
   route,
   navigation,
 }: NativeStackScreenProps<SearchStackParams, 'search'>) => {
+  const intl = useIntl();
   const { top: topInset } = useSafeAreaInsets();
   const { colors } = useTheme();
   const features = useFeatures();
@@ -87,7 +95,7 @@ const SearchScreen = ({
         key={forcedRerenderKey}
       >
         <Tabs style={{ backgroundColor: colors.background }} uppercase={false}>
-          <TabScreen label='Accounts'>
+          <TabScreen label={intl.formatMessage(messages.accounts)}>
             <FlashList
               data={
                 hasQuery
@@ -131,7 +139,7 @@ const SearchScreen = ({
               }
             />
           </TabScreen>
-          <TabScreen label='Posts'>
+          <TabScreen label={intl.formatMessage(messages.statuses)}>
             <FlashList
               data={(hasQuery ? statusesQuery : trendingStatusesQuery).data}
               renderItem={({ item }) => (
@@ -166,11 +174,11 @@ const SearchScreen = ({
               }
             />
           </TabScreen>
-          <TabScreen label='Hashtags'>
+          <TabScreen label={intl.formatMessage(messages.hashtags)}>
             <Text>Hashtags</Text>
           </TabScreen>
           {features.trendingLinks && !hasQuery && (
-            <TabScreen label='Links'>
+            <TabScreen label={intl.formatMessage(messages.links)}>
               <Text>Links</Text>
             </TabScreen>
           )}
