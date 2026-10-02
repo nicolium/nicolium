@@ -17,10 +17,17 @@ const UIStatus: React.FC<IUIStatus> = ({ account, content, actions, isConnectedB
     <View style={{ flexDirection: 'column', gap: 8, flex: 1 }}>
       <RenderHTML
         source={{ html: content }}
+        baseStyle={{
+          color: theme.colors.onSecondaryContainer,
+        }}
         tagsStyles={{
           p: {
             marginVertical: 0,
           },
+          a: {
+            color: theme.colors.primary,
+            textDecorationColor: theme.colors.primary,
+          }
         }}
       />
       {actions}

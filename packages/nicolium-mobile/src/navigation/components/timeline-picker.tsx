@@ -12,12 +12,12 @@ import {
   ListIcon,
   PlanetIcon,
   WrenchIcon,
-  type Icon,
+  type Icon as PhosphorIcon,
 } from 'phosphor-react-native';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import { ActivityIndicator, Button, Divider, Menu, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Button, Divider, Icon, Menu, Text } from 'react-native-paper';
 
 import { iconHelper } from '@/components/ui/icon';
 import { useAntennas } from '@/queries/accounts/use-antennas';
@@ -39,7 +39,7 @@ const messages = defineMessages({
   noLists: { id: 'column.lists.empty', defaultMessage: 'You have no lists yet.' },
 });
 
-const useTimelineHeadingAndIcon = (active: ITimelinePicker['active'] | null): [string, Icon] => {
+const useTimelineHeadingAndIcon = (active: ITimelinePicker['active'] | null): [string, PhosphorIcon] => {
   const intl = useIntl();
   const { data: lists } = useLists(active?.startsWith('list:'));
   const { data: circles } = useCircles(active?.startsWith('circle:'));
@@ -95,7 +95,6 @@ interface ITimelinePicker {
 const anchorRowStyle = { flexDirection: 'row', gap: 8, alignItems: 'center' } as const;
 
 const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home' }) => {
-  const theme = useTheme();
   const intl = useIntl();
   const features = useFeatures();
   const instance = useInstance();
@@ -206,11 +205,11 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
             compact
           >
             <View style={anchorRowStyle}>
-              <TimelineIcon color={theme.colors.onSurface.toString()} />
+              <Icon source={TimelineIcon} size={24} />
               <View>
                 <Text variant='titleLarge'>{heading}</Text>
               </View>
-              <CaretDownIcon size={16} />
+              <Icon source={CaretDownIcon} size={16} />
             </View>
           </Button>
         }

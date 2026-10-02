@@ -279,7 +279,6 @@ const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
   futureDate,
   absolute,
   long,
-  ...props
 }) => {
   const relativeTime = useRelativeTimestamp({ timestamp, year, futureDate, absolute, long });
 

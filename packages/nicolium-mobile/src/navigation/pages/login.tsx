@@ -1,9 +1,10 @@
 import { GlobeIcon } from 'phosphor-react-native';
 import React from 'react';
-import { Image, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Appbar, Button, Divider, Text, TextInput, useTheme } from 'react-native-paper';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import Logo from '@/assets/logo.svg';
 import { UIAccount } from '@/components/ui/account';
 import { useAuthStoreActions } from '@/stores/auth';
 
@@ -33,11 +34,9 @@ const LoginScreen = () => {
     <>
       <ScrollView style={{ padding: 16, marginTop: topInset }}>
         <View style={{ gap: 12 }}>
-          <Image
-            style={{ height: 78, width: 78, marginHorizontal: 'auto' }}
-            alt='Nicolium'
-            source={require('@/assets/logo.svg')}
-          />
+          <View style={{ alignItems: 'center' }}>
+            <Logo width={78} height={78} accessibilityLabel='Nicolium' />
+          </View>
 
           <UIAccount displayName='Nicolium' acct='nicolium' />
 
@@ -53,7 +52,7 @@ const LoginScreen = () => {
           <TextInput
             label='Instance domain'
             style={{ borderRadius: 24 }}
-            startAccessory={(props) => <GlobeIcon {...props} />}
+            startAccessory={(props) => <GlobeIcon color={colors.onPrimaryContainer} {...props} />}
             value={instance}
             onChangeText={setInstance}
             returnKeyType='done'
