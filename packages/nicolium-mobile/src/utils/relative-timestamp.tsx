@@ -281,15 +281,12 @@ const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
   long,
   ...props
 }) => {
-  const intl = useIntl();
   const relativeTime = useRelativeTimestamp({ timestamp, year, futureDate, absolute, long });
 
-  const date = new Date(timestamp);
-
   return (
-    <time {...props} title={intl.formatDate(date, dateFormatOptions)}>
+    <>
       {relativeTime}
-    </time>
+    </>
   );
 };
 

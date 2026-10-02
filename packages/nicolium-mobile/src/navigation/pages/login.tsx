@@ -1,6 +1,6 @@
 import { GlobeIcon } from 'phosphor-react-native';
 import React from 'react';
-import { Image, View } from 'react-native';
+import { Image, ScrollView, View } from 'react-native';
 import { Appbar, Button, Divider, Text, TextInput, useTheme } from 'react-native-paper';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -8,7 +8,7 @@ import { UIAccount } from '@/components/ui/account';
 import { useAuthStoreActions } from '@/stores/auth';
 
 const LoginScreen = () => {
-  const { bottom: bottomInset } = useSafeAreaInsets();
+  const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
   const { colors } = useTheme();
 
   const { signIn } = useAuthStoreActions();
@@ -31,7 +31,7 @@ const LoginScreen = () => {
 
   return (
     <>
-      <SafeAreaView style={{ flex: 1, padding: 16 }}>
+      <ScrollView style={{ padding: 16, marginTop: topInset }}>
         <View style={{ gap: 12 }}>
           <Image
             style={{ height: 78, width: 78, marginHorizontal: 'auto' }}
@@ -69,7 +69,7 @@ const LoginScreen = () => {
             onSubmitEditing={submit}
           />
         </View>
-      </SafeAreaView>
+      </ScrollView>
       <Appbar
         style={[
           {
