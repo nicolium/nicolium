@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0.5 0.5 10 10" style="fill: #ff3ca8;" height="1024" width="1024">
+<style>
+svg { fill: #d80482; }
+@media (prefers-color-scheme: dark) { path { fill: #ff3ca8; } }
+</style>
+<g transform="rotate(56.2 5.5 5.5)">
+<path d="M6 2 L7 2 L7 6 L5 6 L5 9 L4 9 L4 5 L6 5 L6 2 Z"/><path d="M8 2 L9 2 L9 3 L8 3 Z"/><path d="M8 4 L9 4 L9 6 L8 6 Z"/>
+</g>
+</svg>

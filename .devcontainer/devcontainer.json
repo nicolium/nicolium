@@ -14,10 +14,14 @@
   "remoteUser": "vscode",
   "updateRemoteUserUID": true,
 
-  "forwardPorts": [7312],
+  "forwardPorts": [7312, 1312],
   "portsAttributes": {
     "7312": {
       "label": "Nicolium",
+      "onAutoForward": "openBrowser"
+    },
+    "1312": {
+      "label": "Expo",
       "onAutoForward": "openBrowser"
     }
   },
@@ -36,7 +40,9 @@
   },
 
   "containerEnv": {
-    "WAYLAND_DISPLAY": ""
+    "WAYLAND_DISPLAY": "",
+    // "REACT_NATIVE_PACKAGER_HOSTNAME": "",
+    "RCT_METRO_PORT": "1312"
   },
   "remoteEnv": {
   	"WAYLAND_DISPLAY": ""

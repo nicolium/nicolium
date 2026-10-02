@@ -32,6 +32,11 @@ const scheduledStatusSchema = v.object({
     application_id: v.fallback(v.nullable(v.pipe(v.number(), v.integer())), null),
     scheduled_at: v.fallback(v.nullable(datetimeSchema), null),
     idempotency: v.fallback(v.nullable(v.string()), null),
+    quoted_status_id: v.fallback(v.nullable(v.string()), null),
+    quote_approval_policy: v.fallback(
+      v.nullable(v.picklist(['public', 'followers', 'nobody'])),
+      null,
+    ),
     with_rate_limit: v.fallback(v.boolean(), false),
 
     expires_in: v.fallback(v.nullable(v.number()), null),

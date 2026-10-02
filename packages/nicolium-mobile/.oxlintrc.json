@@ -1,0 +1,130 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "import", "promise", "react", "jsx-a11y"],
+  "jsPlugins": ["eslint-plugin-formatjs"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "pedantic": "warn",
+    "perf": "warn"
+  },
+  "rules": {
+    "always-return": "off",
+    "ban-types": "off",
+    "ban-ts-comment": "off",
+    "max-dependencies": "off",
+    "max-lines": "off",
+    "max-lines-per-function": "off",
+    "no-await-in-loop": "off",
+    "no-else-return": "off",
+    "no-inline-comments": "off",
+    "no-named-as-default": "off",
+    "no-negated-condition": "off",
+    "no-new": "warn",
+    "no-non-null-asserted-optional-chain": "warn",
+    "no-promise-executor-return": "off",
+    "no-unassigned-import": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "caughtErrors": "none",
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "prefer-ts-expect-error": "off",
+    "sort-vars": "off",
+
+    "no-floating-promises": "warn",
+    "no-redundant-type-constituents": "warn",
+    "no-unsafe-type-assertion": "warn",
+    "require-array-sort-compare": "off",
+    "unbound-method": "warn",
+    "no-shadow": "off",
+
+    // "react/display-name": "error",
+    "react/exhaustive-deps": "off",
+    "react/rules-of-hooks": "error",
+    "react/no-unstable-nested-components": "warn",
+    "react/react-in-jsx-scope": "off",
+
+    "jsx-a11y/anchor-is-valid": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/label-has-associated-control": "warn",
+    "jsx-a11y/media-has-caption": "off",
+    "jsx-a11y/mouse-events-have-key-events": "warn",
+    "jsx-a11y/no-autofocus": "warn",
+    "jsx-a11y/no-noninteractive-tabindex": "warn",
+    "jsx-a11y/no-static-element-interactions": "warn",
+    "jsx-a11y/prefer-tag-over-role": "warn",
+    "jsx-a11y/no-interactive-element-to-noninteractive-role": "warn",
+    "jsx-a11y/no-noninteractive-element-interactions": "warn",
+    "jsx-a11y/interactive-supports-focus": "warn",
+    "jsx-a11y/control-has-associated-label": "warn",
+
+    "formatjs/enforce-default-message": "error",
+    "formatjs/enforce-id": "error",
+    "formatjs/no-literal-string-in-jsx": "warn",
+
+    "typescript/consistent-type-imports": [
+      "error",
+      { "prefer": "type-imports", "fixStyle": "inline-type-imports" }
+    ],
+    "typescript/consistent-type-exports": [
+      "error",
+      { "fixMixedExportsWithInlineTypeSpecifier": true }
+    ],
+    "typescript/no-import-type-side-effects": "error",
+
+    "await-thenable": "warn",
+    "consistent-return": "warn",
+    "no-base-to-string": "warn",
+    "no-meaningless-void-operator": "warn",
+    "no-misused-spread": "warn",
+    "no-unnecessary-boolean-literal-compare": "warn",
+    "no-unnecessary-type-arguments": "warn",
+    "no-unnecessary-type-assertion": "warn",
+    "no-unnecessary-type-conversion": "warn",
+    "no-unnecessary-type-parameters": "warn",
+    "no-unsafe-enum-comparison": "warn",
+    "no-useless-default-assignment": "warn",
+    "restrict-template-expressions": "warn"
+  },
+  "settings": {
+    "jsx-a11y": {
+      "polymorphicPropName": null,
+      "components": {},
+      "attributes": {}
+    },
+    "next": {
+      "rootDir": []
+    },
+    "react": {
+      "formComponents": [],
+      "linkComponents": [],
+      "version": null,
+      "componentWrapperFunctions": []
+    },
+    "jsdoc": {
+      "ignorePrivate": false,
+      "ignoreInternal": false,
+      "ignoreReplacesDocs": true,
+      "overrideReplacesDocs": true,
+      "augmentsExtendsReplacesDocs": false,
+      "implementsReplacesDocs": false,
+      "exemptDestructuredRootsFromChecks": false,
+      "tagNamePreference": {}
+    }
+  },
+  "env": {
+    "builtin": true,
+    "browser": true,
+    "es6": true
+  },
+  "globals": {},
+  "ignorePatterns": []
+}

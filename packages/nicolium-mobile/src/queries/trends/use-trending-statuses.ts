@@ -1,0 +1,27 @@
+import { useAppQuery } from '@/queries/query';
+import { useImportEntities } from '@/queries/utils/import-entities';
+import { useClient, useFeatures } from '@/stores/auth';
+
+import { queryKeys } from '../keys';
+
+const useTrendingStatuses = () => {
+  const client = useClient();
+  const importEntities = useImportEntities();
+  const features = useFeatures();
+
+  const fetchTrendingStatuses = async () => {
+    const response = await client.trends.getTrendingStatuses();
+
+    importEntities({ statuses: response });
+
+    return response.map(({ id }) => id);
+  };
+
+  return useAppQuery({
+    queryKey: queryKeys.trends.statuses,
+    queryFn: fetchTrendingStatuses,
+    enabled: features.trendingStatuses,
+  });
+};
+
+export { useTrendingStatuses };
