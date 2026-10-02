@@ -39,7 +39,9 @@ const messages = defineMessages({
   noLists: { id: 'column.lists.empty', defaultMessage: 'You have no lists yet.' },
 });
 
-const useTimelineHeadingAndIcon = (active: ITimelinePicker['active'] | null): [string, PhosphorIcon] => {
+const useTimelineHeadingAndIcon = (
+  active: ITimelinePicker['active'] | null,
+): [string, PhosphorIcon] => {
   const intl = useIntl();
   const { data: lists } = useLists(active?.startsWith('list:'));
   const { data: circles } = useCircles(active?.startsWith('circle:'));

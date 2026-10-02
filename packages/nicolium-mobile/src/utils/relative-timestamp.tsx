@@ -282,11 +282,7 @@ const RelativeTimestamp: React.FC<IRelativeTimestamp> = ({
 }) => {
   const relativeTime = useRelativeTimestamp({ timestamp, year, futureDate, absolute, long });
 
-  return (
-    <>
-      {relativeTime}
-    </>
-  );
+  return <>{relativeTime}</>;
 };
 
 export { dateFormatOptions, useRelativeTimestamp, RelativeTimestamp as default };

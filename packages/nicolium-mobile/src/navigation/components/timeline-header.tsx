@@ -1,7 +1,7 @@
 import { DotsThreeVerticalIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Appbar, Menu } from 'react-native-paper';
+import { Appbar, Menu, useTheme } from 'react-native-paper';
 
 import { iconHelper } from '@/components/ui/icon';
 
@@ -15,6 +15,7 @@ const messages = defineMessages({
 });
 
 const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
+  const { colors } = useTheme();
   const intl = useIntl();
   const [showMenu, setShowMenu] = React.useState(false);
 
@@ -22,7 +23,11 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
     route.params && 'id' in route.params ? `${route.name}:${route.params.id}` : route.name;
 
   return (
-    <Appbar.Header>
+    <Appbar.Header
+      style={{
+        backgroundColor: colors.surfaceContainer,
+      }}
+    >
       <Appbar.Content
         title={
           <TimelinePicker

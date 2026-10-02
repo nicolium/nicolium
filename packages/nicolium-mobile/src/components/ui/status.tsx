@@ -27,7 +27,7 @@ const UIStatus: React.FC<IUIStatus> = ({ account, content, actions, isConnectedB
           a: {
             color: theme.colors.primary,
             textDecorationColor: theme.colors.primary,
-          }
+          },
         }}
       />
       {actions}

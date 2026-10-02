@@ -12,7 +12,13 @@ interface IUIAccount {
   timestamp?: string;
 }
 
-const UIAccount: React.FC<IUIAccount> = ({ avatarSrc, displayName, displayNameDetail, acct, timestamp }) => {
+const UIAccount: React.FC<IUIAccount> = ({
+  avatarSrc,
+  displayName,
+  displayNameDetail,
+  acct,
+  timestamp,
+}) => {
   const { colors } = useTheme();
 
   return (
