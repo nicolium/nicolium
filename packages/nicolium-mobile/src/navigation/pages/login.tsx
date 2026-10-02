@@ -16,9 +16,11 @@ const LoginScreen = () => {
   const [token, setToken] = React.useState('');
   const [loading, setLoading] = React.useState(false);
 
-  const canSubmit = instance.trim().length > 0;
+  const canSubmit = instance.trim().length > 0 && token.trim().length > 0;
 
   const submit = async () => {
+    if (!canSubmit) return;
+
     setLoading(true);
     try {
       await signIn(`https://${instance.trim()}`, token.trim());
@@ -54,6 +56,8 @@ const LoginScreen = () => {
             startAccessory={(props) => <GlobeIcon {...props} />}
             value={instance}
             onChangeText={setInstance}
+            returnKeyType='done'
+            onSubmitEditing={submit}
           />
           <TextInput
             label='Access token'
@@ -61,6 +65,8 @@ const LoginScreen = () => {
             onChangeText={setToken}
             textContentType='password'
             secureTextEntry
+            returnKeyType='done'
+            onSubmitEditing={submit}
           />
         </View>
       </SafeAreaView>

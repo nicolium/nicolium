@@ -10,7 +10,7 @@ interface AuthData {
 interface AuthStore extends AuthData {
   client: PlApiClient;
   actions: {
-    signIn: (instance: string, token: string) => void;
+    signIn: (instance: string, token: string) => Promise<void>;
     signOut: () => void;
   };
 }
@@ -25,15 +25,20 @@ const useAuthStore = create<AuthStore>()(
         set((state) => {
           state.instance = instance;
           state.token = token;
+        });
+
+        return new Promise((resolve, reject) => {
           const client = new PlApiClient(instance, token, {
             fetchInstance: true,
             onInstanceFetchSuccess: () => {
               set((state) => {
                 state.client = client;
               });
+              resolve();
             },
+            onInstanceFetchError: () => reject(),
           });
-        });
+        })
       },
       signOut: () => {
         set((state) => {
