@@ -9,6 +9,7 @@ interface IAccount extends Pick<IUIAccount, 'onPress' | 'style'> {
   id: string;
   timestamp?: string;
   withLink?: boolean;
+  fullWidthPressable?: boolean;
 }
 
 const Account: React.FC<IAccount> = ({ id, withLink, ...props }) => {

@@ -1,14 +1,26 @@
-import { BottomNavigation } from '@mkljczk/react-native-paper';
+import { Avatar, BottomNavigation } from '@mkljczk/react-native-paper';
 import { type BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import { createNativeBottomTabNavigator } from '@react-navigation/bottom-tabs/unstable';
 import { CommonActions } from '@react-navigation/native';
-import { BellSimpleIcon, HouseIcon, MagnifyingGlassIcon } from 'phosphor-react-native';
+import {
+  BellSimpleIcon,
+  CaretUpDownIcon,
+  HouseIcon,
+  MagnifyingGlassIcon,
+  UserIcon,
+} from 'phosphor-react-native';
+import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import { View } from 'react-native';
 // import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { iconHelper } from '@/components/ui/icon';
+import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+
 import { HomeStackScreen } from './pages/home';
 import { NotificationsStackScreen } from './pages/notifications';
+import { ProfileStackScreen } from './pages/profile';
 import { SearchStackScreen } from './pages/search';
 
 import type { TabsParams } from './router';
@@ -17,6 +29,7 @@ const messages = defineMessages({
   home: { id: 'column.home', defaultMessage: 'Home' },
   notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
   search: { id: 'column.search', defaultMessage: 'Search' },
+  profile: { id: 'column.profile', defaultMessage: 'Profile' },
 });
 
 const PaperTabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
@@ -109,6 +122,24 @@ const PaperTabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
 //     );
 //   };
 // } else {
+
+const CurrentAccountAvatar: React.FC<{ color: string }> = ({ color }) => {
+  const { data: currentAccount } = useCredentialAccount();
+
+  const avatar = currentAccount ? (
+    <Avatar.Image size={24} source={{ uri: currentAccount.avatar }} />
+  ) : (
+    <Avatar.Icon size={24} icon={iconHelper(UserIcon)} />
+  );
+
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingLeft: 20 }}>
+      {avatar}
+      <CaretUpDownIcon size={16} color={color} />
+    </View>
+  );
+};
+
 const Tab = createBottomTabNavigator<TabsParams>();
 
 const Tabs = () => {
@@ -147,6 +178,14 @@ const Tabs = () => {
           tabBarIcon: ({ color, focused }) => (
             <BellSimpleIcon color={color} weight={focused ? 'fill' : undefined} />
           ),
+        }}
+      />
+      <Tab.Screen
+        name='profile'
+        component={ProfileStackScreen}
+        options={{
+          tabBarLabel: intl.formatMessage(messages.profile),
+          tabBarIcon: CurrentAccountAvatar,
         }}
       />
     </Tab.Navigator>

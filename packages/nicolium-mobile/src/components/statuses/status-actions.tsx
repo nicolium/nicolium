@@ -59,7 +59,7 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
   if (!status) return null;
 
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }}>
+    <View style={{ flexDirection: 'row', gap: 8, marginTop: 4 }}>
       <Tooltip
         title={intl.formatMessage(status.in_reply_to_id ? messages.replyAll : messages.reply)}
       >

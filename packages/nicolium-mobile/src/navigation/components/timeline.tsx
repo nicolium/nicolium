@@ -14,9 +14,17 @@ import type { TimelineEntry } from '@/stores/timelines';
 interface ITimeline extends IEmptyMessage {
   query: ReturnType<typeof useTimeline>;
   context?: 'home' | 'timeline';
+  header?: React.JSX.Element;
+  handleScrolled?: (value: boolean) => void;
 }
 
-const Timeline: React.FC<ITimeline> = ({ query, context = 'timeline', ...props }) => {
+const Timeline: React.FC<ITimeline> = ({
+  query,
+  context = 'timeline',
+  header,
+  handleScrolled,
+  ...props
+}) => {
   const renderItem = useCallback(
     ({ item }: { item: TimelineEntry }) =>
       item.type === 'status' ? (
@@ -66,6 +74,14 @@ const Timeline: React.FC<ITimeline> = ({ query, context = 'timeline', ...props }
         query.isFetching && !query.isPending ? (
           <ActivityIndicator style={{ marginVertical: 8 }} />
         ) : undefined
+      }
+      ListHeaderComponent={header}
+      onScroll={
+        handleScrolled
+          ? (event) => {
+              handleScrolled((event.nativeEvent.contentOffset.y || event.target.scrollTop) > 60);
+            }
+          : undefined
       }
     />
   );

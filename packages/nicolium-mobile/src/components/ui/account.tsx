@@ -6,7 +6,7 @@ import {
   type TouchableRippleProps,
 } from '@mkljczk/react-native-paper';
 import React from 'react';
-import { View } from 'react-native';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
 
 import RelativeTimestamp from '@/utils/relative-timestamp';
 
@@ -16,6 +16,7 @@ interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
   displayNameDetail?: string;
   acct: string;
   timestamp?: string;
+  fullWidthPressable?: boolean;
 }
 
 const UIAccount: React.FC<IUIAccount> = ({
@@ -24,16 +25,21 @@ const UIAccount: React.FC<IUIAccount> = ({
   displayNameDetail,
   acct,
   timestamp,
+  fullWidthPressable = true,
   style,
   onPress,
 }) => {
   const { colors } = useTheme();
 
   const MaybeLink = ({ children }: { children: React.JSX.Element }) =>
-    onPress ? <TouchableRipple onPress={onPress}>{children}</TouchableRipple> : children;
+    onPress && !fullWidthPressable ? (
+      <TouchableRipple onPress={onPress}>{children}</TouchableRipple>
+    ) : (
+      children
+    );
 
-  return (
-    <View style={{ ...style, flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+  const body = (
+    <>
       <MaybeLink>
         {avatarSrc ? (
           <Avatar.Image size={40} source={{ uri: avatarSrc }} />
@@ -72,8 +78,21 @@ const UIAccount: React.FC<IUIAccount> = ({
           </Text>
         </MaybeLink>
       </View>
-    </View>
+    </>
   );
+
+  const styles: StyleProp<ViewStyle> = {
+    ...style,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  };
+
+  if (onPress && fullWidthPressable) {
+    return <TouchableRipple onPress={onPress} style={styles}>{body}</TouchableRipple>;
+  }
+  return <View style={styles}>{body}</View>;
 };
 
 export { UIAccount, IUIAccount };

@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth';
 
 import { Header } from '../components/ui/header';
 
+import { AccountsStackScreen } from './pages/accounts';
 import { LoginScreen } from './pages/login';
 import { SettingsScreen } from './pages/settings';
 import { StatusStackScreen } from './pages/status';
@@ -26,6 +27,9 @@ type NotificationsStackParams = {
 type SearchStackParams = {
   search?: { type: 'statuses' | 'accounts' | 'hashtags' | 'links'; query: string };
 };
+type ProfileStackParams = {
+  view: undefined;
+};
 type StatusStackParams = {
   view: { id: string };
   reblogs: { id: string };
@@ -33,16 +37,22 @@ type StatusStackParams = {
   dislikes: { id: string };
   quotes: { id: string };
 };
+type AccountStackParams = {
+  view: { id: string };
+};
 type TabsParams = {
   timeline: NavigatorScreenParams<TimelineStackParams>;
   notifications: NavigatorScreenParams<NotificationsStackParams>;
   search: NavigatorScreenParams<SearchStackParams>;
+  profile: NavigatorScreenParams<ProfileStackParams>;
+  status: NavigatorScreenParams<StatusStackParams>;
 };
 type RootStackParams = {
   login: undefined;
   app: NavigatorScreenParams<TabsParams>;
   settings: undefined;
   status: StatusStackParams;
+  accounts: AccountStackParams;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -65,6 +75,11 @@ const RootNavigator = () => {
             component={StatusStackScreen}
             options={{ headerShown: false }}
           />
+          <RootStack.Screen
+            name='accounts'
+            component={AccountsStackScreen}
+            options={{ headerShown: false }}
+          />
         </>
       ) : (
         <RootStack.Screen
@@ -81,7 +96,9 @@ export {
   type TimelineStackParams,
   type NotificationsStackParams,
   type SearchStackParams,
+  type ProfileStackParams,
   type StatusStackParams,
+  type AccountStackParams,
   type TabsParams,
   type RootStackParams,
   RootNavigator,

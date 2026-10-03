@@ -1,4 +1,12 @@
-import { Chip, IconButton, Text, TouchableRipple, useTheme } from '@mkljczk/react-native-paper';
+import {
+  ActivityIndicator,
+  Card,
+  Chip,
+  IconButton,
+  Text,
+  TouchableRipple,
+  useTheme,
+} from '@mkljczk/react-native-paper';
 import { Link, useNavigation } from '@react-navigation/native';
 import { DotsThreeVerticalIcon, HashIcon, RepeatIcon } from 'phosphor-react-native';
 import React from 'react';
@@ -15,6 +23,28 @@ import { UIStatus } from '../ui/status';
 
 import { StatusActions } from './status-actions';
 import { StatusMedia } from './status-media';
+
+interface IQuote {
+  id: string;
+}
+
+const Quote: React.FC<IQuote> = ({ id }) => {
+  const { isFetching, isError } = useStatus(id);
+
+  return (
+    <Card mode='outlined'>
+      {isFetching ? (
+        <ActivityIndicator />
+      ) : isError ? (
+        <Text>
+          <FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' />
+        </Text>
+      ) : (
+        <Status id={id} withLink withActions={false} />
+      )}
+    </Card>
+  );
+};
 
 interface IStatusRebloggedChip {
   accountIds: Array<string>;
@@ -101,6 +131,7 @@ interface IStatus {
   context?: 'home' | 'timeline' | 'thread';
   isConnectedBottom?: boolean;
   withLink?: boolean;
+  withActions?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -110,6 +141,7 @@ const Status: React.FC<IStatus> = ({
   context,
   isConnectedBottom,
   withLink,
+  withActions = true,
   style,
 }) => {
   const { data: status } = useStatus(id);
@@ -139,17 +171,25 @@ const Status: React.FC<IStatus> = ({
             timestamp={actualStatus.created_at}
             style={{ padding: 8, margin: -8 }}
             withLink
+            fullWidthPressable={false}
           />
-          <IconButton
-            icon={iconHelper(DotsThreeVerticalIcon)}
-            onPress={() => {}}
-            style={{ height: 32, width: 32 }}
-          />
+          {withActions && (
+            <IconButton
+              icon={iconHelper(DotsThreeVerticalIcon)}
+              onPress={() => {}}
+              style={{ height: 32, width: 32 }}
+            />
+          )}
         </View>
       }
       content={actualStatus.content}
-      media={<StatusMedia id={id} />}
-      actions={<StatusActions id={id} />}
+      media={
+        <>
+          <StatusMedia id={id} />
+          {actualStatus.quote_id && <Quote id={actualStatus.quote_id} />}
+        </>
+      }
+      actions={withActions ? <StatusActions id={id} /> : undefined}
       isConnectedBottom={isConnectedBottom}
     />
   );
