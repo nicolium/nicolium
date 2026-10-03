@@ -54,6 +54,7 @@
     "expo-symbols": "~57.0.3",
     "expo-system-ui": "~57.0.4",
     "expo-web-browser": "~57.0.3",
+    "intl-pluralrules": "^2.0.1",
     "lodash-es": "^4.18.1",
     "mutative": "^1.3.0",
     "phosphor-react-native": "^3.0.6",

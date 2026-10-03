@@ -1,8 +1,8 @@
-import { Avatar, Button, Divider, Text, useTheme } from '@mkljczk/react-native-paper';
+import { Appbar, Avatar, Button, Divider, Text, useTheme } from '@mkljczk/react-native-paper';
 import RenderHTML from '@native-html/render';
 import { Link, useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { View } from 'react-native';
 import { Tabs, TabScreen, TabsProvider } from 'react-native-paper-tabs';
@@ -76,9 +76,10 @@ const MediaTimeline: React.FC<IProfileTimeline> = ({ id, ...props }) => {
 
 interface IProfile {
   id: string;
+  ownAccount?: boolean;
 }
 
-const Profile: React.FC<IProfile> = ({ id }) => {
+const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const { colors } = useTheme();
   const { top: topInset } = useSafeAreaInsets();
   const { data: account } = useAccount(id);
@@ -96,7 +97,7 @@ const Profile: React.FC<IProfile> = ({ id }) => {
   }));
 
   React.useEffect(() => {
-    if (isScrolled) profileInfoMarginTop.value = withTiming(-profileInfoHeight + topInset);
+    if (isScrolled) profileInfoMarginTop.value = withTiming(-profileInfoHeight + topInset + 64);
     else profileInfoMarginTop.value = withTiming(topInset);
   }, [isScrolled]);
 
@@ -148,9 +149,11 @@ const Profile: React.FC<IProfile> = ({ id }) => {
               outlineColor: colors.background,
             }}
           />
-          <Button mode='contained-tonal' onPress={() => navigation.navigate('edit-profile')}>
-            <FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />
-          </Button>
+          {ownAccount && (
+            <Button mode='contained-tonal' onPress={() => navigation.navigate('edit-profile')}>
+              <FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />
+            </Button>
+          )}
         </View>
         <View style={{ gap: 8, marginHorizontal: 16, marginBottom: 8 }}>
           <View>
@@ -201,6 +204,32 @@ const Profile: React.FC<IProfile> = ({ id }) => {
           </Link>
         </View>
       </Animated.View>
+      {isScrolled && (
+        <Appbar.Header
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1,
+            backgroundColor: colors.surfaceContainer,
+          }}
+        >
+          {!ownAccount && <Appbar.BackAction onPress={navigation.goBack} />}
+          <View style={{ marginLeft: ownAccount ? 16 : 0 }}>
+            <Text variant='titleMedium' numberOfLines={1}>
+              {account.display_name}
+            </Text>
+            <Text style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <FormattedMessage
+                id='account.statuses_count'
+                defaultMessage='{count, plural, one {# post} other {# posts}}'
+                values={{ count: account.statuses_count }}
+              />
+            </Text>
+          </View>
+        </Appbar.Header>
+      )}
       <TabsProvider
         defaultIndex={0}
         onChangeIndex={(index) => {
@@ -208,7 +237,10 @@ const Profile: React.FC<IProfile> = ({ id }) => {
           setIsScrolled(false);
         }}
       >
-        <Tabs style={{ backgroundColor: colors.background }} uppercase={false}>
+        <Tabs
+          style={{ backgroundColor: isScrolled ? colors.surfaceContainer : colors.background }}
+          uppercase={false}
+        >
           <TabScreen label='Posts'>
             {currentTab === 0 ? (
               <PostsTimeline id={account.id} handleScrolled={setIsScrolled} />

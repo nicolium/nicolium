@@ -14,7 +14,7 @@ const ProfileScreen = (_: NativeStackScreenProps<ProfileStackParams, 'view'>) =>
 
   if (!account) return null;
 
-  return <Profile id={account.id} />;
+  return <Profile id={account.id} ownAccount />;
 };
 
 const ProfileStack = createNativeStackNavigator<ProfileStackParams>();
