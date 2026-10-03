@@ -7,6 +7,7 @@ import { FlashList } from '@shopify/flash-list';
 
 import { Account } from '@/components/accounts/account';
 import { Status } from '@/components/statuses/status';
+import { Header } from '@/components/ui/header';
 import { useStatus } from '@/queries/statuses/use-status';
 import {
   useStatusDislikes,
@@ -101,11 +102,27 @@ const StatusStack = createNativeStackNavigator<StatusStackParams>();
 
 const StatusStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'status'>) => {
   return (
-    <StatusStack.Navigator screenOptions={{ headerShown: false }}>
-      <StatusStack.Screen name='view' component={StatusViewScreen} />
-      <StatusStack.Screen name='reblogs' component={StatusReblogsScreen} />
-      <StatusStack.Screen name='favourites' component={StatusFavouritesScreen} />
-      <StatusStack.Screen name='dislikes' component={StatusDislikesScreen} />
+    <StatusStack.Navigator>
+      <StatusStack.Screen
+        name='view'
+        component={StatusViewScreen}
+        options={{ header: Header, title: 'Status' }}
+      />
+      <StatusStack.Screen
+        name='reblogs'
+        component={StatusReblogsScreen}
+        options={{ header: Header, title: 'Reposts' }}
+      />
+      <StatusStack.Screen
+        name='favourites'
+        component={StatusFavouritesScreen}
+        options={{ header: Header, title: 'Likes' }}
+      />
+      <StatusStack.Screen
+        name='dislikes'
+        component={StatusDislikesScreen}
+        options={{ header: Header, title: 'Dislikes' }}
+      />
     </StatusStack.Navigator>
   );
 };

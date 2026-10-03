@@ -115,7 +115,12 @@ const Status: React.FC<IStatus> = ({ id, context, isConnectedBottom, withLink, s
       chip={chip}
       account={
         <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'space-between', flex: 1 }}>
-          <Account id={actualStatus.account_id!} timestamp={actualStatus.created_at} withLink />
+          <Account
+            id={actualStatus.account_id!}
+            timestamp={actualStatus.created_at}
+            style={{ padding: 8, margin: -8 }}
+            withLink
+          />
           <IconButton
             icon={iconHelper(DotsThreeVerticalIcon)}
             onPress={() => {}}

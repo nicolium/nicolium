@@ -20,6 +20,9 @@ type TimelineStackParams = {
   circle: { id: string };
   antenna: { id: string };
 };
+type NotificationsStackParams = {
+  view: undefined;
+};
 type SearchStackParams = {
   search?: { type: 'statuses' | 'accounts' | 'hashtags' | 'links'; query: string };
 };
@@ -32,6 +35,7 @@ type StatusStackParams = {
 };
 type TabsParams = {
   timeline: NavigatorScreenParams<TimelineStackParams>;
+  notifications: NavigatorScreenParams<NotificationsStackParams>;
   search: NavigatorScreenParams<SearchStackParams>;
 };
 type RootStackParams = {
@@ -59,7 +63,7 @@ const RootNavigator = () => {
           <RootStack.Screen
             name='status'
             component={StatusStackScreen}
-            options={{ header: Header, title: 'Status' }}
+            options={{ headerShown: false }}
           />
         </>
       ) : (
@@ -75,6 +79,7 @@ const RootNavigator = () => {
 
 export {
   type TimelineStackParams,
+  type NotificationsStackParams,
   type SearchStackParams,
   type StatusStackParams,
   type TabsParams,

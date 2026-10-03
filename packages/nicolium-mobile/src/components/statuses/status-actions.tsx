@@ -5,6 +5,8 @@ import {
   ArrowBendUpLeftIcon,
   RepeatIcon,
   StarIcon,
+  ThumbsDownIcon,
+  ThumbsUpIcon,
 } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -12,11 +14,14 @@ import { View } from 'react-native';
 
 import { useStatus } from '@/queries/statuses/use-status';
 import {
+  useDislikeStatus,
   useFavouriteStatus,
   useReblogStatus,
+  useUndislikeStatus,
   useUnfavouriteStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
+import { useFeatures } from '@/stores/auth';
 
 import { iconHelper } from '../ui/icon';
 
@@ -27,6 +32,8 @@ const messages = defineMessages({
   unreblog: { id: 'status.unreblog', defaultMessage: 'Unrepost' },
   favourite: { id: 'status.favourite', defaultMessage: 'Like' },
   unfavourite: { id: 'status.unfavourite', defaultMessage: 'Undo like' },
+  dislike: { id: 'status.dislike', defaultMessage: 'Dislike' },
+  undislike: { id: 'status.undislike', defaultMessage: 'Undo dislike' },
 });
 
 interface IStatusActions {
@@ -36,15 +43,18 @@ interface IStatusActions {
 const StatusActions: React.FC<IStatusActions> = ({ id }) => {
   const intl = useIntl();
   const theme = useTheme();
+  const features = useFeatures();
 
   const navigation = useNavigation();
 
   const { data: status } = useStatus(id);
 
-  const { mutate: favouriteStatus, isPending: isPendingFavourite } = useFavouriteStatus(id);
-  const { mutate: unfavouriteStatus } = useUnfavouriteStatus(id);
   const { mutate: reblogStatus, isPending: isPendingReblog } = useReblogStatus(id);
   const { mutate: unreblogStatus } = useUnreblogStatus(id);
+  const { mutate: favouriteStatus, isPending: isPendingFavourite } = useFavouriteStatus(id);
+  const { mutate: unfavouriteStatus } = useUnfavouriteStatus(id);
+  const { mutate: dislikeStatus, isPending: isPendingDislike } = useDislikeStatus(id);
+  const { mutate: undislikeStatus } = useUndislikeStatus(id);
 
   if (!status) return null;
 
@@ -88,11 +98,14 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
                 <RepeatIcon {...props} weight={status.reblogged ? 'fill' : undefined} />
               )}
               onPress={() => (status.reblogged ? unreblogStatus() : reblogStatus({}))}
-              onLongPress={() =>
-                navigation.navigate(
-                  'status' as never,
-                  { screen: 'reblogs', params: { id } } as never,
-                )
+              onLongPress={
+                status.reblogs_count
+                  ? () =>
+                      navigation.navigate(
+                        'status' as never,
+                        { screen: 'reblogs', params: { id } } as never,
+                      )
+                  : undefined
               }
               disabled={isPendingReblog}
               style={{ margin: -4, height: 40, width: 40 }}
@@ -121,10 +134,20 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             <IconButton
               {...props}
-              icon={(props) => (
-                <StarIcon {...props} weight={status.favourited ? 'fill' : undefined} />
-              )}
+              icon={(props) => {
+                const Icon = features.statusDislikes ? ThumbsUpIcon : StarIcon;
+                return <Icon {...props} weight={status.favourited ? 'fill' : undefined} />;
+              }}
               onPress={() => (status.favourited ? unfavouriteStatus : favouriteStatus)()}
+              onLongPress={
+                status.favourites_count
+                  ? () =>
+                      navigation.navigate(
+                        'status' as never,
+                        { screen: 'favourites', params: { id } } as never,
+                      )
+                  : undefined
+              }
               disabled={isPendingFavourite}
               style={{ margin: -4, height: 40, width: 40 }}
               selected={status.favourited}
@@ -145,6 +168,48 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
           </View>
         )}
       </Tooltip>
+      {features.statusDislikes && (
+        <Tooltip
+          title={intl.formatMessage(status.disliked ? messages.undislike : messages.dislike)}
+        >
+          {(props) => (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <IconButton
+                {...props}
+                icon={(props) => (
+                  <ThumbsDownIcon {...props} weight={status.disliked ? 'fill' : undefined} />
+                )}
+                onPress={() => (status.disliked ? undislikeStatus : dislikeStatus)()}
+                onLongPress={
+                  status.dislikes_count
+                    ? () =>
+                        navigation.navigate(
+                          'status' as never,
+                          { screen: 'dislikes', params: { id } } as never,
+                        )
+                    : undefined
+                }
+                disabled={isPendingDislike}
+                style={{ margin: -4, height: 40, width: 40 }}
+                selected={status.disliked}
+                accessibilityLabel={intl.formatMessage(
+                  status.disliked ? messages.undislikeStatus : messages.dislikeStatus,
+                )}
+              />
+              {status.dislikes_count > 0 && (
+                <Text
+                  variant='labelMedium'
+                  style={{
+                    color: status.disliked ? theme.colors.primary : theme.colors.onSurfaceVariant,
+                  }}
+                >
+                  {status.dislikes_count}
+                </Text>
+              )}
+            </View>
+          )}
+        </Tooltip>
+      )}
     </View>
   );
 };

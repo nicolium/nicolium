@@ -1,17 +1,19 @@
 import { BottomNavigation } from '@mkljczk/react-native-paper';
 import { type BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CommonActions } from '@react-navigation/native';
-import { HouseIcon, MagnifyingGlassIcon } from 'phosphor-react-native';
+import { BellSimpleIcon, HouseIcon, MagnifyingGlassIcon } from 'phosphor-react-native';
 import { defineMessages, useIntl } from 'react-intl';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HomeStackScreen } from './pages/home';
+import { NotificationsStackScreen } from './pages/notifications';
 import { SearchStackScreen } from './pages/search';
 
 import type { TabsParams } from './router';
 
 const messages = defineMessages({
   home: { id: 'column.home', defaultMessage: 'Home' },
+  notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
   search: { id: 'column.search', defaultMessage: 'Search' },
 });
 
@@ -83,6 +85,16 @@ const Tabs = () => {
           tabBarLabel: intl.formatMessage(messages.search),
           tabBarIcon: ({ color, focused }) => (
             <MagnifyingGlassIcon color={color} weight={focused ? 'fill' : undefined} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='notifications'
+        component={NotificationsStackScreen}
+        options={{
+          tabBarLabel: intl.formatMessage(messages.notifications),
+          tabBarIcon: ({ color, focused }) => (
+            <BellSimpleIcon color={color} weight={focused ? 'fill' : undefined} />
           ),
         }}
       />
