@@ -25,6 +25,9 @@
     },
     "experiments": {
       "reactCompiler": true
-    }
+    },
+    "plugins": [
+      "expo-image"
+    ]
   }
 }

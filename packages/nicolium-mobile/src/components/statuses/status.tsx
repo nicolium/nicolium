@@ -14,6 +14,7 @@ import { iconHelper } from '../ui/icon';
 import { UIStatus } from '../ui/status';
 
 import { StatusActions } from './status-actions';
+import { StatusMedia } from './status-media';
 
 interface IStatusRebloggedChip {
   accountIds: Array<string>;
@@ -147,6 +148,7 @@ const Status: React.FC<IStatus> = ({
         </View>
       }
       content={actualStatus.content}
+      media={<StatusMedia id={id} />}
       actions={<StatusActions id={id} />}
       isConnectedBottom={isConnectedBottom}
     />

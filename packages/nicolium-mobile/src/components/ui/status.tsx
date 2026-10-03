@@ -6,12 +6,20 @@ import { View } from 'react-native';
 interface IUIStatus {
   account: React.JSX.Element;
   content: string;
+  media?: React.JSX.Element;
   actions?: React.JSX.Element;
   isConnectedBottom?: boolean;
   chip?: React.JSX.Element;
 }
 
-const UIStatus: React.FC<IUIStatus> = ({ account, content, actions, isConnectedBottom, chip }) => {
+const UIStatus: React.FC<IUIStatus> = ({
+  account,
+  content,
+  media,
+  actions,
+  isConnectedBottom,
+  chip,
+}) => {
   const theme = useTheme();
 
   const status = (
@@ -31,6 +39,7 @@ const UIStatus: React.FC<IUIStatus> = ({ account, content, actions, isConnectedB
           },
         }}
       />
+      {media}
       {actions}
     </View>
   );
@@ -45,8 +54,8 @@ const UIStatus: React.FC<IUIStatus> = ({ account, content, actions, isConnectedB
             style={{
               marginHorizontal: 19,
               width: 2,
-              backgroundColor: theme.colors.surfaceDim,
-              marginBottom: -8,
+              backgroundColor: theme.colors.surfaceContainerHigh,
+              marginBottom: -16,
             }}
           ></View>
           {status}
