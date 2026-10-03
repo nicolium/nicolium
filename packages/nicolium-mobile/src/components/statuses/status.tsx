@@ -26,25 +26,23 @@ const StatusRebloggedChip: React.FC<IStatusRebloggedChip> = ({ accountIds }) => 
   if (!account) return null;
 
   return (
-    <View style={{ flexDirection: 'column' }}>
-      <Chip mode='outlined' icon={iconHelper(RepeatIcon)} compact style={{ flex: 0 }}>
-        <FormattedMessage
-          id='status.reblogged_by'
-          defaultMessage='{name} reposted'
-          values={{
-            name: (
-              <Link
-                screen='accounts'
-                params={{ screen: 'view', params: { id: account.id } }}
-                key={account.id}
-              >
-                {account.display_name}
-              </Link>
-            ),
-          }}
-        />
-      </Chip>
-    </View>
+    <Chip mode='outlined' icon={iconHelper(RepeatIcon)} compact>
+      <FormattedMessage
+        id='status.reblogged_by'
+        defaultMessage='{name} reposted'
+        values={{
+          name: (
+            <Link
+              screen='accounts'
+              params={{ screen: 'view', params: { id: account.id } }}
+              key={account.id}
+            >
+              {account.display_name}
+            </Link>
+          ),
+        }}
+      />
+    </Chip>
   );
 };
 
@@ -85,7 +83,7 @@ const StatusMaybeFollowedHashtagChip: React.FC<IStatusMaybeFollowedHashtagChip> 
   }
 
   return (
-    <Chip mode='outlined' icon={iconHelper(HashIcon)} compact style={{ flex: 1 }}>
+    <Chip mode='outlined' icon={iconHelper(HashIcon)} compact>
       <FormattedMessage
         id='status.followed_tag'
         defaultMessage='You’re following {tags}'
