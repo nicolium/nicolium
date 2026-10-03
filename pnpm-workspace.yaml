@@ -1,6 +1,7 @@
 packages:
   - 'packages/*'
 allowBuilds:
+  '@mkljczk/react-native-paper@https://codeload.github.com/mkljczk/react-native-paper/tar.gz/567ae6d54ac11e256405ae45266c040e1c9405b9': true
   '@parcel/watcher': false
   core-js: false
   esbuild: false

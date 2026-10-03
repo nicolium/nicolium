@@ -1,8 +1,9 @@
+import { Chip, IconButton, Text, TouchableRipple, useTheme } from '@mkljczk/react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import { DotsThreeVerticalIcon, HashIcon, RepeatIcon } from 'phosphor-react-native';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
-import { View } from 'react-native';
-import { Chip, IconButton, Text, useTheme } from 'react-native-paper';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
@@ -89,10 +90,13 @@ interface IStatus {
   id: string;
   context?: 'home' | 'timeline' | 'thread';
   isConnectedBottom?: boolean;
+  withLink?: boolean;
+  style?: StyleProp<ViewStyle>;
 }
 
-const Status: React.FC<IStatus> = ({ id, context, isConnectedBottom }) => {
+const Status: React.FC<IStatus> = ({ id, context, isConnectedBottom, withLink, style }) => {
   const { data: status } = useStatus(id);
+  const navigation = useNavigation();
 
   const actualStatus = status?.reblog || status;
 
@@ -106,12 +110,12 @@ const Status: React.FC<IStatus> = ({ id, context, isConnectedBottom }) => {
     chip = <StatusMaybeFollowedHashtagChip id={status.id} />;
   }
 
-  return (
+  const statusBody = (
     <UIStatus
       chip={chip}
       account={
         <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'space-between', flex: 1 }}>
-          <Account id={actualStatus.account_id!} timestamp={actualStatus.created_at} />
+          <Account id={actualStatus.account_id!} timestamp={actualStatus.created_at} withLink />
           <IconButton
             icon={iconHelper(DotsThreeVerticalIcon)}
             onPress={() => {}}
@@ -124,6 +128,21 @@ const Status: React.FC<IStatus> = ({ id, context, isConnectedBottom }) => {
       isConnectedBottom={isConnectedBottom}
     />
   );
+
+  if (withLink) {
+    return (
+      <TouchableRipple
+        onPress={() => {
+          navigation.navigate('status' as never, { screen: 'view', params: { id } } as never);
+        }}
+        style={{ ...style, padding: 16 }}
+      >
+        {statusBody}
+      </TouchableRipple>
+    );
+  }
+
+  return <View style={{ ...style, padding: 16 }}>{statusBody}</View>;
 };
 
 export { Status };

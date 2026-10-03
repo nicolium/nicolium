@@ -24,6 +24,7 @@
   "dependencies": {
     "@expo/metro-runtime": "~56.0.21",
     "@expo/ui": "~57.0.21",
+    "@mkljczk/react-native-paper": "github:mkljczk/react-native-paper",
     "@native-html/render": "^1.0.3",
     "@phosphor-icons/core": "^2.1.1",
     "@react-native-vector-icons/material-design-icons": "^13.1.4",

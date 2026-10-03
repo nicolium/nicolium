@@ -6,6 +6,7 @@ import { Header } from '../components/ui/header';
 
 import { LoginScreen } from './pages/login';
 import { SettingsScreen } from './pages/settings';
+import { StatusStackScreen } from './pages/status';
 import { Tabs } from './tabs';
 
 import type { NavigatorScreenParams } from '@react-navigation/native';
@@ -22,6 +23,13 @@ type TimelineStackParams = {
 type SearchStackParams = {
   search?: { type: 'statuses' | 'accounts' | 'hashtags' | 'links'; query: string };
 };
+type StatusStackParams = {
+  view: { id: string };
+  reblogs: { id: string };
+  favourites: { id: string };
+  dislikes: { id: string };
+  quotes: { id: string };
+};
 type TabsParams = {
   timeline: NavigatorScreenParams<TimelineStackParams>;
   search: NavigatorScreenParams<SearchStackParams>;
@@ -30,6 +38,7 @@ type RootStackParams = {
   login: undefined;
   app: NavigatorScreenParams<TabsParams>;
   settings: undefined;
+  status: StatusStackParams;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -47,6 +56,11 @@ const RootNavigator = () => {
             component={SettingsScreen}
             options={{ header: Header, title: 'Settings' }}
           />
+          <RootStack.Screen
+            name='status'
+            component={StatusStackScreen}
+            options={{ header: Header, title: 'Status' }}
+          />
         </>
       ) : (
         <RootStack.Screen
@@ -62,6 +76,7 @@ const RootNavigator = () => {
 export {
   type TimelineStackParams,
   type SearchStackParams,
+  type StatusStackParams,
   type TabsParams,
   type RootStackParams,
   RootNavigator,

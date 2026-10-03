@@ -1,5 +1,5 @@
+import { Appbar, useTheme } from '@mkljczk/react-native-paper';
 import { getHeaderTitle } from '@react-navigation/elements';
-import { Appbar, useTheme } from 'react-native-paper';
 
 import type { NativeStackHeaderProps } from '@react-navigation/native-stack';
 

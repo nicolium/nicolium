@@ -1,9 +1,9 @@
+import { PaperProvider } from '@mkljczk/react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createURL } from 'expo-linking';
 import { IntlProvider } from 'react-intl';
 import { useColorScheme } from 'react-native';
-import { PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import enMessages from './messages/en.json';

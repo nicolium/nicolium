@@ -1,10 +1,16 @@
+import {
+  Avatar,
+  Text,
+  TouchableRipple,
+  useTheme,
+  type TouchableRippleProps,
+} from '@mkljczk/react-native-paper';
 import React from 'react';
 import { View } from 'react-native';
-import { Avatar, Text, useTheme } from 'react-native-paper';
 
 import RelativeTimestamp from '@/utils/relative-timestamp';
 
-interface IUIAccount {
+interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
   avatarSrc?: string;
   displayName: string;
   displayNameDetail?: string;
@@ -18,11 +24,13 @@ const UIAccount: React.FC<IUIAccount> = ({
   displayNameDetail,
   acct,
   timestamp,
+  style,
+  onPress,
 }) => {
   const { colors } = useTheme();
 
-  return (
-    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+  const body = (
+    <>
       {avatarSrc ? (
         <Avatar.Image size={40} source={{ uri: avatarSrc }} />
       ) : (
@@ -51,8 +59,24 @@ const UIAccount: React.FC<IUIAccount> = ({
           )}
         </Text>
       </View>
+    </>
+  );
+
+  if (onPress)
+    return (
+      <TouchableRipple
+        style={{ ...style, flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}
+        onPress={onPress}
+      >
+        {body}
+      </TouchableRipple>
+    );
+
+  return (
+    <View style={{ ...style, flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+      {body}
     </View>
   );
 };
 
-export { UIAccount };
+export { UIAccount, IUIAccount };

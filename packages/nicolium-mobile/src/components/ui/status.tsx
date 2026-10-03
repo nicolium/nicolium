@@ -1,7 +1,7 @@
+import { useTheme } from '@mkljczk/react-native-paper';
 import RenderHTML from '@native-html/render';
 import React from 'react';
 import { View } from 'react-native';
-import { useTheme } from 'react-native-paper';
 
 interface IUIStatus {
   account: React.JSX.Element;

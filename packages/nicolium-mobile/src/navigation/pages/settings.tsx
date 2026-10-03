@@ -1,6 +1,6 @@
+import { Divider, List, useTheme } from '@mkljczk/react-native-paper';
 import { InfoIcon, SignOutIcon } from 'phosphor-react-native';
 import { ScrollView } from 'react-native';
-import { Divider, List, useTheme } from 'react-native-paper';
 
 import { iconHelper } from '@/components/ui/icon';
 import { useAuthStoreActions } from '@/stores/auth';

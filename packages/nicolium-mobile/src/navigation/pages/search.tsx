@@ -1,4 +1,12 @@
 import {
+  ActivityIndicator,
+  Divider,
+  Searchbar,
+  Text,
+  TouchableRipple,
+  useTheme,
+} from '@mkljczk/react-native-paper';
+import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
@@ -6,14 +14,6 @@ import { FlashList } from '@shopify/flash-list';
 import { debounce } from '@tanstack/react-pacer/debouncer';
 import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import {
-  ActivityIndicator,
-  Divider,
-  Searchbar,
-  Text,
-  TouchableRipple,
-  useTheme,
-} from 'react-native-paper';
 import { TabsProvider, Tabs, TabScreen } from 'react-native-paper-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -103,13 +103,12 @@ const SearchScreen = ({
                   : trendingAccountsQuery.data?.map(({ account_id: id }) => id)
               }
               renderItem={({ item }) => (
-                <TouchableRipple
-                  onPress={() => {}}
+                <Account
                   key={item}
+                  id={item}
                   style={{ paddingVertical: 8, padding: 12 }}
-                >
-                  <Account key={item} id={item} />
-                </TouchableRipple>
+                  withLink
+                />
               )}
               ItemSeparatorComponent={Divider}
               onEndReached={
@@ -142,11 +141,7 @@ const SearchScreen = ({
           <TabScreen label={intl.formatMessage(messages.statuses)}>
             <FlashList
               data={(hasQuery ? statusesQuery : trendingStatusesQuery).data}
-              renderItem={({ item }) => (
-                <TouchableRipple onPress={() => {}} key={item} style={{ padding: 16 }}>
-                  <Status id={item} />
-                </TouchableRipple>
-              )}
+              renderItem={({ item }) => <Status id={item} withLink />}
               ItemSeparatorComponent={Divider}
               onEndReached={
                 hasQuery && statusesQuery.hasNextPage && !statusesQuery.isFetching

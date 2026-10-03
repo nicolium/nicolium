@@ -1,7 +1,7 @@
+import { Text, useTheme } from '@mkljczk/react-native-paper';
 import { ChatCenteredSlashIcon } from 'phosphor-react-native';
 import React from 'react';
 import { View } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
 
 import { iconHelper } from '@/components/ui/icon';
 

@@ -1,3 +1,4 @@
+import { ActivityIndicator, Button, Divider, Icon, Menu, Text } from '@mkljczk/react-native-paper';
 import {
   BroadcastIcon,
   CaretDownIcon,
@@ -17,7 +18,6 @@ import {
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import { ActivityIndicator, Button, Divider, Icon, Menu, Text } from 'react-native-paper';
 
 import { iconHelper } from '@/components/ui/icon';
 import { useAntennas } from '@/queries/accounts/use-antennas';

@@ -1,8 +1,8 @@
+import { BottomNavigation } from '@mkljczk/react-native-paper';
 import { type BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CommonActions } from '@react-navigation/native';
 import { HouseIcon, MagnifyingGlassIcon } from 'phosphor-react-native';
 import { defineMessages, useIntl } from 'react-intl';
-import { BottomNavigation } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HomeStackScreen } from './pages/home';

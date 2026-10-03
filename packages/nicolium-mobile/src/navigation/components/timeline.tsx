@@ -1,8 +1,8 @@
+import { ActivityIndicator, Divider, TouchableRipple } from '@mkljczk/react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import { ProhibitIcon } from 'phosphor-react-native';
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { ActivityIndicator, Divider, TouchableRipple } from 'react-native-paper';
 
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage, type IEmptyMessage } from '@/components/ui/empty-message';
@@ -20,9 +20,12 @@ const Timeline: React.FC<ITimeline> = ({ query, context = 'timeline', ...props }
   const renderItem = useCallback(
     ({ item }: { item: TimelineEntry }) =>
       item.type === 'status' ? (
-        <TouchableRipple onPress={() => {}} style={{ padding: 16 }} accessibilityLabel={item.id}>
-          <Status id={item.id} context={context} isConnectedBottom={item.isConnectedBottom} />
-        </TouchableRipple>
+        <Status
+          id={item.id}
+          context={context}
+          isConnectedBottom={item.isConnectedBottom}
+          withLink
+        />
       ) : null,
     [],
   );

@@ -1,7 +1,7 @@
+import { Appbar, Button, Divider, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import { GlobeIcon } from 'phosphor-react-native';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { Appbar, Button, Divider, Text, TextInput, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Logo from '@/assets/logo.svg';
