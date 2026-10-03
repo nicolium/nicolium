@@ -15,7 +15,7 @@ const NotificationsScreen = (_props: NativeStackScreenProps<NotificationsStackPa
 
   return (
     <TabsProvider defaultIndex={0}>
-      <Tabs style={{ backgroundColor: colors.background }} uppercase={false}>
+      <Tabs style={{ backgroundColor: colors.surfaceContainer }} uppercase={false}>
         <TabScreen label='All'>
           <Text>meow</Text>
         </TabScreen>

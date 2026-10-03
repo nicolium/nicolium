@@ -1,11 +1,4 @@
-import {
-  ActivityIndicator,
-  Divider,
-  Searchbar,
-  Text,
-  TouchableRipple,
-  useTheme,
-} from '@mkljczk/react-native-paper';
+import { ActivityIndicator, Divider, Searchbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
@@ -14,6 +7,7 @@ import { FlashList } from '@shopify/flash-list';
 import { debounce } from '@tanstack/react-pacer/debouncer';
 import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { View } from 'react-native';
 import { TabsProvider, Tabs, TabScreen } from 'react-native-paper-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -83,18 +77,25 @@ const SearchScreen = ({
 
   return (
     <>
-      <Searchbar
-        style={{ marginHorizontal: 16, marginBottom: 8, marginTop: 8 + topInset }}
-        placeholder='Search the Fediverse'
-        value={enteredQuery}
-        onChangeText={setQuery}
-      />
+      <View
+        style={{
+          backgroundColor: colors.surfaceContainer,
+          paddingBottom: 8,
+          paddingTop: 8 + topInset,
+        }}
+      >
+        <Searchbar
+          placeholder='Search the Fediverse'
+          value={enteredQuery}
+          onChangeText={setQuery}
+        />
+      </View>
       <TabsProvider
         defaultIndex={SEARCH_TYPES.indexOf(route.params?.type || 'accounts')}
         onChangeIndex={handleChangeIndex}
         key={forcedRerenderKey}
       >
-        <Tabs style={{ backgroundColor: colors.background }} uppercase={false}>
+        <Tabs style={{ backgroundColor: colors.surfaceContainer }} uppercase={false}>
           <TabScreen label={intl.formatMessage(messages.accounts)}>
             <FlashList
               data={
