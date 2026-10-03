@@ -29,52 +29,49 @@ const UIAccount: React.FC<IUIAccount> = ({
 }) => {
   const { colors } = useTheme();
 
-  const body = (
-    <>
-      {avatarSrc ? (
-        <Avatar.Image size={40} source={{ uri: avatarSrc }} />
-      ) : (
-        <Avatar.Text size={40} label={(displayName || acct).slice(0, 2)} />
-      )}
-
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <View style={{ gap: 4, alignItems: 'center', flexDirection: 'row' }}>
-          <Text variant='titleMedium' numberOfLines={1}>
-            {displayName}
-          </Text>
-          {displayNameDetail && (
-            <Text variant='bodySmall' numberOfLines={1} style={{ flex: 1, color: colors.outline }}>
-              {'· '}
-              {displayNameDetail}
-            </Text>
-          )}
-        </View>
-        <Text variant='bodyMedium' numberOfLines={1} style={{ color: colors.outline }}>
-          @{acct}
-          {timestamp && (
-            <>
-              {' · '}
-              <RelativeTimestamp timestamp={timestamp} />
-            </>
-          )}
-        </Text>
-      </View>
-    </>
-  );
-
-  if (onPress)
-    return (
-      <TouchableRipple
-        style={{ ...style, flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}
-        onPress={onPress}
-      >
-        {body}
-      </TouchableRipple>
-    );
+  const MaybeLink = ({ children }: { children: React.JSX.Element }) =>
+    onPress ? <TouchableRipple onPress={onPress}>{children}</TouchableRipple> : children;
 
   return (
     <View style={{ ...style, flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-      {body}
+      <MaybeLink>
+        {avatarSrc ? (
+          <Avatar.Image size={40} source={{ uri: avatarSrc }} />
+        ) : (
+          <Avatar.Text size={40} label={(displayName || acct).slice(0, 2)} />
+        )}
+      </MaybeLink>
+
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start' }}>
+        <MaybeLink>
+          <View style={{ gap: 4, alignItems: 'center', flexDirection: 'row' }}>
+            <Text variant='titleMedium' numberOfLines={1}>
+              {displayName}
+            </Text>
+            {displayNameDetail && (
+              <Text
+                variant='bodySmall'
+                numberOfLines={1}
+                style={{ flex: 1, color: colors.outline }}
+              >
+                {'· '}
+                {displayNameDetail}
+              </Text>
+            )}
+          </View>
+        </MaybeLink>
+        <MaybeLink>
+          <Text variant='bodyMedium' numberOfLines={1} style={{ color: colors.outline }}>
+            @{acct}
+            {timestamp && (
+              <>
+                {' · '}
+                <RelativeTimestamp timestamp={timestamp} />
+              </>
+            )}
+          </Text>
+        </MaybeLink>
+      </View>
     </View>
   );
 };
