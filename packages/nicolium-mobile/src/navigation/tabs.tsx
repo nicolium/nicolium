@@ -1,10 +1,10 @@
 import { BottomNavigation } from '@mkljczk/react-native-paper';
 import { type BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeBottomTabNavigator } from '@react-navigation/bottom-tabs/unstable';
+// import { createNativeBottomTabNavigator } from '@react-navigation/bottom-tabs/unstable';
 import { CommonActions } from '@react-navigation/native';
 import { BellSimpleIcon, HouseIcon, MagnifyingGlassIcon } from 'phosphor-react-native';
 import { defineMessages, useIntl } from 'react-intl';
-import { Platform } from 'react-native';
+// import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HomeStackScreen } from './pages/home';
@@ -60,99 +60,98 @@ const PaperTabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
   );
 };
 
-let Tabs;
+// @ts-ignore
+// if (Platform.OS === 'never_matches') {
+//   const Tab = createNativeBottomTabNavigator<TabsParams>();
 
-if (Platform.OS === 'ios') {
-  const Tab = createNativeBottomTabNavigator<TabsParams>();
+//   Tabs = () => {
+//     const intl = useIntl();
 
-  Tabs = () => {
-    const intl = useIntl();
+//     return (
+//       <Tab.Navigator
+//         tabBar={(props) => <PaperTabBar {...props} />}
+//         screenOptions={{ headerShown: false }}
+//       >
+//         <Tab.Screen
+//           name='timeline'
+//           component={HomeStackScreen}
+//           options={{
+//             tabBarLabel: intl.formatMessage(messages.home),
+//             tabBarIcon: {
+//               type: 'sfSymbol',
+//               name: 'house',
+//             },
+//           }}
+//         />
+//         <Tab.Screen
+//           name='search'
+//           component={SearchStackScreen}
+//           options={{
+//             tabBarLabel: intl.formatMessage(messages.search),
+//             tabBarIcon: {
+//               type: 'sfSymbol',
+//               name: 'magnifyingglass',
+//             },
+//           }}
+//         />
+//         <Tab.Screen
+//           name='notifications'
+//           component={NotificationsStackScreen}
+//           options={{
+//             tabBarLabel: intl.formatMessage(messages.notifications),
+//             tabBarIcon: {
+//               type: 'sfSymbol',
+//               name: 'bell',
+//             },
+//           }}
+//         />
+//       </Tab.Navigator>
+//     );
+//   };
+// } else {
+const Tab = createBottomTabNavigator<TabsParams>();
 
-    return (
-      <Tab.Navigator
-        tabBar={(props) => <PaperTabBar {...props} />}
-        screenOptions={{ headerShown: false }}
-      >
-        <Tab.Screen
-          name='timeline'
-          component={HomeStackScreen}
-          options={{
-            tabBarLabel: intl.formatMessage(messages.home),
-            tabBarIcon: {
-              type: 'sfSymbol',
-              name: 'house',
-            },
-          }}
-        />
-        <Tab.Screen
-          name='search'
-          component={SearchStackScreen}
-          options={{
-            tabBarLabel: intl.formatMessage(messages.search),
-            tabBarIcon: {
-              type: 'sfSymbol',
-              name: 'magnifyingglass',
-            },
-          }}
-        />
-        <Tab.Screen
-          name='notifications'
-          component={NotificationsStackScreen}
-          options={{
-            tabBarLabel: intl.formatMessage(messages.notifications),
-            tabBarIcon: {
-              type: 'sfSymbol',
-              name: 'bell',
-            },
-          }}
-        />
-      </Tab.Navigator>
-    );
-  };
-} else {
-  const Tab = createBottomTabNavigator<TabsParams>();
+const Tabs = () => {
+  const intl = useIntl();
 
-  Tabs = () => {
-    const intl = useIntl();
-
-    return (
-      <Tab.Navigator
-        tabBar={(props) => <PaperTabBar {...props} />}
-        screenOptions={{ headerShown: false, animation: 'shift' }}
-      >
-        <Tab.Screen
-          name='timeline'
-          component={HomeStackScreen}
-          options={{
-            tabBarLabel: intl.formatMessage(messages.home),
-            tabBarIcon: ({ color, focused }) => (
-              <HouseIcon color={color} weight={focused ? 'fill' : undefined} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name='search'
-          component={SearchStackScreen}
-          options={{
-            tabBarLabel: intl.formatMessage(messages.search),
-            tabBarIcon: ({ color, focused }) => (
-              <MagnifyingGlassIcon color={color} weight={focused ? 'fill' : undefined} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name='notifications'
-          component={NotificationsStackScreen}
-          options={{
-            tabBarLabel: intl.formatMessage(messages.notifications),
-            tabBarIcon: ({ color, focused }) => (
-              <BellSimpleIcon color={color} weight={focused ? 'fill' : undefined} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    );
-  };
-}
+  return (
+    <Tab.Navigator
+      tabBar={(props) => <PaperTabBar {...props} />}
+      screenOptions={{ headerShown: false, animation: 'shift' }}
+    >
+      <Tab.Screen
+        name='timeline'
+        component={HomeStackScreen}
+        options={{
+          tabBarLabel: intl.formatMessage(messages.home),
+          tabBarIcon: ({ color, focused }) => (
+            <HouseIcon color={color} weight={focused ? 'fill' : undefined} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='search'
+        component={SearchStackScreen}
+        options={{
+          tabBarLabel: intl.formatMessage(messages.search),
+          tabBarIcon: ({ color, focused }) => (
+            <MagnifyingGlassIcon color={color} weight={focused ? 'fill' : undefined} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='notifications'
+        component={NotificationsStackScreen}
+        options={{
+          tabBarLabel: intl.formatMessage(messages.notifications),
+          tabBarIcon: ({ color, focused }) => (
+            <BellSimpleIcon color={color} weight={focused ? 'fill' : undefined} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+// }
 
 export { Tabs };

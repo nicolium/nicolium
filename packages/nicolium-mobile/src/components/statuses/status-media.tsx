@@ -14,7 +14,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
   if (!status?.media_attachments.length) return null;
 
   return (
-    <View style={{ flex: 1, borderRadius: 8, overflow: 'hidden' }}>
+    <View style={{ flex: 1, gap: 8, overflow: 'hidden' }}>
       {status.media_attachments
         .filter((media) => media.type === 'image')
         .map((media) => {
@@ -25,9 +25,11 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
               style={{
                 flex: 1,
                 width: '100%',
+                maxWidth: '100%',
                 aspectRatio: width && height ? width / height : 1,
                 maxHeight: 400,
                 height: height || 'auto',
+                borderRadius: 8,
               }}
               source={{
                 uri: media.url,
@@ -35,12 +37,13 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
                 height,
               }}
               placeholder={{
-                // blurhash: media.blurhash || undefined,
+                blurhash: media.blurhash || undefined,
                 width,
                 height,
               }}
               accessibilityLabel={media.description}
               contentFit='cover'
+              transition={300}
             />
           );
         })}
