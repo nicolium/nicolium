@@ -1,4 +1,4 @@
-import { ActivityIndicator, Divider, TouchableRipple } from '@mkljczk/react-native-paper';
+import { ActivityIndicator, Divider } from '@mkljczk/react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import { ProhibitIcon } from 'phosphor-react-native';
 import React, { useCallback } from 'react';

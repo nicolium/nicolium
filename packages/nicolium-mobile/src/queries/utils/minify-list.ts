@@ -10,7 +10,6 @@ import {
   type Group,
   type GroupedNotificationsResults,
   type MutedAccount,
-  type Notification,
   type NotificationGroup,
   type Status,
 } from 'pl-api';

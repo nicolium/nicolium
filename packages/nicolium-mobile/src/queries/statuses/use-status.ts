@@ -25,7 +25,7 @@ const minifyContext = ({
   ...context,
 });
 
-type MinifiedContext = ReturnType<typeof minifyContext>;
+// type MinifiedContext = ReturnType<typeof minifyContext>;
 
 type SelectedStatus = NormalizedStatus & {
   account: Account;
