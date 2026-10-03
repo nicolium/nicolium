@@ -8,9 +8,10 @@ interface IUIStatus {
   content: string;
   actions?: React.JSX.Element;
   isConnectedBottom?: boolean;
+  chip?: React.JSX.Element;
 }
 
-const UIStatus: React.FC<IUIStatus> = ({ account, content, actions, isConnectedBottom }) => {
+const UIStatus: React.FC<IUIStatus> = ({ account, content, actions, isConnectedBottom, chip }) => {
   const theme = useTheme();
 
   const status = (
@@ -36,6 +37,7 @@ const UIStatus: React.FC<IUIStatus> = ({ account, content, actions, isConnectedB
 
   return (
     <View style={{ flexDirection: 'column', gap: 8, marginBottom: isConnectedBottom ? -16 : 0 }}>
+      {chip && <View style={{ flexDirection: 'row' }}>{chip}</View>}
       {account}
       {isConnectedBottom ? (
         <View style={{ flexDirection: 'row', gap: 8 }}>

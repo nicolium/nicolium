@@ -27,6 +27,7 @@ const HomeTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, '
           defaultMessage='You’re not following anyone yet'
         />
       }
+      context='home'
     />
   );
 };

@@ -13,14 +13,15 @@ import type { TimelineEntry } from '@/stores/timelines';
 
 interface ITimeline extends IEmptyMessage {
   query: ReturnType<typeof useTimeline>;
+  context?: 'home' | 'timeline';
 }
 
-const Timeline: React.FC<ITimeline> = ({ query, ...props }) => {
+const Timeline: React.FC<ITimeline> = ({ query, context = 'timeline', ...props }) => {
   const renderItem = useCallback(
     ({ item }: { item: TimelineEntry }) =>
       item.type === 'status' ? (
         <TouchableRipple onPress={() => {}} style={{ padding: 16 }} accessibilityLabel={item.id}>
-          <Status id={item.id} isConnectedBottom={item.isConnectedBottom} />
+          <Status id={item.id} context={context} isConnectedBottom={item.isConnectedBottom} />
         </TouchableRipple>
       ) : null,
     [],
