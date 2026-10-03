@@ -368,7 +368,7 @@ const Account = ({
                   <>
                     <span className='separator' />
                     <p
-                      className='account-card__handle'
+                      className='account-card__pronouns'
                       title={intl.formatMessage(messages.pronouns, {
                         pronouns,
                       })}
@@ -472,7 +472,7 @@ const Account = ({
               <>
                 <span className='separator' />
                 <p
-                  className='account-card__handle'
+                  className='account-card__pronouns'
                   title={intl.formatMessage(messages.pronouns, {
                     pronouns,
                   })}

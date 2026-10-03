@@ -420,10 +420,14 @@
     }
   }
 
-  &__handle {
+  &__handle, &__pronouns {
     @include mixins.text($size: sm, $theme: muted, $truncate: true);
 
     direction: ltr;
+  }
+
+  &__pronouns {
+    flex: 1;
   }
 
   &__meta-text {
