@@ -90,7 +90,11 @@ const UIAccount: React.FC<IUIAccount> = ({
   };
 
   if (onPress && fullWidthPressable) {
-    return <TouchableRipple onPress={onPress} style={styles}>{body}</TouchableRipple>;
+    return (
+      <TouchableRipple onPress={onPress} style={styles}>
+        {body}
+      </TouchableRipple>
+    );
   }
   return <View style={styles}>{body}</View>;
 };

@@ -3,9 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
+import { useClient } from '@/stores/auth';
 
 import type { UpdateCredentialsParams } from 'pl-api';
-import { useClient } from '@/stores/auth';
 
 const useCredentialAccount = (enabled = true) => {
   const client = useClient();

@@ -37,7 +37,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
                 height,
               }}
               placeholder={{
-                blurhash: Platform.OS !== 'web' && media.blurhash || undefined,
+                blurhash: (Platform.OS !== 'web' && media.blurhash) || undefined,
                 width,
                 height,
               }}
