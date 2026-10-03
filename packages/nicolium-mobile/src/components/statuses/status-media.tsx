@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import { useStatus } from '@/queries/statuses/use-status';
 
@@ -37,7 +37,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
                 height,
               }}
               placeholder={{
-                blurhash: media.blurhash || undefined,
+                blurhash: Platform.OS !== 'web' && media.blurhash || undefined,
                 width,
                 height,
               }}
