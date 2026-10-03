@@ -4,6 +4,7 @@ import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/logo.svg';
 import { UIAccount } from '@/components/ui/account';
 import { useAuthStoreActions } from '@/stores/auth';
@@ -32,8 +33,14 @@ const LoginScreen = () => {
 
   return (
     <>
-      <ScrollView style={{ padding: 16, marginTop: topInset }}>
-        <View style={{ gap: 12 }}>
+      <Gayness
+        height={520}
+        width={340}
+        style={{ position: 'absolute', right: 0, bottom: 0, opacity: 0.4 }}
+        aria-hidden
+      />
+      <ScrollView style={{ padding: 16, marginTop: topInset, flex: 1 }}>
+        <View style={{ gap: 12, flex: 1 }}>
           <View style={{ alignItems: 'center' }}>
             <Logo width={78} height={78} accessibilityLabel='Nicolium' />
           </View>
@@ -70,17 +77,15 @@ const LoginScreen = () => {
         </View>
       </ScrollView>
       <Appbar
-        style={[
-          {
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            paddingHorizontal: 16,
-            height: 64 + bottomInset,
-            backgroundColor: colors.surfaceContainer,
-          },
-        ]}
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          paddingHorizontal: 16,
+          height: 64 + bottomInset,
+          backgroundColor: colors.surfaceContainer,
+        }}
         safeAreaInsets={{ bottom: bottomInset }}
       >
         <Button

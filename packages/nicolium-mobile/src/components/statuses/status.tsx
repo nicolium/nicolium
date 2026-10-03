@@ -29,10 +29,10 @@ interface IQuote {
 }
 
 const Quote: React.FC<IQuote> = ({ id }) => {
-  const { isFetching, isError } = useStatus(id);
+  const { isFetched, isFetching, isError } = useStatus(id);
 
   return (
-    <Card mode='outlined'>
+    <Card mode='outlined' style={{ padding: isFetched ? 0 : 8 }}>
       {isFetching ? (
         <ActivityIndicator />
       ) : isError ? (
