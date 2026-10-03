@@ -25,6 +25,7 @@ const Timeline: React.FC<ITimeline> = ({ query, context = 'timeline', ...props }
           context={context}
           isConnectedBottom={item.isConnectedBottom}
           withLink
+          rebloggedBy={item.rebloggedBy}
         />
       ) : null,
     [],

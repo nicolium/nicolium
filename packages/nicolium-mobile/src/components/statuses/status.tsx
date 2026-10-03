@@ -1,5 +1,5 @@
 import { Chip, IconButton, Text, TouchableRipple, useTheme } from '@mkljczk/react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { Link, useNavigation } from '@react-navigation/native';
 import { DotsThreeVerticalIcon, HashIcon, RepeatIcon } from 'phosphor-react-native';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
@@ -16,11 +16,11 @@ import { UIStatus } from '../ui/status';
 import { StatusActions } from './status-actions';
 
 interface IStatusRebloggedChip {
-  accountId: string;
+  accountIds: Array<string>;
 }
 
-const StatusRebloggedChip: React.FC<IStatusRebloggedChip> = ({ accountId }) => {
-  const { data: account } = useAccount(accountId);
+const StatusRebloggedChip: React.FC<IStatusRebloggedChip> = ({ accountIds }) => {
+  const { data: account } = useAccount(accountIds[0]);
 
   if (!account) return null;
 
@@ -30,7 +30,15 @@ const StatusRebloggedChip: React.FC<IStatusRebloggedChip> = ({ accountId }) => {
         id='status.reblogged_by'
         defaultMessage='{name} reposted'
         values={{
-          name: account.display_name,
+          name: (
+            <Link
+              screen='accounts'
+              params={{ screen: 'view', params: { id: account.id } }}
+              key={account.id}
+            >
+              {account.display_name}
+            </Link>
+          ),
         }}
       />
     </Chip>
@@ -88,13 +96,21 @@ const StatusMaybeFollowedHashtagChip: React.FC<IStatusMaybeFollowedHashtagChip> 
 
 interface IStatus {
   id: string;
+  rebloggedBy?: Array<string>;
   context?: 'home' | 'timeline' | 'thread';
   isConnectedBottom?: boolean;
   withLink?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
-const Status: React.FC<IStatus> = ({ id, context, isConnectedBottom, withLink, style }) => {
+const Status: React.FC<IStatus> = ({
+  id,
+  rebloggedBy,
+  context,
+  isConnectedBottom,
+  withLink,
+  style,
+}) => {
   const { data: status } = useStatus(id);
   const navigation = useNavigation();
 
@@ -104,8 +120,10 @@ const Status: React.FC<IStatus> = ({ id, context, isConnectedBottom, withLink, s
 
   let chip;
 
-  if ((context === 'timeline' || context === 'home') && status.reblog) {
-    chip = <StatusRebloggedChip accountId={status.account_id!} />;
+  if (rebloggedBy) {
+    chip = <StatusRebloggedChip accountIds={rebloggedBy} />;
+  } else if ((context === 'timeline' || context === 'home') && status.reblog && status.account_id) {
+    chip = <StatusRebloggedChip accountIds={[status.account_id]} />;
   } else if (context === 'home') {
     chip = <StatusMaybeFollowedHashtagChip id={status.id} />;
   }

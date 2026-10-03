@@ -298,7 +298,6 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({
 
     const values = {
       name: <FormattedList type='conjunction' value={renderedAccounts} />,
-      count: accounts.length,
     };
 
     return (

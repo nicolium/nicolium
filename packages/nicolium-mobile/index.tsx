@@ -1,6 +1,7 @@
 import '@expo/metro-runtime'; // Necessary for Fast Refresh on Web
-import 'core-js/actual/array/to-sorted';
 import { registerRootComponent } from 'expo';
+
+import '@/polyfills';
 
 import { App } from './src/App';
 

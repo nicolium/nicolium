@@ -24,6 +24,8 @@
   "dependencies": {
     "@expo/metro-runtime": "~56.0.21",
     "@expo/ui": "~57.0.21",
+    "@formatjs/intl-datetimeformat": "^7.8.0",
+    "@formatjs/intl-numberformat": "^9.4.3",
     "@mkljczk/react-native-paper": "github:mkljczk/react-native-paper",
     "@native-html/render": "^1.0.3",
     "@phosphor-icons/core": "^2.1.1",
