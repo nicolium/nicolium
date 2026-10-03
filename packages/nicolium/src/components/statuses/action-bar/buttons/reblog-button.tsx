@@ -83,11 +83,13 @@ const ReblogButton: React.FC<IReblogButton> = ({
       icon={reblogIcon}
       filledIcon={reblogFilledIcon}
       disabled={!publicStatus}
-      title={
+      title={intl.formatMessage(
         !publicStatus
-          ? intl.formatMessage(messages.cannotReblog)
-          : intl.formatMessage(messages.reblog)
-      }
+          ? messages.cannotReblog
+          : status.reblogged
+            ? messages.unreblog
+            : messages.reblog,
+      )}
       active={status.reblogged}
       onClick={handleReblogClick}
       onLongPress={handleReblogLongPress}

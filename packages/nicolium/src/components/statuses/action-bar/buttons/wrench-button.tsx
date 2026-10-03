@@ -82,7 +82,7 @@ const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me, withCou
 
   return (
     <StatusActionButton
-      title={intl.formatMessage(messages.wrench)}
+      title={intl.formatMessage(wrenches?.me ? messages.unwrench : messages.wrench)}
       icon={iconWrench}
       filledIcon={iconWrenchFill}
       onClick={handleWrenchClick}

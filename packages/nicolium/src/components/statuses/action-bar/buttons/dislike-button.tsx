@@ -49,7 +49,7 @@ const DislikeButton: React.FC<IActionButton> = ({
 
   return (
     <StatusActionButton
-      title={intl.formatMessage(messages.disfavourite)}
+      title={intl.formatMessage(status.disliked ? messages.undisfavourite : messages.disfavourite)}
       icon={iconThumbsDown}
       filledIcon={iconThumbsDownFill}
       onClick={handleDislikeClick}

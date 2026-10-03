@@ -77,7 +77,7 @@ const FavouriteButton: React.FC<IActionButton> = ({
 
   const favouriteButton = (
     <StatusActionButton
-      title={intl.formatMessage(messages.favourite)}
+      title={intl.formatMessage(status.favourited ? messages.unfavourite : messages.favourite)}
       icon={favouriteIcon}
       filledIcon={favouriteFilledIcon}
       onClick={handleFavouriteClick}

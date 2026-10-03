@@ -57,6 +57,16 @@ const messages = defineMessages({
   embed: { id: 'status.embed', defaultMessage: 'Embed post' },
   external: { id: 'status.external', defaultMessage: 'View post on {domain}' },
   favourite: { id: 'status.favourite', defaultMessage: 'Like' },
+  groupBlockConfirm: { id: 'confirmations.block_from_group.confirm', defaultMessage: 'Ban user' },
+  groupBlockFromGroupHeading: {
+    id: 'confirmations.block_from_group.heading',
+    defaultMessage: 'Ban from group',
+  },
+  groupBlockFromGroupMessage: {
+    id: 'confirmations.block_from_group.message',
+    defaultMessage: 'Are you sure you want to ban @{name} from the group?',
+  },
+  groupModDelete: { id: 'status.group_mod_delete', defaultMessage: 'Delete post from group' },
   interactAs: {
     id: 'status.interact_as',
     defaultMessage: 'Interact from other accounts',
@@ -78,16 +88,6 @@ const messages = defineMessages({
     id: 'interact_as_modal.confirmation.checkbox',
     defaultMessage: 'Don’t ask again',
   },
-  groupBlockConfirm: { id: 'confirmations.block_from_group.confirm', defaultMessage: 'Ban user' },
-  groupBlockFromGroupHeading: {
-    id: 'confirmations.block_from_group.heading',
-    defaultMessage: 'Ban from group',
-  },
-  groupBlockFromGroupMessage: {
-    id: 'confirmations.block_from_group.message',
-    defaultMessage: 'Are you sure you want to ban @{name} from the group?',
-  },
-  groupModDelete: { id: 'status.group_mod_delete', defaultMessage: 'Delete post from group' },
   loadConversation: {
     id: 'status.load_conversation',
     defaultMessage: 'Load conversation from remote server',
@@ -162,12 +162,16 @@ const messages = defineMessages({
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   share: { id: 'status.share', defaultMessage: 'Share' },
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
+  undisfavourite: { id: 'status.undisfavourite', defaultMessage: 'Undislike' },
+  unfavourite: { id: 'status.unfavourite', defaultMessage: 'Undo like' },
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
   unmuteConversationSuccess: {
     id: 'status.unmute_conversation.success',
     defaultMessage: 'Conversation unmuted',
   },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
+  unreblog: { id: 'status.unreblog', defaultMessage: 'Undo repost' },
+  unwrench: { id: 'status.unwrench', defaultMessage: 'Undo wrench reaction' },
   viewReactions: { id: 'status.view_reactions', defaultMessage: 'View reactions' },
   wrench: { id: 'status.wrench', defaultMessage: 'Wrench reaction' },
   wrenchConfirm: { id: 'confirmations.wrench.confirm', defaultMessage: 'Wrench' },
