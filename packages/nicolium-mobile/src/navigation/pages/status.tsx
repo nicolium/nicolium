@@ -1,12 +1,15 @@
-import { Divider, useTheme } from '@mkljczk/react-native-paper';
+import { ActivityIndicator, Divider, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { Account } from '@/components/accounts/account';
 import { Status } from '@/components/statuses/status';
+import { EmptyMessage } from '@/components/ui/empty-message';
 import { Header } from '@/components/ui/header';
 import { useStatus } from '@/queries/statuses/use-status';
 import {
@@ -17,6 +20,33 @@ import {
 import { useThread } from '@/stores/contexts';
 
 import type { RootStackParams, StatusStackParams } from '../router';
+import type { PaginatedResponseArray } from '@/queries/utils/make-paginated-response-query';
+import type { UseInfiniteQueryResult } from '@tanstack/react-query';
+
+interface IInteractionList {
+  query: UseInfiniteQueryResult<PaginatedResponseArray<string>, Error>;
+  emptyMessageText?: React.JSX.Element;
+}
+
+const InteractionList: React.FC<IInteractionList> = ({ query, emptyMessageText }) => {
+  return (
+    <FlashList
+      data={query.data}
+      renderItem={({ item }) => (
+        <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink />
+      )}
+      ItemSeparatorComponent={Divider}
+      onEndReached={query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined}
+      onEndReachedThreshold={0.1}
+      ListEmptyComponent={
+        !query.isPending ? <EmptyMessage emptyMessageText={emptyMessageText} /> : null
+      }
+      ListFooterComponent={
+        query.isFetching ? <ActivityIndicator style={{ marginVertical: 8 }} /> : undefined
+      }
+    />
+  );
+};
 
 const StatusViewScreen = ({
   route: {
@@ -49,15 +79,17 @@ const StatusReblogsScreen = ({
     params: { id },
   },
 }: NativeStackScreenProps<StatusStackParams, 'reblogs'>) => {
-  const { data: reblogs } = useStatusReblogs(id);
+  const query = useStatusReblogs(id);
 
   return (
-    <FlashList
-      data={reblogs}
-      renderItem={({ item }) => (
-        <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink />
-      )}
-      ItemSeparatorComponent={Divider}
+    <InteractionList
+      query={query}
+      emptyMessageText={
+        <FormattedMessage
+          id='status.reblogs.empty'
+          defaultMessage='No one has reposted this post yet. When someone does, they will show up here.'
+        />
+      }
     />
   );
 };
@@ -67,15 +99,17 @@ const StatusFavouritesScreen = ({
     params: { id },
   },
 }: NativeStackScreenProps<StatusStackParams, 'favourites'>) => {
-  const { data: favourites } = useStatusFavourites(id);
+  const query = useStatusFavourites(id);
 
   return (
-    <FlashList
-      data={favourites}
-      renderItem={({ item }) => (
-        <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink />
-      )}
-      ItemSeparatorComponent={Divider}
+    <InteractionList
+      query={query}
+      emptyMessageText={
+        <FormattedMessage
+          id='empty_column.favourites'
+          defaultMessage='No one has liked this post yet. When someone does, they will show up here.'
+        />
+      }
     />
   );
 };
@@ -85,15 +119,17 @@ const StatusDislikesScreen = ({
     params: { id },
   },
 }: NativeStackScreenProps<StatusStackParams, 'dislikes'>) => {
-  const { data: dislikes } = useStatusDislikes(id);
+  const query = useStatusDislikes(id);
 
   return (
-    <FlashList
-      data={dislikes}
-      renderItem={({ item }) => (
-        <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink />
-      )}
-      ItemSeparatorComponent={Divider}
+    <InteractionList
+      query={query}
+      emptyMessageText={
+        <FormattedMessage
+          id='empty_column.dislikes'
+          defaultMessage='No one has disliked this post yet. When someone does, they will show up here.'
+        />
+      }
     />
   );
 };
