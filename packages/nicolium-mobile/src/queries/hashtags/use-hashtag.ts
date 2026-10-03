@@ -1,0 +1,15 @@
+import { useAppQuery } from '@/queries/query';
+import { useClient } from '@/stores/auth';
+
+import { queryKeys } from '../keys';
+
+const useHashtag = (tag: string) => {
+  const client = useClient();
+
+  return useAppQuery({
+    queryKey: queryKeys.hashtags.show(tag.toLocaleLowerCase()),
+    queryFn: () => client.myAccount.getTag(tag),
+  });
+};
+
+export { useHashtag };
