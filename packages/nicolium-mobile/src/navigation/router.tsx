@@ -50,6 +50,7 @@ type TabsParams = {
 type LoginStackParams = {
   instance: undefined;
   credentials: undefined;
+  oauth_flow: undefined;
 };
 type RootStackParams = {
   login: undefined;
@@ -62,7 +63,7 @@ type RootStackParams = {
 const RootStack = createNativeStackNavigator<RootStackParams>();
 
 const RootNavigator = () => {
-  const isLoggedIn = useAuthStore(({ token }) => !!token);
+  const isLoggedIn = useAuthStore(({ currentAccount }) => !!currentAccount);
 
   return (
     <RootStack.Navigator>

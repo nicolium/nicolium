@@ -32,7 +32,7 @@ const messages = defineMessages({
   profile: { id: 'column.profile', defaultMessage: 'Profile' },
 });
 
-const PaperTabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
+const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
   const insets = useSafeAreaInsets();
 
   return (
@@ -82,7 +82,7 @@ const PaperTabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
 
 //     return (
 //       <Tab.Navigator
-//         tabBar={(props) => <PaperTabBar {...props} />}
+//         tabBar={(props) => <TabBar {...props} />}
 //         screenOptions={{ headerShown: false }}
 //       >
 //         <Tab.Screen
@@ -147,7 +147,7 @@ const Tabs = () => {
 
   return (
     <Tab.Navigator
-      tabBar={(props) => <PaperTabBar {...props} />}
+      tabBar={(props) => <TabBar {...props} />}
       screenOptions={{ headerShown: false, animation: 'shift' }}
     >
       <Tab.Screen

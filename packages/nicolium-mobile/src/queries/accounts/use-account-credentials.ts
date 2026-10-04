@@ -11,7 +11,7 @@ const useCredentialAccount = (enabled = true) => {
   const client = useClient();
 
   return useAppQuery({
-    queryKey: queryKeys.accountCredentials.show('meow'),
+    queryKey: queryKeys.accountCredentials.show('self'),
     queryFn: () => client.settings.verifyCredentials(),
     enabled,
   });

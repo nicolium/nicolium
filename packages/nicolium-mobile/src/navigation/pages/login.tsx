@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Appbar,
   Button,
   Divider,
@@ -7,6 +8,7 @@ import {
   type TextInputHandles,
   useTheme,
 } from '@mkljczk/react-native-paper';
+import { useHeaderHeight } from '@react-navigation/elements';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
@@ -61,8 +63,58 @@ const messages = defineMessages({
   },
 });
 
-const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'instance'>) => {
+interface ILoginLayout {
+  children: React.ReactNode;
+  footer: React.ReactNode;
+}
+
+const LoginLayout: React.FC<ILoginLayout> = ({ children, footer }) => {
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
+  const headerHeight = useHeaderHeight();
+  const { colors } = useTheme();
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Gayness
+        height={520}
+        width={340}
+        style={{
+          position: 'absolute',
+          right: 0,
+          bottom: bottomInset + 64,
+          opacity: EXTRA_GAYNESS_MODE ? 1 : 0.4,
+        }}
+        aria-hidden
+      />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior='padding'
+        keyboardVerticalOffset={headerHeight - bottomInset}
+      >
+        <ScrollView
+          style={{ flex: 1, marginTop: headerHeight ? 0 : topInset }}
+          contentContainerStyle={{ padding: 16, gap: 12 }}
+          keyboardShouldPersistTaps='handled'
+          keyboardDismissMode='interactive'
+        >
+          {children}
+        </ScrollView>
+        <Appbar
+          style={{
+            paddingHorizontal: 16,
+            height: 64 + bottomInset,
+            backgroundColor: colors.surfaceContainer,
+          }}
+          safeAreaInsets={{ bottom: bottomInset }}
+        >
+          {footer}
+        </Appbar>
+      </KeyboardAvoidingView>
+    </View>
+  );
+};
+
+const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'instance'>) => {
   const { colors } = useTheme();
   const intl = useIntl();
 
@@ -80,9 +132,12 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
     try {
       await fetchInstance(`https://${instance.trim()}`);
       setLoading(false);
-      if (!useAuthStore.getState().client.features.grantTypePassword)
+      if (!useAuthStore.getState().pendingAuthClient?.features.grantTypePassword) {
         await createApp('authorization_code');
-      navigation.navigate('credentials');
+        navigation.navigate('oauth_flow');
+      } else {
+        navigation.navigate('credentials');
+      }
     } catch (e) {
       setError(true);
       setLoading(false);
@@ -94,111 +149,72 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
   }, [instance]);
 
   return (
-    <>
-      <Gayness
-        height={520}
-        width={340}
-        style={{
-          position: 'absolute',
-          right: 0,
-          bottom: bottomInset + 64,
-          opacity: EXTRA_GAYNESS_MODE ? 1 : 0.4,
-        }}
-        aria-hidden
-      />
-      <ScrollView style={{ padding: 16, marginTop: topInset, flex: 1 }}>
-        <View style={{ gap: 12, flex: 1 }}>
-          <View style={{ alignItems: 'center' }}>
-            <Logo width={78} height={78} accessibilityLabel='Nicolium' />
-          </View>
-
-          <UIAccount displayName='Nicolium' acct='nicolium' />
-
-          <View style={{ gap: 12 }}>
-            <Text variant='headlineSmall'>
-              <FormattedMessage id='landing_mobile.headline' defaultMessage='Welcome!' />
-            </Text>
-            <Text variant='bodyLarge'>
-              <FormattedMessage
-                id='landing_mobile.body'
-                defaultMessage='To get started, please enter your home instance’s domain name below.'
-              />
-            </Text>
-          </View>
-
-          <Divider style={{ marginHorizontal: -16 }} />
-
-          <TextInput
-            label={intl.formatMessage(messages.instanceDomain)}
-            startAccessory={(props) => <GlobeIcon color={colors.onPrimaryContainer} {...props} />}
-            value={instance}
-            onChangeText={setInstance}
-            error={error}
-            supportingText={error ? intl.formatMessage(messages.instanceFetchError) : undefined}
-            returnKeyType='done'
-            onSubmitEditing={submit}
-          />
-        </View>
-      </ScrollView>
-      <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-bottomInset}>
-        <Appbar
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            paddingHorizontal: 16,
-            height: 64 + bottomInset,
-            backgroundColor: colors.surfaceContainer,
-          }}
-          safeAreaInsets={{ bottom: bottomInset }}
+    <LoginLayout
+      footer={
+        <Button
+          mode='contained'
+          onPress={submit}
+          loading={loading}
+          style={{ width: '100%', marginVertical: 8 }}
+          disabled={!canSubmit}
         >
-          <Button
-            mode='contained'
-            onPress={submit}
-            loading={loading}
-            style={{ width: '100%', marginVertical: 8 }}
-            disabled={!canSubmit}
-          >
-            <FormattedMessage id='landing_mobile.next' defaultMessage='Next' />
-          </Button>
-        </Appbar>
-      </KeyboardAvoidingView>
-    </>
+          <FormattedMessage id='landing_mobile.next' defaultMessage='Next' />
+        </Button>
+      }
+    >
+      <View style={{ alignItems: 'center' }}>
+        <Logo width={78} height={78} accessibilityLabel='Nicolium' />
+      </View>
+
+      <UIAccount displayName='Nicolium' acct='nicolium' />
+
+      <View style={{ gap: 12 }}>
+        <Text variant='headlineSmall'>
+          <FormattedMessage id='landing_mobile.headline' defaultMessage='Welcome!' />
+        </Text>
+        <Text variant='bodyLarge'>
+          <FormattedMessage
+            id='landing_mobile.body'
+            defaultMessage='To get started, please enter your home instance’s domain name below.'
+          />
+        </Text>
+      </View>
+
+      <Divider style={{ marginHorizontal: -16 }} />
+
+      <TextInput
+        label={intl.formatMessage(messages.instanceDomain)}
+        startAccessory={(props) => <GlobeIcon color={colors.onPrimaryContainer} {...props} />}
+        value={instance}
+        onChangeText={setInstance}
+        error={error}
+        supportingText={error ? intl.formatMessage(messages.instanceFetchError) : undefined}
+        returnKeyType='done'
+        onSubmitEditing={submit}
+      />
+    </LoginLayout>
   );
 };
 
-const CredentialsScreen = () => {
-  const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
+const CredentialsScreen = ({
+  navigation,
+}: NativeStackScreenProps<LoginStackParams, 'credentials'>) => {
   const { colors } = useTheme();
   const intl = useIntl();
-  const features = useFeatures();
 
-  const { client, client_id, client_secret, instance } = useAuthStore();
-  const { createApp, signIn, signInWithCode } = useAuthStoreActions();
+  const { pendingAuthClient } = useAuthStore();
+  const { createApp, signIn } = useAuthStoreActions();
 
-  const [request, response, promptAsync] = useAuthRequest(
-    {
-      clientId: client_id!,
-      clientSecret: client_secret!,
-      redirectUri: makeRedirectUri({
-        scheme: 'nicolium',
-        path: 'redirect',
-      }),
-      scopes: getInstanceScopes(client.instanceInformation).split(' '),
-    },
-    {
-      authorizationEndpoint: `${instance}/oauth/authorize`,
-    },
-  );
+  const features = pendingAuthClient?.features;
 
   const passwordNode = React.useRef<TextInputHandles>(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [shouldForceAuthCodeFlow, setShouldForceAuthCodeFlow] = React.useState(false);
 
-  const canSubmit = !features.grantTypePassword || (username.trim() && password.trim());
+  const canSubmit = username.trim() && password.trim();
 
   const submit = async () => {
     if (!canSubmit) return;
@@ -214,8 +230,88 @@ const CredentialsScreen = () => {
     }
   };
 
+  const forceAuthCodeFlow = async () => {
+    setShouldForceAuthCodeFlow(true);
+    setLoading(true);
+    await createApp('authorization_code');
+    navigation.navigate('oauth_flow');
+    setLoading(false);
+  };
+
+  return (
+    <LoginLayout
+      footer={
+        <View style={{ flex: 1, flexDirection: 'row', gap: 8, marginVertical: 8 }}>
+          <Button
+            mode='contained'
+            onPress={submit}
+            loading={loading && !shouldForceAuthCodeFlow}
+            style={{ flex: 1 }}
+            disabled={!canSubmit}
+          >
+            <FormattedMessage id='landing_mobile.sign_in' defaultMessage='Sign in' />
+          </Button>
+          {features?.grantTypePassword && !shouldForceAuthCodeFlow && (
+            <Button
+              mode='outlined'
+              onPress={forceAuthCodeFlow}
+              loading={loading && shouldForceAuthCodeFlow}
+              style={{ flex: 1 }}
+              disabled={loading}
+            >
+              <FormattedMessage id='landing_mobile.sign_in' defaultMessage='Use browser auth' />
+            </Button>
+          )}
+        </View>
+      }
+    >
+      <TextInput
+        label={intl.formatMessage(features?.logInWithUsername ? messages.username : messages.email)}
+        startAccessory={(props) => <AtIcon color={colors.onPrimaryContainer} {...props} />}
+        value={username}
+        onChangeText={setUsername}
+        enterKeyHint='next'
+        onSubmitEditing={() => passwordNode.current?.focus()}
+        textContentType={features?.logInWithUsername ? 'username' : 'emailAddress'}
+      />
+      <TextInput
+        ref={passwordNode}
+        label={intl.formatMessage(messages.password)}
+        startAccessory={(props) => <LockIcon color={colors.onPrimaryContainer} {...props} />}
+        value={password}
+        onChangeText={setPassword}
+        textContentType='password'
+        secureTextEntry
+        returnKeyType='done'
+        onSubmitEditing={submit}
+        error={error}
+        supportingText={error ? intl.formatMessage(messages.invalidCredentials) : undefined}
+      />
+    </LoginLayout>
+  );
+};
+
+const OauthFlowScreen = () => {
+  const { pendingAuth, pendingAuthClient } = useAuthStore();
+  const { signInWithCode } = useAuthStoreActions();
+
+  const [request, response, promptAsync] = useAuthRequest(
+    {
+      clientId: pendingAuth?.client_id!,
+      clientSecret: pendingAuth?.client_secret!,
+      redirectUri: makeRedirectUri({
+        scheme: 'nicolium',
+        path: 'redirect',
+      }),
+      scopes: getInstanceScopes(pendingAuthClient!.instanceInformation).split(' '),
+    },
+    {
+      authorizationEndpoint: `${pendingAuth?.instance}/oauth/authorize`,
+    },
+  );
+
   React.useEffect(() => {
-    if (request && !features.grantTypePassword) {
+    if (request) {
       promptAsync();
     }
   }, [!!request]);
@@ -229,84 +325,16 @@ const CredentialsScreen = () => {
   }, [response]);
 
   return (
-    <>
-      <Gayness
-        height={520}
-        width={340}
-        style={{
-          position: 'absolute',
-          right: 0,
-          bottom: bottomInset + 64,
-          opacity: EXTRA_GAYNESS_MODE ? 1 : 0.4,
-        }}
-        aria-hidden
-      />
-      <ScrollView style={{ padding: 16, marginTop: topInset, flex: 1 }}>
-        <View style={{ gap: 12, flex: 1 }}>
-          {features.grantTypePassword && (
-            <>
-              <TextInput
-                label={intl.formatMessage(
-                  features.logInWithUsername ? messages.username : messages.email,
-                )}
-                startAccessory={(props) => <AtIcon color={colors.onPrimaryContainer} {...props} />}
-                value={username}
-                onChangeText={setUsername}
-                enterKeyHint='next'
-                onSubmitEditing={() => passwordNode.current?.focus()}
-                textContentType={features.logInWithUsername ? 'username' : 'emailAddress'}
-              />
-              <TextInput
-                ref={passwordNode}
-                label={intl.formatMessage(messages.password)}
-                startAccessory={(props) => (
-                  <LockIcon color={colors.onPrimaryContainer} {...props} />
-                )}
-                value={password}
-                onChangeText={setPassword}
-                textContentType='password'
-                secureTextEntry
-                returnKeyType='done'
-                onSubmitEditing={submit}
-                error={error}
-                supportingText={error ? intl.formatMessage(messages.invalidCredentials) : undefined}
-              />
-            </>
-          )}
-        </View>
-      </ScrollView>
-      <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-bottomInset}>
-        <Appbar
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            paddingHorizontal: 16,
-            height: 64 + bottomInset,
-            backgroundColor: colors.surfaceContainer,
-          }}
-          safeAreaInsets={{ bottom: bottomInset }}
-        >
-          <Button
-            mode='contained'
-            onPress={submit}
-            loading={loading || !features.grantTypePassword}
-            style={{ width: '100%', marginVertical: 8 }}
-            disabled={!canSubmit}
-          >
-            <FormattedMessage id='landing_mobile.sign_in' defaultMessage='Sign in' />
-          </Button>
-        </Appbar>
-      </KeyboardAvoidingView>
-    </>
+    <View style={{ padding: 16 }}>
+      <ActivityIndicator />
+    </View>
   );
 };
 
 const LoginStack = createNativeStackNavigator<LoginStackParams>();
 
 const LoginStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'login'>) => {
-  const instanceUrl = useAuthStore(({ instance }) => instance);
+  const instanceUrl = useAuthStore(({ pendingAuth }) => pendingAuth?.instance);
   const intl = useIntl();
 
   return (
@@ -315,6 +343,16 @@ const LoginStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'login
       <LoginStack.Screen
         name='credentials'
         component={CredentialsScreen}
+        options={{
+          headerBackButtonDisplayMode: 'minimal',
+          title: intl.formatMessage(messages.credentialsHeadline, {
+            instance: instanceUrl ? new URL(instanceUrl).host : '',
+          }),
+        }}
+      />
+      <LoginStack.Screen
+        name='oauth_flow'
+        component={OauthFlowScreen}
         options={{
           headerBackButtonDisplayMode: 'minimal',
           title: intl.formatMessage(messages.credentialsHeadline, {
