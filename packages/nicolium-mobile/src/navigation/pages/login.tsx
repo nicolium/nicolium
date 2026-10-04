@@ -36,7 +36,7 @@ const LoginScreen = () => {
       <Gayness
         height={520}
         width={340}
-        style={{ position: 'absolute', right: 0, bottom: 0, opacity: 0.4 }}
+        style={{ position: 'absolute', right: 0, bottom: bottomInset + 64, opacity: 0.4 }}
         aria-hidden
       />
       <ScrollView style={{ padding: 16, marginTop: topInset, flex: 1 }}>
