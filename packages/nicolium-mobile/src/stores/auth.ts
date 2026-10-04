@@ -79,10 +79,12 @@ const useAuthStore = create<AuthStore>()(
         });
       },
       signOut: () => {
-        set((state) => {
-          queryClient.removeQueries({ queryKey: [state.instance] });
-          useTimelinesStore.getState().actions.resetTimelines(state.instance!);
+        const { instance } = get();
 
+        queryClient.removeQueries({ queryKey: [instance] });
+        useTimelinesStore.getState().actions.resetTimelines(instance!);
+
+        set((state) => {
           state.instance = null;
           state.token = null;
           state.client = null as any;
