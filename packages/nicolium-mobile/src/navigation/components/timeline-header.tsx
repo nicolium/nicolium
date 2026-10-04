@@ -1,7 +1,8 @@
 import { Appbar, Menu, useTheme } from '@mkljczk/react-native-paper';
-import { DotsThreeVerticalIcon } from 'phosphor-react-native';
+import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import { Platform } from 'react-native';
 
 import { iconHelper } from '@/components/ui/icon';
 
@@ -42,7 +43,7 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
         onDismiss={() => setShowMenu(false)}
         anchor={
           <Appbar.Action
-            icon={iconHelper(DotsThreeVerticalIcon)}
+            icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
             onPress={() => setShowMenu((value) => !value)}
           />
         }

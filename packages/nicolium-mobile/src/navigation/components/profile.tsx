@@ -1,14 +1,25 @@
-import { Appbar, Avatar, Button, Divider, Text, useTheme } from '@mkljczk/react-native-paper';
+import {
+  Appbar,
+  Avatar,
+  Button,
+  Divider,
+  IconButton,
+  SplitButton,
+  Text,
+  useTheme,
+} from '@mkljczk/react-native-paper';
 import RenderHTML from '@native-html/render';
 import { Link, useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
+import { CaretDownIcon, DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
 import React, { useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Tabs, TabScreen, TabsProvider } from 'react-native-paper-tabs';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { iconHelper } from '@/components/ui/icon';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useClient } from '@/stores/auth';
@@ -148,11 +159,17 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
               outlineColor: colors.background,
             }}
           />
-          {ownAccount && (
-            <Button mode='contained-tonal' onPress={() => navigation.navigate('edit-profile')}>
-              <FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />
-            </Button>
-          )}
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            {ownAccount && (
+              <Button mode='contained-tonal' onPress={() => navigation.navigate('edit-profile')}>
+                <FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />
+              </Button>
+            )}
+            <IconButton
+              mode='outlined'
+              icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
+            />
+          </View>
         </View>
         <View style={{ gap: 8, marginHorizontal: 16, marginBottom: 8 }}>
           <View>

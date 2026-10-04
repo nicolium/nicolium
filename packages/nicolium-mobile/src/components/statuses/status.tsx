@@ -8,10 +8,10 @@ import {
   useTheme,
 } from '@mkljczk/react-native-paper';
 import { Link, useNavigation } from '@react-navigation/native';
-import { DotsThreeVerticalIcon, HashIcon, RepeatIcon } from 'phosphor-react-native';
+import { DotsThreeIcon, DotsThreeVerticalIcon, HashIcon, RepeatIcon } from 'phosphor-react-native';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
@@ -175,7 +175,7 @@ const Status: React.FC<IStatus> = ({
           />
           {withActions && (
             <IconButton
-              icon={iconHelper(DotsThreeVerticalIcon)}
+              icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
               onPress={() => {}}
               style={{ height: 32, width: 32 }}
             />

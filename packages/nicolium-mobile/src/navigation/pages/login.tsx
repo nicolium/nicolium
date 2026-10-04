@@ -53,6 +53,10 @@ const messages = defineMessages({
     id: 'auth.invalid_access_token',
     defaultMessage: 'Wrong access token.',
   },
+  credentialsHeadline: {
+    id: 'landing_mobile.credentials.headline',
+    defaultMessage: 'Sign in to {instance}',
+  },
 });
 
 const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'instance'>) => {
@@ -166,7 +170,6 @@ const CredentialsScreen = () => {
   const intl = useIntl();
   const features = useFeatures();
 
-  const instanceUrl = useAuthStore(({ instance }) => instance);
   const { signIn, setToken } = useAuthStoreActions();
 
   const passwordNode = React.useRef<TextInputHandles>(null);
@@ -212,13 +215,6 @@ const CredentialsScreen = () => {
       />
       <ScrollView style={{ padding: 16, marginTop: topInset, flex: 1 }}>
         <View style={{ gap: 12, flex: 1 }}>
-          <Text variant='headlineSmall'>
-            <FormattedMessage
-              id='landing_mobile.credentials.headline'
-              defaultMessage='Sign in to {instance}'
-              values={{ instance: new URL(instanceUrl!).host }}
-            />
-          </Text>
           {features.grantTypePassword ? (
             <>
               <TextInput
@@ -305,13 +301,21 @@ const CredentialsScreen = () => {
 const LoginStack = createNativeStackNavigator<LoginStackParams>();
 
 const LoginStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'login'>) => {
+  const instanceUrl = useAuthStore(({ instance }) => instance);
+  const intl = useIntl();
+
   return (
     <LoginStack.Navigator>
       <LoginStack.Screen name='instance' component={LoginScreen} options={{ headerShown: false }} />
       <LoginStack.Screen
         name='credentials'
         component={CredentialsScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerBackButtonDisplayMode: 'minimal',
+          title: intl.formatMessage(messages.credentialsHeadline, {
+            instance: instanceUrl ? new URL(instanceUrl).host : '',
+          }),
+        }}
       />
     </LoginStack.Navigator>
   );
