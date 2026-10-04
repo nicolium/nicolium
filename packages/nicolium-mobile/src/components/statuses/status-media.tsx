@@ -1,3 +1,4 @@
+import { Carousel, CarouselItem, useTheme } from '@mkljczk/react-native-paper';
 import { Image } from 'expo-image';
 import React from 'react';
 import { Platform, View } from 'react-native';
@@ -9,27 +10,29 @@ interface IStatusMedia {
 }
 
 const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
+  const { colors, shapes } = useTheme();
   const { data: status } = useStatus(id);
 
-  if (!status?.media_attachments.length) return null;
+  const filteredMedia = status?.media_attachments.filter((media) => media.type === 'image');
+
+  if (!filteredMedia?.length) return null;
 
   return (
-    <View style={{ flex: 1, gap: 8, overflow: 'hidden' }}>
-      {status.media_attachments
-        .filter((media) => media.type === 'image')
-        .map((media) => {
-          const { width, height } = media.meta.original || {};
-          return (
+    <Carousel
+      data={filteredMedia}
+      height={400}
+      renderItem={({ item: media, index, mask }) => {
+        const { width, height } = media.meta.original || {};
+        return (
+          <CarouselItem mask={mask} style={{ flexDirection: 'row', gap: 8, backgroundColor: colors.background }}>
+            {index === filteredMedia.length - 1 && <View aria-hidden />}
             <Image
               key={media.id}
               style={{
                 flex: 1,
                 width: '100%',
-                maxWidth: '100%',
-                aspectRatio: width && height ? width / height : 1,
-                maxHeight: 400,
-                height: height || 'auto',
-                borderRadius: 8,
+                height: '100%',
+                borderRadius: shapes.corner.medium
               }}
               source={{
                 uri: media.url,
@@ -45,9 +48,11 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
               contentFit='cover'
               transition={300}
             />
-          );
-        })}
-    </View>
+            {index !== filteredMedia.length - 1 && <View aria-hidden />}
+          </CarouselItem>
+        );
+      }}
+    />
   );
 };
 
