@@ -24,7 +24,10 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
       renderItem={({ item: media, index, mask }) => {
         const { width, height } = media.meta.original || {};
         return (
-          <CarouselItem mask={mask} style={{ flexDirection: 'row', gap: 8, backgroundColor: colors.background }}>
+          <CarouselItem
+            mask={mask}
+            style={{ flexDirection: 'row', gap: 8, backgroundColor: colors.background }}
+          >
             {index === filteredMedia.length - 1 && <View aria-hidden />}
             <Image
               key={media.id}
@@ -32,7 +35,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
                 flex: 1,
                 width: '100%',
                 height: '100%',
-                borderRadius: shapes.corner.medium
+                borderRadius: shapes.corner.medium,
               }}
               source={{
                 uri: media.url,

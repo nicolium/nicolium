@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores/auth';
 import { Header } from '../components/ui/header';
 
 import { AccountsStackScreen } from './pages/accounts';
-import { LoginScreen } from './pages/login';
+import { LoginStackScreen } from './pages/login';
 import { SettingsScreen } from './pages/settings';
 import { StatusStackScreen } from './pages/status';
 import { Tabs } from './tabs';
@@ -47,6 +47,10 @@ type TabsParams = {
   profile: NavigatorScreenParams<ProfileStackParams>;
   status: NavigatorScreenParams<StatusStackParams>;
 };
+type LoginStackParams = {
+  instance: undefined;
+  credentials: undefined;
+};
 type RootStackParams = {
   login: undefined;
   app: NavigatorScreenParams<TabsParams>;
@@ -58,11 +62,11 @@ type RootStackParams = {
 const RootStack = createNativeStackNavigator<RootStackParams>();
 
 const RootNavigator = () => {
-  const { client } = useAuthStore();
+  const isLoggedIn = useAuthStore(({ token }) => !!token);
 
   return (
     <RootStack.Navigator>
-      {client ? (
+      {isLoggedIn ? (
         <>
           <RootStack.Screen name='app' component={Tabs} options={{ headerShown: false }} />
           <RootStack.Screen
@@ -84,7 +88,7 @@ const RootNavigator = () => {
       ) : (
         <RootStack.Screen
           name='login'
-          component={LoginScreen}
+          component={LoginStackScreen}
           options={{ headerShown: false, animationTypeForReplace: 'pop' }}
         />
       )}
@@ -100,6 +104,7 @@ export {
   type StatusStackParams,
   type AccountStackParams,
   type TabsParams,
+  type LoginStackParams,
   type RootStackParams,
   RootNavigator,
 };

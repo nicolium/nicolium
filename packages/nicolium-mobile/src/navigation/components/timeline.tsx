@@ -79,7 +79,9 @@ const Timeline: React.FC<ITimeline> = ({
       onScroll={
         handleScrolled
           ? (event) => {
-              handleScrolled((event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0) > 60);
+              handleScrolled(
+                (event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0) > 60,
+              );
             }
           : undefined
       }

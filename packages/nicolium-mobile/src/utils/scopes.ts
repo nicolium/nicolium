@@ -1,0 +1,40 @@
+import { getFeatures, HOLLO, ICESHRIMP_NET, PLEROMA, TOKI, type Instance } from 'pl-api';
+
+/**
+ * Get the OAuth scopes to use for login & signup.
+ * Mastodon will refuse scopes it doesn't know, so care is needed.
+ */
+const getInstanceScopes = (instance: Instance, admin: boolean = true) => {
+  const v = getFeatures(instance).version;
+
+  let scopes;
+
+  switch (v.software) {
+    case TOKI:
+      scopes = 'read write follow push write:bites';
+      break;
+    default:
+      scopes = 'read write follow push';
+  }
+
+  if (admin) {
+    switch (v.software) {
+      case HOLLO:
+      case ICESHRIMP_NET:
+        break;
+      case PLEROMA:
+        scopes += ' admin';
+        break;
+      default:
+        scopes += ' admin:read admin:write';
+    }
+  }
+
+  if (v.software === ICESHRIMP_NET) {
+    scopes += ' iceshrimp';
+  }
+
+  return scopes;
+};
+
+export { getInstanceScopes };
