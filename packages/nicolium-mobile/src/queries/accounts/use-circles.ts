@@ -1,6 +1,6 @@
 import { type UseQueryResult, useMutation } from '@tanstack/react-query';
 
-import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useClient, useFeatures } from '@/stores/auth';
@@ -42,7 +42,7 @@ const useCircle = (circleId?: string) =>
 
 const useCreateCircle = () => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['circles', 'create'],
@@ -54,7 +54,7 @@ const useCreateCircle = () => {
 
 const useDeleteCircle = () => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['circles', 'delete'],
@@ -69,7 +69,7 @@ const useDeleteCircle = () => {
 
 const useUpdateCircle = (circleId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['circles', 'update', circleId],
@@ -89,7 +89,7 @@ const useCircleAccounts = makePaginatedResponseQuery(
 
 const useAddAccountsToCircle = (circleId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['accountsLists', 'circles', circleId, 'add'],
@@ -105,7 +105,7 @@ const useAddAccountsToCircle = (circleId: string) => {
 
 const useRemoveAccountsFromCircle = (circleId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['accountsLists', 'circles', circleId, 'remove'],

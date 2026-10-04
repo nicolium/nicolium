@@ -12,15 +12,15 @@ let SecureishStore: {
 
 if (Platform.OS === 'web') {
   SecureishStore = {
-    getItem: (key) => sessionStorage.getItem(key),
+    getItem: (key) => localStorage.getItem(key),
     getItemAsync: async (key) => {
-      return sessionStorage.getItem(key);
+      return localStorage.getItem(key);
     },
-    setItem: (key, value) => sessionStorage.setItem(key, value),
+    setItem: (key, value) => localStorage.setItem(key, value),
     setItemAsync: async (key, value) => {
-      return sessionStorage.setItem(key, value);
+      return localStorage.setItem(key, value);
     },
-    removeItem: (key) => sessionStorage.removeItem(key),
+    removeItem: (key) => localStorage.removeItem(key),
   };
 } else {
   SecureishStore = {

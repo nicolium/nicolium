@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useClient } from '@/stores/auth';
 
 import { queryClient } from '../client';
@@ -14,7 +14,7 @@ const useFollowedTags = makePaginatedResponseQuery(queryKeys.followedTags.all, (
 
 const useFollowHashtagMutation = (tag: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['followedTags', tag.toLocaleLowerCase()],
@@ -33,7 +33,7 @@ const useFollowHashtagMutation = (tag: string) => {
 
 const useUnfollowHashtagMutation = (tag: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['followedTags', tag.toLocaleLowerCase()],

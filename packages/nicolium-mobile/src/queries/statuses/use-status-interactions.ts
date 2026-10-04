@@ -8,7 +8,7 @@ import {
 import { create } from 'mutative';
 // import { defineMessages, useIntl } from 'react-intl';
 
-import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
@@ -96,7 +96,7 @@ const restorePreviousStatus = (
 const useStatusReactions = (statusId: string, emoji?: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useAppQuery({
     queryKey: queryKeys.accountsLists.statusReactions(statusId, emoji),
@@ -123,7 +123,7 @@ const useEmojiReactMutation = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['statuses', 'emojiReact', statusId],
@@ -162,7 +162,7 @@ const useEmojiUnreactMutation = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['statuses', 'emojiUnreact', statusId],
@@ -203,7 +203,7 @@ const makeStatusToggleMutation =
     const client = useClient();
     const queryClient = useQueryClient();
     const importEntities = useImportEntities();
-    const scopeUrl = useScopeUrl();
+    const scopeUrl = useCurrentAccount();
 
     return useMutation({
       mutationKey: ['statuses', mutationKey, statusId],
@@ -261,7 +261,7 @@ const useReblogStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
@@ -298,7 +298,7 @@ const useUnreblogStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
@@ -330,7 +330,7 @@ const useBookmarkStatus = (statusId: string) => {
   const features = useFeatures();
   // const { openModal } = useModalsActions();
   const importEntities = useImportEntities();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['statuses', 'bookmark', statusId],
@@ -402,7 +402,7 @@ const useUnbookmarkStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['statuses', 'bookmark', statusId],
@@ -430,7 +430,7 @@ const useUnbookmarkStatus = (statusId: string) => {
 //   const queryClient = useQueryClient();
 //   const { data: account } = useOwnAccount();
 //   const importEntities = useImportEntities();
-//   const scopeUrl = useScopeUrl();
+//   const scopeUrl = useCurrentAccount();
 
 //   return useMutation({
 //     mutationKey: ['statuses', 'pin', statusId],
@@ -451,7 +451,7 @@ const useUnbookmarkStatus = (statusId: string) => {
 //   const queryClient = useQueryClient();
 //   const { data: account } = useOwnAccount();
 //   const importEntities = useImportEntities();
-//   const scopeUrl = useScopeUrl();
+//   const scopeUrl = useCurrentAccount();
 
 //   return useMutation({
 //     mutationKey: ['statuses', 'unpin', statusId],
@@ -472,7 +472,7 @@ const useMuteStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['statuses', 'mute', statusId],
@@ -492,7 +492,7 @@ const useUnmuteStatus = (statusId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['statuses', 'mute', statusId],

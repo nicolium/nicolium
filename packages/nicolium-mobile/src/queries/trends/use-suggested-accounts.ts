@@ -6,13 +6,13 @@ import {
 } from '@tanstack/react-query';
 
 import { batcher } from '@/api/batcher';
-import { useScopeUrl } from '@/hooks/use-scope-url';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useClient, useFeatures } from '@/stores/auth';
 
 import { queryKeys } from '../keys';
 
 import type { Suggestion } from 'pl-api';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 
 type MinifiedSuggestion = Omit<Suggestion, 'account'> & { account_id: string };
 
@@ -20,7 +20,7 @@ const useSuggestedAccounts = (enabled?: boolean) => {
   const client = useClient();
   const features = useFeatures();
   const queryClient = useQueryClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   const getSuggestions = async (): Promise<MinifiedSuggestion[]> => {
     const response = await client.myAccount.getSuggestions();
@@ -52,7 +52,7 @@ const useSuggestedAccounts = (enabled?: boolean) => {
 
 const useDismissSuggestion = () => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
   const queryClient = useQueryClient();
 
   return useMutation({

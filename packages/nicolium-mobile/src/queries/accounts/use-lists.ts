@@ -1,6 +1,6 @@
 import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 
-import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useClient, useFeatures } from '@/stores/auth';
@@ -36,7 +36,7 @@ const useList = (listId?: string) =>
 
 const useCreateList = () => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['lists', 'create'],
@@ -48,7 +48,7 @@ const useCreateList = () => {
 
 const useDeleteList = () => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['lists', 'delete'],
@@ -63,7 +63,7 @@ const useDeleteList = () => {
 
 const useUpdateList = (listId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['lists', 'update', listId],
@@ -81,7 +81,7 @@ const useListAccounts = makePaginatedResponseQuery(
 
 const useAddAccountsToList = (listId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['accountsLists', 'lists', listId, 'add'],
@@ -102,7 +102,7 @@ const useAddAccountsToList = (listId: string) => {
 
 const useRemoveAccountsFromList = (listId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['accountsLists', 'lists', listId, 'remove'],

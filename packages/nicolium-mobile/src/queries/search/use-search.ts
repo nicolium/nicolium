@@ -1,6 +1,6 @@
 import { notifyManager, useQueryClient } from '@tanstack/react-query';
 
-import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useImportEntities } from '@/queries/utils/import-entities';
 
 import { useClient } from '../../stores/auth';
@@ -15,7 +15,7 @@ const useSearchAccounts = (
 ) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useAppInfiniteQuery({
     queryKey: queryKeys.search.accounts(query, params),
@@ -128,7 +128,7 @@ const useSearchGroups = (
 ) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useAppInfiniteQuery({
     queryKey: queryKeys.search.groups(query, params),

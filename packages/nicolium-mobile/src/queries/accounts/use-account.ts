@@ -1,10 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query';
 // import { useMemo } from 'react';
 
+import { useCurrentAccount } from '@/contexts/current-account-context';
 // import { useClient } from '@/hooks/use-client';
 // import { useFeatures } from '@/hooks/use-features';
 // import { useLoggedIn } from '@/hooks/use-logged-in';
-import { useScopeUrl } from '@/hooks/use-scope-url';
 // import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 // import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { queryKeys } from '@/queries/keys';
@@ -35,7 +35,7 @@ const useAccount = (accountId?: string, _withRelationship = false) => {
   // const { me } = useLoggedIn();
   const queryClient = useQueryClient();
   // const { accountNicknames } = useSettings();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   // const nickname = accountNicknames[accountId ?? ''];
 

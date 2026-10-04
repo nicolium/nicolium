@@ -224,6 +224,7 @@ const CredentialsScreen = ({
       await createApp('password');
       await signIn(username, password);
       setLoading(false);
+      navigation.getParent()?.navigate('app');
     } catch (e) {
       setError(true);
       setLoading(false);
@@ -291,7 +292,9 @@ const CredentialsScreen = ({
   );
 };
 
-const OauthFlowScreen = () => {
+const OauthFlowScreen = ({
+  navigation,
+}: NativeStackScreenProps<LoginStackParams, 'oauth_flow'>) => {
   const { pendingAuth, pendingAuthClient } = useAuthStore();
   const { signInWithCode } = useAuthStoreActions();
 
@@ -320,7 +323,9 @@ const OauthFlowScreen = () => {
     if (response?.type === 'success') {
       const { code } = response.params;
 
-      signInWithCode(code, request?.codeVerifier!);
+      signInWithCode(code, request?.codeVerifier!).then(() => {
+        navigation.getParent()?.navigate('app');
+      });
     }
   }, [response]);
 

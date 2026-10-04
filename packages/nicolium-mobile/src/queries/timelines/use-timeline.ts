@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
+import { useCurrentAccount } from '@/contexts/current-account-context';
 // import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
-import { useScopeUrl } from '@/hooks/use-scope-url';
 import { importEntities } from '@/queries/utils/import-entities';
 import { useClient } from '@/stores/auth';
 // import { compareId } from '@/utils/comparators';
@@ -46,7 +46,7 @@ const useTimeline = (
   const restoringMaxId = options?.restoringMaxId;
   const pendingRestoringMaxId = useRef(restoringMaxId);
 
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
   const timeline = useStoreTimeline(scopeUrl, timelineId);
   // const pollingEnabled = useTimelinesStore((state) => state.pollingEnabled);
   const timelineActions = useTimelinesActions();

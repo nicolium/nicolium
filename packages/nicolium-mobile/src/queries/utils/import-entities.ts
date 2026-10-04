@@ -1,11 +1,11 @@
 import { notifyManager } from '@tanstack/react-query';
 
-import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
-import { normalizeStatus } from '@/queries/statuses/normalize';
 // import { useContextStore } from '@/stores/contexts';
+import { normalizeStatus } from '@/queries/statuses/normalize';
 
 import { scopedQueryKey } from '../query';
 
@@ -185,7 +185,7 @@ const importEntities = (
 };
 
 const useImportEntities = () => {
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return (entities: ImportEntitiesEntities, options?: ImportEntitiesOptions) => {
     importEntities(scopeUrl, entities, options);

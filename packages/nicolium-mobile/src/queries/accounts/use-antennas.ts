@@ -1,6 +1,6 @@
 import { useMutation, type UseQueryResult } from '@tanstack/react-query';
 
-import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useClient, useFeatures } from '@/stores/auth';
@@ -42,7 +42,7 @@ const useAntenna = (antennaId?: string) =>
 
 const useCreateAntenna = () => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['antennas', 'create'],
@@ -54,7 +54,7 @@ const useCreateAntenna = () => {
 
 const useDeleteAntenna = () => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['antennas', 'delete'],
@@ -69,7 +69,7 @@ const useDeleteAntenna = () => {
 
 const useUpdateAntenna = (antennaId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['antennas', 'update', antennaId],
@@ -89,7 +89,7 @@ const useAntennaAccounts = makePaginatedResponseQuery(
 
 const useAddAccountsToAntenna = (antennaId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['accountsLists', 'antennas', antennaId, 'add'],
@@ -105,7 +105,7 @@ const useAddAccountsToAntenna = (antennaId: string) => {
 
 const useRemoveAccountsFromAntenna = (antennaId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['accountsLists', 'antennas', antennaId, 'remove'],
@@ -130,7 +130,7 @@ const useAntennaExcludedAccounts = makePaginatedResponseQuery(
 
 const useAddExcludedAccountsToAntenna = (antennaId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['accountsLists', 'antennas', antennaId, 'addExcluded'],
@@ -149,7 +149,7 @@ const useAddExcludedAccountsToAntenna = (antennaId: string) => {
 
 const useRemoveExcludedAccountsFromAntenna = (antennaId: string) => {
   const client = useClient();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
     mutationKey: ['accountsLists', 'antennas', antennaId, 'removeExcluded'],
@@ -181,7 +181,7 @@ const makeAntennaItemsMutation =
   ) =>
   (antennaId: string) => {
     const client = useClient();
-    const scopeUrl = useScopeUrl();
+    const scopeUrl = useCurrentAccount();
 
     return useMutation({
       mutationKey: ['antennas', antennaId, kind, action],

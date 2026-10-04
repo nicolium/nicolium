@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useClient } from '@/stores/auth';
@@ -21,14 +21,14 @@ const useUpdateCredentials = () => {
   const client = useClient();
   const queryClient = useQueryClient();
   // const { setCurrentAccount } = useAuthActions();
-  const scopeUrl = useScopeUrl();
+  const scopeUrl = useCurrentAccount();
 
   return useMutation({
-    mutationKey: queryKeys.accountCredentials.show('meow'),
+    mutationKey: queryKeys.accountCredentials.show('self'),
     mutationFn: (params: UpdateCredentialsParams) => client.settings.updateCredentials(params),
     onSuccess: (response) => {
       queryClient.setQueryData(
-        scopedQueryKey(queryKeys.accountCredentials.show('meow'), scopeUrl),
+        scopedQueryKey(queryKeys.accountCredentials.show('self'), scopeUrl),
         response,
       );
       queryClient.setQueryData(

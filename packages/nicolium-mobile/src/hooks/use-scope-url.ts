@@ -1,8 +1,5 @@
-import { useAuthStore } from '@/stores/auth';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 
-const useScopeUrl = () =>
-  useAuthStore(
-    (state) => (state.currentAccount && state.sessions[state.currentAccount].instance) || '',
-  );
+const useScopeUrl = useCurrentAccount;
 
 export { useScopeUrl };

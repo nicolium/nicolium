@@ -67,7 +67,7 @@ const RootNavigator = () => {
 
   return (
     <RootStack.Navigator>
-      {isLoggedIn ? (
+      {isLoggedIn && (
         <>
           <RootStack.Screen name='app' component={Tabs} options={{ headerShown: false }} />
           <RootStack.Screen
@@ -86,13 +86,12 @@ const RootNavigator = () => {
             options={{ headerShown: false }}
           />
         </>
-      ) : (
-        <RootStack.Screen
-          name='login'
-          component={LoginStackScreen}
-          options={{ headerShown: false, animationTypeForReplace: 'pop' }}
-        />
       )}
+      <RootStack.Screen
+        name='login'
+        component={LoginStackScreen}
+        options={{ headerShown: false, animationTypeForReplace: 'pop' }}
+      />
     </RootStack.Navigator>
   );
 };
