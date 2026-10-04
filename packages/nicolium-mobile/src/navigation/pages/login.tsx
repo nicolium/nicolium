@@ -9,6 +9,8 @@ import Logo from '@/assets/logo.svg';
 import { UIAccount } from '@/components/ui/account';
 import { useAuthStoreActions } from '@/stores/auth';
 
+const EXTRA_GAYNESS_MODE = new Date().getMonth() === 5;
+
 const LoginScreen = () => {
   const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
   const { colors } = useTheme();
@@ -36,7 +38,12 @@ const LoginScreen = () => {
       <Gayness
         height={520}
         width={340}
-        style={{ position: 'absolute', right: 0, bottom: bottomInset + 64, opacity: 0.4 }}
+        style={{
+          position: 'absolute',
+          right: 0,
+          bottom: bottomInset + 64,
+          opacity: EXTRA_GAYNESS_MODE ? 1 : 0.4,
+        }}
         aria-hidden
       />
       <ScrollView style={{ padding: 16, marginTop: topInset, flex: 1 }}>
