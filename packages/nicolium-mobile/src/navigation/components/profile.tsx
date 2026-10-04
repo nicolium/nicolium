@@ -182,24 +182,42 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
         <Divider />
         <View style={{ flexDirection: 'row', marginHorizontal: 16, marginVertical: 8, gap: 8 }}>
           <Text style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <Text variant='bodyMediumEmphasized'>{account.statuses_count}</Text>
-            <FormattedMessage id='account.statuses' defaultMessage='Posts' />
+            <FormattedMessage
+              id='account.statuses_with_count'
+              defaultMessage='{count, plural, one {<strong>#</strong> status} other {<strong>#</strong> statuses}}'
+              values={{
+                count: account.statuses_count,
+                strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,
+              }}
+            />
           </Text>
           <Link
             style={{ display: 'flex', alignItems: 'center', gap: 4 }}
             screen='accounts'
             params={{ screen: 'followers', params: { id: account.id } }}
           >
-            <Text variant='bodyMediumEmphasized'>{account.followers_count}</Text>
-            <FormattedMessage id='account.followers' defaultMessage='Followers' />
+            <FormattedMessage
+              id='account.followers_with_count'
+              defaultMessage='{count, plural, one {<strong>#</strong> follower} other {<strong>#</strong> followers}}'
+              values={{
+                count: account.followers_count,
+                strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,
+              }}
+            />
           </Link>
           <Link
             style={{ display: 'flex', alignItems: 'center', gap: 4 }}
             screen='accounts'
             params={{ screen: 'following', params: { id: account.id } }}
           >
-            <Text variant='bodyMediumEmphasized'>{account.following_count}</Text>
-            <FormattedMessage id='account.following' defaultMessage='Following' />
+            <FormattedMessage
+              id='account.following_with_count'
+              defaultMessage='{count, plural, one {<strong>#</strong> following} other {<strong>#</strong> following}}'
+              values={{
+                count: account.following_count,
+                strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,
+              }}
+            />
           </Link>
         </View>
       </Animated.View>
