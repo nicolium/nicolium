@@ -80,7 +80,8 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
     try {
       await fetchInstance(`https://${instance.trim()}`);
       setLoading(false);
-      if (!useAuthStore.getState().client.features.grantTypePassword) await createApp('authorization_code');
+      if (!useAuthStore.getState().client.features.grantTypePassword)
+        await createApp('authorization_code');
       navigation.navigate('credentials');
     } catch (e) {
       setError(true);

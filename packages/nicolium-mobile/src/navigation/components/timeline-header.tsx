@@ -20,6 +20,11 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
   const intl = useIntl();
   const [showMenu, setShowMenu] = React.useState(false);
 
+  const closeAfter = (callback: () => void) => () => {
+    callback();
+    setShowMenu(false);
+  };
+
   const activeKey =
     route.params && 'id' in route.params ? `${route.name}:${route.params.id}` : route.name;
 
@@ -50,10 +55,10 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
         anchorPosition='bottom'
       >
         <Menu.Item
-          onPress={() => navigation.navigate('settings' as never)}
+          onPress={closeAfter(() => navigation.navigate('settings' as never))}
           title={intl.formatMessage(messages.settings)}
         />
-        <Menu.Item onPress={() => {}} title={intl.formatMessage(messages.announcements)} />
+        <Menu.Item onPress={closeAfter(() => {})} title={intl.formatMessage(messages.announcements)} />
         {/* <Menu.Item onPress={() => {}} title='Edit timelines' /> */}
       </Menu>
     </Appbar.Header>
