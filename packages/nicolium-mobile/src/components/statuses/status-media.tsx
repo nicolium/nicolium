@@ -1,4 +1,4 @@
-import { Carousel, CarouselItem, useTheme } from '@mkljczk/react-native-paper';
+import { Carousel, CarouselItem, Chip, Tooltip, useTheme } from '@mkljczk/react-native-paper';
 import { Image } from 'expo-image';
 import React from 'react';
 import { Platform, View } from 'react-native';
@@ -28,29 +28,33 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
             mask={mask}
             style={{ flexDirection: 'row', gap: 8, backgroundColor: colors.background }}
           >
-            {index === filteredMedia.length - 1 && <View aria-hidden />}
-            <Image
-              key={media.id}
-              style={{
-                flex: 1,
-                width: '100%',
-                height: '100%',
-                borderRadius: shapes.corner.medium,
-              }}
-              source={{
-                uri: media.url,
-                width,
-                height,
-              }}
-              placeholder={{
-                blurhash: (Platform.OS !== 'web' && media.blurhash) || undefined,
-                width,
-                height,
-              }}
-              accessibilityLabel={media.description}
-              contentFit='cover'
-              transition={300}
-            />
+            {index !== 0 && index === filteredMedia.length - 1 && <View aria-hidden />}
+            <View style={{ flex: 1, width: '100%', height: '100%', position: 'relative' }}>
+              <Image
+                key={media.id}
+                style={{ flex: 1, borderRadius: shapes.corner.medium }}
+                source={{ uri: media.url, width, height }}
+                placeholder={{
+                  blurhash: (Platform.OS !== 'web' && media.blurhash) || undefined,
+                  width,
+                  height,
+                }}
+                accessibilityLabel={media.description}
+                contentFit='cover'
+                transition={300}
+              />
+              {media.description && (
+                <View style={{ position: 'absolute', bottom: 16, right: 16 }}>
+                  <Tooltip.Rich title='Image description' content={media.description}>
+                    {(props) => (
+                      <Chip {...props} mode='outlined' compact>
+                        ALT
+                      </Chip>
+                    )}
+                  </Tooltip.Rich>
+                </View>
+              )}
+            </View>
             {index !== filteredMedia.length - 1 && <View aria-hidden />}
           </CarouselItem>
         );
