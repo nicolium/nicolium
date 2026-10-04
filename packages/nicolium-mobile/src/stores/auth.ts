@@ -1,4 +1,4 @@
-import { PlApiClient, type Features } from 'pl-api';
+import { PlApiClient, type RevokeTokenParams, type Features } from 'pl-api';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
@@ -9,6 +9,8 @@ import { useTimelinesStore } from './timelines';
 
 interface AuthData {
   instance: string | null;
+  client_id: string | null;
+  client_secret: string | null;
   token: string | null;
 }
 
@@ -25,6 +27,8 @@ interface AuthStore extends AuthData {
 const useAuthStore = create<AuthStore>()(
   mutative((set, get) => ({
     instance: null,
+    client_id: null,
+    client_secret: null,
     token: null,
     client: null as any,
     actions: {
@@ -79,7 +83,13 @@ const useAuthStore = create<AuthStore>()(
         });
       },
       signOut: () => {
-        const { instance } = get();
+        const { client, instance, client_id, client_secret, token } = get();
+
+        client.oauth.revokeToken({
+          client_id,
+          client_secret,
+          token,
+        } as RevokeTokenParams);
 
         queryClient.removeQueries({ queryKey: [instance] });
         useTimelinesStore.getState().actions.resetTimelines(instance!);
