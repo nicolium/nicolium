@@ -11,6 +11,7 @@ import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 import { AtIcon, GlobeIcon, LockIcon } from 'phosphor-react-native';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -21,6 +22,7 @@ import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/logo.svg';
 import { UIAccount } from '@/components/ui/account';
 import { useAuthStore, useAuthStoreActions, useFeatures } from '@/stores/auth';
+import { getInstanceScopes } from '@/utils/scopes';
 
 import type { LoginStackParams, RootStackParams } from '../router';
 
@@ -64,7 +66,7 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
   const { colors } = useTheme();
   const intl = useIntl();
 
-  const { fetchInstance } = useAuthStoreActions();
+  const { fetchInstance, createApp } = useAuthStoreActions();
   const [instance, setInstance] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
@@ -78,6 +80,7 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
     try {
       await fetchInstance(`https://${instance.trim()}`);
       setLoading(false);
+      if (!useAuthStore.getState().client.features.grantTypePassword) await createApp('authorization_code');
       navigation.navigate('credentials');
     } catch (e) {
       setError(true);
@@ -170,35 +173,59 @@ const CredentialsScreen = () => {
   const intl = useIntl();
   const features = useFeatures();
 
-  const { signIn, setToken } = useAuthStoreActions();
+  const { client, client_id, client_secret, instance } = useAuthStore();
+  const { createApp, signIn, signInWithCode } = useAuthStoreActions();
+
+  const [request, response, promptAsync] = useAuthRequest(
+    {
+      clientId: client_id!,
+      clientSecret: client_secret!,
+      redirectUri: makeRedirectUri({
+        scheme: 'nicolium',
+        path: 'redirect',
+      }),
+      scopes: getInstanceScopes(client.instanceInformation).split(' '),
+    },
+    {
+      authorizationEndpoint: `${instance}/oauth/authorize`,
+    },
+  );
 
   const passwordNode = React.useRef<TextInputHandles>(null);
-  const [accessToken, setAccessToken] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
 
-  const canSubmit = !!(features.grantTypePassword
-    ? username.trim() && password.trim()
-    : accessToken.trim());
+  const canSubmit = !features.grantTypePassword || (username.trim() && password.trim());
 
   const submit = async () => {
     if (!canSubmit) return;
 
     setLoading(true);
     try {
-      if (features.grantTypePassword) {
-        await signIn(username, password);
-      } else {
-        await setToken(accessToken);
-      }
+      await createApp('password');
+      await signIn(username, password);
       setLoading(false);
     } catch (e) {
       setError(true);
       setLoading(false);
     }
   };
+
+  React.useEffect(() => {
+    if (request && !features.grantTypePassword) {
+      promptAsync();
+    }
+  }, [!!request]);
+
+  React.useEffect(() => {
+    if (response?.type === 'success') {
+      const { code } = response.params;
+
+      signInWithCode(code, request?.codeVerifier!);
+    }
+  }, [response]);
 
   return (
     <>
@@ -215,7 +242,7 @@ const CredentialsScreen = () => {
       />
       <ScrollView style={{ padding: 16, marginTop: topInset, flex: 1 }}>
         <View style={{ gap: 12, flex: 1 }}>
-          {features.grantTypePassword ? (
+          {features.grantTypePassword && (
             <>
               <TextInput
                 label={intl.formatMessage(
@@ -244,29 +271,6 @@ const CredentialsScreen = () => {
                 supportingText={error ? intl.formatMessage(messages.invalidCredentials) : undefined}
               />
             </>
-          ) : (
-            <>
-              <Text variant='bodyLarge' style={{ color: colors.onBackground }}>
-                <FormattedMessage
-                  id='landing_mobile.grant_type_unsupported_explanation'
-                  defaultMessage='Nicolium (mobile) doesn’t support this authentication grant type yet. You need to obtain and provide access_token manually.'
-                />
-              </Text>
-
-              <Divider style={{ marginHorizontal: -16 }} />
-
-              <TextInput
-                label={intl.formatMessage(messages.accessToken)}
-                value={accessToken}
-                onChangeText={setAccessToken}
-                textContentType='password'
-                secureTextEntry
-                returnKeyType='done'
-                onSubmitEditing={submit}
-                error={error}
-                supportingText={error ? intl.formatMessage(messages.invalidAccessToken) : undefined}
-              />
-            </>
           )}
         </View>
       </ScrollView>
@@ -286,7 +290,7 @@ const CredentialsScreen = () => {
           <Button
             mode='contained'
             onPress={submit}
-            loading={loading}
+            loading={loading || !features.grantTypePassword}
             style={{ width: '100%', marginVertical: 8 }}
             disabled={!canSubmit}
           >
