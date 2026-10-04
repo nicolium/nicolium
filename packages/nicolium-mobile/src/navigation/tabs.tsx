@@ -133,7 +133,7 @@ const CurrentAccountAvatar: React.FC<{ color: string }> = ({ color }) => {
   );
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingLeft: 20 }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, paddingLeft: 18 }}>
       {avatar}
       <CaretUpDownIcon size={16} color={color} />
     </View>

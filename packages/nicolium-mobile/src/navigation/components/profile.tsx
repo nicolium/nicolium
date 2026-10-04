@@ -84,7 +84,6 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const { top: topInset } = useSafeAreaInsets();
   const { data: account } = useAccount(id);
   const navigation = useNavigation();
-
   const profileInfoNode = useRef<View>(null);
 
   const [currentTab, setCurrentTab] = useState(0);

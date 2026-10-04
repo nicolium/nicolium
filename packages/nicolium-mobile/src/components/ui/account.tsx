@@ -33,7 +33,7 @@ const UIAccount: React.FC<IUIAccount> = ({
 
   const MaybeLink = ({ children }: { children: React.JSX.Element }) =>
     onPress && !fullWidthPressable ? (
-      <TouchableRipple onPress={onPress}>{children}</TouchableRipple>
+      <TouchableRipple onPress={onPress} style={{ maxWidth: '100%' }}>{children}</TouchableRipple>
     ) : (
       children
     );
@@ -50,7 +50,7 @@ const UIAccount: React.FC<IUIAccount> = ({
 
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start' }}>
         <MaybeLink>
-          <View style={{ gap: 4, alignItems: 'center', flexDirection: 'row' }}>
+          <View style={{ gap: 4, alignItems: 'center', flexDirection: 'row', maxWidth: '100%' }}>
             <Text variant='titleMedium' numberOfLines={1}>
               {displayName}
             </Text>
