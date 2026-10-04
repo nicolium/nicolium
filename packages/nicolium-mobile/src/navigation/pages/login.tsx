@@ -11,7 +11,7 @@ import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import { AtIcon, GlobeIcon, LockIcon, UserIcon } from 'phosphor-react-native';
+import { AtIcon, GlobeIcon, LockIcon } from 'phosphor-react-native';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { KeyboardAvoidingView, ScrollView, View } from 'react-native';
