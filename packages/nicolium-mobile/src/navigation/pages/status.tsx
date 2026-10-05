@@ -66,6 +66,7 @@ const StatusViewScreen = ({
           context='thread'
           withLink={item !== id}
           style={item === id ? { backgroundColor: colors.surfaceContainerLow } : undefined}
+          detailed={item === id}
         />
       )}
       ItemSeparatorComponent={Divider}

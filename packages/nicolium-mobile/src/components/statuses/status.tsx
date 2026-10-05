@@ -133,6 +133,7 @@ interface IStatus {
   withLink?: boolean;
   withActions?: boolean;
   style?: StyleProp<ViewStyle>;
+  detailed?: boolean;
 }
 
 const Status: React.FC<IStatus> = ({
@@ -143,6 +144,7 @@ const Status: React.FC<IStatus> = ({
   withLink,
   withActions = true,
   style,
+  ...props
 }) => {
   const { data: status } = useStatus(id);
   const navigation = useNavigation();
@@ -183,6 +185,8 @@ const Status: React.FC<IStatus> = ({
         </View>
       }
       content={actualStatus.content}
+      emojis={actualStatus.emojis}
+      mentions={actualStatus.mentions}
       media={
         <>
           <StatusMedia id={id} />
@@ -191,6 +195,7 @@ const Status: React.FC<IStatus> = ({
       }
       actions={withActions ? <StatusActions id={id} /> : undefined}
       isConnectedBottom={isConnectedBottom}
+      {...props}
     />
   );
 

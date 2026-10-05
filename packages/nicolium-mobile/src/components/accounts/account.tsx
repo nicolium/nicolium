@@ -31,7 +31,7 @@ const Account: React.FC<IAccount> = ({ id, withLink, displayFqn, ...props }) => 
 
   return (
     <UIAccount
-      avatarSrc={account.avatar}
+      avatarSrc={account.avatar_default ? undefined : account.avatar}
       displayName={account.display_name}
       displayNameDetail={pronouns}
       acct={displayFqn ? account.fqn : account.acct}

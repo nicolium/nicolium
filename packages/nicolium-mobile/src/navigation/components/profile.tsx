@@ -20,6 +20,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { iconHelper } from '@/components/ui/icon';
+import { StyledHtml } from '@/components/ui/styled-html';
 import { useClient } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
@@ -180,21 +181,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
               @{account.acct}
             </Text>
           </View>
-          <RenderHTML
-            source={{ html: account.note }}
-            baseStyle={{
-              color: colors.onSecondaryContainer,
-            }}
-            tagsStyles={{
-              p: {
-                marginVertical: 0,
-              },
-              a: {
-                color: colors.primary,
-                textDecorationColor: colors.primary,
-              },
-            }}
-          />
+          <StyledHtml html={account.note} />
         </View>
         <Divider />
         <View style={{ flexDirection: 'row', marginHorizontal: 16, marginVertical: 8, gap: 8 }}>

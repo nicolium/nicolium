@@ -1,31 +1,45 @@
 import { useTheme } from '@mkljczk/react-native-paper';
-import RenderHTML from '@native-html/render';
 import React from 'react';
 import { View } from 'react-native';
+
+import { StyledHtml } from './styled-html';
+
+import type { CustomEmoji, Mention } from 'pl-api';
 
 interface IUIStatus {
   account: React.JSX.Element;
   content: string;
+  emojis?: Array<CustomEmoji>;
+  mentions?: Array<Mention>;
   media?: React.JSX.Element;
   actions?: React.JSX.Element;
   isConnectedBottom?: boolean;
   chip?: React.JSX.Element;
+  detailed?: boolean;
 }
 
 const UIStatus: React.FC<IUIStatus> = ({
   account,
   content,
+  emojis,
+  mentions,
   media,
   actions,
   isConnectedBottom,
   chip,
+  detailed,
 }) => {
   const theme = useTheme();
 
   const status = (
     <View style={{ flexDirection: 'column', gap: 8, flex: 1 }}>
-      <RenderHTML
-        source={{ html: content }}
+      <StyledHtml
+        html={content}
+        emojis={emojis}
+        mentions={mentions}
+        sizeMultiplier={detailed ? 1.25 : 1}
+      />
+      {/* source={{ html: content }}
         baseStyle={{
           color: theme.colors.onSecondaryContainer,
         }}
@@ -38,7 +52,7 @@ const UIStatus: React.FC<IUIStatus> = ({
             textDecorationColor: theme.colors.primary,
           },
         }}
-      />
+      /> */}
       {media}
       {actions}
     </View>
