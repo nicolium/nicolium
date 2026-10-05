@@ -39,7 +39,18 @@ const AccountSwitcher = () => {
       {Object.keys(accounts).map((accountId) => {
         const onChange = () => {
           if (toggleAccount(accountId)) {
-            navigation.navigate('app');
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  key: 'app',
+                  name: 'app',
+                  params: {
+                    screen: 'timeline',
+                  },
+                },
+              ],
+            });
           }
           closeAccountSwitcher();
         };
