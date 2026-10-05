@@ -1,7 +1,6 @@
 import {
   BottomSheetModal,
   BottomSheetView,
-  BottomSheetModalProvider,
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
@@ -41,15 +40,7 @@ const AccountSwitcher = () => {
           if (toggleAccount(accountId)) {
             navigation.reset({
               index: 0,
-              routes: [
-                {
-                  key: 'app',
-                  name: 'app',
-                  params: {
-                    screen: 'timeline',
-                  },
-                },
-              ],
+              routes: [{ name: 'app' }],
             });
           }
           closeAccountSwitcher();
@@ -64,6 +55,7 @@ const AccountSwitcher = () => {
                 <RadioButton
                   status={currentAccount === accountId ? 'checked' : 'unchecked'}
                   onPress={onChange}
+                  value={accountId}
                 />
               )}
             />
