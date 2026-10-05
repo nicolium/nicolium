@@ -59,6 +59,7 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
     <div className='edit-filter__field'>
       <div className='edit-filter__field__keyword'>
         <Input
+          required
           type='text'
           value={value.keyword}
           onChange={handleChange('keyword')}
