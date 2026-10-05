@@ -17,6 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { iconHelper } from '@/components/ui/icon';
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+import { useUiStoreActions } from '@/stores/ui';
 
 import { HomeStackScreen } from './pages/home';
 import { NotificationsStackScreen } from './pages/notifications';
@@ -34,6 +35,7 @@ const messages = defineMessages({
 
 const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
   const insets = useSafeAreaInsets();
+  const { openAccountSwitcher } = useUiStoreActions();
 
   return (
     <BottomNavigation.Bar
@@ -53,6 +55,11 @@ const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
             target: state.key,
           });
         }
+      }}
+      onTabLongPress={({ route }) => {
+        if (route.name !== 'profile') return;
+
+        return openAccountSwitcher();
       }}
       renderIcon={({ route, focused, color }) =>
         descriptors[route.key].options.tabBarIcon?.({

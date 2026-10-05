@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 // import { useMemo } from 'react';
 
-import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
 // import { useClient } from '@/hooks/use-client';
 // import { useFeatures } from '@/hooks/use-features';
 // import { useLoggedIn } from '@/hooks/use-logged-in';
@@ -9,7 +9,6 @@ import { useCurrentAccount } from '@/contexts/current-account-context';
 // import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
-import { useClient } from '@/stores/auth';
 // import { useSettings } from '@/stores/settings';
 
 // import type { NicoliumResponse } from '@/api';

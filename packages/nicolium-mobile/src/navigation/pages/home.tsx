@@ -5,8 +5,8 @@ import {
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { useClient } from '@/contexts/current-account-context';
 import { useTimeline } from '@/queries/timelines/use-timeline';
-import { useClient } from '@/stores/auth';
 
 import { Timeline } from '../components/timeline';
 import { TimelineHeader } from '../components/timeline-header';

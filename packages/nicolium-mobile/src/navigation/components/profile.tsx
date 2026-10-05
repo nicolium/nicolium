@@ -20,9 +20,9 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { iconHelper } from '@/components/ui/icon';
+import { useClient } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
-import { useClient } from '@/stores/auth';
 
 import { Timeline } from '../components/timeline';
 

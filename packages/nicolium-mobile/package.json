@@ -30,6 +30,7 @@
     "@formatjs/intl-numberformat": "^9.4.3",
     "@formatjs/intl-pluralrules": "^6.3.15",
     "@formatjs/intl-relativetimeformat": "^12.3.15",
+    "@gorhom/bottom-sheet": "^5.2.14",
     "@mkljczk/react-native-paper": "github:mkljczk/react-native-paper",
     "@native-html/render": "^1.0.3",
     "@phosphor-icons/core": "^2.1.1",

@@ -1,5 +1,6 @@
 import { makeRedirectUri } from 'expo-auth-session';
 import { DraftedObject } from 'mutative';
+import { set } from 'mutative/dist/utils/draft.js';
 import { PlApiClient, type RevokeTokenParams, type Features } from 'pl-api';
 import { v4 as uuid } from 'uuid';
 import * as v from 'valibot';
@@ -43,6 +44,7 @@ interface AuthStore {
     signIn: (username: string, password: string) => Promise<void>;
     signInWithCode: (code: string, codeVerifier: string) => Promise<void>;
     signOut: () => void;
+    toggleAccount: (accountId: string) => boolean;
   };
 }
 
@@ -229,8 +231,8 @@ const useAuthStore = create<AuthStore>()(
             token: currentSession.access_token,
           } as RevokeTokenParams);
 
-          queryClient.removeQueries({ queryKey: [currentSession.instance] });
-          useTimelinesStore.getState().actions.resetTimelines(currentSession.instance);
+          queryClient.removeQueries({ queryKey: [currentAccount] });
+          useTimelinesStore.getState().actions.resetTimelines(currentAccount);
 
           set((state) => {
             delete state.sessions[currentAccount];
@@ -239,6 +241,19 @@ const useAuthStore = create<AuthStore>()(
 
             persistSessions(state);
           });
+        },
+        toggleAccount: (accountId) => {
+          const { currentAccount } = get();
+
+          if (!currentAccount || currentAccount === accountId) return false;
+
+          set((state) => {
+            state.currentAccount = accountId;
+
+            persistSessions(state);
+          });
+
+          return true;
         },
       },
     };

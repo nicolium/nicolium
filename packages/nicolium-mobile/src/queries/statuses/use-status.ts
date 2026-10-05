@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
+import { useClient } from '@/contexts/current-account-context';
 import { useAppQueries, useAppQuery } from '@/queries/query';
 import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
 import { useImportEntities } from '@/queries/utils/import-entities';
-import { useClient } from '@/stores/auth';
 import { useContextsActions } from '@/stores/contexts';
 
 import { useAccount } from '../accounts/use-account';

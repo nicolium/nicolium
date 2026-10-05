@@ -10,9 +10,10 @@ interface IAccount extends Pick<IUIAccount, 'onPress' | 'style'> {
   timestamp?: string;
   withLink?: boolean;
   fullWidthPressable?: boolean;
+  displayFqn?: boolean;
 }
 
-const Account: React.FC<IAccount> = ({ id, withLink, ...props }) => {
+const Account: React.FC<IAccount> = ({ id, withLink, displayFqn, ...props }) => {
   const navigation = useNavigation();
 
   const { data: account } = useAccount(id);
@@ -33,7 +34,7 @@ const Account: React.FC<IAccount> = ({ id, withLink, ...props }) => {
       avatarSrc={account.avatar}
       displayName={account.display_name}
       displayNameDetail={pronouns}
-      acct={account.acct}
+      acct={displayFqn ? account.fqn : account.acct}
       onPress={
         withLink
           ? () => navigation.navigate('accounts', { screen: 'view', params: { id } })

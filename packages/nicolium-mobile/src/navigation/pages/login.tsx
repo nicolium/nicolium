@@ -23,6 +23,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/logo.svg';
 import { UIAccount } from '@/components/ui/account';
+import { Header } from '@/components/ui/header';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useAuthStore, useAuthStoreActions, useFeatures } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
 
@@ -56,6 +58,10 @@ const messages = defineMessages({
   invalidAccessToken: {
     id: 'auth.invalid_access_token',
     defaultMessage: 'Wrong access token.',
+  },
+  addAccountHeadline: {
+    id: 'landing_mobile.add_account.headline',
+    defaultMessage: 'Add account',
   },
   credentialsHeadline: {
     id: 'landing_mobile.credentials.headline',
@@ -118,6 +124,7 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
   const { colors } = useTheme();
   const intl = useIntl();
 
+  const isLoggedIn = !!useCurrentAccount();
   const { fetchInstance, createApp } = useAuthStoreActions();
   const [instance, setInstance] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -166,19 +173,22 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
         <Logo width={78} height={78} accessibilityLabel='Nicolium' />
       </View>
 
-      <UIAccount displayName='Nicolium' acct='nicolium' />
-
-      <View style={{ gap: 12 }}>
-        <Text variant='headlineSmall'>
-          <FormattedMessage id='landing_mobile.headline' defaultMessage='Welcome!' />
-        </Text>
-        <Text variant='bodyLarge'>
-          <FormattedMessage
-            id='landing_mobile.body'
-            defaultMessage='To get started, please enter your home instance’s domain name below.'
-          />
-        </Text>
-      </View>
+      {!isLoggedIn && (
+        <>
+          <UIAccount displayName='Nicolium' acct='nicolium' />
+          <View style={{ gap: 12 }}>
+            <Text variant='headlineSmall'>
+              <FormattedMessage id='landing_mobile.headline' defaultMessage='Welcome!' />
+            </Text>
+            <Text variant='bodyLarge'>
+              <FormattedMessage
+                id='landing_mobile.body'
+                defaultMessage='To get started, please enter your home instance’s domain name below.'
+              />
+            </Text>
+          </View>
+        </>
+      )}
 
       <Divider style={{ marginHorizontal: -16 }} />
 
@@ -340,11 +350,19 @@ const LoginStack = createNativeStackNavigator<LoginStackParams>();
 
 const LoginStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'login'>) => {
   const instanceUrl = useAuthStore(({ pendingAuth }) => pendingAuth?.instance);
+  const isLoggedIn = !!useCurrentAccount();
   const intl = useIntl();
 
   return (
-    <LoginStack.Navigator>
-      <LoginStack.Screen name='instance' component={LoginScreen} options={{ headerShown: false }} />
+    <LoginStack.Navigator screenOptions={{ header: Header }}>
+      <LoginStack.Screen
+        name='instance'
+        component={LoginScreen}
+        options={{
+          headerShown: isLoggedIn,
+          title: intl.formatMessage(messages.addAccountHeadline),
+        }}
+      />
       <LoginStack.Screen
         name='credentials'
         component={CredentialsScreen}

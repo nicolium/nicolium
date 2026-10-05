@@ -26,12 +26,12 @@ function useAppQuery<
   const scopeUrl = useCurrentAccount();
 
   const { queryKey } = options;
-  const modifiedQueryKey = useMemo(
+  const scopedQueryKey = useMemo(
     () => [scopeUrl, ...queryKey] as unknown as TQueryKey,
     [scopeUrl, queryKey],
   );
 
-  return useQuery({ ...options, queryKey: modifiedQueryKey });
+  return useQuery({ ...options, queryKey: scopedQueryKey });
 }
 
 function useAppInfiniteQuery<
@@ -46,12 +46,12 @@ function useAppInfiniteQuery<
   const scopeUrl = useCurrentAccount();
 
   const { queryKey } = options;
-  const modifiedQueryKey = useMemo(
+  const scopedQueryKey = useMemo(
     () => [scopeUrl, ...queryKey] as unknown as TQueryKey,
     [scopeUrl, queryKey],
   );
 
-  return useInfiniteQuery({ ...options, queryKey: modifiedQueryKey });
+  return useInfiniteQuery({ ...options, queryKey: scopedQueryKey });
 }
 
 function useAppQueries<T extends Array<unknown>, TCombinedResult = QueriesResults<T>>(options: {

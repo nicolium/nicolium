@@ -6,13 +6,13 @@ import {
 } from '@tanstack/react-query';
 
 import { batcher } from '@/api/batcher';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useClient, useFeatures } from '@/stores/auth';
 
 import { queryKeys } from '../keys';
 
 import type { Suggestion } from 'pl-api';
-import { useCurrentAccount } from '@/contexts/current-account-context';
 
 type MinifiedSuggestion = Omit<Suggestion, 'account'> & { account_id: string };
 

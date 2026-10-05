@@ -26,9 +26,6 @@
     "experiments": {
       "reactCompiler": true
     },
-    "plugins": [
-      "expo-image",
-      "expo-secure-store"
-    ]
+    "plugins": ["expo-image", "expo-secure-store"]
   }
 }

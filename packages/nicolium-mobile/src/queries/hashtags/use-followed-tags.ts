@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { useCurrentAccount } from '@/contexts/current-account-context';
-import { useClient } from '@/stores/auth';
+import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';

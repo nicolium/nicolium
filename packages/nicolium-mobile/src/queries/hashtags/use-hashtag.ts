@@ -1,5 +1,5 @@
+import { useClient } from '@/contexts/current-account-context';
 import { useAppQuery } from '@/queries/query';
-import { useClient } from '@/stores/auth';
 
 import { queryKeys } from '../keys';
 

@@ -1,10 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
 // import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
 import { importEntities } from '@/queries/utils/import-entities';
-import { useClient } from '@/stores/auth';
 // import { compareId } from '@/utils/comparators';
 import {
   // useTimelinesStore,

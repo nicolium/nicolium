@@ -58,7 +58,10 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
           onPress={closeAfter(() => navigation.navigate('settings' as never))}
           title={intl.formatMessage(messages.settings)}
         />
-        <Menu.Item onPress={closeAfter(() => {})} title={intl.formatMessage(messages.announcements)} />
+        <Menu.Item
+          onPress={closeAfter(() => {})}
+          title={intl.formatMessage(messages.announcements)}
+        />
         {/* <Menu.Item onPress={() => {}} title='Edit timelines' /> */}
       </Menu>
     </Appbar.Header>

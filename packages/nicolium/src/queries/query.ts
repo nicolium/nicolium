@@ -29,7 +29,7 @@ function useAppQuery<
   const scopeUrl = useScopeUrl();
 
   const { queryKey } = options;
-  const modifiedQueryKey = useMemo(
+  const scopedQueryKey = useMemo(
     () => [scopeUrl, ...queryKey] as unknown as TQueryKey,
     [scopeUrl, queryKey],
   );
@@ -39,7 +39,7 @@ function useAppQuery<
     return queryClient.getQueryData<NonFunctionGuard<TQueryFnData>>([instanceUrl, ...queryKey]);
   }, [scopeUrl, queryClient, queryKey]);
 
-  return useQuery({ ...options, queryKey: modifiedQueryKey, placeholderData });
+  return useQuery({ ...options, queryKey: scopedQueryKey, placeholderData });
 }
 
 function useAppInfiniteQuery<
@@ -55,7 +55,7 @@ function useAppInfiniteQuery<
   const scopeUrl = useScopeUrl();
 
   const { queryKey } = options;
-  const modifiedQueryKey = useMemo(
+  const scopedQueryKey = useMemo(
     () => [scopeUrl, ...queryKey] as unknown as TQueryKey,
     [scopeUrl, queryKey],
   );
@@ -68,7 +68,7 @@ function useAppInfiniteQuery<
     ]);
   }, [scopeUrl, queryClient, queryKey]);
 
-  return useInfiniteQuery({ ...options, queryKey: modifiedQueryKey, placeholderData });
+  return useInfiniteQuery({ ...options, queryKey: scopedQueryKey, placeholderData });
 }
 
 function useAppQueries<T extends Array<unknown>, TCombinedResult = QueriesResults<T>>(options: {
