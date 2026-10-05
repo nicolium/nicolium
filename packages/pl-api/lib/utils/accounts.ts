@@ -20,6 +20,7 @@ const isDefaultHeader = (url: string = '') =>
 const DEFAULT_AVATARS: Array<string | RegExp> = [
   /\/assets\/default_avatars\/GoToSocial_icon[1-6]\.webp$/, // GoToSocial
   '/avatars/original/missing.png', // Hollo, Mastodon
+  /\/identicon\/[a-z0-9]{16}$/, // Iceshrimp.NET
   '/api/v1/accounts/identicon', // Mitra
   '/s/img/avatar.svg', // NeoDB
   '/avatars/default.jpg', // Pixelfed
