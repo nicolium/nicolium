@@ -122,10 +122,7 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
     return {
       baseStyle: {
         color: colors.onBackground,
-        fontFamily: baseTypescale.fontFamily,
-        fontSize: baseTypescale.fontSize * sizeMultiplier,
-        lineHeight: baseTypescale.lineHeight * sizeMultiplier,
-        letterSpacing: baseTypescale.letterSpacing,
+        ...baseTypescale,
       },
       tagsStyles: {
         h1: {
