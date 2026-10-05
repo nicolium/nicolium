@@ -179,8 +179,8 @@ const EditFilterPage: React.FC = () => {
 
   if (notFound) return <MissingIndicator />;
 
-  const multipleKeywords = !features.filtersV2;
-  const filterTitle = !features.filtersV2;
+  const multipleKeywords = features.filtersV2 || (!features.filters && !features.filtersV2);
+  const filterTitle = features.filtersV2 || (!features.filters && !features.filtersV2);
   const accountsContextType = features.filtersV2;
   const blurAction = features.filtersV2BlurAction || (!features.filters && !features.filtersV2);
 
