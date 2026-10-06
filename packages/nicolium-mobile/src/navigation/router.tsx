@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/auth';
 import { Header } from '../components/ui/header';
 
 import { AccountsStackScreen } from './pages/accounts';
+import { HashtagsScreen } from './pages/hashtags';
 import { LoginStackScreen } from './pages/login';
 import { SettingsScreen } from './pages/settings';
 import { StatusStackScreen } from './pages/status';
@@ -58,6 +59,7 @@ type RootStackParams = {
   settings: undefined;
   status: StatusStackParams;
   accounts: AccountStackParams;
+  hashtags: { tag: string };
 };
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -83,6 +85,11 @@ const RootNavigator = () => {
           <RootStack.Screen
             name='accounts'
             component={AccountsStackScreen}
+            options={{ headerShown: false }}
+          />
+          <RootStack.Screen
+            name='hashtags'
+            component={HashtagsScreen}
             options={{ headerShown: false }}
           />
         </>

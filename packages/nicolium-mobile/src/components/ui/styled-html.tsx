@@ -104,7 +104,7 @@ const HashtagLink: React.FC<IHashtagLink> = ({ tnode }) => {
   const tag = tnode.attributes['data-hashtag'];
 
   return (
-    <Link screen='hashtags' params={{ screen: 'view', params: { tag: tag } }}>
+    <Link screen='hashtags' params={{ tag }}>
       #{tag}
     </Link>
   );
@@ -178,7 +178,7 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
     return {
       onElement: (element) => {
         if (element.tagName === 'a') {
-          const classList = element.attribs.class?.split(' ');
+          const classList = element.attribs.class?.split(' ') || [];
 
           if (mentions && classList.includes('mention')) {
             const mention = mentions.find(({ url }) => element.attribs.href === url);
