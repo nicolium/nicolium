@@ -66,7 +66,8 @@ const UIStatus: React.FC<IUIStatus> = ({
               marginHorizontal: 19,
               width: 2,
               backgroundColor: theme.colors.surfaceContainerHigh,
-              marginBottom: -16,
+              marginBottom: -8,
+              zIndex: 1,
             }}
           ></View>
           {status}

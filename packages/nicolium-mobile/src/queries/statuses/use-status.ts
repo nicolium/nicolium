@@ -175,4 +175,4 @@ const findStatuses = (
     )
     .map(([key, data]) => [key[2], data]);
 
-export { useStatus, useStatusContext, useStatuses, findStatuses };
+export { useStatus, useStatusContext, useStatuses, findStatuses, type SelectedStatus };

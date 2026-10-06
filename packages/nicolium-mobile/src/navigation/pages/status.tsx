@@ -23,6 +23,14 @@ import type { RootStackParams, StatusStackParams } from '../router';
 import type { PaginatedResponseArray } from '@/queries/utils/make-paginated-response-query';
 import type { UseInfiniteQueryResult } from '@tanstack/react-query';
 
+const MaybeDivider = ({ statusId }) => {
+  const { data: status } = useStatus(statusId);
+
+  if (status?.replies_count) return null;
+
+  return <Divider />;
+};
+
 interface IInteractionList {
   query: UseInfiniteQueryResult<PaginatedResponseArray<string>, Error>;
   emptyMessageText?: React.JSX.Element;
@@ -67,9 +75,12 @@ const StatusViewScreen = ({
           withLink={item !== id}
           style={item === id ? { backgroundColor: colors.surfaceContainerLow } : undefined}
           detailed={item === id}
+          isConnectedBottom={(status) => item !== id && status.replies_count > 0}
         />
       )}
-      ItemSeparatorComponent={Divider}
+      ItemSeparatorComponent={({ leadingItem }) =>
+        leadingItem === id ? <Divider /> : <MaybeDivider statusId={leadingItem} />
+      }
       initialScrollIndex={thread.indexOf(id)}
     />
   );

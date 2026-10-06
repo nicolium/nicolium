@@ -15,7 +15,7 @@ import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
-import { useStatus } from '@/queries/statuses/use-status';
+import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 
 import { Account } from '../accounts/account';
 import { iconHelper } from '../ui/icon';
@@ -129,7 +129,7 @@ interface IStatus {
   id: string;
   rebloggedBy?: Array<string>;
   context?: 'home' | 'timeline' | 'thread';
-  isConnectedBottom?: boolean;
+  isConnectedBottom?: boolean | ((status: SelectedStatus) => boolean);
   withLink?: boolean;
   withActions?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -195,7 +195,11 @@ const Status: React.FC<IStatus> = ({
         </>
       }
       actions={withActions ? <StatusActions id={id} /> : undefined}
-      isConnectedBottom={isConnectedBottom}
+      isConnectedBottom={
+        typeof isConnectedBottom === 'function'
+          ? isConnectedBottom(actualStatus)
+          : isConnectedBottom
+      }
       {...props}
     />
   );
