@@ -19,14 +19,17 @@ const CollapsibleContent: React.FC<ICollapsibleContent> = ({ children, maxHeight
   React.useLayoutEffect(() => {
     if (!containerNode.current) return;
 
-    setShouldCollapse(containerNode.current.scrollHeight > maxHeight + 80);
-  }, [containerNode.current]);
+    setShouldCollapse(containerNode.current.clientHeight > maxHeight + 80);
+  }, [containerNode]);
 
   const transparentBackground = colors.background.toString().slice(0, -2) + '0)';
 
   return (
     <View
-      style={{ maxHeight: shouldCollapse && collapsed ? maxHeight : undefined, overflow: 'hidden' }}
+      style={{
+        maxHeight: shouldCollapse && collapsed ? maxHeight : undefined,
+        overflow: shouldCollapse && collapsed ? 'hidden' : undefined,
+      }}
       ref={containerNode}
     >
       {children}

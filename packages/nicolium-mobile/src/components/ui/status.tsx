@@ -1,5 +1,6 @@
-import { useTheme } from '@mkljczk/react-native-paper';
+import { Button, Card, Text, TouchableRipple, useTheme } from '@mkljczk/react-native-paper';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { View } from 'react-native';
 
 import { CollapsibleContent } from './collapsible-content';
@@ -12,17 +13,22 @@ interface IUIStatus {
   content: string;
   emojis?: Array<CustomEmoji>;
   mentions?: Array<Mention>;
+  spoilerText?: string;
   media?: React.JSX.Element;
   actions?: React.JSX.Element;
   isConnectedBottom?: boolean;
   chip?: React.JSX.Element;
   detailed?: boolean;
   compact?: boolean;
+  spoilerExpanded?: boolean;
+  expandStatusSpoiler?: () => void;
+  collapseStatusSpoiler?: () => void;
 }
 
 const UIStatus: React.FC<IUIStatus> = ({
   account,
   content,
+  spoilerText,
   emojis,
   mentions,
   media,
@@ -31,6 +37,9 @@ const UIStatus: React.FC<IUIStatus> = ({
   chip,
   detailed,
   compact,
+  spoilerExpanded,
+  expandStatusSpoiler,
+  collapseStatusSpoiler,
 }) => {
   const theme = useTheme();
 
@@ -45,13 +54,48 @@ const UIStatus: React.FC<IUIStatus> = ({
 
   const status = (
     <View style={{ flexDirection: 'column', gap: 8, flex: 1 }}>
-      {detailed ? (
-        statusBody
-      ) : (
-        <CollapsibleContent maxHeight={compact ? 120 : undefined}>{statusBody}</CollapsibleContent>
+      {spoilerText && (
+        <TouchableRipple onPress={spoilerExpanded ? collapseStatusSpoiler : expandStatusSpoiler}>
+          <Card mode='contained' style={{ borderWidth: 1, borderColor: theme.colors.primary }}>
+            <Card.Content style={{ paddingBottom: expandStatusSpoiler ? 0 : 16 }}>
+              <Text
+                variant='titleSmall'
+                numberOfLines={!(detailed || spoilerExpanded) ? 1 : undefined}
+              >
+                {spoilerText}
+              </Text>
+            </Card.Content>
+            {expandStatusSpoiler && (
+              <Card.Actions style={{ paddingTop: 0 }}>
+                <Button
+                  mode='text'
+                  compact
+                  onPress={spoilerExpanded ? collapseStatusSpoiler : expandStatusSpoiler}
+                >
+                  {spoilerExpanded ? (
+                    <FormattedMessage id='status.collapse' defaultMessage='Collapse' />
+                  ) : (
+                    <FormattedMessage id='status.read_more' defaultMessage='Read more' />
+                  )}
+                </Button>
+              </Card.Actions>
+            )}
+          </Card>
+        </TouchableRipple>
       )}
-      {media}
-      {actions}
+      {(!spoilerText || !expandStatusSpoiler || spoilerExpanded) && (
+        <>
+          {detailed ? (
+            statusBody
+          ) : (
+            <CollapsibleContent maxHeight={compact ? 120 : undefined}>
+              {statusBody}
+            </CollapsibleContent>
+          )}
+          {media}
+          {actions}
+        </>
+      )}
     </View>
   );
 

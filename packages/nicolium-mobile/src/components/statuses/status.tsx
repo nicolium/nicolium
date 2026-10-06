@@ -16,6 +16,7 @@ import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
+import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
 import { Account } from '../accounts/account';
 import { iconHelper } from '../ui/icon';
@@ -150,6 +151,9 @@ const Status: React.FC<IStatus> = ({
   const { data: status } = useStatus(id);
   const navigation = useNavigation();
 
+  const { spoilerExpanded } = useStatusMeta(id);
+  const { expandStatusSpoiler, collapseStatusSpoiler } = useStatusMetaActions();
+
   const actualStatus = status?.reblog || status;
 
   if (!actualStatus) return null;
@@ -188,6 +192,7 @@ const Status: React.FC<IStatus> = ({
       content={actualStatus.content}
       emojis={actualStatus.emojis}
       mentions={actualStatus.mentions}
+      spoilerText={actualStatus.spoiler_text}
       media={
         <>
           <StatusMedia id={id} compact={props.compact} />
@@ -200,6 +205,9 @@ const Status: React.FC<IStatus> = ({
           ? isConnectedBottom(actualStatus)
           : isConnectedBottom
       }
+      spoilerExpanded={spoilerExpanded}
+      expandStatusSpoiler={() => expandStatusSpoiler(id)}
+      collapseStatusSpoiler={() => collapseStatusSpoiler(id)}
       {...props}
     />
   );

@@ -4,14 +4,12 @@ import {
   Button,
   Divider,
   IconButton,
-  SplitButton,
   Text,
   useTheme,
 } from '@mkljczk/react-native-paper';
-import RenderHTML from '@native-html/render';
 import { Link, useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import { CaretDownIcon, DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
+import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
 import React, { useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Platform, View } from 'react-native';
