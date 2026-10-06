@@ -10,9 +10,9 @@ import {
 import { Link, useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Platform, View } from 'react-native';
+import { type NativeScrollEvent, type NativeSyntheticEvent, Platform, View } from 'react-native';
 import { Tabs, TabScreen, TabsProvider } from 'react-native-paper-tabs';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -29,7 +29,7 @@ import { Timeline } from '../components/timeline';
 
 interface IProfileTimeline {
   id: string;
-  handleScrolled?: (value: boolean) => void;
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }
 
 const PostsTimeline: React.FC<IProfileTimeline> = ({ id, ...props }) => {
@@ -96,11 +96,13 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const { top: topInset } = useSafeAreaInsets();
   const { data: account } = useAccount(id);
   const navigation = useNavigation();
-  const profileInfoNode = useRef<View>(null);
+  const profileInfoNode = React.useRef<View>(null);
+  const previousScrollOffset = React.useRef<number>(0);
 
-  const [currentTab, setCurrentTab] = useState(0);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [profileInfoHeight, setProfileInfoHeight] = useState(0);
+  const [currentTab, setCurrentTab] = React.useState(0);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [profileInfoHeight, setProfileInfoHeight] = React.useState(0);
+  const [showComposeButton, setShowComposeButton] = React.useState(true);
 
   const profileInfoMarginTop = useSharedValue(topInset);
   const profileInfoStyle = useAnimatedStyle(() => ({
@@ -118,6 +120,13 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   }, [isScrolled]);
 
   if (!account) return null;
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
+    setIsScrolled(scrollOffset > 60);
+    setShowComposeButton(scrollOffset < previousScrollOffset.current);
+    previousScrollOffset.current = scrollOffset;
+  };
 
   return (
     <>
@@ -267,29 +276,21 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           uppercase={false}
         >
           <TabScreen label='Posts'>
-            {currentTab === 0 ? (
-              <PostsTimeline id={account.id} handleScrolled={setIsScrolled} />
-            ) : (
-              <></>
-            )}
+            {currentTab === 0 ? <PostsTimeline id={account.id} onScroll={handleScroll} /> : <></>}
           </TabScreen>
           <TabScreen label='With replies'>
             {currentTab === 1 ? (
-              <PostsWithRepliesTimeline id={account.id} handleScrolled={setIsScrolled} />
+              <PostsWithRepliesTimeline id={account.id} onScroll={handleScroll} />
             ) : (
               <></>
             )}
           </TabScreen>
           <TabScreen label='Media'>
-            {currentTab === 2 ? (
-              <MediaTimeline id={account.id} handleScrolled={setIsScrolled} />
-            ) : (
-              <></>
-            )}
+            {currentTab === 2 ? <MediaTimeline id={account.id} onScroll={handleScroll} /> : <></>}
           </TabScreen>
         </Tabs>
       </TabsProvider>
-      <ComposeButton />
+      <ComposeButton visible={showComposeButton} />
     </>
   );
 };

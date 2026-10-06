@@ -10,19 +10,20 @@ import { iconHelper } from '@/components/ui/icon';
 
 import type { useTimeline } from '@/queries/timelines/use-timeline';
 import type { TimelineEntry } from '@/stores/timelines';
+import type { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 
 interface ITimeline extends IEmptyMessage {
   query: ReturnType<typeof useTimeline>;
   context?: 'home' | 'timeline';
   header?: React.JSX.Element;
-  handleScrolled?: (value: boolean) => void;
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }
 
 const Timeline: React.FC<ITimeline> = ({
   query,
   context = 'timeline',
   header,
-  handleScrolled,
+  onScroll,
   ...props
 }) => {
   const renderItem = useCallback(
@@ -76,15 +77,7 @@ const Timeline: React.FC<ITimeline> = ({
         ) : undefined
       }
       ListHeaderComponent={header}
-      onScroll={
-        handleScrolled
-          ? (event) => {
-              handleScrolled(
-                (event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0) > 60,
-              );
-            }
-          : undefined
-      }
+      onScroll={onScroll}
     />
   );
 };
