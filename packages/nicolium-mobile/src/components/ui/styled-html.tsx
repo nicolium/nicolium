@@ -27,7 +27,7 @@ const nodesToText = (nodes: Array<ChildNode>): string =>
       node.type === 'text'
         ? node.data
         : node.type === 'tag'
-          ? nodesToText(node.children as Array<DOMNode>)
+          ? nodesToText(node.children as Array<ChildNode>)
           : '',
     )
     .join('');
