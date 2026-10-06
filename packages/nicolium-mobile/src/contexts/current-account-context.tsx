@@ -36,10 +36,15 @@ const useClient = () => {
   return useAuthStore((state) => state.clients[currentAccount!]);
 };
 
+const useInstance = () => useClient().instanceInformation;
+const useFeatures = () => useClient().features;
+
 export {
   CurrentAccountContext,
   DefaultCurrentAccountProvider,
   CurrentAccountProvider,
   useCurrentAccount,
   useClient,
+  useInstance,
+  useFeatures,
 };

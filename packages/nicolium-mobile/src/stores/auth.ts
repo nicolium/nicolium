@@ -262,11 +262,4 @@ const useAuthStore = create<AuthStore>()(
 
 const useAuthStoreActions = () => useAuthStore(({ actions }) => actions);
 
-const useClient = () =>
-  useAuthStore((state) => (state.currentAccount ? state.clients[state.currentAccount] : null)!);
-
-const useInstance = () => useClient().instanceInformation;
-
-const useFeatures = (): Features => useClient().features;
-
-export { useAuthStore, useAuthStoreActions, useClient, useInstance, useFeatures };
+export { useAuthStore, useAuthStoreActions };

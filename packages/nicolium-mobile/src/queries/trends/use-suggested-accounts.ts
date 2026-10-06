@@ -6,9 +6,8 @@ import {
 } from '@tanstack/react-query';
 
 import { batcher } from '@/api/batcher';
-import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useClient, useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
-import { useClient, useFeatures } from '@/stores/auth';
 
 import { queryKeys } from '../keys';
 

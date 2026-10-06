@@ -12,8 +12,10 @@ import { TabsProvider, Tabs, TabScreen } from 'react-native-paper-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Account } from '@/components/accounts/account';
+import { Hashtag } from '@/components/hashtag';
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage } from '@/components/ui/empty-message';
+import { useFeatures } from '@/contexts/current-account-context';
 import {
   useSearchAccounts,
   useSearchHashtags,
@@ -22,10 +24,8 @@ import {
 import { useSuggestedAccounts } from '@/queries/trends/use-suggested-accounts';
 import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
 import useTrendingTags from '@/queries/trends/use-trending-tags';
-import { useFeatures } from '@/stores/auth';
 
 import type { SearchStackParams } from '../router';
-import { Hashtag } from '@/components/hashtag';
 
 const messages = defineMessages({
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },

@@ -2,7 +2,7 @@ import {
   BottomSheetModal,
   BottomSheetView,
   BottomSheetBackdrop,
-  BottomSheetBackdropProps,
+  type BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
 import { ActivityIndicator, List, RadioButton, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';

@@ -1,6 +1,6 @@
+import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useAppQuery } from '@/queries/query';
 import { useImportEntities } from '@/queries/utils/import-entities';
-import { useClient, useFeatures } from '@/stores/auth';
 
 import { queryKeys } from '../keys';
 

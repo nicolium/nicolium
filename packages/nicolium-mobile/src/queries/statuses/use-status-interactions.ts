@@ -8,12 +8,11 @@ import {
 import { create } from 'mutative';
 // import { defineMessages, useIntl } from 'react-intl';
 
-import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useClient, useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
-import { useClient, useFeatures } from '@/stores/auth';
 import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
 
 import { queryKeys } from '../keys';

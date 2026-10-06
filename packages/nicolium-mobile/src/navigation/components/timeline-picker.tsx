@@ -20,10 +20,10 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 
 import { iconHelper } from '@/components/ui/icon';
+import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useAntennas } from '@/queries/accounts/use-antennas';
 import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
-import { useFeatures, useInstance } from '@/stores/auth';
 
 import type { TimelineStackParams } from '../router';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';

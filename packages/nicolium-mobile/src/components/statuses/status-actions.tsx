@@ -12,6 +12,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { View } from 'react-native';
 
+import { useFeatures } from '@/contexts/current-account-context';
 import { useStatus } from '@/queries/statuses/use-status';
 import {
   useDislikeStatus,
@@ -21,7 +22,6 @@ import {
   useUnfavouriteStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
-import { useFeatures } from '@/stores/auth';
 
 import { iconHelper } from '../ui/icon';
 

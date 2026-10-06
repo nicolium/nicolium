@@ -1,5 +1,4 @@
-import { useCurrentAccount } from '@/contexts/current-account-context';
-import { useClient, useFeatures } from '@/stores/auth';
+import { useClient, useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
 
 import { useAppInfiniteQuery } from '../query';
 

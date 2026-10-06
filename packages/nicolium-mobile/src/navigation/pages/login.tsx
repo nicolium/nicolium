@@ -25,7 +25,7 @@ import Logo from '@/assets/logo.svg';
 import { UIAccount } from '@/components/ui/account';
 import { Header } from '@/components/ui/header';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { useAuthStore, useAuthStoreActions, useFeatures } from '@/stores/auth';
+import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
 
 import type { LoginStackParams, RootStackParams } from '../router';

@@ -6,14 +6,13 @@ import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { iconHelper } from '@/components/ui/icon';
-import { useClient } from '@/contexts/current-account-context';
+import { useClient, useFeatures } from '@/contexts/current-account-context';
 import {
   useFollowHashtagMutation,
   useUnfollowHashtagMutation,
 } from '@/queries/hashtags/use-followed-tags';
 import { useHashtag } from '@/queries/hashtags/use-hashtag';
 import { useTimeline } from '@/queries/timelines/use-timeline';
-import { useFeatures } from '@/stores/auth';
 
 import { Timeline } from '../components/timeline';
 

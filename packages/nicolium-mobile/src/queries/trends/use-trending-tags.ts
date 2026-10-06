@@ -1,6 +1,6 @@
+import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { queryKeys } from '@/queries/keys';
 import { useAppQuery } from '@/queries/query';
-import { useClient, useFeatures } from '@/stores/auth';
 
 import type { Tag } from 'pl-api';
 
