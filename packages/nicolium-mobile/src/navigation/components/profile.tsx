@@ -19,6 +19,7 @@ import { Tabs, TabScreen, TabsProvider } from 'react-native-paper-tabs';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { CollapsibleContent } from '@/components/ui/collapsible-content';
 import { iconHelper } from '@/components/ui/icon';
 import { StyledHtml } from '@/components/ui/styled-html';
 import { useClient } from '@/contexts/current-account-context';
@@ -172,58 +173,62 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             />
           </View>
         </View>
-        <View style={{ gap: 8, marginHorizontal: 16, marginBottom: 8 }}>
-          <View>
-            <Text variant='titleMedium' numberOfLines={1}>
-              {account.display_name}
-            </Text>
-            <Text variant='bodyMedium' numberOfLines={1} style={{ color: colors.outline }}>
-              @{account.acct}
-            </Text>
-          </View>
-          <StyledHtml html={account.note} />
-        </View>
-        <Divider />
-        <View style={{ flexDirection: 'row', marginHorizontal: 16, marginVertical: 8, gap: 8 }}>
-          <Text style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <FormattedMessage
-              id='account.statuses_with_count'
-              defaultMessage='{count, plural, one {<strong>#</strong> status} other {<strong>#</strong> statuses}}'
-              values={{
-                count: account.statuses_count,
-                strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,
-              }}
-            />
-          </Text>
-          <Link
-            style={{ display: 'flex', alignItems: 'center', gap: 4 }}
-            screen='accounts'
-            params={{ screen: 'followers', params: { id: account.id } }}
-          >
-            <FormattedMessage
-              id='account.followers_with_count'
-              defaultMessage='{count, plural, one {<strong>#</strong> follower} other {<strong>#</strong> followers}}'
-              values={{
-                count: account.followers_count,
-                strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,
-              }}
-            />
-          </Link>
-          <Link
-            style={{ display: 'flex', alignItems: 'center', gap: 4 }}
-            screen='accounts'
-            params={{ screen: 'following', params: { id: account.id } }}
-          >
-            <FormattedMessage
-              id='account.following_with_count'
-              defaultMessage='{count, plural, one {<strong>#</strong> following} other {<strong>#</strong> following}}'
-              values={{
-                count: account.following_count,
-                strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,
-              }}
-            />
-          </Link>
-        </View>
+        <CollapsibleContent>
+          <>
+            <View style={{ gap: 8, marginHorizontal: 16, marginBottom: 8 }}>
+              <View>
+                <Text variant='titleMedium' numberOfLines={1}>
+                  {account.display_name}
+                </Text>
+                <Text variant='bodyMedium' numberOfLines={1} style={{ color: colors.outline }}>
+                  @{account.acct}
+                </Text>
+              </View>
+              <StyledHtml html={account.note} />
+            </View>
+            <Divider />
+            <View style={{ flexDirection: 'row', marginHorizontal: 16, marginVertical: 8, gap: 8 }}>
+              <Text style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <FormattedMessage
+                  id='account.statuses_with_count'
+                  defaultMessage='{count, plural, one {<strong>#</strong> status} other {<strong>#</strong> statuses}}'
+                  values={{
+                    count: account.statuses_count,
+                    strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,
+                  }}
+                />
+              </Text>
+              <Link
+                style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+                screen='accounts'
+                params={{ screen: 'followers', params: { id: account.id } }}
+              >
+                <FormattedMessage
+                  id='account.followers_with_count'
+                  defaultMessage='{count, plural, one {<strong>#</strong> follower} other {<strong>#</strong> followers}}'
+                  values={{
+                    count: account.followers_count,
+                    strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,
+                  }}
+                />
+              </Link>
+              <Link
+                style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+                screen='accounts'
+                params={{ screen: 'following', params: { id: account.id } }}
+              >
+                <FormattedMessage
+                  id='account.following_with_count'
+                  defaultMessage='{count, plural, one {<strong>#</strong> following} other {<strong>#</strong> following}}'
+                  values={{
+                    count: account.following_count,
+                    strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,
+                  }}
+                />
+              </Link>
+            </View>
+          </>
+        </CollapsibleContent>
       </Animated.View>
       {isScrolled && (
         <Appbar.Header

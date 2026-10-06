@@ -7,9 +7,10 @@ import { useStatus } from '@/queries/statuses/use-status';
 
 interface IStatusMedia {
   id: string;
+  compact?: boolean;
 }
 
-const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
+const StatusMedia: React.FC<IStatusMedia> = ({ id, compact }) => {
   const { colors, shapes } = useTheme();
   const { data: status } = useStatus(id);
 
@@ -20,7 +21,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id }) => {
   return (
     <Carousel
       data={filteredMedia}
-      height={400}
+      height={compact ? 160 : 320}
       renderItem={({ item: media, index, mask }) => {
         const { width, height } = media.meta.original || {};
         return (

@@ -29,18 +29,18 @@ interface IQuote {
 }
 
 const Quote: React.FC<IQuote> = ({ id }) => {
-  const { isFetched, isFetching, isError } = useStatus(id);
+  const { isFetching, isError } = useStatus(id);
 
   return (
-    <Card mode='outlined' style={{ padding: isFetched ? 0 : 8 }}>
+    <Card mode='outlined'>
       {isFetching ? (
-        <ActivityIndicator />
+        <ActivityIndicator style={{ margin: 8 }} />
       ) : isError ? (
         <Text>
           <FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' />
         </Text>
       ) : (
-        <Status id={id} withLink withActions={false} />
+        <Status id={id} withLink withActions={false} compact />
       )}
     </Card>
   );
@@ -134,6 +134,7 @@ interface IStatus {
   withActions?: boolean;
   style?: StyleProp<ViewStyle>;
   detailed?: boolean;
+  compact?: boolean;
 }
 
 const Status: React.FC<IStatus> = ({
@@ -189,7 +190,7 @@ const Status: React.FC<IStatus> = ({
       mentions={actualStatus.mentions}
       media={
         <>
-          <StatusMedia id={id} />
+          <StatusMedia id={id} compact={props.compact} />
           {actualStatus.quote_id && <Quote id={actualStatus.quote_id} />}
         </>
       }

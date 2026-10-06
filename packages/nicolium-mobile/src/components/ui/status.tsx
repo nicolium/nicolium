@@ -2,6 +2,7 @@ import { useTheme } from '@mkljczk/react-native-paper';
 import React from 'react';
 import { View } from 'react-native';
 
+import { CollapsibleContent } from './collapsible-content';
 import { StyledHtml } from './styled-html';
 
 import type { CustomEmoji, Mention } from 'pl-api';
@@ -16,6 +17,7 @@ interface IUIStatus {
   isConnectedBottom?: boolean;
   chip?: React.JSX.Element;
   detailed?: boolean;
+  compact?: boolean;
 }
 
 const UIStatus: React.FC<IUIStatus> = ({
@@ -28,31 +30,26 @@ const UIStatus: React.FC<IUIStatus> = ({
   isConnectedBottom,
   chip,
   detailed,
+  compact,
 }) => {
   const theme = useTheme();
 
+  const statusBody = (
+    <StyledHtml
+      html={content}
+      emojis={emojis}
+      mentions={mentions}
+      sizeMultiplier={detailed ? 1.2 : 1}
+    />
+  );
+
   const status = (
     <View style={{ flexDirection: 'column', gap: 8, flex: 1 }}>
-      <StyledHtml
-        html={content}
-        emojis={emojis}
-        mentions={mentions}
-        sizeMultiplier={detailed ? 1.25 : 1}
-      />
-      {/* source={{ html: content }}
-        baseStyle={{
-          color: theme.colors.onSecondaryContainer,
-        }}
-        tagsStyles={{
-          p: {
-            marginVertical: 0,
-          },
-          a: {
-            color: theme.colors.primary,
-            textDecorationColor: theme.colors.primary,
-          },
-        }}
-      /> */}
+      {detailed ? (
+        statusBody
+      ) : (
+        <CollapsibleContent maxHeight={compact ? 120 : undefined}>{statusBody}</CollapsibleContent>
+      )}
       {media}
       {actions}
     </View>
