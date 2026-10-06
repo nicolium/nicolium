@@ -213,7 +213,7 @@ const Item: React.FC<IItem> = ({
           <AltPopover
             alt={attachment.description}
             heading={
-              <FormattedMessage id='media-gallery.description' defaultMessage='Image description' />
+              <FormattedMessage id='media_gallery.description' defaultMessage='Image description' />
             }
             title={intl.formatMessage(messages.altText)}
           />

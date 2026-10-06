@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+// import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { v4 as uuid } from 'uuid';
 // import { length } from 'stringz';
 import { create } from 'zustand';
@@ -20,7 +20,7 @@ import { useClient, useFeatures, useInstance } from '@/contexts/current-account-
 // import { useDraftStateStore } from './draft-state';
 // import { useUiStoreActions } from './ui';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+// import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
@@ -44,18 +44,18 @@ import type { SelectedStatus } from '@/queries/statuses/use-status';
 // import type { Language } from '@/utils/languages';
 // import type { LinkOptions } from '@tanstack/react-router';
 import type {
-  Account,
+  // Account,
   CreateStatusParams,
-  Group,
+  // Group,
   MediaAttachment,
   Status as BaseStatus,
   Poll,
   InteractionPolicy,
-  UpdateMediaParams,
+  // UpdateMediaParams,
   Location,
   EditStatusParams,
   StatusSource,
-  ScheduledStatus,
+  // ScheduledStatus,
   Status,
   Features,
 } from 'pl-api';
@@ -348,15 +348,13 @@ const newPoll = (params: Partial<ComposePoll> = {}): ComposePoll => ({
 
 // const domParser = new DOMParser();
 
-const getExplicitMentions = (me: string, status: Pick<Status, 'content' | 'mentions'>) => {
+// const getExplicitMentions = (me: string, status: Pick<Status, 'content' | 'mentions'>) => {
   // const fragment = domParser.parseFromString(status.content, 'text/html').documentElement;
-
   // const mentions = status.mentions
   //   .filter((mention) => !(fragment.querySelector(`a[href="${mention.url}"]`) ?? mention.id === me))
   //   .map((m) => m.acct);
-
   // return [...new Set(mentions)];
-};
+// };
 
 // const appendMedia = (compose: Compose, media: MediaAttachment) => {
 //   const prevSize = compose.mediaAttachments.length;
@@ -737,7 +735,7 @@ const useComposeStore = create<ComposeStore>()(
           redacting = false,
         ) => {
           // const { features } = getClient();
-          const explicitAddressing = false; // features.createStatusExplicitAddressing;
+          // const explicitAddressing = false; // features.createStatusExplicitAddressing;
           //  &&
           // !useSettingsStore.getState().settings.forceImplicitAddressing;
 

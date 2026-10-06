@@ -19,7 +19,7 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<RootStackParams, 
   return (
     <ScrollView>
       <List.Item
-        title='About Nicolium'
+        title={<FormattedMessage id='settings.about' defaultMessage='About Micolium' />}
         left={(props) => <List.Icon {...props} icon={InfoIcon} />}
         onPress={() => navigation.navigate('about')}
       />
@@ -35,7 +35,7 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<RootStackParams, 
         onPress={() => openAccountSwitcher()}
       />
       <List.Item
-        title='Log out'
+        title={<FormattedMessage id='settings.sign_out' defaultMessage='Log out' />}
         left={(props) => (
           <List.Icon {...props} color={theme.colors.error} icon={iconHelper(SignOutIcon)} />
         )}

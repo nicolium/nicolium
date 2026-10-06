@@ -2081,7 +2081,7 @@
   "manage_group.fields.name.label_optional": "Group name",
   "manage_group.fields.name.placeholder": "Group name",
   "manage_group.pending_requests": "Pending requests",
-  "media-gallery.description": "Image description",
+  "media_gallery.description": "Image description",
   "media.default_description.attachment": "Attachment",
   "media.default_description.audio": "Audio",
   "media.default_description.gifv": "GIFV",

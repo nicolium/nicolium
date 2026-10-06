@@ -3,6 +3,7 @@ import { ActivityIndicator, List, RadioButton, useTheme } from '@mkljczk/react-n
 import { useNavigation } from '@react-navigation/native';
 import { PlusIcon } from 'phosphor-react-native';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -59,7 +60,7 @@ const AccountSwitcher = () => {
         );
       })}
       <List.Item
-        title='Add account'
+        title={<FormattedMessage id='account_swithcer.add_account' defaultMessage='Add account' />}
         left={(props) => <List.Icon {...props} icon={PlusIcon} />}
         onPress={() => {
           navigation.navigate('login');

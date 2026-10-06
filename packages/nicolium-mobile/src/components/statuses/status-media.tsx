@@ -1,9 +1,15 @@
 import { Carousel, CarouselItem, Chip, Tooltip, useTheme } from '@mkljczk/react-native-paper';
 import { Image } from 'expo-image';
 import React from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';
 
 import { useStatus } from '@/queries/statuses/use-status';
+
+const messages = defineMessages({
+  altIndicator: { id: 'upload_form.description_missing.indicator', defaultMessage: 'Alt' },
+  altHeading: { id: 'media_gallery.description', defaultMessage: 'Image description' },
+});
 
 interface IStatusMedia {
   id: string;
@@ -11,6 +17,7 @@ interface IStatusMedia {
 }
 
 const StatusMedia: React.FC<IStatusMedia> = ({ id, compact }) => {
+  const intl = useIntl();
   const { colors, shapes } = useTheme();
   const { data: status } = useStatus(id);
 
@@ -46,10 +53,13 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id, compact }) => {
               />
               {media.description && (
                 <View style={{ position: 'absolute', bottom: 16, right: 16 }}>
-                  <Tooltip.Rich title='Image description' content={media.description}>
+                  <Tooltip.Rich
+                    title={intl.formatMessage(messages.altHeading)}
+                    content={media.description}
+                  >
                     {(props) => (
                       <Chip {...props} mode='outlined' compact>
-                        ALT
+                        {intl.formatMessage(messages.altIndicator).toUpperCase()}
                       </Chip>
                     )}
                   </Tooltip.Rich>

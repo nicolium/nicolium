@@ -13,7 +13,7 @@ import { shouldHaveCard } from '@/utils/status';
 import { importEntities } from '../utils/import-entities';
 
 import type { useQueryClient } from '@tanstack/react-query';
-import type{ CreateStatusParams, PlApiClient, Status as BaseStatus, Features } from 'pl-api';
+import type { CreateStatusParams, PlApiClient, Status as BaseStatus, Features } from 'pl-api';
 
 const incrementReplyCount = (
   params: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>,
@@ -157,7 +157,12 @@ const createStatus = (
     });
 };
 
-const editStatus = (client: PlApiClient, statusId: string, scopeUrl: string, features: Features) => {
+const editStatus = (
+  client: PlApiClient,
+  statusId: string,
+  scopeUrl: string,
+  features: Features,
+) => {
   const status = queryClient.getQueryData(
     scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
   );
@@ -189,10 +194,4 @@ const fetchStatus = (client: PlApiClient, statusId: string, scopeUrl: string) =>
   });
 };
 
-export {
-  createStatus,
-  editStatus,
-  fetchStatus,
-  decrementReplyCount,
-  incrementReplyCount,
-};
+export { createStatus, editStatus, fetchStatus, decrementReplyCount, incrementReplyCount };
