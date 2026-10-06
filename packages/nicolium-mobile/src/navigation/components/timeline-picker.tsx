@@ -106,8 +106,6 @@ interface ITimelinePicker {
     | `instance:${string}`;
 }
 
-const anchorRowStyle = { flexDirection: 'row', gap: 8, alignItems: 'center' } as const;
-
 const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home' }) => {
   const intl = useIntl();
   const features = useFeatures();
@@ -344,7 +342,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
             onPress={() => setShowTimelineMenu((value) => !value)}
             compact
           >
-            <View style={anchorRowStyle}>
+            <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
               <Icon source={TimelineIcon} size={24} />
               <View>
                 <Text variant='titleLarge'>{heading}</Text>
