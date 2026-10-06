@@ -1,9 +1,4 @@
-import {
-  BottomSheetModal,
-  BottomSheetView,
-  BottomSheetBackdrop,
-  type BottomSheetBackdropProps,
-} from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { ActivityIndicator, List, RadioButton, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { PlusIcon } from 'phosphor-react-native';
@@ -15,6 +10,7 @@ import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-ac
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { useIsAccountSwitcherOpen, useUiStoreActions } from '@/stores/ui';
+import { BottomSheetBackdrop } from '@/utils/themes';
 
 import { Account } from './accounts/account';
 
@@ -74,10 +70,6 @@ const AccountSwitcher = () => {
   );
 };
 
-const AccountSwitcherBottomSheetBackdrop: React.FC<BottomSheetBackdropProps> = (props) => (
-  <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />
-);
-
 const AccountSwitcherBottomSheet = () => {
   const { colors } = useTheme();
   const { bottom: bottomInset } = useSafeAreaInsets();
@@ -100,7 +92,7 @@ const AccountSwitcherBottomSheet = () => {
       onDismiss={() => closeAccountSwitcher()}
       backgroundStyle={{ backgroundColor: colors.surfaceContainer }}
       handleIndicatorStyle={{ backgroundColor: colors.onSurface }}
-      backdropComponent={AccountSwitcherBottomSheetBackdrop}
+      backdropComponent={BottomSheetBackdrop}
     >
       <BottomSheetView style={{ paddingBottom: bottomInset }}>
         <AccountSwitcher />

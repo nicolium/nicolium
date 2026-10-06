@@ -6,9 +6,11 @@ import { createURL } from 'expo-linking';
 import { IntlProvider } from 'react-intl';
 import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { AccountSwitcher, AccountSwitcherBottomSheet } from './components/account-switcher';
+import { AccountSwitcherBottomSheet } from './components/account-switcher';
+import { ComposeBottomSheet } from './components/compose';
 import { DefaultCurrentAccountProvider } from './contexts/current-account-context';
 import enMessages from './messages/en.json';
 import { RootNavigator } from './navigation/router';
@@ -51,18 +53,21 @@ export const App = () => {
     <IntlProvider locale='en' messages={enMessages}>
       <SafeAreaProvider>
         <PaperProvider theme={theme}>
-          <DefaultCurrentAccountProvider>
-            <QueryClientProvider client={queryClient}>
-              <NavigationContainer theme={theme} linking={linking}>
-                <GestureHandlerRootView>
-                  <BottomSheetModalProvider>
-                    <RootNavigator />
-                    <AccountSwitcherBottomSheet />
-                  </BottomSheetModalProvider>
-                </GestureHandlerRootView>
-              </NavigationContainer>
-            </QueryClientProvider>
-          </DefaultCurrentAccountProvider>
+          <KeyboardProvider>
+            <DefaultCurrentAccountProvider>
+              <QueryClientProvider client={queryClient}>
+                <NavigationContainer theme={theme} linking={linking}>
+                  <GestureHandlerRootView>
+                    <BottomSheetModalProvider>
+                      <RootNavigator />
+                      <AccountSwitcherBottomSheet />
+                      <ComposeBottomSheet />
+                    </BottomSheetModalProvider>
+                  </GestureHandlerRootView>
+                </NavigationContainer>
+              </QueryClientProvider>
+            </DefaultCurrentAccountProvider>
+          </KeyboardProvider>
         </PaperProvider>
       </SafeAreaProvider>
     </IntlProvider>

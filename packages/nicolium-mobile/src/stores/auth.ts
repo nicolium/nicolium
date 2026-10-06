@@ -1,7 +1,5 @@
 import { makeRedirectUri } from 'expo-auth-session';
-import { DraftedObject } from 'mutative';
-import { set } from 'mutative/dist/utils/draft.js';
-import { PlApiClient, type RevokeTokenParams, type Features } from 'pl-api';
+import { PlApiClient, type RevokeTokenParams } from 'pl-api';
 import { v4 as uuid } from 'uuid';
 import * as v from 'valibot';
 import { create } from 'zustand';
@@ -13,6 +11,8 @@ import { getInstanceScopes } from '@/utils/scopes';
 import { SecureishStore } from '@/utils/secureish-store';
 
 import { useTimelinesStore } from './timelines';
+
+import type { DraftedObject } from 'mutative';
 
 const authSessionSchema = v.object({
   instance: v.string(),

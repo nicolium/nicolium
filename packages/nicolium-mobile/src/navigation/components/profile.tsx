@@ -17,6 +17,7 @@ import { Tabs, TabScreen, TabsProvider } from 'react-native-paper-tabs';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { ComposeButton } from '@/components/compose-button';
 import { CollapsibleContent } from '@/components/ui/collapsible-content';
 import { iconHelper } from '@/components/ui/icon';
 import { StyledHtml } from '@/components/ui/styled-html';
@@ -288,6 +289,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           </TabScreen>
         </Tabs>
       </TabsProvider>
+      <ComposeButton />
     </>
   );
 };

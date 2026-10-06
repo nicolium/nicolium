@@ -1,0 +1,1937 @@
+import React, { useCallback } from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { v4 as uuid } from 'uuid';
+// import { length } from 'stringz';
+import { create } from 'zustand';
+import { mutative } from 'zustand-mutative';
+
+import { useClient, useFeatures, useInstance } from '@/contexts/current-account-context';
+// import { cancelDraftStatus, usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
+// import { deckRoute, router } from '@/router';
+// import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';
+// import { useInstance } from '@/stores/instance';
+// import { useModalsActions, useModalsStore } from '@/stores/modals';
+// import { useSettings, useSettingsStore } from '@/stores/settings';
+// import toast, { type IToastOptions } from '@/toast';
+// import { isServo } from '@/utils/browser';
+// import { userTouching } from '@/utils/is-mobile';
+// import { languages } from '@/utils/languages';
+// import { resolveAccount, resolveStatus } from '@/utils/resolve';
+// import { useDraftStateStore } from './draft-state';
+// import { useUiStoreActions } from './ui';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
+// import { uploadFile, updateMedia } from '@/actions/media';
+// import { countableText } from '@/components/compose/util/counter';
+// import { isNativeEmoji } from '@/emoji';
+// import { useClient } from '@/hooks/use-client';
+// import { useFeatures } from '@/hooks/use-features';
+// import { useOwnAccount } from '@/hooks/use-own-account';
+// import { useScopeUrl } from '@/hooks/use-scope-url';
+// import { selectAccount } from '@/queries/accounts/selectors';
+// import { queryClient } from '@/queries/client';
+// import { queryKeys } from '@/queries/keys';
+// import { scopedQueryKey } from '@/queries/query';
+import { createStatus } from '@/queries/statuses/status-actions';
+
+import type { SelectedStatus } from '@/queries/statuses/use-status';
+// import type { AutoSuggestion } from '@/components/autosuggest-input';
+// import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
+// import type { DeckLayout } from '@/schemas/frontend-settings';
+// import type { Language } from '@/utils/languages';
+// import type { LinkOptions } from '@tanstack/react-router';
+import type {
+  Account,
+  CreateStatusParams,
+  Group,
+  MediaAttachment,
+  Status as BaseStatus,
+  Poll,
+  InteractionPolicy,
+  UpdateMediaParams,
+  Location,
+  EditStatusParams,
+  StatusSource,
+  ScheduledStatus,
+  Status,
+  Features,
+} from 'pl-api';
+
+// const messages = defineMessages({
+//   scheduleError: {
+//     id: 'compose.invalid_schedule',
+//     defaultMessage: 'You must schedule a post at least 5 minutes out.',
+//   },
+//   success: { id: 'compose.submit.success', defaultMessage: 'Your post was sent!' },
+//   threadSuccess: { id: 'compose.thread.success', defaultMessage: 'Your thread was sent!' },
+//   threadTooLong: {
+//     id: 'compose.thread.too_long',
+//     defaultMessage: 'One of the posts in your thread is too long.',
+//   },
+//   editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
+//   redactSuccess: { id: 'compose.redact.success', defaultMessage: 'The post was redacted' },
+//   scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
+//   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
+//   uploadErrorPoll: {
+//     id: 'upload_error.poll',
+//     defaultMessage: 'File upload not allowed with polls.',
+//   },
+//   missingLanguageHeading: {
+//     id: 'confirmations.missing_language.heading',
+//     defaultMessage: 'Posting without language selected',
+//   },
+//   missingLanguageMessage: {
+//     id: 'confirmations.missing_language.message',
+//     defaultMessage: 'You have not selected a language for your post. Do you want to post anyway?',
+//   },
+//   detectedLanguageMessage: {
+//     id: 'confirmations.missing_language.message.detected',
+//     defaultMessage:
+//       'You have not selected a language for your post. The detected language is {language}. Do you want to post anyway, with this language?',
+//   },
+//   missingLanguageConfirm: {
+//     id: 'confirmations.missing_language.confirm',
+//     defaultMessage: 'Post',
+//   },
+//   view: { id: 'toast.view', defaultMessage: 'View' },
+//   viewDrafts: { id: 'compose.submit.fail.view_drafts', defaultMessage: 'View drafts' },
+//   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
+//   replyMessage: {
+//     id: 'confirmations.reply.message',
+//     defaultMessage:
+//       'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?',
+//   },
+//   submitError: { id: 'compose.submit.fail', defaultMessage: 'Failed to submit your post' },
+//   resolveAccountError: {
+//     id: 'compose.resolve_account.fail',
+//     defaultMessage: 'Failed to resolve referenced account from the new account',
+//   },
+// });
+
+const getResetFileKey = () => Math.floor(Math.random() * 0x10000);
+
+// type ComposePageSearch = {
+//   approvalRequired?: boolean;
+//   draftId?: string;
+//   inReplyTo?: string;
+//   quote?: string;
+//   text?: string;
+//   visibility?: 'public' | 'unlisted' | 'private' | 'direct';
+// };
+
+interface ComposePoll {
+  options: Array<string>;
+  options_map: Array<Record<Language | string, string>>;
+  expires_in: number;
+  multiple: boolean;
+  hide_totals: boolean;
+}
+
+// type RestoredDraft = Partial<Compose> & { children?: Array<RestoredDraft> };
+
+type Language = string;
+
+interface ClearLinkSuggestion {
+  key: string;
+  originalUrl: string;
+  cleanUrl: string;
+}
+
+interface Compose {
+  // User-edited text
+  spoilerText: string;
+  spoilerTextMap: Record<Language | string, string>;
+  text: string;
+  textMap: Record<Language | string, string>;
+
+  // Non-text content
+  mediaAttachments: Array<MediaAttachment>;
+  poll: ComposePoll | null;
+  location: Location | null;
+
+  // Post settings
+  contentType: string;
+  interactionPolicy: InteractionPolicy | null;
+  quoteApprovalPolicy: CreateStatusParams['quote_approval_policy'] | null;
+  language: Language | string | null;
+  localOnly: boolean;
+  scheduledAt: Date | null;
+  sensitive: boolean;
+  visibility: string;
+
+  // References to other posts/groups/users
+  draftId: string | null;
+  groupId: string | null;
+  editedId: string | null;
+  scheduledStatusId: string | null;
+  inReplyToId: string | null;
+  quoteId: string | null;
+  to: Array<string>;
+  parentRebloggedById: string | null;
+
+  // Used to store the original references when switching accounts, so we can try to resolve them on further switches
+  sourceInReplyToId: [string, string] | null;
+  sourceQuoteId: [string, string] | null;
+  sourceParentRebloggedById: [string, string] | null;
+
+  // State flags
+  isChangingUpload: boolean;
+  isSubmitting: boolean;
+  isUploading: boolean;
+  progress: number;
+
+  // Internal
+  caretPosition: number | null;
+  idempotencyKey: string;
+  resetFileKey: number | null;
+  editorKey: string;
+  autoSavedDraft: boolean;
+
+  // Currently modified language
+  modifiedLanguage: Language | string | null;
+
+  // Suggestions
+  approvalRequired: boolean;
+  clearLinkSuggestion: ClearLinkSuggestion | null;
+  dismissedClearLinksSuggestions: Array<string>;
+  dismissedQuotes: Array<string>;
+  hashtagCasingSuggestion: string | null;
+  hashtagCasingSuggestionIgnored: boolean | null;
+  preview: Partial<BaseStatus> | null;
+  previewAutoUpdate: boolean | null;
+  suggestedLanguage: string | null;
+  showLocationPicker: boolean;
+
+  // Moderation features
+  redacting: boolean;
+  redactingOverwrite: boolean;
+}
+
+const newCompose = (params: Partial<Compose> = {}): Compose => ({
+  spoilerText: '',
+  spoilerTextMap: {},
+  text: '',
+  textMap: {},
+
+  mediaAttachments: [],
+  poll: null,
+  location: null,
+
+  contentType: 'default', // 'text/plain',
+  interactionPolicy: null,
+  quoteApprovalPolicy: null,
+  language: null,
+  localOnly: false,
+  scheduledAt: null,
+  sensitive: false,
+  visibility: 'default', // 'public',
+
+  draftId: null,
+  groupId: null,
+  editedId: null,
+  scheduledStatusId: null,
+  inReplyToId: null,
+  quoteId: null,
+  to: [],
+  parentRebloggedById: null,
+
+  sourceInReplyToId: null,
+  sourceQuoteId: null,
+  sourceParentRebloggedById: null,
+
+  isChangingUpload: false,
+  isSubmitting: false,
+  isUploading: false,
+  progress: 0,
+
+  caretPosition: null,
+  idempotencyKey: '',
+  resetFileKey: null,
+  editorKey: '',
+  autoSavedDraft: false,
+
+  modifiedLanguage: null,
+
+  approvalRequired: false,
+  clearLinkSuggestion: null,
+  dismissedClearLinksSuggestions: [],
+  dismissedQuotes: [],
+  hashtagCasingSuggestion: null,
+  hashtagCasingSuggestionIgnored: null,
+  preview: null,
+  previewAutoUpdate: null,
+  suggestedLanguage: null,
+  showLocationPicker: false,
+
+  redacting: false,
+  redactingOverwrite: false,
+
+  ...params,
+});
+
+const newPoll = (params: Partial<ComposePoll> = {}): ComposePoll => ({
+  options: ['', ''],
+  options_map: [{}, {}],
+  expires_in: 24 * 3600,
+  multiple: false,
+  hide_totals: false,
+  ...params,
+});
+
+// const statusToTextMentions = (
+//   status: Pick<Status, 'account_id' | 'mentions'>,
+//   account: Pick<Account, 'acct'>,
+//   scopeUrl: string,
+// ) => {
+//   const statusAccount = selectAccount(status.account_id, scopeUrl);
+//   const author = statusAccount?.acct;
+//   const mentions = status.mentions.map((m) => m.acct);
+
+//   return [...new Set([author, ...mentions].filter((acct) => acct && acct !== account.acct))]
+//     .map((m) => `@${m} `)
+//     .join('');
+// };
+
+// const statusToMentionsArray = (
+//   status: Pick<Status, 'account_id' | 'mentions'>,
+//   account: Pick<Account, 'acct'>,
+//   rebloggedBy: Pick<Account, 'acct'> | undefined,
+//   scopeUrl: string,
+// ) => {
+//   const statusAccount = selectAccount(status.account_id, scopeUrl);
+//   const author = statusAccount?.acct;
+//   const mentions = status.mentions.map((m) => m.acct);
+
+//   return [
+//     ...new Set(
+//       [author, ...(rebloggedBy ? [rebloggedBy.acct] : []), ...mentions].filter(
+//         (acct): acct is string => !!acct && acct !== account.acct,
+//       ),
+//     ),
+//   ];
+// };
+
+// const statusToMentionsAccountIdsArray = (
+//   status: Pick<Status, 'mentions' | 'account_id'>,
+//   account: Pick<Account, 'id'>,
+//   parentRebloggedBy?: string | null,
+// ) => {
+//   const mentions = status.mentions.map((m) => m.id);
+
+//   return [
+//     ...new Set(
+//       [status.account_id, ...(parentRebloggedBy ? [parentRebloggedBy] : []), ...mentions].filter(
+//         (id) => id !== account.id,
+//       ),
+//     ),
+//   ];
+// };
+
+// const privacyPreference = (
+//   a: string,
+//   b: string,
+//   list_id: number | null,
+//   conversationScope = false,
+// ) => {
+//   if (['private', 'subscribers'].includes(a) && conversationScope) return 'conversation';
+
+//   const order = ['public', 'unlisted', 'mutuals_only', 'private', 'direct', 'local'];
+
+//   if (a === 'group') return a;
+//   if (a === 'list' && list_id !== null) return `list:${list_id}`;
+
+//   return order[Math.max(order.indexOf(a), order.indexOf(b), 0)];
+// };
+
+// const domParser = new DOMParser();
+
+const getExplicitMentions = (me: string, status: Pick<Status, 'content' | 'mentions'>) => {
+  // const fragment = domParser.parseFromString(status.content, 'text/html').documentElement;
+
+  // const mentions = status.mentions
+  //   .filter((mention) => !(fragment.querySelector(`a[href="${mention.url}"]`) ?? mention.id === me))
+  //   .map((m) => m.acct);
+
+  // return [...new Set(mentions)];
+};
+
+// const appendMedia = (compose: Compose, media: MediaAttachment) => {
+//   const prevSize = compose.mediaAttachments.length;
+
+//   compose.mediaAttachments.push(media);
+//   compose.isUploading = false;
+//   compose.resetFileKey = Math.floor(Math.random() * 0x10000);
+
+//   if (prevSize === 0 && compose.sensitive) {
+//     compose.sensitive = true;
+//   }
+// };
+
+// const openDedicatedComposeWindow = (search?: ComposePageSearch) =>
+//   window.open(
+//     router.buildLocation({ search: search ?? {}, to: '/statuses/new' }).href,
+//     'targetWindow',
+//     'height=500,width=700',
+//   );
+
+// const openComposeSurface = (
+//   scopeUrl: string,
+//   columnId?: string,
+//   search?: ComposePageSearch,
+//   modalProps?: { composeId?: string },
+// ) => {
+//   const { useDedicatedComposePage } = useSettingsStore.getState().settings;
+
+//   if (useDedicatedComposePage && !userTouching.matches && !modalProps?.composeId) {
+//     openDedicatedComposeWindow(search);
+//     return;
+//   }
+
+//   useModalsStore.getState().actions.openModal('COMPOSE', modalProps, undefined, scopeUrl, columnId);
+// };
+
+const checkComposeContent = (compose?: Compose) =>
+  !!compose &&
+  [
+    compose.text.length > 0,
+    compose.spoilerText.length > 0,
+    compose.mediaAttachments.length > 0,
+    compose.poll !== null,
+    compose.inReplyToId !== null,
+    compose.quoteId !== null,
+  ].some((check) => check === true);
+
+// const setDeckColumnAccountUrl = (columnId: string, accountUrl: string) =>
+//   useSettingsStore
+//     .getState()
+//     .actions.changeSetting(['deck', 'layouts'], (layouts: Array<DeckLayout>) => {
+//       const column = layouts
+//         .map((layout) => layout.columns)
+//         .flat()
+//         .find((column) => column.id === columnId);
+//       if (column) {
+//         column.accountUrl = accountUrl;
+//       }
+//       return layouts;
+//     });
+
+// const getInteractionsComposeColumn = () => {
+//   if (!router.state.matches.some(({ routeId }) => routeId === deckRoute.id)) return null;
+
+//   const { deck } = useSettingsStore.getState().settings;
+//   const layout = deck.layouts.find(({ id }) => id === deck.activeLayout);
+
+//   if (!layout) return null;
+
+//   return (
+//     layout?.columns.find((column) => column.type === 'compose' && column.openInteractions) ?? null
+//   );
+// };
+
+// const getInteractionsComposeTarget = () => {
+//   const column = getInteractionsComposeColumn();
+//   if (column) {
+//     return {
+//       composeId: `deck:${column.id}`,
+//       element: document.querySelector(`.deck__column[data-column-id="${column.id}"]`),
+//       column,
+//     };
+//   }
+
+//   const { sidebarItems } = useSettingsStore.getState().settings;
+//   const element = document.querySelector('.compose-panel');
+
+//   if (sidebarItems.includes('compose:open-interactions') && element) {
+//     return { composeId: 'home', element, column: null };
+//   }
+
+//   return null;
+// };
+
+// const composeInteraction = (
+//   write: (composeId: string) => void,
+//   scopeUrl: string,
+//   columnId: string | undefined,
+//   search: ComposePageSearch,
+//   openComposer: boolean,
+// ) => {
+//   const composeInModal = () => {
+//     write('compose-modal');
+//     if (openComposer) openComposeSurface(scopeUrl, columnId, search);
+//   };
+
+//   const target = openComposer ? getInteractionsComposeTarget() : null;
+
+//   if (!target) {
+//     composeInModal();
+//     return;
+//   }
+
+//   const { composeId } = target;
+//   const { actions, composers } = useComposeStore.getState();
+
+//   const composeInTarget = () => {
+//     actions.resetCompose(composeId);
+//     write(composeId);
+//     actions.updateCompose(composeId, (compose) => {
+//       compose.editorKey = crypto.randomUUID();
+//     });
+//     if (target.column) setDeckColumnAccountUrl(target.column.id, scopeUrl);
+//     target.element?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+//   };
+
+//   if (checkComposeContent(composers[composeId]) || actions.hasThreadContent(composeId)) {
+//     useModalsStore.getState().actions.openModal('CONFIRM', {
+//       heading: (
+//         <FormattedMessage
+//           id='compose_column.overwrite.heading'
+//           defaultMessage='Discard the post in the compose column?'
+//         />
+//       ),
+//       message: (
+//         <FormattedMessage
+//           id='compose_column.overwrite.message'
+//           defaultMessage='You’re already composing a post in the compose column. Discarding it will replace it with the new post.'
+//         />
+//       ),
+//       confirm: <FormattedMessage id='compose_column.overwrite.confirm' defaultMessage='Discard' />,
+//       onConfirm: composeInTarget,
+//       theme: 'danger',
+//       secondary: (
+//         <FormattedMessage
+//           id='compose_column.overwrite.compose_in_modal'
+//           defaultMessage='Compose in a modal'
+//         />
+//       ),
+//       onSecondary: composeInModal,
+//     });
+//     return;
+//   }
+
+//   composeInTarget();
+// };
+
+interface ComposeState {
+  default: Compose;
+  composers: Record<string, Compose>;
+  threads: Record<string, string[]>;
+}
+
+interface ComposeActions {
+  updateCompose: (composeId: string, updater: (draft: Compose) => void) => void;
+  //   updateAllCompose: (updater: (draft: Compose) => void) => void;
+  getCompose: (composeId: string) => Compose;
+
+  //   addThreadPost: (rootId: string) => string;
+  //   removeThreadPost: (rootId: string, childId: string) => void;
+  //   getThread: (rootId: string) => Array<string>;
+  //   hasThreadPosts: (rootId: string) => boolean;
+  //   hasThreadContent: (rootId: string) => boolean;
+
+  //   restoreCompose: (composeId: string, draft: RestoredDraft) => void;
+
+  setComposeToStatus: (
+    status: Pick<
+      SelectedStatus,
+      | 'id'
+      | 'account_id'
+      | 'content'
+      | 'group_id'
+      | 'in_reply_to_id'
+      | 'language'
+      | 'media_attachments'
+      | 'mentions'
+      | 'quote_id'
+      | 'sensitive'
+      | 'spoiler_text'
+      | 'visibility'
+    >,
+    poll: Poll | null | undefined,
+    source: Omit<StatusSource, 'id'>,
+    features: Features,
+    withRedraft?: boolean,
+    draftId?: string | null,
+    redacting?: boolean,
+  ) => void;
+  //   setComposeToScheduledStatus: (scheduledStatus: ScheduledStatus) => void;
+  //   replyCompose: (
+  //     status: Pick<
+  //       Status,
+  //       | 'id'
+  //       | 'account_id'
+  //       | 'group_id'
+  //       | 'list_id'
+  //       | 'local_only'
+  //       | 'mentions'
+  //       | 'spoiler_text'
+  //       | 'visibility'
+  //     >,
+  //     scopeUrl: string,
+  //     columnId?: string,
+  //     rebloggedBy?: Pick<Account, 'acct' | 'id'>,
+  //     approvalRequired?: boolean,
+  //     openComposer?: boolean,
+  //   ) => void;
+  //   quoteCompose: (
+  //     status: Pick<Status, 'id' | 'account_id' | 'visibility' | 'group_id' | 'list_id'>,
+  //     scopeUrl: string,
+  //     columnId?: string,
+  //     approvalRequired?: boolean,
+  //     openComposer?: boolean,
+  //   ) => void;
+  //   mentionCompose: (account: Pick<Account, 'acct'>, scopeUrl: string, columnId?: string) => void;
+  //   directCompose: (account: Pick<Account, 'acct'>, scopeUrl: string, columnId?: string) => void;
+  //   groupComposeModal: (group: Pick<Group, 'id'>, scopeUrl: string, columnId?: string) => void;
+  //   openComposeWithText: (composeId: string, text: string, scopeUrl: string) => void;
+  //   eventDiscussionCompose: (
+  //     composeId: string,
+  //     scopeUrl: string,
+  //     status: Pick<Status, 'id' | 'account_id' | 'mentions'>,
+  //   ) => void;
+  resetCompose: (composeId?: string) => void;
+  //   composeResetInReplyTo: (composeId?: string) => void;
+  //   selectComposeSuggestion: (
+  //     composeId: string,
+  //     scopeUrl: string,
+  //     position: number,
+  //     token: string | null,
+  //     suggestion: AutoSuggestion,
+  //     path: ['spoiler_text'] | ['poll', 'options', number],
+  //   ) => void;
+
+  //   handleTimelineDelete: (statusId: string) => void;
+
+  //   switchAccount: (composeId: string, sourceScope: string, targetScope: string) => Promise<void>;
+}
+
+type ComposeStore = ComposeState & { actions: ComposeActions };
+
+const useComposeStore = create<ComposeStore>()(
+  mutative(
+    (set, get) => ({
+      default: newCompose({ idempotencyKey: uuid(), resetFileKey: getResetFileKey() }),
+      composers: {},
+      threads: {},
+
+      actions: {
+        updateCompose: (composeId, updater) => {
+          set((state) => {
+            if (!state.composers[composeId]) {
+              state.composers[composeId] = {
+                ...state.default,
+                idempotencyKey: uuid(),
+              };
+            }
+            updater(state.composers[composeId]);
+          });
+        },
+
+        //         updateAllCompose: (updater) => {
+        //           set((state) => {
+        //             Object.values(state.composers).forEach((compose) => {
+        //               updater(compose);
+        //             });
+        //           });
+        //         },
+
+        getCompose: (composeId) => get().composers[composeId] ?? get().default,
+
+        //         addThreadPost: (rootId) => {
+        //           const childId = `${rootId}:thread:${crypto.randomUUID()}`;
+        //           set((state) => {
+        //             const root = state.composers[rootId] ?? state.default;
+        //             state.composers[childId] = {
+        //               ...state.default,
+        //               idempotencyKey: crypto.randomUUID(),
+        //               resetFileKey: getResetFileKey(),
+        //               visibility: root.visibility,
+        //               contentType: root.contentType,
+        //               language: root.language,
+        //               localOnly: root.localOnly,
+        //               groupId: root.groupId,
+        //               interactionPolicy: root.interactionPolicy,
+        //               quoteApprovalPolicy: root.quoteApprovalPolicy,
+        //             };
+        //             (state.threads[rootId] ??= []).push(childId);
+        //           });
+        //           return childId;
+        //         },
+
+        //         removeThreadPost: (rootId, childId) => {
+        //           set((state) => {
+        //             delete state.composers[childId];
+        //             const thread = state.threads[rootId];
+        //             if (!thread) return;
+        //             state.threads[rootId] = thread.filter((id) => id !== childId);
+        //             if (!state.threads[rootId].length) delete state.threads[rootId];
+        //           });
+        //         },
+
+        //         getThread: (rootId) => get().threads[rootId] ?? [],
+
+        //         hasThreadPosts: (rootId) => (get().threads[rootId] ?? []).length > 0,
+
+        //         hasThreadContent: (rootId) => {
+        //           const state = get();
+        //           return (state.threads[rootId] ?? []).some((id) => {
+        //             const compose = state.composers[id];
+        //             return (
+        //               !!compose &&
+        //               ((compose.text?.length ?? 0) > 0 ||
+        //                 compose.spoilerText.length > 0 ||
+        //                 compose.mediaAttachments.length > 0 ||
+        //                 compose.poll !== null)
+        //             );
+        //           });
+        //         },
+
+        //         restoreCompose: (composeId, draft) => {
+        //           set((state) => {
+        //             const removeThread = (parentId: string) => {
+        //               state.threads[parentId]?.forEach((childId) => {
+        //                 removeThread(childId);
+        //                 delete state.composers[childId];
+        //               });
+        //               delete state.threads[parentId];
+        //             };
+
+        //             const restore = (targetId: string, restored: RestoredDraft, isRoot = false) => {
+        //               const { children = [], ...compose } = restored;
+        //               state.composers[targetId] = newCompose({
+        //                 ...state.default,
+        //                 ...compose,
+        //                 draftId: isRoot ? (compose.draftId ?? null) : null,
+        //                 idempotencyKey: crypto.randomUUID(),
+        //                 resetFileKey: getResetFileKey(),
+        //                 caretPosition: null,
+        //                 isChangingUpload: false,
+        //                 isSubmitting: false,
+        //                 isUploading: false,
+        //                 progress: 0,
+        //               });
+
+        //               if (children.length) {
+        //                 state.threads[targetId] = children.map((child) => {
+        //                   const childId = `${targetId}:thread:${crypto.randomUUID()}`;
+        //                   restore(childId, child);
+        //                   return childId;
+        //                 });
+        //               }
+        //             };
+
+        //             removeThread(composeId);
+        //             restore(composeId, draft, true);
+        //           });
+        //         },
+
+        setComposeToStatus: (
+          status,
+          poll,
+          source,
+          features,
+          withRedraft = false,
+          draftId = null,
+          redacting = false,
+        ) => {
+          // const { features } = getClient();
+          const explicitAddressing = false; // features.createStatusExplicitAddressing;
+          //  &&
+          // !useSettingsStore.getState().settings.forceImplicitAddressing;
+
+          set((state) => {
+            state.composers['compose-modal'] = {
+              ...state.default,
+              idempotencyKey: crypto.randomUUID(),
+            };
+
+            const compose = state.composers['compose-modal'];
+            const mentions: Array<string> = [];
+            // explicitAddressing
+            //   ? getExplicitMentions(status.account_id!, status)
+            //   : [];
+            if (!withRedraft && !draftId) {
+              compose.editedId = status.id;
+            }
+            compose.text = source.text;
+            compose.textMap = source.text_map ?? {};
+            compose.to = mentions;
+            compose.parentRebloggedById = null;
+            compose.inReplyToId = status.in_reply_to_id;
+            compose.visibility = status.visibility;
+            compose.caretPosition = null;
+            const contentType =
+              (source.content_type === 'text/markdown' &&
+                state.default.contentType === 'wysiwyg' &&
+                source.content_type) ||
+              'text/plain';
+            compose.contentType = contentType;
+            compose.quoteId = status.quote_id;
+            compose.groupId = status.group_id;
+            compose.language = status.language;
+
+            compose.mediaAttachments = status.media_attachments;
+            compose.sensitive = status.sensitive;
+
+            compose.redacting = redacting ?? false;
+
+            compose.spoilerText = source.spoiler_text;
+            compose.spoilerTextMap = source.spoiler_text_map ?? {};
+
+            if (poll) {
+              compose.poll = newPoll({
+                options: poll.options.map(({ title }) => title),
+                multiple: poll.multiple,
+                expires_in: 24 * 3600,
+              });
+            }
+
+            if (draftId) {
+              compose.draftId = draftId;
+            }
+          });
+        },
+
+        //         setComposeToScheduledStatus: (scheduledStatus) => {
+        //           set((state) => {
+        //             state.composers['compose-modal'] = {
+        //               ...state.default,
+        //               idempotencyKey: crypto.randomUUID(),
+        //             };
+
+        //             const compose = state.composers['compose-modal'];
+        //             compose.scheduledStatusId = scheduledStatus.id;
+        //             compose.text = scheduledStatus.params.text || '';
+        //             compose.mediaAttachments = scheduledStatus.media_attachments;
+        //             compose.sensitive = scheduledStatus.params.sensitive || false;
+        //             compose.spoilerText = scheduledStatus.params.spoiler_text || '';
+        //             compose.visibility = scheduledStatus.params.visibility;
+        //             compose.inReplyToId = scheduledStatus.params.in_reply_to_id;
+        //             compose.language = scheduledStatus.params.language;
+        //             compose.scheduledAt = new Date(scheduledStatus.scheduled_at);
+        //             compose.quoteId = scheduledStatus.params.quoted_status_id;
+        //             compose.quoteApprovalPolicy = scheduledStatus.params.quote_approval_policy;
+
+        //             const poll = scheduledStatus.params.poll;
+        //             if (poll) {
+        //               compose.poll = newPoll({
+        //                 options: poll.options,
+        //                 multiple: poll.multiple,
+        //                 expires_in: +poll.expires_in,
+        //               });
+        //             }
+        //           });
+        //         },
+
+        //         replyCompose: (
+        //           status,
+        //           scopeUrl,
+        //           columnId,
+        //           rebloggedBy,
+        //           approvalRequired,
+        //           openComposer = true,
+        //         ) => {
+        //           const { features } = getClient();
+        //           const { forceImplicitAddressing, preserveSpoilers, defaultPrivacy } =
+        //             useSettingsStore.getState().settings;
+        //           const explicitAddressing =
+        //             features.createStatusExplicitAddressing && !forceImplicitAddressing;
+        //           const account = getOwnAccount();
+
+        //           if (!account) return;
+
+        //           const doCompose = (composeId: string) =>
+        //             set((draft) => {
+        //               draft.composers[composeId] = {
+        //                 ...draft.default,
+        //                 idempotencyKey: crypto.randomUUID(),
+        //               };
+        //               const compose = draft.composers[composeId];
+
+        //               const mentions = explicitAddressing
+        //                 ? statusToMentionsArray(status, account, rebloggedBy, scopeUrl)
+        //                 : [];
+
+        //               compose.groupId = status.group_id;
+        //               compose.inReplyToId = status.id;
+        //               compose.to = mentions;
+        //               compose.parentRebloggedById = rebloggedBy?.id ?? null;
+        //               compose.text = !explicitAddressing
+        //                 ? statusToTextMentions(status, account, scopeUrl)
+        //                 : '';
+        //               compose.visibility = privacyPreference(
+        //                 status.visibility,
+        //                 draft.default.visibility === 'default' ? defaultPrivacy : draft.default.visibility,
+        //                 status.list_id,
+        //                 features.createStatusConversationScope,
+        //               );
+        //               compose.localOnly = status.local_only === true;
+        //               compose.caretPosition = null;
+        //               compose.contentType = draft.default.contentType;
+        //               compose.approvalRequired = approvalRequired ?? false;
+        //               if (preserveSpoilers && status.spoiler_text) {
+        //                 compose.sensitive = true;
+        //                 compose.spoilerText = status.spoiler_text;
+        //               }
+        //             });
+
+        //           composeInteraction(
+        //             doCompose,
+        //             scopeUrl,
+        //             columnId,
+        //             { approvalRequired, inReplyTo: status.id },
+        //             openComposer,
+        //           );
+        //         },
+
+        //         quoteCompose: (status, scopeUrl, columnId, approvalRequired, openComposer = true) => {
+        //           const doCompose = (composeId: string) =>
+        //             set((draft) => {
+        //               const { defaultPrivacy } = useSettingsStore.getState().settings;
+
+        //               draft.composers[composeId] = {
+        //                 ...draft.default,
+        //                 idempotencyKey: crypto.randomUUID(),
+        //               };
+        //               const compose = draft.composers[composeId];
+
+        //               const statusAccount = selectAccount(status.account_id, scopeUrl);
+        //               const author = statusAccount?.acct ?? '';
+
+        //               compose.quoteId = status.id;
+        //               compose.to = [author];
+        //               compose.parentRebloggedById = null;
+        //               compose.text = '';
+        //               compose.visibility = privacyPreference(
+        //                 status.visibility,
+        //                 draft.default.visibility === 'default' ? defaultPrivacy : draft.default.visibility,
+        //                 status.list_id,
+        //               );
+        //               compose.caretPosition = null;
+        //               compose.contentType = draft.default.contentType;
+        //               compose.spoilerText = '';
+        //               compose.approvalRequired = approvalRequired ?? false;
+
+        //               if (status.visibility === 'group') {
+        //                 compose.groupId = status.group_id;
+        //                 compose.visibility = 'group';
+        //               }
+        //             });
+
+        //           composeInteraction(
+        //             doCompose,
+        //             scopeUrl,
+        //             columnId,
+        //             { approvalRequired, quote: status.id },
+        //             openComposer,
+        //           );
+        //         },
+
+        //         mentionCompose: (account, scopeUrl, columnId) => {
+        //           if (!isLoggedIn()) return;
+
+        //           if (
+        //             useSettingsStore.getState().settings.useDedicatedComposePage &&
+        //             !userTouching.matches
+        //           ) {
+        //             openDedicatedComposeWindow({ text: `@${account.acct} ` });
+        //             return;
+        //           }
+
+        //           get().actions.updateCompose('compose-modal', (compose) => {
+        //             compose.text = [compose.text.trim(), `@${account.acct} `]
+        //               .filter((str) => str.length !== 0)
+        //               .join(' ');
+        //             compose.caretPosition = null;
+        //           });
+        //           openComposeSurface(scopeUrl, columnId);
+        //         },
+
+        //         directCompose: (account, scopeUrl, columnId) => {
+        //           if (
+        //             useSettingsStore.getState().settings.useDedicatedComposePage &&
+        //             !userTouching.matches
+        //           ) {
+        //             openDedicatedComposeWindow({
+        //               text: `@${account.acct} `,
+        //               visibility: 'direct',
+        //             });
+        //             return;
+        //           }
+
+        //           get().actions.updateCompose('compose-modal', (compose) => {
+        //             compose.text = [compose.text.trim(), `@${account.acct} `]
+        //               .filter((str) => str.length !== 0)
+        //               .join(' ');
+        //             compose.visibility = 'direct';
+        //             compose.caretPosition = null;
+        //           });
+        //           openComposeSurface(scopeUrl, columnId);
+        //         },
+
+        //         groupComposeModal: (group, scopeUrl, columnId) => {
+        //           const composeId = `group:${group.id}`;
+        //           get().actions.updateCompose(composeId, (draft) => {
+        //             draft.visibility = 'group';
+        //             draft.groupId = group.id;
+        //             draft.caretPosition = null;
+        //           });
+        //           useModalsStore
+        //             .getState()
+        //             .actions.openModal('COMPOSE', { composeId }, undefined, scopeUrl, columnId);
+        //         },
+
+        //         openComposeWithText: (composeId, text = '', scopeUrl) => {
+        //           set((state) => {
+        //             state.composers[composeId] = {
+        //               ...state.default,
+        //               idempotencyKey: crypto.randomUUID(),
+        //               resetFileKey: getResetFileKey(),
+        //               ...(composeId.startsWith('reply:') ? { inReplyToId: composeId.slice(6) } : undefined),
+        //               ...(composeId.startsWith('group:')
+        //                 ? { visibility: 'group', groupId: composeId.slice(6) }
+        //                 : undefined),
+        //               text,
+        //             };
+        //           });
+        //           openComposeSurface(scopeUrl, undefined, { text });
+        //         },
+
+        //         eventDiscussionCompose: (composeId, scopeUrl, status) => {
+        //           const account = getOwnAccount();
+
+        //           if (!account) return;
+
+        //           get().actions.updateCompose(composeId, (compose) => {
+        //             compose.inReplyToId = status.id;
+        //             compose.to = statusToMentionsArray(status, account, undefined, scopeUrl);
+        //           });
+        //         },
+
+        resetCompose: (composeId = 'compose-modal') => {
+          set((state) => {
+            // const removeThread = (parentId: string) => {
+            //   state.threads[parentId]?.forEach((childId) => {
+            //     removeThread(childId);
+            //     delete state.composers[childId];
+            //   });
+            //   delete state.threads[parentId];
+            // };
+            // removeThread(composeId);
+            state.composers[composeId] = {
+              ...state.default,
+              idempotencyKey: uuid(),
+              resetFileKey: getResetFileKey(),
+              // ...(composeId.startsWith('reply:') ? { inReplyToId: composeId.slice(6) } : undefined),
+              // ...(composeId.startsWith('group:')
+              //   ? { visibility: 'group', groupId: composeId.slice(6) }
+              //   : undefined),
+            };
+          });
+        },
+
+        //         composeResetInReplyTo: (composeId = 'compose-modal') => {
+        //           get().actions.updateCompose(composeId, (compose) => {
+        //             compose.inReplyToId = null;
+        //             compose.sourceInReplyToId = null;
+        //           });
+        //         },
+
+        //         selectComposeSuggestion: (composeId, scopeUrl, startPosition, token, suggestion, path) => {
+        //           let completion = '';
+
+        //           if (typeof suggestion === 'object' && 'id' in suggestion) {
+        //             completion = isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
+
+        //             useSettingsStore.getState().actions.rememberEmojiUse(suggestion);
+        //             saveSettings();
+        //           } else if (typeof suggestion === 'string' && suggestion[0] === '#') {
+        //             completion = suggestion;
+        //           } else if (typeof suggestion === 'string') {
+        //             completion = selectAccount(suggestion, scopeUrl)!.acct;
+        //           }
+
+        //           get().actions.updateCompose(composeId, (compose) => {
+        //             const updateText = (oldText?: string) =>
+        //               `${oldText?.slice(0, startPosition)}${completion} ${oldText?.slice(startPosition + (token?.length ?? 0))}`;
+        //             if (path[0] === 'spoiler_text') {
+        //               compose.spoilerText = updateText(compose.spoilerText);
+        //             } else if (compose.poll) {
+        //               compose.poll.options[path[2]] = updateText(compose.poll.options[path[2]]);
+        //             }
+        //           });
+        //         },
+
+        //         handleTimelineDelete: (statusId) => {
+        //           get().actions.updateAllCompose((compose) => {
+        //             if (statusId === compose.inReplyToId) {
+        //               compose.inReplyToId = null;
+        //             }
+        //             if (statusId === compose.quoteId) {
+        //               compose.quoteId = null;
+        //             }
+        //           });
+        //         },
+
+        //         switchAccount: async (composeId, sourceScope, targetScope) => {
+        //           const compose = get().composers[composeId] ?? get().default;
+        //           if (!compose) return;
+
+        //           let inReplyToIdPromise: Promise<string | undefined> = Promise.resolve(undefined);
+        //           let quoteIdPromise: Promise<string | undefined> = Promise.resolve(undefined);
+        //           let parentRebloggedByIdPromise: Promise<string | undefined> = Promise.resolve(undefined);
+
+        //           if (compose.inReplyToId) {
+        //             inReplyToIdPromise = resolveStatus(compose.inReplyToId, sourceScope, targetScope);
+        //           } else if (compose.sourceInReplyToId) {
+        //             const [sourceId, sourceScopeUrl] = compose.sourceInReplyToId;
+        //             inReplyToIdPromise = resolveStatus(sourceId, sourceScopeUrl, targetScope);
+        //           }
+
+        //           if (compose.quoteId) {
+        //             quoteIdPromise = resolveStatus(compose.quoteId, sourceScope, targetScope);
+        //           } else if (compose.sourceQuoteId) {
+        //             const [sourceId, sourceScopeUrl] = compose.sourceQuoteId;
+        //             quoteIdPromise = resolveStatus(sourceId, sourceScopeUrl, targetScope);
+        //           }
+
+        //           if (compose.parentRebloggedById) {
+        //             parentRebloggedByIdPromise = resolveAccount(
+        //               compose.parentRebloggedById,
+        //               sourceScope,
+        //               targetScope,
+        //             );
+        //           } else if (compose.sourceParentRebloggedById) {
+        //             const [sourceId, sourceScopeUrl] = compose.sourceParentRebloggedById;
+        //             parentRebloggedByIdPromise = resolveAccount(sourceId, sourceScopeUrl, targetScope);
+        //           }
+
+        //           const [inReplyToId, quoteId, parentRebloggedById] = await Promise.all([
+        //             inReplyToIdPromise,
+        //             quoteIdPromise,
+        //             parentRebloggedByIdPromise,
+        //           ]);
+
+        //           if (compose.parentRebloggedById && !parentRebloggedById) {
+        //             toast.info(messages.resolveAccountError);
+        //           }
+
+        //           get().actions.updateCompose(composeId, (compose) => {
+        //             if (compose.inReplyToId && !inReplyToId) {
+        //               compose.sourceInReplyToId = [compose.inReplyToId, sourceScope];
+        //             }
+        //             compose.inReplyToId = inReplyToId ?? null;
+        //             if (compose.quoteId && !quoteId) {
+        //               compose.sourceQuoteId = [compose.quoteId, sourceScope];
+        //             }
+        //             compose.quoteId = quoteId ?? null;
+        //             if (compose.parentRebloggedById && !parentRebloggedById) {
+        //               compose.sourceParentRebloggedById = [compose.parentRebloggedById, sourceScope];
+        //             }
+        //             compose.parentRebloggedById = parentRebloggedById ?? null;
+        //           });
+
+        //           if (composeId === 'compose-modal') {
+        //             useModalsStore.getState().actions.setScopeUrl(targetScope);
+        //           } else if (composeId.startsWith('deck:')) {
+        //             setDeckColumnAccountUrl(composeId.slice(5), targetScope);
+        //           }
+        //         },
+      },
+    }),
+    {
+      enableAutoFreeze: false,
+    },
+  ),
+);
+
+interface SubmitDeps {
+  actions: ComposeActions;
+  client: ReturnType<typeof useClient>;
+  // ownAccount: Account | undefined;
+  scopeUrl: string;
+  features: ReturnType<typeof useFeatures>;
+  // openModal: ReturnType<typeof useModalsActions>['openModal'];
+  // closeModal: ReturnType<typeof useModalsActions>['closeModal'];
+  // removeSledzik: () => void;
+  // settings: ReturnType<typeof useSettings>;
+  instance: ReturnType<typeof useInstance>;
+  // persistDraftStatus: (composeId: string) => Promise<string>;
+}
+
+interface SubmitComposeOptions {
+  common?: Partial<Compose>;
+  force?: boolean;
+  preview?: boolean;
+  onSuccess?: () => void;
+  propagate?: boolean;
+  chained?: boolean;
+  inReplyToIdOverride?: string | null;
+  columnId?: string;
+}
+
+const submitCompose = async (
+  deps: SubmitDeps,
+  composeId: string,
+  opts: SubmitComposeOptions = {},
+) => {
+  const {
+    // force = false,
+    preview = false,
+    onSuccess,
+    // propagate = false,
+    chained = false,
+    inReplyToIdOverride,
+    // columnId,
+  } = opts;
+  const {
+    actions,
+    client,
+    // ownAccount,
+    scopeUrl,
+    features,
+    // openModal,
+    // closeModal,
+    // removeSledzik,
+    // persistDraftStatus,
+  } = deps;
+
+  const compose = actions.getCompose(composeId);
+
+  const { defaultContentType } = { defaultContentType: 'text/plain' }; // useSettingsStore.getState().settings;
+
+  const contentType = getComposeContentType(
+    opts.common?.contentType ?? compose.contentType,
+    defaultContentType,
+    deps.instance.pleroma.metadata.post_formats,
+  );
+
+  if (preview && contentType === 'text/x.misskeymarkdown') {
+    const data: Partial<Status> = {
+      text: compose.text,
+      content: compose.text,
+      spoiler_text: compose.spoilerText,
+      media_attachments: compose.mediaAttachments,
+      content_type: 'text/x.misskeymarkdown',
+      emojis: [],
+    };
+    actions.updateCompose(composeId, (draft) => {
+      draft.preview = data;
+      draft.previewAutoUpdate = true;
+    });
+    onSuccess?.();
+    return;
+  }
+
+  const statusText = compose.text;
+  const media = compose.mediaAttachments;
+  const editedId = compose.editedId;
+  let to = compose.to;
+  // const { forceImplicitAddressing } = deps.settings;
+  const explicitAddressing = features.createStatusExplicitAddressing; // && !forceImplicitAddressing;
+
+  if (!preview) {
+    const scheduledAt = compose.scheduledAt;
+    if (scheduledAt) {
+      const fiveMinutesFromNow = new Date(Date.now() + 300000);
+      const valid =
+        scheduledAt.getTime() > fiveMinutesFromNow.getTime() ||
+        (features.scheduledStatusesBackwards && scheduledAt.getTime() < Date.now());
+      if (!valid) {
+        // toast.error(messages.scheduleError);
+        return;
+      }
+    }
+
+    if ((!statusText || !statusText.length) && media.length === 0) {
+      return;
+    }
+
+    // if (!force && !chained) {
+    //   const { missingDescriptionModal, missingLanguageModal, defaultLanguage } = deps.settings;
+    //   const hasMissing = media.some((item) => !item.description);
+    //   const showMissingDescription = missingDescriptionModal && hasMissing;
+    //   const showMissingLanguage =
+    //     missingLanguageModal &&
+    //     !opts.common?.language &&
+    //     !compose.language &&
+    //     (!defaultLanguage || defaultLanguage === 'detect');
+
+    //   const submitForced = () => submitCompose(deps, composeId, { ...opts, force: true });
+
+    //   // if (showMissingLanguage) {
+    //   //   openModal('CONFIRM', {
+    //   //     heading: <FormattedMessage {...messages.missingLanguageHeading} />,
+    //   //     message: compose.suggestedLanguage ? (
+    //   //       <FormattedMessage
+    //   //         {...messages.detectedLanguageMessage}
+    //   //         values={{
+    //   //           language:
+    //   //             languages[compose.suggestedLanguage as Language] ?? compose.suggestedLanguage,
+    //   //         }}
+    //   //       />
+    //   //     ) : (
+    //   //       <FormattedMessage {...messages.missingLanguageMessage} />
+    //   //     ),
+    //   //     confirm: <FormattedMessage {...messages.missingLanguageConfirm} />,
+    //   //     onConfirm: () => {
+    //   //       if (showMissingDescription) {
+    //   //         openModal('MISSING_DESCRIPTION', {
+    //   //           onContinue: () => {
+    //   //             closeModal('MISSING_DESCRIPTION');
+    //   //             submitForced();
+    //   //           },
+    //   //         });
+    //   //       } else {
+    //   //         submitForced();
+    //   //       }
+    //   //     },
+    //   //   });
+    //   //   return;
+    //   // }
+
+    //   // if (showMissingDescription) {
+    //   //   openModal('MISSING_DESCRIPTION', {
+    //   //     onContinue: () => {
+    //   //       closeModal('MISSING_DESCRIPTION');
+    //   //       submitForced();
+    //   //     },
+    //   //   });
+    //   //   return;
+    //   // }
+    // }
+  }
+
+  const mentionsMatch: string[] | null = statusText.match(
+    /(?:^|\s)@([a-z\d_-]+(?:@(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]+)?)/gi,
+  );
+
+  if (mentionsMatch) {
+    to = [
+      ...new Set([
+        ...to,
+        ...mentionsMatch.map((mention) => mention.replaceAll('&#x20;', '').trim().slice(1)),
+      ]),
+    ];
+  }
+
+  // let draftId = compose.draftId;
+
+  if (!preview) {
+    actions.updateCompose(composeId, (draft) => {
+      draft.isSubmitting = true;
+    });
+
+    // const newDraftId = (await persistDraftStatus(composeId).catch(() => {})) ?? undefined;
+
+    // if (newDraftId) {
+    //   draftId = newDraftId;
+    // }
+
+    // if (draftId) {
+    //   useDraftStateStore.getState().actions.updateDraftState(draftId, 'isSubmitting');
+    // }
+
+    // if (!chained) closeModal('COMPOSE');
+
+    // if (compose.language && !editedId) {
+    //   useSettingsStore.getState().actions.rememberLanguageUse(compose.language);
+    //   saveSettings();
+    // }
+  }
+
+  const idempotencyKey = compose.idempotencyKey;
+
+  const { defaultLanguage, defaultPrivacy } = { defaultLanguage: 'en', defaultPrivacy: 'public' };
+
+  let visibility = opts.common?.visibility ?? compose.visibility;
+  if (visibility === 'default') visibility = defaultPrivacy;
+
+  const language =
+    opts.common?.language ??
+    compose.language ??
+    compose.suggestedLanguage ??
+    (defaultLanguage === 'detect' ? undefined : defaultLanguage || undefined);
+
+  const params: CreateStatusParams = {
+    status: statusText,
+    in_reply_to_id: inReplyToIdOverride ?? compose.inReplyToId ?? undefined,
+    quote_id: compose.quoteId ?? undefined,
+    media_ids: media.map((item) => item.id),
+    sensitive: opts.common?.sensitive ?? compose.sensitive,
+    spoiler_text: opts.common?.spoilerText ?? compose.spoilerText,
+    visibility,
+    content_type: contentType,
+    scheduled_at: preview ? undefined : compose.scheduledAt?.toISOString(),
+    language,
+    to: explicitAddressing && to.length ? to : undefined,
+    local_only: compose.localOnly,
+    interaction_policy:
+      (['public', 'unlisted', 'private'].includes(visibility) &&
+        (opts.common?.interactionPolicy ?? compose.interactionPolicy)) ||
+      undefined,
+    quote_approval_policy:
+      opts.common?.quoteApprovalPolicy ?? compose.quoteApprovalPolicy ?? undefined,
+    location_id: compose.location?.origin_id ?? undefined,
+  };
+
+  if (compose.editedId) {
+    (params as EditStatusParams).media_attributes = media.map((item) => {
+      const focalPoint = (item.type === 'image' || item.type === 'gifv') && item.meta?.focus;
+      const focus = focalPoint
+        ? `${focalPoint.x.toFixed(2)},${focalPoint.y.toFixed(2)}`
+        : undefined;
+
+      return { id: item.id, description: item.description, focus };
+    }) as EditStatusParams['media_attributes'];
+  }
+
+  if (compose.poll) {
+    params.poll = {
+      options: compose.poll.options,
+      expires_in: compose.poll.expires_in,
+      multiple: compose.poll.multiple,
+      hide_totals: compose.poll.hide_totals,
+    };
+    if (compose.language && Object.keys(compose.textMap).length) {
+      params.poll.options_map = compose.poll.options_map;
+    }
+  }
+
+  if (compose.language && Object.keys(compose.textMap).length) {
+    params.status_map = compose.textMap;
+    params.status_map[compose.language] = statusText;
+
+    if (params.spoiler_text) {
+      params.spoiler_text_map = compose.spoilerTextMap;
+      params.spoiler_text_map[compose.language] = compose.spoilerText;
+    }
+
+    const pollParams = params.poll;
+    if (pollParams?.options_map) {
+      pollParams.options.forEach(
+        (option, index: number) => (pollParams.options_map![index][compose.language!] = option),
+      );
+    }
+  }
+
+  if (visibility === 'group' && compose.groupId) {
+    params.group_id = compose.groupId;
+  }
+
+  if (preview) {
+    try {
+      const data = await client.statuses.previewStatus(params);
+      actions.updateCompose(composeId, (draft) => {
+        draft.preview = data;
+        draft.preview.id = '';
+      });
+      onSuccess?.();
+    } catch {}
+    return;
+  }
+
+  if (compose.redacting) {
+    // @ts-expect-error
+    params.overwrite = compose.redactingOverwrite;
+  }
+
+  // if (!compose.preview && compose.text.trim().toLocaleUpperCase() === '5P13RD4L4J-5L3D21U') {
+  //   removeSledzik();
+  // }
+
+  if (compose.scheduledStatusId) {
+    await client.scheduledStatuses.cancelScheduledStatus(compose.scheduledStatusId);
+    queryClient.invalidateQueries({
+      queryKey: scopedQueryKey(queryKeys.scheduledStatuses.all, scopeUrl),
+    });
+  }
+
+  try {
+    const data = await createStatus(
+      client,
+      params,
+      idempotencyKey,
+      editedId,
+      scopeUrl,
+      compose.redacting,
+    );
+
+    if (chained) {
+      if (data.scheduled_at !== null) {
+        queryClient.invalidateQueries({
+          queryKey: scopedQueryKey(queryKeys.scheduledStatuses.all, scopeUrl),
+        });
+      }
+      onSuccess?.();
+      return data;
+    }
+
+    actions.resetCompose(composeId);
+
+    // if (draftId) {
+    //   const accountUrl = ownAccount!.url;
+    //   cancelDraftStatus(queryClient, accountUrl, draftId, scopeUrl);
+
+    //   if (draftId) {
+    //     useDraftStateStore.getState().actions.updateDraftState(draftId, undefined);
+    //   }
+    // }
+
+    // if (data.scheduled_at === null) {
+    //   const linkOptions: LinkOptions =
+    //     data.visibility === 'direct' && features.conversations
+    //       ? { to: '/conversations' }
+    //       : {
+    //           to: '/@{-$username}/posts/$statusId',
+    //           params: { username: data.account.acct, statusId: data.id },
+    //         };
+    //   const toastMessage = compose.redacting
+    //     ? messages.redactSuccess
+    //     : editedId
+    //       ? messages.editSuccess
+    //       : messages.success;
+    //   const toastOptions = {
+    //     actionLabel: messages.view,
+    //     actionLinkOptions: linkOptions,
+    //     columnId,
+    //     scopeUrl,
+    //   };
+
+    //   if (propagate) {
+    //     toast.propagate('success', toastMessage, toastOptions);
+    //   } else {
+    //     toast.success(toastMessage, toastOptions);
+    //   }
+    // } else {
+    //   const toastOptions: IToastOptions = {
+    //     actionLabel: messages.view,
+    //     actionLinkOptions: { to: '/scheduled_statuses' as const },
+    //     columnId,
+    //     scopeUrl,
+    //   };
+
+    //   if (propagate) {
+    //     toast.propagate('success', messages.scheduledSuccess, toastOptions);
+    //   } else {
+    //     toast.success(messages.scheduledSuccess, toastOptions);
+    //   }
+
+    //   queryClient.invalidateQueries({
+    //     queryKey: scopedQueryKey(queryKeys.scheduledStatuses.all, scopeUrl),
+    //   });
+    // }
+
+    onSuccess?.();
+    return data;
+  } catch (error) {
+    // if (!chained) {
+    //   const toastOptions: IToastOptions = {
+    //     actionLabel: messages.viewDrafts,
+    //     actionLinkOptions: { to: '/draft_statuses' as const },
+    //     columnId,
+    //     scopeUrl,
+    //   };
+
+    //   const message = (error as any).response?.json?.error || messages.submitError;
+    //   if (propagate) {
+    //     toast.propagate('error', message, toastOptions);
+    //   } else {
+    //     toast.error(message, toastOptions);
+    //   }
+
+    //   if (draftId) {
+    //     useDraftStateStore.getState().actions.updateDraftState(draftId, 'isError');
+    //   }
+    // }
+    actions.updateCompose(composeId, (draft) => {
+      draft.isSubmitting = false;
+    });
+    return undefined;
+  }
+};
+
+const useSubmitDeps = (): SubmitDeps => {
+  const actions = useComposeActions();
+  const client = useClient();
+  // const { data: ownAccount } = useCredentialAccount();
+  const scopeUrl = useScopeUrl();
+  const features = useFeatures();
+  // const { openModal, closeModal } = useModalsActions();
+  // // const { removeSledzik } = useUiStoreActions();
+  // const settings = useSettings();
+  const instance = useInstance();
+  // const persistDraftStatus = usePersistDraftStatus();
+
+  return {
+    actions,
+    client,
+    // ownAccount,
+    scopeUrl,
+    features,
+    // openModal,
+    // closeModal,
+    // removeSledzik,
+    // settings,
+    instance,
+    // persistDraftStatus,
+  };
+};
+
+const useSubmitCompose = (composeId: string) => {
+  const deps = useSubmitDeps();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useCallback(
+    (opts: SubmitComposeOptions = {}) => submitCompose(deps, composeId, opts),
+    [composeId, deps.client],
+  );
+};
+
+// const submitThread = async (
+//   deps: SubmitDeps,
+//   rootId: string,
+//   opts: { force?: boolean; onSuccess?: () => void; columnId?: string } = {},
+// ) => {
+//   const { force = false, onSuccess, columnId } = opts;
+//   const {
+//     actions,
+//     openModal,
+//     closeModal,
+//     ownAccount,
+//     scopeUrl,
+//     features,
+//     instance,
+//     settings,
+//     persistDraftStatus,
+//   } = deps;
+
+//   const rootCompose = actions.getCompose(rootId);
+
+//   const hasContent = (compose: Compose) =>
+//     !!(countableText(compose.text).trim() || compose.mediaAttachments.length || compose.poll);
+
+//   const ids = [rootId, ...actions.getThread(rootId)].filter((id) =>
+//     hasContent(actions.getCompose(id)),
+//   );
+//   if (!ids.length) return;
+
+//   const maxChars = instance.configuration.statuses.max_characters;
+//   const tooLong = ids.some((id) => {
+//     const compose = actions.getCompose(id);
+//     return length([compose.spoilerText, countableText(compose.text)].join('')) > maxChars;
+//   });
+//   if (tooLong) {
+//     toast.error(messages.threadTooLong);
+//     return;
+//   }
+
+//   if (!force) {
+//     const { missingDescriptionModal, missingLanguageModal } = deps.settings;
+//     const hasMissing = ids.some((id) =>
+//       actions.getCompose(id).mediaAttachments.some((item) => !item.description),
+//     );
+//     const showMissingDescription = missingDescriptionModal && hasMissing;
+//     const showMissingLanguage =
+//       missingLanguageModal &&
+//       !rootCompose.language &&
+//       (!settings.defaultLanguage || settings.defaultLanguage === 'detect');
+
+//     const submitForced = () => submitThread(deps, rootId, { ...opts, force: true });
+
+//     if (showMissingLanguage) {
+//       openModal('CONFIRM', {
+//         heading: <FormattedMessage {...messages.missingLanguageHeading} />,
+//         message: rootCompose.suggestedLanguage ? (
+//           <FormattedMessage
+//             {...messages.detectedLanguageMessage}
+//             values={{
+//               language:
+//                 languages[rootCompose.suggestedLanguage as Language] ??
+//                 rootCompose.suggestedLanguage,
+//             }}
+//           />
+//         ) : (
+//           <FormattedMessage {...messages.missingLanguageMessage} />
+//         ),
+//         confirm: <FormattedMessage {...messages.missingLanguageConfirm} />,
+//         onConfirm: () => {
+//           if (showMissingDescription) {
+//             openModal('MISSING_DESCRIPTION', {
+//               onContinue: () => {
+//                 closeModal('MISSING_DESCRIPTION');
+//                 submitForced();
+//               },
+//             });
+//           } else {
+//             submitForced();
+//           }
+//         },
+//       });
+//       return;
+//     }
+
+//     if (showMissingDescription) {
+//       openModal('MISSING_DESCRIPTION', {
+//         onContinue: () => {
+//           closeModal('MISSING_DESCRIPTION');
+//           submitForced();
+//         },
+//       });
+//       return;
+//     }
+//   }
+
+//   ids.forEach((id) =>
+//     actions.updateCompose(id, (draft) => {
+//       draft.isSubmitting = true;
+//     }),
+//   );
+
+//   const newDraftId = await persistDraftStatus(rootId).catch(() => {});
+
+//   closeModal('COMPOSE');
+
+//   const draftIdToCancel = rootCompose.draftId || newDraftId;
+//   let firstStatus: any = null;
+//   let inReplyToId: string | null | undefined;
+
+//   const commonSettings: Partial<Compose> = {
+//     contentType: rootCompose.contentType,
+//     interactionPolicy: rootCompose.interactionPolicy,
+//     quoteApprovalPolicy: rootCompose.quoteApprovalPolicy,
+//     language:
+//       rootCompose.language ||
+//       (settings.defaultLanguage === 'detect' ? null : settings.defaultLanguage),
+//     localOnly: rootCompose.localOnly,
+//     sensitive: rootCompose.sensitive,
+//     visibility: rootCompose.visibility,
+//   };
+
+//   for (let i = 0; i < ids.length; i++) {
+//     const status = await submitCompose(deps, ids[i], {
+//       common: commonSettings,
+//       force: true,
+//       chained: true,
+//       inReplyToIdOverride: i === 0 ? undefined : inReplyToId,
+//       columnId,
+//     });
+
+//     if (!status) {
+//       ids.forEach((id) =>
+//         actions.updateCompose(id, (draft) => {
+//           draft.isSubmitting = false;
+//         }),
+//       );
+//       toast.error(messages.submitError);
+//       return;
+//     }
+
+//     if (i === 0) firstStatus = status;
+//     inReplyToId = status.id;
+//   }
+
+//   actions.resetCompose(rootId);
+
+//   if (draftIdToCancel) {
+//     cancelDraftStatus(queryClient, ownAccount!.url, draftIdToCancel, scopeUrl);
+//   }
+
+//   const linkOptions: LinkOptions =
+//     firstStatus!.visibility === 'direct' && features.conversations
+//       ? { to: '/conversations' }
+//       : {
+//           to: '/@{-$username}/posts/$statusId',
+//           params: { username: firstStatus!.account.acct, statusId: firstStatus!.id },
+//         };
+
+//   toast.success(messages.threadSuccess, {
+//     actionLabel: messages.view,
+//     actionLinkOptions: linkOptions,
+//     scopeUrl,
+//     columnId,
+//   });
+
+//   onSuccess?.();
+// };
+
+// const useSubmitThread = (rootId: string) => {
+//   const deps = useSubmitDeps();
+
+//   // eslint-disable-next-line react-hooks/exhaustive-deps
+//   return useCallback(
+//     (opts: { onSuccess?: () => void; columnId?: string } = {}) => submitThread(deps, rootId, opts),
+//     [rootId, deps.client],
+//   );
+// };
+
+const useCompose = <ID extends string>(composeId: ID extends 'default' ? never : ID): Compose =>
+  useComposeStore((state) => state.composers[composeId] ?? state.default);
+
+// const EMPTY_THREAD: Array<string> = [];
+
+// const useThread = (rootId: string): Array<string> =>
+//   useComposeStore((state) => state.threads[rootId] ?? EMPTY_THREAD);
+
+const useComposeActions = () => useComposeStore((state) => state.actions);
+
+// const useUploadCompose = (composeId: string) => {
+//   const { updateCompose } = useComposeActions();
+//   const client = useClient();
+//   const instance = useInstance();
+//   const intl = useIntl();
+
+//   return useCallback(
+//     (files: FileList | Array<File>, descriptions?: Array<string>) => {
+//       const compose =
+//         useComposeStore.getState().composers[composeId] || useComposeStore.getState().default;
+
+//       const attachmentLimit = instance.configuration.statuses.max_media_attachments;
+//       const media = compose.mediaAttachments;
+//       const progress = new Array(files.length).fill(0);
+//       let total = Array.from(files).reduce((a, v) => a + v.size, 0);
+//       const mediaCount = media ? media.length : 0;
+
+//       if (files.length + mediaCount > attachmentLimit) {
+//         toast.error(messages.uploadErrorLimit);
+//         return;
+//       }
+
+//       updateCompose(composeId, (draft) => {
+//         draft.isUploading = true;
+//       });
+
+//       Array.from(files).forEach((f, i) => {
+//         if (mediaCount + i > attachmentLimit - 1) return;
+
+//         uploadFile(
+//           client,
+//           f,
+//           descriptions?.[i],
+//           intl,
+//           (data) =>
+//             updateCompose(composeId, (draft) => {
+//               appendMedia(draft, data);
+//             }),
+//           () =>
+//             updateCompose(composeId, (draft) => {
+//               draft.isUploading = false;
+//             }),
+//           ({ loaded }) => {
+//             progress[i] = loaded;
+//             updateCompose(composeId, (draft) => {
+//               draft.progress = Math.round((progress.reduce((a, v) => a + v, 0) / total) * 100);
+//             });
+//           },
+//           (value) => {
+//             total += value;
+//           },
+//         );
+//       });
+//     },
+//     [instance, composeId, client],
+//   );
+// };
+
+// const useChangeUploadCompose = (composeId: string) => {
+//   const { updateCompose } = useComposeActions();
+//   const client = useClient();
+
+//   return useCallback(
+//     async (mediaId: string, params: UpdateMediaParams) => {
+//       const compose =
+//         useComposeStore.getState().composers[composeId] || useComposeStore.getState().default;
+
+//       updateCompose(composeId, (draft) => {
+//         draft.isChangingUpload = true;
+//       });
+
+//       try {
+//         const response = await updateMedia(client, mediaId, params);
+//         updateCompose(composeId, (draft) => {
+//           draft.isChangingUpload = false;
+//           draft.mediaAttachments = draft.mediaAttachments.map((item) =>
+//             item.id === response.id ? response : item,
+//           );
+//         });
+//         return response;
+//       } catch (error: any) {
+//         if (error.response?.status === 404 && compose.editedId) {
+//           const previousMedia = compose.mediaAttachments.find((m) => m.id === mediaId);
+//           if (previousMedia) {
+//             updateCompose(composeId, (draft) => {
+//               draft.isChangingUpload = false;
+//               draft.mediaAttachments = draft.mediaAttachments.map((item) =>
+//                 item.id === mediaId ? { ...previousMedia, ...params } : item,
+//               );
+//             });
+//             return;
+//           }
+//         }
+//         updateCompose(composeId, (draft) => {
+//           draft.isChangingUpload = false;
+//         });
+//       }
+//     },
+//     [composeId, client],
+//   );
+// };
+
+// const useComposeVisibility = (composeId: string) => {
+//   const { visibility } = useCompose(composeId);
+//   const { defaultPrivacy } = useSettings();
+
+//   if (visibility === 'default') return defaultPrivacy;
+//   return visibility;
+// };
+
+const getComposeContentType = (
+  contentType: string,
+  defaultContentType: string,
+  postFormats: string[],
+  includeWysiwyg = false,
+) => {
+  if (contentType === 'default') {
+    const resolvedContentType =
+      defaultContentType === 'wysiwyg' ? 'text/markdown' : defaultContentType;
+    if (postFormats.includes(resolvedContentType)) return defaultContentType;
+    return postFormats[0] ?? 'text/plain';
+  }
+
+  if (contentType === 'wysiwyg' && postFormats.includes('text/markdown')) {
+    return includeWysiwyg ? 'wysiwyg' : 'text/markdown';
+  }
+
+  return contentType;
+};
+
+// const useComposeContentType = (composeId: string, includeWysiwyg = false) => {
+//   const { contentType } = useCompose(composeId);
+//   const instance = useInstance();
+//   const postFormats = instance.pleroma.metadata.post_formats;
+//   const { defaultContentType } = useSettings();
+
+//   return getComposeContentType(contentType, defaultContentType, postFormats, includeWysiwyg);
+// };
+
+export {
+  type Compose,
+  //   type RestoredDraft,
+  //   appendMedia,
+  checkComposeContent,
+  //   newPoll,
+  //   openDedicatedComposeWindow,
+  //   statusToMentionsAccountIdsArray,
+  useComposeStore,
+  useCompose,
+  //   useThread,
+  useComposeActions,
+  useSubmitCompose,
+  //   useSubmitThread,
+  //   useUploadCompose,
+  //   useChangeUploadCompose,
+  //   useComposeVisibility,
+  //   useComposeContentType,
+};
