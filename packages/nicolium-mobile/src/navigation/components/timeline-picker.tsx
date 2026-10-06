@@ -39,9 +39,16 @@ const messages = defineMessages({
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   allBookmarks: { id: 'column.bookmarks.all', defaultMessage: 'All bookmarks' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
+  antennas: { id: 'column.antennas', defaultMessage: 'Antennas' },
+  circles: { id: 'column.circles', defaultMessage: 'Circles' },
   back: { id: 'navigation_bar.back', defaultMessage: 'Back' },
   noLists: { id: 'column.lists.empty', defaultMessage: 'You have no lists yet.' },
-  noBookmarkFolders: { id: 'bookmark_folders.empty', defaultMessage: 'You have no bookmark folders yet.' },
+  noAntennas: { id: 'column.antennas.empty', defaultMessage: 'You have no antennas yet.' },
+  noCircles: { id: 'column.circles.empty', defaultMessage: 'You have no circles yet.' },
+  noBookmarkFolders: {
+    id: 'bookmark_folders.empty',
+    defaultMessage: 'You have no bookmark folders yet.',
+  },
 });
 
 const useTimelineHeadingAndIcon = (
@@ -110,10 +117,14 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
   const [heading, TimelineIcon] = useTimelineHeadingAndIcon(active);
 
   const [showTimelineMenu, setShowTimelineMenu] = React.useState(false);
-  const [menuPage, setMenuPage] = React.useState<'timelines' | 'bookmarks' | 'lists'>('timelines');
+  const [menuPage, setMenuPage] = React.useState<
+    'timelines' | 'bookmarks' | 'lists' | 'circles' | 'antennas'
+  >('timelines');
 
   const { data: bookmarkFolders } = useBookmarkFolders(menuPage === 'bookmarks');
   const { data: lists } = useLists(menuPage === 'lists');
+  const { data: antennas } = useAntennas(menuPage === 'antennas');
+  const { data: circles } = useCircles(menuPage === 'circles');
 
   let menuContent;
 
@@ -121,6 +132,56 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     callback();
     setMenuPage('timelines');
     setShowTimelineMenu(false);
+  };
+
+  const getListsMenuPage = (
+    name: 'list' | 'antenna' | 'circle',
+    lists?: Array<{ id: string; title: string }>,
+  ) => {
+    let listIcon;
+    let emptyMessage;
+
+    switch (name) {
+      case 'antenna':
+        listIcon = BroadcastIcon;
+        emptyMessage = messages.noAntennas;
+        break;
+      case 'circle':
+        listIcon = CirclesThreeIcon;
+        emptyMessage = messages.noCircles;
+        break;
+      default:
+        listIcon = ListDashesIcon;
+        emptyMessage = messages.noLists;
+        break;
+    }
+
+    return (
+      <>
+        <Menu.Item
+          leadingIcon={iconHelper(CaretLeftIcon)}
+          onPress={() => setMenuPage('timelines')}
+          title={intl.formatMessage(messages.back)}
+        />
+        <Divider />
+        {lists ? (
+          lists.length ? (
+            lists.map((list) => (
+              <Menu.Item
+                key={list.id}
+                onPress={closeAfter(() => navigation.navigate(name, { id: list.id }))}
+                title={list.title}
+                leadingIcon={iconHelper(listIcon)}
+              />
+            ))
+          ) : (
+            <Menu.Item title={intl.formatMessage(emptyMessage)} />
+          )
+        ) : (
+          <ActivityIndicator style={{ paddingVertical: 8 }} />
+        )}
+      </>
+    );
   };
 
   switch (menuPage) {
@@ -185,6 +246,28 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               trailingIcon={iconHelper(CaretRightIcon)}
             />
           )}
+          {features.antennas && (
+            <Menu.Item
+              onPress={() => {
+                setMenuPage('antennas');
+              }}
+              title={intl.formatMessage(messages.antennas)}
+              contentStyle={{ flex: 1 }}
+              leadingIcon={iconHelper(BroadcastIcon)}
+              trailingIcon={iconHelper(CaretRightIcon)}
+            />
+          )}
+          {features.circles && (
+            <Menu.Item
+              onPress={() => {
+                setMenuPage('circles');
+              }}
+              title={intl.formatMessage(messages.circles)}
+              contentStyle={{ flex: 1 }}
+              leadingIcon={iconHelper(CirclesThreeIcon)}
+              trailingIcon={iconHelper(CaretRightIcon)}
+            />
+          )}
         </>
       );
       break;
@@ -236,32 +319,15 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
       break;
     }
     case 'lists': {
-      menuContent = (
-        <>
-          <Menu.Item
-            leadingIcon={iconHelper(CaretLeftIcon)}
-            onPress={() => setMenuPage('timelines')}
-            title={intl.formatMessage(messages.back)}
-          />
-          <Divider />
-          {lists ? (
-            lists.length ? (
-              lists.map((list) => (
-                <Menu.Item
-                  key={list.id}
-                  onPress={closeAfter(() => navigation.navigate('list', { id: list.id }))}
-                  title={list.title}
-                  leadingIcon={iconHelper(ListDashesIcon)}
-                />
-              ))
-            ) : (
-              <Menu.Item title={intl.formatMessage(messages.noLists)} />
-            )
-          ) : (
-            <ActivityIndicator style={{ paddingVertical: 8 }} />
-          )}
-        </>
-      );
+      menuContent = getListsMenuPage('list', lists);
+      break;
+    }
+    case 'antennas': {
+      menuContent = getListsMenuPage('antenna', antennas);
+      break;
+    }
+    case 'circles': {
+      menuContent = getListsMenuPage('circle', circles);
       break;
     }
   }

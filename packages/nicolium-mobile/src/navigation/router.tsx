@@ -14,6 +14,12 @@ import { Tabs } from './tabs';
 
 import type { NavigatorScreenParams } from '@react-navigation/native';
 
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParams {}
+  }
+}
+
 type TimelineStackParams = {
   home: undefined;
   local: undefined;
