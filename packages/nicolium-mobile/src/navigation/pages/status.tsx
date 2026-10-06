@@ -23,7 +23,7 @@ import type { RootStackParams, StatusStackParams } from '../router';
 import type { PaginatedResponseArray } from '@/queries/utils/make-paginated-response-query';
 import type { UseInfiniteQueryResult } from '@tanstack/react-query';
 
-const MaybeDivider = ({ statusId }) => {
+const MaybeDivider: React.FC<{ statusId: string }> = ({ statusId }) => {
   const { data: status } = useStatus(statusId);
 
   if (status?.replies_count) return null;
