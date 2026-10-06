@@ -4,7 +4,7 @@ import { useClient, useFeatures } from '@/stores/auth';
 
 import type { Tag } from 'pl-api';
 
-const useTrendingTags = () => {
+const useTrendingTags = (enabled = true) => {
   const client = useClient();
   const features = useFeatures();
 
@@ -13,7 +13,7 @@ const useTrendingTags = () => {
     queryFn: () => client.trends.getTrendingTags(),
     placeholderData: [],
     staleTime: 10 * 60 * 1000, // 10 minutes
-    enabled: features.trends,
+    enabled: enabled && features.trends,
   });
 };
 

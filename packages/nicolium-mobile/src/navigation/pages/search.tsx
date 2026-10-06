@@ -14,12 +14,18 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Account } from '@/components/accounts/account';
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage } from '@/components/ui/empty-message';
-import { useSearchAccounts, useSearchStatuses } from '@/queries/search/use-search';
+import {
+  useSearchAccounts,
+  useSearchHashtags,
+  useSearchStatuses,
+} from '@/queries/search/use-search';
 import { useSuggestedAccounts } from '@/queries/trends/use-suggested-accounts';
 import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
+import useTrendingTags from '@/queries/trends/use-trending-tags';
 import { useFeatures } from '@/stores/auth';
 
 import type { SearchStackParams } from '../router';
+import { Hashtag } from '@/components/hashtag';
 
 const messages = defineMessages({
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },
@@ -72,8 +78,10 @@ const SearchScreen = ({
 
   const accountsQuery = useSearchAccounts((activeType === 'accounts' && activeQuery.trim()) || '');
   const statusesQuery = useSearchStatuses((activeType === 'statuses' && activeQuery.trim()) || '');
+  const hashtagsQuery = useSearchHashtags((activeType === 'hashtags' && activeQuery.trim()) || '');
   const trendingAccountsQuery = useSuggestedAccounts(activeType === 'accounts' && !hasQuery);
   const trendingStatusesQuery = useTrendingStatuses(activeType === 'statuses' && !hasQuery);
+  const trendingHashtagsQuery = useTrendingTags(activeType === 'hashtags' && !hasQuery);
 
   return (
     <>
@@ -171,7 +179,35 @@ const SearchScreen = ({
             />
           </TabScreen>
           <TabScreen label={intl.formatMessage(messages.hashtags)}>
-            <Text>Hashtags</Text>
+            <FlashList
+              data={(hasQuery ? hashtagsQuery : trendingHashtagsQuery).data}
+              renderItem={({ item }) => <Hashtag tag={item.name} />}
+              ItemSeparatorComponent={Divider}
+              onEndReached={
+                hasQuery && hashtagsQuery.hasNextPage && !hashtagsQuery.isFetching
+                  ? hashtagsQuery.fetchNextPage
+                  : undefined
+              }
+              onEndReachedThreshold={0.1}
+              ListEmptyComponent={
+                !statusesQuery.isPending ? (
+                  <EmptyMessage
+                    emptyMessageText={
+                      <FormattedMessage
+                        id='empty_column.search.statuses'
+                        defaultMessage='There are no posts results for "{term}"'
+                        values={{ term: activeQuery }}
+                      />
+                    }
+                  />
+                ) : null
+              }
+              ListFooterComponent={
+                statusesQuery.isFetching ? (
+                  <ActivityIndicator style={{ marginVertical: 8 }} />
+                ) : undefined
+              }
+            />
           </TabScreen>
           {features.trendingLinks && !hasQuery && (
             <TabScreen label={intl.formatMessage(messages.links)}>
