@@ -1,5 +1,6 @@
 import { ActivityIndicator, Button, Divider, Icon, Menu, Text } from '@mkljczk/react-native-paper';
 import {
+  BookmarksIcon,
   BroadcastIcon,
   CaretDownIcon,
   CaretLeftIcon,
@@ -24,6 +25,7 @@ import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useAntennas } from '@/queries/accounts/use-antennas';
 import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
+import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 
 import type { TimelineStackParams } from '../router';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -34,9 +36,12 @@ const messages = defineMessages({
   bubbleTimeline: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
   federatedTimeline: { id: 'column.public', defaultMessage: 'Fediverse timeline' },
   wrenchedTimeline: { id: 'column.wrenched', defaultMessage: 'Recent wrenches timeline' },
+  bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
+  allBookmarks: { id: 'column.bookmarks.all', defaultMessage: 'All bookmarks' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
   back: { id: 'navigation_bar.back', defaultMessage: 'Back' },
   noLists: { id: 'column.lists.empty', defaultMessage: 'You have no lists yet.' },
+  noBookmarkFolders: { id: 'bookmark_folders.empty', defaultMessage: 'You have no bookmark folders yet.' },
 });
 
 const useTimelineHeadingAndIcon = (
@@ -105,8 +110,9 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
   const [heading, TimelineIcon] = useTimelineHeadingAndIcon(active);
 
   const [showTimelineMenu, setShowTimelineMenu] = React.useState(false);
-  const [menuPage, setMenuPage] = React.useState<'timelines' | 'lists'>('timelines');
+  const [menuPage, setMenuPage] = React.useState<'timelines' | 'bookmarks' | 'lists'>('timelines');
 
+  const { data: bookmarkFolders } = useBookmarkFolders(menuPage === 'bookmarks');
   const { data: lists } = useLists(menuPage === 'lists');
 
   let menuContent;
@@ -147,7 +153,27 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               leadingIcon={iconHelper(FediverseLogoIcon)}
             />
           )}
-          {(features.lists || features.circles || features.antennas) && <Divider />}
+          {(features.bookmarks || features.lists || features.circles || features.antennas) && (
+            <Divider />
+          )}
+          {features.bookmarks && (
+            <Menu.Item
+              onPress={() => {
+                if (features.bookmarkFolders) setMenuPage('bookmarks');
+                else {
+                  navigation.navigate('bookmarks', {
+                    screen: 'all',
+                  });
+                  setMenuPage('timelines');
+                  setShowTimelineMenu(false);
+                }
+              }}
+              title={intl.formatMessage(messages.bookmarks)}
+              contentStyle={{ flex: 1 }}
+              leadingIcon={iconHelper(BookmarksIcon)}
+              trailingIcon={features.bookmarkFolders ? iconHelper(CaretRightIcon) : undefined}
+            />
+          )}
           {features.lists && (
             <Menu.Item
               onPress={() => {
@@ -158,6 +184,52 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               leadingIcon={iconHelper(ListIcon)}
               trailingIcon={iconHelper(CaretRightIcon)}
             />
+          )}
+        </>
+      );
+      break;
+    }
+    case 'bookmarks': {
+      menuContent = (
+        <>
+          <Menu.Item
+            leadingIcon={iconHelper(CaretLeftIcon)}
+            onPress={() => setMenuPage('timelines')}
+            title={intl.formatMessage(messages.back)}
+          />
+          <Divider />
+          <Menu.Item
+            onPress={() => {
+              navigation.navigate('bookmarks', {
+                screen: 'all',
+              });
+              setMenuPage('timelines');
+              setShowTimelineMenu(false);
+            }}
+            title={intl.formatMessage(messages.allBookmarks)}
+            contentStyle={{ flex: 1 }}
+            leadingIcon={iconHelper(BookmarksIcon)}
+          />
+          {bookmarkFolders ? (
+            bookmarkFolders.length ? (
+              bookmarkFolders.map((folder) => (
+                <Menu.Item
+                  key={folder.id}
+                  onPress={closeAfter(() =>
+                    navigation.navigate('bookmarks', {
+                      screen: 'folder',
+                      params: { id: folder.id },
+                    }),
+                  )}
+                  title={folder.name}
+                  leadingIcon={iconHelper(ListDashesIcon)}
+                />
+              ))
+            ) : (
+              <Menu.Item title={intl.formatMessage(messages.noBookmarkFolders)} />
+            )
+          ) : (
+            <ActivityIndicator style={{ paddingVertical: 8 }} />
           )}
         </>
       );

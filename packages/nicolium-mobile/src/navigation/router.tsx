@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/auth';
 import { Header } from '../components/ui/header';
 
 import { AccountsStackScreen } from './pages/accounts';
+import { BookmarksStackScreen } from './pages/bookmarks';
 import { HashtagsScreen } from './pages/hashtags';
 import { LoginStackScreen } from './pages/login';
 import { SettingsScreen } from './pages/settings';
@@ -41,6 +42,10 @@ type StatusStackParams = {
 type AccountStackParams = {
   view: { id: string };
 };
+type BookmarksStackParams = {
+  all: undefined;
+  folder: { id: string };
+};
 type TabsParams = {
   timeline: NavigatorScreenParams<TimelineStackParams>;
   notifications: NavigatorScreenParams<NotificationsStackParams>;
@@ -60,6 +65,7 @@ type RootStackParams = {
   status: StatusStackParams;
   accounts: AccountStackParams;
   hashtags: { tag: string };
+  bookmarks: BookmarksStackParams;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -92,6 +98,11 @@ const RootNavigator = () => {
             component={HashtagsScreen}
             options={{ headerShown: false }}
           />
+          <RootStack.Screen
+            name='bookmarks'
+            component={BookmarksStackScreen}
+            options={{ headerShown: false }}
+          />
         </>
       )}
       <RootStack.Screen
@@ -110,6 +121,7 @@ export {
   type ProfileStackParams,
   type StatusStackParams,
   type AccountStackParams,
+  type BookmarksStackParams,
   type TabsParams,
   type LoginStackParams,
   type RootStackParams,
