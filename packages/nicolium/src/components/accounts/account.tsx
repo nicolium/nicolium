@@ -177,6 +177,8 @@ const Account = ({
   }, [system, pluraldawnMatch]);
 
   const pronouns = useMemo(() => {
+    if (!account) return undefined;
+
     if (account.pronouns.length) {
       return account.pronouns.join('/');
     } else {
