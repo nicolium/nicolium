@@ -2,13 +2,21 @@ import {
   ActivityIndicator,
   Card,
   Chip,
+  Icon,
   IconButton,
   Text,
   TouchableRipple,
   useTheme,
 } from '@mkljczk/react-native-paper';
+import CardContent from '@mkljczk/react-native-paper/lib/typescript/src/components/Card/CardContent';
 import { Link, useNavigation } from '@react-navigation/native';
-import { DotsThreeIcon, DotsThreeVerticalIcon, HashIcon, RepeatIcon } from 'phosphor-react-native';
+import {
+  DotsThreeIcon,
+  DotsThreeVerticalIcon,
+  HashIcon,
+  QuotesIcon,
+  RepeatIcon,
+} from 'phosphor-react-native';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
@@ -30,11 +38,11 @@ interface IQuote {
 }
 
 const Quote: React.FC<IQuote> = ({ id }) => {
-  const { isFetching, isError } = useStatus(id);
+  const { isPending, isError } = useStatus(id);
 
   return (
     <Card mode='outlined'>
-      {isFetching ? (
+      {isPending ? (
         <ActivityIndicator style={{ margin: 8 }} />
       ) : isError ? (
         <Text>
@@ -196,7 +204,19 @@ const Status: React.FC<IStatus> = ({
       media={
         <>
           <StatusMedia id={id} compact={props.compact} />
-          {actualStatus.quote_id && <Quote id={actualStatus.quote_id} />}
+          {actualStatus.quote_id &&
+            (props.compact ? (
+              <Card mode='outlined'>
+                <Card.Content style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <Icon source={iconHelper(QuotesIcon)} size={20} />
+                  <Text>
+                    <FormattedMessage id='status.quote_indicator' defaultMessage='Quoted post' />
+                  </Text>
+                </Card.Content>
+              </Card>
+            ) : (
+              <Quote id={actualStatus.quote_id} />
+            ))}
         </>
       }
       actions={withActions ? <StatusActions id={id} /> : undefined}
