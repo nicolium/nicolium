@@ -8,7 +8,7 @@ import RenderHtml, {
   type MixedStyleDeclaration,
 } from '@native-html/render';
 import { Link } from '@react-navigation/native';
-import { Element, Text, isText } from 'domhandler';
+import { type ChildNode, Element, Text, isText } from 'domhandler';
 import { prepend, removeElement, replaceElement } from 'domutils';
 import React, { useMemo } from 'react';
 import { useWindowDimensions, Image } from 'react-native';
@@ -20,6 +20,17 @@ import { multiplyFontSizes } from '@/utils/themes';
 import type { CustomEmoji, Mention } from 'pl-api';
 
 const validEmojiChar = (c: string) => /^[a-zA-Z0-9_.-]$/.test(c);
+
+const nodesToText = (nodes: Array<ChildNode>): string =>
+  nodes
+    .map((node) =>
+      node.type === 'text'
+        ? node.data
+        : node.type === 'tag'
+          ? nodesToText(node.children as Array<DOMNode>)
+          : '',
+    )
+    .join('');
 
 const customHTMLElementModels = {
   emoji: HTMLElementModel.fromCustomModel({
@@ -166,32 +177,43 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
 
     return {
       onElement: (element) => {
-        if (
-          mentions &&
-          element.tagName === 'a' &&
-          element.attribs.class?.split(' ').includes('mention')
-        ) {
-          const mention = mentions.find(({ url }) => element.attribs.href === url);
+        if (element.tagName === 'a') {
+          const classList = element.attribs.class?.split(' ');
 
-          if (mention) {
+          if (mentions && classList.includes('mention')) {
+            const mention = mentions.find(({ url }) => element.attribs.href === url);
+
+            if (mention) {
+              replaceElement(
+                element,
+                new Element('account-link', {
+                  'data-account-id': mention.id,
+                  'data-acct': mention.acct,
+                  'data-username': mention.username,
+                }),
+              );
+              return;
+            }
+          } else if (element.attribs['data-user']) {
             replaceElement(
               element,
               new Element('account-link', {
-                'data-account-id': mention.id,
-                'data-acct': mention.acct,
-                'data-username': mention.username,
+                'data-account-id': element.attribs['data-user'],
               }),
             );
             return;
+          } else if (classList.includes('hashtag') || element.attribs.rel === 'tag') {
+            const hashtag = nodesToText(element.children);
+            if (hashtag) {
+              replaceElement(
+                element,
+                new Element('hashtag-link', {
+                  'data-hashtag': hashtag.replace(/^#/, ''),
+                }),
+              );
+              return;
+            }
           }
-        } else if (element.tagName === 'a' && element.attribs['data-user']) {
-          replaceElement(
-            element,
-            new Element('account-link', {
-              'data-account-id': element.attribs['data-user'],
-            }),
-          );
-          return;
         }
 
         if (!emojis?.length) return;
