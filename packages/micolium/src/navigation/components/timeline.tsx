@@ -1,5 +1,5 @@
 import { ActivityIndicator, Divider } from '@mkljczk/react-native-paper';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { ProhibitIcon } from 'phosphor-react-native';
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -14,6 +14,7 @@ import type { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 
 interface ITimeline extends IEmptyMessage {
   query: ReturnType<typeof useTimeline>;
+  pinnedQuery?: ReturnType<typeof useTimeline>;
   context?: 'home' | 'timeline';
   header?: React.JSX.Element;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
@@ -21,13 +22,14 @@ interface ITimeline extends IEmptyMessage {
 
 const Timeline: React.FC<ITimeline> = ({
   query,
+  pinnedQuery,
   context = 'timeline',
   header,
   onScroll,
   ...props
 }) => {
-  const renderItem = useCallback(
-    ({ item }: { item: TimelineEntry }) =>
+  const renderItem: ListRenderItem<TimelineEntry> = useCallback(
+    ({ item, index }) =>
       item.type === 'status' ? (
         <Status
           id={item.id}
@@ -35,9 +37,10 @@ const Timeline: React.FC<ITimeline> = ({
           isConnectedBottom={item.isConnectedBottom}
           withLink
           rebloggedBy={item.rebloggedBy}
+          showPinned={pinnedQuery && index < pinnedQuery?.entries.length}
         />
       ) : null,
-    [],
+    [pinnedQuery?.entries.length],
   );
 
   const ItemSeparatorComponent = useCallback(({ leadingItem }: { leadingItem: TimelineEntry }) => {
@@ -45,9 +48,14 @@ const Timeline: React.FC<ITimeline> = ({
     return <Divider />;
   }, []);
 
+  const data = React.useMemo(
+    () => (pinnedQuery ? [...pinnedQuery.entries, ...query.entries] : query.entries),
+    [query.entries, pinnedQuery?.entries],
+  );
+
   return (
     <FlashList
-      data={query.entries}
+      data={data}
       keyExtractor={(item) => (item.type === 'gap' ? item.minId : item.id)}
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparatorComponent}

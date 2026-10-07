@@ -35,6 +35,10 @@ interface IProfileTimeline {
 const PostsTimeline: React.FC<IProfileTimeline> = ({ id, ...props }) => {
   const client = useClient();
 
+  const pinnedQuery = useTimeline(`account:${id}:pinned`, (paginationParams) =>
+    client.accounts.getAccountStatuses(id, { ...paginationParams, pinned: true }),
+  );
+
   const timelineQuery = useTimeline(`account:${id}:exclude_replies`, (paginationParams) =>
     client.accounts.getAccountStatuses(id, { ...paginationParams, exclude_replies: true }),
   );
@@ -42,6 +46,7 @@ const PostsTimeline: React.FC<IProfileTimeline> = ({ id, ...props }) => {
   return (
     <Timeline
       query={timelineQuery}
+      pinnedQuery={pinnedQuery}
       emptyMessageHeading={
         <FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />
       }

@@ -14,12 +14,14 @@ import {
   DotsThreeVerticalIcon,
   HashIcon,
   PaperclipIcon,
+  PushPinIcon,
   QuotesIcon,
   RepeatIcon,
 } from 'phosphor-react-native';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
+import { boolean } from 'valibot';
 
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccounts } from '@/queries/accounts/use-accounts';
@@ -55,6 +57,12 @@ const Quote: React.FC<IQuote> = ({ id }) => {
     </Card>
   );
 };
+
+const StatusPinnedChip: React.FC = () => (
+  <Chip mode='outlined' icon={iconHelper(PushPinIcon)} compact>
+    <FormattedMessage id='status.pinned' defaultMessage='Pinned post' />
+  </Chip>
+);
 
 interface IStatusRebloggedChip {
   accountIds: Array<string>;
@@ -209,6 +217,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status }) => {
 interface IStatus {
   id: string;
   rebloggedBy?: Array<string>;
+  showPinned?: boolean;
   context?: 'home' | 'timeline' | 'thread';
   isConnectedBottom?: boolean | ((status: SelectedStatus) => boolean);
   withLink?: boolean;
@@ -222,6 +231,7 @@ interface IStatus {
 const Status: React.FC<IStatus> = ({
   id,
   rebloggedBy,
+  showPinned,
   context,
   isConnectedBottom,
   withLink,
@@ -241,7 +251,9 @@ const Status: React.FC<IStatus> = ({
 
   let chip;
 
-  if (rebloggedBy?.length) {
+  if (showPinned) {
+    chip = <StatusPinnedChip />;
+  } else if (rebloggedBy?.length) {
     chip = <StatusRebloggedChip accountIds={rebloggedBy} />;
   } else if ((context === 'timeline' || context === 'home') && status.reblog && status.account_id) {
     chip = <StatusRebloggedChip accountIds={[status.account_id]} />;
