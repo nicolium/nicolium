@@ -182,7 +182,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status }) => {
     accounts.push(
       <>
         {', '}
-        <Link screen='status' params={{ screen: 'mentions', params: { id } }} key='more'>
+        <Link screen='status' params={{ screen: 'mentions', params: { id: status.id } }} key='more'>
           <FormattedMessage
             id='reply_mentions.more'
             defaultMessage='{count} more'
