@@ -147,6 +147,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             accessibilityLabel={account.header_description}
             contentFit='cover'
             transition={300}
+            recyclingKey={account.header}
           />
         )}
         <View

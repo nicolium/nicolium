@@ -50,6 +50,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ id, compact }) => {
                 accessibilityLabel={media.description}
                 contentFit='cover'
                 transition={300}
+                recyclingKey={media.id}
               />
               {media.description && (
                 <View style={{ position: 'absolute', bottom: 16, right: 16 }}>
