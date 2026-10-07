@@ -17,13 +17,13 @@ type State = {
     }
   >;
   actions: {
-    expandStatus: (stautsId: string) => void;
-    collapseStatus: (stautsId: string) => void;
-    expandStatusSpoiler: (stautsId: string) => void;
-    collapseStatusSpoiler: (stautsId: string) => void;
-    revealStatusMedia: (stautsId: string) => void;
-    hideStatusMedia: (stautsId: string) => void;
-    toggleStatusMediaHidden: (stautsId: string) => void;
+    expandStatus: (statusId: string) => void;
+    collapseStatus: (statusId: string) => void;
+    expandStatusSpoiler: (statusId: string) => void;
+    collapseStatusSpoiler: (statusId: string) => void;
+    revealStatusMedia: (statusId: string) => void;
+    hideStatusMedia: (statusId: string) => void;
+    toggleStatusMediaHidden: (statusId: string) => void;
     fetchTranslation: (statusId: string, targetLanguage: string) => void;
     hideTranslation: (statusId: string) => void;
     fetchLocalTranslation: (statusId: string, targetLanguage: string) => void;
