@@ -17,7 +17,7 @@ import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 import { AtIcon, GlobeIcon, LockIcon } from 'phosphor-react-native';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { KeyboardAvoidingView, ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, ToastAndroid, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Gayness from '@/assets/gayness.svg';
@@ -66,6 +66,10 @@ const messages = defineMessages({
   credentialsHeadline: {
     id: 'landing_mobile.credentials.headline',
     defaultMessage: 'Sign in to {instance}',
+  },
+  interruptMessage: {
+    id: 'landing_mobile.interrupt',
+    defaultMessage: 'Authentication interrupted.',
   },
 });
 
@@ -305,6 +309,7 @@ const CredentialsScreen = ({
 const OauthFlowScreen = ({
   navigation,
 }: NativeStackScreenProps<LoginStackParams, 'oauth_flow'>) => {
+  const intl = useIntl();
   const { pendingAuth, pendingAuthClient } = useAuthStore();
   const { signInWithCode } = useAuthStoreActions();
 
@@ -336,6 +341,12 @@ const OauthFlowScreen = ({
       signInWithCode(code, request?.codeVerifier!).then(() => {
         navigation.getParent()?.navigate('app');
       });
+    } else {
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(intl.formatMessage(messages.interruptMessage), ToastAndroid.SHORT);
+        // TODO: support non-android
+      }
+      navigation.goBack();
     }
   }, [response]);
 
