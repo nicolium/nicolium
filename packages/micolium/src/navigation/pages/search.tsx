@@ -153,7 +153,7 @@ const SearchScreen = ({
               }
               ListFooterComponent={
                 accountsQuery.isFetching ? (
-                  <ActivityIndicator style={{ marginVertical: 8 }} />
+                  <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
                 ) : undefined
               }
             />
@@ -184,7 +184,7 @@ const SearchScreen = ({
               }
               ListFooterComponent={
                 statusesQuery.isFetching ? (
-                  <ActivityIndicator style={{ marginVertical: 8 }} />
+                  <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
                 ) : undefined
               }
             />
@@ -215,7 +215,7 @@ const SearchScreen = ({
               }
               ListFooterComponent={
                 statusesQuery.isFetching ? (
-                  <ActivityIndicator style={{ marginVertical: 8 }} />
+                  <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
                 ) : undefined
               }
             />
@@ -247,7 +247,7 @@ const SearchScreen = ({
                     )}
                   />
                 ) : (
-                  <ActivityIndicator />
+                  <ActivityIndicator size='large' />
                 )}
               </View>
             </TabScreen>

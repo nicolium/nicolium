@@ -352,7 +352,7 @@ const OauthFlowScreen = ({
 
   return (
     <View style={{ padding: 16 }}>
-      <ActivityIndicator />
+      <ActivityIndicator size='large' />
     </View>
   );
 };

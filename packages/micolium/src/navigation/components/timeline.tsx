@@ -3,6 +3,7 @@ import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { ProhibitIcon } from 'phosphor-react-native';
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage, type IEmptyMessage } from '@/components/ui/empty-message';
@@ -10,7 +11,6 @@ import { iconHelper } from '@/components/ui/icon';
 
 import type { useTimeline } from '@/queries/timelines/use-timeline';
 import type { TimelineEntry } from '@/stores/timelines';
-import type { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 
 interface ITimeline extends IEmptyMessage {
   query: ReturnType<typeof useTimeline>;
@@ -53,6 +53,13 @@ const Timeline: React.FC<ITimeline> = ({
     [query.entries, pinnedQuery?.entries],
   );
 
+  if (query.isPending)
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size='large' />
+      </View>
+    );
+
   return (
     <FlashList
       data={data}
@@ -81,7 +88,7 @@ const Timeline: React.FC<ITimeline> = ({
       }
       ListFooterComponent={
         query.isFetching && !query.isPending ? (
-          <ActivityIndicator style={{ marginVertical: 8 }} />
+          <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
         ) : undefined
       }
       ListHeaderComponent={header}

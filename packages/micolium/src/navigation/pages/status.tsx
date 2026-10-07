@@ -50,7 +50,9 @@ const InteractionList: React.FC<IInteractionList> = ({ query, emptyMessageText }
         !query.isPending ? <EmptyMessage emptyMessageText={emptyMessageText} /> : null
       }
       ListFooterComponent={
-        query.isFetching ? <ActivityIndicator style={{ marginVertical: 8 }} /> : undefined
+        query.isFetching ? (
+          <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
+        ) : undefined
       }
     />
   );
@@ -161,7 +163,7 @@ const StatusMentionsScreen = ({
       )}
       ItemSeparatorComponent={Divider}
       ListFooterComponent={
-        isPending ? <ActivityIndicator style={{ marginVertical: 8 }} /> : undefined
+        isPending ? <ActivityIndicator style={{ marginVertical: 8 }} size='large' /> : undefined
       }
     />
   );

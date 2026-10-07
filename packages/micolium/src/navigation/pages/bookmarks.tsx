@@ -61,7 +61,7 @@ const AllBookmarksScreen = ({
         }
         ListFooterComponent={
           bookmarksQuery.isFetching ? (
-            <ActivityIndicator style={{ marginVertical: 8 }} />
+            <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
           ) : undefined
         }
       />
@@ -107,7 +107,7 @@ const BookmarksFolderScreen = ({
         }
         ListFooterComponent={
           bookmarksQuery.isFetching ? (
-            <ActivityIndicator style={{ marginVertical: 8 }} />
+            <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
           ) : undefined
         }
       />
