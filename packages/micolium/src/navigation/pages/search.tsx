@@ -1,4 +1,12 @@
-import { ActivityIndicator, Divider, Searchbar, Text, useTheme } from '@mkljczk/react-native-paper';
+import {
+  ActivityIndicator,
+  Carousel,
+  CarouselItem,
+  Divider,
+  Searchbar,
+  Text,
+  useTheme,
+} from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
@@ -14,6 +22,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Account } from '@/components/accounts/account';
 import { Hashtag } from '@/components/hashtag';
 import { Status } from '@/components/statuses/status';
+import { TrendsLink } from '@/components/trends-link';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { useFeatures } from '@/contexts/current-account-context';
 import {
@@ -22,6 +31,7 @@ import {
   useSearchStatuses,
 } from '@/queries/search/use-search';
 import { useSuggestedAccounts } from '@/queries/trends/use-suggested-accounts';
+import { useTrendingLinks } from '@/queries/trends/use-trending-links';
 import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
 import useTrendingTags from '@/queries/trends/use-trending-tags';
 
@@ -82,6 +92,7 @@ const SearchScreen = ({
   const trendingAccountsQuery = useSuggestedAccounts(activeType === 'accounts' && !hasQuery);
   const trendingStatusesQuery = useTrendingStatuses(activeType === 'statuses' && !hasQuery);
   const trendingHashtagsQuery = useTrendingTags(activeType === 'hashtags' && !hasQuery);
+  const trendingLinksQuery = useTrendingLinks(activeType === 'links' && !hasQuery);
 
   return (
     <>
@@ -211,7 +222,34 @@ const SearchScreen = ({
           </TabScreen>
           {features.trendingLinks && !hasQuery && (
             <TabScreen label={intl.formatMessage(messages.links)}>
-              <Text>Links</Text>
+              <View style={{ margin: 8 }}>
+                {trendingLinksQuery.data ? (
+                  <Carousel
+                    data={trendingLinksQuery.data}
+                    height={320}
+                    renderItem={({ item, index, mask }) => (
+                      <CarouselItem
+                        mask={mask}
+                        style={{
+                          flexDirection: 'row',
+                          gap: 8,
+                          backgroundColor: colors.background,
+                        }}
+                      >
+                        {index !== 0 && index === trendingLinksQuery.data.length - 1 && (
+                          <View aria-hidden />
+                        )}
+                        <View style={{ flex: 1 }}>
+                          <TrendsLink link={item} />
+                        </View>
+                        {index !== trendingLinksQuery.data.length - 1 && <View aria-hidden />}
+                      </CarouselItem>
+                    )}
+                  />
+                ) : (
+                  <ActivityIndicator />
+                )}
+              </View>
             </TabScreen>
           )}
         </Tabs>

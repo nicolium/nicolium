@@ -3,14 +3,14 @@ import { useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
 
-const useTrendingLinks = () => {
+const useTrendingLinks = (enabled = true) => {
   const client = useClient();
   const features = useFeatures();
 
   return useAppQuery({
     queryKey: queryKeys.trends.links,
     queryFn: () => client.trends.getTrendingLinks(),
-    enabled: features.trendingLinks,
+    enabled: enabled && features.trendingLinks,
   });
 };
 
