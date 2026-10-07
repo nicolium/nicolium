@@ -14,7 +14,6 @@ import { View } from 'react-native';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 import {
   useDislikeStatus,
   useFavouriteStatus,
@@ -27,6 +26,8 @@ import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { iconHelper } from '../ui/icon';
+
+import type { SelectedStatus } from '@/queries/statuses/use-status';
 
 const messages = defineMessages({
   reply: { id: 'status.reply', defaultMessage: 'Reply' },
