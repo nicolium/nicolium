@@ -165,6 +165,8 @@ const SearchScreen = ({
                     <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
                   ) : undefined
                 }
+                onRefresh={(hasQuery ? accountsQuery : trendingAccountsQuery).refetch}
+                refreshing={(hasQuery ? accountsQuery : trendingAccountsQuery).isRefetching}
               />
             )}
           </TabScreen>
@@ -200,6 +202,8 @@ const SearchScreen = ({
                     <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
                   ) : undefined
                 }
+                onRefresh={(hasQuery ? statusesQuery : trendingStatusesQuery).refetch}
+                refreshing={(hasQuery ? statusesQuery : trendingStatusesQuery).isRefetching}
               />
             )}
           </TabScreen>
@@ -235,6 +239,8 @@ const SearchScreen = ({
                     <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
                   ) : undefined
                 }
+                onRefresh={(hasQuery ? hashtagsQuery : trendingHashtagsQuery).refetch}
+                refreshing={(hasQuery ? hashtagsQuery : trendingHashtagsQuery).isRefetching}
               />
             )}
           </TabScreen>

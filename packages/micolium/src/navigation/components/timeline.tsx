@@ -67,6 +67,7 @@ const Timeline: React.FC<ITimeline> = ({
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparatorComponent}
       onRefresh={query.refetch}
+      refreshing={query.isFetching}
       onEndReached={() => {
         if (query.hasNextPage && !query.isFetching) query.fetchNextPage();
       }}

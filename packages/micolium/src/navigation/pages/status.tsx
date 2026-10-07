@@ -11,7 +11,7 @@ import { Account } from '@/components/accounts/account';
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { Header } from '@/components/ui/header';
-import { useStatus } from '@/queries/statuses/use-status';
+import { useStatus, useStatusContext } from '@/queries/statuses/use-status';
 import {
   useStatusDislikes,
   useStatusFavourites,
@@ -64,7 +64,8 @@ const StatusViewScreen = ({
   },
 }: NativeStackScreenProps<StatusStackParams, 'view'>) => {
   const { colors } = useTheme();
-  useStatus(id, { withContext: true });
+  const { data: status } = useStatus(id);
+  const contextQuery = useStatusContext(id);
   const thread = useThread(id);
 
   return (
@@ -84,6 +85,18 @@ const StatusViewScreen = ({
         leadingItem === id ? <Divider /> : <MaybeDivider statusId={leadingItem} />
       }
       initialScrollIndex={thread.indexOf(id)}
+      ListFooterComponent={
+        contextQuery.isPending && !status?.in_reply_to_id ? (
+          <ActivityIndicator style={{ marginVertical: 8 }} />
+        ) : undefined
+      }
+      ListHeaderComponent={
+        contextQuery.isPending && status?.in_reply_to_id ? (
+          <ActivityIndicator style={{ marginVertical: 8 }} />
+        ) : undefined
+      }
+      onRefresh={contextQuery.refetch}
+      refreshing={contextQuery.isRefetching}
     />
   );
 };
