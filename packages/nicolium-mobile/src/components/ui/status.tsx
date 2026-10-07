@@ -10,6 +10,7 @@ import type { CustomEmoji, Mention } from 'pl-api';
 
 interface IUIStatus {
   account: React.JSX.Element;
+  displayedMentions?: React.JSX.Element;
   content: string;
   emojis?: Array<CustomEmoji>;
   mentions?: Array<Mention>;
@@ -27,6 +28,7 @@ interface IUIStatus {
 
 const UIStatus: React.FC<IUIStatus> = ({
   account,
+  displayedMentions,
   content,
   spoilerText,
   emojis,
@@ -54,6 +56,7 @@ const UIStatus: React.FC<IUIStatus> = ({
 
   const status = (
     <View style={{ flexDirection: 'column', gap: 8, flex: 1 }}>
+      {displayedMentions}
       {spoilerText && (
         <TouchableRipple onPress={spoilerExpanded ? collapseStatusSpoiler : expandStatusSpoiler}>
           <Card mode='contained' style={{ borderWidth: 1, borderColor: theme.colors.primary }}>

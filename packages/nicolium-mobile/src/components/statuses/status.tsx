@@ -8,7 +8,6 @@ import {
   TouchableRipple,
   useTheme,
 } from '@mkljczk/react-native-paper';
-import CardContent from '@mkljczk/react-native-paper/lib/typescript/src/components/Card/CardContent';
 import { Link, useNavigation } from '@react-navigation/native';
 import {
   DotsThreeIcon,
@@ -134,6 +133,82 @@ const StatusMaybeFollowedHashtagChip: React.FC<IStatusMaybeFollowedHashtagChip> 
   );
 };
 
+interface IStatusReplyMentions {
+  id: string;
+}
+
+const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ id }) => {
+  const { colors } = useTheme();
+
+  const { data: status } = useStatus(id);
+
+  if (!status) return null;
+
+  if (!status.in_reply_to_id) {
+    // Used as placeholder by Akkoma
+    // https://akkoma.dev/AkkomaGang/akkoma/src/branch/develop/lib/pleroma/web/mastodon_api/views/status_view.ex#L31
+    if (status.in_reply_to_account_id === '_') {
+      return (
+        <Text variant='labelLarge'>
+          <FormattedMessage id='reply_mentions.reply_empty' defaultMessage='Replying to post' />
+        </Text>
+      );
+    }
+    return null;
+  }
+
+  const to = status.mentions;
+
+  // The post is a reply, but it has no mentions.
+  // Rare, but it can happen.
+  if (to.length === 0) {
+    return (
+      <Text
+        variant='labelLarge'
+        style={{ textDecorationLine: status.parent_visible === false ? 'line-through' : undefined }}
+      >
+        <FormattedMessage id='reply_mentions.reply_empty' defaultMessage='Replying to post' />
+      </Text>
+    );
+  }
+
+  // The typical case with a reply-to and a list of mentions.
+  const accounts = to.slice(0, 2).map((account, index, array) => (
+    <>
+      <Link
+        screen='accounts'
+        params={{ screen: 'view', params: { id: account.id } }}
+        key={account.id}
+      >
+        @{account.username}
+      </Link>
+      {index !== array.length - 1 && <>, </>}
+    </>
+  ));
+
+  if (to.length > 2) {
+    accounts.push(
+      <FormattedMessage
+        id='reply_mentions.more'
+        defaultMessage='{count} more'
+        values={{ count: to.length - 2 }}
+      />,
+    );
+  }
+
+  return (
+    <Text variant='labelLarge'>
+      <FormattedMessage
+        id='reply_mentions.reply'
+        defaultMessage='Replying to {accounts}'
+        values={{
+          accounts,
+        }}
+      />
+    </Text>
+  );
+};
+
 interface IStatus {
   id: string;
   rebloggedBy?: Array<string>;
@@ -197,6 +272,7 @@ const Status: React.FC<IStatus> = ({
           )}
         </View>
       }
+      displayedMentions={<StatusReplyMentions id={actualStatus.id} />}
       content={actualStatus.content}
       emojis={actualStatus.emojis}
       mentions={actualStatus.mentions}
