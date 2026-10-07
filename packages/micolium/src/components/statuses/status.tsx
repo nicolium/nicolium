@@ -34,6 +34,7 @@ import { iconHelper } from '../ui/icon';
 import { UIStatus } from '../ui/status';
 
 import { StatusActions } from './status-actions';
+import { StatusLinkPreview } from './status-link-preview';
 import { StatusMedia } from './status-media';
 
 interface IQuote {
@@ -339,6 +340,7 @@ const Status: React.FC<IStatus> = ({
               ) : (
                 <Quote id={actualStatus.quote_id} />
               ))}
+            {!props.compact && <StatusLinkPreview status={status} />}
           </>
         )
       }
