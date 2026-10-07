@@ -32,6 +32,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { useStatus } from '@/queries/statuses/use-status';
+import { useAuthStore } from '@/stores/auth';
 import {
   checkComposeContent,
   useCompose,
@@ -362,4 +363,10 @@ const ComposeBottomSheet = () => {
   );
 };
 
-export { ComposeBottomSheet };
+const MaybeComposeBottomSheet = () => {
+  const isLoggedIn = useAuthStore(({ currentAccount }) => !!currentAccount);
+
+  return isLoggedIn ? <ComposeBottomSheet /> : null;
+};
+
+export { MaybeComposeBottomSheet as ComposeBottomSheet };

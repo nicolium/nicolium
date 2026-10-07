@@ -46,6 +46,12 @@ const messages = defineMessages({
 
 const SEARCH_TYPES = ['accounts', 'statuses', 'hashtags', 'links'] as const;
 
+const LoadingIndicator = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <ActivityIndicator size='large' />
+  </View>
+);
+
 const SearchScreen = ({
   route,
   navigation,
@@ -116,114 +122,126 @@ const SearchScreen = ({
       >
         <Tabs style={{ backgroundColor: colors.surfaceContainer }} uppercase={false}>
           <TabScreen label={intl.formatMessage(messages.accounts)}>
-            <FlashList
-              data={
-                hasQuery
-                  ? accountsQuery.data
-                  : trendingAccountsQuery.data?.map(({ account_id: id }) => id)
-              }
-              renderItem={({ item }) => (
-                <Account
-                  key={item}
-                  id={item}
-                  style={{ paddingVertical: 8, padding: 12 }}
-                  withLink
-                />
-              )}
-              ItemSeparatorComponent={Divider}
-              onEndReached={
-                hasQuery && accountsQuery.hasNextPage && !accountsQuery.isFetching
-                  ? accountsQuery.fetchNextPage
-                  : undefined
-              }
-              onEndReachedThreshold={0.1}
-
-              ListEmptyComponent={
-                !accountsQuery.isPending ? (
-                  <EmptyMessage
-                    emptyMessageText={
-                      <FormattedMessage
-                        id='empty_column.search.accounts'
-                        defaultMessage='There are no people results for "{term}"'
-                        values={{ term: activeQuery }}
-                      />
-                    }
+            {(hasQuery ? accountsQuery : trendingAccountsQuery).isPending ? (
+              <LoadingIndicator />
+            ) : (
+              <FlashList
+                data={
+                  hasQuery
+                    ? accountsQuery.data
+                    : trendingAccountsQuery.data?.map(({ account_id: id }) => id)
+                }
+                renderItem={({ item }) => (
+                  <Account
+                    key={item}
+                    id={item}
+                    style={{ paddingVertical: 8, padding: 12 }}
+                    withLink
                   />
-                ) : null
-              }
-              ListFooterComponent={
-                accountsQuery.isFetching ? (
-                  <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
-                ) : undefined
-              }
-            />
+                )}
+                ItemSeparatorComponent={Divider}
+                onEndReached={
+                  hasQuery && accountsQuery.hasNextPage && !accountsQuery.isFetching
+                    ? accountsQuery.fetchNextPage
+                    : undefined
+                }
+                onEndReachedThreshold={0.1}
+
+                ListEmptyComponent={
+                  !accountsQuery.isPending ? (
+                    <EmptyMessage
+                      emptyMessageText={
+                        <FormattedMessage
+                          id='empty_column.search.accounts'
+                          defaultMessage='There are no people results for "{term}"'
+                          values={{ term: activeQuery }}
+                        />
+                      }
+                    />
+                  ) : null
+                }
+                ListFooterComponent={
+                  accountsQuery.isFetching ? (
+                    <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
+                  ) : undefined
+                }
+              />
+            )}
           </TabScreen>
           <TabScreen label={intl.formatMessage(messages.statuses)}>
-            <FlashList
-              data={(hasQuery ? statusesQuery : trendingStatusesQuery).data}
-              renderItem={({ item }) => <Status id={item} withLink />}
-              ItemSeparatorComponent={Divider}
-              onEndReached={
-                hasQuery && statusesQuery.hasNextPage && !statusesQuery.isFetching
-                  ? statusesQuery.fetchNextPage
-                  : undefined
-              }
-              onEndReachedThreshold={0.1}
-              ListEmptyComponent={
-                !statusesQuery.isPending ? (
-                  <EmptyMessage
-                    emptyMessageText={
-                      <FormattedMessage
-                        id='empty_column.search.statuses'
-                        defaultMessage='There are no posts results for "{term}"'
-                        values={{ term: activeQuery }}
-                      />
-                    }
-                  />
-                ) : null
-              }
-              ListFooterComponent={
-                statusesQuery.isFetching ? (
-                  <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
-                ) : undefined
-              }
-            />
+            {(hasQuery ? statusesQuery : trendingStatusesQuery).isPending ? (
+              <LoadingIndicator />
+            ) : (
+              <FlashList
+                data={(hasQuery ? statusesQuery : trendingStatusesQuery).data}
+                renderItem={({ item }) => <Status id={item} withLink />}
+                ItemSeparatorComponent={Divider}
+                onEndReached={
+                  hasQuery && statusesQuery.hasNextPage && !statusesQuery.isFetching
+                    ? statusesQuery.fetchNextPage
+                    : undefined
+                }
+                onEndReachedThreshold={0.1}
+                ListEmptyComponent={
+                  !statusesQuery.isPending ? (
+                    <EmptyMessage
+                      emptyMessageText={
+                        <FormattedMessage
+                          id='empty_column.search.statuses'
+                          defaultMessage='There are no posts results for "{term}"'
+                          values={{ term: activeQuery }}
+                        />
+                      }
+                    />
+                  ) : null
+                }
+                ListFooterComponent={
+                  statusesQuery.isFetching ? (
+                    <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
+                  ) : undefined
+                }
+              />
+            )}
           </TabScreen>
           <TabScreen label={intl.formatMessage(messages.hashtags)}>
-            <FlashList
-              data={(hasQuery ? hashtagsQuery : trendingHashtagsQuery).data}
-              renderItem={({ item }) => <Hashtag tag={item.name} />}
-              ItemSeparatorComponent={Divider}
-              onEndReached={
-                hasQuery && hashtagsQuery.hasNextPage && !hashtagsQuery.isFetching
-                  ? hashtagsQuery.fetchNextPage
-                  : undefined
-              }
-              onEndReachedThreshold={0.1}
-              ListEmptyComponent={
-                !statusesQuery.isPending ? (
-                  <EmptyMessage
-                    emptyMessageText={
-                      <FormattedMessage
-                        id='empty_column.search.statuses'
-                        defaultMessage='There are no posts results for "{term}"'
-                        values={{ term: activeQuery }}
-                      />
-                    }
-                  />
-                ) : null
-              }
-              ListFooterComponent={
-                statusesQuery.isFetching ? (
-                  <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
-                ) : undefined
-              }
-            />
+            {(hasQuery ? hashtagsQuery : trendingHashtagsQuery).isPending ? (
+              <LoadingIndicator />
+            ) : (
+              <FlashList
+                data={(hasQuery ? hashtagsQuery : trendingHashtagsQuery).data}
+                renderItem={({ item }) => <Hashtag tag={item.name} />}
+                ItemSeparatorComponent={Divider}
+                onEndReached={
+                  hasQuery && hashtagsQuery.hasNextPage && !hashtagsQuery.isFetching
+                    ? hashtagsQuery.fetchNextPage
+                    : undefined
+                }
+                onEndReachedThreshold={0.1}
+                ListEmptyComponent={
+                  !statusesQuery.isPending ? (
+                    <EmptyMessage
+                      emptyMessageText={
+                        <FormattedMessage
+                          id='empty_column.search.statuses'
+                          defaultMessage='There are no posts results for "{term}"'
+                          values={{ term: activeQuery }}
+                        />
+                      }
+                    />
+                  ) : null
+                }
+                ListFooterComponent={
+                  statusesQuery.isFetching ? (
+                    <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
+                  ) : undefined
+                }
+              />
+            )}
           </TabScreen>
           {features.trendingLinks && !hasQuery && (
             <TabScreen label={intl.formatMessage(messages.links)}>
-              <View style={{ margin: 8 }}>
-                {trendingLinksQuery.data ? (
+              {trendingLinksQuery.data ? (
+                <View style={{ margin: 8 }}>
                   <Carousel
                     data={trendingLinksQuery.data}
                     height={320}
@@ -246,10 +264,10 @@ const SearchScreen = ({
                       </CarouselItem>
                     )}
                   />
-                ) : (
-                  <ActivityIndicator size='large' />
-                )}
-              </View>
+                </View>
+              ) : (
+                <LoadingIndicator />
+              )}
             </TabScreen>
           )}
         </Tabs>
