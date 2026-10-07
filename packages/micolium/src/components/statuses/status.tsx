@@ -22,6 +22,7 @@ import { FormattedList, FormattedMessage } from 'react-intl';
 import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { useAccount } from '@/queries/accounts/use-account';
+import { useAccounts } from '@/queries/accounts/use-accounts';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
@@ -60,9 +61,9 @@ interface IStatusRebloggedChip {
 }
 
 const StatusRebloggedChip: React.FC<IStatusRebloggedChip> = ({ accountIds }) => {
-  const { data: account } = useAccount(accountIds[0]);
+  const { data: accounts } = useAccounts(accountIds);
 
-  if (!account) return null;
+  if (!accountIds.length) return null;
 
   return (
     <Chip mode='outlined' icon={iconHelper(RepeatIcon)} compact>
@@ -71,13 +72,18 @@ const StatusRebloggedChip: React.FC<IStatusRebloggedChip> = ({ accountIds }) => 
         defaultMessage='{name} reposted'
         values={{
           name: (
-            <Link
-              screen='accounts'
-              params={{ screen: 'view', params: { id: account.id } }}
-              key={account.id}
-            >
-              {account.display_name}
-            </Link>
+            <FormattedList
+              type='conjunction'
+              value={accounts.map((account) => (
+                <Link
+                  screen='accounts'
+                  params={{ screen: 'view', params: { id: account.id } }}
+                  key={account.id}
+                >
+                  {account.display_name}
+                </Link>
+              ))}
+            />
           ),
         }}
       />
@@ -235,7 +241,7 @@ const Status: React.FC<IStatus> = ({
 
   let chip;
 
-  if (rebloggedBy) {
+  if (rebloggedBy?.length) {
     chip = <StatusRebloggedChip accountIds={rebloggedBy} />;
   } else if ((context === 'timeline' || context === 'home') && status.reblog && status.account_id) {
     chip = <StatusRebloggedChip accountIds={[status.account_id]} />;
