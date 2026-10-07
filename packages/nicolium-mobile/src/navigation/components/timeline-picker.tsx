@@ -7,6 +7,7 @@ import {
   CaretRightIcon,
   CirclesThreeIcon,
   FediverseLogoIcon,
+  FolderIcon,
   GlobeSimpleIcon,
   GraphIcon,
   HouseIcon,
@@ -303,7 +304,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
                     }),
                   )}
                   title={folder.name}
-                  leadingIcon={iconHelper(ListDashesIcon)}
+                  leadingIcon={iconHelper(FolderIcon)}
                 />
               ))
             ) : (
