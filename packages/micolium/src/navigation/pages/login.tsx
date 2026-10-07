@@ -341,7 +341,7 @@ const OauthFlowScreen = ({
       signInWithCode(code, request?.codeVerifier!).then(() => {
         navigation.getParent()?.navigate('app');
       });
-    } else {
+    } else if (response && ['locked', 'cancel', 'dismiss', 'error'].includes(response.type)) {
       if (Platform.OS === 'android') {
         ToastAndroid.show(intl.formatMessage(messages.interruptMessage), ToastAndroid.SHORT);
         // TODO: support non-android
