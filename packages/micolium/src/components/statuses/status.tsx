@@ -166,30 +166,24 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status }) => {
 
   // The typical case with a reply-to and a list of mentions.
   const accounts = to.slice(0, 2).map((account, index, array) => (
-    <>
-      <Link
-        screen='accounts'
-        params={{ screen: 'view', params: { id: account.id } }}
-        key={account.id}
-      >
-        @{account.username}
-      </Link>
-      {index !== array.length - 1 && <>, </>}
-    </>
+    <Link
+      screen='accounts'
+      params={{ screen: 'view', params: { id: account.id } }}
+      key={account.id}
+    >
+      @{account.username}
+    </Link>
   ));
 
   if (to.length > 2) {
     accounts.push(
-      <>
-        {', '}
-        <Link screen='status' params={{ screen: 'mentions', params: { id: status.id } }} key='more'>
-          <FormattedMessage
-            id='reply_mentions.more'
-            defaultMessage='{count} more'
-            values={{ count: to.length - 2 }}
-          />
-        </Link>
-      </>,
+      <Link screen='status' params={{ screen: 'mentions', params: { id: status.id } }} key='more'>
+        <FormattedMessage
+          id='reply_mentions.more'
+          defaultMessage='{count} more'
+          values={{ count: to.length - 2 }}
+        />
+      </Link>,
     );
   }
 
@@ -199,7 +193,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status }) => {
         id='reply_mentions.reply'
         defaultMessage='Replying to {accounts}'
         values={{
-          accounts,
+          accounts: <FormattedList type='conjunction' value={accounts} />,
         }}
       />
     </Text>

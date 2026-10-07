@@ -2,6 +2,7 @@ import 'core-js/actual/array/to-sorted';
 import 'react-native-get-random-values';
 import { shouldPolyfill as shouldPolyfillDateTimeFormat } from '@formatjs/intl-datetimeformat/should-polyfill';
 import { shouldPolyfill as shouldPolyfillGetCanonicalLocales } from '@formatjs/intl-getcanonicallocales/should-polyfill';
+import { shouldPolyfill as shouldPolyfillListFormat } from '@formatjs/intl-listformat/should-polyfill';
 import { shouldPolyfill as shouldPolyfillLocale } from '@formatjs/intl-locale/should-polyfill';
 import { shouldPolyfill as shouldPolyfillNumberFormat } from '@formatjs/intl-numberformat/should-polyfill';
 import { shouldPolyfill as shouldPolyfillPluralRules } from '@formatjs/intl-pluralrules/should-polyfill';
@@ -43,6 +44,11 @@ async function loadPolyfills() {
     await import('@formatjs/intl-relativetimeformat/polyfill-force');
     await import(`@formatjs/intl-relativetimeformat/locale-data/en`);
   }
+
+  if (shouldPolyfillListFormat('en')) {
+    await import('@formatjs/intl-listformat/polyfill-force');
+    await import(`@formatjs/intl-listformat/locale-data/en`);
+  }
 }
 
-loadPolyfills();
+export { loadPolyfills };

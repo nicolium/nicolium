@@ -113,6 +113,13 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
       <IconButton
         icon={(props) => <RepeatIcon {...props} weight={status.reblogged ? 'fill' : undefined} />}
         onPress={() => (status.reblogged ? unreblogStatus() : reblogStatus({}))}
+        disabled={isPendingReblog || !publicStatus}
+        style={{ margin: -4, height: 40, width: 40 }}
+        selected={status.reblogged}
+        accessibilityLabel={intl.formatMessage(
+          status.reblogged ? messages.unreblog : messages.reblog,
+        )}
+        {...props}
         onLongPress={
           status.reblogs_count
             ? () =>
@@ -122,13 +129,6 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
                 })
             : undefined
         }
-        disabled={isPendingReblog || !publicStatus}
-        style={{ margin: -4, height: 40, width: 40 }}
-        selected={status.reblogged}
-        accessibilityLabel={intl.formatMessage(
-          status.reblogged ? messages.unreblog : messages.reblog,
-        )}
-        {...props}
       />
       {status.reblogs_count > 0 && (
         <Text
@@ -177,6 +177,13 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status }) => {
           return <Icon {...props} weight={status.favourited ? 'fill' : undefined} />;
         }}
         onPress={() => (status.favourited ? unfavouriteStatus : favouriteStatus)()}
+        disabled={isPendingFavourite}
+        style={{ margin: -4, height: 40, width: 40 }}
+        selected={status.favourited}
+        accessibilityLabel={intl.formatMessage(
+          status.favourited ? messages.unfavourite : messages.favourite,
+        )}
+        {...props}
         onLongPress={
           status.favourites_count
             ? () =>
@@ -186,13 +193,6 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status }) => {
                 })
             : undefined
         }
-        disabled={isPendingFavourite}
-        style={{ margin: -4, height: 40, width: 40 }}
-        selected={status.favourited}
-        accessibilityLabel={intl.formatMessage(
-          status.favourited ? messages.unfavourite : messages.favourite,
-        )}
-        {...props}
       />
       {status.favourites_count > 0 && (
         <Text
@@ -245,6 +245,13 @@ const DislikeAction: React.FC<IStatusActions> = ({ status }) => {
               <ThumbsDownIcon {...props} weight={status.disliked ? 'fill' : undefined} />
             )}
             onPress={() => (status.disliked ? undislikeStatus : dislikeStatus)()}
+            disabled={isPendingDislike}
+            style={{ margin: -4, height: 40, width: 40 }}
+            selected={status.disliked}
+            accessibilityLabel={intl.formatMessage(
+              status.disliked ? messages.undislike : messages.dislike,
+            )}
+            {...props}
             onLongPress={
               status.dislikes_count
                 ? () =>
@@ -254,13 +261,6 @@ const DislikeAction: React.FC<IStatusActions> = ({ status }) => {
                     })
                 : undefined
             }
-            disabled={isPendingDislike}
-            style={{ margin: -4, height: 40, width: 40 }}
-            selected={status.disliked}
-            accessibilityLabel={intl.formatMessage(
-              status.disliked ? messages.undislike : messages.dislike,
-            )}
-            {...props}
           />
           {status.dislikes_count > 0 && (
             <Text
