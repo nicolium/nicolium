@@ -44,6 +44,7 @@ type StatusStackParams = {
   favourites: { id: string };
   dislikes: { id: string };
   quotes: { id: string };
+  mentions: { id: string };
 };
 type AccountStackParams = {
   view: { id: string };

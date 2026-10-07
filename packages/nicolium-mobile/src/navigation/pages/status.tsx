@@ -146,6 +146,27 @@ const StatusDislikesScreen = ({
   );
 };
 
+const StatusMentionsScreen = ({
+  route: {
+    params: { id },
+  },
+}: NativeStackScreenProps<StatusStackParams, 'mentions'>) => {
+  const { data: status, isPending } = useStatus(id);
+
+  return (
+    <FlashList
+      data={status?.mentions.map(({ id }) => id)}
+      renderItem={({ item }) => (
+        <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink />
+      )}
+      ItemSeparatorComponent={Divider}
+      ListFooterComponent={
+        isPending ? <ActivityIndicator style={{ marginVertical: 8 }} /> : undefined
+      }
+    />
+  );
+};
+
 const StatusStack = createNativeStackNavigator<StatusStackParams>();
 
 const StatusStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'status'>) => {
@@ -170,6 +191,11 @@ const StatusStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'stat
         name='dislikes'
         component={StatusDislikesScreen}
         options={{ header: Header, title: 'Dislikes' }}
+      />
+      <StatusStack.Screen
+        name='mentions'
+        component={StatusMentionsScreen}
+        options={{ header: Header, title: 'Mentions' }}
       />
     </StatusStack.Navigator>
   );

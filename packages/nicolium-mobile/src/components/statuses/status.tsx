@@ -188,11 +188,16 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ id }) => {
 
   if (to.length > 2) {
     accounts.push(
-      <FormattedMessage
-        id='reply_mentions.more'
-        defaultMessage='{count} more'
-        values={{ count: to.length - 2 }}
-      />,
+      <>
+        {', '}
+        <Link screen='status' params={{ screen: 'mentions', params: { id } }} key='more'>
+          <FormattedMessage
+            id='reply_mentions.more'
+            defaultMessage='{count} more'
+            values={{ count: to.length - 2 }}
+          />
+        </Link>
+      </>,
     );
   }
 
