@@ -401,7 +401,7 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(yaml@2.9.0))
 
-  packages/nicolium-mobile:
+  packages/micolium:
     dependencies:
       '@expo/metro-runtime':
         specifier: ~56.0.21

@@ -330,21 +330,21 @@ const newPoll = (params: Partial<ComposePoll> = {}): ComposePoll => ({
 //   ];
 // };
 
-// const privacyPreference = (
-//   a: string,
-//   b: string,
-//   list_id: number | null,
-//   conversationScope = false,
-// ) => {
-//   if (['private', 'subscribers'].includes(a) && conversationScope) return 'conversation';
+const privacyPreference = (
+  a: string,
+  b: string,
+  list_id: number | null,
+  conversationScope = false,
+) => {
+  if (['private', 'subscribers'].includes(a) && conversationScope) return 'conversation';
 
-//   const order = ['public', 'unlisted', 'mutuals_only', 'private', 'direct', 'local'];
+  const order = ['public', 'unlisted', 'mutuals_only', 'private', 'direct', 'local'];
 
-//   if (a === 'group') return a;
-//   if (a === 'list' && list_id !== null) return `list:${list_id}`;
+  if (a === 'group') return a;
+  if (a === 'list' && list_id !== null) return `list:${list_id}`;
 
-//   return order[Math.max(order.indexOf(a), order.indexOf(b), 0)];
-// };
+  return order[Math.max(order.indexOf(a), order.indexOf(b), 0)];
+};
 
 // const domParser = new DOMParser();
 
@@ -449,68 +449,66 @@ const checkComposeContent = (compose?: Compose) =>
 //   return null;
 // };
 
-// const composeInteraction = (
-//   write: (composeId: string) => void,
-//   scopeUrl: string,
-//   columnId: string | undefined,
-//   search: ComposePageSearch,
-//   openComposer: boolean,
-// ) => {
-//   const composeInModal = () => {
-//     write('compose-modal');
-//     if (openComposer) openComposeSurface(scopeUrl, columnId, search);
-//   };
+const composeInteraction = (
+  write: (composeId: string) => void,
+  scopeUrl: string,
+  columnId: string | undefined,
+  openComposer: boolean,
+) => {
+  const composeInModal = () => {
+    write('compose-modal');
+  };
 
-//   const target = openComposer ? getInteractionsComposeTarget() : null;
+  const target = openComposer ? getInteractionsComposeTarget() : null;
 
-//   if (!target) {
-//     composeInModal();
-//     return;
-//   }
+  if (!target) {
+    composeInModal();
+    return;
+  }
 
-//   const { composeId } = target;
-//   const { actions, composers } = useComposeStore.getState();
+  const { composeId } = target;
+  const { actions, composers } = useComposeStore.getState();
 
-//   const composeInTarget = () => {
-//     actions.resetCompose(composeId);
-//     write(composeId);
-//     actions.updateCompose(composeId, (compose) => {
-//       compose.editorKey = crypto.randomUUID();
-//     });
-//     if (target.column) setDeckColumnAccountUrl(target.column.id, scopeUrl);
-//     target.element?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-//   };
+  const composeInTarget = () => {
+    actions.resetCompose(composeId);
+    write(composeId);
+    actions.updateCompose(composeId, (compose) => {
+      compose.editorKey = crypto.randomUUID();
+    });
+    if (target.column) setDeckColumnAccountUrl(target.column.id, scopeUrl);
+    target.element?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+  };
 
-//   if (checkComposeContent(composers[composeId]) || actions.hasThreadContent(composeId)) {
-//     useModalsStore.getState().actions.openModal('CONFIRM', {
-//       heading: (
-//         <FormattedMessage
-//           id='compose_column.overwrite.heading'
-//           defaultMessage='Discard the post in the compose column?'
-//         />
-//       ),
-//       message: (
-//         <FormattedMessage
-//           id='compose_column.overwrite.message'
-//           defaultMessage='You’re already composing a post in the compose column. Discarding it will replace it with the new post.'
-//         />
-//       ),
-//       confirm: <FormattedMessage id='compose_column.overwrite.confirm' defaultMessage='Discard' />,
-//       onConfirm: composeInTarget,
-//       theme: 'danger',
-//       secondary: (
-//         <FormattedMessage
-//           id='compose_column.overwrite.compose_in_modal'
-//           defaultMessage='Compose in a modal'
-//         />
-//       ),
-//       onSecondary: composeInModal,
-//     });
-//     return;
-//   }
+  if (checkComposeContent(composers[composeId]) || actions.hasThreadContent(composeId)) {
+    useModalsStore.getState().actions.openModal('CONFIRM', {
+      heading: (
+        <FormattedMessage
+          id='compose_column.overwrite.heading'
+          defaultMessage='Discard the post in the compose column?'
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='compose_column.overwrite.message'
+          defaultMessage='You’re already composing a post in the compose column. Discarding it will replace it with the new post.'
+        />
+      ),
+      confirm: <FormattedMessage id='compose_column.overwrite.confirm' defaultMessage='Discard' />,
+      onConfirm: composeInTarget,
+      theme: 'danger',
+      secondary: (
+        <FormattedMessage
+          id='compose_column.overwrite.compose_in_modal'
+          defaultMessage='Compose in a modal'
+        />
+      ),
+      onSecondary: composeInModal,
+    });
+    return;
+  }
 
-//   composeInTarget();
-// };
+  composeInTarget();
+};
 
 interface ComposeState {
   default: Compose;
@@ -555,24 +553,24 @@ interface ComposeActions {
     redacting?: boolean,
   ) => void;
   //   setComposeToScheduledStatus: (scheduledStatus: ScheduledStatus) => void;
-  //   replyCompose: (
-  //     status: Pick<
-  //       Status,
-  //       | 'id'
-  //       | 'account_id'
-  //       | 'group_id'
-  //       | 'list_id'
-  //       | 'local_only'
-  //       | 'mentions'
-  //       | 'spoiler_text'
-  //       | 'visibility'
-  //     >,
-  //     scopeUrl: string,
-  //     columnId?: string,
-  //     rebloggedBy?: Pick<Account, 'acct' | 'id'>,
-  //     approvalRequired?: boolean,
-  //     openComposer?: boolean,
-  //   ) => void;
+    replyCompose: (
+      status: Pick<
+        Status,
+        | 'id'
+        | 'account_id'
+        | 'group_id'
+        | 'list_id'
+        | 'local_only'
+        | 'mentions'
+        | 'spoiler_text'
+        | 'visibility'
+      >,
+      scopeUrl: string,
+      columnId?: string,
+      rebloggedBy?: Pick<Account, 'acct' | 'id'>,
+      approvalRequired?: boolean,
+      openComposer?: boolean,
+    ) => void;
   //   quoteCompose: (
   //     status: Pick<Status, 'id' | 'account_id' | 'visibility' | 'group_id' | 'list_id'>,
   //     scopeUrl: string,
@@ -823,66 +821,66 @@ const useComposeStore = create<ComposeStore>()(
         //           });
         //         },
 
-        //         replyCompose: (
-        //           status,
-        //           scopeUrl,
-        //           columnId,
-        //           rebloggedBy,
-        //           approvalRequired,
-        //           openComposer = true,
-        //         ) => {
-        //           const { features } = getClient();
-        //           const { forceImplicitAddressing, preserveSpoilers, defaultPrivacy } =
-        //             useSettingsStore.getState().settings;
-        //           const explicitAddressing =
-        //             features.createStatusExplicitAddressing && !forceImplicitAddressing;
-        //           const account = getOwnAccount();
+                replyCompose: (
+                  status,
+                  scopeUrl,
+                  columnId,
+                  rebloggedBy,
+                  approvalRequired,
+                  openComposer = true,
+                ) => {
+                  const { features } = getClient();
+                  const { forceImplicitAddressing, preserveSpoilers, defaultPrivacy } =
+                    useSettingsStore.getState().settings;
+                  const explicitAddressing =
+                    features.createStatusExplicitAddressing && !forceImplicitAddressing;
+                  const account = getOwnAccount();
 
-        //           if (!account) return;
+                  if (!account) return;
 
-        //           const doCompose = (composeId: string) =>
-        //             set((draft) => {
-        //               draft.composers[composeId] = {
-        //                 ...draft.default,
-        //                 idempotencyKey: crypto.randomUUID(),
-        //               };
-        //               const compose = draft.composers[composeId];
+                  const doCompose = (composeId: string) =>
+                    set((draft) => {
+                      draft.composers[composeId] = {
+                        ...draft.default,
+                        idempotencyKey: crypto.randomUUID(),
+                      };
+                      const compose = draft.composers[composeId];
 
-        //               const mentions = explicitAddressing
-        //                 ? statusToMentionsArray(status, account, rebloggedBy, scopeUrl)
-        //                 : [];
+                      const mentions = explicitAddressing
+                        ? statusToMentionsArray(status, account, rebloggedBy, scopeUrl)
+                        : [];
 
-        //               compose.groupId = status.group_id;
-        //               compose.inReplyToId = status.id;
-        //               compose.to = mentions;
-        //               compose.parentRebloggedById = rebloggedBy?.id ?? null;
-        //               compose.text = !explicitAddressing
-        //                 ? statusToTextMentions(status, account, scopeUrl)
-        //                 : '';
-        //               compose.visibility = privacyPreference(
-        //                 status.visibility,
-        //                 draft.default.visibility === 'default' ? defaultPrivacy : draft.default.visibility,
-        //                 status.list_id,
-        //                 features.createStatusConversationScope,
-        //               );
-        //               compose.localOnly = status.local_only === true;
-        //               compose.caretPosition = null;
-        //               compose.contentType = draft.default.contentType;
-        //               compose.approvalRequired = approvalRequired ?? false;
-        //               if (preserveSpoilers && status.spoiler_text) {
-        //                 compose.sensitive = true;
-        //                 compose.spoilerText = status.spoiler_text;
-        //               }
-        //             });
+                      compose.groupId = status.group_id;
+                      compose.inReplyToId = status.id;
+                      compose.to = mentions;
+                      compose.parentRebloggedById = rebloggedBy?.id ?? null;
+                      compose.text = !explicitAddressing
+                        ? statusToTextMentions(status, account, scopeUrl)
+                        : '';
+                      compose.visibility = privacyPreference(
+                        status.visibility,
+                        draft.default.visibility === 'default' ? defaultPrivacy : draft.default.visibility,
+                        status.list_id,
+                        features.createStatusConversationScope,
+                      );
+                      compose.localOnly = status.local_only === true;
+                      compose.caretPosition = null;
+                      compose.contentType = draft.default.contentType;
+                      compose.approvalRequired = approvalRequired ?? false;
+                      if (preserveSpoilers && status.spoiler_text) {
+                        compose.sensitive = true;
+                        compose.spoilerText = status.spoiler_text;
+                      }
+                    });
 
-        //           composeInteraction(
-        //             doCompose,
-        //             scopeUrl,
-        //             columnId,
-        //             { approvalRequired, inReplyTo: status.id },
-        //             openComposer,
-        //           );
-        //         },
+                  composeInteraction(
+                    doCompose,
+                    scopeUrl,
+                    columnId,
+                    { approvalRequired, inReplyTo: status.id },
+                    openComposer,
+                  );
+                },
 
         //         quoteCompose: (status, scopeUrl, columnId, approvalRequired, openComposer = true) => {
         //           const doCompose = (composeId: string) =>

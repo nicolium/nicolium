@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Nicolium",
-    "slug": "nicolium-mobile",
+    "slug": "micolium",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "nicoliummobile",
+    "scheme": "micolium",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
