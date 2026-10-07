@@ -1,0 +1,461 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
+
+import { batcher } from '@/api/batcher';
+import { useClient } from '@/contexts/current-account-context';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey, useAppQueries, useAppQuery } from '@/queries/query';
+import { useAuthStore } from '@/stores/auth';
+import { useContextsActions } from '@/stores/contexts';
+import { useTimelinesActions } from '@/stores/timelines';
+
+import { useCredentialAccount } from './use-account-credentials';
+
+import type {
+  BlockAccountParams,
+  FollowAccountParams,
+  MuteAccountParams,
+  Relationship,
+} from 'pl-api';
+
+const updateRelationship = (
+  accountId: string,
+  changes: Partial<Relationship> | ((relationship: Relationship) => Relationship),
+  queryClient: ReturnType<typeof useQueryClient>,
+  scopeUrl: string,
+) => {
+  const previousRelationship = queryClient.getQueryData(
+    scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+  );
+  if (!previousRelationship) return;
+
+  const newRelationship =
+    typeof changes === 'function'
+      ? changes(previousRelationship)
+      : { ...previousRelationship, ...changes };
+  queryClient.setQueryData(
+    scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+    newRelationship,
+  );
+
+  return { previousRelationship };
+};
+
+const restorePreviousRelationship = (
+  accountId: string,
+  context: { previousRelationship?: Relationship } | undefined,
+  queryClient: ReturnType<typeof useQueryClient>,
+  scopeUrl: string,
+) => {
+  if (context?.previousRelationship) {
+    queryClient.setQueryData(
+      scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+      context.previousRelationship,
+    );
+  }
+};
+
+const useRelationshipQuery = (accountId?: string) => {
+  const client = useClient();
+  const isLoggedIn = useAuthStore(({ currentAccount }) => !!currentAccount);
+
+  return useAppQuery({
+    queryKey: queryKeys.accountRelationships.show(accountId!),
+    queryFn: () =>
+      batcher
+        .relationships(client)
+        .fetch(accountId!)
+        .then((data) => data || undefined),
+    enabled: isLoggedIn && !!accountId,
+  });
+};
+
+const useRelationshipsQuery = (accountIds?: Array<string>) => {
+  const client = useClient();
+  const isLoggedIn = useAuthStore(({ currentAccount }) => !!currentAccount);
+
+  const queries = useMemo(
+    () =>
+      isLoggedIn && accountIds
+        ? accountIds.map((accountId) => ({
+            queryKey: queryKeys.accountRelationships.show(accountId),
+            queryFn: () =>
+              batcher
+                .relationships(client)
+                .fetch(accountId)
+                .then((data) => data || undefined),
+            enabled: !!accountId,
+          }))
+        : [],
+    [isLoggedIn, client, accountIds?.join(',')],
+  );
+
+  return useAppQueries({ queries });
+};
+
+const useFollowAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationFn: (params?: FollowAccountParams) => client.accounts.followAccount(accountId, params),
+    onMutate: (params) => {
+      return updateRelationship(
+        accountId,
+        (relationship) => ({
+          ...relationship,
+          requested: !relationship.following,
+          notifying: params?.notify ?? relationship.notifying,
+          showing_reblogs: params?.reblogs ?? relationship.showing_reblogs,
+          notifying_reblogs: params?.notify_reblogs ?? relationship.notifying_reblogs,
+          notifying_replies: params?.notify_replies ?? relationship.notifying_replies,
+        }),
+        queryClient,
+        scopeUrl,
+      );
+    },
+    onError: (_err, _variables, context) => {
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
+    },
+  });
+};
+
+const useUnfollowAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationFn: () => client.accounts.unfollowAccount(accountId),
+    onMutate: () =>
+      updateRelationship(
+        accountId,
+        {
+          following: false,
+          requested: false,
+          notifying: false,
+          notifying_reblogs: false,
+          notifying_replies: false,
+          showing_reblogs: false,
+        },
+        queryClient,
+        scopeUrl,
+      ),
+    onError: (_err, _variables, context) => {
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
+    },
+  });
+};
+
+const useBlockAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const { filterContexts } = useContextsActions();
+  const { filterTimelines } = useTimelinesActions();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationFn: (params?: BlockAccountParams) => client.filtering.blockAccount(accountId, params),
+    onMutate: () =>
+      updateRelationship(
+        accountId,
+        {
+          blocking: true,
+          followed_by: false,
+          following: false,
+          notifying: false,
+          notifying_reblogs: false,
+          notifying_replies: false,
+          requested: false,
+        },
+        queryClient,
+        scopeUrl,
+      ),
+    onError: (_err, _variables, context) => {
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
+
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.suggestions.all, scopeUrl),
+        (suggestions) =>
+          suggestions
+            ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
+            : undefined,
+      );
+
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accountsLists.blocked, scopeUrl),
+      });
+
+      // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
+      filterContexts(data);
+      filterTimelines(scopeUrl, data.id);
+    },
+  });
+};
+
+const useUnblockAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationFn: () => client.filtering.unblockAccount(accountId),
+    onMutate: () =>
+      updateRelationship(
+        accountId,
+        {
+          blocking: false,
+        },
+        queryClient,
+        scopeUrl,
+      ),
+    onError: (_err, _variables, context) => {
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
+    },
+  });
+};
+
+const useMuteAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const { filterContexts } = useContextsActions();
+  const { filterTimelines } = useTimelinesActions();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationFn: (params?: MuteAccountParams) => client.filtering.muteAccount(accountId, params),
+    onMutate: () =>
+      updateRelationship(
+        accountId,
+        {
+          muting: true,
+        },
+        queryClient,
+        scopeUrl,
+      ),
+    onError: (_err, _variables, context) => {
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
+
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.suggestions.all, scopeUrl),
+        (suggestions) =>
+          suggestions
+            ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
+            : undefined,
+      );
+
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accountsLists.muted, scopeUrl),
+      });
+
+      // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
+      filterContexts(data);
+      filterTimelines(scopeUrl, data.id);
+    },
+  });
+};
+
+const useUnmuteAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationFn: () => client.filtering.unmuteAccount(accountId),
+    onMutate: () =>
+      updateRelationship(
+        accountId,
+        {
+          muting: false,
+        },
+        queryClient,
+        scopeUrl,
+      ),
+    onError: (_err, _variables, context) => {
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
+    },
+  });
+};
+
+const usePinAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const { data: account } = useCredentialAccount();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationFn: () => client.accounts.pinAccount(accountId),
+    onMutate: () =>
+      updateRelationship(
+        accountId,
+        {
+          endorsed: true,
+        },
+        queryClient,
+        scopeUrl,
+      ),
+    onError: (_err, _variables, context) => {
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accountsLists.endorsedAccounts(account!.id), scopeUrl),
+      });
+    },
+  });
+};
+
+const useUnpinAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const { data: account } = useCredentialAccount();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationFn: () => client.accounts.unpinAccount(accountId),
+    onMutate: () =>
+      updateRelationship(
+        accountId,
+        {
+          endorsed: false,
+        },
+        queryClient,
+        scopeUrl,
+      ),
+    onError: (_err, _variables, context) => {
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.accountsLists.endorsedAccounts(account!.id), scopeUrl),
+      });
+    },
+  });
+};
+
+const useRemoveAccountFromFollowersMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationFn: () => client.accounts.removeAccountFromFollowers(accountId),
+    onMutate: () =>
+      updateRelationship(
+        accountId,
+        {
+          followed_by: false,
+        },
+        queryClient,
+        scopeUrl,
+      ),
+    onError: (_err, _variables, context) => {
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
+    },
+  });
+};
+
+const useUpdateAccountNoteMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationKey: ['accountNote', accountId],
+    mutationFn: (note: string) => client.accounts.updateAccountNote(accountId, note),
+    onMutate: (note) =>
+      updateRelationship(
+        accountId,
+        {
+          note,
+        },
+        queryClient,
+        scopeUrl,
+      ),
+    onError: (_err, _variables, context) => {
+      restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.accountRelationships.show(accountId), scopeUrl),
+        data,
+      );
+    },
+  });
+};
+
+export {
+  useRelationshipQuery,
+  useRelationshipsQuery,
+  useFollowAccountMutation,
+  useUnfollowAccountMutation,
+  useBlockAccountMutation,
+  useUnblockAccountMutation,
+  useMuteAccountMutation,
+  useUnmuteAccountMutation,
+  usePinAccountMutation,
+  useUnpinAccountMutation,
+  useRemoveAccountFromFollowersMutation,
+  useUpdateAccountNoteMutation,
+};

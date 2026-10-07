@@ -17,6 +17,7 @@ import { Tabs, TabScreen, TabsProvider } from 'react-native-paper-tabs';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { FollowButton } from '@/components/accounts/follow-button';
 import { ComposeButton } from '@/components/compose-button';
 import { CollapsibleContent } from '@/components/ui/collapsible-content';
 import { iconHelper } from '@/components/ui/icon';
@@ -136,32 +137,30 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   return (
     <>
       <Animated.View style={profileInfoStyle} ref={profileInfoNode}>
-        {!account.header_default && (
-          <Image
-            style={{
-              flex: 1,
-              width: '100%',
-              maxWidth: '100%',
-              aspectRatio: 3 / 1,
-              maxHeight: 150 + topInset,
-              height: 'auto',
-            }}
-            source={{
-              uri: account.header,
-            }}
-            accessibilityLabel={account.header_description}
-            contentFit='cover'
-            transition={300}
-            recyclingKey={account.header}
-          />
-        )}
+        <Image
+          style={{
+            flex: 1,
+            width: '100%',
+            maxWidth: '100%',
+            aspectRatio: 3 / 1,
+            maxHeight: account.header_default ? 50 : 150 + topInset,
+            height: 'auto',
+          }}
+          source={{
+            uri: account.header,
+          }}
+          accessibilityLabel={account.header_description}
+          contentFit='cover'
+          transition={300}
+          recyclingKey={account.header}
+        />
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'flex-end',
             height: 88,
-            marginTop: account.header_default ? 8 + topInset : -16,
+            marginTop: -16,
             marginBottom: 8,
             marginHorizontal: 16,
           }}
@@ -176,10 +175,12 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             }}
           />
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            {ownAccount && (
+            {ownAccount ? (
               <Button mode='contained-tonal' onPress={() => navigation.navigate('edit-profile')}>
                 <FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />
               </Button>
+            ) : (
+              <FollowButton id={id} />
             )}
             <IconButton
               mode='outlined'
