@@ -339,7 +339,7 @@ const Status: React.FC<IStatus> = ({
           </>
         )
       }
-      actions={withActions ? <StatusActions id={id} /> : undefined}
+      actions={withActions ? <StatusActions status={status} /> : undefined}
       isConnectedBottom={
         typeof isConnectedBottom === 'function'
           ? isConnectedBottom(actualStatus)

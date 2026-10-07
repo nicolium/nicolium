@@ -1,4 +1,8 @@
-import { BottomSheetModal, BottomSheetTextInput } from '@gorhom/bottom-sheet';
+import {
+  BottomSheetModal,
+  BottomSheetScrollView,
+  BottomSheetTextInput,
+} from '@gorhom/bottom-sheet';
 import {
   ActivityIndicator,
   Card,
@@ -257,7 +261,11 @@ const ComposeBottomSheet = () => {
     >
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1, gap: 8 }}>
-          <View style={{ flex: 1, gap: 8, marginHorizontal: 12 }}>
+          <BottomSheetScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flexGrow: 1, gap: 8, paddingHorizontal: 12 }}
+            keyboardShouldPersistTaps='handled'
+          >
             <View style={{ flexDirection: 'row' }}>
               <Account id={currentAccount?.id} />
             </View>
@@ -283,8 +291,10 @@ const ComposeBottomSheet = () => {
                 })
               }
               placeholder={intl.formatMessage(messages.placeholder)}
+              scrollEnabled={false}
               style={{
-                flex: 1,
+                flexGrow: 1,
+                minHeight: 40,
                 alignSelf: 'stretch',
                 paddingHorizontal: 16 + 1,
                 color: colors.onSurface,
@@ -293,7 +303,7 @@ const ComposeBottomSheet = () => {
               }}
               multiline
             />
-          </View>
+          </BottomSheetScrollView>
           <View
             style={{
               flexDirection: 'row',

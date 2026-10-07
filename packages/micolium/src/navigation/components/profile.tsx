@@ -197,7 +197,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             </View>
             <Divider />
             <View style={{ flexDirection: 'row', marginHorizontal: 16, marginVertical: 8, gap: 8 }}>
-              <Text style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <Text style={{ display: 'flex', alignItems: 'center' }}>
                 <FormattedMessage
                   id='account.statuses_with_count'
                   defaultMessage='{count, plural, one {<strong>#</strong> status} other {<strong>#</strong> statuses}}'
@@ -208,7 +208,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                 />
               </Text>
               <Link
-                style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+                style={{ display: 'flex', alignItems: 'center' }}
                 screen='accounts'
                 params={{ screen: 'followers', params: { id: account.id } }}
               >
@@ -222,7 +222,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                 />
               </Link>
               <Link
-                style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+                style={{ display: 'flex', alignItems: 'center' }}
                 screen='accounts'
                 params={{ screen: 'following', params: { id: account.id } }}
               >
