@@ -50,17 +50,24 @@ interface AuthStore {
 
 const useAuthStore = create<AuthStore>()(
   mutative((set, get) => {
-    const serializedSessions = SecureishStore.getItem('sessions');
-    const rememberedSessions: Record<string, AuthSession> = serializedSessions
-      ? v.parse(filteredRecord(v.string(), authSessionSchema), JSON.parse(serializedSessions))
-      : {};
+    let sessions: Record<string, AuthSession> = {};
+    try {
+      const serializedSessions = SecureishStore.getItem('sessions');
+      if (serializedSessions) {
+        sessions = v.parse(
+          filteredRecord(v.string(), authSessionSchema),
+          JSON.parse(serializedSessions),
+        );
+      }
+    } catch {}
 
-    const serializedPendingAuth = SecureishStore.getItem('pendingAuth');
-    const parsedPendingAuth = v.safeParse(
-      pendingAuthSchema,
-      JSON.stringify(serializedPendingAuth || ''),
-    );
-    const rememberedPendingAuth = parsedPendingAuth.success ? parsedPendingAuth.output : null;
+    let pendingAuth: PendingAuth | null = null;
+    try {
+      const serializedPendingAuth = SecureishStore.getItem('pendingAuth');
+      if (serializedPendingAuth) {
+        pendingAuth = v.parse(pendingAuthSchema, JSON.parse(serializedPendingAuth));
+      }
+    } catch {}
 
     const currentAccount = SecureishStore.getItem('currentAccount');
 
@@ -80,9 +87,9 @@ const useAuthStore = create<AuthStore>()(
     };
 
     return {
-      sessions: rememberedSessions,
+      sessions,
       clients: Object.fromEntries(
-        Object.entries(rememberedSessions).map(([id, session]) => [
+        Object.entries(sessions).map(([id, session]) => [
           id,
           new PlApiClient(session.instance, session.access_token, {
             iceshrimpAccessToken: session.iceshrimp_access_token || undefined,
@@ -91,9 +98,9 @@ const useAuthStore = create<AuthStore>()(
         ]),
       ),
       currentAccount,
-      pendingAuth: rememberedPendingAuth,
-      pendingAuthClient: rememberedPendingAuth
-        ? new PlApiClient(rememberedPendingAuth.instance, undefined, {
+      pendingAuth,
+      pendingAuthClient: pendingAuth
+        ? new PlApiClient(pendingAuth.instance, undefined, {
             fetchInstance: true,
           })
         : null,
