@@ -55,7 +55,7 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
         anchorPosition='bottom'
       >
         <Menu.Item
-          onPress={closeAfter(() => navigation.navigate('settings' as never))}
+          onPress={closeAfter(() => navigation.navigate('settings'))}
           title={intl.formatMessage(messages.settings)}
         />
         <Menu.Item

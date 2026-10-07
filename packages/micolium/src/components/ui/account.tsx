@@ -6,9 +6,26 @@ import {
   type TouchableRippleProps,
 } from '@mkljczk/react-native-paper';
 import React from 'react';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { type GestureResponderEvent, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import RelativeTimestamp from '@/utils/relative-timestamp';
+
+const MaybeLink = ({
+  children,
+  onPress,
+  fullWidthPressable,
+}: {
+  children: React.JSX.Element;
+  onPress?: (event: GestureResponderEvent) => void;
+  fullWidthPressable?: boolean;
+}) =>
+  onPress && !fullWidthPressable ? (
+    <TouchableRipple onPress={onPress} style={{ maxWidth: '100%' }}>
+      {children}
+    </TouchableRipple>
+  ) : (
+    children
+  );
 
 interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
   avatarSrc?: string;
@@ -31,18 +48,9 @@ const UIAccount: React.FC<IUIAccount> = ({
 }) => {
   const { colors } = useTheme();
 
-  const MaybeLink = ({ children }: { children: React.JSX.Element }) =>
-    onPress && !fullWidthPressable ? (
-      <TouchableRipple onPress={onPress} style={{ maxWidth: '100%' }}>
-        {children}
-      </TouchableRipple>
-    ) : (
-      children
-    );
-
   const body = (
     <>
-      <MaybeLink>
+      <MaybeLink onPress={onPress} fullWidthPressable={fullWidthPressable}>
         {avatarSrc ? (
           <Avatar.Image size={40} source={{ uri: avatarSrc }} />
         ) : (
@@ -51,7 +59,7 @@ const UIAccount: React.FC<IUIAccount> = ({
       </MaybeLink>
 
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start' }}>
-        <MaybeLink>
+        <MaybeLink onPress={onPress} fullWidthPressable={fullWidthPressable}>
           <View style={{ gap: 4, alignItems: 'center', flexDirection: 'row', maxWidth: '100%' }}>
             <Text variant='titleMedium' numberOfLines={1}>
               {displayName}
@@ -68,7 +76,7 @@ const UIAccount: React.FC<IUIAccount> = ({
             )}
           </View>
         </MaybeLink>
-        <MaybeLink>
+        <MaybeLink onPress={onPress} fullWidthPressable={fullWidthPressable}>
           <Text variant='bodyMedium' numberOfLines={1} style={{ color: colors.outline }}>
             @{acct}
             {timestamp && (

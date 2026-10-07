@@ -20,10 +20,6 @@ import { useClient, useFeatures, useInstance } from '@/contexts/current-account-
 // import { useDraftStateStore } from './draft-state';
 // import { useUiStoreActions } from './ui';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-// import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
-import { queryClient } from '@/queries/client';
-import { queryKeys } from '@/queries/keys';
-import { scopedQueryKey } from '@/queries/query';
 // import { uploadFile, updateMedia } from '@/actions/media';
 // import { countableText } from '@/components/compose/util/counter';
 // import { isNativeEmoji } from '@/emoji';
@@ -31,11 +27,17 @@ import { scopedQueryKey } from '@/queries/query';
 // import { useFeatures } from '@/hooks/use-features';
 // import { useOwnAccount } from '@/hooks/use-own-account';
 // import { useScopeUrl } from '@/hooks/use-scope-url';
-// import { selectAccount } from '@/queries/accounts/selectors';
+import { selectAccount } from '@/queries/accounts/selectors';
+// import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
+import { scopedQueryKey } from '@/queries/query';
 // import { queryClient } from '@/queries/client';
 // import { queryKeys } from '@/queries/keys';
 // import { scopedQueryKey } from '@/queries/query';
 import { createStatus } from '@/queries/statuses/status-actions';
+
+import { useAuthStore } from './auth';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 // import type { AutoSuggestion } from '@/components/autosuggest-input';
@@ -58,6 +60,7 @@ import type {
   // ScheduledStatus,
   Status,
   Features,
+  Account,
 } from 'pl-api';
 
 // const messages = defineMessages({
@@ -281,38 +284,40 @@ const newPoll = (params: Partial<ComposePoll> = {}): ComposePoll => ({
   ...params,
 });
 
-// const statusToTextMentions = (
-//   status: Pick<Status, 'account_id' | 'mentions'>,
-//   account: Pick<Account, 'acct'>,
-//   scopeUrl: string,
-// ) => {
-//   const statusAccount = selectAccount(status.account_id, scopeUrl);
-//   const author = statusAccount?.acct;
-//   const mentions = status.mentions.map((m) => m.acct);
+const statusToTextMentions = (
+  status: Pick<SelectedStatus, 'account_id' | 'mentions'>,
+  account: Pick<Account, 'acct'> | undefined,
+  scopeUrl: string,
+) => {
+  const statusAccount = selectAccount(status.account_id, scopeUrl);
+  const author = statusAccount?.acct;
+  const mentions = status.mentions.map((m) => m.acct);
 
-//   return [...new Set([author, ...mentions].filter((acct) => acct && acct !== account.acct))]
-//     .map((m) => `@${m} `)
-//     .join('');
-// };
+  return [
+    ...new Set([author, ...mentions].filter((acct) => acct && (!account || acct !== account.acct))),
+  ]
+    .map((m) => `@${m} `)
+    .join('');
+};
 
-// const statusToMentionsArray = (
-//   status: Pick<Status, 'account_id' | 'mentions'>,
-//   account: Pick<Account, 'acct'>,
-//   rebloggedBy: Pick<Account, 'acct'> | undefined,
-//   scopeUrl: string,
-// ) => {
-//   const statusAccount = selectAccount(status.account_id, scopeUrl);
-//   const author = statusAccount?.acct;
-//   const mentions = status.mentions.map((m) => m.acct);
+const statusToMentionsArray = (
+  status: Pick<SelectedStatus, 'account_id' | 'mentions'>,
+  account: Pick<Account, 'acct'> | undefined,
+  rebloggedBy: Pick<Account, 'acct'> | undefined,
+  scopeUrl: string,
+) => {
+  const statusAccount = selectAccount(status.account_id, scopeUrl);
+  const author = statusAccount?.acct;
+  const mentions = status.mentions.map((m) => m.acct);
 
-//   return [
-//     ...new Set(
-//       [author, ...(rebloggedBy ? [rebloggedBy.acct] : []), ...mentions].filter(
-//         (acct): acct is string => !!acct && acct !== account.acct,
-//       ),
-//     ),
-//   ];
-// };
+  return [
+    ...new Set(
+      [author, ...(rebloggedBy ? [rebloggedBy.acct] : []), ...mentions].filter(
+        (acct): acct is string => !!acct && (!account || acct !== account.acct),
+      ),
+    ),
+  ];
+};
 
 // const statusToMentionsAccountIdsArray = (
 //   status: Pick<Status, 'mentions' | 'account_id'>,
@@ -349,11 +354,11 @@ const privacyPreference = (
 // const domParser = new DOMParser();
 
 // const getExplicitMentions = (me: string, status: Pick<Status, 'content' | 'mentions'>) => {
-  // const fragment = domParser.parseFromString(status.content, 'text/html').documentElement;
-  // const mentions = status.mentions
-  //   .filter((mention) => !(fragment.querySelector(`a[href="${mention.url}"]`) ?? mention.id === me))
-  //   .map((m) => m.acct);
-  // return [...new Set(mentions)];
+// const fragment = domParser.parseFromString(status.content, 'text/html').documentElement;
+// const mentions = status.mentions
+//   .filter((mention) => !(fragment.querySelector(`a[href="${mention.url}"]`) ?? mention.id === me))
+//   .map((m) => m.acct);
+// return [...new Set(mentions)];
 // };
 
 // const appendMedia = (compose: Compose, media: MediaAttachment) => {
@@ -449,67 +454,6 @@ const checkComposeContent = (compose?: Compose) =>
 //   return null;
 // };
 
-const composeInteraction = (
-  write: (composeId: string) => void,
-  scopeUrl: string,
-  columnId: string | undefined,
-  openComposer: boolean,
-) => {
-  const composeInModal = () => {
-    write('compose-modal');
-  };
-
-  const target = openComposer ? getInteractionsComposeTarget() : null;
-
-  if (!target) {
-    composeInModal();
-    return;
-  }
-
-  const { composeId } = target;
-  const { actions, composers } = useComposeStore.getState();
-
-  const composeInTarget = () => {
-    actions.resetCompose(composeId);
-    write(composeId);
-    actions.updateCompose(composeId, (compose) => {
-      compose.editorKey = crypto.randomUUID();
-    });
-    if (target.column) setDeckColumnAccountUrl(target.column.id, scopeUrl);
-    target.element?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-  };
-
-  if (checkComposeContent(composers[composeId]) || actions.hasThreadContent(composeId)) {
-    useModalsStore.getState().actions.openModal('CONFIRM', {
-      heading: (
-        <FormattedMessage
-          id='compose_column.overwrite.heading'
-          defaultMessage='Discard the post in the compose column?'
-        />
-      ),
-      message: (
-        <FormattedMessage
-          id='compose_column.overwrite.message'
-          defaultMessage='You’re already composing a post in the compose column. Discarding it will replace it with the new post.'
-        />
-      ),
-      confirm: <FormattedMessage id='compose_column.overwrite.confirm' defaultMessage='Discard' />,
-      onConfirm: composeInTarget,
-      theme: 'danger',
-      secondary: (
-        <FormattedMessage
-          id='compose_column.overwrite.compose_in_modal'
-          defaultMessage='Compose in a modal'
-        />
-      ),
-      onSecondary: composeInModal,
-    });
-    return;
-  }
-
-  composeInTarget();
-};
-
 interface ComposeState {
   default: Compose;
   composers: Record<string, Compose>;
@@ -553,24 +497,23 @@ interface ComposeActions {
     redacting?: boolean,
   ) => void;
   //   setComposeToScheduledStatus: (scheduledStatus: ScheduledStatus) => void;
-    replyCompose: (
-      status: Pick<
-        Status,
-        | 'id'
-        | 'account_id'
-        | 'group_id'
-        | 'list_id'
-        | 'local_only'
-        | 'mentions'
-        | 'spoiler_text'
-        | 'visibility'
-      >,
-      scopeUrl: string,
-      columnId?: string,
-      rebloggedBy?: Pick<Account, 'acct' | 'id'>,
-      approvalRequired?: boolean,
-      openComposer?: boolean,
-    ) => void;
+  replyCompose: (
+    status: Pick<
+      SelectedStatus,
+      | 'id'
+      | 'account_id'
+      | 'group_id'
+      | 'list_id'
+      | 'local_only'
+      | 'mentions'
+      | 'spoiler_text'
+      | 'visibility'
+    >,
+    scopeUrl: string,
+    rebloggedBy?: Pick<Account, 'acct' | 'id'>,
+    approvalRequired?: boolean,
+    openComposer?: boolean,
+  ) => void;
   //   quoteCompose: (
   //     status: Pick<Status, 'id' | 'account_id' | 'visibility' | 'group_id' | 'list_id'>,
   //     scopeUrl: string,
@@ -636,12 +579,12 @@ const useComposeStore = create<ComposeStore>()(
         getCompose: (composeId) => get().composers[composeId] ?? get().default,
 
         //         addThreadPost: (rootId) => {
-        //           const childId = `${rootId}:thread:${crypto.randomUUID()}`;
+        //           const childId = `${rootId}:thread:${uuid()}`;
         //           set((state) => {
         //             const root = state.composers[rootId] ?? state.default;
         //             state.composers[childId] = {
         //               ...state.default,
-        //               idempotencyKey: crypto.randomUUID(),
+        //               idempotencyKey: uuid(),
         //               resetFileKey: getResetFileKey(),
         //               visibility: root.visibility,
         //               contentType: root.contentType,
@@ -700,7 +643,7 @@ const useComposeStore = create<ComposeStore>()(
         //                 ...state.default,
         //                 ...compose,
         //                 draftId: isRoot ? (compose.draftId ?? null) : null,
-        //                 idempotencyKey: crypto.randomUUID(),
+        //                 idempotencyKey: uuid(),
         //                 resetFileKey: getResetFileKey(),
         //                 caretPosition: null,
         //                 isChangingUpload: false,
@@ -711,7 +654,7 @@ const useComposeStore = create<ComposeStore>()(
 
         //               if (children.length) {
         //                 state.threads[targetId] = children.map((child) => {
-        //                   const childId = `${targetId}:thread:${crypto.randomUUID()}`;
+        //                   const childId = `${targetId}:thread:${uuid()}`;
         //                   restore(childId, child);
         //                   return childId;
         //                 });
@@ -740,7 +683,7 @@ const useComposeStore = create<ComposeStore>()(
           set((state) => {
             state.composers['compose-modal'] = {
               ...state.default,
-              idempotencyKey: crypto.randomUUID(),
+              idempotencyKey: uuid(),
             };
 
             const compose = state.composers['compose-modal'];
@@ -794,7 +737,7 @@ const useComposeStore = create<ComposeStore>()(
         //           set((state) => {
         //             state.composers['compose-modal'] = {
         //               ...state.default,
-        //               idempotencyKey: crypto.randomUUID(),
+        //               idempotencyKey: uuid(),
         //             };
 
         //             const compose = state.composers['compose-modal'];
@@ -821,66 +764,53 @@ const useComposeStore = create<ComposeStore>()(
         //           });
         //         },
 
-                replyCompose: (
-                  status,
-                  scopeUrl,
-                  columnId,
-                  rebloggedBy,
-                  approvalRequired,
-                  openComposer = true,
-                ) => {
-                  const { features } = getClient();
-                  const { forceImplicitAddressing, preserveSpoilers, defaultPrivacy } =
-                    useSettingsStore.getState().settings;
-                  const explicitAddressing =
-                    features.createStatusExplicitAddressing && !forceImplicitAddressing;
-                  const account = getOwnAccount();
+        replyCompose: (status, scopeUrl, rebloggedBy, approvalRequired) => {
+          const { features } = useAuthStore.getState().clients[scopeUrl];
+          const { forceImplicitAddressing, preserveSpoilers, defaultPrivacy } = {
+            forceImplicitAddressing: false,
+            preserveSpoilers: true,
+            defaultPrivacy: 'public',
+          };
+          const explicitAddressing =
+            features.createStatusExplicitAddressing && !forceImplicitAddressing;
+          const account = queryClient.getQueryData(
+            scopedQueryKey(queryKeys.accountCredentials.show('self'), scopeUrl),
+          );
 
-                  if (!account) return;
+          set((draft) => {
+            draft.composers['compose-modal'] = {
+              ...draft.default,
+              idempotencyKey: uuid(),
+            };
+            const compose = draft.composers['compose-modal'];
 
-                  const doCompose = (composeId: string) =>
-                    set((draft) => {
-                      draft.composers[composeId] = {
-                        ...draft.default,
-                        idempotencyKey: crypto.randomUUID(),
-                      };
-                      const compose = draft.composers[composeId];
+            const mentions = explicitAddressing
+              ? statusToMentionsArray(status, account, rebloggedBy, scopeUrl)
+              : [];
 
-                      const mentions = explicitAddressing
-                        ? statusToMentionsArray(status, account, rebloggedBy, scopeUrl)
-                        : [];
-
-                      compose.groupId = status.group_id;
-                      compose.inReplyToId = status.id;
-                      compose.to = mentions;
-                      compose.parentRebloggedById = rebloggedBy?.id ?? null;
-                      compose.text = !explicitAddressing
-                        ? statusToTextMentions(status, account, scopeUrl)
-                        : '';
-                      compose.visibility = privacyPreference(
-                        status.visibility,
-                        draft.default.visibility === 'default' ? defaultPrivacy : draft.default.visibility,
-                        status.list_id,
-                        features.createStatusConversationScope,
-                      );
-                      compose.localOnly = status.local_only === true;
-                      compose.caretPosition = null;
-                      compose.contentType = draft.default.contentType;
-                      compose.approvalRequired = approvalRequired ?? false;
-                      if (preserveSpoilers && status.spoiler_text) {
-                        compose.sensitive = true;
-                        compose.spoilerText = status.spoiler_text;
-                      }
-                    });
-
-                  composeInteraction(
-                    doCompose,
-                    scopeUrl,
-                    columnId,
-                    { approvalRequired, inReplyTo: status.id },
-                    openComposer,
-                  );
-                },
+            compose.groupId = status.group_id;
+            compose.inReplyToId = status.id;
+            compose.to = mentions;
+            compose.parentRebloggedById = rebloggedBy?.id ?? null;
+            compose.text = !explicitAddressing
+              ? statusToTextMentions(status, account, scopeUrl)
+              : '';
+            compose.visibility = privacyPreference(
+              status.visibility,
+              draft.default.visibility === 'default' ? defaultPrivacy : draft.default.visibility,
+              status.list_id,
+              features.createStatusConversationScope,
+            );
+            compose.localOnly = status.local_only === true;
+            compose.caretPosition = null;
+            compose.contentType = draft.default.contentType;
+            compose.approvalRequired = approvalRequired ?? false;
+            if (preserveSpoilers && status.spoiler_text) {
+              compose.sensitive = true;
+              compose.spoilerText = status.spoiler_text;
+            }
+          });
+        },
 
         //         quoteCompose: (status, scopeUrl, columnId, approvalRequired, openComposer = true) => {
         //           const doCompose = (composeId: string) =>
@@ -889,7 +819,7 @@ const useComposeStore = create<ComposeStore>()(
 
         //               draft.composers[composeId] = {
         //                 ...draft.default,
-        //                 idempotencyKey: crypto.randomUUID(),
+        //                 idempotencyKey: uuid(),
         //               };
         //               const compose = draft.composers[composeId];
 
@@ -983,7 +913,7 @@ const useComposeStore = create<ComposeStore>()(
         //           set((state) => {
         //             state.composers[composeId] = {
         //               ...state.default,
-        //               idempotencyKey: crypto.randomUUID(),
+        //               idempotencyKey: uuid(),
         //               resetFileKey: getResetFileKey(),
         //               ...(composeId.startsWith('reply:') ? { inReplyToId: composeId.slice(6) } : undefined),
         //               ...(composeId.startsWith('group:')

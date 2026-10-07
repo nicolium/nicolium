@@ -13,6 +13,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { View } from 'react-native';
 
 import { useFeatures } from '@/contexts/current-account-context';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useStatus } from '@/queries/statuses/use-status';
 import {
   useDislikeStatus,
@@ -22,6 +23,8 @@ import {
   useUnfavouriteStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
+import { useComposeActions } from '@/stores/compose';
+import { useUiStoreActions } from '@/stores/ui';
 
 import { iconHelper } from '../ui/icon';
 
@@ -44,10 +47,13 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
   const intl = useIntl();
   const theme = useTheme();
   const features = useFeatures();
+  const { replyCompose } = useComposeActions();
+  const { openCompose } = useUiStoreActions();
 
   const navigation = useNavigation();
 
   const { data: status } = useStatus(id);
+  const scopeUrl = useScopeUrl();
 
   const { mutate: reblogStatus, isPending: isPendingReblog } = useReblogStatus(id);
   const { mutate: unreblogStatus } = useUnreblogStatus(id);
@@ -57,6 +63,11 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
   const { mutate: undislikeStatus } = useUndislikeStatus(id);
 
   if (!status) return null;
+
+  const handleReply = () => {
+    replyCompose(status, scopeUrl);
+    openCompose();
+  };
 
   return (
     <View style={{ flexDirection: 'row', gap: 8, marginTop: 4 }}>
@@ -70,7 +81,7 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
               icon={iconHelper(
                 status.in_reply_to_id ? ArrowBendDoubleUpLeftIcon : ArrowBendUpLeftIcon,
               )}
-              onPress={() => {}}
+              onPress={handleReply}
               style={{ margin: -4, height: 40, width: 40 }}
               accessibilityLabel={intl.formatMessage(
                 status.in_reply_to_id ? messages.replyAll : messages.reply,
@@ -100,11 +111,7 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
               onPress={() => (status.reblogged ? unreblogStatus() : reblogStatus({}))}
               onLongPress={
                 status.reblogs_count
-                  ? () =>
-                      navigation.navigate(
-                        'status' as never,
-                        { screen: 'reblogs', params: { id } } as never,
-                      )
+                  ? () => navigation.navigate('status', { screen: 'reblogs', params: { id } })
                   : undefined
               }
               disabled={isPendingReblog}
@@ -141,11 +148,7 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
               onPress={() => (status.favourited ? unfavouriteStatus : favouriteStatus)()}
               onLongPress={
                 status.favourites_count
-                  ? () =>
-                      navigation.navigate(
-                        'status' as never,
-                        { screen: 'favourites', params: { id } } as never,
-                      )
+                  ? () => navigation.navigate('status', { screen: 'favourites', params: { id } })
                   : undefined
               }
               disabled={isPendingFavourite}
@@ -182,18 +185,14 @@ const StatusActions: React.FC<IStatusActions> = ({ id }) => {
                 onPress={() => (status.disliked ? undislikeStatus : dislikeStatus)()}
                 onLongPress={
                   status.dislikes_count
-                    ? () =>
-                        navigation.navigate(
-                          'status' as never,
-                          { screen: 'dislikes', params: { id } } as never,
-                        )
+                    ? () => navigation.navigate('status', { screen: 'dislikes', params: { id } })
                     : undefined
                 }
                 disabled={isPendingDislike}
                 style={{ margin: -4, height: 40, width: 40 }}
                 selected={status.disliked}
                 accessibilityLabel={intl.formatMessage(
-                  status.disliked ? messages.undislikeStatus : messages.dislikeStatus,
+                  status.disliked ? messages.undislike : messages.dislike,
                 )}
               />
               {status.dislikes_count > 0 && (

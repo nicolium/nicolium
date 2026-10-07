@@ -69,10 +69,10 @@ type RootStackParams = {
   login: undefined;
   app: NavigatorScreenParams<TabsParams>;
   settings: undefined;
-  status: StatusStackParams;
-  accounts: AccountStackParams;
+  status: NavigatorScreenParams<StatusStackParams>;
+  accounts: NavigatorScreenParams<AccountStackParams>;
   hashtags: { tag: string };
-  bookmarks: BookmarksStackParams;
+  bookmarks: NavigatorScreenParams<BookmarksStackParams>;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParams>();

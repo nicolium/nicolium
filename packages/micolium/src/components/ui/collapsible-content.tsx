@@ -7,9 +7,14 @@ import { View } from 'react-native';
 interface ICollapsibleContent {
   children: React.JSX.Element;
   maxHeight?: number;
+  showExpand?: boolean;
 }
 
-const CollapsibleContent: React.FC<ICollapsibleContent> = ({ children, maxHeight = 320 }) => {
+const CollapsibleContent: React.FC<ICollapsibleContent> = ({
+  children,
+  maxHeight = 320,
+  showExpand = true,
+}) => {
   const { colors } = useTheme();
 
   const containerNode = React.useRef<View>(null);
@@ -46,18 +51,20 @@ const CollapsibleContent: React.FC<ICollapsibleContent> = ({ children, maxHeight
             height: Math.min(maxHeight, 160),
           }}
         >
-          <Button
-            mode='contained-tonal'
-            onPress={() => setCollapsed(false)}
-            style={{
-              position: 'absolute',
-              width: 'auto',
-              bottom: 4,
-              marginHorizontal: 'auto',
-            }}
-          >
-            <FormattedMessage id='status.show_more' defaultMessage='Show more' />
-          </Button>
+          {showExpand && (
+            <Button
+              mode='contained-tonal'
+              onPress={() => setCollapsed(false)}
+              style={{
+                position: 'absolute',
+                width: 'auto',
+                bottom: 4,
+                marginHorizontal: 'auto',
+              }}
+            >
+              <FormattedMessage id='status.show_more' defaultMessage='Show more' />
+            </Button>
+          )}
         </LinearGradient>
       )}
     </View>

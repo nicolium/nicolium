@@ -21,6 +21,7 @@ interface IUIStatus {
   chip?: React.JSX.Element;
   detailed?: boolean;
   compact?: boolean;
+  textOnly?: boolean;
   spoilerExpanded?: boolean;
   expandStatusSpoiler?: () => void;
   collapseStatusSpoiler?: () => void;
@@ -39,6 +40,7 @@ const UIStatus: React.FC<IUIStatus> = ({
   chip,
   detailed,
   compact,
+  textOnly,
   spoilerExpanded,
   expandStatusSpoiler,
   collapseStatusSpoiler,
@@ -55,9 +57,9 @@ const UIStatus: React.FC<IUIStatus> = ({
   );
 
   const status = (
-    <View style={{ flexDirection: 'column', gap: 8, flex: 1 }}>
+    <View style={[{ flexDirection: 'column', gap: 8 }, isConnectedBottom && { flex: 1 }]}>
       {displayedMentions}
-      {spoilerText && (
+      {!textOnly && spoilerText && (
         <TouchableRipple onPress={spoilerExpanded ? collapseStatusSpoiler : expandStatusSpoiler}>
           <Card mode='contained' style={{ borderWidth: 1, borderColor: theme.colors.primary }}>
             <Card.Content style={{ paddingBottom: expandStatusSpoiler ? 0 : 16 }}>
@@ -86,19 +88,22 @@ const UIStatus: React.FC<IUIStatus> = ({
           </Card>
         </TouchableRipple>
       )}
-      {(!spoilerText || !expandStatusSpoiler || spoilerExpanded) && (
+      {(textOnly || !spoilerText || !expandStatusSpoiler || spoilerExpanded) && (
         <>
           {detailed ? (
             statusBody
           ) : (
-            <CollapsibleContent maxHeight={compact ? 120 : undefined}>
+            <CollapsibleContent
+              maxHeight={textOnly ? 40 : compact ? 120 : undefined}
+              showExpand={!textOnly}
+            >
               {statusBody}
             </CollapsibleContent>
           )}
           {media}
-          {actions}
         </>
       )}
+      {!textOnly && actions}
     </View>
   );
 

@@ -1,20 +1,33 @@
 import { BottomSheetModal, BottomSheetTextInput } from '@gorhom/bottom-sheet';
-import { IconButton, SplitButton, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import {
+  ActivityIndicator,
+  Card,
+  Icon,
+  IconButton,
+  SplitButton,
+  Text,
+  TextInput,
+  useTheme,
+} from '@mkljczk/react-native-paper';
+import {
+  ArrowBendUpLeftIcon,
   CalendarPlusIcon,
   ChartBarIcon,
   PaperclipIcon,
   PaperPlaneRightIcon,
+  QuotesIcon,
   SmileyIcon,
+  XIcon,
 } from 'phosphor-react-native';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Alert, BackHandler, View } from 'react-native';
 import { useKeyboardState } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+import { useStatus } from '@/queries/statuses/use-status';
 import {
   checkComposeContent,
   useCompose,
@@ -26,6 +39,7 @@ import { useIsComposeOpen, useUiStoreActions } from '@/stores/ui';
 import { BottomSheetBackdrop } from '@/utils/themes';
 
 import { Account } from './accounts/account';
+import { Status } from './statuses/status';
 import { iconHelper } from './ui/icon';
 
 const COMPOSE_ID = 'compose-modal' as const;
@@ -43,6 +57,9 @@ const messages = defineMessages({
   schedule: { id: 'schedule.post_time', defaultMessage: 'Post date/time' },
   removeSchedule: { id: 'schedule.remove', defaultMessage: 'Remove schedule' },
   publish: { id: 'compose_form.publish', defaultMessage: 'Post' },
+  publishReply: { id: 'compose_form.reply', defaultMessage: 'Reply' },
+  publishQuote: { id: 'compose_form.quote', defaultMessage: 'Quote' },
+  publishDirect: { id: 'compose_form.direct', defaultMessage: 'Direct' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   cancelConfirmationConfirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
   cancelConfirmationHeading: { id: 'confirmations.cancel.heading', defaultMessage: 'Discard post' },
@@ -51,6 +68,100 @@ const messages = defineMessages({
     defaultMessage: 'Are you sure you want to discard the currently composed post?',
   },
 });
+
+interface ICompose {
+  composeId?: string;
+}
+
+const ReplyIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
+  const { inReplyToId } = useCompose(composeId);
+  const { updateCompose } = useComposeActions();
+  const { data: status, isPending } = useStatus(inReplyToId || undefined);
+
+  if (!status) return null;
+
+  return (
+    <View style={{ gap: 4 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        <Icon source={iconHelper(ArrowBendUpLeftIcon)} size={20} />
+        <Text style={{ flex: 1 }}>
+          <FormattedMessage
+            id='compose.reply_indicator'
+            defaultMessage='Reply to @{acct}'
+            values={{ acct: status.account.acct }}
+          />
+        </Text>
+        <IconButton
+          icon={iconHelper(XIcon)}
+          style={{ margin: 0 }}
+          onPress={() =>
+            updateCompose(COMPOSE_ID, (draft) => {
+              draft.inReplyToId = null;
+            })
+          }
+        />
+      </View>
+      <Card mode='outlined'>
+        {isPending ? (
+          <ActivityIndicator />
+        ) : (
+          <Status id={inReplyToId!} compact withActions={false} textOnly />
+        )}
+      </Card>
+    </View>
+  );
+};
+
+const QuoteIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
+  const { quoteId } = useCompose(composeId);
+  const { updateCompose } = useComposeActions();
+  const { data: status, isPending } = useStatus(quoteId || undefined);
+
+  if (!status) return null;
+
+  return (
+    <View style={{ gap: 4 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        <Icon source={iconHelper(QuotesIcon)} size={20} />
+        <Text style={{ flex: 1 }}>
+          <FormattedMessage
+            id='compose.quote_indicator'
+            defaultMessage='Quoting @{acct}'
+            values={{ acct: status.account.acct }}
+          />
+        </Text>
+        <IconButton
+          icon={iconHelper(XIcon)}
+          style={{ margin: 0 }}
+          onPress={() =>
+            updateCompose(COMPOSE_ID, (draft) => {
+              draft.quoteId = null;
+            })
+          }
+        />
+      </View>
+      <Card mode='outlined'>
+        {isPending ? (
+          <ActivityIndicator />
+        ) : (
+          <Status id={quoteId!} compact withActions={false} textOnly />
+        )}
+      </Card>
+    </View>
+  );
+};
 
 const ComposeBottomSheet = () => {
   const intl = useIntl();
@@ -64,7 +175,7 @@ const ComposeBottomSheet = () => {
   const { updateCompose, resetCompose } = useComposeActions();
   const submitCompose = useSubmitCompose(COMPOSE_ID);
 
-  const { text, spoilerText, isSubmitting } = compose;
+  const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility } = compose;
 
   const { data: currentAccount } = useCredentialAccount();
 
@@ -121,6 +232,16 @@ const ComposeBottomSheet = () => {
     }
   };
 
+  const publishButtonLabel = intl.formatMessage(
+    inReplyToId
+      ? messages.publishReply
+      : quoteId
+        ? messages.publishQuote
+        : visibility === 'direct'
+          ? messages.publishDirect
+          : messages.publish,
+  );
+
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
@@ -140,6 +261,8 @@ const ComposeBottomSheet = () => {
             <View style={{ flexDirection: 'row' }}>
               <Account id={currentAccount?.id} />
             </View>
+            <ReplyIndicator />
+            <QuoteIndicator />
             {features.spoilers && (
               <TextInput
                 value={spoilerText}
@@ -212,7 +335,7 @@ const ComposeBottomSheet = () => {
             />
             <SplitButton
               icon={iconHelper(PaperPlaneRightIcon)}
-              label={intl.formatMessage(messages.publish)}
+              label={publishButtonLabel}
               style={{ marginLeft: 'auto' }}
               onPress={() =>
                 submitCompose({

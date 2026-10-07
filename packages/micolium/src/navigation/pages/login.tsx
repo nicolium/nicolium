@@ -216,7 +216,7 @@ const CredentialsScreen = ({
   const { colors } = useTheme();
   const intl = useIntl();
 
-  const { pendingAuthClient } = useAuthStore();
+  const pendingAuthClient = useAuthStore(({ pendingAuthClient }) => pendingAuthClient);
   const { createApp, signIn } = useAuthStoreActions();
 
   const features = pendingAuthClient?.features;

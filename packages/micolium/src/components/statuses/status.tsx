@@ -13,6 +13,7 @@ import {
   DotsThreeIcon,
   DotsThreeVerticalIcon,
   HashIcon,
+  PaperclipIcon,
   QuotesIcon,
   RepeatIcon,
 } from 'phosphor-react-native';
@@ -224,6 +225,7 @@ interface IStatus {
   style?: StyleProp<ViewStyle>;
   detailed?: boolean;
   compact?: boolean;
+  textOnly?: boolean;
 }
 
 const Status: React.FC<IStatus> = ({
@@ -260,7 +262,7 @@ const Status: React.FC<IStatus> = ({
     <UIStatus
       chip={chip}
       account={
-        <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'space-between', flex: 1 }}>
+        <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'space-between' }}>
           <Account
             id={actualStatus.account_id!}
             timestamp={actualStatus.created_at}
@@ -283,22 +285,59 @@ const Status: React.FC<IStatus> = ({
       mentions={actualStatus.mentions}
       spoilerText={actualStatus.spoiler_text}
       media={
-        <>
-          <StatusMedia id={id} compact={props.compact} />
-          {actualStatus.quote_id &&
-            (props.compact ? (
-              <Card mode='outlined'>
-                <Card.Content style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Icon source={iconHelper(QuotesIcon)} size={20} />
-                  <Text>
-                    <FormattedMessage id='status.quote_indicator' defaultMessage='Quoted post' />
-                  </Text>
-                </Card.Content>
-              </Card>
-            ) : (
-              <Quote id={actualStatus.quote_id} />
-            ))}
-        </>
+        props.textOnly ? (
+          <>
+            {status.media_attachments.length > 0 && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+              >
+                <Icon source={iconHelper(PaperclipIcon)} size={20} />
+                <Text>
+                  <FormattedMessage
+                    id='status.attachment_count'
+                    defaultMessage='{count, plural, one {# attachment} other {# attachments}}'
+                    values={{ count: status.media_attachments.length }}
+                  />
+                </Text>
+              </View>
+            )}
+            {status.quote_id && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+              >
+                <Icon source={iconHelper(QuotesIcon)} size={20} />
+                <Text>
+                  <FormattedMessage id='status.quote_indicator' defaultMessage='Quoted post' />
+                </Text>
+              </View>
+            )}
+          </>
+        ) : (
+          <>
+            <StatusMedia id={id} compact={props.compact} />
+            {actualStatus.quote_id &&
+              (props.compact ? (
+                <Card mode='outlined'>
+                  <Card.Content style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <Icon source={iconHelper(QuotesIcon)} size={20} />
+                    <Text>
+                      <FormattedMessage id='status.quote_indicator' defaultMessage='Quoted post' />
+                    </Text>
+                  </Card.Content>
+                </Card>
+              ) : (
+                <Quote id={actualStatus.quote_id} />
+              ))}
+          </>
+        )
       }
       actions={withActions ? <StatusActions id={id} /> : undefined}
       isConnectedBottom={
@@ -317,7 +356,7 @@ const Status: React.FC<IStatus> = ({
     return (
       <TouchableRipple
         onPress={() => {
-          navigation.navigate('status' as never, { screen: 'view', params: { id } } as never);
+          navigation.navigate('status', { screen: 'view', params: { id } });
         }}
         style={{ ...style, padding: 16 }}
       >
