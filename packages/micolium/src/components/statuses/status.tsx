@@ -86,15 +86,12 @@ const StatusRebloggedChip: React.FC<IStatusRebloggedChip> = ({ accountIds }) => 
 };
 
 interface IStatusMaybeFollowedHashtagChip {
-  id: string;
+  status: SelectedStatus;
 }
 
-const StatusMaybeFollowedHashtagChip: React.FC<IStatusMaybeFollowedHashtagChip> = ({ id }) => {
+const StatusMaybeFollowedHashtagChip: React.FC<IStatusMaybeFollowedHashtagChip> = ({ status }) => {
   const { colors } = useTheme();
   const { data: followedTags } = useFollowedTags();
-  const { data: status } = useStatus(id);
-
-  if (!status) return null;
 
   const filteredTags = status.tags.filter((tag) =>
     followedTags?.some((followed) => followed.name.toLowerCase() === tag.name.toLowerCase()),
@@ -135,16 +132,10 @@ const StatusMaybeFollowedHashtagChip: React.FC<IStatusMaybeFollowedHashtagChip> 
 };
 
 interface IStatusReplyMentions {
-  id: string;
+  status: SelectedStatus;
 }
 
-const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ id }) => {
-  const { colors } = useTheme();
-
-  const { data: status } = useStatus(id);
-
-  if (!status) return null;
-
+const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status }) => {
   if (!status.in_reply_to_id) {
     // Used as placeholder by Akkoma
     // https://akkoma.dev/AkkomaGang/akkoma/src/branch/develop/lib/pleroma/web/mastodon_api/views/status_view.ex#L31
@@ -255,7 +246,7 @@ const Status: React.FC<IStatus> = ({
   } else if ((context === 'timeline' || context === 'home') && status.reblog && status.account_id) {
     chip = <StatusRebloggedChip accountIds={[status.account_id]} />;
   } else if (context === 'home') {
-    chip = <StatusMaybeFollowedHashtagChip id={status.id} />;
+    chip = <StatusMaybeFollowedHashtagChip status={actualStatus} />;
   }
 
   const statusBody = (
@@ -279,7 +270,7 @@ const Status: React.FC<IStatus> = ({
           )}
         </View>
       }
-      displayedMentions={<StatusReplyMentions id={actualStatus.id} />}
+      displayedMentions={<StatusReplyMentions status={actualStatus} />}
       content={actualStatus.content}
       emojis={actualStatus.emojis}
       mentions={actualStatus.mentions}
@@ -322,7 +313,7 @@ const Status: React.FC<IStatus> = ({
           </>
         ) : (
           <>
-            <StatusMedia id={id} compact={props.compact} />
+            <StatusMedia status={status} compact={props.compact} />
             {actualStatus.quote_id &&
               (props.compact ? (
                 <Card mode='outlined'>

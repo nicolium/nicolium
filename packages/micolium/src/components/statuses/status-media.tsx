@@ -4,7 +4,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';
 
-import { useStatus } from '@/queries/statuses/use-status';
+import type { SelectedStatus } from '@/queries/statuses/use-status';
 
 const messages = defineMessages({
   altIndicator: { id: 'upload_form.description_missing.indicator', defaultMessage: 'Alt' },
@@ -12,18 +12,17 @@ const messages = defineMessages({
 });
 
 interface IStatusMedia {
-  id: string;
+  status: SelectedStatus;
   compact?: boolean;
 }
 
-const StatusMedia: React.FC<IStatusMedia> = ({ id, compact }) => {
+const StatusMedia: React.FC<IStatusMedia> = ({ status, compact }) => {
   const intl = useIntl();
   const { colors, shapes } = useTheme();
-  const { data: status } = useStatus(id);
 
-  const filteredMedia = status?.media_attachments.filter((media) => media.type === 'image');
+  const filteredMedia = status.media_attachments.filter((media) => media.type === 'image');
 
-  if (!filteredMedia?.length) return null;
+  if (!filteredMedia.length) return null;
 
   return (
     <Carousel
