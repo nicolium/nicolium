@@ -5,15 +5,25 @@ import { useAccount } from '@/queries/accounts/use-account';
 
 import { type IUIAccount, UIAccount } from '../ui/account';
 
-interface IAccount extends Pick<IUIAccount, 'onPress' | 'style'> {
+import { FollowButton } from './follow-button';
+
+interface IAccount extends Pick<IUIAccount, 'action' | 'onPress' | 'style'> {
   id: string;
   timestamp?: string;
   withLink?: boolean;
   fullWidthPressable?: boolean;
   displayFqn?: boolean;
+  withFollowButton?: boolean;
 }
 
-const Account: React.FC<IAccount> = ({ id, withLink, displayFqn, ...props }) => {
+const Account: React.FC<IAccount> = ({
+  id,
+  withLink,
+  displayFqn,
+  withFollowButton,
+  action,
+  ...props
+}) => {
   const navigation = useNavigation();
 
   const { data: account } = useAccount(id);
@@ -40,6 +50,7 @@ const Account: React.FC<IAccount> = ({ id, withLink, displayFqn, ...props }) => 
           ? () => navigation.navigate('accounts', { screen: 'view', params: { id } })
           : undefined
       }
+      action={action || (withFollowButton ? <FollowButton id={id} simple /> : undefined)}
       {...props}
     />
   );

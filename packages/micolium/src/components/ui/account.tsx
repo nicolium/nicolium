@@ -34,6 +34,7 @@ interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
   acct: string;
   timestamp?: string;
   fullWidthPressable?: boolean;
+  action?: React.JSX.Element;
 }
 
 const UIAccount: React.FC<IUIAccount> = ({
@@ -45,6 +46,7 @@ const UIAccount: React.FC<IUIAccount> = ({
   fullWidthPressable = true,
   style,
   onPress,
+  action,
 }) => {
   const { colors } = useTheme();
 
@@ -88,6 +90,8 @@ const UIAccount: React.FC<IUIAccount> = ({
           </Text>
         </MaybeLink>
       </View>
+
+      {action}
     </>
   );
 

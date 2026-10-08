@@ -41,7 +41,7 @@ const InteractionList: React.FC<IInteractionList> = ({ query, emptyMessageText }
     <FlashList
       data={query.data}
       renderItem={({ item }) => (
-        <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink />
+        <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink withFollowButton />
       )}
       ItemSeparatorComponent={Divider}
       onEndReached={query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined}

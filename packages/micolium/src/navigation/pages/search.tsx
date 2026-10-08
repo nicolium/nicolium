@@ -100,6 +100,10 @@ const SearchScreen = ({
   const trendingHashtagsQuery = useTrendingTags(activeType === 'hashtags' && !hasQuery);
   const trendingLinksQuery = useTrendingLinks(activeType === 'links' && !hasQuery);
 
+  const activeAccountsQuery = hasQuery ? accountsQuery : trendingAccountsQuery;
+  const activeStatusesQuery = hasQuery ? statusesQuery : trendingStatusesQuery;
+  const activeHashtagsQuery = hasQuery ? hashtagsQuery : trendingHashtagsQuery;
+
   return (
     <>
       <View
@@ -122,7 +126,7 @@ const SearchScreen = ({
       >
         <Tabs style={{ backgroundColor: colors.surfaceContainer }} uppercase={false}>
           <TabScreen label={intl.formatMessage(messages.accounts)}>
-            {(hasQuery ? accountsQuery : trendingAccountsQuery).isPending ? (
+            {activeAccountsQuery.isPending && activeAccountsQuery.isEnabled ? (
               <LoadingIndicator />
             ) : (
               <FlashList
@@ -137,6 +141,7 @@ const SearchScreen = ({
                     id={item}
                     style={{ paddingVertical: 8, padding: 12 }}
                     withLink
+                    withFollowButton
                   />
                 )}
                 ItemSeparatorComponent={Divider}
@@ -165,17 +170,17 @@ const SearchScreen = ({
                     <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
                   ) : undefined
                 }
-                onRefresh={(hasQuery ? accountsQuery : trendingAccountsQuery).refetch}
-                refreshing={(hasQuery ? accountsQuery : trendingAccountsQuery).isRefetching}
+                onRefresh={activeAccountsQuery.refetch}
+                refreshing={activeAccountsQuery.isRefetching}
               />
             )}
           </TabScreen>
           <TabScreen label={intl.formatMessage(messages.statuses)}>
-            {(hasQuery ? statusesQuery : trendingStatusesQuery).isPending ? (
+            {activeStatusesQuery.isEnabled && activeStatusesQuery.isPending ? (
               <LoadingIndicator />
             ) : (
               <FlashList
-                data={(hasQuery ? statusesQuery : trendingStatusesQuery).data}
+                data={activeStatusesQuery.data}
                 renderItem={({ item }) => <Status id={item} withLink />}
                 ItemSeparatorComponent={Divider}
                 onEndReached={
@@ -202,17 +207,17 @@ const SearchScreen = ({
                     <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
                   ) : undefined
                 }
-                onRefresh={(hasQuery ? statusesQuery : trendingStatusesQuery).refetch}
-                refreshing={(hasQuery ? statusesQuery : trendingStatusesQuery).isRefetching}
+                onRefresh={activeStatusesQuery.refetch}
+                refreshing={activeStatusesQuery.isRefetching}
               />
             )}
           </TabScreen>
           <TabScreen label={intl.formatMessage(messages.hashtags)}>
-            {(hasQuery ? hashtagsQuery : trendingHashtagsQuery).isPending ? (
+            {activeHashtagsQuery.isEnabled && activeHashtagsQuery.isPending ? (
               <LoadingIndicator />
             ) : (
               <FlashList
-                data={(hasQuery ? hashtagsQuery : trendingHashtagsQuery).data}
+                data={activeHashtagsQuery.data}
                 renderItem={({ item }) => <Hashtag tag={item.name} />}
                 ItemSeparatorComponent={Divider}
                 onEndReached={
@@ -239,8 +244,8 @@ const SearchScreen = ({
                     <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
                   ) : undefined
                 }
-                onRefresh={(hasQuery ? hashtagsQuery : trendingHashtagsQuery).refetch}
-                refreshing={(hasQuery ? hashtagsQuery : trendingHashtagsQuery).isRefetching}
+                onRefresh={activeHashtagsQuery.refetch}
+                refreshing={activeHashtagsQuery.isRefetching}
               />
             )}
           </TabScreen>

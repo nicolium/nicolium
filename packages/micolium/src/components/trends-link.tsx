@@ -29,7 +29,9 @@ const TrendsLink: React.FC<ITrendsLink> = ({ link }) => {
           />
         )}
         <Card.Content style={{ gap: 4 }}>
-          <Text variant='titleMedium' numberOfLines={2}>{link.title}</Text>
+          <Text variant='titleMedium' numberOfLines={2}>
+            {link.title}
+          </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             <Icon source={iconHelper(LinkSimpleIcon)} size={20} />
             <Text variant='bodyMedium'>{link.provider_name}</Text>

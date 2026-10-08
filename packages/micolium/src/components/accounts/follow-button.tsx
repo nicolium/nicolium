@@ -225,15 +225,16 @@ const FollowButton: React.FC<IFollowButton> = ({ id, simple }) => {
       mode='contained'
       onPress={() => followAccount(undefined)}
       disabled={!relationship || relationship?.blocked_by}
-      loading={isPendingFollow}
+      loading={!relationship || isPendingFollow}
     >
-      {relationship?.blocked_by ? (
-        <FormattedMessage id='account.blocked' defaultMessage='Blocked' />
-      ) : account?.locked ? (
-        <FormattedMessage id='account.request_follow' defaultMessage='Request follow' />
-      ) : (
-        <FormattedMessage id='account.follow' defaultMessage='Follow' />
-      )}
+      {relationship &&
+        (relationship.blocked_by ? (
+          <FormattedMessage id='account.blocked' defaultMessage='Blocked' />
+        ) : account?.locked ? (
+          <FormattedMessage id='account.request_follow' defaultMessage='Request follow' />
+        ) : (
+          <FormattedMessage id='account.follow' defaultMessage='Follow' />
+        ))}
     </Button>
   );
 };
