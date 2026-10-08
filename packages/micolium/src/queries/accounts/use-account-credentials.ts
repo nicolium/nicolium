@@ -4,15 +4,19 @@ import { useClient, useCurrentAccount } from '@/contexts/current-account-context
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
-import type { UpdateCredentialsParams } from 'pl-api';
+import type { CredentialAccount, UpdateCredentialsParams } from 'pl-api';
 
-const useCredentialAccount = (enabled = true) => {
+const useCredentialAccount = <T = CredentialAccount>(
+  enabled = true,
+  select?: (data: CredentialAccount) => T,
+) => {
   const client = useClient();
 
   return useAppQuery({
     queryKey: queryKeys.accountCredentials.show('self'),
     queryFn: () => client.settings.verifyCredentials(),
     enabled,
+    select,
   });
 };
 

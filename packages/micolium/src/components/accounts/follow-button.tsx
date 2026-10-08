@@ -13,6 +13,7 @@ import { Alert, ViewStyle } from 'react-native';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import {
   useFollowAccountMutation,
   useUnblockAccountMutation,
@@ -42,9 +43,10 @@ const messages = defineMessages({
 
 interface IFollowButton {
   id: string;
+  simple?: boolean;
 }
 
-const FollowButton: React.FC<IFollowButton> = ({ id }) => {
+const FollowButton: React.FC<IFollowButton> = ({ id, simple }) => {
   const { colors } = useTheme();
   const intl = useIntl();
   const features = useFeatures();
@@ -52,35 +54,51 @@ const FollowButton: React.FC<IFollowButton> = ({ id }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   const { data: account } = useAccount(id, true);
+  const { data: ownAccountId } = useCredentialAccount(true, ({ id }) => id);
   const { mutate: followAccount, isPending: isPendingFollow } = useFollowAccountMutation(id);
   const { mutate: unfollowAccount } = useUnfollowAccountMutation(id);
   const { mutate: unblockAccount, isPending: isPendingUnblock } = useUnblockAccountMutation(id);
 
   const relationship = account?.relationship;
 
-  const handleUnfollow = () => {
-    Alert.alert(
-      intl.formatMessage(messages.unfollowHeading, { name: account?.username }),
-      intl.formatMessage(
-        account?.locked ? messages.unfollowMessageLocked : messages.unfollowMessage,
-        { name: account?.acct },
-      ),
-      [
-        {
-          text: intl.formatMessage(messages.cancel),
-          style: 'cancel',
-        },
-        {
-          text: intl.formatMessage(messages.unfollowConfirm),
-          style: 'destructive',
-          onPress: () => unfollowAccount(),
-        },
-      ],
-    );
-    setShowMenu(false);
-  };
+  if (ownAccountId === id) return null;
 
   if (relationship?.following) {
+    const handleUnfollow = () => {
+      Alert.alert(
+        intl.formatMessage(messages.unfollowHeading, { name: account?.username }),
+        intl.formatMessage(
+          account?.locked ? messages.unfollowMessageLocked : messages.unfollowMessage,
+          { name: account?.acct },
+        ),
+        [
+          {
+            text: intl.formatMessage(messages.cancel),
+            style: 'cancel',
+          },
+          {
+            text: intl.formatMessage(messages.unfollowConfirm),
+            style: 'destructive',
+            onPress: () => unfollowAccount(),
+          },
+        ],
+      );
+      setShowMenu(false);
+    };
+
+    if (simple) {
+      return (
+        <Button
+          mode='contained-tonal'
+          onPress={handleUnfollow}
+          disabled={!relationship}
+          loading={isPendingFollow}
+        >
+          <FormattedMessage id='account.unfollow' defaultMessage='Unfollow' />
+        </Button>
+      );
+    }
+
     const handleToggleShowReposts = () => followAccount({ reblogs: !relationship.showing_reblogs });
 
     const handleToggleNotify = () => followAccount({ notify: !relationship.notifying });
