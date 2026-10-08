@@ -19,6 +19,7 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { KeyboardAvoidingView, Platform, ScrollView, ToastAndroid, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { toast } from 'sonner-native';
 
 import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/logo.svg';
@@ -344,7 +345,8 @@ const OauthFlowScreen = ({
     } else if (response && ['locked', 'cancel', 'dismiss', 'error'].includes(response.type)) {
       if (Platform.OS === 'android') {
         ToastAndroid.show(intl.formatMessage(messages.interruptMessage), ToastAndroid.SHORT);
-        // TODO: support non-android
+      } else {
+        toast(intl.formatMessage(messages.interruptMessage));
       }
       navigation.goBack();
     }

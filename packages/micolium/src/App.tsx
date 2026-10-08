@@ -10,6 +10,7 @@ import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Toaster } from 'sonner-native';
 
 import { AccountSwitcherBottomSheet } from './components/account-switcher';
 import { ComposeBottomSheet } from './components/compose';
@@ -75,6 +76,7 @@ export const App = () => {
                   <GestureHandlerRootView>
                     <BottomSheetModalProvider>
                       <RootNavigator />
+                      <Toaster position='bottom-center' />
                       <AccountSwitcherBottomSheet />
                       <ComposeBottomSheet />
                     </BottomSheetModalProvider>

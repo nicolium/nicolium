@@ -29,7 +29,7 @@ const StatusLinkPreview: React.FC<IStatusLinkPreview> = ({ status }) => {
             accessibilityLabel={status.card.image_description}
           />
         )}
-        <Card.Content style={{gap: 4 }}>
+        <Card.Content style={{ gap: 4, paddingTop: status.card.image ? undefined : 16 }}>
           <Text variant='titleMedium'>{status.card.title}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             <Icon source={iconHelper(LinkSimpleIcon)} size={20} />
