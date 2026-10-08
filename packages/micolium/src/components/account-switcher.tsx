@@ -8,7 +8,7 @@ import { ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-account-context';
-import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { useIsAccountSwitcherOpen, useUiStoreActions } from '@/stores/ui';
 import { BottomSheetBackdrop } from '@/utils/themes';
@@ -16,11 +16,11 @@ import { BottomSheetBackdrop } from '@/utils/themes';
 import { Account } from './accounts/account';
 
 const CurrentAccount = () => {
-  const { data: account } = useCredentialAccount();
+  const { data: currentAccountId } = useCredentialAccountId();
 
-  if (!account) return <ActivityIndicator />;
+  if (!currentAccountId) return <ActivityIndicator />;
 
-  return <Account id={account.id} displayFqn />;
+  return <Account id={currentAccountId} displayFqn />;
 };
 
 const AccountSwitcher = () => {

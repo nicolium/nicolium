@@ -3,18 +3,18 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 
-import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 
 import { Profile } from '../components/profile';
 
 import type { ProfileStackParams } from '../router';
 
 const ProfileScreen = (_: NativeStackScreenProps<ProfileStackParams, 'view'>) => {
-  const { data: account } = useCredentialAccount();
+  const { data: currentAccountId } = useCredentialAccountId();
 
-  if (!account) return null;
+  if (!currentAccountId) return null;
 
-  return <Profile id={account.id} ownAccount />;
+  return <Profile id={currentAccountId} ownAccount />;
 };
 
 const ProfileStack = createNativeStackNavigator<ProfileStackParams>();

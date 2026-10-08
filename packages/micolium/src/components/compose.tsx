@@ -30,7 +30,7 @@ import { useKeyboardState } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useFeatures } from '@/contexts/current-account-context';
-import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useStatus } from '@/queries/statuses/use-status';
 import { useAuthStore } from '@/stores/auth';
 import {
@@ -182,7 +182,7 @@ const ComposeBottomSheet = () => {
 
   const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility } = compose;
 
-  const { data: currentAccount } = useCredentialAccount();
+  const { data: currentAccountId } = useCredentialAccountId();
 
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
 
@@ -268,7 +268,7 @@ const ComposeBottomSheet = () => {
             keyboardShouldPersistTaps='handled'
           >
             <View style={{ flexDirection: 'row' }}>
-              <Account id={currentAccount?.id} />
+              <Account id={currentAccountId} />
             </View>
             <ReplyIndicator />
             <QuoteIndicator />

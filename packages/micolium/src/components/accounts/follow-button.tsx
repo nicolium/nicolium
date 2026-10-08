@@ -13,7 +13,7 @@ import { Alert, ViewStyle } from 'react-native';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';
-import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import {
   useFollowAccountMutation,
   useUnblockAccountMutation,
@@ -54,14 +54,14 @@ const FollowButton: React.FC<IFollowButton> = ({ id, simple }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   const { data: account } = useAccount(id, true);
-  const { data: ownAccountId } = useCredentialAccount(true, ({ id }) => id);
+  const { data: currentAccountId } = useCredentialAccountId();
   const { mutate: followAccount, isPending: isPendingFollow } = useFollowAccountMutation(id);
   const { mutate: unfollowAccount } = useUnfollowAccountMutation(id);
   const { mutate: unblockAccount, isPending: isPendingUnblock } = useUnblockAccountMutation(id);
 
   const relationship = account?.relationship;
 
-  if (ownAccountId === id) return null;
+  if (currentAccountId === id) return null;
 
   if (relationship?.following) {
     const handleUnfollow = () => {

@@ -20,6 +20,10 @@ const useCredentialAccount = <T = CredentialAccount>(
   });
 };
 
+const accountIdSelector = ({ id }: CredentialAccount) => id;
+
+const useCredentialAccountId = () => useCredentialAccount(true, accountIdSelector);
+
 const useUpdateCredentials = () => {
   const client = useClient();
   const queryClient = useQueryClient();
@@ -43,4 +47,4 @@ const useUpdateCredentials = () => {
   });
 };
 
-export { useCredentialAccount, useUpdateCredentials };
+export { useCredentialAccount, useCredentialAccountId, useUpdateCredentials };

@@ -1,7 +1,10 @@
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
-import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+import {
+  useCredentialAccount,
+  useCredentialAccountId,
+} from '@/queries/accounts/use-account-credentials';
 
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { InteractionPolicy, InteractionPolicyEntry } from 'pl-api';
@@ -17,7 +20,7 @@ const useCanInteract = (
   approvalRequired: boolean | null;
   allowed?: Array<InteractionPolicyEntry>;
 } => {
-  const { data: account } = useCredentialAccount();
+  const { data: currentAccountId } = useCredentialAccountId();
 
   return useMemo(() => {
     if (type === 'can_quote') {
@@ -31,7 +34,7 @@ const useCanInteract = (
     const interactionPolicy = status.interaction_policy;
 
     if (
-      account?.id === status.account_id ||
+      currentAccountId === status.account_id ||
       interactionPolicy[type].automatic_approval.includes('me')
     )
       return {
@@ -53,7 +56,7 @@ const useCanInteract = (
         ...interactionPolicy[type].manual_approval,
       ],
     };
-  }, [account?.id, status.id, type]);
+  }, [currentAccountId, status.id, type]);
 };
 
 const INTERACTION_POLICY_HEADERS = {
