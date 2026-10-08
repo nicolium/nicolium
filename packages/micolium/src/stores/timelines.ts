@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import { findStatuses } from '@/queries/statuses/use-status';
+import { findStatuses } from '@/queries/statuses/find-statuses';
 import { compareId } from '@/utils/comparators';
 // import { hasActiveFilters, isEntryFiltered } from '@/utils/timeline-filter';
 

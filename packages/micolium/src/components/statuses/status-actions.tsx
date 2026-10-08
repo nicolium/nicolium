@@ -47,13 +47,14 @@ const ReplyAction: React.FC<IStatusActions> = ({ status }) => {
   const theme = useTheme();
   const { replyCompose } = useComposeActions();
   const { openCompose } = useUiStoreActions();
+  const features = useFeatures();
 
   const scopeUrl = useScopeUrl();
 
   const interactionTooltip = useInteractionMessages(status, 'can_reply');
 
   const handleReply = () => {
-    replyCompose(status, scopeUrl);
+    replyCompose(status, scopeUrl, features);
     openCompose();
   };
 

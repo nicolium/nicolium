@@ -37,8 +37,6 @@ import { scopedQueryKey } from '@/queries/query';
 // import { scopedQueryKey } from '@/queries/query';
 import { createStatus } from '@/queries/statuses/status-actions';
 
-import { useAuthStore } from './auth';
-
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 // import type { AutoSuggestion } from '@/components/autosuggest-input';
 // import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
@@ -510,9 +508,9 @@ interface ComposeActions {
       | 'visibility'
     >,
     scopeUrl: string,
+    features: Features,
     rebloggedBy?: Pick<Account, 'acct' | 'id'>,
     approvalRequired?: boolean,
-    openComposer?: boolean,
   ) => void;
   //   quoteCompose: (
   //     status: Pick<Status, 'id' | 'account_id' | 'visibility' | 'group_id' | 'list_id'>,
@@ -764,8 +762,7 @@ const useComposeStore = create<ComposeStore>()(
         //           });
         //         },
 
-        replyCompose: (status, scopeUrl, rebloggedBy, approvalRequired) => {
-          const { features } = useAuthStore.getState().clients[scopeUrl];
+        replyCompose: (status, scopeUrl, features, rebloggedBy, approvalRequired) => {
           const { forceImplicitAddressing, preserveSpoilers, defaultPrivacy } = {
             forceImplicitAddressing: false,
             preserveSpoilers: true,

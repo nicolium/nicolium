@@ -1,15 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
 // import { useMemo } from 'react';
+import React from 'react';
 
 import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
-// import { useClient } from '@/hooks/use-client';
-// import { useFeatures } from '@/hooks/use-features';
-// import { useLoggedIn } from '@/hooks/use-logged-in';
-// import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
-// import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
-// import { useSettings } from '@/stores/settings';
+
+import { useRelationshipQuery } from './use-relationship';
 
 // import type { NicoliumResponse } from '@/api';
 
@@ -28,7 +25,7 @@ import { scopedQueryKey, useAppQuery } from '@/queries/query';
 //   }
 // };
 
-const useAccount = (accountId?: string, _withRelationship = false) => {
+const useAccount = (accountId?: string, withRelationship = false) => {
   const client = useClient();
   // const features = useFeatures();
   // const { me } = useLoggedIn();
@@ -53,9 +50,9 @@ const useAccount = (accountId?: string, _withRelationship = false) => {
 
   // const { data: credentialAccount } = useCredentialAccount(me === accountId);
 
-  // const { data: relationship, isLoading: isRelationshipLoading } = useRelationshipQuery(
-  //   withRelationship ? accountQuery.data?.id : undefined,
-  // );
+  const { data: relationship, isLoading: isRelationshipLoading } = useRelationshipQuery(
+    withRelationship ? accountQuery.data?.id : undefined,
+  );
 
   // const isBlocked = accountQuery.data?.relationship?.blocked_by === true;
 
@@ -66,26 +63,28 @@ const useAccount = (accountId?: string, _withRelationship = false) => {
   //   [credentialAccount?.role?.permissions, me, accountId],
   // );
 
-  // const account = useMemo(() => {
-  //   if (!accountQuery.data) return undefined;
+  const account = React.useMemo(() => {
+    if (!accountQuery.data) return undefined;
 
-  //   // const mergedRelationship = relationship ?? accountQuery.data.relationship;
-  //   // const mergedIsAdmin = credentialIsAdmin ?? accountQuery.data.is_admin;
+    const mergedRelationship = relationship ?? accountQuery.data.relationship;
+    // const mergedIsAdmin = credentialIsAdmin ?? accountQuery.data.is_admin;
 
-  //   return {
-  //     ...accountQuery.data,
-  //     display_name: nickname ?? accountQuery.data.display_name,
-  //     original_display_name: accountQuery.data.display_name,
-  //     // relationship: mergedRelationship,
-  //     // is_admin: mergedIsAdmin,
-  //   };
-  // }, [accountQuery.data, relationship, credentialIsAdmin, nickname]);
+    return {
+      ...accountQuery.data,
+      // display_name: nickname ?? accountQuery.data.display_name,
+      // original_display_name: accountQuery.data.display_name,
+      relationship: mergedRelationship,
+      // is_admin: mergedIsAdmin,
+    };
+  }, [accountQuery.data, relationship]);
 
-  return accountQuery;
-  // isRelationshipLoading,
-  // isUnauthorized,
-  // isUnavailable,
-  // data: account,
+  return {
+    ...accountQuery,
+    isRelationshipLoading,
+    // isUnauthorized,
+    // isUnavailable,
+    data: account,
+  };
 };
 
 export { useAccount };

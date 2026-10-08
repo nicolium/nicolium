@@ -1,5 +1,5 @@
 import { useCurrentAccount } from '@/contexts/current-account-context';
 
-const useScopeUrl = useCurrentAccount;
+const useScopeUrl = () => useCurrentAccount();
 
 export { useScopeUrl };
