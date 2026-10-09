@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Appbar,
   Avatar,
   Button,
@@ -125,7 +126,12 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     if (height) setProfileInfoHeight(height);
   }, [isScrolled]);
 
-  if (!account) return null;
+  if (!account)
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator size='large' />
+      </View>
+    );
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
