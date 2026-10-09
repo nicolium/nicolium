@@ -8,7 +8,8 @@
     "scheme": "micolium",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.mkljczk.micolium"
     },
     "android": {
       "adaptiveIcon": {
@@ -17,7 +18,8 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.mkljczk.micolium"
     },
     "web": {
       "output": "single",
@@ -26,6 +28,10 @@
     "experiments": {
       "reactCompiler": true
     },
-    "plugins": ["expo-image", "expo-secure-store", "expo-splash-screen"]
+    "plugins": [
+      "expo-image",
+      "expo-secure-store",
+      "expo-splash-screen"
+    ]
   }
 }

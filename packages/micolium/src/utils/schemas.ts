@@ -37,4 +37,17 @@ const filteredRecord = <K extends string, T>(
     }),
   );
 
-export { filteredArray, filteredRecord };
+/** valibot schema to force the value into an object, if it isn't already. */
+const coerceObject = <T extends v.ObjectEntries>(shape: T) =>
+  v.optional(
+    v.pipe(
+      v.any(),
+      v.transform((input) =>
+        typeof input === 'object' && !Array.isArray(input) && input !== null ? input : {},
+      ),
+      v.object(shape),
+    ),
+    {},
+  );
+
+export { filteredArray, filteredRecord, coerceObject };

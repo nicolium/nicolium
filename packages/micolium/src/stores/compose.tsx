@@ -37,6 +37,8 @@ import { scopedQueryKey } from '@/queries/query';
 // import { scopedQueryKey } from '@/queries/query';
 import { createStatus } from '@/queries/statuses/status-actions';
 
+import { useSettingsStore } from './settings';
+
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 // import type { AutoSuggestion } from '@/components/autosuggest-input';
 // import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
@@ -349,16 +351,6 @@ const privacyPreference = (
   return order[Math.max(order.indexOf(a), order.indexOf(b), 0)];
 };
 
-// const domParser = new DOMParser();
-
-// const getExplicitMentions = (me: string, status: Pick<Status, 'content' | 'mentions'>) => {
-// const fragment = domParser.parseFromString(status.content, 'text/html').documentElement;
-// const mentions = status.mentions
-//   .filter((mention) => !(fragment.querySelector(`a[href="${mention.url}"]`) ?? mention.id === me))
-//   .map((m) => m.acct);
-// return [...new Set(mentions)];
-// };
-
 // const appendMedia = (compose: Compose, media: MediaAttachment) => {
 //   const prevSize = compose.mediaAttachments.length;
 
@@ -369,29 +361,6 @@ const privacyPreference = (
 //   if (prevSize === 0 && compose.sensitive) {
 //     compose.sensitive = true;
 //   }
-// };
-
-// const openDedicatedComposeWindow = (search?: ComposePageSearch) =>
-//   window.open(
-//     router.buildLocation({ search: search ?? {}, to: '/statuses/new' }).href,
-//     'targetWindow',
-//     'height=500,width=700',
-//   );
-
-// const openComposeSurface = (
-//   scopeUrl: string,
-//   columnId?: string,
-//   search?: ComposePageSearch,
-//   modalProps?: { composeId?: string },
-// ) => {
-//   const { useDedicatedComposePage } = useSettingsStore.getState().settings;
-
-//   if (useDedicatedComposePage && !userTouching.matches && !modalProps?.composeId) {
-//     openDedicatedComposeWindow(search);
-//     return;
-//   }
-
-//   useModalsStore.getState().actions.openModal('COMPOSE', modalProps, undefined, scopeUrl, columnId);
 // };
 
 const checkComposeContent = (compose?: Compose) =>
@@ -674,9 +643,9 @@ const useComposeStore = create<ComposeStore>()(
           redacting = false,
         ) => {
           // const { features } = getClient();
-          // const explicitAddressing = false; // features.createStatusExplicitAddressing;
-          //  &&
-          // !useSettingsStore.getState().settings.forceImplicitAddressing;
+          const explicitAddressing =
+            features.createStatusExplicitAddressing &&
+            !useSettingsStore.getState().settings['compose.forceImplicitAddressing'];
 
           set((state) => {
             state.composers['compose-modal'] = {
@@ -685,10 +654,9 @@ const useComposeStore = create<ComposeStore>()(
             };
 
             const compose = state.composers['compose-modal'];
-            const mentions: Array<string> = [];
-            // explicitAddressing
-            //   ? getExplicitMentions(status.account_id!, status)
-            //   : [];
+            const mentions: Array<string> = explicitAddressing
+              ? status.mentions.map((mention) => mention.acct)
+              : [];
             if (!withRedraft && !draftId) {
               compose.editedId = status.id;
             }
@@ -763,11 +731,11 @@ const useComposeStore = create<ComposeStore>()(
         //         },
 
         replyCompose: (status, scopeUrl, features, rebloggedBy, approvalRequired) => {
-          const { forceImplicitAddressing, preserveSpoilers, defaultPrivacy } = {
-            forceImplicitAddressing: false,
-            preserveSpoilers: true,
-            defaultPrivacy: 'public',
-          };
+          const {
+            'compose.forceImplicitAddressing': forceImplicitAddressing,
+            'compose.preserveSpoilers': preserveSpoilers,
+            'compose.defaultPrivacy': defaultPrivacy,
+          } = useSettingsStore.getState().settings;
           const explicitAddressing =
             features.createStatusExplicitAddressing && !forceImplicitAddressing;
           const account = queryClient.getQueryData(
@@ -855,14 +823,6 @@ const useComposeStore = create<ComposeStore>()(
         //         mentionCompose: (account, scopeUrl, columnId) => {
         //           if (!isLoggedIn()) return;
 
-        //           if (
-        //             useSettingsStore.getState().settings.useDedicatedComposePage &&
-        //             !userTouching.matches
-        //           ) {
-        //             openDedicatedComposeWindow({ text: `@${account.acct} ` });
-        //             return;
-        //           }
-
         //           get().actions.updateCompose('compose-modal', (compose) => {
         //             compose.text = [compose.text.trim(), `@${account.acct} `]
         //               .filter((str) => str.length !== 0)
@@ -873,17 +833,6 @@ const useComposeStore = create<ComposeStore>()(
         //         },
 
         //         directCompose: (account, scopeUrl, columnId) => {
-        //           if (
-        //             useSettingsStore.getState().settings.useDedicatedComposePage &&
-        //             !userTouching.matches
-        //           ) {
-        //             openDedicatedComposeWindow({
-        //               text: `@${account.acct} `,
-        //               visibility: 'direct',
-        //             });
-        //             return;
-        //           }
-
         //           get().actions.updateCompose('compose-modal', (compose) => {
         //             compose.text = [compose.text.trim(), `@${account.acct} `]
         //               .filter((str) => str.length !== 0)
@@ -1152,8 +1101,9 @@ const submitCompose = async (
   const media = compose.mediaAttachments;
   const editedId = compose.editedId;
   let to = compose.to;
-  // const { forceImplicitAddressing } = deps.settings;
-  const explicitAddressing = features.createStatusExplicitAddressing; // && !forceImplicitAddressing;
+  const forceImplicitAddressing =
+    useSettingsStore.getState().settings['compose.forceImplicitAddressing'];
+  const explicitAddressing = features.createStatusExplicitAddressing && !forceImplicitAddressing;
 
   if (!preview) {
     const scheduledAt = compose.scheduledAt;
@@ -1484,7 +1434,6 @@ const useSubmitDeps = (): SubmitDeps => {
   const features = useFeatures();
   // const { openModal, closeModal } = useModalsActions();
   // // const { removeSledzik } = useUiStoreActions();
-  // const settings = useSettings();
   const instance = useInstance();
   // const persistDraftStatus = usePersistDraftStatus();
 
@@ -1497,7 +1446,6 @@ const useSubmitDeps = (): SubmitDeps => {
     // openModal,
     // closeModal,
     // removeSledzik,
-    // settings,
     instance,
     // persistDraftStatus,
   };
@@ -1845,7 +1793,6 @@ export {
   //   appendMedia,
   checkComposeContent,
   //   newPoll,
-  //   openDedicatedComposeWindow,
   //   statusToMentionsAccountIdsArray,
   useComposeStore,
   useCompose,
