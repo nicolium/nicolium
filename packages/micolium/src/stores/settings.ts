@@ -39,8 +39,10 @@ const storage = createAsyncStorage('settings');
 
 type State = {
   settings: Settings;
-  update: <K extends keyof Settings>(key: K, value: Settings[K]) => void;
-  reset: () => void;
+  actions: {
+    update: <K extends keyof Settings>(key: K, value: Settings[K]) => void;
+    reset: () => void;
+  };
 };
 
 const useSettingsStore = create<State>()(
@@ -65,4 +67,6 @@ const useSettingsStore = create<State>()(
 
 const useSetting = <K extends keyof Settings>(key: K) => useSettingsStore((s) => s.settings[key]);
 
-export { useSettingsStore, useSetting };
+const useSettingsActions = () => useSettingsStore(({ actions }) => actions);
+
+export { useSettingsStore, useSetting, useSettingsActions };
