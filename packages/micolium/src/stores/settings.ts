@@ -1,7 +1,7 @@
 import { createAsyncStorage } from '@react-native-async-storage/async-storage';
 import * as v from 'valibot';
 import { create } from 'zustand';
-import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 import { filteredArray } from '@/utils/schemas';
 
@@ -49,8 +49,10 @@ const useSettingsStore = create<State>()(
   persist(
     (set) => ({
       settings: DEFAULT_SETTINGS,
-      update: (key, value) => set((s) => ({ settings: { ...s.settings, [key]: value } })),
-      reset: () => set({ settings: DEFAULT_SETTINGS }),
+      actions: {
+        update: (key, value) => set((s) => ({ settings: { ...s.settings, [key]: value } })),
+        reset: () => set({ settings: DEFAULT_SETTINGS }),
+      },
     }),
     {
       name: 'settings',
