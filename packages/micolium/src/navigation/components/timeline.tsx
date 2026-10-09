@@ -8,6 +8,8 @@ import { View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-n
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage, type IEmptyMessage } from '@/components/ui/empty-message';
 import { iconHelper } from '@/components/ui/icon';
+import { LoadMore } from '@/components/ui/load-more';
+import { useSetting } from '@/stores/settings';
 
 import type { useTimeline } from '@/queries/timelines/use-timeline';
 import type { TimelineEntry } from '@/stores/timelines';
@@ -28,6 +30,8 @@ const Timeline: React.FC<ITimeline> = ({
   onScroll,
   ...props
 }) => {
+  const autoloadMore = useSetting('timelines.autoloadMore');
+
   const renderItem: ListRenderItem<TimelineEntry> = useCallback(
     ({ item, index }) =>
       item.type === 'status' ? (
@@ -67,10 +71,14 @@ const Timeline: React.FC<ITimeline> = ({
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparatorComponent}
       onRefresh={query.refetch}
-      refreshing={query.isFetching}
-      onEndReached={() => {
-        if (query.hasNextPage && !query.isFetching) query.fetchNextPage();
-      }}
+      refreshing={query.isRefetching}
+      onEndReached={
+        autoloadMore
+          ? () => {
+              if (query.hasNextPage && !query.isFetching) query.fetchNextPage();
+            }
+          : undefined
+      }
       onEndReachedThreshold={0.1}
       ListEmptyComponent={
         query.isPending ? null : query.isError === 401 ? (
@@ -87,11 +95,7 @@ const Timeline: React.FC<ITimeline> = ({
           <EmptyMessage {...props} />
         )
       }
-      ListFooterComponent={
-        query.isFetching && !query.isPending ? (
-          <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
-        ) : undefined
-      }
+      ListFooterComponent={<LoadMore query={query} />}
       ListHeaderComponent={header}
       onScroll={onScroll}
     />

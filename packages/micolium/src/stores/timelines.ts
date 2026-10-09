@@ -51,6 +51,7 @@ interface TimelineData {
   queuedCount: number;
   queuedAccountIds: Array<string>;
   isFetching: boolean;
+  isRefetching: boolean;
   isPending: boolean;
   isError: boolean | number;
   hasNextPage: boolean;
@@ -72,7 +73,7 @@ interface State {
     ) => void;
     receiveStreamingStatus: (scopeUrl: string, timelineId: string, status: Status) => void;
     deleteStatus: (scopeUrl: string, statusId: string) => void;
-    setLoading: (scopeUrl: string, timelineId: string, isFetching: boolean) => void;
+    setLoading: (scopeUrl: string, timelineId: string, isFetching: boolean, isRefetching: boolean) => void;
     setError: (scopeUrl: string, timelineId: string, isError: boolean, statusCode?: number) => void;
     dequeueEntries: (scopeUrl: string, timelineId: string) => void;
     fillGap: (
@@ -249,6 +250,7 @@ const useTimelinesStore = create<State>()(
           }
           timeline.isPending = false;
           timeline.isFetching = false;
+          timeline.isRefetching = false;
           if ((initialFetch || restoring) && statuses.length > 0) {
             timeline.newestStatusId = statuses[0].id;
           }
@@ -296,11 +298,12 @@ const useTimelinesStore = create<State>()(
           }
         });
       },
-      setLoading: (scopeUrl, timelineId, isFetching) =>
+      setLoading: (scopeUrl, timelineId, isFetching, isRefetching) =>
         set((state) => {
           const timeline = getOrCreateTimeline(state, scopeUrl, timelineId);
 
           timeline.isFetching = isFetching;
+          timeline.isRefetching = isRefetching;
           if (!isFetching) timeline.isPending = false;
         }),
       setError: (scopeUrl, timelineId, isError, statusCode) =>
@@ -310,6 +313,7 @@ const useTimelinesStore = create<State>()(
           if (!timeline) return;
 
           timeline.isFetching = false;
+          timeline.isRefetching = false;
           timeline.isPending = false;
           timeline.isError = isError ? statusCode || true : false;
         }),
@@ -510,6 +514,7 @@ const createEmptyTimeline = (): TimelineData => ({
   queuedCount: 0,
   queuedAccountIds: [],
   isFetching: false,
+  isRefetching: false,
   isPending: true,
   isError: false,
   hasNextPage: true,

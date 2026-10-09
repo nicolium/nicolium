@@ -4,7 +4,6 @@ import {
   CarouselItem,
   Divider,
   Searchbar,
-  Text,
   useTheme,
 } from '@mkljczk/react-native-paper';
 import {
@@ -13,7 +12,7 @@ import {
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
 import { debounce } from '@tanstack/react-pacer/debouncer';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { TabsProvider, Tabs, TabScreen } from 'react-native-paper-tabs';
@@ -24,6 +23,7 @@ import { Hashtag } from '@/components/hashtag';
 import { Status } from '@/components/statuses/status';
 import { TrendsLink } from '@/components/trends-link';
 import { EmptyMessage } from '@/components/ui/empty-message';
+import { LoadMore } from '@/components/ui/load-more';
 import { useFeatures } from '@/contexts/current-account-context';
 import {
   useSearchAccounts,
@@ -34,6 +34,7 @@ import { useSuggestedAccounts } from '@/queries/trends/use-suggested-accounts';
 import { useTrendingLinks } from '@/queries/trends/use-trending-links';
 import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
 import useTrendingTags from '@/queries/trends/use-trending-tags';
+import { useSetting } from '@/stores/settings';
 
 import type { SearchStackParams } from '../router';
 
@@ -60,10 +61,11 @@ const SearchScreen = ({
   const { top: topInset } = useSafeAreaInsets();
   const { colors } = useTheme();
   const features = useFeatures();
-  const [forcedRerenderKey, setForcedRerenderKey] = useState(0);
+  const autoloadMore = useSetting('timelines.autoloadMore');
 
   const { type: activeType = 'accounts', query: activeQuery = '' } = route.params || {};
 
+  const [forcedRerenderKey, setForcedRerenderKey] = React.useState(0);
   const [enteredQuery, setEnteredQuery] = React.useState(activeQuery || '');
 
   const hasQuery = activeQuery.trim().length > 0;
@@ -146,7 +148,7 @@ const SearchScreen = ({
                 )}
                 ItemSeparatorComponent={Divider}
                 onEndReached={
-                  hasQuery && accountsQuery.hasNextPage && !accountsQuery.isFetching
+                  autoloadMore && hasQuery && accountsQuery.hasNextPage && !accountsQuery.isFetching
                     ? accountsQuery.fetchNextPage
                     : undefined
                 }
@@ -165,11 +167,7 @@ const SearchScreen = ({
                     />
                   ) : null
                 }
-                ListFooterComponent={
-                  accountsQuery.isFetching ? (
-                    <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
-                  ) : undefined
-                }
+                ListFooterComponent={<LoadMore query={accountsQuery} />}
                 onRefresh={activeAccountsQuery.refetch}
                 refreshing={activeAccountsQuery.isRefetching}
               />
@@ -184,7 +182,7 @@ const SearchScreen = ({
                 renderItem={({ item }) => <Status id={item} withLink />}
                 ItemSeparatorComponent={Divider}
                 onEndReached={
-                  hasQuery && statusesQuery.hasNextPage && !statusesQuery.isFetching
+                  autoloadMore && hasQuery && statusesQuery.hasNextPage && !statusesQuery.isFetching
                     ? statusesQuery.fetchNextPage
                     : undefined
                 }
@@ -202,11 +200,7 @@ const SearchScreen = ({
                     />
                   ) : null
                 }
-                ListFooterComponent={
-                  statusesQuery.isFetching ? (
-                    <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
-                  ) : undefined
-                }
+                ListFooterComponent={<LoadMore query={statusesQuery} />}
                 onRefresh={activeStatusesQuery.refetch}
                 refreshing={activeStatusesQuery.isRefetching}
               />
@@ -221,7 +215,7 @@ const SearchScreen = ({
                 renderItem={({ item }) => <Hashtag tag={item.name} />}
                 ItemSeparatorComponent={Divider}
                 onEndReached={
-                  hasQuery && hashtagsQuery.hasNextPage && !hashtagsQuery.isFetching
+                  autoloadMore && hasQuery && hashtagsQuery.hasNextPage && !hashtagsQuery.isFetching
                     ? hashtagsQuery.fetchNextPage
                     : undefined
                 }
@@ -239,11 +233,7 @@ const SearchScreen = ({
                     />
                   ) : null
                 }
-                ListFooterComponent={
-                  statusesQuery.isFetching ? (
-                    <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
-                  ) : undefined
-                }
+                ListFooterComponent={<LoadMore query={hashtagsQuery} />}
                 onRefresh={activeHashtagsQuery.refetch}
                 refreshing={activeHashtagsQuery.isRefetching}
               />

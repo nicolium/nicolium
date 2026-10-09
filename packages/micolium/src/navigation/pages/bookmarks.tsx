@@ -8,17 +8,21 @@ import { FormattedMessage } from 'react-intl';
 
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage } from '@/components/ui/empty-message';
+import { LoadMore } from '@/components/ui/load-more';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useBookmarks } from '@/queries/status-lists/use-bookmarks';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
+import { useSetting } from '@/stores/settings';
 
 import type { BookmarksStackParams } from '../router';
 
 const AllBookmarksScreen = ({
   navigation,
 }: NativeStackScreenProps<BookmarksStackParams, 'all'>) => {
-  const bookmarksQuery = useBookmarks();
+  const autoloadMore = useSetting('timelines.autoloadMore');
   const features = useFeatures();
+
+  const bookmarksQuery = useBookmarks();
 
   return (
     <>
@@ -42,7 +46,7 @@ const AllBookmarksScreen = ({
         renderItem={({ item }) => <Status id={item} withLink />}
         ItemSeparatorComponent={Divider}
         onEndReached={
-          bookmarksQuery.hasNextPage && !bookmarksQuery.isFetching
+          autoloadMore && bookmarksQuery.hasNextPage && !bookmarksQuery.isFetching
             ? bookmarksQuery.fetchNextPage
             : undefined
         }
@@ -59,11 +63,7 @@ const AllBookmarksScreen = ({
             />
           ) : null
         }
-        ListFooterComponent={
-          bookmarksQuery.isFetching ? (
-            <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
-          ) : undefined
-        }
+        ListFooterComponent={<LoadMore query={bookmarksQuery} />}
       />
     </>
   );
@@ -73,6 +73,8 @@ const BookmarksFolderScreen = ({
   route,
   navigation,
 }: NativeStackScreenProps<BookmarksStackParams, 'folder'>) => {
+  const autoloadMore = useSetting('timelines.autoloadMore');
+
   const bookmarksQuery = useBookmarks(route.params.id);
   const { data: folder } = useBookmarkFolder(route.params.id);
 
@@ -88,7 +90,7 @@ const BookmarksFolderScreen = ({
         renderItem={({ item }) => <Status id={item} withLink />}
         ItemSeparatorComponent={Divider}
         onEndReached={
-          bookmarksQuery.hasNextPage && !bookmarksQuery.isFetching
+          autoloadMore && bookmarksQuery.hasNextPage && !bookmarksQuery.isFetching
             ? bookmarksQuery.fetchNextPage
             : undefined
         }
@@ -105,11 +107,7 @@ const BookmarksFolderScreen = ({
             />
           ) : null
         }
-        ListFooterComponent={
-          bookmarksQuery.isFetching ? (
-            <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
-          ) : undefined
-        }
+        ListFooterComponent={<LoadMore query={bookmarksQuery} />}
       />
     </>
   );

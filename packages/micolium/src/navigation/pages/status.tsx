@@ -11,6 +11,7 @@ import { Account } from '@/components/accounts/account';
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { Header } from '@/components/ui/header';
+import { LoadMore } from '@/components/ui/load-more';
 import { useStatus, useStatusContext } from '@/queries/statuses/use-status';
 import {
   useStatusDislikes,
@@ -18,6 +19,7 @@ import {
   useStatusReblogs,
 } from '@/queries/statuses/use-status-interactions';
 import { useThread } from '@/stores/contexts';
+import { useSetting } from '@/stores/settings';
 
 import type { RootStackParams, StatusStackParams } from '../router';
 import type { PaginatedResponseArray } from '@/queries/utils/make-paginated-response-query';
@@ -37,6 +39,8 @@ interface IInteractionList {
 }
 
 const InteractionList: React.FC<IInteractionList> = ({ query, emptyMessageText }) => {
+  const autoloadMore = useSetting('timelines.autoloadMore');
+
   return (
     <FlashList
       data={query.data}
@@ -44,16 +48,14 @@ const InteractionList: React.FC<IInteractionList> = ({ query, emptyMessageText }
         <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink withFollowButton />
       )}
       ItemSeparatorComponent={Divider}
-      onEndReached={query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined}
+      onEndReached={
+        autoloadMore && query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined
+      }
       onEndReachedThreshold={0.1}
       ListEmptyComponent={
         !query.isPending ? <EmptyMessage emptyMessageText={emptyMessageText} /> : null
       }
-      ListFooterComponent={
-        query.isFetching ? (
-          <ActivityIndicator style={{ marginVertical: 8 }} size='large' />
-        ) : undefined
-      }
+      ListFooterComponent={<LoadMore query={query} />}
     />
   );
 };

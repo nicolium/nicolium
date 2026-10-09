@@ -138,7 +138,7 @@ const useTimeline = (
     async (isRestoring = !!pendingRestoringMaxId.current) => {
       const restoringFromId = isRestoring ? pendingRestoringMaxId.current : undefined;
       pendingRestoringMaxId.current = undefined;
-      timelineActions.setLoading(scopeUrl, timelineId, true);
+      timelineActions.setLoading(scopeUrl, timelineId, true, true);
       try {
         const [response, shouldInsertGap] = await Promise.all([
           fetcherRef.current(),
@@ -175,7 +175,7 @@ const useTimeline = (
   const fetchNextPage = useCallback(async () => {
     if (timeline.isFetching) return;
 
-    timelineActions.setLoading(scopeUrl, timelineId, true);
+    timelineActions.setLoading(scopeUrl, timelineId, true, false);
 
     try {
       const response = await fetcherRef.current({ max_id: timeline.oldestStatusId });
