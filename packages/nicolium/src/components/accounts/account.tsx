@@ -193,7 +193,7 @@ const Account = ({
 
       return pronouns;
     }
-  }, [account.pronouns, account.fields]);
+  }, [account?.pronouns, account?.fields]);
 
   const withExternalLink = !me && !allowDisplayingRemoteNoLogin && account && !account.local;
 
