@@ -35,7 +35,6 @@ import { scopedQueryKey } from '@/queries/query';
 // import { queryClient } from '@/queries/client';
 // import { queryKeys } from '@/queries/keys';
 // import { scopedQueryKey } from '@/queries/query';
-import { createStatus } from '@/queries/statuses/status-actions';
 
 import { useSettingsStore } from './settings';
 
@@ -1323,6 +1322,7 @@ const submitCompose = async (
   }
 
   try {
+    const { createStatus } = await import('@/queries/statuses/status-actions');
     const data = await createStatus(
       client,
       params,
