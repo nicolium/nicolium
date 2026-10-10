@@ -124,9 +124,11 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
   const {
     baseStyle,
     tagsStyles,
+    classesStyles,
   }: {
     baseStyle: MixedStyleDeclaration;
     tagsStyles: Readonly<Record<string, MixedStyleDeclaration>>;
+    classesStyles: Readonly<Record<string, MixedStyleDeclaration>>;
   } = useMemo(() => {
     const baseTypescale = multiplyFontSizes(fonts.bodyMedium, sizeMultiplier);
 
@@ -169,6 +171,9 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
         p: { marginTop: 0, marginBottom: 12 * sizeMultiplier },
         a: { color: colors.primary, textDecorationLine: 'none' },
       },
+      classesStyles: {
+        'last-paragraph': { marginBottom: 0 },
+      },
     };
   }, [colors, fonts, sizeMultiplier]);
 
@@ -177,6 +182,15 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
 
     return {
       onElement: (element) => {
+        if (element.tagName === 'p' && element.parent) {
+          const children = element.parent.children.filter((element) => element.type === 'tag');
+
+          if (element === children.at(-1)) {
+            if (element.attribs.class) element.attribs.class += ' last-paragraph';
+            else element.attribs.class = 'last-paragraph';
+          }
+        }
+
         if (element.tagName === 'a') {
           const classList = element.attribs.class?.split(' ') || [];
 
@@ -293,6 +307,7 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
       source={{ html }}
       baseStyle={baseStyle}
       tagsStyles={tagsStyles}
+      classesStyles={classesStyles}
       systemFonts={[...defaultSystemFonts, fonts.bodyMedium.fontFamily]}
       customHTMLElementModels={customHTMLElementModels}
       renderers={{
