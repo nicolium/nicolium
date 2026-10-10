@@ -24,7 +24,7 @@ import { LoadMore } from '@/components/ui/load-more';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-import { useStatus, useStatusContext } from '@/queries/statuses/use-status';
+import { type SelectedStatus, useStatus, useStatusContext } from '@/queries/statuses/use-status';
 import {
   useStatusDislikes,
   useStatusFavourites,
@@ -45,6 +45,68 @@ const MaybeDivider: React.FC<{ statusId: string }> = ({ statusId }) => {
   if (status?.replies_count) return null;
 
   return <Divider />;
+};
+
+interface IReplyBox {
+  status?: SelectedStatus;
+}
+
+const ReplyBox: React.FC<IReplyBox> = ({ status }) => {
+  const { bottom: bottomInset } = useSafeAreaInsets();
+  const { colors } = useTheme();
+  const { replyCompose } = useComposeActions();
+  const { openCompose } = useUiStoreActions();
+
+  const canReply = useCanInteract(status, 'can_reply');
+
+  const features = useFeatures();
+  const scopeUrl = useScopeUrl();
+
+  if (!status || !canReply) return null;
+
+  const handleReply = () => {
+    if (!status) return;
+
+    replyCompose(status, scopeUrl, features);
+    openCompose();
+  };
+
+  return (
+    <View
+      style={{
+        backgroundColor: colors.surfaceContainer,
+        paddingTop: 8,
+        paddingBottom: 8 + bottomInset,
+        paddingHorizontal: 16,
+        borderTopColor: colors.surfaceVariant,
+        borderTopWidth: 1,
+      }}
+    >
+      <TouchableRipple
+        style={{
+          gap: 8,
+          flexDirection: 'row',
+          alignItems: 'center',
+          padding: 8,
+          backgroundColor: colors.surfaceVariant,
+          borderRadius: 20,
+          overflow: 'hidden',
+        }}
+        onPress={handleReply}
+      >
+        <>
+          <CurrentAccountAvatar />
+          <Text>
+            <FormattedMessage
+              id='status.reply_to'
+              defaultMessage='Reply to {name}'
+              values={{ name: status?.account.display_name }}
+            />
+          </Text>
+        </>
+      </TouchableRipple>
+    </View>
+  );
 };
 
 interface IInteractionList {
@@ -79,25 +141,10 @@ const StatusViewScreen = ({
     params: { id },
   },
 }: NativeStackScreenProps<StatusStackParams, 'view'>) => {
-  const { bottom: bottomInset } = useSafeAreaInsets();
   const { colors } = useTheme();
   const { data: status } = useStatus(id);
   const contextQuery = useStatusContext(id);
   const thread = useThread(id);
-  const { replyCompose } = useComposeActions();
-  const { openCompose } = useUiStoreActions();
-
-  const canReply = useCanInteract(status, 'can_reply');
-
-  const features = useFeatures();
-  const scopeUrl = useScopeUrl();
-
-  const handleReply = () => {
-    if (!status) return;
-
-    replyCompose(status, scopeUrl, features);
-    openCompose();
-  };
 
   return (
     <>
@@ -130,42 +177,7 @@ const StatusViewScreen = ({
         onRefresh={contextQuery.refetch}
         refreshing={contextQuery.isRefetching}
       />
-      {canReply && (
-        <View
-          style={{
-            backgroundColor: colors.surfaceContainer,
-            paddingTop: 8,
-            paddingBottom: 8 + bottomInset,
-            paddingHorizontal: 16,
-            borderTopColor: colors.surfaceVariant,
-            borderTopWidth: 1,
-          }}
-        >
-          <TouchableRipple
-            style={{
-              gap: 8,
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: 8,
-              backgroundColor: colors.surfaceVariant,
-              borderRadius: 20,
-              overflow: 'hidden',
-            }}
-            onPress={handleReply}
-          >
-            <>
-              <CurrentAccountAvatar />
-              <Text>
-                <FormattedMessage
-                  id='status.reply_to'
-                  defaultMessage='Reply to {name}'
-                  values={{ name: status?.account.display_name }}
-                />
-              </Text>
-            </>
-          </TouchableRipple>
-        </View>
-      )}
+      <ReplyBox status={status} />
     </>
   );
 };
