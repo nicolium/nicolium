@@ -180,7 +180,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status }) => {
   }
 
   // The typical case with a reply-to and a list of mentions.
-  const accounts = to.slice(0, 2).map((account, index, array) => (
+  const accounts = to.slice(0, 2).map((account) => (
     <Link
       screen='accounts'
       params={{ screen: 'view', params: { id: account.id } }}
