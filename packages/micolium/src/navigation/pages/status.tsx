@@ -8,7 +8,7 @@ import {
 } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
-  NativeStackHeaderProps,
+  type NativeStackHeaderProps,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
@@ -21,7 +21,6 @@ import { Account } from '@/components/accounts/account';
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage } from '@/components/ui/empty-message';
-import { Header } from '@/components/ui/header';
 import { LoadMore } from '@/components/ui/load-more';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract } from '@/hooks/use-can-interact';
