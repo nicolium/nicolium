@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Appbar,
   Divider,
   Text,
   TouchableRipple,
@@ -7,11 +8,12 @@ import {
 } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
+  NativeStackHeaderProps,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -38,6 +40,73 @@ import { useUiStoreActions } from '@/stores/ui';
 import type { RootStackParams, StatusStackParams } from '../router';
 import type { PaginatedResponseArray } from '@/queries/utils/make-paginated-response-query';
 import type { UseInfiniteQueryResult } from '@tanstack/react-query';
+
+const messages = defineMessages({
+  statusHeader: { id: 'column.status', defaultMessage: 'Post' },
+  statusByAuthorHeader: { id: 'column.status.by_author', defaultMessage: 'Post by {name}' },
+  reblogsHeader: { id: 'column.reblogs', defaultMessage: 'Reposts' },
+  favouritesHeader: { id: 'column.favourites', defaultMessage: 'Likes' },
+  dislikesHeader: { id: 'column.dislikes', defaultMessage: 'Dislikes' },
+  mentionsHeader: { id: 'column.mentions', defaultMessage: 'Mentions' },
+  countSubtitle: {
+    id: 'column.count',
+    defaultMessage: '{count, plural, one {# person} other {# people}}',
+  },
+});
+
+const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
+  const intl = useIntl();
+  const { colors } = useTheme();
+  const { data: status } = useStatus(route.params?.id);
+
+  let title: string;
+  let subtitle: string | undefined;
+  switch (route.name) {
+    case 'view':
+      title = intl.formatMessage(status ? messages.statusByAuthorHeader : messages.statusHeader, {
+        name: status?.account.display_name,
+      });
+      break;
+    case 'reblogs':
+      title = intl.formatMessage(messages.reblogsHeader);
+      subtitle = intl.formatMessage(messages.countSubtitle, { count: status?.reblogs_count });
+      break;
+    case 'favourites':
+      title = intl.formatMessage(messages.favouritesHeader);
+      subtitle = intl.formatMessage(messages.countSubtitle, { count: status?.favourites_count });
+      break;
+    case 'dislikes':
+      title = intl.formatMessage(messages.dislikesHeader);
+      subtitle = intl.formatMessage(messages.countSubtitle, { count: status?.dislikes_count });
+      break;
+    case 'mentions':
+      title = intl.formatMessage(messages.mentionsHeader);
+      subtitle = intl.formatMessage(messages.countSubtitle, { count: status?.mentions.length });
+      break;
+    default:
+      title = '';
+  }
+
+  return (
+    <Appbar.Header
+      style={{
+        backgroundColor: colors.surfaceContainer,
+      }}
+    >
+      {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+      {subtitle ? (
+        <View>
+          <Text variant='titleMedium' numberOfLines={1}>
+            {title}
+          </Text>
+          <Text style={{ display: 'flex', alignItems: 'center', gap: 4 }}>{subtitle}</Text>
+        </View>
+      ) : (
+        <Appbar.Content title={title} />
+      )}
+    </Appbar.Header>
+  );
+};
 
 const MaybeDivider: React.FC<{ statusId: string }> = ({ statusId }) => {
   const { data: status } = useStatus(statusId);
@@ -271,27 +340,27 @@ const StatusStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'stat
       <StatusStack.Screen
         name='view'
         component={StatusViewScreen}
-        options={{ header: Header, title: 'Status' }}
+        options={{ header: StatusHeader, title: 'Status' }}
       />
       <StatusStack.Screen
         name='reblogs'
         component={StatusReblogsScreen}
-        options={{ header: Header, title: 'Reposts' }}
+        options={{ header: StatusHeader, title: 'Reposts' }}
       />
       <StatusStack.Screen
         name='favourites'
         component={StatusFavouritesScreen}
-        options={{ header: Header, title: 'Likes' }}
+        options={{ header: StatusHeader, title: 'Likes' }}
       />
       <StatusStack.Screen
         name='dislikes'
         component={StatusDislikesScreen}
-        options={{ header: Header, title: 'Dislikes' }}
+        options={{ header: StatusHeader, title: 'Dislikes' }}
       />
       <StatusStack.Screen
         name='mentions'
         component={StatusMentionsScreen}
-        options={{ header: Header, title: 'Mentions' }}
+        options={{ header: StatusHeader, title: 'Mentions' }}
       />
     </StatusStack.Navigator>
   );
