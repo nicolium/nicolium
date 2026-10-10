@@ -1,14 +1,13 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
 
 import { useAuthStore } from '@/stores/auth';
-
-import { Header } from '../components/ui/header';
 
 import { AccountsStackScreen } from './pages/accounts';
 import { BookmarksStackScreen } from './pages/bookmarks';
 import { HashtagsScreen } from './pages/hashtags';
 import { LoginStackScreen } from './pages/login';
-import { SettingsScreen } from './pages/settings';
+import { SettingsStackScreen } from './pages/settings';
 import { StatusStackScreen } from './pages/status';
 import { Tabs } from './tabs';
 
@@ -37,6 +36,12 @@ type SearchStackParams = {
 };
 type ProfileStackParams = {
   view: undefined;
+};
+type SettingsStackParams = {
+  index: undefined;
+  compose: undefined;
+  timelines: undefined;
+  notifications: undefined;
 };
 type StatusStackParams = {
   view: { id: string };
@@ -68,7 +73,7 @@ type LoginStackParams = {
 type RootStackParams = {
   login: undefined;
   app: NavigatorScreenParams<TabsParams>;
-  settings: undefined;
+  settings: NavigatorScreenParams<SettingsStackParams>;
   status: NavigatorScreenParams<StatusStackParams>;
   accounts: NavigatorScreenParams<AccountStackParams>;
   hashtags: { tag: string };
@@ -87,8 +92,8 @@ const RootNavigator = () => {
           <RootStack.Screen name='app' component={Tabs} options={{ headerShown: false }} />
           <RootStack.Screen
             name='settings'
-            component={SettingsScreen}
-            options={{ header: Header, title: 'Settings' }}
+            component={SettingsStackScreen}
+            options={{ headerShown: false }}
           />
           <RootStack.Screen
             name='status'
@@ -126,6 +131,7 @@ export {
   type NotificationsStackParams,
   type SearchStackParams,
   type ProfileStackParams,
+  type SettingsStackParams,
   type StatusStackParams,
   type AccountStackParams,
   type BookmarksStackParams,

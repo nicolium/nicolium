@@ -73,7 +73,12 @@ interface State {
     ) => void;
     receiveStreamingStatus: (scopeUrl: string, timelineId: string, status: Status) => void;
     deleteStatus: (scopeUrl: string, statusId: string) => void;
-    setLoading: (scopeUrl: string, timelineId: string, isFetching: boolean, isRefetching: boolean) => void;
+    setLoading: (
+      scopeUrl: string,
+      timelineId: string,
+      isFetching: boolean,
+      isRefetching: boolean,
+    ) => void;
     setError: (scopeUrl: string, timelineId: string, isError: boolean, statusCode?: number) => void;
     dequeueEntries: (scopeUrl: string, timelineId: string) => void;
     fillGap: (

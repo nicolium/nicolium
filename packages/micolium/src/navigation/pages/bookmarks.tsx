@@ -1,9 +1,10 @@
-import { ActivityIndicator, Appbar, Divider, Text } from '@mkljczk/react-native-paper';
+import { Appbar, Divider, Text } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Status } from '@/components/statuses/status';
