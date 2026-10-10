@@ -1,4 +1,10 @@
-import { ActivityIndicator, Divider, useTheme } from '@mkljczk/react-native-paper';
+import {
+  ActivityIndicator,
+  Divider,
+  Text,
+  TouchableRipple,
+  useTheme,
+} from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
@@ -6,20 +12,28 @@ import {
 import { FlashList } from '@shopify/flash-list';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Account } from '@/components/accounts/account';
+import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { Header } from '@/components/ui/header';
 import { LoadMore } from '@/components/ui/load-more';
+import { useFeatures } from '@/contexts/current-account-context';
+import { useCanInteract } from '@/hooks/use-can-interact';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useStatus, useStatusContext } from '@/queries/statuses/use-status';
 import {
   useStatusDislikes,
   useStatusFavourites,
   useStatusReblogs,
 } from '@/queries/statuses/use-status-interactions';
+import { useComposeActions } from '@/stores/compose';
 import { useThread } from '@/stores/contexts';
 import { useSetting } from '@/stores/settings';
+import { useUiStoreActions } from '@/stores/ui';
 
 import type { RootStackParams, StatusStackParams } from '../router';
 import type { PaginatedResponseArray } from '@/queries/utils/make-paginated-response-query';
@@ -65,41 +79,94 @@ const StatusViewScreen = ({
     params: { id },
   },
 }: NativeStackScreenProps<StatusStackParams, 'view'>) => {
+  const { bottom: bottomInset } = useSafeAreaInsets();
   const { colors } = useTheme();
   const { data: status } = useStatus(id);
   const contextQuery = useStatusContext(id);
   const thread = useThread(id);
+  const { replyCompose } = useComposeActions();
+  const { openCompose } = useUiStoreActions();
+
+  const canReply = useCanInteract(status, 'can_reply');
+
+  const features = useFeatures();
+  const scopeUrl = useScopeUrl();
+
+  const handleReply = () => {
+    if (!status) return;
+
+    replyCompose(status, scopeUrl, features);
+    openCompose();
+  };
 
   return (
-    <FlashList
-      data={thread}
-      renderItem={({ item }) => (
-        <Status
-          id={item}
-          context='thread'
-          withLink={item !== id}
-          style={item === id ? { backgroundColor: colors.surfaceContainerLow } : undefined}
-          detailed={item === id}
-          isConnectedBottom={(status) => item !== id && status.replies_count > 0}
-        />
+    <>
+      <FlashList
+        data={thread}
+        renderItem={({ item }) => (
+          <Status
+            id={item}
+            context='thread'
+            withLink={item !== id}
+            style={item === id ? { backgroundColor: colors.surfaceContainerLow } : undefined}
+            detailed={item === id}
+            isConnectedBottom={(status) => item !== id && status.replies_count > 0}
+          />
+        )}
+        ItemSeparatorComponent={({ leadingItem }) =>
+          leadingItem === id ? <Divider /> : <MaybeDivider statusId={leadingItem} />
+        }
+        initialScrollIndex={thread.indexOf(id)}
+        ListFooterComponent={
+          contextQuery.isPending && !status?.in_reply_to_id ? (
+            <ActivityIndicator style={{ marginVertical: 8 }} />
+          ) : undefined
+        }
+        ListHeaderComponent={
+          contextQuery.isPending && status?.in_reply_to_id ? (
+            <ActivityIndicator style={{ marginVertical: 8 }} />
+          ) : undefined
+        }
+        onRefresh={contextQuery.refetch}
+        refreshing={contextQuery.isRefetching}
+      />
+      {canReply && (
+        <View
+          style={{
+            backgroundColor: colors.surfaceContainer,
+            paddingTop: 8,
+            paddingBottom: 8 + bottomInset,
+            paddingHorizontal: 16,
+            borderTopColor: colors.surfaceVariant,
+            borderTopWidth: 1,
+          }}
+        >
+          <TouchableRipple
+            style={{
+              gap: 8,
+              flexDirection: 'row',
+              alignItems: 'center',
+              padding: 8,
+              backgroundColor: colors.surfaceVariant,
+              borderRadius: 20,
+              overflow: 'hidden',
+            }}
+            onPress={handleReply}
+          >
+            <>
+              <CurrentAccountAvatar />
+              <Text>
+                <FormattedMessage
+                  id='status.reply_to'
+                  defaultMessage='Reply to {name}'
+                  values={{ name: status?.account.display_name }}
+                />
+              </Text>
+            </>
+          </TouchableRipple>
+        </View>
       )}
-      ItemSeparatorComponent={({ leadingItem }) =>
-        leadingItem === id ? <Divider /> : <MaybeDivider statusId={leadingItem} />
-      }
-      initialScrollIndex={thread.indexOf(id)}
-      ListFooterComponent={
-        contextQuery.isPending && !status?.in_reply_to_id ? (
-          <ActivityIndicator style={{ marginVertical: 8 }} />
-        ) : undefined
-      }
-      ListHeaderComponent={
-        contextQuery.isPending && status?.in_reply_to_id ? (
-          <ActivityIndicator style={{ marginVertical: 8 }} />
-        ) : undefined
-      }
-      onRefresh={contextQuery.refetch}
-      refreshing={contextQuery.isRefetching}
-    />
+    </>
   );
 };
 

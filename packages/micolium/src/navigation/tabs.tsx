@@ -7,7 +7,6 @@ import {
   CaretUpDownIcon,
   HouseIcon,
   MagnifyingGlassIcon,
-  UserIcon,
 } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -15,8 +14,7 @@ import { View } from 'react-native';
 // import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { iconHelper } from '@/components/ui/icon';
-import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
+import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { HomeStackScreen } from './pages/home';
@@ -130,22 +128,12 @@ const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
 //   };
 // } else {
 
-const CurrentAccountAvatar: React.FC<{ color: string }> = ({ color }) => {
-  const { data: currentAccount } = useCredentialAccount();
-
-  const avatar = currentAccount ? (
-    <Avatar.Image size={24} source={{ uri: currentAccount.avatar }} />
-  ) : (
-    <Avatar.Icon size={24} icon={iconHelper(UserIcon)} />
-  );
-
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, paddingLeft: 18 }}>
-      {avatar}
-      <CaretUpDownIcon size={16} color={color} />
-    </View>
-  );
-};
+const ProfileIcon: React.FC<{ color: string }> = ({ color }) => (
+  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, paddingLeft: 18 }}>
+    <CurrentAccountAvatar />
+    <CaretUpDownIcon size={16} color={color} />
+  </View>
+);
 
 const Tab = createBottomTabNavigator<TabsParams>();
 
@@ -192,7 +180,7 @@ const Tabs = () => {
         component={ProfileStackScreen}
         options={{
           tabBarLabel: intl.formatMessage(messages.profile),
-          tabBarIcon: CurrentAccountAvatar,
+          tabBarIcon: ProfileIcon,
         }}
       />
     </Tab.Navigator>
