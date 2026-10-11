@@ -377,7 +377,7 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
             <FormattedMessage
               id='settings.about'
               defaultMessage='About {app_name}'
-              values={{ app_name: 'Micolium' }}
+              values={{ app_name: 'micolium' }}
             />
           }
           left={(props) => <List.Icon {...props} icon={InfoIcon} />}
