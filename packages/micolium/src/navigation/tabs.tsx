@@ -10,11 +10,11 @@ import {
 } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { View } from 'react-native';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
+import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useUiStoreActions } from '@/stores/ui';
 
@@ -41,6 +41,7 @@ if (Platform.OS === 'ios') {
   Tabs = () => {
     const intl = useIntl();
     const unreadCount = useNotificationsUnreadCount();
+    const { openAccountSwitcher } = useUiStoreActions();
 
     return (
       <Tab.Navigator screenOptions={{ headerShown: false }}>
@@ -73,7 +74,7 @@ if (Platform.OS === 'ios') {
             tabBarLabel: intl.formatMessage(messages.notifications),
             tabBarIcon: {
               type: 'sfSymbol',
-              name: 'bell',
+              name: 'bell.fill',
             },
             tabBarBadge: unreadCount || undefined,
           }}
@@ -85,9 +86,20 @@ if (Platform.OS === 'ios') {
             tabBarLabel: intl.formatMessage(messages.profile),
             tabBarIcon: {
               type: 'sfSymbol',
-              name: 'person',
+              name: 'person.fill',
             },
           }}
+          listeners={({ navigation, route }) => ({
+            tabPress: (e) => {
+              if (!e.data.behavior.popToTop) return;
+
+              const stackState = navigation
+                .getState()
+                .routes.find(({ key }) => key === route.key)?.state;
+
+              if (!stackState?.index) openAccountSwitcher();
+            },
+          })}
         />
       </Tab.Navigator>
     );
