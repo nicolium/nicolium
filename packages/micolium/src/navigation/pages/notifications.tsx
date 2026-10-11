@@ -272,6 +272,8 @@ const NotificationsScreen = ({
           <Notification key={item.most_recent_notification_id} notification={item} />
         )}
         ItemSeparatorComponent={Divider}
+        onRefresh={query.refetch}
+        refreshing={query.isRefetching}
         onEndReached={
           autoloadMore && query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined
         }
