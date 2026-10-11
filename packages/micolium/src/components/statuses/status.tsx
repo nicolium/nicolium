@@ -46,6 +46,7 @@ import { UIStatus } from '../ui/status';
 import { StatusActions } from './status-actions';
 import { StatusLinkPreview } from './status-link-preview';
 import { StatusMedia } from './status-media';
+import { StatusPoll } from './status-poll';
 
 const messages = defineMessages({
   publicExplanation: {
@@ -446,6 +447,7 @@ const Status: React.FC<IStatus> = ({
         ) : (
           <>
             <StatusMedia status={actualStatus} compact={props.compact} />
+            {actualStatus.poll_id && <StatusPoll status={actualStatus} />}
             {actualStatus.quote_id &&
               (props.compact ? (
                 <Card mode='outlined'>
