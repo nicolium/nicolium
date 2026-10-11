@@ -58,7 +58,7 @@ const SearchScreen = ({
   navigation,
 }: NativeStackScreenProps<SearchStackParams, 'search'>) => {
   const intl = useIntl();
-  const { top: topInset } = useSafeAreaInsets();
+  const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
   const { colors } = useTheme();
   const features = useFeatures();
   const autoloadMore = useSetting('timelines.autoloadMore');
@@ -132,6 +132,8 @@ const SearchScreen = ({
               <LoadingIndicator />
             ) : (
               <FlashList
+                contentContainerStyle={{ paddingBottom: bottomInset }}
+                scrollIndicatorInsets={{ bottom: bottomInset }}
                 data={
                   hasQuery
                     ? accountsQuery.data
@@ -178,6 +180,8 @@ const SearchScreen = ({
               <LoadingIndicator />
             ) : (
               <FlashList
+                contentContainerStyle={{ paddingBottom: bottomInset }}
+                scrollIndicatorInsets={{ bottom: bottomInset }}
                 data={activeStatusesQuery.data}
                 renderItem={({ item }) => <Status id={item} withLink />}
                 ItemSeparatorComponent={Divider}
@@ -211,6 +215,8 @@ const SearchScreen = ({
               <LoadingIndicator />
             ) : (
               <FlashList
+                contentContainerStyle={{ paddingBottom: bottomInset }}
+                scrollIndicatorInsets={{ bottom: bottomInset }}
                 data={activeHashtagsQuery.data}
                 renderItem={({ item }) => <Hashtag tag={item.name} />}
                 ItemSeparatorComponent={Divider}

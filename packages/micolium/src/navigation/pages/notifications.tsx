@@ -20,6 +20,7 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ScrollView, View } from 'react-native';
 import { Tabs, TabScreen, TabsProvider } from 'react-native-paper-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Notification } from '@/components/notification';
 import { EmptyMessage } from '@/components/ui/empty-message';
@@ -253,6 +254,7 @@ const NotificationsScreen = ({
   const mentionsNotificationsQuery = useNotifications(['mention'], currentTab === 'mentions');
 
   const autoloadMore = useSetting('timelines.autoloadMore');
+  const { bottom: bottomInset } = useSafeAreaInsets();
 
   const handleChangeIndex = (index: number) => {
     const newTab = index === 1 ? 'mentions' : 'all';
@@ -302,7 +304,8 @@ const NotificationsScreen = ({
           ) : null
         }
         ListFooterComponent={<LoadMore query={query} />}
-        contentInsetAdjustmentBehavior='automatic'
+        contentContainerStyle={{ paddingBottom: bottomInset }}
+        scrollIndicatorInsets={{ bottom: bottomInset }}
       />
     );
   };
@@ -331,7 +334,7 @@ const NotificationsStackScreen = () => {
       <NotificationsStack.Screen
         name='view'
         component={NotificationsScreen}
-        options={{ header: TimelineHeader, title: 'Notifications' }}
+        options={{ header: TimelineHeader }}
       />
     </NotificationsStack.Navigator>
   );

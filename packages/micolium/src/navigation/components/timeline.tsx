@@ -4,6 +4,7 @@ import { ProhibitIcon } from 'phosphor-react-native';
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Status } from '@/components/statuses/status';
 import { EmptyMessage, type IEmptyMessage } from '@/components/ui/empty-message';
@@ -30,6 +31,7 @@ const Timeline: React.FC<ITimeline> = ({
   onScroll,
   ...props
 }) => {
+  const { bottom: bottomInset } = useSafeAreaInsets();
   const autoloadMore = useSetting('timelines.autoloadMore');
 
   const renderItem: ListRenderItem<TimelineEntry> = useCallback(
@@ -98,7 +100,8 @@ const Timeline: React.FC<ITimeline> = ({
       ListFooterComponent={<LoadMore query={query} />}
       ListHeaderComponent={header}
       onScroll={onScroll}
-      contentInsetAdjustmentBehavior='automatic'
+      contentContainerStyle={{ paddingBottom: bottomInset }}
+      scrollIndicatorInsets={{ bottom: bottomInset }}
     />
   );
 };

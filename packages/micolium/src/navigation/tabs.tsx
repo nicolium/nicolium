@@ -1,7 +1,14 @@
 import { BottomNavigation } from '@mkljczk/react-native-paper';
-import { type BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeBottomTabNavigator } from '@react-navigation/bottom-tabs/unstable';
-import { CommonActions } from '@react-navigation/native';
+import {
+  type BottomTabBarProps,
+  type BottomTabNavigationOptions,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
+import {
+  createNativeBottomTabNavigator,
+  type NativeBottomTabNavigationOptions,
+} from '@react-navigation/bottom-tabs/unstable';
+import { CommonActions, type ScreenLayoutArgs } from '@react-navigation/native';
 import {
   BellSimpleIcon,
   CaretUpDownIcon,
@@ -11,10 +18,9 @@ import {
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
-import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useUiStoreActions } from '@/stores/ui';
 
@@ -32,6 +38,15 @@ const messages = defineMessages({
   profile: { id: 'column.profile', defaultMessage: 'Profile' },
 });
 
+const TabScreenLayout: (
+  props: ScreenLayoutArgs<
+    TabsParams,
+    keyof TabsParams,
+    NativeBottomTabNavigationOptions | BottomTabNavigationOptions,
+    any
+  >,
+) => React.ReactElement = ({ children }) => <SafeAreaProvider>{children}</SafeAreaProvider>;
+
 let Tabs;
 
 // @ts-ignore
@@ -44,7 +59,13 @@ if (Platform.OS === 'ios') {
     const { openAccountSwitcher } = useUiStoreActions();
 
     return (
-      <Tab.Navigator screenOptions={{ headerShown: false }}>
+      <Tab.Navigator
+        screenLayout={TabScreenLayout}
+        screenOptions={{
+          headerShown: false,
+          overrideScrollViewContentInsetAdjustmentBehavior: false,
+        }}
+      >
         <Tab.Screen
           name='timeline'
           component={HomeStackScreen}
@@ -169,6 +190,7 @@ if (Platform.OS === 'ios') {
     return (
       <Tab.Navigator
         tabBar={(props) => <TabBar {...props} />}
+        screenLayout={TabScreenLayout}
         screenOptions={{ headerShown: false, animation: 'shift' }}
       >
         <Tab.Screen

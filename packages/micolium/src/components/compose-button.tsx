@@ -3,9 +3,9 @@ import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import { NotePencilIcon } from 'phosphor-react-native';
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-screens/experimental';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useUiStoreActions } from '@/stores/ui';
 
@@ -22,6 +22,7 @@ interface IComposeButton {
 const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
   const intl = useIntl();
   const glassEffect = isGlassEffectAPIAvailable();
+  const { bottom: bottomInset } = useSafeAreaInsets();
   const iconOpacity = useSharedValue(+visible);
 
   const { openCompose } = useUiStoreActions();
@@ -34,10 +35,8 @@ const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
     iconOpacity.value = withTiming(+visible, { duration: 250 });
   }, [visible, iconOpacity]);
 
-  let button;
-
   if (glassEffect) {
-    button = (
+    return (
       <Pressable
         onPress={openCompose}
         accessibilityLabel={intl.formatMessage(messages.compose)}
@@ -45,7 +44,7 @@ const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
           position: 'absolute',
           margin: 16,
           right: 0,
-          bottom: 0,
+          bottom: bottomInset,
           pointerEvents: visible ? 'auto' : 'none',
         }}
       >
@@ -68,38 +67,22 @@ const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
         </GlassView>
       </Pressable>
     );
-  } else {
-    button = (
-      <FAB
-        onPress={openCompose}
-        icon={iconHelper(NotePencilIcon)}
-        style={{
-          position: 'absolute',
-          margin: 16,
-          right: 0,
-          bottom: 0,
-        }}
-        visible={visible}
-        aria-label={intl.formatMessage(messages.compose)}
-      />
-    );
   }
 
-  if (Platform.OS === 'ios') {
-    return (
-      <SafeAreaView
-        edges={{ bottom: true }}
-        style={StyleSheet.absoluteFill}
-        pointerEvents='box-none'
-      >
-        <View style={{ flex: 1 }} pointerEvents='box-none'>
-          {button}
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  return button;
+  return (
+    <FAB
+      onPress={openCompose}
+      icon={iconHelper(NotePencilIcon)}
+      style={{
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: bottomInset,
+      }}
+      visible={visible}
+      aria-label={intl.formatMessage(messages.compose)}
+    />
+  );
 };
 
 export { ComposeButton };
