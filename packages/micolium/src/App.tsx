@@ -13,7 +13,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Toaster } from 'sonner-native';
 
 import { AccountSwitcherBottomSheet } from './components/account-switcher';
-import { ComposeBottomSheet } from './components/compose';
+import { ComposeBottomSheet } from './components/compose/compose';
 import { DefaultCurrentAccountProvider } from './contexts/current-account-context';
 import enMessages from './messages/en.json';
 import { RootNavigator } from './navigation/router';

@@ -1,11 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
+import { useClient } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 
 import { queryKeys } from '../keys';
-import { useClient } from '@/contexts/current-account-context';
 
 const useMarker = (timeline: 'home' | 'notifications') => {
   const client = useClient();

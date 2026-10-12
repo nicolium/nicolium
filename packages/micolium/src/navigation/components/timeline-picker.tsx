@@ -171,6 +171,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
                 onPress={closeAfter(() => navigation.navigate(name, { id: list.id }))}
                 title={list.title}
                 leadingIcon={iconHelper(listIcon)}
+                selected={active === `${name}:${list.id}`}
               />
             ))
           ) : (
@@ -191,12 +192,14 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
             onPress={closeAfter(() => navigation.navigate('home'))}
             title={<FormattedMessage id='column.home' defaultMessage='Home' />}
             leadingIcon={iconHelper(HouseIcon)}
+            selected={active === 'home'}
           />
           {features.publicTimeline && timelineAccess.live_feeds.local !== 'disabled' && (
             <Menu.Item
               onPress={closeAfter(() => navigation.navigate('local'))}
               title={<FormattedMessage id='column.community' defaultMessage='Local timeline' />}
               leadingIcon={iconHelper(PlanetIcon)}
+              selected={active === 'local'}
             />
           )}
           {features.bubbleTimeline && timelineAccess.live_feeds.bubble !== 'disabled' && (
@@ -204,6 +207,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               onPress={closeAfter(() => navigation.navigate('bubble'))}
               title={<FormattedMessage id='column.bubble' defaultMessage='Bubble timeline' />}
               leadingIcon={iconHelper(GraphIcon)}
+              selected={active === 'bubble'}
             />
           )}
           {features.publicTimeline && timelineAccess.live_feeds.remote !== 'disabled' && (
@@ -211,6 +215,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               onPress={closeAfter(() => navigation.navigate('federated'))}
               title={<FormattedMessage id='column.public' defaultMessage='Fediverse timeline' />}
               leadingIcon={iconHelper(FediverseLogoIcon)}
+              selected={active === 'federated'}
             />
           )}
           {(features.bookmarks || features.lists || features.circles || features.antennas) && (
@@ -243,6 +248,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               contentStyle={{ flex: 1 }}
               leadingIcon={iconHelper(ListIcon)}
               trailingIcon={iconHelper(CaretRightIcon)}
+              selected={active.startsWith('list:')}
             />
           )}
           {features.antennas && (
@@ -254,6 +260,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               contentStyle={{ flex: 1 }}
               leadingIcon={iconHelper(BroadcastIcon)}
               trailingIcon={iconHelper(CaretRightIcon)}
+              selected={active.startsWith('antenna:')}
             />
           )}
           {features.circles && (
@@ -265,6 +272,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               contentStyle={{ flex: 1 }}
               leadingIcon={iconHelper(CirclesThreeIcon)}
               trailingIcon={iconHelper(CaretRightIcon)}
+              selected={active.startsWith('circle:')}
             />
           )}
         </>
