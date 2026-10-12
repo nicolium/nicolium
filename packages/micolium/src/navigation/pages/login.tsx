@@ -337,7 +337,7 @@ const OauthFlowScreen = ({
       clientId: pendingAuth?.client_id!,
       clientSecret: pendingAuth?.client_secret!,
       redirectUri: makeRedirectUri({
-        scheme: 'nicolium',
+        scheme: 'micolium',
         path: 'redirect',
       }),
       scopes: getInstanceScopes(pendingAuthClient!.instanceInformation).split(' '),
