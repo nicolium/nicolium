@@ -3,15 +3,7 @@ import {
   BottomSheetScrollView,
   BottomSheetTextInput,
 } from '@gorhom/bottom-sheet';
-import {
-  Card,
-  Icon,
-  IconButton,
-  SplitButton,
-  Text,
-  TextInput,
-  useTheme,
-} from '@mkljczk/react-native-paper';
+import { Button, Card, Icon, IconButton, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
   ArrowBendUpLeftIcon,
   CalendarPlusIcon,
@@ -37,14 +29,19 @@ import {
   useCompose,
   useComposeActions,
   useComposeStore,
+  newPoll,
   useSubmitCompose,
 } from '@/stores/compose';
 import { useIsComposeOpen, useUiStoreActions } from '@/stores/ui';
 import { BottomSheetBackdrop } from '@/utils/themes';
 
-import { Account } from './accounts/account';
-import { Status } from './statuses/status';
-import { iconHelper } from './ui/icon';
+import { Account } from '../accounts/account';
+import { Status } from '../statuses/status';
+import { iconHelper } from '../ui/icon';
+import { WrappedTextInput } from '../ui/wrapped-text-input';
+
+import { ComposeVisibilityDropdown } from './compose-visibility-dropdown';
+import { PollForm } from './poll-form';
 
 const COMPOSE_ID = 'compose-modal' as const;
 
@@ -175,13 +172,14 @@ const ComposeBottomSheet = () => {
   const { updateCompose, resetCompose } = useComposeActions();
   const submitCompose = useSubmitCompose(COMPOSE_ID);
 
-  const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility } = compose;
+  const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility, poll } = compose;
 
   const { data: currentAccountId } = useCredentialAccountId();
 
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
 
-  const disabled = !text.trim().length;
+  const disabled =
+    !text.trim().length || (!!poll && poll.options.some((option) => !option.trim().length));
 
   const handleClose = React.useCallback(() => {
     const compose = useComposeStore.getState().composers[COMPOSE_ID];
@@ -262,13 +260,14 @@ const ComposeBottomSheet = () => {
             contentContainerStyle={{ flexGrow: 1, gap: 8, paddingHorizontal: 12 }}
             keyboardShouldPersistTaps='handled'
           >
+            <ComposeVisibilityDropdown composeId={COMPOSE_ID} />
             <View style={{ flexDirection: 'row' }}>
               <Account id={currentAccountId} />
             </View>
             <ReplyIndicator />
             <QuoteIndicator />
             {features.spoilers && (
-              <TextInput
+              <WrappedTextInput
                 value={spoilerText}
                 onChangeText={(text) =>
                   updateCompose(COMPOSE_ID, (draft) => {
@@ -299,6 +298,7 @@ const ComposeBottomSheet = () => {
               }}
               multiline
             />
+            <PollForm composeId={COMPOSE_ID} />
           </BottomSheetScrollView>
           <View
             style={{
@@ -318,30 +318,45 @@ const ComposeBottomSheet = () => {
               disabled
               accessibilityLabel={intl.formatMessage(messages.upload)}
             />
-            <IconButton
-              icon={iconHelper(ChartBarIcon)}
-              style={{ marginHorizontal: 0 }}
-              onPress={() => {}}
-              disabled
-              accessibilityLabel={intl.formatMessage(messages.addPoll)}
-            />
-            <IconButton
-              icon={iconHelper(SmileyIcon)}
-              style={{ marginHorizontal: 0 }}
-              onPress={() => {}}
-              disabled
-              accessibilityLabel={intl.formatMessage(messages.emoji)}
-            />
-            <IconButton
-              icon={iconHelper(CalendarPlusIcon)}
-              style={{ marginHorizontal: 0 }}
-              onPress={() => {}}
-              disabled
-              accessibilityLabel={intl.formatMessage(messages.schedule)}
-            />
-            <SplitButton
+            {features.polls && (
+              <IconButton
+                icon={iconHelper(ChartBarIcon)}
+                style={{ marginHorizontal: 0 }}
+                mode={poll ? 'contained' : undefined}
+                selected={!!poll}
+                onPress={() =>
+                  updateCompose(COMPOSE_ID, (draft) => {
+                    draft.poll = draft.poll ? null : newPoll();
+                  })
+                }
+                disabled={compose.mediaAttachments.length > 0 || compose.isUploading}
+                accessibilityLabel={intl.formatMessage(
+                  poll ? messages.removePoll : messages.addPoll,
+                )}
+              />
+            )}
+            {features.emojiReacts && (
+              <IconButton
+                icon={iconHelper(SmileyIcon)}
+                style={{ marginHorizontal: 0 }}
+                onPress={() => {}}
+                disabled
+                accessibilityLabel={intl.formatMessage(messages.emoji)}
+              />
+            )}
+            {features.scheduledStatuses && (
+              <IconButton
+                icon={iconHelper(CalendarPlusIcon)}
+                style={{ marginHorizontal: 0 }}
+                onPress={() => {}}
+                disabled
+                accessibilityLabel={intl.formatMessage(messages.schedule)}
+              />
+            )}
+            <Button
+              mode='contained'
               icon={iconHelper(PaperPlaneRightIcon)}
-              label={publishButtonLabel}
+              // label={publishButtonLabel}
               style={{ marginLeft: 'auto' }}
               onPress={() =>
                 submitCompose({
@@ -350,7 +365,9 @@ const ComposeBottomSheet = () => {
               }
               loading={isSubmitting}
               disabled={disabled || isSubmitting}
-            />
+            >
+              {publishButtonLabel}
+            </Button>
           </View>
         </View>
       </View>

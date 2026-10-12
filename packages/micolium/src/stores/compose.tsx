@@ -1789,7 +1789,7 @@ export {
   //   type RestoredDraft,
   //   appendMedia,
   checkComposeContent,
-  //   newPoll,
+  newPoll,
   //   statusToMentionsAccountIdsArray,
   useComposeStore,
   useCompose,
