@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.mkljczk.micolium"
+      "bundleIdentifier": "com.mkljczk.micolium",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +35,20 @@
       "expo-image",
       "expo-secure-store",
       "expo-splash-screen",
-      "expo-video"
-    ]
+      "expo-video",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "enableSceneSupport": true
+          }
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b848f0e7-82c2-441b-bd09-2afcf86415f1"
+      }
+    }
   }
 }
