@@ -357,7 +357,12 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
             />
           }
           description={
-            glassEffect ? undefined : (
+            glassEffect ? (
+              <FormattedMessage
+                id='preferences.appearance.enable_liquid_glass.description'
+                defaultMessage='Turning this option off will reduce the amount of displayed glass effects, but won’t fully disable it.'
+              />
+            ) : (
               <FormattedMessage
                 id='preferences.appearance.enable_liquid_glass.disabled_description'
                 defaultMessage='how did you even get there lol '
