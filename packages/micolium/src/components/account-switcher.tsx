@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import { Platform, ScrollView } from 'react-native';
 
 import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { useIsAccountSwitcherOpen, useUiStoreActions } from '@/stores/ui';
@@ -70,6 +71,9 @@ const AccountSwitcher = () => {
 };
 
 const AccountSwitcherBottomSheet = () => {
+  const glassEffect = useEnableLiquidGlass();
+  const { colors } = useTheme();
+
   const isAccountSwitcherOpen = useIsAccountSwitcherOpen();
   const { closeAccountSwitcher } = useUiStoreActions();
 
@@ -89,6 +93,7 @@ const AccountSwitcherBottomSheet = () => {
       detents={['auto']}
       onDidDismiss={() => closeAccountSwitcher()}
       style={{ paddingTop: Platform.OS === 'ios' ? 16 : 32 }}
+      backgroundColor={glassEffect ? undefined : colors.surfaceContainer}
     >
       <AccountSwitcher />
     </TrueSheet>

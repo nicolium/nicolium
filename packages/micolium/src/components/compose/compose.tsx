@@ -8,7 +8,7 @@ import {
   TextInput,
   useTheme,
 } from '@mkljczk/react-native-paper';
-import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
+import { GlassView } from 'expo-glass-effect';
 import {
   ArrowBendUpLeftIcon,
   CalendarPlusIcon,
@@ -25,6 +25,7 @@ import { Alert, ScrollView, TextInput as RNTextInput, View, Platform } from 'rea
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useFeatures } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useStatus } from '@/queries/statuses/use-status';
 import { useAuthStore } from '@/stores/auth';
@@ -164,7 +165,7 @@ const QuoteIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
 
 const ComposeBottomSheet = () => {
   const intl = useIntl();
-  const glassEffect = isGlassEffectAPIAvailable();
+  const glassEffect = useEnableLiquidGlass();
   const { colors, fonts } = useTheme();
   const { bottom: bottomInset } = useSafeAreaInsets();
   const isComposeOpen = useIsComposeOpen();
@@ -333,6 +334,7 @@ const ComposeBottomSheet = () => {
       onDidDismiss={handleDismiss}
       scrollableRef={scrollableRef}
       style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 16 : 32 }}
+      backgroundColor={glassEffect ? undefined : colors.surfaceContainer}
     >
       <ScrollView
         ref={scrollableRef}

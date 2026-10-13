@@ -1,5 +1,5 @@
 import { FAB, Icon } from '@mkljczk/react-native-paper';
-import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
+import { GlassView } from 'expo-glass-effect';
 import { NotePencilIcon } from 'phosphor-react-native';
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -7,6 +7,7 @@ import { Pressable } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { iconHelper } from './ui/icon';
@@ -21,7 +22,7 @@ interface IComposeButton {
 
 const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
   const intl = useIntl();
-  const glassEffect = isGlassEffectAPIAvailable();
+  const glassEffect = useEnableLiquidGlass();
   const { bottom: bottomInset } = useSafeAreaInsets();
   const iconOpacity = useSharedValue(+visible);
 

@@ -11,7 +11,7 @@ import {
 } from '@mkljczk/react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import { Directory, File, Paths } from 'expo-file-system';
-import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
+import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { PaperclipIcon, PlayIcon } from 'phosphor-react-native';
@@ -19,6 +19,8 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { toast } from 'sonner-native';
+
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 
 import { iconHelper } from '../ui/icon';
 
@@ -134,7 +136,7 @@ const StatusVideo: React.FC<IMediaVideo> = ({ media }) => {
   const intl = useIntl();
   const [active, setActive] = useState(false);
 
-  const glassEffect = isGlassEffectAPIAvailable();
+  const glassEffect = useEnableLiquidGlass();
 
   return (
     <View style={{ flex: 1 }} onStartShouldSetResponder={() => true}>

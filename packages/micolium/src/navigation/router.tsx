@@ -42,6 +42,7 @@ type SettingsStackParams = {
   compose: undefined;
   timelines: undefined;
   notifications: undefined;
+  appearance: undefined;
 };
 type StatusStackParams = {
   view: { id: string };

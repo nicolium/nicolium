@@ -12,7 +12,7 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
-import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
+import { GlassView } from 'expo-glass-effect';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, View } from 'react-native';
@@ -26,6 +26,7 @@ import { EmptyMessage } from '@/components/ui/empty-message';
 import { LoadMore } from '@/components/ui/load-more';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract } from '@/hooks/use-can-interact';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { type SelectedStatus, useStatus, useStatusContext } from '@/queries/statuses/use-status';
 import {
@@ -140,7 +141,7 @@ const ReplyBox: React.FC<IReplyBox> = ({ status }) => {
   const { colors } = useTheme();
   const { replyCompose } = useComposeActions();
   const { openCompose } = useUiStoreActions();
-  const glassEffect = isGlassEffectAPIAvailable();
+  const glassEffect = useEnableLiquidGlass();
 
   const canReply = useCanInteract(status, 'can_reply');
 
@@ -270,7 +271,7 @@ const StatusViewScreen = ({
   const { data: status } = useStatus(id);
   const contextQuery = useStatusContext(id);
   const thread = useThread(id);
-  const glassEffect = isGlassEffectAPIAvailable();
+  const glassEffect = useEnableLiquidGlass();
 
   return (
     <>

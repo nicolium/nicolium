@@ -32,6 +32,8 @@ const settingsSchema = v.object({
   'notifications.hideBots': v.optional(v.boolean(), false),
   'notifications.autoMarkRead': v.optional(v.boolean(), false),
 
+  'appearance.enableLiquidGlass': v.optional(v.boolean(), true),
+
   filters: filteredArray(filterSchema),
 });
 

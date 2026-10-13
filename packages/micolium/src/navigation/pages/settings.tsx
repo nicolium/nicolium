@@ -3,11 +3,13 @@ import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import { isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import { Timeline as TimelineIcon } from 'lucide-react-native';
 import {
   BellSimpleIcon,
   InfoIcon,
   NotePencilIcon,
+  PaletteIcon,
   SignOutIcon,
   UserPlusIcon,
 } from 'phosphor-react-native';
@@ -31,6 +33,10 @@ const messages = defineMessages({
   notificationsHeading: {
     id: 'preferences.heading.notifications',
     defaultMessage: 'Notifications settings',
+  },
+  appearanceHeading: {
+    id: 'preferences.heading.appearance',
+    defaultMessage: 'Appearance settings',
   },
   privacyPublic: { id: 'preferences.options.privacy_public', defaultMessage: 'Public' },
   privacyUnlisted: { id: 'preferences.options.privacy_unlisted', defaultMessage: 'Unlisted' },
@@ -333,8 +339,49 @@ const NotificationsSettingsScreen = (
   );
 };
 
+const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'appearance'>) => {
+  const glassEffect = isGlassEffectAPIAvailable();
+
+  const { update } = useSettingsActions();
+
+  const enableLiquidGlass = useSetting('appearance.enableLiquidGlass');
+
+  return (
+    <ScrollView>
+      <List.Section>
+        <List.Item
+          title={
+            <FormattedMessage
+              id='preferences.appearance.enable_liquid_glass'
+              defaultMessage='Use native glass effect'
+            />
+          }
+          description={
+            glassEffect ? undefined : (
+              <FormattedMessage
+                id='preferences.appearance.enable_liquid_glass.disabled_description'
+                defaultMessage='how did you even get there lol '
+              />
+            )
+          }
+          titleNumberOfLines={0}
+          right={() => (
+            <Switch
+              value={enableLiquidGlass}
+              onValueChange={(value) => update('appearance.enableLiquidGlass', value)}
+              disabled={!glassEffect}
+            />
+          )}
+          containerStyle={{ gap: 4 }}
+        />
+      </List.Section>
+    </ScrollView>
+  );
+};
+
 const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'index'>) => {
   const theme = useTheme();
+  const glassEffect = isGlassEffectAPIAvailable();
 
   const { signOut } = useAuthStoreActions();
   const { openAccountSwitcher } = useUiStoreActions();
@@ -372,6 +419,18 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
           left={(props) => <List.Icon {...props} icon={iconHelper(BellSimpleIcon)} />}
           onPress={() => navigation.navigate('notifications')}
         />
+        {glassEffect && (
+          <List.Item
+            title={
+              <FormattedMessage
+                id='preferences.heading.appearance'
+                defaultMessage='Appearance settings'
+              />
+            }
+            left={(props) => <List.Icon {...props} icon={iconHelper(PaletteIcon)} />}
+            onPress={() => navigation.navigate('appearance')}
+          />
+        )}
         <List.Item
           title={
             <FormattedMessage
@@ -438,6 +497,11 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='notifications'
         component={NotificationsSettingsScreen}
         options={{ header: Header, title: intl.formatMessage(messages.notificationsHeading) }}
+      />
+      <SettingsStack.Screen
+        name='appearance'
+        component={AppearanceSettingsScreen}
+        options={{ header: Header, title: intl.formatMessage(messages.appearanceHeading) }}
       />
     </SettingsStack.Navigator>
   );

@@ -21,6 +21,7 @@ import { Platform, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useUiStoreActions } from '@/stores/ui';
 
@@ -47,13 +48,13 @@ const TabScreenLayout: (
   >,
 ) => React.ReactElement = ({ children }) => <SafeAreaProvider>{children}</SafeAreaProvider>;
 
-let Tabs;
+let NativeTabs: React.FC | undefined = undefined;
 
 // @ts-ignore
 if (Platform.OS === 'ios') {
   const Tab = createNativeBottomTabNavigator<TabsParams>();
 
-  Tabs = () => {
+  NativeTabs = () => {
     const intl = useIntl();
     const unreadCount = useNotificationsUnreadCount();
     const { openAccountSwitcher } = useUiStoreActions();
@@ -125,116 +126,122 @@ if (Platform.OS === 'ios') {
       </Tab.Navigator>
     );
   };
-} else {
-  const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
-    const insets = useSafeAreaInsets();
-    const { openAccountSwitcher } = useUiStoreActions();
-
-    return (
-      <BottomNavigation.Bar
-        navigationState={state}
-        safeAreaInsets={insets}
-        onTabPress={({ route, preventDefault }) => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
-          if (event.defaultPrevented) {
-            preventDefault();
-          } else {
-            navigation.dispatch({
-              ...CommonActions.navigate(route.name, route.params),
-              target: state.key,
-            });
-          }
-        }}
-        onTabLongPress={({ route }) => {
-          if (route.name !== 'profile') return;
-
-          return openAccountSwitcher();
-        }}
-        renderIcon={({ route, focused, color }) =>
-          descriptors[route.key].options.tabBarIcon?.({
-            focused,
-            color: color.toString(),
-            size: 24,
-          }) ?? null
-        }
-        getLabelText={({ route }) => {
-          const { options } = descriptors[route.key];
-          return typeof options.tabBarLabel === 'string'
-            ? options.tabBarLabel
-            : typeof options.title === 'string'
-              ? options.title
-              : route.name;
-        }}
-        getBadge={({ route }) => descriptors[route.key].options.tabBarBadge}
-      />
-    );
-  };
-
-  const ProfileIcon: React.FC<{ color: string }> = ({ color }) => (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, paddingLeft: 18 }}>
-      <CurrentAccountAvatar />
-      <CaretUpDownIcon size={16} color={color} />
-    </View>
-  );
-
-  const Tab = createBottomTabNavigator<TabsParams>();
-
-  Tabs = () => {
-    const intl = useIntl();
-    const unreadCount = useNotificationsUnreadCount();
-
-    return (
-      <Tab.Navigator
-        tabBar={(props) => <TabBar {...props} />}
-        screenLayout={TabScreenLayout}
-        screenOptions={{ headerShown: false, animation: 'shift' }}
-      >
-        <Tab.Screen
-          name='timeline'
-          component={HomeStackScreen}
-          options={{
-            tabBarLabel: intl.formatMessage(messages.home),
-            tabBarIcon: ({ color, focused }) => (
-              <HouseIcon color={color} weight={focused ? 'fill' : undefined} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name='search'
-          component={SearchStackScreen}
-          options={{
-            tabBarLabel: intl.formatMessage(messages.search),
-            tabBarIcon: ({ color, focused }) => (
-              <MagnifyingGlassIcon color={color} weight={focused ? 'fill' : undefined} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name='notifications'
-          component={NotificationsStackScreen}
-          options={{
-            tabBarLabel: intl.formatMessage(messages.notifications),
-            tabBarIcon: ({ color, focused }) => (
-              <BellSimpleIcon color={color} weight={focused ? 'fill' : undefined} />
-            ),
-            tabBarBadge: unreadCount || undefined,
-          }}
-        />
-        <Tab.Screen
-          name='profile'
-          component={ProfileStackScreen}
-          options={{
-            tabBarLabel: intl.formatMessage(messages.profile),
-            tabBarIcon: ProfileIcon,
-          }}
-        />
-      </Tab.Navigator>
-    );
-  };
 }
+const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
+  const insets = useSafeAreaInsets();
+  const { openAccountSwitcher } = useUiStoreActions();
+
+  return (
+    <BottomNavigation.Bar
+      navigationState={state}
+      safeAreaInsets={insets}
+      onTabPress={({ route, preventDefault }) => {
+        const event = navigation.emit({
+          type: 'tabPress',
+          target: route.key,
+          canPreventDefault: true,
+        });
+        if (event.defaultPrevented) {
+          preventDefault();
+        } else {
+          navigation.dispatch({
+            ...CommonActions.navigate(route.name, route.params),
+            target: state.key,
+          });
+        }
+      }}
+      onTabLongPress={({ route }) => {
+        if (route.name !== 'profile') return;
+
+        return openAccountSwitcher();
+      }}
+      renderIcon={({ route, focused, color }) =>
+        descriptors[route.key].options.tabBarIcon?.({
+          focused,
+          color: color.toString(),
+          size: 24,
+        }) ?? null
+      }
+      getLabelText={({ route }) => {
+        const { options } = descriptors[route.key];
+        return typeof options.tabBarLabel === 'string'
+          ? options.tabBarLabel
+          : typeof options.title === 'string'
+            ? options.title
+            : route.name;
+      }}
+      getBadge={({ route }) => descriptors[route.key].options.tabBarBadge}
+    />
+  );
+};
+
+const ProfileIcon: React.FC<{ color: string }> = ({ color }) => (
+  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, paddingLeft: 18 }}>
+    <CurrentAccountAvatar />
+    <CaretUpDownIcon size={16} color={color} />
+  </View>
+);
+
+const Tab = createBottomTabNavigator<TabsParams>();
+
+const PaperTabs = () => {
+  const intl = useIntl();
+  const unreadCount = useNotificationsUnreadCount();
+
+  return (
+    <Tab.Navigator
+      tabBar={(props) => <TabBar {...props} />}
+      screenLayout={TabScreenLayout}
+      screenOptions={{ headerShown: false, animation: 'shift' }}
+    >
+      <Tab.Screen
+        name='timeline'
+        component={HomeStackScreen}
+        options={{
+          tabBarLabel: intl.formatMessage(messages.home),
+          tabBarIcon: ({ color, focused }) => (
+            <HouseIcon color={color} weight={focused ? 'fill' : undefined} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='search'
+        component={SearchStackScreen}
+        options={{
+          tabBarLabel: intl.formatMessage(messages.search),
+          tabBarIcon: ({ color, focused }) => (
+            <MagnifyingGlassIcon color={color} weight={focused ? 'fill' : undefined} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='notifications'
+        component={NotificationsStackScreen}
+        options={{
+          tabBarLabel: intl.formatMessage(messages.notifications),
+          tabBarIcon: ({ color, focused }) => (
+            <BellSimpleIcon color={color} weight={focused ? 'fill' : undefined} />
+          ),
+          tabBarBadge: unreadCount || undefined,
+        }}
+      />
+      <Tab.Screen
+        name='profile'
+        component={ProfileStackScreen}
+        options={{
+          tabBarLabel: intl.formatMessage(messages.profile),
+          tabBarIcon: ProfileIcon,
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
+const Tabs = () => {
+  const glassEffect = useEnableLiquidGlass();
+
+  if (glassEffect && NativeTabs) return <NativeTabs />;
+  return <PaperTabs />;
+};
 
 export { Tabs };
