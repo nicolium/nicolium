@@ -14,6 +14,7 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
+import { Image } from 'expo-image';
 import { AtIcon, GlobeIcon, LockIcon } from 'phosphor-react-native';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -30,7 +31,6 @@ import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
 
 import type { LoginStackParams, RootStackParams } from '../router';
-import { Image } from 'expo-image';
 
 const EXTRA_GAYNESS_MODE = new Date().getMonth() === 5;
 
