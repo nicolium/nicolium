@@ -22,7 +22,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { toast } from 'sonner-native';
 
 import Gayness from '@/assets/gayness.svg';
-import Logo from '@/assets/logo.svg';
+import Logo from '@/assets/images/icon.png';
 import { UIAccount } from '@/components/ui/account';
 import { Header } from '@/components/ui/header';
 import { useCurrentAccount } from '@/contexts/current-account-context';
@@ -30,6 +30,7 @@ import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
 
 import type { LoginStackParams, RootStackParams } from '../router';
+import { Image } from 'expo-image';
 
 const EXTRA_GAYNESS_MODE = new Date().getMonth() === 5;
 
@@ -190,7 +191,7 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
       }
     >
       <View style={{ alignItems: 'center' }}>
-        <Logo width={78} height={78} accessibilityLabel='micolium' />
+        <Image source={Logo} accessibilityLabel='Micolium' style={{ height: 80, width: 80 }} />
       </View>
 
       {!isLoggedIn && (
