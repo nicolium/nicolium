@@ -47,6 +47,7 @@ import { StatusActions } from './status-actions';
 import { StatusLinkPreview } from './status-link-preview';
 import { StatusMedia } from './status-media';
 import { StatusPoll } from './status-poll';
+import { StatusActionsDropdown } from './status-actions-dropdown';
 
 const messages = defineMessages({
   publicExplanation: {
@@ -394,11 +395,7 @@ const Status: React.FC<IStatus> = ({
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <StatusVisibilityIcon status={status} />
             {withActions && (
-              <IconButton
-                icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
-                onPress={() => {}}
-                style={{ height: 32, width: 32 }}
-              />
+              <StatusActionsDropdown status={status} detailed={props.detailed} />
             )}
           </View>
         </View>

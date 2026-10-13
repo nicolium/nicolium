@@ -1,16 +1,28 @@
+import { useMutation, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
+import { toast } from 'sonner-native';
 
 import { useClient } from '@/contexts/current-account-context';
-import { useAppQueries, useAppQuery } from '@/queries/query';
+import { useScopeUrl } from '@/hooks/use-scope-url';
+import { scopedQueryKey, useAppQueries, useAppQuery } from '@/queries/query';
 import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { useContextsActions } from '@/stores/contexts';
+import { useStatusMetaActions } from '@/stores/status-meta';
+import { useTimelinesActions } from '@/stores/timelines';
 
 import { useAccount } from '../accounts/use-account';
 import { queryKeys } from '../keys';
 
-import type { UseQueryResult } from '@tanstack/react-query';
+import { decrementReplyCount, incrementReplyCount } from './status-actions';
+
 import type { Context, AsyncRefreshHeader, Account } from 'pl-api';
+
+const messages = defineMessages({
+  deleteSuccess: { id: 'compose.delete.success', defaultMessage: 'Post deleted' },
+  deleteFail: { id: 'compose.delete.fail', defaultMessage: 'Failed to delete post' },
+});
 
 const minifyContext = ({
   ancestors,
@@ -156,4 +168,40 @@ const useStatuses = (statusIds: Array<string>) => {
   });
 };
 
-export { useStatus, useStatusContext, useStatuses, type SelectedStatus };
+const useDeleteStatus = (statusId: string) => {
+  const intl = useIntl();
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const { markStatusDeleted } = useStatusMetaActions();
+  const { deleteStatus: deleteStatusFromTimelines } = useTimelinesActions();
+  const scopeUrl = useScopeUrl();
+
+  return useMutation({
+    mutationFn: () => client.statuses.deleteStatus(statusId),
+    onMutate: () => {
+      const status = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+      );
+      if (!status) return;
+
+      decrementReplyCount(status, queryClient, scopeUrl);
+    },
+    onSuccess: () => {
+      deleteStatusFromTimelines(scopeUrl, statusId);
+      markStatusDeleted(statusId);
+
+      toast.success(intl.formatMessage(messages.deleteSuccess));
+    },
+    onError: () => {
+      const status = queryClient.getQueryData(
+        scopedQueryKey(queryKeys.statuses.show(statusId), scopeUrl),
+      );
+      if (!status) return;
+
+      incrementReplyCount(status, queryClient, scopeUrl);
+      toast.error(intl.formatMessage(messages.deleteFail));
+    },
+  });
+};
+
+export { useStatus, useStatusContext, useStatuses, useDeleteStatus, type SelectedStatus };

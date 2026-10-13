@@ -132,7 +132,7 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
       <IconButton
         icon={(props) => <RepeatIcon {...props} weight={status.reblogged ? 'fill' : undefined} />}
         onPress={action || handleReblog}
-        disabled={isPendingReblog || !publicStatus}
+        disabled={isPendingReblog || (!publicStatus && !status.reblogged)}
         style={{ margin: -4, height: 40, width: 40 }}
         selected={status.reblogged}
         accessibilityLabel={intl.formatMessage(
@@ -171,7 +171,7 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
   } else if (features.quotePosts && canQuote) {
     return (
       <DropdownMenu.Root>
-        <DropdownMenu.Trigger>{renderAction({})}</DropdownMenu.Trigger>
+        <DropdownMenu.Trigger>{renderAction({}, () => {})}</DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Item key='reblog' onSelect={handleReblog}>
             <DropdownMenu.ItemIcon

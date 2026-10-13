@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import {
   type InfiniteData,
   type QueryKey,
@@ -6,7 +7,8 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { create } from 'mutative';
-// import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
+import { toast } from 'sonner-native';
 
 import { useClient, useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
@@ -15,25 +17,28 @@ import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-respo
 import { minifyAccountList } from '@/queries/utils/minify-list';
 import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
 
+import { useCredentialAccountId } from '../accounts/use-account-credentials';
 import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';
 
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
 import type { EmojiReaction, PaginatedResponse, Status } from 'pl-api';
 
-// const messages = defineMessages({
-//   bookmarkAdded: { id: 'status.bookmarked', defaultMessage: 'Bookmark added.' },
-//   bookmarkRemoved: { id: 'status.unbookmarked', defaultMessage: 'Bookmark removed.' },
-//   folderChanged: { id: 'status.bookmark_folder_changed', defaultMessage: 'Changed folder' },
-//   view: { id: 'toast.view', defaultMessage: 'View' },
-//   selectFolder: { id: 'status.bookmark.select_folder', defaultMessage: 'Select folder' },
-//   emojiReactionsUnsupported: {
-//     id: 'emoji_reactions.unsupported_by_remote',
-//     defaultMessage:
-//       '@{acct}’s instance most likely doesn’t understand emoji reactions. The user will not get notified of the reaction.',
-//   },
-//   reblogScheduled: { id: 'status.reblog_scheduled', defaultMessage: 'Repost scheduled' },
-// });
+const messages = defineMessages({
+  bookmarkAdded: { id: 'status.bookmarked', defaultMessage: 'Bookmark added.' },
+  bookmarkRemoved: { id: 'status.unbookmarked', defaultMessage: 'Bookmark removed.' },
+  folderChanged: { id: 'status.bookmark_folder_changed', defaultMessage: 'Changed folder' },
+  view: { id: 'toast.view', defaultMessage: 'View' },
+  pinned: { id: 'status.pin.success', defaultMessage: 'Post pinned.' },
+  unpinned: { id: 'status.unpin.success', defaultMessage: 'Post unpinned.' },
+  // selectFolder: { id: 'status.bookmark.select_folder', defaultMessage: 'Select folder' },
+  // emojiReactionsUnsupported: {
+  //   id: 'emoji_reactions.unsupported_by_remote',
+  //   defaultMessage:
+  //     '@{acct}’s instance most likely doesn’t understand emoji reactions. The user will not get notified of the reaction.',
+  // },
+  // reblogScheduled: { id: 'status.reblog_scheduled', defaultMessage: 'Repost scheduled' },
+});
 
 const queryKey = {
   getDislikedBy: 'statusDislikes',
@@ -324,9 +329,10 @@ const useUnreblogStatus = (statusId: string) => {
 };
 
 const useBookmarkStatus = (statusId: string) => {
+  const navigation = useNavigation();
+  const intl = useIntl();
   const client = useClient();
   const queryClient = useQueryClient();
-  const features = useFeatures();
   // const { openModal } = useModalsActions();
   const importEntities = useImportEntities();
   const scopeUrl = useCurrentAccount();
@@ -368,36 +374,31 @@ const useBookmarkStatus = (statusId: string) => {
         });
       }
 
-      // let opts: IToastOptions = {
-      //   actionLabel: messages.view,
-      //   actionLinkOptions: {
-      //     to: '/bookmarks/$folderId',
-      //     params: { folderId: folderId ?? 'all' },
-      //   },
-      //   columnId,
-      //   scopeUrl,
-      // };
-
-      if (features.bookmarkFolders && typeof folderId !== 'string') {
-        // opts = {
-        //   actionLabel: messages.selectFolder,
-        //   action: () => {
-        //     openModal('SELECT_BOOKMARK_FOLDER', {
-        //       statusId,
-        //     });
-        //   },
-        // };
-      }
-
-      // toast.success(
-      //   typeof folderId === 'string' ? messages.folderChanged : messages.bookmarkAdded,
-      //   opts,
-      // );
+      toast.success(
+        intl.formatMessage(
+          typeof folderId === 'string' ? messages.folderChanged : messages.bookmarkAdded,
+        ),
+        {
+          action: {
+            label: intl.formatMessage(messages.view),
+            onClick: () =>
+              folderId
+                ? navigation.navigate('bookmarks', {
+                    screen: 'folder',
+                    params: { id: folderId },
+                  })
+                : navigation.navigate('bookmarks', {
+                    screen: 'all',
+                  }),
+          },
+        },
+      );
     },
   });
 };
 
 const useUnbookmarkStatus = (statusId: string) => {
+  const intl = useIntl();
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
@@ -419,53 +420,58 @@ const useUnbookmarkStatus = (statusId: string) => {
         filterById(statusId),
       );
 
-      // toast.success(messages.bookmarkRemoved);
+      toast.success(intl.formatMessage(messages.bookmarkRemoved));
     },
   });
 };
 
-// const usePinStatus = (statusId: string) => {
-//   const client = useClient();
-//   const queryClient = useQueryClient();
-//   const { data: account } = useOwnAccount();
-//   const importEntities = useImportEntities();
-//   const scopeUrl = useCurrentAccount();
+const usePinStatus = (statusId: string) => {
+  const intl = useIntl();
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const { data: currentAccountId } = useCredentialAccountId();
+  const importEntities = useImportEntities();
+  const scopeUrl = useCurrentAccount();
 
-//   return useMutation({
-//     mutationKey: ['statuses', 'pin', statusId],
-//     mutationFn: () => client.statuses.pinStatus(statusId),
-//     onMutate: () => updateStatus(statusId, { pinned: true }, queryClient, scopeUrl),
-//     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
-//     onSuccess: (status) => {
-//       importEntities({ statuses: [status] });
-//       queryClient.invalidateQueries({
-//         queryKey: scopedQueryKey(queryKeys.statusLists.pins(account!.id), scopeUrl),
-//       });
-//     },
-//   });
-// };
+  return useMutation({
+    mutationKey: ['statuses', 'pin', statusId],
+    mutationFn: () => client.statuses.pinStatus(statusId),
+    onMutate: () => updateStatus(statusId, { pinned: true }, queryClient, scopeUrl),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
+    onSuccess: (status) => {
+      importEntities({ statuses: [status] });
+      // TODO: update timeline store
+      queryClient.invalidateQueries({
+        queryKey: scopedQueryKey(queryKeys.statusLists.pins(currentAccountId), scopeUrl),
+      });
+      toast.success(intl.formatMessage(messages.pinned));
+    },
+  });
+};
 
-// const useUnpinStatus = (statusId: string) => {
-//   const client = useClient();
-//   const queryClient = useQueryClient();
-//   const { data: account } = useOwnAccount();
-//   const importEntities = useImportEntities();
-//   const scopeUrl = useCurrentAccount();
+const useUnpinStatus = (statusId: string) => {
+  const intl = useIntl();
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const { data: currentAccountId } = useCredentialAccountId();
+  const importEntities = useImportEntities();
+  const scopeUrl = useCurrentAccount();
 
-//   return useMutation({
-//     mutationKey: ['statuses', 'unpin', statusId],
-//     mutationFn: () => client.statuses.unpinStatus(statusId),
-//     onMutate: () => updateStatus(statusId, { pinned: false }, queryClient, scopeUrl),
-//     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
-//     onSuccess: (status) => {
-//       importEntities({ statuses: [status] });
-//       queryClient.setQueryData(
-//         scopedQueryKey(queryKeys.statusLists.pins(account!.id), scopeUrl),
-//         filterById(statusId),
-//       );
-//     },
-//   });
-// };
+  return useMutation({
+    mutationKey: ['statuses', 'unpin', statusId],
+    mutationFn: () => client.statuses.unpinStatus(statusId),
+    onMutate: () => updateStatus(statusId, { pinned: false }, queryClient, scopeUrl),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient, scopeUrl),
+    onSuccess: (status) => {
+      importEntities({ statuses: [status] });
+      queryClient.setQueryData(
+        scopedQueryKey(queryKeys.statusLists.pins(currentAccountId), scopeUrl),
+        filterById(statusId),
+      );
+      toast.success(intl.formatMessage(messages.unpinned));
+    },
+  });
+};
 
 const useMuteStatus = (statusId: string) => {
   const client = useClient();
@@ -520,8 +526,8 @@ export {
   useUnreblogStatus,
   useBookmarkStatus,
   useUnbookmarkStatus,
-  // usePinStatus,
-  // useUnpinStatus,
+  usePinStatus,
+  useUnpinStatus,
   useEmojiReactMutation,
   useEmojiUnreactMutation,
   useMuteStatus,

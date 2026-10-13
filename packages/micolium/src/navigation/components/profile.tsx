@@ -14,7 +14,7 @@ import { Link, useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { type NativeScrollEvent, type NativeSyntheticEvent, Platform, View } from 'react-native';
 import { Tabs, TabScreen, TabsProvider } from 'react-native-paper-tabs';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -31,6 +31,12 @@ import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 
 import { Timeline } from '../components/timeline';
+
+const messages = defineMessages({
+  postsTab: { id: 'account.posts', defaultMessage: 'Posts' },
+  postsWithRepliesTab: { id: 'account.posts_with_replies.short', defaultMessage: 'With replies' },
+  mediaTab: { id: 'account.media', defaultMessage: 'Media' },
+});
 
 interface IProfileTimeline {
   id: string;
@@ -102,6 +108,7 @@ interface IProfile {
 }
 
 const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
+  const intl = useIntl();
   const { colors } = useTheme();
   const { top: topInset } = useSafeAreaInsets();
   const { data: account } = useAccount(id);
@@ -319,17 +326,17 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           style={{ backgroundColor: isScrolled ? colors.surfaceContainer : colors.background }}
           uppercase={false}
         >
-          <TabScreen label='Posts'>
+          <TabScreen label={intl.formatMessage(messages.postsTab)}>
             {currentTab === 0 ? <PostsTimeline id={account.id} onScroll={handleScroll} /> : <></>}
           </TabScreen>
-          <TabScreen label='With replies'>
+          <TabScreen label={intl.formatMessage(messages.postsWithRepliesTab)}>
             {currentTab === 1 ? (
               <PostsWithRepliesTimeline id={account.id} onScroll={handleScroll} />
             ) : (
               <></>
             )}
           </TabScreen>
-          <TabScreen label='Media'>
+          <TabScreen label={intl.formatMessage(messages.mediaTab)}>
             {currentTab === 2 ? <MediaTimeline id={account.id} onScroll={handleScroll} /> : <></>}
           </TabScreen>
         </Tabs>

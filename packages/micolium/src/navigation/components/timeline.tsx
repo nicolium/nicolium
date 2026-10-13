@@ -69,10 +69,19 @@ const Timeline: React.FC<ITimeline> = ({
   return (
     <FlashList
       data={data}
-      keyExtractor={(item) => (item.type === 'gap' ? item.minId : item.id)}
+      keyExtractor={(item, index) =>
+        item.type === 'gap'
+          ? `gap:${item.minId}`
+          : pinnedQuery && index < pinnedQuery?.entries.length
+            ? `pinned:${item.id}`
+            : item.id
+      }
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparatorComponent}
-      onRefresh={query.refetch}
+      onRefresh={() => {
+        query.refetch();
+        pinnedQuery?.refetch();
+      }}
       refreshing={query.isRefetching}
       onEndReached={
         autoloadMore
