@@ -182,13 +182,14 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
           <DropdownMenu.Item key='reblog' onSelect={handleReblog}>
             <DropdownMenu.ItemIcon
               ios={{ name: status.reblogged ? 'repeat.badge.xmark' : 'repeat' }}
+              androidIconName='ph_repeat'
             />
             <DropdownMenu.ItemTitle>
               {intl.formatMessage(status.reblogged ? messages.unreblog : messages.reblog)}
             </DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
           <DropdownMenu.Item key='quote' onSelect={handleReblog}>
-            <DropdownMenu.ItemIcon ios={{ name: 'quote.bubble' }} />
+            <DropdownMenu.ItemIcon ios={{ name: 'quote.bubble' }} androidIconName='ph_quotes' />
             <DropdownMenu.ItemTitle>{intl.formatMessage(messages.quote)}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
         </DropdownMenu.Content>

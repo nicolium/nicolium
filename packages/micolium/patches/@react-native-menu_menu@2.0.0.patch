@@ -1,0 +1,575 @@
+# Adapted from https://github.com/react-native-menu/menu/pull/1136
+diff --git a/README.md b/README.md
+index 04b000c..67e9d4e 100644
+--- a/README.md
++++ b/README.md
+@@ -177,13 +177,21 @@ Actions to be displayed in the menu.
+ |--------------|----------|
+ | MenuAction[] | Yes      |
+ 
+-### `themeVariant` (iOS only)
++### `themeVariant`
+ 
+ String to override theme of the menu. If you want to control theme universally across your app, [see this package](https://github.com/vonovak/react-native-theme-control).
+ 
+-| Type                  | Required |
+-|-----------------------|----------|
+-| enum('light', 'dark') | No       |
++| Type                            | Required |
++| ------------------------------- | -------- |
++| enum('light', 'dark', 'system') | No       |
++
++### `uiKit` (Android only)
++
++String to override UI kit of the menu. Allows you to choose between different Android UI implementations. `auto` uses `material3-expressive` when the app theme inherits from `Theme.Material3Expressive`, `material3` otherwise. Falls back to `appcompat` when Material Components are not available.
++
++| Type                                                           | Required |
++| -------------------------------------------------------------- | -------- |
++| enum('auto', 'material3-expressive', 'material3', 'appcompat') | No       |
+ 
+ #### `MenuAction`
+ 
+diff --git a/android/build.gradle b/android/build.gradle
+index f1d2631..dc53152 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -158,4 +158,4 @@ if (isNewArchitectureEnabled()) {
+     libraryName = "MenuView"
+     codegenJavaPackageName = "com.reactnativemenu"
+   }
+-}
++}
+\ No newline at end of file
+diff --git a/android/src/main/java/com/reactnativemenu/MenuView.kt b/android/src/main/java/com/reactnativemenu/MenuView.kt
+index c45f5cc..b2d576d 100644
+--- a/android/src/main/java/com/reactnativemenu/MenuView.kt
++++ b/android/src/main/java/com/reactnativemenu/MenuView.kt
+@@ -1,25 +1,38 @@
+ package com.reactnativemenu
+ 
++import android.content.Context
+ import android.content.res.ColorStateList
+ import android.content.res.Resources
+ import android.graphics.Color
+ import android.graphics.Rect
+-import android.os.Build
+ import android.text.Spannable
+ import android.text.SpannableStringBuilder
+ import android.text.style.ForegroundColorSpan
+ import android.view.*
+-import android.widget.PopupMenu
++import android.widget.AbsListView
++import androidx.appcompat.view.menu.MenuBuilder
++import androidx.appcompat.view.menu.MenuPopupHelper
+ import com.facebook.react.bridge.*
+ import com.facebook.react.uimanager.UIManagerHelper
+ import com.facebook.react.views.view.ReactViewGroup
++import com.reactnativemenu.ThemeHelper.appcompat
++import com.reactnativemenu.ThemeHelper.color
++import com.reactnativemenu.ThemeHelper.isMaterial3Expressive
++import com.reactnativemenu.ThemeHelper.isNight
++import com.reactnativemenu.ThemeHelper.material3
++import com.reactnativemenu.ThemeHelper.material3Expressive
+ import java.lang.reflect.Field
+ 
+ 
+ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+   private lateinit var mActions: ReadableArray
++  private var uiKit = "auto"
++  private var themeVariant = "system"
+   private var mIsAnchoredToRight = false
+-  private val mPopupMenu: PopupMenu = PopupMenu(context, this)
++  private var mThemedContext: Context = context
++  private var mPopup: MenuPopupHelper? = null
++  private var mPendingSubactions: ReadableArray? = null
++  private var mHighlightSelected = false
+   private var mIsMenuDisplayed = false
+   private var mIsOnLongPress = false
+   private var mGestureDetector: GestureDetector
+@@ -48,7 +61,7 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+     })
+   }
+ 
+-  fun show(){
++  fun show() {
+     prepareMenu()
+   }
+ 
+@@ -74,7 +87,8 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+   override fun onDetachedFromWindow() {
+     super.onDetachedFromWindow()
+     if (mIsMenuDisplayed) {
+-      mPopupMenu.dismiss()
++      mPendingSubactions = null
++      mPopup?.dismiss()
+     }
+   }
+ 
+@@ -93,6 +107,18 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+     mIsOnLongPress = isLongPress
+   }
+ 
++  fun setUiKit(uiKit: String?) {
++    this.uiKit = uiKit ?: "auto"
++
++    setStyle()
++  }
++
++  fun setThemeVariant(themeVariant: String?) {
++    this.themeVariant = themeVariant ?: "system"
++
++    setStyle()
++  }
++
+   private val getActionsCount: Int
+     get() = mActions.size()
+ 
+@@ -113,10 +139,6 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+       true -> config.getMap("attributes")
+       else -> null
+     }
+-    val subactions = when (config != null && config.hasKey("subactions") && !config.isNull(("subactions"))) {
+-      true -> config.getArray("subactions")
+-      else -> null
+-    }
+     val menuState = config?.getString("state")
+ 
+     if (titleColor != null) {
+@@ -175,100 +197,102 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+ 
+     // Handle menuState for checkable items
+     when (menuState) {
+-      "on", "off" -> {
++      "on", "off" -> if (mHighlightSelected) {
++        menuItem.isCheckable = false
++        if (menuState == "on" && titleColor == null && menuItem.isEnabled) {
++          val selectedColor = color(mThemedContext, "colorOnTertiaryContainer")
++          if (selectedColor != null) {
++            menuItem.title = getMenuItemTextWithColor(menuItem.title.toString(), selectedColor)
++          }
++        }
++      } else {
+         menuItem.isCheckable = true
+         menuItem.isChecked = menuState == "on"
+       }
+       else -> menuItem.isCheckable = false
+     }
+-
+-    // On Android SubMenu cannot contain another SubMenu, so even if there are subactions provided
+-    // we are checking if item has submenu (which will occur only for 1 lvl nesting)
+-    if (subactions != null && menuItem.hasSubMenu()) {
+-      var i = 0
+-      val subactionsCount = subactions.size()
+-      while (i < subactionsCount) {
+-        if (!subactions.isNull(i)) {
+-          val subMenuConfig = subactions.getMap(i)
+-          val subMenuItem = menuItem.subMenu?.add(Menu.NONE, Menu.NONE, i, subMenuConfig?.getString("title"))
+-          if (subMenuItem != null) {
+-            prepareMenuItem(subMenuItem, subMenuConfig)
+-            subMenuItem.setOnMenuItemClickListener {
+-              if (!it.hasSubMenu()) {
+-                mIsMenuDisplayed = false
+-                if (!subactions.isNull(it.order)) {
+-                  val selectedItem = subactions.getMap(it.order)
+-                  val dispatcher =
+-                    UIManagerHelper.getEventDispatcherForReactTag(mContext, id)
+-                  val surfaceId: Int = UIManagerHelper.getSurfaceId(this)
+-                  dispatcher?.dispatchEvent(
+-                    MenuOnPressActionEvent(surfaceId, id, selectedItem?.getString("id"), id)
+-                  )
+-                }
+-                true
+-              } else {
+-                false
+-              }
+-            }
+-          }
+-        }
+-        i++
+-      }
+-    }
+   }
+ 
+   private fun prepareMenu() {
+     if (getActionsCount > 0) {
+-      mPopupMenu.menu.clear()
+-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+-        mPopupMenu.gravity = when (mIsAnchoredToRight) {
+-          true -> Gravity.RIGHT
+-          false -> Gravity.LEFT
++      mIsMenuDisplayed = true
++      val dispatcher = UIManagerHelper.getEventDispatcherForReactTag(mContext, id)
++      val surfaceId: Int = UIManagerHelper.getSurfaceId(this)
++      dispatcher?.dispatchEvent(MenuOnOpenEvent(surfaceId, id, id))
++      showMenu(mActions)
++    }
++  }
++
++  private fun showMenu(actions: ReadableArray) {
++    val menu = MenuBuilder(mThemedContext)
++    val selectedPositions = mutableListOf<Int>()
++    var position = 0
++    var i = 0
++    while (i < actions.size()) {
++      if (!actions.isNull(i)) {
++        val item = actions.getMap(i)
++        val subactions = when (item != null && item.hasKey("subactions") && !item.isNull("subactions")) {
++          true -> item.getArray("subactions")
++          else -> null
+         }
+-      }
+-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+-        mPopupMenu.setForceShowIcon(true)
+-      }
+-      var i = 0
+-      while (i < getActionsCount) {
+-        if (!mActions.isNull(i)) {
+-          val item = mActions.getMap(i)
+-          val menuItem = when (item != null && item.hasKey("subactions") && !item.isNull("subactions")) {
+-            true -> mPopupMenu.menu.addSubMenu(Menu.NONE, Menu.NONE, i, item.getString("title")).item
+-            else -> mPopupMenu.menu.add(Menu.NONE, Menu.NONE, i, item?.getString("title"))
++        val menuItem = when (subactions != null) {
++          true -> menu.addSubMenu(Menu.NONE, Menu.NONE, i, item?.getString("title")).item
++          else -> menu.add(Menu.NONE, Menu.NONE, i, item?.getString("title"))
++        }
++        prepareMenuItem(menuItem, item)
++        if (menuItem.isVisible) {
++          if (mHighlightSelected && item?.getString("state") == "on") {
++            selectedPositions.add(position)
+           }
+-          prepareMenuItem(menuItem, item)
+-          menuItem.setOnMenuItemClickListener {
+-            if (!it.hasSubMenu()) {
+-              mIsMenuDisplayed = false
+-              if (!mActions.isNull(it.order)) {
+-                val selectedItem = mActions.getMap(it.order)
+-                val dispatcher =
+-                  UIManagerHelper.getEventDispatcherForReactTag(mContext, id)
+-                val surfaceId: Int = UIManagerHelper.getSurfaceId(this)
+-                dispatcher?.dispatchEvent(
+-                  MenuOnPressActionEvent(surfaceId, id, selectedItem?.getString("id"), id)
+-                )
+-              }
+-              true
+-            } else {
+-              false
++          position++
++        }
++        menuItem.setOnMenuItemClickListener {
++          if (subactions != null) {
++            mPendingSubactions = subactions
++          } else {
++            mIsMenuDisplayed = false
++            if (!actions.isNull(it.order)) {
++              val selectedItem = actions.getMap(it.order)
++              val dispatcher =
++                UIManagerHelper.getEventDispatcherForReactTag(mContext, id)
++              val surfaceId: Int = UIManagerHelper.getSurfaceId(this)
++              dispatcher?.dispatchEvent(
++                MenuOnPressActionEvent(surfaceId, id, selectedItem?.getString("id"), id)
++              )
+             }
+           }
++          true
+         }
+-        i++
+       }
+-      mPopupMenu.setOnDismissListener {
+-        mIsMenuDisplayed = false
+-        val dispatcher = UIManagerHelper.getEventDispatcherForReactTag(mContext, id)
+-        val surfaceId: Int = UIManagerHelper.getSurfaceId(this)
+-        dispatcher?.dispatchEvent(MenuOnCloseEvent(surfaceId, id, id))
++      i++
++    }
++
++    val popup = MenuPopupHelper(mThemedContext, menu, this)
++    popup.gravity = when (mIsAnchoredToRight) {
++      true -> Gravity.RIGHT
++      false -> Gravity.LEFT
++    }
++    popup.setForceShowIcon(true)
++    popup.setOnDismissListener {
++      val subactions = mPendingSubactions
++      if (subactions != null) {
++        mPendingSubactions = null
++        showMenu(subactions)
++        return@setOnDismissListener
+       }
+-      mIsMenuDisplayed = true
++      mIsMenuDisplayed = false
+       val dispatcher = UIManagerHelper.getEventDispatcherForReactTag(mContext, id)
+       val surfaceId: Int = UIManagerHelper.getSurfaceId(this)
+-      dispatcher?.dispatchEvent(MenuOnOpenEvent(surfaceId, id, id))
+-      mPopupMenu.show()
++      dispatcher?.dispatchEvent(MenuOnCloseEvent(surfaceId, id, id))
++    }
++    mPopup = popup
++    popup.show()
++
++    if (selectedPositions.isNotEmpty()) {
++      popup.listView?.let { listView ->
++        listView.choiceMode = AbsListView.CHOICE_MODE_MULTIPLE
++        selectedPositions.forEach { listView.setItemChecked(it, true) }
++      }
+     }
+   }
+ 
+@@ -317,4 +341,32 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+       0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+     return textWithColor
+   }
++
++  private fun setStyle() {
++    val dark = when (this.themeVariant) {
++      "dark" -> true
++      "light" -> false
++      else -> isNight(context)
++    }
++
++    val expressive = when (this.uiKit) {
++      "material3-expressive" -> material3Expressive(dark)
++      "material3", "appcompat" -> 0
++      else -> if (isMaterial3Expressive(context)) material3Expressive(dark) else 0
++    }
++
++    val theme = when (this.uiKit) {
++      "appcompat" -> appcompat(dark)
++      else -> expressive.takeIf { it != 0 } ?: material3(dark).takeIf { it != 0 } ?: appcompat(dark)
++    }
++
++    val themedCtx = ContextThemeWrapper(context, theme)
++
++    if (expressive != 0) {
++      themedCtx.theme.applyStyle(R.style.ThemeOverlay_RNMenu_Material3Expressive, true)
++    }
++
++    mThemedContext = themedCtx
++    mHighlightSelected = expressive != 0
++  }
+ }
+diff --git a/android/src/main/java/com/reactnativemenu/MenuViewManagerBase.kt b/android/src/main/java/com/reactnativemenu/MenuViewManagerBase.kt
+index e4d2743..20674d2 100644
+--- a/android/src/main/java/com/reactnativemenu/MenuViewManagerBase.kt
++++ b/android/src/main/java/com/reactnativemenu/MenuViewManagerBase.kt
+@@ -214,6 +214,16 @@ abstract class MenuViewManagerBase : ReactClippingViewManager<MenuView>() {
+     view.setBackfaceVisibility(backfaceVisibility)
+   }
+ 
++  @ReactProp(name = "themeVariant")
++  fun setThemeVariant(view: MenuView, themeVariant: String?) {
++    view.setThemeVariant(themeVariant)
++  }
++
++  @ReactProp(name = "uiKit")
++  fun setUiKit(view: MenuView, uiKit: String?) {
++    view.setUiKit(uiKit)
++  }
++
+   override fun setOpacity(@NonNull view: MenuView, opacity: Float) {
+     view.setOpacityIfPossible(opacity)
+   }
+diff --git a/android/src/main/java/com/reactnativemenu/ThemeHelper.kt b/android/src/main/java/com/reactnativemenu/ThemeHelper.kt
+new file mode 100644
+index 0000000..27f65c3
+--- /dev/null
++++ b/android/src/main/java/com/reactnativemenu/ThemeHelper.kt
+@@ -0,0 +1,57 @@
++package com.reactnativemenu
++
++import android.content.Context
++import android.content.res.Configuration
++import android.util.TypedValue
++
++object ThemeHelper {
++  fun isNight(context: Context): Boolean {
++    val mask = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
++    return mask == Configuration.UI_MODE_NIGHT_YES
++  }
++
++  private fun styleIdOrZero(className: String, fieldName: String): Int {
++    return try {
++      val cls = Class.forName(className) // exp: "com.google.android.material.R$style"
++      val f = cls.getField(fieldName)    // exp: "ThemeOverlay_Material3_Dark"
++      f.getInt(null)
++    } catch (_: Throwable) {
++      0
++    }
++  }
++
++  fun isMaterial3Expressive(context: Context): Boolean {
++    val attr = styleIdOrZero("com.google.android.material.R\$attr", "materialButtonStyle")
++    val style = styleIdOrZero("com.google.android.material.R\$style", "Widget_Material3Expressive_Button")
++    if (attr == 0 || style == 0) return false
++
++    val value = TypedValue()
++    return context.theme.resolveAttribute(attr, value, true) && value.resourceId == style
++  }
++
++  fun color(context: Context, attrName: String): Int? {
++    val attr = styleIdOrZero("com.google.android.material.R\$attr", attrName)
++    if (attr == 0) return null
++
++    val value = TypedValue()
++    if (!context.theme.resolveAttribute(attr, value, true)) return null
++    return if (value.resourceId != 0) context.getColor(value.resourceId) else value.data
++  }
++
++  fun material3Expressive(dark: Boolean): Int {
++    val name = if (dark) "ThemeOverlay_Material3Expressive_Dark" else "ThemeOverlay_Material3Expressive_Light"
++    return styleIdOrZero("com.google.android.material.R\$style", name)
++  }
++
++  fun material3(dark: Boolean): Int {
++    // Reflection ile: Material3 varsa al, yoksa 0 döner
++    val name = if (dark) "ThemeOverlay_Material3_Dark" else "ThemeOverlay_Material3_Light"
++    return styleIdOrZero("com.google.android.material.R\$style", name)
++  }
++
++  fun appcompat(dark: Boolean): Int {
++    // AppCompat reflection (RN projelerinde zaten var)
++    val name = if (dark) "ThemeOverlay_AppCompat_Dark" else "ThemeOverlay_AppCompat_Light"
++    return styleIdOrZero("androidx.appcompat.R\$style", name)
++  }
++}
+diff --git a/android/src/main/res/drawable/rnmenu_material3_expressive_item_background.xml b/android/src/main/res/drawable/rnmenu_material3_expressive_item_background.xml
+new file mode 100644
+index 0000000..8f11d64
+--- /dev/null
++++ b/android/src/main/res/drawable/rnmenu_material3_expressive_item_background.xml
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="utf-8"?>
++<selector xmlns:android="http://schemas.android.com/apk/res/android">
++  <item android:state_activated="true">
++    <inset
++      android:insetLeft="4dp"
++      android:insetRight="4dp">
++      <shape>
++        <solid android:color="?attr/colorTertiaryContainer" />
++
++        <corners android:radius="12dp" />
++      </shape>
++    </inset>
++  </item>
++
++  <item android:drawable="@android:color/transparent" />
++</selector>
+diff --git a/android/src/main/res/drawable/rnmenu_material3_expressive_popup_background.xml b/android/src/main/res/drawable/rnmenu_material3_expressive_popup_background.xml
+new file mode 100644
+index 0000000..9b9e62d
+--- /dev/null
++++ b/android/src/main/res/drawable/rnmenu_material3_expressive_popup_background.xml
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="utf-8"?>
++<shape xmlns:android="http://schemas.android.com/apk/res/android">
++  <solid android:color="?attr/colorSurfaceContainerLow" />
++
++  <corners android:radius="16dp" />
++
++  <padding
++    android:bottom="4dp"
++    android:top="4dp" />
++</shape>
+diff --git a/android/src/main/res/values/attrs.xml b/android/src/main/res/values/attrs.xml
+new file mode 100644
+index 0000000..eb6ab29
+--- /dev/null
++++ b/android/src/main/res/values/attrs.xml
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++  <attr name="colorSurfaceContainerLow" format="color" />
++  <attr name="colorTertiaryContainer" format="color" />
++</resources>
+diff --git a/android/src/main/res/values/styles.xml b/android/src/main/res/values/styles.xml
+new file mode 100644
+index 0000000..243b9aa
+--- /dev/null
++++ b/android/src/main/res/values/styles.xml
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++  <style name="ThemeOverlay.RNMenu.Material3Expressive" parent="">
++    <item name="popupMenuStyle">@style/Widget.RNMenu.Material3Expressive.PopupMenu</item>
++    <item name="listMenuViewStyle">@style/Widget.RNMenu.Material3Expressive.ListMenuView</item>
++  </style>
++
++  <style name="Widget.RNMenu.Material3Expressive.PopupMenu" parent="Widget.AppCompat.PopupMenu">
++    <item name="android:popupBackground">@drawable/rnmenu_material3_expressive_popup_background</item>
++    <item name="android:popupElevation">3dp</item>
++  </style>
++
++  <style name="Widget.RNMenu.Material3Expressive.ListMenuView" parent="Widget.AppCompat.ListMenuView">
++    <item name="android:itemBackground">@drawable/rnmenu_material3_expressive_item_background</item>
++  </style>
++</resources>
+diff --git a/src/NativeModuleSpecs/UIMenuNativeComponent.ts b/src/NativeModuleSpecs/UIMenuNativeComponent.ts
+index e650935..f16a439 100644
+--- a/src/NativeModuleSpecs/UIMenuNativeComponent.ts
++++ b/src/NativeModuleSpecs/UIMenuNativeComponent.ts
+@@ -52,6 +52,7 @@ export interface NativeProps extends ViewProps {
+ 	actionsHash: string; // just a workaround to make sure we don't have to manually compare MenuActions manually in C++ (since it's a struct and that's a pain)
+ 	title?: string;
+ 	themeVariant?: string;
++	uiKit?: string;
+ 	shouldOpenOnLongPress?: boolean;
+ 	hitSlop: {
+ 		top: Int32;
+diff --git a/src/index.tsx b/src/index.tsx
+index a536298..7fc7f89 100644
+--- a/src/index.tsx
++++ b/src/index.tsx
+@@ -8,6 +8,8 @@ import type {
+ 	ProcessedMenuAction,
+ 	NativeActionEvent,
+ 	MenuComponentRef,
++	MenuThemeVariant,
++	MenuUiKit,
+ } from "./types";
+ import { objectHash } from "./utils";
+ 
+@@ -49,4 +51,6 @@ export type {
+ 	MenuComponentRef,
+ 	MenuAction,
+ 	NativeActionEvent,
++	MenuThemeVariant,
++	MenuUiKit,
+ };
+diff --git a/src/types.ts b/src/types.ts
+index 9c323d9..90d5dc5 100644
+--- a/src/types.ts
++++ b/src/types.ts
+@@ -12,6 +12,14 @@ export type NativeActionEvent = {
+ 	};
+ };
+ 
++export type MenuThemeVariant = "light" | "dark" | "system";
++
++export type MenuUiKit =
++	| "auto"
++	| "material3-expressive"
++	| "material3"
++	| "appcompat";
++
+ type MenuAttributes = {
+ 	/**
+ 	 * An attribute indicating the destructive style.
+@@ -147,11 +155,15 @@ type MenuComponentPropsBase = {
+ 	shouldOpenOnLongPress?: boolean;
+ 	/**
+ 	 * Overrides theme variant of menu to light mode, dark mode or system theme
+-	 * (Only support iOS for now)
+-	 *
+-	 * @platform iOS
++	 * @default system
++	 */
++	themeVariant?: MenuThemeVariant;
++	/**
++	 * Overrides UI kit of menu to auto, material3-expressive, material3 or appcompat.
++	 * @platform Android
++	 * @default auto
+ 	 */
+-	themeVariant?: string;
++	uiKit?: MenuUiKit;
+ 	/**
+ 	 * Custom OpenSpace hitSlop prop. Works like touchable hitslop.
+ 	 * @platform iOS

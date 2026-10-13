@@ -124,11 +124,12 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
   const getTimelineItem = (
     value: string,
     icon: SFSymbol,
+    androidIcon: string,
     title: MessageDescriptor,
     handleSelect: () => void,
   ) => (
     <DropdownMenu.CheckboxItem key={value} value={active === value} onSelect={handleSelect}>
-      <DropdownMenu.ItemIcon ios={{ name: icon }} />
+      <DropdownMenu.ItemIcon ios={{ name: icon }} androidIconName={androidIcon} />
       <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
     </DropdownMenu.CheckboxItem>
   );
@@ -137,7 +138,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     return (
       <DropdownMenu.Sub key='bookmarks'>
         <DropdownMenu.SubTrigger key='bookmarks}-sub'>
-          <DropdownMenu.ItemIcon ios={{ name: 'bookmark' }} />
+          <DropdownMenu.ItemIcon ios={{ name: 'bookmark' }} androidIconName='ph_bookmarks' />
           <DropdownMenu.ItemTitle>{intl.formatMessage(messages.bookmarks)}</DropdownMenu.ItemTitle>
         </DropdownMenu.SubTrigger>
         <DropdownMenu.SubContent>
@@ -149,7 +150,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               })
             }
           >
-            <DropdownMenu.ItemIcon ios={{ name: 'bookmark' }} />
+            <DropdownMenu.ItemIcon ios={{ name: 'bookmark' }} androidIconName='ph_bookmarks' />
             <DropdownMenu.ItemTitle>
               {intl.formatMessage(messages.allBookmarks)}
             </DropdownMenu.ItemTitle>
@@ -166,7 +167,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
                     })
                   }
                 >
-                  <DropdownMenu.ItemIcon ios={{ name: 'folder' }} />
+                  <DropdownMenu.ItemIcon
+                    ios={{ name: 'folder' }}
+                    androidIconName='ph_folder_simple'
+                  />
                   <DropdownMenu.ItemTitle>{folder.name}</DropdownMenu.ItemTitle>
                 </DropdownMenu.Item>
               ))
@@ -194,22 +198,26 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     lists?: Array<{ id: string; title: string }>,
   ) => {
     let title: MessageDescriptor;
-    let listIcon: SFSymbol;
+    let sfIcon: SFSymbol;
+    let androidIcon: string;
     let emptyMessage;
 
     switch (name) {
       case 'antenna':
-        listIcon = 'antenna.radiowaves.left.and.right';
+        sfIcon = 'antenna.radiowaves.left.and.right';
+        androidIcon = 'ph_broadcast';
         emptyMessage = messages.noAntennas;
         title = messages.antennas;
         break;
       case 'circle':
-        listIcon = 'circle.grid.2x2';
+        sfIcon = 'circle.grid.2x2';
+        androidIcon = 'ph_circles_four';
         emptyMessage = messages.noCircles;
         title = messages.circles;
         break;
       default:
-        listIcon = 'list.bullet';
+        sfIcon = 'list.bullet';
+        androidIcon = 'ph_list_dashes';
         emptyMessage = messages.noLists;
         title = messages.lists;
         break;
@@ -218,7 +226,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     return (
       <DropdownMenu.Sub key={name}>
         <DropdownMenu.SubTrigger key={`${name}-sub`}>
-          <DropdownMenu.ItemIcon ios={{ name: listIcon }} />
+          <DropdownMenu.ItemIcon ios={{ name: sfIcon }} androidIconName={androidIcon} />
           <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
         </DropdownMenu.SubTrigger>
         <DropdownMenu.SubContent>
@@ -230,7 +238,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
                   value={active === `${name}:${list.id}`}
                   onSelect={() => navigation.navigate(name, { id: list.id })}
                 >
-                  <DropdownMenu.ItemIcon ios={{ name: listIcon }} />
+                  <DropdownMenu.ItemIcon ios={{ name: sfIcon }} androidIconName={androidIcon} />
                   <DropdownMenu.ItemTitle>{list.title}</DropdownMenu.ItemTitle>
                 </DropdownMenu.CheckboxItem>
               ))
@@ -254,20 +262,22 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
   const menuContent = (
     <>
       <DropdownMenu.Group>
-        {getTimelineItem('home', 'house', messages.homeTimeline, () => navigation.navigate('home'))}
+        {getTimelineItem('home', 'house', 'ph_house', messages.homeTimeline, () =>
+          navigation.navigate('home'),
+        )}
         {features.publicTimeline &&
           timelineAccess.live_feeds.local !== 'disabled' &&
-          getTimelineItem('local', 'globe.desk', messages.localTimeline, () =>
+          getTimelineItem('local', 'globe.desk', 'ph_planet', messages.localTimeline, () =>
             navigation.navigate('local'),
           )}
         {features.bubbleTimeline &&
           timelineAccess.live_feeds.bubble !== 'disabled' &&
-          getTimelineItem('bubble', 'circle.hexagonpath', messages.bubbleTimeline, () =>
+          getTimelineItem('bubble', 'circle.hexagonpath', 'ph_graph', messages.bubbleTimeline, () =>
             navigation.navigate('bubble'),
           )}
         {features.publicTimeline &&
           timelineAccess.live_feeds.remote !== 'disabled' &&
-          getTimelineItem('federated', 'globe', messages.federatedTimeline, () =>
+          getTimelineItem('federated', 'globe', 'ph_globe_simple', messages.federatedTimeline, () =>
             navigation.navigate('federated'),
           )}
       </DropdownMenu.Group>
@@ -275,7 +285,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
         {features.bookmarks &&
           (features.bookmarkFolders
             ? getBookmarksMenu()
-            : getTimelineItem('bookmarks', 'bookmark', messages.bookmarks, () =>
+            : getTimelineItem('bookmarks', 'bookmark', 'ph_bookmarks', messages.bookmarks, () =>
                 navigation.navigate('bookmarks', { screen: 'all' }),
               ))}
         {features.lists && getListsSubMenu('list', lists)}

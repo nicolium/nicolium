@@ -46,6 +46,34 @@
         {
           "initialOrientation": "DEFAULT"
         }
+      ],
+      ["./plugins/with-material3-theme.ts", { "theme": "material3-expressive" }],
+      [
+        "./plugins/with-android-drawables.ts",
+        {
+          "drawableFiles": [
+            "./node_modules/@phosphor-icons/core/assets/regular/at.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/bookmarks.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/broadcast.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/chats-circle.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/circles-four.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/coins.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/fediverse-logo.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/folder-simple.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/globe-simple.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/graph.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/house.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/list-dashes.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/lock.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/moon.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/planet.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/repeat.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/quotes.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/users-three.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/wrench.svg"
+          ],
+          "prefix": "ph_"
+        }
       ]
     ],
     "extra": {

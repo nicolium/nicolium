@@ -157,7 +157,8 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
 
   const getVisibilityItem = (
     value: string,
-    icon: SFSymbol,
+    sfIcon: SFSymbol,
+    androidIcon: string,
     title: MessageDescriptor,
     subtitle: MessageDescriptor,
   ) => (
@@ -166,7 +167,7 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
       value={visibility === value}
       onSelect={handleChangeVisibility(value)}
     >
-      <DropdownMenu.ItemIcon ios={{ name: icon }} />
+      <DropdownMenu.ItemIcon ios={{ name: sfIcon }} androidIconName={androidIcon} />
       <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
       <DropdownMenu.ItemSubtitle>{intl.formatMessage(subtitle)}</DropdownMenu.ItemSubtitle>
     </DropdownMenu.CheckboxItem>
@@ -176,7 +177,8 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
     name: 'list' | 'circle',
     lists?: Array<{ id: string; title: string }>,
   ) => {
-    const listIcon: SFSymbol = name === 'circle' ? 'circle.grid.2x2' : 'list.bullet';
+    const sfListIcon: SFSymbol = name === 'circle' ? 'circle.grid.2x2' : 'list.bullet';
+    const androidIcon = name === 'circle' ? 'ph_circles_four' : 'ph_list_dashes';
     const title = name === 'circle' ? messages.circleShort : messages.listShort;
     const subtitle = name === 'circle' ? messages.circleLong : messages.listLong;
     const emptyMessage = name === 'circle' ? messages.noCircles : messages.noLists;
@@ -184,7 +186,7 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
     return (
       <DropdownMenu.Sub key={name}>
         <DropdownMenu.SubTrigger key={`${name}-sub`}>
-          <DropdownMenu.ItemIcon ios={{ name: listIcon }} />
+          <DropdownMenu.ItemIcon ios={{ name: sfListIcon }} androidIconName={androidIcon} />
           <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
           <DropdownMenu.ItemSubtitle>{intl.formatMessage(subtitle)}</DropdownMenu.ItemSubtitle>
         </DropdownMenu.SubTrigger>
@@ -197,7 +199,7 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
                   value={visibility === `${name}:${list.id}`}
                   onSelect={handleChangeVisibility(`${name}:${list.id}`)}
                 >
-                  <DropdownMenu.ItemIcon ios={{ name: listIcon }} />
+                  <DropdownMenu.ItemIcon ios={{ name: sfListIcon }} androidIconName={androidIcon} />
                   <DropdownMenu.ItemTitle>{list.title}</DropdownMenu.ItemTitle>
                 </DropdownMenu.CheckboxItem>
               ))
@@ -246,14 +248,33 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
         <DropdownMenu.Content>
           <DropdownMenu.Label>{intl.formatMessage(messages.changePrivacy)}</DropdownMenu.Label>
           <DropdownMenu.Group>
-            {getVisibilityItem('public', 'globe', messages.publicShort, messages.publicLong)}
-            {getVisibilityItem('unlisted', 'moon', messages.unlistedShort, messages.unlistedLong)}
-            {getVisibilityItem('private', 'lock', messages.privateShort, messages.privateLong)}
+            {getVisibilityItem(
+              'public',
+              'globe',
+              'ph_globe_simple',
+              messages.publicShort,
+              messages.publicLong,
+            )}
+            {getVisibilityItem(
+              'unlisted',
+              'moon',
+              'ph_moon',
+              messages.unlistedShort,
+              messages.unlistedLong,
+            )}
+            {getVisibilityItem(
+              'private',
+              'lock',
+              'ph_lock',
+              messages.privateShort,
+              messages.privateLong,
+            )}
             {isReply &&
               features.createStatusConversationScope &&
               getVisibilityItem(
                 'conversation',
                 'bubble.left.and.bubble.right',
+                'ph_chats_circle',
                 messages.conversationShort,
                 messages.conversationLong,
               )}
@@ -261,6 +282,7 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
               getVisibilityItem(
                 'mutuals_only',
                 'person.3',
+                'ph_users_three',
                 messages.mutualsOnlyShort,
                 messages.mutualsOnlyLong,
               )}
@@ -268,12 +290,19 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
               getVisibilityItem(
                 'subscribers',
                 'dollarsign.circle',
+                'ph_coins',
                 messages.subscribersShort,
                 messages.subscribersLong,
               )}
-            {getVisibilityItem('direct', 'at', messages.directShort, messages.directLong)}
+            {getVisibilityItem('direct', 'at', 'ph_at', messages.directShort, messages.directLong)}
             {features.createStatusLocalScope &&
-              getVisibilityItem('local', 'globe.desk', messages.localShort, messages.localLong)}
+              getVisibilityItem(
+                'local',
+                'globe.desk',
+                'ph_planet',
+                messages.localShort,
+                messages.localLong,
+              )}
             {features.createStatusListScope && getListsSubMenu('list', lists)}
             {features.circles && getListsSubMenu('circle', circles)}
           </DropdownMenu.Group>

@@ -1,0 +1,31 @@
+diff --git a/lib/commonjs/menu/create-android-menu/index.android.js b/lib/commonjs/menu/create-android-menu/index.android.js
+@@ -421,7 +421,8 @@ If you want to use a custom component as your <Content />, you can use the creat
+         var _props$onOpenChange2;
+ 
+         (_props$onOpenChange2 = props.onOpenChange) === null || _props$onOpenChange2 === void 0 ? void 0 : _props$onOpenChange2.call(props, false);
+-      }
++      },
++      uiKit: "auto"
+     }, triggerItem);
+   }, 'Root');
+   const Separator = (0, _displayNames.create)(_ => {
+diff --git a/lib/module/menu/create-android-menu/index.android.js b/lib/module/menu/create-android-menu/index.android.js
+@@ -405,7 +405,8 @@ If you want to use a custom component as your <Content />, you can use the creat
+         var _props$onOpenChange2;
+ 
+         (_props$onOpenChange2 = props.onOpenChange) === null || _props$onOpenChange2 === void 0 ? void 0 : _props$onOpenChange2.call(props, false);
+-      }
++      },
++      uiKit: "auto"
+     }, triggerItem);
+   }, 'Root');
+   const Separator = create(_ => {
+diff --git a/src/menu/create-android-menu/index.android.tsx b/src/menu/create-android-menu/index.android.tsx
+@@ -466,6 +466,7 @@ If you want to use a custom component as your <Content />, you can use the creat
+         onCloseMenu={() => {
+           props.onOpenChange?.(false)
+         }}
++        uiKit="auto"
+       >
+         {triggerItem}
+       </MenuView>

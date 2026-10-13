@@ -35,9 +35,12 @@ overrides:
   minimatch@10: ^10.2.5
   serialize-javascript: ^7.0.5
   sharp: ^0.35.3
+  "svg2vectordrawable>svgo": "^2.8.0"
   svgo: ^4.0.2
   undici: 7.29.0
   yaml@2: ^2.9.0
 patchedDependencies:
+  '@react-native-menu/menu@2.0.0': packages/micolium/patches/@react-native-menu_menu@2.0.0.patch
   react-native-ios-context-menu@3.2.0: packages/micolium/patches/react-native-ios-context-menu@3.2.0.patch
   react-native-ios-utilities@5.2.0: packages/micolium/patches/react-native-ios-utilities@5.2.0.patch
+  zeego@3.0.6: packages/micolium/patches/zeego@3.0.6.patch
