@@ -1,27 +1,22 @@
-import { ActivityIndicator, Button, Divider, Icon, Menu, Text } from '@mkljczk/react-native-paper';
+import { Button, Icon, Text } from '@mkljczk/react-native-paper';
 import {
-  BookmarksIcon,
   BroadcastIcon,
   CaretDownIcon,
-  CaretLeftIcon,
-  CaretRightIcon,
-  CirclesThreeIcon,
+  CirclesFourIcon,
   FediverseLogoIcon,
-  FolderIcon,
   GlobeSimpleIcon,
   GraphIcon,
   HouseIcon,
   ListDashesIcon,
-  ListIcon,
   PlanetIcon,
   WrenchIcon,
   type Icon as PhosphorIcon,
 } from 'phosphor-react-native';
 import React, { useMemo } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, type MessageDescriptor, useIntl } from 'react-intl';
 import { View } from 'react-native';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
-import { iconHelper } from '@/components/ui/icon';
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useAntennas } from '@/queries/accounts/use-antennas';
 import { useCircles } from '@/queries/accounts/use-circles';
@@ -29,6 +24,7 @@ import { useLists } from '@/queries/accounts/use-lists';
 import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 
 import type { TimelineStackParams } from '../router';
+import type { SFSymbol } from '@/utils/types';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const messages = defineMessages({
@@ -50,6 +46,7 @@ const messages = defineMessages({
     id: 'bookmark_folders.empty',
     defaultMessage: 'You have no bookmark folders yet.',
   },
+  loading: { id: 'loading_indicator.label', defaultMessage: 'Loading…' },
 });
 
 const useTimelineHeadingAndIcon = (
@@ -79,7 +76,7 @@ const useTimelineHeadingAndIcon = (
         }
         if (active?.startsWith('circle:')) {
           const circle = circles?.find((circle) => `circle:${circle.id}` === active);
-          return [circle?.title ?? '', CirclesThreeIcon];
+          return [circle?.title ?? '', CirclesFourIcon];
         }
         if (active?.startsWith('antenna:')) {
           const antenna = antennas?.find((antenna) => `antenna:${antenna.id}` === active);
@@ -115,242 +112,184 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
 
   const [heading, TimelineIcon] = useTimelineHeadingAndIcon(active);
 
-  const [showTimelineMenu, setShowTimelineMenu] = React.useState(false);
-  const [menuPage, setMenuPage] = React.useState<
-    'timelines' | 'bookmarks' | 'lists' | 'circles' | 'antennas'
-  >('timelines');
+  // const [menuPage, setMenuPage] = React.useState<
+  //   'timelines' | 'bookmarks' | 'lists' | 'circles' | 'antennas'
+  // >('timelines');
 
-  const { data: bookmarkFolders } = useBookmarkFolders(menuPage === 'bookmarks');
-  const { data: lists } = useLists(menuPage === 'lists');
-  const { data: antennas } = useAntennas(menuPage === 'antennas');
-  const { data: circles } = useCircles(menuPage === 'circles');
+  const { data: bookmarkFolders } = useBookmarkFolders(); // menuPage === 'bookmarks');
+  const { data: lists } = useLists(); // menuPage === 'lists');
+  const { data: antennas } = useAntennas(); // menuPage === 'antennas');
+  const { data: circles } = useCircles(); // menuPage === 'circles');
 
-  let menuContent;
+  const getTimelineItem = (
+    value: string,
+    icon: SFSymbol,
+    title: MessageDescriptor,
+    handleSelect: () => void,
+  ) => (
+    <DropdownMenu.CheckboxItem key={value} value={active === value} onSelect={handleSelect}>
+      <DropdownMenu.ItemIcon ios={{ name: icon }} />
+      <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
+    </DropdownMenu.CheckboxItem>
+  );
 
-  const closeAfter = (callback: () => void) => () => {
-    callback();
-    setMenuPage('timelines');
-    setShowTimelineMenu(false);
+  const getBookmarksMenu = () => {
+    return (
+      <DropdownMenu.Sub key='bookmarks'>
+        <DropdownMenu.SubTrigger key='bookmarks}-sub'>
+          <DropdownMenu.ItemIcon ios={{ name: 'bookmark' }} />
+          <DropdownMenu.ItemTitle>{intl.formatMessage(messages.bookmarks)}</DropdownMenu.ItemTitle>
+        </DropdownMenu.SubTrigger>
+        <DropdownMenu.SubContent>
+          <DropdownMenu.Item
+            key='bookmarks:all'
+            onSelect={() =>
+              navigation.navigate('bookmarks', {
+                screen: 'all',
+              })
+            }
+          >
+            <DropdownMenu.ItemIcon ios={{ name: 'bookmark' }} />
+            <DropdownMenu.ItemTitle>
+              {intl.formatMessage(messages.allBookmarks)}
+            </DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+          {bookmarkFolders ? (
+            bookmarkFolders.length ? (
+              bookmarkFolders.map((folder) => (
+                <DropdownMenu.Item
+                  key={`bookmarks:${folder.id}`}
+                  onSelect={() =>
+                    navigation.navigate('bookmarks', {
+                      screen: 'folder',
+                      params: { id: folder.id },
+                    })
+                  }
+                >
+                  <DropdownMenu.ItemIcon ios={{ name: 'folder' }} />
+                  <DropdownMenu.ItemTitle>{folder.name}</DropdownMenu.ItemTitle>
+                </DropdownMenu.Item>
+              ))
+            ) : (
+              <DropdownMenu.Item key='bookmarks-empty' disabled>
+                <DropdownMenu.ItemTitle>
+                  {intl.formatMessage(messages.noBookmarkFolders)}
+                </DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+            )
+          ) : (
+            <DropdownMenu.Item key='bookmarks-loading' disabled>
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.loading)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          )}
+        </DropdownMenu.SubContent>
+      </DropdownMenu.Sub>
+    );
   };
 
-  const getListsMenuPage = (
+  const getListsSubMenu = (
     name: 'list' | 'antenna' | 'circle',
     lists?: Array<{ id: string; title: string }>,
   ) => {
-    let listIcon;
+    let title: MessageDescriptor;
+    let listIcon: SFSymbol;
     let emptyMessage;
 
     switch (name) {
       case 'antenna':
-        listIcon = BroadcastIcon;
+        listIcon = 'antenna.radiowaves.left.and.right';
         emptyMessage = messages.noAntennas;
+        title = messages.antennas;
         break;
       case 'circle':
-        listIcon = CirclesThreeIcon;
+        listIcon = 'circle.grid.2x2';
         emptyMessage = messages.noCircles;
+        title = messages.circles;
         break;
       default:
-        listIcon = ListDashesIcon;
+        listIcon = 'list.bullet';
         emptyMessage = messages.noLists;
+        title = messages.lists;
         break;
     }
 
     return (
-      <>
-        <Menu.Item
-          leadingIcon={iconHelper(CaretLeftIcon)}
-          onPress={() => setMenuPage('timelines')}
-          title={intl.formatMessage(messages.back)}
-        />
-        <Divider />
-        {lists ? (
-          lists.length ? (
-            lists.map((list) => (
-              <Menu.Item
-                key={list.id}
-                onPress={closeAfter(() => navigation.navigate(name, { id: list.id }))}
-                title={list.title}
-                leadingIcon={iconHelper(listIcon)}
-                selected={active === `${name}:${list.id}`}
-              />
-            ))
+      <DropdownMenu.Sub key={name}>
+        <DropdownMenu.SubTrigger key={`${name}-sub`}>
+          <DropdownMenu.ItemIcon ios={{ name: listIcon }} />
+          <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
+        </DropdownMenu.SubTrigger>
+        <DropdownMenu.SubContent>
+          {lists ? (
+            lists.length ? (
+              lists.map((list) => (
+                <DropdownMenu.CheckboxItem
+                  key={`${name}:${list.id}`}
+                  value={active === `${name}:${list.id}`}
+                  onSelect={() => navigation.navigate(name, { id: list.id })}
+                >
+                  <DropdownMenu.ItemIcon ios={{ name: listIcon }} />
+                  <DropdownMenu.ItemTitle>{list.title}</DropdownMenu.ItemTitle>
+                </DropdownMenu.CheckboxItem>
+              ))
+            ) : (
+              <DropdownMenu.Item key={`${name}-empty`} disabled>
+                <DropdownMenu.ItemTitle>{intl.formatMessage(emptyMessage)}</DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+            )
           ) : (
-            <Menu.Item title={intl.formatMessage(emptyMessage)} />
-          )
-        ) : (
-          <ActivityIndicator style={{ paddingVertical: 8 }} />
-        )}
-      </>
+            <DropdownMenu.Item key={`${name}-loading`} disabled>
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.loading)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          )}
+        </DropdownMenu.SubContent>
+      </DropdownMenu.Sub>
     );
   };
 
-  switch (menuPage) {
-    case 'timelines': {
-      menuContent = (
-        <>
-          <Menu.Item
-            onPress={closeAfter(() => navigation.navigate('home'))}
-            title={<FormattedMessage id='column.home' defaultMessage='Home' />}
-            leadingIcon={iconHelper(HouseIcon)}
-            selected={active === 'home'}
-          />
-          {features.publicTimeline && timelineAccess.live_feeds.local !== 'disabled' && (
-            <Menu.Item
-              onPress={closeAfter(() => navigation.navigate('local'))}
-              title={<FormattedMessage id='column.community' defaultMessage='Local timeline' />}
-              leadingIcon={iconHelper(PlanetIcon)}
-              selected={active === 'local'}
-            />
+  const menuContent = (
+    <>
+      <DropdownMenu.Group>
+        {getTimelineItem('home', 'house', messages.homeTimeline, () => navigation.navigate('home'))}
+        {features.publicTimeline &&
+          timelineAccess.live_feeds.local !== 'disabled' &&
+          getTimelineItem('local', 'globe.desk', messages.localTimeline, () =>
+            navigation.navigate('local'),
           )}
-          {features.bubbleTimeline && timelineAccess.live_feeds.bubble !== 'disabled' && (
-            <Menu.Item
-              onPress={closeAfter(() => navigation.navigate('bubble'))}
-              title={<FormattedMessage id='column.bubble' defaultMessage='Bubble timeline' />}
-              leadingIcon={iconHelper(GraphIcon)}
-              selected={active === 'bubble'}
-            />
+        {features.bubbleTimeline &&
+          timelineAccess.live_feeds.bubble !== 'disabled' &&
+          getTimelineItem('bubble', 'circle.hexagonpath', messages.bubbleTimeline, () =>
+            navigation.navigate('bubble'),
           )}
-          {features.publicTimeline && timelineAccess.live_feeds.remote !== 'disabled' && (
-            <Menu.Item
-              onPress={closeAfter(() => navigation.navigate('federated'))}
-              title={<FormattedMessage id='column.public' defaultMessage='Fediverse timeline' />}
-              leadingIcon={iconHelper(FediverseLogoIcon)}
-              selected={active === 'federated'}
-            />
+        {features.publicTimeline &&
+          timelineAccess.live_feeds.remote !== 'disabled' &&
+          getTimelineItem('federated', 'globe', messages.federatedTimeline, () =>
+            navigation.navigate('federated'),
           )}
-          {(features.bookmarks || features.lists || features.circles || features.antennas) && (
-            <Divider />
-          )}
-          {features.bookmarks && (
-            <Menu.Item
-              onPress={() => {
-                if (features.bookmarkFolders) setMenuPage('bookmarks');
-                else {
-                  navigation.navigate('bookmarks', {
-                    screen: 'all',
-                  });
-                  setMenuPage('timelines');
-                  setShowTimelineMenu(false);
-                }
-              }}
-              title={intl.formatMessage(messages.bookmarks)}
-              contentStyle={{ flex: 1 }}
-              leadingIcon={iconHelper(BookmarksIcon)}
-              trailingIcon={features.bookmarkFolders ? iconHelper(CaretRightIcon) : undefined}
-            />
-          )}
-          {features.lists && (
-            <Menu.Item
-              onPress={() => {
-                setMenuPage('lists');
-              }}
-              title={intl.formatMessage(messages.lists)}
-              contentStyle={{ flex: 1 }}
-              leadingIcon={iconHelper(ListIcon)}
-              trailingIcon={iconHelper(CaretRightIcon)}
-              selected={active.startsWith('list:')}
-            />
-          )}
-          {features.antennas && (
-            <Menu.Item
-              onPress={() => {
-                setMenuPage('antennas');
-              }}
-              title={intl.formatMessage(messages.antennas)}
-              contentStyle={{ flex: 1 }}
-              leadingIcon={iconHelper(BroadcastIcon)}
-              trailingIcon={iconHelper(CaretRightIcon)}
-              selected={active.startsWith('antenna:')}
-            />
-          )}
-          {features.circles && (
-            <Menu.Item
-              onPress={() => {
-                setMenuPage('circles');
-              }}
-              title={intl.formatMessage(messages.circles)}
-              contentStyle={{ flex: 1 }}
-              leadingIcon={iconHelper(CirclesThreeIcon)}
-              trailingIcon={iconHelper(CaretRightIcon)}
-              selected={active.startsWith('circle:')}
-            />
-          )}
-        </>
-      );
-      break;
-    }
-    case 'bookmarks': {
-      menuContent = (
-        <>
-          <Menu.Item
-            leadingIcon={iconHelper(CaretLeftIcon)}
-            onPress={() => setMenuPage('timelines')}
-            title={intl.formatMessage(messages.back)}
-          />
-          <Divider />
-          <Menu.Item
-            onPress={() => {
-              navigation.navigate('bookmarks', {
-                screen: 'all',
-              });
-              setMenuPage('timelines');
-              setShowTimelineMenu(false);
-            }}
-            title={intl.formatMessage(messages.allBookmarks)}
-            contentStyle={{ flex: 1 }}
-            leadingIcon={iconHelper(BookmarksIcon)}
-          />
-          {bookmarkFolders ? (
-            bookmarkFolders.length ? (
-              bookmarkFolders.map((folder) => (
-                <Menu.Item
-                  key={folder.id}
-                  onPress={closeAfter(() =>
-                    navigation.navigate('bookmarks', {
-                      screen: 'folder',
-                      params: { id: folder.id },
-                    }),
-                  )}
-                  title={folder.name}
-                  leadingIcon={iconHelper(FolderIcon)}
-                />
-              ))
-            ) : (
-              <Menu.Item title={intl.formatMessage(messages.noBookmarkFolders)} />
-            )
-          ) : (
-            <ActivityIndicator style={{ paddingVertical: 8 }} />
-          )}
-        </>
-      );
-      break;
-    }
-    case 'lists': {
-      menuContent = getListsMenuPage('list', lists);
-      break;
-    }
-    case 'antennas': {
-      menuContent = getListsMenuPage('antenna', antennas);
-      break;
-    }
-    case 'circles': {
-      menuContent = getListsMenuPage('circle', circles);
-      break;
-    }
-  }
+      </DropdownMenu.Group>
+      <DropdownMenu.Group>
+        {features.bookmarks &&
+          (features.bookmarkFolders
+            ? getBookmarksMenu()
+            : getTimelineItem('bookmarks', 'bookmark', messages.bookmarks, () =>
+                navigation.navigate('bookmarks', { screen: 'all' }),
+              ))}
+        {features.lists && getListsSubMenu('list', lists)}
+        {features.antennas && getListsSubMenu('antenna', antennas)}
+        {features.circles && getListsSubMenu('circle', circles)}
+      </DropdownMenu.Group>
+    </>
+  );
 
   return (
     <View style={{ alignItems: 'flex-start' }}>
-      <Menu
-        visible={showTimelineMenu}
-        onDismiss={() => setShowTimelineMenu(false)}
-        anchor={
-          <Button
-            mode='text'
-            labelStyle={{ fontSize: 20 }}
-            onPress={() => setShowTimelineMenu((value) => !value)}
-            compact
-          >
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Button mode='text' labelStyle={{ fontSize: 20 }} compact>
             <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
               <Icon source={TimelineIcon} size={24} />
               <View>
@@ -359,11 +298,9 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               <Icon source={CaretDownIcon} size={16} />
             </View>
           </Button>
-        }
-        anchorPosition='bottom'
-      >
-        {menuContent}
-      </Menu>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>{menuContent}</DropdownMenu.Content>
+      </DropdownMenu.Root>
     </View>
   );
 };

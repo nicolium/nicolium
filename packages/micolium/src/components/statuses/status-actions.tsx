@@ -1,17 +1,17 @@
-import { IconButton, Menu, Text, Tooltip, useTheme } from '@mkljczk/react-native-paper';
+import { IconButton, Text, Tooltip, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import {
   ArrowBendDoubleUpLeftIcon,
   ArrowBendUpLeftIcon,
-  QuotesIcon,
   RepeatIcon,
   StarIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
 } from 'phosphor-react-native';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { View } from 'react-native';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract, useInteractionMessages } from '@/hooks/use-can-interact';
@@ -41,6 +41,7 @@ const messages = defineMessages({
   unfavourite: { id: 'status.unfavourite', defaultMessage: 'Undo like' },
   dislike: { id: 'status.dislike', defaultMessage: 'Dislike' },
   undislike: { id: 'status.undislike', defaultMessage: 'Undo dislike' },
+  quote: { id: 'status.quote', defaultMessage: 'Quote post' },
 });
 
 const ReplyAction: React.FC<IStatusActions> = ({ status }) => {
@@ -175,29 +176,23 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
     );
   } else if (features.quotePosts && canQuote) {
     return (
-      <Menu
-        visible={showMenu}
-        onDismiss={() => setShowMenu(false)}
-        anchor={renderAction({}, () => setShowMenu(true))}
-        anchorPosition='bottom'
-      >
-        <Menu.Item
-          title={
-            status.reblogged ? (
-              <FormattedMessage id='status.unreblog' defaultMessage='Unrepost' />
-            ) : (
-              <FormattedMessage id='status.reblog' defaultMessage='Repost' />
-            )
-          }
-          leadingIcon={iconHelper(RepeatIcon)}
-          onPress={handleReblog}
-        />
-        <Menu.Item
-          title={<FormattedMessage id='status.quote' defaultMessage='Quote' />}
-          leadingIcon={iconHelper(QuotesIcon)}
-          onPress={handleQuote}
-        />
-      </Menu>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>{renderAction({}, () => setShowMenu(true))}</DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Item key='reblog' onSelect={handleReblog}>
+            <DropdownMenu.ItemIcon
+              ios={{ name: status.reblogged ? 'repeat.badge.xmark' : 'repeat' }}
+            />
+            <DropdownMenu.ItemTitle>
+              {intl.formatMessage(status.reblogged ? messages.unreblog : messages.reblog)}
+            </DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item key='quote' onSelect={handleReblog}>
+            <DropdownMenu.ItemIcon ios={{ name: 'quote.bubble' }} />
+            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.quote)}</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
     );
   }
 

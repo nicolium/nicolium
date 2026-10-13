@@ -1,0 +1,32 @@
+diff --git a/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift b/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift
+@@ -25,16 +25,10 @@ public extension RCTView {
+     return rootView.recursivelyFindSubview(whereType: targetType);
+   };
+
+-  var closestParentReactContentView: RCTRootContentView? {
+-    let targetType = RCTRootContentView.self;
+-
+-    if let match = self.recursivelyFindParentView(whereType: targetType) {
+-      return match;
+-    };
+-
+-    guard let rootView = self.rootViewForCurrentWindow else { return nil };
+-    return rootView.recursivelyFindSubview(whereType: targetType);
+-  };
++  // RCTRootContentView is excluded when RCT_REMOVE_LEGACY_ARCH=1 (default in
++  // RN 0.85+ / Expo SDK 56). Property is unused by this package and downstream,
++  // so stub to nil to avoid an undefined-symbol linker error.
++  var closestParentReactContentView: AnyObject? { nil };
+
+   var reactTouchHandlers: [RCTTouchHandler]? {
+     self.gestureRecognizers?.compactMap {
+@@ -58,6 +52,8 @@ public extension RCTView {
+       currentView = superview;
+     };
+
+-    return closestParentReactContentView?.reactTouchHandlers?.first;
++    // Legacy `closestParentReactContentView` chain returned nil under new arch
++    // (RCTRootContentView excluded by RCT_REMOVE_LEGACY_ARCH=1); inline that.
++    return nil;
+   };
+ };

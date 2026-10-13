@@ -1,7 +1,8 @@
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { TrueSheetProvider } from '@lodev09/react-native-true-sheet';
 import { PaperProvider, type Theme } from '@mkljczk/react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { makeRedirectUri } from 'expo-auth-session';
 import { createURL } from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
@@ -26,6 +27,8 @@ SplashScreen.preventAutoHideAsync();
 const linking = {
   enabled: true,
   prefixes: [createURL('/')],
+  filter: (url: string) =>
+    !url.startsWith(makeRedirectUri({ scheme: 'micolium', path: 'redirect' })),
 };
 
 const darkTheme: Theme = {
@@ -74,12 +77,12 @@ export const App = () => {
               <QueryClientProvider client={queryClient}>
                 <NavigationContainer theme={theme} linking={linking}>
                   <GestureHandlerRootView>
-                    <BottomSheetModalProvider>
+                    <TrueSheetProvider>
                       <RootNavigator />
                       <Toaster position='bottom-center' />
                       <AccountSwitcherBottomSheet />
                       <ComposeBottomSheet />
-                    </BottomSheetModalProvider>
+                    </TrueSheetProvider>
                   </GestureHandlerRootView>
                 </NavigationContainer>
               </QueryClientProvider>

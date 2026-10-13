@@ -1,20 +1,9 @@
-import {
-  ActivityIndicator,
-  Checkbox,
-  Chip,
-  Divider,
-  Icon,
-  Menu,
-  useTheme,
-} from '@mkljczk/react-native-paper';
+import { Chip, Icon, useTheme } from '@mkljczk/react-native-paper';
 import {
   AtIcon,
   CaretDownIcon,
-  CaretLeftIcon,
-  CaretRightIcon,
   ChatsCircleIcon,
-  CheckIcon,
-  CirclesThreeIcon,
+  CirclesFourIcon,
   CoinsIcon,
   GlobeIcon,
   ListDashesIcon,
@@ -25,8 +14,9 @@ import {
   type Icon as PhosphorIcon,
 } from 'phosphor-react-native';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl, type MessageDescriptor } from 'react-intl';
 import { View } from 'react-native';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { iconHelper } from '@/components/ui/icon';
 import { useFeatures } from '@/contexts/current-account-context';
@@ -35,9 +25,41 @@ import { useLists } from '@/queries/accounts/use-lists';
 import { useCompose, useComposeActions } from '@/stores/compose';
 import { useSetting } from '@/stores/settings';
 
+import type { SFSymbol } from '@/utils/types';
+
 const messages = defineMessages({
+  publicShort: { id: 'privacy.public.short', defaultMessage: 'Public' },
+  publicLong: { id: 'privacy.public.long', defaultMessage: 'Post to public timelines' },
+  unlistedShort: { id: 'privacy.unlisted.short', defaultMessage: 'Quiet public' },
+  unlistedLong: { id: 'privacy.unlisted.long', defaultMessage: 'Not visible in public timelines' },
+  privateShort: { id: 'privacy.private.short', defaultMessage: 'Followers-only' },
+  privateLong: { id: 'privacy.private.long', defaultMessage: 'Post to followers only' },
+  conversationShort: { id: 'privacy.conversation.short', defaultMessage: 'Conversation' },
+  conversationLong: {
+    id: 'privacy.conversation.long',
+    defaultMessage: 'Post to recipients of the parent post',
+  },
+  mutualsOnlyShort: { id: 'privacy.mutuals_only.short', defaultMessage: 'Mutuals-only' },
+  mutualsOnlyLong: {
+    id: 'privacy.mutuals_only.long',
+    defaultMessage: 'Post to mutually followed users only',
+  },
+  directShort: { id: 'privacy.direct.short', defaultMessage: 'Private mention' },
+  directLong: { id: 'privacy.direct.long', defaultMessage: 'Visible to mentioned users only' },
+  localShort: { id: 'privacy.local.short', defaultMessage: 'Local-only' },
+  localLong: { id: 'privacy.local.long', defaultMessage: 'Only visible on your instance' },
+  listShort: { id: 'privacy.list.short', defaultMessage: 'List only' },
+  listLong: { id: 'privacy.list.long', defaultMessage: 'Visible to members of a list' },
+  circleShort: { id: 'privacy.circle.short', defaultMessage: 'Circle only' },
+  circleLong: { id: 'privacy.circle.long', defaultMessage: 'Visible to members of a circle' },
+  subscribersShort: { id: 'privacy.subscribers.short', defaultMessage: 'Subscribers-only' },
+  subscribersLong: {
+    id: 'privacy.subscribers.long',
+    defaultMessage: 'Post to users subscribing you only',
+  },
+
   changePrivacy: { id: 'privacy.change', defaultMessage: 'Adjust post privacy' },
-  back: { id: 'navigation_bar.back', defaultMessage: 'Back' },
+  loading: { id: 'loading_indicator.label', defaultMessage: 'Loading…' },
   noLists: { id: 'column.lists.empty', defaultMessage: 'You have no lists yet.' },
   noCircles: { id: 'column.circles.empty', defaultMessage: 'You have no circles yet.' },
 });
@@ -60,7 +82,7 @@ const getVisibilityIcon = (visibility: string): PhosphorIcon => {
       return PlanetIcon;
     default:
       if (visibility.startsWith('list:')) return ListDashesIcon;
-      if (visibility.startsWith('circle:')) return CirclesThreeIcon;
+      if (visibility.startsWith('circle:')) return CirclesFourIcon;
       return GlobeIcon;
   }
 };
@@ -117,19 +139,10 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
   const visibility = compose.visibility === 'default' ? defaultPrivacy : compose.visibility;
   const isReply = !!compose.inReplyToId;
 
-  const [showMenu, setShowMenu] = React.useState(false);
-  const [menuPage, setMenuPage] = React.useState<'visibility' | 'lists' | 'circles'>('visibility');
-
-  const { data: lists } = useLists(menuPage === 'lists');
-  const { data: circles } = useCircles(menuPage === 'circles');
-
-  const closeMenu = () => {
-    setShowMenu(false);
-    setMenuPage('visibility');
-  };
+  const { data: lists } = useLists(features.createStatusListScope);
+  const { data: circles } = useCircles(features.circles);
 
   const handleChangeVisibility = (newVisibility: string) => () => {
-    closeMenu();
     updateCompose(composeId, (draft) => {
       draft.visibility = newVisibility;
     });
@@ -142,238 +155,77 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
 
   if (compose.editedId) return null;
 
-  let menuContent;
+  const getVisibilityItem = (
+    value: string,
+    icon: SFSymbol,
+    title: MessageDescriptor,
+    subtitle: MessageDescriptor,
+  ) => (
+    <DropdownMenu.CheckboxItem
+      key={value}
+      value={visibility === value}
+      onSelect={handleChangeVisibility(value)}
+    >
+      <DropdownMenu.ItemIcon ios={{ name: icon }} />
+      <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
+      <DropdownMenu.ItemSubtitle>{intl.formatMessage(subtitle)}</DropdownMenu.ItemSubtitle>
+    </DropdownMenu.CheckboxItem>
+  );
 
-  const getListsMenuPage = (
+  const getListsSubMenu = (
     name: 'list' | 'circle',
     lists?: Array<{ id: string; title: string }>,
   ) => {
-    const listIcon = name === 'circle' ? CirclesThreeIcon : ListDashesIcon;
+    const listIcon: SFSymbol = name === 'circle' ? 'circle.grid.2x2' : 'list.bullet';
+    const title = name === 'circle' ? messages.circleShort : messages.listShort;
+    const subtitle = name === 'circle' ? messages.circleLong : messages.listLong;
     const emptyMessage = name === 'circle' ? messages.noCircles : messages.noLists;
 
     return (
-      <>
-        <Menu.Item
-          leadingIcon={iconHelper(CaretLeftIcon)}
-          onPress={() => setMenuPage('visibility')}
-          title={intl.formatMessage(messages.back)}
-        />
-        <Divider />
-        {lists ? (
-          lists.length ? (
-            lists.map((list) => (
-              <Menu.Item
-                key={list.id}
-                onPress={handleChangeVisibility(`${name}:${list.id}`)}
-                title={list.title}
-                leadingIcon={iconHelper(listIcon)}
-                selected={visibility === `${name}:${list.id}`}
-              />
-            ))
+      <DropdownMenu.Sub key={name}>
+        <DropdownMenu.SubTrigger key={`${name}-sub`}>
+          <DropdownMenu.ItemIcon ios={{ name: listIcon }} />
+          <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
+          <DropdownMenu.ItemSubtitle>{intl.formatMessage(subtitle)}</DropdownMenu.ItemSubtitle>
+        </DropdownMenu.SubTrigger>
+        <DropdownMenu.SubContent>
+          {lists ? (
+            lists.length ? (
+              lists.map((list) => (
+                <DropdownMenu.CheckboxItem
+                  key={`${name}:${list.id}`}
+                  value={visibility === `${name}:${list.id}`}
+                  onSelect={handleChangeVisibility(`${name}:${list.id}`)}
+                >
+                  <DropdownMenu.ItemIcon ios={{ name: listIcon }} />
+                  <DropdownMenu.ItemTitle>{list.title}</DropdownMenu.ItemTitle>
+                </DropdownMenu.CheckboxItem>
+              ))
+            ) : (
+              <DropdownMenu.Item key={`${name}-empty`} disabled>
+                <DropdownMenu.ItemTitle>{intl.formatMessage(emptyMessage)}</DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+            )
           ) : (
-            <Menu.Item title={intl.formatMessage(emptyMessage)} />
-          )
-        ) : (
-          <ActivityIndicator style={{ paddingVertical: 8 }} />
-        )}
-      </>
+            <DropdownMenu.Item key={`${name}-loading`} disabled>
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.loading)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          )}
+        </DropdownMenu.SubContent>
+      </DropdownMenu.Sub>
     );
   };
 
-  switch (menuPage) {
-    case 'visibility': {
-      menuContent = (
-        <>
-          <Menu.Item
-            onPress={handleChangeVisibility('public')}
-            title={<FormattedMessage id='privacy.public.short' defaultMessage='Public' />}
-            supportingText={
-              <FormattedMessage
-                id='privacy.public.long'
-                defaultMessage='Post to public timelines'
-              />
-            }
-            leadingIcon={iconHelper(GlobeIcon)}
-            selected={visibility === 'public'}
-          />
-          <Menu.Item
-            onPress={handleChangeVisibility('unlisted')}
-            title={<FormattedMessage id='privacy.unlisted.short' defaultMessage='Quiet public' />}
-            supportingText={
-              <FormattedMessage
-                id='privacy.unlisted.long'
-                defaultMessage='Not visible in public timelines'
-              />
-            }
-            leadingIcon={iconHelper(MoonIcon)}
-            selected={visibility === 'unlisted'}
-          />
-          <Menu.Item
-            onPress={handleChangeVisibility('private')}
-            title={<FormattedMessage id='privacy.private.short' defaultMessage='Followers-only' />}
-            supportingText={
-              <FormattedMessage id='privacy.private.long' defaultMessage='Post to followers only' />
-            }
-            leadingIcon={iconHelper(LockIcon)}
-            selected={visibility === 'private'}
-          />
-          {isReply && features.createStatusConversationScope && (
-            <Menu.Item
-              onPress={handleChangeVisibility('conversation')}
-              title={
-                <FormattedMessage id='privacy.conversation.short' defaultMessage='Conversation' />
-              }
-              supportingText={
-                <FormattedMessage
-                  id='privacy.conversation.long'
-                  defaultMessage='Post to recipients of the parent post'
-                />
-              }
-              leadingIcon={iconHelper(ChatsCircleIcon)}
-              selected={visibility === 'conversation'}
-            />
-          )}
-          {features.createStatusMutualsOnlyScope && (
-            <Menu.Item
-              onPress={handleChangeVisibility('mutuals_only')}
-              title={
-                <FormattedMessage id='privacy.mutuals_only.short' defaultMessage='Mutuals-only' />
-              }
-              supportingText={
-                <FormattedMessage
-                  id='privacy.mutuals_only.long'
-                  defaultMessage='Post to mutually followed users only'
-                />
-              }
-              leadingIcon={iconHelper(UsersThreeIcon)}
-              selected={visibility === 'mutuals_only'}
-            />
-          )}
-          {features.createStatusSubscribersScope && (
-            <Menu.Item
-              onPress={handleChangeVisibility('subscribers')}
-              title={
-                <FormattedMessage
-                  id='privacy.subscribers.short'
-                  defaultMessage='Subscribers-only'
-                />
-              }
-              supportingText={
-                <FormattedMessage
-                  id='privacy.subscribers.long'
-                  defaultMessage='Post to users subscribing you only'
-                />
-              }
-              leadingIcon={iconHelper(CoinsIcon)}
-              selected={visibility === 'subscribers'}
-            />
-          )}
-          <Menu.Item
-            onPress={handleChangeVisibility('direct')}
-            title={<FormattedMessage id='privacy.direct.short' defaultMessage='Private mention' />}
-            supportingText={
-              <FormattedMessage
-                id='privacy.direct.long'
-                defaultMessage='Visible to mentioned users only'
-              />
-            }
-            leadingIcon={iconHelper(AtIcon)}
-            selected={visibility === 'direct'}
-          />
-          {features.createStatusLocalScope && (
-            <Menu.Item
-              onPress={handleChangeVisibility('local')}
-              title={<FormattedMessage id='privacy.local.short' defaultMessage='Local-only' />}
-              supportingText={
-                <FormattedMessage
-                  id='privacy.local.long'
-                  defaultMessage='Only visible on your instance'
-                />
-              }
-              leadingIcon={iconHelper(PlanetIcon)}
-              selected={visibility === 'local'}
-            />
-          )}
-          {features.createStatusListScope && (
-            <Menu.Item
-              onPress={() => setMenuPage('lists')}
-              title={<FormattedMessage id='privacy.list.short' defaultMessage='List only' />}
-              supportingText={
-                <FormattedMessage
-                  id='privacy.list.long'
-                  defaultMessage='Visible to members of a list'
-                />
-              }
-              contentStyle={{ flex: 1 }}
-              leadingIcon={iconHelper(ListDashesIcon)}
-              trailingIcon={iconHelper(CaretRightIcon)}
-              selected={visibility.startsWith('list:')}
-            />
-          )}
-          {features.circles && (
-            <Menu.Item
-              onPress={() => setMenuPage('circles')}
-              title={<FormattedMessage id='privacy.circle.short' defaultMessage='Circle only' />}
-              supportingText={
-                <FormattedMessage
-                  id='privacy.circle.long'
-                  defaultMessage='Visible to members of a circle'
-                />
-              }
-              contentStyle={{ flex: 1 }}
-              leadingIcon={iconHelper(CirclesThreeIcon)}
-              trailingIcon={iconHelper(CaretRightIcon)}
-              selected={visibility.startsWith('circle:')}
-            />
-          )}
-          {features.localOnlyStatuses && (
-            <>
-              <Divider />
-              <Menu.Item
-                onPress={handleToggleLocalOnly}
-                title={<FormattedMessage id='privacy.local.short' defaultMessage='Local-only' />}
-                supportingText={
-                  <FormattedMessage
-                    id='privacy.local.long'
-                    defaultMessage='Only visible on your instance'
-                  />
-                }
-                contentStyle={{ flex: 1 }}
-                leadingIcon={iconHelper(PlanetIcon)}
-                trailingIcon={() => (
-                  <Checkbox
-                    status={compose.localOnly ? 'checked' : 'unchecked'}
-                    onPress={handleToggleLocalOnly}
-                    style={{ marginLeft: -12 }}
-                  />
-                )}
-                selected={compose.localOnly}
-              />
-            </>
-          )}
-        </>
-      );
-      break;
-    }
-    case 'lists': {
-      menuContent = getListsMenuPage('list', lists);
-      break;
-    }
-    case 'circles': {
-      menuContent = getListsMenuPage('circle', circles);
-      break;
-    }
-  }
-
   return (
     <View style={{ alignItems: 'flex-start' }}>
-      <Menu
-        anchor={
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
           <Chip
             mode='outlined'
             icon={iconHelper(getVisibilityIcon(visibility))}
             accessibilityLabel={intl.formatMessage(messages.changePrivacy)}
-            onPress={() => setShowMenu(true)}
           >
             {compose.localOnly ? (
               <FormattedMessage
@@ -390,13 +242,60 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
               <Icon source={iconHelper(CaretDownIcon)} size={16} color={colors.onSurfaceVariant} />
             </View>
           </Chip>
-        }
-        anchorPosition='bottom'
-        visible={showMenu}
-        onDismiss={closeMenu}
-      >
-        {menuContent}
-      </Menu>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Label>{intl.formatMessage(messages.changePrivacy)}</DropdownMenu.Label>
+          <DropdownMenu.Group>
+            {getVisibilityItem('public', 'globe', messages.publicShort, messages.publicLong)}
+            {getVisibilityItem('unlisted', 'moon', messages.unlistedShort, messages.unlistedLong)}
+            {getVisibilityItem('private', 'lock', messages.privateShort, messages.privateLong)}
+            {isReply &&
+              features.createStatusConversationScope &&
+              getVisibilityItem(
+                'conversation',
+                'bubble.left.and.bubble.right',
+                messages.conversationShort,
+                messages.conversationLong,
+              )}
+            {features.createStatusMutualsOnlyScope &&
+              getVisibilityItem(
+                'mutuals_only',
+                'person.3',
+                messages.mutualsOnlyShort,
+                messages.mutualsOnlyLong,
+              )}
+            {features.createStatusSubscribersScope &&
+              getVisibilityItem(
+                'subscribers',
+                'dollarsign.circle',
+                messages.subscribersShort,
+                messages.subscribersLong,
+              )}
+            {getVisibilityItem('direct', 'at', messages.directShort, messages.directLong)}
+            {features.createStatusLocalScope &&
+              getVisibilityItem('local', 'globe.desk', messages.localShort, messages.localLong)}
+            {features.createStatusListScope && getListsSubMenu('list', lists)}
+            {features.circles && getListsSubMenu('circle', circles)}
+          </DropdownMenu.Group>
+          {features.localOnlyStatuses && (
+            <DropdownMenu.Group>
+              <DropdownMenu.CheckboxItem
+                key='local-only'
+                value={compose.localOnly}
+                onValueChange={handleToggleLocalOnly}
+              >
+                <DropdownMenu.ItemIcon ios={{ name: 'building.2' }} />
+                <DropdownMenu.ItemTitle>
+                  {intl.formatMessage(messages.localShort)}
+                </DropdownMenu.ItemTitle>
+                <DropdownMenu.ItemSubtitle>
+                  {intl.formatMessage(messages.localLong)}
+                </DropdownMenu.ItemSubtitle>
+              </DropdownMenu.CheckboxItem>
+            </DropdownMenu.Group>
+          )}
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
     </View>
   );
 };

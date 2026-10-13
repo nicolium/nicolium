@@ -132,11 +132,11 @@ const useAuthStore = create<AuthStore>()(
           if (!client || !pendingAuth?.instance) return;
 
           const { client_id, client_secret } = await client.apps.createApplication({
-            client_name: 'Nicolium (mobile)',
+            client_name: 'micolium',
             redirect_uris:
               grantType === 'authorization_code'
                 ? makeRedirectUri({
-                    scheme: 'nicolium',
+                    scheme: 'micolium',
                     path: 'redirect',
                   })
                 : 'urn:ietf:wg:oauth:2.0:oob',
@@ -197,7 +197,7 @@ const useAuthStore = create<AuthStore>()(
             client_id: pendingAuth.client_id!,
             client_secret: pendingAuth.client_secret!,
             redirect_uri: makeRedirectUri({
-              scheme: 'nicolium',
+              scheme: 'micolium',
               path: 'redirect',
             }),
             grant_type: 'authorization_code',

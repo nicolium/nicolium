@@ -1,8 +1,9 @@
-import { Appbar, Menu, useTheme } from '@mkljczk/react-native-paper';
+import { Appbar, useTheme } from '@mkljczk/react-native-paper';
 import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform } from 'react-native';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { iconHelper } from '@/components/ui/icon';
 
@@ -18,12 +19,6 @@ const messages = defineMessages({
 const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
   const { colors } = useTheme();
   const intl = useIntl();
-  const [showMenu, setShowMenu] = React.useState(false);
-
-  const closeAfter = (callback: () => void) => () => {
-    callback();
-    setShowMenu(false);
-  };
 
   const activeKey =
     route.params && 'id' in route.params ? `${route.name}:${route.params.id}` : route.name;
@@ -43,27 +38,23 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
         }
       />
 
-      <Menu
-        visible={showMenu}
-        onDismiss={() => setShowMenu(false)}
-        anchor={
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
           <Appbar.Action
             icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
-            onPress={() => setShowMenu((value) => !value)}
           />
-        }
-        anchorPosition='bottom'
-      >
-        <Menu.Item
-          onPress={closeAfter(() => navigation.navigate('settings'))}
-          title={intl.formatMessage(messages.settings)}
-        />
-        <Menu.Item
-          onPress={closeAfter(() => {})}
-          title={intl.formatMessage(messages.announcements)}
-        />
-        {/* <Menu.Item onPress={() => {}} title='Edit timelines' /> */}
-      </Menu>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Item key='settings' onSelect={() => navigation.navigate('settings')}>
+            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.settings)}</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item key='announcements' onSelect={() => {}}>
+            <DropdownMenu.ItemTitle>
+              {intl.formatMessage(messages.announcements)}
+            </DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
     </Appbar.Header>
   );
 };

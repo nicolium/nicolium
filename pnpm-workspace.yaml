@@ -16,6 +16,7 @@ minimumReleaseAgeExclude:
   - '@typescript/native-preview-win32-x64@7.0.0-dev.20260616.1'
   - '@typescript/native-preview@7.0.0-dev.20260616.1'
   - astro@7.3.0
+  - expo-screen-orientation@57.0.3
 overrides:
   "@babel/core@7": ^7.29.7
   "@babel/runtime": ^7.26.10
@@ -37,3 +38,6 @@ overrides:
   svgo: ^4.0.2
   undici: 7.29.0
   yaml@2: ^2.9.0
+patchedDependencies:
+  react-native-ios-context-menu@3.2.0: packages/micolium/patches/react-native-ios-context-menu@3.2.0.patch
+  react-native-ios-utilities@5.2.0: packages/micolium/patches/react-native-ios-utilities@5.2.0.patch

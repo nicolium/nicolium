@@ -1,17 +1,15 @@
-import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { ActivityIndicator, List, RadioButton, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { PlusIcon } from 'phosphor-react-native';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Platform, ScrollView } from 'react-native';
 
 import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-account-context';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { useIsAccountSwitcherOpen, useUiStoreActions } from '@/stores/ui';
-import { BottomSheetBackdrop } from '@/utils/themes';
 
 import { Account } from './accounts/account';
 
@@ -72,33 +70,28 @@ const AccountSwitcher = () => {
 };
 
 const AccountSwitcherBottomSheet = () => {
-  const { colors } = useTheme();
-  const { bottom: bottomInset } = useSafeAreaInsets();
   const isAccountSwitcherOpen = useIsAccountSwitcherOpen();
   const { closeAccountSwitcher } = useUiStoreActions();
 
-  const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
+  const bottomSheetRef = React.useRef<TrueSheet>(null);
 
   React.useEffect(() => {
     if (isAccountSwitcherOpen) {
-      bottomSheetModalRef.current?.present();
-    } else {
-      bottomSheetModalRef.current?.close();
+      bottomSheetRef.current?.present();
+    } else if (bottomSheetRef.current) {
+      bottomSheetRef.current?.dismiss();
     }
   }, [isAccountSwitcherOpen]);
 
   return (
-    <BottomSheetModal
-      ref={bottomSheetModalRef}
-      onDismiss={() => closeAccountSwitcher()}
-      backgroundStyle={{ backgroundColor: colors.surfaceContainer }}
-      handleIndicatorStyle={{ backgroundColor: colors.onSurface }}
-      backdropComponent={BottomSheetBackdrop}
+    <TrueSheet
+      ref={bottomSheetRef}
+      detents={['auto']}
+      onDidDismiss={() => closeAccountSwitcher()}
+      style={{ paddingTop: Platform.OS === 'ios' ? 16 : 32 }}
     >
-      <BottomSheetView style={{ paddingBottom: bottomInset }}>
-        <AccountSwitcher />
-      </BottomSheetView>
-    </BottomSheetModal>
+      <AccountSwitcher />
+    </TrueSheet>
   );
 };
 

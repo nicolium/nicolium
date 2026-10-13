@@ -3,28 +3,28 @@ import {
   Icon,
   IconButton,
   List,
-  Menu,
   Switch,
   Text,
-  useTheme,
+  TextInput,
 } from '@mkljczk/react-native-paper';
-import { CheckIcon, DotsSixVerticalIcon, PlusIcon, XIcon } from 'phosphor-react-native';
+import { DotsSixVerticalIcon, PlusIcon, XIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl, type IntlShape } from 'react-intl';
 import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
   type SharedValue,
 } from 'react-native-reanimated';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useInstance } from '@/contexts/current-account-context';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 import { iconHelper } from '../ui/icon';
-import { WrappedTextInput } from '../ui/wrapped-text-input';
 
 const messages = defineMessages({
   optionPlaceholder: {
@@ -33,6 +33,7 @@ const messages = defineMessages({
   },
   removeOption: { id: 'compose_form.poll.remove_option', defaultMessage: 'Remove this answer' },
   reorderOption: { id: 'compose_form.poll.reorder_option', defaultMessage: 'Reorder answer' },
+  pollDuration: { id: 'compose_form.poll.duration', defaultMessage: 'Poll duration' },
   days: {
     id: 'intervals.full.days',
     defaultMessage: '{number, plural, one {# day} other {# days}}',
@@ -101,7 +102,6 @@ const Option: React.FC<IOption> = ({
   onMove,
 }) => {
   const intl = useIntl();
-  const { colors } = useTheme();
 
   const gesture = React.useMemo(
     () =>
@@ -121,7 +121,7 @@ const Option: React.FC<IOption> = ({
           const target = step ? clamp(Math.round(index + dragY.value / step), 0, count - 1) : index;
 
           if (target !== index) {
-            onMove(index, target);
+            runOnJS(onMove)(index, target);
           } else {
             activeIndex.value = -1;
             dragY.value = withTiming(0);
@@ -160,13 +160,12 @@ const Option: React.FC<IOption> = ({
 
   return (
     <Animated.View style={animatedStyle} onLayout={handleLayout}>
-      <WrappedTextInput
+      <TextInput
         value={title}
         onChangeText={(value) => onChange(index, value)}
         variant='outlined'
         placeholder={intl.formatMessage(messages.optionPlaceholder, { number: index + 1 })}
         maxLength={maxChars}
-        style={{ backgroundColor: colors.surfaceContainer }}
         endAccessory={({ style }) => (
           <View
             style={[
@@ -226,8 +225,6 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
     max_expiration: maxExpiration,
   } = configuration.polls;
 
-  const [showDurationMenu, setShowDurationMenu] = React.useState(false);
-
   const activeIndex = useSharedValue(-1);
   const dragY = useSharedValue(0);
   const rowHeight = useSharedValue(0);
@@ -282,7 +279,6 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   };
 
   const handleSelectDuration = (value: number) => {
-    setShowDurationMenu(false);
     updateCompose(composeId, (draft) => {
       if (draft.poll) draft.poll.expires_in = value;
     });
@@ -335,30 +331,29 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
         </Button>
       )}
 
-      <Menu
-        visible={showDurationMenu}
-        onDismiss={() => setShowDurationMenu(false)}
-        anchor={
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
           <List.Item
             title={
               <FormattedMessage id='compose_form.poll.duration' defaultMessage='Poll duration' />
             }
             right={() => <Text>{formatDuration(intl, poll.expires_in)}</Text>}
-            onPress={() => setShowDurationMenu(true)}
             containerStyle={{ alignItems: 'center' }}
           />
-        }
-        anchorPosition='bottom'
-      >
-        {durations.map((duration) => (
-          <Menu.Item
-            key={duration}
-            title={formatDuration(intl, duration)}
-            onPress={() => handleSelectDuration(duration)}
-            trailingIcon={duration === poll.expires_in ? iconHelper(CheckIcon) : undefined}
-          />
-        ))}
-      </Menu>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Label>{intl.formatMessage(messages.pollDuration)}</DropdownMenu.Label>
+          {durations.map((duration) => (
+            <DropdownMenu.CheckboxItem
+              key={duration.toString()}
+              value={duration === poll.expires_in}
+              onSelect={() => handleSelectDuration(duration)}
+            >
+              <DropdownMenu.ItemTitle>{formatDuration(intl, duration)}</DropdownMenu.ItemTitle>
+            </DropdownMenu.CheckboxItem>
+          ))}
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
 
       <List.Item
         title={

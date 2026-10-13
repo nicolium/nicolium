@@ -190,12 +190,12 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
       }
     >
       <View style={{ alignItems: 'center' }}>
-        <Logo width={78} height={78} accessibilityLabel='Nicolium' />
+        <Logo width={78} height={78} accessibilityLabel='micolium' />
       </View>
 
       {!isLoggedIn && (
         <>
-          <UIAccount displayName='Nicolium' acct='nicolium' />
+          <UIAccount displayName='micolium' acct='micolium' />
           <View style={{ gap: 12 }}>
             <Text variant='headlineSmall'>
               <FormattedMessage id='landing_mobile.headline' defaultMessage='Welcome!' />
@@ -254,7 +254,6 @@ const CredentialsScreen = ({
       await createApp('password');
       await signIn(username, password);
       setLoading(false);
-      navigation.getParent()?.navigate('app');
     } catch (e) {
       setError(true);
       setLoading(false);
@@ -357,18 +356,14 @@ const OauthFlowScreen = ({
     if (response?.type === 'success') {
       const { code } = response.params;
 
-      signInWithCode(code, request?.codeVerifier!)
-        .then(() => {
-          navigation.getParent()?.navigate('app');
-        })
-        .catch(() => {
-          if (Platform.OS === 'android') {
-            ToastAndroid.show(intl.formatMessage(messages.failMessage), ToastAndroid.SHORT);
-          } else {
-            toast(intl.formatMessage(messages.failMessage));
-          }
-          navigation.goBack();
-        });
+      signInWithCode(code, request?.codeVerifier!).catch(() => {
+        if (Platform.OS === 'android') {
+          ToastAndroid.show(intl.formatMessage(messages.failMessage), ToastAndroid.SHORT);
+        } else {
+          toast(intl.formatMessage(messages.failMessage));
+        }
+        navigation.goBack();
+      });
     } else if (response && ['locked', 'cancel', 'dismiss', 'error'].includes(response.type)) {
       if (Platform.OS === 'android') {
         ToastAndroid.show(intl.formatMessage(messages.interruptMessage), ToastAndroid.SHORT);
@@ -388,10 +383,22 @@ const OauthFlowScreen = ({
 
 const LoginStack = createNativeStackNavigator<LoginStackParams>();
 
-const LoginStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'login'>) => {
+const LoginStackScreen = ({ navigation }: NativeStackScreenProps<RootStackParams, 'login'>) => {
   const instanceUrl = useAuthStore(({ pendingAuth }) => pendingAuth?.instance);
+  const currentAccount = useAuthStore(({ currentAccount }) => currentAccount);
   const isLoggedIn = !!useCurrentAccount();
   const intl = useIntl();
+
+  const initialAccount = React.useRef(currentAccount);
+
+  useEffect(() => {
+    if (currentAccount && currentAccount !== initialAccount.current) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'app' }],
+      });
+    }
+  }, [currentAccount]);
 
   return (
     <LoginStack.Navigator screenOptions={{ header: Header }}>

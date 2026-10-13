@@ -43,6 +43,12 @@
             "enableSceneSupport": true
           }
         }
+      ],
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
+        }
       ]
     ],
     "extra": {
