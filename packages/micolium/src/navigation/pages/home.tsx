@@ -26,6 +26,8 @@ const useShowComposeButton = () => {
     if (scrollOffset < previousScrollOffset.current) {
       scrollDownStartOffset.current = scrollOffset;
       setShowComposeButton(true);
+    } else if (scrollOffset <= 0) {
+      setShowComposeButton(true);
     } else if (scrollOffset - scrollDownStartOffset.current > 16) {
       setShowComposeButton(false);
     }

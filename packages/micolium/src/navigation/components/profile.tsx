@@ -139,7 +139,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
     setIsScrolled(scrollOffset > 60);
-    setShowComposeButton(scrollOffset < previousScrollOffset.current);
+    setShowComposeButton(scrollOffset < previousScrollOffset.current || scrollOffset === 0);
     previousScrollOffset.current = scrollOffset;
   };
 
