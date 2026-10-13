@@ -10,7 +10,7 @@ import { create } from 'mutative';
 import { defineMessages, useIntl } from 'react-intl';
 import { toast } from 'sonner-native';
 
-import { useClient, useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
+import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
 import { useImportEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
@@ -38,6 +38,14 @@ const messages = defineMessages({
   //     '@{acct}’s instance most likely doesn’t understand emoji reactions. The user will not get notified of the reaction.',
   // },
   // reblogScheduled: { id: 'status.reblog_scheduled', defaultMessage: 'Repost scheduled' },
+  muteConversationSuccess: {
+    id: 'status.mute_conversation.success',
+    defaultMessage: 'Conversation muted',
+  },
+  unmuteConversationSuccess: {
+    id: 'status.unmute_conversation.success',
+    defaultMessage: 'Conversation unmuted',
+  },
 });
 
 const queryKey = {
@@ -474,6 +482,7 @@ const useUnpinStatus = (statusId: string) => {
 };
 
 const useMuteStatus = (statusId: string) => {
+  const intl = useIntl();
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
@@ -489,11 +498,13 @@ const useMuteStatus = (statusId: string) => {
       queryClient.invalidateQueries({
         queryKey: scopedQueryKey(queryKeys.statusLists.mutedThreads, scopeUrl),
       });
+      toast.success(intl.formatMessage(messages.muteConversationSuccess));
     },
   });
 };
 
 const useUnmuteStatus = (statusId: string) => {
+  const intl = useIntl();
   const client = useClient();
   const queryClient = useQueryClient();
   const importEntities = useImportEntities();
@@ -509,6 +520,7 @@ const useUnmuteStatus = (statusId: string) => {
       queryClient.invalidateQueries({
         queryKey: scopedQueryKey(queryKeys.statusLists.mutedThreads, scopeUrl),
       });
+      toast.success(intl.formatMessage(messages.unmuteConversationSuccess));
     },
   });
 };

@@ -66,6 +66,7 @@
     "expo-linking": "~57.0.12",
     "expo-screen-orientation": "~57.0.3",
     "expo-secure-store": "~57.0.4",
+    "expo-sharing": "~57.0.23",
     "expo-splash-screen": "~57.0.9",
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.3",

@@ -47,7 +47,12 @@
           "initialOrientation": "DEFAULT"
         }
       ],
-      ["./plugins/with-material3-theme.ts", { "theme": "material3-expressive" }],
+      [
+        "./plugins/with-material3-theme.ts",
+        {
+          "theme": "material3-expressive"
+        }
+      ],
       [
         "./plugins/with-android-drawables.ts",
         {
@@ -86,7 +91,8 @@
           ],
           "prefix": "ph_"
         }
-      ]
+      ],
+      "expo-sharing"
     ],
     "extra": {
       "eas": {

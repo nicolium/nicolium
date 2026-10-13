@@ -1,6 +1,7 @@
 import { IconButton } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
+import { shareAsync } from 'expo-sharing';
 import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -14,9 +15,11 @@ import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 import { useDeleteStatus, type SelectedStatus } from '@/queries/statuses/use-status';
 import {
   useBookmarkStatus,
+  useMuteStatus,
   usePinStatus,
   useReblogStatus,
   useUnbookmarkStatus,
+  useUnmuteStatus,
   useUnpinStatus,
 } from '@/queries/statuses/use-status-interactions';
 
@@ -102,6 +105,8 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
   const { mutate: deleteStatus } = useDeleteStatus(status.id);
   const { mutate: pin } = usePinStatus(status.id);
   const { mutate: unpin } = useUnpinStatus(status.id);
+  const { mutate: muteStatus } = useMuteStatus(status.id);
+  const { mutate: unmuteStatus } = useUnmuteStatus(status.id);
 
   const publicStatus = ['public', 'unlisted', 'group'].includes(status.visibility);
   const ownStatus = status.account_id === currentAccountId;
@@ -117,8 +122,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
   const handleOpenInBrowser = () => Linking.openURL(status.uri);
 
   const handleShare = () => {
-    // TODO
-    // Sharing.shareAsync(status.uri);
+    shareAsync(status.uri);
   };
 
   const handleBookmark = (folderId?: string | null) => {
@@ -178,7 +182,8 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
   };
 
   const handleMuteConversation = () => {
-    // TODO
+    if (status.muted) unmuteStatus();
+    else muteStatus();
   };
 
   const handleReport = () => {
