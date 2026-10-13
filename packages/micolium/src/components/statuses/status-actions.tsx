@@ -112,8 +112,6 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
   const interactionTooltip = useInteractionMessages(status, 'can_reblog');
   const { canInteract: canQuote, approvalRequired } = useCanInteract(status, 'can_quote');
 
-  const [showMenu, setShowMenu] = React.useState(false);
-
   const { mutate: reblogStatus, isPending: isPendingReblog } = useReblogStatus(status.id);
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
@@ -122,15 +120,11 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
   const handleReblog = () => {
     if (status.reblogged) unreblogStatus();
     else reblogStatus({});
-
-    setShowMenu(false);
   };
 
   const handleQuote = () => {
     quoteCompose(status, scopeUrl, approvalRequired || false);
     openCompose();
-
-    setShowMenu(false);
   };
 
   const renderAction = (props: Partial<TooltipTriggerProps>, action?: () => void) => (
@@ -177,7 +171,7 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
   } else if (features.quotePosts && canQuote) {
     return (
       <DropdownMenu.Root>
-        <DropdownMenu.Trigger>{renderAction({}, () => setShowMenu(true))}</DropdownMenu.Trigger>
+        <DropdownMenu.Trigger>{renderAction({})}</DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Item key='reblog' onSelect={handleReblog}>
             <DropdownMenu.ItemIcon
@@ -188,7 +182,7 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
               {intl.formatMessage(status.reblogged ? messages.unreblog : messages.reblog)}
             </DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
-          <DropdownMenu.Item key='quote' onSelect={handleReblog}>
+          <DropdownMenu.Item key='quote' onSelect={handleQuote}>
             <DropdownMenu.ItemIcon ios={{ name: 'quote.bubble' }} androidIconName='ph_quotes' />
             <DropdownMenu.ItemTitle>{intl.formatMessage(messages.quote)}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
