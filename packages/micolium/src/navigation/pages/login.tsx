@@ -375,7 +375,7 @@ const OauthFlowScreen = ({
   }, [response]);
 
   return (
-    <View style={{ padding: 16 }}>
+    <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
       <ActivityIndicator size='large' />
     </View>
   );
