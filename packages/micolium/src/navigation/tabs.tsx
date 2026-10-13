@@ -50,7 +50,6 @@ const TabScreenLayout: (
 
 let NativeTabs: React.FC | undefined = undefined;
 
-// @ts-ignore
 if (Platform.OS === 'ios') {
   const Tab = createNativeBottomTabNavigator<TabsParams>();
 
