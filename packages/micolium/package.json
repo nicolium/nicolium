@@ -74,6 +74,7 @@
     "expo-system-ui": "~57.0.4",
     "expo-video": "~57.0.5",
     "expo-web-browser": "~57.0.3",
+    "htmlparser2": "^12.0.0",
     "intl-pluralrules": "^2.0.1",
     "lodash-es": "^4.18.1",
     "lucide-react-native": "^1.53.0",

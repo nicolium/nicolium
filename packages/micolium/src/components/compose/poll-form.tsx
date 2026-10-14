@@ -305,7 +305,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
       <View style={{ gap: OPTION_GAP }}>
         {options.map((title, index) => (
           <Option
-            key={keys.current[index]}
+            key={keys.current[index] || `fallback-${index}`}
             index={index}
             count={options.length}
             title={title}

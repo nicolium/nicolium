@@ -321,4 +321,4 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
   );
 };
 
-export { StyledHtml };
+export { StyledHtml, nodesToText };

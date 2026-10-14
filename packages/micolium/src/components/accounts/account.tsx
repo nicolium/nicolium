@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
+import { parseDocument } from 'htmlparser2';
 import React from 'react';
 
 import { useAccount } from '@/queries/accounts/use-account';
 
 import { type IUIAccount, UIAccount } from '../ui/account';
+import { nodesToText } from '../ui/styled-html';
 
 import { ActionButton } from './action-button';
 
@@ -30,16 +32,24 @@ const Account: React.FC<IAccount> = ({
 
   const { data: account } = useAccount(id);
 
-  if (!account) return null;
+  const pronouns = React.useMemo(() => {
+    if (!account) return;
 
-  const pronouns = account.pronouns.length
-    ? account.pronouns.join('/')
-    : account.fields.find(
-        ({ name, value }) =>
-          name.toLocaleLowerCase().includes('pronouns') &&
-          value.length <= 24 &&
-          !value.startsWith('<'),
-      )?.value;
+    if (account.pronouns.length) return account.pronouns.join('/');
+
+    const candidate = account.fields.find(({ name }) =>
+      name.toLocaleLowerCase().includes('pronouns'),
+    );
+
+    if (!candidate) return;
+
+    try {
+      const parsedText = nodesToText(parseDocument(candidate.value).childNodes);
+      if (parsedText.length < 25) return parsedText;
+    } catch {}
+  }, [account]);
+
+  if (!account) return null;
 
   return (
     <UIAccount
