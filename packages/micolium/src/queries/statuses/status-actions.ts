@@ -8,6 +8,7 @@ import { useContextStore } from '@/stores/contexts';
 // import { usePendingStatusesStore } from '@/stores/pending-statuses';
 // import { useSettingsStore } from '@/stores/settings';
 import { useTimelinesStore } from '@/stores/timelines';
+import { useUiStore, useUiStoreActions } from '@/stores/ui';
 import { shouldHaveCard } from '@/utils/status';
 
 import { importEntities } from '../utils/import-entities';
@@ -176,7 +177,7 @@ const editStatus = (
 
   return client.statuses.getStatusSource(statusId).then((response) => {
     useComposeStore.getState().actions.setComposeToStatus(status, poll, response, features);
-    // useModalsStore.getState().actions.openModal('COMPOSE', undefined, undefined, scopeUrl);
+    useUiStore.getState().actions.openCompose();
   });
 };
 

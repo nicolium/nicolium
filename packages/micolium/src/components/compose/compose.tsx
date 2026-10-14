@@ -64,12 +64,26 @@ const messages = defineMessages({
   publishReply: { id: 'compose_form.reply', defaultMessage: 'Reply' },
   publishQuote: { id: 'compose_form.quote', defaultMessage: 'Quote' },
   publishDirect: { id: 'compose_form.direct', defaultMessage: 'Direct' },
+  publishChanges: { id: 'compose_form.save_changes.short', defaultMessage: 'Edit' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   cancelConfirmationConfirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
   cancelConfirmationHeading: { id: 'confirmations.cancel.heading', defaultMessage: 'Discard post' },
   cancelConfirmationMessage: {
     id: 'confirmations.cancel.message',
     defaultMessage: 'Are you sure you want to discard the currently composed post?',
+  },
+  cancelEditingConfirmationConfirm: {
+    id: 'confirmations.cancel_editing.confirm',
+    defaultMessage: 'Cancel editing',
+  },
+  cancelEditingConfirmationHeading: {
+    id: 'confirmations.cancel_editing.heading',
+    defaultMessage: 'Cancel post editing',
+  },
+  cancelEditingConfirmationMessage: {
+    id: 'confirmations.cancel_editing.message',
+    defaultMessage:
+      'Are you sure you want to discard the changes to this post? All changes will be lost.',
   },
 });
 
@@ -189,9 +203,15 @@ const ComposeBottomSheet = () => {
     const compose = useComposeStore.getState().composers[COMPOSE_ID];
 
     if (checkComposeContent(compose)) {
+      const editing = !!compose.editedId;
+
       Alert.alert(
-        intl.formatMessage(messages.cancelConfirmationHeading),
-        intl.formatMessage(messages.cancelConfirmationMessage),
+        intl.formatMessage(
+          editing ? messages.cancelEditingConfirmationHeading : messages.cancelConfirmationHeading,
+        ),
+        intl.formatMessage(
+          editing ? messages.cancelEditingConfirmationMessage : messages.cancelConfirmationMessage,
+        ),
         [
           {
             text: intl.formatMessage(messages.cancel),
@@ -199,7 +219,11 @@ const ComposeBottomSheet = () => {
             onPress: () => openCompose(),
           },
           {
-            text: intl.formatMessage(messages.cancelConfirmationConfirm),
+            text: intl.formatMessage(
+              editing
+                ? messages.cancelEditingConfirmationConfirm
+                : messages.cancelConfirmationConfirm,
+            ),
             style: 'destructive',
             onPress: () => resetCompose(COMPOSE_ID),
           },
@@ -227,13 +251,15 @@ const ComposeBottomSheet = () => {
   };
 
   const publishButtonLabel = intl.formatMessage(
-    inReplyToId
-      ? messages.publishReply
-      : quoteId
-        ? messages.publishQuote
-        : visibility === 'direct'
-          ? messages.publishDirect
-          : messages.publish,
+    compose.editedId
+      ? messages.publishChanges
+      : inReplyToId
+        ? messages.publishReply
+        : quoteId
+          ? messages.publishQuote
+          : visibility === 'direct'
+            ? messages.publishDirect
+            : messages.publish,
   );
 
   const footerContent = (

@@ -10,7 +10,9 @@ import { toast } from 'sonner-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useClient, useFeatures } from '@/contexts/current-account-context';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
+import { editStatus } from '@/queries/statuses/status-actions';
 import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 import { useDeleteStatus, type SelectedStatus } from '@/queries/statuses/use-status';
 import {
@@ -95,6 +97,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
   const features = useFeatures();
   const intl = useIntl();
   const navigation = useNavigation();
+  const scopeUrl = useScopeUrl();
 
   const { data: bookmarkFolders } = useBookmarkFolders();
   const { data: currentAccountId } = useCredentialAccountId();
@@ -178,7 +181,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
   };
 
   const handleEdit = () => {
-    // TODO
+    editStatus(client, status.id, scopeUrl, features);
   };
 
   const handleMuteConversation = () => {
@@ -187,7 +190,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
   };
 
   const handleReport = () => {
-    // TODO
+    Alert.alert('not implemented');
   };
 
   return (
