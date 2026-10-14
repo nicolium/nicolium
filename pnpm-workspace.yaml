@@ -17,6 +17,15 @@ minimumReleaseAgeExclude:
   - '@typescript/native-preview@7.0.0-dev.20260616.1'
   - astro@7.3.0
   - expo-screen-orientation@57.0.3
+  - '@react-navigation/bottom-tabs@8.0.0-alpha.57'
+  - '@react-navigation/core@8.0.0-alpha.41'
+  - '@react-navigation/elements@3.0.0-alpha.55'
+  - '@react-navigation/material-symbols@8.0.0-alpha.1'
+  - '@react-navigation/material-top-tabs@8.0.0-alpha.56'
+  - '@react-navigation/native-stack@8.0.0-alpha.59'
+  - '@react-navigation/native@8.0.0-alpha.51'
+  - '@react-navigation/routers@8.0.0-alpha.21'
+  - react-native-tab-view@5.0.0-alpha.18
 overrides:
   "@babel/core@7": ^7.29.7
   "@babel/runtime": ^7.26.10

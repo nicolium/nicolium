@@ -224,7 +224,8 @@ const TimelineHeader = ({ route }: NativeStackHeaderProps) => {
             </Text>
           }
         />
-        {(!route.params || route.params?.tab === 'all') && (
+        {(!route.params ||
+          (route.params as NotificationsStackParams['view'] | undefined)?.tab === 'all') && (
           <Appbar.Action icon={iconHelper(FunnelIcon)} onPress={() => setShowFiltersDialog(true)} />
         )}
         <NotificationsMarkReadButton />

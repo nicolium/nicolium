@@ -13,10 +13,10 @@ import { Tabs } from './tabs';
 
 import type { NavigatorScreenParams } from '@react-navigation/native';
 
-declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends RootStackParams {}
-  }
+type RootStackType = typeof RootStack;
+
+declare module '@react-navigation/native' {
+  interface RootNavigator extends RootStackType {}
 }
 
 type TimelineStackParams = {

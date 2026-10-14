@@ -4,10 +4,6 @@ import {
   type BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import {
-  createNativeBottomTabNavigator,
-  type NativeBottomTabNavigationOptions,
-} from '@react-navigation/bottom-tabs/unstable';
 import { CommonActions, type ScreenLayoutArgs } from '@react-navigation/native';
 import {
   BellSimpleIcon,
@@ -17,7 +13,7 @@ import {
 } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Platform, View } from 'react-native';
+import { type ColorValue, Platform, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
@@ -40,19 +36,14 @@ const messages = defineMessages({
 });
 
 const TabScreenLayout: (
-  props: ScreenLayoutArgs<
-    TabsParams,
-    keyof TabsParams,
-    NativeBottomTabNavigationOptions | BottomTabNavigationOptions,
-    any
-  >,
+  props: ScreenLayoutArgs<TabsParams, keyof TabsParams, BottomTabNavigationOptions, any>,
 ) => React.ReactElement = ({ children }) => <SafeAreaProvider>{children}</SafeAreaProvider>;
+
+const Tab = createBottomTabNavigator<TabsParams>();
 
 let NativeTabs: React.FC | undefined = undefined;
 
 if (Platform.OS === 'ios') {
-  const Tab = createNativeBottomTabNavigator<TabsParams>();
-
   NativeTabs = () => {
     const intl = useIntl();
     const unreadCount = useNotificationsUnreadCount();
@@ -60,6 +51,7 @@ if (Platform.OS === 'ios') {
 
     return (
       <Tab.Navigator
+        implementation='native'
         screenLayout={TabScreenLayout}
         screenOptions={{
           headerShown: false,
@@ -135,10 +127,18 @@ const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
       navigationState={state}
       safeAreaInsets={insets}
       onTabPress={({ route, preventDefault }) => {
+        const isRepeatedPress = state.routes[state.index].key === route.key;
+
         const event = navigation.emit({
           type: 'tabPress',
           target: route.key,
           canPreventDefault: true,
+          data: {
+            behavior: {
+              scrollToTop: isRepeatedPress,
+              popToTop: isRepeatedPress,
+            },
+          },
         });
         if (event.defaultPrevented) {
           preventDefault();
@@ -154,13 +154,12 @@ const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
 
         return openAccountSwitcher();
       }}
-      renderIcon={({ route, focused, color }) =>
-        descriptors[route.key].options.tabBarIcon?.({
-          focused,
-          color: color.toString(),
-          size: 24,
-        }) ?? null
-      }
+      renderIcon={({ route, focused, color }) => {
+        const { tabBarIcon } = descriptors[route.key].options;
+        const icon =
+          typeof tabBarIcon === 'function' ? tabBarIcon({ focused, color, size: 24 }) : null;
+        return React.isValidElement(icon) ? icon : null;
+      }}
       getLabelText={({ route }) => {
         const { options } = descriptors[route.key];
         return typeof options.tabBarLabel === 'string'
@@ -174,14 +173,16 @@ const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
   );
 };
 
-const ProfileIcon: React.FC<{ color: string }> = ({ color }) => (
+interface IProfileIcon {
+  color: string;
+}
+
+const ProfileIcon: React.FC<IProfileIcon> = ({ color }) => (
   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2, paddingLeft: 18 }}>
     <CurrentAccountAvatar />
     <CaretUpDownIcon size={16} color={color} />
   </View>
 );
-
-const Tab = createBottomTabNavigator<TabsParams>();
 
 const PaperTabs = () => {
   const intl = useIntl();
@@ -189,6 +190,7 @@ const PaperTabs = () => {
 
   return (
     <Tab.Navigator
+      implementation='custom'
       tabBar={(props) => <TabBar {...props} />}
       screenLayout={TabScreenLayout}
       screenOptions={{ headerShown: false, animation: 'shift' }}

@@ -44,10 +44,10 @@ import { iconHelper } from '../ui/icon';
 import { UIStatus } from '../ui/status';
 
 import { StatusActions } from './status-actions';
+import { StatusActionsDropdown } from './status-actions-dropdown';
 import { StatusLinkPreview } from './status-link-preview';
 import { StatusMedia } from './status-media';
 import { StatusPoll } from './status-poll';
-import { StatusActionsDropdown } from './status-actions-dropdown';
 
 const messages = defineMessages({
   publicExplanation: {
@@ -394,9 +394,7 @@ const Status: React.FC<IStatus> = ({
           />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <StatusVisibilityIcon status={status} />
-            {withActions && (
-              <StatusActionsDropdown status={status} detailed={props.detailed} />
-            )}
+            {withActions && <StatusActionsDropdown status={status} detailed={props.detailed} />}
           </View>
         </View>
       }

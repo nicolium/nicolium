@@ -1,5 +1,5 @@
 import { TrueSheetProvider } from '@lodev09/react-native-true-sheet';
-import { PaperProvider, type Theme } from '@mkljczk/react-native-paper';
+import { PaperProvider } from '@mkljczk/react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { makeRedirectUri } from 'expo-auth-session';
@@ -31,7 +31,7 @@ const linking = {
     !url.startsWith(makeRedirectUri({ scheme: 'micolium', path: 'redirect' })),
 };
 
-const darkTheme: Theme = {
+const darkTheme = {
   ...DarkTheme,
   shapes: {
     ...DarkTheme.shapes,
@@ -42,7 +42,7 @@ const darkTheme: Theme = {
   },
 };
 
-const lightTheme: Theme = {
+const lightTheme = {
   ...LightTheme,
   shapes: {
     ...LightTheme.shapes,

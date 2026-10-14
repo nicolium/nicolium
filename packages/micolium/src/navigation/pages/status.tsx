@@ -61,7 +61,7 @@ const messages = defineMessages({
 const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
   const intl = useIntl();
   const { colors } = useTheme();
-  const { data: status } = useStatus(route.params?.id);
+  const { data: status } = useStatus((route.params as StatusStackParams['view'] | undefined)?.id);
 
   let title: string | Array<React.ReactNode>;
   let subtitle: string | undefined;
