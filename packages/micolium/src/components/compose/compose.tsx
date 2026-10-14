@@ -92,7 +92,7 @@ interface ICompose {
 }
 
 const ReplyIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
-  const { inReplyToId } = useCompose(composeId);
+  const { inReplyToId, editedId } = useCompose(composeId);
   const { updateCompose } = useComposeActions();
   const { data: status } = useStatus(inReplyToId || undefined);
 
@@ -118,16 +118,18 @@ const ReplyIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
             values={{ acct: status.account.acct }}
           />
         </Text>
-        <IconButton
-          icon={iconHelper(XIcon)}
-          style={{ margin: 0, marginRight: -8 }}
-          onPress={() =>
-            updateCompose(composeId, (draft) => {
-              draft.inReplyToId = null;
-            })
-          }
-          size={20}
-        />
+        {!editedId && (
+          <IconButton
+            icon={iconHelper(XIcon)}
+            style={{ margin: 0, marginRight: -8 }}
+            onPress={() =>
+              updateCompose(composeId, (draft) => {
+                draft.inReplyToId = null;
+              })
+            }
+            size={20}
+          />
+        )}
       </View>
       <Status id={inReplyToId!} compact withActions={false} textOnly style={{ paddingTop: 0 }} />
     </Card>
@@ -135,7 +137,7 @@ const ReplyIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
 };
 
 const QuoteIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
-  const { quoteId } = useCompose(composeId);
+  const { quoteId, editedId } = useCompose(composeId);
   const { updateCompose } = useComposeActions();
   const { data: status } = useStatus(quoteId || undefined);
 
@@ -161,16 +163,18 @@ const QuoteIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
             values={{ acct: status.account.acct }}
           />
         </Text>
-        <IconButton
-          icon={iconHelper(XIcon)}
-          style={{ margin: 0, marginRight: -8 }}
-          onPress={() =>
-            updateCompose(composeId, (draft) => {
-              draft.quoteId = null;
-            })
-          }
-          size={20}
-        />
+        {!editedId && (
+          <IconButton
+            icon={iconHelper(XIcon)}
+            style={{ margin: 0, marginRight: -8 }}
+            onPress={() =>
+              updateCompose(composeId, (draft) => {
+                draft.quoteId = null;
+              })
+            }
+            size={20}
+          />
+        )}
       </View>
       <Status id={quoteId!} compact withActions={false} textOnly style={{ paddingTop: 0 }} />
     </Card>
