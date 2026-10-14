@@ -1,6 +1,5 @@
-# Adapted from https://github.com/react-native-menu/menu/pull/1136
 diff --git a/README.md b/README.md
-index 04b000c..67e9d4e 100644
+index 04b000c8edc646e85d6a6f297246153e6b8a4122..67e9d4ed63d83f81ca219a12eae46c36258ebcf5 100644
 --- a/README.md
 +++ b/README.md
 @@ -177,13 +177,21 @@ Actions to be displayed in the menu.
@@ -29,19 +28,8 @@ index 04b000c..67e9d4e 100644
  
  #### `MenuAction`
  
-diff --git a/android/build.gradle b/android/build.gradle
-index f1d2631..dc53152 100644
---- a/android/build.gradle
-+++ b/android/build.gradle
-@@ -158,4 +158,4 @@ if (isNewArchitectureEnabled()) {
-     libraryName = "MenuView"
-     codegenJavaPackageName = "com.reactnativemenu"
-   }
--}
-+}
-\ No newline at end of file
 diff --git a/android/src/main/java/com/reactnativemenu/MenuView.kt b/android/src/main/java/com/reactnativemenu/MenuView.kt
-index c45f5cc..b2d576d 100644
+index c45f5cc8ee16db610686fe5b6bef9f3372c6944b..6a2fd1db7f702144c82ee570d10ea96a2fd0af0e 100644
 --- a/android/src/main/java/com/reactnativemenu/MenuView.kt
 +++ b/android/src/main/java/com/reactnativemenu/MenuView.kt
 @@ -1,25 +1,38 @@
@@ -86,7 +74,7 @@ index c45f5cc..b2d576d 100644
    private var mIsMenuDisplayed = false
    private var mIsOnLongPress = false
    private var mGestureDetector: GestureDetector
-@@ -48,7 +61,7 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+@@ -48,10 +61,23 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
      })
    }
  
@@ -95,7 +83,38 @@ index c45f5cc..b2d576d 100644
      prepareMenu()
    }
  
-@@ -74,7 +87,8 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
++  // from https://github.com/react-native-menu/menu/pull/1190
++  override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
++    super.addView(child, index, params)
++    // Make child views trigger menu when clicked via TalkBack
++    child?.let {
++      it.isClickable = true
++      it.isFocusable = true
++      it.setOnClickListener {
++        performClick()
++      }
++    }
++  }
++
+   override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+     return true
+   }
+@@ -61,6 +87,14 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+     return true
+   }
+ 
++  override fun performClick(): Boolean {
++    super.performClick()
++    if (!mIsOnLongPress) {
++      prepareMenu()
++    }
++    return true
++  }
++
+   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+     super.onSizeChanged(w, h, oldw, oldh)
+     updateTouchDelegate()
+@@ -74,7 +108,8 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
    override fun onDetachedFromWindow() {
      super.onDetachedFromWindow()
      if (mIsMenuDisplayed) {
@@ -105,7 +124,7 @@ index c45f5cc..b2d576d 100644
      }
    }
  
-@@ -93,6 +107,18 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+@@ -93,6 +128,18 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
      mIsOnLongPress = isLongPress
    }
  
@@ -124,7 +143,7 @@ index c45f5cc..b2d576d 100644
    private val getActionsCount: Int
      get() = mActions.size()
  
-@@ -113,10 +139,6 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+@@ -113,10 +160,6 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
        true -> config.getMap("attributes")
        else -> null
      }
@@ -135,7 +154,7 @@ index c45f5cc..b2d576d 100644
      val menuState = config?.getString("state")
  
      if (titleColor != null) {
-@@ -175,100 +197,102 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+@@ -175,100 +218,102 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
  
      // Handle menuState for checkable items
      when (menuState) {
@@ -314,7 +333,7 @@ index c45f5cc..b2d576d 100644
      }
    }
  
-@@ -317,4 +341,32 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
+@@ -317,4 +362,32 @@ class MenuView(private val mContext: ReactContext) : ReactViewGroup(mContext) {
        0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
      return textWithColor
    }
@@ -348,7 +367,7 @@ index c45f5cc..b2d576d 100644
 +  }
  }
 diff --git a/android/src/main/java/com/reactnativemenu/MenuViewManagerBase.kt b/android/src/main/java/com/reactnativemenu/MenuViewManagerBase.kt
-index e4d2743..20674d2 100644
+index e4d2743bd6a038b769c3cf34c68297a1fc44d109..20674d27d1315e177f7a69837b531a57fee5d003 100644
 --- a/android/src/main/java/com/reactnativemenu/MenuViewManagerBase.kt
 +++ b/android/src/main/java/com/reactnativemenu/MenuViewManagerBase.kt
 @@ -214,6 +214,16 @@ abstract class MenuViewManagerBase : ReactClippingViewManager<MenuView>() {
@@ -370,7 +389,7 @@ index e4d2743..20674d2 100644
    }
 diff --git a/android/src/main/java/com/reactnativemenu/ThemeHelper.kt b/android/src/main/java/com/reactnativemenu/ThemeHelper.kt
 new file mode 100644
-index 0000000..27f65c3
+index 0000000000000000000000000000000000000000..27f65c3a4aba22ae97b29bdc50dff7d768e81c52
 --- /dev/null
 +++ b/android/src/main/java/com/reactnativemenu/ThemeHelper.kt
 @@ -0,0 +1,57 @@
@@ -433,7 +452,7 @@ index 0000000..27f65c3
 +}
 diff --git a/android/src/main/res/drawable/rnmenu_material3_expressive_item_background.xml b/android/src/main/res/drawable/rnmenu_material3_expressive_item_background.xml
 new file mode 100644
-index 0000000..8f11d64
+index 0000000000000000000000000000000000000000..8f11d64b48a1821f351deea786a464442db019eb
 --- /dev/null
 +++ b/android/src/main/res/drawable/rnmenu_material3_expressive_item_background.xml
 @@ -0,0 +1,16 @@
@@ -455,7 +474,7 @@ index 0000000..8f11d64
 +</selector>
 diff --git a/android/src/main/res/drawable/rnmenu_material3_expressive_popup_background.xml b/android/src/main/res/drawable/rnmenu_material3_expressive_popup_background.xml
 new file mode 100644
-index 0000000..9b9e62d
+index 0000000000000000000000000000000000000000..9b9e62d3f238a9bc6e52aa0cb427ba02caff4203
 --- /dev/null
 +++ b/android/src/main/res/drawable/rnmenu_material3_expressive_popup_background.xml
 @@ -0,0 +1,10 @@
@@ -471,7 +490,7 @@ index 0000000..9b9e62d
 +</shape>
 diff --git a/android/src/main/res/values/attrs.xml b/android/src/main/res/values/attrs.xml
 new file mode 100644
-index 0000000..eb6ab29
+index 0000000000000000000000000000000000000000..eb6ab29c3db322be8caee181d44e73d258818233
 --- /dev/null
 +++ b/android/src/main/res/values/attrs.xml
 @@ -0,0 +1,5 @@
@@ -482,7 +501,7 @@ index 0000000..eb6ab29
 +</resources>
 diff --git a/android/src/main/res/values/styles.xml b/android/src/main/res/values/styles.xml
 new file mode 100644
-index 0000000..243b9aa
+index 0000000000000000000000000000000000000000..243b9aa6197ff767b16d49d9cb8644773dda9a8c
 --- /dev/null
 +++ b/android/src/main/res/values/styles.xml
 @@ -0,0 +1,16 @@
@@ -503,7 +522,7 @@ index 0000000..243b9aa
 +  </style>
 +</resources>
 diff --git a/src/NativeModuleSpecs/UIMenuNativeComponent.ts b/src/NativeModuleSpecs/UIMenuNativeComponent.ts
-index e650935..f16a439 100644
+index e6509355275596c451f9d082223cc16bfe504e1a..f16a4394b58c6f63fb4d6ccd56790ca0898ab7af 100644
 --- a/src/NativeModuleSpecs/UIMenuNativeComponent.ts
 +++ b/src/NativeModuleSpecs/UIMenuNativeComponent.ts
 @@ -52,6 +52,7 @@ export interface NativeProps extends ViewProps {
@@ -515,7 +534,7 @@ index e650935..f16a439 100644
  	hitSlop: {
  		top: Int32;
 diff --git a/src/index.tsx b/src/index.tsx
-index a536298..7fc7f89 100644
+index a5362981d693bc66d841554c7882f0a4a1bb3974..7fc7f89beaf21516c76f7262d4f0cc16b63820c8 100644
 --- a/src/index.tsx
 +++ b/src/index.tsx
 @@ -8,6 +8,8 @@ import type {
@@ -535,7 +554,7 @@ index a536298..7fc7f89 100644
 +	MenuUiKit,
  };
 diff --git a/src/types.ts b/src/types.ts
-index 9c323d9..90d5dc5 100644
+index 9c323d9c510e7359c83d4d6633affde673570632..90d5dc55baa98fccc594dc68aceb57c2ce507890 100644
 --- a/src/types.ts
 +++ b/src/types.ts
 @@ -12,6 +12,14 @@ export type NativeActionEvent = {
