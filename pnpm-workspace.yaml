@@ -40,7 +40,7 @@ overrides:
   undici: 7.29.0
   yaml@2: ^2.9.0
 patchedDependencies:
-  '@react-native-menu/menu@2.0.0': packages/micolium/patches/@react-native-menu_menu@2.0.0.patch
+  '@react-native-menu/menu@2.0.0': packages/micolium/patches/@react-native-menu__menu@2.0.0.patch
   react-native-ios-context-menu@3.2.0: packages/micolium/patches/react-native-ios-context-menu@3.2.0.patch
   react-native-ios-utilities@5.2.0: packages/micolium/patches/react-native-ios-utilities@5.2.0.patch
   zeego@3.0.6: packages/micolium/patches/zeego@3.0.6.patch
