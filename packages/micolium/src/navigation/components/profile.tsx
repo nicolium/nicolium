@@ -137,24 +137,16 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const [showReplies, setShowReplies] = React.useState(false);
   const [showReblogs, setShowReblogs] = React.useState(true);
   const [showPinned, setShowPinned] = React.useState(true);
-  const [isScrolled, setIsScrolled] = React.useState(false);
-  const [profileInfoHeight, setProfileInfoHeight] = React.useState(0);
   const [showComposeButton, setShowComposeButton] = React.useState(true);
 
-  const profileInfoMarginTop = useSharedValue(topInset);
-  const profileInfoStyle = useAnimatedStyle(() => ({
-    marginTop: profileInfoMarginTop.value,
+  const headerMarginTop = useSharedValue(-64 - topInset);
+  const headerStyle = useAnimatedStyle(() => ({
+    position: 'absolute',
+    marginTop: headerMarginTop.value,
+    left: 0,
+    right: 0,
+    zIndex: 1,
   }));
-
-  React.useEffect(() => {
-    if (isScrolled) profileInfoMarginTop.value = withTiming(-profileInfoHeight + topInset + 64);
-    else profileInfoMarginTop.value = withTiming(topInset);
-  }, [isScrolled]);
-
-  React.useLayoutEffect(() => {
-    const height = profileInfoNode.current?.getBoundingClientRect().height;
-    if (height) setProfileInfoHeight(height);
-  }, [isScrolled]);
 
   if (!account)
     return (
@@ -165,7 +157,10 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
-    setIsScrolled(scrollOffset > 60);
+    const showHeader =
+      !!profileInfoNode.current &&
+      scrollOffset + topInset > profileInfoNode.current.getBoundingClientRect().height;
+    headerMarginTop.value = withTiming(showHeader ? 0 : -64 - topInset);
     setShowComposeButton(scrollOffset < previousScrollOffset.current || scrollOffset === 0);
     previousScrollOffset.current = scrollOffset;
   };
@@ -254,14 +249,15 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
 
   const header = (
     <>
-      <Animated.View style={profileInfoStyle} ref={profileInfoNode}>
+      <View ref={profileInfoNode}>
         <Image
           style={{
             flex: 1,
             width: '100%',
             maxWidth: '100%',
+            minWidth: '100%',
             aspectRatio: 3 / 1,
-            maxHeight: account.header_default ? 50 : 150 + topInset,
+            maxHeight: (account.header_default ? 50 : 150) + topInset,
             height: 'auto',
           }}
           source={{
@@ -414,15 +410,17 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             </View>
           </>
         </CollapsibleContent>
-      </Animated.View>
-      {isScrolled && (
+      </View>
+      {timelineFiltersSelector}
+    </>
+  );
+
+  return (
+    <>
+      <Animated.View style={headerStyle}>
         <Appbar.Header
           style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1,
+            // marginTop: -64 - topInset,
             backgroundColor: colors.surfaceContainer,
           }}
         >
@@ -440,13 +438,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             </Text>
           </View>
         </Appbar.Header>
-      )}
-      {timelineFiltersSelector}
-    </>
-  );
-
-  return (
-    <>
+      </Animated.View>
       <PostsTimeline
         id={account.id}
         onScroll={handleScroll}
