@@ -246,7 +246,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
               )}
             </View>
             <Divider />
-            <View style={{ flexDirection: 'row', marginHorizontal: 16, marginVertical: 8, gap: 8 }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: 16, marginVertical: 8, gap: 8 }}>
               <Text style={{ display: 'flex', alignItems: 'center' }}>
                 <FormattedMessage
                   id='account.statuses_with_count'
@@ -285,6 +285,22 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                   }}
                 />
               </Link>
+              {account.subscribers_count > 0 && (
+                <Link
+                  style={{ display: 'flex', alignItems: 'center' }}
+                  screen='accounts'
+                  params={{ screen: 'subscribers', params: { id: account.id } }}
+                >
+                  <FormattedMessage
+                    id='account.subscribers_with_count'
+                    defaultMessage='{count, plural, one {<strong>#</strong> subscriber} other {<strong>#</strong> subscribers}}'
+                    values={{
+                      count: account.subscribers_count,
+                      strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,
+                    }}
+                  />
+                </Link>
+              )}
             </View>
           </>
         </CollapsibleContent>
