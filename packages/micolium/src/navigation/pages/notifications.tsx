@@ -19,8 +19,8 @@ import { ChecksIcon, FunnelIcon } from 'phosphor-react-native';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ScrollView, View } from 'react-native';
-import { Tabs, TabScreen, TabsProvider } from 'react-native-paper-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TabView, TabBar } from 'react-native-tab-view';
 
 import { Notification } from '@/components/notification';
 import { EmptyMessage } from '@/components/ui/empty-message';
@@ -41,6 +41,11 @@ const messages = defineMessages({
   tabFiltered: { id: 'notifications.filter.all.filtered', defaultMessage: 'Filtered' },
   tabMentions: { id: 'notifications.filter_mentions', defaultMessage: 'Mentions' },
 });
+
+const NOTIFICATION_TABS = {
+  all: 0,
+  mentions: 1,
+} as const;
 
 const ALL_FILTERS = [
   'mention',
@@ -249,18 +254,20 @@ const NotificationsScreen = ({
 
   const filters = useSetting('notifications.filters');
 
-  const [currentTab, setCurrentTab] = React.useState<'all' | 'mentions'>('all');
+  const [currentTab, setCurrentTab] = React.useState(0);
 
-  const notificationsQuery = useNotifications(filters, currentTab === 'all');
-  const mentionsNotificationsQuery = useNotifications(['mention'], currentTab === 'mentions');
+  const notificationsQuery = useNotifications(filters, currentTab === NOTIFICATION_TABS.all);
+  const mentionsNotificationsQuery = useNotifications(
+    ['mention'],
+    currentTab === NOTIFICATION_TABS.mentions,
+  );
 
   const autoloadMore = useSetting('timelines.autoloadMore');
   const { bottom: bottomInset } = useSafeAreaInsets();
 
   const handleChangeIndex = (index: number) => {
-    const newTab = index === 1 ? 'mentions' : 'all';
-    setCurrentTab(newTab);
-    navigation.navigate('view', { tab: newTab });
+    setCurrentTab(index);
+    navigation.navigate('view', { tab: index ? 'mentions' : 'all' });
   };
 
   const renderNotifications = (tab: 'all' | 'mentions') => {
@@ -311,19 +318,23 @@ const NotificationsScreen = ({
     );
   };
 
+  const routes: Array<{
+    key: 'all' | 'mentions';
+    title: string;
+  }> = [
+    { key: 'all', title: intl.formatMessage(messages.tabAll) },
+    { key: 'mentions', title: intl.formatMessage(messages.tabFiltered) },
+  ];
+
   return (
-    <TabsProvider defaultIndex={0} onChangeIndex={handleChangeIndex}>
-      <Tabs style={{ backgroundColor: colors.surfaceContainer }} uppercase={false}>
-        <TabScreen
-          label={intl.formatMessage(filters.length ? messages.tabFiltered : messages.tabAll)}
-        >
-          {renderNotifications('all')}
-        </TabScreen>
-        <TabScreen label={intl.formatMessage(messages.tabMentions)}>
-          {renderNotifications('mentions')}
-        </TabScreen>
-      </Tabs>
-    </TabsProvider>
+    <TabView
+      navigationState={{ index: currentTab, routes }}
+      onIndexChange={handleChangeIndex}
+      renderScene={({ route }) => renderNotifications(route.key)}
+      renderTabBar={(props) => (
+        <TabBar {...props} style={{ backgroundColor: colors.surfaceContainer }} />
+      )}
+    />
   );
 };
 

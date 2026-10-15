@@ -54,6 +54,9 @@ type StatusStackParams = {
 };
 type AccountStackParams = {
   view: { id: string };
+  followers: { id: string };
+  following: { id: string };
+  subscribers: { id: string };
 };
 type BookmarksStackParams = {
   all: undefined;
