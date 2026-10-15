@@ -1,4 +1,5 @@
-import { Chip, Icon, useTheme } from '@mkljczk/react-native-paper';
+import { Chip, Icon, Text, useTheme } from '@mkljczk/react-native-paper';
+import { GlassView } from 'expo-glass-effect';
 import {
   AtIcon,
   CaretDownIcon,
@@ -15,11 +16,12 @@ import {
 } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl, type MessageDescriptor } from 'react-intl';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { iconHelper } from '@/components/ui/icon';
 import { useFeatures } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
 import { useCompose, useComposeActions } from '@/stores/compose';
@@ -130,6 +132,7 @@ interface IComposeVisibilityDropdown {
 const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ composeId }) => {
   const { colors } = useTheme();
   const intl = useIntl();
+  const glassEffect = useEnableLiquidGlass();
   const features = useFeatures();
   const defaultPrivacy = useSetting('compose.defaultPrivacy');
 
@@ -220,31 +223,57 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
     );
   };
 
+  const label = compose.localOnly ? (
+    <FormattedMessage
+      id='privacy.local'
+      defaultMessage='{privacy} (local-only)'
+      values={{
+        privacy: <VisibilityLabel visibility={visibility} />,
+      }}
+    />
+  ) : (
+    <VisibilityLabel visibility={visibility} />
+  );
+
+  const chip = glassEffect ? (
+    <Pressable onPress={() => {}}>
+      <GlassView
+        style={{
+          gap: 4,
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderRadius: 16,
+          paddingHorizontal: 12,
+          paddingVertical: 4,
+        }}
+        accessibilityLabel={intl.formatMessage(messages.changePrivacy)}
+      >
+        <Icon
+          source={iconHelper(getVisibilityIcon(visibility))}
+          size={20}
+          color={colors.onSurfaceVariant}
+        />
+        <Text>{label}</Text>
+        <Icon source={iconHelper(CaretDownIcon)} size={16} color={colors.onSurfaceVariant} />
+      </GlassView>
+    </Pressable>
+  ) : (
+    <Chip
+      mode='outlined'
+      icon={iconHelper(getVisibilityIcon(visibility))}
+      accessibilityLabel={intl.formatMessage(messages.changePrivacy)}
+    >
+      {label}
+      <View style={{ paddingLeft: 4 }}>
+        <Icon source={iconHelper(CaretDownIcon)} size={16} color={colors.onSurfaceVariant} />
+      </View>
+    </Chip>
+  );
+
   return (
     <View style={{ alignItems: 'flex-start' }}>
       <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <Chip
-            mode='outlined'
-            icon={iconHelper(getVisibilityIcon(visibility))}
-            accessibilityLabel={intl.formatMessage(messages.changePrivacy)}
-          >
-            {compose.localOnly ? (
-              <FormattedMessage
-                id='privacy.local'
-                defaultMessage='{privacy} (local-only)'
-                values={{
-                  privacy: <VisibilityLabel visibility={visibility} />,
-                }}
-              />
-            ) : (
-              <VisibilityLabel visibility={visibility} />
-            )}
-            <View style={{ paddingLeft: 4 }}>
-              <Icon source={iconHelper(CaretDownIcon)} size={16} color={colors.onSurfaceVariant} />
-            </View>
-          </Chip>
-        </DropdownMenu.Trigger>
+        <DropdownMenu.Trigger>{chip}</DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Label>{intl.formatMessage(messages.changePrivacy)}</DropdownMenu.Label>
           <DropdownMenu.Group>

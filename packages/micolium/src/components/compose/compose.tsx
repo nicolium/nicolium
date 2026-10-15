@@ -371,9 +371,11 @@ const ComposeBottomSheet = () => {
         style={{ flex: 1 }}
         contentContainerStyle={{ flexGrow: 1, gap: 8, paddingHorizontal: 12 }}
       >
-        <ComposeVisibilityDropdown composeId={COMPOSE_ID} />
         <View style={{ flexDirection: 'row' }}>
-          <Account id={currentAccountId} />
+          <Account
+            id={currentAccountId}
+            action={<ComposeVisibilityDropdown composeId={COMPOSE_ID} />}
+          />
         </View>
         <ReplyIndicator />
         <QuoteIndicator />
