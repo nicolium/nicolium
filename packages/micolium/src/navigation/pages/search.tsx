@@ -12,11 +12,11 @@ import {
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
 import { debounce } from '@tanstack/react-pacer/debouncer';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import { TabsProvider, Tabs, TabScreen } from 'react-native-paper-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TabBar, TabView } from 'react-native-tab-view';
 
 import { Account } from '@/components/accounts/account';
 import { Hashtag } from '@/components/hashtag';
@@ -47,25 +47,213 @@ const messages = defineMessages({
 
 const SEARCH_TYPES = ['accounts', 'statuses', 'hashtags', 'links'] as const;
 
+type SearchType = (typeof SEARCH_TYPES)[number];
+
 const LoadingIndicator = () => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     <ActivityIndicator size='large' />
   </View>
 );
 
+interface ISearchResults {
+  query: string;
+}
+
+const AccountsResults: React.FC<ISearchResults> = ({ query }) => {
+  const { bottom: bottomInset } = useSafeAreaInsets();
+  const autoloadMore = useSetting('timelines.autoloadMore');
+
+  const trimmedQuery = query.trim() || '';
+
+  const accountsQuery = useSearchAccounts(trimmedQuery);
+  const trendingAccountsQuery = useSuggestedAccounts(!trimmedQuery);
+
+  const activeAccountsQuery = trimmedQuery ? accountsQuery : trendingAccountsQuery;
+
+  return activeAccountsQuery.isPending && activeAccountsQuery.isEnabled ? (
+    <LoadingIndicator />
+  ) : (
+    <FlashList
+      contentContainerStyle={{ paddingBottom: bottomInset }}
+      scrollIndicatorInsets={{ bottom: bottomInset }}
+      data={
+        trimmedQuery
+          ? accountsQuery.data
+          : trendingAccountsQuery.data?.map(({ account_id: id }) => id)
+      }
+      renderItem={({ item }) => (
+        <Account
+          key={item}
+          id={item}
+          style={{ paddingVertical: 8, padding: 12 }}
+          withLink
+          withFollowButton
+        />
+      )}
+      ItemSeparatorComponent={Divider}
+      onEndReached={
+        autoloadMore && trimmedQuery && accountsQuery.hasNextPage && !accountsQuery.isFetching
+          ? accountsQuery.fetchNextPage
+          : undefined
+      }
+      onEndReachedThreshold={0.1}
+
+      ListEmptyComponent={
+        !accountsQuery.isPending ? (
+          <EmptyMessage
+            emptyMessageText={
+              <FormattedMessage
+                id='empty_column.search.accounts'
+                defaultMessage='There are no people results for "{term}"'
+                values={{ term: trimmedQuery }}
+              />
+            }
+          />
+        ) : null
+      }
+      ListFooterComponent={<LoadMore query={accountsQuery} />}
+      onRefresh={activeAccountsQuery.refetch}
+      refreshing={activeAccountsQuery.isRefetching}
+    />
+  );
+};
+
+const StatusesResults: React.FC<ISearchResults> = ({ query }) => {
+  const { bottom: bottomInset } = useSafeAreaInsets();
+  const autoloadMore = useSetting('timelines.autoloadMore');
+
+  const trimmedQuery = query.trim() || '';
+
+  const statusesQuery = useSearchStatuses(trimmedQuery);
+  const trendingStatusesQuery = useTrendingStatuses(!trimmedQuery);
+
+  const activeStatusesQuery = trimmedQuery ? statusesQuery : trendingStatusesQuery;
+
+  return activeStatusesQuery.isEnabled && activeStatusesQuery.isPending ? (
+    <LoadingIndicator />
+  ) : (
+    <FlashList
+      contentContainerStyle={{ paddingBottom: bottomInset }}
+      scrollIndicatorInsets={{ bottom: bottomInset }}
+      data={activeStatusesQuery.data}
+      renderItem={({ item }) => <Status id={item} withLink />}
+      ItemSeparatorComponent={Divider}
+      onEndReached={
+        autoloadMore && trimmedQuery && statusesQuery.hasNextPage && !statusesQuery.isFetching
+          ? statusesQuery.fetchNextPage
+          : undefined
+      }
+      onEndReachedThreshold={0.1}
+      ListEmptyComponent={
+        !statusesQuery.isPending ? (
+          <EmptyMessage
+            emptyMessageText={
+              <FormattedMessage
+                id='empty_column.search.statuses'
+                defaultMessage='There are no posts results for "{term}"'
+                values={{ term: trimmedQuery }}
+              />
+            }
+          />
+        ) : null
+      }
+      ListFooterComponent={<LoadMore query={statusesQuery} />}
+      onRefresh={activeStatusesQuery.refetch}
+      refreshing={activeStatusesQuery.isRefetching}
+    />
+  );
+};
+
+const HashtagsResults: React.FC<ISearchResults> = ({ query }) => {
+  const { bottom: bottomInset } = useSafeAreaInsets();
+  const autoloadMore = useSetting('timelines.autoloadMore');
+
+  const trimmedQuery = query.trim() || '';
+
+  const hashtagsQuery = useSearchHashtags(trimmedQuery);
+  const trendingHashtagsQuery = useTrendingTags(!trimmedQuery);
+
+  const activeHashtagsQuery = trimmedQuery ? hashtagsQuery : trendingHashtagsQuery;
+
+  return activeHashtagsQuery.isEnabled && activeHashtagsQuery.isPending ? (
+    <LoadingIndicator />
+  ) : (
+    <FlashList
+      contentContainerStyle={{ paddingBottom: bottomInset }}
+      scrollIndicatorInsets={{ bottom: bottomInset }}
+      data={activeHashtagsQuery.data}
+      renderItem={({ item }) => <Hashtag tag={item.name} />}
+      ItemSeparatorComponent={Divider}
+      onEndReached={
+        autoloadMore && trimmedQuery && hashtagsQuery.hasNextPage && !hashtagsQuery.isFetching
+          ? hashtagsQuery.fetchNextPage
+          : undefined
+      }
+      onEndReachedThreshold={0.1}
+      ListEmptyComponent={
+        !hashtagsQuery.isPending ? (
+          <EmptyMessage
+            emptyMessageText={
+              <FormattedMessage
+                id='empty_column.search.hashtags'
+                defaultMessage='There are no tags results for "{term}"'
+                values={{ term: trimmedQuery }}
+              />
+            }
+          />
+        ) : null
+      }
+      ListFooterComponent={<LoadMore query={hashtagsQuery} />}
+      onRefresh={activeHashtagsQuery.refetch}
+      refreshing={activeHashtagsQuery.isRefetching}
+    />
+  );
+};
+
+const LinksResults: React.FC = () => {
+  const { colors } = useTheme();
+
+  const trendingLinksQuery = useTrendingLinks();
+
+  return trendingLinksQuery.data ? (
+    <View style={{ margin: 8 }}>
+      <Carousel
+        data={trendingLinksQuery.data}
+        height={320}
+        renderItem={({ item, index, mask }) => (
+          <CarouselItem
+            mask={mask}
+            style={{
+              flexDirection: 'row',
+              gap: 8,
+              backgroundColor: colors.background,
+            }}
+          >
+            {index !== 0 && index === trendingLinksQuery.data.length - 1 && <View aria-hidden />}
+            <View style={{ flex: 1 }}>
+              <TrendsLink link={item} />
+            </View>
+            {index !== trendingLinksQuery.data.length - 1 && <View aria-hidden />}
+          </CarouselItem>
+        )}
+      />
+    </View>
+  ) : (
+    <LoadingIndicator />
+  );
+};
+
 const SearchScreen = ({
   route,
   navigation,
 }: NativeStackScreenProps<SearchStackParams, 'search'>) => {
   const intl = useIntl();
-  const { top: topInset, bottom: bottomInset } = useSafeAreaInsets();
+  const { top: topInset } = useSafeAreaInsets();
   const { colors } = useTheme();
   const features = useFeatures();
-  const autoloadMore = useSetting('timelines.autoloadMore');
 
   const { type: activeType = 'accounts', query: activeQuery = '' } = route.params || {};
 
-  const [forcedRerenderKey, setForcedRerenderKey] = React.useState(0);
   const [enteredQuery, setEnteredQuery] = React.useState(activeQuery || '');
 
   const hasQuery = activeQuery.trim().length > 0;
@@ -73,7 +261,6 @@ const SearchScreen = ({
   useEffect(() => {
     if (activeType === 'links' && hasQuery) {
       navigation.setParams({ type: 'accounts' });
-      setForcedRerenderKey((value) => value + 1);
     }
   }, [activeType, activeQuery]);
 
@@ -94,17 +281,35 @@ const SearchScreen = ({
     debouncedNavigate(query);
   };
 
-  const accountsQuery = useSearchAccounts((activeType === 'accounts' && activeQuery.trim()) || '');
-  const statusesQuery = useSearchStatuses((activeType === 'statuses' && activeQuery.trim()) || '');
-  const hashtagsQuery = useSearchHashtags((activeType === 'hashtags' && activeQuery.trim()) || '');
-  const trendingAccountsQuery = useSuggestedAccounts(activeType === 'accounts' && !hasQuery);
-  const trendingStatusesQuery = useTrendingStatuses(activeType === 'statuses' && !hasQuery);
-  const trendingHashtagsQuery = useTrendingTags(activeType === 'hashtags' && !hasQuery);
-  const trendingLinksQuery = useTrendingLinks(activeType === 'links' && !hasQuery);
+  const routes = useMemo(() => {
+    const routes: Array<{
+      key: SearchType;
+      title: string;
+    }> = [
+      { key: 'accounts', title: intl.formatMessage(messages.accounts) },
+      { key: 'statuses', title: intl.formatMessage(messages.statuses) },
+      { key: 'hashtags', title: intl.formatMessage(messages.hashtags) },
+    ];
 
-  const activeAccountsQuery = hasQuery ? accountsQuery : trendingAccountsQuery;
-  const activeStatusesQuery = hasQuery ? statusesQuery : trendingStatusesQuery;
-  const activeHashtagsQuery = hasQuery ? hashtagsQuery : trendingHashtagsQuery;
+    if (!hasQuery && features.trendingLinks) {
+      routes.push({ key: 'links', title: intl.formatMessage(messages.links) });
+    }
+
+    return routes;
+  }, [intl, hasQuery]);
+
+  const renderScene = (route: SearchType) => {
+    switch (route) {
+      case 'accounts':
+        return <AccountsResults query={activeQuery} />;
+      case 'statuses':
+        return <StatusesResults query={activeQuery} />;
+      case 'hashtags':
+        return <HashtagsResults query={activeQuery} />;
+      case 'links':
+        return <LinksResults />;
+    }
+  };
 
   return (
     <>
@@ -121,164 +326,14 @@ const SearchScreen = ({
           onChangeText={setQuery}
         />
       </View>
-      <TabsProvider
-        defaultIndex={SEARCH_TYPES.indexOf(route.params?.type || 'accounts')}
-        onChangeIndex={handleChangeIndex}
-        key={forcedRerenderKey}
-      >
-        <Tabs style={{ backgroundColor: colors.surfaceContainer }} uppercase={false}>
-          <TabScreen label={intl.formatMessage(messages.accounts)}>
-            {activeAccountsQuery.isPending && activeAccountsQuery.isEnabled ? (
-              <LoadingIndicator />
-            ) : (
-              <FlashList
-                contentContainerStyle={{ paddingBottom: bottomInset }}
-                scrollIndicatorInsets={{ bottom: bottomInset }}
-                data={
-                  hasQuery
-                    ? accountsQuery.data
-                    : trendingAccountsQuery.data?.map(({ account_id: id }) => id)
-                }
-                renderItem={({ item }) => (
-                  <Account
-                    key={item}
-                    id={item}
-                    style={{ paddingVertical: 8, padding: 12 }}
-                    withLink
-                    withFollowButton
-                  />
-                )}
-                ItemSeparatorComponent={Divider}
-                onEndReached={
-                  autoloadMore && hasQuery && accountsQuery.hasNextPage && !accountsQuery.isFetching
-                    ? accountsQuery.fetchNextPage
-                    : undefined
-                }
-                onEndReachedThreshold={0.1}
-
-                ListEmptyComponent={
-                  !accountsQuery.isPending ? (
-                    <EmptyMessage
-                      emptyMessageText={
-                        <FormattedMessage
-                          id='empty_column.search.accounts'
-                          defaultMessage='There are no people results for "{term}"'
-                          values={{ term: activeQuery }}
-                        />
-                      }
-                    />
-                  ) : null
-                }
-                ListFooterComponent={<LoadMore query={accountsQuery} />}
-                onRefresh={activeAccountsQuery.refetch}
-                refreshing={activeAccountsQuery.isRefetching}
-              />
-            )}
-          </TabScreen>
-          <TabScreen label={intl.formatMessage(messages.statuses)}>
-            {activeStatusesQuery.isEnabled && activeStatusesQuery.isPending ? (
-              <LoadingIndicator />
-            ) : (
-              <FlashList
-                contentContainerStyle={{ paddingBottom: bottomInset }}
-                scrollIndicatorInsets={{ bottom: bottomInset }}
-                data={activeStatusesQuery.data}
-                renderItem={({ item }) => <Status id={item} withLink />}
-                ItemSeparatorComponent={Divider}
-                onEndReached={
-                  autoloadMore && hasQuery && statusesQuery.hasNextPage && !statusesQuery.isFetching
-                    ? statusesQuery.fetchNextPage
-                    : undefined
-                }
-                onEndReachedThreshold={0.1}
-                ListEmptyComponent={
-                  !statusesQuery.isPending ? (
-                    <EmptyMessage
-                      emptyMessageText={
-                        <FormattedMessage
-                          id='empty_column.search.statuses'
-                          defaultMessage='There are no posts results for "{term}"'
-                          values={{ term: activeQuery }}
-                        />
-                      }
-                    />
-                  ) : null
-                }
-                ListFooterComponent={<LoadMore query={statusesQuery} />}
-                onRefresh={activeStatusesQuery.refetch}
-                refreshing={activeStatusesQuery.isRefetching}
-              />
-            )}
-          </TabScreen>
-          <TabScreen label={intl.formatMessage(messages.hashtags)}>
-            {activeHashtagsQuery.isEnabled && activeHashtagsQuery.isPending ? (
-              <LoadingIndicator />
-            ) : (
-              <FlashList
-                contentContainerStyle={{ paddingBottom: bottomInset }}
-                scrollIndicatorInsets={{ bottom: bottomInset }}
-                data={activeHashtagsQuery.data}
-                renderItem={({ item }) => <Hashtag tag={item.name} />}
-                ItemSeparatorComponent={Divider}
-                onEndReached={
-                  autoloadMore && hasQuery && hashtagsQuery.hasNextPage && !hashtagsQuery.isFetching
-                    ? hashtagsQuery.fetchNextPage
-                    : undefined
-                }
-                onEndReachedThreshold={0.1}
-                ListEmptyComponent={
-                  !statusesQuery.isPending ? (
-                    <EmptyMessage
-                      emptyMessageText={
-                        <FormattedMessage
-                          id='empty_column.search.statuses'
-                          defaultMessage='There are no posts results for "{term}"'
-                          values={{ term: activeQuery }}
-                        />
-                      }
-                    />
-                  ) : null
-                }
-                ListFooterComponent={<LoadMore query={hashtagsQuery} />}
-                onRefresh={activeHashtagsQuery.refetch}
-                refreshing={activeHashtagsQuery.isRefetching}
-              />
-            )}
-          </TabScreen>
-          {features.trendingLinks && !hasQuery && (
-            <TabScreen label={intl.formatMessage(messages.links)}>
-              {trendingLinksQuery.data ? (
-                <View style={{ margin: 8 }}>
-                  <Carousel
-                    data={trendingLinksQuery.data}
-                    height={320}
-                    renderItem={({ item, index, mask }) => (
-                      <CarouselItem
-                        mask={mask}
-                        style={{
-                          flexDirection: 'row',
-                          gap: 8,
-                          backgroundColor: colors.background,
-                        }}
-                      >
-                        {index !== 0 && index === trendingLinksQuery.data.length - 1 && (
-                          <View aria-hidden />
-                        )}
-                        <View style={{ flex: 1 }}>
-                          <TrendsLink link={item} />
-                        </View>
-                        {index !== trendingLinksQuery.data.length - 1 && <View aria-hidden />}
-                      </CarouselItem>
-                    )}
-                  />
-                </View>
-              ) : (
-                <LoadingIndicator />
-              )}
-            </TabScreen>
-          )}
-        </Tabs>
-      </TabsProvider>
+      <TabView
+        navigationState={{ index: SEARCH_TYPES.indexOf(route.params?.type || 'accounts'), routes }}
+        onIndexChange={handleChangeIndex}
+        renderScene={({ route }) => renderScene(route.key)}
+        renderTabBar={(props) => (
+          <TabBar {...props} style={{ backgroundColor: colors.surfaceContainer }} />
+        )}
+      />
     </>
   );
 };
