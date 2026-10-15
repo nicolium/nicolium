@@ -213,10 +213,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
               </GlassView>
             </Pressable>
           ) : (
-            <Chip
-              mode='outlined'
-              accessibilityLabel={intl.formatMessage(messages.changeFilters)}
-            >
+            <Chip mode='outlined' accessibilityLabel={intl.formatMessage(messages.changeFilters)}>
               {filtersLabel}
               <View style={{ paddingLeft: 4 }}>
                 <Icon
@@ -350,7 +347,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                 </DataTable>
               )}
             </View>
-            <Divider />
+            {account.fields.length === 0 && <Divider />}
             <View
               style={{
                 flexDirection: 'row',
