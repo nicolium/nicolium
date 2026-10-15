@@ -115,4 +115,4 @@ const Timeline: React.FC<ITimeline> = ({
   );
 };
 
-export { Timeline };
+export { Timeline, type ITimeline };

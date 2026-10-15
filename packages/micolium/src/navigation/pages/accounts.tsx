@@ -9,7 +9,7 @@ import { Profile } from '../components/profile';
 import type { AccountStackParams } from '../router';
 
 const AccountScreen = ({ route }: NativeStackScreenProps<AccountStackParams, 'view'>) => {
-  return <Profile id={route.params.id} />;
+  return <Profile id={route.params?.id} />;
 };
 
 const AccountsStack = createNativeStackNavigator<AccountStackParams>();

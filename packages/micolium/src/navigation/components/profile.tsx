@@ -6,19 +6,27 @@ import {
   Chip,
   DataTable,
   Divider,
+  Icon,
   IconButton,
   Text,
   useTheme,
 } from '@mkljczk/react-native-paper';
 import { Link, useNavigation } from '@react-navigation/native';
+import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import { Image } from 'expo-image';
-import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
+import { CaretDownIcon, DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { type NativeScrollEvent, type NativeSyntheticEvent, Platform, View } from 'react-native';
-import { Tabs, TabScreen, TabsProvider } from 'react-native-paper-tabs';
+import {
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  Platform,
+  Pressable,
+  View,
+} from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { FollowButton } from '@/components/accounts/follow-button';
 import { ComposeButton } from '@/components/compose-button';
@@ -30,72 +38,81 @@ import { useClient } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 
-import { Timeline } from '../components/timeline';
+import { type ITimeline, Timeline } from '../components/timeline';
 
 const messages = defineMessages({
-  postsTab: { id: 'account.posts', defaultMessage: 'Posts' },
-  postsWithRepliesTab: { id: 'account.posts_with_replies.short', defaultMessage: 'With replies' },
-  mediaTab: { id: 'account.media', defaultMessage: 'Media' },
+  repliesToggle: { id: 'account.filters.replies_toggle', defaultMessage: 'Show replies' },
+  reblogsToggle: { id: 'account.filters.reblogs_toggle', defaultMessage: 'Show boosts' },
+  pinnedToggle: { id: 'account.filters.pinned_toggle', defaultMessage: 'Show pinned' },
+  changeFilters: {
+    id: 'account.filters.change_filters',
+    defaultMessage: 'Change timeline filters',
+  },
+  filtersAll: { id: 'account.filters.label.all', defaultMessage: 'All activity' },
+  filtersWithReblogs: {
+    id: 'account.filters.label.with_reblogs',
+    defaultMessage: 'Posts and boosts',
+  },
+  filtersWithReplies: {
+    id: 'account.filters.label.with_replies',
+    defaultMessage: 'Posts and replies',
+  },
+  filtersNone: { id: 'account.filters.label.none', defaultMessage: 'Posts' },
+  filtersAllExceptPinned: {
+    id: 'account.filters.label.all',
+    defaultMessage: 'All activity, without pinned',
+  },
+  filtersWithReblogsExceptPinned: {
+    id: 'account.filters.label.with_reblogs',
+    defaultMessage: 'Posts and boosts, without pinned',
+  },
+  filtersWithRepliesExceptPinned: {
+    id: 'account.filters.label.with_replies',
+    defaultMessage: 'Posts and replies, without pinned',
+  },
+  filtersNoneExceptPinned: {
+    id: 'account.filters.label.none',
+    defaultMessage: 'Posts, without pinned',
+  },
 });
 
-interface IProfileTimeline {
+interface IProfileTimeline extends Pick<ITimeline, 'header'> {
   id: string;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  withReplies?: boolean;
+  withReblogs?: boolean;
+  withPinned?: boolean;
 }
 
-const PostsTimeline: React.FC<IProfileTimeline> = ({ id, ...props }) => {
+const PostsTimeline: React.FC<IProfileTimeline> = ({
+  id,
+  withReplies,
+  withReblogs,
+  withPinned,
+  ...props
+}) => {
   const client = useClient();
 
   const pinnedQuery = useTimeline(`account:${id}:pinned`, (paginationParams) =>
     client.accounts.getAccountStatuses(id, { ...paginationParams, pinned: true }),
   );
 
-  const timelineQuery = useTimeline(`account:${id}:exclude_replies`, (paginationParams) =>
-    client.accounts.getAccountStatuses(id, { ...paginationParams, exclude_replies: true }),
+  const timelineQuery = useTimeline(
+    `account:${id}${withReblogs ? '' : ':exclude_reblogs'}${withReplies ? '' : ':exclude_replies'}`,
+    (paginationParams) =>
+      client.accounts.getAccountStatuses(id, {
+        ...paginationParams,
+        exclude_reblogs: !withReblogs,
+        exclude_replies: !withReplies,
+      }),
   );
 
   return (
     <Timeline
       query={timelineQuery}
-      pinnedQuery={pinnedQuery}
+      pinnedQuery={withPinned ? pinnedQuery : undefined}
       emptyMessageHeading={
         <FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />
-      }
-      {...props}
-    />
-  );
-};
-
-const PostsWithRepliesTimeline: React.FC<IProfileTimeline> = ({ id, ...props }) => {
-  const client = useClient();
-
-  const timelineQuery = useTimeline(`account:${id}`, (paginationParams) =>
-    client.accounts.getAccountStatuses(id, paginationParams),
-  );
-
-  return (
-    <Timeline
-      query={timelineQuery}
-      emptyMessageHeading={
-        <FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />
-      }
-      {...props}
-    />
-  );
-};
-
-const MediaTimeline: React.FC<IProfileTimeline> = ({ id, ...props }) => {
-  const client = useClient();
-
-  const timelineQuery = useTimeline(`account:${id}:only_media`, (paginationParams) =>
-    client.accounts.getAccountStatuses(id, { ...paginationParams, only_media: true }),
-  );
-
-  return (
-    <Timeline
-      query={timelineQuery}
-      emptyMessageHeading={
-        <FormattedMessage id='account_gallery.none' defaultMessage='No media to show.' />
       }
       {...props}
     />
@@ -115,8 +132,11 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const navigation = useNavigation();
   const profileInfoNode = React.useRef<View>(null);
   const previousScrollOffset = React.useRef<number>(0);
+  const glassEffect = isGlassEffectAPIAvailable();
 
-  const [currentTab, setCurrentTab] = React.useState(0);
+  const [showReplies, setShowReplies] = React.useState(false);
+  const [showReblogs, setShowReblogs] = React.useState(true);
+  const [showPinned, setShowPinned] = React.useState(true);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [profileInfoHeight, setProfileInfoHeight] = React.useState(0);
   const [showComposeButton, setShowComposeButton] = React.useState(true);
@@ -150,7 +170,92 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     previousScrollOffset.current = scrollOffset;
   };
 
-  return (
+  const filtersLabel = (() => {
+    if (showReblogs && showReplies) {
+      return intl.formatMessage(showPinned ? messages.filtersAll : messages.filtersAllExceptPinned);
+    } else if (showReblogs) {
+      return intl.formatMessage(
+        showPinned ? messages.filtersWithReblogs : messages.filtersWithReblogsExceptPinned,
+      );
+    } else if (showReplies) {
+      return intl.formatMessage(
+        showPinned ? messages.filtersWithReplies : messages.filtersWithRepliesExceptPinned,
+      );
+    } else {
+      return intl.formatMessage(
+        showPinned ? messages.filtersNone : messages.filtersNoneExceptPinned,
+      );
+    }
+  })();
+
+  const timelineFiltersSelector = (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <View style={{ flexDirection: 'row', marginHorizontal: 16 }}>
+          {glassEffect ? (
+            <Pressable onPress={() => {}}>
+              <GlassView
+                style={{
+                  gap: 4,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  borderRadius: 16,
+                  paddingHorizontal: 12,
+                  paddingVertical: 8,
+                }}
+              >
+                <Text>{filtersLabel}</Text>
+                <Icon
+                  source={iconHelper(CaretDownIcon)}
+                  size={16}
+                  color={colors.onSurfaceVariant}
+                />
+              </GlassView>
+            </Pressable>
+          ) : (
+            <Chip
+              mode='outlined'
+              accessibilityLabel={intl.formatMessage(messages.changeFilters)}
+            >
+              {filtersLabel}
+              <View style={{ paddingLeft: 4 }}>
+                <Icon
+                  source={iconHelper(CaretDownIcon)}
+                  size={16}
+                  color={colors.onSurfaceVariant}
+                />
+              </View>
+            </Chip>
+          )}
+        </View>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.CheckboxItem
+          key='show-replies'
+          value={showReplies}
+          onSelect={() => setShowReplies((value) => !value)}
+        >
+          {intl.formatMessage(messages.repliesToggle)}
+        </DropdownMenu.CheckboxItem>
+        <DropdownMenu.CheckboxItem
+          key='show-reblogs'
+          value={showReblogs}
+          onSelect={() => setShowReblogs((value) => !value)}
+        >
+          {intl.formatMessage(messages.reblogsToggle)}
+        </DropdownMenu.CheckboxItem>
+        <DropdownMenu.CheckboxItem
+          key='show-pinned'
+          value={showPinned}
+          onSelect={() => setShowPinned((value) => !value)}
+        >
+          {intl.formatMessage(messages.pinnedToggle)}
+        </DropdownMenu.CheckboxItem>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+
+  const header = (
     <>
       <Animated.View style={profileInfoStyle} ref={profileInfoNode}>
         <Image
@@ -246,7 +351,15 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
               )}
             </View>
             <Divider />
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: 16, marginVertical: 8, gap: 8 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                marginHorizontal: 16,
+                marginVertical: 8,
+                gap: 8,
+              }}
+            >
               <Text style={{ display: 'flex', alignItems: 'center' }}>
                 <FormattedMessage
                   id='account.statuses_with_count'
@@ -331,32 +444,20 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           </View>
         </Appbar.Header>
       )}
-      <TabsProvider
-        defaultIndex={0}
-        onChangeIndex={(index) => {
-          setCurrentTab(index);
-          setIsScrolled(false);
-        }}
-      >
-        <Tabs
-          style={{ backgroundColor: isScrolled ? colors.surfaceContainer : colors.background }}
-          uppercase={false}
-        >
-          <TabScreen label={intl.formatMessage(messages.postsTab)}>
-            {currentTab === 0 ? <PostsTimeline id={account.id} onScroll={handleScroll} /> : <></>}
-          </TabScreen>
-          <TabScreen label={intl.formatMessage(messages.postsWithRepliesTab)}>
-            {currentTab === 1 ? (
-              <PostsWithRepliesTimeline id={account.id} onScroll={handleScroll} />
-            ) : (
-              <></>
-            )}
-          </TabScreen>
-          <TabScreen label={intl.formatMessage(messages.mediaTab)}>
-            {currentTab === 2 ? <MediaTimeline id={account.id} onScroll={handleScroll} /> : <></>}
-          </TabScreen>
-        </Tabs>
-      </TabsProvider>
+      {timelineFiltersSelector}
+    </>
+  );
+
+  return (
+    <>
+      <PostsTimeline
+        id={account.id}
+        onScroll={handleScroll}
+        header={header}
+        withReplies={showReplies}
+        withReblogs={showReblogs}
+        withPinned={showPinned}
+      />
       <ComposeButton visible={showComposeButton} />
     </>
   );
