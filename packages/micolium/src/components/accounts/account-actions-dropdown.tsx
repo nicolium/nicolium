@@ -49,8 +49,16 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         <DropdownMenu.Group>
-          {(ownAccount || !account.hide_favorites) && (
-            <DropdownMenu.Item key='favourites'>
+          {(ownAccount || (features.publicFavourites && !account.hide_favorites)) && (
+            <DropdownMenu.Item
+              key='favourites'
+              onSelect={() =>
+                navigation.navigate('accounts', {
+                  screen: 'favourites',
+                  params: { id: account.id },
+                })
+              }
+            >
               <DropdownMenu.ItemIcon ios={{ name: 'star' }} androidIconName='ph_star' />
               <DropdownMenu.ItemTitle>
                 {intl.formatMessage(messages.favourites)}

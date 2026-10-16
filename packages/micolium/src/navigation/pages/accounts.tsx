@@ -1,16 +1,23 @@
-import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
+import { Appbar, Divider, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackHeaderProps,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
+import { FlashList } from '@shopify/flash-list';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 
 import { AccountsList } from '@/components/accounts/accounts-list';
+import { Status } from '@/components/statuses/status';
+import { EmptyMessage } from '@/components/ui/empty-message';
+import { LoadMore } from '@/components/ui/load-more';
 import { useFollowers } from '@/queries/account-lists/use-follows';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
+import { useFavourites } from '@/queries/status-lists/use-favourites';
+import { useSetting } from '@/stores/settings';
 
 import { Profile } from '../components/profile';
 
@@ -20,10 +27,7 @@ const messages = defineMessages({
   followingHeader: { id: 'column.following', defaultMessage: 'Following' },
   followersHeader: { id: 'column.followers', defaultMessage: 'Followers' },
   subscribersHeader: { id: 'column.subscribers', defaultMessage: 'Subscribers' },
-  countSubtitle: {
-    id: 'column.count',
-    defaultMessage: '{count, plural, one {# person} other {# people}}',
-  },
+  favouritesHeader: { id: 'column.favourited_statuses', defaultMessage: 'Liked posts' },
 });
 
 const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
@@ -38,15 +42,19 @@ const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => 
   switch (route.name) {
     case 'followers':
       title = intl.formatMessage(messages.followersHeader);
-      subtitle = intl.formatMessage(messages.countSubtitle, { count: account?.followers_count });
+      subtitle = account ? `@${account.acct}` : undefined;
       break;
     case 'following':
       title = intl.formatMessage(messages.followingHeader);
-      subtitle = intl.formatMessage(messages.countSubtitle, { count: account?.following_count });
+      subtitle = account ? `@${account.acct}` : undefined;
       break;
     case 'subscribers':
       title = intl.formatMessage(messages.subscribersHeader);
-      subtitle = intl.formatMessage(messages.countSubtitle, { count: account?.subscribers_count });
+      subtitle = account ? `@${account.acct}` : undefined;
+      break;
+    case 'favourites':
+      title = intl.formatMessage(messages.favouritesHeader);
+      subtitle = account ? `@${account.acct}` : undefined;
       break;
     default:
       title = '';
@@ -143,6 +151,49 @@ const AccountSubscribersScreen = ({
   );
 };
 
+const AccountFavouritesScreen = ({
+  route: {
+    params: { id },
+  },
+}: NativeStackScreenProps<AccountStackParams, 'favourites'>) => {
+  const autoloadMore = useSetting('timelines.autoloadMore');
+  const { data: currentAccountId } = useCredentialAccountId();
+
+  const query = useFavourites(currentAccountId === id ? undefined : id);
+
+  return (
+    <FlashList
+      data={query.data}
+      renderItem={({ item }) => <Status id={item} withLink />}
+      ItemSeparatorComponent={Divider}
+      onEndReached={
+        autoloadMore && query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined
+      }
+      onEndReachedThreshold={0.1}
+      ListEmptyComponent={
+        !query.isPending ? (
+          <EmptyMessage
+            emptyMessageText={
+              currentAccountId === id ? (
+                <FormattedMessage
+                  id='empty_column.favourited_statuses'
+                  defaultMessage='You don’t have any liked posts yet. When you like one, it will show up here.'
+                />
+              ) : (
+                <FormattedMessage
+                  id='empty_column.account_favourited_statuses'
+                  defaultMessage='This user doesn’t have any liked posts yet.'
+                />
+              )
+            }
+          />
+        ) : null
+      }
+      ListFooterComponent={<LoadMore query={query} />}
+    />
+  );
+};
+
 const AccountsStack = createNativeStackNavigator<AccountStackParams>();
 
 const AccountsStackScreen = () => {
@@ -156,6 +207,7 @@ const AccountsStackScreen = () => {
       <AccountsStack.Screen name='followers' component={AccountFollowersScreen} />
       <AccountsStack.Screen name='following' component={AccountFollowingScreen} />
       <AccountsStack.Screen name='subscribers' component={AccountSubscribersScreen} />
+      <AccountsStack.Screen name='favourites' component={AccountFavouritesScreen} />
     </AccountsStack.Navigator>
   );
 };

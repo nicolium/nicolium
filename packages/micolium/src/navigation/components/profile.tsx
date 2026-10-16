@@ -28,6 +28,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
+import { AccountActionsDropdown } from '@/components/accounts/account-actions-dropdown';
 import { FollowButton } from '@/components/accounts/follow-button';
 import { ComposeButton } from '@/components/compose-button';
 import { CollapsibleContent } from '@/components/ui/collapsible-content';
@@ -39,7 +40,6 @@ import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 
 import { type ITimeline, Timeline } from '../components/timeline';
-import { AccountActionsDropdown } from '@/components/accounts/account-actions-dropdown';
 
 const messages = defineMessages({
   repliesToggle: { id: 'account.filters.replies_toggle', defaultMessage: 'Show replies' },

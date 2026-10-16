@@ -57,6 +57,7 @@ type AccountStackParams = {
   followers: { id: string };
   following: { id: string };
   subscribers: { id: string };
+  favourites: { id: string };
 };
 type BookmarksStackParams = {
   all: undefined;
