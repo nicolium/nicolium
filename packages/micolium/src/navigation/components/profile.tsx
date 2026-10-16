@@ -418,12 +418,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   return (
     <>
       <Animated.View style={headerStyle}>
-        <Appbar.Header
-          style={{
-            // marginTop: -64 - topInset,
-            backgroundColor: colors.surfaceContainer,
-          }}
-        >
+        <Appbar.Header style={{ backgroundColor: colors.surfaceContainer }}>
           {!ownAccount && <Appbar.BackAction onPress={navigation.goBack} />}
           <View style={{ marginLeft: ownAccount ? 16 : 0 }}>
             <Text variant='titleMedium' numberOfLines={1}>

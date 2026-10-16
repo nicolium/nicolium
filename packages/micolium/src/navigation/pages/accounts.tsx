@@ -1,16 +1,83 @@
+import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
+  type NativeStackHeaderProps,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { View } from 'react-native';
 
 import { AccountsList } from '@/components/accounts/accounts-list';
 import { useFollowers } from '@/queries/account-lists/use-follows';
+import { useAccount } from '@/queries/accounts/use-account';
 
 import { Profile } from '../components/profile';
 
 import type { AccountStackParams } from '../router';
+
+const messages = defineMessages({
+  followingHeader: { id: 'column.following', defaultMessage: 'Following' },
+  followersHeader: { id: 'column.followers', defaultMessage: 'Followers' },
+  subscribersHeader: { id: 'column.subscribers', defaultMessage: 'Subscribers' },
+  countSubtitle: {
+    id: 'column.count',
+    defaultMessage: '{count, plural, one {# person} other {# people}}',
+  },
+});
+
+const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
+  const intl = useIntl();
+  const { colors } = useTheme();
+  const { data: account } = useAccount(
+    (route.params as AccountStackParams['view'] | undefined)?.id,
+  );
+
+  let title: string | Array<React.ReactNode>;
+  let subtitle: string | undefined;
+  switch (route.name) {
+    case 'followers':
+      title = intl.formatMessage(messages.followersHeader);
+      subtitle = intl.formatMessage(messages.countSubtitle, { count: account?.followers_count });
+      break;
+    case 'following':
+      title = intl.formatMessage(messages.followingHeader);
+      subtitle = intl.formatMessage(messages.countSubtitle, { count: account?.following_count });
+      break;
+    case 'subscribers':
+      title = intl.formatMessage(messages.subscribersHeader);
+      subtitle = intl.formatMessage(messages.countSubtitle, { count: account?.subscribers_count });
+      break;
+    default:
+      title = '';
+  }
+
+  return (
+    <Appbar.Header style={{ backgroundColor: colors.surfaceContainer }}>
+      {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+      {subtitle ? (
+        <View>
+          <Text variant='titleMedium' numberOfLines={1}>
+            {title}
+          </Text>
+          <Text style={{ display: 'flex', alignItems: 'center', gap: 4 }}>{subtitle}</Text>
+        </View>
+      ) : (
+        <Appbar.Content
+          title={
+            typeof title === 'string' ? (
+              title
+            ) : (
+              <Text variant='titleLarge' numberOfLines={1}>
+                {title}
+              </Text>
+            )
+          }
+        />
+      )}
+    </Appbar.Header>
+  );
+};
 
 const AccountScreen = ({ route }: NativeStackScreenProps<AccountStackParams, 'view'>) => {
   return <Profile id={route.params?.id} />;
@@ -80,7 +147,7 @@ const AccountsStack = createNativeStackNavigator<AccountStackParams>();
 
 const AccountsStackScreen = () => {
   return (
-    <AccountsStack.Navigator>
+    <AccountsStack.Navigator screenOptions={{ header: AccountsHeader }}>
       <AccountsStack.Screen
         name='view'
         component={AccountScreen}
