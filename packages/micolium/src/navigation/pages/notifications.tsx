@@ -322,8 +322,8 @@ const NotificationsScreen = ({
     key: 'all' | 'mentions';
     title: string;
   }> = [
-    { key: 'all', title: intl.formatMessage(messages.tabAll) },
-    { key: 'mentions', title: intl.formatMessage(messages.tabFiltered) },
+    { key: 'all', title: intl.formatMessage(filters.length ? messages.tabFiltered : messages.tabAll) },
+    { key: 'mentions', title: intl.formatMessage(messages.tabMentions) },
   ];
 
   return (
