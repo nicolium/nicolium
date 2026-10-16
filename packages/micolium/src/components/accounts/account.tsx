@@ -74,4 +74,4 @@ const Account: React.FC<IAccount> = ({
   );
 };
 
-export { Account };
+export { Account, type IAccount };

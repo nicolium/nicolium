@@ -16,6 +16,7 @@ import type { Account } from 'pl-api';
 
 const messages = defineMessages({
   favourites: { id: 'column.favourites', defaultMessage: 'Likes' },
+  followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
@@ -62,6 +63,20 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
               <DropdownMenu.ItemIcon ios={{ name: 'star' }} androidIconName='ph_star' />
               <DropdownMenu.ItemTitle>
                 {intl.formatMessage(messages.favourites)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          )}
+          {ownAccount && (
+            <DropdownMenu.Item
+              key='follow-requests'
+              onSelect={() => navigation.navigate('follow_requests')}
+            >
+              <DropdownMenu.ItemIcon
+                ios={{ name: 'person.badge.plus' }}
+                androidIconName='ph_user_plus'
+              />
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.followRequests)}
               </DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
           )}
