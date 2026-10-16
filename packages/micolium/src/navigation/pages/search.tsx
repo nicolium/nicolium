@@ -43,6 +43,7 @@ const messages = defineMessages({
   statuses: { id: 'search_results.statuses', defaultMessage: 'Posts' },
   hashtags: { id: 'search_results.hashtags', defaultMessage: 'Hashtags' },
   links: { id: 'search_results.links', defaultMessage: 'News' },
+  searchPlaceholder: { id: 'search.placeholder', defaultMessage: 'Search the Fediverse' },
 });
 
 const SEARCH_TYPES = ['accounts', 'statuses', 'hashtags', 'links'] as const;
@@ -292,7 +293,10 @@ const SearchScreen = ({
     ];
 
     if (!hasQuery && features.trendingLinks) {
-      routes.push({ key: 'links', title: intl.formatMessage(messages.links) });
+      routes.push({
+        key: 'links',
+        title: intl.formatMessage(messages.links),
+      });
     }
 
     return routes;
@@ -311,6 +315,11 @@ const SearchScreen = ({
     }
   };
 
+  let index = SEARCH_TYPES.indexOf(route.params?.type || 'accounts');
+  if (index === 3 && routes.length === 3) index = 0;
+
+  const tabBarKey = features.trendingLinks && !hasQuery ? 'with-links' : 'without-links';
+
   return (
     <>
       <View
@@ -321,17 +330,17 @@ const SearchScreen = ({
         }}
       >
         <Searchbar
-          placeholder='Search the Fediverse'
+          placeholder={intl.formatMessage(messages.searchPlaceholder)}
           value={enteredQuery}
           onChangeText={setQuery}
         />
       </View>
       <TabView
-        navigationState={{ index: SEARCH_TYPES.indexOf(route.params?.type || 'accounts'), routes }}
+        navigationState={{ index, routes }}
         onIndexChange={handleChangeIndex}
         renderScene={({ route }) => renderScene(route.key)}
         renderTabBar={(props) => (
-          <TabBar {...props} style={{ backgroundColor: colors.surfaceContainer }} />
+          <TabBar {...props} key={tabBarKey} style={{ backgroundColor: colors.surfaceContainer }} />
         )}
       />
     </>
