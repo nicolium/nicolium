@@ -410,37 +410,13 @@ const StatusStack = createNativeStackNavigator<StatusStackParams>();
 
 const StatusStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'status'>) => {
   return (
-    <StatusStack.Navigator>
-      <StatusStack.Screen
-        name='view'
-        component={StatusViewScreen}
-        options={{ header: StatusHeader }}
-      />
-      <StatusStack.Screen
-        name='reblogs'
-        component={StatusReblogsScreen}
-        options={{ header: StatusHeader }}
-      />
-      <StatusStack.Screen
-        name='favourites'
-        component={StatusFavouritesScreen}
-        options={{ header: StatusHeader }}
-      />
-      <StatusStack.Screen
-        name='dislikes'
-        component={StatusDislikesScreen}
-        options={{ header: StatusHeader }}
-      />
-      <StatusStack.Screen
-        name='mentions'
-        component={StatusMentionsScreen}
-        options={{ header: StatusHeader }}
-      />
-      <StatusStack.Screen
-        name='quotes'
-        component={StatusQuotesScreen}
-        options={{ header: StatusHeader }}
-      />
+    <StatusStack.Navigator screenOptions={{ header: StatusHeader }}>
+      <StatusStack.Screen name='view' component={StatusViewScreen} />
+      <StatusStack.Screen name='reblogs' component={StatusReblogsScreen} />
+      <StatusStack.Screen name='favourites' component={StatusFavouritesScreen} />
+      <StatusStack.Screen name='dislikes' component={StatusDislikesScreen} />
+      <StatusStack.Screen name='mentions' component={StatusMentionsScreen} />
+      <StatusStack.Screen name='quotes' component={StatusQuotesScreen} />
     </StatusStack.Navigator>
   );
 };
