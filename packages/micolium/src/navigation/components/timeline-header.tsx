@@ -1,4 +1,4 @@
-import { IconButton } from '@mkljczk/react-native-paper';
+import { Appbar, useTheme } from '@mkljczk/react-native-paper';
 import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -16,36 +16,47 @@ const messages = defineMessages({
   announcements: { id: 'announcements.title', defaultMessage: 'Announcements' },
 });
 
-interface ITimelineHeaderTitle {
-  active?: ITimelinePicker['active'];
-}
-
-const TimelineHeaderTitle: React.FC<ITimelineHeaderTitle> = ({ active = 'home' }) => {
-  return <TimelinePicker active={active} />;
-};
-
-const TimelineHeaderButton = ({ navigation }: NativeStackHeaderProps) => {
+const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
+  const { colors } = useTheme();
   const intl = useIntl();
 
+  const activeKey =
+    route.params && 'id' in route.params ? `${route.name}:${route.params.id}` : route.name;
+
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <IconButton
-          icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
-        />
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Item key='settings' onSelect={() => navigation.navigate('settings')}>
-          <DropdownMenu.ItemTitle>{intl.formatMessage(messages.settings)}</DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-        <DropdownMenu.Item key='announcements' onSelect={() => {}}>
-          <DropdownMenu.ItemTitle>
-            {intl.formatMessage(messages.announcements)}
-          </DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+    <Appbar.Header
+      style={{
+        backgroundColor: colors.surfaceContainer,
+      }}
+    >
+      <Appbar.Content
+        title={
+          <TimelinePicker
+            navigation={navigation as ITimelinePicker['navigation']}
+            active={activeKey as ITimelinePicker['active']}
+          />
+        }
+      />
+
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Appbar.Action
+            icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
+          />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Item key='settings' onSelect={() => navigation.navigate('settings')}>
+            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.settings)}</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item key='announcements' onSelect={() => {}}>
+            <DropdownMenu.ItemTitle>
+              {intl.formatMessage(messages.announcements)}
+            </DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </Appbar.Header>
   );
 };
 
-export { TimelineHeaderTitle, TimelineHeaderButton };
+export { TimelineHeader };
