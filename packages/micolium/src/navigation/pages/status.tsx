@@ -19,6 +19,7 @@ import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Account } from '@/components/accounts/account';
+import { AccountsList } from '@/components/accounts/accounts-list';
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { Status } from '@/components/statuses/status';
 import { Emojify } from '@/components/ui/emojify';
@@ -41,8 +42,6 @@ import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import type { RootStackParams, StatusStackParams } from '../router';
-import type { PaginatedResponseArray } from '@/queries/utils/make-paginated-response-query';
-import type { UseInfiniteQueryResult } from '@tanstack/react-query';
 
 const messages = defineMessages({
   statusHeader: { id: 'column.status', defaultMessage: 'Post' },
@@ -234,33 +233,6 @@ const ReplyBox: React.FC<IReplyBox> = ({ status }) => {
   );
 };
 
-interface IInteractionList {
-  query: UseInfiniteQueryResult<PaginatedResponseArray<string>, Error>;
-  emptyMessageText?: React.JSX.Element;
-}
-
-const InteractionList: React.FC<IInteractionList> = ({ query, emptyMessageText }) => {
-  const autoloadMore = useSetting('timelines.autoloadMore');
-
-  return (
-    <FlashList
-      data={query.data}
-      renderItem={({ item }) => (
-        <Account id={item} style={{ paddingVertical: 8, padding: 12 }} withLink withFollowButton />
-      )}
-      ItemSeparatorComponent={Divider}
-      onEndReached={
-        autoloadMore && query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined
-      }
-      onEndReachedThreshold={0.1}
-      ListEmptyComponent={
-        !query.isPending ? <EmptyMessage emptyMessageText={emptyMessageText} /> : null
-      }
-      ListFooterComponent={<LoadMore query={query} />}
-    />
-  );
-};
-
 const StatusViewScreen = ({
   route: {
     params: { id },
@@ -324,7 +296,7 @@ const StatusReblogsScreen = ({
   const query = useStatusReblogs(id);
 
   return (
-    <InteractionList
+    <AccountsList
       query={query}
       emptyMessageText={
         <FormattedMessage
@@ -344,7 +316,7 @@ const StatusFavouritesScreen = ({
   const query = useStatusFavourites(id);
 
   return (
-    <InteractionList
+    <AccountsList
       query={query}
       emptyMessageText={
         <FormattedMessage
@@ -364,7 +336,7 @@ const StatusDislikesScreen = ({
   const query = useStatusDislikes(id);
 
   return (
-    <InteractionList
+    <AccountsList
       query={query}
       emptyMessageText={
         <FormattedMessage

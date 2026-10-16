@@ -11,6 +11,7 @@ import { useCredentialAccountId } from '@/queries/accounts/use-account-credentia
 import { Profile } from '../components/profile';
 
 import type { ProfileStackParams } from '../router';
+import { useFollowers } from '@/queries/account-lists/use-follows';
 
 const ProfileScreen = (_: NativeStackScreenProps<ProfileStackParams, 'view'>) => {
   const { data: currentAccountId } = useCredentialAccountId();
