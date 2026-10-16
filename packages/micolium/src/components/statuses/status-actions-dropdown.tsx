@@ -336,7 +336,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
           )}
           {!ownStatus && features.biteStatuses && (
             <DropdownMenu.Item key='bite-status' onSelect={handleBiteStatus}>
-              <DropdownMenu.ItemIcon androidIconName='ph_tooth' />
+              <DropdownMenu.ItemIcon ios={{ name: 'cat' }} androidIconName='ph_tooth' />
               <DropdownMenu.ItemTitle>{intl.formatMessage(messages.bite)}</DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
           )}
