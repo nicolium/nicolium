@@ -1,23 +1,19 @@
-import { Appbar, Divider, Text, useTheme } from '@mkljczk/react-native-paper';
+import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackHeaderProps,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import { FlashList } from '@shopify/flash-list';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 
 import { AccountsList } from '@/components/accounts/accounts-list';
-import { Status } from '@/components/statuses/status';
-import { EmptyMessage } from '@/components/ui/empty-message';
-import { LoadMore } from '@/components/ui/load-more';
+import { StatusesList } from '@/components/statuses/statuses-list';
 import { useFollowers } from '@/queries/account-lists/use-follows';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useFavourites } from '@/queries/status-lists/use-favourites';
-import { useSetting } from '@/stores/settings';
 
 import { Profile } from '../components/profile';
 
@@ -156,40 +152,26 @@ const AccountFavouritesScreen = ({
     params: { id },
   },
 }: NativeStackScreenProps<AccountStackParams, 'favourites'>) => {
-  const autoloadMore = useSetting('timelines.autoloadMore');
   const { data: currentAccountId } = useCredentialAccountId();
 
   const query = useFavourites(currentAccountId === id ? undefined : id);
 
   return (
-    <FlashList
-      data={query.data}
-      renderItem={({ item }) => <Status id={item} withLink />}
-      ItemSeparatorComponent={Divider}
-      onEndReached={
-        autoloadMore && query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined
-      }
-      onEndReachedThreshold={0.1}
-      ListEmptyComponent={
-        !query.isPending ? (
-          <EmptyMessage
-            emptyMessageText={
-              currentAccountId === id ? (
-                <FormattedMessage
-                  id='empty_column.favourited_statuses'
-                  defaultMessage='You don’t have any liked posts yet. When you like one, it will show up here.'
-                />
-              ) : (
-                <FormattedMessage
-                  id='empty_column.account_favourited_statuses'
-                  defaultMessage='This user doesn’t have any liked posts yet.'
-                />
-              )
-            }
+    <StatusesList
+      query={query}
+      emptyMessageText={
+        currentAccountId === id ? (
+          <FormattedMessage
+            id='empty_column.favourited_statuses'
+            defaultMessage='You don’t have any liked posts yet. When you like one, it will show up here.'
           />
-        ) : null
+        ) : (
+          <FormattedMessage
+            id='empty_column.account_favourited_statuses'
+            defaultMessage='This user doesn’t have any liked posts yet.'
+          />
+        )
       }
-      ListFooterComponent={<LoadMore query={query} />}
     />
   );
 };

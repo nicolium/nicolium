@@ -22,9 +22,9 @@ import { Account } from '@/components/accounts/account';
 import { AccountsList } from '@/components/accounts/accounts-list';
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { Status } from '@/components/statuses/status';
+import { StatusesList } from '@/components/statuses/statuses-list';
 import { Emojify } from '@/components/ui/emojify';
 import { EmptyMessage } from '@/components/ui/empty-message';
-import { LoadMore } from '@/components/ui/load-more';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -38,7 +38,6 @@ import {
 import { useStatusQuotes } from '@/queries/statuses/use-status-quotes';
 import { useComposeActions } from '@/stores/compose';
 import { useThread } from '@/stores/contexts';
-import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import type { RootStackParams, StatusStackParams } from '../router';
@@ -370,34 +369,21 @@ const StatusQuotesScreen = ({
     params: { id },
   },
 }: NativeStackScreenProps<StatusStackParams, 'quotes'>) => {
-  const autoloadMore = useSetting('timelines.autoloadMore');
-
   const quotesQuery = useStatusQuotes(id);
 
   return (
-    <FlashList
-      data={quotesQuery.data}
-      renderItem={({ item }) => <Status id={item} withLink />}
-      ItemSeparatorComponent={Divider}
-      onEndReached={
-        autoloadMore && quotesQuery.hasNextPage && !quotesQuery.isFetching
-          ? quotesQuery.fetchNextPage
-          : undefined
+    <StatusesList
+      query={quotesQuery}
+      emptyMessageText={
+        <EmptyMessage
+          emptyMessageText={
+            <FormattedMessage
+              id='empty_column.quotes'
+              defaultMessage='This post has not been quoted yet.'
+            />
+          }
+        />
       }
-      onEndReachedThreshold={0.1}
-      ListEmptyComponent={
-        !quotesQuery.isPending ? (
-          <EmptyMessage
-            emptyMessageText={
-              <FormattedMessage
-                id='empty_column.quotes'
-                defaultMessage='This post has not been quoted yet.'
-              />
-            }
-          />
-        ) : null
-      }
-      ListFooterComponent={<LoadMore query={quotesQuery} />}
     />
   );
 };
