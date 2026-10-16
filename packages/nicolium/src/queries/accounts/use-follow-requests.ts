@@ -5,7 +5,11 @@ import { useClient } from '@/hooks/use-client';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
-import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
+import {
+  defaultSelect,
+  makePaginatedResponseQuery,
+  type PaginatedResponseQueryResult,
+} from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 
 import { scopedQueryKey } from '../query';
@@ -48,7 +52,9 @@ const makeUseFollowRequests = <T>(
     enabled ?? 'isLoggedIn',
   );
 
-const useFollowRequests = makeUseFollowRequests((data) => data.pages.flatMap((page) => page.items));
+const useFollowRequests = makeUseFollowRequests(
+  defaultSelect<string, true, PaginatedResponseQueryResult<string, true>>,
+);
 
 const selectFollowRequestsCount = (data: InfiniteData<PaginatedResponse<string>>) =>
   data.pages.flatMap((page) => page.items).length;
