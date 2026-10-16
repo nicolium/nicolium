@@ -210,7 +210,7 @@ const NotificationsMarkReadButton = () => {
   );
 };
 
-const TimelineHeader = ({ route }: NativeStackHeaderProps) => {
+const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
   const { colors } = useTheme();
 
   const [showFiltersDialog, setShowFiltersDialog] = React.useState(false);
@@ -349,7 +349,7 @@ const NotificationsStackScreen = () => {
       <NotificationsStack.Screen
         name='view'
         component={NotificationsScreen}
-        options={{ header: TimelineHeader }}
+        options={{ header: NotificationsHeader }}
       />
     </NotificationsStack.Navigator>
   );
