@@ -10,7 +10,7 @@ import { View } from 'react-native';
 
 import { AccountsList } from '@/components/accounts/accounts-list';
 import { StatusesList } from '@/components/statuses/statuses-list';
-import { useFollowers } from '@/queries/account-lists/use-follows';
+import { useFollowers, useFollowing, useSubscribers } from '@/queries/account-lists/use-follows';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useFavourites } from '@/queries/status-lists/use-favourites';
@@ -112,7 +112,7 @@ const AccountFollowingScreen = ({
     params: { id },
   },
 }: NativeStackScreenProps<AccountStackParams, 'following'>) => {
-  const query = useFollowers(id);
+  const query = useFollowing(id);
 
   return (
     <AccountsList
@@ -132,7 +132,7 @@ const AccountSubscribersScreen = ({
     params: { id },
   },
 }: NativeStackScreenProps<AccountStackParams, 'subscribers'>) => {
-  const query = useFollowers(id);
+  const query = useSubscribers(id);
 
   return (
     <AccountsList
