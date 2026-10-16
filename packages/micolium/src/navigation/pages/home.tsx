@@ -2,7 +2,7 @@ import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ComposeButton } from '@/components/compose-button';
@@ -10,7 +10,11 @@ import { useClient } from '@/contexts/current-account-context';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 
 import { Timeline } from '../components/timeline';
-import { TimelineHeader } from '../components/timeline-header';
+import {
+  TimelineHeader,
+  TimelineHeaderButton,
+  TimelineHeaderTitle,
+} from '../components/timeline-header';
 
 import type { TimelineStackParams } from '../router';
 import type { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
@@ -37,11 +41,19 @@ const useShowComposeButton = () => {
   return React.useMemo(() => ({ handleScroll, showComposeButton }), [showComposeButton]);
 };
 
-const HomeTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'home'>> = () => {
+const HomeTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'home'>> = ({
+  navigation,
+}) => {
   const client = useClient();
   const { showComposeButton, handleScroll } = useShowComposeButton();
 
   const timelineQuery = useTimeline('home', (params) => client.timelines.homeTimeline(params));
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <TimelineHeaderTitle active='home' />,
+    });
+  });
 
   return (
     <>
@@ -61,13 +73,21 @@ const HomeTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, '
   );
 };
 
-const LocalTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'local'>> = () => {
+const LocalTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'local'>> = ({
+  navigation,
+}) => {
   const client = useClient();
   const { showComposeButton, handleScroll } = useShowComposeButton();
 
   const timelineQuery = useTimeline('public:local', (paginationParams) =>
     client.timelines.publicTimeline({ ...paginationParams, local: true }),
   );
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <TimelineHeaderTitle active='local' />,
+    });
+  });
 
   return (
     <>
@@ -92,15 +112,21 @@ const LocalTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 
   );
 };
 
-const BubbleTimelineScreen: React.FC<
-  NativeStackScreenProps<TimelineStackParams, 'bubble'>
-> = () => {
+const BubbleTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'bubble'>> = ({
+  navigation,
+}) => {
   const client = useClient();
   const { showComposeButton, handleScroll } = useShowComposeButton();
 
   const timelineQuery = useTimeline('bubble', (paginationParams) =>
     client.timelines.bubbleTimeline(paginationParams),
   );
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <TimelineHeaderTitle active='bubble' />,
+    });
+  });
 
   return (
     <>
@@ -112,13 +138,19 @@ const BubbleTimelineScreen: React.FC<
 
 const FederatedTimelineScreen: React.FC<
   NativeStackScreenProps<TimelineStackParams, 'federated'>
-> = () => {
+> = ({ navigation }) => {
   const client = useClient();
   const { showComposeButton, handleScroll } = useShowComposeButton();
 
   const timelineQuery = useTimeline('public', (paginationParams) =>
     client.timelines.publicTimeline(paginationParams),
   );
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <TimelineHeaderTitle active='federated' />,
+    });
+  });
 
   return (
     <>
@@ -129,6 +161,7 @@ const FederatedTimelineScreen: React.FC<
 };
 
 const ListTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'list'>> = ({
+  navigation,
   route,
 }) => {
   const client = useClient();
@@ -137,6 +170,12 @@ const ListTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, '
   const timelineQuery = useTimeline(`list:${route.params.id}`, (paginationParams) =>
     client.timelines.listTimeline(route.params.id, paginationParams),
   );
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <TimelineHeaderTitle active={`list:${route.params.id}`} />,
+    });
+  });
 
   return (
     <>
@@ -162,6 +201,7 @@ const ListTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, '
 };
 
 const AntennaTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'antenna'>> = ({
+  navigation,
   route,
 }) => {
   const client = useClient();
@@ -170,6 +210,12 @@ const AntennaTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams
   const timelineQuery = useTimeline(`antenna:${route.params.id}`, (paginationParams) =>
     client.timelines.antennaTimeline(route.params.id, paginationParams),
   );
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <TimelineHeaderTitle active={`antenna:${route.params.id}`} />,
+    });
+  });
 
   return (
     <>
@@ -195,6 +241,7 @@ const AntennaTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams
 };
 
 const CircleTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 'circle'>> = ({
+  navigation,
   route,
 }) => {
   const client = useClient();
@@ -203,6 +250,12 @@ const CircleTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams,
   const timelineQuery = useTimeline(`circle:${route.params.id}`, (paginationParams) =>
     client.circles.getCircleStatuses(route.params.id, paginationParams),
   );
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <TimelineHeaderTitle active={`circle:${route.params.id}`} />,
+    });
+  });
 
   return (
     <>
@@ -233,8 +286,15 @@ const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator
       screenOptions={{
-        header: TimelineHeader,
+        headerTitle: TimelineHeaderTitle,
         animation: 'slide_from_right',
+        headerBackButtonDisplayMode: 'minimal',
+        unstable_headerRightItems: () => [
+          {
+            type: 'custom',
+            element: <TimelineHeaderButton />,
+          },
+        ],
       }}
     >
       <HomeStack.Screen

@@ -1,4 +1,5 @@
 import { Button, Icon, Text } from '@mkljczk/react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import {
   BroadcastIcon,
   CaretDownIcon,
@@ -91,7 +92,6 @@ const useTimelineHeadingAndIcon = (
 };
 
 interface ITimelinePicker {
-  navigation: NativeStackNavigationProp<TimelineStackParams>;
   active?:
     | 'home'
     | 'local'
@@ -104,22 +104,21 @@ interface ITimelinePicker {
     | `instance:${string}`;
 }
 
-const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home' }) => {
+const TimelinePicker: React.FC<ITimelinePicker> = ({ active = 'home' }) => {
   const intl = useIntl();
   const features = useFeatures();
   const instance = useInstance();
   const timelineAccess = instance.configuration.timelines_access;
+  const navigation = useNavigation();
+
+  console.log(active);
 
   const [heading, TimelineIcon] = useTimelineHeadingAndIcon(active);
 
-  // const [menuPage, setMenuPage] = React.useState<
-  //   'timelines' | 'bookmarks' | 'lists' | 'circles' | 'antennas'
-  // >('timelines');
-
-  const { data: bookmarkFolders } = useBookmarkFolders(); // menuPage === 'bookmarks');
-  const { data: lists } = useLists(); // menuPage === 'lists');
-  const { data: antennas } = useAntennas(); // menuPage === 'antennas');
-  const { data: circles } = useCircles(); // menuPage === 'circles');
+  const { data: bookmarkFolders } = useBookmarkFolders();
+  const { data: lists } = useLists();
+  const { data: antennas } = useAntennas();
+  const { data: circles } = useCircles();
 
   const getTimelineItem = (
     value: string,
@@ -295,8 +294,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     </>
   );
 
+  console.log(heading);
+
   return (
-    <View style={{ alignItems: 'flex-start' }}>
+    <View style={{ alignItems: 'flex-start'}}>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <Button mode='text' labelStyle={{ fontSize: 20 }} compact>
