@@ -39,6 +39,7 @@ import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 
 import { type ITimeline, Timeline } from '../components/timeline';
+import { AccountActionsDropdown } from '@/components/accounts/account-actions-dropdown';
 
 const messages = defineMessages({
   repliesToggle: { id: 'account.filters.replies_toggle', defaultMessage: 'Show replies' },
@@ -296,10 +297,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             ) : (
               <FollowButton id={id} />
             )}
-            <IconButton
-              mode='outlined'
-              icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
-            />
+            <AccountActionsDropdown account={account} />
           </View>
         </View>
         <CollapsibleContent>
