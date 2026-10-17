@@ -25,6 +25,7 @@ import { Status } from '@/components/statuses/status';
 import { StatusesList } from '@/components/statuses/statuses-list';
 import { Emojify } from '@/components/ui/emojify';
 import { EmptyMessage } from '@/components/ui/empty-message';
+import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -93,7 +94,7 @@ const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
 
   return (
     <Appbar.Header style={{ backgroundColor: colors.surfaceContainer }}>
-      {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+      {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}
       {subtitle ? (
         <View>
           <Text variant='titleMedium' numberOfLines={1}>

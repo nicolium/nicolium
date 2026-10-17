@@ -18,6 +18,7 @@ import { Timeline } from '../components/timeline';
 
 import type { RootStackParams } from '../router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HeaderIconButton } from '@/components/ui/header-icon-button';
 
 const messages = defineMessages({
   followHashtag: { id: 'hashtag.follow', defaultMessage: 'Follow hashtag' },
@@ -64,14 +65,14 @@ const HashtagsScreen = ({
           <>
             <Appbar.Content title={`#${tag}`} />
             {features.followHashtags && (
-              <Appbar.Action
-                icon={iconHelper(hashtag?.following ? UserMinusIcon : UserPlusIcon)}
+              <HeaderIconButton
+                icon={hashtag?.following ? UserMinusIcon : UserPlusIcon}
                 disabled={!hashtag || isFollowPending}
                 onPress={() => (hashtag?.following ? unfollowHashtag() : followHashtag())}
                 accessibilityLabel={intl.formatMessage(
                   hashtag?.following ? messages.unfollowHashtag : messages.followHashtag,
                 )}
-              ></Appbar.Action>
+              />
             )}
           </>
         )}

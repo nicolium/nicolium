@@ -3,6 +3,7 @@ import { getHeaderTitle } from '@react-navigation/elements';
 import React from 'react';
 
 import type { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import { HeaderBackButton } from './header-icon-button';
 
 const Header = ({ navigation, route, options, back }: NativeStackHeaderProps) => {
   const { colors } = useTheme();
@@ -14,7 +15,7 @@ const Header = ({ navigation, route, options, back }: NativeStackHeaderProps) =>
         backgroundColor: colors.surfaceContainer,
       }}
     >
-      {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+      {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}
       <Appbar.Content title={title} />
     </Appbar.Header>
   );

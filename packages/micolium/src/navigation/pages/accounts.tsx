@@ -10,6 +10,7 @@ import { View } from 'react-native';
 
 import { AccountsList } from '@/components/accounts/accounts-list';
 import { StatusesList } from '@/components/statuses/statuses-list';
+import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { useFollowers, useFollowing, useSubscribers } from '@/queries/account-lists/use-follows';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
@@ -58,7 +59,7 @@ const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => 
 
   return (
     <Appbar.Header style={{ backgroundColor: colors.surfaceContainer }}>
-      {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+      {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}
       {subtitle ? (
         <View>
           <Text variant='titleMedium' numberOfLines={1}>

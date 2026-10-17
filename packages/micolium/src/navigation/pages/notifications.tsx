@@ -24,6 +24,7 @@ import { TabView, TabBar } from 'react-native-tab-view';
 
 import { Notification } from '@/components/notification';
 import { EmptyMessage } from '@/components/ui/empty-message';
+import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { iconHelper } from '@/components/ui/icon';
 import { LoadMore } from '@/components/ui/load-more';
 import { useFeatures } from '@/contexts/current-account-context';
@@ -201,13 +202,7 @@ const NotificationsMarkReadButton = () => {
     );
   };
 
-  return (
-    <Appbar.Action
-      icon={iconHelper(ChecksIcon)}
-      disabled={!notificationCount}
-      onPress={handleClick}
-    />
-  );
+  return <HeaderIconButton icon={ChecksIcon} disabled={!notificationCount} onPress={handleClick} />;
 };
 
 const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
@@ -231,7 +226,7 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
         />
         {(!route.params ||
           (route.params as NotificationsStackParams['view'] | undefined)?.tab === 'all') && (
-          <Appbar.Action icon={iconHelper(FunnelIcon)} onPress={() => setShowFiltersDialog(true)} />
+          <HeaderIconButton icon={FunnelIcon} onPress={() => setShowFiltersDialog(true)} />
         )}
         <NotificationsMarkReadButton />
       </Appbar.Header>

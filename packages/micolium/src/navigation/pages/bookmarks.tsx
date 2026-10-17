@@ -81,17 +81,9 @@ const BookmarksStack = createNativeStackNavigator<BookmarksStackParams>();
 
 const BookmarksStackScreen = () => {
   return (
-    <BookmarksStack.Navigator>
-      <BookmarksStack.Screen
-        name='all'
-        component={AllBookmarksScreen}
-        options={{ headerShown: false, title: 'Bookmarks' }}
-      />
-      <BookmarksStack.Screen
-        name='folder'
-        component={BookmarksFolderScreen}
-        options={{ headerShown: false, title: 'Bookmarks' }}
-      />
+    <BookmarksStack.Navigator screenOptions={{ headerShown: false }}>
+      <BookmarksStack.Screen name='all' component={AllBookmarksScreen} />
+      <BookmarksStack.Screen name='folder' component={BookmarksFolderScreen} />
     </BookmarksStack.Navigator>
   );
 };

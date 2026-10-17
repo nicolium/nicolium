@@ -5,7 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Platform } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
-import { iconHelper } from '@/components/ui/icon';
+import { HeaderIconButton } from '@/components/ui/header-icon-button';
 
 import { TimelinePicker, type ITimelinePicker } from './timeline-picker';
 
@@ -40,9 +40,7 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
 
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <Appbar.Action
-            icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
-          />
+          <HeaderIconButton icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon} />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Item key='settings' onSelect={() => navigation.navigate('settings')}>
