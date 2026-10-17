@@ -1,6 +1,7 @@
+import { useTheme } from '@mkljczk/react-native-paper';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { TabView } from 'react-native-tab-view';
+import { TabBar, TabView } from 'react-native-tab-view';
 
 import { AccountsList } from '@/components/accounts/accounts-list';
 import { useFeatures } from '@/contexts/current-account-context';
@@ -51,6 +52,7 @@ const OutgoingFollowRequests = () => {
 };
 
 const FollowRequestsScreen = (_: NativeStackScreenProps<RootStackParams, 'follow_requests'>) => {
+  const { colors } = useTheme();
   const intl = useIntl();
   const [index, setIndex] = useState(0);
   const features = useFeatures();
@@ -69,6 +71,9 @@ const FollowRequestsScreen = (_: NativeStackScreenProps<RootStackParams, 'follow
       renderScene={({ route }) =>
         route.key === 'outgoing' ? <OutgoingFollowRequests /> : <IncomingFollowRequests />
       }
+      renderTabBar={(props) => (
+        <TabBar {...props} style={{ backgroundColor: colors.surfaceContainer }} />
+      )}
     />
   );
 };

@@ -29,7 +29,15 @@ const HeaderIconButton: React.FC<IHeaderIconButton> = ({ icon, badge, ...props }
           isInteractive={!props.disabled}
         >
           <Icon size={24} source={iconHelper(icon)} />
-          <Badge style={{ position: 'absolute', top: 0, right: 0 }} visible={!!badge}>
+          <Badge
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              minWidth: badge && badge > 100 ? 32 : undefined,
+            }}
+            visible={!!badge}
+          >
             {badge}
           </Badge>
         </GlassView>
