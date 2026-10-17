@@ -267,7 +267,7 @@ const NotificationsScreen = ({
 
   const handleChangeIndex = (index: number) => {
     setCurrentTab(index);
-    navigation.navigate('view', { tab: index ? 'mentions' : 'all' });
+    navigation.setParams({ tab: index ? 'mentions' : 'all' });
   };
 
   const renderNotifications = (tab: 'all' | 'mentions') => {
