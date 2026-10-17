@@ -57,7 +57,6 @@ const CustomEmojiCategory: React.FC<ICustomEmojiCategory> = ({ category }) => {
 
   const renderEmoji = (emoji: CustomEmoji) => (
     <Image
-      key={emoji.shortcode}
       source={{ uri: emoji.url }}
       accessibilityLabel={emoji.shortcode}
       style={{ width: 24, height: 24, objectFit: 'contain' }}

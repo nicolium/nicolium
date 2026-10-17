@@ -45,6 +45,7 @@ import { UIStatus } from '../ui/status';
 
 import { StatusActions } from './status-actions';
 import { StatusActionsDropdown } from './status-actions-dropdown';
+import { StatusEmojiReactions } from './status-emoji-reactions';
 import { StatusLinkPreview } from './status-link-preview';
 import { StatusMedia } from './status-media';
 import { StatusPoll } from './status-poll';
@@ -460,7 +461,14 @@ const Status: React.FC<IStatus> = ({
           </>
         )
       }
-      actions={withActions ? <StatusActions status={actualStatus} /> : undefined}
+      actions={
+        withActions ? (
+          <>
+            <StatusEmojiReactions status={actualStatus} />
+            <StatusActions status={actualStatus} />
+          </>
+        ) : undefined
+      }
       isConnectedBottom={
         typeof isConnectedBottom === 'function'
           ? isConnectedBottom(actualStatus)
