@@ -2,8 +2,9 @@ import { Appbar, useTheme } from '@mkljczk/react-native-paper';
 import { getHeaderTitle } from '@react-navigation/elements';
 import React from 'react';
 
-import type { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { HeaderBackButton } from './header-icon-button';
+
+import type { NativeStackHeaderProps } from '@react-navigation/native-stack';
 
 const Header = ({ navigation, route, options, back }: NativeStackHeaderProps) => {
   const { colors } = useTheme();

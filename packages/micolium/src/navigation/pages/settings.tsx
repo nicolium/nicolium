@@ -24,8 +24,9 @@ import { useAuthStoreActions } from '@/stores/auth';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
-import type { RootStackParams, SettingsStackParams } from '../router';
 import { FollowRequestsScreen } from './follow-requests';
+
+import type { RootStackParams, SettingsStackParams } from '../router';
 
 const messages = defineMessages({
   settingsHeading: { id: 'settings.settings', defaultMessage: 'Settings' },

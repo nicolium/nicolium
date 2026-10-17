@@ -96,26 +96,11 @@ const RootNavigator = () => {
       {isLoggedIn && (
         <>
           <RootStack.Screen name='app' component={Tabs} />
-          <RootStack.Screen
-            name='settings'
-            component={SettingsStackScreen}
-          />
-          <RootStack.Screen
-            name='status'
-            component={StatusStackScreen}
-          />
-          <RootStack.Screen
-            name='accounts'
-            component={AccountsStackScreen}
-          />
-          <RootStack.Screen
-            name='hashtags'
-            component={HashtagsScreen}
-          />
-          <RootStack.Screen
-            name='bookmarks'
-            component={BookmarksStackScreen}
-          />
+          <RootStack.Screen name='settings' component={SettingsStackScreen} />
+          <RootStack.Screen name='status' component={StatusStackScreen} />
+          <RootStack.Screen name='accounts' component={AccountsStackScreen} />
+          <RootStack.Screen name='hashtags' component={HashtagsScreen} />
+          <RootStack.Screen name='bookmarks' component={BookmarksStackScreen} />
         </>
       )}
       <RootStack.Screen

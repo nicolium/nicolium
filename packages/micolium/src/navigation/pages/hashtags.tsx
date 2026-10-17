@@ -3,6 +3,12 @@ import { UserMinusIcon, UserPlusIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { type NativeScrollEvent, type NativeSyntheticEvent, View } from 'react-native';
+import Animated, {
+  createAnimatedComponent,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
@@ -24,6 +30,9 @@ const messages = defineMessages({
   unfollowHashtag: { id: 'hashtag.unfollow', defaultMessage: 'Unfollow hashtag' },
 });
 
+const AnimatedAppbarContent = createAnimatedComponent(Appbar.Content);
+const AnimatedHeaderIconButton = createAnimatedComponent(HeaderIconButton);
+
 const HashtagsScreen = ({
   navigation,
   route: {
@@ -37,6 +46,11 @@ const HashtagsScreen = ({
   const features = useFeatures();
   const [isScrolled, setIsScrolled] = React.useState(false);
 
+  const headerOpacity = useSharedValue(+isScrolled);
+  const headerStyle = useAnimatedStyle(() => ({
+    opacity: headerOpacity.value,
+  }));
+
   const { mutate: followHashtag, isPending: isFollowPending } = useFollowHashtagMutation(tag);
   const { mutate: unfollowHashtag } = useUnfollowHashtagMutation(tag);
 
@@ -48,7 +62,9 @@ const HashtagsScreen = ({
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
-    setIsScrolled(scrollOffset > 64 + topInset);
+    const newIsScrolled = scrollOffset > 64;
+    setIsScrolled(newIsScrolled);
+    headerOpacity.value = withTiming(+newIsScrolled);
   };
 
   return (
@@ -65,20 +81,17 @@ const HashtagsScreen = ({
         elevated={isScrolled}
       >
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
-        {isScrolled && (
-          <>
-            <Appbar.Content title={`#${tag}`} />
-            {features.followHashtags && (
-              <HeaderIconButton
-                icon={hashtag?.following ? UserMinusIcon : UserPlusIcon}
-                disabled={!hashtag || isFollowPending}
-                onPress={() => (hashtag?.following ? unfollowHashtag() : followHashtag())}
-                accessibilityLabel={intl.formatMessage(
-                  hashtag?.following ? messages.unfollowHashtag : messages.followHashtag,
-                )}
-              />
+        <AnimatedAppbarContent title={`#${tag}`} style={headerStyle} />
+        {features.followHashtags && (
+          <AnimatedHeaderIconButton
+            icon={hashtag?.following ? UserMinusIcon : UserPlusIcon}
+            disabled={!hashtag || isFollowPending}
+            onPress={() => (hashtag?.following ? unfollowHashtag() : followHashtag())}
+            accessibilityLabel={intl.formatMessage(
+              hashtag?.following ? messages.unfollowHashtag : messages.followHashtag,
             )}
-          </>
+            style={headerStyle}
+          />
         )}
       </Appbar.Header>
       <Timeline

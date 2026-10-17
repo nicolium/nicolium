@@ -24,10 +24,10 @@ const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
   const intl = useIntl();
   const glassEffect = useEnableLiquidGlass();
   const { bottom: bottomInset } = useSafeAreaInsets();
-  const iconOpacity = useSharedValue(+visible);
 
   const { openCompose } = useUiStoreActions();
 
+  const iconOpacity = useSharedValue(+visible);
   const iconStyle = useAnimatedStyle(() => ({
     opacity: iconOpacity.value,
   }));
