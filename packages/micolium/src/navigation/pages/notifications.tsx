@@ -9,13 +9,14 @@ import {
   Text,
   useTheme,
 } from '@mkljczk/react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   type NativeStackHeaderProps,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
-import { ChecksIcon, FunnelIcon } from 'phosphor-react-native';
+import { ChecksIcon, FunnelIcon, UserPlusIcon } from 'phosphor-react-native';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ScrollView, View } from 'react-native';
@@ -28,6 +29,7 @@ import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { iconHelper } from '@/components/ui/icon';
 import { LoadMore } from '@/components/ui/load-more';
 import { useFeatures } from '@/contexts/current-account-context';
+import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
 import {
   useMarkNotificationsReadMutation,
   useNotifications,
@@ -41,6 +43,10 @@ const messages = defineMessages({
   tabAll: { id: 'notifications.filter.all', defaultMessage: 'All' },
   tabFiltered: { id: 'notifications.filter.all.filtered', defaultMessage: 'Filtered' },
   tabMentions: { id: 'notifications.filter_mentions', defaultMessage: 'Mentions' },
+  followRequests: {
+    id: 'navigation_bar.follow_requests.count',
+    defaultMessage: '{count, plural, one {# follow request} other {# follow requests}}',
+  },
 });
 
 const NOTIFICATION_TABS = {
@@ -190,6 +196,28 @@ const FiltersDialog: React.FC<IFiltersDialog> = ({ visible, setVisible }) => {
   );
 };
 
+const FollowRequestsButton = () => {
+  const intl = useIntl();
+  const count = useFollowRequestsCount();
+  const navigation = useNavigation();
+
+  if (!count) return null;
+
+  return (
+    <HeaderIconButton
+      icon={UserPlusIcon}
+      onPress={() =>
+        navigation.navigate('settings', {
+          screen: 'follow_requests',
+        })
+      }
+      accessibilityLabel={intl.formatMessage(messages.followRequests, { count })}
+      badge={count}
+    />
+    // <Badge style={{ position: 'absolute', top: 4, right: 4 }}>{count}</Badge>
+  );
+};
+
 const NotificationsMarkReadButton = () => {
   const notificationCount = useNotificationsUnreadCount();
   const { mutate: markNotificationsRead } = useMarkNotificationsReadMutation();
@@ -228,6 +256,7 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
           (route.params as NotificationsStackParams['view'] | undefined)?.tab === 'all') && (
           <HeaderIconButton icon={FunnelIcon} onPress={() => setShowFiltersDialog(true)} />
         )}
+        <FollowRequestsButton />
         <NotificationsMarkReadButton />
       </Appbar.Header>
       <FiltersDialog visible={showFiltersDialog} setVisible={setShowFiltersDialog} />
