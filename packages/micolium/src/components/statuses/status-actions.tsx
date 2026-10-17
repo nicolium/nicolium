@@ -28,7 +28,6 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
-import { useEmojiPickerActions } from '@/stores/emoji-picker';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { iconHelper } from '../ui/icon';
@@ -277,7 +276,7 @@ const ReactionAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =>
   const navigation = useNavigation();
   const scopeUrl = useScopeUrl();
 
-  const { showPicker } = useEmojiPickerActions();
+  const { openEmojiPicker } = useUiStoreActions();
 
   const { mutate: emojiReact, isPending: isPendingReact } = useEmojiReactMutation(status.id);
   const { mutate: emojiUnreact } = useEmojiUnreactMutation(status.id);
@@ -289,7 +288,7 @@ const ReactionAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =>
       .filter((reaction) => reaction.me)
       .map((reaction) => reaction.name);
 
-    showPicker(
+    openEmojiPicker(
       (emoji) => {
         console.log(emoji);
         if (selected.includes(emoji)) return emojiUnreact(emoji);

@@ -37,7 +37,6 @@ import {
   newPoll,
   useSubmitCompose,
 } from '@/stores/compose';
-import { useEmojiPickerActions } from '@/stores/emoji-picker';
 import { useIsComposeOpen, useUiStore, useUiStoreActions } from '@/stores/ui';
 
 import { Account } from '../accounts/account';
@@ -193,7 +192,7 @@ const ComposeBottomSheet = () => {
   const compose = useCompose(COMPOSE_ID);
   const { updateCompose, resetCompose } = useComposeActions();
   const submitCompose = useSubmitCompose(COMPOSE_ID);
-  const { showPicker } = useEmojiPickerActions();
+  const { openEmojiPicker } = useUiStoreActions();
 
   const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility, poll } = compose;
 
@@ -257,7 +256,7 @@ const ComposeBottomSheet = () => {
   };
 
   const handleInsertEmoji = () => {
-    showPicker((emoji, custom) => {
+    openEmojiPicker((emoji, custom) => {
       updateCompose(COMPOSE_ID, (draft) => {
         const insertedText = custom ? `:${emoji}:` : emoji;
 

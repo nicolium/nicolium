@@ -13,7 +13,7 @@ import emojiData, { type EmojiCategory as MartEmojiCategory } from '@/emoji/data
 import emojiSearch, { type Emoji } from '@/emoji/search';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
-import { useEmojiPickerActions, useEmojiPickerStore } from '@/stores/emoji-picker';
+import { useEmojiPicker, useUiStoreActions } from '@/stores/ui';
 
 import { EmptyMessage } from './ui/empty-message';
 import { iconHelper } from './ui/icon';
@@ -59,8 +59,8 @@ interface ICustomEmojiCategory {
 const CustomEmojiCategory: React.FC<ICustomEmojiCategory> = ({ category }) => {
   const { data: emojis = [] } = useCustomEmojis((emojis) => selectCustomEmojis(emojis, category));
 
-  const { config } = useEmojiPickerStore();
-  const { dismissPicker } = useEmojiPickerActions();
+  const state = useEmojiPicker();
+  const { closeEmojiPicker } = useUiStoreActions();
 
   const renderEmoji = (emoji: CustomEmoji) => (
     <Image
@@ -75,10 +75,10 @@ const CustomEmojiCategory: React.FC<ICustomEmojiCategory> = ({ category }) => {
       <IconButton
         key={emoji.shortcode}
         onPress={() => {
-          config?.onPick(emoji.shortcode, true);
-          dismissPicker();
+          state?.onPick(emoji.shortcode, true);
+          closeEmojiPicker();
         }}
-        mode={config?.selected?.includes(emoji.shortcode) ? 'contained-tonal' : 'outlined'}
+        mode={state?.selected?.includes(emoji.shortcode) ? 'contained-tonal' : 'outlined'}
         icon={() => renderEmoji(emoji)}
         size={24}
       />
@@ -114,8 +114,8 @@ interface IEmojiCategory {
 }
 
 const EmojiCategory: React.FC<IEmojiCategory> = ({ category }) => {
-  const { config } = useEmojiPickerStore();
-  const { dismissPicker } = useEmojiPickerActions();
+  const state = useEmojiPicker();
+  const { closeEmojiPicker } = useUiStoreActions();
 
   const emojis = category.emojis.map((emoji) => emojiData.emojis[emoji].skins[0].native);
 
@@ -124,10 +124,10 @@ const EmojiCategory: React.FC<IEmojiCategory> = ({ category }) => {
       <IconButton
         key={emoji}
         onPress={() => {
-          config?.onPick(emoji, false);
-          dismissPicker();
+          state?.onPick(emoji, false);
+          closeEmojiPicker();
         }}
-        mode={config?.selected?.includes(emoji) ? 'contained-tonal' : 'outlined'}
+        mode={state?.selected?.includes(emoji) ? 'contained-tonal' : 'outlined'}
         icon={() => <Text style={{ fontSize: 24 }}>{emoji}</Text>}
         size={24}
       />
@@ -142,8 +142,8 @@ interface IEmojiSearchResults {
 }
 
 const EmojiSearchResults: React.FC<IEmojiSearchResults> = ({ searchResults }) => {
-  const { config } = useEmojiPickerStore();
-  const { dismissPicker } = useEmojiPickerActions();
+  const state = useEmojiPicker();
+  const { closeEmojiPicker } = useUiStoreActions();
 
   const renderedEmojis = React.useMemo(() => {
     if (!searchResults.length) {
@@ -161,11 +161,11 @@ const EmojiSearchResults: React.FC<IEmojiSearchResults> = ({ searchResults }) =>
       <IconButton
         key={emoji.id}
         onPress={() => {
-          config?.onPick(emoji.custom ? emoji.id : emoji.native, emoji.custom);
-          dismissPicker();
+          state?.onPick(emoji.custom ? emoji.id : emoji.native, emoji.custom);
+          closeEmojiPicker();
         }}
         mode={
-          config?.selected?.includes(emoji.custom ? emoji.id : emoji.native)
+          state?.selected?.includes(emoji.custom ? emoji.id : emoji.native)
             ? 'contained-tonal'
             : 'outlined'
         }
@@ -196,7 +196,7 @@ type PickerItem =
 const EmojiPicker = React.forwardRef<FlashListRef<PickerItem>>((_, ref) => {
   const { colors } = useTheme();
   const intl = useIntl();
-  const { config } = useEmojiPickerStore();
+  const state = useEmojiPicker();
 
   const [query, setQuery] = React.useState('');
   const deferredQuery = React.useDeferredValue(query);
@@ -207,7 +207,7 @@ const EmojiPicker = React.forwardRef<FlashListRef<PickerItem>>((_, ref) => {
   const searchResults = React.useMemo(() => {
     if (!deferredQuery.trim()) return null;
 
-    return emojiSearch(deferredQuery, customEmojis, 40, config?.withCustom);
+    return emojiSearch(deferredQuery, customEmojis, 40, state?.withCustom);
   }, [deferredQuery]);
 
   const categories: Array<PickerItem> = React.useMemo(
@@ -295,31 +295,31 @@ const EmojiPickerBottomSheet = () => {
   const glassEffect = useEnableLiquidGlass();
   const { colors } = useTheme();
 
-  const { config } = useEmojiPickerStore();
-  const { dismissPicker } = useEmojiPickerActions();
+  const state = useEmojiPicker();
+  const { closeEmojiPicker } = useUiStoreActions();
 
   const bottomSheetRef = React.useRef<TrueSheet>(null);
   const scrollableRef = React.useRef<FlashListRef<PickerItem>>(null);
 
   React.useEffect(() => {
-    if (config) {
+    if (state) {
       bottomSheetRef.current?.present();
     } else if (bottomSheetRef.current) {
       bottomSheetRef.current?.dismiss();
     }
-  }, [!config]);
+  }, [!state]);
 
   return (
     <TrueSheet
       ref={bottomSheetRef}
       detents={[0.5, 'auto']}
-      onDidDismiss={dismissPicker}
+      onDidDismiss={closeEmojiPicker}
       scrollableRef={scrollableRef}
       style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 16 : 32, paddingHorizontal: 16 }}
       backgroundColor={glassEffect ? undefined : colors.surfaceContainer}
     >
-      {config?.scopeUrl ? (
-        <CurrentAccountProvider value={config.scopeUrl}>
+      {state?.scopeUrl ? (
+        <CurrentAccountProvider value={state.scopeUrl}>
           <EmojiPicker ref={scrollableRef} />
         </CurrentAccountProvider>
       ) : (
