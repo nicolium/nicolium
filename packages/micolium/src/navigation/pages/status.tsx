@@ -157,10 +157,10 @@ const ReplyBox: React.FC<IReplyBox> = ({ status }) => {
       <CurrentAccountAvatar />
       <Text>
         <FormattedMessage
-          id='status.reply_to'
-          defaultMessage='Reply to {name}'
+          id='compose.reply_indicator'
+          defaultMessage='Reply to @{acct}'
           values={{
-            name: <Emojify text={status.account.display_name} emojis={status.account.emojis} />,
+            acct: status.account.acct,
           }}
         />
       </Text>
