@@ -235,7 +235,7 @@ const EmojiPicker = React.forwardRef<FlashListRef<PickerItem>>((_, ref) => {
     <FlashList
       ref={ref}
       data={categories}
-      ListHeaderComponent={renderSearch}
+      ListHeaderComponent={renderSearch()}
       renderItem={({ item }) => {
         if (!item) return null;
 
