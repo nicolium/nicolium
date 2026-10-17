@@ -101,7 +101,7 @@ const InteractAsSheet: React.FC = () => {
           </Text>
           <Status id={interactAs.statusId} compact withActions={false} textOnly />
           <Divider />
-          {!scopes.length ? (
+          {scopes.length ? (
             scopes.map((scope) => (
               <CurrentAccountProvider key={scope} value={scope}>
                 <InteractAsAccount

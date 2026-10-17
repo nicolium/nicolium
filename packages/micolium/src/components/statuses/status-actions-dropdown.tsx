@@ -147,8 +147,9 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
   const handleOpenInBrowser = () => Linking.openURL(status.uri);
 
   const handleOpenInteractAs = () => {
-    if (skipInteractAsConfirmation) openInteractAs(status.id, scopeUrl);
-    else {
+    if (skipInteractAsConfirmation) {
+      openInteractAs(status.id, scopeUrl);
+    } else {
       Alert.alert(
         intl.formatMessage(messages.interactAsConfirmationHeading),
         intl.formatMessage(messages.interactAsConfirmationMessage),
