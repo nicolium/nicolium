@@ -49,7 +49,7 @@ const messages = defineMessages({
   quote: { id: 'status.quote', defaultMessage: 'Quote post' },
 });
 
-const ReplyAction: React.FC<IStatusActions> = ({ status }) => {
+const ReplyAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
   const intl = useIntl();
   const theme = useTheme();
   const { replyCompose } = useComposeActions();
@@ -59,6 +59,8 @@ const ReplyAction: React.FC<IStatusActions> = ({ status }) => {
   const scopeUrl = useScopeUrl();
 
   const interactionTooltip = useInteractionMessages(status, 'can_reply');
+
+  if (fromInteractAs) return null;
 
   const handleReply = () => {
     replyCompose(status, scopeUrl, features);
@@ -104,7 +106,7 @@ const ReplyAction: React.FC<IStatusActions> = ({ status }) => {
   );
 };
 
-const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
+const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
   const intl = useIntl();
   const theme = useTheme();
   const { quoteCompose } = useComposeActions();
@@ -145,7 +147,7 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
         )}
         {...props}
         onLongPress={
-          status.reblogs_count
+          !fromInteractAs && status.reblogs_count
             ? () =>
                 navigation.navigate('status', {
                   screen: 'reblogs',
@@ -173,7 +175,7 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
         {renderAction}
       </Tooltip.Rich>
     );
-  } else if (features.quotePosts && canQuote) {
+  } else if (features.quotePosts && canQuote && !fromInteractAs) {
     return (
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>{renderAction({}, () => {})}</DropdownMenu.Trigger>
@@ -203,7 +205,7 @@ const ReblogAction: React.FC<IStatusActions> = ({ status }) => {
   );
 };
 
-const FavouriteAction: React.FC<IStatusActions> = ({ status }) => {
+const FavouriteAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
   const intl = useIntl();
   const theme = useTheme();
   const features = useFeatures();
@@ -230,7 +232,7 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status }) => {
         )}
         {...props}
         onLongPress={
-          status.favourites_count
+          !fromInteractAs && status.favourites_count
             ? () =>
                 navigation.navigate('status', {
                   screen: 'favourites',
@@ -269,10 +271,11 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status }) => {
   );
 };
 
-const ReactionAction: React.FC<IStatusActions> = ({ status }) => {
+const ReactionAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
   const intl = useIntl();
   const features = useFeatures();
   const navigation = useNavigation();
+  const scopeUrl = useScopeUrl();
 
   const { showPicker } = useEmojiPickerActions();
 
@@ -288,12 +291,14 @@ const ReactionAction: React.FC<IStatusActions> = ({ status }) => {
 
     showPicker(
       (emoji) => {
+        console.log(emoji);
         if (selected.includes(emoji)) return emojiUnreact(emoji);
         return emojiReact(emoji);
       },
       selected,
       true,
       features.customEmojiReacts,
+      scopeUrl,
     );
   };
 
@@ -307,7 +312,7 @@ const ReactionAction: React.FC<IStatusActions> = ({ status }) => {
       accessibilityLabel={intl.formatMessage(messages.emoji)}
       {...props}
       onLongPress={
-        status.emoji_reactions.length
+        !fromInteractAs && status.emoji_reactions.length
           ? () =>
               navigation.navigate('status', {
                 screen: 'reactions',
@@ -321,7 +326,7 @@ const ReactionAction: React.FC<IStatusActions> = ({ status }) => {
   return <Tooltip title={intl.formatMessage(messages.emoji)}>{renderAction}</Tooltip>;
 };
 
-const DislikeAction: React.FC<IStatusActions> = ({ status }) => {
+const DislikeAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
   const intl = useIntl();
   const theme = useTheme();
   const features = useFeatures();
@@ -350,7 +355,7 @@ const DislikeAction: React.FC<IStatusActions> = ({ status }) => {
             )}
             {...props}
             onLongPress={
-              status.dislikes_count
+              !fromInteractAs && status.dislikes_count
                 ? () =>
                     navigation.navigate('status', {
                       screen: 'dislikes',
@@ -377,16 +382,17 @@ const DislikeAction: React.FC<IStatusActions> = ({ status }) => {
 
 interface IStatusActions {
   status: SelectedStatus;
+  fromInteractAs?: boolean;
 }
 
-const StatusActions: React.FC<IStatusActions> = ({ status }) => (
+const StatusActions: React.FC<IStatusActions> = (props) => (
   <View style={{ flexDirection: 'row', gap: 8, marginTop: 4 }}>
-    <ReplyAction status={status} />
-    <ReblogAction status={status} />
-    <FavouriteAction status={status} />
-    <ReactionAction status={status} />
-    <DislikeAction status={status} />
+    <ReplyAction {...props} />
+    <ReblogAction {...props} />
+    <FavouriteAction {...props} />
+    <DislikeAction {...props} />
+    <ReactionAction {...props} />
   </View>
 );
 
-export { StatusActions };
+export { StatusActions, ReblogAction, FavouriteAction, DislikeAction, ReactionAction };

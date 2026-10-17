@@ -24,6 +24,8 @@ import {
   useUnmuteStatus,
   useUnpinStatus,
 } from '@/queries/statuses/use-status-interactions';
+import { useAuthStore } from '@/stores/auth';
+import { useUiStoreActions } from '@/stores/ui';
 
 import { iconHelper } from '../ui/icon';
 
@@ -85,6 +87,7 @@ const messages = defineMessages({
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
   muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
   report: { id: 'status.report', defaultMessage: 'Report post' },
+  interactAs: { id: 'status.interact_as', defaultMessage: 'Interact from other accounts' },
 });
 
 interface IStatusActionsDropdown {
@@ -98,6 +101,9 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
   const intl = useIntl();
   const navigation = useNavigation();
   const scopeUrl = useScopeUrl();
+
+  const hasOtherAccounts = useAuthStore((state) => Object.keys(state.sessions).length > 1);
+  const { openInteractAs } = useUiStoreActions();
 
   const { data: bookmarkFolders } = useBookmarkFolders();
   const { data: currentAccountId } = useCredentialAccountId();
@@ -226,6 +232,17 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
               {intl.formatMessage(messages.openInBrowser)}
             </DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
+          {hasOtherAccounts && (
+            <DropdownMenu.Item
+              key='interact-as'
+              onSelect={() => openInteractAs(status.id, scopeUrl)}
+            >
+              <DropdownMenu.ItemIcon ios={{ name: 'person.2' }} androidIconName='ph_users_three' />
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.interactAs)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          )}
           <DropdownMenu.Item key='share' onSelect={handleShare}>
             <DropdownMenu.ItemIcon
               ios={{ name: 'square.and.arrow.up' }}

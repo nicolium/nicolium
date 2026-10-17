@@ -6,6 +6,7 @@ type State = {
     selected?: Array<string>;
     withSystem?: boolean;
     withCustom?: boolean;
+    scopeUrl?: string;
   } | null;
   actions: {
     showPicker: (
@@ -13,6 +14,7 @@ type State = {
       selected?: Array<string>,
       withSystem?: boolean,
       withCustom?: boolean,
+      scopeUrl?: string,
     ) => void;
     dismissPicker: () => void;
   };
@@ -21,13 +23,14 @@ type State = {
 const useEmojiPickerStore = create<State>((set) => ({
   config: null,
   actions: {
-    showPicker: (onPick, selected = [], withSystem = true, withCustom = true) =>
+    showPicker: (onPick, selected = [], withSystem = true, withCustom = true, scopeUrl) =>
       set(() => ({
         config: {
           onPick,
           selected,
           withSystem,
           withCustom,
+          scopeUrl,
         },
       })),
     dismissPicker: () => set(() => ({ config: null })),

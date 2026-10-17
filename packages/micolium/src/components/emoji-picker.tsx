@@ -8,6 +8,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';
 
+import { CurrentAccountProvider } from '@/contexts/current-account-context';
 import emojiData, { type EmojiCategory as MartEmojiCategory } from '@/emoji/data';
 import emojiSearch, { type Emoji } from '@/emoji/search';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -317,7 +318,13 @@ const EmojiPickerBottomSheet = () => {
       style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 16 : 32, paddingHorizontal: 16 }}
       backgroundColor={glassEffect ? undefined : colors.surfaceContainer}
     >
-      <EmojiPicker ref={scrollableRef} />
+      {config?.scopeUrl ? (
+        <CurrentAccountProvider value={config.scopeUrl}>
+          <EmojiPicker ref={scrollableRef} />
+        </CurrentAccountProvider>
+      ) : (
+        <EmojiPicker ref={scrollableRef} />
+      )}
     </TrueSheet>
   );
 };
