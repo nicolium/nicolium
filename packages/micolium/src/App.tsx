@@ -15,6 +15,7 @@ import { Toaster } from 'sonner-native';
 
 import { AccountSwitcherBottomSheet } from './components/account-switcher';
 import { ComposeBottomSheet } from './components/compose/compose';
+import { EmojiPickerBottomSheet } from './components/emoji-picker';
 import { DefaultCurrentAccountProvider } from './contexts/current-account-context';
 import enMessages from './messages/en.json';
 import { RootNavigator } from './navigation/router';
@@ -82,6 +83,7 @@ export const App = () => {
                       <Toaster position='bottom-center' />
                       <AccountSwitcherBottomSheet />
                       <ComposeBottomSheet />
+                      <EmojiPickerBottomSheet />
                     </TrueSheetProvider>
                   </GestureHandlerRootView>
                 </NavigationContainer>

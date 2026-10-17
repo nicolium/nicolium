@@ -4,6 +4,7 @@ import {
   ArrowBendDoubleUpLeftIcon,
   ArrowBendUpLeftIcon,
   RepeatIcon,
+  SmileyIcon,
   StarIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
@@ -18,6 +19,8 @@ import { useCanInteract, useInteractionMessages } from '@/hooks/use-can-interact
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import {
   useDislikeStatus,
+  useEmojiReactMutation,
+  useEmojiUnreactMutation,
   useFavouriteStatus,
   useReblogStatus,
   useUndislikeStatus,
@@ -25,6 +28,7 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
+import { useEmojiPickerActions } from '@/stores/emoji-picker';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { iconHelper } from '../ui/icon';
@@ -39,6 +43,7 @@ const messages = defineMessages({
   unreblog: { id: 'status.unreblog', defaultMessage: 'Unrepost' },
   favourite: { id: 'status.favourite', defaultMessage: 'Like' },
   unfavourite: { id: 'status.unfavourite', defaultMessage: 'Undo like' },
+  emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
   dislike: { id: 'status.dislike', defaultMessage: 'Dislike' },
   undislike: { id: 'status.undislike', defaultMessage: 'Undo dislike' },
   quote: { id: 'status.quote', defaultMessage: 'Quote post' },
@@ -264,6 +269,58 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status }) => {
   );
 };
 
+const ReactionAction: React.FC<IStatusActions> = ({ status }) => {
+  const intl = useIntl();
+  const features = useFeatures();
+  const navigation = useNavigation();
+
+  const { showPicker } = useEmojiPickerActions();
+
+  const { mutate: emojiReact, isPending: isPendingReact } = useEmojiReactMutation(status.id);
+  const { mutate: emojiUnreact } = useEmojiUnreactMutation(status.id);
+
+  if (!features.emojiReacts) return null;
+
+  const handleReact = () => {
+    const selected = status.emoji_reactions
+      .filter((reaction) => reaction.me)
+      .map((reaction) => reaction.name);
+
+    showPicker(
+      (emoji) => {
+        if (selected.includes(emoji)) return emojiUnreact(emoji);
+        return emojiReact(emoji);
+      },
+      selected,
+      true,
+      features.customEmojiReacts,
+    );
+  };
+
+  const renderAction = (props: TooltipTriggerProps) => (
+    <IconButton
+      icon={iconHelper(SmileyIcon)}
+      onPress={handleReact}
+      disabled={isPendingReact}
+      style={{ margin: -4, height: 40, width: 40 }}
+      selected={status.favourited}
+      accessibilityLabel={intl.formatMessage(messages.emoji)}
+      {...props}
+      onLongPress={
+        status.emoji_reactions.length
+          ? () =>
+              navigation.navigate('status', {
+                screen: 'reactions',
+                params: { id: status.id },
+              })
+          : undefined
+      }
+    />
+  );
+
+  return <Tooltip title={intl.formatMessage(messages.emoji)}>{renderAction}</Tooltip>;
+};
+
 const DislikeAction: React.FC<IStatusActions> = ({ status }) => {
   const intl = useIntl();
   const theme = useTheme();
@@ -327,6 +384,7 @@ const StatusActions: React.FC<IStatusActions> = ({ status }) => (
     <ReplyAction status={status} />
     <ReblogAction status={status} />
     <FavouriteAction status={status} />
+    <ReactionAction status={status} />
     <DislikeAction status={status} />
   </View>
 );

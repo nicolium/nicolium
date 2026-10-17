@@ -22,6 +22,7 @@
     "fmt:check": "oxfmt --check"
   },
   "dependencies": {
+    "@emoji-mart/data": "^1.2.1",
     "@expo/metro-runtime": "~57.0.16",
     "@expo/ui": "~57.0.22",
     "@formatjs/intl-datetimeformat": "^7.8.0",
@@ -74,6 +75,7 @@
     "expo-system-ui": "~57.0.4",
     "expo-video": "~57.0.5",
     "expo-web-browser": "~57.0.3",
+    "fuzzysort": "^3.1.0",
     "htmlparser2": "^12.0.0",
     "intl-pluralrules": "^2.0.1",
     "lodash-es": "^4.18.1",

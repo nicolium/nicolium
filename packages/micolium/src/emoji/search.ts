@@ -1,0 +1,97 @@
+import fuzzysort from 'fuzzysort';
+
+import data, { type EmojiData } from './data';
+
+import type { CustomEmoji } from 'pl-api';
+
+type Emoji =
+  | {
+      id: string;
+      colons: string;
+      custom: true;
+      imageUrl: string;
+    }
+  | {
+      id: string;
+      colons: string;
+      custom?: false;
+      unified: string;
+      native: string;
+    };
+
+let emojis: EmojiData['emojis'] = data.emojis;
+
+interface SearchableEmoji {
+  emojiId: string;
+  emojiName: string;
+  emojiKeywords: string;
+  id: string;
+}
+
+const nativeData: Array<SearchableEmoji> = [];
+let customData: Array<SearchableEmoji> = [];
+
+const sortedEmojis = Object.entries(emojis).toSorted((a, b) => a[0].localeCompare(b[0]));
+for (const [key, emoji] of sortedEmojis) {
+  nativeData.push({
+    emojiId: emoji.id.replaceAll('-', '_'),
+    emojiName: emoji.name.replaceAll('-', '_'),
+    emojiKeywords: `${emoji.id} ${emoji.keywords.join(' ')}`.replaceAll('-', '_'),
+    id: 'e' + key,
+  });
+}
+
+const addCustomToPool = (customEmojis: CustomEmoji[]) => {
+  customData = customEmojis.map((emoji, i) => ({
+    emojiId: '',
+    emojiName: emoji.shortcode.replaceAll('-', '_'),
+    emojiKeywords: emoji.shortcode.replaceAll('-', '_'),
+    id: 'c' + i,
+  }));
+};
+
+const search = (
+  query: string,
+  customEmojis: Array<CustomEmoji> = [],
+  limit = 5,
+  withCustom = true,
+): Emoji[] => {
+  const pool = withCustom ? [...nativeData, ...customData] : nativeData;
+
+  return fuzzysort
+    .go(query.replaceAll('-', '_'), pool, {
+      keys: ['emojiId', 'emojiName', 'emojiKeywords'],
+      limit,
+    })
+    .map((result) => {
+      const { id } = result.obj;
+
+      if (id[0] === 'c') {
+        const customEmoji = customEmojis[Number(id.slice(1))];
+
+        if (!customEmoji) return undefined;
+
+        return {
+          id: customEmoji.shortcode,
+          colons: ':' + customEmoji.shortcode + ':',
+          custom: true,
+          imageUrl: customEmoji.static_url,
+        };
+      }
+
+      const emojiData = emojis[id.slice(1)];
+      if (emojiData) {
+        return {
+          id: id.slice(1),
+          colons: ':' + id.slice(1) + ':',
+          unified: emojiData.skins[0].unified,
+          native: emojiData.skins[0].native,
+        };
+      }
+
+      return undefined;
+    })
+    .filter(Boolean) as Array<Emoji>;
+};
+
+export { search as default, addCustomToPool };
