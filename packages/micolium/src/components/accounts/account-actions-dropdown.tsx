@@ -181,7 +181,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
                 {intl.formatMessage(
                   account.relationship?.muting ? messages.unmute : messages.mute,
                   {
-                    name: account.acct,
+                    name: account.username,
                   },
                 )}
               </DropdownMenu.ItemTitle>
@@ -192,7 +192,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
                 {intl.formatMessage(
                   account.relationship?.blocking ? messages.unblock : messages.block,
                   {
-                    name: account.acct,
+                    name: account.username,
                   },
                 )}
               </DropdownMenu.ItemTitle>
@@ -201,7 +201,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
               <DropdownMenu.ItemIcon ios={{ name: 'flag' }} androidIconName='ph_flag' />
               <DropdownMenu.ItemTitle>
                 {intl.formatMessage(messages.report, {
-                  name: account.acct,
+                  name: account.username,
                 })}
               </DropdownMenu.ItemTitle>
             </DropdownMenu.Item>

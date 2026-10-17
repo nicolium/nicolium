@@ -37,6 +37,7 @@ import {
   newPoll,
   useSubmitCompose,
 } from '@/stores/compose';
+import { useEmojiPickerActions } from '@/stores/emoji-picker';
 import { useIsComposeOpen, useUiStore, useUiStoreActions } from '@/stores/ui';
 
 import { Account } from '../accounts/account';
@@ -192,6 +193,7 @@ const ComposeBottomSheet = () => {
   const compose = useCompose(COMPOSE_ID);
   const { updateCompose, resetCompose } = useComposeActions();
   const submitCompose = useSubmitCompose(COMPOSE_ID);
+  const { showPicker } = useEmojiPickerActions();
 
   const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility, poll } = compose;
 
@@ -254,6 +256,21 @@ const ComposeBottomSheet = () => {
     }
   };
 
+  const handleInsertEmoji = () => {
+    showPicker((emoji, custom) => {
+      updateCompose(COMPOSE_ID, (draft) => {
+        const insertedText = custom ? `:${emoji}:` : emoji;
+
+        if (draft.modifiedLanguage) {
+          draft.textMap[draft.modifiedLanguage] =
+            (draft.textMap[draft.modifiedLanguage] || '') + insertedText;
+        } else {
+          draft.text += insertedText;
+        }
+      });
+    });
+  };
+
   const publishButtonLabel = intl.formatMessage(
     compose.editedId
       ? messages.publishChanges
@@ -290,15 +307,12 @@ const ComposeBottomSheet = () => {
           accessibilityLabel={intl.formatMessage(poll ? messages.removePoll : messages.addPoll)}
         />
       )}
-      {features.emojiReacts && (
-        <IconButton
-          icon={iconHelper(SmileyIcon)}
-          style={{ marginHorizontal: 0 }}
-          onPress={() => {}}
-          disabled
-          accessibilityLabel={intl.formatMessage(messages.emoji)}
-        />
-      )}
+      <IconButton
+        icon={iconHelper(SmileyIcon)}
+        style={{ marginHorizontal: 0 }}
+        onPress={handleInsertEmoji}
+        accessibilityLabel={intl.formatMessage(messages.emoji)}
+      />
       {features.scheduledStatuses && (
         <IconButton
           icon={iconHelper(CalendarPlusIcon)}

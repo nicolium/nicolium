@@ -74,7 +74,7 @@ const CustomEmojiCategory: React.FC<ICustomEmojiCategory> = ({ category }) => {
       <IconButton
         key={emoji.shortcode}
         onPress={() => {
-          config?.onPick(emoji.shortcode);
+          config?.onPick(emoji.shortcode, true);
           dismissPicker();
         }}
         mode={config?.selected?.includes(emoji.shortcode) ? 'contained-tonal' : 'outlined'}
@@ -123,7 +123,7 @@ const EmojiCategory: React.FC<IEmojiCategory> = ({ category }) => {
       <IconButton
         key={emoji}
         onPress={() => {
-          config?.onPick(emoji);
+          config?.onPick(emoji, false);
           dismissPicker();
         }}
         mode={config?.selected?.includes(emoji) ? 'contained-tonal' : 'outlined'}
@@ -160,7 +160,7 @@ const EmojiSearchResults: React.FC<IEmojiSearchResults> = ({ searchResults }) =>
       <IconButton
         key={emoji.id}
         onPress={() => {
-          config?.onPick(emoji.custom ? emoji.id : emoji.native);
+          config?.onPick(emoji.custom ? emoji.id : emoji.native, emoji.custom);
           dismissPicker();
         }}
         mode={

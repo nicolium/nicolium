@@ -2,14 +2,14 @@ import { create } from 'zustand';
 
 type State = {
   config: {
-    onPick: (emoji: string) => void;
+    onPick: (emoji: string, custom?: boolean) => void;
     selected?: Array<string>;
     withSystem?: boolean;
     withCustom?: boolean;
   } | null;
   actions: {
     showPicker: (
-      onPick: (emoji: string) => void,
+      onPick: (emoji: string, custom?: boolean) => void,
       selected?: Array<string>,
       withSystem?: boolean,
       withCustom?: boolean,

@@ -41,7 +41,7 @@ for (const [key, emoji] of sortedEmojis) {
   });
 }
 
-const addCustomToPool = (customEmojis: CustomEmoji[]) => {
+const addCustomToPool = (customEmojis: Array<CustomEmoji>) => {
   customData = customEmojis.map((emoji, i) => ({
     emojiId: '',
     emojiName: emoji.shortcode.replaceAll('-', '_'),
@@ -56,6 +56,10 @@ const search = (
   limit = 5,
   withCustom = true,
 ): Emoji[] => {
+  if (withCustom && !customData.length && customEmojis.length) {
+    addCustomToPool(customEmojis);
+  }
+
   const pool = withCustom ? [...nativeData, ...customData] : nativeData;
 
   return fuzzysort
