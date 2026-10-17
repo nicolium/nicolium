@@ -129,7 +129,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const intl = useIntl();
   const { colors } = useTheme();
   const { top: topInset } = useSafeAreaInsets();
-  const { data: account } = useAccount(id);
+  const { data: account } = useAccount(id, !ownAccount);
   const navigation = useNavigation();
   const profileInfoNode = React.useRef<View>(null);
   const previousScrollOffset = React.useRef<number>(0);
