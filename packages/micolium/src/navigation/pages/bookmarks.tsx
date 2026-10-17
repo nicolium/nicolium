@@ -7,6 +7,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { StatusesList } from '@/components/statuses/statuses-list';
+import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useBookmarks } from '@/queries/status-lists/use-bookmarks';
 import { useBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
@@ -23,7 +24,7 @@ const AllBookmarksScreen = ({
   return (
     <>
       <Appbar.Header>
-        {navigation.canGoBack() ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+        {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
         <Appbar.Content
           title={
@@ -60,7 +61,7 @@ const BookmarksFolderScreen = ({
   return (
     <>
       <Appbar.Header>
-        {navigation.canGoBack() ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+        {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
         <Appbar.Content title={<Text variant='titleLarge'>{folder?.name}</Text>} />
       </Appbar.Header>

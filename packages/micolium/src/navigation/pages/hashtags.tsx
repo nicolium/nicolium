@@ -2,10 +2,10 @@ import { Appbar, Button, Text, useTheme } from '@mkljczk/react-native-paper';
 import { UserMinusIcon, UserPlusIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { View } from 'react-native';
+import { type NativeScrollEvent, type NativeSyntheticEvent, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { iconHelper } from '@/components/ui/icon';
+import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import {
   useFollowHashtagMutation,
@@ -18,7 +18,6 @@ import { Timeline } from '../components/timeline';
 
 import type { RootStackParams } from '../router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { HeaderIconButton } from '@/components/ui/header-icon-button';
 
 const messages = defineMessages({
   followHashtag: { id: 'hashtag.follow', defaultMessage: 'Follow hashtag' },
@@ -47,6 +46,11 @@ const HashtagsScreen = ({
     client.timelines.hashtagTimeline(tag, paginationParams),
   );
 
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
+    setIsScrolled(scrollOffset > 64 + topInset);
+  };
+
   return (
     <>
       <Appbar.Header
@@ -60,7 +64,7 @@ const HashtagsScreen = ({
         }}
         elevated={isScrolled}
       >
-        {navigation.canGoBack() ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+        {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
         {isScrolled && (
           <>
             <Appbar.Content title={`#${tag}`} />
@@ -85,7 +89,7 @@ const HashtagsScreen = ({
             defaultMessage='There is nothing in this hashtag yet.'
           />
         }
-        handleScrolled={setIsScrolled}
+        onScroll={handleScroll}
         header={
           <View style={{ marginTop: 64 + topInset, paddingHorizontal: 16 }}>
             <View
