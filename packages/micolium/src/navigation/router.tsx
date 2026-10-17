@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth';
 import { AccountsStackScreen } from './pages/accounts';
 import { BookmarksStackScreen } from './pages/bookmarks';
 import { HashtagsScreen } from './pages/hashtags';
+import { LinksScreen } from './pages/links';
 import { LoginStackScreen } from './pages/login';
 import { SettingsStackScreen } from './pages/settings';
 import { StatusStackScreen } from './pages/status';
@@ -86,6 +87,7 @@ type RootStackParams = {
   accounts: NavigatorScreenParams<AccountStackParams>;
   hashtags: { tag: string };
   bookmarks: NavigatorScreenParams<BookmarksStackParams>;
+  links: { url: string };
 };
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -103,6 +105,7 @@ const RootNavigator = () => {
           <RootStack.Screen name='accounts' component={AccountsStackScreen} />
           <RootStack.Screen name='hashtags' component={HashtagsScreen} />
           <RootStack.Screen name='bookmarks' component={BookmarksStackScreen} />
+          <RootStack.Screen name='links' component={LinksScreen} />
         </>
       )}
       <RootStack.Screen
