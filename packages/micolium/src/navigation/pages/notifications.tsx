@@ -361,6 +361,7 @@ const NotificationsScreen = ({
       renderTabBar={(props) => (
         <TabBar {...props} style={{ backgroundColor: colors.surfaceContainer }} />
       )}
+      lazy
     />
   );
 };

@@ -342,6 +342,7 @@ const SearchScreen = ({
         renderTabBar={(props) => (
           <TabBar {...props} key={tabBarKey} style={{ backgroundColor: colors.surfaceContainer }} />
         )}
+        lazy
       />
     </>
   );

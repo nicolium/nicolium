@@ -74,6 +74,7 @@ const FollowRequestsScreen = (_: NativeStackScreenProps<RootStackParams, 'follow
       renderTabBar={(props) => (
         <TabBar {...props} style={{ backgroundColor: colors.surfaceContainer }} />
       )}
+      lazy
     />
   );
 };
