@@ -4,10 +4,8 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React from 'react';
-import { useIntl } from 'react-intl';
 import { View } from 'react-native';
 
-import { Header } from '@/components/ui/header';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 
 import { Profile } from '../components/profile';

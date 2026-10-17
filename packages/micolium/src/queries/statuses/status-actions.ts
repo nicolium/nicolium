@@ -8,7 +8,7 @@ import { useContextStore } from '@/stores/contexts';
 // import { usePendingStatusesStore } from '@/stores/pending-statuses';
 // import { useSettingsStore } from '@/stores/settings';
 import { useTimelinesStore } from '@/stores/timelines';
-import { useUiStore, useUiStoreActions } from '@/stores/ui';
+import { useUiStore } from '@/stores/ui';
 import { shouldHaveCard } from '@/utils/status';
 
 import { importEntities } from '../utils/import-entities';

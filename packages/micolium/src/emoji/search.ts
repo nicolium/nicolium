@@ -1,6 +1,6 @@
 import fuzzysort from 'fuzzysort';
 
-import data, { type EmojiData } from './data';
+import { emojis, type EmojiData } from './data';
 
 import type { CustomEmoji } from 'pl-api';
 
@@ -19,8 +19,6 @@ type Emoji =
       native: string;
     };
 
-let emojis: EmojiData['emojis'] = data.emojis;
-
 interface SearchableEmoji {
   emojiId: string;
   emojiName: string;
@@ -31,7 +29,9 @@ interface SearchableEmoji {
 const nativeData: Array<SearchableEmoji> = [];
 let customData: Array<SearchableEmoji> = [];
 
-const sortedEmojis = Object.entries(emojis).toSorted((a, b) => a[0].localeCompare(b[0]));
+const sortedEmojis = Object.entries(emojis as EmojiData).toSorted((a, b) =>
+  a[0].localeCompare(b[0]),
+);
 for (const [key, emoji] of sortedEmojis) {
   nativeData.push({
     emojiId: emoji.id.replaceAll('-', '_'),

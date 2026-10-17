@@ -3,7 +3,6 @@ import {
   Card,
   Chip,
   Icon,
-  IconButton,
   Text,
   Tooltip,
   TouchableRipple,
@@ -13,8 +12,6 @@ import { Link, useNavigation } from '@react-navigation/native';
 import {
   AtIcon,
   CoinsIcon,
-  DotsThreeIcon,
-  DotsThreeVerticalIcon,
   GlobeIcon,
   HashIcon,
   ListIcon,
@@ -30,7 +27,7 @@ import {
 } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
-import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { useAccounts } from '@/queries/accounts/use-accounts';
 import { useList } from '@/queries/accounts/use-lists';

@@ -7,23 +7,16 @@ import {
   DataTable,
   Divider,
   Icon,
-  IconButton,
   Text,
   useTheme,
 } from '@mkljczk/react-native-paper';
 import { Link, useNavigation } from '@react-navigation/native';
 import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import { Image } from 'expo-image';
-import { CaretDownIcon, DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
+import { CaretDownIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import {
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
-  Platform,
-  Pressable,
-  View,
-} from 'react-native';
+import { type NativeScrollEvent, type NativeSyntheticEvent, Pressable, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as DropdownMenu from 'zeego/dropdown-menu';

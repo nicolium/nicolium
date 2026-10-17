@@ -1,6 +1,5 @@
 import { Chip, Text } from '@mkljczk/react-native-paper';
 import { Image } from 'expo-image';
-import { EmojiReaction } from 'pl-api';
 import React from 'react';
 import { View } from 'react-native';
 
@@ -10,6 +9,7 @@ import {
 } from '@/queries/statuses/use-status-interactions';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
+import type { EmojiReaction } from 'pl-api';
 
 interface IStatusEmojiReactions {
   status: SelectedStatus;

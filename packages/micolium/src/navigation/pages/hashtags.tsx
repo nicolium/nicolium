@@ -3,7 +3,7 @@ import { UserMinusIcon, UserPlusIcon } from 'phosphor-react-native';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { type NativeScrollEvent, type NativeSyntheticEvent, View } from 'react-native';
-import Animated, {
+import {
   createAnimatedComponent,
   useAnimatedStyle,
   useSharedValue,

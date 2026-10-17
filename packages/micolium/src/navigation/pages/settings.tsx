@@ -1,4 +1,4 @@
-import { Divider, List, SegmentedButtons, Switch, useTheme } from '@mkljczk/react-native-paper';
+import { List, SegmentedButtons, Switch, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,

@@ -26,7 +26,6 @@ import { TabView, TabBar } from 'react-native-tab-view';
 import { Notification } from '@/components/notification';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
-import { iconHelper } from '@/components/ui/icon';
 import { LoadMore } from '@/components/ui/load-more';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';

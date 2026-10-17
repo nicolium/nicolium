@@ -50,7 +50,7 @@ const InteractAsAccount: React.FC<IInteractAsAccount> = ({ scope, statusId, sour
       {accountId ? <Account id={accountId} displayFqn /> : <ActivityIndicator />}
       {resolvedId === undefined || (!status && resolvedId !== null) ? (
         <ActivityIndicator style={{ alignSelf: 'flex-start', margin: 8 }} />
-      ) : (resolvedId === null || !status) ? (
+      ) : resolvedId === null || !status ? (
         <Text variant='bodyMedium' style={{ color: colors.onSurfaceVariant }}>
           {intl.formatMessage(messages.unavailable)}
         </Text>
@@ -101,7 +101,7 @@ const InteractAsSheet: React.FC = () => {
           </Text>
           <Status id={interactAs.statusId} compact withActions={false} textOnly />
           <Divider />
-          {scopes.length ? (
+          {!scopes.length ? (
             scopes.map((scope) => (
               <CurrentAccountProvider key={scope} value={scope}>
                 <InteractAsAccount
@@ -112,7 +112,7 @@ const InteractAsSheet: React.FC = () => {
               </CurrentAccountProvider>
             ))
           ) : (
-            <Text variant='bodyMedium' style={{ marginHorizontal: 16 }}>
+            <Text variant='bodyMedium' style={{ margin: 16, marginBottom: 0 }}>
               <FormattedMessage
                 id='interact_as_modal.no_accounts'
                 defaultMessage='You are not logged in to any other accounts.'
