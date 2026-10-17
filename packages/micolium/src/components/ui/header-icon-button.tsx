@@ -34,11 +34,11 @@ const HeaderIconButton: React.FC<IHeaderIconButton> = ({ icon, badge, ...props }
               position: 'absolute',
               top: 0,
               right: 0,
-              minWidth: badge && badge > 100 ? 32 : undefined,
+              minWidth: badge && (badge >= 1000 ? 40 : badge >= 100 ? 32 : undefined),
             }}
             visible={!!badge}
           >
-            {badge}
+            {badge && badge >= 1000 ? '999+' : badge}
           </Badge>
         </GlassView>
       </Pressable>
