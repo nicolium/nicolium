@@ -69,7 +69,11 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
           {ownAccount && (
             <DropdownMenu.Item
               key='follow-requests'
-              onSelect={() => navigation.navigate('follow_requests')}
+              onSelect={() =>
+                navigation.navigate('settings', {
+                  screen: 'follow_requests',
+                })
+              }
             >
               <DropdownMenu.ItemIcon
                 ios={{ name: 'person.badge.plus' }}

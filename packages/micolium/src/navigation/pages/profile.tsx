@@ -4,8 +4,10 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { View } from 'react-native';
 
+import { Header } from '@/components/ui/header';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 
 import { Profile } from '../components/profile';
@@ -27,16 +29,10 @@ const ProfileScreen = (_: NativeStackScreenProps<ProfileStackParams, 'view'>) =>
 
 const ProfileStack = createNativeStackNavigator<ProfileStackParams>();
 
-const ProfileStackScreen = () => {
-  return (
-    <ProfileStack.Navigator>
-      <ProfileStack.Screen
-        name='view'
-        component={ProfileScreen}
-        options={{ headerShown: false, title: 'Profile' }}
-      />
-    </ProfileStack.Navigator>
-  );
-};
+const ProfileStackScreen = () => (
+  <ProfileStack.Navigator>
+    <ProfileStack.Screen name='view' component={ProfileScreen} options={{ headerShown: false }} />
+  </ProfileStack.Navigator>
+);
 
 export { ProfileStackScreen };

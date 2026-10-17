@@ -1,12 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
 
 import { useAuthStore } from '@/stores/auth';
 
 import { AccountsStackScreen } from './pages/accounts';
 import { BookmarksStackScreen } from './pages/bookmarks';
-import { FollowRequestsScreen } from './pages/follow-requests';
 import { HashtagsScreen } from './pages/hashtags';
 import { LoginStackScreen } from './pages/login';
 import { SettingsStackScreen } from './pages/settings';
@@ -45,6 +43,7 @@ type SettingsStackParams = {
   timelines: undefined;
   notifications: undefined;
   appearance: undefined;
+  follow_requests: undefined;
 };
 type StatusStackParams = {
   view: { id: string };
@@ -85,53 +84,37 @@ type RootStackParams = {
   accounts: NavigatorScreenParams<AccountStackParams>;
   hashtags: { tag: string };
   bookmarks: NavigatorScreenParams<BookmarksStackParams>;
-  follow_requests: undefined;
 };
-
-const messages = defineMessages({
-  followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
-});
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
 
 const RootNavigator = () => {
-  const intl = useIntl();
   const isLoggedIn = useAuthStore(({ currentAccount }) => !!currentAccount);
 
   return (
-    <RootStack.Navigator screenOptions={{ headerBackButtonDisplayMode: 'minimal' }}>
+    <RootStack.Navigator screenOptions={{ headerShown: false }}>
       {isLoggedIn && (
         <>
-          <RootStack.Screen name='app' component={Tabs} options={{ headerShown: false }} />
+          <RootStack.Screen name='app' component={Tabs} />
           <RootStack.Screen
             name='settings'
             component={SettingsStackScreen}
-            options={{ headerShown: false }}
           />
           <RootStack.Screen
             name='status'
             component={StatusStackScreen}
-            options={{ headerShown: false }}
           />
           <RootStack.Screen
             name='accounts'
             component={AccountsStackScreen}
-            options={{ headerShown: false }}
           />
           <RootStack.Screen
             name='hashtags'
             component={HashtagsScreen}
-            options={{ headerShown: false }}
           />
           <RootStack.Screen
             name='bookmarks'
             component={BookmarksStackScreen}
-            options={{ headerShown: false }}
-          />
-          <RootStack.Screen
-            name='follow_requests'
-            component={FollowRequestsScreen}
-            options={{ title: intl.formatMessage(messages.followRequests) }}
           />
         </>
       )}

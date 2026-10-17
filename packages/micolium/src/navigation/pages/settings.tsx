@@ -25,6 +25,7 @@ import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import type { RootStackParams, SettingsStackParams } from '../router';
+import { FollowRequestsScreen } from './follow-requests';
 
 const messages = defineMessages({
   settingsHeading: { id: 'settings.settings', defaultMessage: 'Settings' },
@@ -53,6 +54,7 @@ const messages = defineMessages({
     defaultMessage: 'Markdown',
   },
   contentTypeHtml: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
+  followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
 });
 
 const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'compose'>) => {
@@ -482,31 +484,36 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
   const intl = useIntl();
 
   return (
-    <SettingsStack.Navigator>
+    <SettingsStack.Navigator screenOptions={{ header: Header }}>
       <SettingsStack.Screen
         name='index'
         component={SettingsScreen}
-        options={{ header: Header, title: intl.formatMessage(messages.settingsHeading) }}
+        options={{ title: intl.formatMessage(messages.settingsHeading) }}
       />
       <SettingsStack.Screen
         name='compose'
         component={ComposeSettingsScreen}
-        options={{ header: Header, title: intl.formatMessage(messages.composeHeading) }}
+        options={{ title: intl.formatMessage(messages.composeHeading) }}
       />
       <SettingsStack.Screen
         name='timelines'
         component={TimelinesSettingsScreen}
-        options={{ header: Header, title: intl.formatMessage(messages.timelinesHeading) }}
+        options={{ title: intl.formatMessage(messages.timelinesHeading) }}
       />
       <SettingsStack.Screen
         name='notifications'
         component={NotificationsSettingsScreen}
-        options={{ header: Header, title: intl.formatMessage(messages.notificationsHeading) }}
+        options={{ title: intl.formatMessage(messages.notificationsHeading) }}
       />
       <SettingsStack.Screen
         name='appearance'
         component={AppearanceSettingsScreen}
-        options={{ header: Header, title: intl.formatMessage(messages.appearanceHeading) }}
+        options={{ title: intl.formatMessage(messages.appearanceHeading) }}
+      />
+      <SettingsStack.Screen
+        name='follow_requests'
+        component={FollowRequestsScreen}
+        options={{ title: intl.formatMessage(messages.followRequests) }}
       />
     </SettingsStack.Navigator>
   );
