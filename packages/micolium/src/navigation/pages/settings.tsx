@@ -7,10 +7,13 @@ import { isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import { Timeline as TimelineIcon } from 'lucide-react-native';
 import {
   BellSimpleIcon,
+  FunnelIcon,
   InfoIcon,
   NotePencilIcon,
   PaletteIcon,
+  ProhibitIcon,
   SignOutIcon,
+  SpeakerSimpleXIcon,
   UserPlusIcon,
 } from 'phosphor-react-native';
 import React, { useMemo } from 'react';
@@ -25,6 +28,7 @@ import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { FollowRequestsScreen } from './follow-requests';
+import { BlocksScreen, MutesScreen } from './mutes-blocks';
 
 import type { RootStackParams, SettingsStackParams } from '../router';
 
@@ -56,6 +60,8 @@ const messages = defineMessages({
   },
   contentTypeHtml: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
+  blocked: { id: 'column.blocks.long', defaultMessage: 'Blocked accounts' },
+  muted: { id: 'column.mutes.long', defaultMessage: 'Muted accounts' },
 });
 
 const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'compose'>) => {
@@ -451,7 +457,26 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
           onPress={() => navigation.navigate('about')}
         />
       </List.Section>
-      <Divider />
+      <List.Section>
+        <List.Subheader>
+          <FormattedMessage id='settings.account_header' defaultMessage='Account settings' />
+        </List.Subheader>
+        <List.Item
+          title={<FormattedMessage id='column.mutes.long' defaultMessage='Muted accounts' />}
+          left={(props) => <List.Icon {...props} icon={iconHelper(SpeakerSimpleXIcon)} />}
+          onPress={() => navigation.navigate('mutes')}
+        />
+        <List.Item
+          title={<FormattedMessage id='column.blocks.long' defaultMessage='Blocked accounts' />}
+          left={(props) => <List.Icon {...props} icon={iconHelper(ProhibitIcon)} />}
+          onPress={() => navigation.navigate('blocks')}
+        />
+        <List.Item
+          title={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
+          left={(props) => <List.Icon {...props} icon={iconHelper(FunnelIcon)} />}
+          onPress={() => navigation.navigate('filters')}
+        />
+      </List.Section>
       <List.Section>
         <List.Subheader>
           <FormattedMessage id='settings.accounts_header' defaultMessage='Accounts' />
@@ -515,6 +540,16 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='follow_requests'
         component={FollowRequestsScreen}
         options={{ title: intl.formatMessage(messages.followRequests) }}
+      />
+      <SettingsStack.Screen
+        name='blocks'
+        component={BlocksScreen}
+        options={{ title: intl.formatMessage(messages.blocked) }}
+      />
+      <SettingsStack.Screen
+        name='mutes'
+        component={MutesScreen}
+        options={{ title: intl.formatMessage(messages.muted) }}
       />
     </SettingsStack.Navigator>
   );

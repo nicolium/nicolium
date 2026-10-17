@@ -100,7 +100,7 @@ const useFollowAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: ['accountRelationships', accountId, 'follow'],
     mutationFn: (params?: FollowAccountParams) => client.accounts.followAccount(accountId, params),
     onMutate: (params) => {
       return updateRelationship(
@@ -135,7 +135,7 @@ const useUnfollowAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: ['accountRelationships', accountId, 'follow'],
     mutationFn: () => client.accounts.unfollowAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -171,7 +171,7 @@ const useBlockAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: ['accountRelationships', accountId, 'block'],
     mutationFn: (params?: BlockAccountParams) => client.filtering.blockAccount(accountId, params),
     onMutate: () =>
       updateRelationship(
@@ -222,7 +222,7 @@ const useUnblockAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: ['accountRelationships', accountId, 'block'],
     mutationFn: () => client.filtering.unblockAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -253,7 +253,7 @@ const useMuteAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: ['accountRelationships', accountId, 'mute'],
     mutationFn: (params?: MuteAccountParams) => client.filtering.muteAccount(accountId, params),
     onMutate: () =>
       updateRelationship(
@@ -298,7 +298,7 @@ const useUnmuteAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: ['accountRelationships', accountId, 'mute'],
     mutationFn: () => client.filtering.unmuteAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -328,7 +328,7 @@ const usePinAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: ['accountRelationships', accountId, 'pin'],
     mutationFn: () => client.accounts.pinAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -361,7 +361,7 @@ const useUnpinAccountMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: ['accountRelationships', accountId, 'pin'],
     mutationFn: () => client.accounts.unpinAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -393,7 +393,7 @@ const useRemoveAccountFromFollowersMutation = (accountId: string) => {
   const scopeUrl = useScopeUrl();
 
   return useMutation({
-    mutationKey: queryKeys.accountRelationships.show(accountId),
+    mutationKey: ['accountRelationships', accountId, 'removeFollower'],
     mutationFn: () => client.accounts.removeAccountFromFollowers(accountId),
     onMutate: () =>
       updateRelationship(

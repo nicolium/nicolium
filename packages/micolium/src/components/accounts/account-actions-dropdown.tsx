@@ -27,8 +27,8 @@ const messages = defineMessages({
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
-  blocked: { id: 'column.blocked.long', defaultMessage: 'Blocked accounts' },
-  muted: { id: 'column.muted.long', defaultMessage: 'Muted accounts' },
+  blocked: { id: 'column.blocks.long', defaultMessage: 'Blocked accounts' },
+  muted: { id: 'column.mutes.long', defaultMessage: 'Muted accounts' },
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
 });
 

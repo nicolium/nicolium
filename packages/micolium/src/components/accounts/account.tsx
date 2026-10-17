@@ -12,6 +12,7 @@ import { ActionButton } from './action-button';
 interface IAccount extends Pick<IUIAccount, 'action' | 'onPress' | 'style'> {
   id: string;
   timestamp?: string;
+  futureDate?: boolean;
   withLink?: boolean;
   fullWidthPressable?: boolean;
   displayFqn?: boolean;

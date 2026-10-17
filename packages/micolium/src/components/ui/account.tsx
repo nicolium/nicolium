@@ -38,6 +38,7 @@ interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
   emojis?: Array<CustomEmoji>;
   acct: string;
   timestamp?: string;
+  futureDate?: boolean;
   fullWidthPressable?: boolean;
   action?: React.JSX.Element;
 }
@@ -49,6 +50,7 @@ const UIAccount: React.FC<IUIAccount> = ({
   emojis,
   acct,
   timestamp,
+  futureDate,
   fullWidthPressable = true,
   style,
   onPress,
@@ -90,7 +92,7 @@ const UIAccount: React.FC<IUIAccount> = ({
             {timestamp && (
               <>
                 {' · '}
-                <RelativeTimestamp timestamp={timestamp} />
+                <RelativeTimestamp timestamp={timestamp} futureDate={futureDate} />
               </>
             )}
           </Text>

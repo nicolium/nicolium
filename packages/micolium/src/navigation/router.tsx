@@ -44,6 +44,8 @@ type SettingsStackParams = {
   notifications: undefined;
   appearance: undefined;
   follow_requests: undefined;
+  blocks: undefined;
+  mutes: undefined;
 };
 type StatusStackParams = {
   view: { id: string };
