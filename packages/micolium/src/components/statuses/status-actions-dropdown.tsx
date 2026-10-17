@@ -25,6 +25,7 @@ import {
   useUnpinStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useAuthStore } from '@/stores/auth';
+import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { iconHelper } from '../ui/icon';
@@ -35,6 +36,20 @@ const messages = defineMessages({
   open: { id: 'status.open', defaultMessage: 'Show post details' },
   openInBrowser: { id: 'status.open_in_browser', defaultMessage: 'Open post in browser' },
   share: { id: 'status.share', defaultMessage: 'Share' },
+  interactAs: { id: 'status.interact_as', defaultMessage: 'Interact from other accounts' },
+  interactAsConfirmationHeading: {
+    id: 'interact_as_modal.title',
+    defaultMessage: 'Interact from accounts',
+  },
+  interactAsConfirmationMessage: {
+    id: 'interact_as_modal.confirmation_message',
+    defaultMessage:
+      'This option will ask the remote server to fetch the post on behalf of the other accounts you’re signed in with. That may reveal which accounts you use to the server that hosts the post, so only continue if you are comfortable with that risk. Are you sure you want to proceed?',
+  },
+  interactAsConfirmationConfirm: {
+    id: 'interact_as_modal.confirmation.confirm',
+    defaultMessage: 'Confirm',
+  },
   bookmark: { id: 'status.bookmark', defaultMessage: 'Bookmark' },
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
   bookmarkSetFolder: { id: 'status.bookmark_folder', defaultMessage: 'Set bookmark folder' },
@@ -87,7 +102,6 @@ const messages = defineMessages({
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
   muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
   report: { id: 'status.report', defaultMessage: 'Report post' },
-  interactAs: { id: 'status.interact_as', defaultMessage: 'Interact from other accounts' },
 });
 
 interface IStatusActionsDropdown {
@@ -107,6 +121,8 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
 
   const { data: bookmarkFolders } = useBookmarkFolders();
   const { data: currentAccountId } = useCredentialAccountId();
+
+  const skipInteractAsConfirmation = useSetting('timelines.skipInteractAsConfirmation');
 
   const { mutate: bookmark } = useBookmarkStatus(status.id);
   const { mutate: unbookmark } = useUnbookmarkStatus(status.id);
@@ -129,6 +145,26 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
   const handleCopy = () => Clipboard.setStringAsync(status.uri);
 
   const handleOpenInBrowser = () => Linking.openURL(status.uri);
+
+  const handleOpenInteractAs = () => {
+    if (skipInteractAsConfirmation) openInteractAs(status.id, scopeUrl);
+    else {
+      Alert.alert(
+        intl.formatMessage(messages.interactAsConfirmationHeading),
+        intl.formatMessage(messages.interactAsConfirmationMessage),
+        [
+          {
+            text: intl.formatMessage(messages.cancel),
+            style: 'cancel',
+          },
+          {
+            text: intl.formatMessage(messages.interactAsConfirmationConfirm),
+            onPress: () => openInteractAs(status.id, scopeUrl),
+          },
+        ],
+      );
+    }
+  };
 
   const handleShare = () => {
     shareAsync(status.uri);
@@ -232,17 +268,6 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
               {intl.formatMessage(messages.openInBrowser)}
             </DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
-          {hasOtherAccounts && (
-            <DropdownMenu.Item
-              key='interact-as'
-              onSelect={() => openInteractAs(status.id, scopeUrl)}
-            >
-              <DropdownMenu.ItemIcon ios={{ name: 'person.2' }} androidIconName='ph_users_three' />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.interactAs)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          )}
           <DropdownMenu.Item key='share' onSelect={handleShare}>
             <DropdownMenu.ItemIcon
               ios={{ name: 'square.and.arrow.up' }}
@@ -252,6 +277,14 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
           </DropdownMenu.Item>
         </DropdownMenu.Group>
         <DropdownMenu.Group>
+          {hasOtherAccounts && (
+            <DropdownMenu.Item key='interact-as' onSelect={handleOpenInteractAs}>
+              <DropdownMenu.ItemIcon ios={{ name: 'person.3' }} androidIconName='ph_users_three' />
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.interactAs)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          )}
           {features.bookmarks && (
             <DropdownMenu.Item key='bookmark' onSelect={handleBookmark}>
               <DropdownMenu.ItemIcon
