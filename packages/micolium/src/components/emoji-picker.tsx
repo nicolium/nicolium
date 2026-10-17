@@ -1,13 +1,14 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
-import { IconButton, Text, useTheme } from '@mkljczk/react-native-paper';
+import { IconButton, Searchbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';
 
 import emojiData, { type EmojiCategory as MartEmojiCategory } from '@/emoji/data';
+import emojiSearch, { type Emoji } from '@/emoji/search';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useEmojiPickerActions, useEmojiPickerStore } from '@/stores/emoji-picker';
@@ -24,6 +25,7 @@ const messages = defineMessages({
   symbols: { id: 'emoji_button.symbols', defaultMessage: 'Symbols' },
   flags: { id: 'emoji_button.flags', defaultMessage: 'Flags' },
   custom: { id: 'emoji_button.custom', defaultMessage: 'Custom' },
+  emojiSearch: { id: 'emoji_button.search', defaultMessage: 'Search…' },
 });
 
 const selectCustomEmojis = (emojis: Array<CustomEmoji>, category: string | null) => {
@@ -63,7 +65,7 @@ const CustomEmojiCategory: React.FC<ICustomEmojiCategory> = ({ category }) => {
     />
   );
 
-  const renderedEmojis = useMemo(() => {
+  const renderedEmojis = React.useMemo(() => {
     return emojis.map((emoji) => (
       <IconButton
         key={emoji.shortcode}
@@ -130,23 +132,94 @@ const EmojiCategory: React.FC<IEmojiCategory> = ({ category }) => {
   return <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{renderedEmojis}</View>;
 };
 
+interface IEmojiSearchResults {
+  searchResults: Array<Emoji>;
+}
+
+const EmojiSearchResults: React.FC<IEmojiSearchResults> = ({ searchResults }) => {
+  const { config } = useEmojiPickerStore();
+  const { dismissPicker } = useEmojiPickerActions();
+
+  const renderedEmojis = React.useMemo(() => {
+    return searchResults.map((emoji) => (
+      <IconButton
+        key={emoji.id}
+        onPress={() => {
+          config?.onPick(emoji.custom ? emoji.id : emoji.native);
+          dismissPicker();
+        }}
+        mode={
+          config?.selected?.includes(emoji.custom ? emoji.id : emoji.native)
+            ? 'contained-tonal'
+            : 'outlined'
+        }
+        icon={() =>
+          emoji.custom ? (
+            <Image
+              source={{ uri: emoji.imageUrl }}
+              accessibilityLabel={emoji.id}
+              style={{ width: 24, height: 24, objectFit: 'contain' }}
+            />
+          ) : (
+            <Text style={{ fontSize: 24 }}>{emoji.native}</Text>
+          )
+        }
+        size={24}
+      />
+    ));
+  }, [searchResults]);
+
+  return <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{renderedEmojis}</View>;
+};
+
 type PickerItem =
   | { type: 'header'; category: MartEmojiCategory | string }
-  | { type: 'row'; category: MartEmojiCategory | string };
+  | { type: 'row'; category: MartEmojiCategory | string }
+  | { type: 'search-results'; category: '' };
 
 const EmojiPicker = React.forwardRef<FlashListRef<PickerItem>>((_, ref) => {
+  const { colors } = useTheme();
   const intl = useIntl();
+  const { config } = useEmojiPickerStore();
 
+  const [query, setQuery] = React.useState('');
+  const deferredQuery = React.useDeferredValue(query);
+
+  const { data: customEmojis } = useCustomEmojis();
   const { data: customCategories = [] } = useCustomEmojis(selectCustomCategories);
 
-  const categories: Array<PickerItem> = useMemo(
+  const searchResults = React.useMemo(() => {
+    if (!deferredQuery.trim()) return null;
+
+    return emojiSearch(deferredQuery, customEmojis, 40, config?.withCustom);
+  }, [deferredQuery]);
+
+  const categories: Array<PickerItem> = React.useMemo(
     () =>
-      [...emojiData.categories, ...customCategories].flatMap((category) => [
-        { type: 'header', category },
-        { type: 'row', category },
-      ]),
-    [customCategories],
+      searchResults
+        ? [{ type: 'search-results', category: '' }]
+        : [...emojiData.categories, ...customCategories].flatMap((category) => [
+            { type: 'header', category },
+            { type: 'row', category },
+          ]),
+    [searchResults, customCategories],
   );
+
+  const renderSearch = () => {
+    return (
+      <Searchbar
+        placeholder={intl.formatMessage(messages.emojiSearch)}
+        value={query}
+        onChangeText={setQuery}
+        style={{
+          marginHorizontal: 0,
+          marginBottom: 16,
+          borderColor: colors.outlineVariant,
+          borderWidth: 1,
+        }}
+      />
+    );
+  };
 
   const stickyHeaderIndices = categories
     .map((item, index) => {
@@ -162,10 +235,13 @@ const EmojiPicker = React.forwardRef<FlashListRef<PickerItem>>((_, ref) => {
     <FlashList
       ref={ref}
       data={categories}
+      ListHeaderComponent={renderSearch}
       renderItem={({ item }) => {
         if (!item) return null;
 
         const { category, type } = item;
+
+        if (type === 'search-results') return <EmojiSearchResults searchResults={searchResults!} />;
 
         if (typeof category === 'string') {
           if (type === 'row')
@@ -220,8 +296,8 @@ const EmojiPickerBottomSheet = () => {
   return (
     <TrueSheet
       ref={bottomSheetRef}
-      detents={[0.4, 'auto']}
-      onDidDismiss={() => dismissPicker()}
+      detents={[0.5, 'auto']}
+      onDidDismiss={dismissPicker}
       scrollableRef={scrollableRef}
       style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 16 : 32, paddingHorizontal: 16 }}
       backgroundColor={glassEffect ? undefined : colors.surfaceContainer}
