@@ -290,7 +290,6 @@ const ReactionAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =>
 
     openEmojiPicker(
       (emoji) => {
-        console.log(emoji);
         if (selected.includes(emoji)) return emojiUnreact(emoji);
         return emojiReact(emoji);
       },
