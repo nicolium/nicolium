@@ -31,13 +31,22 @@ const getMentionedUsernames = (status: Pick<BaseStatus, 'mentions'>): Array<stri
 
 // Creates search text from the status
 const buildSearchContent = (
-  status: Pick<BaseStatus, 'mentions' | 'spoiler_text' | 'content'>,
+  status: Pick<BaseStatus, 'content' | 'media_attachments' | 'mentions' | 'spoiler_text'>,
   poll?: BaseStatus['poll'],
 ): string => {
   const pollOptionTitles = getPollOptionTitles(poll);
   const mentionedUsernames = getMentionedUsernames(status);
+  const mediaAttachmentDescriptions = status.media_attachments.map(
+    (attachment) => attachment.description,
+  );
 
-  const fields = [status.spoiler_text, status.content, ...pollOptionTitles, ...mentionedUsernames];
+  const fields = [
+    status.spoiler_text,
+    status.content,
+    ...pollOptionTitles,
+    ...mentionedUsernames,
+    ...mediaAttachmentDescriptions,
+  ];
 
   return unescapeHTML(fields.join('\n\n')) || '';
 };
