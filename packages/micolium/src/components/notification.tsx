@@ -293,7 +293,9 @@ const Notification: React.FC<INotification> = (props) => {
 
   const renderContent = () => {
     if (notification.type === 'bite' && status) {
-      return <Status id={status.id} withLink compact style={{ padding: 0 }} />;
+      return (
+        <Status id={status.id} withLink compact context='notifications' style={{ padding: 0 }} />
+      );
     }
 
     switch (notification.type) {

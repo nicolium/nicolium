@@ -108,6 +108,7 @@ const PostsTimeline: React.FC<IProfileTimeline> = ({
       emptyMessageHeading={
         <FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />
       }
+      context='account'
       {...props}
     />
   );

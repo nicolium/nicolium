@@ -55,6 +55,8 @@ import { StatusLinkPreview } from './status-link-preview';
 import { StatusMedia } from './status-media';
 import { StatusPoll } from './status-poll';
 
+import type { FilterContext } from 'pl-api';
+
 const messages = defineMessages({
   publicExplanation: {
     id: 'status.visibility.public',
@@ -159,7 +161,7 @@ const StatusVisibilityIcon: React.FC<IStatusVisibilityIcon> = ({ status }) => {
 
 interface IQuote {
   id: string;
-  context?: 'home' | 'public' | 'thread' | 'notifications';
+  context?: FilterContext;
 }
 
 const Quote: React.FC<IQuote> = ({ id, ...props }) => {
@@ -391,7 +393,7 @@ interface IStatus {
   id: string;
   rebloggedBy?: Array<string>;
   showPinned?: boolean;
-  context?: 'home' | 'public' | 'thread' | 'notifications';
+  context?: FilterContext;
   isConnectedBottom?: boolean | ((status: SelectedStatus) => boolean);
   withLink?: boolean;
   withActions?: boolean;

@@ -14,11 +14,12 @@ import { useSetting } from '@/stores/settings';
 
 import type { useTimeline } from '@/queries/timelines/use-timeline';
 import type { TimelineEntry } from '@/stores/timelines';
+import type { FilterContext } from 'pl-api';
 
 interface ITimeline extends IEmptyMessage {
   query: ReturnType<typeof useTimeline>;
   pinnedQuery?: ReturnType<typeof useTimeline>;
-  context?: 'home' | 'public';
+  context?: FilterContext;
   header?: React.JSX.Element;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }
