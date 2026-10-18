@@ -4,7 +4,7 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { isGlassEffectAPIAvailable } from 'expo-glass-effect';
-import { Timeline as TimelineIcon } from 'lucide-react-native';
+import TimelineIcon from 'lucide-react-native/icons/timeline';
 import {
   BellSimpleIcon,
   ChatSlashIcon,
