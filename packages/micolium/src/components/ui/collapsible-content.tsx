@@ -27,7 +27,11 @@ const CollapsibleContent: React.FC<ICollapsibleContent> = ({
     setShouldCollapse(containerNode.current.clientHeight > maxHeight + 80);
   }, [containerNode]);
 
-  const transparentBackground = colors.background.toString().slice(0, -2) + '0)';
+  const transparentBackground =
+    colors.background.toString().length === 7
+      ? colors.background.toString() + '00'
+      : colors.background.toString().slice(0, -2) + '0)';
+  console.log(transparentBackground, colors.background);
 
   return (
     <View
