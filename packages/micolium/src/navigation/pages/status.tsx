@@ -1,7 +1,6 @@
 import {
   ActivityIndicator,
   Appbar,
-  Card,
   Divider,
   Text,
   TouchableRipple,
@@ -24,6 +23,7 @@ import { AccountsList } from '@/components/accounts/accounts-list';
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { Status } from '@/components/statuses/status';
 import { StatusMedia } from '@/components/statuses/status-media';
+import { StatusesList } from '@/components/statuses/statuses-list';
 import { Emojify } from '@/components/ui/emojify';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';

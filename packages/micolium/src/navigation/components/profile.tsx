@@ -15,7 +15,7 @@ import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
 import { mediaAttachmentSchema } from 'pl-api';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { type NativeScrollEvent, type NativeSyntheticEvent, Pressable, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
