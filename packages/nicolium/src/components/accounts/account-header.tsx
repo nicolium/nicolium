@@ -207,9 +207,9 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
   const makeInfo = () => {
     const info: React.ReactNode[] = [];
 
-    if (!account || !ownAccount) return info;
+    if (!account || !ownAccount || ownAccount.id === account.id) return info;
 
-    if (ownAccount.id !== account.id && account.relationship?.followed_by) {
+    if (account.relationship?.followed_by) {
       info.push(
         <Badge
           key='followed_by'
@@ -217,7 +217,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
           title={<FormattedMessage id='account.follows_you' defaultMessage='Follows you' />}
         />,
       );
-    } else if (ownAccount.id !== account.id && account.relationship?.blocking) {
+    } else if (account.relationship?.blocking) {
       info.push(
         <Badge
           key='blocked'
@@ -225,7 +225,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
           title={<FormattedMessage id='account.blocked' defaultMessage='Blocked' />}
         />,
       );
-    } else if (ownAccount.id !== account.id && account.relationship?.requested_by) {
+    } else if (account.relationship?.requested_by) {
       info.push(
         <Badge
           key='requested'
@@ -240,7 +240,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
       );
     }
 
-    if (ownAccount.id !== account.id && account.relationship?.muting) {
+    if (account.relationship?.muting) {
       info.push(
         <Badge
           key='muted'
@@ -248,7 +248,7 @@ const AccountHeader: React.FC<IAccountHeader> = ({ account }) => {
           title={<FormattedMessage id='account.muted' defaultMessage='Muted' />}
         />,
       );
-    } else if (ownAccount.id !== account.id && account.relationship?.domain_blocking) {
+    } else if (account.relationship?.domain_blocking) {
       info.push(
         <Badge
           key='domain_blocked'
