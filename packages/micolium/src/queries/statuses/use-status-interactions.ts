@@ -382,22 +382,26 @@ const useBookmarkStatus = (statusId: string) => {
         });
       }
 
-      toast.success(
+      const openedToast = toast.success(
         intl.formatMessage(
           typeof folderId === 'string' ? messages.folderChanged : messages.bookmarkAdded,
         ),
         {
           action: {
             label: intl.formatMessage(messages.view),
-            onClick: () =>
-              folderId
-                ? navigation.navigate('bookmarks', {
-                    screen: 'folder',
-                    params: { id: folderId },
-                  })
-                : navigation.navigate('bookmarks', {
-                    screen: 'all',
-                  }),
+            onClick: () => {
+              toast.dismiss(openedToast);
+              if (folderId) {
+                navigation.navigate('bookmarks', {
+                  screen: 'folder',
+                  params: { id: folderId },
+                });
+              } else {
+                navigation.navigate('bookmarks', {
+                  screen: 'all',
+                });
+              }
+            },
           },
         },
       );

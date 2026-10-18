@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { MediaAttachment } from 'pl-api';
 
 type InteractAsState = {
   statusId: string;
@@ -13,11 +14,17 @@ type EmojiPickerState = {
   scopeUrl?: string;
 };
 
+type MediaViewerState = {
+  media: Array<MediaAttachment>;
+  index: number;
+};
+
 type State = {
   isAccountSwitcherOpen: boolean;
   isComposeOpen: boolean;
   interactAs: InteractAsState | null;
   emojiPicker: EmojiPickerState | null;
+  mediaViewer: MediaViewerState | null;
   actions: {
     openAccountSwitcher: () => void;
     closeAccountSwitcher: () => void;
@@ -33,6 +40,8 @@ type State = {
       scopeUrl?: string,
     ) => void;
     closeEmojiPicker: () => void;
+    openMediaViewer: (media: Array<MediaAttachment>, index?: number) => void;
+    closeMediaViewer: () => void;
   };
 };
 
@@ -41,6 +50,7 @@ const useUiStore = create<State>((set) => ({
   isComposeOpen: false,
   interactAs: null,
   emojiPicker: null,
+  mediaViewer: null,
   actions: {
     openAccountSwitcher: () => {
       set({ isAccountSwitcherOpen: true });
@@ -71,6 +81,12 @@ const useUiStore = create<State>((set) => ({
         },
       })),
     closeEmojiPicker: () => set(() => ({ emojiPicker: null })),
+    openMediaViewer: (media, index = 0) => {
+      set({ mediaViewer: { media, index } });
+    },
+    closeMediaViewer: () => {
+      set({ mediaViewer: null });
+    },
   },
 }));
 
@@ -79,6 +95,7 @@ const useIsAccountSwitcherOpen = () => useUiStore((state) => state.isAccountSwit
 const useIsComposeOpen = () => useUiStore((state) => state.isComposeOpen);
 const useInteractAs = () => useUiStore((state) => state.interactAs);
 const useEmojiPicker = () => useUiStore((state) => state.emojiPicker);
+const useMediaViewer = () => useUiStore((state) => state.mediaViewer);
 
 export {
   useUiStore,
@@ -87,4 +104,5 @@ export {
   useIsComposeOpen,
   useInteractAs,
   useEmojiPicker,
+  useMediaViewer,
 };

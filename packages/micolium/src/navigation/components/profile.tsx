@@ -14,11 +14,13 @@ import { Link, useNavigation } from '@react-navigation/native';
 import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { CaretDownIcon } from 'phosphor-react-native';
+import { mediaAttachmentSchema } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { type NativeScrollEvent, type NativeSyntheticEvent, Pressable, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as v from 'valibot';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { AccountActionsDropdown } from '@/components/accounts/account-actions-dropdown';
@@ -31,6 +33,7 @@ import { StyledHtml } from '@/components/ui/styled-html';
 import { useClient } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
+import { useUiStoreActions } from '@/stores/ui';
 
 import { type ITimeline, Timeline } from '../components/timeline';
 
@@ -128,6 +131,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const profileInfoNode = React.useRef<View>(null);
   const previousScrollOffset = React.useRef<number>(0);
   const glassEffect = isGlassEffectAPIAvailable();
+  const { openMediaViewer } = useUiStoreActions();
 
   const [showReplies, setShowReplies] = React.useState(false);
   const [showReblogs, setShowReblogs] = React.useState(true);
@@ -203,6 +207,28 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     headerMarginTop.value = withTiming(showHeader ? 0 : -64 - topInset);
     setShowComposeButton(scrollOffset < previousScrollOffset.current || scrollOffset === 0);
     previousScrollOffset.current = scrollOffset;
+  };
+
+  const handlePreviewHeader = () => {
+    const header = v.parse(mediaAttachmentSchema, {
+      id: '',
+      type: 'image',
+      url: account.header,
+      description: account.header_description,
+    });
+
+    openMediaViewer([header], 0);
+  };
+
+  const handlePreviewAvatar = () => {
+    const avatar = v.parse(mediaAttachmentSchema, {
+      id: '',
+      type: 'image',
+      url: account.avatar,
+      description: account.avatar_description,
+    });
+
+    openMediaViewer([avatar], 0);
   };
 
   const filtersLabel = (() => {
@@ -295,25 +321,30 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
         </View>
       )}
       <View ref={profileInfoNode}>
-        <Image
-          style={{
-            flex: 1,
-            width: '100%',
-            maxWidth: '100%',
-            minWidth: '100%',
-            height: Math.min(
-              (account.header_default ? (badges.length ? 60 : 50) : 150) + topInset,
-              180,
-            ),
-          }}
-          source={{
-            uri: account.header,
-          }}
-          accessibilityLabel={account.header_description}
-          contentFit='cover'
-          transition={300}
-          recyclingKey={account.header}
-        />
+        <Pressable
+          disabled={account.header_default}
+          onPress={account.header_default ? undefined : handlePreviewHeader}
+        >
+          <Image
+            style={{
+              flex: 1,
+              width: '100%',
+              maxWidth: '100%',
+              minWidth: '100%',
+              height: Math.min(
+                (account.header_default ? (badges.length ? 60 : 50) : 150) + topInset,
+                180,
+              ),
+            }}
+            source={{
+              uri: account.header,
+            }}
+            accessibilityLabel={account.header_description}
+            contentFit='cover'
+            transition={300}
+            recyclingKey={account.header}
+          />
+        </Pressable>
         <View
           style={{
             flexDirection: 'row',
@@ -325,15 +356,20 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             marginHorizontal: 16,
           }}
         >
-          <Avatar.Image
-            source={{ uri: account.avatar }}
-            size={80}
-            accessibilityLabel={account.avatar_description}
-            style={{
-              outlineWidth: 4,
-              outlineColor: colors.background,
-            }}
-          />
+          <Pressable
+            disabled={account.avatar_default}
+            onPress={account.avatar_default ? undefined : handlePreviewAvatar}
+          >
+            <Avatar.Image
+              source={{ uri: account.avatar }}
+              size={80}
+              accessibilityLabel={account.avatar_description}
+              style={{
+                outlineWidth: 4,
+                outlineColor: colors.background,
+              }}
+            />
+          </Pressable>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             {ownAccount ? (
               <Button mode='contained-tonal' onPress={() => navigation.navigate('edit-profile')}>

@@ -14,6 +14,8 @@ import { useIsFocused } from '@react-navigation/native';
 import { Directory, File, Paths } from 'expo-file-system';
 import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
+import { startActivityAsync } from 'expo-intent-launcher';
+import { shareAsync } from 'expo-sharing';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { PaperclipIcon, PlayIcon } from 'phosphor-react-native';
 import React, { useEffect, useState } from 'react';
@@ -22,6 +24,7 @@ import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
+import { useUiStoreActions } from '@/stores/ui';
 
 import { iconHelper } from '../ui/icon';
 
@@ -35,6 +38,10 @@ const messages = defineMessages({
   downloaded: {
     id: 'media_gallery.download.success',
     defaultMessage: 'File {name} downloaded successfully',
+  },
+  downloadOpen: {
+    id: 'media_gallery.download.open',
+    defaultMessage: 'Open',
   },
   fileAlreadyExists: {
     id: 'media_gallery.download.fail.already_exists',
@@ -208,6 +215,7 @@ interface IStatusMedia {
 const StatusMedia: React.FC<IStatusMedia> = ({ status, compact }) => {
   const intl = useIntl();
   const { colors, shapes } = useTheme();
+  const { openMediaViewer } = useUiStoreActions();
 
   if (!status.media_attachments.length) return null;
 
@@ -226,7 +234,18 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, compact }) => {
         overflow: 'hidden',
       }}
     >
-      {renderMedia(media)}
+      {media.type === 'video' ? (
+        renderMedia(media)
+      ) : (
+        <Pressable
+          style={{ flex: 1 }}
+          onPress={() => openMediaViewer(filteredMedia, filteredMedia.indexOf(media))}
+          accessibilityRole='imagebutton'
+          accessibilityLabel={media.description || undefined}
+        >
+          {renderMedia(media)}
+        </Pressable>
+      )}
       {media.description && (
         <View style={{ position: 'absolute', bottom: 16, right: 16 }}>
           <Tooltip.Rich
@@ -269,15 +288,34 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, compact }) => {
   };
 
   const handleDownload = async (media: UnsupportedMediaAttachment) => {
-    const destination = new Directory(Paths.document, 'micolium');
     try {
-      destination.create();
-      await File.downloadFileAsync(media.url, destination);
+      const destination = new Directory(Paths.document, 'micolium');
+      if (!destination.exists) destination.create();
 
-      toast.success(
+      const file = await File.downloadFileAsync(media.url, destination);
+
+      const openedToast = toast.success(
         intl.formatMessage(messages.downloaded, {
           name: media.url.split('/').at(-1),
         }),
+        {
+          action: {
+            label: intl.formatMessage(messages.downloadOpen),
+            onClick: async () => {
+              toast.dismiss(openedToast);
+
+              if (Platform.OS === 'android') {
+                await startActivityAsync('android.intent.action.VIEW', {
+                  data: file.contentUri,
+                  flags: 1,
+                  type: file.type,
+                });
+              } else {
+                await shareAsync(file.uri, { mimeType: file.type });
+              }
+            },
+          },
+        },
       );
     } catch (error: any) {
       if (error?.code === 'ERR_FILE_ALREADY_EXISTS') {

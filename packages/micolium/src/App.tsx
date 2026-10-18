@@ -17,6 +17,7 @@ import { AccountSwitcherBottomSheet } from './components/account-switcher';
 import { ComposeBottomSheet } from './components/compose/compose';
 import { EmojiPickerBottomSheet } from './components/emoji-picker';
 import { InteractAsSheet } from './components/interact-as';
+import { MediaViewer } from './components/media-viewer';
 import { DefaultCurrentAccountProvider } from './contexts/current-account-context';
 import enMessages from './messages/en.json';
 import { RootNavigator } from './navigation/router';
@@ -86,6 +87,7 @@ export const App = () => {
                       <ComposeBottomSheet />
                       <EmojiPickerBottomSheet />
                       <InteractAsSheet />
+                      <MediaViewer />
                     </TrueSheetProvider>
                   </GestureHandlerRootView>
                 </NavigationContainer>
