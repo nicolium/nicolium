@@ -7,7 +7,7 @@ import { type ConfigPlugin, withAndroidStyles, withAppBuildGradle } from 'expo/c
 const MATERIAL3_THEME_DYNAMIC = 'Theme.Material3.DynamicColors.DayNight.NoActionBar';
 const MATERIAL3_THEME = 'Theme.Material3.DayNight.NoActionBar';
 const MATERIAL2_THEME = 'Theme.MaterialComponents.DayNight.NoActionBar';
-const MATERIAL3_EXPRESSIVE_THEME = 'Theme.Material3Expressive.DayNight.NoActionBar';
+const MATERIAL3_EXPRESSIVE_THEME = 'Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar';
 
 const MATERIAL_DEPENDENCY = "implementation 'com.google.android.material:material:1.14.0'";
 
