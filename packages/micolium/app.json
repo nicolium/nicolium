@@ -16,14 +16,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png"
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#00FFDE"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.mkljczk.micolium"
     },
     "web": {
       "output": "single",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icon.png"
     },
     "experiments": {
       "reactCompiler": true

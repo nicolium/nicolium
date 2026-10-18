@@ -4,7 +4,8 @@
       "layers": [
         {
           "image-name": "micolium.png",
-          "name": "micolium"
+          "name": "micolium",
+          "position": { "scale": 0.5, "translation-in-points": [0, 0] }
         }
       ]
     }
