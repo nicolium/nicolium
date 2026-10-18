@@ -4,7 +4,7 @@ import React from 'react';
 import PlaceholderStatus from '@/components/placeholders/placeholder-status';
 import StatusContainer from '@/components/statuses/status-container';
 import Tombstone from '@/components/statuses/tombstone';
-import { useStatus } from '@/queries/statuses/use-status';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useReplyCount, useReplyToId } from '@/stores/contexts';
 import { useStatusMeta } from '@/stores/status-meta';
 import { isMobile } from '@/utils/is-mobile';
@@ -28,7 +28,7 @@ const ThreadStatus: React.FC<IThreadStatus> = (props) => {
 
   const replyToId = useReplyToId(id);
   const replyCount = useReplyCount(id);
-  const { data: statusData } = useStatus(id, { withFilteredResults: true });
+  const { data: statusData } = useMinimalStatus(id);
   const isLoaded = Boolean(statusData);
   const { deleted } = useStatusMeta(id);
 
@@ -36,16 +36,6 @@ const ThreadStatus: React.FC<IThreadStatus> = (props) => {
 
   const isIndentMode = props.depth !== undefined;
   const depth = Math.min(props.depth ?? 0, maxIndentDepth);
-
-  if (
-    statusData?.filtered.some(
-      ({ filter }) =>
-        filter.filter_action === 'hide' &&
-        (!props.contextType || filter.context.includes(props.contextType)),
-    )
-  ) {
-    return null;
-  }
 
   if (deleted) {
     return (
