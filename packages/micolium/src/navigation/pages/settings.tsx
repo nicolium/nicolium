@@ -7,7 +7,9 @@ import { isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import { Timeline as TimelineIcon } from 'lucide-react-native';
 import {
   BellSimpleIcon,
+  ChatSlashIcon,
   FunnelIcon,
+  HeartHalfIcon,
   InfoIcon,
   NotePencilIcon,
   PaletteIcon,
@@ -44,6 +46,7 @@ const messages = defineMessages({
     id: 'preferences.heading.appearance',
     defaultMessage: 'Appearance settings',
   },
+  contentHeading: { id: 'preferences.heading.content', defaultMessage: 'Content and filtering' },
   privacyPublic: { id: 'preferences.options.privacy_public', defaultMessage: 'Public' },
   privacyUnlisted: { id: 'preferences.options.privacy_unlisted', defaultMessage: 'Unlisted' },
   privacyFollowersOnly: {
@@ -393,6 +396,55 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
   );
 };
 
+const ContentSettingsScreen = ({
+  navigation,
+}: NativeStackScreenProps<SettingsStackParams, 'content'>) => {
+  const features = useFeatures();
+
+  return (
+    <ScrollView>
+      <List.Section>
+        <List.Item
+          title={<FormattedMessage id='column.mutes.long' defaultMessage='Muted accounts' />}
+          left={(props) => <List.Icon {...props} icon={iconHelper(SpeakerSimpleXIcon)} />}
+          onPress={() => navigation.navigate('mutes')}
+        />
+        <List.Item
+          title={<FormattedMessage id='column.blocks.long' defaultMessage='Blocked accounts' />}
+          left={(props) => <List.Icon {...props} icon={iconHelper(ProhibitIcon)} />}
+          onPress={() => navigation.navigate('blocks')}
+        />
+        <List.Item
+          title={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
+          left={(props) => <List.Icon {...props} icon={iconHelper(FunnelIcon)} />}
+          onPress={() => navigation.navigate('filters')}
+        />
+        {(features.interactionRequests || features.quoteApprovalPolicies) && (
+          <List.Item
+            title={
+              <FormattedMessage
+                id='column.interaction_policies'
+                defaultMessage='Interaction policies'
+              />
+            }
+            left={(props) => <List.Icon {...props} icon={iconHelper(HeartHalfIcon)} />}
+            onPress={() => navigation.navigate('interaction_policies')}
+          />
+        )}
+        {features.mutedThreads && (
+          <List.Item
+            title={
+              <FormattedMessage id='column.muted_threads' defaultMessage='Muted conversations' />
+            }
+            left={(props) => <List.Icon {...props} icon={iconHelper(ChatSlashIcon)} />}
+            onPress={() => navigation.navigate('muted_threads')}
+          />
+        )}
+      </List.Section>
+    </ScrollView>
+  );
+};
+
 const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'index'>) => {
   const theme = useTheme();
   const glassEffect = isGlassEffectAPIAvailable();
@@ -462,19 +514,14 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
           <FormattedMessage id='settings.account_header' defaultMessage='Account settings' />
         </List.Subheader>
         <List.Item
-          title={<FormattedMessage id='column.mutes.long' defaultMessage='Muted accounts' />}
-          left={(props) => <List.Icon {...props} icon={iconHelper(SpeakerSimpleXIcon)} />}
-          onPress={() => navigation.navigate('mutes')}
-        />
-        <List.Item
-          title={<FormattedMessage id='column.blocks.long' defaultMessage='Blocked accounts' />}
-          left={(props) => <List.Icon {...props} icon={iconHelper(ProhibitIcon)} />}
-          onPress={() => navigation.navigate('blocks')}
-        />
-        <List.Item
-          title={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
+          title={
+            <FormattedMessage
+              id='preferences.heading.content'
+              defaultMessage='Content and filtering'
+            />
+          }
           left={(props) => <List.Icon {...props} icon={iconHelper(FunnelIcon)} />}
-          onPress={() => navigation.navigate('filters')}
+          onPress={() => navigation.navigate('content')}
         />
       </List.Section>
       <List.Section>
@@ -535,6 +582,11 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='appearance'
         component={AppearanceSettingsScreen}
         options={{ title: intl.formatMessage(messages.appearanceHeading) }}
+      />
+      <SettingsStack.Screen
+        name='content'
+        component={ContentSettingsScreen}
+        options={{ title: intl.formatMessage(messages.contentHeading) }}
       />
       <SettingsStack.Screen
         name='follow_requests'

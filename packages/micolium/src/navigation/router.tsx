@@ -44,6 +44,7 @@ type SettingsStackParams = {
   timelines: undefined;
   notifications: undefined;
   appearance: undefined;
+  content: undefined;
   follow_requests: undefined;
   blocks: undefined;
   mutes: undefined;

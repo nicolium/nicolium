@@ -14,7 +14,7 @@ import { Link, useNavigation } from '@react-navigation/native';
 import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { CaretDownIcon } from 'phosphor-react-native';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { type NativeScrollEvent, type NativeSyntheticEvent, Pressable, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -143,6 +143,51 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     zIndex: 1,
   }));
 
+  const badges = React.useMemo(() => {
+    const chips: React.ReactNode[] = [];
+
+    if (!account?.relationship || ownAccount) return chips;
+
+    if (account.relationship?.followed_by) {
+      chips.push(
+        <Chip key='followed_by' mode='flat' compact>
+          <FormattedMessage id='account.follows_you' defaultMessage='Follows you' />
+        </Chip>,
+      );
+    } else if (account.relationship?.blocking) {
+      chips.push(
+        <Chip key='blocked' mode='flat' compact>
+          <FormattedMessage id='account.blocked' defaultMessage='Blocked' />
+        </Chip>,
+      );
+    } else if (account.relationship?.requested_by) {
+      chips.push(
+        <Chip key='requested' mode='flat' compact>
+          <FormattedMessage
+            id='account.requested_follow'
+            defaultMessage='Requested to follow you'
+          />
+        </Chip>,
+      );
+    }
+
+    if (account.relationship?.muting) {
+      chips.push(
+        <Chip key='muted' mode='flat' compact>
+          <FormattedMessage id='account.muted' defaultMessage='Muted' />
+        </Chip>,
+      );
+    } else if (account.relationship?.domain_blocking) {
+      chips.push(
+        <Chip key='domain_blocked' mode='flat' compact>
+          <FormattedMessage id='account.domain_blocked' defaultMessage='Domain hidden' />
+        </Chip>,
+      );
+    }
+
+    return chips;
+  }, [account?.relationship, ownAccount]);
+
   if (!account)
     return (
       <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -244,6 +289,11 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
 
   const header = (
     <>
+      {badges && (
+        <View style={{ position: 'absolute', zIndex: 1, top: topInset + 8, left: 8 }}>
+          {badges}
+        </View>
+      )}
       <View ref={profileInfoNode}>
         <Image
           style={{
@@ -251,9 +301,10 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             width: '100%',
             maxWidth: '100%',
             minWidth: '100%',
-            aspectRatio: 3 / 1,
-            maxHeight: (account.header_default ? 50 : 150) + topInset,
-            height: 'auto',
+            height: Math.min(
+              (account.header_default ? (badges.length ? 60 : 50) : 150) + topInset,
+              180,
+            ),
           }}
           source={{
             uri: account.header,
