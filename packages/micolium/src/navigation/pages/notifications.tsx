@@ -1,9 +1,7 @@
 import {
   ActivityIndicator,
   Appbar,
-  Button,
   Checkbox,
-  Dialog,
   Divider,
   List,
   Text,
@@ -21,11 +19,12 @@ import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TabView } from 'react-native-tab-view';
 
 import { Notification } from '@/components/notification';
+import { DialogOrSheet } from '@/components/ui/dialog-or-sheet';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { LoadMore } from '@/components/ui/load-more';
@@ -49,6 +48,9 @@ const messages = defineMessages({
     id: 'navigation_bar.follow_requests.count',
     defaultMessage: '{count, plural, one {# follow request} other {# follow requests}}',
   },
+  cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
+  reset: { id: 'notifications.filters.reset', defaultMessage: 'Reset' },
+  save: { id: 'common.save', defaultMessage: 'Save' },
 });
 
 const NOTIFICATION_TABS = {
@@ -72,7 +74,7 @@ interface IFiltersDialog {
 }
 
 const FiltersDialog: React.FC<IFiltersDialog> = ({ visible, setVisible }) => {
-  const { colors } = useTheme();
+  const intl = useIntl();
   const features = useFeatures();
 
   const filters = useSetting('notifications.filters');
@@ -98,103 +100,91 @@ const FiltersDialog: React.FC<IFiltersDialog> = ({ visible, setVisible }) => {
   };
 
   return (
-    <Dialog visible={visible} onDismiss={() => setVisible(false)}>
-      <Dialog.Title>
+    <DialogOrSheet
+      title={
         <FormattedMessage
           id='notifications.filters.heading'
           defaultMessage='Visible notifications'
         />
-      </Dialog.Title>
-      <Dialog.ScrollArea>
-        <ScrollView>
-          <List.Item
-            title={
-              <FormattedMessage id='notifications.filters.mention' defaultMessage='Mentions' />
-            }
-            left={() => (
-              <Checkbox status={getStatus('mention')} onPress={toggleFilters('mention')} />
-            )}
-            onPress={toggleFilters('mention')}
-          />
-          <List.Item
-            title={<FormattedMessage id='notifications.filters.favourite' defaultMessage='Likes' />}
-            left={() => (
-              <Checkbox status={getStatus('favourite')} onPress={toggleFilters('favourite')} />
-            )}
-            onPress={toggleFilters('favourite')}
-          />
-          <List.Item
-            title={<FormattedMessage id='notifications.filters.reblog' defaultMessage='Reposts' />}
-            left={() => <Checkbox status={getStatus('reblog')} onPress={toggleFilters('reblog')} />}
-            onPress={toggleFilters('reblog')}
-          />
-          <List.Item
-            title={<FormattedMessage id='notifications.filters.poll' defaultMessage='Polls' />}
-            left={() => <Checkbox status={getStatus('poll')} onPress={toggleFilters('poll')} />}
-            onPress={toggleFilters('poll')}
-          />
-          {features.accountNotifies && (
-            <List.Item
-              title={
-                <FormattedMessage
-                  id='notifications.filters.status'
-                  defaultMessage='Account subscriptions'
-                />
-              }
-              left={() => (
-                <Checkbox status={getStatus('status')} onPress={toggleFilters('status')} />
-              )}
-              onPress={toggleFilters('status')}
-            />
-          )}
-          <List.Item
-            title={<FormattedMessage id='notifications.filters.follow' defaultMessage='Follows' />}
-            left={() => <Checkbox status={getStatus('follow')} onPress={toggleFilters('follow')} />}
-            onPress={toggleFilters('follow')}
-          />
-          {features.events && (
-            <List.Item
-              title={<FormattedMessage id='notifications.filters.events' defaultMessage='Events' />}
-              left={() => (
-                <Checkbox status={getStatus('events')} onPress={toggleFilters('events')} />
-              )}
-              onPress={toggleFilters('events')}
-            />
-          )}
-        </ScrollView>
-      </Dialog.ScrollArea>
-      <Dialog.Actions>
-        <Button onPress={() => setVisible(false)}>
-          <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
-        </Button>
-        <View style={{ flex: 1 }} />
-        <Button
-          onPress={() => {
+      }
+      actions={[
+        {
+          icon: 'xmark',
+          label: intl.formatMessage(messages.cancel),
+          onPress: () => setVisible(false),
+        },
+        {
+          label: intl.formatMessage(messages.reset),
+          onPress: () => {
             setVisible(false);
             update('notifications.filters', []);
-          }}
-          textColor={colors.error}
-        >
-          <FormattedMessage id='notifications.filters.reset' defaultMessage='Reset' />
-        </Button>
-        <Button
-          onPress={
-            newFilters.length === 0
-              ? undefined
-              : () => {
-                  setVisible(false);
-                  update(
-                    'notifications.filters',
-                    newFilters.length === ALL_FILTERS.length ? [] : newFilters,
-                  );
-                }
+          },
+          destructive: true,
+        },
+        {
+          icon: 'checkmark',
+          label: intl.formatMessage(messages.save),
+          onPress: () => {
+            setVisible(false);
+            update(
+              'notifications.filters',
+              newFilters.length === ALL_FILTERS.length ? [] : newFilters,
+            );
+          },
+          confirm: true,
+          disabled: newFilters.length === 0,
+        },
+      ]}
+      visible={visible}
+      handleDismiss={() => setVisible(false)}
+    >
+      <List.Item
+        title={<FormattedMessage id='notifications.filters.mention' defaultMessage='Mentions' />}
+        left={() => <Checkbox status={getStatus('mention')} onPress={toggleFilters('mention')} />}
+        onPress={toggleFilters('mention')}
+      />
+      <List.Item
+        title={<FormattedMessage id='notifications.filters.favourite' defaultMessage='Likes' />}
+        left={() => (
+          <Checkbox status={getStatus('favourite')} onPress={toggleFilters('favourite')} />
+        )}
+        onPress={toggleFilters('favourite')}
+      />
+      <List.Item
+        title={<FormattedMessage id='notifications.filters.reblog' defaultMessage='Reposts' />}
+        left={() => <Checkbox status={getStatus('reblog')} onPress={toggleFilters('reblog')} />}
+        onPress={toggleFilters('reblog')}
+      />
+      <List.Item
+        title={<FormattedMessage id='notifications.filters.poll' defaultMessage='Polls' />}
+        left={() => <Checkbox status={getStatus('poll')} onPress={toggleFilters('poll')} />}
+        onPress={toggleFilters('poll')}
+      />
+      {features.accountNotifies && (
+        <List.Item
+          title={
+            <FormattedMessage
+              id='notifications.filters.status'
+              defaultMessage='Account subscriptions'
+            />
           }
-          disabled={newFilters.length === 0}
-        >
-          <FormattedMessage id='common.save' defaultMessage='Save' />
-        </Button>
-      </Dialog.Actions>
-    </Dialog>
+          left={() => <Checkbox status={getStatus('status')} onPress={toggleFilters('status')} />}
+          onPress={toggleFilters('status')}
+        />
+      )}
+      <List.Item
+        title={<FormattedMessage id='notifications.filters.follow' defaultMessage='Follows' />}
+        left={() => <Checkbox status={getStatus('follow')} onPress={toggleFilters('follow')} />}
+        onPress={toggleFilters('follow')}
+      />
+      {features.events && (
+        <List.Item
+          title={<FormattedMessage id='notifications.filters.events' defaultMessage='Events' />}
+          left={() => <Checkbox status={getStatus('events')} onPress={toggleFilters('events')} />}
+          onPress={toggleFilters('events')}
+        />
+      )}
+    </DialogOrSheet>
   );
 };
 
@@ -216,7 +206,6 @@ const FollowRequestsButton = () => {
       accessibilityLabel={intl.formatMessage(messages.followRequests, { count })}
       badge={count}
     />
-    // <Badge style={{ position: 'absolute', top: 4, right: 4 }}>{count}</Badge>
   );
 };
 

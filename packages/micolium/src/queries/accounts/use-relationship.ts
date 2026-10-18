@@ -255,15 +255,17 @@ const useMuteAccountMutation = (accountId: string) => {
   return useMutation({
     mutationKey: ['accountRelationships', accountId, 'mute'],
     mutationFn: (params?: MuteAccountParams) => client.filtering.muteAccount(accountId, params),
-    onMutate: () =>
-      updateRelationship(
+    onMutate: () => {
+      console.log('huj');
+      return updateRelationship(
         accountId,
         {
           muting: true,
         },
         queryClient,
         scopeUrl,
-      ),
+      );
+    },
     onError: (_err, _variables, context) => {
       restorePreviousRelationship(accountId, context, queryClient, scopeUrl);
     },
