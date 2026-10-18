@@ -1,3 +1,4 @@
+import { VisibilitySensor } from '@futurejj/react-native-visibility-sensor';
 import {
   Carousel,
   CarouselItem,
@@ -98,14 +99,20 @@ const StatusGifv: React.FC<IMediaVideo> = ({ media }) => {
   }, [isFocused, player]);
 
   return (
-    <VideoView
-      player={player}
+    <VisibilitySensor
+      onChange={(visible) => !visible && player.pause()}
+      threshold={{ top: 60, bottom: 60 }}
       style={{ flex: 1 }}
-      contentFit='cover'
-      nativeControls={false}
-      surfaceType='textureView'
-      accessibilityLabel={media.description}
-    />
+    >
+      <VideoView
+        player={player}
+        style={{ flex: 1 }}
+        contentFit='cover'
+        nativeControls={false}
+        surfaceType='textureView'
+        accessibilityLabel={media.description}
+      />
+    </VisibilitySensor>
   );
 };
 
@@ -121,14 +128,20 @@ const StatusVideoPlayer: React.FC<IMediaVideo> = ({ media }) => {
   }, [isFocused, player]);
 
   return (
-    <VideoView
-      player={player}
-      style={{ flex: 1, backgroundColor: colors.scrim }}
-      contentFit='contain'
-      fullscreenOptions={{ enable: true }}
-      surfaceType='textureView'
-      accessibilityLabel={media.description}
-    />
+    <VisibilitySensor
+      onChange={(visible) => !visible && player.pause()}
+      threshold={{ top: 60, bottom: 60 }}
+      style={{ flex: 1 }}
+    >
+      <VideoView
+        player={player}
+        style={{ flex: 1, backgroundColor: colors.scrim }}
+        contentFit='contain'
+        fullscreenOptions={{ enable: true }}
+        surfaceType='textureView'
+        accessibilityLabel={media.description}
+      />
+    </VisibilitySensor>
   );
 };
 
