@@ -1,5 +1,6 @@
 import { TrueSheetProvider } from '@lodev09/react-native-true-sheet';
 import { PaperProvider } from '@mkljczk/react-native-paper';
+import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { makeRedirectUri } from 'expo-auth-session';
@@ -56,11 +57,24 @@ const lightTheme = {
   },
 };
 
-export const App = () => {
+const ThemeProvider: React.FC<{ children: React.ReactNode }> = (props) => {
   const colorScheme = useColorScheme();
-  const [loaded, setLoaded] = React.useState(false);
+  const { theme } = useMaterial3Theme();
 
-  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+  const paperTheme =
+    colorScheme === 'dark'
+      ? { ...darkTheme, colors: theme.dark }
+      : { ...lightTheme, colors: theme.light };
+
+  return (
+    <PaperProvider theme={paperTheme}>
+      <NavigationContainer theme={paperTheme} linking={linking} {...props} />
+    </PaperProvider>
+  );
+};
+
+export const App = () => {
+  const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {
     loadPolyfills().finally(() => {
@@ -74,27 +88,25 @@ export const App = () => {
   return (
     <IntlProvider locale='en' messages={enMessages}>
       <SafeAreaProvider>
-        <PaperProvider theme={theme}>
+        <ThemeProvider>
           <KeyboardProvider>
             <DefaultCurrentAccountProvider>
               <QueryClientProvider client={queryClient}>
-                <NavigationContainer theme={theme} linking={linking}>
-                  <GestureHandlerRootView>
-                    <TrueSheetProvider>
-                      <RootNavigator />
-                      <Toaster position='bottom-center' />
-                      <AccountSwitcherBottomSheet />
-                      <ComposeBottomSheet />
-                      <EmojiPickerBottomSheet />
-                      <InteractAsSheet />
-                      <MediaViewer />
-                    </TrueSheetProvider>
-                  </GestureHandlerRootView>
-                </NavigationContainer>
+                <GestureHandlerRootView>
+                  <TrueSheetProvider>
+                    <RootNavigator />
+                    <Toaster position='bottom-center' />
+                    <AccountSwitcherBottomSheet />
+                    <ComposeBottomSheet />
+                    <EmojiPickerBottomSheet />
+                    <InteractAsSheet />
+                    <MediaViewer />
+                  </TrueSheetProvider>
+                </GestureHandlerRootView>
               </QueryClientProvider>
             </DefaultCurrentAccountProvider>
           </KeyboardProvider>
-        </PaperProvider>
+        </ThemeProvider>
       </SafeAreaProvider>
     </IntlProvider>
   );

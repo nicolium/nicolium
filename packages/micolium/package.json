@@ -36,6 +36,7 @@
     "@lodev09/react-native-true-sheet": "4.0.0-beta.24",
     "@mkljczk/react-native-paper": "github:mkljczk/react-native-paper",
     "@native-html/render": "^1.0.3",
+    "@pchmn/expo-material3-theme": "^1.4.0",
     "@phosphor-icons/core": "^2.1.1",
     "@react-native-async-storage/async-storage": "^3.1.1",
     "@react-native-menu/menu": "2.0.0",
