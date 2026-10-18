@@ -316,7 +316,17 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const header = (
     <>
       {badges && (
-        <View style={{ position: 'absolute', zIndex: 1, top: topInset + 8, left: 8 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: 4,
+            position: 'absolute',
+            zIndex: 1,
+            top: topInset + 8,
+            left: 8,
+          }}
+        >
           {badges}
         </View>
       )}
