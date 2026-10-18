@@ -26,7 +26,13 @@ import {
   type Icon as PhosphorIcon,
 } from 'phosphor-react-native';
 import React from 'react';
-import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
+import {
+  defineMessages,
+  FormattedDate,
+  FormattedList,
+  FormattedMessage,
+  useIntl,
+} from 'react-intl';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { useAccounts } from '@/queries/accounts/use-accounts';
@@ -327,6 +333,57 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status }) => {
   );
 };
 
+interface IStatusDetailedInfo {
+  status: SelectedStatus;
+}
+
+const StatusDetailedInfo: React.FC<IStatusDetailedInfo> = ({ status }) => {
+  const { colors } = useTheme();
+
+  return (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 4 }}>
+      <Text variant='bodyMedium' style={{ color: colors.onSurfaceVariant }}>
+        <FormattedDate
+          value={new Date(status.created_at)}
+          hour12
+          year='numeric'
+          month='short'
+          day='2-digit'
+          hour='numeric'
+          minute='2-digit'
+        />
+      </Text>
+      {status.edited_at && (
+        <>
+          <Text variant='bodyMedium' style={{ color: colors.onSurfaceVariant }}>
+            ·
+          </Text>
+          <Link screen='status' params={{ screen: 'history', params: { id: status.id } }}>
+            <Text variant='bodyMedium' style={{ color: colors.primary }}>
+              <FormattedMessage
+                id='status.edited'
+                defaultMessage='Edited {date}'
+                values={{
+                  date: (
+                    <FormattedDate
+                      value={new Date(status.edited_at)}
+                      hour12
+                      month='short'
+                      day='2-digit'
+                      hour='numeric'
+                      minute='2-digit'
+                    />
+                  ),
+                }}
+              />
+            </Text>
+          </Link>
+        </>
+      )}
+    </View>
+  );
+};
+
 interface IStatus {
   id: string;
   rebloggedBy?: Array<string>;
@@ -385,7 +442,7 @@ const Status: React.FC<IStatus> = ({
         <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'space-between' }}>
           <Account
             id={actualStatus.account_id!}
-            timestamp={actualStatus.created_at}
+            timestamp={props.detailed ? undefined : actualStatus.created_at}
             style={{ padding: 8, margin: -8 }}
             withLink
             fullWidthPressable={false}
@@ -455,6 +512,7 @@ const Status: React.FC<IStatus> = ({
                 <Quote id={actualStatus.quote_id} />
               ))}
             {!props.compact && <StatusLinkPreview status={actualStatus} />}
+            {props.detailed && <StatusDetailedInfo status={actualStatus} />}
           </>
         )
       }

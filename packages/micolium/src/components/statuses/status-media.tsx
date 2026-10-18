@@ -188,7 +188,7 @@ const renderMedia = (media: SupportedMediaAttachment) => {
 };
 
 interface IStatusMedia {
-  status: SelectedStatus;
+  status: Pick<SelectedStatus, 'media_attachments'>;
   compact?: boolean;
 }
 

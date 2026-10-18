@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Appbar,
+  Card,
   Divider,
   Text,
   TouchableRipple,
@@ -14,7 +15,7 @@ import {
 import { FlashList } from '@shopify/flash-list';
 import { GlassView } from 'expo-glass-effect';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -22,15 +23,17 @@ import { Account } from '@/components/accounts/account';
 import { AccountsList } from '@/components/accounts/accounts-list';
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { Status } from '@/components/statuses/status';
-import { StatusesList } from '@/components/statuses/statuses-list';
+import { StatusMedia } from '@/components/statuses/status-media';
 import { Emojify } from '@/components/ui/emojify';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
+import { StyledHtml } from '@/components/ui/styled-html';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { type SelectedStatus, useStatus, useStatusContext } from '@/queries/statuses/use-status';
+import { useStatusHistory } from '@/queries/statuses/use-status-history';
 import {
   useStatusDislikes,
   useStatusFavourites,
@@ -51,6 +54,7 @@ const messages = defineMessages({
   dislikesHeader: { id: 'column.dislikes', defaultMessage: 'Dislikes' },
   mentionsHeader: { id: 'column.mentions', defaultMessage: 'Mentions' },
   quotesHeader: { id: 'column.quotes', defaultMessage: 'Post quotes' },
+  historyHeader: { id: 'compare_history_modal.header', defaultMessage: 'Edit history' },
   countSubtitle: {
     id: 'column.count',
     defaultMessage: '{count, plural, one {# person} other {# people}}',
@@ -87,6 +91,9 @@ const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
     case 'mentions':
       title = intl.formatMessage(messages.mentionsHeader);
       subtitle = intl.formatMessage(messages.countSubtitle, { count: status?.mentions.length });
+      break;
+    case 'history':
+      title = intl.formatMessage(messages.historyHeader);
       break;
     default:
       title = '';
@@ -389,6 +396,75 @@ const StatusQuotesScreen = ({
   );
 };
 
+const StatusHistoryScreen = ({
+  route: {
+    params: { id },
+  },
+}: NativeStackScreenProps<StatusStackParams, 'history'>) => {
+  const { colors } = useTheme();
+  const { data: status } = useStatus(id);
+  const { data: versions, isPending } = useStatusHistory(id);
+
+  return (
+    <FlashList
+      data={versions}
+      keyExtractor={(version) => version.created_at}
+      renderItem={({ item: version, index }) => (
+        <View style={{ padding: 16, gap: 8 }}>
+          <Text variant='labelLarge' style={{ color: colors.onSurfaceVariant }}>
+            {versions && index === versions.length - 1 && (
+              <>
+                <FormattedMessage id='compare_history_modal.original' defaultMessage='Original' />
+                {' · '}
+              </>
+            )}
+            <FormattedDate
+              value={new Date(version.created_at)}
+              hour12
+              year='numeric'
+              month='short'
+              day='2-digit'
+              hour='numeric'
+              minute='2-digit'
+            />
+          </Text>
+          {version.spoiler_text.length > 0 && (
+            <Text variant='titleSmall'>
+              <Emojify text={version.spoiler_text} emojis={version.emojis} />
+            </Text>
+          )}
+          <StyledHtml html={version.content} emojis={version.emojis} mentions={status?.mentions} />
+          {version.poll && (
+            <View style={{ gap: 8 }}>
+              {version.poll.options.map((option) => (
+                <View
+                  key={option.title}
+                  style={{
+                    padding: 10,
+                    paddingHorizontal: 12,
+                    borderRadius: 8,
+                    borderColor: colors.outlineVariant,
+                    borderWidth: 1,
+                  }}
+                >
+                  <Text numberOfLines={1}>
+                    <Emojify text={option.title} emojis={version.emojis} />
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
+          <StatusMedia status={version} compact />
+        </View>
+      )}
+      ItemSeparatorComponent={Divider}
+      ListFooterComponent={
+        isPending ? <ActivityIndicator style={{ marginVertical: 8 }} size='large' /> : undefined
+      }
+    />
+  );
+};
+
 const StatusStack = createNativeStackNavigator<StatusStackParams>();
 
 const StatusStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'status'>) => {
@@ -400,6 +476,7 @@ const StatusStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'stat
       <StatusStack.Screen name='dislikes' component={StatusDislikesScreen} />
       <StatusStack.Screen name='mentions' component={StatusMentionsScreen} />
       <StatusStack.Screen name='quotes' component={StatusQuotesScreen} />
+      <StatusStack.Screen name='history' component={StatusHistoryScreen} />
     </StatusStack.Navigator>
   );
 };
