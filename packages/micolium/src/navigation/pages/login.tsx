@@ -15,7 +15,9 @@ import {
 } from '@react-navigation/native-stack';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 import { Image } from 'expo-image';
-import { AtIcon, GlobeIcon, LockIcon } from 'phosphor-react-native';
+import { AtIcon } from 'phosphor-react-native/src/icons/At';
+import { GlobeIcon } from 'phosphor-react-native/src/icons/Globe';
+import { LockIcon } from 'phosphor-react-native/src/icons/Lock';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { KeyboardAvoidingView, Platform, ScrollView, ToastAndroid, View } from 'react-native';

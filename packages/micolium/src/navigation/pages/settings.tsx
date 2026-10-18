@@ -5,19 +5,17 @@ import {
 } from '@react-navigation/native-stack';
 import { isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import TimelineIcon from 'lucide-react-native/icons/timeline';
-import {
-  BellSimpleIcon,
-  ChatSlashIcon,
-  FunnelIcon,
-  HeartHalfIcon,
-  InfoIcon,
-  NotePencilIcon,
-  PaletteIcon,
-  ProhibitIcon,
-  SignOutIcon,
-  SpeakerSimpleXIcon,
-  UserPlusIcon,
-} from 'phosphor-react-native';
+import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
+import { ChatSlashIcon } from 'phosphor-react-native/src/icons/ChatSlash';
+import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
+import { HeartHalfIcon } from 'phosphor-react-native/src/icons/HeartHalf';
+import { InfoIcon } from 'phosphor-react-native/src/icons/Info';
+import { NotePencilIcon } from 'phosphor-react-native/src/icons/NotePencil';
+import { PaletteIcon } from 'phosphor-react-native/src/icons/Palette';
+import { ProhibitIcon } from 'phosphor-react-native/src/icons/Prohibit';
+import { SignOutIcon } from 'phosphor-react-native/src/icons/SignOut';
+import { SpeakerSimpleXIcon } from 'phosphor-react-native/src/icons/SpeakerSimpleX';
+import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ScrollView } from 'react-native';

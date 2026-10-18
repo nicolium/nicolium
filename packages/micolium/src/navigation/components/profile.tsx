@@ -13,7 +13,7 @@ import {
 import { Link, useNavigation } from '@react-navigation/native';
 import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import { Image } from 'expo-image';
-import { CaretDownIcon } from 'phosphor-react-native';
+import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
 import { mediaAttachmentSchema } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';

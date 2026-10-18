@@ -1,5 +1,6 @@
 import { Appbar, Card, Icon, Text, useTheme } from '@mkljczk/react-native-paper';
-import { ArrowSquareOutIcon, LinkSimpleIcon } from 'phosphor-react-native';
+import { ArrowSquareOutIcon } from 'phosphor-react-native/src/icons/ArrowSquareOut';
+import { LinkSimpleIcon } from 'phosphor-react-native/src/icons/LinkSimple';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Linking, View } from 'react-native';

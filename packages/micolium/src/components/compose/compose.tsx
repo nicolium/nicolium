@@ -9,16 +9,14 @@ import {
   useTheme,
 } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
-import {
-  ArrowBendUpLeftIcon,
-  CalendarPlusIcon,
-  ChartBarIcon,
-  PaperclipIcon,
-  PaperPlaneRightIcon,
-  QuotesIcon,
-  SmileyIcon,
-  XIcon,
-} from 'phosphor-react-native';
+import { ArrowBendUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendUpLeft';
+import { CalendarPlusIcon } from 'phosphor-react-native/src/icons/CalendarPlus';
+import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
+import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
+import { PaperPlaneRightIcon } from 'phosphor-react-native/src/icons/PaperPlaneRight';
+import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
+import { SmileyIcon } from 'phosphor-react-native/src/icons/Smiley';
+import { XIcon } from 'phosphor-react-native/src/icons/X';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Alert, ScrollView, TextInput as RNTextInput, View, Platform } from 'react-native';

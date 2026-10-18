@@ -1,6 +1,6 @@
 import { ActivityIndicator, Divider } from '@mkljczk/react-native-paper';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import { ProhibitIcon } from 'phosphor-react-native';
+import { ProhibitIcon } from 'phosphor-react-native/src/icons/Prohibit';
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';

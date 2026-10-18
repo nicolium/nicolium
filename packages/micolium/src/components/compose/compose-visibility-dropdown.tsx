@@ -1,19 +1,16 @@
 import { Chip, Icon, Text, useTheme } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
-import {
-  AtIcon,
-  CaretDownIcon,
-  ChatsCircleIcon,
-  CirclesFourIcon,
-  CoinsIcon,
-  GlobeIcon,
-  ListDashesIcon,
-  LockIcon,
-  MoonIcon,
-  PlanetIcon,
-  UsersThreeIcon,
-  type Icon as PhosphorIcon,
-} from 'phosphor-react-native';
+import { AtIcon } from 'phosphor-react-native/src/icons/At';
+import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
+import { ChatsCircleIcon } from 'phosphor-react-native/src/icons/ChatsCircle';
+import { CirclesFourIcon } from 'phosphor-react-native/src/icons/CirclesFour';
+import { CoinsIcon } from 'phosphor-react-native/src/icons/Coins';
+import { GlobeIcon } from 'phosphor-react-native/src/icons/Globe';
+import { ListDashesIcon } from 'phosphor-react-native/src/icons/ListDashes';
+import { LockIcon } from 'phosphor-react-native/src/icons/Lock';
+import { MoonIcon } from 'phosphor-react-native/src/icons/Moon';
+import { PlanetIcon } from 'phosphor-react-native/src/icons/Planet';
+import { UsersThreeIcon } from 'phosphor-react-native/src/icons/UsersThree';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl, type MessageDescriptor } from 'react-intl';
 import { Pressable, View } from 'react-native';
@@ -28,6 +25,7 @@ import { useCompose, useComposeActions } from '@/stores/compose';
 import { useSetting } from '@/stores/settings';
 
 import type { SFSymbol } from '@/utils/types';
+import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 
 const messages = defineMessages({
   publicShort: { id: 'privacy.public.short', defaultMessage: 'Public' },

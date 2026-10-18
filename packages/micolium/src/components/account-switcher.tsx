@@ -1,7 +1,7 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { ActivityIndicator, List, RadioButton, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { PlusIcon } from 'phosphor-react-native';
+import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Platform, ScrollView } from 'react-native';

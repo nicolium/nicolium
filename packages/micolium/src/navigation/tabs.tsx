@@ -5,12 +5,10 @@ import {
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import { CommonActions, type ScreenLayoutArgs } from '@react-navigation/native';
-import {
-  BellSimpleIcon,
-  CaretUpDownIcon,
-  HouseIcon,
-  MagnifyingGlassIcon,
-} from 'phosphor-react-native';
+import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
+import { CaretUpDownIcon } from 'phosphor-react-native/src/icons/CaretUpDown';
+import { HouseIcon } from 'phosphor-react-native/src/icons/House';
+import { MagnifyingGlassIcon } from 'phosphor-react-native/src/icons/MagnifyingGlass';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';

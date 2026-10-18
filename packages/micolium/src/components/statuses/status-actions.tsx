@@ -1,14 +1,12 @@
 import { IconButton, Text, Tooltip, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import {
-  ArrowBendDoubleUpLeftIcon,
-  ArrowBendUpLeftIcon,
-  RepeatIcon,
-  SmileyIcon,
-  StarIcon,
-  ThumbsDownIcon,
-  ThumbsUpIcon,
-} from 'phosphor-react-native';
+import { ArrowBendDoubleUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendDoubleUpLeft';
+import { ArrowBendUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendUpLeft';
+import { RepeatIcon } from 'phosphor-react-native/src/icons/Repeat';
+import { SmileyIcon } from 'phosphor-react-native/src/icons/Smiley';
+import { StarIcon } from 'phosphor-react-native/src/icons/Star';
+import { ThumbsDownIcon } from 'phosphor-react-native/src/icons/ThumbsDown';
+import { ThumbsUpIcon } from 'phosphor-react-native/src/icons/ThumbsUp';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { View } from 'react-native';

@@ -1,6 +1,6 @@
 import { Card, Icon, Text } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { LinkSimpleIcon } from 'phosphor-react-native';
+import { LinkSimpleIcon } from 'phosphor-react-native/src/icons/LinkSimple';
 import React from 'react';
 import { View } from 'react-native';
 

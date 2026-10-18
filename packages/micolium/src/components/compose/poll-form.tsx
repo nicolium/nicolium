@@ -7,7 +7,9 @@ import {
   Text,
   TextInput,
 } from '@mkljczk/react-native-paper';
-import { DotsSixVerticalIcon, PlusIcon, XIcon } from 'phosphor-react-native';
+import { DotsSixVerticalIcon } from 'phosphor-react-native/src/icons/DotsSixVertical';
+import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
+import { XIcon } from 'phosphor-react-native/src/icons/X';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';

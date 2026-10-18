@@ -6,7 +6,7 @@ import {
   SplitButton,
   useTheme,
 } from '@mkljczk/react-native-paper';
-import { BellSimpleIcon } from 'phosphor-react-native';
+import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Alert, type ViewStyle } from 'react-native';

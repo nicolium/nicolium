@@ -3,7 +3,7 @@ import { IconButton, Searchbar, Text, useTheme } from '@mkljczk/react-native-pap
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
-import { SmileySadIcon } from 'phosphor-react-native';
+import { SmileySadIcon } from 'phosphor-react-native/src/icons/SmileySad';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';

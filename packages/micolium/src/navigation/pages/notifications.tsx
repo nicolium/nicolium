@@ -16,7 +16,9 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
-import { ChecksIcon, FunnelIcon, UserPlusIcon } from 'phosphor-react-native';
+import { ChecksIcon } from 'phosphor-react-native/src/icons/Checks';
+import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
+import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ScrollView, View } from 'react-native';

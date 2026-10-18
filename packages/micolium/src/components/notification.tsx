@@ -1,24 +1,21 @@
 import { Chip } from '@mkljczk/react-native-paper';
 import { Link } from '@react-navigation/native';
-import {
-  ArrowBendUpLeftIcon,
-  AtIcon,
-  BellSimpleRingingIcon,
-  CalendarDotIcon,
-  CalendarStarIcon,
-  ChartBarIcon,
-  ChatsTeardropIcon,
-  PencilSimpleLineIcon,
-  QuotesIcon,
-  RepeatIcon,
-  ShapesIcon,
-  SmileyIcon,
-  StarIcon,
-  SuitcaseIcon,
-  ToothIcon,
-  UserPlusIcon,
-  type Icon as PhosphorIcon,
-} from 'phosphor-react-native';
+import { ArrowBendUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendUpLeft';
+import { AtIcon } from 'phosphor-react-native/src/icons/At';
+import { BellSimpleRingingIcon } from 'phosphor-react-native/src/icons/BellSimpleRinging';
+import { CalendarDotIcon } from 'phosphor-react-native/src/icons/CalendarDot';
+import { CalendarStarIcon } from 'phosphor-react-native/src/icons/CalendarStar';
+import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
+import { ChatsTeardropIcon } from 'phosphor-react-native/src/icons/ChatsTeardrop';
+import { PencilSimpleLineIcon } from 'phosphor-react-native/src/icons/PencilSimpleLine';
+import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
+import { RepeatIcon } from 'phosphor-react-native/src/icons/Repeat';
+import { ShapesIcon } from 'phosphor-react-native/src/icons/Shapes';
+import { SmileyIcon } from 'phosphor-react-native/src/icons/Smiley';
+import { StarIcon } from 'phosphor-react-native/src/icons/Star';
+import { SuitcaseIcon } from 'phosphor-react-native/src/icons/Suitcase';
+import { ToothIcon } from 'phosphor-react-native/src/icons/Tooth';
+import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React from 'react';
 import {
   defineMessages,
@@ -40,6 +37,7 @@ import { Emojify } from './ui/emojify';
 import { iconHelper } from './ui/icon';
 
 import type { NotificationType } from '@/utils/notification';
+import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 import type { NotificationGroup, Account as AccountEntity } from 'pl-api';
 
 const messages: Record<

@@ -7,7 +7,7 @@ import {
   TouchableRipple,
   useTheme,
 } from '@mkljczk/react-native-paper';
-import { CheckIcon } from 'phosphor-react-native';
+import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { View } from 'react-native';

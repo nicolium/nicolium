@@ -10,23 +10,20 @@ import {
   useTheme,
 } from '@mkljczk/react-native-paper';
 import { Link, useNavigation } from '@react-navigation/native';
-import {
-  AtIcon,
-  CoinsIcon,
-  EyeSlashIcon,
-  GlobeIcon,
-  HashIcon,
-  ListIcon,
-  LockIcon,
-  MoonIcon,
-  PaperclipIcon,
-  PlanetIcon,
-  PushPinIcon,
-  QuotesIcon,
-  RepeatIcon,
-  UsersThreeIcon,
-  type Icon as PhosphorIcon,
-} from 'phosphor-react-native';
+import { AtIcon } from 'phosphor-react-native/src/icons/At';
+import { CoinsIcon } from 'phosphor-react-native/src/icons/Coins';
+import { EyeSlashIcon } from 'phosphor-react-native/src/icons/EyeSlash';
+import { GlobeIcon } from 'phosphor-react-native/src/icons/Globe';
+import { HashIcon } from 'phosphor-react-native/src/icons/Hash';
+import { ListIcon } from 'phosphor-react-native/src/icons/List';
+import { LockIcon } from 'phosphor-react-native/src/icons/Lock';
+import { MoonIcon } from 'phosphor-react-native/src/icons/Moon';
+import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
+import { PlanetIcon } from 'phosphor-react-native/src/icons/Planet';
+import { PushPinIcon } from 'phosphor-react-native/src/icons/PushPin';
+import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
+import { RepeatIcon } from 'phosphor-react-native/src/icons/Repeat';
+import { UsersThreeIcon } from 'phosphor-react-native/src/icons/UsersThree';
 import React from 'react';
 import {
   defineMessages,
@@ -55,6 +52,7 @@ import { StatusLinkPreview } from './status-link-preview';
 import { StatusMedia } from './status-media';
 import { StatusPoll } from './status-poll';
 
+import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 import type { FilterContext } from 'pl-api';
 
 const messages = defineMessages({

@@ -1,5 +1,5 @@
 import { Avatar } from '@mkljczk/react-native-paper';
-import { UserIcon } from 'phosphor-react-native';
+import { UserIcon } from 'phosphor-react-native/src/icons/User';
 import React from 'react';
 
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';

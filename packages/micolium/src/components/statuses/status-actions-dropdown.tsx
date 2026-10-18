@@ -1,7 +1,8 @@
 import { IconButton } from '@mkljczk/react-native-paper';
 import * as Clipboard from 'expo-clipboard';
 import { shareAsync } from 'expo-sharing';
-import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
+import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
+import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Alert, Linking, Platform } from 'react-native';

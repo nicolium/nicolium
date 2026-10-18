@@ -1,5 +1,6 @@
 import { Appbar, Button, Text, useTheme } from '@mkljczk/react-native-paper';
-import { UserMinusIcon, UserPlusIcon } from 'phosphor-react-native';
+import { UserMinusIcon } from 'phosphor-react-native/src/icons/UserMinus';
+import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { type NativeScrollEvent, type NativeSyntheticEvent, View } from 'react-native';

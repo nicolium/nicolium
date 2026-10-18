@@ -1,6 +1,6 @@
 import { FAB, Icon } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
-import { NotePencilIcon } from 'phosphor-react-native';
+import { NotePencilIcon } from 'phosphor-react-native/src/icons/NotePencil';
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Pressable } from 'react-native';

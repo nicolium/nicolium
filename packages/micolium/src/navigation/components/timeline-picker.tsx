@@ -1,17 +1,14 @@
 import { Button, Icon, Text } from '@mkljczk/react-native-paper';
-import {
-  BroadcastIcon,
-  CaretDownIcon,
-  CirclesFourIcon,
-  FediverseLogoIcon,
-  GlobeSimpleIcon,
-  GraphIcon,
-  HouseIcon,
-  ListDashesIcon,
-  PlanetIcon,
-  WrenchIcon,
-  type Icon as PhosphorIcon,
-} from 'phosphor-react-native';
+import { BroadcastIcon } from 'phosphor-react-native/src/icons/Broadcast';
+import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
+import { CirclesFourIcon } from 'phosphor-react-native/src/icons/CirclesFour';
+import { FediverseLogoIcon } from 'phosphor-react-native/src/icons/FediverseLogo';
+import { GlobeSimpleIcon } from 'phosphor-react-native/src/icons/GlobeSimple';
+import { GraphIcon } from 'phosphor-react-native/src/icons/Graph';
+import { HouseIcon } from 'phosphor-react-native/src/icons/House';
+import { ListDashesIcon } from 'phosphor-react-native/src/icons/ListDashes';
+import { PlanetIcon } from 'phosphor-react-native/src/icons/Planet';
+import { WrenchIcon } from 'phosphor-react-native/src/icons/Wrench';
 import React, { useMemo } from 'react';
 import { defineMessages, type MessageDescriptor, useIntl } from 'react-intl';
 import { View } from 'react-native';
@@ -26,6 +23,7 @@ import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 import type { TimelineStackParams } from '../router';
 import type { SFSymbol } from '@/utils/types';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 
 const messages = defineMessages({
   homeTimeline: { id: 'column.home', defaultMessage: 'Home' },

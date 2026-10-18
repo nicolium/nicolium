@@ -1,5 +1,6 @@
 import { Appbar, useTheme } from '@mkljczk/react-native-paper';
-import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
+import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
+import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform } from 'react-native';

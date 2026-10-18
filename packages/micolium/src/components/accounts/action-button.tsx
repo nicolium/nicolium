@@ -1,5 +1,7 @@
 import { Button, IconButton } from '@mkljczk/react-native-paper';
-import { CheckIcon, ToothIcon, XIcon } from 'phosphor-react-native';
+import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
+import { ToothIcon } from 'phosphor-react-native/src/icons/Tooth';
+import { XIcon } from 'phosphor-react-native/src/icons/X';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';

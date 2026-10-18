@@ -1,12 +1,15 @@
 import { Appbar, Badge, Icon } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
-import { ArrowLeftIcon, CaretLeftIcon, type Icon as PhosphorIcon } from 'phosphor-react-native';
+import { ArrowLeftIcon } from 'phosphor-react-native/src/icons/ArrowLeft';
+import { CaretLeftIcon } from 'phosphor-react-native/src/icons/CaretLeft';
 import React from 'react';
 import { Platform, Pressable, View, type PressableProps } from 'react-native';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 
 import { iconHelper } from './icon';
+
+import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 
 interface IHeaderIconButton extends PressableProps {
   icon: PhosphorIcon;
