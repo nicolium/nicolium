@@ -16,7 +16,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TabBar, TabView } from 'react-native-tab-view';
+import { TabView } from 'react-native-tab-view';
 
 import { Account } from '@/components/accounts/account';
 import { Hashtag } from '@/components/hashtag';
@@ -24,6 +24,7 @@ import { Status } from '@/components/statuses/status';
 import { TrendsLink } from '@/components/trends-link';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { LoadMore } from '@/components/ui/load-more';
+import { TabBar } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
 import {
   useSearchAccounts,

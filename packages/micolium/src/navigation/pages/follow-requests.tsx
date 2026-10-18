@@ -1,9 +1,10 @@
 import { useTheme } from '@mkljczk/react-native-paper';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { TabBar, TabView } from 'react-native-tab-view';
+import { TabView } from 'react-native-tab-view';
 
 import { AccountsList } from '@/components/accounts/accounts-list';
+import { TabBar } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
 import {
   useFollowRequests,

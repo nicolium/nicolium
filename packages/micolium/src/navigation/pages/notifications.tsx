@@ -21,12 +21,13 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TabView, TabBar } from 'react-native-tab-view';
+import { TabView } from 'react-native-tab-view';
 
 import { Notification } from '@/components/notification';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { LoadMore } from '@/components/ui/load-more';
+import { TabBar } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
 import {
@@ -358,7 +359,17 @@ const NotificationsScreen = ({
       onIndexChange={handleChangeIndex}
       renderScene={({ route }) => renderNotifications(route.key)}
       renderTabBar={(props) => (
-        <TabBar {...props} style={{ backgroundColor: colors.surfaceContainer }} />
+        <TabBar
+          {...props}
+          activeColor={colors.primary}
+          inactiveColor={colors.onSurfaceVariant}
+          pressColor={colors.surfaceContainerHighest}
+          indicatorStyle={{ backgroundColor: colors.primary }}
+          style={{
+            backgroundColor: colors.surfaceContainer,
+            borderBottomColor: colors.outlineVariant,
+          }}
+        />
       )}
       lazy
     />
