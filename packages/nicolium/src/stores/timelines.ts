@@ -459,7 +459,11 @@ const useTimelinesStore = create<State>()(
             statusIdsToRemove.add(status.id);
           }
 
-          for (const timeline of Object.values(state.timelines[scopeUrl] ?? {})) {
+          for (const timelineId of Object.keys(state.timelines[scopeUrl] ?? {})) {
+            if (timelineId.startsWith(`account:${accountId}`)) continue;
+
+            const timeline = state.timelines[scopeUrl][timelineId];
+
             timeline.entries = timeline.entries.filter((entry) => {
               if (entry.type !== 'status') return true;
               if (statusIdsToRemove.has(entry.id)) return false;
