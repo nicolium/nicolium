@@ -127,6 +127,7 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
           )}
         </View>
       }
+      // TODO: include non-icon actions somewhere in the footer
     >
       <ScrollView ref={scrollableRef}>{children}</ScrollView>
     </TrueSheet>
