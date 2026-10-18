@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+
 import type { MediaAttachment } from 'pl-api';
 
 type InteractAsState = {
