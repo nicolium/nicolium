@@ -348,7 +348,13 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props) => {
   const { deleted } = useStatusMeta(id);
   const statusQuery = useStatus(id, { withFilteredResults: true });
 
-  if (statusQuery.data?.filtered?.some(({ filter }) => filter.filter_action === 'hide')) {
+  if (
+    statusQuery.data?.filtered?.some(
+      ({ filter }) =>
+        filter.filter_action === 'hide' &&
+        (!props.contextType || filter.context.includes(props.contextType)),
+    )
+  ) {
     return null;
   }
 

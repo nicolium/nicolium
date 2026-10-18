@@ -556,6 +556,14 @@ const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, 
     }
   };
 
+  if (
+    status?.filtered.some(
+      ({ filter }) => filter.filter_action === 'hide' && filter.context.includes('notifications'),
+    )
+  ) {
+    return null;
+  }
+
   const targetName = notification.type === 'move' ? notification.target!.acct : '';
 
   const message: React.ReactNode = notification.accounts.length

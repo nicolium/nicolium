@@ -144,7 +144,7 @@ const useNotifications = (activeFilter: FilterType) => {
 
 const useNotification = (notification: NotificationGroup) => {
   const statusId = getNotificationStatusId(notification);
-  const { data: status } = useStatus(statusId ?? undefined);
+  const { data: status } = useStatus(statusId ?? undefined, { withFilteredResults: true });
   const { data: target } = useAccount(
     'target_id' in notification ? notification.target_id : undefined,
   );
