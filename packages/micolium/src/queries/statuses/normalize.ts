@@ -7,10 +7,64 @@ import {
 } from 'pl-api';
 import * as v from 'valibot';
 
+import { unescapeHTML } from '../utils/html';
+
 type StatusApprovalStatus = Exclude<BaseStatus['approval_status'], null>;
 
 type OldStatus = Pick<BaseStatus, 'content' | 'spoiler_text'> & {
+  search_index: string;
   account_id: string;
+};
+
+// Gets titles of poll options from status
+const getPollOptionTitles = (poll?: BaseStatus['poll']): readonly string[] => {
+  if (poll) {
+    return poll.options.map(({ title }) => title);
+  } else {
+    return [];
+  }
+};
+
+// Gets usernames of mentioned users from status
+const getMentionedUsernames = (status: Pick<BaseStatus, 'mentions'>): Array<string> =>
+  status.mentions.map(({ acct }) => `@${acct}`);
+
+// Creates search text from the status
+const buildSearchContent = (
+  status: Pick<BaseStatus, 'content' | 'media_attachments' | 'mentions' | 'spoiler_text'>,
+  poll?: BaseStatus['poll'],
+): string => {
+  const pollOptionTitles = getPollOptionTitles(poll);
+  const mentionedUsernames = getMentionedUsernames(status);
+  const mediaAttachmentDescriptions = status.media_attachments.map(
+    (attachment) => attachment.description,
+  );
+
+  const fields = [
+    status.spoiler_text,
+    status.content,
+    ...pollOptionTitles,
+    ...mentionedUsernames,
+    ...mediaAttachmentDescriptions,
+  ];
+
+  return unescapeHTML(fields.join('\n\n')) || '';
+};
+
+const getSearchIndex = (
+  status: Omit<BaseStatus, 'account' | 'reblog' | 'quote' | 'poll' | 'group'>,
+  oldStatus?: OldStatus,
+  poll?: BaseStatus['poll'],
+) => {
+  if (
+    oldStatus &&
+    oldStatus.content === status.content &&
+    oldStatus.spoiler_text === status.spoiler_text
+  ) {
+    return oldStatus.search_index;
+  } else {
+    return buildSearchContent(status, poll);
+  }
 };
 
 const normalizeStatus = (
@@ -27,6 +81,8 @@ const normalizeStatus = (
   },
   oldStatus?: OldStatus,
 ) => {
+  const searchIndex = getSearchIndex(status, oldStatus, poll);
+
   // Sort the replied-to mention to the top
   let mentions = status.mentions.toSorted((a, b) => {
     if (a.id === status.in_reply_to_account_id) {
@@ -91,6 +147,7 @@ const normalizeStatus = (
     mentions,
     event,
     media_attachments,
+    search_index: searchIndex,
   };
 };
 

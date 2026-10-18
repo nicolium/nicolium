@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { toast } from 'sonner-native';
 
-import { useClient } from '@/contexts/current-account-context';
+import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { scopedQueryKey, useAppQueries, useAppQuery } from '@/queries/query';
 import { normalizeStatus, type NormalizedStatus } from '@/queries/statuses/normalize';
@@ -17,7 +17,9 @@ import { queryKeys } from '../keys';
 
 import { decrementReplyCount, incrementReplyCount } from './status-actions';
 
-import type { Context, AsyncRefreshHeader, Account } from 'pl-api';
+import type { Account, AsyncRefreshHeader, Context, Filter, FilterResult } from 'pl-api';
+import { useFilters } from '../settings/use-filters';
+import { checkFiltered } from '../utils/filters';
 
 const messages = defineMessages({
   deleteSuccess: { id: 'compose.delete.success', defaultMessage: 'Post deleted' },
@@ -79,25 +81,25 @@ const useStatusQuery = (statusId?: string) => {
   }, [statusQuery.data, account.data]) as unknown as UseQueryResult<NormalizedStatus>;
 };
 
-// const emptyFilters: Array<Filter> = [];
-// const emptyFilterResults: Array<FilterResult> = [];
-// const selectActiveFilters = (data: Array<Filter>) =>
-//   data.filter((filter) => filter.expires_at === null || Date.parse(filter.expires_at) > Date.now());
-// const selectNoFilters = () => emptyFilters;
+const emptyFilters: Array<Filter> = [];
+const emptyFilterResults: Array<FilterResult> = [];
+const selectActiveFilters = (data: Array<Filter>) =>
+  data.filter((filter) => filter.expires_at === null || Date.parse(filter.expires_at) > Date.now());
+const selectNoFilters = () => emptyFilters;
 
 const useStatus = (
   statusId?: string,
   {
     withContext,
-    // withFilteredResults,
+    withFilteredResults,
   }: { withContext?: boolean; withFilteredResults?: boolean } = {},
 ) => {
-  // const features = useFeatures();
-  // const withClientSideFilters = !!(!features.filtersV2 && withFilteredResults);
+  const features = useFeatures();
+  const withClientSideFilters = !!(!features.filtersV2 && withFilteredResults);
 
-  // const { data: filters } = useFilters(
-  //   withClientSideFilters ? selectActiveFilters : selectNoFilters,
-  // );
+  const { data: filters } = useFilters(
+    withClientSideFilters ? selectActiveFilters : selectNoFilters,
+  );
 
   const { refetch: refetchContext } = useStatusContext(withContext ? statusId : undefined);
 
@@ -106,8 +108,15 @@ const useStatus = (
   const reblogQuery = useStatusQuery(statusQuery.data?.reblog_id ?? undefined);
   const quoteQuery = useStatusQuery(statusQuery.data?.quote_id ?? undefined);
 
+  const clientFilterResults = useMemo(() => {
+    if (!withClientSideFilters || !filters?.length || !statusQuery.data) return emptyFilterResults;
+    return checkFiltered(statusQuery.data.search_index, filters);
+  }, [withClientSideFilters, filters, statusQuery.data?.search_index]);
+
   return useMemo(() => {
     if (!statusQuery.data) return { ...statusQuery, refetchContext };
+
+    const filtered = withClientSideFilters ? clientFilterResults : statusQuery.data.filtered;
 
     return {
       ...statusQuery,
@@ -115,6 +124,7 @@ const useStatus = (
         ...statusQuery.data,
         reblog: reblogQuery.data ?? null,
         quote: quoteQuery.data ?? null,
+        filtered,
       },
       refetchContext,
     };
@@ -122,6 +132,7 @@ const useStatus = (
     statusQuery.data,
     reblogQuery.data,
     quoteQuery.data,
+    clientFilterResults,
   ]) as unknown as UseQueryResult<SelectedStatus> & { refetchContext: () => Promise<any> };
 };
 
