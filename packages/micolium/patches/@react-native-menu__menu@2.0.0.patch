@@ -1,5 +1,5 @@
 diff --git a/README.md b/README.md
-index 04b000c8edc646e85d6a6f297246153e6b8a4122..67e9d4ed63d83f81ca219a12eae46c36258ebcf5 100644
+index 04b000c8edc646e85d6a6f297246153e6b8a4122..9487ea76d4355b705f5675ad38c47882ef712332 100644
 --- a/README.md
 +++ b/README.md
 @@ -177,13 +177,21 @@ Actions to be displayed in the menu.
@@ -20,7 +20,7 @@ index 04b000c8edc646e85d6a6f297246153e6b8a4122..67e9d4ed63d83f81ca219a12eae46c36
 +
 +### `uiKit` (Android only)
 +
-+String to override UI kit of the menu. Allows you to choose between different Android UI implementations. `auto` uses `material3-expressive` when the app theme inherits from `Theme.Material3Expressive`, `material3` otherwise. Falls back to `appcompat` when Material Components are not available.
++String to override UI kit of the menu. Allows you to choose between different Android UI implementations. `auto` uses `material3-expressive` when the app theme inherits from `Theme.Material3Expressive`, `material3` otherwise. Falls back to `appcompat` when Material Components are not available. Material 3 variants use dynamic colors when available.
 +
 +| Type                                                           | Required |
 +| -------------------------------------------------------------- | -------- |
@@ -28,6 +28,27 @@ index 04b000c8edc646e85d6a6f297246153e6b8a4122..67e9d4ed63d83f81ca219a12eae46c36
  
  #### `MenuAction`
  
+diff --git a/android/build.gradle b/android/build.gradle
+index f1d2631ff516f0a0d74990166bde985f37816335..645970f2bd9a587413b63baeab6947dcb3d47678 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -94,6 +94,7 @@ android {
+     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+     versionCode 1
+     versionName "1.0"
++    consumerProguardFiles "proguard-rules.pro"
+   }
+ 
+   buildFeatures {
+diff --git a/android/proguard-rules.pro b/android/proguard-rules.pro
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a534073e4fff3d46299dff3e812ced3a6ac8f69
+--- /dev/null
++++ b/android/proguard-rules.pro
+@@ -0,0 +1,3 @@
++# ThemeHelper looks up these resources by name via reflection
++-keep class com.google.android.material.R$* { public static <fields>; }
++-keep class androidx.appcompat.R$* { public static <fields>; }
 diff --git a/android/src/main/java/com/reactnativemenu/MenuView.kt b/android/src/main/java/com/reactnativemenu/MenuView.kt
 index c45f5cc8ee16db610686fe5b6bef9f3372c6944b..6a2fd1db7f702144c82ee570d10ea96a2fd0af0e 100644
 --- a/android/src/main/java/com/reactnativemenu/MenuView.kt
@@ -389,10 +410,10 @@ index e4d2743bd6a038b769c3cf34c68297a1fc44d109..20674d27d1315e177f7a69837b531a57
    }
 diff --git a/android/src/main/java/com/reactnativemenu/ThemeHelper.kt b/android/src/main/java/com/reactnativemenu/ThemeHelper.kt
 new file mode 100644
-index 0000000000000000000000000000000000000000..27f65c3a4aba22ae97b29bdc50dff7d768e81c52
+index 0000000000000000000000000000000000000000..7612d4dc1deba4cb58134bca4bcfcb3b89eaad3c
 --- /dev/null
 +++ b/android/src/main/java/com/reactnativemenu/ThemeHelper.kt
-@@ -0,0 +1,57 @@
+@@ -0,0 +1,63 @@
 +package com.reactnativemenu
 +
 +import android.content.Context
@@ -433,15 +454,21 @@ index 0000000000000000000000000000000000000000..27f65c3a4aba22ae97b29bdc50dff7d7
 +    return if (value.resourceId != 0) context.getColor(value.resourceId) else value.data
 +  }
 +
++  // Prefers DynamicColors variant, falls back to static one
++  private fun overlay(prefix: String, dark: Boolean): Int {
++    val variant = if (dark) "Dark" else "Light"
++    val cls = "com.google.android.material.R\$style"
++    return styleIdOrZero(cls, "${prefix}_DynamicColors_$variant").takeIf { it != 0 }
++      ?: styleIdOrZero(cls, "${prefix}_$variant")
++  }
++
 +  fun material3Expressive(dark: Boolean): Int {
-+    val name = if (dark) "ThemeOverlay_Material3Expressive_Dark" else "ThemeOverlay_Material3Expressive_Light"
-+    return styleIdOrZero("com.google.android.material.R\$style", name)
++    return overlay("ThemeOverlay_Material3Expressive", dark)
 +  }
 +
 +  fun material3(dark: Boolean): Int {
 +    // Reflection ile: Material3 varsa al, yoksa 0 döner
-+    val name = if (dark) "ThemeOverlay_Material3_Dark" else "ThemeOverlay_Material3_Light"
-+    return styleIdOrZero("com.google.android.material.R\$style", name)
++    return overlay("ThemeOverlay_Material3", dark)
 +  }
 +
 +  fun appcompat(dark: Boolean): Int {

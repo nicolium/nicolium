@@ -7,7 +7,9 @@ import { type ConfigPlugin, withAndroidStyles, withAppBuildGradle } from 'expo/c
 const MATERIAL3_THEME_DYNAMIC = 'Theme.Material3.DynamicColors.DayNight.NoActionBar';
 const MATERIAL3_THEME = 'Theme.Material3.DayNight.NoActionBar';
 const MATERIAL2_THEME = 'Theme.MaterialComponents.DayNight.NoActionBar';
-const MATERIAL3_EXPRESSIVE_THEME = 'Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar';
+const MATERIAL3_EXPRESSIVE_THEME = 'Theme.Material3Expressive.DayNight.NoActionBar';
+const MATERIAL3_EXPRESSIVE_THEME_DYNAMIC =
+  'Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar';
 
 const MATERIAL_DEPENDENCY = "implementation 'com.google.android.material:material:1.14.0'";
 
@@ -16,13 +18,18 @@ type ConfigProps = {
    * Define theme that should be used.
    * @default 'material3'(i)
    */
-  theme: 'material2' | 'material3' | 'material3-dynamic' | 'material3-expressive';
+  theme:
+    | 'material2'
+    | 'material3'
+    | 'material3-dynamic'
+    | 'material3-expressive'
+    | 'material3-expressive-dynamic';
 };
 
 const withMaterial3Theme: ConfigPlugin<ConfigProps> = (config, options) => {
   const theme = options?.theme;
 
-  if (theme === 'material3-expressive') {
+  if (theme === 'material3-expressive' || theme === 'material3-expressive-dynamic') {
     config = withAppBuildGradle(config, (gradleConfig) => {
       if (!gradleConfig.modResults.contents.includes('com.google.android.material:material')) {
         gradleConfig.modResults.contents = gradleConfig.modResults.contents.replace(
@@ -44,6 +51,8 @@ const withMaterial3Theme: ConfigPlugin<ConfigProps> = (config, options) => {
             style.$.parent = MATERIAL2_THEME;
           } else if (theme === 'material3-expressive') {
             style.$.parent = MATERIAL3_EXPRESSIVE_THEME;
+          } else if (theme === 'material3-expressive-dynamic') {
+            style.$.parent = MATERIAL3_EXPRESSIVE_THEME_DYNAMIC;
           } else {
             style.$.parent = MATERIAL3_THEME;
           }
