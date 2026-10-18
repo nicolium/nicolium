@@ -329,7 +329,9 @@ const Notification: React.FC<INotification> = (props) => {
       case 'quote':
       case 'quoted_update':
       case 'subscribed_reaction':
-        return status ? <Status id={status.id} withLink compact style={{ padding: 0 }} /> : null;
+        return status ? (
+          <Status id={status.id} withLink compact context='notifications' style={{ padding: 0 }} />
+        ) : null;
       default:
         return null;
     }
