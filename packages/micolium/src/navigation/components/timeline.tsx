@@ -18,7 +18,7 @@ import type { TimelineEntry } from '@/stores/timelines';
 interface ITimeline extends IEmptyMessage {
   query: ReturnType<typeof useTimeline>;
   pinnedQuery?: ReturnType<typeof useTimeline>;
-  context?: 'home' | 'timeline';
+  context?: 'home' | 'public';
   header?: React.JSX.Element;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }
@@ -26,7 +26,7 @@ interface ITimeline extends IEmptyMessage {
 const Timeline: React.FC<ITimeline> = ({
   query,
   pinnedQuery,
-  context = 'timeline',
+  context = 'public',
   header,
   onScroll,
   ...props

@@ -3,6 +3,7 @@ import {
   Card,
   Chip,
   Icon,
+  IconButton,
   Text,
   Tooltip,
   TouchableRipple,
@@ -12,6 +13,7 @@ import { Link, useNavigation } from '@react-navigation/native';
 import {
   AtIcon,
   CoinsIcon,
+  EyeSlashIcon,
   GlobeIcon,
   HashIcon,
   ListIcon,
@@ -157,9 +159,10 @@ const StatusVisibilityIcon: React.FC<IStatusVisibilityIcon> = ({ status }) => {
 
 interface IQuote {
   id: string;
+  context?: 'home' | 'public' | 'thread' | 'notifications';
 }
 
-const Quote: React.FC<IQuote> = ({ id }) => {
+const Quote: React.FC<IQuote> = ({ id, ...props }) => {
   const { isPending, isError } = useStatus(id);
 
   return (
@@ -171,7 +174,7 @@ const Quote: React.FC<IQuote> = ({ id }) => {
           <FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' />
         </Text>
       ) : (
-        <Status id={id} withLink withActions={false} compact />
+        <Status id={id} withLink withActions={false} compact {...props} />
       )}
     </Card>
   );
@@ -388,7 +391,7 @@ interface IStatus {
   id: string;
   rebloggedBy?: Array<string>;
   showPinned?: boolean;
-  context?: 'home' | 'timeline' | 'thread' | 'notifications';
+  context?: 'home' | 'public' | 'thread' | 'notifications';
   isConnectedBottom?: boolean | ((status: SelectedStatus) => boolean);
   withLink?: boolean;
   withActions?: boolean;
@@ -409,11 +412,12 @@ const Status: React.FC<IStatus> = ({
   style,
   ...props
 }) => {
-  const { data: status } = useStatus(id);
+  const { data: status } = useStatus(id, { withFilteredResults: true });
   const navigation = useNavigation();
 
-  const { spoilerExpanded } = useStatusMeta(id);
-  const { expandStatusSpoiler, collapseStatusSpoiler } = useStatusMetaActions();
+  const { spoilerExpanded, showFiltered } = useStatusMeta(id);
+  const { expandStatusSpoiler, collapseStatusSpoiler, unfilterStatus, undoUnfilterStatus } =
+    useStatusMetaActions();
 
   const actualStatus = status?.reblog || status;
 
@@ -426,7 +430,7 @@ const Status: React.FC<IStatus> = ({
   } else if (rebloggedBy?.length) {
     chip = <StatusRebloggedChip accountIds={rebloggedBy} />;
   } else if (
-    (context === 'timeline' || context === 'home') &&
+    (context === 'public' || context === 'home') &&
     actualStatus.reblog &&
     actualStatus.account_id
   ) {
@@ -434,6 +438,19 @@ const Status: React.FC<IStatus> = ({
   } else if (context === 'home') {
     chip = <StatusMaybeFollowedHashtagChip status={actualStatus} />;
   }
+
+  const filters = context
+    ? status.filtered
+        .filter(({ filter }) => filter.filter_action === 'warn' && filter.context.includes(context))
+        .reduce<typeof status.filtered>((uniqueFilters, current) => {
+          if (
+            !uniqueFilters.some(({ filter: uniqueFilter }) => uniqueFilter.id === current.filter.id)
+          ) {
+            uniqueFilters.push(current);
+          }
+          return uniqueFilters;
+        }, [])
+    : [];
 
   const statusBody = (
     <UIStatus
@@ -448,6 +465,13 @@ const Status: React.FC<IStatus> = ({
             fullWidthPressable={false}
           />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {showFiltered && filters.length > 0 && (
+              <IconButton
+                icon={iconHelper(EyeSlashIcon)}
+                style={{ height: 32, width: 32 }}
+                onPress={() => undoUnfilterStatus(actualStatus.id)}
+              />
+            )}
             <StatusVisibilityIcon status={status} />
             {withActions && <StatusActionsDropdown status={status} detailed={props.detailed} />}
           </View>
@@ -509,7 +533,7 @@ const Status: React.FC<IStatus> = ({
                   </Card.Content>
                 </Card>
               ) : (
-                <Quote id={actualStatus.quote_id} />
+                <Quote id={actualStatus.quote_id} context={context} />
               ))}
             {!props.compact && <StatusLinkPreview status={actualStatus} />}
             {props.detailed && <StatusDetailedInfo status={actualStatus} />}
@@ -532,6 +556,9 @@ const Status: React.FC<IStatus> = ({
       spoilerExpanded={spoilerExpanded}
       expandStatusSpoiler={() => expandStatusSpoiler(id)}
       collapseStatusSpoiler={() => collapseStatusSpoiler(id)}
+      filters={filters}
+      showFiltered={showFiltered}
+      unfilterStatus={() => unfilterStatus(id)}
       {...props}
     />
   );

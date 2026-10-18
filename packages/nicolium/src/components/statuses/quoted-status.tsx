@@ -87,17 +87,14 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({
       .filter(
         ({ filter }) => filter.filter_action === 'warn' && filter.context.includes(contextType),
       )
-      .reduce(
-        (uniqueFilters, current) => {
-          if (
-            !uniqueFilters.some(({ filter: uniqueFilter }) => uniqueFilter.id === current.filter.id)
-          ) {
-            uniqueFilters.push(current);
-          }
-          return uniqueFilters;
-        },
-        [] as typeof status.filtered,
-      );
+      .reduce<typeof status.filtered>((uniqueFilters, current) => {
+        if (
+          !uniqueFilters.some(({ filter: uniqueFilter }) => uniqueFilter.id === current.filter.id)
+        ) {
+          uniqueFilters.push(current);
+        }
+        return uniqueFilters;
+      }, []);
   }, [status?.filtered, contextType]);
   const filtered = filterResults.length > 0;
 

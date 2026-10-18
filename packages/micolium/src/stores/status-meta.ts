@@ -31,6 +31,7 @@ type State = {
     setStatusLanguage: (statusId: string, language: string) => void;
     toggleShowPollResults: (statusId: string) => void;
     unfilterStatus: (statusId: string) => void;
+    undoUnfilterStatus: (statusId: string) => void;
     markStatusDeleted: (statusId: string) => void;
   };
 };
@@ -135,6 +136,13 @@ const useStatusMetaStore = create<State>()(
           if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
           state.statuses[statusId].showFiltered = true;
+        });
+      },
+      undoUnfilterStatus: (statusId) => {
+        set((state: State) => {
+          if (state.statuses[statusId]) {
+            delete state.statuses[statusId].showFiltered;
+          }
         });
       },
       markStatusDeleted: (statusId) => {
