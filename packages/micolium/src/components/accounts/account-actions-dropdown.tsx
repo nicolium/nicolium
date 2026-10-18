@@ -112,6 +112,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
               <DropdownMenu.ItemTitle>{intl.formatMessage(messages.share)}</DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
           </DropdownMenu.Group>
+          <DropdownMenu.Separator />
           <DropdownMenu.Group>
             {(ownAccount || (features.publicFavourites && !account.hide_favorites)) && (
               <DropdownMenu.Item
@@ -196,41 +197,44 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
             )}
           </DropdownMenu.Group>
           {!ownAccount && (
-            <DropdownMenu.Group>
-              <DropdownMenu.Item key='mute' onSelect={handleMute}>
-                <DropdownMenu.ItemIcon
-                  ios={{ name: 'speaker.slash' }}
-                  androidIconName='ph_speaker_simple_x'
-                />
-                <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(
-                    account.relationship?.muting ? messages.unmute : messages.mute,
-                    {
+            <>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Group>
+                <DropdownMenu.Item key='mute' onSelect={handleMute}>
+                  <DropdownMenu.ItemIcon
+                    ios={{ name: 'speaker.slash' }}
+                    androidIconName='ph_speaker_simple_x'
+                  />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(
+                      account.relationship?.muting ? messages.unmute : messages.mute,
+                      {
+                        name: account.username,
+                      },
+                    )}
+                  </DropdownMenu.ItemTitle>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item key='block' onSelect={handleBlock}>
+                  <DropdownMenu.ItemIcon ios={{ name: 'nosign' }} androidIconName='ph_prohibit' />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(
+                      account.relationship?.blocking ? messages.unblock : messages.block,
+                      {
+                        name: account.username,
+                      },
+                    )}
+                  </DropdownMenu.ItemTitle>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item key='report'>
+                  <DropdownMenu.ItemIcon ios={{ name: 'flag' }} androidIconName='ph_flag' />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(messages.report, {
                       name: account.username,
-                    },
-                  )}
-                </DropdownMenu.ItemTitle>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item key='block' onSelect={handleBlock}>
-                <DropdownMenu.ItemIcon ios={{ name: 'nosign' }} androidIconName='ph_prohibit' />
-                <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(
-                    account.relationship?.blocking ? messages.unblock : messages.block,
-                    {
-                      name: account.username,
-                    },
-                  )}
-                </DropdownMenu.ItemTitle>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item key='report'>
-                <DropdownMenu.ItemIcon ios={{ name: 'flag' }} androidIconName='ph_flag' />
-                <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(messages.report, {
-                    name: account.username,
-                  })}
-                </DropdownMenu.ItemTitle>
-              </DropdownMenu.Item>
-            </DropdownMenu.Group>
+                    })}
+                  </DropdownMenu.ItemTitle>
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+            </>
           )}
         </DropdownMenu.Content>
       </DropdownMenu.Root>

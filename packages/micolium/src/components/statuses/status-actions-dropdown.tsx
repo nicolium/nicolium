@@ -288,6 +288,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
               <DropdownMenu.ItemTitle>{intl.formatMessage(messages.share)}</DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
           </DropdownMenu.Group>
+          <DropdownMenu.Separator />
           <DropdownMenu.Group>
             {hasOtherAccounts && (
               <DropdownMenu.Item key='interact-as' onSelect={handleOpenInteractAs}>
@@ -409,6 +410,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
               </DropdownMenu.Item>
             )}
           </DropdownMenu.Group>
+          <DropdownMenu.Separator />
           {ownStatus ? (
             <DropdownMenu.Group>
               <DropdownMenu.Item key='pin' onSelect={() => handlePin()}>

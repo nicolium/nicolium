@@ -279,6 +279,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
             navigation.navigate('federated'),
           )}
       </DropdownMenu.Group>
+      <DropdownMenu.Separator />
       <DropdownMenu.Group>
         {features.bookmarks &&
           (features.bookmarkFolders

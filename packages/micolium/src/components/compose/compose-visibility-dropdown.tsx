@@ -334,21 +334,24 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
             {features.circles && getListsSubMenu('circle', circles)}
           </DropdownMenu.Group>
           {features.localOnlyStatuses && (
-            <DropdownMenu.Group>
-              <DropdownMenu.CheckboxItem
-                key='local-only'
-                value={compose.localOnly}
-                onValueChange={handleToggleLocalOnly}
-              >
-                <DropdownMenu.ItemIcon ios={{ name: 'building.2' }} />
-                <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(messages.localShort)}
-                </DropdownMenu.ItemTitle>
-                <DropdownMenu.ItemSubtitle>
-                  {intl.formatMessage(messages.localLong)}
-                </DropdownMenu.ItemSubtitle>
-              </DropdownMenu.CheckboxItem>
-            </DropdownMenu.Group>
+            <>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Group>
+                <DropdownMenu.CheckboxItem
+                  key='local-only'
+                  value={compose.localOnly}
+                  onValueChange={handleToggleLocalOnly}
+                >
+                  <DropdownMenu.ItemIcon ios={{ name: 'building.2' }} />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(messages.localShort)}
+                  </DropdownMenu.ItemTitle>
+                  <DropdownMenu.ItemSubtitle>
+                    {intl.formatMessage(messages.localLong)}
+                  </DropdownMenu.ItemSubtitle>
+                </DropdownMenu.CheckboxItem>
+              </DropdownMenu.Group>
+            </>
           )}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
