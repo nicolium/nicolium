@@ -18,7 +18,7 @@ type OldStatus = Pick<BaseStatus, 'content' | 'spoiler_text'> & {
 
 // Gets titles of poll options from status
 const getPollOptionTitles = (poll?: BaseStatus['poll']): readonly string[] => {
-  if (poll && typeof poll === 'object') {
+  if (poll) {
     return poll.options.map(({ title }) => title);
   } else {
     return [];
