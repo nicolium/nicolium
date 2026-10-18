@@ -1,5 +1,4 @@
 import { IconButton } from '@mkljczk/react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
 import { shareAsync } from 'expo-sharing';
 import { DotsThreeIcon, DotsThreeVerticalIcon } from 'phosphor-react-native';
@@ -12,6 +11,10 @@ import * as DropdownMenu from 'zeego/dropdown-menu';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
+import {
+  useUnblockAccountMutation,
+  useUnmuteAccountMutation,
+} from '@/queries/accounts/use-relationship';
 import { editStatus } from '@/queries/statuses/status-actions';
 import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 import { useDeleteStatus, type SelectedStatus } from '@/queries/statuses/use-status';
@@ -28,12 +31,12 @@ import { useAuthStore } from '@/stores/auth';
 import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
+import { BlockMuteDialog } from '../accounts/block-mute-dialog';
 import { iconHelper } from '../ui/icon';
 
 const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   copy: { id: 'status.copy', defaultMessage: 'Copy link to post' },
-  open: { id: 'status.open', defaultMessage: 'Show post details' },
   openInBrowser: { id: 'status.open_in_browser', defaultMessage: 'Open post in browser' },
   share: { id: 'status.share', defaultMessage: 'Share' },
   interactAs: { id: 'status.interact_as', defaultMessage: 'Interact from other accounts' },
@@ -102,25 +105,33 @@ const messages = defineMessages({
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
   muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
   report: { id: 'status.report', defaultMessage: 'Report post' },
+  accountActions: { id: 'status.account_actions', defaultMessage: 'Account actions' },
+  mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
+  unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
+  block: { id: 'account.block', defaultMessage: 'Block @{name}' },
+  unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
+  reportAccount: { id: 'account.report', defaultMessage: 'Report @{name}' },
 });
 
 interface IStatusActionsDropdown {
   status: SelectedStatus;
-  detailed?: boolean;
 }
 
-const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detailed }) => {
+const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => {
   const client = useClient();
   const features = useFeatures();
   const intl = useIntl();
-  const navigation = useNavigation();
   const scopeUrl = useScopeUrl();
 
   const hasOtherAccounts = useAuthStore((state) => Object.keys(state.sessions).length > 1);
   const { openInteractAs } = useUiStoreActions();
 
+  const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
+
   const { data: bookmarkFolders } = useBookmarkFolders();
   const { data: currentAccountId } = useCredentialAccountId();
+  const { mutate: unmuteAccount } = useUnmuteAccountMutation(status.account.id);
+  const { mutate: unblockAccount } = useUnblockAccountMutation(status.account.id);
 
   const skipInteractAsConfirmation = useSetting('timelines.skipInteractAsConfirmation');
 
@@ -135,12 +146,6 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
 
   const publicStatus = ['public', 'unlisted', 'group'].includes(status.visibility);
   const ownStatus = status.account_id === currentAccountId;
-
-  const handleExpand = () =>
-    navigation.navigate('status', {
-      screen: 'view',
-      params: { id: status.id },
-    });
 
   const handleCopy = () => Clipboard.setStringAsync(status.uri);
 
@@ -236,206 +241,273 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
     Alert.alert('not implemented');
   };
 
+  const handleMute = () => {
+    if (status.account.relationship?.muting) unmuteAccount();
+    else setBlockMuteDialog('mute');
+  };
+
+  const handleBlock = () => {
+    if (status.account.relationship?.blocking) unblockAccount();
+    else setBlockMuteDialog('block');
+  };
+
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <IconButton
-          icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
-          style={{ height: 32, width: 32 }}
-          onPress={() => {}}
-        />
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Group>
-          {!detailed && (
-            <DropdownMenu.Item key='expand' onSelect={handleExpand}>
+    <>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <IconButton
+            icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
+            style={{ height: 32, width: 32 }}
+            onPress={() => {}}
+          />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Group>
+            <DropdownMenu.Item key='copy' onSelect={handleCopy}>
               <DropdownMenu.ItemIcon
-                ios={{ name: 'arrow.up.and.line.horizontal.and.arrow.down' }}
-                androidIconName='ph_arrows_vertical'
+                ios={{ name: 'link' }}
+                androidIconName='ph_link_simple_horizontal'
               />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.open)}</DropdownMenu.ItemTitle>
+              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.copy)}</DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
-          )}
-          <DropdownMenu.Item key='copy' onSelect={handleCopy}>
-            <DropdownMenu.ItemIcon
-              ios={{ name: 'link' }}
-              androidIconName='ph_link_simple_horizontal'
-            />
-            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.copy)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item key='open-in-browser' onSelect={handleOpenInBrowser}>
-            <DropdownMenu.ItemIcon ios={{ name: 'safari' }} androidIconName='ph_arrow_square_out' />
-            <DropdownMenu.ItemTitle>
-              {intl.formatMessage(messages.openInBrowser)}
-            </DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item key='share' onSelect={handleShare}>
-            <DropdownMenu.ItemIcon
-              ios={{ name: 'square.and.arrow.up' }}
-              androidIconName='ph_export'
-            />
-            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.share)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-        </DropdownMenu.Group>
-        <DropdownMenu.Group>
-          {hasOtherAccounts && (
-            <DropdownMenu.Item key='interact-as' onSelect={handleOpenInteractAs}>
-              <DropdownMenu.ItemIcon ios={{ name: 'person.3' }} androidIconName='ph_users_three' />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.interactAs)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          )}
-          {features.bookmarks && (
-            <DropdownMenu.Item key='bookmark' onSelect={handleBookmark}>
+            <DropdownMenu.Item key='open-in-browser' onSelect={handleOpenInBrowser}>
               <DropdownMenu.ItemIcon
-                ios={{ name: status.bookmarked ? 'bookmark.slash' : 'bookmark' }}
-                androidIconName={status.bookmarked ? 'ph_bookmark' : 'ph_bookmark_simple'}
+                ios={{ name: 'safari' }}
+                androidIconName='ph_arrow_square_out'
               />
               <DropdownMenu.ItemTitle>
-                {intl.formatMessage(status.bookmarked ? messages.unbookmark : messages.bookmark)}
+                {intl.formatMessage(messages.openInBrowser)}
               </DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
-          )}
-          {status.bookmarked && features.bookmarkFolders && (
-            <DropdownMenu.Sub key='bookmark-folder'>
-              <DropdownMenu.SubTrigger key='bookmark-folder-sub'>
-                <DropdownMenu.ItemIcon ios={{ name: 'folder' }} androidIconName={'ph_folders'} />
+            <DropdownMenu.Item key='share' onSelect={handleShare}>
+              <DropdownMenu.ItemIcon
+                ios={{ name: 'square.and.arrow.up' }}
+                androidIconName='ph_export'
+              />
+              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.share)}</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          </DropdownMenu.Group>
+          <DropdownMenu.Group>
+            {hasOtherAccounts && (
+              <DropdownMenu.Item key='interact-as' onSelect={handleOpenInteractAs}>
+                <DropdownMenu.ItemIcon
+                  ios={{ name: 'person.3' }}
+                  androidIconName='ph_users_three'
+                />
                 <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(
-                    status.bookmark_folder
-                      ? messages.bookmarkChangeFolder
-                      : messages.bookmarkSetFolder,
-                  )}
-                </DropdownMenu.ItemTitle>
-              </DropdownMenu.SubTrigger>
-              <DropdownMenu.SubContent>
-                {bookmarkFolders ? (
-                  bookmarkFolders.length ? (
-                    bookmarkFolders.map((folder) => (
-                      <DropdownMenu.CheckboxItem
-                        key={`bookmarks:${folder.id}`}
-                        onSelect={() => handleBookmark(folder.id)}
-                        value={status.bookmark_folder === folder.id}
-                      >
-                        <DropdownMenu.ItemIcon
-                          ios={{ name: 'folder' }}
-                          androidIconName='ph_folder_simple'
-                        />
-                        <DropdownMenu.ItemTitle>{folder.name}</DropdownMenu.ItemTitle>
-                      </DropdownMenu.CheckboxItem>
-                    ))
-                  ) : (
-                    <DropdownMenu.Item key='bookmarks-empty' disabled>
-                      <DropdownMenu.ItemTitle>
-                        {intl.formatMessage(messages.noBookmarkFolders)}
-                      </DropdownMenu.ItemTitle>
-                    </DropdownMenu.Item>
-                  )
-                ) : (
-                  <DropdownMenu.Item key='bookmarks-loading' disabled>
-                    <DropdownMenu.ItemTitle>
-                      {intl.formatMessage(messages.loading)}
-                    </DropdownMenu.ItemTitle>
-                  </DropdownMenu.Item>
-                )}
-              </DropdownMenu.SubContent>
-            </DropdownMenu.Sub>
-          )}
-          {!status.reblogged && publicStatus && features.reblogVisibility ? (
-            <DropdownMenu.Sub key='reblog'>
-              <DropdownMenu.SubTrigger key='reblog-sub'>
-                <DropdownMenu.ItemIcon ios={{ name: 'repeat' }} androidIconName={'ph_repeat'} />
-                <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(messages.reblogVisibility)}
-                </DropdownMenu.ItemTitle>
-              </DropdownMenu.SubTrigger>
-              <DropdownMenu.SubContent>
-                <DropdownMenu.Item key='reblog-public' onSelect={() => handleReblog('public')}>
-                  <DropdownMenu.ItemIcon
-                    ios={{ name: 'globe' }}
-                    androidIconName='ph_globe_simple'
-                  />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.reblogVisibilityPublic)}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-                <DropdownMenu.Item key='reblog-unlisted' onSelect={() => handleReblog('unlisted')}>
-                  <DropdownMenu.ItemIcon ios={{ name: 'moon' }} androidIconName='ph_moon' />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.reblogVisibilityUnlisted)}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-                <DropdownMenu.Item key='reblog-private' onSelect={() => handleReblog('private')}>
-                  <DropdownMenu.ItemIcon ios={{ name: 'lock' }} androidIconName='ph_lock' />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.reblogVisibilityPrivate)}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-              </DropdownMenu.SubContent>
-            </DropdownMenu.Sub>
-          ) : (
-            ownStatus &&
-            (status.visibility === 'private' || status.visibility === 'mutuals_only') && (
-              <DropdownMenu.Item key='reblog-private' onSelect={() => handleReblog('private')}>
-                <DropdownMenu.ItemIcon ios={{ name: 'repeat' }} androidIconName='ph_repeat' />
-                <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(messages.reblogPrivate)}
+                  {intl.formatMessage(messages.interactAs)}
                 </DropdownMenu.ItemTitle>
               </DropdownMenu.Item>
-            )
-          )}
-          {!ownStatus && features.biteStatuses && (
-            <DropdownMenu.Item key='bite-status' onSelect={handleBiteStatus}>
-              <DropdownMenu.ItemIcon ios={{ name: 'cat' }} androidIconName='ph_tooth' />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.bite)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          )}
-        </DropdownMenu.Group>
-        {ownStatus ? (
-          <DropdownMenu.Group>
-            <DropdownMenu.Item key='pin' onSelect={() => handlePin()}>
-              <DropdownMenu.ItemIcon
-                ios={{ name: status.pinned ? 'pin.slash' : 'pin' }}
-                androidIconName={status.pinned ? 'ph_push_pin_slash' : 'ph_push_pin'}
-              />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(status.pinned ? messages.unpin : messages.pin)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key='delete' onSelect={() => handleDelete()} destructive>
-              <DropdownMenu.ItemIcon ios={{ name: 'trash' }} androidIconName={'ph_trash'} />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.delete)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key='edit' onSelect={() => handleEdit()}>
-              <DropdownMenu.ItemIcon
-                ios={{ name: 'pencil' }}
-                androidIconName={'ph_pencil_simple'}
-              />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.edit)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
+            )}
+            {features.bookmarks && (
+              <DropdownMenu.Item key='bookmark' onSelect={handleBookmark}>
+                <DropdownMenu.ItemIcon
+                  ios={{ name: status.bookmarked ? 'bookmark.slash' : 'bookmark' }}
+                  androidIconName={status.bookmarked ? 'ph_bookmark' : 'ph_bookmark_simple'}
+                />
+                <DropdownMenu.ItemTitle>
+                  {intl.formatMessage(status.bookmarked ? messages.unbookmark : messages.bookmark)}
+                </DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+            )}
+            {status.bookmarked && features.bookmarkFolders && (
+              <DropdownMenu.Sub key='bookmark-folder'>
+                <DropdownMenu.SubTrigger key='bookmark-folder-sub'>
+                  <DropdownMenu.ItemIcon ios={{ name: 'folder' }} androidIconName={'ph_folders'} />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(
+                      status.bookmark_folder
+                        ? messages.bookmarkChangeFolder
+                        : messages.bookmarkSetFolder,
+                    )}
+                  </DropdownMenu.ItemTitle>
+                </DropdownMenu.SubTrigger>
+                <DropdownMenu.SubContent>
+                  {bookmarkFolders ? (
+                    bookmarkFolders.length ? (
+                      bookmarkFolders.map((folder) => (
+                        <DropdownMenu.CheckboxItem
+                          key={`bookmarks:${folder.id}`}
+                          onSelect={() => handleBookmark(folder.id)}
+                          value={status.bookmark_folder === folder.id}
+                        >
+                          <DropdownMenu.ItemIcon
+                            ios={{ name: 'folder' }}
+                            androidIconName='ph_folder_simple'
+                          />
+                          <DropdownMenu.ItemTitle>{folder.name}</DropdownMenu.ItemTitle>
+                        </DropdownMenu.CheckboxItem>
+                      ))
+                    ) : (
+                      <DropdownMenu.Item key='bookmarks-empty' disabled>
+                        <DropdownMenu.ItemTitle>
+                          {intl.formatMessage(messages.noBookmarkFolders)}
+                        </DropdownMenu.ItemTitle>
+                      </DropdownMenu.Item>
+                    )
+                  ) : (
+                    <DropdownMenu.Item key='bookmarks-loading' disabled>
+                      <DropdownMenu.ItemTitle>
+                        {intl.formatMessage(messages.loading)}
+                      </DropdownMenu.ItemTitle>
+                    </DropdownMenu.Item>
+                  )}
+                </DropdownMenu.SubContent>
+              </DropdownMenu.Sub>
+            )}
+            {!status.reblogged && publicStatus && features.reblogVisibility ? (
+              <DropdownMenu.Sub key='reblog'>
+                <DropdownMenu.SubTrigger key='reblog-sub'>
+                  <DropdownMenu.ItemIcon ios={{ name: 'repeat' }} androidIconName={'ph_repeat'} />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(messages.reblogVisibility)}
+                  </DropdownMenu.ItemTitle>
+                </DropdownMenu.SubTrigger>
+                <DropdownMenu.SubContent>
+                  <DropdownMenu.Item key='reblog-public' onSelect={() => handleReblog('public')}>
+                    <DropdownMenu.ItemIcon
+                      ios={{ name: 'globe' }}
+                      androidIconName='ph_globe_simple'
+                    />
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(messages.reblogVisibilityPublic)}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item
+                    key='reblog-unlisted'
+                    onSelect={() => handleReblog('unlisted')}
+                  >
+                    <DropdownMenu.ItemIcon ios={{ name: 'moon' }} androidIconName='ph_moon' />
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(messages.reblogVisibilityUnlisted)}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item key='reblog-private' onSelect={() => handleReblog('private')}>
+                    <DropdownMenu.ItemIcon ios={{ name: 'lock' }} androidIconName='ph_lock' />
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(messages.reblogVisibilityPrivate)}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.Item>
+                </DropdownMenu.SubContent>
+              </DropdownMenu.Sub>
+            ) : (
+              ownStatus &&
+              (status.visibility === 'private' || status.visibility === 'mutuals_only') && (
+                <DropdownMenu.Item key='reblog-private' onSelect={() => handleReblog('private')}>
+                  <DropdownMenu.ItemIcon ios={{ name: 'repeat' }} androidIconName='ph_repeat' />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(messages.reblogPrivate)}
+                  </DropdownMenu.ItemTitle>
+                </DropdownMenu.Item>
+              )
+            )}
+            {!ownStatus && features.biteStatuses && (
+              <DropdownMenu.Item key='bite-status' onSelect={handleBiteStatus}>
+                <DropdownMenu.ItemIcon ios={{ name: 'cat' }} androidIconName='ph_tooth' />
+                <DropdownMenu.ItemTitle>{intl.formatMessage(messages.bite)}</DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+            )}
           </DropdownMenu.Group>
-        ) : (
-          <DropdownMenu.Group>
-            <DropdownMenu.Item key='mute-conversation' onSelect={() => handleMuteConversation()}>
-              <DropdownMenu.ItemIcon
-                ios={{ name: status.pinned ? 'bell' : 'bell.slash' }}
-                androidIconName={status.pinned ? 'ph_bell_simple' : 'ph_bell_simple_slash'}
-              />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(
-                  status.muted ? messages.unmuteConversation : messages.muteConversation,
-                )}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key='report' onSelect={() => handleReport()}>
-              <DropdownMenu.ItemIcon ios={{ name: 'flag' }} androidIconName={'ph_flag'} />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.report)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          </DropdownMenu.Group>
-        )}
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+          {ownStatus ? (
+            <DropdownMenu.Group>
+              <DropdownMenu.Item key='pin' onSelect={() => handlePin()}>
+                <DropdownMenu.ItemIcon
+                  ios={{ name: status.pinned ? 'pin.slash' : 'pin' }}
+                  androidIconName={status.pinned ? 'ph_push_pin_slash' : 'ph_push_pin'}
+                />
+                <DropdownMenu.ItemTitle>
+                  {intl.formatMessage(status.pinned ? messages.unpin : messages.pin)}
+                </DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item key='delete' onSelect={() => handleDelete()} destructive>
+                <DropdownMenu.ItemIcon ios={{ name: 'trash' }} androidIconName={'ph_trash'} />
+                <DropdownMenu.ItemTitle>
+                  {intl.formatMessage(messages.delete)}
+                </DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item key='edit' onSelect={() => handleEdit()}>
+                <DropdownMenu.ItemIcon
+                  ios={{ name: 'pencil' }}
+                  androidIconName={'ph_pencil_simple'}
+                />
+                <DropdownMenu.ItemTitle>{intl.formatMessage(messages.edit)}</DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+            </DropdownMenu.Group>
+          ) : (
+            <DropdownMenu.Group>
+              <DropdownMenu.Item key='mute-conversation' onSelect={() => handleMuteConversation()}>
+                <DropdownMenu.ItemIcon
+                  ios={{ name: status.pinned ? 'bell' : 'bell.slash' }}
+                  androidIconName={status.pinned ? 'ph_bell_simple' : 'ph_bell_simple_slash'}
+                />
+                <DropdownMenu.ItemTitle>
+                  {intl.formatMessage(
+                    status.muted ? messages.unmuteConversation : messages.muteConversation,
+                  )}
+                </DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item key='report' onSelect={() => handleReport()}>
+                <DropdownMenu.ItemIcon ios={{ name: 'flag' }} androidIconName={'ph_flag'} />
+                <DropdownMenu.ItemTitle>
+                  {intl.formatMessage(messages.report)}
+                </DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+              <DropdownMenu.Sub key='account-actions'>
+                <DropdownMenu.SubTrigger key='account-actions-sub'>
+                  <DropdownMenu.ItemIcon ios={{ name: 'person' }} androidIconName={'ph_user'} />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(messages.accountActions)}
+                  </DropdownMenu.ItemTitle>
+                </DropdownMenu.SubTrigger>
+                <DropdownMenu.SubContent>
+                  <DropdownMenu.Item key='mute' onSelect={handleMute}>
+                    <DropdownMenu.ItemIcon
+                      ios={{ name: 'speaker.slash' }}
+                      androidIconName='ph_speaker_simple_x'
+                    />
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(
+                        status.account.relationship?.muting ? messages.unmute : messages.mute,
+                        {
+                          name: status.account.username,
+                        },
+                      )}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item key='block' onSelect={handleBlock}>
+                    <DropdownMenu.ItemIcon ios={{ name: 'nosign' }} androidIconName='ph_prohibit' />
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(
+                        status.account.relationship?.blocking ? messages.unblock : messages.block,
+                        {
+                          name: status.account.username,
+                        },
+                      )}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item key='report'>
+                    <DropdownMenu.ItemIcon ios={{ name: 'flag' }} androidIconName='ph_flag' />
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(messages.reportAccount, {
+                        name: status.account.username,
+                      })}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.Item>
+                </DropdownMenu.SubContent>
+              </DropdownMenu.Sub>
+            </DropdownMenu.Group>
+          )}
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+      {blockMuteDialog && (
+        <BlockMuteDialog
+          action={blockMuteDialog}
+          accountId={status.account.id}
+          visible
+          onDismiss={() => setBlockMuteDialog(null)}
+        />
+      )}
+    </>
   );
 };
 

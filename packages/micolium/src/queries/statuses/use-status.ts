@@ -14,12 +14,12 @@ import { useTimelinesActions } from '@/stores/timelines';
 
 import { useAccount } from '../accounts/use-account';
 import { queryKeys } from '../keys';
+import { useFilters } from '../settings/use-filters';
+import { checkFiltered } from '../utils/filters';
 
 import { decrementReplyCount, incrementReplyCount } from './status-actions';
 
 import type { Account, AsyncRefreshHeader, Context, Filter, FilterResult } from 'pl-api';
-import { useFilters } from '../settings/use-filters';
-import { checkFiltered } from '../utils/filters';
 
 const messages = defineMessages({
   deleteSuccess: { id: 'compose.delete.success', defaultMessage: 'Post deleted' },

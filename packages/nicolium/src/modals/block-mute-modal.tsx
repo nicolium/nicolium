@@ -41,7 +41,6 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
   const { data: account } = useAccount(accountId || undefined, true);
   const [notifications, setNotifications] = useState(true);
   const [duration, setDuration] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [note, setNote] = useState<string | undefined>(undefined);
   const { notes, blocksDuration, mutesDuration } = useFeatures();
   const canSetDuration = action === 'MUTE' ? mutesDuration : blocksDuration;
@@ -49,25 +48,27 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
 
   const currentNote = account?.relationship?.note;
 
-  const { mutate: muteAccount } = useMuteAccountMutation(accountId);
-  const { mutate: blockAccount } = useBlockAccountMutation(accountId);
+  const { mutate: muteAccount, isPending: isPendingMute } = useMuteAccountMutation(accountId);
+  const { mutate: blockAccount, isPending: isPendingBlock } = useBlockAccountMutation(accountId);
   const { mutate: updateAccountNote } = useUpdateAccountNoteMutation(accountId);
+
+  const isSubmitting = isPendingMute || isPendingBlock;
 
   if (!account) return null;
 
   const handleClick = (callback?: () => void) => {
-    setIsSubmitting(true);
-    const params: MuteAccountParams | BlockAccountParams = { duration: duration || undefined };
+    const onSuccess = () => {
+      callback?.();
+    };
+
     if (action === 'MUTE') {
-      (params as MuteAccountParams).notifications = notifications;
+      const params: MuteAccountParams = { duration: duration || undefined, notifications };
+      muteAccount(params, { onSuccess });
+    } else {
+      const params: BlockAccountParams = { duration: duration || undefined };
+      blockAccount(params, { onSuccess });
     }
-    (action === 'MUTE' ? muteAccount : blockAccount)(params, {
-      onSuccess: () => {
-        setIsSubmitting(false);
-        onClose('BLOCK_MUTE');
-        if (callback) callback();
-      },
-    });
+
     if (notes && note !== undefined && note !== currentNote) {
       updateAccountNote(note, {
         onError: () => {

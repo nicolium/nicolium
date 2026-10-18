@@ -9,7 +9,7 @@ import {
 } from '@mkljczk/react-native-paper';
 import { DotsSixVerticalIcon, PlusIcon, XIcon } from 'phosphor-react-native';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl, type IntlShape } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -24,7 +24,10 @@ import * as DropdownMenu from 'zeego/dropdown-menu';
 import { useInstance } from '@/contexts/current-account-context';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
+import { formatDuration, DURATIONS as TOO_MANY_DURATIONS } from '../accounts/block-mute-dialog';
 import { iconHelper } from '../ui/icon';
+
+const DURATIONS = TOO_MANY_DURATIONS.slice(0, -1);
 
 const messages = defineMessages({
   optionPlaceholder: {
@@ -34,42 +37,9 @@ const messages = defineMessages({
   removeOption: { id: 'compose_form.poll.remove_option', defaultMessage: 'Remove this answer' },
   reorderOption: { id: 'compose_form.poll.reorder_option', defaultMessage: 'Reorder answer' },
   pollDuration: { id: 'compose_form.poll.duration', defaultMessage: 'Poll duration' },
-  days: {
-    id: 'intervals.full.days',
-    defaultMessage: '{number, plural, one {# day} other {# days}}',
-  },
-  hours: {
-    id: 'intervals.full.hours',
-    defaultMessage: '{number, plural, one {# hour} other {# hours}}',
-  },
-  minutes: {
-    id: 'intervals.full.minutes',
-    defaultMessage: '{number, plural, one {# minute} other {# minutes}}',
-  },
 });
 
-const DURATIONS = [
-  5 * 60,
-  30 * 60,
-  60 * 60,
-  6 * 60 * 60,
-  12 * 60 * 60,
-  24 * 60 * 60,
-  3 * 24 * 60 * 60,
-  7 * 24 * 60 * 60,
-];
-
 const OPTION_GAP = 8;
-
-const formatDuration = (intl: IntlShape, seconds: number) => {
-  if (seconds % (24 * 60 * 60) === 0) {
-    return intl.formatMessage(messages.days, { number: seconds / (24 * 60 * 60) });
-  }
-  if (seconds % (60 * 60) === 0) {
-    return intl.formatMessage(messages.hours, { number: seconds / (60 * 60) });
-  }
-  return intl.formatMessage(messages.minutes, { number: Math.round(seconds / 60) });
-};
 
 const clamp = (value: number, min: number, max: number) => {
   'worklet';
@@ -376,4 +346,4 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   );
 };
 
-export { PollForm };
+export { PollForm, formatDuration };
