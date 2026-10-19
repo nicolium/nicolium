@@ -95,7 +95,10 @@ const List: React.FC<IList> = ({ sections }) => {
   //   );
 
   return filteredSections.map((section, index) => (
-    <PaperList.Section key={index}>
+    <PaperList.Section
+      key={index}
+      style={index === 0 && !section.subheader ? { marginTop: 16 } : undefined}
+    >
       {section.subheader && <PaperList.Subheader>{section.subheader}</PaperList.Subheader>}
       <View style={{ gap: 2 }}>
         {section.items.map((item, index) => {
