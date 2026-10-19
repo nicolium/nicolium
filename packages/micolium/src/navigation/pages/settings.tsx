@@ -18,7 +18,7 @@ import { SpeakerSimpleXIcon } from 'phosphor-react-native/src/icons/SpeakerSimpl
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import { Header } from '@/components/ui/header';
 import { iconHelper } from '@/components/ui/icon';
@@ -26,11 +26,13 @@ import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useAuthStoreActions } from '@/stores/auth';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
+import { getSegmentedMenuStyles } from '@/utils/themes';
 
 import { FollowRequestsScreen } from './follow-requests';
 import { BlocksScreen, MutesScreen } from './mutes-blocks';
 
 import type { RootStackParams, SettingsStackParams } from '../router';
+import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 
 const messages = defineMessages({
   settingsHeading: { id: 'settings.settings', defaultMessage: 'Settings' },
@@ -43,6 +45,10 @@ const messages = defineMessages({
   appearanceHeading: {
     id: 'preferences.heading.appearance',
     defaultMessage: 'Appearance settings',
+  },
+  aboutHeading: {
+    id: 'preferences.heading.about',
+    defaultMessage: 'About {app_name}',
   },
   contentHeading: { id: 'preferences.heading.content', defaultMessage: 'Content and filtering' },
   privacyPublic: { id: 'preferences.options.privacy_public', defaultMessage: 'Public' },
@@ -63,7 +69,197 @@ const messages = defineMessages({
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   blocked: { id: 'column.blocks.long', defaultMessage: 'Blocked accounts' },
   muted: { id: 'column.mutes.long', defaultMessage: 'Muted accounts' },
+  settingsHeader: { id: 'settings.settings_header', defaultMessage: 'App settings' },
+  accountHeader: { id: 'settings.account_header', defaultMessage: 'Account settings' },
+  accountsHeader: { id: 'settings.accounts_header', defaultMessage: 'Accounts' },
+  addOrSwitchAccounts: {
+    id: 'settings.add_or_switch_accounts',
+    defaultMessage: 'Add or switch accounts',
+  },
+  signOut: { id: 'settings.sign_out', defaultMessage: 'Log out' },
+  autosaveDrafts: {
+    id: 'preferences.fields.autosave_drafts',
+    defaultMessage: 'Automatically save posts as drafts while composing',
+  },
+  preserveSpoilers: {
+    id: 'preferences.fields.preserve_spoilers.label',
+    defaultMessage: 'Preserve content warning when replying',
+  },
+  forceImplicitAddressing: {
+    id: 'preferences.fields.implicit_addressing.label',
+    defaultMessage: 'Include mentions in post content when replying',
+  },
+  missingDescriptionModal: {
+    id: 'preferences.fields.missing_description_modal.label',
+    defaultMessage: 'Show confirmation dialog before sending a post without media descriptions',
+  },
+  missingLanguageModal: {
+    id: 'preferences.fields.missing_language_modal.label',
+    defaultMessage: 'Show confirmation dialog before sending a post without language set',
+  },
+  autoloadTimelines: {
+    id: 'preferences.fields.autoload_timelines.label',
+    defaultMessage: 'Automatically load new posts when scrolled to the top of the page',
+  },
+  autoloadMore: {
+    id: 'preferences.fields.autoload_more.label',
+    defaultMessage: 'Automatically load more items when scrolled to the bottom of the page',
+  },
+  missingDescriptionBoostModal: {
+    id: 'preferences.fields.missing_description_boost_modal.label',
+    defaultMessage: 'Show confirmation dialog before reposting a post without media descriptions',
+  },
+  hideBots: {
+    id: 'preferences.notifications.hide_bots',
+    defaultMessage: 'Filter notifications from automated accounts',
+  },
+  autoMarkRead: {
+    id: 'preferences.notifications.auto_mark_read',
+    defaultMessage: 'Mark notifications read automatically',
+  },
+  enableLiquidGlass: {
+    id: 'preferences.appearance.enable_liquid_glass',
+    defaultMessage: 'Use native glass effect',
+  },
+  enableLiquidGlassDescription: {
+    id: 'preferences.appearance.enable_liquid_glass.description',
+    defaultMessage:
+      'Turning this option off will reduce the amount of displayed glass effects, but won’t fully disable it.',
+  },
+  enableLiquidGlassDisabledDescription: {
+    id: 'preferences.appearance.enable_liquid_glass.disabled_description',
+    defaultMessage: 'how did you even get there lol ',
+  },
+  filters: { id: 'column.filters', defaultMessage: 'Muted words' },
+  interactionPolicies: {
+    id: 'column.interaction_policies',
+    defaultMessage: 'Interaction policies',
+  },
+  mutedThreads: { id: 'column.muted_threads', defaultMessage: 'Muted conversations' },
 });
+
+interface IRenderedList {
+  sections: Array<{
+    subheader?: string;
+    items: Array<
+      | {
+          enabled?: boolean;
+          type: 'button';
+          onPress: () => void;
+          label: string;
+          sublabel?: string;
+          role?: 'destructive';
+          icon?: PhosphorIcon;
+        }
+      | {
+          enabled?: boolean;
+          type: 'toggle';
+          active: boolean;
+          onPress: () => void;
+          label: string;
+          sublabel?: string;
+          disabled?: boolean;
+        }
+    >;
+  }>;
+}
+
+const RenderedList: React.FC<IRenderedList> = ({ sections }) => {
+  // const glassEffect = useEnableLiquidGlass();
+  const theme = useTheme();
+
+  // if (glassEffect)
+  //   return (
+  //     <SwiftUIList style={{ marginHorizontal: 0 }}>
+  //       {sections.map((section, index) => (
+  //         <SwiftUISection title={section.heading} key={section.heading || index}>
+  //           {section.items.map(
+  //             (item, index) =>
+  //               item.type === 'button' && (
+  //                 <SwiftUIButton
+  //                   key={index}
+  //                   modifiers={item.role !== 'destructive' ? [buttonStyle('plain')] : undefined}
+  //                   role={item.role === 'destructive' ? 'destructive' : 'default'}
+  //                   onPress={item.onPress}
+  //                 >
+  //                   {item.sublabel ? (
+  //                     <>
+  //                       <SwiftUIText>{item.label}</SwiftUIText>
+  //                       <SwiftUIText>{item.sublabel}</SwiftUIText>
+  //                     </>
+  //                   ) : (
+  //                     <SwiftUIText>{item.label}</SwiftUIText>
+  //                   )}
+  //                 </SwiftUIButton>
+  //               ),
+  //           )}
+  //         </SwiftUISection>
+  //       ))}
+  //     </SwiftUIList>
+  //   );
+
+  return sections.map((section, index) => (
+    <List.Section key={index}>
+      {section.subheader && <List.Subheader>{section.subheader}</List.Subheader>}
+      <View style={{ gap: 2 }}>
+        {section.items.map((item, index) => {
+          if (item.enabled === false) return null;
+
+          const styles = [
+            getSegmentedMenuStyles(theme, false, index, section.items.length),
+            { marginHorizontal: 16 },
+          ];
+
+          if (item.type === 'button') {
+            const Icon = item.icon ? iconHelper(item.icon!) : undefined;
+
+            return (
+              <List.Item
+                key={index}
+                title={item.label}
+                description={item.sublabel}
+                style={styles}
+                onPress={item.onPress}
+                left={
+                  Icon
+                    ? (props) => (
+                        <List.Icon
+                          {...props}
+                          color={item.role === 'destructive' ? theme.colors.error : undefined}
+                          icon={(props) => <Icon {...props} />}
+                        />
+                      )
+                    : undefined
+                }
+                titleStyle={item.role === 'destructive' ? { color: theme.colors.error } : undefined}
+              />
+            );
+          } else {
+            return (
+              <List.Item
+                key={index}
+                title={item.label}
+                description={item.sublabel}
+                style={styles}
+                onPress={item.onPress}
+                disabled={item.disabled}
+                titleNumberOfLines={0}
+                right={() => (
+                  <Switch
+                    value={item.active}
+                    onValueChange={item.onPress}
+                    disabled={item.disabled}
+                  />
+                )}
+                containerStyle={{ gap: 4, alignItems: 'center' }}
+              />
+            );
+          }
+        })}
+      </View>
+    </List.Section>
+  ));
+};
 
 const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'compose'>) => {
   const features = useFeatures();
@@ -147,98 +343,61 @@ const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
             containerStyle={{ flexDirection: 'column', gap: 8 }}
           />
         )}
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.fields.autosave_drafts'
-              defaultMessage='Automatically save posts as drafts while composing'
-            />
-          }
-          titleNumberOfLines={0}
-          right={() => (
-            <Switch
-              value={autosaveDrafts}
-              onValueChange={(value) => update('compose.autosaveDrafts', value)}
-            />
-          )}
-          containerStyle={{ gap: 4, alignItems: 'center' }}
-        />
-        {features.spoilers && (
-          <List.Item
-            title={
-              <FormattedMessage
-                id='preferences.fields.preserve_spoilers.label'
-                defaultMessage='Preserve content warning when replying'
-              />
-            }
-            titleNumberOfLines={0}
-            right={() => (
-              <Switch
-                value={preserveSpoilers}
-                onValueChange={(value) => update('compose.preserveSpoilers', value)}
-              />
-            )}
-            containerStyle={{ gap: 4, alignItems: 'center' }}
-          />
-        )}
-        {features.createStatusExplicitAddressing && (
-          <List.Item
-            title={
-              <FormattedMessage
-                id='preferences.fields.implicit_addressing.label'
-                defaultMessage='Include mentions in post content when replying'
-              />
-            }
-            titleNumberOfLines={0}
-            right={() => (
-              <Switch
-                value={forceImplicitAddressing}
-                onValueChange={(value) => update('compose.forceImplicitAddressing', value)}
-              />
-            )}
-            containerStyle={{ gap: 4, alignItems: 'center' }}
-          />
-        )}
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.fields.missing_description_modal.label'
-              defaultMessage='Show confirmation dialog before sending a post without media descriptions'
-            />
-          }
-          titleNumberOfLines={0}
-          right={() => (
-            <Switch
-              value={missingDescriptionModal}
-              onValueChange={(value) => update('compose.missingDescriptionModal', value)}
-            />
-          )}
-          containerStyle={{ gap: 4, alignItems: 'center' }}
-        />
-        {features.postLanguages && (
-          <List.Item
-            title={
-              <FormattedMessage
-                id='preferences.fields.missing_language_modal.label'
-                defaultMessage='Show confirmation dialog before sending a post without language set'
-              />
-            }
-            titleNumberOfLines={0}
-            right={() => (
-              <Switch
-                value={missingLanguageModal}
-                onValueChange={(value) => update('compose.missingLanguageModal', value)}
-              />
-            )}
-            containerStyle={{ gap: 4 }}
-          />
-        )}
       </List.Section>
+      <RenderedList
+        sections={[
+          {
+            items: [
+              // {
+              //   type: 'list',
+              //   label: intl.formatMessage(messages.defaultContentType),
+              //   active: enableLiquidGlass,
+              //   onPress: () => update('appearance.enableLiquidGlass', !enableLiquidGlass),
+              //   enabled: contentTypes.length > 1,
+              // },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.autosaveDrafts),
+                active: autosaveDrafts,
+                onPress: () => update('compose.autosaveDrafts', !autosaveDrafts),
+              },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.preserveSpoilers),
+                active: preserveSpoilers,
+                onPress: () => update('compose.preserveSpoilers', !preserveSpoilers),
+                enabled: features.spoilers,
+              },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.forceImplicitAddressing),
+                active: forceImplicitAddressing,
+                onPress: () => update('compose.forceImplicitAddressing', !forceImplicitAddressing),
+                enabled: features.createStatusExplicitAddressing,
+              },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.missingDescriptionModal),
+                active: missingDescriptionModal,
+                onPress: () => update('compose.missingDescriptionModal', !missingDescriptionModal),
+              },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.missingLanguageModal),
+                active: missingLanguageModal,
+                onPress: () => update('compose.missingLanguageModal', !missingLanguageModal),
+                enabled: features.postLanguages,
+              },
+            ],
+          },
+        ]}
+      />
     </ScrollView>
   );
 };
 
 const TimelinesSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'timelines'>) => {
+  const intl = useIntl();
   const { update } = useSettingsActions();
 
   const autoloadMore = useSetting('timelines.autoloadMore');
@@ -247,56 +406,33 @@ const TimelinesSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 
 
   return (
     <ScrollView>
-      <List.Section>
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.fields.autoload_timelines.label'
-              defaultMessage='Automatically load new posts when scrolled to the top of the page'
-            />
-          }
-          titleNumberOfLines={0}
-          right={() => (
-            <Switch
-              value={autoloadMore}
-              onValueChange={(value) => update('timelines.autoloadMore', value)}
-            />
-          )}
-          containerStyle={{ gap: 4, alignItems: 'center' }}
-        />
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.fields.autoload_more.label'
-              defaultMessage='Automatically load more items when scrolled to the bottom of the page'
-            />
-          }
-          titleNumberOfLines={0}
-          right={() => (
-            <Switch
-              value={autoloadTimelines}
-              onValueChange={(value) => update('timelines.autoloadTimelines', value)}
-            />
-          )}
-          containerStyle={{ gap: 4, alignItems: 'center' }}
-        />
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.fields.missing_description_boost_modal.label'
-              defaultMessage='Show confirmation dialog before reposting a post without media descriptions'
-            />
-          }
-          titleNumberOfLines={0}
-          right={() => (
-            <Switch
-              value={missingDescriptionBoostModal}
-              onValueChange={(value) => update('timelines.missingDescriptionBoostModal', value)}
-            />
-          )}
-          containerStyle={{ gap: 4, alignItems: 'center' }}
-        />
-      </List.Section>
+      <RenderedList
+        sections={[
+          {
+            items: [
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.autoloadMore),
+                active: autoloadMore,
+                onPress: () => update('timelines.autoloadMore', !autoloadMore),
+              },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.autoloadTimelines),
+                active: autoloadTimelines,
+                onPress: () => update('timelines.autoloadTimelines', !autoloadTimelines),
+              },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.missingDescriptionBoostModal),
+                active: missingDescriptionBoostModal,
+                onPress: () =>
+                  update('timelines.missingDescriptionBoostModal', !missingDescriptionBoostModal),
+              },
+            ],
+          },
+        ]}
+      />
     </ScrollView>
   );
 };
@@ -304,6 +440,7 @@ const TimelinesSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 
 const NotificationsSettingsScreen = (
   _: NativeStackScreenProps<SettingsStackParams, 'notifications'>,
 ) => {
+  const intl = useIntl();
   const { update } = useSettingsActions();
 
   const hideBots = useSetting('notifications.hideBots');
@@ -311,45 +448,32 @@ const NotificationsSettingsScreen = (
 
   return (
     <ScrollView>
-      <List.Section>
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.notifications.hide_bots'
-              defaultMessage='Filter notifications from automated accounts'
-            />
-          }
-          titleNumberOfLines={0}
-          right={() => (
-            <Switch
-              value={hideBots}
-              onValueChange={(value) => update('notifications.hideBots', value)}
-            />
-          )}
-          containerStyle={{ gap: 4 }}
-        />
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.notifications.auto_mark_read'
-              defaultMessage='Mark notifications read automatically'
-            />
-          }
-          titleNumberOfLines={0}
-          right={() => (
-            <Switch
-              value={autoMarkRead}
-              onValueChange={(value) => update('notifications.autoMarkRead', value)}
-            />
-          )}
-          containerStyle={{ gap: 4 }}
-        />
-      </List.Section>
+      <RenderedList
+        sections={[
+          {
+            items: [
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.hideBots),
+                active: hideBots,
+                onPress: () => update('notifications.hideBots', !hideBots),
+              },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.autoMarkRead),
+                active: autoMarkRead,
+                onPress: () => update('notifications.autoMarkRead', !autoMarkRead),
+              },
+            ],
+          },
+        ]}
+      />
     </ScrollView>
   );
 };
 
 const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'appearance'>) => {
+  const intl = useIntl();
   const glassEffect = isGlassEffectAPIAvailable();
 
   const { update } = useSettingsActions();
@@ -358,38 +482,26 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
 
   return (
     <ScrollView>
-      <List.Section>
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.appearance.enable_liquid_glass'
-              defaultMessage='Use native glass effect'
-            />
-          }
-          description={
-            glassEffect ? (
-              <FormattedMessage
-                id='preferences.appearance.enable_liquid_glass.description'
-                defaultMessage='Turning this option off will reduce the amount of displayed glass effects, but won’t fully disable it.'
-              />
-            ) : (
-              <FormattedMessage
-                id='preferences.appearance.enable_liquid_glass.disabled_description'
-                defaultMessage='how did you even get there lol '
-              />
-            )
-          }
-          titleNumberOfLines={0}
-          right={() => (
-            <Switch
-              value={enableLiquidGlass}
-              onValueChange={(value) => update('appearance.enableLiquidGlass', value)}
-              disabled={!glassEffect}
-            />
-          )}
-          containerStyle={{ gap: 4 }}
-        />
-      </List.Section>
+      <RenderedList
+        sections={[
+          {
+            items: [
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.enableLiquidGlass),
+                sublabel: intl.formatMessage(
+                  glassEffect
+                    ? messages.enableLiquidGlassDescription
+                    : messages.enableLiquidGlassDisabledDescription,
+                ),
+                active: enableLiquidGlass,
+                onPress: () => update('appearance.enableLiquidGlass', !enableLiquidGlass),
+                disabled: !glassEffect,
+              },
+            ],
+          },
+        ]}
+      />
     </ScrollView>
   );
 };
@@ -397,54 +509,57 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
 const ContentSettingsScreen = ({
   navigation,
 }: NativeStackScreenProps<SettingsStackParams, 'content'>) => {
+  const intl = useIntl();
   const features = useFeatures();
 
   return (
     <ScrollView>
-      <List.Section>
-        <List.Item
-          title={<FormattedMessage id='column.mutes.long' defaultMessage='Muted accounts' />}
-          left={(props) => <List.Icon {...props} icon={iconHelper(SpeakerSimpleXIcon)} />}
-          onPress={() => navigation.navigate('mutes')}
-        />
-        <List.Item
-          title={<FormattedMessage id='column.blocks.long' defaultMessage='Blocked accounts' />}
-          left={(props) => <List.Icon {...props} icon={iconHelper(ProhibitIcon)} />}
-          onPress={() => navigation.navigate('blocks')}
-        />
-        <List.Item
-          title={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
-          left={(props) => <List.Icon {...props} icon={iconHelper(FunnelIcon)} />}
-          onPress={() => navigation.navigate('filters')}
-        />
-        {(features.interactionRequests || features.quoteApprovalPolicies) && (
-          <List.Item
-            title={
-              <FormattedMessage
-                id='column.interaction_policies'
-                defaultMessage='Interaction policies'
-              />
-            }
-            left={(props) => <List.Icon {...props} icon={iconHelper(HeartHalfIcon)} />}
-            onPress={() => navigation.navigate('interaction_policies')}
-          />
-        )}
-        {features.mutedThreads && (
-          <List.Item
-            title={
-              <FormattedMessage id='column.muted_threads' defaultMessage='Muted conversations' />
-            }
-            left={(props) => <List.Icon {...props} icon={iconHelper(ChatSlashIcon)} />}
-            onPress={() => navigation.navigate('muted_threads')}
-          />
-        )}
-      </List.Section>
+      <RenderedList
+        sections={[
+          {
+            items: [
+              {
+                icon: SpeakerSimpleXIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.muted),
+                onPress: () => navigation.navigate('mutes'),
+              },
+              {
+                icon: ProhibitIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.blocked),
+                onPress: () => navigation.navigate('blocks'),
+              },
+              {
+                icon: FunnelIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.filters),
+                onPress: () => navigation.navigate('filters'),
+              },
+              {
+                icon: HeartHalfIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.interactionPolicies),
+                onPress: () => navigation.navigate('interaction_policies'),
+                enabled: features.interactionRequests || features.quoteApprovalPolicies,
+              },
+              {
+                icon: ChatSlashIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.mutedThreads),
+                onPress: () => navigation.navigate('muted_threads'),
+                enabled: features.mutedThreads,
+              },
+            ],
+          },
+        ]}
+      />
     </ScrollView>
   );
 };
 
 const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'index'>) => {
-  const theme = useTheme();
+  const intl = useIntl();
   const glassEffect = isGlassEffectAPIAvailable();
 
   const { signOut } = useAuthStoreActions();
@@ -452,99 +567,75 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
 
   return (
     <ScrollView>
-      <List.Section>
-        <List.Subheader>
-          <FormattedMessage id='settings.settings_header' defaultMessage='App settings' />
-        </List.Subheader>
-        <List.Item
-          title={
-            <FormattedMessage id='preferences.heading.compose' defaultMessage='Compose settings' />
-          }
-          left={(props) => <List.Icon {...props} icon={iconHelper(NotePencilIcon)} />}
-          onPress={() => navigation.navigate('compose')}
-        />
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.heading.timelines'
-              defaultMessage='Timelines settings'
-            />
-          }
-          left={(props) => <List.Icon {...props} icon={(props) => <TimelineIcon {...props} />} />}
-          onPress={() => navigation.navigate('timelines')}
-        />
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.heading.notifications'
-              defaultMessage='Notifications settings'
-            />
-          }
-          left={(props) => <List.Icon {...props} icon={iconHelper(BellSimpleIcon)} />}
-          onPress={() => navigation.navigate('notifications')}
-        />
-        {glassEffect && (
-          <List.Item
-            title={
-              <FormattedMessage
-                id='preferences.heading.appearance'
-                defaultMessage='Appearance settings'
-              />
-            }
-            left={(props) => <List.Icon {...props} icon={iconHelper(PaletteIcon)} />}
-            onPress={() => navigation.navigate('appearance')}
-          />
-        )}
-        <List.Item
-          title={
-            <FormattedMessage
-              id='settings.about'
-              defaultMessage='About {app_name}'
-              values={{ app_name: 'micolium' }}
-            />
-          }
-          left={(props) => <List.Icon {...props} icon={InfoIcon} />}
-          onPress={() => navigation.navigate('about')}
-        />
-      </List.Section>
-      <List.Section>
-        <List.Subheader>
-          <FormattedMessage id='settings.account_header' defaultMessage='Account settings' />
-        </List.Subheader>
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.heading.content'
-              defaultMessage='Content and filtering'
-            />
-          }
-          left={(props) => <List.Icon {...props} icon={iconHelper(FunnelIcon)} />}
-          onPress={() => navigation.navigate('content')}
-        />
-      </List.Section>
-      <List.Section>
-        <List.Subheader>
-          <FormattedMessage id='settings.accounts_header' defaultMessage='Accounts' />
-        </List.Subheader>
-        <List.Item
-          title={
-            <FormattedMessage
-              id='settings.add_or_switch_accounts'
-              defaultMessage='Add or switch accounts'
-            />
-          }
-          left={(props) => <List.Icon {...props} icon={iconHelper(UserPlusIcon)} />}
-          onPress={() => openAccountSwitcher()}
-        />
-        <List.Item
-          title={<FormattedMessage id='settings.sign_out' defaultMessage='Log out' />}
-          left={(props) => (
-            <List.Icon {...props} color={theme.colors.error} icon={iconHelper(SignOutIcon)} />
-          )}
-          onPress={() => signOut()}
-          titleStyle={{ color: theme.colors.error }}
-        />
-      </List.Section>
+      <RenderedList
+        sections={[
+          {
+            subheader: intl.formatMessage(messages.settingsHeader),
+            items: [
+              {
+                icon: NotePencilIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.composeHeading),
+                onPress: () => navigation.navigate('compose'),
+              },
+              {
+                icon: TimelineIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.timelinesHeading),
+                onPress: () => navigation.navigate('timelines'),
+              },
+              {
+                icon: BellSimpleIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.notificationsHeading),
+                onPress: () => navigation.navigate('notifications'),
+              },
+              {
+                icon: PaletteIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.appearanceHeading),
+                onPress: () => navigation.navigate('appearance'),
+                enabled: glassEffect,
+              },
+              {
+                icon: InfoIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.aboutHeading, { app_name: 'micolium' }),
+                onPress: () => navigation.navigate('about'),
+              },
+            ],
+          },
+          {
+            subheader: intl.formatMessage(messages.accountHeader),
+            items: [
+              {
+                icon: FunnelIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.contentHeading),
+                onPress: () => navigation.navigate('content'),
+              },
+            ],
+          },
+          {
+            subheader: intl.formatMessage(messages.accountsHeader),
+            items: [
+              {
+                icon: UserPlusIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.addOrSwitchAccounts),
+                onPress: () => openAccountSwitcher(),
+              },
+              {
+                icon: SignOutIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.signOut),
+                onPress: () => signOut(),
+                role: 'destructive',
+              },
+            ],
+          },
+        ]}
+      />
     </ScrollView>
   );
 };

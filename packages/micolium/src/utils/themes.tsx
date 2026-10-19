@@ -6,6 +6,7 @@ import {
 import merge from 'deepmerge';
 
 import type { TypescaleStyle } from '@mkljczk/react-native-paper/lib/typescript/src/theme/types';
+import type { StyleProp, ViewStyle } from 'react-native';
 
 const { LightTheme: AdaptedLightTheme, DarkTheme: AdaptedDarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -29,13 +30,14 @@ const getSegmentedMenuStyles = (
   active: boolean,
   index: number,
   length: number,
-) => {
+): StyleProp<ViewStyle> => {
   return {
     backgroundColor: active ? colors.secondaryContainer : colors.surfaceContainerHigh,
     borderTopLeftRadius: index === 0 ? 16 : 4,
     borderTopRightRadius: index === 0 ? 16 : 4,
     borderBottomLeftRadius: index === length - 1 ? 16 : 4,
     borderBottomRightRadius: index === length - 1 ? 16 : 4,
+    overflow: 'hidden',
   };
 };
 
