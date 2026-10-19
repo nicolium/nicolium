@@ -1,7 +1,6 @@
-import { Icon, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
+import { Icon, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import { useQueryClient } from '@tanstack/react-query';
 import { GlassView } from 'expo-glass-effect';
-import { Image } from 'expo-image';
 import { FolderSimpleIcon } from 'phosphor-react-native/src/icons/FolderSimple';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -19,6 +18,7 @@ import { useCreateBookmarkFolder } from '@/queries/statuses/use-bookmark-folders
 import { useUiStoreActions } from '@/stores/ui';
 
 import { DialogOrSheet } from './ui/dialog-or-sheet';
+import { Emoji } from './ui/emoji';
 
 const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
@@ -179,14 +179,8 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, visible, onDismis
       break;
   }
 
-  const renderedEmoji = emojiUrl ? (
-    <Image
-      source={{ uri: emojiUrl.url }}
-      accessibilityLabel={emojiUrl.shortcode}
-      style={{ width: 24, height: 24, objectFit: 'contain' }}
-    />
-  ) : emoji ? (
-    <Text style={{ fontSize: 24 }}>{emoji}</Text>
+  const renderedEmoji = emoji ? (
+    <Emoji emoji={emoji} url={emojiUrl?.url} shortcode={emojiUrl?.shortcode} />
   ) : (
     <Icon source={FolderSimpleIcon} size={24} />
   );

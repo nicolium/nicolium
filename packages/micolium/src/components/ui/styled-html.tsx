@@ -11,12 +11,13 @@ import { Link } from '@react-navigation/native';
 import { type ChildNode, Element, Text, isText } from 'domhandler';
 import { prepend, removeElement, replaceElement } from 'domutils';
 import React, { useMemo } from 'react';
-import { useWindowDimensions, Image } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 
 import { useAccount } from '@/queries/accounts/use-account';
 import { makeEmojiMap } from '@/utils/emojis';
 import { multiplyFontSizes } from '@/utils/themes';
 
+import { Emoji as EmojiComponent } from './emoji';
 import { validEmojiChar } from './emojify';
 
 import type { CustomEmoji, Mention } from 'pl-api';
@@ -54,13 +55,7 @@ interface IEmoji {
 const Emoji: React.FC<IEmoji> = ({ tnode }) => {
   const size = tnode.getNativeStyles().lineHeight;
 
-  return (
-    <Image
-      source={{ uri: tnode.attributes.src }}
-      accessibilityLabel={tnode.attributes.title}
-      style={{ width: size, height: size, objectFit: 'contain' }}
-    />
-  );
+  return <EmojiComponent emoji={tnode.attributes.title} url={tnode.attributes.src} size={size} />;
 };
 
 interface IPartialAccountLink {

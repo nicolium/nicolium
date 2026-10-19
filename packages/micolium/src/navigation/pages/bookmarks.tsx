@@ -5,8 +5,10 @@ import {
 } from '@react-navigation/native-stack';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { View } from 'react-native';
 
 import { StatusesList } from '@/components/statuses/statuses-list';
+import { Emoji } from '@/components/ui/emoji';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useBookmarks } from '@/queries/status-lists/use-bookmarks';
@@ -63,7 +65,14 @@ const BookmarksFolderScreen = ({
       <Appbar.Header>
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
-        <Appbar.Content title={<Text variant='titleLarge'>{folder?.name}</Text>} />
+        <Appbar.Content
+          title={
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              {folder?.emoji && <Emoji emoji={folder.emoji} url={folder.emoji_url || undefined} />}
+              <Text variant='titleLarge'>{folder?.name}</Text>
+            </View>
+          }
+        />
       </Appbar.Header>
       <StatusesList
         query={bookmarksQuery}

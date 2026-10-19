@@ -2,7 +2,6 @@ import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { IconButton, Searchbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { GlassView } from 'expo-glass-effect';
-import { Image } from 'expo-image';
 import { SmileySadIcon } from 'phosphor-react-native/src/icons/SmileySad';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -15,6 +14,7 @@ import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useEmojiPicker, useUiStoreActions } from '@/stores/ui';
 
+import { Emoji as EmojiComponent } from './ui/emoji';
 import { EmptyMessage } from './ui/empty-message';
 import { iconHelper } from './ui/icon';
 
@@ -63,11 +63,7 @@ const CustomEmojiCategory: React.FC<ICustomEmojiCategory> = ({ category }) => {
   const { closeEmojiPicker } = useUiStoreActions();
 
   const renderEmoji = (emoji: CustomEmoji) => (
-    <Image
-      source={{ uri: emoji.url }}
-      accessibilityLabel={emoji.shortcode}
-      style={{ width: 24, height: 24, objectFit: 'contain' }}
-    />
+    <EmojiComponent emoji={emoji.shortcode} url={emoji.url} />
   );
 
   const renderedEmojis = React.useMemo(() => {
@@ -169,17 +165,12 @@ const EmojiSearchResults: React.FC<IEmojiSearchResults> = ({ searchResults }) =>
             ? 'contained-tonal'
             : 'outlined'
         }
-        icon={() =>
-          emoji.custom ? (
-            <Image
-              source={{ uri: emoji.imageUrl }}
-              accessibilityLabel={emoji.id}
-              style={{ width: 24, height: 24, objectFit: 'contain' }}
-            />
-          ) : (
-            <Text style={{ fontSize: 24 }}>{emoji.native}</Text>
-          )
-        }
+        icon={() => (
+          <Emoji
+            emoji={emoji.custom ? emoji.id : emoji.native}
+            url={emoji.custom ? emoji.imageUrl : undefined}
+          />
+        )}
         size={24}
       />
     ));

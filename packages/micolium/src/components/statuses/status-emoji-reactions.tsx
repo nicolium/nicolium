@@ -1,5 +1,4 @@
-import { Chip, Text } from '@mkljczk/react-native-paper';
-import { Image } from 'expo-image';
+import { Chip } from '@mkljczk/react-native-paper';
 import React from 'react';
 import { View } from 'react-native';
 
@@ -7,6 +6,8 @@ import {
   useEmojiReactMutation,
   useEmojiUnreactMutation,
 } from '@/queries/statuses/use-status-interactions';
+
+import { Emoji } from '../ui/emoji';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { EmojiReaction } from 'pl-api';
@@ -32,19 +33,7 @@ const StatusEmojiReactions: React.FC<IStatusEmojiReactions> = ({ status }) => {
         <Chip
           key={emoji.name}
           mode={emoji.me ? 'flat' : 'outlined'}
-          icon={() => {
-            if (emoji.url) {
-              return (
-                <Image
-                  source={{ uri: emoji.url }}
-                  accessibilityLabel={emoji.name}
-                  style={{ width: 20, height: 20, objectFit: 'contain' }}
-                />
-              );
-            } else {
-              return <Text style={{ fontSize: 20 }}>{emoji.name}</Text>;
-            }
-          }}
+          icon={() => <Emoji emoji={emoji.name} url={emoji.url} />}
           onPress={() => handleReact(emoji)}
           compact
         >
