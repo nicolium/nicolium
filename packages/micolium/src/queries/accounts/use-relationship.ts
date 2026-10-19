@@ -256,7 +256,6 @@ const useMuteAccountMutation = (accountId: string) => {
     mutationKey: ['accountRelationships', accountId, 'mute'],
     mutationFn: (params?: MuteAccountParams) => client.filtering.muteAccount(accountId, params),
     onMutate: () => {
-      console.log('huj');
       return updateRelationship(
         accountId,
         {

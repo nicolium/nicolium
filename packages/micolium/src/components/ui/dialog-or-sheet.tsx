@@ -75,10 +75,8 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
 
   React.useEffect(() => {
     if (visible) {
-      console.log('present');
       bottomSheetRef.current?.present();
     } else {
-      console.log('dismiss');
       bottomSheetRef.current?.dismiss();
     }
   }, [visible]);
@@ -130,7 +128,14 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
       }
       footer={
         remainingActions.length ? (
-          <View style={{ flexDirection: 'row', gap: 4, justifyContent: 'flex-end', paddingHorizontal: 16 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 4,
+              justifyContent: 'flex-end',
+              paddingHorizontal: 16,
+            }}
+          >
             {remainingActions.map((action, i) => (
               <Button
                 key={i}
