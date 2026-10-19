@@ -1,6 +1,6 @@
 import { Host as SwiftUIHost, Toggle as SwiftUIToggle } from '@expo/ui/swift-ui';
 import { labelsHidden } from '@expo/ui/swift-ui/modifiers';
-import { List, SegmentedButtons, Switch, useTheme } from '@mkljczk/react-native-paper';
+import { List, Switch, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
@@ -20,8 +20,9 @@ import { SignOutIcon } from 'phosphor-react-native/src/icons/SignOut';
 import { SpeakerSimpleXIcon } from 'phosphor-react-native/src/icons/SpeakerSimpleX';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useMemo } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { ScrollView, View } from 'react-native';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { Header } from '@/components/ui/header';
 import { iconHelper } from '@/components/ui/icon';
@@ -81,6 +82,14 @@ const messages = defineMessages({
     defaultMessage: 'Add or switch accounts',
   },
   signOut: { id: 'settings.sign_out', defaultMessage: 'Log out' },
+  defaultPrivacy: {
+    id: 'preferences.fields.privacy.label',
+    defaultMessage: 'Default post privacy for new posts',
+  },
+  defaultContentType: {
+    id: 'preferences.fields.content_type.label',
+    defaultMessage: 'Default content type for new posts',
+  },
   autosaveDrafts: {
     id: 'preferences.fields.autosave_drafts',
     defaultMessage: 'Automatically save posts as drafts while composing',
@@ -142,6 +151,17 @@ const messages = defineMessages({
   mutedThreads: { id: 'column.muted_threads', defaultMessage: 'Muted conversations' },
 });
 
+interface ISelectItem<T> {
+  enabled?: boolean;
+  type: 'select';
+  active: T;
+  onChange: (value: T) => void;
+  options: Array<{ value: T; label: string }>;
+  label: string;
+  sublabel?: string;
+  disabled?: boolean;
+}
+
 interface IRenderedList {
   sections: Array<{
     subheader?: string;
@@ -164,6 +184,7 @@ interface IRenderedList {
           sublabel?: string;
           disabled?: boolean;
         }
+      | ISelectItem<any>
     >;
   }>;
 }
@@ -248,7 +269,7 @@ const RenderedList: React.FC<IRenderedList> = ({ sections }) => {
                 titleStyle={item.role === 'destructive' ? { color: theme.colors.error } : undefined}
               />
             );
-          } else {
+          } else if (item.type === 'toggle') {
             return (
               <List.Item
                 key={index}
@@ -278,6 +299,36 @@ const RenderedList: React.FC<IRenderedList> = ({ sections }) => {
                 }
                 containerStyle={{ gap: 4, alignItems: 'center' }}
               />
+            );
+          } else {
+            return (
+              <DropdownMenu.Root key={index}>
+                <DropdownMenu.Trigger>
+                  <List.Item
+                    title={item.label}
+                    description={item.sublabel}
+                    style={styles}
+                    right={() => (
+                      <Text>
+                        {item.options.find((option) => option.value === item.active)?.label}
+                      </Text>
+                    )}
+                    containerStyle={{ alignItems: 'center' }}
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  <DropdownMenu.Label>{item.label}</DropdownMenu.Label>
+                  {item.options.map((option) => (
+                    <DropdownMenu.CheckboxItem
+                      key={option.value.toString()}
+                      value={option.value === item.active}
+                      onSelect={() => item.onChange(option.value)}
+                    >
+                      <DropdownMenu.ItemTitle>{option.label}</DropdownMenu.ItemTitle>
+                    </DropdownMenu.CheckboxItem>
+                  ))}
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
             );
           }
         })}
@@ -325,61 +376,29 @@ const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
 
   return (
     <ScrollView>
-      <List.Section>
-        <List.Item
-          title={
-            <FormattedMessage
-              id='preferences.fields.privacy.label'
-              defaultMessage='Default post privacy for new posts'
-            />
-          }
-          titleNumberOfLines={0}
-          right={() => (
-            <SegmentedButtons
-              value={defaultPrivacy}
-              onValueChange={(value) => update('compose.defaultPrivacy', value)}
-              buttons={[
-                { value: 'public', label: intl.formatMessage(messages.privacyPublic) },
-                { value: 'unlisted', label: intl.formatMessage(messages.privacyUnlisted) },
-                { value: 'private', label: intl.formatMessage(messages.privacyFollowersOnly) },
-              ]}
-              style={{ marginLeft: 16 }}
-            />
-          )}
-          containerStyle={{ flexDirection: 'column', gap: 8 }}
-        />
-        {contentTypes.length > 1 && (
-          <List.Item
-            title={
-              <FormattedMessage
-                id='preferences.fields.content_type.label'
-                defaultMessage='Default content type for new posts'
-              />
-            }
-            titleNumberOfLines={0}
-            right={() => (
-              <SegmentedButtons
-                value={defaultContentType}
-                onValueChange={(value) => update('compose.defaultContentType', value)}
-                buttons={contentTypes}
-                style={{ marginLeft: 16 }}
-              />
-            )}
-            containerStyle={{ flexDirection: 'column', gap: 8 }}
-          />
-        )}
-      </List.Section>
       <RenderedList
         sections={[
           {
             items: [
-              // {
-              //   type: 'list',
-              //   label: intl.formatMessage(messages.defaultContentType),
-              //   active: enableLiquidGlass,
-              //   onPress: () => update('appearance.enableLiquidGlass', !enableLiquidGlass),
-              //   enabled: contentTypes.length > 1,
-              // },
+              {
+                type: 'select',
+                label: intl.formatMessage(messages.defaultPrivacy),
+                active: defaultPrivacy,
+                onChange: (value) => update('compose.defaultPrivacy', value),
+                options: [
+                  { value: 'public', label: intl.formatMessage(messages.privacyPublic) },
+                  { value: 'unlisted', label: intl.formatMessage(messages.privacyUnlisted) },
+                  { value: 'private', label: intl.formatMessage(messages.privacyFollowersOnly) },
+                ],
+              },
+              {
+                type: 'select',
+                label: intl.formatMessage(messages.defaultContentType),
+                active: defaultContentType,
+                onChange: (value) => update('compose.defaultContentType', value),
+                enabled: contentTypes.length > 1,
+                options: contentTypes,
+              },
               {
                 type: 'toggle',
                 label: intl.formatMessage(messages.autosaveDrafts),
