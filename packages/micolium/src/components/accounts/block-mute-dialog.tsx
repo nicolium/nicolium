@@ -1,10 +1,5 @@
-import { Host, Picker, List as SwiftUIList, Text as SwiftUIText, Toggle } from '@expo/ui/swift-ui';
-import {
-  pickerStyle,
-  scrollDisabled,
-  tag,
-  useScrollGeometryChange,
-} from '@expo/ui/swift-ui/modifiers';
+import { Picker, Text as SwiftUIText, Toggle } from '@expo/ui/swift-ui';
+import { pickerStyle, tag } from '@expo/ui/swift-ui/modifiers';
 import { List, Switch, Text, TextInput } from '@mkljczk/react-native-paper';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl, type IntlShape } from 'react-intl';
@@ -21,6 +16,7 @@ import {
 } from '@/queries/accounts/use-relationship';
 
 import { DialogOrSheet } from '../ui/dialog-or-sheet';
+import { SwiftUIList } from '../ui/swift-ui-list';
 
 import type { BlockAccountParams, MuteAccountParams } from 'pl-api';
 
@@ -106,11 +102,6 @@ const BlockMuteDialog: React.FC<IBlockMuteDialog> = ({ action, accountId, visibl
   const [duration, setDuration] = useState(0);
   const [note, setNote] = useState<string | undefined>(undefined);
   const [closing, setClosing] = useState(false);
-
-  const [listHeight, setListHeight] = useState(67);
-  const listGeometryModifier = useScrollGeometryChange(({ contentHeight }) =>
-    setListHeight(contentHeight),
-  );
 
   const { mutate: muteAccount, isPending: isPendingMute } = useMuteAccountMutation(accountId);
   const { mutate: blockAccount, isPending: isPendingBlock } = useBlockAccountMutation(accountId);
@@ -198,45 +189,41 @@ const BlockMuteDialog: React.FC<IBlockMuteDialog> = ({ action, accountId, visibl
       </Text>
 
       {(action === 'mute' || canSetDuration) && glassEffect ? (
-        <Host style={{ height: listHeight, marginHorizontal: -16, marginTop: -16 }}>
-          <SwiftUIList
-            modifiers={[scrollDisabled(), ...(listGeometryModifier ? [listGeometryModifier] : [])]}
-          >
-            {action === 'mute' && (
-              <Toggle
-                isOn={notifications}
-                onIsOnChange={() => setNotifications((value) => !value)}
-                label={intl.formatMessage(messages.hideNotifications)}
-              />
-            )}
+        <SwiftUIList>
+          {action === 'mute' && (
+            <Toggle
+              isOn={notifications}
+              onIsOnChange={() => setNotifications((value) => !value)}
+              label={intl.formatMessage(messages.hideNotifications)}
+            />
+          )}
 
-            {canSetDuration && (
-              <>
-                <Toggle
-                  isOn={duration !== 0}
-                  onIsOnChange={(value) => setDuration(value ? DURATIONS[5] : 0)}
-                  label={intl.formatMessage(
-                    action === 'mute' ? messages.muteAutoExpire : messages.blockAutoExpire,
-                  )}
-                />
-                {duration !== 0 && (
-                  <Picker
-                    label={intl.formatMessage(messages.duration)}
-                    selection={DURATIONS.indexOf(duration)}
-                    onSelectionChange={(index) => setDuration(DURATIONS[index])}
-                    modifiers={[pickerStyle('menu')]}
-                  >
-                    {DURATIONS.map((value, index) => (
-                      <SwiftUIText key={value.toString()} modifiers={[tag(index)]}>
-                        {formatDuration(intl, value)}
-                      </SwiftUIText>
-                    ))}
-                  </Picker>
+          {canSetDuration && (
+            <>
+              <Toggle
+                isOn={duration !== 0}
+                onIsOnChange={(value) => setDuration(value ? DURATIONS[5] : 0)}
+                label={intl.formatMessage(
+                  action === 'mute' ? messages.muteAutoExpire : messages.blockAutoExpire,
                 )}
-              </>
-            )}
-          </SwiftUIList>
-        </Host>
+              />
+              {duration !== 0 && (
+                <Picker
+                  label={intl.formatMessage(messages.duration)}
+                  selection={DURATIONS.indexOf(duration)}
+                  onSelectionChange={(index) => setDuration(DURATIONS[index])}
+                  modifiers={[pickerStyle('menu')]}
+                >
+                  {DURATIONS.map((value, index) => (
+                    <SwiftUIText key={value.toString()} modifiers={[tag(index)]}>
+                      {formatDuration(intl, value)}
+                    </SwiftUIText>
+                  ))}
+                </Picker>
+              )}
+            </>
+          )}
+        </SwiftUIList>
       ) : (
         <>
           {action === 'mute' && (

@@ -1,5 +1,4 @@
-import { Host, List as SwiftUIList, Toggle } from '@expo/ui/swift-ui';
-import { scrollDisabled, useScrollGeometryChange } from '@expo/ui/swift-ui/modifiers';
+import { Toggle } from '@expo/ui/swift-ui';
 import {
   ActivityIndicator,
   Appbar,
@@ -30,6 +29,7 @@ import { DialogOrSheet } from '@/components/ui/dialog-or-sheet';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { LoadMore } from '@/components/ui/load-more';
+import { SwiftUIList } from '@/components/ui/swift-ui-list';
 import { TabBar } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -99,11 +99,6 @@ const FiltersDialog: React.FC<IFiltersDialog> = ({ visible, setVisible }) => {
     return filters;
   });
 
-  const [listHeight, setListHeight] = useState(67);
-  const listGeometryModifier = useScrollGeometryChange(({ contentHeight }) =>
-    setListHeight(contentHeight),
-  );
-
   const getBooleanStatus = (key: (typeof filters)[0]) => {
     if (newFilters.length === 0) return true;
     if (newFilters.includes(key)) return true;
@@ -170,20 +165,16 @@ const FiltersDialog: React.FC<IFiltersDialog> = ({ visible, setVisible }) => {
       handleDismiss={() => setVisible(false)}
     >
       {glassEffect ? (
-        <Host style={{ height: listHeight, marginHorizontal: -16, marginTop: -32 }}>
-          <SwiftUIList
-            modifiers={[scrollDisabled(), ...(listGeometryModifier ? [listGeometryModifier] : [])]}
-          >
-            {availableFilters.map((filter) => (
-              <Toggle
-                key={filter}
-                isOn={getBooleanStatus(filter)}
-                onIsOnChange={toggleFilters(filter)}
-                label={intl.formatMessage(filtersMessages[filter])}
-              />
-            ))}
-          </SwiftUIList>
-        </Host>
+        <SwiftUIList>
+          {availableFilters.map((filter) => (
+            <Toggle
+              key={filter}
+              isOn={getBooleanStatus(filter)}
+              onIsOnChange={toggleFilters(filter)}
+              label={intl.formatMessage(filtersMessages[filter])}
+            />
+          ))}
+        </SwiftUIList>
       ) : (
         availableFilters.map((filter) => (
           <List.Item
