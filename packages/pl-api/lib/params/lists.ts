@@ -20,6 +20,10 @@ interface CreateListParams {
    * Requires features{@link Features['listsFavourites']}
    */
   favourite?: boolean;
+  /**
+   * Requires features{@link Features['listsEmojis']}
+   */
+  emoji?: string;
 }
 
 /**

@@ -15,10 +15,7 @@ import type { List as ListEntity } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.lists', defaultMessage: 'Lists' },
-  subheading: { id: 'lists.subheading', defaultMessage: 'Your lists' },
   label: { id: 'lists.new.title.placeholder', defaultMessage: 'New list title' },
-  title: { id: 'lists.new.create', defaultMessage: 'Add list' },
-  create: { id: 'lists.new.create.title', defaultMessage: 'Add list' },
 });
 
 const getOrderedLists = (lists: Array<Pick<ListEntity, 'title'>>) => {
@@ -48,7 +45,6 @@ const NewListForm: React.FC = () => {
   };
 
   const label = intl.formatMessage(messages.label);
-  const create = intl.formatMessage(messages.create);
 
   return (
     <Form className='lists__form' onSubmit={handleSubmit}>
@@ -65,7 +61,7 @@ const NewListForm: React.FC = () => {
       </label>
 
       <button disabled={isPending || !value.trim()} type='submit'>
-        {create}
+        <FormattedMessage id='lists.new.create.title' defaultMessage='Add list' />
       </button>
     </Form>
   );

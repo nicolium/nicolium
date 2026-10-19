@@ -9,11 +9,12 @@ import { HouseIcon } from 'phosphor-react-native/src/icons/House';
 import { ListDashesIcon } from 'phosphor-react-native/src/icons/ListDashes';
 import { PlanetIcon } from 'phosphor-react-native/src/icons/Planet';
 import { WrenchIcon } from 'phosphor-react-native/src/icons/Wrench';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { defineMessages, type MessageDescriptor, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
+import { CreateListDialog } from '@/components/create-list-dialog';
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useAntennas } from '@/queries/accounts/use-antennas';
 import { useCircles } from '@/queries/accounts/use-circles';
@@ -45,6 +46,10 @@ const messages = defineMessages({
     defaultMessage: 'You have no bookmark folders yet.',
   },
   loading: { id: 'loading_indicator.label', defaultMessage: 'Loading…' },
+  addList: { id: 'lists.new.create', defaultMessage: 'Add list' },
+  addAntenna: { id: 'antennas.new.create', defaultMessage: 'Add antenna' },
+  addCircle: { id: 'circles.new.create', defaultMessage: 'Add circle' },
+  addBookmarkFolder: { id: 'bookmark_folders.new.create', defaultMessage: 'Add bookmark folder' },
 });
 
 const useTimelineHeadingAndIcon = (
@@ -107,6 +112,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
   const features = useFeatures();
   const instance = useInstance();
   const timelineAccess = instance.configuration.timelines_access;
+
+  const [createDialog, setCreateDialog] = useState<
+    'bookmark_folder' | 'antenna' | 'circle' | 'list' | null
+  >(null);
 
   const [heading, TimelineIcon] = useTimelineHeadingAndIcon(active);
 
@@ -186,6 +195,15 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               </DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
           )}
+          <DropdownMenu.Item
+            key='bookmarks-create'
+            onSelect={() => setCreateDialog('bookmark_folder')}
+          >
+            <DropdownMenu.ItemIcon ios={{ name: 'plus' }} androidIconName='ph_plus' />
+            <DropdownMenu.ItemTitle>
+              {intl.formatMessage(messages.addBookmarkFolder)}
+            </DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
         </DropdownMenu.SubContent>
       </DropdownMenu.Sub>
     );
@@ -199,6 +217,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     let sfIcon: SFSymbol;
     let androidIcon: string;
     let emptyMessage;
+    let createTitle;
 
     switch (name) {
       case 'antenna':
@@ -206,18 +225,21 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
         androidIcon = 'ph_broadcast';
         emptyMessage = messages.noAntennas;
         title = messages.antennas;
+        createTitle = messages.addAntenna;
         break;
       case 'circle':
         sfIcon = 'circle.grid.2x2';
         androidIcon = 'ph_circles_four';
         emptyMessage = messages.noCircles;
         title = messages.circles;
+        createTitle = messages.addCircle;
         break;
       default:
         sfIcon = 'list.bullet';
         androidIcon = 'ph_list_dashes';
         emptyMessage = messages.noLists;
         title = messages.lists;
+        createTitle = messages.addList;
         break;
     }
 
@@ -252,6 +274,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               </DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
           )}
+          <DropdownMenu.Item key={`${name}-create`} onSelect={() => setCreateDialog(name)}>
+            <DropdownMenu.ItemIcon ios={{ name: 'plus' }} androidIconName='ph_plus' />
+            <DropdownMenu.ItemTitle>{intl.formatMessage(createTitle)}</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
         </DropdownMenu.SubContent>
       </DropdownMenu.Sub>
     );
@@ -295,22 +321,27 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
   );
 
   return (
-    <View style={{ alignItems: 'flex-start' }}>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <Button mode='text' labelStyle={{ fontSize: 20 }} compact>
-            <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
-              <Icon source={TimelineIcon} size={24} />
-              <View>
-                <Text variant='titleLarge'>{heading}</Text>
+    <>
+      <View style={{ alignItems: 'flex-start' }}>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Button mode='text' labelStyle={{ fontSize: 20 }} compact>
+              <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+                <Icon source={TimelineIcon} size={24} />
+                <View>
+                  <Text variant='titleLarge'>{heading}</Text>
+                </View>
+                <Icon source={CaretDownIcon} size={16} />
               </View>
-              <Icon source={CaretDownIcon} size={16} />
-            </View>
-          </Button>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content>{menuContent}</DropdownMenu.Content>
-      </DropdownMenu.Root>
-    </View>
+            </Button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>{menuContent}</DropdownMenu.Content>
+        </DropdownMenu.Root>
+      </View>
+      {createDialog && (
+        <CreateListDialog type={createDialog} visible onDismiss={() => setCreateDialog(null)} />
+      )}
+    </>
   );
 };
 
