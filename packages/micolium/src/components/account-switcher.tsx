@@ -1,11 +1,5 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
-import {
-  ActivityIndicator,
-  Button,
-  List,
-  RadioButton,
-  useTheme,
-} from '@mkljczk/react-native-paper';
+import { ActivityIndicator, Button, List, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
 import React from 'react';
@@ -17,6 +11,7 @@ import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { useIsAccountSwitcherOpen, useUiStoreActions } from '@/stores/ui';
+import { getSegmentedMenuStyles } from '@/utils/themes';
 
 import { Account } from './accounts/account';
 import { iconHelper } from './ui/icon';
@@ -30,7 +25,7 @@ const CurrentAccount = () => {
 };
 
 const AccountSwitcher = () => {
-  const { colors } = useTheme();
+  const theme = useTheme();
   const navigation = useNavigation();
   const currentAccount = useCurrentAccount();
   const accounts = useAuthStore((state) => state.sessions);
@@ -56,22 +51,18 @@ const AccountSwitcher = () => {
               <List.Item
                 title={CurrentAccount}
                 onPress={onChange}
-                style={{
-                  backgroundColor:
-                    currentAccount === accountId
-                      ? colors.secondaryContainer
-                      : colors.surfaceContainerHigh,
-                  borderTopLeftRadius: index === 0 ? 16 : 4,
-                  borderTopRightRadius: index === 0 ? 16 : 4,
-                  borderBottomLeftRadius: index === array.length - 1 ? 16 : 4,
-                  borderBottomRightRadius: index === array.length - 1 ? 16 : 4,
-                }}
+                style={getSegmentedMenuStyles(
+                  theme,
+                  currentAccount === accountId,
+                  index,
+                  array.length,
+                )}
               />
             </CurrentAccountProvider>
           );
         })}
         <Button
-         style={{ margin: 'auto', marginTop: 8 }}
+          style={{ margin: 'auto', marginTop: 8 }}
           icon={iconHelper(PlusIcon)}
           onPress={() => {
             navigation.navigate('login');

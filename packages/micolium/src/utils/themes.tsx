@@ -24,4 +24,24 @@ const multiplyFontSizes = (typescaleStyle: TypescaleStyle, multiplier: number) =
         lineHeight: typescaleStyle.lineHeight * multiplier,
       };
 
-export { CombinedLightTheme as LightTheme, CombinedDarkTheme as DarkTheme, multiplyFontSizes };
+const getSegmentedMenuStyles = (
+  { colors }: typeof LightTheme,
+  active: boolean,
+  index: number,
+  length: number,
+) => {
+  return {
+    backgroundColor: active ? colors.secondaryContainer : colors.surfaceContainerHigh,
+    borderTopLeftRadius: index === 0 ? 16 : 4,
+    borderTopRightRadius: index === 0 ? 16 : 4,
+    borderBottomLeftRadius: index === length - 1 ? 16 : 4,
+    borderBottomRightRadius: index === length - 1 ? 16 : 4,
+  };
+};
+
+export {
+  CombinedLightTheme as LightTheme,
+  CombinedDarkTheme as DarkTheme,
+  multiplyFontSizes,
+  getSegmentedMenuStyles,
+};
