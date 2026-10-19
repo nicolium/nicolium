@@ -2,19 +2,22 @@ import { Icon, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import { useQueryClient } from '@tanstack/react-query';
 import { GlassView } from 'expo-glass-effect';
 import { FolderSimpleIcon } from 'phosphor-react-native/src/icons/FolderSimple';
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 import { useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
-import { useCreateAntenna } from '@/queries/accounts/use-antennas';
-import { useCreateCircle } from '@/queries/accounts/use-circles';
-import { useCreateList } from '@/queries/accounts/use-lists';
+import { useCreateAntenna, useUpdateAntenna } from '@/queries/accounts/use-antennas';
+import { useCreateCircle, useUpdateCircle } from '@/queries/accounts/use-circles';
+import { useCreateList, useUpdateList } from '@/queries/accounts/use-lists';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
-import { useCreateBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
+import {
+  useCreateBookmarkFolder,
+  useUpdateBookmarkFolder,
+} from '@/queries/statuses/use-bookmark-folders';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { DialogOrSheet } from './ui/dialog-or-sheet';
@@ -28,6 +31,13 @@ const messages = defineMessages({
   createBookmarkFolder: {
     id: 'bookmark_folders.new.create.title',
     defaultMessage: 'Add bookmark folder',
+  },
+  updateList: { id: 'lists.edit', defaultMessage: 'Edit list' },
+  updateAntenna: { id: 'antennas.edit', defaultMessage: 'Edit antenna' },
+  updateCircle: { id: 'circles.edit', defaultMessage: 'Edit circle' },
+  updateBookmarkFolder: {
+    id: 'bookmark_folders.edit',
+    defaultMessage: 'Edit bookmark folder',
   },
   listPlaceholder: { id: 'lists.new.title.placeholder', defaultMessage: 'New list title' },
   antennaPlaceholder: { id: 'antennas.new.title.placeholder', defaultMessage: 'New antenna title' },
@@ -54,11 +64,12 @@ const messages = defineMessages({
 
 interface ICreateListDialog {
   type: 'bookmark_folder' | 'antenna' | 'circle' | 'list';
+  id?: string;
   visible: boolean;
   onDismiss: () => void;
 }
 
-const CreateListDialog: React.FC<ICreateListDialog> = ({ type, visible, onDismiss }) => {
+const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDismiss }) => {
   const { colors } = useTheme();
   const intl = useIntl();
   const queryClient = useQueryClient();
@@ -70,14 +81,57 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, visible, onDismis
 
   const [closing, setClosing] = React.useState(false);
   const [emoji, setEmoji] = React.useState<string | null>(null);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = React.useState('');
 
-  const emojiUrl = useMemo(() => {
+  const emojiUrl = React.useMemo(() => {
     if (emoji)
       return queryClient
         .getQueryData(scopedQueryKey(queryKeys.instance.customEmojis, scopeUrl))
         ?.find((e) => e.shortcode === emoji);
   }, [emoji, scopeUrl]);
+
+  React.useEffect(() => {
+    switch (type) {
+      case 'bookmark_folder': {
+        const bookmarkFolder = queryClient
+          .getQueryData(scopedQueryKey(queryKeys.bookmarkFolders.all, scopeUrl))
+          ?.find((folder) => folder.id === id);
+        if (bookmarkFolder) {
+          setTitle(bookmarkFolder.name);
+          setEmoji(bookmarkFolder.emoji);
+        }
+        break;
+      }
+      case 'list': {
+        const list = queryClient
+          .getQueryData(scopedQueryKey(queryKeys.lists.all, scopeUrl))
+          ?.find((list) => list.id === id);
+        if (list) {
+          setTitle(list.title);
+          setEmoji(list.emoji);
+        }
+        break;
+      }
+      case 'circle': {
+        const circle = queryClient
+          .getQueryData(scopedQueryKey(queryKeys.circles.all, scopeUrl))
+          ?.find((circle) => circle.id === id);
+        if (circle) {
+          setTitle(circle.title);
+        }
+        break;
+      }
+      case 'antenna': {
+        const antenna = queryClient
+          .getQueryData(scopedQueryKey(queryKeys.antennas.all, scopeUrl))
+          ?.find((antenna) => antenna.id === id);
+        if (antenna) {
+          setTitle(antenna.title);
+        }
+        break;
+      }
+    }
+  }, [id]);
 
   const canSetEmoji =
     (type === 'list' && features.listsEmojis) ||
@@ -90,6 +144,11 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, visible, onDismis
   const { mutate: createCircle, isPending: isPendingCircle } = useCreateCircle();
   const { mutate: createBookmarkFolder, isPending: isPendingBookmarkFolder } =
     useCreateBookmarkFolder();
+
+  const { mutate: updateList } = useUpdateList(id || '');
+  const { mutate: updateAntenna } = useUpdateAntenna(id || '');
+  const { mutate: updateCircle } = useUpdateCircle(id || '');
+  const { mutate: updateBookmarkFolder } = useUpdateBookmarkFolder(id || '');
 
   const isSubmitting =
     isPendingList || isPendingAntenna || isPendingCircle || isPendingBookmarkFolder;
@@ -132,16 +191,19 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, visible, onDismis
 
     switch (type) {
       case 'bookmark_folder':
-        createBookmarkFolder({ name: value, emoji: emojiParam }, { onSuccess, onError });
+        (id ? updateBookmarkFolder : createBookmarkFolder)(
+          { name: value, emoji: emojiParam },
+          { onSuccess, onError },
+        );
         break;
       case 'antenna':
-        createAntenna({ title: value }, { onSuccess, onError });
+        (id ? updateAntenna : createAntenna)({ title: value }, { onSuccess, onError });
         break;
       case 'circle':
-        createCircle(value, { onSuccess, onError });
+        (id ? updateCircle : createCircle)(value, { onSuccess, onError });
         break;
       case 'list':
-        createList({ title: value, emoji: emojiParam }, { onSuccess, onError });
+        (id ? updateList : createList)({ title: value, emoji: emojiParam }, { onSuccess, onError });
         break;
     }
   };
@@ -151,30 +213,47 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, visible, onDismis
   let titlePlaceholder;
   switch (type) {
     case 'bookmark_folder':
-      dialogTitle = (
+      dialogTitle = id ? (
+        <FormattedMessage
+          id='edit_bookmark_folder_modal.header.title'
+          defaultMessage='Edit folder'
+        />
+      ) : (
         <FormattedMessage
           id='bookmark_folders.create.heading'
           defaultMessage='Create bookmark folder'
         />
       );
-      createLabel = intl.formatMessage(messages.createBookmarkFolder);
+      createLabel = intl.formatMessage(
+        id ? messages.updateBookmarkFolder : messages.createBookmarkFolder,
+      );
       titlePlaceholder = intl.formatMessage(messages.bookmarkFolderPlaceholder);
       break;
     case 'antenna':
-      dialogTitle = (
+      dialogTitle = id ? (
+        <FormattedMessage id='antennas.edit' defaultMessage='Edit antenna' />
+      ) : (
         <FormattedMessage id='antenna.create.heading' defaultMessage='Create antenna' />
       );
-      createLabel = intl.formatMessage(messages.createAntenna);
+      createLabel = intl.formatMessage(id ? messages.updateAntenna : messages.createAntenna);
       titlePlaceholder = intl.formatMessage(messages.antennaPlaceholder);
       break;
     case 'circle':
-      dialogTitle = <FormattedMessage id='circles.create.heading' defaultMessage='Create circle' />;
-      createLabel = intl.formatMessage(messages.createCircle);
+      dialogTitle = id ? (
+        <FormattedMessage id='circles.edit' defaultMessage='Edit circle' />
+      ) : (
+        <FormattedMessage id='circles.create.heading' defaultMessage='Create circle' />
+      );
+      createLabel = intl.formatMessage(id ? messages.updateCircle : messages.createCircle);
       titlePlaceholder = intl.formatMessage(messages.circlePlaceholder);
       break;
     case 'list':
-      dialogTitle = <FormattedMessage id='lists.create.heading' defaultMessage='Create list' />;
-      createLabel = intl.formatMessage(messages.createList);
+      dialogTitle = id ? (
+        <FormattedMessage id='list.edit' defaultMessage='Edit list' />
+      ) : (
+        <FormattedMessage id='lists.create.heading' defaultMessage='Create list' />
+      );
+      createLabel = intl.formatMessage(id ? messages.updateList : messages.createList);
       titlePlaceholder = intl.formatMessage(messages.listPlaceholder);
       break;
   }
