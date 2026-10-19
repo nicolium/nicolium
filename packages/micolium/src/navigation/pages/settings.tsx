@@ -1,3 +1,5 @@
+import { Host as SwiftUIHost, Toggle as SwiftUIToggle } from '@expo/ui/swift-ui';
+import { labelsHidden } from '@expo/ui/swift-ui/modifiers';
 import { List, SegmentedButtons, Switch, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
@@ -5,6 +7,7 @@ import {
 } from '@react-navigation/native-stack';
 import { isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import TimelineIcon from 'lucide-react-native/icons/timeline';
+import { create } from 'mutative';
 import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
 import { ChatSlashIcon } from 'phosphor-react-native/src/icons/ChatSlash';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
@@ -23,6 +26,7 @@ import { ScrollView, View } from 'react-native';
 import { Header } from '@/components/ui/header';
 import { iconHelper } from '@/components/ui/icon';
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAuthStoreActions } from '@/stores/auth';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
@@ -165,8 +169,18 @@ interface IRenderedList {
 }
 
 const RenderedList: React.FC<IRenderedList> = ({ sections }) => {
-  // const glassEffect = useEnableLiquidGlass();
+  const glassEffect = useEnableLiquidGlass();
   const theme = useTheme();
+
+  const filteredSections = useMemo(
+    () =>
+      create(sections, (draft) => {
+        for (const section of draft) {
+          section.items = section.items.filter(({ enabled }) => enabled !== false);
+        }
+      }),
+    [sections],
+  );
 
   // if (glassEffect)
   //   return (
@@ -198,7 +212,7 @@ const RenderedList: React.FC<IRenderedList> = ({ sections }) => {
   //     </SwiftUIList>
   //   );
 
-  return sections.map((section, index) => (
+  return filteredSections.map((section, index) => (
     <List.Section key={index}>
       {section.subheader && <List.Subheader>{section.subheader}</List.Subheader>}
       <View style={{ gap: 2 }}>
@@ -244,13 +258,24 @@ const RenderedList: React.FC<IRenderedList> = ({ sections }) => {
                 onPress={item.onPress}
                 disabled={item.disabled}
                 titleNumberOfLines={0}
-                right={() => (
-                  <Switch
-                    value={item.active}
-                    onValueChange={item.onPress}
-                    disabled={item.disabled}
-                  />
-                )}
+                right={() =>
+                  glassEffect ? (
+                    <SwiftUIHost matchContents style={{ width: 64 }}>
+                      <SwiftUIToggle
+                        isOn={item.active}
+                        onIsOnChange={item.onPress}
+                        label=''
+                        modifiers={[labelsHidden()]}
+                      />
+                    </SwiftUIHost>
+                  ) : (
+                    <Switch
+                      value={item.active}
+                      onValueChange={item.onPress}
+                      disabled={item.disabled}
+                    />
+                  )
+                }
                 containerStyle={{ gap: 4, alignItems: 'center' }}
               />
             );
