@@ -1,10 +1,16 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
-import { ActivityIndicator, List, RadioButton, useTheme } from '@mkljczk/react-native-paper';
+import {
+  ActivityIndicator,
+  Button,
+  List,
+  RadioButton,
+  useTheme,
+} from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Platform, ScrollView } from 'react-native';
+import { Platform, ScrollView, View } from 'react-native';
 
 import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -13,16 +19,18 @@ import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { useIsAccountSwitcherOpen, useUiStoreActions } from '@/stores/ui';
 
 import { Account } from './accounts/account';
+import { iconHelper } from './ui/icon';
 
 const CurrentAccount = () => {
   const { data: currentAccountId } = useCredentialAccountId();
 
   if (!currentAccountId) return <ActivityIndicator />;
 
-  return <Account id={currentAccountId} displayFqn />;
+  return <Account id={currentAccountId} />;
 };
 
 const AccountSwitcher = () => {
+  const { colors } = useTheme();
   const navigation = useNavigation();
   const currentAccount = useCurrentAccount();
   const accounts = useAuthStore((state) => state.sessions);
@@ -31,41 +39,48 @@ const AccountSwitcher = () => {
 
   return (
     <ScrollView>
-      {Object.keys(accounts).map((accountId) => {
-        const onChange = () => {
-          if (toggleAccount(accountId)) {
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'app' }],
-            });
-          }
-          closeAccountSwitcher();
-        };
+      <View style={{ gap: 2, marginHorizontal: 16, marginTop: 16 }}>
+        {Object.keys(accounts).map((accountId, index, array) => {
+          const onChange = () => {
+            if (toggleAccount(accountId)) {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'app' }],
+              });
+            }
+            closeAccountSwitcher();
+          };
 
-        return (
-          <CurrentAccountProvider key={accountId} value={accountId}>
-            <List.Item
-              title={CurrentAccount}
-              onPress={onChange}
-              right={() => (
-                <RadioButton
-                  status={currentAccount === accountId ? 'checked' : 'unchecked'}
-                  onPress={onChange}
-                  value={accountId}
-                />
-              )}
-            />
-          </CurrentAccountProvider>
-        );
-      })}
-      <List.Item
-        title={<FormattedMessage id='account_swithcer.add_account' defaultMessage='Add account' />}
-        left={(props) => <List.Icon {...props} icon={PlusIcon} />}
-        onPress={() => {
-          navigation.navigate('login');
-          closeAccountSwitcher();
-        }}
-      />
+          return (
+            <CurrentAccountProvider key={accountId} value={accountId}>
+              <List.Item
+                title={CurrentAccount}
+                onPress={onChange}
+                style={{
+                  backgroundColor:
+                    currentAccount === accountId
+                      ? colors.secondaryContainer
+                      : colors.surfaceContainerHigh,
+                  borderTopLeftRadius: index === 0 ? 16 : 4,
+                  borderTopRightRadius: index === 0 ? 16 : 4,
+                  borderBottomLeftRadius: index === array.length - 1 ? 16 : 4,
+                  borderBottomRightRadius: index === array.length - 1 ? 16 : 4,
+                }}
+              />
+            </CurrentAccountProvider>
+          );
+        })}
+        <Button
+         style={{ margin: 'auto', marginTop: 8 }}
+          icon={iconHelper(PlusIcon)}
+          onPress={() => {
+            navigation.navigate('login');
+            closeAccountSwitcher();
+          }}
+        >
+          <FormattedMessage id='account_swithcer.add_account' defaultMessage='Add account' />
+        </Button>
+      </View>
     </ScrollView>
   );
 };
