@@ -1,3 +1,5 @@
+import { Host, List as SwiftUIList, Toggle } from '@expo/ui/swift-ui';
+import { scrollDisabled, useScrollGeometryChange } from '@expo/ui/swift-ui/modifiers';
 import {
   ActivityIndicator,
   Appbar,
@@ -18,7 +20,7 @@ import { ChecksIcon } from 'phosphor-react-native/src/icons/Checks';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TabView } from 'react-native-tab-view';
@@ -30,6 +32,7 @@ import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { LoadMore } from '@/components/ui/load-more';
 import { TabBar } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
 import {
   useMarkNotificationsReadMutation,
@@ -53,6 +56,16 @@ const messages = defineMessages({
   save: { id: 'common.save', defaultMessage: 'Save' },
 });
 
+const filtersMessages: Record<(typeof ALL_FILTERS)[number], MessageDescriptor> = defineMessages({
+  mention: { id: 'notifications.filters.mention', defaultMessage: 'Mentions' },
+  favourite: { id: 'notifications.filters.favourite', defaultMessage: 'Likes' },
+  reblog: { id: 'notifications.filters.reblog', defaultMessage: 'Reposts' },
+  poll: { id: 'notifications.filters.poll', defaultMessage: 'Polls' },
+  status: { id: 'notifications.filters.status', defaultMessage: 'Account subscriptions' },
+  follow: { id: 'notifications.filters.follow', defaultMessage: 'Follows' },
+  events: { id: 'notifications.filters.events', defaultMessage: 'Events' },
+});
+
 const NOTIFICATION_TABS = {
   all: 0,
   mentions: 1,
@@ -74,6 +87,7 @@ interface IFiltersDialog {
 }
 
 const FiltersDialog: React.FC<IFiltersDialog> = ({ visible, setVisible }) => {
+  const glassEffect = useEnableLiquidGlass();
   const intl = useIntl();
   const features = useFeatures();
 
@@ -85,11 +99,18 @@ const FiltersDialog: React.FC<IFiltersDialog> = ({ visible, setVisible }) => {
     return filters;
   });
 
-  const getStatus = (key: (typeof filters)[0]) => {
-    if (newFilters.length === 0) return 'checked';
-    if (newFilters.includes(key)) return 'checked';
-    return 'unchecked';
+  const [listHeight, setListHeight] = useState(67);
+  const listGeometryModifier = useScrollGeometryChange(({ contentHeight }) =>
+    setListHeight(contentHeight),
+  );
+
+  const getBooleanStatus = (key: (typeof filters)[0]) => {
+    if (newFilters.length === 0) return true;
+    if (newFilters.includes(key)) return true;
+    return false;
   };
+
+  const getStatus = (key: (typeof filters)[0]) => (getBooleanStatus(key) ? 'checked' : 'unchecked');
 
   const toggleFilters = (key: (typeof filters)[0]) => () => {
     if (newFilters.includes(key)) {
@@ -98,6 +119,16 @@ const FiltersDialog: React.FC<IFiltersDialog> = ({ visible, setVisible }) => {
       setNewFilters((filters) => [...filters, key]);
     }
   };
+
+  const availableFilters = React.useMemo(() => {
+    const menu: Array<(typeof ALL_FILTERS)[number]> = ['mention', 'favourite', 'reblog', 'poll'];
+
+    if (features.accountNotifies) menu.push('status');
+    menu.push('follow');
+    if (features.events) menu.push('events');
+
+    return menu;
+  }, [features]);
 
   return (
     <DialogOrSheet
@@ -138,51 +169,30 @@ const FiltersDialog: React.FC<IFiltersDialog> = ({ visible, setVisible }) => {
       visible={visible}
       handleDismiss={() => setVisible(false)}
     >
-      <List.Item
-        title={<FormattedMessage id='notifications.filters.mention' defaultMessage='Mentions' />}
-        left={() => <Checkbox status={getStatus('mention')} onPress={toggleFilters('mention')} />}
-        onPress={toggleFilters('mention')}
-      />
-      <List.Item
-        title={<FormattedMessage id='notifications.filters.favourite' defaultMessage='Likes' />}
-        left={() => (
-          <Checkbox status={getStatus('favourite')} onPress={toggleFilters('favourite')} />
-        )}
-        onPress={toggleFilters('favourite')}
-      />
-      <List.Item
-        title={<FormattedMessage id='notifications.filters.reblog' defaultMessage='Reposts' />}
-        left={() => <Checkbox status={getStatus('reblog')} onPress={toggleFilters('reblog')} />}
-        onPress={toggleFilters('reblog')}
-      />
-      <List.Item
-        title={<FormattedMessage id='notifications.filters.poll' defaultMessage='Polls' />}
-        left={() => <Checkbox status={getStatus('poll')} onPress={toggleFilters('poll')} />}
-        onPress={toggleFilters('poll')}
-      />
-      {features.accountNotifies && (
-        <List.Item
-          title={
-            <FormattedMessage
-              id='notifications.filters.status'
-              defaultMessage='Account subscriptions'
-            />
-          }
-          left={() => <Checkbox status={getStatus('status')} onPress={toggleFilters('status')} />}
-          onPress={toggleFilters('status')}
-        />
-      )}
-      <List.Item
-        title={<FormattedMessage id='notifications.filters.follow' defaultMessage='Follows' />}
-        left={() => <Checkbox status={getStatus('follow')} onPress={toggleFilters('follow')} />}
-        onPress={toggleFilters('follow')}
-      />
-      {features.events && (
-        <List.Item
-          title={<FormattedMessage id='notifications.filters.events' defaultMessage='Events' />}
-          left={() => <Checkbox status={getStatus('events')} onPress={toggleFilters('events')} />}
-          onPress={toggleFilters('events')}
-        />
+      {glassEffect ? (
+        <Host style={{ height: listHeight, marginHorizontal: -16, marginTop: -32 }}>
+          <SwiftUIList
+            modifiers={[scrollDisabled(), ...(listGeometryModifier ? [listGeometryModifier] : [])]}
+          >
+            {availableFilters.map((filter) => (
+              <Toggle
+                key={filter}
+                isOn={getBooleanStatus(filter)}
+                onIsOnChange={toggleFilters(filter)}
+                label={intl.formatMessage(filtersMessages[filter])}
+              />
+            ))}
+          </SwiftUIList>
+        </Host>
+      ) : (
+        availableFilters.map((filter) => (
+          <List.Item
+            key={filter}
+            title={intl.formatMessage(filtersMessages[filter])}
+            left={() => <Checkbox status={getStatus(filter)} onPress={toggleFilters(filter)} />}
+            onPress={toggleFilters(filter)}
+          />
+        ))
       )}
     </DialogOrSheet>
   );

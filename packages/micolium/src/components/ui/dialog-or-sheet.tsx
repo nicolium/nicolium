@@ -1,3 +1,5 @@
+import { Button as SwiftUIButton, Host, HStack } from '@expo/ui/swift-ui';
+import { disabled } from '@expo/ui/swift-ui/modifiers';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Button, Dialog as PaperDialog, Text, useTheme } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
@@ -126,27 +128,19 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
       }
       footer={
         remainingActions.length ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: 4,
-              justifyContent: 'flex-end',
-              paddingHorizontal: 16,
-            }}
-          >
-            {remainingActions.map((action, i) => (
-              <Button
-                key={i}
-                onPress={action.onPress}
-                loading={action.loading}
-                disabled={action.disabled}
-                textColor={action.destructive ? colors.error : undefined}
-                mode='outlined'
-              >
-                {action.label}
-              </Button>
-            ))}
-          </View>
+          <Host style={{ marginTop: 8, alignSelf: 'center', marginHorizontal: 16 }} matchContents>
+            <HStack spacing={8}>
+              {remainingActions.map((action, i) => (
+                <SwiftUIButton
+                  key={i}
+                  label={action.label}
+                  onPress={action.onPress}
+                  modifiers={action.disabled ? [disabled()] : []}
+                  role={action.destructive ? 'destructive' : 'default'}
+                />
+              ))}
+            </HStack>
+          </Host>
         ) : undefined
       }
     >
@@ -186,7 +180,9 @@ const Dialog: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, h
 };
 
 const DialogOrSheet: React.FC<IDialogOrSheet> = (props) => {
-  if (Platform.OS === 'ios') return <Sheet {...props} />;
+  const glassEffect = useEnableLiquidGlass();
+
+  if (glassEffect) return <Sheet {...props} />;
   return <Dialog {...props} />;
 };
 
