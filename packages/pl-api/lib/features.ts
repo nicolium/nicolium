@@ -1324,6 +1324,8 @@ const getFeatures = (instance: Instance) => {
       v.software === TAKAHE && gte(v.version, '0.12.0'),
     ]),
 
+    listsEmojis: v.software === PLEROMA && gte(v.version, '2.10.3'),
+
     listsExclusive: any([
       v.software === GOTOSOCIAL,
       v.software === HOLLO,
