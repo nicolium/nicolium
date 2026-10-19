@@ -12,6 +12,7 @@ import { GlassView } from 'expo-glass-effect';
 import { ArrowBendUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendUpLeft';
 import { CalendarPlusIcon } from 'phosphor-react-native/src/icons/CalendarPlus';
 import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
+import { EnvelopeIcon } from 'phosphor-react-native/src/icons/Envelope';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import { PaperPlaneRightIcon } from 'phosphor-react-native/src/icons/PaperPlaneRight';
 import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
@@ -23,6 +24,7 @@ import { Alert, ScrollView, TextInput as RNTextInput, View, Platform } from 'rea
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useFeatures } from '@/contexts/current-account-context';
+import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useStatus } from '@/queries/statuses/use-status';
@@ -39,10 +41,13 @@ import { useIsComposeOpen, useUiStore, useUiStoreActions } from '@/stores/ui';
 
 import { Account } from '../accounts/account';
 import { Status } from '../statuses/status';
+import { GlassButton } from '../ui/dialog-or-sheet';
 import { iconHelper } from '../ui/icon';
 
 import { ComposeVisibilityDropdown } from './compose-visibility-dropdown';
 import { PollForm } from './poll-form';
+
+import type { SFSymbol } from 'expo-symbols';
 
 const COMPOSE_ID = 'compose-modal' as const;
 
@@ -83,6 +88,7 @@ const messages = defineMessages({
     defaultMessage:
       'Are you sure you want to discard the changes to this post? All changes will be lost.',
   },
+  close: { id: 'common.close', defaultMessage: 'Close' },
 });
 
 interface ICompose {
@@ -191,6 +197,7 @@ const ComposeBottomSheet = () => {
   const { updateCompose, resetCompose } = useComposeActions();
   const submitCompose = useSubmitCompose(COMPOSE_ID);
   const { openEmojiPicker } = useUiStoreActions();
+  const heading = useComposeHeading(COMPOSE_ID);
 
   const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility, poll } = compose;
 
@@ -280,6 +287,40 @@ const ComposeBottomSheet = () => {
             : messages.publish,
   );
 
+  const publishButtonSfIcon: SFSymbol = visibility === 'direct' ? 'envelope' : 'paperplane';
+  const publishButtonIcon = visibility === 'direct' ? EnvelopeIcon : PaperPlaneRightIcon;
+
+  const headerContent = glassEffect ? (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingTop: 16,
+        paddingBottom: 8,
+      }}
+    >
+      <GlassButton
+        icon='xmark'
+        label={intl.formatMessage(messages.close)}
+        onPress={() => handleClose()}
+      />
+      <Text variant='titleMedium'>{heading}</Text>
+      <GlassButton
+        icon={publishButtonSfIcon}
+        label={publishButtonLabel}
+        onPress={() =>
+          submitCompose({
+            onSuccess: closeCompose,
+          })
+        }
+        confirm
+        disabled={disabled || isSubmitting}
+      />
+    </View>
+  ) : undefined;
+
   const footerContent = (
     <>
       <IconButton
@@ -319,21 +360,22 @@ const ComposeBottomSheet = () => {
           accessibilityLabel={intl.formatMessage(messages.schedule)}
         />
       )}
-      <Button
-        mode='contained'
-        icon={iconHelper(PaperPlaneRightIcon)}
-        // label={publishButtonLabel}
-        style={{ marginLeft: 'auto' }}
-        onPress={() =>
-          submitCompose({
-            onSuccess: closeCompose,
-          })
-        }
-        loading={isSubmitting}
-        disabled={disabled || isSubmitting}
-      >
-        {publishButtonLabel}
-      </Button>
+      {!glassEffect && (
+        <Button
+          mode='contained'
+          icon={iconHelper(publishButtonIcon)}
+          style={{ marginLeft: 'auto' }}
+          onPress={() =>
+            submitCompose({
+              onSuccess: closeCompose,
+            })
+          }
+          loading={isSubmitting}
+          disabled={disabled || isSubmitting}
+        >
+          {publishButtonLabel}
+        </Button>
+      )}
     </>
   );
 
@@ -370,6 +412,7 @@ const ComposeBottomSheet = () => {
     <TrueSheet
       ref={bottomSheetRef}
       detents={[0.85]}
+      header={headerContent}
       footer={footer}
       footerOptions={{ keyboardOffset: -bottomInset }}
       onDidDismiss={handleDismiss}

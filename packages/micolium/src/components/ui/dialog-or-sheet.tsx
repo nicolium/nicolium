@@ -112,9 +112,7 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
               disabled={firstAction.disabled}
             />
           )}
-          <Text style={{ fontSize: 17, fontWeight: '600', color: colors.onSurfaceVariant }}>
-            {title}
-          </Text>
+          <Text variant='titleMedium'>{title}</Text>
           {secondAction && (
             <GlassButton
               icon={secondAction.icon}
@@ -192,4 +190,4 @@ const DialogOrSheet: React.FC<IDialogOrSheet> = (props) => {
   return <Dialog {...props} />;
 };
 
-export { DialogOrSheet };
+export { DialogOrSheet, GlassButton };
