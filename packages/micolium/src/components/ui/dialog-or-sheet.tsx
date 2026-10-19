@@ -84,6 +84,7 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
   }, [visible]);
 
   const [firstAction, secondAction] = actions.filter(({ icon }) => icon);
+  const remainingActions = actions.filter(({ icon }) => !icon);
 
   return (
     <TrueSheet
@@ -127,7 +128,24 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
           )}
         </View>
       }
-      // TODO: include non-icon actions somewhere in the footer
+      footer={
+        remainingActions.length ? (
+          <View style={{ flexDirection: 'row', gap: 4, justifyContent: 'flex-end', paddingHorizontal: 16 }}>
+            {remainingActions.map((action, i) => (
+              <Button
+                key={i}
+                onPress={action.onPress}
+                loading={action.loading}
+                disabled={action.disabled}
+                textColor={action.destructive ? colors.error : undefined}
+                mode='outlined'
+              >
+                {action.label}
+              </Button>
+            ))}
+          </View>
+        ) : undefined
+      }
     >
       <ScrollView ref={scrollableRef}>{children}</ScrollView>
     </TrueSheet>
@@ -148,7 +166,6 @@ const Dialog: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, h
           {actions.map((action, i) => (
             <React.Fragment key={i}>
               <Button
-                key={i}
                 onPress={action.onPress}
                 loading={action.loading}
                 disabled={action.disabled}
