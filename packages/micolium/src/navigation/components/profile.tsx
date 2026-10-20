@@ -28,6 +28,7 @@ import { FollowButton } from '@/components/accounts/follow-button';
 import { ComposeButton } from '@/components/compose-button';
 import { CollapsibleContent } from '@/components/ui/collapsible-content';
 import { Emojify } from '@/components/ui/emojify';
+import { GlassButton } from '@/components/ui/glass-button';
 import { iconHelper } from '@/components/ui/icon';
 import { StyledHtml } from '@/components/ui/styled-html';
 import { useClient } from '@/contexts/current-account-context';
@@ -37,7 +38,6 @@ import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { type ITimeline, Timeline } from '../components/timeline';
-import { GlassButton } from '@/components/ui/glass-button';
 
 const messages = defineMessages({
   repliesToggle: { id: 'account.filters.replies_toggle', defaultMessage: 'Show replies' },
@@ -384,7 +384,10 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           </Pressable>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             {ownAccount ? (
-              <GlassButton mode='contained-tonal' onPress={() => navigation.navigate('edit-profile')}>
+              <GlassButton
+                mode='contained-tonal'
+                onPress={() => navigation.navigate('edit-profile')}
+              >
                 <FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />
               </GlassButton>
             ) : (
