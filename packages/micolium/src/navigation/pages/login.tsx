@@ -224,6 +224,7 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
         supportingText={error ? intl.formatMessage(messages.instanceFetchError) : undefined}
         returnKeyType='done'
         onSubmitEditing={submit}
+        variant='outlined'
       />
     </LoginLayout>
   );
@@ -309,6 +310,7 @@ const CredentialsScreen = ({
         enterKeyHint='next'
         onSubmitEditing={() => passwordNode.current?.focus()}
         textContentType={features?.logInWithUsername ? 'username' : 'emailAddress'}
+        variant='outlined'
       />
       <TextInput
         ref={passwordNode}
@@ -322,6 +324,7 @@ const CredentialsScreen = ({
         onSubmitEditing={submit}
         error={error}
         supportingText={error ? intl.formatMessage(messages.invalidCredentials) : undefined}
+        variant='outlined'
       />
     </LoginLayout>
   );
