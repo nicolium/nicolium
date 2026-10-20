@@ -239,6 +239,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
   };
 
   const handleReport = () => {
+    // TODO
     Alert.alert('not implemented');
   };
 

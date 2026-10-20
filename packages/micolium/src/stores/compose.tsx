@@ -488,8 +488,8 @@ interface ComposeActions {
     scopeUrl: string,
     approvalRequired?: boolean,
   ) => void;
-  //   mentionCompose: (account: Pick<Account, 'acct'>, scopeUrl: string, columnId?: string) => void;
-  //   directCompose: (account: Pick<Account, 'acct'>, scopeUrl: string, columnId?: string) => void;
+  mentionCompose: (account: Pick<Account, 'acct'>) => void;
+  directCompose: (account: Pick<Account, 'acct'>) => void;
   //   groupComposeModal: (group: Pick<Group, 'id'>, scopeUrl: string, columnId?: string) => void;
   //   openComposeWithText: (composeId: string, text: string, scopeUrl: string) => void;
   //   eventDiscussionCompose: (
@@ -815,28 +815,24 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
-        //         mentionCompose: (account, scopeUrl, columnId) => {
-        //           if (!isLoggedIn()) return;
+        mentionCompose: (account) => {
+          get().actions.updateCompose('compose-modal', (compose) => {
+            compose.text = [compose.text.trim(), `@${account.acct} `]
+              .filter((str) => str.length !== 0)
+              .join(' ');
+            compose.caretPosition = null;
+          });
+        },
 
-        //           get().actions.updateCompose('compose-modal', (compose) => {
-        //             compose.text = [compose.text.trim(), `@${account.acct} `]
-        //               .filter((str) => str.length !== 0)
-        //               .join(' ');
-        //             compose.caretPosition = null;
-        //           });
-        //           openComposeSurface(scopeUrl, columnId);
-        //         },
-
-        //         directCompose: (account, scopeUrl, columnId) => {
-        //           get().actions.updateCompose('compose-modal', (compose) => {
-        //             compose.text = [compose.text.trim(), `@${account.acct} `]
-        //               .filter((str) => str.length !== 0)
-        //               .join(' ');
-        //             compose.visibility = 'direct';
-        //             compose.caretPosition = null;
-        //           });
-        //           openComposeSurface(scopeUrl, columnId);
-        //         },
+        directCompose: (account) => {
+          get().actions.updateCompose('compose-modal', (compose) => {
+            compose.text = [compose.text.trim(), `@${account.acct} `]
+              .filter((str) => str.length !== 0)
+              .join(' ');
+            compose.visibility = 'direct';
+            compose.caretPosition = null;
+          });
+        },
 
         //         groupComposeModal: (group, scopeUrl, columnId) => {
         //           const composeId = `group:${group.id}`;

@@ -16,6 +16,8 @@ import {
   useUnblockAccountMutation,
   useUnmuteAccountMutation,
 } from '@/queries/accounts/use-relationship';
+import { useComposeActions } from '@/stores/compose';
+import { useUiStoreActions } from '@/stores/ui';
 
 import { iconHelper } from '../ui/icon';
 
@@ -30,6 +32,8 @@ const messages = defineMessages({
   share: { id: 'account.share', defaultMessage: 'Share profile' },
   favourites: { id: 'column.favourites', defaultMessage: 'Likes' },
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
+  mention: { id: 'account.mention', defaultMessage: 'Mention' },
+  direct: { id: 'account.direct', defaultMessage: 'Direct message @{name}' },
   removeFromFollowers: {
     id: 'account.remove_from_followers',
     defaultMessage: 'Remove this follower',
@@ -63,7 +67,9 @@ interface IAccountActionsDropdown {
 const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) => {
   const features = useFeatures();
   const intl = useIntl();
+  const { mentionCompose, directCompose } = useComposeActions();
   const navigation = useNavigation();
+  const { openCompose } = useUiStoreActions();
 
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
 
@@ -85,6 +91,16 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
   const handleMute = () => {
     if (account.relationship?.muting) unmuteAccount();
     else setBlockMuteDialog('mute');
+  };
+
+  const handleDirect = () => {
+    directCompose(account);
+    openCompose();
+  };
+
+  const handleMention = () => {
+    mentionCompose(account);
+    openCompose();
   };
 
   const handleRemoveFromFollowers = () => {
@@ -112,6 +128,11 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
   const handleBlock = () => {
     if (account.relationship?.blocking) unblockAccount();
     else setBlockMuteDialog('block');
+  };
+
+  const handleReport = () => {
+    // TODO
+    Alert.alert('not implemented');
   };
 
   return (
@@ -238,6 +259,26 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
             <>
               <DropdownMenu.Separator />
               <DropdownMenu.Group>
+                <DropdownMenu.Item key='mention' onSelect={handleMention}>
+                  <DropdownMenu.ItemIcon ios={{ name: 'at' }} androidIconName='ph_at' />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(messages.mention)}
+                  </DropdownMenu.ItemTitle>
+                </DropdownMenu.Item>
+                {features.privacyScopes && (
+                  <DropdownMenu.Item key='direct' onSelect={handleDirect}>
+                    <DropdownMenu.ItemIcon
+                      ios={{ name: 'envelope' }}
+                      androidIconName='ph_envelope_simple'
+                    />
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(messages.direct, { name: account.username })}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.Item>
+                )}
+              </DropdownMenu.Group>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Group>
                 {features.removeFromFollowers && account.relationship?.followed_by && (
                   <DropdownMenu.Item
                     key='remove-from-followers'
@@ -277,7 +318,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
                     )}
                   </DropdownMenu.ItemTitle>
                 </DropdownMenu.Item>
-                <DropdownMenu.Item key='report'>
+                <DropdownMenu.Item key='report' onSelect={handleReport}>
                   <DropdownMenu.ItemIcon ios={{ name: 'flag' }} androidIconName='ph_flag' />
                   <DropdownMenu.ItemTitle>
                     {intl.formatMessage(messages.report, {
