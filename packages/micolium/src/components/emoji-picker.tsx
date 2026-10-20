@@ -166,7 +166,7 @@ const EmojiSearchResults: React.FC<IEmojiSearchResults> = ({ searchResults }) =>
             : 'outlined'
         }
         icon={() => (
-          <Emoji
+          <EmojiComponent
             emoji={emoji.custom ? emoji.id : emoji.native}
             url={emoji.custom ? emoji.imageUrl : undefined}
           />
