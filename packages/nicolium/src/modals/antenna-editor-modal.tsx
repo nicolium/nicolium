@@ -51,7 +51,7 @@ const messages = defineMessages({
   createSuccess: { id: 'antennas.create.success', defaultMessage: 'Antenna created' },
   editSuccess: { id: 'antennas.edit.success', defaultMessage: 'Antenna updated' },
   createError: { id: 'antennas.create.error', defaultMessage: 'Failed to create antenna' },
-  editError: { id: 'antennas.edit.error', defaultMessage: 'Failed to create antenna' },
+  editError: { id: 'antennas.edit.error', defaultMessage: 'Failed to update antenna' },
   removeDomain: { id: 'antennas.domain.remove', defaultMessage: 'Remove domain' },
   removeKeyword: { id: 'antennas.keyword.remove', defaultMessage: 'Remove keyword' },
   removeTag: { id: 'antennas.tag.remove', defaultMessage: 'Remove tag' },

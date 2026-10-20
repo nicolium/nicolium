@@ -60,6 +60,20 @@ const messages = defineMessages({
   listAddSuccess: { id: 'lists.create.success', defaultMessage: 'List created' },
   circleAddFail: { id: 'circles.create.error', defaultMessage: 'Failed to create circle' },
   circleAddSuccess: { id: 'circles.create.success', defaultMessage: 'Circle created' },
+  bookmarkFolderEditFail: {
+    id: 'bookmark_folders.edit.fail',
+    defaultMessage: 'Failed to edit bookmark folder',
+  },
+  bookmarkFolderEditSuccess: {
+    id: 'bookmark_folders.edit.success',
+    defaultMessage: 'Bookmark folder updated',
+  },
+  antennaEditFail: { id: 'antennas.edit.error', defaultMessage: 'Failed to update antenna' },
+  antennaEditSuccess: { id: 'antennas.edit.success', defaultMessage: 'Antenna updated' },
+  listEditFail: { id: 'lists.edit.error', defaultMessage: 'Failed to update list' },
+  listEditSuccess: { id: 'lists.edit.success', defaultMessage: 'List updated' },
+  circleEditFail: { id: 'circles.edit.error', defaultMessage: 'Failed to update circle' },
+  circleEditSuccess: { id: 'circles.edit.success', defaultMessage: 'Circle updated' },
 });
 
 interface ICreateListDialog {
@@ -162,20 +176,22 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDi
 
     switch (type) {
       case 'bookmark_folder':
-        successMessage = messages.bookmarkFolderAddSuccess;
-        failMessage = messages.bookmarkFolderAddFail;
+        successMessage = id
+          ? messages.bookmarkFolderEditSuccess
+          : messages.bookmarkFolderAddSuccess;
+        failMessage = id ? messages.bookmarkFolderEditFail : messages.bookmarkFolderAddFail;
         break;
       case 'list':
-        successMessage = messages.listAddSuccess;
-        failMessage = messages.listAddFail;
+        successMessage = id ? messages.listEditSuccess : messages.listAddSuccess;
+        failMessage = id ? messages.listEditFail : messages.listAddFail;
         break;
       case 'antenna':
-        successMessage = messages.antennaAddSuccess;
-        failMessage = messages.antennaAddFail;
+        successMessage = id ? messages.antennaEditSuccess : messages.antennaAddSuccess;
+        failMessage = id ? messages.antennaEditFail : messages.antennaAddFail;
         break;
       case 'circle':
-        successMessage = messages.circleAddSuccess;
-        failMessage = messages.circleAddFail;
+        successMessage = id ? messages.circleEditSuccess : messages.circleAddSuccess;
+        failMessage = id ? messages.circleEditFail : messages.circleAddFail;
         break;
     }
 
