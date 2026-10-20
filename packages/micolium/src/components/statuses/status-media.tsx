@@ -200,7 +200,7 @@ const StatusVideo: React.FC<IMediaVideo> = ({ media }) => {
 const renderMedia = (media: SupportedMediaAttachment) => {
   switch (media.type) {
     case 'image':
-      return <StatusImage media={media} uri={media.url} />;
+      return <StatusImage media={media} uri={media.preview_url} />;
     case 'gifv':
       return <StatusGifv media={media} />;
     case 'video':
