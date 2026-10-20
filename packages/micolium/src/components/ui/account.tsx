@@ -33,6 +33,7 @@ const MaybeLink = ({
 
 interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
   avatarSrc?: string;
+  avatarDescription?: string;
   displayName: string;
   displayNameDetail?: string;
   emojis?: Array<CustomEmoji>;
@@ -45,6 +46,7 @@ interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
 
 const UIAccount: React.FC<IUIAccount> = ({
   avatarSrc,
+  avatarDescription,
   displayName,
   displayNameDetail,
   emojis,
@@ -62,7 +64,11 @@ const UIAccount: React.FC<IUIAccount> = ({
     <>
       <MaybeLink onPress={onPress} fullWidthPressable={fullWidthPressable}>
         {avatarSrc ? (
-          <Avatar.Image size={40} source={{ uri: avatarSrc }} />
+          <Avatar.Image
+            size={40}
+            source={{ uri: avatarSrc }}
+            accessibilityLabel={avatarDescription}
+          />
         ) : (
           <Avatar.Text size={40} label={(displayName || acct).slice(0, 2)} />
         )}
