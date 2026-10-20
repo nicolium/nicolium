@@ -1,5 +1,6 @@
 import '@expo/metro-runtime'; // Necessary for Fast Refresh on Web
 import { registerRootComponent } from 'expo';
+import { maybeCompleteAuthSession } from 'expo-web-browser';
 
 import '@/polyfills';
 
@@ -9,3 +10,5 @@ import { App } from './src/App';
 // It also ensures that whether you load the app in Expo Go or in a native build,
 // the environment is set up appropriately
 registerRootComponent(App);
+
+maybeCompleteAuthSession();

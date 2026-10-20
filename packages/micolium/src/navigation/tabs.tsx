@@ -116,6 +116,7 @@ if (Platform.OS === 'ios') {
     );
   };
 }
+
 const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
   const insets = useSafeAreaInsets();
   const { openAccountSwitcher } = useUiStoreActions();
