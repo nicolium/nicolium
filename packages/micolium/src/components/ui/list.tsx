@@ -3,7 +3,7 @@ import { labelsHidden } from '@expo/ui/swift-ui/modifiers';
 import { List as PaperList, Switch, Text, useTheme } from '@mkljczk/react-native-paper';
 import { create } from 'mutative';
 import React from 'react';
-import { View } from 'react-native';
+import { Pressable, type StyleProp, View, type ViewStyle } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { iconHelper } from '@/components/ui/icon';
@@ -48,9 +48,10 @@ interface IList {
       | ISelectItem<any>
     >;
   }>;
+  style?: StyleProp<ViewStyle>;
 }
 
-const List: React.FC<IList> = ({ sections }) => {
+const List: React.FC<IList> = ({ sections, style }) => {
   const glassEffect = useEnableLiquidGlass();
   const theme = useTheme();
 
@@ -97,7 +98,7 @@ const List: React.FC<IList> = ({ sections }) => {
   return filteredSections.map((section, index) => (
     <PaperList.Section
       key={index}
-      style={index === 0 && !section.subheader ? { marginTop: 16 } : undefined}
+      style={[index === 0 && !section.subheader ? { marginTop: 16 } : undefined, style]}
     >
       {section.subheader && <PaperList.Subheader>{section.subheader}</PaperList.Subheader>}
       <View style={{ gap: 2 }}>
@@ -145,14 +146,16 @@ const List: React.FC<IList> = ({ sections }) => {
                 titleNumberOfLines={0}
                 right={() =>
                   glassEffect ? (
-                    <SwiftUIHost matchContents style={{ width: 64 }}>
-                      <SwiftUIToggle
-                        isOn={item.active}
-                        onIsOnChange={item.onPress}
-                        label=''
-                        modifiers={[labelsHidden()]}
-                      />
-                    </SwiftUIHost>
+                    <Pressable onPress={() => {}}>
+                      <SwiftUIHost matchContents style={{ width: 64 }}>
+                        <SwiftUIToggle
+                          isOn={item.active}
+                          onIsOnChange={item.onPress}
+                          label=''
+                          modifiers={[labelsHidden()]}
+                        />
+                      </SwiftUIHost>
+                    </Pressable>
                   ) : (
                     <Switch
                       value={item.active}
@@ -201,4 +204,4 @@ const List: React.FC<IList> = ({ sections }) => {
   ));
 };
 
-export { List };
+export { List, type IList };

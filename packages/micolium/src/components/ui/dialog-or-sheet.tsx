@@ -5,7 +5,7 @@ import { Button, Dialog as PaperDialog, Text, useTheme } from '@mkljczk/react-na
 import { GlassView } from 'expo-glass-effect';
 import { SymbolView, type SFSymbol } from 'expo-symbols';
 import React from 'react';
-import { Platform, Pressable, ScrollView, useColorScheme, View } from 'react-native';
+import { Pressable, ScrollView, useColorScheme, View } from 'react-native';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 
@@ -19,7 +19,7 @@ type DialogOrSheetAction = {
   loading?: boolean;
 };
 
-const GlassButton: React.FC<DialogOrSheetAction> = ({
+const GlassActionButton: React.FC<DialogOrSheetAction> = ({
   icon,
   label,
   onPress,
@@ -106,7 +106,7 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
           }}
         >
           {firstAction && (
-            <GlassButton
+            <GlassActionButton
               icon={firstAction.icon}
               label={firstAction.label}
               onPress={firstAction.onPress}
@@ -116,7 +116,7 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
           )}
           <Text variant='titleMedium'>{title}</Text>
           {secondAction && (
-            <GlassButton
+            <GlassActionButton
               icon={secondAction.icon}
               label={secondAction.label}
               onPress={secondAction.onPress}
@@ -186,4 +186,4 @@ const DialogOrSheet: React.FC<IDialogOrSheet> = (props) => {
   return <Dialog {...props} />;
 };
 
-export { DialogOrSheet, GlassButton };
+export { DialogOrSheet, GlassActionButton, type DialogOrSheetAction };

@@ -23,6 +23,7 @@ import { useUiStoreActions } from '@/stores/ui';
 import { iconHelper } from '../ui/icon';
 
 import { BlockMuteDialog } from './block-mute-dialog';
+import { ReportDialog } from './report-dialog';
 
 import type { Account } from 'pl-api';
 
@@ -88,6 +89,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
   const { openCompose } = useUiStoreActions();
 
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
+  const [reportDialog, setReportDialog] = React.useState(false);
 
   const { data: currentAccountId } = useCredentialAccountId();
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account.id);
@@ -172,8 +174,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
   };
 
   const handleReport = () => {
-    // TODO
-    Alert.alert('not implemented');
+    setReportDialog(true);
   };
 
   return (
@@ -394,6 +395,9 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
           visible
           onDismiss={() => setBlockMuteDialog(null)}
         />
+      )}
+      {reportDialog && (
+        <ReportDialog accountId={account.id} visible onDismiss={() => setReportDialog(false)} />
       )}
     </>
   );

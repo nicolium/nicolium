@@ -14,6 +14,7 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
+import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
 import { GlobeIcon } from 'phosphor-react-native/src/icons/Globe';
@@ -27,8 +28,10 @@ import { toast } from 'sonner-native';
 import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/images/icon.png';
 import { UIAccount } from '@/components/ui/account';
+import { GlassButton } from '@/components/ui/glass-button';
 import { Header } from '@/components/ui/header';
 import { useCurrentAccount } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
 
@@ -145,6 +148,7 @@ const normalizeInstanceUrl = (input: string) => {
 const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'instance'>) => {
   const { colors } = useTheme();
   const intl = useIntl();
+  const glassEffect = useEnableLiquidGlass();
 
   const isLoggedIn = !!useCurrentAccount();
   const { fetchInstance, createApp } = useAuthStoreActions();
@@ -181,15 +185,15 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
   return (
     <LoginLayout
       footer={
-        <Button
+        <GlassButton
           mode='contained'
           onPress={submit}
           loading={loading}
-          style={{ width: '100%', marginVertical: 8 }}
+          style={{ width: '100%' }}
           disabled={!canSubmit}
         >
           <FormattedMessage id='landing_mobile.next' defaultMessage='Next' />
-        </Button>
+        </GlassButton>
       }
     >
       <View style={{ alignItems: 'center' }}>
@@ -235,6 +239,7 @@ const CredentialsScreen = ({
 }: NativeStackScreenProps<LoginStackParams, 'credentials'>) => {
   const { colors } = useTheme();
   const intl = useIntl();
+  const glassEffect = useEnableLiquidGlass();
 
   const pendingAuthClient = useAuthStore(({ pendingAuthClient }) => pendingAuthClient);
   const { createApp, signIn } = useAuthStoreActions();
@@ -276,28 +281,30 @@ const CredentialsScreen = ({
     <LoginLayout
       footer={
         <View style={{ flex: 1, flexDirection: 'row', gap: 8, marginVertical: 8 }}>
-          <Button
+          <GlassButton
             mode='contained'
             onPress={submit}
             loading={loading && !shouldForceAuthCodeFlow}
             style={{ flex: 1 }}
+            containerStyle={{ flex: 1 }}
             disabled={!canSubmit}
           >
             <FormattedMessage id='landing_mobile.sign_in' defaultMessage='Sign in' />
-          </Button>
+          </GlassButton>
           {features?.grantTypePassword && !shouldForceAuthCodeFlow && (
-            <Button
+            <GlassButton
               mode='outlined'
               onPress={forceAuthCodeFlow}
               loading={loading && shouldForceAuthCodeFlow}
               style={{ flex: 1 }}
+              containerStyle={{ flex: 1 }}
               disabled={loading}
             >
               <FormattedMessage
                 id='landing_mobile.browser_auth'
                 defaultMessage='Use browser auth'
               />
-            </Button>
+            </GlassButton>
           )}
         </View>
       }

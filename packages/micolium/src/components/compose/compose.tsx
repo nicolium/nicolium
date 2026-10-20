@@ -41,7 +41,7 @@ import { useIsComposeOpen, useUiStore, useUiStoreActions } from '@/stores/ui';
 
 import { Account } from '../accounts/account';
 import { Status } from '../statuses/status';
-import { GlassButton } from '../ui/dialog-or-sheet';
+import { GlassActionButton } from '../ui/dialog-or-sheet';
 import { iconHelper } from '../ui/icon';
 
 import { ComposeVisibilityDropdown } from './compose-visibility-dropdown';
@@ -301,13 +301,13 @@ const ComposeBottomSheet = () => {
         paddingBottom: 8,
       }}
     >
-      <GlassButton
+      <GlassActionButton
         icon='xmark'
         label={intl.formatMessage(messages.close)}
         onPress={() => handleClose()}
       />
       <Text variant='titleMedium'>{heading}</Text>
-      <GlassButton
+      <GlassActionButton
         icon={publishButtonSfIcon}
         label={publishButtonLabel}
         onPress={() =>

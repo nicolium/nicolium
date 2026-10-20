@@ -37,6 +37,7 @@ import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { type ITimeline, Timeline } from '../components/timeline';
+import { GlassButton } from '@/components/ui/glass-button';
 
 const messages = defineMessages({
   repliesToggle: { id: 'account.filters.replies_toggle', defaultMessage: 'Show replies' },
@@ -383,9 +384,9 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           </Pressable>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             {ownAccount ? (
-              <Button mode='contained-tonal' onPress={() => navigation.navigate('edit-profile')}>
+              <GlassButton mode='contained-tonal' onPress={() => navigation.navigate('edit-profile')}>
                 <FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />
-              </Button>
+              </GlassButton>
             ) : (
               <FollowButton id={id} />
             )}

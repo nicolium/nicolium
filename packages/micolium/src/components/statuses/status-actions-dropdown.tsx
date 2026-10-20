@@ -33,6 +33,7 @@ import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { BlockMuteDialog } from '../accounts/block-mute-dialog';
+import { ReportDialog } from '../accounts/report-dialog';
 import { iconHelper } from '../ui/icon';
 
 const messages = defineMessages({
@@ -128,6 +129,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
   const { openInteractAs } = useUiStoreActions();
 
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
+  const [reportDialog, setReportDialog] = React.useState(false);
 
   const { data: bookmarkFolders } = useBookmarkFolders();
   const { data: currentAccountId } = useCredentialAccountId();
@@ -239,8 +241,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
   };
 
   const handleReport = () => {
-    // TODO
-    Alert.alert('not implemented');
+    setReportDialog(true);
   };
 
   const handleMute = () => {
@@ -506,9 +507,17 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
       {blockMuteDialog && (
         <BlockMuteDialog
           action={blockMuteDialog}
-          accountId={status.account.id}
+          accountId={status.account_id}
           visible
           onDismiss={() => setBlockMuteDialog(null)}
+        />
+      )}
+      {reportDialog && (
+        <ReportDialog
+          accountId={status.account_id}
+          statusId={status.id}
+          visible
+          onDismiss={() => setReportDialog(false)}
         />
       )}
     </>
