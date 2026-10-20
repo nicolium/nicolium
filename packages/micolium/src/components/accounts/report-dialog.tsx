@@ -23,6 +23,7 @@ const messages = defineMessages({
   previous: { id: 'report.previous', defaultMessage: 'Previous' },
   next: { id: 'report.next', defaultMessage: 'Next' },
   submit: { id: 'report.submit', defaultMessage: 'Submit' },
+  reason: { id: 'report.reason.title', defaultMessage: 'Reason for reporting' },
   placeholder: { id: 'report.placeholder', defaultMessage: 'Additional comments' },
   furtherActions: { id: 'report.other_actions.further_actions', defaultMessage: 'Further actions' },
   block: { id: 'report.block', defaultMessage: 'Block {target}' },
@@ -32,19 +33,48 @@ const messages = defineMessages({
 });
 
 interface IReportDialogFirstStep {
+  ruleIds: Array<string>;
+  setRuleIds: (value: Array<string>) => void;
   comment: string;
   setComment: (value: string) => void;
 }
 
-const ReportDialogFirstStep: React.FC<IReportDialogFirstStep> = ({ comment, setComment }) => {
+const ReportDialogFirstStep: React.FC<IReportDialogFirstStep> = ({
+  ruleIds,
+  setRuleIds,
+  comment,
+  setComment,
+}) => {
   const intl = useIntl();
-  // const features = useFeatures();
 
-  // const instance = useInstance();
+  const { rules } = useInstance();
+  const shouldRequireRule = rules.length > 0;
 
   return (
     <>
-      {/* TODO: list instance rules  */}
+      {shouldRequireRule && (
+        <List
+          sections={[
+            {
+              subheader: intl.formatMessage(messages.reason),
+              items: rules.map((rule) => ({
+                label: rule.text,
+                sublabel: rule.hint,
+                type: 'toggle',
+                active: ruleIds.includes(rule.id),
+                onPress: () => {
+                  let newRuleIds;
+                  if (ruleIds.includes(rule.id))
+                    newRuleIds = ruleIds.filter((id) => id !== rule.id);
+                  else newRuleIds = [...ruleIds, rule.id];
+                  setRuleIds(newRuleIds);
+                },
+              })),
+            },
+          ]}
+          style={{ marginTop: -8, marginHorizontal: -16 }}
+        />
+      )}
       <TextInput
         variant='outlined'
         multiline
@@ -103,7 +133,7 @@ const ReportDialogSecondStep: React.FC<IReportDialogSecondStep> = ({
           ],
         },
       ]}
-      style={{ marginHorizontal: -16 }}
+      style={{ marginTop: -8, marginHorizontal: -16 }}
     />
   );
 };
@@ -124,9 +154,10 @@ const ReportDialog: React.FC<IReportDialog> = ({ accountId, statusId, visible, o
   const { mutate: reportAccount, isPending } = useReportAccountMutation(accountId);
 
   const [step, setStep] = React.useState<0 | 1>(0);
+  const [ruleIds, setRuleIds] = React.useState<Array<string>>([]);
+  const [comment, setComment] = React.useState('');
   const [block, setBlock] = React.useState(false);
   const [forward, setForward] = React.useState(false);
-  const [comment, setComment] = React.useState('');
   const [closing, setClosing] = React.useState(false);
 
   const handleClose = () => setClosing(true);
@@ -134,6 +165,7 @@ const ReportDialog: React.FC<IReportDialog> = ({ accountId, statusId, visible, o
   const handleSubmit = () => {
     reportAccount(
       {
+        rule_ids: ruleIds.length ? ruleIds : undefined,
         status_ids: statusId ? [statusId] : undefined,
         comment,
         forward: canForward && forward,
@@ -204,7 +236,12 @@ const ReportDialog: React.FC<IReportDialog> = ({ accountId, statusId, visible, o
         </Card>
 
         {step === 0 ? (
-          <ReportDialogFirstStep comment={comment} setComment={setComment} />
+          <ReportDialogFirstStep
+            ruleIds={ruleIds}
+            setRuleIds={setRuleIds}
+            comment={comment}
+            setComment={setComment}
+          />
         ) : (
           account && (
             <ReportDialogSecondStep
