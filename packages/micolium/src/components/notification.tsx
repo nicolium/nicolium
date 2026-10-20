@@ -25,7 +25,7 @@ import {
   type IntlShape,
   type MessageDescriptor,
 } from 'react-intl';
-import { View } from 'react-native';
+import { ColorValue, View } from 'react-native';
 
 import { useInstance } from '@/contexts/current-account-context';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
@@ -33,6 +33,7 @@ import { useNotification } from '@/queries/notifications/use-notifications';
 
 import { Account } from './accounts/account';
 import { Status } from './statuses/status';
+import { Emoji } from './ui/emoji';
 import { Emojify } from './ui/emojify';
 import { iconHelper } from './ui/icon';
 
@@ -335,14 +336,22 @@ const Notification: React.FC<INotification> = (props) => {
     }
   };
 
+  let icon:
+    | ((_: { size: number; allowFontScaling?: boolean; color: ColorValue }) => React.ReactNode)
+    | undefined = undefined;
+
+  if (notification.type === 'emoji_reaction') {
+    icon = () => (
+      <Emoji size={18} emoji={notification.emoji} url={notification.emoji_url || undefined} />
+    );
+  } else if (icons[displayedType]) {
+    icon = iconHelper(icons[displayedType]);
+  }
+
   return (
     <View style={{ padding: 16, gap: 8 }}>
       <View style={{ flexDirection: 'row' }}>
-        <Chip
-          mode='outlined'
-          icon={icons[displayedType] ? iconHelper(icons[displayedType]) : undefined}
-          compact
-        >
+        <Chip mode='outlined' icon={icon} compact>
           {message}
         </Chip>
       </View>
