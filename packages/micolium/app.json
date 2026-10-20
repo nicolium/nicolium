@@ -99,6 +99,7 @@
             "./node_modules/@phosphor-icons/core/assets/regular/tooth.svg",
             "./node_modules/@phosphor-icons/core/assets/regular/trash.svg",
             "./node_modules/@phosphor-icons/core/assets/regular/user.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/user-minus.svg",
             "./node_modules/@phosphor-icons/core/assets/regular/user-plus.svg",
             "./node_modules/@phosphor-icons/core/assets/regular/users-three.svg",
             "./node_modules/@phosphor-icons/core/assets/regular/wrench.svg"

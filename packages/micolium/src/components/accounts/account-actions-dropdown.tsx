@@ -6,13 +6,13 @@ import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Linking, Platform } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
-import { useClient, useFeatures } from '@/contexts/current-account-context';
-import { useScopeUrl } from '@/hooks/use-scope-url';
+import { useFeatures } from '@/contexts/current-account-context';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import {
+  useRemoveAccountFromFollowersMutation,
   useUnblockAccountMutation,
   useUnmuteAccountMutation,
 } from '@/queries/accounts/use-relationship';
@@ -24,11 +24,28 @@ import { BlockMuteDialog } from './block-mute-dialog';
 import type { Account } from 'pl-api';
 
 const messages = defineMessages({
+  cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
   openInBrowser: { id: 'account.open_in_browser', defaultMessage: 'Open profile in browser' },
   share: { id: 'account.share', defaultMessage: 'Share profile' },
   favourites: { id: 'column.favourites', defaultMessage: 'Likes' },
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
+  removeFromFollowers: {
+    id: 'account.remove_from_followers',
+    defaultMessage: 'Remove this follower',
+  },
+  removeFromFollowersHeading: {
+    id: 'confirmations.remove_from_followers.heading',
+    defaultMessage: 'Remove {name} from followers',
+  },
+  removeFromFollowersMessage: {
+    id: 'confirmations.remove_from_followers.message',
+    defaultMessage: 'Are you sure you want to remove {name} from your followers?',
+  },
+  removeFromFollowersConfirm: {
+    id: 'confirmations.remove_from_followers.confirm',
+    defaultMessage: 'Remove',
+  },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
@@ -44,17 +61,16 @@ interface IAccountActionsDropdown {
 }
 
 const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) => {
-  const client = useClient();
   const features = useFeatures();
   const intl = useIntl();
   const navigation = useNavigation();
-  const scopeUrl = useScopeUrl();
 
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
 
   const { data: currentAccountId } = useCredentialAccountId();
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account.id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(account.id);
+  const { mutate: removeFromFollowers } = useRemoveAccountFromFollowersMutation(account.id);
 
   const ownAccount = currentAccountId === account.id;
 
@@ -69,6 +85,28 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
   const handleMute = () => {
     if (account.relationship?.muting) unmuteAccount();
     else setBlockMuteDialog('mute');
+  };
+
+  const handleRemoveFromFollowers = () => {
+    Alert.alert(
+      intl.formatMessage(messages.removeFromFollowersHeading, {
+        name: account.acct,
+      }),
+      intl.formatMessage(messages.removeFromFollowersMessage, {
+        name: account.acct,
+      }),
+      [
+        {
+          text: intl.formatMessage(messages.cancel),
+          style: 'cancel',
+        },
+        {
+          text: intl.formatMessage(messages.removeFromFollowersConfirm),
+          style: 'destructive',
+          onPress: () => removeFromFollowers(),
+        },
+      ],
+    );
   };
 
   const handleBlock = () => {
@@ -200,6 +238,20 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
             <>
               <DropdownMenu.Separator />
               <DropdownMenu.Group>
+                {features.removeFromFollowers && account.relationship?.followed_by && (
+                  <DropdownMenu.Item
+                    key='remove-from-followers'
+                    onSelect={handleRemoveFromFollowers}
+                  >
+                    <DropdownMenu.ItemIcon
+                      ios={{ name: 'person.badge.minus' }}
+                      androidIconName='ph_user_minus'
+                    />
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(messages.removeFromFollowers)}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.Item>
+                )}
                 <DropdownMenu.Item key='mute' onSelect={handleMute}>
                   <DropdownMenu.ItemIcon
                     ios={{ name: 'speaker.slash' }}
