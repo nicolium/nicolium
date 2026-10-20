@@ -40,7 +40,7 @@ const messages = defineMessages({
     defaultMessage: 'Failed to download file. File already exists.',
   },
   downloadFailed: {
-    id: 'media_gallery.download.success',
+    id: 'media_gallery.download.fail',
     defaultMessage: 'Failed to download file.',
   },
 });

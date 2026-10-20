@@ -129,7 +129,7 @@ const useStatus = (
       refetchContext,
     };
   }, [
-    statusQuery.data,
+    statusQuery,
     reblogQuery.data,
     quoteQuery.data,
     clientFilterResults,

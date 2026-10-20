@@ -112,6 +112,7 @@ const Timeline: React.FC<ITimeline> = ({
       onScroll={onScroll}
       contentContainerStyle={{ paddingBottom: bottomInset }}
       scrollIndicatorInsets={{ bottom: bottomInset }}
+      getItemType={(item) => item.type}
     />
   );
 };

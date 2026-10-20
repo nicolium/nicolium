@@ -294,9 +294,8 @@ const NotificationsScreen = ({
     return (
       <FlashList
         data={query.data}
-        renderItem={({ item }) => (
-          <Notification key={item.most_recent_notification_id} notification={item} />
-        )}
+        renderItem={({ item }) => <Notification notification={item} />}
+        keyExtractor={(item) => item.most_recent_notification_id}
         ItemSeparatorComponent={Divider}
         onRefresh={query.refetch}
         refreshing={query.isRefetching}

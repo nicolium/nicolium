@@ -16,6 +16,7 @@ import {
   useUnblockAccountMutation,
   useUnmuteAccountMutation,
 } from '@/queries/accounts/use-relationship';
+import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/settings/domain-blocks';
 import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
 
@@ -54,6 +55,21 @@ const messages = defineMessages({
   unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
+  blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
+  blockDomainHeading: {
+    id: 'confirmations.domain_block.heading',
+    defaultMessage: 'Block {domain}',
+  },
+  blockDomainMessage: {
+    id: 'confirmations.domain_block.message',
+    defaultMessage:
+      'Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications.',
+  },
+  blockDomainConfirm: {
+    id: 'confirmations.domain_block.confirm',
+    defaultMessage: 'Hide entire domain',
+  },
+  unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   blocked: { id: 'column.blocks.long', defaultMessage: 'Blocked accounts' },
   muted: { id: 'column.mutes.long', defaultMessage: 'Muted accounts' },
@@ -76,6 +92,8 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
   const { data: currentAccountId } = useCredentialAccountId();
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account.id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(account.id);
+  const { mutate: blockDomain } = useBlockDomainMutation();
+  const { mutate: unblockDomain } = useUnblockDomainMutation();
   const { mutate: removeFromFollowers } = useRemoveAccountFromFollowersMutation(account.id);
 
   const ownAccount = currentAccountId === account.id;
@@ -128,6 +146,29 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
   const handleBlock = () => {
     if (account.relationship?.blocking) unblockAccount();
     else setBlockMuteDialog('block');
+  };
+
+  const handleBlockDomain = () => {
+    const domain = account.fqn.split('@')[1];
+
+    if (account.relationship?.domain_blocking) unblockDomain(domain);
+    else {
+      Alert.alert(
+        intl.formatMessage(messages.blockDomainHeading),
+        intl.formatMessage(messages.blockDomainMessage),
+        [
+          {
+            text: intl.formatMessage(messages.cancel),
+            style: 'cancel',
+          },
+          {
+            text: intl.formatMessage(messages.blockDomainConfirm),
+            style: 'destructive',
+            onPress: () => blockDomain(domain),
+          },
+        ],
+      );
+    }
   };
 
   const handleReport = () => {
@@ -318,6 +359,21 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
                     )}
                   </DropdownMenu.ItemTitle>
                 </DropdownMenu.Item>
+                {!account.local && (
+                  <DropdownMenu.Item key='block-domain' onSelect={handleBlockDomain}>
+                    <DropdownMenu.ItemIcon ios={{ name: 'nosign' }} androidIconName='ph_prohibit' />
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(
+                        account.relationship?.domain_blocking
+                          ? messages.unblockDomain
+                          : messages.blockDomain,
+                        {
+                          domain: account.fqn.split('@')[1],
+                        },
+                      )}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.Item>
+                )}
                 <DropdownMenu.Item key='report' onSelect={handleReport}>
                   <DropdownMenu.ItemIcon ios={{ name: 'flag' }} androidIconName='ph_flag' />
                   <DropdownMenu.ItemTitle>
