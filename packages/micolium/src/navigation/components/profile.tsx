@@ -11,7 +11,7 @@ import {
   useTheme,
 } from '@mkljczk/react-native-paper';
 import { Link, useNavigation } from '@react-navigation/native';
-import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
+import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
 import { mediaAttachmentSchema } from 'pl-api';
@@ -31,6 +31,7 @@ import { Emojify } from '@/components/ui/emojify';
 import { iconHelper } from '@/components/ui/icon';
 import { StyledHtml } from '@/components/ui/styled-html';
 import { useClient } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useUiStoreActions } from '@/stores/ui';
@@ -130,7 +131,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const navigation = useNavigation();
   const profileInfoNode = React.useRef<View>(null);
   const previousScrollOffset = React.useRef<number>(0);
-  const glassEffect = isGlassEffectAPIAvailable();
+  const glassEffect = useEnableLiquidGlass();
   const { openMediaViewer } = useUiStoreActions();
 
   const [showReplies, setShowReplies] = React.useState(false);
