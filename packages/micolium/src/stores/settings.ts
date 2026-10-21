@@ -24,6 +24,7 @@ const settingsSchema = v.object({
 
   'timelines.autoloadMore': v.fallback(v.boolean(), false),
   'timelines.autoloadTimelines': v.fallback(v.boolean(), false),
+  'timelines.boostModal': v.fallback(v.boolean(), false),
   'timelines.missingDescriptionBoostModal': v.fallback(v.boolean(), false),
   'timelines.skipInteractAsConfirmation': v.fallback(v.boolean(), false),
 

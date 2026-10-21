@@ -14,6 +14,7 @@ import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract, useInteractionMessages } from '@/hooks/use-can-interact';
+import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import {
   useDislikeStatus,
@@ -115,15 +116,15 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
 
   const interactionTooltip = useInteractionMessages(status, 'can_reblog');
   const { canInteract: canQuote, approvalRequired } = useCanInteract(status, 'can_quote');
+  const doReblog = useReblog(status);
 
-  const { mutate: reblogStatus, isPending: isPendingReblog } = useReblogStatus(status.id);
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
   const publicStatus = ['public', 'unlisted', 'group'].includes(status.visibility);
 
   const handleReblog = () => {
     if (status.reblogged) unreblogStatus();
-    else reblogStatus({});
+    else doReblog();
   };
 
   const handleQuote = () => {
@@ -136,7 +137,7 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
       <IconButton
         icon={(props) => <RepeatIcon {...props} weight={status.reblogged ? 'fill' : undefined} />}
         onPress={action || handleReblog}
-        disabled={isPendingReblog || (!publicStatus && !status.reblogged)}
+        disabled={!publicStatus && !status.reblogged}
         style={{ margin: -4, height: 40, width: 40 }}
         selected={status.reblogged}
         accessibilityLabel={intl.formatMessage(

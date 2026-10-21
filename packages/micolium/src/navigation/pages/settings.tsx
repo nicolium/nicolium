@@ -110,6 +110,10 @@ const messages = defineMessages({
     id: 'preferences.fields.autoload_more.label',
     defaultMessage: 'Automatically load more items when scrolled to the bottom of the page',
   },
+  boostModal: {
+    id: 'preferences.fields.boost_modal.label',
+    defaultMessage: 'Show confirmation dialog before reposting',
+  },
   missingDescriptionBoostModal: {
     id: 'preferences.fields.missing_description_boost_modal.label',
     defaultMessage: 'Show confirmation dialog before reposting a post without media descriptions',
@@ -252,6 +256,7 @@ const TimelinesSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 
 
   const autoloadMore = useSetting('timelines.autoloadMore');
   const autoloadTimelines = useSetting('timelines.autoloadTimelines');
+  const boostModal = useSetting('timelines.boostModal');
   const missingDescriptionBoostModal = useSetting('timelines.missingDescriptionBoostModal');
 
   return (
@@ -271,6 +276,12 @@ const TimelinesSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 
                 label: intl.formatMessage(messages.autoloadTimelines),
                 active: autoloadTimelines,
                 onPress: () => update('timelines.autoloadTimelines', !autoloadTimelines),
+              },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.boostModal),
+                active: boostModal,
+                onPress: () => update('timelines.boostModal', !boostModal),
               },
               {
                 type: 'toggle',

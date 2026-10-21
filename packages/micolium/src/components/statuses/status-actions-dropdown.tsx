@@ -10,6 +10,7 @@ import { toast } from 'sonner-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useClient, useFeatures } from '@/contexts/current-account-context';
+import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import {
@@ -23,7 +24,6 @@ import {
   useBookmarkStatus,
   useMuteStatus,
   usePinStatus,
-  useReblogStatus,
   useUnbookmarkStatus,
   useUnmuteStatus,
   useUnpinStatus,
@@ -127,6 +127,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
 
   const hasOtherAccounts = useAuthStore((state) => Object.keys(state.sessions).length > 1);
   const { openInteractAs } = useUiStoreActions();
+  const doReblog = useReblog(status);
 
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
   const [reportDialog, setReportDialog] = React.useState(false);
@@ -140,7 +141,6 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
 
   const { mutate: bookmark } = useBookmarkStatus(status.id);
   const { mutate: unbookmark } = useUnbookmarkStatus(status.id);
-  const { mutate: reblog } = useReblogStatus(status.id);
   const { mutate: deleteStatus } = useDeleteStatus(status.id);
   const { mutate: pin } = usePinStatus(status.id);
   const { mutate: unpin } = useUnpinStatus(status.id);
@@ -188,7 +188,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
   };
 
   const handleReblog = (visibility?: string) => {
-    reblog({ visibility });
+    return doReblog(visibility);
   };
 
   const handleBiteStatus = () => {
