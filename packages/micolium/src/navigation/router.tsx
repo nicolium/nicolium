@@ -48,6 +48,7 @@ type SettingsStackParams = {
   follow_requests: undefined;
   blocks: undefined;
   mutes: undefined;
+  muted_threads: undefined;
 };
 type StatusStackParams = {
   view: { id: string };

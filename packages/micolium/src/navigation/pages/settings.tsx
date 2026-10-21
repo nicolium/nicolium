@@ -16,12 +16,15 @@ import { SignOutIcon } from 'phosphor-react-native/src/icons/SignOut';
 import { SpeakerSimpleXIcon } from 'phosphor-react-native/src/icons/SpeakerSimpleX';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useMemo } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ScrollView } from 'react-native';
 
+import { StatusesList } from '@/components/statuses/statuses-list';
+import { EmptyMessage } from '@/components/ui/empty-message';
 import { Header } from '@/components/ui/header';
 import { List } from '@/components/ui/list';
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
+import { useMutedThreads } from '@/queries/status-lists/use-muted-threads';
 import { useAuthStoreActions } from '@/stores/auth';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
@@ -367,6 +370,26 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
   );
 };
 
+const MutedThreadsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'muted_threads'>) => {
+  const mutedThreadsQuery = useMutedThreads();
+
+  return (
+    <StatusesList
+      query={mutedThreadsQuery}
+      emptyMessageText={
+        <EmptyMessage
+          emptyMessageText={
+            <FormattedMessage
+              id='empty_column.muted_threads'
+              defaultMessage='You have not muted any conversations yet.'
+            />
+          }
+        />
+      }
+    />
+  );
+};
+
 const ContentSettingsScreen = ({
   navigation,
 }: NativeStackScreenProps<SettingsStackParams, 'content'>) => {
@@ -552,6 +575,11 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='mutes'
         component={MutesScreen}
         options={{ title: intl.formatMessage(messages.muted) }}
+      />
+      <SettingsStack.Screen
+        name='muted_threads'
+        component={MutedThreadsScreen}
+        options={{ title: intl.formatMessage(messages.mutedThreads) }}
       />
     </SettingsStack.Navigator>
   );
