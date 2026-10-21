@@ -38,6 +38,8 @@ const AccountsList: React.FC<IAccountsList> = ({ query, emptyMessageText, action
         autoloadMore && query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined
       }
       onEndReachedThreshold={0.1}
+      onRefresh={query.refetch}
+      refreshing={query.isRefetching}
       ListEmptyComponent={
         !query.isPending ? <EmptyMessage emptyMessageText={emptyMessageText} /> : null
       }

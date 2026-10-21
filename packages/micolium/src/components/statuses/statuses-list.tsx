@@ -29,6 +29,8 @@ const StatusesList: React.FC<IStatusesList> = ({ query, emptyMessageText }) => {
         autoloadMore && query.hasNextPage && !query.isFetching ? query.fetchNextPage : undefined
       }
       onEndReachedThreshold={0.1}
+      onRefresh={query.refetch}
+      refreshing={query.isRefetching}
       ListEmptyComponent={
         !query.isPending ? <EmptyMessage emptyMessageText={emptyMessageText} /> : null
       }
