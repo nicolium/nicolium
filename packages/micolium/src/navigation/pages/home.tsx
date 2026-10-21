@@ -46,6 +46,7 @@ const HomeTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, '
   return (
     <>
       <Timeline
+        filtersKey='home'
         query={timelineQuery}
         emptyMessageHeading={
           <FormattedMessage
@@ -72,6 +73,7 @@ const LocalTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 
   return (
     <>
       <Timeline
+        filtersKey='local'
         query={timelineQuery}
         emptyMessageHeading={
           <FormattedMessage
@@ -104,7 +106,7 @@ const BubbleTimelineScreen: React.FC<
 
   return (
     <>
-      <Timeline query={timelineQuery} onScroll={handleScroll} />
+      <Timeline filtersKey='bubble' query={timelineQuery} onScroll={handleScroll} />
       <ComposeButton visible={showComposeButton} />
     </>
   );
@@ -122,7 +124,7 @@ const FederatedTimelineScreen: React.FC<
 
   return (
     <>
-      <Timeline query={timelineQuery} onScroll={handleScroll} />
+      <Timeline filtersKey='public' query={timelineQuery} onScroll={handleScroll} />
       <ComposeButton visible={showComposeButton} />
     </>
   );
@@ -141,6 +143,7 @@ const ListTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, '
   return (
     <>
       <Timeline
+        filtersKey='list'
         query={timelineQuery}
         emptyMessageHeading={
           <FormattedMessage
@@ -174,6 +177,7 @@ const AntennaTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams
   return (
     <>
       <Timeline
+        filtersKey='antenna'
         query={timelineQuery}
         emptyMessageHeading={
           <FormattedMessage
@@ -207,6 +211,7 @@ const CircleTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams,
   return (
     <>
       <Timeline
+        filtersKey='circle'
         query={timelineQuery}
         emptyMessageHeading={
           <FormattedMessage

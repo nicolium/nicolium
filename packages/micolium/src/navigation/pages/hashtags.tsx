@@ -96,6 +96,7 @@ const HashtagsScreen = ({
         )}
       </Appbar.Header>
       <Timeline
+        filtersKey='hashtag'
         query={timelineQuery}
         emptyMessageText={
           <FormattedMessage

@@ -10,13 +10,15 @@ import { Status } from '@/components/statuses/status';
 import { EmptyMessage, type IEmptyMessage } from '@/components/ui/empty-message';
 import { iconHelper } from '@/components/ui/icon';
 import { LoadMore } from '@/components/ui/load-more';
-import { useSetting } from '@/stores/settings';
+import { type TIMELINE_FILTER_KEYS, useSetting } from '@/stores/settings';
+import { hasActiveFilters, sortFilteredTimeline } from '@/utils/timeline-filter';
 
 import type { useTimeline } from '@/queries/timelines/use-timeline';
 import type { TimelineEntry } from '@/stores/timelines';
 import type { FilterContext } from 'pl-api';
 
 interface ITimeline extends IEmptyMessage {
+  filtersKey?: (typeof TIMELINE_FILTER_KEYS)[number];
   query: ReturnType<typeof useTimeline>;
   pinnedQuery?: ReturnType<typeof useTimeline>;
   context?: FilterContext;
@@ -25,6 +27,7 @@ interface ITimeline extends IEmptyMessage {
 }
 
 const Timeline: React.FC<ITimeline> = ({
+  filtersKey,
   query,
   pinnedQuery,
   context = 'public',
@@ -32,6 +35,8 @@ const Timeline: React.FC<ITimeline> = ({
   onScroll,
   ...props
 }) => {
+  const allFilters = useSetting('timelines.filters');
+  const filters = filtersKey ? allFilters[filtersKey] : undefined;
   const { bottom: bottomInset } = useSafeAreaInsets();
   const autoloadMore = useSetting('timelines.autoloadMore');
 
@@ -55,10 +60,20 @@ const Timeline: React.FC<ITimeline> = ({
     return <Divider />;
   }, []);
 
-  const data = React.useMemo(
-    () => (pinnedQuery ? [...pinnedQuery.entries, ...query.entries] : query.entries),
-    [query.entries, pinnedQuery?.entries],
-  );
+  const data = React.useMemo(() => {
+    const processedPinnedEntries =
+      pinnedQuery &&
+      (hasActiveFilters(filters)
+        ? sortFilteredTimeline(pinnedQuery.entries, filters)
+        : pinnedQuery.entries);
+
+    const processedEntries = hasActiveFilters(filters)
+      ? sortFilteredTimeline(query.entries, filters)
+      : query.entries;
+
+    if (processedPinnedEntries) return [...processedPinnedEntries, ...processedEntries];
+    return processedEntries;
+  }, [query.entries, context, pinnedQuery?.entries, filters]);
 
   if (query.isPending)
     return (

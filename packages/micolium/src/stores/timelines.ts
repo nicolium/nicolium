@@ -4,10 +4,10 @@ import { mutative } from 'zustand-mutative';
 
 import { findStatuses } from '@/queries/statuses/find-statuses';
 import { compareId } from '@/utils/comparators';
-// import { hasActiveFilters, isEntryFiltered } from '@/utils/timeline-filter';
+import { hasActiveFilters, isEntryFiltered } from '@/utils/timeline-filter';
 
+import type { TimelineFilters } from './settings';
 import type { NormalizedStatus } from '@/queries/statuses/normalize';
-// import type { TimelineFilters } from '@/schemas/frontend-settings';
 import type { CreateStatusParams, Status } from 'pl-api';
 
 interface StatusEntry {
@@ -537,35 +537,30 @@ const useTimelinesActions = () => useTimelinesStore((state) => state.actions);
 const useTimeline = (scopeUrl: string, timelineId: string) =>
   useTimelinesStore((state) => state.timelines[scopeUrl]?.[timelineId] ?? emptyTimeline);
 
-const useQueuedEntries = (
-  scopeUrl: string,
-  timelineId: string,
-  // filters: TimelineFilters,
-  followedAccountIds: Set<string>,
-) => {
+const useQueuedEntries = (scopeUrl: string, timelineId: string, filters: TimelineFilters) => {
   const timeline = useTimeline(scopeUrl, timelineId);
 
   return useMemo(() => {
-    // if (!hasActiveFilters(filters))
+    if (!hasActiveFilters(filters)) {
+      return {
+        queuedCount: timeline.queuedCount,
+        queuedAccountIds: timeline.queuedAccountIds,
+      };
+    }
+
+    const processed = processPage(timeline.queuedEntries);
+
+    const visible: Array<StatusEntry> = processed.filter(
+      (entry): entry is StatusEntry => entry.type === 'status' && !isEntryFiltered(entry, filters),
+    );
+
     return {
-      queuedCount: timeline.queuedCount,
-      queuedAccountIds: timeline.queuedAccountIds,
+      queuedCount: visible.length,
+      // 0ca3419 introduced `toReversed()` here and i don't remember why
+      // i'm probably just stupid lol
+      queuedAccountIds: Array.from(new Set(visible.map((entry) => entry.accountId))),
     };
-
-    // const processed = processPage(timeline.queuedEntries);
-
-    // const visible: Array<StatusEntry> = processed.filter(
-    //   (entry): entry is StatusEntry =>
-    //     entry.type === 'status' && !isEntryFiltered(entry, filters, followedAccountIds),
-    // );
-
-    // return {
-    //   queuedCount: visible.length,
-    //   // 0ca3419 introduced `toReversed()` here and i don't remember why
-    //   // i'm probably just stupid lol
-    //   queuedAccountIds: Array.from(new Set(visible.map((entry) => entry.accountId))),
-    // };
-  }, [/** filters, */ timeline.queuedEntries, followedAccountIds]);
+  }, [filters, timeline.queuedEntries]);
 };
 
 export {

@@ -4,7 +4,32 @@ import * as v from 'valibot';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-import { filteredArray } from '@/utils/schemas';
+import { coerceObject, filteredArray, filteredRecord } from '@/utils/schemas';
+
+const TIMELINE_FILTER_KEYS = [
+  'home',
+  'antenna',
+  'bubble',
+  'circle',
+  'local',
+  'group',
+  'hashtag',
+  'list',
+  'public',
+  'wrenched',
+] as const;
+
+const timelineFiltersSchema = coerceObject({
+  showReblogs: v.fallback(v.boolean(), true),
+  showSelfReblogs: v.fallback(v.boolean(), true),
+  showReplies: v.fallback(v.boolean(), true),
+  showQuotes: v.fallback(v.boolean(), true),
+  showDirect: v.fallback(v.boolean(), true),
+  showNonMedia: v.fallback(v.boolean(), true),
+  showMediaWithoutAltText: v.fallback(v.boolean(), true),
+});
+
+type TimelineFilters = v.InferOutput<typeof timelineFiltersSchema>;
 
 const settingsSchema = v.object({
   'compose.autosaveDrafts': v.optional(v.boolean(), false),
@@ -27,6 +52,7 @@ const settingsSchema = v.object({
   'timelines.boostModal': v.fallback(v.boolean(), false),
   'timelines.missingDescriptionBoostModal': v.fallback(v.boolean(), false),
   'timelines.skipInteractAsConfirmation': v.fallback(v.boolean(), false),
+  'timelines.filters': filteredRecord(v.picklist(TIMELINE_FILTER_KEYS), timelineFiltersSchema),
 
   'notifications.filters': filteredArray(
     v.picklist(['mention', 'favourite', 'reblog', 'poll', 'status', 'follow', 'events']),
@@ -79,4 +105,10 @@ const useSetting = <K extends keyof Settings>(key: K) => useSettingsStore((s) =>
 
 const useSettingsActions = () => useSettingsStore(({ actions }) => actions);
 
-export { useSettingsStore, useSetting, useSettingsActions };
+export {
+  TIMELINE_FILTER_KEYS,
+  useSettingsStore,
+  useSetting,
+  useSettingsActions,
+  type TimelineFilters,
+};

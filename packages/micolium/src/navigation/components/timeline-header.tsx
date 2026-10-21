@@ -10,9 +10,15 @@ import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
+import { useFeatures } from '@/contexts/current-account-context';
+import {
+  defaultFiltersSettings,
+  getUpdatedTimelineSettings,
+} from '@/hooks/use-timeline-filters-options';
 import { useDeleteAntenna } from '@/queries/accounts/use-antennas';
 import { useDeleteCircle } from '@/queries/accounts/use-circles';
 import { useDeleteList } from '@/queries/accounts/use-lists';
+import { type TIMELINE_FILTER_KEYS, useSetting, useSettingsActions } from '@/stores/settings';
 
 import { TimelinePicker, type ITimelinePicker } from './timeline-picker';
 
@@ -56,11 +62,196 @@ const messages = defineMessages({
   deleteCircleFail: { id: 'circles.delete.error', defaultMessage: 'Failed to delete circle' },
   editCircle: { id: 'circles.edit', defaultMessage: 'Edit circle' },
   deleteCircle: { id: 'circles.delete', defaultMessage: 'Delete circle' },
+  timelineFiltersLabel: { id: 'timeline_filters.label', defaultMessage: 'Timeline filters' },
+  showReblogs: { id: 'timeline_filters.show_reblogs', defaultMessage: 'Show reposts' },
+  showSelfReblogs: {
+    id: 'timeline_filters.show_self_reblogs',
+    defaultMessage: 'Show self-reposts',
+  },
+  showReplies: { id: 'timeline_filters.show_replies', defaultMessage: 'Show replies' },
+  showQuotes: { id: 'timeline_filters.show_quotes', defaultMessage: 'Show quotes' },
+  showDirect: {
+    id: 'timeline_filters.show_direct',
+    defaultMessage: 'Show direct messages',
+  },
+  hideNonMedia: {
+    id: 'timeline_filters.show_media_only',
+    defaultMessage: 'Only show posts with media',
+  },
+  showMediaWithoutAltText: {
+    id: 'timeline_filters.show_media_without_alt_text',
+    defaultMessage: 'Show media without description',
+  },
 });
 
-const TimelineHeaderMenu = () => {
+interface ITimelineHeaderMenu {
+  timeline: (typeof TIMELINE_FILTER_KEYS)[number];
+}
+
+const useFiltersDropdownMenu = (timeline: (typeof TIMELINE_FILTER_KEYS)[number]) => {
+  const intl = useIntl();
+  const features = useFeatures();
+
+  const timelinesFilters = useSetting('timelines.filters');
+  const timelineSettings = timelinesFilters[timeline] || defaultFiltersSettings;
+  const { update } = useSettingsActions();
+
+  const handleOnChecked =
+    (key: keyof typeof timelineSettings, inverse: boolean = false) =>
+    () => {
+      const checked = !timelineSettings[key];
+
+      update('timelines.filters', {
+        ...timelinesFilters,
+        [timeline]: getUpdatedTimelineSettings(timelineSettings, key, inverse ? !checked : checked),
+      });
+    };
+
+  return [
+    {
+      key: 'show-reblogs',
+      value: timelineSettings.showReblogs,
+      onSelect: handleOnChecked('showReblogs'),
+      enabled: ['home', 'list', 'antenna'].includes(timeline),
+      children: intl.formatMessage(messages.showReblogs),
+    },
+    {
+      key: 'show-self-reblogs',
+      value: timelineSettings.showSelfReblogs,
+      onSelect: handleOnChecked('showSelfReblogs'),
+      disabled: !timelineSettings.showReblogs,
+      enabled: ['home', 'list', 'antenna'].includes(timeline),
+      children: intl.formatMessage(messages.showSelfReblogs),
+    },
+    {
+      key: 'show-replies',
+      value: timelineSettings?.showReplies,
+      onSelect: handleOnChecked('showReplies'),
+      children: intl.formatMessage(messages.showReplies),
+    },
+    {
+      key: 'quotes',
+      value: timelineSettings.showQuotes,
+      onSelect: handleOnChecked('showQuotes'),
+      enabled: features.quotePosts,
+      children: intl.formatMessage(messages.showQuotes),
+    },
+    {
+      key: 'show-direct',
+      value: timelineSettings?.showDirect,
+      onSelect: handleOnChecked('showDirect'),
+      enabled: timeline === 'home',
+      children: intl.formatMessage(messages.showDirect),
+    },
+    {
+      key: 'hide-non-media',
+      value: !timelineSettings?.showNonMedia,
+      onSelect: handleOnChecked('showNonMedia', true),
+      children: intl.formatMessage(messages.hideNonMedia),
+    },
+    {
+      key: 'show-media-without-alt-text',
+      value: timelineSettings?.showMediaWithoutAltText,
+      onSelect: handleOnChecked('showMediaWithoutAltText'),
+      children: intl.formatMessage(messages.showMediaWithoutAltText),
+    },
+  ].filter(({ enabled }) => enabled !== false);
+};
+
+const FiltersDropdownMenuItem = DropdownMenu.create<ITimelineHeaderMenu>(({ timeline }) => {
+  const intl = useIntl();
+  const features = useFeatures();
+
+  const timelinesFilters = useSetting('timelines.filters');
+  const timelineSettings = timelinesFilters[timeline] || defaultFiltersSettings;
+  const { update } = useSettingsActions();
+
+  const handleOnChecked =
+    (key: keyof typeof timelineSettings, inverse: boolean = false) =>
+    () => {
+      const checked = !timelineSettings[key];
+
+      update('timelines.filters', {
+        ...timelinesFilters,
+        [timeline]: getUpdatedTimelineSettings(timelineSettings, key, inverse ? !checked : checked),
+      });
+    };
+
+  return (
+    <DropdownMenu.Group>
+      <DropdownMenu.Sub>
+        <DropdownMenu.SubTrigger key='filters'>
+          <DropdownMenu.ItemIcon
+            ios={{ name: 'line.3.horizontal.decrease' }}
+            androidIconName='ph_funnel'
+          />
+          <DropdownMenu.ItemTitle>
+            {intl.formatMessage(messages.timelineFiltersLabel)}
+          </DropdownMenu.ItemTitle>
+        </DropdownMenu.SubTrigger>
+        <DropdownMenu.SubContent>
+          {['home', 'list', 'antenna'].includes(timeline) && (
+            <>
+              <DropdownMenu.CheckboxItem
+                key='show-self-reblogs'
+                value={timelineSettings?.showSelfReblogs}
+                onSelect={handleOnChecked('showSelfReblogs')}
+                disabled={!timelineSettings.showReblogs}
+              >
+                {intl.formatMessage(messages.showSelfReblogs)}
+              </DropdownMenu.CheckboxItem>
+            </>
+          )}
+          <DropdownMenu.CheckboxItem
+            key='show-replies'
+            value={timelineSettings?.showReplies}
+            onSelect={handleOnChecked('showReplies')}
+          >
+            {intl.formatMessage(messages.showReplies)}
+          </DropdownMenu.CheckboxItem>
+          {features.quotePosts && (
+            <DropdownMenu.CheckboxItem
+              key='quotes'
+              value={timelineSettings?.showQuotes}
+              onSelect={handleOnChecked('showQuotes')}
+            >
+              {intl.formatMessage(messages.showQuotes)}
+            </DropdownMenu.CheckboxItem>
+          )}
+          {timeline === 'home' && (
+            <DropdownMenu.CheckboxItem
+              key='show-direct'
+              value={timelineSettings?.showDirect}
+              onSelect={handleOnChecked('showDirect')}
+            >
+              {intl.formatMessage(messages.showDirect)}
+            </DropdownMenu.CheckboxItem>
+          )}
+          <DropdownMenu.CheckboxItem
+            key='hide-non-media'
+            value={!timelineSettings?.showNonMedia}
+            onSelect={handleOnChecked('showNonMedia', true)}
+          >
+            {intl.formatMessage(messages.hideNonMedia)}
+          </DropdownMenu.CheckboxItem>
+          <DropdownMenu.CheckboxItem
+            key='show-media-without-alt-text'
+            value={timelineSettings?.showMediaWithoutAltText}
+            onSelect={handleOnChecked('showMediaWithoutAltText')}
+          >
+            {intl.formatMessage(messages.showMediaWithoutAltText)}
+          </DropdownMenu.CheckboxItem>
+        </DropdownMenu.SubContent>
+      </DropdownMenu.Sub>
+    </DropdownMenu.Group>
+  );
+}, 'Group');
+
+const TimelineHeaderMenu: React.FC<ITimelineHeaderMenu> = ({ timeline }) => {
   const intl = useIntl();
   const navigation = useNavigation('timeline');
+
+  const filtersDropdownMenuItems = useFiltersDropdownMenu(timeline);
 
   return (
     <DropdownMenu.Root>
@@ -68,21 +259,41 @@ const TimelineHeaderMenu = () => {
         <HeaderIconButton icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon} />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        <DropdownMenu.Item
-          key='settings'
-          onSelect={() =>
-            navigation.navigate('settings', {
-              screen: 'index',
-            })
-          }
-        >
-          <DropdownMenu.ItemTitle>{intl.formatMessage(messages.settings)}</DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-        <DropdownMenu.Item key='announcements' onSelect={() => {}}>
-          <DropdownMenu.ItemTitle>
-            {intl.formatMessage(messages.announcements)}
-          </DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
+        <DropdownMenu.Group>
+          <DropdownMenu.Sub>
+            <DropdownMenu.SubTrigger key='filters'>
+              <DropdownMenu.ItemIcon
+                ios={{ name: 'line.3.horizontal.decrease' }}
+                androidIconName='ph_funnel'
+              />
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.timelineFiltersLabel)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.SubTrigger>
+            <DropdownMenu.SubContent>
+              {filtersDropdownMenuItems.map((item) => (
+                <DropdownMenu.CheckboxItem {...item} key={item.key} />
+              ))}
+            </DropdownMenu.SubContent>
+          </DropdownMenu.Sub>
+        </DropdownMenu.Group>
+        <DropdownMenu.Group>
+          <DropdownMenu.Item
+            key='settings'
+            onSelect={() =>
+              navigation.navigate('settings', {
+                screen: 'index',
+              })
+            }
+          >
+            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.settings)}</DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item key='announcements' onSelect={() => {}}>
+            <DropdownMenu.ItemTitle>
+              {intl.formatMessage(messages.announcements)}
+            </DropdownMenu.ItemTitle>
+          </DropdownMenu.Item>
+        </DropdownMenu.Group>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
@@ -165,14 +376,20 @@ const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => 
           <HeaderIconButton icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon} />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
-          <DropdownMenu.Item key='edit' onSelect={() => setEditDialog(true)}>
-            <DropdownMenu.ItemIcon ios={{ name: 'pencil' }} androidIconName={'ph_pencil_simple'} />
-            <DropdownMenu.ItemTitle>{intl.formatMessage(editLabel)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item key='delete' onSelect={handleDelete} destructive>
-            <DropdownMenu.ItemIcon ios={{ name: 'trash' }} androidIconName={'ph_trash'} />
-            <DropdownMenu.ItemTitle>{intl.formatMessage(deleteLabel)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
+          <FiltersDropdownMenuItem timeline={type} />
+          <DropdownMenu.Group>
+            <DropdownMenu.Item key='edit' onSelect={() => setEditDialog(true)}>
+              <DropdownMenu.ItemIcon
+                ios={{ name: 'pencil' }}
+                androidIconName={'ph_pencil_simple'}
+              />
+              <DropdownMenu.ItemTitle>{intl.formatMessage(editLabel)}</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item key='delete' onSelect={handleDelete} destructive>
+              <DropdownMenu.ItemIcon ios={{ name: 'trash' }} androidIconName={'ph_trash'} />
+              <DropdownMenu.ItemTitle>{intl.formatMessage(deleteLabel)}</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          </DropdownMenu.Group>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
       {editDialog && (
@@ -196,7 +413,7 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
         navigation={navigation as ITimelinePicker['navigation']}
       />
     ) : (
-      <TimelineHeaderMenu />
+      <TimelineHeaderMenu timeline={route.name as ITimelineHeaderMenu['timeline']} />
     );
 
   return (

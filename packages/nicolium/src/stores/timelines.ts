@@ -536,11 +536,12 @@ const useQueuedEntries = (
   const timeline = useTimeline(scopeUrl, timelineId);
 
   return useMemo(() => {
-    if (!hasActiveFilters(filters))
+    if (!hasActiveFilters(filters)) {
       return {
         queuedCount: timeline.queuedCount,
         queuedAccountIds: timeline.queuedAccountIds,
       };
+    }
 
     const processed = processPage(timeline.queuedEntries);
 
