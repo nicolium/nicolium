@@ -1116,7 +1116,6 @@ const submitCompose = async (
     // if (!force && !chained) {
     //   const { missingDescriptionModal, missingLanguageModal, defaultLanguage } = deps.settings;
     //   const hasMissing = media.some((item) => !item.description);
-    //   const showMissingDescription = missingDescriptionModal && hasMissing;
     //   const showMissingLanguage =
     //     missingLanguageModal &&
     //     !opts.common?.language &&
@@ -1141,26 +1140,7 @@ const submitCompose = async (
     //   //     ),
     //   //     confirm: <FormattedMessage {...messages.missingLanguageConfirm} />,
     //   //     onConfirm: () => {
-    //   //       if (showMissingDescription) {
-    //   //         openModal('MISSING_DESCRIPTION', {
-    //   //           onContinue: () => {
-    //   //             closeModal('MISSING_DESCRIPTION');
-    //   //             submitForced();
-    //   //           },
-    //   //         });
-    //   //       } else {
     //   //         submitForced();
-    //   //       }
-    //   //     },
-    //   //   });
-    //   //   return;
-    //   // }
-
-    //   // if (showMissingDescription) {
-    //   //   openModal('MISSING_DESCRIPTION', {
-    //   //     onContinue: () => {
-    //   //       closeModal('MISSING_DESCRIPTION');
-    //   //       submitForced();
     //   //     },
     //   //   });
     //   //   return;
@@ -1497,7 +1477,6 @@ const useSubmitCompose = (composeId: string) => {
 //     const hasMissing = ids.some((id) =>
 //       actions.getCompose(id).mediaAttachments.some((item) => !item.description),
 //     );
-//     const showMissingDescription = missingDescriptionModal && hasMissing;
 //     const showMissingLanguage =
 //       missingLanguageModal &&
 //       !rootCompose.language &&
@@ -1522,26 +1501,7 @@ const useSubmitCompose = (composeId: string) => {
 //         ),
 //         confirm: <FormattedMessage {...messages.missingLanguageConfirm} />,
 //         onConfirm: () => {
-//           if (showMissingDescription) {
-//             openModal('MISSING_DESCRIPTION', {
-//               onContinue: () => {
-//                 closeModal('MISSING_DESCRIPTION');
-//                 submitForced();
-//               },
-//             });
-//           } else {
 //             submitForced();
-//           }
-//         },
-//       });
-//       return;
-//     }
-
-//     if (showMissingDescription) {
-//       openModal('MISSING_DESCRIPTION', {
-//         onContinue: () => {
-//           closeModal('MISSING_DESCRIPTION');
-//           submitForced();
 //         },
 //       });
 //       return;

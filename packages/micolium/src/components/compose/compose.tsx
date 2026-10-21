@@ -37,6 +37,7 @@ import {
   newPoll,
   useSubmitCompose,
 } from '@/stores/compose';
+import { useSetting } from '@/stores/settings';
 import { useIsComposeOpen, useUiStore, useUiStoreActions } from '@/stores/ui';
 
 import { Account } from '../accounts/account';
@@ -89,6 +90,18 @@ const messages = defineMessages({
       'Are you sure you want to discard the changes to this post? All changes will be lost.',
   },
   close: { id: 'common.close', defaultMessage: 'Close' },
+  missingDescriptionModalTitle: {
+    id: 'missing_description_modal.text',
+    defaultMessage: 'You have not entered a description for all attachments. Continue anyway?',
+  },
+  missingDescriptionModalMessage: {
+    id: 'missing_desription_modal.description',
+    defaultMessage: 'Continue anyway?',
+  },
+  missingDescriptionModalConfirm: {
+    id: 'missing_description_modal.continue',
+    defaultMessage: 'Post',
+  },
 });
 
 interface ICompose {
@@ -199,6 +212,8 @@ const ComposeBottomSheet = () => {
   const { openEmojiPicker } = useUiStoreActions();
   const heading = useComposeHeading(COMPOSE_ID);
 
+  const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
+
   const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility, poll } = compose;
 
   const { data: currentAccountId } = useCredentialAccountId();
@@ -253,6 +268,33 @@ const ComposeBottomSheet = () => {
       bottomSheetRef.current?.dismiss();
     }
   }, [isComposeOpen]);
+
+  const handlePublish = () => {
+    const doPublish = () =>
+      submitCompose({
+        onSuccess: closeCompose,
+      });
+
+    const hasMissingDescriptions = compose.mediaAttachments.some((item) => !item.description);
+    if (missingDescriptionModal && hasMissingDescriptions) {
+      return Alert.alert(
+        intl.formatMessage(messages.missingDescriptionModalTitle),
+        intl.formatMessage(messages.missingDescriptionModalMessage),
+        [
+          {
+            text: intl.formatMessage(messages.cancel),
+            style: 'cancel',
+          },
+          {
+            text: intl.formatMessage(messages.missingDescriptionModalConfirm),
+            onPress: doPublish,
+          },
+        ],
+      );
+    }
+
+    doPublish();
+  };
 
   const handleDismiss = () => {
     if (useUiStore.getState().isComposeOpen) {
@@ -310,11 +352,7 @@ const ComposeBottomSheet = () => {
       <GlassActionButton
         icon={publishButtonSfIcon}
         label={publishButtonLabel}
-        onPress={() =>
-          submitCompose({
-            onSuccess: closeCompose,
-          })
-        }
+        onPress={handlePublish}
         confirm
         disabled={disabled || isSubmitting}
       />
@@ -365,11 +403,7 @@ const ComposeBottomSheet = () => {
           mode='contained'
           icon={iconHelper(publishButtonIcon)}
           style={{ marginLeft: 'auto' }}
-          onPress={() =>
-            submitCompose({
-              onSuccess: closeCompose,
-            })
-          }
+          onPress={handlePublish}
           loading={isSubmitting}
           disabled={disabled || isSubmitting}
         >
