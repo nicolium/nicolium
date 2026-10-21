@@ -27,16 +27,16 @@ const messages = defineMessages({
     defaultMessage: 'Repost anyway',
   },
   reblogModalTitle: {
-    id: 'boost_modal.title',
-    defaultMessage: 'Repost?',
+    id: 'boost_modal.title.long',
+    defaultMessage: 'Are you sure you want to boost this post?',
   },
   reblogModalTitleUnlisted: {
-    id: 'boost_modal.title.unlisted',
-    defaultMessage: 'Repost unlisted?',
+    id: 'boost_modal.title.unlisted.long',
+    defaultMessage: 'Are you sure you want to boost this post unlisted?',
   },
   reblogModalTitlePrivate: {
-    id: 'boost_modal.title.private',
-    defaultMessage: 'Repost privately?',
+    id: 'boost_modal.title.private.long',
+    defaultMessage: 'Are you sure you want to boost this post privately?',
   },
   reblogModalConfirm: { id: 'status.reblog', defaultMessage: 'Repost' },
 });
