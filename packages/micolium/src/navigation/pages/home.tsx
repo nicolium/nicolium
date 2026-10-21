@@ -257,4 +257,4 @@ const HomeStackScreen = () => {
   );
 };
 
-export { HomeStackScreen };
+export { HomeStackScreen, useShowComposeButton };

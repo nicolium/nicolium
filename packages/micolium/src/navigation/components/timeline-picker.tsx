@@ -33,6 +33,7 @@ const messages = defineMessages({
   federatedTimeline: { id: 'column.public', defaultMessage: 'Fediverse timeline' },
   wrenchedTimeline: { id: 'column.wrenched', defaultMessage: 'Recent wrenches timeline' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
+  conversations: { id: 'column.direct', defaultMessage: 'Conversations' },
   allBookmarks: { id: 'column.bookmarks.all', defaultMessage: 'All bookmarks' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
   antennas: { id: 'column.antennas', defaultMessage: 'Antennas' },
@@ -313,6 +314,14 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
             : getTimelineItem('bookmarks', 'bookmark', 'ph_bookmarks', messages.bookmarks, () =>
                 navigation.navigate('bookmarks', { screen: 'all' }),
               ))}
+        {features.conversations &&
+          getTimelineItem(
+            'conversations',
+            'envelope',
+            'ph_envelope_simple',
+            messages.conversations,
+            () => navigation.navigate('conversations'),
+          )}
         {features.lists && getListsSubMenu('list', lists)}
         {features.antennas && getListsSubMenu('antenna', antennas)}
         {features.circles && getListsSubMenu('circle', circles)}

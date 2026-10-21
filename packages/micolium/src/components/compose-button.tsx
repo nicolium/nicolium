@@ -1,5 +1,6 @@
 import { FAB, Icon } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
+import { EnvelopeSimpleIcon } from 'phosphor-react-native/src/icons/EnvelopeSimple';
 import { NotePencilIcon } from 'phosphor-react-native/src/icons/NotePencil';
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -8,24 +9,28 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
+import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { iconHelper } from './ui/icon';
 
 const messages = defineMessages({
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
+  newMessage: { id: 'conversations.new', defaultMessage: 'New message' },
 });
 
 interface IComposeButton {
   visible: boolean;
+  direct?: boolean;
 }
 
-const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
+const ComposeButton: React.FC<IComposeButton> = ({ direct, visible }) => {
   const intl = useIntl();
   const glassEffect = useEnableLiquidGlass();
   const { bottom: bottomInset } = useSafeAreaInsets();
 
   const { openCompose } = useUiStoreActions();
+  const { updateCompose, resetCompose } = useComposeActions();
 
   const iconOpacity = useSharedValue(+visible);
   const iconStyle = useAnimatedStyle(() => ({
@@ -36,11 +41,22 @@ const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
     iconOpacity.value = withTiming(+visible, { duration: 250 });
   }, [visible, iconOpacity]);
 
+  const handleCompose = () => {
+    if (direct) {
+      resetCompose('compose-modal');
+      updateCompose('compose-modal', (draft) => {
+        draft.visibility = 'direct';
+      });
+    }
+
+    openCompose();
+  };
+
   if (glassEffect) {
     return (
       <Pressable
-        onPress={openCompose}
-        accessibilityLabel={intl.formatMessage(messages.compose)}
+        onPress={handleCompose}
+        accessibilityLabel={intl.formatMessage(direct ? messages.newMessage : messages.compose)}
         style={{
           position: 'absolute',
           margin: 16,
@@ -63,7 +79,7 @@ const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
           }}
         >
           <Animated.View style={iconStyle}>
-            <Icon source={iconHelper(NotePencilIcon)} size={24} />
+            <Icon source={iconHelper(direct ? EnvelopeSimpleIcon : NotePencilIcon)} size={24} />
           </Animated.View>
         </GlassView>
       </Pressable>
@@ -73,7 +89,7 @@ const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
   return (
     <FAB
       onPress={openCompose}
-      icon={iconHelper(NotePencilIcon)}
+      icon={iconHelper(direct ? EnvelopeSimpleIcon : NotePencilIcon)}
       style={{
         position: 'absolute',
         margin: 16,
@@ -81,7 +97,7 @@ const ComposeButton: React.FC<IComposeButton> = ({ visible }) => {
         bottom: bottomInset,
       }}
       visible={visible}
-      aria-label={intl.formatMessage(messages.compose)}
+      aria-label={intl.formatMessage(direct ? messages.newMessage : messages.compose)}
     />
   );
 };

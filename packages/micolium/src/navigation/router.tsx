@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/auth';
 
 import { AccountsStackScreen } from './pages/accounts';
 import { BookmarksStackScreen } from './pages/bookmarks';
+import { ConversationsStackScreen } from './pages/conversations';
 import { HashtagsScreen } from './pages/hashtags';
 import { LinksScreen } from './pages/links';
 import { LoginStackScreen } from './pages/login';
@@ -70,6 +71,10 @@ type BookmarksStackParams = {
   all: undefined;
   folder: { id: string };
 };
+type ConversationsStackParams = {
+  index: undefined;
+  mentions: { id: string };
+};
 type TabsParams = {
   timeline: NavigatorScreenParams<TimelineStackParams>;
   notifications: NavigatorScreenParams<NotificationsStackParams>;
@@ -91,6 +96,7 @@ type RootStackParams = {
   hashtags: { tag: string };
   bookmarks: NavigatorScreenParams<BookmarksStackParams>;
   links: { url: string };
+  conversations: ConversationsStackParams;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -109,6 +115,7 @@ const RootNavigator = () => {
           <RootStack.Screen name='hashtags' component={HashtagsScreen} />
           <RootStack.Screen name='bookmarks' component={BookmarksStackScreen} />
           <RootStack.Screen name='links' component={LinksScreen} />
+          <RootStack.Screen name='conversations' component={ConversationsStackScreen} />
         </>
       )}
       <RootStack.Screen
@@ -129,6 +136,7 @@ export {
   type StatusStackParams,
   type AccountStackParams,
   type BookmarksStackParams,
+  type ConversationsStackParams,
   type TabsParams,
   type LoginStackParams,
   type RootStackParams,

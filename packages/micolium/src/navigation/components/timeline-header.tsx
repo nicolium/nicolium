@@ -72,7 +72,7 @@ const messages = defineMessages({
   showQuotes: { id: 'timeline_filters.show_quotes', defaultMessage: 'Show quotes' },
   showDirect: {
     id: 'timeline_filters.show_direct',
-    defaultMessage: 'Show direct messages',
+    defaultMessage: 'Show private mentions',
   },
   hideNonMedia: {
     id: 'timeline_filters.show_media_only',

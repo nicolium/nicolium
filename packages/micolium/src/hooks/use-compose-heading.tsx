@@ -20,7 +20,7 @@ const useComposeHeading = (composeId: string, compact?: boolean) => {
   } else if (compose.editedId) {
     return <FormattedMessage id='navigation_bar.compose_edit' defaultMessage='Edit post' />;
   } else if (compose.visibility === 'direct') {
-    return <FormattedMessage id='navigation_bar.compose_direct' defaultMessage='Direct message' />;
+    return <FormattedMessage id='navigation_bar.compose_direct' defaultMessage='Private mention' />;
   } else if (compose.inReplyToId && compose.groupId) {
     return (
       <FormattedMessage

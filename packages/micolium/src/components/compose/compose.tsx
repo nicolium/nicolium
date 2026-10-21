@@ -10,9 +10,9 @@ import {
 } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
 import { ArrowBendUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendUpLeft';
+import { AtIcon } from 'phosphor-react-native/src/icons/At';
 import { CalendarPlusIcon } from 'phosphor-react-native/src/icons/CalendarPlus';
 import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
-import { EnvelopeIcon } from 'phosphor-react-native/src/icons/Envelope';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import { PaperPlaneRightIcon } from 'phosphor-react-native/src/icons/PaperPlaneRight';
 import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
@@ -148,7 +148,9 @@ const ReplyIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
           />
         )}
       </View>
-      <Status id={inReplyToId!} compact withActions={false} textOnly style={{ paddingTop: 0 }} />
+      <View pointerEvents='none'>
+        <Status id={inReplyToId!} compact withActions={false} textOnly style={{ paddingTop: 0 }} />
+      </View>
     </Card>
   );
 };
@@ -193,7 +195,9 @@ const QuoteIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
           />
         )}
       </View>
-      <Status id={quoteId!} compact withActions={false} textOnly style={{ paddingTop: 0 }} />
+      <View pointerEvents='none'>
+        <Status id={quoteId!} compact withActions={false} textOnly style={{ paddingTop: 0 }} />
+      </View>
     </Card>
   );
 };
@@ -329,8 +333,8 @@ const ComposeBottomSheet = () => {
             : messages.publish,
   );
 
-  const publishButtonSfIcon: SFSymbol = visibility === 'direct' ? 'envelope' : 'paperplane';
-  const publishButtonIcon = visibility === 'direct' ? EnvelopeIcon : PaperPlaneRightIcon;
+  const publishButtonSfIcon: SFSymbol = visibility === 'direct' ? 'at' : 'paperplane';
+  const publishButtonIcon = visibility === 'direct' ? AtIcon : PaperPlaneRightIcon;
 
   const headerContent = glassEffect ? (
     <View
