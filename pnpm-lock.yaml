@@ -28,7 +28,6 @@ overrides:
   yaml@2: ^2.9.0
 
 patchedDependencies:
-  '@react-native-menu/menu@2.0.0': 23b7393a304a22254d68c8bdb1650da55eb30b727e92101e285d7ccc74fdb872
   react-native-ios-context-menu@3.2.0: 4843ffe12a7c84f95658dc04203dc9e70221a61c720f9bae2d545b7f30e63e57
   react-native-ios-utilities@5.2.0: cbd0be64b94875236e80fb39f11082fd5da2664e4d5748bbc329ae5592372a5a
   zeego@3.0.6: 09591ba93bb35b160ffb0d68d4856c1a39910eae22e4e62c89a9aa59c43fa9c0
@@ -98,8 +97,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3)
       '@react-native-menu/menu':
-        specifier: 2.0.0
-        version: 2.0.0(patch_hash=23b7393a304a22254d68c8bdb1650da55eb30b727e92101e285d7ccc74fdb872)(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3)
+        specifier: github:mkljczk/react-native-menu-menu
+        version: https://codeload.github.com/mkljczk/react-native-menu-menu/tar.gz/6349a4f022c630c712a02b31673a2a59208eb9db(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3)
       '@react-native-vector-icons/material-design-icons':
         specifier: ^13.1.4
         version: 13.1.4(@expo/config-plugins@57.0.10(supports-color@10.2.2)(typescript@6.0.3))(@react-native/assets-registry@0.86.3)(expo-font@57.0.4)(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3)
@@ -327,7 +326,7 @@ importers:
         version: 1.4.2(typescript@6.0.3)
       zeego:
         specifier: ^3.0.6
-        version: 3.0.6(patch_hash=09591ba93bb35b160ffb0d68d4856c1a39910eae22e4e62c89a9aa59c43fa9c0)(d27781b619b5c141fa46bec779d038f3)
+        version: 3.0.6(patch_hash=09591ba93bb35b160ffb0d68d4856c1a39910eae22e4e62c89a9aa59c43fa9c0)(61dfdfc86d58e25366ff627be366f8e7)
       zustand:
         specifier: ^5.0.14
         version: 5.0.14(@types/react@19.2.17)(react@19.2.3)(use-sync-external-store@1.6.0(react@19.2.3))
@@ -3782,8 +3781,9 @@ packages:
       react: '>=16'
       react-native: '>=0.57'
 
-  '@react-native-menu/menu@2.0.0':
-    resolution: {integrity: sha512-hb8Mirw6aKPGONhgo52IiNpwHtISVrgCT3rMdFX1qS7eOFNzOcQh8d2UDnaH5zVpxN+QuvWtaaiRMGFpIjzdtA==}
+  '@react-native-menu/menu@https://codeload.github.com/mkljczk/react-native-menu-menu/tar.gz/6349a4f022c630c712a02b31673a2a59208eb9db':
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/mkljczk/react-native-menu-menu/tar.gz/6349a4f022c630c712a02b31673a2a59208eb9db}
+    version: 2.0.0
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -13453,7 +13453,7 @@ snapshots:
       react-native: 0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2)
     optional: true
 
-  '@react-native-menu/menu@2.0.0(patch_hash=23b7393a304a22254d68c8bdb1650da55eb30b727e92101e285d7ccc74fdb872)(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3)':
+  '@react-native-menu/menu@https://codeload.github.com/mkljczk/react-native-menu-menu/tar.gz/6349a4f022c630c712a02b31673a2a59208eb9db(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3)':
     dependencies:
       react: 19.2.3
       react-native: 0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2)
@@ -20961,11 +20961,11 @@ snapshots:
 
   yocto-queue@1.2.2: {}
 
-  zeego@3.0.6(patch_hash=09591ba93bb35b160ffb0d68d4856c1a39910eae22e4e62c89a9aa59c43fa9c0)(d27781b619b5c141fa46bec779d038f3):
+  zeego@3.0.6(patch_hash=09591ba93bb35b160ffb0d68d4856c1a39910eae22e4e62c89a9aa59c43fa9c0)(61dfdfc86d58e25366ff627be366f8e7):
     dependencies:
       '@radix-ui/react-context-menu': 2.3.8(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@radix-ui/react-dropdown-menu': 2.1.25(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      '@react-native-menu/menu': 2.0.0(patch_hash=23b7393a304a22254d68c8bdb1650da55eb30b727e92101e285d7ccc74fdb872)(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3)
+      '@react-native-menu/menu': https://codeload.github.com/mkljczk/react-native-menu-menu/tar.gz/6349a4f022c630c712a02b31673a2a59208eb9db(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3)
       react: 19.2.3
       react-native: 0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2)
       react-native-ios-context-menu: 3.2.0(patch_hash=4843ffe12a7c84f95658dc04203dc9e70221a61c720f9bae2d545b7f30e63e57)(react-native-ios-utilities@5.2.0(patch_hash=cbd0be64b94875236e80fb39f11082fd5da2664e4d5748bbc329ae5592372a5a)(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3))(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3)

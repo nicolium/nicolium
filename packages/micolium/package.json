@@ -39,7 +39,7 @@
     "@pchmn/expo-material3-theme": "^1.4.0",
     "@phosphor-icons/core": "^2.1.1",
     "@react-native-async-storage/async-storage": "^3.1.1",
-    "@react-native-menu/menu": "2.0.0",
+    "@react-native-menu/menu": "github:mkljczk/react-native-menu-menu",
     "@react-native-vector-icons/material-design-icons": "^13.1.4",
     "@react-navigation/bottom-tabs": "8.0.0-alpha.57",
     "@react-navigation/elements": "3.0.0-alpha.55",

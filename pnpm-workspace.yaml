@@ -2,6 +2,7 @@ packages:
   - 'packages/*'
 allowBuilds:
   '@mkljczk/react-native-paper@https://codeload.github.com/mkljczk/react-native-paper/tar.gz/c44cb5e7cba4faaab68832bdc25b5ead42a90c94': true
+  '@react-native-menu/menu@https://codeload.github.com/mkljczk/react-native-menu-menu/tar.gz/6349a4f022c630c712a02b31673a2a59208eb9db': true
   '@parcel/watcher': false
   core-js: false
   esbuild: false
@@ -49,7 +50,6 @@ overrides:
   undici: 7.29.0
   yaml@2: ^2.9.0
 patchedDependencies:
-  '@react-native-menu/menu@2.0.0': packages/micolium/patches/@react-native-menu__menu@2.0.0.patch
   react-native-ios-context-menu@3.2.0: packages/micolium/patches/react-native-ios-context-menu@3.2.0.patch
   react-native-ios-utilities@5.2.0: packages/micolium/patches/react-native-ios-utilities@5.2.0.patch
   zeego@3.0.6: packages/micolium/patches/zeego@3.0.6.patch
