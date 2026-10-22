@@ -65,8 +65,6 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({ message, onClick, count }
     if (count !== 0) setDisplayedCount(count);
   }, [count]);
 
-  console.log(containerTop.value, topInset);
-
   return (
     <Animated.View
       style={[
