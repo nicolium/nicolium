@@ -57,8 +57,10 @@ const HashtagsScreen = ({
 
   const { data: hashtag } = useHashtag(tag);
 
-  const timelineQuery = useTimeline(`hashtag:${tag}`, (paginationParams) =>
-    client.timelines.hashtagTimeline(tag, paginationParams),
+  const timelineQuery = useTimeline(
+    `hashtag:${tag}`,
+    (paginationParams) => client.timelines.hashtagTimeline(tag, paginationParams),
+    { stream: 'hashtag', params: { tag } },
   );
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {

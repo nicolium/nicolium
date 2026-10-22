@@ -15,6 +15,7 @@ import { Platform, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
+import { useUserStream } from '@/hooks/streaming/use-user-stream';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useUiStoreActions } from '@/stores/ui';
@@ -239,6 +240,7 @@ const PaperTabs = () => {
 
 const Tabs = () => {
   const glassEffect = useEnableLiquidGlass();
+  useUserStream();
 
   if (glassEffect && NativeTabs) return <NativeTabs />;
   return <PaperTabs />;

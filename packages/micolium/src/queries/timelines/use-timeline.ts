@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
-// import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
+import { useTimelineStream } from '@/hooks/streaming/use-timeline-stream';
 import { importEntities } from '@/queries/utils/import-entities';
 // import { compareId } from '@/utils/comparators';
 import {
@@ -55,11 +55,8 @@ const useTimeline = (
   const streamConfigRef = useRef(streamConfig);
   streamConfigRef.current = streamConfig;
 
-  // const { connected: streamingConnected } = useTimelineStream(
-  //   streamConfig?.stream ?? '',
-  //   streamConfig?.params,
-  //   !!streamConfig?.stream,
-  // );
+  // const { connected: streamingConnected } =
+  useTimelineStream(streamConfig?.stream ?? '', streamConfig?.params, !!streamConfig?.stream);
 
   const fetcherRef = useRef(fetcher);
   fetcherRef.current = fetcher;

@@ -41,7 +41,9 @@ const HomeTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, '
   const client = useClient();
   const { showComposeButton, handleScroll } = useShowComposeButton();
 
-  const timelineQuery = useTimeline('home', (params) => client.timelines.homeTimeline(params));
+  const timelineQuery = useTimeline('home', (params) => client.timelines.homeTimeline(params), {
+    stream: 'user',
+  });
 
   return (
     <>
@@ -66,8 +68,10 @@ const LocalTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, 
   const client = useClient();
   const { showComposeButton, handleScroll } = useShowComposeButton();
 
-  const timelineQuery = useTimeline('public:local', (paginationParams) =>
-    client.timelines.publicTimeline({ ...paginationParams, local: true }),
+  const timelineQuery = useTimeline(
+    'public:local',
+    (paginationParams) => client.timelines.publicTimeline({ ...paginationParams, local: true }),
+    { stream: 'public:local' },
   );
 
   return (
@@ -100,8 +104,10 @@ const BubbleTimelineScreen: React.FC<
   const client = useClient();
   const { showComposeButton, handleScroll } = useShowComposeButton();
 
-  const timelineQuery = useTimeline('bubble', (paginationParams) =>
-    client.timelines.bubbleTimeline(paginationParams),
+  const timelineQuery = useTimeline(
+    'bubble',
+    (paginationParams) => client.timelines.bubbleTimeline(paginationParams),
+    { stream: 'buuble' },
   );
 
   return (
@@ -118,8 +124,10 @@ const FederatedTimelineScreen: React.FC<
   const client = useClient();
   const { showComposeButton, handleScroll } = useShowComposeButton();
 
-  const timelineQuery = useTimeline('public', (paginationParams) =>
-    client.timelines.publicTimeline(paginationParams),
+  const timelineQuery = useTimeline(
+    'public',
+    (paginationParams) => client.timelines.publicTimeline(paginationParams),
+    { stream: 'public' },
   );
 
   return (
@@ -136,8 +144,10 @@ const ListTimelineScreen: React.FC<NativeStackScreenProps<TimelineStackParams, '
   const client = useClient();
   const { showComposeButton, handleScroll } = useShowComposeButton();
 
-  const timelineQuery = useTimeline(`list:${route.params.id}`, (paginationParams) =>
-    client.timelines.listTimeline(route.params.id, paginationParams),
+  const timelineQuery = useTimeline(
+    `list:${route.params.id}`,
+    (paginationParams) => client.timelines.listTimeline(route.params.id, paginationParams),
+    { stream: 'list', params: { list: route.params.id } },
   );
 
   return (
