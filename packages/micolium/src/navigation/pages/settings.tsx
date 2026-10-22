@@ -7,6 +7,7 @@ import TimelineIcon from 'lucide-react-native/icons/timeline';
 import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
 import { ChatSlashIcon } from 'phosphor-react-native/src/icons/ChatSlash';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
+import { HashIcon } from 'phosphor-react-native/src/icons/Hash';
 import { HeartHalfIcon } from 'phosphor-react-native/src/icons/HeartHalf';
 import { InfoIcon } from 'phosphor-react-native/src/icons/Info';
 import { NotePencilIcon } from 'phosphor-react-native/src/icons/NotePencil';
@@ -30,6 +31,7 @@ import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { FollowRequestsScreen } from './follow-requests';
+import { FollowedTagsScreen } from './followed-tags';
 import { BlocksScreen, MutesScreen } from './mutes-blocks';
 
 import type { RootStackParams, SettingsStackParams } from '../router';
@@ -148,6 +150,7 @@ const messages = defineMessages({
     defaultMessage: 'Interaction policies',
   },
   mutedThreads: { id: 'column.muted_threads', defaultMessage: 'Muted conversations' },
+  followedTags: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
 });
 
 const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'compose'>) => {
@@ -443,6 +446,7 @@ const ContentSettingsScreen = ({
 };
 
 const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'index'>) => {
+  const features = useFeatures();
   const intl = useIntl();
   const glassEffect = isGlassEffectAPIAvailable();
 
@@ -497,6 +501,13 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
                 type: 'button',
                 label: intl.formatMessage(messages.contentHeading),
                 onPress: () => navigation.navigate('content'),
+              },
+              {
+                icon: HashIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.followedTags),
+                onPress: () => navigation.navigate('followed_tags'),
+                enabled: features.followedHashtagsList,
               },
             ],
           },
@@ -580,6 +591,11 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='muted_threads'
         component={MutedThreadsScreen}
         options={{ title: intl.formatMessage(messages.mutedThreads) }}
+      />
+      <SettingsStack.Screen
+        name='followed_tags'
+        component={FollowedTagsScreen}
+        options={{ title: intl.formatMessage(messages.followedTags) }}
       />
     </SettingsStack.Navigator>
   );
