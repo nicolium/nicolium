@@ -19,7 +19,7 @@ import { iconHelper } from './ui/icon';
 const CurrentAccount = () => {
   const { data: currentAccountId } = useCredentialAccountId();
 
-  if (!currentAccountId) return <ActivityIndicator />;
+  if (!currentAccountId) return <ActivityIndicator style={{ marginVertical: 10 }} />;
 
   return <Account id={currentAccountId} />;
 };
