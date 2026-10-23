@@ -30,6 +30,7 @@ import { useAuthStoreActions } from '@/stores/auth';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
+import { FilterEditorScreen, FiltersScreen } from './filters';
 import { FollowRequestsScreen } from './follow-requests';
 import { FollowedTagsScreen } from './followed-tags';
 import { BlocksScreen, MutesScreen } from './mutes-blocks';
@@ -151,6 +152,8 @@ const messages = defineMessages({
   },
   mutedThreads: { id: 'column.muted_threads', defaultMessage: 'Muted conversations' },
   followedTags: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
+  editFilter: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
+  newFilter: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
 });
 
 const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'compose'>) => {
@@ -586,6 +589,18 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='mutes'
         component={MutesScreen}
         options={{ title: intl.formatMessage(messages.muted) }}
+      />
+      <SettingsStack.Screen
+        name='filters'
+        component={FiltersScreen}
+        options={{ headerShown: false }}
+      />
+      <SettingsStack.Screen
+        name='filter'
+        component={FilterEditorScreen}
+        options={({ route }) => ({
+          title: intl.formatMessage(route.params?.id ? messages.editFilter : messages.newFilter),
+        })}
       />
       <SettingsStack.Screen
         name='muted_threads'

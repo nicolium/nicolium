@@ -97,7 +97,7 @@ const EditFilterPage: React.FC = () => {
   const [homeTimeline, setHomeTimeline] = useState(true);
   const [publicTimeline, setPublicTimeline] = useState(false);
   const [notifications, setNotifications] = useState(false);
-  const [conversations, setConversations] = useState(false);
+  const [threads, setThreads] = useState(false);
   const [accounts, setAccounts] = useState(false);
   const [filterAction, setFilterAction] = useState<Filter['filter_action']>('warn');
   const [keywords, setKeywords] = useState<IFilterField[]>([{ keyword: '', whole_word: false }]);
@@ -126,7 +126,7 @@ const EditFilterPage: React.FC = () => {
     if (homeTimeline) context.push('home');
     if (publicTimeline) context.push('public');
     if (notifications) context.push('notifications');
-    if (conversations) context.push('thread');
+    if (threads) context.push('thread');
     if (accounts) context.push('account');
 
     (filterId !== 'new' ? updateFilter : createFilter)(
@@ -171,7 +171,7 @@ const EditFilterPage: React.FC = () => {
       setHomeTimeline(filter.context.includes('home'));
       setPublicTimeline(filter.context.includes('public'));
       setNotifications(filter.context.includes('notifications'));
-      setConversations(filter.context.includes('thread'));
+      setThreads(filter.context.includes('thread'));
       setAccounts(filter.context.includes('account'));
       setFilterAction(filter.filter_action);
       setKeywords(filter.keywords);
@@ -180,16 +180,17 @@ const EditFilterPage: React.FC = () => {
 
   if (notFound) return <MissingIndicator />;
 
-  const multipleKeywords = features.filtersV2 || (!features.filters && !features.filtersV2);
-  const filterTitle = features.filtersV2 || (!features.filters && !features.filtersV2);
+  const localFilters = !features.filters && !features.filtersV2;
+  const multipleKeywords = features.filtersV2 || localFilters;
+  const filterTitle = features.filtersV2 || localFilters;
   const accountsContextType = features.filtersV2;
-  const blurAction = features.filtersV2BlurAction || (!features.filters && !features.filtersV2);
+  const blurAction = features.filtersV2BlurAction || localFilters;
 
   const disabled =
     isFetchingFilter ||
     isUpdating ||
     isCreating ||
-    !(homeTimeline || publicTimeline || notifications || conversations || accounts);
+    !(homeTimeline || publicTimeline || notifications || threads || accounts);
 
   const keywordsField = (
     <Streamfield
@@ -282,10 +283,7 @@ const EditFilterPage: React.FC = () => {
               <FormattedMessage id='column.filters.conversations' defaultMessage='Conversations' />
             }
           >
-            <Toggle
-              checked={conversations}
-              onChange={({ target }) => setConversations(target.checked)}
-            />
+            <Toggle checked={threads} onChange={({ target }) => setThreads(target.checked)} />
           </ListItem>
           {accountsContextType && (
             <ListItem
