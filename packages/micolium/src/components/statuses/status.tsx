@@ -53,7 +53,7 @@ import { StatusMedia } from './status-media';
 import { StatusPoll } from './status-poll';
 
 import type { Icon as PhosphorIcon } from 'phosphor-react-native';
-import type { FilterContext } from 'pl-api';
+import type { FilterContext, FilterResult } from 'pl-api';
 
 const messages = defineMessages({
   publicExplanation: {
@@ -421,7 +421,32 @@ const Status: React.FC<IStatus> = ({
 
   const actualStatus = status?.reblog || status;
 
-  if (!actualStatus) return null;
+  const [hideFilters, warnFilters, blurFilters] = React.useMemo(() => {
+    if (!context || !actualStatus) return [[], [], []];
+
+    const hideResults: Array<FilterResult> = [];
+    const warnResults: Array<FilterResult> = [];
+    const blurResults: Array<FilterResult> = [];
+
+    actualStatus.filtered
+      .reduce<Array<FilterResult>>((uniqueFilters, current) => {
+        if (
+          !uniqueFilters.some(({ filter: uniqueFilter }) => uniqueFilter.id === current.filter.id)
+        ) {
+          uniqueFilters.push(current);
+        }
+        return uniqueFilters;
+      }, [])
+      .forEach((filter) => {
+        if (filter.filter.filter_action === 'hide') hideResults.push(filter);
+        if (filter.filter.filter_action === 'warn') warnResults.push(filter);
+        if (filter.filter.filter_action === 'blur') blurResults.push(filter);
+      });
+
+    return [hideResults, warnResults, blurResults];
+  }, [actualStatus?.filtered, context]);
+
+  if (!actualStatus || (hideFilters.length && !props.detailed)) return null;
 
   let chip;
 
@@ -439,19 +464,6 @@ const Status: React.FC<IStatus> = ({
     chip = <StatusMaybeFollowedHashtagChip status={actualStatus} />;
   }
 
-  const filters = context
-    ? status.filtered
-        .filter(({ filter }) => filter.filter_action === 'warn' && filter.context.includes(context))
-        .reduce<typeof status.filtered>((uniqueFilters, current) => {
-          if (
-            !uniqueFilters.some(({ filter: uniqueFilter }) => uniqueFilter.id === current.filter.id)
-          ) {
-            uniqueFilters.push(current);
-          }
-          return uniqueFilters;
-        }, [])
-    : [];
-
   const statusBody = (
     <UIStatus
       chip={chip}
@@ -465,7 +477,7 @@ const Status: React.FC<IStatus> = ({
             fullWidthPressable={false}
           />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            {showFiltered && filters.length > 0 && (
+            {showFiltered && warnFilters.length > 0 && (
               <IconButton
                 icon={iconHelper(EyeSlashIcon)}
                 style={{ height: 32, width: 32 }}
@@ -556,7 +568,7 @@ const Status: React.FC<IStatus> = ({
       spoilerExpanded={spoilerExpanded}
       expandStatusSpoiler={() => expandStatusSpoiler(id)}
       collapseStatusSpoiler={() => collapseStatusSpoiler(id)}
-      filters={filters}
+      filters={warnFilters}
       showFiltered={showFiltered}
       unfilterStatus={() => unfilterStatus(id)}
       {...props}

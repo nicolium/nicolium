@@ -56,6 +56,7 @@ import StatusReplyMentions from './status-reply-mentions';
 import Tombstone from './tombstone';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
+import type { FilterResult } from 'pl-api';
 
 const messages = defineMessages({
   applicationName: { id: 'status.application_name', defaultMessage: 'Sent from {name}' },
@@ -339,7 +340,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
       .filter(
         ({ filter }) => filter.filter_action === 'warn' && filter.context.includes(contextType),
       )
-      .reduce<typeof status.filtered>((uniqueFilters, current) => {
+      .reduce<Array<FilterResult>>((uniqueFilters, current) => {
         if (
           !uniqueFilters.some(({ filter: uniqueFilter }) => uniqueFilter.id === current.filter.id)
         ) {
