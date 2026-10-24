@@ -19,6 +19,7 @@ import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ScrollView } from 'react-native';
+import { toast } from 'sonner-native';
 
 import { StatusesList } from '@/components/statuses/statuses-list';
 import { EmptyMessage } from '@/components/ui/empty-message';
@@ -38,6 +39,7 @@ import { BlocksScreen, MutesScreen } from './mutes-blocks';
 import type { RootStackParams, SettingsStackParams } from '../router';
 
 const messages = defineMessages({
+  loggedOut: { id: 'auth.logged_out', defaultMessage: 'Logged out.' },
   settingsHeading: { id: 'settings.settings', defaultMessage: 'Settings' },
   composeHeading: { id: 'preferences.heading.compose', defaultMessage: 'Compose settings' },
   timelinesHeading: { id: 'preferences.heading.timelines', defaultMessage: 'Timelines settings' },
@@ -527,7 +529,11 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
                 icon: SignOutIcon,
                 type: 'button',
                 label: intl.formatMessage(messages.signOut),
-                onPress: () => signOut(),
+                onPress: () => {
+                  signOut();
+                  navigation.navigate('home');
+                  toast.info(intl.formatMessage(messages.loggedOut));
+                },
                 role: 'destructive',
               },
             ],
