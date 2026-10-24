@@ -21,7 +21,6 @@ import {
   useEmojiReactMutation,
   useEmojiUnreactMutation,
   useFavouriteStatus,
-  useReblogStatus,
   useUndislikeStatus,
   useUnfavouriteStatus,
   useUnreblogStatus,

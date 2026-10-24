@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import { type GestureResponderEvent, View, type StyleProp, type ViewStyle } from 'react-native';
 
-import RelativeTimestamp from '@/utils/relative-timestamp';
+import RelativeTimestamp from '@/components/relative-timestamp';
 
 import { Emojify } from './emojify';
 

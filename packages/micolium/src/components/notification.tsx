@@ -25,7 +25,7 @@ import {
   type IntlShape,
   type MessageDescriptor,
 } from 'react-intl';
-import { ColorValue, View } from 'react-native';
+import { type ColorValue, View } from 'react-native';
 
 import { useInstance } from '@/contexts/current-account-context';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';

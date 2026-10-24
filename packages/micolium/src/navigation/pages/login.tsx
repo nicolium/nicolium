@@ -1,7 +1,6 @@
 import {
   ActivityIndicator,
   Appbar,
-  Button,
   Divider,
   Text,
   TextInput,
@@ -14,7 +13,6 @@ import {
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
-import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
 import { GlobeIcon } from 'phosphor-react-native/src/icons/Globe';
@@ -31,7 +29,6 @@ import { UIAccount } from '@/components/ui/account';
 import { GlassButton } from '@/components/ui/glass-button';
 import { Header } from '@/components/ui/header';
 import { useCurrentAccount } from '@/contexts/current-account-context';
-import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
 
@@ -148,7 +145,6 @@ const normalizeInstanceUrl = (input: string) => {
 const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'instance'>) => {
   const { colors } = useTheme();
   const intl = useIntl();
-  const glassEffect = useEnableLiquidGlass();
 
   const isLoggedIn = !!useCurrentAccount();
   const { fetchInstance, createApp } = useAuthStoreActions();
@@ -239,7 +235,6 @@ const CredentialsScreen = ({
 }: NativeStackScreenProps<LoginStackParams, 'credentials'>) => {
   const { colors } = useTheme();
   const intl = useIntl();
-  const glassEffect = useEnableLiquidGlass();
 
   const pendingAuthClient = useAuthStore(({ pendingAuthClient }) => pendingAuthClient);
   const { createApp, signIn } = useAuthStoreActions();

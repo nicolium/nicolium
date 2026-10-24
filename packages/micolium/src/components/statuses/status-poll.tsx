@@ -12,8 +12,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { View } from 'react-native';
 
+import RelativeTimestamp from '@/components/relative-timestamp';
 import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
-import RelativeTimestamp from '@/utils/relative-timestamp';
 
 import { Emojify } from '../ui/emojify';
 
