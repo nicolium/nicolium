@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.mkljczk.micolium",
+      "bundleIdentifier": "app.nicolium.micolium",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -20,7 +20,7 @@
         "backgroundColor": "#00FFDE"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.mkljczk.micolium"
+      "package": "app.nicolium.micolium"
     },
     "web": {
       "output": "single",
