@@ -113,11 +113,27 @@ const RootNavigator = () => {
         <>
           <RootStack.Screen name='app' component={Tabs} />
           <RootStack.Screen name='settings' component={SettingsStackScreen} />
-          <RootStack.Screen name='status' component={StatusStackScreen} />
-          <RootStack.Screen name='accounts' component={AccountsStackScreen} />
-          <RootStack.Screen name='hashtags' component={HashtagsScreen} />
+          <RootStack.Screen
+            name='status'
+            component={StatusStackScreen}
+            getId={({ params }) => params?.params?.id}
+          />
+          <RootStack.Screen
+            name='accounts'
+            component={AccountsStackScreen}
+            getId={({ params }) => params?.params?.id}
+          />
+          <RootStack.Screen
+            name='hashtags'
+            component={HashtagsScreen}
+            getId={({ params }) => params.tag}
+          />
           <RootStack.Screen name='bookmarks' component={BookmarksStackScreen} />
-          <RootStack.Screen name='links' component={LinksScreen} />
+          <RootStack.Screen
+            name='links'
+            component={LinksScreen}
+            getId={({ params }) => params.url}
+          />
           <RootStack.Screen name='conversations' component={ConversationsStackScreen} />
         </>
       )}
