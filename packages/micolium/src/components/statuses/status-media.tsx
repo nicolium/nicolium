@@ -1,5 +1,6 @@
 import { VisibilitySensor } from '@futurejj/react-native-visibility-sensor';
 import {
+  Button,
   Carousel,
   CarouselItem,
   Chip,
@@ -17,10 +18,12 @@ import { Image } from 'expo-image';
 import { startActivityAsync } from 'expo-intent-launcher';
 import { shareAsync } from 'expo-sharing';
 import { useVideoPlayer, VideoView } from 'expo-video';
+import { EyeIcon } from 'phosphor-react-native/src/icons/Eye';
+import { EyeSlashIcon } from 'phosphor-react-native/src/icons/EyeSlash';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import { PlayIcon } from 'phosphor-react-native/src/icons/Play';
 import React, { useEffect, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { toast } from 'sonner-native';
 
@@ -30,6 +33,7 @@ import { useUiStoreActions } from '@/stores/ui';
 import { iconHelper } from '../ui/icon';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
+import type { FilterResult } from 'pl-api';
 
 const messages = defineMessages({
   altIndicator: { id: 'upload_form.description_missing.indicator', defaultMessage: 'Alt' },
@@ -67,15 +71,20 @@ const isUnsupportedMedia = (media: MediaAttachment): media is UnsupportedMediaAt
 interface IStatusImage {
   media: SupportedMediaAttachment;
   uri: string;
+  sensitive?: boolean;
+  mediaVisible?: boolean;
 }
 
-const StatusImage: React.FC<IStatusImage> = ({ media, uri }) => {
+const StatusImage: React.FC<IStatusImage> = ({ media, uri, sensitive, mediaVisible }) => {
+  const { colors } = useTheme();
+
   const { width, height } = media.meta.original || {};
+  const hidden = sensitive && !mediaVisible;
 
   return (
     <Image
-      style={{ flex: 1 }}
-      source={{ uri, width, height }}
+      style={{ flex: 1, backgroundColor: hidden ? colors.surfaceContainer : undefined }}
+      source={{ uri: hidden ? undefined : uri, width, height }}
       placeholder={{
         blurhash: (Platform.OS !== 'web' && media.blurhash) || undefined,
         width,
@@ -84,7 +93,7 @@ const StatusImage: React.FC<IStatusImage> = ({ media, uri }) => {
       accessibilityLabel={media.description}
       contentFit='cover'
       transition={300}
-      recyclingKey={media.id}
+      recyclingKey={`${hidden ? 'hidden-' : ''}${media.id}`}
     />
   );
 };
@@ -197,10 +206,32 @@ const StatusVideo: React.FC<IMediaVideo> = ({ media }) => {
   );
 };
 
-const renderMedia = (media: SupportedMediaAttachment) => {
+const renderMedia = (
+  media: SupportedMediaAttachment,
+  sensitive?: boolean,
+  mediaVisible?: boolean,
+) => {
+  if (sensitive && mediaVisible !== true) {
+    return (
+      <StatusImage
+        media={media}
+        uri={media.preview_url}
+        sensitive={sensitive}
+        mediaVisible={mediaVisible}
+      />
+    );
+  }
+
   switch (media.type) {
     case 'image':
-      return <StatusImage media={media} uri={media.preview_url} />;
+      return (
+        <StatusImage
+          media={media}
+          uri={media.preview_url}
+          sensitive={sensitive}
+          mediaVisible={mediaVisible}
+        />
+      );
     case 'gifv':
       return <StatusGifv media={media} />;
     case 'video':
@@ -209,19 +240,99 @@ const renderMedia = (media: SupportedMediaAttachment) => {
 };
 
 interface IStatusMedia {
-  status: Pick<SelectedStatus, 'media_attachments'>;
+  status: Pick<SelectedStatus, 'media_attachments' | 'sensitive'>;
   compact?: boolean;
+  filters?: Array<FilterResult>;
+  mediaVisible?: boolean;
+  revealStatusMedia?: () => void;
+  hideStatusMedia?: () => void;
 }
 
-const StatusMedia: React.FC<IStatusMedia> = ({ status, compact }) => {
+const StatusMedia: React.FC<IStatusMedia> = ({
+  status,
+  compact,
+  filters,
+  mediaVisible,
+  revealStatusMedia,
+  hideStatusMedia,
+}) => {
   const intl = useIntl();
   const { colors, shapes } = useTheme();
   const { openMediaViewer } = useUiStoreActions();
+
+  const matchedFilters = React.useMemo(() => filters?.map(({ filter }) => filter.title), [filters]);
 
   if (!status.media_attachments.length) return null;
 
   const filteredMedia = status.media_attachments.filter(isSupportedMedia);
   const unsupportedMedia = status.media_attachments.filter(isUnsupportedMedia);
+
+  const sensitive = status.sensitive || !!filters?.length;
+
+  const renderSensitiveOverlay = () =>
+    sensitive && (
+      <>
+        <IconButton
+          icon={iconHelper(mediaVisible ? EyeSlashIcon : EyeIcon)}
+          style={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            zIndex: 1,
+            borderRadius: shapes.corner.medium,
+          }}
+          mode='contained'
+          onPress={mediaVisible ? hideStatusMedia : revealStatusMedia}
+        />
+        {!mediaVisible && (
+          <TouchableRipple
+            onPress={revealStatusMedia}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 1,
+              minWidth: '60%',
+              maxWidth: '90%',
+              backgroundColor: colors.surfaceVariant,
+              borderRadius: shapes.corner.medium,
+              padding: 8,
+              paddingVertical: 12,
+              alignItems: 'center',
+            }}
+          >
+            <>
+              <Text variant='titleSmallEmphasized' style={{ textAlign: 'center', marginBottom: 4 }}>
+                <FormattedMessage
+                  id='status.sensitive_warning'
+                  defaultMessage='Sensitive content'
+                />
+              </Text>
+              <Text variant='bodyMedium' style={{ textAlign: 'center' }} numberOfLines={2}>
+                {matchedFilters?.length ? (
+                  <FormattedMessage
+                    id='status.sensitive_warning.matches_filters'
+                    defaultMessage='Matches filters: {filters}'
+                    values={{
+                      filters: intl.formatList(matchedFilters, { type: 'conjunction' }),
+                    }}
+                  />
+                ) : (
+                  <FormattedMessage
+                    id='status.sensitive_warning.subtitle'
+                    defaultMessage='This content may not be suitable for all audiences.'
+                  />
+                )}
+              </Text>
+              <Button compact onPress={revealStatusMedia}>
+                <FormattedMessage id='moderation_overlay.show' defaultMessage='Show content' />
+              </Button>
+            </>
+          </TouchableRipple>
+        )}
+      </>
+    );
 
   const renderItem = (media: SupportedMediaAttachment, multiple = filteredMedia.length > 1) => (
     <View
@@ -235,8 +346,9 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, compact }) => {
         overflow: 'hidden',
       }}
     >
+      {!multiple && renderSensitiveOverlay()}
       {media.type === 'video' ? (
-        renderMedia(media)
+        renderMedia(media, sensitive, mediaVisible)
       ) : (
         <Pressable
           style={{ flex: 1 }}
@@ -244,7 +356,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, compact }) => {
           accessibilityRole='imagebutton'
           accessibilityLabel={media.description || undefined}
         >
-          {renderMedia(media)}
+          {renderMedia(media, sensitive, mediaVisible)}
         </Pressable>
       )}
       {media.description && (
@@ -270,21 +382,28 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, compact }) => {
     if (!filteredMedia.length) return null;
     if (filteredMedia.length === 1) return renderItem(filteredMedia[0]);
 
+    console.log(sensitive, mediaVisible);
+
     return (
-      <Carousel
-        data={filteredMedia}
-        height={compact ? 160 : 320}
-        renderItem={({ item: media, index, mask }) => (
-          <CarouselItem
-            mask={mask}
-            style={{ flexDirection: 'row', gap: 8, backgroundColor: colors.background }}
-          >
-            {index !== 0 && index === filteredMedia.length - 1 && <View aria-hidden />}
-            {renderItem(media)}
-            {index !== filteredMedia.length - 1 && <View aria-hidden />}
-          </CarouselItem>
-        )}
-      />
+      <View style={{ position: 'relative' }}>
+        {renderSensitiveOverlay()}
+        <Carousel
+          data={filteredMedia}
+          height={compact ? 160 : 320}
+          disabled={sensitive && !mediaVisible}
+          renderItem={({ item: media, index, mask }) => (
+            <CarouselItem
+              mask={mask}
+              style={{ flexDirection: 'row', gap: 8, backgroundColor: colors.background }}
+            >
+              {index !== 0 && index === filteredMedia.length - 1 && <View aria-hidden />}
+              {renderItem(media)}
+              {index !== filteredMedia.length - 1 && <View aria-hidden />}
+            </CarouselItem>
+          )}
+          style={{ pointerEvents: sensitive && !mediaVisible ? 'none' : 'auto' }}
+        />
+      </View>
     );
   };
 

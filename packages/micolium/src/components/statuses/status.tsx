@@ -48,6 +48,7 @@ import { UIStatus } from '../ui/status';
 import { StatusActions } from './status-actions';
 import { StatusActionsDropdown } from './status-actions-dropdown';
 import { StatusEmojiReactions } from './status-emoji-reactions';
+import { StatusFilteredMedia } from './status-filtered-media';
 import { StatusLinkPreview } from './status-link-preview';
 import { StatusMedia } from './status-media';
 import { StatusPoll } from './status-poll';
@@ -415,9 +416,15 @@ const Status: React.FC<IStatus> = ({
   const { data: status } = useStatus(id, { withFilteredResults: true });
   const navigation = useNavigation();
 
-  const { spoilerExpanded, showFiltered } = useStatusMeta(id);
-  const { expandStatusSpoiler, collapseStatusSpoiler, unfilterStatus, undoUnfilterStatus } =
-    useStatusMetaActions();
+  const { spoilerExpanded, showFiltered, mediaVisible } = useStatusMeta(id);
+  const {
+    expandStatusSpoiler,
+    collapseStatusSpoiler,
+    unfilterStatus,
+    undoUnfilterStatus,
+    revealStatusMedia,
+    hideStatusMedia,
+  } = useStatusMetaActions();
 
   const actualStatus = status?.reblog || status;
 
@@ -532,7 +539,14 @@ const Status: React.FC<IStatus> = ({
           </>
         ) : (
           <>
-            <StatusMedia status={actualStatus} compact={props.compact} />
+            <StatusMedia
+              status={actualStatus}
+              compact={props.compact}
+              filters={blurFilters}
+              mediaVisible={mediaVisible}
+              revealStatusMedia={() => revealStatusMedia(actualStatus.id)}
+              hideStatusMedia={() => hideStatusMedia(actualStatus.id)}
+            />
             {actualStatus.poll_id && <StatusPoll status={actualStatus} />}
             {actualStatus.quote_id &&
               (props.compact ? (
