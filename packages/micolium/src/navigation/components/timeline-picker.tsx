@@ -288,7 +288,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     <>
       <DropdownMenu.Group>
         {getTimelineItem('home', 'house', 'ph_house', messages.homeTimeline, () =>
-          navigation.navigate('home'),
+          navigation.popTo('home'),
         )}
         {features.publicTimeline &&
           timelineAccess.live_feeds.local !== 'disabled' &&
