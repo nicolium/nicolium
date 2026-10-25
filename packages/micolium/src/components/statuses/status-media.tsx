@@ -337,7 +337,6 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   const renderItem = (media: SupportedMediaAttachment, multiple = filteredMedia.length > 1) => {
     const { width, height } = media.meta.original || {};
     const aspectRatio = !multiple && width && height ? width / height : undefined;
-    console.log(width, height, aspectRatio, media.meta);
 
     return (
       <View

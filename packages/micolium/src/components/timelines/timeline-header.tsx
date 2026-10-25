@@ -7,7 +7,7 @@ import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { FunnelSimpleIcon } from 'phosphor-react-native/src/icons/FunnelSimple';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert, Platform, View } from 'react-native';
+import { Alert, Platform, useColorScheme, View } from 'react-native';
 import { toast } from 'sonner-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
@@ -315,6 +315,7 @@ const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => 
 const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
   const glassEffect = useEnableLiquidGlass();
   const { colors } = useTheme();
+  const colorScheme = useColorScheme();
 
   const activeKey =
     route.params && 'id' in route.params ? `${route.name}:${route.params.id}` : route.name;
@@ -357,6 +358,7 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
     <View style={{ position: 'absolute', left: 0, right: 0 }}>
       {glassEffect && (
         <ProgressiveBlurView
+          key={colorScheme}
           blurAmount={16}
           direction='blurredTopClearBottom'
           startOffset={0.3}
