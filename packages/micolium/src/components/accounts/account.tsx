@@ -9,7 +9,7 @@ import { nodesToText } from '../ui/styled-html';
 
 import { ActionButton } from './action-button';
 
-interface IAccount extends Pick<IUIAccount, 'action' | 'onPress' | 'style'> {
+interface IAccount extends Pick<IUIAccount, 'action' | 'badge' | 'onPress' | 'style'> {
   id: string;
   timestamp?: string;
   futureDate?: boolean;

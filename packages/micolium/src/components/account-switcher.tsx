@@ -1,5 +1,5 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
-import { ActivityIndicator, Button, List, useTheme } from '@mkljczk/react-native-paper';
+import { ActivityIndicator, Badge, Button, List, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
 import React from 'react';
@@ -9,6 +9,7 @@ import { Platform, ScrollView, View } from 'react-native';
 import { CurrentAccountProvider, useCurrentAccount } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
+import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { useIsAccountSwitcherOpen, useUiStoreActions } from '@/stores/ui';
 import { getSegmentedMenuStyles } from '@/utils/themes';
@@ -18,10 +19,16 @@ import { iconHelper } from './ui/icon';
 
 const CurrentAccount = () => {
   const { data: currentAccountId } = useCredentialAccountId();
+  const unreadCount = useNotificationsUnreadCount();
 
   if (!currentAccountId) return <ActivityIndicator style={{ marginVertical: 10 }} />;
 
-  return <Account id={currentAccountId} />;
+  return (
+    <Account
+      id={currentAccountId}
+      badge={unreadCount > 0 ? <Badge>{unreadCount}</Badge> : undefined}
+    />
+  );
 };
 
 const AccountSwitcher = () => {

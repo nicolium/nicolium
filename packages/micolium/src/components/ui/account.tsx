@@ -42,6 +42,7 @@ interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
   futureDate?: boolean;
   fullWidthPressable?: boolean;
   action?: React.JSX.Element;
+  badge?: React.JSX.Element;
 }
 
 const UIAccount: React.FC<IUIAccount> = ({
@@ -57,22 +58,37 @@ const UIAccount: React.FC<IUIAccount> = ({
   style,
   onPress,
   action,
+  badge,
 }) => {
   const { colors } = useTheme();
 
   const body = (
     <>
-      <MaybeLink onPress={onPress} fullWidthPressable={fullWidthPressable}>
-        {avatarSrc ? (
-          <Avatar.Image
-            size={40}
-            source={{ uri: avatarSrc }}
-            accessibilityLabel={avatarDescription}
-          />
-        ) : (
-          <Avatar.Text size={40} label={(displayName || acct).slice(0, 2)} />
+      <View style={{ position: 'relative' }}>
+        <MaybeLink onPress={onPress} fullWidthPressable={fullWidthPressable}>
+          {avatarSrc ? (
+            <Avatar.Image
+              size={40}
+              source={{ uri: avatarSrc }}
+              accessibilityLabel={avatarDescription}
+            />
+          ) : (
+            <Avatar.Text size={40} label={(displayName || acct).slice(0, 2)} />
+          )}
+        </MaybeLink>
+        {badge && (
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0,
+              transform: 'translate(25%, 25%)',
+            }}
+          >
+            {badge}
+          </View>
         )}
-      </MaybeLink>
+      </View>
 
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start' }}>
         <MaybeLink onPress={onPress} fullWidthPressable={fullWidthPressable}>
