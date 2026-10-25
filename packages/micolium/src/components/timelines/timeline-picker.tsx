@@ -334,7 +334,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
       <View style={{ alignItems: 'flex-start' }}>
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
-            <Button mode='text' labelStyle={{ fontSize: 20 }} compact>
+            <Button mode='text'>
               <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
                 <Icon source={TimelineIcon} size={24} />
                 <View>
