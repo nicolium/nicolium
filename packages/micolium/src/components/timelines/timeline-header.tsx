@@ -2,6 +2,8 @@ import { Appbar, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
+import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
+import { FunnelSimpleIcon } from 'phosphor-react-native/src/icons/FunnelSimple';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Alert, Platform } from 'react-native';
@@ -158,11 +160,28 @@ const useFiltersDropdownMenu = (timeline: (typeof TIMELINE_FILTER_KEYS)[number])
   ].filter(({ enabled }) => enabled !== false);
 };
 
-const TimelineHeaderMenu: React.FC<ITimelineHeaderMenu> = ({ timeline }) => {
+const FiltersDropdownMenu: React.FC<ITimelineHeaderMenu> = ({ timeline }) => {
+  const filtersDropdownMenuItems = useFiltersDropdownMenu(timeline);
+
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <HeaderIconButton icon={Platform.OS === 'ios' ? FunnelSimpleIcon : FunnelIcon} />
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Group>
+          {filtersDropdownMenuItems.map((item) => (
+            <DropdownMenu.CheckboxItem {...item} key={item.key} />
+          ))}
+        </DropdownMenu.Group>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+};
+
+const TimelineHeaderMenu = () => {
   const intl = useIntl();
   const navigation = useNavigation('timeline');
-
-  const filtersDropdownMenuItems = useFiltersDropdownMenu(timeline);
 
   return (
     <DropdownMenu.Root>
@@ -170,24 +189,6 @@ const TimelineHeaderMenu: React.FC<ITimelineHeaderMenu> = ({ timeline }) => {
         <HeaderIconButton icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon} />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        <DropdownMenu.Group>
-          <DropdownMenu.Sub>
-            <DropdownMenu.SubTrigger key='filters'>
-              <DropdownMenu.ItemIcon
-                ios={{ name: 'line.3.horizontal.decrease' }}
-                androidIconName='ph_funnel'
-              />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.timelineFiltersLabel)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.SubTrigger>
-            <DropdownMenu.SubContent>
-              {filtersDropdownMenuItems.map((item) => (
-                <DropdownMenu.CheckboxItem {...item} key={item.key} />
-              ))}
-            </DropdownMenu.SubContent>
-          </DropdownMenu.Sub>
-        </DropdownMenu.Group>
         <DropdownMenu.Group>
           <DropdownMenu.Item
             key='settings'
@@ -218,8 +219,6 @@ interface IListHeaderMenu {
 
 const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => {
   const intl = useIntl();
-
-  const filtersDropdownMenuItems = useFiltersDropdownMenu('list');
 
   const { mutate: deleteList } = useDeleteList();
   const { mutate: deleteAntenna } = useDeleteAntenna();
@@ -290,24 +289,6 @@ const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => 
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Group>
-            <DropdownMenu.Sub>
-              <DropdownMenu.SubTrigger key='filters'>
-                <DropdownMenu.ItemIcon
-                  ios={{ name: 'line.3.horizontal.decrease' }}
-                  androidIconName='ph_funnel'
-                />
-                <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(messages.timelineFiltersLabel)}
-                </DropdownMenu.ItemTitle>
-              </DropdownMenu.SubTrigger>
-              <DropdownMenu.SubContent>
-                {filtersDropdownMenuItems.map((item) => (
-                  <DropdownMenu.CheckboxItem {...item} key={item.key} />
-                ))}
-              </DropdownMenu.SubContent>
-            </DropdownMenu.Sub>
-          </DropdownMenu.Group>
-          <DropdownMenu.Group>
             <DropdownMenu.Item key='edit' onSelect={() => setEditDialog(true)}>
               <DropdownMenu.ItemIcon
                 ios={{ name: 'pencil' }}
@@ -343,7 +324,7 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
         navigation={navigation as ITimelinePicker['navigation']}
       />
     ) : (
-      <TimelineHeaderMenu timeline={route.name as ITimelineHeaderMenu['timeline']} />
+      <TimelineHeaderMenu />
     );
 
   return (
@@ -361,6 +342,7 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
         }
       />
 
+      <FiltersDropdownMenu timeline={route.name as ITimelineHeaderMenu['timeline']} />
       {menu}
     </Appbar.Header>
   );
