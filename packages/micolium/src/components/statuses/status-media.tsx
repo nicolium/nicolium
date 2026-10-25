@@ -382,8 +382,6 @@ const StatusMedia: React.FC<IStatusMedia> = ({
     if (!filteredMedia.length) return null;
     if (filteredMedia.length === 1) return renderItem(filteredMedia[0]);
 
-    console.log(sensitive, mediaVisible);
-
     return (
       <View style={{ position: 'relative' }}>
         {renderSensitiveOverlay()}
