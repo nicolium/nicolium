@@ -37,6 +37,8 @@ const withAndroidDrawables: ConfigPlugin<ConfigProps> = (
         fs.mkdirSync(drawableDir, { recursive: true });
       }
 
+      const keptDrawables: Array<string> = [];
+
       // Copy each drawable file to the drawable directory
       for (const filePath of drawableFiles) {
         const sourcePath = path.resolve(config.modRequest.projectRoot, filePath);
@@ -63,6 +65,7 @@ const withAndroidDrawables: ConfigPlugin<ConfigProps> = (
             );
 
           fs.writeFileSync(destPath, convertedIcon);
+          keptDrawables.push(path.basename(destPath, '.xml'));
         } else {
           const fileName = path.basename(filePath);
           const destPath = path.join(drawableDir, prefix + fileName);
@@ -74,8 +77,19 @@ const withAndroidDrawables: ConfigPlugin<ConfigProps> = (
 
           // Copy the file
           fs.copyFileSync(sourcePath, destPath);
+          keptDrawables.push((prefix + fileName).split('.')[0]);
         }
       }
+
+      const rawDir = path.join(config.modRequest.projectRoot, 'android/app/src/main/res/raw');
+      if (!fs.existsSync(rawDir)) {
+        fs.mkdirSync(rawDir, { recursive: true });
+      }
+
+      fs.writeFileSync(
+        path.join(rawDir, 'keep_drawables.xml'),
+        `<?xml version="1.0" encoding="utf-8"?>\n<resources xmlns:tools="http://schemas.android.com/tools"\n    tools:keep="${keptDrawables.map((name) => `@drawable/${name}`).join(',')}" />\n`,
+      );
 
       return config;
     },
