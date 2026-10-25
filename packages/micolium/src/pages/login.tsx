@@ -32,7 +32,7 @@ import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
 
-import type { LoginStackParams, RootStackParams } from '../router';
+import type { LoginStackParams, RootStackParams } from '@/router/router';
 
 const EXTRA_GAYNESS_MODE = new Date().getMonth() === 5;
 

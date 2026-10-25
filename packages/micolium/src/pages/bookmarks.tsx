@@ -22,7 +22,7 @@ import {
   useDeleteBookmarkFolder,
 } from '@/queries/statuses/use-bookmark-folders';
 
-import type { BookmarksStackParams } from '../router';
+import type { BookmarksStackParams } from '@/router/router';
 
 const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },

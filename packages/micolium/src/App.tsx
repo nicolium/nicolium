@@ -21,7 +21,7 @@ import { InteractAsSheet } from './components/interact-as';
 import { MediaViewer } from './components/media-viewer';
 import { DefaultCurrentAccountProvider } from './contexts/current-account-context';
 import enMessages from './messages/en.json';
-import { RootNavigator } from './navigation/router';
+import { RootNavigator } from './router/router';
 import { loadPolyfills } from './polyfills';
 import { queryClient } from './queries/client';
 import { DarkTheme, LightTheme } from './utils/themes';

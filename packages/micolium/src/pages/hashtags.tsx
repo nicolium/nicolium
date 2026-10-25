@@ -21,9 +21,9 @@ import {
 import { useHashtag } from '@/queries/hashtags/use-hashtag';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 
-import { Timeline } from '../../components/timelines/timeline';
+import { Timeline } from '@/components/timelines/timeline';
 
-import type { RootStackParams } from '../router';
+import type { RootStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 const messages = defineMessages({

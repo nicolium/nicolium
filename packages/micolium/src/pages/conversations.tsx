@@ -27,7 +27,7 @@ import { useSetting } from '@/stores/settings';
 
 import { useShowComposeButton } from './home';
 
-import type { RootStackParams, ConversationsStackParams } from '../router';
+import type { RootStackParams, ConversationsStackParams } from '@/router/router';
 import type { MinifiedConversation } from '@/queries/utils/minify-list';
 
 const messages = defineMessages({

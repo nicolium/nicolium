@@ -21,7 +21,7 @@ import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
 import { useBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
 
-import type { TimelineStackParams } from '../router';
+import type { TimelineStackParams } from '@/router/router';
 import type { SFSymbol } from '@/utils/types';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { Icon as PhosphorIcon } from 'phosphor-react-native';

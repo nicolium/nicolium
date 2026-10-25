@@ -1,16 +1,16 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
+import { AccountsStackScreen } from '@/pages/accounts';
+import { BookmarksStackScreen } from '@/pages/bookmarks';
+import { ConversationsStackScreen } from '@/pages/conversations';
+import { HashtagsScreen } from '@/pages/hashtags';
+import { LinksScreen } from '@/pages/links';
+import { LoginStackScreen } from '@/pages/login';
+import { SettingsStackScreen } from '@/pages/settings';
+import { StatusStackScreen } from '@/pages/statuses';
 import { useAuthStore } from '@/stores/auth';
 
-import { AccountsStackScreen } from './pages/accounts';
-import { BookmarksStackScreen } from './pages/bookmarks';
-import { ConversationsStackScreen } from './pages/conversations';
-import { HashtagsScreen } from './pages/hashtags';
-import { LinksScreen } from './pages/links';
-import { LoginStackScreen } from './pages/login';
-import { SettingsStackScreen } from './pages/settings';
-import { StatusStackScreen } from './pages/status';
 import { Tabs } from './tabs';
 
 import type { NavigatorScreenParams } from '@react-navigation/native';

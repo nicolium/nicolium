@@ -33,7 +33,7 @@ import {
 } from '@/queries/notifications/use-notifications';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 
-import type { NotificationsStackParams } from '../router';
+import type { NotificationsStackParams } from '@/router/router';
 
 const messages = defineMessages({
   tabAll: { id: 'notifications.filter.all', defaultMessage: 'All' },

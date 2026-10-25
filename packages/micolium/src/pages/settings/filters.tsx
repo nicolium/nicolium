@@ -39,7 +39,7 @@ import {
 } from '@/queries/settings/use-filters';
 import { getSegmentedMenuStyles } from '@/utils/themes';
 
-import type { SettingsStackParams } from '../router';
+import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { Filter } from 'pl-api';
 

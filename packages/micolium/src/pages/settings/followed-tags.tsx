@@ -11,7 +11,7 @@ import { LoadMore } from '@/components/ui/load-more';
 import { useFollowedTags, useUnfollowHashtagMutation } from '@/queries/hashtags/use-followed-tags';
 import { useSetting } from '@/stores/settings';
 
-import type { SettingsStackParams } from '../router';
+import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { Tag } from 'pl-api';
 

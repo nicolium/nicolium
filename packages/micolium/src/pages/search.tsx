@@ -31,7 +31,7 @@ import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
 import useTrendingTags from '@/queries/trends/use-trending-tags';
 import { useSetting } from '@/stores/settings';
 
-import type { SearchStackParams } from '../router';
+import type { SearchStackParams } from '@/router/router';
 
 const messages = defineMessages({
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },

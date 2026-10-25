@@ -10,7 +10,7 @@ import {
   useOutgoingFollowRequests,
 } from '@/queries/accounts/use-follow-requests';
 
-import type { SettingsStackParams } from '../router';
+import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 const messages = defineMessages({

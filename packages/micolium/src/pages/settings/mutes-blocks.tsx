@@ -16,7 +16,7 @@ import {
 } from '@/queries/accounts/use-relationship';
 import { useSetting } from '@/stores/settings';
 
-import type { SettingsStackParams } from '../router';
+import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 interface IMutedAccount {

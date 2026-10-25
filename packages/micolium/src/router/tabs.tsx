@@ -17,13 +17,12 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { useUserStream } from '@/hooks/streaming/use-user-stream';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
+import { HomeStackScreen } from '@/pages/home';
+import { NotificationsStackScreen } from '@/pages/notifications';
+import { ProfileStackScreen } from '@/pages/profile';
+import { SearchStackScreen } from '@/pages/search';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useUiStoreActions } from '@/stores/ui';
-
-import { HomeStackScreen } from './pages/home';
-import { NotificationsStackScreen } from './pages/notifications';
-import { ProfileStackScreen } from './pages/profile';
-import { SearchStackScreen } from './pages/search';
 
 import type { TabsParams } from './router';
 
