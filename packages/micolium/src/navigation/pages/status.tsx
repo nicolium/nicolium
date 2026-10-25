@@ -430,8 +430,13 @@ const StatusReactionsScreen = ({
       <FlashList
         data={accounts}
         renderItem={({ item }) => (
-          <Account id={item.id} style={{ paddingVertical: 8, padding: 12 }} withLink />
+          <Account
+            id={item.id}
+            style={{ paddingVertical: 8, padding: 12 }}
+            badge={<Emoji emoji={item.reaction} url={item.reactionUrl} />}
+          />
         )}
+        keyExtractor={(item) => item.id}
         ItemSeparatorComponent={Divider}
         onEndReachedThreshold={0.1}
         onRefresh={refetch}
