@@ -382,13 +382,19 @@ interface IAccountWithReaction {
 
 const StatusReactionsScreen = ({
   route: {
-    params: { id },
+    params: { id, emoji: initialEmoji },
   },
 }: NativeStackScreenProps<StatusStackParams, 'reactions'>) => {
   const intl = useIntl();
-  const [index, setIndex] = useState(0);
 
   const { data: status, refetch, isRefetching } = useStatus(id);
+  const [index, setIndex] = useState(() => {
+    const index = status?.emoji_reactions.findIndex(({ name }) => name === initialEmoji);
+    if (index !== undefined && index !== -1) {
+      return index + 1;
+    }
+    return 0;
+  });
 
   if (!status) return <LoadingIndicator />;
 
@@ -433,6 +439,7 @@ const StatusReactionsScreen = ({
           <Account
             id={item.id}
             style={{ paddingVertical: 8, padding: 12 }}
+            withLink
             badge={<Emoji emoji={item.reaction} url={item.reactionUrl} />}
           />
         )}

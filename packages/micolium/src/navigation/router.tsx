@@ -59,7 +59,7 @@ type StatusStackParams = {
   reblogs: { id: string };
   favourites: { id: string };
   dislikes: { id: string };
-  reactions: { id: string };
+  reactions: { id: string, emoji?: string };
   quotes: { id: string };
   mentions: { id: string };
   history: { id: string };

@@ -1,4 +1,5 @@
 import { Chip } from '@mkljczk/react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 
@@ -17,6 +18,7 @@ interface IStatusEmojiReactions {
 }
 
 const StatusEmojiReactions: React.FC<IStatusEmojiReactions> = ({ status }) => {
+  const navigation = useNavigation();
   const { mutate: emojiReact } = useEmojiReactMutation(status.id);
   const { mutate: emojiUnreact } = useEmojiUnreactMutation(status.id);
 
@@ -35,6 +37,12 @@ const StatusEmojiReactions: React.FC<IStatusEmojiReactions> = ({ status }) => {
           mode={emoji.me ? 'flat' : 'outlined'}
           icon={() => <Emoji emoji={emoji.name} url={emoji.url} />}
           onPress={() => handleReact(emoji)}
+          onLongPress={() =>
+            navigation.navigate('status', {
+              screen: 'reactions',
+              params: { id: status.id, emoji: emoji.name },
+            })
+          }
           compact
         >
           {emoji.count}
