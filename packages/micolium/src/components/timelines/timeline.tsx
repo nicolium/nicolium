@@ -4,7 +4,7 @@ import { GlassView } from 'expo-glass-effect';
 import { ProhibitIcon } from 'phosphor-react-native/src/icons/Prohibit';
 import React, { useCallback, useRef } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
-import { Pressable, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { Pressable, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -106,6 +106,15 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({ message, onClick, count }
   );
 };
 
+const HeaderInset = () => {
+  const glassEffect = useEnableLiquidGlass();
+  const { top: topInset } = useSafeAreaInsets();
+
+  if (!glassEffect) return null;
+
+  return <View style={{ height: topInset + 64 }} />;
+};
+
 interface ITimeline extends IEmptyMessage {
   filtersKey?: (typeof TIMELINE_FILTER_KEYS)[number];
   query: ReturnType<typeof useTimeline>;
@@ -120,7 +129,7 @@ const Timeline: React.FC<ITimeline> = ({
   query,
   pinnedQuery,
   context = 'public',
-  header,
+  header = HeaderInset,
   onScroll,
   ...props
 }) => {
@@ -228,6 +237,7 @@ const Timeline: React.FC<ITimeline> = ({
         contentContainerStyle={{ paddingBottom: bottomInset }}
         scrollIndicatorInsets={{ bottom: bottomInset }}
         getItemType={(item) => item.type}
+        // style={{ paddingTop: topInset + 48 }}
       />
     </>
   );

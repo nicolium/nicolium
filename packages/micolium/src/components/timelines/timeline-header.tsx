@@ -1,18 +1,20 @@
 import { Appbar, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { ProgressiveBlurView } from '@sbaiahmed1/react-native-blur';
 import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { FunnelSimpleIcon } from 'phosphor-react-native/src/icons/FunnelSimple';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert, Platform } from 'react-native';
+import { Alert, Platform, View } from 'react-native';
 import { toast } from 'sonner-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useFeatures } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import {
   defaultFiltersSettings,
   getUpdatedTimelineSettings,
@@ -311,6 +313,7 @@ const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => 
 };
 
 const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
+  const glassEffect = useEnableLiquidGlass();
   const { colors } = useTheme();
 
   const activeKey =
@@ -327,10 +330,10 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
       <TimelineHeaderMenu />
     );
 
-  return (
+  const header = (
     <Appbar.Header
       style={{
-        backgroundColor: colors.surfaceContainer,
+        backgroundColor: glassEffect ? 'transparent' : colors.surfaceContainer,
       }}
     >
       <Appbar.Content
@@ -345,6 +348,23 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
       <FiltersDropdownMenu timeline={route.name as ITimelineHeaderMenu['timeline']} />
       {menu}
     </Appbar.Header>
+  );
+
+  if (!glassEffect) return header;
+
+  return (
+    <View style={{ position: 'absolute', left: 0, right: 0 }}>
+      {glassEffect && (
+        <ProgressiveBlurView
+          blurAmount={16}
+          direction='blurredTopClearBottom'
+          startOffset={0.3}
+          pointerEvents='none'
+          style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: -24 }}
+        />
+      )}
+      {header}
+    </View>
   );
 };
 
