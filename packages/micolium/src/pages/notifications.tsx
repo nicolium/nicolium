@@ -225,6 +225,7 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
   return (
     <>
       <Appbar.Header
+        mode='small'
         style={{
           backgroundColor: colors.surfaceContainer,
         }}

@@ -146,6 +146,7 @@ const FiltersScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParam
   return (
     <>
       <Appbar.Header
+        mode='small'
         style={{
           backgroundColor: colors.surfaceContainer,
         }}

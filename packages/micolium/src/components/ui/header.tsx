@@ -12,6 +12,7 @@ const Header = ({ navigation, route, options, back }: NativeStackHeaderProps) =>
 
   return (
     <Appbar.Header
+      mode='small'
       style={{
         backgroundColor: colors.surfaceContainer,
       }}

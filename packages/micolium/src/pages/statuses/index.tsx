@@ -97,7 +97,7 @@ const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
   }
 
   return (
-    <Appbar.Header style={{ backgroundColor: colors.surfaceContainer }}>
+    <Appbar.Header mode='small' style={{ backgroundColor: colors.surfaceContainer }}>
       {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}
       {subtitle ? (
         <View>

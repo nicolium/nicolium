@@ -332,6 +332,7 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
 
   const header = (
     <Appbar.Header
+      mode='small'
       style={{
         backgroundColor: glassEffect ? 'transparent' : colors.surfaceContainer,
       }}

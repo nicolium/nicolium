@@ -61,7 +61,7 @@ const LinksScreen = ({
 
   return (
     <>
-      <Appbar.Header style={{ backgroundColor: colors.surfaceContainer }}>
+      <Appbar.Header mode='small' style={{ backgroundColor: colors.surfaceContainer }}>
         <Appbar.BackAction onPress={navigation.goBack} />
         <Appbar.Content
           title={intl.formatMessage(messages.header, {

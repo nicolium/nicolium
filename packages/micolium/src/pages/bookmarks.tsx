@@ -56,7 +56,7 @@ const AllBookmarksScreen = ({
 
   return (
     <>
-      <Appbar.Header>
+      <Appbar.Header mode='small'>
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
         <Appbar.Content
@@ -121,7 +121,7 @@ const BookmarksFolderScreen = ({
 
   return (
     <>
-      <Appbar.Header>
+      <Appbar.Header mode='small'>
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
         <Appbar.Content

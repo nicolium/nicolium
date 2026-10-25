@@ -72,6 +72,7 @@ const HashtagsScreen = ({
   return (
     <>
       <Appbar.Header
+        mode='small'
         style={{
           position: 'absolute',
           top: 0,
