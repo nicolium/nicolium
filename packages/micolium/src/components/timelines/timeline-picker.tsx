@@ -1,4 +1,5 @@
-import { Button, Icon, Text } from '@mkljczk/react-native-paper';
+import { Icon, Text } from '@mkljczk/react-native-paper';
+import { GlassView } from 'expo-glass-effect';
 import { BroadcastIcon } from 'phosphor-react-native/src/icons/Broadcast';
 import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
 import { CirclesFourIcon } from 'phosphor-react-native/src/icons/CirclesFour';
@@ -16,6 +17,7 @@ import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAntennas } from '@/queries/accounts/use-antennas';
 import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
@@ -112,7 +114,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
   const intl = useIntl();
   const features = useFeatures();
   const instance = useInstance();
+  const glassEffect = useEnableLiquidGlass();
   const timelineAccess = instance.configuration.timelines_access;
+
+  const MaybeGlassView = glassEffect ? GlassView : View;
 
   const [createDialog, setCreateDialog] = useState<
     'bookmark_folder' | 'antenna' | 'circle' | 'list' | null
@@ -120,14 +125,10 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
 
   const [heading, TimelineIcon] = useTimelineHeadingAndIcon(active);
 
-  // const [menuPage, setMenuPage] = React.useState<
-  //   'timelines' | 'bookmarks' | 'lists' | 'circles' | 'antennas'
-  // >('timelines');
-
-  const { data: bookmarkFolders } = useBookmarkFolders(); // menuPage === 'bookmarks');
-  const { data: lists } = useLists(); // menuPage === 'lists');
-  const { data: antennas } = useAntennas(); // menuPage === 'antennas');
-  const { data: circles } = useCircles(); // menuPage === 'circles');
+  const { data: bookmarkFolders } = useBookmarkFolders();
+  const { data: lists } = useLists();
+  const { data: antennas } = useAntennas();
+  const { data: circles } = useCircles();
 
   const getTimelineItem = (
     value: string,
@@ -334,15 +335,29 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
       <View style={{ alignItems: 'flex-start' }}>
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
-            <Button mode='text'>
-              <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
-                <Icon source={TimelineIcon} size={24} />
-                <View>
-                  <Text variant='titleLarge'>{heading}</Text>
-                </View>
-                <Icon source={CaretDownIcon} size={16} />
+            <MaybeGlassView
+              style={[
+                {
+                  flexDirection: 'row',
+                  gap: 8,
+                  alignItems: 'center',
+                },
+                glassEffect
+                  ? {
+                      paddingHorizontal: 12,
+                      paddingVertical: 8,
+                      borderRadius: 24,
+                    }
+                  : undefined,
+              ]}
+              isInteractive
+            >
+              <Icon source={TimelineIcon} size={24} />
+              <View>
+                <Text variant='titleLarge'>{heading}</Text>
               </View>
-            </Button>
+              <Icon source={CaretDownIcon} size={16} />
+            </MaybeGlassView>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>{menuContent}</DropdownMenu.Content>
         </DropdownMenu.Root>
