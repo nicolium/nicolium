@@ -1,7 +1,7 @@
-import { ScrollView } from '@expo/ui/swift-ui';
 import { isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import { ScrollView } from 'react-native';
 
 import { List } from '@/components/ui/list';
 import { useSetting, useSettingsActions } from '@/stores/settings';
