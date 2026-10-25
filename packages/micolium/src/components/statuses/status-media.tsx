@@ -334,49 +334,57 @@ const StatusMedia: React.FC<IStatusMedia> = ({
       </>
     );
 
-  const renderItem = (media: SupportedMediaAttachment, multiple = filteredMedia.length > 1) => (
-    <View
-      key={media.id}
-      style={{
-        flex: 1,
-        width: '100%',
-        height: multiple ? '100%' : compact ? 160 : 320,
-        position: 'relative',
-        borderRadius: shapes.corner.medium,
-        overflow: 'hidden',
-      }}
-    >
-      {!multiple && renderSensitiveOverlay()}
-      {media.type === 'video' ? (
-        renderMedia(media, sensitive, mediaVisible)
-      ) : (
-        <Pressable
-          style={{ flex: 1 }}
-          onPress={() => openMediaViewer(filteredMedia, filteredMedia.indexOf(media))}
-          accessibilityRole='imagebutton'
-          accessibilityLabel={media.description || undefined}
-        >
-          {renderMedia(media, sensitive, mediaVisible)}
-        </Pressable>
-      )}
-      {media.description && (
-        <View style={{ position: 'absolute', bottom: 16, right: 16 }}>
-          <Tooltip.Rich
-            title={intl.formatMessage(
-              media.type === 'image' ? messages.altHeading : messages.altHeadingVideo,
-            )}
-            content={media.description}
+  const renderItem = (media: SupportedMediaAttachment, multiple = filteredMedia.length > 1) => {
+    const { width, height } = media.meta.original || {};
+    const aspectRatio = !multiple && width && height ? width / height : undefined;
+    console.log(width, height, aspectRatio, media.meta);
+
+    return (
+      <View
+        key={media.id}
+        style={{
+          flex: multiple ? 1 : undefined,
+          width: '100%',
+          height: multiple ? '100%' : aspectRatio ? undefined : compact ? 160 : 320,
+          aspectRatio,
+          maxHeight: multiple ? undefined : compact ? 240 : 480,
+          position: 'relative',
+          borderRadius: shapes.corner.medium,
+          overflow: 'hidden',
+        }}
+      >
+        {!multiple && renderSensitiveOverlay()}
+        {media.type === 'video' ? (
+          renderMedia(media, sensitive, mediaVisible)
+        ) : (
+          <Pressable
+            style={{ flex: 1 }}
+            onPress={() => openMediaViewer(filteredMedia, filteredMedia.indexOf(media))}
+            accessibilityRole='imagebutton'
+            accessibilityLabel={media.description || undefined}
           >
-            {(props) => (
-              <Chip {...props} mode='outlined' compact>
-                {intl.formatMessage(messages.altIndicator).toUpperCase()}
-              </Chip>
-            )}
-          </Tooltip.Rich>
-        </View>
-      )}
-    </View>
-  );
+            {renderMedia(media, sensitive, mediaVisible)}
+          </Pressable>
+        )}
+        {media.description && (
+          <View style={{ position: 'absolute', bottom: 16, right: 16 }}>
+            <Tooltip.Rich
+              title={intl.formatMessage(
+                media.type === 'image' ? messages.altHeading : messages.altHeadingVideo,
+              )}
+              content={media.description}
+            >
+              {(props) => (
+                <Chip {...props} mode='outlined' compact>
+                  {intl.formatMessage(messages.altIndicator).toUpperCase()}
+                </Chip>
+              )}
+            </Tooltip.Rich>
+          </View>
+        )}
+      </View>
+    );
+  };
 
   const renderSupportedMedia = () => {
     if (!filteredMedia.length) return null;
