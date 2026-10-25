@@ -5,12 +5,11 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Linking, View } from 'react-native';
 
+import { Timeline } from '@/components/timelines/timeline';
 import { iconHelper } from '@/components/ui/icon';
 import { useClient } from '@/contexts/current-account-context';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useTrendingLinks } from '@/queries/trends/use-trending-links';
-
-import { Timeline } from '@/components/timelines/timeline';
 
 import type { RootStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';

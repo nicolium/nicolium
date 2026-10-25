@@ -6,11 +6,10 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ComposeButton } from '@/components/compose-button';
-import { useClient } from '@/contexts/current-account-context';
-import { useTimeline } from '@/queries/timelines/use-timeline';
-
 import { Timeline } from '@/components/timelines/timeline';
 import { TimelineHeader } from '@/components/timelines/timeline-header';
+import { useClient } from '@/contexts/current-account-context';
+import { useTimeline } from '@/queries/timelines/use-timeline';
 
 import type { TimelineStackParams } from '@/router/router';
 import type { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';

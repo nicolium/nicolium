@@ -9,14 +9,13 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 
 import { AccountsList } from '@/components/accounts/accounts-list';
+import { Profile } from '@/components/accounts/profile';
 import { StatusesList } from '@/components/statuses/statuses-list';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { useFollowers, useFollowing, useSubscribers } from '@/queries/account-lists/use-follows';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useFavourites } from '@/queries/status-lists/use-favourites';
-
-import { Profile } from '@/components/accounts/profile';
 
 import type { AccountStackParams } from '@/router/router';
 

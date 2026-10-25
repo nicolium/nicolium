@@ -1,25 +1,14 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
-import {
-  Button,
-  Card,
-  Icon,
-  IconButton,
-  Text,
-  TextInput,
-  useTheme,
-} from '@mkljczk/react-native-paper';
+import { Button, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
-import { ArrowBendUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendUpLeft';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
 import { CalendarPlusIcon } from 'phosphor-react-native/src/icons/CalendarPlus';
 import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import { PaperPlaneRightIcon } from 'phosphor-react-native/src/icons/PaperPlaneRight';
-import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
 import { SmileyIcon } from 'phosphor-react-native/src/icons/Smiley';
-import { XIcon } from 'phosphor-react-native/src/icons/X';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { Alert, ScrollView, TextInput as RNTextInput, View, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -27,7 +16,6 @@ import { useFeatures } from '@/contexts/current-account-context';
 import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
-import { useStatus } from '@/queries/statuses/use-status';
 import { useAuthStore } from '@/stores/auth';
 import {
   checkComposeContent,
@@ -41,10 +29,11 @@ import { useSetting } from '@/stores/settings';
 import { useIsComposeOpen, useUiStore, useUiStoreActions } from '@/stores/ui';
 
 import { Account } from '../accounts/account';
-import { Status } from '../statuses/status';
 import { GlassActionButton } from '../ui/dialog-or-sheet';
 import { iconHelper } from '../ui/icon';
 
+import { ComposeQuoteIndicator } from './compose-quote-indicator';
+import { ComposeReplyIndicator } from './compose-reply-indicator';
 import { ComposeVisibilityDropdown } from './compose-visibility-dropdown';
 import { PollForm } from './poll-form';
 
@@ -105,102 +94,8 @@ const messages = defineMessages({
 });
 
 interface ICompose {
-  composeId?: string;
+  composeId: string;
 }
-
-const ReplyIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
-  const { inReplyToId, editedId } = useCompose(composeId);
-  const { updateCompose } = useComposeActions();
-  const { data: status } = useStatus(inReplyToId || undefined);
-
-  if (!status) return null;
-
-  return (
-    <Card mode='outlined'>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 8,
-          paddingHorizontal: 16,
-          paddingTop: 8,
-          paddingBottom: 4,
-        }}
-      >
-        <Icon source={iconHelper(ArrowBendUpLeftIcon)} size={20} />
-        <Text style={{ flex: 1 }}>
-          <FormattedMessage
-            id='compose.reply_indicator'
-            defaultMessage='Reply to @{acct}'
-            values={{ acct: status.account.acct }}
-          />
-        </Text>
-        {!editedId && (
-          <IconButton
-            icon={iconHelper(XIcon)}
-            style={{ margin: 0, marginRight: -8 }}
-            onPress={() =>
-              updateCompose(composeId, (draft) => {
-                draft.inReplyToId = null;
-              })
-            }
-            size={20}
-          />
-        )}
-      </View>
-      <View pointerEvents='none'>
-        <Status id={inReplyToId!} compact withActions={false} textOnly style={{ paddingTop: 0 }} />
-      </View>
-    </Card>
-  );
-};
-
-const QuoteIndicator: React.FC<ICompose> = ({ composeId = COMPOSE_ID }) => {
-  const { quoteId, editedId } = useCompose(composeId);
-  const { updateCompose } = useComposeActions();
-  const { data: status } = useStatus(quoteId || undefined);
-
-  if (!status) return null;
-
-  return (
-    <Card mode='outlined'>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 8,
-          paddingHorizontal: 16,
-          paddingTop: 8,
-          paddingBottom: 4,
-        }}
-      >
-        <Icon source={iconHelper(QuotesIcon)} size={20} />
-        <Text style={{ flex: 1 }}>
-          <FormattedMessage
-            id='compose.quote_indicator'
-            defaultMessage='Quoting @{acct}'
-            values={{ acct: status.account.acct }}
-          />
-        </Text>
-        {!editedId && (
-          <IconButton
-            icon={iconHelper(XIcon)}
-            style={{ margin: 0, marginRight: -8 }}
-            onPress={() =>
-              updateCompose(composeId, (draft) => {
-                draft.quoteId = null;
-              })
-            }
-            size={20}
-          />
-        )}
-      </View>
-      <View pointerEvents='none'>
-        <Status id={quoteId!} compact withActions={false} textOnly style={{ paddingTop: 0 }} />
-      </View>
-    </Card>
-  );
-};
 
 const ComposeBottomSheet = () => {
   const intl = useIntl();
@@ -469,8 +364,8 @@ const ComposeBottomSheet = () => {
             action={<ComposeVisibilityDropdown composeId={COMPOSE_ID} />}
           />
         </View>
-        <ReplyIndicator />
-        <QuoteIndicator />
+        <ComposeReplyIndicator composeId={COMPOSE_ID} />
+        <ComposeQuoteIndicator composeId={COMPOSE_ID} />
         {features.spoilers && (
           <TextInput
             value={spoilerText}
@@ -515,4 +410,4 @@ const MaybeComposeBottomSheet = () => {
   return isLoggedIn ? <ComposeBottomSheet /> : null;
 };
 
-export { MaybeComposeBottomSheet as ComposeBottomSheet };
+export { MaybeComposeBottomSheet as ComposeBottomSheet, type ICompose };

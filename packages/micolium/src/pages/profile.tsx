@@ -4,10 +4,9 @@ import {
 } from '@react-navigation/native-stack';
 import React from 'react';
 
+import { Profile } from '@/components/accounts/profile';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
-
-import { Profile } from '@/components/accounts/profile';
 
 import type { ProfileStackParams } from '@/router/router';
 

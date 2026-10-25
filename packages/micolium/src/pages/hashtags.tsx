@@ -12,6 +12,7 @@ import {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Timeline } from '@/components/timelines/timeline';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import {
@@ -20,8 +21,6 @@ import {
 } from '@/queries/hashtags/use-followed-tags';
 import { useHashtag } from '@/queries/hashtags/use-hashtag';
 import { useTimeline } from '@/queries/timelines/use-timeline';
-
-import { Timeline } from '@/components/timelines/timeline';
 
 import type { RootStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
