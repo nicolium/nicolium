@@ -158,95 +158,6 @@ const useFiltersDropdownMenu = (timeline: (typeof TIMELINE_FILTER_KEYS)[number])
   ].filter(({ enabled }) => enabled !== false);
 };
 
-const FiltersDropdownMenuItem = DropdownMenu.create<ITimelineHeaderMenu>(({ timeline }) => {
-  const intl = useIntl();
-  const features = useFeatures();
-
-  const timelinesFilters = useSetting('timelines.filters');
-  const timelineSettings = timelinesFilters[timeline] || defaultFiltersSettings;
-  const { update } = useSettingsActions();
-
-  const handleOnChecked =
-    (key: keyof typeof timelineSettings, inverse: boolean = false) =>
-    () => {
-      const checked = !timelineSettings[key];
-
-      update('timelines.filters', {
-        ...timelinesFilters,
-        [timeline]: getUpdatedTimelineSettings(timelineSettings, key, inverse ? !checked : checked),
-      });
-    };
-
-  return (
-    <DropdownMenu.Group>
-      <DropdownMenu.Sub>
-        <DropdownMenu.SubTrigger key='filters'>
-          <DropdownMenu.ItemIcon
-            ios={{ name: 'line.3.horizontal.decrease' }}
-            androidIconName='ph_funnel'
-          />
-          <DropdownMenu.ItemTitle>
-            {intl.formatMessage(messages.timelineFiltersLabel)}
-          </DropdownMenu.ItemTitle>
-        </DropdownMenu.SubTrigger>
-        <DropdownMenu.SubContent>
-          {['home', 'list', 'antenna'].includes(timeline) && (
-            <>
-              <DropdownMenu.CheckboxItem
-                key='show-self-reblogs'
-                value={timelineSettings?.showSelfReblogs}
-                onSelect={handleOnChecked('showSelfReblogs')}
-                disabled={!timelineSettings.showReblogs}
-              >
-                {intl.formatMessage(messages.showSelfReblogs)}
-              </DropdownMenu.CheckboxItem>
-            </>
-          )}
-          <DropdownMenu.CheckboxItem
-            key='show-replies'
-            value={timelineSettings?.showReplies}
-            onSelect={handleOnChecked('showReplies')}
-          >
-            {intl.formatMessage(messages.showReplies)}
-          </DropdownMenu.CheckboxItem>
-          {features.quotePosts && (
-            <DropdownMenu.CheckboxItem
-              key='quotes'
-              value={timelineSettings?.showQuotes}
-              onSelect={handleOnChecked('showQuotes')}
-            >
-              {intl.formatMessage(messages.showQuotes)}
-            </DropdownMenu.CheckboxItem>
-          )}
-          {timeline === 'home' && (
-            <DropdownMenu.CheckboxItem
-              key='show-direct'
-              value={timelineSettings?.showDirect}
-              onSelect={handleOnChecked('showDirect')}
-            >
-              {intl.formatMessage(messages.showDirect)}
-            </DropdownMenu.CheckboxItem>
-          )}
-          <DropdownMenu.CheckboxItem
-            key='hide-non-media'
-            value={!timelineSettings?.showNonMedia}
-            onSelect={handleOnChecked('showNonMedia', true)}
-          >
-            {intl.formatMessage(messages.hideNonMedia)}
-          </DropdownMenu.CheckboxItem>
-          <DropdownMenu.CheckboxItem
-            key='show-media-without-alt-text'
-            value={timelineSettings?.showMediaWithoutAltText}
-            onSelect={handleOnChecked('showMediaWithoutAltText')}
-          >
-            {intl.formatMessage(messages.showMediaWithoutAltText)}
-          </DropdownMenu.CheckboxItem>
-        </DropdownMenu.SubContent>
-      </DropdownMenu.Sub>
-    </DropdownMenu.Group>
-  );
-}, 'Group');
-
 const TimelineHeaderMenu: React.FC<ITimelineHeaderMenu> = ({ timeline }) => {
   const intl = useIntl();
   const navigation = useNavigation('timeline');
@@ -307,6 +218,8 @@ interface IListHeaderMenu {
 
 const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => {
   const intl = useIntl();
+
+  const filtersDropdownMenuItems = useFiltersDropdownMenu('list');
 
   const { mutate: deleteList } = useDeleteList();
   const { mutate: deleteAntenna } = useDeleteAntenna();
@@ -376,7 +289,24 @@ const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => 
           <HeaderIconButton icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon} />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
-          <FiltersDropdownMenuItem timeline={type} />
+          <DropdownMenu.Group>
+            <DropdownMenu.Sub>
+              <DropdownMenu.SubTrigger key='filters'>
+                <DropdownMenu.ItemIcon
+                  ios={{ name: 'line.3.horizontal.decrease' }}
+                  androidIconName='ph_funnel'
+                />
+                <DropdownMenu.ItemTitle>
+                  {intl.formatMessage(messages.timelineFiltersLabel)}
+                </DropdownMenu.ItemTitle>
+              </DropdownMenu.SubTrigger>
+              <DropdownMenu.SubContent>
+                {filtersDropdownMenuItems.map((item) => (
+                  <DropdownMenu.CheckboxItem {...item} key={item.key} />
+                ))}
+              </DropdownMenu.SubContent>
+            </DropdownMenu.Sub>
+          </DropdownMenu.Group>
           <DropdownMenu.Group>
             <DropdownMenu.Item key='edit' onSelect={() => setEditDialog(true)}>
               <DropdownMenu.ItemIcon
