@@ -16,7 +16,7 @@ import { useAccount } from '@/queries/accounts/use-account';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useFavourites } from '@/queries/status-lists/use-favourites';
 
-import { Profile } from '../components/profile';
+import { Profile } from '../../components/accounts/profile';
 
 import type { AccountStackParams } from '../router';
 

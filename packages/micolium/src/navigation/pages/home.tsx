@@ -9,8 +9,8 @@ import { ComposeButton } from '@/components/compose-button';
 import { useClient } from '@/contexts/current-account-context';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 
-import { Timeline } from '../components/timeline';
-import { TimelineHeader } from '../components/timeline-header';
+import { Timeline } from '../../components/timelines/timeline';
+import { TimelineHeader } from '../../components/timelines/timeline-header';
 
 import type { TimelineStackParams } from '../router';
 import type { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';

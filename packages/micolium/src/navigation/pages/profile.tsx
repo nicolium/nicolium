@@ -7,7 +7,7 @@ import React from 'react';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 
-import { Profile } from '../components/profile';
+import { Profile } from '../../components/accounts/profile';
 
 import type { ProfileStackParams } from '../router';
 

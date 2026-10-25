@@ -36,7 +36,7 @@ import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useUiStoreActions } from '@/stores/ui';
 
-import { type ITimeline, Timeline } from '../components/timeline';
+import { type ITimeline, Timeline } from '../timelines/timeline';
 
 const messages = defineMessages({
   repliesToggle: { id: 'account.filters.replies_toggle', defaultMessage: 'Show replies' },
