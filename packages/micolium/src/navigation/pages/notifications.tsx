@@ -1,13 +1,5 @@
 import { Toggle } from '@expo/ui/swift-ui';
-import {
-  ActivityIndicator,
-  Appbar,
-  Checkbox,
-  Divider,
-  List,
-  Text,
-  useTheme,
-} from '@mkljczk/react-native-paper';
+import { Appbar, Checkbox, Divider, List, Text, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
@@ -20,7 +12,6 @@ import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
-import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TabView } from 'react-native-tab-view';
 
@@ -29,6 +20,7 @@ import { DialogOrSheet } from '@/components/ui/dialog-or-sheet';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { LoadMore } from '@/components/ui/load-more';
+import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { SwiftUIList } from '@/components/ui/swift-ui-list';
 import { TabBar } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
@@ -256,17 +248,10 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
   );
 };
 
-const LoadingIndicator = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <ActivityIndicator size='large' />
-  </View>
-);
-
 const NotificationsScreen = ({
   navigation,
 }: NativeStackScreenProps<NotificationsStackParams, 'view'>) => {
   const intl = useIntl();
-  const { colors } = useTheme();
 
   const filters = useSetting('notifications.filters');
 
@@ -349,19 +334,7 @@ const NotificationsScreen = ({
       navigationState={{ index: currentTab, routes }}
       onIndexChange={handleChangeIndex}
       renderScene={({ route }) => renderNotifications(route.key)}
-      renderTabBar={(props) => (
-        <TabBar
-          {...props}
-          activeColor={colors.primary}
-          inactiveColor={colors.onSurfaceVariant}
-          pressColor={colors.surfaceContainerHighest}
-          indicatorStyle={{ backgroundColor: colors.primary }}
-          style={{
-            backgroundColor: colors.surfaceContainer,
-            borderBottomColor: colors.outlineVariant,
-          }}
-        />
-      )}
+      renderTabBar={TabBar}
       lazy
     />
   );

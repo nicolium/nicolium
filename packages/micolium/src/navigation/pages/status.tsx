@@ -13,10 +13,11 @@ import {
 } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
 import { GlassView } from 'expo-glass-effect';
-import React from 'react';
+import React, { useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { type TabDescriptor, TabView } from 'react-native-tab-view';
 
 import { Account } from '@/components/accounts/account';
 import { AccountsList } from '@/components/accounts/accounts-list';
@@ -24,10 +25,13 @@ import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { Status } from '@/components/statuses/status';
 import { StatusMedia } from '@/components/statuses/status-media';
 import { StatusesList } from '@/components/statuses/statuses-list';
+import { Emoji } from '@/components/ui/emoji';
 import { Emojify } from '@/components/ui/emojify';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
+import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { StyledHtml } from '@/components/ui/styled-html';
+import { TabBar } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -52,6 +56,7 @@ const messages = defineMessages({
   reblogsHeader: { id: 'column.reblogs', defaultMessage: 'Reposts' },
   favouritesHeader: { id: 'column.favourites', defaultMessage: 'Likes' },
   dislikesHeader: { id: 'column.dislikes', defaultMessage: 'Dislikes' },
+  reactionsHeader: { id: 'column.reactions', defaultMessage: 'Reactions' },
   mentionsHeader: { id: 'column.mentions', defaultMessage: 'Mentions' },
   quotesHeader: { id: 'column.quotes', defaultMessage: 'Post quotes' },
   historyHeader: { id: 'compare_history_modal.header', defaultMessage: 'Edit history' },
@@ -59,6 +64,11 @@ const messages = defineMessages({
     id: 'column.count',
     defaultMessage: '{count, plural, one {# person} other {# people}}',
   },
+  reactionsCountSubtitle: {
+    id: 'column.reactions.count',
+    defaultMessage: '{count, plural, one {# reaction} other {# reactions}}',
+  },
+  reactionsAll: { id: 'reactions.all', defaultMessage: 'All' },
 });
 
 const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
@@ -88,6 +98,19 @@ const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
       title = intl.formatMessage(messages.dislikesHeader);
       subtitle = intl.formatMessage(messages.countSubtitle, { count: status?.dislikes_count });
       break;
+    case 'reactions': {
+      title = intl.formatMessage(messages.reactionsHeader);
+      const count = status?.emoji_reactions.reduce<number>(
+        (prev, cur) => prev + (cur.count || 0),
+        0,
+      );
+      if (count) {
+        subtitle = intl.formatMessage(messages.reactionsCountSubtitle, {
+          count,
+        });
+      }
+      break;
+    }
     case 'mentions':
       title = intl.formatMessage(messages.mentionsHeader);
       subtitle = intl.formatMessage(messages.countSubtitle, { count: status?.mentions.length });
@@ -351,6 +374,94 @@ const StatusDislikesScreen = ({
   );
 };
 
+interface IAccountWithReaction {
+  id: string;
+  reaction: string;
+  reactionUrl?: string;
+}
+
+const StatusReactionsScreen = ({
+  route: {
+    params: { id },
+  },
+}: NativeStackScreenProps<StatusStackParams, 'reactions'>) => {
+  const intl = useIntl();
+  const [index, setIndex] = useState(0);
+
+  const { data: status, refetch, isRefetching } = useStatus(id);
+
+  if (!status) return <LoadingIndicator />;
+
+  const routes: Array<{
+    key: 'all' | string;
+    title: string;
+  }> = [
+    {
+      key: 'all',
+      title: intl.formatMessage(messages.reactionsAll),
+    },
+  ];
+
+  const options: Record<string, TabDescriptor<(typeof routes)[number]>> = {};
+
+  const renderScene = (emoji: 'all' | string) => {
+    let accounts: Array<IAccountWithReaction> = [];
+
+    if (emoji === 'all') {
+      accounts = status.emoji_reactions.flatMap(({ account_ids, name, url }) =>
+        account_ids.map((account) => ({
+          id: account,
+          reaction: name,
+          reactionUrl: url ?? undefined,
+        })),
+      );
+    } else {
+      const reactionRecord = status.emoji_reactions.find(({ name }) => name === emoji);
+
+      if (reactionRecord)
+        accounts = reactionRecord.account_ids.map((account) => ({
+          id: account,
+          reaction: emoji,
+          reactionUrl: reactionRecord.url ?? undefined,
+        }));
+    }
+
+    return (
+      <FlashList
+        data={accounts}
+        renderItem={({ item }) => (
+          <Account id={item.id} style={{ paddingVertical: 8, padding: 12 }} withLink />
+        )}
+        ItemSeparatorComponent={Divider}
+        onEndReachedThreshold={0.1}
+        onRefresh={refetch}
+        refreshing={isRefetching}
+      />
+    );
+  };
+
+  for (const reaction of status.emoji_reactions) {
+    routes.push({
+      key: reaction.name,
+      title: reaction.name,
+    });
+    options[reaction.name] = {
+      label: () => <Emoji emoji={reaction.name} url={reaction.url} size={20} />,
+    };
+  }
+
+  return (
+    <TabView
+      navigationState={{ index, routes }}
+      onIndexChange={setIndex}
+      options={options}
+      renderTabBar={TabBar}
+      renderScene={({ route }) => renderScene(route.key)}
+      lazy
+    />
+  );
+};
+
 const StatusMentionsScreen = ({
   route: {
     params: { id },
@@ -474,6 +585,7 @@ const StatusStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'stat
       <StatusStack.Screen name='reblogs' component={StatusReblogsScreen} />
       <StatusStack.Screen name='favourites' component={StatusFavouritesScreen} />
       <StatusStack.Screen name='dislikes' component={StatusDislikesScreen} />
+      <StatusStack.Screen name='reactions' component={StatusReactionsScreen} />
       <StatusStack.Screen name='mentions' component={StatusMentionsScreen} />
       <StatusStack.Screen name='quotes' component={StatusQuotesScreen} />
       <StatusStack.Screen name='history' component={StatusHistoryScreen} />

@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   Appbar,
   Avatar,
   Chip,
@@ -29,6 +28,7 @@ import { CollapsibleContent } from '@/components/ui/collapsible-content';
 import { Emojify } from '@/components/ui/emojify';
 import { GlassButton } from '@/components/ui/glass-button';
 import { iconHelper } from '@/components/ui/icon';
+import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { StyledHtml } from '@/components/ui/styled-html';
 import { useClient } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -193,12 +193,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     return chips;
   }, [account?.relationship, ownAccount]);
 
-  if (!account)
-    return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <ActivityIndicator size='large' />
-      </View>
-    );
+  if (!account) return <LoadingIndicator />;
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
@@ -385,7 +380,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             {ownAccount ? (
               <GlassButton
                 mode='contained-tonal'
-                onPress={() => navigation.navigate('edit-profile')}
+                onPress={() => navigation.navigate('edit_profile')}
               >
                 <FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />
               </GlassButton>

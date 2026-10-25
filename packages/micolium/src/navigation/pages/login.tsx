@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   Appbar,
   Divider,
   Text,
@@ -28,6 +27,7 @@ import Logo from '@/assets/images/icon.png';
 import { UIAccount } from '@/components/ui/account';
 import { GlassButton } from '@/components/ui/glass-button';
 import { Header } from '@/components/ui/header';
+import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
@@ -382,11 +382,7 @@ const OauthFlowScreen = ({
     }
   }, [response]);
 
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
-      <ActivityIndicator size='large' />
-    </View>
-  );
+  return <LoadingIndicator />;
 };
 
 const LoginStack = createNativeStackNavigator<LoginStackParams>();

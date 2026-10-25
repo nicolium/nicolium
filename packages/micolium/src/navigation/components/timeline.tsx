@@ -1,10 +1,10 @@
-import { ActivityIndicator, Chip, Divider, Text, useTheme } from '@mkljczk/react-native-paper';
+import { Chip, Divider, Text, useTheme } from '@mkljczk/react-native-paper';
 import { FlashList, type FlashListRef, type ListRenderItem } from '@shopify/flash-list';
 import { GlassView } from 'expo-glass-effect';
 import { ProhibitIcon } from 'phosphor-react-native/src/icons/Prohibit';
 import React, { useCallback, useRef } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
-import { Pressable, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { Pressable, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -12,6 +12,7 @@ import { Status } from '@/components/statuses/status';
 import { EmptyMessage, type IEmptyMessage } from '@/components/ui/empty-message';
 import { iconHelper } from '@/components/ui/icon';
 import { LoadMore } from '@/components/ui/load-more';
+import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { type TIMELINE_FILTER_KEYS, useSetting } from '@/stores/settings';
 import { hasActiveFilters, sortFilteredTimeline } from '@/utils/timeline-filter';
@@ -164,12 +165,7 @@ const Timeline: React.FC<ITimeline> = ({
     return processedEntries;
   }, [query.entries, context, pinnedQuery?.entries, filters]);
 
-  if (query.isPending)
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size='large' />
-      </View>
-    );
+  if (query.isPending) return <LoadingIndicator />;
 
   const handleScrollTop = () => {
     query.dequeueEntries();

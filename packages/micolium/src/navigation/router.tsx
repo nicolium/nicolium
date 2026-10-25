@@ -59,6 +59,7 @@ type StatusStackParams = {
   reblogs: { id: string };
   favourites: { id: string };
   dislikes: { id: string };
+  reactions: { id: string };
   quotes: { id: string };
   mentions: { id: string };
   history: { id: string };
@@ -83,7 +84,6 @@ type TabsParams = {
   notifications: NavigatorScreenParams<NotificationsStackParams>;
   search: NavigatorScreenParams<SearchStackParams>;
   profile: NavigatorScreenParams<ProfileStackParams>;
-  status: NavigatorScreenParams<StatusStackParams>;
 };
 type LoginStackParams = {
   instance: undefined;
@@ -99,7 +99,7 @@ type RootStackParams = {
   hashtags: { tag: string };
   bookmarks: NavigatorScreenParams<BookmarksStackParams>;
   links: { url: string };
-  conversations: ConversationsStackParams;
+  conversations: NavigatorScreenParams<ConversationsStackParams>;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParams>();

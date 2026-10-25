@@ -1,11 +1,4 @@
-import {
-  ActivityIndicator,
-  Carousel,
-  CarouselItem,
-  Divider,
-  Searchbar,
-  useTheme,
-} from '@mkljczk/react-native-paper';
+import { Carousel, CarouselItem, Divider, Searchbar, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
@@ -24,6 +17,7 @@ import { Status } from '@/components/statuses/status';
 import { TrendsLink } from '@/components/trends-link';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { LoadMore } from '@/components/ui/load-more';
+import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { TabBar } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
 import {
@@ -50,12 +44,6 @@ const messages = defineMessages({
 const SEARCH_TYPES = ['accounts', 'statuses', 'hashtags', 'links'] as const;
 
 type SearchType = (typeof SEARCH_TYPES)[number];
-
-const LoadingIndicator = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <ActivityIndicator size='large' />
-  </View>
-);
 
 interface ISearchResults {
   query: string;
@@ -340,9 +328,7 @@ const SearchScreen = ({
         navigationState={{ index, routes }}
         onIndexChange={handleChangeIndex}
         renderScene={({ route }) => renderScene(route.key)}
-        renderTabBar={(props) => (
-          <TabBar {...props} key={tabBarKey} style={{ backgroundColor: colors.surfaceContainer }} />
-        )}
+        renderTabBar={(props) => <TabBar {...props} key={tabBarKey} />}
         lazy
       />
     </>
