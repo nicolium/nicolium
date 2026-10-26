@@ -20,6 +20,7 @@ const onlyImages = (types: string[] | undefined): boolean =>
 
 const messages = defineMessages({
   upload: { id: 'upload_button.label', defaultMessage: 'Add media attachment' },
+  camera: { id: 'upload_button.label.camera', defaultMessage: 'Take a photo' },
   addFile: { id: 'upload_button.label.file', defaultMessage: 'Add file' },
   uploadPermissionRequiredTitle: {
     id: 'upload_button.permission_required.title',
@@ -28,6 +29,10 @@ const messages = defineMessages({
   uploadPermissionRequiredMessage: {
     id: 'upload_button.permission_required.message',
     defaultMessage: 'Permission to access the media library is required.',
+  },
+  uploadCameraPermissionRequiredMessage: {
+    id: 'upload_button.camera_permission_required.message',
+    defaultMessage: 'Permission to access the camera is required.',
   },
 });
 
@@ -58,18 +63,29 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
     );
   };
 
-  const handleAddMedia = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const handleAddMedia = async (camera?: boolean) => {
+    let permissionResult;
+    if (camera) {
+      permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    } else {
+      permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    }
 
     if (!permissionResult.granted) {
       Alert.alert(
         intl.formatMessage(messages.uploadPermissionRequiredTitle),
-        intl.formatMessage(messages.uploadPermissionRequiredMessage),
+        intl.formatMessage(
+          camera
+            ? messages.uploadCameraPermissionRequiredMessage
+            : messages.uploadPermissionRequiredMessage,
+        ),
       );
       return;
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
+    const fn = camera ? ImagePicker.launchCameraAsync : ImagePicker.launchImageLibraryAsync;
+
+    const result = await fn({
       mediaTypes: onlyImages(attachmentTypes) ? ['images'] : ['images', 'videos'],
       allowsMultipleSelection: true,
       preferredAssetRepresentationMode:
@@ -106,20 +122,21 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
         />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        <DropdownMenu.Group>
-          {/* TODO: camera */}
-          <DropdownMenu.Item key='file' onSelect={handleAddFile}>
-            <DropdownMenu.ItemIcon ios={{ name: 'paperclip' }} androidIconName='ph_paperclip' />
-            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.addFile)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item key='media' onSelect={handleAddMedia}>
-            <DropdownMenu.ItemIcon
-              ios={{ name: 'photo.on.rectangle.angled' }}
-              androidIconName='ph_images'
-            />
-            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.upload)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-        </DropdownMenu.Group>
+        <DropdownMenu.Item key='camera' onSelect={() => handleAddMedia(true)}>
+          <DropdownMenu.ItemIcon ios={{ name: 'camera' }} androidIconName='ph_camera' />
+          <DropdownMenu.ItemTitle>{intl.formatMessage(messages.camera)}</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item key='file' onSelect={handleAddFile}>
+          <DropdownMenu.ItemIcon ios={{ name: 'paperclip' }} androidIconName='ph_paperclip' />
+          <DropdownMenu.ItemTitle>{intl.formatMessage(messages.addFile)}</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item key='media' onSelect={() => handleAddMedia()}>
+          <DropdownMenu.ItemIcon
+            ios={{ name: 'photo.on.rectangle.angled' }}
+            androidIconName='ph_images'
+          />
+          <DropdownMenu.ItemTitle>{intl.formatMessage(messages.upload)}</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
