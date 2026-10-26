@@ -181,18 +181,14 @@ const processImage = (
     }, type);
   });
 
-const resizeImage = async (
-  img: HTMLImageElement,
-  inputFile: File,
-  maxPixels: number,
-  force = false,
-) => {
+const resizeImage = async (img: HTMLImageElement, inputFile: File, maxPixels: number) => {
   let { width, height } = img;
   const type = inputFile.type || 'image/png';
 
-  if (!force && width * height <= maxPixels) {
-    width = Math.round(Math.sqrt(maxPixels * (width / height)));
-    height = Math.round(Math.sqrt(maxPixels * (height / width)));
+  if (width * height > maxPixels) {
+    const scale = Math.sqrt(maxPixels / (width * height));
+    width = Math.floor(width * scale);
+    height = Math.floor(height * scale);
   }
 
   const orientation = await getOrientation(img, type);
@@ -226,7 +222,7 @@ const resize = async (
     }
 
     try {
-      return await resizeImage(img, inputFile, maxPixels, force);
+      return await resizeImage(img, inputFile, maxPixels);
     } catch (error) {
       console.error(error);
       return inputFile;

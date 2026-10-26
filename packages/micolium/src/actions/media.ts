@@ -1,7 +1,9 @@
 import { defineMessages, type IntlShape } from 'react-intl';
 import { toast } from 'sonner-native';
 
+import { useSettingsStore } from '@/stores/settings';
 import { formatBytes } from '@/utils/media';
+import resizeImage from '@/utils/resize-image';
 
 import type { MediaAttachment, PlApiClient, UpdateMediaParams, UploadMediaParams } from 'pl-api';
 
@@ -48,7 +50,10 @@ const uploadFile = (
   onSuccess: (data: MediaAttachment) => void = () => {},
   onFail: (error: unknown) => void = () => {},
   onProgress: (e: ProgressEvent) => void = () => {},
+  changeTotal: (value: number) => void = () => {},
 ) => {
+  const stripMetadata = useSettingsStore.getState().settings['compose.stripMetadata'];
+
   const {
     configuration: { media_attachments },
   } = client.instanceInformation;
@@ -56,7 +61,7 @@ const uploadFile = (
   const maxVideoSize = media_attachments.video_size_limit;
   const maxVideoDuration = media_attachments.video_duration_limit;
 
-  // const imageMatrixLimit = media_attachments.image_matrix_limit;
+  const imageMatrixLimit = media_attachments.image_matrix_limit;
 
   const isImage = file.type.match(/image.*/);
   const isVideo = file.type.match(/video.*/);
@@ -82,37 +87,42 @@ const uploadFile = (
     return;
   }
 
-  const body = {
-    file: { uri: file.uri, name: file.name, type: file.type } as unknown as File,
-    description,
-  };
+  resizeImage(file, imageMatrixLimit, stripMetadata)
+    .then((resized) => {
+      // Account for disparity in size of original image and resized data
+      changeTotal(resized.size - file.size);
 
-  uploadMedia(client, body, onProgress)
-    .then((data) => {
-      // If server-side processing of the media attachment has not completed yet,
-      // poll the server until it is, before showing the media attachment as uploaded
-      if (data.url) {
-        onSuccess(data);
-      } else if (data.url === '') {
-        const poll = () => {
-          client.media
-            .getMedia(data.id)
-            .then((data) => {
-              if (data.url) {
-                onSuccess(data);
-              } else if (data.url === '') {
-                setTimeout(() => {
-                  poll();
-                }, 1000);
-              }
-            })
-            .catch((error) => {
-              onFail(error);
-            });
-        };
+      const body = {
+        file: { uri: resized.uri, name: resized.name, type: resized.type } as unknown as File,
+        description,
+      };
 
-        poll();
-      }
+      return uploadMedia(client, body, onProgress).then((data) => {
+        // If server-side processing of the media attachment has not completed yet,
+        // poll the server until it is, before showing the media attachment as uploaded
+        if (data.url) {
+          onSuccess(data);
+        } else if (data.url === '') {
+          const poll = () => {
+            client.media
+              .getMedia(data.id)
+              .then((data) => {
+                if (data.url) {
+                  onSuccess(data);
+                } else if (data.url === '') {
+                  setTimeout(() => {
+                    poll();
+                  }, 1000);
+                }
+              })
+              .catch((error) => {
+                onFail(error);
+              });
+          };
+
+          poll();
+        }
+      });
     })
     .catch((error) => {
       onFail(error);

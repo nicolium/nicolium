@@ -1616,7 +1616,7 @@ const useUploadCompose = (composeId: string) => {
       const attachmentLimit = instance.configuration.statuses.max_media_attachments;
       const media = compose.mediaAttachments;
       const progress = new Array(files.length).fill(0);
-      const total = files.reduce((a, v) => a + v.size, 0);
+      let total = files.reduce((a, v) => a + v.size, 0);
       const mediaCount = media ? media.length : 0;
       let uploaded = 0;
 
@@ -1651,6 +1651,9 @@ const useUploadCompose = (composeId: string) => {
             updateCompose(composeId, (draft) => {
               draft.progress = Math.round((progress.reduce((a, v) => a + v, 0) / total) * 100);
             });
+          },
+          (value) => {
+            total += value;
           },
         );
       });
