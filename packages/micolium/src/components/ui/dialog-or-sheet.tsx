@@ -133,7 +133,7 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
       }
       footer={
         !glassEffect && actions.length ? (
-          <View style={{ flexDirection: 'row', gap: 8, marginHorizontal: 16 }}>
+          <View style={{ flexDirection: 'row', gap: 8, marginHorizontal: 16, marginTop: 16 }}>
             {actions.map((action, i) => (
               <React.Fragment key={i}>
                 <Button

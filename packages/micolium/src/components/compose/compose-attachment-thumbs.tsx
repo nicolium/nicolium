@@ -1,4 +1,4 @@
-import { ActivityIndicator, Icon, useTheme } from '@mkljczk/react-native-paper';
+import { ActivityIndicator, Icon, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import { Image } from 'expo-image';
 import { BookIcon } from 'phosphor-react-native/src/icons/Book';
 import { FileArchiveIcon } from 'phosphor-react-native/src/icons/FileArchive';
@@ -20,12 +20,15 @@ import { PresentationIcon } from 'phosphor-react-native/src/icons/Presentation';
 import { TableIcon } from 'phosphor-react-native/src/icons/Table';
 import { VideoIcon } from 'phosphor-react-native/src/icons/Video';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, ScrollView, View } from 'react-native';
+import { toast } from 'sonner-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
-import { useCompose, useComposeActions } from '@/stores/compose';
+import { useChangeUploadCompose, useCompose, useComposeActions } from '@/stores/compose';
 
+import { renderMedia } from '../statuses/status-media';
+import { DialogOrSheet } from '../ui/dialog-or-sheet';
 import { iconHelper } from '../ui/icon';
 
 import type { ICompose } from './compose';
@@ -80,7 +83,128 @@ const messages = defineMessages({
   delete: { id: 'upload_form.undo', defaultMessage: 'Delete' },
   moveToLeft: { id: 'upload_form.move_to_left', defaultMessage: 'Move to left' },
   moveToRight: { id: 'upload_form.move_to_right', defaultMessage: 'Move to right' },
+  cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
+  save: { id: 'common.save', defaultMessage: 'Save' },
+  titleVisual: {
+    id: 'alt_text_modal.describe_for_people_with_visual_impairments',
+    defaultMessage: 'Describe this for people with visual impairments…',
+  },
+  titleHearing: {
+    id: 'alt_text_modal.describe_for_people_with_hearing_impairments',
+    defaultMessage: 'Describe this for people with hearing impairments…',
+  },
+  placeholder: {
+    id: 'placeholder',
+    defaultMessage: 'Media description',
+  },
+  savingFailed: {
+    id: 'alt_text_modal.save.fail',
+    defaultMessage: 'Failed to save alt text',
+  },
 });
+
+interface IComposeAttachmentEditor {
+  composeId: string;
+  media: MediaAttachment;
+  visible: boolean;
+  onDismiss: () => void;
+}
+
+const ComposeAttachmentEditor: React.FC<IComposeAttachmentEditor> = ({
+  composeId,
+  media,
+  visible,
+  onDismiss,
+}) => {
+  const intl = useIntl();
+  const { colors, shapes } = useTheme();
+  const changeUploadCompose = useChangeUploadCompose(composeId);
+
+  const [closing, setClosing] = React.useState(false);
+  const [description, setDescription] = React.useState(media.description);
+  const [isSaving, setIsSaving] = React.useState(false);
+
+  const { width, height } =
+    (media.type !== 'audio' && media.type !== 'unknown' && media.meta.original) || {};
+  const aspectRatio = width && height ? width / height : undefined;
+
+  const handleClose = () => setClosing(true);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+
+    try {
+      await changeUploadCompose(media.id, {
+        description,
+        // focus: position
+        //   ? `${((position[0] - 0.5) * 2).toFixed(2)},${((position[1] - 0.5) * -2).toFixed(2)}`
+        //   : undefined,
+      });
+      setClosing(true);
+    } catch {
+      toast.error(intl.formatMessage(messages.savingFailed));
+    }
+
+    setIsSaving(false);
+  };
+
+  React.useEffect(() => {
+    if (visible) setClosing(false);
+  }, [visible]);
+
+  return (
+    <DialogOrSheet
+      visible={visible && !closing}
+      handleDismiss={onDismiss}
+      title={<FormattedMessage id='alt_text_modal.header' defaultMessage='Add alt text' />}
+      actions={[
+        {
+          icon: 'arrow.left',
+          label: intl.formatMessage(messages.cancel),
+          onPress: handleClose,
+        },
+        {
+          icon: 'checkmark',
+          label: intl.formatMessage(messages.save),
+          onPress: handleSave,
+          confirm: true,
+          loading: isSaving,
+          disabled: isSaving,
+        },
+      ]}
+      forceSheet
+    >
+      <View style={{ gap: 8 }}>
+        <View
+          style={{
+            width: '100%',
+            height: aspectRatio ? undefined : 320,
+            aspectRatio,
+            maxHeight: 480,
+            position: 'relative',
+            borderRadius: shapes.corner.medium,
+            overflow: 'hidden',
+          }}
+        >
+          {media.type !== 'unknown' && media.type !== 'audio' && renderMedia(media)}
+        </View>
+        <Text variant='bodyMedium' style={{ color: colors.onSurfaceVariant }}>
+          {intl.formatMessage(
+            media.type === 'audio' ? messages.titleHearing : messages.titleVisual,
+          )}
+        </Text>
+        <TextInput
+          value={description}
+          onChangeText={setDescription}
+          variant='outlined'
+          placeholder={intl.formatMessage(messages.placeholder)}
+          multiline
+          numberOfLines={4}
+        />
+      </View>
+    </DialogOrSheet>
+  );
+};
 
 interface IComposeAttachmentThumb {
   composeId: string;
@@ -98,6 +222,8 @@ const ComposeAttachmentThumb: React.FC<IComposeAttachmentThumb> = ({
   const intl = useIntl();
   const theme = useTheme();
   const { updateCompose } = useComposeActions();
+
+  const [showEditor, setShowEditor] = React.useState(false);
 
   const handleDelete = () => {
     updateCompose(composeId, (draft) => {
@@ -147,44 +273,57 @@ const ComposeAttachmentThumb: React.FC<IComposeAttachmentThumb> = ({
     );
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>{thumb}</DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Label>{media.url.split('/').at(-1)}</DropdownMenu.Label>
-        <DropdownMenu.Group>
-          <DropdownMenu.Item key='edit' onSelect={() => {}}>
-            <DropdownMenu.ItemIcon ios={{ name: 'pencil' }} androidIconName='ph_pencil_simple' />
-            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.edit)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item key='delete' onSelect={handleDelete} destructive>
-            <DropdownMenu.ItemIcon ios={{ name: 'trash' }} androidIconName='ph_trash' />
-            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.delete)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-        </DropdownMenu.Group>
-        <DropdownMenu.Group>
-          <DropdownMenu.Item
-            key='move-left'
-            onSelect={() => handleMove(index - 1)}
-            disabled={index === 0}
-          >
-            <DropdownMenu.ItemIcon ios={{ name: 'arrow.left' }} androidIconName='ph_arrow_left' />
-            <DropdownMenu.ItemTitle>
-              {intl.formatMessage(messages.moveToLeft)}
-            </DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item
-            key='move-right'
-            onSelect={() => handleMove(index + 1)}
-            disabled={index === mediaCount - 1}
-          >
-            <DropdownMenu.ItemIcon ios={{ name: 'arrow.right' }} androidIconName='ph_arrow_right' />
-            <DropdownMenu.ItemTitle>
-              {intl.formatMessage(messages.moveToRight)}
-            </DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-        </DropdownMenu.Group>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+    <>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>{thumb}</DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Label>{media.url.split('/').at(-1)}</DropdownMenu.Label>
+          <DropdownMenu.Group>
+            <DropdownMenu.Item key='edit' onSelect={() => setShowEditor(true)}>
+              <DropdownMenu.ItemIcon ios={{ name: 'pencil' }} androidIconName='ph_pencil_simple' />
+              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.edit)}</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item key='delete' onSelect={handleDelete} destructive>
+              <DropdownMenu.ItemIcon ios={{ name: 'trash' }} androidIconName='ph_trash' />
+              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.delete)}</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          </DropdownMenu.Group>
+          <DropdownMenu.Group>
+            <DropdownMenu.Item
+              key='move-left'
+              onSelect={() => handleMove(index - 1)}
+              disabled={index === 0}
+            >
+              <DropdownMenu.ItemIcon ios={{ name: 'arrow.left' }} androidIconName='ph_arrow_left' />
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.moveToLeft)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item
+              key='move-right'
+              onSelect={() => handleMove(index + 1)}
+              disabled={index === mediaCount - 1}
+            >
+              <DropdownMenu.ItemIcon
+                ios={{ name: 'arrow.right' }}
+                androidIconName='ph_arrow_right'
+              />
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.moveToRight)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          </DropdownMenu.Group>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+      {showEditor && (
+        <ComposeAttachmentEditor
+          composeId={composeId}
+          media={media}
+          visible={showEditor}
+          onDismiss={() => setShowEditor(false)}
+        />
+      )}
+    </>
   );
 };
 

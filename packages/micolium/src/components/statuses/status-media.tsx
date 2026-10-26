@@ -484,4 +484,4 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   );
 };
 
-export { StatusMedia };
+export { StatusMedia, renderMedia };
