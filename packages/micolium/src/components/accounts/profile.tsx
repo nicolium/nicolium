@@ -531,7 +531,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
               />
             </Text>
           </View>
-          <AccountActionsDropdown account={account} />
+          <AccountActionsDropdown account={account} headerButton />
         </Appbar.Header>
       </Animated.View>
       <PostsTimeline
