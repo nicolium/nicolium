@@ -1618,6 +1618,7 @@ const useUploadCompose = (composeId: string) => {
       const progress = new Array(files.length).fill(0);
       const total = files.reduce((a, v) => a + v.size, 0);
       const mediaCount = media ? media.length : 0;
+      let uploaded = 0;
 
       if (files.length + mediaCount > attachmentLimit) {
         toast.error(intl.formatMessage(messages.uploadErrorLimit));
@@ -1642,7 +1643,8 @@ const useUploadCompose = (composeId: string) => {
             }),
           () =>
             updateCompose(composeId, (draft) => {
-              draft.isUploading = false;
+              uploaded += 1;
+              if (uploaded === files.length) draft.isUploading = false;
             }),
           ({ loaded }) => {
             progress[i] = loaded;

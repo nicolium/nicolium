@@ -107,6 +107,7 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         <DropdownMenu.Group>
+          {/* TODO: camera */}
           <DropdownMenu.Item key='file' onSelect={handleAddFile}>
             <DropdownMenu.ItemIcon ios={{ name: 'paperclip' }} androidIconName='ph_paperclip' />
             <DropdownMenu.ItemTitle>{intl.formatMessage(messages.addFile)}</DropdownMenu.ItemTitle>

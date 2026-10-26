@@ -1790,6 +1790,7 @@ const useUploadCompose = (composeId: string) => {
       const media = compose.mediaAttachments;
       const progress = new Array(files.length).fill(0);
       let total = Array.from(files).reduce((a, v) => a + v.size, 0);
+      let uploaded = 0;
       const mediaCount = media ? media.length : 0;
 
       if (files.length + mediaCount > attachmentLimit) {
@@ -1815,7 +1816,8 @@ const useUploadCompose = (composeId: string) => {
             }),
           () =>
             updateCompose(composeId, (draft) => {
-              draft.isUploading = false;
+              uploaded += 1;
+              if (uploaded === files.length) draft.isUploading = false;
             }),
           ({ loaded }) => {
             progress[i] = loaded;
