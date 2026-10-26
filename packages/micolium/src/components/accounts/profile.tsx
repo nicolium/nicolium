@@ -519,18 +519,22 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
       <Animated.View style={headerStyle}>
         <Appbar.Header mode='small' style={{ backgroundColor: colors.surfaceContainer }}>
           {!ownAccount && <Appbar.BackAction onPress={navigation.goBack} />}
-          <View style={{ marginLeft: ownAccount ? 16 : 0 }}>
-            <Text variant='titleMedium' numberOfLines={1}>
-              <Emojify text={account.display_name} emojis={account.emojis} />
-            </Text>
-            <Text style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <FormattedMessage
-                id='account.statuses_count'
-                defaultMessage='{count, plural, one {# post} other {# posts}}'
-                values={{ count: account.statuses_count }}
-              />
-            </Text>
-          </View>
+          <Appbar.Content
+            title={
+              <View style={{ marginLeft: ownAccount ? 16 : 0 }}>
+                <Text variant='titleMedium' numberOfLines={1}>
+                  <Emojify text={account.display_name} emojis={account.emojis} />
+                </Text>
+                <Text style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <FormattedMessage
+                    id='account.statuses_count'
+                    defaultMessage='{count, plural, one {# post} other {# posts}}'
+                    values={{ count: account.statuses_count }}
+                  />
+                </Text>
+              </View>
+            }
+          />
           <AccountActionsDropdown account={account} headerButton />
         </Appbar.Header>
       </Animated.View>

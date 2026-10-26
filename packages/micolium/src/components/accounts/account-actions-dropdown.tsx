@@ -12,8 +12,10 @@ import * as DropdownMenu from 'zeego/dropdown-menu';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import {
+  useFollowAccountMutation,
   useRemoveAccountFromFollowersMutation,
   useUnblockAccountMutation,
+  useUnfollowAccountMutation,
   useUnmuteAccountMutation,
 } from '@/queries/accounts/use-relationship';
 import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/settings/domain-blocks';
@@ -77,6 +79,25 @@ const messages = defineMessages({
   blocked: { id: 'column.blocks.long', defaultMessage: 'Blocked accounts' },
   muted: { id: 'column.mutes.long', defaultMessage: 'Muted accounts' },
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
+  follow: { id: 'account.follow', defaultMessage: 'Follow' },
+  requestFollow: { id: 'account.request_follow', defaultMessage: 'Request follow' },
+  requested: { id: 'account.requested_small', defaultMessage: 'Follow requested' },
+  unfollow: { id: 'account.unfollow', defaultMessage: 'Unfollow' },
+  unfollowHeading: { id: 'confirmations.unfollow.heading', defaultMessage: 'Unfollow {name}' },
+  unfollowMessage: {
+    id: 'confirmations.unfollow.message',
+    defaultMessage: 'Are you sure you want to unfollow {name}?',
+  },
+  unfollowMessageLocked: {
+    id: 'confirmations.unfollow.message.locked',
+    defaultMessage:
+      'Are you sure you want to unfollow {name}? You will have to request to follow them again if you change your mind.',
+  },
+  unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
+  showReblogs: { id: 'account.show_reblogs.short', defaultMessage: 'Show reposts' },
+  subscribe: { id: 'account.subscribe.short', defaultMessage: 'Subscribe to notifications' },
+  notifyReplies: { id: 'account.notify_replies.short', defaultMessage: 'Subscribe to replies' },
+  notifyReblogs: { id: 'account.notify_reblogs.short', defaultMessage: 'Subscribe to reposts' },
 });
 
 interface IAccountActionsDropdown {
@@ -95,6 +116,8 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
   const [reportDialog, setReportDialog] = React.useState(false);
 
   const { data: currentAccountId } = useCredentialAccountId();
+  const { mutate: followAccount } = useFollowAccountMutation(account.id);
+  const { mutate: unfollowAccount } = useUnfollowAccountMutation(account.id);
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account.id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(account.id);
   const { mutate: blockDomain } = useBlockDomainMutation();
@@ -102,6 +125,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
   const { mutate: removeFromFollowers } = useRemoveAccountFromFollowersMutation(account.id);
 
   const ownAccount = currentAccountId === account.id;
+  const relationship = account.relationship;
 
   const handleCopy = () => Clipboard.setStringAsync(account.url);
 
@@ -110,6 +134,49 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
   const handleShare = () => {
     shareAsync(account.url);
   };
+
+  const handleUnfollow = () => {
+    if (relationship?.requested) {
+      unfollowAccount();
+    } else {
+      Alert.alert(
+        intl.formatMessage(messages.unfollowHeading, { name: account.username }),
+        intl.formatMessage(
+          account.locked ? messages.unfollowMessageLocked : messages.unfollowMessage,
+          { name: account.acct },
+        ),
+        [
+          {
+            text: intl.formatMessage(messages.cancel),
+            style: 'cancel',
+          },
+          {
+            text: intl.formatMessage(messages.unfollowConfirm),
+            style: 'destructive',
+            onPress: () => unfollowAccount(),
+          },
+        ],
+      );
+    }
+  };
+
+  const handleToggleShowReposts = () => followAccount({ reblogs: !relationship?.showing_reblogs });
+
+  const handleToggleNotify = () => followAccount({ notify: !relationship?.notifying });
+
+  const handleToggleNotifyReplies = () =>
+    followAccount({
+      notify: true,
+      notify_replies: !relationship?.notifying_replies,
+      notify_reblogs: relationship?.notifying_reblogs,
+    });
+
+  const handleToggleNotifyReblogs = () =>
+    followAccount({
+      notify: true,
+      notify_replies: relationship?.notifying_replies,
+      notify_reblogs: !relationship?.notifying_reblogs,
+    });
 
   const handleMute = () => {
     if (account.relationship?.muting) unmuteAccount();
@@ -204,9 +271,82 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
                   key='edit-profile'
                   onSelect={() => navigation.navigate('edit_profile')}
                 >
-                  <DropdownMenu.ItemIcon ios={{ name: 'pencil' }} androidIconName='ph_pencil]' />
+                  <DropdownMenu.ItemIcon
+                    ios={{ name: 'pencil' }}
+                    androidIconName='ph_pencil_simple'
+                  />
                   <DropdownMenu.ItemTitle>
                     {intl.formatMessage(messages.editProfile)}
+                  </DropdownMenu.ItemTitle>
+                </DropdownMenu.Item>
+              ) : relationship?.following || relationship?.requested ? (
+                <>
+                  <DropdownMenu.Item key='unfollow' onSelect={handleUnfollow} destructive>
+                    <DropdownMenu.ItemIcon
+                      ios={{ name: 'person.badge.minus' }}
+                      androidIconName='ph_user_minus'
+                    />
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(
+                        relationship.requested ? messages.requested : messages.unfollow,
+                      )}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.CheckboxItem
+                    key='show-reblogs'
+                    value={relationship.showing_reblogs}
+                    onSelect={handleToggleShowReposts}
+                  >
+                    <DropdownMenu.ItemTitle>
+                      {intl.formatMessage(messages.showReblogs)}
+                    </DropdownMenu.ItemTitle>
+                  </DropdownMenu.CheckboxItem>
+                  {features.accountNotifies && (
+                    <DropdownMenu.CheckboxItem
+                      key='notify'
+                      value={relationship.notifying}
+                      onSelect={handleToggleNotify}
+                    >
+                      <DropdownMenu.ItemTitle>
+                        {intl.formatMessage(messages.subscribe)}
+                      </DropdownMenu.ItemTitle>
+                    </DropdownMenu.CheckboxItem>
+                  )}
+                  {features.accountNotifiesControl && (
+                    <>
+                      <DropdownMenu.CheckboxItem
+                        key='notify-replies'
+                        value={relationship.notifying_replies}
+                        onSelect={handleToggleNotifyReplies}
+                      >
+                        <DropdownMenu.ItemTitle>
+                          {intl.formatMessage(messages.notifyReplies)}
+                        </DropdownMenu.ItemTitle>
+                      </DropdownMenu.CheckboxItem>
+                      <DropdownMenu.CheckboxItem
+                        key='notify-reblogs'
+                        value={relationship.notifying_reblogs}
+                        onSelect={handleToggleNotifyReblogs}
+                      >
+                        <DropdownMenu.ItemTitle>
+                          {intl.formatMessage(messages.notifyReblogs)}
+                        </DropdownMenu.ItemTitle>
+                      </DropdownMenu.CheckboxItem>
+                    </>
+                  )}
+                </>
+              ) : !relationship?.blocking ? (
+                <DropdownMenu.Item
+                  key='follow'
+                  onSelect={() => followAccount(undefined)}
+                  disabled={!relationship || relationship.blocked_by}
+                >
+                  <DropdownMenu.ItemIcon
+                    ios={{ name: 'person.badge.plus' }}
+                    androidIconName='ph_user_plus'
+                  />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(account.locked ? messages.requestFollow : messages.follow)}
                   </DropdownMenu.ItemTitle>
                 </DropdownMenu.Item>
               ) : null}
