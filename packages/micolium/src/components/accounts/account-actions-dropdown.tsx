@@ -20,6 +20,7 @@ import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/sett
 import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
 
+import { HeaderIconButton } from '../ui/header-icon-button';
 import { iconHelper } from '../ui/icon';
 
 import { BlockMuteDialog } from './block-mute-dialog';
@@ -29,6 +30,7 @@ import type { Account } from 'pl-api';
 
 const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
+  editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
   copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
   openInBrowser: { id: 'account.open_in_browser', defaultMessage: 'Open profile in browser' },
   share: { id: 'account.share', defaultMessage: 'Share profile' },
@@ -79,9 +81,10 @@ const messages = defineMessages({
 
 interface IAccountActionsDropdown {
   account: Account;
+  headerButton?: boolean;
 }
 
-const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) => {
+const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, headerButton }) => {
   const features = useFeatures();
   const intl = useIntl();
   const { mentionCompose, directCompose } = useComposeActions();
@@ -181,13 +184,34 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account }) 
     <>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <IconButton
-            mode='outlined'
-            icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
-            onPress={() => {}}
-          />
+          {headerButton ? (
+            <HeaderIconButton
+              icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
+            />
+          ) : (
+            <IconButton
+              mode='outlined'
+              icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
+              onPress={() => {}}
+            />
+          )}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
+          {headerButton && (
+            <DropdownMenu.Group>
+              {ownAccount ? (
+                <DropdownMenu.Item
+                  key='edit-profile'
+                  onSelect={() => navigation.navigate('edit_profile')}
+                >
+                  <DropdownMenu.ItemIcon ios={{ name: 'pencil' }} androidIconName='ph_pencil]' />
+                  <DropdownMenu.ItemTitle>
+                    {intl.formatMessage(messages.editProfile)}
+                  </DropdownMenu.ItemTitle>
+                </DropdownMenu.Item>
+              ) : null}
+            </DropdownMenu.Group>
+          )}
           <DropdownMenu.Group>
             <DropdownMenu.Item key='copy' onSelect={handleCopy}>
               <DropdownMenu.ItemIcon
