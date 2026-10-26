@@ -6,6 +6,7 @@ import { useFeatures } from '@/contexts/current-account-context';
 import { List, type IList } from './ui/list';
 
 import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
+import type { StyleProp, ViewStyle } from 'react-native';
 
 type Visibility = 'public' | 'unlisted' | 'private';
 type Policy = 'can_favourite' | 'can_reblog' | 'can_reply';
@@ -137,6 +138,7 @@ interface IInteractionPolicyConfig {
   visibility: Visibility;
   singlePost?: boolean;
   disabled?: boolean;
+  style?: StyleProp<ViewStyle>;
 }
 
 const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
@@ -147,6 +149,7 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
   onQuotePolicyChange,
   singlePost,
   disabled,
+  style,
 }) => {
   const features = useFeatures();
   const intl = useIntl();
@@ -222,7 +225,7 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
     });
   }
 
-  return <List sections={sections} />;
+  return <List sections={sections} style={style} />;
 };
 
 export {

@@ -132,6 +132,7 @@ const ComposeInteractionPolicyDialog: React.FC<IComposeInteractionPolicyDialog> 
         onQuotePolicyChange={setDraftQuotePolicy}
         visibility={visibility as 'public'}
         singlePost
+        style={{ marginTop: -8, marginHorizontal: -16 }}
       />
     </DialogOrSheet>
   );
