@@ -24,7 +24,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Platform, ScrollView, View } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
-import { useCompose } from '@/stores/compose';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 import { iconHelper } from '../ui/icon';
 
@@ -83,18 +83,37 @@ const messages = defineMessages({
 });
 
 interface IComposeAttachmentThumb {
+  composeId: string;
   media: MediaAttachment;
   index: number;
   mediaCount: number;
 }
 
 const ComposeAttachmentThumb: React.FC<IComposeAttachmentThumb> = ({
+  composeId,
   media,
   index,
   mediaCount,
 }) => {
   const intl = useIntl();
   const theme = useTheme();
+  const { updateCompose } = useComposeActions();
+
+  const handleDelete = () => {
+    updateCompose(composeId, (draft) => {
+      if (draft.mediaAttachments.length === 1) {
+        draft.sensitive = false;
+      }
+      draft.mediaAttachments.splice(index, 1);
+    });
+  };
+
+  const handleMove = (newIndex: number) => {
+    updateCompose(composeId, (draft) => {
+      const item = draft.mediaAttachments.splice(index, 1)[0];
+      draft.mediaAttachments.splice(newIndex, 0, item);
+    });
+  };
 
   const thumb =
     media.type === 'audio' || media.type === 'unknown' ? (
@@ -137,13 +156,17 @@ const ComposeAttachmentThumb: React.FC<IComposeAttachmentThumb> = ({
             <DropdownMenu.ItemIcon ios={{ name: 'pencil' }} androidIconName='ph_pencil_simple' />
             <DropdownMenu.ItemTitle>{intl.formatMessage(messages.edit)}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
-          <DropdownMenu.Item key='delete' onSelect={() => {}} destructive>
+          <DropdownMenu.Item key='delete' onSelect={handleDelete} destructive>
             <DropdownMenu.ItemIcon ios={{ name: 'trash' }} androidIconName='ph_trash' />
             <DropdownMenu.ItemTitle>{intl.formatMessage(messages.delete)}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
         </DropdownMenu.Group>
         <DropdownMenu.Group>
-          <DropdownMenu.Item key='move-left' onSelect={() => {}} disabled={index === 0}>
+          <DropdownMenu.Item
+            key='move-left'
+            onSelect={() => handleMove(index - 1)}
+            disabled={index === 0}
+          >
             <DropdownMenu.ItemIcon ios={{ name: 'arrow.left' }} androidIconName='ph_arrow_left' />
             <DropdownMenu.ItemTitle>
               {intl.formatMessage(messages.moveToLeft)}
@@ -151,7 +174,7 @@ const ComposeAttachmentThumb: React.FC<IComposeAttachmentThumb> = ({
           </DropdownMenu.Item>
           <DropdownMenu.Item
             key='move-right'
-            onSelect={() => {}}
+            onSelect={() => handleMove(index + 1)}
             disabled={index === mediaCount - 1}
           >
             <DropdownMenu.ItemIcon ios={{ name: 'arrow.right' }} androidIconName='ph_arrow_right' />
@@ -168,7 +191,7 @@ const ComposeAttachmentThumb: React.FC<IComposeAttachmentThumb> = ({
 const ComposeAttachmentThumbs: React.FC<ICompose> = ({ composeId }) => {
   const { mediaAttachments, isUploading } = useCompose(composeId);
 
-  if (!mediaAttachments && !isUploading) return null;
+  if (!mediaAttachments.length && !isUploading) return null;
 
   return (
     <View style={{ marginVertical: 8 }}>
@@ -179,11 +202,13 @@ const ComposeAttachmentThumbs: React.FC<ICompose> = ({ composeId }) => {
         {mediaAttachments.map((media, index) => (
           <ComposeAttachmentThumb
             key={media.id}
+            composeId={composeId}
             media={media}
             index={index}
             mediaCount={mediaAttachments.length}
           />
         ))}
+        {/* TODO: Use CircularProgressIndicator when merged into react native paper */}
         {isUploading && <ActivityIndicator size='large' style={{ margin: 8 }} />}
       </ScrollView>
     </View>

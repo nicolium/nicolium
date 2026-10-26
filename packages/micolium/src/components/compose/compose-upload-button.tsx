@@ -27,7 +27,7 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
   const intl = useIntl();
 
   const { configuration } = useInstance();
-  const { isUploading, mediaAttachments } = useCompose(composeId);
+  const { isUploading, mediaAttachments, poll } = useCompose(composeId);
   const uploadCompose = useUploadCompose(composeId);
 
   const attachmentTypes = configuration.media_attachments.supported_mime_types;
@@ -87,7 +87,9 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
           style={{ marginHorizontal: 0 }}
           onPress={() => {}}
           disabled={
-            isUploading || mediaAttachments.length >= configuration.statuses.max_media_attachments
+            !!poll ||
+            isUploading ||
+            mediaAttachments.length >= configuration.statuses.max_media_attachments
           }
           accessibilityLabel={intl.formatMessage(messages.upload)}
         />
