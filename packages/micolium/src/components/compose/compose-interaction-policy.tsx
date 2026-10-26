@@ -112,7 +112,7 @@ const ComposeInteractionPolicyDialog: React.FC<IComposeInteractionPolicyDialog> 
       }
       actions={[
         {
-          icon: 'xmark',
+          icon: 'arrow.left',
           label: intl.formatMessage(messages.cancel),
           onPress: handleClose,
         },
