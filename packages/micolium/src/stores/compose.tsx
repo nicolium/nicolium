@@ -36,7 +36,7 @@ import { scopedQueryKey } from '@/queries/query';
 // import { queryKeys } from '@/queries/keys';
 // import { scopedQueryKey } from '@/queries/query';
 
-import { useSettingsStore } from './settings';
+import { useSetting, useSettingsStore } from './settings';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 // import type { AutoSuggestion } from '@/components/autosuggest-input';
@@ -1703,13 +1703,13 @@ const useComposeActions = () => useComposeStore((state) => state.actions);
 //   );
 // };
 
-// const useComposeVisibility = (composeId: string) => {
-//   const { visibility } = useCompose(composeId);
-//   const { defaultPrivacy } = useSettings();
+const useComposeVisibility = (composeId: string) => {
+  const { visibility } = useCompose(composeId);
+  const defaultPrivacy = useSetting('compose.defaultPrivacy');
 
-//   if (visibility === 'default') return defaultPrivacy;
-//   return visibility;
-// };
+  if (visibility === 'default') return defaultPrivacy;
+  return visibility;
+};
 
 const getComposeContentType = (
   contentType: string,
@@ -1755,6 +1755,6 @@ export {
   //   useSubmitThread,
   //   useUploadCompose,
   //   useChangeUploadCompose,
-  //   useComposeVisibility,
+  useComposeVisibility,
   //   useComposeContentType,
 };

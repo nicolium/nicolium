@@ -32,6 +32,7 @@ import { Account } from '../accounts/account';
 import { GlassActionButton } from '../ui/dialog-or-sheet';
 import { iconHelper } from '../ui/icon';
 
+import { ComposeInteractionPolicy } from './compose-interaction-policy';
 import { ComposeQuoteIndicator } from './compose-quote-indicator';
 import { ComposeReplyIndicator } from './compose-reply-indicator';
 import { ComposeVisibilityDropdown } from './compose-visibility-dropdown';
@@ -281,6 +282,9 @@ const ComposeBottomSheet = () => {
           disabled={compose.mediaAttachments.length > 0 || compose.isUploading}
           accessibilityLabel={intl.formatMessage(poll ? messages.removePoll : messages.addPoll)}
         />
+      )}
+      {(features.interactionRequests || features.quoteApprovalPolicies) && (
+        <ComposeInteractionPolicy composeId={COMPOSE_ID} />
       )}
       <IconButton
         icon={iconHelper(SmileyIcon)}
