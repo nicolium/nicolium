@@ -3,6 +3,7 @@ import { labelsHidden } from '@expo/ui/swift-ui/modifiers';
 import { List as PaperList, Switch, Text, useTheme } from '@mkljczk/react-native-paper';
 import { create } from 'mutative';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { Pressable, type StyleProp, View, type ViewStyle } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
@@ -54,6 +55,7 @@ interface IList {
 const List: React.FC<IList> = ({ sections, style }) => {
   const glassEffect = useEnableLiquidGlass();
   const theme = useTheme();
+  const intl = useIntl();
 
   const filteredSections = React.useMemo(
     () =>
@@ -177,7 +179,14 @@ const List: React.FC<IList> = ({ sections, style }) => {
                     style={styles}
                     right={() => (
                       <Text>
-                        {item.options.find((option) => option.value === item.active)?.label}
+                        {Array.isArray(item.active)
+                          ? intl.formatList(
+                              item.options
+                                .filter((option) => item.active.includes(option.value))
+                                .map((option) => option.label),
+                              { type: 'conjunction' },
+                            )
+                          : item.options.find((option) => option.value === item.active)?.label}
                       </Text>
                     )}
                     containerStyle={{ alignItems: 'center' }}
