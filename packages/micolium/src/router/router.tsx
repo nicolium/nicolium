@@ -109,7 +109,10 @@ const RootNavigator = () => {
   const isLoggedIn = useAuthStore(({ currentAccount }) => !!currentAccount);
 
   return (
-    <RootStack.Navigator screenOptions={{ headerShown: false }}>
+    <RootStack.Navigator
+      screenOptions={{ headerShown: false }}
+      key={isLoggedIn ? 'logged-in' : 'not-logged-in'}
+    >
       {isLoggedIn && (
         <>
           <RootStack.Screen name='app' component={Tabs} />
