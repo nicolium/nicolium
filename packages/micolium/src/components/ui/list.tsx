@@ -67,36 +67,6 @@ const List: React.FC<IList> = ({ sections, style }) => {
     [sections],
   );
 
-  // if (glassEffect)
-  //   return (
-  //     <SwiftUIList style={{ marginHorizontal: 0 }}>
-  //       {sections.map((section, index) => (
-  //         <SwiftUISection title={section.heading} key={section.heading || index}>
-  //           {section.items.map(
-  //             (item, index) =>
-  //               item.type === 'button' && (
-  //                 <SwiftUIButton
-  //                   key={index}
-  //                   modifiers={item.role !== 'destructive' ? [buttonStyle('plain')] : undefined}
-  //                   role={item.role === 'destructive' ? 'destructive' : 'default'}
-  //                   onPress={item.onPress}
-  //                 >
-  //                   {item.sublabel ? (
-  //                     <>
-  //                       <SwiftUIText>{item.label}</SwiftUIText>
-  //                       <SwiftUIText>{item.sublabel}</SwiftUIText>
-  //                     </>
-  //                   ) : (
-  //                     <SwiftUIText>{item.label}</SwiftUIText>
-  //                   )}
-  //                 </SwiftUIButton>
-  //               ),
-  //           )}
-  //         </SwiftUISection>
-  //       ))}
-  //     </SwiftUIList>
-  //   );
-
   return filteredSections.map((section, index) => (
     <PaperList.Section
       key={index}
