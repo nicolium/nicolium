@@ -27,6 +27,7 @@ const CurrentAccount = () => {
     <Account
       id={currentAccountId}
       badge={unreadCount > 0 ? <Badge>{unreadCount}</Badge> : undefined}
+      displayFqn
     />
   );
 };
