@@ -366,15 +366,26 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             disabled={account.avatar_default}
             onPress={account.avatar_default ? undefined : handlePreviewAvatar}
           >
-            <Avatar.Image
-              source={{ uri: account.avatar }}
-              size={80}
-              accessibilityLabel={account.avatar_description}
-              style={{
-                outlineWidth: 4,
-                outlineColor: colors.background,
-              }}
-            />
+            {account.avatar_default ? (
+              <Avatar.Text
+                size={80}
+                label={(account.display_name || account.acct).slice(0, 2)}
+                style={{
+                  outlineWidth: 4,
+                  outlineColor: colors.background,
+                }}
+              />
+            ) : (
+              <Avatar.Image
+                source={{ uri: account.avatar }}
+                size={80}
+                accessibilityLabel={account.avatar_description}
+                style={{
+                  outlineWidth: 4,
+                  outlineColor: colors.background,
+                }}
+              />
+            )}
           </Pressable>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             {ownAccount ? (
