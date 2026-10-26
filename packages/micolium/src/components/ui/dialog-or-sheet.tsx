@@ -35,7 +35,7 @@ const GlassActionButton: React.FC<DialogOrSheetAction> = ({
     <Pressable onPress={onPress} disabled={disabled} accessibilityLabel={label}>
       <GlassView
         glassEffectStyle='regular'
-        isInteractive
+        isInteractive={!disabled}
         tintColor={
           // found the color values online, wouldn't surprise me if hallucinated? lol
           confirm && !disabled ? (colorScheme === 'dark' ? '#0A84FF' : '#007AFF') : undefined

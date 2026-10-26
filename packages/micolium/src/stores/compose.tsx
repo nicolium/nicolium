@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
-// import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
+import { toast } from 'sonner-native';
 import { v4 as uuid } from 'uuid';
 // import { length } from 'stringz';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import { useClient, useFeatures, useInstance } from '@/contexts/current-account-context';
 // import { cancelDraftStatus, usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 // import { deckRoute, router } from '@/router';
 // import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';
@@ -19,8 +19,9 @@ import { useClient, useFeatures, useInstance } from '@/contexts/current-account-
 // import { resolveAccount, resolveStatus } from '@/utils/resolve';
 // import { useDraftStateStore } from './draft-state';
 // import { useUiStoreActions } from './ui';
+import { uploadFile, updateMedia, type PickedFile } from '@/actions/media';
+import { useClient, useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
-// import { uploadFile, updateMedia } from '@/actions/media';
 // import { countableText } from '@/components/compose/util/counter';
 // import { isNativeEmoji } from '@/emoji';
 // import { useClient } from '@/hooks/use-client';
@@ -52,7 +53,7 @@ import type {
   Status as BaseStatus,
   Poll,
   InteractionPolicy,
-  // UpdateMediaParams,
+  UpdateMediaParams,
   Location,
   EditStatusParams,
   StatusSource,
@@ -62,56 +63,56 @@ import type {
   Account,
 } from 'pl-api';
 
-// const messages = defineMessages({
-//   scheduleError: {
-//     id: 'compose.invalid_schedule',
-//     defaultMessage: 'You must schedule a post at least 5 minutes out.',
-//   },
-//   success: { id: 'compose.submit.success', defaultMessage: 'Your post was sent!' },
-//   threadSuccess: { id: 'compose.thread.success', defaultMessage: 'Your thread was sent!' },
-//   threadTooLong: {
-//     id: 'compose.thread.too_long',
-//     defaultMessage: 'One of the posts in your thread is too long.',
-//   },
-//   editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
-//   redactSuccess: { id: 'compose.redact.success', defaultMessage: 'The post was redacted' },
-//   scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
-//   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
-//   uploadErrorPoll: {
-//     id: 'upload_error.poll',
-//     defaultMessage: 'File upload not allowed with polls.',
-//   },
-//   missingLanguageHeading: {
-//     id: 'confirmations.missing_language.heading',
-//     defaultMessage: 'Posting without language selected',
-//   },
-//   missingLanguageMessage: {
-//     id: 'confirmations.missing_language.message',
-//     defaultMessage: 'You have not selected a language for your post. Do you want to post anyway?',
-//   },
-//   detectedLanguageMessage: {
-//     id: 'confirmations.missing_language.message.detected',
-//     defaultMessage:
-//       'You have not selected a language for your post. The detected language is {language}. Do you want to post anyway, with this language?',
-//   },
-//   missingLanguageConfirm: {
-//     id: 'confirmations.missing_language.confirm',
-//     defaultMessage: 'Post',
-//   },
-//   view: { id: 'toast.view', defaultMessage: 'View' },
-//   viewDrafts: { id: 'compose.submit.fail.view_drafts', defaultMessage: 'View drafts' },
-//   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
-//   replyMessage: {
-//     id: 'confirmations.reply.message',
-//     defaultMessage:
-//       'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?',
-//   },
-//   submitError: { id: 'compose.submit.fail', defaultMessage: 'Failed to submit your post' },
-//   resolveAccountError: {
-//     id: 'compose.resolve_account.fail',
-//     defaultMessage: 'Failed to resolve referenced account from the new account',
-//   },
-// });
+const messages = defineMessages({
+  //   scheduleError: {
+  //     id: 'compose.invalid_schedule',
+  //     defaultMessage: 'You must schedule a post at least 5 minutes out.',
+  //   },
+  //   success: { id: 'compose.submit.success', defaultMessage: 'Your post was sent!' },
+  //   threadSuccess: { id: 'compose.thread.success', defaultMessage: 'Your thread was sent!' },
+  //   threadTooLong: {
+  //     id: 'compose.thread.too_long',
+  //     defaultMessage: 'One of the posts in your thread is too long.',
+  //   },
+  //   editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
+  //   redactSuccess: { id: 'compose.redact.success', defaultMessage: 'The post was redacted' },
+  //   scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
+  uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
+  //   uploadErrorPoll: {
+  //     id: 'upload_error.poll',
+  //     defaultMessage: 'File upload not allowed with polls.',
+  //   },
+  //   missingLanguageHeading: {
+  //     id: 'confirmations.missing_language.heading',
+  //     defaultMessage: 'Posting without language selected',
+  //   },
+  //   missingLanguageMessage: {
+  //     id: 'confirmations.missing_language.message',
+  //     defaultMessage: 'You have not selected a language for your post. Do you want to post anyway?',
+  //   },
+  //   detectedLanguageMessage: {
+  //     id: 'confirmations.missing_language.message.detected',
+  //     defaultMessage:
+  //       'You have not selected a language for your post. The detected language is {language}. Do you want to post anyway, with this language?',
+  //   },
+  //   missingLanguageConfirm: {
+  //     id: 'confirmations.missing_language.confirm',
+  //     defaultMessage: 'Post',
+  //   },
+  //   view: { id: 'toast.view', defaultMessage: 'View' },
+  //   viewDrafts: { id: 'compose.submit.fail.view_drafts', defaultMessage: 'View drafts' },
+  //   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
+  //   replyMessage: {
+  //     id: 'confirmations.reply.message',
+  //     defaultMessage:
+  //       'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?',
+  //   },
+  //   submitError: { id: 'compose.submit.fail', defaultMessage: 'Failed to submit your post' },
+  //   resolveAccountError: {
+  //     id: 'compose.resolve_account.fail',
+  //     defaultMessage: 'Failed to resolve referenced account from the new account',
+  //   },
+});
 
 const getResetFileKey = () => Math.floor(Math.random() * 0x10000);
 
@@ -350,17 +351,17 @@ const privacyPreference = (
   return order[Math.max(order.indexOf(a), order.indexOf(b), 0)];
 };
 
-// const appendMedia = (compose: Compose, media: MediaAttachment) => {
-//   const prevSize = compose.mediaAttachments.length;
+const appendMedia = (compose: Compose, media: MediaAttachment) => {
+  const prevSize = compose.mediaAttachments.length;
 
-//   compose.mediaAttachments.push(media);
-//   compose.isUploading = false;
-//   compose.resetFileKey = Math.floor(Math.random() * 0x10000);
+  compose.mediaAttachments.push(media);
+  compose.isUploading = false;
+  compose.resetFileKey = Math.floor(Math.random() * 0x10000);
 
-//   if (prevSize === 0 && compose.sensitive) {
-//     compose.sensitive = true;
-//   }
-// };
+  if (prevSize === 0 && compose.sensitive) {
+    compose.sensitive = true;
+  }
+};
 
 const checkComposeContent = (compose?: Compose) =>
   !!compose &&
@@ -1601,107 +1602,104 @@ const useCompose = <ID extends string>(composeId: ID extends 'default' ? never :
 
 const useComposeActions = () => useComposeStore((state) => state.actions);
 
-// const useUploadCompose = (composeId: string) => {
-//   const { updateCompose } = useComposeActions();
-//   const client = useClient();
-//   const instance = useInstance();
-//   const intl = useIntl();
+const useUploadCompose = (composeId: string) => {
+  const { updateCompose } = useComposeActions();
+  const client = useClient();
+  const instance = useInstance();
+  const intl = useIntl();
 
-//   return useCallback(
-//     (files: FileList | Array<File>, descriptions?: Array<string>) => {
-//       const compose =
-//         useComposeStore.getState().composers[composeId] || useComposeStore.getState().default;
+  return useCallback(
+    (files: Array<PickedFile>, descriptions?: Array<string>) => {
+      const compose =
+        useComposeStore.getState().composers[composeId] || useComposeStore.getState().default;
 
-//       const attachmentLimit = instance.configuration.statuses.max_media_attachments;
-//       const media = compose.mediaAttachments;
-//       const progress = new Array(files.length).fill(0);
-//       let total = Array.from(files).reduce((a, v) => a + v.size, 0);
-//       const mediaCount = media ? media.length : 0;
+      const attachmentLimit = instance.configuration.statuses.max_media_attachments;
+      const media = compose.mediaAttachments;
+      const progress = new Array(files.length).fill(0);
+      const total = files.reduce((a, v) => a + v.size, 0);
+      const mediaCount = media ? media.length : 0;
 
-//       if (files.length + mediaCount > attachmentLimit) {
-//         toast.error(messages.uploadErrorLimit);
-//         return;
-//       }
+      if (files.length + mediaCount > attachmentLimit) {
+        toast.error(intl.formatMessage(messages.uploadErrorLimit));
+        return;
+      }
 
-//       updateCompose(composeId, (draft) => {
-//         draft.isUploading = true;
-//       });
+      updateCompose(composeId, (draft) => {
+        draft.isUploading = true;
+      });
 
-//       Array.from(files).forEach((f, i) => {
-//         if (mediaCount + i > attachmentLimit - 1) return;
+      files.forEach((f, i) => {
+        if (mediaCount + i > attachmentLimit - 1) return;
 
-//         uploadFile(
-//           client,
-//           f,
-//           descriptions?.[i],
-//           intl,
-//           (data) =>
-//             updateCompose(composeId, (draft) => {
-//               appendMedia(draft, data);
-//             }),
-//           () =>
-//             updateCompose(composeId, (draft) => {
-//               draft.isUploading = false;
-//             }),
-//           ({ loaded }) => {
-//             progress[i] = loaded;
-//             updateCompose(composeId, (draft) => {
-//               draft.progress = Math.round((progress.reduce((a, v) => a + v, 0) / total) * 100);
-//             });
-//           },
-//           (value) => {
-//             total += value;
-//           },
-//         );
-//       });
-//     },
-//     [instance, composeId, client],
-//   );
-// };
+        uploadFile(
+          client,
+          f,
+          descriptions?.[i],
+          intl,
+          (data) =>
+            updateCompose(composeId, (draft) => {
+              appendMedia(draft, data);
+            }),
+          () =>
+            updateCompose(composeId, (draft) => {
+              draft.isUploading = false;
+            }),
+          ({ loaded }) => {
+            progress[i] = loaded;
+            updateCompose(composeId, (draft) => {
+              draft.progress = Math.round((progress.reduce((a, v) => a + v, 0) / total) * 100);
+            });
+          },
+        );
+      });
+    },
+    [instance, composeId, client],
+  );
+};
 
-// const useChangeUploadCompose = (composeId: string) => {
-//   const { updateCompose } = useComposeActions();
-//   const client = useClient();
+const useChangeUploadCompose = (composeId: string) => {
+  const { updateCompose } = useComposeActions();
+  const client = useClient();
 
-//   return useCallback(
-//     async (mediaId: string, params: UpdateMediaParams) => {
-//       const compose =
-//         useComposeStore.getState().composers[composeId] || useComposeStore.getState().default;
+  return useCallback(
+    async (mediaId: string, params: UpdateMediaParams) => {
+      const compose =
+        useComposeStore.getState().composers[composeId] || useComposeStore.getState().default;
 
-//       updateCompose(composeId, (draft) => {
-//         draft.isChangingUpload = true;
-//       });
+      updateCompose(composeId, (draft) => {
+        draft.isChangingUpload = true;
+      });
 
-//       try {
-//         const response = await updateMedia(client, mediaId, params);
-//         updateCompose(composeId, (draft) => {
-//           draft.isChangingUpload = false;
-//           draft.mediaAttachments = draft.mediaAttachments.map((item) =>
-//             item.id === response.id ? response : item,
-//           );
-//         });
-//         return response;
-//       } catch (error: any) {
-//         if (error.response?.status === 404 && compose.editedId) {
-//           const previousMedia = compose.mediaAttachments.find((m) => m.id === mediaId);
-//           if (previousMedia) {
-//             updateCompose(composeId, (draft) => {
-//               draft.isChangingUpload = false;
-//               draft.mediaAttachments = draft.mediaAttachments.map((item) =>
-//                 item.id === mediaId ? { ...previousMedia, ...params } : item,
-//               );
-//             });
-//             return;
-//           }
-//         }
-//         updateCompose(composeId, (draft) => {
-//           draft.isChangingUpload = false;
-//         });
-//       }
-//     },
-//     [composeId, client],
-//   );
-// };
+      try {
+        const response = await updateMedia(client, mediaId, params);
+        updateCompose(composeId, (draft) => {
+          draft.isChangingUpload = false;
+          draft.mediaAttachments = draft.mediaAttachments.map((item) =>
+            item.id === response.id ? response : item,
+          );
+        });
+        return response;
+      } catch (error: any) {
+        if (error.response?.status === 404 && compose.editedId) {
+          const previousMedia = compose.mediaAttachments.find((m) => m.id === mediaId);
+          if (previousMedia) {
+            updateCompose(composeId, (draft) => {
+              draft.isChangingUpload = false;
+              draft.mediaAttachments = draft.mediaAttachments.map((item) =>
+                item.id === mediaId ? { ...previousMedia, ...params } : item,
+              );
+            });
+            return;
+          }
+        }
+        updateCompose(composeId, (draft) => {
+          draft.isChangingUpload = false;
+        });
+      }
+    },
+    [composeId, client],
+  );
+};
 
 const useComposeVisibility = (composeId: string) => {
   const { visibility } = useCompose(composeId);
@@ -1743,7 +1741,7 @@ const getComposeContentType = (
 export {
   type Compose,
   //   type RestoredDraft,
-  //   appendMedia,
+  appendMedia,
   checkComposeContent,
   newPoll,
   //   statusToMentionsAccountIdsArray,
@@ -1753,8 +1751,8 @@ export {
   useComposeActions,
   useSubmitCompose,
   //   useSubmitThread,
-  //   useUploadCompose,
-  //   useChangeUploadCompose,
+  useUploadCompose,
+  useChangeUploadCompose,
   useComposeVisibility,
   //   useComposeContentType,
 };

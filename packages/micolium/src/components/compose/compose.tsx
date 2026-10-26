@@ -4,7 +4,6 @@ import { GlassView } from 'expo-glass-effect';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
 import { CalendarPlusIcon } from 'phosphor-react-native/src/icons/CalendarPlus';
 import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
-import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import { PaperPlaneRightIcon } from 'phosphor-react-native/src/icons/PaperPlaneRight';
 import { SmileyIcon } from 'phosphor-react-native/src/icons/Smiley';
 import React from 'react';
@@ -35,6 +34,7 @@ import { iconHelper } from '../ui/icon';
 import { ComposeInteractionPolicy } from './compose-interaction-policy';
 import { ComposeQuoteIndicator } from './compose-quote-indicator';
 import { ComposeReplyIndicator } from './compose-reply-indicator';
+import { ComposeUploadButton } from './compose-upload-button';
 import { ComposeVisibilityDropdown } from './compose-visibility-dropdown';
 import { PollForm } from './poll-form';
 
@@ -48,7 +48,6 @@ const messages = defineMessages({
     id: 'compose_form.spoiler.placeholder',
     defaultMessage: 'Subject (optional)',
   },
-  upload: { id: 'upload_button.label', defaultMessage: 'Add media attachment' },
   addPoll: { id: 'poll_button.add_poll', defaultMessage: 'Add a poll' },
   removePoll: { id: 'poll_button.remove_poll', defaultMessage: 'Remove poll' },
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
@@ -122,7 +121,10 @@ const ComposeBottomSheet = () => {
   const scrollableRef = React.useRef<ScrollView>(null);
 
   const disabled =
-    !text.trim().length || (!!poll && poll.options.some((option) => !option.trim().length));
+    (!text.trim().length && !compose.mediaAttachments.length) ||
+    (!!poll && poll.options.some((option) => !option.trim().length)) ||
+    compose.isUploading ||
+    compose.isChangingUpload;
 
   const handleClose = React.useCallback(() => {
     const compose = useComposeStore.getState().composers[COMPOSE_ID];
@@ -261,13 +263,7 @@ const ComposeBottomSheet = () => {
 
   const footerContent = (
     <>
-      <IconButton
-        icon={iconHelper(PaperclipIcon)}
-        style={{ marginHorizontal: 0 }}
-        onPress={() => {}}
-        disabled
-        accessibilityLabel={intl.formatMessage(messages.upload)}
-      />
+      <ComposeUploadButton composeId={COMPOSE_ID} />
       {features.polls && (
         <IconButton
           icon={iconHelper(ChartBarIcon)}

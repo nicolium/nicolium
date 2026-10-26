@@ -83,7 +83,6 @@ const uploadFile = async (
     return;
   }
 
-  // FIXME: Don't define const in loop
   resizeImage(file, imageMatrixLimit, stripMetadata)
     .then((resized) => {
       const data = new FormData();
@@ -92,7 +91,7 @@ const uploadFile = async (
       // Account for disparity in size of original image and resized data
       changeTotal(resized.size - file.size);
 
-      return uploadMedia(client, { file: resized }, onProgress).then((data) => {
+      return uploadMedia(client, { file: resized, description }, onProgress).then((data) => {
         // If server-side processing of the media attachment has not completed yet,
         // poll the server until it is, before showing the media attachment as uploaded
         if (data.url) {
