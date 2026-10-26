@@ -53,6 +53,15 @@ const messages = defineMessages({
     id: 'preferences.fields.missing_language_modal.label',
     defaultMessage: 'Show confirmation dialog before sending a post without language set',
   },
+  stripMetadata: {
+    id: 'url_privacy.strip_metadata',
+    defaultMessage: 'Strip metadata from uploaded images',
+  },
+  stripMetadataHint: {
+    id: 'url_privacy.strip_metadata.hint',
+    defaultMessage:
+      'Removes metadata such as EXIF tags, including geolocation, from images before hitting the server. This is usually done server-side, regardless of client settings.',
+  },
 });
 
 const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'compose'>) => {
@@ -67,6 +76,7 @@ const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
   const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
   const missingLanguageModal = useSetting('compose.missingLanguageModal');
   const preserveSpoilers = useSetting('compose.preserveSpoilers');
+  const stripMetadata = useSetting('compose.stripMetadata');
 
   const { update } = useSettingsActions();
 
@@ -149,6 +159,13 @@ const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
                 active: missingLanguageModal,
                 onPress: () => update('compose.missingLanguageModal', !missingLanguageModal),
                 enabled: features.postLanguages,
+              },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.stripMetadata),
+                sublabel: intl.formatMessage(messages.stripMetadataHint),
+                active: stripMetadata,
+                onPress: () => update('compose.stripMetadata', !stripMetadata),
               },
             ],
           },
