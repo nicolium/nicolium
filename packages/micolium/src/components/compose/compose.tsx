@@ -31,6 +31,7 @@ import { Account } from '../accounts/account';
 import { GlassActionButton } from '../ui/dialog-or-sheet';
 import { iconHelper } from '../ui/icon';
 
+import { ComposeAttachmentThumbs } from './compose-attachment-thumbs';
 import { ComposeInteractionPolicy } from './compose-interaction-policy';
 import { ComposeQuoteIndicator } from './compose-quote-indicator';
 import { ComposeReplyIndicator } from './compose-reply-indicator';
@@ -399,6 +400,7 @@ const ComposeBottomSheet = () => {
           multiline
         />
         <PollForm composeId={COMPOSE_ID} />
+        <ComposeAttachmentThumbs composeId={COMPOSE_ID} />
       </ScrollView>
     </TrueSheet>
   );
