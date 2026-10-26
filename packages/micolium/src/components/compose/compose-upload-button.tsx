@@ -21,6 +21,14 @@ const onlyImages = (types: string[] | undefined): boolean =>
 const messages = defineMessages({
   upload: { id: 'upload_button.label', defaultMessage: 'Add media attachment' },
   addFile: { id: 'upload_button.label.file', defaultMessage: 'Add file' },
+  uploadPermissionRequiredTitle: {
+    id: 'upload_button.permission_required.title',
+    defaultMessage: 'Permission required',
+  },
+  uploadPermissionRequiredMessage: {
+    id: 'upload_button.permission_required.message',
+    defaultMessage: 'Permission to access the media library is required.',
+  },
 });
 
 const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
@@ -54,7 +62,10 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permissionResult.granted) {
-      Alert.alert('Permission required', 'Permission to access the media library is required.');
+      Alert.alert(
+        intl.formatMessage(messages.uploadPermissionRequiredTitle),
+        intl.formatMessage(messages.uploadPermissionRequiredMessage),
+      );
       return;
     }
 
