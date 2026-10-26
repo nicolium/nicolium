@@ -123,6 +123,7 @@ const ComposeInteractionPolicyDialog: React.FC<IComposeInteractionPolicyDialog> 
           confirm: true,
         },
       ]}
+      forceSheet
     >
       <InteractionPolicyConfig
         interactionPolicy={interactionPolicy}

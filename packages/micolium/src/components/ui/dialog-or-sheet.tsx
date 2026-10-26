@@ -66,6 +66,7 @@ interface IDialogOrSheet {
   actions: Array<DialogOrSheetAction>;
   visible: boolean;
   handleDismiss?: () => void;
+  forceSheet?: boolean;
 }
 
 const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, handleDismiss }) => {
@@ -105,7 +106,7 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
             paddingBottom: 8,
           }}
         >
-          {firstAction && (
+          {glassEffect && firstAction ? (
             <GlassActionButton
               icon={firstAction.icon}
               label={firstAction.label}
@@ -113,9 +114,11 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
               confirm={firstAction.confirm}
               disabled={firstAction.disabled}
             />
+          ) : (
+            <View />
           )}
           <Text variant='titleMedium'>{title}</Text>
-          {secondAction && (
+          {glassEffect && secondAction ? (
             <GlassActionButton
               icon={secondAction.icon}
               label={secondAction.label}
@@ -123,11 +126,29 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
               confirm={secondAction.confirm}
               disabled={secondAction.disabled}
             />
+          ) : (
+            <View />
           )}
         </View>
       }
       footer={
-        remainingActions.length ? (
+        !glassEffect && actions.length ? (
+          <View style={{ flexDirection: 'row', gap: 8, marginHorizontal: 16 }}>
+            {actions.map((action, i) => (
+              <React.Fragment key={i}>
+                <Button
+                  onPress={action.onPress}
+                  loading={action.loading}
+                  disabled={action.disabled}
+                  textColor={action.destructive ? colors.error : undefined}
+                >
+                  {action.label}
+                </Button>
+                {i === 0 && <View style={{ flex: 1 }} />}
+              </React.Fragment>
+            ))}
+          </View>
+        ) : remainingActions.length ? (
           <Host style={{ marginTop: 8, alignSelf: 'center', marginHorizontal: 16 }} matchContents>
             <HStack spacing={8}>
               {remainingActions.map((action, i) => (
@@ -182,7 +203,7 @@ const Dialog: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, h
 const DialogOrSheet: React.FC<IDialogOrSheet> = (props) => {
   const glassEffect = useEnableLiquidGlass();
 
-  if (glassEffect) return <Sheet {...props} />;
+  if (glassEffect || props.forceSheet) return <Sheet {...props} />;
   return <Dialog {...props} />;
 };
 
