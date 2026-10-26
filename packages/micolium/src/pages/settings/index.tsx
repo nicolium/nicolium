@@ -13,6 +13,7 @@ import { ContentSettingsScreen } from './content-settings';
 import { FilterEditorScreen, FiltersScreen } from './filters';
 import { FollowRequestsScreen } from './follow-requests';
 import { FollowedTagsScreen } from './followed-tags';
+import { InteractionPoliciesScreen } from './interaction-policies';
 import { MutedThreadsScreen } from './muted-threads';
 import { BlocksScreen, MutesScreen } from './mutes-blocks';
 import { NotificationsSettingsScreen } from './notifications-settings';
@@ -128,6 +129,11 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='followed_tags'
         component={FollowedTagsScreen}
         options={{ title: intl.formatMessage(messages.followedTags) }}
+      />
+      <SettingsStack.Screen
+        name='interaction_policies'
+        component={InteractionPoliciesScreen}
+        options={{ title: intl.formatMessage(messages.interactionPolicies) }}
       />
     </SettingsStack.Navigator>
   );

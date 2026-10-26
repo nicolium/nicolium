@@ -225,4 +225,11 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
   return <List sections={sections} />;
 };
 
-export { InteractionPolicyConfig, type Policy, type Rule, type Scope };
+export {
+  InteractionPolicyConfig,
+  type Policy,
+  type QuoteApprovalPolicy,
+  type Rule,
+  type Scope,
+  type Visibility,
+};

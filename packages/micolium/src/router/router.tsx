@@ -53,6 +53,7 @@ type SettingsStackParams = {
   followed_tags: undefined;
   filters: undefined;
   filter: { id?: string };
+  interaction_policies: undefined;
 };
 type StatusStackParams = {
   view: { id: string };
