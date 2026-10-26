@@ -30,6 +30,7 @@ import { toast } from 'sonner-native';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useUiStoreActions } from '@/stores/ui';
 
+import { MIMETYPE_ICONS } from '../compose/compose-attachment-thumbs';
 import { iconHelper } from '../ui/icon';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
@@ -467,7 +468,13 @@ const StatusMedia: React.FC<IStatusMedia> = ({
             onPress={() => handleDownload(media)}
           >
             <>
-              <Icon source={iconHelper(PaperclipIcon)} size={20} />
+              <Icon
+                source={iconHelper(
+                  MIMETYPE_ICONS[(media.type === 'unknown' && media.mime_type) || media.type] ??
+                    PaperclipIcon,
+                )}
+                size={20}
+              />
               <Text>{media.url.split('/').at(-1)}</Text>
             </>
           </TouchableRipple>

@@ -175,19 +175,34 @@ const ComposeAttachmentEditor: React.FC<IComposeAttachmentEditor> = ({
       forceSheet
     >
       <View style={{ gap: 8 }}>
-        <View
-          style={{
-            width: '100%',
-            height: aspectRatio ? undefined : 320,
-            aspectRatio,
-            maxHeight: 480,
-            position: 'relative',
-            borderRadius: shapes.corner.medium,
-            overflow: 'hidden',
-          }}
-        >
-          {media.type !== 'unknown' && media.type !== 'audio' && renderMedia(media)}
-        </View>
+        {media.type !== 'unknown' && media.type !== 'audio' ? (
+          <View
+            style={{
+              width: '100%',
+              height: aspectRatio ? undefined : 320,
+              aspectRatio,
+              maxHeight: 480,
+              position: 'relative',
+              borderRadius: shapes.corner.medium,
+              overflow: 'hidden',
+            }}
+          >
+            {renderMedia(media)}
+          </View>
+        ) : (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Icon
+              source={iconHelper(
+                MIMETYPE_ICONS[(media.type === 'unknown' && media.mime_type) || media.type] ??
+                  PaperclipIcon,
+              )}
+              size={20}
+            />
+            <Text variant='bodyMedium' style={{ color: colors.onSurfaceVariant }} numberOfLines={1}>
+              {media.url.split('/').at(-1)}
+            </Text>
+          </View>
+        )}
         <Text variant='bodyMedium' style={{ color: colors.onSurfaceVariant }}>
           {intl.formatMessage(
             media.type === 'audio' ? messages.titleHearing : messages.titleVisual,
@@ -354,4 +369,4 @@ const ComposeAttachmentThumbs: React.FC<ICompose> = ({ composeId }) => {
   );
 };
 
-export { ComposeAttachmentThumbs };
+export { ComposeAttachmentThumbs, MIMETYPE_ICONS };
