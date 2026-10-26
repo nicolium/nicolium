@@ -15,7 +15,7 @@ import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 interface ISelectItem<T> {
   enabled?: boolean;
   type: 'select';
-  active: T;
+  active: T | Array<T>;
   onChange: (value: T) => void;
   options: Array<{ value: T; label: string }>;
   label: string;
@@ -188,7 +188,11 @@ const List: React.FC<IList> = ({ sections, style }) => {
                   {item.options.map((option) => (
                     <DropdownMenu.CheckboxItem
                       key={option.value.toString()}
-                      value={option.value === item.active}
+                      value={
+                        Array.isArray(item.active)
+                          ? item.active.includes(option.value)
+                          : option.value === item.active
+                      }
                       onSelect={() => item.onChange(option.value)}
                     >
                       <DropdownMenu.ItemTitle>{option.label}</DropdownMenu.ItemTitle>
