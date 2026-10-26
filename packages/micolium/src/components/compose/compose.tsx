@@ -6,6 +6,7 @@ import { CalendarPlusIcon } from 'phosphor-react-native/src/icons/CalendarPlus';
 import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
 import { PaperPlaneRightIcon } from 'phosphor-react-native/src/icons/PaperPlaneRight';
 import { SmileyIcon } from 'phosphor-react-native/src/icons/Smiley';
+import { WarningIcon } from 'phosphor-react-native/src/icons/Warning';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Alert, ScrollView, TextInput as RNTextInput, View, Platform } from 'react-native';
@@ -51,6 +52,11 @@ const messages = defineMessages({
   },
   addPoll: { id: 'poll_button.add_poll', defaultMessage: 'Add a poll' },
   removePoll: { id: 'poll_button.remove_poll', defaultMessage: 'Remove poll' },
+  marked: { id: 'compose_form.sensitive.marked', defaultMessage: 'Media is marked as sensitive' },
+  unmarked: {
+    id: 'compose_form.sensitive.unmarked',
+    defaultMessage: 'Media is not marked as sensitive',
+  },
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
   schedule: { id: 'schedule.post_time', defaultMessage: 'Post date/time' },
   removeSchedule: { id: 'schedule.remove', defaultMessage: 'Remove schedule' },
@@ -114,7 +120,8 @@ const ComposeBottomSheet = () => {
 
   const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
 
-  const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility, poll } = compose;
+  const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility, poll, sensitive } =
+    compose;
 
   const { data: currentAccountId } = useCredentialAccountId();
 
@@ -278,6 +285,20 @@ const ComposeBottomSheet = () => {
           }
           disabled={compose.mediaAttachments.length > 0 || compose.isUploading}
           accessibilityLabel={intl.formatMessage(poll ? messages.removePoll : messages.addPoll)}
+        />
+      )}
+      {compose.mediaAttachments.length > 0 && (
+        <IconButton
+          icon={iconHelper(WarningIcon)}
+          style={{ marginHorizontal: 0 }}
+          mode={sensitive ? 'contained' : undefined}
+          selected={sensitive}
+          onPress={() =>
+            updateCompose(COMPOSE_ID, (draft) => {
+              draft.sensitive = !draft.sensitive;
+            })
+          }
+          accessibilityLabel={intl.formatMessage(sensitive ? messages.marked : messages.unmarked)}
         />
       )}
       {(features.interactionRequests || features.quoteApprovalPolicies) && (
