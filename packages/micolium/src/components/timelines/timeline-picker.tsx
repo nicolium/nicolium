@@ -345,7 +345,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
                 glassEffect
                   ? {
                       paddingHorizontal: 12,
-                      paddingVertical: 8,
+                      paddingVertical: 6,
                       borderRadius: 24,
                     }
                   : undefined,
