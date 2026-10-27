@@ -188,7 +188,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   const intl = useIntl();
   const { configuration } = useInstance();
   const { updateCompose } = useComposeActions();
-  const { poll } = useCompose(composeId);
+  const { poll, language, modifiedLanguage } = useCompose(composeId);
 
   const {
     max_options: maxOptions,
@@ -216,7 +216,10 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   const handleChangeOption = (index: number, title: string) =>
     updateCompose(composeId, (draft) => {
       if (!draft.poll) return;
-      draft.poll.options[index] = title;
+      if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+        draft.poll.options[index] = title;
+        if (draft.modifiedLanguage) draft.poll.options_map[index][draft.modifiedLanguage] = title;
+      }
     });
 
   const handleRemoveOption = (index: number) => {
@@ -275,21 +278,28 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   return (
     <View style={{ gap: 4 }}>
       <View style={{ gap: OPTION_GAP }}>
-        {options.map((title, index) => (
-          <Option
-            key={keys.current[index] || `fallback-${index}`}
-            index={index}
-            count={options.length}
-            title={title}
-            maxChars={maxOptionChars}
-            activeIndex={activeIndex}
-            dragY={dragY}
-            rowHeight={rowHeight}
-            onChange={handleChangeOption}
-            onRemove={handleRemoveOption}
-            onMove={handleMoveOption}
-          />
-        ))}
+        {options.map((title, index) => {
+          const text =
+            !modifiedLanguage || modifiedLanguage === language
+              ? title
+              : poll.options_map[index][modifiedLanguage];
+
+          return (
+            <Option
+              key={keys.current[index] || `fallback-${index}`}
+              index={index}
+              count={options.length}
+              title={text}
+              maxChars={maxOptionChars}
+              activeIndex={activeIndex}
+              dragY={dragY}
+              rowHeight={rowHeight}
+              onChange={handleChangeOption}
+              onRemove={handleRemoveOption}
+              onMove={handleMoveOption}
+            />
+          );
+        })}
       </View>
 
       {options.length < maxOptions && (

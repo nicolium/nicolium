@@ -121,8 +121,22 @@ const ComposeBottomSheet = () => {
 
   const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
 
-  const { text, spoilerText, isSubmitting, inReplyToId, quoteId, visibility, poll, sensitive } =
-    compose;
+  let { text, spoilerText } = compose;
+  const {
+    isSubmitting,
+    inReplyToId,
+    quoteId,
+    visibility,
+    poll,
+    sensitive,
+    language,
+    modifiedLanguage,
+  } = compose;
+
+  if (modifiedLanguage && modifiedLanguage !== language) {
+    text = compose.textMap[modifiedLanguage];
+    spoilerText = compose.spoilerTextMap[modifiedLanguage];
+  }
 
   const { data: currentAccountId } = useCredentialAccountId();
 
@@ -399,7 +413,11 @@ const ComposeBottomSheet = () => {
             value={spoilerText}
             onChangeText={(text) =>
               updateCompose(COMPOSE_ID, (draft) => {
-                draft.spoilerText = text;
+                if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+                  draft.spoilerText = text;
+                } else {
+                  draft.spoilerTextMap[draft.modifiedLanguage] = text;
+                }
               })
             }
             variant='outlined'
@@ -410,7 +428,11 @@ const ComposeBottomSheet = () => {
           value={text}
           onChangeText={(text) =>
             updateCompose(COMPOSE_ID, (draft) => {
-              draft.text = text;
+              if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+                draft.text = text;
+              } else {
+                draft.textMap[draft.modifiedLanguage] = text;
+              }
             })
           }
           placeholder={intl.formatMessage(messages.placeholder)}
