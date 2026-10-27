@@ -296,6 +296,8 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
     };
   }, [emojis, mentions]);
 
+  const systemFonts = React.useMemo(() => [...defaultSystemFonts, fonts.bodyMedium.fontFamily], [fonts]);
+
   return (
     <RenderHtml
       contentWidth={width}
@@ -303,7 +305,7 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
       baseStyle={baseStyle}
       tagsStyles={tagsStyles}
       classesStyles={classesStyles}
-      systemFonts={[...defaultSystemFonts, fonts.bodyMedium.fontFamily]}
+      systemFonts={systemFonts}
       customHTMLElementModels={customHTMLElementModels}
       renderers={{
         hr: Divider,
