@@ -1,4 +1,5 @@
 import { ActivityIndicator, Icon, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
+import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { BookIcon } from 'phosphor-react-native/src/icons/Book';
 import { FileArchiveIcon } from 'phosphor-react-native/src/icons/FileArchive';
@@ -21,11 +22,20 @@ import { TableIcon } from 'phosphor-react-native/src/icons/Table';
 import { VideoIcon } from 'phosphor-react-native/src/icons/Video';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Platform, ScrollView, View } from 'react-native';
+import {
+  type NativeSyntheticEvent,
+  type NativeTouchEvent,
+  Platform,
+  ScrollView,
+  View,
+} from 'react-native';
 import { toast } from 'sonner-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
+import { useFeatures } from '@/contexts/current-account-context';
+import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useChangeUploadCompose, useCompose, useComposeActions } from '@/stores/compose';
+import { getPointerPosition } from '@/utils/media';
 
 import { renderMedia } from '../statuses/status-media';
 import { DialogOrSheet } from '../ui/dialog-or-sheet';
@@ -119,14 +129,42 @@ const ComposeAttachmentEditor: React.FC<IComposeAttachmentEditor> = ({
   const intl = useIntl();
   const { colors, shapes } = useTheme();
   const changeUploadCompose = useChangeUploadCompose(composeId);
+  const features = useFeatures();
+  const glassEffect = useEnableLiquidGlass();
+
+  const withFocalPoint = features.focalPoint && (media.type === 'image' || media.type === 'gifv');
 
   const [closing, setClosing] = React.useState(false);
   const [description, setDescription] = React.useState(media.description);
   const [isSaving, setIsSaving] = React.useState(false);
+  const [focalPoint, setFocalPoint] = React.useState(
+    ((media.type === 'image' || media.type === 'gifv') && media.meta.focus) || { x: 0, y: 0 },
+  );
 
   const { width, height } =
     (media.type !== 'audio' && media.type !== 'unknown' && media.meta.original) || {};
   const aspectRatio = width && height ? width / height : undefined;
+  const nodeRef = React.useRef<View | null>(null);
+  const [dragging, setDragging] = React.useState(false);
+
+  const handleTouchStart = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
+    if (!nodeRef.current) return;
+
+    const { x, y } = getPointerPosition(nodeRef.current, e);
+    setDragging(true);
+    setFocalPoint({ x, y });
+  };
+
+  const handleTouchEnd = () => {
+    setDragging(false);
+  };
+
+  const handleTouchMove = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
+    if (dragging && nodeRef.current) {
+      const { x, y } = getPointerPosition(nodeRef.current, e);
+      setFocalPoint({ x, y });
+    }
+  };
 
   const handleClose = () => setClosing(true);
 
@@ -134,11 +172,10 @@ const ComposeAttachmentEditor: React.FC<IComposeAttachmentEditor> = ({
     setIsSaving(true);
 
     try {
+      console.log(`${focalPoint.x.toFixed(2)},${focalPoint.y.toFixed(2)}`);
       await changeUploadCompose(media.id, {
         description,
-        // focus: position
-        //   ? `${((position[0] - 0.5) * 2).toFixed(2)},${((position[1] - 0.5) * -2).toFixed(2)}`
-        //   : undefined,
+        focus: withFocalPoint ? `${focalPoint.x.toFixed(2)},${focalPoint.y.toFixed(2)}` : undefined,
       });
       setClosing(true);
     } catch {
@@ -173,10 +210,12 @@ const ComposeAttachmentEditor: React.FC<IComposeAttachmentEditor> = ({
         },
       ]}
       forceSheet
+      dismissible={!dragging}
     >
       <View style={{ gap: 8 }}>
         {media.type !== 'unknown' && media.type !== 'audio' ? (
           <View
+            ref={nodeRef}
             style={{
               width: '100%',
               height: aspectRatio ? undefined : 320,
@@ -186,8 +225,48 @@ const ComposeAttachmentEditor: React.FC<IComposeAttachmentEditor> = ({
               borderRadius: shapes.corner.medium,
               overflow: 'hidden',
             }}
+            // onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onTouchMove={handleTouchMove}
           >
             {renderMedia(media)}
+            {withFocalPoint &&
+              (glassEffect ? (
+                <GlassView
+                  style={{
+                    borderRadius: 9999,
+                    height: 64,
+                    width: 64,
+                    top: `${(focalPoint.y + 1) * 50}%`,
+                    left: `${(focalPoint.x + 1) * 50}%`,
+                    position: 'absolute',
+                    transform: 'translate(-50%, -50%)',
+                    opacity: 0.8,
+                  }}
+                  isInteractive
+                  glassEffectStyle={{
+                    style: 'clear',
+                    animate: true,
+                  }}
+                />
+              ) : (
+                <View
+                  style={{
+                    borderRadius: 9999,
+                    height: 64,
+                    width: 64,
+                    top: `${(focalPoint.y + 1) * 50}%`,
+                    left: `${(focalPoint.x + 1) * 50}%`,
+                    position: 'absolute',
+                    transform: 'translate(-50%, -50%)',
+                    opacity: 0.8,
+                    backgroundColor: colors.surfaceContainer,
+                    borderWidth: 2,
+                    borderColor: colors.outline,
+                  }}
+                />
+              ))}
           </View>
         ) : (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>

@@ -67,9 +67,17 @@ interface IDialogOrSheet {
   visible: boolean;
   handleDismiss?: () => void;
   forceSheet?: boolean;
+  dismissible?: boolean;
 }
 
-const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, handleDismiss }) => {
+const Sheet: React.FC<IDialogOrSheet> = ({
+  children,
+  title,
+  actions,
+  visible,
+  handleDismiss,
+  dismissible,
+}) => {
   const { colors } = useTheme();
   const glassEffect = useEnableLiquidGlass();
 
@@ -164,8 +172,12 @@ const Sheet: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, ha
           </Host>
         ) : undefined
       }
+      draggable={false}
+      dismissible={dismissible}
     >
-      <ScrollView ref={scrollableRef}>{children}</ScrollView>
+      <ScrollView ref={scrollableRef} scrollEnabled={dismissible !== false}>
+        {children}
+      </ScrollView>
     </TrueSheet>
   );
 };
