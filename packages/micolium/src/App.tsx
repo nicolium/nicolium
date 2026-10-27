@@ -1,4 +1,3 @@
-import { useCalendars } from 'expo-localization';
 import { TrueSheetProvider } from '@lodev09/react-native-true-sheet';
 import { PaperProvider } from '@mkljczk/react-native-paper';
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
@@ -6,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { makeRedirectUri } from 'expo-auth-session';
 import { createURL } from 'expo-linking';
+import { useCalendars } from 'expo-localization';
 import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
 import { IntlProvider } from 'react-intl';

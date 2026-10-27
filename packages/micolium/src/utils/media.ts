@@ -24,9 +24,7 @@ const findElementPosition = (el: View) => {
 
 const getPointerPosition = (
   el: View,
-  event:
-    | Pick<MouseEvent, 'pageX' | 'pageY'>
-    | NativeSyntheticEvent<NativeTouchEvent>,
+  event: Pick<MouseEvent, 'pageX' | 'pageY'> | NativeSyntheticEvent<NativeTouchEvent>,
 ): Position => {
   const box = findElementPosition(el);
   const boxW = el.offsetWidth;

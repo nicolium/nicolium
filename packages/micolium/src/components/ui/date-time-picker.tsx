@@ -31,7 +31,7 @@ const DateTimePicker: React.FC<IDateTimePicker> = ({
 
   if (Platform.OS === 'ios') {
     return (
-      <SwiftUIHost matchContents style={{ marginBottom: 8 }}>
+      <SwiftUIHost matchContents={{ vertical: true }} style={{ marginBottom: 8, width: '100%' }}>
         <SwiftUIDatePicker
           title={title}
           selection={initialDate}

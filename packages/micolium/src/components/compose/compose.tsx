@@ -67,6 +67,7 @@ const messages = defineMessages({
   publishQuote: { id: 'compose_form.quote', defaultMessage: 'Quote' },
   publishDirect: { id: 'compose_form.direct', defaultMessage: 'Direct' },
   publishChanges: { id: 'compose_form.save_changes.short', defaultMessage: 'Edit' },
+  schedule: { id: 'compose_form.save_changes', defaultMessage: 'Schedule' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   cancelConfirmationConfirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
   cancelConfirmationHeading: { id: 'confirmations.cancel.heading', defaultMessage: 'Discard post' },
@@ -244,15 +245,19 @@ const ComposeBottomSheet = () => {
   };
 
   const publishButtonLabel = intl.formatMessage(
-    compose.editedId
-      ? messages.publishChanges
-      : inReplyToId
-        ? messages.publishReply
-        : quoteId
-          ? messages.publishQuote
-          : visibility === 'direct'
-            ? messages.publishDirect
-            : messages.publish,
+    compose.scheduledAt
+      ? compose.scheduledStatusId
+        ? messages.publishChanges
+        : messages.schedule
+      : compose.editedId
+        ? messages.publishChanges
+        : inReplyToId
+          ? messages.publishReply
+          : quoteId
+            ? messages.publishQuote
+            : visibility === 'direct'
+              ? messages.publishDirect
+              : messages.publish,
   );
 
   const publishButtonSfIcon: SFSymbol = visibility === 'direct' ? 'at' : 'paperplane';

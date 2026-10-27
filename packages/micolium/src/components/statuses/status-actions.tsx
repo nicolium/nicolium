@@ -8,8 +8,9 @@ import { StarIcon } from 'phosphor-react-native/src/icons/Star';
 import { ThumbsDownIcon } from 'phosphor-react-native/src/icons/ThumbsDown';
 import { ThumbsUpIcon } from 'phosphor-react-native/src/icons/ThumbsUp';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
+import { toast } from 'sonner-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useFeatures } from '@/contexts/current-account-context';
@@ -21,13 +22,17 @@ import {
   useEmojiReactMutation,
   useEmojiUnreactMutation,
   useFavouriteStatus,
+  useReblogStatus,
   useUndislikeStatus,
   useUnfavouriteStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
+import { getSegmentedMenuStyles } from '@/utils/themes';
 
+import { DateTimePicker } from '../ui/date-time-picker';
+import { DialogOrSheet } from '../ui/dialog-or-sheet';
 import { iconHelper } from '../ui/icon';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
@@ -44,6 +49,19 @@ const messages = defineMessages({
   dislike: { id: 'status.dislike', defaultMessage: 'Dislike' },
   undislike: { id: 'status.undislike', defaultMessage: 'Undo dislike' },
   quote: { id: 'status.quote', defaultMessage: 'Quote post' },
+  scheduleReblog: { id: 'status.schedule_reblog', defaultMessage: 'Schedule repost' },
+  scheduleReblogLabel: { id: 'boost_modal.schedule.label', defaultMessage: 'Schedule at:' },
+  scheduledSuccess: {
+    id: 'boost_modal.scheduled.success',
+    defaultMessage: 'The repost was scheduled',
+  },
+  scheduledFail: {
+    id: 'boost_modal.scheduled.fail',
+    defaultMessage: 'Failed to schedule the repost',
+  },
+  view: { id: 'toast.view', defaultMessage: 'View' },
+  cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
+  schedule: { id: 'compose_form.save_changes', defaultMessage: 'Schedule' },
 });
 
 const ReplyAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
@@ -103,6 +121,86 @@ const ReplyAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
   );
 };
 
+interface IScheduleReblog {
+  status: SelectedStatus;
+  visible: boolean;
+  setVisible: (value: boolean) => void;
+}
+
+const ScheduleReblog: React.FC<IScheduleReblog> = ({ status, visible, setVisible }) => {
+  const intl = useIntl();
+  const navigation = useNavigation();
+  const theme = useTheme();
+
+  const [scheduledAt, setScheduledAt] = React.useState(() => new Date(Date.now() + 10 * 60 * 1000));
+  const [closing, setClosing] = React.useState(false);
+
+  const handleClose = () => setClosing(true);
+
+  const { mutate: reblog } = useReblogStatus(status.id);
+
+  React.useEffect(() => {
+    if (closing) setVisible(false);
+  }, [closing]);
+
+  return (
+    <DialogOrSheet
+      title={
+        <FormattedMessage
+          id='boost_modal.title.scheduled'
+          defaultMessage='Schedule repost for later'
+        />
+      }
+      actions={[
+        {
+          icon: 'xmark',
+          label: intl.formatMessage(messages.cancel),
+          onPress: () => handleClose(),
+        },
+        {
+          icon: 'checkmark',
+          label: intl.formatMessage(messages.schedule),
+          onPress: () => {
+            reblog(
+              {
+                scheduledAt: scheduledAt.toISOString(),
+              },
+              {
+                onSuccess: () => {
+                  const openedToast = toast.success(intl.formatMessage(messages.scheduledSuccess), {
+                    action: {
+                      label: intl.formatMessage(messages.view),
+                      onClick: () => {
+                        toast.dismiss(openedToast);
+                        navigation.navigate('scheduled_statuses');
+                      },
+                    },
+                  });
+                  setVisible(false);
+                },
+                onError: (e) => {
+                  console.log(e);
+                  toast.error(intl.formatMessage(messages.scheduledFail));
+                },
+              },
+            );
+          },
+          confirm: true,
+        },
+      ]}
+      visible={visible && !closing}
+      handleDismiss={() => setVisible(false)}
+    >
+      <DateTimePicker
+        title={intl.formatMessage(messages.scheduleReblogLabel)}
+        initialDate={scheduledAt}
+        onSelect={setScheduledAt}
+        listItemStyle={[getSegmentedMenuStyles(theme, false, 0, 1, 'low'), { marginVertical: 16 }]}
+      />
+    </DialogOrSheet>
+  );
+};
+
 const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
   const intl = useIntl();
   const theme = useTheme();
@@ -118,6 +216,8 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
   const doReblog = useReblog(status);
 
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
+
+  const [showScheduleReblog, setShowScheduleReblog] = React.useState(false);
 
   const publicStatus = ['public', 'unlisted', 'group'].includes(status.visibility);
 
@@ -174,24 +274,40 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
     );
   } else if (features.quotePosts && canQuote && !fromInteractAs) {
     return (
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>{renderAction({}, () => {})}</DropdownMenu.Trigger>
-        <DropdownMenu.Content>
-          <DropdownMenu.Item key='reblog' onSelect={handleReblog}>
-            <DropdownMenu.ItemIcon
-              ios={{ name: status.reblogged ? 'repeat.badge.xmark' : 'repeat' }}
-              androidIconName='ph_repeat'
-            />
-            <DropdownMenu.ItemTitle>
-              {intl.formatMessage(status.reblogged ? messages.unreblog : messages.reblog)}
-            </DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item key='quote' onSelect={handleQuote}>
-            <DropdownMenu.ItemIcon ios={{ name: 'quote.bubble' }} androidIconName='ph_quotes' />
-            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.quote)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+      <>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>{renderAction({}, () => {})}</DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            <DropdownMenu.Item key='reblog' onSelect={handleReblog}>
+              <DropdownMenu.ItemIcon
+                ios={{ name: status.reblogged ? 'repeat.badge.xmark' : 'repeat' }}
+                androidIconName='ph_repeat'
+              />
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(status.reblogged ? messages.unreblog : messages.reblog)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item key='quote' onSelect={handleQuote}>
+              <DropdownMenu.ItemIcon ios={{ name: 'quote.bubble' }} androidIconName='ph_quotes' />
+              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.quote)}</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+            {!features.scheduledReblogs && (
+              <DropdownMenu.Item key='schedule-reblog' onSelect={() => setShowScheduleReblog(true)}>
+                <DropdownMenu.ItemIcon
+                  ios={{ name: 'calendar.badge.plus' }}
+                  androidIconName='ph_calendar_plus'
+                />
+                <DropdownMenu.ItemTitle>
+                  {intl.formatMessage(messages.scheduleReblog)}
+                </DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+            )}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+        {showScheduleReblog && (
+          <ScheduleReblog status={status} visible setVisible={setShowScheduleReblog} />
+        )}
+      </>
     );
   }
 
