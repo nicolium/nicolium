@@ -116,6 +116,9 @@ const LanguagePicker = React.forwardRef<FlashListRef<[Language, string, string]>
       updateCompose(composeId, (draft) => {
         delete draft.textMap[value];
         delete draft.spoilerTextMap[value];
+        if (draft.modifiedLanguage === value) {
+          draft.modifiedLanguage = Object.keys(draft.textMap)[0];
+        }
       });
     };
 

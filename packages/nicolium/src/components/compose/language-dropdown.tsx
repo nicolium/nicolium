@@ -119,6 +119,10 @@ const getLanguageDropdown =
         delete draft.editorStateMap[value];
         delete draft.textMap[value];
         delete draft.spoilerTextMap[value];
+
+        if (draft.modifiedLanguage === value) {
+          draft.modifiedLanguage = Object.keys(draft.textMap)[0];
+        }
       });
     };
 
