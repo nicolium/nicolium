@@ -4,7 +4,13 @@ import { GlassView } from 'expo-glass-effect';
 import { ProhibitIcon } from 'phosphor-react-native/src/icons/Prohibit';
 import React, { useCallback, useRef } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
-import { Pressable, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  View,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+} from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -237,6 +243,7 @@ const Timeline: React.FC<ITimeline> = ({
         contentContainerStyle={{ paddingBottom: bottomInset }}
         scrollIndicatorInsets={{ bottom: bottomInset }}
         getItemType={(item) => item.type}
+        maintainVisibleContentPosition={{ disabled: Platform.OS === 'android' ? true : undefined }}
         // style={{ paddingTop: topInset + 48 }}
       />
     </>
