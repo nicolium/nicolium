@@ -286,6 +286,7 @@ const Status: React.FC<IStatus> = ({
       filters={warnFilters}
       showFiltered={showFiltered}
       unfilterStatus={() => unfilterStatus(id)}
+      contentKey={status.id}
       {...props}
     />
   );

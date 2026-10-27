@@ -29,6 +29,7 @@ interface IUIStatus {
   filters?: Array<FilterResult>;
   showFiltered?: boolean;
   unfilterStatus?: () => void;
+  contentKey?: string;
 }
 
 const UIStatus: React.FC<IUIStatus> = ({
@@ -51,6 +52,7 @@ const UIStatus: React.FC<IUIStatus> = ({
   filters,
   showFiltered,
   unfilterStatus,
+  contentKey,
 }) => {
   const theme = useTheme();
 
@@ -124,6 +126,7 @@ const UIStatus: React.FC<IUIStatus> = ({
               <CollapsibleContent
                 maxHeight={textOnly ? 40 : compact ? 120 : undefined}
                 showExpand={!textOnly}
+                key={contentKey}
               >
                 {statusBody}
               </CollapsibleContent>

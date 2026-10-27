@@ -401,7 +401,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             <AccountActionsDropdown account={account} />
           </View>
         </View>
-        <CollapsibleContent>
+        <CollapsibleContent key={id}>
           <>
             <View style={{ gap: 8, marginHorizontal: 16, marginBottom: 8 }}>
               <View>
