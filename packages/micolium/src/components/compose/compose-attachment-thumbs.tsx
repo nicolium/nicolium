@@ -172,7 +172,6 @@ const ComposeAttachmentEditor: React.FC<IComposeAttachmentEditor> = ({
     setIsSaving(true);
 
     try {
-      console.log(`${focalPoint.x.toFixed(2)},${focalPoint.y.toFixed(2)}`);
       await changeUploadCompose(media.id, {
         description,
         focus: withFocalPoint ? `${focalPoint.x.toFixed(2)},${focalPoint.y.toFixed(2)}` : undefined,

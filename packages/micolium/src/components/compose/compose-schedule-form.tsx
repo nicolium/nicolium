@@ -89,7 +89,6 @@ const ComposeScheduleForm: React.FC<ICompose> = ({ composeId }) => {
             <JetpackTimePickerDialog
               onDateSelected={(date) => {
                 updateCompose(composeId, (draft) => {
-                  console.log(date);
                   draft.scheduledAt = date;
                 });
                 setDisplayed(false);
