@@ -1,3 +1,4 @@
+import { useCalendars } from 'expo-localization';
 import { TrueSheetProvider } from '@lodev09/react-native-true-sheet';
 import { PaperProvider } from '@mkljczk/react-native-paper';
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
@@ -74,6 +75,8 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = (props) => {
 };
 
 export const App = () => {
+  const [{ timeZone }] = useCalendars();
+
   const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {
@@ -86,7 +89,7 @@ export const App = () => {
   if (!loaded) return null;
 
   return (
-    <IntlProvider locale='en' messages={enMessages}>
+    <IntlProvider locale='en' timeZone={timeZone || undefined} messages={enMessages}>
       <SafeAreaProvider>
         <ThemeProvider>
           <KeyboardProvider>

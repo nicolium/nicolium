@@ -1,3 +1,4 @@
+import { DatePicker, Host } from '@expo/ui/swift-ui';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Button, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
@@ -37,6 +38,8 @@ import { ComposeInteractionPolicy } from './compose-interaction-policy';
 import { ComposeLanguageDropdown } from './compose-language-dropdown';
 import { ComposeQuoteIndicator } from './compose-quote-indicator';
 import { ComposeReplyIndicator } from './compose-reply-indicator';
+import { ComposeScheduleButton } from './compose-schedule-button';
+import { ComposeScheduleForm } from './compose-schedule-form';
 import { ComposeUploadButton } from './compose-upload-button';
 import { ComposeVisibilityDropdown } from './compose-visibility-dropdown';
 import { PollForm } from './poll-form';
@@ -59,8 +62,6 @@ const messages = defineMessages({
     defaultMessage: 'Media is not marked as sensitive',
   },
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
-  schedule: { id: 'schedule.post_time', defaultMessage: 'Post date/time' },
-  removeSchedule: { id: 'schedule.remove', defaultMessage: 'Remove schedule' },
   publish: { id: 'compose_form.publish', defaultMessage: 'Post' },
   publishReply: { id: 'compose_form.reply', defaultMessage: 'Reply' },
   publishQuote: { id: 'compose_form.quote', defaultMessage: 'Quote' },
@@ -325,15 +326,7 @@ const ComposeBottomSheet = () => {
         onPress={handleInsertEmoji}
         accessibilityLabel={intl.formatMessage(messages.emoji)}
       />
-      {features.scheduledStatuses && (
-        <IconButton
-          icon={iconHelper(CalendarPlusIcon)}
-          style={{ marginHorizontal: 0 }}
-          onPress={() => {}}
-          disabled
-          accessibilityLabel={intl.formatMessage(messages.schedule)}
-        />
-      )}
+      {features.scheduledStatuses && <ComposeScheduleButton composeId={COMPOSE_ID} />}
       {!glassEffect && (
         <Button
           mode='contained'
@@ -449,6 +442,7 @@ const ComposeBottomSheet = () => {
           multiline
         />
         <PollForm composeId={COMPOSE_ID} />
+        <ComposeScheduleForm composeId={COMPOSE_ID} />
         <ComposeAttachmentThumbs composeId={COMPOSE_ID} />
       </ScrollView>
     </TrueSheet>
