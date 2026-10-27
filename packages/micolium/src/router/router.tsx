@@ -54,6 +54,10 @@ type SettingsStackParams = {
   filters: undefined;
   filter: { id?: string };
   interaction_policies: undefined;
+  // TODO
+  scheduled_statuses: undefined;
+  // TODO
+  edit_profile: undefined;
 };
 type StatusStackParams = {
   view: { id: string };

@@ -178,8 +178,7 @@ const ScheduleReblog: React.FC<IScheduleReblog> = ({ status, visible, setVisible
                   });
                   setVisible(false);
                 },
-                onError: (e) => {
-                  console.log(e);
+                onError: () => {
                   toast.error(intl.formatMessage(messages.scheduledFail));
                 },
               },
