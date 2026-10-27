@@ -113,7 +113,8 @@
           "prefix": "ph_"
         }
       ],
-      "expo-sharing"
+      "expo-sharing",
+      "expo-localization"
     ],
     "extra": {
       "eas": {

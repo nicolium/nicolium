@@ -34,6 +34,7 @@ import { iconHelper } from '../ui/icon';
 
 import { ComposeAttachmentThumbs } from './compose-attachment-thumbs';
 import { ComposeInteractionPolicy } from './compose-interaction-policy';
+import { ComposeLanguageDropdown } from './compose-language-dropdown';
 import { ComposeQuoteIndicator } from './compose-quote-indicator';
 import { ComposeReplyIndicator } from './compose-reply-indicator';
 import { ComposeUploadButton } from './compose-upload-button';
@@ -383,7 +384,12 @@ const ComposeBottomSheet = () => {
         <View style={{ flexDirection: 'row' }}>
           <Account
             id={currentAccountId}
-            action={<ComposeVisibilityDropdown composeId={COMPOSE_ID} />}
+            action={
+              <View style={{ gap: 8, alignItems: 'flex-end' }}>
+                {features.privacyScopes && <ComposeVisibilityDropdown composeId={COMPOSE_ID} />}
+                {features.postLanguages && <ComposeLanguageDropdown composeId={COMPOSE_ID} />}
+              </View>
+            }
           />
         </View>
         <ComposeReplyIndicator composeId={COMPOSE_ID} />
