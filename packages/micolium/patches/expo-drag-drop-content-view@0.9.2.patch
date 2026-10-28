@@ -1,0 +1,39 @@
+diff --git a/ios/DragDropContentView.swift b/ios/DragDropContentView.swift
+index 00ad418ab201a58ee9c85f2d6ba51ad762f08697..3e045268ff9cf6e2e5b2a7cfa74dea437b702815 100644
+--- a/ios/DragDropContentView.swift
++++ b/ios/DragDropContentView.swift
+@@ -36,9 +36,7 @@ class DragDropContentView: UIView, UIDropInteractionDelegate, UIDragInteractionD
+ 
+ 
+     private func setupDropInteraction() {
+-        let dropInteraction = UIDropInteraction(delegate: self)
+         let dragInteraction = UIDragInteraction(delegate: self)
+-        self.addInteraction(dropInteraction)
+         self.addInteraction(dragInteraction)
+     }
+ 
+diff --git a/ios/ExpoDragDropContentView.swift b/ios/ExpoDragDropContentView.swift
+index 655a2903772649308dc74ef328e1bdfda9455efe..47d56ca098c734e82851db88358229edd9fcd5b2 100644
+--- a/ios/ExpoDragDropContentView.swift
++++ b/ios/ExpoDragDropContentView.swift
+@@ -15,6 +15,7 @@ class ExpoDragDropContentView: ExpoView {
+         super.init(appContext: appContext)
+         clipsToBounds = false
+         addSubview(dragDropContentView)
++        addInteraction(UIDropInteraction(delegate: dragDropContentView))
+ 
+         dragDropContentView.setDropEventDispatcher(onDrop)
+         dragDropContentView.setDragStartEventDispatcher(onDragStart)
+@@ -28,12 +29,6 @@ class ExpoDragDropContentView: ExpoView {
+     }
+ 
+     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+-       // The event type is incomplete. The number 9 indicates a drag event.
+-       // If the drag event has been received, we can direct it to the drag-drop content view.
+-       if event?.type.rawValue == 9 {
+-         return dragDropContentView.hitTest(point, with: event)
+-       }
+-
+        // We know that we're not dealing with a drag event.
+        // Other events we want to pass to child views, omitting the `dragDropContentView`.
+        // We don't need to use `reactZIndexSortedSubviews` on Fabric, but it seems to be necessary on Paper.

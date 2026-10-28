@@ -50,6 +50,7 @@ overrides:
   undici: 7.29.0
   yaml@2: ^2.9.0
 patchedDependencies:
+  expo-drag-drop-content-view@0.9.2: packages/micolium/patches/expo-drag-drop-content-view@0.9.2.patch
   react-native-ios-context-menu@3.2.0: packages/micolium/patches/react-native-ios-context-menu@3.2.0.patch
   react-native-ios-utilities@5.2.0: packages/micolium/patches/react-native-ios-utilities@5.2.0.patch
   zeego@3.0.6: packages/micolium/patches/zeego@3.0.6.patch

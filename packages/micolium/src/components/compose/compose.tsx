@@ -1,5 +1,6 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Button, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
+import { DragDropContentView } from 'expo-drag-drop-content-view';
 import { GlassView } from 'expo-glass-effect';
 import { TextInputWrapper } from 'expo-paste-input';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
@@ -393,87 +394,109 @@ const ComposeBottomSheet = () => {
       <ScrollView
         ref={scrollableRef}
         style={{ flex: 1 }}
-        contentContainerStyle={{ flexGrow: 1, gap: 8, paddingHorizontal: 12 }}
+        contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 12 }}
       >
-        <View style={{ flexDirection: 'row' }}>
-          <Account
-            id={currentAccountId}
-            action={
-              <View style={{ gap: 8, alignItems: 'flex-end' }}>
-                {features.privacyScopes && <ComposeVisibilityDropdown composeId={COMPOSE_ID} />}
-                {features.postLanguages && <ComposeLanguageDropdown composeId={COMPOSE_ID} />}
-              </View>
-            }
-          />
-        </View>
-        <ComposeReplyIndicator composeId={COMPOSE_ID} />
-        <ComposeQuoteIndicator composeId={COMPOSE_ID} />
-        {features.spoilers && (
-          <TextInput
-            value={spoilerText}
-            onChangeText={(text) =>
-              updateCompose(COMPOSE_ID, (draft) => {
-                if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
-                  draft.spoilerText = text;
-                } else {
-                  draft.spoilerTextMap[draft.modifiedLanguage] = text;
-                }
-              })
-            }
-            variant='outlined'
-            placeholder={intl.formatMessage(messages.spoilerPlaceholder)}
-          />
-        )}
-        <TextInputWrapper
-          onPaste={(payload) => {
-            if (payload.type === 'images') {
-              uploadCompose(
-                payload.uris
-                  .slice(
-                    0,
-                    configuration.statuses.max_media_attachments - compose.mediaAttachments.length,
-                  )
-                  .map((uri) => ({
-                    uri,
-                    name: uri.split('/').at(-1)!,
-                    type: 'application/octet-stream',
-                    size: 0,
-                  })),
-              );
-            }
+        <DragDropContentView
+          allowedMimeTypes={configuration.media_attachments.supported_mime_types}
+          onDrop={(event) => {
+            uploadCompose(
+              event.assets
+                .filter((asset) => asset.uri)
+                .slice(
+                  0,
+                  configuration.statuses.max_media_attachments - compose.mediaAttachments.length,
+                )
+                .map((asset) => ({
+                  uri: asset.uri!,
+                  name: asset.uri!.split('/').at(-1)!,
+                  type: asset.type,
+                  size: 0,
+                })),
+            );
           }}
-          style={{
-            flexGrow: 1,
-          }}
+          style={{ flexGrow: 1, gap: 8 }}
         >
-          <RNTextInput
-            value={text}
-            onChangeText={(text) =>
-              updateCompose(COMPOSE_ID, (draft) => {
-                if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
-                  draft.text = text;
-                } else {
-                  draft.textMap[draft.modifiedLanguage] = text;
-                }
-              })
-            }
-            placeholder={intl.formatMessage(messages.placeholder)}
-            scrollEnabled={false}
+          <View style={{ flexDirection: 'row' }}>
+            <Account
+              id={currentAccountId}
+              action={
+                <View style={{ gap: 8, alignItems: 'flex-end' }}>
+                  {features.privacyScopes && <ComposeVisibilityDropdown composeId={COMPOSE_ID} />}
+                  {features.postLanguages && <ComposeLanguageDropdown composeId={COMPOSE_ID} />}
+                </View>
+              }
+            />
+          </View>
+          <ComposeReplyIndicator composeId={COMPOSE_ID} />
+          <ComposeQuoteIndicator composeId={COMPOSE_ID} />
+          {features.spoilers && (
+            <TextInput
+              value={spoilerText}
+              onChangeText={(text) =>
+                updateCompose(COMPOSE_ID, (draft) => {
+                  if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+                    draft.spoilerText = text;
+                  } else {
+                    draft.spoilerTextMap[draft.modifiedLanguage] = text;
+                  }
+                })
+              }
+              variant='outlined'
+              placeholder={intl.formatMessage(messages.spoilerPlaceholder)}
+            />
+          )}
+          <TextInputWrapper
+            onPaste={(payload) => {
+              if (payload.type === 'images') {
+                uploadCompose(
+                  payload.uris
+                    .slice(
+                      0,
+                      configuration.statuses.max_media_attachments -
+                        compose.mediaAttachments.length,
+                    )
+                    .map((uri) => ({
+                      uri,
+                      name: uri.split('/').at(-1)!,
+                      type: 'application/octet-stream',
+                      size: 0,
+                    })),
+                );
+              }
+            }}
             style={{
               flexGrow: 1,
-              minHeight: 40,
-              alignSelf: 'stretch',
-              paddingHorizontal: 16 + 1,
-              color: colors.onSurface,
-              textAlignVertical: 'top',
-              ...fonts.bodyLarge,
             }}
-            multiline
-          />
-        </TextInputWrapper>
-        <PollForm composeId={COMPOSE_ID} />
-        <ComposeScheduleForm composeId={COMPOSE_ID} />
-        <ComposeAttachmentThumbs composeId={COMPOSE_ID} />
+          >
+            <RNTextInput
+              value={text}
+              onChangeText={(text) =>
+                updateCompose(COMPOSE_ID, (draft) => {
+                  if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+                    draft.text = text;
+                  } else {
+                    draft.textMap[draft.modifiedLanguage] = text;
+                  }
+                })
+              }
+              placeholder={intl.formatMessage(messages.placeholder)}
+              scrollEnabled={false}
+              style={{
+                flexGrow: 1,
+                minHeight: 40,
+                alignSelf: 'stretch',
+                paddingHorizontal: 16 + 1,
+                color: colors.onSurface,
+                textAlignVertical: 'top',
+                ...fonts.bodyLarge,
+              }}
+              multiline
+            />
+          </TextInputWrapper>
+          <PollForm composeId={COMPOSE_ID} />
+          <ComposeScheduleForm composeId={COMPOSE_ID} />
+          <ComposeAttachmentThumbs composeId={COMPOSE_ID} />
+        </DragDropContentView>
       </ScrollView>
     </TrueSheet>
   );

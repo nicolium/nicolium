@@ -12,7 +12,8 @@
       "bundleIdentifier": "app.nicolium.micolium",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "appleTeamId": "28NDJH3G7W"
     },
     "android": {
       "adaptiveIcon": {
