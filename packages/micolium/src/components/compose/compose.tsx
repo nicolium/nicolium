@@ -1,9 +1,8 @@
-import { DatePicker, Host } from '@expo/ui/swift-ui';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Button, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
+import { TextInputWrapper } from 'expo-paste-input';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
-import { CalendarPlusIcon } from 'phosphor-react-native/src/icons/CalendarPlus';
 import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
 import { PaperPlaneRightIcon } from 'phosphor-react-native/src/icons/PaperPlaneRight';
 import { SmileyIcon } from 'phosphor-react-native/src/icons/Smiley';
@@ -13,7 +12,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Alert, ScrollView, TextInput as RNTextInput, View, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useFeatures } from '@/contexts/current-account-context';
+import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
@@ -25,6 +24,7 @@ import {
   useComposeStore,
   newPoll,
   useSubmitCompose,
+  useUploadCompose,
 } from '@/stores/compose';
 import { useSetting } from '@/stores/settings';
 import { useIsComposeOpen, useUiStore, useUiStoreActions } from '@/stores/ui';
@@ -120,6 +120,8 @@ const ComposeBottomSheet = () => {
   const submitCompose = useSubmitCompose(COMPOSE_ID);
   const { openEmojiPicker } = useUiStoreActions();
   const heading = useComposeHeading(COMPOSE_ID);
+  const uploadCompose = useUploadCompose(COMPOSE_ID);
+  const { configuration } = useInstance();
 
   const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
 
@@ -422,30 +424,53 @@ const ComposeBottomSheet = () => {
             placeholder={intl.formatMessage(messages.spoilerPlaceholder)}
           />
         )}
-        <RNTextInput
-          value={text}
-          onChangeText={(text) =>
-            updateCompose(COMPOSE_ID, (draft) => {
-              if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
-                draft.text = text;
-              } else {
-                draft.textMap[draft.modifiedLanguage] = text;
-              }
-            })
-          }
-          placeholder={intl.formatMessage(messages.placeholder)}
-          scrollEnabled={false}
+        <TextInputWrapper
+          onPaste={(payload) => {
+            if (payload.type === 'images') {
+              uploadCompose(
+                payload.uris
+                  .slice(
+                    0,
+                    configuration.statuses.max_media_attachments - compose.mediaAttachments.length,
+                  )
+                  .map((uri) => ({
+                    uri,
+                    name: uri.split('/').at(-1)!,
+                    type: 'application/octet-stream',
+                    size: 0,
+                  })),
+              );
+            }
+          }}
           style={{
             flexGrow: 1,
-            minHeight: 40,
-            alignSelf: 'stretch',
-            paddingHorizontal: 16 + 1,
-            color: colors.onSurface,
-            textAlignVertical: 'top',
-            ...fonts.bodyLarge,
           }}
-          multiline
-        />
+        >
+          <RNTextInput
+            value={text}
+            onChangeText={(text) =>
+              updateCompose(COMPOSE_ID, (draft) => {
+                if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+                  draft.text = text;
+                } else {
+                  draft.textMap[draft.modifiedLanguage] = text;
+                }
+              })
+            }
+            placeholder={intl.formatMessage(messages.placeholder)}
+            scrollEnabled={false}
+            style={{
+              flexGrow: 1,
+              minHeight: 40,
+              alignSelf: 'stretch',
+              paddingHorizontal: 16 + 1,
+              color: colors.onSurface,
+              textAlignVertical: 'top',
+              ...fonts.bodyLarge,
+            }}
+            multiline
+          />
+        </TextInputWrapper>
         <PollForm composeId={COMPOSE_ID} />
         <ComposeScheduleForm composeId={COMPOSE_ID} />
         <ComposeAttachmentThumbs composeId={COMPOSE_ID} />

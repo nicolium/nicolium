@@ -74,6 +74,7 @@
     "expo-linear-gradient": "~57.0.2",
     "expo-linking": "~57.0.12",
     "expo-localization": "~57.0.2",
+    "expo-paste-input": "^0.2.2",
     "expo-screen-orientation": "~57.0.3",
     "expo-secure-store": "~57.0.4",
     "expo-sharing": "~57.0.23",

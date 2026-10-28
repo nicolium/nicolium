@@ -1783,6 +1783,8 @@ const useUploadCompose = (composeId: string) => {
 
   return useCallback(
     (files: FileList | Array<File>, descriptions?: Array<string>) => {
+      if (files.length === 0) return;
+
       const compose =
         useComposeStore.getState().composers[composeId] || useComposeStore.getState().default;
 
