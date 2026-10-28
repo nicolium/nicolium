@@ -17,7 +17,15 @@ const Emoji: React.FC<IEmoji> = ({ emoji, url, shortcode, size = 24 }) =>
       style={{ width: size, height: size, objectFit: 'contain' }}
     />
   ) : (
-    <Text style={{ fontSize: size }}>{emoji}</Text>
+    <Text
+      style={{
+        fontSize: size * 0.9,
+        lineHeight: size,
+        height: size,
+      }}
+    >
+      {emoji}
+    </Text>
   );
 
 export { Emoji };
