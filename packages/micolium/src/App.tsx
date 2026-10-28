@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { makeRedirectUri } from 'expo-auth-session';
 import { createURL } from 'expo-linking';
-import { useCalendars } from 'expo-localization';
+import { useCalendars, useLocales } from 'expo-localization';
 import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -76,6 +76,7 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = (props) => {
 
 export const App = () => {
   const [{ timeZone }] = useCalendars();
+  const [{ languageCode }] = useLocales();
 
   const [loaded, setLoaded] = React.useState(false);
 
@@ -89,7 +90,12 @@ export const App = () => {
   if (!loaded) return null;
 
   return (
-    <IntlProvider locale='en' timeZone={timeZone || undefined} messages={enMessages}>
+    <IntlProvider
+      locale={languageCode || 'en'}
+      defaultLocale='en'
+      timeZone={timeZone || undefined}
+      messages={enMessages}
+    >
       <SafeAreaProvider>
         <ThemeProvider>
           <KeyboardProvider>
