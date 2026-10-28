@@ -57,19 +57,19 @@ const messages = defineMessages({
   },
   filtersNone: { id: 'account.filters.label.none', defaultMessage: 'Posts' },
   filtersAllExceptPinned: {
-    id: 'account.filters.label.all',
+    id: 'account.filters.label.all.except_pinned',
     defaultMessage: 'All activity, without pinned',
   },
   filtersWithReblogsExceptPinned: {
-    id: 'account.filters.label.with_reblogs',
+    id: 'account.filters.label.with_reblogs.except_pinned',
     defaultMessage: 'Posts and boosts, without pinned',
   },
   filtersWithRepliesExceptPinned: {
-    id: 'account.filters.label.with_replies',
+    id: 'account.filters.label.with_replies.except_pinned',
     defaultMessage: 'Posts and replies, without pinned',
   },
   filtersNoneExceptPinned: {
-    id: 'account.filters.label.none',
+    id: 'account.filters.label.none.except_pinned',
     defaultMessage: 'Posts, without pinned',
   },
 });

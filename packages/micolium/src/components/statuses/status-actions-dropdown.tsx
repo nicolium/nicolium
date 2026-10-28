@@ -44,7 +44,7 @@ const messages = defineMessages({
   interactAs: { id: 'status.interact_as', defaultMessage: 'Interact from other accounts' },
   interactAsConfirmationHeading: {
     id: 'interact_as_modal.title',
-    defaultMessage: 'Interact from accounts',
+    defaultMessage: 'Interact other from accounts',
   },
   interactAsConfirmationMessage: {
     id: 'interact_as_modal.confirmation_message',

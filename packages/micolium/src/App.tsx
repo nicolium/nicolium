@@ -21,13 +21,21 @@ import { EmojiPickerBottomSheet } from './components/emoji-picker';
 import { InteractAsSheet } from './components/interact-as';
 import { MediaViewer } from './components/media-viewer';
 import { DefaultCurrentAccountProvider } from './contexts/current-account-context';
-import enMessages from './messages/en.json';
 import { loadPolyfills } from './polyfills';
 import { queryClient } from './queries/client';
 import { RootNavigator } from './router/router';
 import { DarkTheme, LightTheme } from './utils/themes';
 
 SplashScreen.preventAutoHideAsync();
+
+const messagesContext = require.context('./messages', false, /\.json$/u, 'lazy');
+
+const locales = messagesContext.keys().map((key) => key.replace(/^\.\/|\.json$/gu, ''));
+
+const loadMessages = (locale: string): Promise<Record<string, string>> =>
+  messagesContext(`./${locale}.json`).then(
+    (module: { default: Record<string, string> }) => module.default,
+  );
 
 const linking = {
   enabled: true,
@@ -76,9 +84,13 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = (props) => {
 
 export const App = () => {
   const [{ timeZone }] = useCalendars();
-  const [{ languageCode }] = useLocales();
+  const [{ languageCode, languageTag }] = useLocales();
+
+  const locale =
+    [languageTag, languageCode].find((locale) => locale && locales.includes(locale)) || 'en';
 
   const [loaded, setLoaded] = React.useState(false);
+  const [messages, setMessages] = React.useState<Record<string, string>>();
 
   React.useEffect(() => {
     loadPolyfills().finally(() => {
@@ -87,14 +99,21 @@ export const App = () => {
     });
   }, []);
 
-  if (!loaded) return null;
+  React.useEffect(() => {
+    loadMessages(locale)
+      .catch(() => ({}))
+      .then(setMessages);
+  }, [locale]);
+
+  if (!loaded || !messages) return null;
 
   return (
     <IntlProvider
       locale={languageCode || 'en'}
       defaultLocale='en'
       timeZone={timeZone || undefined}
-      messages={enMessages}
+      messages={messages}
+      onError={() => {}}
     >
       <SafeAreaProvider>
         <ThemeProvider>

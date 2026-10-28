@@ -1,3 +1,5 @@
+/// <reference types="expo/types" />
+
 declare module '*.png' {
   // eslint-disable-next-line
   const value: import('react-native').ImageSourcePropType;
