@@ -148,11 +148,15 @@ const ComposeBottomSheet = () => {
   const bottomSheetRef = React.useRef<TrueSheet>(null);
   const scrollableRef = React.useRef<ScrollView>(null);
 
+  const textLength = (spoilerText + text).length;
+  const maxLength = configuration.statuses.max_characters;
+
   const disabled =
     (!text.trim().length && !compose.mediaAttachments.length) ||
     (!!poll && poll.options.some((option) => !option.trim().length)) ||
     compose.isUploading ||
-    compose.isChangingUpload;
+    compose.isChangingUpload ||
+    textLength > maxLength;
 
   const handleClose = React.useCallback(() => {
     const compose = useComposeStore.getState().composers[COMPOSE_ID];
@@ -335,11 +339,20 @@ const ComposeBottomSheet = () => {
         accessibilityLabel={intl.formatMessage(messages.emoji)}
       />
       {features.scheduledStatuses && <ComposeScheduleButton composeId={COMPOSE_ID} />}
+      <View style={{ flexGrow: 1 }} />
+      <Text
+        variant='labelLargeEmphasized'
+        style={{
+          marginHorizontal: 8,
+          color: textLength > maxLength ? colors.error : colors.onBackground,
+        }}
+      >
+        {maxLength - textLength}
+      </Text>
       {!glassEffect && (
         <Button
           mode='contained'
           icon={iconHelper(publishButtonIcon)}
-          style={{ marginLeft: 'auto' }}
           onPress={handlePublish}
           loading={isSubmitting}
           disabled={disabled || isSubmitting}
