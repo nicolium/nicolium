@@ -74,9 +74,16 @@ interface IStatusImage {
   uri: string;
   sensitive?: boolean;
   mediaVisible?: boolean;
+  setImageDimensions?: (_: { height: number; width: number }) => void;
 }
 
-const StatusImage: React.FC<IStatusImage> = ({ media, uri, sensitive, mediaVisible }) => {
+const StatusImage: React.FC<IStatusImage> = ({
+  media,
+  uri,
+  sensitive,
+  mediaVisible,
+  setImageDimensions,
+}) => {
   const { colors } = useTheme();
 
   const { width, height } = media.meta.original || {};
@@ -95,6 +102,13 @@ const StatusImage: React.FC<IStatusImage> = ({ media, uri, sensitive, mediaVisib
       contentFit='cover'
       transition={300}
       recyclingKey={`${hidden ? 'hidden-' : ''}${media.id}`}
+      onLoad={
+        setImageDimensions
+          ? ({ source }) =>
+              media.type === 'image' &&
+              setImageDimensions({ width: source.width, height: source.height })
+          : undefined
+      }
     />
   );
 };
@@ -211,6 +225,7 @@ const renderMedia = (
   media: SupportedMediaAttachment,
   sensitive?: boolean,
   mediaVisible?: boolean,
+  setImageDimensions?: (_: { height: number; width: number }) => void,
 ) => {
   if (sensitive && mediaVisible !== true) {
     return (
@@ -219,6 +234,7 @@ const renderMedia = (
         uri={media.preview_url}
         sensitive={sensitive}
         mediaVisible={mediaVisible}
+        setImageDimensions={setImageDimensions}
       />
     );
   }
@@ -231,6 +247,7 @@ const renderMedia = (
           uri={media.preview_url}
           sensitive={sensitive}
           mediaVisible={mediaVisible}
+          setImageDimensions={setImageDimensions}
         />
       );
     case 'gifv':
@@ -262,6 +279,8 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   const { openMediaViewer } = useUiStoreActions();
 
   const matchedFilters = React.useMemo(() => filters?.map(({ filter }) => filter.title), [filters]);
+
+  const [imageDimensions, setImageDimensions] = React.useState<{ width: number; height: number }>();
 
   if (!status.media_attachments.length) return null;
 
@@ -336,7 +355,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
     );
 
   const renderItem = (media: SupportedMediaAttachment, multiple = filteredMedia.length > 1) => {
-    const { width, height } = media.meta.original || {};
+    const { width, height } = media.meta.original || imageDimensions || {};
     const aspectRatio = !multiple && width && height ? width / height : undefined;
 
     return (
@@ -363,7 +382,12 @@ const StatusMedia: React.FC<IStatusMedia> = ({
             accessibilityRole='imagebutton'
             accessibilityLabel={media.description || undefined}
           >
-            {renderMedia(media, sensitive, mediaVisible)}
+            {renderMedia(
+              media,
+              sensitive,
+              mediaVisible,
+              media.meta.original || multiple ? undefined : setImageDimensions,
+            )}
           </Pressable>
         )}
         {media.description && (
