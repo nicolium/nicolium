@@ -54,6 +54,7 @@ const Account: React.FC<IAccount> = ({
 
   return (
     <UIAccount
+      id={account.id}
       avatarSrc={account.avatar_default ? undefined : account.avatar}
       avatarDescription={account.avatar_description}
       displayName={account.display_name}

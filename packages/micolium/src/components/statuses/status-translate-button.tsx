@@ -1,6 +1,5 @@
 import { Button, Text, useTheme } from '@mkljczk/react-native-paper';
 import { TranslateIcon } from 'phosphor-react-native/src/icons/Translate';
-// import iconCircleNotch from '@phosphor-icons/core/regular/circle-notch.svg';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { View } from 'react-native';

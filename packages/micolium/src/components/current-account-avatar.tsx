@@ -1,4 +1,5 @@
 import { Avatar } from '@mkljczk/react-native-paper';
+import { Image } from 'expo-image';
 import { UserIcon } from 'phosphor-react-native/src/icons/User';
 import React from 'react';
 
@@ -20,7 +21,17 @@ const CurrentAccountAvatar: React.FC<ICurrentAccountAvatar> = ({ size = 24 }) =>
         label={(currentAccount.display_name || currentAccount.acct).slice(0, 2)}
       />
     ) : (
-      <Avatar.Image size={size} source={{ uri: currentAccount.avatar }} />
+      <Image
+        source={{ uri: currentAccount.avatar }}
+        accessibilityLabel={currentAccount.avatar_description}
+        style={{
+          height: size,
+          width: size,
+          borderRadius: size / 2,
+        }}
+        contentFit='contain'
+        recyclingKey={`avatar-${currentAccount.id}`}
+      />
     )
   ) : (
     <Avatar.Icon size={size} icon={iconHelper(UserIcon)} />

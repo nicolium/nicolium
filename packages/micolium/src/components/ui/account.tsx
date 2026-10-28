@@ -5,6 +5,7 @@ import {
   useTheme,
   type TouchableRippleProps,
 } from '@mkljczk/react-native-paper';
+import { Image } from 'expo-image';
 import React from 'react';
 import { type GestureResponderEvent, View, type StyleProp, type ViewStyle } from 'react-native';
 
@@ -32,6 +33,7 @@ const MaybeLink = ({
   );
 
 interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
+  id?: string;
   avatarSrc?: string;
   avatarDescription?: string;
   displayName: string;
@@ -46,6 +48,7 @@ interface IUIAccount extends Pick<TouchableRippleProps, 'onPress' | 'style'> {
 }
 
 const UIAccount: React.FC<IUIAccount> = ({
+  id,
   avatarSrc,
   avatarDescription,
   displayName,
@@ -67,10 +70,16 @@ const UIAccount: React.FC<IUIAccount> = ({
       <View style={{ position: 'relative' }}>
         <MaybeLink onPress={onPress} fullWidthPressable={fullWidthPressable}>
           {avatarSrc ? (
-            <Avatar.Image
-              size={40}
+            <Image
               source={{ uri: avatarSrc }}
               accessibilityLabel={avatarDescription}
+              style={{
+                height: 40,
+                width: 40,
+                borderRadius: 20,
+              }}
+              contentFit='contain'
+              recyclingKey={`avatar-${id}`}
             />
           ) : (
             <Avatar.Text size={40} label={(displayName || acct).slice(0, 2)} />

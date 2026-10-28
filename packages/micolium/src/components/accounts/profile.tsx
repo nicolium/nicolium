@@ -376,15 +376,25 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                 }}
               />
             ) : (
-              <Avatar.Image
-                source={{ uri: account.avatar }}
-                size={80}
-                accessibilityLabel={account.avatar_description}
+              <View
                 style={{
                   outlineWidth: 4,
                   outlineColor: colors.background,
+                  borderRadius: 40,
+                  overflow: 'hidden',
                 }}
-              />
+              >
+                <Image
+                  source={{ uri: account.avatar }}
+                  accessibilityLabel={account.avatar_description}
+                  style={{
+                    height: 80,
+                    width: 80,
+                  }}
+                  contentFit='contain'
+                  recyclingKey={`avatar-${account.id}`}
+                />
+              </View>
             )}
           </Pressable>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>

@@ -198,7 +198,7 @@ const LoginScreen = ({ navigation }: NativeStackScreenProps<LoginStackParams, 'i
 
       {!isLoggedIn && (
         <>
-          <UIAccount displayName='micolium' acct='micolium' />
+          <UIAccount displayName='micolium' acct='micolium' id='__internal__micolium' />
           <View style={{ gap: 12 }}>
             <Text variant='headlineSmall'>
               <FormattedMessage id='landing_mobile.headline' defaultMessage='Welcome!' />
