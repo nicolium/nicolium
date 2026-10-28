@@ -290,7 +290,7 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
               <DropdownMenu.ItemIcon ios={{ name: 'quote.bubble' }} androidIconName='ph_quotes' />
               <DropdownMenu.ItemTitle>{intl.formatMessage(messages.quote)}</DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
-            {!features.scheduledReblogs && (
+            {features.scheduledReblogs && (
               <DropdownMenu.Item key='schedule-reblog' onSelect={() => setShowScheduleReblog(true)}>
                 <DropdownMenu.ItemIcon
                   ios={{ name: 'calendar.badge.plus' }}
