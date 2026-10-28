@@ -18,12 +18,14 @@ import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
 import { Emojify } from '../ui/emojify';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
+import type { Translation } from 'pl-api';
 
 interface IStatusPoll {
   status: SelectedStatus;
+  translation?: Translation;
 }
 
-const StatusPoll: React.FC<IStatusPoll> = ({ status }) => {
+const StatusPoll: React.FC<IStatusPoll> = ({ status, translation }) => {
   const { colors } = useTheme();
 
   const { data: poll, refetch } = usePollQuery(status.poll_id!);
@@ -97,7 +99,10 @@ const StatusPoll: React.FC<IStatusPoll> = ({ status }) => {
                   />
                 )}
                 <Text numberOfLines={1} style={{ flex: voted ? undefined : 1 }}>
-                  <Emojify text={option.title} emojis={status.emojis} />
+                  <Emojify
+                    text={translation?.poll?.options[index]?.title || option.title}
+                    emojis={status.emojis}
+                  />
                 </Text>
                 {voted && (
                   <View style={{ flex: voted ? 1 : undefined }}>

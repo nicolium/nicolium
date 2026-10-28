@@ -15,6 +15,7 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
+import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
 import { Account } from '../accounts/account';
@@ -34,6 +35,7 @@ import { StatusMedia } from './status-media';
 import { StatusPoll } from './status-poll';
 import { StatusQuote } from './status-quote';
 import { StatusReplyMentions } from './status-reply-mentions';
+import StatusTranslateButton from './status-translate-button';
 import { StatusVisibilityIcon } from './status-visibility-icon';
 
 import type { FilterContext, FilterResult } from 'pl-api';
@@ -115,9 +117,11 @@ const Status: React.FC<IStatus> = ({
   ...props
 }) => {
   const { data: status } = useStatus(id, { withFilteredResults: true });
-  const navigation = useNavigation();
 
-  const { spoilerExpanded, showFiltered, mediaVisible } = useStatusMeta(id);
+  const { spoilerExpanded, showFiltered, mediaVisible, targetLanguage } = useStatusMeta(id);
+  const { data: translation } = useStatusTranslation(id, targetLanguage);
+
+  const navigation = useNavigation();
   const {
     expandStatusSpoiler,
     collapseStatusSpoiler,
@@ -198,10 +202,10 @@ const Status: React.FC<IStatus> = ({
         </View>
       }
       displayedMentions={<StatusReplyMentions status={actualStatus} />}
-      content={actualStatus.content}
+      content={(translation && translation.content) || actualStatus.content}
       emojis={actualStatus.emojis}
       mentions={actualStatus.mentions}
-      spoilerText={actualStatus.spoiler_text}
+      spoilerText={(translation && translation.spoiler_text) || actualStatus.spoiler_text}
       media={
         props.textOnly ? (
           <>
@@ -248,7 +252,9 @@ const Status: React.FC<IStatus> = ({
               revealStatusMedia={() => revealStatusMedia(actualStatus.id)}
               hideStatusMedia={() => hideStatusMedia(actualStatus.id)}
             />
-            {actualStatus.poll_id && <StatusPoll status={actualStatus} />}
+            {actualStatus.poll_id && (
+              <StatusPoll status={actualStatus} translation={translation || undefined} />
+            )}
             {actualStatus.quote_id &&
               (props.compact ? (
                 <Card mode='outlined'>
@@ -270,6 +276,7 @@ const Status: React.FC<IStatus> = ({
       actions={
         withActions ? (
           <>
+            <StatusTranslateButton status={actualStatus} />
             <StatusEmojiReactions status={actualStatus} />
             <StatusActions status={actualStatus} />
           </>
