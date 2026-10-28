@@ -116,7 +116,12 @@
         }
       ],
       "expo-sharing",
-      "expo-localization"
+      [
+        "expo-localization",
+        {
+          "supportedLocales": ["en", "pl"]
+        }
+      ]
     ],
     "extra": {
       "eas": {
