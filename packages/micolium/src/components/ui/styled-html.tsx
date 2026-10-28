@@ -8,8 +8,9 @@ import RenderHtml, {
   type MixedStyleDeclaration,
 } from '@native-html/render';
 import { Link } from '@react-navigation/native';
-import { type ChildNode, Element, Text, isText } from 'domhandler';
+import { type ChildNode, type ParentNode, Element, Text, isTag, isText } from 'domhandler';
 import { prepend, removeElement, replaceElement } from 'domutils';
+import { parseDocument } from 'htmlparser2';
 import React, { useMemo } from 'react';
 import { useWindowDimensions } from 'react-native';
 
@@ -46,6 +47,15 @@ const customHTMLElementModels = {
     tagName: 'hashtag-link',
     contentModel: HTMLContentModel.mixed,
   }),
+};
+
+const visitDom = (node: ParentNode, visitors: DomVisitorCallbacks) => {
+  for (const child of [...node.children]) {
+    if (isTag(child)) {
+      visitDom(child, visitors);
+      visitors.onElement?.(child);
+    }
+  }
 };
 
 interface IEmoji {
@@ -103,6 +113,13 @@ const HashtagLink: React.FC<IHashtagLink> = ({ tnode }) => {
       #{tag}
     </Link>
   );
+};
+
+const renderers = {
+  hr: Divider,
+  emoji: Emoji,
+  'account-link': AccountLink,
+  'hashtag-link': HashtagLink,
 };
 
 interface IStyledHtml {
@@ -172,7 +189,7 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
     };
   }, [colors, fonts, sizeMultiplier]);
 
-  const domVisitors = useMemo((): DomVisitorCallbacks | undefined => {
+  const domVisitors = useMemo((): DomVisitorCallbacks => {
     const emojiMap = makeEmojiMap(emojis || []);
 
     return {
@@ -296,23 +313,27 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
     };
   }, [emojis, mentions]);
 
-  const systemFonts = React.useMemo(() => [...defaultSystemFonts, fonts.bodyMedium.fontFamily], [fonts]);
+  const dom = useMemo(() => {
+    const document = parseDocument(html);
+    visitDom(document, domVisitors);
+    return document;
+  }, [html, domVisitors]);
+
+  const systemFonts = React.useMemo(
+    () => [...defaultSystemFonts, fonts.bodyMedium.fontFamily],
+    [fonts],
+  );
 
   return (
     <RenderHtml
       contentWidth={width}
-      source={{ html }}
+      source={{ dom }}
       baseStyle={baseStyle}
       tagsStyles={tagsStyles}
       classesStyles={classesStyles}
       systemFonts={systemFonts}
       customHTMLElementModels={customHTMLElementModels}
-      renderers={{
-        hr: Divider,
-        emoji: Emoji,
-        'account-link': AccountLink,
-        'hashtag-link': HashtagLink,
-      }}
+      renderers={renderers}
       domVisitors={domVisitors}
     />
   );
