@@ -3,6 +3,7 @@ import { GlassView } from 'expo-glass-effect';
 import { ArrowLeftIcon } from 'phosphor-react-native/src/icons/ArrowLeft';
 import { CaretLeftIcon } from 'phosphor-react-native/src/icons/CaretLeft';
 import React from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { Platform, Pressable, View, type PressableProps } from 'react-native';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -10,6 +11,10 @@ import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { iconHelper } from './icon';
 
 import type { Icon as PhosphorIcon } from 'phosphor-react-native';
+
+const messages = defineMessages({
+  back: { id: 'card.back.label', defaultMessage: 'Back' },
+});
 
 interface IHeaderIconButton extends PressableProps {
   icon: PhosphorIcon;
@@ -58,8 +63,16 @@ const HeaderIconButton: React.FC<IHeaderIconButton> = ({ icon, badge, ...props }
   );
 };
 
-const HeaderBackButton: React.FC<PressableProps> = (props) => (
-  <HeaderIconButton icon={Platform.OS === 'ios' ? CaretLeftIcon : ArrowLeftIcon} {...props} />
-);
+const HeaderBackButton: React.FC<PressableProps> = (props) => {
+  const intl = useIntl();
+
+  return (
+    <HeaderIconButton
+      icon={Platform.OS === 'ios' ? CaretLeftIcon : ArrowLeftIcon}
+      accessibilityLabel={intl.formatMessage(messages.back)}
+      {...props}
+    />
+  );
+};
 
 export { HeaderIconButton, HeaderBackButton };

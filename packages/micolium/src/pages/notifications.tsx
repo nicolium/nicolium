@@ -46,6 +46,11 @@ const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   reset: { id: 'notifications.filters.reset', defaultMessage: 'Reset' },
   save: { id: 'common.save', defaultMessage: 'Save' },
+  markRead: {
+    id: 'notifications.mark_read',
+    defaultMessage: 'Mark notifications read',
+  },
+  showFilters: { id: 'notifications.filter.menu', defaultMessage: 'Filter notifications' },
 });
 
 const filtersMessages: Record<(typeof ALL_FILTERS)[number], MessageDescriptor> = defineMessages({
@@ -203,6 +208,8 @@ const FollowRequestsButton = () => {
 };
 
 const NotificationsMarkReadButton = () => {
+  const intl = useIntl();
+
   const notificationCount = useNotificationsUnreadCount();
   const { mutate: markNotificationsRead } = useMarkNotificationsReadMutation();
 
@@ -214,10 +221,18 @@ const NotificationsMarkReadButton = () => {
     );
   };
 
-  return <HeaderIconButton icon={ChecksIcon} disabled={!notificationCount} onPress={handleClick} />;
+  return (
+    <HeaderIconButton
+      icon={ChecksIcon}
+      disabled={!notificationCount}
+      onPress={handleClick}
+      accessibilityLabel={intl.formatMessage(messages.markRead)}
+    />
+  );
 };
 
 const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
+  const intl = useIntl();
   const { colors } = useTheme();
 
   const [showFiltersDialog, setShowFiltersDialog] = React.useState(false);
@@ -239,7 +254,11 @@ const NotificationsHeader = ({ route }: NativeStackHeaderProps) => {
         />
         {(!route.params ||
           (route.params as NotificationsStackParams['view'] | undefined)?.tab === 'all') && (
-          <HeaderIconButton icon={FunnelIcon} onPress={() => setShowFiltersDialog(true)} />
+          <HeaderIconButton
+            icon={FunnelIcon}
+            onPress={() => setShowFiltersDialog(true)}
+            accessibilityLabel={intl.formatMessage(messages.showFilters)}
+          />
         )}
         <FollowRequestsButton />
         <NotificationsMarkReadButton />

@@ -123,7 +123,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
                         <SwiftUIToggle
                           isOn={item.active}
                           onIsOnChange={item.onPress}
-                          label=''
+                          label={item.label}
                           modifiers={[labelsHidden()]}
                         />
                       </SwiftUIHost>

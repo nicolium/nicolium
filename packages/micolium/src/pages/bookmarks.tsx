@@ -46,6 +46,7 @@ const messages = defineMessages({
     id: 'bookmarks.delete_folder.fail',
     defaultMessage: 'Failed to delete folder',
   },
+  menuTitle: { id: 'dropdown_menu.title', defaultMessage: 'Menu' },
 });
 
 const AllBookmarksScreen = ({
@@ -137,6 +138,7 @@ const BookmarksFolderScreen = ({
           <DropdownMenu.Trigger>
             <HeaderIconButton
               icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
+              accessibilityLabel={intl.formatMessage(messages.menuTitle)}
             />
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>

@@ -86,6 +86,7 @@ const messages = defineMessages({
     id: 'timeline_filters.show_media_without_alt_text',
     defaultMessage: 'Show media without description',
   },
+  menuTitle: { id: 'dropdown_menu.title', defaultMessage: 'Menu' },
 });
 
 interface ITimelineHeaderMenu {
@@ -163,12 +164,17 @@ const useFiltersDropdownMenu = (timeline: (typeof TIMELINE_FILTER_KEYS)[number])
 };
 
 const FiltersDropdownMenu: React.FC<ITimelineHeaderMenu> = ({ timeline }) => {
+  const intl = useIntl();
+
   const filtersDropdownMenuItems = useFiltersDropdownMenu(timeline);
 
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <HeaderIconButton icon={Platform.OS === 'ios' ? FunnelSimpleIcon : FunnelIcon} />
+        <HeaderIconButton
+          icon={Platform.OS === 'ios' ? FunnelSimpleIcon : FunnelIcon}
+          accessibilityLabel={intl.formatMessage(messages.timelineFiltersLabel)}
+        />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         <DropdownMenu.Group>
@@ -188,7 +194,10 @@ const TimelineHeaderMenu = () => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <HeaderIconButton icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon} />
+        <HeaderIconButton
+          icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
+          accessibilityLabel={intl.formatMessage(messages.menuTitle)}
+        />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         <DropdownMenu.Group>
@@ -287,7 +296,10 @@ const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => 
     <>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <HeaderIconButton icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon} />
+          <HeaderIconButton
+            icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
+            accessibilityLabel={intl.formatMessage(messages.menuTitle)}
+          />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Group>

@@ -113,6 +113,7 @@ const messages = defineMessages({
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
   reportAccount: { id: 'account.report', defaultMessage: 'Report @{name}' },
+  menuTitle: { id: 'dropdown_menu.title', defaultMessage: 'Menu' },
 });
 
 interface IStatusActionsDropdown {
@@ -262,6 +263,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
             icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
             style={{ height: 32, width: 32 }}
             onPress={() => {}}
+            accessibilityLabel={intl.formatMessage(messages.menuTitle)}
           />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>

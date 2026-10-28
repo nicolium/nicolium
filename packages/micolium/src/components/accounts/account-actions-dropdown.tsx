@@ -98,6 +98,7 @@ const messages = defineMessages({
   subscribe: { id: 'account.subscribe.short', defaultMessage: 'Subscribe to notifications' },
   notifyReplies: { id: 'account.notify_replies.short', defaultMessage: 'Subscribe to replies' },
   notifyReblogs: { id: 'account.notify_reblogs.short', defaultMessage: 'Subscribe to reposts' },
+  menuTitle: { id: 'dropdown_menu.title', defaultMessage: 'Menu' },
 });
 
 interface IAccountActionsDropdown {
@@ -254,12 +255,14 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
           {headerButton ? (
             <HeaderIconButton
               icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
+              accessibilityLabel={intl.formatMessage(messages.menuTitle)}
             />
           ) : (
             <IconButton
               mode='outlined'
               icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
               onPress={() => {}}
+              accessibilityLabel={intl.formatMessage(messages.menuTitle)}
             />
           )}
         </DropdownMenu.Trigger>

@@ -66,20 +66,27 @@ const CustomEmojiCategory: React.FC<ICustomEmojiCategory> = ({ category }) => {
     <EmojiComponent emoji={emoji.shortcode} url={emoji.url} />
   );
 
-  const renderedEmojis = React.useMemo(() => {
-    return emojis.map((emoji) => (
-      <IconButton
-        key={emoji.shortcode}
-        onPress={() => {
-          state?.onPick(emoji.shortcode, true);
-          closeEmojiPicker();
-        }}
-        mode={state?.selected?.includes(emoji.shortcode) ? 'contained-tonal' : 'outlined'}
-        icon={() => renderEmoji(emoji)}
-        size={24}
-      />
-    ));
-  }, [emojis]);
+  const renderedEmojis = React.useMemo(
+    () =>
+      emojis.map((emoji) => {
+        const selected = state?.selected?.includes(emoji.shortcode);
+        return (
+          <IconButton
+            key={emoji.shortcode}
+            onPress={() => {
+              state?.onPick(emoji.shortcode, true);
+              closeEmojiPicker();
+            }}
+            mode={selected ? 'contained-tonal' : 'outlined'}
+            icon={() => renderEmoji(emoji)}
+            size={24}
+            accessibilityState={{ selected }}
+            accessibilityLabel={emoji.shortcode}
+          />
+        );
+      }),
+    [emojis],
+  );
 
   return <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{renderedEmojis}</View>;
 };
