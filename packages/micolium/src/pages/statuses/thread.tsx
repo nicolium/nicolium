@@ -7,13 +7,15 @@ import {
 } from '@mkljczk/react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import { GlassView } from 'expo-glass-effect';
+import { EyeIcon } from 'phosphor-react-native/src/icons/Eye';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { Status } from '@/components/statuses/status';
+import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -21,10 +23,15 @@ import { useScopeUrl } from '@/hooks/use-scope-url';
 import { type SelectedStatus, useStatus, useStatusContext } from '@/queries/statuses/use-status';
 import { useComposeActions } from '@/stores/compose';
 import { useThread } from '@/stores/contexts';
+import { useStatusMetaActions } from '@/stores/status-meta';
 import { useUiStoreActions } from '@/stores/ui';
 
 import type { StatusStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+const messages = defineMessages({
+  expandAll: { id: 'status.thread.expand_all', defaultMessage: 'Expand all posts' },
+});
 
 const MaybeDivider: React.FC<{ statusId: string }> = ({ statusId }) => {
   const { data: status } = useStatus(statusId);
@@ -191,4 +198,30 @@ const ThreadScreen = ({
   );
 };
 
-export { ThreadScreen };
+interface IThreadExpandPostsButton {
+  id: string;
+}
+
+const ThreadExpandPostsButton: React.FC<IThreadExpandPostsButton> = ({ id }) => {
+  const intl = useIntl();
+  const thread = useThread(id);
+
+  const { expandStatusSpoiler, revealStatusMedia } = useStatusMetaActions();
+
+  const handleExpand = () => {
+    for (const statusId of thread) {
+      expandStatusSpoiler(statusId);
+      revealStatusMedia(statusId);
+    }
+  };
+
+  return (
+    <HeaderIconButton
+      icon={EyeIcon}
+      accessibilityLabel={intl.formatMessage(messages.expandAll)}
+      onPress={handleExpand}
+    />
+  );
+};
+
+export { ThreadScreen, ThreadExpandPostsButton };

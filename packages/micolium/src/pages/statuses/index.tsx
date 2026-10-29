@@ -21,7 +21,7 @@ import {
   StatusReactionsScreen,
   StatusReblogsScreen,
 } from './status-interactions';
-import { ThreadScreen } from './thread';
+import { ThreadExpandPostsButton, ThreadScreen } from './thread';
 
 import type { RootStackParams, StatusStackParams } from '@/router/router';
 
@@ -119,6 +119,7 @@ const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
           }
         />
       )}
+      {status && route.name === 'view' && <ThreadExpandPostsButton id={status.id} />}
     </Appbar.Header>
   );
 };
