@@ -1560,6 +1560,10 @@ body {
   background-color: #fff;
   box-shadow: var(--shadow-lg);
 
+  .body--bordered & {
+    outline: 1px solid var(--card-border);
+  }
+
   .dark.black & {
     background-color: #000;
   }
