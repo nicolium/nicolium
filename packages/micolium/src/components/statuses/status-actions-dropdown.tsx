@@ -7,8 +7,8 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Alert, Linking, Platform } from 'react-native';
 import { toast } from 'sonner-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
+import DropdownMenu from '@/components/ui/dropdown-menu';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useReblog } from '@/hooks/use-reblog';
 import { useScopeUrl } from '@/hooks/use-scope-url';

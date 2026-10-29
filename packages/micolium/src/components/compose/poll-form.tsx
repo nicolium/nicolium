@@ -21,8 +21,8 @@ import Animated, {
   withTiming,
   type SharedValue,
 } from 'react-native-reanimated';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
+import DropdownMenu from '@/components/ui/dropdown-menu';
 import { useInstance } from '@/contexts/current-account-context';
 import { useCompose, useComposeActions } from '@/stores/compose';
 

@@ -5,8 +5,8 @@ import { create } from 'mutative';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Pressable, type StyleProp, View, type ViewStyle } from 'react-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
+import DropdownMenu from '@/components/ui/dropdown-menu';
 import { iconHelper } from '@/components/ui/icon';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { getSegmentedMenuStyles } from '@/utils/themes';

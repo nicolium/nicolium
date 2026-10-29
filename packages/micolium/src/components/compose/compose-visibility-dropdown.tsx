@@ -14,8 +14,8 @@ import { UsersThreeIcon } from 'phosphor-react-native/src/icons/UsersThree';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl, type MessageDescriptor } from 'react-intl';
 import { Pressable, View } from 'react-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
+import DropdownMenu from '@/components/ui/dropdown-menu';
 import { iconHelper } from '@/components/ui/icon';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';

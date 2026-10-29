@@ -13,9 +13,9 @@ import { WrenchIcon } from 'phosphor-react-native/src/icons/Wrench';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, type MessageDescriptor, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
+import DropdownMenu from '@/components/ui/dropdown-menu';
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAntennas } from '@/queries/accounts/use-antennas';

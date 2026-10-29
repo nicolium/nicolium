@@ -9,9 +9,9 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Alert, Platform, useColorScheme, View } from 'react-native';
 import { toast } from 'sonner-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
+import DropdownMenu from '@/components/ui/dropdown-menu';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';

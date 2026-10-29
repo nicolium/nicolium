@@ -19,12 +19,12 @@ import { type NativeScrollEvent, type NativeSyntheticEvent, Pressable, View } fr
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as v from 'valibot';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { AccountActionsDropdown } from '@/components/accounts/account-actions-dropdown';
 import { FollowButton } from '@/components/accounts/follow-button';
 import { ComposeButton } from '@/components/compose-button';
 import { CollapsibleContent } from '@/components/ui/collapsible-content';
+import DropdownMenu from '@/components/ui/dropdown-menu';
 import { Emojify } from '@/components/ui/emojify';
 import { GlassButton } from '@/components/ui/glass-button';
 import { iconHelper } from '@/components/ui/icon';

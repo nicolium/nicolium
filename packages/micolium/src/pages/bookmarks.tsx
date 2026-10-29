@@ -9,10 +9,10 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Platform, View } from 'react-native';
 import { toast } from 'sonner-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
 import { StatusesList } from '@/components/statuses/statuses-list';
+import DropdownMenu from '@/components/ui/dropdown-menu';
 import { Emoji } from '@/components/ui/emoji';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useFeatures } from '@/contexts/current-account-context';

@@ -11,8 +11,8 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { toast } from 'sonner-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
+import DropdownMenu from '@/components/ui/dropdown-menu';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract, useInteractionMessages } from '@/hooks/use-can-interact';
 import { useReblog } from '@/hooks/use-reblog';

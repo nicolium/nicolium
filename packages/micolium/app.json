@@ -116,10 +116,7 @@
       [
         "expo-localization",
         {
-          "supportedLocales": [
-            "en",
-            "pl"
-          ]
+          "supportedLocales": ["en", "pl"]
         }
       ],
       "expo-asset",
