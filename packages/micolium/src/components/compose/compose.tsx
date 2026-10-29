@@ -1,6 +1,6 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Button, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
-import { DragDropContentView } from 'expo-drag-drop-content-view';
+import { DragDropContentView, DragDropContentViewProps } from 'expo-drag-drop-content-view';
 import { GlassView } from 'expo-glass-effect';
 import { TextInputWrapper } from 'expo-paste-input';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
@@ -103,6 +103,12 @@ const messages = defineMessages({
     defaultMessage: 'Post',
   },
 });
+
+const MaybeDragDropContentView: React.FC<DragDropContentViewProps> = (props) => {
+  if (Platform.OS === 'ios') return <DragDropContentView {...props} />;
+
+  return props.children;
+};
 
 interface ICompose {
   composeId: string;
@@ -407,9 +413,9 @@ const ComposeBottomSheet = () => {
       <ScrollView
         ref={scrollableRef}
         style={{ flex: 1 }}
-        contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 12 }}
+        contentContainerStyle={{ flexGrow: 1, gap: 8, paddingHorizontal: 12 }}
       >
-        <DragDropContentView
+        <MaybeDragDropContentView
           allowedMimeTypes={configuration.media_attachments.supported_mime_types}
           onDrop={(event) => {
             uploadCompose(
@@ -509,7 +515,7 @@ const ComposeBottomSheet = () => {
           <PollForm composeId={COMPOSE_ID} />
           <ComposeScheduleForm composeId={COMPOSE_ID} />
           <ComposeAttachmentThumbs composeId={COMPOSE_ID} />
-        </DragDropContentView>
+        </MaybeDragDropContentView>
       </ScrollView>
     </TrueSheet>
   );
