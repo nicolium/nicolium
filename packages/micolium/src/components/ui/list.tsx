@@ -91,14 +91,20 @@ const List: React.FC<IList> = ({ sections, style }) => {
                 title={item.label}
                 description={item.sublabel}
                 style={styles}
+                containerStyle={{ marginLeft: Icon ? -8 : undefined }}
                 onPress={item.onPress}
                 left={
                   Icon
                     ? (props) => (
                         <PaperList.Icon
                           {...props}
-                          color={item.role === 'destructive' ? theme.colors.error : undefined}
                           icon={(props) => <Icon {...props} />}
+                          style={{
+                            ...props.style,
+                            backgroundColor: theme.colors.primaryFixedDim,
+                            padding: 8,
+                            borderRadius: 24,
+                          }}
                         />
                       )
                     : undefined
