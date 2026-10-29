@@ -30,7 +30,13 @@ const StatusRebloggedChip: React.FC<IStatusRebloggedChip> = ({ accountIds }) => 
   if (!accountIds.length) return null;
 
   return (
-    <Chip mode='outlined' icon={iconHelper(RepeatIcon)} compact>
+    <Chip
+      mode='outlined'
+      icon={iconHelper(RepeatIcon)}
+      compact
+      style={{ flexShrink: 1 }}
+      textStyle={{ flexShrink: 1 }}
+    >
       <FormattedMessage
         id='status.reblogged_by'
         defaultMessage='{name} reposted'
@@ -89,7 +95,13 @@ const StatusMaybeFollowedHashtagChip: React.FC<IStatusMaybeFollowedHashtagChip> 
   }
 
   return (
-    <Chip mode='outlined' icon={iconHelper(HashIcon)} compact>
+    <Chip
+      mode='outlined'
+      icon={iconHelper(HashIcon)}
+      compact
+      style={{ flexShrink: 1 }}
+      textStyle={{ flexShrink: 1 }}
+    >
       <FormattedMessage
         id='status.followed_tag'
         defaultMessage='You’re following {tags}'

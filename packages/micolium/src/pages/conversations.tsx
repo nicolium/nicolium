@@ -96,7 +96,8 @@ const Conversation: React.FC<IConversation> = ({ conversation }) => {
               mode='outlined'
               icon={iconHelper(EnvelopeSimpleIcon)}
               compact
-              style={{ marginHorizontal: 16, marginTop: 8 }}
+              style={{ flexShrink: 1, marginHorizontal: 16, marginTop: 8 }}
+              textStyle={{ flexShrink: 1 }}
             >
               <Text variant='labelLarge'>
                 <FormattedMessage

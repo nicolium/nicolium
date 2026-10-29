@@ -348,10 +348,18 @@ const Notification: React.FC<INotification> = (props) => {
     icon = iconHelper(icons[displayedType]);
   }
 
+  console.log(message);
+
   return (
     <View style={{ padding: 16, gap: 8 }}>
       <View style={{ flexDirection: 'row' }}>
-        <Chip mode='outlined' icon={icon} compact>
+        <Chip
+          mode='outlined'
+          icon={icon}
+          compact
+          style={{ flexShrink: 1 }}
+          textStyle={{ flexShrink: 1 }}
+        >
           {message}
         </Chip>
       </View>
