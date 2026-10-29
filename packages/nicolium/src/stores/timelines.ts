@@ -400,6 +400,9 @@ const useTimelinesStore = create<State>()(
             const idx = timeline.entries.findIndex(
               (e) => e.type === 'pending-status' && e.id === idempotencyKey,
             );
+
+            if (idx === -1) continue;
+
             const queuedEntryIndex = timeline.queuedEntries.findIndex(
               (queued) => queued.id === status.id,
             );
