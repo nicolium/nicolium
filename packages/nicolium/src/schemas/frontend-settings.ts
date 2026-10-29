@@ -468,6 +468,7 @@ const settingsSchema = v.object({
   autoloadTimelines: v.fallback(v.boolean(), false),
   autoloadMore: v.fallback(v.boolean(), false),
   preserveSpoilers: v.fallback(v.boolean(), true),
+  prependReToSpoilers: v.fallback(v.boolean(), false),
   forceImplicitAddressing: v.fallback(v.boolean(), false),
   useDedicatedComposePage: v.fallback(v.boolean(), false),
   autosaveDrafts: v.fallback(v.boolean(), false),

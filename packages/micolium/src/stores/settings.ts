@@ -46,6 +46,7 @@ const settingsSchema = v.object({
   'compose.missingDescriptionModal': v.fallback(v.boolean(), true),
   'compose.missingLanguageModal': v.fallback(v.boolean(), false),
   'compose.preserveSpoilers': v.fallback(v.boolean(), true),
+  'compose.prependReToSpoilers': v.fallback(v.boolean(), false),
   'compose.stripMetadata': v.fallback(v.boolean(), false),
 
   'timelines.autoloadMore': v.fallback(v.boolean(), false),

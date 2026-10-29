@@ -333,8 +333,6 @@ const Notification: React.FC<INotification> = (props) => {
     icon = iconHelper(icons[displayedType]);
   }
 
-  console.log(message);
-
   return (
     <View style={{ padding: 16, gap: 8 }}>
       <View style={{ flexDirection: 'row' }}>

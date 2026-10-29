@@ -41,6 +41,10 @@ const messages = defineMessages({
     id: 'preferences.fields.preserve_spoilers.label',
     defaultMessage: 'Preserve content warning when replying',
   },
+  prependReToSpoilers: {
+    id: 'preferences.fields.prepend_re_to_spoilers.label',
+    defaultMessage: 'Prepend RE: to content warning when replying',
+  },
   forceImplicitAddressing: {
     id: 'preferences.fields.implicit_addressing.label',
     defaultMessage: 'Include mentions in post content when replying',
@@ -76,6 +80,7 @@ const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
   const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
   const missingLanguageModal = useSetting('compose.missingLanguageModal');
   const preserveSpoilers = useSetting('compose.preserveSpoilers');
+  const prependReToSpoilers = useSetting('compose.prependReToSpoilers');
   const stripMetadata = useSetting('compose.stripMetadata');
 
   const { update } = useSettingsActions();
@@ -139,6 +144,13 @@ const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
                 active: preserveSpoilers,
                 onPress: () => update('compose.preserveSpoilers', !preserveSpoilers),
                 enabled: features.spoilers,
+              },
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.prependReToSpoilers),
+                active: prependReToSpoilers,
+                onPress: () => update('compose.prependReToSpoilers', !prependReToSpoilers),
+                enabled: features.spoilers && preserveSpoilers,
               },
               {
                 type: 'toggle',

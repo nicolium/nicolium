@@ -832,7 +832,7 @@ const useComposeStore = create<ComposeStore>()(
           openComposer = true,
         ) => {
           const { features } = getClient();
-          const { forceImplicitAddressing, preserveSpoilers, defaultPrivacy } =
+          const { forceImplicitAddressing, preserveSpoilers, prependReToSpoilers, defaultPrivacy } =
             useSettingsStore.getState().settings;
           const explicitAddressing =
             features.createStatusExplicitAddressing && !forceImplicitAddressing;
@@ -871,7 +871,10 @@ const useComposeStore = create<ComposeStore>()(
               compose.approvalRequired = approvalRequired ?? false;
               if (preserveSpoilers && status.spoiler_text) {
                 compose.sensitive = true;
-                compose.spoilerText = status.spoiler_text;
+                compose.spoilerText =
+                  prependReToSpoilers && !/^re:/iu.test(status.spoiler_text)
+                    ? `RE: ${status.spoiler_text}`
+                    : status.spoiler_text;
               }
             });
 

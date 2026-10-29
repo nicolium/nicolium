@@ -225,6 +225,23 @@ const ComposePreferences: React.FC<ISettingsPage> = ({
             </ListItem>
           )}
 
+          {features.spoilers && settings.preserveSpoilers && (
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='preferences.fields.prepend_re_to_spoilers.label'
+                  defaultMessage='Prepend RE: to content warning when replying'
+                />
+              }
+            >
+              <SettingToggle
+                settings={settings}
+                settingPath={['prependReToSpoilers']}
+                onChange={onToggleChange}
+              />
+            </ListItem>
+          )}
+
           {features.createStatusExplicitAddressing && (
             <ListItem
               label={
