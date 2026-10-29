@@ -18,3 +18,29 @@ diff --git a/ios/RNIContextMenu/RNIMenuActionItem.swift b/ios/RNIContextMenu/RNI
        action.subtitle =
             self.actionSubtitle
          ?? self.fallbackActionSubtitle;
+diff --git a/ios/RNIContextMenuButton/RNIContextMenuButtonViewManager.mm b/ios/RNIContextMenuButton/RNIContextMenuButtonViewManager.mm
+index 13db268..2fba5fc 100644
+--- a/ios/RNIContextMenuButton/RNIContextMenuButtonViewManager.mm
++++ b/ios/RNIContextMenuButton/RNIContextMenuButtonViewManager.mm
+@@ -12,7 +12,7 @@
+ 
+ #import RNI_UTILITIES_HEADER(RNIBaseViewUtils.h)
+ 
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+ 
+diff --git a/ios/RNIContextMenuView/RNIContextMenuViewManager.mm b/ios/RNIContextMenuView/RNIContextMenuViewManager.mm
+index 3a0ac50..6bd0211 100644
+--- a/ios/RNIContextMenuView/RNIContextMenuViewManager.mm
++++ b/ios/RNIContextMenuView/RNIContextMenuViewManager.mm
+@@ -12,7 +12,7 @@
+ 
+ #import RNI_UTILITIES_HEADER(RNIBaseViewUtils.h)
+ 
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+ 

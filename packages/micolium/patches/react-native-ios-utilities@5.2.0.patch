@@ -1,15 +1,27 @@
+diff --git a/ios/Sources/Deprecated/RNIImage/RNIImageLoader.h b/ios/Sources/Deprecated/RNIImage/RNIImageLoader.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..2f55f42923ff409bf733e88a42a3abde89dc4722
+--- /dev/null
++++ b/ios/Sources/Deprecated/RNIImage/RNIImageLoader.h
+@@ -0,0 +1,3 @@
++// Expose the attribution protocol to Swift when React's prebuilt umbrella
++// includes only RCTImageLoaderProtocol.h.
++#import <React/RCTImageLoaderWithAttributionProtocol.h>
 diff --git a/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift b/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift
+index 09be306d5aa39337c5114c2ad6ba7513218e0751..d6887617e2349d6d040cb298b87360797b6225c2 100644
+--- a/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift
++++ b/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift
 @@ -25,16 +25,10 @@ public extension RCTView {
      return rootView.recursivelyFindSubview(whereType: targetType);
    };
-
+   
 -  var closestParentReactContentView: RCTRootContentView? {
 -    let targetType = RCTRootContentView.self;
--
+-  
 -    if let match = self.recursivelyFindParentView(whereType: targetType) {
 -      return match;
 -    };
--
+-    
 -    guard let rootView = self.rootViewForCurrentWindow else { return nil };
 -    return rootView.recursivelyFindSubview(whereType: targetType);
 -  };
@@ -17,16 +29,266 @@ diff --git a/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift b/ios/Sources/
 +  // RN 0.85+ / Expo SDK 56). Property is unused by this package and downstream,
 +  // so stub to nil to avoid an undefined-symbol linker error.
 +  var closestParentReactContentView: AnyObject? { nil };
-
+   
    var reactTouchHandlers: [RCTTouchHandler]? {
      self.gestureRecognizers?.compactMap {
 @@ -58,6 +52,8 @@ public extension RCTView {
        currentView = superview;
      };
-
+     
 -    return closestParentReactContentView?.reactTouchHandlers?.first;
 +    // Legacy `closestParentReactContentView` chain returned nil under new arch
 +    // (RCTRootContentView excluded by RCT_REMOVE_LEGACY_ARCH=1); inline that.
 +    return nil;
    };
  };
+diff --git a/ios/Sources/ObjcHelpers/RNIObjcUtils.mm b/ios/Sources/ObjcHelpers/RNIObjcUtils.mm
+index 38f71a7f00d651e57ba203050b9042b84f1c85ab..72c02cf36112a3e71ddfae2412d8a11a6c7deadf 100644
+--- a/ios/Sources/ObjcHelpers/RNIObjcUtils.mm
++++ b/ios/Sources/ObjcHelpers/RNIObjcUtils.mm
+@@ -24,6 +24,7 @@
+ #include <react/renderer/core/LayoutMetrics.h>
+ #include <react/renderer/graphics/Rect.h>
+ #include <react/renderer/graphics/RectangleEdges.h>
++#include <mutex>
+ 
+ #import <React/RCTBridgeProxy.h>
+ #import <React/RCTBridgeProxy+Cxx.h>
+@@ -32,6 +33,16 @@
+ 
+ static BOOL SHOULD_LOG = NO;
+ 
++#if __cplusplus
++// Set by RNIUtilitiesModule's JSI bindings hook (JS thread), read from any thread
++static std::mutex RNIJSCallInvokerMutex;
++static std::weak_ptr<facebook::react::CallInvoker> RNIJSCallInvoker;
++void RNIObjcUtilsSetJSCallInvoker(std::shared_ptr<facebook::react::CallInvoker> callInvoker) {
++  std::lock_guard<std::mutex> lock(RNIJSCallInvokerMutex);
++  RNIJSCallInvoker = callInvoker;
++}
++#endif
++
+ @implementation RNIObjcUtils
+ #if __cplusplus
+ + (std::string)convertToCxxStringForObjcString:(NSString *)string
+@@ -266,10 +277,20 @@ + (void)dispatchToJSThreadViaBridgeForBlock:(void (^)(void))block
+ + (void)dispatchToJSThreadViaCallInvokerForBlock:(void (^)(void))block
+ {
+ #if __cplusplus
+-  RCTBridge *bridge = [RCTBridge currentBridge];
+-  RCTBridgeProxy *bridgeProxy = (RCTBridgeProxy *)bridge;
++  std::shared_ptr<facebook::react::CallInvoker> jsCallInvoker;
++  {
++    std::lock_guard<std::mutex> lock(RNIJSCallInvokerMutex);
++    jsCallInvoker = RNIJSCallInvoker.lock();
++  }
++  
++  if (jsCallInvoker == nullptr) {
++    RCTBridgeProxy *bridgeProxy = (RCTBridgeProxy *)[RCTBridge currentBridge];
++    jsCallInvoker = [bridgeProxy jsCallInvoker];
++  };
+   
+-  std::shared_ptr<facebook::react::CallInvoker> jsCallInvoker = [bridgeProxy jsCallInvoker];
++  if (jsCallInvoker == nullptr) {
++    return;
++  };
+   
+   #if REACT_NATIVE_TARGET_VERSION <= 74
+   facebook::react::CallFunc dispatchBlock = [block]() {
+diff --git a/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm b/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm
+index a3cb9522f3727cc7f9f148675bf4c35cc7a19e27..fb71cbadce88e4bc1b64424fbe88f0cc2a9a7df7 100644
+--- a/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm
++++ b/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm
+@@ -16,8 +16,12 @@
+ //
+ #if REACT_NATIVE_TARGET_VERSION < 78 || RCT_NEW_ARCH_ENABLED || !defined(REACT_NATIVE_TARGET_VERSION)
+ #define USE_RCT_APP_DELEGATE
++#if __has_include(<React/RCTAppDelegate.h>)
++#import <React/RCTAppDelegate.h>
++#else
+ #import "RCTAppDelegate.h"
+ #endif
++#endif
+ 
+ #import <React/RCTSurfacePresenter.h>
+ #import <React/RCTSurfacePresenterBridgeAdapter.h>
+@@ -113,7 +117,10 @@ - (RCTAppDelegate *)reactAppDelegate
+ 
+ - (RCTSurfacePresenterBridgeAdapter *)reactBridgeAdapter
+ {
+-  #ifdef USE_RCT_APP_DELEGATE
++  // The bridge adapter doesn't exist without the legacy architecture (RN 0.88+)
++  #ifdef RCT_REMOVE_LEGACY_ARCH
++  return nil;
++  #elif defined(USE_RCT_APP_DELEGATE)
+   RCTAppDelegate *reactAppDelegate = [self reactAppDelegate];
+   
+   if(reactAppDelegate == nil){
+@@ -134,6 +141,9 @@ - (RCTRootViewFactory *)reactRootViewFactory
+ 
+ - (RCTSurfacePresenter *) reactSurfacePresenter
+ {
++  #ifdef RCT_REMOVE_LEGACY_ARCH
++  return nil;
++  #else
+   RCTSurfacePresenterBridgeAdapter *reactBridgeAdapter = [self reactBridgeAdapter];
+   
+   if(reactBridgeAdapter == nil){
+@@ -141,6 +151,7 @@ - (RCTSurfacePresenter *) reactSurfacePresenter
+   };
+   
+   return [reactBridgeAdapter surfacePresenter];
++  #endif
+ }
+ 
+ - (RCTMountingManager *)reactMountingManager
+diff --git a/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm b/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm
+index 4083b045e1a2ccf7edf23a382c48d1ca98e7e944..51a8e733b16e57fd8e33a135bbfdeb172e908c1a 100644
+--- a/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm
++++ b/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm
+@@ -27,12 +27,14 @@ @implementation UIView (RNIPaperHelpers)
+ - (RCTBridge *)reactGetPaperBridge
+ {
+   #if RCT_NEW_ARCH_ENABLED
++  #ifndef RCT_REMOVE_LEGACY_ARCH
+   RCTSurfacePresenterBridgeAdapter *reactBridgeAdapter =
+     [[UIApplication sharedApplication] reactBridgeAdapter];
+     
+   if(reactBridgeAdapter != nil){
+     return reactBridgeAdapter.bridge;
+   };
++  #endif
+   #else
+   RCTRootView *reactPaperRootView = [self reactGetPaperRootView];
+   if(reactPaperRootView != nil){
+diff --git a/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm b/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm
+index 333b40537e41190a433ac261ca521bf7f693c313..b5e57263d5b2863d115a4630756e8493e5f4cbf5 100644
+--- a/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm
++++ b/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm
+@@ -10,7 +10,7 @@
+ 
+ #import "RNIBaseViewUtils.h"
+ 
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+ 
+diff --git a/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm b/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm
+index cc137e21f376661224eb6d4d0ca0b2448d00845f..e65fa78109c65ab8ca057a3161a100450b2fad02 100644
+--- a/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm
++++ b/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm
+@@ -13,7 +13,7 @@
+ 
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ 
+ 
+ @interface RNIDummyTestViewManager : RCTViewManager
+diff --git a/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm b/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm
+index 0e53f8489c5d1fbeba5325071da985b16490507b..96312de455a4cd2da0fff56c473b91bac6136a58 100644
+--- a/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm
++++ b/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm
+@@ -23,6 +23,10 @@
+ 
+ #include <jsi/jsi.h>
+ #include <string>
++#if __has_include(<ReactCommon/RCTTurboModuleWithJSIBindings.h>)
++#import <ReactCommon/RCTTurboModuleWithJSIBindings.h>
++#define RNI_HAS_JSI_BINDINGS 1
++#endif
+ 
+ #if DEBUG
+ #include <iostream>
+@@ -35,6 +39,18 @@
+ 
+ static BOOL SHOULD_LOG = NO;
+ 
++#if __cplusplus
++// Set by the JSI bindings hook; RN 0.88 removed RCTCxxBridge, so this is the
++// only way to reach the runtime when the legacy architecture is removed.
++static jsi::Runtime *RNIUtilitiesJSIRuntime = nullptr;
++void RNIObjcUtilsSetJSCallInvoker(std::shared_ptr<facebook::react::CallInvoker> callInvoker);
++#endif
++
++#ifdef RNI_HAS_JSI_BINDINGS
++@interface RNIUtilitiesModule () <RCTTurboModuleWithJSIBindings>
++@end
++#endif
++
+ @implementation RNIUtilitiesModule {
+   BOOL _didInstallHostObject;
+ }
+@@ -75,15 +91,16 @@ - (void)installHostObjectIfNeeded
+     return;
+   };
+   
+-  RCTBridge *bridge = [RCTBridge currentBridge];
++  jsi::Runtime *jsiRuntime = RNIUtilitiesJSIRuntime;
+   
+-  RCTCxxBridge *cxxBridge = (RCTCxxBridge *)bridge;
+-  if (cxxBridge == nil) {
+-    return;
++  #ifndef RCT_REMOVE_LEGACY_ARCH
++  if (jsiRuntime == nullptr) {
++    RCTCxxBridge *cxxBridge = (RCTCxxBridge *)[RCTBridge currentBridge];
++    jsiRuntime = (jsi::Runtime *)cxxBridge.runtime;
+   };
++  #endif
+   
+-  auto jsiRuntime = (jsi::Runtime *)cxxBridge.runtime;
+-  if (jsiRuntime == nil) {
++  if (jsiRuntime == nullptr) {
+     return;
+   };
+     
+@@ -250,6 +267,22 @@ - (void)installHostObjectIfNeeded
+   self->_didInstallHostObject = YES;
+ }
+ 
++#ifdef RNI_HAS_JSI_BINDINGS
++// RN 0.88+ only calls this variant
++- (void)installJSIBindingsWithRuntime:(jsi::Runtime &)runtime
++                          callInvoker:(const std::shared_ptr<facebook::react::CallInvoker> &)callInvoker
++{
++  RNIObjcUtilsSetJSCallInvoker(callInvoker);
++  [self installJSIBindingsWithRuntime:runtime];
++}
++
++- (void)installJSIBindingsWithRuntime:(jsi::Runtime &)runtime
++{
++  RNIUtilitiesJSIRuntime = &runtime;
++  [self installHostObjectIfNeeded];
++}
++#endif
++
+ // MARK: Module Commands
+ // ---------------------
+ 
+@@ -384,7 +417,11 @@ + (BOOL)requiresMainQueueSetup
+ /// Doesn't get called...
+ - (std::shared_ptr<TurboModule>)getTurboModule:(const ObjCTurboModule::InitParams &)params
+ {
++ // With the JSI bindings hook, install from there: it runs with the current
++ // runtime, while the stored pointer may still refer to a reloaded one here.
++ #ifndef RNI_HAS_JSI_BINDINGS
+  [self installHostObjectIfNeeded];
++ #endif
+  return std::make_shared<react::NativeRNIUtilitiesModuleSpecJSI>(params);
+ }
+ #endif
+diff --git a/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm b/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
+index 94ca7d29cc8b6282e516503d8ded253be23ff46e..e07e9914782047877f69f2007de18cdd80aa715e 100644
+--- a/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
++++ b/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
+@@ -10,7 +10,7 @@
+ 
+ #import "RNIBaseViewUtils.h"
+ 
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+ 

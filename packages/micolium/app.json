@@ -41,9 +41,6 @@
           "android": {
             "enableMinifyInReleaseBuilds": true,
             "enableShrinkResourcesInReleaseBuilds": true
-          },
-          "ios": {
-            "enableSceneSupport": true
           }
         }
       ],
@@ -119,9 +116,16 @@
       [
         "expo-localization",
         {
-          "supportedLocales": ["en", "pl"]
+          "supportedLocales": [
+            "en",
+            "pl"
+          ]
         }
-      ]
+      ],
+      "expo-asset",
+      "expo-font",
+      "expo-status-bar",
+      "expo-web-browser"
     ],
     "extra": {
       "eas": {

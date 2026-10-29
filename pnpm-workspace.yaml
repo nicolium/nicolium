@@ -2,7 +2,7 @@ packages:
   - 'packages/*'
 allowBuilds:
   '@mkljczk/react-native-paper@https://codeload.github.com/mkljczk/react-native-paper/tar.gz/c44cb5e7cba4faaab68832bdc25b5ead42a90c94': true
-  '@react-native-menu/menu@https://codeload.github.com/mkljczk/react-native-menu-menu/tar.gz/6349a4f022c630c712a02b31673a2a59208eb9db': true
+  '@react-native-menu/menu@https://codeload.github.com/mkljczk/react-native-menu-menu/tar.gz/9a520af513fe38fa09f797294b50c85bc8ed6a4e': true
   '@parcel/watcher': false
   core-js: false
   esbuild: false
