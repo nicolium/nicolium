@@ -257,24 +257,6 @@ const Notification: React.FC<INotification> = (props) => {
       ? 'reply'
       : notification.type;
 
-  // const icon = useMemo(() => {
-  //   if ((type === 'emoji_reaction' || type === 'subscribed_reaction') && notification.emoji) {
-  //     return (
-  //       <Emoji
-  //         emoji={notification.emoji}
-  //         src={notification.emoji_url ?? undefined}
-  //         staticSrc={notification.emoji_static_url ?? undefined}
-  //         className='notification__icon notification__icon--emoji'
-  //       />
-  //     );
-  //   if (icons[displayedType]) {
-  //     const icon = icons[displayedType];
-  //     return <Icon source={icon} size={16} />;
-  //   } else {
-  //     return null;
-  //   }
-  // }, [displayedType]);
-
   const targetName = notification.type === 'move' ? notification.target!.acct : '';
 
   const message: React.ReactNode = notification.accounts.length
@@ -340,9 +322,12 @@ const Notification: React.FC<INotification> = (props) => {
     | ((_: { size: number; allowFontScaling?: boolean; color: ColorValue }) => React.ReactNode)
     | undefined = undefined;
 
-  if (notification.type === 'emoji_reaction') {
+  if (
+    notification.type === 'emoji_reaction' ||
+    (notification.type === 'subscribed_reaction' && notification.emoji)
+  ) {
     icon = () => (
-      <Emoji size={18} emoji={notification.emoji} url={notification.emoji_url || undefined} />
+      <Emoji size={18} emoji={notification.emoji!} url={notification.emoji_url || undefined} />
     );
   } else if (icons[displayedType]) {
     icon = iconHelper(icons[displayedType]);
