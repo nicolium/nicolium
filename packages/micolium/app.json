@@ -2,7 +2,7 @@
   "expo": {
     "name": "micolium",
     "slug": "micolium",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "micolium",
@@ -13,7 +13,10 @@
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
-      "appleTeamId": "28NDJH3G7W"
+      "appleTeamId": "28NDJH3G7W",
+      "config": {
+        "usesNonExemptEncryption": false
+      },
     },
     "android": {
       "adaptiveIcon": {
