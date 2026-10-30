@@ -1,6 +1,6 @@
 import { TrueSheetProvider } from '@lodev09/react-native-true-sheet';
 import { PaperProvider } from '@mkljczk/react-native-paper';
-import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
+import { getMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { makeRedirectUri } from 'expo-auth-session';
@@ -24,6 +24,7 @@ import { DefaultCurrentAccountProvider } from './contexts/current-account-contex
 import { loadPolyfills } from './polyfills';
 import { queryClient } from './queries/client';
 import { RootNavigator } from './router/router';
+import { useSetting } from './stores/settings';
 import { DarkTheme, LightTheme } from './utils/themes';
 
 SplashScreen.preventAutoHideAsync();
@@ -67,8 +68,10 @@ const lightTheme = {
 };
 
 const ThemeProvider: React.FC<{ children: React.ReactNode }> = (props) => {
+  const sourceColor = useSetting('appearance.sourceColor');
+
   const colorScheme = useColorScheme();
-  const { theme } = useMaterial3Theme();
+  const theme = React.useMemo(() => getMaterial3Theme(sourceColor.slice(0, 7)), [sourceColor]);
 
   const paperTheme =
     colorScheme === 'dark'

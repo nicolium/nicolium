@@ -63,6 +63,7 @@ const settingsSchema = v.object({
   'notifications.autoMarkRead': v.optional(v.boolean(), false),
 
   'appearance.enableLiquidGlass': v.optional(v.boolean(), true),
+  'appearance.sourceColor': v.optional(v.string(), '#6750A4'),
 
   filters: filteredArray(filterSchema),
 });

@@ -1,4 +1,8 @@
-import { Host as SwiftUIHost, Toggle as SwiftUIToggle } from '@expo/ui/swift-ui';
+import {
+  ColorPicker as SwiftUIColorPicker,
+  Host as SwiftUIHost,
+  Toggle as SwiftUIToggle,
+} from '@expo/ui/swift-ui';
 import { labelsHidden } from '@expo/ui/swift-ui/modifiers';
 import { List as PaperList, Switch, Text, useTheme } from '@mkljczk/react-native-paper';
 import { create } from 'mutative';
@@ -42,6 +46,15 @@ interface IList {
           type: 'toggle';
           active: boolean;
           onPress: () => void;
+          label: string;
+          sublabel?: string;
+          disabled?: boolean;
+        }
+      | {
+          enabled?: boolean;
+          type: 'color-picker';
+          value: string;
+          onChange: (color: string) => void;
           label: string;
           sublabel?: string;
           disabled?: boolean;
@@ -145,7 +158,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
                 containerStyle={{ gap: 4, alignItems: 'center' }}
               />
             );
-          } else {
+          } else if (item.type === 'select') {
             return (
               <DropdownMenu.Root key={index}>
                 <DropdownMenu.Trigger>
@@ -185,6 +198,27 @@ const List: React.FC<IList> = ({ sections, style }) => {
                   ))}
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
+            );
+          } else {
+            return (
+              <PaperList.Item
+                key={index}
+                title={item.label}
+                description={item.sublabel}
+                style={styles}
+                disabled={item.disabled}
+                titleNumberOfLines={0}
+                right={() => (
+                  <SwiftUIHost matchContents>
+                    <SwiftUIColorPicker
+                      selection={item.value}
+                      onSelectionChange={item.onChange}
+                      supportsOpacity={false}
+                    />
+                  </SwiftUIHost>
+                )}
+                containerStyle={{ gap: 4, alignItems: 'center' }}
+              />
             );
           }
         })}

@@ -10,7 +10,7 @@ import { SignOutIcon } from 'phosphor-react-native/src/icons/SignOut';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { ScrollView } from 'react-native';
+import { Platform, ScrollView } from 'react-native';
 import { toast } from 'sonner-native';
 
 import { List } from '@/components/ui/list';
@@ -57,7 +57,6 @@ const messages = defineMessages({
 const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'index'>) => {
   const features = useFeatures();
   const intl = useIntl();
-  const glassEffect = isGlassEffectAPIAvailable();
 
   const { signOut } = useAuthStoreActions();
   const { openAccountSwitcher } = useUiStoreActions();
@@ -92,7 +91,7 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
                 type: 'button',
                 label: intl.formatMessage(messages.appearanceHeading),
                 onPress: () => navigation.navigate('appearance'),
-                enabled: glassEffect,
+                enabled: Platform.OS === 'ios',
               },
               {
                 icon: InfoIcon,
