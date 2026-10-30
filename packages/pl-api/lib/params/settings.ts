@@ -60,6 +60,10 @@ interface UpdateCredentialsParams {
   display_name?: string;
   /** String. The account bio. */
   note?: string;
+  /**
+   * Requires features{@link Features.accountLocation}
+   */
+  location?: string;
   /** Avatar image encoded using `multipart/form-data` */
   avatar?: File | '';
   /** Header image encoded using `multipart/form-data` */
