@@ -10,6 +10,7 @@ import { Header } from '@/components/ui/header';
 import { AppearanceSettingsScreen } from './appearance-settings';
 import { ComposeSettingsScreen } from './compose-settings';
 import { ContentSettingsScreen } from './content-settings';
+import { EditProfileScreen } from './edit-profile';
 import { FilterEditorScreen, FiltersScreen } from './filters';
 import { FollowRequestsScreen } from './follow-requests';
 import { FollowedTagsScreen } from './followed-tags';
@@ -54,6 +55,7 @@ const messages = defineMessages({
   followedTags: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
   editFilter: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
   newFilter: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
+  editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
 });
 
 const SettingsStack = createNativeStackNavigator<SettingsStackParams>();
@@ -134,6 +136,11 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='interaction_policies'
         component={InteractionPoliciesScreen}
         options={{ title: intl.formatMessage(messages.interactionPolicies) }}
+      />
+      <SettingsStack.Screen
+        name='edit_profile'
+        component={EditProfileScreen}
+        options={{ title: intl.formatMessage(messages.editProfile), headerShown: false }}
       />
     </SettingsStack.Navigator>
   );

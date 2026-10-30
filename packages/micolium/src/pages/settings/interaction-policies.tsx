@@ -41,7 +41,7 @@ const InteractionPoliciesScreen = (
   const intl = useIntl();
   const client = useClient();
   const features = useFeatures();
-  const updateCredentials = useUpdateCredentials();
+  const { mutateAsync: updateCredentials } = useUpdateCredentials();
 
   const {
     interactionPolicies: initial,
@@ -99,7 +99,7 @@ const InteractionPoliciesScreen = (
     }
 
     if (features.quoteApprovalPolicies && !features.interactionRequests) {
-      promises.push(updateCredentials.mutateAsync({ source: { quote_policy: quotePolicy } }));
+      promises.push(updateCredentials({ source: { quote_policy: quotePolicy } }));
     }
 
     Promise.all(promises)

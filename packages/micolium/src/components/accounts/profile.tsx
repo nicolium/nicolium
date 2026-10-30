@@ -401,7 +401,11 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             {ownAccount ? (
               <GlassButton
                 mode='contained-tonal'
-                onPress={() => navigation.navigate('edit_profile')}
+                onPress={() =>
+                  navigation.navigate('settings', {
+                    screen: 'edit_profile',
+                  })
+                }
               >
                 <FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />
               </GlassButton>

@@ -272,7 +272,11 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
               {ownAccount ? (
                 <DropdownMenu.Item
                   key='edit-profile'
-                  onSelect={() => navigation.navigate('edit_profile')}
+                  onSelect={() =>
+                    navigation.navigate('settings', {
+                      screen: 'edit_profile',
+                    })
+                  }
                 >
                   <DropdownMenu.ItemIcon
                     ios={{ name: 'pencil' }}

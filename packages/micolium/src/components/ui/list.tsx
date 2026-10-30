@@ -114,7 +114,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
                           icon={(props) => <Icon {...props} color={theme.colors.onPrimaryFixed} />}
                           style={{
                             ...props.style,
-                            backgroundColor: theme.colors.primaryFixedDim,
+                            backgroundColor: theme.colors.secondaryFixedDim,
                             padding: 8,
                             borderRadius: 24,
                           }}
