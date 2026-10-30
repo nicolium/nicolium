@@ -20,6 +20,7 @@
     "lint": "oxlint",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
+    "eas-build-post-install": "pnpm -F pl-api build",
     "i18n": "formatjs extract 'src/**/*.{ts,tsx}' --ignore '**/*.d.ts' --out-file build/messages.json && npx formatjs compile build/messages.json --out-file src/messages/en.json"
   },
   "dependencies": {
