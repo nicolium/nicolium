@@ -30,12 +30,10 @@ const useBlockDomainMutation = () => {
       const accounts = selectAccountsByDomain(domain, scopeUrl);
       if (!accounts) return;
 
-      queryClient.setQueryData(
-        scopedQueryKey(queryKeys.suggestions.all, scopeUrl),
-        (suggestions) =>
-          suggestions
-            ? suggestions.filter((suggestion) => !accounts.includes(suggestion.account_id))
-            : undefined,
+      queryClient.setQueryData(scopedQueryKey(queryKeys.suggestions.all, scopeUrl), (suggestions) =>
+        suggestions
+          ? suggestions.filter((suggestion) => !accounts.includes(suggestion.account_id))
+          : undefined,
       );
     },
   });

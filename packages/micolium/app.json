@@ -16,7 +16,7 @@
       "appleTeamId": "28NDJH3G7W",
       "config": {
         "usesNonExemptEncryption": false
-      },
+      }
     },
     "android": {
       "adaptiveIcon": {
