@@ -15,6 +15,8 @@ import { iconHelper } from '@/components/ui/icon';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { getSegmentedMenuStyles } from '@/utils/themes';
 
+import { DateTimePicker } from './date-time-picker';
+
 import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 
 interface ISelectItem<T> {
@@ -58,6 +60,18 @@ interface IList {
           label: string;
           sublabel?: string;
           disabled?: boolean;
+        }
+      | {
+          enabled?: boolean;
+          type: 'date-picker';
+          value: Date;
+          onChange: (date: Date) => void;
+          label: string;
+          sublabel?: string;
+          // disabled?: boolean;
+          withTime?: boolean;
+          rangeStart?: Date;
+          rangeEnd?: Date;
         }
       | ISelectItem<any>
     >;
@@ -199,7 +213,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
             );
-          } else {
+          } else if (item.type === 'color-picker') {
             return (
               <PaperList.Item
                 key={index}
@@ -218,6 +232,20 @@ const List: React.FC<IList> = ({ sections, style }) => {
                   </SwiftUIHost>
                 )}
                 containerStyle={{ gap: 4, alignItems: 'center' }}
+              />
+            );
+          } else {
+            return (
+              <DateTimePicker
+                key={index}
+                title={item.label}
+                description={item.sublabel}
+                listItemStyle={styles}
+                initialDate={item.value}
+                onSelect={item.onChange}
+                withTime={item.withTime}
+                rangeStart={item.rangeStart}
+                rangeEnd={item.rangeEnd}
               />
             );
           }

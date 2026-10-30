@@ -101,6 +101,10 @@ interface UpdateCredentialsParams {
     /** String (Enumerable, oneOf `public` `followers` `nobody`). Default quote policy for new posts. */
     quote_policy?: 'public' | 'followers' | 'nobody';
   };
+  /**
+   * Requires features{@link Features.birthdays}
+   */
+  birthday?: string;
 
   /** if true, html tags are stripped from all statuses requested from the API */
   no_rich_text?: boolean;

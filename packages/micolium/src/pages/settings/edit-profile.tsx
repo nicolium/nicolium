@@ -7,6 +7,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Alert, ScrollView, View } from 'react-native';
 import { toast } from 'sonner-native';
 
+import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { List } from '@/components/ui/list';
 import { useClient, useFeatures, useInstance } from '@/contexts/current-account-context';
@@ -33,6 +34,10 @@ const messages = defineMessages({
   bioPlaceholder: {
     id: 'edit_profile.fields.bio.placeholder',
     defaultMessage: 'Tell us about yourself.',
+  },
+  birthdayLabel: {
+    id: 'edit_profile.fields.birthday.label',
+    defaultMessage: 'Birthday',
   },
   locationLabel: {
     id: 'edit_profile.fields.location.label',
@@ -377,8 +382,11 @@ const EditProfileScreen = ({
     updateData(key, value);
   };
 
-  const handleBirthdayChange = (date: string) => {
-    updateData('birthday', date);
+  const handleBirthdayChange = (date: Date) => {
+    updateData(
+      'birthday',
+      new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10),
+    );
   };
 
   const hideNetwork =
@@ -476,6 +484,16 @@ const EditProfileScreen = ({
             value={data.note}
             onChangeText={handleTextChange('note')}
           />
+
+          {features.birthdays && (
+            <DateTimePicker
+              title={intl.formatMessage(messages.birthdayLabel)}
+              initialDate={data.birthday ? new Date(data.birthday) : undefined}
+              onSelect={handleBirthdayChange}
+              listItemStyle={getSegmentedMenuStyles(theme, false, 0, 1)}
+              withTime={false}
+            />
+          )}
 
           {features.accountLocation && (
             <TextInput

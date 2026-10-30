@@ -6,25 +6,29 @@ import {
 import { DatePicker as SwiftUIDatePicker, Host as SwiftUIHost } from '@expo/ui/swift-ui';
 import { List, Text } from '@mkljczk/react-native-paper';
 import React from 'react';
-import { FormattedDate } from 'react-intl';
+import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Platform, type StyleProp, type ViewStyle } from 'react-native';
 
 interface IDateTimePicker {
   title: string;
+  description?: string;
   initialDate?: Date;
   rangeStart?: Date;
   rangeEnd?: Date;
   onSelect: (date: Date) => void;
   listItemStyle?: StyleProp<ViewStyle>;
+  withTime?: boolean;
 }
 
 const DateTimePicker: React.FC<IDateTimePicker> = ({
   title,
+  description,
   initialDate,
   rangeStart,
   rangeEnd,
   onSelect,
   listItemStyle,
+  withTime = true,
 }) => {
   const [displayed, setDisplayed] = React.useState<false | 'date' | 'time'>(false);
   const [pickedDate, setPickedDate] = React.useState(initialDate);
@@ -35,7 +39,7 @@ const DateTimePicker: React.FC<IDateTimePicker> = ({
         <SwiftUIDatePicker
           title={title}
           selection={initialDate}
-          displayedComponents={['date', 'hourAndMinute']}
+          displayedComponents={withTime ? ['date', 'hourAndMinute'] : ['date']}
           onDateChange={onSelect}
           range={{
             start: rangeStart,
@@ -50,22 +54,25 @@ const DateTimePicker: React.FC<IDateTimePicker> = ({
     <>
       <List.Item
         title={title}
-        right={
-          initialDate
-            ? () => (
-                <Text>
-                  <FormattedDate
-                    value={initialDate}
-                    hour12
-                    year='numeric'
-                    month='short'
-                    day='2-digit'
-                    hour='numeric'
-                    minute='2-digit'
-                  />
-                </Text>
-              )
-            : undefined
+        description={description}
+        right={() =>
+          initialDate ? (
+            <Text>
+              <FormattedDate
+                value={initialDate}
+                hour12
+                year='numeric'
+                month='short'
+                day='2-digit'
+                hour={withTime ? 'numeric' : undefined}
+                minute={withTime ? '2-digit' : undefined}
+              />
+            </Text>
+          ) : (
+            <Text>
+              <FormattedMessage id='date_picker.placeholder' defaultMessage='Select date…' />
+            </Text>
+          )
         }
         containerStyle={{ alignItems: 'center' }}
         onPress={() => setDisplayed('date')}
@@ -76,8 +83,13 @@ const DateTimePicker: React.FC<IDateTimePicker> = ({
           {displayed === 'date' ? (
             <JetpackDatePickerDialog
               onDateSelected={(date) => {
-                setPickedDate(date);
-                setDisplayed('time');
+                if (withTime) {
+                  setPickedDate(date);
+                  setDisplayed('time');
+                } else {
+                  onSelect(date);
+                  setDisplayed(false);
+                }
               }}
               initialDate={initialDate?.toISOString()}
               variant='picker'
