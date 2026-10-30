@@ -51,7 +51,7 @@
     "@lexical/react": "^0.50.0",
     "@lexical/rich-text": "^0.50.0",
     "@lexical/selection": "^0.50.0",
-    "@lexical/utils": "^0.50.0",
+    "@lexical/utils": "^0.52.0",
     "@mkljczk/url-purify": "^0.0.5",
     "@phosphor-icons/core": "^2.1.1",
     "@reach/rect": "^0.18.0",
