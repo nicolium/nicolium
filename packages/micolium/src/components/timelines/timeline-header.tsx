@@ -217,6 +217,9 @@ const TimelineHeaderMenu = () => {
               <DropdownMenu.ItemTitle>
                 {intl.formatMessage(messages.announcements)}
               </DropdownMenu.ItemTitle>
+              <DropdownMenu.ItemSubtitle>
+                not implemented yet
+              </DropdownMenu.ItemSubtitle>
             </DropdownMenu.Item>
           )}
         </DropdownMenu.Group>
