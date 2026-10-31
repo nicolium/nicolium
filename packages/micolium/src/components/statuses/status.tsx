@@ -12,7 +12,7 @@ import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
 import React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { Linking, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
@@ -85,6 +85,32 @@ const StatusDetailedInfo: React.FC<IStatusDetailedInfo> = ({ status }) => {
               />
             </Text>
           </Link>
+        </>
+      )}
+      {status.application && (
+        <>
+          <Text variant='bodyMedium' style={{ color: colors.onSurfaceVariant }}>
+            {'· '}
+            <FormattedMessage
+              id='status.application_name.with_link'
+              defaultMessage='Sent from <a>{name}</a>'
+              values={{
+                name: status.application.name,
+                a: (children) => (
+                  <Text
+                    onPress={
+                      status.application?.website
+                        ? () => Linking.openURL(status.application!.website!)
+                        : undefined
+                    }
+                    style={{ color: status.application?.website ? colors.onPrimary : undefined }}
+                  >
+                    {children}
+                  </Text>
+                ),
+              }}
+            />
+          </Text>
         </>
       )}
     </View>
