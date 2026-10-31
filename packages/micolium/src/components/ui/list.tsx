@@ -6,6 +6,7 @@ import {
 import { labelsHidden } from '@expo/ui/swift-ui/modifiers';
 import { List as PaperList, Switch, Text, useTheme } from '@mkljczk/react-native-paper';
 import { create } from 'mutative';
+import { CaretRightIcon } from 'phosphor-react-native/src/icons/CaretRight';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Pressable, type StyleProp, View, type ViewStyle } from 'react-native';
@@ -72,6 +73,14 @@ interface IList {
           withTime?: boolean;
           rangeStart?: Date;
           rangeEnd?: Date;
+        }
+      | {
+          enabled?: boolean;
+          type: 'text';
+          onPress?: () => void;
+          label: string;
+          sublabel?: string;
+          disabled?: boolean;
         }
       | ISelectItem<any>
     >;
@@ -258,8 +267,26 @@ const List: React.FC<IList> = ({ sections, style }) => {
                   rangeEnd={item.rangeEnd}
                 />
               );
+            case 'text':
+              return (
+                <PaperList.Item
+                  key={index}
+                  title={item.label}
+                  description={item.sublabel}
+                  style={styles}
+                  disabled={item.disabled}
+                  titleNumberOfLines={0}
+                  right={
+                    item.onPress
+                      ? (props) => <PaperList.Icon icon={iconHelper(CaretRightIcon)} {...props} />
+                      : undefined
+                  }
+                  onPress={item.onPress}
+                  containerStyle={{ gap: 4, alignItems: 'center' }}
+                />
+              );
             default:
-              console.error(`Unimplemented item type: ${item}`)
+              console.error(`Unimplemented item type: ${item}`);
               return null;
           }
         })}
