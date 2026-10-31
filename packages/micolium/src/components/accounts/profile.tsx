@@ -139,7 +139,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const [showPinned, setShowPinned] = React.useState(true);
   const [showComposeButton, setShowComposeButton] = React.useState(true);
 
-  const headerMarginTop = useSharedValue(-64 - topInset);
+  const headerMarginTop = useSharedValue(-128);
   const headerStyle = useAnimatedStyle(() => ({
     position: 'absolute',
     marginTop: headerMarginTop.value,
@@ -196,6 +196,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   if (!account) return <LoadingIndicator />;
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    console.log('handling scroll')
     const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
     const showHeader =
       !!profileInfoNode.current &&
