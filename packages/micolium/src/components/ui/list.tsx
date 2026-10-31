@@ -109,151 +109,158 @@ const List: React.FC<IList> = ({ sections, style }) => {
             { marginHorizontal: 16 },
           ];
 
-          if (item.type === 'button') {
-            const Icon = item.icon ? iconHelper(item.icon!) : undefined;
+          switch (item.type) {
+            case 'button': {
+              const Icon = item.icon ? iconHelper(item.icon!) : undefined;
 
-            return (
-              <PaperList.Item
-                key={index}
-                title={item.label}
-                description={item.sublabel}
-                style={styles}
-                containerStyle={{ marginLeft: Icon ? -8 : undefined }}
-                onPress={item.onPress}
-                left={
-                  Icon
-                    ? (props) => (
-                        <PaperList.Icon
-                          {...props}
-                          icon={(props) => (
-                            <Icon
-                              {...props}
-                              color={theme.colors.onPrimaryFixed}
-                              strokeWidth={1.75}
-                            />
-                          )}
-                          style={{
-                            ...props.style,
-                            backgroundColor: theme.colors.secondaryFixedDim,
-                            padding: 8,
-                            borderRadius: 24,
-                          }}
-                        />
-                      )
-                    : undefined
-                }
-                titleStyle={item.role === 'destructive' ? { color: theme.colors.error } : undefined}
-              />
-            );
-          } else if (item.type === 'toggle') {
-            return (
-              <PaperList.Item
-                key={index}
-                title={item.label}
-                description={item.sublabel}
-                style={styles}
-                onPress={item.onPress}
-                disabled={item.disabled}
-                titleNumberOfLines={0}
-                right={() =>
-                  glassEffect ? (
-                    <Pressable onPress={() => {}}>
-                      <SwiftUIHost matchContents style={{ width: 64 }}>
-                        <SwiftUIToggle
-                          isOn={item.active}
-                          onIsOnChange={item.onPress}
-                          label={item.label}
-                          modifiers={[labelsHidden()]}
-                        />
-                      </SwiftUIHost>
-                    </Pressable>
-                  ) : (
-                    <Switch
-                      value={item.active}
-                      onValueChange={item.onPress}
-                      disabled={item.disabled}
+              return (
+                <PaperList.Item
+                  key={index}
+                  title={item.label}
+                  description={item.sublabel}
+                  style={styles}
+                  containerStyle={{ marginLeft: Icon ? -8 : undefined }}
+                  onPress={item.onPress}
+                  left={
+                    Icon
+                      ? (props) => (
+                          <PaperList.Icon
+                            {...props}
+                            icon={(props) => (
+                              <Icon
+                                {...props}
+                                color={theme.colors.onPrimaryFixed}
+                                strokeWidth={1.75}
+                              />
+                            )}
+                            style={{
+                              ...props.style,
+                              backgroundColor: theme.colors.secondaryFixedDim,
+                              padding: 8,
+                              borderRadius: 24,
+                            }}
+                          />
+                        )
+                      : undefined
+                  }
+                  titleStyle={
+                    item.role === 'destructive' ? { color: theme.colors.error } : undefined
+                  }
+                />
+              );
+            }
+            case 'toggle':
+              return (
+                <PaperList.Item
+                  key={index}
+                  title={item.label}
+                  description={item.sublabel}
+                  style={styles}
+                  onPress={item.onPress}
+                  disabled={item.disabled}
+                  titleNumberOfLines={0}
+                  right={() =>
+                    glassEffect ? (
+                      <Pressable onPress={() => {}}>
+                        <SwiftUIHost matchContents style={{ width: 64 }}>
+                          <SwiftUIToggle
+                            isOn={item.active}
+                            onIsOnChange={item.onPress}
+                            label={item.label}
+                            modifiers={[labelsHidden()]}
+                          />
+                        </SwiftUIHost>
+                      </Pressable>
+                    ) : (
+                      <Switch
+                        value={item.active}
+                        onValueChange={item.onPress}
+                        disabled={item.disabled}
+                      />
+                    )
+                  }
+                  containerStyle={{ gap: 4, alignItems: 'center' }}
+                />
+              );
+            case 'select':
+              return (
+                <DropdownMenu.Root key={index}>
+                  <DropdownMenu.Trigger>
+                    <PaperList.Item
+                      title={item.label}
+                      description={item.sublabel}
+                      style={styles}
+                      right={() => (
+                        <Text>
+                          {Array.isArray(item.active)
+                            ? intl.formatList(
+                                item.options
+                                  .filter((option) => item.active.includes(option.value))
+                                  .map((option) => option.label),
+                                { type: 'conjunction' },
+                              )
+                            : item.options.find((option) => option.value === item.active)?.label}
+                        </Text>
+                      )}
+                      containerStyle={{ alignItems: 'center' }}
                     />
-                  )
-                }
-                containerStyle={{ gap: 4, alignItems: 'center' }}
-              />
-            );
-          } else if (item.type === 'select') {
-            return (
-              <DropdownMenu.Root key={index}>
-                <DropdownMenu.Trigger>
-                  <PaperList.Item
-                    title={item.label}
-                    description={item.sublabel}
-                    style={styles}
-                    right={() => (
-                      <Text>
-                        {Array.isArray(item.active)
-                          ? intl.formatList(
-                              item.options
-                                .filter((option) => item.active.includes(option.value))
-                                .map((option) => option.label),
-                              { type: 'conjunction' },
-                            )
-                          : item.options.find((option) => option.value === item.active)?.label}
-                      </Text>
-                    )}
-                    containerStyle={{ alignItems: 'center' }}
-                  />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Content>
-                  <DropdownMenu.Label>{item.label}</DropdownMenu.Label>
-                  {item.options.map((option) => (
-                    <DropdownMenu.CheckboxItem
-                      key={option.value.toString()}
-                      value={
-                        Array.isArray(item.active)
-                          ? item.active.includes(option.value)
-                          : option.value === item.active
-                      }
-                      onSelect={() => item.onChange(option.value)}
-                    >
-                      <DropdownMenu.ItemTitle>{option.label}</DropdownMenu.ItemTitle>
-                    </DropdownMenu.CheckboxItem>
-                  ))}
-                </DropdownMenu.Content>
-              </DropdownMenu.Root>
-            );
-          } else if (item.type === 'color-picker') {
-            return (
-              <PaperList.Item
-                key={index}
-                title={item.label}
-                description={item.sublabel}
-                style={styles}
-                disabled={item.disabled}
-                titleNumberOfLines={0}
-                right={() => (
-                  <SwiftUIHost matchContents>
-                    <SwiftUIColorPicker
-                      selection={item.value}
-                      onSelectionChange={item.onChange}
-                      supportsOpacity={false}
-                    />
-                  </SwiftUIHost>
-                )}
-                containerStyle={{ gap: 4, alignItems: 'center' }}
-              />
-            );
-          } else {
-            return (
-              <DateTimePicker
-                key={index}
-                title={item.label}
-                description={item.sublabel}
-                listItemStyle={styles}
-                initialDate={item.value}
-                onSelect={item.onChange}
-                withTime={item.withTime}
-                rangeStart={item.rangeStart}
-                rangeEnd={item.rangeEnd}
-              />
-            );
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Content>
+                    <DropdownMenu.Label>{item.label}</DropdownMenu.Label>
+                    {item.options.map((option) => (
+                      <DropdownMenu.CheckboxItem
+                        key={option.value.toString()}
+                        value={
+                          Array.isArray(item.active)
+                            ? item.active.includes(option.value)
+                            : option.value === item.active
+                        }
+                        onSelect={() => item.onChange(option.value)}
+                      >
+                        <DropdownMenu.ItemTitle>{option.label}</DropdownMenu.ItemTitle>
+                      </DropdownMenu.CheckboxItem>
+                    ))}
+                  </DropdownMenu.Content>
+                </DropdownMenu.Root>
+              );
+            case 'color-picker':
+              return (
+                <PaperList.Item
+                  key={index}
+                  title={item.label}
+                  description={item.sublabel}
+                  style={styles}
+                  disabled={item.disabled}
+                  titleNumberOfLines={0}
+                  right={() => (
+                    <SwiftUIHost matchContents>
+                      <SwiftUIColorPicker
+                        selection={item.value}
+                        onSelectionChange={item.onChange}
+                        supportsOpacity={false}
+                      />
+                    </SwiftUIHost>
+                  )}
+                  containerStyle={{ gap: 4, alignItems: 'center' }}
+                />
+              );
+            case 'date-picker':
+              return (
+                <DateTimePicker
+                  key={index}
+                  title={item.label}
+                  description={item.sublabel}
+                  listItemStyle={styles}
+                  initialDate={item.value}
+                  onSelect={item.onChange}
+                  withTime={item.withTime}
+                  rangeStart={item.rangeStart}
+                  rangeEnd={item.rangeEnd}
+                />
+              );
+            default:
+              console.error(`Unimplemented item type: ${item}`)
+              return null;
           }
         })}
       </View>
