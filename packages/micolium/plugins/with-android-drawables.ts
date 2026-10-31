@@ -96,4 +96,4 @@ const withAndroidDrawables: ConfigPlugin<ConfigProps> = (
   ]);
 };
 
-module.exports = withAndroidDrawables;
+export default withAndroidDrawables;
