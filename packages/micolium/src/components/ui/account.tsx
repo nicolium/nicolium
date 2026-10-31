@@ -104,17 +104,13 @@ const UIAccount: React.FC<IUIAccount> = ({
           <View style={{ gap: 4, alignItems: 'center', flexDirection: 'row', maxWidth: '100%' }}>
             <Text variant='titleMedium' numberOfLines={1}>
               {emojis ? <Emojify text={displayName} emojis={emojis} /> : displayName}
+              {displayNameDetail && (
+                <Text variant='bodySmall' style={{ flex: 1, color: colors.outline }}>
+                  {' · '}
+                  {displayNameDetail}
+                </Text>
+              )}
             </Text>
-            {displayNameDetail && (
-              <Text
-                variant='bodySmall'
-                numberOfLines={1}
-                style={{ flex: 1, color: colors.outline }}
-              >
-                {'· '}
-                {displayNameDetail}
-              </Text>
-            )}
           </View>
         </MaybeLink>
         <MaybeLink onPress={onPress} fullWidthPressable={fullWidthPressable}>
