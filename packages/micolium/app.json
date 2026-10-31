@@ -16,7 +16,8 @@
       "appleTeamId": "28NDJH3G7W",
       "config": {
         "usesNonExemptEncryption": false
-      }
+      },
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
