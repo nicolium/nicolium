@@ -189,6 +189,7 @@ const FiltersDropdownMenu: React.FC<ITimelineHeaderMenu> = ({ timeline }) => {
 
 const TimelineHeaderMenu = () => {
   const intl = useIntl();
+  const features = useFeatures();
   const navigation = useNavigation('timeline');
 
   return (
@@ -211,11 +212,13 @@ const TimelineHeaderMenu = () => {
           >
             <DropdownMenu.ItemTitle>{intl.formatMessage(messages.settings)}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
-          <DropdownMenu.Item key='announcements' onSelect={() => {}}>
-            <DropdownMenu.ItemTitle>
-              {intl.formatMessage(messages.announcements)}
-            </DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
+          {features.announcements && (
+            <DropdownMenu.Item key='announcements' onSelect={() => {}}>
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.announcements)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          )}
         </DropdownMenu.Group>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
