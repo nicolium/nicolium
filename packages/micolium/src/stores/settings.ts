@@ -1,8 +1,8 @@
-import { createAsyncStorage } from '@react-native-async-storage/async-storage';
 import { filterSchema } from 'pl-api';
+import { createMMKV } from 'react-native-mmkv';
 import * as v from 'valibot';
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage, type StateStorage } from 'zustand/middleware';
 
 import { coerceObject, filteredArray, filteredRecord } from '@/utils/schemas';
 
@@ -72,7 +72,20 @@ type Settings = v.InferOutput<typeof settingsSchema>;
 
 const DEFAULT_SETTINGS = v.parse(settingsSchema, {});
 
-const storage = createAsyncStorage('settings');
+const storage = createMMKV();
+
+const zustandStorage: StateStorage = {
+  setItem: (name, value) => {
+    return storage.set(name, value);
+  },
+  getItem: (name) => {
+    const value = storage.getString(name);
+    return value ?? null;
+  },
+  removeItem: (name) => {
+    return storage.remove(name);
+  },
+};
 
 type State = {
   settings: Settings;
@@ -94,8 +107,8 @@ const useSettingsStore = create<State>()(
     {
       name: 'settings',
       version: 1,
-      storage: createJSONStorage(() => storage),
-      partialize: (s) => ({ settings: s.settings }),
+      storage: createJSONStorage(() => zustandStorage),
+      // partialize: (s) => ({ settings: s.settings }),
       merge: (persisted: any, current) => ({
         ...current,
         settings: v.parse(settingsSchema, persisted?.settings ?? {}),
@@ -110,6 +123,7 @@ const useSettingsActions = () => useSettingsStore(({ actions }) => actions);
 
 export {
   TIMELINE_FILTER_KEYS,
+  storage,
   useSettingsStore,
   useSetting,
   useSettingsActions,

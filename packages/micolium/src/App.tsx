@@ -25,6 +25,7 @@ import { loadPolyfills } from './polyfills';
 import { queryClient } from './queries/client';
 import { RootNavigator } from './router/router';
 import { useSetting } from './stores/settings';
+import { hasMigratedFromAsyncStorage, migrateFromAsyncStorage } from './utils/storage-migration';
 import { DarkTheme, LightTheme } from './utils/themes';
 
 SplashScreen.preventAutoHideAsync();
@@ -95,6 +96,22 @@ export const App = () => {
   const [loaded, setLoaded] = React.useState(false);
   const [messages, setMessages] = React.useState<Record<string, string>>();
 
+  // TODO: Remove `hasMigratedFromAsyncStorage` after a while (when everyone has migrated)
+  const [hasMigrated, setHasMigrated] = React.useState(hasMigratedFromAsyncStorage);
+
+  React.useEffect(() => {
+    if (!hasMigratedFromAsyncStorage) {
+      requestIdleCallback(async () => {
+        try {
+          await migrateFromAsyncStorage();
+          setHasMigrated(true);
+        } catch (e) {
+          // TODO: fall back to AsyncStorage? Wipe storage clean and use MMKV? Crash app?
+        }
+      });
+    }
+  }, []);
+
   React.useEffect(() => {
     loadPolyfills().finally(() => {
       setLoaded(true);
@@ -108,7 +125,7 @@ export const App = () => {
       .then(setMessages);
   }, [locale]);
 
-  if (!loaded || !messages) return null;
+  if (!loaded || !messages || !hasMigrated) return null;
 
   return (
     <IntlProvider
