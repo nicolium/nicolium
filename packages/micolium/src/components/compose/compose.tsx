@@ -1,6 +1,6 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Button, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
-import { DragDropContentView, DragDropContentViewProps } from 'expo-drag-drop-content-view';
+import { DragDropContentView, type DragDropContentViewProps } from 'expo-drag-drop-content-view';
 import { GlassView } from 'expo-glass-effect';
 import { TextInputWrapper } from 'expo-paste-input';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
@@ -120,6 +120,7 @@ const ComposeBottomSheet = () => {
   const { colors, fonts } = useTheme();
   const { bottom: bottomInset } = useSafeAreaInsets();
   const isComposeOpen = useIsComposeOpen();
+  const [footerHeight, setFooterHeight] = React.useState(0);
   const { closeCompose, openCompose } = useUiStoreActions();
   const features = useFeatures();
   const compose = useCompose(COMPOSE_ID);
@@ -371,6 +372,7 @@ const ComposeBottomSheet = () => {
 
   const footer = glassEffect ? (
     <GlassView
+      onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -385,6 +387,7 @@ const ComposeBottomSheet = () => {
     </GlassView>
   ) : (
     <View
+      onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
       style={{
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -404,7 +407,7 @@ const ComposeBottomSheet = () => {
       detents={[0.85]}
       header={headerContent}
       footer={footer}
-      footerOptions={{ keyboardOffset: -bottomInset }}
+      footerOptions={{ position: 'absolute', keyboardOffset: 12 }}
       onDidDismiss={handleDismiss}
       scrollableRef={scrollableRef}
       style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 16 : 32 }}
@@ -413,7 +416,12 @@ const ComposeBottomSheet = () => {
       <ScrollView
         ref={scrollableRef}
         style={{ flex: 1 }}
-        contentContainerStyle={{ flexGrow: 1, gap: 8, paddingHorizontal: 12 }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          gap: 8,
+          paddingHorizontal: 12,
+          paddingBottom: footerHeight + bottomInset,
+        }}
       >
         <MaybeDragDropContentView
           allowedMimeTypes={configuration.media_attachments.supported_mime_types}
