@@ -12,7 +12,11 @@ import { MagnifyingGlassIcon } from 'phosphor-react-native/src/icons/MagnifyingG
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaInsetsContext,
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { useUserStream } from '@/hooks/streaming/use-user-stream';
@@ -35,7 +39,23 @@ const messages = defineMessages({
 
 const TabScreenLayout: (
   props: ScreenLayoutArgs<TabsParams, keyof TabsParams, BottomTabNavigationOptions, any>,
-) => React.ReactElement = ({ children }) => <SafeAreaProvider>{children}</SafeAreaProvider>;
+) => React.ReactElement = ({ children }) => (
+  <SafeAreaProvider>
+    <TabletInsets>{children}</TabletInsets>
+  </SafeAreaProvider>
+);
+
+const TabletInsets: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View style={{ flex: 1, paddingLeft: insets.left, paddingRight: insets.right }}>
+      <SafeAreaInsetsContext.Provider value={{ ...insets, left: 0, right: 0 }}>
+        {children}
+      </SafeAreaInsetsContext.Provider>
+    </View>
+  );
+};
 
 const Tab = createBottomTabNavigator<TabsParams>();
 
@@ -54,6 +74,8 @@ if (Platform.OS === 'ios') {
         screenOptions={{
           headerShown: false,
           overrideScrollViewContentInsetAdjustmentBehavior: false,
+          tabBarControllerMode: 'tabSidebar',
+          tabBarSidebarPreferredPlacement: 'sidebar',
         }}
       >
         <Tab.Screen
