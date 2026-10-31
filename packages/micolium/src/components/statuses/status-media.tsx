@@ -24,7 +24,7 @@ import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import { PlayIcon } from 'phosphor-react-native/src/icons/Play';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -264,6 +264,7 @@ interface IStatusMedia {
   mediaVisible?: boolean;
   revealStatusMedia?: () => void;
   hideStatusMedia?: () => void;
+  thumbs?: boolean;
 }
 
 const StatusMedia: React.FC<IStatusMedia> = ({
@@ -273,6 +274,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   mediaVisible,
   revealStatusMedia,
   hideStatusMedia,
+  thumbs,
 }) => {
   const intl = useIntl();
   const { colors, shapes } = useTheme();
@@ -290,7 +292,8 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   const sensitive = status.sensitive || !!filters?.length;
 
   const renderSensitiveOverlay = () =>
-    sensitive && (
+    sensitive &&
+    !thumbs && (
       <>
         <IconButton
           icon={iconHelper(mediaVisible ? EyeSlashIcon : EyeIcon)}
@@ -363,10 +366,11 @@ const StatusMedia: React.FC<IStatusMedia> = ({
         key={media.id}
         style={{
           flex: multiple ? 1 : undefined,
-          width: '100%',
-          height: multiple ? '100%' : aspectRatio ? undefined : compact ? 160 : 320,
-          aspectRatio,
-          maxHeight: multiple ? undefined : compact ? 240 : 480,
+          width: thumbs ? 64 : '100%',
+          maxWidth: thumbs ? 64 : undefined,
+          height: thumbs ? 64 : multiple ? '100%' : aspectRatio ? undefined : compact ? 160 : 320,
+          aspectRatio: thumbs ? 1 : aspectRatio,
+          maxHeight: thumbs ? 64 : multiple ? undefined : compact ? 240 : 480,
           position: 'relative',
           borderRadius: shapes.corner.medium,
           overflow: 'hidden',
@@ -417,22 +421,40 @@ const StatusMedia: React.FC<IStatusMedia> = ({
     return (
       <View style={{ position: 'relative' }}>
         {renderSensitiveOverlay()}
-        <Carousel
-          data={filteredMedia}
-          height={compact ? 160 : 320}
-          disabled={sensitive && !mediaVisible}
-          renderItem={({ item: media, index, mask }) => (
-            <CarouselItem
-              mask={mask}
-              style={{ flexDirection: 'row', gap: 8, backgroundColor: colors.background }}
-            >
-              {index !== 0 && index === filteredMedia.length - 1 && <View aria-hidden />}
-              {renderItem(media)}
-              {index !== filteredMedia.length - 1 && <View aria-hidden />}
-            </CarouselItem>
-          )}
-          style={{ pointerEvents: sensitive && !mediaVisible ? 'none' : 'auto' }}
-        />
+        {thumbs ? (
+          <ScrollView
+            horizontal
+            contentContainerStyle={{
+              height: 64,
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 8,
+            }}
+          >
+            {filteredMedia.map((media) => renderItem(media))}
+          </ScrollView>
+        ) : (
+          <Carousel
+            data={filteredMedia}
+            height={compact ? 160 : 320}
+            itemSpacing={8}
+            disabled={sensitive && !mediaVisible}
+            renderItem={({ item: media, mask }) => (
+              <CarouselItem
+                mask={mask}
+                style={{ flexDirection: 'row', gap: 8, backgroundColor: colors.background }}
+              >
+                {/* {index !== 0 && index === filteredMedia.length - 1 && <View aria-hidden />} */}
+                {renderItem(media)}
+                {/* {index !== filteredMedia.length - 1 && <View aria-hidden />} */}
+              </CarouselItem>
+            )}
+            style={{
+              width: 'fit-content',
+              pointerEvents: sensitive && !mediaVisible ? 'none' : 'auto',
+            }}
+          />
+        )}
       </View>
     );
   };

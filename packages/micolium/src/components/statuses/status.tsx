@@ -247,6 +247,7 @@ const Status: React.FC<IStatus> = ({
             <StatusMedia
               status={actualStatus}
               compact={props.compact}
+              thumbs={props.compact}
               filters={blurFilters}
               mediaVisible={mediaVisible}
               revealStatusMedia={() => revealStatusMedia(actualStatus.id)}
