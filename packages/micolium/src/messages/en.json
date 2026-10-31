@@ -44,7 +44,7 @@
   "account.share": "Share profile",
   "account.show_reblogs.short": "Show reposts",
   "account.statuses_count": "{count, plural, one {# post} other {# posts}}",
-  "account.statuses_with_count": "{count, plural, one {<strong>#</strong> status} other {<strong>#</strong> statuses}}",
+  "account.statuses_with_count": "{count, plural, one {<strong>#</strong> post} other {<strong>#</strong> posts}}",
   "account.subscribe.short": "Subscribe to notifications",
   "account.subscribers.empty": "No one subscribes to this user yet.",
   "account.subscribers_with_count": "{count, plural, one {<strong>#</strong> subscriber} other {<strong>#</strong> subscribers}}",

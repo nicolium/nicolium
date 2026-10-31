@@ -470,7 +470,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
               <Text style={{ display: 'flex', alignItems: 'center' }}>
                 <FormattedMessage
                   id='account.statuses_with_count'
-                  defaultMessage='{count, plural, one {<strong>#</strong> status} other {<strong>#</strong> statuses}}'
+                  defaultMessage='{count, plural, one {<strong>#</strong> post} other {<strong>#</strong> posts}}'
                   values={{
                     count: account.statuses_count,
                     strong: (chunks) => <Text variant='bodyMediumEmphasized'>{chunks}</Text>,

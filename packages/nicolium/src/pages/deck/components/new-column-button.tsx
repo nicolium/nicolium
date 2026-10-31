@@ -61,7 +61,7 @@ const messages = defineMessages({
   hashtag: { id: 'column.hashtag', defaultMessage: 'Hashtag' },
   trending: { id: 'deck.columns.trending', defaultMessage: 'Trending' },
   trendingAccounts: { id: 'deck.columns.trending_accounts', defaultMessage: 'Suggested accounts' },
-  trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending statuses' },
+  trendingStatuses: { id: 'deck.columns.trending_statuses', defaultMessage: 'Trending posts' },
   trendingHashtags: { id: 'deck.columns.trending_hashtags', defaultMessage: 'Trending hashtags' },
   trendingLinks: { id: 'deck.columns.trending_links', defaultMessage: 'Trending links' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
