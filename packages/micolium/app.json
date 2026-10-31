@@ -3,7 +3,7 @@
     "name": "micolium",
     "slug": "micolium",
     "version": "0.0.1",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "micolium",
     "userInterfaceStyle": "automatic",
