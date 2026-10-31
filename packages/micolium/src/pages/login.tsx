@@ -445,4 +445,4 @@ const LoginStackScreen = ({ navigation }: NativeStackScreenProps<RootStackParams
   );
 };
 
-export { LoginStackScreen };
+export { LoginStackScreen, EXTRA_GAYNESS_MODE };

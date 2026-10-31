@@ -7,6 +7,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { Header } from '@/components/ui/header';
 
+import { AboutScreen } from './about';
 import { AppearanceSettingsScreen } from './appearance-settings';
 import { ComposeSettingsScreen } from './compose-settings';
 import { ContentSettingsScreen } from './content-settings';
@@ -141,6 +142,11 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='edit_profile'
         component={EditProfileScreen}
         options={{ title: intl.formatMessage(messages.editProfile), headerShown: false }}
+      />
+      <SettingsStack.Screen
+        name='about'
+        component={AboutScreen}
+        options={{ title: intl.formatMessage(messages.aboutHeading, { app_name: 'micolium' }) }}
       />
     </SettingsStack.Navigator>
   );

@@ -57,6 +57,7 @@ type SettingsStackParams = {
   // TODO
   scheduled_statuses: undefined;
   edit_profile: undefined;
+  about: undefined;
 };
 type StatusStackParams = {
   view: { id: string };
