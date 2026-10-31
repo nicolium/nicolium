@@ -125,7 +125,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
                     ? (props) => (
                         <PaperList.Icon
                           {...props}
-                          icon={(props) => <Icon {...props} color={theme.colors.onPrimaryFixed} />}
+                          icon={(props) => <Icon {...props} color={theme.colors.onPrimaryFixed} strokeWidth={1.75} />}
                           style={{
                             ...props.style,
                             backgroundColor: theme.colors.secondaryFixedDim,

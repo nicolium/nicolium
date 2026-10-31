@@ -3,6 +3,7 @@ import { Button, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-na
 import { DragDropContentView, type DragDropContentViewProps } from 'expo-drag-drop-content-view';
 import { GlassView } from 'expo-glass-effect';
 import { TextInputWrapper } from 'expo-paste-input';
+import KeyboardOffIcon from 'lucide-react-native/icons/keyboard-off';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
 import { ChartBarIcon } from 'phosphor-react-native/src/icons/ChartBar';
 import { PaperPlaneRightIcon } from 'phosphor-react-native/src/icons/PaperPlaneRight';
@@ -10,7 +11,15 @@ import { SmileyIcon } from 'phosphor-react-native/src/icons/Smiley';
 import { WarningIcon } from 'phosphor-react-native/src/icons/Warning';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert, ScrollView, TextInput as RNTextInput, View, Platform } from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  TextInput as RNTextInput,
+  View,
+  Platform,
+  Keyboard,
+} from 'react-native';
+import { useKeyboardState } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
@@ -102,6 +111,7 @@ const messages = defineMessages({
     id: 'missing_description_modal.continue',
     defaultMessage: 'Post',
   },
+  hideKeyboard: { id: 'compose_form.hide_keyboard', defaultMessage: 'Hide keyboard' },
 });
 
 const MaybeDragDropContentView: React.FC<DragDropContentViewProps> = (props) => {
@@ -130,6 +140,7 @@ const ComposeBottomSheet = () => {
   const heading = useComposeHeading(COMPOSE_ID);
   const uploadCompose = useUploadCompose(COMPOSE_ID);
   const { configuration } = useInstance();
+  const isKeyboardVisible = useKeyboardState((state) => state.isVisible);
 
   const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
 
@@ -347,6 +358,14 @@ const ComposeBottomSheet = () => {
       />
       {features.scheduledStatuses && <ComposeScheduleButton composeId={COMPOSE_ID} />}
       <View style={{ flexGrow: 1 }} />
+      {Platform.OS === 'ios' && isKeyboardVisible && (
+        <IconButton
+          icon={(props) => <KeyboardOffIcon {...props} strokeWidth={1.75} />}
+          style={{ marginHorizontal: 0 }}
+          onPress={() => Keyboard.dismiss()}
+          accessibilityLabel={intl.formatMessage(messages.hideKeyboard)}
+        />
+      )}
       <Text
         variant='labelLargeEmphasized'
         style={{
