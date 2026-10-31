@@ -55,9 +55,9 @@ const DateTimePicker: React.FC<IDateTimePicker> = ({
       <List.Item
         title={title}
         description={description}
-        right={() =>
-          initialDate ? (
-            <Text>
+        right={() => (
+          <Text>
+            {initialDate ? (
               <FormattedDate
                 value={initialDate}
                 hour12
@@ -67,13 +67,11 @@ const DateTimePicker: React.FC<IDateTimePicker> = ({
                 hour={withTime ? 'numeric' : undefined}
                 minute={withTime ? '2-digit' : undefined}
               />
-            </Text>
-          ) : (
-            <Text>
+            ) : (
               <FormattedMessage id='date_picker.placeholder' defaultMessage='Select date…' />
-            </Text>
-          )
-        }
+            )}
+          </Text>
+        )}
         containerStyle={{ alignItems: 'center' }}
         onPress={() => setDisplayed('date')}
         style={listItemStyle}
