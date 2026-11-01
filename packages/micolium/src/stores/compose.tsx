@@ -1,5 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useCallback } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, type IntlShape, useIntl } from 'react-intl';
 import { toast } from 'sonner-native';
 import { v4 as uuid } from 'uuid';
 // import { length } from 'stringz';
@@ -68,15 +69,15 @@ const messages = defineMessages({
   //     id: 'compose.invalid_schedule',
   //     defaultMessage: 'You must schedule a post at least 5 minutes out.',
   //   },
-  //   success: { id: 'compose.submit.success', defaultMessage: 'Your post was sent!' },
+  success: { id: 'compose.submit.success', defaultMessage: 'Your post was sent!' },
   //   threadSuccess: { id: 'compose.thread.success', defaultMessage: 'Your thread was sent!' },
   //   threadTooLong: {
   //     id: 'compose.thread.too_long',
   //     defaultMessage: 'One of the posts in your thread is too long.',
   //   },
-  //   editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
+  editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
   //   redactSuccess: { id: 'compose.redact.success', defaultMessage: 'The post was redacted' },
-  //   scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
+  scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
   //   uploadErrorPoll: {
   //     id: 'upload_error.poll',
@@ -99,7 +100,7 @@ const messages = defineMessages({
   //     id: 'confirmations.missing_language.confirm',
   //     defaultMessage: 'Post',
   //   },
-  //   view: { id: 'toast.view', defaultMessage: 'View' },
+  view: { id: 'toast.view', defaultMessage: 'View' },
   //   viewDrafts: { id: 'compose.submit.fail.view_drafts', defaultMessage: 'View drafts' },
   //   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
   //   replyMessage: {
@@ -107,7 +108,7 @@ const messages = defineMessages({
   //     defaultMessage:
   //       'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?',
   //   },
-  //   submitError: { id: 'compose.submit.fail', defaultMessage: 'Failed to submit your post' },
+  submitError: { id: 'compose.submit.fail', defaultMessage: 'Failed to submit your post' },
   //   resolveAccountError: {
   //     id: 'compose.resolve_account.fail',
   //     defaultMessage: 'Failed to resolve referenced account from the new account',
@@ -1027,6 +1028,8 @@ interface SubmitDeps {
   // settings: ReturnType<typeof useSettings>;
   instance: ReturnType<typeof useInstance>;
   // persistDraftStatus: (composeId: string) => Promise<string>;
+  intl: IntlShape;
+  navigation: ReturnType<typeof useNavigation>;
 }
 
 interface SubmitComposeOptions {
@@ -1064,6 +1067,8 @@ const submitCompose = async (
     // closeModal,
     // removeSledzik,
     // persistDraftStatus,
+    intl,
+    navigation,
   } = deps;
 
   const compose = actions.getCompose(composeId);
@@ -1331,6 +1336,33 @@ const submitCompose = async (
     //   }
     // }
 
+    const openedToast = toast.success(
+      intl.formatMessage(
+        compose.scheduledAt
+          ? messages.scheduledSuccess
+          : compose.editedId
+            ? messages.editSuccess
+            : messages.success,
+      ),
+      {
+        action: {
+          label: intl.formatMessage(messages.view),
+          onClick: () => {
+            toast.dismiss(openedToast);
+
+            if (data.scheduled_at) {
+              navigation.navigate('scheduled_statuses');
+            } else {
+              navigation.navigate('status', {
+                screen: 'view',
+                params: { id: data.id },
+              });
+            }
+          },
+        },
+      },
+    );
+
     // if (data.scheduled_at === null) {
     //   const linkOptions: LinkOptions =
     //     data.visibility === 'direct' && features.conversations
@@ -1386,7 +1418,7 @@ const submitCompose = async (
     //     scopeUrl,
     //   };
 
-    //   const message = (error as any).response?.json?.error || messages.submitError;
+    toast.error((error as any).response?.json?.error || intl.formatMessage(messages.submitError));
     //   if (propagate) {
     //     toast.propagate('error', message, toastOptions);
     //   } else {
@@ -1414,6 +1446,8 @@ const useSubmitDeps = (): SubmitDeps => {
   // // const { removeSledzik } = useUiStoreActions();
   const instance = useInstance();
   // const persistDraftStatus = usePersistDraftStatus();
+  const intl = useIntl();
+  const navigation = useNavigation();
 
   return {
     actions,
@@ -1426,6 +1460,8 @@ const useSubmitDeps = (): SubmitDeps => {
     // removeSledzik,
     instance,
     // persistDraftStatus,
+    intl,
+    navigation,
   };
 };
 

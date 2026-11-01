@@ -1,5 +1,6 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Button, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import { DragDropContentView, type DragDropContentViewProps } from 'expo-drag-drop-content-view';
 import { GlassView } from 'expo-glass-effect';
 import { TextInputWrapper } from 'expo-paste-input';
@@ -21,6 +22,7 @@ import {
 } from 'react-native';
 import { useKeyboardState } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { toast } from 'sonner-native';
 
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useComposeHeading } from '@/hooks/use-compose-heading';
@@ -112,6 +114,9 @@ const messages = defineMessages({
     defaultMessage: 'Post',
   },
   hideKeyboard: { id: 'compose_form.hide_keyboard', defaultMessage: 'Hide keyboard' },
+  success: { id: 'compose.submit.success', defaultMessage: 'Your post was sent!' },
+  editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
+  scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
 });
 
 const MaybeDragDropContentView: React.FC<DragDropContentViewProps> = (props) => {
@@ -125,6 +130,7 @@ interface ICompose {
 }
 
 const ComposeBottomSheet = () => {
+  const navigation = useNavigation();
   const intl = useIntl();
   const glassEffect = useEnableLiquidGlass();
   const { colors, fonts } = useTheme();
@@ -230,7 +236,7 @@ const ComposeBottomSheet = () => {
   const handlePublish = () => {
     const doPublish = () =>
       submitCompose({
-        onSuccess: closeCompose,
+        onSuccess: () => closeCompose(),
       });
 
     const hasMissingDescriptions = compose.mediaAttachments.some((item) => !item.description);
