@@ -142,6 +142,8 @@ const ComposeBottomSheet = () => {
   const { configuration } = useInstance();
   const isKeyboardVisible = useKeyboardState((state) => state.isVisible);
 
+  const [showKeyboardButton, setShowKeyboardButton] = React.useState(isKeyboardVisible);
+
   const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
 
   let { text, spoilerText } = compose;
@@ -212,6 +214,10 @@ const ComposeBottomSheet = () => {
 
     closeCompose();
   }, []);
+
+  React.useEffect(() => {
+    if (isKeyboardVisible) setShowKeyboardButton(true);
+  }, [isKeyboardVisible]);
 
   React.useEffect(() => {
     if (isComposeOpen) {
@@ -358,11 +364,14 @@ const ComposeBottomSheet = () => {
       />
       {features.scheduledStatuses && <ComposeScheduleButton composeId={COMPOSE_ID} />}
       <View style={{ flexGrow: 1 }} />
-      {Platform.OS === 'ios' && isKeyboardVisible && (
+      {Platform.OS === 'ios' && showKeyboardButton && (
         <IconButton
           icon={(props) => <KeyboardOffIcon {...props} strokeWidth={1.75} />}
           style={{ marginHorizontal: 0 }}
-          onPress={() => Keyboard.dismiss()}
+          onPress={() => {
+            Keyboard.dismiss();
+            setShowKeyboardButton(false);
+          }}
           accessibilityLabel={intl.formatMessage(messages.hideKeyboard)}
         />
       )}
