@@ -69,6 +69,7 @@
   "account.search_self": "Шукати власні дописи",
   "account.share": "Поширити профіль @{name}",
   "account.show_reblogs": "Показати передмухи від @{name}",
+  "account.statuses_count": "{count, plural, one {# допис} few {# дописи} many {# дописів} other {# дописів}}",
   "account.unblock": "Розблокувати @{name}",
   "account.unblock_domain": "Розблокувати {domain}",
   "account.unendorse": "Не публікувати у профілі",
