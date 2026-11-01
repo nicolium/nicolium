@@ -180,8 +180,6 @@ const Timeline: React.FC<ITimeline> = ({
     return processedEntries;
   }, [query.entries, context, pinnedQuery?.entries, filters]);
 
-  if (query.isPending) return <LoadingIndicator />;
-
   const handleScrollTop = () => {
     query.dequeueEntries();
     setTimeout(() => flashListRef.current?.scrollToTop(), 0);
@@ -223,7 +221,9 @@ const Timeline: React.FC<ITimeline> = ({
         }
         onEndReachedThreshold={0.1}
         ListEmptyComponent={
-          query.isPending ? null : query.isError === 401 ? (
+          query.isPending ? (
+            <LoadingIndicator />
+          ) : query.isError === 401 ? (
             <EmptyMessage
               emptyMessageIcon={iconHelper(ProhibitIcon)}
               emptyMessageText={

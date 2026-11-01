@@ -213,13 +213,10 @@ const TimelineHeaderMenu = () => {
             <DropdownMenu.ItemTitle>{intl.formatMessage(messages.settings)}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
           {features.announcements && (
-            <DropdownMenu.Item key='announcements' onSelect={() => {}}>
+            <DropdownMenu.Item key='announcements' onSelect={() => {}} disabled>
               <DropdownMenu.ItemTitle>
                 {intl.formatMessage(messages.announcements)}
               </DropdownMenu.ItemTitle>
-              <DropdownMenu.ItemSubtitle>
-                not implemented yet
-              </DropdownMenu.ItemSubtitle>
             </DropdownMenu.Item>
           )}
         </DropdownMenu.Group>
