@@ -348,7 +348,7 @@
   "toast.view": "View",
   "trends.count_by_accounts": "{count} {rawCount, plural, one {persoon praat} other {mensen praten}} hierover",
   "unauthorized_modal.title": "Sign up for {site_title}",
-  "upload_button.label": "Media toevoegen (JPEG, PNG, GIF, WebM, MP4, MOV)",
+  "upload_button.label": "Media toevoegen",
   "upload_error.limit": "Uploadlimiet van bestand overschreden.",
   "upload_error.poll": "Het uploaden van bestanden is in polls niet toegestaan.",
   "upload_form.description": "Omschrijf dit voor mensen met een visuele beperking",

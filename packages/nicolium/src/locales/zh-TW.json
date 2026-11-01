@@ -1194,7 +1194,7 @@
   "trends.title": "趨勢",
   "unauthorized_modal.text": "您需要登入才能執行此操作。",
   "unauthorized_modal.title": "註冊 {site_title} 帳戶",
-  "upload_button.label": "上傳媒體檔案 (JPEG, PNG, GIF, WebM, MP4, MOV)",
+  "upload_button.label": "上傳媒體檔案",
   "upload_error.image_size_limit": "圖片超出當前文件大小限制 ({limit})",
   "upload_error.limit": "已達到檔案上傳限制。",
   "upload_error.poll": "不允許在投票上傳檔案。",

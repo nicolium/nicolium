@@ -864,7 +864,7 @@
   "trends.title": "Trends",
   "unauthorized_modal.text": "You need to be logged in to do that.",
   "unauthorized_modal.title": "Sign up for {site_title}",
-  "upload_button.label": "افزودن عکس و ویدیو (JPEG, PNG, GIF, WebM, MP4, MOV)",
+  "upload_button.label": "افزودن عکس و ویدیو",
   "upload_error.image_size_limit": "Image exceeds the current file size limit ({limit})",
   "upload_error.limit": "از حد مجاز باگذاری فراتر رفتید.",
   "upload_error.poll": "باگذاری پرونده در نظرسنجی‌ها ممکن نیست.",

@@ -606,7 +606,7 @@
   "trends.title": "Trendy",
   "unauthorized_modal.text": "Nejprve se přihlašte.",
   "unauthorized_modal.title": "Registrovat se na {site_title}",
-  "upload_button.label": "Přidat média (JPEG, PNG, GIF, WebM, MP4, MOV)",
+  "upload_button.label": "Přidat média",
   "upload_error.limit": "Byl překročen limit nahraných souborů.",
   "upload_error.poll": "Nahrávání souborů není povoleno u anket.",
   "upload_form.description": "Popis pro zrakově postižené",

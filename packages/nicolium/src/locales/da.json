@@ -344,7 +344,7 @@
   "toast.view": "View",
   "trends.count_by_accounts": "{count} {rawCount, plural, one {person} other {personer}} snakker",
   "unauthorized_modal.title": "Sign up for {site_title}",
-  "upload_button.label": "Tilføj medie (JPEG, PNG, GIF, WebM, MP4, MOV)",
+  "upload_button.label": "Tilføj medie",
   "upload_error.limit": "Uploadgrænse overskredet.",
   "upload_error.poll": "Filupload ikke tilladt sammen med afstemninger.",
   "upload_form.description": "Beskriv for svagtseende",

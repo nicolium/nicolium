@@ -2289,7 +2289,7 @@
   "trends_panel.view_all": "Tout voir",
   "unauthorized_modal.text": "Vous devez être connecté pour faire ceci.",
   "unauthorized_modal.title": "Se connecter à {site_title}",
-  "upload_button.label": "Joindre un média (JPEG, PNG, GIF, WebM, MP4, MOV)",
+  "upload_button.label": "Joindre un média",
   "upload_error.image_size_limit": "L’image excède la taille autorisée ({limit})",
   "upload_error.limit": "Taille maximale d’envoi de fichier dépassée.",
   "upload_error.poll": "L’envoi de fichiers attachés n’est pas autorisé avec les sondages.",

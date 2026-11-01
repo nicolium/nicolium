@@ -1624,7 +1624,7 @@
   "trends_panel.view_all": "அனைத்தையும் காண்க",
   "unauthorized_modal.text": "அதைச் செய்ய நீங்கள் உள்நுழைய வேண்டும்.",
   "unauthorized_modal.title": "{site_title}க்கு பதிவுபெறுக",
-  "upload_button.label": "மீடியாவைச் சேர்க்கவும் (JPEG, PNG, GIF, WebM, MP4, MOV)",
+  "upload_button.label": "மீடியாவைச் சேர்க்கவும்",
   "upload_error.image_size_limit": "படம் தற்போதைய கோப்பு அளவு வரம்பை மீறுகிறது ({limit})",
   "upload_error.limit": "கோப்பு பதிவேற்ற வரம்பு மீறப்பட்டது.",
   "upload_error.poll": "கோப்பு பதிவேற்றம் அனுமதிக்கப்படவில்லை.",

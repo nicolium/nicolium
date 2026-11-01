@@ -855,7 +855,7 @@
   "trends.title": "Trends",
   "unauthorized_modal.text": "You need to be logged in to do that.",
   "unauthorized_modal.title": "Sign up for {site_title}",
-  "upload_button.label": "Pridaj médiálny súbor (JPEG, PNG, GIF, WebM, MP4, MOV)",
+  "upload_button.label": "Pridaj médiálny súbor",
   "upload_error.image_size_limit": "Image exceeds the current file size limit ({limit})",
   "upload_error.limit": "Limit pre nahrávanie súborov bol prekročený.",
   "upload_error.poll": "Nahrávanie súborov pri anketách nieje možné.",

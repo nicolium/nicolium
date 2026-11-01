@@ -336,7 +336,7 @@
   "toast.view": "View",
   "trends.count_by_accounts": "{count} {rawCount, plural, one {person} other {people}} మాట్లాడుతున్నారు",
   "unauthorized_modal.title": "Sign up for {site_title}",
-  "upload_button.label": "మీడియాను జోడించండి (JPEG, PNG, GIF, WebM, MP4, MOV)",
+  "upload_button.label": "మీడియాను జోడించండి",
   "upload_error.video_duration_limit": "Video exceeds the current duration limit ({limit} seconds)",
   "upload_form.description": "దృష్టి లోపమున్న వారి కోసం వివరించండి",
   "upload_form.undo": "తొలగించు",

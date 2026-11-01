@@ -350,7 +350,7 @@
   "toast.view": "View",
   "trends.count_by_accounts": "{count} {rawCount, plural, one {person} outras {people}} conversando",
   "unauthorized_modal.title": "Sign up for {site_title}",
-  "upload_button.label": "Engadir medios (JPEG, PNG, GIF, WebM, MP4, MOV)",
+  "upload_button.label": "Engadir medios",
   "upload_error.limit": "Excedeu o límite de subida de ficheiros.",
   "upload_error.poll": "Non se poden subir ficheiros nas sondaxes.",
   "upload_error.video_duration_limit": "Video exceeds the current duration limit ({limit} seconds)",
