@@ -257,10 +257,6 @@ const CredentialsScreen = ({
     try {
       await createApp('password');
       await signIn(username, password);
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'app' }],
-      });
       setLoading(false);
     } catch (e) {
       setError(true);
@@ -368,21 +364,14 @@ const OauthFlowScreen = ({
     if (response?.type === 'success') {
       const { code } = response.params;
 
-      signInWithCode(code, request?.codeVerifier!)
-        .then(() =>
-          navigation.getParent()?.reset({
-            index: 0,
-            routes: [{ name: 'app' }],
-          }),
-        )
-        .catch(() => {
-          if (Platform.OS === 'android') {
-            ToastAndroid.show(intl.formatMessage(messages.failMessage), ToastAndroid.SHORT);
-          } else {
-            toast(intl.formatMessage(messages.failMessage));
-          }
-          navigation.goBack();
-        });
+      signInWithCode(code, request?.codeVerifier!).catch(() => {
+        if (Platform.OS === 'android') {
+          ToastAndroid.show(intl.formatMessage(messages.failMessage), ToastAndroid.SHORT);
+        } else {
+          toast(intl.formatMessage(messages.failMessage));
+        }
+        navigation.goBack();
+      });
     } else if (response && ['locked', 'cancel', 'dismiss', 'error'].includes(response.type)) {
       if (Platform.OS === 'android') {
         ToastAndroid.show(intl.formatMessage(messages.interruptMessage), ToastAndroid.SHORT);

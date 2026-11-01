@@ -114,10 +114,7 @@ const RootNavigator = () => {
   const isLoggedIn = useAuthStore(({ currentAccount }) => !!currentAccount);
 
   return (
-    <RootStack.Navigator
-      screenOptions={{ headerShown: false }}
-      key={isLoggedIn ? 'logged-in' : 'not-logged-in'}
-    >
+    <RootStack.Navigator screenOptions={{ headerShown: false }}>
       {isLoggedIn && (
         <>
           <RootStack.Screen name='app' component={Tabs} />
@@ -167,6 +164,7 @@ const RootNavigator = () => {
       <RootStack.Screen
         name='login'
         component={LoginStackScreen}
+        navigationKey={isLoggedIn ? 'logged-in' : 'not-logged-in'}
         options={{ headerShown: false, animationTypeForReplace: 'pop' }}
       />
     </RootStack.Navigator>
