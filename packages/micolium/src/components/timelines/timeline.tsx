@@ -211,7 +211,7 @@ const Timeline: React.FC<ITimeline> = ({
           query.refetch();
           pinnedQuery?.refetch();
         }}
-        refreshing={query.isRefetching}
+        refreshing={!query.isPending && query.isRefetching}
         onEndReached={
           autoloadMore
             ? () => {
