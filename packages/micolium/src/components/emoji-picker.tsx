@@ -1,5 +1,5 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
-import { IconButton, Searchbar, Text, useTheme } from '@mkljczk/react-native-paper';
+import { Chip, IconButton, Searchbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { GlassView } from 'expo-glass-effect';
 import { SmileySadIcon } from 'phosphor-react-native/src/icons/SmileySad';
@@ -95,22 +95,29 @@ interface IEmojiCategoryHeader {
   title: string;
 }
 
-const EmojiCategoryHeader: React.FC<IEmojiCategoryHeader> = ({ title }) => (
-  <View style={{ flexDirection: 'row' }}>
-    <GlassView
-      style={{
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-        borderRadius: 20,
-        marginHorizontal: 4,
-        marginBottom: 8,
-      }}
-      glassEffectStyle='clear'
-    >
-      <Text variant='titleMedium'>{title}</Text>
-    </GlassView>
-  </View>
-);
+const EmojiCategoryHeader: React.FC<IEmojiCategoryHeader> = ({ title }) => {
+  const glassEffect = useEnableLiquidGlass();
+  return (
+    <View style={{ flexDirection: 'row' }}>
+      {glassEffect ? (
+        <GlassView
+          style={{
+            paddingHorizontal: 12,
+            paddingVertical: 8,
+            borderRadius: 20,
+            marginHorizontal: 4,
+            marginBottom: 8,
+          }}
+          glassEffectStyle='clear'
+        >
+          <Text variant='titleMedium'>{title}</Text>
+        </GlassView>
+      ) : (
+        <Chip mode='outlined'>{title}</Chip>
+      )}
+    </View>
+  );
+};
 
 interface IEmojiCategory {
   category: MartEmojiCategory;
