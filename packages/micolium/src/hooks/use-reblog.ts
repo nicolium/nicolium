@@ -64,8 +64,14 @@ const useReblog = (status: SelectedStatus) => {
 
   const { mutate: reblog } = useReblogStatus(status.id);
 
-  return (visibility?: string) => {
-    const doReblog = () => reblog({ visibility });
+  return (visibility?: string, callback?: () => void) => {
+    const doReblog = () =>
+      reblog(
+        { visibility },
+        {
+          onSuccess: callback,
+        },
+      );
 
     if (missingDescriptionBoostModal) {
       const { hasMissingDescriptions, hasFilenameDescriptions } = getMissingDescriptions(status);

@@ -62,6 +62,14 @@ const messages = defineMessages({
   view: { id: 'toast.view', defaultMessage: 'View' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   schedule: { id: 'compose_form.save_changes', defaultMessage: 'Schedule' },
+  reblogApprovalRequired: {
+    id: 'status.interaction_policy.reblog.approval_required',
+    defaultMessage: 'The author needs to approve your repost.',
+  },
+  favouriteApprovalRequired: {
+    id: 'status.interaction_policy.favourite.approval_required',
+    defaultMessage: 'The author needs to approve your like.',
+  },
 });
 
 const ReplyAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
@@ -222,7 +230,15 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
 
   const handleReblog = () => {
     if (status.reblogged) unreblogStatus();
-    else doReblog();
+    else
+      doReblog(
+        undefined,
+        approvalRequired
+          ? () => {
+              toast.info(intl.formatMessage(messages.reblogApprovalRequired));
+            }
+          : undefined,
+      );
   };
 
   const handleQuote = () => {
@@ -335,7 +351,13 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =
           const Icon = features.statusDislikes ? ThumbsUpIcon : StarIcon;
           return <Icon {...props} weight={status.favourited ? 'fill' : undefined} />;
         }}
-        onPress={() => (status.favourited ? unfavouriteStatus : favouriteStatus)()}
+        onPress={() =>
+          status.favourited
+            ? unfavouriteStatus()
+            : favouriteStatus(undefined, {
+                onSuccess: () => toast.info(intl.formatMessage(messages.favouriteApprovalRequired)),
+              })
+        }
         disabled={isPendingFavourite}
         style={{ margin: -4, height: 40, width: 40 }}
         selected={status.favourited}
