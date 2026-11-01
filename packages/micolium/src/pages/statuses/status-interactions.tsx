@@ -1,7 +1,8 @@
-import { ActivityIndicator, Divider } from '@mkljczk/react-native-paper';
+import { ActivityIndicator, Divider, Text } from '@mkljczk/react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { View } from 'react-native';
 import { type TabDescriptor, TabView } from 'react-native-tab-view';
 
 import { Account } from '@/components/accounts/account';
@@ -168,7 +169,12 @@ const StatusReactionsScreen = ({
       title: reaction.name,
     });
     options[reaction.name] = {
-      label: () => <Emoji emoji={reaction.name} url={reaction.url} size={20} />,
+      label: () => (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Emoji emoji={reaction.name} url={reaction.url} size={20} />
+          <Text>{reaction.count}</Text>
+        </View>
+      ),
     };
   }
 
