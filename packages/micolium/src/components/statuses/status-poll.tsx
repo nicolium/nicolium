@@ -10,7 +10,7 @@ import {
 import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { View } from 'react-native';
+import { useColorScheme, View } from 'react-native';
 
 import RelativeTimestamp from '@/components/relative-timestamp';
 import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
@@ -27,6 +27,7 @@ interface IStatusPoll {
 
 const StatusPoll: React.FC<IStatusPoll> = ({ status, translation }) => {
   const { colors } = useTheme();
+  const colorScheme = useColorScheme();
 
   const { data: poll, refetch } = usePollQuery(status.poll_id!);
   const { mutate: vote, isPending } = usePollVoteMutation(status.poll_id!);
@@ -79,7 +80,8 @@ const StatusPoll: React.FC<IStatusPoll> = ({ status, translation }) => {
                       width: `${percent}%`,
                       top: 0,
                       bottom: 0,
-                      backgroundColor: colors.secondaryFixedDim,
+                      backgroundColor:
+                        colorScheme === 'dark' ? colors.inversePrimary : colors.secondaryFixedDim,
                       position: 'absolute',
                     }}
                   />

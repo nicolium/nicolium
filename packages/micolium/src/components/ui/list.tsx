@@ -144,7 +144,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
                             )}
                             style={{
                               ...props.style,
-                              backgroundColor: theme.colors.secondaryFixedDim,
+                              backgroundColor: theme.colors.inversePrimary,
                               padding: 8,
                               borderRadius: 24,
                             }}
