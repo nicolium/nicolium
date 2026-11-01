@@ -347,7 +347,7 @@
   "toast.view": "View",
   "trends.count_by_accounts": "{count} {rawCount, plural, one {person} other {people}} hitz egiten",
   "unauthorized_modal.title": "Sign up for {site_title}",
-  "upload_button.label": "Gehitu multimedia ",
+  "upload_button.label": "Gehitu multimedia",
   "upload_error.limit": "Fitxategi igoera muga gaindituta.",
   "upload_error.poll": "Ez da inkestetan fitxategiak igotzea onartzen.",
   "upload_form.description": "Deskribatu ikusmen arazoak dituztenentzat",

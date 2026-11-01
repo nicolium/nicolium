@@ -1132,7 +1132,6 @@
   "manage_group.fields.name.label_optional": "குழு பெயர்",
   "manage_group.fields.name.placeholder": "குழு பெயர்",
   "manage_group.pending_requests": "கோரிக்கைகள் நிலுவையில் உள்ளன",
-  "media-gallery.description": "பட விவரம்",
   "media.default_description.attachment": "இணைப்பு",
   "media.default_description.audio": "ஆடியோ",
   "media.default_description.gifv": "Gifav",

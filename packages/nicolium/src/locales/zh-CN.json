@@ -1605,7 +1605,6 @@
   "manage_group.fields.name.label_optional": "群组名称",
   "manage_group.fields.name.placeholder": "群组名称",
   "manage_group.pending_requests": "待处理的申请",
-  "media-gallery.description": "图片描述",
   "media.default_description.attachment": "附件",
   "media.default_description.audio": "音频",
   "media.default_description.gifv": "GIFV",
