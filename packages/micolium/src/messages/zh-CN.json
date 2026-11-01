@@ -522,6 +522,7 @@
   "upload_error.video_size_limit": "视频超过了当前的文件大小限制（{limit}）",
   "upload_form.description_missing.indicator": "替代文本",
   "upload_form.undo": "删除",
+  "url_privacy.display_target_host": "始终显示外部链接指向的域名",
   "url_privacy.strip_metadata": "删除已上传图像元数据",
   "url_privacy.strip_metadata.hint": "在图像上传服务器前删除元数据，例如包含地理标签的 EXIF 标签。这通常在服务器端被完成，无论客户端如何设置。",
   "video.play": "播放"

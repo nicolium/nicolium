@@ -16,6 +16,7 @@ import React, { useMemo } from 'react';
 import { Text as RNText, useWindowDimensions } from 'react-native';
 
 import { useAccount } from '@/queries/accounts/use-account';
+import { useSetting } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/emojis';
 import { multiplyFontSizes } from '@/utils/themes';
 import { openUrl } from '@/utils/url';
@@ -77,7 +78,10 @@ const isHostNotVisible = (href: string, text?: string): false | string => {
 };
 
 const Anchor: CustomTextualRenderer = ({ TDefaultRenderer, TNodeChildrenRenderer, ...props }) => {
-  const host = isHostNotVisible(props.tnode.attributes.href, props.tnode.init?.textNode?.data);
+  const displayTargetHost = useSetting('content.displayTargetHost');
+  const host =
+    displayTargetHost &&
+    isHostNotVisible(props.tnode.attributes.href, props.tnode.init?.textNode?.data);
 
   return (
     <TDefaultRenderer {...props} onPress={() => openUrl(props.tnode.attributes.href)}>

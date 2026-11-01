@@ -514,6 +514,7 @@
   "upload_error.video_duration_limit": "La vidéo dépasse les limites de durées actuelles ({limit, plural, one {# seconde} other {# secondes}})",
   "upload_error.video_size_limit": "La vidéo excède la taille autorisée ({limit})",
   "upload_form.undo": "Supprimer",
+  "url_privacy.display_target_host": "Toujours afficher le domaine vers lequel pointent les liens externes",
   "url_privacy.strip_metadata": "Effacer les métadonnée des images téléversées",
   "url_privacy.strip_metadata.hint": "Supprime les métadonnées telles que les balises EXIF, y compris la géolocalisation, des images avant qu’elles ne soient envoyées au serveur. Cette opération est généralement effectuée côté serveur, indépendamment des paramètres du client.",
   "video.play": "Lecture"

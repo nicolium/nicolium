@@ -525,6 +525,7 @@
   "upload_error.video_size_limit": "Film przekracza limit rozmiaru plików ({limit})",
   "upload_form.description_missing.indicator": "Alt",
   "upload_form.undo": "Usuń",
+  "url_privacy.display_target_host": "Zawsze wyświetlaj domenę, do której prowadzi zewnętrzny odnośnik",
   "url_privacy.strip_metadata": "Wycinaj metadane z wysyłanych obrazów",
   "url_privacy.strip_metadata.hint": "Usuwa z obrazów metadane takie jak tagi EXIF, w tym dane geolokalizacyjne, zanim dotrą na serwer. Zwykle jest to robione po stronie serwera, niezależnie od ustawień klienta.",
   "video.play": "Odtwórz"

@@ -10,6 +10,7 @@ import { Header } from '@/components/ui/header';
 import { AboutScreen } from './about';
 import { AppearanceSettingsScreen } from './appearance-settings';
 import { ComposeSettingsScreen } from './compose-settings';
+import { ContentFilteringSettingsScreen } from './content-filtering-settings';
 import { ContentSettingsScreen } from './content-settings';
 import { EditProfileScreen } from './edit-profile';
 import { FilterEditorScreen, FiltersScreen } from './filters';
@@ -28,6 +29,10 @@ const messages = defineMessages({
   settingsHeading: { id: 'settings.settings', defaultMessage: 'Settings' },
   composeHeading: { id: 'preferences.heading.compose', defaultMessage: 'Compose settings' },
   timelinesHeading: { id: 'preferences.heading.timelines', defaultMessage: 'Timelines settings' },
+  contentHeading: {
+    id: 'preferences.heading.app_content',
+    defaultMessage: 'Content display settings',
+  },
   notificationsHeading: {
     id: 'preferences.heading.notifications',
     defaultMessage: 'Notifications settings',
@@ -40,7 +45,10 @@ const messages = defineMessages({
     id: 'preferences.heading.about',
     defaultMessage: 'About {app_name}',
   },
-  contentHeading: { id: 'preferences.heading.content', defaultMessage: 'Content and filtering' },
+  contentFilteringHeading: {
+    id: 'preferences.heading.content',
+    defaultMessage: 'Content and filtering',
+  },
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   blocked: { id: 'column.blocks.long', defaultMessage: 'Blocked accounts' },
   muted: { id: 'column.mutes.long', defaultMessage: 'Muted accounts' },
@@ -82,6 +90,11 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         options={{ title: intl.formatMessage(messages.timelinesHeading) }}
       />
       <SettingsStack.Screen
+        name='content'
+        component={ContentSettingsScreen}
+        options={{ title: intl.formatMessage(messages.contentHeading) }}
+      />
+      <SettingsStack.Screen
         name='notifications'
         component={NotificationsSettingsScreen}
         options={{ title: intl.formatMessage(messages.notificationsHeading) }}
@@ -92,9 +105,9 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         options={{ title: intl.formatMessage(messages.appearanceHeading) }}
       />
       <SettingsStack.Screen
-        name='content'
-        component={ContentSettingsScreen}
-        options={{ title: intl.formatMessage(messages.contentHeading) }}
+        name='content_filtering'
+        component={ContentFilteringSettingsScreen}
+        options={{ title: intl.formatMessage(messages.contentFilteringHeading) }}
       />
       <SettingsStack.Screen
         name='follow_requests'

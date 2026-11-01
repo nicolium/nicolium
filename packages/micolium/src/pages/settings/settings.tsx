@@ -3,6 +3,7 @@ import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { HashIcon } from 'phosphor-react-native/src/icons/Hash';
 import { InfoIcon } from 'phosphor-react-native/src/icons/Info';
+import { MonitorIcon } from 'phosphor-react-native/src/icons/Monitor';
 import { NotePencilIcon } from 'phosphor-react-native/src/icons/NotePencil';
 import { PaletteIcon } from 'phosphor-react-native/src/icons/Palette';
 import { SignOutIcon } from 'phosphor-react-native/src/icons/SignOut';
@@ -15,7 +16,6 @@ import { toast } from 'sonner-native';
 import { List } from '@/components/ui/list';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useAuthStoreActions } from '@/stores/auth';
-import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import type { SettingsStackParams } from '@/router/router';
@@ -25,6 +25,10 @@ const messages = defineMessages({
   loggedOut: { id: 'auth.logged_out', defaultMessage: 'Logged out.' },
   composeHeading: { id: 'preferences.heading.compose', defaultMessage: 'Compose settings' },
   timelinesHeading: { id: 'preferences.heading.timelines', defaultMessage: 'Timelines settings' },
+  contentHeading: {
+    id: 'preferences.heading.app_content',
+    defaultMessage: 'Content display settings',
+  },
   notificationsHeading: {
     id: 'preferences.heading.notifications',
     defaultMessage: 'Notifications settings',
@@ -37,7 +41,10 @@ const messages = defineMessages({
     id: 'preferences.heading.about',
     defaultMessage: 'About {app_name}',
   },
-  contentHeading: { id: 'preferences.heading.content', defaultMessage: 'Content and filtering' },
+  contentFilteringHeading: {
+    id: 'preferences.heading.content',
+    defaultMessage: 'Content and filtering',
+  },
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   blocked: { id: 'column.blocks.long', defaultMessage: 'Blocked accounts' },
   muted: { id: 'column.mutes.long', defaultMessage: 'Muted accounts' },
@@ -52,18 +59,11 @@ const messages = defineMessages({
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
   mutedThreads: { id: 'column.muted_threads', defaultMessage: 'Muted conversations' },
   followedTags: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
-  useInAppBrowser: {
-    id: 'preferences.general.use_in_app_browser',
-    defaultMessage: 'Open external links in in-app browser',
-  },
 });
 
 const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'index'>) => {
   const features = useFeatures();
   const intl = useIntl();
-
-  const { update } = useSettingsActions();
-  const useInAppBrowser = useSetting('general.useInAppBrowser');
 
   const { signOut } = useAuthStoreActions();
   const { openAccountSwitcher } = useUiStoreActions();
@@ -76,16 +76,6 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
             subheader: intl.formatMessage(messages.settingsHeader),
             items: [
               {
-                type: 'toggle',
-                label: intl.formatMessage(messages.useInAppBrowser),
-                active: useInAppBrowser,
-                onPress: () => update('general.useInAppBrowser', !useInAppBrowser),
-              },
-            ],
-          },
-          {
-            items: [
-              {
                 icon: NotePencilIcon,
                 type: 'button',
                 label: intl.formatMessage(messages.composeHeading),
@@ -96,6 +86,12 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
                 type: 'button',
                 label: intl.formatMessage(messages.timelinesHeading),
                 onPress: () => navigation.navigate('timelines'),
+              },
+              {
+                icon: MonitorIcon,
+                type: 'button',
+                label: intl.formatMessage(messages.contentHeading),
+                onPress: () => navigation.navigate('content'),
               },
               {
                 icon: BellSimpleIcon,
@@ -124,8 +120,8 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
               {
                 icon: FunnelIcon,
                 type: 'button',
-                label: intl.formatMessage(messages.contentHeading),
-                onPress: () => navigation.navigate('content'),
+                label: intl.formatMessage(messages.contentFilteringHeading),
+                onPress: () => navigation.navigate('content_filtering'),
               },
               {
                 icon: HashIcon,

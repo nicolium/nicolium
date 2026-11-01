@@ -433,5 +433,6 @@
   "upload_error.video_size_limit": "வீடியோ தற்போதைய கோப்பு அளவு வரம்பை மீறுகிறது ({limit})",
   "upload_form.description_missing.indicator": "மாற்று",
   "upload_form.undo": "நீக்கு",
+  "url_privacy.display_target_host": "டொமைன் வெளிப்புற இணைப்புகளை எப்போதும் காண்பிக்கும்",
   "video.play": "விளையாடு"
 }

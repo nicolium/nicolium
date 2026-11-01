@@ -66,6 +66,7 @@ const settingsSchema = v.object({
   'appearance.sourceColor': v.optional(v.string(), '#6750A4'),
 
   'general.useInAppBrowser': v.optional(v.boolean(), false),
+  'content.displayTargetHost': v.optional(v.boolean(), true),
 
   filters: filteredArray(filterSchema),
 });

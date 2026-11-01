@@ -750,6 +750,7 @@
   "upload_form.move_to_left": "Move to left",
   "upload_form.move_to_right": "Move to right",
   "upload_form.undo": "Delete",
+  "url_privacy.display_target_host": "Always display the domain external links lead to",
   "url_privacy.strip_metadata": "Strip metadata from uploaded images",
   "url_privacy.strip_metadata.hint": "Removes metadata such as EXIF tags, including geolocation, from images before hitting the server. This is usually done server-side, regardless of client settings.",
   "video.play": "Play"
