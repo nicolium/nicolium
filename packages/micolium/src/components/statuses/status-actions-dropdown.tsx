@@ -1,4 +1,5 @@
 import { IconButton } from '@mkljczk/react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
 import { shareAsync } from 'expo-sharing';
 import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
@@ -118,13 +119,15 @@ const messages = defineMessages({
 
 interface IStatusActionsDropdown {
   status: SelectedStatus;
+  detailed?: boolean;
 }
 
-const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => {
+const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detailed }) => {
   const client = useClient();
   const features = useFeatures();
   const intl = useIntl();
   const scopeUrl = useScopeUrl();
+  const navigation = useNavigation();
 
   const hasOtherAccounts = useAuthStore((state) => Object.keys(state.sessions).length > 1);
   const { openInteractAs } = useUiStoreActions();
@@ -226,7 +229,14 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status }) => 
         {
           text: intl.formatMessage(messages.deleteConfirm),
           style: 'destructive',
-          onPress: () => deleteStatus(),
+          onPress: () =>
+            deleteStatus(undefined, {
+              onSuccess: () => {
+                if (detailed) {
+                  navigation.goBack();
+                }
+              },
+            }),
         },
       ],
     );

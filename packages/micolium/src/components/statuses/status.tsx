@@ -223,7 +223,7 @@ const Status: React.FC<IStatus> = ({
               />
             )}
             <StatusVisibilityIcon status={status} />
-            {withActions && <StatusActionsDropdown status={status} />}
+            {withActions && <StatusActionsDropdown status={status} detailed={props.detailed} />}
           </View>
         </View>
       }
