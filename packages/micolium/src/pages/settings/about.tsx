@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Linking, ScrollView, View } from 'react-native';
+import { toast } from 'sonner-native';
 
 import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/images/icon.png';
@@ -22,6 +23,7 @@ const messages = defineMessages({
   developerLabel: { id: 'about.developer.label', defaultMessage: 'Developed by' },
   artistLabel: { id: 'about.artist.label', defaultMessage: 'Logo by' },
   sourceCodeLabel: { id: 'navigation.source_code', defaultMessage: 'Source code' },
+  lookupFail: { id: 'about.lookup_fail', defaultMessage: 'Failed to lookup the account @{acct}' },
 });
 
 const AboutScreen = (_: NativeStackScreenProps<SettingsStackParams, 'about'>) => {
@@ -30,12 +32,17 @@ const AboutScreen = (_: NativeStackScreenProps<SettingsStackParams, 'about'>) =>
   const navigation = useNavigation();
 
   const navigateToAccount = (acct: string) => {
-    client.accounts.lookupAccount(acct).then((account) => {
-      navigation.navigate('accounts', {
-        screen: 'view',
-        params: { id: account.id },
+    client.accounts
+      .lookupAccount(acct)
+      .then((account) => {
+        navigation.navigate('accounts', {
+          screen: 'view',
+          params: { id: account.id },
+        });
+      })
+      .catch(() => {
+        toast(intl.formatMessage(messages.lookupFail, { acct: acct }));
       });
-    });
   };
 
   return (

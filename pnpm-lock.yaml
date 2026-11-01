@@ -80,8 +80,8 @@ importers:
         specifier: ^1.4.18
         version: 1.4.18(react-native@0.88.1(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.88.1(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(react@19.3.0)
       '@lodev09/react-native-true-sheet':
-        specifier: 4.0.0-beta.24
-        version: 4.0.0-beta.24(7a735a31309dc3f85a644c110e28d471)
+        specifier: 4.0.1
+        version: 4.0.1(7a735a31309dc3f85a644c110e28d471)
       '@mkljczk/react-native-paper':
         specifier: github:mkljczk/react-native-paper
         version: https://codeload.github.com/mkljczk/react-native-paper/tar.gz/c44cb5e7cba4faaab68832bdc25b5ead42a90c94(7850975a238218c7b4294144bc7db0e7)
@@ -2888,8 +2888,8 @@ packages:
       typescript:
         optional: true
 
-  '@lodev09/react-native-true-sheet@4.0.0-beta.24':
-    resolution: {integrity: sha512-FoShcTIrapKYpFZXbdDEDc/GL4HM9g8+M73/4cnfwnXFLQRERQ5YrPVmMUHfEd4HZRAzLXX80bdxNvZfUWYhVg==}
+  '@lodev09/react-native-true-sheet@4.0.1':
+    resolution: {integrity: sha512-7FebcsouW7VGUB6F/Ah2gCAvhP0geZbSVbxfMG72zOjzpEbPzl5pwxHj8nQQ/0q8KnkQoKWiF4tuHhDqLGyVnw==}
     peerDependencies:
       '@radix-ui/react-dialog': '>=1'
       '@radix-ui/react-presence': '>=1'
@@ -2898,8 +2898,8 @@ packages:
       react: '*'
       react-dom: '*'
       react-native: '>=0.82.0'
-      react-native-reanimated: '>=4'
-      react-native-worklets: '*'
+      react-native-reanimated: '>=4.1.0'
+      react-native-worklets: '>=0.5.0'
       standard-navigation: '>=0.0.9'
     peerDependenciesMeta:
       '@radix-ui/react-dialog':
@@ -12781,7 +12781,7 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.3
 
-  '@lodev09/react-native-true-sheet@4.0.0-beta.24(7a735a31309dc3f85a644c110e28d471)':
+  '@lodev09/react-native-true-sheet@4.0.1(7a735a31309dc3f85a644c110e28d471)':
     dependencies:
       react: 19.3.0
       react-native: 0.88.1(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.88.1(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2)
