@@ -257,6 +257,10 @@ const CredentialsScreen = ({
     try {
       await createApp('password');
       await signIn(username, password);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'app' }],
+      });
       setLoading(false);
     } catch (e) {
       setError(true);
