@@ -16,6 +16,7 @@
   "account.birthday_today": "Ma dziś urodziny!",
   "account.bite": "Ugryź @{name}",
   "account.bite.fail": "Nie udało się ugryźć @{acct}",
+  "account.bite.fail.not_allowed": "@{acct} nie pozwala na ugryzienia",
   "account.bite.success": "Ugryziono @{acct}",
   "account.block": "Blokuj @{name}",
   "account.block_domain": "Blokuj wszystko z {domain}",
