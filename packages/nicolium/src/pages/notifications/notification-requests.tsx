@@ -12,7 +12,7 @@ import IconButton from '@/components/ui/icon-button';
 import '@/styles/notifications.scss';
 
 const messages = defineMessages({
-  title: { id: 'columns.notification_requests', defaultMessage: 'Filtered notifications' },
+  title: { id: 'column.notification_requests', defaultMessage: 'Filtered notifications' },
   settings: { id: 'notifications.settings', defaultMessage: 'Notification settings' },
 });
 

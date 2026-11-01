@@ -989,8 +989,6 @@
   "column.wrenched": "Recent wrenches timeline",
   "column_forbidden.body": "You do not have permission to access this page.",
   "column_forbidden.title": "Forbidden",
-  "columns.notification_requests": "Filtered notifications",
-  "columns.notifications_from": "Notifications from {name}",
   "common.add": "Add",
   "common.cancel": "Cancel",
   "common.logo": "Logo",

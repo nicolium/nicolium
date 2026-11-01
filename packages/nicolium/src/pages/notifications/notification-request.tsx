@@ -19,7 +19,7 @@ import '@/styles/notifications.scss';
 import { notificationRequestRoute } from '@/router';
 
 const messages = defineMessages({
-  title: { id: 'columns.notifications_from', defaultMessage: 'Notifications from {name}' },
+  title: { id: 'column.notifications_from', defaultMessage: 'Notifications from {name}' },
   accept: { id: 'notification_requests.accept', defaultMessage: 'Accept' },
   dismiss: { id: 'notification_requests.dismiss', defaultMessage: 'Dismiss' },
 });
