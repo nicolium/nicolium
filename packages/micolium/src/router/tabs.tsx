@@ -283,4 +283,4 @@ const Tabs = () => {
   return <PaperTabs />;
 };
 
-export { Tabs };
+export { Tabs, TabScreenLayout };

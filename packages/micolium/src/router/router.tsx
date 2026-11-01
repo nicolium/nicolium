@@ -11,7 +11,7 @@ import { SettingsStackScreen } from '@/pages/settings';
 import { StatusStackScreen } from '@/pages/statuses';
 import { useAuthStore } from '@/stores/auth';
 
-import { Tabs } from './tabs';
+import { Tabs, TabScreenLayout } from './tabs';
 
 import type { NavigatorScreenParams } from '@react-navigation/native';
 
@@ -120,29 +120,47 @@ const RootNavigator = () => {
       {isLoggedIn && (
         <>
           <RootStack.Screen name='app' component={Tabs} />
-          <RootStack.Screen name='settings' component={SettingsStackScreen} />
+          <RootStack.Screen
+            name='settings'
+            component={SettingsStackScreen}
+            layout={TabScreenLayout}
+          />
           <RootStack.Screen
             name='status'
             component={StatusStackScreen}
             getId={({ params }) => params?.params?.id}
+            layout={TabScreenLayout}
           />
           <RootStack.Screen
             name='accounts'
             component={AccountsStackScreen}
             getId={({ params }) => params?.params?.id}
+            layout={TabScreenLayout}
           />
           <RootStack.Screen
             name='hashtags'
             component={HashtagsScreen}
             getId={({ params }) => params.tag}
+            layout={TabScreenLayout}
           />
-          <RootStack.Screen name='bookmarks' component={BookmarksStackScreen} />
+          <RootStack.Screen
+            name='bookmarks'
+            component={BookmarksStackScreen}
+
+            layout={TabScreenLayout}
+          />
           <RootStack.Screen
             name='links'
             component={LinksScreen}
             getId={({ params }) => params.url}
+            layout={TabScreenLayout}
           />
-          <RootStack.Screen name='conversations' component={ConversationsStackScreen} />
+          <RootStack.Screen
+            name='conversations'
+            component={ConversationsStackScreen}
+
+            layout={TabScreenLayout}
+          />
         </>
       )}
       <RootStack.Screen
