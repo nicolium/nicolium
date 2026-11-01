@@ -65,6 +65,7 @@
   "account.scrobbling": "Слухає {song}",
   "account.scrobbling.compose": "Створити допис з хештеґом #NowPlaying",
   "account.scrobbling.title": "{title} від {artist}",
+  "account.search": "Шукати дописи @{name}",
   "account.search_self": "Шукати власні дописи",
   "account.share": "Поширити профіль @{name}",
   "account.show_reblogs": "Показати передмухи від @{name}",
