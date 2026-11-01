@@ -1,7 +1,9 @@
 import { Card, Icon, Text } from '@mkljczk/react-native-paper';
 import { LinkSimpleIcon } from 'phosphor-react-native/src/icons/LinkSimple';
 import React from 'react';
-import { Linking, View } from 'react-native';
+import { View } from 'react-native';
+
+import { openUrl } from '@/utils/url';
 
 import { iconHelper } from '../ui/icon';
 
@@ -19,7 +21,7 @@ const StatusLinkPreview: React.FC<IStatusLinkPreview> = ({ status }) => {
   return (
     <Card
       onPress={() => {
-        Linking.openURL(status.card!.url);
+        openUrl(status.card!.url);
       }}
     >
       {status.card.image && (

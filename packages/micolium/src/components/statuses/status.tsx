@@ -12,11 +12,12 @@ import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import { QuotesIcon } from 'phosphor-react-native/src/icons/Quotes';
 import React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
-import { Linking, View, type StyleProp, type ViewStyle } from 'react-native';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
+import { openUrl } from '@/utils/url';
 
 import { Account } from '../accounts/account';
 import { iconHelper } from '../ui/icon';
@@ -100,7 +101,7 @@ const StatusDetailedInfo: React.FC<IStatusDetailedInfo> = ({ status }) => {
                   <Text
                     onPress={
                       status.application?.website
-                        ? () => Linking.openURL(status.application!.website!)
+                        ? () => openUrl(status.application!.website!)
                         : undefined
                     }
                     style={{ color: status.application?.website ? colors.onPrimary : undefined }}

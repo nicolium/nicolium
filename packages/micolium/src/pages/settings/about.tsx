@@ -2,13 +2,14 @@ import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Linking, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/images/icon.png';
 import { List } from '@/components/ui/list';
 import { useClient } from '@/contexts/current-account-context';
+import { openUrl } from '@/utils/url';
 
 import pkg from '../../../package.json';
 import { EXTRA_GAYNESS_MODE } from '../login';
@@ -86,7 +87,7 @@ const AboutScreen = (_: NativeStackScreenProps<SettingsStackParams, 'about'>) =>
                   type: 'text',
                   label: intl.formatMessage(messages.sourceCodeLabel),
                   sublabel: pkg.repository.url,
-                  onPress: () => Linking.openURL(pkg.repository.url),
+                  onPress: () => openUrl(pkg.repository.url),
                 },
               ],
             },

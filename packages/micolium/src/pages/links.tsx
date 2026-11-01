@@ -3,13 +3,14 @@ import { ArrowSquareOutIcon } from 'phosphor-react-native/src/icons/ArrowSquareO
 import { LinkSimpleIcon } from 'phosphor-react-native/src/icons/LinkSimple';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Linking, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Timeline } from '@/components/timelines/timeline';
 import { iconHelper } from '@/components/ui/icon';
 import { useClient } from '@/contexts/current-account-context';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useTrendingLinks } from '@/queries/trends/use-trending-links';
+import { openUrl } from '@/utils/url';
 
 import type { RootStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -37,7 +38,7 @@ const LinksScreen = ({
   );
 
   const header = link ? (
-    <Card style={{ margin: 16, marginBottom: 0 }} onPress={() => Linking.openURL(url)}>
+    <Card style={{ margin: 16, marginBottom: 0 }} onPress={() => openUrl(url)}>
       {link.image && (
         <Card.Cover
           source={{ uri: link.image }}
@@ -70,7 +71,7 @@ const LinksScreen = ({
         />
         <Appbar.Action
           icon={iconHelper(ArrowSquareOutIcon)}
-          onPress={() => Linking.openURL(url)}
+          onPress={() => openUrl(url)}
           accessibilityLabel={intl.formatMessage(messages.openInBrowser)}
         />
       </Appbar.Header>

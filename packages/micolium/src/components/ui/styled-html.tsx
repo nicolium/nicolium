@@ -6,6 +6,7 @@ import RenderHtml, {
   type TNode,
   type DomVisitorCallbacks,
   type MixedStyleDeclaration,
+  type CustomTextualRenderer,
 } from '@native-html/render';
 import { Link } from '@react-navigation/native';
 import { type ChildNode, type ParentNode, Element, Text, isTag, isText } from 'domhandler';
@@ -17,6 +18,7 @@ import { useWindowDimensions } from 'react-native';
 import { useAccount } from '@/queries/accounts/use-account';
 import { makeEmojiMap } from '@/utils/emojis';
 import { multiplyFontSizes } from '@/utils/themes';
+import { openUrl } from '@/utils/url';
 
 import { Emoji as EmojiComponent } from './emoji';
 import { validEmojiChar } from './emojify';
@@ -56,6 +58,10 @@ const visitDom = (node: ParentNode, visitors: DomVisitorCallbacks) => {
       visitors.onElement?.(child);
     }
   }
+};
+
+const Anchor: CustomTextualRenderer = ({ TDefaultRenderer, ...props }) => {
+  return <TDefaultRenderer {...props} onPress={() => openUrl(props.tnode.attributes.href)} />;
 };
 
 interface IEmoji {
@@ -116,6 +122,7 @@ const HashtagLink: React.FC<IHashtagLink> = ({ tnode }) => {
 };
 
 const renderers = {
+  a: Anchor,
   hr: Divider,
   emoji: Emoji,
   'account-link': AccountLink,

@@ -6,7 +6,7 @@ import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert, Linking, Platform } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
 import DropdownMenu from '@/components/ui/dropdown-menu';
 import { useFeatures } from '@/contexts/current-account-context';
@@ -21,6 +21,7 @@ import {
 import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/settings/domain-blocks';
 import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
+import { openUrl } from '@/utils/url';
 
 import { HeaderIconButton } from '../ui/header-icon-button';
 import { iconHelper } from '../ui/icon';
@@ -130,7 +131,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
 
   const handleCopy = () => Clipboard.setStringAsync(account.url);
 
-  const handleOpenInBrowser = () => Linking.openURL(account.url);
+  const handleOpenInBrowser = () => openUrl(account.url);
 
   const handleShare = () => {
     shareAsync(account.url);

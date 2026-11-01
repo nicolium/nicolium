@@ -6,7 +6,7 @@ import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert, Linking, Platform } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { toast } from 'sonner-native';
 
 import DropdownMenu from '@/components/ui/dropdown-menu';
@@ -32,6 +32,7 @@ import {
 import { useAuthStore } from '@/stores/auth';
 import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
+import { openUrl } from '@/utils/url';
 
 import { BlockMuteDialog } from '../accounts/block-mute-dialog';
 import { ReportDialog } from '../accounts/report-dialog';
@@ -156,7 +157,7 @@ const StatusActionsDropdown: React.FC<IStatusActionsDropdown> = ({ status, detai
 
   const handleCopy = () => Clipboard.setStringAsync(status.uri);
 
-  const handleOpenInBrowser = () => Linking.openURL(status.uri);
+  const handleOpenInBrowser = () => openUrl(status.uri);
 
   const handleOpenInteractAs = () => {
     if (skipInteractAsConfirmation) {
