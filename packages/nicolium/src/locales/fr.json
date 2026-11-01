@@ -1656,7 +1656,6 @@
   "manage_group.fields.name.label_optional": "Nom du groupe",
   "manage_group.fields.name.placeholder": "Nom du groupe",
   "manage_group.pending_requests": "Demandes en attente",
-  "media-gallery.description": "Description de l’image",
   "media.default_description.attachment": "Fichier attaché",
   "media.default_description.audio": "Audio",
   "media.default_description.gifv": "GIFV",

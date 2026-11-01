@@ -1709,7 +1709,6 @@
   "manage_group.fields.name.label_optional": "Nazwa grupy",
   "manage_group.fields.name.placeholder": "Nazwa grupy",
   "manage_group.pending_requests": "Oczekujące zgłoszenia",
-  "media-gallery.description": "Opis obrazu",
   "media.default_description.attachment": "Załącznik",
   "media.default_description.audio": "Plik dźwiękowy",
   "media.default_description.gifv": "GIFV",

@@ -716,7 +716,6 @@
   "manage_group.fields.name.label_optional": "Име на групата",
   "manage_group.fields.name.placeholder": "Име на групата",
   "manage_group.pending_requests": "Чакащи заявки",
-  "media-gallery.description": "Описание на изображението",
   "media.default_description.attachment": "Прикачен файл",
   "media.default_description.audio": "Аудио",
   "media.default_description.gifv": "GIFV",
