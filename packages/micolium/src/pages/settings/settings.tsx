@@ -16,6 +16,7 @@ import { toast } from 'sonner-native';
 import { List } from '@/components/ui/list';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useAuthStoreActions } from '@/stores/auth';
+import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import type { SettingsStackParams } from '@/router/router';
@@ -52,11 +53,18 @@ const messages = defineMessages({
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
   mutedThreads: { id: 'column.muted_threads', defaultMessage: 'Muted conversations' },
   followedTags: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
+  useInAppBrowser: {
+    id: 'preferences.general.use_in_app_browser',
+    defaultMessage: 'Open external links in in-app browser',
+  },
 });
 
 const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'index'>) => {
   const features = useFeatures();
   const intl = useIntl();
+
+  const { update } = useSettingsActions();
+  const useInAppBrowser = useSetting('general.useInAppBrowser');
 
   const { signOut } = useAuthStoreActions();
   const { openAccountSwitcher } = useUiStoreActions();
@@ -67,6 +75,16 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
         sections={[
           {
             subheader: intl.formatMessage(messages.settingsHeader),
+            items: [
+              {
+                type: 'toggle',
+                label: intl.formatMessage(messages.useInAppBrowser),
+                active: useInAppBrowser,
+                onPress: () => update('general.useInAppBrowser', !useInAppBrowser),
+              },
+            ],
+          },
+          {
             items: [
               {
                 icon: NotePencilIcon,

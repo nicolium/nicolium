@@ -65,6 +65,8 @@ const settingsSchema = v.object({
   'appearance.enableLiquidGlass': v.optional(v.boolean(), true),
   'appearance.sourceColor': v.optional(v.string(), '#6750A4'),
 
+  'general.useInAppBrowser': v.optional(v.boolean(), false),
+
   filters: filteredArray(filterSchema),
 });
 
