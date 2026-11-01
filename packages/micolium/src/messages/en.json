@@ -378,7 +378,7 @@
   "interact_as_modal.confirmation.confirm": "Confirm",
   "interact_as_modal.confirmation_message": "This option will ask the remote server to fetch the post on behalf of the other accounts you’re signed in with. That may reveal which accounts you use to the server that hosts the post, so only continue if you are comfortable with that risk. Are you sure you want to proceed?",
   "interact_as_modal.no_accounts": "You are not logged in to any other accounts.",
-  "interact_as_modal.title": "Interact other from accounts",
+  "interact_as_modal.title": "Interact from other accounts",
   "interact_as_modal.unavailable": "This post could not be found from this account.",
   "interaction_policies.entry.followers": "Followers",
   "interaction_policies.entry.following": "People I follow",
