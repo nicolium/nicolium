@@ -1,4 +1,3 @@
-import { isGlassEffectAPIAvailable } from 'expo-glass-effect';
 import TimelineIcon from 'lucide-react-native/icons/timeline';
 import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';

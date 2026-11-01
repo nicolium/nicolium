@@ -1,6 +1,5 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Button, Card, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 import { DragDropContentView, type DragDropContentViewProps } from 'expo-drag-drop-content-view';
 import { GlassView } from 'expo-glass-effect';
 import { TextInputWrapper } from 'expo-paste-input';
@@ -22,7 +21,6 @@ import {
 } from 'react-native';
 import { useKeyboardState } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { toast } from 'sonner-native';
 
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useComposeHeading } from '@/hooks/use-compose-heading';
@@ -130,7 +128,6 @@ interface ICompose {
 }
 
 const ComposeBottomSheet = () => {
-  const navigation = useNavigation();
   const intl = useIntl();
   const glassEffect = useEnableLiquidGlass();
   const { colors, fonts } = useTheme();
