@@ -13,7 +13,7 @@ import { type ChildNode, type ParentNode, Element, Text, isTag, isText } from 'd
 import { prepend, removeElement, replaceElement } from 'domutils';
 import { parseDocument } from 'htmlparser2';
 import React, { useMemo } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Text as RNText, useWindowDimensions } from 'react-native';
 
 import { useAccount } from '@/queries/accounts/use-account';
 import { makeEmojiMap } from '@/utils/emojis';
@@ -60,8 +60,36 @@ const visitDom = (node: ParentNode, visitors: DomVisitorCallbacks) => {
   }
 };
 
-const Anchor: CustomTextualRenderer = ({ TDefaultRenderer, ...props }) => {
-  return <TDefaultRenderer {...props} onPress={() => openUrl(props.tnode.attributes.href)} />;
+const isHostNotVisible = (href: string, text?: string): false | string => {
+  try {
+    let { host } = new URL(href);
+    host = host.replace(/^www\./, '');
+    if (!text) return host;
+
+    if (new RegExp(`^(https?://)?(www.)?${host}(/|$)`, 'i').test(text)) {
+      return false;
+    } else {
+      return host;
+    }
+  } catch (e) {
+    return false;
+  }
+};
+
+const Anchor: CustomTextualRenderer = ({ TDefaultRenderer, TNodeChildrenRenderer, ...props }) => {
+  const host = isHostNotVisible(props.tnode.attributes.href, props.tnode.init?.textNode?.data);
+
+  return (
+    <TDefaultRenderer {...props} onPress={() => openUrl(props.tnode.attributes.href)}>
+      <TNodeChildrenRenderer tnode={props.tnode} />
+      {host && (
+        <>
+          {' '}
+          <RNText style={{ fontSize: 12 }}>[{host}]</RNText>
+        </>
+      )}
+    </TDefaultRenderer>
+  );
 };
 
 interface IEmoji {
