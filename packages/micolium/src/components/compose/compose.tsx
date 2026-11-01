@@ -1,5 +1,5 @@
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
-import { Button, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
+import { Button, Card, IconButton, Text, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { DragDropContentView, type DragDropContentViewProps } from 'expo-drag-drop-content-view';
 import { GlassView } from 'expo-glass-effect';
@@ -11,7 +11,7 @@ import { PaperPlaneRightIcon } from 'phosphor-react-native/src/icons/PaperPlaneR
 import { SmileyIcon } from 'phosphor-react-native/src/icons/Smiley';
 import { WarningIcon } from 'phosphor-react-native/src/icons/Warning';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import {
   Alert,
   ScrollView,
@@ -490,6 +490,23 @@ const ComposeBottomSheet = () => {
           </View>
           <ComposeReplyIndicator composeId={COMPOSE_ID} />
           <ComposeQuoteIndicator composeId={COMPOSE_ID} />
+          {compose.approvalRequired && (
+            <Card mode='outlined'>
+              <Text style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
+                {compose.quoteId ? (
+                  <FormattedMessage
+                    id='compose_form.approval_required.quote'
+                    defaultMessage='The quote needs to be approved by the post author.'
+                  />
+                ) : (
+                  <FormattedMessage
+                    id='compose_form.approval_required'
+                    defaultMessage='The reply needs to be approved by the post author.'
+                  />
+                )}
+              </Text>
+            </Card>
+          )}
           {features.spoilers && (
             <TextInput
               value={spoilerText}
