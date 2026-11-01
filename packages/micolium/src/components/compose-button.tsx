@@ -27,7 +27,11 @@ interface IComposeButton {
 const ComposeButton: React.FC<IComposeButton> = ({ direct, visible }) => {
   const intl = useIntl();
   const glassEffect = useEnableLiquidGlass();
-  const { bottom: bottomInset } = useSafeAreaInsets();
+  const {
+    bottom: bottomInset,
+    parentLeft: leftInset,
+    parentRight: rightInset,
+  } = useSafeAreaInsets();
 
   const { openCompose } = useUiStoreActions();
   const { updateCompose, resetCompose } = useComposeActions();
@@ -53,6 +57,9 @@ const ComposeButton: React.FC<IComposeButton> = ({ direct, visible }) => {
   };
 
   if (glassEffect) {
+    // compose button is displayed in navigation tabs
+    if ((leftInset || rightInset) && !direct) return null;
+
     return (
       <Pressable
         onPress={handleCompose}

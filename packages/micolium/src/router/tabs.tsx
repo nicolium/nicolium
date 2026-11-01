@@ -35,6 +35,7 @@ const messages = defineMessages({
   notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
   search: { id: 'column.search', defaultMessage: 'Search' },
   profile: { id: 'column.profile', defaultMessage: 'Profile' },
+  compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
 });
 
 const TabScreenLayout: (
@@ -50,7 +51,9 @@ const TabletInsets: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   return (
     <View style={{ flex: 1, paddingLeft: insets.left, paddingRight: insets.right }}>
-      <SafeAreaInsetsContext.Provider value={{ ...insets, left: 0, right: 0 }}>
+      <SafeAreaInsetsContext.Provider
+        value={{ ...insets, left: 0, right: 0, parentLeft: insets.left, parentRight: insets.right }}
+      >
         {children}
       </SafeAreaInsetsContext.Provider>
     </View>
@@ -65,7 +68,8 @@ if (Platform.OS === 'ios') {
   NativeTabs = () => {
     const intl = useIntl();
     const unreadCount = useNotificationsUnreadCount();
-    const { openAccountSwitcher } = useUiStoreActions();
+    const { openAccountSwitcher, openCompose } = useUiStoreActions();
+    const insets = useSafeAreaInsets();
 
     return (
       <Tab.Navigator
@@ -134,6 +138,18 @@ if (Platform.OS === 'ios') {
             },
           })}
         />
+        {(insets.left > 0 || insets.right > 0) && (
+          <Tab.Screen
+            name='compose'
+            component={() => null}
+            options={{
+              tabBarLabel: intl.formatMessage(messages.compose),
+              tabBarIcon: { type: 'sfSymbol', name: 'square.and.pencil' },
+              tabBarSelectionEnabled: false,
+            }}
+            listeners={{ tabPress: () => openCompose() }}
+          />
+        )}
       </Tab.Navigator>
     );
   };
