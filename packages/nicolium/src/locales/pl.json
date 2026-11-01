@@ -974,8 +974,6 @@
   "column.wrenched": "Oś czasu ostatnio kluczowanych wpisów",
   "column_forbidden.body": "Nie masz uprawnień, aby odwiedzić tę stronę.",
   "column_forbidden.title": "Niedozwolone",
-  "columns.notification_requests": "Filtrowane powiadomienia",
-  "columns.notifications_from": "Powiadomienia od {name}",
   "common.add": "Dodaj",
   "common.cancel": "Zaniechaj",
   "common.logo": "Logo",
