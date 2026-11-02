@@ -235,7 +235,9 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
         undefined,
         approvalRequired
           ? () => {
-              toast.info(intl.formatMessage(messages.reblogApprovalRequired));
+              if (approvalRequired) {
+                toast.info(intl.formatMessage(messages.reblogApprovalRequired));
+              }
             }
           : undefined,
       );
@@ -355,7 +357,11 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =
           status.favourited
             ? unfavouriteStatus()
             : favouriteStatus(undefined, {
-                onSuccess: () => toast.info(intl.formatMessage(messages.favouriteApprovalRequired)),
+                onSuccess: () => {
+                  if (status.interaction_policy.can_favourite.manual_approval.includes('me')) {
+                    toast.info(intl.formatMessage(messages.favouriteApprovalRequired));
+                  }
+                },
               })
         }
         disabled={isPendingFavourite}
