@@ -386,7 +386,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       () =>
         clsx('status-content', {
           'status-content--lg': textSize === 'lg',
-          'status-content--overflow': collapsed && !expanded,
+          'status-content--overflow': collapsed && (isQuote || !expanded),
           'status-content--clamp-default': collapsed && !isQuote && !preview && !expanded,
           'status-content--clamp-quote': collapsed && isQuote,
           'status-content--clamp-preview': collapsed && preview,
