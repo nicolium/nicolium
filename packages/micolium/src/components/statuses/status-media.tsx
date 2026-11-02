@@ -74,7 +74,7 @@ interface IStatusImage {
   uri: string;
   sensitive?: boolean;
   mediaVisible?: boolean;
-  setImageDimensions?: React.Dispatch<React.SetStateAction<{ height: number; width: number }>>;
+  setImageDimensions?: React.Dispatch<React.SetStateAction<{ height: number; width: number } | undefined>>;
 }
 
 const StatusImage: React.FC<IStatusImage> = ({
@@ -117,6 +117,7 @@ const StatusImage: React.FC<IStatusImage> = ({
 
 interface IMediaVideo {
   media: Extract<MediaAttachment, { type: 'video' | 'gifv' }>;
+  compact?: boolean;
 }
 
 const StatusGifv: React.FC<IMediaVideo> = ({ media }) => {
@@ -179,7 +180,7 @@ const StatusVideoPlayer: React.FC<IMediaVideo> = ({ media }) => {
   );
 };
 
-const StatusVideo: React.FC<IMediaVideo> = ({ media }) => {
+const StatusVideo: React.FC<IMediaVideo> = ({ media, compact }) => {
   const intl = useIntl();
   const [active, setActive] = useState(false);
 
@@ -201,11 +202,11 @@ const StatusVideo: React.FC<IMediaVideo> = ({ media }) => {
                 accessibilityLabel={intl.formatMessage(messages.play)}
               >
                 <GlassView
-                  style={{ borderRadius: 36, padding: 16 }}
+                  style={{ borderRadius: compact ? 14 : 36, padding: compact ? 6 : 16 }}
                   glassEffectStyle='clear'
                   isInteractive
                 >
-                  <PlayIcon weight='fill' size={40} color='#fff' />
+                  <PlayIcon weight='fill' size={compact ? 16 : 40} color='#fff' />
                 </GlassView>
               </Pressable>
             ) : (
@@ -227,7 +228,8 @@ const renderMedia = (
   media: SupportedMediaAttachment,
   sensitive?: boolean,
   mediaVisible?: boolean,
-  setImageDimensions?: React.Dispatch<React.SetStateAction<{ height: number; width: number }>>,
+  compact?: boolean,
+  setImageDimensions?: React.Dispatch<React.SetStateAction<{ height: number; width: number } | undefined>>,
 ) => {
   if (sensitive && mediaVisible !== true) {
     return (
@@ -253,9 +255,9 @@ const renderMedia = (
         />
       );
     case 'gifv':
-      return <StatusGifv media={media} />;
+      return <StatusGifv media={media} compact={compact} />;
     case 'video':
-      return <StatusVideo media={media} />;
+      return <StatusVideo media={media} compact={compact} />;
   }
 };
 
@@ -380,7 +382,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
       >
         {!multiple && renderSensitiveOverlay()}
         {media.type === 'video' ? (
-          renderMedia(media, sensitive, mediaVisible)
+          renderMedia(media, sensitive, mediaVisible, compact)
         ) : (
           <Pressable
             style={{ flex: 1 }}
@@ -392,11 +394,12 @@ const StatusMedia: React.FC<IStatusMedia> = ({
               media,
               sensitive,
               mediaVisible,
+              compact,
               media.meta.original || multiple ? undefined : setImageDimensions,
             )}
           </Pressable>
         )}
-        {media.description && (
+        {media.description && !compact && (
           <View style={{ position: 'absolute', bottom: 16, right: 16 }}>
             <Tooltip.Rich
               title={intl.formatMessage(
