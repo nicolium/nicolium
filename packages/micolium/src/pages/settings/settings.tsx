@@ -152,6 +152,13 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
                 },
                 role: 'destructive',
               },
+              {
+                type: 'button',
+                label: 'toast',
+                onPress: () => {
+                  toast.info('meow');
+                },
+              },
             ],
           },
         ]}

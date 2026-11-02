@@ -9,7 +9,7 @@ import { useCalendars, useLocales } from 'expo-localization';
 import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import { useColorScheme } from 'react-native';
+import { Platform, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -143,7 +143,7 @@ export const App = () => {
                 <GestureHandlerRootView>
                   <TrueSheetProvider>
                     <RootNavigator />
-                    <Toaster position='bottom-center' />
+                    <Toaster position='bottom-center' enableStacking={Platform.OS === 'ios'} />
                     <AccountSwitcherBottomSheet />
                     <ComposeBottomSheet />
                     <EmojiPickerBottomSheet />
