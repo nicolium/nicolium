@@ -74,7 +74,7 @@ interface IStatusImage {
   uri: string;
   sensitive?: boolean;
   mediaVisible?: boolean;
-  setImageDimensions?: (_: { height: number; width: number }) => void;
+  setImageDimensions?: React.Dispatch<React.SetStateAction<{ height: number; width: number }>>;
 }
 
 const StatusImage: React.FC<IStatusImage> = ({
@@ -106,7 +106,9 @@ const StatusImage: React.FC<IStatusImage> = ({
         setImageDimensions
           ? ({ source }) =>
               media.type === 'image' &&
-              setImageDimensions({ width: source.width, height: source.height })
+              setImageDimensions(
+                (dimensions) => dimensions ?? { width: source.width, height: source.height },
+              )
           : undefined
       }
     />
@@ -225,7 +227,7 @@ const renderMedia = (
   media: SupportedMediaAttachment,
   sensitive?: boolean,
   mediaVisible?: boolean,
-  setImageDimensions?: (_: { height: number; width: number }) => void,
+  setImageDimensions?: React.Dispatch<React.SetStateAction<{ height: number; width: number }>>,
 ) => {
   if (sensitive && mediaVisible !== true) {
     return (
