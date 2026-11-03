@@ -50,6 +50,7 @@ import { ComposeQuoteIndicator } from './compose-quote-indicator';
 import { ComposeReplyIndicator } from './compose-reply-indicator';
 import { ComposeScheduleButton } from './compose-schedule-button';
 import { ComposeScheduleForm } from './compose-schedule-form';
+import { ComposeSuggestions } from './compose-suggestions';
 import { ComposeUploadButton } from './compose-upload-button';
 import { ComposeVisibilityDropdown } from './compose-visibility-dropdown';
 import { PollForm } from './poll-form';
@@ -401,35 +402,40 @@ const ComposeBottomSheet = () => {
     </>
   );
 
-  const footer = glassEffect ? (
-    <GlassView
-      onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        marginHorizontal: 12,
-        borderRadius: 32,
-        paddingHorizontal: 12,
-        paddingVertical: 4,
-      }}
-    >
-      {footerContent}
-    </GlassView>
-  ) : (
-    <View
-      onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        backgroundColor: colors.secondaryContainer,
-      }}
-    >
-      {footerContent}
-    </View>
+  const footer = (
+    <>
+      <ComposeSuggestions token='' handleSelected={() => {}} />
+      {glassEffect ? (
+        <GlassView
+          onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            marginHorizontal: 12,
+            borderRadius: 32,
+            paddingHorizontal: 12,
+            paddingVertical: 4,
+          }}
+        >
+          {footerContent}
+        </GlassView>
+      ) : (
+        <View
+          onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            paddingVertical: 8,
+            paddingHorizontal: 12,
+            backgroundColor: colors.secondaryContainer,
+          }}
+        >
+          {footerContent}
+        </View>
+      )}
+    </>
   );
 
   return (
