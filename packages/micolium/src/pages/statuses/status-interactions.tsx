@@ -1,5 +1,5 @@
 import { ActivityIndicator, Divider, Text } from '@mkljczk/react-native-paper';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
@@ -99,6 +99,7 @@ const StatusReactionsScreen = ({
   const intl = useIntl();
 
   const { data: status, refetch, isRefetching } = useStatus(id);
+  const listRefs = React.useRef<Record<string, FlashListRef<IAccountWithReaction> | null>>({});
   const [index, setIndex] = useState(() => {
     const index = status?.emoji_reactions.findIndex(({ name }) => name === initialEmoji);
     if (index !== undefined && index !== -1) {
@@ -145,6 +146,9 @@ const StatusReactionsScreen = ({
 
     return (
       <FlashList
+        ref={(ref) => {
+          listRefs.current[emoji] = ref;
+        }}
         data={accounts}
         renderItem={({ item }) => (
           <Account
@@ -183,7 +187,9 @@ const StatusReactionsScreen = ({
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       options={options}
-      renderTabBar={TabBar}
+      renderTabBar={(props) => (
+        <TabBar {...props} onTabReselect={({ key }) => listRefs.current[key]?.scrollToTop()} />
+      )}
       renderScene={({ route }) => renderScene(route.key)}
       lazy
     />

@@ -3,7 +3,7 @@ import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { debounce } from '@tanstack/react-pacer/debouncer';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -32,6 +32,7 @@ import useTrendingTags from '@/queries/trends/use-trending-tags';
 import { useSetting } from '@/stores/settings';
 
 import type { SearchStackParams } from '@/router/router';
+import type { Tag } from 'pl-api';
 
 const messages = defineMessages({
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },
@@ -45,11 +46,12 @@ const SEARCH_TYPES = ['accounts', 'statuses', 'hashtags', 'links'] as const;
 
 type SearchType = (typeof SEARCH_TYPES)[number];
 
-interface ISearchResults {
+interface ISearchResults<T> {
   query: string;
+  ref?: React.Ref<FlashListRef<T>>;
 }
 
-const AccountsResults: React.FC<ISearchResults> = ({ query }) => {
+const AccountsResults: React.FC<ISearchResults<string>> = ({ query, ref }) => {
   const { bottom: bottomInset } = useSafeAreaInsets();
   const autoloadMore = useSetting('timelines.autoloadMore');
 
@@ -64,6 +66,7 @@ const AccountsResults: React.FC<ISearchResults> = ({ query }) => {
     <LoadingIndicator />
   ) : (
     <FlashList
+      ref={ref}
       contentContainerStyle={{ paddingBottom: bottomInset }}
       scrollIndicatorInsets={{ bottom: bottomInset }}
       data={
@@ -108,7 +111,7 @@ const AccountsResults: React.FC<ISearchResults> = ({ query }) => {
   );
 };
 
-const StatusesResults: React.FC<ISearchResults> = ({ query }) => {
+const StatusesResults: React.FC<ISearchResults<string>> = ({ query, ref }) => {
   const { bottom: bottomInset } = useSafeAreaInsets();
   const autoloadMore = useSetting('timelines.autoloadMore');
 
@@ -123,6 +126,7 @@ const StatusesResults: React.FC<ISearchResults> = ({ query }) => {
     <LoadingIndicator />
   ) : (
     <FlashList
+      ref={ref}
       contentContainerStyle={{ paddingBottom: bottomInset }}
       scrollIndicatorInsets={{ bottom: bottomInset }}
       data={activeStatusesQuery.data}
@@ -154,7 +158,7 @@ const StatusesResults: React.FC<ISearchResults> = ({ query }) => {
   );
 };
 
-const HashtagsResults: React.FC<ISearchResults> = ({ query }) => {
+const HashtagsResults: React.FC<ISearchResults<Tag>> = ({ query, ref }) => {
   const { bottom: bottomInset } = useSafeAreaInsets();
   const autoloadMore = useSetting('timelines.autoloadMore');
 
@@ -169,6 +173,7 @@ const HashtagsResults: React.FC<ISearchResults> = ({ query }) => {
     <LoadingIndicator />
   ) : (
     <FlashList
+      ref={ref}
       contentContainerStyle={{ paddingBottom: bottomInset }}
       scrollIndicatorInsets={{ bottom: bottomInset }}
       data={activeHashtagsQuery.data}
@@ -264,6 +269,12 @@ const SearchScreen = ({
     [],
   );
 
+  const listRefs = {
+    accounts: React.useRef<FlashListRef<string>>(null),
+    statuses: React.useRef<FlashListRef<string>>(null),
+    hashtags: React.useRef<FlashListRef<Tag>>(null),
+  };
+
   const handleChangeIndex = (index: number) => navigation.setParams({ type: SEARCH_TYPES[index] });
 
   const setQuery = (query: string) => {
@@ -294,11 +305,11 @@ const SearchScreen = ({
   const renderScene = (route: SearchType) => {
     switch (route) {
       case 'accounts':
-        return <AccountsResults query={activeQuery} />;
+        return <AccountsResults ref={listRefs.accounts} query={activeQuery} />;
       case 'statuses':
-        return <StatusesResults query={activeQuery} />;
+        return <StatusesResults ref={listRefs.statuses} query={activeQuery} />;
       case 'hashtags':
-        return <HashtagsResults query={activeQuery} />;
+        return <HashtagsResults ref={listRefs.hashtags} query={activeQuery} />;
       case 'links':
         return <LinksResults />;
     }
@@ -328,7 +339,13 @@ const SearchScreen = ({
         navigationState={{ index, routes }}
         onIndexChange={handleChangeIndex}
         renderScene={({ route }) => renderScene(route.key)}
-        renderTabBar={(props) => <TabBar {...props} key={tabBarKey} />}
+        renderTabBar={(props) => (
+          <TabBar
+            {...props}
+            key={tabBarKey}
+            onTabReselect={({ key }) => key !== 'links' && listRefs[key].current?.scrollToTop()}
+          />
+        )}
         lazy
       />
     </>

@@ -1,5 +1,5 @@
 import { Divider } from '@mkljczk/react-native-paper';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import React from 'react';
 
 import { useSetting } from '@/stores/settings';
@@ -16,13 +16,15 @@ interface IAccountsList {
   query: UseInfiniteQueryResult<PaginatedResponseArray<string>, Error>;
   emptyMessageText?: React.JSX.Element;
   actionType?: IAccount['actionType'];
+  ref?: React.Ref<FlashListRef<string>>;
 }
 
-const AccountsList: React.FC<IAccountsList> = ({ query, emptyMessageText, actionType }) => {
+const AccountsList: React.FC<IAccountsList> = ({ query, emptyMessageText, actionType, ref }) => {
   const autoloadMore = useSetting('timelines.autoloadMore');
 
   return (
     <FlashList
+      ref={ref}
       data={query.data}
       renderItem={({ item }) => (
         <Account

@@ -6,6 +6,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 
 import { Timeline } from '@/components/timelines/timeline';
+import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { iconHelper } from '@/components/ui/icon';
 import { useClient } from '@/contexts/current-account-context';
 import { useTimeline } from '@/queries/timelines/use-timeline';
@@ -14,7 +15,6 @@ import { openUrl } from '@/utils/url';
 
 import type { RootStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { HeaderBackButton } from '@/components/ui/header-icon-button';
 
 const messages = defineMessages({
   header: { id: 'column.link_timeline', defaultMessage: 'Posts linking to {url}' },

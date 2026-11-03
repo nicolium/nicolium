@@ -6,7 +6,7 @@ import {
   type NativeStackHeaderProps,
   type NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { ChecksIcon } from 'phosphor-react-native/src/icons/Checks';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
@@ -34,6 +34,7 @@ import {
 import { useSetting, useSettingsActions } from '@/stores/settings';
 
 import type { NotificationsStackParams } from '@/router/router';
+import type { NotificationGroup } from 'pl-api';
 
 const messages = defineMessages({
   tabAll: { id: 'notifications.filter.all', defaultMessage: 'All' },
@@ -272,6 +273,10 @@ const NotificationsScreen = ({
   navigation,
 }: NativeStackScreenProps<NotificationsStackParams, 'view'>) => {
   const intl = useIntl();
+  const listRefs = {
+    all: React.useRef<FlashListRef<NotificationGroup>>(null),
+    mentions: React.useRef<FlashListRef<NotificationGroup>>(null),
+  };
 
   const filters = useSetting('notifications.filters');
 
@@ -298,6 +303,7 @@ const NotificationsScreen = ({
 
     return (
       <FlashList
+        ref={listRefs[tab]}
         data={query.data}
         renderItem={({ item }) => <Notification notification={item} />}
         keyExtractor={(item) => item.most_recent_notification_id}
@@ -354,7 +360,9 @@ const NotificationsScreen = ({
       navigationState={{ index: currentTab, routes }}
       onIndexChange={handleChangeIndex}
       renderScene={({ route }) => renderNotifications(route.key)}
-      renderTabBar={TabBar}
+      renderTabBar={(props) => (
+        <TabBar {...props} onTabReselect={({ key }) => listRefs[key].current?.scrollToTop()} />
+      )}
       lazy
     />
   );

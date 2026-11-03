@@ -12,17 +12,23 @@ import {
 
 import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { FlashListRef } from '@shopify/flash-list';
 
 const messages = defineMessages({
   incoming: { id: 'column.follow_requests.short', defaultMessage: 'Incoming' },
   outgoing: { id: 'column.outgoing_follow_requests.short', defaultMessage: 'Outgoing' },
 });
 
-const IncomingFollowRequests = () => {
+interface IFollowRequests {
+  ref?: React.Ref<FlashListRef<string>>;
+}
+
+const IncomingFollowRequests: React.FC<IFollowRequests> = ({ ref }) => {
   const query = useFollowRequests();
 
   return (
     <AccountsList
+      ref={ref}
       query={query}
       emptyMessageText={
         <FormattedMessage
@@ -35,11 +41,12 @@ const IncomingFollowRequests = () => {
   );
 };
 
-const OutgoingFollowRequests = () => {
+const OutgoingFollowRequests: React.FC<IFollowRequests> = ({ ref }) => {
   const query = useOutgoingFollowRequests();
 
   return (
     <AccountsList
+      ref={ref}
       query={query}
       emptyMessageText={
         <FormattedMessage
@@ -58,9 +65,14 @@ const FollowRequestsScreen = (
   const [index, setIndex] = useState(0);
   const features = useFeatures();
 
+  const listRefs = {
+    incoming: React.useRef<FlashListRef<string>>(null),
+    outgoing: React.useRef<FlashListRef<string>>(null),
+  };
+
   if (!features.outgoingFollowRequests) return <IncomingFollowRequests />;
 
-  const routes = [
+  const routes: Array<{ key: 'incoming' | 'outgoing'; title: string }> = [
     { key: 'incoming', title: intl.formatMessage(messages.incoming) },
     { key: 'outgoing', title: intl.formatMessage(messages.outgoing) },
   ];
@@ -70,9 +82,15 @@ const FollowRequestsScreen = (
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={({ route }) =>
-        route.key === 'outgoing' ? <OutgoingFollowRequests /> : <IncomingFollowRequests />
+        route.key === 'outgoing' ? (
+          <OutgoingFollowRequests ref={listRefs.outgoing} />
+        ) : (
+          <IncomingFollowRequests ref={listRefs.incoming} />
+        )
       }
-      renderTabBar={TabBar}
+      renderTabBar={(props) => (
+        <TabBar {...props} onTabReselect={({ key }) => listRefs[key].current?.scrollToTop()} />
+      )}
       lazy
     />
   );
