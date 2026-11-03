@@ -1,5 +1,6 @@
 import { useTheme } from '@mkljczk/react-native-paper';
 import React from 'react';
+import { Keyboard } from 'react-native';
 import { TabBar as TabViewTabBar } from 'react-native-tab-view';
 
 const TabBar: typeof TabViewTabBar = (props) => {
@@ -15,6 +16,9 @@ const TabBar: typeof TabViewTabBar = (props) => {
       style={{
         backgroundColor: colors.surfaceContainer,
         borderBottomColor: colors.outlineVariant,
+      }}
+      onTabPress={() => {
+        Keyboard.dismiss();
       }}
     />
   );
