@@ -92,7 +92,12 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({ message, onClick, count }
           <GlassView
             isInteractive
             tintColor={colors.primaryContainer}
-            style={{ padding: 8, paddingHorizontal: 16, borderRadius: 32 }}
+            style={{
+              padding: 8,
+              paddingHorizontal: 16,
+              borderRadius: 32,
+              borderCurve: 'continuous',
+            }}
           >
             <Text variant='bodyLarge'>
               {intl.formatMessage(message, {

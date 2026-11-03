@@ -241,6 +241,7 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
           flexDirection: 'row',
           alignItems: 'center',
           borderRadius: 16,
+          borderCurve: 'continuous',
           paddingHorizontal: 12,
           paddingVertical: 4,
         }}

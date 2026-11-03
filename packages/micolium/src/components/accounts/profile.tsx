@@ -281,6 +281,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                   flexDirection: 'row',
                   alignItems: 'center',
                   borderRadius: 16,
+                  borderCurve: 'continuous',
                   paddingHorizontal: 12,
                   paddingVertical: 8,
                 }}
@@ -361,6 +362,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           flexDirection: 'row',
           alignItems: 'center',
           borderRadius: 16,
+          borderCurve: 'continuous',
           paddingHorizontal: 12,
           paddingVertical: 8,
         }}

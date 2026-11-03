@@ -307,6 +307,7 @@ const ComposeLanguageDropdown: React.FC<ICompose> = ({ composeId }) => {
           flexDirection: 'row',
           alignItems: 'center',
           borderRadius: 16,
+          borderCurve: 'continuous',
           paddingHorizontal: 12,
           paddingVertical: 4,
         }}

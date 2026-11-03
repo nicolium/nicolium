@@ -105,6 +105,7 @@ const EmojiCategoryHeader: React.FC<IEmojiCategoryHeader> = ({ title }) => {
             paddingHorizontal: 12,
             paddingVertical: 8,
             borderRadius: 20,
+            borderCurve: 'continuous',
             marginHorizontal: 4,
             marginBottom: 8,
           }}

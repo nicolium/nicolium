@@ -418,7 +418,8 @@ const ComposeFooter: React.FC<IComposeFooter> = ({
             alignItems: 'center',
             justifyContent: 'flex-start',
             marginHorizontal: 12,
-            borderRadius: 32,
+            borderRadius: 28,
+            borderCurve: 'continuous',
             paddingHorizontal: 12,
             paddingVertical: 4,
           }}

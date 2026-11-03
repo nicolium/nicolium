@@ -157,6 +157,7 @@ export const App = () => {
                               position: 'absolute',
                               inset: 0,
                               borderRadius: 8,
+                              borderCurve: 'continuous',
                             }}
                           />
                         ) : undefined,

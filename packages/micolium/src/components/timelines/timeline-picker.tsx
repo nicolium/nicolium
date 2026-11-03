@@ -346,7 +346,8 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
                   ? {
                       paddingHorizontal: 12,
                       paddingVertical: 6,
-                      borderRadius: 24,
+                      borderRadius: 40,
+                      borderCurve: 'continuous',
                     }
                   : undefined,
               ]}

@@ -103,6 +103,7 @@ const ReplyBox: React.FC<IReplyBox> = ({ status }) => {
             padding: 8,
             backgroundColor: colors.surfaceVariant,
             borderRadius: 20,
+            borderCurve: 'continuous',
             overflow: 'hidden',
           }}
           glassEffectStyle='clear'
