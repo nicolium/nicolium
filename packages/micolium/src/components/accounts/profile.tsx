@@ -11,6 +11,7 @@ import {
 import { Link, useNavigation } from '@react-navigation/native';
 import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
+import { ArrowLineDownIcon } from 'phosphor-react-native/src/icons/ArrowLineDown';
 import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
 import { mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
@@ -39,6 +40,9 @@ import { useUiStoreActions } from '@/stores/ui';
 
 import { type ITimeline, Timeline } from '../timelines/timeline';
 import { HeaderBackButton } from '../ui/header-icon-button';
+
+import type { TimelineEntry } from '@/stores/timelines';
+import type { FlashListRef } from '@shopify/flash-list';
 
 const messages = defineMessages({
   repliesToggle: { id: 'account.filters.replies_toggle', defaultMessage: 'Show replies' },
@@ -77,6 +81,8 @@ const messages = defineMessages({
 });
 
 interface IProfileTimeline extends Pick<ITimeline, 'header'> {
+  ref?: React.RefObject<FlashListRef<TimelineEntry> | null>;
+  pinnedCountRef?: React.RefObject<number>;
   id: string;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   withReplies?: boolean;
@@ -84,11 +90,12 @@ interface IProfileTimeline extends Pick<ITimeline, 'header'> {
   withPinned?: boolean;
 }
 
-const PostsTimeline: React.FC<IProfileTimeline> = ({
+const ProfileTimeline: React.FC<IProfileTimeline> = ({
   id,
   withReplies,
   withReblogs,
   withPinned,
+  pinnedCountRef,
   ...props
 }) => {
   const client = useClient();
@@ -106,6 +113,10 @@ const PostsTimeline: React.FC<IProfileTimeline> = ({
         exclude_replies: !withReplies,
       }),
   );
+
+  React.useEffect(() => {
+    if (pinnedCountRef) pinnedCountRef.current = withPinned ? pinnedQuery.entries.length : 0;
+  }, [withPinned, pinnedQuery.entries.length]);
 
   return (
     <Timeline
@@ -131,8 +142,10 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const { top: topInset } = useSafeAreaInsets();
   const { data: account } = useAccount(id, !ownAccount);
   const navigation = useNavigation();
-  const profileInfoNode = React.useRef<View>(null);
+  const profileInfoNode = React.useRef<React.ComponentRef<typeof View>>(null);
   const previousScrollOffset = React.useRef<number>(0);
+  const timelineNode = React.useRef<FlashListRef<TimelineEntry>>(null);
+  const pinnedCount = React.useRef<number>(0);
   const glassEffect = useEnableLiquidGlass();
   const { openMediaViewer } = useUiStoreActions();
 
@@ -198,7 +211,10 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   if (!account) return <LoadingIndicator />;
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
+    const scrollOffset =
+      event.nativeEvent.contentOffset.y ||
+      (typeof event.target === 'object' && event.target.scrollTop) ||
+      0;
     const showHeader =
       !!profileInfoNode.current &&
       scrollOffset + topInset > profileInfoNode.current.getBoundingClientRect().height;
@@ -268,6 +284,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                   paddingHorizontal: 12,
                   paddingVertical: 8,
                 }}
+                isInteractive
               >
                 <Text>{filtersLabel}</Text>
                 <Icon
@@ -330,6 +347,38 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
         </DropdownMenu.CheckboxItem>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
+  );
+
+  const handleSkipPinned = () => {
+    timelineNode.current?.scrollToIndex({ index: pinnedCount.current, viewOffset: -64 });
+  };
+
+  const skipPinnedButton = glassEffect ? (
+    <Pressable onPress={handleSkipPinned}>
+      <GlassView
+        style={{
+          gap: 4,
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderRadius: 16,
+          paddingHorizontal: 12,
+          paddingVertical: 8,
+        }}
+        isInteractive
+      >
+        <Icon source={iconHelper(ArrowLineDownIcon)} size={16} color={colors.onSurfaceVariant} />
+        <Text>
+          <FormattedMessage id='status.skip_pinned' defaultMessage='Skip pinned posts' />
+        </Text>
+      </GlassView>
+    </Pressable>
+  ) : (
+    <Chip mode='outlined' onPress={handleSkipPinned}>
+      <View style={{ paddingLeft: 4 }}>
+        <Icon source={iconHelper(ArrowLineDownIcon)} size={16} color={colors.onSurfaceVariant} />
+      </View>
+      <FormattedMessage id='status.skip_pinned' defaultMessage='Skip pinned posts' />
+    </Chip>
   );
 
   const header = (
@@ -547,7 +596,10 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           </>
         </CollapsibleContent>
       </View>
-      {timelineFiltersSelector}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8 }}>
+        {timelineFiltersSelector}
+        {pinnedCount.current > 3 && skipPinnedButton}
+      </View>
     </>
   );
 
@@ -575,7 +627,9 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           <AccountActionsDropdown account={account} headerButton />
         </Appbar.Header>
       </Animated.View>
-      <PostsTimeline
+      <ProfileTimeline
+        ref={timelineNode}
+        pinnedCountRef={pinnedCount}
         id={account.id}
         onScroll={handleScroll}
         header={header}

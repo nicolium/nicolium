@@ -128,6 +128,7 @@ interface ITimeline extends IEmptyMessage {
   context?: FilterContext;
   header?: React.JSX.Element;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  ref?: React.RefObject<FlashListRef<TimelineEntry> | null>;
 }
 
 const Timeline: React.FC<ITimeline> = ({
@@ -196,7 +197,10 @@ const Timeline: React.FC<ITimeline> = ({
         />
       )}
       <FlashList
-        ref={flashListRef}
+        ref={(ref) => {
+          flashListRef.current = ref;
+          if (props.ref) props.ref.current = ref;
+        }}
         data={data}
         keyExtractor={(item, index) =>
           item.type === 'gap'
