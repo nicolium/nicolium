@@ -256,7 +256,7 @@ const CredentialsScreen = ({
     setLoading(true);
     try {
       await createApp('password');
-      await signIn(username, password);
+      await signIn(username, password, intl);
       setLoading(false);
     } catch (e) {
       setError(true);
@@ -364,7 +364,7 @@ const OauthFlowScreen = ({
     if (response?.type === 'success') {
       const { code } = response.params;
 
-      signInWithCode(code, request?.codeVerifier!).catch(() => {
+      signInWithCode(code, request?.codeVerifier!, intl).catch(() => {
         if (Platform.OS === 'android') {
           ToastAndroid.show(intl.formatMessage(messages.failMessage), ToastAndroid.SHORT);
         } else {
