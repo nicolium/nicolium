@@ -34,6 +34,7 @@ import { useClient } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useTimeline } from '@/queries/timelines/use-timeline';
+import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { type ITimeline, Timeline } from '../timelines/timeline';
@@ -134,9 +135,9 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const glassEffect = useEnableLiquidGlass();
   const { openMediaViewer } = useUiStoreActions();
 
-  const [showReplies, setShowReplies] = React.useState(false);
-  const [showReblogs, setShowReblogs] = React.useState(true);
-  const [showPinned, setShowPinned] = React.useState(true);
+  const profileFilters = useSetting('timelines.profileFilters');
+  const { update } = useSettingsActions();
+
   const [showComposeButton, setShowComposeButton] = React.useState(true);
 
   const headerMarginTop = useSharedValue(-128);
@@ -228,19 +229,25 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   };
 
   const filtersLabel = (() => {
-    if (showReblogs && showReplies) {
-      return intl.formatMessage(showPinned ? messages.filtersAll : messages.filtersAllExceptPinned);
-    } else if (showReblogs) {
+    if (profileFilters.showReblogs && profileFilters.showReplies) {
       return intl.formatMessage(
-        showPinned ? messages.filtersWithReblogs : messages.filtersWithReblogsExceptPinned,
+        profileFilters.showPinned ? messages.filtersAll : messages.filtersAllExceptPinned,
       );
-    } else if (showReplies) {
+    } else if (profileFilters.showReblogs) {
       return intl.formatMessage(
-        showPinned ? messages.filtersWithReplies : messages.filtersWithRepliesExceptPinned,
+        profileFilters.showPinned
+          ? messages.filtersWithReblogs
+          : messages.filtersWithReblogsExceptPinned,
+      );
+    } else if (profileFilters.showReplies) {
+      return intl.formatMessage(
+        profileFilters.showPinned
+          ? messages.filtersWithReplies
+          : messages.filtersWithRepliesExceptPinned,
       );
     } else {
       return intl.formatMessage(
-        showPinned ? messages.filtersNone : messages.filtersNoneExceptPinned,
+        profileFilters.showPinned ? messages.filtersNone : messages.filtersNoneExceptPinned,
       );
     }
   })();
@@ -286,22 +293,37 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
       <DropdownMenu.Content>
         <DropdownMenu.CheckboxItem
           key='show-replies'
-          value={showReplies}
-          onSelect={() => setShowReplies((value) => !value)}
+          value={profileFilters.showReplies}
+          onSelect={() =>
+            update('timelines.profileFilters', {
+              ...profileFilters,
+              showReplies: !profileFilters.showReplies,
+            })
+          }
         >
           {intl.formatMessage(messages.repliesToggle)}
         </DropdownMenu.CheckboxItem>
         <DropdownMenu.CheckboxItem
           key='show-reblogs'
-          value={showReblogs}
-          onSelect={() => setShowReblogs((value) => !value)}
+          value={profileFilters.showReblogs}
+          onSelect={() =>
+            update('timelines.profileFilters', {
+              ...profileFilters,
+              showReplies: !profileFilters.showReblogs,
+            })
+          }
         >
           {intl.formatMessage(messages.reblogsToggle)}
         </DropdownMenu.CheckboxItem>
         <DropdownMenu.CheckboxItem
           key='show-pinned'
-          value={showPinned}
-          onSelect={() => setShowPinned((value) => !value)}
+          value={profileFilters.showPinned}
+          onSelect={() =>
+            update('timelines.profileFilters', {
+              ...profileFilters,
+              showReplies: !profileFilters.showPinned,
+            })
+          }
         >
           {intl.formatMessage(messages.pinnedToggle)}
         </DropdownMenu.CheckboxItem>
@@ -556,9 +578,9 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
         id={account.id}
         onScroll={handleScroll}
         header={header}
-        withReplies={showReplies}
-        withReblogs={showReblogs}
-        withPinned={showPinned}
+        withReplies={profileFilters.showReplies}
+        withReblogs={profileFilters.showReblogs}
+        withPinned={profileFilters.showPinned}
       />
       <ComposeButton visible={showComposeButton} />
     </>

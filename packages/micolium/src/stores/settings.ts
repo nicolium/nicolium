@@ -55,6 +55,11 @@ const settingsSchema = v.object({
   'timelines.missingDescriptionBoostModal': v.fallback(v.boolean(), false),
   'timelines.skipInteractAsConfirmation': v.fallback(v.boolean(), false),
   'timelines.filters': filteredRecord(v.picklist(TIMELINE_FILTER_KEYS), timelineFiltersSchema),
+  'timelines.profileFilters': coerceObject({
+    showReplies: v.fallback(v.boolean(), false),
+    showReblogs: v.fallback(v.boolean(), true),
+    showPinned: v.fallback(v.boolean(), true),
+  }),
 
   'notifications.filters': filteredArray(
     v.picklist(['mention', 'favourite', 'reblog', 'poll', 'status', 'follow', 'events']),
