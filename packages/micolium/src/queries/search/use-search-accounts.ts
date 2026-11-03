@@ -13,12 +13,15 @@ const useAccountSearch = (query: string, params?: Omit<SearchAccountParams, 'off
   const queryClient = useQueryClient();
   const scopeUrl = useScopeUrl();
 
+  let trimmedQuery = query.trim();
+  if (trimmedQuery.startsWith('@')) trimmedQuery = trimmedQuery.slice(1);
+
   return useAppInfiniteQuery({
-    queryKey: queryKeys.search.accountSearch(query.trim(), params),
+    queryKey: queryKeys.search.accountSearch(trimmedQuery, params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.accounts
         .searchAccounts(
-          query.trim(),
+          trimmedQuery,
           {
             ...params,
             offset,
@@ -36,7 +39,7 @@ const useAccountSearch = (query: string, params?: Omit<SearchAccountParams, 'off
           });
           return accounts.map(({ id }) => id);
         }),
-    enabled: !!query?.trim(),
+    enabled: !!trimmedQuery,
     initialPageParam: 0,
     getNextPageParam: (_, allPages) => allPages.flat().length,
     select: (data) => data.pages.flat(),
