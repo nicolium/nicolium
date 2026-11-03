@@ -68,7 +68,10 @@ const SEARCH_TOKENS = ['@', ':', '#'] as const;
 const getStartPosition = (suggestion: Suggestion, tokenStart: number) =>
   typeof suggestion === 'object' || suggestion[0] === '#' ? tokenStart - 1 : tokenStart;
 
+type SuggestionField = 'text' | 'spoiler_text';
+
 interface SuggestionToken {
+  field: SuggestionField;
   tokenStart: number;
   token: string;
 }
@@ -446,8 +449,8 @@ interface IComposeBody {
   footerHeight: number;
   suggestionToken: SuggestionToken | null;
   onSuggestionTokenChange: (suggestionToken: SuggestionToken | null) => void;
-  textRefs: Record<'text', React.RefObject<string>>;
-  caretPositionRefs: Record<'text', React.RefObject<number>>;
+  textRefs: Record<SuggestionField, React.RefObject<string>>;
+  caretPositionRefs: Record<SuggestionField, React.RefObject<number>>;
 }
 
 const ComposeBody: React.FC<IComposeBody> = ({
@@ -469,17 +472,20 @@ const ComposeBody: React.FC<IComposeBody> = ({
   const { data: currentAccountId } = useCredentialAccountId();
   const { text, spoilerText } = useComposeText();
 
-  const checkSuggestionToken = () => {
+  const checkSuggestionToken = (field: SuggestionField) => {
     const [tokenStart, token] = textAtCursorMatchesToken(
-      textRefs.text.current,
-      caretPositionRefs.text.current,
+      textRefs[field].current,
+      caretPositionRefs[field].current,
       SEARCH_TOKENS,
     );
 
     if (token && token[0] === '@' && token.match(/:.+/)) {
       onSuggestionTokenChange(null);
-    } else if (token !== null && suggestionToken?.token !== token) {
-      onSuggestionTokenChange({ tokenStart: tokenStart!, token });
+    } else if (
+      token !== null &&
+      (suggestionToken?.token !== token || suggestionToken.field !== field)
+    ) {
+      onSuggestionTokenChange({ field, tokenStart: tokenStart!, token });
     } else if (token === null) {
       onSuggestionTokenChange(null);
     }
@@ -487,7 +493,7 @@ const ComposeBody: React.FC<IComposeBody> = ({
 
   const handleChangeText = (text: string) => {
     textRefs.text.current = text;
-    checkSuggestionToken();
+    checkSuggestionToken('text');
 
     updateCompose(COMPOSE_ID, (draft) => {
       if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
@@ -500,7 +506,25 @@ const ComposeBody: React.FC<IComposeBody> = ({
 
   const handleSelectionChange = (e: TextInputSelectionChangeEvent) => {
     caretPositionRefs.text.current = e.nativeEvent.selection.start;
-    checkSuggestionToken();
+    checkSuggestionToken('text');
+  };
+
+  const handleChangeSpoilerText = (text: string) => {
+    textRefs.spoiler_text.current = text;
+    checkSuggestionToken('spoiler_text');
+
+    updateCompose(COMPOSE_ID, (draft) => {
+      if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+        draft.spoilerText = text;
+      } else {
+        draft.spoilerTextMap[draft.modifiedLanguage] = text;
+      }
+    });
+  };
+
+  const handleSpoilerSelectionChange = (e: TextInputSelectionChangeEvent) => {
+    caretPositionRefs.spoiler_text.current = e.nativeEvent.selection.start;
+    checkSuggestionToken('spoiler_text');
   };
 
   return (
@@ -569,15 +593,8 @@ const ComposeBody: React.FC<IComposeBody> = ({
         {features.spoilers && (
           <TextInput
             value={spoilerText}
-            onChangeText={(text) =>
-              updateCompose(COMPOSE_ID, (draft) => {
-                if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
-                  draft.spoilerText = text;
-                } else {
-                  draft.spoilerTextMap[draft.modifiedLanguage] = text;
-                }
-              })
-            }
+            onChangeText={handleChangeSpoilerText}
+            onSelectionChange={handleSpoilerSelectionChange}
             variant='outlined'
             placeholder={intl.formatMessage(messages.spoilerPlaceholder)}
           />
@@ -647,15 +664,17 @@ const ComposeBottomSheet = () => {
 
   const textRefs = {
     text: React.useRef(''),
+    spoiler_text: React.useRef(''),
   };
   const caretPositionRefs = {
     text: React.useRef(0),
+    spoiler_text: React.useRef(0),
   };
 
   const handleSuggestionSelected = (suggestion: Suggestion) => {
     if (!suggestionToken) return;
 
-    const { tokenStart, token } = suggestionToken;
+    const { field, tokenStart, token } = suggestionToken;
 
     selectComposeSuggestion(
       COMPOSE_ID,
@@ -663,14 +682,23 @@ const ComposeBottomSheet = () => {
       getStartPosition(suggestion, tokenStart),
       token,
       suggestion,
+      [field],
     );
     setSuggestionToken(null);
 
     const compose = useComposeStore.getState().composers[COMPOSE_ID];
-    textRefs.text.current =
+    const modifiedLanguage =
       compose.modifiedLanguage && compose.modifiedLanguage !== compose.language
-        ? compose.textMap[compose.modifiedLanguage]
-        : compose.text;
+        ? compose.modifiedLanguage
+        : null;
+
+    if (field === 'spoiler_text') {
+      textRefs.spoiler_text.current = modifiedLanguage
+        ? compose.spoilerTextMap[modifiedLanguage]
+        : compose.spoilerText;
+    } else {
+      textRefs.text.current = modifiedLanguage ? compose.textMap[modifiedLanguage] : compose.text;
+    }
   };
 
   const handleClose = React.useCallback(() => {

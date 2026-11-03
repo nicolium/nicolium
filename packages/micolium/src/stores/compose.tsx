@@ -508,6 +508,7 @@ interface ComposeActions {
     position: number,
     token: string | null,
     suggestion: Suggestion,
+    path: ['text'] | ['spoiler_text'],
   ) => void;
 
   //   handleTimelineDelete: (statusId: string) => void;
@@ -908,7 +909,7 @@ const useComposeStore = create<ComposeStore>()(
         //           });
         //         },
 
-        selectComposeSuggestion: (composeId, scopeUrl, startPosition, token, suggestion) => {
+        selectComposeSuggestion: (composeId, scopeUrl, startPosition, token, suggestion, path) => {
           let completion = '';
 
           if (typeof suggestion === 'object') {
@@ -923,10 +924,21 @@ const useComposeStore = create<ComposeStore>()(
             const updateText = (oldText?: string) =>
               `${oldText?.slice(0, startPosition)}${completion} ${oldText?.slice(startPosition + (token?.length ?? 0))}`;
 
-            if (compose.modifiedLanguage && compose.modifiedLanguage !== compose.language) {
-              compose.textMap[compose.modifiedLanguage] = updateText(
-                compose.textMap[compose.modifiedLanguage],
-              );
+            const modifiedLanguage =
+              compose.modifiedLanguage && compose.modifiedLanguage !== compose.language
+                ? compose.modifiedLanguage
+                : null;
+
+            if (path[0] === 'spoiler_text') {
+              if (modifiedLanguage) {
+                compose.spoilerTextMap[modifiedLanguage] = updateText(
+                  compose.spoilerTextMap[modifiedLanguage],
+                );
+              } else {
+                compose.spoilerText = updateText(compose.spoilerText);
+              }
+            } else if (modifiedLanguage) {
+              compose.textMap[modifiedLanguage] = updateText(compose.textMap[modifiedLanguage]);
             } else {
               compose.text = updateText(compose.text);
             }
