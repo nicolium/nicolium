@@ -128,49 +128,30 @@ interface ICompose {
   composeId: string;
 }
 
-const ComposeBottomSheet = () => {
-  const intl = useIntl();
-  const glassEffect = useEnableLiquidGlass();
-  const { colors, fonts } = useTheme();
-  const { bottom: bottomInset } = useSafeAreaInsets();
-  const isComposeOpen = useIsComposeOpen();
-  const [footerHeight, setFooterHeight] = React.useState(0);
-  const { closeCompose, openCompose } = useUiStoreActions();
-  const features = useFeatures();
+const useComposeText = () => {
   const compose = useCompose(COMPOSE_ID);
-  const { updateCompose, resetCompose } = useComposeActions();
-  const submitCompose = useSubmitCompose(COMPOSE_ID);
-  const { openEmojiPicker } = useUiStoreActions();
-  const heading = useComposeHeading(COMPOSE_ID);
-  const uploadCompose = useUploadCompose(COMPOSE_ID);
-  const { configuration } = useInstance();
-  const isKeyboardVisible = useKeyboardState((state) => state.isVisible);
-
-  const [showKeyboardButton, setShowKeyboardButton] = React.useState(isKeyboardVisible);
-
-  const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
 
   let { text, spoilerText } = compose;
-  const {
-    isSubmitting,
-    inReplyToId,
-    quoteId,
-    visibility,
-    poll,
-    sensitive,
-    language,
-    modifiedLanguage,
-  } = compose;
+  const { language, modifiedLanguage } = compose;
 
   if (modifiedLanguage && modifiedLanguage !== language) {
     text = compose.textMap[modifiedLanguage];
     spoilerText = compose.spoilerTextMap[modifiedLanguage];
   }
 
-  const { data: currentAccountId } = useCredentialAccountId();
+  return { text, spoilerText };
+};
 
-  const bottomSheetRef = React.useRef<TrueSheet>(null);
-  const scrollableRef = React.useRef<ScrollView>(null);
+const useComposePublish = () => {
+  const intl = useIntl();
+  const compose = useCompose(COMPOSE_ID);
+  const { closeCompose } = useUiStoreActions();
+  const submitCompose = useSubmitCompose(COMPOSE_ID);
+  const { configuration } = useInstance();
+  const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
+  const { text, spoilerText } = useComposeText();
+
+  const { isSubmitting, inReplyToId, quoteId, visibility, poll } = compose;
 
   const textLength = (spoilerText + text).length;
   const maxLength = configuration.statuses.max_characters;
@@ -181,55 +162,6 @@ const ComposeBottomSheet = () => {
     compose.isUploading ||
     compose.isChangingUpload ||
     textLength > maxLength;
-
-  const handleClose = React.useCallback(() => {
-    const compose = useComposeStore.getState().composers[COMPOSE_ID];
-
-    if (checkComposeContent(compose)) {
-      const editing = !!compose.editedId;
-
-      Alert.alert(
-        intl.formatMessage(
-          editing ? messages.cancelEditingConfirmationHeading : messages.cancelConfirmationHeading,
-        ),
-        intl.formatMessage(
-          editing ? messages.cancelEditingConfirmationMessage : messages.cancelConfirmationMessage,
-        ),
-        [
-          {
-            text: intl.formatMessage(messages.cancel),
-            style: 'cancel',
-            onPress: () => openCompose(),
-          },
-          {
-            text: intl.formatMessage(
-              editing
-                ? messages.cancelEditingConfirmationConfirm
-                : messages.cancelConfirmationConfirm,
-            ),
-            style: 'destructive',
-            onPress: () => resetCompose(COMPOSE_ID),
-          },
-        ],
-      );
-    } else {
-      resetCompose(COMPOSE_ID);
-    }
-
-    closeCompose();
-  }, []);
-
-  React.useEffect(() => {
-    if (isKeyboardVisible) setShowKeyboardButton(true);
-  }, [isKeyboardVisible]);
-
-  React.useEffect(() => {
-    if (isComposeOpen) {
-      bottomSheetRef.current?.present();
-    } else {
-      bottomSheetRef.current?.dismiss();
-    }
-  }, [isComposeOpen]);
 
   const handlePublish = () => {
     const doPublish = () =>
@@ -258,27 +190,6 @@ const ComposeBottomSheet = () => {
     doPublish();
   };
 
-  const handleDismiss = () => {
-    if (useUiStore.getState().isComposeOpen) {
-      handleClose();
-    }
-  };
-
-  const handleInsertEmoji = () => {
-    openEmojiPicker((emoji, custom) => {
-      updateCompose(COMPOSE_ID, (draft) => {
-        const insertedText = custom ? `:${emoji}:` : emoji;
-
-        if (draft.modifiedLanguage) {
-          draft.textMap[draft.modifiedLanguage] =
-            (draft.textMap[draft.modifiedLanguage] || '') + insertedText;
-        } else {
-          draft.text += insertedText;
-        }
-      });
-    });
-  };
-
   const publishButtonLabel = intl.formatMessage(
     compose.scheduledAt
       ? compose.scheduledStatusId
@@ -298,7 +209,28 @@ const ComposeBottomSheet = () => {
   const publishButtonSfIcon: SFSymbol = visibility === 'direct' ? 'at' : 'paperplane';
   const publishButtonIcon = visibility === 'direct' ? AtIcon : PaperPlaneRightIcon;
 
-  const headerContent = glassEffect ? (
+  return {
+    handlePublish,
+    disabled: disabled || isSubmitting,
+    isSubmitting,
+    textLength,
+    maxLength,
+    publishButtonLabel,
+    publishButtonSfIcon,
+    publishButtonIcon,
+  };
+};
+
+interface IComposeHeader {
+  onClose: () => void;
+}
+
+const ComposeHeader: React.FC<IComposeHeader> = ({ onClose }) => {
+  const intl = useIntl();
+  const heading = useComposeHeading(COMPOSE_ID);
+  const { handlePublish, disabled, publishButtonLabel, publishButtonSfIcon } = useComposePublish();
+
+  return (
     <View
       style={{
         flexDirection: 'row',
@@ -312,7 +244,7 @@ const ComposeBottomSheet = () => {
       <GlassActionButton
         icon='xmark'
         label={intl.formatMessage(messages.close)}
-        onPress={() => handleClose()}
+        onPress={onClose}
       />
       <Text variant='titleMedium'>{heading}</Text>
       <GlassActionButton
@@ -320,10 +252,57 @@ const ComposeBottomSheet = () => {
         label={publishButtonLabel}
         onPress={handlePublish}
         confirm
-        disabled={disabled || isSubmitting}
+        disabled={disabled}
       />
     </View>
-  ) : undefined;
+  );
+};
+
+interface IComposeFooter {
+  onHeightChange: (height: number) => void;
+}
+
+const ComposeFooter: React.FC<IComposeFooter> = ({ onHeightChange }) => {
+  const intl = useIntl();
+  const glassEffect = useEnableLiquidGlass();
+  const { colors } = useTheme();
+  const features = useFeatures();
+  const compose = useCompose(COMPOSE_ID);
+  const { updateCompose } = useComposeActions();
+  const { openEmojiPicker } = useUiStoreActions();
+  const isKeyboardVisible = useKeyboardState((state) => state.isVisible);
+  const {
+    handlePublish,
+    disabled,
+    isSubmitting,
+    textLength,
+    maxLength,
+    publishButtonLabel,
+    publishButtonIcon,
+  } = useComposePublish();
+
+  const [showKeyboardButton, setShowKeyboardButton] = React.useState(isKeyboardVisible);
+
+  const { poll, sensitive } = compose;
+
+  React.useEffect(() => {
+    if (isKeyboardVisible) setShowKeyboardButton(true);
+  }, [isKeyboardVisible]);
+
+  const handleInsertEmoji = () => {
+    openEmojiPicker((emoji, custom) => {
+      updateCompose(COMPOSE_ID, (draft) => {
+        const insertedText = custom ? `:${emoji}:` : emoji;
+
+        if (draft.modifiedLanguage) {
+          draft.textMap[draft.modifiedLanguage] =
+            (draft.textMap[draft.modifiedLanguage] || '') + insertedText;
+        } else {
+          draft.text += insertedText;
+        }
+      });
+    });
+  };
 
   const footerContent = (
     <>
@@ -394,7 +373,7 @@ const ComposeBottomSheet = () => {
           icon={iconHelper(publishButtonIcon)}
           onPress={handlePublish}
           loading={isSubmitting}
-          disabled={disabled || isSubmitting}
+          disabled={disabled}
         >
           {publishButtonLabel}
         </Button>
@@ -402,12 +381,12 @@ const ComposeBottomSheet = () => {
     </>
   );
 
-  const footer = (
+  return (
     <>
       <ComposeSuggestions token='' handleSelected={() => {}} />
       {glassEffect ? (
         <GlassView
-          onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
+          onLayout={(e) => onHeightChange(e.nativeEvent.layout.height)}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -422,7 +401,7 @@ const ComposeBottomSheet = () => {
         </GlassView>
       ) : (
         <View
-          onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
+          onLayout={(e) => onHeightChange(e.nativeEvent.layout.height)}
           style={{
             flexDirection: 'row',
             justifyContent: 'flex-start',
@@ -437,148 +416,236 @@ const ComposeBottomSheet = () => {
       )}
     </>
   );
+};
+
+interface IComposeBody {
+  scrollableRef: React.RefObject<ScrollView | null>;
+  footerHeight: number;
+}
+
+const ComposeBody: React.FC<IComposeBody> = ({ scrollableRef, footerHeight }) => {
+  const intl = useIntl();
+  const { colors, fonts } = useTheme();
+  const { bottom: bottomInset } = useSafeAreaInsets();
+  const features = useFeatures();
+  const compose = useCompose(COMPOSE_ID);
+  const { updateCompose } = useComposeActions();
+  const uploadCompose = useUploadCompose(COMPOSE_ID);
+  const { configuration } = useInstance();
+  const { data: currentAccountId } = useCredentialAccountId();
+  const { text, spoilerText } = useComposeText();
+
+  return (
+    <ScrollView
+      ref={scrollableRef}
+      style={{ flex: 1 }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        gap: 8,
+        paddingHorizontal: 12,
+        paddingBottom: footerHeight + bottomInset,
+      }}
+    >
+      <MaybeDragDropContentView
+        allowedMimeTypes={configuration.media_attachments.supported_mime_types}
+        onDrop={(event) => {
+          uploadCompose(
+            event.assets
+              .filter((asset) => asset.uri)
+              .slice(
+                0,
+                configuration.statuses.max_media_attachments - compose.mediaAttachments.length,
+              )
+              .map((asset) => ({
+                uri: asset.uri!,
+                name: asset.uri!.split('/').at(-1)!,
+                type: asset.type,
+                size: 0,
+              })),
+          );
+        }}
+        style={{ flexGrow: 1, gap: 8 }}
+      >
+        <View style={{ flexDirection: 'row' }}>
+          <Account
+            id={currentAccountId}
+            action={
+              <View style={{ gap: 8, alignItems: 'flex-end' }}>
+                {features.privacyScopes && <ComposeVisibilityDropdown composeId={COMPOSE_ID} />}
+                {features.postLanguages && <ComposeLanguageDropdown composeId={COMPOSE_ID} />}
+              </View>
+            }
+          />
+        </View>
+        <ComposeReplyIndicator composeId={COMPOSE_ID} />
+        <ComposeQuoteIndicator composeId={COMPOSE_ID} />
+        {compose.approvalRequired && (
+          <Card mode='outlined'>
+            <Text style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
+              {compose.quoteId ? (
+                <FormattedMessage
+                  id='compose_form.approval_required.quote'
+                  defaultMessage='The quote needs to be approved by the post author.'
+                />
+              ) : (
+                <FormattedMessage
+                  id='compose_form.approval_required'
+                  defaultMessage='The reply needs to be approved by the post author.'
+                />
+              )}
+            </Text>
+          </Card>
+        )}
+        {features.spoilers && (
+          <TextInput
+            value={spoilerText}
+            onChangeText={(text) =>
+              updateCompose(COMPOSE_ID, (draft) => {
+                if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+                  draft.spoilerText = text;
+                } else {
+                  draft.spoilerTextMap[draft.modifiedLanguage] = text;
+                }
+              })
+            }
+            variant='outlined'
+            placeholder={intl.formatMessage(messages.spoilerPlaceholder)}
+          />
+        )}
+        <TextInputWrapper
+          onPaste={(payload) => {
+            if (payload.type === 'images') {
+              uploadCompose(
+                payload.uris
+                  .slice(
+                    0,
+                    configuration.statuses.max_media_attachments - compose.mediaAttachments.length,
+                  )
+                  .map((uri) => ({
+                    uri,
+                    name: uri.split('/').at(-1)!,
+                    type: 'application/octet-stream',
+                    size: 0,
+                  })),
+              );
+            }
+          }}
+          style={{
+            flexGrow: 1,
+          }}
+        >
+          <RNTextInput
+            value={text}
+            onChangeText={(text) =>
+              updateCompose(COMPOSE_ID, (draft) => {
+                if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+                  draft.text = text;
+                } else {
+                  draft.textMap[draft.modifiedLanguage] = text;
+                }
+              })
+            }
+            placeholder={intl.formatMessage(messages.placeholder)}
+            scrollEnabled={false}
+            style={{
+              flexGrow: 1,
+              minHeight: 40,
+              alignSelf: 'stretch',
+              paddingHorizontal: 16 + 1,
+              color: colors.onSurface,
+              textAlignVertical: 'top',
+              ...fonts.bodyLarge,
+            }}
+            multiline
+          />
+        </TextInputWrapper>
+        <PollForm composeId={COMPOSE_ID} />
+        <ComposeScheduleForm composeId={COMPOSE_ID} />
+        <ComposeAttachmentThumbs composeId={COMPOSE_ID} />
+      </MaybeDragDropContentView>
+    </ScrollView>
+  );
+};
+
+const ComposeBottomSheet = () => {
+  const intl = useIntl();
+  const glassEffect = useEnableLiquidGlass();
+  const { colors } = useTheme();
+  const isComposeOpen = useIsComposeOpen();
+  const [isPresented, setIsPresented] = React.useState(isComposeOpen);
+  const [footerHeight, setFooterHeight] = React.useState(0);
+  const { closeCompose, openCompose } = useUiStoreActions();
+  const { resetCompose } = useComposeActions();
+
+  const bottomSheetRef = React.useRef<TrueSheet>(null);
+  const scrollableRef = React.useRef<ScrollView>(null);
+
+  const handleClose = React.useCallback(() => {
+    const compose = useComposeStore.getState().composers[COMPOSE_ID];
+
+    if (checkComposeContent(compose)) {
+      const editing = !!compose.editedId;
+
+      Alert.alert(
+        intl.formatMessage(
+          editing ? messages.cancelEditingConfirmationHeading : messages.cancelConfirmationHeading,
+        ),
+        intl.formatMessage(
+          editing ? messages.cancelEditingConfirmationMessage : messages.cancelConfirmationMessage,
+        ),
+        [
+          {
+            text: intl.formatMessage(messages.cancel),
+            style: 'cancel',
+            onPress: () => openCompose(),
+          },
+          {
+            text: intl.formatMessage(
+              editing
+                ? messages.cancelEditingConfirmationConfirm
+                : messages.cancelConfirmationConfirm,
+            ),
+            style: 'destructive',
+            onPress: () => resetCompose(COMPOSE_ID),
+          },
+        ],
+      );
+    } else {
+      resetCompose(COMPOSE_ID);
+    }
+
+    closeCompose();
+  }, []);
+
+  React.useEffect(() => {
+    if (isComposeOpen) {
+      setIsPresented(true);
+      bottomSheetRef.current?.present();
+    } else {
+      bottomSheetRef.current?.dismiss();
+    }
+  }, [isComposeOpen]);
+
+  const handleDismiss = () => {
+    setIsPresented(false);
+    if (useUiStore.getState().isComposeOpen) {
+      handleClose();
+    }
+  };
 
   return (
     <TrueSheet
       ref={bottomSheetRef}
       detents={[0.85]}
-      header={headerContent}
-      footer={footer}
+      header={isPresented && glassEffect ? <ComposeHeader onClose={handleClose} /> : undefined}
+      footer={isPresented ? <ComposeFooter onHeightChange={setFooterHeight} /> : undefined}
       footerOptions={{ position: 'absolute', keyboardOffset: 12 }}
       onDidDismiss={handleDismiss}
       scrollableRef={scrollableRef}
       style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 16 : 32 }}
       backgroundColor={glassEffect ? undefined : colors.surfaceContainer}
     >
-      <ScrollView
-        ref={scrollableRef}
-        style={{ flex: 1 }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          gap: 8,
-          paddingHorizontal: 12,
-          paddingBottom: footerHeight + bottomInset,
-        }}
-      >
-        <MaybeDragDropContentView
-          allowedMimeTypes={configuration.media_attachments.supported_mime_types}
-          onDrop={(event) => {
-            uploadCompose(
-              event.assets
-                .filter((asset) => asset.uri)
-                .slice(
-                  0,
-                  configuration.statuses.max_media_attachments - compose.mediaAttachments.length,
-                )
-                .map((asset) => ({
-                  uri: asset.uri!,
-                  name: asset.uri!.split('/').at(-1)!,
-                  type: asset.type,
-                  size: 0,
-                })),
-            );
-          }}
-          style={{ flexGrow: 1, gap: 8 }}
-        >
-          <View style={{ flexDirection: 'row' }}>
-            <Account
-              id={currentAccountId}
-              action={
-                <View style={{ gap: 8, alignItems: 'flex-end' }}>
-                  {features.privacyScopes && <ComposeVisibilityDropdown composeId={COMPOSE_ID} />}
-                  {features.postLanguages && <ComposeLanguageDropdown composeId={COMPOSE_ID} />}
-                </View>
-              }
-            />
-          </View>
-          <ComposeReplyIndicator composeId={COMPOSE_ID} />
-          <ComposeQuoteIndicator composeId={COMPOSE_ID} />
-          {compose.approvalRequired && (
-            <Card mode='outlined'>
-              <Text style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
-                {compose.quoteId ? (
-                  <FormattedMessage
-                    id='compose_form.approval_required.quote'
-                    defaultMessage='The quote needs to be approved by the post author.'
-                  />
-                ) : (
-                  <FormattedMessage
-                    id='compose_form.approval_required'
-                    defaultMessage='The reply needs to be approved by the post author.'
-                  />
-                )}
-              </Text>
-            </Card>
-          )}
-          {features.spoilers && (
-            <TextInput
-              value={spoilerText}
-              onChangeText={(text) =>
-                updateCompose(COMPOSE_ID, (draft) => {
-                  if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
-                    draft.spoilerText = text;
-                  } else {
-                    draft.spoilerTextMap[draft.modifiedLanguage] = text;
-                  }
-                })
-              }
-              variant='outlined'
-              placeholder={intl.formatMessage(messages.spoilerPlaceholder)}
-            />
-          )}
-          <TextInputWrapper
-            onPaste={(payload) => {
-              if (payload.type === 'images') {
-                uploadCompose(
-                  payload.uris
-                    .slice(
-                      0,
-                      configuration.statuses.max_media_attachments -
-                        compose.mediaAttachments.length,
-                    )
-                    .map((uri) => ({
-                      uri,
-                      name: uri.split('/').at(-1)!,
-                      type: 'application/octet-stream',
-                      size: 0,
-                    })),
-                );
-              }
-            }}
-            style={{
-              flexGrow: 1,
-            }}
-          >
-            <RNTextInput
-              value={text}
-              onChangeText={(text) =>
-                updateCompose(COMPOSE_ID, (draft) => {
-                  if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
-                    draft.text = text;
-                  } else {
-                    draft.textMap[draft.modifiedLanguage] = text;
-                  }
-                })
-              }
-              placeholder={intl.formatMessage(messages.placeholder)}
-              scrollEnabled={false}
-              style={{
-                flexGrow: 1,
-                minHeight: 40,
-                alignSelf: 'stretch',
-                paddingHorizontal: 16 + 1,
-                color: colors.onSurface,
-                textAlignVertical: 'top',
-                ...fonts.bodyLarge,
-              }}
-              multiline
-            />
-          </TextInputWrapper>
-          <PollForm composeId={COMPOSE_ID} />
-          <ComposeScheduleForm composeId={COMPOSE_ID} />
-          <ComposeAttachmentThumbs composeId={COMPOSE_ID} />
-        </MaybeDragDropContentView>
-      </ScrollView>
+      {isPresented && <ComposeBody scrollableRef={scrollableRef} footerHeight={footerHeight} />}
     </TrueSheet>
   );
 };
