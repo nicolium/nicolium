@@ -466,17 +466,19 @@ const ComposeBody: React.FC<IComposeBody> = ({ scrollableRef, footerHeight }) =>
         }}
         style={{ flexGrow: 1, gap: 8 }}
       >
-        <View style={{ flexDirection: 'row' }}>
-          <Account
-            id={currentAccountId}
-            action={
-              <View style={{ gap: 8, alignItems: 'flex-end' }}>
-                {features.privacyScopes && <ComposeVisibilityDropdown composeId={COMPOSE_ID} />}
-                {features.postLanguages && <ComposeLanguageDropdown composeId={COMPOSE_ID} />}
-              </View>
-            }
-          />
-        </View>
+        {currentAccountId && (
+          <View style={{ flexDirection: 'row' }}>
+            <Account
+              id={currentAccountId}
+              action={
+                <View style={{ gap: 8, alignItems: 'flex-end' }}>
+                  {features.privacyScopes && <ComposeVisibilityDropdown composeId={COMPOSE_ID} />}
+                  {features.postLanguages && <ComposeLanguageDropdown composeId={COMPOSE_ID} />}
+                </View>
+              }
+            />
+          </View>
+        )}
         <ComposeReplyIndicator composeId={COMPOSE_ID} />
         <ComposeQuoteIndicator composeId={COMPOSE_ID} />
         {compose.approvalRequired && (
