@@ -147,7 +147,10 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
                 label: intl.formatMessage(messages.signOut),
                 onPress: () => {
                   signOut();
-                  navigation.navigate('home');
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'app' }],
+                  });
                   toast.info(intl.formatMessage(messages.loggedOut));
                 },
                 role: 'destructive',

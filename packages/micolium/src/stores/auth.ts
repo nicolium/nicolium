@@ -61,8 +61,12 @@ interface AuthStore {
   actions: {
     fetchInstance: (instance: string) => Promise<void>;
     createApp: (grantType: 'password' | 'authorization_code') => Promise<void>;
-    signIn: (username: string, password: string, intl?: IntlShape) => Promise<void>;
-    signInWithCode: (code: string, codeVerifier: string, intl?: IntlShape) => Promise<void>;
+    signIn: (username: string, password: string, intl?: IntlShape) => Promise<void | 'canceled'>;
+    signInWithCode: (
+      code: string,
+      codeVerifier: string,
+      intl?: IntlShape,
+    ) => Promise<void | 'canceled'>;
     signOut: () => void;
     toggleAccount: (accountId: string) => boolean;
   };
@@ -106,12 +110,28 @@ const useAuthStore = create<AuthStore>()(
       }
     };
 
+    const cancelPendingAuth = (client: PlApiClient, pendingAuth: PendingAuth) => {
+      client.oauth
+        .revokeToken({
+          client_id: pendingAuth.client_id!,
+          client_secret: pendingAuth.client_secret!,
+          token: client.accessToken!,
+        } as RevokeTokenParams)
+        .catch(() => {});
+
+      set((state) => {
+        state.pendingAuth = null;
+
+        persistSessions(state);
+      });
+    };
+
     const checkDuplicatedAccount = async (
       client: PlApiClient,
       pendingAuth: PendingAuth,
       addAccount: () => void,
       intl?: IntlShape,
-    ) => {
+    ): Promise<void | 'canceled'> => {
       if (intl) {
         try {
           const account = await client.settings.verifyCredentials();
@@ -123,22 +143,35 @@ const useAuthStore = create<AuthStore>()(
               scopedQueryKey(queryKeys.accountCredentials.show('self'), session),
             );
             if (
-              sessions[session].instance === pendingAuth.instance &&
+              sessions[session].instance.toLocaleLowerCase() ===
+                pendingAuth.instance.toLocaleLowerCase() &&
               credentialAccount?.id === account.id
             ) {
-              return Alert.alert(
-                intl.formatMessage(messages.confirmDuplicateAccountTitle, {
-                  acct: account.acct,
-                }),
-                intl.formatMessage(messages.confirmDuplicateAccountMessage),
-                [
-                  {
-                    text: intl.formatMessage(messages.confirmDuplicateAccountConfirm),
-                    onPress: addAccount,
-                  },
-                  { text: intl.formatMessage(messages.cancel) },
-                ],
-              );
+              return new Promise((resolve) => {
+                Alert.alert(
+                  intl.formatMessage(messages.confirmDuplicateAccountTitle, {
+                    acct: account.acct,
+                  }),
+                  intl.formatMessage(messages.confirmDuplicateAccountMessage),
+                  [
+                    {
+                      text: intl.formatMessage(messages.confirmDuplicateAccountConfirm),
+                      onPress: () => {
+                        addAccount();
+                        resolve();
+                      },
+                    },
+                    {
+                      text: intl.formatMessage(messages.cancel),
+                      onPress: () => {
+                        cancelPendingAuth(client, pendingAuth);
+                        resolve('canceled');
+                      },
+                    },
+                  ],
+                  { cancelable: false },
+                );
+              });
             }
           }
         } catch {}
@@ -251,7 +284,7 @@ const useAuthStore = create<AuthStore>()(
             });
           };
 
-          await checkDuplicatedAccount(client, pendingAuth, addAccount, intl);
+          return checkDuplicatedAccount(client, pendingAuth, addAccount, intl);
         },
         signInWithCode: async (code, codeVerifier, intl) => {
           const { pendingAuth, pendingAuthClient: client } = get();
@@ -292,7 +325,7 @@ const useAuthStore = create<AuthStore>()(
             });
           };
 
-          await checkDuplicatedAccount(client, pendingAuth, addAccount, intl);
+          return checkDuplicatedAccount(client, pendingAuth, addAccount, intl);
         },
         signOut: () => {
           const { currentAccount, clients, sessions } = get();

@@ -256,7 +256,10 @@ const CredentialsScreen = ({
     setLoading(true);
     try {
       await createApp('password');
-      await signIn(username, password, intl);
+      const result = await signIn(username, password, intl);
+      if (result === 'canceled') {
+        navigation.popTo('instance');
+      }
       setLoading(false);
     } catch (e) {
       setError(true);
@@ -364,14 +367,20 @@ const OauthFlowScreen = ({
     if (response?.type === 'success') {
       const { code } = response.params;
 
-      signInWithCode(code, request?.codeVerifier!, intl).catch(() => {
-        if (Platform.OS === 'android') {
-          ToastAndroid.show(intl.formatMessage(messages.failMessage), ToastAndroid.SHORT);
-        } else {
-          toast(intl.formatMessage(messages.failMessage));
-        }
-        navigation.goBack();
-      });
+      signInWithCode(code, request?.codeVerifier!, intl)
+        .then((result) => {
+          if (result === 'canceled') {
+            navigation.popTo('instance');
+          }
+        })
+        .catch(() => {
+          if (Platform.OS === 'android') {
+            ToastAndroid.show(intl.formatMessage(messages.failMessage), ToastAndroid.SHORT);
+          } else {
+            toast(intl.formatMessage(messages.failMessage));
+          }
+          navigation.goBack();
+        });
     } else if (response && ['locked', 'cancel', 'dismiss', 'error'].includes(response.type)) {
       if (Platform.OS === 'android') {
         ToastAndroid.show(intl.formatMessage(messages.interruptMessage), ToastAndroid.SHORT);
