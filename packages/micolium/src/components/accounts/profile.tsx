@@ -38,6 +38,7 @@ import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
 
 import { type ITimeline, Timeline } from '../timelines/timeline';
+import { HeaderBackButton } from '../ui/header-icon-button';
 
 const messages = defineMessages({
   repliesToggle: { id: 'account.filters.replies_toggle', defaultMessage: 'Show replies' },
@@ -554,7 +555,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     <>
       <Animated.View style={headerStyle}>
         <Appbar.Header mode='small' style={{ backgroundColor: colors.surfaceContainer }}>
-          {!ownAccount && <Appbar.BackAction onPress={navigation.goBack} />}
+          {!ownAccount && <HeaderBackButton onPress={navigation.goBack} />}
           <Appbar.Content
             title={
               <View style={{ marginLeft: ownAccount ? 16 : 0 }}>

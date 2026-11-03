@@ -14,6 +14,7 @@ import { openUrl } from '@/utils/url';
 
 import type { RootStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HeaderBackButton } from '@/components/ui/header-icon-button';
 
 const messages = defineMessages({
   header: { id: 'column.link_timeline', defaultMessage: 'Posts linking to {url}' },
@@ -63,7 +64,7 @@ const LinksScreen = ({
   return (
     <>
       <Appbar.Header mode='small' style={{ backgroundColor: colors.surfaceContainer }}>
-        <Appbar.BackAction onPress={navigation.goBack} />
+        <HeaderBackButton onPress={navigation.goBack} />
         <Appbar.Content
           title={intl.formatMessage(messages.header, {
             url: url.replace(/^https?:\/\/(www\.)?/, ''),
