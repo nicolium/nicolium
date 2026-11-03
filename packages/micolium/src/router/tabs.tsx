@@ -38,6 +38,8 @@ const messages = defineMessages({
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
 });
 
+const EmptyComponent = () => null;
+
 const TabScreenLayout: (
   props: ScreenLayoutArgs<TabsParams, keyof TabsParams, BottomTabNavigationOptions, any>,
 ) => React.ReactElement = ({ children }) => (
@@ -141,7 +143,7 @@ if (Platform.OS === 'ios') {
         {(insets.left > 0 || insets.right > 0) && (
           <Tab.Screen
             name='compose'
-            component={() => null}
+            component={EmptyComponent}
             options={{
               tabBarLabel: intl.formatMessage(messages.compose),
               tabBarIcon: { type: 'sfSymbol', name: 'square.and.pencil' },
