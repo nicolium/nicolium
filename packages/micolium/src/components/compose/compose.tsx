@@ -18,6 +18,7 @@ import {
   View,
   Platform,
   Keyboard,
+  type TextInputSelectionChangeEvent,
 } from 'react-native';
 import { useKeyboardState } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -25,6 +26,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
+import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useAuthStore } from '@/stores/auth';
 import {
@@ -38,6 +40,7 @@ import {
 } from '@/stores/compose';
 import { useSetting } from '@/stores/settings';
 import { useIsComposeOpen, useUiStore, useUiStoreActions } from '@/stores/ui';
+import { textAtCursorMatchesToken } from '@/utils/suggestions';
 
 import { Account } from '../accounts/account';
 import { GlassActionButton } from '../ui/dialog-or-sheet';
@@ -55,9 +58,20 @@ import { ComposeUploadButton } from './compose-upload-button';
 import { ComposeVisibilityDropdown } from './compose-visibility-dropdown';
 import { PollForm } from './poll-form';
 
+import type { Suggestion } from '@/hooks/use-compose-suggestions';
 import type { SFSymbol } from 'expo-symbols';
 
 const COMPOSE_ID = 'compose-modal' as const;
+
+const SEARCH_TOKENS = ['@', ':', '#'] as const;
+
+const getStartPosition = (suggestion: Suggestion, tokenStart: number) =>
+  typeof suggestion === 'object' || suggestion[0] === '#' ? tokenStart - 1 : tokenStart;
+
+interface SuggestionToken {
+  tokenStart: number;
+  token: string;
+}
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What’s on your mind?' },
@@ -259,10 +273,16 @@ const ComposeHeader: React.FC<IComposeHeader> = ({ onClose }) => {
 };
 
 interface IComposeFooter {
+  suggestionToken: SuggestionToken | null;
+  onSuggestionSelected: (suggestion: Suggestion) => void;
   onHeightChange: (height: number) => void;
 }
 
-const ComposeFooter: React.FC<IComposeFooter> = ({ onHeightChange }) => {
+const ComposeFooter: React.FC<IComposeFooter> = ({
+  suggestionToken,
+  onSuggestionSelected,
+  onHeightChange,
+}) => {
   const intl = useIntl();
   const glassEffect = useEnableLiquidGlass();
   const { colors } = useTheme();
@@ -383,7 +403,10 @@ const ComposeFooter: React.FC<IComposeFooter> = ({ onHeightChange }) => {
 
   return (
     <>
-      <ComposeSuggestions token='' handleSelected={() => {}} />
+      <ComposeSuggestions
+        token={suggestionToken?.token ?? ''}
+        handleSelected={onSuggestionSelected}
+      />
       {glassEffect ? (
         <GlassView
           onLayout={(e) => onHeightChange(e.nativeEvent.layout.height)}
@@ -421,9 +444,20 @@ const ComposeFooter: React.FC<IComposeFooter> = ({ onHeightChange }) => {
 interface IComposeBody {
   scrollableRef: React.RefObject<ScrollView | null>;
   footerHeight: number;
+  suggestionToken: SuggestionToken | null;
+  onSuggestionTokenChange: (suggestionToken: SuggestionToken | null) => void;
+  textRefs: Record<'text', React.RefObject<string>>;
+  caretPositionRefs: Record<'text', React.RefObject<number>>;
 }
 
-const ComposeBody: React.FC<IComposeBody> = ({ scrollableRef, footerHeight }) => {
+const ComposeBody: React.FC<IComposeBody> = ({
+  scrollableRef,
+  footerHeight,
+  suggestionToken,
+  onSuggestionTokenChange,
+  textRefs,
+  caretPositionRefs,
+}) => {
   const intl = useIntl();
   const { colors, fonts } = useTheme();
   const { bottom: bottomInset } = useSafeAreaInsets();
@@ -434,6 +468,40 @@ const ComposeBody: React.FC<IComposeBody> = ({ scrollableRef, footerHeight }) =>
   const { configuration } = useInstance();
   const { data: currentAccountId } = useCredentialAccountId();
   const { text, spoilerText } = useComposeText();
+
+  const checkSuggestionToken = () => {
+    const [tokenStart, token] = textAtCursorMatchesToken(
+      textRefs.text.current,
+      caretPositionRefs.text.current,
+      SEARCH_TOKENS,
+    );
+
+    if (token && token[0] === '@' && token.match(/:.+/)) {
+      onSuggestionTokenChange(null);
+    } else if (token !== null && suggestionToken?.token !== token) {
+      onSuggestionTokenChange({ tokenStart: tokenStart!, token });
+    } else if (token === null) {
+      onSuggestionTokenChange(null);
+    }
+  };
+
+  const handleChangeText = (text: string) => {
+    textRefs.text.current = text;
+    checkSuggestionToken();
+
+    updateCompose(COMPOSE_ID, (draft) => {
+      if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+        draft.text = text;
+      } else {
+        draft.textMap[draft.modifiedLanguage] = text;
+      }
+    });
+  };
+
+  const handleSelectionChange = (e: TextInputSelectionChangeEvent) => {
+    caretPositionRefs.text.current = e.nativeEvent.selection.start;
+    checkSuggestionToken();
+  };
 
   return (
     <ScrollView
@@ -538,15 +606,8 @@ const ComposeBody: React.FC<IComposeBody> = ({ scrollableRef, footerHeight }) =>
         >
           <RNTextInput
             value={text}
-            onChangeText={(text) =>
-              updateCompose(COMPOSE_ID, (draft) => {
-                if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
-                  draft.text = text;
-                } else {
-                  draft.textMap[draft.modifiedLanguage] = text;
-                }
-              })
-            }
+            onChangeText={handleChangeText}
+            onSelectionChange={handleSelectionChange}
             placeholder={intl.formatMessage(messages.placeholder)}
             scrollEnabled={false}
             style={{
@@ -576,11 +637,41 @@ const ComposeBottomSheet = () => {
   const isComposeOpen = useIsComposeOpen();
   const [isPresented, setIsPresented] = React.useState(isComposeOpen);
   const [footerHeight, setFooterHeight] = React.useState(0);
+  const [suggestionToken, setSuggestionToken] = React.useState<SuggestionToken | null>(null);
   const { closeCompose, openCompose } = useUiStoreActions();
-  const { resetCompose } = useComposeActions();
+  const { resetCompose, selectComposeSuggestion } = useComposeActions();
+  const scopeUrl = useScopeUrl();
 
   const bottomSheetRef = React.useRef<TrueSheet>(null);
   const scrollableRef = React.useRef<ScrollView>(null);
+
+  const textRefs = {
+    text: React.useRef(''),
+  };
+  const caretPositionRefs = {
+    text: React.useRef(0),
+  };
+
+  const handleSuggestionSelected = (suggestion: Suggestion) => {
+    if (!suggestionToken) return;
+
+    const { tokenStart, token } = suggestionToken;
+
+    selectComposeSuggestion(
+      COMPOSE_ID,
+      scopeUrl,
+      getStartPosition(suggestion, tokenStart),
+      token,
+      suggestion,
+    );
+    setSuggestionToken(null);
+
+    const compose = useComposeStore.getState().composers[COMPOSE_ID];
+    textRefs.text.current =
+      compose.modifiedLanguage && compose.modifiedLanguage !== compose.language
+        ? compose.textMap[compose.modifiedLanguage]
+        : compose.text;
+  };
 
   const handleClose = React.useCallback(() => {
     const compose = useComposeStore.getState().composers[COMPOSE_ID];
@@ -640,14 +731,31 @@ const ComposeBottomSheet = () => {
       ref={bottomSheetRef}
       detents={[0.85]}
       header={isPresented && glassEffect ? <ComposeHeader onClose={handleClose} /> : undefined}
-      footer={isPresented ? <ComposeFooter onHeightChange={setFooterHeight} /> : undefined}
+      footer={
+        isPresented ? (
+          <ComposeFooter
+            suggestionToken={suggestionToken}
+            onSuggestionSelected={handleSuggestionSelected}
+            onHeightChange={setFooterHeight}
+          />
+        ) : undefined
+      }
       footerOptions={{ position: 'absolute', keyboardOffset: 12 }}
       onDidDismiss={handleDismiss}
       scrollableRef={scrollableRef}
       style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 16 : 32 }}
       backgroundColor={glassEffect ? undefined : colors.surfaceContainer}
     >
-      {isPresented && <ComposeBody scrollableRef={scrollableRef} footerHeight={footerHeight} />}
+      {isPresented && (
+        <ComposeBody
+          scrollableRef={scrollableRef}
+          footerHeight={footerHeight}
+          suggestionToken={suggestionToken}
+          onSuggestionTokenChange={setSuggestionToken}
+          textRefs={textRefs}
+          caretPositionRefs={caretPositionRefs}
+        />
+      )}
     </TrueSheet>
   );
 };

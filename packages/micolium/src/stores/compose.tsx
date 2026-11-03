@@ -40,6 +40,7 @@ import { scopedQueryKey } from '@/queries/query';
 
 import { useSetting, useSettingsStore } from './settings';
 
+import type { Suggestion } from '@/hooks/use-compose-suggestions';
 import type { SelectedStatus } from '@/queries/statuses/use-status';
 // import type { AutoSuggestion } from '@/components/autosuggest-input';
 // import type { NormalizedStatus as Status } from '@/queries/statuses/normalize';
@@ -501,14 +502,13 @@ interface ComposeActions {
   //   ) => void;
   resetCompose: (composeId?: string) => void;
   //   composeResetInReplyTo: (composeId?: string) => void;
-  //   selectComposeSuggestion: (
-  //     composeId: string,
-  //     scopeUrl: string,
-  //     position: number,
-  //     token: string | null,
-  //     suggestion: AutoSuggestion,
-  //     path: ['spoiler_text'] | ['poll', 'options', number],
-  //   ) => void;
+  selectComposeSuggestion: (
+    composeId: string,
+    scopeUrl: string,
+    position: number,
+    token: string | null,
+    suggestion: Suggestion,
+  ) => void;
 
   //   handleTimelineDelete: (statusId: string) => void;
 
@@ -908,30 +908,30 @@ const useComposeStore = create<ComposeStore>()(
         //           });
         //         },
 
-        //         selectComposeSuggestion: (composeId, scopeUrl, startPosition, token, suggestion, path) => {
-        //           let completion = '';
+        selectComposeSuggestion: (composeId, scopeUrl, startPosition, token, suggestion) => {
+          let completion = '';
 
-        //           if (typeof suggestion === 'object' && 'id' in suggestion) {
-        //             completion = isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
+          if (typeof suggestion === 'object') {
+            completion = suggestion.custom ? suggestion.colons : suggestion.native;
+          } else if (suggestion[0] === '#') {
+            completion = suggestion;
+          } else {
+            completion = selectAccount(suggestion, scopeUrl)!.acct;
+          }
 
-        //             useSettingsStore.getState().actions.rememberEmojiUse(suggestion);
-        //             saveSettings();
-        //           } else if (typeof suggestion === 'string' && suggestion[0] === '#') {
-        //             completion = suggestion;
-        //           } else if (typeof suggestion === 'string') {
-        //             completion = selectAccount(suggestion, scopeUrl)!.acct;
-        //           }
+          get().actions.updateCompose(composeId, (compose) => {
+            const updateText = (oldText?: string) =>
+              `${oldText?.slice(0, startPosition)}${completion} ${oldText?.slice(startPosition + (token?.length ?? 0))}`;
 
-        //           get().actions.updateCompose(composeId, (compose) => {
-        //             const updateText = (oldText?: string) =>
-        //               `${oldText?.slice(0, startPosition)}${completion} ${oldText?.slice(startPosition + (token?.length ?? 0))}`;
-        //             if (path[0] === 'spoiler_text') {
-        //               compose.spoilerText = updateText(compose.spoilerText);
-        //             } else if (compose.poll) {
-        //               compose.poll.options[path[2]] = updateText(compose.poll.options[path[2]]);
-        //             }
-        //           });
-        //         },
+            if (compose.modifiedLanguage && compose.modifiedLanguage !== compose.language) {
+              compose.textMap[compose.modifiedLanguage] = updateText(
+                compose.textMap[compose.modifiedLanguage],
+              );
+            } else {
+              compose.text = updateText(compose.text);
+            }
+          });
+        },
 
         //         handleTimelineDelete: (statusId) => {
         //           get().actions.updateAllCompose((compose) => {
