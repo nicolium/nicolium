@@ -74,6 +74,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({ message, onClick, count }
 
   return (
     <Animated.View
+      pointerEvents='box-none'
       style={[
         {
           flexDirection: 'row',
