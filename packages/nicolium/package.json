@@ -80,7 +80,7 @@
     "fast-average-color": "^9.5.2",
     "fasttext.wasm.js": "^1.0.0",
     "fflate": "^0.8.3",
-    "fuzzysort": "^3.1.0",
+    "fuzzysort": "^4.0.2",
     "html-react-parser": "^5.2.17",
     "intl-messageformat": "^11.1.2",
     "intl-pluralrules": "^2.0.1",
