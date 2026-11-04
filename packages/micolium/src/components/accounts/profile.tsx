@@ -13,7 +13,7 @@ import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { ArrowLineDownIcon } from 'phosphor-react-native/src/icons/ArrowLineDown';
 import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
-import { mediaAttachmentSchema } from 'pl-api';
+import { type Account, mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { type NativeScrollEvent, type NativeSyntheticEvent, Pressable, View } from 'react-native';
@@ -34,6 +34,10 @@ import { StyledHtml } from '@/components/ui/styled-html';
 import { useClient } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAccount } from '@/queries/accounts/use-account';
+import {
+  useAcceptFollowRequestMutation,
+  useRejectFollowRequestMutation,
+} from '@/queries/accounts/use-follow-requests';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
@@ -78,7 +82,68 @@ const messages = defineMessages({
     id: 'account.filters.label.none.except_pinned',
     defaultMessage: 'Posts, without pinned',
   },
+  followRequestWithName: {
+    id: 'notification.follow_request',
+    defaultMessage: '{name} requested to follow you',
+  },
+  followRequestAuthorize: {
+    id: 'follow_request.authorize',
+    defaultMessage: 'Authorize',
+  },
+  followRequestReject: {
+    id: 'follow_request.reject',
+    defaultMessage: 'Reject',
+  },
 });
+
+interface IFollowRequestedChip {
+  account: Account;
+}
+
+const FollowRequestedChip: React.FC<IFollowRequestedChip> = ({ account }) => {
+  const intl = useIntl();
+
+  const { mutate: authorizeFollowRequest } = useAcceptFollowRequestMutation(account.id);
+  const { mutate: rejectFollowRequest } = useRejectFollowRequestMutation(account.id);
+
+  const handleAuthorize = () => {
+    authorizeFollowRequest();
+  };
+
+  const handleReject = () => {
+    rejectFollowRequest();
+  };
+
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <Chip key='requested' mode='flat' compact onPress={() => {}}>
+          <FormattedMessage
+            id='account.requested_follow'
+            defaultMessage='Requested to follow you'
+          />
+        </Chip>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Label>
+          {intl.formatMessage(messages.followRequestWithName, {
+            name: `@${account.acct}`,
+          })}
+        </DropdownMenu.Label>
+        <DropdownMenu.Item key='authorize' onSelect={handleAuthorize}>
+          <DropdownMenu.ItemTitle>
+            {intl.formatMessage(messages.followRequestAuthorize)}
+          </DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item key='reject' onSelect={handleReject}>
+          <DropdownMenu.ItemTitle>
+            {intl.formatMessage(messages.followRequestReject)}
+          </DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+};
 
 interface IProfileTimeline extends Pick<ITimeline, 'header'> {
   ref?: React.RefObject<FlashListRef<TimelineEntry> | null>;
@@ -181,14 +246,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
         </Chip>,
       );
     } else if (account.relationship?.requested_by) {
-      chips.push(
-        <Chip key='requested' mode='flat' compact>
-          <FormattedMessage
-            id='account.requested_follow'
-            defaultMessage='Requested to follow you'
-          />
-        </Chip>,
-      );
+      chips.push(<FollowRequestedChip account={account} />);
     }
 
     if (account.relationship?.muting) {

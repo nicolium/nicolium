@@ -691,6 +691,7 @@
   "status.show_filter_reason": "Show anyway",
   "status.show_more": "Show more",
   "status.show_original": "Show original",
+  "status.skip_pinned": "Skip pinned posts",
   "status.thread.expand_all": "Expand all posts",
   "status.translate": "Translate",
   "status.translate.download": "Download model and translate locally",

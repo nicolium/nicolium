@@ -478,6 +478,7 @@
   "status.show_filter_reason": "仍然显示",
   "status.show_more": "显示更多",
   "status.show_original": "显示原文本",
+  "status.skip_pinned": "跳过置顶帖文",
   "status.thread.expand_all": "展开全部帖文",
   "status.translate": "翻译",
   "status.translate.download": "下载模型并本地翻译",

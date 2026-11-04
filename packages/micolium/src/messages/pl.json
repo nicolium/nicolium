@@ -481,6 +481,7 @@
   "status.show_filter_reason": "Pokaż mimo tego",
   "status.show_more": "Pokaż więcej",
   "status.show_original": "Pokaż oryginalny wpis",
+  "status.skip_pinned": "Pomiń przypięte wpisy",
   "status.thread.expand_all": "Rozwiń wszystkie wpisy",
   "status.translate": "Przetłumacz wpis",
   "status.translate.download": "Pobierz model i przetłumacz lokalnie",
