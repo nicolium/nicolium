@@ -94,6 +94,7 @@ const ComposeSuggestions: React.FC<IComposeSuggestions> = ({ token, handleSelect
     suggestions.length > 0 && (
       <ScrollView
         horizontal
+        keyboardShouldPersistTaps='handled'
         contentContainerStyle={{
           flexDirection: 'row',
           gap: 4,
