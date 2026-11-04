@@ -322,6 +322,7 @@ const Status: React.FC<IStatus> = ({
       showFiltered={showFiltered}
       unfilterStatus={() => unfilterStatus(id)}
       contentKey={status.id}
+      nyaize={status.account.speak_as_cat}
       {...props}
     />
   );

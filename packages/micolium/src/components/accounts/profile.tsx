@@ -500,7 +500,11 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                   @{account.acct}
                 </Text>
               </View>
-              <StyledHtml html={account.note} emojis={account.emojis} />
+              <StyledHtml
+                html={account.note}
+                emojis={account.emojis}
+                nyaize={account.speak_as_cat}
+              />
               {account.fields.length > 0 && (
                 <DataTable>
                   {account.fields.map((field, index) => (
@@ -523,7 +527,11 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                         )}
                       </DataTable.Cell>
                       <DataTable.Cell>
-                        <StyledHtml html={field.value} emojis={account.emojis} />
+                        <StyledHtml
+                          html={field.value}
+                          emojis={account.emojis}
+                          nyaize={account.speak_as_cat}
+                        />
                       </DataTable.Cell>
                     </DataTable.Row>
                   ))}

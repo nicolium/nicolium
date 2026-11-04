@@ -30,6 +30,7 @@ interface IUIStatus {
   showFiltered?: boolean;
   unfilterStatus?: () => void;
   contentKey?: string;
+  nyaize?: boolean;
 }
 
 const UIStatus: React.FC<IUIStatus> = ({
@@ -53,6 +54,7 @@ const UIStatus: React.FC<IUIStatus> = ({
   showFiltered,
   unfilterStatus,
   contentKey,
+  nyaize: shouldNyaize,
 }) => {
   const theme = useTheme();
 
@@ -81,6 +83,7 @@ const UIStatus: React.FC<IUIStatus> = ({
         emojis={emojis}
         mentions={mentions}
         sizeMultiplier={detailed ? 1.2 : 1}
+        nyaize={shouldNyaize}
       />
     );
 
@@ -98,7 +101,11 @@ const UIStatus: React.FC<IUIStatus> = ({
                 variant='titleSmall'
                 numberOfLines={!(detailed || spoilerExpanded) ? 1 : undefined}
               >
-                {emojis ? <Emojify text={spoilerText} emojis={emojis} /> : spoilerText}
+                {emojis ? (
+                  <Emojify text={spoilerText} emojis={emojis} nyaize={shouldNyaize} />
+                ) : (
+                  spoilerText
+                )}
               </Text>
             </Card.Content>
             {expandStatusSpoiler && (

@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import React from 'react';
 
+import nyaize from '@/queries/utils/nyaize';
 import { makeEmojiMap } from '@/utils/emojis';
 
 import type { CustomEmoji } from 'pl-api';
@@ -10,10 +11,11 @@ const validEmojiChar = (c: string) => /^[a-zA-Z0-9_.-]$/.test(c);
 interface IEmojify {
   text: string;
   emojis: Array<CustomEmoji>;
+  nyaize?: boolean;
 }
 
-const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis }) => {
-  if (!emojis?.length) return text;
+const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis, nyaize: shouldNyaize }) => {
+  if (!emojis?.length) return shouldNyaize ? nyaize(text) : text;
 
   const emojiMap = makeEmojiMap(emojis || []);
 
@@ -75,7 +77,7 @@ const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis }) => {
   if (!replaced) return text;
 
   if (stack.length) currentText += stack;
-  if (currentText.length) nodes.push(currentText);
+  if (currentText.length) nodes.push(shouldNyaize ? nyaize(currentText) : currentText);
   currentText = '';
 
   return <>{nodes}</>;

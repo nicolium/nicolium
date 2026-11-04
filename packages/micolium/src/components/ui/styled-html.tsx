@@ -16,6 +16,7 @@ import React, { useMemo } from 'react';
 import { Text as RNText, useWindowDimensions } from 'react-native';
 
 import { useAccount } from '@/queries/accounts/use-account';
+import nyaize from '@/queries/utils/nyaize';
 import { useSetting } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/emojis';
 import { multiplyFontSizes } from '@/utils/themes';
@@ -166,9 +167,16 @@ interface IStyledHtml {
   emojis?: Array<CustomEmoji>;
   mentions?: Array<Mention>;
   sizeMultiplier?: number;
+  nyaize?: boolean;
 }
 
-const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultiplier = 1 }) => {
+const StyledHtml: React.FC<IStyledHtml> = ({
+  html,
+  emojis,
+  mentions,
+  sizeMultiplier = 1,
+  nyaize: shouldNyaize,
+}) => {
   const { colors, fonts } = useTheme();
   const { width } = useWindowDimensions();
 
@@ -281,11 +289,17 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
           }
         }
 
-        if (!emojis?.length) return;
+        if (!emojis?.length && !shouldNyaize) return;
 
         const textElements = element.children.filter((value): value is Text => isText(value));
 
         for (const textElement of textElements) {
+          if (!emojis?.length) {
+            prepend(textElement, new Text(nyaize(textElement.data)));
+            removeElement(textElement);
+            continue;
+          }
+
           const nodes: Array<Text | Element> = [];
           let replaced = false;
 
@@ -340,7 +354,7 @@ const StyledHtml: React.FC<IStyledHtml> = ({ html, emojis, mentions, sizeMultipl
           if (!replaced) continue;
 
           if (stack.length) text += stack;
-          if (text.length) nodes.push(new Text(text));
+          if (text.length) nodes.push(new Text(shouldNyaize ? nyaize(text) : text));
           text = '';
 
           for (const node of nodes) {

@@ -47,10 +47,19 @@ const StatusHistoryScreen = ({
           </Text>
           {version.spoiler_text.length > 0 && (
             <Text variant='titleSmall'>
-              <Emojify text={version.spoiler_text} emojis={version.emojis} />
+              <Emojify
+                text={version.spoiler_text}
+                emojis={version.emojis}
+                nyaize={status?.account.speak_as_cat}
+              />
             </Text>
           )}
-          <StyledHtml html={version.content} emojis={version.emojis} mentions={status?.mentions} />
+          <StyledHtml
+            html={version.content}
+            emojis={version.emojis}
+            mentions={status?.mentions}
+            nyaize={status?.account.speak_as_cat}
+          />
           {version.poll && (
             <View style={{ gap: 8 }}>
               {version.poll.options.map((option) => (
@@ -65,7 +74,11 @@ const StatusHistoryScreen = ({
                   }}
                 >
                   <Text numberOfLines={1}>
-                    <Emojify text={option.title} emojis={version.emojis} />
+                    <Emojify
+                      text={option.title}
+                      emojis={version.emojis}
+                      nyaize={status?.account.speak_as_cat}
+                    />
                   </Text>
                 </View>
               ))}

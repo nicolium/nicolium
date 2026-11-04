@@ -104,6 +104,7 @@ const StatusPoll: React.FC<IStatusPoll> = ({ status, translation }) => {
                   <Emojify
                     text={translation?.poll?.options[index]?.title || option.title}
                     emojis={status.emojis}
+                    nyaize={status.account.speak_as_cat}
                   />
                 </Text>
                 {voted && (
