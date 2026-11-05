@@ -135,7 +135,7 @@ const Textarea = React.forwardRef(
           >
             <FormattedMessage
               id='textarea.counter.label'
-              defaultMessage='{count} characters remaining'
+              defaultMessage='{count, plural, one {# character} other {# characters}} remaining'
               values={{ count: maxLength - length }}
             />
           </p>

@@ -26,8 +26,8 @@ const UploadCompose: React.FC<IUploadCompose> = ({
   const { updateCompose } = useComposeActions();
   const changeUploadCompose = useChangeUploadCompose(composeId);
   const {
-    pleroma: {
-      metadata: { description_limit: descriptionLimit },
+    configuration: {
+      media_attachments: { description_limit: descriptionLimit },
     },
   } = useInstance();
 

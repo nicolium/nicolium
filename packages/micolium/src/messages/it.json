@@ -335,6 +335,7 @@
   "status.unmute_conversation": "Annulla silenzia conversazione",
   "status.unpin": "Non fissare in cima al profilo",
   "statuses.quote_tombstone": "Pubblicazione non disponibile.",
+  "textarea.counter.label": "rimangono {count} caratteri",
   "time_remaining.days": "ancora {number, plural, one {# giorno} other {# giorni}}",
   "time_remaining.hours": "ancora {number, plural, one {# ora} other {# ore}}",
   "time_remaining.minutes": "ancora {number, plural, one {# minuto} other {# minuti}}",

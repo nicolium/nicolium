@@ -286,6 +286,7 @@
   "status.unmute_conversation": "Yazışmayı Sessize Almadan Kaldır",
   "status.unpin": "Profilden sabitlemeyi kaldır",
   "statuses.quote_tombstone": "Gönderi bulunamadı.",
+  "textarea.counter.label": "{count} karakter kaldı",
   "time_remaining.days": "{number, plural, one {# gün} other {# gün}} kaldı",
   "time_remaining.hours": "{number, plural, one {# saat} other {# saat}} kaldı",
   "time_remaining.minutes": "{number, plural, one {# dakika} other {# dakika}} kaldı",

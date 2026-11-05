@@ -32,7 +32,7 @@ import {
 import { toast } from 'sonner-native';
 
 import DropdownMenu from '@/components/ui/dropdown-menu';
-import { useFeatures } from '@/contexts/current-account-context';
+import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useChangeUploadCompose, useCompose, useComposeActions } from '@/stores/compose';
 import { getPointerPosition } from '@/utils/media';
@@ -111,6 +111,10 @@ const messages = defineMessages({
     id: 'alt_text_modal.save.fail',
     defaultMessage: 'Failed to save alt text',
   },
+  charactersRemaining: {
+    id: 'textarea.counter.label',
+    defaultMessage: '{count, plural, one {# character} other {# characters}} remaining',
+  },
 });
 
 interface IComposeAttachmentEditor {
@@ -131,6 +135,11 @@ const ComposeAttachmentEditor: React.FC<IComposeAttachmentEditor> = ({
   const changeUploadCompose = useChangeUploadCompose(composeId);
   const features = useFeatures();
   const glassEffect = useEnableLiquidGlass();
+  const {
+    configuration: {
+      media_attachments: { description_limit: descriptionLimit },
+    },
+  } = useInstance();
 
   const withFocalPoint = features.focalPoint && (media.type === 'image' || media.type === 'gifv');
 
@@ -293,6 +302,10 @@ const ComposeAttachmentEditor: React.FC<IComposeAttachmentEditor> = ({
           placeholder={intl.formatMessage(messages.placeholder)}
           multiline
           numberOfLines={4}
+          maxLength={descriptionLimit}
+          supportingText={intl.formatMessage(messages.charactersRemaining, {
+            count: descriptionLimit - description.length,
+          })}
         />
       </View>
     </DialogOrSheet>

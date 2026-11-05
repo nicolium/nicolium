@@ -287,6 +287,7 @@
   "status.unmute_conversation": "Unmute conversation",
   "status.unpin": "Lepas pin dari profil",
   "statuses.quote_tombstone": "Pos tidak tersedia.",
+  "textarea.counter.label": "{count} karakter yang tersisa",
   "time_remaining.days": "{number, plural, one {# day} lainnya {# days}} left",
   "time_remaining.hours": "{number, plural, one {# hour} lainnya {# hours}} left",
   "time_remaining.minutes": "{number, plural, one {# minute} lainnya {# minutes}} pergi",

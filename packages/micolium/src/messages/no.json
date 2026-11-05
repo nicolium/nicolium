@@ -279,6 +279,7 @@
   "status.unmute_conversation": "Ikke demp samtale",
   "status.unpin": "Angre festing på profilen",
   "statuses.quote_tombstone": "Innlegget er utilgjengelig.",
+  "textarea.counter.label": "{count} tegn gjenstår",
   "time_remaining.days": "{number, plural, one {# day} other {# days}} igjen",
   "time_remaining.hours": "{number, plural, one {# hour} other {# hours}} igjen",
   "time_remaining.minutes": "{number, plural, one {# minute} other {# minutes}} igjen",

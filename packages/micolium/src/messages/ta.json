@@ -419,6 +419,7 @@
   "status.visibility.private": "இந்த இடுகை ஆசிரியரைப் பின்தொடர்பவர்களுக்கு மட்டுமே தெரியும்",
   "status.visibility.subscribers": "இந்த இடுகை ஆசிரியரை சந்தா செலுத்தும் பயனர்களுக்கு மட்டுமே தெரியும்",
   "statuses.quote_tombstone": "இடுகை கிடைக்கவில்லை.",
+  "textarea.counter.label": "{count} எழுத்துக்கள் மீதமுள்ளவை",
   "time_remaining.days": "{number, plural, one {# day} மற்ற {# days}} left",
   "time_remaining.hours": "{number, plural, one {# hour} மற்ற {# hours}} left",
   "time_remaining.minutes": "{number, plural, one {# minute} மற்ற {# minutes}} left",

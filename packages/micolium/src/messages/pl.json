@@ -504,6 +504,7 @@
   "status.visibility.private": "Ten wpis jest widoczny tylko dla obserwujących autora",
   "status.visibility.subscribers": "Ten wpis jest widoczny tylko dla subskrybujących autora",
   "statuses.quote_tombstone": "Wpis jest niedostępny.",
+  "textarea.counter.label": "Pozostało {count} znaków",
   "time_remaining.days": "{number, plural, one {Pozostał # dzień} few {Pozostały # dni} many {Pozostało # dni} other {Pozostało # dni}}",
   "time_remaining.hours": "{number, plural, one {Pozostała # godzina} few {Pozostały # godziny} many {Pozostało # godzin} other {Pozostało # godzin}}",
   "time_remaining.minutes": "{number, plural, one {Pozostała # minuta} few {Pozostały # minuty} many {Pozostało # minut} other {Pozostało # minut}}",

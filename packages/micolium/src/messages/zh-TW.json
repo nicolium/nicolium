@@ -287,6 +287,7 @@
   "status.unmute_conversation": "取消靜音對話",
   "status.unpin": "在個人檔案解除釘選",
   "statuses.quote_tombstone": "貼文不可用。",
+  "textarea.counter.label": "剩餘 {count} 個字",
   "time_remaining.days": "剩餘 {number} 天",
   "time_remaining.hours": "剩餘 {number} 小時",
   "time_remaining.minutes": "剩餘 {number} 分鐘",

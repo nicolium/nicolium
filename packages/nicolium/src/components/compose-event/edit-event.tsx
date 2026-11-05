@@ -78,8 +78,8 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   const { data: status } = useMinimalStatus(statusId ?? undefined);
   const {
-    pleroma: {
-      metadata: { description_limit: descriptionLimit },
+    configuration: {
+      media_attachments: { description_limit: descriptionLimit },
     },
   } = useInstance();
 
@@ -158,7 +158,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       media: banner,
       previousDescription: banner.description,
       previousPosition: [0, 0],
-      descriptionLimit: descriptionLimit,
+      descriptionLimit,
       onSubmit: (description: string, position: [number, number]) =>
         changeUploadCompose(banner.id, {
           description,

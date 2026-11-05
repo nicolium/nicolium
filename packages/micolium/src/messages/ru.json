@@ -299,6 +299,7 @@
   "status.unmute_conversation": "Снять глушение с обсуждения",
   "status.unpin": "Открепить от профиля",
   "statuses.quote_tombstone": "Post is unavailable.",
+  "textarea.counter.label": "осталось {count} символов",
   "time_remaining.days": "{number, plural, one {остался # день} few {осталось # дня} many {осталось # дней} other {осталось # дней}}",
   "time_remaining.hours": "{number, plural, one {остался # час} few {осталось # часа} many {осталось # часов} other {осталось # часов}}",
   "time_remaining.minutes": "{number, plural, one {осталась # минута} few {осталось # минуты} many {осталось # минут} other {осталось # минут}}",

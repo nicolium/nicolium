@@ -303,6 +303,7 @@
   "status.unmute_conversation": "Dejar de silenciar conversación",
   "status.unpin": "Dejar de fijar",
   "statuses.quote_tombstone": "Post is unavailable.",
+  "textarea.counter.label": "{count} caracteres restantes",
   "time_remaining.days": "{number, plural, one {# día restante} other {# días restantes}}",
   "time_remaining.hours": "{number, plural, one {# hora restante} other {# horas restantes}}",
   "time_remaining.minutes": "{number, plural, one {# minuto restante} other {# minutos restantes}}",

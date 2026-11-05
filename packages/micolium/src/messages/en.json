@@ -722,6 +722,7 @@
   "status.visibility.unlisted": "The post is visible to everyone, but doesn’t appear in public timelines",
   "status_list.queue.label.inline": "{count} new {count, plural, one {post} other {posts}}",
   "statuses.quote_tombstone": "Post is unavailable.",
+  "textarea.counter.label": "{count, plural, one {# character} other {# characters}} remaining",
   "time_remaining.days": "{number, plural, one {# day} other {# days}} left",
   "time_remaining.hours": "{number, plural, one {# hour} other {# hours}} left",
   "time_remaining.minutes": "{number, plural, one {# minute} other {# minutes}} left",

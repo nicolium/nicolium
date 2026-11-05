@@ -287,6 +287,7 @@
   "status.unmute_conversation": "إلغاء كتم المحادثة",
   "status.unpin": "إلغاء التثبيت",
   "statuses.quote_tombstone": "المنشور غير متوفر.",
+  "textarea.counter.label": "{count} الأحرف المتبقية",
   "time_remaining.days": "{number, plural, one {# يوم} other {# أيام}} متبقية",
   "time_remaining.hours": "{number, plural, one {# ساعة} other {# ساعات}} متبقية",
   "time_remaining.minutes": "{number, plural, one {# دقيقة} other {# دقائق}} متبقية",

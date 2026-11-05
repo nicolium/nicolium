@@ -273,6 +273,7 @@
   "status.unmute_conversation": "会話のミュートを解除",
   "status.unpin": "プロフィールへの固定を解除",
   "statuses.quote_tombstone": "投稿は利用できません。",
+  "textarea.counter.label": "残り {count} 字",
   "time_remaining.days": "残り{number}日",
   "time_remaining.hours": "残り{number}時間",
   "time_remaining.minutes": "残り{number}分",

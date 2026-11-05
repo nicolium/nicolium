@@ -59,6 +59,7 @@ const instanceV1ToV2 = (data: any) => {
       ...configuration,
       media_attachments: {
         ...configuration.media_attachments,
+        description_limit: description_limit ?? configuration.media_attachments.description_limit,
         image_size_limit: upload_limit ?? configuration.media_attachments.image_size_limit,
         video_size_limit: upload_limit ?? configuration.media_attachments.video_size_limit,
       },
@@ -164,6 +165,7 @@ const configurationSchema = coerceObject({
     max_characters_name: v.fallback(v.number(), 50),
   }),
   media_attachments: coerceObject({
+    description_limit: v.fallback(v.number(), 10000),
     image_matrix_limit: v.fallback(v.optional(v.number()), undefined),
     image_size_limit: v.fallback(v.optional(v.number()), undefined),
     supported_mime_types: v.fallback(v.optional(v.array(mimeSchema)), undefined),
@@ -424,29 +426,38 @@ const instanceSchema = v.pipe(
       };
     }
 
-    if (data.pleroma?.metadata?.restrict_unauthenticated?.timelines) {
-      const timelines = data.pleroma.metadata.restrict_unauthenticated.timelines;
-      const features = data.pleroma.metadata.features || [];
-
+    if (data.pleroma?.metadata) {
       if (!data.configuration) data.configuration = {};
 
-      data.configuration.timelines_access = {
-        ...data.configuration.timelines_access,
-        live_feeds: {
-          bubble: timelines.bubble
-            ? 'authenticated'
-            : features.includes('bubble_timeline')
-              ? 'public'
-              : 'disabled',
-          local: timelines.local ? 'authenticated' : 'public',
-          remote: timelines.federated ? 'authenticated' : 'public',
-          wrenched: timelines.wrenched
-            ? 'authenticated'
-            : features.includes('pleroma:wrenched_timeline')
-              ? 'public'
-              : 'disabled',
-        },
-      };
+      if (data.pleroma.metadata.description_limit) {
+        if (!data.configuration.media_attachments) data.configuration.media_attachments = {};
+
+        data.configuration.media_attachments.description_limit =
+          data.pleroma.metadata.description_limit;
+      }
+
+      if (data.pleroma.metadata.restrict_unauthenticated?.timelines) {
+        const timelines = data.pleroma.metadata.restrict_unauthenticated.timelines;
+        const features = data.pleroma.metadata.features || [];
+
+        data.configuration.timelines_access = {
+          ...data.configuration.timelines_access,
+          live_feeds: {
+            bubble: timelines.bubble
+              ? 'authenticated'
+              : features.includes('bubble_timeline')
+                ? 'public'
+                : 'disabled',
+            local: timelines.local ? 'authenticated' : 'public',
+            remote: timelines.federated ? 'authenticated' : 'public',
+            wrenched: timelines.wrenched
+              ? 'authenticated'
+              : features.includes('pleroma:wrenched_timeline')
+                ? 'public'
+                : 'disabled',
+          },
+        };
+      }
     }
 
     if (data.domain) return { account_domain: data.domain, ...data, api_versions: apiVersions };

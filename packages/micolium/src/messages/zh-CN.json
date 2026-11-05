@@ -501,6 +501,7 @@
   "status.visibility.private": "该帖文仅对作者的关注者可见",
   "status.visibility.subscribers": "此帖文仅对订阅作者的用户可见",
   "statuses.quote_tombstone": "帖文不可用。",
+  "textarea.counter.label": "剩余 {count} 个字符",
   "time_remaining.days": "剩余 {number} 天",
   "time_remaining.hours": "剩余 {number} 小时",
   "time_remaining.minutes": "剩余 {number} 分钟",
