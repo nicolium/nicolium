@@ -387,7 +387,6 @@ const StyledHtml: React.FC<IStyledHtml> = ({
       systemFonts={systemFonts}
       customHTMLElementModels={customHTMLElementModels}
       renderers={renderers}
-      domVisitors={domVisitors}
     />
   );
 };
