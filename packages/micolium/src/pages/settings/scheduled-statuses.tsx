@@ -166,7 +166,7 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus }) => {
             </View>
           )}
           {scheduledStatus.params.quoted_status_id && (
-            <StatusQuote id={scheduledStatus.params.quoted_status_id} context={context} />
+            <StatusQuote id={scheduledStatus.params.quoted_status_id} context='account' />
           )}
         </>
       }
