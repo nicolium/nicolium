@@ -10,7 +10,7 @@ import { StyledHtml } from './styled-html';
 import type { CustomEmoji, FilterResult, Mention } from 'pl-api';
 
 interface IUIStatus {
-  account: React.JSX.Element;
+  account?: React.JSX.Element;
   displayedMentions?: React.JSX.Element;
   content: string;
   emojis?: Array<CustomEmoji>;

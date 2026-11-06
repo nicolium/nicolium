@@ -177,6 +177,7 @@
   "report.target": "Nahlášení uživatele {target}",
   "schedule_button.add_schedule": "Naplánovat na později",
   "schedule_button.remove_schedule": "Publikovat ihned",
+  "scheduled_status.cancel": "Zrušit",
   "search.placeholder": "Hledat",
   "search_results.accounts": "Lidé",
   "search_results.hashtags": "Hashtagy",

@@ -20,6 +20,7 @@ import { InteractionPoliciesScreen } from './interaction-policies';
 import { MutedThreadsScreen } from './muted-threads';
 import { BlocksScreen, MutesScreen } from './mutes-blocks';
 import { NotificationsSettingsScreen } from './notifications-settings';
+import { ScheduledStatusesScreen } from './scheduled-statuses';
 import { SettingsScreen } from './settings';
 import { TimelinesSettingsScreen } from './timeline-settings';
 
@@ -65,6 +66,7 @@ const messages = defineMessages({
   editFilter: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
   newFilter: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
   editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
+  scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
 });
 
 const SettingsStack = createNativeStackNavigator<SettingsStackParams>();
@@ -160,6 +162,11 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='about'
         component={AboutScreen}
         options={{ title: intl.formatMessage(messages.aboutHeading, { app_name: 'micolium' }) }}
+      />
+      <SettingsStack.Screen
+        name='scheduled_statuses'
+        component={ScheduledStatusesScreen}
+        options={{ title: intl.formatMessage(messages.scheduledStatuses) }}
       />
     </SettingsStack.Navigator>
   );

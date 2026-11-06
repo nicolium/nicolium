@@ -180,7 +180,7 @@ const ScheduleReblog: React.FC<IScheduleReblog> = ({ status, visible, setVisible
                       label: intl.formatMessage(messages.view),
                       onClick: () => {
                         toast.dismiss(openedToast);
-                        navigation.navigate('scheduled_statuses');
+                        navigation.navigate('settings', { screen: 'scheduled_statuses' });
                       },
                     },
                   });

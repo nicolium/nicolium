@@ -57,7 +57,7 @@ const messages = defineMessages({
 });
 
 interface IStatusVisibilityIcon {
-  status: SelectedStatus;
+  status: Pick<SelectedStatus, 'list_id' | 'visibility'>;
 }
 
 const StatusVisibilityIcon: React.FC<IStatusVisibilityIcon> = ({ status }) => {

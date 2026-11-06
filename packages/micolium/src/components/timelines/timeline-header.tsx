@@ -87,6 +87,7 @@ const messages = defineMessages({
     defaultMessage: 'Show media without description',
   },
   menuTitle: { id: 'dropdown_menu.title', defaultMessage: 'Menu' },
+  scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
 });
 
 interface ITimelineHeaderMenu {
@@ -216,6 +217,20 @@ const TimelineHeaderMenu = () => {
             <DropdownMenu.Item key='announcements' onSelect={() => {}} disabled>
               <DropdownMenu.ItemTitle>
                 {intl.formatMessage(messages.announcements)}
+              </DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          )}
+          {features.scheduledStatuses && (
+            <DropdownMenu.Item
+              key='scheduled_statuses'
+              onSelect={() =>
+                navigation.navigate('settings', {
+                  screen: 'scheduled_statuses',
+                })
+              }
+            >
+              <DropdownMenu.ItemTitle>
+                {intl.formatMessage(messages.scheduledStatuses)}
               </DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
           )}

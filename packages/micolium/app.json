@@ -111,7 +111,8 @@
             "./node_modules/@phosphor-icons/core/assets/regular/user-minus.svg",
             "./node_modules/@phosphor-icons/core/assets/regular/user-plus.svg",
             "./node_modules/@phosphor-icons/core/assets/regular/users-three.svg",
-            "./node_modules/@phosphor-icons/core/assets/regular/wrench.svg"
+            "./node_modules/@phosphor-icons/core/assets/regular/wrench.svg",
+            "./node_modules/@phosphor-icons/core/assets/regular/x.svg"
           ],
           "prefix": "ph_"
         }

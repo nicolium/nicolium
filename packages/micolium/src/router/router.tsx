@@ -55,7 +55,6 @@ type SettingsStackParams = {
   filters: undefined;
   filter: { id?: string };
   interaction_policies: undefined;
-  // TODO
   scheduled_statuses: undefined;
   edit_profile: undefined;
   about: undefined;

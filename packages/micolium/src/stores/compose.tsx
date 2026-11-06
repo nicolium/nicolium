@@ -63,6 +63,7 @@ import type {
   Status,
   Features,
   Account,
+  ScheduledStatus,
 } from 'pl-api';
 
 const messages = defineMessages({
@@ -79,6 +80,10 @@ const messages = defineMessages({
   editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
   //   redactSuccess: { id: 'compose.redact.success', defaultMessage: 'The post was redacted' },
   scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
+  scheduledEditSuccess: {
+    id: 'compose.scheduled.edit.success',
+    defaultMessage: 'Your scheduled post was edited',
+  },
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
   //   uploadErrorPoll: {
   //     id: 'upload_error.poll',
@@ -465,7 +470,7 @@ interface ComposeActions {
     draftId?: string | null,
     redacting?: boolean,
   ) => void;
-  //   setComposeToScheduledStatus: (scheduledStatus: ScheduledStatus) => void;
+  setComposeToScheduledStatus: (scheduledStatus: ScheduledStatus) => void;
   replyCompose: (
     status: Pick<
       SelectedStatus,
@@ -702,36 +707,36 @@ const useComposeStore = create<ComposeStore>()(
           });
         },
 
-        //         setComposeToScheduledStatus: (scheduledStatus) => {
-        //           set((state) => {
-        //             state.composers['compose-modal'] = {
-        //               ...state.default,
-        //               idempotencyKey: uuid(),
-        //             };
+        setComposeToScheduledStatus: (scheduledStatus) => {
+          set((state) => {
+            state.composers['compose-modal'] = {
+              ...state.default,
+              idempotencyKey: uuid(),
+            };
 
-        //             const compose = state.composers['compose-modal'];
-        //             compose.scheduledStatusId = scheduledStatus.id;
-        //             compose.text = scheduledStatus.params.text || '';
-        //             compose.mediaAttachments = scheduledStatus.media_attachments;
-        //             compose.sensitive = scheduledStatus.params.sensitive || false;
-        //             compose.spoilerText = scheduledStatus.params.spoiler_text || '';
-        //             compose.visibility = scheduledStatus.params.visibility;
-        //             compose.inReplyToId = scheduledStatus.params.in_reply_to_id;
-        //             compose.language = scheduledStatus.params.language;
-        //             compose.scheduledAt = new Date(scheduledStatus.scheduled_at);
-        //             compose.quoteId = scheduledStatus.params.quoted_status_id;
-        //             compose.quoteApprovalPolicy = scheduledStatus.params.quote_approval_policy;
+            const compose = state.composers['compose-modal'];
+            compose.scheduledStatusId = scheduledStatus.id;
+            compose.text = scheduledStatus.params.text || '';
+            compose.mediaAttachments = scheduledStatus.media_attachments;
+            compose.sensitive = scheduledStatus.params.sensitive || false;
+            compose.spoilerText = scheduledStatus.params.spoiler_text || '';
+            compose.visibility = scheduledStatus.params.visibility;
+            compose.inReplyToId = scheduledStatus.params.in_reply_to_id;
+            compose.language = scheduledStatus.params.language;
+            compose.scheduledAt = new Date(scheduledStatus.scheduled_at);
+            compose.quoteId = scheduledStatus.params.quoted_status_id;
+            compose.quoteApprovalPolicy = scheduledStatus.params.quote_approval_policy;
 
-        //             const poll = scheduledStatus.params.poll;
-        //             if (poll) {
-        //               compose.poll = newPoll({
-        //                 options: poll.options,
-        //                 multiple: poll.multiple,
-        //                 expires_in: +poll.expires_in,
-        //               });
-        //             }
-        //           });
-        //         },
+            const poll = scheduledStatus.params.poll;
+            if (poll) {
+              compose.poll = newPoll({
+                options: poll.options,
+                multiple: poll.multiple,
+                expires_in: +poll.expires_in,
+              });
+            }
+          });
+        },
 
         replyCompose: (status, scopeUrl, features, rebloggedBy, approvalRequired) => {
           const {
@@ -1351,7 +1356,9 @@ const submitCompose = async (
     const openedToast = toast.success(
       intl.formatMessage(
         compose.scheduledAt
-          ? messages.scheduledSuccess
+          ? compose.scheduledStatusId
+            ? messages.scheduledEditSuccess
+            : messages.scheduledSuccess
           : compose.editedId
             ? messages.editSuccess
             : messages.success,
@@ -1363,7 +1370,7 @@ const submitCompose = async (
             toast.dismiss(openedToast);
 
             if (data.scheduled_at) {
-              navigation.navigate('scheduled_statuses');
+              navigation.navigate('settings', { screen: 'scheduled_statuses' });
             } else {
               navigation.navigate('status', {
                 screen: 'view',

@@ -66,6 +66,10 @@ const messages = defineMessages({
   editSuccess: { id: 'compose.edit.success', defaultMessage: 'Your post was edited' },
   redactSuccess: { id: 'compose.redact.success', defaultMessage: 'The post was redacted' },
   scheduledSuccess: { id: 'compose.scheduled.success', defaultMessage: 'Your post was scheduled' },
+  scheduledEditSuccess: {
+    id: 'compose.scheduled.edit.success',
+    defaultMessage: 'Your scheduled post was edited',
+  },
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
   uploadErrorPoll: {
     id: 'upload_error.poll',
@@ -1515,9 +1519,16 @@ const submitCompose = async (
       };
 
       if (propagate) {
-        toast.propagate('success', messages.scheduledSuccess, toastOptions);
+        toast.propagate(
+          'success',
+          compose.scheduledStatusId ? messages.scheduledEditSuccess : messages.scheduledSuccess,
+          toastOptions,
+        );
       } else {
-        toast.success(messages.scheduledSuccess, toastOptions);
+        toast.success(
+          compose.scheduledStatusId ? messages.scheduledEditSuccess : messages.scheduledSuccess,
+          toastOptions,
+        );
       }
 
       queryClient.invalidateQueries({
