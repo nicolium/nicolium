@@ -1025,6 +1025,7 @@
   "compose.reply.unresolved": "The referenced post could not be resolved.",
   "compose.reply_group_indicator.message": "Posting to {groupLink}",
   "compose.resolve_account.fail": "Failed to resolve referenced account from the new account",
+  "compose.scheduled.edit.success": "Your scheduled post was edited",
   "compose.scheduled.success": "Your post was scheduled",
   "compose.submit.fail": "Failed to submit your post",
   "compose.submit.fail.view_drafts": "View drafts",
