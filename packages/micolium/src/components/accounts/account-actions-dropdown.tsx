@@ -6,7 +6,7 @@ import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert, Platform } from 'react-native';
+import { Platform } from 'react-native';
 
 import DropdownMenu from '@/components/ui/dropdown-menu';
 import { useFeatures } from '@/contexts/current-account-context';
@@ -19,6 +19,7 @@ import {
   useUnmuteAccountMutation,
 } from '@/queries/accounts/use-relationship';
 import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/settings/domain-blocks';
+import { Alert } from '@/stores/alerts';
 import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
 import { openUrl } from '@/utils/url';

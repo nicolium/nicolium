@@ -1,7 +1,7 @@
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert } from 'react-native';
 
 import { useReblogStatus } from '@/queries/statuses/use-status-interactions';
+import { Alert } from '@/stores/alerts';
 import { useSetting } from '@/stores/settings';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';

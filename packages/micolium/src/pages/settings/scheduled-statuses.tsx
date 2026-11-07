@@ -4,7 +4,7 @@ import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Platform, View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import { Account } from '@/components/accounts/account';
 import { StatusMedia } from '@/components/statuses/status-media';
@@ -20,6 +20,7 @@ import {
   useCancelScheduledStatusMutation,
   useScheduledStatusesQuery,
 } from '@/queries/statuses/scheduled-statuses';
+import { Alert } from '@/stores/alerts';
 import { useComposeActions } from '@/stores/compose';
 import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';

@@ -7,7 +7,7 @@ import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
 import { FunnelSimpleIcon } from 'phosphor-react-native/src/icons/FunnelSimple';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert, Platform, useColorScheme, View } from 'react-native';
+import { Platform, useColorScheme, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
@@ -22,6 +22,7 @@ import {
 import { useDeleteAntenna } from '@/queries/accounts/use-antennas';
 import { useDeleteCircle } from '@/queries/accounts/use-circles';
 import { useDeleteList } from '@/queries/accounts/use-lists';
+import { Alert } from '@/stores/alerts';
 import { type TIMELINE_FILTER_KEYS, useSetting, useSettingsActions } from '@/stores/settings';
 
 import { TimelinePicker, type ITimelinePicker } from './timeline-picker';

@@ -26,6 +26,7 @@ import { useEnableLiquidGlass } from './hooks/use-enable-liquid-glass';
 import { loadPolyfills } from './polyfills';
 import { queryClient } from './queries/client';
 import { RootNavigator } from './router/router';
+import { AlertRoot } from './stores/alerts';
 import { useSetting } from './stores/settings';
 import { DarkTheme, LightTheme } from './utils/themes';
 
@@ -151,6 +152,7 @@ export const App = () => {
                     <EmojiPickerBottomSheet />
                     <InteractAsSheet />
                     <MediaViewer />
+                    <AlertRoot />
                   </TrueSheetProvider>
                 </GestureHandlerRootView>
               </QueryClientProvider>

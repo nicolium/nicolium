@@ -5,10 +5,10 @@ import { ImageIcon } from 'phosphor-react-native/src/icons/Image';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert } from 'react-native';
 
 import DropdownMenu from '@/components/ui/dropdown-menu';
 import { useInstance } from '@/contexts/current-account-context';
+import { Alert } from '@/stores/alerts';
 import { useCompose, useUploadCompose } from '@/stores/compose';
 
 import { iconHelper } from '../ui/icon';

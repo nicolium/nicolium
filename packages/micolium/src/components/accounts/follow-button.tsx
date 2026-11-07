@@ -9,7 +9,6 @@ import {
 import { BellSimpleIcon } from 'phosphor-react-native/src/icons/BellSimple';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Alert, type ViewStyle } from 'react-native';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -19,8 +18,11 @@ import {
   useUnblockAccountMutation,
   useUnfollowAccountMutation,
 } from '@/queries/accounts/use-relationship';
+import { Alert } from '@/stores/alerts';
 
 import { iconHelper } from '../ui/icon';
+
+import type { ViewStyle } from 'react-native';
 
 const checkboxStyle: ViewStyle = { marginLeft: -12 };
 

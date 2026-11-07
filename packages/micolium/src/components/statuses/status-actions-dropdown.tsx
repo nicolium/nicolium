@@ -6,7 +6,7 @@ import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { toast } from 'sonner-native';
 
 import DropdownMenu from '@/components/ui/dropdown-menu';
@@ -29,6 +29,7 @@ import {
   useUnmuteStatus,
   useUnpinStatus,
 } from '@/queries/statuses/use-status-interactions';
+import { Alert } from '@/stores/alerts';
 import { useAuthStore } from '@/stores/auth';
 import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';

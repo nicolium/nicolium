@@ -1,7 +1,6 @@
 import { makeRedirectUri } from 'expo-auth-session';
 import { PlApiClient, type RevokeTokenParams } from 'pl-api';
 import { defineMessages, type IntlShape } from 'react-intl';
-import { Alert } from 'react-native';
 import { v4 as uuid } from 'uuid';
 import * as v from 'valibot';
 import { create } from 'zustand';
@@ -10,6 +9,7 @@ import { mutative } from 'zustand-mutative';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
+import { Alert } from '@/stores/alerts';
 import { filteredRecord } from '@/utils/schemas';
 import { getInstanceScopes } from '@/utils/scopes';
 import { SecureishStore } from '@/utils/secureish-store';

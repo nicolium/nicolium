@@ -12,7 +12,6 @@ import { WarningIcon } from 'phosphor-react-native/src/icons/Warning';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import {
-  Alert,
   ScrollView,
   TextInput as RNTextInput,
   View,
@@ -28,6 +27,7 @@ import { useComposeHeading } from '@/hooks/use-compose-heading';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useScopeUrl } from '@/hooks/use-scope-url';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
+import { Alert } from '@/stores/alerts';
 import { useAuthStore } from '@/stores/auth';
 import {
   checkComposeContent,

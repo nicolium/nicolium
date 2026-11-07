@@ -4,7 +4,7 @@ import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
 import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Alert, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 import { DateTimePicker } from '@/components/ui/date-time-picker';
@@ -12,6 +12,7 @@ import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-
 import { type IListSections, List } from '@/components/ui/list';
 import { useClient, useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
+import { Alert } from '@/stores/alerts';
 import { getSegmentedMenuStyles } from '@/utils/themes';
 
 import type { SettingsStackParams } from '@/router/router';

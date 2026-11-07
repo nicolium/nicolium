@@ -18,7 +18,7 @@ import { TrashIcon } from 'phosphor-react-native/src/icons/Trash';
 import { XIcon } from 'phosphor-react-native/src/icons/X';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { toast } from 'sonner-native';
 
@@ -37,6 +37,7 @@ import {
   useFilters,
   useUpdateFilter,
 } from '@/queries/settings/use-filters';
+import { Alert } from '@/stores/alerts';
 import { getSegmentedMenuStyles } from '@/utils/themes';
 
 import type { SettingsStackParams } from '@/router/router';

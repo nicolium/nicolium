@@ -7,7 +7,7 @@ import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Platform, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
@@ -21,6 +21,7 @@ import {
   useBookmarkFolder,
   useDeleteBookmarkFolder,
 } from '@/queries/statuses/use-bookmark-folders';
+import { Alert } from '@/stores/alerts';
 
 import type { BookmarksStackParams } from '@/router/router';
 
