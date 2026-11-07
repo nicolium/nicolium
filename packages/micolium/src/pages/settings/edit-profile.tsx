@@ -9,7 +9,7 @@ import { toast } from 'sonner-native';
 
 import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
-import { List } from '@/components/ui/list';
+import { type IListSections, List } from '@/components/ui/list';
 import { useClient, useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { getSegmentedMenuStyles } from '@/utils/themes';
@@ -435,6 +435,173 @@ const EditProfileScreen = ({
     navigation.goBack();
   };
 
+  const listSections = React.useMemo(() => {
+    const profileSection: IListSections[number] = {
+      items: [],
+    };
+
+    if (features.followRequests) {
+      profileSection.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.lockedLabel),
+        sublabel: intl.formatMessage(messages.lockedHint),
+        active: !!data.locked,
+        onPress: handleToggle('locked'),
+      });
+    }
+
+    if (features.hideNetwork) {
+      profileSection.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.hideNetworkLabel),
+        sublabel: intl.formatMessage(messages.hideNetworkHint),
+        active: hideNetwork,
+        onPress: handleHideNetworkChange,
+      });
+    }
+
+    if (features.bots) {
+      profileSection.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.botLabel),
+        sublabel: intl.formatMessage(messages.botHint),
+        active: !!data.bot,
+        onPress: handleToggle('bot'),
+      });
+    }
+
+    if (features.accountDiscoverability) {
+      profileSection.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.discoverableLabel),
+        sublabel: intl.formatMessage(messages.discoverableHint),
+        active: !!data.discoverable,
+        onPress: handleToggle('discoverable'),
+      });
+    }
+
+    if (features.rssFeeds && features.version.software === GOTOSOCIAL) {
+      profileSection.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.rssLabel),
+        active: !!data.enable_rss,
+        onPress: handleToggle('enable_rss'),
+      });
+    }
+
+    if (features.accountIsCat) {
+      profileSection.items.push(
+        {
+          type: 'toggle',
+          label: intl.formatMessage(messages.isCatLabel),
+          sublabel: intl.formatMessage(messages.isCatHint),
+          active: !!data.is_cat,
+          onPress: handleToggle('is_cat'),
+        },
+        {
+          type: 'toggle',
+          label: intl.formatMessage(messages.speakAsCatLabel),
+          sublabel: intl.formatMessage(messages.speakAsCatHint),
+          active: !!data.speak_as_cat,
+          onPress: handleToggle('speak_as_cat'),
+        },
+      );
+    }
+
+    if (features.biteControls) {
+      profileSection.items.push({
+        type: 'select',
+        label: intl.formatMessage(messages.biteControlsLabel),
+        active: data.bite_controls ?? 'none',
+        onChange: handleFieldChange('bite_controls'),
+        options: [
+          { value: 'public', label: intl.formatMessage(messages.biteControlsPublic) },
+          { value: 'followers', label: intl.formatMessage(messages.biteControlsFollowers) },
+          { value: 'none', label: intl.formatMessage(messages.biteControlsNone) },
+        ],
+      });
+    }
+
+    if (features.accountWebLayout) {
+      profileSection.items.push({
+        type: 'select',
+        label: intl.formatMessage(messages.webLayoutLabel),
+        active: data.web_layout,
+        onChange: handleFieldChange('web_layout'),
+        options: [
+          { value: 'microblog', label: intl.formatMessage(messages.webLayoutMicroblog) },
+          { value: 'gallery', label: intl.formatMessage(messages.webLayoutGallery) },
+        ],
+      });
+    }
+
+    if (features.accountWebVisibility) {
+      profileSection.items.push({
+        type: 'select',
+        label: intl.formatMessage(messages.webVisibilityLabel),
+        active: data.web_visibility,
+        onChange: handleFieldChange('web_visibility'),
+        options: [
+          { value: 'public', label: intl.formatMessage(messages.webVisibilityPublic) },
+          { value: 'unlisted', label: intl.formatMessage(messages.webVisibilityUnlisted) },
+          { value: 'none', label: intl.formatMessage(messages.webVisibilityNone) },
+        ],
+      });
+    }
+
+    if (features.accountWebIncludeBoosts) {
+      profileSection.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.webIncludeBoostsLabel),
+        sublabel: intl.formatMessage(messages.webIncludeBoostsHint),
+        active: !!data.web_include_boosts,
+        onPress: handleToggle('web_include_boosts'),
+      });
+    }
+
+    if (features.accountMentionPolicy) {
+      profileSection.items.push({
+        type: 'select',
+        label: intl.formatMessage(messages.mentionPolicyLabel),
+        sublabel: intl.formatMessage(messages.mentionPolicyHint),
+        active: data.mention_policy,
+        onChange: handleFieldChange('mention_policy'),
+        options: [
+          { value: 'none', label: intl.formatMessage(messages.mentionPolicyNone) },
+          { value: 'only_known', label: intl.formatMessage(messages.mentionPolicyOnlyKnown) },
+          {
+            value: 'only_contacts',
+            label: intl.formatMessage(messages.mentionPolicyOnlyContacts),
+          },
+        ],
+      });
+    }
+
+    const sections: IListSections = [profileSection];
+
+    if (features.muteStrangers) {
+      sections.push({
+        items: [
+          {
+            type: 'toggle',
+            label: intl.formatMessage(messages.strangerNotificationsLabel),
+            sublabel: intl.formatMessage(messages.strangerNotificationsHint),
+            active: muteStrangers,
+            onPress: () => setMuteStrangers(!muteStrangers),
+          },
+          {
+            type: 'toggle',
+            label: intl.formatMessage(messages.hideNotificationContentLabel),
+            active: hideNotificationContent,
+            onPress: () => setHideNotificationContent(!hideNotificationContent),
+          },
+        ],
+      });
+    }
+
+    return sections;
+  }, [features, data, hideNetwork, muteStrangers, hideNotificationContent]);
+
   const customCSSField =
     instance.configuration.accounts?.allow_custom_css &&
     (() => (
@@ -506,156 +673,7 @@ const EditProfileScreen = ({
           )}
         </View>
 
-        <List
-          sections={[
-            {
-              items: [
-                {
-                  type: 'toggle',
-                  label: intl.formatMessage(messages.lockedLabel),
-                  sublabel: intl.formatMessage(messages.lockedHint),
-                  active: !!data.locked,
-                  onPress: handleToggle('locked'),
-                  enabled: features.followRequests,
-                },
-                {
-                  type: 'toggle',
-                  label: intl.formatMessage(messages.hideNetworkLabel),
-                  sublabel: intl.formatMessage(messages.hideNetworkHint),
-                  active: hideNetwork,
-                  onPress: handleHideNetworkChange,
-                  enabled: features.hideNetwork,
-                },
-                {
-                  type: 'toggle',
-                  label: intl.formatMessage(messages.botLabel),
-                  sublabel: intl.formatMessage(messages.botHint),
-                  active: !!data.bot,
-                  onPress: handleToggle('bot'),
-                  enabled: features.bots,
-                },
-                {
-                  type: 'toggle',
-                  label: intl.formatMessage(messages.discoverableLabel),
-                  sublabel: intl.formatMessage(messages.discoverableHint),
-                  active: !!data.discoverable,
-                  onPress: handleToggle('discoverable'),
-                  enabled: features.accountDiscoverability,
-                },
-                {
-                  type: 'toggle',
-                  label: intl.formatMessage(messages.rssLabel),
-                  active: !!data.enable_rss,
-                  onPress: handleToggle('enable_rss'),
-                  enabled: features.rssFeeds && features.version.software === GOTOSOCIAL,
-                },
-                {
-                  type: 'toggle',
-                  label: intl.formatMessage(messages.isCatLabel),
-                  sublabel: intl.formatMessage(messages.isCatHint),
-                  active: !!data.is_cat,
-                  onPress: handleToggle('is_cat'),
-                  enabled: features.accountIsCat,
-                },
-                {
-                  type: 'toggle',
-                  label: intl.formatMessage(messages.speakAsCatLabel),
-                  sublabel: intl.formatMessage(messages.speakAsCatHint),
-                  active: !!data.speak_as_cat,
-                  onPress: handleToggle('speak_as_cat'),
-                  enabled: features.accountIsCat,
-                },
-                {
-                  type: 'select',
-                  label: intl.formatMessage(messages.biteControlsLabel),
-                  active: data.bite_controls ?? 'none',
-                  onChange: handleFieldChange('bite_controls'),
-                  options: [
-                    { value: 'public', label: intl.formatMessage(messages.biteControlsPublic) },
-                    {
-                      value: 'followers',
-                      label: intl.formatMessage(messages.biteControlsFollowers),
-                    },
-                    { value: 'none', label: intl.formatMessage(messages.biteControlsNone) },
-                  ],
-                  enabled: features.biteControls,
-                },
-                {
-                  type: 'select',
-                  label: intl.formatMessage(messages.webLayoutLabel),
-                  active: data.web_layout,
-                  onChange: handleFieldChange('web_layout'),
-                  options: [
-                    { value: 'microblog', label: intl.formatMessage(messages.webLayoutMicroblog) },
-                    { value: 'gallery', label: intl.formatMessage(messages.webLayoutGallery) },
-                  ],
-                  enabled: features.accountWebLayout,
-                },
-                {
-                  type: 'select',
-                  label: intl.formatMessage(messages.webVisibilityLabel),
-                  active: data.web_visibility,
-                  onChange: handleFieldChange('web_visibility'),
-                  options: [
-                    { value: 'public', label: intl.formatMessage(messages.webVisibilityPublic) },
-                    {
-                      value: 'unlisted',
-                      label: intl.formatMessage(messages.webVisibilityUnlisted),
-                    },
-                    { value: 'none', label: intl.formatMessage(messages.webVisibilityNone) },
-                  ],
-                  enabled: features.accountWebVisibility,
-                },
-                {
-                  type: 'toggle',
-                  label: intl.formatMessage(messages.webIncludeBoostsLabel),
-                  sublabel: intl.formatMessage(messages.webIncludeBoostsHint),
-                  active: !!data.web_include_boosts,
-                  onPress: handleToggle('web_include_boosts'),
-                  enabled: features.accountWebIncludeBoosts,
-                },
-                {
-                  type: 'select',
-                  label: intl.formatMessage(messages.mentionPolicyLabel),
-                  sublabel: intl.formatMessage(messages.mentionPolicyHint),
-                  active: data.mention_policy,
-                  onChange: handleFieldChange('mention_policy'),
-                  options: [
-                    { value: 'none', label: intl.formatMessage(messages.mentionPolicyNone) },
-                    {
-                      value: 'only_known',
-                      label: intl.formatMessage(messages.mentionPolicyOnlyKnown),
-                    },
-                    {
-                      value: 'only_contacts',
-                      label: intl.formatMessage(messages.mentionPolicyOnlyContacts),
-                    },
-                  ],
-                  enabled: features.accountMentionPolicy,
-                },
-              ],
-            },
-            {
-              items: [
-                {
-                  type: 'toggle',
-                  label: intl.formatMessage(messages.strangerNotificationsLabel),
-                  sublabel: intl.formatMessage(messages.strangerNotificationsHint),
-                  active: muteStrangers,
-                  onPress: () => setMuteStrangers(!muteStrangers),
-                  enabled: features.muteStrangers,
-                },
-                {
-                  type: 'toggle',
-                  label: intl.formatMessage(messages.hideNotificationContentLabel),
-                  active: hideNotificationContent,
-                  onPress: () => setHideNotificationContent(!hideNotificationContent),
-                  enabled: features.muteStrangers,
-                },
-              ],
-            },
-          ]}
-        />
+        <List sections={listSections} />
 
         {customCSSField && (
           <PaperList.Section>

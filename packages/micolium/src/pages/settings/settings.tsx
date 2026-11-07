@@ -13,7 +13,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Platform, ScrollView } from 'react-native';
 import { toast } from 'sonner-native';
 
-import { List } from '@/components/ui/list';
+import { type IListSections, List } from '@/components/ui/list';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useAuthStoreActions } from '@/stores/auth';
 import { useUiStoreActions } from '@/stores/ui';
@@ -68,97 +68,106 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
   const { signOut } = useAuthStoreActions();
   const { openAccountSwitcher } = useUiStoreActions();
 
+  const listSections = React.useMemo(() => {
+    const settingsSection: IListSections[number] = {
+      subheader: intl.formatMessage(messages.settingsHeader),
+      items: [
+        {
+          icon: NotePencilIcon,
+          type: 'button',
+          label: intl.formatMessage(messages.composeHeading),
+          onPress: () => navigation.navigate('compose'),
+        },
+        {
+          icon: TimelineIcon,
+          type: 'button',
+          label: intl.formatMessage(messages.timelinesHeading),
+          onPress: () => navigation.navigate('timelines'),
+        },
+        {
+          icon: MonitorIcon,
+          type: 'button',
+          label: intl.formatMessage(messages.contentHeading),
+          onPress: () => navigation.navigate('content'),
+        },
+        {
+          icon: BellSimpleIcon,
+          type: 'button',
+          label: intl.formatMessage(messages.notificationsHeading),
+          onPress: () => navigation.navigate('notifications'),
+        },
+      ],
+    };
+
+    if (Platform.OS === 'ios') {
+      settingsSection.items.push({
+        icon: PaletteIcon,
+        type: 'button',
+        label: intl.formatMessage(messages.appearanceHeading),
+        onPress: () => navigation.navigate('appearance'),
+      });
+    }
+
+    settingsSection.items.push({
+      icon: InfoIcon,
+      type: 'button',
+      label: intl.formatMessage(messages.aboutHeading, { app_name: 'micolium' }),
+      onPress: () => navigation.navigate('about'),
+    });
+
+    const accountSection: IListSections[number] = {
+      subheader: intl.formatMessage(messages.accountHeader),
+      items: [
+        {
+          icon: FunnelIcon,
+          type: 'button',
+          label: intl.formatMessage(messages.contentFilteringHeading),
+          onPress: () => navigation.navigate('content_filtering'),
+        },
+      ],
+    };
+
+    if (features.followedHashtagsList) {
+      accountSection.items.push({
+        icon: HashIcon,
+        type: 'button',
+        label: intl.formatMessage(messages.followedTags),
+        onPress: () => navigation.navigate('followed_tags'),
+      });
+    }
+
+    const accountsSection: IListSections[number] = {
+      subheader: intl.formatMessage(messages.accountsHeader),
+      items: [
+        {
+          icon: UserPlusIcon,
+          type: 'button',
+          label: intl.formatMessage(messages.addOrSwitchAccounts),
+          onPress: () => openAccountSwitcher(),
+        },
+        {
+          icon: SignOutIcon,
+          type: 'button',
+          label: intl.formatMessage(messages.signOut),
+          onPress: () => {
+            signOut();
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'app' }],
+            });
+            toast.info(intl.formatMessage(messages.loggedOut));
+          },
+          role: 'destructive',
+        },
+      ],
+    };
+
+    return [settingsSection, accountSection, accountsSection];
+  }, [features]);
+
   return (
     <ScrollView>
-      <List
-        sections={[
-          {
-            subheader: intl.formatMessage(messages.settingsHeader),
-            items: [
-              {
-                icon: NotePencilIcon,
-                type: 'button',
-                label: intl.formatMessage(messages.composeHeading),
-                onPress: () => navigation.navigate('compose'),
-              },
-              {
-                icon: TimelineIcon,
-                type: 'button',
-                label: intl.formatMessage(messages.timelinesHeading),
-                onPress: () => navigation.navigate('timelines'),
-              },
-              {
-                icon: MonitorIcon,
-                type: 'button',
-                label: intl.formatMessage(messages.contentHeading),
-                onPress: () => navigation.navigate('content'),
-              },
-              {
-                icon: BellSimpleIcon,
-                type: 'button',
-                label: intl.formatMessage(messages.notificationsHeading),
-                onPress: () => navigation.navigate('notifications'),
-              },
-              {
-                icon: PaletteIcon,
-                type: 'button',
-                label: intl.formatMessage(messages.appearanceHeading),
-                onPress: () => navigation.navigate('appearance'),
-                enabled: Platform.OS === 'ios',
-              },
-              {
-                icon: InfoIcon,
-                type: 'button',
-                label: intl.formatMessage(messages.aboutHeading, { app_name: 'micolium' }),
-                onPress: () => navigation.navigate('about'),
-              },
-            ],
-          },
-          {
-            subheader: intl.formatMessage(messages.accountHeader),
-            items: [
-              {
-                icon: FunnelIcon,
-                type: 'button',
-                label: intl.formatMessage(messages.contentFilteringHeading),
-                onPress: () => navigation.navigate('content_filtering'),
-              },
-              {
-                icon: HashIcon,
-                type: 'button',
-                label: intl.formatMessage(messages.followedTags),
-                onPress: () => navigation.navigate('followed_tags'),
-                enabled: features.followedHashtagsList,
-              },
-            ],
-          },
-          {
-            subheader: intl.formatMessage(messages.accountsHeader),
-            items: [
-              {
-                icon: UserPlusIcon,
-                type: 'button',
-                label: intl.formatMessage(messages.addOrSwitchAccounts),
-                onPress: () => openAccountSwitcher(),
-              },
-              {
-                icon: SignOutIcon,
-                type: 'button',
-                label: intl.formatMessage(messages.signOut),
-                onPress: () => {
-                  signOut();
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'app' }],
-                  });
-                  toast.info(intl.formatMessage(messages.loggedOut));
-                },
-                role: 'destructive',
-              },
-            ],
-          },
-        ]}
-      />
+      <List sections={listSections} />
     </ScrollView>
   );
 };

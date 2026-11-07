@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { ScrollView } from 'react-native';
 
-import { List } from '@/components/ui/list';
+import { type IListSections, List } from '@/components/ui/list';
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 
@@ -107,82 +107,109 @@ const ComposeSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams, 'c
     return types;
   }, [instance, intl]);
 
+  const listSections = useMemo(() => {
+    const section: IListSections[number] = {
+      items: [
+        {
+          type: 'select',
+          label: intl.formatMessage(messages.defaultPrivacy),
+          active: defaultPrivacy,
+          onChange: (value) => update('compose.defaultPrivacy', value),
+          options: [
+            { value: 'public', label: intl.formatMessage(messages.privacyPublic) },
+            { value: 'unlisted', label: intl.formatMessage(messages.privacyUnlisted) },
+            { value: 'private', label: intl.formatMessage(messages.privacyFollowersOnly) },
+          ],
+        },
+      ],
+    };
+
+    if (contentTypes.length > 1) {
+      section.items.push({
+        type: 'select',
+        label: intl.formatMessage(messages.defaultContentType),
+        active: defaultContentType,
+        onChange: (value) => update('compose.defaultContentType', value),
+        options: contentTypes,
+      });
+    }
+
+    section.items.push({
+      type: 'toggle',
+      label: intl.formatMessage(messages.autosaveDrafts),
+      active: autosaveDrafts,
+      onPress: () => update('compose.autosaveDrafts', !autosaveDrafts),
+    });
+
+    if (features.spoilers) {
+      section.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.preserveSpoilers),
+        active: preserveSpoilers,
+        onPress: () => update('compose.preserveSpoilers', !preserveSpoilers),
+      });
+
+      if (preserveSpoilers) {
+        section.items.push({
+          type: 'toggle',
+          label: intl.formatMessage(messages.prependReToSpoilers),
+          active: prependReToSpoilers,
+          onPress: () => update('compose.prependReToSpoilers', !prependReToSpoilers),
+        });
+      }
+    }
+
+    if (features.createStatusExplicitAddressing) {
+      section.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.forceImplicitAddressing),
+        active: forceImplicitAddressing,
+        onPress: () => update('compose.forceImplicitAddressing', !forceImplicitAddressing),
+      });
+    }
+
+    section.items.push({
+      type: 'toggle',
+      label: intl.formatMessage(messages.missingDescriptionModal),
+      active: missingDescriptionModal,
+      onPress: () => update('compose.missingDescriptionModal', !missingDescriptionModal),
+    });
+
+    if (features.postLanguages) {
+      section.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.missingLanguageModal),
+        active: missingLanguageModal,
+        onPress: () => update('compose.missingLanguageModal', !missingLanguageModal),
+      });
+    }
+
+    section.items.push({
+      type: 'toggle',
+      label: intl.formatMessage(messages.stripMetadata),
+      sublabel: intl.formatMessage(messages.stripMetadataHint),
+      active: stripMetadata,
+      onPress: () => update('compose.stripMetadata', !stripMetadata),
+    });
+
+    return [section];
+  }, [
+    features,
+    contentTypes,
+    autosaveDrafts,
+    defaultPrivacy,
+    defaultContentType,
+    forceImplicitAddressing,
+    missingDescriptionModal,
+    missingLanguageModal,
+    preserveSpoilers,
+    prependReToSpoilers,
+    stripMetadata,
+  ]);
+
   return (
     <ScrollView>
-      <List
-        sections={[
-          {
-            items: [
-              {
-                type: 'select',
-                label: intl.formatMessage(messages.defaultPrivacy),
-                active: defaultPrivacy,
-                onChange: (value) => update('compose.defaultPrivacy', value),
-                options: [
-                  { value: 'public', label: intl.formatMessage(messages.privacyPublic) },
-                  { value: 'unlisted', label: intl.formatMessage(messages.privacyUnlisted) },
-                  { value: 'private', label: intl.formatMessage(messages.privacyFollowersOnly) },
-                ],
-              },
-              {
-                type: 'select',
-                label: intl.formatMessage(messages.defaultContentType),
-                active: defaultContentType,
-                onChange: (value) => update('compose.defaultContentType', value),
-                enabled: contentTypes.length > 1,
-                options: contentTypes,
-              },
-              {
-                type: 'toggle',
-                label: intl.formatMessage(messages.autosaveDrafts),
-                active: autosaveDrafts,
-                onPress: () => update('compose.autosaveDrafts', !autosaveDrafts),
-              },
-              {
-                type: 'toggle',
-                label: intl.formatMessage(messages.preserveSpoilers),
-                active: preserveSpoilers,
-                onPress: () => update('compose.preserveSpoilers', !preserveSpoilers),
-                enabled: features.spoilers,
-              },
-              {
-                type: 'toggle',
-                label: intl.formatMessage(messages.prependReToSpoilers),
-                active: prependReToSpoilers,
-                onPress: () => update('compose.prependReToSpoilers', !prependReToSpoilers),
-                enabled: features.spoilers && preserveSpoilers,
-              },
-              {
-                type: 'toggle',
-                label: intl.formatMessage(messages.forceImplicitAddressing),
-                active: forceImplicitAddressing,
-                onPress: () => update('compose.forceImplicitAddressing', !forceImplicitAddressing),
-                enabled: features.createStatusExplicitAddressing,
-              },
-              {
-                type: 'toggle',
-                label: intl.formatMessage(messages.missingDescriptionModal),
-                active: missingDescriptionModal,
-                onPress: () => update('compose.missingDescriptionModal', !missingDescriptionModal),
-              },
-              {
-                type: 'toggle',
-                label: intl.formatMessage(messages.missingLanguageModal),
-                active: missingLanguageModal,
-                onPress: () => update('compose.missingLanguageModal', !missingLanguageModal),
-                enabled: features.postLanguages,
-              },
-              {
-                type: 'toggle',
-                label: intl.formatMessage(messages.stripMetadata),
-                sublabel: intl.formatMessage(messages.stripMetadataHint),
-                active: stripMetadata,
-                onPress: () => update('compose.stripMetadata', !stripMetadata),
-              },
-            ],
-          },
-        ]}
-      />
+      <List sections={listSections} />
     </ScrollView>
   );
 };

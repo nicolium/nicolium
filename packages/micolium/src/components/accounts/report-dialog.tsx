@@ -12,7 +12,7 @@ import { getDomain } from '@/utils/accounts';
 
 import { Status } from '../statuses/status';
 import { DialogOrSheet, type DialogOrSheetAction } from '../ui/dialog-or-sheet';
-import { List } from '../ui/list';
+import { type IListSections, List } from '../ui/list';
 
 import { Account } from './account';
 
@@ -50,30 +50,32 @@ const ReportDialogFirstStep: React.FC<IReportDialogFirstStep> = ({
   const { rules } = useInstance();
   const shouldRequireRule = rules.length > 0;
 
+  const listSections: IListSections = React.useMemo(() => {
+    if (!shouldRequireRule) return [];
+
+    return [
+      {
+        subheader: intl.formatMessage(messages.reason),
+        items: rules.map((rule) => ({
+          label: rule.text,
+          sublabel: rule.hint,
+          type: 'toggle',
+          active: ruleIds.includes(rule.id),
+          onPress: () => {
+            let newRuleIds;
+            if (ruleIds.includes(rule.id)) newRuleIds = ruleIds.filter((id) => id !== rule.id);
+            else newRuleIds = [...ruleIds, rule.id];
+            setRuleIds(newRuleIds);
+          },
+        })),
+      },
+    ];
+  }, [rules, shouldRequireRule, ruleIds]);
+
   return (
     <>
       {shouldRequireRule && (
-        <List
-          sections={[
-            {
-              subheader: intl.formatMessage(messages.reason),
-              items: rules.map((rule) => ({
-                label: rule.text,
-                sublabel: rule.hint,
-                type: 'toggle',
-                active: ruleIds.includes(rule.id),
-                onPress: () => {
-                  let newRuleIds;
-                  if (ruleIds.includes(rule.id))
-                    newRuleIds = ruleIds.filter((id) => id !== rule.id);
-                  else newRuleIds = [...ruleIds, rule.id];
-                  setRuleIds(newRuleIds);
-                },
-              })),
-            },
-          ]}
-          style={{ marginTop: -8, marginHorizontal: -16 }}
-        />
+        <List sections={listSections} style={{ marginTop: -8, marginHorizontal: -16 }} />
       )}
       <TextInput
         variant='outlined'
@@ -106,36 +108,40 @@ const ReportDialogSecondStep: React.FC<IReportDialogSecondStep> = ({
 }) => {
   const intl = useIntl();
 
-  return (
-    <List
-      sections={[
-        {
-          subheader: intl.formatMessage(messages.furtherActions),
-          items: [
-            {
-              label: intl.formatMessage(messages.block, {
-                target: '@' + account?.acct,
-              }),
-              type: 'toggle',
-              active: block,
-              onPress: () => setBlock((value) => !value),
-              enabled: account?.relationship?.blocking !== true,
-            },
-            {
-              label: intl.formatMessage(messages.forward, {
-                target: account && getDomain(account),
-              }),
-              type: 'toggle',
-              active: forward,
-              onPress: () => setForward((value) => !value),
-              enabled: canForward,
-            },
-          ],
-        },
-      ]}
-      style={{ marginTop: -8, marginHorizontal: -16 }}
-    />
-  );
+  const listSections: IListSections = React.useMemo(() => {
+    if (account?.relationship?.blocking === true && !canForward) return [];
+
+    const section: IListSections[number] = {
+      subheader: intl.formatMessage(messages.furtherActions),
+      items: [],
+    };
+
+    if (account?.relationship?.blocking !== true) {
+      section.items.push({
+        label: intl.formatMessage(messages.block, {
+          target: '@' + account?.acct,
+        }),
+        type: 'toggle',
+        active: block,
+        onPress: () => setBlock((value) => !value),
+      });
+    }
+
+    if (canForward) {
+      section.items.push({
+        label: intl.formatMessage(messages.forward, {
+          target: account && getDomain(account),
+        }),
+        type: 'toggle',
+        active: forward,
+        onPress: () => setForward((value) => !value),
+      });
+    }
+
+    return [section];
+  }, [account.relationship, block, forward, canForward]);
+
+  return <List sections={listSections} style={{ marginTop: -8, marginHorizontal: -16 }} />;
 };
 
 interface IReportDialog {

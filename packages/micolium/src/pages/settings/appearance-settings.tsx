@@ -3,7 +3,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, ScrollView } from 'react-native';
 
-import { List } from '@/components/ui/list';
+import { type IListSections, List } from '@/components/ui/list';
 import { useSetting, useSettingsActions } from '@/stores/settings';
 
 import type { SettingsStackParams } from '@/router/router';
@@ -33,31 +33,36 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
   const enableLiquidGlass = useSetting('appearance.enableLiquidGlass');
   const sourceColor = useSetting('appearance.sourceColor');
 
+  const listSections = React.useMemo(() => {
+    const section: IListSections[number] = {
+      items: [],
+    };
+
+    if (Platform.OS !== 'android') {
+      section.items.push({
+        type: 'color-picker',
+        label: intl.formatMessage(messages.baseColor),
+        value: sourceColor,
+        onChange: (color) => update('appearance.sourceColor', color),
+      });
+    }
+
+    if (glassEffect) {
+      section.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.enableLiquidGlass),
+        sublabel: intl.formatMessage(messages.enableLiquidGlassDescription),
+        active: enableLiquidGlass,
+        onPress: () => update('appearance.enableLiquidGlass', !enableLiquidGlass),
+      });
+    }
+
+    return [section];
+  }, [sourceColor, glassEffect, enableLiquidGlass]);
+
   return (
     <ScrollView>
-      <List
-        sections={[
-          {
-            items: [
-              {
-                type: 'color-picker',
-                label: intl.formatMessage(messages.baseColor),
-                value: sourceColor,
-                onChange: (color) => update('appearance.sourceColor', color),
-                enabled: Platform.OS !== 'android',
-              },
-              {
-                type: 'toggle',
-                label: intl.formatMessage(messages.enableLiquidGlass),
-                sublabel: intl.formatMessage(messages.enableLiquidGlassDescription),
-                active: enableLiquidGlass,
-                onPress: () => update('appearance.enableLiquidGlass', !enableLiquidGlass),
-                enabled: glassEffect,
-              },
-            ],
-          },
-        ]}
-      />
+      <List sections={listSections} />
     </ScrollView>
   );
 };

@@ -5,7 +5,6 @@ import {
 } from '@expo/ui/swift-ui';
 import { labelsHidden } from '@expo/ui/swift-ui/modifiers';
 import { List as PaperList, Switch, Text, useTheme } from '@mkljczk/react-native-paper';
-import { create } from 'mutative';
 import { CaretRightIcon } from 'phosphor-react-native/src/icons/CaretRight';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -21,7 +20,6 @@ import { DateTimePicker } from './date-time-picker';
 import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 
 interface ISelectItem<T> {
-  enabled?: boolean;
   type: 'select';
   active: T | Array<T>;
   onChange: (value: T) => void;
@@ -36,7 +34,6 @@ interface IList {
     subheader?: string;
     items: Array<
       | {
-          enabled?: boolean;
           type: 'button';
           onPress: () => void;
           label: string;
@@ -45,7 +42,6 @@ interface IList {
           icon?: PhosphorIcon;
         }
       | {
-          enabled?: boolean;
           type: 'toggle';
           active: boolean;
           onPress: () => void;
@@ -54,7 +50,6 @@ interface IList {
           disabled?: boolean;
         }
       | {
-          enabled?: boolean;
           type: 'color-picker';
           value: string;
           onChange: (color: string) => void;
@@ -63,7 +58,6 @@ interface IList {
           disabled?: boolean;
         }
       | {
-          enabled?: boolean;
           type: 'date-picker';
           value: Date;
           onChange: (date: Date) => void;
@@ -75,7 +69,6 @@ interface IList {
           rangeEnd?: Date;
         }
       | {
-          enabled?: boolean;
           type: 'text';
           onPress?: () => void;
           label: string;
@@ -88,22 +81,14 @@ interface IList {
   style?: StyleProp<ViewStyle>;
 }
 
+type IListSections = IList['sections'];
+
 const List: React.FC<IList> = ({ sections, style }) => {
   const glassEffect = useEnableLiquidGlass();
   const theme = useTheme();
   const intl = useIntl();
 
-  const filteredSections = React.useMemo(
-    () =>
-      create(sections, (draft) => {
-        for (const section of draft) {
-          section.items = section.items.filter(({ enabled }) => enabled !== false);
-        }
-      }),
-    [sections],
-  );
-
-  return filteredSections.map((section, index) => (
+  return sections.map((section, index) => (
     <PaperList.Section
       key={index}
       style={[index === 0 && !section.subheader ? { marginTop: 16 } : undefined, style]}
@@ -111,8 +96,6 @@ const List: React.FC<IList> = ({ sections, style }) => {
       {section.subheader && <PaperList.Subheader>{section.subheader}</PaperList.Subheader>}
       <View style={{ gap: 2 }}>
         {section.items.map((item, index) => {
-          if (item.enabled === false) return null;
-
           const styles = [
             getSegmentedMenuStyles(theme, false, index, section.items.length),
             { marginHorizontal: 16 },
@@ -295,4 +278,4 @@ const List: React.FC<IList> = ({ sections, style }) => {
   ));
 };
 
-export { List, type IList };
+export { List, type IList, type IListSections };

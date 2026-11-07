@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { useFeatures } from '@/contexts/current-account-context';
 
-import { List, type IList } from './ui/list';
+import { type IListSections, List } from './ui/list';
 
 import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
 import type { StyleProp, ViewStyle } from 'react-native';
@@ -172,7 +172,7 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
     );
   };
 
-  const sections: IList['sections'] = [];
+  const sections: IListSections = [];
 
   if (features.interactionRequests) {
     for (const policy of policies) {
