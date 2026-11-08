@@ -26,7 +26,7 @@ import {
 import { disabled } from '@expo/ui/swift-ui/modifiers';
 import { useTheme } from '@mkljczk/react-native-paper';
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import type { SFSymbol } from 'expo-symbols';
 
@@ -302,30 +302,36 @@ const JetpackDropdownMenuItems = <T extends Array<unknown>>(props: IDropdownMenu
 const DropdownMenu: <T extends Array<unknown> = []>(props: IDropdownMenu<T>) => React.JSX.Element =
   Platform.OS === 'ios'
     ? (props) => (
-        <SwiftUIHost matchContents>
-          <SwiftUIMenu label={<SwiftUIRNHostView matchContents>{props.trigger}</SwiftUIRNHostView>}>
-            <SwiftUIDropdownMenuItems {...props} />
-          </SwiftUIMenu>
-        </SwiftUIHost>
+        <View onStartShouldSetResponder={() => true}>
+          <SwiftUIHost matchContents>
+            <SwiftUIMenu
+              label={
+                <SwiftUIRNHostView matchContents>
+                  <View>{props.trigger}</View>
+                </SwiftUIRNHostView>
+              }
+            >
+              <SwiftUIDropdownMenuItems {...props} />
+            </SwiftUIMenu>
+          </SwiftUIHost>
+        </View>
       )
     : (props) => {
         const [expanded, setExpanded] = React.useState(false);
 
         return (
           <JetpackHost matchContents>
-            <JetpackBox>
-              <JetpackRNHostView matchContents>
-                {React.cloneElement(props.trigger, { onPress: () => setExpanded(true) })}
-              </JetpackRNHostView>
-              <JetpackDropdownMenuPopup
-                expanded={expanded}
-                onDismissRequest={() => setExpanded(false)}
-              >
-                {expanded && (
-                  <JetpackDropdownMenuItems {...props} onClose={() => setExpanded(false)} />
-                )}
-              </JetpackDropdownMenuPopup>
-            </JetpackBox>
+            <JetpackRNHostView matchContents>
+              <View>{React.cloneElement(props.trigger, { onPress: () => setExpanded(true) })}</View>
+            </JetpackRNHostView>
+            <JetpackDropdownMenuPopup
+              expanded={expanded}
+              onDismissRequest={() => setExpanded(false)}
+            >
+              {expanded && (
+                <JetpackDropdownMenuItems {...props} onClose={() => setExpanded(false)} />
+              )}
+            </JetpackDropdownMenuPopup>
           </JetpackHost>
         );
       };
