@@ -269,38 +269,61 @@ const jetpackRenderGroups = (items: Array<DropdownMenuItem>, onClose: () => void
   ));
 };
 
-interface IDropdownMenu {
-  items: Array<DropdownMenuItem>;
+type IDropdownMenu<T extends Array<unknown>> = {
   trigger: React.JSX.Element;
-}
+} & (
+  | {
+      items: Array<DropdownMenuItem>;
+    }
+  | {
+      useItems: (...args: T) => Array<DropdownMenuItem>;
+      hookArgs?: T;
+    }
+);
 
-const DropdownMenu: React.FC<IDropdownMenu> =
+type IDropdownMenuItems<T extends Array<unknown>> = IDropdownMenu<T> & {
+  onClose: () => void;
+};
+
+const SwiftUIDropdownMenuItems = <T extends Array<unknown>>(props: IDropdownMenu<T>) => {
+  const items =
+    'useItems' in props ? props.useItems(...(props.hookArgs || ([] as any as T))) : props.items;
+
+  return items.map((item, index, array) => swiftUIRenderItem(item, array.length - 1 === index));
+};
+
+const JetpackDropdownMenuItems = <T extends Array<unknown>>(props: IDropdownMenuItems<T>) => {
+  const items =
+    'useItems' in props ? props.useItems(...(props.hookArgs || ([] as any as T))) : props.items;
+
+  return jetpackRenderGroups(items, () => props.onClose());
+};
+
+const DropdownMenu: <T extends Array<unknown> = []>(props: IDropdownMenu<T>) => React.JSX.Element =
   Platform.OS === 'ios'
-    ? ({ items, trigger }) => {
-        return (
-          <SwiftUIHost matchContents>
-            <SwiftUIMenu label={<SwiftUIRNHostView matchContents>{trigger}</SwiftUIRNHostView>}>
-              {items.map((item, index, array) =>
-                swiftUIRenderItem(item, array.length - 1 === index),
-              )}
-            </SwiftUIMenu>
-          </SwiftUIHost>
-        );
-      }
-    : ({ items, trigger }) => {
+    ? (props) => (
+        <SwiftUIHost matchContents>
+          <SwiftUIMenu label={<SwiftUIRNHostView matchContents>{props.trigger}</SwiftUIRNHostView>}>
+            <SwiftUIDropdownMenuItems {...props} />
+          </SwiftUIMenu>
+        </SwiftUIHost>
+      )
+    : (props) => {
         const [expanded, setExpanded] = React.useState(false);
 
         return (
           <JetpackHost matchContents>
             <JetpackBox>
               <JetpackRNHostView matchContents>
-                {React.cloneElement(trigger, { onPress: () => setExpanded(true) })}
+                {React.cloneElement(props.trigger, { onPress: () => setExpanded(true) })}
               </JetpackRNHostView>
               <JetpackDropdownMenuPopup
                 expanded={expanded}
                 onDismissRequest={() => setExpanded(false)}
               >
-                {jetpackRenderGroups(items, () => setExpanded(false))}
+                {expanded && (
+                  <JetpackDropdownMenuItems {...props} onClose={() => setExpanded(false)} />
+                )}
               </JetpackDropdownMenuPopup>
             </JetpackBox>
           </JetpackHost>

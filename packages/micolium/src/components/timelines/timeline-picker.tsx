@@ -97,35 +97,15 @@ const useTimelineHeadingAndIcon = (
   }, [active, lists, circles, antennas]);
 };
 
-interface ITimelinePicker {
-  navigation: NativeStackNavigationProp<TimelineStackParams>;
-  active?:
-    | 'home'
-    | 'local'
-    | 'bubble'
-    | 'federated'
-    | 'wrenched'
-    | `list:${string}`
-    | `circle:${string}`
-    | `antenna:${string}`
-    | `instance:${string}`;
-}
-
-const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home' }) => {
+const useMenuItems = (
+  active: ITimelinePicker['active'],
+  handleCreateDialog: (name: 'bookmark_folder' | 'antenna' | 'circle' | 'list' | null) => void,
+) => {
   const intl = useIntl();
   const features = useFeatures();
+  const navigation = useNavigation();
   const instance = useInstance();
-  const glassEffect = useEnableLiquidGlass();
-  const rootNavigation = useNavigation();
   const timelineAccess = instance.configuration.timelines_access;
-
-  const MaybeGlassView = glassEffect ? GlassView : View;
-
-  const [createDialog, setCreateDialog] = useState<
-    'bookmark_folder' | 'antenna' | 'circle' | 'list' | null
-  >(null);
-
-  const [heading, TimelineIcon] = useTimelineHeadingAndIcon(active);
 
   const { data: bookmarkFolders } = useBookmarkFolders();
   const { data: lists } = useLists();
@@ -160,7 +140,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
       {
         key: 'bookmarks:all',
         type: 'button',
-        onPress: () => rootNavigation.navigate('bookmarks', { screen: 'all' }),
+        onPress: () => navigation.navigate('bookmarks', { screen: 'all' }),
         label: intl.formatMessage(messages.allBookmarks),
         appleIcon: 'bookmark',
         androidIcon: 'ph_bookmarks',
@@ -177,7 +157,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
           key: `bookmarks:${folder.id}`,
           type: 'button',
           onPress: () =>
-            rootNavigation.navigate('bookmarks', {
+            navigation.navigate('bookmarks', {
               screen: 'folder',
               params: { id: folder.id },
             }),
@@ -191,7 +171,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     children.push({
       key: 'bookmarks-create',
       type: 'button',
-      onPress: () => setCreateDialog('bookmark_folder'),
+      onPress: () => handleCreateDialog('bookmark_folder'),
       label: intl.formatMessage(messages.addBookmarkFolder),
       appleIcon: 'plus',
       androidIcon: 'ph_plus',
@@ -264,7 +244,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     children.push({
       key: `${name}-create`,
       type: 'button',
-      onPress: () => setCreateDialog(name),
+      onPress: () => handleCreateDialog(name),
       label: intl.formatMessage(createTitle),
       appleIcon: 'plus',
       androidIcon: 'ph_plus',
@@ -280,63 +260,87 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
     };
   };
 
-  const getMenuItems = () => {
-    const timelines: Array<DropdownMenuItem> = [
-      getTimelineItem('home', 'house', 'ph_house', messages.homeTimeline),
-    ];
+  const timelines: Array<DropdownMenuItem> = [
+    getTimelineItem('home', 'house', 'ph_house', messages.homeTimeline),
+  ];
 
-    if (features.publicTimeline && timelineAccess.live_feeds.local !== 'disabled') {
-      timelines.push(getTimelineItem('local', 'globe.desk', 'ph_planet', messages.localTimeline));
-    }
-    if (features.bubbleTimeline && timelineAccess.live_feeds.bubble !== 'disabled') {
-      timelines.push(
-        getTimelineItem('bubble', 'circle.hexagonpath', 'ph_graph', messages.bubbleTimeline),
-      );
-    }
-    if (features.publicTimeline && timelineAccess.live_feeds.remote !== 'disabled') {
-      timelines.push(
-        getTimelineItem('federated', 'globe', 'ph_globe_simple', messages.federatedTimeline),
-      );
-    }
+  if (features.publicTimeline && timelineAccess.live_feeds.local !== 'disabled') {
+    timelines.push(getTimelineItem('local', 'globe.desk', 'ph_planet', messages.localTimeline));
+  }
+  if (features.bubbleTimeline && timelineAccess.live_feeds.bubble !== 'disabled') {
+    timelines.push(
+      getTimelineItem('bubble', 'circle.hexagonpath', 'ph_graph', messages.bubbleTimeline),
+    );
+  }
+  if (features.publicTimeline && timelineAccess.live_feeds.remote !== 'disabled') {
+    timelines.push(
+      getTimelineItem('federated', 'globe', 'ph_globe_simple', messages.federatedTimeline),
+    );
+  }
 
-    const other: Array<DropdownMenuItem> = [];
+  const other: Array<DropdownMenuItem> = [];
 
-    if (features.bookmarks) {
-      other.push(
-        features.bookmarkFolders
-          ? getBookmarksMenu()
-          : {
-              key: 'bookmarks',
-              type: 'button',
-              onPress: () => rootNavigation.navigate('bookmarks', { screen: 'all' }),
-              label: intl.formatMessage(messages.bookmarks),
-              appleIcon: 'bookmark',
-              androidIcon: 'ph_bookmarks',
-            },
-      );
-    }
-    if (features.conversations) {
-      other.push({
-        key: 'conversations',
-        type: 'button',
-        onPress: () => rootNavigation.navigate('conversations', { screen: 'index' }),
-        label: intl.formatMessage(messages.conversations),
-        appleIcon: 'envelope',
-        androidIcon: 'ph_envelope_simple',
-      });
-    }
-    if (features.lists) other.push(getListsSubMenu('list', lists));
-    if (features.antennas) other.push(getListsSubMenu('antenna', antennas));
-    if (features.circles) other.push(getListsSubMenu('circle', circles));
+  if (features.bookmarks) {
+    other.push(
+      features.bookmarkFolders
+        ? getBookmarksMenu()
+        : {
+            key: 'bookmarks',
+            type: 'button',
+            onPress: () => navigation.navigate('bookmarks', { screen: 'all' }),
+            label: intl.formatMessage(messages.bookmarks),
+            appleIcon: 'bookmark',
+            androidIcon: 'ph_bookmarks',
+          },
+    );
+  }
+  if (features.conversations) {
+    other.push({
+      key: 'conversations',
+      type: 'button',
+      onPress: () => navigation.navigate('conversations', { screen: 'index' }),
+      label: intl.formatMessage(messages.conversations),
+      appleIcon: 'envelope',
+      androidIcon: 'ph_envelope_simple',
+    });
+  }
+  if (features.lists) other.push(getListsSubMenu('list', lists));
+  if (features.antennas) other.push(getListsSubMenu('antenna', antennas));
+  if (features.circles) other.push(getListsSubMenu('circle', circles));
 
-    const items: Array<DropdownMenuItem> = [
-      { key: 'timelines', type: 'section', children: timelines },
-    ];
+  const items: Array<DropdownMenuItem> = [
+    { key: 'timelines', type: 'section', children: timelines },
+  ];
 
-    if (other.length) items.push({ key: 'other', type: 'section', children: other });
+  if (other.length) items.push({ key: 'other', type: 'section', children: other });
 
-    return items;
-  };
+  return items;
+};
+
+interface ITimelinePicker {
+  navigation: NativeStackNavigationProp<TimelineStackParams>;
+  active?:
+    | 'home'
+    | 'local'
+    | 'bubble'
+    | 'federated'
+    | 'wrenched'
+    | `list:${string}`
+    | `circle:${string}`
+    | `antenna:${string}`
+    | `instance:${string}`;
+}
+
+const TimelinePicker: React.FC<ITimelinePicker> = ({ active = 'home' }) => {
+  const glassEffect = useEnableLiquidGlass();
+
+  const MaybeGlassView = glassEffect ? GlassView : View;
+
+  const [createDialog, setCreateDialog] = useState<
+    'bookmark_folder' | 'antenna' | 'circle' | 'list' | null
+  >(null);
+
+  const [heading, TimelineIcon] = useTimelineHeadingAndIcon(active);
 
   return (
     <>
@@ -370,7 +374,8 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
               </MaybeGlassView>
             </Pressable>
           }
-          items={getMenuItems()}
+          useItems={useMenuItems}
+          hookArgs={[active, setCreateDialog]}
         />
       </View>
       {createDialog && (
