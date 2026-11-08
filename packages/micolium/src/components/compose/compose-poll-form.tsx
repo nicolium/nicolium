@@ -13,14 +13,14 @@ import { XIcon } from 'phosphor-react-native/src/icons/X';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { GestureDetector, usePanGesture } from 'react-native-gesture-handler';
 import Animated, {
-  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
   type SharedValue,
 } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 
 import { useInstance } from '@/contexts/current-account-context';
 import { useCompose, useComposeActions } from '@/stores/compose';
@@ -75,32 +75,30 @@ const Option: React.FC<IOption> = ({
 }) => {
   const intl = useIntl();
 
-  const gesture = React.useMemo(
-    () =>
-      Gesture.Pan()
-        .minDistance(0)
-        .hitSlop({ horizontal: 12, vertical: 12 })
-        .onBegin(() => {
-          activeIndex.value = index;
-          dragY.value = 0;
-        })
-        .onUpdate((event) => {
-          const step = rowHeight.value;
-          dragY.value = clamp(event.translationY, -index * step, (count - 1 - index) * step);
-        })
-        .onFinalize(() => {
-          const step = rowHeight.value;
-          const target = step ? clamp(Math.round(index + dragY.value / step), 0, count - 1) : index;
+  const gesture = usePanGesture({
+    minDistance: 0,
+    hitSlop: { horizontal: 12, vertical: 12 },
+    onBegin: () => {
+      activeIndex.value = index;
+      dragY.value = 0;
+    },
+    onUpdate: (event) => {
+      const step = rowHeight.value;
+      dragY.value = clamp(event.translationY, -index * step, (count - 1 - index) * step);
+    },
+    onFinalize: () => {
+      const step = rowHeight.value;
+      const target = step ? clamp(Math.round(index + dragY.value / step), 0, count - 1) : index;
+      console.log(target);
 
-          if (target !== index) {
-            runOnJS(onMove)(index, target);
-          } else {
-            activeIndex.value = -1;
-            dragY.value = withTiming(0);
-          }
-        }),
-    [index, count, onMove],
-  );
+      if (target !== index) {
+        scheduleOnRN(onMove, index, target);
+      } else {
+        activeIndex.value = -1;
+        dragY.value = withTiming(0);
+      }
+    },
+  });
 
   const animatedStyle = useAnimatedStyle(() => {
     const active = activeIndex.value;
