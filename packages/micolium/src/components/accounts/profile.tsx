@@ -204,6 +204,7 @@ interface IProfile {
 const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const intl = useIntl();
   const { colors } = useTheme();
+  const blackTheme = useSetting('appearance.black');
   const { top: topInset } = useSafeAreaInsets();
   const { data: account } = useAccount(id, !ownAccount);
   const navigation = useNavigation();
@@ -674,7 +675,18 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   return (
     <>
       <Animated.View style={headerStyle}>
-        <Appbar.Header mode='small' style={{ backgroundColor: colors.surfaceContainer }}>
+        <Appbar.Header
+          mode='small'
+          style={[
+            {
+              backgroundColor: colors.surfaceContainer,
+            },
+            blackTheme && {
+              borderBottomWidth: 1,
+              borderBottomColor: colors.surfaceContainerHighest,
+            },
+          ]}
+        >
           {!ownAccount && <HeaderBackButton onPress={navigation.goBack} />}
           <Appbar.Content
             title={

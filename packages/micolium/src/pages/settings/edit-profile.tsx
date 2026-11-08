@@ -13,6 +13,7 @@ import { type IListSections, List } from '@/components/ui/list';
 import { useClient, useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { Alert } from '@/stores/alerts';
+import { useSetting } from '@/stores/settings';
 import { getSegmentedMenuStyles } from '@/utils/themes';
 
 import type { SettingsStackParams } from '@/router/router';
@@ -238,6 +239,7 @@ const EditProfileScreen = ({
 }: NativeStackScreenProps<SettingsStackParams, 'edit_profile'>) => {
   const intl = useIntl();
   const theme = useTheme();
+  const blackTheme = useSetting('appearance.black');
   const client = useClient();
   const features = useFeatures();
   const instance = useInstance();
@@ -624,9 +626,15 @@ const EditProfileScreen = ({
     <>
       <Appbar.Header
         mode='small'
-        style={{
-          backgroundColor: theme.colors.surfaceContainer,
-        }}
+        style={[
+          {
+            backgroundColor: theme.colors.surfaceContainer,
+          },
+          blackTheme && {
+            borderBottomWidth: 1,
+            borderBottomColor: theme.colors.surfaceContainerHighest,
+          },
+        ]}
       >
         <HeaderBackButton onPress={handleBackButton} />
         <Appbar.Content title={intl.formatMessage(messages.heading)} />

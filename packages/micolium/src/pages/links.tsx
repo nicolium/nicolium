@@ -11,6 +11,7 @@ import { iconHelper } from '@/components/ui/icon';
 import { useClient } from '@/contexts/current-account-context';
 import { useTimeline } from '@/queries/timelines/use-timeline';
 import { useTrendingLinks } from '@/queries/trends/use-trending-links';
+import { useSetting } from '@/stores/settings';
 import { openUrl } from '@/utils/url';
 
 import type { RootStackParams } from '@/router/router';
@@ -30,6 +31,7 @@ const LinksScreen = ({
   const intl = useIntl();
   const client = useClient();
   const { colors } = useTheme();
+  const blackTheme = useSetting('appearance.black');
 
   const { data: trendingLinks } = useTrendingLinks();
   const link = trendingLinks?.find((link) => link.url === url);
@@ -63,7 +65,18 @@ const LinksScreen = ({
 
   return (
     <>
-      <Appbar.Header mode='small' style={{ backgroundColor: colors.surfaceContainer }}>
+      <Appbar.Header
+        mode='small'
+        style={[
+          {
+            backgroundColor: colors.surfaceContainer,
+          },
+          blackTheme && {
+            borderBottomWidth: 1,
+            borderBottomColor: colors.surfaceContainerHighest,
+          },
+        ]}
+      >
         <HeaderBackButton onPress={navigation.goBack} />
         <Appbar.Content
           title={intl.formatMessage(messages.header, {

@@ -1,4 +1,4 @@
-import { Appbar, Text } from '@mkljczk/react-native-paper';
+import { Appbar, Text, useTheme } from '@mkljczk/react-native-paper';
 import {
   createNativeStackNavigator,
   type NativeStackScreenProps,
@@ -22,6 +22,7 @@ import {
   useDeleteBookmarkFolder,
 } from '@/queries/statuses/use-bookmark-folders';
 import { Alert } from '@/stores/alerts';
+import { useSetting } from '@/stores/settings';
 
 import type { BookmarksStackParams } from '@/router/router';
 
@@ -53,12 +54,22 @@ const messages = defineMessages({
 const AllBookmarksScreen = ({
   navigation,
 }: NativeStackScreenProps<BookmarksStackParams, 'all'>) => {
+  const { colors } = useTheme();
+  const blackTheme = useSetting('appearance.black');
   const features = useFeatures();
   const bookmarksQuery = useBookmarks();
 
   return (
     <>
-      <Appbar.Header mode='small'>
+      <Appbar.Header
+        mode='small'
+        style={
+          blackTheme && {
+            borderBottomWidth: 1,
+            borderBottomColor: colors.surfaceContainerHighest,
+          }
+        }
+      >
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
         <Appbar.Content
@@ -91,6 +102,8 @@ const BookmarksFolderScreen = ({
   navigation,
 }: NativeStackScreenProps<BookmarksStackParams, 'folder'>) => {
   const intl = useIntl();
+  const { colors } = useTheme();
+  const blackTheme = useSetting('appearance.black');
 
   const bookmarksQuery = useBookmarks(route.params.id);
   const { data: folder } = useBookmarkFolder(route.params.id);
@@ -123,7 +136,15 @@ const BookmarksFolderScreen = ({
 
   return (
     <>
-      <Appbar.Header mode='small'>
+      <Appbar.Header
+        mode='small'
+        style={
+          blackTheme && {
+            borderBottomWidth: 1,
+            borderBottomColor: colors.surfaceContainerHighest,
+          }
+        }
+      >
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}
 
         <Appbar.Content

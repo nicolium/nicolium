@@ -11,6 +11,7 @@ import { View } from 'react-native';
 import { Emojify } from '@/components/ui/emojify';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
 import { useStatus } from '@/queries/statuses/use-status';
+import { useSetting } from '@/stores/settings';
 
 import { StatusHistoryScreen } from './status-history';
 import {
@@ -48,6 +49,7 @@ const messages = defineMessages({
 const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
   const intl = useIntl();
   const { colors } = useTheme();
+  const blackTheme = useSetting('appearance.black');
   const { data: status } = useStatus((route.params as StatusStackParams['view'] | undefined)?.id);
 
   let title: string | Array<React.ReactNode>;
@@ -97,7 +99,18 @@ const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
   }
 
   return (
-    <Appbar.Header mode='small' style={{ backgroundColor: colors.surfaceContainer }}>
+    <Appbar.Header
+      mode='small'
+      style={[
+        {
+          backgroundColor: colors.surfaceContainer,
+        },
+        blackTheme && {
+          borderBottomWidth: 1,
+          borderBottomColor: colors.surfaceContainerHighest,
+        },
+      ]}
+    >
       {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}
       {subtitle ? (
         <View>

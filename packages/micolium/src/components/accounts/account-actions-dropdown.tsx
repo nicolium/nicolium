@@ -247,6 +247,33 @@ const useMenuItems = (
     openReportDialog();
   };
 
+  const shareItems: Array<DropdownMenuItem> = [
+    {
+      key: 'copy',
+      type: 'button',
+      label: intl.formatMessage(messages.copy),
+      appleIcon: 'link',
+      androidIcon: 'ph_link_simple_horizontal',
+      onPress: handleCopy,
+    },
+    {
+      key: 'open-in-browser',
+      type: 'button',
+      label: intl.formatMessage(messages.openInBrowser),
+      appleIcon: 'safari',
+      androidIcon: 'ph_arrow_square_out',
+      onPress: handleOpenInBrowser,
+    },
+    {
+      key: 'share',
+      type: 'button',
+      label: intl.formatMessage(messages.share),
+      appleIcon: 'square.and.arrow.up',
+      androidIcon: 'ph_export',
+      onPress: handleShare,
+    },
+  ];
+
   const relationshipItems: Array<DropdownMenuItem> = [];
 
   if (ownAccount) {
@@ -318,33 +345,6 @@ const useMenuItems = (
     });
   }
 
-  const shareItems: Array<DropdownMenuItem> = [
-    {
-      key: 'copy',
-      type: 'button',
-      label: intl.formatMessage(messages.copy),
-      appleIcon: 'link',
-      androidIcon: 'ph_link_simple_horizontal',
-      onPress: handleCopy,
-    },
-    {
-      key: 'open-in-browser',
-      type: 'button',
-      label: intl.formatMessage(messages.openInBrowser),
-      appleIcon: 'safari',
-      androidIcon: 'ph_arrow_square_out',
-      onPress: handleOpenInBrowser,
-    },
-    {
-      key: 'share',
-      type: 'button',
-      label: intl.formatMessage(messages.share),
-      appleIcon: 'square.and.arrow.up',
-      androidIcon: 'ph_export',
-      onPress: handleShare,
-    },
-  ];
-
   const navigationItems: Array<DropdownMenuItem> = [];
 
   if (ownAccount || (features.publicFavourites && !account.hide_favorites)) {
@@ -396,13 +396,13 @@ const useMenuItems = (
     );
   }
 
-  const items: Array<DropdownMenuItem> = [];
+  const items: Array<DropdownMenuItem> = [
+    { key: 'share', type: 'section', children: shareItems, controlGroup: true },
+  ];
 
   if (headerButton && relationshipItems.length) {
     items.push({ key: 'relationship', type: 'section', children: relationshipItems });
   }
-
-  items.push({ key: 'share', type: 'section', children: shareItems, controlGroup: true });
 
   if (navigationItems.length) {
     items.push({ key: 'navigation', type: 'section', children: navigationItems });

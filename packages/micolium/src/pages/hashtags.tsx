@@ -21,6 +21,7 @@ import {
 } from '@/queries/hashtags/use-followed-tags';
 import { useHashtag } from '@/queries/hashtags/use-hashtag';
 import { useTimeline } from '@/queries/timelines/use-timeline';
+import { useSetting } from '@/stores/settings';
 
 import type { RootStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -41,6 +42,7 @@ const HashtagsScreen = ({
 }: NativeStackScreenProps<RootStackParams, 'hashtags'>) => {
   const intl = useIntl();
   const { colors } = useTheme();
+  const blackTheme = useSetting('appearance.black');
   const { top: topInset } = useSafeAreaInsets();
   const client = useClient();
   const features = useFeatures();
@@ -73,14 +75,21 @@ const HashtagsScreen = ({
     <>
       <Appbar.Header
         mode='small'
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1,
-          backgroundColor: isScrolled ? colors.surfaceContainer : undefined,
-        }}
+        style={[
+          {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1,
+            backgroundColor: isScrolled ? colors.surfaceContainer : undefined,
+          },
+          blackTheme &&
+            isScrolled && {
+              borderBottomWidth: 1,
+              borderBottomColor: colors.surfaceContainerHighest,
+            },
+        ]}
         elevated={isScrolled}
       >
         {navigation.canGoBack() ? <HeaderBackButton onPress={navigation.goBack} /> : null}

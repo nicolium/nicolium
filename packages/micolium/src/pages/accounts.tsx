@@ -16,6 +16,7 @@ import { useFollowers, useFollowing, useSubscribers } from '@/queries/account-li
 import { useAccount } from '@/queries/accounts/use-account';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
 import { useFavourites } from '@/queries/status-lists/use-favourites';
+import { useSetting } from '@/stores/settings';
 
 import type { AccountStackParams } from '@/router/router';
 
@@ -29,6 +30,7 @@ const messages = defineMessages({
 const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
   const intl = useIntl();
   const { colors } = useTheme();
+  const blackTheme = useSetting('appearance.black');
   const { data: account } = useAccount(
     (route.params as AccountStackParams['view'] | undefined)?.id,
   );
@@ -57,7 +59,18 @@ const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => 
   }
 
   return (
-    <Appbar.Header mode='small' style={{ backgroundColor: colors.surfaceContainer }}>
+    <Appbar.Header
+      mode='small'
+      style={[
+        {
+          backgroundColor: colors.surfaceContainer,
+        },
+        blackTheme && {
+          borderBottomWidth: 1,
+          borderBottomColor: colors.surfaceContainerHighest,
+        },
+      ]}
+    >
       {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}
       {subtitle ? (
         <View>

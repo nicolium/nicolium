@@ -356,6 +356,7 @@ const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => 
 const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
   const glassEffect = useEnableLiquidGlass();
   const { colors } = useTheme();
+  const blackTheme = useSetting('appearance.black');
   const colorScheme = useColorScheme();
 
   const activeKey =
@@ -375,9 +376,16 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
   const header = (
     <Appbar.Header
       mode='small'
-      style={{
-        backgroundColor: glassEffect ? 'transparent' : colors.surfaceContainer,
-      }}
+      style={[
+        {
+          backgroundColor: glassEffect ? 'transparent' : colors.surfaceContainer,
+        },
+        blackTheme &&
+          !glassEffect && {
+            borderBottomWidth: 1,
+            borderBottomColor: colors.surfaceContainerHighest,
+          },
+      ]}
     >
       <Appbar.Content
         title={

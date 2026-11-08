@@ -38,6 +38,7 @@ import {
   useUpdateFilter,
 } from '@/queries/settings/use-filters';
 import { Alert } from '@/stores/alerts';
+import { useSetting } from '@/stores/settings';
 import { getSegmentedMenuStyles } from '@/utils/themes';
 
 import type { SettingsStackParams } from '@/router/router';
@@ -104,6 +105,7 @@ const messages = defineMessages({
 
 const FiltersScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'filters'>) => {
   const { colors } = useTheme();
+  const blackTheme = useSetting('appearance.black');
   const intl = useIntl();
   const { bottom: bottomInset } = useSafeAreaInsets();
   const { data: filters, isPending } = useFilters();
@@ -148,9 +150,15 @@ const FiltersScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParam
     <>
       <Appbar.Header
         mode='small'
-        style={{
-          backgroundColor: colors.surfaceContainer,
-        }}
+        style={[
+          {
+            backgroundColor: colors.surfaceContainer,
+          },
+          blackTheme && {
+            borderBottomWidth: 1,
+            borderBottomColor: colors.surfaceContainerHighest,
+          },
+        ]}
       >
         <HeaderBackButton onPress={navigation.goBack} />
         <Appbar.Content title={intl.formatMessage(messages.filtersHeading)} />
