@@ -137,7 +137,7 @@ const AlertRoot =
           </Host>
         );
       }
-    : () => {};
+    : () => null;
 
 const Alert = {
   alert,
