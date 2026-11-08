@@ -180,11 +180,11 @@ const Option: React.FC<IOption> = ({
   );
 };
 
-interface IPollForm {
+interface IComposePollForm {
   composeId: string;
 }
 
-const PollForm: React.FC<IPollForm> = ({ composeId }) => {
+const ComposePollForm: React.FC<IComposePollForm> = ({ composeId }) => {
   const intl = useIntl();
   const { configuration } = useInstance();
   const { updateCompose } = useComposeActions();
@@ -362,4 +362,4 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   );
 };
 
-export { PollForm, formatDuration };
+export { ComposePollForm, formatDuration };

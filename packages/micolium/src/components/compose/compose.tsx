@@ -49,6 +49,7 @@ import { iconHelper } from '../ui/icon';
 import { ComposeAttachmentThumbs } from './compose-attachment-thumbs';
 import { ComposeInteractionPolicy } from './compose-interaction-policy';
 import { ComposeLanguageDropdown } from './compose-language-dropdown';
+import { ComposePollForm } from './compose-poll-form';
 import { ComposeQuoteIndicator } from './compose-quote-indicator';
 import { ComposeReplyIndicator } from './compose-reply-indicator';
 import { ComposeScheduleButton } from './compose-schedule-button';
@@ -56,7 +57,6 @@ import { ComposeScheduleForm } from './compose-schedule-form';
 import { ComposeSuggestions } from './compose-suggestions';
 import { ComposeUploadButton } from './compose-upload-button';
 import { ComposeVisibilityDropdown } from './compose-visibility-dropdown';
-import { PollForm } from './poll-form';
 
 import type { Suggestion } from '@/hooks/use-compose-suggestions';
 import type { SFSymbol } from 'expo-symbols';
@@ -640,7 +640,7 @@ const ComposeBody: React.FC<IComposeBody> = ({
             multiline
           />
         </TextInputWrapper>
-        <PollForm composeId={COMPOSE_ID} />
+        <ComposePollForm composeId={COMPOSE_ID} />
         <ComposeScheduleForm composeId={COMPOSE_ID} />
         <ComposeAttachmentThumbs composeId={COMPOSE_ID} />
       </MaybeDragDropContentView>
