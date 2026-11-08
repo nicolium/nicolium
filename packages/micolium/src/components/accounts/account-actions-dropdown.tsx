@@ -7,7 +7,6 @@ import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThree
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform } from 'react-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCredentialAccountId } from '@/queries/accounts/use-account-credentials';
@@ -24,6 +23,7 @@ import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
 import { openUrl } from '@/utils/url';
 
+import { DropdownMenu, type DropdownMenuItem } from '../ui/dropdown-menu';
 import { HeaderIconButton } from '../ui/header-icon-button';
 import { iconHelper } from '../ui/icon';
 
@@ -35,8 +35,8 @@ import type { Account } from 'pl-api';
 const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
-  copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
-  openInBrowser: { id: 'account.open_in_browser', defaultMessage: 'Open profile in browser' },
+  copy: { id: 'account.copy.short', defaultMessage: 'Copy link' },
+  openInBrowser: { id: 'account.open_in_browser.short', defaultMessage: 'Open in browser' },
   share: { id: 'account.share', defaultMessage: 'Share profile' },
   favourites: { id: 'column.favourites', defaultMessage: 'Likes' },
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
@@ -103,20 +103,17 @@ const messages = defineMessages({
   menuTitle: { id: 'dropdown_menu.title', defaultMessage: 'Menu' },
 });
 
-interface IAccountActionsDropdown {
-  account: Account;
-  headerButton?: boolean;
-}
-
-const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, headerButton }) => {
+const useMenuItems = (
+  account: Account,
+  headerButton: boolean | undefined,
+  openReportDialog: () => void,
+  openBlockMuteDialog: (action: 'block' | 'mute') => void,
+) => {
   const features = useFeatures();
   const intl = useIntl();
   const { mentionCompose, directCompose } = useComposeActions();
   const navigation = useNavigation();
   const { openCompose } = useUiStoreActions();
-
-  const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
-  const [reportDialog, setReportDialog] = React.useState(false);
 
   const { data: currentAccountId } = useCredentialAccountId();
   const { mutate: followAccount } = useFollowAccountMutation(account.id);
@@ -183,7 +180,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
 
   const handleMute = () => {
     if (account.relationship?.muting) unmuteAccount();
-    else setBlockMuteDialog('mute');
+    else openBlockMuteDialog('mute');
   };
 
   const handleDirect = () => {
@@ -220,7 +217,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
 
   const handleBlock = () => {
     if (account.relationship?.blocking) unblockAccount();
-    else setBlockMuteDialog('block');
+    else openBlockMuteDialog('block');
   };
 
   const handleBlockDomain = () => {
@@ -247,14 +244,278 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
   };
 
   const handleReport = () => {
-    setReportDialog(true);
+    openReportDialog();
   };
+
+  const relationshipItems: Array<DropdownMenuItem> = [];
+
+  if (ownAccount) {
+    relationshipItems.push({
+      key: 'edit-profile',
+      type: 'button',
+      label: intl.formatMessage(messages.editProfile),
+      appleIcon: 'pencil',
+      androidIcon: 'ph_pencil_simple',
+      onPress: () => navigation.navigate('settings', { screen: 'edit_profile' }),
+    });
+  } else if (relationship?.following || relationship?.requested) {
+    relationshipItems.push(
+      {
+        key: 'unfollow',
+        type: 'button',
+        label: intl.formatMessage(relationship.requested ? messages.requested : messages.unfollow),
+        appleIcon: 'person.badge.minus',
+        androidIcon: 'ph_user_minus',
+        destructive: true,
+        onPress: handleUnfollow,
+      },
+      {
+        key: 'show-reblogs',
+        type: 'button',
+        label: intl.formatMessage(messages.showReblogs),
+        checked: relationship.showing_reblogs,
+        onPress: handleToggleShowReposts,
+      },
+    );
+
+    if (features.accountNotifies) {
+      relationshipItems.push({
+        key: 'notify',
+        type: 'button',
+        label: intl.formatMessage(messages.subscribe),
+        checked: relationship.notifying,
+        onPress: handleToggleNotify,
+      });
+    }
+
+    if (features.accountNotifiesControl) {
+      relationshipItems.push(
+        {
+          key: 'notify-replies',
+          type: 'button',
+          label: intl.formatMessage(messages.notifyReplies),
+          checked: relationship.notifying_replies,
+          onPress: handleToggleNotifyReplies,
+        },
+        {
+          key: 'notify-reblogs',
+          type: 'button',
+          label: intl.formatMessage(messages.notifyReblogs),
+          checked: relationship.notifying_reblogs,
+          onPress: handleToggleNotifyReblogs,
+        },
+      );
+    }
+  } else if (!relationship?.blocking) {
+    relationshipItems.push({
+      key: 'follow',
+      type: 'button',
+      label: intl.formatMessage(account.locked ? messages.requestFollow : messages.follow),
+      appleIcon: 'person.badge.plus',
+      androidIcon: 'ph_user_plus',
+      disabled: !relationship || relationship.blocked_by,
+      onPress: () => followAccount(undefined),
+    });
+  }
+
+  const shareItems: Array<DropdownMenuItem> = [
+    {
+      key: 'copy',
+      type: 'button',
+      label: intl.formatMessage(messages.copy),
+      appleIcon: 'link',
+      androidIcon: 'ph_link_simple_horizontal',
+      onPress: handleCopy,
+    },
+    {
+      key: 'open-in-browser',
+      type: 'button',
+      label: intl.formatMessage(messages.openInBrowser),
+      appleIcon: 'safari',
+      androidIcon: 'ph_arrow_square_out',
+      onPress: handleOpenInBrowser,
+    },
+    {
+      key: 'share',
+      type: 'button',
+      label: intl.formatMessage(messages.share),
+      appleIcon: 'square.and.arrow.up',
+      androidIcon: 'ph_export',
+      onPress: handleShare,
+    },
+  ];
+
+  const navigationItems: Array<DropdownMenuItem> = [];
+
+  if (ownAccount || (features.publicFavourites && !account.hide_favorites)) {
+    navigationItems.push({
+      key: 'favourites',
+      type: 'button',
+      label: intl.formatMessage(messages.favourites),
+      appleIcon: 'star',
+      androidIcon: 'ph_star',
+      onPress: () =>
+        navigation.navigate('accounts', { screen: 'favourites', params: { id: account.id } }),
+    });
+  }
+
+  if (ownAccount) {
+    navigationItems.push(
+      {
+        key: 'follow-requests',
+        type: 'button',
+        label: intl.formatMessage(messages.followRequests),
+        appleIcon: 'person.badge.plus',
+        androidIcon: 'ph_user_plus',
+        onPress: () => navigation.navigate('settings', { screen: 'follow_requests' }),
+      },
+      {
+        key: 'blocks',
+        type: 'button',
+        label: intl.formatMessage(messages.blocked),
+        appleIcon: 'nosign',
+        androidIcon: 'ph_prohibit',
+        onPress: () => navigation.navigate('settings', { screen: 'blocks' }),
+      },
+      {
+        key: 'mutes',
+        type: 'button',
+        label: intl.formatMessage(messages.muted),
+        appleIcon: 'speaker.slash',
+        androidIcon: 'ph_speaker_simple_x',
+        onPress: () => navigation.navigate('settings', { screen: 'mutes' }),
+      },
+      {
+        key: 'filters',
+        type: 'button',
+        label: intl.formatMessage(messages.filters),
+        appleIcon: 'line.3.horizontal.decrease.circle',
+        androidIcon: 'ph_funnel',
+        onPress: () => navigation.navigate('settings', { screen: 'filters' }),
+      },
+    );
+  }
+
+  const items: Array<DropdownMenuItem> = [];
+
+  if (headerButton && relationshipItems.length) {
+    items.push({ key: 'relationship', type: 'section', children: relationshipItems });
+  }
+
+  items.push({ key: 'share', type: 'section', children: shareItems, controlGroup: true });
+
+  if (navigationItems.length) {
+    items.push({ key: 'navigation', type: 'section', children: navigationItems });
+  }
+
+  if (!ownAccount) {
+    const composeItems: Array<DropdownMenuItem> = [
+      {
+        key: 'mention',
+        type: 'button',
+        label: intl.formatMessage(messages.mention),
+        appleIcon: 'at',
+        androidIcon: 'ph_at',
+        onPress: handleMention,
+      },
+    ];
+
+    if (features.privacyScopes) {
+      composeItems.push({
+        key: 'direct',
+        type: 'button',
+        label: intl.formatMessage(messages.direct, { name: account.username }),
+        appleIcon: 'envelope',
+        androidIcon: 'ph_envelope_simple',
+        onPress: handleDirect,
+      });
+    }
+
+    const moderationItems: Array<DropdownMenuItem> = [];
+
+    if (features.removeFromFollowers && account.relationship?.followed_by) {
+      moderationItems.push({
+        key: 'remove-from-followers',
+        type: 'button',
+        label: intl.formatMessage(messages.removeFromFollowers),
+        appleIcon: 'person.badge.minus',
+        androidIcon: 'ph_user_minus',
+        onPress: handleRemoveFromFollowers,
+      });
+    }
+
+    moderationItems.push(
+      {
+        key: 'mute',
+        type: 'button',
+        label: intl.formatMessage(account.relationship?.muting ? messages.unmute : messages.mute, {
+          name: account.username,
+        }),
+        appleIcon: 'speaker.slash',
+        androidIcon: 'ph_speaker_simple_x',
+        onPress: handleMute,
+      },
+      {
+        key: 'block',
+        type: 'button',
+        label: intl.formatMessage(
+          account.relationship?.blocking ? messages.unblock : messages.block,
+          { name: account.username },
+        ),
+        appleIcon: 'nosign',
+        androidIcon: 'ph_prohibit',
+        onPress: handleBlock,
+      },
+    );
+
+    if (!account.local) {
+      moderationItems.push({
+        key: 'block-domain',
+        type: 'button',
+        label: intl.formatMessage(
+          account.relationship?.domain_blocking ? messages.unblockDomain : messages.blockDomain,
+          { domain: account.fqn.split('@')[1] },
+        ),
+        appleIcon: 'nosign',
+        androidIcon: 'ph_prohibit',
+        onPress: handleBlockDomain,
+      });
+    }
+
+    moderationItems.push({
+      key: 'report',
+      type: 'button',
+      label: intl.formatMessage(messages.report, { name: account.username }),
+      appleIcon: 'flag',
+      androidIcon: 'ph_flag',
+      onPress: handleReport,
+    });
+
+    items.push(
+      { key: 'compose', type: 'section', children: composeItems },
+      { key: 'moderation', type: 'section', children: moderationItems },
+    );
+  }
+
+  return items;
+};
+
+interface IAccountActionsDropdown {
+  account: Account;
+  headerButton?: boolean;
+}
+
+const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, headerButton }) => {
+  const intl = useIntl();
+
+  const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
+  const [reportDialog, setReportDialog] = React.useState(false);
 
   return (
     <>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          {headerButton ? (
+      <DropdownMenu
+        trigger={
+          headerButton ? (
             <HeaderIconButton
               icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
               accessibilityLabel={intl.formatMessage(messages.menuTitle)}
@@ -266,301 +527,16 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
               onPress={() => {}}
               accessibilityLabel={intl.formatMessage(messages.menuTitle)}
             />
-          )}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content>
-          {headerButton && (
-            <DropdownMenu.Group>
-              {ownAccount ? (
-                <DropdownMenu.Item
-                  key='edit-profile'
-                  onSelect={() =>
-                    navigation.navigate('settings', {
-                      screen: 'edit_profile',
-                    })
-                  }
-                >
-                  <DropdownMenu.ItemIcon
-                    ios={{ name: 'pencil' }}
-                    androidIconName='ph_pencil_simple'
-                  />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.editProfile)}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-              ) : relationship?.following || relationship?.requested ? (
-                <>
-                  <DropdownMenu.Item key='unfollow' onSelect={handleUnfollow} destructive>
-                    <DropdownMenu.ItemIcon
-                      ios={{ name: 'person.badge.minus' }}
-                      androidIconName='ph_user_minus'
-                    />
-                    <DropdownMenu.ItemTitle>
-                      {intl.formatMessage(
-                        relationship.requested ? messages.requested : messages.unfollow,
-                      )}
-                    </DropdownMenu.ItemTitle>
-                  </DropdownMenu.Item>
-                  <DropdownMenu.CheckboxItem
-                    key='show-reblogs'
-                    value={relationship.showing_reblogs}
-                    onSelect={handleToggleShowReposts}
-                  >
-                    <DropdownMenu.ItemTitle>
-                      {intl.formatMessage(messages.showReblogs)}
-                    </DropdownMenu.ItemTitle>
-                  </DropdownMenu.CheckboxItem>
-                  {features.accountNotifies && (
-                    <DropdownMenu.CheckboxItem
-                      key='notify'
-                      value={relationship.notifying}
-                      onSelect={handleToggleNotify}
-                    >
-                      <DropdownMenu.ItemTitle>
-                        {intl.formatMessage(messages.subscribe)}
-                      </DropdownMenu.ItemTitle>
-                    </DropdownMenu.CheckboxItem>
-                  )}
-                  {features.accountNotifiesControl && (
-                    <>
-                      <DropdownMenu.CheckboxItem
-                        key='notify-replies'
-                        value={relationship.notifying_replies}
-                        onSelect={handleToggleNotifyReplies}
-                      >
-                        <DropdownMenu.ItemTitle>
-                          {intl.formatMessage(messages.notifyReplies)}
-                        </DropdownMenu.ItemTitle>
-                      </DropdownMenu.CheckboxItem>
-                      <DropdownMenu.CheckboxItem
-                        key='notify-reblogs'
-                        value={relationship.notifying_reblogs}
-                        onSelect={handleToggleNotifyReblogs}
-                      >
-                        <DropdownMenu.ItemTitle>
-                          {intl.formatMessage(messages.notifyReblogs)}
-                        </DropdownMenu.ItemTitle>
-                      </DropdownMenu.CheckboxItem>
-                    </>
-                  )}
-                </>
-              ) : !relationship?.blocking ? (
-                <DropdownMenu.Item
-                  key='follow'
-                  onSelect={() => followAccount(undefined)}
-                  disabled={!relationship || relationship.blocked_by}
-                >
-                  <DropdownMenu.ItemIcon
-                    ios={{ name: 'person.badge.plus' }}
-                    androidIconName='ph_user_plus'
-                  />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(account.locked ? messages.requestFollow : messages.follow)}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-              ) : null}
-            </DropdownMenu.Group>
-          )}
-          <DropdownMenu.Group>
-            <DropdownMenu.Item key='copy' onSelect={handleCopy}>
-              <DropdownMenu.ItemIcon
-                ios={{ name: 'link' }}
-                androidIconName='ph_link_simple_horizontal'
-              />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.copy)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key='open-in-browser' onSelect={handleOpenInBrowser}>
-              <DropdownMenu.ItemIcon
-                ios={{ name: 'safari' }}
-                androidIconName='ph_arrow_square_out'
-              />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.openInBrowser)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key='share' onSelect={handleShare}>
-              <DropdownMenu.ItemIcon
-                ios={{ name: 'square.and.arrow.up' }}
-                androidIconName='ph_export'
-              />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.share)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          </DropdownMenu.Group>
-          <DropdownMenu.Separator />
-          <DropdownMenu.Group>
-            {(ownAccount || (features.publicFavourites && !account.hide_favorites)) && (
-              <DropdownMenu.Item
-                key='favourites'
-                onSelect={() =>
-                  navigation.navigate('accounts', {
-                    screen: 'favourites',
-                    params: { id: account.id },
-                  })
-                }
-              >
-                <DropdownMenu.ItemIcon ios={{ name: 'star' }} androidIconName='ph_star' />
-                <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(messages.favourites)}
-                </DropdownMenu.ItemTitle>
-              </DropdownMenu.Item>
-            )}
-            {ownAccount && (
-              <>
-                <DropdownMenu.Item
-                  key='follow-requests'
-                  onSelect={() =>
-                    navigation.navigate('settings', {
-                      screen: 'follow_requests',
-                    })
-                  }
-                >
-                  <DropdownMenu.ItemIcon
-                    ios={{ name: 'person.badge.plus' }}
-                    androidIconName='ph_user_plus'
-                  />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.followRequests)}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-                <DropdownMenu.Item
-                  key='blocks'
-                  onSelect={() =>
-                    navigation.navigate('settings', {
-                      screen: 'blocks',
-                    })
-                  }
-                >
-                  <DropdownMenu.ItemIcon ios={{ name: 'nosign' }} androidIconName='ph_prohibit' />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.blocked)}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-                <DropdownMenu.Item
-                  key='mutes'
-                  onSelect={() =>
-                    navigation.navigate('settings', {
-                      screen: 'mutes',
-                    })
-                  }
-                >
-                  <DropdownMenu.ItemIcon
-                    ios={{ name: 'speaker.slash' }}
-                    androidIconName='ph_speaker_simple_x'
-                  />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.muted)}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-                <DropdownMenu.Item
-                  key='filters'
-                  onSelect={() =>
-                    navigation.navigate('settings', {
-                      screen: 'filters',
-                    })
-                  }
-                >
-                  <DropdownMenu.ItemIcon
-                    ios={{ name: 'line.3.horizontal.decrease.circle' }}
-                    androidIconName='ph_funnel'
-                  />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.filters)}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-              </>
-            )}
-          </DropdownMenu.Group>
-          {!ownAccount && (
-            <>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Group>
-                <DropdownMenu.Item key='mention' onSelect={handleMention}>
-                  <DropdownMenu.ItemIcon ios={{ name: 'at' }} androidIconName='ph_at' />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.mention)}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-                {features.privacyScopes && (
-                  <DropdownMenu.Item key='direct' onSelect={handleDirect}>
-                    <DropdownMenu.ItemIcon
-                      ios={{ name: 'envelope' }}
-                      androidIconName='ph_envelope_simple'
-                    />
-                    <DropdownMenu.ItemTitle>
-                      {intl.formatMessage(messages.direct, { name: account.username })}
-                    </DropdownMenu.ItemTitle>
-                  </DropdownMenu.Item>
-                )}
-              </DropdownMenu.Group>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Group>
-                {features.removeFromFollowers && account.relationship?.followed_by && (
-                  <DropdownMenu.Item
-                    key='remove-from-followers'
-                    onSelect={handleRemoveFromFollowers}
-                  >
-                    <DropdownMenu.ItemIcon
-                      ios={{ name: 'person.badge.minus' }}
-                      androidIconName='ph_user_minus'
-                    />
-                    <DropdownMenu.ItemTitle>
-                      {intl.formatMessage(messages.removeFromFollowers)}
-                    </DropdownMenu.ItemTitle>
-                  </DropdownMenu.Item>
-                )}
-                <DropdownMenu.Item key='mute' onSelect={handleMute}>
-                  <DropdownMenu.ItemIcon
-                    ios={{ name: 'speaker.slash' }}
-                    androidIconName='ph_speaker_simple_x'
-                  />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(
-                      account.relationship?.muting ? messages.unmute : messages.mute,
-                      {
-                        name: account.username,
-                      },
-                    )}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-                <DropdownMenu.Item key='block' onSelect={handleBlock}>
-                  <DropdownMenu.ItemIcon ios={{ name: 'nosign' }} androidIconName='ph_prohibit' />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(
-                      account.relationship?.blocking ? messages.unblock : messages.block,
-                      {
-                        name: account.username,
-                      },
-                    )}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-                {!account.local && (
-                  <DropdownMenu.Item key='block-domain' onSelect={handleBlockDomain}>
-                    <DropdownMenu.ItemIcon ios={{ name: 'nosign' }} androidIconName='ph_prohibit' />
-                    <DropdownMenu.ItemTitle>
-                      {intl.formatMessage(
-                        account.relationship?.domain_blocking
-                          ? messages.unblockDomain
-                          : messages.blockDomain,
-                        {
-                          domain: account.fqn.split('@')[1],
-                        },
-                      )}
-                    </DropdownMenu.ItemTitle>
-                  </DropdownMenu.Item>
-                )}
-                <DropdownMenu.Item key='report' onSelect={handleReport}>
-                  <DropdownMenu.ItemIcon ios={{ name: 'flag' }} androidIconName='ph_flag' />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.report, {
-                      name: account.username,
-                    })}
-                  </DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-              </DropdownMenu.Group>
-            </>
-          )}
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+          )
+        }
+        useItems={useMenuItems}
+        hookArgs={[
+          account,
+          headerButton,
+          () => setReportDialog(true),
+          (action) => setBlockMuteDialog(action),
+        ]}
+      />
       {blockMuteDialog && (
         <BlockMuteDialog
           action={blockMuteDialog}
