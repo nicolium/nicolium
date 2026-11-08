@@ -10,6 +10,10 @@ import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 const messages = defineMessages({
+  blackMode: {
+    id: 'preferences.appearance.black_mode',
+    defaultMessage: 'Use black color for the background in dark mode',
+  },
   enableLiquidGlass: {
     id: 'preferences.appearance.enable_liquid_glass',
     defaultMessage: 'Use native glass effect',
@@ -32,10 +36,18 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
 
   const enableLiquidGlass = useSetting('appearance.enableLiquidGlass');
   const sourceColor = useSetting('appearance.sourceColor');
+  const black = useSetting('appearance.black');
 
   const listSections = React.useMemo(() => {
     const section: IListSections[number] = {
-      items: [],
+      items: [
+        {
+          type: 'toggle',
+          label: intl.formatMessage(messages.blackMode),
+          active: black,
+          onPress: () => update('appearance.black', !black),
+        },
+      ],
     };
 
     if (Platform.OS !== 'android') {
@@ -58,7 +70,7 @@ const AppearanceSettingsScreen = (_: NativeStackScreenProps<SettingsStackParams,
     }
 
     return [section];
-  }, [sourceColor, glassEffect, enableLiquidGlass]);
+  }, [black, sourceColor, glassEffect, enableLiquidGlass]);
 
   return (
     <ScrollView>

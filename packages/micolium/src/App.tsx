@@ -70,15 +70,18 @@ const lightTheme = {
   },
 };
 
+const BLACK_OVERRIDE = { surface: '#000', surfaceContainer: '#000', background: '#000' };
+
 const ThemeProvider: React.FC<{ children: React.ReactNode }> = (props) => {
   const sourceColor = useSetting('appearance.sourceColor');
 
   const colorScheme = useColorScheme();
   const theme = React.useMemo(() => getMaterial3Theme(sourceColor.slice(0, 7)), [sourceColor]);
+  const darkOverrides = useSetting('appearance.black') ? BLACK_OVERRIDE : {};
 
   const paperTheme =
     colorScheme === 'dark'
-      ? { ...darkTheme, colors: theme.dark }
+      ? { ...darkTheme, colors: { ...theme.dark, ...darkOverrides } }
       : { ...lightTheme, colors: theme.light };
 
   return (
