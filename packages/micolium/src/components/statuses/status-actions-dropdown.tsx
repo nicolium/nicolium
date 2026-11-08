@@ -41,8 +41,8 @@ import { iconHelper } from '../ui/icon';
 
 const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
-  copy: { id: 'status.copy', defaultMessage: 'Copy link to post' },
-  openInBrowser: { id: 'status.open_in_browser', defaultMessage: 'Open post in browser' },
+  copy: { id: 'status.copy.short', defaultMessage: 'Copy link' },
+  openInBrowser: { id: 'status.open_in_browser.short', defaultMessage: 'Open in browser' },
   share: { id: 'status.share', defaultMessage: 'Share' },
   interactAs: { id: 'status.interact_as', defaultMessage: 'Interact from other accounts' },
   interactAsConfirmationHeading: {
@@ -513,7 +513,9 @@ const useMenuItems = (
         },
       ];
 
-  const items: Array<DropdownMenuItem> = [{ key: 'share', type: 'section', children: shareItems }];
+  const items: Array<DropdownMenuItem> = [
+    { key: 'share', type: 'section', children: shareItems, controlGroup: true },
+  ];
 
   if (interactionItems.length) {
     items.push({ key: 'interactions', type: 'section', children: interactionItems });

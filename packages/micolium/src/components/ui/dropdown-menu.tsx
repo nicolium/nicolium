@@ -14,6 +14,7 @@ import {
 import { height, padding } from '@expo/ui/jetpack-compose/modifiers';
 import {
   Button as SwiftUIButton,
+  ControlGroup as SwiftUIControlGroup,
   Divider as SwiftUIDivider,
   Host as SwiftUIHost,
   Label as SwiftUILabel,
@@ -51,7 +52,7 @@ type DropdownMenuItem = {
       sublabel?: string;
       appleIcon?: SFSymbol;
       androidIcon?: string;
-      disabled?: boolean;
+      controlGroup?: boolean;
     }
   | {
       type: 'menu';
@@ -102,13 +103,15 @@ const swiftUIRenderItem = (item: DropdownMenuItem, isLast?: boolean) => {
       );
     }
     case 'section': {
+      const Section = item.controlGroup ? SwiftUIControlGroup : SwiftUISection;
+
       return (
         <React.Fragment key={item.key}>
-          <SwiftUISection key={item.key} title={item.label}>
+          <Section key={item.key} title={item.label}>
             {item.children.map((child, index, array) =>
               swiftUIRenderItem(child, array.length - 1 === index),
             )}
-          </SwiftUISection>
+          </Section>
           {!isLast && <SwiftUIDivider />}
         </React.Fragment>
       );
