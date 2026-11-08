@@ -362,7 +362,6 @@ const appendMedia = (compose: Compose, media: MediaAttachment) => {
   const prevSize = compose.mediaAttachments.length;
 
   compose.mediaAttachments.push(media);
-  compose.isUploading = false;
   compose.resetFileKey = Math.floor(Math.random() * 0x10000);
 
   if (prevSize === 0 && compose.sensitive) {
@@ -1700,6 +1699,8 @@ const useUploadCompose = (composeId: string) => {
           intl,
           (data) =>
             updateCompose(composeId, (draft) => {
+              uploaded += 1;
+              if (uploaded === files.length) draft.isUploading = false;
               appendMedia(draft, data);
             }),
           () =>
