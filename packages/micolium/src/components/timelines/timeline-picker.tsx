@@ -1,4 +1,5 @@
 import { Icon, Text } from '@mkljczk/react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import { GlassView } from 'expo-glass-effect';
 import { BroadcastIcon } from 'phosphor-react-native/src/icons/Broadcast';
 import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
@@ -12,10 +13,10 @@ import { PlanetIcon } from 'phosphor-react-native/src/icons/Planet';
 import { WrenchIcon } from 'phosphor-react-native/src/icons/Wrench';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, type MessageDescriptor, useIntl } from 'react-intl';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
-import DropdownMenu from '@/components/ui/dropdown-menu';
+import { DropdownMenu, type DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useAntennas } from '@/queries/accounts/use-antennas';
@@ -115,6 +116,7 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
   const features = useFeatures();
   const instance = useInstance();
   const glassEffect = useEnableLiquidGlass();
+  const rootNavigation = useNavigation();
   const timelineAccess = instance.configuration.timelines_access;
 
   const MaybeGlassView = glassEffect ? GlassView : View;
@@ -131,90 +133,84 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
   const { data: circles } = useCircles();
 
   const getTimelineItem = (
-    value: string,
-    icon: SFSymbol,
+    value: 'home' | 'local' | 'bubble' | 'federated',
+    appleIcon: SFSymbol,
     androidIcon: string,
     title: MessageDescriptor,
-    handleSelect: () => void,
-  ) => (
-    <DropdownMenu.CheckboxItem key={value} value={active === value} onSelect={handleSelect}>
-      <DropdownMenu.ItemIcon ios={{ name: icon }} androidIconName={androidIcon} />
-      <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
-    </DropdownMenu.CheckboxItem>
-  );
+  ): DropdownMenuItem => ({
+    key: value,
+    type: 'button',
+    onPress: () => navigation.popTo(value),
+    label: intl.formatMessage(title),
+    appleIcon,
+    androidIcon,
+    checked: active === value,
+  });
 
-  const getBookmarksMenu = () => {
-    return (
-      <DropdownMenu.Sub key='bookmarks'>
-        <DropdownMenu.SubTrigger key='bookmarks}-sub'>
-          <DropdownMenu.ItemIcon ios={{ name: 'bookmark' }} androidIconName='ph_bookmarks' />
-          <DropdownMenu.ItemTitle>{intl.formatMessage(messages.bookmarks)}</DropdownMenu.ItemTitle>
-        </DropdownMenu.SubTrigger>
-        <DropdownMenu.SubContent>
-          <DropdownMenu.Item
-            key='bookmarks:all'
-            onSelect={() =>
-              navigation.navigate('bookmarks', {
-                screen: 'all',
-              })
-            }
-          >
-            <DropdownMenu.ItemIcon ios={{ name: 'bookmark' }} androidIconName='ph_bookmarks' />
-            <DropdownMenu.ItemTitle>
-              {intl.formatMessage(messages.allBookmarks)}
-            </DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-          {bookmarkFolders ? (
-            bookmarkFolders.length ? (
-              bookmarkFolders.map((folder) => (
-                <DropdownMenu.Item
-                  key={`bookmarks:${folder.id}`}
-                  onSelect={() =>
-                    navigation.navigate('bookmarks', {
-                      screen: 'folder',
-                      params: { id: folder.id },
-                    })
-                  }
-                >
-                  <DropdownMenu.ItemIcon
-                    ios={{ name: 'folder' }}
-                    androidIconName='ph_folder_simple'
-                  />
-                  <DropdownMenu.ItemTitle>{folder.name}</DropdownMenu.ItemTitle>
-                </DropdownMenu.Item>
-              ))
-            ) : (
-              <DropdownMenu.Item key='bookmarks-empty' disabled>
-                <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(messages.noBookmarkFolders)}
-                </DropdownMenu.ItemTitle>
-              </DropdownMenu.Item>
-            )
-          ) : (
-            <DropdownMenu.Item key='bookmarks-loading' disabled>
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.loading)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          )}
-          <DropdownMenu.Item
-            key='bookmarks-create'
-            onSelect={() => setCreateDialog('bookmark_folder')}
-          >
-            <DropdownMenu.ItemIcon ios={{ name: 'plus' }} androidIconName='ph_plus' />
-            <DropdownMenu.ItemTitle>
-              {intl.formatMessage(messages.addBookmarkFolder)}
-            </DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-        </DropdownMenu.SubContent>
-      </DropdownMenu.Sub>
-    );
+  const getPlaceholderItem = (key: string, title: MessageDescriptor): DropdownMenuItem => ({
+    key,
+    type: 'button',
+    onPress: () => {},
+    label: intl.formatMessage(title),
+    disabled: true,
+  });
+
+  const getBookmarksMenu = (): DropdownMenuItem => {
+    const children: Array<DropdownMenuItem> = [
+      {
+        key: 'bookmarks:all',
+        type: 'button',
+        onPress: () => rootNavigation.navigate('bookmarks', { screen: 'all' }),
+        label: intl.formatMessage(messages.allBookmarks),
+        appleIcon: 'bookmark',
+        androidIcon: 'ph_bookmarks',
+      },
+    ];
+
+    if (!bookmarkFolders) {
+      children.push(getPlaceholderItem('bookmarks-loading', messages.loading));
+    } else if (!bookmarkFolders.length) {
+      children.push(getPlaceholderItem('bookmarks-empty', messages.noBookmarkFolders));
+    } else {
+      children.push(
+        ...bookmarkFolders.map((folder): DropdownMenuItem => ({
+          key: `bookmarks:${folder.id}`,
+          type: 'button',
+          onPress: () =>
+            rootNavigation.navigate('bookmarks', {
+              screen: 'folder',
+              params: { id: folder.id },
+            }),
+          label: folder.name,
+          appleIcon: 'folder',
+          androidIcon: 'ph_folder_simple',
+        })),
+      );
+    }
+
+    children.push({
+      key: 'bookmarks-create',
+      type: 'button',
+      onPress: () => setCreateDialog('bookmark_folder'),
+      label: intl.formatMessage(messages.addBookmarkFolder),
+      appleIcon: 'plus',
+      androidIcon: 'ph_plus',
+    });
+
+    return {
+      key: 'bookmarks',
+      type: 'menu',
+      label: intl.formatMessage(messages.bookmarks),
+      appleIcon: 'bookmark',
+      androidIcon: 'ph_bookmarks',
+      children,
+    };
   };
 
   const getListsSubMenu = (
     name: 'list' | 'antenna' | 'circle',
     lists?: Array<{ id: string; title: string }>,
-  ) => {
+  ): DropdownMenuItem => {
     let title: MessageDescriptor;
     let sfIcon: SFSymbol;
     let androidIcon: string;
@@ -245,123 +241,137 @@ const TimelinePicker: React.FC<ITimelinePicker> = ({ navigation, active = 'home'
         break;
     }
 
-    return (
-      <DropdownMenu.Sub key={name}>
-        <DropdownMenu.SubTrigger key={`${name}-sub`}>
-          <DropdownMenu.ItemIcon ios={{ name: sfIcon }} androidIconName={androidIcon} />
-          <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
-        </DropdownMenu.SubTrigger>
-        <DropdownMenu.SubContent>
-          {lists ? (
-            lists.length ? (
-              lists.map((list) => (
-                <DropdownMenu.CheckboxItem
-                  key={`${name}:${list.id}`}
-                  value={active === `${name}:${list.id}`}
-                  onSelect={() => navigation.navigate(name, { id: list.id })}
-                >
-                  <DropdownMenu.ItemIcon ios={{ name: sfIcon }} androidIconName={androidIcon} />
-                  <DropdownMenu.ItemTitle>{list.title}</DropdownMenu.ItemTitle>
-                </DropdownMenu.CheckboxItem>
-              ))
-            ) : (
-              <DropdownMenu.Item key={`${name}-empty`} disabled>
-                <DropdownMenu.ItemTitle>{intl.formatMessage(emptyMessage)}</DropdownMenu.ItemTitle>
-              </DropdownMenu.Item>
-            )
-          ) : (
-            <DropdownMenu.Item key={`${name}-loading`} disabled>
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.loading)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          )}
-          <DropdownMenu.Item key={`${name}-create`} onSelect={() => setCreateDialog(name)}>
-            <DropdownMenu.ItemIcon ios={{ name: 'plus' }} androidIconName='ph_plus' />
-            <DropdownMenu.ItemTitle>{intl.formatMessage(createTitle)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-        </DropdownMenu.SubContent>
-      </DropdownMenu.Sub>
-    );
+    const children: Array<DropdownMenuItem> = [];
+
+    if (!lists) {
+      children.push(getPlaceholderItem(`${name}-loading`, messages.loading));
+    } else if (!lists.length) {
+      children.push(getPlaceholderItem(`${name}-empty`, emptyMessage));
+    } else {
+      children.push(
+        ...lists.map((list): DropdownMenuItem => ({
+          key: `${name}:${list.id}`,
+          type: 'button',
+          onPress: () => navigation.navigate(name, { id: list.id }),
+          label: list.title,
+          appleIcon: sfIcon,
+          androidIcon,
+          checked: active === `${name}:${list.id}`,
+        })),
+      );
+    }
+
+    children.push({
+      key: `${name}-create`,
+      type: 'button',
+      onPress: () => setCreateDialog(name),
+      label: intl.formatMessage(createTitle),
+      appleIcon: 'plus',
+      androidIcon: 'ph_plus',
+    });
+
+    return {
+      key: name,
+      type: 'menu',
+      label: intl.formatMessage(title),
+      appleIcon: sfIcon,
+      androidIcon,
+      children,
+    };
   };
 
-  const menuContent = (
-    <>
-      <DropdownMenu.Group>
-        {getTimelineItem('home', 'house', 'ph_house', messages.homeTimeline, () =>
-          navigation.popTo('home'),
-        )}
-        {features.publicTimeline &&
-          timelineAccess.live_feeds.local !== 'disabled' &&
-          getTimelineItem('local', 'globe.desk', 'ph_planet', messages.localTimeline, () =>
-            navigation.navigate('local'),
-          )}
-        {features.bubbleTimeline &&
-          timelineAccess.live_feeds.bubble !== 'disabled' &&
-          getTimelineItem('bubble', 'circle.hexagonpath', 'ph_graph', messages.bubbleTimeline, () =>
-            navigation.navigate('bubble'),
-          )}
-        {features.publicTimeline &&
-          timelineAccess.live_feeds.remote !== 'disabled' &&
-          getTimelineItem('federated', 'globe', 'ph_globe_simple', messages.federatedTimeline, () =>
-            navigation.navigate('federated'),
-          )}
-      </DropdownMenu.Group>
-      <DropdownMenu.Separator />
-      <DropdownMenu.Group>
-        {features.bookmarks &&
-          (features.bookmarkFolders
-            ? getBookmarksMenu()
-            : getTimelineItem('bookmarks', 'bookmark', 'ph_bookmarks', messages.bookmarks, () =>
-                navigation.navigate('bookmarks', { screen: 'all' }),
-              ))}
-        {features.conversations &&
-          getTimelineItem(
-            'conversations',
-            'envelope',
-            'ph_envelope_simple',
-            messages.conversations,
-            () => navigation.navigate('conversations'),
-          )}
-        {features.lists && getListsSubMenu('list', lists)}
-        {features.antennas && getListsSubMenu('antenna', antennas)}
-        {features.circles && getListsSubMenu('circle', circles)}
-      </DropdownMenu.Group>
-    </>
-  );
+  const getMenuItems = () => {
+    const timelines: Array<DropdownMenuItem> = [
+      getTimelineItem('home', 'house', 'ph_house', messages.homeTimeline),
+    ];
+
+    if (features.publicTimeline && timelineAccess.live_feeds.local !== 'disabled') {
+      timelines.push(getTimelineItem('local', 'globe.desk', 'ph_planet', messages.localTimeline));
+    }
+    if (features.bubbleTimeline && timelineAccess.live_feeds.bubble !== 'disabled') {
+      timelines.push(
+        getTimelineItem('bubble', 'circle.hexagonpath', 'ph_graph', messages.bubbleTimeline),
+      );
+    }
+    if (features.publicTimeline && timelineAccess.live_feeds.remote !== 'disabled') {
+      timelines.push(
+        getTimelineItem('federated', 'globe', 'ph_globe_simple', messages.federatedTimeline),
+      );
+    }
+
+    const other: Array<DropdownMenuItem> = [];
+
+    if (features.bookmarks) {
+      other.push(
+        features.bookmarkFolders
+          ? getBookmarksMenu()
+          : {
+              key: 'bookmarks',
+              type: 'button',
+              onPress: () => rootNavigation.navigate('bookmarks', { screen: 'all' }),
+              label: intl.formatMessage(messages.bookmarks),
+              appleIcon: 'bookmark',
+              androidIcon: 'ph_bookmarks',
+            },
+      );
+    }
+    if (features.conversations) {
+      other.push({
+        key: 'conversations',
+        type: 'button',
+        onPress: () => rootNavigation.navigate('conversations', { screen: 'index' }),
+        label: intl.formatMessage(messages.conversations),
+        appleIcon: 'envelope',
+        androidIcon: 'ph_envelope_simple',
+      });
+    }
+    if (features.lists) other.push(getListsSubMenu('list', lists));
+    if (features.antennas) other.push(getListsSubMenu('antenna', antennas));
+    if (features.circles) other.push(getListsSubMenu('circle', circles));
+
+    const items: Array<DropdownMenuItem> = [
+      { key: 'timelines', type: 'section', children: timelines },
+    ];
+
+    if (other.length) items.push({ key: 'other', type: 'section', children: other });
+
+    return items;
+  };
 
   return (
     <>
       <View style={{ alignItems: 'flex-start' }}>
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger>
-            <MaybeGlassView
-              style={[
-                {
-                  flexDirection: 'row',
-                  gap: 8,
-                  alignItems: 'center',
-                },
-                glassEffect
-                  ? {
-                      paddingHorizontal: 12,
-                      paddingVertical: 6,
-                      borderRadius: 40,
-                      borderCurve: 'continuous',
-                    }
-                  : undefined,
-              ]}
-              isInteractive
-            >
-              <Icon source={TimelineIcon} size={24} />
-              <View>
-                <Text variant='titleLarge'>{heading}</Text>
-              </View>
-              <Icon source={CaretDownIcon} size={16} />
-            </MaybeGlassView>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content>{menuContent}</DropdownMenu.Content>
-        </DropdownMenu.Root>
+        <DropdownMenu
+          trigger={
+            <Pressable>
+              <MaybeGlassView
+                style={[
+                  {
+                    flexDirection: 'row',
+                    gap: 8,
+                    alignItems: 'center',
+                  },
+                  glassEffect
+                    ? {
+                        paddingHorizontal: 12,
+                        paddingVertical: 6,
+                        borderRadius: 40,
+                        borderCurve: 'continuous',
+                      }
+                    : undefined,
+                ]}
+                isInteractive
+              >
+                <Icon source={TimelineIcon} size={24} />
+                <View>
+                  <Text variant='titleLarge'>{heading}</Text>
+                </View>
+                <Icon source={CaretDownIcon} size={16} />
+              </MaybeGlassView>
+            </Pressable>
+          }
+          items={getMenuItems()}
+        />
       </View>
       {createDialog && (
         <CreateListDialog type={createDialog} visible onDismiss={() => setCreateDialog(null)} />

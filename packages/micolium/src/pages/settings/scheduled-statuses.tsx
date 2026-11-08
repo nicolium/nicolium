@@ -5,12 +5,12 @@ import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThree
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { Account } from '@/components/accounts/account';
 import { StatusMedia } from '@/components/statuses/status-media';
 import { StatusQuote } from '@/components/statuses/status-quote';
 import { StatusVisibilityIcon } from '@/components/statuses/status-visibility-icon';
-import DropdownMenu from '@/components/ui/dropdown-menu';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { iconHelper } from '@/components/ui/icon';
 import { LoadMore } from '@/components/ui/load-more';

@@ -5,8 +5,8 @@ import { ImageIcon } from 'phosphor-react-native/src/icons/Image';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
-import DropdownMenu from '@/components/ui/dropdown-menu';
 import { useInstance } from '@/contexts/current-account-context';
 import { Alert } from '@/stores/alerts';
 import { useCompose, useUploadCompose } from '@/stores/compose';

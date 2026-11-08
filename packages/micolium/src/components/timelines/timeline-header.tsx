@@ -11,7 +11,7 @@ import { Platform, useColorScheme, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
-import DropdownMenu from '@/components/ui/dropdown-menu';
+import { type DropdownMenuItem, DropdownMenu } from '@/components/ui/dropdown-menu';
 import { HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -103,66 +103,73 @@ const useFiltersDropdownMenu = (timeline: (typeof TIMELINE_FILTER_KEYS)[number])
   const timelineSettings = timelinesFilters[timeline] || defaultFiltersSettings;
   const { update } = useSettingsActions();
 
-  const handleOnChecked =
-    (key: keyof typeof timelineSettings, inverse: boolean = false) =>
-    () => {
-      const checked = !timelineSettings[key];
+  const handleOnChecked = (key: keyof typeof timelineSettings) => () => {
+    const checked = !timelineSettings[key];
 
-      update('timelines.filters', {
-        ...timelinesFilters,
-        [timeline]: getUpdatedTimelineSettings(timelineSettings, key, inverse ? !checked : checked),
-      });
-    };
+    update('timelines.filters', {
+      ...timelinesFilters,
+      [timeline]: getUpdatedTimelineSettings(timelineSettings, key, checked),
+    });
+  };
 
-  return [
+  const items: Array<DropdownMenuItem & { enabled?: boolean }> = [
     {
       key: 'show-reblogs',
-      value: timelineSettings.showReblogs,
-      onSelect: handleOnChecked('showReblogs'),
+      type: 'button',
+      checked: timelineSettings.showReblogs,
+      onPress: handleOnChecked('showReblogs'),
       enabled: ['home', 'list', 'antenna'].includes(timeline),
-      children: intl.formatMessage(messages.showReblogs),
+      label: intl.formatMessage(messages.showReblogs),
     },
     {
       key: 'show-self-reblogs',
-      value: timelineSettings.showSelfReblogs,
-      onSelect: handleOnChecked('showSelfReblogs'),
+      type: 'button',
+      checked: timelineSettings.showSelfReblogs,
+      onPress: handleOnChecked('showSelfReblogs'),
       disabled: !timelineSettings.showReblogs,
       enabled: ['home', 'list', 'antenna'].includes(timeline),
-      children: intl.formatMessage(messages.showSelfReblogs),
+      label: intl.formatMessage(messages.showSelfReblogs),
     },
     {
       key: 'show-replies',
-      value: timelineSettings?.showReplies,
-      onSelect: handleOnChecked('showReplies'),
-      children: intl.formatMessage(messages.showReplies),
+      type: 'button',
+      checked: timelineSettings?.showReplies,
+      onPress: handleOnChecked('showReplies'),
+      label: intl.formatMessage(messages.showReplies),
     },
     {
       key: 'quotes',
-      value: timelineSettings.showQuotes,
-      onSelect: handleOnChecked('showQuotes'),
+      type: 'button',
+      checked: timelineSettings.showQuotes,
+      onPress: handleOnChecked('showQuotes'),
       enabled: features.quotePosts,
-      children: intl.formatMessage(messages.showQuotes),
+      label: intl.formatMessage(messages.showQuotes),
     },
     {
       key: 'show-direct',
-      value: timelineSettings?.showDirect,
-      onSelect: handleOnChecked('showDirect'),
+      type: 'button',
+      checked: timelineSettings?.showDirect,
+      onPress: handleOnChecked('showDirect'),
       enabled: timeline === 'home',
-      children: intl.formatMessage(messages.showDirect),
+      label: intl.formatMessage(messages.showDirect),
     },
     {
       key: 'hide-non-media',
-      value: !timelineSettings?.showNonMedia,
-      onSelect: handleOnChecked('showNonMedia', true),
-      children: intl.formatMessage(messages.hideNonMedia),
+      type: 'button',
+      checked: !timelineSettings?.showNonMedia,
+      onPress: handleOnChecked('showNonMedia'),
+      label: intl.formatMessage(messages.hideNonMedia),
     },
     {
       key: 'show-media-without-alt-text',
-      value: timelineSettings?.showMediaWithoutAltText,
-      onSelect: handleOnChecked('showMediaWithoutAltText'),
-      children: intl.formatMessage(messages.showMediaWithoutAltText),
+      type: 'button',
+      checked: timelineSettings?.showMediaWithoutAltText,
+      onPress: handleOnChecked('showMediaWithoutAltText'),
+      label: intl.formatMessage(messages.showMediaWithoutAltText),
     },
-  ].filter(({ enabled }) => enabled !== false);
+  ];
+
+  return items.filter(({ enabled }) => enabled !== false);
 };
 
 const FiltersDropdownMenu: React.FC<ITimelineHeaderMenu> = ({ timeline }) => {
@@ -171,21 +178,15 @@ const FiltersDropdownMenu: React.FC<ITimelineHeaderMenu> = ({ timeline }) => {
   const filtersDropdownMenuItems = useFiltersDropdownMenu(timeline);
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+    <DropdownMenu
+      trigger={
         <HeaderIconButton
           icon={Platform.OS === 'ios' ? FunnelSimpleIcon : FunnelIcon}
           accessibilityLabel={intl.formatMessage(messages.timelineFiltersLabel)}
         />
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Group>
-          {filtersDropdownMenuItems.map((item) => (
-            <DropdownMenu.CheckboxItem {...item} key={item.key} />
-          ))}
-        </DropdownMenu.Group>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+      }
+      items={filtersDropdownMenuItems}
+    />
   );
 };
 
@@ -194,50 +195,55 @@ const TimelineHeaderMenu = () => {
   const features = useFeatures();
   const navigation = useNavigation('timeline');
 
+  const dropdownMenuItems = React.useMemo(() => {
+    const items: Array<DropdownMenuItem> = [
+      {
+        key: 'settings',
+        type: 'button',
+        label: intl.formatMessage(messages.settings),
+        onPress: () =>
+          navigation.navigate('settings', {
+            screen: 'index',
+          }),
+      },
+    ];
+
+    if (features.announcements) {
+      items.push({
+        key: 'announcements',
+        type: 'button',
+        label: intl.formatMessage(messages.announcements),
+        disabled: true,
+        onPress: () => {},
+      });
+    }
+
+    if (features.scheduledStatuses) {
+      items.push({
+        key: 'scheduled_statuses',
+        type: 'button',
+        label: intl.formatMessage(messages.scheduledStatuses),
+        onPress: () => {
+          navigation.navigate('settings', {
+            screen: 'scheduled_statuses',
+          });
+        },
+      });
+    }
+
+    return items;
+  }, [intl, features]);
+
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+    <DropdownMenu
+      trigger={
         <HeaderIconButton
           icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
           accessibilityLabel={intl.formatMessage(messages.menuTitle)}
         />
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Group>
-          <DropdownMenu.Item
-            key='settings'
-            onSelect={() =>
-              navigation.navigate('settings', {
-                screen: 'index',
-              })
-            }
-          >
-            <DropdownMenu.ItemTitle>{intl.formatMessage(messages.settings)}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-          {features.announcements && (
-            <DropdownMenu.Item key='announcements' onSelect={() => {}} disabled>
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.announcements)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          )}
-          {features.scheduledStatuses && (
-            <DropdownMenu.Item
-              key='scheduled_statuses'
-              onSelect={() =>
-                navigation.navigate('settings', {
-                  screen: 'scheduled_statuses',
-                })
-              }
-            >
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.scheduledStatuses)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          )}
-        </DropdownMenu.Group>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+      }
+      items={dropdownMenuItems}
+    />
   );
 };
 
@@ -313,29 +319,33 @@ const ListHeaderMenu: React.FC<IListHeaderMenu> = ({ type, id, navigation }) => 
 
   return (
     <>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
+      <DropdownMenu
+        trigger={
           <HeaderIconButton
             icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
             accessibilityLabel={intl.formatMessage(messages.menuTitle)}
           />
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content>
-          <DropdownMenu.Group>
-            <DropdownMenu.Item key='edit' onSelect={() => setEditDialog(true)}>
-              <DropdownMenu.ItemIcon
-                ios={{ name: 'pencil' }}
-                androidIconName={'ph_pencil_simple'}
-              />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(editLabel)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key='delete' onSelect={handleDelete} destructive>
-              <DropdownMenu.ItemIcon ios={{ name: 'trash' }} androidIconName={'ph_trash'} />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(deleteLabel)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          </DropdownMenu.Group>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+        }
+        items={[
+          {
+            key: 'edit',
+            type: 'button',
+            label: intl.formatMessage(editLabel),
+            appleIcon: 'pencil',
+            androidIcon: 'ph_pencil_simple',
+            onPress: () => setEditDialog(true),
+          },
+          {
+            key: 'delete',
+            type: 'button',
+            label: intl.formatMessage(deleteLabel),
+            appleIcon: 'trash',
+            androidIcon: 'ph_trash',
+            destructive: true,
+            onPress: handleDelete,
+          },
+        ]}
+      />
       {editDialog && (
         <CreateListDialog type={type} id={id} visible onDismiss={() => setEditDialog(false)} />
       )}
