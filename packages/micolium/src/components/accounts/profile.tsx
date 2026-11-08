@@ -20,12 +20,12 @@ import { type NativeScrollEvent, type NativeSyntheticEvent, Pressable, View } fr
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as v from 'valibot';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { AccountActionsDropdown } from '@/components/accounts/account-actions-dropdown';
 import { FollowButton } from '@/components/accounts/follow-button';
 import { ComposeButton } from '@/components/compose-button';
 import { CollapsibleContent } from '@/components/ui/collapsible-content';
+import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Emojify } from '@/components/ui/emojify';
 import { GlassButton } from '@/components/ui/glass-button';
 import { iconHelper } from '@/components/ui/icon';
@@ -115,33 +115,39 @@ const FollowRequestedChip: React.FC<IFollowRequestedChip> = ({ account }) => {
   };
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+    <DropdownMenu
+      trigger={
         <Chip key='requested' mode='flat' compact onPress={() => {}}>
           <FormattedMessage
             id='account.requested_follow'
             defaultMessage='Requested to follow you'
           />
         </Chip>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Label>
-          {intl.formatMessage(messages.followRequestWithName, {
+      }
+      items={[
+        {
+          key: 'follow-request',
+          type: 'section',
+          label: intl.formatMessage(messages.followRequestWithName, {
             name: `@${account.acct}`,
-          })}
-        </DropdownMenu.Label>
-        <DropdownMenu.Item key='authorize' onSelect={handleAuthorize}>
-          <DropdownMenu.ItemTitle>
-            {intl.formatMessage(messages.followRequestAuthorize)}
-          </DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-        <DropdownMenu.Item key='reject' onSelect={handleReject}>
-          <DropdownMenu.ItemTitle>
-            {intl.formatMessage(messages.followRequestReject)}
-          </DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+          }),
+          children: [
+            {
+              key: 'authorize',
+              type: 'button',
+              label: intl.formatMessage(messages.followRequestAuthorize),
+              onPress: handleAuthorize,
+            },
+            {
+              key: 'reject',
+              type: 'button',
+              label: intl.formatMessage(messages.followRequestReject),
+              onPress: handleReject,
+            },
+          ],
+        },
+      ]}
+    />
   );
 };
 
@@ -329,10 +335,10 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   })();
 
   const timelineFiltersSelector = (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <View style={{ flexDirection: 'row', marginHorizontal: 16 }}>
-          {glassEffect ? (
+    <View style={{ flexDirection: 'row', marginHorizontal: 16 }}>
+      <DropdownMenu
+        trigger={
+          glassEffect ? (
             <Pressable onPress={() => {}}>
               <GlassView
                 style={{
@@ -365,48 +371,45 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
                 />
               </View>
             </Chip>
-          )}
-        </View>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.CheckboxItem
-          key='show-replies'
-          value={profileFilters.showReplies}
-          onSelect={() =>
-            update('timelines.profileFilters', {
-              ...profileFilters,
-              showReplies: !profileFilters.showReplies,
-            })
-          }
-        >
-          {intl.formatMessage(messages.repliesToggle)}
-        </DropdownMenu.CheckboxItem>
-        <DropdownMenu.CheckboxItem
-          key='show-reblogs'
-          value={profileFilters.showReblogs}
-          onSelect={() =>
-            update('timelines.profileFilters', {
-              ...profileFilters,
-              showReplies: !profileFilters.showReblogs,
-            })
-          }
-        >
-          {intl.formatMessage(messages.reblogsToggle)}
-        </DropdownMenu.CheckboxItem>
-        <DropdownMenu.CheckboxItem
-          key='show-pinned'
-          value={profileFilters.showPinned}
-          onSelect={() =>
-            update('timelines.profileFilters', {
-              ...profileFilters,
-              showReplies: !profileFilters.showPinned,
-            })
-          }
-        >
-          {intl.formatMessage(messages.pinnedToggle)}
-        </DropdownMenu.CheckboxItem>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+          )
+        }
+        items={[
+          {
+            key: 'show-replies',
+            type: 'button',
+            label: intl.formatMessage(messages.repliesToggle),
+            checked: profileFilters.showReplies,
+            onPress: () =>
+              update('timelines.profileFilters', {
+                ...profileFilters,
+                showReplies: !profileFilters.showReplies,
+              }),
+          },
+          {
+            key: 'show-reblogs',
+            type: 'button',
+            label: intl.formatMessage(messages.reblogsToggle),
+            checked: profileFilters.showReblogs,
+            onPress: () =>
+              update('timelines.profileFilters', {
+                ...profileFilters,
+                showReblogs: !profileFilters.showReblogs,
+              }),
+          },
+          {
+            key: 'show-pinned',
+            type: 'button',
+            label: intl.formatMessage(messages.pinnedToggle),
+            checked: profileFilters.showPinned,
+            onPress: () =>
+              update('timelines.profileFilters', {
+                ...profileFilters,
+                showPinned: !profileFilters.showPinned,
+              }),
+          },
+        ]}
+      />
+    </View>
   );
 
   const handleSkipPinned = () => {

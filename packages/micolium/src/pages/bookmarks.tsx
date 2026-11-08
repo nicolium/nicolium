@@ -9,10 +9,10 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';
 import { toast } from 'sonner-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
 import { StatusesList } from '@/components/statuses/statuses-list';
+import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Emoji } from '@/components/ui/emoji';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { useFeatures } from '@/contexts/current-account-context';
@@ -156,31 +156,33 @@ const BookmarksFolderScreen = ({
           }
         />
 
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger>
+        <DropdownMenu
+          trigger={
             <HeaderIconButton
               icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
               accessibilityLabel={intl.formatMessage(messages.menuTitle)}
             />
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content>
-            <DropdownMenu.Item key='edit' onSelect={() => setEditDialog(true)}>
-              <DropdownMenu.ItemIcon
-                ios={{ name: 'pencil' }}
-                androidIconName={'ph_pencil_simple'}
-              />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.editFolder)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key='delete' onSelect={handleDelete} destructive>
-              <DropdownMenu.ItemIcon ios={{ name: 'trash' }} androidIconName={'ph_trash'} />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.deleteFolder)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
+          }
+          items={[
+            {
+              key: 'edit',
+              type: 'button',
+              label: intl.formatMessage(messages.editFolder),
+              appleIcon: 'pencil',
+              androidIcon: 'ph_pencil_simple',
+              onPress: () => setEditDialog(true),
+            },
+            {
+              key: 'delete',
+              type: 'button',
+              label: intl.formatMessage(messages.deleteFolder),
+              appleIcon: 'trash',
+              androidIcon: 'ph_trash',
+              destructive: true,
+              onPress: handleDelete,
+            },
+          ]}
+        />
       </Appbar.Header>
       <StatusesList
         query={bookmarksQuery}

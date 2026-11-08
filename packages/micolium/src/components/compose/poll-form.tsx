@@ -21,12 +21,12 @@ import Animated, {
   withTiming,
   type SharedValue,
 } from 'react-native-reanimated';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useInstance } from '@/contexts/current-account-context';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 import { formatDuration, DURATIONS as TOO_MANY_DURATIONS } from '../accounts/block-mute-dialog';
+import { DropdownMenu } from '../ui/dropdown-menu';
 import { iconHelper } from '../ui/icon';
 
 const DURATIONS = TOO_MANY_DURATIONS.slice(0, -1);
@@ -313,29 +313,33 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
         </Button>
       )}
 
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
+      <DropdownMenu
+        fullWidth
+        trigger={
           <List.Item
             title={
               <FormattedMessage id='compose_form.poll.duration' defaultMessage='Poll duration' />
             }
             right={() => <Text>{formatDuration(intl, poll.expires_in)}</Text>}
             containerStyle={{ alignItems: 'center' }}
+            onPress={() => {}}
           />
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content>
-          <DropdownMenu.Label>{intl.formatMessage(messages.pollDuration)}</DropdownMenu.Label>
-          {durations.map((duration) => (
-            <DropdownMenu.CheckboxItem
-              key={duration.toString()}
-              value={duration === poll.expires_in}
-              onSelect={() => handleSelectDuration(duration)}
-            >
-              <DropdownMenu.ItemTitle>{formatDuration(intl, duration)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.CheckboxItem>
-          ))}
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+        }
+        items={[
+          {
+            key: 'duration',
+            type: 'section',
+            label: intl.formatMessage(messages.pollDuration),
+            children: durations.map((duration) => ({
+              key: duration.toString(),
+              type: 'button',
+              label: formatDuration(intl, duration),
+              checked: duration === poll.expires_in,
+              onPress: () => handleSelectDuration(duration),
+            })),
+          },
+        ]}
+      />
 
       <List.Item
         title={

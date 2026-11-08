@@ -5,12 +5,12 @@ import { ImageIcon } from 'phosphor-react-native/src/icons/Image';
 import { PaperclipIcon } from 'phosphor-react-native/src/icons/Paperclip';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useInstance } from '@/contexts/current-account-context';
 import { Alert } from '@/stores/alerts';
 import { useCompose, useUploadCompose } from '@/stores/compose';
 
+import { DropdownMenu } from '../ui/dropdown-menu';
 import { iconHelper } from '../ui/icon';
 
 import type { ICompose } from './compose';
@@ -107,8 +107,8 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
   };
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+    <DropdownMenu
+      trigger={
         <IconButton
           icon={iconHelper(onlyImages(attachmentTypes) ? ImageIcon : PaperclipIcon)}
           style={{ marginHorizontal: 0 }}
@@ -120,25 +120,34 @@ const ComposeUploadButton: React.FC<ICompose> = ({ composeId }) => {
           }
           accessibilityLabel={intl.formatMessage(messages.upload)}
         />
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Item key='camera' onSelect={() => handleAddMedia(true)}>
-          <DropdownMenu.ItemIcon ios={{ name: 'camera' }} androidIconName='ph_camera' />
-          <DropdownMenu.ItemTitle>{intl.formatMessage(messages.camera)}</DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-        <DropdownMenu.Item key='file' onSelect={handleAddFile}>
-          <DropdownMenu.ItemIcon ios={{ name: 'paperclip' }} androidIconName='ph_paperclip' />
-          <DropdownMenu.ItemTitle>{intl.formatMessage(messages.addFile)}</DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-        <DropdownMenu.Item key='media' onSelect={() => handleAddMedia()}>
-          <DropdownMenu.ItemIcon
-            ios={{ name: 'photo.on.rectangle.angled' }}
-            androidIconName='ph_images'
-          />
-          <DropdownMenu.ItemTitle>{intl.formatMessage(messages.upload)}</DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+      }
+      items={[
+        {
+          key: 'camera',
+          type: 'button',
+          label: intl.formatMessage(messages.camera),
+          appleIcon: 'camera',
+          androidIcon: 'ph_camera',
+          onPress: () => handleAddMedia(true),
+        },
+        {
+          key: 'file',
+          type: 'button',
+          label: intl.formatMessage(messages.addFile),
+          appleIcon: 'paperclip',
+          androidIcon: 'ph_paperclip',
+          onPress: handleAddFile,
+        },
+        {
+          key: 'media',
+          type: 'button',
+          label: intl.formatMessage(messages.upload),
+          appleIcon: 'photo.on.rectangle.angled',
+          androidIcon: 'ph_images',
+          onPress: () => handleAddMedia(),
+        },
+      ]}
+    />
   );
 };
 

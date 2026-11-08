@@ -273,7 +273,8 @@ const jetpackRenderGroups = (items: Array<DropdownMenuItem>, onClose: () => void
 };
 
 type IDropdownMenu<T extends Array<unknown>> = {
-  trigger: React.JSX.Element;
+  trigger: React.JSX.Element | ((onPress: () => void) => React.JSX.Element);
+  fullWidth?: boolean;
 } & (
   | {
       items: Array<DropdownMenuItem>;
@@ -304,28 +305,47 @@ const JetpackDropdownMenuItems = <T extends Array<unknown>>(props: IDropdownMenu
 
 const DropdownMenu: <T extends Array<unknown> = []>(props: IDropdownMenu<T>) => React.JSX.Element =
   Platform.OS === 'ios'
-    ? (props) => (
-        <View onStartShouldSetResponder={() => true}>
-          <SwiftUIHost matchContents>
-            <SwiftUIMenu
-              label={
-                <SwiftUIRNHostView matchContents>
-                  <View>{props.trigger}</View>
-                </SwiftUIRNHostView>
-              }
-            >
-              <SwiftUIDropdownMenuItems {...props} />
-            </SwiftUIMenu>
-          </SwiftUIHost>
-        </View>
-      )
+    ? (props) => {
+        const [width, setWidth] = React.useState<number>();
+
+        return (
+          <View
+            onStartShouldSetResponder={() => true}
+            onLayout={
+              props.fullWidth ? (event) => setWidth(event.nativeEvent.layout.width) : undefined
+            }
+          >
+            <SwiftUIHost matchContents>
+              <SwiftUIMenu
+                label={
+                  <SwiftUIRNHostView matchContents>
+                    <View style={props.fullWidth ? { width } : undefined}>
+                      {typeof props.trigger === 'function'
+                        ? props.trigger(() => {})
+                        : props.trigger}
+                    </View>
+                  </SwiftUIRNHostView>
+                }
+              >
+                <SwiftUIDropdownMenuItems {...props} />
+              </SwiftUIMenu>
+            </SwiftUIHost>
+          </View>
+        );
+      }
     : (props) => {
         const [expanded, setExpanded] = React.useState(false);
 
+        const onPress = () => setExpanded(true);
+
         return (
-          <JetpackHost matchContents>
-            <JetpackRNHostView matchContents>
-              <View>{React.cloneElement(props.trigger, { onPress: () => setExpanded(true) })}</View>
+          <JetpackHost matchContents={props.fullWidth ? { vertical: true } : true}>
+            <JetpackRNHostView matchContents={props.fullWidth ? { vertical: true } : true}>
+              <View>
+                {typeof props.trigger === 'function'
+                  ? props.trigger(onPress)
+                  : React.cloneElement(props.trigger, { onPress })}
+              </View>
             </JetpackRNHostView>
             <JetpackDropdownMenuPopup
               expanded={expanded}

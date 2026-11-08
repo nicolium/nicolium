@@ -3,8 +3,8 @@ import { pickerStyle, tag } from '@expo/ui/swift-ui/modifiers';
 import { List, Switch, Text, TextInput } from '@mkljczk/react-native-paper';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl, type IntlShape } from 'react-intl';
+import { View } from 'react-native';
 import { toast } from 'sonner-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -16,6 +16,7 @@ import {
 } from '@/queries/accounts/use-relationship';
 
 import { DialogOrSheet } from '../ui/dialog-or-sheet';
+import { DropdownMenu } from '../ui/dropdown-menu';
 import { SwiftUIList } from '../ui/swift-ui-list';
 
 import type { BlockAccountParams, MuteAccountParams } from 'pl-api';
@@ -265,32 +266,35 @@ const BlockMuteDialog: React.FC<IBlockMuteDialog> = ({ action, accountId, visibl
                 containerStyle={{ gap: 4, alignItems: 'center' }}
               />
               {duration !== 0 && (
-                <DropdownMenu.Root>
-                  <DropdownMenu.Trigger>
-                    <List.Item
-                      title={
-                        <FormattedMessage id='mute_modal.duration' defaultMessage='Duration' />
-                      }
-                      right={() => <Text>{formatDuration(intl, duration)}</Text>}
-                      style={{ marginHorizontal: -16 }}
-                      containerStyle={{ alignItems: 'center' }}
-                    />
-                  </DropdownMenu.Trigger>
-                  <DropdownMenu.Content>
-                    <DropdownMenu.Label>{intl.formatMessage(messages.duration)}</DropdownMenu.Label>
-                    {DURATIONS.map((value) => (
-                      <DropdownMenu.CheckboxItem
-                        key={value.toString()}
-                        value={value === duration}
-                        onSelect={() => setDuration(value)}
-                      >
-                        <DropdownMenu.ItemTitle>
-                          {formatDuration(intl, value)}
-                        </DropdownMenu.ItemTitle>
-                      </DropdownMenu.CheckboxItem>
-                    ))}
-                  </DropdownMenu.Content>
-                </DropdownMenu.Root>
+                <View style={{ marginHorizontal: -16 }}>
+                  <DropdownMenu
+                    fullWidth
+                    trigger={
+                      <List.Item
+                        title={
+                          <FormattedMessage id='mute_modal.duration' defaultMessage='Duration' />
+                        }
+                        right={() => <Text>{formatDuration(intl, duration)}</Text>}
+                        containerStyle={{ alignItems: 'center' }}
+                        onPress={() => {}}
+                      />
+                    }
+                    items={[
+                      {
+                        key: 'duration',
+                        type: 'section',
+                        label: intl.formatMessage(messages.duration),
+                        children: DURATIONS.map((value) => ({
+                          key: value.toString(),
+                          type: 'button',
+                          label: formatDuration(intl, value),
+                          checked: value === duration,
+                          onPress: () => setDuration(value),
+                        })),
+                      },
+                    ]}
+                  />
+                </View>
               )}
             </>
           )}

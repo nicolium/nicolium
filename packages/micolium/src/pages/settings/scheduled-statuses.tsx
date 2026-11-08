@@ -5,12 +5,12 @@ import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThree
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { Account } from '@/components/accounts/account';
 import { StatusMedia } from '@/components/statuses/status-media';
 import { StatusQuote } from '@/components/statuses/status-quote';
 import { StatusVisibilityIcon } from '@/components/statuses/status-visibility-icon';
+import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { iconHelper } from '@/components/ui/icon';
 import { LoadMore } from '@/components/ui/load-more';
@@ -98,35 +98,35 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus }) => {
               <StatusVisibilityIcon
                 status={{ visibility: scheduledStatus.params.visibility, list_id: null }}
               />
-              <DropdownMenu.Root>
-                <DropdownMenu.Trigger>
+              <DropdownMenu
+                trigger={
                   <IconButton
                     icon={iconHelper(Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon)}
                     style={{ height: 32, width: 32 }}
                     onPress={() => {}}
                     accessibilityLabel={intl.formatMessage(messages.menuTitle)}
                   />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Content>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Item key='edit' onSelect={() => handleEdit()}>
-                      <DropdownMenu.ItemIcon
-                        ios={{ name: 'pencil' }}
-                        androidIconName={'ph_pencil_simple'}
-                      />
-                      <DropdownMenu.ItemTitle>
-                        {intl.formatMessage(messages.edit)}
-                      </DropdownMenu.ItemTitle>
-                    </DropdownMenu.Item>
-                    <DropdownMenu.Item key='cancel' onSelect={() => handleCancel()} destructive>
-                      <DropdownMenu.ItemIcon ios={{ name: 'xmark' }} androidIconName={'ph_x'} />
-                      <DropdownMenu.ItemTitle>
-                        {intl.formatMessage(messages.cancel)}
-                      </DropdownMenu.ItemTitle>
-                    </DropdownMenu.Item>
-                  </DropdownMenu.Group>
-                </DropdownMenu.Content>
-              </DropdownMenu.Root>
+                }
+                items={[
+                  {
+                    key: 'edit',
+                    type: 'button',
+                    label: intl.formatMessage(messages.edit),
+                    appleIcon: 'pencil',
+                    androidIcon: 'ph_pencil_simple',
+                    onPress: () => handleEdit(),
+                  },
+                  {
+                    key: 'cancel',
+                    type: 'button',
+                    label: intl.formatMessage(messages.cancel),
+                    appleIcon: 'xmark',
+                    androidIcon: 'ph_x',
+                    destructive: true,
+                    onPress: () => handleCancel(),
+                  },
+                ]}
+              />
             </View>
           </View>
         ) : undefined

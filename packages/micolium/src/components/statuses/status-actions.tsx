@@ -11,7 +11,6 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { toast } from 'sonner-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract, useInteractionMessages } from '@/hooks/use-can-interact';
@@ -33,6 +32,7 @@ import { getSegmentedMenuStyles } from '@/utils/themes';
 
 import { DateTimePicker } from '../ui/date-time-picker';
 import { DialogOrSheet } from '../ui/dialog-or-sheet';
+import { DropdownMenu, type DropdownMenuItem } from '../ui/dropdown-menu';
 import { iconHelper } from '../ui/icon';
 
 import type { SelectedStatus } from '@/queries/statuses/use-status';
@@ -290,37 +290,39 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
       </Tooltip.Rich>
     );
   } else if (features.quotePosts && canQuote && !fromInteractAs) {
+    const items: Array<DropdownMenuItem> = [
+      {
+        key: 'reblog',
+        type: 'button',
+        label: intl.formatMessage(status.reblogged ? messages.unreblog : messages.reblog),
+        appleIcon: status.reblogged ? 'repeat.badge.xmark' : 'repeat',
+        androidIcon: 'ph_repeat',
+        onPress: handleReblog,
+      },
+      {
+        key: 'quote',
+        type: 'button',
+        label: intl.formatMessage(messages.quote),
+        appleIcon: 'quote.bubble',
+        androidIcon: 'ph_quotes',
+        onPress: handleQuote,
+      },
+    ];
+
+    if (features.scheduledReblogs) {
+      items.push({
+        key: 'schedule-reblog',
+        type: 'button',
+        label: intl.formatMessage(messages.scheduleReblog),
+        appleIcon: 'calendar.badge.plus',
+        androidIcon: 'ph_calendar_plus',
+        onPress: () => setShowScheduleReblog(true),
+      });
+    }
+
     return (
       <>
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger>{renderAction({}, () => {})}</DropdownMenu.Trigger>
-          <DropdownMenu.Content>
-            <DropdownMenu.Item key='reblog' onSelect={handleReblog}>
-              <DropdownMenu.ItemIcon
-                ios={{ name: status.reblogged ? 'repeat.badge.xmark' : 'repeat' }}
-                androidIconName='ph_repeat'
-              />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(status.reblogged ? messages.unreblog : messages.reblog)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key='quote' onSelect={handleQuote}>
-              <DropdownMenu.ItemIcon ios={{ name: 'quote.bubble' }} androidIconName='ph_quotes' />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.quote)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            {features.scheduledReblogs && (
-              <DropdownMenu.Item key='schedule-reblog' onSelect={() => setShowScheduleReblog(true)}>
-                <DropdownMenu.ItemIcon
-                  ios={{ name: 'calendar.badge.plus' }}
-                  androidIconName='ph_calendar_plus'
-                />
-                <DropdownMenu.ItemTitle>
-                  {intl.formatMessage(messages.scheduleReblog)}
-                </DropdownMenu.ItemTitle>
-              </DropdownMenu.Item>
-            )}
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
+        <DropdownMenu trigger={(onPress) => renderAction({}, onPress)} items={items} />
         {showScheduleReblog && (
           <ScheduleReblog status={status} visible setVisible={setShowScheduleReblog} />
         )}

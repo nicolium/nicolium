@@ -26,11 +26,11 @@ import {
   type NativeSyntheticEvent,
   type NativeTouchEvent,
   Platform,
+  Pressable,
   ScrollView,
   View,
 } from 'react-native';
 import { toast } from 'sonner-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -39,6 +39,7 @@ import { getPointerPosition } from '@/utils/media';
 
 import { renderMedia } from '../statuses/status-media';
 import { DialogOrSheet } from '../ui/dialog-or-sheet';
+import { DropdownMenu } from '../ui/dropdown-menu';
 import { iconHelper } from '../ui/icon';
 
 import type { ICompose } from './compose';
@@ -380,47 +381,59 @@ const ComposeAttachmentThumb: React.FC<IComposeAttachmentThumb> = ({
 
   return (
     <>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>{thumb}</DropdownMenu.Trigger>
-        <DropdownMenu.Content>
-          <DropdownMenu.Label>{media.url.split('/').at(-1)}</DropdownMenu.Label>
-          <DropdownMenu.Group>
-            <DropdownMenu.Item key='edit' onSelect={() => setShowEditor(true)}>
-              <DropdownMenu.ItemIcon ios={{ name: 'pencil' }} androidIconName='ph_pencil_simple' />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.edit)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key='delete' onSelect={handleDelete} destructive>
-              <DropdownMenu.ItemIcon ios={{ name: 'trash' }} androidIconName='ph_trash' />
-              <DropdownMenu.ItemTitle>{intl.formatMessage(messages.delete)}</DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          </DropdownMenu.Group>
-          <DropdownMenu.Group>
-            <DropdownMenu.Item
-              key='move-left'
-              onSelect={() => handleMove(index - 1)}
-              disabled={index === 0}
-            >
-              <DropdownMenu.ItemIcon ios={{ name: 'arrow.left' }} androidIconName='ph_arrow_left' />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.moveToLeft)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item
-              key='move-right'
-              onSelect={() => handleMove(index + 1)}
-              disabled={index === mediaCount - 1}
-            >
-              <DropdownMenu.ItemIcon
-                ios={{ name: 'arrow.right' }}
-                androidIconName='ph_arrow_right'
-              />
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.moveToRight)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          </DropdownMenu.Group>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+      <DropdownMenu
+        trigger={<Pressable onPress={() => {}}>{thumb}</Pressable>}
+        items={[
+          {
+            key: 'actions',
+            type: 'section',
+            label: media.url.split('/').at(-1),
+            children: [
+              {
+                key: 'edit',
+                type: 'button',
+                label: intl.formatMessage(messages.edit),
+                appleIcon: 'pencil',
+                androidIcon: 'ph_pencil_simple',
+                onPress: () => setShowEditor(true),
+              },
+              {
+                key: 'delete',
+                type: 'button',
+                label: intl.formatMessage(messages.delete),
+                appleIcon: 'trash',
+                androidIcon: 'ph_trash',
+                destructive: true,
+                onPress: handleDelete,
+              },
+            ],
+          },
+          {
+            key: 'move',
+            type: 'section',
+            children: [
+              {
+                key: 'move-left',
+                type: 'button',
+                label: intl.formatMessage(messages.moveToLeft),
+                appleIcon: 'arrow.left',
+                androidIcon: 'ph_arrow_left',
+                disabled: index === 0,
+                onPress: () => handleMove(index - 1),
+              },
+              {
+                key: 'move-right',
+                type: 'button',
+                label: intl.formatMessage(messages.moveToRight),
+                appleIcon: 'arrow.right',
+                androidIcon: 'ph_arrow_right',
+                disabled: index === mediaCount - 1,
+                onPress: () => handleMove(index + 1),
+              },
+            ],
+          },
+        ]}
+      />
       {showEditor && (
         <ComposeAttachmentEditor
           composeId={composeId}

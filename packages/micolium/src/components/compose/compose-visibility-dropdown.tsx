@@ -14,8 +14,8 @@ import { UsersThreeIcon } from 'phosphor-react-native/src/icons/UsersThree';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl, type MessageDescriptor } from 'react-intl';
 import { Pressable, View } from 'react-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
+import { DropdownMenu, type DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { iconHelper } from '@/components/ui/icon';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -24,7 +24,7 @@ import { useLists } from '@/queries/accounts/use-lists';
 import { useCompose, useComposeActions } from '@/stores/compose';
 import { useSetting } from '@/stores/settings';
 
-import type { SFSymbol } from '@/utils/types';
+import type { SFSymbol } from 'expo-symbols';
 import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 
 const messages = defineMessages({
@@ -158,68 +158,161 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
 
   const getVisibilityItem = (
     value: string,
-    sfIcon: SFSymbol,
+    appleIcon: SFSymbol,
     androidIcon: string,
     title: MessageDescriptor,
     subtitle: MessageDescriptor,
-  ) => (
-    <DropdownMenu.CheckboxItem
-      key={value}
-      value={visibility === value}
-      onSelect={handleChangeVisibility(value)}
-    >
-      <DropdownMenu.ItemIcon ios={{ name: sfIcon }} androidIconName={androidIcon} />
-      <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
-      <DropdownMenu.ItemSubtitle>{intl.formatMessage(subtitle)}</DropdownMenu.ItemSubtitle>
-    </DropdownMenu.CheckboxItem>
-  );
+  ): DropdownMenuItem => ({
+    key: value,
+    type: 'button',
+    label: intl.formatMessage(title),
+    sublabel: intl.formatMessage(subtitle),
+    appleIcon,
+    androidIcon,
+    checked: visibility === value,
+    onPress: handleChangeVisibility(value),
+  });
+
+  const getPlaceholderItem = (key: string, title: MessageDescriptor): DropdownMenuItem => ({
+    key,
+    type: 'button',
+    label: intl.formatMessage(title),
+    disabled: true,
+    onPress: () => {},
+  });
 
   const getListsSubMenu = (
     name: 'list' | 'circle',
     lists?: Array<{ id: string; title: string }>,
-  ) => {
-    const sfListIcon: SFSymbol = name === 'circle' ? 'circle.grid.2x2' : 'list.bullet';
+  ): DropdownMenuItem => {
+    const appleIcon: SFSymbol = name === 'circle' ? 'circle.grid.2x2' : 'list.bullet';
     const androidIcon = name === 'circle' ? 'ph_circles_four' : 'ph_list_dashes';
     const title = name === 'circle' ? messages.circleShort : messages.listShort;
     const subtitle = name === 'circle' ? messages.circleLong : messages.listLong;
     const emptyMessage = name === 'circle' ? messages.noCircles : messages.noLists;
 
-    return (
-      <DropdownMenu.Sub key={name}>
-        <DropdownMenu.SubTrigger key={`${name}-sub`}>
-          <DropdownMenu.ItemIcon ios={{ name: sfListIcon }} androidIconName={androidIcon} />
-          <DropdownMenu.ItemTitle>{intl.formatMessage(title)}</DropdownMenu.ItemTitle>
-          <DropdownMenu.ItemSubtitle>{intl.formatMessage(subtitle)}</DropdownMenu.ItemSubtitle>
-        </DropdownMenu.SubTrigger>
-        <DropdownMenu.SubContent>
-          {lists ? (
-            lists.length ? (
-              lists.map((list) => (
-                <DropdownMenu.CheckboxItem
-                  key={`${name}:${list.id}`}
-                  value={visibility === `${name}:${list.id}`}
-                  onSelect={handleChangeVisibility(`${name}:${list.id}`)}
-                >
-                  <DropdownMenu.ItemIcon ios={{ name: sfListIcon }} androidIconName={androidIcon} />
-                  <DropdownMenu.ItemTitle>{list.title}</DropdownMenu.ItemTitle>
-                </DropdownMenu.CheckboxItem>
-              ))
-            ) : (
-              <DropdownMenu.Item key={`${name}-empty`} disabled>
-                <DropdownMenu.ItemTitle>{intl.formatMessage(emptyMessage)}</DropdownMenu.ItemTitle>
-              </DropdownMenu.Item>
-            )
-          ) : (
-            <DropdownMenu.Item key={`${name}-loading`} disabled>
-              <DropdownMenu.ItemTitle>
-                {intl.formatMessage(messages.loading)}
-              </DropdownMenu.ItemTitle>
-            </DropdownMenu.Item>
-          )}
-        </DropdownMenu.SubContent>
-      </DropdownMenu.Sub>
-    );
+    let children: Array<DropdownMenuItem>;
+
+    if (!lists) {
+      children = [getPlaceholderItem(`${name}-loading`, messages.loading)];
+    } else if (!lists.length) {
+      children = [getPlaceholderItem(`${name}-empty`, emptyMessage)];
+    } else {
+      children = lists.map((list) => ({
+        key: `${name}:${list.id}`,
+        type: 'button',
+        label: list.title,
+        appleIcon,
+        androidIcon,
+        checked: visibility === `${name}:${list.id}`,
+        onPress: handleChangeVisibility(`${name}:${list.id}`),
+      }));
+    }
+
+    return {
+      key: name,
+      type: 'menu',
+      label: intl.formatMessage(title),
+      sublabel: intl.formatMessage(subtitle),
+      appleIcon,
+      androidIcon,
+      children,
+    };
   };
+
+  const visibilityItems = [
+    getVisibilityItem(
+      'public',
+      'globe',
+      'ph_globe_simple',
+      messages.publicShort,
+      messages.publicLong,
+    ),
+    getVisibilityItem('unlisted', 'moon', 'ph_moon', messages.unlistedShort, messages.unlistedLong),
+    getVisibilityItem('private', 'lock', 'ph_lock', messages.privateShort, messages.privateLong),
+  ];
+
+  if (isReply && features.createStatusConversationScope) {
+    visibilityItems.push(
+      getVisibilityItem(
+        'conversation',
+        'bubble.left.and.bubble.right',
+        'ph_chats_circle',
+        messages.conversationShort,
+        messages.conversationLong,
+      ),
+    );
+  }
+
+  if (features.createStatusMutualsOnlyScope) {
+    visibilityItems.push(
+      getVisibilityItem(
+        'mutuals_only',
+        'person.3',
+        'ph_users_three',
+        messages.mutualsOnlyShort,
+        messages.mutualsOnlyLong,
+      ),
+    );
+  }
+
+  if (features.createStatusSubscribersScope) {
+    visibilityItems.push(
+      getVisibilityItem(
+        'subscribers',
+        'dollarsign.circle',
+        'ph_coins',
+        messages.subscribersShort,
+        messages.subscribersLong,
+      ),
+    );
+  }
+
+  visibilityItems.push(
+    getVisibilityItem('direct', 'at', 'ph_at', messages.directShort, messages.directLong),
+  );
+
+  if (features.createStatusLocalScope) {
+    visibilityItems.push(
+      getVisibilityItem(
+        'local',
+        'globe.desk',
+        'ph_planet',
+        messages.localShort,
+        messages.localLong,
+      ),
+    );
+  }
+
+  if (features.createStatusListScope) visibilityItems.push(getListsSubMenu('list', lists));
+  if (features.circles) visibilityItems.push(getListsSubMenu('circle', circles));
+
+  const items: Array<DropdownMenuItem> = [
+    {
+      key: 'visibility',
+      type: 'section',
+      label: intl.formatMessage(messages.changePrivacy),
+      children: visibilityItems,
+    },
+  ];
+
+  if (features.localOnlyStatuses) {
+    items.push({
+      key: 'local-only',
+      type: 'section',
+      children: [
+        {
+          key: 'local-only',
+          type: 'button',
+          label: intl.formatMessage(messages.localShort),
+          sublabel: intl.formatMessage(messages.localLong),
+          appleIcon: 'building.2',
+          checked: compose.localOnly,
+          onPress: handleToggleLocalOnly,
+        },
+      ],
+    });
+  }
 
   const label = compose.localOnly ? (
     <FormattedMessage
@@ -271,91 +364,7 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
 
   return (
     <View style={{ alignItems: 'flex-start' }}>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>{chip}</DropdownMenu.Trigger>
-        <DropdownMenu.Content>
-          <DropdownMenu.Label>{intl.formatMessage(messages.changePrivacy)}</DropdownMenu.Label>
-          <DropdownMenu.Group>
-            {getVisibilityItem(
-              'public',
-              'globe',
-              'ph_globe_simple',
-              messages.publicShort,
-              messages.publicLong,
-            )}
-            {getVisibilityItem(
-              'unlisted',
-              'moon',
-              'ph_moon',
-              messages.unlistedShort,
-              messages.unlistedLong,
-            )}
-            {getVisibilityItem(
-              'private',
-              'lock',
-              'ph_lock',
-              messages.privateShort,
-              messages.privateLong,
-            )}
-            {isReply &&
-              features.createStatusConversationScope &&
-              getVisibilityItem(
-                'conversation',
-                'bubble.left.and.bubble.right',
-                'ph_chats_circle',
-                messages.conversationShort,
-                messages.conversationLong,
-              )}
-            {features.createStatusMutualsOnlyScope &&
-              getVisibilityItem(
-                'mutuals_only',
-                'person.3',
-                'ph_users_three',
-                messages.mutualsOnlyShort,
-                messages.mutualsOnlyLong,
-              )}
-            {features.createStatusSubscribersScope &&
-              getVisibilityItem(
-                'subscribers',
-                'dollarsign.circle',
-                'ph_coins',
-                messages.subscribersShort,
-                messages.subscribersLong,
-              )}
-            {getVisibilityItem('direct', 'at', 'ph_at', messages.directShort, messages.directLong)}
-            {features.createStatusLocalScope &&
-              getVisibilityItem(
-                'local',
-                'globe.desk',
-                'ph_planet',
-                messages.localShort,
-                messages.localLong,
-              )}
-            {features.createStatusListScope && getListsSubMenu('list', lists)}
-            {features.circles && getListsSubMenu('circle', circles)}
-          </DropdownMenu.Group>
-          {features.localOnlyStatuses && (
-            <>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Group>
-                <DropdownMenu.CheckboxItem
-                  key='local-only'
-                  value={compose.localOnly}
-                  onValueChange={handleToggleLocalOnly}
-                >
-                  <DropdownMenu.ItemIcon ios={{ name: 'building.2' }} />
-                  <DropdownMenu.ItemTitle>
-                    {intl.formatMessage(messages.localShort)}
-                  </DropdownMenu.ItemTitle>
-                  <DropdownMenu.ItemSubtitle>
-                    {intl.formatMessage(messages.localLong)}
-                  </DropdownMenu.ItemSubtitle>
-                </DropdownMenu.CheckboxItem>
-              </DropdownMenu.Group>
-            </>
-          )}
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+      <DropdownMenu trigger={chip} items={items} />
     </View>
   );
 };

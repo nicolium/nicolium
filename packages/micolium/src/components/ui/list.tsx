@@ -9,13 +9,13 @@ import { CaretRightIcon } from 'phosphor-react-native/src/icons/CaretRight';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Pressable, type StyleProp, View, type ViewStyle } from 'react-native';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { iconHelper } from '@/components/ui/icon';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { getSegmentedMenuStyles } from '@/utils/themes';
 
 import { DateTimePicker } from './date-time-picker';
+import { DropdownMenu } from './dropdown-menu';
 
 import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 
@@ -176,8 +176,10 @@ const List: React.FC<IList> = ({ sections, style }) => {
               );
             case 'select':
               return (
-                <DropdownMenu.Root key={index}>
-                  <DropdownMenu.Trigger>
+                <DropdownMenu
+                  key={index}
+                  fullWidth
+                  trigger={
                     <PaperList.Item
                       title={item.label}
                       description={item.sublabel}
@@ -195,25 +197,26 @@ const List: React.FC<IList> = ({ sections, style }) => {
                         </Text>
                       )}
                       containerStyle={{ alignItems: 'center' }}
+                      onPress={() => {}}
                     />
-                  </DropdownMenu.Trigger>
-                  <DropdownMenu.Content>
-                    <DropdownMenu.Label>{item.label}</DropdownMenu.Label>
-                    {item.options.map((option) => (
-                      <DropdownMenu.CheckboxItem
-                        key={option.value.toString()}
-                        value={
-                          Array.isArray(item.active)
-                            ? item.active.includes(option.value)
-                            : option.value === item.active
-                        }
-                        onSelect={() => item.onChange(option.value)}
-                      >
-                        <DropdownMenu.ItemTitle>{option.label}</DropdownMenu.ItemTitle>
-                      </DropdownMenu.CheckboxItem>
-                    ))}
-                  </DropdownMenu.Content>
-                </DropdownMenu.Root>
+                  }
+                  items={[
+                    {
+                      key: 'options',
+                      type: 'section',
+                      label: item.label,
+                      children: item.options.map((option) => ({
+                        key: option.value.toString(),
+                        type: 'button',
+                        label: option.label,
+                        checked: Array.isArray(item.active)
+                          ? item.active.includes(option.value)
+                          : option.value === item.active,
+                        onPress: () => item.onChange(option.value),
+                      })),
+                    },
+                  ]}
+                />
               );
             case 'color-picker':
               return (
