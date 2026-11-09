@@ -335,8 +335,18 @@ const DropdownMenu: <T extends Array<unknown> = []>(props: IDropdownMenu<T>) => 
       }
     : (props) => {
         const [expanded, setExpanded] = React.useState(false);
+        const [mounted, setMounted] = React.useState(false);
 
-        const onPress = () => setExpanded(true);
+        React.useEffect(() => {
+          if (expanded) return;
+          const timeout = setTimeout(() => setMounted(false), 300);
+          return () => clearTimeout(timeout);
+        }, [expanded]);
+
+        const onPress = () => {
+          setExpanded(true);
+          setMounted(true);
+        };
 
         return (
           <JetpackHost matchContents={props.fullWidth ? { vertical: true } : true}>
@@ -351,7 +361,7 @@ const DropdownMenu: <T extends Array<unknown> = []>(props: IDropdownMenu<T>) => 
               expanded={expanded}
               onDismissRequest={() => setExpanded(false)}
             >
-              {expanded && (
+              {mounted && (
                 <JetpackDropdownMenuItems {...props} onClose={() => setExpanded(false)} />
               )}
             </JetpackDropdownMenuPopup>
