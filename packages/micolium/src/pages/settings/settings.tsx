@@ -11,12 +11,12 @@ import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, ScrollView } from 'react-native';
-import { toast } from '@/utils/toast';
 
 import { type IListSections, List } from '@/components/ui/list';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useAuthStoreActions } from '@/stores/auth';
 import { useUiStoreActions } from '@/stores/ui';
+import { toast } from '@/utils/toast';
 
 import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -99,14 +99,12 @@ const SettingsScreen = ({ navigation }: NativeStackScreenProps<SettingsStackPara
       ],
     };
 
-    if (Platform.OS === 'ios') {
-      settingsSection.items.push({
-        icon: PaletteIcon,
-        type: 'button',
-        label: intl.formatMessage(messages.appearanceHeading),
-        onPress: () => navigation.navigate('appearance'),
-      });
-    }
+    settingsSection.items.push({
+      icon: PaletteIcon,
+      type: 'button',
+      label: intl.formatMessage(messages.appearanceHeading),
+      onPress: () => navigation.navigate('appearance'),
+    });
 
     settingsSection.items.push({
       icon: InfoIcon,
