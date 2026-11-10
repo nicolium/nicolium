@@ -1,5 +1,5 @@
 import { defineMessages, type IntlShape } from 'react-intl';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { useSettingsStore } from '@/stores/settings';
 import { formatBytes } from '@/utils/media';

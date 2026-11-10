@@ -5,7 +5,7 @@ import { FolderSimpleIcon } from 'phosphor-react-native/src/icons/FolderSimple';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, View } from 'react-native';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';

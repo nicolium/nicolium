@@ -14,7 +14,7 @@ import { Modal, Platform, StatusBar, useWindowDimensions } from 'react-native';
 import Gallery, { type RenderItemInfo } from 'react-native-awesome-gallery';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { useMediaViewer, useUiStoreActions } from '@/stores/ui';
 

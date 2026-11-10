@@ -104,7 +104,7 @@ const StatusDetailedInfo: React.FC<IStatusDetailedInfo> = ({ status }) => {
                         ? () => openUrl(status.application!.website!)
                         : undefined
                     }
-                    style={{ color: status.application?.website ? colors.onPrimary : undefined }}
+                    style={{ color: status.application?.website ? colors.primary : undefined }}
                   >
                     {children}
                   </Text>

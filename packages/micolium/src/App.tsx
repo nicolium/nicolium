@@ -4,17 +4,15 @@ import { getMaterial3Theme } from '@pchmn/expo-material3-theme';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { makeRedirectUri } from 'expo-auth-session';
-import { GlassView } from 'expo-glass-effect';
 import { createURL } from 'expo-linking';
 import { useCalendars, useLocales } from 'expo-localization';
 import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import { Platform, useColorScheme } from 'react-native';
+import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Toaster } from 'sonner-native';
 
 import { AccountSwitcherBottomSheet } from './components/account-switcher';
 import { ComposeBottomSheet } from './components/compose/compose';
@@ -22,13 +20,13 @@ import { EmojiPickerBottomSheet } from './components/emoji-picker';
 import { InteractAsSheet } from './components/interact-as';
 import { MediaViewer } from './components/media-viewer';
 import { DefaultCurrentAccountProvider } from './contexts/current-account-context';
-import { useEnableLiquidGlass } from './hooks/use-enable-liquid-glass';
 import { loadPolyfills } from './polyfills';
 import { queryClient } from './queries/client';
 import { RootNavigator } from './router/router';
 import { AlertRoot } from './stores/alerts';
 import { useSetting } from './stores/settings';
 import { DarkTheme, LightTheme } from './utils/themes';
+import { ToastRoot } from './utils/toast';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -94,7 +92,6 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = (props) => {
 export const App = () => {
   const [{ timeZone }] = useCalendars();
   const [{ languageCode, languageTag }] = useLocales();
-  const glassEffect = useEnableLiquidGlass();
 
   const locale =
     [languageTag, languageCode].find((locale) => locale && locales.includes(locale)) || 'en';
@@ -133,23 +130,7 @@ export const App = () => {
                 <GestureHandlerRootView>
                   <TrueSheetProvider>
                     <RootNavigator />
-                    <Toaster
-                      position={'bottom-center'}
-                      enableStacking={Platform.OS === 'ios'}
-                      toastOptions={{
-                        backgroundComponent: glassEffect ? (
-                          <GlassView
-                            glassEffectStyle='regular'
-                            style={{
-                              position: 'absolute',
-                              inset: 0,
-                              borderRadius: 8,
-                              borderCurve: 'continuous',
-                            }}
-                          />
-                        ) : undefined,
-                      }}
-                    />
+                    <ToastRoot />
                     <AccountSwitcherBottomSheet />
                     <ComposeBottomSheet />
                     <EmojiPickerBottomSheet />

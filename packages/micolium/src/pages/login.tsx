@@ -20,7 +20,7 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { KeyboardAvoidingView, Platform, ScrollView, ToastAndroid, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/images/icon.png';

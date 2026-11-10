@@ -3,7 +3,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { TabView } from 'react-native-tab-view';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import {
   InteractionPolicyConfig,

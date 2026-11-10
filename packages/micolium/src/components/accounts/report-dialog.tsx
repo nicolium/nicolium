@@ -2,7 +2,7 @@ import { Card, TextInput } from '@mkljczk/react-native-paper';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';

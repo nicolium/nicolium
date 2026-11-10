@@ -4,7 +4,7 @@ import { List, Switch, Text, TextInput } from '@mkljczk/react-native-paper';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl, type IntlShape } from 'react-intl';
 import { View } from 'react-native';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';

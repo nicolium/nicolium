@@ -7,7 +7,7 @@ import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThree
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform } from 'react-native';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useReblog } from '@/hooks/use-reblog';

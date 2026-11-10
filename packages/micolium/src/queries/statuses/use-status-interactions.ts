@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-query';
 import { create } from 'mutative';
 import { defineMessages, useIntl } from 'react-intl';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';

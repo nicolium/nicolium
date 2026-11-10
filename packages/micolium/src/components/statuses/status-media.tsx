@@ -25,7 +25,7 @@ import { PlayIcon } from 'phosphor-react-native/src/icons/Play';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useUiStoreActions } from '@/stores/ui';

@@ -8,7 +8,7 @@ import { FunnelSimpleIcon } from 'phosphor-react-native/src/icons/FunnelSimple';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, useColorScheme, View } from 'react-native';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
 import { type DropdownMenuItem, DropdownMenu } from '@/components/ui/dropdown-menu';

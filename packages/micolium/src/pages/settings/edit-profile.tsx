@@ -15,7 +15,7 @@ import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ScrollView, View } from 'react-native';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';

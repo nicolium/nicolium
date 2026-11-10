@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { defineMessages, type IntlShape, useIntl } from 'react-intl';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 import { v4 as uuid } from 'uuid';
 // import { length } from 'stringz';
 import { create } from 'zustand';

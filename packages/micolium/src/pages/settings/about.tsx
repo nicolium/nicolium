@@ -3,7 +3,7 @@ import { Image } from 'expo-image';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { ScrollView, View } from 'react-native';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/images/icon.png';

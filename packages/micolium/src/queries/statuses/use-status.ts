@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';

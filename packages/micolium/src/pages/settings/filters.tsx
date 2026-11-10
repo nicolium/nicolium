@@ -20,7 +20,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { GlassButton } from '@/components/ui/glass-button';

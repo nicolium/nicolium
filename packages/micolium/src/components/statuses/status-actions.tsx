@@ -10,7 +10,7 @@ import { ThumbsUpIcon } from 'phosphor-react-native/src/icons/ThumbsUp';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useCanInteract, useInteractionMessages } from '@/hooks/use-can-interact';

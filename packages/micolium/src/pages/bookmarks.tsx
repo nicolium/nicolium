@@ -8,7 +8,7 @@ import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThree
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, View } from 'react-native';
-import { toast } from 'sonner-native';
+import { toast } from '@/utils/toast';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
 import { StatusesList } from '@/components/statuses/statuses-list';
