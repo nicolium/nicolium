@@ -61,6 +61,8 @@
   "edit_profile.fields.display_name.label": "Mostra el nom",
   "edit_profile.fields.display_name.placeholder": "Name",
   "edit_profile.fields.locked.label": "Bloqueja el compte",
+  "edit_profile.fields.meta_fields.content.placeholder": "Contingut",
+  "edit_profile.fields.meta_fields.label.placeholder": "Etiqueta",
   "edit_profile.hints.bot": "Aquest compte realitza principalment accions automatitzades i pot ser que no sigui controlat",
   "edit_profile.hints.locked": "Cal que aprovis els seguidors manualment",
   "edit_profile.success": "Profile saved!",

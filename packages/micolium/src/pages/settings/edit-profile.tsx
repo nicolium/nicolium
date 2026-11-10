@@ -1,14 +1,25 @@
-import { Appbar, List as PaperList, TextInput, useTheme } from '@mkljczk/react-native-paper';
+import {
+  Appbar,
+  Button,
+  IconButton,
+  List as PaperList,
+  TextInput,
+  useTheme,
+} from '@mkljczk/react-native-paper';
 import { pick } from 'lodash-es';
+import { create } from 'mutative';
 import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
+import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
+import { XIcon } from 'phosphor-react-native/src/icons/X';
 import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from 'pl-api';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { ScrollView, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
+import { iconHelper } from '@/components/ui/icon';
 import { type IListSections, List } from '@/components/ui/list';
 import { useClient, useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
@@ -187,7 +198,27 @@ const messages = defineMessages({
     id: 'edit_profile.back_confirmation.confirm',
     defaultMessage: 'Discard',
   },
+  metaFieldLabel: {
+    id: 'edit_profile.fields.meta_fields.label.placeholder',
+    defaultMessage: 'Label',
+  },
+  metaFieldContent: {
+    id: 'edit_profile.fields.meta_fields.content.placeholder',
+    defaultMessage: 'Content',
+  },
+  firstMetaFieldLabel: {
+    id: 'edit_profile.fields.meta_fields.label.placeholder.first',
+    defaultMessage: 'Label (e.g. pronouns)',
+  },
+  remove: { id: 'streamfield.remove', defaultMessage: 'Remove' },
 });
+
+type UpdateCredentials = UpdateCredentialsParams & {
+  fields: Array<{
+    name: string;
+    value: string;
+  }>;
+};
 
 /**
  * Whether the user is hiding their follows and/or followers.
@@ -202,8 +233,12 @@ const hidesNetwork = ({ __meta }: Pick<CredentialAccount, '__meta'>): boolean =>
   );
 
 /** Convert an account into an update_credentials request object. */
-const accountToCredentials = (account: CredentialAccount): UpdateCredentialsParams => {
+const accountToCredentials = (account: CredentialAccount): UpdateCredentials => {
   const hideNetwork = hidesNetwork(account);
+
+  const fields = [...(account.__meta.source?.fields ?? [])];
+
+  if (!fields.length) fields.push({});
 
   return {
     ...pick(account, [
@@ -224,7 +259,7 @@ const accountToCredentials = (account: CredentialAccount): UpdateCredentialsPara
       'bite_controls',
     ]),
     ...pick(account.source, ['note', 'web_include_boosts', 'web_layout', 'web_visibility']),
-    fields_attributes: [...(account.__meta.source?.fields ?? [])],
+    fields,
     stranger_notifications:
       account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
     hide_followers: hideNetwork,
@@ -246,7 +281,9 @@ const EditProfileScreen = ({
 
   const { mutate: updateCredentials } = useUpdateCredentials();
 
-  const [data, setData] = React.useState<UpdateCredentialsParams>({});
+  const [data, setData] = React.useState<UpdateCredentials>({
+    fields: [],
+  });
   const [isLoading, setLoading] = React.useState(true);
   const [muteStrangers, setMuteStrangers] = React.useState(false);
   const [hideNotificationContent, setHideNotificationContent] = React.useState(false);
@@ -276,17 +313,16 @@ const EditProfileScreen = ({
     const onConfirm = () => {
       const promises = [];
 
-      const { fields_attributes, ...rest } = data;
+      const { fields, ...rest } = data;
       const params: UpdateCredentialsParams = {
         ...rest,
       };
 
-      if (fields_attributes?.length === 0)
-        params.fields_attributes = { '0': { name: '', value: '' } };
-      else if (fields_attributes) {
-        const padLength = fields_attributes.length.toString().length;
+      if (fields.length === 0) params.fields_attributes = {};
+      else {
+        const padLength = fields.length.toString().length;
         params.fields_attributes = Object.fromEntries(
-          fields_attributes.map(({ name, value }, i) => [
+          fields.map(({ name, value }, i) => [
             i.toString().padStart(padLength, '0'),
             { name, value },
           ]),
@@ -366,9 +402,12 @@ const EditProfileScreen = ({
   };
 
   /** Set a single key in the request data. */
-  const updateData = (key: string, value: any) => {
+  const updateData = (key: string, value: any | ((oldValue: any) => any)) => {
     setIsChanged(true);
-    setData((prevData) => ({ ...prevData, [key]: value }));
+    setData((prevData) => ({
+      ...prevData,
+      [key]: typeof value === 'function' ? create(prevData[key], value) : value,
+    }));
   };
 
   const handleFieldChange =
@@ -415,6 +454,19 @@ const EditProfileScreen = ({
             hide_follows_count: hide,
           }),
     }));
+  };
+
+  const handleAddField = () => {
+    const oldFields = data.fields ?? [];
+    const fields = [...oldFields, { name: '', value: '' }];
+    updateData('fields', fields);
+  };
+
+  const handleRemoveField = (i: number) => {
+    const oldFields = data.fields ?? [];
+    const fields = [...oldFields];
+    fields.splice(i, 1);
+    updateData('fields', fields);
   };
 
   const handleBackButton = () => {
@@ -681,6 +733,85 @@ const EditProfileScreen = ({
             />
           )}
         </View>
+
+        <PaperList.Section>
+          <PaperList.Subheader>
+            <FormattedMessage
+              id='edit_profile.fields.meta_fields.label'
+              defaultMessage='Profile fields'
+            />
+          </PaperList.Subheader>
+          <View style={{ gap: 2 }}>
+            {data.fields.map((field, index, fields) => {
+              const styles = [
+                getSegmentedMenuStyles(theme, false, index, fields.length, 'high'),
+                { marginHorizontal: 16 },
+              ];
+
+              return (
+                <PaperList.Item
+                  key={index}
+                  style={styles}
+                  title={() => (
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                      <View style={{ flex: 2 }}>
+                        <TextInput
+                          variant='outlined'
+                          label={intl.formatMessage(messages.metaFieldLabel)}
+                          placeholder={intl.formatMessage(
+                            index === 0 ? messages.firstMetaFieldLabel : messages.metaFieldLabel,
+                          )}
+                          value={field.name}
+                          onChangeText={(text) =>
+                            updateData('fields', (fields) => {
+                              fields[index].name = text;
+                            })
+                          }
+                        />
+                      </View>
+                      <View style={{ flex: 3 }}>
+                        <TextInput
+                          variant='outlined'
+                          label={intl.formatMessage(messages.metaFieldContent)}
+                          placeholder={intl.formatMessage(messages.metaFieldContent)}
+                          value={field.value}
+                          onChangeText={(text) =>
+                            updateData('fields', (fields) => {
+                              fields[index].value = text;
+                            })
+                          }
+                        />
+                      </View>
+                      {data.fields.length > 1 && (
+                        <IconButton
+                          onPress={() => handleRemoveField(index)}
+                          icon={iconHelper(XIcon)}
+                          style={{ margin: -4 }}
+                          accessibilityLabel={intl.formatMessage(messages.remove)}
+                        />
+                      )}
+                    </View>
+                  )}
+                />
+              );
+            })}
+          </View>
+          {data.fields.length <=
+            (instance.configuration.accounts?.max_profile_fields ??
+              instance.pleroma.metadata.fields_limits.max_fields) && (
+            <Button
+              mode='text'
+              icon={iconHelper(PlusIcon)}
+              onPress={handleAddField}
+              style={{ alignSelf: 'flex-start', marginHorizontal: 8 }}
+            >
+              <FormattedMessage
+                id='edit_profile.fields.meta_fields.add_field'
+                defaultMessage='Add field'
+              />
+            </Button>
+          )}
+        </PaperList.Section>
 
         <List sections={listSections} />
 

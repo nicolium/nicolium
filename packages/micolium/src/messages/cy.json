@@ -83,6 +83,8 @@
   "edit_profile.fields.location.label": "Lleoliad",
   "edit_profile.fields.location.placeholder": "Lleoliad",
   "edit_profile.fields.locked.label": "Cloi'r cyfrif",
+  "edit_profile.fields.meta_fields.content.placeholder": "Cynnwys",
+  "edit_profile.fields.meta_fields.label.placeholder": "Label",
   "edit_profile.success": "Profile saved!",
   "emoji_button.activity": "Gweithgarwch",
   "emoji_button.custom": "Unigryw",

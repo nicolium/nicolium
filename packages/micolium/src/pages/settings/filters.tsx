@@ -62,7 +62,6 @@ const messages = defineMessages({
   addFilter: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
   title: { id: 'column.filters.title', defaultMessage: 'Title' },
   keyword: { id: 'column.filters.keyword', defaultMessage: 'Keyword or phrase' },
-  addKeyword: { id: 'column.filters.add_keyword', defaultMessage: 'Add keyword' },
   removeKeyword: { id: 'column.filters.remove_keyword', defaultMessage: 'Remove keyword' },
   expires: { id: 'column.filters.expires', defaultMessage: 'Expire after' },
   createError: { id: 'column.filters.create.error', defaultMessage: 'Failed to add filter' },
@@ -75,7 +74,6 @@ const messages = defineMessages({
     defaultMessage: 'Are you sure you want to delete this filter?',
   },
   deleteConfirm: { id: 'confirmations.delete_filter.confirm', defaultMessage: 'Delete' },
-  deleteFilter: { id: 'column.filters.delete', defaultMessage: 'Delete filter' },
   deleteSuccess: { id: 'column.filters.delete.success', defaultMessage: 'Filter deleted' },
   deleteError: { id: 'column.filters.delete.error', defaultMessage: 'Failed to delete filter' },
   expirationNever: { id: 'column.filters.expiration.never', defaultMessage: 'Never' },
@@ -418,7 +416,7 @@ const FilterEditorScreen = ({
             onPress={handleAddKeyword}
             style={{ alignSelf: 'flex-start', marginHorizontal: 8 }}
           >
-            {intl.formatMessage(messages.addKeyword)}
+            <FormattedMessage id='column.filters.add_keyword' defaultMessage='Add keyword' />
           </Button>
         )}
       </PaperList.Section>
@@ -482,7 +480,7 @@ const FilterEditorScreen = ({
             onPress={handleDelete}
             destructive
           >
-            {intl.formatMessage(messages.deleteFilter)}
+            <FormattedMessage id='column.filters.delete' defaultMessage='Delete filter' />
           </GlassButton>
         )}
         <GlassButton

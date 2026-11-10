@@ -67,6 +67,8 @@
   "edit_profile.fields.display_name.label": "Ім'я",
   "edit_profile.fields.display_name.placeholder": "Name",
   "edit_profile.fields.locked.label": "Зробити акаунт приватним",
+  "edit_profile.fields.meta_fields.content.placeholder": "Вміст",
+  "edit_profile.fields.meta_fields.label.placeholder": "Позначка",
   "edit_profile.hints.bot": "Цей акаунт виконує автоматичні дії та може не відстежуватися",
   "edit_profile.hints.hide_network": "У вашому профілі не буде відображено підписки та підписників",
   "edit_profile.success": "Profile saved!",

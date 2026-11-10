@@ -35,6 +35,8 @@
   "confirmations.domain_block.heading": "Block {domain}",
   "edit_profile.fields.display_name.placeholder": "Name",
   "edit_profile.fields.locked.label": "Lock account",
+  "edit_profile.fields.meta_fields.content.placeholder": "Content",
+  "edit_profile.fields.meta_fields.label.placeholder": "Label",
   "emoji_button.label": "Insert emoji",
   "emoji_button.people": "People",
   "emoji_button.symbols": "Symbols",

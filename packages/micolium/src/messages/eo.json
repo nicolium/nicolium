@@ -50,6 +50,8 @@
   "confirmations.unfollow.confirm": "Ne plu sekvi",
   "edit_profile.fields.display_name.placeholder": "Name",
   "edit_profile.fields.locked.label": "Lock account",
+  "edit_profile.fields.meta_fields.content.placeholder": "Content",
+  "edit_profile.fields.meta_fields.label.placeholder": "Label",
   "edit_profile.success": "Profile saved!",
   "emoji_button.activity": "Agadoj",
   "emoji_button.custom": "Propraj",
