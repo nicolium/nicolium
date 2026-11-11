@@ -31,6 +31,7 @@ import { Alert } from '@/stores/alerts';
 import { useAuthStore } from '@/stores/auth';
 import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
+import { haptics } from '@/utils/haptics';
 import { toast } from '@/utils/toast';
 import { openUrl } from '@/utils/url';
 
@@ -184,20 +185,27 @@ const useMenuItems = (
 
   const handleBookmark = (folderId?: string | null) => {
     if (folderId !== undefined || !status.bookmarked) {
-      bookmark(folderId === status.bookmark_folder ? undefined : folderId || undefined);
+      bookmark(folderId === status.bookmark_folder ? undefined : folderId || undefined, {
+        onSuccess: () => haptics.toggleOn(),
+      });
     } else {
-      unbookmark();
+      unbookmark(undefined, {
+        onSuccess: () => haptics.toggleOff(),
+      });
     }
   };
 
   const handleReblog = (visibility?: string) => {
-    return doReblog(visibility);
+    return doReblog(visibility, () => {
+      haptics.toggleOn();
+    });
   };
 
   const handleBiteStatus = () => {
     client.statuses
       .biteStatus(status.id)
       .then(() => {
+        haptics.toggleOn();
         toast.success(intl.formatMessage(messages.biteSuccess));
       })
       .catch((error) => {
@@ -212,8 +220,14 @@ const useMenuItems = (
   };
 
   const handlePin = () => {
-    if (status.pinned) unpin();
-    else pin();
+    if (status.pinned)
+      unpin(undefined, {
+        onSuccess: () => haptics.toggleOff(),
+      });
+    else
+      pin(undefined, {
+        onSuccess: () => haptics.toggleOn(),
+      });
   };
 
   const handleDelete = () => {

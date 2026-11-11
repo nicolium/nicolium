@@ -33,10 +33,11 @@ import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
-import { toast } from '@/utils/toast';
+import { haptics } from '@/utils/haptics';
 // import { queryClient } from '@/queries/client';
 // import { queryKeys } from '@/queries/keys';
 // import { scopedQueryKey } from '@/queries/query';
+import { toast } from '@/utils/toast';
 
 import { useSetting, useSettingsStore } from './settings';
 
@@ -1331,6 +1332,8 @@ const submitCompose = async (
       compose.redacting,
     );
 
+    haptics.confirm();
+
     if (chained) {
       if (data.scheduled_at !== null) {
         queryClient.invalidateQueries({
@@ -1428,6 +1431,7 @@ const submitCompose = async (
     onSuccess?.();
     return data;
   } catch (error) {
+    haptics.reject();
     // if (!chained) {
     //   const toastOptions: IToastOptions = {
     //     actionLabel: messages.viewDrafts,

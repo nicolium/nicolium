@@ -7,6 +7,7 @@ import {
   useEmojiReactMutation,
   useEmojiUnreactMutation,
 } from '@/queries/statuses/use-status-interactions';
+import { haptics } from '@/utils/haptics';
 
 import { Emoji } from '../ui/emoji';
 
@@ -25,8 +26,15 @@ const StatusEmojiReactions: React.FC<IStatusEmojiReactions> = ({ status }) => {
   if (!status.emoji_reactions.length) return null;
 
   const handleReact = (emoji: EmojiReaction) => {
-    if (emoji.me) emojiUnreact(emoji.name);
-    else emojiReact(emoji.name);
+    if (emoji.me) {
+      emojiUnreact(emoji.name, {
+        onSuccess: () => haptics.toggleOff(),
+      });
+    } else {
+      emojiReact(emoji.name, {
+        onSuccess: () => haptics.toggleOn(),
+      });
+    }
   };
 
   return (
@@ -37,12 +45,13 @@ const StatusEmojiReactions: React.FC<IStatusEmojiReactions> = ({ status }) => {
           mode={emoji.me ? 'flat' : 'outlined'}
           icon={() => <Emoji emoji={emoji.name} url={emoji.url} />}
           onPress={() => handleReact(emoji)}
-          onLongPress={() =>
+          onLongPress={() => {
+            haptics.longPress();
             navigation.navigate('status', {
               screen: 'reactions',
               params: { id: status.id, emoji: emoji.name },
-            })
-          }
+            });
+          }}
           compact
         >
           {emoji.count}

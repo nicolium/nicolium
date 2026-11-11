@@ -14,6 +14,7 @@ import { useColorScheme, View } from 'react-native';
 
 import RelativeTimestamp from '@/components/relative-timestamp';
 import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
+import { haptics } from '@/utils/haptics';
 
 import { Emojify } from '../ui/emojify';
 
@@ -47,7 +48,8 @@ const StatusPoll: React.FC<IStatusPoll> = ({ status, translation }) => {
 
           const voted = poll.voted && poll.own_votes?.includes(index);
 
-          const handleCheck = () =>
+          const handleCheck = () => {
+            haptics.selection();
             setSelected((value) =>
               poll.multiple
                 ? value.includes(index)
@@ -55,6 +57,7 @@ const StatusPoll: React.FC<IStatusPoll> = ({ status, translation }) => {
                   : [...value, index]
                 : [index],
             );
+          };
 
           return (
             <TouchableRipple
@@ -95,7 +98,10 @@ const StatusPoll: React.FC<IStatusPoll> = ({ status, translation }) => {
                 ) : (
                   <RadioButton
                     status={selected.includes(index) ? 'checked' : 'unchecked'}
-                    onPress={() => setSelected([index])}
+                    onPress={() => {
+                      haptics.selection();
+                      setSelected([index]);
+                    }}
                     value={option.title}
                     disabled={isPending}
                   />

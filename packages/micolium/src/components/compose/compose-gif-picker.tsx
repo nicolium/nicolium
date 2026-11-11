@@ -20,6 +20,7 @@ import { useDebounce } from '@/hooks/use-debounce';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useSearchGifs } from '@/queries/search/use-search-gifs';
 import { useCompose, useUploadCompose } from '@/stores/compose';
+import { haptics } from '@/utils/haptics';
 import { toast } from '@/utils/toast';
 
 import { EmptyMessage } from '../ui/empty-message';
@@ -51,7 +52,10 @@ const GifItem: React.FC<IGifItem> = ({ gif, onSelect, disabled }) => {
 
   return (
     <Pressable
-      onPress={() => onSelect(gif)}
+      onPress={() => {
+        haptics.selection();
+        onSelect(gif);
+      }}
       disabled={disabled}
       style={{
         flex: 1,

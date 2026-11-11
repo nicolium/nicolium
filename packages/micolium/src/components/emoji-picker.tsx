@@ -13,6 +13,7 @@ import emojiSearch, { type Emoji } from '@/emoji/search';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useEmojiPicker, useUiStoreActions } from '@/stores/ui';
+import { haptics } from '@/utils/haptics';
 
 import { Emoji as EmojiComponent } from './ui/emoji';
 import { EmptyMessage } from './ui/empty-message';
@@ -75,6 +76,7 @@ const CustomEmojiCategory: React.FC<ICustomEmojiCategory> = ({ category }) => {
             key={emoji.shortcode}
             onPress={() => {
               state?.onPick(emoji.shortcode, true);
+              haptics.selection();
               closeEmojiPicker();
             }}
             mode={selected ? 'contained-tonal' : 'outlined'}
@@ -136,6 +138,7 @@ const EmojiCategory: React.FC<IEmojiCategory> = ({ category }) => {
         key={emoji}
         onPress={() => {
           state?.onPick(emoji, false);
+          haptics.selection();
           closeEmojiPicker();
         }}
         mode={state?.selected?.includes(emoji) ? 'contained-tonal' : 'outlined'}
@@ -173,6 +176,7 @@ const EmojiSearchResults: React.FC<IEmojiSearchResults> = ({ searchResults }) =>
         key={emoji.id}
         onPress={() => {
           state?.onPick(emoji.custom ? emoji.id : emoji.native, emoji.custom);
+          haptics.selection();
           closeEmojiPicker();
         }}
         mode={

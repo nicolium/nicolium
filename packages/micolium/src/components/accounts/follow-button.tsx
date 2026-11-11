@@ -19,6 +19,7 @@ import {
   useUnfollowAccountMutation,
 } from '@/queries/accounts/use-relationship';
 import { Alert } from '@/stores/alerts';
+import { haptics } from '@/utils/haptics';
 
 import { iconHelper } from '../ui/icon';
 
@@ -68,6 +69,7 @@ const FollowButton: React.FC<IFollowButton> = ({ id, simple }) => {
   if (relationship?.following || relationship?.requested) {
     const handleUnfollow = () => {
       if (relationship.requested) {
+        haptics.toggleOff();
         unfollowAccount();
       } else {
         Alert.alert(
@@ -84,7 +86,10 @@ const FollowButton: React.FC<IFollowButton> = ({ id, simple }) => {
             {
               text: intl.formatMessage(messages.unfollowConfirm),
               style: 'destructive',
-              onPress: () => unfollowAccount(),
+              onPress: () => {
+                haptics.toggleOff();
+                unfollowAccount();
+              },
             },
           ],
         );
@@ -133,7 +138,10 @@ const FollowButton: React.FC<IFollowButton> = ({ id, simple }) => {
         onDismiss={() => setShowMenu(false)}
         anchor={
           <SplitButton
-            onPress={() => unfollowAccount()}
+            onPress={() => {
+              haptics.toggleOff();
+              unfollowAccount();
+            }}
             icon={relationship.notifying ? iconHelper(BellSimpleIcon) : undefined}
             label={intl.formatMessage(messages.following)}
             onTrailingPress={() => setShowMenu(true)}
@@ -232,7 +240,14 @@ const FollowButton: React.FC<IFollowButton> = ({ id, simple }) => {
 
   if (relationship?.requested) {
     return (
-      <Button mode='contained-tonal' onPress={() => unfollowAccount()} loading={isPendingFollow}>
+      <Button
+        mode='contained-tonal'
+        onPress={() => {
+          haptics.toggleOff();
+          unfollowAccount();
+        }}
+        loading={isPendingFollow}
+      >
         <FormattedMessage id='account.requested_small' defaultMessage='Follow requested' />
       </Button>
     );
@@ -241,7 +256,11 @@ const FollowButton: React.FC<IFollowButton> = ({ id, simple }) => {
   return (
     <Button
       mode='contained'
-      onPress={() => followAccount(undefined)}
+      onPress={() =>
+        followAccount(undefined, {
+          onSuccess: () => haptics.toggleOn(),
+        })
+      }
       disabled={!relationship || relationship?.blocked_by}
       loading={!relationship || isPendingFollow}
     >

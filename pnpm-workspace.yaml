@@ -28,6 +28,7 @@ minimumReleaseAgeExclude:
   - '@react-navigation/routers@8.0.0-alpha.21'
   - react-native-tab-view@5.0.0-alpha.18
   - '@expo/ui@58.0.26'
+  - expo-haptics@58.0.8
 overrides:
   "@babel/core@7": ^7.29.7
   "@babel/runtime": ^7.26.10

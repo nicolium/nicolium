@@ -27,6 +27,7 @@ import {
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
 import { useUiStoreActions } from '@/stores/ui';
+import { haptics } from '@/utils/haptics';
 import { getSegmentedMenuStyles } from '@/utils/themes';
 import { toast } from '@/utils/toast';
 
@@ -175,6 +176,7 @@ const ScheduleReblog: React.FC<IScheduleReblog> = ({ status, visible, setVisible
               },
               {
                 onSuccess: () => {
+                  haptics.confirm();
                   const openedToast = toast.success(intl.formatMessage(messages.scheduledSuccess), {
                     action: {
                       label: intl.formatMessage(messages.view),
@@ -187,6 +189,7 @@ const ScheduleReblog: React.FC<IScheduleReblog> = ({ status, visible, setVisible
                   setVisible(false);
                 },
                 onError: () => {
+                  haptics.reject();
                   toast.error(intl.formatMessage(messages.scheduledFail));
                 },
               },
@@ -229,18 +232,17 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
   const publicStatus = ['public', 'unlisted', 'group'].includes(status.visibility);
 
   const handleReblog = () => {
-    if (status.reblogged) unreblogStatus();
+    if (status.reblogged)
+      unreblogStatus(undefined, {
+        onSuccess: () => haptics.toggleOff(),
+      });
     else
-      doReblog(
-        undefined,
-        approvalRequired
-          ? () => {
-              if (approvalRequired) {
-                toast.info(intl.formatMessage(messages.reblogApprovalRequired));
-              }
-            }
-          : undefined,
-      );
+      doReblog(undefined, () => {
+        haptics.toggleOn();
+        if (approvalRequired) {
+          toast.info(intl.formatMessage(messages.reblogApprovalRequired));
+        }
+      });
   };
 
   const handleQuote = () => {
@@ -262,11 +264,13 @@ const ReblogAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => {
         {...props}
         onLongPress={
           !fromInteractAs && status.reblogs_count
-            ? () =>
+            ? () => {
+                haptics.longPress();
                 navigation.navigate('status', {
                   screen: 'reblogs',
                   params: { id: status.id },
-                })
+                });
+              }
             : undefined
         }
       />
@@ -357,9 +361,12 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =
         }}
         onPress={() =>
           status.favourited
-            ? unfavouriteStatus()
+            ? unfavouriteStatus(undefined, {
+                onSuccess: () => haptics.toggleOff(),
+              })
             : favouriteStatus(undefined, {
                 onSuccess: () => {
+                  haptics.toggleOn();
                   if (status.interaction_policy.can_favourite.manual_approval.includes('me')) {
                     toast.info(intl.formatMessage(messages.favouriteApprovalRequired));
                   }
@@ -375,11 +382,14 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =
         {...props}
         onLongPress={
           !fromInteractAs && status.favourites_count
-            ? () =>
+            ? () => {
+              console.log('huj')
+                haptics.longPress().finally(console.log);
                 navigation.navigate('status', {
                   screen: 'favourites',
                   params: { id: status.id },
-                })
+                });
+              }
             : undefined
         }
       />
@@ -454,11 +464,13 @@ const ReactionAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =>
       {...props}
       onLongPress={
         !fromInteractAs && status.emoji_reactions.length
-          ? () =>
+          ? () => {
+              haptics.longPress();
               navigation.navigate('status', {
                 screen: 'reactions',
                 params: { id: status.id },
-              })
+              });
+            }
           : undefined
       }
     />
@@ -487,7 +499,15 @@ const DislikeAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => 
             icon={(props) => (
               <ThumbsDownIcon {...props} weight={status.disliked ? 'fill' : undefined} />
             )}
-            onPress={() => (status.disliked ? undislikeStatus : dislikeStatus)()}
+            onPress={() =>
+              status.disliked
+                ? undislikeStatus(undefined, {
+                    onSuccess: () => haptics.toggleOff(),
+                  })
+                : dislikeStatus(undefined, {
+                    onSuccess: () => haptics.toggleOn(),
+                  })
+            }
             disabled={isPendingDislike}
             style={{ margin: -4, height: 40, width: 40 }}
             selected={status.disliked}
@@ -497,11 +517,13 @@ const DislikeAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) => 
             {...props}
             onLongPress={
               !fromInteractAs && status.dislikes_count
-                ? () =>
+                ? () => {
+                    haptics.longPress();
                     navigation.navigate('status', {
                       screen: 'dislikes',
                       params: { id: status.id },
-                    })
+                    });
+                  }
                 : undefined
             }
           />
