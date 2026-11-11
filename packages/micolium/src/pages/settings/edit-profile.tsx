@@ -6,6 +6,8 @@ import {
   TextInput,
   useTheme,
 } from '@mkljczk/react-native-paper';
+import { Image } from 'expo-image';
+import { ImagePickerAsset } from 'expo-image-picker';
 import { pick } from 'lodash-es';
 import { create } from 'mutative';
 import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
@@ -14,9 +16,10 @@ import { XIcon } from 'phosphor-react-native/src/icons/X';
 import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { ScrollView, useColorScheme, View } from 'react-native';
+import { Pressable, ScrollView, useColorScheme, View } from 'react-native';
 
 import { DateTimePicker } from '@/components/ui/date-time-picker';
+import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { iconHelper } from '@/components/ui/icon';
 import { type IListSections, List } from '@/components/ui/list';
@@ -290,6 +293,8 @@ const EditProfileScreen = ({
   const [hideNotificationContent, setHideNotificationContent] = React.useState(false);
   const [isChanged, setIsChanged] = React.useState(false);
   const [customCSSEditorExpanded, setCustomCSSEditorExpanded] = React.useState(false);
+  const [avatar, setAvatar] = React.useState<ImagePickerAsset | string>();
+  const [header, setHeader] = React.useState<ImagePickerAsset | string>();
 
   React.useEffect(() => {
     client.settings
@@ -299,6 +304,8 @@ const EditProfileScreen = ({
         const strangerNotifications =
           credentialAccount.__meta.pleroma?.notification_settings?.block_from_strangers === true;
         setData(credentials);
+        setAvatar(credentialAccount.avatar || undefined);
+        setHeader(credentialAccount.header || undefined);
         setMuteStrangers(strangerNotifications);
         setHideNotificationContent(
           credentialAccount.__meta.pleroma?.hide_notification_content ?? false,
@@ -329,8 +336,24 @@ const EditProfileScreen = ({
           ]),
         );
       }
-      // if (header.file !== null) params.header = header.file ?? '';
-      // if (avatar.file !== null) params.avatar = avatar.file ?? '';
+      if (typeof header === 'object') {
+        params.header = {
+          uri: header.uri,
+          name: header.fileName,
+          type: header.type,
+        } as unknown as File;
+      } else if (!header) {
+        params.header = '';
+      }
+      if (typeof avatar === 'object') {
+        params.avatar = {
+          uri: avatar.uri,
+          name: avatar.fileName,
+          type: avatar.type,
+        } as unknown as File;
+      } else if (!avatar) {
+        params.avatar = '';
+      }
 
       if (!instance.configuration.accounts?.allow_custom_css) delete params.custom_css;
 
@@ -696,30 +719,72 @@ const EditProfileScreen = ({
       </Appbar.Header>
       <ScrollView>
         <View style={{ padding: 16, paddingBottom: 0, gap: 12 }}>
-          {/* <View style={{ position: 'relative', marginBottom: 48 }}>
-            <View
-              style={{
-                borderRadius: theme.shapes.corner.medium,
-                borderWidth: 1,
-                borderColor: theme.colors.primary,
-                width: '100%',
-                aspectRatio: 3,
-              }}
-            ></View>
-            <View
-              style={{
-                borderRadius: 48,
-                borderWidth: 1,
-                borderColor: theme.colors.primary,
-                height: 96,
-                width: 96,
-                aspectRatio: 3,
-                position: 'absolute',
-                left: 16,
-                bottom: -48,
-              }}
-            ></View>
-          </View> */}
+          <View style={{ position: 'relative', marginBottom: -48 }}>
+            <DropdownMenu
+              fullWidth
+              trigger={
+                <View
+                  style={{
+                    borderRadius: theme.shapes.corner.medium,
+                    borderWidth: 1,
+                    borderColor: theme.colors.primary,
+                    width: '100%',
+                    aspectRatio: 3,
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Image
+                    source={typeof header === 'string' ? { uri: header } : header}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      backgroundColor: theme.colors.surfaceContainer,
+                    }}
+                    recyclingKey={typeof header === 'string' ? header : header?.uri}
+                  />
+                </View>
+              }
+              items={[{ key: 'remove-photo', type: 'button', label: 'huj', onPress: () => {} }]}
+            />
+            <View style={{ left: 16, bottom: 48 }}>
+              <DropdownMenu
+                trigger={
+                  <Pressable
+                    style={{
+                      borderRadius: 48,
+                      borderWidth: 1,
+                      borderColor: theme.colors.primary,
+                      height: 96,
+                      width: 96,
+                      maxWidth: 96,
+                      aspectRatio: 3,
+                      overflow: 'hidden',
+                      backgroundColor: theme.colors.surfaceContainer,
+                      zIndex: 10,
+                    }}
+                  >
+                    <Image
+                      source={typeof avatar === 'string' ? { uri: avatar } : avatar}
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                      }}
+                      recyclingKey={typeof avatar === 'string' ? avatar : avatar?.uri}
+                    />
+                  </Pressable>
+                }
+                items={[
+                  {
+                    key: 'remove-avatar',
+                    type: 'button',
+                    label: 'Clear avatar image',
+                    destructive: true,
+                    onPress: () => setAvatar(undefined),
+                  },
+                ]}
+              />
+            </View>
+          </View>
 
           <TextInput
             variant='outlined'

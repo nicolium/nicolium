@@ -1693,12 +1693,12 @@ const useUploadCompose = (composeId: string) => {
         draft.isUploading = true;
       });
 
-      files.forEach((f, i) => {
+      files.forEach((file, i) => {
         if (mediaCount + i > attachmentLimit - 1) return;
 
         uploadFile(
           client,
-          f,
+          file,
           descriptions?.[i],
           intl,
           (data) =>
