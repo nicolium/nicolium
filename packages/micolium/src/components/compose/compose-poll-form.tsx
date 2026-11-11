@@ -89,7 +89,6 @@ const Option: React.FC<IOption> = ({
     onFinalize: () => {
       const step = rowHeight.value;
       const target = step ? clamp(Math.round(index + dragY.value / step), 0, count - 1) : index;
-      console.log(target);
 
       if (target !== index) {
         scheduleOnRN(onMove, index, target);
