@@ -2,7 +2,7 @@ import { Icon, TextInput, useTheme } from '@mkljczk/react-native-paper';
 import { useQueryClient } from '@tanstack/react-query';
 import { GlassView } from 'expo-glass-effect';
 import { FolderSimpleIcon } from 'phosphor-react-native/src/icons/FolderSimple';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, View } from 'react-native';
 
@@ -22,6 +22,7 @@ import { toast } from '@/utils/toast';
 
 import { DialogOrSheet } from './ui/dialog-or-sheet';
 import { Emoji } from './ui/emoji';
+import { type IListSections, List } from './ui/list';
 
 const messages = defineMessages({
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
@@ -74,6 +75,27 @@ const messages = defineMessages({
   listEditSuccess: { id: 'lists.edit.success', defaultMessage: 'List updated' },
   circleEditFail: { id: 'circles.edit.error', defaultMessage: 'Failed to update circle' },
   circleEditSuccess: { id: 'circles.edit.success', defaultMessage: 'Circle updated' },
+  showRepliesTo: {
+    id: 'lists.edit.show_replies_to',
+    defaultMessage: 'Include replies from list members to',
+  },
+  repliesPolicyNone: { id: 'lists.replies_policy.none', defaultMessage: 'No one' },
+  repliesPolicyList: { id: 'lists.replies_policy.list', defaultMessage: 'Members of the list' },
+  repliesPolicyFollowed: {
+    id: 'lists.replies_policy.followed',
+    defaultMessage: 'Any followed user',
+  },
+  exclusive: { id: 'lists.exclusive', defaultMessage: 'Hide members in Home' },
+  exclusiveHint: {
+    id: 'lists.exclusive.hint',
+    defaultMessage:
+      'If someone is on this list, hide them in your Home feed to avoid seeing their posts twice.',
+  },
+  notifications: { id: 'lists.notifications', defaultMessage: 'Subscribe' },
+  notificationsHint: {
+    id: 'lists.notifications.hint',
+    defaultMessage: 'Receive notifications for new posts in the list.',
+  },
 });
 
 interface ICreateListDialog {
@@ -96,6 +118,10 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDi
   const [closing, setClosing] = React.useState(false);
   const [emoji, setEmoji] = React.useState<string | null>(null);
   const [title, setTitle] = React.useState('');
+
+  const [repliesPolicy, setRepliesPolicy] = React.useState<'none' | 'list' | 'followed'>('list');
+  const [exclusive, setExclusive] = React.useState(false);
+  const [notify, setNotify] = React.useState(false);
 
   const emojiUrl = React.useMemo(() => {
     if (emoji)
@@ -219,7 +245,10 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDi
         (id ? updateCircle : createCircle)(value, { onSuccess, onError });
         break;
       case 'list':
-        (id ? updateList : createList)({ title: value, emoji: emojiParam }, { onSuccess, onError });
+        (id ? updateList : createList)(
+          { title: value, emoji: emojiParam, replies_policy: repliesPolicy, exclusive, notify },
+          { onSuccess, onError },
+        );
         break;
     }
   };
@@ -279,6 +308,50 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDi
   ) : (
     <Icon source={FolderSimpleIcon} size={24} />
   );
+
+  const formItems = useMemo(() => {
+    const section: IListSections[number] = {
+      items: [],
+    };
+
+    if (type === 'list' && features.listsRepliesPolicy) {
+      section.items.push({
+        type: 'select',
+        label: intl.formatMessage(messages.showRepliesTo),
+        active: repliesPolicy ?? 'list',
+        onChange: setRepliesPolicy,
+        options: [
+          { value: 'none', label: intl.formatMessage(messages.repliesPolicyNone) },
+          { value: 'list', label: intl.formatMessage(messages.repliesPolicyList) },
+          { value: 'followed', label: intl.formatMessage(messages.repliesPolicyFollowed) },
+        ],
+      });
+    }
+
+    if (type === 'list' && features.listsExclusive) {
+      section.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.exclusive),
+        sublabel: intl.formatMessage(messages.exclusiveHint),
+        active: exclusive,
+        onPress: () => setExclusive((value) => !value),
+      });
+    }
+
+    if (type === 'list' && features.listsNotifications) {
+      section.items.push({
+        type: 'toggle',
+        label: intl.formatMessage(messages.notifications),
+        sublabel: intl.formatMessage(messages.notificationsHint),
+        active: notify,
+        onPress: () => setNotify((value) => !value),
+      });
+    }
+
+    if (!section.items.length) return [];
+
+    return [section];
+  }, [features, repliesPolicy, exclusive, notify]);
 
   return (
     <DialogOrSheet
@@ -352,6 +425,8 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDi
           />
         </View>
       </View>
+
+      <List style={{ marginHorizontal: -16 }} sections={formItems} />
     </DialogOrSheet>
   );
 };

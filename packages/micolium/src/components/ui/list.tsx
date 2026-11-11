@@ -4,8 +4,9 @@ import {
   Toggle as SwiftUIToggle,
 } from '@expo/ui/swift-ui';
 import { labelsHidden } from '@expo/ui/swift-ui/modifiers';
-import { List as PaperList, Switch, Text, useTheme } from '@mkljczk/react-native-paper';
+import { Icon, List as PaperList, Switch, Text, useTheme } from '@mkljczk/react-native-paper';
 import { CaretRightIcon } from 'phosphor-react-native/src/icons/CaretRight';
+import { CaretUpDownIcon } from 'phosphor-react-native/src/icons/CaretUpDown';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Pressable, type StyleProp, View, type ViewStyle } from 'react-native';
@@ -88,6 +89,8 @@ const List: React.FC<IList> = ({ sections, style }) => {
   const theme = useTheme();
   const intl = useIntl();
 
+  if (!sections.length) return null;
+
   return sections.map((section, index) => (
     <PaperList.Section
       key={index}
@@ -138,6 +141,8 @@ const List: React.FC<IList> = ({ sections, style }) => {
                   titleStyle={
                     item.role === 'destructive' ? { color: theme.colors.error } : undefined
                   }
+                  titleNumberOfLines={0}
+                  descriptionNumberOfLines={0}
                 />
               );
             }
@@ -151,6 +156,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
                   onPress={item.onPress}
                   disabled={item.disabled}
                   titleNumberOfLines={0}
+                  descriptionNumberOfLines={0}
                   right={() =>
                     glassEffect ? (
                       <Pressable onPress={() => {}}>
@@ -185,19 +191,24 @@ const List: React.FC<IList> = ({ sections, style }) => {
                       description={item.sublabel}
                       style={styles}
                       right={() => (
-                        <Text>
-                          {Array.isArray(item.active)
-                            ? intl.formatList(
-                                item.options
-                                  .filter((option) => item.active.includes(option.value))
-                                  .map((option) => option.label),
-                                { type: 'conjunction' },
-                              )
-                            : item.options.find((option) => option.value === item.active)?.label}
-                        </Text>
+                        <View style={{ gap: 2, alignItems: 'center', flexDirection: 'row' }}>
+                          <Text>
+                            {Array.isArray(item.active)
+                              ? intl.formatList(
+                                  item.options
+                                    .filter((option) => item.active.includes(option.value))
+                                    .map((option) => option.label),
+                                  { type: 'conjunction' },
+                                )
+                              : item.options.find((option) => option.value === item.active)?.label}
+                          </Text>
+                          <Icon source={CaretUpDownIcon} size={16} />
+                        </View>
                       )}
                       containerStyle={{ alignItems: 'center' }}
                       onPress={() => {}}
+                      titleNumberOfLines={0}
+                      descriptionNumberOfLines={0}
                     />
                   }
                   items={[
@@ -227,6 +238,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
                   style={styles}
                   disabled={item.disabled}
                   titleNumberOfLines={0}
+                  descriptionNumberOfLines={0}
                   right={() => (
                     <SwiftUIHost matchContents>
                       <SwiftUIColorPicker
@@ -262,6 +274,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
                   style={styles}
                   disabled={item.disabled}
                   titleNumberOfLines={0}
+                  descriptionNumberOfLines={0}
                   right={
                     item.onPress
                       ? (props) => <PaperList.Icon icon={iconHelper(CaretRightIcon)} {...props} />

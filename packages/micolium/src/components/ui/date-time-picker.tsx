@@ -75,6 +75,8 @@ const DateTimePicker: React.FC<IDateTimePicker> = ({
         containerStyle={{ alignItems: 'center' }}
         onPress={() => setDisplayed('date')}
         style={listItemStyle}
+        titleNumberOfLines={0}
+        descriptionNumberOfLines={0}
       />
       {displayed && (
         <JetpackHost matchContents={{ vertical: true }} style={{ width: '100%' }}>
