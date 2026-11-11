@@ -333,6 +333,7 @@ const ComposeFooter: React.FC<IComposeFooter> = ({
     <ScrollView
       horizontal
       contentContainerStyle={{
+        flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',

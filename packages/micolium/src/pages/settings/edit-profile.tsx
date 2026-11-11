@@ -696,6 +696,31 @@ const EditProfileScreen = ({
       </Appbar.Header>
       <ScrollView>
         <View style={{ padding: 16, paddingBottom: 0, gap: 12 }}>
+          {/* <View style={{ position: 'relative', marginBottom: 48 }}>
+            <View
+              style={{
+                borderRadius: theme.shapes.corner.medium,
+                borderWidth: 1,
+                borderColor: theme.colors.primary,
+                width: '100%',
+                aspectRatio: 3,
+              }}
+            ></View>
+            <View
+              style={{
+                borderRadius: 48,
+                borderWidth: 1,
+                borderColor: theme.colors.primary,
+                height: 96,
+                width: 96,
+                aspectRatio: 3,
+                position: 'absolute',
+                left: 16,
+                bottom: -48,
+              }}
+            ></View>
+          </View> */}
+
           <TextInput
             variant='outlined'
             label={intl.formatMessage(messages.displayNameLabel)}
@@ -746,7 +771,7 @@ const EditProfileScreen = ({
           <View style={{ gap: 2 }}>
             {data.fields.map((field, index, fields) => {
               const styles = [
-                getSegmentedMenuStyles(theme, false, index, fields.length, 'high'),
+                getSegmentedMenuStyles(theme, false, index, fields.length),
                 { marginHorizontal: 16 },
               ];
 

@@ -50,7 +50,7 @@ const getSegmentedMenuStyles = (
   active: boolean,
   index: number,
   length: number,
-  variant: SurfaceColorVariant = 'normal',
+  variant: SurfaceColorVariant = 'high',
 ): StyleProp<ViewStyle> => ({
   backgroundColor: active ? colors.secondaryContainer : colors[getColorVariant(variant)],
   borderTopLeftRadius: index === 0 ? 16 : 4,

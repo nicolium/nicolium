@@ -97,7 +97,7 @@ const List: React.FC<IList> = ({ sections, style }) => {
       <View style={{ gap: 2 }}>
         {section.items.map((item, index) => {
           const styles = [
-            getSegmentedMenuStyles(theme, false, index, section.items.length, 'high'),
+            getSegmentedMenuStyles(theme, false, index, section.items.length),
             { marginHorizontal: 16 },
           ];
 

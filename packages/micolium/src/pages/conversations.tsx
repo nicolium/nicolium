@@ -99,15 +99,13 @@ const Conversation: React.FC<IConversation> = ({ conversation }) => {
               style={{ flexShrink: 1, marginHorizontal: 16, marginTop: 8 }}
               textStyle={{ flexShrink: 1 }}
             >
-              <Text variant='labelLarge'>
-                <FormattedMessage
-                  id='conversations.with_others'
-                  defaultMessage='Conversation with {accounts}'
-                  values={{
-                    accounts: <FormattedList type='conjunction' value={renderedAccounts} />,
-                  }}
-                />
-              </Text>
+              <FormattedMessage
+                id='conversations.with_others'
+                defaultMessage='Conversation with {accounts}'
+                values={{
+                  accounts: <FormattedList type='conjunction' value={renderedAccounts} />,
+                }}
+              />
             </Chip>
           </View>
         )}

@@ -354,11 +354,9 @@ const ComposeVisibilityDropdown: React.FC<IComposeVisibilityDropdown> = ({ compo
       mode='outlined'
       icon={iconHelper(getVisibilityIcon(visibility))}
       accessibilityLabel={intl.formatMessage(messages.changePrivacy)}
+      rightIcon={iconHelper(CaretDownIcon)}
     >
       {label}
-      <View style={{ paddingLeft: 4 }}>
-        <Icon source={iconHelper(CaretDownIcon)} size={16} color={colors.onSurfaceVariant} />
-      </View>
     </Chip>
   );
 

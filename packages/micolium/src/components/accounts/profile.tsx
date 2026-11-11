@@ -363,15 +363,12 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             </GlassView>
           </Pressable>
         ) : (
-          <Chip mode='outlined' accessibilityLabel={intl.formatMessage(messages.changeFilters)}>
+          <Chip
+            mode='outlined'
+            accessibilityLabel={intl.formatMessage(messages.changeFilters)}
+            rightIcon={iconHelper(CaretDownIcon)}
+          >
             {filtersLabel}
-            <View
-              style={{
-                paddingLeft: 4,
-              }}
-            >
-              <Icon source={iconHelper(CaretDownIcon)} size={16} color={colors.onSurfaceVariant} />
-            </View>
           </Chip>
         )
       }
@@ -669,7 +666,14 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           </>
         </CollapsibleContent>
       </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8, marginHorizontal: 16 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          gap: 8,
+          marginHorizontal: 16,
+        }}
+      >
         {timelineFiltersSelector}
         {pinnedCount.current > 3 && skipPinnedButton}
       </View>

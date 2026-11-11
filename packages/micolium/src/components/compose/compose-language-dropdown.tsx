@@ -319,11 +319,9 @@ const ComposeLanguageDropdown: React.FC<ICompose> = ({ composeId }) => {
       icon={iconHelper(TranslateIcon)}
       onPress={handlePress}
       accessibilityLabel={intl.formatMessage(messages.languagePrompt)}
+      rightIcon={iconHelper(CaretDownIcon)}
     >
       {label}
-      <View style={{ paddingLeft: 4 }}>
-        <Icon source={iconHelper(CaretDownIcon)} size={16} color={colors.onSurfaceVariant} />
-      </View>
     </Chip>
   );
 

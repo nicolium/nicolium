@@ -81,7 +81,7 @@ importers:
         version: 4.0.1(7a735a31309dc3f85a644c110e28d471)
       '@mkljczk/react-native-paper':
         specifier: github:mkljczk/react-native-paper
-        version: https://codeload.github.com/mkljczk/react-native-paper/tar.gz/c44cb5e7cba4faaab68832bdc25b5ead42a90c94(7850975a238218c7b4294144bc7db0e7)
+        version: https://codeload.github.com/mkljczk/react-native-paper/tar.gz/fe1403d038992fc86253a14c1f61b220f0ca23e4(7850975a238218c7b4294144bc7db0e7)
       '@native-html/render':
         specifier: ^1.0.3
         version: 1.0.3(@types/react@19.3.0)(react-native@0.88.1(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/metro-config@0.88.1(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(react@19.3.0)
@@ -2923,8 +2923,8 @@ packages:
     peerDependencies:
       astro: ^7.0.0
 
-  '@mkljczk/react-native-paper@https://codeload.github.com/mkljczk/react-native-paper/tar.gz/c44cb5e7cba4faaab68832bdc25b5ead42a90c94':
-    resolution: {gitHosted: true, integrity: sha512-yUMEcV4gfc3h10WLD1d779g3bl3zyBn5Sy8aRl2qdnaKuWstfnDP6yrvAnGtyPaZGpkyQvlofbnQotku4DilIg==, tarball: https://codeload.github.com/mkljczk/react-native-paper/tar.gz/c44cb5e7cba4faaab68832bdc25b5ead42a90c94}
+  '@mkljczk/react-native-paper@https://codeload.github.com/mkljczk/react-native-paper/tar.gz/fe1403d038992fc86253a14c1f61b220f0ca23e4':
+    resolution: {gitHosted: true, integrity: sha512-27tUzvIKNEixUJSFvUtRaMXi8ugS6g+0kgnMarGYLHDsZ/e4+hGrWvYWf5/c25/JqiszevCg22l+3qHN7l1E0A==, tarball: https://codeload.github.com/mkljczk/react-native-paper/tar.gz/fe1403d038992fc86253a14c1f61b220f0ca23e4}
     version: 6.0.0-alpha.1
     peerDependencies:
       react: '*'
@@ -12626,7 +12626,7 @@ snapshots:
     dependencies:
       astro: 7.3.0(@astrojs/markdown-remark@7.3.0(supports-color@10.2.2))(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@26.1.1)(sass-embedded@1.100.0)(sass@1.100.0)(terser@5.47.1)(yaml@2.9.0)
 
-  '@mkljczk/react-native-paper@https://codeload.github.com/mkljczk/react-native-paper/tar.gz/c44cb5e7cba4faaab68832bdc25b5ead42a90c94(7850975a238218c7b4294144bc7db0e7)':
+  '@mkljczk/react-native-paper@https://codeload.github.com/mkljczk/react-native-paper/tar.gz/fe1403d038992fc86253a14c1f61b220f0ca23e4(7850975a238218c7b4294144bc7db0e7)':
     dependencies:
       '@callstack/react-theme-provider': 3.0.9(react@19.3.0)
       color: 3.2.1

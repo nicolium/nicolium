@@ -1,7 +1,7 @@
 packages:
   - 'packages/*'
 allowBuilds:
-  '@mkljczk/react-native-paper@https://codeload.github.com/mkljczk/react-native-paper/tar.gz/c44cb5e7cba4faaab68832bdc25b5ead42a90c94': true
+  '@mkljczk/react-native-paper@https://codeload.github.com/mkljczk/react-native-paper/tar.gz/fe1403d038992fc86253a14c1f61b220f0ca23e4': true
   '@parcel/watcher': false
   '@react-native-menu/menu@https://codeload.github.com/mkljczk/react-native-menu-menu/tar.gz/9a520af513fe38fa09f797294b50c85bc8ed6a4e': set this to true or false
   core-js: false
