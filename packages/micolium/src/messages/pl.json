@@ -141,6 +141,7 @@
   "compose_form.approval_required": "Odpowiedź musi zostać zatwierdzona przez jej autora.",
   "compose_form.approval_required.quote": "Cytat musi zostać zatwierdzony przez osobę, która utworzyła wpis.",
   "compose_form.content_type.change": "Zmień typ treści",
+  "compose_form.gif_button": "Szukaj GIF-ów",
   "compose_form.interaction_policy.label": "Zarządzaj zasadami interakcji",
   "compose_form.placeholder": "Właśnie wróciłam z Kutna.",
   "compose_form.poll.add_option": "Dodaj opcję",

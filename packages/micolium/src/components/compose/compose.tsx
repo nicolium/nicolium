@@ -48,6 +48,7 @@ import { iconHelper } from '../ui/icon';
 
 import { ComposeAttachmentThumbs } from './compose-attachment-thumbs';
 import { ComposeContentTypeButton } from './compose-content-type-button';
+import { ComposeGifPickerButton } from './compose-gif-picker';
 import { ComposeInteractionPolicy } from './compose-interaction-policy';
 import { ComposeLanguageDropdown } from './compose-language-dropdown';
 import { ComposePollForm } from './compose-poll-form';
@@ -329,8 +330,18 @@ const ComposeFooter: React.FC<IComposeFooter> = ({
   };
 
   const footerContent = (
-    <>
+    <ScrollView
+      horizontal
+      contentContainerStyle={{
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        paddingVertical: glassEffect ? 4 : 8,
+        paddingHorizontal: 12,
+      }}
+    >
       <ComposeUploadButton composeId={COMPOSE_ID} />
+      {features.gifPicker && <ComposeGifPickerButton composeId={COMPOSE_ID} />}
       {features.polls && (
         <IconButton
           icon={iconHelper(ChartBarIcon)}
@@ -403,7 +414,7 @@ const ComposeFooter: React.FC<IComposeFooter> = ({
           {publishButtonLabel}
         </Button>
       )}
-    </>
+    </ScrollView>
   );
 
   return (
@@ -416,14 +427,9 @@ const ComposeFooter: React.FC<IComposeFooter> = ({
         <GlassView
           onLayout={(e) => onHeightChange(e.nativeEvent.layout.height)}
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
             marginHorizontal: 12,
             borderRadius: 28,
             borderCurve: 'continuous',
-            paddingHorizontal: 12,
-            paddingVertical: 4,
           }}
         >
           {footerContent}
@@ -432,11 +438,6 @@ const ComposeFooter: React.FC<IComposeFooter> = ({
         <View
           onLayout={(e) => onHeightChange(e.nativeEvent.layout.height)}
           style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            paddingVertical: 8,
-            paddingHorizontal: 12,
             backgroundColor: colors.secondaryContainer,
           }}
         >

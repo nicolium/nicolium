@@ -66,163 +66,158 @@ const ItemSeparator = () => <View style={{ height: 2 }} />;
 interface ILanguagePicker {
   composeId: string;
   onClose: () => void;
+  ref?: React.Ref<FlashListRef<[Language, string, string]>>;
 }
 
-const LanguagePicker = React.forwardRef<FlashListRef<[Language, string, string]>, ILanguagePicker>(
-  ({ composeId, onClose }, ref) => {
-    const theme = useTheme();
-    const intl = useIntl();
-    const features = useFeatures();
-    const { updateCompose } = useComposeActions();
-    const locales = useLocales();
-    const localeLanguages = locales.map(({ languageCode }) => languageCode);
+const LanguagePicker: React.FC<ILanguagePicker> = ({ composeId, onClose, ref }) => {
+  const theme = useTheme();
+  const intl = useIntl();
+  const features = useFeatures();
+  const { updateCompose } = useComposeActions();
+  const locales = useLocales();
+  const localeLanguages = locales.map(({ languageCode }) => languageCode);
 
-    const [searchValue, setSearchValue] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState('');
 
-    const compose = useCompose(composeId);
-    const { language, modifiedLanguage, textMap } = compose;
+  const compose = useCompose(composeId);
+  const { language, modifiedLanguage, textMap } = compose;
 
-    const hasMultipleLanguages = !!Object.keys(textMap).length;
+  const hasMultipleLanguages = !!Object.keys(textMap).length;
 
-    const handleOptionClick = (value: Language) => {
-      if (Object.keys(textMap).length) {
-        if (!(value in textMap || language === value)) return;
+  const handleOptionClick = (value: Language) => {
+    if (Object.keys(textMap).length) {
+      if (!(value in textMap || language === value)) return;
 
-        updateCompose(composeId, (draft) => {
-          draft.modifiedLanguage = value;
-        });
-      } else {
-        updateCompose(composeId, (draft) => {
-          draft.language = value;
-          draft.modifiedLanguage = value;
-        });
-      }
-
-      onClose();
-    };
-
-    const handleAddLanguageClick = (value: Language) => {
       updateCompose(composeId, (draft) => {
-        draft.textMap[value] = draft.text;
-        draft.spoilerTextMap[value] = draft.spoilerText;
-        if (draft.poll)
-          draft.poll.options_map.forEach(
-            (option, key) => (option[value] = draft.poll!.options[key]),
-          );
+        draft.modifiedLanguage = value;
       });
-    };
-
-    const handleDeleteLanguageClick = (value: Language) => {
+    } else {
       updateCompose(composeId, (draft) => {
-        delete draft.textMap[value];
-        delete draft.spoilerTextMap[value];
-        if (draft.modifiedLanguage === value) {
-          draft.modifiedLanguage = Object.keys(draft.textMap)[0];
+        draft.language = value;
+        draft.modifiedLanguage = value;
+      });
+    }
+
+    onClose();
+  };
+
+  const handleAddLanguageClick = (value: Language) => {
+    updateCompose(composeId, (draft) => {
+      draft.textMap[value] = draft.text;
+      draft.spoilerTextMap[value] = draft.spoilerText;
+      if (draft.poll)
+        draft.poll.options_map.forEach((option, key) => (option[value] = draft.poll!.options[key]));
+    });
+  };
+
+  const handleDeleteLanguageClick = (value: Language) => {
+    updateCompose(composeId, (draft) => {
+      delete draft.textMap[value];
+      delete draft.spoilerTextMap[value];
+      if (draft.modifiedLanguage === value) {
+        draft.modifiedLanguage = Object.keys(draft.textMap)[0];
+      }
+    });
+  };
+
+  const search = (value: string) => {
+    if (value === '') {
+      return languages.toSorted((a, b) => {
+        // Push current selection to the top of the list
+
+        if (a[0] in textMap) {
+          if (b[0] === language) return 1;
+          return -1;
+        }
+        if (b[0] in textMap) {
+          if (a[0] === language) return -1;
+          return 1;
+        }
+        if (a[0] === language) {
+          return -1;
+        } else if (b[0] === language) {
+          return 1;
+        } else {
+          // Sort according to device locales
+
+          const indexOfA = localeLanguages.indexOf(a[0]);
+          const indexOfB = localeLanguages.indexOf(b[0]);
+
+          return (indexOfA > -1 ? indexOfA : Infinity) - (indexOfB > -1 ? indexOfB : Infinity);
         }
       });
-    };
+    }
 
-    const search = (value: string) => {
-      if (value === '') {
-        return languages.toSorted((a, b) => {
-          // Push current selection to the top of the list
+    return fuzzysort
+      .go(value, languages, {
+        keys: ['0', '1', '2'],
+        limit: 5,
+        threshold: -10000,
+      })
+      .map((result) => result.obj);
+  };
 
-          if (a[0] in textMap) {
-            if (b[0] === language) return 1;
-            return -1;
-          }
-          if (b[0] in textMap) {
-            if (a[0] === language) return -1;
-            return 1;
-          }
-          if (a[0] === language) {
-            return -1;
-          } else if (b[0] === language) {
-            return 1;
-          } else {
-            // Sort according to device locales
+  const deferredSearchValue = React.useDeferredValue(searchValue);
+  const results = React.useMemo(() => search(deferredSearchValue), [deferredSearchValue]);
 
-            const indexOfA = localeLanguages.indexOf(a[0]);
-            const indexOfB = localeLanguages.indexOf(b[0]);
-
-            return (indexOfA > -1 ? indexOfA : Infinity) - (indexOfB > -1 ? indexOfB : Infinity);
-          }
-        });
+  return (
+    <FlashList
+      ref={ref}
+      data={results}
+      extraData={compose}
+      keyExtractor={([code]) => code}
+      ListHeaderComponent={
+        <Searchbar
+          placeholder={intl.formatMessage(messages.search)}
+          value={searchValue}
+          onChangeText={setSearchValue}
+          style={{
+            marginHorizontal: 0,
+            marginBottom: 16,
+            borderColor: theme.colors.outlineVariant,
+            borderWidth: 1,
+          }}
+        />
       }
+      ItemSeparatorComponent={ItemSeparator}
+      renderItem={({ item: [code, name], index }) => {
+        const active = code === language;
+        const modified = code === (modifiedLanguage ?? language);
+        const available = !hasMultipleLanguages || code in textMap || active;
 
-      return fuzzysort
-        .go(value, languages, {
-          keys: ['0', '1', '2'],
-          limit: 5,
-          threshold: -10000,
-        })
-        .map((result) => result.obj);
-    };
-
-    const deferredSearchValue = React.useDeferredValue(searchValue);
-    const results = React.useMemo(() => search(deferredSearchValue), [deferredSearchValue]);
-
-    return (
-      <FlashList
-        ref={ref}
-        data={results}
-        extraData={compose}
-        keyExtractor={([code]) => code}
-        ListHeaderComponent={
-          <Searchbar
-            placeholder={intl.formatMessage(messages.search)}
-            value={searchValue}
-            onChangeText={setSearchValue}
-            style={{
-              marginHorizontal: 0,
-              marginBottom: 16,
-              borderColor: theme.colors.outlineVariant,
-              borderWidth: 1,
-            }}
+        return (
+          <List.Item
+            title={name}
+            onPress={() => handleOptionClick(code)}
+            style={getSegmentedMenuStyles(theme, modified, index, results.length)}
+            titleStyle={{ opacity: available ? 1 : 0.38 }}
+            right={({ style }) =>
+              features.multiLanguage && !!language && !active ? (
+                code in textMap ? (
+                  <IconButton
+                    icon={iconHelper(MinusIcon)}
+                    style={[style, { marginVertical: -8, marginRight: -8 }]}
+                    onPress={() => handleDeleteLanguageClick(code)}
+                    accessibilityLabel={intl.formatMessage(messages.deleteLanguage)}
+                  />
+                ) : (
+                  <IconButton
+                    icon={iconHelper(PlusIcon)}
+                    style={[style, { marginVertical: -8, marginRight: -8 }]}
+                    onPress={() => handleAddLanguageClick(code)}
+                    accessibilityLabel={intl.formatMessage(messages.addLanguage)}
+                  />
+                )
+              ) : active ? (
+                <List.Icon icon={iconHelper(CheckIcon)} style={style} />
+              ) : null
+            }
           />
-        }
-        ItemSeparatorComponent={ItemSeparator}
-        renderItem={({ item: [code, name], index }) => {
-          const active = code === language;
-          const modified = code === (modifiedLanguage ?? language);
-          const available = !hasMultipleLanguages || code in textMap || active;
-
-          return (
-            <List.Item
-              title={name}
-              onPress={() => handleOptionClick(code)}
-              style={getSegmentedMenuStyles(theme, modified, index, results.length)}
-              titleStyle={{ opacity: available ? 1 : 0.38 }}
-              right={({ style }) =>
-                features.multiLanguage && !!language && !active ? (
-                  code in textMap ? (
-                    <IconButton
-                      icon={iconHelper(MinusIcon)}
-                      style={[style, { marginVertical: -8, marginRight: -8 }]}
-                      onPress={() => handleDeleteLanguageClick(code)}
-                      accessibilityLabel={intl.formatMessage(messages.deleteLanguage)}
-                    />
-                  ) : (
-                    <IconButton
-                      icon={iconHelper(PlusIcon)}
-                      style={[style, { marginVertical: -8, marginRight: -8 }]}
-                      onPress={() => handleAddLanguageClick(code)}
-                      accessibilityLabel={intl.formatMessage(messages.addLanguage)}
-                    />
-                  )
-                ) : active ? (
-                  <List.Icon icon={iconHelper(CheckIcon)} style={style} />
-                ) : null
-              }
-            />
-          );
-        }}
-      />
-    );
-  },
-);
-
-LanguagePicker.displayName = 'LanguagePicker';
+        );
+      }}
+    />
+  );
+};
 
 interface IComposeLanguagePicker {
   composeId: string;

@@ -199,7 +199,11 @@ type PickerItem =
   | { type: 'row'; category: MartEmojiCategory | string }
   | { type: 'search-results'; category: '' };
 
-const EmojiPicker = React.forwardRef<FlashListRef<PickerItem>>((_, ref) => {
+interface IEmojiPicker {
+  ref?: React.Ref<FlashListRef<PickerItem>>;
+}
+
+const EmojiPicker: React.FC<IEmojiPicker> = ({ ref }) => {
   const { colors } = useTheme();
   const intl = useIntl();
   const state = useEmojiPicker();
@@ -293,9 +297,7 @@ const EmojiPicker = React.forwardRef<FlashListRef<PickerItem>>((_, ref) => {
       }}
     />
   );
-});
-
-EmojiPicker.displayName = 'EmojiPicker';
+};
 
 const EmojiPickerBottomSheet = () => {
   const glassEffect = useEnableLiquidGlass();
