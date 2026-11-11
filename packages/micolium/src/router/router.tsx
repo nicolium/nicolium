@@ -50,6 +50,7 @@ type SettingsStackParams = {
   follow_requests: undefined;
   blocks: undefined;
   mutes: undefined;
+  domain_blocks: undefined;
   muted_threads: undefined;
   followed_tags: undefined;
   filters: undefined;

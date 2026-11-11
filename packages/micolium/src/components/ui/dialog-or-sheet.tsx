@@ -4,7 +4,7 @@ import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import { Button, Dialog as PaperDialog, Text, useTheme } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
 import { SymbolView, type SFSymbol } from 'expo-symbols';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pressable, ScrollView, useColorScheme, View } from 'react-native';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -184,6 +184,14 @@ const Sheet: React.FC<IDialogOrSheet> = ({
 
 const Dialog: React.FC<IDialogOrSheet> = ({ children, title, actions, visible, handleDismiss }) => {
   const { colors } = useTheme();
+
+  useEffect(() => {
+    if (!visible && handleDismiss) {
+      setTimeout(() => {
+        handleDismiss();
+      }, 300);
+    }
+  }, [visible]);
 
   return (
     <PaperDialog visible={visible} onDismiss={handleDismiss}>

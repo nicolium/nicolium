@@ -12,6 +12,7 @@ import { AppearanceSettingsScreen } from './appearance-settings';
 import { ComposeSettingsScreen } from './compose-settings';
 import { ContentFilteringSettingsScreen } from './content-filtering-settings';
 import { ContentSettingsScreen } from './content-settings';
+import { DomainBlocksScreen } from './domain-blocks';
 import { EditProfileScreen } from './edit-profile';
 import { FilterEditorScreen, FiltersScreen } from './filters';
 import { FollowRequestsScreen } from './follow-requests';
@@ -125,6 +126,11 @@ const SettingsStackScreen = (_props: NativeStackScreenProps<RootStackParams, 'se
         name='mutes'
         component={MutesScreen}
         options={{ title: intl.formatMessage(messages.muted) }}
+      />
+      <SettingsStack.Screen
+        name='domain_blocks'
+        component={DomainBlocksScreen}
+        options={{ headerShown: false }}
       />
       <SettingsStack.Screen
         name='filters'

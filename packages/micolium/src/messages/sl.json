@@ -66,6 +66,7 @@
   "empty_column.account_timeline": "Tukaj ni tutov!",
   "empty_column.blocks": "Niste še blokirali nobenega uporabnika.",
   "empty_column.direct": "Nimate še nobenih neposrednih sporočil. Ko ga boste poslali ali prejeli, se bo prikazal tukaj.",
+  "empty_column.domain_blocks": "Še vedno ni skritih domen.",
   "empty_column.favourited_statuses": "Nimate priljubljenih tutov. Ko boste vzljubili kakšnega, se bo prikazal tukaj.",
   "empty_column.favourites": "Nihče še ni vzljubil tega tuta. Ko ga bo nekdo, se bo pojavil tukaj.",
   "empty_column.follow_requests": "Nimate prošenj za sledenje. Ko boste prejeli kakšno, se bo prikazala tukaj.",

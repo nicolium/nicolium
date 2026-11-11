@@ -1,5 +1,6 @@
 import { ChatSlashIcon } from 'phosphor-react-native/src/icons/ChatSlash';
 import { FunnelIcon } from 'phosphor-react-native/src/icons/Funnel';
+import { GlobeSimpleXIcon } from 'phosphor-react-native/src/icons/GlobeSimpleX';
 import { HeartHalfIcon } from 'phosphor-react-native/src/icons/HeartHalf';
 import { ProhibitIcon } from 'phosphor-react-native/src/icons/Prohibit';
 import { SpeakerSimpleXIcon } from 'phosphor-react-native/src/icons/SpeakerSimpleX';
@@ -16,6 +17,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 const messages = defineMessages({
   muted: { id: 'column.mutes.long', defaultMessage: 'Muted accounts' },
   blocked: { id: 'column.blocks.long', defaultMessage: 'Blocked accounts' },
+  domainBlocks: { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
   interactionPolicies: {
     id: 'column.interaction_policies',
@@ -44,6 +46,12 @@ const ContentFilteringSettingsScreen = ({
           type: 'button',
           label: intl.formatMessage(messages.blocked),
           onPress: () => navigation.navigate('blocks'),
+        },
+        {
+          icon: GlobeSimpleXIcon,
+          type: 'button',
+          label: intl.formatMessage(messages.domainBlocks),
+          onPress: () => navigation.navigate('domain_blocks'),
         },
         {
           icon: FunnelIcon,

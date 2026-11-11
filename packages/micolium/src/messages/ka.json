@@ -16,6 +16,7 @@
   "admin.statuses.actions.delete_status": "Delete post",
   "column.community": "ლოკალური თაიმლაინი",
   "column.direct": "პირდაპირი წერილები",
+  "column.domain_blocks": "დამალული დომენები",
   "column.filters.delete": "Delete",
   "column.filters.notifications": "Notifications",
   "column.follow_requests": "დადევნების მოთხოვნები",
