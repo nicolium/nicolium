@@ -1,27 +1,63 @@
-import { Icon, TextInput, useTheme } from '@mkljczk/react-native-paper';
+import {
+  ActivityIndicator,
+  Button,
+  Icon,
+  IconButton,
+  List as PaperList,
+  Searchbar,
+  TextInput,
+  useTheme,
+} from '@mkljczk/react-native-paper';
 import { useQueryClient } from '@tanstack/react-query';
 import { GlassView } from 'expo-glass-effect';
 import { FolderSimpleIcon } from 'phosphor-react-native/src/icons/FolderSimple';
-import React, { useMemo } from 'react';
+import { PlusIcon } from 'phosphor-react-native/src/icons/Plus';
+import { UsersIcon } from 'phosphor-react-native/src/icons/Users';
+import { XIcon } from 'phosphor-react-native/src/icons/X';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, View } from 'react-native';
 
 import { useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
+import { useDebounce } from '@/hooks/use-debounce';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
-import { useCreateAntenna, useUpdateAntenna } from '@/queries/accounts/use-antennas';
-import { useCreateCircle, useUpdateCircle } from '@/queries/accounts/use-circles';
-import { useCreateList, useUpdateList } from '@/queries/accounts/use-lists';
+import {
+  useAddAccountsToAntenna,
+  useAntennaAccounts,
+  useCreateAntenna,
+  useRemoveAccountsFromAntenna,
+  useUpdateAntenna,
+} from '@/queries/accounts/use-antennas';
+import {
+  useAddAccountsToCircle,
+  useCircleAccounts,
+  useCreateCircle,
+  useRemoveAccountsFromCircle,
+  useUpdateCircle,
+} from '@/queries/accounts/use-circles';
+import {
+  useAddAccountsToList,
+  useCreateList,
+  useListAccounts,
+  useRemoveAccountsFromList,
+  useUpdateList,
+} from '@/queries/accounts/use-lists';
 import { queryKeys } from '@/queries/keys';
 import { scopedQueryKey } from '@/queries/query';
+import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import {
   useCreateBookmarkFolder,
   useUpdateBookmarkFolder,
 } from '@/queries/statuses/use-bookmark-folders';
 import { useUiStoreActions } from '@/stores/ui';
+import { haptics } from '@/utils/haptics';
 import { toast } from '@/utils/toast';
 
+import { Account } from './accounts/account';
 import { DialogOrSheet } from './ui/dialog-or-sheet';
 import { Emoji } from './ui/emoji';
+import { EmptyMessage } from './ui/empty-message';
+import { iconHelper } from './ui/icon';
 import { type IListSections, List } from './ui/list';
 
 const messages = defineMessages({
@@ -96,7 +132,299 @@ const messages = defineMessages({
     id: 'lists.notifications.hint',
     defaultMessage: 'Receive notifications for new posts in the list.',
   },
+  back: { id: 'navigation_bar.back', defaultMessage: 'Back' },
+  close: { id: 'lightbox.close', defaultMessage: 'Close' },
+  search: { id: 'lists.search', defaultMessage: 'Search among people you follow' },
+  addAccount: { id: 'lists.account.add', defaultMessage: 'Add to list' },
+  removeAccount: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },
+  addToCircle: { id: 'circles.add_to_circle', defaultMessage: 'Add to circle' },
+  addToAntenna: { id: 'antennas.account.add', defaultMessage: 'Add to antenna' },
+  listMembers: { id: 'lists.account.members', defaultMessage: 'List members' },
+  circleMembers: { id: 'circles.members', defaultMessage: 'Circle members' },
+  antennaMembers: { id: 'antennas.account.list', defaultMessage: 'Antenna members list' },
+  manageListMembers: { id: 'lists.manage_members', defaultMessage: 'Manage list members' },
+  manageAntennaAccounts: {
+    id: 'antennas.manage_accounts',
+    defaultMessage: 'Manage antenna accounts',
+  },
 });
+
+interface IMemberAccount {
+  accountId: string;
+  added: boolean;
+  onAdd: (accountId: string) => void;
+  onRemove: (accountId: string) => void;
+}
+
+const MemberAccount: React.FC<IMemberAccount> = ({ accountId, added, onAdd, onRemove }) => {
+  const intl = useIntl();
+
+  return (
+    <Account
+      id={accountId}
+      style={{ paddingVertical: 8 }}
+      action={
+        <IconButton
+          icon={iconHelper(added ? XIcon : PlusIcon)}
+          mode={added ? 'contained-tonal' : 'outlined'}
+          onPress={() => {
+            (added ? onRemove : onAdd)(accountId);
+            haptics.selection();
+          }}
+          accessibilityLabel={intl.formatMessage(
+            added ? messages.removeAccount : messages.addAccount,
+          )}
+        />
+      }
+    />
+  );
+};
+
+interface IAccountMembersList {
+  query: {
+    data?: Array<string>;
+    isFetching: boolean;
+    hasNextPage: boolean;
+    fetchNextPage: () => void;
+  };
+  onAdd: (accountId: string) => void;
+  onRemove: (accountId: string) => void;
+  membersTitle: string;
+  addTitle: string;
+  emptyMessage: React.JSX.Element;
+}
+
+const AccountMembersList: React.FC<IAccountMembersList> = ({
+  query,
+  onAdd,
+  onRemove,
+  membersTitle,
+  addTitle,
+  emptyMessage,
+}) => {
+  const { colors } = useTheme();
+  const intl = useIntl();
+
+  const [searchValue, setSearchValue] = React.useState('');
+  const debouncedSearchValue = useDebounce(searchValue, 300);
+
+  const { data: accountIds = [], isFetching } = query;
+  const { data: searchAccountIds = [], isFetching: isSearching } = useAccountSearch(
+    debouncedSearchValue,
+    { following: true, limit: 10 },
+  );
+
+  const searching = !!debouncedSearchValue.trim();
+
+  const renderAccount = (accountId: string) => (
+    <MemberAccount
+      key={accountId}
+      accountId={accountId}
+      added={accountIds.includes(accountId)}
+      onAdd={onAdd}
+      onRemove={onRemove}
+    />
+  );
+
+  let content;
+  if (searching) {
+    if (searchAccountIds.length) content = searchAccountIds.map(renderAccount);
+    else if (isSearching) content = <ActivityIndicator style={{ marginVertical: 16 }} />;
+    else
+      content = (
+        <EmptyMessage
+          emptyMessageText={
+            <FormattedMessage
+              id='empty_column.search.accounts'
+              defaultMessage='There are no people results for "{term}"'
+              values={{ term: debouncedSearchValue }}
+            />
+          }
+        />
+      );
+  } else if (accountIds.length) {
+    content = (
+      <>
+        {accountIds.map(renderAccount)}
+        {query.hasNextPage && (
+          <Button
+            mode='contained-tonal'
+            onPress={query.fetchNextPage}
+            loading={isFetching}
+            style={{ alignSelf: 'center', marginVertical: 8 }}
+          >
+            <FormattedMessage id='status.load_more' defaultMessage='Load more' />
+          </Button>
+        )}
+      </>
+    );
+  } else if (isFetching) {
+    content = <ActivityIndicator style={{ marginVertical: 16 }} />;
+  } else {
+    content = (
+      <EmptyMessage emptyMessageIcon={iconHelper(UsersIcon)} emptyMessageText={emptyMessage} />
+    );
+  }
+
+  return (
+    <>
+      <Searchbar
+        placeholder={intl.formatMessage(messages.search)}
+        value={searchValue}
+        onChangeText={setSearchValue}
+        autoCapitalize='none'
+        autoCorrect={false}
+        style={{
+          marginHorizontal: 0,
+          marginBottom: 8,
+          borderColor: colors.outlineVariant,
+          borderWidth: 1,
+        }}
+      />
+      <PaperList.Subheader style={{ marginHorizontal: -16 }}>
+        {searching ? addTitle : membersTitle}
+      </PaperList.Subheader>
+      {content}
+    </>
+  );
+};
+
+const ListMembers: React.FC<{ id: string }> = ({ id }) => {
+  const intl = useIntl();
+
+  const query = useListAccounts(id);
+  const { mutate: addToList } = useAddAccountsToList(id);
+  const { mutate: removeFromList } = useRemoveAccountsFromList(id);
+
+  return (
+    <AccountMembersList
+      query={query}
+      onAdd={(accountId) => addToList([accountId])}
+      onRemove={(accountId) => removeFromList([accountId])}
+      membersTitle={intl.formatMessage(messages.listMembers)}
+      addTitle={intl.formatMessage(messages.addAccount)}
+      emptyMessage={
+        <FormattedMessage
+          id='empty_column.list_members'
+          defaultMessage='There are no members in this list. Use search to find users to add.'
+        />
+      }
+    />
+  );
+};
+
+const CircleMembers: React.FC<{ id: string }> = ({ id }) => {
+  const intl = useIntl();
+
+  const query = useCircleAccounts(id);
+  const { mutate: addToCircle } = useAddAccountsToCircle(id);
+  const { mutate: removeFromCircle } = useRemoveAccountsFromCircle(id);
+
+  return (
+    <AccountMembersList
+      query={query}
+      onAdd={(accountId) => addToCircle([accountId])}
+      onRemove={(accountId) => removeFromCircle([accountId])}
+      membersTitle={intl.formatMessage(messages.circleMembers)}
+      addTitle={intl.formatMessage(messages.addToCircle)}
+      emptyMessage={
+        <FormattedMessage
+          id='empty_column.circle_members'
+          defaultMessage='There are no members in this circle. Use search to find users to add.'
+        />
+      }
+    />
+  );
+};
+
+const AntennaMembers: React.FC<{ id: string }> = ({ id }) => {
+  const intl = useIntl();
+
+  const query = useAntennaAccounts(id);
+  const { mutate: addToAntenna } = useAddAccountsToAntenna(id);
+  const { mutate: removeFromAntenna } = useRemoveAccountsFromAntenna(id);
+
+  return (
+    <AccountMembersList
+      query={query}
+      onAdd={(accountId) => addToAntenna([accountId])}
+      onRemove={(accountId) => removeFromAntenna([accountId])}
+      membersTitle={intl.formatMessage(messages.antennaMembers)}
+      addTitle={intl.formatMessage(messages.addToAntenna)}
+      emptyMessage={
+        <FormattedMessage
+          id='empty_column.antenna_accounts'
+          defaultMessage='There are no accounts in this antenna. Use search to find users to add.'
+        />
+      }
+    />
+  );
+};
+
+interface IEditListMembersDialog {
+  type: 'antenna' | 'circle' | 'list';
+  id: string;
+  visible: boolean;
+  onDismiss: () => void;
+  onDismissCreateDialog: () => void;
+}
+
+const EditListMembersDialog: React.FC<IEditListMembersDialog> = ({
+  type,
+  id,
+  visible,
+  onDismiss,
+  onDismissCreateDialog,
+}) => {
+  const intl = useIntl();
+
+  const [closing, setClosing] = React.useState(false);
+
+  let title;
+  let content;
+  switch (type) {
+    case 'list':
+      title = <FormattedMessage id='lists.manage_members' defaultMessage='Manage list members' />;
+      content = <ListMembers id={id} />;
+      break;
+    case 'circle':
+      title = <FormattedMessage id='circles.members' defaultMessage='Circle members' />;
+      content = <CircleMembers id={id} />;
+      break;
+    case 'antenna':
+      title = (
+        <FormattedMessage id='antennas.manage_accounts' defaultMessage='Manage antenna accounts' />
+      );
+      content = <AntennaMembers id={id} />;
+      break;
+  }
+
+  return (
+    <DialogOrSheet
+      visible={visible && !closing}
+      handleDismiss={onDismiss}
+      actions={[
+        {
+          icon: 'arrow.left',
+          label: intl.formatMessage(messages.back),
+          onPress: () => setClosing(true),
+        },
+        {
+          icon: 'checkmark',
+          label: intl.formatMessage(messages.close),
+          onPress: () => {
+            setClosing(true);
+            onDismissCreateDialog();
+          },
+          confirm: true,
+        },
+      ]}
+      title={title}
+    >
+      {content}
+    </DialogOrSheet>
+  );
+};
 
 interface ICreateListDialog {
   type: 'bookmark_folder' | 'antenna' | 'circle' | 'list';
@@ -116,6 +444,7 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDi
   const glassEffect = useEnableLiquidGlass();
 
   const [closing, setClosing] = React.useState(false);
+  const [membersDialog, setMembersDialog] = React.useState(false);
   const [emoji, setEmoji] = React.useState<string | null>(null);
   const [title, setTitle] = React.useState('');
 
@@ -309,7 +638,8 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDi
     <Icon source={FolderSimpleIcon} size={24} />
   );
 
-  const formItems = useMemo(() => {
+  const formItems = React.useMemo(() => {
+    const sections: IListSections = [];
     const section: IListSections[number] = {
       items: [],
     };
@@ -348,86 +678,115 @@ const CreateListDialog: React.FC<ICreateListDialog> = ({ type, id, visible, onDi
       });
     }
 
-    if (!section.items.length) return [];
+    if (section.items.length) sections.push(section);
 
-    return [section];
-  }, [features, repliesPolicy, exclusive, notify]);
+    if (id && type !== 'bookmark_folder') {
+      sections.push({
+        items: [
+          {
+            type: 'button',
+            label: intl.formatMessage(
+              type === 'list'
+                ? messages.manageListMembers
+                : type === 'antenna'
+                  ? messages.manageAntennaAccounts
+                  : messages.circleMembers,
+            ),
+            onPress: () => setMembersDialog(true),
+          },
+        ],
+      });
+    }
+
+    return sections;
+  }, [features, id, type, repliesPolicy, exclusive, notify]);
 
   return (
-    <DialogOrSheet
-      visible={visible && !closing}
-      handleDismiss={onDismiss}
-      actions={[
-        {
-          icon: 'xmark',
-          label: intl.formatMessage(messages.cancel),
-          onPress: handleClose,
-        },
-        {
-          icon: 'checkmark',
-          label: createLabel,
-          onPress: handleSubmit,
-          loading: isSubmitting,
-          disabled: isSubmitting || !title.trim(),
-          confirm: true,
-        },
-      ]}
-      title={dialogTitle}
-    >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        {canSetEmoji && (
-          <Pressable
-            onPress={() =>
-              openEmojiPicker(
-                (emoji) => {
-                  setEmoji(emoji);
-                },
-                emoji ? [emoji] : undefined,
-              )
-            }
-          >
-            {glassEffect ? (
-              <GlassView
-                style={{
-                  height: 56,
-                  width: 56,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 8,
-                }}
-                isInteractive
-              >
-                {renderedEmoji}
-              </GlassView>
-            ) : (
-              <View
-                style={{
-                  height: 56,
-                  width: 56,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 4,
-                  borderColor: colors.outline,
-                  borderWidth: 1,
-                }}
-              >
-                {renderedEmoji}
-              </View>
-            )}
-          </Pressable>
-        )}
-        <View style={{ flex: 1 }}>
-          <TextInput
-            variant='outlined'
-            placeholder={titlePlaceholder}
-            value={title}
-            onChangeText={setTitle}
-          />
+    <>
+      <DialogOrSheet
+        visible={visible && !closing}
+        handleDismiss={onDismiss}
+        actions={[
+          {
+            icon: 'xmark',
+            label: intl.formatMessage(messages.cancel),
+            onPress: handleClose,
+          },
+          {
+            icon: 'checkmark',
+            label: createLabel,
+            onPress: handleSubmit,
+            loading: isSubmitting,
+            disabled: isSubmitting || !title.trim(),
+            confirm: true,
+          },
+        ]}
+        title={dialogTitle}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          {canSetEmoji && (
+            <Pressable
+              onPress={() =>
+                openEmojiPicker(
+                  (emoji) => {
+                    setEmoji(emoji);
+                  },
+                  emoji ? [emoji] : undefined,
+                )
+              }
+            >
+              {glassEffect ? (
+                <GlassView
+                  style={{
+                    height: 56,
+                    width: 56,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 8,
+                  }}
+                  isInteractive
+                >
+                  {renderedEmoji}
+                </GlassView>
+              ) : (
+                <View
+                  style={{
+                    height: 56,
+                    width: 56,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 4,
+                    borderColor: colors.outline,
+                    borderWidth: 1,
+                  }}
+                >
+                  {renderedEmoji}
+                </View>
+              )}
+            </Pressable>
+          )}
+          <View style={{ flex: 1 }}>
+            <TextInput
+              variant='outlined'
+              placeholder={titlePlaceholder}
+              value={title}
+              onChangeText={setTitle}
+            />
+          </View>
         </View>
-      </View>
 
-      <List style={{ marginHorizontal: -16 }} sections={formItems} />
-    </DialogOrSheet>
+        <List style={{ marginHorizontal: -16 }} sections={formItems} />
+      </DialogOrSheet>
+      {membersDialog && id && type !== 'bookmark_folder' && (
+        <EditListMembersDialog
+          id={id}
+          type={type}
+          visible
+          onDismiss={() => setMembersDialog(false)}
+          onDismissCreateDialog={handleClose}
+        />
+      )}
+    </>
   );
 };
 

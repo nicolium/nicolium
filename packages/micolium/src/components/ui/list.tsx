@@ -138,6 +138,9 @@ const List: React.FC<IList> = ({ sections, style }) => {
                         )
                       : undefined
                   }
+                  right={(props) => (
+                    <PaperList.Icon {...props} icon={(props) => <CaretRightIcon {...props} />} />
+                  )}
                   titleStyle={
                     item.role === 'destructive' ? { color: theme.colors.error } : undefined
                   }

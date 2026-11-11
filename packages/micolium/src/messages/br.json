@@ -45,6 +45,7 @@
   "empty_column.favourites": "No one has favorited this post yet. When someone does, they will show up here.",
   "intervals.full.minutes": "{number, plural, one {# minute} other {# minutes}}",
   "lightbox.close": "Close",
+  "lists.account.add": "Add to list",
   "lists.delete": "Delete list",
   "lists.new.create": "Add list",
   "lists.new.create.title": "Add list",

@@ -118,7 +118,7 @@ const messages = defineMessages({
     defaultMessage:
       'Are you sure you want to discard the changes to this post? All changes will be lost.',
   },
-  close: { id: 'common.close', defaultMessage: 'Close' },
+  close: { id: 'lightbox.close', defaultMessage: 'Close' },
   missingDescriptionModalTitle: {
     id: 'missing_description_modal.text',
     defaultMessage: 'You have not entered a description for all attachments. Continue anyway?',
