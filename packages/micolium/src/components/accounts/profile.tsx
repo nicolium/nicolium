@@ -342,81 +342,75 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   })();
 
   const timelineFiltersSelector = (
-    <View style={{ flexDirection: 'row', marginHorizontal: 16 }}>
-      <DropdownMenu
-        trigger={
-          glassEffect ? (
-            <Pressable onPress={() => {}}>
-              <GlassView
-                style={{
-                  gap: 4,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  borderRadius: 16,
-                  borderCurve: 'continuous',
-                  paddingHorizontal: 12,
-                  paddingVertical: 8,
-                }}
-                isInteractive
-              >
-                <Text>{filtersLabel}</Text>
-                <Icon
-                  source={iconHelper(CaretDownIcon)}
-                  size={16}
-                  color={colors.onSurfaceVariant}
-                />
-              </GlassView>
-            </Pressable>
-          ) : (
-            <Chip mode='outlined' accessibilityLabel={intl.formatMessage(messages.changeFilters)}>
-              {filtersLabel}
-              <View style={{ paddingLeft: 4 }}>
-                <Icon
-                  source={iconHelper(CaretDownIcon)}
-                  size={16}
-                  color={colors.onSurfaceVariant}
-                />
-              </View>
-            </Chip>
-          )
-        }
-        items={[
-          {
-            key: 'show-replies',
-            type: 'button',
-            label: intl.formatMessage(messages.repliesToggle),
-            checked: profileFilters.showReplies,
-            onPress: () =>
-              update('timelines.profileFilters', {
-                ...profileFilters,
-                showReplies: !profileFilters.showReplies,
-              }),
-          },
-          {
-            key: 'show-reblogs',
-            type: 'button',
-            label: intl.formatMessage(messages.reblogsToggle),
-            checked: profileFilters.showReblogs,
-            onPress: () =>
-              update('timelines.profileFilters', {
-                ...profileFilters,
-                showReblogs: !profileFilters.showReblogs,
-              }),
-          },
-          {
-            key: 'show-pinned',
-            type: 'button',
-            label: intl.formatMessage(messages.pinnedToggle),
-            checked: profileFilters.showPinned,
-            onPress: () =>
-              update('timelines.profileFilters', {
-                ...profileFilters,
-                showPinned: !profileFilters.showPinned,
-              }),
-          },
-        ]}
-      />
-    </View>
+    <DropdownMenu
+      trigger={
+        glassEffect ? (
+          <Pressable onPress={() => {}}>
+            <GlassView
+              style={{
+                gap: 4,
+                flexDirection: 'row',
+                alignItems: 'center',
+                borderRadius: 16,
+                borderCurve: 'continuous',
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+              }}
+              isInteractive
+            >
+              <Text>{filtersLabel}</Text>
+              <Icon source={iconHelper(CaretDownIcon)} size={16} color={colors.onSurfaceVariant} />
+            </GlassView>
+          </Pressable>
+        ) : (
+          <Chip mode='outlined' accessibilityLabel={intl.formatMessage(messages.changeFilters)}>
+            {filtersLabel}
+            <View
+              style={{
+                paddingLeft: 4,
+              }}
+            >
+              <Icon source={iconHelper(CaretDownIcon)} size={16} color={colors.onSurfaceVariant} />
+            </View>
+          </Chip>
+        )
+      }
+      items={[
+        {
+          key: 'show-replies',
+          type: 'button',
+          label: intl.formatMessage(messages.repliesToggle),
+          checked: profileFilters.showReplies,
+          onPress: () =>
+            update('timelines.profileFilters', {
+              ...profileFilters,
+              showReplies: !profileFilters.showReplies,
+            }),
+        },
+        {
+          key: 'show-reblogs',
+          type: 'button',
+          label: intl.formatMessage(messages.reblogsToggle),
+          checked: profileFilters.showReblogs,
+          onPress: () =>
+            update('timelines.profileFilters', {
+              ...profileFilters,
+              showReblogs: !profileFilters.showReblogs,
+            }),
+        },
+        {
+          key: 'show-pinned',
+          type: 'button',
+          label: intl.formatMessage(messages.pinnedToggle),
+          checked: profileFilters.showPinned,
+          onPress: () =>
+            update('timelines.profileFilters', {
+              ...profileFilters,
+              showPinned: !profileFilters.showPinned,
+            }),
+        },
+      ]}
+    />
   );
 
   const handleSkipPinned = () => {
@@ -444,10 +438,10 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
       </GlassView>
     </Pressable>
   ) : (
-    <Chip mode='outlined' onPress={handleSkipPinned}>
-      <View style={{ paddingRight: 4 }}>
+    <Chip mode='outlined' onPress={handleSkipPinned} icon={iconHelper(ArrowLineDownIcon)}>
+      {/* <View style={{ paddingRight: 4 }}>
         <Icon source={iconHelper(ArrowLineDownIcon)} size={16} color={colors.onSurfaceVariant} />
-      </View>
+      </View> */}
       <FormattedMessage id='status.skip_pinned' defaultMessage='Skip pinned posts' />
     </Chip>
   );
@@ -675,7 +669,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
           </>
         </CollapsibleContent>
       </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8, marginHorizontal: 16 }}>
         {timelineFiltersSelector}
         {pinnedCount.current > 3 && skipPinnedButton}
       </View>
