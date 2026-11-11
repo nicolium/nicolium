@@ -226,6 +226,8 @@
   "filters.filters_list_context.label": "சூழல்களை வடிகட்டவும்:",
   "follow_request.authorize": "அதிகாரமளி",
   "follow_request.reject": "விலக்கு",
+  "group.upload_avatar": "அவதாரத்தைப் பதிவேற்றவும்",
+  "group.upload_banner.title": "பின்னணி படத்தைப் பதிவேற்றவும்",
   "hashtag.follow": "ஏச்டேக்கைப் பின்தொடரவும்",
   "interaction_policies.entry.followers": "பின்தொடர்பவர்கள்",
   "interaction_policies.entry.following": "நான் பின்பற்றும் நபர்கள்",

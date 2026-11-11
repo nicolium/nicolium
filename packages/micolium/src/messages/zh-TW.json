@@ -166,6 +166,8 @@
   "filters.filters_list_context.label": "過濾器場景：",
   "follow_request.authorize": "授權",
   "follow_request.reject": "拒絕",
+  "group.upload_avatar": "上傳頭像",
+  "group.upload_banner.title": "上傳背景圖片",
   "hashtag.follow": "關注主題標籤",
   "intervals.full.days": "{number} 天",
   "intervals.full.hours": "{number} 小時",

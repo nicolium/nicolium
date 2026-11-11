@@ -178,6 +178,8 @@
   "filters.filters_list_context.label": "Filter contexts:",
   "follow_request.authorize": "Авторизовать",
   "follow_request.reject": "Отказать",
+  "group.upload_avatar": "Загрузить аватар",
+  "group.upload_banner.title": "Загрузить фоновое изображение",
   "hashtag.follow": "Подписаться на хэштег",
   "intervals.full.days": "{number, plural, one {# день} few {# дня} other {# дней}}",
   "intervals.full.hours": "{number, plural, one {# час} few {# часа} other {# часов}}",

@@ -161,6 +161,8 @@
   "filters.filters_list_context.label": "フィルターの文脈:",
   "follow_request.authorize": "許可",
   "follow_request.reject": "拒否",
+  "group.upload_avatar": "アバターをアップロードする",
+  "group.upload_banner.title": "背景画像をアップロードする",
   "hashtag.follow": "ハッシュタグをフォローする",
   "intervals.full.days": "{number}日",
   "intervals.full.hours": "{number}時間",

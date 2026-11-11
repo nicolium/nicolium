@@ -180,6 +180,8 @@
   "filters.filters_list_context.label": "Filter contexts:",
   "follow_request.authorize": "Autorizar",
   "follow_request.reject": "Rechazar",
+  "group.upload_avatar": "Subir avatar",
+  "group.upload_banner.title": "Cargar imagen de fondo",
   "hashtag.follow": "Siga el hashtag",
   "intervals.full.days": "{number, plural, one {# día} other {# días}}",
   "intervals.full.hours": "{number, plural, one {# hora} other {# horas}}",

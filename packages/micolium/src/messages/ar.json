@@ -166,6 +166,8 @@
   "filters.filters_list_context.label": "سياق المُرشِّح:",
   "follow_request.authorize": "السماح بالمتابعة",
   "follow_request.reject": "رفض",
+  "group.upload_avatar": "رفع الأفاتار",
+  "group.upload_banner.title": "رفع صورة الخلفية",
   "hashtag.follow": "اتبع الهاشتاج",
   "intervals.full.days": "{number, plural, one {# يوم} other {# أيام}}",
   "intervals.full.hours": "{number, plural, one {# ساعة} other {# ساعات}}",

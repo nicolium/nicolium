@@ -162,6 +162,7 @@
   "filters.filters_list_context.label": "הקשרי הפילטר:",
   "follow_request.authorize": "קבלה",
   "follow_request.reject": "דחיה",
+  "group.upload_banner.title": "העלה תמונת רקע",
   "intervals.full.days": "{number, plural, one {# יום} other {# ימים}}",
   "intervals.full.hours": "{number, plural, one {# שעה} other {# שעות}}",
   "intervals.full.minutes": "{number, plural, one {# דקה} other {# דקות}}",

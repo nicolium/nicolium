@@ -208,6 +208,8 @@
   "filters.filters_list_context.label": "Contesto del filtro:",
   "follow_request.authorize": "Autorizza",
   "follow_request.reject": "Rifiuta",
+  "group.upload_avatar": "Carica immagine",
+  "group.upload_banner.title": "Carica immagine di sfondo",
   "hashtag.follow": "Segui l'hashtag",
   "interaction_policies.entry.followers": "Follower",
   "interaction_policies.entry.following": "Following",

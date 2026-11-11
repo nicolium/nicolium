@@ -166,6 +166,8 @@
   "filters.filters_list_context.label": "Filter konteks:",
   "follow_request.authorize": "Izinkan",
   "follow_request.reject": "Tolak",
+  "group.upload_avatar": "Unggah avatar",
+  "group.upload_banner.title": "Unggah gambar latar belakang",
   "hashtag.follow": "Ikuti tagar",
   "intervals.full.days": "{number, plural, other {# hari}}",
   "intervals.full.hours": "{number, plural, other {# jam}}",

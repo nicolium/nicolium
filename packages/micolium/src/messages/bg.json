@@ -197,6 +197,8 @@
   "empty_column.home.title": "Все още не следвате никого",
   "empty_column.search.accounts": "Няма резултати за хора за „{term}“",
   "empty_column.search.statuses": "Няма резултати за публикации за „{term}“",
+  "group.upload_avatar": "Качване на аватар",
+  "group.upload_banner.title": "Качване на фонова снимка",
   "hashtag.follow": "Последване на хаштага",
   "interaction_policies.entry.followers": "Последователи",
   "interaction_policies.entry.following": "Хора, които следвам",

@@ -166,6 +166,8 @@
   "filters.filters_list_context.label": "Bağlamları filtrele:",
   "follow_request.authorize": "Yetkilendir",
   "follow_request.reject": "Reddet",
+  "group.upload_avatar": "Bir profil resmi yükle",
+  "group.upload_banner.title": "Bir arkaplan resmi yükle",
   "hashtag.follow": "Hashtag'i takip edin",
   "intervals.full.days": "gün",
   "intervals.full.hours": "saat",

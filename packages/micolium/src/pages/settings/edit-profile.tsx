@@ -7,7 +7,6 @@ import {
   useTheme,
 } from '@mkljczk/react-native-paper';
 import { Image } from 'expo-image';
-import { ImagePickerAsset } from 'expo-image-picker';
 import { pick } from 'lodash-es';
 import { create } from 'mutative';
 import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
@@ -19,7 +18,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, ScrollView, useColorScheme, View } from 'react-native';
 
 import { DateTimePicker } from '@/components/ui/date-time-picker';
-import { DropdownMenu } from '@/components/ui/dropdown-menu';
+import { DialogOrSheet } from '@/components/ui/dialog-or-sheet';
+import { DropdownMenu, type DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
 import { iconHelper } from '@/components/ui/icon';
 import { type IListSections, List } from '@/components/ui/list';
@@ -32,6 +32,7 @@ import { toast } from '@/utils/toast';
 
 import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { ImagePickerAsset } from 'expo-image-picker';
 
 const messages = defineMessages({
   heading: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
@@ -196,6 +197,27 @@ const messages = defineMessages({
     id: 'edit_profile.back_confirmation.message',
     defaultMessage: 'Are you sure you want to discard the changes?',
   },
+  missingDescriptionHeading: {
+    id: 'confirmations.edit_profile.missing_description.heading',
+    defaultMessage: 'Missing description',
+  },
+  missingDescriptionMessage: {
+    id: 'confirmations.edit_profile.missing_description.message',
+    defaultMessage:
+      'You have not entered a description for your avatar and header. Continue anyway?',
+  },
+  missingDescriptionAvatar: {
+    id: 'confirmations.edit_profile.missing_description.avatar',
+    defaultMessage: 'You have not entered a description for your avatar. Continue anyway?',
+  },
+  missingDescriptionHeader: {
+    id: 'confirmations.edit_profile.missing_description.header',
+    defaultMessage: 'You have not entered a description for your header. Continue anyway?',
+  },
+  missingDescriptionConfirm: {
+    id: 'confirmations.edit_profile.missing_description.confirm',
+    defaultMessage: 'Continue anyway',
+  },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   backButtonConfirmationConfirm: {
     id: 'edit_profile.back_confirmation.confirm',
@@ -214,7 +236,92 @@ const messages = defineMessages({
     defaultMessage: 'Label (e.g. pronouns)',
   },
   remove: { id: 'streamfield.remove', defaultMessage: 'Remove' },
+  uploadHeader: { id: 'group.upload_banner.title', defaultMessage: 'Upload background picture' },
+  clearHeader: { id: 'group.upload_banner.clear', defaultMessage: 'Clear header image' },
+  uploadAvatar: { id: 'group.upload_avatar', defaultMessage: 'Upload avatar' },
+  clearAvatar: { id: 'group.upload_avatar.clear', defaultMessage: 'Clear avatar image' },
+  changeDescription: {
+    id: 'group.upload_banner.change.description',
+    defaultMessage: 'Change alt text',
+  },
+  save: { id: 'common.save', defaultMessage: 'Save' },
+  placeholder: {
+    id: 'alt_text_modal.placeholder',
+    defaultMessage: 'Media description',
+  },
+  charactersRemaining: {
+    id: 'textarea.counter.label',
+    defaultMessage: '{count, plural, one {# character} other {# characters}} remaining',
+  },
 });
+
+interface IAltTextEditor {
+  text: string;
+  onSave: (value: string) => void;
+  visible: boolean;
+  onDismiss: () => void;
+}
+
+const AltTextEditor: React.FC<IAltTextEditor> = ({ text, onSave, visible, onDismiss }) => {
+  const intl = useIntl();
+  const {
+    configuration: {
+      media_attachments: { description_limit: descriptionLimit },
+    },
+  } = useInstance();
+
+  const [closing, setClosing] = React.useState(false);
+  const [description, setDescription] = React.useState(text);
+
+  const handleClose = () => setClosing(true);
+
+  const handleSave = () => {
+    setClosing(true);
+    onSave(description);
+  };
+
+  React.useEffect(() => {
+    if (visible) setClosing(false);
+  }, [visible]);
+
+  return (
+    <DialogOrSheet
+      visible={visible && !closing}
+      handleDismiss={onDismiss}
+      title={<FormattedMessage id='alt_text_modal.header' defaultMessage='Add alt text' />}
+      actions={[
+        {
+          icon: 'arrow.left',
+          label: intl.formatMessage(messages.cancel),
+          onPress: handleClose,
+        },
+        {
+          icon: 'checkmark',
+          label: intl.formatMessage(messages.save),
+          onPress: handleSave,
+          confirm: true,
+        },
+      ]}
+      forceSheet
+    >
+      <View>
+        <TextInput
+          value={description}
+          onChangeText={setDescription}
+          variant='outlined'
+          placeholder={intl.formatMessage(messages.placeholder)}
+          multiline
+          numberOfLines={4}
+          maxLength={descriptionLimit}
+          supportingText={intl.formatMessage(messages.charactersRemaining, {
+            count: descriptionLimit - description.length,
+          })}
+          style={{ minHeight: 80 }}
+        />
+      </View>
+    </DialogOrSheet>
+  );
+};
 
 type UpdateCredentials = UpdateCredentialsParams & {
   fields: Array<{
@@ -279,6 +386,7 @@ const EditProfileScreen = ({
   const theme = useTheme();
   const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
+  const missingDescriptionModal = useSetting('compose.missingDescriptionModal');
   const client = useClient();
   const features = useFeatures();
   const instance = useInstance();
@@ -295,6 +403,7 @@ const EditProfileScreen = ({
   const [customCSSEditorExpanded, setCustomCSSEditorExpanded] = React.useState(false);
   const [avatar, setAvatar] = React.useState<ImagePickerAsset | string>();
   const [header, setHeader] = React.useState<ImagePickerAsset | string>();
+  const [showAltTextEditor, setShowAltTextEditor] = React.useState<'avatar' | 'header'>();
 
   React.useEffect(() => {
     client.settings
@@ -384,45 +493,35 @@ const EditProfileScreen = ({
         });
     };
 
-    // const missingAvatarDescription =
-    //   features.accountAvatarDescription && (avatar.src || avatar.file) && !data.avatar_description;
-    // const missingHeaderDescription =
-    //   features.accountAvatarDescription && (header.src || header.file) && !data.header_description;
+    const missingAvatarDescription =
+      features.accountAvatarDescription && avatar && !data.avatar_description;
+    const missingHeaderDescription =
+      features.accountAvatarDescription && header && !data.header_description;
 
-    // if (
-    //   settings.missingDescriptionModal &&
-    //   (missingAvatarDescription || missingHeaderDescription)
-    // ) {
-    //   openModal('CONFIRM', {
-    //     heading: (
-    //       <FormattedMessage
-    //         id='confirmations.edit_profile.missing_description.heading'
-    //         defaultMessage='Missing description'
-    //       />
-    //     ),
-    //     message:
-    //       missingAvatarDescription && missingHeaderDescription ? (
-    //         <FormattedMessage
-    //           id='confirmations.edit_profile.missing_description.message'
-    //           defaultMessage='You have not entered a description for your avatar and header. Continue anyway?'
-    //         />
-    //       ) : missingAvatarDescription ? (
-    //         <FormattedMessage
-    //           id='confirmations.edit_profile.missing_description.avatar'
-    //           defaultMessage='You have not entered a description for your avatar. Continue anyway?'
-    //         />
-    //       ) : (
-    //         <FormattedMessage
-    //           id='confirmations.edit_profile.missing_description.header'
-    //           defaultMessage='You have not entered a description for your header. Continue anyway?'
-    //         />
-    //       ),
-    //     confirm: intl.formatMessage(messages.missingDescriptionConfirm),
-    //     onConfirm,
-    //   });
-    // } else {
+    if (missingDescriptionModal && (missingAvatarDescription || missingHeaderDescription)) {
+      return Alert.alert(
+        intl.formatMessage(messages.missingDescriptionHeading),
+        intl.formatMessage(
+          missingAvatarDescription && missingHeaderDescription
+            ? messages.missingDescriptionMessage
+            : missingAvatarDescription
+              ? messages.missingDescriptionAvatar
+              : messages.missingDescriptionHeader,
+        ),
+        [
+          {
+            text: intl.formatMessage(messages.cancel),
+            style: 'cancel',
+          },
+          {
+            text: intl.formatMessage(messages.missingDescriptionConfirm),
+            onPress: onConfirm,
+          },
+        ],
+      );
+    }
+
     onConfirm();
-    // }
   };
 
   /** Set a single key in the request data. */
@@ -698,6 +797,82 @@ const EditProfileScreen = ({
       />
     ));
 
+  const headerMenu = React.useMemo(() => {
+    const items: Array<DropdownMenuItem> = [];
+
+    items.push({
+      key: 'upload',
+      type: 'button',
+      label: intl.formatMessage(messages.uploadHeader),
+      onPress: () => {},
+      appleIcon: 'photo.on.rectangle.angled',
+      androidIcon: 'ph_images',
+    });
+
+    if (features.accountAvatarDescription) {
+      items.push({
+        key: 'change-description',
+        type: 'button',
+        label: intl.formatMessage(messages.changeDescription),
+        onPress: () => setShowAltTextEditor('header'),
+        appleIcon: 'text.document',
+        androidIcon: 'ph_file_text',
+      });
+    }
+
+    if (header) {
+      items.push({
+        key: 'remove',
+        type: 'button',
+        label: intl.formatMessage(messages.clearHeader),
+        onPress: () => setHeader(undefined),
+        appleIcon: 'xmark',
+        androidIcon: 'ph_x',
+        destructive: true,
+      });
+    }
+
+    return items;
+  }, [features, header, data.header_description]);
+
+  const avatarMenu = React.useMemo(() => {
+    const items: Array<DropdownMenuItem> = [];
+
+    items.push({
+      key: 'upload',
+      type: 'button',
+      label: intl.formatMessage(messages.uploadAvatar),
+      onPress: () => {},
+      appleIcon: 'photo.on.rectangle.angled',
+      androidIcon: 'ph_images',
+    });
+
+    if (features.accountAvatarDescription) {
+      items.push({
+        key: 'change-description',
+        type: 'button',
+        label: intl.formatMessage(messages.changeDescription),
+        onPress: () => setShowAltTextEditor('avatar'),
+        appleIcon: 'text.document',
+        androidIcon: 'ph_file_text',
+      });
+    }
+
+    if (avatar) {
+      items.push({
+        key: 'remove',
+        type: 'button',
+        label: intl.formatMessage(messages.clearAvatar),
+        onPress: () => setAvatar(undefined),
+        appleIcon: 'xmark',
+        androidIcon: 'ph_x',
+        destructive: true,
+      });
+    }
+
+    return items;
+  }, [features, avatar, data.avatar_description]);
+
   return (
     <>
       <Appbar.Header
@@ -727,10 +902,11 @@ const EditProfileScreen = ({
                   style={{
                     borderRadius: theme.shapes.corner.medium,
                     borderWidth: 1,
-                    borderColor: theme.colors.primary,
+                    borderColor: theme.colors.surfaceDim,
                     width: '100%',
                     aspectRatio: 3,
                     overflow: 'hidden',
+                    backgroundColor: theme.colors.surfaceContainerHigh,
                   }}
                 >
                   <Image
@@ -738,28 +914,27 @@ const EditProfileScreen = ({
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      backgroundColor: theme.colors.surfaceContainer,
                     }}
                     recyclingKey={typeof header === 'string' ? header : header?.uri}
                   />
                 </View>
               }
-              items={[{ key: 'remove-photo', type: 'button', label: 'huj', onPress: () => {} }]}
+              items={headerMenu}
             />
-            <View style={{ left: 16, bottom: 48 }}>
+            <View style={{ left: 16, bottom: 48, width: 96, borderRadius: 48, overflow: 'hidden' }}>
               <DropdownMenu
                 trigger={
                   <Pressable
                     style={{
                       borderRadius: 48,
                       borderWidth: 1,
-                      borderColor: theme.colors.primary,
+                      borderColor: theme.colors.surfaceDim,
                       height: 96,
                       width: 96,
                       maxWidth: 96,
                       aspectRatio: 3,
                       overflow: 'hidden',
-                      backgroundColor: theme.colors.surfaceContainer,
+                      backgroundColor: theme.colors.surfaceContainerHigh,
                       zIndex: 10,
                     }}
                   >
@@ -773,15 +948,7 @@ const EditProfileScreen = ({
                     />
                   </Pressable>
                 }
-                items={[
-                  {
-                    key: 'remove-avatar',
-                    type: 'button',
-                    label: 'Clear avatar image',
-                    destructive: true,
-                    onPress: () => setAvatar(undefined),
-                  },
-                ]}
+                items={avatarMenu}
               />
             </View>
           </View>
@@ -926,6 +1093,22 @@ const EditProfileScreen = ({
           </PaperList.Section>
         )}
       </ScrollView>
+      {showAltTextEditor && (
+        <AltTextEditor
+          text={
+            (showAltTextEditor === 'avatar' ? data.avatar_description : data.header_description) ||
+            ''
+          }
+          onSave={(text) => {
+            updateData(
+              showAltTextEditor === 'avatar' ? 'avatar_description' : 'header_description',
+              text,
+            );
+          }}
+          visible
+          onDismiss={() => setShowAltTextEditor(undefined)}
+        />
+      )}
     </>
   );
 };

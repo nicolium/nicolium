@@ -105,7 +105,7 @@ const messages = defineMessages({
     defaultMessage: 'Describe this for people with hearing impairments…',
   },
   placeholder: {
-    id: 'placeholder',
+    id: 'alt_text_modal.placeholder',
     defaultMessage: 'Media description',
   },
   savingFailed: {
