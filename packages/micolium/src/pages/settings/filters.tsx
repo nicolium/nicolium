@@ -18,9 +18,8 @@ import { TrashIcon } from 'phosphor-react-native/src/icons/Trash';
 import { XIcon } from 'phosphor-react-native/src/icons/X';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, useColorScheme, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { toast } from '@/utils/toast';
 
 import { EmptyMessage } from '@/components/ui/empty-message';
 import { GlassButton } from '@/components/ui/glass-button';
@@ -40,6 +39,7 @@ import {
 import { Alert } from '@/stores/alerts';
 import { useSetting } from '@/stores/settings';
 import { getSegmentedMenuStyles } from '@/utils/themes';
+import { toast } from '@/utils/toast';
 
 import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -103,6 +103,7 @@ const messages = defineMessages({
 
 const FiltersScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParams, 'filters'>) => {
   const { colors } = useTheme();
+  const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
   const intl = useIntl();
   const { bottom: bottomInset } = useSafeAreaInsets();
@@ -152,10 +153,11 @@ const FiltersScreen = ({ navigation }: NativeStackScreenProps<SettingsStackParam
           {
             backgroundColor: colors.surfaceContainer,
           },
-          blackTheme && {
-            borderBottomWidth: 1,
-            borderBottomColor: colors.surfaceContainerHighest,
-          },
+          colorScheme === 'dark' &&
+            blackTheme && {
+              borderBottomWidth: 1,
+              borderBottomColor: colors.surfaceContainerHighest,
+            },
         ]}
       >
         <HeaderBackButton onPress={navigation.goBack} />

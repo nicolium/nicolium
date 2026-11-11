@@ -4,7 +4,6 @@ import { List, Switch, Text, TextInput } from '@mkljczk/react-native-paper';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl, type IntlShape } from 'react-intl';
 import { View } from 'react-native';
-import { toast } from '@/utils/toast';
 
 import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -14,6 +13,7 @@ import {
   useMuteAccountMutation,
   useUpdateAccountNoteMutation,
 } from '@/queries/accounts/use-relationship';
+import { toast } from '@/utils/toast';
 
 import { DialogOrSheet } from '../ui/dialog-or-sheet';
 import { DropdownMenu } from '../ui/dropdown-menu';

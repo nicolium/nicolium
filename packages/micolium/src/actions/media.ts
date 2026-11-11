@@ -1,9 +1,9 @@
 import { defineMessages, type IntlShape } from 'react-intl';
-import { toast } from '@/utils/toast';
 
 import { useSettingsStore } from '@/stores/settings';
 import { formatBytes } from '@/utils/media';
 import resizeImage from '@/utils/resize-image';
+import { toast } from '@/utils/toast';
 
 import type { MediaAttachment, PlApiClient, UpdateMediaParams, UploadMediaParams } from 'pl-api';
 

@@ -25,10 +25,10 @@ import { PlayIcon } from 'phosphor-react-native/src/icons/Play';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { toast } from '@/utils/toast';
 
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useUiStoreActions } from '@/stores/ui';
+import { toast } from '@/utils/toast';
 
 import { MIMETYPE_ICONS } from '../compose/compose-attachment-thumbs';
 import { iconHelper } from '../ui/icon';

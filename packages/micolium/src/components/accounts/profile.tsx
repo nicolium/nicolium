@@ -16,7 +16,13 @@ import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
 import { type Account, mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { type NativeScrollEvent, type NativeSyntheticEvent, Pressable, View } from 'react-native';
+import {
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  Pressable,
+  useColorScheme,
+  View,
+} from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as v from 'valibot';
@@ -210,6 +216,7 @@ interface IProfile {
 const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const intl = useIntl();
   const { colors } = useTheme();
+  const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
   const { top: topInset } = useSafeAreaInsets();
   const { data: account } = useAccount(id, !ownAccount);
@@ -684,10 +691,11 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
             {
               backgroundColor: colors.surfaceContainer,
             },
-            blackTheme && {
-              borderBottomWidth: 1,
-              borderBottomColor: colors.surfaceContainerHighest,
-            },
+            colorScheme === 'dark' &&
+              blackTheme && {
+                borderBottomWidth: 1,
+                borderBottomColor: colors.surfaceContainerHighest,
+              },
           ]}
         >
           {!ownAccount && <HeaderBackButton onPress={navigation.goBack} />}

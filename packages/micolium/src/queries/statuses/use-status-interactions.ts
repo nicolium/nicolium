@@ -8,7 +8,6 @@ import {
 } from '@tanstack/react-query';
 import { create } from 'mutative';
 import { defineMessages, useIntl } from 'react-intl';
-import { toast } from '@/utils/toast';
 
 import { useClient, useCurrentAccount } from '@/contexts/current-account-context';
 import { scopedQueryKey, useAppQuery } from '@/queries/query';
@@ -16,6 +15,7 @@ import { useImportEntities } from '@/queries/utils/import-entities';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
+import { toast } from '@/utils/toast';
 
 import { useCredentialAccountId } from '../accounts/use-account-credentials';
 import { queryKeys } from '../keys';

@@ -3,7 +3,6 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
 import { TabView } from 'react-native-tab-view';
-import { toast } from '@/utils/toast';
 
 import {
   InteractionPolicyConfig,
@@ -18,6 +17,7 @@ import { TabBar } from '@/components/ui/tab-bar';
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';
+import { toast } from '@/utils/toast';
 
 import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';

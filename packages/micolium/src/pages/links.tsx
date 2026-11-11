@@ -3,7 +3,7 @@ import { ArrowSquareOutIcon } from 'phosphor-react-native/src/icons/ArrowSquareO
 import { LinkSimpleIcon } from 'phosphor-react-native/src/icons/LinkSimple';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { View } from 'react-native';
+import { useColorScheme, View } from 'react-native';
 
 import { Timeline } from '@/components/timelines/timeline';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
@@ -31,6 +31,7 @@ const LinksScreen = ({
   const intl = useIntl();
   const client = useClient();
   const { colors } = useTheme();
+  const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
 
   const { data: trendingLinks } = useTrendingLinks();
@@ -71,10 +72,11 @@ const LinksScreen = ({
           {
             backgroundColor: colors.surfaceContainer,
           },
-          blackTheme && {
-            borderBottomWidth: 1,
-            borderBottomColor: colors.surfaceContainerHighest,
-          },
+          colorScheme === 'dark' &&
+            blackTheme && {
+              borderBottomWidth: 1,
+              borderBottomColor: colors.surfaceContainerHighest,
+            },
         ]}
       >
         <HeaderBackButton onPress={navigation.goBack} />

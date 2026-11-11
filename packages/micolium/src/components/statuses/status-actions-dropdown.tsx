@@ -7,7 +7,6 @@ import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThree
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform } from 'react-native';
-import { toast } from '@/utils/toast';
 
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useReblog } from '@/hooks/use-reblog';
@@ -32,6 +31,7 @@ import { Alert } from '@/stores/alerts';
 import { useAuthStore } from '@/stores/auth';
 import { useSetting } from '@/stores/settings';
 import { useUiStoreActions } from '@/stores/ui';
+import { toast } from '@/utils/toast';
 import { openUrl } from '@/utils/url';
 
 import { BlockMuteDialog } from '../accounts/block-mute-dialog';

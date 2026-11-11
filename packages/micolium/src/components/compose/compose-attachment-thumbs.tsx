@@ -30,12 +30,12 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import { toast } from '@/utils/toast';
 
 import { useFeatures, useInstance } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useChangeUploadCompose, useCompose, useComposeActions } from '@/stores/compose';
 import { getPointerPosition } from '@/utils/media';
+import { toast } from '@/utils/toast';
 
 import { renderMedia } from '../statuses/status-media';
 import { DialogOrSheet } from '../ui/dialog-or-sheet';

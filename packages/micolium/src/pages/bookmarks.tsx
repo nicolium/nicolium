@@ -7,8 +7,7 @@ import { DotsThreeIcon } from 'phosphor-react-native/src/icons/DotsThree';
 import { DotsThreeVerticalIcon } from 'phosphor-react-native/src/icons/DotsThreeVertical';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Platform, View } from 'react-native';
-import { toast } from '@/utils/toast';
+import { Platform, useColorScheme, View } from 'react-native';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
 import { StatusesList } from '@/components/statuses/statuses-list';
@@ -23,6 +22,7 @@ import {
 } from '@/queries/statuses/use-bookmark-folders';
 import { Alert } from '@/stores/alerts';
 import { useSetting } from '@/stores/settings';
+import { toast } from '@/utils/toast';
 
 import type { BookmarksStackParams } from '@/router/router';
 
@@ -55,6 +55,7 @@ const AllBookmarksScreen = ({
   navigation,
 }: NativeStackScreenProps<BookmarksStackParams, 'all'>) => {
   const { colors } = useTheme();
+  const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
   const features = useFeatures();
   const bookmarksQuery = useBookmarks();
@@ -64,6 +65,7 @@ const AllBookmarksScreen = ({
       <Appbar.Header
         mode='small'
         style={
+          colorScheme === 'dark' &&
           blackTheme && {
             borderBottomWidth: 1,
             borderBottomColor: colors.surfaceContainerHighest,
@@ -103,6 +105,7 @@ const BookmarksFolderScreen = ({
 }: NativeStackScreenProps<BookmarksStackParams, 'folder'>) => {
   const intl = useIntl();
   const { colors } = useTheme();
+  const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
 
   const bookmarksQuery = useBookmarks(route.params.id);
@@ -139,6 +142,7 @@ const BookmarksFolderScreen = ({
       <Appbar.Header
         mode='small'
         style={
+          colorScheme === 'dark' &&
           blackTheme && {
             borderBottomWidth: 1,
             borderBottomColor: colors.surfaceContainerHighest,

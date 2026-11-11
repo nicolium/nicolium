@@ -5,7 +5,6 @@ import { XIcon } from 'phosphor-react-native/src/icons/X';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { View } from 'react-native';
-import { toast } from '@/utils/toast';
 
 import { useClient } from '@/contexts/current-account-context';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -14,6 +13,7 @@ import {
   useAcceptFollowRequestMutation,
   useRejectFollowRequestMutation,
 } from '@/queries/accounts/use-follow-requests';
+import { toast } from '@/utils/toast';
 
 import { iconHelper } from '../ui/icon';
 

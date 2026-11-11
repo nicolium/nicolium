@@ -8,7 +8,6 @@ import { FunnelSimpleIcon } from 'phosphor-react-native/src/icons/FunnelSimple';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Platform, useColorScheme, View } from 'react-native';
-import { toast } from '@/utils/toast';
 
 import { CreateListDialog } from '@/components/create-list-dialog';
 import { type DropdownMenuItem, DropdownMenu } from '@/components/ui/dropdown-menu';
@@ -24,6 +23,7 @@ import { useDeleteCircle } from '@/queries/accounts/use-circles';
 import { useDeleteList } from '@/queries/accounts/use-lists';
 import { Alert } from '@/stores/alerts';
 import { type TIMELINE_FILTER_KEYS, useSetting, useSettingsActions } from '@/stores/settings';
+import { toast } from '@/utils/toast';
 
 import { TimelinePicker, type ITimelinePicker } from './timeline-picker';
 
@@ -380,7 +380,8 @@ const TimelineHeader = ({ navigation, route }: NativeStackHeaderProps) => {
         {
           backgroundColor: glassEffect ? 'transparent' : colors.surfaceContainer,
         },
-        blackTheme &&
+        colorScheme === 'dark' &&
+          blackTheme &&
           !glassEffect && {
             borderBottomWidth: 1,
             borderBottomColor: colors.surfaceContainerHighest,

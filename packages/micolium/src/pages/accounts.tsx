@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/native-stack';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { View } from 'react-native';
+import { useColorScheme, View } from 'react-native';
 
 import { AccountsList } from '@/components/accounts/accounts-list';
 import { Profile } from '@/components/accounts/profile';
@@ -30,6 +30,7 @@ const messages = defineMessages({
 const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
   const intl = useIntl();
   const { colors } = useTheme();
+  const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
   const { data: account } = useAccount(
     (route.params as AccountStackParams['view'] | undefined)?.id,
@@ -65,10 +66,11 @@ const AccountsHeader = ({ navigation, route, back }: NativeStackHeaderProps) => 
         {
           backgroundColor: colors.surfaceContainer,
         },
-        blackTheme && {
-          borderBottomWidth: 1,
-          borderBottomColor: colors.surfaceContainerHighest,
-        },
+        colorScheme === 'dark' &&
+          blackTheme && {
+            borderBottomWidth: 1,
+            borderBottomColor: colors.surfaceContainerHighest,
+          },
       ]}
     >
       {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}

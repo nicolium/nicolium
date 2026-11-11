@@ -3,12 +3,12 @@ import { Image } from 'expo-image';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { ScrollView, View } from 'react-native';
-import { toast } from '@/utils/toast';
 
 import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/images/icon.png';
 import { List } from '@/components/ui/list';
 import { useClient } from '@/contexts/current-account-context';
+import { toast } from '@/utils/toast';
 import { openUrl } from '@/utils/url';
 
 import pkg from '../../../package.json';

@@ -20,7 +20,6 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { KeyboardAvoidingView, Platform, ScrollView, ToastAndroid, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { toast } from '@/utils/toast';
 
 import Gayness from '@/assets/gayness.svg';
 import Logo from '@/assets/images/icon.png';
@@ -31,6 +30,7 @@ import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 import { getInstanceScopes } from '@/utils/scopes';
+import { toast } from '@/utils/toast';
 
 import type { LoginStackParams, RootStackParams } from '@/router/router';
 

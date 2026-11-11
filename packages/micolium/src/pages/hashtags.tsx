@@ -3,7 +3,12 @@ import { UserMinusIcon } from 'phosphor-react-native/src/icons/UserMinus';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { type NativeScrollEvent, type NativeSyntheticEvent, View } from 'react-native';
+import {
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  useColorScheme,
+  View,
+} from 'react-native';
 import {
   createAnimatedComponent,
   useAnimatedStyle,
@@ -42,6 +47,7 @@ const HashtagsScreen = ({
 }: NativeStackScreenProps<RootStackParams, 'hashtags'>) => {
   const intl = useIntl();
   const { colors } = useTheme();
+  const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
   const { top: topInset } = useSafeAreaInsets();
   const client = useClient();
@@ -84,7 +90,8 @@ const HashtagsScreen = ({
             zIndex: 1,
             backgroundColor: isScrolled ? colors.surfaceContainer : undefined,
           },
-          blackTheme &&
+          colorScheme === 'dark' &&
+            blackTheme &&
             isScrolled && {
               borderBottomWidth: 1,
               borderBottomColor: colors.surfaceContainerHighest,

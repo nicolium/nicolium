@@ -5,7 +5,6 @@ import { FolderSimpleIcon } from 'phosphor-react-native/src/icons/FolderSimple';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Pressable, View } from 'react-native';
-import { toast } from '@/utils/toast';
 
 import { useCurrentAccount, useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
@@ -19,6 +18,7 @@ import {
   useUpdateBookmarkFolder,
 } from '@/queries/statuses/use-bookmark-folders';
 import { useUiStoreActions } from '@/stores/ui';
+import { toast } from '@/utils/toast';
 
 import { DialogOrSheet } from './ui/dialog-or-sheet';
 import { Emoji } from './ui/emoji';

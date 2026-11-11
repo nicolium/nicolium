@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/native-stack';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { View } from 'react-native';
+import { useColorScheme, View } from 'react-native';
 
 import { Emojify } from '@/components/ui/emojify';
 import { HeaderBackButton } from '@/components/ui/header-icon-button';
@@ -49,6 +49,7 @@ const messages = defineMessages({
 const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
   const intl = useIntl();
   const { colors } = useTheme();
+  const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
   const { data: status } = useStatus((route.params as StatusStackParams['view'] | undefined)?.id);
 
@@ -105,10 +106,11 @@ const StatusHeader = ({ navigation, route, back }: NativeStackHeaderProps) => {
         {
           backgroundColor: colors.surfaceContainer,
         },
-        blackTheme && {
-          borderBottomWidth: 1,
-          borderBottomColor: colors.surfaceContainerHighest,
-        },
+        colorScheme === 'dark' &&
+          blackTheme && {
+            borderBottomWidth: 1,
+            borderBottomColor: colors.surfaceContainerHighest,
+          },
       ]}
     >
       {back ? <HeaderBackButton onPress={navigation.goBack} /> : null}

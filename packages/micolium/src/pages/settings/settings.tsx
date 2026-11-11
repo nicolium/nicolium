@@ -10,7 +10,7 @@ import { SignOutIcon } from 'phosphor-react-native/src/icons/SignOut';
 import { UserPlusIcon } from 'phosphor-react-native/src/icons/UserPlus';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Platform, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 
 import { type IListSections, List } from '@/components/ui/list';
 import { useFeatures } from '@/contexts/current-account-context';

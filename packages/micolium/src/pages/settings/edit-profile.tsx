@@ -14,8 +14,7 @@ import { XIcon } from 'phosphor-react-native/src/icons/X';
 import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { ScrollView, View } from 'react-native';
-import { toast } from '@/utils/toast';
+import { ScrollView, useColorScheme, View } from 'react-native';
 
 import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { HeaderBackButton, HeaderIconButton } from '@/components/ui/header-icon-button';
@@ -26,6 +25,7 @@ import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials
 import { Alert } from '@/stores/alerts';
 import { useSetting } from '@/stores/settings';
 import { getSegmentedMenuStyles } from '@/utils/themes';
+import { toast } from '@/utils/toast';
 
 import type { SettingsStackParams } from '@/router/router';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -274,6 +274,7 @@ const EditProfileScreen = ({
 }: NativeStackScreenProps<SettingsStackParams, 'edit_profile'>) => {
   const intl = useIntl();
   const theme = useTheme();
+  const colorScheme = useColorScheme();
   const blackTheme = useSetting('appearance.black');
   const client = useClient();
   const features = useFeatures();
@@ -682,10 +683,11 @@ const EditProfileScreen = ({
           {
             backgroundColor: theme.colors.surfaceContainer,
           },
-          blackTheme && {
-            borderBottomWidth: 1,
-            borderBottomColor: theme.colors.surfaceContainerHighest,
-          },
+          colorScheme === 'dark' &&
+            blackTheme && {
+              borderBottomWidth: 1,
+              borderBottomColor: theme.colors.surfaceContainerHighest,
+            },
         ]}
       >
         <HeaderBackButton onPress={handleBackButton} />

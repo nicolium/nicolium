@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { toast } from '@/utils/toast';
 
 import { useClient, useFeatures } from '@/contexts/current-account-context';
 import { useScopeUrl } from '@/hooks/use-scope-url';
@@ -11,6 +10,7 @@ import { useImportEntities } from '@/queries/utils/import-entities';
 import { useContextsActions } from '@/stores/contexts';
 import { useStatusMetaActions } from '@/stores/status-meta';
 import { useTimelinesActions } from '@/stores/timelines';
+import { toast } from '@/utils/toast';
 
 import { useAccount } from '../accounts/use-account';
 import { queryKeys } from '../keys';
