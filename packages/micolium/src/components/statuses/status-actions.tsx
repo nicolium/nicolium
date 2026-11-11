@@ -383,8 +383,7 @@ const FavouriteAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =
         onLongPress={
           !fromInteractAs && status.favourites_count
             ? () => {
-              console.log('huj')
-                haptics.longPress().finally(console.log);
+                haptics.longPress();
                 navigation.navigate('status', {
                   screen: 'favourites',
                   params: { id: status.id },
