@@ -445,7 +445,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     </Pressable>
   ) : (
     <Chip mode='outlined' onPress={handleSkipPinned}>
-      <View style={{ paddingLeft: 4 }}>
+      <View style={{ paddingRight: 4 }}>
         <Icon source={iconHelper(ArrowLineDownIcon)} size={16} color={colors.onSurfaceVariant} />
       </View>
       <FormattedMessage id='status.skip_pinned' defaultMessage='Skip pinned posts' />
