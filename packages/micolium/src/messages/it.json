@@ -103,6 +103,7 @@
   "compose.language_dropdown.suggestion": "{language} (indovinata)",
   "compose.scheduled.success": "La scrittura è stata pianificata",
   "compose.submit.success": "Pubblicazione avvenuta!",
+  "compose_form.content_type.change": "Cambia il tipo di contenuto",
   "compose_form.placeholder": "A cosa pensi?",
   "compose_form.poll.add_option": "Opzione aggiuntiva",
   "compose_form.poll.duration": "Durata del sondaggio",

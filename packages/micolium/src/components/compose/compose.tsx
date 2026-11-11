@@ -47,6 +47,7 @@ import { GlassActionButton } from '../ui/dialog-or-sheet';
 import { iconHelper } from '../ui/icon';
 
 import { ComposeAttachmentThumbs } from './compose-attachment-thumbs';
+import { ComposeContentTypeButton } from './compose-content-type-button';
 import { ComposeInteractionPolicy } from './compose-interaction-policy';
 import { ComposeLanguageDropdown } from './compose-language-dropdown';
 import { ComposePollForm } from './compose-poll-form';
@@ -368,6 +369,7 @@ const ComposeFooter: React.FC<IComposeFooter> = ({
         onPress={handleInsertEmoji}
         accessibilityLabel={intl.formatMessage(messages.emoji)}
       />
+      <ComposeContentTypeButton composeId={COMPOSE_ID} />
       {features.scheduledStatuses && <ComposeScheduleButton composeId={COMPOSE_ID} />}
       <View style={{ flexGrow: 1 }} />
       {Platform.OS === 'ios' && showKeyboardButton && (

@@ -1796,14 +1796,14 @@ const getComposeContentType = (
   return contentType;
 };
 
-// const useComposeContentType = (composeId: string, includeWysiwyg = false) => {
-//   const { contentType } = useCompose(composeId);
-//   const instance = useInstance();
-//   const postFormats = instance.pleroma.metadata.post_formats;
-//   const { defaultContentType } = useSettings();
+const useComposeContentType = (composeId: string, includeWysiwyg = false) => {
+  const { contentType } = useCompose(composeId);
+  const instance = useInstance();
+  const postFormats = instance.pleroma.metadata.post_formats;
+  const defaultContentType = useSetting('compose.defaultContentType');
 
-//   return getComposeContentType(contentType, defaultContentType, postFormats, includeWysiwyg);
-// };
+  return getComposeContentType(contentType, defaultContentType, postFormats, includeWysiwyg);
+};
 
 export {
   type Compose,
@@ -1821,5 +1821,5 @@ export {
   useUploadCompose,
   useChangeUploadCompose,
   useComposeVisibility,
-  //   useComposeContentType,
+  useComposeContentType,
 };

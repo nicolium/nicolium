@@ -101,6 +101,7 @@
   "compose.language_dropdown.suggestion": "{language} (открит)",
   "compose.submit.success": "Вашата публикация е изпратена!",
   "compose_form.approval_required": "Отговорът трябва да бъде одобрен от автора на публикацията.",
+  "compose_form.content_type.change": "Промяна на типа съдържание",
   "compose_form.interaction_policy.label": "Управление на политиката за взаимодействие",
   "compose_form.placeholder": "Какво ви е наум?",
   "compose_form.poll.add_option": "Добавяне на отговор",
