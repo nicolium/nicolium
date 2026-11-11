@@ -33,8 +33,7 @@
       "extensions": [
         "expo.vscode-expo-tools",
         "oxc.oxc-vscode",
-        "stylelint.vscode-stylelint",
-        "wix.vscode-import-cost"
+        "stylelint.vscode-stylelint"
       ]
     }
   },
