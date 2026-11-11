@@ -8,6 +8,7 @@ const hostRef = React.createRef<SnackbarHostRef>();
 const ToastRoot = () => (
   <Host
     matchContents={{ vertical: true }}
+    pointerEvents='box-none'
     style={{ position: 'absolute', left: 16, right: 16, bottom: 80 }}
   >
     <SnackbarHost ref={hostRef} />
