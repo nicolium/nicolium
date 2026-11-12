@@ -41,7 +41,6 @@ const loadMessages = (locale: string): Promise<Record<string, string>> =>
 
 const linking = {
   enabled: true,
-  prefixes: [createURL('/')],
   filter: (url: string) =>
     !url.startsWith(makeRedirectUri({ scheme: 'micolium', path: 'redirect' })),
 };
