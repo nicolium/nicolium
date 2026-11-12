@@ -82,11 +82,16 @@ const Conversation: React.FC<IConversation> = ({ conversation }) => {
     );
   }
 
+  const unreadBackgroundColor =
+    colors.secondaryContainer.toString().length === 7
+      ? colors.secondaryContainer.toString() + '60'
+      : colors.secondaryContainer.toString().slice(0, -2) + '96)';
+
   return (
     <TouchableRipple
       onPress={handlePress}
       style={{
-        backgroundColor: conversation.unread ? colors.primaryContainer : undefined,
+        backgroundColor: conversation.unread ? unreadBackgroundColor : undefined,
       }}
     >
       <View>

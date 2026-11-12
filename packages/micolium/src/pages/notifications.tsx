@@ -26,12 +26,14 @@ import { TabBar } from '@/components/ui/tab-bar';
 import { useFeatures } from '@/contexts/current-account-context';
 import { useEnableLiquidGlass } from '@/hooks/use-enable-liquid-glass';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
+import { useNotificationsMarker } from '@/queries/markers/use-markers';
 import {
   useMarkNotificationsReadMutation,
   useNotifications,
   useNotificationsUnreadCount,
 } from '@/queries/notifications/use-notifications';
 import { useSetting, useSettingsActions } from '@/stores/settings';
+import { compareId } from '@/utils/comparators';
 
 import type { NotificationsStackParams } from '@/router/router';
 import type { NotificationGroup } from 'pl-api';
@@ -287,6 +289,7 @@ const NotificationsScreen = ({
     ['mention'],
     currentTab === NOTIFICATION_TABS.mentions,
   );
+  const { data: marker } = useNotificationsMarker();
 
   const autoloadMore = useSetting('timelines.autoloadMore');
   const { bottom: bottomInset } = useSafeAreaInsets();
@@ -305,7 +308,12 @@ const NotificationsScreen = ({
       <FlashList
         ref={listRefs[tab]}
         data={query.data}
-        renderItem={({ item }) => <Notification notification={item} />}
+        renderItem={({ item }) => (
+          <Notification
+            notification={item}
+            unread={marker && compareId(item.most_recent_notification_id, marker.last_read_id) > 0}
+          />
+        )}
         keyExtractor={(item) => item.most_recent_notification_id}
         ItemSeparatorComponent={Divider}
         onRefresh={query.refetch}

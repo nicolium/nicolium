@@ -1,4 +1,4 @@
-import { Chip } from '@mkljczk/react-native-paper';
+import { Chip, useTheme } from '@mkljczk/react-native-paper';
 import { Link } from '@react-navigation/native';
 import { ArrowBendUpLeftIcon } from 'phosphor-react-native/src/icons/ArrowBendUpLeft';
 import { AtIcon } from 'phosphor-react-native/src/icons/At';
@@ -238,11 +238,13 @@ const buildMessage = (
 
 interface INotification {
   notification: NotificationGroup;
+  unread?: boolean;
 }
 
 const Notification: React.FC<INotification> = (props) => {
   const intl = useIntl();
   const instance = useInstance();
+  const { colors } = useTheme();
 
   const { data: currentAccountId } = useCredentialAccountId();
 
@@ -333,8 +335,19 @@ const Notification: React.FC<INotification> = (props) => {
     icon = iconHelper(icons[displayedType]);
   }
 
+  const unreadBackgroundColor =
+    colors.secondaryContainer.toString().length === 7
+      ? colors.secondaryContainer.toString() + '60'
+      : colors.secondaryContainer.toString().slice(0, -2) + '96)';
+
   return (
-    <View style={{ padding: 16, gap: 8 }}>
+    <View
+      style={{
+        padding: 16,
+        gap: 8,
+        backgroundColor: props.unread ? unreadBackgroundColor : undefined,
+      }}
+    >
       <View style={{ flexDirection: 'row' }}>
         <Chip
           mode='outlined'
