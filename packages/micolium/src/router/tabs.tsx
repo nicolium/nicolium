@@ -11,12 +11,8 @@ import { HouseIcon } from 'phosphor-react-native/src/icons/House';
 import { MagnifyingGlassIcon } from 'phosphor-react-native/src/icons/MagnifyingGlass';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Platform, View } from 'react-native';
-import {
-  SafeAreaInsetsContext,
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { Platform, useWindowDimensions, View } from 'react-native';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CurrentAccountAvatar } from '@/components/current-account-avatar';
 import { useUserStream } from '@/hooks/streaming/use-user-stream';
@@ -42,25 +38,7 @@ const EmptyComponent = () => null;
 
 const TabScreenLayout: (
   props: ScreenLayoutArgs<TabsParams, keyof TabsParams, BottomTabNavigationOptions, any>,
-) => React.ReactElement = ({ children }) => (
-  <SafeAreaProvider>
-    <TabletInsets>{children}</TabletInsets>
-  </SafeAreaProvider>
-);
-
-const TabletInsets: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const insets = useSafeAreaInsets();
-
-  return (
-    <View style={{ flex: 1, paddingLeft: insets.left, paddingRight: insets.right }}>
-      <SafeAreaInsetsContext.Provider
-        value={{ ...insets, left: 0, right: 0, parentLeft: insets.left, parentRight: insets.right }}
-      >
-        {children}
-      </SafeAreaInsetsContext.Provider>
-    </View>
-  );
-};
+) => React.ReactElement = ({ children }) => <SafeAreaProvider>{children}</SafeAreaProvider>;
 
 const Tab = createBottomTabNavigator<TabsParams>();
 
@@ -71,7 +49,7 @@ if (Platform.OS === 'ios') {
     const intl = useIntl();
     const unreadCount = useNotificationsUnreadCount();
     const { openAccountSwitcher, openCompose } = useUiStoreActions();
-    const insets = useSafeAreaInsets();
+    const { width } = useWindowDimensions();
 
     return (
       <Tab.Navigator
@@ -140,7 +118,7 @@ if (Platform.OS === 'ios') {
             },
           })}
         />
-        {(insets.left > 0 || insets.right > 0) && (
+        {width >= 960 && (
           <Tab.Screen
             name='compose'
             component={EmptyComponent}

@@ -291,7 +291,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     const showHeader =
       !!profileInfoNode.current &&
       scrollOffset + topInset > profileInfoNode.current.getBoundingClientRect().height;
-      setShowHeader(showHeader);
+    setShowHeader(showHeader);
     headerMarginTop.set(withTiming(showHeader ? 0 : -64 - topInset));
     setShowComposeButton(scrollOffset < previousScrollOffset.current || scrollOffset === 0);
     previousScrollOffset.current = scrollOffset;

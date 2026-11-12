@@ -4,7 +4,7 @@ import { EnvelopeSimpleIcon } from 'phosphor-react-native/src/icons/EnvelopeSimp
 import { NotePencilIcon } from 'phosphor-react-native/src/icons/NotePencil';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Pressable } from 'react-native';
+import { Pressable, useWindowDimensions } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -27,11 +27,8 @@ interface IComposeButton {
 const ComposeButton: React.FC<IComposeButton> = ({ direct, visible }) => {
   const intl = useIntl();
   const glassEffect = useEnableLiquidGlass();
-  const {
-    bottom: bottomInset,
-    parentLeft: leftInset,
-    parentRight: rightInset,
-  } = useSafeAreaInsets();
+  const { bottom: bottomInset } = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
 
   const { openCompose } = useUiStoreActions();
   const { updateCompose, resetCompose } = useComposeActions();
@@ -58,7 +55,7 @@ const ComposeButton: React.FC<IComposeButton> = ({ direct, visible }) => {
 
   if (glassEffect) {
     // compose button is displayed in navigation tabs
-    if ((leftInset || rightInset) && !direct) return null;
+    if (width >= 960) return null;
 
     return (
       <Pressable
