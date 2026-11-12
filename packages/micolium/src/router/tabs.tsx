@@ -141,7 +141,14 @@ const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
 
   return (
     <BottomNavigation.Bar
-      navigationState={state}
+      navigationState={{
+        ...state,
+        routes: state.routes.map((route) => ({
+          ...route,
+          // remove after migrating to upstream react native paper
+          badge: descriptors[route.key].options.tabBarBadge,
+        })),
+      }}
       safeAreaInsets={insets}
       onTabPress={({ route, preventDefault }) => {
         const isRepeatedPress = state.routes[state.index].key === route.key;
@@ -185,7 +192,6 @@ const TabBar = ({ navigation, state, descriptors }: BottomTabBarProps) => {
             ? options.title
             : route.name;
       }}
-      getBadge={({ route }) => descriptors[route.key].options.tabBarBadge}
     />
   );
 };
