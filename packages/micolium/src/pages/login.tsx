@@ -330,6 +330,7 @@ const CredentialsScreen = ({
         error={error}
         supportingText={error ? intl.formatMessage(messages.invalidCredentials) : undefined}
         variant='outlined'
+        autoCapitalize='none'
       />
     </LoginLayout>
   );
