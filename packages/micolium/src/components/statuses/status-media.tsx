@@ -300,8 +300,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   const sensitive = status.sensitive || !!filters?.length;
 
   const renderSensitiveOverlay = () =>
-    sensitive &&
-    !thumbs && (
+    sensitive && (
       <>
         <IconButton
           icon={iconHelper(mediaVisible ? EyeSlashIcon : EyeIcon)}
@@ -315,7 +314,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
           mode='contained'
           onPress={mediaVisible ? hideStatusMedia : revealStatusMedia}
         />
-        {!mediaVisible && (
+        {!thumbs && !mediaVisible && (
           <TouchableRipple
             onPress={revealStatusMedia}
             style={{
