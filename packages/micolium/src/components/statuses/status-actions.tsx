@@ -447,7 +447,7 @@ const ReactionAction: React.FC<IStatusActions> = ({ status, fromInteractAs }) =>
       },
       selected,
       true,
-      features.customEmojiReacts,
+      true,
       scopeUrl,
     );
   };
