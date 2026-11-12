@@ -2,7 +2,7 @@ import { FAB, Icon } from '@mkljczk/react-native-paper';
 import { GlassView } from 'expo-glass-effect';
 import { EnvelopeSimpleIcon } from 'phosphor-react-native/src/icons/EnvelopeSimple';
 import { NotePencilIcon } from 'phosphor-react-native/src/icons/NotePencil';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Pressable } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -41,7 +41,7 @@ const ComposeButton: React.FC<IComposeButton> = ({ direct, visible }) => {
     opacity: iconOpacity.value,
   }));
 
-  useEffect(() => {
+  React.useEffect(() => {
     iconOpacity.set(withTiming(+visible, { duration: 250 }));
   }, [visible, iconOpacity]);
 

@@ -503,9 +503,14 @@ const useMenuItems = (
 interface IAccountActionsDropdown {
   account: Account;
   headerButton?: boolean;
+  visible?: boolean;
 }
 
-const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, headerButton }) => {
+const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({
+  account,
+  headerButton,
+  visible = true,
+}) => {
   const intl = useIntl();
 
   const [blockMuteDialog, setBlockMuteDialog] = React.useState<'block' | 'mute' | null>(null);
@@ -519,6 +524,7 @@ const AccountActionsDropdown: React.FC<IAccountActionsDropdown> = ({ account, he
             <HeaderIconButton
               icon={Platform.OS === 'ios' ? DotsThreeIcon : DotsThreeVerticalIcon}
               accessibilityLabel={intl.formatMessage(messages.menuTitle)}
+              visible={visible}
             />
           ) : (
             <IconButton

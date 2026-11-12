@@ -231,6 +231,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
   const profileFilters = useSetting('timelines.profileFilters');
   const { update } = useSettingsActions();
 
+  const [showHeader, setShowHeader] = React.useState(false);
   const [showComposeButton, setShowComposeButton] = React.useState(true);
 
   const headerMarginTop = useSharedValue(-128);
@@ -290,6 +291,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
     const showHeader =
       !!profileInfoNode.current &&
       scrollOffset + topInset > profileInfoNode.current.getBoundingClientRect().height;
+      setShowHeader(showHeader);
     headerMarginTop.set(withTiming(showHeader ? 0 : -64 - topInset));
     setShowComposeButton(scrollOffset < previousScrollOffset.current || scrollOffset === 0);
     previousScrollOffset.current = scrollOffset;
@@ -713,7 +715,7 @@ const Profile: React.FC<IProfile> = ({ id, ownAccount }) => {
               </View>
             }
           />
-          <AccountActionsDropdown account={account} headerButton />
+          <AccountActionsDropdown account={account} headerButton visible={showHeader} />
         </Appbar.Header>
       </Animated.View>
       <ProfileTimeline
