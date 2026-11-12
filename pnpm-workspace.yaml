@@ -30,14 +30,14 @@ minimumReleaseAgeExclude:
   - '@expo/ui@58.0.26'
   - expo-haptics@58.0.8
 overrides:
-  "@babel/core@7": ^7.29.7
+  "@babel/core@7": ^7.29.13
   "@babel/runtime": ^7.26.10
   "@types/react": ^19.3.0
   "@types/react-dom": ^19.2.3
-  ajv@8: ^8.18.0
-  brace-expansion@1: ^1.1.16
-  brace-expansion@2: ^2.1.2
-  brace-expansion@5: ^5.0.7
+  ajv@8: ^8.20.0
+  brace-expansion@1: ^1.1.22
+  brace-expansion@2: ^2.1.8
+  brace-expansion@5: ^5.0.13
   esbuild: ^0.28.0
   fast-uri@3: ^3.1.4
   glob-parent: ^6.0.2
@@ -46,9 +46,9 @@ overrides:
   lodash: ^4.18.1
   minimatch@10: ^10.2.5
   serialize-javascript: ^7.0.5
-  sharp: ^0.35.3
-  "svg2vectordrawable>svgo": "^2.8.0"
-  svgo: ^4.0.2
+  sharp: ^0.35.5
+  "svg2vectordrawable>svgo": "^2.8.4"
+  svgo: ^4.1.0
   undici: 7.29.0
   yaml@2: ^2.9.0
 patchedDependencies:

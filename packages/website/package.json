@@ -17,12 +17,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "^7.3.0",
-    "@astrojs/mdx": "^8.0.0",
+    "@astrojs/markdown-remark": "^7.3.8",
+    "@astrojs/mdx": "^8.1.5",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "@mkljczk/astro-theme": "github:mkljczk/mkljczk-astro-theme",
-    "astro": "^7.3.0",
+    "astro": "^7.4.11",
     "rehype-external-links": "^3.0.0",
     "sharp": "^0.35.5"
   }
