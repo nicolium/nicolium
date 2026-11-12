@@ -66,8 +66,8 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({ message, onClick, count }
   }));
 
   React.useEffect(() => {
-    containerTop.value = withTiming(count ? 72 + topInset : topInset);
-    containerOpacity.value = withTiming(Math.min(count, 1), { duration: count ? 300 : 100 });
+    containerTop.set(withTiming(count ? 72 + topInset : topInset));
+    containerOpacity.set(withTiming(Math.min(count, 1), { duration: count ? 300 : 100 }));
 
     if (count !== 0) setDisplayedCount(count);
   }, [count]);

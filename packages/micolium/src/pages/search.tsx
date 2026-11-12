@@ -257,7 +257,7 @@ const SearchScreen = ({
     if (activeType === 'links' && hasQuery) {
       navigation.setParams({ type: 'accounts' });
     }
-  }, [activeType, activeQuery]);
+  }, [activeType, navigation, activeQuery]);
 
   const debouncedNavigate = useCallback(
     debounce(
@@ -300,7 +300,7 @@ const SearchScreen = ({
     }
 
     return routes;
-  }, [intl, hasQuery]);
+  }, [features, intl, hasQuery]);
 
   const renderScene = (route: SearchType) => {
     switch (route) {

@@ -74,7 +74,7 @@ const HashtagsScreen = ({
     const scrollOffset = event.nativeEvent.contentOffset.y || event.target?.scrollTop || 0;
     const newIsScrolled = scrollOffset > 64;
     setIsScrolled(newIsScrolled);
-    headerOpacity.value = withTiming(+newIsScrolled);
+    headerOpacity.set(withTiming(+newIsScrolled));
   };
 
   return (

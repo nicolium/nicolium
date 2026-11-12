@@ -868,7 +868,7 @@ const EditProfileScreen = ({
     }
 
     return items;
-  }, [features, header, data.header_description]);
+  }, [features, header]);
 
   const avatarMenu = React.useMemo(() => {
     const items: Array<DropdownMenuItem> = [];
@@ -906,7 +906,7 @@ const EditProfileScreen = ({
     }
 
     return items;
-  }, [features, avatar, data.avatar_description]);
+  }, [features, avatar]);
 
   return (
     <>

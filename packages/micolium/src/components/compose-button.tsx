@@ -42,7 +42,7 @@ const ComposeButton: React.FC<IComposeButton> = ({ direct, visible }) => {
   }));
 
   useEffect(() => {
-    iconOpacity.value = withTiming(+visible, { duration: 250 });
+    iconOpacity.set(withTiming(+visible, { duration: 250 }));
   }, [visible, iconOpacity]);
 
   const handleCompose = () => {

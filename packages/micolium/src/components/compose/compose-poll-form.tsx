@@ -94,7 +94,7 @@ const Option: React.FC<IOption> = ({
         scheduleOnRN(onMove, index, target);
       } else {
         activeIndex.value = -1;
-        dragY.value = withTiming(0);
+        dragY.set(withTiming(0));
       }
     },
   });
