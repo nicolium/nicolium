@@ -1,4 +1,4 @@
-import fuzzysort from 'fuzzysort';
+import { go as fuzzysortGo } from 'fuzzysort';
 
 import type { EmojiData } from './data';
 import type { Emoji } from './index';
@@ -49,11 +49,11 @@ const search = (
 ): Emoji[] => {
   const pool = withCustom ? [...nativeData, ...customData] : nativeData;
 
-  return fuzzysort
-    .go(query.replaceAll('-', '_'), pool, {
-      keys: ['emojiId', 'emojiName', 'emojiKeywords'],
-      limit,
-    })
+  return fuzzysortGo(query.replaceAll('-', '_'), pool, {
+    keys: ['emojiId', 'emojiName', 'emojiKeywords'],
+    limit,
+    threshold: 0,
+  })
     .map((result) => {
       const { id } = result.obj;
 

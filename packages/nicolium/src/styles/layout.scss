@@ -78,8 +78,8 @@ body {
 .dropdown-navigation {
   position: fixed;
   z-index: 1000;
-  bottom: 60px;
   inset-inline-start: 0.5rem;
+  bottom: 60px;
   transform-origin: bottom left;
 
   overflow: hidden;
@@ -887,8 +887,8 @@ body {
 
     position: fixed;
     z-index: 9999;
-    top: 0;
     inset-inline-start: 0;
+    top: 0;
 
     overscroll-behavior: none;
     display: flex;

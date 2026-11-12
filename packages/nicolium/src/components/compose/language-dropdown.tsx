@@ -5,7 +5,7 @@ import iconMinus from '@phosphor-icons/core/regular/minus.svg';
 import iconPlus from '@phosphor-icons/core/regular/plus.svg';
 import iconTranslate from '@phosphor-icons/core/regular/translate.svg';
 import clsx from 'clsx';
-import fuzzysort from 'fuzzysort';
+import { go as fuzzysortGo } from 'fuzzysort';
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -161,13 +161,11 @@ const getLanguageDropdown =
         });
       }
 
-      return fuzzysort
-        .go(value, languages, {
-          keys: ['0', '1'],
-          limit: 5,
-          threshold: -10000,
-        })
-        .map((result) => result.obj);
+      return fuzzysortGo(value, languages, {
+        keys: ['0', '1'],
+        limit: 5,
+        threshold: -10000,
+      }).map((result) => result.obj);
     };
 
     const handleClose = () => {

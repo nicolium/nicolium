@@ -11,7 +11,7 @@ import {
 import { FlashList, type FlashListRef } from '@shopify/flash-list';
 import { GlassView } from 'expo-glass-effect';
 import { useLocales } from 'expo-localization';
-import fuzzysort from 'fuzzysort';
+import { go as fuzzysortGo } from 'fuzzysort';
 import { by639_1, codes, type Code } from 'iso-language-codes';
 import { CaretDownIcon } from 'phosphor-react-native/src/icons/CaretDown';
 import { CheckIcon } from 'phosphor-react-native/src/icons/Check';
@@ -148,13 +148,11 @@ const LanguagePicker: React.FC<ILanguagePicker> = ({ composeId, onClose, ref }) 
       });
     }
 
-    return fuzzysort
-      .go(value, languages, {
-        keys: ['0', '1', '2'],
-        limit: 5,
-        threshold: -10000,
-      })
-      .map((result) => result.obj);
+    return fuzzysortGo(value, languages, {
+      keys: ['0', '1', '2'],
+      limit: 5,
+      threshold: -10000,
+    }).map((result) => result.obj);
   };
 
   const deferredSearchValue = React.useDeferredValue(searchValue);

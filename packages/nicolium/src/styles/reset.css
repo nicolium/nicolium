@@ -11,8 +11,7 @@
 
 ::before,
 ::after {
-  --tw-content:""
-;
+  --tw-content: "";
 }
 
 html,

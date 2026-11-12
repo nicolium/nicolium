@@ -230,6 +230,7 @@ const config = defineConfig(() => ({
         {
           src: './node_modules/@twemoji/svg/*.svg',
           dest: 'packs/emoji/',
+          rename: { stripBase: true },
         },
         {
           src: './favicon.ico',
@@ -242,18 +243,22 @@ const config = defineConfig(() => ({
         {
           src: './src/instance',
           dest: '.',
+          rename: { stripBase: 1 },
         },
         {
           src: './custom/instance',
           dest: '.',
+          rename: { stripBase: 1 },
         },
         {
           src: './node_modules/fasttext.wasm.js/dist/models/language-identification/assets/lid.176.ftz',
           dest: 'fastText/models/',
+          rename: { stripBase: true },
         },
         {
           src: './node_modules/fasttext.wasm.js/dist/core/fastText.common.wasm',
           dest: 'fastText/',
+          rename: { stripBase: true },
         },
       ],
     }),

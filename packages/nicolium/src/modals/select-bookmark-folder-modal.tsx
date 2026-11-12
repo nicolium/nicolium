@@ -1,6 +1,6 @@
 import iconBookmarks from '@phosphor-icons/core/regular/bookmarks.svg';
 import iconFolderSimple from '@phosphor-icons/core/regular/folder-simple.svg';
-import fuzzysort from 'fuzzysort';
+import { go as fuzzysortGo } from 'fuzzysort';
 import React, { useDeferredValue, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -32,7 +32,9 @@ interface SelectBookmarkFolderModalProps {
 const search = (bookmarkFolders: Array<BookmarkFolder>, term: string) => {
   if (!term) return bookmarkFolders;
 
-  return fuzzysort.go(term, bookmarkFolders, { key: 'name' }).map((result) => result.obj);
+  return fuzzysortGo(term, bookmarkFolders, { key: 'name', limit: 0, threshold: 0 }).map(
+    (result) => result.obj,
+  );
 };
 
 const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseModalProps> = ({

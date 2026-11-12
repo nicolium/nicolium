@@ -742,8 +742,8 @@
 .chat-widget {
   position: fixed;
   z-index: 99;
-  bottom: 0;
   inset-inline-end: 1.25rem;
+  bottom: 0;
 
   display: flex;
   flex-direction: column;

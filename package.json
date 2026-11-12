@@ -4,8 +4,8 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "husky": "^9.0.0",
-    "lint-staged": "^16.4.0"
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0"
   },
   "resolutions": {
     "@babel/core@7": "^7.29.7",
@@ -32,6 +32,6 @@
     "node": ">=22"
   },
   "dependencies": {
-    "expo-haptics": "^58.0.7"
+    "expo-haptics": "^58.0.8"
   }
 }
