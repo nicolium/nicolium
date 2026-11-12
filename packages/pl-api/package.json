@@ -42,17 +42,17 @@
   "dependencies": {
     "blurhash": "^2.0.5",
     "http-link-header": "^1.1.4",
-    "isows": "^1.0.7",
+    "isows": "^1.0.8",
     "object-to-formdata": "^5.0.0",
     "query-string": "^10.0.0",
-    "semver": "^7.8.5",
-    "valibot": "^1.4.2"
+    "semver": "^7.8.6",
+    "valibot": "^1.5.0"
   },
   "devDependencies": {
     "@types/http-link-header": "^1.0.7",
-    "@types/node": "^26.1.1",
-    "@types/semver": "^7.7.1",
-    "@vitest/coverage-v8": "4.1.10",
+    "@types/node": "^26.6.6",
+    "@types/semver": "^7.8.0",
+    "@vitest/coverage-v8": "4.1.12",
     "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",
     "typedoc": "^0.28.20",
@@ -61,7 +61,7 @@
     "typescript": "^6.0.3",
     "vite": "^8.1.5",
     "vite-plugin-dts": "^5.0.3",
-    "vitest": "^4.1.10",
+    "vitest": "^4.1.12",
     "ws": "^8.21.1"
   },
   "lint-staged": {
