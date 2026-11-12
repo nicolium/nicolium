@@ -44,7 +44,7 @@
     "http-link-header": "^1.1.4",
     "isows": "^1.0.7",
     "object-to-formdata": "^5.0.0",
-    "query-string": "^9.4.1",
+    "query-string": "^10.0.0",
     "semver": "^7.8.5",
     "valibot": "^1.4.2"
   },
